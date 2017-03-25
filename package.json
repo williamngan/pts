@@ -2,7 +2,7 @@
   "name": "pts",
   "version": "0.0.3",
   "description": "pts",
-  "main": "dist/pts-bundle.js",
+  "main": "dist/pts.js",
   "scripts": {
     "start": "webpack --watch",
     "build": "webpack -p",
