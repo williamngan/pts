@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
-    "module": "ES2015",
-    "noImplicitAny": true,
-    "sourceMap": true
+    "module": "commonjs",
+    "noImplicitAny": false,
+    "sourceMap": true,
+    "outDir": "dist/es6",
+    "rootDir": "src"
   },
 
   "include": [
@@ -10,6 +12,7 @@
   ],
 
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "dist"
   ]
 }

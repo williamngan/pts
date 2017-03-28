@@ -64,11 +64,33 @@ var pts =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+(function () {
+  'use strict';
+
+  var Vector = module.exports.Vector = __webpack_require__(1),
+      Matrix = module.exports.Matrix = __webpack_require__(5);
+/*
+  try {
+    var nblas = module.exports.BLAS = require('nblas'),
+        applyBlasOptimizations = require('./applyBlasOptimizations');
+    
+    applyBlasOptimizations(Vector, Matrix, nblas);
+  } catch (error) {
+
+  }
+  */
+}());
+
+
+/***/ }),
+/* 1 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -661,50 +683,110 @@ var pts =
 
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-(function () {
-  'use strict';
-
-  var Vector = module.exports.Vector = __webpack_require__(0),
-      Matrix = module.exports.Matrix = __webpack_require__(3);
-/*
-  try {
-    var nblas = module.exports.BLAS = require('nblas'),
-        applyBlasOptimizations = require('./applyBlasOptimizations');
-    
-    applyBlasOptimizations(Vector, Matrix, nblas);
-  } catch (error) {
-
-  }
-  */
-}());
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vectorious__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vectorious___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vectorious__);
 
-var vec = new __WEBPACK_IMPORTED_MODULE_0_vectorious__["Vector"]([1000, 2, 3]).add(new __WEBPACK_IMPORTED_MODULE_0_vectorious__["Vector"]([2, 3, 4]));
-console.log(vec.toString());
-setInterval(function () {
-  return vec.add(new __WEBPACK_IMPORTED_MODULE_0_vectorious__["Vector"]([1, 2, 3]));
-}, 500);
+
+exports.__esModule = true;
+var Pt_1 = __webpack_require__(3);
+var Pts = function () {
+    function Pts() {
+        this.vs = [];
+    }
+    Pts.prototype.pt = function (x, y, z) {
+        this.vs.push(new Pt_1["default"](x, y, z));
+    };
+    return Pts;
+}();
+exports["default"] = Pts;
 
 /***/ }),
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
+var __extends = this && this.__extends || function () {
+    var extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function (d, b) {
+        d.__proto__ = b;
+    } || function (d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+}();
+exports.__esModule = true;
+var vectorious_1 = __webpack_require__(0);
+var Pt = function (_super) {
+    __extends(Pt, _super);
+    function Pt(x, y, z, w) {
+        var _this = this;
+        // positional arguments: x,y,z,w
+        if (typeof x === 'number') {
+            var p = y != undefined ? z != undefined ? w != undefined ? [x, y, z, w] : [x, y, z] : [x, y] : [x];
+            _this = _super.call(this, p) || this;
+            // as an object of {x, y?, z?, w?}, with a second argument of a default value if certain properties are undefined
+        } else if (typeof x === 'object') {
+            var a = ["x", "y", "z", "w"];
+            var b = [];
+            for (var _i = 0, a_1 = a; _i < a_1.length; _i++) {
+                var p = a_1[_i];
+                if (x[p] == undefined && y == undefined) break;
+                b.push(x[p] || y);
+            }
+            _this = _super.call(this, b) || this;
+            // as an array of values
+        } else {
+            _this = _super.call(this, x) || this;
+        }
+        return _this;
+    }
+    return Pt;
+}(vectorious_1.Vector);
+exports["default"] = Pt;
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+var vectorious_1 = __webpack_require__(0);
+var Pts_1 = __webpack_require__(2);
+var vec = new vectorious_1.Vector([1000, 2, 3]).add(new vectorious_1.Vector([2, 3, 4]));
+console.log(vec.toString());
+setInterval(function () {
+  return vec.add(new vectorious_1.Vector([1, 2, 3]));
+}, 500);
+var m1 = vectorious_1.Matrix.identity(3);
+var m2 = vectorious_1.Matrix.identity(3);
+console.log(vectorious_1.Matrix.add(m1, m2).toString());
+var pts = new Pts_1["default"]();
+console.log(pts);
+// console.log(pts.toString());
+// pts.pt(1,2,3);
+// pts.pt(2,3,4);
+// console.log(pts.toString());
+// console.log( Matrix.augment(m1, m2).toString() );
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
 (function () {
   'use strict';
 
-  var Vector = __webpack_require__(0);
+  var Vector = __webpack_require__(1);
 
   /**
    * @method constructor
