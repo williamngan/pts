@@ -1,5 +1,10 @@
 import {Vector, Matrix} from 'vectorious';
-import Pts from './Pts';
+import {Pt} from './Pt';
+import {Pts} from './Pts';
+
+window["Pt"] = Pt;
+window["Pts"] = Pts;
+
 
 let vec = new Vector( [1000, 2, 3] ).add( new Vector( [2, 3, 4] ) );
 console.log(vec.toString());

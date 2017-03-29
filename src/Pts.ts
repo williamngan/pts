@@ -1,6 +1,6 @@
-import Pt from "./Pt";
+import {Pt} from "./Pt";
 
-export default class Pts {
+export class Pts {
 
   protected vs:Pt[];
 

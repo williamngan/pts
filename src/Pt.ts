@@ -1,13 +1,13 @@
 import {Vector} from "vectorious";
 
-interface IPt {
+export interface IPt {
   x?:number,
   y?:number,
   z?:number,
   w?:number
 }
 
-export default class Pt extends Vector implements IPt {
+export class Pt extends Vector implements IPt {
 
   constructor(x?:number|Array<number>|IPt, y?:number, z?:number, w?:number) {
     super( Pt.getArgs(x,y,z,w) );
