@@ -76,6 +76,7 @@ var pts =
 
   var Vector = module.exports.Vector = __webpack_require__(1),
       Matrix = module.exports.Matrix = __webpack_require__(5);
+
 /*
   try {
     var nblas = module.exports.BLAS = require('nblas'),
@@ -85,7 +86,8 @@ var pts =
   } catch (error) {
 
   }
-  */
+*/
+
 }());
 
 
@@ -689,26 +691,6 @@ var pts =
 "use strict";
 
 
-exports.__esModule = true;
-var Pt_1 = __webpack_require__(3);
-var Pts = function () {
-    function Pts() {
-        this.vs = [];
-    }
-    Pts.prototype.pt = function (x, y, z) {
-        this.vs.push(new Pt_1["default"](x, y, z));
-    };
-    return Pts;
-}();
-exports["default"] = Pts;
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
 var __extends = this && this.__extends || function () {
     var extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function (d, b) {
         d.__proto__ = b;
@@ -723,35 +705,125 @@ var __extends = this && this.__extends || function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 }();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var vectorious_1 = __webpack_require__(0);
 var Pt = function (_super) {
     __extends(Pt, _super);
-    function Pt(x, y, z, w) {
-        var _this = this;
+    function Pt() {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        return _super.call(this, Pt.getArgs(args)) || this;
+    }
+    Pt.getArgs = function (args) {
+        if (args.length < 1) return [];
+        var pos = [];
         // positional arguments: x,y,z,w
-        if (typeof x === 'number') {
-            var p = y != undefined ? z != undefined ? w != undefined ? [x, y, z, w] : [x, y, z] : [x, y] : [x];
-            _this = _super.call(this, p) || this;
-            // as an object of {x, y?, z?, w?}, with a second argument of a default value if certain properties are undefined
-        } else if (typeof x === 'object') {
+        if (typeof args[0] === 'number') {
+            pos = Array.prototype.slice.call(args);
+            // as an object of {x, y?, z?, w?}
+        } else if (typeof args[0] === 'object' && !Array.isArray(args[0])) {
             var a = ["x", "y", "z", "w"];
-            var b = [];
             for (var _i = 0, a_1 = a; _i < a_1.length; _i++) {
                 var p = a_1[_i];
-                if (x[p] == undefined && y == undefined) break;
-                b.push(x[p] || y);
+                if (args[0][p] == undefined) break;
+                pos.push(args[0][p]);
             }
-            _this = _super.call(this, b) || this;
             // as an array of values
-        } else {
-            _this = _super.call(this, x) || this;
+        } else if (Array.isArray(args[0])) {
+            var _x = args[0];
+            pos = _x.slice();
         }
-        return _this;
-    }
+        return pos;
+    };
+    Pt.prototype.to = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        var p = Pt.getArgs(args);
+        if (p[0] != undefined) this.x = p[0];
+        if (p[1] != undefined) this.y = p[1];
+        if (p[2] != undefined) this.z = p[2];
+        if (p[3] != undefined) this.w = p[3];
+        return this;
+    };
+    Object.defineProperty(Pt.prototype, "x", {
+        get: function () {
+            return this.get(0);
+        },
+        set: function (_x) {
+            this.set(0, _x);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Pt.prototype, "y", {
+        get: function () {
+            return this.get(1);
+        },
+        set: function (_y) {
+            this.set(1, _y);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Pt.prototype, "z", {
+        get: function () {
+            return this.get(2);
+        },
+        set: function (_z) {
+            this.set(2, _z);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Pt.prototype, "w", {
+        get: function () {
+            return this.get(3);
+        },
+        set: function (_w) {
+            this.set(3, _w);
+        },
+        enumerable: true,
+        configurable: true
+    });
     return Pt;
 }(vectorious_1.Vector);
-exports["default"] = Pt;
+exports.Pt = Pt;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Pts = function () {
+    function Pts() {
+        this.vecs = [];
+        this.names = [];
+    }
+    Pts.prototype.push = function (pt, name) {
+        this.vecs.push(pt);
+        this.names.push(name || "field" + this.vecs.length);
+        return this;
+    };
+    Pts.prototype.pop = function () {
+        var dv = this.vecs.pop();
+        var dn = this.names.pop();
+        return [dv, dn];
+    };
+    Pts.prototype.slice = function (start, end) {
+        var dv = this.vecs.slice(start, end);
+        var dn = this.names.slice(start, end);
+        return [dv, dn];
+    };
+    return Pts;
+}();
+exports.Pts = Pts;
 
 /***/ }),
 /* 4 */
@@ -760,9 +832,12 @@ exports["default"] = Pt;
 "use strict";
 
 
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var vectorious_1 = __webpack_require__(0);
-var Pts_1 = __webpack_require__(2);
+var Pt_1 = __webpack_require__(2);
+var Pts_1 = __webpack_require__(3);
+window["Pt"] = Pt_1.Pt;
+window["Pts"] = Pts_1.Pts;
 var vec = new vectorious_1.Vector([1000, 2, 3]).add(new vectorious_1.Vector([2, 3, 4]));
 console.log(vec.toString());
 setInterval(function () {
@@ -771,7 +846,7 @@ setInterval(function () {
 var m1 = vectorious_1.Matrix.identity(3);
 var m2 = vectorious_1.Matrix.identity(3);
 console.log(vectorious_1.Matrix.add(m1, m2).toString());
-var pts = new Pts_1["default"]();
+var pts = new Pts_1.Pts();
 console.log(pts);
 // console.log(pts.toString());
 // pts.pt(1,2,3);

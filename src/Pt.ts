@@ -9,40 +9,38 @@ export interface IPt {
 
 export class Pt extends Vector implements IPt {
 
-  constructor(x?:number|Array<number>|IPt, y?:number, z?:number, w?:number) {
-    super( Pt.getArgs(x,y,z,w) );
+  constructor( ...args:any[]) {
+    super( Pt.getArgs( args ) );
   }
 
-  static getArgs(x?:number|Array<number>|IPt, y?:number, z?:number, w?:number):Array<number> {
-    var pos = [];
-    // positional arguments: x,y,z,w
-    if (typeof x === 'number') {
-      pos = y != undefined ? ( z != undefined ? ( w != undefined ? [x, y, z, w] : [x, y, z]) : [x, y] ) : [x];
+  static getArgs( args:any[] ):Array<number> {
+    if (args.length<1) return [];
 
-    // as an object of {x, y?, z?, w?}, with a second argument of a default value if certain properties are undefined
-    } else if (typeof x === 'object' && !Array.isArray(x)) {
+    var pos = [];
+    
+    // positional arguments: x,y,z,w
+    if (typeof args[0] === 'number') {
+      pos = Array.prototype.slice.call( args );
+
+    // as an object of {x, y?, z?, w?}
+    } else if (typeof args[0] === 'object' && !Array.isArray( args[0] )) {
       let a:Array<string> = ["x", "y", "z", "w"];
       for (let p of a) {
-        if (x[p] == undefined && y == undefined) break;
-        pos.push( x[p] || y );
+        if ( args[0][p] == undefined) break;
+        pos.push( args[0][p] );
       }
 
-    // as an array of values, with a second argument of a default value if certain properties are undefined
-    } else if (Array.isArray(x)) {
-      let _x = x as Array<number>;
+    // as an array of values
+    } else if (Array.isArray( args[0] )) {
+      let _x = args[0] as Array<number>;
       pos = _x.slice();
-      if (y != undefined) {
-        while (pos.length < 4) {
-          pos.push( y );
-        }
-      }
     }
     
     return pos;
   }
 
-  to(x?:number|Array<number>|IPt, y?:number, z?:number, w?:number):Pt {
-    let p = Pt.getArgs(x,y,z,w);
+  to( ...args:any[]):Pt {
+    let p = Pt.getArgs( args );
     if (p[0] != undefined) this.x = p[0];
     if (p[1] != undefined) this.y = p[1];
     if (p[2] != undefined) this.z = p[2];
@@ -50,7 +48,6 @@ export class Pt extends Vector implements IPt {
     return this;
   }
 
-  get dims():number { return this.data.length; }
 
   get x():number { return this.get(0); }
   set x( _x:number ) {this.set(0, _x); }

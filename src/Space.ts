@@ -7,7 +7,9 @@ import {Pts} from "./Pts";
 export interface IPlayer {
   animateID: string;
   animate( time:number, frameTime:number, context:any ): IPlayer;
-  onSpaceResize( p:IPt ): undefined;
+  onSpaceResize( p:IPt, evt?:Event ): undefined;
+  onMouseAction( type:string, px:number, py:number, evt:Event );
+  onTouchAction( type:string, px:number, py:number, evt:Event );
 }
 
 interface ISpacePlayers { 
@@ -39,7 +41,7 @@ export abstract class Space {
    * Set whether the rendering should be repainted on each frame
    * @param b a boolean value to set whether to repaint each frame
    */
-  refresh( b:boolean ):Space {
+  refresh( b:boolean ):this {
     this._refresh = b;
     return this;
   }
@@ -50,7 +52,7 @@ export abstract class Space {
    * Subclasses of Space may define other callback functions.
    * @param player 
    */
-  add( player:IPlayer ):Space {
+  add( player:IPlayer ):this {
     let k = this.playerCount++;
     let pid = this.id + k;
 
@@ -65,7 +67,7 @@ export abstract class Space {
    * Remove a player from this Space
    * @param player an IPlayer that has an `animateID` property
    */
-  remove( player:IPlayer ):Space {
+  remove( player:IPlayer ):this {
     delete this.players[ player.animateID ];
     return this;
   }
@@ -73,7 +75,7 @@ export abstract class Space {
   /**
    * Remove all players from this Space
    */
-  removeAll():Space {
+  removeAll():this {
     this.players = {};
     return this;
   }
@@ -83,7 +85,7 @@ export abstract class Space {
    * Override this `play()` function to implemenet your own animation loop.
    * @param time current time
    */
-  play( time=0 ):Space {
+  play( time=0 ):this {
     this._animID = requestAnimationFrame( (t) => this.play(t) );
     if (this._pause) return this;
 
@@ -122,7 +124,7 @@ export abstract class Space {
    * Pause the animation
    * @param toggle a boolean value to set if this function call should be a toggle (between pause and resume)
    */
-  pause( toggle=false ):Space {
+  pause( toggle=false ):this {
     this._pause = (toggle) ? !this._pause : true;
     return this;
   }
@@ -130,7 +132,7 @@ export abstract class Space {
   /**
    * Resume the pause animation
    */
-  resume():Space {
+  resume():this {
     this._pause = false;
     return this;
   }
@@ -139,7 +141,7 @@ export abstract class Space {
    * Specify when the animation should stop: immediately, after a time period, or never stops.
    * @param t a value in millisecond to specify a time period to play before stopping, or `-1` to play forever, or `0` to end immediately. Default is 0 which will stop the animation immediately.
    */
-  stop( t=0 ):Space {
+  stop( t=0 ):this {
     this._time.end = t;
     return this;
   }
@@ -148,7 +150,7 @@ export abstract class Space {
    * Play animation loop, and then stop after `duration` time has passed.
    * @param duration a value in millisecond to specify a time period to play before stopping, or `-1` to play forever
    */
-  playOnce( duration=5000 ):Space {
+  playOnce( duration=5000 ):this {
     this.play();
     this.stop( duration );
     return this;
@@ -158,43 +160,61 @@ export abstract class Space {
    * set custom render function (on resize and other events)
    * @param context graphics context
    */
-  abstract render( context?:any ):Space;
+  abstract render( context:any ):this;
 
   /**
    * Resize the space
    * @param w `width or an IPt object
    * @param h height
    */
-  abstract resize( w:number|IPt, h?:number ):Space;
+  abstract resize( b:IPt, evt?:Event ):this;
 
   /**
    * clear all contents in the space
    */
-  abstract clear( ):Space;
+  abstract clear( ):this;
+
 
   /**
-   * Bind event listener in canvas element, for events such as mouse events
+   * Bind event listener in canvas element, for events such as mouse events. Not implemented.
    * @param evt 
    * @param callback 
    */
-  abstract bindCanvas(evt:Event, callback:Function);
+  bindCanvas(evt:string, callback:EventListener) {
+
+  }
 
   /**
-   * A convenient method to bind (or unbind) all mouse events
+   * Unbind event listener in canvas element, for events such as mouse events. Not implemented.
+   * @param evt 
+   * @param callback 
+   */
+  unbindCanvas(evt:string, callback:EventListener) {
+
+  }
+
+  /**
+   * A convenient method to bind (or unbind) all mouse events. Not implemented.
    * @param _bind 
    */
-  abstract bindMouse( _bind:boolean );
+  bindMouse( _bind:boolean ) {
+
+  }
 
   /**
-   * A convenient method to bind (or unbind) all mobile touch events
+   * A convenient method to bind (or unbind) all mobile touch events. Not implemented.
    * @param _bind 
    */
-  abstract bindTouch( _bind:boolean );
+  bindTouch( _bind:boolean ) {
+
+  }
 
   /**
-   * A convenient method to convert the touch points in a touch event to a Pts
+   * A convenient method to convert the touch points in a touch event to a Pts. Not implemented.
    * @param evt 
    * @param which 
    */
-  abstract touchesToPoints( evt:Event, which?:string ):Pts;
+  touchesToPoints( evt:Event, which?:string ):Pts {
+    return new Pts();
+  }
 }
