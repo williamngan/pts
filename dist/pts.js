@@ -705,6 +705,17 @@ var __extends = this && this.__extends || function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 }();
+var __values = this && this.__values || function (o) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator],
+        i = 0;
+    if (m) return m.call(o);
+    return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var vectorious_1 = __webpack_require__(0);
 var Pt = function (_super) {
@@ -716,19 +727,33 @@ var Pt = function (_super) {
         }
         return _super.call(this, Pt.getArgs(args)) || this;
     }
+    /**
+     * Convert different kinds of parameters (arguments, array, object) into an array of numbers
+     * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
+     */
     Pt.getArgs = function (args) {
         if (args.length < 1) return [];
         var pos = [];
-        // positional arguments: x,y,z,w
+        // positional arguments: x,y,z,w,...
         if (typeof args[0] === 'number') {
             pos = Array.prototype.slice.call(args);
             // as an object of {x, y?, z?, w?}
         } else if (typeof args[0] === 'object' && !Array.isArray(args[0])) {
             var a = ["x", "y", "z", "w"];
-            for (var _i = 0, a_1 = a; _i < a_1.length; _i++) {
-                var p = a_1[_i];
-                if (args[0][p] == undefined) break;
-                pos.push(args[0][p]);
+            try {
+                for (var a_1 = __values(a), a_1_1 = a_1.next(); !a_1_1.done; a_1_1 = a_1.next()) {
+                    var p = a_1_1.value;
+                    if (args[0][p] == undefined) break;
+                    pos.push(args[0][p]);
+                }
+            } catch (e_1_1) {
+                e_1 = { error: e_1_1 };
+            } finally {
+                try {
+                    if (a_1_1 && !a_1_1.done && (_a = a_1.return)) _a.call(a_1);
+                } finally {
+                    if (e_1) throw e_1.error;
+                }
             }
             // as an array of values
         } else if (Array.isArray(args[0])) {
@@ -736,59 +761,37 @@ var Pt = function (_super) {
             pos = _x.slice();
         }
         return pos;
+        var e_1, _a;
     };
+    /**
+     * Update the values of this Pt
+     * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
+     */
     Pt.prototype.to = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
         var p = Pt.getArgs(args);
-        if (p[0] != undefined) this.x = p[0];
-        if (p[1] != undefined) this.y = p[1];
-        if (p[2] != undefined) this.z = p[2];
-        if (p[3] != undefined) this.w = p[3];
+        for (var i = 0; i < p.length; i++) {
+            this.set(i, p[i]);
+        }
+        this.length = Math.max(this.length, p.length);
         return this;
     };
-    Object.defineProperty(Pt.prototype, "x", {
-        get: function () {
-            return this.get(0);
-        },
-        set: function (_x) {
-            this.set(0, _x);
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Pt.prototype, "y", {
-        get: function () {
-            return this.get(1);
-        },
-        set: function (_y) {
-            this.set(1, _y);
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Pt.prototype, "z", {
-        get: function () {
-            return this.get(2);
-        },
-        set: function (_z) {
-            this.set(2, _z);
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Pt.prototype, "w", {
-        get: function () {
-            return this.get(3);
-        },
-        set: function (_w) {
-            this.set(3, _w);
-        },
-        enumerable: true,
-        configurable: true
-    });
+    /**
+     * Iterator implementation to support for ... of loop
+     */
+    Pt.prototype[Symbol.iterator] = function () {
+        var idx = 0;
+        var count = this.length;
+        var self = this;
+        return {
+            next: function () {
+                return idx < count ? { done: false, value: self.get(idx++) } : { done: true, value: null };
+            }
+        };
+    };
     return Pt;
 }(vectorious_1.Vector);
 exports.Pt = Pt;

@@ -40,9 +40,16 @@ describe('Pt', function() {
       let p = new Pt([1,2,3,4,5,6]);
       p.push(7);
       assert.equal( 7, p.length );
-
     });
 
+    it('can support for-of loop', function() {
+      let p = new Pt([1,2,3,4,5,6]);
+      let d = 0;
+      for (let k of p) {
+        d += k
+      }
+      assert.equal( d, 21 );
+    });
 
   });
 });

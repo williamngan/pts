@@ -5,7 +5,8 @@
     "noImplicitAny": false,
     "sourceMap": true,
     "outDir": "dist/es6",
-    "rootDir": "src"
+    "rootDir": "src",
+    "downlevelIteration": true
   },
 
   "include": [

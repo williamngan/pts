@@ -7,18 +7,22 @@ export interface IPt {
   w?:number
 }
 
-export class Pt extends Vector implements IPt {
+export class Pt extends Vector implements IPt, Iterable<number> {
 
   constructor( ...args:any[]) {
     super( Pt.getArgs( args ) );
   }
 
+  /**
+   * Convert different kinds of parameters (arguments, array, object) into an array of numbers
+   * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
+   */
   static getArgs( args:any[] ):Array<number> {
     if (args.length<1) return [];
 
     var pos = [];
     
-    // positional arguments: x,y,z,w
+    // positional arguments: x,y,z,w,...
     if (typeof args[0] === 'number') {
       pos = Array.prototype.slice.call( args );
 
@@ -39,27 +43,39 @@ export class Pt extends Vector implements IPt {
     return pos;
   }
 
+
+  /**
+   * Update the values of this Pt
+   * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
+   */
   to( ...args:any[]):Pt {
     let p = Pt.getArgs( args );
-    if (p[0] != undefined) this.x = p[0];
-    if (p[1] != undefined) this.y = p[1];
-    if (p[2] != undefined) this.z = p[2];
-    if (p[3] != undefined) this.w = p[3];
+    for (let i=0; i<p.length; i++) {
+      this.set( i, p[i] );
+    }
+    this.length = Math.max( this.length, p.length );
     return this;
   }
 
 
-  get x():number { return this.get(0); }
-  set x( _x:number ) {this.set(0, _x); }
+  /**
+   * Iterator implementation to support for ... of loop
+   */
+  [Symbol.iterator]():Iterator<number> {
 
-  get y():number { return this.get(1); }
-  set y( _y:number ) {this.set(1, _y); }
+    let idx = 0;
+    let count = this.length;
+    let self = this;
 
-  get z():number { return this.get(2); }
-  set z( _z:number ) {this.set(2, _z); }
+    return {
+      next(): IteratorResult<number> {
+        return (idx < count) ? { done: false, value: self.get(idx++) } : { done: true, value: null };
+      }
+    }
+  }
 
-  get w():number { return this.get(3); }
-  set w( _w:number ) {this.set(3, _w); }
+
+
 
 
 
