@@ -18,6 +18,10 @@ export class Bound implements IPt{
     }
   }
 
+  public clone():Bound {
+    return new Bound( this._topLeft, this._bottomRight );
+  }
+
   protected _updateSize() {
     this._size = this._bottomRight.$subtract( this._topLeft ).abs();
     this._updateCenter();

@@ -1869,6 +1869,9 @@ var Bound = function () {
             this._updateSize();
         }
     }
+    Bound.prototype.clone = function () {
+        return new Bound(this._topLeft, this._bottomRight);
+    };
     Bound.prototype._updateSize = function () {
         this._size = this._bottomRight.$subtract(this._topLeft).abs();
         this._updateCenter();
@@ -2019,7 +2022,7 @@ var __extends = this && this.__extends || function () {
 }();
 Object.defineProperty(exports, "__esModule", { value: true });
 var Space_1 = __webpack_require__(8);
-var Pts_1 = __webpack_require__(2);
+var Pt_1 = __webpack_require__(1);
 var Bound_1 = __webpack_require__(6);
 var CanvasSpace = function (_super) {
     __extends(CanvasSpace, _super);
@@ -2034,8 +2037,9 @@ var CanvasSpace = function (_super) {
         _this._autoResize = false;
         _this._bgcolor = "#F3F7FA";
         // track mouse dragging
-        _this._mousedown = false;
-        _this._mousedrag = false;
+        _this._pressed = false;
+        _this._dragged = false;
+        _this._renderFunc = undefined;
         var _selector = null;
         var _existed = false;
         _this.id = "pt";
@@ -2077,6 +2081,11 @@ var CanvasSpace = function (_super) {
         _this._ctx = _this._canvas.getContext('2d');
         return _this;
     }
+    /**
+     * Helper function to create a DOM element
+     * @param elem element tag name
+     * @param id element id attribute
+     */
     CanvasSpace.prototype._createElement = function (elem, id) {
         if (elem === void 0) {
             elem = "div";
@@ -2085,6 +2094,10 @@ var CanvasSpace = function (_super) {
         d.setAttribute("id", id);
         return d;
     };
+    /**
+     * Handle callbacks after element is mounted in DOM
+     * @param callback
+     */
     CanvasSpace.prototype._ready = function (callback) {
         if (!this._container) throw "Cannot initiate #" + this.id + " element";
         if (this._autoResize) {
@@ -2112,6 +2125,10 @@ var CanvasSpace = function (_super) {
         }
         return this;
     };
+    /**
+     * Window resize handling
+     * @param evt
+     */
     CanvasSpace.prototype._resizeHandler = function (evt) {
         var b = this._container.getBoundingClientRect();
         this.resize(Bound_1.Bound.fromBoundingRect(b), evt);
@@ -2132,15 +2149,30 @@ var CanvasSpace = function (_super) {
         return this;
     };
     Object.defineProperty(CanvasSpace.prototype, "element", {
+        /**
+         * Get the html canvas element
+         */
         get: function () {
             return this._canvas;
         },
         enumerable: true,
         configurable: true
     });
-    CanvasSpace.prototype.render = function (context) {
-        return this;
-    };
+    Object.defineProperty(CanvasSpace.prototype, "parent", {
+        /**
+         * Get the parent element that contains the canvas element
+         */
+        get: function () {
+            return this._container;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+     * This overrides Space's `resize` function. It's a callback function for window's resize event. Keep track of this with `onSpaceResize(w,h,evt)` callback in your added objects.
+     * @param b a Bound object to resize to
+     * @param evt Optionally pass a resize event
+     */
     CanvasSpace.prototype.resize = function (b, evt) {
         this.bound = b;
         var s = this.bound.size.$scale(this._pixelScale);
@@ -2156,6 +2188,10 @@ var CanvasSpace = function (_super) {
         this.render(this._ctx);
         return this;
     };
+    /**
+     * Clear the canvas with its background color. Overrides Space's `clear` function.
+     * @param bg Optionally specify a custom background color in hex or rgba string, or "transparent". If not defined, it will use its `bgcolor` property as background color to clear the canvas.
+     */
     CanvasSpace.prototype.clear = function (bg) {
         if (bg) this._bgcolor = bg;
         var lastColor = this._ctx.fillStyle;
@@ -2168,53 +2204,189 @@ var CanvasSpace = function (_super) {
         this._ctx.fillStyle = lastColor;
         return this;
     };
+    /**
+     * Main animation function. Call `Space.playItems`.
+     * @param time current time
+     */
     CanvasSpace.prototype.playItems = function (time) {
         this._ctx.save();
         _super.prototype.playItems.call(this, time);
         this._ctx.restore();
+        this.render(this._ctx);
     };
+    /**
+     * Bind event listener in canvas element, for events such as mouse events
+     * @param evt an event string such as "mousedown"
+     * @param callback callback function for this event
+     */
     CanvasSpace.prototype.bindCanvas = function (evt, callback) {
         this._canvas.addEventListener(evt, callback);
     };
+    /**
+     * Unbind a callback from the event listener
+     * @param evt an event string such as "mousedown"
+     * @param callback callback function to unbind
+     */
     CanvasSpace.prototype.unbindCanvas = function (evt, callback) {
         this._canvas.removeEventListener(evt, callback);
     };
+    /**
+     * A convenient method to bind (or unbind) all mouse events in canvas element. All item added to `players` property that implements an `onMouseAction` callback will receive mouse event callbacks. The types of mouse actions are: "up", "down", "move", "drag", "drop", "over", and "out".
+     * @param _bind a boolean value to bind mouse events if set to `true`. If `false`, all mouse events will be unbound. Default is true.
+     */
     CanvasSpace.prototype.bindMouse = function (_bind) {
         if (_bind === void 0) {
             _bind = true;
         }
         if (_bind) {
-            // this.bindCanvas( "mousedown", this._mousedown.bind(this) )
-        } else {}
+            this.bindCanvas("mousedown", this._mouseDown.bind(this));
+            this.bindCanvas("mouseup", this._mouseUp.bind(this));
+            this.bindCanvas("mouseover", this._mouseOver.bind(this));
+            this.bindCanvas("mouseout", this._mouseOut.bind(this));
+            this.bindCanvas("mousemove", this._mouseMove.bind(this));
+        } else {
+            this.unbindCanvas("mousedown", this._mouseDown.bind(this));
+            this.unbindCanvas("mouseup", this._mouseUp.bind(this));
+            this.unbindCanvas("mouseover", this._mouseOver.bind(this));
+            this.unbindCanvas("mouseout", this._mouseOut.bind(this));
+            this.unbindCanvas("mousemove", this._mouseMove.bind(this));
+        }
     };
+    /**
+     * A convenient method to bind (or unbind) all mobile touch events in canvas element. All item added to `players` property that implements an `onTouchAction` callback will receive touch event callbacks. The types of touch actions are the same as the mouse actions: "up", "down", "move", and "out"
+     * @param _bind a boolean value to bind touch events if set to `true`. If `false`, all touch events will be unbound. Default is true.
+     */
     CanvasSpace.prototype.bindTouch = function (_bind) {
         if (_bind === void 0) {
             _bind = true;
         }
+        if (_bind) {
+            this.bindCanvas("touchstart", this._mouseDown.bind(this));
+            this.bindCanvas("touchend", this._mouseUp.bind(this));
+            this.bindCanvas("touchmove", this._touchMove.bind(this));
+            this.bindCanvas("touchcancel", this._mouseOut.bind(this));
+        } else {
+            this.unbindCanvas("touchstart", this._mouseDown.bind(this));
+            this.unbindCanvas("touchend", this._mouseUp.bind(this));
+            this.unbindCanvas("touchmove", this._touchMove.bind(this));
+            this.unbindCanvas("touchcancel", this._mouseOut.bind(this));
+        }
     };
+    /**
+     * A convenient method to convert the touch points in a touch event to an array of `Pt`.
+     * @param evt a touch event which contains touches, changedTouches, and targetTouches list
+     * @param which a string to select a touches list: "touches", "changedTouches", or "targetTouches". Default is "touches"
+     * @return an array of Pt, whose origin position (0,0) is offset to the top-left of this space
+     */
     CanvasSpace.prototype.touchesToPoints = function (evt, which) {
-        return new Pts_1.Pts();
+        if (which === void 0) {
+            which = "touches";
+        }
+        if (!evt || !evt[which]) return [];
+        var ts = [];
+        for (var i = 0; i < evt[which].length; i++) {
+            var t = evt[which].item(i);
+            ts.push(new Pt_1.Pt(t.pageX - this.bound.topLeft.x, t.pageY - this.bound.topLeft.y));
+        }
+        return ts;
     };
+    /**
+     * Go through all the `players` and call its `onMouseAction` callback function
+     * @param type
+     * @param evt
+     */
     CanvasSpace.prototype._mouseAction = function (type, evt) {
         if (evt instanceof TouchEvent) {
-            for (var k in this.playItems) {
-                var v = this.playItems[k];
+            for (var k in this.players) {
+                var v = this.players[k];
                 var c = evt.changedTouches && evt.changedTouches.length > 0;
                 var px = c ? evt.changedTouches.item(0).pageX : 0;
                 var py = c ? evt.changedTouches.item(0).pageY : 0;
                 v.onTouchAction(type, px, py, evt);
             }
         } else {
-            for (var k in this.playItems) {
-                var v = this.playItems[k];
+            for (var k in this.players) {
+                var v = this.players[k];
                 var px = evt.offsetX || evt.layerX;
                 var py = evt.offsetY || evt.layerY;
                 v.onMouseAction(type, px, py, evt);
             }
         }
     };
-    CanvasSpace.prototype._mouseDown = function (evt) {};
-    CanvasSpace.prototype._mouseUp = function (evt) {};
+    /**
+     * MouseDown handler
+     * @param evt
+     */
+    CanvasSpace.prototype._mouseDown = function (evt) {
+        this._mouseAction("down", evt);
+        this._pressed = true;
+    };
+    /**
+     * MouseUp handler
+     * @param evt
+     */
+    CanvasSpace.prototype._mouseUp = function (evt) {
+        this._mouseAction("up", evt);
+        if (this._dragged) this._mouseAction("drop", evt);
+        this._pressed = false;
+        this._dragged = false;
+    };
+    /**
+     * MouseMove handler
+     * @param evt
+     */
+    CanvasSpace.prototype._mouseMove = function (evt) {
+        this._mouseAction("move", evt);
+        if (this._pressed) {
+            this._dragged = true;
+            this._mouseAction("drag", evt);
+        }
+    };
+    /**
+     * MouseOver handler
+     * @param evt
+     */
+    CanvasSpace.prototype._mouseOver = function (evt) {
+        this._mouseAction("over", evt);
+    };
+    /**
+     * MouseOut handler
+     * @param evt
+     */
+    CanvasSpace.prototype._mouseOut = function (evt) {
+        this._mouseAction("out", evt);
+        if (this._dragged) this._mouseAction("drop", evt);
+        this._dragged = false;
+    };
+    /**
+     * TouchMove handler
+     * @param evt
+     */
+    CanvasSpace.prototype._touchMove = function (evt) {
+        evt.preventDefault();
+        this._mouseMove(evt);
+    };
+    /**
+     * Custom rendering
+     * @param context rendering context
+     */
+    CanvasSpace.prototype.render = function (context) {
+        if (this._renderFunc) this._renderFunc(context, this);
+        return this;
+    };
+    Object.defineProperty(CanvasSpace.prototype, "customRendering", {
+        get: function () {
+            return this._renderFunc;
+        },
+        /**
+         * Set a custom rendering `function(graphics_context, canvas_space)` if needed
+         */
+        set: function (f) {
+            this._renderFunc = f;
+        },
+        enumerable: true,
+        configurable: true
+    });
     return CanvasSpace;
 }(Space_1.Space);
 exports.default = CanvasSpace;
@@ -2228,7 +2400,6 @@ exports.default = CanvasSpace;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var Bound_1 = __webpack_require__(6);
-var Pts_1 = __webpack_require__(2);
 var Space = function () {
     function Space() {
         this.id = "space";
@@ -2357,36 +2528,6 @@ var Space = function () {
         this.play();
         this.stop(duration);
         return this;
-    };
-    /**
-     * Bind event listener in canvas element, for events such as mouse events. Not implemented.
-     * @param evt
-     * @param callback
-     */
-    Space.prototype.bindCanvas = function (evt, callback) {};
-    /**
-     * Unbind event listener in canvas element, for events such as mouse events. Not implemented.
-     * @param evt
-     * @param callback
-     */
-    Space.prototype.unbindCanvas = function (evt, callback) {};
-    /**
-     * A convenient method to bind (or unbind) all mouse events. Not implemented.
-     * @param _bind
-     */
-    Space.prototype.bindMouse = function (_bind) {};
-    /**
-     * A convenient method to bind (or unbind) all mobile touch events. Not implemented.
-     * @param _bind
-     */
-    Space.prototype.bindTouch = function (_bind) {};
-    /**
-     * A convenient method to convert the touch points in a touch event to a Pts. Not implemented.
-     * @param evt
-     * @param which
-     */
-    Space.prototype.touchesToPoints = function (evt, which) {
-        return new Pts_1.Pts();
     };
     return Space;
 }();

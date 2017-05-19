@@ -11,7 +11,11 @@ interface PtsCanvasRenderingContext2D extends CanvasRenderingContext2D {
   backingStorePixelRatio?:number;
 }
 
+type TouchPointsKey = "touches" | "changedTouches" | "targetTouches";
+
+
 export default class CanvasSpace extends Space {
+  
   protected _canvas:HTMLCanvasElement;
 
   protected _container:Element;
@@ -21,8 +25,10 @@ export default class CanvasSpace extends Space {
   protected _ctx:PtsCanvasRenderingContext2D;
 
   // track mouse dragging
-  private _mousedown = false;
-  private _mousedrag = false;
+  private _pressed = false;
+  private _dragged = false;
+  
+  private _renderFunc: Function = undefined;
 
   /**
    * Create a CanvasSpace which represents a HTML Canvas Space
@@ -80,12 +86,23 @@ export default class CanvasSpace extends Space {
 
   }
 
+
+  /**
+   * Helper function to create a DOM element
+   * @param elem element tag name
+   * @param id element id attribute
+   */
   private _createElement( elem="div", id ) {
     let d = document.createElement( elem );
     d.setAttribute("id", id);
     return d;
   }
 
+
+  /**
+   * Handle callbacks after element is mounted in DOM
+   * @param callback 
+   */
   private _ready( callback:Function ) {
     if (!this._container) throw `Cannot initiate #${this.id} element`;
 
@@ -121,10 +138,16 @@ export default class CanvasSpace extends Space {
     return this;
   }
 
+
+  /**
+   * Window resize handling
+   * @param evt 
+   */
   protected _resizeHandler( evt:Event ) {
     let b = this._container.getBoundingClientRect();
     this.resize( Bound.fromBoundingRect(b), evt );
   }
+
 
   /**
    * Set whether the canvas element should resize when its container is resized. Default will auto size
@@ -140,15 +163,26 @@ export default class CanvasSpace extends Space {
   }
 
 
+  /**
+   * Get the html canvas element
+   */
   get element():HTMLCanvasElement {
     return this._canvas;
   }
 
-
-  render( context:CanvasRenderingContext2D ):this {
-    return this;
+  /**
+   * Get the parent element that contains the canvas element
+   */
+  get parent():Element {
+    return this._container;
   }
 
+
+  /**
+   * This overrides Space's `resize` function. It's a callback function for window's resize event. Keep track of this with `onSpaceResize(w,h,evt)` callback in your added objects.
+   * @param b a Bound object to resize to
+   * @param evt Optionally pass a resize event
+   */
   resize( b:Bound, evt?:Event):this {
 
     this.bound = b;
@@ -171,6 +205,11 @@ export default class CanvasSpace extends Space {
     return this;
   }
 
+
+  /**
+   * Clear the canvas with its background color. Overrides Space's `clear` function.
+   * @param bg Optionally specify a custom background color in hex or rgba string, or "transparent". If not defined, it will use its `bgcolor` property as background color to clear the canvas.
+   */
   clear( bg?:string ):this {
 
     if (bg) this._bgcolor = bg;
@@ -188,49 +227,113 @@ export default class CanvasSpace extends Space {
   }
 
 
+  /**
+   * Main animation function. Call `Space.playItems`.
+   * @param time current time
+   */
   protected playItems( time: number ) {
     this._ctx.save();
     super.playItems( time );
     this._ctx.restore();
+    this.render( this._ctx );
   }
 
+
+  /**
+   * Bind event listener in canvas element, for events such as mouse events
+   * @param evt an event string such as "mousedown"
+   * @param callback callback function for this event
+   */
   bindCanvas(evt:string, callback:EventListener) {
     this._canvas.addEventListener( evt, callback );
   }
 
+
+  /**
+   * Unbind a callback from the event listener
+   * @param evt an event string such as "mousedown"
+   * @param callback callback function to unbind
+   */
   unbindCanvas(evt:string, callback:EventListener) {
     this._canvas.removeEventListener( evt, callback );
   }
 
+
+  /**
+   * A convenient method to bind (or unbind) all mouse events in canvas element. All item added to `players` property that implements an `onMouseAction` callback will receive mouse event callbacks. The types of mouse actions are: "up", "down", "move", "drag", "drop", "over", and "out".
+   * @param _bind a boolean value to bind mouse events if set to `true`. If `false`, all mouse events will be unbound. Default is true.
+   */
   bindMouse( _bind:boolean=true ) {
     if ( _bind) {
-      // this.bindCanvas( "mousedown", this._mousedown.bind(this) )
+      this.bindCanvas( "mousedown", this._mouseDown.bind(this) )
+      this.bindCanvas( "mouseup", this._mouseUp.bind(this) )
+      this.bindCanvas( "mouseover", this._mouseOver.bind(this) )
+      this.bindCanvas( "mouseout", this._mouseOut.bind(this) )
+      this.bindCanvas( "mousemove", this._mouseMove.bind(this) )
     } else {
-
+      this.unbindCanvas( "mousedown", this._mouseDown.bind(this) )
+      this.unbindCanvas( "mouseup", this._mouseUp.bind(this) )
+      this.unbindCanvas( "mouseover", this._mouseOver.bind(this) )
+      this.unbindCanvas( "mouseout", this._mouseOut.bind(this) )
+      this.unbindCanvas( "mousemove", this._mouseMove.bind(this) )
     }
     
   }
 
+
+  /**
+   * A convenient method to bind (or unbind) all mobile touch events in canvas element. All item added to `players` property that implements an `onTouchAction` callback will receive touch event callbacks. The types of touch actions are the same as the mouse actions: "up", "down", "move", and "out"
+   * @param _bind a boolean value to bind touch events if set to `true`. If `false`, all touch events will be unbound. Default is true.
+   */
   bindTouch( _bind:boolean=true ) {
-
+    if (_bind) {
+      this.bindCanvas( "touchstart", this._mouseDown.bind(this) )
+      this.bindCanvas( "touchend", this._mouseUp.bind(this) )
+      this.bindCanvas( "touchmove", this._touchMove.bind(this) );
+      this.bindCanvas( "touchcancel", this._mouseOut.bind(this) )
+    } else {
+      this.unbindCanvas( "touchstart", this._mouseDown.bind(this) )
+      this.unbindCanvas( "touchend", this._mouseUp.bind(this) )
+      this.unbindCanvas( "touchmove", this._touchMove.bind(this) );
+      this.unbindCanvas( "touchcancel", this._mouseOut.bind(this) )
+    }
   }
 
-  touchesToPoints( evt:Event, which?:string ): Pts {
-    return new Pts()
+  
+  /**
+   * A convenient method to convert the touch points in a touch event to an array of `Pt`.
+   * @param evt a touch event which contains touches, changedTouches, and targetTouches list
+   * @param which a string to select a touches list: "touches", "changedTouches", or "targetTouches". Default is "touches"
+   * @return an array of Pt, whose origin position (0,0) is offset to the top-left of this space
+   */
+  touchesToPoints( evt:TouchEvent, which:TouchPointsKey="touches" ): Pt[] {
+    if (!evt || !evt[which]) return [];
+    let ts = [];
+    for (var i=0; i<evt[which].length; i++) {
+      let t = evt[which].item(i);
+      ts.push( new Pt( t.pageX - this.bound.topLeft.x, t.pageY - this.bound.topLeft.y ) );
+    }
+    return ts;
   }
 
+
+  /**
+   * Go through all the `players` and call its `onMouseAction` callback function
+   * @param type 
+   * @param evt 
+   */
   protected _mouseAction( type:string, evt:MouseEvent|TouchEvent ) {
     if (evt instanceof TouchEvent) {
-      for (let k in this.playItems) {
-        let v = this.playItems[k];
+      for (let k in this.players) {
+        let v = this.players[k];
         let c = evt.changedTouches && evt.changedTouches.length > 0
         let px = (c) ? evt.changedTouches.item(0).pageX : 0;
         let py = (c) ? evt.changedTouches.item(0).pageY : 0;
         v.onTouchAction( type, px, py, evt );
       }
     } else {
-      for (let k in this.playItems) {
-        let v = this.playItems[k];
+      for (let k in this.players) {
+        let v = this.players[k];
         let px = evt.offsetX || evt.layerX;
         let py = evt.offsetY || evt.layerY;
         v.onMouseAction( type, px, py, evt );
@@ -238,12 +341,84 @@ export default class CanvasSpace extends Space {
     }
   }
 
-  protected _mouseDown( evt:Event ) {
 
+  /**
+   * MouseDown handler
+   * @param evt 
+   */
+  protected _mouseDown( evt:MouseEvent|TouchEvent ) {
+    this._mouseAction( "down", evt );
+    this._pressed = true;
   }
 
-  protected _mouseUp( evt:Event ) {
 
+  /**
+   * MouseUp handler
+   * @param evt 
+   */
+  protected _mouseUp( evt:MouseEvent|TouchEvent ) {
+    this._mouseAction( "up", evt );
+    if (this._dragged) this._mouseAction( "drop", evt );
+    this._pressed = false;
+    this._dragged = false;
   }
 
+
+  /**
+   * MouseMove handler
+   * @param evt 
+   */
+  protected _mouseMove( evt:MouseEvent|TouchEvent ) {
+    this._mouseAction( "move", evt );
+    if (this._pressed) {
+      this._dragged = true;
+      this._mouseAction( "drag", evt );
+    }
+  }
+
+
+  /**
+   * MouseOver handler
+   * @param evt 
+   */
+  protected _mouseOver( evt:MouseEvent|TouchEvent ) {
+    this._mouseAction( "over", evt );
+  }
+
+
+  /**
+   * MouseOut handler
+   * @param evt 
+   */
+  protected _mouseOut( evt:MouseEvent|TouchEvent ) {
+    this._mouseAction( "out", evt );
+    if (this._dragged) this._mouseAction( "drop", evt );
+    this._dragged = false;
+  }
+
+
+  /**
+   * TouchMove handler
+   * @param evt 
+   */
+  protected _touchMove( evt:TouchEvent) {
+    evt.preventDefault();
+    this._mouseMove(evt);
+  }
+
+  
+  /**
+   * Custom rendering
+   * @param context rendering context
+   */
+  protected render( context:CanvasRenderingContext2D ):this {
+    if (this._renderFunc) this._renderFunc( context, this );
+    return this;
+  }
+
+  /**
+   * Set a custom rendering `function(graphics_context, canvas_space)` if needed
+   */
+  set customRendering( f:Function ) { this._renderFunc = f; }
+  get customRendering():Function { return this._renderFunc; }
 }

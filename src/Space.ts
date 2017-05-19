@@ -156,11 +156,6 @@ export abstract class Space {
     return this;
   }
 
-  /**
-   * set custom render function (on resize and other events)
-   * @param context graphics context
-   */
-  abstract render( context:any ):this;
 
   /**
    * Resize the space
@@ -175,46 +170,5 @@ export abstract class Space {
   abstract clear( ):this;
 
 
-  /**
-   * Bind event listener in canvas element, for events such as mouse events. Not implemented.
-   * @param evt 
-   * @param callback 
-   */
-  bindCanvas(evt:string, callback:EventListener) {
 
-  }
-
-  /**
-   * Unbind event listener in canvas element, for events such as mouse events. Not implemented.
-   * @param evt 
-   * @param callback 
-   */
-  unbindCanvas(evt:string, callback:EventListener) {
-
-  }
-
-  /**
-   * A convenient method to bind (or unbind) all mouse events. Not implemented.
-   * @param _bind 
-   */
-  bindMouse( _bind:boolean ) {
-
-  }
-
-  /**
-   * A convenient method to bind (or unbind) all mobile touch events. Not implemented.
-   * @param _bind 
-   */
-  bindTouch( _bind:boolean ) {
-
-  }
-
-  /**
-   * A convenient method to convert the touch points in a touch event to a Pts. Not implemented.
-   * @param evt 
-   * @param which 
-   */
-  touchesToPoints( evt:Event, which?:string ):Pts {
-    return new Pts();
-  }
 }
