@@ -28,6 +28,12 @@ describe('Pt', function() {
       assert.equal(11346, p1.get(0) + p1.get(3) + p2.get(2) + p3.get(1) + p4.get(0));
     });
 
+    it('should init with Pt object', function() {
+      let p = new Pt( new Pt(1,2,3) );
+      assert.equal( 6, p.x + p.y + p.z );
+    });
+
+  
     it('should init with Array of numbers', function() {
       let p1 = new Pt([10,100,1000,10000]);
       let p2 = new Pt([11,111,1111]);

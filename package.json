@@ -20,7 +20,6 @@
     "vectorious": "^4.8.1"
   },
   "devDependencies": {
-    "@types/vectorious": "^4.3.3",
     "babel-loader": "^6.4.1",
     "babel-preset-es2015": "^6.24.0",
     "chai": "^3.5.0",

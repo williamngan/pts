@@ -11,12 +11,12 @@ interface PtsCanvasRenderingContext2D extends CanvasRenderingContext2D {
   backingStorePixelRatio?:number;
 }
 
-export class CanvasSpace extends Space {
-
+export default class CanvasSpace extends Space {
   protected _canvas:HTMLCanvasElement;
+
   protected _container:Element;
   protected _pixelScale = 1;
-  protected _autoResize = true;
+  protected _autoResize = false;
   protected _bgcolor = "#F3F7FA";
   protected _ctx:PtsCanvasRenderingContext2D;
 
@@ -29,7 +29,7 @@ export class CanvasSpace extends Space {
    * @param elem Specify an element by its "id" attribute as string, or by the element object itself. An element can be an existing `<canvas>`, or a `<div>` container in which a new `<canvas>` will be created. If left empty, a `<div id="pt_container"><canvas id="pt" /></div>` will be added to DOM. Use css to customize its appearance if needed.
    * @param callback an optional callback `function(boundingBox, spaceElement)` to be called when canvas is appended and ready. A "ready" event will also be fired from the `<canvas>` element when it's appended, which can be traced with `spaceInstance.space.addEventListener("ready")`
    */
-  constructor( elem:string|Element, callback:Function) {
+  constructor( elem:string|Element, callback?:Function) {
     super();
 
     var _selector:Element = null;
@@ -67,10 +67,10 @@ export class CanvasSpace extends Space {
     }
 
     // if size is known then set it immediately
-    if (_existed) {
-      let b = this._container.getBoundingClientRect();
-      this.resize( Bound.fromBoundingRect(b) );
-    }
+    // if (_existed) {
+      // let b = this._container.getBoundingClientRect();
+      // this.resize( Bound.fromBoundingRect(b) );
+    // }
 
     // no mutation observer, so we set a timeout for ready event
     setTimeout( this._ready.bind( this, callback ), 50 );
@@ -89,8 +89,10 @@ export class CanvasSpace extends Space {
   private _ready( callback:Function ) {
     if (!this._container) throw `Cannot initiate #${this.id} element`;
 
-    let b = this._container.getBoundingClientRect();
-    this.resize( Bound.fromBoundingRect(b) );
+    if (this._autoResize) {
+      let b = this._container.getBoundingClientRect();
+      this.resize( Bound.fromBoundingRect(b) );
+    }
     
     this.clear( this._bgcolor );
     this._canvas.dispatchEvent( new Event("ready") );
@@ -109,7 +111,7 @@ export class CanvasSpace extends Space {
   setup( opt:{bgcolor?:string, resize?:boolean, retina?:boolean} ):this {
     if (opt.bgcolor) this._bgcolor = opt.bgcolor;
     
-    this._autoResize = (opt.resize !== false)
+    this._autoResize = (opt.resize === true);
 
     if (opt.retina !== false) {
       let r1 = window.devicePixelRatio || 1
@@ -151,12 +153,11 @@ export class CanvasSpace extends Space {
 
     this.bound = b;
 
-    let sw = Math.floor(this.bound.width * this._pixelScale);
-    let sh = Math.floor(this.bound.height * this._pixelScale);
-    this._canvas.width = sw;
-    this._canvas.height = sh;
-    this._canvas.style.width = sw + "px";
-    this._canvas.style.height = sh + "px";
+    let s = this.bound.size.$scale( this._pixelScale );
+    this._canvas.width = s.x;
+    this._canvas.height = s.y;
+    this._canvas.style.width = s.x + "px";
+    this._canvas.style.height = s.y + "px";
 
     if (this._pixelScale != 1) this._ctx.scale( this._pixelScale, this._pixelScale );
 
@@ -177,9 +178,9 @@ export class CanvasSpace extends Space {
 
     if (this._bgcolor && this._bgcolor != "transparent") {
       this._ctx.fillStyle = this._bgcolor;
-      this._ctx.fillRect( 0, 0, this.bound.width, this.bound.height );
+      this._ctx.fillRect( 0, 0, this._canvas.width, this._canvas.height );
     } else {
-      this._ctx.clearRect( 0, 0, this.bound.width, this.bound.height );
+      this._ctx.clearRect( 0, 0, this._canvas.width, this._canvas.height );
     }
 
     this._ctx.fillStyle = lastColor;

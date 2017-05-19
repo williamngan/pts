@@ -64,35 +64,11 @@ var pts =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports, __webpack_require__) {
-
-(function () {
-  'use strict';
-
-  var Vector = module.exports.Vector = __webpack_require__(1),
-      Matrix = module.exports.Matrix = __webpack_require__(5);
-
-/*
-  try {
-    var nblas = module.exports.BLAS = require('nblas'),
-        applyBlasOptimizations = require('./applyBlasOptimizations');
-    
-    applyBlasOptimizations(Vector, Matrix, nblas);
-  } catch (error) {
-
-  }
-*/
-
-}());
-
-
-/***/ }),
-/* 1 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -685,7 +661,7 @@ var pts =
 
 
 /***/ }),
-/* 2 */
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -705,19 +681,8 @@ var __extends = this && this.__extends || function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 }();
-var __values = this && this.__values || function (o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator],
-        i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var vectorious_1 = __webpack_require__(0);
+var vectorious_1 = __webpack_require__(5);
 var Pt = function (_super) {
     __extends(Pt, _super);
     function Pt() {
@@ -740,20 +705,10 @@ var Pt = function (_super) {
             // as an object of {x, y?, z?, w?}
         } else if (typeof args[0] === 'object' && !Array.isArray(args[0])) {
             var a = ["x", "y", "z", "w"];
-            try {
-                for (var a_1 = __values(a), a_1_1 = a_1.next(); !a_1_1.done; a_1_1 = a_1.next()) {
-                    var p = a_1_1.value;
-                    if (args[0][p] == undefined) break;
-                    pos.push(args[0][p]);
-                }
-            } catch (e_1_1) {
-                e_1 = { error: e_1_1 };
-            } finally {
-                try {
-                    if (a_1_1 && !a_1_1.done && (_a = a_1.return)) _a.call(a_1);
-                } finally {
-                    if (e_1) throw e_1.error;
-                }
+            var p = args[0];
+            for (var i = 0; i < a.length; i++) {
+                if (p.length && i >= p.length || !(a[i] in p)) break; // check for length and key exist
+                pos.push(p[a[i]]);
             }
             // as an array of values
         } else if (Array.isArray(args[0])) {
@@ -761,7 +716,6 @@ var Pt = function (_super) {
             pos = _x.slice();
         }
         return pos;
-        var e_1, _a;
     };
     /**
      * Update the values of this Pt
@@ -779,6 +733,33 @@ var Pt = function (_super) {
         this.length = Math.max(this.length, p.length);
         return this;
     };
+    Pt.prototype.$add = function (p) {
+        return new Pt(this).add(p);
+    };
+    Pt.prototype.$subtract = function (p) {
+        return new Pt(this).subtract(p);
+    };
+    Pt.prototype.$scale = function (n) {
+        return new Pt(this).scale(n);
+    };
+    Pt.prototype.$normalize = function () {
+        return new Pt(this).normalize();
+    };
+    Pt.prototype.$project = function (p) {
+        return new Pt(this).project(new Pt(p));
+    };
+    Pt.prototype.multiply = function (n) {
+        return this.scale(n);
+    };
+    Pt.prototype.$multiply = function (n) {
+        return this.$scale(n);
+    };
+    Pt.prototype.divide = function (n) {
+        return this.scale(1 / n);
+    };
+    Pt.prototype.$divide = function (n) {
+        return this.$scale(1 / n);
+    };
     /**
      * Iterator implementation to support for ... of loop
      */
@@ -792,12 +773,18 @@ var Pt = function (_super) {
             }
         };
     };
+    Pt.prototype.abs = function () {
+        this.each(function (p) {
+            return Math.abs(p);
+        });
+        return this;
+    };
     return Pt;
 }(vectorious_1.Vector);
 exports.Pt = Pt;
 
 /***/ }),
-/* 3 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -829,28 +816,36 @@ var Pts = function () {
 exports.Pts = Pts;
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var vectorious_1 = __webpack_require__(0);
-var Pt_1 = __webpack_require__(2);
-var Pts_1 = __webpack_require__(3);
+var Pt_1 = __webpack_require__(1);
+var Pts_1 = __webpack_require__(2);
+var CanvasSpace_1 = __webpack_require__(7);
 window["Pt"] = Pt_1.Pt;
 window["Pts"] = Pts_1.Pts;
-var vec = new vectorious_1.Vector([1000, 2, 3]).add(new vectorious_1.Vector([2, 3, 4]));
+var canvas = new CanvasSpace_1.default("#pt");
+console.log(canvas);
+canvas.setup({ bgcolor: "#f00", resize: false });
+/*
+let vec = new Vector( [1000, 2, 3] ).add( new Vector( [2, 3, 4] ) );
 console.log(vec.toString());
-setInterval(function () {
-  return vec.add(new vectorious_1.Vector([1, 2, 3]));
-}, 500);
-var m1 = vectorious_1.Matrix.identity(3);
-var m2 = vectorious_1.Matrix.identity(3);
-console.log(vectorious_1.Matrix.add(m1, m2).toString());
-var pts = new Pts_1.Pts();
-console.log(pts);
+
+setInterval( () => vec.add( new Vector( [ 1, 2, 3 ]) ), 500 );
+
+let m1 = Matrix.identity(3);
+let m2 = Matrix.identity(3);
+
+
+console.log( Matrix.add(m1, m2).toString() );
+
+let pts = new Pts();
+console.log( pts );
+*/
 // console.log(pts.toString());
 // pts.pt(1,2,3);
 // pts.pt(2,3,4);
@@ -858,13 +853,13 @@ console.log(pts);
 // console.log( Matrix.augment(m1, m2).toString() );
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function () {
   'use strict';
 
-  var Vector = __webpack_require__(1);
+  var Vector = __webpack_require__(0);
 
   /**
    * @method constructor
@@ -1826,6 +1821,576 @@ console.log(pts);
   } catch (e) {}
 }());
 
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+(function () {
+  'use strict';
+
+  var Vector = module.exports.Vector = __webpack_require__(0),
+      Matrix = module.exports.Matrix = __webpack_require__(4);
+
+/*
+  try {
+    var nblas = module.exports.BLAS = require('nblas'),
+        applyBlasOptimizations = require('./applyBlasOptimizations');
+    
+    applyBlasOptimizations(Vector, Matrix, nblas);
+  } catch (error) {
+
+  }
+*/
+
+}());
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Pt_1 = __webpack_require__(1);
+var Bound = function () {
+    function Bound(p1, p2) {
+        this._center = new Pt_1.Pt();
+        this._size = new Pt_1.Pt();
+        this._topLeft = new Pt_1.Pt();
+        this._bottomRight = new Pt_1.Pt();
+        if (!p2) {
+            this._size = new Pt_1.Pt(p1);
+        } else if (p1) {
+            this._topLeft = new Pt_1.Pt(p1);
+            this._bottomRight = new Pt_1.Pt(p2);
+            this._updateSize();
+        }
+    }
+    Bound.prototype._updateSize = function () {
+        this._size = this._bottomRight.$subtract(this._topLeft).abs();
+        this._updateCenter();
+    };
+    Bound.prototype._updateCenter = function () {
+        this._center = this._size.$scale(0.5).add(this._topLeft);
+    };
+    Bound.prototype._updatePosFromTop = function () {
+        this._bottomRight = this._topLeft.$add(this._size);
+        this._updateCenter();
+    };
+    Bound.prototype._updatePosFromBottom = function () {
+        this._topLeft = this._bottomRight.$subtract(this._size);
+        this._updateCenter();
+    };
+    Bound.prototype._updatePosFromCenter = function () {
+        var half = this._size.$scale(0.5);
+        this._topLeft = this._center.$subtract(half);
+        this._bottomRight = this._center.$add(half);
+    };
+    Object.defineProperty(Bound.prototype, "size", {
+        get: function () {
+            return new Pt_1.Pt(this._size);
+        },
+        set: function (p) {
+            this._size = new Pt_1.Pt(p);
+            this._updatePosFromTop();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Bound.prototype, "center", {
+        get: function () {
+            return new Pt_1.Pt(this._center);
+        },
+        set: function (p) {
+            this._center = new Pt_1.Pt(p);
+            this._updatePosFromCenter();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Bound.prototype, "topLeft", {
+        get: function () {
+            return new Pt_1.Pt(this._topLeft);
+        },
+        set: function (p) {
+            this._topLeft = new Pt_1.Pt(p);
+            this._updateSize();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Bound.prototype, "bottomRight", {
+        get: function () {
+            return new Pt_1.Pt(this._bottomRight);
+        },
+        set: function (p) {
+            this._bottomRight = new Pt_1.Pt(p);
+            this._updateSize();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Bound.prototype, "width", {
+        get: function () {
+            return this._size.x;
+        },
+        set: function (w) {
+            this._size.x = w;
+            this._updatePosFromTop();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Bound.prototype, "height", {
+        get: function () {
+            return this._size.y;
+        },
+        set: function (h) {
+            this._size.y = h;
+            this._updatePosFromTop();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Bound.prototype, "depth", {
+        get: function () {
+            return this._size.z;
+        },
+        set: function (d) {
+            this._size.z = d;
+            this._updatePosFromTop();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Bound.prototype, "x", {
+        get: function () {
+            return this.topLeft.x;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Bound.prototype, "y", {
+        get: function () {
+            return this.topLeft.y;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Bound.prototype, "z", {
+        get: function () {
+            return this.topLeft.z;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Bound.fromBoundingRect = function (rect) {
+        var b = new Bound(new Pt_1.Pt(rect.left || 0, rect.top || 0), new Pt_1.Pt(rect.right || 0, rect.bottom || 0));
+        if (rect.width && rect.height) b.size = new Pt_1.Pt(rect.width, rect.height);
+        return b;
+    };
+    return Bound;
+}();
+exports.Bound = Bound;
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __extends = this && this.__extends || function () {
+    var extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function (d, b) {
+        d.__proto__ = b;
+    } || function (d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+}();
+Object.defineProperty(exports, "__esModule", { value: true });
+var Space_1 = __webpack_require__(8);
+var Pts_1 = __webpack_require__(2);
+var Bound_1 = __webpack_require__(6);
+var CanvasSpace = function (_super) {
+    __extends(CanvasSpace, _super);
+    /**
+     * Create a CanvasSpace which represents a HTML Canvas Space
+     * @param elem Specify an element by its "id" attribute as string, or by the element object itself. An element can be an existing `<canvas>`, or a `<div>` container in which a new `<canvas>` will be created. If left empty, a `<div id="pt_container"><canvas id="pt" /></div>` will be added to DOM. Use css to customize its appearance if needed.
+     * @param callback an optional callback `function(boundingBox, spaceElement)` to be called when canvas is appended and ready. A "ready" event will also be fired from the `<canvas>` element when it's appended, which can be traced with `spaceInstance.space.addEventListener("ready")`
+     */
+    function CanvasSpace(elem, callback) {
+        var _this = _super.call(this) || this;
+        _this._pixelScale = 1;
+        _this._autoResize = false;
+        _this._bgcolor = "#F3F7FA";
+        // track mouse dragging
+        _this._mousedown = false;
+        _this._mousedrag = false;
+        var _selector = null;
+        var _existed = false;
+        _this.id = "pt";
+        // check element or element id string
+        if (elem instanceof Element) {
+            _selector = elem;
+            _this.id = "pts_existing_space";
+        } else {
+            ;
+            _selector = document.querySelector(elem);
+            _existed = true;
+            _this.id = elem;
+        }
+        // if selector is not defined, create a canvas
+        if (!_selector) {
+            _this._container = _this._createElement("div", _this.id + "_container");
+            _this._canvas = _this._createElement("canvas", _this.id);
+            _this._container.appendChild(_this._canvas);
+            document.body.appendChild(_this._container);
+            _existed = false;
+            // if selector is element but not canvas, create a canvas inside it
+        } else if (_selector.nodeName.toLowerCase() != "canvas") {
+            _this._container = _selector;
+            _this._canvas = _this._createElement("canvas", _this.id + "_canvas");
+            _this._container.appendChild(_this._canvas);
+            // if selector is an existing canvas
+        } else {
+            _this._canvas = _selector;
+            _this._container = _selector.parentElement;
+        }
+        // if size is known then set it immediately
+        // if (_existed) {
+        // let b = this._container.getBoundingClientRect();
+        // this.resize( Bound.fromBoundingRect(b) );
+        // }
+        // no mutation observer, so we set a timeout for ready event
+        setTimeout(_this._ready.bind(_this, callback), 50);
+        // store canvas 2d rendering context
+        _this._ctx = _this._canvas.getContext('2d');
+        return _this;
+    }
+    CanvasSpace.prototype._createElement = function (elem, id) {
+        if (elem === void 0) {
+            elem = "div";
+        }
+        var d = document.createElement(elem);
+        d.setAttribute("id", id);
+        return d;
+    };
+    CanvasSpace.prototype._ready = function (callback) {
+        if (!this._container) throw "Cannot initiate #" + this.id + " element";
+        if (this._autoResize) {
+            var b = this._container.getBoundingClientRect();
+            this.resize(Bound_1.Bound.fromBoundingRect(b));
+        }
+        this.clear(this._bgcolor);
+        this._canvas.dispatchEvent(new Event("ready"));
+        if (callback) callback(this.bound, this._canvas);
+    };
+    /**
+     * Set up various options for CanvasSpace. The `opt` parameter is an object with the following fields. This is usually set during instantiation, eg `new CanvasSpace(...).setup( { opt } )`
+     * @param opt an object with optional settings, as follows.
+     * @param opt.bgcolor a hex or rgba string to set initial background color of the canvas, or use `false` or "transparent" to set a transparent background. You may also change it later with `clear()`
+     * @param opt.resize a boolean to set whether `<canvas>` size should auto resize to match its container's size. You can also set it manually with `autoSize()`
+     * @param opt.retina a boolean to set if device pixel scaling should be used. This may make drawings on retina displays look sharper but may reduce performance slightly. Default is `true`.
+     */
+    CanvasSpace.prototype.setup = function (opt) {
+        if (opt.bgcolor) this._bgcolor = opt.bgcolor;
+        this._autoResize = opt.resize === true;
+        if (opt.retina !== false) {
+            var r1 = window.devicePixelRatio || 1;
+            var r2 = this._ctx.webkitBackingStorePixelRatio || this._ctx.mozBackingStorePixelRatio || this._ctx.msBackingStorePixelRatio || this._ctx.oBackingStorePixelRatio || this._ctx.backingStorePixelRatio || 1;
+            this._pixelScale = r1 / r2;
+        }
+        return this;
+    };
+    CanvasSpace.prototype._resizeHandler = function (evt) {
+        var b = this._container.getBoundingClientRect();
+        this.resize(Bound_1.Bound.fromBoundingRect(b), evt);
+    };
+    /**
+     * Set whether the canvas element should resize when its container is resized. Default will auto size
+     * @param auto a boolean value indicating if auto size is set. Default is `true`.
+     */
+    CanvasSpace.prototype.autoResize = function (auto) {
+        if (auto === void 0) {
+            auto = true;
+        }
+        if (auto) {
+            window.addEventListener('resize', this._resizeHandler);
+        } else {
+            window.removeEventListener('resize', this._resizeHandler);
+        }
+        return this;
+    };
+    Object.defineProperty(CanvasSpace.prototype, "element", {
+        get: function () {
+            return this._canvas;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    CanvasSpace.prototype.render = function (context) {
+        return this;
+    };
+    CanvasSpace.prototype.resize = function (b, evt) {
+        this.bound = b;
+        var s = this.bound.size.$scale(this._pixelScale);
+        this._canvas.width = s.x;
+        this._canvas.height = s.y;
+        this._canvas.style.width = s.x + "px";
+        this._canvas.style.height = s.y + "px";
+        if (this._pixelScale != 1) this._ctx.scale(this._pixelScale, this._pixelScale);
+        for (var k in this.players) {
+            var p = this.players[k];
+            if (p.onSpaceResize) p.onSpaceResize(this.bound.size, evt);
+        }
+        this.render(this._ctx);
+        return this;
+    };
+    CanvasSpace.prototype.clear = function (bg) {
+        if (bg) this._bgcolor = bg;
+        var lastColor = this._ctx.fillStyle;
+        if (this._bgcolor && this._bgcolor != "transparent") {
+            this._ctx.fillStyle = this._bgcolor;
+            this._ctx.fillRect(0, 0, this._canvas.width, this._canvas.height);
+        } else {
+            this._ctx.clearRect(0, 0, this._canvas.width, this._canvas.height);
+        }
+        this._ctx.fillStyle = lastColor;
+        return this;
+    };
+    CanvasSpace.prototype.playItems = function (time) {
+        this._ctx.save();
+        _super.prototype.playItems.call(this, time);
+        this._ctx.restore();
+    };
+    CanvasSpace.prototype.bindCanvas = function (evt, callback) {
+        this._canvas.addEventListener(evt, callback);
+    };
+    CanvasSpace.prototype.unbindCanvas = function (evt, callback) {
+        this._canvas.removeEventListener(evt, callback);
+    };
+    CanvasSpace.prototype.bindMouse = function (_bind) {
+        if (_bind === void 0) {
+            _bind = true;
+        }
+        if (_bind) {
+            // this.bindCanvas( "mousedown", this._mousedown.bind(this) )
+        } else {}
+    };
+    CanvasSpace.prototype.bindTouch = function (_bind) {
+        if (_bind === void 0) {
+            _bind = true;
+        }
+    };
+    CanvasSpace.prototype.touchesToPoints = function (evt, which) {
+        return new Pts_1.Pts();
+    };
+    CanvasSpace.prototype._mouseAction = function (type, evt) {
+        if (evt instanceof TouchEvent) {
+            for (var k in this.playItems) {
+                var v = this.playItems[k];
+                var c = evt.changedTouches && evt.changedTouches.length > 0;
+                var px = c ? evt.changedTouches.item(0).pageX : 0;
+                var py = c ? evt.changedTouches.item(0).pageY : 0;
+                v.onTouchAction(type, px, py, evt);
+            }
+        } else {
+            for (var k in this.playItems) {
+                var v = this.playItems[k];
+                var px = evt.offsetX || evt.layerX;
+                var py = evt.offsetY || evt.layerY;
+                v.onMouseAction(type, px, py, evt);
+            }
+        }
+    };
+    CanvasSpace.prototype._mouseDown = function (evt) {};
+    CanvasSpace.prototype._mouseUp = function (evt) {};
+    return CanvasSpace;
+}(Space_1.Space);
+exports.default = CanvasSpace;
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Bound_1 = __webpack_require__(6);
+var Pts_1 = __webpack_require__(2);
+var Space = function () {
+    function Space() {
+        this.id = "space";
+        this.bound = new Bound_1.Bound();
+        this._time = { prev: 0, diff: 0, end: -1 };
+        this.players = {};
+        this.playerCount = 0;
+        this.ctx = {};
+        this._animID = -1;
+        this._pause = false;
+        this._refresh = false;
+    }
+    /**
+     * Set whether the rendering should be repainted on each frame
+     * @param b a boolean value to set whether to repaint each frame
+     */
+    Space.prototype.refresh = function (b) {
+        this._refresh = b;
+        return this;
+    };
+    /**
+     * Add an item to this space. An item must define a callback function `animate( time, fps, context )` and will be assigned a property `animateID` automatically.
+     * An item should also define a callback function `onSpaceResize( w, h, evt )`.
+     * Subclasses of Space may define other callback functions.
+     * @param player
+     */
+    Space.prototype.add = function (player) {
+        var k = this.playerCount++;
+        var pid = this.id + k;
+        this.players[pid] = player;
+        player.animateID = pid;
+        player.onSpaceResize(this.bound);
+        return this;
+    };
+    /**
+     * Remove a player from this Space
+     * @param player an IPlayer that has an `animateID` property
+     */
+    Space.prototype.remove = function (player) {
+        delete this.players[player.animateID];
+        return this;
+    };
+    /**
+     * Remove all players from this Space
+     */
+    Space.prototype.removeAll = function () {
+        this.players = {};
+        return this;
+    };
+    /**
+     * Main play loop. This implements window.requestAnimationFrame and calls it recursively.
+     * Override this `play()` function to implemenet your own animation loop.
+     * @param time current time
+     */
+    Space.prototype.play = function (time) {
+        var _this = this;
+        if (time === void 0) {
+            time = 0;
+        }
+        this._animID = requestAnimationFrame(function (t) {
+            return _this.play(t);
+        });
+        if (this._pause) return this;
+        this._time.diff = time - this._time.prev;
+        try {
+            this.playItems(time);
+        } catch (err) {
+            cancelAnimationFrame(this._animID);
+            throw err;
+        }
+        return this;
+    };
+    /**
+     * Main animate function. This calls all the items to perform
+     * @param time current time
+     */
+    Space.prototype.playItems = function (time) {
+        // clear before draw if refresh is true
+        if (this._refresh) this.clear();
+        // animate all players
+        for (var k in this.players) {
+            this.players[k].animate(time, this._time.diff, this.ctx);
+        }
+        // stop if time ended
+        if (this._time.end >= 0 && time > this._time.end) {
+            cancelAnimationFrame(this._animID);
+        }
+    };
+    /**
+     * Pause the animation
+     * @param toggle a boolean value to set if this function call should be a toggle (between pause and resume)
+     */
+    Space.prototype.pause = function (toggle) {
+        if (toggle === void 0) {
+            toggle = false;
+        }
+        this._pause = toggle ? !this._pause : true;
+        return this;
+    };
+    /**
+     * Resume the pause animation
+     */
+    Space.prototype.resume = function () {
+        this._pause = false;
+        return this;
+    };
+    /**
+     * Specify when the animation should stop: immediately, after a time period, or never stops.
+     * @param t a value in millisecond to specify a time period to play before stopping, or `-1` to play forever, or `0` to end immediately. Default is 0 which will stop the animation immediately.
+     */
+    Space.prototype.stop = function (t) {
+        if (t === void 0) {
+            t = 0;
+        }
+        this._time.end = t;
+        return this;
+    };
+    /**
+     * Play animation loop, and then stop after `duration` time has passed.
+     * @param duration a value in millisecond to specify a time period to play before stopping, or `-1` to play forever
+     */
+    Space.prototype.playOnce = function (duration) {
+        if (duration === void 0) {
+            duration = 5000;
+        }
+        this.play();
+        this.stop(duration);
+        return this;
+    };
+    /**
+     * Bind event listener in canvas element, for events such as mouse events. Not implemented.
+     * @param evt
+     * @param callback
+     */
+    Space.prototype.bindCanvas = function (evt, callback) {};
+    /**
+     * Unbind event listener in canvas element, for events such as mouse events. Not implemented.
+     * @param evt
+     * @param callback
+     */
+    Space.prototype.unbindCanvas = function (evt, callback) {};
+    /**
+     * A convenient method to bind (or unbind) all mouse events. Not implemented.
+     * @param _bind
+     */
+    Space.prototype.bindMouse = function (_bind) {};
+    /**
+     * A convenient method to bind (or unbind) all mobile touch events. Not implemented.
+     * @param _bind
+     */
+    Space.prototype.bindTouch = function (_bind) {};
+    /**
+     * A convenient method to convert the touch points in a touch event to a Pts. Not implemented.
+     * @param evt
+     * @param which
+     */
+    Space.prototype.touchesToPoints = function (evt, which) {
+        return new Pts_1.Pts();
+    };
+    return Space;
+}();
+exports.Space = Space;
 
 /***/ })
 /******/ ]);

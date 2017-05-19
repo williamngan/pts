@@ -1,63 +1,99 @@
 import {Pt, IPt} from "./Pt"
 
 
-export class Bound extends Pt {
+export class Bound implements IPt{
 
+  protected _center:Pt = new Pt();
+  protected _size:Pt = new Pt();
+  protected _topLeft:Pt = new Pt();
+  protected _bottomRight:Pt = new Pt();
 
-  constructor(x?:number|Array<number>|IPt, y=0, z=0, w=0) {
-    super(x,y,z,w);
-    if (!this.z) this.z = 0;
-    this._update();
+  constructor( p1?:IPt, p2?:IPt ) {
+    if (!p2) {
+      this._size = new Pt(p1);
+    } else if (p1) {
+      this._topLeft = new Pt(p1);
+      this._bottomRight = new Pt(p2);
+      this._updateSize();
+    }
   }
 
-  bound( x?:number|Array<number>|IPt, y?:number, z?:number, w?:number ) {
-    let b = Pt.getArgs( [x,y,z,w] );
-    this.set(5, (b[0] || 0));
-    this.set(6, (b[1] || 0));
-    this.set(7, (b[2] || 0));
-    this._update();
+  protected _updateSize() {
+    this._size = this._bottomRight.$subtract( this._topLeft ).abs();
+    this._updateCenter();
   }
+
+  protected _updateCenter() {
+    this._center = this._size.$scale(0.5).add( this._topLeft );
+  }
+
+  protected _updatePosFromTop() {
+    this._bottomRight = this._topLeft.$add( this._size );
+    this._updateCenter();
+  }
+
+  protected _updatePosFromBottom() {
+    this._topLeft = this._bottomRight.$subtract( this._size );
+    this._updateCenter();
+  }
+
+  protected _updatePosFromCenter() {
+    let half = this._size.$scale(0.5);
+    this._topLeft = this._center.$subtract( half );
+    this._bottomRight = this._center.$add( half );
+  }
+
+
+  public get size():Pt { return new Pt(this._size); }
+  public set size(p: Pt) { 
+    this._size = new Pt(p); 
+    this._updatePosFromTop();
+  }
+
+  public get center():Pt { return new Pt(this._center); }
+  public set center( p:Pt ) {
+    this._center = new Pt(p);
+    this._updatePosFromCenter();
+  }
+
+  public get topLeft():Pt { return new Pt(this._topLeft); }
+  public set topLeft( p:Pt ) {
+    this._topLeft = new Pt(p);
+    this._updateSize();
+  }
+
+  public get bottomRight():Pt { return new Pt(this._bottomRight); }
+  public set bottomRight( p:Pt ) {
+    this._bottomRight = new Pt(p);
+    this._updateSize();
+  }
+
+  public get width():number { return this._size.x; }
+  public set width( w:number ) {
+    this._size.x = w;
+    this._updatePosFromTop();
+  }
+
+  public get height():number { return this._size.y; }
+  public set height( h:number ) {
+    this._size.y = h;
+    this._updatePosFromTop();
+  }
+
+  public get depth():number { return this._size.z; }
+  public set depth( d:number ) {
+    this._size.z = d;
+    this._updatePosFromTop();
+  }
+
+  public get x():number { return this.topLeft.x; }
+  public get y():number { return this.topLeft.y; }
+  public get z():number { return this.topLeft.z; }
 
   static fromBoundingRect( rect:ClientRect ) {
-    let b = new Bound();
-    if (rect.top) b.y = rect.top;
-    if (rect.left) b.x = rect.left;
-    b.width = (rect.width) ? rect.width : ((rect.right) ? rect.right-rect.left : 0);
-    b.height = (rect.height) ? rect.height : ((rect.bottom) ? rect.bottom-rect.top : 0);
+    let b = new Bound( new Pt( rect.left||0, rect.top||0 ), new Pt( rect.right||0, rect.bottom||0 ) );
+    if (rect.width && rect.height) b.size = new Pt(rect.width, rect.height);
     return b;
   }
-
-  protected _update( which?:string ) {
-    if (!which || which == "x" || which == "w") this.set(8, this.x + this.width/2);
-    if (!which || which == "y" || which == "h") this.set(9, this.y + this.height/2);
-    if (!which || which == "z" || which == "d") this.set(10, this.z + this.depth/2);
-  }
-
-  setSize( w:number, h:number, d?:number ):this {
-    this.width = w;
-    this.height = h;
-    if (d != undefined) this.depth = d;
-    return this;
-  }
-
-  set x( _x:number ) { this.set(0, _x); this._update('x'); }
-  set y( _y:number ) { this.set(0, _y); this._update('y'); }
-  set z( _z:number ) { this.set(0, _z); this._update('z'); }
-
-  get width():number { return this.get(5); }
-  set width( _w:number ) { this.set(5, _w); this._update('w'); }
-
-  get height():number { return this.get(6); }
-  set height( _h:number ) { this.set(6, _h); this._update('h'); }
-
-  get size():Pt { return new Pt( this.width, this.height, this.depth ); }
-
-  get depth():number { return this.get(7); }
-  set depth( _d:number ) { this.set(7, _d); this._update('d'); }
-
-  get center():Pt { return new Pt( this.get(8), this.get(9), this.get(10) ); }
-  get centerX(): number { return this.get(8); }
-  get centerY(): number { return this.get(9); }
-  get centerZ(): number { return this.get(10); }
 
 }

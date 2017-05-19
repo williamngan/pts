@@ -28,10 +28,11 @@ export class Pt extends Vector implements IPt, Iterable<number> {
 
     // as an object of {x, y?, z?, w?}
     } else if (typeof args[0] === 'object' && !Array.isArray( args[0] )) {
-      let a:Array<string> = ["x", "y", "z", "w"];
-      for (let p of a) {
-        if ( args[0][p] == undefined) break;
-        pos.push( args[0][p] );
+      let a = ["x", "y", "z", "w"];
+      let p = args[0];
+      for (let i=0; i<a.length; i++) {
+        if ( (p.length && i>=p.length) || !(a[i] in p) ) break; // check for length and key exist
+        pos.push( p[ a[i] ] );
       }
 
     // as an array of values
@@ -48,7 +49,7 @@ export class Pt extends Vector implements IPt, Iterable<number> {
    * Update the values of this Pt
    * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
    */
-  to( ...args:any[]):Pt {
+  to( ...args:any[]):this {
     let p = Pt.getArgs( args );
     for (let i=0; i<p.length; i++) {
       this.set( i, p[i] );
@@ -56,6 +57,18 @@ export class Pt extends Vector implements IPt, Iterable<number> {
     this.length = Math.max( this.length, p.length );
     return this;
   }
+
+  $add( p:Vector ):Pt { return new Pt(this).add( p ); }
+  $subtract( p:Vector ):Pt { return new Pt(this).subtract( p ); }
+  $scale( n:number ):Pt { return new Pt(this).scale(n); }
+  $normalize():Pt { return new Pt(this).normalize(); }
+  $project( p:Vector ):Pt { return new Pt(this).project( new Pt(p) ); }
+
+  multiply( n:number ):this { return this.scale( n ); }
+  $multiply( n:number ):Pt { return this.$scale( n ); }
+  divide( n:number ):this { return this.scale(1/n); }
+  $divide( n:number ):Pt { return this.$scale(1/n); }
+
 
 
   /**
@@ -74,7 +87,10 @@ export class Pt extends Vector implements IPt, Iterable<number> {
     }
   }
 
-
+  abs():Pt {
+    this.each( (p) => Math.abs(p) );
+    return this;
+  }
 
 
 
