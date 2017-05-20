@@ -830,10 +830,15 @@ window["Pt"] = Pt_1.Pt;
 window["Pts"] = Pts_1.Pts;
 var canvas = new CanvasSpace_1.CanvasSpace("#pt").setup({ bgcolor: "#000", retina: true });
 var form = canvas.getForm();
+canvas.add(function (time, fps, context) {
+    form.fill("#fff").stroke(false).point({ x: 50.5, y: 50.5 }, 20, "circle");
+    form.fill("#f00").stroke("#ccc").point({ x: 50.5, y: 140.5 }, 20);
+    // console.log(time, fps);
+});
 canvas.add({
     animate: function (time, fps, context) {
-        form.fill("#fff").stroke(false).point({ x: 50.5, y: 50.5 }, 20, "circle");
-        form.fill("#f00").stroke("#ccc").point({ x: 50.5, y: 140.5 }, 20);
+        form.fill("#fff").stroke(false).point({ x: 150.5, y: 50.5 }, 20, "circle");
+        form.fill("#f00").stroke("#ccc").point({ x: 150.5, y: 140.5 }, 20);
         // console.log(time, fps);
     }
 });
@@ -2449,9 +2454,10 @@ var Space = function () {
      * Add an item to this space. An item must define a callback function `animate( time, fps, context )` and will be assigned a property `animateID` automatically.
      * An item should also define a callback function `onSpaceResize( w, h, evt )`.
      * Subclasses of Space may define other callback functions.
-     * @param player
+     * @param player an IPlayer object with animate function, or simply a function(time, fps, context){}
      */
-    Space.prototype.add = function (player) {
+    Space.prototype.add = function (p) {
+        var player = typeof p == "function" ? { animate: p } : p;
         var k = this.playerCount++;
         var pid = this.id + k;
         this.players[pid] = player;

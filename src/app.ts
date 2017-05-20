@@ -10,10 +10,18 @@ window["Pts"] = Pts;
 var canvas = new CanvasSpace("#pt").setup({bgcolor: "#000", retina: true });
 var form = canvas.getForm();
 
-canvas.add({
-  animate: (time, fps, context) => {
+canvas.add( 
+  (time, fps, context) => {
     form.fill("#fff").stroke(false).point( {x:50.5, y: 50.5}, 20, "circle");
     form.fill("#f00").stroke("#ccc").point( {x:50.5, y: 140.5}, 20, );
+    // console.log(time, fps);
+  }
+) 
+
+canvas.add( {
+  animate: (time, fps, context) => {
+    form.fill("#fff").stroke(false).point( {x:150.5, y: 50.5}, 20, "circle");
+    form.fill("#f00").stroke("#ccc").point( {x:150.5, y: 140.5}, 20, );
     // console.log(time, fps);
   }
 }) 

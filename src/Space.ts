@@ -2,9 +2,11 @@ import {Bound} from "./Bound";
 import {Pt, IPt} from "./Pt";
 import {Form} from "./Form";
 
+type AnimateFunction = ( time:number, frameTime:number, context?:any ) => void;
+
 export interface IPlayer {
   animateID?: string;
-  animate( time:number, frameTime:number, context:any );
+  animate:AnimateFunction;
   onSpaceResize?( p:IPt, evt?:Event ): undefined;
   onMouseAction?( type:string, px:number, py:number, evt:Event );
   onTouchAction?( type:string, px:number, py:number, evt:Event );
@@ -48,9 +50,11 @@ export abstract class Space {
    * Add an item to this space. An item must define a callback function `animate( time, fps, context )` and will be assigned a property `animateID` automatically. 
    * An item should also define a callback function `onSpaceResize( w, h, evt )`. 
    * Subclasses of Space may define other callback functions.
-   * @param player 
+   * @param player an IPlayer object with animate function, or simply a function(time, fps, context){}
    */
-  add( player:IPlayer ):this {
+  add( p:IPlayer|AnimateFunction ):this {
+    let player:IPlayer = (typeof p == "function") ? { animate: p } : p;
+
     let k = this.playerCount++;
     let pid = this.id + k;
 
