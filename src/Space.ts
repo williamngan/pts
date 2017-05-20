@@ -2,7 +2,7 @@ import {Bound} from "./Bound";
 import {Pt, IPt} from "./Pt";
 import {Form} from "./Form";
 
-type AnimateFunction = ( time:number, frameTime:number, context?:any ) => void;
+type AnimateFunction = ( time?:number, frameTime?:number, context?:any ) => void;
 
 export interface IPlayer {
   animateID?: string;

@@ -7,26 +7,28 @@ import {CanvasForm} from "./CanvasForm";
 window["Pt"] = Pt;
 window["Pts"] = Pts;
 
-var canvas = new CanvasSpace("#pt").setup({bgcolor: "#000", retina: true });
+var canvas = new CanvasSpace("#pt").setup({retina: true});
 var form = canvas.getForm();
+var form2 = canvas.getForm();
 
-canvas.add( 
-  (time, fps, context) => {
-    form.fill("#fff").stroke(false).point( {x:50.5, y: 50.5}, 20, "circle");
-    form.fill("#f00").stroke("#ccc").point( {x:50.5, y: 140.5}, 20, );
+canvas.add( () => {
+  form.reset();
+  form.point( {x:50.5, y: 50.5}, 20, "circle");
+  form.point( {x:50.5, y: 140.5}, 20, );
     // console.log(time, fps);
   }
 ) 
 
 canvas.add( {
   animate: (time, fps, context) => {
-    form.fill("#fff").stroke(false).point( {x:150.5, y: 50.5}, 20, "circle");
-    form.fill("#f00").stroke("#ccc").point( {x:150.5, y: 140.5}, 20, );
+    form2.reset();
+    form2.fill("#fff").stroke("#000").point( {x:150.5, y: 50.5}, 20, "circle");
+    form2.fill("#ff0").stroke("#ccc").point( {x:150.5, y: 140.5}, 20, );
     // console.log(time, fps);
   }
 }) 
 
-canvas.playOnce(500);
+canvas.playOnce(200);
 
 
 /*

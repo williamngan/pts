@@ -22,7 +22,7 @@ export class CanvasSpace extends Space {
   protected _container:Element;
   protected _pixelScale = 1;
   protected _autoResize = true;
-  protected _bgcolor = "#F3F7FA";
+  protected _bgcolor = "#e1e9f0";
   protected _ctx:PtsCanvasRenderingContext2D;
 
   // track mouse dragging
@@ -434,6 +434,7 @@ export class CanvasSpace extends Space {
     if (this._renderFunc) this._renderFunc( context, this );
     return this;
   }
+
 
   /**
    * Set a custom rendering `function(graphics_context, canvas_space)` if needed

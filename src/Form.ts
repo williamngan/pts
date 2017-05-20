@@ -30,7 +30,9 @@ export abstract class Form {
   public get font():Font { return this._font; }
   public set font( b:Font ) { this._font = b; }
 
-  abstract get space():Space;
+  public abstract get space():Space;
+
+  public abstract reset(): this;
 
   public abstract fill( c:string|boolean ):this;
 

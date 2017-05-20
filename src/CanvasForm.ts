@@ -8,12 +8,16 @@ export class CanvasForm extends Form {
   protected _space:CanvasSpace;
   protected _ctx:CanvasRenderingContext2D;
 
+  // store common styles so that they can be restored to canvas context when using multiple forms. See `reset()`.
+  protected _style = {fillStyle: "#e51c23", strokeStyle:"#fff", lineWidth: 1, lineJoin: "miter", lineCap: "butt" }
+
+
   constructor( space:CanvasSpace ) {
     super();
     this._space = space;
     this._ctx = this._space.ctx;
-    this._ctx.fillStyle = "#e9f1f5";
-    this._ctx.strokeStyle = "#37405a";
+    this._ctx.fillStyle = this._style.fillStyle;
+    this._ctx.strokeStyle = this._style.strokeStyle;
   }
 
   public get space():CanvasSpace { return this._space; }
@@ -29,6 +33,7 @@ export class CanvasForm extends Form {
       this.filled = c;
     } else {
       this.filled = true;
+      this._style.fillStyle = c;
       this._ctx.fillStyle = c;
     }
     return this;
@@ -48,10 +53,31 @@ export class CanvasForm extends Form {
       this.stroked = c;
     } else {
       this.stroked = true;
+      this._style.strokeStyle = c;
       this._ctx.strokeStyle = c;
-      if (width) this._ctx.lineWidth = width;
-      if (linejoin) this._ctx.lineJoin = linejoin;
-      if (linecap) this._ctx.lineCap = linecap;
+      if (width) {
+        this._ctx.lineWidth = width;
+        this._style.lineWidth = width;
+      }
+      if (linejoin) {
+        this._ctx.lineJoin = linejoin;
+        this._style.lineJoin = linejoin;
+      }
+      if (linecap) {
+        this._ctx.lineCap = linecap;
+        this._style.lineCap = linecap;
+      }
+    }
+    return this;
+  }
+
+
+  /**
+   * Reset the rendering context's common styles to this form's styles. This supports using multiple forms on the same canvas context.
+   */
+  public reset():this {
+    for (let k in this._style) {
+      this._ctx[k] = this._style[k];
     }
     return this;
   }

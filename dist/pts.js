@@ -828,21 +828,24 @@ var Pts_1 = __webpack_require__(2);
 var CanvasSpace_1 = __webpack_require__(7);
 window["Pt"] = Pt_1.Pt;
 window["Pts"] = Pts_1.Pts;
-var canvas = new CanvasSpace_1.CanvasSpace("#pt").setup({ bgcolor: "#000", retina: true });
+var canvas = new CanvasSpace_1.CanvasSpace("#pt").setup({ retina: true });
 var form = canvas.getForm();
-canvas.add(function (time, fps, context) {
-    form.fill("#fff").stroke(false).point({ x: 50.5, y: 50.5 }, 20, "circle");
-    form.fill("#f00").stroke("#ccc").point({ x: 50.5, y: 140.5 }, 20);
+var form2 = canvas.getForm();
+canvas.add(function () {
+    form.reset();
+    form.point({ x: 50.5, y: 50.5 }, 20, "circle");
+    form.point({ x: 50.5, y: 140.5 }, 20);
     // console.log(time, fps);
 });
 canvas.add({
     animate: function (time, fps, context) {
-        form.fill("#fff").stroke(false).point({ x: 150.5, y: 50.5 }, 20, "circle");
-        form.fill("#f00").stroke("#ccc").point({ x: 150.5, y: 140.5 }, 20);
+        form2.reset();
+        form2.fill("#fff").stroke("#000").point({ x: 150.5, y: 50.5 }, 20, "circle");
+        form2.fill("#ff0").stroke("#ccc").point({ x: 150.5, y: 140.5 }, 20);
         // console.log(time, fps);
     }
 });
-canvas.playOnce(500);
+canvas.playOnce(200);
 /*
 let vec = new Vector( [1000, 2, 3] ).add( new Vector( [2, 3, 4] ) );
 console.log(vec.toString());
@@ -2048,7 +2051,7 @@ var CanvasSpace = function (_super) {
         var _this = _super.call(this) || this;
         _this._pixelScale = 1;
         _this._autoResize = true;
-        _this._bgcolor = "#F3F7FA";
+        _this._bgcolor = "#e1e9f0";
         // track mouse dragging
         _this._pressed = false;
         _this._dragged = false;
@@ -2592,10 +2595,12 @@ var CanvasForm = function (_super) {
     __extends(CanvasForm, _super);
     function CanvasForm(space) {
         var _this = _super.call(this) || this;
+        // store common styles so that they can be restored to canvas context when using multiple forms. See `reset()`.
+        _this._style = { fillStyle: "#e51c23", strokeStyle: "#fff", lineWidth: 1, lineJoin: "miter", lineCap: "butt" };
         _this._space = space;
         _this._ctx = _this._space.ctx;
-        _this._ctx.fillStyle = "#e9f1f5";
-        _this._ctx.strokeStyle = "#37405a";
+        _this._ctx.fillStyle = _this._style.fillStyle;
+        _this._ctx.strokeStyle = _this._style.strokeStyle;
         return _this;
     }
     Object.defineProperty(CanvasForm.prototype, "space", {
@@ -2615,6 +2620,7 @@ var CanvasForm = function (_super) {
             this.filled = c;
         } else {
             this.filled = true;
+            this._style.fillStyle = c;
             this._ctx.fillStyle = c;
         }
         return this;
@@ -2632,10 +2638,29 @@ var CanvasForm = function (_super) {
             this.stroked = c;
         } else {
             this.stroked = true;
+            this._style.strokeStyle = c;
             this._ctx.strokeStyle = c;
-            if (width) this._ctx.lineWidth = width;
-            if (linejoin) this._ctx.lineJoin = linejoin;
-            if (linecap) this._ctx.lineCap = linecap;
+            if (width) {
+                this._ctx.lineWidth = width;
+                this._style.lineWidth = width;
+            }
+            if (linejoin) {
+                this._ctx.lineJoin = linejoin;
+                this._style.lineJoin = linejoin;
+            }
+            if (linecap) {
+                this._ctx.lineCap = linecap;
+                this._style.lineCap = linecap;
+            }
+        }
+        return this;
+    };
+    /**
+     * Reset the rendering context's common styles to this form's styles. This supports using multiple forms on the same canvas context.
+     */
+    CanvasForm.prototype.reset = function () {
+        for (var k in this._style) {
+            this._ctx[k] = this._style[k];
         }
         return this;
     };
