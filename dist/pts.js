@@ -828,9 +828,16 @@ var Pts_1 = __webpack_require__(2);
 var CanvasSpace_1 = __webpack_require__(7);
 window["Pt"] = Pt_1.Pt;
 window["Pts"] = Pts_1.Pts;
-var canvas = new CanvasSpace_1.default("#pt");
-console.log(canvas);
-canvas.setup({ bgcolor: "#f00", resize: false });
+var canvas = new CanvasSpace_1.CanvasSpace("#pt").setup({ bgcolor: "#000", retina: true });
+var form = canvas.getForm();
+canvas.add({
+    animate: function (time, fps, context) {
+        form.fill("#fff").stroke(false).point({ x: 50.5, y: 50.5 }, 20, "circle");
+        form.fill("#f00").stroke("#ccc").point({ x: 50.5, y: 140.5 }, 20);
+        // console.log(time, fps);
+    }
+});
+canvas.playOnce(500);
 /*
 let vec = new Vector( [1000, 2, 3] ).add( new Vector( [2, 3, 4] ) );
 console.log(vec.toString());
@@ -2024,6 +2031,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var Space_1 = __webpack_require__(8);
 var Pt_1 = __webpack_require__(1);
 var Bound_1 = __webpack_require__(6);
+var CanvasForm_1 = __webpack_require__(9);
 var CanvasSpace = function (_super) {
     __extends(CanvasSpace, _super);
     /**
@@ -2034,7 +2042,7 @@ var CanvasSpace = function (_super) {
     function CanvasSpace(elem, callback) {
         var _this = _super.call(this) || this;
         _this._pixelScale = 1;
-        _this._autoResize = false;
+        _this._autoResize = true;
         _this._bgcolor = "#F3F7FA";
         // track mouse dragging
         _this._pressed = false;
@@ -2069,6 +2077,7 @@ var CanvasSpace = function (_super) {
         } else {
             _this._canvas = _selector;
             _this._container = _selector.parentElement;
+            _this._autoResize = false;
         }
         // if size is known then set it immediately
         // if (_existed) {
@@ -2080,6 +2089,7 @@ var CanvasSpace = function (_super) {
         // store canvas 2d rendering context
         _this._ctx = _this._canvas.getContext('2d');
         return _this;
+        //
     }
     /**
      * Helper function to create a DOM element
@@ -2100,10 +2110,8 @@ var CanvasSpace = function (_super) {
      */
     CanvasSpace.prototype._ready = function (callback) {
         if (!this._container) throw "Cannot initiate #" + this.id + " element";
-        if (this._autoResize) {
-            var b = this._container.getBoundingClientRect();
-            this.resize(Bound_1.Bound.fromBoundingRect(b));
-        }
+        var b = this._autoResize ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
+        this.resize(Bound_1.Bound.fromBoundingRect(b));
         this.clear(this._bgcolor);
         this._canvas.dispatchEvent(new Event("ready"));
         if (callback) callback(this.bound, this._canvas);
@@ -2117,13 +2125,29 @@ var CanvasSpace = function (_super) {
      */
     CanvasSpace.prototype.setup = function (opt) {
         if (opt.bgcolor) this._bgcolor = opt.bgcolor;
-        this._autoResize = opt.resize === true;
+        if (opt.resize != undefined) this._autoResize = opt.resize;
         if (opt.retina !== false) {
             var r1 = window.devicePixelRatio || 1;
             var r2 = this._ctx.webkitBackingStorePixelRatio || this._ctx.mozBackingStorePixelRatio || this._ctx.msBackingStorePixelRatio || this._ctx.oBackingStorePixelRatio || this._ctx.backingStorePixelRatio || 1;
             this._pixelScale = r1 / r2;
         }
         return this;
+    };
+    Object.defineProperty(CanvasSpace.prototype, "ctx", {
+        /**
+         * Get the rendering context of canvas
+         */
+        get: function () {
+            return this._ctx;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+     * Get a new CanvasForm for drawing
+     */
+    CanvasSpace.prototype.getForm = function () {
+        return new CanvasForm_1.CanvasForm(this);
     };
     /**
      * Window resize handling
@@ -2175,12 +2199,14 @@ var CanvasSpace = function (_super) {
      */
     CanvasSpace.prototype.resize = function (b, evt) {
         this.bound = b;
-        var s = this.bound.size.$scale(this._pixelScale);
-        this._canvas.width = s.x;
-        this._canvas.height = s.y;
-        this._canvas.style.width = s.x + "px";
-        this._canvas.style.height = s.y + "px";
-        if (this._pixelScale != 1) this._ctx.scale(this._pixelScale, this._pixelScale);
+        this._canvas.width = this.bound.size.x * this._pixelScale;
+        this._canvas.height = this.bound.size.y * this._pixelScale;
+        this._canvas.style.width = this.bound.size.x + "px";
+        this._canvas.style.height = this.bound.size.y + "px";
+        if (this._pixelScale != 1) {
+            this._ctx.scale(this._pixelScale, this._pixelScale);
+            this._ctx.translate(0.5, 0.5);
+        }
         for (var k in this.players) {
             var p = this.players[k];
             if (p.onSpaceResize) p.onSpaceResize(this.bound.size, evt);
@@ -2389,7 +2415,7 @@ var CanvasSpace = function (_super) {
     });
     return CanvasSpace;
 }(Space_1.Space);
-exports.default = CanvasSpace;
+exports.CanvasSpace = CanvasSpace;
 
 /***/ }),
 /* 8 */
@@ -2407,10 +2433,9 @@ var Space = function () {
         this._time = { prev: 0, diff: 0, end: -1 };
         this.players = {};
         this.playerCount = 0;
-        this.ctx = {};
         this._animID = -1;
         this._pause = false;
-        this._refresh = false;
+        this._refresh = true;
     }
     /**
      * Set whether the rendering should be repainted on each frame
@@ -2431,7 +2456,7 @@ var Space = function () {
         var pid = this.id + k;
         this.players[pid] = player;
         player.animateID = pid;
-        player.onSpaceResize(this.bound);
+        if (player.onSpaceResize) player.onSpaceResize(this.bound);
         return this;
     };
     /**
@@ -2481,7 +2506,7 @@ var Space = function () {
         if (this._refresh) this.clear();
         // animate all players
         for (var k in this.players) {
-            this.players[k].animate(time, this._time.diff, this.ctx);
+            this.players[k].animate(time, this._time.diff, this._ctx);
         }
         // stop if time ended
         if (this._time.end >= 0 && time > this._time.end) {
@@ -2532,6 +2557,257 @@ var Space = function () {
     return Space;
 }();
 exports.Space = Space;
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __extends = this && this.__extends || function () {
+    var extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function (d, b) {
+        d.__proto__ = b;
+    } || function (d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+}();
+Object.defineProperty(exports, "__esModule", { value: true });
+var Form_1 = __webpack_require__(10);
+var Util_1 = __webpack_require__(11);
+var CanvasForm = function (_super) {
+    __extends(CanvasForm, _super);
+    function CanvasForm(space) {
+        var _this = _super.call(this) || this;
+        _this._space = space;
+        _this._ctx = _this._space.ctx;
+        _this._ctx.fillStyle = "#e9f1f5";
+        _this._ctx.strokeStyle = "#37405a";
+        return _this;
+    }
+    Object.defineProperty(CanvasForm.prototype, "space", {
+        get: function () {
+            return this._space;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+     * Set current fill style. For example: `form.fill("#F90")` `form.fill("rgba(0,0,0,.5")` `form.fill(false)`
+     * @param c fill color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle))
+     * @return this
+     */
+    CanvasForm.prototype.fill = function (c) {
+        if (typeof c == "boolean") {
+            this.filled = c;
+        } else {
+            this.filled = true;
+            this._ctx.fillStyle = c;
+        }
+        return this;
+    };
+    /**
+     * Set current stroke style. For example: `form.stroke("#F90")` `form.stroke("rgba(0,0,0,.5")` `form.stroke(false)` `form.stroke("#000", 0.5, 'round')`
+     * @param c stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle))
+     * @param width Optional value (can be floating point) to set line width
+     * @param linejoin Optional string to set line joint style. Can be "miter", "bevel", or "round".
+     * @param linecap Optional string to set line cap style. Can be "butt", "round", or "square".
+     * @return this
+     */
+    CanvasForm.prototype.stroke = function (c, width, linejoin, linecap) {
+        if (typeof c == "boolean") {
+            this.stroked = c;
+        } else {
+            this.stroked = true;
+            this._ctx.strokeStyle = c;
+            if (width) this._ctx.lineWidth = width;
+            if (linejoin) this._ctx.lineJoin = linejoin;
+            if (linecap) this._ctx.lineCap = linecap;
+        }
+        return this;
+    };
+    CanvasForm.prototype._paint = function () {
+        if (this._filled) this._ctx.fill();
+        if (this._stroked) this._ctx.stroke();
+    };
+    CanvasForm.prototype.point = function (p, radius, shape) {
+        if (radius === void 0) {
+            radius = 5;
+        }
+        if (shape === void 0) {
+            shape = "square";
+        }
+        if (CanvasForm[shape]) {
+            CanvasForm[shape](this._ctx, p, radius);
+            this._paint();
+        } else {
+            console.warn(shape + " is not a static function of CanvasForm");
+        }
+        return this;
+    };
+    CanvasForm.circle = function (ctx, pt, radius) {
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, radius, 0, Util_1.Const.two_pi, false);
+        ctx.closePath();
+    };
+    CanvasForm.square = function (ctx, pt, halfsize) {
+        var x1 = pt.x - halfsize;
+        var y1 = pt.y - halfsize;
+        var x2 = pt.x + halfsize;
+        var y2 = pt.y + halfsize;
+        // faster than using `rect`
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x1, y2);
+        ctx.lineTo(x2, y2);
+        ctx.lineTo(x2, y1);
+        ctx.closePath();
+    };
+    CanvasForm.prototype.draw = function (ps, shape) {
+        return this;
+    };
+    return CanvasForm;
+}(Form_1.Form);
+exports.CanvasForm = CanvasForm;
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Font = function () {
+    function Font(size, face, style) {
+        if (size === void 0) {
+            size = 11;
+        }
+        if (face === void 0) {
+            face = "sans-serif";
+        }
+        if (style === void 0) {
+            style = "";
+        }
+        this.size = size;
+        this.face = face;
+        this.style = style;
+    }
+    Object.defineProperty(Font.prototype, "data", {
+        get: function () {
+            return this.style + " " + this.size + "px " + this.face;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    ;
+    return Font;
+}();
+exports.Font = Font;
+var Form = function () {
+    function Form() {
+        this._filled = true;
+        this._stroked = true;
+    }
+    Object.defineProperty(Form.prototype, "filled", {
+        get: function () {
+            return this._filled;
+        },
+        set: function (b) {
+            this._filled = b;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Form.prototype, "stroked", {
+        get: function () {
+            return this._stroked;
+        },
+        set: function (b) {
+            this._stroked = b;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Form.prototype, "font", {
+        get: function () {
+            return this._font;
+        },
+        set: function (b) {
+            this._font = b;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return Form;
+}();
+exports.Form = Form;
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Key;
+(function (Key) {
+    Key[Key["xy"] = 0] = "xy";
+    Key[Key["yz"] = 1] = "yz";
+    Key[Key["xz"] = 2] = "xz";
+    Key[Key["xyz"] = 3] = "xyz";
+    /* represents identical point or value */
+    Key[Key["identical"] = 0] = "identical";
+    /* represents right position or direction */
+    Key[Key["right"] = 4] = "right";
+    /* represents bottom right position or direction */
+    Key[Key["bottom_right"] = 5] = "bottom_right";
+    /* represents bottom position or direction */
+    Key[Key["bottom"] = 6] = "bottom";
+    /* represents bottom left position or direction */
+    Key[Key["bottom_left"] = 7] = "bottom_left";
+    /* represents left position or direction */
+    Key[Key["left"] = 8] = "left";
+    /* represents top left position or direction */
+    Key[Key["top_left"] = 1] = "top_left";
+    /* represents top position or direction */
+    Key[Key["top"] = 2] = "top";
+    /* represents top right position or direction */
+    Key[Key["top_right"] = 3] = "top_right";
+})(Key = exports.Key || (exports.Key = {}));
+;
+exports.Const = {
+    /* represents an arbitrary very small number. It is set as 0.0001 here. */
+    epsilon: 0.0001,
+    /* pi radian (180 deg) */
+    pi: Math.PI,
+    /* two pi radian (360deg) */
+    two_pi: 6.283185307179586,
+    /* half pi radian (90deg) */
+    half_pi: 1.5707963267948966,
+    /* pi/4 radian (45deg) */
+    quarter_pi: 0.7853981633974483,
+    /* pi/180: 1 degree in radian */
+    one_degree: 0.017453292519943295,
+    /* multiply this constant with a radian to get a degree */
+    rad_to_deg: 57.29577951308232,
+    /* multiply this constant with a degree to get a radian */
+    deg_to_rad: 0.017453292519943295,
+    /* Gravity acceleration (unit: m/s^2) and gravity force (unit: Newton) on 1kg of mass. */
+    gravity: 9.81,
+    /* 1 Newton: 0.10197 Kilogram-force */
+    newton: 0.10197,
+    /* Gaussian constant (1 / Math.sqrt(2 * Math.PI)) */
+    gaussian: 0.3989422804014327
+};
 
 /***/ })
 /******/ ]);

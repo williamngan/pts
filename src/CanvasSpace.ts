@@ -2,6 +2,7 @@ import {Space} from './Space';
 import {Pt, IPt} from './Pt';
 import {Pts} from './Pts';
 import {Bound} from './Bound';
+import {CanvasForm} from "./CanvasForm";
 
 interface PtsCanvasRenderingContext2D extends CanvasRenderingContext2D {
   webkitBackingStorePixelRatio?:number;
@@ -11,16 +12,16 @@ interface PtsCanvasRenderingContext2D extends CanvasRenderingContext2D {
   backingStorePixelRatio?:number;
 }
 
-type TouchPointsKey = "touches" | "changedTouches" | "targetTouches";
+export type TouchPointsKey = "touches" | "changedTouches" | "targetTouches";
 
 
-export default class CanvasSpace extends Space {
-  
+export class CanvasSpace extends Space {
+
   protected _canvas:HTMLCanvasElement;
 
   protected _container:Element;
   protected _pixelScale = 1;
-  protected _autoResize = false;
+  protected _autoResize = true;
   protected _bgcolor = "#F3F7FA";
   protected _ctx:PtsCanvasRenderingContext2D;
 
@@ -70,6 +71,7 @@ export default class CanvasSpace extends Space {
     } else {
       this._canvas = _selector as HTMLCanvasElement;
       this._container = _selector.parentElement;
+      this._autoResize = false;
     }
 
     // if size is known then set it immediately
@@ -83,6 +85,9 @@ export default class CanvasSpace extends Space {
 
     // store canvas 2d rendering context
     this._ctx = this._canvas.getContext('2d');
+
+    //
+    
 
   }
 
@@ -106,10 +111,10 @@ export default class CanvasSpace extends Space {
   private _ready( callback:Function ) {
     if (!this._container) throw `Cannot initiate #${this.id} element`;
 
-    if (this._autoResize) {
-      let b = this._container.getBoundingClientRect();
-      this.resize( Bound.fromBoundingRect(b) );
-    }
+    
+    let b = (this._autoResize) ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
+    this.resize( Bound.fromBoundingRect(b) );
+    
     
     this.clear( this._bgcolor );
     this._canvas.dispatchEvent( new Event("ready") );
@@ -128,15 +133,27 @@ export default class CanvasSpace extends Space {
   setup( opt:{bgcolor?:string, resize?:boolean, retina?:boolean} ):this {
     if (opt.bgcolor) this._bgcolor = opt.bgcolor;
     
-    this._autoResize = (opt.resize === true);
+    if (opt.resize != undefined) this._autoResize = opt.resize;
 
     if (opt.retina !== false) {
       let r1 = window.devicePixelRatio || 1
-      let r2 = this._ctx.webkitBackingStorePixelRatio || this._ctx.mozBackingStorePixelRatio || this._ctx.msBackingStorePixelRatio || this._ctx.oBackingStorePixelRatio || this._ctx.backingStorePixelRatio || 1;
-      this._pixelScale = r1/r2
+      let r2 = this._ctx.webkitBackingStorePixelRatio || this._ctx.mozBackingStorePixelRatio || this._ctx.msBackingStorePixelRatio || this._ctx.oBackingStorePixelRatio || this._ctx.backingStorePixelRatio || 1;      
+      this._pixelScale = r1/r2;
     }
     return this;
   }
+
+
+  /**
+   * Get the rendering context of canvas
+   */
+  public get ctx():PtsCanvasRenderingContext2D { return this._ctx; }
+
+
+  /**
+   * Get a new CanvasForm for drawing
+   */
+  public getForm():CanvasForm { return new CanvasForm(this); }
 
 
   /**
@@ -187,13 +204,15 @@ export default class CanvasSpace extends Space {
 
     this.bound = b;
 
-    let s = this.bound.size.$scale( this._pixelScale );
-    this._canvas.width = s.x;
-    this._canvas.height = s.y;
-    this._canvas.style.width = s.x + "px";
-    this._canvas.style.height = s.y + "px";
+    this._canvas.width = this.bound.size.x * this._pixelScale;
+    this._canvas.height = this.bound.size.y * this._pixelScale;
+    this._canvas.style.width = this.bound.size.x + "px";
+    this._canvas.style.height = this.bound.size.y + "px";
 
-    if (this._pixelScale != 1) this._ctx.scale( this._pixelScale, this._pixelScale );
+    if (this._pixelScale != 1) {
+      this._ctx.scale( this._pixelScale, this._pixelScale );
+      this._ctx.translate( 0.5, 0.5);
+    }
 
     for (let k in this.players) {
       let p = this.players[k];

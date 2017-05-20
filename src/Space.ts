@@ -1,22 +1,20 @@
-import {Vector} from "vectorious";
 import {Bound} from "./Bound";
 import {Pt, IPt} from "./Pt";
-import {Pts} from "./Pts";
-
+import {Form} from "./Form";
 
 export interface IPlayer {
-  animateID: string;
-  animate( time:number, frameTime:number, context:any ): IPlayer;
-  onSpaceResize( p:IPt, evt?:Event ): undefined;
-  onMouseAction( type:string, px:number, py:number, evt:Event );
-  onTouchAction( type:string, px:number, py:number, evt:Event );
+  animateID?: string;
+  animate( time:number, frameTime:number, context:any );
+  onSpaceResize?( p:IPt, evt?:Event ): undefined;
+  onMouseAction?( type:string, px:number, py:number, evt:Event );
+  onTouchAction?( type:string, px:number, py:number, evt:Event );
 }
 
 interface ISpacePlayers { 
   [key: string]: IPlayer;
 }
 
-interface ITimer {
+export interface ITimer {
   prev: number;
   diff: number;
   end: number;
@@ -30,12 +28,12 @@ export abstract class Space {
   protected _time: ITimer = { prev: 0, diff: 0, end: -1 };
   protected players:ISpacePlayers = {};
   protected playerCount = 0;
-  protected ctx:any = {};
+  protected _ctx:any;
 
   private _animID:number = -1;
 
   private _pause:boolean = false;
-  private _refresh:boolean = false;
+  private _refresh:boolean = true;
 
   /**
    * Set whether the rendering should be repainted on each frame
@@ -58,7 +56,7 @@ export abstract class Space {
 
     this.players[pid] = player;
     player.animateID = pid;
-    player.onSpaceResize( this.bound ); 
+    if (player.onSpaceResize) player.onSpaceResize( this.bound ); 
 
     return this;
   }
@@ -111,7 +109,7 @@ export abstract class Space {
 
     // animate all players
     for (let k in this.players) {
-      this.players[k].animate( time, this._time.diff, this.ctx );
+      this.players[k].animate( time, this._time.diff, this._ctx );
     }
 
     // stop if time ended
@@ -164,11 +162,16 @@ export abstract class Space {
    */
   abstract resize( b:IPt, evt?:Event ):this;
 
+
   /**
    * clear all contents in the space
    */
   abstract clear( ):this;
 
 
+  /**
+   * Get a default form for drawing in this space
+   */
+  abstract getForm():Form;
 
 }

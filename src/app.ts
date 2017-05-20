@@ -1,14 +1,25 @@
 import {Vector, Matrix} from 'vectorious';
 import {Pt} from './Pt';
 import {Pts} from './Pts';
-import CanvasSpace from "./CanvasSpace";
+import {CanvasSpace} from "./CanvasSpace"; 
+import {CanvasForm} from "./CanvasForm"; 
 
 window["Pt"] = Pt;
 window["Pts"] = Pts;
 
-var canvas = new CanvasSpace("#pt");
-console.log(canvas);
-canvas.setup({bgcolor: "#f00", resize: false });
+var canvas = new CanvasSpace("#pt").setup({bgcolor: "#000", retina: true });
+var form = canvas.getForm();
+
+canvas.add({
+  animate: (time, fps, context) => {
+    form.fill("#fff").stroke(false).point( {x:50.5, y: 50.5}, 20, "circle");
+    form.fill("#f00").stroke("#ccc").point( {x:50.5, y: 140.5}, 20, );
+    // console.log(time, fps);
+  }
+}) 
+
+canvas.playOnce(500);
+
 
 /*
 let vec = new Vector( [1000, 2, 3] ).add( new Vector( [2, 3, 4] ) );
