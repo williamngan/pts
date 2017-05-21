@@ -27,6 +27,11 @@ describe('Pts: ', function() {
 
     it('can zip an array of Pt with defaults', function() {
       let ps = Pts.zip( [new Pt(1,2), new Pt(3), new Pt(5,6,7,8)], 10 );
+      assert.isTrue( ps[1].equals( new Pt(2, 10, 6) ) && ps.length == 2 );
+    });
+
+    it('can zip an array of Pt with longest value', function() {
+      let ps = Pts.zip( [new Pt(1,2), new Pt(3), new Pt(5,6,7,8)], 10, true );
       assert.isTrue( ps[2].equals( new Pt(10, 10, 7) ) && ps.length == 4 );
     });
   });
