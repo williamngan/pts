@@ -6,8 +6,9 @@ var {assert} = chai;
 var {describe, it} = mocha;
 
 
-describe('Pt', function() {
-  describe('#constructor()', function() {
+describe('Pt: ', function() {
+
+  describe('Constructor: ', function() {
     it('can init as empty vector', function() {
       assert.equal( 0, new Pt().length )
     });
@@ -42,6 +43,10 @@ describe('Pt', function() {
       assert.equal(11346, p1.get(0) + p1.get(3) + p2.get(2) + p3.get(1) + p4.get(0));
     });
 
+  });
+
+  describe('Functions: ', function() {
+
     it('can check size of vector', function() {
       let p = new Pt([1,2,3,4,5,6]);
       p.push(7);
@@ -57,5 +62,16 @@ describe('Pt', function() {
       assert.equal( d, 21 );
     });
 
+    it('can get an out-of-bound index with default value', function() {
+      let p = new Pt(1,2,3);
+      assert.equal( 100, p.at(5, 100) );
+    })
+
+    it('can get a slice of values', function() {
+      let p = new Pt(1,2,3,4,5,6);
+      assert.isTrue( p.slice(2,5).equals( new Pt(3,4,5) ) );
+    })
+
   });
+
 });

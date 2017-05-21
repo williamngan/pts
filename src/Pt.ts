@@ -87,11 +87,42 @@ export class Pt extends Vector implements IPt, Iterable<number> {
     }
   }
 
+
+  /**
+   * Clone this and return a new Pt
+   */
+  clone():Pt {
+    return new Pt( this );
+  }
+
+
+  /**
+   * Similar to `get()`, but return a default value instead of throwing error when index is out-of-bound, 
+   * @param idx index to get
+   * @param defaultValue value to return when index is out of bound
+   */
+  at(idx:number, defaultValue?:number):number {
+    return this.data[idx] || defaultValue;
+  }
+
+
+  /**
+   * Get a new Pt based on a slice of this Pt. Similar to `Array.slice()`.
+   * @param start start index
+   * @param end end index (ie, entry will not include value at this index)
+   */
+  slice(start?:number, end?:number):Pt {
+    return new Pt( [].slice.call( this.data.slice(start, end) ) );
+  }
+
+
+  /**
+   * Absolute values for all values in this pt
+   */
   abs():Pt {
     this.each( (p) => Math.abs(p) );
     return this;
   }
-
 
 
 

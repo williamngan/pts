@@ -773,6 +773,31 @@ var Pt = function (_super) {
             }
         };
     };
+    /**
+     * Clone this and return a new Pt
+     */
+    Pt.prototype.clone = function () {
+        return new Pt(this);
+    };
+    /**
+     * Similar to `get()`, but return a default value instead of throwing error when index is out-of-bound,
+     * @param idx index to get
+     * @param defaultValue value to return when index is out of bound
+     */
+    Pt.prototype.at = function (idx, defaultValue) {
+        return this.data[idx] || defaultValue;
+    };
+    /**
+     * Get a new Pt based on a slice of this Pt. Similar to `Array.slice()`.
+     * @param start start index
+     * @param end end index (ie, entry will not include value at this index)
+     */
+    Pt.prototype.slice = function (start, end) {
+        return new Pt([].slice.call(this.data.slice(start, end)));
+    };
+    /**
+     * Absolute values for all values in this pt
+     */
     Pt.prototype.abs = function () {
         this.each(function (p) {
             return Math.abs(p);
@@ -791,25 +816,50 @@ exports.Pt = Pt;
 
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var Pt_1 = __webpack_require__(1);
 var Pts = function () {
-    function Pts() {
-        this.vecs = [];
-        this.names = [];
-    }
-    Pts.prototype.push = function (pt, name) {
-        this.vecs.push(pt);
-        this.names.push(name || "field" + this.vecs.length);
-        return this;
+    function Pts() {}
+    /**
+     * Zip one slice of an array of Pt
+     * @param pts an array of Pt
+     * @param idx index to zip at
+     * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
+     */
+    Pts.zipOne = function (pts, idx, defaultValue) {
+        if (defaultValue === void 0) {
+            defaultValue = false;
+        }
+        var f = typeof defaultValue == "boolean" ? "get" : "at"; // choose `get` or `at` function
+        return pts.reduce(function (prev, curr) {
+            return prev.push(curr[f](idx, defaultValue));
+        }, new Pt_1.Pt());
     };
-    Pts.prototype.pop = function () {
-        var dv = this.vecs.pop();
-        var dn = this.names.pop();
-        return [dv, dn];
+    /**
+     * Zip an array of Pt. eg, [[1,2],[3,4],[5,6]] => [[1,3,5],[2,4,6]]
+     * @param pts an array of Pt
+     * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
+     */
+    Pts.zip = function (pts, defaultValue) {
+        if (defaultValue === void 0) {
+            defaultValue = false;
+        }
+        var ps = [];
+        var len = pts.reduce(function (a, b) {
+            return Math.max(a, b.length);
+        }, 0);
+        for (var i = 0; i < len; i++) {
+            ps.push(Pts.zipOne(pts, i, defaultValue));
+        }
+        return ps;
     };
-    Pts.prototype.slice = function (start, end) {
-        var dv = this.vecs.slice(start, end);
-        var dn = this.names.slice(start, end);
-        return [dv, dn];
+    /**
+     * Provide a string representation of an array of Pt
+     * @param pts an array of Pt
+     */
+    Pts.toString = function (pts) {
+        return pts.reduce(function (a, b) {
+            return a + (b.toString() + ", ");
+        }, "[ ") + "]";
     };
     return Pts;
 }();
