@@ -34,6 +34,12 @@ describe('Pts: ', function() {
       let ps = Pts.zip( [new Pt(1,2), new Pt(3), new Pt(5,6,7,8)], 10, true );
       assert.isTrue( ps[2].equals( new Pt(10, 10, 7) ) && ps.length == 4 );
     });
+
+    it('can split an array into chunks', function() {
+      let ps = Pts.split([1,2,3,4,5,6,7,8,9,10], 3);
+      assert.isTrue( ps[2][2] === 9 && ps[2].length == 3 ) && ps.length == 4;
+    });
+
   });
 
 });

@@ -35,7 +35,7 @@ export abstract class Space {
   private _animID:number = -1;
 
   private _pause:boolean = false;
-  private _refresh:boolean = true;
+  private _refresh:boolean = undefined;
 
   /**
    * Set whether the rendering should be repainted on each frame
@@ -61,6 +61,9 @@ export abstract class Space {
     this.players[pid] = player;
     player.animateID = pid;
     if (player.onSpaceResize) player.onSpaceResize( this.bound ); 
+
+    // if _refresh is not set, set it to true
+    if (this._refresh === undefined) this._refresh = true;
 
     return this;
   }
@@ -113,7 +116,7 @@ export abstract class Space {
 
     // animate all players
     for (let k in this.players) {
-      this.players[k].animate( time, this._time.diff, this._ctx );
+      this.players[k].animate( time, this._time.diff, this );
     }
 
     // stop if time ended

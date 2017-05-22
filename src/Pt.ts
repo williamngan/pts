@@ -4,7 +4,8 @@ export interface IPt {
   x?:number,
   y?:number,
   z?:number,
-  w?:number
+  w?:number,
+  props?:any
 }
 
 export class Pt extends Vector implements IPt, Iterable<number> {
@@ -12,6 +13,13 @@ export class Pt extends Vector implements IPt, Iterable<number> {
   constructor( ...args:any[]) {
     super( Pt.getArgs( args ) );
   }
+
+
+  /**
+   * An object to get/set custom properties for this Pt directly
+   */
+  public props = {};
+
 
   /**
    * Convert different kinds of parameters (arguments, array, object) into an array of numbers

@@ -690,7 +690,12 @@ var Pt = function (_super) {
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
-        return _super.call(this, Pt.getArgs(args)) || this;
+        var _this = _super.call(this, Pt.getArgs(args)) || this;
+        /**
+         * An object to get/set custom properties for this Pt directly
+         */
+        _this.props = {};
+        return _this;
     }
     /**
      * Convert different kinds of parameters (arguments, array, object) into an array of numbers
@@ -825,13 +830,13 @@ var Pts = function () {
      * @param idx index to zip at
      * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
      */
-    Pts.zipOne = function (pts, idx, defaultValue) {
+    Pts.zipOne = function (pts, index, defaultValue) {
         if (defaultValue === void 0) {
             defaultValue = false;
         }
         var f = typeof defaultValue == "boolean" ? "get" : "at"; // choose `get` or `at` function
         return pts.reduce(function (prev, curr) {
-            return prev.push(curr[f](idx, defaultValue));
+            return prev.push(curr[f](index, defaultValue));
         }, new Pt_1.Pt());
     };
     /**
@@ -855,6 +860,22 @@ var Pts = function () {
             ps.push(Pts.zipOne(pts, i, defaultValue));
         }
         return ps;
+    };
+    Pts.split = function (pts, size) {
+        var count = Math.ceil(pts.length / size);
+        var chunks = [];
+        for (var i = 0; i < count; i++) {
+            chunks.push(pts.slice(i * size, i * size + size));
+        }
+        return chunks;
+        /*
+        function c(agg, i) {
+          if (i>=pts.length) return;
+          agg.push( pts.slice(i, i+size) );
+          c(agg, i+size);
+        }
+        return c([], 0);
+        */
     };
     /**
      * Provide a string representation of an array of Pt
@@ -882,17 +903,31 @@ var Pts_1 = __webpack_require__(2);
 var CanvasSpace_1 = __webpack_require__(7);
 window["Pt"] = Pt_1.Pt;
 window["Pts"] = Pts_1.Pts;
+// console.log( Pts.zipOne( [new Pt(1,3,5,7), new Pt(2,4,6,8), new Pt(5,10,15,20)], 5, 0 ) );
+// console.log( new Pt(1,2,3,4,5,6).slice(2,5).toString() );
+// console.log( Pts.toString( Pts.zip( [new Pt(1,2,3), new Pt(3,4), new Pt(5,6,7,8,9)], 0 ) ) );
+// console.log( Pts.toString( Pts.zip( Pts.zip( [new Pt(1,2), new Pt(3,4), new Pt(5,6)] ) ) ) );
+console.log(Pts_1.Pts.split([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], 5));
+var cs = [];
+for (var i = 0; i < 500; i++) {
+    var c = new Pt_1.Pt(Math.random() * 200, Math.random() * 200);
+    cs.push(c);
+}
 var canvas = new CanvasSpace_1.CanvasSpace("#pt").setup({ retina: true });
 var form = canvas.getForm();
 var form2 = canvas.getForm();
-canvas.add(function () {
+canvas.add(function (time, fps, space) {
     form.reset();
-    form.point({ x: 50.5, y: 50.5 }, 20, "circle");
-    form.point({ x: 50.5, y: 140.5 }, 20);
+    // form.point( {x:50.5, y: 50.5}, 20, "circle");
+    // form.point( {x:50.5, y: 140.5}, 20, );
     // console.log(time, fps);
+    form.point({ x: 50, y: 50 }, 100);
+    form.circles(cs, function (p) {
+        return p.$subtract(new Pt_1.Pt(100, 100)).magnitude() / 10;
+    });
 });
 canvas.add({
-    animate: function (time, fps, context) {
+    animate: function (time, fps, space) {
         form2.reset();
         form2.fill("#fff").stroke("#000").point({ x: 150.5, y: 50.5 }, 20, "circle");
         form2.fill("#ff0").stroke("#ccc").point({ x: 150.5, y: 140.5 }, 20);
@@ -2497,7 +2532,7 @@ var Space = function () {
         this.playerCount = 0;
         this._animID = -1;
         this._pause = false;
-        this._refresh = true;
+        this._refresh = undefined;
     }
     /**
      * Set whether the rendering should be repainted on each frame
@@ -2520,6 +2555,8 @@ var Space = function () {
         this.players[pid] = player;
         player.animateID = pid;
         if (player.onSpaceResize) player.onSpaceResize(this.bound);
+        // if _refresh is not set, set it to true
+        if (this._refresh === undefined) this._refresh = true;
         return this;
     };
     /**
@@ -2569,7 +2606,7 @@ var Space = function () {
         if (this._refresh) this.clear();
         // animate all players
         for (var k in this.players) {
-            this.players[k].animate(time, this._time.diff, this._ctx);
+            this.players[k].animate(time, this._time.diff, this);
         }
         // stop if time ended
         if (this._time.end >= 0 && time > this._time.end) {
@@ -2737,6 +2774,12 @@ var CanvasForm = function (_super) {
         }
         return this;
     };
+    CanvasForm.prototype.circles = function (pts, radius) {
+        for (var i = 0; i < pts.length; i++) {
+            CanvasForm.circle(this._ctx, pts[i], CanvasForm.getValue(pts[i], radius));
+            this._paint();
+        }
+    };
     CanvasForm.circle = function (ctx, pt, radius) {
         ctx.beginPath();
         ctx.arc(pt.x, pt.y, radius, 0, Util_1.Const.two_pi, false);
@@ -2754,6 +2797,11 @@ var CanvasForm = function (_super) {
         ctx.lineTo(x2, y2);
         ctx.lineTo(x2, y1);
         ctx.closePath();
+    };
+    CanvasForm.getValue = function (pt, n) {
+        if (typeof n == "number") return n;
+        if (typeof n == "string") return pt.props[n];
+        return n(pt);
     };
     CanvasForm.prototype.draw = function (ps, shape) {
         return this;

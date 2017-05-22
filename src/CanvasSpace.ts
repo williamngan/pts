@@ -111,10 +111,8 @@ export class CanvasSpace extends Space {
   private _ready( callback:Function ) {
     if (!this._container) throw `Cannot initiate #${this.id} element`;
 
-    
     let b = (this._autoResize) ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
     this.resize( Bound.fromBoundingRect(b) );
-    
     
     this.clear( this._bgcolor );
     this._canvas.dispatchEvent( new Event("ready") );

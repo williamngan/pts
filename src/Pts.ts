@@ -12,9 +12,9 @@ export class Pts {
    * @param idx index to zip at
    * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
    */
-  static zipOne( pts:Pt[],  idx:number, defaultValue:number|boolean = false ):Pt {
+  static zipOne( pts:Pt[],  index:number, defaultValue:number|boolean = false ):Pt {
     let f = (typeof defaultValue == "boolean") ? "get" : "at"; // choose `get` or `at` function
-    return pts.reduce( (prev, curr) => { return prev.push( curr[f](idx, defaultValue) ); }, new Pt());
+    return pts.reduce( (prev, curr) => { return prev.push( curr[f](index, defaultValue) ); }, new Pt());
   }
 
 
@@ -32,6 +32,25 @@ export class Pts {
     }
     return ps;
   }
+
+
+  static split( pts:any[], size:number ):any[][] {
+    let count = Math.ceil(pts.length/size);
+    let chunks = [];
+    for (let i=0; i<count; i++) {
+      chunks.push( pts.slice(i*size, i*size+size) );
+    }
+    return chunks;
+    /*
+    function c(agg, i) {
+      if (i>=pts.length) return;
+      agg.push( pts.slice(i, i+size) );
+      c(agg, i+size);
+    }
+    return c([], 0);
+    */
+  }
+
 
   /**
    * Provide a string representation of an array of Pt
