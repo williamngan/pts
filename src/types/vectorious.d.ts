@@ -33,7 +33,7 @@ export class Vector {
      * @param {Vector} vector
      * @returns {Vector} this
      **/
-    public add (vector: Vector): this;
+    public add (...args:any[]): this;
 
     /**
      * Static method. Subtracts the vector `b` from vector `a`.

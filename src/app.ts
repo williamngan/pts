@@ -25,6 +25,12 @@ var canvas = new CanvasSpace("#pt").setup({retina: true});
 var form = canvas.getForm();
 var form2 = canvas.getForm();
 
+var pt = new Pt(50, 50);
+var pto = pt.to([
+  (p:Pt) => p.$add( new Pt(10) ),
+  (p:Pt) => p.$add( new Pt(20) ),
+
+]);
 
 canvas.add( (time, fps, space) => {
   form.reset();
@@ -32,14 +38,8 @@ canvas.add( (time, fps, space) => {
   // form.point( {x:50.5, y: 140.5}, 20, );
     // console.log(time, fps);
 
-    form.point( {x:50, y:50}, 100);
-
-    form.circles( cs, (p:IPt) => {
-      return (p as Pt).$subtract( new Pt(100, 100) ).magnitude()/10;
-    } );
-    
-  }
-) 
+    form.point( {x:50, y:50}, 100);    
+}) 
 
 canvas.add( {
   animate: (time, fps, space) => {

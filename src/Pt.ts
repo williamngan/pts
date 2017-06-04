@@ -1,4 +1,5 @@
 import {Vector} from "vectorious";
+import "./augment"
 
 export interface IPt {
   x?:number,
@@ -13,12 +14,6 @@ export class Pt extends Vector implements IPt, Iterable<number> {
   constructor( ...args:any[]) {
     super( Pt.getArgs( args ) );
   }
-
-
-  /**
-   * An object to get/set custom properties for this Pt directly
-   */
-  public props = {};
 
 
   /**
@@ -57,16 +52,29 @@ export class Pt extends Vector implements IPt, Iterable<number> {
    * Update the values of this Pt
    * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
    */
-  to( ...args:any[]):this {
+  set( ...args:any[]):this {
     let p = Pt.getArgs( args );
     for (let i=0; i<p.length; i++) {
-      this.set( i, p[i] );
+      super.set( i, p[i] );
     }
     this.length = Math.max( this.length, p.length );
     return this;
   }
 
-  $add( p:Vector ):Pt { return new Pt(this).add( p ); }
+
+  to( fns:((p:Pt) => Pt)[] ):Pt[] {
+    let results = [];
+    for (var k in fns) {
+      results[k]( this );
+    }
+    return results;
+  }
+
+  add( ...args:any[] ):this {
+    return super.add( new Pt( Pt.getArgs(args)) );
+  }
+
+  $add( ...args:any[] ):Pt { return new Pt(this).add( args ); }
   $subtract( p:Vector ):Pt { return new Pt(this).subtract( p ); }
   $scale( n:number ):Pt { return new Pt(this).scale(n); }
   $normalize():Pt { return new Pt(this).normalize(); }

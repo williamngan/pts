@@ -99,11 +99,8 @@ export class CanvasForm extends Form {
   }
 
 
-  public circles( pts:IPt[], radius:number|string|( (p:IPt) => number) ) {
-    for (let i=0; i<pts.length; i++) {
-      CanvasForm.circle( this._ctx, pts[i], CanvasForm.getValue( pts[i], radius ));
-      this._paint();
-    }
+  public circle( pts:IPt, radius:number ) {
+    CanvasForm.circle( this._ctx, pts, radius );
   }
 
   public static circle( ctx:CanvasRenderingContext2D, pt:IPt, radius:number ) {
@@ -127,12 +124,6 @@ export class CanvasForm extends Form {
     ctx.closePath()
   }
 
-
-  public static getValue( pt:IPt, n:number|string|( (p:IPt) => number) ):number {
-    if (typeof n == "number") return n;
-    if (typeof n == "string") return pt.props[n];
-    return n( pt );
-  }
 
   public draw( ps:Pt[], shape?:string ):this {
     return this;

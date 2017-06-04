@@ -45,12 +45,17 @@ describe('Pt: ', function() {
 
   });
 
-  describe('Functions: ', function() {
+  describe('Functions: ', () => {
 
-    it('can check size of vector', function() {
+    it('can check size of vector', () => {
       let p = new Pt([1,2,3,4,5,6]);
       p.push(7);
       assert.equal( 7, p.length );
+    });
+
+    it('can add', () => {
+      let p = new Pt({x:1,y:2,z:3}).add([1,1,1]).add(2,2,2).add(new Pt(3,4,5));
+      assert.isTrue( p.$add(1,2,3).equals( new Pt(8, 11, 14) ) );
     });
 
     it('can support for-of loop', function() {
