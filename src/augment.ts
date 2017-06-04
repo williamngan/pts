@@ -8,8 +8,6 @@ import {Vector} from "vectorious";
 declare module "vectorious" {
 
   interface Vector {
-    constructor(...args:any[]);
-    data:Float64Array;
     x: number;
     y: number;
     z: number;
@@ -23,6 +21,25 @@ declare module "vectorious" {
     set (index: number, value: number): this;
     combine (vector: Vector): this;
     push (value: number): this;
+    map (callback: (element: number) => number): this;
+    each (callback: (element: number) => void): this;
+  }
+
+  interface Matrix {
+    add (matrix: Matrix): this;
+    subtract (matrix: Matrix): this;
+    scale (scalar: number): this;
+    product (matrix: Matrix): this;
+    multiply (matrix: Matrix): this;
+    transpose (): this;
+    inverse (): this;
+    gauss (): this;
+    lusolve (rhs: Matrix, ipiv: Int32Array): this;
+    solve (rhs: Matrix|Vector): this;
+    augment (matrix: Matrix): this;
+    diag (): this;
+    set (i: number, j: number, value: number): this;
+    swap (i: number, j: number): this;
     map (callback: (element: number) => number): this;
     each (callback: (element: number) => void): this;
   }
