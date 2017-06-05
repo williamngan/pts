@@ -78,13 +78,13 @@ export class Bound implements IPt{
     this._updatePosFromTop();
   }
 
-  public get height():number { return this._size.y; }
+  public get height():number { return (this._size.length > 1) ? this._size.y : 0; }
   public set height( h:number ) {
     this._size.y = h;
     this._updatePosFromTop();
   }
 
-  public get depth():number { return this._size.z; }
+  public get depth():number { return (this._size.length > 2) ? this._size.z : 0; }
   public set depth( d:number ) {
     this._size.z = d;
     this._updatePosFromTop();

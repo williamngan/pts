@@ -89,17 +89,44 @@ var __extends = this && this.__extends || function () {
     };
 }();
 Object.defineProperty(exports, "__esModule", { value: true });
-var vectorious_1 = __webpack_require__(11);
-__webpack_require__(14);
+var vectorious_1 = __webpack_require__(12);
+__webpack_require__(10);
 var Pt = function (_super) {
     __extends(Pt, _super);
+    /**
+     * Create a Pt. This will instantiate with at least 3 dimensions. If provided parameters are less than 3 dimensions, default value of 0 will be used to fill. Use 'Pt.$()' if you need 1D or 2D specifically.
+     * Example: `new Pt()`, `new Pt(1,2,3,4,5)`, `new Pt([1,2])`, `new Pt({x:0, y:1})`, `new Pt(pt)`
+     * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
+     */
     function Pt() {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
-        return _super.call(this, Pt.getArgs(args)) || this;
+        var _this = this;
+        var p = Pt.getArgs(args);
+        for (var i = p.length; i < 3; i++) {
+            p.push(0);
+        } // fill to 3 dimensions
+        _this = _super.call(this, p) || this;
+        return _this;
     }
+    /**
+     * Create a Pt without padding to 3 dimensions. This allows you to create Pt with less than 3 dimensions.
+     * Example: `Pt.$()`, `Pt.$(1,2,3,4,5)`, `Pt.$([1,2])`, `Pt.$({x:0, y:1})`, `Pt.$(pt)`
+     * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
+     */
+    Pt.$ = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        var p = Pt.getArgs(args);
+        var pt = new Pt();
+        pt.data = new Float64Array(p);
+        pt.length = p.length;
+        return pt;
+    };
     /**
      * Convert different kinds of parameters (arguments, array, object) into an array of numbers
      * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
@@ -141,13 +168,18 @@ var Pt = function (_super) {
         this.length = Math.max(this.length, p.length);
         return this;
     };
+    /**
+     * Apply a series of functions to transform this Pt. The function should have this form: (p:Pt) => Pt
+     * @param fns a list of function as array or object {key: function}
+     */
     Pt.prototype.to = function (fns) {
         var results = [];
         for (var k in fns) {
-            results[k](this);
+            results[k] = fns[k](this);
         }
         return results;
     };
+    // Override the functions in vectorious library
     Pt.prototype.add = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
@@ -155,15 +187,38 @@ var Pt = function (_super) {
         }
         return _super.prototype.add.call(this, new Pt(Pt.getArgs(args)));
     };
+    Pt.prototype.subtract = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        return _super.prototype.subtract.call(this, new Pt(Pt.getArgs(args)));
+    };
+    Pt.prototype.multiply = function (n) {
+        return this.scale(n);
+    };
+    Pt.prototype.divide = function (n) {
+        return this.scale(1 / n);
+    };
     Pt.prototype.$add = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
-        return new Pt(this).add(args);
+        return new Pt(this).add(Pt.getArgs(args));
     };
-    Pt.prototype.$subtract = function (p) {
-        return new Pt(this).subtract(p);
+    Pt.prototype.$subtract = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        return new Pt(this).subtract(Pt.getArgs(args));
+    };
+    Pt.prototype.$multiply = function (n) {
+        return this.$scale(n);
+    };
+    Pt.prototype.$divide = function (n) {
+        return this.$scale(1 / n);
     };
     Pt.prototype.$scale = function (n) {
         return new Pt(this).scale(n);
@@ -173,18 +228,6 @@ var Pt = function (_super) {
     };
     Pt.prototype.$project = function (p) {
         return new Pt(this).project(new Pt(p));
-    };
-    Pt.prototype.multiply = function (n) {
-        return this.scale(n);
-    };
-    Pt.prototype.$multiply = function (n) {
-        return this.$scale(n);
-    };
-    Pt.prototype.divide = function (n) {
-        return this.scale(1 / n);
-    };
-    Pt.prototype.$divide = function (n) {
-        return this.$scale(1 / n);
     };
     /**
      * Iterator implementation to support for ... of loop
@@ -229,6 +272,24 @@ var Pt = function (_super) {
             return Math.abs(p);
         });
         return this;
+    };
+    /**
+     * Get a new Pt with absolute values of this Pt
+     */
+    Pt.prototype.$abs = function () {
+        return this.clone().abs();
+    };
+    /**
+     * Convert to a unit vector
+     */
+    Pt.prototype.unit = function () {
+        return this.divide(this.magnitude());
+    };
+    /**
+     * Get a unit vector from this Pt
+     */
+    Pt.prototype.$unit = function () {
+        return this.clone().unit();
     };
     return Pt;
 }(vectorious_1.Vector);
@@ -337,7 +398,7 @@ var Bound = function () {
     });
     Object.defineProperty(Bound.prototype, "height", {
         get: function () {
-            return this._size.y;
+            return this._size.length > 1 ? this._size.y : 0;
         },
         set: function (h) {
             this._size.y = h;
@@ -348,7 +409,7 @@ var Bound = function () {
     });
     Object.defineProperty(Bound.prototype, "depth", {
         get: function () {
-            return this._size.z;
+            return this._size.length > 2 ? this._size.z : 0;
         },
         set: function (d) {
             this._size.z = d;
@@ -1415,7 +1476,7 @@ var Pts = function () {
         var f = typeof defaultValue == "boolean" ? "get" : "at"; // choose `get` or `at` function
         return pts.reduce(function (prev, curr) {
             return prev.push(curr[f](index, defaultValue));
-        }, new Pt_1.Pt());
+        }, Pt_1.Pt.$());
     };
     /**
      * Zip an array of Pt. eg, [[1,2],[3,4],[5,6]] => [[1,3,5],[2,4,6]]
@@ -1439,6 +1500,11 @@ var Pts = function () {
         }
         return ps;
     };
+    /**
+     * Split an array into chunks of sub-array
+     * @param pts an array
+     * @param size chunk size, ie, number of items in a chunk
+     */
     Pts.split = function (pts, size) {
         var count = Math.ceil(pts.length / size);
         var chunks = [];
@@ -1825,6 +1891,46 @@ var Space = function () {
         this.stop(duration);
         return this;
     };
+    Object.defineProperty(Space.prototype, "boundingBox", {
+        /**
+         * Get this space's bounding box
+         */
+        get: function () {
+            return this.bound.clone();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Space.prototype, "size", {
+        /**
+         * Get the size of this bounding box as a Pt
+         */
+        get: function () {
+            return this.bound.size.clone();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Space.prototype, "width", {
+        /**
+         * Get width of canvas
+         */
+        get: function () {
+            return this.bound.width;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Space.prototype, "height", {
+        /**
+         * Get height of canvas
+         */
+        get: function () {
+            return this.bound.height;
+        },
+        enumerable: true,
+        configurable: true
+    });
     return Space;
 }();
 exports.Space = Space;
@@ -1898,44 +2004,91 @@ exports.Const = {
 Object.defineProperty(exports, "__esModule", { value: true });
 var Pt_1 = __webpack_require__(0);
 var Pts_1 = __webpack_require__(4);
+var Bound_1 = __webpack_require__(1);
+var Create_1 = __webpack_require__(13);
 var CanvasSpace_1 = __webpack_require__(3);
 window["Pt"] = Pt_1.Pt;
 window["Pts"] = Pts_1.Pts;
-// console.log( Pts.zipOne( [new Pt(1,3,5,7), new Pt(2,4,6,8), new Pt(5,10,15,20)], 5, 0 ) );
+console.log(new Pt_1.Pt(32, 43).unit().magnitude());
+// console.log( Pts.zipOne( [new Pt(1,3), new Pt(2,4), new Pt(5,10)], 1, 0 ).toString() );
 // console.log( new Pt(1,2,3,4,5,6).slice(2,5).toString() );
-// console.log( Pts.toString( Pts.zip( [new Pt(1,2,3), new Pt(3,4), new Pt(5,6,7,8,9)], 0 ) ) );
+// console.log( Pts.toString( Pts.zip( [new Pt(1,2), new Pt(3,4), new Pt(5,6)] ) ) );
 // console.log( Pts.toString( Pts.zip( Pts.zip( [new Pt(1,2), new Pt(3,4), new Pt(5,6)] ) ) ) );
 console.log(Pts_1.Pts.split([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], 5));
 var cs = [];
-for (var i = 0; i < 500; i++) {
+for (var i_1 = 0; i_1 < 500; i_1++) {
     var c = new Pt_1.Pt(Math.random() * 200, Math.random() * 200);
     cs.push(c);
 }
-var canvas = new CanvasSpace_1.CanvasSpace("#pt").setup({ retina: true });
+var canvas = new CanvasSpace_1.CanvasSpace("#pt", ready).setup({ retina: true });
 var form = canvas.getForm();
 var form2 = canvas.getForm();
 var pt = new Pt_1.Pt(50, 50);
 var pto = pt.to([function (p) {
-    return p.$add(new Pt_1.Pt(10));
+    return p.$add(10, 10);
 }, function (p) {
-    return p.$add(new Pt_1.Pt(20));
+    return p.$add(20, 25);
 }]);
-canvas.add(function (time, fps, space) {
-    form.reset();
-    // form.point( {x:50.5, y: 50.5}, 20, "circle");
-    // form.point( {x:50.5, y: 140.5}, 20, );
-    // console.log(time, fps);
-    form.point({ x: 50, y: 50 }, 100);
-});
-canvas.add({
-    animate: function (time, fps, space) {
-        form2.reset();
-        form2.fill("#fff").stroke("#000").point({ x: 150.5, y: 50.5 }, 20, "circle");
-        form2.fill("#ff0").stroke("#ccc").point({ x: 150.5, y: 140.5 }, 20);
-        // console.log(time, fps);
+var pto2 = pt.to({
+    "a": function (p) {
+        return p.$add(10, 10);
+    },
+    "b": function (p) {
+        return p.$add(20, 25);
     }
 });
-canvas.playOnce(200);
+for (var i in pto2) {
+    console.log("==>", pto2[i].toString());
+}
+console.log(pto.reduce(function (a, b) {
+    return a + " | " + b.toString();
+}, ""));
+console.log(pt.toString());
+var ps = [];
+var fs = {
+    "size": function (p) {
+        var dist = p.$subtract(canvas.size.$divide(2)).magnitude();
+        return new Pt_1.Pt(dist / 8, dist / (Math.max(canvas.width, canvas.height) / 2));
+    }
+};
+function ready(bound, space) {
+    ps = Create_1.Create.distributeRandom(new Bound_1.Bound(canvas.size), 200);
+}
+canvas.add({
+    animate: function (time, fps, space) {
+        form.reset();
+        form.stroke(false);
+        ps.forEach(function (p) {
+            var attrs = p.to(fs);
+            form.fill("rgba(255,0,0," + (1.2 - attrs.size.y));
+            form.point(p, attrs.size.x, "circle");
+        });
+        // form.point( {x:50.5, y: 50.5}, 20, "circle");
+        // form.point( {x:50.5, y: 140.5}, 20, );
+        // console.log(time, fps);
+        // form.point( {x:50, y:50}, 100);    
+    },
+    onMouseAction: function (type, px, py) {
+        if (type == "move") {
+            var d = canvas.boundingBox.center.$subtract(px, py);
+            var p1 = canvas.boundingBox.center.$subtract(d);
+            var bound = new Bound_1.Bound(p1, p1.$add(d.$abs().multiply(2)));
+            ps = Create_1.Create.distributeRandom(bound, 200);
+        }
+    }
+});
+canvas.bindMouse();
+/*
+canvas.add( {
+  animate: (time, fps, space) => {
+    form2.reset();
+    form2.fill("#fff").stroke("#000").point( {x:150.5, y: 50.5}, 20, "circle");
+    form2.fill("#ff0").stroke("#ccc").point( {x:150.5, y: 140.5}, 20, );
+    // console.log(time, fps);
+  }
+})
+*/
+canvas.playOnce(5000);
 /*
 let vec = new Vector( [1000, 2, 3] ).add( new Vector( [2, 3, 4] ) );
 console.log(vec.toString());
@@ -1959,6 +2112,15 @@ console.log( pts );
 
 /***/ }),
 /* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", { value: true });
+
+/***/ }),
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function () {
@@ -2928,14 +3090,14 @@ console.log( pts );
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function () {
   'use strict';
 
   var Vector = module.exports.Vector = __webpack_require__(2),
-      Matrix = module.exports.Matrix = __webpack_require__(10);
+      Matrix = module.exports.Matrix = __webpack_require__(11);
 
 /*
   try {
@@ -2952,15 +3114,26 @@ console.log( pts );
 
 
 /***/ }),
-/* 12 */,
-/* 13 */,
-/* 14 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var Pt_1 = __webpack_require__(0);
+var Create = function () {
+    function Create() {}
+    Create.distributeRandom = function (bound, count) {
+        var pts = [];
+        for (var i = 0; i < count; i++) {
+            pts.push(new Pt_1.Pt(bound.x + Math.random() * bound.width, bound.y + Math.random() * bound.height, bound.z + Math.random() * bound.depth));
+        }
+        return pts;
+    };
+    return Create;
+}();
+exports.Create = Create;
 
 /***/ })
 /******/ ]);

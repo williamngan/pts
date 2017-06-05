@@ -14,7 +14,7 @@ export class Pts {
    */
   static zipOne( pts:Pt[],  index:number, defaultValue:number|boolean = false ):Pt {
     let f = (typeof defaultValue == "boolean") ? "get" : "at"; // choose `get` or `at` function
-    return pts.reduce( (prev, curr) => { return prev.push( curr[f](index, defaultValue) ); }, new Pt());
+    return pts.reduce( (prev, curr) => { return prev.push( curr[f](index, defaultValue) ); }, Pt.$());
   }
 
 
@@ -33,7 +33,11 @@ export class Pts {
     return ps;
   }
 
-
+  /**
+   * Split an array into chunks of sub-array
+   * @param pts an array 
+   * @param size chunk size, ie, number of items in a chunk
+   */
   static split( pts:any[], size:number ):any[][] {
     let count = Math.ceil(pts.length/size);
     let chunks = [];

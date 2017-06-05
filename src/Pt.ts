@@ -11,8 +11,31 @@ export interface IPt {
 
 export class Pt extends Vector implements IPt, Iterable<number> {
 
+  protected data:Float64Array;
+
+  /**
+   * Create a Pt. This will instantiate with at least 3 dimensions. If provided parameters are less than 3 dimensions, default value of 0 will be used to fill. Use 'Pt.$()' if you need 1D or 2D specifically.
+   * Example: `new Pt()`, `new Pt(1,2,3,4,5)`, `new Pt([1,2])`, `new Pt({x:0, y:1})`, `new Pt(pt)`
+   * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
+   */
   constructor( ...args:any[]) {
-    super( Pt.getArgs( args ) );
+    let p = Pt.getArgs( args );
+    for (let i=p.length; i<3; i++) { p.push(0); } // fill to 3 dimensions
+    super( p );
+  }
+
+
+  /**
+   * Create a Pt without padding to 3 dimensions. This allows you to create Pt with less than 3 dimensions.
+   * Example: `Pt.$()`, `Pt.$(1,2,3,4,5)`, `Pt.$([1,2])`, `Pt.$({x:0, y:1})`, `Pt.$(pt)`
+   * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
+   */
+  static $( ...args:any[]) {
+    let p = Pt.getArgs( args );
+    let pt = new Pt();
+    pt.data = new Float64Array(p);
+    pt.length = p.length;
+    return pt;
   }
 
 
@@ -61,30 +84,32 @@ export class Pt extends Vector implements IPt, Iterable<number> {
     return this;
   }
 
-
-  to( fns:((p:Pt) => Pt)[] ):Pt[] {
+  /**
+   * Apply a series of functions to transform this Pt. The function should have this form: (p:Pt) => Pt
+   * @param fns a list of function as array or object {key: function}
+   */
+  to( fns: ((p:Pt) => Pt)[] | {[key:string]:(p:Pt) => Pt} ):Pt[] {
     let results = [];
     for (var k in fns) {
-      results[k]( this );
+      results[k] = fns[k]( this );
     }
     return results;
   }
 
-  add( ...args:any[] ):this {
-    return super.add( new Pt( Pt.getArgs(args)) );
-  }
 
-  $add( ...args:any[] ):Pt { return new Pt(this).add( args ); }
-  $subtract( p:Vector ):Pt { return new Pt(this).subtract( p ); }
+  // Override the functions in vectorious library
+  add( ...args:any[] ):this { return super.add( new Pt( Pt.getArgs(args)) ); }
+  subtract( ...args:any[] ):this { return super.subtract( new Pt( Pt.getArgs(args)) ); }
+  multiply( n:number ):this { return this.scale( n ); }
+  divide( n:number ):this { return this.scale(1/n); }
+
+  $add( ...args:any[] ):Pt { return new Pt(this).add( Pt.getArgs(args) ); }
+  $subtract( ...args:any[] ):Pt { return new Pt(this).subtract( Pt.getArgs(args) ); }
+  $multiply( n:number ):Pt { return this.$scale( n ); }
+  $divide( n:number ):Pt { return this.$scale(1/n); }
   $scale( n:number ):Pt { return new Pt(this).scale(n); }
   $normalize():Pt { return new Pt(this).normalize(); }
   $project( p:Vector ):Pt { return new Pt(this).project( new Pt(p) ); }
-
-  multiply( n:number ):this { return this.scale( n ); }
-  $multiply( n:number ):Pt { return this.$scale( n ); }
-  divide( n:number ):this { return this.scale(1/n); }
-  $divide( n:number ):Pt { return this.$scale(1/n); }
-
 
 
   /**
@@ -140,6 +165,26 @@ export class Pt extends Vector implements IPt, Iterable<number> {
     return this;
   }
 
+  /**
+   * Get a new Pt with absolute values of this Pt
+   */
+  $abs():Pt {
+    return this.clone().abs();
+  }
+
+  /**
+   * Convert to a unit vector
+   */
+  unit():Pt {
+    return this.divide( this.magnitude() );
+  }
+
+  /**
+   * Get a unit vector from this Pt
+   */
+  $unit():Pt {
+    return this.clone().unit();
+  }
 
 
 }

@@ -25,7 +25,7 @@ export interface ITimer {
 export abstract class Space {
 
   id: string = "space";
-  bound: Bound = new Bound();
+  protected bound: Bound = new Bound();
 
   protected _time: ITimer = { prev: 0, diff: 0, end: -1 };
   protected players:ISpacePlayers = {};
@@ -160,6 +160,29 @@ export abstract class Space {
     this.stop( duration );
     return this;
   }
+
+
+  /**
+   * Get this space's bounding box
+   */
+  get boundingBox():Bound { return this.bound.clone(); }
+
+
+  /**
+   * Get the size of this bounding box as a Pt
+   */
+  get size():Pt { return this.bound.size.clone(); }
+
+  /**
+   * Get width of canvas
+   */
+  get width():number { return this.bound.width; }
+
+  /**
+   * Get height of canvas
+   */
+  get height():number { return this.bound.height; }
+
 
 
   /**
