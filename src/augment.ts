@@ -1,3 +1,4 @@
+/*
 import {Vector} from "vectorious";
 
 // Augment the Vectorious typing
@@ -45,3 +46,5 @@ declare module "vectorious" {
   }
   
 }
+
+*/

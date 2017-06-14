@@ -1,4 +1,4 @@
-import {Vector} from "vectorious";
+import {Vector} from "./Vector";
 import "./augment"
 
 export interface IPt {

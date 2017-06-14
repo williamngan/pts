@@ -1,4 +1,4 @@
-import {Vector, Matrix} from 'vectorious';
+import {Vector} from './Vector';
 import {Pt, IPt} from './Pt';
 import {Pts} from './Pts';
 import {Bound} from './Bound';
