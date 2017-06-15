@@ -1,5 +1,6 @@
-import {Vector} from "./Vector";
-import "./augment"
+import {Util} from "./Util"
+import {LinearAlgebra} from "./LinearAlgebra"
+
 
 export interface IPt {
   x?:number,
@@ -9,65 +10,44 @@ export interface IPt {
   props?:any
 }
 
-export class Pt extends Vector implements IPt, Iterable<number> {
+export type ArrayType = Float64Array;
 
-  protected data:Float64Array;
+let TypedArray = Float64Array; 
+let LA = LinearAlgebra;
+
+export class Pt extends TypedArray implements IPt, Iterable<number> {
+
 
   /**
    * Create a Pt. This will instantiate with at least 3 dimensions. If provided parameters are less than 3 dimensions, default value of 0 will be used to fill. Use 'Pt.$()' if you need 1D or 2D specifically.
    * Example: `new Pt()`, `new Pt(1,2,3,4,5)`, `new Pt([1,2])`, `new Pt({x:0, y:1})`, `new Pt(pt)`
    * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
    */
-  constructor( ...args:any[]) {
-    let p = Pt.getArgs( args );
-    for (let i=p.length; i<3; i++) { p.push(0); } // fill to 3 dimensions
-    super( p );
+  constructor(...args) {
+    super( Util.getArgs(args) );
   }
 
 
-  /**
-   * Create a Pt without padding to 3 dimensions. This allows you to create Pt with less than 3 dimensions.
-   * Example: `Pt.$()`, `Pt.$(1,2,3,4,5)`, `Pt.$([1,2])`, `Pt.$({x:0, y:1})`, `Pt.$(pt)`
-   * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
-   */
-  static $( ...args:any[]) {
-    let p = Pt.getArgs( args );
-    let pt = new Pt();
-    pt.data = new Float64Array(p);
-    pt.length = p.length;
-    return pt;
+  get x():number { return this[0]; }
+  get y():number { return this[1]; }
+  get z():number { return this[2]; }
+  get w():number { return this[3]; }
+
+  set x( n:number ) { this[0] = n; }
+  set y( n:number ) { this[1] = n; }
+  set z( n:number ) { this[2] = n; }
+  set w( n:number ) { this[3] = n; }
+  
+
+  clone():Pt {
+    return new Pt( this );
   }
 
-
-  /**
-   * Convert different kinds of parameters (arguments, array, object) into an array of numbers
-   * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
-   */
-  static getArgs( args:any[] ):Array<number> {
-    if (args.length<1) return [];
-
-    var pos = [];
-    
-    // positional arguments: x,y,z,w,...
-    if (typeof args[0] === 'number') {
-      pos = Array.prototype.slice.call( args );
-
-    // as an object of {x, y?, z?, w?}
-    } else if (typeof args[0] === 'object' && !Array.isArray( args[0] )) {
-      let a = ["x", "y", "z", "w"];
-      let p = args[0];
-      for (let i=0; i<a.length; i++) {
-        if ( (p.length && i>=p.length) || !(a[i] in p) ) break; // check for length and key exist
-        pos.push( p[ a[i] ] );
-      }
-
-    // as an array of values
-    } else if (Array.isArray( args[0] )) {
-      let _x = args[0] as Array<number>;
-      pos = _x.slice();
+  equals( p:ArrayType|number[], threshold=0 ):boolean {
+    for (let i=0, len=this.length; i<len; i++) {
+      if ( Math.abs(this[i]-p[i]) > threshold ) return false;
     }
-    
-    return pos;
+    return true;
   }
 
 
@@ -75,12 +55,11 @@ export class Pt extends Vector implements IPt, Iterable<number> {
    * Update the values of this Pt
    * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
    */
-  set( ...args:any[]):this {
-    let p = Pt.getArgs( args );
-    for (let i=0; i<p.length; i++) {
-      super.set( i, p[i] );
+  to( ...args ):this {
+    let p = Util.getArgs( args );
+    for (let i=0, len=Math.min(this.length, p.length); i<len; i++) {
+      this[i] = p[i];
     }
-    this.length = Math.max( this.length, p.length );
     return this;
   }
 
@@ -88,7 +67,7 @@ export class Pt extends Vector implements IPt, Iterable<number> {
    * Apply a series of functions to transform this Pt. The function should have this form: (p:Pt) => Pt
    * @param fns a list of function as array or object {key: function}
    */
-  to( fns: ((p:Pt) => Pt)[] | {[key:string]:(p:Pt) => Pt} ):Pt[] {
+  op( fns: ((p:Pt) => Pt)[] | {[key:string]:(p:Pt) => Pt} ):Pt[] {
     let results = [];
     for (var k in fns) {
       results[k] = fns[k]( this );
@@ -97,53 +76,10 @@ export class Pt extends Vector implements IPt, Iterable<number> {
   }
 
 
-  // Override the functions in vectorious library
-  add( ...args:any[] ):this { return super.add( new Pt( Pt.getArgs(args)) ); }
-  subtract( ...args:any[] ):this { return super.subtract( new Pt( Pt.getArgs(args)) ); }
-  multiply( n:number ):this { return this.scale( n ); }
-  divide( n:number ):this { return this.scale(1/n); }
-
-  $add( ...args:any[] ):Pt { return new Pt(this).add( Pt.getArgs(args) ); }
-  $subtract( ...args:any[] ):Pt { return new Pt(this).subtract( Pt.getArgs(args) ); }
-  $multiply( n:number ):Pt { return this.$scale( n ); }
-  $divide( n:number ):Pt { return this.$scale(1/n); }
-  $scale( n:number ):Pt { return new Pt(this).scale(n); }
-  $normalize():Pt { return new Pt(this).normalize(); }
-  $project( p:Vector ):Pt { return new Pt(this).project( new Pt(p) ); }
-
-
-  /**
-   * Iterator implementation to support for ... of loop
-   */
-  [Symbol.iterator]():Iterator<number> {
-
-    let idx = 0;
-    let count = this.length;
-    let self = this;
-
-    return {
-      next(): IteratorResult<number> {
-        return (idx < count) ? { done: false, value: self.get(idx++) } : { done: true, value: null };
-      }
-    }
-  }
-
-
-  /**
-   * Clone this and return a new Pt
-   */
-  clone():Pt {
-    return new Pt( this );
-  }
-
-
-  /**
-   * Similar to `get()`, but return a default value instead of throwing error when index is out-of-bound, 
-   * @param idx index to get
-   * @param defaultValue value to return when index is out of bound
-   */
-  at(idx:number, defaultValue?:number):number {
-    return this.data[idx] || defaultValue;
+  $map( fn:(currentValue:number, index:number, array:ArrayType) => number):Pt {
+    let m = this.clone();
+    LinearAlgebra.map( m, fn );
+    return m;
   }
 
 
@@ -152,8 +88,80 @@ export class Pt extends Vector implements IPt, Iterable<number> {
    * @param start start index
    * @param end end index (ie, entry will not include value at this index)
    */
-  slice(start?:number, end?:number):Pt {
-    return new Pt( [].slice.call( this.data.slice(start, end) ) );
+  $slice(start?:number, end?:number):Pt {
+    let m = new TypedArray( this ).slice(start, end);
+    return new Pt( m );
+  }
+
+
+  add(...args): this { 
+    (args.length === 1 && typeof args[0] == "number") ? LA.add( this, args[0] ) : LA.add( this, Util.getArgs(args) );
+    return this; 
+  }
+
+  $add(...args): Pt { return this.clone().add(...args) };
+
+
+  subtract(...args): this { 
+    (args.length === 1 && typeof args[0] == "number") ? LA.subtract( this, args[0] ) : LA.subtract( this, Util.getArgs(args) );
+    return this; 
+  }
+
+  $subtract(...args): Pt { return this.clone().subtract(...args) };
+
+
+  multiply(...args): this { 
+    (args.length === 1 && typeof args[0] == "number") ? LA.multiply( this, args[0] ) : LA.multiply( this, Util.getArgs(args) );
+    return this;
+  }
+
+  $multiply(...args): Pt { return this.clone().multiply(...args) };
+
+
+  divide(...args): this { 
+    (args.length === 1 && typeof args[0] == "number") ? LA.divide( this, args[0] ) : LA.divide( this, Util.getArgs(args) );
+    return this; 
+  }
+
+  $divide(...args): Pt { return this.clone().divide(...args) };
+
+
+  scale(...args ): this { return this.multiply(...args); }
+
+  $scale(...args ): Pt { return this.clone().scale(...args) };
+  
+
+  magnitudeSq():number {  return LA.dot( this, this ); }
+
+  magnitude():number { return LA.magnitude( this ); }
+
+
+  /**
+   * Convert to a unit vector
+   */
+  unit():Pt {
+    LA.unit( this );
+    return this;
+  }
+
+  /**
+   * Get a unit vector from this Pt
+   */
+  $unit():Pt { return this.clone().unit(); }
+
+  dot( ...args ):number { return LA.dot( this, Util.getArgs(args) ); }
+
+  cross( ...args ): Pt { 
+    let p = Util.getArgs( args );
+    return new Pt( (this[1]*p[2] - this[2]*p[1]), (this[2]*p[0] - this[0]*p[2]), (this[0]*p[1] - this[1]*p[0]) )
+  }
+
+  project( p:Pt ):Pt {
+    let m = p.magnitude();
+    let a = this.$unit();
+    let b = p.$divide(m);
+    let dot = a.dot( b );
+    return a.multiply( m * dot );
   }
 
 
@@ -161,7 +169,7 @@ export class Pt extends Vector implements IPt, Iterable<number> {
    * Absolute values for all values in this pt
    */
   abs():Pt {
-    this.each( (p) => Math.abs(p) );
+    LA.abs( this );
     return this;
   }
 
@@ -172,19 +180,14 @@ export class Pt extends Vector implements IPt, Iterable<number> {
     return this.clone().abs();
   }
 
-  /**
-   * Convert to a unit vector
-   */
-  unit():Pt {
-    return this.divide( this.magnitude() );
-  }
+  each( fn:Function ) { return; }
 
-  /**
-   * Get a unit vector from this Pt
-   */
-  $unit():Pt {
-    return this.clone().unit();
-  }
+  push( p:number ):this { return this; }
+  pop():number { return 0; }
 
+
+  toString():string {
+    return `Pt(${ this.join(", ")})`
+  }
 
 }

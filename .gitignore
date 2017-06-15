@@ -3,3 +3,5 @@
 node_modules/
 temp/
 *.js.map
+.DS_Store
+package-lock.json

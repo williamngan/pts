@@ -1,4 +1,3 @@
-import {Vector} from './Vector';
 import {Pt, IPt} from './Pt';
 import {Pts} from './Pts';
 import {Bound} from './Bound';
@@ -9,6 +8,26 @@ import {CanvasForm} from "./CanvasForm";
 window["Pt"] = Pt;
 window["Pts"] = Pts;
 
+var p = new Pt([1,2,3]);
+console.log( p, p.x );
+
+p.add(10,20);
+console.log( p, p.x );
+
+p.add( 1 );
+console.log( p, p.x );
+
+var p2 = p.clone();
+p2.add(10,20);
+var p3 = p2.$add(100);
+console.log(  p, p2, p3 );
+
+var p4 = p3.$map( (n, i) => n*i*10 );
+console.log( p3, p4 );
+
+console.log( new Pt([1,2,3]).$slice(0,2).toString() );
+
+/*
 console.log( new Pt(32,43).unit().magnitude() );
 
 // console.log( Pts.zipOne( [new Pt(1,3), new Pt(2,4), new Pt(5,10)], 1, 0 ).toString() );
@@ -88,7 +107,7 @@ canvas.add( {
 }); 
 
 canvas.bindMouse();
-
+*/
 
 
 
@@ -103,7 +122,7 @@ canvas.add( {
 })
 */ 
 
-canvas.playOnce(5000);
+//canvas.playOnce(5000);
 
 
 /*

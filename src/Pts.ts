@@ -14,7 +14,7 @@ export class Pts {
    */
   static zipOne( pts:Pt[],  index:number, defaultValue:number|boolean = false ):Pt {
     let f = (typeof defaultValue == "boolean") ? "get" : "at"; // choose `get` or `at` function
-    return pts.reduce( (prev, curr) => { return prev.push( curr[f](index, defaultValue) ); }, Pt.$());
+    return pts.reduce( (prev, curr) => { return prev.push( curr[f](index, defaultValue) ); }, new Pt());
   }
 
 

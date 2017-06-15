@@ -70,3 +70,40 @@ export const Const = {
   gaussian: 0.3989422804014327
 
 };
+
+
+export class Util {
+  
+  /**
+   * Convert different kinds of parameters (arguments, array, object) into an array of numbers
+   * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
+   */
+  static getArgs( args:any[] ):Array<number> {
+    if (args.length<1) return [];
+
+    var pos = [];
+    
+    var isArray = Array.isArray( args[0] ) || ArrayBuffer.isView( args[0] );
+    
+    // positional arguments: x,y,z,w,...
+    if (typeof args[0] === 'number') {
+      pos = Array.prototype.slice.call( args );
+
+    // as an object of {x, y?, z?, w?}
+    } else if (typeof args[0] === 'object' && !isArray ) {
+      let a = ["x", "y", "z", "w"];
+      let p = args[0];
+      for (let i=0; i<a.length; i++) {
+        if ( (p.length && i>=p.length) || !(a[i] in p) ) break; // check for length and key exist
+        pos.push( p[ a[i] ] );
+      }
+
+    // as an array of values
+    } else if (isArray) {
+      pos = [].slice.call( args[0] );
+    }
+    
+    return pos;
+  }
+
+}
