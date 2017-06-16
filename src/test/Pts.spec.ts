@@ -22,7 +22,6 @@ describe('Pts: ', function() {
 
     it('can zip an array of Pt', function() {
       let ps = Pts.zip( [new Pt(1,2), new Pt(3,4), new Pt(5,6)] );
-      console.log( ps[1].toString() );
       assert.isTrue( ps[1].equals( new Pt(2,4,6) ) && ps.length == 2 );
     });
 

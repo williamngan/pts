@@ -8,26 +8,8 @@ import {CanvasForm} from "./CanvasForm";
 window["Pt"] = Pt;
 window["Pts"] = Pts;
 
-var p = new Pt([1,2,3]);
-console.log( p, p.x );
 
-p.add(10,20);
-console.log( p, p.x );
 
-p.add( 1 );
-console.log( p, p.x );
-
-var p2 = p.clone();
-p2.add(10,20);
-var p3 = p2.$add(100);
-console.log(  p, p2, p3 );
-
-var p4 = p3.$map( (n, i) => n*i*10 );
-console.log( p3, p4 );
-
-console.log( new Pt([1,2,3]).$slice(0,2).toString() );
-
-/*
 console.log( new Pt(32,43).unit().magnitude() );
 
 // console.log( Pts.zipOne( [new Pt(1,3), new Pt(2,4), new Pt(5,10)], 1, 0 ).toString() );
@@ -48,12 +30,12 @@ var form = canvas.getForm();
 var form2 = canvas.getForm();
 
 var pt = new Pt(50, 50);
-var pto = pt.to([
+var pto = pt.op([
   (p:Pt) => p.$add( 10, 10 ),
   (p:Pt) => p.$add( 20, 25 )
 ]);
 
-var pto2 = pt.to({
+var pto2 = pt.op({
   "a": (p:Pt) => p.$add( 10, 10 ),
   "b": (p:Pt) => p.$add( 20, 25 )
 });
@@ -76,15 +58,17 @@ let fs = {
 }
 
 function ready( bound, space) {
-  ps = Create.distributeRandom( new Bound(canvas.size), 200 );
+  ps = Create.distributeRandom( new Bound(canvas.size), 50 );
 }
+
 
 canvas.add( {
  animate: (time, fps, space) => {
     form.reset();
     form.stroke( false );
+
     ps.forEach( (p) => {
-      let attrs = p.to( fs );
+      let attrs = p.op( fs );
       form.fill(`rgba(255,0,0,${1.2-attrs.size.y}`);
       form.point( p, attrs.size.x, "circle" );
     })
@@ -107,7 +91,8 @@ canvas.add( {
 }); 
 
 canvas.bindMouse();
-*/
+canvas.playOnce(500);
+
 
 
 

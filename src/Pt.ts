@@ -19,12 +19,12 @@ export class Pt extends TypedArray implements IPt, Iterable<number> {
 
 
   /**
-   * Create a Pt. This will instantiate with at least 3 dimensions. If provided parameters are less than 3 dimensions, default value of 0 will be used to fill. Use 'Pt.$()' if you need 1D or 2D specifically.
+   * Create a Pt. If no parameter is provided, this will instantiate a Pt with 2 dimensions [0, 0].
    * Example: `new Pt()`, `new Pt(1,2,3,4,5)`, `new Pt([1,2])`, `new Pt({x:0, y:1})`, `new Pt(pt)`
    * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
    */
   constructor(...args) {
-    super( Util.getArgs(args) );
+    super( (args.length>0) ? Util.getArgs(args) : [0,0] );
   }
 
 

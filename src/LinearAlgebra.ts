@@ -74,7 +74,6 @@ export class LinearAlgebra {
 
   static map( a:ArrayType|number[], fn:(n:number, index:number, arr) => number ) {
     for (let i=0, len=a.length; i<len; i++) {
-      console.log( a[i], i );
       a[i] = fn( a[i], i, a );
     }
     return LinearAlgebra;
