@@ -93,6 +93,9 @@ export class Pt extends TypedArray implements IPt, Iterable<number> {
     return new Pt( m );
   }
 
+  $concat( ...args ) {
+    return new Pt( this.toArray().concat( Util.getArgs( args ) ) );
+  }
 
   add(...args): this { 
     (args.length === 1 && typeof args[0] == "number") ? LA.add( this, args[0] ) : LA.add( this, Util.getArgs(args) );
@@ -180,14 +183,12 @@ export class Pt extends TypedArray implements IPt, Iterable<number> {
     return this.clone().abs();
   }
 
-  each( fn:Function ) { return; }
-
-  push( p:number ):this { return this; }
-  pop():number { return 0; }
-
 
   toString():string {
     return `Pt(${ this.join(", ")})`
   }
 
+  toArray():number[] {
+    return [].slice.call( this );
+  }
 }

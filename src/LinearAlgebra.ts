@@ -25,7 +25,7 @@ export class LinearAlgebra {
     if (typeof b == "number") {
       for (let i=0, len=a.length; i<len; i++) a[i] *= b;
     } else {
-      for (let i=0, len=a.length; i<len; i++) a[i] *= b[i] || 0;
+      for (let i=0, len=a.length; i<len; i++) a[i] *= b[i] || 1;
     }
     return LinearAlgebra;
   }
@@ -34,7 +34,7 @@ export class LinearAlgebra {
     if (typeof b == "number") {
       for (let i=0, len=a.length; i<len; i++) a[i] /= b;
     } else {
-      for (let i=0, len=a.length; i<len; i++) a[i] /= b[i] || 0;
+      for (let i=0, len=a.length; i<len; i++) a[i] /= b[i] || 1;
     }
     return LinearAlgebra;
   }

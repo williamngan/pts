@@ -14,7 +14,12 @@ export class Pts {
    */
   static zipOne( pts:Pt[],  index:number, defaultValue:number|boolean = false ):Pt {
     let f = (typeof defaultValue == "boolean") ? "get" : "at"; // choose `get` or `at` function
-    return pts.reduce( (prev, curr) => { return prev.push( curr[f](index, defaultValue) ); }, new Pt());
+    let z = [];
+    for (let i=0, len=pts.length; i<len; i++) {
+      if (pts[i].length-1 < index && defaultValue === false) throw `Index ${index} is out of bounds`;
+      z.push( pts[i][index] || defaultValue );
+    }
+    return new Pt(z);
   }
 
 

@@ -9,11 +9,11 @@ var {describe, it} = mocha;
 describe('Pt: ', () => {
 
   describe('Constructor: ', () => {
-    it('can init empty parameter as a 3D Pt', () => {
-      assert.equal( 3, new Pt().length )
+    it('can init multi-dimensions', () => {
+      assert.equal( 6, new Pt(1,2,3,4,5,6).length )
     });
 
-    it('can init in 1 or 2 dimensions', () => {
+    it('can init in 1 dimensions', () => {
       assert.equal( 1, new Pt(10).length )
     });
 
@@ -34,8 +34,8 @@ describe('Pt: ', () => {
     });
 
     it('should init with Pt object', () => {
-      let p = new Pt( new Pt(1,2,3) );
-      assert.equal( 6, p.x + p.y + p.z );
+      let p = new Pt( new Pt(1,2,3,4,5,6) );
+      assert.equal( 15, p[0]+p[1]+p[2]+p[3]+p[4] );
     });
 
   
@@ -53,8 +53,7 @@ describe('Pt: ', () => {
 
     it('can check size of vector', () => {
       let p = new Pt([1,2,3,4,5,6]);
-      p.push(7);
-      assert.equal( 7, p.length );
+      assert.equal( 6, p.length );
     });
 
     it('can add with different args', () => {
@@ -77,15 +76,14 @@ describe('Pt: ', () => {
     });
 
 
-    it('can get an out-of-bound index with default value', () => {
-      let p = new Pt(1,2,3);
-      // assert.equal( 100, p.at(5, 100) );
-      assert.isTrue( true );
+    it('can concat with another Pt or array', () => {
+      let p = new Pt(1,2,3).$concat([2,3]).$concat(new Pt(10, 20, 30, 40));
+      assert.equal( p.length, 9 );
     })
 
     it('can get a slice of values', () => {
       let p = new Pt(1,2,3,4,5,6);
-      // assert.isTrue( p.slice(2,5).equals( new Pt(3,4,5) ) );
+      assert.isTrue( p.$slice(2,5).equals( new Pt(3,4,5) ) );
       assert.isTrue( true );
     })
 

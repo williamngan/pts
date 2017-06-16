@@ -157,6 +157,9 @@ class Pt extends TypedArray {
         let m = new TypedArray(this).slice(start, end);
         return new Pt(m);
     }
+    $concat(...args) {
+        return new Pt(this.toArray().concat(Util_1.Util.getArgs(args)));
+    }
     add(...args) {
         args.length === 1 && typeof args[0] == "number" ? LA.add(this, args[0]) : LA.add(this, Util_1.Util.getArgs(args));
         return this;
@@ -242,17 +245,11 @@ class Pt extends TypedArray {
     $abs() {
         return this.clone().abs();
     }
-    each(fn) {
-        return;
-    }
-    push(p) {
-        return this;
-    }
-    pop() {
-        return 0;
-    }
     toString() {
         return `Pt(${this.join(", ")})`;
+    }
+    toArray() {
+        return [].slice.call(this);
     }
 }
 exports.Pt = Pt;
@@ -276,9 +273,12 @@ class Pts {
      */
     static zipOne(pts, index, defaultValue = false) {
         let f = typeof defaultValue == "boolean" ? "get" : "at"; // choose `get` or `at` function
-        return pts.reduce((prev, curr) => {
-            return prev.push(curr[f](index, defaultValue));
-        }, new Pt_1.Pt());
+        let z = [];
+        for (let i = 0, len = pts.length; i < len; i++) {
+            if (pts[i].length - 1 < index && defaultValue === false) throw `Index ${index} is out of bounds`;
+            z.push(pts[i][index] || defaultValue);
+        }
+        return new Pt_1.Pt(z);
     }
     /**
      * Zip an array of Pt. eg, [[1,2],[3,4],[5,6]] => [[1,3,5],[2,4,6]]
@@ -354,7 +354,7 @@ class LinearAlgebra {
         if (typeof b == "number") {
             for (let i = 0, len = a.length; i < len; i++) a[i] *= b;
         } else {
-            for (let i = 0, len = a.length; i < len; i++) a[i] *= b[i] || 0;
+            for (let i = 0, len = a.length; i < len; i++) a[i] *= b[i] || 1;
         }
         return LinearAlgebra;
     }
@@ -362,7 +362,7 @@ class LinearAlgebra {
         if (typeof b == "number") {
             for (let i = 0, len = a.length; i < len; i++) a[i] /= b;
         } else {
-            for (let i = 0, len = a.length; i < len; i++) a[i] /= b[i] || 0;
+            for (let i = 0, len = a.length; i < len; i++) a[i] /= b[i] || 1;
         }
         return LinearAlgebra;
     }

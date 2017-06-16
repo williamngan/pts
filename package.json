@@ -16,7 +16,8 @@
   "author": "William Ngan",
   "license": "Apache",
   "dependencies": {
-    "babel-core": "^6.25.0"
+    "babel-core": "^6.25.0",
+    "vectorious": "^4.8.1"
   },
   "devDependencies": {
     "babel-loader": "^6.4.1",
