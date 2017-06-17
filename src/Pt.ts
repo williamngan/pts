@@ -1,5 +1,5 @@
 import {Util} from "./Util"
-import {LinearAlgebra} from "./LinearAlgebra"
+import {LinearAlgebra as LA} from "./LinearAlgebra"
 
 
 export interface IPt {
@@ -10,12 +10,9 @@ export interface IPt {
   props?:any
 }
 
-export type ArrayType = Float64Array;
+export type PtArrayType = Float64Array;
 
-let TypedArray = Float64Array; 
-let LA = LinearAlgebra;
-
-export class Pt extends TypedArray implements IPt, Iterable<number> {
+export class Pt extends Float64Array implements IPt, Iterable<number> {
 
 
   /**
@@ -25,6 +22,12 @@ export class Pt extends TypedArray implements IPt, Iterable<number> {
    */
   constructor(...args) {
     super( (args.length>0) ? Util.getArgs(args) : [0,0] );
+  }
+
+  static make( dimensions:number, defaultValue:number ):Pt {
+    let p = new Float64Array(dimensions);
+    if (defaultValue) p.fill( defaultValue );
+    return new Pt( p );
   }
 
 
@@ -43,7 +46,7 @@ export class Pt extends TypedArray implements IPt, Iterable<number> {
     return new Pt( this );
   }
 
-  equals( p:ArrayType|number[], threshold=0 ):boolean {
+  equals( p:PtArrayType|number[], threshold=0 ):boolean {
     for (let i=0, len=this.length; i<len; i++) {
       if ( Math.abs(this[i]-p[i]) > threshold ) return false;
     }
@@ -76,9 +79,9 @@ export class Pt extends TypedArray implements IPt, Iterable<number> {
   }
 
 
-  $map( fn:(currentValue:number, index:number, array:ArrayType) => number):Pt {
+  $map( fn:(currentValue:number, index:number, array:PtArrayType) => number):Pt {
     let m = this.clone();
-    LinearAlgebra.map( m, fn );
+    LA.map( m, fn );
     return m;
   }
 
@@ -89,7 +92,7 @@ export class Pt extends TypedArray implements IPt, Iterable<number> {
    * @param end end index (ie, entry will not include value at this index)
    */
   $slice(start?:number, end?:number):Pt {
-    let m = new TypedArray( this ).slice(start, end);
+    let m = new Pt( this ).slice(start, end);
     return new Pt( m );
   }
 
@@ -141,16 +144,17 @@ export class Pt extends TypedArray implements IPt, Iterable<number> {
 
   /**
    * Convert to a unit vector
+   * @param magnitude Optional: if the magnitude is known, pass it as a parameter to avoid duplicate calculation.
    */
-  unit():Pt {
-    LA.unit( this );
+  unit( magnitude:number=undefined ):Pt {
+    LA.unit( this, magnitude );
     return this;
   }
 
   /**
    * Get a unit vector from this Pt
    */
-  $unit():Pt { return this.clone().unit(); }
+  $unit( magnitude:number=undefined ):Pt { return this.clone().unit( magnitude ); }
 
   dot( ...args ):number { return LA.dot( this, Util.getArgs(args) ); }
 
@@ -159,7 +163,7 @@ export class Pt extends TypedArray implements IPt, Iterable<number> {
     return new Pt( (this[1]*p[2] - this[2]*p[1]), (this[2]*p[0] - this[0]*p[2]), (this[0]*p[1] - this[1]*p[0]) )
   }
 
-  project( p:Pt ):Pt {
+  $project( p:Pt ):Pt {
     let m = p.magnitude();
     let a = this.$unit();
     let b = p.$divide(m);
@@ -191,4 +195,52 @@ export class Pt extends TypedArray implements IPt, Iterable<number> {
   toArray():number[] {
     return [].slice.call( this );
   }
+
+
+  /**
+   * Zip one slice of an array of Pt
+   * @param pts an array of Pt
+   * @param idx index to zip at
+   * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
+   */
+  static zipOne( pts:Pt[],  index:number, defaultValue:number|boolean = false ):Pt {
+    let f = (typeof defaultValue == "boolean") ? "get" : "at"; // choose `get` or `at` function
+    let z = [];
+    for (let i=0, len=pts.length; i<len; i++) {
+      if (pts[i].length-1 < index && defaultValue === false) throw `Index ${index} is out of bounds`;
+      z.push( pts[i][index] || defaultValue );
+    }
+    return new Pt(z);
+  }
+
+
+  /**
+   * Zip an array of Pt. eg, [[1,2],[3,4],[5,6]] => [[1,3,5],[2,4,6]]
+   * @param pts an array of Pt
+   * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
+   * @param useLongest If true, find the longest list of values in a Pt and use its length for zipping. Default is false, which uses the first item's length for zipping.
+   */
+  static zip( pts:Pt[], defaultValue:number|boolean = false, useLongest=false ):Pt[] {
+    let ps = [];
+    let len = (useLongest) ? pts.reduce( (a,b) => Math.max(a, b.length), 0 ) : pts[0].length;
+    for (let i=0; i<len; i++) {
+      ps.push( Pt.zipOne( pts, i, defaultValue ) )
+    }
+    return ps;
+  }
+
+
+  static sum( pts:Pt[] ):Pt {
+    let c = Pt.make( pts[0].length, 0 );
+    for (let i=0, len=pts.length; i<len; i++) {
+      c.add( pts[i] );
+    }
+    return c;
+  }
+
+
+  static average( pts:Pt[] ):Pt {
+    return Pt.sum( pts ).divide( pts.length );
+  }
+
 }

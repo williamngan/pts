@@ -1,40 +1,35 @@
-export enum Key {
-  xy,
-  yz,
-  xz,
-  xyz,
+export const Const = {
+  xy: "xy",
+  yz: "yz",
+  xz: "xz",
+  xyz: "xyz",
 
   /* represents identical point or value */
-  identical = 0,
+  identical: 0,
 
   /* represents right position or direction */
-  right = 4,
+  right: 4,
 
   /* represents bottom right position or direction */
-  bottom_right = 5,
+  bottom_right: 5,
 
   /* represents bottom position or direction */
-  bottom = 6,
+  bottom: 6,
 
   /* represents bottom left position or direction */
-  bottom_left = 7,
+  bottom_left: 7,
 
   /* represents left position or direction */
-  left = 8,
+  left: 8,
 
   /* represents top left position or direction */
-  top_left = 1,
+  top_left: 1,
 
   /* represents top position or direction */
-  top = 2,
+  top: 2,
 
   /* represents top right position or direction */
-  top_right = 3,
-};
-
-
-
-export const Const = {
+  top_right: 3,
 
   /* represents an arbitrary very small number. It is set as 0.0001 here. */
   epsilon : 0.0001,
@@ -74,6 +69,8 @@ export const Const = {
 
 export class Util {
   
+  
+
   /**
    * Convert different kinds of parameters (arguments, array, object) into an array of numbers
    * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
@@ -105,5 +102,21 @@ export class Util {
     
     return pos;
   }
+
+
+  /**
+   * Split an array into chunks of sub-array
+   * @param pts an array 
+   * @param size chunk size, ie, number of items in a chunk
+   */
+  static split( pts:any[], size:number ):any[][] {
+    let count = Math.ceil(pts.length/size);
+    let chunks = [];
+    for (let i=0; i<count; i++) {
+      chunks.push( pts.slice(i*size, i*size+size) );
+    }
+    return chunks;
+  }
+
 
 }

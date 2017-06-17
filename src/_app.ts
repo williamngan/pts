@@ -1,13 +1,11 @@
 import {Pt, IPt} from './Pt';
-import {Pts} from './Pts';
+import {Util} from './Util';
 import {Bound} from './Bound';
 import {Create} from './Create';
 import {CanvasSpace} from "./CanvasSpace"; 
 import {CanvasForm} from "./CanvasForm"; 
 
 window["Pt"] = Pt;
-window["Pts"] = Pts;
-
 
 
 console.log( new Pt(32,43).unit().magnitude() );
@@ -17,7 +15,7 @@ console.log( new Pt(32,43).unit().magnitude() );
 // console.log( Pts.toString( Pts.zip( [new Pt(1,2), new Pt(3,4), new Pt(5,6)] ) ) );
 // console.log( Pts.toString( Pts.zip( Pts.zip( [new Pt(1,2), new Pt(3,4), new Pt(5,6)] ) ) ) );
 
-console.log( Pts.split( [1,2,3,4,5,6,7,8,9,10,11,12,13], 5 ) );
+console.log( Util.split( [1,2,3,4,5,6,7,8,9,10,11,12,13], 5 ) );
 
 let cs = [];
 for (let i=0; i<500; i++) {

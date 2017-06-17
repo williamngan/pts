@@ -84,14 +84,16 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_space_.iplayer.html#animate" class="tsd-kind-icon">animate</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_space_.iplayer.html#animateid" class="tsd-kind-icon">animateID</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_space_.iplayer.html#animate" class="tsd-kind-icon">animate</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_space_.iplayer.html#onmouseaction" class="tsd-kind-icon">on<wbr>Mouse<wbr>Action</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_space_.iplayer.html#onspaceresize" class="tsd-kind-icon">on<wbr>Space<wbr>Resize</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_space_.iplayer.html#ontouchaction" class="tsd-kind-icon">on<wbr>Touch<wbr>Action</a></li>
 							</ul>
 						</section>
 					</div>
@@ -100,12 +102,22 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="animate" class="tsd-anchor"></a>
+					<h3>animate</h3>
+					<div class="tsd-signature tsd-kind-icon">animate<span class="tsd-signature-symbol">:</span> <a href="../modules/_space_.html#animatefunction" class="tsd-signature-type">AnimateFunction</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/8674fc0/src/Space.ts#L9">Space.ts:9</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="animateid" class="tsd-anchor"></a>
-					<h3>animateID</h3>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> animateID</h3>
 					<div class="tsd-signature tsd-kind-icon">animateID<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/58bb0f7/src/Space.ts#L8">Space.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/8674fc0/src/Space.ts#L8">Space.ts:8</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -113,45 +125,48 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
-					<a name="animate" class="tsd-anchor"></a>
-					<h3>animate</h3>
+					<a name="onmouseaction" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Mouse<wbr>Action</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">animate<span class="tsd-signature-symbol">(</span>time<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, frameTime<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, context<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_space_.iplayer.html" class="tsd-signature-type">IPlayer</a></li>
+						<li class="tsd-signature tsd-kind-icon">on<wbr>Mouse<wbr>Action<span class="tsd-signature-symbol">(</span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, px<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, py<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Event</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/58bb0f7/src/Space.ts#L9">Space.ts:9</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/8674fc0/src/Space.ts#L11">Space.ts:11</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>time: <span class="tsd-signature-type">number</span></h5>
+									<h5>type: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
-									<h5>frameTime: <span class="tsd-signature-type">number</span></h5>
+									<h5>px: <span class="tsd-signature-type">number</span></h5>
 								</li>
 								<li>
-									<h5>context: <span class="tsd-signature-type">any</span></h5>
+									<h5>py: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>evt: <span class="tsd-signature-type">Event</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_space_.iplayer.html" class="tsd-signature-type">IPlayer</a></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="onspaceresize" class="tsd-anchor"></a>
-					<h3>on<wbr>Space<wbr>Resize</h3>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Space<wbr>Resize</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">on<wbr>Space<wbr>Resize<span class="tsd-signature-symbol">(</span>p<span class="tsd-signature-symbol">: </span><a href="_pt_.ipt.html" class="tsd-signature-type">IPt</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span></li>
+						<li class="tsd-signature tsd-kind-icon">on<wbr>Space<wbr>Resize<span class="tsd-signature-symbol">(</span>p<span class="tsd-signature-symbol">: </span><a href="_pt_.ipt.html" class="tsd-signature-type">IPt</a>, evt<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Event</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/58bb0f7/src/Space.ts#L10">Space.ts:10</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/8674fc0/src/Space.ts#L10">Space.ts:10</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -159,8 +174,43 @@
 								<li>
 									<h5>p: <a href="_pt_.ipt.html" class="tsd-signature-type">IPt</a></h5>
 								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> evt: <span class="tsd-signature-type">Event</span></h5>
+								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="ontouchaction" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Touch<wbr>Action</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">on<wbr>Touch<wbr>Action<span class="tsd-signature-symbol">(</span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, px<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, py<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Event</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/8674fc0/src/Space.ts#L12">Space.ts:12</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>type: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>px: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>py: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>evt: <span class="tsd-signature-type">Event</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -176,22 +226,46 @@
 						<a href="../modules/_bound_.html">"<wbr>Bound"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="../modules/_canvasform_.html">"<wbr>Canvas<wbr>Form"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_canvasspace_.html">"<wbr>Canvas<wbr>Space"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_pt_.html">"<wbr>Pt"</a>
+						<a href="../modules/_create_.html">"<wbr>Create"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_pts_.html">"<wbr>Pts"</a>
+						<a href="../modules/_form_.html">"<wbr>Form"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_linearalgebra_.html">"<wbr>Linear<wbr>Algebra"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_op_.html">"<wbr>Op"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_pt_.html">"<wbr>Pt"</a>
 					</li>
 					<li class="current tsd-kind-external-module">
 						<a href="../modules/_space_.html">"<wbr>Space"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_.html">"app"</a>
+						<a href="../modules/_util_.html">"<wbr>Util"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/__app_.html">"_<wbr>app"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/__augment_.html">"_<wbr>augment"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/__lib_.html">"_<wbr>lib"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_test_pt_spec_.html">"test/<wbr>Pt.spec"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_test_pts_spec_.html">"test/<wbr>Pts.spec"</a>
 					</li>
 				</ul>
 			</nav>
@@ -206,13 +280,19 @@
 						<a href="_space_.iplayer.html" class="tsd-kind-icon">IPlayer</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_space_.iplayer.html#animate" class="tsd-kind-icon">animate</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="_space_.iplayer.html#animateid" class="tsd-kind-icon">animateID</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface">
-								<a href="_space_.iplayer.html#animate" class="tsd-kind-icon">animate</a>
+								<a href="_space_.iplayer.html#onmouseaction" class="tsd-kind-icon">on<wbr>Mouse<wbr>Action</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="_space_.iplayer.html#onspaceresize" class="tsd-kind-icon">on<wbr>Space<wbr>Resize</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="_space_.iplayer.html#ontouchaction" class="tsd-kind-icon">on<wbr>Touch<wbr>Action</a>
 							</li>
 						</ul>
 					</li>
@@ -221,8 +301,11 @@
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
 						<a href="_space_.ispaceplayers.html" class="tsd-kind-icon">ISpace<wbr>Players</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
 						<a href="_space_.itimer.html" class="tsd-kind-icon">ITimer</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="../modules/_space_.html#animatefunction" class="tsd-kind-icon">Animate<wbr>Function</a>
 					</li>
 				</ul>
 			</nav>

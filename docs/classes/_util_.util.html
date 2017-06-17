@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;Pts&quot; | pts</title>
+	<title>Util | pts</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,27 +56,110 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="_pts_.html">&quot;Pts&quot;</a>
+					<a href="../modules/_util_.html">&quot;Util&quot;</a>
+				</li>
+				<li>
+					<a href="_util_.util.html">Util</a>
 				</li>
 			</ul>
-			<h1>External module &quot;Pts&quot;</h1>
+			<h1>Class Util</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">Util</span>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Classes</h3>
+							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-class tsd-parent-kind-external-module"><a href="../classes/_pts_.pts.html" class="tsd-kind-icon">Pts</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_util_.util.html#getargs" class="tsd-kind-icon">get<wbr>Args</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_util_.util.html#split" class="tsd-kind-icon">split</a></li>
 							</ul>
 						</section>
 					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="getargs" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> get<wbr>Args</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Args<span class="tsd-signature-symbol">(</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/8674fc0/src/Util.ts#L78">Util.ts:78</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Convert different kinds of parameters (arguments, array, object) into an array of numbers</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>args: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a list of numbers, an array of number, or an object with {x,y,z,w} properties</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="split" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> split</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">split<span class="tsd-signature-symbol">(</span>pts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span>, size<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/8674fc0/src/Util.ts#L112">Util.ts:112</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Split an array into chunks of sub-array</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>pts: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an array</p>
+									</div>
+								</li>
+								<li>
+									<h5>size: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>chunk size, ie, number of items in a chunk</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span></h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -87,32 +170,71 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_bound_.html">"<wbr>Bound"</a>
+						<a href="../modules/_bound_.html">"<wbr>Bound"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_canvasspace_.html">"<wbr>Canvas<wbr>Space"</a>
+						<a href="../modules/_canvasform_.html">"<wbr>Canvas<wbr>Form"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_pt_.html">"<wbr>Pt"</a>
+						<a href="../modules/_canvasspace_.html">"<wbr>Canvas<wbr>Space"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_create_.html">"<wbr>Create"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_form_.html">"<wbr>Form"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_linearalgebra_.html">"<wbr>Linear<wbr>Algebra"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_op_.html">"<wbr>Op"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_pt_.html">"<wbr>Pt"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_space_.html">"<wbr>Space"</a>
 					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="_pts_.html">"<wbr>Pts"</a>
+						<a href="../modules/_util_.html">"<wbr>Util"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_space_.html">"<wbr>Space"</a>
+						<a href="../modules/__app_.html">"_<wbr>app"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_app_.html">"app"</a>
+						<a href="../modules/__augment_.html">"_<wbr>augment"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_test_pt_spec_.html">"test/<wbr>Pt.spec"</a>
+						<a href="../modules/__lib_.html">"_<wbr>lib"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_test_pt_spec_.html">"test/<wbr>Pt.spec"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_test_pts_spec_.html">"test/<wbr>Pts.spec"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="../classes/_pts_.pts.html" class="tsd-kind-icon">Pts</a>
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-class tsd-parent-kind-external-module">
+						<a href="_util_.util.html" class="tsd-kind-icon">Util</a>
+						<ul>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="_util_.util.html#getargs" class="tsd-kind-icon">get<wbr>Args</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="_util_.util.html#split" class="tsd-kind-icon">split</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
+					<li class=" tsd-kind-object-literal tsd-parent-kind-external-module">
+						<a href="../modules/_util_.html#const" class="tsd-kind-icon">Const</a>
 					</li>
 				</ul>
 			</nav>

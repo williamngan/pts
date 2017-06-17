@@ -1,6 +1,5 @@
 import {Space} from './Space';
 import {Pt, IPt} from './Pt';
-import {Pts} from './Pts';
 import {Bound} from './Bound';
 import {CanvasForm} from "./CanvasForm";
 

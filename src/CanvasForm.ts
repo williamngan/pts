@@ -20,7 +20,7 @@ export class CanvasForm extends Form {
     this._ctx.strokeStyle = this._style.strokeStyle;
   }
 
-  public get space():CanvasSpace { return this._space; }
+  get space():CanvasSpace { return this._space; }
 
 
   /**
@@ -28,7 +28,7 @@ export class CanvasForm extends Form {
    * @param c fill color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle))
    * @return this
    */
-  public fill( c:string|boolean ):this {
+  fill( c:string|boolean ):this {
     if (typeof c == "boolean") {
       this.filled = c;
     } else {
@@ -48,7 +48,7 @@ export class CanvasForm extends Form {
    * @param linecap Optional string to set line cap style. Can be "butt", "round", or "square".
    * @return this
    */
-  public stroke( c:string|boolean, width?:number, linejoin?:string, linecap?:string ):this {
+  stroke( c:string|boolean, width?:number, linejoin?:string, linecap?:string ):this {
     if (typeof c == "boolean") {
       this.stroked = c;
     } else {
@@ -75,7 +75,7 @@ export class CanvasForm extends Form {
   /**
    * Reset the rendering context's common styles to this form's styles. This supports using multiple forms on the same canvas context.
    */
-  public reset():this {
+  reset():this {
     for (let k in this._style) {
       this._ctx[k] = this._style[k];
     }
@@ -88,7 +88,7 @@ export class CanvasForm extends Form {
     if (this._stroked) this._ctx.stroke();
   }
 
-  public point( p:IPt, radius:number=5, shape:string="square" ):this {
+  point( p:IPt, radius:number=5, shape:string="square" ):this {
     if (CanvasForm[shape]) {
       CanvasForm[shape]( this._ctx, p, radius );
       this._paint();
@@ -99,17 +99,17 @@ export class CanvasForm extends Form {
   }
 
 
-  public circle( pts:IPt, radius:number ) {
+  circle( pts:IPt, radius:number ) {
     CanvasForm.circle( this._ctx, pts, radius );
   }
 
-  public static circle( ctx:CanvasRenderingContext2D, pt:IPt, radius:number ) {
+  static circle( ctx:CanvasRenderingContext2D, pt:IPt, radius:number ) {
     ctx.beginPath()
     ctx.arc( pt.x, pt.y, radius, 0, Const.two_pi, false );
     ctx.closePath();
   }
 
-  public static square( ctx:CanvasRenderingContext2D, pt:IPt, halfsize:number ) {
+  static square( ctx:CanvasRenderingContext2D, pt:IPt, halfsize:number ) {
     let x1 = pt.x-halfsize
     let y1 = pt.y-halfsize
     let x2 = pt.x+halfsize
@@ -124,8 +124,24 @@ export class CanvasForm extends Form {
     ctx.closePath()
   }
 
+  line( pts:number[][] ) {
+    CanvasForm.line( this._ctx, pts );
+    this._paint();
+  }
 
-  public draw( ps:Pt[], shape?:string ):this {
+  static line( ctx:CanvasRenderingContext2D, pts:number[][]) {
+    ctx.beginPath();
+    ctx.moveTo( pts[0][0], pts[0][1] );
+    for (let i=1, len=pts.length; i<len; i++) {
+      ctx.lineTo( pts[i][0], pts[i][1] );
+    }
+    ctx.stroke();
+  }
+
+
+
+
+  draw( ps:Pt[], shape?:string ):this {
     return this;
   }
   

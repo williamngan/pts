@@ -64,7 +64,7 @@ var Pts =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 11);
+/******/ 	return __webpack_require__(__webpack_require__.s = 10);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1296,145 +1296,112 @@ class Create {
 exports.Create = Create;
 
 /***/ }),
-/* 9 */
+/* 9 */,
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const Pt_1 = __webpack_require__(0);
 const Util_1 = __webpack_require__(2);
 const Bound_1 = __webpack_require__(1);
-const Pt_1 = __webpack_require__(0);
-class Num {
-    static lerp(a, b, t) {
-        return (1 - t) * a + t * b;
-    }
-    static boundValue(val, max, positive = false) {
-        let a = val % max;
-        let half = max / 2;
-        if (a > half) a -= max;else if (a < -half) a += max;
-        if (positive && a < 0) return a + max;
-        return a;
-    }
-    static within(p, a, b) {
-        return p >= Math.min(a, b) && p <= Math.max(a, b);
-    }
-    static randomRange(a, b = 0) {
-        let r = a > b ? a - b : b - a;
-        return a + Math.random() * r;
-    }
-    static normalizeValue(n, a, b) {
-        let min = Math.min(a, b);
-        let max = Math.max(a, b);
-        return (n - min) / (max - min);
-    }
-    /**
-     * Map a value from one range to another
-     * @param n a value in the first range
-     * @param currMin lower bound of the first range
-     * @param currMax upper bound of the first range
-     * @param targetMin lower bound of the second range
-     * @param targetMax upper bound of the second range
-     * @returns a remapped value in the second range
-     */
-    static mapToRange(n, currA, currB, targetA, targetB) {
-        if (currA == currB) throw "[currMin, currMax] must define a range that is not zero";
-        let min = Math.min(targetA, targetB);
-        let max = Math.max(targetA, targetB);
-        return Num.normalizeValue(n, currA, currB) * (max - min) + min;
-    }
+const Create_1 = __webpack_require__(8);
+const CanvasSpace_1 = __webpack_require__(7);
+window["Pt"] = Pt_1.Pt;
+console.log(new Pt_1.Pt(32, 43).unit().magnitude());
+// console.log( Pts.zipOne( [new Pt(1,3), new Pt(2,4), new Pt(5,10)], 1, 0 ).toString() );
+// console.log( new Pt(1,2,3,4,5,6).slice(2,5).toString() );
+// console.log( Pts.toString( Pts.zip( [new Pt(1,2), new Pt(3,4), new Pt(5,6)] ) ) );
+// console.log( Pts.toString( Pts.zip( Pts.zip( [new Pt(1,2), new Pt(3,4), new Pt(5,6)] ) ) ) );
+console.log(Util_1.Util.split([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], 5));
+let cs = [];
+for (let i = 0; i < 500; i++) {
+    let c = new Pt_1.Pt(Math.random() * 200, Math.random() * 200);
+    cs.push(c);
 }
-exports.Num = Num;
-class Geom {
-    static boundAngle(angle, positive = false) {
-        return Num.boundValue(angle, 360, positive);
-    }
-    static boundRadian(angle, positive = false) {
-        return Num.boundValue(angle, 360, positive);
-    }
-    static toRadian(angle) {
-        return angle * Util_1.Const.deg_to_rad;
-    }
-    static toDegree(radian) {
-        return radian * Util_1.Const.rad_to_deg;
-    }
-    static boundingBox(pts) {
-        let minPt = pts[0].clone().fill(Number.MAX_VALUE);
-        let maxPt = pts[0].clone().fill(Number.MIN_VALUE);
-        for (let i = 0, len = pts.length; i < len; i++) {
-            for (let d = 0, len = pts[i].length; d < len; d++) {
-                if (pts[i][d] < minPt[d]) minPt[d] = pts[i][d];
-                if (pts[i][d] > maxPt[d]) maxPt[d] = pts[i][d];
-            }
-        }
-        return new Bound_1.Bound(minPt, maxPt);
-    }
-    static centroid(pts) {
-        return Pt_1.Pt.average(pts);
-    }
-    /**
-     * Get a bisector between two Pts
-     * @param a first Pt
-     * @param b second Pt
-     * @param t a ratio between 0 to 1
-     * @param returnAsNormalized if true, return the bisector as a unit vector; otherwise, it'll have an interpolated magnitude.
-     */
-    static bisect(a, b, t = 0.5, returnAsNormalized = false) {
-        let ma = a.magnitude();
-        let mb = b.magnitude();
-        let ua = a.$unit(ma);
-        let ub = b.$unit(mb);
-        let bisect = ua.$multiply(t).add(ub.$multiply(1 - t));
-        return returnAsNormalized ? bisect : bisect.$multiply(ma * t + mb * (1 - t));
-    }
-    /**
-     * Generate a sine and cosine lookup table
-     * @returns an object with 2 tables (array of 360 values) and 2 functions to get sin/cos given a radian parameter. { sinTable:Float64Array, cosTable:Float64Array, sin:(rad)=>number, cos:(rad)=>number }
-     */
-    static sinCosTable() {
-        let cos = new Float64Array(360);
-        let sin = new Float64Array(360);
-        for (let i = 0; i < 360; i++) {
-            cos[i] = Math.cos(i * Math.PI / 180);
-            sin[i] = Math.sin(i * Math.PI / 180);
-        }
-        let getSin = rad => sin[Math.floor(Geom.boundAngle(Geom.toDegree(rad), true))];
-        let getCos = rad => cos[Math.floor(Geom.boundAngle(Geom.toDegree(rad), true))];
-        return { sinTable: sin, cosTable: cos, sin: getSin, cos: getCos };
-    }
+var canvas = new CanvasSpace_1.CanvasSpace("#pt", ready).setup({ retina: true });
+var form = canvas.getForm();
+var form2 = canvas.getForm();
+var pt = new Pt_1.Pt(50, 50);
+var pto = pt.op([p => p.$add(10, 10), p => p.$add(20, 25)]);
+var pto2 = pt.op({
+    "a": p => p.$add(10, 10),
+    "b": p => p.$add(20, 25)
+});
+for (var i in pto2) {
+    console.log("==>", pto2[i].toString());
 }
-exports.Geom = Geom;
-
-/***/ }),
-/* 10 */,
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const _Bound = __webpack_require__(1);
-const _CanvasForm = __webpack_require__(3);
-const _CanvasSpace = __webpack_require__(7);
-const _Create = __webpack_require__(8);
-const _Form = __webpack_require__(4);
-const _LinearAlgebra = __webpack_require__(5);
-const _Op = __webpack_require__(9);
-const _Pt = __webpack_require__(0);
-const _Space = __webpack_require__(6);
-const _Util = __webpack_require__(2);
-// A function to switch scope for Pts library. eg, Pts.scope( Pts, window );
-let scope = (lib, sc) => {
-    for (let k in lib) {
-        if (k != "scope") {
-            sc[k] = lib[k];
-        }
+console.log(pto.reduce((a, b) => a + " | " + b.toString(), ""));
+console.log(pt.toString());
+var ps = [];
+let fs = {
+    "size": p => {
+        let dist = p.$subtract(canvas.size.$divide(2)).magnitude();
+        return new Pt_1.Pt(dist / 8, dist / (Math.max(canvas.width, canvas.height) / 2));
     }
 };
-module.exports = Object.assign({ scope }, _Bound, _CanvasForm, _CanvasSpace, _Create, _Form, _LinearAlgebra, _Op, _Pt, _Space, _Util);
+function ready(bound, space) {
+    ps = Create_1.Create.distributeRandom(new Bound_1.Bound(canvas.size), 50);
+}
+canvas.add({
+    animate: (time, fps, space) => {
+        form.reset();
+        form.stroke(false);
+        ps.forEach(p => {
+            let attrs = p.op(fs);
+            form.fill(`rgba(255,0,0,${1.2 - attrs.size.y}`);
+            form.point(p, attrs.size.x, "circle");
+        });
+        // form.point( {x:50.5, y: 50.5}, 20, "circle");
+        // form.point( {x:50.5, y: 140.5}, 20, );
+        // console.log(time, fps);
+        // form.point( {x:50, y:50}, 100);    
+    },
+    onMouseAction: (type, px, py) => {
+        if (type == "move") {
+            let d = canvas.boundingBox.center.$subtract(px, py);
+            let p1 = canvas.boundingBox.center.$subtract(d);
+            let bound = new Bound_1.Bound(p1, p1.$add(d.$abs().multiply(2)));
+            ps = Create_1.Create.distributeRandom(bound, 200);
+        }
+    }
+});
+canvas.bindMouse();
+canvas.playOnce(500);
+/*
+canvas.add( {
+  animate: (time, fps, space) => {
+    form2.reset();
+    form2.fill("#fff").stroke("#000").point( {x:150.5, y: 50.5}, 20, "circle");
+    form2.fill("#ff0").stroke("#ccc").point( {x:150.5, y: 140.5}, 20, );
+    // console.log(time, fps);
+  }
+})
+*/
+//canvas.playOnce(5000);
+/*
+let vec = new Vector( [1000, 2, 3] ).add( new Vector( [2, 3, 4] ) );
+console.log(vec.toString());
+
+setInterval( () => vec.add( new Vector( [ 1, 2, 3 ]) ), 500 );
+
+let m1 = Matrix.identity(3);
+let m2 = Matrix.identity(3);
+
+
+console.log( Matrix.add(m1, m2).toString() );
+
+let pts = new Pts();
+console.log( pts );
+*/
+// console.log(pts.toString());
+// pts.pt(1,2,3);
+// pts.pt(2,3,4);
+// console.log(pts.toString());
+// console.log( Matrix.augment(m1, m2).toString() );
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=pts.js.map
+//# sourceMappingURL=testapp.js.map
