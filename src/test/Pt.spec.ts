@@ -47,6 +47,11 @@ describe('Pt: ', () => {
       assert.equal(11346, p1[0] + p1[3] + p2[2] + p3[1] + p4[0]);
     });
 
+    it('can init by filling dimensions', () => {
+      let p = Pt.make(5, 100);
+      assert.isTrue( p.length === 5 && p[3] === 100);
+    });
+
   });
 
   describe('Functions: ', () => {
@@ -56,6 +61,36 @@ describe('Pt: ', () => {
       assert.equal( 6, p.length );
     });
 
+    it('can update values', () => {
+      let p = new Pt([1,2,3,4,5,6]);
+      p.to(0,10,100);
+      assert.isTrue( p.equals( new Pt(0,10,100,4,5,6)) );
+    });
+
+    it('can check equality', () => {
+      let p = new Pt( 1, 2.1, 3.01 );
+      let p2 = new Pt( 1.01, 2, 3 );
+      assert.isTrue( p.equals( new Pt(1,2,3), 0.101) && (p2.equals( new Pt(1,2,3), 0.0099) === false) );
+    });
+
+    it('can apply operations with op', () => {
+      let f1 = (p:Pt) => p.$add(1);
+      let f2 = (p:Pt) => p.$multiply(2);
+      
+      let p = new Pt(3,4,5);
+      let r1 = p.op([f1, f2]);
+      let r2 = r1[1].op({triple: (p:Pt) => p.$multiply(3) }); 
+
+      assert.isTrue( r2["triple"].equals( new Pt(18, 24, 30) ) );
+    });
+
+    it('can map to a function', () => {
+      let p = new Pt(5,7,12).$map( (n:number, i:number, list) => {
+        return n*10+2;
+      });
+      assert.isTrue( p.equals( new Pt(52, 72, 122) ) )
+    });
+    
     it('can add with different args', () => {
       let p = new Pt({x:1,y:2,z:3}).add([1,1,1]).add(2,2,2).add(new Pt(3,4,5));
       assert.isTrue( p.$add(1,2,3).$add([2, 4, 0]).equals( new Pt(10, 15, 14) ) );
@@ -75,7 +110,6 @@ describe('Pt: ', () => {
       assert.equal( d, 21 );
     });
 
-
     it('can concat with another Pt or array', () => {
       let p = new Pt(1,2,3).$concat([2,3]).$concat(new Pt(10, 20, 30, 40));
       assert.equal( p.length, 9 );
@@ -84,14 +118,78 @@ describe('Pt: ', () => {
     it('can get a slice of values', () => {
       let p = new Pt(1,2,3,4,5,6);
       assert.isTrue( p.$slice(2,5).equals( new Pt(3,4,5) ) );
-      assert.isTrue( true );
     })
 
-    it('can get a unit vector', () => {
+    it('can get a normalized unit vector', () => {
       let p = new Pt(123,3453,293);
       assert.equal( p.unit().magnitude(), 1 );
     })
 
+    it('can calculate dot product', () => {
+      let p = new Pt(1,2,3,4).dot( 10,9,8,7 );
+      assert.equal( p, 80 );
+    })
+
+    it('can calculate projection', () => {
+      let p = new Pt(1, 2).$project(new Pt(-4, 1)).equals( new Pt(-2/5, -4/5), 0.001 );
+      assert.isTrue( p );
+    })
+
+    it('can calculate cross product', () => {
+      let p = new Pt(3, -3, 1).$cross( new Pt(4, 9, 2) );
+      assert.isTrue( p.equals( new Pt(-15, -2, 39) ));
+    })
+
+    it('can calculate abs', () => {
+      let p = new Pt(3, -3, 1).$abs();
+      assert.isTrue( p.equals( new Pt(3,3,1) ));
+    })
+
+
+    it('can find minimum point', () => {
+      let p = new Pt(3, -3, 1, -10).$min( new Pt(4, 9, -2, 0) );
+      assert.isTrue( p.equals( new Pt(3, -3, -2, -10) ));
+    })
+
+    it('can find maximum point', () => {
+      let p = new Pt(3, -3, 1, -10).$max( new Pt(4, 9, -2, 0) );
+      assert.isTrue( p.equals( new Pt(4, 9, 1, 0) ));
+    })
+
+    it('can zip one slice', function() {
+      let p = Pt.zipOne( [new Pt(1,3,5,7), new Pt(2,4,6,8), new Pt(5,10,15,20)], 2 );
+      assert.isTrue( p.equals( new Pt(5,6,15) ) )
+    });
+
+    it('can zip one slice with default', function() {
+      let p = Pt.zipOne( [new Pt(1), new Pt(2,4,6), new Pt(5,10)], 2, -1 );
+      assert.isTrue( p.equals( new Pt(-1, 6, -1) ) )
+    });
+
+    it('can zip an array of Pt', function() {
+      let ps = Pt.zip( [new Pt(1,2), new Pt(3,4), new Pt(5,6)] );
+      assert.isTrue( ps[1].equals( new Pt(2,4,6) ) && ps.length == 2 );
+    });
+
+    it('can zip an array of Pt with defaults', function() {
+      let ps = Pt.zip( [new Pt(1,2), new Pt(3), new Pt(5,6,7,8)], 10 );
+      assert.isTrue( ps[1].equals( new Pt(2, 10, 6) ) && ps.length == 2 );
+    });
+
+    it('can zip an array of Pt with longest value', function() {
+      let ps = Pt.zip( [new Pt(1,2), new Pt(3), new Pt(5,6,7,8)], 10, true );
+      assert.isTrue( ps[2].equals( new Pt(10, 10, 7) ) && ps.length == 4 );
+    });
+
+    it('can sum a list of Pts', function() {
+      let p = Pt.sum( [new Pt(1,3,5,7), new Pt(2,4,6,8), new Pt(5,10,15,20)] );
+      assert.isTrue( p.equals( new Pt(8, 17, 26, 35) ) );
+    });
+
+    it('can average a list of Pts', function() {
+      let p = Pt.average( [new Pt(1,3,5,7), new Pt(2,3,8,8), new Pt(5,10,14,21), new Pt(0, 0, 1, 0)] );
+      assert.isTrue( p.equals( new Pt(2, 4, 7, 9) ) );
+    });
   });
 
 });

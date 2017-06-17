@@ -11,8 +11,9 @@ export interface IPt {
 }
 
 export type PtArrayType = Float64Array;
+let PtBaseArray = Float64Array;
 
-export class Pt extends Float64Array implements IPt, Iterable<number> {
+export class Pt extends PtBaseArray implements IPt, Iterable<number> {
 
 
   /**
@@ -25,7 +26,7 @@ export class Pt extends Float64Array implements IPt, Iterable<number> {
   }
 
   static make( dimensions:number, defaultValue:number ):Pt {
-    let p = new Float64Array(dimensions);
+    let p = new PtBaseArray(dimensions);
     if (defaultValue) p.fill( defaultValue );
     return new Pt( p );
   }
@@ -92,7 +93,8 @@ export class Pt extends Float64Array implements IPt, Iterable<number> {
    * @param end end index (ie, entry will not include value at this index)
    */
   $slice(start?:number, end?:number):Pt {
-    let m = new Pt( this ).slice(start, end);
+    // seems like new Pt(...).slice will return an error, must use Float64Array
+    let m = new PtBaseArray( this ).slice(start, end); 
     return new Pt( m );
   }
 
@@ -158,7 +160,7 @@ export class Pt extends Float64Array implements IPt, Iterable<number> {
 
   dot( ...args ):number { return LA.dot( this, Util.getArgs(args) ); }
 
-  cross( ...args ): Pt { 
+  $cross( ...args ): Pt { 
     let p = Util.getArgs( args );
     return new Pt( (this[1]*p[2] - this[2]*p[1]), (this[2]*p[0] - this[0]*p[2]), (this[0]*p[1] - this[1]*p[0]) )
   }
@@ -187,6 +189,21 @@ export class Pt extends Float64Array implements IPt, Iterable<number> {
     return this.clone().abs();
   }
 
+  $min( p: Pt ) {
+    let m = this.clone();
+    for (let i=0, len=Math.min( this.length, p.length ); i<len; i++) {
+      m[i] = Math.min( this[i], p[i] );
+    }
+    return m;
+  }
+
+  $max( p: Pt ) {
+    let m = this.clone();
+    for (let i=0, len=Math.min( this.length, p.length ); i<len; i++) {
+      m[i] = Math.max( this[i], p[i] );
+    }
+    return m;
+  }
 
   toString():string {
     return `Pt(${ this.join(", ")})`
