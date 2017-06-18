@@ -77,7 +77,8 @@ var Pts =
 Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(2);
 const LinearAlgebra_1 = __webpack_require__(5);
-class Pt extends Float64Array {
+let PtBaseArray = Float64Array;
+class Pt extends PtBaseArray {
     /**
      * Create a Pt. If no parameter is provided, this will instantiate a Pt with 2 dimensions [0, 0].
      * Example: `new Pt()`, `new Pt(1,2,3,4,5)`, `new Pt([1,2])`, `new Pt({x:0, y:1})`, `new Pt(pt)`
@@ -87,7 +88,7 @@ class Pt extends Float64Array {
         super(args.length > 0 ? Util_1.Util.getArgs(args) : [0, 0]);
     }
     static make(dimensions, defaultValue) {
-        let p = new Float64Array(dimensions);
+        let p = new PtBaseArray(dimensions);
         if (defaultValue) p.fill(defaultValue);
         return new Pt(p);
     }
@@ -157,7 +158,8 @@ class Pt extends Float64Array {
      * @param end end index (ie, entry will not include value at this index)
      */
     $slice(start, end) {
-        let m = new Pt(this).slice(start, end);
+        // seems like new Pt(...).slice will return an error, must use Float64Array
+        let m = new PtBaseArray(this).slice(start, end);
         return new Pt(m);
     }
     $concat(...args) {
@@ -225,7 +227,7 @@ class Pt extends Float64Array {
     dot(...args) {
         return LinearAlgebra_1.LinearAlgebra.dot(this, Util_1.Util.getArgs(args));
     }
-    cross(...args) {
+    $cross(...args) {
         let p = Util_1.Util.getArgs(args);
         return new Pt(this[1] * p[2] - this[2] * p[1], this[2] * p[0] - this[0] * p[2], this[0] * p[1] - this[1] * p[0]);
     }
@@ -248,6 +250,20 @@ class Pt extends Float64Array {
      */
     $abs() {
         return this.clone().abs();
+    }
+    $min(p) {
+        let m = this.clone();
+        for (let i = 0, len = Math.min(this.length, p.length); i < len; i++) {
+            m[i] = Math.min(this[i], p[i]);
+        }
+        return m;
+    }
+    $max(p) {
+        let m = this.clone();
+        for (let i = 0, len = Math.min(this.length, p.length); i < len; i++) {
+            m[i] = Math.max(this[i], p[i]);
+        }
+        return m;
     }
     toString() {
         return `Pt(${this.join(", ")})`;
@@ -1310,11 +1326,10 @@ class Num {
     static lerp(a, b, t) {
         return (1 - t) * a + t * b;
     }
-    static boundValue(val, max, positive = false) {
-        let a = val % max;
-        let half = max / 2;
-        if (a > half) a -= max;else if (a < -half) a += max;
-        if (positive && a < 0) return a + max;
+    static boundValue(val, min, max, positive = false) {
+        let len = Math.abs(max - min);
+        let a = val % len;
+        if (a > max) a -= len;else if (a < min) a += len;
         return a;
     }
     static within(p, a, b) {
@@ -1347,11 +1362,11 @@ class Num {
 }
 exports.Num = Num;
 class Geom {
-    static boundAngle(angle, positive = false) {
-        return Num.boundValue(angle, 360, positive);
+    static boundAngle(angle) {
+        return Num.boundValue(angle, 0, 360);
     }
-    static boundRadian(angle, positive = false) {
-        return Num.boundValue(angle, 360, positive);
+    static boundRadian(angle) {
+        return Num.boundValue(angle, 0, Util_1.Const.two_pi);
     }
     static toRadian(angle) {
         return angle * Util_1.Const.deg_to_rad;
@@ -1380,13 +1395,13 @@ class Geom {
      * @param t a ratio between 0 to 1
      * @param returnAsNormalized if true, return the bisector as a unit vector; otherwise, it'll have an interpolated magnitude.
      */
-    static bisect(a, b, t = 0.5, returnAsNormalized = false) {
+    static interpolate(a, b, t = 0.5, returnAsNormalized = false) {
         let ma = a.magnitude();
         let mb = b.magnitude();
         let ua = a.$unit(ma);
         let ub = b.$unit(mb);
-        let bisect = ua.$multiply(t).add(ub.$multiply(1 - t));
-        return returnAsNormalized ? bisect : bisect.$multiply(ma * t + mb * (1 - t));
+        let bisect = ua.$multiply(1 - t).add(ub.$multiply(t));
+        return returnAsNormalized ? bisect : bisect.$multiply(ma * (1 - t) + mb * t);
     }
     /**
      * Generate a sine and cosine lookup table
@@ -1399,8 +1414,8 @@ class Geom {
             cos[i] = Math.cos(i * Math.PI / 180);
             sin[i] = Math.sin(i * Math.PI / 180);
         }
-        let getSin = rad => sin[Math.floor(Geom.boundAngle(Geom.toDegree(rad), true))];
-        let getCos = rad => cos[Math.floor(Geom.boundAngle(Geom.toDegree(rad), true))];
+        let getSin = rad => sin[Math.floor(Geom.boundAngle(Geom.toDegree(rad)))];
+        let getCos = rad => cos[Math.floor(Geom.boundAngle(Geom.toDegree(rad)))];
         return { sinTable: sin, cosTable: cos, sin: getSin, cos: getCos };
     }
 }

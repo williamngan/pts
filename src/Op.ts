@@ -9,14 +9,13 @@ export class Num {
     return (1-t) * a + t * b;
   }
 
-  static boundValue( val:number, max:number, positive=false ):number {
-    let a = val % max;
-    let half = max / 2;
+  static boundValue( val:number, min:number, max:number, positive=false ):number {
+    let len = Math.abs(max - min);
+    let a = val % len;
+    
+    if (a > max) a -= len
+    else if (a < min) a += len
 
-    if (a > half) a -= max
-    else if (a < -half) a += max
-
-    if (positive && (a<0)) return a+max;
     return a;
   }
 
@@ -56,12 +55,12 @@ export class Num {
 export class Geom {
 
 
-  static boundAngle( angle:number, positive=false ) { 
-    return Num.boundValue(angle, 360, positive); 
+  static boundAngle( angle:number ) { 
+    return Num.boundValue(angle, 0, 360); 
   }
 
-  static boundRadian( angle:number, positive=false ) { 
-    return Num.boundValue(angle, 360, positive); 
+  static boundRadian( angle:number ) { 
+    return Num.boundValue(angle, 0, Const.two_pi ); 
   }
 
   static toRadian( angle: number ):number {
@@ -95,14 +94,14 @@ export class Geom {
    * @param t a ratio between 0 to 1
    * @param returnAsNormalized if true, return the bisector as a unit vector; otherwise, it'll have an interpolated magnitude.
    */
-  static bisect( a:Pt, b:Pt, t=0.5, returnAsNormalized:boolean = false ) {
+  static interpolate( a:Pt, b:Pt, t=0.5, returnAsNormalized:boolean = false ) {
     let ma = a.magnitude();
     let mb = b.magnitude();
     let ua = a.$unit( ma );
     let ub = b.$unit( mb );
     
-    let bisect = ua.$multiply( t ).add( ub.$multiply( 1-t ) );
-    return (returnAsNormalized) ? bisect : bisect.$multiply( ma*t + mb*(1-t) );
+    let bisect = ua.$multiply( 1-t ).add( ub.$multiply( t ) );
+    return (returnAsNormalized) ? bisect : bisect.$multiply( ma*(1-t) + mb*t );
   }
 
   /**
@@ -118,8 +117,8 @@ export class Geom {
       sin[i] = Math.sin( i * Math.PI / 180 );
     }
 
-    let getSin = ( rad:number ) => sin[ Math.floor( Geom.boundAngle( Geom.toDegree(rad), true ) ) ];
-    let getCos = ( rad:number ) => cos[ Math.floor( Geom.boundAngle( Geom.toDegree(rad), true ) ) ];
+    let getSin = ( rad:number ) => sin[ Math.floor( Geom.boundAngle( Geom.toDegree(rad) ) ) ];
+    let getCos = ( rad:number ) => cos[ Math.floor( Geom.boundAngle( Geom.toDegree(rad) ) ) ];
     
     return {sinTable: sin, cosTable: cos, sin: getSin, cos: getCos};
   }

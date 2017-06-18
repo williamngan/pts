@@ -77,7 +77,8 @@ var Pts =
 Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(2);
 const LinearAlgebra_1 = __webpack_require__(5);
-class Pt extends Float64Array {
+let PtBaseArray = Float64Array;
+class Pt extends PtBaseArray {
     /**
      * Create a Pt. If no parameter is provided, this will instantiate a Pt with 2 dimensions [0, 0].
      * Example: `new Pt()`, `new Pt(1,2,3,4,5)`, `new Pt([1,2])`, `new Pt({x:0, y:1})`, `new Pt(pt)`
@@ -87,7 +88,7 @@ class Pt extends Float64Array {
         super(args.length > 0 ? Util_1.Util.getArgs(args) : [0, 0]);
     }
     static make(dimensions, defaultValue) {
-        let p = new Float64Array(dimensions);
+        let p = new PtBaseArray(dimensions);
         if (defaultValue) p.fill(defaultValue);
         return new Pt(p);
     }
@@ -157,7 +158,8 @@ class Pt extends Float64Array {
      * @param end end index (ie, entry will not include value at this index)
      */
     $slice(start, end) {
-        let m = new Pt(this).slice(start, end);
+        // seems like new Pt(...).slice will return an error, must use Float64Array
+        let m = new PtBaseArray(this).slice(start, end);
         return new Pt(m);
     }
     $concat(...args) {
@@ -225,7 +227,7 @@ class Pt extends Float64Array {
     dot(...args) {
         return LinearAlgebra_1.LinearAlgebra.dot(this, Util_1.Util.getArgs(args));
     }
-    cross(...args) {
+    $cross(...args) {
         let p = Util_1.Util.getArgs(args);
         return new Pt(this[1] * p[2] - this[2] * p[1], this[2] * p[0] - this[0] * p[2], this[0] * p[1] - this[1] * p[0]);
     }
@@ -248,6 +250,20 @@ class Pt extends Float64Array {
      */
     $abs() {
         return this.clone().abs();
+    }
+    $min(p) {
+        let m = this.clone();
+        for (let i = 0, len = Math.min(this.length, p.length); i < len; i++) {
+            m[i] = Math.min(this[i], p[i]);
+        }
+        return m;
+    }
+    $max(p) {
+        let m = this.clone();
+        for (let i = 0, len = Math.min(this.length, p.length); i < len; i++) {
+            m[i] = Math.max(this[i], p[i]);
+        }
+        return m;
     }
     toString() {
         return `Pt(${this.join(", ")})`;
