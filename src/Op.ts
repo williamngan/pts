@@ -106,6 +106,26 @@ export class Geom {
   }
 
   /**
+   * Find two Pt that are perpendicular to this Pt (2D)
+   * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
+   * @returns an array of two Pt that are perpendicular to this Pt
+   */
+  static perpendicular( p:Pt, axis:string|number[]=Const.xy ):Pt[] {
+    let y = axis[1];
+    let x = axis[0];
+
+    let pa = p.clone();
+    pa[x] = -p[y];
+    pa[y] = p[x];
+    let pb = p.clone();
+    pb[x] = p[y];
+    pb[y] = -p[x];
+    
+    return [pa, pb];
+  }
+
+
+  /**
    * Generate a sine and cosine lookup table
    * @returns an object with 2 tables (array of 360 values) and 2 functions to get sin/cos given a radian parameter. { sinTable:Float64Array, cosTable:Float64Array, sin:(rad)=>number, cos:(rad)=>number }
    */

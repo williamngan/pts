@@ -61,7 +61,10 @@ function ready( bound, space) {
 
 
 canvas.add( {
- animate: (time, fps, space) => {
+ animate: (time, ftime, space) => {
+    let framerate = 1000/ftime;
+    form.fill("#999").text( new Pt(20, 20), framerate+" fps" );
+
     form.reset();
     form.stroke( false );
 
@@ -89,7 +92,7 @@ canvas.add( {
 }); 
 
 canvas.bindMouse();
-canvas.playOnce(500);
+canvas.playOnce(3000);
 
 
 

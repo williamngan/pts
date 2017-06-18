@@ -2,7 +2,7 @@ import {Bound} from "./Bound";
 import {Pt, IPt} from "./Pt";
 import {Form} from "./Form";
 
-type AnimateFunction = ( time?:number, frameTime?:number, context?:any ) => void;
+type AnimateFunction = ( time?:number, frameTime?:number, currentSpace?:any ) => void;
 
 export interface IPlayer {
   animateID?: string;
@@ -95,6 +95,7 @@ export abstract class Space {
     if (this._pause) return this;
 
     this._time.diff = time - this._time.prev;
+    this._time.prev = time;
 
     try {
       this.playItems( time );
@@ -172,6 +173,11 @@ export abstract class Space {
    * Get the size of this bounding box as a Pt
    */
   get size():Pt { return this.bound.size.clone(); }
+
+  /**
+   * Get the size of this bounding box as a Pt
+   */
+  get center():Pt { return this.size.divide(2); }
 
   /**
    * Get width of canvas

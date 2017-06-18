@@ -99,14 +99,27 @@ export class CanvasForm extends Form {
   }
 
 
-  circle( pts:IPt, radius:number ) {
-    CanvasForm.circle( this._ctx, pts, radius );
-  }
-
   static circle( ctx:CanvasRenderingContext2D, pt:IPt, radius:number ) {
     ctx.beginPath()
     ctx.arc( pt.x, pt.y, radius, 0, Const.two_pi, false );
     ctx.closePath();
+  }
+
+  circle( pts:IPt, radius:number ):this {
+    CanvasForm.circle( this._ctx, pts, radius );
+    return this;
+  }
+
+
+  static arc( ctx:CanvasRenderingContext2D, pt:IPt, radius:number, startAngle:number, endAngle:number, cc?:boolean ) {
+    ctx.beginPath()
+    ctx.arc( pt.x, pt.y, radius, startAngle, endAngle, cc );
+  }
+
+  arc( pt:IPt, radius:number, startAngle:number, endAngle:number, cc?:boolean ):this {
+    CanvasForm.arc( this._ctx, pt, radius, startAngle, endAngle, cc );
+    this._paint();
+    return this;
   }
 
   static square( ctx:CanvasRenderingContext2D, pt:IPt, halfsize:number ) {
@@ -124,21 +137,61 @@ export class CanvasForm extends Form {
     ctx.closePath()
   }
 
-  line( pts:number[][] ) {
+  line( pts:number[][]|Pt[] ):this {
     CanvasForm.line( this._ctx, pts );
-    this._paint();
+    this._ctx.stroke();
+    return this;
   }
 
-  static line( ctx:CanvasRenderingContext2D, pts:number[][]) {
+  static line( ctx:CanvasRenderingContext2D, pts:number[][]|Pt[] ) {
     ctx.beginPath();
     ctx.moveTo( pts[0][0], pts[0][1] );
     for (let i=1, len=pts.length; i<len; i++) {
       ctx.lineTo( pts[i][0], pts[i][1] );
     }
-    ctx.stroke();
+  }
+
+  static rect( ctx:CanvasRenderingContext2D, pts:number[][]|Pt[] ) {
+    ctx.beginPath();
+    ctx.moveTo( pts[0][0], pts[0][1] );
+    ctx.lineTo( pts[0][0], pts[1][1] );
+    ctx.lineTo( pts[1][0], pts[1][1] );
+    ctx.lineTo( pts[1][0], pts[0][1] );
+    ctx.closePath();
   }
 
 
+  rect( pts:number[][]|Pt[] ):this {
+    CanvasForm.rect( this._ctx, pts );
+    this._paint();
+    return this;
+  }
+
+
+  /**
+   * A static function to draw text
+   * @param `ctx` canvas rendering context
+   * @param `pt` a Point object to specify the anchor point
+   * @param `txt` a string of text to draw
+   * @param `maxWidth` specify a maximum width per line
+   */
+  static text( ctx:CanvasRenderingContext2D, pt:IPt|number[], txt:string, maxWidth?:number ) {
+    ctx.fillText( txt, pt[0], pt[1], maxWidth )
+  }
+
+
+  text( pt:IPt|number[], txt:string, maxWidth?:number): this {
+    CanvasForm.text( this._ctx, pt, txt, maxWidth );
+    return this;
+  }
+
+  log( txt ):this {
+    this._ctx.font = "12px sans-serif";
+    let w = this._ctx.measureText( txt ).width + 20;
+    this.stroke(false).fill("rgba(0,0,0,.4)").rect( [[0,0], [w, 20]] );
+    this.fill("#fff").text( [10,14], txt );   
+    return this;
+  }
 
 
   draw( ps:Pt[], shape?:string ):this {

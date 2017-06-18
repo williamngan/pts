@@ -76,7 +76,7 @@ var Pts =
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(2);
-const Op_1 = __webpack_require__(9);
+const Op_1 = __webpack_require__(6);
 const LinearAlgebra_1 = __webpack_require__(5);
 let PtBaseArray = Float64Array;
 class Pt extends PtBaseArray {
@@ -136,6 +136,15 @@ class Pt extends PtBaseArray {
             this[i] = p[i];
         }
         return this;
+    }
+    /**
+     * Update the values of this Pt to point at a specific angle
+     * @param radian target angle in radian
+     * @param magnitude Optional magnitude if known. If not provided, it'll calculate and use this Pt's magnitude.
+     */
+    toAngle(radian, magnitude) {
+        let m = magnitude != undefined ? magnitude : this.magnitude();
+        return this.to(Math.cos(radian) * m, Math.sin(radian) * m);
     }
     /**
      * Apply a series of functions to transform this Pt. The function should have this form: (p:Pt) => Pt
@@ -292,22 +301,6 @@ class Pt extends PtBaseArray {
     angleBetween(p, axis = Util_1.Const.xy) {
         console.log(Op_1.Geom.boundRadian(this.angle(axis)) - Op_1.Geom.boundRadian(p.angle(axis)));
         return Op_1.Geom.boundRadian(this.angle(axis)) - Op_1.Geom.boundRadian(p.angle(axis));
-    }
-    /**
-     * Find two Pt that are perpendicular to this Pt (2D)
-     * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
-     * @returns an array of two Pt that are perpendicular to this Pt
-     */
-    perpendicular(axis = Util_1.Const.xy) {
-        let y = axis[1];
-        let x = axis[0];
-        let pa = this.clone();
-        pa[x] = -this[y];
-        pa[y] = this[x];
-        let pb = this.clone();
-        pb[x] = this[y];
-        pb[y] = -this[x];
-        return [pa, pb];
     }
     /**
      * Check if another Pt is perpendicular to this Pt
@@ -662,13 +655,23 @@ class CanvasForm extends Form_1.Form {
         }
         return this;
     }
-    circle(pts, radius) {
-        CanvasForm.circle(this._ctx, pts, radius);
-    }
     static circle(ctx, pt, radius) {
         ctx.beginPath();
         ctx.arc(pt.x, pt.y, radius, 0, Util_1.Const.two_pi, false);
         ctx.closePath();
+    }
+    circle(pts, radius) {
+        CanvasForm.circle(this._ctx, pts, radius);
+        return this;
+    }
+    static arc(ctx, pt, radius, startAngle, endAngle, cc) {
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, radius, startAngle, endAngle, cc);
+    }
+    arc(pt, radius, startAngle, endAngle, cc) {
+        CanvasForm.arc(this._ctx, pt, radius, startAngle, endAngle, cc);
+        this._paint();
+        return this;
     }
     static square(ctx, pt, halfsize) {
         let x1 = pt.x - halfsize;
@@ -685,7 +688,8 @@ class CanvasForm extends Form_1.Form {
     }
     line(pts) {
         CanvasForm.line(this._ctx, pts);
-        this._paint();
+        this._ctx.stroke();
+        return this;
     }
     static line(ctx, pts) {
         ctx.beginPath();
@@ -693,7 +697,40 @@ class CanvasForm extends Form_1.Form {
         for (let i = 1, len = pts.length; i < len; i++) {
             ctx.lineTo(pts[i][0], pts[i][1]);
         }
-        ctx.stroke();
+    }
+    static rect(ctx, pts) {
+        ctx.beginPath();
+        ctx.moveTo(pts[0][0], pts[0][1]);
+        ctx.lineTo(pts[0][0], pts[1][1]);
+        ctx.lineTo(pts[1][0], pts[1][1]);
+        ctx.lineTo(pts[1][0], pts[0][1]);
+        ctx.closePath();
+    }
+    rect(pts) {
+        CanvasForm.rect(this._ctx, pts);
+        this._paint();
+        return this;
+    }
+    /**
+     * A static function to draw text
+     * @param `ctx` canvas rendering context
+     * @param `pt` a Point object to specify the anchor point
+     * @param `txt` a string of text to draw
+     * @param `maxWidth` specify a maximum width per line
+     */
+    static text(ctx, pt, txt, maxWidth) {
+        ctx.fillText(txt, pt[0], pt[1], maxWidth);
+    }
+    text(pt, txt, maxWidth) {
+        CanvasForm.text(this._ctx, pt, txt, maxWidth);
+        return this;
+    }
+    log(txt) {
+        this._ctx.font = "12px sans-serif";
+        let w = this._ctx.measureText(txt).width + 20;
+        this.stroke(false).fill("rgba(0,0,0,.4)").rect([[0, 0], [w, 20]]);
+        this.fill("#fff").text([10, 14], txt);
+        return this;
     }
     draw(ps, shape) {
         return this;
@@ -832,6 +869,132 @@ exports.LinearAlgebra = LinearAlgebra;
 
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const Util_1 = __webpack_require__(2);
+const Bound_1 = __webpack_require__(1);
+const Pt_1 = __webpack_require__(0);
+class Num {
+    static lerp(a, b, t) {
+        return (1 - t) * a + t * b;
+    }
+    static boundValue(val, min, max, positive = false) {
+        let len = Math.abs(max - min);
+        let a = val % len;
+        if (a > max) a -= len;else if (a < min) a += len;
+        return a;
+    }
+    static within(p, a, b) {
+        return p >= Math.min(a, b) && p <= Math.max(a, b);
+    }
+    static randomRange(a, b = 0) {
+        let r = a > b ? a - b : b - a;
+        return a + Math.random() * r;
+    }
+    static normalizeValue(n, a, b) {
+        let min = Math.min(a, b);
+        let max = Math.max(a, b);
+        return (n - min) / (max - min);
+    }
+    /**
+     * Map a value from one range to another
+     * @param n a value in the first range
+     * @param currMin lower bound of the first range
+     * @param currMax upper bound of the first range
+     * @param targetMin lower bound of the second range
+     * @param targetMax upper bound of the second range
+     * @returns a remapped value in the second range
+     */
+    static mapToRange(n, currA, currB, targetA, targetB) {
+        if (currA == currB) throw "[currMin, currMax] must define a range that is not zero";
+        let min = Math.min(targetA, targetB);
+        let max = Math.max(targetA, targetB);
+        return Num.normalizeValue(n, currA, currB) * (max - min) + min;
+    }
+}
+exports.Num = Num;
+class Geom {
+    static boundAngle(angle) {
+        return Num.boundValue(angle, 0, 360);
+    }
+    static boundRadian(angle) {
+        return Num.boundValue(angle, 0, Util_1.Const.two_pi);
+    }
+    static toRadian(angle) {
+        return angle * Util_1.Const.deg_to_rad;
+    }
+    static toDegree(radian) {
+        return radian * Util_1.Const.rad_to_deg;
+    }
+    static boundingBox(pts) {
+        let minPt = pts[0].clone().fill(Number.MAX_VALUE);
+        let maxPt = pts[0].clone().fill(Number.MIN_VALUE);
+        for (let i = 0, len = pts.length; i < len; i++) {
+            for (let d = 0, len = pts[i].length; d < len; d++) {
+                if (pts[i][d] < minPt[d]) minPt[d] = pts[i][d];
+                if (pts[i][d] > maxPt[d]) maxPt[d] = pts[i][d];
+            }
+        }
+        return new Bound_1.Bound(minPt, maxPt);
+    }
+    static centroid(pts) {
+        return Pt_1.Pt.average(pts);
+    }
+    /**
+     * Get a bisector between two Pts
+     * @param a first Pt
+     * @param b second Pt
+     * @param t a ratio between 0 to 1
+     * @param returnAsNormalized if true, return the bisector as a unit vector; otherwise, it'll have an interpolated magnitude.
+     */
+    static interpolate(a, b, t = 0.5, returnAsNormalized = false) {
+        let ma = a.magnitude();
+        let mb = b.magnitude();
+        let ua = a.$unit(ma);
+        let ub = b.$unit(mb);
+        let bisect = ua.$multiply(1 - t).add(ub.$multiply(t));
+        return returnAsNormalized ? bisect : bisect.$multiply(ma * (1 - t) + mb * t);
+    }
+    /**
+     * Find two Pt that are perpendicular to this Pt (2D)
+     * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
+     * @returns an array of two Pt that are perpendicular to this Pt
+     */
+    static perpendicular(p, axis = Util_1.Const.xy) {
+        let y = axis[1];
+        let x = axis[0];
+        let pa = p.clone();
+        pa[x] = -p[y];
+        pa[y] = p[x];
+        let pb = p.clone();
+        pb[x] = p[y];
+        pb[y] = -p[x];
+        return [pa, pb];
+    }
+    /**
+     * Generate a sine and cosine lookup table
+     * @returns an object with 2 tables (array of 360 values) and 2 functions to get sin/cos given a radian parameter. { sinTable:Float64Array, cosTable:Float64Array, sin:(rad)=>number, cos:(rad)=>number }
+     */
+    static sinCosTable() {
+        let cos = new Float64Array(360);
+        let sin = new Float64Array(360);
+        for (let i = 0; i < 360; i++) {
+            cos[i] = Math.cos(i * Math.PI / 180);
+            sin[i] = Math.sin(i * Math.PI / 180);
+        }
+        let getSin = rad => sin[Math.floor(Geom.boundAngle(Geom.toDegree(rad)))];
+        let getCos = rad => cos[Math.floor(Geom.boundAngle(Geom.toDegree(rad)))];
+        return { sinTable: sin, cosTable: cos, sin: getSin, cos: getCos };
+    }
+}
+exports.Geom = Geom;
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", { value: true });
 const Bound_1 = __webpack_require__(1);
 class Space {
     constructor() {
@@ -893,6 +1056,7 @@ class Space {
         this._animID = requestAnimationFrame(t => this.play(t));
         if (this._pause) return this;
         this._time.diff = time - this._time.prev;
+        this._time.prev = time;
         try {
             this.playItems(time);
         } catch (err) {
@@ -962,6 +1126,12 @@ class Space {
         return this.bound.size.clone();
     }
     /**
+     * Get the size of this bounding box as a Pt
+     */
+    get center() {
+        return this.size.divide(2);
+    }
+    /**
      * Get width of canvas
      */
     get width() {
@@ -977,14 +1147,14 @@ class Space {
 exports.Space = Space;
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const Space_1 = __webpack_require__(6);
+const Space_1 = __webpack_require__(7);
 const Pt_1 = __webpack_require__(0);
 const Bound_1 = __webpack_require__(1);
 const CanvasForm_1 = __webpack_require__(3);
@@ -1340,7 +1510,7 @@ class CanvasSpace extends Space_1.Space {
 exports.CanvasSpace = CanvasSpace;
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1363,116 +1533,6 @@ class Create {
 exports.Create = Create;
 
 /***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const Util_1 = __webpack_require__(2);
-const Bound_1 = __webpack_require__(1);
-const Pt_1 = __webpack_require__(0);
-class Num {
-    static lerp(a, b, t) {
-        return (1 - t) * a + t * b;
-    }
-    static boundValue(val, min, max, positive = false) {
-        let len = Math.abs(max - min);
-        let a = val % len;
-        if (a > max) a -= len;else if (a < min) a += len;
-        return a;
-    }
-    static within(p, a, b) {
-        return p >= Math.min(a, b) && p <= Math.max(a, b);
-    }
-    static randomRange(a, b = 0) {
-        let r = a > b ? a - b : b - a;
-        return a + Math.random() * r;
-    }
-    static normalizeValue(n, a, b) {
-        let min = Math.min(a, b);
-        let max = Math.max(a, b);
-        return (n - min) / (max - min);
-    }
-    /**
-     * Map a value from one range to another
-     * @param n a value in the first range
-     * @param currMin lower bound of the first range
-     * @param currMax upper bound of the first range
-     * @param targetMin lower bound of the second range
-     * @param targetMax upper bound of the second range
-     * @returns a remapped value in the second range
-     */
-    static mapToRange(n, currA, currB, targetA, targetB) {
-        if (currA == currB) throw "[currMin, currMax] must define a range that is not zero";
-        let min = Math.min(targetA, targetB);
-        let max = Math.max(targetA, targetB);
-        return Num.normalizeValue(n, currA, currB) * (max - min) + min;
-    }
-}
-exports.Num = Num;
-class Geom {
-    static boundAngle(angle) {
-        return Num.boundValue(angle, 0, 360);
-    }
-    static boundRadian(angle) {
-        return Num.boundValue(angle, 0, Util_1.Const.two_pi);
-    }
-    static toRadian(angle) {
-        return angle * Util_1.Const.deg_to_rad;
-    }
-    static toDegree(radian) {
-        return radian * Util_1.Const.rad_to_deg;
-    }
-    static boundingBox(pts) {
-        let minPt = pts[0].clone().fill(Number.MAX_VALUE);
-        let maxPt = pts[0].clone().fill(Number.MIN_VALUE);
-        for (let i = 0, len = pts.length; i < len; i++) {
-            for (let d = 0, len = pts[i].length; d < len; d++) {
-                if (pts[i][d] < minPt[d]) minPt[d] = pts[i][d];
-                if (pts[i][d] > maxPt[d]) maxPt[d] = pts[i][d];
-            }
-        }
-        return new Bound_1.Bound(minPt, maxPt);
-    }
-    static centroid(pts) {
-        return Pt_1.Pt.average(pts);
-    }
-    /**
-     * Get a bisector between two Pts
-     * @param a first Pt
-     * @param b second Pt
-     * @param t a ratio between 0 to 1
-     * @param returnAsNormalized if true, return the bisector as a unit vector; otherwise, it'll have an interpolated magnitude.
-     */
-    static interpolate(a, b, t = 0.5, returnAsNormalized = false) {
-        let ma = a.magnitude();
-        let mb = b.magnitude();
-        let ua = a.$unit(ma);
-        let ub = b.$unit(mb);
-        let bisect = ua.$multiply(1 - t).add(ub.$multiply(t));
-        return returnAsNormalized ? bisect : bisect.$multiply(ma * (1 - t) + mb * t);
-    }
-    /**
-     * Generate a sine and cosine lookup table
-     * @returns an object with 2 tables (array of 360 values) and 2 functions to get sin/cos given a radian parameter. { sinTable:Float64Array, cosTable:Float64Array, sin:(rad)=>number, cos:(rad)=>number }
-     */
-    static sinCosTable() {
-        let cos = new Float64Array(360);
-        let sin = new Float64Array(360);
-        for (let i = 0; i < 360; i++) {
-            cos[i] = Math.cos(i * Math.PI / 180);
-            sin[i] = Math.sin(i * Math.PI / 180);
-        }
-        let getSin = rad => sin[Math.floor(Geom.boundAngle(Geom.toDegree(rad)))];
-        let getCos = rad => cos[Math.floor(Geom.boundAngle(Geom.toDegree(rad)))];
-        return { sinTable: sin, cosTable: cos, sin: getSin, cos: getCos };
-    }
-}
-exports.Geom = Geom;
-
-/***/ }),
 /* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1483,8 +1543,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
 const Util_1 = __webpack_require__(2);
 const Bound_1 = __webpack_require__(1);
-const Create_1 = __webpack_require__(8);
-const CanvasSpace_1 = __webpack_require__(7);
+const Create_1 = __webpack_require__(9);
+const CanvasSpace_1 = __webpack_require__(8);
 window["Pt"] = Pt_1.Pt;
 console.log(new Pt_1.Pt(32, 43).unit().magnitude());
 // console.log( Pts.zipOne( [new Pt(1,3), new Pt(2,4), new Pt(5,10)], 1, 0 ).toString() );
@@ -1522,7 +1582,9 @@ function ready(bound, space) {
     ps = Create_1.Create.distributeRandom(new Bound_1.Bound(canvas.size), 50);
 }
 canvas.add({
-    animate: (time, fps, space) => {
+    animate: (time, ftime, space) => {
+        let framerate = 1000 / ftime;
+        form.fill("#999").text(new Pt_1.Pt(20, 20), framerate + " fps");
         form.reset();
         form.stroke(false);
         ps.forEach(p => {
@@ -1545,7 +1607,7 @@ canvas.add({
     }
 });
 canvas.bindMouse();
-canvas.playOnce(500);
+canvas.playOnce(3000);
 /*
 canvas.add( {
   animate: (time, fps, space) => {

@@ -69,6 +69,16 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
   }
 
   /**
+   * Update the values of this Pt to point at a specific angle
+   * @param radian target angle in radian
+   * @param magnitude Optional magnitude if known. If not provided, it'll calculate and use this Pt's magnitude.
+   */
+  toAngle( radian:number, magnitude?:number ):this {
+    let m = (magnitude!=undefined) ? magnitude : this.magnitude();
+    return this.to( Math.cos(radian)*m, Math.sin(radian)*m );
+  }
+
+  /**
    * Apply a series of functions to transform this Pt. The function should have this form: (p:Pt) => Pt
    * @param fns a list of function as array or object {key: function}
    */
@@ -234,25 +244,6 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
   angleBetween( p:Pt, axis:string|number[]=Const.xy ):number {
     console.log(  Geom.boundRadian( this.angle(axis) ) - Geom.boundRadian( p.angle(axis) ) );
     return Geom.boundRadian( this.angle(axis) ) - Geom.boundRadian( p.angle(axis) );
-  }
-
-  /**
-   * Find two Pt that are perpendicular to this Pt (2D)
-   * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
-   * @returns an array of two Pt that are perpendicular to this Pt
-   */
-  perpendicular( axis:string|number[]=Const.xy ) {
-    let y = axis[1];
-    let x = axis[0];
-
-    let pa = this.clone();
-    pa[x] = -this[y];
-    pa[y] = this[x];
-    let pb = this.clone();
-    pb[x] = this[y];
-    pb[y] = -this[x];
-    
-    return [pa, pb];
   }
 
   /**

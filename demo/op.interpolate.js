@@ -7,8 +7,9 @@ console.log( form );
 var ratio = 0.5;
 
 space.add( {
-  animate: (time, fps, ctx) => {
-    
+  animate: (time, ftime) => {
+    form.log( 1000/ftime + " fps" );
+
     var center = space.size.$divide(2);
     let a = [center, center.$subtract(100, 40)];
     let b = [center, center.$subtract(-50, 200)];
@@ -28,7 +29,9 @@ space.add( {
 
   },
   onMouseAction:( type, px, py) => {
-    ratio = Num.normalizeValue( px, 0, space.size.x)
+    if (type=="move") {
+      ratio = Num.normalizeValue( px, 0, space.size.x)
+    }
   }
 })
   
