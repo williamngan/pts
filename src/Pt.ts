@@ -1,4 +1,5 @@
-import {Util} from "./Util"
+import {Util, Const} from "./Util"
+import {Geom} from "./Op"
 import {LinearAlgebra as LA} from "./LinearAlgebra"
 
 
@@ -84,6 +85,18 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
     let m = this.clone();
     LA.map( m, fn );
     return m;
+  }
+
+  /**
+   * Take specific dimensional values from this Pt and create a new Pt
+   * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
+   */
+  $take( axis:string|number[] ):Pt {
+    let p = [];
+    for (let i=0, len=axis.length; i<len; i++) {
+      p.push( this[axis[i]] || 0 );
+    }
+    return new Pt(p);
   }
 
 
@@ -189,7 +202,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
     return this.clone().abs();
   }
 
-  $min( p: Pt ) {
+  $min( p: Pt ):Pt {
     let m = this.clone();
     for (let i=0, len=Math.min( this.length, p.length ); i<len; i++) {
       m[i] = Math.min( this[i], p[i] );
@@ -197,13 +210,59 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
     return m;
   }
 
-  $max( p: Pt ) {
+  $max( p: Pt ):Pt {
     let m = this.clone();
     for (let i=0, len=Math.min( this.length, p.length ); i<len; i++) {
       m[i] = Math.max( this[i], p[i] );
     }
     return m;
   }
+
+  /**
+   * Get angle of this vector from origin
+   * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
+   */
+  angle( axis:string|number[]=Const.xy ):number {
+    return Math.atan2( this[axis[1]], this[axis[0]] );
+  }
+
+  /**
+   * Get the angle between this and another Pt
+   * @param p the other Pt
+   * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
+   */
+  angleBetween( p:Pt, axis:string|number[]=Const.xy ):number {
+    console.log(  Geom.boundRadian( this.angle(axis) ) - Geom.boundRadian( p.angle(axis) ) );
+    return Geom.boundRadian( this.angle(axis) ) - Geom.boundRadian( p.angle(axis) );
+  }
+
+  /**
+   * Find two Pt that are perpendicular to this Pt (2D)
+   * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
+   * @returns an array of two Pt that are perpendicular to this Pt
+   */
+  perpendicular( axis:string|number[]=Const.xy ) {
+    let y = axis[1];
+    let x = axis[0];
+
+    let pa = this.clone();
+    pa[x] = -this[y];
+    pa[y] = this[x];
+    let pb = this.clone();
+    pb[x] = this[y];
+    pb[y] = -this[x];
+    
+    return [pa, pb];
+  }
+
+  /**
+   * Check if another Pt is perpendicular to this Pt
+   * @param p another Pt
+   */
+  isPerpendicular( p ) {
+    return this.dot(p) == 0
+  } 
+
 
   toString():string {
     return `Pt(${ this.join(", ")})`

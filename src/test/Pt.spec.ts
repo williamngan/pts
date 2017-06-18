@@ -51,6 +51,7 @@ describe('Pt: ', () => {
       let p = Pt.make(5, 100);
       assert.isTrue( p.length === 5 && p[3] === 100);
     });
+    
 
   });
 
@@ -89,6 +90,11 @@ describe('Pt: ', () => {
         return n*10+2;
       });
       assert.isTrue( p.equals( new Pt(52, 72, 122) ) )
+    });
+
+    it('can take specific dimensions', () => {
+      let p = new Pt(1,2,3,4,5,6).$take([1,3,5]);
+      assert.isTrue( p.equals( new Pt(2, 4, 6) ) );
     });
     
     it('can add with different args', () => {
@@ -145,6 +151,15 @@ describe('Pt: ', () => {
       assert.isTrue( p.equals( new Pt(3,3,1) ));
     })
 
+    it('can calculate angle', () => {
+      let p = new Pt(0.5, 0.9, 0.8).angle('yz');
+      assert.isTrue( Math.abs(p-0.7266) < 0.0001);
+    })
+
+    it('can calculate angle between two Pt', () => {
+      let p = new Pt(0.5, 0.9, 0.8).angleBetween( new Pt(0.7, 0.5) )
+      assert.isTrue( Math.abs(p-0.4434) < 0.0001);
+    })
 
     it('can find minimum point', () => {
       let p = new Pt(3, -3, 1, -10).$min( new Pt(4, 9, -2, 0) );

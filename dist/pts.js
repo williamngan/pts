@@ -76,6 +76,7 @@ var Pts =
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(2);
+const Op_1 = __webpack_require__(9);
 const LinearAlgebra_1 = __webpack_require__(5);
 let PtBaseArray = Float64Array;
 class Pt extends PtBaseArray {
@@ -151,6 +152,17 @@ class Pt extends PtBaseArray {
         let m = this.clone();
         LinearAlgebra_1.LinearAlgebra.map(m, fn);
         return m;
+    }
+    /**
+     * Take specific dimensional values from this Pt and create a new Pt
+     * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
+     */
+    $take(axis) {
+        let p = [];
+        for (let i = 0, len = axis.length; i < len; i++) {
+            p.push(this[axis[i]] || 0);
+        }
+        return new Pt(p);
     }
     /**
      * Get a new Pt based on a slice of this Pt. Similar to `Array.slice()`.
@@ -264,6 +276,45 @@ class Pt extends PtBaseArray {
             m[i] = Math.max(this[i], p[i]);
         }
         return m;
+    }
+    /**
+     * Get angle of this vector from origin
+     * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
+     */
+    angle(axis = Util_1.Const.xy) {
+        return Math.atan2(this[axis[1]], this[axis[0]]);
+    }
+    /**
+     * Get the angle between this and another Pt
+     * @param p the other Pt
+     * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
+     */
+    angleBetween(p, axis = Util_1.Const.xy) {
+        console.log(Op_1.Geom.boundRadian(this.angle(axis)) - Op_1.Geom.boundRadian(p.angle(axis)));
+        return Op_1.Geom.boundRadian(this.angle(axis)) - Op_1.Geom.boundRadian(p.angle(axis));
+    }
+    /**
+     * Find two Pt that are perpendicular to this Pt (2D)
+     * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
+     * @returns an array of two Pt that are perpendicular to this Pt
+     */
+    perpendicular(axis = Util_1.Const.xy) {
+        let y = axis[1];
+        let x = axis[0];
+        let pa = this.clone();
+        pa[x] = -this[y];
+        pa[y] = this[x];
+        let pb = this.clone();
+        pb[x] = this[y];
+        pb[y] = -this[x];
+        return [pa, pb];
+    }
+    /**
+     * Check if another Pt is perpendicular to this Pt
+     * @param p another Pt
+     */
+    isPerpendicular(p) {
+        return this.dot(p) == 0;
     }
     toString() {
         return `Pt(${this.join(", ")})`;
