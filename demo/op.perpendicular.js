@@ -20,9 +20,8 @@ space.add( {
     
     perpends = Geom.perpendicular( p ).map( (p) => p.$add( c ) );    
     form.stroke("#0f0").line( perpends );
-
   },
-  onMouseAction:(type, px, py) => {
+  action:(type, px, py) => {
     if (type=="move") {
       mouse.to(px, py);
     }

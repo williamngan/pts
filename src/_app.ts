@@ -80,7 +80,7 @@ canvas.add( {
       // form.point( {x:50, y:50}, 100);    
   },
 
-  onMouseAction: (type, px, py) => {
+  action: (type, px, py) => {
     if (type=="move") {
       let d = canvas.boundingBox.center.$subtract( px, py);
       let p1 = canvas.boundingBox.center.$subtract(d);

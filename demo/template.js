@@ -8,12 +8,19 @@ space.add( (time, fps) => {
 });
 
 space.add( {
+
   animate: (time, fps) => {
 
   },
-  onMouseAction:( type, px, py) => {
 
+  action:( type, px, py) => {
+
+  },
+  
+  resize:( bound, evt) => {
+    
   }
+  
 });
   
 space.bindMouse();

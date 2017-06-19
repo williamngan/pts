@@ -1,8 +1,7 @@
 Pts.scope( Pts, window );
 
-var space = new CanvasSpace("#pt").setup({retina: true});
+var space = new CanvasSpace("#pt").setup({retina: true, resize: true});
 var form = space.getForm();
-console.log( form );
 
 var ratio = 0.5;
 
@@ -28,10 +27,13 @@ space.add( {
     form.stroke("#999").line([center.$add(p1), center.$add(p2), center.$add(p3), center.$add(p1)] );
 
   },
-  onMouseAction:( type, px, py) => {
+  action:( type, px, py) => {
     if (type=="move") {
       ratio = Num.normalizeValue( px, 0, space.size.x)
     }
+  },
+  resize:( bound, evt) => {
+    console.log( bound.width, bound.height );
   }
 })
   

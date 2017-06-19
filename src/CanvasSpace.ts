@@ -27,6 +27,9 @@ export class CanvasSpace extends Space {
   // track mouse dragging
   private _pressed = false;
   private _dragged = false;
+
+  private _hasMouse = false;
+  private _hasTouch = false;
   
   private _renderFunc: Function = undefined;
 
@@ -53,7 +56,7 @@ export class CanvasSpace extends Space {
     }
     
     // if selector is not defined, create a canvas
-    if (!_selector) {
+    if (!_selector) {      
       this._container = this._createElement( "div", this.id+"_container" );
       this._canvas = this._createElement( "canvas", this.id ) as HTMLCanvasElement;
       this._container.appendChild( this._canvas );
@@ -61,7 +64,7 @@ export class CanvasSpace extends Space {
       _existed = false;
 
     // if selector is element but not canvas, create a canvas inside it
-    } else if (_selector.nodeName.toLowerCase() != "canvas") {
+    } else if (_selector.nodeName.toLowerCase() != "canvas") {      
       this._container = _selector;
       this._canvas = this._createElement( "canvas", this.id+"_canvas" ) as HTMLCanvasElement;
       this._container.appendChild( this._canvas );
@@ -78,6 +81,7 @@ export class CanvasSpace extends Space {
       // let b = this._container.getBoundingClientRect();
       // this.resize( Bound.fromBoundingRect(b) );
     // }
+
 
     // no mutation observer, so we set a timeout for ready event
     setTimeout( this._ready.bind( this, callback ), 50 );
@@ -111,7 +115,7 @@ export class CanvasSpace extends Space {
     if (!this._container) throw `Cannot initiate #${this.id} element`;
 
     let b = (this._autoResize) ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
-    this.resize( Bound.fromBoundingRect(b) );
+    if (b) this.resize( Bound.fromBoundingRect(b) );
     
     this.clear( this._bgcolor );
     this._canvas.dispatchEvent( new Event("ready") );
@@ -130,7 +134,7 @@ export class CanvasSpace extends Space {
   setup( opt:{bgcolor?:string, resize?:boolean, retina?:boolean} ):this {
     if (opt.bgcolor) this._bgcolor = opt.bgcolor;
     
-    if (opt.resize != undefined) this._autoResize = opt.resize;
+    if (opt.resize != undefined) this.autoResize( opt.resize );
 
     if (opt.retina !== false) {
       let r1 = window.devicePixelRatio || 1
@@ -158,8 +162,8 @@ export class CanvasSpace extends Space {
    * @param evt 
    */
   protected _resizeHandler( evt:Event ) {
-    let b = this._container.getBoundingClientRect();
-    this.resize( Bound.fromBoundingRect(b), evt );
+    let b = (this._autoResize) ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
+    if (b) this.resize( Bound.fromBoundingRect(b), evt );
   }
 
 
@@ -168,10 +172,11 @@ export class CanvasSpace extends Space {
    * @param auto a boolean value indicating if auto size is set. Default is `true`.
    */
   autoResize( auto:boolean=true ):this {
+    this._autoResize = auto;
     if (auto) {
-      window.addEventListener( 'resize', this._resizeHandler );
+      window.addEventListener( 'resize', this._resizeHandler.bind(this) );
     } else {
-      window.removeEventListener( 'resize', this._resizeHandler );
+      window.removeEventListener( 'resize', this._resizeHandler.bind(this) );
     }
     return this;
   }
@@ -193,7 +198,7 @@ export class CanvasSpace extends Space {
 
 
   /**
-   * This overrides Space's `resize` function. It's a callback function for window's resize event. Keep track of this with `onSpaceResize(w,h,evt)` callback in your added objects.
+   * This overrides Space's `resize` function. It's a callback function for window's resize event. Keep track of this with `resize: (bound ,evt)` callback in your added objects.
    * @param b a Bound object to resize to
    * @param evt Optionally pass a resize event
    */
@@ -213,7 +218,7 @@ export class CanvasSpace extends Space {
 
     for (let k in this.players) {
       let p = this.players[k];
-      if (p.onSpaceResize) p.onSpaceResize( this.bound.size, evt);
+      if (p.resize) p.resize( this.bound, evt);
     }
 
     this.render( this._ctx );
@@ -286,12 +291,14 @@ export class CanvasSpace extends Space {
       this.bindCanvas( "mouseover", this._mouseOver.bind(this) )
       this.bindCanvas( "mouseout", this._mouseOut.bind(this) )
       this.bindCanvas( "mousemove", this._mouseMove.bind(this) )
+      this._hasMouse = true;
     } else {
       this.unbindCanvas( "mousedown", this._mouseDown.bind(this) )
       this.unbindCanvas( "mouseup", this._mouseUp.bind(this) )
       this.unbindCanvas( "mouseover", this._mouseOver.bind(this) )
       this.unbindCanvas( "mouseout", this._mouseOut.bind(this) )
       this.unbindCanvas( "mousemove", this._mouseMove.bind(this) )
+      this._hasMouse = false;
     }
     
   }
@@ -303,15 +310,17 @@ export class CanvasSpace extends Space {
    */
   bindTouch( _bind:boolean=true ) {
     if (_bind) {
-      this.bindCanvas( "touchstart", this._mouseDown.bind(this) )
-      this.bindCanvas( "touchend", this._mouseUp.bind(this) )
+      this.bindCanvas( "touchstart", this._mouseDown.bind(this) );
+      this.bindCanvas( "touchend", this._mouseUp.bind(this) );
       this.bindCanvas( "touchmove", this._touchMove.bind(this) );
-      this.bindCanvas( "touchcancel", this._mouseOut.bind(this) )
+      this.bindCanvas( "touchcancel", this._mouseOut.bind(this) );
+      this._hasTouch = true;
     } else {
-      this.unbindCanvas( "touchstart", this._mouseDown.bind(this) )
-      this.unbindCanvas( "touchend", this._mouseUp.bind(this) )
+      this.unbindCanvas( "touchstart", this._mouseDown.bind(this) );
+      this.unbindCanvas( "touchend", this._mouseUp.bind(this) );
       this.unbindCanvas( "touchmove", this._touchMove.bind(this) );
-      this.unbindCanvas( "touchcancel", this._mouseOut.bind(this) )
+      this.unbindCanvas( "touchcancel", this._mouseOut.bind(this) );
+      this._hasTouch = false;
     }
   }
 
@@ -345,14 +354,14 @@ export class CanvasSpace extends Space {
         let c = evt.changedTouches && evt.changedTouches.length > 0
         let px = (c) ? evt.changedTouches.item(0).pageX : 0;
         let py = (c) ? evt.changedTouches.item(0).pageY : 0;
-        v.onTouchAction( type, px, py, evt );
+        v.action( type, px, py, evt );
       }
     } else {
       for (let k in this.players) {
         let v = this.players[k];
         let px = evt.offsetX || evt.layerX;
         let py = evt.offsetY || evt.layerY;
-        v.onMouseAction( type, px, py, evt );
+        v.action( type, px, py, evt );
       }
     }
   }

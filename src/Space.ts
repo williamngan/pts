@@ -7,9 +7,8 @@ type AnimateFunction = ( time?:number, frameTime?:number, currentSpace?:any ) =>
 export interface IPlayer {
   animateID?: string;
   animate:AnimateFunction;
-  onSpaceResize?( p:IPt, evt?:Event ): undefined;
-  onMouseAction?( type:string, px:number, py:number, evt:Event );
-  onTouchAction?( type:string, px:number, py:number, evt:Event );
+  resize?( p:IPt, evt?:Event ): undefined;
+  action?( type:string, px:number, py:number, evt:Event );
 }
 
 interface ISpacePlayers { 
@@ -48,7 +47,7 @@ export abstract class Space {
 
   /**
    * Add an item to this space. An item must define a callback function `animate( time, fps, context )` and will be assigned a property `animateID` automatically. 
-   * An item should also define a callback function `onSpaceResize( w, h, evt )`. 
+   * An item should also define a callback function `resize:( bound, evt )`. 
    * Subclasses of Space may define other callback functions.
    * @param player an IPlayer object with animate function, or simply a function(time, fps, context){}
    */
@@ -60,7 +59,7 @@ export abstract class Space {
 
     this.players[pid] = player;
     player.animateID = pid;
-    if (player.onSpaceResize) player.onSpaceResize( this.bound ); 
+    if (player.resize && this.bound.inited) player.resize( this.bound ); 
 
     // if _refresh is not set, set it to true
     if (this._refresh === undefined) this._refresh = true;

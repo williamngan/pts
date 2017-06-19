@@ -7,11 +7,15 @@ export class Bound implements IPt{
   protected _size:Pt = new Pt();
   protected _topLeft:Pt = new Pt();
   protected _bottomRight:Pt = new Pt();
+  protected _inited = false;
 
   constructor( p1?:IPt, p2?:IPt ) {
-    if (!p2) {
+
+    if (p1) {
       this._size = new Pt(p1);
-    } else if (p1) {
+      this._inited = true;
+    } 
+    if (p1 && p2) {
       this._topLeft = new Pt(p1);
       this._bottomRight = new Pt(p2);
       this._updateSize();
@@ -72,7 +76,7 @@ export class Bound implements IPt{
     this._updateSize();
   }
 
-  public get width():number { return this._size.x; }
+  public get width():number { return (this._size.length > 0) ? this._size.x : 0; }
   public set width( w:number ) {
     this._size.x = w;
     this._updatePosFromTop();
@@ -93,6 +97,8 @@ export class Bound implements IPt{
   public get x():number { return this.topLeft.x; }
   public get y():number { return this.topLeft.y; }
   public get z():number { return this.topLeft.z; }
+
+  public get inited():boolean { return this._inited; }
 
   static fromBoundingRect( rect:ClientRect ) {
     let b = new Bound( new Pt( rect.left||0, rect.top||0 ), new Pt( rect.right||0, rect.bottom||0 ) );

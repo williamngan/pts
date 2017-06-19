@@ -372,9 +372,12 @@ class Bound {
         this._size = new Pt_1.Pt();
         this._topLeft = new Pt_1.Pt();
         this._bottomRight = new Pt_1.Pt();
-        if (!p2) {
+        this._inited = false;
+        if (p1) {
             this._size = new Pt_1.Pt(p1);
-        } else if (p1) {
+            this._inited = true;
+        }
+        if (p1 && p2) {
             this._topLeft = new Pt_1.Pt(p1);
             this._bottomRight = new Pt_1.Pt(p2);
             this._updateSize();
@@ -432,7 +435,7 @@ class Bound {
         this._updateSize();
     }
     get width() {
-        return this._size.x;
+        return this._size.length > 0 ? this._size.x : 0;
     }
     set width(w) {
         this._size.x = w;
@@ -460,6 +463,9 @@ class Bound {
     }
     get z() {
         return this.topLeft.z;
+    }
+    get inited() {
+        return this._inited;
     }
     static fromBoundingRect(rect) {
         let b = new Bound(new Pt_1.Pt(rect.left || 0, rect.top || 0), new Pt_1.Pt(rect.right || 0, rect.bottom || 0));
@@ -1017,7 +1023,7 @@ class Space {
     }
     /**
      * Add an item to this space. An item must define a callback function `animate( time, fps, context )` and will be assigned a property `animateID` automatically.
-     * An item should also define a callback function `onSpaceResize( w, h, evt )`.
+     * An item should also define a callback function `resize:( bound, evt )`.
      * Subclasses of Space may define other callback functions.
      * @param player an IPlayer object with animate function, or simply a function(time, fps, context){}
      */
@@ -1027,7 +1033,7 @@ class Space {
         let pid = this.id + k;
         this.players[pid] = player;
         player.animateID = pid;
-        if (player.onSpaceResize) player.onSpaceResize(this.bound);
+        if (player.resize && this.bound.inited) player.resize(this.bound);
         // if _refresh is not set, set it to true
         if (this._refresh === undefined) this._refresh = true;
         return this;
@@ -1172,6 +1178,8 @@ class CanvasSpace extends Space_1.Space {
         // track mouse dragging
         this._pressed = false;
         this._dragged = false;
+        this._hasMouse = false;
+        this._hasTouch = false;
         this._renderFunc = undefined;
         var _selector = null;
         var _existed = false;
@@ -1232,7 +1240,7 @@ class CanvasSpace extends Space_1.Space {
     _ready(callback) {
         if (!this._container) throw `Cannot initiate #${this.id} element`;
         let b = this._autoResize ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
-        this.resize(Bound_1.Bound.fromBoundingRect(b));
+        if (b) this.resize(Bound_1.Bound.fromBoundingRect(b));
         this.clear(this._bgcolor);
         this._canvas.dispatchEvent(new Event("ready"));
         if (callback) callback(this.bound, this._canvas);
@@ -1246,7 +1254,7 @@ class CanvasSpace extends Space_1.Space {
      */
     setup(opt) {
         if (opt.bgcolor) this._bgcolor = opt.bgcolor;
-        if (opt.resize != undefined) this._autoResize = opt.resize;
+        if (opt.resize != undefined) this.autoResize(opt.resize);
         if (opt.retina !== false) {
             let r1 = window.devicePixelRatio || 1;
             let r2 = this._ctx.webkitBackingStorePixelRatio || this._ctx.mozBackingStorePixelRatio || this._ctx.msBackingStorePixelRatio || this._ctx.oBackingStorePixelRatio || this._ctx.backingStorePixelRatio || 1;
@@ -1271,18 +1279,19 @@ class CanvasSpace extends Space_1.Space {
      * @param evt
      */
     _resizeHandler(evt) {
-        let b = this._container.getBoundingClientRect();
-        this.resize(Bound_1.Bound.fromBoundingRect(b), evt);
+        let b = this._autoResize ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
+        if (b) this.resize(Bound_1.Bound.fromBoundingRect(b), evt);
     }
     /**
      * Set whether the canvas element should resize when its container is resized. Default will auto size
      * @param auto a boolean value indicating if auto size is set. Default is `true`.
      */
     autoResize(auto = true) {
+        this._autoResize = auto;
         if (auto) {
-            window.addEventListener('resize', this._resizeHandler);
+            window.addEventListener('resize', this._resizeHandler.bind(this));
         } else {
-            window.removeEventListener('resize', this._resizeHandler);
+            window.removeEventListener('resize', this._resizeHandler.bind(this));
         }
         return this;
     }
@@ -1299,7 +1308,7 @@ class CanvasSpace extends Space_1.Space {
         return this._container;
     }
     /**
-     * This overrides Space's `resize` function. It's a callback function for window's resize event. Keep track of this with `onSpaceResize(w,h,evt)` callback in your added objects.
+     * This overrides Space's `resize` function. It's a callback function for window's resize event. Keep track of this with `resize: (bound ,evt)` callback in your added objects.
      * @param b a Bound object to resize to
      * @param evt Optionally pass a resize event
      */
@@ -1315,7 +1324,7 @@ class CanvasSpace extends Space_1.Space {
         }
         for (let k in this.players) {
             let p = this.players[k];
-            if (p.onSpaceResize) p.onSpaceResize(this.bound.size, evt);
+            if (p.resize) p.resize(this.bound, evt);
         }
         this.render(this._ctx);
         return this;
@@ -1373,12 +1382,14 @@ class CanvasSpace extends Space_1.Space {
             this.bindCanvas("mouseover", this._mouseOver.bind(this));
             this.bindCanvas("mouseout", this._mouseOut.bind(this));
             this.bindCanvas("mousemove", this._mouseMove.bind(this));
+            this._hasMouse = true;
         } else {
             this.unbindCanvas("mousedown", this._mouseDown.bind(this));
             this.unbindCanvas("mouseup", this._mouseUp.bind(this));
             this.unbindCanvas("mouseover", this._mouseOver.bind(this));
             this.unbindCanvas("mouseout", this._mouseOut.bind(this));
             this.unbindCanvas("mousemove", this._mouseMove.bind(this));
+            this._hasMouse = false;
         }
     }
     /**
@@ -1391,11 +1402,13 @@ class CanvasSpace extends Space_1.Space {
             this.bindCanvas("touchend", this._mouseUp.bind(this));
             this.bindCanvas("touchmove", this._touchMove.bind(this));
             this.bindCanvas("touchcancel", this._mouseOut.bind(this));
+            this._hasTouch = true;
         } else {
             this.unbindCanvas("touchstart", this._mouseDown.bind(this));
             this.unbindCanvas("touchend", this._mouseUp.bind(this));
             this.unbindCanvas("touchmove", this._touchMove.bind(this));
             this.unbindCanvas("touchcancel", this._mouseOut.bind(this));
+            this._hasTouch = false;
         }
     }
     /**
@@ -1425,14 +1438,14 @@ class CanvasSpace extends Space_1.Space {
                 let c = evt.changedTouches && evt.changedTouches.length > 0;
                 let px = c ? evt.changedTouches.item(0).pageX : 0;
                 let py = c ? evt.changedTouches.item(0).pageY : 0;
-                v.onTouchAction(type, px, py, evt);
+                v.action(type, px, py, evt);
             }
         } else {
             for (let k in this.players) {
                 let v = this.players[k];
                 let px = evt.offsetX || evt.layerX;
                 let py = evt.offsetY || evt.layerY;
-                v.onMouseAction(type, px, py, evt);
+                v.action(type, px, py, evt);
             }
         }
     }
