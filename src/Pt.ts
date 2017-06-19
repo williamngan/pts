@@ -1,6 +1,6 @@
 import {Util, Const} from "./Util"
 import {Geom} from "./Op"
-import {LinearAlgebra as LA} from "./LinearAlgebra"
+import {Vec} from "./LinearAlgebra"
 
 
 export interface IPt {
@@ -12,7 +12,7 @@ export interface IPt {
 }
 
 export type PtArrayType = Float64Array;
-let PtBaseArray = Float64Array;
+export var PtBaseArray = Float64Array;
 
 export class Pt extends PtBaseArray implements IPt, Iterable<number> {
 
@@ -93,7 +93,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
 
   $map( fn:(currentValue:number, index:number, array:PtArrayType) => number):Pt {
     let m = this.clone();
-    LA.map( m, fn );
+    Vec.map( m, fn );
     return m;
   }
 
@@ -126,7 +126,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
   }
 
   add(...args): this { 
-    (args.length === 1 && typeof args[0] == "number") ? LA.add( this, args[0] ) : LA.add( this, Util.getArgs(args) );
+    (args.length === 1 && typeof args[0] == "number") ? Vec.add( this, args[0] ) : Vec.add( this, Util.getArgs(args) );
     return this; 
   }
 
@@ -134,7 +134,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
 
 
   subtract(...args): this { 
-    (args.length === 1 && typeof args[0] == "number") ? LA.subtract( this, args[0] ) : LA.subtract( this, Util.getArgs(args) );
+    (args.length === 1 && typeof args[0] == "number") ? Vec.subtract( this, args[0] ) : Vec.subtract( this, Util.getArgs(args) );
     return this; 
   }
 
@@ -142,7 +142,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
 
 
   multiply(...args): this { 
-    (args.length === 1 && typeof args[0] == "number") ? LA.multiply( this, args[0] ) : LA.multiply( this, Util.getArgs(args) );
+    (args.length === 1 && typeof args[0] == "number") ? Vec.multiply( this, args[0] ) : Vec.multiply( this, Util.getArgs(args) );
     return this;
   }
 
@@ -150,7 +150,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
 
 
   divide(...args): this { 
-    (args.length === 1 && typeof args[0] == "number") ? LA.divide( this, args[0] ) : LA.divide( this, Util.getArgs(args) );
+    (args.length === 1 && typeof args[0] == "number") ? Vec.divide( this, args[0] ) : Vec.divide( this, Util.getArgs(args) );
     return this; 
   }
 
@@ -162,9 +162,9 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
   $scale(...args ): Pt { return this.clone().scale(...args) };
   
 
-  magnitudeSq():number {  return LA.dot( this, this ); }
+  magnitudeSq():number {  return Vec.dot( this, this ); }
 
-  magnitude():number { return LA.magnitude( this ); }
+  magnitude():number { return Vec.magnitude( this ); }
 
 
   /**
@@ -172,7 +172,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
    * @param magnitude Optional: if the magnitude is known, pass it as a parameter to avoid duplicate calculation.
    */
   unit( magnitude:number=undefined ):Pt {
-    LA.unit( this, magnitude );
+    Vec.unit( this, magnitude );
     return this;
   }
 
@@ -181,7 +181,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
    */
   $unit( magnitude:number=undefined ):Pt { return this.clone().unit( magnitude ); }
 
-  dot( ...args ):number { return LA.dot( this, Util.getArgs(args) ); }
+  dot( ...args ):number { return Vec.dot( this, Util.getArgs(args) ); }
 
   $cross( ...args ): Pt { 
     let p = Util.getArgs( args );
@@ -201,7 +201,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
    * Absolute values for all values in this pt
    */
   abs():Pt {
-    LA.abs( this );
+    Vec.abs( this );
     return this;
   }
 

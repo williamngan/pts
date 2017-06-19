@@ -123,7 +123,7 @@ export class Geom {
     
     return [pa, pb];
   }
-
+  
 
   /**
    * Generate a sine and cosine lookup table
@@ -143,5 +143,24 @@ export class Geom {
     
     return {sinTable: sin, cosTable: cos, sin: getSin, cos: getCos};
   }
+}
 
+
+
+export class Line {
+
+  static slope( p1:Pt|number[], p2:Pt|number[] ):number {
+    return (p2[0] - p1[0] === 0) ? undefined : (p2[1] - p1[1]) / (p2[0] - p1[0]);
+  }
+
+  static intercept( p1:Pt|number[], p2:Pt|number[] ):{ slope:number, xi:number, yi:number } {
+    if (p2[0] - p1[0] === 0) {
+      return undefined;
+    } else {
+      let m = (p2[1] - p1[1]) / (p2[0] - p1[0]);
+      let c = p1[1] - m * p1[0];
+      return { slope: m, yi: c, xi: (m===0) ? undefined : -c/m };
+    }
+  }
+  
 }

@@ -10,16 +10,17 @@ import * as _Space from "./Space";
 import * as _Util from "./Util";
 
 // A function to switch scope for Pts library. eg, Pts.scope( Pts, window );
-let scope = ( lib:object, sc:object ) => {
+let namespace = ( sc:object ) => {
+  let lib = module.exports;
   for (let k in lib) {    
-    if (k!="scope") {
+    if (k!="namespace") {
       sc[k] = lib[k];
     }
   }
 }
 
 module.exports = {
-  scope,
+  namespace,
   ..._Bound,
   ..._CanvasForm,
   ..._CanvasSpace,

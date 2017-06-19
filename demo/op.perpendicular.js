@@ -1,4 +1,4 @@
-Pts.scope( Pts, window );
+Pts.namespace( window );
 
 var space = new CanvasSpace("#pt").setup({retina: true});
 var form = space.getForm();
@@ -10,16 +10,26 @@ space.add( {
   animate: (time, ftime) => {
     let p = mouse.$subtract( space.center );
     let c = space.center;
+
     let ang = p.angle();
     form.log( Geom.toDegree( ang ) );
 
-    form.stroke("#ccc").line([ c, new Pt( c.x+p.magnitude(), c.y)] );
+    // line to mouse
+    let pm = new Pt( c.x+p.magnitude(), c.y);
+    form.stroke("#ccc").line( [c, pm] );
     form.fill(false).arc( c, 20, 0, ang );
-    
+
+    // line at specific angle
+    let d = p.clone().toAngle( ang + Math.PI );
+    form.stroke("#f99").line( [c, c.$add(d)] );
+
+    // line at angle 0    
     form.stroke("#f00").line( [c, space.center.add(p)] );
-    
+
+    // perpendicular lines
     perpends = Geom.perpendicular( p ).map( (p) => p.$add( c ) );    
     form.stroke("#0f0").line( perpends );
+
   },
   action:(type, px, py) => {
     if (type=="move") {

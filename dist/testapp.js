@@ -75,11 +75,11 @@ var Pts =
 
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const Util_1 = __webpack_require__(2);
+const Util_1 = __webpack_require__(1);
 const Op_1 = __webpack_require__(6);
 const LinearAlgebra_1 = __webpack_require__(5);
-let PtBaseArray = Float64Array;
-class Pt extends PtBaseArray {
+exports.PtBaseArray = Float64Array;
+class Pt extends exports.PtBaseArray {
     /**
      * Create a Pt. If no parameter is provided, this will instantiate a Pt with 2 dimensions [0, 0].
      * Example: `new Pt()`, `new Pt(1,2,3,4,5)`, `new Pt([1,2])`, `new Pt({x:0, y:1})`, `new Pt(pt)`
@@ -89,7 +89,7 @@ class Pt extends PtBaseArray {
         super(args.length > 0 ? Util_1.Util.getArgs(args) : [0, 0]);
     }
     static make(dimensions, defaultValue) {
-        let p = new PtBaseArray(dimensions);
+        let p = new exports.PtBaseArray(dimensions);
         if (defaultValue) p.fill(defaultValue);
         return new Pt(p);
     }
@@ -159,7 +159,7 @@ class Pt extends PtBaseArray {
     }
     $map(fn) {
         let m = this.clone();
-        LinearAlgebra_1.LinearAlgebra.map(m, fn);
+        LinearAlgebra_1.Vec.map(m, fn);
         return m;
     }
     /**
@@ -180,14 +180,14 @@ class Pt extends PtBaseArray {
      */
     $slice(start, end) {
         // seems like new Pt(...).slice will return an error, must use Float64Array
-        let m = new PtBaseArray(this).slice(start, end);
+        let m = new exports.PtBaseArray(this).slice(start, end);
         return new Pt(m);
     }
     $concat(...args) {
         return new Pt(this.toArray().concat(Util_1.Util.getArgs(args)));
     }
     add(...args) {
-        args.length === 1 && typeof args[0] == "number" ? LinearAlgebra_1.LinearAlgebra.add(this, args[0]) : LinearAlgebra_1.LinearAlgebra.add(this, Util_1.Util.getArgs(args));
+        args.length === 1 && typeof args[0] == "number" ? LinearAlgebra_1.Vec.add(this, args[0]) : LinearAlgebra_1.Vec.add(this, Util_1.Util.getArgs(args));
         return this;
     }
     $add(...args) {
@@ -195,7 +195,7 @@ class Pt extends PtBaseArray {
     }
 
     subtract(...args) {
-        args.length === 1 && typeof args[0] == "number" ? LinearAlgebra_1.LinearAlgebra.subtract(this, args[0]) : LinearAlgebra_1.LinearAlgebra.subtract(this, Util_1.Util.getArgs(args));
+        args.length === 1 && typeof args[0] == "number" ? LinearAlgebra_1.Vec.subtract(this, args[0]) : LinearAlgebra_1.Vec.subtract(this, Util_1.Util.getArgs(args));
         return this;
     }
     $subtract(...args) {
@@ -203,7 +203,7 @@ class Pt extends PtBaseArray {
     }
 
     multiply(...args) {
-        args.length === 1 && typeof args[0] == "number" ? LinearAlgebra_1.LinearAlgebra.multiply(this, args[0]) : LinearAlgebra_1.LinearAlgebra.multiply(this, Util_1.Util.getArgs(args));
+        args.length === 1 && typeof args[0] == "number" ? LinearAlgebra_1.Vec.multiply(this, args[0]) : LinearAlgebra_1.Vec.multiply(this, Util_1.Util.getArgs(args));
         return this;
     }
     $multiply(...args) {
@@ -211,7 +211,7 @@ class Pt extends PtBaseArray {
     }
 
     divide(...args) {
-        args.length === 1 && typeof args[0] == "number" ? LinearAlgebra_1.LinearAlgebra.divide(this, args[0]) : LinearAlgebra_1.LinearAlgebra.divide(this, Util_1.Util.getArgs(args));
+        args.length === 1 && typeof args[0] == "number" ? LinearAlgebra_1.Vec.divide(this, args[0]) : LinearAlgebra_1.Vec.divide(this, Util_1.Util.getArgs(args));
         return this;
     }
     $divide(...args) {
@@ -226,17 +226,17 @@ class Pt extends PtBaseArray {
     }
 
     magnitudeSq() {
-        return LinearAlgebra_1.LinearAlgebra.dot(this, this);
+        return LinearAlgebra_1.Vec.dot(this, this);
     }
     magnitude() {
-        return LinearAlgebra_1.LinearAlgebra.magnitude(this);
+        return LinearAlgebra_1.Vec.magnitude(this);
     }
     /**
      * Convert to a unit vector
      * @param magnitude Optional: if the magnitude is known, pass it as a parameter to avoid duplicate calculation.
      */
     unit(magnitude = undefined) {
-        LinearAlgebra_1.LinearAlgebra.unit(this, magnitude);
+        LinearAlgebra_1.Vec.unit(this, magnitude);
         return this;
     }
     /**
@@ -246,7 +246,7 @@ class Pt extends PtBaseArray {
         return this.clone().unit(magnitude);
     }
     dot(...args) {
-        return LinearAlgebra_1.LinearAlgebra.dot(this, Util_1.Util.getArgs(args));
+        return LinearAlgebra_1.Vec.dot(this, Util_1.Util.getArgs(args));
     }
     $cross(...args) {
         let p = Util_1.Util.getArgs(args);
@@ -263,7 +263,7 @@ class Pt extends PtBaseArray {
      * Absolute values for all values in this pt
      */
     abs() {
-        LinearAlgebra_1.LinearAlgebra.abs(this);
+        LinearAlgebra_1.Vec.abs(this);
         return this;
     }
     /**
@@ -359,6 +359,102 @@ exports.Pt = Pt;
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Const = {
+    xy: "xy",
+    yz: "yz",
+    xz: "xz",
+    xyz: "xyz",
+    /* represents identical point or value */
+    identical: 0,
+    /* represents right position or direction */
+    right: 4,
+    /* represents bottom right position or direction */
+    bottom_right: 5,
+    /* represents bottom position or direction */
+    bottom: 6,
+    /* represents bottom left position or direction */
+    bottom_left: 7,
+    /* represents left position or direction */
+    left: 8,
+    /* represents top left position or direction */
+    top_left: 1,
+    /* represents top position or direction */
+    top: 2,
+    /* represents top right position or direction */
+    top_right: 3,
+    /* represents an arbitrary very small number. It is set as 0.0001 here. */
+    epsilon: 0.0001,
+    /* pi radian (180 deg) */
+    pi: Math.PI,
+    /* two pi radian (360deg) */
+    two_pi: 6.283185307179586,
+    /* half pi radian (90deg) */
+    half_pi: 1.5707963267948966,
+    /* pi/4 radian (45deg) */
+    quarter_pi: 0.7853981633974483,
+    /* pi/180: 1 degree in radian */
+    one_degree: 0.017453292519943295,
+    /* multiply this constant with a radian to get a degree */
+    rad_to_deg: 57.29577951308232,
+    /* multiply this constant with a degree to get a radian */
+    deg_to_rad: 0.017453292519943295,
+    /* Gravity acceleration (unit: m/s^2) and gravity force (unit: Newton) on 1kg of mass. */
+    gravity: 9.81,
+    /* 1 Newton: 0.10197 Kilogram-force */
+    newton: 0.10197,
+    /* Gaussian constant (1 / Math.sqrt(2 * Math.PI)) */
+    gaussian: 0.3989422804014327
+};
+class Util {
+    /**
+     * Convert different kinds of parameters (arguments, array, object) into an array of numbers
+     * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
+     */
+    static getArgs(args) {
+        if (args.length < 1) return [];
+        var pos = [];
+        var isArray = Array.isArray(args[0]) || ArrayBuffer.isView(args[0]);
+        // positional arguments: x,y,z,w,...
+        if (typeof args[0] === 'number') {
+            pos = Array.prototype.slice.call(args);
+            // as an object of {x, y?, z?, w?}
+        } else if (typeof args[0] === 'object' && !isArray) {
+            let a = ["x", "y", "z", "w"];
+            let p = args[0];
+            for (let i = 0; i < a.length; i++) {
+                if (p.length && i >= p.length || !(a[i] in p)) break; // check for length and key exist
+                pos.push(p[a[i]]);
+            }
+            // as an array of values
+        } else if (isArray) {
+            pos = [].slice.call(args[0]);
+        }
+        return pos;
+    }
+    /**
+     * Split an array into chunks of sub-array
+     * @param pts an array
+     * @param size chunk size, ie, number of items in a chunk
+     */
+    static split(pts, size) {
+        let count = Math.ceil(pts.length / size);
+        let chunks = [];
+        for (let i = 0; i < count; i++) {
+            chunks.push(pts.slice(i * size, i * size + size));
+        }
+        return chunks;
+    }
+}
+exports.Util = Util;
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -476,102 +572,6 @@ class Bound {
 exports.Bound = Bound;
 
 /***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Const = {
-    xy: "xy",
-    yz: "yz",
-    xz: "xz",
-    xyz: "xyz",
-    /* represents identical point or value */
-    identical: 0,
-    /* represents right position or direction */
-    right: 4,
-    /* represents bottom right position or direction */
-    bottom_right: 5,
-    /* represents bottom position or direction */
-    bottom: 6,
-    /* represents bottom left position or direction */
-    bottom_left: 7,
-    /* represents left position or direction */
-    left: 8,
-    /* represents top left position or direction */
-    top_left: 1,
-    /* represents top position or direction */
-    top: 2,
-    /* represents top right position or direction */
-    top_right: 3,
-    /* represents an arbitrary very small number. It is set as 0.0001 here. */
-    epsilon: 0.0001,
-    /* pi radian (180 deg) */
-    pi: Math.PI,
-    /* two pi radian (360deg) */
-    two_pi: 6.283185307179586,
-    /* half pi radian (90deg) */
-    half_pi: 1.5707963267948966,
-    /* pi/4 radian (45deg) */
-    quarter_pi: 0.7853981633974483,
-    /* pi/180: 1 degree in radian */
-    one_degree: 0.017453292519943295,
-    /* multiply this constant with a radian to get a degree */
-    rad_to_deg: 57.29577951308232,
-    /* multiply this constant with a degree to get a radian */
-    deg_to_rad: 0.017453292519943295,
-    /* Gravity acceleration (unit: m/s^2) and gravity force (unit: Newton) on 1kg of mass. */
-    gravity: 9.81,
-    /* 1 Newton: 0.10197 Kilogram-force */
-    newton: 0.10197,
-    /* Gaussian constant (1 / Math.sqrt(2 * Math.PI)) */
-    gaussian: 0.3989422804014327
-};
-class Util {
-    /**
-     * Convert different kinds of parameters (arguments, array, object) into an array of numbers
-     * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
-     */
-    static getArgs(args) {
-        if (args.length < 1) return [];
-        var pos = [];
-        var isArray = Array.isArray(args[0]) || ArrayBuffer.isView(args[0]);
-        // positional arguments: x,y,z,w,...
-        if (typeof args[0] === 'number') {
-            pos = Array.prototype.slice.call(args);
-            // as an object of {x, y?, z?, w?}
-        } else if (typeof args[0] === 'object' && !isArray) {
-            let a = ["x", "y", "z", "w"];
-            let p = args[0];
-            for (let i = 0; i < a.length; i++) {
-                if (p.length && i >= p.length || !(a[i] in p)) break; // check for length and key exist
-                pos.push(p[a[i]]);
-            }
-            // as an array of values
-        } else if (isArray) {
-            pos = [].slice.call(args[0]);
-        }
-        return pos;
-    }
-    /**
-     * Split an array into chunks of sub-array
-     * @param pts an array
-     * @param size chunk size, ie, number of items in a chunk
-     */
-    static split(pts, size) {
-        let count = Math.ceil(pts.length / size);
-        let chunks = [];
-        for (let i = 0; i < count; i++) {
-            chunks.push(pts.slice(i * size, i * size + size));
-        }
-        return chunks;
-    }
-}
-exports.Util = Util;
-
-/***/ }),
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -580,7 +580,7 @@ exports.Util = Util;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const Form_1 = __webpack_require__(4);
-const Util_1 = __webpack_require__(2);
+const Util_1 = __webpack_require__(1);
 class CanvasForm extends Form_1.Form {
     constructor(space) {
         super();
@@ -797,14 +797,17 @@ exports.Form = Form;
 
 
 Object.defineProperty(exports, "__esModule", { value: true });
-class LinearAlgebra {
+const Util_1 = __webpack_require__(1);
+const Pt_1 = __webpack_require__(0);
+const Op_1 = __webpack_require__(6);
+class Vec {
     static add(a, b) {
         if (typeof b == "number") {
             for (let i = 0, len = a.length; i < len; i++) a[i] += b;
         } else {
             for (let i = 0, len = a.length; i < len; i++) a[i] += b[i] || 0;
         }
-        return LinearAlgebra;
+        return Vec;
     }
     static subtract(a, b) {
         if (typeof b == "number") {
@@ -812,7 +815,7 @@ class LinearAlgebra {
         } else {
             for (let i = 0, len = a.length; i < len; i++) a[i] -= b[i] || 0;
         }
-        return LinearAlgebra;
+        return Vec;
     }
     static multiply(a, b) {
         if (typeof b == "number") {
@@ -820,7 +823,7 @@ class LinearAlgebra {
         } else {
             for (let i = 0, len = a.length; i < len; i++) a[i] *= b[i] || 1;
         }
-        return LinearAlgebra;
+        return Vec;
     }
     static divide(a, b) {
         if (typeof b == "number") {
@@ -828,7 +831,7 @@ class LinearAlgebra {
         } else {
             for (let i = 0, len = a.length; i < len; i++) a[i] /= b[i] || 1;
         }
-        return LinearAlgebra;
+        return Vec;
     }
     static dot(a, b) {
         if (a.length != b.length) throw "Array lengths don't match";
@@ -839,14 +842,14 @@ class LinearAlgebra {
         return d;
     }
     static magnitude(a) {
-        return Math.sqrt(LinearAlgebra.dot(a, a));
+        return Math.sqrt(Vec.dot(a, a));
     }
     static unit(a, magnitude = undefined) {
-        let m = magnitude === undefined ? LinearAlgebra.magnitude(a) : magnitude;
-        return LinearAlgebra.divide(a, m);
+        let m = magnitude === undefined ? Vec.magnitude(a) : magnitude;
+        return Vec.divide(a, m);
     }
     static abs(a) {
-        return LinearAlgebra.map(a, Math.abs);
+        return Vec.map(a, Math.abs);
     }
     static max(a) {
         let m = Number.MIN_VALUE;
@@ -862,10 +865,56 @@ class LinearAlgebra {
         for (let i = 0, len = a.length; i < len; i++) {
             a[i] = fn(a[i], i, a);
         }
-        return LinearAlgebra;
+        return Vec;
     }
 }
-exports.LinearAlgebra = LinearAlgebra;
+exports.Vec = Vec;
+class Mat {
+    static transform2D(pt, m, axis = Util_1.Const.xy) {
+        let v = pt.$take(axis);
+        let x = v.x * m[0][0] + v.y * m[1][0] + m[2][0];
+        let y = v.x * m[0][1] + v.y * m[1][1] + m[2][1];
+        return v.to(x, y);
+    }
+    static scale2DMatrix(x, y) {
+        return [new Pt_1.PtBaseArray([x, 0, 0]), new Pt_1.PtBaseArray([0, y, 0]), new Pt_1.PtBaseArray([0, 0, 1])];
+    }
+    static rotate2DMatrix(cosA, sinA) {
+        return [new Pt_1.PtBaseArray([cosA, sinA, 0]), new Pt_1.PtBaseArray([-sinA, cosA, 0]), new Pt_1.PtBaseArray([0, 0, 1])];
+    }
+    static shear2DMatrix(tanX, tanY) {
+        return [new Pt_1.PtBaseArray([1, tanX, 0]), new Pt_1.PtBaseArray([tanY, 1, 0]), new Pt_1.PtBaseArray([0, 0, 1])];
+    }
+    static translate2DMatrix(x, y) {
+        return [new Pt_1.PtBaseArray([1, 0, 0]), new Pt_1.PtBaseArray([0, 1, 0]), new Pt_1.PtBaseArray([x, y, 1])];
+    }
+    static scaleAt2DMatrix(sx, sy, at) {
+        let m = Mat.scale2DMatrix(sx, sy);
+        m[2][0] = -at[0] * sx + at[0];
+        m[2][1] = -at[1] * sy + at[1];
+        return m;
+    }
+    static rotateAt2DMatrix(cosA, sinA, at) {
+        let m = Mat.rotate2DMatrix(cosA, sinA);
+        m[2][0] = at[0] * (1 - cosA) + at[1] * sinA;
+        m[2][1] = at[1] * (1 - cosA) - at[0] * sinA;
+        return m;
+    }
+    static shearAt2DMatrix(tanX, tanY, at) {
+        let m = Mat.shear2DMatrix(tanX, tanY);
+        m[2][0] = -at[1] * tanY;
+        m[2][1] = -at[0] * tanX;
+        return m;
+    }
+    static reflectAt2DMatrix(p1, p2, at) {
+        let intercept = Op_1.Line.intercept(p1, p2);
+        let ang2 = Math.atan(intercept.slope) * 2;
+        let cosA = Math.cos(ang2);
+        let sinA = Math.sin(ang2);
+        return [new Pt_1.PtBaseArray([cosA, sinA, 0]), new Pt_1.PtBaseArray([sinA, -cosA, 0]), new Pt_1.PtBaseArray([-intercept.yi * sinA, intercept.yi + intercept.yi * cosA, 1])];
+    }
+}
+exports.Mat = Mat;
 
 /***/ }),
 /* 6 */
@@ -875,8 +924,8 @@ exports.LinearAlgebra = LinearAlgebra;
 
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const Util_1 = __webpack_require__(2);
-const Bound_1 = __webpack_require__(1);
+const Util_1 = __webpack_require__(1);
+const Bound_1 = __webpack_require__(2);
 const Pt_1 = __webpack_require__(0);
 class Num {
     static lerp(a, b, t) {
@@ -992,6 +1041,21 @@ class Geom {
     }
 }
 exports.Geom = Geom;
+class Line {
+    static slope(p1, p2) {
+        return p2[0] - p1[0] === 0 ? undefined : (p2[1] - p1[1]) / (p2[0] - p1[0]);
+    }
+    static intercept(p1, p2) {
+        if (p2[0] - p1[0] === 0) {
+            return undefined;
+        } else {
+            let m = (p2[1] - p1[1]) / (p2[0] - p1[0]);
+            let c = p1[1] - m * p1[0];
+            return { slope: m, yi: c, xi: m === 0 ? undefined : -c / m };
+        }
+    }
+}
+exports.Line = Line;
 
 /***/ }),
 /* 7 */
@@ -1001,7 +1065,7 @@ exports.Geom = Geom;
 
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const Bound_1 = __webpack_require__(1);
+const Bound_1 = __webpack_require__(2);
 class Space {
     constructor() {
         this.id = "space";
@@ -1162,7 +1226,7 @@ exports.Space = Space;
 Object.defineProperty(exports, "__esModule", { value: true });
 const Space_1 = __webpack_require__(7);
 const Pt_1 = __webpack_require__(0);
-const Bound_1 = __webpack_require__(1);
+const Bound_1 = __webpack_require__(2);
 const CanvasForm_1 = __webpack_require__(3);
 class CanvasSpace extends Space_1.Space {
     /**
@@ -1554,8 +1618,8 @@ exports.Create = Create;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
-const Util_1 = __webpack_require__(2);
-const Bound_1 = __webpack_require__(1);
+const Util_1 = __webpack_require__(1);
+const Bound_1 = __webpack_require__(2);
 const Create_1 = __webpack_require__(9);
 const CanvasSpace_1 = __webpack_require__(8);
 window["Pt"] = Pt_1.Pt;

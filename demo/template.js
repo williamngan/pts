@@ -1,4 +1,4 @@
-Pts.scope( Pts, window );
+Pts.namespace( window );
 
 var space = new CanvasSpace("#pt").setup({retina: true});
 var form = space.getForm();
