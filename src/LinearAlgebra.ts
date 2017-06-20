@@ -149,14 +149,26 @@ export class Mat {
 
   static reflectAt2DMatrix( p1:PtArrayType|number[], p2:PtArrayType|number[], at:PtArrayType|number[]) {
     let intercept = Line.intercept( p1, p2 );
-    let ang2 = Math.atan( intercept.slope ) * 2;
-    let cosA = Math.cos( ang2 );
-    let sinA = Math.sin( ang2 );
-    return [
-      new PtBaseArray( [cosA, sinA, 0] ),
-      new PtBaseArray( [sinA, -cosA, 0] ),
-      new PtBaseArray( [-intercept.yi*sinA, intercept.yi + intercept.yi*cosA, 1] )
-    ]
+    
+    if (intercept == undefined) {
+      return [
+        new PtBaseArray( [-1, 0, 0] ),
+        new PtBaseArray( [0, 1, 0] ),
+        new PtBaseArray( [at[0]+p1[0], 0, 1] )  
+      ]
+    } else {
+
+      let yi = intercept.yi;
+      let ang2 = Math.atan( intercept.slope ) * 2;
+      let cosA = Math.cos( ang2 );
+      let sinA = Math.sin( ang2 );
+      
+      return [
+        new PtBaseArray( [cosA, sinA, 0] ),
+        new PtBaseArray( [sinA, -cosA, 0] ),
+        new PtBaseArray( [-yi*sinA, yi + yi*cosA, 1] )
+      ]
+    }
   }
 
   

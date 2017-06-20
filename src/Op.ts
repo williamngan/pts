@@ -125,15 +125,59 @@ export class Geom {
     return [pa, pb];
   }
 
-  static rotate2D( pts:Pt[], angle:number, anchor?:Pt, axis?:string) {
+  static rotate2D( ps:Pt|Pt[], angle:number, anchor?:Pt, axis?:string) {
+    let pts = (!Array.isArray(ps)) ? [ps] : ps;
+    let fn = (anchor != undefined) ? Mat.rotateAt2DMatrix : Mat.rotate2DMatrix;
+    let cos = Math.cos(angle);
+    let sin = Math.sin(angle);
+
     for (let i=0, len=pts.length; i<len; i++) {
       let p = (axis !=undefined) ? pts[i].$take( axis ) : pts[i];
-      let fn = (anchor != undefined) ? Mat.rotateAt2DMatrix : Mat.rotate2DMatrix;
-      p.to( Mat.transform2D( p, fn( Math.cos(angle), Math.sin(angle), anchor ) ) );
+      p.to( Mat.transform2D( p, fn( cos, sin, anchor ) ) );
     }
+
     return Geom;
   }
   
+  static scale2D( ps:Pt[], scale:number|number[]|PtArrayType, anchor?:Pt, axis?:string) {
+    let pts = (!Array.isArray(ps)) ? [ps] : ps;
+    let s = (typeof scale == "number") ? [scale, scale] : scale;
+    let fn = (anchor != undefined) ? Mat.scaleAt2DMatrix : Mat.scale2DMatrix;
+    
+    for (let i=0, len=pts.length; i<len; i++) {
+      let p = (axis !=undefined) ? pts[i].$take( axis ) : pts[i];
+      p.to( Mat.transform2D( p, fn( s[0], s[1], anchor ) ) );
+    }
+
+    return Geom;
+  }
+
+  static shear2D( ps:Pt[], scale:number|number[]|PtArrayType, anchor?:Pt, axis?:string) {
+    let pts = (!Array.isArray(ps)) ? [ps] : ps;
+    let s = (typeof scale == "number") ? [scale, scale] : scale;
+    let fn = (anchor != undefined) ? Mat.shearAt2DMatrix : Mat.shear2DMatrix;
+    let tanx = Math.tan( s[0] );
+    let tany = Math.tan( s[1] );
+
+    for (let i=0, len=pts.length; i<len; i++) {
+      let p = (axis !=undefined) ? pts[i].$take( axis ) : pts[i];
+      p.to( Mat.transform2D( p, fn( tanx, tany, anchor ) ) );
+    }
+    
+    return Geom;
+  }
+
+  static reflect2D( ps:Pt[], line:Pt[]|number[][], anchor?:Pt, axis?:string) {
+    let pts = (!Array.isArray(ps)) ? [ps] : ps;
+    
+    for (let i=0, len=pts.length; i<len; i++) {
+      let p = (axis !=undefined) ? pts[i].$take( axis ) : pts[i];
+      console.log( p, Mat.transform2D( p, Mat.reflectAt2DMatrix( line[0], line[1], anchor ) ) );
+      p.to( Mat.transform2D( p, Mat.reflectAt2DMatrix( line[0], line[1], anchor ) ) );
+    }
+
+    return Geom;
+  }
 
   /**
    * Generate a sine and cosine lookup table

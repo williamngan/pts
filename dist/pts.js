@@ -906,10 +906,15 @@ class Mat {
     }
     static reflectAt2DMatrix(p1, p2, at) {
         let intercept = Op_1.Line.intercept(p1, p2);
-        let ang2 = Math.atan(intercept.slope) * 2;
-        let cosA = Math.cos(ang2);
-        let sinA = Math.sin(ang2);
-        return [new Pt_1.PtBaseArray([cosA, sinA, 0]), new Pt_1.PtBaseArray([sinA, -cosA, 0]), new Pt_1.PtBaseArray([-intercept.yi * sinA, intercept.yi + intercept.yi * cosA, 1])];
+        if (intercept == undefined) {
+            return [new Pt_1.PtBaseArray([-1, 0, 0]), new Pt_1.PtBaseArray([0, 1, 0]), new Pt_1.PtBaseArray([at[0] + p1[0], 0, 1])];
+        } else {
+            let yi = intercept.yi;
+            let ang2 = Math.atan(intercept.slope) * 2;
+            let cosA = Math.cos(ang2);
+            let sinA = Math.sin(ang2);
+            return [new Pt_1.PtBaseArray([cosA, sinA, 0]), new Pt_1.PtBaseArray([sinA, -cosA, 0]), new Pt_1.PtBaseArray([-yi * sinA, yi + yi * cosA, 1])];
+        }
     }
 }
 exports.Mat = Mat;
@@ -1023,11 +1028,45 @@ class Geom {
         pb[y] = -p[x];
         return [pa, pb];
     }
-    static rotate2D(pts, angle, anchor, axis) {
+    static rotate2D(ps, angle, anchor, axis) {
+        let pts = !Array.isArray(ps) ? [ps] : ps;
+        let fn = anchor != undefined ? LinearAlgebra_1.Mat.rotateAt2DMatrix : LinearAlgebra_1.Mat.rotate2DMatrix;
+        let cos = Math.cos(angle);
+        let sin = Math.sin(angle);
         for (let i = 0, len = pts.length; i < len; i++) {
             let p = axis != undefined ? pts[i].$take(axis) : pts[i];
-            let fn = anchor != undefined ? LinearAlgebra_1.Mat.rotateAt2DMatrix : LinearAlgebra_1.Mat.rotate2DMatrix;
-            p.to(LinearAlgebra_1.Mat.transform2D(p, fn(Math.cos(angle), Math.sin(angle), anchor)));
+            p.to(LinearAlgebra_1.Mat.transform2D(p, fn(cos, sin, anchor)));
+        }
+        return Geom;
+    }
+    static scale2D(ps, scale, anchor, axis) {
+        let pts = !Array.isArray(ps) ? [ps] : ps;
+        let s = typeof scale == "number" ? [scale, scale] : scale;
+        let fn = anchor != undefined ? LinearAlgebra_1.Mat.scaleAt2DMatrix : LinearAlgebra_1.Mat.scale2DMatrix;
+        for (let i = 0, len = pts.length; i < len; i++) {
+            let p = axis != undefined ? pts[i].$take(axis) : pts[i];
+            p.to(LinearAlgebra_1.Mat.transform2D(p, fn(s[0], s[1], anchor)));
+        }
+        return Geom;
+    }
+    static shear2D(ps, scale, anchor, axis) {
+        let pts = !Array.isArray(ps) ? [ps] : ps;
+        let s = typeof scale == "number" ? [scale, scale] : scale;
+        let fn = anchor != undefined ? LinearAlgebra_1.Mat.shearAt2DMatrix : LinearAlgebra_1.Mat.shear2DMatrix;
+        let tanx = Math.tan(s[0]);
+        let tany = Math.tan(s[1]);
+        for (let i = 0, len = pts.length; i < len; i++) {
+            let p = axis != undefined ? pts[i].$take(axis) : pts[i];
+            p.to(LinearAlgebra_1.Mat.transform2D(p, fn(tanx, tany, anchor)));
+        }
+        return Geom;
+    }
+    static reflect2D(ps, line, anchor, axis) {
+        let pts = !Array.isArray(ps) ? [ps] : ps;
+        for (let i = 0, len = pts.length; i < len; i++) {
+            let p = axis != undefined ? pts[i].$take(axis) : pts[i];
+            console.log(p, LinearAlgebra_1.Mat.transform2D(p, LinearAlgebra_1.Mat.reflectAt2DMatrix(line[0], line[1], anchor)));
+            p.to(LinearAlgebra_1.Mat.transform2D(p, LinearAlgebra_1.Mat.reflectAt2DMatrix(line[0], line[1], anchor)));
         }
         return Geom;
     }
@@ -1252,6 +1291,7 @@ class CanvasSpace extends Space_1.Space {
         this._hasMouse = false;
         this._hasTouch = false;
         this._renderFunc = undefined;
+        this._isReady = false;
         var _selector = null;
         var _existed = false;
         this.id = "pt";
@@ -1310,6 +1350,7 @@ class CanvasSpace extends Space_1.Space {
      */
     _ready(callback) {
         if (!this._container) throw `Cannot initiate #${this.id} element`;
+        this._isReady = true;
         let b = this._autoResize ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
         if (b) this.resize(Bound_1.Bound.fromBoundingRect(b));
         this.clear(this._bgcolor);
@@ -1424,10 +1465,12 @@ class CanvasSpace extends Space_1.Space {
      * @param time current time
      */
     playItems(time) {
-        this._ctx.save();
-        super.playItems(time);
-        this._ctx.restore();
-        this.render(this._ctx);
+        if (this._isReady) {
+            this._ctx.save();
+            super.playItems(time);
+            this._ctx.restore();
+            this.render(this._ctx);
+        }
     }
     /**
      * Bind event listener in canvas element, for events such as mouse events

@@ -32,6 +32,7 @@ export class CanvasSpace extends Space {
   private _hasTouch = false;
   
   private _renderFunc: Function = undefined;
+  private _isReady = false;
 
   /**
    * Create a CanvasSpace which represents a HTML Canvas Space
@@ -113,6 +114,8 @@ export class CanvasSpace extends Space {
    */
   private _ready( callback:Function ) {
     if (!this._container) throw `Cannot initiate #${this.id} element`;
+
+    this._isReady = true;
 
     let b = (this._autoResize) ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
     if (b) this.resize( Bound.fromBoundingRect(b) );
@@ -257,10 +260,12 @@ export class CanvasSpace extends Space {
    * @param time current time
    */
   protected playItems( time: number ) {
-    this._ctx.save();
-    super.playItems( time );
-    this._ctx.restore();
-    this.render( this._ctx );
+    if (this._isReady) {
+      this._ctx.save();
+      super.playItems( time );
+      this._ctx.restore();
+      this.render( this._ctx );
+    }
   }
 
 
