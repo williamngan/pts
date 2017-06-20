@@ -120,6 +120,10 @@ export class CanvasSpace extends Space {
     this.clear( this._bgcolor );
     this._canvas.dispatchEvent( new Event("ready") );
 
+    for (let k in this.players) {
+      if (this.players[k].start) this.players[k].start( this.bound.clone(), this );
+    }
+
     if (callback) callback( this.bound, this._canvas );
   }
 

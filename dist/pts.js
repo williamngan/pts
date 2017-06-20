@@ -797,7 +797,6 @@ exports.Form = Form;
 
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const Util_1 = __webpack_require__(1);
 const Pt_1 = __webpack_require__(0);
 const Op_1 = __webpack_require__(6);
 class Vec {
@@ -870,11 +869,10 @@ class Vec {
 }
 exports.Vec = Vec;
 class Mat {
-    static transform2D(pt, m, axis = Util_1.Const.xy) {
-        let v = pt.$take(axis);
-        let x = v.x * m[0][0] + v.y * m[1][0] + m[2][0];
-        let y = v.x * m[0][1] + v.y * m[1][1] + m[2][1];
-        return v.to(x, y);
+    static transform2D(pt, m) {
+        let x = pt[0] * m[0][0] + pt[1] * m[1][0] + m[2][0];
+        let y = pt[0] * m[0][1] + pt[1] * m[1][1] + m[2][1];
+        return new Pt_1.Pt(x, y);
     }
     static scale2DMatrix(x, y) {
         return [new Pt_1.PtBaseArray([x, 0, 0]), new Pt_1.PtBaseArray([0, y, 0]), new Pt_1.PtBaseArray([0, 0, 1])];
@@ -927,6 +925,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(1);
 const Bound_1 = __webpack_require__(2);
 const Pt_1 = __webpack_require__(0);
+const LinearAlgebra_1 = __webpack_require__(5);
 class Num {
     static lerp(a, b, t) {
         return (1 - t) * a + t * b;
@@ -1023,6 +1022,14 @@ class Geom {
         pb[x] = p[y];
         pb[y] = -p[x];
         return [pa, pb];
+    }
+    static rotate2D(pts, angle, anchor, axis) {
+        for (let i = 0, len = pts.length; i < len; i++) {
+            let p = axis != undefined ? pts[i].$take(axis) : pts[i];
+            let fn = anchor != undefined ? LinearAlgebra_1.Mat.rotateAt2DMatrix : LinearAlgebra_1.Mat.rotate2DMatrix;
+            p.to(LinearAlgebra_1.Mat.transform2D(p, fn(Math.cos(angle), Math.sin(angle), anchor)));
+        }
+        return Geom;
     }
     /**
      * Generate a sine and cosine lookup table
@@ -1307,6 +1314,9 @@ class CanvasSpace extends Space_1.Space {
         if (b) this.resize(Bound_1.Bound.fromBoundingRect(b));
         this.clear(this._bgcolor);
         this._canvas.dispatchEvent(new Event("ready"));
+        for (let k in this.players) {
+            if (this.players[k].start) this.players[k].start(this.bound.clone(), this);
+        }
         if (callback) callback(this.bound, this._canvas);
     }
     /**

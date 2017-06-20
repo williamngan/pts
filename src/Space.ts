@@ -6,9 +6,10 @@ type AnimateFunction = ( time?:number, frameTime?:number, currentSpace?:any ) =>
 
 export interface IPlayer {
   animateID?: string;
-  animate:AnimateFunction;
+  animate?:AnimateFunction;
   resize?( p:IPt, evt?:Event ): undefined;
   action?( type:string, px:number, py:number, evt:Event );
+  start?( bound:Bound, space:Space );
 }
 
 interface ISpacePlayers { 

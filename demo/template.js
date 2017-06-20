@@ -9,6 +9,10 @@ space.add( (time, fps) => {
 
 space.add( {
 
+  start: (bound, space) => {
+
+  },
+
   animate: (time, fps) => {
 
   },

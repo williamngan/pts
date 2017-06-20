@@ -1,6 +1,7 @@
 import {Util, Const} from "./Util";
 import {Bound} from "./Bound";
-import {Pt} from "./Pt";
+import {Pt, PtArrayType} from "./Pt";
+import {Mat} from "./LinearAlgebra";
 
 
 export class Num {
@@ -123,6 +124,15 @@ export class Geom {
     
     return [pa, pb];
   }
+
+  static rotate2D( pts:Pt[], angle:number, anchor?:Pt, axis?:string) {
+    for (let i=0, len=pts.length; i<len; i++) {
+      let p = (axis !=undefined) ? pts[i].$take( axis ) : pts[i];
+      let fn = (anchor != undefined) ? Mat.rotateAt2DMatrix : Mat.rotate2DMatrix;
+      p.to( Mat.transform2D( p, fn( Math.cos(angle), Math.sin(angle), anchor ) ) );
+    }
+    return Geom;
+  }
   
 
   /**
@@ -149,11 +159,11 @@ export class Geom {
 
 export class Line {
 
-  static slope( p1:Pt|number[], p2:Pt|number[] ):number {
+  static slope( p1:PtArrayType|number[], p2:Pt|number[] ):number {
     return (p2[0] - p1[0] === 0) ? undefined : (p2[1] - p1[1]) / (p2[0] - p1[0]);
   }
 
-  static intercept( p1:Pt|number[], p2:Pt|number[] ):{ slope:number, xi:number, yi:number } {
+  static intercept( p1:PtArrayType|number[], p2:PtArrayType|number[] ):{ slope:number, xi:number, yi:number } {
     if (p2[0] - p1[0] === 0) {
       return undefined;
     } else {

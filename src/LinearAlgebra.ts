@@ -87,11 +87,10 @@ export class Vec {
 
 export class Mat {
 
-  static transform2D( pt:Pt, m:PtArrayType[], axis=Const.xy ):Pt {
-    let v = pt.$take( axis );
-    let x = v.x * m[0][0] + v.y * m[1][0] + m[2][0];
-    let y = v.x * m[0][1] + v.y * m[1][1] + m[2][1];
-    return v.to( x, y );
+  static transform2D( pt:PtArrayType|number[], m:PtArrayType[]|number[][] ):Pt {
+    let x = pt[0] * m[0][0] + pt[1] * m[1][0] + m[2][0];
+    let y = pt[0] * m[0][1] + pt[1] * m[1][1] + m[2][1];
+    return new Pt(x, y);
   }
 
   static scale2DMatrix( x:number, y:number ):PtArrayType[] {
@@ -126,7 +125,7 @@ export class Mat {
     ];
   }
 
-  static scaleAt2DMatrix( sx:number, sy:number, at:number[] ):PtArrayType[] {
+  static scaleAt2DMatrix( sx:number, sy:number, at:PtArrayType|number[] ):PtArrayType[] {
     let m = Mat.scale2DMatrix(sx, sy);
     m[2][0] = -at[0]*sx + at[0];
     m[2][1] = -at[1]*sy + at[1];
@@ -134,21 +133,21 @@ export class Mat {
   }
 
 
-  static rotateAt2DMatrix( cosA:number, sinA:number, at:number[] ):PtArrayType[] {
+  static rotateAt2DMatrix( cosA:number, sinA:number, at:PtArrayType|number[] ):PtArrayType[] {
     let m = Mat.rotate2DMatrix(cosA, sinA);
     m[2][0] = at[0]*(1-cosA) + at[1]*sinA;
     m[2][1] = at[1]*(1-cosA)-at[0]*sinA;
     return m;
   }
 
-  static shearAt2DMatrix( tanX:number, tanY:number, at:number[] ):PtArrayType[] {
+  static shearAt2DMatrix( tanX:number, tanY:number, at:PtArrayType|number[] ):PtArrayType[] {
     let m = Mat.shear2DMatrix(tanX, tanY);
     m[2][0] = -at[1]*tanY;
     m[2][1] = -at[0]*tanX;
     return m;
   }
 
-  static reflectAt2DMatrix( p1:number[], p2:number[], at:number[]) {
+  static reflectAt2DMatrix( p1:PtArrayType|number[], p2:PtArrayType|number[], at:PtArrayType|number[]) {
     let intercept = Line.intercept( p1, p2 );
     let ang2 = Math.atan( intercept.slope ) * 2;
     let cosA = Math.cos( ang2 );
