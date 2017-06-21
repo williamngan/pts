@@ -1,5 +1,6 @@
 import {Util, Const} from "./Util"
 import {Geom} from "./Op"
+import {Bound} from "./Bound"
 import {Vec} from "./LinearAlgebra"
 
 
@@ -26,7 +27,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
     super( (args.length>0) ? Util.getArgs(args) : [0,0] );
   }
 
-  static make( dimensions:number, defaultValue:number ):Pt {
+  static make( dimensions:number, defaultValue:number=0 ):Pt {
     let p = new PtBaseArray(dimensions);
     if (defaultValue) p.fill( defaultValue );
     return new Pt( p );
@@ -296,18 +297,33 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
     return ps;
   }
 
+}
 
-  static sum( pts:Pt[] ):Pt {
-    let c = Pt.make( pts[0].length, 0 );
-    for (let i=0, len=pts.length; i<len; i++) {
-      c.add( pts[i] );
+
+export class Group extends Array<Pt> {
+
+
+  clone():Group {
+    let group = new Group();   
+    for (let i=0, len=this.length; i<len; i++) {
+      group.push( this[i].clone() );
     }
-    return c;
+    return group;
   }
 
+  boundingBox():Bound {
+    return Geom.boundingBox( this );
+  }
 
-  static average( pts:Pt[] ):Pt {
-    return Pt.sum( pts ).divide( pts.length );
+  centroid():Pt {
+    return Geom.centroid( this );
+  }
+
+  interpolate( t:number ):Pt {
+    let chunk = this.length-1;
+    let tc = 1/(this.length-1);
+    let idx = Math.floor( t / tc );
+    return Geom.interpolate( this[idx], this[idx+1], (t - idx*tc) * chunk );
   }
 
 }

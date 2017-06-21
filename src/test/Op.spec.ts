@@ -35,6 +35,16 @@ describe('Op: ', function() {
     it('can map value to a new range', function() {
       assert.equal( Num.mapToRange( 0.32, 1, 0, 0, 100), 32 );
     });
+
+    it('can sum a list of Pts', function() {
+      let p = Num.sum( [new Pt(1,3,5,7), new Pt(2,4,6,8), new Pt(5,10,15,20)] );
+      assert.isTrue( p.equals( new Pt(8, 17, 26, 35) ) );
+    });
+
+    it('can average a list of Pts', function() {
+      let p = Num.average( [new Pt(1,3,5,7), new Pt(2,3,8,8), new Pt(5,10,14,21), new Pt(0, 0, 1, 0)] );
+      assert.isTrue( p.equals( new Pt(2, 4, 7, 9) ) );
+    });
   });
 
   describe('Geom: ', function() {

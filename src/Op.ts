@@ -34,6 +34,19 @@ export class Num {
     let max = Math.max(a,b);
     return (n-min) / (max-min);
   }
+
+  static sum( pts:Pt[]|number[][] ):Pt {
+    let c = Pt.make( pts[0].length, 0 );
+    for (let i=0, len=pts.length; i<len; i++) {
+      c.add( pts[i] );
+    }
+    return c;
+  }
+
+
+  static average( pts:Pt[]|number[][] ):Pt {
+    return Num.sum( pts ).divide( pts.length );
+  }
     
   /**  
    * Map a value from one range to another
@@ -84,8 +97,8 @@ export class Geom {
     return new Bound( minPt, maxPt );
   }
 
-  static centroid(pts:Pt[]):Pt {
-    return Pt.average( pts );
+  static centroid( pts:Pt[]|number[][] ):Pt {
+    return Num.average( pts );
   }
 
 
@@ -94,16 +107,17 @@ export class Geom {
    * @param a first Pt
    * @param b second Pt
    * @param t a ratio between 0 to 1
-   * @param returnAsNormalized if true, return the bisector as a unit vector; otherwise, it'll have an interpolated magnitude.
+   * @returns interpolated point as a new Pt
    */
-  static interpolate( a:Pt, b:Pt, t=0.5, returnAsNormalized:boolean = false ) {
-    let ma = a.magnitude();
-    let mb = b.magnitude();
-    let ua = a.$unit( ma );
-    let ub = b.$unit( mb );
-    
-    let bisect = ua.$multiply( 1-t ).add( ub.$multiply( t ) );
-    return (returnAsNormalized) ? bisect : bisect.$multiply( ma*(1-t) + mb*t );
+  static interpolate( a:Pt, b:Pt, t=0.5 ):Pt {
+
+    let len = Math.min(a.length, b.length);
+    let d = Pt.make( len );
+    for (let i=0; i<len; i++) {
+      d[i] = a[i]*(1-t) + b[i]*t
+    }
+    return d;
+
   }
 
   /**

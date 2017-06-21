@@ -196,15 +196,6 @@ describe('Pt: ', () => {
       assert.isTrue( ps[2].equals( new Pt(10, 10, 7) ) && ps.length == 4 );
     });
 
-    it('can sum a list of Pts', function() {
-      let p = Pt.sum( [new Pt(1,3,5,7), new Pt(2,4,6,8), new Pt(5,10,15,20)] );
-      assert.isTrue( p.equals( new Pt(8, 17, 26, 35) ) );
-    });
-
-    it('can average a list of Pts', function() {
-      let p = Pt.average( [new Pt(1,3,5,7), new Pt(2,3,8,8), new Pt(5,10,14,21), new Pt(0, 0, 1, 0)] );
-      assert.isTrue( p.equals( new Pt(2, 4, 7, 9) ) );
-    });
   });
 
 });

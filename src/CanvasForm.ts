@@ -1,5 +1,5 @@
 import {Form} from "./Form";
-import {IPt, Pt} from "./Pt";
+import {IPt, Pt, Group} from "./Pt";
 import {CanvasSpace} from "./CanvasSpace";
 import {Const} from "./Util";
 
