@@ -1,7 +1,7 @@
 import {Util, Const} from "./Util";
 import {Bound} from "./Bound";
-import {Pt, PtArrayType} from "./Pt";
-import {Mat} from "./LinearAlgebra";
+import {Pt, PtArrayType, Group} from "./Pt";
+import {Vec, Mat} from "./LinearAlgebra";
 
 
 export class Num {
@@ -85,7 +85,7 @@ export class Geom {
     return radian * Const.rad_to_deg;
   }
 
-  static boundingBox( pts:Pt[] ):Bound {
+  static boundingBox( pts:Pt[] ):Group {
     let minPt = pts[0].clone().fill( Number.MAX_VALUE );
     let maxPt = pts[0].clone().fill( Number.MIN_VALUE );
     for (let i=0, len=pts.length; i<len; i++) {
@@ -94,7 +94,7 @@ export class Geom {
         if (pts[i][d] > maxPt[d] ) maxPt[d] = pts[i][d];
       }
     }
-    return new Bound( minPt, maxPt );
+    return new Group( minPt, maxPt );
   }
 
   static centroid( pts:Pt[]|number[][] ):Pt {
@@ -186,12 +186,20 @@ export class Geom {
     
     for (let i=0, len=pts.length; i<len; i++) {
       let p = (axis !=undefined) ? pts[i].$take( axis ) : pts[i];
-      console.log( p, Mat.transform2D( p, Mat.reflectAt2DMatrix( line[0], line[1], anchor ) ) );
       p.to( Mat.transform2D( p, Mat.reflectAt2DMatrix( line[0], line[1], anchor ) ) );
     }
 
     return Geom;
   }
+
+
+  static withinBound( pt:PtArrayType|number[], top:PtArrayType|number[], bottom:PtArrayType|number[] ):boolean {
+    for (let i=0, len=Math.min( pt.length, top.length, bottom.length); i<len; i++) {
+      if ( !(pt[i] >= Math.min( top[i], bottom[i] ) && pt[i] <= Math.max( top[i], bottom[i] )) ) return false;
+    }
+    return true;
+  }
+  
 
   /**
    * Generate a sine and cosine lookup table
@@ -217,7 +225,7 @@ export class Geom {
 
 export class Line {
 
-  static slope( p1:PtArrayType|number[], p2:Pt|number[] ):number {
+  static slope( p1:PtArrayType|number[], p2:PtArrayType|number[] ):number {
     return (p2[0] - p1[0] === 0) ? undefined : (p2[1] - p1[1]) / (p2[0] - p1[0]);
   }
 
@@ -229,6 +237,24 @@ export class Line {
       let c = p1[1] - m * p1[0];
       return { slope: m, yi: c, xi: (m===0) ? undefined : -c/m };
     }
+  }
+
+  static collinear( p1:PtArrayType|number[], p2:PtArrayType|number[], p3:PtArrayType|number[] ) {
+    // Use cross product method
+    let a = new Pt(0,0,0).to(p2).$subtract( p1 );
+    let b = new Pt(0,0,0).to(p1).$subtract( p3 );
+    return a.$cross( b ).equals( new Pt(0,0,0) );
+  }
+
+  static perpendicularFromPt( pt:PtArrayType|number[], ln:Pt[], asProjection:boolean=false ):Pt {
+    let a = ln[0].$subtract( ln[1] );
+    let b = ln[1].$subtract( pt );
+    let proj = b.$subtract( a.$project( b ) );
+    return (asProjection) ? proj : proj.$add( pt );
+  }
+
+  static distanceFromPt( pt:PtArrayType|number[], ln:Pt[], asProjection:boolean=false ):number {
+    return Line.perpendicularFromPt( pt, ln, true ).magnitude();
   }
   
 }

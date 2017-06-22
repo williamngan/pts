@@ -184,10 +184,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
 
   dot( ...args ):number { return Vec.dot( this, Util.getArgs(args) ); }
 
-  $cross( ...args ): Pt { 
-    let p = Util.getArgs( args );
-    return new Pt( (this[1]*p[2] - this[2]*p[1]), (this[2]*p[0] - this[0]*p[2]), (this[0]*p[1] - this[1]*p[0]) )
-  }
+  $cross( ...args ): Pt { return Vec.cross( this, Util.getArgs( args ) ); }
 
   $project( p:Pt ):Pt {
     let m = p.magnitude();
@@ -243,7 +240,6 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
    * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
    */
   angleBetween( p:Pt, axis:string|number[]=Const.xy ):number {
-    console.log(  Geom.boundRadian( this.angle(axis) ) - Geom.boundRadian( p.angle(axis) ) );
     return Geom.boundRadian( this.angle(axis) ) - Geom.boundRadian( p.angle(axis) );
   }
 
@@ -257,7 +253,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
 
 
   toString():string {
-    return `Pt(${ this.join(", ")})`
+    return `Pt(${ this.join(",")})`
   }
 
   toArray():number[] {
@@ -302,7 +298,6 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
 
 export class Group extends Array<Pt> {
 
-
   clone():Group {
     let group = new Group();   
     for (let i=0, len=this.length; i<len; i++) {
@@ -311,7 +306,7 @@ export class Group extends Array<Pt> {
     return group;
   }
 
-  boundingBox():Bound {
+  boundingBox():Group {
     return Geom.boundingBox( this );
   }
 
@@ -324,6 +319,15 @@ export class Group extends Array<Pt> {
     let tc = 1/(this.length-1);
     let idx = Math.floor( t / tc );
     return Geom.interpolate( this[idx], this[idx+1], (t - idx*tc) * chunk );
+  }
+
+  sortByDimension( dim:number, desc:boolean=false ):Group {
+    return this.sort( (a, b) => (desc) ? b[dim] - a[dim] : a[dim] - b[dim] );
+  }
+
+
+  toString():string {
+    return "Group[ "+ this.reduce( (p, c) => p+c.toString()+" ", "" )+" ]";
   }
 
 }

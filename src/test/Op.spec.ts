@@ -2,7 +2,7 @@ import chai = require('chai');
 import mocha = require('mocha');
 import {Pt} from '../Pt';
 import {Util} from '../Util';
-import {Num, Geom} from '../Op';
+import {Num, Geom, Line} from '../Op';
 
 var {assert} = chai;
 var {describe, it} = mocha;
@@ -49,13 +49,20 @@ describe('Op: ', function() {
 
   describe('Geom: ', function() {
     
-
     it('can bound angle', function() {
       assert.equal( Geom.boundAngle(-12), 348 );
     });
 
     it('can bound radian', function() {
       assert.equal( Geom.boundRadian(-Math.PI), Math.PI );
+    });
+
+  });
+
+  describe('Line: ', function() {
+    
+    it('can check collinearity up to 3D', function() {
+      assert.isTrue( Line.collinear( [2,4,0], [4,6,2], [6,8,4] ) );
     });
 
   });

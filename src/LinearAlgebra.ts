@@ -50,6 +50,10 @@ export class Vec {
     return d;
   } 
 
+  static cross( a:PtArrayType|number[], b:PtArrayType|number[] ):Pt {
+    return new Pt( (a[1]*b[2] - a[2]*b[1]), (a[2]*b[0] - a[0]*b[2]), (a[0]*b[1] - a[1]*b[0]) );
+  }
+
   static magnitude( a:PtArrayType|number[] ):number {
     return Math.sqrt( Vec.dot( a, a ) );
   }

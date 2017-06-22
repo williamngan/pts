@@ -249,8 +249,7 @@ class Pt extends exports.PtBaseArray {
         return LinearAlgebra_1.Vec.dot(this, Util_1.Util.getArgs(args));
     }
     $cross(...args) {
-        let p = Util_1.Util.getArgs(args);
-        return new Pt(this[1] * p[2] - this[2] * p[1], this[2] * p[0] - this[0] * p[2], this[0] * p[1] - this[1] * p[0]);
+        return LinearAlgebra_1.Vec.cross(this, Util_1.Util.getArgs(args));
     }
     $project(p) {
         let m = p.magnitude();
@@ -299,7 +298,6 @@ class Pt extends exports.PtBaseArray {
      * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
      */
     angleBetween(p, axis = Util_1.Const.xy) {
-        console.log(Op_1.Geom.boundRadian(this.angle(axis)) - Op_1.Geom.boundRadian(p.angle(axis)));
         return Op_1.Geom.boundRadian(this.angle(axis)) - Op_1.Geom.boundRadian(p.angle(axis));
     }
     /**
@@ -310,7 +308,7 @@ class Pt extends exports.PtBaseArray {
         return this.dot(p) == 0;
     }
     toString() {
-        return `Pt(${this.join(", ")})`;
+        return `Pt(${this.join(",")})`;
     }
     toArray() {
         return [].slice.call(this);
@@ -365,6 +363,12 @@ class Group extends Array {
         let tc = 1 / (this.length - 1);
         let idx = Math.floor(t / tc);
         return Op_1.Geom.interpolate(this[idx], this[idx + 1], (t - idx * tc) * chunk);
+    }
+    sortByDimension(dim, desc = false) {
+        return this.sort((a, b) => desc ? b[dim] - a[dim] : a[dim] - b[dim]);
+    }
+    toString() {
+        return "Group[ " + this.reduce((p, c) => p + c.toString() + " ", "") + " ]";
     }
 }
 exports.Group = Group;
@@ -634,6 +638,9 @@ class Vec {
         }
         return d;
     }
+    static cross(a, b) {
+        return new Pt_1.Pt(a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]);
+    }
     static magnitude(a) {
         return Math.sqrt(Vec.dot(a, a));
     }
@@ -722,7 +729,6 @@ exports.Mat = Mat;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(2);
-const Bound_1 = __webpack_require__(1);
 const Pt_1 = __webpack_require__(0);
 const LinearAlgebra_1 = __webpack_require__(3);
 class Num {
@@ -796,7 +802,7 @@ class Geom {
                 if (pts[i][d] > maxPt[d]) maxPt[d] = pts[i][d];
             }
         }
-        return new Bound_1.Bound(minPt, maxPt);
+        return new Pt_1.Group(minPt, maxPt);
     }
     static centroid(pts) {
         return Num.average(pts);
@@ -869,10 +875,15 @@ class Geom {
         let pts = !Array.isArray(ps) ? [ps] : ps;
         for (let i = 0, len = pts.length; i < len; i++) {
             let p = axis != undefined ? pts[i].$take(axis) : pts[i];
-            console.log(p, LinearAlgebra_1.Mat.transform2D(p, LinearAlgebra_1.Mat.reflectAt2DMatrix(line[0], line[1], anchor)));
             p.to(LinearAlgebra_1.Mat.transform2D(p, LinearAlgebra_1.Mat.reflectAt2DMatrix(line[0], line[1], anchor)));
         }
         return Geom;
+    }
+    static withinBound(pt, top, bottom) {
+        for (let i = 0, len = Math.min(pt.length, top.length, bottom.length); i < len; i++) {
+            if (!(pt[i] >= Math.min(top[i], bottom[i]) && pt[i] <= Math.max(top[i], bottom[i]))) return false;
+        }
+        return true;
     }
     /**
      * Generate a sine and cosine lookup table
@@ -903,6 +914,21 @@ class Line {
             let c = p1[1] - m * p1[0];
             return { slope: m, yi: c, xi: m === 0 ? undefined : -c / m };
         }
+    }
+    static collinear(p1, p2, p3) {
+        // Use cross product method
+        let a = new Pt_1.Pt(0, 0, 0).to(p2).$subtract(p1);
+        let b = new Pt_1.Pt(0, 0, 0).to(p1).$subtract(p3);
+        return a.$cross(b).equals(new Pt_1.Pt(0, 0, 0));
+    }
+    static perpendicularFromPt(pt, ln, asProjection = false) {
+        let a = ln[0].$subtract(ln[1]);
+        let b = ln[1].$subtract(pt);
+        let proj = b.$subtract(a.$project(b));
+        return asProjection ? proj : proj.$add(pt);
+    }
+    static distanceFromPt(pt, ln, asProjection = false) {
+        return Line.perpendicularFromPt(pt, ln, true).magnitude();
     }
 }
 exports.Line = Line;
