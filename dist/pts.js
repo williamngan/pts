@@ -504,6 +504,8 @@ exports.Const = {
     yz: "yz",
     xz: "xz",
     xyz: "xyz",
+    horizontal: 0,
+    vertical: 1,
     /* represents identical point or value */
     identical: 0,
     /* represents right position or direction */
@@ -879,9 +881,9 @@ class Geom {
         }
         return Geom;
     }
-    static withinBound(pt, top, bottom) {
-        for (let i = 0, len = Math.min(pt.length, top.length, bottom.length); i < len; i++) {
-            if (!(pt[i] >= Math.min(top[i], bottom[i]) && pt[i] <= Math.max(top[i], bottom[i]))) return false;
+    static withinBound(pt, boundPt1, boundPt2) {
+        for (let i = 0, len = Math.min(pt.length, boundPt1.length, boundPt2.length); i < len; i++) {
+            if (!(pt[i] >= Math.min(boundPt1[i], boundPt2[i]) && pt[i] <= Math.max(boundPt1[i], boundPt2[i]))) return false;
         }
         return true;
     }
@@ -921,6 +923,13 @@ class Line {
         let b = new Pt_1.Pt(0, 0, 0).to(p1).$subtract(p3);
         return a.$cross(b).equals(new Pt_1.Pt(0, 0, 0));
     }
+    /**
+     * Find a Pt on a line that is perpendicular (shortest distance) to a target Pt
+     * @param pt a target Pt
+     * @param ln a group of Pts that defines a line
+     * @param asProjection if true, this returns the projection vector instead. Default is false.
+     * @returns a Pt on the line that is perpendicular to the target Pt, or a projection vector if `asProjection` is true.
+     */
     static perpendicularFromPt(pt, ln, asProjection = false) {
         let a = ln[0].$subtract(ln[1]);
         let b = ln[1].$subtract(pt);
@@ -929,6 +938,54 @@ class Line {
     }
     static distanceFromPt(pt, ln, asProjection = false) {
         return Line.perpendicularFromPt(pt, ln, true).magnitude();
+    }
+    static intersectPath2D(la, lb) {
+        let a = Line.intercept(la[0], la[1]);
+        let b = Line.intercept(lb[0], lb[1]);
+        let pa = la[0];
+        let pb = lb[0];
+        if (a == undefined) {
+            if (b == undefined) return undefined;
+            // one of them is vertical line, while the other is not, so they will intersect
+            let y1 = -b.slope * (pb[0] - pa[0]) + pb[1]; // -slope * x + y
+            return new Pt_1.Pt(pa[0], y1);
+        } else {
+            // diff slope, or b slope is vertical line
+            if (b == undefined) {
+                let y1 = -a.slope * (pa[0] - pb[0]) + pa[1];
+                return new Pt_1.Pt(pb[0], y1);
+            } else if (b.slope != a.slope) {
+                let px = (a.slope * pa[0] - b.slope * pb[0] + pb[1] - pa[1]) / (a.slope - b.slope);
+                let py = a.slope * (px - pa[0]) + pa[1];
+                return new Pt_1.Pt(px, py);
+            } else {
+                if (a.yi == b.yi) {
+                    return new Pt_1.Pt(pa[0], pa[1]);
+                } else {
+                    return undefined;
+                }
+            }
+        }
+    }
+    static intersectLine2D(la, lb) {
+        let pt = Line.intersectPath2D(la, lb);
+        return pt && Geom.withinBound(pt, la[0], la[1]) && Geom.withinBound(pt, lb[0], lb[1]) ? pt : undefined;
+    }
+    /**
+     * Get two intersection points on a standard xy grid
+     * @param pt a target Pt
+     * @param gridPt a Pt on the grid
+     * @returns a group of two intersection points. The first one is horizontal intersection and the second one is vertical intersection.
+     */
+    static intersectGrid2D(pt, gridPt) {
+        return new Pt_1.Group(new Pt_1.Pt(gridPt[0], pt[1]), new Pt_1.Pt(pt[0], gridPt[1]));
+    }
+    static subpoints(ln, num) {
+        let pts = new Pt_1.Group();
+        for (let i = 1; i <= num; i++) {
+            pts.push(Geom.interpolate(ln[0], ln[1], i / (num + 1)));
+        }
+        return pts;
     }
 }
 exports.Line = Line;
@@ -1015,17 +1072,20 @@ class CanvasForm extends Form_1.Form {
         if (this._stroked) this._ctx.stroke();
     }
     point(p, radius = 5, shape = "square") {
-        if (CanvasForm[shape]) {
-            CanvasForm[shape](this._ctx, p, radius);
-            this._paint();
-        } else {
-            console.warn(`${shape} is not a static function of CanvasForm`);
+        if (!CanvasForm[shape]) throw `${shape} is not a static function of CanvasForm`;
+        CanvasForm[shape](this._ctx, p, radius);
+        this._paint();
+        return this;
+    }
+    points(pts, radius = 5, shape = "square") {
+        for (let i = 0, len = pts.length; i < len; i++) {
+            this.point(pts[i], radius, shape);
         }
         return this;
     }
     static circle(ctx, pt, radius) {
         ctx.beginPath();
-        ctx.arc(pt.x, pt.y, radius, 0, Util_1.Const.two_pi, false);
+        ctx.arc(pt[0], pt[1], radius, 0, Util_1.Const.two_pi, false);
         ctx.closePath();
     }
     circle(pts, radius) {
@@ -1034,7 +1094,7 @@ class CanvasForm extends Form_1.Form {
     }
     static arc(ctx, pt, radius, startAngle, endAngle, cc) {
         ctx.beginPath();
-        ctx.arc(pt.x, pt.y, radius, startAngle, endAngle, cc);
+        ctx.arc(pt[0], pt[1], radius, startAngle, endAngle, cc);
     }
     arc(pt, radius, startAngle, endAngle, cc) {
         CanvasForm.arc(this._ctx, pt, radius, startAngle, endAngle, cc);
@@ -1042,10 +1102,10 @@ class CanvasForm extends Form_1.Form {
         return this;
     }
     static square(ctx, pt, halfsize) {
-        let x1 = pt.x - halfsize;
-        let y1 = pt.y - halfsize;
-        let x2 = pt.x + halfsize;
-        let y2 = pt.y + halfsize;
+        let x1 = pt[0] - halfsize;
+        let y1 = pt[1] - halfsize;
+        let x2 = pt[0] + halfsize;
+        let y2 = pt[1] + halfsize;
         // faster than using `rect`
         ctx.beginPath();
         ctx.moveTo(x1, y1);

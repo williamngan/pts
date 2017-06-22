@@ -1,5 +1,5 @@
 import {Form} from "./Form";
-import {IPt, Pt, Group} from "./Pt";
+import {Pt, Group} from "./Pt";
 import {CanvasSpace} from "./CanvasSpace";
 import {Const} from "./Util";
 
@@ -88,45 +88,51 @@ export class CanvasForm extends Form {
     if (this._stroked) this._ctx.stroke();
   }
 
-  point( p:IPt, radius:number=5, shape:string="square" ):this {
-    if (CanvasForm[shape]) {
-      CanvasForm[shape]( this._ctx, p, radius );
-      this._paint();
-    } else {
-      console.warn( `${shape} is not a static function of CanvasForm`);
+  point( p:Pt|number[], radius:number=5, shape:string="square" ):this {
+    if (!CanvasForm[shape]) throw `${shape} is not a static function of CanvasForm`;
+
+    CanvasForm[shape]( this._ctx, p, radius );
+    this._paint();
+    
+    return this;
+  }
+
+  points( pts:Pt[]|number[][], radius:number=5, shape:string="square" ): this {
+    for (let i=0, len=pts.length; i<len; i++) {
+      this.point( pts[i], radius, shape );
     }
     return this;
   }
 
 
-  static circle( ctx:CanvasRenderingContext2D, pt:IPt, radius:number ) {
+  static circle( ctx:CanvasRenderingContext2D, pt:Pt|number[], radius:number ) {
     ctx.beginPath()
-    ctx.arc( pt.x, pt.y, radius, 0, Const.two_pi, false );
+    ctx.arc( pt[0], pt[1], radius, 0, Const.two_pi, false );
     ctx.closePath();
   }
 
-  circle( pts:IPt, radius:number ):this {
+  circle( pts:Pt|number[], radius:number ):this {
     CanvasForm.circle( this._ctx, pts, radius );
     return this;
   }
 
 
-  static arc( ctx:CanvasRenderingContext2D, pt:IPt, radius:number, startAngle:number, endAngle:number, cc?:boolean ) {
+  static arc( ctx:CanvasRenderingContext2D, pt:Pt|number[], radius:number, startAngle:number, endAngle:number, cc?:boolean ) {
     ctx.beginPath()
-    ctx.arc( pt.x, pt.y, radius, startAngle, endAngle, cc );
+    ctx.arc( pt[0], pt[1], radius, startAngle, endAngle, cc );
   }
 
-  arc( pt:IPt, radius:number, startAngle:number, endAngle:number, cc?:boolean ):this {
+  arc( pt:Pt|number[], radius:number, startAngle:number, endAngle:number, cc?:boolean ):this {
     CanvasForm.arc( this._ctx, pt, radius, startAngle, endAngle, cc );
     this._paint();
     return this;
   }
 
-  static square( ctx:CanvasRenderingContext2D, pt:IPt, halfsize:number ) {
-    let x1 = pt.x-halfsize
-    let y1 = pt.y-halfsize
-    let x2 = pt.x+halfsize
-    let y2 = pt.y+halfsize
+  static square( ctx:CanvasRenderingContext2D, pt:Pt|number[], halfsize:number ) {
+    let x1 = pt[0]-halfsize
+    let y1 = pt[1]-halfsize
+    let x2 = pt[0]+halfsize
+    let y2 = pt[1]+halfsize
 
     // faster than using `rect`
     ctx.beginPath()
@@ -175,12 +181,12 @@ export class CanvasForm extends Form {
    * @param `txt` a string of text to draw
    * @param `maxWidth` specify a maximum width per line
    */
-  static text( ctx:CanvasRenderingContext2D, pt:IPt|number[], txt:string, maxWidth?:number ) {
+  static text( ctx:CanvasRenderingContext2D, pt:Pt|number[], txt:string, maxWidth?:number ) {
     ctx.fillText( txt, pt[0], pt[1], maxWidth )
   }
 
 
-  text( pt:IPt|number[], txt:string, maxWidth?:number): this {
+  text( pt:Pt|number[], txt:string, maxWidth?:number): this {
     CanvasForm.text( this._ctx, pt, txt, maxWidth );
     return this;
   }

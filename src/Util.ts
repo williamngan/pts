@@ -4,6 +4,9 @@ export const Const = {
   xz: "xz",
   xyz: "xyz",
 
+  horizontal: 0,
+  vertical: 1,
+
   /* represents identical point or value */
   identical: 0,
 

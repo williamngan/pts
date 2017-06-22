@@ -109,7 +109,7 @@ export class Geom {
    * @param t a ratio between 0 to 1
    * @returns interpolated point as a new Pt
    */
-  static interpolate( a:Pt, b:Pt, t=0.5 ):Pt {
+  static interpolate( a:Pt|number[], b:Pt|number[], t=0.5 ):Pt {
 
     let len = Math.min(a.length, b.length);
     let d = Pt.make( len );
@@ -193,9 +193,9 @@ export class Geom {
   }
 
 
-  static withinBound( pt:PtArrayType|number[], top:PtArrayType|number[], bottom:PtArrayType|number[] ):boolean {
-    for (let i=0, len=Math.min( pt.length, top.length, bottom.length); i<len; i++) {
-      if ( !(pt[i] >= Math.min( top[i], bottom[i] ) && pt[i] <= Math.max( top[i], bottom[i] )) ) return false;
+  static withinBound( pt:PtArrayType|number[], boundPt1:PtArrayType|number[], boundPt2:PtArrayType|number[] ):boolean {
+    for (let i=0, len=Math.min( pt.length, boundPt1.length, boundPt2.length); i<len; i++) {
+      if ( !(pt[i] >= Math.min( boundPt1[i], boundPt2[i] ) && pt[i] <= Math.max( boundPt1[i], boundPt2[i] )) ) return false;
     }
     return true;
   }
@@ -246,6 +246,14 @@ export class Line {
     return a.$cross( b ).equals( new Pt(0,0,0) );
   }
 
+
+  /**
+   * Find a Pt on a line that is perpendicular (shortest distance) to a target Pt
+   * @param pt a target Pt 
+   * @param ln a group of Pts that defines a line
+   * @param asProjection if true, this returns the projection vector instead. Default is false.
+   * @returns a Pt on the line that is perpendicular to the target Pt, or a projection vector if `asProjection` is true.
+   */
   static perpendicularFromPt( pt:PtArrayType|number[], ln:Pt[], asProjection:boolean=false ):Pt {
     let a = ln[0].$subtract( ln[1] );
     let b = ln[1].$subtract( pt );
@@ -256,5 +264,63 @@ export class Line {
   static distanceFromPt( pt:PtArrayType|number[], ln:Pt[], asProjection:boolean=false ):number {
     return Line.perpendicularFromPt( pt, ln, true ).magnitude();
   }
-  
+
+  static intersectPath2D( la:Pt[], lb:Pt[] ):Pt {
+
+    let a = Line.intercept( la[0], la[1] );
+    let b = Line.intercept( lb[0], lb[1] );
+
+    let pa = la[0];
+    let pb = lb[0];
+
+    if (a == undefined) {
+      if (b == undefined) return undefined;
+      // one of them is vertical line, while the other is not, so they will intersect
+      let y1 = -b.slope *  (pb[0] - pa[0]) + pb[1]; // -slope * x + y
+      return new Pt( pa[0], y1 );
+
+    } else {
+      // diff slope, or b slope is vertical line
+      if (b == undefined) {
+        let y1 = -a.slope *  (pa[0] - pb[0]) + pa[1];
+        return new Pt( pb[0], y1 )
+
+      } else if (b.slope != a.slope) {
+        let px = (a.slope * pa[0] - b.slope * pb[0] + pb[1] - pa[1]) / (a.slope - b.slope)
+        let py = a.slope * ( px - pa[0] ) + pa[1]
+        return new Pt( px, py )
+        
+      } else {
+        if (a.yi == b.yi) { // exactly along the same path
+          return new Pt( pa[0], pa[1] );
+        } else {
+          return undefined;
+        }
+      }
+    }
+  }
+
+  static intersectLine2D( la:Pt[], lb:Pt[] ) {
+    let pt = Line.intersectPath2D( la, lb );
+    return ( pt && Geom.withinBound( pt, la[0], la[1] ) && Geom.withinBound(pt, lb[0], lb[1]) ) ? pt : undefined;
+  }
+
+
+  /**
+   * Get two intersection points on a standard xy grid
+   * @param pt a target Pt
+   * @param gridPt a Pt on the grid
+   * @returns a group of two intersection points. The first one is horizontal intersection and the second one is vertical intersection.
+   */
+  static intersectGrid2D( pt:PtArrayType|number[], gridPt:PtArrayType|number[] ):Group {
+    return new Group( new Pt( gridPt[0], pt[1] ), new Pt( pt[0], gridPt[1] ) );
+  }  
+
+  static subpoints( ln:Pt[]|number[][], num:number ) {
+    let pts = new Group();
+    for (let i=1; i<=num; i++) {
+      pts.push( Geom.interpolate( ln[0], ln[1], i/(num+1) ) );
+    }
+    return pts;
+  }
 }
