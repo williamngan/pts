@@ -352,18 +352,41 @@ class Group extends Array {
         }
         return group;
     }
+    static fromArray(list) {
+        return Group.from(list.map(p => new Pt(p)));
+    }
     boundingBox() {
         return Op_1.Geom.boundingBox(this);
     }
     centroid() {
         return Op_1.Geom.centroid(this);
     }
+    /**
+     * Get an interpolated point on the line segments defined by this Group
+     * @param t a value between 0 to 1 usually
+     */
     interpolate(t) {
         let chunk = this.length - 1;
         let tc = 1 / (this.length - 1);
         let idx = Math.floor(t / tc);
         return Op_1.Geom.interpolate(this[idx], this[idx + 1], (t - idx * tc) * chunk);
     }
+    moveBy(pt) {
+        for (let i = 0, len = this.length; i < len; i++) {
+            this[i].add(pt);
+        }
+        return this;
+    }
+    moveTo(pt) {
+        let d = new Pt(pt).subtract(this[0]);
+        this.moveBy(d);
+        return this;
+    }
+    /**
+     * Sort this group's Pts by values in a specific dimension
+     * @param dim dimensional index
+     * @param desc if true, sort descending. Default is false (ascending)
+     */
     sortByDimension(dim, desc = false) {
         return this.sort((a, b) => desc ? b[dim] - a[dim] : a[dim] - b[dim]);
     }

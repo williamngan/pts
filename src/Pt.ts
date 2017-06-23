@@ -306,6 +306,10 @@ export class Group extends Array<Pt> {
     return group;
   }
 
+  static fromArray( list:number[][] ) {
+    return Group.from( list.map( (p) => new Pt(p) ) );
+  }
+
   boundingBox():Group {
     return Geom.boundingBox( this );
   }
@@ -314,6 +318,10 @@ export class Group extends Array<Pt> {
     return Geom.centroid( this );
   }
 
+  /**
+   * Get an interpolated point on the line segments defined by this Group
+   * @param t a value between 0 to 1 usually
+   */
   interpolate( t:number ):Pt {
     let chunk = this.length-1;
     let tc = 1/(this.length-1);
@@ -321,10 +329,27 @@ export class Group extends Array<Pt> {
     return Geom.interpolate( this[idx], this[idx+1], (t - idx*tc) * chunk );
   }
 
-  sortByDimension( dim:number, desc:boolean=false ):Group {
-    return this.sort( (a, b) => (desc) ? b[dim] - a[dim] : a[dim] - b[dim] );
+  moveBy( pt:PtArrayType|number[] ):this {
+    for (let i=0, len=this.length; i<len; i++) {
+      this[i].add( pt );
+    }
+    return this;
   }
 
+  moveTo( pt:PtArrayType|number[] ):this {
+    let d = new Pt(pt).subtract( this[0] );
+    this.moveBy( d );
+    return this; 
+  }
+
+  /**
+   * Sort this group's Pts by values in a specific dimension
+   * @param dim dimensional index
+   * @param desc if true, sort descending. Default is false (ascending)
+   */
+  sortByDimension( dim:number, desc:boolean=false ):this {
+    return this.sort( (a, b) => (desc) ? b[dim] - a[dim] : a[dim] - b[dim] );
+  }
 
   toString():string {
     return "Group[ "+ this.reduce( (p, c) => p+c.toString()+" ", "" )+" ]";
