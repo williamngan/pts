@@ -1,3 +1,5 @@
+import {Pt, PtLike, Group, GroupLike} from "./Pt";
+
 export const Const = {
   xy: "xy",
   yz: "yz",
@@ -111,14 +113,27 @@ export class Util {
    * Split an array into chunks of sub-array
    * @param pts an array 
    * @param size chunk size, ie, number of items in a chunk
+   * @param stride optional parameter to "walk through" the array in steps
    */
-  static split( pts:any[], size:number ):any[][] {
-    let count = Math.ceil(pts.length/size);
+  static split( pts:any[], size:number, stride?:number ):any[][] {
+    let st = stride || size;
     let chunks = [];
-    for (let i=0; i<count; i++) {
-      chunks.push( pts.slice(i*size, i*size+size) );
+    for (let i=0; i<pts.length; i++) {
+      if (i*st+size > pts.length) break;
+      chunks.push( pts.slice(i*st, i*st+size ) );
     }
     return chunks;
+  }
+
+
+  static groupOp( a:GroupLike, b:GroupLike, op:( _a:Pt, _b:Pt) => Pt ):Group {
+    let result = new Group();
+    for (let i=0, len=a.length; i<len; i++) {
+      for (let k=0, len=b.length; k<len; k++) {
+        result.push( op(a[i], b[k]) );
+      }
+    }
+    return result;
   }
 
 

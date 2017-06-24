@@ -8,12 +8,13 @@ export interface IPt {
   x?:number,
   y?:number,
   z?:number,
-  w?:number,
-  props?:any
+  w?:number
 }
 
-export type PtArrayType = Float64Array;
 export var PtBaseArray = Float64Array;
+export type GroupLike = Group | Pt[];
+export type PtLike = Pt | Float64Array | number[];
+
 
 export class Pt extends PtBaseArray implements IPt, Iterable<number> {
 
@@ -49,7 +50,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
     return new Pt( this );
   }
 
-  equals( p:PtArrayType|number[], threshold=0 ):boolean {
+  equals( p:PtLike, threshold=0 ):boolean {
     for (let i=0, len=this.length; i<len; i++) {
       if ( Math.abs(this[i]-p[i]) > threshold ) return false;
     }
@@ -83,8 +84,8 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
    * Apply a series of functions to transform this Pt. The function should have this form: (p:Pt) => Pt
    * @param fns a list of function as array or object {key: function}
    */
-  op( fns: ((p:Pt) => Pt)[] | {[key:string]:(p:Pt) => Pt} ):Pt[] {
-    let results = [];
+  op( fns: ((p:Pt) => Pt)[] | {[key:string]:(p:Pt) => Pt} ):Group {
+    let results = new Group();
     for (var k in fns) {
       results[k] = fns[k]( this );
     }
@@ -92,7 +93,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
   }
 
 
-  $map( fn:(currentValue:number, index:number, array:PtArrayType) => number):Pt {
+  $map( fn:(currentValue:number, index:number, array:PtLike) => number):Pt {
     let m = this.clone();
     Vec.map( m, fn );
     return m;
@@ -262,41 +263,29 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
 
 
   /**
-   * Zip one slice of an array of Pt
-   * @param pts an array of Pt
-   * @param idx index to zip at
-   * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
+   * Given two groups of Pts, and a function that operate on two Pt, return a group of Pts  
+   * @param a a group of Pts
+   * @param b another array of Pts
+   * @param op a function that takes two parameters (p1, p2) and returns a Pt 
    */
-  static zipOne( pts:Pt[],  index:number, defaultValue:number|boolean = false ):Pt {
-    let f = (typeof defaultValue == "boolean") ? "get" : "at"; // choose `get` or `at` function
-    let z = [];
-    for (let i=0, len=pts.length; i<len; i++) {
-      if (pts[i].length-1 < index && defaultValue === false) throw `Index ${index} is out of bounds`;
-      z.push( pts[i][index] || defaultValue );
+  static combine( a:GroupLike, b:GroupLike, op:(p1:Pt, p2:Pt) => Pt ):Group {
+    let result = new Group();
+    for (let i=0, len=a.length; i<len; i++) {
+      for (let k=0, len=b.length; k<len; k++) {
+        result.push( op(a[i], b[k]) );
+      }
     }
-    return new Pt(z);
-  }
-
-
-  /**
-   * Zip an array of Pt. eg, [[1,2],[3,4],[5,6]] => [[1,3,5],[2,4,6]]
-   * @param pts an array of Pt
-   * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
-   * @param useLongest If true, find the longest list of values in a Pt and use its length for zipping. Default is false, which uses the first item's length for zipping.
-   */
-  static zip( pts:Pt[], defaultValue:number|boolean = false, useLongest=false ):Pt[] {
-    let ps = [];
-    let len = (useLongest) ? pts.reduce( (a,b) => Math.max(a, b.length), 0 ) : pts[0].length;
-    for (let i=0; i<len; i++) {
-      ps.push( Pt.zipOne( pts, i, defaultValue ) )
-    }
-    return ps;
+    return result;
   }
 
 }
 
 
 export class Group extends Array<Pt> {
+
+  constructor(...args) {
+    super(...args);
+  }
 
   clone():Group {
     let group = new Group();   
@@ -306,9 +295,20 @@ export class Group extends Array<Pt> {
     return group;
   }
 
-  static fromArray( list:number[][] ) {
-    return Group.from( list.map( (p) => new Pt(p) ) );
+  static fromArray( list:number[][] ):Group {
+    return Group.from( list.map( (p) => new Pt(p) ) ) as Group;
   }
+
+  split( chunkSize:number, stride?:number ):Group[] {
+    let sp = Util.split( this, chunkSize, stride );
+    return sp.map( (g) => Group.fromArray( g ) );
+  }
+  
+  pairs( stride:number=2 ):Group[] { return this.split(2, stride); }
+
+  segments():Group[] { return this.pairs(1); }
+
+
 
   boundingBox():Group {
     return Geom.boundingBox( this );
@@ -329,17 +329,33 @@ export class Group extends Array<Pt> {
     return Geom.interpolate( this[idx], this[idx+1], (t - idx*tc) * chunk );
   }
 
-  moveBy( pt:PtArrayType|number[] ):this {
+  moveBy( ...args ):this {
+    let pt = Util.getArgs( args );
     for (let i=0, len=this.length; i<len; i++) {
       this[i].add( pt );
     }
     return this;
   }
 
-  moveTo( pt:PtArrayType|number[] ):this {
-    let d = new Pt(pt).subtract( this[0] );
+  moveTo( ...args ):this {
+    let d = new Pt( Util.getArgs(args) ).subtract( this[0] );
     this.moveBy( d );
     return this; 
+  }
+
+  scale2D( scale:number, anchor?:Pt, axis?:string ) {    
+    Geom.scale2D( this, scale, anchor || this[0], axis );
+    return this;
+  }
+
+  rotate2D( angle:number, anchor?:Pt, axis?:string ) {    
+    Geom.rotate2D( this, angle, anchor || this[0], axis );
+    return this;
+  }
+
+  shear2D( scale:number|number[]|PtLike, anchor?:Pt, axis?:string) {
+    Geom.shear2D( this, scale, anchor || this[0], axis );
+    return this;
   }
 
   /**
@@ -355,4 +371,53 @@ export class Group extends Array<Pt> {
     return "Group[ "+ this.reduce( (p, c) => p+c.toString()+" ", "" )+" ]";
   }
 
+
+  /**
+   * Zip one slice of an array of Pt
+   * @param pts an array of Pt
+   * @param idx index to zip at
+   * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
+   */
+  zipOne( index:number, defaultValue:number|boolean = false ):Pt {
+    let f = (typeof defaultValue == "boolean") ? "get" : "at"; // choose `get` or `at` function
+    let z = [];
+    for (let i=0, len=this.length; i<len; i++) {
+      if (this[i].length-1 < index && defaultValue === false) throw `Index ${index} is out of bounds`;
+      z.push( this[i][index] || defaultValue );
+    }
+    return new Pt(z);
+  }
+
+
+  /**
+   * Zip an array of Pt. eg, [[1,2],[3,4],[5,6]] => [[1,3,5],[2,4,6]]
+   * @param pts an array of Pt
+   * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
+   * @param useLongest If true, find the longest list of values in a Pt and use its length for zipping. Default is false, which uses the first item's length for zipping.
+   */
+  zip( defaultValue:number|boolean = false, useLongest=false ):Group {
+    let ps = new Group();
+    let len = (useLongest) ? this.reduce( (a,b) => Math.max(a, b.length), 0 ) : this[0].length;
+    for (let i=0; i<len; i++) {
+      ps.push( this.zipOne( i, defaultValue ) )
+    }
+    return ps;
+  }
+
+
+  /**
+   * Given two arrays of Groups, and a function that operate on two Groups, return an array of Group  
+   * @param a an array of Groups, eg [ Group, Group, ... ]
+   * @param b another array of Groups
+   * @param op a function that takes two parameters (group1, group2) and returns a Group
+   */
+  static combine( a:Group[], b:Group[], op:(group1:Group, group2:Group) => Group ):Group[] {
+    let result = [];
+    for (let i=0, len=a.length; i<len; i++) {
+      for (let k=0, len=b.length; k<len; k++) {
+        result.push( op(a[i], b[k]) );
+      }
+    }
+    return result;
+  }
 }

@@ -75,7 +75,7 @@ var Pts =
 
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const Util_1 = __webpack_require__(2);
+const Util_1 = __webpack_require__(1);
 const Op_1 = __webpack_require__(4);
 const LinearAlgebra_1 = __webpack_require__(3);
 exports.PtBaseArray = Float64Array;
@@ -151,7 +151,7 @@ class Pt extends exports.PtBaseArray {
      * @param fns a list of function as array or object {key: function}
      */
     op(fns) {
-        let results = [];
+        let results = new Group();
         for (var k in fns) {
             results[k] = fns[k](this);
         }
@@ -314,37 +314,26 @@ class Pt extends exports.PtBaseArray {
         return [].slice.call(this);
     }
     /**
-     * Zip one slice of an array of Pt
-     * @param pts an array of Pt
-     * @param idx index to zip at
-     * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
+     * Given two groups of Pts, and a function that operate on two Pt, return a group of Pts
+     * @param a a group of Pts
+     * @param b another array of Pts
+     * @param op a function that takes two parameters (p1, p2) and returns a Pt
      */
-    static zipOne(pts, index, defaultValue = false) {
-        let f = typeof defaultValue == "boolean" ? "get" : "at"; // choose `get` or `at` function
-        let z = [];
-        for (let i = 0, len = pts.length; i < len; i++) {
-            if (pts[i].length - 1 < index && defaultValue === false) throw `Index ${index} is out of bounds`;
-            z.push(pts[i][index] || defaultValue);
+    static combine(a, b, op) {
+        let result = new Group();
+        for (let i = 0, len = a.length; i < len; i++) {
+            for (let k = 0, len = b.length; k < len; k++) {
+                result.push(op(a[i], b[k]));
+            }
         }
-        return new Pt(z);
-    }
-    /**
-     * Zip an array of Pt. eg, [[1,2],[3,4],[5,6]] => [[1,3,5],[2,4,6]]
-     * @param pts an array of Pt
-     * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
-     * @param useLongest If true, find the longest list of values in a Pt and use its length for zipping. Default is false, which uses the first item's length for zipping.
-     */
-    static zip(pts, defaultValue = false, useLongest = false) {
-        let ps = [];
-        let len = useLongest ? pts.reduce((a, b) => Math.max(a, b.length), 0) : pts[0].length;
-        for (let i = 0; i < len; i++) {
-            ps.push(Pt.zipOne(pts, i, defaultValue));
-        }
-        return ps;
+        return result;
     }
 }
 exports.Pt = Pt;
 class Group extends Array {
+    constructor(...args) {
+        super(...args);
+    }
     clone() {
         let group = new Group();
         for (let i = 0, len = this.length; i < len; i++) {
@@ -354,6 +343,16 @@ class Group extends Array {
     }
     static fromArray(list) {
         return Group.from(list.map(p => new Pt(p)));
+    }
+    split(chunkSize, stride) {
+        let sp = Util_1.Util.split(this, chunkSize, stride);
+        return sp.map(g => Group.fromArray(g));
+    }
+    pairs(stride = 2) {
+        return this.split(2, stride);
+    }
+    segments() {
+        return this.pairs(1);
     }
     boundingBox() {
         return Op_1.Geom.boundingBox(this);
@@ -371,15 +370,28 @@ class Group extends Array {
         let idx = Math.floor(t / tc);
         return Op_1.Geom.interpolate(this[idx], this[idx + 1], (t - idx * tc) * chunk);
     }
-    moveBy(pt) {
+    moveBy(...args) {
+        let pt = Util_1.Util.getArgs(args);
         for (let i = 0, len = this.length; i < len; i++) {
             this[i].add(pt);
         }
         return this;
     }
-    moveTo(pt) {
-        let d = new Pt(pt).subtract(this[0]);
+    moveTo(...args) {
+        let d = new Pt(Util_1.Util.getArgs(args)).subtract(this[0]);
         this.moveBy(d);
+        return this;
+    }
+    scale2D(scale, anchor, axis) {
+        Op_1.Geom.scale2D(this, scale, anchor || this[0], axis);
+        return this;
+    }
+    rotate2D(angle, anchor, axis) {
+        Op_1.Geom.rotate2D(this, angle, anchor || this[0], axis);
+        return this;
+    }
+    shear2D(scale, anchor, axis) {
+        Op_1.Geom.shear2D(this, scale, anchor || this[0], axis);
         return this;
     }
     /**
@@ -393,11 +405,165 @@ class Group extends Array {
     toString() {
         return "Group[ " + this.reduce((p, c) => p + c.toString() + " ", "") + " ]";
     }
+    /**
+     * Zip one slice of an array of Pt
+     * @param pts an array of Pt
+     * @param idx index to zip at
+     * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
+     */
+    zipOne(index, defaultValue = false) {
+        let f = typeof defaultValue == "boolean" ? "get" : "at"; // choose `get` or `at` function
+        let z = [];
+        for (let i = 0, len = this.length; i < len; i++) {
+            if (this[i].length - 1 < index && defaultValue === false) throw `Index ${index} is out of bounds`;
+            z.push(this[i][index] || defaultValue);
+        }
+        return new Pt(z);
+    }
+    /**
+     * Zip an array of Pt. eg, [[1,2],[3,4],[5,6]] => [[1,3,5],[2,4,6]]
+     * @param pts an array of Pt
+     * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
+     * @param useLongest If true, find the longest list of values in a Pt and use its length for zipping. Default is false, which uses the first item's length for zipping.
+     */
+    zip(defaultValue = false, useLongest = false) {
+        let ps = new Group();
+        let len = useLongest ? this.reduce((a, b) => Math.max(a, b.length), 0) : this[0].length;
+        for (let i = 0; i < len; i++) {
+            ps.push(this.zipOne(i, defaultValue));
+        }
+        return ps;
+    }
+    /**
+     * Given two arrays of Groups, and a function that operate on two Groups, return an array of Group
+     * @param a an array of Groups, eg [ Group, Group, ... ]
+     * @param b another array of Groups
+     * @param op a function that takes two parameters (group1, group2) and returns a Group
+     */
+    static combine(a, b, op) {
+        let result = [];
+        for (let i = 0, len = a.length; i < len; i++) {
+            for (let k = 0, len = b.length; k < len; k++) {
+                result.push(op(a[i], b[k]));
+            }
+        }
+        return result;
+    }
 }
 exports.Group = Group;
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const Pt_1 = __webpack_require__(0);
+exports.Const = {
+    xy: "xy",
+    yz: "yz",
+    xz: "xz",
+    xyz: "xyz",
+    horizontal: 0,
+    vertical: 1,
+    /* represents identical point or value */
+    identical: 0,
+    /* represents right position or direction */
+    right: 4,
+    /* represents bottom right position or direction */
+    bottom_right: 5,
+    /* represents bottom position or direction */
+    bottom: 6,
+    /* represents bottom left position or direction */
+    bottom_left: 7,
+    /* represents left position or direction */
+    left: 8,
+    /* represents top left position or direction */
+    top_left: 1,
+    /* represents top position or direction */
+    top: 2,
+    /* represents top right position or direction */
+    top_right: 3,
+    /* represents an arbitrary very small number. It is set as 0.0001 here. */
+    epsilon: 0.0001,
+    /* pi radian (180 deg) */
+    pi: Math.PI,
+    /* two pi radian (360deg) */
+    two_pi: 6.283185307179586,
+    /* half pi radian (90deg) */
+    half_pi: 1.5707963267948966,
+    /* pi/4 radian (45deg) */
+    quarter_pi: 0.7853981633974483,
+    /* pi/180: 1 degree in radian */
+    one_degree: 0.017453292519943295,
+    /* multiply this constant with a radian to get a degree */
+    rad_to_deg: 57.29577951308232,
+    /* multiply this constant with a degree to get a radian */
+    deg_to_rad: 0.017453292519943295,
+    /* Gravity acceleration (unit: m/s^2) and gravity force (unit: Newton) on 1kg of mass. */
+    gravity: 9.81,
+    /* 1 Newton: 0.10197 Kilogram-force */
+    newton: 0.10197,
+    /* Gaussian constant (1 / Math.sqrt(2 * Math.PI)) */
+    gaussian: 0.3989422804014327
+};
+class Util {
+    /**
+     * Convert different kinds of parameters (arguments, array, object) into an array of numbers
+     * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
+     */
+    static getArgs(args) {
+        if (args.length < 1) return [];
+        var pos = [];
+        var isArray = Array.isArray(args[0]) || ArrayBuffer.isView(args[0]);
+        // positional arguments: x,y,z,w,...
+        if (typeof args[0] === 'number') {
+            pos = Array.prototype.slice.call(args);
+            // as an object of {x, y?, z?, w?}
+        } else if (typeof args[0] === 'object' && !isArray) {
+            let a = ["x", "y", "z", "w"];
+            let p = args[0];
+            for (let i = 0; i < a.length; i++) {
+                if (p.length && i >= p.length || !(a[i] in p)) break; // check for length and key exist
+                pos.push(p[a[i]]);
+            }
+            // as an array of values
+        } else if (isArray) {
+            pos = [].slice.call(args[0]);
+        }
+        return pos;
+    }
+    /**
+     * Split an array into chunks of sub-array
+     * @param pts an array
+     * @param size chunk size, ie, number of items in a chunk
+     * @param stride optional parameter to "walk through" the array in steps
+     */
+    static split(pts, size, stride) {
+        let st = stride || size;
+        let chunks = [];
+        for (let i = 0; i < pts.length; i++) {
+            if (i * st + size > pts.length) break;
+            chunks.push(pts.slice(i * st, i * st + size));
+        }
+        return chunks;
+    }
+    static groupOp(a, b, op) {
+        let result = new Pt_1.Group();
+        for (let i = 0, len = a.length; i < len; i++) {
+            for (let k = 0, len = b.length; k < len; k++) {
+                result.push(op(a[i], b[k]));
+            }
+        }
+        return result;
+    }
+}
+exports.Util = Util;
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -515,104 +681,6 @@ class Bound {
 exports.Bound = Bound;
 
 /***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Const = {
-    xy: "xy",
-    yz: "yz",
-    xz: "xz",
-    xyz: "xyz",
-    horizontal: 0,
-    vertical: 1,
-    /* represents identical point or value */
-    identical: 0,
-    /* represents right position or direction */
-    right: 4,
-    /* represents bottom right position or direction */
-    bottom_right: 5,
-    /* represents bottom position or direction */
-    bottom: 6,
-    /* represents bottom left position or direction */
-    bottom_left: 7,
-    /* represents left position or direction */
-    left: 8,
-    /* represents top left position or direction */
-    top_left: 1,
-    /* represents top position or direction */
-    top: 2,
-    /* represents top right position or direction */
-    top_right: 3,
-    /* represents an arbitrary very small number. It is set as 0.0001 here. */
-    epsilon: 0.0001,
-    /* pi radian (180 deg) */
-    pi: Math.PI,
-    /* two pi radian (360deg) */
-    two_pi: 6.283185307179586,
-    /* half pi radian (90deg) */
-    half_pi: 1.5707963267948966,
-    /* pi/4 radian (45deg) */
-    quarter_pi: 0.7853981633974483,
-    /* pi/180: 1 degree in radian */
-    one_degree: 0.017453292519943295,
-    /* multiply this constant with a radian to get a degree */
-    rad_to_deg: 57.29577951308232,
-    /* multiply this constant with a degree to get a radian */
-    deg_to_rad: 0.017453292519943295,
-    /* Gravity acceleration (unit: m/s^2) and gravity force (unit: Newton) on 1kg of mass. */
-    gravity: 9.81,
-    /* 1 Newton: 0.10197 Kilogram-force */
-    newton: 0.10197,
-    /* Gaussian constant (1 / Math.sqrt(2 * Math.PI)) */
-    gaussian: 0.3989422804014327
-};
-class Util {
-    /**
-     * Convert different kinds of parameters (arguments, array, object) into an array of numbers
-     * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
-     */
-    static getArgs(args) {
-        if (args.length < 1) return [];
-        var pos = [];
-        var isArray = Array.isArray(args[0]) || ArrayBuffer.isView(args[0]);
-        // positional arguments: x,y,z,w,...
-        if (typeof args[0] === 'number') {
-            pos = Array.prototype.slice.call(args);
-            // as an object of {x, y?, z?, w?}
-        } else if (typeof args[0] === 'object' && !isArray) {
-            let a = ["x", "y", "z", "w"];
-            let p = args[0];
-            for (let i = 0; i < a.length; i++) {
-                if (p.length && i >= p.length || !(a[i] in p)) break; // check for length and key exist
-                pos.push(p[a[i]]);
-            }
-            // as an array of values
-        } else if (isArray) {
-            pos = [].slice.call(args[0]);
-        }
-        return pos;
-    }
-    /**
-     * Split an array into chunks of sub-array
-     * @param pts an array
-     * @param size chunk size, ie, number of items in a chunk
-     */
-    static split(pts, size) {
-        let count = Math.ceil(pts.length / size);
-        let chunks = [];
-        for (let i = 0; i < count; i++) {
-            chunks.push(pts.slice(i * size, i * size + size));
-        }
-        return chunks;
-    }
-}
-exports.Util = Util;
-
-/***/ }),
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -701,16 +769,16 @@ class Mat {
         return new Pt_1.Pt(x, y);
     }
     static scale2DMatrix(x, y) {
-        return [new Pt_1.PtBaseArray([x, 0, 0]), new Pt_1.PtBaseArray([0, y, 0]), new Pt_1.PtBaseArray([0, 0, 1])];
+        return new Pt_1.Group(new Pt_1.Pt(x, 0, 0), new Pt_1.Pt(0, y, 0), new Pt_1.Pt(0, 0, 1));
     }
     static rotate2DMatrix(cosA, sinA) {
-        return [new Pt_1.PtBaseArray([cosA, sinA, 0]), new Pt_1.PtBaseArray([-sinA, cosA, 0]), new Pt_1.PtBaseArray([0, 0, 1])];
+        return new Pt_1.Group(new Pt_1.Pt(cosA, sinA, 0), new Pt_1.Pt(-sinA, cosA, 0), new Pt_1.Pt(0, 0, 1));
     }
     static shear2DMatrix(tanX, tanY) {
-        return [new Pt_1.PtBaseArray([1, tanX, 0]), new Pt_1.PtBaseArray([tanY, 1, 0]), new Pt_1.PtBaseArray([0, 0, 1])];
+        return new Pt_1.Group(new Pt_1.Pt(1, tanX, 0), new Pt_1.Pt(tanY, 1, 0), new Pt_1.Pt(0, 0, 1));
     }
     static translate2DMatrix(x, y) {
-        return [new Pt_1.PtBaseArray([1, 0, 0]), new Pt_1.PtBaseArray([0, 1, 0]), new Pt_1.PtBaseArray([x, y, 1])];
+        return new Pt_1.Group(new Pt_1.Pt(1, 0, 0), new Pt_1.Pt(0, 1, 0), new Pt_1.Pt(x, y, 1));
     }
     static scaleAt2DMatrix(sx, sy, at) {
         let m = Mat.scale2DMatrix(sx, sy);
@@ -733,13 +801,13 @@ class Mat {
     static reflectAt2DMatrix(p1, p2, at) {
         let intercept = Op_1.Line.intercept(p1, p2);
         if (intercept == undefined) {
-            return [new Pt_1.PtBaseArray([-1, 0, 0]), new Pt_1.PtBaseArray([0, 1, 0]), new Pt_1.PtBaseArray([at[0] + p1[0], 0, 1])];
+            return [new Pt_1.Pt([-1, 0, 0]), new Pt_1.Pt([0, 1, 0]), new Pt_1.Pt([at[0] + p1[0], 0, 1])];
         } else {
             let yi = intercept.yi;
             let ang2 = Math.atan(intercept.slope) * 2;
             let cosA = Math.cos(ang2);
             let sinA = Math.sin(ang2);
-            return [new Pt_1.PtBaseArray([cosA, sinA, 0]), new Pt_1.PtBaseArray([sinA, -cosA, 0]), new Pt_1.PtBaseArray([-yi * sinA, yi + yi * cosA, 1])];
+            return [new Pt_1.Pt([cosA, sinA, 0]), new Pt_1.Pt([sinA, -cosA, 0]), new Pt_1.Pt([-yi * sinA, yi + yi * cosA, 1])];
         }
     }
 }
@@ -753,7 +821,7 @@ exports.Mat = Mat;
 
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const Util_1 = __webpack_require__(2);
+const Util_1 = __webpack_require__(1);
 const Pt_1 = __webpack_require__(0);
 const LinearAlgebra_1 = __webpack_require__(3);
 class Num {
@@ -861,7 +929,7 @@ class Geom {
         let pb = p.clone();
         pb[x] = p[y];
         pb[y] = -p[x];
-        return [pa, pb];
+        return new Pt_1.Group(pa, pb);
     }
     static rotate2D(ps, angle, anchor, axis) {
         let pts = !Array.isArray(ps) ? [ps] : ps;
@@ -994,6 +1062,10 @@ class Line {
         let pt = Line.intersectPath2D(la, lb);
         return pt && Geom.withinBound(pt, la[0], la[1]) && Geom.withinBound(pt, lb[0], lb[1]) ? pt : undefined;
     }
+    static intersectLineWithPath2D(line, path) {
+        let pt = Line.intersectPath2D(line, path);
+        return pt && Geom.withinBound(pt, line[0], line[1]) ? pt : undefined;
+    }
     /**
      * Get two intersection points on a standard xy grid
      * @param pt a target Pt
@@ -1012,6 +1084,23 @@ class Line {
     }
 }
 exports.Line = Line;
+class Rectangle {
+    static fromTopLeft(topLeft, width, height, depth = 0) {
+        return new Pt_1.Group(new Pt_1.Pt(topLeft), new Pt_1.Pt(topLeft).add(width, height));
+    }
+    static fromCenter(center, width, height, depth = 0) {
+        let half = [width / 2, height / 2];
+        return new Pt_1.Group(new Pt_1.Pt(center).subtract(half), new Pt_1.Pt(center).add(half));
+    }
+    static sides(pts) {
+        let p0 = pts[0].clone();
+        let p2 = pts[1].clone();
+        let p1 = pts[0].clone().to(p0.x, p2.y);
+        let p3 = pts[0].clone().to(p2.x, p0.y);
+        return [new Pt_1.Group(p0, p1), new Pt_1.Group(p1, p2), new Pt_1.Group(p2, p3), new Pt_1.Group(p3, p0)];
+    }
+}
+exports.Rectangle = Rectangle;
 
 /***/ }),
 /* 5 */
@@ -1022,7 +1111,7 @@ exports.Line = Line;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const Form_1 = __webpack_require__(6);
-const Util_1 = __webpack_require__(2);
+const Util_1 = __webpack_require__(1);
 class CanvasForm extends Form_1.Form {
     constructor(space) {
         super();
@@ -1242,7 +1331,7 @@ exports.Form = Form;
 
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const Bound_1 = __webpack_require__(1);
+const Bound_1 = __webpack_require__(2);
 class Space {
     constructor() {
         this.id = "space";
@@ -1403,7 +1492,7 @@ exports.Space = Space;
 Object.defineProperty(exports, "__esModule", { value: true });
 const Space_1 = __webpack_require__(7);
 const Pt_1 = __webpack_require__(0);
-const Bound_1 = __webpack_require__(1);
+const Bound_1 = __webpack_require__(2);
 const CanvasForm_1 = __webpack_require__(5);
 class CanvasSpace extends Space_1.Space {
     /**
@@ -1802,8 +1891,8 @@ exports.Create = Create;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
-const Util_1 = __webpack_require__(2);
-const Bound_1 = __webpack_require__(1);
+const Util_1 = __webpack_require__(1);
+const Bound_1 = __webpack_require__(2);
 const Create_1 = __webpack_require__(9);
 const CanvasSpace_1 = __webpack_require__(8);
 window["Pt"] = Pt_1.Pt;
