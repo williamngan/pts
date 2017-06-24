@@ -75,14 +75,16 @@ describe('Pt: ', () => {
     });
 
     it('can apply operations with op', () => {
-      let f1 = (p:Pt) => p.$add(1);
-      let f2 = (p:Pt) => p.$multiply(2);
+      let f1 = (a:Pt):Pt => a.$add(1);
+      let f2 = (b:Pt, n:number):Pt => p.$multiply(n);
       
       let p = new Pt(3,4,5);
-      let r1 = p.op([f1, f2]);
-      let r2 = r1[1].op({triple: (p:Pt) => p.$multiply(3) }); 
+      let pf1 = p.op( f1 );
+      let pf2 = pf1().op( f2 );
+      let r1 = pf2(2);
+      let r2 = r1.op( (p:Pt) => p.$multiply(3) ); 
 
-      assert.isTrue( r2["triple"].equals( new Pt(18, 24, 30) ) );
+      assert.isTrue( r2().equals( new Pt(18, 24, 30) ) );
     });
 
     it('can map to a function', () => {
@@ -128,7 +130,7 @@ describe('Pt: ', () => {
 
     it('can get a normalized unit vector', () => {
       let p = new Pt(123,3453,293);
-      assert.equal( p.unit().magnitude(), 1 );
+      assert.isTrue( Math.abs(p.unit().magnitude()-1) < 0.00001 );
     })
 
     it('can calculate dot product', () => {

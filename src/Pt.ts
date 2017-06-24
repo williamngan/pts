@@ -11,9 +11,9 @@ export interface IPt {
   w?:number
 }
 
-export var PtBaseArray = Float64Array;
+export var PtBaseArray = Float32Array;
 export type GroupLike = Group | Pt[];
-export type PtLike = Pt | Float64Array | number[];
+export type PtLike = Pt | Float32Array | number[];
 
 
 export class Pt extends PtBaseArray implements IPt, Iterable<number> {
@@ -81,15 +81,30 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
   }
 
   /**
-   * Apply a series of functions to transform this Pt. The function should have this form: (p:Pt) => Pt
-   * @param fns a list of function as array or object {key: function}
+   * Create an operation using this Pt, passing this Pt into a custom function's first parameter
+   * For example: `let myOp = pt.op( fn ); let result = myOp( [1,2,3] );`
+   * @param fn any function that takes a Pt as its first parameter
+   * @returns a resulting function that takes other parameters required in `fn`
    */
-  op( fns: ((p:Pt) => Pt)[] | {[key:string]:(p:Pt) => Pt} ):Group {
-    let results = new Group();
-    for (var k in fns) {
-      results[k] = fns[k]( this );
+  op( fn:(p1:PtLike, ...rest:any[]) => any ): ( ...rest:any[] ) => any {
+    let self = this;
+    return ( ...params:any[] ) => {
+      return fn( self, ...params );
     }
-    return results;
+  }
+
+  /**
+   * This combines a series of operations into an array. See `op()` for details.
+   * For example: `let myOps = pt.ops([fn1, fn2, fn3]); let results = myOps.map( (op) => op([1,2,3]) );`
+   * @param fns an array of functions for `op`
+   * @returns an array of resulting functions
+   */
+  ops( fns:((p1:PtLike, ...rest:any[]) => any)[] ): (( ...rest:any[] ) => any)[] {
+    let _ops = [];
+    for (let i=0, len=fns.length; i<len; i++) {
+      _ops.push( this.op( fns[i] ) );
+    }
+    return _ops;
   }
 
 
@@ -308,6 +323,34 @@ export class Group extends Array<Pt> {
 
   segments():Group[] { return this.pairs(1); }
 
+
+  /**
+   * Create an operation using this Group, passing this Group into a custom function's first parameter
+   * For example: `let myOp = group.op( fn ); let result = myOp( [1,2,3] );`
+   * @param fn any function that takes a Group as its first parameter
+   * @returns a resulting function that takes other parameters required in `fn`
+   */
+  op( fn:(g1:GroupLike, ...rest:any[]) => any ): ( ...rest:any[] ) => any {
+    let self = this;
+    return ( ...params:any[] ) => {
+      return fn( self, ...params );
+    }
+  }
+
+
+  /**
+   * This combines a series of operations into an array. See `op()` for details.
+   * For example: `let myOps = pt.ops([fn1, fn2, fn3]); let results = myOps.map( (op) => op([1,2,3]) );`
+   * @param fns an array of functions for `op`
+   * @returns an array of resulting functions
+   */
+  ops( fns:((g1:GroupLike, ...rest:any[]) => any)[] ): (( ...rest:any[] ) => any)[] {
+    let _ops = [];
+    for (let i=0, len=fns.length; i<len; i++) {
+      _ops.push( this.op( fns[i] ) );
+    }
+    return _ops;
+  }
 
 
   boundingBox():Group {

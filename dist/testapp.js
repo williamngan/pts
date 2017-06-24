@@ -78,7 +78,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(1);
 const Op_1 = __webpack_require__(4);
 const LinearAlgebra_1 = __webpack_require__(3);
-exports.PtBaseArray = Float64Array;
+exports.PtBaseArray = Float32Array;
 class Pt extends exports.PtBaseArray {
     /**
      * Create a Pt. If no parameter is provided, this will instantiate a Pt with 2 dimensions [0, 0].
@@ -147,15 +147,29 @@ class Pt extends exports.PtBaseArray {
         return this.to(Math.cos(radian) * m, Math.sin(radian) * m);
     }
     /**
-     * Apply a series of functions to transform this Pt. The function should have this form: (p:Pt) => Pt
-     * @param fns a list of function as array or object {key: function}
+     * Create an operation using this Pt, passing this Pt into a custom function's first parameter
+     * For example: `let myOp = pt.op( fn ); let result = myOp( [1,2,3] );`
+     * @param fn any function that takes a Pt as its first parameter
+     * @returns a resulting function that takes other parameters required in `fn`
      */
-    op(fns) {
-        let results = new Group();
-        for (var k in fns) {
-            results[k] = fns[k](this);
+    op(fn) {
+        let self = this;
+        return (...params) => {
+            return fn(self, ...params);
+        };
+    }
+    /**
+     * This combines a series of operations into an array. See `op()` for details.
+     * For example: `let myOps = pt.ops([fn1, fn2, fn3]); let results = myOps.map( (op) => op([1,2,3]) );`
+     * @param fns an array of functions for `op`
+     * @returns an array of resulting functions
+     */
+    ops(fns) {
+        let _ops = [];
+        for (let i = 0, len = fns.length; i < len; i++) {
+            _ops.push(this.op(fns[i]));
         }
-        return results;
+        return _ops;
     }
     $map(fn) {
         let m = this.clone();
@@ -353,6 +367,31 @@ class Group extends Array {
     }
     segments() {
         return this.pairs(1);
+    }
+    /**
+     * Create an operation using this Group, passing this Group into a custom function's first parameter
+     * For example: `let myOp = group.op( fn ); let result = myOp( [1,2,3] );`
+     * @param fn any function that takes a Group as its first parameter
+     * @returns a resulting function that takes other parameters required in `fn`
+     */
+    op(fn) {
+        let self = this;
+        return (...params) => {
+            return fn(self, ...params);
+        };
+    }
+    /**
+     * This combines a series of operations into an array. See `op()` for details.
+     * For example: `let myOps = pt.ops([fn1, fn2, fn3]); let results = myOps.map( (op) => op([1,2,3]) );`
+     * @param fns an array of functions for `op`
+     * @returns an array of resulting functions
+     */
+    ops(fns) {
+        let _ops = [];
+        for (let i = 0, len = fns.length; i < len; i++) {
+            _ops.push(this.op(fns[i]));
+        }
+        return _ops;
     }
     boundingBox() {
         return Op_1.Geom.boundingBox(this);
@@ -553,7 +592,7 @@ class Util {
     static groupOp(a, b, op) {
         let result = new Pt_1.Group();
         for (let i = 0, len = a.length; i < len; i++) {
-            for (let k = 0, len = b.length; k < len; k++) {
+            for (let k = 0, len2 = b.length; k < len2; k++) {
                 result.push(op(a[i], b[k]));
             }
         }
@@ -1911,11 +1950,12 @@ var canvas = new CanvasSpace_1.CanvasSpace("#pt", ready).setup({ retina: true })
 var form = canvas.getForm();
 var form2 = canvas.getForm();
 var pt = new Pt_1.Pt(50, 50);
-var pto = pt.op([p => p.$add(10, 10), p => p.$add(20, 25)]);
-var pto2 = pt.op({
-    "a": p => p.$add(10, 10),
-    "b": p => p.$add(20, 25)
-});
+var ptAdd = pt.op((a, b) => a.$add(b));
+var pto = [ptAdd(10, 10), ptAdd(20, 25)];
+var pto2 = {
+    "a": ptAdd(10, 10),
+    "b": ptAdd(20, 25)
+};
 for (var i in pto2) {
     console.log("==>", pto2[i].toString());
 }

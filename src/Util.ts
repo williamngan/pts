@@ -129,7 +129,7 @@ export class Util {
   static groupOp( a:GroupLike, b:GroupLike, op:( _a:Pt, _b:Pt) => Pt ):Group {
     let result = new Group();
     for (let i=0, len=a.length; i<len; i++) {
-      for (let k=0, len=b.length; k<len; k++) {
+      for (let k=0, len2=b.length; k<len2; k++) {
         result.push( op(a[i], b[k]) );
       }
     }

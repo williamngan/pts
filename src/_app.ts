@@ -4,6 +4,7 @@ import {Bound} from './Bound';
 import {Create} from './Create';
 import {CanvasSpace} from "./CanvasSpace"; 
 import {CanvasForm} from "./CanvasForm"; 
+import {Vec} from "./LinearAlgebra"; 
 
 window["Pt"] = Pt;
 
@@ -28,15 +29,13 @@ var form = canvas.getForm();
 var form2 = canvas.getForm();
 
 var pt = new Pt(50, 50);
-var pto = pt.op([
-  (p:Pt) => p.$add( 10, 10 ),
-  (p:Pt) => p.$add( 20, 25 )
-]);
+var ptAdd = pt.op( (a:Pt, b:Pt) => a.$add(b) );
+var pto = [ ptAdd( 10, 10 ), ptAdd( 20, 25 ) ];
 
-var pto2 = pt.op({
-  "a": (p:Pt) => p.$add( 10, 10 ),
-  "b": (p:Pt) => p.$add( 20, 25 )
-});
+var pto2 = {
+  "a": ptAdd( 10, 10 ),
+  "b": ptAdd( 20, 25 )
+};
 
 
 for (var i in pto2) {

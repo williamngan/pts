@@ -143,7 +143,7 @@ export class CanvasForm extends Form {
     ctx.closePath()
   }
 
-  line( pts:number[][]|Pt[] ):this {
+  line( pts:GroupLike|number[][] ):this {
     CanvasForm.line( this._ctx, pts );
     this._ctx.stroke();
     return this;
