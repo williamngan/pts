@@ -34,19 +34,14 @@ space.add( {
 
     sides.forEach( (s) => {
 
-      let ops = s.ops( [Line.intersectLineWithPath2D, Line.intersectLine2D] );
-      let results = ops.map( (_op) => _op(ln) );
+      // convert each side to a list of intersection operations
+      let ops = s.ops( [Line.intersectLineWithPath2D, Line.intersectLine2D, Line.intersectPath2D] );
 
-      // let intc = Line.intersectLineWithPath2D( s, ln );
-      // let intc = s.op( Line.intersectLineWithPath2D )(ln);
-      if (results[0]) form.fill("#0f0").stroke(false).point( results[0], 7, "circle" );
+      // operate side each with "ln" and draw the results
+      let results = ops.map( (_op) => _op(ln) ).map( (r, i) => {
+        if (r) form.fill(["#0f0", "#f00", "#999"][i]).point( r, [7,5,2][i], "circle" )
+      });
 
-      // let intb = s.op( Line.intersectLine2D )(ln);
-      if (results[1]) form.fill("#f00").stroke(false).point( results[1], 5, "circle" );
-
-      // let inta = Line.intersectPath2D( ln, s );
-      // form.fill("#666").stroke(false).point( inta, 2 );
-      
     });
   },
 

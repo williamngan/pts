@@ -310,8 +310,8 @@ export class Group extends Array<Pt> {
     return group;
   }
 
-  static fromArray( list:number[][] ):Group {
-    return Group.from( list.map( (p) => new Pt(p) ) ) as Group;
+  static fromArray( list:PtLike[] ):Group {
+    return Group.from( list.map( (p:PtLike) => new Pt(p) ) ) as Group;
   }
 
   split( chunkSize:number, stride?:number ):Group[] {

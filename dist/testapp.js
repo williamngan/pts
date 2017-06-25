@@ -1105,6 +1105,15 @@ class Line {
         let pt = Line.intersectPath2D(line, path);
         return pt && Geom.withinBound(pt, line[0], line[1]) ? pt : undefined;
     }
+    static intersectPolygon2D(lineOrPath, poly, sourceIsPath = false) {
+        let fn = sourceIsPath ? Line.intersectLineWithPath2D : Line.intersectLine2D;
+        let pts = new Pt_1.Group();
+        for (let i = 0, len = poly.length; i < len; i++) {
+            let d = fn(poly[i], lineOrPath);
+            if (d) pts.push(d);
+        }
+        return pts;
+    }
     /**
      * Get two intersection points on a standard xy grid
      * @param pt a target Pt
@@ -1140,6 +1149,16 @@ class Rectangle {
     }
 }
 exports.Rectangle = Rectangle;
+class Polygon {
+    static intersect2D(linesOrPaths, poly, sourceIsPath = true) {
+        let groups = [];
+        for (let i = 0, len = linesOrPaths.length; i < len; i++) {
+            groups.push(Line.intersectPolygon2D(linesOrPaths[i], poly, sourceIsPath));
+        }
+        return groups;
+    }
+}
+exports.Polygon = Polygon;
 
 /***/ }),
 /* 5 */

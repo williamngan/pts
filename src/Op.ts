@@ -300,15 +300,25 @@ export class Line {
     }
   }
 
-  static intersectLine2D( la:GroupLike, lb:GroupLike ) {
+  static intersectLine2D( la:GroupLike, lb:GroupLike ):Pt {
     let pt = Line.intersectPath2D( la, lb );
     return ( pt && Geom.withinBound( pt, la[0], la[1] ) && Geom.withinBound(pt, lb[0], lb[1]) ) ? pt : undefined;
   }
 
-  static intersectLineWithPath2D( line:GroupLike, path:GroupLike ) {
+  static intersectLineWithPath2D( line:GroupLike, path:GroupLike ):Pt {
     let pt = Line.intersectPath2D( line, path );
     return ( pt && Geom.withinBound( pt, line[0], line[1] )) ? pt : undefined;
   }
+
+  static intersectPolygon2D( lineOrPath:GroupLike, poly:GroupLike[], sourceIsPath:boolean = false ) {
+    let fn = sourceIsPath ? Line.intersectLineWithPath2D : Line.intersectLine2D; 
+    let pts = new Group();
+    for (let i=0, len=poly.length; i<len; i++) {
+      let d = fn( poly[i], lineOrPath );
+      if (d) pts.push( d ); 
+    }
+    return pts;
+  } 
 
   /**
    * Get two intersection points on a standard xy grid
@@ -353,5 +363,16 @@ export class Rectangle {
     ];
   }
 
+}
 
+
+export class Polygon {
+
+  static intersect2D( linesOrPaths:GroupLike[], poly:GroupLike[], sourceIsPath:boolean=true):Group[] {
+    let groups = [];
+    for (let i=0, len=linesOrPaths.length; i<len; i++) {
+      groups.push( Line.intersectPolygon2D( linesOrPaths[i], poly, sourceIsPath ) );
+    }
+    return groups;
+  }
 }
