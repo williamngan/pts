@@ -1,4 +1,4 @@
-import {Pt, IPt} from "./Pt"
+import {Pt, IPt, PtLike} from "./Pt"
 
 
 export class Bound implements IPt{
@@ -9,15 +9,17 @@ export class Bound implements IPt{
   protected _bottomRight:Pt = new Pt();
   protected _inited = false;
 
-  constructor( p1?:IPt, p2?:IPt ) {
+  constructor( p1?:IPt|PtLike, p2?:IPt|PtLike ) {
 
     if (p1) {
       this._size = new Pt(p1);
       this._inited = true;
     } 
     if (p1 && p2) {
-      this._topLeft = new Pt(p1);
-      this._bottomRight = new Pt(p2);
+      let a = new Pt(p1);
+      let b = new Pt(p2)
+      this._topLeft = a.$min(b);
+      this._bottomRight = a.$max(b);
       this._updateSize();
     }
   }

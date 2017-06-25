@@ -1,7 +1,7 @@
 import {Form} from "./Form";
 import {Pt, Group, PtLike, GroupLike} from "./Pt";
 import {CanvasSpace} from "./CanvasSpace";
-import {Const} from "./Util";
+import {Const, Util} from "./Util";
 
 export class CanvasForm extends Form {
 
@@ -149,6 +149,11 @@ export class CanvasForm extends Form {
     return this;
   }
 
+  lines( pts:GroupLike[] ):this {
+    this.line( Util.flatten( pts ) );
+    return this;
+  }
+
   static line( ctx:CanvasRenderingContext2D, pts:GroupLike|number[][] ) {
     ctx.beginPath();
     ctx.moveTo( pts[0][0], pts[0][1] );
@@ -156,6 +161,7 @@ export class CanvasForm extends Form {
       ctx.lineTo( pts[i][0], pts[i][1] );
     }
   }
+
 
   static rect( ctx:CanvasRenderingContext2D, pts:GroupLike|number[][] ) {
     ctx.beginPath();

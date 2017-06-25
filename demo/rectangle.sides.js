@@ -15,12 +15,24 @@ space.add( {
     let ln = Rectangle.fromCenter( space.center, 100, 50 );
     form.stroke("#f00").line( ln );
 
+    let rectB = Rectangle.fromCenter( [250, 100], 100, 100 );
+    form.stroke("#0f0").lines( Rectangle.polygon( rectB ) );
+
     let rect = Rectangle.fromCenter( mouse, 50, 50 );
     let sides = Rectangle.sides( rect );
     form.stroke("#333").line( sides[0] );
     form.stroke("#666").line( sides[1] );
     form.stroke("#999").line( sides[2] );
     form.stroke("#ccc").line( sides[3] );
+
+    let quads = Rectangle.quadrants( rect ).map( (qs) => Rectangle.polygon( qs ) );
+    quads.forEach( (q) => {
+      form.stroke("rgba(0,0,255,.3)").line( q );
+    });
+
+
+    let intersects = Rectangle.intersect2D( rectB, sides );
+    form.fill("#0ff").points( Util.flatten( intersects ) )
 
     // let ps = sides.op( Line.intersectPath2D )( [ln] );
 

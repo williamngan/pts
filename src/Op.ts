@@ -310,14 +310,14 @@ export class Line {
     return ( pt && Geom.withinBound( pt, line[0], line[1] )) ? pt : undefined;
   }
 
-  static intersectPolygon2D( lineOrPath:GroupLike, poly:GroupLike[], sourceIsPath:boolean = false ) {
+  static intersectPolygon2D( lineOrPath:GroupLike, poly:GroupLike[], sourceIsPath:boolean = false ):Group {
     let fn = sourceIsPath ? Line.intersectLineWithPath2D : Line.intersectLine2D; 
     let pts = new Group();
     for (let i=0, len=poly.length; i<len; i++) {
       let d = fn( poly[i], lineOrPath );
       if (d) pts.push( d ); 
     }
-    return pts;
+    return (pts.length > 0) ? pts : undefined;
   } 
 
   /**
@@ -351,16 +351,41 @@ export class Rectangle {
     return new Group( new Pt(center).subtract( half ), new Pt(center).add( half ) );
   }
 
+  static corners( pts:GroupLike ):Group {
+    let p0 = pts[0].$min(pts[1]);
+    let p2 = pts[0].$max(pts[1]);
+    return new Group(p0, new Pt(p0.x, p2.y), p2, new Pt(p2.x, p0.y));
+  }
+
   static sides( pts:GroupLike ):Group[] {
-    let p0 = pts[0].clone();
-    let p2 = pts[1].clone();
-    let p1 = pts[0].clone().to( p0.x, p2.y );
-    let p3 = pts[0].clone().to( p2.x, p0.y );
-    
+    let [p0, p1, p2, p3] = Rectangle.corners( pts );
     return [
       new Group( p0, p1 ), new Group( p1, p2 ),
       new Group( p2, p3 ), new Group( p3, p0 )
     ];
+  }
+
+  static polygon( pts:GroupLike ):Group {
+    let corners = Rectangle.corners( pts );
+    corners.push( corners[0].clone() );
+    return corners;
+  }
+
+  static quadrants( rect:GroupLike ):Group[] {
+    let corners = Rectangle.corners( rect );
+    let center = Geom.interpolate( rect[0], rect[1], 0.5 );
+    return corners.map( (c) => new Group(c, center.clone()) );
+  }
+
+  static inside( r:GroupLike, pt:PtLike ) {
+    for (let i=0, len=pt.length; i<len; i++) {
+      if (pt[i] >= r[0][i] && pt[i] <= r[1][i]) return false;
+    }
+    return true;
+  }
+
+  static intersect2D( rect:GroupLike, poly:GroupLike[] ):Group[] {
+    return Polygon.intersect2D( Rectangle.sides( rect ), poly )
   }
 
 }
@@ -368,10 +393,11 @@ export class Rectangle {
 
 export class Polygon {
 
-  static intersect2D( linesOrPaths:GroupLike[], poly:GroupLike[], sourceIsPath:boolean=true):Group[] {
+  static intersect2D( poly:GroupLike[], linesOrPaths:GroupLike[], sourceIsPath:boolean=false):Group[] {
     let groups = [];
     for (let i=0, len=linesOrPaths.length; i<len; i++) {
-      groups.push( Line.intersectPolygon2D( linesOrPaths[i], poly, sourceIsPath ) );
+      let _ip = Line.intersectPolygon2D( linesOrPaths[i], poly, sourceIsPath );
+      if (_ip) groups.push( _ip );
     }
     return groups;
   }

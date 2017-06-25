@@ -589,14 +589,9 @@ class Util {
         }
         return chunks;
     }
-    static groupOp(a, b, op) {
-        let result = new Pt_1.Group();
-        for (let i = 0, len = a.length; i < len; i++) {
-            for (let k = 0, len2 = b.length; k < len2; k++) {
-                result.push(op(a[i], b[k]));
-            }
-        }
-        return result;
+    static flatten(pts, flattenAsGroup = true) {
+        let arr = flattenAsGroup ? new Pt_1.Group() : new Array();
+        return arr.concat.apply(arr, pts);
     }
 }
 exports.Util = Util;
@@ -622,8 +617,10 @@ class Bound {
             this._inited = true;
         }
         if (p1 && p2) {
-            this._topLeft = new Pt_1.Pt(p1);
-            this._bottomRight = new Pt_1.Pt(p2);
+            let a = new Pt_1.Pt(p1);
+            let b = new Pt_1.Pt(p2);
+            this._topLeft = a.$min(b);
+            this._bottomRight = a.$max(b);
             this._updateSize();
         }
     }
@@ -1112,7 +1109,7 @@ class Line {
             let d = fn(poly[i], lineOrPath);
             if (d) pts.push(d);
         }
-        return pts;
+        return pts.length > 0 ? pts : undefined;
     }
     /**
      * Get two intersection points on a standard xy grid
@@ -1140,20 +1137,42 @@ class Rectangle {
         let half = [width / 2, height / 2];
         return new Pt_1.Group(new Pt_1.Pt(center).subtract(half), new Pt_1.Pt(center).add(half));
     }
+    static corners(pts) {
+        let p0 = pts[0].$min(pts[1]);
+        let p2 = pts[0].$max(pts[1]);
+        return new Pt_1.Group(p0, new Pt_1.Pt(p0.x, p2.y), p2, new Pt_1.Pt(p2.x, p0.y));
+    }
     static sides(pts) {
-        let p0 = pts[0].clone();
-        let p2 = pts[1].clone();
-        let p1 = pts[0].clone().to(p0.x, p2.y);
-        let p3 = pts[0].clone().to(p2.x, p0.y);
+        let [p0, p1, p2, p3] = Rectangle.corners(pts);
         return [new Pt_1.Group(p0, p1), new Pt_1.Group(p1, p2), new Pt_1.Group(p2, p3), new Pt_1.Group(p3, p0)];
+    }
+    static polygon(pts) {
+        let corners = Rectangle.corners(pts);
+        corners.push(corners[0].clone());
+        return corners;
+    }
+    static quadrants(rect) {
+        let corners = Rectangle.corners(rect);
+        let center = Geom.interpolate(rect[0], rect[1], 0.5);
+        return corners.map(c => new Pt_1.Group(c, center.clone()));
+    }
+    static inside(r, pt) {
+        for (let i = 0, len = pt.length; i < len; i++) {
+            if (pt[i] >= r[0][i] && pt[i] <= r[1][i]) return false;
+        }
+        return true;
+    }
+    static intersect2D(rect, poly) {
+        return Polygon.intersect2D(Rectangle.sides(rect), poly);
     }
 }
 exports.Rectangle = Rectangle;
 class Polygon {
-    static intersect2D(linesOrPaths, poly, sourceIsPath = true) {
+    static intersect2D(poly, linesOrPaths, sourceIsPath = false) {
         let groups = [];
         for (let i = 0, len = linesOrPaths.length; i < len; i++) {
-            groups.push(Line.intersectPolygon2D(linesOrPaths[i], poly, sourceIsPath));
+            let _ip = Line.intersectPolygon2D(linesOrPaths[i], poly, sourceIsPath);
+            if (_ip) groups.push(_ip);
         }
         return groups;
     }
@@ -1287,6 +1306,10 @@ class CanvasForm extends Form_1.Form {
     line(pts) {
         CanvasForm.line(this._ctx, pts);
         this._ctx.stroke();
+        return this;
+    }
+    lines(pts) {
+        this.line(Util_1.Util.flatten(pts));
         return this;
     }
     static line(ctx, pts) {
