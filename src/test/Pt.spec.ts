@@ -1,6 +1,7 @@
 import chai = require('chai');
 import mocha = require('mocha');
 import {Pt, Group} from '../Pt';
+import {Geom} from '../Op';
 
 var {assert} = chai;
 var {describe, it} = mocha;
@@ -87,6 +88,13 @@ describe('Pt: ', () => {
       assert.isTrue( r2().equals( new Pt(18, 24, 30) ) );
     });
 
+    it('can apply multiple ops', () => {
+      let p = new Pt(1,2,3);
+      let ops = p.ops([ (a:Pt):Pt => a.$add(1,2,3), (b:Pt, n:number):Pt => p.$multiply(n) ]);
+      let q = ops[0]().$add( ops[1](3) );
+      assert.equal( q.z, 15 )
+    });
+
     it('can map to a function', () => {
       let p = new Pt(5,7,12).$map( (n:number, i:number, list) => {
         return n*10+2;
@@ -159,8 +167,13 @@ describe('Pt: ', () => {
     })
 
     it('can calculate angle between two Pt', () => {
-      let p = new Pt(0.5, 0.9, 0.8).angleBetween( new Pt(0.7, 0.5) )
+      let p = new Pt(0.5, 0.9, 0.8).angleBetween( new Pt(0.7, 0.5) );
       assert.isTrue( Math.abs(p-0.4434) < 0.0001);
+    })
+
+    it('can move to a new direction', () => {
+      let p = new Pt(10,0).toAngle( Math.PI/2  );
+      assert.isTrue( Math.abs(p.x-0) < 0.00001 && Math.abs(p.y-10) < 0.00001);
     })
 
     it('can find minimum point', () => {
@@ -224,6 +237,21 @@ describe('Pt: ', () => {
       p.remove( -3, p.length );
       assert.isTrue( p.length == 2 && p[1].x == 3 );
     });
+
+    it('can convert into an op', function() {
+      let p = Group.fromArray( [[1,2],[3,4],[5,6]] );
+      let s = p.op( Geom.scale2D );
+      s(3);
+      assert.equal( p[1].y, 12 );
+    });
+
+    it('can convert into multiple ops', function() {
+      let p = Group.fromArray( [[1,2],[3,4],[5,6], [7,8]] );
+      let s = p.ops( [Geom.scale2D, Geom.centroid] );
+      s[0](2);
+      assert.equal( s[1]().x, 8 );
+    });
+    
 
     it('can zip one slice', function() {
       let p = new Group( new Pt(1,3,5,7), new Pt(2,4,6,8), new Pt(5,10,15,20) ).zipOne( 2 );

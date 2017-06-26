@@ -139,7 +139,7 @@ export class Geom {
     return new Group(pa, pb);
   }
 
-  static rotate2D( ps:Pt|GroupLike, angle:number, anchor?:Pt, axis?:string) {
+  static rotate2D( ps:Pt|GroupLike, angle:number, anchor?:Pt, axis?:string):Geom {
     let pts = (!Array.isArray(ps)) ? [ps] : ps;
     let fn = (anchor != undefined) ? Mat.rotateAt2DMatrix : Mat.rotate2DMatrix;
     let cos = Math.cos(angle);
@@ -153,7 +153,7 @@ export class Geom {
     return Geom;
   }
   
-  static scale2D( ps:GroupLike, scale:number|number[]|PtLike, anchor?:Pt, axis?:string) {
+  static scale2D( ps:Pt|GroupLike, scale:number|number[]|PtLike, anchor?:Pt, axis?:string):Geom {
     let pts = (!Array.isArray(ps)) ? [ps] : ps;
     let s = (typeof scale == "number") ? [scale, scale] : scale;
     let fn = (anchor != undefined) ? Mat.scaleAt2DMatrix : Mat.scale2DMatrix;
@@ -166,7 +166,7 @@ export class Geom {
     return Geom;
   }
 
-  static shear2D( ps:GroupLike, scale:number|number[]|PtLike, anchor?:Pt, axis?:string) {
+  static shear2D( ps:Pt|GroupLike, scale:number|number[]|PtLike, anchor?:Pt, axis?:string):Geom {
     let pts = (!Array.isArray(ps)) ? [ps] : ps;
     let s = (typeof scale == "number") ? [scale, scale] : scale;
     let fn = (anchor != undefined) ? Mat.shearAt2DMatrix : Mat.shear2DMatrix;
@@ -181,7 +181,7 @@ export class Geom {
     return Geom;
   }
 
-  static reflect2D( ps:GroupLike, line:GroupLike, anchor?:Pt, axis?:string) {
+  static reflect2D( ps:Pt|GroupLike, line:GroupLike, anchor?:Pt, axis?:string):Geom {
     let pts = (!Array.isArray(ps)) ? [ps] : ps;
     
     for (let i=0, len=pts.length; i<len; i++) {
