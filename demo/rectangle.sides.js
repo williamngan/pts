@@ -7,7 +7,10 @@ var mouse = new Pt();
 space.add( {
 
   start: (bound, space) => {
-
+    let g = new Group( new Pt(1,2), new Pt(2,3), new Pt(3,4), new Pt(4,5) );
+    let gg = g.remove(-2,2);
+    console.log( "g", g );
+    console.log( "gg", gg, gg.pairs() );
   },
 
   animate: (time, fps) => {

@@ -254,15 +254,15 @@ export class Line {
    * @param asProjection if true, this returns the projection vector instead. Default is false.
    * @returns a Pt on the line that is perpendicular to the target Pt, or a projection vector if `asProjection` is true.
    */
-  static perpendicularFromPt( pt:PtLike|number[], ln:GroupLike, asProjection:boolean=false ):Pt {
-    let a = ln[0].$subtract( ln[1] );
-    let b = ln[1].$subtract( pt );
+  static perpendicularFromPt( line:GroupLike, pt:PtLike|number[], asProjection:boolean=false ):Pt {
+    let a = line[0].$subtract( line[1] );
+    let b = line[1].$subtract( pt );
     let proj = b.$subtract( a.$project( b ) );
     return (asProjection) ? proj : proj.$add( pt );
   }
 
-  static distanceFromPt( pt:PtLike|number[], ln:GroupLike, asProjection:boolean=false ):number {
-    return Line.perpendicularFromPt( pt, ln, true ).magnitude();
+  static distanceFromPt( line:GroupLike, pt:PtLike|number[], asProjection:boolean=false ):number {
+    return Line.perpendicularFromPt( line, pt, true ).magnitude();
   }
 
   static intersectPath2D( la:GroupLike, lb:GroupLike ):Pt {
@@ -330,10 +330,10 @@ export class Line {
     return new Group( new Pt( gridPt[0], pt[1] ), new Pt( pt[0], gridPt[1] ) );
   }  
 
-  static subpoints( ln:GroupLike|number[][], num:number ) {
+  static subpoints( line:GroupLike|number[][], num:number ) {
     let pts = new Group();
     for (let i=1; i<=num; i++) {
-      pts.push( Geom.interpolate( ln[0], ln[1], i/(num+1) ) );
+      pts.push( Geom.interpolate( line[0], line[1], i/(num+1) ) );
     }
     return pts;
   }
@@ -351,22 +351,22 @@ export class Rectangle {
     return new Group( new Pt(center).subtract( half ), new Pt(center).add( half ) );
   }
 
-  static corners( pts:GroupLike ):Group {
-    let p0 = pts[0].$min(pts[1]);
-    let p2 = pts[0].$max(pts[1]);
+  static corners( rect:GroupLike ):Group {
+    let p0 = rect[0].$min(rect[1]);
+    let p2 = rect[0].$max(rect[1]);
     return new Group(p0, new Pt(p0.x, p2.y), p2, new Pt(p2.x, p0.y));
   }
 
-  static sides( pts:GroupLike ):Group[] {
-    let [p0, p1, p2, p3] = Rectangle.corners( pts );
+  static sides( rect:GroupLike ):Group[] {
+    let [p0, p1, p2, p3] = Rectangle.corners( rect );
     return [
       new Group( p0, p1 ), new Group( p1, p2 ),
       new Group( p2, p3 ), new Group( p3, p0 )
     ];
   }
 
-  static polygon( pts:GroupLike ):Group {
-    let corners = Rectangle.corners( pts );
+  static polygon( rect:GroupLike ):Group {
+    let corners = Rectangle.corners( rect );
     corners.push( corners[0].clone() );
     return corners;
   }
@@ -377,9 +377,9 @@ export class Rectangle {
     return corners.map( (c) => new Group(c, center.clone()) );
   }
 
-  static inside( r:GroupLike, pt:PtLike ) {
+  static inside( rect:GroupLike, pt:PtLike ) {
     for (let i=0, len=pt.length; i<len; i++) {
-      if (pt[i] >= r[0][i] && pt[i] <= r[1][i]) return false;
+      if (pt[i] >= rect[0][i] && pt[i] <= rect[1][i]) return false;
     }
     return true;
   }
@@ -389,6 +389,7 @@ export class Rectangle {
   }
 
 }
+
 
 
 export class Polygon {

@@ -356,11 +356,38 @@ class Group extends Array {
         return group;
     }
     static fromArray(list) {
-        return Group.from(list.map(p => new Pt(p)));
+        let g = new Group();
+        for (let i = 0, len = list.length; i < len; i++) {
+            let p = list[i] instanceof Pt ? list[i] : new Pt(list[i]);
+            g.push(p);
+        }
+        return g;
+    }
+    static fromGroup(list) {
+        return Group.from(list);
     }
     split(chunkSize, stride) {
         let sp = Util_1.Util.split(this, chunkSize, stride);
-        return sp.map(g => Group.fromArray(g));
+        return sp.map(g => Group.fromGroup(g));
+    }
+    /**
+     * Insert a
+     * @param pts Another group of Pts
+     * @param index the index position to insert into
+     */
+    insert(pts, index = 0) {
+        let g = Group.prototype.splice.apply(this, [index, 0, ...pts]);
+        return this;
+    }
+    /**
+     * Like Array's splice function, with support for negative index and a friendlier name.
+     * @param index start index, which can be negative (where -1 is at index 0, -2 at index 1, etc)
+     * @param count number of items to remove
+     * @returns The items that are removed.
+     */
+    remove(index = 0, count = 1) {
+        let param = index < 0 ? [index * -1 - 1, count] : [index, count];
+        return Group.prototype.splice.apply(this, param);
     }
     pairs(stride = 2) {
         return this.split(2, stride);
@@ -1057,14 +1084,14 @@ class Line {
      * @param asProjection if true, this returns the projection vector instead. Default is false.
      * @returns a Pt on the line that is perpendicular to the target Pt, or a projection vector if `asProjection` is true.
      */
-    static perpendicularFromPt(pt, ln, asProjection = false) {
-        let a = ln[0].$subtract(ln[1]);
-        let b = ln[1].$subtract(pt);
+    static perpendicularFromPt(line, pt, asProjection = false) {
+        let a = line[0].$subtract(line[1]);
+        let b = line[1].$subtract(pt);
         let proj = b.$subtract(a.$project(b));
         return asProjection ? proj : proj.$add(pt);
     }
-    static distanceFromPt(pt, ln, asProjection = false) {
-        return Line.perpendicularFromPt(pt, ln, true).magnitude();
+    static distanceFromPt(line, pt, asProjection = false) {
+        return Line.perpendicularFromPt(line, pt, true).magnitude();
     }
     static intersectPath2D(la, lb) {
         let a = Line.intercept(la[0], la[1]);
@@ -1120,10 +1147,10 @@ class Line {
     static intersectGrid2D(pt, gridPt) {
         return new Pt_1.Group(new Pt_1.Pt(gridPt[0], pt[1]), new Pt_1.Pt(pt[0], gridPt[1]));
     }
-    static subpoints(ln, num) {
+    static subpoints(line, num) {
         let pts = new Pt_1.Group();
         for (let i = 1; i <= num; i++) {
-            pts.push(Geom.interpolate(ln[0], ln[1], i / (num + 1)));
+            pts.push(Geom.interpolate(line[0], line[1], i / (num + 1)));
         }
         return pts;
     }
@@ -1137,17 +1164,17 @@ class Rectangle {
         let half = [width / 2, height / 2];
         return new Pt_1.Group(new Pt_1.Pt(center).subtract(half), new Pt_1.Pt(center).add(half));
     }
-    static corners(pts) {
-        let p0 = pts[0].$min(pts[1]);
-        let p2 = pts[0].$max(pts[1]);
+    static corners(rect) {
+        let p0 = rect[0].$min(rect[1]);
+        let p2 = rect[0].$max(rect[1]);
         return new Pt_1.Group(p0, new Pt_1.Pt(p0.x, p2.y), p2, new Pt_1.Pt(p2.x, p0.y));
     }
-    static sides(pts) {
-        let [p0, p1, p2, p3] = Rectangle.corners(pts);
+    static sides(rect) {
+        let [p0, p1, p2, p3] = Rectangle.corners(rect);
         return [new Pt_1.Group(p0, p1), new Pt_1.Group(p1, p2), new Pt_1.Group(p2, p3), new Pt_1.Group(p3, p0)];
     }
-    static polygon(pts) {
-        let corners = Rectangle.corners(pts);
+    static polygon(rect) {
+        let corners = Rectangle.corners(rect);
         corners.push(corners[0].clone());
         return corners;
     }
@@ -1156,9 +1183,9 @@ class Rectangle {
         let center = Geom.interpolate(rect[0], rect[1], 0.5);
         return corners.map(c => new Pt_1.Group(c, center.clone()));
     }
-    static inside(r, pt) {
+    static inside(rect, pt) {
         for (let i = 0, len = pt.length; i < len; i++) {
-            if (pt[i] >= r[0][i] && pt[i] <= r[1][i]) return false;
+            if (pt[i] >= rect[0][i] && pt[i] <= rect[1][i]) return false;
         }
         return true;
     }

@@ -178,6 +178,53 @@ describe('Pt: ', () => {
 
   describe('Group collection functions', () => {
 
+    it('can deep clone', function() {
+      let p = new Group( new Pt(1,2), new Pt(2,3) );
+      let q = p.clone().map( (a) => a.add(10) );
+      assert.isTrue( p[1].x == 2 && q[1].x == 12 );
+    });
+
+    it('can create from number array', function() {
+      let p = Group.fromArray( [[1,2],[3,4],[5,6]] ).moveBy( 10, 20 );
+      assert.equal( p[2].y, 26 );
+    });
+
+    it('can create from GroupLike array', function() {
+      let p = Group.fromGroup( [ new Pt(1,2), new Pt(3,4), new Pt(5,6) ] ).moveBy( 10, 20 );
+      assert.equal( p[2].x, 15);
+    });
+
+    it('can split into an array of subgroups', function() {
+      let p = Group.fromArray( [[1,2],[3,4],[5,6],[7,8],[9,10]] );
+      let sp = p.split(2);
+      assert.isTrue( sp.length == 2 && sp[1][1].y == 8 )
+    });
+
+    it('can split into an array of subgroups with stride', function() {
+      let p = Group.fromArray( [[1,2],[3,4],[5,6],[7,8],[9,10]] );
+      let sp = p.split(4,1);
+      assert.isTrue( sp.length == 2 && sp[1][3].y == 10 )
+    });
+
+    it('can insert another group into a specific position', function() {
+      let a = Group.fromArray( [[1,2],[3,4],[5,6]] );
+      let b = Group.fromArray( [[7,8],[9,10]] );
+      a.insert( new Group(new Pt(7,8), new Pt(9,10)), 1 );
+      assert.isTrue( a.length == 5 && a[1].y == 8);
+    });
+
+    it('can remove a range', function() {
+      let p = Group.fromArray( [[1,2],[3,4],[5,6],[7,8],[9,10]] );
+      p.remove( 1,3 );
+      assert.isTrue( p.length == 2 && p[1].x == 9 );
+    });
+
+    it('can remove a range using negative index', function() {
+      let p = Group.fromArray( [[1,2],[3,4],[5,6],[7,8],[9,10]] );
+      p.remove( -3, p.length );
+      assert.isTrue( p.length == 2 && p[1].x == 3 );
+    });
+
     it('can zip one slice', function() {
       let p = new Group( new Pt(1,3,5,7), new Pt(2,4,6,8), new Pt(5,10,15,20) ).zipOne( 2 );
       assert.isTrue( p.equals( new Pt(5,6,15) ) )

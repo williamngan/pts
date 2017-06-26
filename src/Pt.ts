@@ -311,14 +311,44 @@ export class Group extends Array<Pt> {
   }
 
   static fromArray( list:PtLike[] ):Group {
-    return Group.from( list.map( (p:PtLike) => new Pt(p) ) ) as Group;
+    let g = new Group();
+    for (let i=0, len=list.length; i<len; i++) {
+      let p = (list[i] instanceof Pt) ? list[i] as Pt : new Pt(list[i]);
+      g.push( p );
+    }
+    return g;
+  }
+
+  static fromGroup( list:GroupLike ):Group {
+    return Group.from( list ) as Group;
   }
 
   split( chunkSize:number, stride?:number ):Group[] {
     let sp = Util.split( this, chunkSize, stride );
-    return sp.map( (g) => Group.fromArray( g ) );
+    return sp.map( (g) => Group.fromGroup( g ) );
+  }
+
+  /**
+   * Insert a
+   * @param pts Another group of Pts
+   * @param index the index position to insert into
+   */
+  insert( pts:GroupLike, index=0 ):this {
+    let g = Group.prototype.splice.apply( this, [index, 0, ...pts] );
+    return this;
   }
   
+  /**
+   * Like Array's splice function, with support for negative index and a friendlier name.
+   * @param index start index, which can be negative (where -1 is at index 0, -2 at index 1, etc)
+   * @param count number of items to remove
+   * @returns The items that are removed. 
+   */
+  remove( index=0, count:number=1 ):Group {
+    let param = (index<0) ? [index*-1 - 1, count] : [index, count];
+    return Group.prototype.splice.apply( this, param );
+  }
+
   pairs( stride:number=2 ):Group[] { return this.split(2, stride); }
 
   segments():Group[] { return this.pairs(1); }
