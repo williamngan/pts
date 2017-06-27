@@ -34,7 +34,7 @@ export class Bound implements IPt{
   }
 
   protected _updateCenter() {
-    this._center = this._size.$scale(0.5).add( this._topLeft );
+    this._center = this._size.$multiply(0.5).add( this._topLeft );
   }
 
   protected _updatePosFromTop() {
@@ -48,7 +48,7 @@ export class Bound implements IPt{
   }
 
   protected _updatePosFromCenter() {
-    let half = this._size.$scale(0.5);
+    let half = this._size.$multiply(0.5);
     this._topLeft = this._center.$subtract( half );
     this._bottomRight = this._center.$add( half );
   }

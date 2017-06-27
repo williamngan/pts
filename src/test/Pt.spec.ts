@@ -240,14 +240,14 @@ describe('Pt: ', () => {
 
     it('can convert into an op', function() {
       let p = Group.fromArray( [[1,2],[3,4],[5,6]] );
-      let s = p.op( Geom.scale2D );
+      let s = p.op( Geom.scale );
       s(3);
       assert.equal( p[1].y, 12 );
     });
 
     it('can convert into multiple ops', function() {
       let p = Group.fromArray( [[1,2],[3,4],[5,6], [7,8]] );
-      let s = p.ops( [Geom.scale2D, Geom.centroid] );
+      let s = p.ops( [Geom.scale, Geom.centroid] );
       s[0](2);
       assert.equal( s[1]().x, 8 );
     });
@@ -278,4 +278,32 @@ describe('Pt: ', () => {
       assert.isTrue( ps[2].equals( new Pt(10, 10, 7) ) && ps.length == 4 );
     });
   });
+
+    describe('Group geometry functions', () => {
+
+      it('can interpolate a position based on all Pts in this group', function() {
+        let ps = new Group( new Pt(0,0), new Pt(10, 10), new Pt(20, 100) );
+        assert.equal( ps.interpolate( 0.75 ).y, 55 );
+      });
+
+      it('can move by a specific amount', function() {
+        let ps = new Group( new Pt(0,0), new Pt(10, 10), new Pt(20, 100) );
+        ps.moveBy( 5, 1 );
+        assert.isTrue( ps[0].x === 5 && ps[1].y === 11 && ps[2].x === 25 );
+      });
+
+      it('can move the group based on a specific position for the first Pt', function() {
+        let ps = new Group( new Pt(5,0), new Pt(10, 10), new Pt(20, 100) );
+        ps.moveTo( 50, 50 );
+        assert.isTrue( ps[0].x === 50 && ps[1].x === 55 && ps[2].y === 150 );
+      });
+
+      it('can scale a group', function() {
+        let ps = new Group( new Pt(0,0,1), new Pt(3,6,5) );
+        ps.scale( [10,9,8], [0,0,0] );
+        assert.isTrue( ps[0].x === 0 && ps[1].y === 54 && ps[0].z === 8 );
+      });
+
+
+    });
 });

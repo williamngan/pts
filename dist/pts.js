@@ -232,13 +232,6 @@ class Pt extends exports.PtBaseArray {
         return this.clone().divide(...args);
     }
 
-    scale(...args) {
-        return this.multiply(...args);
-    }
-    $scale(...args) {
-        return this.clone().scale(...args);
-    }
-
     magnitudeSq() {
         return LinearAlgebra_1.Vec.dot(this, this);
     }
@@ -313,6 +306,22 @@ class Pt extends exports.PtBaseArray {
      */
     angleBetween(p, axis = Util_1.Const.xy) {
         return Op_1.Geom.boundRadian(this.angle(axis)) - Op_1.Geom.boundRadian(p.angle(axis));
+    }
+    scale(scale, anchor) {
+        Op_1.Geom.scale(this, scale, anchor || Pt.make(this.length, 0));
+        return this;
+    }
+    rotate2D(angle, anchor, axis) {
+        Op_1.Geom.rotate2D(this, angle, anchor || Pt.make(this.length, 0), axis);
+        return this;
+    }
+    shear2D(scale, anchor, axis) {
+        Op_1.Geom.shear2D(this, scale, anchor || Pt.make(this.length, 0), axis);
+        return this;
+    }
+    reflect2D(line, anchor, axis) {
+        Op_1.Geom.reflect2D(this, line, anchor || Pt.make(this.length, 0), axis);
+        return this;
     }
     /**
      * Check if another Pt is perpendicular to this Pt
@@ -443,21 +452,37 @@ class Group extends Array {
         }
         return this;
     }
+    /**
+     * Move the first Pt in this group to a specific position, and move all the other Pts correspondingly
+     * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
+     */
     moveTo(...args) {
         let d = new Pt(Util_1.Util.getArgs(args)).subtract(this[0]);
         this.moveBy(d);
         return this;
     }
-    scale2D(scale, anchor, axis) {
-        Op_1.Geom.scale2D(this, scale, anchor || this[0], axis);
+    scale(scale, anchor) {
+        for (let i = 0, len = this.length; i < len; i++) {
+            Op_1.Geom.scale(this[i], scale, anchor || this[0]);
+        }
         return this;
     }
     rotate2D(angle, anchor, axis) {
-        Op_1.Geom.rotate2D(this, angle, anchor || this[0], axis);
+        for (let i = 0, len = this.length; i < len; i++) {
+            Op_1.Geom.rotate2D(this[i], angle, anchor || this[0], axis);
+        }
         return this;
     }
     shear2D(scale, anchor, axis) {
-        Op_1.Geom.shear2D(this, scale, anchor || this[0], axis);
+        for (let i = 0, len = this.length; i < len; i++) {
+            Op_1.Geom.shear2D(this[i], scale, anchor || this[0], axis);
+        }
+        return this;
+    }
+    reflect2D(line, anchor, axis) {
+        for (let i = 0, len = this.length; i < len; i++) {
+            Op_1.Geom.reflect2D(this[i], line, anchor || this[0], axis);
+        }
         return this;
     }
     /**
@@ -659,7 +684,7 @@ class Bound {
         this._updateCenter();
     }
     _updateCenter() {
-        this._center = this._size.$scale(0.5).add(this._topLeft);
+        this._center = this._size.$multiply(0.5).add(this._topLeft);
     }
     _updatePosFromTop() {
         this._bottomRight = this._topLeft.$add(this._size);
@@ -670,7 +695,7 @@ class Bound {
         this._updateCenter();
     }
     _updatePosFromCenter() {
-        let half = this._size.$scale(0.5);
+        let half = this._size.$multiply(0.5);
         this._topLeft = this._center.$subtract(half);
         this._bottomRight = this._center.$add(half);
     }
@@ -950,8 +975,8 @@ class Geom {
         return radian * Util_1.Const.rad_to_deg;
     }
     static boundingBox(pts) {
-        let minPt = pts[0].clone().fill(Number.MAX_VALUE);
-        let maxPt = pts[0].clone().fill(Number.MIN_VALUE);
+        let minPt = Pt_1.Pt.make(pts[0].length, Number.MAX_VALUE);
+        let maxPt = Pt_1.Pt.make(pts[0].length, Number.MIN_VALUE);
         for (let i = 0, len = pts.length; i < len; i++) {
             for (let d = 0, len = pts[i].length; d < len; d++) {
                 if (pts[i][d] < minPt[d]) minPt[d] = pts[i][d];
@@ -994,9 +1019,22 @@ class Geom {
         pb[y] = -p[x];
         return new Pt_1.Group(pa, pb);
     }
+    static scale(ps, scale, anchor) {
+        let pts = !Array.isArray(ps) ? [ps] : ps;
+        let scs = typeof scale == "number" ? Pt_1.Pt.make(pts[0].length, scale) : scale;
+        if (!anchor) anchor = Pt_1.Pt.make(pts[0].length, 0);
+        for (let i = 0, len = pts.length; i < len; i++) {
+            let p = pts[i];
+            for (let k = 0, lenP = p.length; k < lenP; k++) {
+                p[k] = anchor && anchor[k] ? anchor[k] + (p[k] - anchor[k]) * scs[k] : p[k] * scs[k];
+            }
+        }
+        return Geom;
+    }
     static rotate2D(ps, angle, anchor, axis) {
         let pts = !Array.isArray(ps) ? [ps] : ps;
         let fn = anchor != undefined ? LinearAlgebra_1.Mat.rotateAt2DMatrix : LinearAlgebra_1.Mat.rotate2DMatrix;
+        if (!anchor) anchor = Pt_1.Pt.make(pts[0].length, 0);
         let cos = Math.cos(angle);
         let sin = Math.sin(angle);
         for (let i = 0, len = pts.length; i < len; i++) {
@@ -1005,19 +1043,10 @@ class Geom {
         }
         return Geom;
     }
-    static scale2D(ps, scale, anchor, axis) {
-        let pts = !Array.isArray(ps) ? [ps] : ps;
-        let s = typeof scale == "number" ? [scale, scale] : scale;
-        let fn = anchor != undefined ? LinearAlgebra_1.Mat.scaleAt2DMatrix : LinearAlgebra_1.Mat.scale2DMatrix;
-        for (let i = 0, len = pts.length; i < len; i++) {
-            let p = axis != undefined ? pts[i].$take(axis) : pts[i];
-            p.to(LinearAlgebra_1.Mat.transform2D(p, fn(s[0], s[1], anchor)));
-        }
-        return Geom;
-    }
     static shear2D(ps, scale, anchor, axis) {
         let pts = !Array.isArray(ps) ? [ps] : ps;
         let s = typeof scale == "number" ? [scale, scale] : scale;
+        if (!anchor) anchor = Pt_1.Pt.make(pts[0].length, 0);
         let fn = anchor != undefined ? LinearAlgebra_1.Mat.shearAt2DMatrix : LinearAlgebra_1.Mat.shear2DMatrix;
         let tanx = Math.tan(s[0]);
         let tany = Math.tan(s[1]);
@@ -1029,6 +1058,7 @@ class Geom {
     }
     static reflect2D(ps, line, anchor, axis) {
         let pts = !Array.isArray(ps) ? [ps] : ps;
+        if (!anchor) anchor = Pt_1.Pt.make(pts[0].length, 0);
         for (let i = 0, len = pts.length; i < len; i++) {
             let p = axis != undefined ? pts[i].$take(axis) : pts[i];
             p.to(LinearAlgebra_1.Mat.transform2D(p, LinearAlgebra_1.Mat.reflectAt2DMatrix(line[0], line[1], anchor)));

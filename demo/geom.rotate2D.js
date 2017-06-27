@@ -26,14 +26,14 @@ space.add( {
 
 
     // let a = new Pt(50, 0);
-    Geom.scale2D( new Group(a, b), p.$unit().multiply(2), center);
+    // Geom.scale( new Group(a, b), [p.x*4/center.x, p.y*4/center.y], center);
     // Geom.rotate2D([a, b], ang, center);
     // Geom.rotate2D(a, ang, center);
-    // Geom.shear2D([a, b], [p.$unit().x, 0], center);
+    // Geom.shear2D([a, b], [p.y/center.y, 0], center);
     
-    // let reflectLine = [ mouse, center ];
-    // Geom.reflect2D([a, b], reflectLine, center);
-    // form.stroke("#0f0").line( reflectLine );
+    let reflectLine = [ mouse, center ];
+    Geom.reflect2D([a, b], reflectLine, center);
+    form.stroke("#0f0").line( reflectLine );
     
     // a.add(center);
 

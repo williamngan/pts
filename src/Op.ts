@@ -86,8 +86,8 @@ export class Geom {
   }
 
   static boundingBox( pts:GroupLike ):Group {
-    let minPt = pts[0].clone().fill( Number.MAX_VALUE );
-    let maxPt = pts[0].clone().fill( Number.MIN_VALUE );
+    let minPt = Pt.make( pts[0].length, Number.MAX_VALUE );
+    let maxPt = Pt.make( pts[0].length, Number.MIN_VALUE );
     for (let i=0, len=pts.length; i<len; i++) {
       for (let d=0, len=pts[i].length; d<len; d++) {
         if (pts[i][d] < minPt[d] ) minPt[d] = pts[i][d];
@@ -139,9 +139,25 @@ export class Geom {
     return new Group(pa, pb);
   }
 
-  static rotate2D( ps:Pt|GroupLike, angle:number, anchor?:Pt, axis?:string):Geom {
+  static scale( ps:Pt|GroupLike, scale:number|number[]|PtLike, anchor?:PtLike ):Geom {
+    let pts = (!Array.isArray(ps)) ? [ps] : ps;
+    let scs = (typeof scale == "number") ? Pt.make( pts[0].length, scale) : scale;
+    if (!anchor) anchor = Pt.make( pts[0].length, 0 );
+  
+    for (let i=0, len=pts.length; i<len; i++) {
+      let p = pts[i];
+      for (let k=0, lenP=p.length; k<lenP; k++) {
+        p[k] = (anchor && anchor[k]) ? anchor[k] + (p[k] - anchor[k])*scs[k] : p[k] * scs[k];
+      }
+    }
+
+    return Geom;
+  }
+
+  static rotate2D( ps:Pt|GroupLike, angle:number, anchor?:PtLike, axis?:string):Geom {
     let pts = (!Array.isArray(ps)) ? [ps] : ps;
     let fn = (anchor != undefined) ? Mat.rotateAt2DMatrix : Mat.rotate2DMatrix;
+    if (!anchor) anchor = Pt.make( pts[0].length, 0 );
     let cos = Math.cos(angle);
     let sin = Math.sin(angle);
 
@@ -153,22 +169,11 @@ export class Geom {
     return Geom;
   }
   
-  static scale2D( ps:Pt|GroupLike, scale:number|number[]|PtLike, anchor?:Pt, axis?:string):Geom {
+
+  static shear2D( ps:Pt|GroupLike, scale:number|number[]|PtLike, anchor?:PtLike, axis?:string):Geom {
     let pts = (!Array.isArray(ps)) ? [ps] : ps;
     let s = (typeof scale == "number") ? [scale, scale] : scale;
-    let fn = (anchor != undefined) ? Mat.scaleAt2DMatrix : Mat.scale2DMatrix;
-    
-    for (let i=0, len=pts.length; i<len; i++) {
-      let p = (axis !=undefined) ? pts[i].$take( axis ) : pts[i];
-      p.to( Mat.transform2D( p, fn( s[0], s[1], anchor ) ) );
-    }
-
-    return Geom;
-  }
-
-  static shear2D( ps:Pt|GroupLike, scale:number|number[]|PtLike, anchor?:Pt, axis?:string):Geom {
-    let pts = (!Array.isArray(ps)) ? [ps] : ps;
-    let s = (typeof scale == "number") ? [scale, scale] : scale;
+    if (!anchor) anchor = Pt.make( pts[0].length, 0 );
     let fn = (anchor != undefined) ? Mat.shearAt2DMatrix : Mat.shear2DMatrix;
     let tanx = Math.tan( s[0] );
     let tany = Math.tan( s[1] );
@@ -181,8 +186,9 @@ export class Geom {
     return Geom;
   }
 
-  static reflect2D( ps:Pt|GroupLike, line:GroupLike, anchor?:Pt, axis?:string):Geom {
+  static reflect2D( ps:Pt|GroupLike, line:GroupLike, anchor?:PtLike, axis?:string):Geom {
     let pts = (!Array.isArray(ps)) ? [ps] : ps;
+    if (!anchor) anchor = Pt.make( pts[0].length, 0 );
     
     for (let i=0, len=pts.length; i<len; i++) {
       let p = (axis !=undefined) ? pts[i].$take( axis ) : pts[i];

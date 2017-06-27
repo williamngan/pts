@@ -173,12 +173,6 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
 
   $divide(...args): Pt { return this.clone().divide(...args) };
 
-
-  scale(...args ): this { return this.multiply(...args); }
-
-  $scale(...args ): Pt { return this.clone().scale(...args) };
-  
-
   magnitudeSq():number {  return Vec.dot( this, this ); }
 
   magnitude():number { return Vec.magnitude( this ); }
@@ -257,6 +251,27 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
    */
   angleBetween( p:Pt, axis:string|number[]=Const.xy ):number {
     return Geom.boundRadian( this.angle(axis) ) - Geom.boundRadian( p.angle(axis) );
+  }
+
+  scale( scale:number|number[]|PtLike, anchor?:PtLike ) {    
+    Geom.scale( this, scale, anchor || Pt.make( this.length, 0) );
+    return this;
+  }
+
+
+  rotate2D( angle:number, anchor?:PtLike, axis?:string ) {    
+    Geom.rotate2D( this, angle, anchor || Pt.make( this.length, 0), axis );
+    return this;
+  }
+
+  shear2D( scale:number|number[]|PtLike, anchor?:PtLike, axis?:string) {
+    Geom.shear2D( this, scale, anchor || Pt.make( this.length, 0), axis );
+    return this;
+  }
+
+  reflect2D( line:GroupLike, anchor?:PtLike, axis?:string):this {
+    Geom.reflect2D( this, line, anchor || Pt.make( this.length, 0), axis );
+    return this;
   }
 
   /**
@@ -410,24 +425,41 @@ export class Group extends Array<Pt> {
     return this;
   }
 
+  /**
+   * Move the first Pt in this group to a specific position, and move all the other Pts correspondingly
+   * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
+   */
   moveTo( ...args ):this {
     let d = new Pt( Util.getArgs(args) ).subtract( this[0] );
     this.moveBy( d );
     return this; 
   }
 
-  scale2D( scale:number, anchor?:Pt, axis?:string ) {    
-    Geom.scale2D( this, scale, anchor || this[0], axis );
+  scale( scale:number|number[]|PtLike, anchor?:PtLike ):this {    
+    for (let i=0, len=this.length; i<len; i++) {
+      Geom.scale( this[i], scale, anchor || this[0] );
+    }
     return this;
   }
 
-  rotate2D( angle:number, anchor?:Pt, axis?:string ) {    
-    Geom.rotate2D( this, angle, anchor || this[0], axis );
+  rotate2D( angle:number, anchor?:PtLike, axis?:string ):this {   
+    for (let i=0, len=this.length; i<len; i++) {
+      Geom.rotate2D( this[i], angle, anchor || this[0], axis );
+    } 
     return this;
   }
 
-  shear2D( scale:number|number[]|PtLike, anchor?:Pt, axis?:string) {
-    Geom.shear2D( this, scale, anchor || this[0], axis );
+  shear2D( scale:number|number[]|PtLike, anchor?:PtLike, axis?:string):this {
+    for (let i=0, len=this.length; i<len; i++) {
+      Geom.shear2D( this[i], scale, anchor || this[0], axis );
+    }
+    return this;
+  }
+
+  reflect2D( line:GroupLike, anchor?:PtLike, axis?:string):this {
+    for (let i=0, len=this.length; i<len; i++) {
+      Geom.reflect2D( this[i], line, anchor || this[0], axis );
+    }
     return this;
   }
 

@@ -1,6 +1,6 @@
 import chai = require('chai');
 import mocha = require('mocha');
-import {Pt} from '../Pt';
+import {Pt, Group} from '../Pt';
 import {Util} from '../Util';
 import {Num, Geom, Line} from '../Op';
 
@@ -57,6 +57,29 @@ describe('Op: ', function() {
       assert.equal( Geom.boundRadian(-Math.PI), Math.PI );
     });
 
+    it('can find a bounding box', function() {
+      let g = Group.fromArray( [[-10,100,5], [1,2,3], [-1,50,9]] );
+      let b = Geom.boundingBox( g );
+      assert.isTrue( b[0].equals( [-10,2,3] ) && b[1].equals([1,100,9]) );
+    });
+    
+    it('can find centroid', function() {
+      let g = Group.fromArray( [[5,4,3], [1,2,3], [10,10,5]] );
+      let c = Geom.centroid( g );
+      assert.isTrue( c.equals( [(5+1+10)/3, (4+2+10)/3, (3+3+5)/3], 0.00001 ) );
+    });
+
+    it('can scale a group by dimensions', function() {
+      let ps = [new Pt(0,0,1), new Pt(3,6,5)];
+      Geom.scale( ps, [10,9,8], [0,0,0] );
+      assert.isTrue( ps[0].x === 0 && ps[1].y === 54 && ps[0].z === 8 );
+    });
+
+    it('can scale a group uniformly', function() {
+      let ps = [new Pt(1,10,0), new Pt(3,6,5)];
+      Geom.scale( ps, 5, [1,10,0] );
+      assert.isTrue( ps[0].x === 1 && ps[1].y === -10 && ps[1].z === 25 );
+    });
   });
 
   describe('Line: ', function() {
