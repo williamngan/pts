@@ -186,5 +186,22 @@ describe('Op: ', function() {
       assert.isTrue( Line.intersectLine2D(r1, r2).equals([21.81818181, 58.1818199], 0.00001) );
     });
 
+    it('can check 2D grid intersection with ray', function() {
+      let g = Group.fromArray([[368, 654], [296, 579]]);
+      let d = Line.intersectGridWithRay2D( g, [268, 454] );
+      assert.isTrue( Util.equals( d[0].x, 176) && Util.equals( d[1].y, 549.83331) );
+    });
+
+    it('can check 2D grid intersection with line', function() {
+      let g = Group.fromArray([[368, 654], [221, 533]]);
+      let d = Line.intersectGridWithLine2D( g, [268, 454] );
+      assert.isTrue( d.length === 1 && Util.equals( d[0].y, 571.6870727) );
+    });
+
+    it('can interpolate sub-points on a line', function() {
+      let g = Line.subpoints( [[10, 10], [100, 100]], 8 );
+      assert.isTrue( g.length === 8 && g[1].y === 30 && g[3].x === 50 );
+    });
+
   });
 });

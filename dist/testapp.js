@@ -1245,12 +1245,24 @@ class Line {
     }
     /**
      * Get two intersection points on a standard xy grid
-     * @param pt a target Pt
+     * @param ray a ray specified by 2 Pts
      * @param gridPt a Pt on the grid
      * @returns a group of two intersection points. The first one is horizontal intersection and the second one is vertical intersection.
      */
-    static intersectGrid2D(pt, gridPt) {
-        return new Pt_1.Group(new Pt_1.Pt(gridPt[0], pt[1]), new Pt_1.Pt(pt[0], gridPt[1]));
+    static intersectGridWithRay2D(ray, gridPt) {
+        let t = Line.intercept(new Pt_1.Pt(ray[0]).subtract(gridPt), new Pt_1.Pt(ray[1]).subtract(gridPt));
+        let g = new Pt_1.Group();
+        if (t && t.xi) g.push(new Pt_1.Pt(gridPt[0] + t.xi, gridPt[1]));
+        if (t && t.yi) g.push(new Pt_1.Pt(gridPt[0], gridPt[1] + t.yi));
+        return g;
+    }
+    static intersectGridWithLine2D(line, gridPt) {
+        let g = Line.intersectGridWithRay2D(line, gridPt);
+        let gg = new Pt_1.Group();
+        for (let i = 0, len = g.length; i < len; i++) {
+            if (Geom.withinBound(g[i], line[0], line[1])) gg.push(g[i]);
+        }
+        return gg;
     }
     static subpoints(line, num) {
         let pts = new Pt_1.Group();
@@ -1412,6 +1424,7 @@ class CanvasForm extends Form_1.Form {
         return this;
     }
     static circle(ctx, pt, radius) {
+        if (!pt) return;
         ctx.beginPath();
         ctx.arc(pt[0], pt[1], radius, 0, Util_1.Const.two_pi, false);
         ctx.closePath();
@@ -1430,6 +1443,7 @@ class CanvasForm extends Form_1.Form {
         return this;
     }
     static square(ctx, pt, halfsize) {
+        if (!pt) return;
         let x1 = pt[0] - halfsize;
         let y1 = pt[1] - halfsize;
         let x2 = pt[0] + halfsize;
@@ -1452,13 +1466,15 @@ class CanvasForm extends Form_1.Form {
         return this;
     }
     static line(ctx, pts) {
+        if (pts.length < 2) return;
         ctx.beginPath();
         ctx.moveTo(pts[0][0], pts[0][1]);
         for (let i = 1, len = pts.length; i < len; i++) {
-            ctx.lineTo(pts[i][0], pts[i][1]);
+            if (pts[i]) ctx.lineTo(pts[i][0], pts[i][1]);
         }
     }
     static rect(ctx, pts) {
+        if (pts.length < 2) return;
         ctx.beginPath();
         ctx.moveTo(pts[0][0], pts[0][1]);
         ctx.lineTo(pts[0][0], pts[1][1]);
@@ -1479,6 +1495,7 @@ class CanvasForm extends Form_1.Form {
      * @param `maxWidth` specify a maximum width per line
      */
     static text(ctx, pt, txt, maxWidth) {
+        if (!pt) return;
         ctx.fillText(txt, pt[0], pt[1], maxWidth);
     }
     text(pt, txt, maxWidth) {

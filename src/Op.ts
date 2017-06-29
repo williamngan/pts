@@ -339,13 +339,26 @@ export class Line {
 
   /**
    * Get two intersection points on a standard xy grid
-   * @param pt a target Pt
+   * @param ray a ray specified by 2 Pts
    * @param gridPt a Pt on the grid
    * @returns a group of two intersection points. The first one is horizontal intersection and the second one is vertical intersection.
    */
-  static intersectGrid2D( pt:PtLike|number[], gridPt:PtLike|number[] ):Group {
-    return new Group( new Pt( gridPt[0], pt[1] ), new Pt( pt[0], gridPt[1] ) );
+  static intersectGridWithRay2D( ray:GroupLike, gridPt:PtLike|number[] ):Group {
+    let t = Line.intercept( new Pt( ray[0] ).subtract( gridPt ), new Pt( ray[1] ).subtract( gridPt ) );
+    let g = new Group();
+    if (t && t.xi) g.push( new Pt( gridPt[0] + t.xi, gridPt[1] ) );
+    if (t && t.yi) g.push( new Pt( gridPt[0], gridPt[1] + t.yi ) );
+    return g;
   }  
+
+  static intersectGridWithLine2D( line:GroupLike, gridPt:PtLike|number[] ):Group {
+    let g = Line.intersectGridWithRay2D( line, gridPt );
+    let gg = new Group();
+    for (let i=0, len=g.length; i<len; i++) {
+      if ( Geom.withinBound( g[i], line[0], line[1] ) ) gg.push( g[i] );
+    }
+    return gg;
+  }
 
   static subpoints( line:GroupLike|number[][], num:number ) {
     let pts = new Group();

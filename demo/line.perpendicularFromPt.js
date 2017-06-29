@@ -26,18 +26,21 @@ space.add( {
     let dist = Line.distanceFromPt( [a,b], c );
     form.log( "distance: "+dist );
 
-    console.log( a, b, c, dist );
-
-
     let intersector = [ space.center, c ];
     form.stroke("#ccc").line( intersector );
-    let inPt1 = Line.intersectPath2D( [a, b], intersector );
+    let inPt1 = Line.intersectRay2D( [a, b], intersector );
     let inPt2 = Line.intersectLine2D( [a, b], intersector );
     if (inPt1) form.fill("#00f").stroke(false).point( inPt1, 5, "circle" );
     if (inPt2) form.fill("#f90").stroke(false).point( inPt2, 3, "circle" );
 
-    let gridPt = Line.intersectGrid2D( c, space.center );
-    form.stroke("#999").fill(false).points( [gridPt[0], gridPt[1]], 3 );
+    let gridPt = Line.intersectGridWithRay2D( [a, c], space.center );
+    form.stroke("#f0f").fill(false).points( [gridPt[0], gridPt[1]], 5 ).line([a, c]);
+    form.stroke("#ccc").line([space.center, gridPt[0]]).line([space.center, gridPt[1]]);
+
+    let gridPt2 = Line.intersectGridWithLine2D( [a, c], space.center );
+    form.stroke(false).fill("#f0f").points( [gridPt2[0], gridPt2[1]], 2 ).line([a, c]);
+
+    console.log( a, c, space.center, gridPt2 );
 
     let subPts = Line.subpoints( [b, c], 7 );
     form.points( subPts, 1 );
@@ -59,4 +62,4 @@ space.add( {
 });
   
 space.bindMouse();
-space.playOnce(5000);
+space.playOnce(2000);

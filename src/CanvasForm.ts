@@ -106,6 +106,7 @@ export class CanvasForm extends Form {
 
 
   static circle( ctx:CanvasRenderingContext2D, pt:PtLike, radius:number ) {
+    if (!pt) return;
     ctx.beginPath()
     ctx.arc( pt[0], pt[1], radius, 0, Const.two_pi, false );
     ctx.closePath();
@@ -129,6 +130,7 @@ export class CanvasForm extends Form {
   }
 
   static square( ctx:CanvasRenderingContext2D, pt:PtLike, halfsize:number ) {
+    if (!pt) return;
     let x1 = pt[0]-halfsize
     let y1 = pt[1]-halfsize
     let x2 = pt[0]+halfsize
@@ -155,15 +157,17 @@ export class CanvasForm extends Form {
   }
 
   static line( ctx:CanvasRenderingContext2D, pts:GroupLike|number[][] ) {
+    if (pts.length<2) return;
     ctx.beginPath();
     ctx.moveTo( pts[0][0], pts[0][1] );
     for (let i=1, len=pts.length; i<len; i++) {
-      ctx.lineTo( pts[i][0], pts[i][1] );
+      if (pts[i]) ctx.lineTo( pts[i][0], pts[i][1] );
     }
   }
 
 
   static rect( ctx:CanvasRenderingContext2D, pts:GroupLike|number[][] ) {
+    if (pts.length<2) return;
     ctx.beginPath();
     ctx.moveTo( pts[0][0], pts[0][1] );
     ctx.lineTo( pts[0][0], pts[1][1] );
@@ -188,6 +192,7 @@ export class CanvasForm extends Form {
    * @param `maxWidth` specify a maximum width per line
    */
   static text( ctx:CanvasRenderingContext2D, pt:PtLike, txt:string, maxWidth?:number ) {
+    if (!pt) return;
     ctx.fillText( txt, pt[0], pt[1], maxWidth )
   }
 
