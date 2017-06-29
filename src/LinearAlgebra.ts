@@ -5,40 +5,40 @@ import {Line} from "./Op"
 
 export class Vec {
 
-  static add( a:PtLike, b:PtLike|number ) {
+  static add( a:PtLike, b:PtLike|number ):PtLike {
     if (typeof b == "number") {
       for (let i=0, len=a.length; i<len; i++) a[i] += b;
     } else {
       for (let i=0, len=a.length; i<len; i++) a[i] += b[i] || 0;
     }
-    return Vec;
+    return a;
   }
 
-  static subtract( a:PtLike, b:PtLike|number ) {
+  static subtract( a:PtLike, b:PtLike|number ):PtLike {
     if (typeof b == "number") {
       for (let i=0, len=a.length; i<len; i++) a[i] -= b;
     } else {
       for (let i=0, len=a.length; i<len; i++) a[i] -= b[i] || 0;
     }
-    return Vec;
+    return a;
   }
 
-  static multiply( a:PtLike, b:PtLike|number ) {
+  static multiply( a:PtLike, b:PtLike|number ):PtLike {
     if (typeof b == "number") {
       for (let i=0, len=a.length; i<len; i++) a[i] *= b;
     } else {
       for (let i=0, len=a.length; i<len; i++) a[i] *= b[i] || 1;
     }
-    return Vec;
+    return a;
   }
 
-  static divide( a:PtLike, b:PtLike|number ) {
+  static divide( a:PtLike, b:PtLike|number ):PtLike {
     if (typeof b == "number") {
       for (let i=0, len=a.length; i<len; i++) a[i] /= b;
     } else {
       for (let i=0, len=a.length; i<len; i++) a[i] /= b[i] || 1;
     }
-    return Vec;
+    return a;
   }
 
   static dot( a:PtLike, b:PtLike ):number {
@@ -58,32 +58,46 @@ export class Vec {
     return Math.sqrt( Vec.dot( a, a ) );
   }
 
-  static unit( a:PtLike, magnitude:number=undefined ) {
+  static unit( a:PtLike, magnitude:number=undefined ):PtLike {
     let m = (magnitude===undefined) ? Vec.magnitude(a) : magnitude;
     return Vec.divide( a, m );
   }
 
-  static abs( a:PtLike ) {
+  static abs( a:PtLike ):PtLike {
     return Vec.map( a, Math.abs );
   }
 
-  static max( a:PtLike ) {
+  static max( a:PtLike ):{value, index} {
     let m = Number.MIN_VALUE;
-    for (let i=0, len=this.length; i<len; i++) m = Math.max( m, this[i] );
-    return m;
+    let index = 0;
+    for (let i=0, len=a.length; i<len; i++) {
+      m = Math.max( m, a[i] );
+      if (m === a[i]) index = i;
+    }
+    return {value: m, index: index};
   }
 
-  static min( a:PtLike ) {
+  static min( a:PtLike ):{value, index} {
     let m = Number.MAX_VALUE;
-    for (let i=0, len=this.length; i<len; i++) m = Math.min( m, this[i] );
-    return m;
+    let index = 0;
+    for (let i=0, len=a.length; i<len; i++) {
+      m = Math.min( m, a[i] );
+      if (m === a[i]) index = i;
+    }
+    return {value: m, index: index};
   }
 
-  static map( a:PtLike, fn:(n:number, index:number, arr) => number ) {
+  static sum( a:PtLike ):number {
+    let s = 0;
+    for (let i=0, len=a.length; i<len; i++) s += a[i];
+    return s;
+  }
+
+  static map( a:PtLike, fn:(n:number, index:number, arr) => number ):PtLike {
     for (let i=0, len=a.length; i<len; i++) {
       a[i] = fn( a[i], i, a );
     }
-    return Vec;
+    return a;
   }
   
 }
@@ -91,7 +105,7 @@ export class Vec {
 
 export class Mat {
 
-  static transform2D( pt:PtLike, m:GroupLike ):Pt {
+  static transform2D( pt:PtLike, m:GroupLike|number[][] ):Pt {
     let x = pt[0] * m[0][0] + pt[1] * m[1][0] + m[2][0];
     let y = pt[0] * m[0][1] + pt[1] * m[1][1] + m[2][1];
     return new Pt(x, y);
@@ -140,7 +154,7 @@ export class Mat {
   static rotateAt2DMatrix( cosA:number, sinA:number, at:PtLike ):GroupLike {
     let m = Mat.rotate2DMatrix(cosA, sinA);
     m[2][0] = at[0]*(1-cosA) + at[1]*sinA;
-    m[2][1] = at[1]*(1-cosA)-at[0]*sinA;
+    m[2][1] = at[1]*(1-cosA) - at[0]*sinA;
     return m;
   }
 
@@ -151,14 +165,14 @@ export class Mat {
     return m;
   }
 
-  static reflectAt2DMatrix( p1:PtLike, p2:PtLike, at:PtLike) {
+  static reflectAt2DMatrix( p1:PtLike, p2:PtLike ) {
     let intercept = Line.intercept( p1, p2 );
     
     if (intercept == undefined) {
       return [
         new Pt( [-1, 0, 0] ),
         new Pt( [0, 1, 0] ),
-        new Pt( [at[0]+p1[0], 0, 1] )  
+        new Pt( [p1[0]+p2[0], 0, 1] )  
       ]
     } else {
 

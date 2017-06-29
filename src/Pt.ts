@@ -269,8 +269,8 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
     return this;
   }
 
-  reflect2D( line:GroupLike, anchor?:PtLike, axis?:string):this {
-    Geom.reflect2D( this, line, anchor || Pt.make( this.length, 0), axis );
+  reflect2D( line:GroupLike, axis?:string):this {
+    Geom.reflect2D( this, line, axis );
     return this;
   }
 
@@ -364,9 +364,12 @@ export class Group extends Array<Pt> {
     return Group.prototype.splice.apply( this, param );
   }
 
-  pairs( stride:number=2 ):Group[] { return this.split(2, stride); }
+  segments( pts_per_segment:number=2, stride:number=2 ):Group[] { return this.split(2, stride); }
 
-  segments():Group[] { return this.pairs(1); }
+  /**
+   * Get all the lines (ie, edges in a graph) of this group
+   */
+  lines():Group[] { return this.segments(2, 1); }
 
 
   /**
@@ -456,9 +459,9 @@ export class Group extends Array<Pt> {
     return this;
   }
 
-  reflect2D( line:GroupLike, anchor?:PtLike, axis?:string):this {
+  reflect2D( line:GroupLike, axis?:string):this {
     for (let i=0, len=this.length; i<len; i++) {
-      Geom.reflect2D( this[i], line, anchor || this[0], axis );
+      Geom.reflect2D( this[i], line, axis );
     }
     return this;
   }

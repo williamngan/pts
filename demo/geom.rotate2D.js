@@ -30,10 +30,13 @@ space.add( {
     // Geom.rotate2D([a, b], ang, center);
     // Geom.rotate2D(a, ang, center);
     // Geom.shear2D([a, b], [p.y/center.y, 0], center);
+
+    // console.log( [a, b], p.y/center.y, center );
     
     let reflectLine = [ mouse, center ];
     Geom.reflect2D([a, b], reflectLine, center);
-    form.stroke("#0f0").line( reflectLine );
+    console.log( mouse, da, db, a, b, center );
+    // form.stroke("#0f0").line( reflectLine );
     
     // a.add(center);
 
@@ -57,4 +60,4 @@ space.add( {
 });
   
 space.bindMouse();
-space.playOnce(15000);
+space.playOnce(3000);

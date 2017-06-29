@@ -80,6 +80,29 @@ describe('Op: ', function() {
       Geom.scale( ps, 5, [1,10,0] );
       assert.isTrue( ps[0].x === 1 && ps[1].y === -10 && ps[1].z === 25 );
     });
+
+    it('can rotate a group in 2D', function() {
+      let ps = [new Pt(1,2), new Pt(3,6) ];
+      let ang = Math.PI/4;
+      Geom.rotate2D( ps, ang, [1,1] );
+      let s1 = Util.equals( ps[0].x, Math.cos(2.35619449)+1);
+      let s2 = Util.equals( ps[1].y, Math.sin(1.97568811)*5.38516480+1 );
+      assert.isTrue( s1 && s2 );
+    });
+
+    it('can shear a group in 2D', function() {
+      let ps = [new Pt(218, 454), new Pt( 218, 404) ];
+      let scale = [-0.5154185022026432, 0];
+      Geom.shear2D( ps, scale, [268, 454] );
+      assert.isTrue( Util.equals( ps[0].x, 218) && Util.equals(ps[0].y, 482.324, 0.001) &&  Util.equals(ps[1].y, 432.324, 0.001) );
+    });
+
+    it('can reflect a group in 2D', function() {
+      let ps = [new Pt(218, 454), new Pt( 218, 404) ];
+      let reflect = Group.fromArray( [[230, 497], [268, 454]] )
+      Geom.reflect2D( ps, reflect );
+      assert.isTrue( Util.equals(ps[0].x, 274.14938) &&  Util.equals(ps[1].y, 497.4710) );
+    });
   });
 
   describe('Line: ', function() {

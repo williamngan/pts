@@ -132,5 +132,9 @@ export class Util {
   }
 
 
+  static equals( a:number, b:number, threshold=0.00001) {
+    return Math.abs( a-b ) < threshold;
+  }
+
 
 }

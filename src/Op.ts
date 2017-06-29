@@ -186,13 +186,12 @@ export class Geom {
     return Geom;
   }
 
-  static reflect2D( ps:Pt|GroupLike, line:GroupLike, anchor?:PtLike, axis?:string):Geom {
+  static reflect2D( ps:Pt|GroupLike, line:GroupLike, axis?:string):Geom {
     let pts = (!Array.isArray(ps)) ? [ps] : ps;
-    if (!anchor) anchor = Pt.make( pts[0].length, 0 );
     
     for (let i=0, len=pts.length; i<len; i++) {
       let p = (axis !=undefined) ? pts[i].$take( axis ) : pts[i];
-      p.to( Mat.transform2D( p, Mat.reflectAt2DMatrix( line[0], line[1], anchor ) ) );
+      p.to( Mat.transform2D( p, Mat.reflectAt2DMatrix( line[0], line[1] ) ) );
     }
 
     return Geom;
@@ -407,5 +406,13 @@ export class Polygon {
       if (_ip) groups.push( _ip );
     }
     return groups;
+  }
+
+  static network( poly:GroupLike, originIndex:number=0 ):Group[] {
+    let g = []
+    for (let i=0, len=poly.length; i<len; i++) {
+      if (i != originIndex) g.push( new Group( poly[originIndex], poly[i] ) );
+    }
+    return g;
   }
 }

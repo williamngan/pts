@@ -319,8 +319,8 @@ class Pt extends exports.PtBaseArray {
         Op_1.Geom.shear2D(this, scale, anchor || Pt.make(this.length, 0), axis);
         return this;
     }
-    reflect2D(line, anchor, axis) {
-        Op_1.Geom.reflect2D(this, line, anchor || Pt.make(this.length, 0), axis);
+    reflect2D(line, axis) {
+        Op_1.Geom.reflect2D(this, line, axis);
         return this;
     }
     /**
@@ -398,11 +398,14 @@ class Group extends Array {
         let param = index < 0 ? [index * -1 - 1, count] : [index, count];
         return Group.prototype.splice.apply(this, param);
     }
-    pairs(stride = 2) {
+    segments(pts_per_segment = 2, stride = 2) {
         return this.split(2, stride);
     }
-    segments() {
-        return this.pairs(1);
+    /**
+     * Get all the lines (ie, edges in a graph) of this group
+     */
+    lines() {
+        return this.segments(2, 1);
     }
     /**
      * Create an operation using this Group, passing this Group into a custom function's first parameter
@@ -479,9 +482,9 @@ class Group extends Array {
         }
         return this;
     }
-    reflect2D(line, anchor, axis) {
+    reflect2D(line, axis) {
         for (let i = 0, len = this.length; i < len; i++) {
-            Op_1.Geom.reflect2D(this[i], line, anchor || this[0], axis);
+            Op_1.Geom.reflect2D(this[i], line, axis);
         }
         return this;
     }
@@ -645,6 +648,9 @@ class Util {
         let arr = flattenAsGroup ? new Pt_1.Group() : new Array();
         return arr.concat.apply(arr, pts);
     }
+    static equals(a, b, threshold = 0.00001) {
+        return Math.abs(a - b) < threshold;
+    }
 }
 exports.Util = Util;
 
@@ -785,7 +791,7 @@ class Vec {
         } else {
             for (let i = 0, len = a.length; i < len; i++) a[i] += b[i] || 0;
         }
-        return Vec;
+        return a;
     }
     static subtract(a, b) {
         if (typeof b == "number") {
@@ -793,7 +799,7 @@ class Vec {
         } else {
             for (let i = 0, len = a.length; i < len; i++) a[i] -= b[i] || 0;
         }
-        return Vec;
+        return a;
     }
     static multiply(a, b) {
         if (typeof b == "number") {
@@ -801,7 +807,7 @@ class Vec {
         } else {
             for (let i = 0, len = a.length; i < len; i++) a[i] *= b[i] || 1;
         }
-        return Vec;
+        return a;
     }
     static divide(a, b) {
         if (typeof b == "number") {
@@ -809,7 +815,7 @@ class Vec {
         } else {
             for (let i = 0, len = a.length; i < len; i++) a[i] /= b[i] || 1;
         }
-        return Vec;
+        return a;
     }
     static dot(a, b) {
         if (a.length != b.length) throw "Array lengths don't match";
@@ -834,19 +840,32 @@ class Vec {
     }
     static max(a) {
         let m = Number.MIN_VALUE;
-        for (let i = 0, len = this.length; i < len; i++) m = Math.max(m, this[i]);
-        return m;
+        let index = 0;
+        for (let i = 0, len = a.length; i < len; i++) {
+            m = Math.max(m, a[i]);
+            if (m === a[i]) index = i;
+        }
+        return { value: m, index: index };
     }
     static min(a) {
         let m = Number.MAX_VALUE;
-        for (let i = 0, len = this.length; i < len; i++) m = Math.min(m, this[i]);
-        return m;
+        let index = 0;
+        for (let i = 0, len = a.length; i < len; i++) {
+            m = Math.min(m, a[i]);
+            if (m === a[i]) index = i;
+        }
+        return { value: m, index: index };
+    }
+    static sum(a) {
+        let s = 0;
+        for (let i = 0, len = a.length; i < len; i++) s += a[i];
+        return s;
     }
     static map(a, fn) {
         for (let i = 0, len = a.length; i < len; i++) {
             a[i] = fn(a[i], i, a);
         }
-        return Vec;
+        return a;
     }
 }
 exports.Vec = Vec;
@@ -886,10 +905,10 @@ class Mat {
         m[2][1] = -at[0] * tanX;
         return m;
     }
-    static reflectAt2DMatrix(p1, p2, at) {
+    static reflectAt2DMatrix(p1, p2) {
         let intercept = Op_1.Line.intercept(p1, p2);
         if (intercept == undefined) {
-            return [new Pt_1.Pt([-1, 0, 0]), new Pt_1.Pt([0, 1, 0]), new Pt_1.Pt([at[0] + p1[0], 0, 1])];
+            return [new Pt_1.Pt([-1, 0, 0]), new Pt_1.Pt([0, 1, 0]), new Pt_1.Pt([p1[0] + p2[0], 0, 1])];
         } else {
             let yi = intercept.yi;
             let ang2 = Math.atan(intercept.slope) * 2;
@@ -1056,12 +1075,11 @@ class Geom {
         }
         return Geom;
     }
-    static reflect2D(ps, line, anchor, axis) {
+    static reflect2D(ps, line, axis) {
         let pts = !Array.isArray(ps) ? [ps] : ps;
-        if (!anchor) anchor = Pt_1.Pt.make(pts[0].length, 0);
         for (let i = 0, len = pts.length; i < len; i++) {
             let p = axis != undefined ? pts[i].$take(axis) : pts[i];
-            p.to(LinearAlgebra_1.Mat.transform2D(p, LinearAlgebra_1.Mat.reflectAt2DMatrix(line[0], line[1], anchor)));
+            p.to(LinearAlgebra_1.Mat.transform2D(p, LinearAlgebra_1.Mat.reflectAt2DMatrix(line[0], line[1])));
         }
         return Geom;
     }
@@ -1232,6 +1250,13 @@ class Polygon {
             if (_ip) groups.push(_ip);
         }
         return groups;
+    }
+    static network(poly, originIndex = 0) {
+        let g = [];
+        for (let i = 0, len = poly.length; i < len; i++) {
+            if (i != originIndex) g.push(new Pt_1.Group(poly[originIndex], poly[i]));
+        }
+        return g;
     }
 }
 exports.Polygon = Polygon;

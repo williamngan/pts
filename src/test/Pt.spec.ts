@@ -2,6 +2,7 @@ import chai = require('chai');
 import mocha = require('mocha');
 import {Pt, Group} from '../Pt';
 import {Geom} from '../Op';
+import {Util} from '../Util';
 
 var {assert} = chai;
 var {describe, it} = mocha;
@@ -252,7 +253,12 @@ describe('Pt: ', () => {
       assert.equal( s[1]().x, 8 );
     });
     
-
+    it('can sort by a specifc dimension', function() {
+      let p = Group.fromArray( [[1,2,0,4],[3,4,1,-1],[5,6,2,0], [7,8,10,9]] );
+      p.sortByDimension( 3 );
+      assert.equal( p[1].x, 5 );
+    });
+    
     it('can zip one slice', function() {
       let p = new Group( new Pt(1,3,5,7), new Pt(2,4,6,8), new Pt(5,10,15,20) ).zipOne( 2 );
       assert.isTrue( p.equals( new Pt(5,6,15) ) )
@@ -304,6 +310,31 @@ describe('Pt: ', () => {
         assert.isTrue( ps[0].x === 0 && ps[1].y === 54 && ps[0].z === 8 );
       });
 
+      it('can rotate a group in 2D', function() {
+        let ps = new Group( new Pt(1,2), new Pt(3,6) );
+        let ang = Math.PI/4;
+        ps.rotate2D( ang, [1,1] );
+        let s1 = Util.equals( ps[0].x, Math.cos(2.35619449)+1);
+        let s2 = Util.equals( ps[1].y, Math.sin(1.97568811)*5.38516480+1 );
+        assert.isTrue( s1 && s2 );
+      });
+
+      it('can shear a group in 2D', function() {
+        let ps = new Group( new Pt(218, 454), new Pt( 218, 404) );
+        let scale = [-0.5154185022026432, 0];
+        ps.shear2D( scale, [268, 454] );
+        assert.isTrue( Util.equals( ps[0].x, 218) && Util.equals(ps[0].y, 482.324, 0.001) &&  Util.equals(ps[1].y, 432.324, 0.001) );
+      });
+
+      it('can reflect a group in 2D', function() {
+        let ps = new Group( new Pt(218, 454), new Pt( 218, 404) );
+        let reflect = Group.fromArray( [[230, 497], [268, 454]] )
+        let scale = [-0.5154185022026432, 0];
+        ps.reflect2D( reflect );
+        assert.isTrue( Util.equals(ps[0].x, 274.14938) &&  Util.equals(ps[1].y, 497.4710) );
+      });
+
+      
 
     });
 });
