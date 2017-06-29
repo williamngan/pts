@@ -69,6 +69,25 @@ describe('Op: ', function() {
       assert.isTrue( c.equals( [(5+1+10)/3, (4+2+10)/3, (3+3+5)/3], 0.00001 ) );
     });
 
+    it('can interpolate between 2 points', function() {
+      assert.isTrue( Geom.interpolate([10,10], [20,100], 0.3).equals( [13,37] ) );
+    });
+
+    it('can find perpendicular pts', function() {
+      let ps = Geom.perpendicular( [10, 3] )
+      assert.isTrue( Util.equals( ps[0].x, -3) && Util.equals( ps[1].y, -10 ) );
+    });
+
+    it('can check if 2 pts are perpendicular to each other', function() {
+      assert.isTrue( Geom.isPerpendicular( [-2, 4], [8,4] ) );
+    });
+
+    it('can check if a pt is within bound', function() {
+      let a = Geom.withinBound( [10, 15], [10,10], [11,15] );
+      let b = Geom.withinBound( [10, 15], [10,10], [11,14] );
+      assert.isTrue( a && !b );
+    });
+
     it('can scale a group by dimensions', function() {
       let ps = [new Pt(0,0,1), new Pt(3,6,5)];
       Geom.scale( ps, [10,9,8], [0,0,0] );
@@ -103,12 +122,68 @@ describe('Op: ', function() {
       Geom.reflect2D( ps, reflect );
       assert.isTrue( Util.equals(ps[0].x, 274.14938) &&  Util.equals(ps[1].y, 497.4710) );
     });
+
+    it('can reflect a group in 2D', function() {
+      let ps = [new Pt(218, 454), new Pt( 218, 404) ];
+      let reflect = Group.fromArray( [[230, 497], [268, 454]] )
+      Geom.reflect2D( ps, reflect );
+      assert.isTrue( Util.equals(ps[0].x, 274.14938) &&  Util.equals(ps[1].y, 497.4710) );
+    });
+
+    it('can get a sin table', function() {
+      let sin = Geom.sinTable();
+      assert.isTrue( Util.equals( sin.sin( Math.PI/17 ), Math.sin( Math.PI/17 ), Math.PI/180) );
+    });
+    
   });
 
   describe('Line: ', function() {
-    
+
+    it('find slope', function() {
+      assert.isTrue( Util.equals( Line.slope([3,-2], [9,2]), 2/3 ) );
+    });
+
+    it('find x-intercept', function() {
+      let intercept = Line.intercept([7,3], [3,-4]);
+      assert.isTrue( Util.equals( intercept.xi, 37/7 ) );
+    });
+
+    it('find y-intercept', function() {
+      let intercept = Line.intercept([6,4], [2,2]);
+      assert.isTrue( Util.equals( intercept.yi, 1 ) );
+    });
+
     it('can check collinearity up to 3D', function() {
       assert.isTrue( Line.collinear( [2,4,0], [4,6,2], [6,8,4] ) );
+    });
+
+    it('can find Pt on a line that is perpendicular to a target Pt', function() {
+      let ln = Group.fromArray([[368,654], [418,514]]);
+      let p = Line.perpendicularFromPt( ln, [358, 474] );
+      assert.isTrue( Util.equals( p.x, 423.8823547363281 ) );
+    });
+
+    it('can find Pt on a line that is perpendicular to a target Pt', function() {
+      let ln = Group.fromArray([[368,654], [418,514]]);
+      assert.isTrue( Util.equals( Line.distanceFromPt( ln, [392, 446] ), 47.356164440736634 ) );
+    });
+
+    it('can check 2D ray intersection', function() {
+      let r1 = Group.fromArray([[5, 4.5], [10, 2]]);
+      let r2 = Group.fromArray([[0, 3], [-4, -5]]);
+      assert.isTrue( Line.intersectRay2D(r1, r2).equals([1.6, 6.2]) );
+    });
+
+    it('can check 2D ray intersection with line segment', function() {
+      let r1 = Group.fromArray([[5, 4.5], [10, 2]]);
+      let r2 = Group.fromArray([[0, 3], [-4, -5]]);
+      assert.isTrue( !Line.intersectLineWithRay2D(r1, r2) );
+    });
+
+    it('can check 2D line segment intersection', function() {
+      let r1 = Group.fromArray([[0, 0], [60, 160]]);
+      let r2 = Group.fromArray([[0, 80], [80, 0]]);
+      assert.isTrue( Line.intersectLine2D(r1, r2).equals([21.81818181, 58.1818199], 0.00001) );
     });
 
   });

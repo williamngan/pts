@@ -125,18 +125,31 @@ export class Geom {
    * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
    * @returns an array of two Pt that are perpendicular to this Pt
    */
-  static perpendicular( p:Pt, axis:string|number[]=Const.xy ):Group {
+  static perpendicular( pt:PtLike, axis:string|number[]=Const.xy ):Group {
     let y = axis[1];
     let x = axis[0];
-
-    let pa = p.clone();
+    
+    let p = new Pt(pt);
+    let pa = new Pt(p);
     pa[x] = -p[y];
     pa[y] = p[x];
-    let pb = p.clone();
+    let pb = new Pt(p);
     pb[x] = p[y];
     pb[y] = -p[x];
     
     return new Group(pa, pb);
+  }
+
+  static isPerpendicular( p1:PtLike, p2:PtLike ):boolean {
+    return new Pt(p1).dot( p2 ) === 0;
+  }
+
+
+  static withinBound( pt:PtLike|number[], boundPt1:PtLike|number[], boundPt2:PtLike|number[] ):boolean {
+    for (let i=0, len=Math.min( pt.length, boundPt1.length, boundPt2.length); i<len; i++) {
+      if ( !(pt[i] >= Math.min( boundPt1[i], boundPt2[i] ) && pt[i] <= Math.max( boundPt1[i], boundPt2[i] )) ) return false;
+    }
+    return true;
   }
 
   static scale( ps:Pt|GroupLike, scale:number|number[]|PtLike, anchor?:PtLike ):Geom {
@@ -196,33 +209,32 @@ export class Geom {
 
     return Geom;
   }
-
-
-  static withinBound( pt:PtLike|number[], boundPt1:PtLike|number[], boundPt2:PtLike|number[] ):boolean {
-    for (let i=0, len=Math.min( pt.length, boundPt1.length, boundPt2.length); i<len; i++) {
-      if ( !(pt[i] >= Math.min( boundPt1[i], boundPt2[i] ) && pt[i] <= Math.max( boundPt1[i], boundPt2[i] )) ) return false;
-    }
-    return true;
-  }
   
 
   /**
    * Generate a sine and cosine lookup table
    * @returns an object with 2 tables (array of 360 values) and 2 functions to get sin/cos given a radian parameter. { sinTable:Float64Array, cosTable:Float64Array, sin:(rad)=>number, cos:(rad)=>number }
    */
-  static sinCosTable() {
+  static cosTable() {
     let cos = new Float64Array(360);
+
+    for (let i=0; i<360; i++) cos[i] = Math.cos( i * Math.PI / 180 );
+    let find = ( rad:number ) => cos[ Math.floor( Geom.boundAngle( Geom.toDegree(rad) ) ) ];
+
+    return {table: cos, cos: find};
+  }
+
+  /**
+   * Generate a sine and cosine lookup table
+   * @returns an object with 2 tables (array of 360 values) and 2 functions to get sin/cos given a radian parameter. { sinTable:Float64Array, cosTable:Float64Array, sin:(rad)=>number, cos:(rad)=>number }
+   */
+  static sinTable() {
     let sin = new Float64Array(360);
 
-    for (let i=0; i<360; i++) {
-      cos[i] = Math.cos( i * Math.PI / 180 );
-      sin[i] = Math.sin( i * Math.PI / 180 );
-    }
-
-    let getSin = ( rad:number ) => sin[ Math.floor( Geom.boundAngle( Geom.toDegree(rad) ) ) ];
-    let getCos = ( rad:number ) => cos[ Math.floor( Geom.boundAngle( Geom.toDegree(rad) ) ) ];
+    for (let i=0; i<360; i++) sin[i] = Math.sin( i * Math.PI / 180 );
+    let find = ( rad:number ) => sin[ Math.floor( Geom.boundAngle( Geom.toDegree(rad) ) ) ];
     
-    return {sinTable: sin, cosTable: cos, sin: getSin, cos: getCos};
+    return {table: sin, sin: find};
   }
 }
 
@@ -270,7 +282,7 @@ export class Line {
     return Line.perpendicularFromPt( line, pt, true ).magnitude();
   }
 
-  static intersectPath2D( la:GroupLike, lb:GroupLike ):Pt {
+  static intersectRay2D( la:GroupLike, lb:GroupLike ):Pt {
 
     let a = Line.intercept( la[0], la[1] );
     let b = Line.intercept( lb[0], lb[1] );
@@ -306,20 +318,20 @@ export class Line {
   }
 
   static intersectLine2D( la:GroupLike, lb:GroupLike ):Pt {
-    let pt = Line.intersectPath2D( la, lb );
+    let pt = Line.intersectRay2D( la, lb );
     return ( pt && Geom.withinBound( pt, la[0], la[1] ) && Geom.withinBound(pt, lb[0], lb[1]) ) ? pt : undefined;
   }
 
-  static intersectLineWithPath2D( line:GroupLike, path:GroupLike ):Pt {
-    let pt = Line.intersectPath2D( line, path );
+  static intersectLineWithRay2D( line:GroupLike, ray:GroupLike ):Pt {
+    let pt = Line.intersectRay2D( line, ray );
     return ( pt && Geom.withinBound( pt, line[0], line[1] )) ? pt : undefined;
   }
 
-  static intersectPolygon2D( lineOrPath:GroupLike, poly:GroupLike[], sourceIsPath:boolean = false ):Group {
-    let fn = sourceIsPath ? Line.intersectLineWithPath2D : Line.intersectLine2D; 
+  static intersectPolygon2D( lineOrRay:GroupLike, poly:GroupLike[], sourceIsRay:boolean = false ):Group {
+    let fn = sourceIsRay ? Line.intersectLineWithRay2D : Line.intersectLine2D; 
     let pts = new Group();
     for (let i=0, len=poly.length; i<len; i++) {
-      let d = fn( poly[i], lineOrPath );
+      let d = fn( poly[i], lineOrRay );
       if (d) pts.push( d ); 
     }
     return (pts.length > 0) ? pts : undefined;
@@ -399,10 +411,10 @@ export class Rectangle {
 
 export class Polygon {
 
-  static intersect2D( poly:GroupLike[], linesOrPaths:GroupLike[], sourceIsPath:boolean=false):Group[] {
+  static intersect2D( poly:GroupLike[], linesOrRays:GroupLike[], sourceIsRay:boolean=false):Group[] {
     let groups = [];
-    for (let i=0, len=linesOrPaths.length; i<len; i++) {
-      let _ip = Line.intersectPolygon2D( linesOrPaths[i], poly, sourceIsPath );
+    for (let i=0, len=linesOrRays.length; i<len; i++) {
+      let _ip = Line.intersectPolygon2D( linesOrRays[i], poly, sourceIsRay );
       if (_ip) groups.push( _ip );
     }
     return groups;

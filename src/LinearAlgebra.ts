@@ -67,6 +67,18 @@ export class Vec {
     return Vec.map( a, Math.abs );
   }
 
+  static floor( a:PtLike ):PtLike {
+    return Vec.map( a, Math.floor );
+  }
+
+  static ceil( a:PtLike ):PtLike {
+    return Vec.map( a, Math.ceil );
+  }
+
+  static round( a:PtLike ):PtLike {
+    return Vec.map( a, Math.round );
+  }
+
   static max( a:PtLike ):{value, index} {
     let m = Number.MIN_VALUE;
     let index = 0;

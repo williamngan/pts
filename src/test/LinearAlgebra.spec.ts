@@ -84,6 +84,21 @@ describe('Linear Algebra: ', function() {
       assert.isTrue( new Pt(1,999,2).equals( c ) );
     });
 
+    it('can convert to floor values', function() {
+      let c = Vec.floor( [1.01, 55.91] );
+      assert.isTrue( new Pt(1,55).equals( c ) );
+    });
+
+    it('can convert to ceil values', function() {
+      let c = Vec.ceil( [1.01, 55.91] );
+      assert.isTrue( new Pt(2,56).equals( c ) );
+    });
+
+    it('can convert to round values', function() {
+      let c = Vec.round( [1.01, 55.91] );
+      assert.isTrue( new Pt(1,56).equals( c ) );
+    });
+
     it('can find max value in dimensions', function() {
       let c = Vec.max( [5,7,-1,3,7] );
       assert.isTrue( c.value === 7 && c.index === 4 );

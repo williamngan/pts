@@ -19,12 +19,15 @@ space.add( {
     form.stroke("#999").line([a, b]);
     form.stroke(false).fill("#f00").point( c, 5, "circle" );
     
-    let p = Line.perpendicularFromPt( c, [a,b] );
+    let p = Line.perpendicularFromPt( [a,b], c );
     form.fill("#0f0").point( p, 3 );
     form.stroke("#f00").line( [c, p] );
 
-    let dist = Line.distanceFromPt( c, [a,b] );
+    let dist = Line.distanceFromPt( [a,b], c );
     form.log( "distance: "+dist );
+
+    console.log( a, b, c, dist );
+
 
     let intersector = [ space.center, c ];
     form.stroke("#ccc").line( intersector );
@@ -38,6 +41,8 @@ space.add( {
 
     let subPts = Line.subpoints( [b, c], 7 );
     form.points( subPts, 1 );
+
+    
 
   },
 

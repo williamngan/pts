@@ -50,7 +50,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
     return new Pt( this );
   }
 
-  equals( p:PtLike, threshold=0 ):boolean {
+  equals( p:PtLike, threshold=0.000001 ):boolean {
     for (let i=0, len=this.length; i<len; i++) {
       if ( Math.abs(this[i]-p[i]) > threshold ) return false;
     }
@@ -218,6 +218,52 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
    */
   $abs():Pt {
     return this.clone().abs();
+  }
+
+  /**
+   * Floor values for all values in this pt
+   */
+  floor():Pt {
+    Vec.floor( this );
+    return this;
+  }
+
+  /**
+   * Get a new Pt with floor values of this Pt
+   */
+  $floor():Pt {
+    return this.clone().floor();
+  }
+
+
+  /**
+   * Ceil values for all values in this pt
+   */
+  ceil():Pt {
+    Vec.ceil( this );
+    return this;
+  }
+
+  /**
+   * Get a new Pt with ceil values of this Pt
+   */
+  $ceil():Pt {
+    return this.clone().ceil();
+  }
+
+  /**
+   * Round values for all values in this pt
+   */
+  round():Pt {
+    Vec.round( this );
+    return this;
+  }
+
+  /**
+   * Get a new Pt with round values of this Pt
+   */
+  $round():Pt {
+    return this.clone().round();
   }
 
   $min( p: Pt ):Pt {

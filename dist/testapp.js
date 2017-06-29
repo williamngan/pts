@@ -120,7 +120,7 @@ class Pt extends exports.PtBaseArray {
     clone() {
         return new Pt(this);
     }
-    equals(p, threshold = 0) {
+    equals(p, threshold = 0.000001) {
         for (let i = 0, len = this.length; i < len; i++) {
             if (Math.abs(this[i] - p[i]) > threshold) return false;
         }
@@ -277,6 +277,45 @@ class Pt extends exports.PtBaseArray {
      */
     $abs() {
         return this.clone().abs();
+    }
+    /**
+     * Floor values for all values in this pt
+     */
+    floor() {
+        LinearAlgebra_1.Vec.floor(this);
+        return this;
+    }
+    /**
+     * Get a new Pt with floor values of this Pt
+     */
+    $floor() {
+        return this.clone().floor();
+    }
+    /**
+     * Ceil values for all values in this pt
+     */
+    ceil() {
+        LinearAlgebra_1.Vec.ceil(this);
+        return this;
+    }
+    /**
+     * Get a new Pt with ceil values of this Pt
+     */
+    $ceil() {
+        return this.clone().ceil();
+    }
+    /**
+     * Round values for all values in this pt
+     */
+    round() {
+        LinearAlgebra_1.Vec.round(this);
+        return this;
+    }
+    /**
+     * Get a new Pt with round values of this Pt
+     */
+    $round() {
+        return this.clone().round();
     }
     $min(p) {
         let m = this.clone();
@@ -838,6 +877,15 @@ class Vec {
     static abs(a) {
         return Vec.map(a, Math.abs);
     }
+    static floor(a) {
+        return Vec.map(a, Math.floor);
+    }
+    static ceil(a) {
+        return Vec.map(a, Math.ceil);
+    }
+    static round(a) {
+        return Vec.map(a, Math.round);
+    }
     static max(a) {
         let m = Number.MIN_VALUE;
         let index = 0;
@@ -1027,16 +1075,26 @@ class Geom {
      * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
      * @returns an array of two Pt that are perpendicular to this Pt
      */
-    static perpendicular(p, axis = Util_1.Const.xy) {
+    static perpendicular(pt, axis = Util_1.Const.xy) {
         let y = axis[1];
         let x = axis[0];
-        let pa = p.clone();
+        let p = new Pt_1.Pt(pt);
+        let pa = new Pt_1.Pt(p);
         pa[x] = -p[y];
         pa[y] = p[x];
-        let pb = p.clone();
+        let pb = new Pt_1.Pt(p);
         pb[x] = p[y];
         pb[y] = -p[x];
         return new Pt_1.Group(pa, pb);
+    }
+    static isPerpendicular(p1, p2) {
+        return new Pt_1.Pt(p1).dot(p2) === 0;
+    }
+    static withinBound(pt, boundPt1, boundPt2) {
+        for (let i = 0, len = Math.min(pt.length, boundPt1.length, boundPt2.length); i < len; i++) {
+            if (!(pt[i] >= Math.min(boundPt1[i], boundPt2[i]) && pt[i] <= Math.max(boundPt1[i], boundPt2[i]))) return false;
+        }
+        return true;
     }
     static scale(ps, scale, anchor) {
         let pts = !Array.isArray(ps) ? [ps] : ps;
@@ -1083,26 +1141,25 @@ class Geom {
         }
         return Geom;
     }
-    static withinBound(pt, boundPt1, boundPt2) {
-        for (let i = 0, len = Math.min(pt.length, boundPt1.length, boundPt2.length); i < len; i++) {
-            if (!(pt[i] >= Math.min(boundPt1[i], boundPt2[i]) && pt[i] <= Math.max(boundPt1[i], boundPt2[i]))) return false;
-        }
-        return true;
+    /**
+     * Generate a sine and cosine lookup table
+     * @returns an object with 2 tables (array of 360 values) and 2 functions to get sin/cos given a radian parameter. { sinTable:Float64Array, cosTable:Float64Array, sin:(rad)=>number, cos:(rad)=>number }
+     */
+    static cosTable() {
+        let cos = new Float64Array(360);
+        for (let i = 0; i < 360; i++) cos[i] = Math.cos(i * Math.PI / 180);
+        let find = rad => cos[Math.floor(Geom.boundAngle(Geom.toDegree(rad)))];
+        return { table: cos, cos: find };
     }
     /**
      * Generate a sine and cosine lookup table
      * @returns an object with 2 tables (array of 360 values) and 2 functions to get sin/cos given a radian parameter. { sinTable:Float64Array, cosTable:Float64Array, sin:(rad)=>number, cos:(rad)=>number }
      */
-    static sinCosTable() {
-        let cos = new Float64Array(360);
+    static sinTable() {
         let sin = new Float64Array(360);
-        for (let i = 0; i < 360; i++) {
-            cos[i] = Math.cos(i * Math.PI / 180);
-            sin[i] = Math.sin(i * Math.PI / 180);
-        }
-        let getSin = rad => sin[Math.floor(Geom.boundAngle(Geom.toDegree(rad)))];
-        let getCos = rad => cos[Math.floor(Geom.boundAngle(Geom.toDegree(rad)))];
-        return { sinTable: sin, cosTable: cos, sin: getSin, cos: getCos };
+        for (let i = 0; i < 360; i++) sin[i] = Math.sin(i * Math.PI / 180);
+        let find = rad => sin[Math.floor(Geom.boundAngle(Geom.toDegree(rad)))];
+        return { table: sin, sin: find };
     }
 }
 exports.Geom = Geom;
@@ -1141,7 +1198,7 @@ class Line {
     static distanceFromPt(line, pt, asProjection = false) {
         return Line.perpendicularFromPt(line, pt, true).magnitude();
     }
-    static intersectPath2D(la, lb) {
+    static intersectRay2D(la, lb) {
         let a = Line.intercept(la[0], la[1]);
         let b = Line.intercept(lb[0], lb[1]);
         let pa = la[0];
@@ -1170,18 +1227,18 @@ class Line {
         }
     }
     static intersectLine2D(la, lb) {
-        let pt = Line.intersectPath2D(la, lb);
+        let pt = Line.intersectRay2D(la, lb);
         return pt && Geom.withinBound(pt, la[0], la[1]) && Geom.withinBound(pt, lb[0], lb[1]) ? pt : undefined;
     }
-    static intersectLineWithPath2D(line, path) {
-        let pt = Line.intersectPath2D(line, path);
+    static intersectLineWithRay2D(line, ray) {
+        let pt = Line.intersectRay2D(line, ray);
         return pt && Geom.withinBound(pt, line[0], line[1]) ? pt : undefined;
     }
-    static intersectPolygon2D(lineOrPath, poly, sourceIsPath = false) {
-        let fn = sourceIsPath ? Line.intersectLineWithPath2D : Line.intersectLine2D;
+    static intersectPolygon2D(lineOrRay, poly, sourceIsRay = false) {
+        let fn = sourceIsRay ? Line.intersectLineWithRay2D : Line.intersectLine2D;
         let pts = new Pt_1.Group();
         for (let i = 0, len = poly.length; i < len; i++) {
-            let d = fn(poly[i], lineOrPath);
+            let d = fn(poly[i], lineOrRay);
             if (d) pts.push(d);
         }
         return pts.length > 0 ? pts : undefined;
@@ -1243,10 +1300,10 @@ class Rectangle {
 }
 exports.Rectangle = Rectangle;
 class Polygon {
-    static intersect2D(poly, linesOrPaths, sourceIsPath = false) {
+    static intersect2D(poly, linesOrRays, sourceIsRay = false) {
         let groups = [];
-        for (let i = 0, len = linesOrPaths.length; i < len; i++) {
-            let _ip = Line.intersectPolygon2D(linesOrPaths[i], poly, sourceIsPath);
+        for (let i = 0, len = linesOrRays.length; i < len; i++) {
+            let _ip = Line.intersectPolygon2D(linesOrRays[i], poly, sourceIsRay);
             if (_ip) groups.push(_ip);
         }
         return groups;
