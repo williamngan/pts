@@ -1,5 +1,6 @@
-var webpack = require('webpack')
-var path = require('path')
+var webpack = require('webpack');
+var path = require('path');
+// var BabiliPlugin = require("babili-webpack-plugin");
 
 var TARGET = process.env.npm_lifecycle_event
 process.env.BABEL_ENV = TARGET
@@ -56,7 +57,10 @@ module.exports = {
         test: /\.tsx?$/, loader: "tslint-loader", enforce: "pre",
         options: {emitErrors: true, failOnHint: true}
       },*/
-      { test: /\.tsx?$/, loader: 'babel-loader!ts-loader' }
+      { 
+        test: /\.tsx?$/, 
+        loader: 'ts-loader'
+      }
     ],
   },
 

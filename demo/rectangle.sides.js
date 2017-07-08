@@ -49,7 +49,7 @@ space.add( {
     sides.forEach( (s) => {
 
       // convert each side to a list of intersection operations
-      let ops = s.ops( [Line.intersectLineWithPath2D, Line.intersectLine2D, Line.intersectPath2D] );
+      let ops = s.ops( [Line.intersectLineWithRay2D, Line.intersectLine2D, Line.intersectRay2D] );
 
       // operate side each with "ln" and draw the results
       let results = ops.map( (_op) => _op(ln) ).map( (r, i) => {

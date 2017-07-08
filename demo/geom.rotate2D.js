@@ -34,9 +34,9 @@ space.add( {
     // console.log( [a, b], p.y/center.y, center );
     
     let reflectLine = [ mouse, center ];
-    Geom.reflect2D([a, b], reflectLine, center);
-    console.log( mouse, da, db, a, b, center );
-    // form.stroke("#0f0").line( reflectLine );
+    Geom.reflect2D( [a,b], reflectLine);
+    // console.log( mouse, da, db, a, b, center );
+    form.stroke("#0f0").line( reflectLine );
     
     // a.add(center);
 

@@ -25,7 +25,7 @@ space.add( {
     let a = Math.atan2( space.center.y-mouse.y, space.center.x-mouse.x );
 
     let centroid = group.centroid();
-    let gscale = group.clone().scale2D( s, centroid );
+    let gscale = group.clone().scale( s, centroid );
     form.fill(false).stroke("#f00").points( gscale, 5 );
 
     let grotate = group.clone().rotate2D( a, centroid );

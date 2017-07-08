@@ -73,7 +73,6 @@ var Pts =
 
 "use strict";
 
-
 Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(1);
 const Op_1 = __webpack_require__(4);
@@ -86,43 +85,29 @@ class Pt extends exports.PtBaseArray {
      * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
      */
     constructor(...args) {
-        super(args.length > 0 ? Util_1.Util.getArgs(args) : [0, 0]);
+        super((args.length > 0) ? Util_1.Util.getArgs(args) : [0, 0]);
     }
     static make(dimensions, defaultValue = 0) {
         let p = new exports.PtBaseArray(dimensions);
-        if (defaultValue) p.fill(defaultValue);
+        if (defaultValue)
+            p.fill(defaultValue);
         return new Pt(p);
     }
-    get x() {
-        return this[0];
-    }
-    get y() {
-        return this[1];
-    }
-    get z() {
-        return this[2];
-    }
-    get w() {
-        return this[3];
-    }
-    set x(n) {
-        this[0] = n;
-    }
-    set y(n) {
-        this[1] = n;
-    }
-    set z(n) {
-        this[2] = n;
-    }
-    set w(n) {
-        this[3] = n;
-    }
+    get x() { return this[0]; }
+    get y() { return this[1]; }
+    get z() { return this[2]; }
+    get w() { return this[3]; }
+    set x(n) { this[0] = n; }
+    set y(n) { this[1] = n; }
+    set z(n) { this[2] = n; }
+    set w(n) { this[3] = n; }
     clone() {
         return new Pt(this);
     }
     equals(p, threshold = 0.000001) {
         for (let i = 0, len = this.length; i < len; i++) {
-            if (Math.abs(this[i] - p[i]) > threshold) return false;
+            if (Math.abs(this[i] - p[i]) > threshold)
+                return false;
         }
         return true;
     }
@@ -143,7 +128,7 @@ class Pt extends exports.PtBaseArray {
      * @param magnitude Optional magnitude if known. If not provided, it'll calculate and use this Pt's magnitude.
      */
     toAngle(radian, magnitude) {
-        let m = magnitude != undefined ? magnitude : this.magnitude();
+        let m = (magnitude != undefined) ? magnitude : this.magnitude();
         return this.to(Math.cos(radian) * m, Math.sin(radian) * m);
     }
     /**
@@ -201,43 +186,31 @@ class Pt extends exports.PtBaseArray {
         return new Pt(this.toArray().concat(Util_1.Util.getArgs(args)));
     }
     add(...args) {
-        args.length === 1 && typeof args[0] == "number" ? LinearAlgebra_1.Vec.add(this, args[0]) : LinearAlgebra_1.Vec.add(this, Util_1.Util.getArgs(args));
+        (args.length === 1 && typeof args[0] == "number") ? LinearAlgebra_1.Vec.add(this, args[0]) : LinearAlgebra_1.Vec.add(this, Util_1.Util.getArgs(args));
         return this;
     }
-    $add(...args) {
-        return this.clone().add(...args);
-    }
-
+    $add(...args) { return this.clone().add(...args); }
+    ;
     subtract(...args) {
-        args.length === 1 && typeof args[0] == "number" ? LinearAlgebra_1.Vec.subtract(this, args[0]) : LinearAlgebra_1.Vec.subtract(this, Util_1.Util.getArgs(args));
+        (args.length === 1 && typeof args[0] == "number") ? LinearAlgebra_1.Vec.subtract(this, args[0]) : LinearAlgebra_1.Vec.subtract(this, Util_1.Util.getArgs(args));
         return this;
     }
-    $subtract(...args) {
-        return this.clone().subtract(...args);
-    }
-
+    $subtract(...args) { return this.clone().subtract(...args); }
+    ;
     multiply(...args) {
-        args.length === 1 && typeof args[0] == "number" ? LinearAlgebra_1.Vec.multiply(this, args[0]) : LinearAlgebra_1.Vec.multiply(this, Util_1.Util.getArgs(args));
+        (args.length === 1 && typeof args[0] == "number") ? LinearAlgebra_1.Vec.multiply(this, args[0]) : LinearAlgebra_1.Vec.multiply(this, Util_1.Util.getArgs(args));
         return this;
     }
-    $multiply(...args) {
-        return this.clone().multiply(...args);
-    }
-
+    $multiply(...args) { return this.clone().multiply(...args); }
+    ;
     divide(...args) {
-        args.length === 1 && typeof args[0] == "number" ? LinearAlgebra_1.Vec.divide(this, args[0]) : LinearAlgebra_1.Vec.divide(this, Util_1.Util.getArgs(args));
+        (args.length === 1 && typeof args[0] == "number") ? LinearAlgebra_1.Vec.divide(this, args[0]) : LinearAlgebra_1.Vec.divide(this, Util_1.Util.getArgs(args));
         return this;
     }
-    $divide(...args) {
-        return this.clone().divide(...args);
-    }
-
-    magnitudeSq() {
-        return LinearAlgebra_1.Vec.dot(this, this);
-    }
-    magnitude() {
-        return LinearAlgebra_1.Vec.magnitude(this);
-    }
+    $divide(...args) { return this.clone().divide(...args); }
+    ;
+    magnitudeSq() { return LinearAlgebra_1.Vec.dot(this, this); }
+    magnitude() { return LinearAlgebra_1.Vec.magnitude(this); }
     /**
      * Convert to a unit vector
      * @param magnitude Optional: if the magnitude is known, pass it as a parameter to avoid duplicate calculation.
@@ -249,15 +222,9 @@ class Pt extends exports.PtBaseArray {
     /**
      * Get a unit vector from this Pt
      */
-    $unit(magnitude = undefined) {
-        return this.clone().unit(magnitude);
-    }
-    dot(...args) {
-        return LinearAlgebra_1.Vec.dot(this, Util_1.Util.getArgs(args));
-    }
-    $cross(...args) {
-        return LinearAlgebra_1.Vec.cross(this, Util_1.Util.getArgs(args));
-    }
+    $unit(magnitude = undefined) { return this.clone().unit(magnitude); }
+    dot(...args) { return LinearAlgebra_1.Vec.dot(this, Util_1.Util.getArgs(args)); }
+    $cross(...args) { return LinearAlgebra_1.Vec.cross(this, Util_1.Util.getArgs(args)); }
     $project(p) {
         let m = p.magnitude();
         let a = this.$unit();
@@ -406,7 +373,7 @@ class Group extends Array {
     static fromArray(list) {
         let g = new Group();
         for (let i = 0, len = list.length; i < len; i++) {
-            let p = list[i] instanceof Pt ? list[i] : new Pt(list[i]);
+            let p = (list[i] instanceof Pt) ? list[i] : new Pt(list[i]);
             g.push(p);
         }
         return g;
@@ -416,7 +383,7 @@ class Group extends Array {
     }
     split(chunkSize, stride) {
         let sp = Util_1.Util.split(this, chunkSize, stride);
-        return sp.map(g => Group.fromGroup(g));
+        return sp.map((g) => Group.fromGroup(g));
     }
     /**
      * Insert a
@@ -434,18 +401,14 @@ class Group extends Array {
      * @returns The items that are removed.
      */
     remove(index = 0, count = 1) {
-        let param = index < 0 ? [index * -1 - 1, count] : [index, count];
+        let param = (index < 0) ? [index * -1 - 1, count] : [index, count];
         return Group.prototype.splice.apply(this, param);
     }
-    segments(pts_per_segment = 2, stride = 2) {
-        return this.split(2, stride);
-    }
+    segments(pts_per_segment = 2, stride = 2) { return this.split(2, stride); }
     /**
      * Get all the lines (ie, edges in a graph) of this group
      */
-    lines() {
-        return this.segments(2, 1);
-    }
+    lines() { return this.segments(2, 1); }
     /**
      * Create an operation using this Group, passing this Group into a custom function's first parameter
      * For example: `let myOp = group.op( fn ); let result = myOp( [1,2,3] );`
@@ -533,7 +496,7 @@ class Group extends Array {
      * @param desc if true, sort descending. Default is false (ascending)
      */
     sortByDimension(dim, desc = false) {
-        return this.sort((a, b) => desc ? b[dim] - a[dim] : a[dim] - b[dim]);
+        return this.sort((a, b) => (desc) ? b[dim] - a[dim] : a[dim] - b[dim]);
     }
     toString() {
         return "Group[ " + this.reduce((p, c) => p + c.toString() + " ", "") + " ]";
@@ -545,10 +508,11 @@ class Group extends Array {
      * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
      */
     zipOne(index, defaultValue = false) {
-        let f = typeof defaultValue == "boolean" ? "get" : "at"; // choose `get` or `at` function
+        let f = (typeof defaultValue == "boolean") ? "get" : "at"; // choose `get` or `at` function
         let z = [];
         for (let i = 0, len = this.length; i < len; i++) {
-            if (this[i].length - 1 < index && defaultValue === false) throw `Index ${index} is out of bounds`;
+            if (this[i].length - 1 < index && defaultValue === false)
+                throw `Index ${index} is out of bounds`;
             z.push(this[i][index] || defaultValue);
         }
         return new Pt(z);
@@ -561,7 +525,7 @@ class Group extends Array {
      */
     zip(defaultValue = false, useLongest = false) {
         let ps = new Group();
-        let len = useLongest ? this.reduce((a, b) => Math.max(a, b.length), 0) : this[0].length;
+        let len = (useLongest) ? this.reduce((a, b) => Math.max(a, b.length), 0) : this[0].length;
         for (let i = 0; i < len; i++) {
             ps.push(this.zipOne(i, defaultValue));
         }
@@ -585,12 +549,12 @@ class Group extends Array {
 }
 exports.Group = Group;
 
+
 /***/ }),
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
@@ -648,22 +612,26 @@ class Util {
      * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
      */
     static getArgs(args) {
-        if (args.length < 1) return [];
+        if (args.length < 1)
+            return [];
         var pos = [];
         var isArray = Array.isArray(args[0]) || ArrayBuffer.isView(args[0]);
         // positional arguments: x,y,z,w,...
         if (typeof args[0] === 'number') {
             pos = Array.prototype.slice.call(args);
             // as an object of {x, y?, z?, w?}
-        } else if (typeof args[0] === 'object' && !isArray) {
+        }
+        else if (typeof args[0] === 'object' && !isArray) {
             let a = ["x", "y", "z", "w"];
             let p = args[0];
             for (let i = 0; i < a.length; i++) {
-                if (p.length && i >= p.length || !(a[i] in p)) break; // check for length and key exist
+                if ((p.length && i >= p.length) || !(a[i] in p))
+                    break; // check for length and key exist
                 pos.push(p[a[i]]);
             }
             // as an array of values
-        } else if (isArray) {
+        }
+        else if (isArray) {
             pos = [].slice.call(args[0]);
         }
         return pos;
@@ -678,13 +646,14 @@ class Util {
         let st = stride || size;
         let chunks = [];
         for (let i = 0; i < pts.length; i++) {
-            if (i * st + size > pts.length) break;
+            if (i * st + size > pts.length)
+                break;
             chunks.push(pts.slice(i * st, i * st + size));
         }
         return chunks;
     }
     static flatten(pts, flattenAsGroup = true) {
-        let arr = flattenAsGroup ? new Pt_1.Group() : new Array();
+        let arr = (flattenAsGroup) ? new Pt_1.Group() : new Array();
         return arr.concat.apply(arr, pts);
     }
     static equals(a, b, threshold = 0.00001) {
@@ -693,12 +662,12 @@ class Util {
 }
 exports.Util = Util;
 
+
 /***/ }),
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
@@ -744,74 +713,54 @@ class Bound {
         this._topLeft = this._center.$subtract(half);
         this._bottomRight = this._center.$add(half);
     }
-    get size() {
-        return new Pt_1.Pt(this._size);
-    }
+    get size() { return new Pt_1.Pt(this._size); }
     set size(p) {
         this._size = new Pt_1.Pt(p);
         this._updatePosFromTop();
     }
-    get center() {
-        return new Pt_1.Pt(this._center);
-    }
+    get center() { return new Pt_1.Pt(this._center); }
     set center(p) {
         this._center = new Pt_1.Pt(p);
         this._updatePosFromCenter();
     }
-    get topLeft() {
-        return new Pt_1.Pt(this._topLeft);
-    }
+    get topLeft() { return new Pt_1.Pt(this._topLeft); }
     set topLeft(p) {
         this._topLeft = new Pt_1.Pt(p);
         this._updateSize();
     }
-    get bottomRight() {
-        return new Pt_1.Pt(this._bottomRight);
-    }
+    get bottomRight() { return new Pt_1.Pt(this._bottomRight); }
     set bottomRight(p) {
         this._bottomRight = new Pt_1.Pt(p);
         this._updateSize();
     }
-    get width() {
-        return this._size.length > 0 ? this._size.x : 0;
-    }
+    get width() { return (this._size.length > 0) ? this._size.x : 0; }
     set width(w) {
         this._size.x = w;
         this._updatePosFromTop();
     }
-    get height() {
-        return this._size.length > 1 ? this._size.y : 0;
-    }
+    get height() { return (this._size.length > 1) ? this._size.y : 0; }
     set height(h) {
         this._size.y = h;
         this._updatePosFromTop();
     }
-    get depth() {
-        return this._size.length > 2 ? this._size.z : 0;
-    }
+    get depth() { return (this._size.length > 2) ? this._size.z : 0; }
     set depth(d) {
         this._size.z = d;
         this._updatePosFromTop();
     }
-    get x() {
-        return this.topLeft.x;
-    }
-    get y() {
-        return this.topLeft.y;
-    }
-    get z() {
-        return this.topLeft.z;
-    }
-    get inited() {
-        return this._inited;
-    }
+    get x() { return this.topLeft.x; }
+    get y() { return this.topLeft.y; }
+    get z() { return this.topLeft.z; }
+    get inited() { return this._inited; }
     static fromBoundingRect(rect) {
         let b = new Bound(new Pt_1.Pt(rect.left || 0, rect.top || 0), new Pt_1.Pt(rect.right || 0, rect.bottom || 0));
-        if (rect.width && rect.height) b.size = new Pt_1.Pt(rect.width, rect.height);
+        if (rect.width && rect.height)
+            b.size = new Pt_1.Pt(rect.width, rect.height);
         return b;
     }
 }
 exports.Bound = Bound;
+
 
 /***/ }),
 /* 3 */
@@ -819,45 +768,57 @@ exports.Bound = Bound;
 
 "use strict";
 
-
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
 const Op_1 = __webpack_require__(4);
 class Vec {
     static add(a, b) {
         if (typeof b == "number") {
-            for (let i = 0, len = a.length; i < len; i++) a[i] += b;
-        } else {
-            for (let i = 0, len = a.length; i < len; i++) a[i] += b[i] || 0;
+            for (let i = 0, len = a.length; i < len; i++)
+                a[i] += b;
+        }
+        else {
+            for (let i = 0, len = a.length; i < len; i++)
+                a[i] += b[i] || 0;
         }
         return a;
     }
     static subtract(a, b) {
         if (typeof b == "number") {
-            for (let i = 0, len = a.length; i < len; i++) a[i] -= b;
-        } else {
-            for (let i = 0, len = a.length; i < len; i++) a[i] -= b[i] || 0;
+            for (let i = 0, len = a.length; i < len; i++)
+                a[i] -= b;
+        }
+        else {
+            for (let i = 0, len = a.length; i < len; i++)
+                a[i] -= b[i] || 0;
         }
         return a;
     }
     static multiply(a, b) {
         if (typeof b == "number") {
-            for (let i = 0, len = a.length; i < len; i++) a[i] *= b;
-        } else {
-            for (let i = 0, len = a.length; i < len; i++) a[i] *= b[i] || 1;
+            for (let i = 0, len = a.length; i < len; i++)
+                a[i] *= b;
+        }
+        else {
+            for (let i = 0, len = a.length; i < len; i++)
+                a[i] *= b[i] || 1;
         }
         return a;
     }
     static divide(a, b) {
         if (typeof b == "number") {
-            for (let i = 0, len = a.length; i < len; i++) a[i] /= b;
-        } else {
-            for (let i = 0, len = a.length; i < len; i++) a[i] /= b[i] || 1;
+            for (let i = 0, len = a.length; i < len; i++)
+                a[i] /= b;
+        }
+        else {
+            for (let i = 0, len = a.length; i < len; i++)
+                a[i] /= b[i] || 1;
         }
         return a;
     }
     static dot(a, b) {
-        if (a.length != b.length) throw "Array lengths don't match";
+        if (a.length != b.length)
+            throw "Array lengths don't match";
         let d = 0;
         for (let i = 0, len = a.length; i < len; i++) {
             d += a[i] * b[i];
@@ -865,13 +826,13 @@ class Vec {
         return d;
     }
     static cross(a, b) {
-        return new Pt_1.Pt(a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]);
+        return new Pt_1.Pt((a[1] * b[2] - a[2] * b[1]), (a[2] * b[0] - a[0] * b[2]), (a[0] * b[1] - a[1] * b[0]));
     }
     static magnitude(a) {
         return Math.sqrt(Vec.dot(a, a));
     }
     static unit(a, magnitude = undefined) {
-        let m = magnitude === undefined ? Vec.magnitude(a) : magnitude;
+        let m = (magnitude === undefined) ? Vec.magnitude(a) : magnitude;
         return Vec.divide(a, m);
     }
     static abs(a) {
@@ -891,7 +852,8 @@ class Vec {
         let index = 0;
         for (let i = 0, len = a.length; i < len; i++) {
             m = Math.max(m, a[i]);
-            if (m === a[i]) index = i;
+            if (m === a[i])
+                index = i;
         }
         return { value: m, index: index };
     }
@@ -900,13 +862,15 @@ class Vec {
         let index = 0;
         for (let i = 0, len = a.length; i < len; i++) {
             m = Math.min(m, a[i]);
-            if (m === a[i]) index = i;
+            if (m === a[i])
+                index = i;
         }
         return { value: m, index: index };
     }
     static sum(a) {
         let s = 0;
-        for (let i = 0, len = a.length; i < len; i++) s += a[i];
+        for (let i = 0, len = a.length; i < len; i++)
+            s += a[i];
         return s;
     }
     static map(a, fn) {
@@ -956,24 +920,33 @@ class Mat {
     static reflectAt2DMatrix(p1, p2) {
         let intercept = Op_1.Line.intercept(p1, p2);
         if (intercept == undefined) {
-            return [new Pt_1.Pt([-1, 0, 0]), new Pt_1.Pt([0, 1, 0]), new Pt_1.Pt([p1[0] + p2[0], 0, 1])];
-        } else {
+            return [
+                new Pt_1.Pt([-1, 0, 0]),
+                new Pt_1.Pt([0, 1, 0]),
+                new Pt_1.Pt([p1[0] + p2[0], 0, 1])
+            ];
+        }
+        else {
             let yi = intercept.yi;
             let ang2 = Math.atan(intercept.slope) * 2;
             let cosA = Math.cos(ang2);
             let sinA = Math.sin(ang2);
-            return [new Pt_1.Pt([cosA, sinA, 0]), new Pt_1.Pt([sinA, -cosA, 0]), new Pt_1.Pt([-yi * sinA, yi + yi * cosA, 1])];
+            return [
+                new Pt_1.Pt([cosA, sinA, 0]),
+                new Pt_1.Pt([sinA, -cosA, 0]),
+                new Pt_1.Pt([-yi * sinA, yi + yi * cosA, 1])
+            ];
         }
     }
 }
 exports.Mat = Mat;
+
 
 /***/ }),
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(1);
@@ -986,14 +959,17 @@ class Num {
     static boundValue(val, min, max, positive = false) {
         let len = Math.abs(max - min);
         let a = val % len;
-        if (a > max) a -= len;else if (a < min) a += len;
+        if (a > max)
+            a -= len;
+        else if (a < min)
+            a += len;
         return a;
     }
     static within(p, a, b) {
         return p >= Math.min(a, b) && p <= Math.max(a, b);
     }
     static randomRange(a, b = 0) {
-        let r = a > b ? a - b : b - a;
+        let r = (a > b) ? (a - b) : (b - a);
         return a + Math.random() * r;
     }
     static normalizeValue(n, a, b) {
@@ -1021,7 +997,8 @@ class Num {
      * @returns a remapped value in the second range
      */
     static mapToRange(n, currA, currB, targetA, targetB) {
-        if (currA == currB) throw "[currMin, currMax] must define a range that is not zero";
+        if (currA == currB)
+            throw "[currMin, currMax] must define a range that is not zero";
         let min = Math.min(targetA, targetB);
         let max = Math.max(targetA, targetB);
         return Num.normalizeValue(n, currA, currB) * (max - min) + min;
@@ -1046,8 +1023,10 @@ class Geom {
         let maxPt = Pt_1.Pt.make(pts[0].length, Number.MIN_VALUE);
         for (let i = 0, len = pts.length; i < len; i++) {
             for (let d = 0, len = pts[i].length; d < len; d++) {
-                if (pts[i][d] < minPt[d]) minPt[d] = pts[i][d];
-                if (pts[i][d] > maxPt[d]) maxPt[d] = pts[i][d];
+                if (pts[i][d] < minPt[d])
+                    minPt[d] = pts[i][d];
+                if (pts[i][d] > maxPt[d])
+                    maxPt[d] = pts[i][d];
             }
         }
         return new Pt_1.Group(minPt, maxPt);
@@ -1092,51 +1071,55 @@ class Geom {
     }
     static withinBound(pt, boundPt1, boundPt2) {
         for (let i = 0, len = Math.min(pt.length, boundPt1.length, boundPt2.length); i < len; i++) {
-            if (!(pt[i] >= Math.min(boundPt1[i], boundPt2[i]) && pt[i] <= Math.max(boundPt1[i], boundPt2[i]))) return false;
+            if (!(pt[i] >= Math.min(boundPt1[i], boundPt2[i]) && pt[i] <= Math.max(boundPt1[i], boundPt2[i])))
+                return false;
         }
         return true;
     }
     static scale(ps, scale, anchor) {
-        let pts = !Array.isArray(ps) ? [ps] : ps;
-        let scs = typeof scale == "number" ? Pt_1.Pt.make(pts[0].length, scale) : scale;
-        if (!anchor) anchor = Pt_1.Pt.make(pts[0].length, 0);
+        let pts = (!Array.isArray(ps)) ? [ps] : ps;
+        let scs = (typeof scale == "number") ? Pt_1.Pt.make(pts[0].length, scale) : scale;
+        if (!anchor)
+            anchor = Pt_1.Pt.make(pts[0].length, 0);
         for (let i = 0, len = pts.length; i < len; i++) {
             let p = pts[i];
             for (let k = 0, lenP = p.length; k < lenP; k++) {
-                p[k] = anchor && anchor[k] ? anchor[k] + (p[k] - anchor[k]) * scs[k] : p[k] * scs[k];
+                p[k] = (anchor && anchor[k]) ? anchor[k] + (p[k] - anchor[k]) * scs[k] : p[k] * scs[k];
             }
         }
         return Geom;
     }
     static rotate2D(ps, angle, anchor, axis) {
-        let pts = !Array.isArray(ps) ? [ps] : ps;
-        let fn = anchor != undefined ? LinearAlgebra_1.Mat.rotateAt2DMatrix : LinearAlgebra_1.Mat.rotate2DMatrix;
-        if (!anchor) anchor = Pt_1.Pt.make(pts[0].length, 0);
+        let pts = (!Array.isArray(ps)) ? [ps] : ps;
+        let fn = (anchor) ? LinearAlgebra_1.Mat.rotateAt2DMatrix : LinearAlgebra_1.Mat.rotate2DMatrix;
+        if (!anchor)
+            anchor = Pt_1.Pt.make(pts[0].length, 0);
         let cos = Math.cos(angle);
         let sin = Math.sin(angle);
         for (let i = 0, len = pts.length; i < len; i++) {
-            let p = axis != undefined ? pts[i].$take(axis) : pts[i];
+            let p = (axis) ? pts[i].$take(axis) : pts[i];
             p.to(LinearAlgebra_1.Mat.transform2D(p, fn(cos, sin, anchor)));
         }
         return Geom;
     }
     static shear2D(ps, scale, anchor, axis) {
-        let pts = !Array.isArray(ps) ? [ps] : ps;
-        let s = typeof scale == "number" ? [scale, scale] : scale;
-        if (!anchor) anchor = Pt_1.Pt.make(pts[0].length, 0);
-        let fn = anchor != undefined ? LinearAlgebra_1.Mat.shearAt2DMatrix : LinearAlgebra_1.Mat.shear2DMatrix;
+        let pts = (!Array.isArray(ps)) ? [ps] : ps;
+        let s = (typeof scale == "number") ? [scale, scale] : scale;
+        if (!anchor)
+            anchor = Pt_1.Pt.make(pts[0].length, 0);
+        let fn = (anchor) ? LinearAlgebra_1.Mat.shearAt2DMatrix : LinearAlgebra_1.Mat.shear2DMatrix;
         let tanx = Math.tan(s[0]);
         let tany = Math.tan(s[1]);
         for (let i = 0, len = pts.length; i < len; i++) {
-            let p = axis != undefined ? pts[i].$take(axis) : pts[i];
+            let p = (axis) ? pts[i].$take(axis) : pts[i];
             p.to(LinearAlgebra_1.Mat.transform2D(p, fn(tanx, tany, anchor)));
         }
         return Geom;
     }
     static reflect2D(ps, line, axis) {
-        let pts = !Array.isArray(ps) ? [ps] : ps;
+        let pts = (!Array.isArray(ps)) ? [ps] : ps;
         for (let i = 0, len = pts.length; i < len; i++) {
-            let p = axis != undefined ? pts[i].$take(axis) : pts[i];
+            let p = (axis) ? pts[i].$take(axis) : pts[i];
             p.to(LinearAlgebra_1.Mat.transform2D(p, LinearAlgebra_1.Mat.reflectAt2DMatrix(line[0], line[1])));
         }
         return Geom;
@@ -1147,8 +1130,9 @@ class Geom {
      */
     static cosTable() {
         let cos = new Float64Array(360);
-        for (let i = 0; i < 360; i++) cos[i] = Math.cos(i * Math.PI / 180);
-        let find = rad => cos[Math.floor(Geom.boundAngle(Geom.toDegree(rad)))];
+        for (let i = 0; i < 360; i++)
+            cos[i] = Math.cos(i * Math.PI / 180);
+        let find = (rad) => cos[Math.floor(Geom.boundAngle(Geom.toDegree(rad)))];
         return { table: cos, cos: find };
     }
     /**
@@ -1157,23 +1141,25 @@ class Geom {
      */
     static sinTable() {
         let sin = new Float64Array(360);
-        for (let i = 0; i < 360; i++) sin[i] = Math.sin(i * Math.PI / 180);
-        let find = rad => sin[Math.floor(Geom.boundAngle(Geom.toDegree(rad)))];
+        for (let i = 0; i < 360; i++)
+            sin[i] = Math.sin(i * Math.PI / 180);
+        let find = (rad) => sin[Math.floor(Geom.boundAngle(Geom.toDegree(rad)))];
         return { table: sin, sin: find };
     }
 }
 exports.Geom = Geom;
 class Line {
     static slope(p1, p2) {
-        return p2[0] - p1[0] === 0 ? undefined : (p2[1] - p1[1]) / (p2[0] - p1[0]);
+        return (p2[0] - p1[0] === 0) ? undefined : (p2[1] - p1[1]) / (p2[0] - p1[0]);
     }
     static intercept(p1, p2) {
         if (p2[0] - p1[0] === 0) {
             return undefined;
-        } else {
+        }
+        else {
             let m = (p2[1] - p1[1]) / (p2[0] - p1[0]);
             let c = p1[1] - m * p1[0];
-            return { slope: m, yi: c, xi: m === 0 ? undefined : -c / m };
+            return { slope: m, yi: c, xi: (m === 0) ? undefined : -c / m };
         }
     }
     static collinear(p1, p2, p3) {
@@ -1193,7 +1179,7 @@ class Line {
         let a = line[0].$subtract(line[1]);
         let b = line[1].$subtract(pt);
         let proj = b.$subtract(a.$project(b));
-        return asProjection ? proj : proj.$add(pt);
+        return (asProjection) ? proj : proj.$add(pt);
     }
     static distanceFromPt(line, pt, asProjection = false) {
         return Line.perpendicularFromPt(line, pt, true).magnitude();
@@ -1204,23 +1190,28 @@ class Line {
         let pa = la[0];
         let pb = lb[0];
         if (a == undefined) {
-            if (b == undefined) return undefined;
+            if (b == undefined)
+                return undefined;
             // one of them is vertical line, while the other is not, so they will intersect
             let y1 = -b.slope * (pb[0] - pa[0]) + pb[1]; // -slope * x + y
             return new Pt_1.Pt(pa[0], y1);
-        } else {
+        }
+        else {
             // diff slope, or b slope is vertical line
             if (b == undefined) {
                 let y1 = -a.slope * (pa[0] - pb[0]) + pa[1];
                 return new Pt_1.Pt(pb[0], y1);
-            } else if (b.slope != a.slope) {
+            }
+            else if (b.slope != a.slope) {
                 let px = (a.slope * pa[0] - b.slope * pb[0] + pb[1] - pa[1]) / (a.slope - b.slope);
                 let py = a.slope * (px - pa[0]) + pa[1];
                 return new Pt_1.Pt(px, py);
-            } else {
+            }
+            else {
                 if (a.yi == b.yi) {
                     return new Pt_1.Pt(pa[0], pa[1]);
-                } else {
+                }
+                else {
                     return undefined;
                 }
             }
@@ -1228,20 +1219,21 @@ class Line {
     }
     static intersectLine2D(la, lb) {
         let pt = Line.intersectRay2D(la, lb);
-        return pt && Geom.withinBound(pt, la[0], la[1]) && Geom.withinBound(pt, lb[0], lb[1]) ? pt : undefined;
+        return (pt && Geom.withinBound(pt, la[0], la[1]) && Geom.withinBound(pt, lb[0], lb[1])) ? pt : undefined;
     }
     static intersectLineWithRay2D(line, ray) {
         let pt = Line.intersectRay2D(line, ray);
-        return pt && Geom.withinBound(pt, line[0], line[1]) ? pt : undefined;
+        return (pt && Geom.withinBound(pt, line[0], line[1])) ? pt : undefined;
     }
     static intersectPolygon2D(lineOrRay, poly, sourceIsRay = false) {
         let fn = sourceIsRay ? Line.intersectLineWithRay2D : Line.intersectLine2D;
         let pts = new Pt_1.Group();
         for (let i = 0, len = poly.length; i < len; i++) {
             let d = fn(poly[i], lineOrRay);
-            if (d) pts.push(d);
+            if (d)
+                pts.push(d);
         }
-        return pts.length > 0 ? pts : undefined;
+        return (pts.length > 0) ? pts : undefined;
     }
     /**
      * Get two intersection points on a standard xy grid
@@ -1252,15 +1244,18 @@ class Line {
     static intersectGridWithRay2D(ray, gridPt) {
         let t = Line.intercept(new Pt_1.Pt(ray[0]).subtract(gridPt), new Pt_1.Pt(ray[1]).subtract(gridPt));
         let g = new Pt_1.Group();
-        if (t && t.xi) g.push(new Pt_1.Pt(gridPt[0] + t.xi, gridPt[1]));
-        if (t && t.yi) g.push(new Pt_1.Pt(gridPt[0], gridPt[1] + t.yi));
+        if (t && t.xi)
+            g.push(new Pt_1.Pt(gridPt[0] + t.xi, gridPt[1]));
+        if (t && t.yi)
+            g.push(new Pt_1.Pt(gridPt[0], gridPt[1] + t.yi));
         return g;
     }
     static intersectGridWithLine2D(line, gridPt) {
         let g = Line.intersectGridWithRay2D(line, gridPt);
         let gg = new Pt_1.Group();
         for (let i = 0, len = g.length; i < len; i++) {
-            if (Geom.withinBound(g[i], line[0], line[1])) gg.push(g[i]);
+            if (Geom.withinBound(g[i], line[0], line[1]))
+                gg.push(g[i]);
         }
         return gg;
     }
@@ -1288,7 +1283,10 @@ class Rectangle {
     }
     static sides(rect) {
         let [p0, p1, p2, p3] = Rectangle.corners(rect);
-        return [new Pt_1.Group(p0, p1), new Pt_1.Group(p1, p2), new Pt_1.Group(p2, p3), new Pt_1.Group(p3, p0)];
+        return [
+            new Pt_1.Group(p0, p1), new Pt_1.Group(p1, p2),
+            new Pt_1.Group(p2, p3), new Pt_1.Group(p3, p0)
+        ];
     }
     static polygon(rect) {
         let corners = Rectangle.corners(rect);
@@ -1298,13 +1296,10 @@ class Rectangle {
     static quadrants(rect) {
         let corners = Rectangle.corners(rect);
         let center = Geom.interpolate(rect[0], rect[1], 0.5);
-        return corners.map(c => new Pt_1.Group(c, center.clone()));
+        return corners.map((c) => new Pt_1.Group(c, center.clone()));
     }
     static inside(rect, pt) {
-        for (let i = 0, len = pt.length; i < len; i++) {
-            if (pt[i] >= rect[0][i] && pt[i] <= rect[1][i]) return false;
-        }
-        return true;
+        return Geom.withinBound(pt, rect[0], rect[1]);
     }
     static intersect2D(rect, poly) {
         return Polygon.intersect2D(Rectangle.sides(rect), poly);
@@ -1316,26 +1311,28 @@ class Polygon {
         let groups = [];
         for (let i = 0, len = linesOrRays.length; i < len; i++) {
             let _ip = Line.intersectPolygon2D(linesOrRays[i], poly, sourceIsRay);
-            if (_ip) groups.push(_ip);
+            if (_ip)
+                groups.push(_ip);
         }
         return groups;
     }
     static network(poly, originIndex = 0) {
         let g = [];
         for (let i = 0, len = poly.length; i < len; i++) {
-            if (i != originIndex) g.push(new Pt_1.Group(poly[originIndex], poly[i]));
+            if (i != originIndex)
+                g.push(new Pt_1.Group(poly[originIndex], poly[i]));
         }
         return g;
     }
 }
 exports.Polygon = Polygon;
 
+
 /***/ }),
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const Form_1 = __webpack_require__(6);
@@ -1350,9 +1347,7 @@ class CanvasForm extends Form_1.Form {
         this._ctx.fillStyle = this._style.fillStyle;
         this._ctx.strokeStyle = this._style.strokeStyle;
     }
-    get space() {
-        return this._space;
-    }
+    get space() { return this._space; }
     /**
      * Set current fill style. For example: `form.fill("#F90")` `form.fill("rgba(0,0,0,.5")` `form.fill(false)`
      * @param c fill color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle))
@@ -1361,7 +1356,8 @@ class CanvasForm extends Form_1.Form {
     fill(c) {
         if (typeof c == "boolean") {
             this.filled = c;
-        } else {
+        }
+        else {
             this.filled = true;
             this._style.fillStyle = c;
             this._ctx.fillStyle = c;
@@ -1379,7 +1375,8 @@ class CanvasForm extends Form_1.Form {
     stroke(c, width, linejoin, linecap) {
         if (typeof c == "boolean") {
             this.stroked = c;
-        } else {
+        }
+        else {
             this.stroked = true;
             this._style.strokeStyle = c;
             this._ctx.strokeStyle = c;
@@ -1408,11 +1405,14 @@ class CanvasForm extends Form_1.Form {
         return this;
     }
     _paint() {
-        if (this._filled) this._ctx.fill();
-        if (this._stroked) this._ctx.stroke();
+        if (this._filled)
+            this._ctx.fill();
+        if (this._stroked)
+            this._ctx.stroke();
     }
     point(p, radius = 5, shape = "square") {
-        if (!CanvasForm[shape]) throw `${shape} is not a static function of CanvasForm`;
+        if (!CanvasForm[shape])
+            throw `${shape} is not a static function of CanvasForm`;
         CanvasForm[shape](this._ctx, p, radius);
         this._paint();
         return this;
@@ -1424,7 +1424,8 @@ class CanvasForm extends Form_1.Form {
         return this;
     }
     static circle(ctx, pt, radius) {
-        if (!pt) return;
+        if (!pt)
+            return;
         ctx.beginPath();
         ctx.arc(pt[0], pt[1], radius, 0, Util_1.Const.two_pi, false);
         ctx.closePath();
@@ -1443,7 +1444,8 @@ class CanvasForm extends Form_1.Form {
         return this;
     }
     static square(ctx, pt, halfsize) {
-        if (!pt) return;
+        if (!pt)
+            return;
         let x1 = pt[0] - halfsize;
         let y1 = pt[1] - halfsize;
         let x2 = pt[0] + halfsize;
@@ -1466,15 +1468,18 @@ class CanvasForm extends Form_1.Form {
         return this;
     }
     static line(ctx, pts) {
-        if (pts.length < 2) return;
+        if (pts.length < 2)
+            return;
         ctx.beginPath();
         ctx.moveTo(pts[0][0], pts[0][1]);
         for (let i = 1, len = pts.length; i < len; i++) {
-            if (pts[i]) ctx.lineTo(pts[i][0], pts[i][1]);
+            if (pts[i])
+                ctx.lineTo(pts[i][0], pts[i][1]);
         }
     }
     static rect(ctx, pts) {
-        if (pts.length < 2) return;
+        if (pts.length < 2)
+            return;
         ctx.beginPath();
         ctx.moveTo(pts[0][0], pts[0][1]);
         ctx.lineTo(pts[0][0], pts[1][1]);
@@ -1495,7 +1500,8 @@ class CanvasForm extends Form_1.Form {
      * @param `maxWidth` specify a maximum width per line
      */
     static text(ctx, pt, txt, maxWidth) {
-        if (!pt) return;
+        if (!pt)
+            return;
         ctx.fillText(txt, pt[0], pt[1], maxWidth);
     }
     text(pt, txt, maxWidth) {
@@ -1515,12 +1521,12 @@ class CanvasForm extends Form_1.Form {
 }
 exports.CanvasForm = CanvasForm;
 
+
 /***/ }),
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
 
 Object.defineProperty(exports, "__esModule", { value: true });
 class Font {
@@ -1529,9 +1535,8 @@ class Font {
         this.face = face;
         this.style = style;
     }
-    get data() {
-        return `${this.style} ${this.size}px ${this.face}`;
-    }
+    get data() { return `${this.style} ${this.size}px ${this.face}`; }
+    ;
 }
 exports.Font = Font;
 class Form {
@@ -1539,33 +1544,21 @@ class Form {
         this._filled = true;
         this._stroked = true;
     }
-    get filled() {
-        return this._filled;
-    }
-    set filled(b) {
-        this._filled = b;
-    }
-    get stroked() {
-        return this._stroked;
-    }
-    set stroked(b) {
-        this._stroked = b;
-    }
-    get font() {
-        return this._font;
-    }
-    set font(b) {
-        this._font = b;
-    }
+    get filled() { return this._filled; }
+    set filled(b) { this._filled = b; }
+    get stroked() { return this._stroked; }
+    set stroked(b) { this._stroked = b; }
+    get font() { return this._font; }
+    set font(b) { this._font = b; }
 }
 exports.Form = Form;
+
 
 /***/ }),
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const Bound_1 = __webpack_require__(2);
@@ -1595,14 +1588,16 @@ class Space {
      * @param player an IPlayer object with animate function, or simply a function(time, fps, context){}
      */
     add(p) {
-        let player = typeof p == "function" ? { animate: p } : p;
+        let player = (typeof p == "function") ? { animate: p } : p;
         let k = this.playerCount++;
         let pid = this.id + k;
         this.players[pid] = player;
         player.animateID = pid;
-        if (player.resize && this.bound.inited) player.resize(this.bound);
+        if (player.resize && this.bound.inited)
+            player.resize(this.bound);
         // if _refresh is not set, set it to true
-        if (this._refresh === undefined) this._refresh = true;
+        if (this._refresh === undefined)
+            this._refresh = true;
         return this;
     }
     /**
@@ -1626,13 +1621,15 @@ class Space {
      * @param time current time
      */
     play(time = 0) {
-        this._animID = requestAnimationFrame(t => this.play(t));
-        if (this._pause) return this;
+        this._animID = requestAnimationFrame((t) => this.play(t));
+        if (this._pause)
+            return this;
         this._time.diff = time - this._time.prev;
         this._time.prev = time;
         try {
             this.playItems(time);
-        } catch (err) {
+        }
+        catch (err) {
             cancelAnimationFrame(this._animID);
             throw err;
         }
@@ -1644,7 +1641,8 @@ class Space {
      */
     playItems(time) {
         // clear before draw if refresh is true
-        if (this._refresh) this.clear();
+        if (this._refresh)
+            this.clear();
         // animate all players
         for (let k in this.players) {
             this.players[k].animate(time, this._time.diff, this);
@@ -1659,7 +1657,7 @@ class Space {
      * @param toggle a boolean value to set if this function call should be a toggle (between pause and resume)
      */
     pause(toggle = false) {
-        this._pause = toggle ? !this._pause : true;
+        this._pause = (toggle) ? !this._pause : true;
         return this;
     }
     /**
@@ -1689,42 +1687,32 @@ class Space {
     /**
      * Get this space's bounding box
      */
-    get boundingBox() {
-        return this.bound.clone();
-    }
+    get boundingBox() { return this.bound.clone(); }
     /**
      * Get the size of this bounding box as a Pt
      */
-    get size() {
-        return this.bound.size.clone();
-    }
+    get size() { return this.bound.size.clone(); }
     /**
      * Get the size of this bounding box as a Pt
      */
-    get center() {
-        return this.size.divide(2);
-    }
+    get center() { return this.size.divide(2); }
     /**
      * Get width of canvas
      */
-    get width() {
-        return this.bound.width;
-    }
+    get width() { return this.bound.width; }
     /**
      * Get height of canvas
      */
-    get height() {
-        return this.bound.height;
-    }
+    get height() { return this.bound.height; }
 }
 exports.Space = Space;
+
 
 /***/ }),
 /* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const Space_1 = __webpack_require__(7);
@@ -1756,7 +1744,8 @@ class CanvasSpace extends Space_1.Space {
         if (elem instanceof Element) {
             _selector = elem;
             this.id = "pts_existing_space";
-        } else {
+        }
+        else {
             ;
             _selector = document.querySelector(elem);
             _existed = true;
@@ -1770,12 +1759,14 @@ class CanvasSpace extends Space_1.Space {
             document.body.appendChild(this._container);
             _existed = false;
             // if selector is element but not canvas, create a canvas inside it
-        } else if (_selector.nodeName.toLowerCase() != "canvas") {
+        }
+        else if (_selector.nodeName.toLowerCase() != "canvas") {
             this._container = _selector;
             this._canvas = this._createElement("canvas", this.id + "_canvas");
             this._container.appendChild(this._canvas);
             // if selector is an existing canvas
-        } else {
+        }
+        else {
             this._canvas = _selector;
             this._container = _selector.parentElement;
             this._autoResize = false;
@@ -1806,16 +1797,20 @@ class CanvasSpace extends Space_1.Space {
      * @param callback
      */
     _ready(callback) {
-        if (!this._container) throw `Cannot initiate #${this.id} element`;
+        if (!this._container)
+            throw `Cannot initiate #${this.id} element`;
         this._isReady = true;
-        let b = this._autoResize ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
-        if (b) this.resize(Bound_1.Bound.fromBoundingRect(b));
+        let b = (this._autoResize) ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
+        if (b)
+            this.resize(Bound_1.Bound.fromBoundingRect(b));
         this.clear(this._bgcolor);
         this._canvas.dispatchEvent(new Event("ready"));
         for (let k in this.players) {
-            if (this.players[k].start) this.players[k].start(this.bound.clone(), this);
+            if (this.players[k].start)
+                this.players[k].start(this.bound.clone(), this);
         }
-        if (callback) callback(this.bound, this._canvas);
+        if (callback)
+            callback(this.bound, this._canvas);
     }
     /**
      * Set up various options for CanvasSpace. The `opt` parameter is an object with the following fields. This is usually set during instantiation, eg `new CanvasSpace(...).setup( { opt } )`
@@ -1825,8 +1820,10 @@ class CanvasSpace extends Space_1.Space {
      * @param opt.retina a boolean to set if device pixel scaling should be used. This may make drawings on retina displays look sharper but may reduce performance slightly. Default is `true`.
      */
     setup(opt) {
-        if (opt.bgcolor) this._bgcolor = opt.bgcolor;
-        if (opt.resize != undefined) this.autoResize(opt.resize);
+        if (opt.bgcolor)
+            this._bgcolor = opt.bgcolor;
+        if (opt.resize != undefined)
+            this.autoResize(opt.resize);
         if (opt.retina !== false) {
             let r1 = window.devicePixelRatio || 1;
             let r2 = this._ctx.webkitBackingStorePixelRatio || this._ctx.mozBackingStorePixelRatio || this._ctx.msBackingStorePixelRatio || this._ctx.oBackingStorePixelRatio || this._ctx.backingStorePixelRatio || 1;
@@ -1837,22 +1834,19 @@ class CanvasSpace extends Space_1.Space {
     /**
      * Get the rendering context of canvas
      */
-    get ctx() {
-        return this._ctx;
-    }
+    get ctx() { return this._ctx; }
     /**
      * Get a new CanvasForm for drawing
      */
-    getForm() {
-        return new CanvasForm_1.CanvasForm(this);
-    }
+    getForm() { return new CanvasForm_1.CanvasForm(this); }
     /**
      * Window resize handling
      * @param evt
      */
     _resizeHandler(evt) {
-        let b = this._autoResize ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
-        if (b) this.resize(Bound_1.Bound.fromBoundingRect(b), evt);
+        let b = (this._autoResize) ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
+        if (b)
+            this.resize(Bound_1.Bound.fromBoundingRect(b), evt);
     }
     /**
      * Set whether the canvas element should resize when its container is resized. Default will auto size
@@ -1862,7 +1856,8 @@ class CanvasSpace extends Space_1.Space {
         this._autoResize = auto;
         if (auto) {
             window.addEventListener('resize', this._resizeHandler.bind(this));
-        } else {
+        }
+        else {
             window.removeEventListener('resize', this._resizeHandler.bind(this));
         }
         return this;
@@ -1896,7 +1891,8 @@ class CanvasSpace extends Space_1.Space {
         }
         for (let k in this.players) {
             let p = this.players[k];
-            if (p.resize) p.resize(this.bound, evt);
+            if (p.resize)
+                p.resize(this.bound, evt);
         }
         this.render(this._ctx);
         return this;
@@ -1906,12 +1902,14 @@ class CanvasSpace extends Space_1.Space {
      * @param bg Optionally specify a custom background color in hex or rgba string, or "transparent". If not defined, it will use its `bgcolor` property as background color to clear the canvas.
      */
     clear(bg) {
-        if (bg) this._bgcolor = bg;
+        if (bg)
+            this._bgcolor = bg;
         let lastColor = this._ctx.fillStyle;
         if (this._bgcolor && this._bgcolor != "transparent") {
             this._ctx.fillStyle = this._bgcolor;
             this._ctx.fillRect(0, 0, this._canvas.width, this._canvas.height);
-        } else {
+        }
+        else {
             this._ctx.clearRect(0, 0, this._canvas.width, this._canvas.height);
         }
         this._ctx.fillStyle = lastColor;
@@ -1957,7 +1955,8 @@ class CanvasSpace extends Space_1.Space {
             this.bindCanvas("mouseout", this._mouseOut.bind(this));
             this.bindCanvas("mousemove", this._mouseMove.bind(this));
             this._hasMouse = true;
-        } else {
+        }
+        else {
             this.unbindCanvas("mousedown", this._mouseDown.bind(this));
             this.unbindCanvas("mouseup", this._mouseUp.bind(this));
             this.unbindCanvas("mouseover", this._mouseOver.bind(this));
@@ -1977,7 +1976,8 @@ class CanvasSpace extends Space_1.Space {
             this.bindCanvas("touchmove", this._touchMove.bind(this));
             this.bindCanvas("touchcancel", this._mouseOut.bind(this));
             this._hasTouch = true;
-        } else {
+        }
+        else {
             this.unbindCanvas("touchstart", this._mouseDown.bind(this));
             this.unbindCanvas("touchend", this._mouseUp.bind(this));
             this.unbindCanvas("touchmove", this._touchMove.bind(this));
@@ -1992,7 +1992,8 @@ class CanvasSpace extends Space_1.Space {
      * @return an array of Pt, whose origin position (0,0) is offset to the top-left of this space
      */
     touchesToPoints(evt, which = "touches") {
-        if (!evt || !evt[which]) return [];
+        if (!evt || !evt[which])
+            return [];
         let ts = [];
         for (var i = 0; i < evt[which].length; i++) {
             let t = evt[which].item(i);
@@ -2010,11 +2011,12 @@ class CanvasSpace extends Space_1.Space {
             for (let k in this.players) {
                 let v = this.players[k];
                 let c = evt.changedTouches && evt.changedTouches.length > 0;
-                let px = c ? evt.changedTouches.item(0).pageX : 0;
-                let py = c ? evt.changedTouches.item(0).pageY : 0;
+                let px = (c) ? evt.changedTouches.item(0).pageX : 0;
+                let py = (c) ? evt.changedTouches.item(0).pageY : 0;
                 v.action(type, px, py, evt);
             }
-        } else {
+        }
+        else {
             for (let k in this.players) {
                 let v = this.players[k];
                 let px = evt.offsetX || evt.layerX;
@@ -2037,7 +2039,8 @@ class CanvasSpace extends Space_1.Space {
      */
     _mouseUp(evt) {
         this._mouseAction("up", evt);
-        if (this._dragged) this._mouseAction("drop", evt);
+        if (this._dragged)
+            this._mouseAction("drop", evt);
         this._pressed = false;
         this._dragged = false;
     }
@@ -2065,7 +2068,8 @@ class CanvasSpace extends Space_1.Space {
      */
     _mouseOut(evt) {
         this._mouseAction("out", evt);
-        if (this._dragged) this._mouseAction("drop", evt);
+        if (this._dragged)
+            this._mouseAction("drop", evt);
         this._dragged = false;
     }
     /**
@@ -2081,27 +2085,24 @@ class CanvasSpace extends Space_1.Space {
      * @param context rendering context
      */
     render(context) {
-        if (this._renderFunc) this._renderFunc(context, this);
+        if (this._renderFunc)
+            this._renderFunc(context, this);
         return this;
     }
     /**
      * Set a custom rendering `function(graphics_context, canvas_space)` if needed
      */
-    set customRendering(f) {
-        this._renderFunc = f;
-    }
-    get customRendering() {
-        return this._renderFunc;
-    }
+    set customRendering(f) { this._renderFunc = f; }
+    get customRendering() { return this._renderFunc; }
 }
 exports.CanvasSpace = CanvasSpace;
+
 
 /***/ }),
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
@@ -2110,8 +2111,10 @@ class Create {
         let pts = [];
         for (let i = 0; i < count; i++) {
             let p = [bound.x + Math.random() * bound.width];
-            if (dimensions > 1) p.push(bound.y + Math.random() * bound.height);
-            if (dimensions > 2) p.push(bound.z + Math.random() * bound.depth);
+            if (dimensions > 1)
+                p.push(bound.y + Math.random() * bound.height);
+            if (dimensions > 2)
+                p.push(bound.z + Math.random() * bound.depth);
             pts.push(new Pt_1.Pt(p));
         }
         return pts;
@@ -2119,12 +2122,12 @@ class Create {
 }
 exports.Create = Create;
 
+
 /***/ }),
 /* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
@@ -2161,10 +2164,10 @@ console.log(pto.reduce((a, b) => a + " | " + b.toString(), ""));
 console.log(pt.toString());
 var ps = [];
 let fs = {
-    "size": p => {
+    "size": (p) => {
         let dist = p.$subtract(canvas.size.$divide(2)).magnitude();
         return new Pt_1.Pt(dist / 8, dist / (Math.max(canvas.width, canvas.height) / 2));
-    }
+    },
 };
 function ready(bound, space) {
     ps = Create_1.Create.distributeRandom(new Bound_1.Bound(canvas.size), 50);
@@ -2175,7 +2178,7 @@ canvas.add({
         form.fill("#999").text(new Pt_1.Pt(20, 20), framerate + " fps");
         form.reset();
         form.stroke(false);
-        ps.forEach(p => {
+        ps.forEach((p) => {
             let attrs = p.op(fs);
             form.fill(`rgba(255,0,0,${1.2 - attrs.size.y}`);
             form.point(p, attrs.size.x, "circle");
@@ -2227,6 +2230,7 @@ console.log( pts );
 // pts.pt(2,3,4);
 // console.log(pts.toString());
 // console.log( Matrix.augment(m1, m2).toString() );
+
 
 /***/ })
 /******/ ]);

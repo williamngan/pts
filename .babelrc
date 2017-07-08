@@ -1,0 +1,6 @@
+{
+    "presets": ["babili"],
+    "plugins": [
+        ["babel-plugin-transform-builtin-extend", {"globals": ["Float32Array", "Float64Array", "Array"]}]
+    ]
+}

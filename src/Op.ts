@@ -169,13 +169,13 @@ export class Geom {
 
   static rotate2D( ps:Pt|GroupLike, angle:number, anchor?:PtLike, axis?:string):Geom {
     let pts = (!Array.isArray(ps)) ? [ps] : ps;
-    let fn = (anchor != undefined) ? Mat.rotateAt2DMatrix : Mat.rotate2DMatrix;
+    let fn = (anchor) ? Mat.rotateAt2DMatrix : Mat.rotate2DMatrix;
     if (!anchor) anchor = Pt.make( pts[0].length, 0 );
     let cos = Math.cos(angle);
     let sin = Math.sin(angle);
 
     for (let i=0, len=pts.length; i<len; i++) {
-      let p = (axis !=undefined) ? pts[i].$take( axis ) : pts[i];
+      let p = (axis) ? pts[i].$take( axis ) : pts[i];
       p.to( Mat.transform2D( p, fn( cos, sin, anchor ) ) );
     }
 
@@ -187,12 +187,12 @@ export class Geom {
     let pts = (!Array.isArray(ps)) ? [ps] : ps;
     let s = (typeof scale == "number") ? [scale, scale] : scale;
     if (!anchor) anchor = Pt.make( pts[0].length, 0 );
-    let fn = (anchor != undefined) ? Mat.shearAt2DMatrix : Mat.shear2DMatrix;
+    let fn = (anchor) ? Mat.shearAt2DMatrix : Mat.shear2DMatrix;
     let tanx = Math.tan( s[0] );
     let tany = Math.tan( s[1] );
 
     for (let i=0, len=pts.length; i<len; i++) {
-      let p = (axis !=undefined) ? pts[i].$take( axis ) : pts[i];
+      let p = (axis) ? pts[i].$take( axis ) : pts[i];
       p.to( Mat.transform2D( p, fn( tanx, tany, anchor ) ) );
     }
     
@@ -203,7 +203,7 @@ export class Geom {
     let pts = (!Array.isArray(ps)) ? [ps] : ps;
     
     for (let i=0, len=pts.length; i<len; i++) {
-      let p = (axis !=undefined) ? pts[i].$take( axis ) : pts[i];
+      let p = (axis) ? pts[i].$take( axis ) : pts[i];
       p.to( Mat.transform2D( p, Mat.reflectAt2DMatrix( line[0], line[1] ) ) );
     }
 
@@ -408,10 +408,7 @@ export class Rectangle {
   }
 
   static inside( rect:GroupLike, pt:PtLike ) {
-    for (let i=0, len=pt.length; i<len; i++) {
-      if (pt[i] >= rect[0][i] && pt[i] <= rect[1][i]) return false;
-    }
-    return true;
+    return Geom.withinBound( pt, rect[0], rect[1] );
   }
 
   static intersect2D( rect:GroupLike, poly:GroupLike[] ):Group[] {
