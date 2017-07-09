@@ -18,6 +18,7 @@ export type PtLike = Pt | Float32Array | number[];
 
 export class Pt extends PtBaseArray implements IPt, Iterable<number> {
 
+  protected _id:string;
 
   /**
    * Create a Pt. If no parameter is provided, this will instantiate a Pt with 2 dimensions [0, 0].
@@ -34,6 +35,8 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
     return new Pt( p );
   }
 
+  get id():string { return this._id; }
+  set id( s:string ) { this._id = s; }
 
   get x():number { return this[0]; }
   get y():number { return this[1]; }
@@ -359,9 +362,14 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
 
 export class Group extends Array<Pt> {
 
+  protected _id:string;
+  
   constructor(...args) {
     super(...args);
   }
+
+  get id():string { return this._id; }
+  set id( s:string ) { this._id = s; }
 
   clone():Group {
     let group = new Group();   

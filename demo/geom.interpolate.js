@@ -33,11 +33,6 @@ space.add( {
     // form.stroke("#999").line([center.$add(p1), center.$add(p2), center.$add(p3), center.$add(p1)] );
 
   },
-  action:( type, px, py) => {
-    if (type=="move") {
-      
-    }
-  },
   resize:( bound, evt) => {
     console.log( bound.width, bound.height );
   }

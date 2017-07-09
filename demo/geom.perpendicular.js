@@ -4,11 +4,10 @@ var space = new CanvasSpace("#pt").setup({retina: true});
 var form = space.getForm();
 
 let ang = Math.random() * Const.two_pi;
-let mouse = new Pt();
 
 space.add( {
   animate: (time, ftime) => {
-    let p = mouse.$subtract( space.center );
+    let p = space.pointer.$subtract( space.center );
     let c = space.center;
 
     let ang = p.angle();
@@ -30,11 +29,6 @@ space.add( {
     perpends = Geom.perpendicular( p ).map( (p) => p.$add( c ) );    
     form.stroke("#0f0").line( perpends );
 
-  },
-  action:(type, px, py) => {
-    if (type=="move") {
-      mouse.to(px, py);
-    }
   }
 });
   

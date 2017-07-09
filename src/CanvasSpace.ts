@@ -12,7 +12,6 @@ interface PtsCanvasRenderingContext2D extends CanvasRenderingContext2D {
 }
 
 export type TouchPointsKey = "touches" | "changedTouches" | "targetTouches";
-export type ActionPointer = {type:string, x:number, y:number};
 
 export class CanvasSpace extends Space {
 
@@ -23,7 +22,7 @@ export class CanvasSpace extends Space {
   protected _autoResize = true;
   protected _bgcolor = "#e1e9f0";
   protected _ctx:PtsCanvasRenderingContext2D;
-  protected _pointer:ActionPointer = {type: "", x: 0, y: 0}
+  protected _pointer:Pt = new Pt();
 
   // track mouse dragging
   private _pressed = false;
@@ -161,12 +160,10 @@ export class CanvasSpace extends Space {
   /**
    * Get the mouse or touch pointer that stores the last action
    */
-  public get pointer():ActionPointer {
-    return {
-      type: this._pointer.type,
-      x: this._pointer.x,
-      y: this._pointer.y
-    };
+  public get pointer():Pt {
+    let p = this._pointer.clone();
+    p.id = this._pointer.id;
+    return p;
   }
 
   /**
@@ -375,17 +372,20 @@ export class CanvasSpace extends Space {
         let c = evt.changedTouches && evt.changedTouches.length > 0
         px = (c) ? evt.changedTouches.item(0).pageX : 0;
         py = (c) ? evt.changedTouches.item(0).pageY : 0;
-        v.action( type, px, py, evt );
+        if (v.action) v.action( type, px, py, evt );
       }
     } else {
       for (let k in this.players) {
         let v = this.players[k];
         px = evt.offsetX || evt.layerX;
         py = evt.offsetY || evt.layerY;
-        v.action( type, px, py, evt );
+        if (v.action) v.action( type, px, py, evt );
       }
     }
-    if (type) this._pointer = {type: type, x: px, y: py };
+    if (type) {
+      this._pointer.to( px, py );
+      this._pointer.id = type;
+    }
   }
 
 

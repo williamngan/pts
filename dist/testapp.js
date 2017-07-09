@@ -93,6 +93,8 @@ class Pt extends exports.PtBaseArray {
             p.fill(defaultValue);
         return new Pt(p);
     }
+    get id() { return this._id; }
+    set id(s) { this._id = s; }
     get x() { return this[0]; }
     get y() { return this[1]; }
     get z() { return this[2]; }
@@ -363,6 +365,8 @@ class Group extends Array {
     constructor(...args) {
         super(...args);
     }
+    get id() { return this._id; }
+    set id(s) { this._id = s; }
     clone() {
         let group = new Group();
         for (let i = 0, len = this.length; i < len; i++) {
@@ -1746,7 +1750,7 @@ class CanvasSpace extends Space_1.Space {
         this._pixelScale = 1;
         this._autoResize = true;
         this._bgcolor = "#e1e9f0";
-        this._pointer = { type: "", x: 0, y: 0 };
+        this._pointer = new Pt_1.Pt();
         // track mouse dragging
         this._pressed = false;
         this._dragged = false;
@@ -1856,11 +1860,9 @@ class CanvasSpace extends Space_1.Space {
      * Get the mouse or touch pointer that stores the last action
      */
     get pointer() {
-        return {
-            type: this._pointer.type,
-            x: this._pointer.x,
-            y: this._pointer.y
-        };
+        let p = this._pointer.clone();
+        p.id = this._pointer.id;
+        return p;
     }
     /**
      * Get a new CanvasForm for drawing
@@ -2041,7 +2043,8 @@ class CanvasSpace extends Space_1.Space {
                 let c = evt.changedTouches && evt.changedTouches.length > 0;
                 px = (c) ? evt.changedTouches.item(0).pageX : 0;
                 py = (c) ? evt.changedTouches.item(0).pageY : 0;
-                v.action(type, px, py, evt);
+                if (v.action)
+                    v.action(type, px, py, evt);
             }
         }
         else {
@@ -2049,11 +2052,14 @@ class CanvasSpace extends Space_1.Space {
                 let v = this.players[k];
                 px = evt.offsetX || evt.layerX;
                 py = evt.offsetY || evt.layerY;
-                v.action(type, px, py, evt);
+                if (v.action)
+                    v.action(type, px, py, evt);
             }
         }
-        if (type)
-            this._pointer = { type: type, x: px, y: py };
+        if (type) {
+            this._pointer.to(px, py);
+            this._pointer.id = type;
+        }
     }
     /**
      * MouseDown handler
