@@ -445,10 +445,11 @@ class Group extends Array {
      * @param t a value between 0 to 1 usually
      */
     interpolate(t) {
+        t = Op_1.Num.limitValue(t, 0, 1);
         let chunk = this.length - 1;
         let tc = 1 / (this.length - 1);
         let idx = Math.floor(t / tc);
-        return Op_1.Geom.interpolate(this[idx], this[idx + 1], (t - idx * tc) * chunk);
+        return Op_1.Geom.interpolate(this[idx], this[Math.min(this.length - 1, idx + 1)], (t - idx * tc) * chunk);
     }
     moveBy(...args) {
         let pt = Util_1.Util.getArgs(args);
@@ -956,7 +957,22 @@ class Num {
     static lerp(a, b, t) {
         return (1 - t) * a + t * b;
     }
-    static boundValue(val, min, max, positive = false) {
+    /**
+     * Clamp values between min and max
+     * @param val
+     * @param min
+     * @param max
+     */
+    static limitValue(val, min, max) {
+        return Math.max(min, Math.min(max, val));
+    }
+    /**
+     * Different from Num.limitValue in that the value out-of-bound will be "looped back" to the other end.
+     * @param val
+     * @param min
+     * @param max
+     */
+    static boundValue(val, min, max) {
         let len = Math.abs(max - min);
         let a = val % len;
         if (a > max)
@@ -1035,7 +1051,7 @@ class Geom {
         return Num.average(pts);
     }
     /**
-     * Get a bisector between two Pts
+     * Get an interpolated value between two Pts
      * @param a first Pt
      * @param b second Pt
      * @param t a ratio between 0 to 1
@@ -1730,6 +1746,7 @@ class CanvasSpace extends Space_1.Space {
         this._pixelScale = 1;
         this._autoResize = true;
         this._bgcolor = "#e1e9f0";
+        this._pointer = { type: "", x: 0, y: 0 };
         // track mouse dragging
         this._pressed = false;
         this._dragged = false;
@@ -1835,6 +1852,16 @@ class CanvasSpace extends Space_1.Space {
      * Get the rendering context of canvas
      */
     get ctx() { return this._ctx; }
+    /**
+     * Get the mouse or touch pointer that stores the last action
+     */
+    get pointer() {
+        return {
+            type: this._pointer.type,
+            x: this._pointer.x,
+            y: this._pointer.y
+        };
+    }
     /**
      * Get a new CanvasForm for drawing
      */
@@ -2007,23 +2034,26 @@ class CanvasSpace extends Space_1.Space {
      * @param evt
      */
     _mouseAction(type, evt) {
+        let px = 0, py = 0;
         if (evt instanceof TouchEvent) {
             for (let k in this.players) {
                 let v = this.players[k];
                 let c = evt.changedTouches && evt.changedTouches.length > 0;
-                let px = (c) ? evt.changedTouches.item(0).pageX : 0;
-                let py = (c) ? evt.changedTouches.item(0).pageY : 0;
+                px = (c) ? evt.changedTouches.item(0).pageX : 0;
+                py = (c) ? evt.changedTouches.item(0).pageY : 0;
                 v.action(type, px, py, evt);
             }
         }
         else {
             for (let k in this.players) {
                 let v = this.players[k];
-                let px = evt.offsetX || evt.layerX;
-                let py = evt.offsetY || evt.layerY;
+                px = evt.offsetX || evt.layerX;
+                py = evt.offsetY || evt.layerY;
                 v.action(type, px, py, evt);
             }
         }
+        if (type)
+            this._pointer = { type: type, x: px, y: py };
     }
     /**
      * MouseDown handler

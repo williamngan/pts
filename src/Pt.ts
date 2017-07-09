@@ -1,5 +1,5 @@
 import {Util, Const} from "./Util"
-import {Geom} from "./Op"
+import {Geom, Num} from "./Op"
 import {Bound} from "./Bound"
 import {Vec} from "./LinearAlgebra"
 
@@ -460,10 +460,11 @@ export class Group extends Array<Pt> {
    * @param t a value between 0 to 1 usually
    */
   interpolate( t:number ):Pt {
+    t = Num.limitValue( t, 0, 1 );
     let chunk = this.length-1;
     let tc = 1/(this.length-1);
     let idx = Math.floor( t / tc );
-    return Geom.interpolate( this[idx], this[idx+1], (t - idx*tc) * chunk );
+    return Geom.interpolate( this[idx], this[ Math.min( this.length-1, idx+1)], (t - idx*tc) * chunk );
   }
 
   moveBy( ...args ):this {

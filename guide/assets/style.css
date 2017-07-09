@@ -192,8 +192,26 @@ p {
   position: relative;
 }
 
-p > .demoOverlay {
+.demoOverlay {
   position: absolute;
-  top: 0; left: 0; bottom: 0; width: 400px;
+  top: 0; left: 0; bottom: 0; width: 500px;
   background: rgba(255,0,0,.2);
+  box-sizing: border-box;
+}
+.demoOverlay::after {
+  display: block;
+  position: absolute; bottom: 0; right: 0;
+  background: rgba(0,0,0,.7);
+  color: #fff;
+  padding: 10px;
+  font-size: 11px;
+  content: 'hover to try demo';
+}
+
+.demoOverlay.active {
+  box-shadow: 0 0 0 2px #000;
+}
+
+.demoOverlay.active::after {
+  display: none;
 }

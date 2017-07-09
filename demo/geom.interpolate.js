@@ -3,10 +3,10 @@ Pts.namespace( window );
 var space = new CanvasSpace("#pt").setup({retina: true, resize: true});
 var form = space.getForm();
 
-var ratio = 0.5;
 
 space.add( {
   animate: (time, ftime) => {
+    let ratio = Num.limitValue( Num.normalizeValue( space.pointer.x, 0, space.size.x), 0, 1 );
     form.log( 1000/ftime + " fps" );
 
     var center = space.size.$divide(2);
@@ -35,7 +35,7 @@ space.add( {
   },
   action:( type, px, py) => {
     if (type=="move") {
-      ratio = Num.normalizeValue( px, 0, space.size.x)
+      
     }
   },
   resize:( bound, evt) => {

@@ -10,7 +10,23 @@ export class Num {
     return (1-t) * a + t * b;
   }
 
-  static boundValue( val:number, min:number, max:number, positive=false ):number {
+  /**
+   * Clamp values between min and max
+   * @param val 
+   * @param min 
+   * @param max 
+   */
+  static limitValue( val:number, min:number, max:number ){
+    return Math.max(min, Math.min( max, val ));
+  }
+
+  /**
+   * Different from Num.limitValue in that the value out-of-bound will be "looped back" to the other end.
+   * @param val 
+   * @param min 
+   * @param max 
+   */
+  static boundValue( val:number, min:number, max:number ):number {
     let len = Math.abs(max - min);
     let a = val % len;
     
@@ -103,21 +119,19 @@ export class Geom {
 
 
   /**
-   * Get a bisector between two Pts
+   * Get an interpolated value between two Pts
    * @param a first Pt
    * @param b second Pt
    * @param t a ratio between 0 to 1
    * @returns interpolated point as a new Pt
    */
   static interpolate( a:Pt|number[], b:Pt|number[], t=0.5 ):Pt {
-
     let len = Math.min(a.length, b.length);
     let d = Pt.make( len );
     for (let i=0; i<len; i++) {
       d[i] = a[i]*(1-t) + b[i]*t
     }
     return d;
-
   }
 
   /**
