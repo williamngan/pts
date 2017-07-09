@@ -370,9 +370,11 @@ export class CanvasSpace extends Space {
     if (evt instanceof TouchEvent) {
       for (let k in this.players) {
         let v = this.players[k];
-        let c = evt.changedTouches && evt.changedTouches.length > 0
-        px = (c) ? evt.changedTouches.item(0).pageX : 0;
-        py = (c) ? evt.changedTouches.item(0).pageY : 0;
+        let c = evt.changedTouches && evt.changedTouches.length > 0;
+        let touch = evt.changedTouches.item(0);
+        let bound = this._canvas.getBoundingClientRect();
+        px = (c) ? touch.clientX - bound.left : 0;
+        py = (c) ? touch.clientY - bound.top : 0;
         if (v.action) v.action( type, px, py, evt );
       }
     } else {

@@ -9,7 +9,6 @@
   });
 
   for (let i=0, len=blocks.length; i<len; i++) {
-    console.log( blocks[i] );
     createDemoContainer( blocks[i] );
   }
 
@@ -21,27 +20,27 @@
   function createDemoContainer( imgElem ) {
     var div = document.createElement("div");
     var divID = imgElem.getAttribute("alt").replace(/js\:/gi, "");
+
     div.setAttribute("class", "demoOverlay");
     div.setAttribute("id", divID );
     imgElem.parentNode.appendChild( div );
 
     loadDemo( div, divID );
 
-    div.addEventListener( 'mouseenter', function(evt) {
+    function startDemo(evt) {
       div.classList.add("active");
-      if (demos[divID]) {
-        console.log( "start" );
-        demos[divID].replay();
-      }
-    });
+      if (demos[divID]) demos[divID].replay();
+    }
 
-    div.addEventListener( 'mouseleave', function(evt) {
+    function stopDemo(evt) {
       div.classList.remove("active");
-      if (demos[divID]) {
-        console.log( "stop" );
-        demos[divID].stop();
-      }
-    });
+      if (demos[divID]) demos[divID].stop();
+    }
+
+    div.addEventListener( 'mouseenter', startDemo );
+    div.addEventListener( 'touchstart', stopDemo );
+    div.addEventListener( 'mouseleave', startDemo );
+    div.addEventListener( 'touchend', stopDemo );
   }
 
   function loadDemo( div, demoID ) {
@@ -49,7 +48,7 @@
     try {
       script.src = "./js/examples/"+demoID+".js";
       script.onload = function () {
-          console.log( "loaded" + demoID );
+          console.log( "loaded " + demoID );
       };
     } catch (e) {
       console.warn( e  );

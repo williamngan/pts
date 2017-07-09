@@ -9,9 +9,7 @@ let mouse = new Pt();
 
 space.add({
   animate: (time, ftime) => {
-    console.log( time );
 
-    // console.log( space._pause, "!!" );
     let p = mouse.$subtract(space.center);
     let c = space.center;
 
@@ -20,7 +18,7 @@ space.add({
 
     // line to mouse
     let pm = new Pt(c.x + p.magnitude(), c.y);
-    form.stroke("#ccc").line([c, pm]);
+    form.stroke("#ccc", 10).line([c, pm]);
     form.fill(false).arc(c, 20, 0, ang);
 
     // line at specific angle
@@ -42,7 +40,7 @@ space.add({
   }
 });
 
-space.playOnce(200).bindMouse();
+space.playOnce(200).bindMouse().bindTouch();
 
 // For demo page only
 if (window.registerDemo) window.registerDemo(demoID, space);

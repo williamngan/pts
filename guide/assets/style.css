@@ -194,7 +194,7 @@ p {
 
 .demoOverlay {
   position: absolute;
-  top: 0; left: 0; bottom: 0; width: 500px;
+  top: 0; left: 0; bottom: 0; width: 100%;
   background: rgba(255,0,0,.2);
   box-sizing: border-box;
 }
