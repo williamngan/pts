@@ -91,7 +91,8 @@ export abstract class Space {
    * @param time current time
    */
   play( time=0 ):this {
-    this._animID = requestAnimationFrame( (t) => this.play(t) );
+    
+    this._animID = requestAnimationFrame( this.play.bind(this) );
     if (this._pause) return this;
 
     this._time.diff = time - this._time.prev;
@@ -105,6 +106,15 @@ export abstract class Space {
     }
 
     return this;
+  }
+
+  /**
+   * Replay the animation after `stop()`. This resets the end-time counter.
+   * You may also use `pause()` and `resume()` for temporary pause.
+   */
+  replay() {
+    this._time.end = -1;
+    this.play();
   }
 
   /**

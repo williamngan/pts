@@ -301,7 +301,7 @@ export class CanvasSpace extends Space {
    * A convenient method to bind (or unbind) all mouse events in canvas element. All item added to `players` property that implements an `onMouseAction` callback will receive mouse event callbacks. The types of mouse actions are: "up", "down", "move", "drag", "drop", "over", and "out".
    * @param _bind a boolean value to bind mouse events if set to `true`. If `false`, all mouse events will be unbound. Default is true.
    */
-  bindMouse( _bind:boolean=true ) {
+  bindMouse( _bind:boolean=true ):this {
     if ( _bind) {
       this.bindCanvas( "mousedown", this._mouseDown.bind(this) )
       this.bindCanvas( "mouseup", this._mouseUp.bind(this) )
@@ -317,7 +317,7 @@ export class CanvasSpace extends Space {
       this.unbindCanvas( "mousemove", this._mouseMove.bind(this) )
       this._hasMouse = false;
     }
-    
+    return this;
   }
 
 
@@ -325,7 +325,7 @@ export class CanvasSpace extends Space {
    * A convenient method to bind (or unbind) all mobile touch events in canvas element. All item added to `players` property that implements an `onTouchAction` callback will receive touch event callbacks. The types of touch actions are the same as the mouse actions: "up", "down", "move", and "out"
    * @param _bind a boolean value to bind touch events if set to `true`. If `false`, all touch events will be unbound. Default is true.
    */
-  bindTouch( _bind:boolean=true ) {
+  bindTouch( _bind:boolean=true ):this {
     if (_bind) {
       this.bindCanvas( "touchstart", this._mouseDown.bind(this) );
       this.bindCanvas( "touchend", this._mouseUp.bind(this) );
@@ -339,6 +339,7 @@ export class CanvasSpace extends Space {
       this.unbindCanvas( "touchcancel", this._mouseOut.bind(this) );
       this._hasTouch = false;
     }
+    return this;
   }
 
   

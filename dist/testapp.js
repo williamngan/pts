@@ -1641,7 +1641,7 @@ class Space {
      * @param time current time
      */
     play(time = 0) {
-        this._animID = requestAnimationFrame((t) => this.play(t));
+        this._animID = requestAnimationFrame(this.play.bind(this));
         if (this._pause)
             return this;
         this._time.diff = time - this._time.prev;
@@ -1654,6 +1654,14 @@ class Space {
             throw err;
         }
         return this;
+    }
+    /**
+     * Replay the animation after `stop()`. This resets the end-time counter.
+     * You may also use `pause()` and `resume()` for temporary pause.
+     */
+    replay() {
+        this._time.end = -1;
+        this.play();
     }
     /**
      * Main animate function. This calls all the items to perform
@@ -1993,6 +2001,7 @@ class CanvasSpace extends Space_1.Space {
             this.unbindCanvas("mousemove", this._mouseMove.bind(this));
             this._hasMouse = false;
         }
+        return this;
     }
     /**
      * A convenient method to bind (or unbind) all mobile touch events in canvas element. All item added to `players` property that implements an `onTouchAction` callback will receive touch event callbacks. The types of touch actions are the same as the mouse actions: "up", "down", "move", and "out"
@@ -2013,6 +2022,7 @@ class CanvasSpace extends Space_1.Space {
             this.unbindCanvas("touchcancel", this._mouseOut.bind(this));
             this._hasTouch = false;
         }
+        return this;
     }
     /**
      * A convenient method to convert the touch points in a touch event to an array of `Pt`.
