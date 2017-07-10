@@ -1,6 +1,7 @@
 (function() {
 
   Pts.namespace( this );
+  var sourceCodePath = "./js/examples/";
 
   var blocks = Array.from( document.querySelectorAll("img") ).filter( (f) => {
     var t = f.getAttribute("alt");
@@ -20,6 +21,13 @@
   function createDemoContainer( imgElem ) {
     var div = document.createElement("div");
     var divID = imgElem.getAttribute("alt").replace(/js\:/gi, "");
+
+    var link = document.createElement("a");
+    link.textContent = "source code";
+    link.classList.add("sourceCodeLink");
+    link.setAttribute( "target", "_blank");
+    link.setAttribute( "href", sourceCodePath+divID+".js");
+    div.appendChild( link );
 
     div.setAttribute("class", "demoOverlay");
     div.setAttribute("id", divID );

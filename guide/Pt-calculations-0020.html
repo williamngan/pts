@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Pt - calculating values</title>
+	<title>Pt calculations</title>
 	<link href="./assets/style.css" rel="stylesheet" type="text/css" />
 <meta charset="UTF-8">
 </head>
@@ -9,8 +9,8 @@
 <body>
 
 <a href="#menu" id="toc">&#x2261;</a>
-<div id="post"><h1>Pt</h1>
-<h3>Calculating values</h3>
+<div id="post"><h1>Pt calculations</h1>
+<h3>Vector math</h3>
 <p>Pt provides functions for vector arithmetics, which is to say, you can perform calculations on arrays of values like adding or multiplying them.</p>
 <pre><code>pt.add( 1, 2 )
 pt.divide( 5 ) // divide each value by 5
@@ -30,7 +30,7 @@ pt.angle(Const.yz) // get the angle of axis y-z
 pt.angleBetween( anotherPt )
 pt.toAngle( Math.PI/2 )
 </code></pre>
-<h5>* Note that all angles are specified in radian, where 180 degrees = <em>π</em> radian. You can use <code>Num.toRadian</code> and <code>Num.toDegree</code> functions to convert between degrees and radian.</h5>
+<h5>* Note that all angles are specified in radian, where 180 degrees = <em>π</em> radian. (Imagine half-circle is like 180 degrees.) You can use <code>Num.toRadian</code> and <code>Num.toDegree</code> functions to convert between degrees and radian.</h5>
 <h3>Transformations</h3>
 <p>If you use Illustrator or other graphics software, you'll probably know operations to rotate or scale a shape. Pt also provides these transformation functions:</p>
 <pre><code>pt.scale( 0.5 )
@@ -42,16 +42,18 @@ pt.reflect2D( [p1, p2] )
 <pre><code>pt.scale( 0.5, anchorPt )
 pt.rotate( Math.PI/3, anchorPt )
 </code></pre>
-<p>Another common way is to transform a <code>Pt</code> is to use <code>$map(...)</code> with a custom transform function. This is similar to Array's <code>map(...)</code> function.</p>
-<pre><code>let np = pt.$map( (d) =&gt; d*d )
+<h3>Roll your own</h3>
+<p>Other common ways to perform calculations include <code>reduce</code> and <code>map</code>, which let you operate on an array of numbers. You may use all of Float32Array's functions with Pt, and some additional ones in Pt like <code>$map</code> and <code>op</code>. (See advanced topics for details)</p>
+<pre><code>let p1 = pt.$map( (d) =&gt; d*d )
+
+// same as pt.$map(...)
+let p2 = new Pt( pt.map( (d) =&gt; d*d ) 
 </code></pre>
 <h5>* Note that you may still use <code>map</code> but it will return a <code>Float32Array</code> instead of a <code>Pt</code></h5>
-<pre><code>let np = new Pt( pt.map( (d) =&gt; d*d ) // same result as pt.$map(...)
-</code></pre>
 <p><img src="./assets/bg.png" alt="js:pt_angle"></p>
 </div>
 
-<ol id="menu"><a id="close" href="#">&times;</a><li><a href="Pt-0010.html">Pt</a></li><li><a href="Pt---calculating-values-0020.html">Pt - calculating values</a></li></ol>
+<ol id="menu"><a id="close" href="#">&times;</a><li><a href="Pt-basics-0010.html">Pt basics</a></li><li><a href="Pt-calculations-0020.html">Pt calculations</a></li></ol>
 
 <script type="text/javascript" src="../dist/pts.js"></script>
 <script type="text/javascript" src="./js/guide.js"></script>

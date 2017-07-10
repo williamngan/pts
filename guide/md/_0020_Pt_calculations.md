@@ -1,6 +1,6 @@
-# Pt
+# Pt calculations
 
-### Calculating values
+### Vector math
 Pt provides functions for vector arithmetics, which is to say, you can perform calculations on arrays of values like adding or multiplying them. 
 ```
 pt.add( 1, 2 )
@@ -25,7 +25,7 @@ pt.angleBetween( anotherPt )
 pt.toAngle( Math.PI/2 )
 ```
 
-##### * Note that all angles are specified in radian, where 180 degrees = _π_ radian. You can use `Num.toRadian` and `Num.toDegree` functions to convert between degrees and radian.
+##### * Note that all angles are specified in radian, where 180 degrees = _π_ radian. (Imagine half-circle is like 180 degrees.) You can use `Num.toRadian` and `Num.toDegree` functions to convert between degrees and radian.
 
 
 ### Transformations
@@ -44,14 +44,16 @@ pt.scale( 0.5, anchorPt )
 pt.rotate( Math.PI/3, anchorPt )
 ```
 
-Another common way is to transform a `Pt` is to use `$map(...)` with a custom transform function. This is similar to Array's `map(...)` function. 
-```
-let np = pt.$map( (d) => d*d )
-```
+### Roll your own
 
+Other common ways to perform calculations include `reduce` and `map`, which let you operate on an array of numbers. You may use all of Float32Array's functions with Pt, and some additional ones in Pt like `$map` and `op`. (See advanced topics for details)
+```
+let p1 = pt.$map( (d) => d*d )
+
+// same as pt.$map(...)
+let p2 = new Pt( pt.map( (d) => d*d ) 
+```
 ##### * Note that you may still use `map` but it will return a `Float32Array` instead of a `Pt`
-```
-let np = new Pt( pt.map( (d) => d*d ) // same result as pt.$map(...)
-```
+
 
 ![js:pt_angle](./assets/bg.png)

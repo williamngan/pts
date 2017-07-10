@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Pt basics</title>
+	<link href="./assets/style.css" rel="stylesheet" type="text/css" />
+<meta charset="UTF-8">
+</head>
+
+<body>
+
+<a href="#menu" id="toc">&#x2261;</a>
+<div id="post"><h1>Pt basics</h1>
+<p>A <code>Pt</code> represents a point in space, or more technically, an <em>n</em>-dimensional vector. You may also think of a Pt as an array of numeric values, a set of weights, or like an arrow coming from the origin point (0,0,0...).</p>
+<h3>Creating a Pt</h3>
+<p>You can create a <code>Pt</code> in many different ways:</p>
+<pre><code>// defaults to (0,0)
+new Pt() 
+
+// from a series of parameters, array, or object
+new Pt( 1, 2, 3, 4 )  
+new Pt( [1,2,3] ) 
+new Pt( {x:0, y:1, z:2, w:3} )
+new Pt( anotherPt ) 
+
+Pt.make( 5, 0 ) // same as new Pt(0,0,0,0,0)
+</code></pre>
+<p>Here's a simple demo visualizing a Pt, which is your cursor position.</p>
+<p><img src="./assets/bg.png" alt="js:pt_create"></p>
+<h3>Float32Array</h3>
+<p><code>Pt</code> is implemented as a subclass of javascript's <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array">Float32Array</a>. That means you may use all the <code>Float32Array</code> features on a <code>Pt</code> too. For example:</p>
+<pre><code>p[0]
+p.fill( 0, 1, 2 )
+p.reduce( (a,b) =&gt; Math.max(a,b), 0 );
+</code></pre>
+<p>Note that some <code>Float32Array</code> functions return a new <code>Float32Array</code>. You may cast it back to <code>Pt</code> by a simple wrapping:</p>
+<pre><code>new Pt( p.slice(1,3) )
+p.$slice(1,3) // or alternatively, use $slice
+</code></pre>
+<h3>Updating values</h3>
+<p>You can update a Pt's values by using <code>to</code> function, or accessing the <code>x, y, z, w</code> properties.</p>
+<pre><code>p.to(1,2,3)
+p.to( anotherPt )
+p.w = p.x + p.z
+</code></pre>
+<p>See the next section on <a href="./Pt-calculations-0020.html">Pt calculations</a> for more ways to calculate and update a Pt.</p>
+</div>
+
+<ol id="menu"><a id="close" href="#">&times;</a><li><a href="Pt-basics-0010.html">Pt basics</a></li><li><a href="Pt-calculations-0020.html">Pt calculations</a></li></ol>
+
+<script type="text/javascript" src="../dist/pts.js"></script>
+<script type="text/javascript" src="./js/guide.js"></script>
+<script src="./js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+</body>
+</html>

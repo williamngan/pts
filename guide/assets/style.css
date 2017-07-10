@@ -74,7 +74,7 @@ a:hover { color: #FC0021; }
 
 h1 { font-size: 3em; line-height: 1; }
 h2 { font-size: 2.0em; }
-h3 { font-size: 1.6em; }
+h3 { font-size: 1.6em; margin-top: 50px;}
 h4 { font-size: 1.35em; }
 h5 { font-size: 0.8em; font-weight: normal; color: #90959C; }
 
@@ -211,7 +211,7 @@ p {
 .demoOverlay {
   position: absolute;
   top: 0; left: 0; bottom: 0; right: 0;
-  background: rgba(255,0,0,.2);
+  background: rgba(0,0,0,.2);
   box-sizing: border-box;
 }
 
@@ -219,7 +219,7 @@ p {
   width: 100% !important; height: 100% !important;
 }
 
-.demoOverlay::after {
+.demoOverlay::after, .demoOverlay .sourceCodeLink {
   display: block;
   position: absolute; bottom: 0; right: 0;
   background: rgba(0,0,0,.7);
@@ -236,6 +236,15 @@ p {
 .demoOverlay.active::after {
   display: none;
 }
+
+.demoOverlay .sourceCodeLink {
+  display: none;
+}
+
+.demoOverlay.active .sourceCodeLink {
+  display: block;
+}
+
 
 /*
 
