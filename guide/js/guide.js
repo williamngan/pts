@@ -38,8 +38,8 @@
     }
 
     div.addEventListener( 'mouseenter', startDemo );
-    div.addEventListener( 'touchstart', stopDemo );
-    div.addEventListener( 'mouseleave', startDemo );
+    div.addEventListener( 'touchstart', startDemo );
+    div.addEventListener( 'mouseleave', stopDemo );
     div.addEventListener( 'touchend', stopDemo );
   }
 

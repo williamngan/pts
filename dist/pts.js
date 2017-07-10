@@ -339,7 +339,7 @@ class Pt extends exports.PtBaseArray {
         return this.dot(p) == 0;
     }
     toString() {
-        return `Pt(${this.join(",")})`;
+        return `Pt(${this.join(", ")})`;
     }
     toArray() {
         return [].slice.call(this);
@@ -1582,6 +1582,7 @@ exports.Form = Form;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const Bound_1 = __webpack_require__(2);
+const Pt_1 = __webpack_require__(0);
 class Space {
     constructor() {
         this.id = "space";
@@ -1592,6 +1593,7 @@ class Space {
         this._animID = -1;
         this._pause = false;
         this._refresh = undefined;
+        this._pointer = new Pt_1.Pt();
     }
     /**
      * Set whether the rendering should be repainted on each frame
@@ -1758,7 +1760,6 @@ class CanvasSpace extends Space_1.Space {
         this._pixelScale = 1;
         this._autoResize = true;
         this._bgcolor = "#e1e9f0";
-        this._pointer = new Pt_1.Pt();
         // track mouse dragging
         this._pressed = false;
         this._dragged = false;
@@ -1838,6 +1839,7 @@ class CanvasSpace extends Space_1.Space {
             if (this.players[k].start)
                 this.players[k].start(this.bound.clone(), this);
         }
+        this._pointer = this.center;
         if (callback)
             callback(this.bound, this._canvas);
     }
@@ -1920,8 +1922,8 @@ class CanvasSpace extends Space_1.Space {
         this.bound = b;
         this._canvas.width = this.bound.size.x * this._pixelScale;
         this._canvas.height = this.bound.size.y * this._pixelScale;
-        this._canvas.style.width = this.bound.size.x + "px";
-        this._canvas.style.height = this.bound.size.y + "px";
+        this._canvas.style.width = Math.floor(this.bound.size.x) + "px";
+        this._canvas.style.height = Math.floor(this.bound.size.y) + "px";
         if (this._pixelScale != 1) {
             this._ctx.scale(this._pixelScale, this._pixelScale);
             this._ctx.translate(0.5, 0.5);
@@ -1944,10 +1946,10 @@ class CanvasSpace extends Space_1.Space {
         let lastColor = this._ctx.fillStyle;
         if (this._bgcolor && this._bgcolor != "transparent") {
             this._ctx.fillStyle = this._bgcolor;
-            this._ctx.fillRect(0, 0, this._canvas.width, this._canvas.height);
+            this._ctx.fillRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
         }
         else {
-            this._ctx.clearRect(0, 0, this._canvas.width, this._canvas.height);
+            this._ctx.clearRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
         }
         this._ctx.fillStyle = lastColor;
         return this;
@@ -2047,14 +2049,11 @@ class CanvasSpace extends Space_1.Space {
      */
     _mouseAction(type, evt) {
         let px = 0, py = 0;
-        if (evt instanceof TouchEvent) {
+        if (evt instanceof MouseEvent) {
             for (let k in this.players) {
                 let v = this.players[k];
-                let c = evt.changedTouches && evt.changedTouches.length > 0;
-                let touch = evt.changedTouches.item(0);
-                let bound = this._canvas.getBoundingClientRect();
-                px = (c) ? touch.clientX - bound.left : 0;
-                py = (c) ? touch.clientY - bound.top : 0;
+                px = evt.offsetX || evt.layerX;
+                py = evt.offsetY || evt.layerY;
                 if (v.action)
                     v.action(type, px, py, evt);
             }
@@ -2062,8 +2061,11 @@ class CanvasSpace extends Space_1.Space {
         else {
             for (let k in this.players) {
                 let v = this.players[k];
-                px = evt.offsetX || evt.layerX;
-                py = evt.offsetY || evt.layerY;
+                let c = evt.changedTouches && evt.changedTouches.length > 0;
+                let touch = evt.changedTouches.item(0);
+                let bound = this._canvas.getBoundingClientRect();
+                px = (c) ? touch.clientX - bound.left : 0;
+                py = (c) ? touch.clientY - bound.top : 0;
                 if (v.action)
                     v.action(type, px, py, evt);
             }

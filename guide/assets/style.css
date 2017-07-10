@@ -3,11 +3,13 @@ html{font-family:sans-serif;line-height:1.15;-ms-text-size-adjust:100%;-webkit-t
 
 body {
   line-height: 1.5;
+  font-size: 12px;
 }
 
 a { color: #041018; text-decoration: underline; }
 a:visited { color: #041018; }
 a:hover { color: #FC0021; }
+
 
 #menu {
   position: absolute;
@@ -70,24 +72,28 @@ a:hover { color: #FC0021; }
 #header { padding: 30px 0 50px; }
 #footer { padding: 100px 0 30px; }
 
-h1 { font-size: 2.5em; line-height: 1; }
+h1 { font-size: 3em; line-height: 1; }
 h2 { font-size: 2.0em; }
 h3 { font-size: 1.6em; }
 h4 { font-size: 1.35em; }
+h5 { font-size: 0.8em; font-weight: normal; color: #90959C; }
 
 code { 
   display: inline-block; 
-  background: #F3F7FA; color: #041018;
-  font-size: 0.8em; padding: 3px 10px; 
+  font-size: 0.9em; 
 }
 
-p > code {
-  font-family: sans-serif;
-  font-weight: bold;
-  font-size: 1em; 
-  padding: 0;
-  background: transparent;
+p code, h5 code {
+  font-size: 1em;
+  color: #60636F;
   font-style: normal;
+  background: #F1F3FA;
+  font-size: 0.85em;
+  padding: 0 3px;
+}
+
+em > code {
+  background: #FFF93A;
 }
 
 #toc {
@@ -186,6 +192,16 @@ p > code {
   #footer { padding-bottom: 0; }
 }
 
+pre {
+  border-left: 5px solid #e2e6ef;
+  padding: 5px 10px;
+  font-size: 0.9em;
+  margin: 40px 0;
+}
+
+code {
+  font-family: "Menlo", "Consolas", "Monaco", monospace;
+}
 
 /* Demo elements */
 p {
@@ -194,10 +210,15 @@ p {
 
 .demoOverlay {
   position: absolute;
-  top: 0; left: 0; bottom: 0; width: 100%;
+  top: 0; left: 0; bottom: 0; right: 0;
   background: rgba(255,0,0,.2);
   box-sizing: border-box;
 }
+
+.demoOverlay > canvas{
+  width: 100% !important; height: 100% !important;
+}
+
 .demoOverlay::after {
   display: block;
   position: absolute; bottom: 0; right: 0;
@@ -209,9 +230,103 @@ p {
 }
 
 .demoOverlay.active {
-  box-shadow: 0 0 0 2px #000;
+  box-shadow: 0 0 0 2px #fff;
 }
 
 .demoOverlay.active::after {
   display: none;
+}
+
+/*
+
+XCode style (c) Angel Garcia <angelgarcia.mail@gmail.com>
+
+*/
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  background: #fff;
+  color: black;
+}
+
+.hljs-comment,
+.hljs-quote {
+  color: #006a00;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal {
+  color: #aa0d91;
+}
+
+.hljs-name {
+  color: #008;
+}
+
+.hljs-variable,
+.hljs-template-variable {
+  color: #660;
+}
+
+.hljs-string {
+  color: #c41a16;
+}
+
+.hljs-regexp,
+.hljs-link {
+  color: #080;
+}
+
+.hljs-title,
+.hljs-tag,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-number,
+.hljs-meta {
+  color: #1c00cf;
+}
+
+.hljs-section,
+.hljs-class .hljs-title,
+.hljs-type,
+.hljs-attr,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-params {
+  color: #5c2699;
+}
+
+.hljs-attribute,
+.hljs-subst {
+  color: #000;
+}
+
+.hljs-formula {
+  background-color: #eee;
+  font-style: italic;
+}
+
+.hljs-addition {
+  background-color: #baeeba;
+}
+
+.hljs-deletion {
+  background-color: #ffc8bd;
+}
+
+.hljs-selector-id,
+.hljs-selector-class {
+  color: #9b703f;
+}
+
+.hljs-doctag,
+.hljs-strong {
+  font-weight: bold;
+}
+
+.hljs-emphasis {
+  font-style: italic;
 }

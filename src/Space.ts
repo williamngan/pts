@@ -37,6 +37,8 @@ export abstract class Space {
   private _pause:boolean = false;
   private _refresh:boolean = undefined;
 
+  protected _pointer:Pt = new Pt();
+
   /**
    * Set whether the rendering should be repainted on each frame
    * @param b a boolean value to set whether to repaint each frame

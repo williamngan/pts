@@ -333,7 +333,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
 
 
   toString():string {
-    return `Pt(${ this.join(",")})`
+    return `Pt(${ this.join(", ")})`
   }
 
   toArray():number[] {

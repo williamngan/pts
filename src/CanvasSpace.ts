@@ -22,7 +22,6 @@ export class CanvasSpace extends Space {
   protected _autoResize = true;
   protected _bgcolor = "#e1e9f0";
   protected _ctx:PtsCanvasRenderingContext2D;
-  protected _pointer:Pt = new Pt();
 
   // track mouse dragging
   private _pressed = false;
@@ -127,6 +126,8 @@ export class CanvasSpace extends Space {
       if (this.players[k].start) this.players[k].start( this.bound.clone(), this );
     }
 
+    this._pointer = this.center;
+
     if (callback) callback( this.bound, this._canvas );
   }
 
@@ -223,8 +224,8 @@ export class CanvasSpace extends Space {
 
     this._canvas.width = this.bound.size.x * this._pixelScale;
     this._canvas.height = this.bound.size.y * this._pixelScale;
-    this._canvas.style.width = this.bound.size.x + "px";
-    this._canvas.style.height = this.bound.size.y + "px";
+    this._canvas.style.width = Math.floor(this.bound.size.x) + "px";
+    this._canvas.style.height = Math.floor(this.bound.size.y) + "px";
 
     if (this._pixelScale != 1) {
       this._ctx.scale( this._pixelScale, this._pixelScale );
@@ -253,9 +254,9 @@ export class CanvasSpace extends Space {
 
     if (this._bgcolor && this._bgcolor != "transparent") {
       this._ctx.fillStyle = this._bgcolor;
-      this._ctx.fillRect( 0, 0, this._canvas.width, this._canvas.height );
+      this._ctx.fillRect( -1, -1, this._canvas.width+1, this._canvas.height+1 );
     } else {
-      this._ctx.clearRect( 0, 0, this._canvas.width, this._canvas.height );
+      this._ctx.clearRect( -1, -1, this._canvas.width+1, this._canvas.height+1 );
     }
 
     this._ctx.fillStyle = lastColor;
@@ -367,7 +368,14 @@ export class CanvasSpace extends Space {
    */
   protected _mouseAction( type:string, evt:MouseEvent|TouchEvent ) {
     let px = 0, py = 0;
-    if (evt instanceof TouchEvent) {
+    if (evt instanceof MouseEvent) {
+      for (let k in this.players) {
+        let v = this.players[k];
+        px = evt.offsetX || evt.layerX;
+        py = evt.offsetY || evt.layerY;
+        if (v.action) v.action( type, px, py, evt );
+      }
+    } else {
       for (let k in this.players) {
         let v = this.players[k];
         let c = evt.changedTouches && evt.changedTouches.length > 0;
@@ -375,13 +383,6 @@ export class CanvasSpace extends Space {
         let bound = this._canvas.getBoundingClientRect();
         px = (c) ? touch.clientX - bound.left : 0;
         py = (c) ? touch.clientY - bound.top : 0;
-        if (v.action) v.action( type, px, py, evt );
-      }
-    } else {
-      for (let k in this.players) {
-        let v = this.players[k];
-        px = evt.offsetX || evt.layerX;
-        py = evt.offsetY || evt.layerY;
         if (v.action) v.action( type, px, py, evt );
       }
     }
