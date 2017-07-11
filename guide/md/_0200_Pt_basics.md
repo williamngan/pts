@@ -1,10 +1,10 @@
 # Pt basics
 
-A [`Pt`](#pt) represents a point in space, or more technically, an _n_-dimensional vector. You may also think of a `Pt` as an array of numeric values, a set of weights, or like an arrow coming from the origin point (0,0,0...). 
+A [`Pt`](#pt-pt) represents a point in space, or more technically, an _n_-dimensional vector. You may also think of a `Pt` as an array of numeric values, a set of weights, or like an arrow coming from the origin point (0,0,0...). 
 
 ### Creating a Pt
 
-You can create a [`Pt`](#pt) in many different ways:
+You can create a [`Pt`](#pt-pt) in many different ways:
 ```
 // defaults to (0,0)
 new Pt() 
@@ -26,7 +26,7 @@ Here's a simple demo visualizing a Pt, which moves with your mouse/touch.
 
 ### Float32Array
 
-Since [`Pt`](#pt) is a subclass of javascript's [`Float32Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array), it means you may use all the `Float32Array` features on a `Pt` too. For example:
+Since [`Pt`](#pt-pt) is a subclass of javascript's [`Float32Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array), it means you may use all the `Float32Array` features on a `Pt` too. For example:
 ```
 p[0]
 p.fill( 0, 1, 2 )
@@ -41,7 +41,7 @@ p.$slice(1,3) // or alternatively, use $slice
 
 ### Updating values
 
-You can update a Pt's values by using [`to`](#pt) function, or accessing the [`x`](#pt), [`y`](#pt), [`z`](#pt), [`w`](#pt) properties.
+You can update a Pt's values by using [`to`](#pt-pt) function, or accessing the [`x`](#pt-pt), [`y`](#pt-pt), [`z`](#pt-pt), [`w`](#pt-pt) properties.
 ```
 p.to(1,2,3)
 p.to( anotherPt )

@@ -9,16 +9,16 @@ pt.divide( 2 ) // divide each value by 2
 pt.multiply( {x: 2, y: 1} )
 pt.subtract( anotherPt ).multiply( 5 ).add( [1,2,3] )
 ```
-The above functions like [`add`](#pt) will update the values of `pt` instance. If you want to get the results as a new Pt, using [`$add`](#pt) etc instead.
+The above functions like [`add`](#pt-pt) will update the values of `pt` instance. If you want to get the results as a new Pt, using [`$add`](#pt-pt) etc instead.
 ```
 let p1 = pt.$add( 1,2,3 );
 let p2 = pt.$multiply( 5 ).add( 1,2,3 )
 
 ```
-There are other basic vector operations like [`unit`](#pt) (get a normalized vector), [`magnitude`](#pt) (get its distance from origin), [`dot`](#pt) (find dot product), [`$project`](#pt) (find its projection vector). Check the docs on [`Pt`](#pt) for a full list.
+There are other basic vector operations like [`unit`](#pt-pt) (get a normalized vector), [`magnitude`](#pt-pt) (get its distance from origin), [`dot`](#pt-pt) (find dot product), [`$project`](#pt-pt) (find its projection vector). Check the docs on [`Pt`](#pt-pt) for a full list.
 
 ### Angles
-Since a Pt can be thought of as an arrow from origin, you can find its angle with [`angle`](#pt) function. You can also find the angle between two Pts with [`angleBetween`](#pt) function. A related function [`toAngle()`](#pt) lets you move a Pt by specifying a target angle.
+Since a Pt can be thought of as an arrow from origin, you can find its angle with [`angle`](#pt-pt) function. You can also find the angle between two Pts with [`angleBetween`](#pt-pt) function. A related function [`toAngle()`](#pt-pt) lets you move a Pt by specifying a target angle.
 ```
 pt.angle()
 pt.angle(Const.yz) // get the angle of axis y-z
@@ -26,7 +26,7 @@ pt.angleBetween( anotherPt )
 pt.toAngle( Math.PI/2 )
 ```
 
-##### * Note that all angles are specified in radian, where 180 degrees = _π_ radian. (Imagine half-circle is like 180 degrees.) You can use `Geom.toRadian` and `Geom.toDegree` functions to convert between degrees and radian.
+##### * Note that all angles are specified in radian, where 180 degrees = _π_ radian. (Imagine half-circle is like 180 degrees.) You can use [`Geom.toRadian`](#op-geom) and [`Geom.toDegree`](#op-geom) functions to convert between degrees and radian.
 
 ![js:pt_angle](./assets/bg.png)
 
@@ -48,7 +48,7 @@ pt.scale( 0.5, anchorPt )
 pt.rotate( Math.PI/3, anchorPt )
 ```
 
-Take a look at the [`Geom`](#op) class which also provides many functions to help with geometry and transformations.
+Take a look at the [`Geom`](#op-geom) class which also provides many functions to help with geometry and transformations.
 
 ![js:pt_reflect](./assets/bg.png)
 

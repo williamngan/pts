@@ -18,20 +18,20 @@ pt.divide( 2 ) // divide each value by 2
 pt.multiply( {x: 2, y: 1} )
 pt.subtract( anotherPt ).multiply( 5 ).add( [1,2,3] )
 </code></pre>
-<p>The above functions like <a href="#pt"><code>add</code></a> will update the values of <code>pt</code> instance. If you want to get the results as a new Pt, using <a href="#pt"><code>$add</code></a> etc instead.</p>
+<p>The above functions like <a href="#pt-pt"><code>add</code></a> will update the values of <code>pt</code> instance. If you want to get the results as a new Pt, using <a href="#pt-pt"><code>$add</code></a> etc instead.</p>
 <pre><code>let p1 = pt.$add( 1,2,3 );
 let p2 = pt.$multiply( 5 ).add( 1,2,3 )
 
 </code></pre>
-<p>There are other basic vector operations like <a href="#pt"><code>unit</code></a> (get a normalized vector), <a href="#pt"><code>magnitude</code></a> (get its distance from origin), <a href="#pt"><code>dot</code></a> (find dot product), <a href="#pt"><code>$project</code></a> (find its projection vector). Check the docs on <a href="#pt"><code>Pt</code></a> for a full list.</p>
+<p>There are other basic vector operations like <a href="#pt-pt"><code>unit</code></a> (get a normalized vector), <a href="#pt-pt"><code>magnitude</code></a> (get its distance from origin), <a href="#pt-pt"><code>dot</code></a> (find dot product), <a href="#pt-pt"><code>$project</code></a> (find its projection vector). Check the docs on <a href="#pt-pt"><code>Pt</code></a> for a full list.</p>
 <h3>Angles</h3>
-<p>Since a Pt can be thought of as an arrow from origin, you can find its angle with <a href="#pt"><code>angle</code></a> function. You can also find the angle between two Pts with <a href="#pt"><code>angleBetween</code></a> function. A related function <a href="#pt"><code>toAngle()</code></a> lets you move a Pt by specifying a target angle.</p>
+<p>Since a Pt can be thought of as an arrow from origin, you can find its angle with <a href="#pt-pt"><code>angle</code></a> function. You can also find the angle between two Pts with <a href="#pt-pt"><code>angleBetween</code></a> function. A related function <a href="#pt-pt"><code>toAngle()</code></a> lets you move a Pt by specifying a target angle.</p>
 <pre><code>pt.angle()
 pt.angle(Const.yz) // get the angle of axis y-z
 pt.angleBetween( anotherPt )
 pt.toAngle( Math.PI/2 )
 </code></pre>
-<h5>* Note that all angles are specified in radian, where 180 degrees = <em>π</em> radian. (Imagine half-circle is like 180 degrees.) You can use <code>Geom.toRadian</code> and <code>Geom.toDegree</code> functions to convert between degrees and radian.</h5>
+<h5>* Note that all angles are specified in radian, where 180 degrees = <em>π</em> radian. (Imagine half-circle is like 180 degrees.) You can use <a href="#op-geom"><code>Geom.toRadian</code></a> and <a href="#op-geom"><code>Geom.toDegree</code></a> functions to convert between degrees and radian.</h5>
 <p><img src="./assets/bg.png" alt="js:pt_angle"></p>
 <h5>The above demo is put together with some basic vector operations and angle functions.</h5>
 <h3>Transformations</h3>
@@ -45,7 +45,7 @@ pt.reflect2D( [p1, p2] )
 <pre><code>pt.scale( 0.5, anchorPt )
 pt.rotate( Math.PI/3, anchorPt )
 </code></pre>
-<p>Take a look at the <a href="#op"><code>Geom</code></a> class which also provides many functions to help with geometry and transformations.</p>
+<p>Take a look at the <a href="#op-geom"><code>Geom</code></a> class which also provides many functions to help with geometry and transformations.</p>
 <p><img src="./assets/bg.png" alt="js:pt_reflect"></p>
 <h5>A demo of scale and reflect transformation. The red line's length changes the scale, while its angle specifies the reflection. Take a look at the source code to see how easy this it :)</h5>
 <h3>Roll your own</h3>

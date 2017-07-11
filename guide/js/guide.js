@@ -71,8 +71,8 @@
       let c = codes[i];
       
       if (c.parentNode.getAttribute("href").indexOf("#") === 0 && c.textContent) {
-        let link = c.parentNode.getAttribute("href").replace(/#/g, "");
-        c.parentNode.setAttribute( "href", `../docs/classes/_${link}_.${link}.html#${c.textContent}` );
+        let link = c.parentNode.getAttribute("href").replace(/#/g, "").split("-");
+        c.parentNode.setAttribute( "href", `../docs/classes/_${link[0]}_.${link[1] || link[0]}.html#${c.textContent}` );
       }
       c.parentElement.setAttribute( "target", "_blank" );
     }
