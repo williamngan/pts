@@ -7,9 +7,14 @@ var form = space.getForm();
 
 // animation
 space.add( (time, ftime) => {
+
+  // space.pointer stores the last mouse or touch position
   let m = space.pointer;
-  form.stroke("#1e252C", 5).line( [new Pt( m.x, 0), m, new Pt( 0, m.y)] );
-  form.stroke("#fff", 5).fill("#f00").point( m, 10, "circle")
+
+  // drawing
+  form.stroke("#1E252C", 5).line( [new Pt( m.x, 0), m, new Pt( 0, m.y)] );
+  form.stroke("#FC0021").line( [new Pt(0,0), m] );
+  form.stroke("#fff", 5).fill("#FC0021").point( m, 10, "circle")
   form.text( m.$add(20, 5), m.toString() );
 });
 

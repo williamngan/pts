@@ -1,48 +1,31 @@
 (function(){
 var demoID = "pt_angle";
 
-var space = new CanvasSpace("#"+demoID).setup({ retina: true });
+// create Space and Form
+var space = new CanvasSpace("#"+demoID).setup({ retina: true, bgcolor: "#e2e6ef" });
 var form = space.getForm();
 
-let ang = Math.random() * Const.two_pi;
-let mouse = new Pt();
+// animation
+space.add( (time, ftime) => {
 
-space.add({
-  animate: (time, ftime) => {
+  let m = space.pointer;
+  let c = space.center;
+  let p = m.$subtract(c); // the vector from center to mouse
+  let lengthP = p.magnitude();
+  
+  let ang = p.angle();
+  let angText = Geom.boundRadian( ang ); // bound between 0 to 2-PI
 
-    let p = mouse.$subtract(space.center);
-    let c = space.center;
-
-    let ang = p.angle();
-    form.log(Geom.toDegree(ang));
-
-    // line to mouse
-    let pm = new Pt(c.x + p.magnitude(), c.y);
-    form.stroke("#ccc", 10).line([c, pm]);
-    form.fill(false).arc(c, 20, 0, ang);
-
-    // line at specific angle
-    let d = p.clone().toAngle(ang + Math.PI);
-    form.stroke("#f99").line([c, c.$add(d)]);
-
-    // line at angle 0    
-    form.stroke("#f00").line([c, space.center.add(p)]);
-
-    // perpendicular lines
-    perpends = Geom.perpendicular(p).map((p) => p.$add(c));
-    form.stroke("#0f0").line(perpends);
-
-  },
-  action: (type, px, py) => {
-    if (type == "move") {
-      mouse.to(px, py);
-    }
-  }
+  form.fill(false).stroke("#FC0021", 10, "round", "round").line( [c, m] );
+  form.stroke("#fff").line( [c, new Pt(c.x + lengthP, c.y)])
+  form.stroke("#FC0021", 10).arc(c, lengthP, 0, ang);
+  form.fill("#1E252C").text( c.$add( p.toAngle( angText/2, lengthP/2 ) ), Math.floor( Geom.toDegree(angText) )+"°" );
 });
 
+// start
 space.playOnce(200).bindMouse().bindTouch();
 
-// For demo page only
+// For use in demo page only
 if (window.registerDemo) window.registerDemo(demoID, space);
 
 })();

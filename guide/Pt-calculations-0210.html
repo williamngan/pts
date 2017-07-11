@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Pt calculations</title>
+	<link href="./assets/style.css" rel="stylesheet" type="text/css" />
+<meta charset="UTF-8">
+</head>
+
+<body>
+
+<a href="#menu" id="toc">&#x2261;</a>
+<div id="post"><h1>Pt calculations</h1>
+<h3>Vector math</h3>
+<p>Pt provides basic functions for calculating vectors and matrices. But don't worry if you are not familiar wtih linear algrebra. To start, think of it as methods to perform calculations on arrays of values like adding or multiplying them.</p>
+<pre><code>let pt = new Pt( 10, 10 )
+pt.add( 1, 2 ) // pt is now (11, 12)
+pt.divide( 2 ) // divide each value by 2
+pt.multiply( {x: 2, y: 1} )
+pt.subtract( anotherPt ).multiply( 5 ).add( [1,2,3] )
+</code></pre>
+<p>The above functions like <a href="#pt"><code>add</code></a> will update the values of <code>pt</code> instance. If you want to get the results as a new Pt, using <a href="#pt"><code>$add</code></a> etc instead.</p>
+<pre><code>let p1 = pt.$add( 1,2,3 );
+let p2 = pt.$multiply( 5 ).add( 1,2,3 )
+
+</code></pre>
+<p>There are other basic vector operations like <a href="#pt"><code>unit</code></a> (get a normalized vector), <a href="#pt"><code>magnitude</code></a> (get its distance from origin), <a href="#pt"><code>dot</code></a> (find dot product), <a href="#pt"><code>$project</code></a> (find its projection vector). Check the docs on <a href="#pt"><code>Pt</code></a> for a full list.</p>
+<h3>Angles</h3>
+<p>Since a Pt can be thought of as an arrow from origin, you can find its angle with <a href="#pt"><code>angle</code></a> function. You can also find the angle between two Pts with <a href="#pt"><code>angleBetween</code></a> function. A related function <a href="#pt"><code>toAngle()</code></a> lets you move a Pt by specifying a target angle.</p>
+<pre><code>pt.angle()
+pt.angle(Const.yz) // get the angle of axis y-z
+pt.angleBetween( anotherPt )
+pt.toAngle( Math.PI/2 )
+</code></pre>
+<h5>* Note that all angles are specified in radian, where 180 degrees = <em>π</em> radian. (Imagine half-circle is like 180 degrees.) You can use <code>Geom.toRadian</code> and <code>Geom.toDegree</code> functions to convert between degrees and radian.</h5>
+<p><img src="./assets/bg.png" alt="js:pt_angle"></p>
+<h5>The above demo is put together with some basic vector operations and angle functions.</h5>
+<h3>Transformations</h3>
+<p>If you use Illustrator or other graphics software, you'll probably know operations to rotate or scale a shape. Pt also provides these transformation functions:</p>
+<pre><code>pt.scale( 0.5 )
+pt.rotate2D( Math.PI/3 )
+pt.shear2D( [0.3, 1.2] )
+pt.reflect2D( [p1, p2] ) 
+</code></pre>
+<p>If you want to transform from a specific anchor point instead of at (0,0), provide an anchor as the second parameter:</p>
+<pre><code>pt.scale( 0.5, anchorPt )
+pt.rotate( Math.PI/3, anchorPt )
+</code></pre>
+<p>Take a look at the <a href="#op"><code>Geom</code></a> class which also provides many functions to help with geometry and transformations.</p>
+<p><img src="./assets/bg.png" alt="js:pt_reflect"></p>
+<h5>A demo of scale and reflect transformation. The red line's length changes the scale, while its angle specifies the reflection. Take a look at the source code to see how easy this it :)</h5>
+<h3>Roll your own</h3>
+<p>Other common ways to perform calculations include <code>reduce</code> and <code>map</code>, which let you operate on an array of numbers. You may use all of Float32Array's functions with Pt, and some additional ones in Pt like <code>$map</code> and <code>op</code>. (See advanced topics for details)</p>
+<pre><code>let p1 = pt.$map( (d) =&gt; d*d )
+
+// same as pt.$map(...)
+let p2 = new Pt( pt.map( (d) =&gt; d*d ) 
+</code></pre>
+<h5>* Note that you may still use <code>map</code> but it will return a <code>Float32Array</code> instead of a <code>Pt</code></h5>
+</div>
+
+<ol id="menu"><a id="close" href="#">&times;</a><li><a href="Overview-0100.html">Overview</a></li><li><a href="Pt-basics-0200.html">Pt basics</a></li><li><a href="Pt-calculations-0210.html">Pt calculations</a></li></ol>
+
+<script type="text/javascript" src="../dist/pts.js"></script>
+<script type="text/javascript" src="./js/guide.js"></script>
+<script src="./js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+</body>
+</html>

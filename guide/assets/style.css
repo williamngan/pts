@@ -87,13 +87,24 @@ p code, h5 code {
   font-size: 1em;
   color: #60636F;
   font-style: normal;
-  background: #F1F3FA;
   font-size: 0.85em;
-  padding: 0 3px;
+  
 }
 
 em > code {
   background: #FFF93A;
+}
+
+a > code {
+  background: #F1F3FA;
+  border: 1px solid #e2e6ef;
+  padding: 0 5px;
+}
+
+a:hover > code {
+  background: #FC0021;
+  border-color: #FC0021;
+  color: #fff;
 }
 
 #toc {
@@ -226,7 +237,7 @@ p {
   color: #fff;
   padding: 10px;
   font-size: 11px;
-  content: 'hover to try demo';
+  content: 'Touch to try demo';
 }
 
 .demoOverlay.active {
