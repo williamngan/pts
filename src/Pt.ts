@@ -269,6 +269,14 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
     return this.clone().round();
   }
 
+  minValue():{value:number, index:number} {
+    return Vec.min( this );
+  }
+
+  maxValue():{value:number, index:number} {
+    return Vec.max( this );
+  }
+
   $min( p: Pt ):Pt {
     let m = this.clone();
     for (let i=0, len=Math.min( this.length, p.length ); i<len; i++) {
@@ -284,6 +292,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
     }
     return m;
   }
+  
 
   /**
    * Get angle of this vector from origin
@@ -430,7 +439,13 @@ export class Group extends Array<Pt> {
    */
   lines():Group[] { return this.segments(2, 1); }
 
+  centroid(): Pt {
+    return Geom.centroid( this );
+  }
 
+  boundingBox():Group {
+    return Geom.boundingBox( this );
+  }
 
   anchorTo( ptOrIndex:PtLike|number=0 ) { Geom.anchor( this, ptOrIndex, "to" ); }
 
@@ -463,12 +478,6 @@ export class Group extends Array<Pt> {
     }
     return _ops;
   }
-
-
-  boundingBox():Group {
-    return Geom.boundingBox( this );
-  }
-
 
   /**
    * Get an interpolated point on the line segments defined by this Group

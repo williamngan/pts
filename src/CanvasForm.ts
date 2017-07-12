@@ -110,8 +110,9 @@ export class CanvasForm extends Form {
     ctx.closePath();
   }
 
-  circle( pt:PtLike, radius:number ) {
-    CanvasForm.circle( this._ctx, pt, radius );
+  circle( pts:GroupLike ) {
+    CanvasForm.circle( this._ctx, pts[0], pts[1][0] );
+    this._paint();
     return this;
   }
 

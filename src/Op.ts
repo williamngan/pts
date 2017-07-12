@@ -411,11 +411,26 @@ export class Rectangle {
     return new Group(new Pt(center).subtract(half), new Pt(center).add(half));
   }
 
+  static toCircle( pts:GroupLike ) {
+    return Circle.fromRect( pts );
+  }
+
+  static size( pts:GroupLike ): Pt {
+    return pts[0].$max( pts[1] ).subtract( pts[0].$min( pts[1] ) );
+  }
+
+  static center( pts:GroupLike ): Pt {
+    let min = pts[0].$min( pts[1] );
+    let max = pts[0].$max( pts[1] );
+    return min.add( max.$subtract( min ).divide( 2 ) );
+  }
+
   static corners( rect:GroupLike ):Group {
     let p0 = rect[0].$min(rect[1]);
     let p2 = rect[0].$max(rect[1]);
     return new Group(p0, new Pt(p0.x, p2.y), p2, new Pt(p2.x, p0.y));
   }
+
 
   static sides( rect:GroupLike ):Group[] {
     let [p0, p1, p2, p3] = Rectangle.corners( rect );
@@ -423,6 +438,21 @@ export class Rectangle {
       new Group( p0, p1 ), new Group( p1, p2 ),
       new Group( p2, p3 ), new Group( p3, p0 )
     ];
+  }
+
+  static union( rects:GroupLike[] ):Group {
+    let merged = [].concat.apply([], rects );
+    let min = Pt.make( 2, Number.MAX_VALUE );
+    let max = Pt.make( 2, Number.MIN_VALUE );
+
+    // calculate min max in a single pass
+    for (let i=0, len=merged.length; i<len; i++) {
+      for (let k=0; k<2; k++) {
+        min[k] = Math.min( min[k], merged[i][k] );
+        max[k] = Math.max( max[k], merged[i][k] );
+      }
+    }
+    return new Group( min, max );
   }
 
   static polygon( rect:GroupLike ):Group {
@@ -448,7 +478,28 @@ export class Rectangle {
 }
 
 
-export class Cirlce {
+export class Circle {
+  
+  static fromRect( pts:GroupLike, enclose=false ):Group {
+    let r = 0;
+    let min = r = Rectangle.size( pts ).minValue().value / 2;
+    if (enclose) {
+      let max = Rectangle.size( pts ).maxValue().value / 2;
+      r = Math.sqrt( min*min + max*max );
+    } else {
+      r = min;
+    }
+    return new Group( Rectangle.center( pts ), new Pt(r, r) )
+  }
+
+  static fromPt( pt:PtLike, radius:number ) {
+    return new Group( pt, new Pt(radius, radius) );
+  }
+
+  static toRect( pts:GroupLike ) {
+    let r = pts[1][0];
+    return new Group( pts[0].$subtract( r ), pts[0].$add( r ) );
+  }
   
 
 }
@@ -458,12 +509,16 @@ export class Cirlce {
 
 export class Polygon {
 
+  static centroid( pts:GroupLike ):Pt {
+    return Geom.centroid( pts );
+  }
+
 
   /**
    * Get a bounding box for each polygon group, as well as a union bounding-box for all groups
    * @param polys an array of Groups, or an array of Pt arrays
    */
-  static boundingBoxes( polys:GroupLike[] ):GroupLike[] {
+  static toRects( polys:GroupLike[] ):GroupLike[] {
     let boxes = polys.map( (g) => Geom.boundingBox(g) );
     let merged = [].concat.apply([], boxes);
     boxes.unshift( Geom.boundingBox( merged ) );

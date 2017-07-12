@@ -16,22 +16,22 @@ export class Bound extends Group implements IPt {
 
   init() {
     if (this.p1) {
-      this._size = new Pt(this.p1);
+      this._size = this.p1.clone();
       this._inited = true;
     } 
     if (this.p1 && this.p2) {
-      let a = new Pt(this.p1);
-      let b = new Pt(this.p2)
+      let a = this.p1;
+      let b = this.p2;
       this.topLeft = a.$min(b);
       this._bottomRight = a.$max(b);
       this._updateSize();
     }
   }
 
-
   clone():Bound {
-    return new Bound( this._topLeft, this._bottomRight );
+    return new Bound( this._topLeft.clone(), this._bottomRight.clone() );
   }
+
 
   protected _updateSize() {
     this._size = this._bottomRight.$subtract( this._topLeft ).abs();

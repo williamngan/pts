@@ -286,6 +286,12 @@ class Pt extends exports.PtBaseArray {
     $round() {
         return this.clone().round();
     }
+    minValue() {
+        return LinearAlgebra_1.Vec.min(this);
+    }
+    maxValue() {
+        return LinearAlgebra_1.Vec.max(this);
+    }
     $min(p) {
         let m = this.clone();
         for (let i = 0, len = Math.min(this.length, p.length); i < len; i++) {
@@ -417,6 +423,12 @@ class Group extends Array {
      * Get all the lines (ie, edges in a graph) of this group
      */
     lines() { return this.segments(2, 1); }
+    centroid() {
+        return Op_1.Geom.centroid(this);
+    }
+    boundingBox() {
+        return Op_1.Geom.boundingBox(this);
+    }
     anchorTo(ptOrIndex = 0) { Op_1.Geom.anchor(this, ptOrIndex, "to"); }
     anchorFrom(ptOrIndex = 0) { Op_1.Geom.anchor(this, ptOrIndex, "from"); }
     /**
@@ -443,9 +455,6 @@ class Group extends Array {
             _ops.push(this.op(fns[i]));
         }
         return _ops;
-    }
-    boundingBox() {
-        return Op_1.Geom.boundingBox(this);
     }
     /**
      * Get an interpolated point on the line segments defined by this Group
@@ -691,19 +700,19 @@ class Bound extends Pt_1.Group {
     }
     init() {
         if (this.p1) {
-            this._size = new Pt_1.Pt(this.p1);
+            this._size = this.p1.clone();
             this._inited = true;
         }
         if (this.p1 && this.p2) {
-            let a = new Pt_1.Pt(this.p1);
-            let b = new Pt_1.Pt(this.p2);
+            let a = this.p1;
+            let b = this.p2;
             this.topLeft = a.$min(b);
             this._bottomRight = a.$max(b);
             this._updateSize();
         }
     }
     clone() {
-        return new Bound(this._topLeft, this._bottomRight);
+        return new Bound(this._topLeft.clone(), this._bottomRight.clone());
     }
     _updateSize() {
         this._size = this._bottomRight.$subtract(this._topLeft).abs();
@@ -1328,6 +1337,17 @@ class Rectangle {
         let half = (typeof widthOrSize == "number") ? [widthOrSize / 2, (height || widthOrSize) / 2] : new Pt_1.Pt(widthOrSize).divide;
         return new Pt_1.Group(new Pt_1.Pt(center).subtract(half), new Pt_1.Pt(center).add(half));
     }
+    static toCircle(pts) {
+        return Circle.fromRect(pts);
+    }
+    static size(pts) {
+        return pts[0].$max(pts[1]).subtract(pts[0].$min(pts[1]));
+    }
+    static center(pts) {
+        let min = pts[0].$min(pts[1]);
+        let max = pts[0].$max(pts[1]);
+        return min.add(max.$subtract(min).divide(2));
+    }
     static corners(rect) {
         let p0 = rect[0].$min(rect[1]);
         let p2 = rect[0].$max(rect[1]);
@@ -1339,6 +1359,19 @@ class Rectangle {
             new Pt_1.Group(p0, p1), new Pt_1.Group(p1, p2),
             new Pt_1.Group(p2, p3), new Pt_1.Group(p3, p0)
         ];
+    }
+    static union(rects) {
+        let merged = [].concat.apply([], rects);
+        let min = Pt_1.Pt.make(2, Number.MAX_VALUE);
+        let max = Pt_1.Pt.make(2, Number.MIN_VALUE);
+        // calculate min max in a single pass
+        for (let i = 0, len = merged.length; i < len; i++) {
+            for (let k = 0; k < 2; k++) {
+                min[k] = Math.min(min[k], merged[i][k]);
+                max[k] = Math.max(max[k], merged[i][k]);
+            }
+        }
+        return new Pt_1.Group(min, max);
     }
     static polygon(rect) {
         let corners = Rectangle.corners(rect);
@@ -1358,15 +1391,37 @@ class Rectangle {
     }
 }
 exports.Rectangle = Rectangle;
-class Cirlce {
+class Circle {
+    static fromRect(pts, enclose = false) {
+        let r = 0;
+        let min = r = Rectangle.size(pts).minValue().value / 2;
+        if (enclose) {
+            let max = Rectangle.size(pts).maxValue().value / 2;
+            r = Math.sqrt(min * min + max * max);
+        }
+        else {
+            r = min;
+        }
+        return new Pt_1.Group(Rectangle.center(pts), new Pt_1.Pt(r, r));
+    }
+    static fromPt(pt, radius) {
+        return new Pt_1.Group(pt, new Pt_1.Pt(radius, radius));
+    }
+    static toRect(pts) {
+        let r = pts[1][0];
+        return new Pt_1.Group(pts[0].$subtract(r), pts[0].$add(r));
+    }
 }
-exports.Cirlce = Cirlce;
+exports.Circle = Circle;
 class Polygon {
+    static centroid(pts) {
+        return Geom.centroid(pts);
+    }
     /**
      * Get a bounding box for each polygon group, as well as a union bounding-box for all groups
      * @param polys an array of Groups, or an array of Pt arrays
      */
-    static boundingBoxes(polys) {
+    static toRects(polys) {
         let boxes = polys.map((g) => Geom.boundingBox(g));
         let merged = [].concat.apply([], boxes);
         boxes.unshift(Geom.boundingBox(merged));
@@ -1493,8 +1548,9 @@ class CanvasForm extends Form_1.Form {
         ctx.arc(pt[0], pt[1], radius, 0, Util_1.Const.two_pi, false);
         ctx.closePath();
     }
-    circle(pt, radius) {
-        CanvasForm.circle(this._ctx, pt, radius);
+    circle(pts) {
+        CanvasForm.circle(this._ctx, pts[0], pts[1][0]);
+        this._paint();
         return this;
     }
     static ellipse(ctx, pts) {

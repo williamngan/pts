@@ -3,7 +3,11 @@ Pts.namespace( window );
 var space = new CanvasSpace("#pt").setup({retina: true});
 var form = space.getForm();
 
-let gp = [];
+let gp = new Group();
+let line1, line2;
+let rect1, rect2, rect3;
+let poly1;
+let circle1, circle2;
 
 
 space.add( {
@@ -13,33 +17,44 @@ space.add( {
     let uy = space.height/20;
 
     // vertical and horizontal line
-    gp.push( Group.fromArray( [[-ux, -space.height/2], [ux, space.height/2]] ) ); 
-    gp.push( Group.fromArray( [[-space.width/2, -uy], [space.width/2, uy]] ) ); 
+    line1 = Group.fromArray( [[-ux, -space.height/2], [ux, space.height/2]] ); 
+    line2 = Group.fromArray( [[-space.width/2, -uy], [space.width/2, uy]] ); 
+    gp.push( line1, line2 );
 
     // bounds
-    gp.push( Group.fromArray( [[-ux*3, -uy*3], [ux, uy]] ) ); 
-    gp.push( Group.fromArray( [[-ux, -ux], [ux*4, ux*4]] ) ); 
+    rect1 = Group.fromArray( [[-ux*3, -uy*3], [ux, uy]] ); 
+    rect2 = Group.fromArray( [[-ux, -ux], [ux*4, ux*4]] ); 
+    gp.push( rect1, rect2 );
 
     // shapes
-    gp.push( Group.fromArray( [[-ux*2, -uy*2], [ux, uy*3], [ux*4, 0]] ) ); 
+    poly1 = Group.fromArray( [[-ux*2, -uy*2], [ux, uy*3], [ux*4, 0], [ux*6, uy*5]] ); 
+    gp.push( poly1 );
 
     for (let i=0, len=gp.length; i<len; i++) {
       gp[i].anchorFrom( space.center );
     }
+
+    circle1 = Circle.fromRect( rect1 );
+    circle2 = Circle.fromRect( rect1, true );
+    circle3 = Circle.fromRect( rect2, true );
+    rect3 = Rectangle.union( [rect1, rect2] );
   },
 
   animate: (time, fps) => {
-    form.stroke("#aaa").fill(false).line( gp[0] );
-    form.line( gp[1] );
+    form.stroke("#c1c5ca").fill(false).line( line1 );
+    form.line( line2 );
 
-    form.rect( gp[2] );
-    form.rect( gp[3] );
+    form.rect( rect1 );
+    form.rect( rect2 );
+    form.line( poly1 );
 
-    // let gc = gp[2].clone().relativeTo(0);
-    // console.log( gp[2] );
-    // form.point( gp[2], gc.x );
-
-    form.line( gp[4] )
+    form.circle( circle1 );
+    form.circle( circle2 );
+    form.circle( circle3 );
+    form.rect( rect3 );
+    
+  
+    
   },
 
   action:( type, px, py) => {
