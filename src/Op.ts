@@ -102,19 +102,30 @@ export class Geom {
   }
 
   static boundingBox( pts:GroupLike ):Group {
-    let minPt = Pt.make( pts[0].length, Number.MAX_VALUE );
-    let maxPt = Pt.make( pts[0].length, Number.MIN_VALUE );
-    for (let i=0, len=pts.length; i<len; i++) {
-      for (let d=0, len=pts[i].length; d<len; d++) {
-        if (pts[i][d] < minPt[d] ) minPt[d] = pts[i][d];
-        if (pts[i][d] > maxPt[d] ) maxPt[d] = pts[i][d];
-      }
-    }
+    let minPt = pts.reduce( (a:Pt, p:Pt) => a.$min( p ) );
+    let maxPt = pts.reduce( (a:Pt, p:Pt) => a.$max( p ) );
     return new Group( minPt, maxPt );
   }
 
   static centroid( pts:GroupLike|number[][] ):Pt {
     return Num.average( pts );
+  }
+
+  /**
+   * Given an anchor Pt, rebase all Pts in this group either to or from this anchor base.
+   * @param pts a Group or array of Pt
+   * @param ptOrIndex an index for the Pt array, or an external Pt
+   * @param direction "to" (subtract all Pt with this anchor base) or "from" (add all Pt from this anchor base)
+   */
+  static anchor( pts:GroupLike, ptOrIndex:PtLike|number=0, direction:("to"|"from")="to" ) {
+    let method = (direction == "to") ? "subtract" : "add";
+    for (let i=0, len=pts.length; i<len; i++) {
+      if (typeof ptOrIndex=="number") {
+        if (ptOrIndex !== i) pts[i][method]( pts[ptOrIndex] );
+      } else {
+        pts[i][method]( ptOrIndex );
+      }
+    }
   }
 
 
@@ -386,13 +397,18 @@ export class Line {
 
 export class Rectangle {
 
-  static fromTopLeft( topLeft:PtLike|number[], width:number, height:number, depth=0 ):Group {
-    return new Group( new Pt(topLeft), new Pt(topLeft).add( width, height ) );
+  static from( topLeft:PtLike|number[], widthOrSize:number|PtLike, height?:number ):Group {
+    return Rectangle.fromTopLeft( topLeft, widthOrSize, height );
   }
 
-  static fromCenter( center:PtLike|number[], width:number, height:number, depth=0 ):Group {
-    let half = [width/2, height/2];
-    return new Group( new Pt(center).subtract( half ), new Pt(center).add( half ) );
+  static fromTopLeft( topLeft:PtLike|number[], widthOrSize:number|PtLike, height?:number ):Group {
+    let size = (typeof widthOrSize == "number") ? [widthOrSize, (height||widthOrSize) ] : widthOrSize;
+    return new Group(new Pt(topLeft), new Pt(topLeft).add( size ) );
+  }
+
+  static fromCenter( center:PtLike|number[], widthOrSize:number|PtLike, height?:number ):Group {
+    let half = (typeof widthOrSize == "number") ? [ widthOrSize/2, (height||widthOrSize)/2 ] : new Pt(widthOrSize).divide;
+    return new Group(new Pt(center).subtract(half), new Pt(center).add(half));
   }
 
   static corners( rect:GroupLike ):Group {
@@ -421,7 +437,7 @@ export class Rectangle {
     return corners.map( (c) => new Group(c, center.clone()) );
   }
 
-  static inside( rect:GroupLike, pt:PtLike ) {
+  static contains( rect:GroupLike, pt:PtLike ) {
     return Geom.withinBound( pt, rect[0], rect[1] );
   }
 
@@ -432,8 +448,27 @@ export class Rectangle {
 }
 
 
+export class Cirlce {
+  
+
+}
+
+
+
 
 export class Polygon {
+
+
+  /**
+   * Get a bounding box for each polygon group, as well as a union bounding-box for all groups
+   * @param polys an array of Groups, or an array of Pt arrays
+   */
+  static boundingBoxes( polys:GroupLike[] ):GroupLike[] {
+    let boxes = polys.map( (g) => Geom.boundingBox(g) );
+    let merged = [].concat.apply([], boxes);
+    boxes.unshift( Geom.boundingBox( merged ) );
+    return boxes;
+  }
 
   static intersect2D( poly:GroupLike[], linesOrRays:GroupLike[], sourceIsRay:boolean=false):Group[] {
     let groups = [];

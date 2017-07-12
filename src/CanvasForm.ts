@@ -104,16 +104,28 @@ export class CanvasForm extends Form {
     return this;
   }
 
-
   static circle( ctx:CanvasRenderingContext2D, pt:PtLike, radius:number ) {
-    if (!pt) return;
     ctx.beginPath()
     ctx.arc( pt[0], pt[1], radius, 0, Const.two_pi, false );
     ctx.closePath();
   }
 
-  circle( pts:PtLike, radius:number ):this {
-    CanvasForm.circle( this._ctx, pts, radius );
+  circle( pt:PtLike, radius:number ) {
+    CanvasForm.circle( this._ctx, pt, radius );
+    return this;
+  }
+
+  static ellipse( ctx:CanvasRenderingContext2D, pts:GroupLike|number[][] ) {
+    if (pts.length<2) return;
+    if (pts[1].length < 2) {
+      CanvasForm.circle( ctx, pts[0], pts[1][0] );
+    } else {
+      ctx.ellipse( pts[0][0], pts[0][1], pts[1][0], pts[1][1], 0, 0, Const.two_pi );
+    }
+  }
+
+  ellipse( pts:GroupLike|number[][] ):this {
+    CanvasForm.ellipse( this._ctx, pts );
     return this;
   }
 
@@ -130,7 +142,6 @@ export class CanvasForm extends Form {
   }
 
   static square( ctx:CanvasRenderingContext2D, pt:PtLike, halfsize:number ) {
-    if (!pt) return;
     let x1 = pt[0]-halfsize
     let y1 = pt[1]-halfsize
     let x2 = pt[0]+halfsize

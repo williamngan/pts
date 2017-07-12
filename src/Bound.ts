@@ -1,7 +1,7 @@
-import {Pt, IPt, PtLike} from "./Pt"
+import {Pt, IPt, PtLike, Group} from "./Pt"
 
 
-export class Bound implements IPt{
+export class Bound extends Group implements IPt {
 
   protected _center:Pt = new Pt();
   protected _size:Pt = new Pt();
@@ -9,22 +9,27 @@ export class Bound implements IPt{
   protected _bottomRight:Pt = new Pt();
   protected _inited = false;
 
-  constructor( p1?:IPt|PtLike, p2?:IPt|PtLike ) {
+  constructor( ...args ) {
+    super(...args);
+    this.init();
+  }
 
-    if (p1) {
-      this._size = new Pt(p1);
+  init() {
+    if (this.p1) {
+      this._size = new Pt(this.p1);
       this._inited = true;
     } 
-    if (p1 && p2) {
-      let a = new Pt(p1);
-      let b = new Pt(p2)
-      this._topLeft = a.$min(b);
+    if (this.p1 && this.p2) {
+      let a = new Pt(this.p1);
+      let b = new Pt(this.p2)
+      this.topLeft = a.$min(b);
       this._bottomRight = a.$max(b);
       this._updateSize();
     }
   }
 
-  public clone():Bound {
+
+  clone():Bound {
     return new Bound( this._topLeft, this._bottomRight );
   }
 
@@ -54,53 +59,66 @@ export class Bound implements IPt{
   }
 
 
-  public get size():Pt { return new Pt(this._size); }
-  public set size(p: Pt) { 
+  get size():Pt { return new Pt(this._size); }
+  set size(p: Pt) { 
     this._size = new Pt(p); 
     this._updatePosFromTop();
   }
 
-  public get center():Pt { return new Pt(this._center); }
-  public set center( p:Pt ) {
+  get center():Pt { return new Pt(this._center); }
+  set center( p:Pt ) {
     this._center = new Pt(p);
     this._updatePosFromCenter();
   }
 
-  public get topLeft():Pt { return new Pt(this._topLeft); }
-  public set topLeft( p:Pt ) {
+  get topLeft():Pt { return new Pt(this._topLeft); }
+  set topLeft( p:Pt ) {
     this._topLeft = new Pt(p);
+    this[0] = this._topLeft;
     this._updateSize();
   }
 
-  public get bottomRight():Pt { return new Pt(this._bottomRight); }
-  public set bottomRight( p:Pt ) {
+  get bottomRight():Pt { return new Pt(this._bottomRight); }
+  set bottomRight( p:Pt ) {
     this._bottomRight = new Pt(p);
+    this[1] = this._bottomRight;
     this._updateSize();
   }
 
-  public get width():number { return (this._size.length > 0) ? this._size.x : 0; }
-  public set width( w:number ) {
+  get width():number { return (this._size.length > 0) ? this._size.x : 0; }
+  set width( w:number ) {
     this._size.x = w;
     this._updatePosFromTop();
   }
 
-  public get height():number { return (this._size.length > 1) ? this._size.y : 0; }
-  public set height( h:number ) {
+  get height():number { return (this._size.length > 1) ? this._size.y : 0; }
+  set height( h:number ) {
     this._size.y = h;
     this._updatePosFromTop();
   }
 
-  public get depth():number { return (this._size.length > 2) ? this._size.z : 0; }
-  public set depth( d:number ) {
+  get depth():number { return (this._size.length > 2) ? this._size.z : 0; }
+  set depth( d:number ) {
     this._size.z = d;
     this._updatePosFromTop();
   }
+  
 
-  public get x():number { return this.topLeft.x; }
-  public get y():number { return this.topLeft.y; }
-  public get z():number { return this.topLeft.z; }
+  get x():number { return this.topLeft.x; }
+  get y():number { return this.topLeft.y; }
+  get z():number { return this.topLeft.z; }
 
-  public get inited():boolean { return this._inited; }
+  get inited():boolean { return this._inited; }
+
+  /**
+   * If the Group elements are changed, call this function to update the Bound's properties.
+   * It's preferable to change the topLeft/bottomRight etc properties instead of changing the Group array directly.
+   */
+  update() {
+    this._topLeft = this[0];
+    this._bottomRight = this[1];
+    this._updateSize();
+  }
 
   static fromBoundingRect( rect:ClientRect ) {
     let b = new Bound( new Pt( rect.left||0, rect.top||0 ), new Pt( rect.right||0, rect.bottom||0 ) );

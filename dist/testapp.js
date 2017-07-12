@@ -367,6 +367,10 @@ class Group extends Array {
     }
     get id() { return this._id; }
     set id(s) { this._id = s; }
+    get p1() { return this[0]; }
+    get p2() { return this[1]; }
+    get p3() { return this[2]; }
+    get p4() { return this[2]; }
     clone() {
         let group = new Group();
         for (let i = 0, len = this.length; i < len; i++) {
@@ -413,6 +417,8 @@ class Group extends Array {
      * Get all the lines (ie, edges in a graph) of this group
      */
     lines() { return this.segments(2, 1); }
+    anchorTo(ptOrIndex = 0) { Op_1.Geom.anchor(this, ptOrIndex, "to"); }
+    anchorFrom(ptOrIndex = 0) { Op_1.Geom.anchor(this, ptOrIndex, "from"); }
     /**
      * Create an operation using this Group, passing this Group into a custom function's first parameter
      * For example: `let myOp = group.op( fn ); let result = myOp( [1,2,3] );`
@@ -440,9 +446,6 @@ class Group extends Array {
     }
     boundingBox() {
         return Op_1.Geom.boundingBox(this);
-    }
-    centroid() {
-        return Op_1.Geom.centroid(this);
     }
     /**
      * Get an interpolated point on the line segments defined by this Group
@@ -676,21 +679,25 @@ exports.Util = Util;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
-class Bound {
-    constructor(p1, p2) {
+class Bound extends Pt_1.Group {
+    constructor(...args) {
+        super(...args);
         this._center = new Pt_1.Pt();
         this._size = new Pt_1.Pt();
         this._topLeft = new Pt_1.Pt();
         this._bottomRight = new Pt_1.Pt();
         this._inited = false;
-        if (p1) {
-            this._size = new Pt_1.Pt(p1);
+        this.init();
+    }
+    init() {
+        if (this.p1) {
+            this._size = new Pt_1.Pt(this.p1);
             this._inited = true;
         }
-        if (p1 && p2) {
-            let a = new Pt_1.Pt(p1);
-            let b = new Pt_1.Pt(p2);
-            this._topLeft = a.$min(b);
+        if (this.p1 && this.p2) {
+            let a = new Pt_1.Pt(this.p1);
+            let b = new Pt_1.Pt(this.p2);
+            this.topLeft = a.$min(b);
             this._bottomRight = a.$max(b);
             this._updateSize();
         }
@@ -731,11 +738,13 @@ class Bound {
     get topLeft() { return new Pt_1.Pt(this._topLeft); }
     set topLeft(p) {
         this._topLeft = new Pt_1.Pt(p);
+        this[0] = this._topLeft;
         this._updateSize();
     }
     get bottomRight() { return new Pt_1.Pt(this._bottomRight); }
     set bottomRight(p) {
         this._bottomRight = new Pt_1.Pt(p);
+        this[1] = this._bottomRight;
         this._updateSize();
     }
     get width() { return (this._size.length > 0) ? this._size.x : 0; }
@@ -757,6 +766,15 @@ class Bound {
     get y() { return this.topLeft.y; }
     get z() { return this.topLeft.z; }
     get inited() { return this._inited; }
+    /**
+     * If the Group elements are changed, call this function to update the Bound's properties.
+     * It's preferable to change the topLeft/bottomRight etc properties instead of changing the Group array directly.
+     */
+    update() {
+        this._topLeft = this[0];
+        this._bottomRight = this[1];
+        this._updateSize();
+    }
     static fromBoundingRect(rect) {
         let b = new Bound(new Pt_1.Pt(rect.left || 0, rect.top || 0), new Pt_1.Pt(rect.right || 0, rect.bottom || 0));
         if (rect.width && rect.height)
@@ -1039,20 +1057,30 @@ class Geom {
         return radian * Util_1.Const.rad_to_deg;
     }
     static boundingBox(pts) {
-        let minPt = Pt_1.Pt.make(pts[0].length, Number.MAX_VALUE);
-        let maxPt = Pt_1.Pt.make(pts[0].length, Number.MIN_VALUE);
-        for (let i = 0, len = pts.length; i < len; i++) {
-            for (let d = 0, len = pts[i].length; d < len; d++) {
-                if (pts[i][d] < minPt[d])
-                    minPt[d] = pts[i][d];
-                if (pts[i][d] > maxPt[d])
-                    maxPt[d] = pts[i][d];
-            }
-        }
+        let minPt = pts.reduce((a, p) => a.$min(p));
+        let maxPt = pts.reduce((a, p) => a.$max(p));
         return new Pt_1.Group(minPt, maxPt);
     }
     static centroid(pts) {
         return Num.average(pts);
+    }
+    /**
+     * Given an anchor Pt, rebase all Pts in this group either to or from this anchor base.
+     * @param pts a Group or array of Pt
+     * @param ptOrIndex an index for the Pt array, or an external Pt
+     * @param direction "to" (subtract all Pt with this anchor base) or "from" (add all Pt from this anchor base)
+     */
+    static anchor(pts, ptOrIndex = 0, direction = "to") {
+        let method = (direction == "to") ? "subtract" : "add";
+        for (let i = 0, len = pts.length; i < len; i++) {
+            if (typeof ptOrIndex == "number") {
+                if (ptOrIndex !== i)
+                    pts[i][method](pts[ptOrIndex]);
+            }
+            else {
+                pts[i][method](ptOrIndex);
+            }
+        }
     }
     /**
      * Get an interpolated value between two Pts
@@ -1289,11 +1317,15 @@ class Line {
 }
 exports.Line = Line;
 class Rectangle {
-    static fromTopLeft(topLeft, width, height, depth = 0) {
-        return new Pt_1.Group(new Pt_1.Pt(topLeft), new Pt_1.Pt(topLeft).add(width, height));
+    static from(topLeft, widthOrSize, height) {
+        return Rectangle.fromTopLeft(topLeft, widthOrSize, height);
     }
-    static fromCenter(center, width, height, depth = 0) {
-        let half = [width / 2, height / 2];
+    static fromTopLeft(topLeft, widthOrSize, height) {
+        let size = (typeof widthOrSize == "number") ? [widthOrSize, (height || widthOrSize)] : widthOrSize;
+        return new Pt_1.Group(new Pt_1.Pt(topLeft), new Pt_1.Pt(topLeft).add(size));
+    }
+    static fromCenter(center, widthOrSize, height) {
+        let half = (typeof widthOrSize == "number") ? [widthOrSize / 2, (height || widthOrSize) / 2] : new Pt_1.Pt(widthOrSize).divide;
         return new Pt_1.Group(new Pt_1.Pt(center).subtract(half), new Pt_1.Pt(center).add(half));
     }
     static corners(rect) {
@@ -1318,7 +1350,7 @@ class Rectangle {
         let center = Geom.interpolate(rect[0], rect[1], 0.5);
         return corners.map((c) => new Pt_1.Group(c, center.clone()));
     }
-    static inside(rect, pt) {
+    static contains(rect, pt) {
         return Geom.withinBound(pt, rect[0], rect[1]);
     }
     static intersect2D(rect, poly) {
@@ -1326,7 +1358,20 @@ class Rectangle {
     }
 }
 exports.Rectangle = Rectangle;
+class Cirlce {
+}
+exports.Cirlce = Cirlce;
 class Polygon {
+    /**
+     * Get a bounding box for each polygon group, as well as a union bounding-box for all groups
+     * @param polys an array of Groups, or an array of Pt arrays
+     */
+    static boundingBoxes(polys) {
+        let boxes = polys.map((g) => Geom.boundingBox(g));
+        let merged = [].concat.apply([], boxes);
+        boxes.unshift(Geom.boundingBox(merged));
+        return boxes;
+    }
     static intersect2D(poly, linesOrRays, sourceIsRay = false) {
         let groups = [];
         for (let i = 0, len = linesOrRays.length; i < len; i++) {
@@ -1444,14 +1489,26 @@ class CanvasForm extends Form_1.Form {
         return this;
     }
     static circle(ctx, pt, radius) {
-        if (!pt)
-            return;
         ctx.beginPath();
         ctx.arc(pt[0], pt[1], radius, 0, Util_1.Const.two_pi, false);
         ctx.closePath();
     }
-    circle(pts, radius) {
-        CanvasForm.circle(this._ctx, pts, radius);
+    circle(pt, radius) {
+        CanvasForm.circle(this._ctx, pt, radius);
+        return this;
+    }
+    static ellipse(ctx, pts) {
+        if (pts.length < 2)
+            return;
+        if (pts[1].length < 2) {
+            CanvasForm.circle(ctx, pts[0], pts[1][0]);
+        }
+        else {
+            ctx.ellipse(pts[0][0], pts[0][1], pts[1][0], pts[1][1], 0, 0, Util_1.Const.two_pi);
+        }
+    }
+    ellipse(pts) {
+        CanvasForm.ellipse(this._ctx, pts);
         return this;
     }
     static arc(ctx, pt, radius, startAngle, endAngle, cc) {
@@ -1464,8 +1521,6 @@ class CanvasForm extends Form_1.Form {
         return this;
     }
     static square(ctx, pt, halfsize) {
-        if (!pt)
-            return;
         let x1 = pt[0] - halfsize;
         let y1 = pt[1] - halfsize;
         let x2 = pt[0] + halfsize;

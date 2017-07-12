@@ -371,6 +371,11 @@ export class Group extends Array<Pt> {
   get id():string { return this._id; }
   set id( s:string ) { this._id = s; }
 
+  get p1():Pt { return this[0]; }
+  get p2():Pt { return this[1]; }
+  get p3():Pt { return this[2]; }
+  get p4():Pt { return this[2]; }
+
   clone():Group {
     let group = new Group();   
     for (let i=0, len=this.length; i<len; i++) {
@@ -426,6 +431,11 @@ export class Group extends Array<Pt> {
   lines():Group[] { return this.segments(2, 1); }
 
 
+
+  anchorTo( ptOrIndex:PtLike|number=0 ) { Geom.anchor( this, ptOrIndex, "to" ); }
+
+  anchorFrom( ptOrIndex:PtLike|number=0 ) { Geom.anchor( this, ptOrIndex, "from" ); }
+
   /**
    * Create an operation using this Group, passing this Group into a custom function's first parameter
    * For example: `let myOp = group.op( fn ); let result = myOp( [1,2,3] );`
@@ -459,9 +469,6 @@ export class Group extends Array<Pt> {
     return Geom.boundingBox( this );
   }
 
-  centroid():Pt {
-    return Geom.centroid( this );
-  }
 
   /**
    * Get an interpolated point on the line segments defined by this Group

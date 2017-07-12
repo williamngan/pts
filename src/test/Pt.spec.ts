@@ -239,6 +239,24 @@ describe('Pt: ', () => {
       assert.isTrue( p.length == 2 && p[1].x == 3 );
     });
 
+    it('can rebase all pts from an anchor', function() {
+      let p = Group.fromArray( [[1,2,3], [10,10,10], [3,4,5]] );
+      p.anchorFrom( 1 );
+      assert.isTrue( p[0].x === 11 && p[1].y === 10 && p[2].z === 15);
+    });
+
+    it('can rebase all pts to an anchor', function() {
+      let p = Group.fromArray( [[1,2,3], [10,10,10], [3,4,5]] );
+      p.anchorTo( 2 );
+      assert.isTrue( p[0].x === -2 && p[1].y === 6 && p[2].z === 5);
+    });
+
+    it('can rebase all pts from an external Pt anchor', function() {
+      let p = Group.fromArray( [[1,2,3], [10,10,10], [3,4,5]] );
+      p.anchorFrom( new Pt(100,100) );
+      assert.isTrue( p[0].x === 101 && p[1].y === 110 && p[2].z === 5);
+    });
+
     it('can convert into an op', function() {
       let p = Group.fromArray( [[1,2],[3,4],[5,6]] );
       let s = p.op( Geom.scale );
