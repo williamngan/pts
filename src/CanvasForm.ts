@@ -195,6 +195,13 @@ export class CanvasForm extends Form {
     return this;
   }
 
+  rects( rects:GroupLike[] ):this {
+    for (let i=0, len=rects.length; i<len; i++) {
+      this.rect( rects[i] );
+    }
+    return this;
+  }
+
 
   /**
    * A static function to draw text

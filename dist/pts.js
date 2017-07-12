@@ -1361,7 +1361,7 @@ class Rectangle {
         ];
     }
     static union(rects) {
-        let merged = [].concat.apply([], rects);
+        let merged = Util_1.Util.flatten(rects, false);
         let min = Pt_1.Pt.make(2, Number.MAX_VALUE);
         let max = Pt_1.Pt.make(2, Number.MIN_VALUE);
         // calculate min max in a single pass
@@ -1423,7 +1423,7 @@ class Polygon {
      */
     static toRects(polys) {
         let boxes = polys.map((g) => Geom.boundingBox(g));
-        let merged = [].concat.apply([], boxes);
+        let merged = Util_1.Util.flatten(boxes, false);
         boxes.unshift(Geom.boundingBox(merged));
         return boxes;
     }
@@ -1621,6 +1621,12 @@ class CanvasForm extends Form_1.Form {
     rect(pts) {
         CanvasForm.rect(this._ctx, pts);
         this._paint();
+        return this;
+    }
+    rects(rects) {
+        for (let i = 0, len = rects.length; i < len; i++) {
+            this.rect(rects[i]);
+        }
         return this;
     }
     /**

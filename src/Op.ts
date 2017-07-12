@@ -441,7 +441,7 @@ export class Rectangle {
   }
 
   static union( rects:GroupLike[] ):Group {
-    let merged = [].concat.apply([], rects );
+    let merged = Util.flatten( rects, false );
     let min = Pt.make( 2, Number.MAX_VALUE );
     let max = Pt.make( 2, Number.MIN_VALUE );
 
@@ -520,7 +520,7 @@ export class Polygon {
    */
   static toRects( polys:GroupLike[] ):GroupLike[] {
     let boxes = polys.map( (g) => Geom.boundingBox(g) );
-    let merged = [].concat.apply([], boxes);
+    let merged = Util.flatten( boxes, false );
     boxes.unshift( Geom.boundingBox( merged ) );
     return boxes;
   }

@@ -41,7 +41,7 @@ space.add( {
   },
 
   animate: (time, fps) => {
-    form.stroke("#c1c5ca").fill(false).line( line1 );
+    form.stroke("#c1c5ca", 1).fill(false).line( line1 );
     form.line( line2 );
 
     form.rect( rect1 );
@@ -53,8 +53,11 @@ space.add( {
     form.circle( circle3 );
     form.rect( rect3 );
     
-  
+    // Begin Test Code --
     
+    form.stroke("#f00", 2);
+
+    // End
   },
 
   action:( type, px, py) => {
