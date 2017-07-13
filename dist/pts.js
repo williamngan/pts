@@ -515,38 +515,25 @@ class Group extends Array {
     sortByDimension(dim, desc = false) {
         return this.sort((a, b) => (desc) ? b[dim] - a[dim] : a[dim] - b[dim]);
     }
-    toString() {
-        return "Group[ " + this.reduce((p, c) => p + c.toString() + " ", "") + " ]";
+    $add(g) {
+        return LinearAlgebra_1.Mat.add(this, g);
+    }
+    $multiply(g, transposed = false) {
+        return LinearAlgebra_1.Mat.multiply(this, g, transposed);
+    }
+    zipSlice(index, defaultValue = false) {
+        return LinearAlgebra_1.Mat.zipSlice(this, index, defaultValue);
     }
     /**
-     * Zip one slice of an array of Pt
-     * @param pts an array of Pt
-     * @param idx index to zip at
-     * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
-     */
-    zipOne(index, defaultValue = false) {
-        let f = (typeof defaultValue == "boolean") ? "get" : "at"; // choose `get` or `at` function
-        let z = [];
-        for (let i = 0, len = this.length; i < len; i++) {
-            if (this[i].length - 1 < index && defaultValue === false)
-                throw `Index ${index} is out of bounds`;
-            z.push(this[i][index] || defaultValue);
-        }
-        return new Pt(z);
-    }
-    /**
-     * Zip an array of Pt. eg, [[1,2],[3,4],[5,6]] => [[1,3,5],[2,4,6]]
-     * @param pts an array of Pt
+     * Zip a group of Pt. eg, [[1,2],[3,4],[5,6]] => [[1,3,5],[2,4,6]]
      * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
      * @param useLongest If true, find the longest list of values in a Pt and use its length for zipping. Default is false, which uses the first item's length for zipping.
      */
-    zip(defaultValue = false, useLongest = false) {
-        let ps = new Group();
-        let len = (useLongest) ? this.reduce((a, b) => Math.max(a, b.length), 0) : this[0].length;
-        for (let i = 0; i < len; i++) {
-            ps.push(this.zipOne(i, defaultValue));
-        }
-        return ps;
+    $zip(defaultValue = false, useLongest = false) {
+        return LinearAlgebra_1.Mat.zip(this, defaultValue, useLongest);
+    }
+    toString() {
+        return "Group[ " + this.reduce((p, c) => p + c.toString() + " ", "") + " ]";
     }
     /**
      * Given two arrays of Groups, and a function that operate on two Groups, return an array of Group
@@ -914,6 +901,90 @@ class Vec {
 }
 exports.Vec = Vec;
 class Mat {
+    /**
+     * Matrix additions. Matrices should have the same rows and columns.
+     * @param a a group of Pt
+     * @param b a scalar number or a group of Pt
+     * @returns a group with the same rows and columns as a and b
+     */
+    static add(a, b) {
+        if (typeof b != "number") {
+            if (a[0].length != b[0].length)
+                throw "Cannot add matrix if rows' and columns' size don't match.";
+            if (a.length != b.length)
+                throw "Cannot add matrix if rows' and columns' size don't match.";
+        }
+        let g = new Pt_1.Group();
+        let isNum = typeof b == "number";
+        for (let i = 0, len = a.length; i < len; i++) {
+            g.push(a[i].$add((isNum) ? b : b[i]));
+        }
+        return g;
+    }
+    /**
+     * Matrix multiplication
+     * @param a a Group of M Pts, each with K dimensions (M-rows, K-columns)
+     * @param b a scalar number, or a Group of K Pts, each with N dimensions (K-rows, N-columns) -- or if transposed is true, then N Pts with K dimensions
+     * @param transposed if true, then a and b's columns should match (ie, each Pt should have the same dimensions).
+     * @returns a group with M Pt, each with N dimensions (M-rows, N-columns)
+     */
+    static multiply(a, b, transposed = false) {
+        let g = new Pt_1.Group();
+        if (typeof b != "number") {
+            if (!transposed && a[0].length != b.length)
+                throw "Cannot multiply matrix if rows in matrix-a don't match columns in matrix-b.";
+            if (transposed && a[0].length != b[0].length)
+                throw "Cannot multiply matrix if transposed and the columns in both matrices don't match.";
+            if (!transposed)
+                b = Mat.transpose(b);
+            for (let ai = 0, alen = a.length; ai < alen; ai++) {
+                let p = Pt_1.Pt.make(b.length, 0);
+                for (let bi = 0, blen = b.length; bi < blen; bi++) {
+                    p[bi] = a[ai].dot(b[bi]);
+                }
+                g.push(p);
+            }
+        }
+        else {
+            for (let ai = 0, alen = a.length; ai < alen; ai++) {
+                g.push(a[ai].$multiply(b));
+            }
+        }
+        return g;
+    }
+    /**
+     * Zip one slice of an array of Pt
+     * @param g a group of Pt
+     * @param idx index to zip at
+     * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
+     */
+    static zipSlice(g, index, defaultValue = false) {
+        let f = (typeof defaultValue == "boolean") ? "get" : "at"; // choose `get` or `at` function
+        let z = [];
+        for (let i = 0, len = g.length; i < len; i++) {
+            if (g[i].length - 1 < index && defaultValue === false)
+                throw `Index ${index} is out of bounds`;
+            z.push(g[i][index] || defaultValue);
+        }
+        return new Pt_1.Pt(z);
+    }
+    /**
+     * Zip a group of Pt. eg, [[1,2],[3,4],[5,6]] => [[1,3,5],[2,4,6]]
+     * @param g a group of Pt
+     * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
+     * @param useLongest If true, find the longest list of values in a Pt and use its length for zipping. Default is false, which uses the first item's length for zipping.
+     */
+    static zip(g, defaultValue = false, useLongest = false) {
+        let ps = new Pt_1.Group();
+        let len = (useLongest) ? g.reduce((a, b) => Math.max(a, b.length), 0) : g[0].length;
+        for (let i = 0; i < len; i++) {
+            ps.push(Mat.zipSlice(g, i, defaultValue));
+        }
+        return ps;
+    }
+    static transpose(g) {
+        return Mat.zip(g);
+    }
     static transform2D(pt, m) {
         let x = pt[0] * m[0][0] + pt[1] * m[1][0] + m[2][0];
         let y = pt[0] * m[0][1] + pt[1] * m[1][1] + m[2][1];

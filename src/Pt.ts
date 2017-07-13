@@ -1,7 +1,7 @@
 import {Util, Const} from "./Util"
 import {Geom, Num} from "./Op"
 import {Bound} from "./Bound"
-import {Vec} from "./LinearAlgebra"
+import {Vec, Mat} from "./LinearAlgebra"
 
 
 export interface IPt {
@@ -546,42 +546,33 @@ export class Group extends Array<Pt> {
     return this.sort( (a, b) => (desc) ? b[dim] - a[dim] : a[dim] - b[dim] );
   }
 
+  $add( g:GroupLike|number ):Group {
+    return Mat.add( this, g );
+  }
+
+  $multiply( g:GroupLike|number, transposed:boolean=false ):Group {
+    return Mat.multiply( this, g, transposed );
+  }
+
+  zipSlice( index:number, defaultValue:number|boolean = false ):Pt {
+    return Mat.zipSlice( this, index, defaultValue );
+  }
+
+  /**
+   * Zip a group of Pt. eg, [[1,2],[3,4],[5,6]] => [[1,3,5],[2,4,6]]
+   * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
+   * @param useLongest If true, find the longest list of values in a Pt and use its length for zipping. Default is false, which uses the first item's length for zipping.
+   */
+  $zip( defaultValue:number|boolean = false, useLongest=false ):Group {
+    return Mat.zip( this, defaultValue, useLongest );
+  }
+
   toString():string {
     return "Group[ "+ this.reduce( (p, c) => p+c.toString()+" ", "" )+" ]";
   }
 
 
-  /**
-   * Zip one slice of an array of Pt
-   * @param pts an array of Pt
-   * @param idx index to zip at
-   * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
-   */
-  zipOne( index:number, defaultValue:number|boolean = false ):Pt {
-    let f = (typeof defaultValue == "boolean") ? "get" : "at"; // choose `get` or `at` function
-    let z = [];
-    for (let i=0, len=this.length; i<len; i++) {
-      if (this[i].length-1 < index && defaultValue === false) throw `Index ${index} is out of bounds`;
-      z.push( this[i][index] || defaultValue );
-    }
-    return new Pt(z);
-  }
 
-
-  /**
-   * Zip an array of Pt. eg, [[1,2],[3,4],[5,6]] => [[1,3,5],[2,4,6]]
-   * @param pts an array of Pt
-   * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
-   * @param useLongest If true, find the longest list of values in a Pt and use its length for zipping. Default is false, which uses the first item's length for zipping.
-   */
-  zip( defaultValue:number|boolean = false, useLongest=false ):Group {
-    let ps = new Group();
-    let len = (useLongest) ? this.reduce( (a,b) => Math.max(a, b.length), 0 ) : this[0].length;
-    for (let i=0; i<len; i++) {
-      ps.push( this.zipOne( i, defaultValue ) )
-    }
-    return ps;
-  }
 
 
   /**
