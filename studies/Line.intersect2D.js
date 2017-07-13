@@ -16,10 +16,12 @@ space.add( {
     let ux = space.width/20;
     let uy = space.height/20;
 
-    // vertical and horizontal line
-    line1 = Group.fromArray( [[-ux, -space.height/3], [ux, space.height/3]] ); 
+    // vertical line
+    line1 = Group.fromArray( [[-ux, -space.height/5], [ux, space.height/5]] ); 
     line2 = Group.fromArray( [[0, -space.height/2], [0, space.height/2]] ); 
-    line3 = Group.fromArray( [[-space.width/3, -uy], [space.width/3, uy]] ); 
+
+    // horizontal line
+    line3 = Group.fromArray( [[-space.width/5, -uy], [space.width/5, uy]] ); 
     line4 = Group.fromArray( [[-space.width/2, 0], [space.width/2, 0]] ); 
     gp.push( line1, line2, line3, line4 );
 
@@ -56,20 +58,40 @@ space.add( {
     form.circle( circle2 );
     form.circle( circle3 );
     form.rect( rect3 );
-
+    
     // Begin Test Code --
 
-    poly1[poly1.length-1] = space.pointer;
+    form.stroke("#000", 3);
+    let ln1 = new Group( space.center.$add(50), space.pointer.clone() );
+    form.line( ln1 );
 
-    form.stroke("#fff", 2);
-    form.line( poly1 );
-    
-    form.stroke("#f00", 2);
-    let rects = Polygon.toRects( poly1.lines() );
-    form.rects( rects ); 
+    // bounding box
+    let r1 = Line.toRect( ln1 );
+    form.stroke("#fff", 1).rect( r1 );
 
-    // End   
-    
+    // ray
+    let t1 = Line.intersectRay2D( ln1, line2 );
+    form.stroke("#09f", 2).line( line2 ).point( t1 );
+
+    // line
+    let t2 = Line.intersectLine2D( ln1, line1 );
+    form.stroke("#f90").line( line1 ).point( t2 );
+
+    // line to ray
+    let t3 = Line.intersectLineWithRay2D( ln1, line3 );
+    form.stroke("#90f").line( line3 ).point( t3 );
+
+    // polygon
+    let tp = Line.intersectPolygon2D( ln1, poly1.lines() );
+    form.stroke("#f00").line( poly1 ).points( tp );
+
+    // grid
+    let t4 = Line.intersectGridWithRay2D( ln1, rect1[0] );
+    let t5 = Line.intersectGridWithLine2D( ln1, rect1[0] );
+    form.stroke("#090").point( rect1.p1, 5, "circle" ).points( t4, 3, "circle" );
+    form.fill("#0f0").stroke(false).point( rect1.p1, 5, "circle" ).points( t5, 2 );
+
+    // End
   },
 
   action:( type, px, py) => {

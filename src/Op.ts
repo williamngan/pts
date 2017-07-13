@@ -392,6 +392,20 @@ export class Line {
     }
     return pts;
   }
+
+  static toRect( line:GroupLike ) {
+    return new Group( line[0].$min( line[1] ), line[0].$max( line[1] ) );
+  }
+
+  /**
+   * Quick way to check rectangle intersection. 
+   * For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersect2D()`.
+   * @param line a Group representing a line
+   * @param rect a Group representing a rectangle
+   */
+  static intersectRect2D( line:GroupLike, rect:GroupLike ):Group {
+    return Rectangle.intersectRect2D( Line.toRect(line), rect );
+  }
 }
 
 
@@ -428,7 +442,7 @@ export class Rectangle {
   static corners( rect:GroupLike ):Group {
     let p0 = rect[0].$min(rect[1]);
     let p2 = rect[0].$max(rect[1]);
-    return new Group(p0, new Pt(p0.x, p2.y), p2, new Pt(p2.x, p0.y));
+    return new Group(p0,  new Pt(p2.x, p0.y), p2, new Pt(p0.x, p2.y));
   }
 
 
@@ -471,8 +485,20 @@ export class Rectangle {
     return Geom.withinBound( pt, rect[0], rect[1] );
   }
 
-  static intersect2D( rect:GroupLike, poly:GroupLike[] ):Group[] {
-    return Polygon.intersect2D( Rectangle.sides( rect ), poly )
+  static intersectBound2D( rect1:GroupLike, rect2:GroupLike ) {
+    return Geom.withinBound( rect1[0], rect2[0], rect2[1] ) || Geom.withinBound( rect1[1], rect2[0], rect2[1] );
+  }
+
+  /**
+   * Quick way to check rectangle intersection. 
+   * For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersect2D()`.
+   * @param rect1 a Group representing a rectangle
+   * @param rect2 a Group representing a rectangle
+   */
+  static intersectRect2D( rect1:GroupLike, rect2:GroupLike ):Group {
+    return Util.flatten(
+      Polygon.intersect2D( Rectangle.sides( rect1 ), Rectangle.sides( rect2 ) )
+    );
   }
 
 }
@@ -518,8 +544,8 @@ export class Polygon {
    * Get a bounding box for each polygon group, as well as a union bounding-box for all groups
    * @param polys an array of Groups, or an array of Pt arrays
    */
-  static toRects( polys:GroupLike[] ):GroupLike[] {
-    let boxes = polys.map( (g) => Geom.boundingBox(g) );
+  static toRects( poly:GroupLike[] ):GroupLike[] {
+    let boxes = poly.map( (g) => Geom.boundingBox(g) );
     let merged = Util.flatten( boxes, false );
     boxes.unshift( Geom.boundingBox( merged ) );
     return boxes;
@@ -534,10 +560,10 @@ export class Polygon {
     return groups;
   }
 
-  static network( poly:GroupLike, originIndex:number=0 ):Group[] {
+  static network( pts:GroupLike, originIndex:number=0 ):Group[] {
     let g = []
-    for (let i=0, len=poly.length; i<len; i++) {
-      if (i != originIndex) g.push( new Group( poly[originIndex], poly[i] ) );
+    for (let i=0, len=pts.length; i<len; i++) {
+      if (i != originIndex) g.push( new Group( pts[originIndex], pts[i] ) );
     }
     return g;
   }

@@ -22,7 +22,6 @@ space.add( {
     line3 = Group.fromArray( [[-space.width/3, -uy], [space.width/3, uy]] ); 
     line4 = Group.fromArray( [[-space.width/2, 0], [space.width/2, 0]] ); 
     gp.push( line1, line2, line3, line4 );
-
     // bounds
     rect1 = Group.fromArray( [[-ux*3, -uy*3], [ux, uy]] ); 
     rect2 = Group.fromArray( [[-ux, -ux], [ux*4, ux*4]] ); 
@@ -56,20 +55,30 @@ space.add( {
     form.circle( circle2 );
     form.circle( circle3 );
     form.rect( rect3 );
-
+    
     // Begin Test Code --
 
-    poly1[poly1.length-1] = space.pointer;
+    form.stroke("#09f").rect( rect1 );
+    form.stroke("#000").rect( rect2 );
 
-    form.stroke("#fff", 2);
-    form.line( poly1 );
-    
-    form.stroke("#f00", 2);
-    let rects = Polygon.toRects( poly1.lines() );
-    form.rects( rects ); 
+    let r = Rectangle.fromCenter( space.pointer, 50, 90 );
+    let strokeWeight = Rectangle.intersectBound2D( r, rect1) ? 5 : 2;
+    form.stroke("#f00", strokeWeight ).rect( r );
 
-    // End   
+    let ps = Rectangle.intersectRect2D( r, rect1 );
+    form.stroke(false).fill("#09f").points( ps );
+
+    // more optimized if the sides are stored separately
+    let sides = Rectangle.sides( r );
+    let ips = Polygon.intersect2D( sides, Rectangle.sides( rect2 ) );
+    ips.forEach( (p) => form.stroke(false).fill("#000").points( p ) );
+
+    ips = Polygon.intersect2D( sides, [line1, line3] );
+    ips.forEach( (p) => form.stroke(false).fill("#f90").points( p ) );
     
+    form.stroke("#f90",1).lines( [line1, line3] );
+    
+    // End
   },
 
   action:( type, px, py) => {

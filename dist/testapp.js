@@ -1323,6 +1323,18 @@ class Line {
         }
         return pts;
     }
+    static toRect(line) {
+        return new Pt_1.Group(line[0].$min(line[1]), line[0].$max(line[1]));
+    }
+    /**
+     * Quick way to check rectangle intersection.
+     * For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersect2D()`.
+     * @param line a Group representing a line
+     * @param rect a Group representing a rectangle
+     */
+    static intersectRect2D(line, rect) {
+        return Rectangle.intersectRect2D(Line.toRect(line), rect);
+    }
 }
 exports.Line = Line;
 class Rectangle {
@@ -1351,7 +1363,7 @@ class Rectangle {
     static corners(rect) {
         let p0 = rect[0].$min(rect[1]);
         let p2 = rect[0].$max(rect[1]);
-        return new Pt_1.Group(p0, new Pt_1.Pt(p0.x, p2.y), p2, new Pt_1.Pt(p2.x, p0.y));
+        return new Pt_1.Group(p0, new Pt_1.Pt(p2.x, p0.y), p2, new Pt_1.Pt(p0.x, p2.y));
     }
     static sides(rect) {
         let [p0, p1, p2, p3] = Rectangle.corners(rect);
@@ -1386,8 +1398,17 @@ class Rectangle {
     static contains(rect, pt) {
         return Geom.withinBound(pt, rect[0], rect[1]);
     }
-    static intersect2D(rect, poly) {
-        return Polygon.intersect2D(Rectangle.sides(rect), poly);
+    static intersectBound2D(rect1, rect2) {
+        return Geom.withinBound(rect1[0], rect2[0], rect2[1]) || Geom.withinBound(rect1[1], rect2[0], rect2[1]);
+    }
+    /**
+     * Quick way to check rectangle intersection.
+     * For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersect2D()`.
+     * @param rect1 a Group representing a rectangle
+     * @param rect2 a Group representing a rectangle
+     */
+    static intersectRect2D(rect1, rect2) {
+        return Util_1.Util.flatten(Polygon.intersect2D(Rectangle.sides(rect1), Rectangle.sides(rect2)));
     }
 }
 exports.Rectangle = Rectangle;
@@ -1421,8 +1442,8 @@ class Polygon {
      * Get a bounding box for each polygon group, as well as a union bounding-box for all groups
      * @param polys an array of Groups, or an array of Pt arrays
      */
-    static toRects(polys) {
-        let boxes = polys.map((g) => Geom.boundingBox(g));
+    static toRects(poly) {
+        let boxes = poly.map((g) => Geom.boundingBox(g));
         let merged = Util_1.Util.flatten(boxes, false);
         boxes.unshift(Geom.boundingBox(merged));
         return boxes;
@@ -1436,11 +1457,11 @@ class Polygon {
         }
         return groups;
     }
-    static network(poly, originIndex = 0) {
+    static network(pts, originIndex = 0) {
         let g = [];
-        for (let i = 0, len = poly.length; i < len; i++) {
+        for (let i = 0, len = pts.length; i < len; i++) {
             if (i != originIndex)
-                g.push(new Pt_1.Group(poly[originIndex], poly[i]));
+                g.push(new Pt_1.Group(pts[originIndex], pts[i]));
         }
         return g;
     }
@@ -1538,12 +1559,16 @@ class CanvasForm extends Form_1.Form {
         return this;
     }
     points(pts, radius = 5, shape = "square") {
+        if (!pts)
+            return;
         for (let i = 0, len = pts.length; i < len; i++) {
             this.point(pts[i], radius, shape);
         }
         return this;
     }
-    static circle(ctx, pt, radius) {
+    static circle(ctx, pt, radius = 10) {
+        if (!pt)
+            return;
         ctx.beginPath();
         ctx.arc(pt[0], pt[1], radius, 0, Util_1.Const.two_pi, false);
         ctx.closePath();
@@ -1568,6 +1593,8 @@ class CanvasForm extends Form_1.Form {
         return this;
     }
     static arc(ctx, pt, radius, startAngle, endAngle, cc) {
+        if (!pt)
+            return;
         ctx.beginPath();
         ctx.arc(pt[0], pt[1], radius, startAngle, endAngle, cc);
     }
@@ -1577,6 +1604,8 @@ class CanvasForm extends Form_1.Form {
         return this;
     }
     static square(ctx, pt, halfsize) {
+        if (!pt)
+            return;
         let x1 = pt[0] - halfsize;
         let y1 = pt[1] - halfsize;
         let x2 = pt[0] + halfsize;
@@ -1594,8 +1623,10 @@ class CanvasForm extends Form_1.Form {
         this._ctx.stroke();
         return this;
     }
-    lines(pts) {
-        this.line(Util_1.Util.flatten(pts));
+    lines(segs) {
+        for (let i = 0, len = segs.length; i < len; i++) {
+            this.line(segs[i]);
+        }
         return this;
     }
     static line(ctx, pts) {

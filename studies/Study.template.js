@@ -4,7 +4,7 @@ var space = new CanvasSpace("#pt").setup({retina: true});
 var form = space.getForm();
 
 let gp = new Group();
-let line1, line2;
+let line1, line2, line3, line4;
 let rect1, rect2, rect3;
 let poly1;
 let circle1, circle2;
@@ -17,9 +17,11 @@ space.add( {
     let uy = space.height/20;
 
     // vertical and horizontal line
-    line1 = Group.fromArray( [[-ux, -space.height/2], [ux, space.height/2]] ); 
-    line2 = Group.fromArray( [[-space.width/2, -uy], [space.width/2, uy]] ); 
-    gp.push( line1, line2 );
+    line1 = Group.fromArray( [[-ux, -space.height/3], [ux, space.height/3]] ); 
+    line2 = Group.fromArray( [[0, -space.height/2], [0, space.height/2]] ); 
+    line3 = Group.fromArray( [[-space.width/3, -uy], [space.width/3, uy]] ); 
+    line4 = Group.fromArray( [[-space.width/2, 0], [space.width/2, 0]] ); 
+    gp.push( line1, line2, line3, line4 );
 
     // bounds
     rect1 = Group.fromArray( [[-ux*3, -uy*3], [ux, uy]] ); 
@@ -43,6 +45,8 @@ space.add( {
   animate: (time, fps) => {
     form.stroke("#c1c5ca", 1).fill(false).line( line1 );
     form.line( line2 );
+    form.line( line3 );
+    form.line( line4 );
 
     form.rect( rect1 );
     form.rect( rect2 );
@@ -71,5 +75,5 @@ space.add( {
 });
   
 space.bindMouse();
-// space.play();
-space.playOnce(5000);
+space.play();
+// space.playOnce(5000);

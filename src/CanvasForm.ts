@@ -98,13 +98,15 @@ export class CanvasForm extends Form {
   }
 
   points( pts:GroupLike|number[][], radius:number=5, shape:string="square" ): this {
+    if (!pts) return;
     for (let i=0, len=pts.length; i<len; i++) {
       this.point( pts[i], radius, shape );
     }
     return this;
   }
 
-  static circle( ctx:CanvasRenderingContext2D, pt:PtLike, radius:number ) {
+  static circle( ctx:CanvasRenderingContext2D, pt:PtLike, radius:number=10 ) {
+    if (!pt) return;
     ctx.beginPath()
     ctx.arc( pt[0], pt[1], radius, 0, Const.two_pi, false );
     ctx.closePath();
@@ -132,6 +134,7 @@ export class CanvasForm extends Form {
 
 
   static arc( ctx:CanvasRenderingContext2D, pt:PtLike, radius:number, startAngle:number, endAngle:number, cc?:boolean ) {
+    if (!pt) return;
     ctx.beginPath()
     ctx.arc( pt[0], pt[1], radius, startAngle, endAngle, cc );
   }
@@ -143,6 +146,7 @@ export class CanvasForm extends Form {
   }
 
   static square( ctx:CanvasRenderingContext2D, pt:PtLike, halfsize:number ) {
+    if (!pt) return;
     let x1 = pt[0]-halfsize
     let y1 = pt[1]-halfsize
     let x2 = pt[0]+halfsize
@@ -163,8 +167,10 @@ export class CanvasForm extends Form {
     return this;
   }
 
-  lines( pts:GroupLike[] ):this {
-    this.line( Util.flatten( pts ) );
+  lines( segs:GroupLike[] ):this {
+    for (let i=0, len=segs.length; i<len; i++) {
+      this.line( segs[i] );
+    }
     return this;
   }
 

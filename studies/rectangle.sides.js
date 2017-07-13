@@ -72,7 +72,7 @@ space.add( {
 });
   
 space.bindMouse();
-// space.play();
-space.playOnce(5000);
+space.play();
+// space.playOnce(5000);
 
 
