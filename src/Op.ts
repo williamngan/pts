@@ -172,7 +172,7 @@ export class Geom {
 
   static withinBound( pt:PtLike|number[], boundPt1:PtLike|number[], boundPt2:PtLike|number[] ):boolean {
     for (let i=0, len=Math.min( pt.length, boundPt1.length, boundPt2.length); i<len; i++) {
-      if ( !(pt[i] >= Math.min( boundPt1[i], boundPt2[i] ) && pt[i] <= Math.max( boundPt1[i], boundPt2[i] )) ) return false;
+      if ( !Num.within( pt[i], boundPt1[i], boundPt2[i] ) ) return false;
     }
     return true;
   }
@@ -385,6 +385,16 @@ export class Line {
     return gg;
   }
 
+  /**
+   * Quick way to check rectangle intersection. 
+   * For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersect2D()`.
+   * @param line a Group representing a line
+   * @param rect a Group representing a rectangle
+   */
+  static intersectRect2D( line:GroupLike, rect:GroupLike ):Group {
+    return Rectangle.intersectRect2D( Line.toRect(line), rect );
+  }
+
   static subpoints( line:GroupLike|number[][], num:number ) {
     let pts = new Group();
     for (let i=1; i<=num; i++) {
@@ -397,15 +407,7 @@ export class Line {
     return new Group( line[0].$min( line[1] ), line[0].$max( line[1] ) );
   }
 
-  /**
-   * Quick way to check rectangle intersection. 
-   * For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersect2D()`.
-   * @param line a Group representing a line
-   * @param rect a Group representing a rectangle
-   */
-  static intersectRect2D( line:GroupLike, rect:GroupLike ):Group {
-    return Rectangle.intersectRect2D( Line.toRect(line), rect );
-  }
+
 }
 
 
@@ -481,12 +483,16 @@ export class Rectangle {
     return corners.map( (c) => new Group(c, center.clone()) );
   }
 
-  static contains( rect:GroupLike, pt:PtLike ) {
+  static withinBound( rect:GroupLike, pt:PtLike ) {
     return Geom.withinBound( pt, rect[0], rect[1] );
   }
 
   static intersectBound2D( rect1:GroupLike, rect2:GroupLike ) {
-    return Geom.withinBound( rect1[0], rect2[0], rect2[1] ) || Geom.withinBound( rect1[1], rect2[0], rect2[1] );
+    let pts = Rectangle.corners( rect1 );
+    for (let i=0, len=pts.length; i<len; i++) {
+      if (Geom.withinBound( pts[i], rect2[0], rect2[1])) return true;
+    }
+    return false;
   }
 
   /**
@@ -518,14 +524,100 @@ export class Circle {
     return new Group( Rectangle.center( pts ), new Pt(r, r) )
   }
 
-  static fromPt( pt:PtLike, radius:number ) {
+  static fromPt( pt:PtLike, radius:number ):Group {
     return new Group( pt, new Pt(radius, radius) );
   }
 
-  static toRect( pts:GroupLike ) {
+  static withinBound( pts:GroupLike, pt:PtLike ):boolean  {
+    let d = pts[0].$subtract( pt );
+    return d.dot(d) < pts[1].x * pts[1].x;
+  }
+
+  static intersectRay2D( pts:GroupLike, ray:GroupLike ):Group {
+    let d = ray[0].$subtract( ray[1] );
+    let f = pts[0].$subtract( ray[0] );
+
+    let a = d.dot( d );
+    let b = f.dot( d );
+    let c = f.dot( f ) - pts[1].x * pts[1].x;
+    let p = b/a;
+    let q = c/a;
+    let disc = p * p - q; // discriminant
+
+    if (disc < 0) {
+      return new Group();
+    } else {
+      let discSqrt = Math.sqrt( disc );
+
+      let t1 = -p + discSqrt;
+      let p1 = ray[0].$subtract( d.$multiply( t1 ) );
+      if (disc === 0) return new Group( p1 );
+
+      let t2 = -p - discSqrt;
+      let p2 = ray[0].$subtract( d.$multiply( t2 ) );
+      return new Group( p1, p2 );
+    }
+  }
+
+  static intersectLine2D( pts:GroupLike, line:GroupLike ):Group {
+    let ps = Circle.intersectRay2D( pts, line );
+    let g = new Group();
+    if (ps.length > 0) {
+      for (let i=0, len=ps.length; i<len; i++) {
+        if (Rectangle.withinBound( line, ps[i] )) g.push( ps[i] );
+      }
+    }
+    return g;
+  }
+
+  static intersectCircle2D( pts:GroupLike, circle:GroupLike ):Group {
+    let dv = circle[0].$subtract( pts[0] );
+    let dr2 = dv.magnitudeSq();
+    let dr = Math.sqrt( dr2 );
+
+    let ar = pts[1].x;
+    let br = circle[1].x;
+    let ar2 = ar * ar;
+    let br2 = br * br;
+
+
+    if ( dr > ar + br ) { // not intersected
+      return new Group();
+    } else if ( dr < Math.abs( ar - br ) ) { // completely enclosed
+      return new Group( pts[0].clone() );
+    } else {
+      let a = (ar2 - br2 + dr2) / (2 * dr);
+      let h = Math.sqrt( ar2 - a*a );
+      let p = dv.$multiply( a/dr ).add( pts[0] );
+      return new Group(  
+        new Pt( p.x + h*dv.y/dr, p.y - h*dv.x/dr ),
+        new Pt( p.x - h*dv.y/dr, p.y + h*dv.x/dr )
+      )
+    }
+  }
+
+  /**
+   * Quick way to check rectangle intersection. 
+   * For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersect2D()`.
+   * @param pts a Group representing a circle
+   * @param rect a Group representing a rectangle
+   */
+  static intersectRect2D( pts:GroupLike, rect:GroupLike ):Group {
+    let sides = Rectangle.sides( rect );
+    let g = [];
+    for (let i=0, len=sides.length; i<len; i++) {
+      let ps = Circle.intersectLine2D( pts, sides[i] );
+      if (ps.length > 0) g.push( ps );
+    }
+    return Util.flatten( g );
+  }
+
+  static toRect( pts:GroupLike ):Group {
     let r = pts[1][0];
     return new Group( pts[0].$subtract( r ), pts[0].$add( r ) );
   }
+
+
   
 
 }
