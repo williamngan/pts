@@ -412,7 +412,7 @@ export class Group extends Array<Pt> {
   }
 
   /**
-   * Insert a
+   * Insert a Pt into this group
    * @param pts Another group of Pts
    * @param index the index position to insert into
    */

@@ -400,7 +400,7 @@ class Group extends Array {
         return sp.map((g) => Group.fromGroup(g));
     }
     /**
-     * Insert a
+     * Insert a Pt into this group
      * @param pts Another group of Pts
      * @param index the index position to insert into
      */
@@ -1589,6 +1589,44 @@ class Polygon {
     static centroid(pts) {
         return Geom.centroid(pts);
     }
+    static convexHull(pts, sorted = false) {
+        if (pts.length < 3)
+            return new Pt_1.Group();
+        if (!sorted) {
+            pts = pts.slice();
+            pts.sort((a, b) => a.x - b.x);
+        }
+        // check if is on left of ray a-b
+        let left = (a, b, pt) => (b.x - a.x) * (pt.y - a.y) - (pt.x - a.x) * (b.y - a.y) > 0;
+        // double end queue
+        let dq = new Pt_1.Group();
+        // first 3 pt
+        if (left(pts[0], pts[1], pts[2])) {
+            dq.push(pts[0], pts[1]);
+        }
+        else {
+            dq.push(pts[1], pts[0]);
+        }
+        dq.unshift(pts[0]);
+        dq.push(pts[2]);
+        // remaining pts
+        let i = 3;
+        while (i < pts.length) {
+            let pt = pts[i];
+            if (left(pt, dq[0], dq[1]) && left(dq[dq.length - 2], dq[dq.length - 1], pt)) {
+                i++;
+                continue;
+            }
+            while (!left(dq[dq.length - 2], dq[dq.length - 1], pt))
+                dq.pop();
+            dq.push(pt);
+            while (!left(dq[0], dq[1], pt))
+                dq.shift();
+            dq.unshift(pt);
+            i++;
+        }
+        return dq;
+    }
     /**
      * Get a bounding box for each polygon group, as well as a union bounding-box for all groups
      * @param polys an array of Groups, or an array of Pt arrays
@@ -1729,6 +1767,12 @@ class CanvasForm extends Form_1.Form {
         this._paint();
         return this;
     }
+    circles(groups) {
+        for (let i = 0, len = groups.length; i < len; i++) {
+            this.circle(groups[i]);
+        }
+        return this;
+    }
     static ellipse(ctx, pts) {
         if (pts.length < 2)
             return;
@@ -1774,9 +1818,9 @@ class CanvasForm extends Form_1.Form {
         this._ctx.stroke();
         return this;
     }
-    lines(segs) {
-        for (let i = 0, len = segs.length; i < len; i++) {
-            this.line(segs[i]);
+    lines(groups) {
+        for (let i = 0, len = groups.length; i < len; i++) {
+            this.line(groups[i]);
         }
         return this;
     }
@@ -1805,9 +1849,9 @@ class CanvasForm extends Form_1.Form {
         this._paint();
         return this;
     }
-    rects(rects) {
-        for (let i = 0, len = rects.length; i < len; i++) {
-            this.rect(rects[i]);
+    rects(groups) {
+        for (let i = 0, len = groups.length; i < len; i++) {
+            this.rect(groups[i]);
         }
         return this;
     }

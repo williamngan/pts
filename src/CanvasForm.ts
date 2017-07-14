@@ -118,6 +118,13 @@ export class CanvasForm extends Form {
     return this;
   }
 
+  circles( groups:GroupLike[] ):this {
+    for (let i=0, len=groups.length; i<len; i++) {
+      this.circle( groups[i] );
+    }
+    return this;
+  }
+
   static ellipse( ctx:CanvasRenderingContext2D, pts:GroupLike|number[][] ) {
     if (pts.length<2) return;
     if (pts[1].length < 2) {
@@ -167,9 +174,9 @@ export class CanvasForm extends Form {
     return this;
   }
 
-  lines( segs:GroupLike[] ):this {
-    for (let i=0, len=segs.length; i<len; i++) {
-      this.line( segs[i] );
+  lines( groups:GroupLike[] ):this {
+    for (let i=0, len=groups.length; i<len; i++) {
+      this.line( groups[i] );
     }
     return this;
   }
@@ -201,9 +208,9 @@ export class CanvasForm extends Form {
     return this;
   }
 
-  rects( rects:GroupLike[] ):this {
-    for (let i=0, len=rects.length; i<len; i++) {
-      this.rect( rects[i] );
+  rects( groups:GroupLike[] ):this {
+    for (let i=0, len=groups.length; i<len; i++) {
+      this.rect( groups[i] );
     }
     return this;
   }

@@ -43,19 +43,10 @@ space.add( {
   },
 
   animate: (time, fps) => {
-    form.stroke("#c1c5ca", 1).fill(false).line( line1 );
-    form.line( line2 );
-    form.line( line3 );
-    form.line( line4 );
-
-    form.rect( rect1 );
-    form.rect( rect2 );
-    form.line( poly1 );
-
-    form.circle( circle1 );
-    form.circle( circle2 );
-    form.circle( circle3 );
-    form.rect( rect3 );
+    form.stroke("#c1c5ca", 1).fill(false);
+    form.lines( [line1, line2, line3, line4, poly1] );
+    form.rects( [rect1, rect2, rect3] );
+    form.circles( [circle1, circle2, circle3] );
     
     // Begin Test Code --
 

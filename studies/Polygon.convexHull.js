@@ -4,7 +4,7 @@ var space = new CanvasSpace("#pt").setup({retina: true});
 var form = space.getForm();
 
 let gp = new Group();
-let line1, line2;
+let line1, line2, line3, line4;
 let rect1, rect2, rect3;
 let poly1;
 let circle1, circle2;
@@ -47,20 +47,18 @@ space.add( {
     form.lines( [line1, line2, line3, line4, poly1] );
     form.rects( [rect1, rect2, rect3] );
     form.circles( [circle1, circle2, circle3] );
-
+    
     // Begin Test Code --
-
-    poly1[poly1.length-1] = space.pointer;
-
-    form.stroke("#fff", 2);
-    form.line( poly1 );
     
     form.stroke("#f00", 2);
-    let rects = Polygon.toRects( poly1.lines() );
-    form.rects( rects ); 
 
-    // End   
-    
+    let pts = Util.flatten( [line1, line3, poly1, rect1, rect2, rect3, space.pointer ] );
+    form.points( pts );
+
+    let convex = Polygon.convexHull( pts );
+    form.stroke("#000").line( convex );
+
+    // End
   },
 
   action:( type, px, py) => {

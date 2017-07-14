@@ -632,6 +632,54 @@ export class Polygon {
   }
 
 
+  static convexHull( pts:GroupLike, sorted:boolean=false ): Group {
+    if (pts.length < 3) return new Group();
+
+    if (!sorted) {
+      pts = pts.slice();
+      pts.sort( (a,b) => a.x-b.x );
+    } 
+
+    // check if is on left of ray a-b
+    let left = (a, b, pt) => (b.x - a.x) * (pt.y - a.y) - (pt.x - a.x) * (b.y - a.y) > 0;
+    
+    // double end queue
+    let dq = new Group();
+
+    // first 3 pt
+    if ( left( pts[0], pts[1], pts[2]) ) {
+      dq.push( pts[0], pts[1] );
+    } else {
+      dq.push( pts[1], pts[0] );
+    }
+
+    dq.unshift( pts[0] );
+    dq.push( pts[2] );
+
+    // remaining pts
+    let i = 3;
+    while (i < pts.length) {
+      let pt = pts[i];
+      
+      if (left( pt, dq[0], dq[1] ) && left(dq[dq.length-2], dq[dq.length-1], pt)) {
+        i++
+        continue
+      }
+
+      while (!left(dq[dq.length-2], dq[dq.length-1], pt)) dq.pop()
+      
+      dq.push( pt )
+
+      while (!left( dq[0], dq[1], pt)) dq.shift()
+      
+      dq.unshift( pt )
+      i++
+    }
+
+    return dq;
+
+  }
+
   /**
    * Get a bounding box for each polygon group, as well as a union bounding-box for all groups
    * @param polys an array of Groups, or an array of Pt arrays
