@@ -1364,10 +1364,10 @@ class Line {
         return (pts.length > 0) ? pts : undefined;
     }
     /**
-     * Get two intersection points on a standard xy grid
+     * Get two intersection Pts on a standard xy grid
      * @param ray a ray specified by 2 Pts
      * @param gridPt a Pt on the grid
-     * @returns a group of two intersection points. The first one is horizontal intersection and the second one is vertical intersection.
+     * @returns a group of two intersecting Pts. The first one is horizontal intersection and the second one is vertical intersection.
      */
     static intersectGridWithRay2D(ray, gridPt) {
         let t = Line.intercept(new Pt_1.Pt(ray[0]).subtract(gridPt), new Pt_1.Pt(ray[1]).subtract(gridPt));
@@ -1589,6 +1589,12 @@ class Polygon {
     static centroid(pts) {
         return Geom.centroid(pts);
     }
+    /**
+     * Get a convex hull of the point set using Melkman's algorithm
+     * @param pts a group of Pt
+     * @param sorted a boolean value to indicate if the group is pre-sorted by x position. Default is false.
+     * @returns a group of Pt that defines the convex hull polygon
+     */
     static convexHull(pts, sorted = false) {
         if (pts.length < 3)
             return new Pt_1.Group();
@@ -1627,16 +1633,6 @@ class Polygon {
         }
         return dq;
     }
-    /**
-     * Get a bounding box for each polygon group, as well as a union bounding-box for all groups
-     * @param polys an array of Groups, or an array of Pt arrays
-     */
-    static toRects(poly) {
-        let boxes = poly.map((g) => Geom.boundingBox(g));
-        let merged = Util_1.Util.flatten(boxes, false);
-        boxes.unshift(Geom.boundingBox(merged));
-        return boxes;
-    }
     static intersect2D(poly, linesOrRays, sourceIsRay = false) {
         let groups = [];
         for (let i = 0, len = linesOrRays.length; i < len; i++) {
@@ -1654,8 +1650,278 @@ class Polygon {
         }
         return g;
     }
+    /**
+     * Get a bounding box for each polygon group, as well as a union bounding-box for all groups
+     * @param polys an array of Groups, or an array of Pt arrays
+     */
+    static toRects(poly) {
+        let boxes = poly.map((g) => Geom.boundingBox(g));
+        let merged = Util_1.Util.flatten(boxes, false);
+        boxes.unshift(Geom.boundingBox(merged));
+        return boxes;
+    }
 }
 exports.Polygon = Polygon;
+class Curve {
+    /**
+     * Get a precalculated coefficients per step
+     * @param steps number of steps
+     */
+    static getSteps(steps) {
+        let ts = new Pt_1.Group();
+        for (let i = 0; i <= steps; i++) {
+            let t = i / steps;
+            ts.push(new Pt_1.Pt(t * t * t, t * t, t, 1));
+        }
+        return ts;
+    }
+    /**
+     * Given an index for the starting position in a Pt group, get the control and/or end points of a curve segment
+     * @param pts a group of Pt
+     * @param index start index in `pts` array. Default is 0.
+     * @param copyStart an optional boolean value to indicate if the start index should be used twice. Default is false.
+     * @returns a group of 4 Pts
+     */
+    static controlPoints(pts, index = 0, copyStart = false) {
+        if (index > pts.length - 1)
+            return new Pt_1.Group();
+        let _index = (i) => (i < pts.length - 1) ? i : pts.length - 1;
+        let p0 = pts[index];
+        index = (copyStart) ? index : index + 1;
+        // get points based on index
+        return new Pt_1.Group(p0, pts[_index(index++)], pts[_index(index++)], pts[_index(index++)]);
+    }
+    /**
+     * Calulcate weighted sum to get the interpolated points
+     * @param ctrls anchors
+     * @param params parameters
+     */
+    static _calcPt(ctrls, params) {
+        let x = ctrls.reduce((a, c, i) => a + c.x * params[i], 0);
+        let y = ctrls.reduce((a, c, i) => a + c.y * params[i], 0);
+        if (ctrls[0].length > 2) {
+            let z = ctrls.reduce((a, c, i) => a + c.z * params[i], 0);
+            return new Pt_1.Pt(x, y, z);
+        }
+        return new Pt_1.Pt(x, y);
+    }
+    /**
+     * Create a Catmull-Rom curve. Catmull-Rom is a kind of Cardinal curve with smooth-looking curve.
+     * @param pts a group of anchor Pt
+     * @param steps the number of line segments per curve. Defaults to 10 steps.
+     * @returns a curve as a group of interpolated Pt
+     */
+    static catmullRom(pts, steps = 10) {
+        if (pts.length < 2)
+            return new Pt_1.Group();
+        let ps = new Pt_1.Group();
+        let ts = Curve.getSteps(steps);
+        // use first point twice
+        let c = Curve.controlPoints(pts, 0, true);
+        for (let i = 0; i <= steps; i++) {
+            ps.push(Curve.catmullRomStep(ts[i], c));
+        }
+        let k = 0;
+        while (k < pts.length - 2) {
+            let c = Curve.controlPoints(pts, k);
+            if (c.length > 0) {
+                for (let i = 0; i <= steps; i++) {
+                    ps.push(Curve.catmullRomStep(ts[i], c));
+                }
+                k++;
+            }
+        }
+        return ps;
+    }
+    /**
+     * Interpolate to get a point on Catmull-Rom curve
+     * @param step the coefficients [t*t*t, t*t, t, 1]
+     * @param ctrls a group of anchor Pts
+     * @return an interpolated Pt on the curve
+     */
+    static catmullRomStep(step, ctrls) {
+        /*
+        * Basis Matrix (http://mrl.nyu.edu/~perlin/courses/fall2002/hw/12.html)
+        * [-0.5,  1.5, -1.5, 0.5],
+        * [ 1  , -2.5,  2  ,-0.5],
+        * [-0.5,  0  ,  0.5, 0  ],
+        * [ 0  ,  1  ,  0  , 0  ]
+        */
+        let m = new Pt_1.Group(new Pt_1.Pt(-0.5, 1, -0.5, 0), new Pt_1.Pt(1.5, -2.5, 0, 1), new Pt_1.Pt(-1.5, 2, 0.5, 0), new Pt_1.Pt(0.5, -0.5, 0, 0));
+        return Curve._calcPt(ctrls, LinearAlgebra_1.Mat.multiply([step], m, true)[0]);
+    }
+    /**
+     * Create a Cardinal spline curve
+     * @param pts a group of anchor Pt
+     * @param steps the number of line segments per curve. Defaults to 10 steps.
+     * @param tension optional value between 0 to 1 to specify a "tension". Default to 0.5 which is the tension for Catmull-Rom curve.
+     * @returns a curve as a group of interpolated Pt
+     */
+    static cardinal(pts, steps = 10, tension = 0.5) {
+        if (pts.length < 2)
+            return new Pt_1.Group();
+        let ps = new Pt_1.Group();
+        let ts = Curve.getSteps(steps);
+        // use first point twice
+        let c = Curve.controlPoints(pts, 0, true);
+        for (let i = 0; i <= steps; i++) {
+            ps.push(Curve.cardinalStep(ts[i], c, tension));
+        }
+        let k = 0;
+        while (k < pts.length - 2) {
+            let c = Curve.controlPoints(pts, k);
+            if (c.length > 0) {
+                for (let i = 0; i <= steps; i++) {
+                    ps.push(Curve.cardinalStep(ts[i], c, tension));
+                }
+                k++;
+            }
+        }
+        return ps;
+    }
+    /**
+     * Interpolate to get a point on Catmull-Rom curve
+     * @param step the coefficients [t*t*t, t*t, t, 1]
+     * @param ctrls a group of anchor Pts
+     * @param tension optional value between 0 to 1 to specify a "tension". Default to 0.5 which is the tension for Catmull-Rom curve
+     * @return an interpolated Pt on the curve
+     */
+    static cardinalStep(step, ctrls, tension = 0.5) {
+        /*
+        * Basis Matrix (http://algorithmist.wordpress.com/2009/10/06/cardinal-splines-part-4/)
+        * [ -s  2-s  s-2   s ]
+        * [ 2s  s-3  3-2s -s ]
+        * [ -s   0    s    0 ]
+        * [  0   1    0    0 ]
+        */
+        let m = new Pt_1.Group(new Pt_1.Pt(-1, 2, -1, 0), new Pt_1.Pt(-1, 1, 0, 0), new Pt_1.Pt(1, -2, 1, 0), new Pt_1.Pt(1, -1, 0, 0));
+        let h = LinearAlgebra_1.Mat.multiply([step], m, true)[0].multiply(tension);
+        let h2 = (2 * step[0] - 3 * step[1] + 1);
+        let h3 = -2 * step[0] + 3 * step[1];
+        let pt = Curve._calcPt(ctrls, h);
+        pt.x += h2 * ctrls[1].x + h3 * ctrls[2].x;
+        pt.y += h2 * ctrls[1].y + h3 * ctrls[2].y;
+        if (pt.length > 2)
+            pt.z += h2 * ctrls[1].z + h3 * ctrls[2].z;
+        return pt;
+    }
+    /**
+     * Create a Bezier curve. In a cubic bezier curve, the first and 4th anchors are end-points, and 2nd and 3rd anchors are control-points.
+     * @param pts a group of anchor Pt
+     * @param steps the number of line segments per curve. Defaults to 10 steps.
+     * @returns a curve as a group of interpolated Pt
+     */
+    static bezier(pts, steps = 10) {
+        if (pts.length < 4)
+            return new Pt_1.Group();
+        let ps = new Pt_1.Group();
+        let ts = Curve.getSteps(steps);
+        let k = 0;
+        while (k < pts.length - 3) {
+            let c = Curve.controlPoints(pts, k);
+            if (c.length > 0) {
+                for (let i = 0; i <= steps; i++) {
+                    ps.push(Curve.bezierStep(ts[i], c));
+                }
+                // go to the next set of point, but assume current end pt is next start pt
+                k += 3;
+            }
+        }
+        return ps;
+    }
+    /**
+     * Interpolate to get a point on a cubic Bezier curve
+     * @param step the coefficients [t*t*t, t*t, t, 1]
+     * @param ctrls a group of anchor Pts
+     * @return an interpolated Pt on the curve
+     */
+    static bezierStep(step, ctrls) {
+        /*
+        * Bezier basis matrix
+        * [ -1,  3, -3,  1 ]
+        * [  3, -6,  3,  0 ]
+        * [ -3,  3,  0,  0 ]
+        * [  1,  0,  0,  0 ]
+        */
+        let m = new Pt_1.Group(new Pt_1.Pt(-1, 3, -3, 1), new Pt_1.Pt(3, -6, 3, 0), new Pt_1.Pt(-3, 3, 0, 0), new Pt_1.Pt(1, 0, 0, 0));
+        return Curve._calcPt(ctrls, LinearAlgebra_1.Mat.multiply([step], m, true)[0]);
+    }
+    /**
+     * Create a B-spline curve
+     * @param pts a group of anchor Pt
+     * @param steps the number of line segments per curve. Defaults to 10 steps.
+     * @param tension optional value between 0 to n to specify a "tension". Default is 1 which is the usual tension.
+     * @returns a curve as a group of interpolated Pt
+     */
+    static bspline(pts, steps = 10, tension = 1) {
+        if (pts.length < 2)
+            return new Pt_1.Group();
+        let ps = new Pt_1.Group();
+        let ts = Curve.getSteps(steps);
+        let k = 0;
+        while (k < pts.length - 3) {
+            let c = Curve.controlPoints(pts, k);
+            if (c.length > 0) {
+                if (tension !== 1) {
+                    for (let i = 0; i <= steps; i++) {
+                        ps.push(Curve.bsplineTensionStep(ts[i], c, tension));
+                    }
+                }
+                else {
+                    for (let i = 0; i <= steps; i++) {
+                        ps.push(Curve.bsplineStep(ts[i], c));
+                    }
+                }
+                k++;
+            }
+        }
+        return ps;
+    }
+    /**
+     * Interpolate to get a point on a B-spline curve
+     * @param step the coefficients [t*t*t, t*t, t, 1]
+     * @param ctrls a group of anchor Pts
+     * @return an interpolated Pt on the curve
+     */
+    static bsplineStep(step, ctrls) {
+        /*
+        * Basis matrix:
+        * [ -1.0/6.0,  3.0/6.0, -3.0/6.0, 1.0/6.0 ],
+        * [  3.0/6.0, -6.0/6.0,  3.0/6.0,    0.0 ],
+        * [ -3.0/6.0,      0.0,  3.0/6.0,    0.0 ],
+        * [  1.0/6.0,  4.0/6.0,  1.0/6.0,    0.0 ]
+        */
+        let m = new Pt_1.Group(new Pt_1.Pt(-0.16666666666666666, 0.5, -0.5, 0.16666666666666666), new Pt_1.Pt(0.5, -1, 0, 0.6666666666666666), new Pt_1.Pt(-0.5, 0.5, 0.5, 0.16666666666666666), new Pt_1.Pt(0.16666666666666666, 0, 0, 0));
+        return Curve._calcPt(ctrls, LinearAlgebra_1.Mat.multiply([step], m, true)[0]);
+    }
+    /**
+     * Interpolate to get a point on a B-spline curve
+     * @param step the coefficients [t*t*t, t*t, t, 1]
+     * @param ctrls a group of anchor Pts
+     * @param tension optional value between 0 to n to specify a "tension". Default to 1 which is the usual tension.
+     * @return an interpolated Pt on the curve
+     */
+    static bsplineTensionStep(step, ctrls, tension = 1) {
+        /*
+        * Basis matrix:
+        * [ -1/6a, 2 - 1.5a, 1.5a - 2, 1/6a ]
+        * [ 0.5a,  2a-3,     3-2.5a    0 ]
+        * [ -0.5a, 0,        0.5a,     0 ]
+        * [ 1/6a,  1 - 1/3a, 1/6a,     0 ]
+        */
+        let m = new Pt_1.Group(new Pt_1.Pt(-0.16666666666666666, 0.5, -0.5, 0.16666666666666666), new Pt_1.Pt(-1.5, 2, 0, -0.3333333333333333), new Pt_1.Pt(1.5, -2.5, 0.5, 0.16666666666666666), new Pt_1.Pt(0.16666666666666666, 0, 0, 0));
+        let h = LinearAlgebra_1.Mat.multiply([step], m, true)[0].multiply(tension);
+        let h2 = (2 * step[0] - 3 * step[1] + 1);
+        let h3 = -2 * step[0] + 3 * step[1];
+        let pt = Curve._calcPt(ctrls, h);
+        pt.x += h2 * ctrls[1].x + h3 * ctrls[2].x;
+        pt.y += h2 * ctrls[1].y + h3 * ctrls[2].y;
+        if (pt.length > 2)
+            pt.z += h2 * ctrls[1].z + h3 * ctrls[2].z;
+        return pt;
+    }
+}
+exports.Curve = Curve;
 
 
 /***/ }),
