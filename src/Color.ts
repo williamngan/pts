@@ -150,7 +150,7 @@ export class Color extends Pt {
   }
 
 
-  static RGBtoHSL( rgb:Color, normalizedInput:boolean) {
+  static RGBtoHSL( rgb:Color, normalizedInput:boolean=false, normalizedOutput:boolean=false):Color {
     let [r,g,b] = (!normalizedInput) ? rgb.$normalize() : rgb;
 
     let max = Math.max( r, g, b );
@@ -176,11 +176,10 @@ export class Color extends Pt {
       }
     }
 
-    return Color.hsl( h*60, s, l, rgb.alpha );
-
+    return Color.hsl( ((normalizedOutput) ? h/60 : h*60), s, l, rgb.alpha );
   }
 
-  static HSLtoRGB( hsl:Color, normalizedInput:boolean):Color {
+  static HSLtoRGB( hsl:Color, normalizedInput:boolean=false, normalizedOutput:boolean=false):Color {
     let [h, s, l] = hsl;
     if (!normalizedInput) h = h/360;
     
@@ -202,18 +201,19 @@ export class Color extends Pt {
       }
     }
 
+    let sc = (normalizedOutput) ? 1 : 255; 
     
     return Color.rgb( 
-      255 * convert( ( h + 1/3 ) ),
-      255 * convert( h ),
-      255 * convert( ( h - 1/3 ) ),
+      sc * convert( ( h + 1/3 ) ),
+      sc * convert( h ),
+      sc * convert( ( h - 1/3 ) ),
       hsl.alpha
     );
 
   }
   
 
-  static RGBtoHSB( rgb:Color, normalizedInput:boolean) {
+  static RGBtoHSB( rgb:Color, normalizedInput:boolean=false, normalizedOutput:boolean=false):Color {
     let [r,g,b] = (!normalizedInput) ? rgb.$normalize() : rgb;
 
     let max = Math.max( r, g, b );
@@ -233,11 +233,11 @@ export class Color extends Pt {
       }
     }
 
-    return Color.hsl( h*60, s, v, rgb.alpha );
+    return Color.hsb( ((normalizedOutput) ? h/60 : h*60), s, v, rgb.alpha );
   }
 
   
-  static HSBtoRGB( hsb:Color, normalizedInput:boolean):Color {
+  static HSBtoRGB( hsb:Color, normalizedInput:boolean=false, normalizedOutput:boolean=false):Color {
     let [h, s, v] = hsb;
     if (!normalizedInput) h = h/360;
 
@@ -253,16 +253,50 @@ export class Color extends Pt {
     ];
     let c = pick[ i%6 ];
     
+    let sc = (normalizedOutput) ? 1 : 255; 
+
     return Color.rgb( 
-      255 * c[0],
-      255 * c[1],
-      255 * c[2],
+      sc * c[0],
+      sc * c[1],
+      sc * c[2],
       hsb.alpha
     );
   }
 
-  static XYZtoRGB( rgb:Color, normalizedInput:boolean) {
+  static XYZtoRGB( xyz:Color, normalizedInput:boolean=false, normalizedOutput:boolean=false):Color {
+    let [x,y,z] = (!normalizedInput) ? xyz.$normalize() : xyz;
 
+    let rgb = [
+      x *  3.2404542 + y * -1.5371385 + z * -0.4985314,
+      x * -0.9692660 + y *  1.8760108 + z *  0.0415560,
+      x *  0.0556434 + y * -0.2040259 + z *  1.0572252
+    ];
+
+    // convert xyz to rgb. Note that not all colors are visible in rgb, so here we bound rgb between 0 to 1
+    for (let i=0, len=rgb.length; i<len; i++) {
+      let c = rgb[i];
+      rgb[i] = (c<0) ? 0 : Math.min( 1, ( c > 0.0031308 ) ? (1.055 * Math.pow(c, 1/2.4) - 0.055) : (12.92 * c) );
+      if (!normalizedOutput) rgb[i] = Math.round( rgb[i] * 255 );
+    }
+
+    return Color.rgb( rgb[0], rgb[1], rgb[2], xyz.alpha );
+  }
+
+  static RGBtoXYZ( rgb:Color, normalizedInput:boolean=false, normalizedOutput:boolean=false):Color {
+    let [r,g,b] = (!normalizedInput) ? rgb.$normalize() : rgb;
+
+    for (let i=0, len=rgb.length; i<len; i++) {
+      let c = rgb[i];
+      rgb[i] = ( r > 0.04045 ) ? Math.pow( (r+0.055)/1.055, 2.4 ) : r/12.92;
+      if (!normalizedOutput) rgb[i] = rgb[i] * 100;
+    }
+
+    return Color.xyz(
+      r * 0.4124564 + g * 0.3575761 + b * 0.1804375,
+      r * 0.2126729 + g * 0.7151522 + b * 0.0721750,
+      r * 0.0193339 + g * 0.1191920 + b * 0.9503041,
+      rgb.alpha
+    );
   }
 
 }
