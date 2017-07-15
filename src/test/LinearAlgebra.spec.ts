@@ -45,7 +45,7 @@ describe('Linear Algebra: ', function() {
 
     it('can multiply vector with a vector', function() {
       let p = [5,4,3,2,1];
-      Vec.multiply( p, [2,3,4] );
+      Vec.multiply( p, [2,3,4,1,1] );
       assert.isTrue( p[0] === 10 && p[2] === 12 && p[4] === 1 );
     });
 
@@ -57,7 +57,7 @@ describe('Linear Algebra: ', function() {
 
     it('can divide vector with a vector', function() {
       let p = [5,4,3,2,5];
-      Vec.divide( p, [5,2,4] );
+      Vec.divide( p, [5,2,4,1,1] );
       assert.isTrue( p[0] === 1 && p[1] === 2 && p[4] === 5 );
     });
 

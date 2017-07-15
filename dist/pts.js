@@ -819,19 +819,25 @@ class Vec {
                 a[i] *= b;
         }
         else {
+            if (a.length != b.length)
+                throw "Cannot do element-wise multiply since the array lengths don't match.";
             for (let i = 0, len = a.length; i < len; i++)
-                a[i] *= b[i] || 1;
+                a[i] *= b[i];
         }
         return a;
     }
     static divide(a, b) {
         if (typeof b == "number") {
+            if (b === 0)
+                throw "Cannot divide by zero";
             for (let i = 0, len = a.length; i < len; i++)
                 a[i] /= b;
         }
         else {
+            if (a.length != b.length)
+                throw "Cannot do element-wise divide since the array lengths don't match.";
             for (let i = 0, len = a.length; i < len; i++)
-                a[i] /= b[i] || 1;
+                a[i] /= b[i];
         }
         return a;
     }
@@ -2799,6 +2805,7 @@ const _LinearAlgebra = __webpack_require__(3);
 const _Op = __webpack_require__(4);
 const _Pt = __webpack_require__(0);
 const _Space = __webpack_require__(7);
+const _Color = __webpack_require__(12);
 const _Util = __webpack_require__(1);
 // A function to switch scope for Pts library. eg, Pts.scope( Pts, window );
 let namespace = (sc) => {
@@ -2809,7 +2816,224 @@ let namespace = (sc) => {
         }
     }
 };
-module.exports = Object.assign({ namespace }, _Bound, _CanvasForm, _CanvasSpace, _Create, _Form, _LinearAlgebra, _Op, _Pt, _Space, _Util);
+module.exports = Object.assign({ namespace }, _Bound, _CanvasForm, _CanvasSpace, _Create, _Form, _LinearAlgebra, _Op, _Pt, _Space, _Util, _Color);
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const Pt_1 = __webpack_require__(0);
+const Util_1 = __webpack_require__(1);
+class Color extends Pt_1.Pt {
+    constructor(...args) {
+        super(...args);
+        // XYZ property for Standard Observer 2deg, Daylight/sRGB illuminant D65
+        this.D65 = new Pt_1.Pt(95.047, 100, 108.883);
+        this._mode = "rgb";
+    }
+    static from(...args) {
+        let p = [1, 1, 1, 1];
+        let c = Util_1.Util.getArgs(args);
+        for (let i = 0, len = p.length; i < len; i++) {
+            if (i < c.length)
+                p[i] = c[i];
+        }
+        return new Color(p);
+    }
+    static fromHex(hex) {
+        if (hex[0] == "#")
+            hex = hex.substr(1); // remove '#' if needed
+        if (hex.length <= 3) {
+            let fn = (i) => hex[1] || "F";
+            hex = `${fn(0)}${fn(0)}${fn(1)}${fn(1)}${fn(2)}${fn(2)}`;
+        }
+        let alpha = 1;
+        if (hex.length === 8) {
+            alpha = hex.substr(6) && 0xFF / 255;
+            hex = hex.substring(0, 6);
+        }
+        let hexVal = parseInt(hex, 16);
+        return new Color(hexVal >> 16, hexVal >> 8 & 0xFF, hexVal & 0xFF, alpha);
+    }
+    static rgb(...args) { return Color.from(...args).toMode("rgb"); }
+    static hsl(...args) { return Color.from(...args).toMode("hsl"); }
+    static hsb(...args) { return Color.from(...args).toMode("hsb"); }
+    static lab(...args) { return Color.from(...args).toMode("lab"); }
+    static lch(...args) { return Color.from(...args).toMode("lch"); }
+    static luv(...args) { return Color.from(...args).toMode("luv"); }
+    static xyz(...args) { return Color.from(...args).toMode("xyz"); }
+    clone() {
+        let c = new Color(this);
+        this.toMode(this._mode);
+        return c;
+    }
+    toMode(m, convert = false) {
+        this._mode = m;
+        return this;
+    }
+    get mode() { return this._mode; }
+    // rgb
+    get r() { return this[0]; }
+    set r(n) { this[0] = n; }
+    get g() { return this[1]; }
+    set g(n) { this[1] = n; }
+    get b() { return this[1]; }
+    set b(n) { this[2] = n; }
+    // hsl, hsb
+    get h() { return (this._mode == "lch") ? this[2] : this[0]; }
+    set h(n) {
+        let i = (this._mode == "lch") ? 2 : 0;
+        this[i] = n;
+    }
+    get s() { return this[1]; }
+    set s(n) { this[1] = n; }
+    get l() { return (this._mode == "hsl") ? this[2] : this[0]; }
+    set l(n) {
+        let i = (this._mode == "hsl") ? 2 : 0;
+        this[i] = n;
+    }
+    // lab, lch, luv
+    get a() { return this[1]; }
+    set a(n) { this[1] = n; }
+    get c() { return this[1]; }
+    set c(n) { this[1] = n; }
+    get u() { return this[1]; }
+    set u(n) { this[1] = n; }
+    get v() { return this[1]; }
+    set v(n) { this[2] = n; }
+    get alpha() { return (this.length > 3) ? this[3] : 1; }
+    normalize() {
+        let ranges = Color.ranges[this._mode];
+        for (let i = 0; i < 3; i++) {
+            this[i] = (this[i] - ranges[i][0]) / (ranges[i][1] - ranges[i][0]);
+        }
+        return this;
+    }
+    $normalize() { return this.clone().normalize(); }
+    toString(format = "mode") {
+        if (format == "hex") {
+            let _hex = (n) => {
+                let s = Math.floor(n).toString(16);
+                return (s.length < 2) ? '0' + s : s;
+            };
+            return `#${_hex(this.x)}${_hex(this.y)}${_hex(this.z)}`;
+        }
+        else if (format == "rgba") {
+            return `rgba(${Math.floor(this.x)},${Math.floor(this.y)},${Math.floor(this.z)},${this.alpha}`;
+        }
+        else if (format == "rgb") {
+            return `rgb(${Math.floor(this.x)},${Math.floor(this.y)},${Math.floor(this.z)}`;
+        }
+        else {
+            return `${this._mode}(${this.x},${this.y},${this.z},${this.alpha})`;
+        }
+    }
+    static RGBtoHSL(rgb, normalizedInput) {
+        let [r, g, b] = (!normalizedInput) ? rgb.$normalize() : rgb;
+        let max = Math.max(r, g, b);
+        let min = Math.min(r, g, b);
+        let h = (max + min) / 2;
+        let s = h;
+        let l = h;
+        if (max == min) {
+            h = 0;
+            s = 0; // achromatic
+        }
+        else {
+            let d = max - min;
+            s = (l > 0.5) ? d / (2 - max - min) : d / (max + min);
+            h = 0;
+            if (max === r) {
+                h = (g - b) / d + ((g < b) ? 6 : 0);
+            }
+            else if (max === g) {
+                h = (b - r) / d + 2;
+            }
+            else if (max === b) {
+                h = (r - g) / d + 4;
+            }
+        }
+        return Color.hsl(h * 60, s, l, rgb.alpha);
+    }
+    static HSLtoRGB(hsl, normalizedInput) {
+        let [h, s, l] = hsl;
+        if (!normalizedInput)
+            h = h / 360;
+        if (s == 0)
+            return Color.rgb(l * 255, l * 255, l * 255, hsl.alpha);
+        let q = (l <= 0.5) ? l * (1 + s) : l + s - (l * s);
+        let p = 2 * l - q;
+        let convert = (t) => {
+            t = (t < 0) ? t + 1 : (t > 1) ? t - 1 : t;
+            if (t * 6 < 1) {
+                return p + (q - p) * t * 6;
+            }
+            else if (t * 2 < 1) {
+                return q;
+            }
+            else if (t * 3 < 2) {
+                return p + (q - p) * ((2 / 3) - t) * 6;
+            }
+            else {
+                return p;
+            }
+        };
+        return Color.rgb(255 * convert((h + 1 / 3)), 255 * convert(h), 255 * convert((h - 1 / 3)), hsl.alpha);
+    }
+    static RGBtoHSB(rgb, normalizedInput) {
+        let [r, g, b] = (!normalizedInput) ? rgb.$normalize() : rgb;
+        let max = Math.max(r, g, b);
+        let min = Math.min(r, g, b);
+        let d = max - min;
+        let h = 0;
+        let s = (max === 0) ? 0 : d / max;
+        let v = max;
+        if (max != min) {
+            if (max === r) {
+                h = (g - b) / d + ((g < b) ? 6 : 0);
+            }
+            else if (max === g) {
+                h = (b - r) / d + 2;
+            }
+            else if (max === b) {
+                h = (r - g) / d + 4;
+            }
+        }
+        return Color.hsl(h * 60, s, v, rgb.alpha);
+    }
+    static HSBtoRGB(hsb, normalizedInput) {
+        let [h, s, v] = hsb;
+        if (!normalizedInput)
+            h = h / 360;
+        let i = Math.floor(h * 6);
+        let f = h * 6 - i;
+        let p = v * (1 - s);
+        let q = v * (1 - f * s);
+        let t = v * (1 - (1 - f) * s);
+        let pick = [
+            [v, t, p], [q, v, p], [p, v, t],
+            [p, q, v], [t, p, v], [v, p, q]
+        ];
+        let c = pick[i % 6];
+        return Color.rgb(255 * c[0], 255 * c[1], 255 * c[2], hsb.alpha);
+    }
+    static XYZtoRGB(rgb, normalizedInput) {
+    }
+}
+Color.ranges = {
+    rgb: [[0, 255], [0, 255], [0, 255]],
+    hsl: [[0, 360], [0, 1], [0, 1]],
+    hsb: [[0, 360], [0, 1], [0, 1]],
+    lab: [[0, 100], [-128, 127], [-128, 127]],
+    lch: [[0, 100], [0, 100], [0, 360]],
+    luv: [[0, 100], [-134, 220], [-140, 122]],
+    xyz: [[0, 100], [0, 100], [0, 100]],
+};
+exports.Color = Color;
 
 
 /***/ })

@@ -7,6 +7,7 @@ import * as _LinearAlgebra from "./LinearAlgebra";
 import * as _Op from "./Op";
 import * as _Pt from "./Pt";
 import * as _Space from "./Space";
+import * as _Color from "./Color";
 import * as _Util from "./Util";
 
 // A function to switch scope for Pts library. eg, Pts.scope( Pts, window );
@@ -31,4 +32,5 @@ module.exports = {
   ..._Pt,
   ..._Space,
   ..._Util,
+  ..._Color
 }

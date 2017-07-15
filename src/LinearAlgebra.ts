@@ -27,16 +27,19 @@ export class Vec {
     if (typeof b == "number") {
       for (let i=0, len=a.length; i<len; i++) a[i] *= b;
     } else {
-      for (let i=0, len=a.length; i<len; i++) a[i] *= b[i] || 1;
+      if (a.length != b.length) throw "Cannot do element-wise multiply since the array lengths don't match."
+      for (let i=0, len=a.length; i<len; i++) a[i] *= b[i];
     }
     return a;
   }
 
   static divide( a:PtLike, b:PtLike|number ):PtLike {
     if (typeof b == "number") {
+      if (b === 0) throw "Cannot divide by zero"
       for (let i=0, len=a.length; i<len; i++) a[i] /= b;
     } else {
-      for (let i=0, len=a.length; i<len; i++) a[i] /= b[i] || 1;
+      if (a.length != b.length) throw "Cannot do element-wise divide since the array lengths don't match."
+      for (let i=0, len=a.length; i<len; i++) a[i] /= b[i];
     }
     return a;
   }
