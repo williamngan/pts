@@ -3,7 +3,7 @@ import mocha = require('mocha');
 import {Pt, Group} from '../Pt';
 import {Util} from '../Util';
 import {Num, Geom} from '../Num';
-import {Line} from '../Op';
+import {Line, Polygon} from '../Op';
 
 var {assert} = chai;
 var {describe, it} = mocha;
@@ -203,6 +203,20 @@ describe('Op: ', function() {
       let g = Line.subpoints( [[10, 10], [100, 100]], 8 );
       assert.isTrue( g.length === 8 && g[1].y === 30 && g[3].x === 50 );
     });
+
+  });
+
+  describe('Polygon: ', function() {
+    it('can calculate area of a convex polygon', function() {
+      let g = Group.fromArray([ [2.66, 4.71], [5, 3.5], [3.63, 2.52], [4, 1.6], [1.9, 1], [0.72, 2.28] ]);
+      assert.isTrue( Num.equals( Polygon.area( g ), 8.3593, 0.0001 ) );
+    });
+
+    it('can calculate perimeter of a polygon', function() {
+      let g = Group.fromArray([ [-3, 0], [2, 4], [3, 1], [-4, -3] ]);
+      assert.isTrue( Num.equals( Polygon.perimeter( g, true ).total, 20.789, 0.001 ) );
+    });
+
 
   });
 });

@@ -73,6 +73,8 @@ export const Const = {
 
 
 export class Util {
+
+  static warnLevel:"error"|"warn"|"default" = "default"; 
   
   /**
    * Convert different kinds of parameters (arguments, array, object) into an array of numbers
@@ -104,6 +106,16 @@ export class Util {
     }
     
     return pos;
+  }
+
+  static warn( defaultReturn:any, message:string="error" ):any {
+    if (Util.warnLevel == "error") {
+      throw new Error( message );
+    } else if (Util.warnLevel == "warn") {
+      console.warn( message );
+    }
+    return defaultReturn;
+  
   }
 
 

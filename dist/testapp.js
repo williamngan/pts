@@ -640,6 +640,15 @@ class Util {
         }
         return pos;
     }
+    static warn(defaultReturn, message = "error") {
+        if (Util.warnLevel == "error") {
+            throw new Error(message);
+        }
+        else if (Util.warnLevel == "warn") {
+            console.warn(message);
+        }
+        return defaultReturn;
+    }
     /**
      * Split an array into chunks of sub-array
      * @param pts an array
@@ -661,6 +670,7 @@ class Util {
         return arr.concat.apply(arr, pts);
     }
 }
+Util.warnLevel = "default";
 exports.Util = Util;
 
 
@@ -1620,6 +1630,8 @@ const Util_1 = __webpack_require__(1);
 const Num_1 = __webpack_require__(4);
 const Pt_1 = __webpack_require__(0);
 const LinearAlgebra_1 = __webpack_require__(2);
+let _errorLength = (obj, param = "expected") => Util_1.Util.warn(obj, "Group's length is less than " + param);
+let _errorOutofBound = (obj, param = "") => Util_1.Util.warn(obj, `Index ${param} is out of bound in Group`);
 class Line {
     static slope(p1, p2) {
         return (p2[0] - p1[0] === 0) ? undefined : (p2[1] - p1[1]) / (p2[0] - p1[0]);
@@ -1639,6 +1651,9 @@ class Line {
         let a = new Pt_1.Pt(0, 0, 0).to(p2).$subtract(p1);
         let b = new Pt_1.Pt(0, 0, 0).to(p1).$subtract(p3);
         return a.$cross(b).equals(new Pt_1.Pt(0, 0, 0));
+    }
+    static magnitude(line) {
+        return (line.length >= 2) ? line[1].$subtract(line[0]).magnitude() : 0;
     }
     /**
      * Find a Pt on a line that is perpendicular (shortest distance) to a target Pt
@@ -1929,9 +1944,146 @@ class Circle {
     }
 }
 exports.Circle = Circle;
+class Triangle {
+    /**
+     * Get the medial, which is an inner triangle formed by connecting the midpoints of this triangle's sides
+     * @param pts a Group of Pts
+     * @returns a Group representing a medial triangle
+     */
+    static medial(pts) {
+        if (pts.length < 3)
+            return _errorLength(new Pt_1.Group(), 3);
+        return Polygon.midpoints(pts, true);
+    }
+    static oppositeSide(pts, index) {
+        if (pts.length < 3)
+            return _errorLength(new Pt_1.Group(), 3);
+        if (index === 0) {
+            return Pt_1.Group.fromGroup([pts[1], pts[2]]);
+        }
+        else if (index === 1) {
+            return Pt_1.Group.fromGroup([pts[0], pts[2]]);
+        }
+        else {
+            return Pt_1.Group.fromGroup([pts[0], pts[1]]);
+        }
+    }
+}
+exports.Triangle = Triangle;
 class Polygon {
     static centroid(pts) {
         return Num_1.Geom.centroid(pts);
+    }
+    /**
+     * Get the line segments in this polygon
+     * @param pts a Group of Pts
+     * @param closePath a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).
+     * @returns an array of Groups which has 2 Pts in each group
+     */
+    static lines(pts, closePath = false) {
+        if (pts.length < 2)
+            return _errorLength(new Pt_1.Group(), 2);
+        let sp = Util_1.Util.split(pts, 2, 1);
+        if (closePath)
+            sp.push(new Pt_1.Group(pts[pts.length - 1], pts[0]));
+        return sp.map((g) => Pt_1.Group.fromGroup(g));
+    }
+    /**
+     * Get a new polygon group that is derived from midpoints in this polygon
+     * @param pts a Group of Pts
+     * @param closePath a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).
+     * @param t a value between 0 to 1 for interpolation. Default to 0.5 which will get the middle point.
+     */
+    static midpoints(pts, closePath = false, t = 0.5) {
+        if (pts.length < 2)
+            return _errorLength(new Pt_1.Group(), 2);
+        let sides = Polygon.lines(pts, closePath);
+        let mids = sides.map((s) => Num_1.Geom.interpolate(s[0], s[1], t));
+        return Pt_1.Group.fromGroup(mids);
+    }
+    /**
+     * Given a Pt in the polygon group, the adjacent sides are the two sides which the Pt touches.
+     * @param pts a group of Pts
+     * @param index the target Pt
+     * @param closePath a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).
+     */
+    static adjacentSides(pts, index, closePath = false) {
+        if (pts.length < 2)
+            return _errorLength(new Pt_1.Group(), 2);
+        if (index < 0 || index >= pts.length)
+            return _errorOutofBound(new Pt_1.Group(), index);
+        let gs = [];
+        let left = index - 1;
+        if (closePath && left < 0)
+            left = pts.length - 1;
+        if (left >= 0)
+            gs.push(new Pt_1.Group(pts[index], pts[left]));
+        let right = index + 1;
+        if (closePath && right > pts.length - 1)
+            right = 0;
+        if (right <= pts.length - 1)
+            gs.push(new Pt_1.Group(pts[index], pts[right]));
+        return gs;
+    }
+    /**
+     * Get a bisector which is a line that split between two sides of a polygon. Usually this bisects in the middle, but you may use the `t` parameter to change the position.
+     * @param pts a group of Pts
+     * @param index the Pt in the polygon to bisect from
+     * @param closePath a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).
+     * @param t an optional parameter to change the bisector position. Default to 0.5 which bisects in the middle.
+     */
+    static bisector(pts, index, closePath = false, t = 0.5) {
+        let sides = Polygon.adjacentSides(pts, index, closePath);
+        if (sides.length >= 2) {
+            let a = sides[0][1].$subtract(sides[0][0]);
+            let b = sides[1][1].$subtract(sides[1][0]);
+            return Num_1.Geom.interpolate(a, b, t).add(pts[index]);
+        }
+        else {
+            return undefined;
+        }
+    }
+    /**
+     * Find the perimeter of this polygon, ie, the lengths of its sides.
+     * @param pts a group of Pts
+     * @param closePath a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).
+     * @returns an object with `total` length, and `segments` which is a Pt that stores each segment's length
+     */
+    static perimeter(pts, closePath = false) {
+        if (pts.length < 2)
+            return _errorLength(new Pt_1.Group(), 2);
+        let lines = Polygon.lines(pts, closePath);
+        let mag = 0;
+        let p = Pt_1.Pt.make(lines.length, 0);
+        for (let i = 0, len = lines.length; i < len; i++) {
+            let m = Line.magnitude(lines[i]);
+            mag += m;
+            p[i] = m;
+        }
+        return {
+            total: mag,
+            segments: p
+        };
+    }
+    /**
+     * Find the area of a *convex* polygon.
+     * @param pts a group of Pts
+     */
+    static area(pts) {
+        if (pts.length < 3)
+            return _errorLength(new Pt_1.Group(), 3);
+        // determinant
+        let det = (a, b) => a[0] * b[1] - a[1] * b[0];
+        let area = 0;
+        for (let i = 0, len = pts.length; i < len; i++) {
+            if (i < pts.length - 1) {
+                area += det(pts[i], pts[i + 1]);
+            }
+            else {
+                area += det(pts[i], pts[0]);
+            }
+        }
+        return Math.abs(area / 2);
     }
     /**
      * Get a convex hull of the point set using Melkman's algorithm
@@ -1941,7 +2093,7 @@ class Polygon {
      */
     static convexHull(pts, sorted = false) {
         if (pts.length < 3)
-            return new Pt_1.Group();
+            return _errorLength(new Pt_1.Group(), 3);
         if (!sorted) {
             pts = pts.slice();
             pts.sort((a, b) => a.x - b.x);

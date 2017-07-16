@@ -5,6 +5,10 @@ import {Pt, PtLike, Group, GroupLike} from "./Pt";
 import {Vec, Mat} from "./LinearAlgebra";
 
 
+let _errorLength = (obj, param:number|string="expected") => Util.warn( obj, "Group's length is less than "+param  );
+let _errorOutofBound = (obj, param:number|string="") => Util.warn( obj, `Index ${param} is out of bound in Group`  );
+
+
 
 export class Line {
 
@@ -29,6 +33,9 @@ export class Line {
     return a.$cross( b ).equals( new Pt(0,0,0) );
   }
 
+  static magnitude( line:GroupLike ) {
+    return (line.length >= 2) ? line[1].$subtract( line[0] ).magnitude() : 0;
+  }
 
   /**
    * Find a Pt on a line that is perpendicular (shortest distance) to a target Pt
@@ -358,12 +365,33 @@ export class Circle {
     return new Group( pts[0].$subtract( r ), pts[0].$add( r ) );
   }
 
-
-  
-
 }
 
 
+export class Triangle {
+  
+
+  /**
+   * Get the medial, which is an inner triangle formed by connecting the midpoints of this triangle's sides
+   * @param pts a Group of Pts
+   * @returns a Group representing a medial triangle
+   */
+  static medial( pts:GroupLike ):Group {
+    if (pts.length < 3) return _errorLength( new Group(), 3 );
+    return Polygon.midpoints( pts, true );
+  }
+
+  static oppositeSide( pts:GroupLike, index:number ):Group {
+    if (pts.length < 3) return _errorLength( new Group(), 3 );
+    if (index === 0) {
+      return Group.fromGroup( [pts[1], pts[2]] );
+    } else if (index === 1) {
+      return Group.fromGroup( [pts[0], pts[2]] );
+    } else {
+      return Group.fromGroup( [pts[0], pts[1]] );
+    }
+  }
+}
 
 
 export class Polygon {
@@ -373,13 +401,127 @@ export class Polygon {
   }
 
   /**
+   * Get the line segments in this polygon
+   * @param pts a Group of Pts
+   * @param closePath a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).
+   * @returns an array of Groups which has 2 Pts in each group
+   */
+  static lines( pts:GroupLike, closePath:boolean=false ):Group[] {
+    if (pts.length < 2) return _errorLength( new Group(), 2 );
+    let sp = Util.split( pts, 2, 1 );
+    if (closePath) sp.push( new Group( pts[pts.length-1], pts[0]) );
+    return sp.map( (g) => Group.fromGroup( g ) );
+  }
+
+  /**
+   * Get a new polygon group that is derived from midpoints in this polygon
+   * @param pts a Group of Pts
+   * @param closePath a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).
+   * @param t a value between 0 to 1 for interpolation. Default to 0.5 which will get the middle point.
+   */
+  static midpoints( pts:GroupLike, closePath:boolean=false, t:number=0.5 ):Group {
+    if (pts.length < 2) return _errorLength( new Group(), 2 );
+    let sides = Polygon.lines( pts, closePath );
+    let mids = sides.map( (s) => Geom.interpolate( s[0], s[1], t) );
+    return Group.fromGroup( mids );
+  }
+
+  /**
+   * Given a Pt in the polygon group, the adjacent sides are the two sides which the Pt touches.
+   * @param pts a group of Pts
+   * @param index the target Pt
+   * @param closePath a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).
+   */
+  static adjacentSides( pts:GroupLike, index:number, closePath:boolean=false ):Group[] {
+    if (pts.length < 2) return _errorLength( new Group(), 2 );
+    if (index < 0 || index >= pts.length) return _errorOutofBound( new Group(), index );
+
+    let gs = [];
+    let left = index-1;
+    if (closePath && left < 0) left = pts.length-1;
+    if (left >= 0) gs.push( new Group( pts[index], pts[left]) );
+
+    let right = index+1;
+    if (closePath && right > pts.length-1) right = 0;
+    if (right <= pts.length-1) gs.push( new Group( pts[index], pts[right]) );
+
+    return gs;
+  }
+
+
+  /**
+   * Get a bisector which is a line that split between two sides of a polygon. Usually this bisects in the middle, but you may use the `t` parameter to change the position.
+   * @param pts a group of Pts
+   * @param index the Pt in the polygon to bisect from
+   * @param closePath a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).
+   * @param t an optional parameter to change the bisector position. Default to 0.5 which bisects in the middle.
+   */
+  static bisector( pts:GroupLike, index:number, closePath:boolean=false, t:number=0.5 ):Pt {
+    let sides = Polygon.adjacentSides( pts, index, closePath );
+    if (sides.length >= 2) {
+      let a = sides[0][1].$subtract( sides[0][0] );
+      let b = sides[1][1].$subtract( sides[1][0] );
+      return Geom.interpolate( a, b, t).add( pts[index] );
+    } else {
+      return undefined;
+    }
+  }
+
+  
+
+  /**
+   * Find the perimeter of this polygon, ie, the lengths of its sides.
+   * @param pts a group of Pts
+   * @param closePath a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).
+   * @returns an object with `total` length, and `segments` which is a Pt that stores each segment's length
+   */
+  static perimeter( pts:GroupLike, closePath:boolean=false ):{total:number, segments:Pt} {
+    if (pts.length < 2) return _errorLength( new Group(), 2 );
+    let lines = Polygon.lines( pts, closePath );
+    let mag = 0;
+    let p = Pt.make( lines.length, 0 );
+
+    for (let i=0, len=lines.length; i<len; i++) {
+      let m = Line.magnitude( lines[i] );
+      mag += m;
+      p[i] = m;
+    }
+
+    return {
+      total: mag,
+      segments: p
+    }
+  }
+
+  
+  /**
+   * Find the area of a *convex* polygon.
+   * @param pts a group of Pts
+   */
+  static area( pts:GroupLike ) {
+    if (pts.length < 3) return _errorLength( new Group(), 3 );
+    // determinant
+    let det = (a, b) => a[0] * b[1] - a[1] * b[0];
+
+    let area = 0;
+    for (let i=0, len=pts.length; i<len; i++) {
+      if (i < pts.length-1) {
+        area += det( pts[i], pts[i+1]);
+      } else {  
+        area += det( pts[i], pts[0] );
+      }
+    }
+    return Math.abs( area/2 );
+  }
+
+  /**
    * Get a convex hull of the point set using Melkman's algorithm
    * @param pts a group of Pt
    * @param sorted a boolean value to indicate if the group is pre-sorted by x position. Default is false.
    * @returns a group of Pt that defines the convex hull polygon
    */
   static convexHull( pts:GroupLike, sorted:boolean=false ): Group {
-    if (pts.length < 3) return new Group();
+    if (pts.length < 3) return _errorLength( new Group(), 3 );
 
     if (!sorted) {
       pts = pts.slice();
