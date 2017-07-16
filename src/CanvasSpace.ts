@@ -112,7 +112,7 @@ export class CanvasSpace extends Space {
    * @param callback 
    */
   private _ready( callback:Function ) {
-    if (!this._container) throw `Cannot initiate #${this.id} element`;
+    if (!this._container) throw new Error(`Cannot initiate #${this.id} element`);
 
     this._isReady = true;
 

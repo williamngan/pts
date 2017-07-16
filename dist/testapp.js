@@ -819,8 +819,9 @@ class Vec {
                 a[i] *= b;
         }
         else {
-            if (a.length != b.length)
-                throw "Cannot do element-wise multiply since the array lengths don't match.";
+            if (a.length != b.length) {
+                throw new Error(`Cannot do element-wise multiply since the array lengths don't match: ${a.toString()} multiply-with ${b.toString()}`);
+            }
             for (let i = 0, len = a.length; i < len; i++)
                 a[i] *= b[i];
         }
@@ -834,8 +835,9 @@ class Vec {
                 a[i] /= b;
         }
         else {
-            if (a.length != b.length)
-                throw "Cannot do element-wise divide since the array lengths don't match.";
+            if (a.length != b.length) {
+                throw new Error(`Cannot do element-wise divide since the array lengths don't match. ${a.toString()} divide-by ${b.toString()}`);
+            }
             for (let i = 0, len = a.length; i < len; i++)
                 a[i] /= b[i];
         }
@@ -1122,7 +1124,7 @@ class Num {
      */
     static mapToRange(n, currA, currB, targetA, targetB) {
         if (currA == currB)
-            throw "[currMin, currMax] must define a range that is not zero";
+            throw new Error("[currMin, currMax] must define a range that is not zero");
         let min = Math.min(targetA, targetB);
         let max = Math.max(targetA, targetB);
         return Num.normalizeValue(n, currA, currB) * (max - min) + min;
@@ -2014,7 +2016,7 @@ class CanvasForm extends Form_1.Form {
     }
     point(p, radius = 5, shape = "square") {
         if (!CanvasForm[shape])
-            throw `${shape} is not a static function of CanvasForm`;
+            throw new Error(`${shape} is not a static function of CanvasForm`);
         CanvasForm[shape](this._ctx, p, radius);
         this._paint();
         return this;
@@ -2443,7 +2445,7 @@ class CanvasSpace extends Space_1.Space {
      */
     _ready(callback) {
         if (!this._container)
-            throw `Cannot initiate #${this.id} element`;
+            throw new Error(`Cannot initiate #${this.id} element`);
         this._isReady = true;
         let b = (this._autoResize) ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
         if (b)

@@ -14,7 +14,7 @@ space.add( {
     
     form.stroke( false );
 
-    let grid = 10;
+    let grid = 30;
     
     let d = space.pointer.$subtract( space.center );
     

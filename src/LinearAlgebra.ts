@@ -27,7 +27,9 @@ export class Vec {
     if (typeof b == "number") {
       for (let i=0, len=a.length; i<len; i++) a[i] *= b;
     } else {
-      if (a.length != b.length) throw "Cannot do element-wise multiply since the array lengths don't match."
+      if (a.length != b.length) {
+        throw new Error(`Cannot do element-wise multiply since the array lengths don't match: ${a.toString()} multiply-with ${b.toString()}`);
+      }
       for (let i=0, len=a.length; i<len; i++) a[i] *= b[i];
     }
     return a;
@@ -38,7 +40,9 @@ export class Vec {
       if (b === 0) throw "Cannot divide by zero"
       for (let i=0, len=a.length; i<len; i++) a[i] /= b;
     } else {
-      if (a.length != b.length) throw "Cannot do element-wise divide since the array lengths don't match."
+      if (a.length != b.length) {
+        throw new Error(`Cannot do element-wise divide since the array lengths don't match. ${a.toString()} divide-by ${b.toString()}`);
+      }
       for (let i=0, len=a.length; i<len; i++) a[i] /= b[i];
     }
     return a;

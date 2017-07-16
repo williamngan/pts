@@ -18,16 +18,18 @@ space.add( {
 
     
     let d = space.pointer.$subtract( space.center );
+
     
     for (let i=0; i<grid; i++) {
       for (let k=0; k<grid; k++) {
-        let target = "hsl";
-        let h = Num.mapToRange( Geom.toDegree( Math.atan2( d.y, d.x) ), -180, 180, Color.ranges[target][0][0], Color.ranges[target][0][1] );
-        let s = Num.mapToRange( k, 0, grid-1, Color.ranges[target][1][0], Color.ranges[target][1][1] );
-        let l = Num.mapToRange( i, 0, grid-1, Color.ranges[target][2][0], Color.ranges[target][2][1] );
+        let target = "lab";
+        let L = Num.mapToRange( Geom.toDegree( Math.atan2( d.y, d.x) ), -180, 180, Color.ranges[target][0][0], Color.ranges[target][0][1] );
+        let A = Num.mapToRange( k, 0, grid-1, Color.ranges[target][1][0], Color.ranges[target][1][1] );
+        let B = Num.mapToRange( i, 0, grid-1, Color.ranges[target][2][0], Color.ranges[target][2][1] );
         
-        let hsl = Color.hsl( h, s, l );
-        let rgb = Color.HSLtoRGB( hsl );
+        let lab = Color.lab( L, A, B );
+        let rgb = Color.LABtoRGB( lab );
+        // let rgb = lab.clone().toMode( "rgb", true );
 
         let sub = Rectangle.size( rect3 ).$divide( grid );
         let pos = rect3.p1.$add( sub.$multiply( i, k ) );
@@ -41,13 +43,13 @@ space.add( {
         let b = Num.mapToRange( i, 0, grid-1, Color.ranges[target][2][0], Color.ranges[target][2][1] );
         
         let revRGB = Color.rgb( r, g, b, 0.7 );
-        let revHSL = Color.RGBtoHSL( revRGB );
-        let backToRGB = Color.HSLtoRGB( revHSL );
+        let revLAB = Color.RGBtoLAB( revRGB );
+        let backToRGB = Color.LABtoRGB( revLAB );
 
         let sub2 = Rectangle.size( rect3 ).$divide( grid );
         let pos2 = rect3.p1.$add( 0, rect3.p2.y-rect3.p1.y+20 ).add( sub.$multiply( i, k ) );
 
-        form.fill( backToRGB.toString("rgba") ).rect( Rectangle.fromTopLeft( pos2, sub2.ceil() ) );
+        form.fill( revRGB.toString("rgba") ).rect( Rectangle.fromTopLeft( pos2, sub2.ceil() ) );
 
       }
       

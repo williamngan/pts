@@ -74,7 +74,7 @@ export class Num {
    * @returns a remapped value in the second range
    */
   static mapToRange(n:number, currA, currB, targetA, targetB) {
-    if (currA == currB) throw "[currMin, currMax] must define a range that is not zero"
+    if (currA == currB) throw new Error("[currMin, currMax] must define a range that is not zero");
     let min = Math.min(targetA, targetB);
     let max = Math.max(targetA, targetB);
     return Num.normalizeValue(n, currA, currB) * (max - min) + min;
