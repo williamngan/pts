@@ -74,8 +74,6 @@ export const Const = {
 
 export class Util {
   
-  
-
   /**
    * Convert different kinds of parameters (arguments, array, object) into an array of numbers
    * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
@@ -129,11 +127,6 @@ export class Util {
   static flatten( pts:any[], flattenAsGroup:boolean=true ) {
     let arr = (flattenAsGroup) ? new Group() : new Array();
     return arr.concat.apply(arr, pts);
-  }
-
-
-  static equals( a:number, b:number, threshold=0.00001) {
-    return Math.abs( a-b ) < threshold;
   }
 
 

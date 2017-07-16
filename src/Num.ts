@@ -3,8 +3,14 @@ import { Curve } from "./Op";
 import { Pt, PtLike, Group, GroupLike } from "./Pt";
 import { Vec, Mat } from "./LinearAlgebra";
 
-
+/**
+ * A collection of helper functions for basic numeric operations
+ */
 export class Num {
+
+  static equals( a:number, b:number, threshold=0.00001) {
+    return Math.abs( a-b ) < threshold;
+  }
 
   static lerp(a:number, b:number, t:number):number {
     return (1 - t) * a + t * b;

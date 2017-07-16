@@ -660,9 +660,6 @@ class Util {
         let arr = (flattenAsGroup) ? new Pt_1.Group() : new Array();
         return arr.concat.apply(arr, pts);
     }
-    static equals(a, b, threshold = 0.00001) {
-        return Math.abs(a - b) < threshold;
-    }
 }
 exports.Util = Util;
 
@@ -1064,7 +1061,13 @@ const Util_1 = __webpack_require__(1);
 const Op_1 = __webpack_require__(5);
 const Pt_1 = __webpack_require__(0);
 const LinearAlgebra_1 = __webpack_require__(2);
+/**
+ * A collection of helper functions for basic numeric operations
+ */
 class Num {
+    static equals(a, b, threshold = 0.00001) {
+        return Math.abs(a - b) < threshold;
+    }
     static lerp(a, b, t) {
         return (1 - t) * a + t * b;
     }

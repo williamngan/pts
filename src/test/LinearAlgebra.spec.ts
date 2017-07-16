@@ -71,12 +71,12 @@ describe('Linear Algebra: ', function() {
     });
 
     it('can calculate magnitude', function() {
-      assert.isTrue( Util.equals( Vec.magnitude( [2,3,4] ), 5.3851648 ) );
+      assert.isTrue( Num.equals( Vec.magnitude( [2,3,4] ), 5.3851648 ) );
     });
 
     it('can calculate unit vector', function() {
       let c = Vec.magnitude( Vec.unit( [3,4,1,2]) );
-      assert.isTrue( Util.equals(c, 1) );
+      assert.isTrue( Num.equals(c, 1) );
     });
 
     it('can convert to absolute values', function() {
@@ -178,14 +178,14 @@ describe('Linear Algebra: ', function() {
       let ps = [new Pt(218, 454), new Pt( 218, 404) ];
       let reflect = Group.fromArray( [[230, 497], [268, 454]] )
       Geom.reflect2D( ps, reflect );
-      assert.isTrue( Util.equals(ps[0].x, 274.14938) &&  Util.equals(ps[1].y, 497.4710) );
+      assert.isTrue( Num.equals(ps[0].x, 274.14938) &&  Num.equals(ps[1].y, 497.4710) );
     });
 
     it('can reflect a group in 2D when there is no y-intercept', function() {
       let ps = [new Pt(218, 454), new Pt( 250, 404) ];
       let reflect = Group.fromArray( [[230, 497], [230, 454]] )
       Geom.reflect2D( ps, reflect );
-      assert.isTrue( Util.equals(ps[0].x, 242) &&  Util.equals(ps[1].x, 210) );
+      assert.isTrue( Num.equals(ps[0].x, 242) &&  Num.equals(ps[1].x, 210) );
     });
 
     
