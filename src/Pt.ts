@@ -1,5 +1,5 @@
 import {Util, Const} from "./Util"
-import {Geom, Num} from "./Op"
+import {Geom, Num} from "./Num"
 import {Bound} from "./Bound"
 import {Vec, Mat} from "./LinearAlgebra"
 

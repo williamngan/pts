@@ -3,7 +3,7 @@ import mocha = require('mocha');
 import {Pt, Group} from '../Pt';
 import {Util} from '../Util';
 import {Vec, Mat} from '../LinearAlgebra';
-import {Num, Geom} from '../Op';
+import {Num, Geom} from '../Num';
 
 var {assert} = chai;
 var {describe, it} = mocha;

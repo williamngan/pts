@@ -1,7 +1,7 @@
 import chai = require('chai');
 import mocha = require('mocha');
 import {Pt, Group} from '../Pt';
-import {Geom} from '../Op';
+import {Geom} from '../Num';
 import {Util} from '../Util';
 
 var {assert} = chai;

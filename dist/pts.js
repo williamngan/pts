@@ -64,7 +64,7 @@ var Pts =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 11);
+/******/ 	return __webpack_require__(__webpack_require__.s = 13);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -75,8 +75,8 @@ var Pts =
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(1);
-const Op_1 = __webpack_require__(4);
-const LinearAlgebra_1 = __webpack_require__(3);
+const Num_1 = __webpack_require__(4);
+const LinearAlgebra_1 = __webpack_require__(2);
 exports.PtBaseArray = Float32Array;
 class Pt extends exports.PtBaseArray {
     /**
@@ -319,22 +319,22 @@ class Pt extends exports.PtBaseArray {
      * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
      */
     angleBetween(p, axis = Util_1.Const.xy) {
-        return Op_1.Geom.boundRadian(this.angle(axis)) - Op_1.Geom.boundRadian(p.angle(axis));
+        return Num_1.Geom.boundRadian(this.angle(axis)) - Num_1.Geom.boundRadian(p.angle(axis));
     }
     scale(scale, anchor) {
-        Op_1.Geom.scale(this, scale, anchor || Pt.make(this.length, 0));
+        Num_1.Geom.scale(this, scale, anchor || Pt.make(this.length, 0));
         return this;
     }
     rotate2D(angle, anchor, axis) {
-        Op_1.Geom.rotate2D(this, angle, anchor || Pt.make(this.length, 0), axis);
+        Num_1.Geom.rotate2D(this, angle, anchor || Pt.make(this.length, 0), axis);
         return this;
     }
     shear2D(scale, anchor, axis) {
-        Op_1.Geom.shear2D(this, scale, anchor || Pt.make(this.length, 0), axis);
+        Num_1.Geom.shear2D(this, scale, anchor || Pt.make(this.length, 0), axis);
         return this;
     }
     reflect2D(line, axis) {
-        Op_1.Geom.reflect2D(this, line, axis);
+        Num_1.Geom.reflect2D(this, line, axis);
         return this;
     }
     /**
@@ -424,13 +424,13 @@ class Group extends Array {
      */
     lines() { return this.segments(2, 1); }
     centroid() {
-        return Op_1.Geom.centroid(this);
+        return Num_1.Geom.centroid(this);
     }
     boundingBox() {
-        return Op_1.Geom.boundingBox(this);
+        return Num_1.Geom.boundingBox(this);
     }
-    anchorTo(ptOrIndex = 0) { Op_1.Geom.anchor(this, ptOrIndex, "to"); }
-    anchorFrom(ptOrIndex = 0) { Op_1.Geom.anchor(this, ptOrIndex, "from"); }
+    anchorTo(ptOrIndex = 0) { Num_1.Geom.anchor(this, ptOrIndex, "to"); }
+    anchorFrom(ptOrIndex = 0) { Num_1.Geom.anchor(this, ptOrIndex, "from"); }
     /**
      * Create an operation using this Group, passing this Group into a custom function's first parameter
      * For example: `let myOp = group.op( fn ); let result = myOp( [1,2,3] );`
@@ -461,11 +461,11 @@ class Group extends Array {
      * @param t a value between 0 to 1 usually
      */
     interpolate(t) {
-        t = Op_1.Num.limitValue(t, 0, 1);
+        t = Num_1.Num.limitValue(t, 0, 1);
         let chunk = this.length - 1;
         let tc = 1 / (this.length - 1);
         let idx = Math.floor(t / tc);
-        return Op_1.Geom.interpolate(this[idx], this[Math.min(this.length - 1, idx + 1)], (t - idx * tc) * chunk);
+        return Num_1.Geom.interpolate(this[idx], this[Math.min(this.length - 1, idx + 1)], (t - idx * tc) * chunk);
     }
     moveBy(...args) {
         let pt = Util_1.Util.getArgs(args);
@@ -485,25 +485,25 @@ class Group extends Array {
     }
     scale(scale, anchor) {
         for (let i = 0, len = this.length; i < len; i++) {
-            Op_1.Geom.scale(this[i], scale, anchor || this[0]);
+            Num_1.Geom.scale(this[i], scale, anchor || this[0]);
         }
         return this;
     }
     rotate2D(angle, anchor, axis) {
         for (let i = 0, len = this.length; i < len; i++) {
-            Op_1.Geom.rotate2D(this[i], angle, anchor || this[0], axis);
+            Num_1.Geom.rotate2D(this[i], angle, anchor || this[0], axis);
         }
         return this;
     }
     shear2D(scale, anchor, axis) {
         for (let i = 0, len = this.length; i < len; i++) {
-            Op_1.Geom.shear2D(this[i], scale, anchor || this[0], axis);
+            Num_1.Geom.shear2D(this[i], scale, anchor || this[0], axis);
         }
         return this;
     }
     reflect2D(line, axis) {
         for (let i = 0, len = this.length; i < len; i++) {
-            Op_1.Geom.reflect2D(this[i], line, axis);
+            Num_1.Geom.reflect2D(this[i], line, axis);
         }
         return this;
     }
@@ -675,121 +675,7 @@ exports.Util = Util;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
-class Bound extends Pt_1.Group {
-    constructor(...args) {
-        super(...args);
-        this._center = new Pt_1.Pt();
-        this._size = new Pt_1.Pt();
-        this._topLeft = new Pt_1.Pt();
-        this._bottomRight = new Pt_1.Pt();
-        this._inited = false;
-        this.init();
-    }
-    init() {
-        if (this.p1) {
-            this._size = this.p1.clone();
-            this._inited = true;
-        }
-        if (this.p1 && this.p2) {
-            let a = this.p1;
-            let b = this.p2;
-            this.topLeft = a.$min(b);
-            this._bottomRight = a.$max(b);
-            this._updateSize();
-        }
-    }
-    clone() {
-        return new Bound(this._topLeft.clone(), this._bottomRight.clone());
-    }
-    _updateSize() {
-        this._size = this._bottomRight.$subtract(this._topLeft).abs();
-        this._updateCenter();
-    }
-    _updateCenter() {
-        this._center = this._size.$multiply(0.5).add(this._topLeft);
-    }
-    _updatePosFromTop() {
-        this._bottomRight = this._topLeft.$add(this._size);
-        this._updateCenter();
-    }
-    _updatePosFromBottom() {
-        this._topLeft = this._bottomRight.$subtract(this._size);
-        this._updateCenter();
-    }
-    _updatePosFromCenter() {
-        let half = this._size.$multiply(0.5);
-        this._topLeft = this._center.$subtract(half);
-        this._bottomRight = this._center.$add(half);
-    }
-    get size() { return new Pt_1.Pt(this._size); }
-    set size(p) {
-        this._size = new Pt_1.Pt(p);
-        this._updatePosFromTop();
-    }
-    get center() { return new Pt_1.Pt(this._center); }
-    set center(p) {
-        this._center = new Pt_1.Pt(p);
-        this._updatePosFromCenter();
-    }
-    get topLeft() { return new Pt_1.Pt(this._topLeft); }
-    set topLeft(p) {
-        this._topLeft = new Pt_1.Pt(p);
-        this[0] = this._topLeft;
-        this._updateSize();
-    }
-    get bottomRight() { return new Pt_1.Pt(this._bottomRight); }
-    set bottomRight(p) {
-        this._bottomRight = new Pt_1.Pt(p);
-        this[1] = this._bottomRight;
-        this._updateSize();
-    }
-    get width() { return (this._size.length > 0) ? this._size.x : 0; }
-    set width(w) {
-        this._size.x = w;
-        this._updatePosFromTop();
-    }
-    get height() { return (this._size.length > 1) ? this._size.y : 0; }
-    set height(h) {
-        this._size.y = h;
-        this._updatePosFromTop();
-    }
-    get depth() { return (this._size.length > 2) ? this._size.z : 0; }
-    set depth(d) {
-        this._size.z = d;
-        this._updatePosFromTop();
-    }
-    get x() { return this.topLeft.x; }
-    get y() { return this.topLeft.y; }
-    get z() { return this.topLeft.z; }
-    get inited() { return this._inited; }
-    /**
-     * If the Group elements are changed, call this function to update the Bound's properties.
-     * It's preferable to change the topLeft/bottomRight etc properties instead of changing the Group array directly.
-     */
-    update() {
-        this._topLeft = this[0];
-        this._bottomRight = this[1];
-        this._updateSize();
-    }
-    static fromBoundingRect(rect) {
-        let b = new Bound(new Pt_1.Pt(rect.left || 0, rect.top || 0), new Pt_1.Pt(rect.right || 0, rect.bottom || 0));
-        if (rect.width && rect.height)
-            b.size = new Pt_1.Pt(rect.width, rect.height);
-        return b;
-    }
-}
-exports.Bound = Bound;
-
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const Pt_1 = __webpack_require__(0);
-const Op_1 = __webpack_require__(4);
+const Op_1 = __webpack_require__(5);
 class Vec {
     static add(a, b) {
         if (typeof b == "number") {
@@ -1054,6 +940,120 @@ exports.Mat = Mat;
 
 
 /***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const Pt_1 = __webpack_require__(0);
+class Bound extends Pt_1.Group {
+    constructor(...args) {
+        super(...args);
+        this._center = new Pt_1.Pt();
+        this._size = new Pt_1.Pt();
+        this._topLeft = new Pt_1.Pt();
+        this._bottomRight = new Pt_1.Pt();
+        this._inited = false;
+        this.init();
+    }
+    init() {
+        if (this.p1) {
+            this._size = this.p1.clone();
+            this._inited = true;
+        }
+        if (this.p1 && this.p2) {
+            let a = this.p1;
+            let b = this.p2;
+            this.topLeft = a.$min(b);
+            this._bottomRight = a.$max(b);
+            this._updateSize();
+        }
+    }
+    clone() {
+        return new Bound(this._topLeft.clone(), this._bottomRight.clone());
+    }
+    _updateSize() {
+        this._size = this._bottomRight.$subtract(this._topLeft).abs();
+        this._updateCenter();
+    }
+    _updateCenter() {
+        this._center = this._size.$multiply(0.5).add(this._topLeft);
+    }
+    _updatePosFromTop() {
+        this._bottomRight = this._topLeft.$add(this._size);
+        this._updateCenter();
+    }
+    _updatePosFromBottom() {
+        this._topLeft = this._bottomRight.$subtract(this._size);
+        this._updateCenter();
+    }
+    _updatePosFromCenter() {
+        let half = this._size.$multiply(0.5);
+        this._topLeft = this._center.$subtract(half);
+        this._bottomRight = this._center.$add(half);
+    }
+    get size() { return new Pt_1.Pt(this._size); }
+    set size(p) {
+        this._size = new Pt_1.Pt(p);
+        this._updatePosFromTop();
+    }
+    get center() { return new Pt_1.Pt(this._center); }
+    set center(p) {
+        this._center = new Pt_1.Pt(p);
+        this._updatePosFromCenter();
+    }
+    get topLeft() { return new Pt_1.Pt(this._topLeft); }
+    set topLeft(p) {
+        this._topLeft = new Pt_1.Pt(p);
+        this[0] = this._topLeft;
+        this._updateSize();
+    }
+    get bottomRight() { return new Pt_1.Pt(this._bottomRight); }
+    set bottomRight(p) {
+        this._bottomRight = new Pt_1.Pt(p);
+        this[1] = this._bottomRight;
+        this._updateSize();
+    }
+    get width() { return (this._size.length > 0) ? this._size.x : 0; }
+    set width(w) {
+        this._size.x = w;
+        this._updatePosFromTop();
+    }
+    get height() { return (this._size.length > 1) ? this._size.y : 0; }
+    set height(h) {
+        this._size.y = h;
+        this._updatePosFromTop();
+    }
+    get depth() { return (this._size.length > 2) ? this._size.z : 0; }
+    set depth(d) {
+        this._size.z = d;
+        this._updatePosFromTop();
+    }
+    get x() { return this.topLeft.x; }
+    get y() { return this.topLeft.y; }
+    get z() { return this.topLeft.z; }
+    get inited() { return this._inited; }
+    /**
+     * If the Group elements are changed, call this function to update the Bound's properties.
+     * It's preferable to change the topLeft/bottomRight etc properties instead of changing the Group array directly.
+     */
+    update() {
+        this._topLeft = this[0];
+        this._bottomRight = this[1];
+        this._updateSize();
+    }
+    static fromBoundingRect(rect) {
+        let b = new Bound(new Pt_1.Pt(rect.left || 0, rect.top || 0), new Pt_1.Pt(rect.right || 0, rect.bottom || 0));
+        if (rect.width && rect.height)
+            b.size = new Pt_1.Pt(rect.width, rect.height);
+        return b;
+    }
+}
+exports.Bound = Bound;
+
+
+/***/ }),
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1061,8 +1061,9 @@ exports.Mat = Mat;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(1);
+const Op_1 = __webpack_require__(5);
 const Pt_1 = __webpack_require__(0);
-const LinearAlgebra_1 = __webpack_require__(3);
+const LinearAlgebra_1 = __webpack_require__(2);
 class Num {
     static lerp(a, b, t) {
         return (1 - t) * a + t * b;
@@ -1284,6 +1285,338 @@ class Geom {
     }
 }
 exports.Geom = Geom;
+class Shaping {
+    /**
+     * Linear mapping
+     * @parma t a value between 0 to 1
+     * @parma c the value to shape, default is 1
+     */
+    static linear(t, c = 1) {
+        return c * t;
+    }
+    /**
+     * Quadratic in, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
+     * @parma t a value between 0 to 1
+     * @parma c the value to shape, default is 1
+    */
+    static quadraticIn(t, c = 1) {
+        return c * t * t;
+    }
+    /**
+     * Quadratic out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
+     * @parma t a value between 0 to 1
+     * @parma c the value to shape, default is 1
+    */
+    static quadraticOut(t, c = 1) {
+        return -c * t * (t - 2);
+    }
+    /**
+     * Quadratic in-out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
+     * @parma t a value between 0 to 1
+     * @parma c the value to shape, default is 1
+     */
+    static quadraticInOut(t, c = 1) {
+        let dt = t * 2;
+        return (t < 0.5) ? c / 2 * t * t * 4 : -c / 2 * ((dt - 1) * (dt - 3) - 1);
+    }
+    /**
+     * Cubic in, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
+     * @parma t a value between 0 to 1
+     * @parma c the value to shape, default is 1
+     */
+    static cubicIn(t, c = 1) {
+        return c * t * t * t;
+    }
+    /**
+     * Cubic out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
+     * @parma t a value between 0 to 1
+     * @parma c the value to shape, default is 1
+     */
+    static cubicOut(t, c = 1) {
+        let dt = t - 1;
+        return c * (dt * dt * dt + 1);
+    }
+    /**
+     * Cubic in-out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
+     * @parma t a value between 0 to 1
+     * @parma c the value to shape, default is 1
+     */
+    static cubicInOut(t, c = 1) {
+        let dt = t * 2;
+        return (t < 0.5) ? c / 2 * dt * dt * dt : c / 2 * ((dt - 2) * (dt - 2) * (dt - 2) + 2);
+    }
+    /**
+     * Exponential ease In, adapted from Golan Levin's [polynomial shapers](http://www.flong.com/texts/code/shapers_poly/)
+     * @parma t a value between 0 to 1
+     * @parma c the value to shape, default is 1
+     * @parma p a value between 0 to 1 to control the curve. Default is 0.25.
+     */
+    static exponentialIn(t, c = 1, p = 0.25) {
+        return c * Math.pow(t, 1 / p);
+    }
+    /**
+     * Exponential ease out, adapted from Golan Levin's [polynomial shapers](http://www.flong.com/texts/code/shapers_poly/)
+     * @parma t a value between 0 to 1
+     * @parma c the value to shape, default is 1
+     * @parma p a value between 0 to 1 to control the curve. Default is 0.25.
+     */
+    static exponentialOut(t, c = 1, p = 0.25) {
+        return c * Math.pow(t, p);
+    }
+    /**
+     * Sinuous in, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
+     * @parma t a value between 0 to 1
+     * @parma c the value to shape, default is 1
+     */
+    static sineIn(t, c = 1) {
+        return -c * Math.cos(t * Util_1.Const.half_pi) + c;
+    }
+    /**
+     * Sinuous out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
+     * @parma t a value between 0 to 1
+     * @parma c the value to shape, default is 1
+     */
+    static sineOut(t, c = 1) {
+        return c * Math.sin(t * Util_1.Const.half_pi);
+    }
+    /**
+     * Sinuous in-out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
+     * @parma t a value between 0 to 1
+     * @parma c the value to shape, default is 1
+     */
+    static sineInOut(t, c = 1) {
+        return -c / 2 * (Math.cos(Math.PI * t) - 1);
+    }
+    /**
+     * A faster way to approximate cosine ease in-out using Blinn-Wyvill Approximation. Adapated from Golan Levin's [polynomial shaping](http://www.flong.com/texts/code/shapers_poly/)
+     * @parma t a value between 0 to 1
+     * @parma c the value to shape, default is 1
+     */
+    static cosineApprox(t, c = 1) {
+        let t2 = t * t;
+        let t4 = t2 * t2;
+        let t6 = t4 * t2;
+        return c * (4 * t6 / 9 - 17 * t4 / 9 + 22 * t2 / 9);
+    }
+    /**
+     * Circular in, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
+     * @parma t a value between 0 to 1
+     * @parma c the value to shape, default is 1
+     */
+    static circularIn(t, c = 1) {
+        return -c * (Math.sqrt(1 - t * t) - 1);
+    }
+    /**
+     * Circular out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
+     * @parma t a value between 0 to 1
+     * @parma c the value to shape, default is 1
+     */
+    static circularOut(t, c = 1) {
+        let dt = t - 1;
+        return c * Math.sqrt(1 - dt * dt);
+    }
+    /**
+     * Circular in-out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
+     * @parma t a value between 0 to 1
+     * @parma c the value to shape, default is 1
+     */
+    static circularInOut(t, c = 1) {
+        let dt = t * 2;
+        return (t < 0.5) ? -c / 2 * (Math.sqrt(1 - dt * dt) - 1) : c / 2 * (Math.sqrt(1 - (dt - 2) * (dt - 2)) + 1);
+    }
+    /**
+     * Elastic in, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
+     * @parma t a value between 0 to 1
+     * @parma c the value to shape, default is 1
+     * @parma p elastic parmeter between 0 to 1. The lower the number, the more elastic it will be. Default is 0.7.
+     */
+    static elasticIn(t, c = 1, p = 0.7) {
+        let dt = t - 1;
+        let s = (p / Util_1.Const.two_pi) * 1.5707963267948966;
+        return c * (-Math.pow(2, 10 * dt) * Math.sin((dt - s) * Util_1.Const.two_pi / p));
+    }
+    /**
+     * Elastic out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
+     * @parma t a value between 0 to 1
+     * @parma c the value to shape, default is 1
+     * @parma p elastic parmeter between 0 to 1. The lower the number, the more elastic it will be. Default is 0.7.
+     */
+    static elasticOut(t, c = 1, p = 0.7) {
+        let s = (p / Util_1.Const.two_pi) * 1.5707963267948966;
+        return c * (Math.pow(2, -10 * t) * Math.sin((t - s) * Util_1.Const.two_pi / p)) + c;
+    }
+    /**
+     * Elastic in-out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
+     * @parma t a value between 0 to 1
+     * @parma c the value to shape, default is 1
+     * @parma p elastic parmeter between 0 to 1. The lower the number, the more elastic it will be. Default is 0.6.
+     */
+    static elasticInOut(t, c = 1, p = 0.6) {
+        let dt = t * 2;
+        let s = (p / Util_1.Const.two_pi) * 1.5707963267948966;
+        if (t < 0.5) {
+            dt -= 1;
+            return c * (-0.5 * (Math.pow(2, 10 * dt) * Math.sin((dt - s) * Util_1.Const.two_pi / p)));
+        }
+        else {
+            dt -= 1;
+            return c * (0.5 * (Math.pow(2, -10 * dt) * Math.sin((dt - s) * Util_1.Const.two_pi / p))) + c;
+        }
+    }
+    /**
+     * Bounce in, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
+     * @parma t a value between 0 to 1
+     * @parma c the value to shape, default is 1
+     */
+    static bounceIn(t, c = 1) {
+        return c - Shaping.bounceOut((1 - t), c);
+    }
+    /**
+     * Bounce out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
+     * @parma t a value between 0 to 1
+     * @parma c the value to shape, default is 1
+     */
+    static bounceOut(t, c = 1) {
+        if (t < (1 / 2.75)) {
+            return c * (7.5625 * t * t);
+        }
+        else if (t < (2 / 2.75)) {
+            t -= 1.5 / 2.75;
+            return c * (7.5625 * t * t + 0.75);
+        }
+        else if (t < (2.5 / 2.75)) {
+            t -= 2.25 / 2.75;
+            return c * (7.5625 * t * t + 0.9375);
+        }
+        else {
+            t -= 2.625 / 2.75;
+            return c * (7.5625 * t * t + 0.984375);
+        }
+    }
+    /**
+     * Bounce in-out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
+     * @parma t a value between 0 to 1
+     * @parma c the value to shape, default is 1
+     */
+    static bounceInOut(t, c = 1) {
+        return (t < 0.5) ? Shaping.bounceIn(t * 2, c) / 2 : Shaping.bounceOut(t * 2 - 1, c) / 2 + c / 2;
+    }
+    /**
+     * Sigmoid curve changes its shape adapted from the input value, but always returns a value between 0 to 1.
+     * @parma t a value between 0 to 1
+     * @parma c the value to shape, default is 1
+     * @parma p the larger the value, the "steeper" the curve will be. Default is 10.
+     */
+    static sigmoid(t, c = 1, p = 10) {
+        let d = p * (t - 0.5);
+        return c / (1 + Math.exp(-d));
+    }
+    /**
+     * The Logistic Sigmoid is a useful curve. Adapted from Golan Levin's [shaping function](http://www.flong.com/texts/code/shapers_exp/)
+     * @parma t a value between 0 to 1
+     * @parma c the value to shape, default is 1
+     * @parma p a parameter between 0 to 1 to control the steepness of the curve. Higher is steeper. Default is 0.7.
+     */
+    static logSigmoid(t, c = 1, p = 0.7) {
+        p = Math.max(Util_1.Const.epsilon, Math.min(1 - Util_1.Const.epsilon, p));
+        p = 1 / (1 - p);
+        let A = 1 / (1 + Math.exp(((t - 0.5) * p * -2)));
+        let B = 1 / (1 + Math.exp(p));
+        let C = 1 / (1 + Math.exp(-p));
+        return c * (A - B) / (C - B);
+    }
+    /**
+     * An exponential seat curve. Adapted from Golan Levin's [shaping functions](http://www.flong.com/texts/code/shapers_exp/)
+     * @parma t a value between 0 to 1
+     * @parma c the value to shape, default is 1
+     * @parma p a parameter between 0 to 1 to control the steepness of the curve. Higher is steeper. Default is 0.5.
+     */
+    static seat(t, c = 1, p = 0.5) {
+        if ((t < 0.5)) {
+            return c * (Math.pow(2 * t, 1 - p)) / 2;
+        }
+        else {
+            return c * (1 - (Math.pow(2 * (1 - t), 1 - p)) / 2);
+        }
+    }
+    /**
+     * Quadratic bezier curve. Adapted from Golan Levin's [shaping functions](http://www.flong.com/texts/code/shapers_exp/)
+     * @parma t a value between 0 to 1
+     * @parma c the value to shape, default is 1
+     * @parma p1 a Pt object specifying the first control Pt, or a value specifying the control Pt's x position (its y position will default to 0.5). Default is `Pt(0.95, 0.95)
+     */
+    static quadraticBezier(t, c = 1, p = [0.05, 0.95]) {
+        let a = (typeof p != "number") ? p[0] : p;
+        let b = (typeof p != "number") ? p[1] : 0.5;
+        let om2a = 1 - 2 * a;
+        if (om2a === 0) {
+            om2a = Util_1.Const.epsilon;
+        }
+        let d = (Math.sqrt(a * a + om2a * t) - a) / om2a;
+        return c * ((1 - 2 * b) * (d * d) + (2 * b) * d);
+    }
+    /**
+     * Cubic bezier curve. This reuses the bezier functions in Curve class.
+     * @parma t a value between 0 to 1
+     * @parma c the value to shape, default is 1
+     * @parma p1` a Pt object specifying the first control Pt. Default is `Pt(0.1, 0.7).
+     * @parma p2` a Pt object specifying the second control Pt. Default is `Pt(0.9, 0.2).
+     */
+    static cubicBezier(t, c = 1, p1 = [0.1, 0.7], p2 = [0.9, 0.2]) {
+        let curve = new Pt_1.Group(new Pt_1.Pt(0, 0), new Pt_1.Pt(p1), new Pt_1.Pt(p2), new Pt_1.Pt(1, 1));
+        return c * Op_1.Curve.bezierStep(new Pt_1.Pt(t, t * t, t * t * t), Op_1.Curve.controlPoints(curve)).y;
+    }
+    /**
+     * Give a Pt, draw a quadratic curve that will pass through that Pt as closely as possible. Adapted from Golan Levin's [shaping functions](http://www.flong.com/texts/code/shapers_poly/)
+     * @parma t a value between 0 to 1
+     * @parma c the value to shape, default is 1
+     * @parma p1` a Pt object specifying the Pt to pass through. Default is `Pt(0.2, 0.35)
+     */
+    static quadraticTarget(t, c = 1, p1 = [0.2, 0.35]) {
+        let a = Math.min(1 - Util_1.Const.epsilon, Math.max(Util_1.Const.epsilon, p1[0]));
+        let b = Math.min(1, Math.max(0, p1[1]));
+        let A = (1 - b) / (1 - a) - (b / a);
+        let B = (A * (a * a) - b) / a;
+        let y = A * (t * t) - B * t;
+        return c * Math.min(1, Math.max(0, y));
+    }
+    /**
+     * Step function is a simple jump from 0 to 1 at a specific Pt in time
+     * @parma t a value between 0 to 1
+     * @parma c the value to shape, default is 1
+     * @parma p usually a value between 0 to 1, which specify the Pt to "jump". Default is 0.5 which is in the middle.
+     */
+    static cliff(t, c = 1, p = 0.5) {
+        return (t > p) ? c : 0;
+    }
+    /**
+     * Convert any shaping functions into a series of steps
+     * @parma fn the original shaping function
+     * @parma steps the number of steps
+     * @parma t a value between 0 to 1
+     * @parma c the value to shape, default is 1
+     * @parma args optional paramters to pass to original function
+     */
+    static step(fn, steps, t, c, ...args) {
+        let s = 1 / steps;
+        let tt = Math.floor(t / s) * s;
+        return fn(tt, c, ...args);
+    }
+}
+exports.Shaping = Shaping;
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const Util_1 = __webpack_require__(1);
+const Num_1 = __webpack_require__(4);
+const Pt_1 = __webpack_require__(0);
+const LinearAlgebra_1 = __webpack_require__(2);
 class Line {
     static slope(p1, p2) {
         return (p2[0] - p1[0] === 0) ? undefined : (p2[1] - p1[1]) / (p2[0] - p1[0]);
@@ -1355,11 +1688,11 @@ class Line {
     }
     static intersectLine2D(la, lb) {
         let pt = Line.intersectRay2D(la, lb);
-        return (pt && Geom.withinBound(pt, la[0], la[1]) && Geom.withinBound(pt, lb[0], lb[1])) ? pt : undefined;
+        return (pt && Num_1.Geom.withinBound(pt, la[0], la[1]) && Num_1.Geom.withinBound(pt, lb[0], lb[1])) ? pt : undefined;
     }
     static intersectLineWithRay2D(line, ray) {
         let pt = Line.intersectRay2D(line, ray);
-        return (pt && Geom.withinBound(pt, line[0], line[1])) ? pt : undefined;
+        return (pt && Num_1.Geom.withinBound(pt, line[0], line[1])) ? pt : undefined;
     }
     static intersectPolygon2D(lineOrRay, poly, sourceIsRay = false) {
         let fn = sourceIsRay ? Line.intersectLineWithRay2D : Line.intersectLine2D;
@@ -1390,7 +1723,7 @@ class Line {
         let g = Line.intersectGridWithRay2D(line, gridPt);
         let gg = new Pt_1.Group();
         for (let i = 0, len = g.length; i < len; i++) {
-            if (Geom.withinBound(g[i], line[0], line[1]))
+            if (Num_1.Geom.withinBound(g[i], line[0], line[1]))
                 gg.push(g[i]);
         }
         return gg;
@@ -1407,7 +1740,7 @@ class Line {
     static subpoints(line, num) {
         let pts = new Pt_1.Group();
         for (let i = 1; i <= num; i++) {
-            pts.push(Geom.interpolate(line[0], line[1], i / (num + 1)));
+            pts.push(Num_1.Geom.interpolate(line[0], line[1], i / (num + 1)));
         }
         return pts;
     }
@@ -1471,16 +1804,16 @@ class Rectangle {
     }
     static quadrants(rect) {
         let corners = Rectangle.corners(rect);
-        let center = Geom.interpolate(rect[0], rect[1], 0.5);
+        let center = Num_1.Geom.interpolate(rect[0], rect[1], 0.5);
         return corners.map((c) => new Pt_1.Group(c, center.clone()));
     }
     static withinBound(rect, pt) {
-        return Geom.withinBound(pt, rect[0], rect[1]);
+        return Num_1.Geom.withinBound(pt, rect[0], rect[1]);
     }
     static intersectBound2D(rect1, rect2) {
         let pts = Rectangle.corners(rect1);
         for (let i = 0, len = pts.length; i < len; i++) {
-            if (Geom.withinBound(pts[i], rect2[0], rect2[1]))
+            if (Num_1.Geom.withinBound(pts[i], rect2[0], rect2[1]))
                 return true;
         }
         return false;
@@ -1595,7 +1928,7 @@ class Circle {
 exports.Circle = Circle;
 class Polygon {
     static centroid(pts) {
-        return Geom.centroid(pts);
+        return Num_1.Geom.centroid(pts);
     }
     /**
      * Get a convex hull of the point set using Melkman's algorithm
@@ -1663,9 +1996,9 @@ class Polygon {
      * @param polys an array of Groups, or an array of Pt arrays
      */
     static toRects(poly) {
-        let boxes = poly.map((g) => Geom.boundingBox(g));
+        let boxes = poly.map((g) => Num_1.Geom.boundingBox(g));
         let merged = Util_1.Util.flatten(boxes, false);
-        boxes.unshift(Geom.boundingBox(merged));
+        boxes.unshift(Num_1.Geom.boundingBox(merged));
         return boxes;
     }
 }
@@ -1933,13 +2266,13 @@ exports.Curve = Curve;
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const Form_1 = __webpack_require__(6);
+const Form_1 = __webpack_require__(7);
 const Util_1 = __webpack_require__(1);
 class CanvasForm extends Form_1.Form {
     constructor(space) {
@@ -2160,7 +2493,7 @@ exports.CanvasForm = CanvasForm;
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2192,13 +2525,13 @@ exports.Form = Form;
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const Bound_1 = __webpack_require__(2);
+const Bound_1 = __webpack_require__(3);
 const Pt_1 = __webpack_require__(0);
 class Space {
     constructor() {
@@ -2356,16 +2689,16 @@ exports.Space = Space;
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const Space_1 = __webpack_require__(7);
+const Space_1 = __webpack_require__(8);
 const Pt_1 = __webpack_require__(0);
-const Bound_1 = __webpack_require__(2);
-const CanvasForm_1 = __webpack_require__(5);
+const Bound_1 = __webpack_require__(3);
+const CanvasForm_1 = __webpack_require__(6);
 class CanvasSpace extends Space_1.Space {
     /**
      * Create a CanvasSpace which represents a HTML Canvas Space
@@ -2766,7 +3099,7 @@ exports.CanvasSpace = CanvasSpace;
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2791,38 +3124,7 @@ exports.Create = Create;
 
 
 /***/ }),
-/* 10 */,
 /* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const _Bound = __webpack_require__(2);
-const _CanvasForm = __webpack_require__(5);
-const _CanvasSpace = __webpack_require__(8);
-const _Create = __webpack_require__(9);
-const _Form = __webpack_require__(6);
-const _LinearAlgebra = __webpack_require__(3);
-const _Op = __webpack_require__(4);
-const _Pt = __webpack_require__(0);
-const _Space = __webpack_require__(7);
-const _Color = __webpack_require__(12);
-const _Util = __webpack_require__(1);
-// A function to switch scope for Pts library. eg, Pts.scope( Pts, window );
-let namespace = (sc) => {
-    let lib = module.exports;
-    for (let k in lib) {
-        if (k != "namespace") {
-            sc[k] = lib[k];
-        }
-    }
-};
-module.exports = Object.assign({ namespace }, _Bound, _CanvasForm, _CanvasSpace, _Create, _Form, _LinearAlgebra, _Op, _Pt, _Space, _Util, _Color);
-
-
-/***/ }),
-/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2830,7 +3132,7 @@ module.exports = Object.assign({ namespace }, _Bound, _CanvasForm, _CanvasSpace,
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
 const Util_1 = __webpack_require__(1);
-const Op_1 = __webpack_require__(4);
+const Num_1 = __webpack_require__(4);
 class Color extends Pt_1.Pt {
     constructor(...args) {
         super(...args);
@@ -2977,8 +3279,8 @@ class Color extends Pt_1.Pt {
         let ranges = Color.ranges[this._mode];
         for (let i = 0; i < 3; i++) {
             this[i] = (!toNorm)
-                ? Op_1.Num.mapToRange(this[i], 0, 1, ranges[i][0], ranges[i][1])
-                : Op_1.Num.mapToRange(this[i], ranges[i][0], ranges[i][1], 0, 1);
+                ? Num_1.Num.mapToRange(this[i], 0, 1, ranges[i][0], ranges[i][1])
+                : Num_1.Num.mapToRange(this[i], ranges[i][0], ranges[i][1], 0, 1);
         }
         this._isNorm = toNorm;
         return this;
@@ -3325,7 +3627,7 @@ class Color extends Pt_1.Pt {
      */
     static LABtoLCH(lab, normalizedInput = false, normalizedOutput = false) {
         let c = (normalizedInput) ? lab.$normalize(false) : lab;
-        let h = Op_1.Geom.toDegree(Op_1.Geom.boundRadian(Math.atan2(c[2], c[1]))); // 0 to 360 degrees
+        let h = Num_1.Geom.toDegree(Num_1.Geom.boundRadian(Math.atan2(c[2], c[1]))); // 0 to 360 degrees
         return Color.lch(c[0], Math.sqrt(c[1] * c[1] + c[2] * c[2]), h, lab.alpha);
     }
     /**
@@ -3337,7 +3639,7 @@ class Color extends Pt_1.Pt {
      */
     static LCHtoLAB(lch, normalizedInput = false, normalizedOutput = false) {
         let c = (normalizedInput) ? lch.$normalize(false) : lch;
-        let rad = Op_1.Geom.toRadian(c[2]);
+        let rad = Num_1.Geom.toRadian(c[2]);
         return Color.lab(c[0], Math.cos(rad) * c[1], Math.sin(rad) * c[1], lch.alpha);
     }
 }
@@ -3353,6 +3655,38 @@ Color.ranges = {
     xyz: [[0, 100], [0, 100], [0, 100]],
 };
 exports.Color = Color;
+
+
+/***/ }),
+/* 12 */,
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const _Bound = __webpack_require__(3);
+const _CanvasForm = __webpack_require__(6);
+const _CanvasSpace = __webpack_require__(9);
+const _Create = __webpack_require__(10);
+const _Form = __webpack_require__(7);
+const _LinearAlgebra = __webpack_require__(2);
+const _Num = __webpack_require__(4);
+const _Op = __webpack_require__(5);
+const _Pt = __webpack_require__(0);
+const _Space = __webpack_require__(8);
+const _Color = __webpack_require__(11);
+const _Util = __webpack_require__(1);
+// A function to switch scope for Pts library. eg, Pts.scope( Pts, window );
+let namespace = (sc) => {
+    let lib = module.exports;
+    for (let k in lib) {
+        if (k != "namespace") {
+            sc[k] = lib[k];
+        }
+    }
+};
+module.exports = Object.assign({ namespace }, _Bound, _CanvasForm, _CanvasSpace, _Create, _Form, _LinearAlgebra, _Op, _Num, _Pt, _Space, _Util, _Color);
 
 
 /***/ })

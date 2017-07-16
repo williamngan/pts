@@ -1,6 +1,6 @@
 import {Pt, Group, PtLike, GroupLike} from "./Pt"
 import {Util} from "./Util"
-import {Num, Geom} from "./Op"
+import {Num, Geom} from "./Num"
 import {Vec} from "./LinearAlgebra"
 
 export type ColorType = "rgb"|"hsl"|"hsb"|"lab"|"lch"|"luv"|"xyz";

@@ -4,6 +4,7 @@ import * as _CanvasSpace from "./CanvasSpace";
 import * as _Create from "./Create";
 import * as _Form from "./Form";
 import * as _LinearAlgebra from "./LinearAlgebra";
+import * as _Num from "./Num";
 import * as _Op from "./Op";
 import * as _Pt from "./Pt";
 import * as _Space from "./Space";
@@ -29,6 +30,7 @@ module.exports = {
   ..._Form,
   ..._LinearAlgebra,
   ..._Op,
+  ..._Num,
   ..._Pt,
   ..._Space,
   ..._Util,

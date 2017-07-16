@@ -2,7 +2,8 @@ import chai = require('chai');
 import mocha = require('mocha');
 import {Pt, Group} from '../Pt';
 import {Util} from '../Util';
-import {Num, Geom, Line} from '../Op';
+import {Num, Geom} from '../Num';
+import {Line} from '../Op';
 
 var {assert} = chai;
 var {describe, it} = mocha;

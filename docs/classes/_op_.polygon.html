@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Num | pts</title>
+	<title>Polygon | pts</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -59,10 +59,10 @@
 					<a href="../modules/_op_.html">&quot;Op&quot;</a>
 				</li>
 				<li>
-					<a href="_op_.num.html">Num</a>
+					<a href="_op_.polygon.html">Polygon</a>
 				</li>
 			</ul>
-			<h1>Class Num</h1>
+			<h1>Class Polygon</h1>
 		</div>
 	</div>
 </header>
@@ -73,7 +73,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">Num</span>
+						<span class="target">Polygon</span>
 					</li>
 				</ul>
 			</section>
@@ -84,12 +84,11 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.num.html#boundvalue" class="tsd-kind-icon">bound<wbr>Value</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.num.html#lerp" class="tsd-kind-icon">lerp</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.num.html#maptorange" class="tsd-kind-icon">map<wbr>ToRange</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.num.html#normalizevalue" class="tsd-kind-icon">normalize<wbr>Value</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.num.html#randomrange" class="tsd-kind-icon">random<wbr>Range</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.num.html#within" class="tsd-kind-icon">within</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.polygon.html#centroid" class="tsd-kind-icon">centroid</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.polygon.html#convexhull" class="tsd-kind-icon">convex<wbr>Hull</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.polygon.html#intersect2d" class="tsd-kind-icon">intersect2D</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.polygon.html#network" class="tsd-kind-icon">network</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.polygon.html#torects" class="tsd-kind-icon">to<wbr>Rects</a></li>
 							</ul>
 						</section>
 					</div>
@@ -98,191 +97,146 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a name="boundvalue" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> bound<wbr>Value</h3>
+					<a name="centroid" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> centroid</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">bound<wbr>Value<span class="tsd-signature-symbol">(</span>val<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, min<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, max<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, positive<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+						<li class="tsd-signature tsd-kind-icon">centroid<span class="tsd-signature-symbol">(</span>pts<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/973c9ae/src/Op.ts#L12">Op.ts:12</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/22ec2a9/src/Op.ts#L371">Op.ts:371</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>val: <span class="tsd-signature-type">number</span></h5>
-								</li>
-								<li>
-									<h5>min: <span class="tsd-signature-type">number</span></h5>
-								</li>
-								<li>
-									<h5>max: <span class="tsd-signature-type">number</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> positive: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
+									<h5>pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a name="lerp" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> lerp</h3>
+					<a name="convexhull" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> convex<wbr>Hull</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">lerp<span class="tsd-signature-symbol">(</span>a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, b<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, t<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+						<li class="tsd-signature tsd-kind-icon">convex<wbr>Hull<span class="tsd-signature-symbol">(</span>pts<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a>, sorted<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.group.html" class="tsd-signature-type">Group</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/973c9ae/src/Op.ts#L8">Op.ts:8</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>a: <span class="tsd-signature-type">number</span></h5>
-								</li>
-								<li>
-									<h5>b: <span class="tsd-signature-type">number</span></h5>
-								</li>
-								<li>
-									<h5>t: <span class="tsd-signature-type">number</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a name="maptorange" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> map<wbr>ToRange</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">map<wbr>ToRange<span class="tsd-signature-symbol">(</span>n<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, currA<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, currB<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, targetA<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, targetB<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/973c9ae/src/Op.ts#L46">Op.ts:46</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/22ec2a9/src/Op.ts#L381">Op.ts:381</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Map a value from one range to another</p>
+									<p>Get a convex hull of the point set using Melkman&#39;s algorithm</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>n: <span class="tsd-signature-type">number</span></h5>
+									<h5>pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>a value in the first range</p>
+										<p>a group of Pt</p>
 									</div>
 								</li>
 								<li>
-									<h5>currA: <span class="tsd-signature-type">any</span></h5>
-								</li>
-								<li>
-									<h5>currB: <span class="tsd-signature-type">any</span></h5>
-								</li>
-								<li>
-									<h5>targetA: <span class="tsd-signature-type">any</span></h5>
-								</li>
-								<li>
-									<h5>targetB: <span class="tsd-signature-type">any</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> sorted: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a boolean value to indicate if the group is pre-sorted by x position. Default is false.</p>
+									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-							<p>a remapped value in the second range</p>
+							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
+							<p>a group of Pt that defines the convex hull polygon</p>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a name="normalizevalue" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> normalize<wbr>Value</h3>
+					<a name="intersect2d" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> intersect2D</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">normalize<wbr>Value<span class="tsd-signature-symbol">(</span>n<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, b<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+						<li class="tsd-signature tsd-kind-icon">intersect2D<span class="tsd-signature-symbol">(</span>poly<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol">[]</span>, linesOrRays<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol">[]</span>, sourceIsRay<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.group.html" class="tsd-signature-type">Group</a><span class="tsd-signature-symbol">[]</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/973c9ae/src/Op.ts#L31">Op.ts:31</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/22ec2a9/src/Op.ts#L429">Op.ts:429</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>n: <span class="tsd-signature-type">number</span></h5>
+									<h5>poly: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol">[]</span></h5>
 								</li>
 								<li>
-									<h5>a: <span class="tsd-signature-type">number</span></h5>
+									<h5>linesOrRays: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol">[]</span></h5>
 								</li>
 								<li>
-									<h5>b: <span class="tsd-signature-type">number</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> sourceIsRay: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a><span class="tsd-signature-symbol">[]</span></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a name="randomrange" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> random<wbr>Range</h3>
+					<a name="network" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> network</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">random<wbr>Range<span class="tsd-signature-symbol">(</span>a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, b<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+						<li class="tsd-signature tsd-kind-icon">network<span class="tsd-signature-symbol">(</span>pts<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a>, originIndex<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.group.html" class="tsd-signature-type">Group</a><span class="tsd-signature-symbol">[]</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/973c9ae/src/Op.ts#L26">Op.ts:26</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/22ec2a9/src/Op.ts#L438">Op.ts:438</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>a: <span class="tsd-signature-type">number</span></h5>
+									<h5>pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> b: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;0</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> originIndex: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;0</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a><span class="tsd-signature-symbol">[]</span></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a name="within" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> within</h3>
+					<a name="torects" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> to<wbr>Rects</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">within<span class="tsd-signature-symbol">(</span>p<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, b<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">to<wbr>Rects<span class="tsd-signature-symbol">(</span>poly<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol">[]</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/973c9ae/src/Op.ts#L22">Op.ts:22</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/22ec2a9/src/Op.ts#L450">Op.ts:450</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get a bounding box for each polygon group, as well as a union bounding-box for all groups</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>p: <span class="tsd-signature-type">number</span></h5>
-								</li>
-								<li>
-									<h5>a: <span class="tsd-signature-type">number</span></h5>
-								</li>
-								<li>
-									<h5>b: <span class="tsd-signature-type">number</span></h5>
+									<h5>poly: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol">[]</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol">[]</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -304,6 +258,9 @@
 						<a href="../modules/_canvasspace_.html">"<wbr>Canvas<wbr>Space"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="../modules/_color_.html">"<wbr>Color"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_create_.html">"<wbr>Create"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -311,6 +268,9 @@
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_linearalgebra_.html">"<wbr>Linear<wbr>Algebra"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_num_.html">"<wbr>Num"</a>
 					</li>
 					<li class="current tsd-kind-external-module">
 						<a href="../modules/_op_.html">"<wbr>Op"</a>
@@ -334,45 +294,57 @@
 						<a href="../modules/__lib_.html">"_<wbr>lib"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="../modules/_test_linearalgebra_spec_.html">"test/<wbr>Linear<wbr>Algebra.spec"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_test_op_spec_.html">"test/<wbr>Op.spec"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_test_pt_spec_.html">"test/<wbr>Pt.spec"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_test_util_spec_.html">"test/<wbr>Util.spec"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="_op_.geom.html" class="tsd-kind-icon">Geom</a>
+						<a href="_op_.circle.html" class="tsd-kind-icon">Circle</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="_op_.curve.html" class="tsd-kind-icon">Curve</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="_op_.line.html" class="tsd-kind-icon">Line</a>
 					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-external-module">
-						<a href="_op_.num.html" class="tsd-kind-icon">Num</a>
+						<a href="_op_.polygon.html" class="tsd-kind-icon">Polygon</a>
 						<ul>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="_op_.num.html#boundvalue" class="tsd-kind-icon">bound<wbr>Value</a>
+								<a href="_op_.polygon.html#centroid" class="tsd-kind-icon">centroid</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="_op_.num.html#lerp" class="tsd-kind-icon">lerp</a>
+								<a href="_op_.polygon.html#convexhull" class="tsd-kind-icon">convex<wbr>Hull</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="_op_.num.html#maptorange" class="tsd-kind-icon">map<wbr>ToRange</a>
+								<a href="_op_.polygon.html#intersect2d" class="tsd-kind-icon">intersect2D</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="_op_.num.html#normalizevalue" class="tsd-kind-icon">normalize<wbr>Value</a>
+								<a href="_op_.polygon.html#network" class="tsd-kind-icon">network</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="_op_.num.html#randomrange" class="tsd-kind-icon">random<wbr>Range</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="_op_.num.html#within" class="tsd-kind-icon">within</a>
+								<a href="_op_.polygon.html#torects" class="tsd-kind-icon">to<wbr>Rects</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="_op_.rectangle.html" class="tsd-kind-icon">Rectangle</a>
+					</li>
 				</ul>
 			</nav>
 		</div>
