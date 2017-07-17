@@ -2502,249 +2502,7 @@ exports.Curve = Curve;
 
 
 /***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const Form_1 = __webpack_require__(7);
-const Util_1 = __webpack_require__(1);
-class CanvasForm extends Form_1.Form {
-    constructor(space) {
-        super();
-        // store common styles so that they can be restored to canvas context when using multiple forms. See `reset()`.
-        this._style = { fillStyle: "#e51c23", strokeStyle: "#fff", lineWidth: 1, lineJoin: "miter", lineCap: "butt" };
-        this._space = space;
-        this._ctx = this._space.ctx;
-        this._ctx.fillStyle = this._style.fillStyle;
-        this._ctx.strokeStyle = this._style.strokeStyle;
-    }
-    get space() { return this._space; }
-    /**
-     * Set current fill style. For example: `form.fill("#F90")` `form.fill("rgba(0,0,0,.5")` `form.fill(false)`
-     * @param c fill color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle))
-     * @return this
-     */
-    fill(c) {
-        if (typeof c == "boolean") {
-            this.filled = c;
-        }
-        else {
-            this.filled = true;
-            this._style.fillStyle = c;
-            this._ctx.fillStyle = c;
-        }
-        return this;
-    }
-    /**
-     * Set current stroke style. For example: `form.stroke("#F90")` `form.stroke("rgba(0,0,0,.5")` `form.stroke(false)` `form.stroke("#000", 0.5, 'round')`
-     * @param c stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle))
-     * @param width Optional value (can be floating point) to set line width
-     * @param linejoin Optional string to set line joint style. Can be "miter", "bevel", or "round".
-     * @param linecap Optional string to set line cap style. Can be "butt", "round", or "square".
-     * @return this
-     */
-    stroke(c, width, linejoin, linecap) {
-        if (typeof c == "boolean") {
-            this.stroked = c;
-        }
-        else {
-            this.stroked = true;
-            this._style.strokeStyle = c;
-            this._ctx.strokeStyle = c;
-            if (width) {
-                this._ctx.lineWidth = width;
-                this._style.lineWidth = width;
-            }
-            if (linejoin) {
-                this._ctx.lineJoin = linejoin;
-                this._style.lineJoin = linejoin;
-            }
-            if (linecap) {
-                this._ctx.lineCap = linecap;
-                this._style.lineCap = linecap;
-            }
-        }
-        return this;
-    }
-    /**
-     * Reset the rendering context's common styles to this form's styles. This supports using multiple forms on the same canvas context.
-     */
-    reset() {
-        for (let k in this._style) {
-            this._ctx[k] = this._style[k];
-        }
-        return this;
-    }
-    _paint() {
-        if (this._filled)
-            this._ctx.fill();
-        if (this._stroked)
-            this._ctx.stroke();
-    }
-    point(p, radius = 5, shape = "square") {
-        if (!CanvasForm[shape])
-            throw new Error(`${shape} is not a static function of CanvasForm`);
-        CanvasForm[shape](this._ctx, p, radius);
-        this._paint();
-        return this;
-    }
-    points(pts, radius = 5, shape = "square") {
-        if (!pts)
-            return;
-        for (let i = 0, len = pts.length; i < len; i++) {
-            this.point(pts[i], radius, shape);
-        }
-        return this;
-    }
-    static circle(ctx, pt, radius = 10) {
-        if (!pt)
-            return;
-        ctx.beginPath();
-        ctx.arc(pt[0], pt[1], radius, 0, Util_1.Const.two_pi, false);
-        ctx.closePath();
-    }
-    circle(pts) {
-        CanvasForm.circle(this._ctx, pts[0], pts[1][0]);
-        this._paint();
-        return this;
-    }
-    circles(groups) {
-        for (let i = 0, len = groups.length; i < len; i++) {
-            this.circle(groups[i]);
-        }
-        return this;
-    }
-    static ellipse(ctx, pts) {
-        if (pts.length < 2)
-            return;
-        if (pts[1].length < 2) {
-            CanvasForm.circle(ctx, pts[0], pts[1][0]);
-        }
-        else {
-            ctx.ellipse(pts[0][0], pts[0][1], pts[1][0], pts[1][1], 0, 0, Util_1.Const.two_pi);
-        }
-    }
-    ellipse(pts) {
-        CanvasForm.ellipse(this._ctx, pts);
-        return this;
-    }
-    static arc(ctx, pt, radius, startAngle, endAngle, cc) {
-        if (!pt)
-            return;
-        ctx.beginPath();
-        ctx.arc(pt[0], pt[1], radius, startAngle, endAngle, cc);
-    }
-    arc(pt, radius, startAngle, endAngle, cc) {
-        CanvasForm.arc(this._ctx, pt, radius, startAngle, endAngle, cc);
-        this._paint();
-        return this;
-    }
-    static square(ctx, pt, halfsize) {
-        if (!pt)
-            return;
-        let x1 = pt[0] - halfsize;
-        let y1 = pt[1] - halfsize;
-        let x2 = pt[0] + halfsize;
-        let y2 = pt[1] + halfsize;
-        // faster than using `rect`
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x1, y2);
-        ctx.lineTo(x2, y2);
-        ctx.lineTo(x2, y1);
-        ctx.closePath();
-    }
-    static line(ctx, pts) {
-        if (pts.length < 2)
-            return;
-        ctx.beginPath();
-        ctx.moveTo(pts[0][0], pts[0][1]);
-        for (let i = 1, len = pts.length; i < len; i++) {
-            if (pts[i])
-                ctx.lineTo(pts[i][0], pts[i][1]);
-        }
-    }
-    line(pts) {
-        CanvasForm.line(this._ctx, pts);
-        this._paint();
-        return this;
-    }
-    lines(groups) {
-        for (let i = 0, len = groups.length; i < len; i++) {
-            this.line(groups[i]);
-        }
-        return this;
-    }
-    static polygon(ctx, pts) {
-        if (pts.length < 2)
-            return;
-        ctx.beginPath();
-        ctx.moveTo(pts[0][0], pts[0][1]);
-        for (let i = 1, len = pts.length; i < len; i++) {
-            if (pts[i])
-                ctx.lineTo(pts[i][0], pts[i][1]);
-        }
-        ctx.closePath();
-    }
-    polygon(pts) {
-        CanvasForm.polygon(this._ctx, pts);
-        this._paint();
-        return this;
-    }
-    static rect(ctx, pts) {
-        if (pts.length < 2)
-            return;
-        ctx.beginPath();
-        ctx.moveTo(pts[0][0], pts[0][1]);
-        ctx.lineTo(pts[0][0], pts[1][1]);
-        ctx.lineTo(pts[1][0], pts[1][1]);
-        ctx.lineTo(pts[1][0], pts[0][1]);
-        ctx.closePath();
-    }
-    rect(pts) {
-        CanvasForm.rect(this._ctx, pts);
-        this._paint();
-        return this;
-    }
-    rects(groups) {
-        for (let i = 0, len = groups.length; i < len; i++) {
-            this.rect(groups[i]);
-        }
-        return this;
-    }
-    /**
-     * A static function to draw text
-     * @param `ctx` canvas rendering context
-     * @param `pt` a Point object to specify the anchor point
-     * @param `txt` a string of text to draw
-     * @param `maxWidth` specify a maximum width per line
-     */
-    static text(ctx, pt, txt, maxWidth) {
-        if (!pt)
-            return;
-        ctx.fillText(txt, pt[0], pt[1], maxWidth);
-    }
-    text(pt, txt, maxWidth) {
-        CanvasForm.text(this._ctx, pt, txt, maxWidth);
-        return this;
-    }
-    log(txt) {
-        this._ctx.font = "12px sans-serif";
-        let w = this._ctx.measureText(txt).width + 20;
-        this.stroke(false).fill("rgba(0,0,0,.4)").rect([[0, 0], [w, 20]]);
-        this.fill("#fff").text([10, 14], txt);
-        return this;
-    }
-    draw(ps, shape) {
-        return this;
-    }
-}
-exports.CanvasForm = CanvasForm;
-
-
-/***/ }),
+/* 6 */,
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2941,16 +2699,154 @@ exports.Space = Space;
 
 
 /***/ }),
-/* 9 */
+/* 9 */,
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const Pt_1 = __webpack_require__(0);
+class Create {
+    static distributeRandom(bound, count, dimensions = 2) {
+        let pts = [];
+        for (let i = 0; i < count; i++) {
+            let p = [bound.x + Math.random() * bound.width];
+            if (dimensions > 1)
+                p.push(bound.y + Math.random() * bound.height);
+            if (dimensions > 2)
+                p.push(bound.z + Math.random() * bound.depth);
+            pts.push(new Pt_1.Pt(p));
+        }
+        return pts;
+    }
+}
+exports.Create = Create;
+
+
+/***/ }),
+/* 11 */,
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const Pt_1 = __webpack_require__(0);
+const Util_1 = __webpack_require__(1);
+const Bound_1 = __webpack_require__(3);
+const Create_1 = __webpack_require__(10);
+const Canvas_1 = __webpack_require__(14);
+window["Pt"] = Pt_1.Pt;
+console.log(new Pt_1.Pt(32, 43).unit().magnitude());
+// console.log( Pts.zipOne( [new Pt(1,3), new Pt(2,4), new Pt(5,10)], 1, 0 ).toString() );
+// console.log( new Pt(1,2,3,4,5,6).slice(2,5).toString() );
+// console.log( Pts.toString( Pts.zip( [new Pt(1,2), new Pt(3,4), new Pt(5,6)] ) ) );
+// console.log( Pts.toString( Pts.zip( Pts.zip( [new Pt(1,2), new Pt(3,4), new Pt(5,6)] ) ) ) );
+console.log(Util_1.Util.split([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], 5));
+let cs = [];
+for (let i = 0; i < 500; i++) {
+    let c = new Pt_1.Pt(Math.random() * 200, Math.random() * 200);
+    cs.push(c);
+}
+var canvas = new Canvas_1.CanvasSpace("#pt", ready).setup({ retina: true });
+var form = canvas.getForm();
+var form2 = canvas.getForm();
+var pt = new Pt_1.Pt(50, 50);
+var ptAdd = pt.op((a, b) => a.$add(b));
+var pto = [ptAdd(10, 10), ptAdd(20, 25)];
+var pto2 = {
+    "a": ptAdd(10, 10),
+    "b": ptAdd(20, 25)
+};
+for (var i in pto2) {
+    console.log("==>", pto2[i].toString());
+}
+console.log(pto.reduce((a, b) => a + " | " + b.toString(), ""));
+console.log(pt.toString());
+var ps = [];
+let fs = {
+    "size": (p) => {
+        let dist = p.$subtract(canvas.size.$divide(2)).magnitude();
+        return new Pt_1.Pt(dist / 8, dist / (Math.max(canvas.width, canvas.height) / 2));
+    },
+};
+function ready(bound, space) {
+    ps = Create_1.Create.distributeRandom(new Bound_1.Bound(canvas.size), 50);
+}
+canvas.add({
+    animate: (time, ftime, space) => {
+        let framerate = 1000 / ftime;
+        form.fill("#999").text(new Pt_1.Pt(20, 20), framerate + " fps");
+        form.reset();
+        form.stroke(false);
+        ps.forEach((p) => {
+            let attrs = p.op(fs);
+            form.fill(`rgba(255,0,0,${1.2 - attrs.size.y}`);
+            form.point(p, attrs.size.x, "circle");
+        });
+        // form.point( {x:50.5, y: 50.5}, 20, "circle");
+        // form.point( {x:50.5, y: 140.5}, 20, );
+        // console.log(time, fps);
+        // form.point( {x:50, y:50}, 100);    
+    },
+    action: (type, px, py) => {
+        if (type == "move") {
+            let d = canvas.boundingBox.center.$subtract(px, py);
+            let p1 = canvas.boundingBox.center.$subtract(d);
+            let bound = new Bound_1.Bound(p1, p1.$add(d.$abs().multiply(2)));
+            ps = Create_1.Create.distributeRandom(bound, 200);
+        }
+    }
+});
+canvas.bindMouse();
+canvas.playOnce(3000);
+/*
+canvas.add( {
+  animate: (time, fps, space) => {
+    form2.reset();
+    form2.fill("#fff").stroke("#000").point( {x:150.5, y: 50.5}, 20, "circle");
+    form2.fill("#ff0").stroke("#ccc").point( {x:150.5, y: 140.5}, 20, );
+    // console.log(time, fps);
+  }
+})
+*/
+//canvas.playOnce(5000);
+/*
+let vec = new Vector( [1000, 2, 3] ).add( new Vector( [2, 3, 4] ) );
+console.log(vec.toString());
+
+setInterval( () => vec.add( new Vector( [ 1, 2, 3 ]) ), 500 );
+
+let m1 = Matrix.identity(3);
+let m2 = Matrix.identity(3);
+
+
+console.log( Matrix.add(m1, m2).toString() );
+
+let pts = new Pts();
+console.log( pts );
+*/
+// console.log(pts.toString());
+// pts.pt(1,2,3);
+// pts.pt(2,3,4);
+// console.log(pts.toString());
+// console.log( Matrix.augment(m1, m2).toString() );
+
+
+/***/ }),
+/* 13 */,
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const Space_1 = __webpack_require__(8);
-const Pt_1 = __webpack_require__(0);
+const Form_1 = __webpack_require__(7);
 const Bound_1 = __webpack_require__(3);
-const CanvasForm_1 = __webpack_require__(6);
+const Pt_1 = __webpack_require__(0);
+const Util_1 = __webpack_require__(1);
 class CanvasSpace extends Space_1.Space {
     /**
      * Create a CanvasSpace which represents a HTML Canvas Space
@@ -3079,7 +2975,7 @@ class CanvasSpace extends Space_1.Space {
     /**
      * Get a new CanvasForm for drawing
      */
-    getForm() { return new CanvasForm_1.CanvasForm(this); }
+    getForm() { return new CanvasForm(this); }
     /**
      * Window resize handling
      * @param evt
@@ -3348,141 +3244,238 @@ class CanvasSpace extends Space_1.Space {
     get customRendering() { return this._renderFunc; }
 }
 exports.CanvasSpace = CanvasSpace;
-
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const Pt_1 = __webpack_require__(0);
-class Create {
-    static distributeRandom(bound, count, dimensions = 2) {
-        let pts = [];
-        for (let i = 0; i < count; i++) {
-            let p = [bound.x + Math.random() * bound.width];
-            if (dimensions > 1)
-                p.push(bound.y + Math.random() * bound.height);
-            if (dimensions > 2)
-                p.push(bound.z + Math.random() * bound.depth);
-            pts.push(new Pt_1.Pt(p));
+class CanvasForm extends Form_1.Form {
+    constructor(space) {
+        super();
+        // store common styles so that they can be restored to canvas context when using multiple forms. See `reset()`.
+        this._style = { fillStyle: "#e51c23", strokeStyle: "#fff", lineWidth: 1, lineJoin: "miter", lineCap: "butt" };
+        this._space = space;
+        this._ctx = this._space.ctx;
+        this._ctx.fillStyle = this._style.fillStyle;
+        this._ctx.strokeStyle = this._style.strokeStyle;
+    }
+    get space() { return this._space; }
+    /**
+     * Set current fill style. For example: `form.fill("#F90")` `form.fill("rgba(0,0,0,.5")` `form.fill(false)`
+     * @param c fill color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle))
+     * @return this
+     */
+    fill(c) {
+        if (typeof c == "boolean") {
+            this.filled = c;
         }
-        return pts;
+        else {
+            this.filled = true;
+            this._style.fillStyle = c;
+            this._ctx.fillStyle = c;
+        }
+        return this;
+    }
+    /**
+     * Set current stroke style. For example: `form.stroke("#F90")` `form.stroke("rgba(0,0,0,.5")` `form.stroke(false)` `form.stroke("#000", 0.5, 'round')`
+     * @param c stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle))
+     * @param width Optional value (can be floating point) to set line width
+     * @param linejoin Optional string to set line joint style. Can be "miter", "bevel", or "round".
+     * @param linecap Optional string to set line cap style. Can be "butt", "round", or "square".
+     * @return this
+     */
+    stroke(c, width, linejoin, linecap) {
+        if (typeof c == "boolean") {
+            this.stroked = c;
+        }
+        else {
+            this.stroked = true;
+            this._style.strokeStyle = c;
+            this._ctx.strokeStyle = c;
+            if (width) {
+                this._ctx.lineWidth = width;
+                this._style.lineWidth = width;
+            }
+            if (linejoin) {
+                this._ctx.lineJoin = linejoin;
+                this._style.lineJoin = linejoin;
+            }
+            if (linecap) {
+                this._ctx.lineCap = linecap;
+                this._style.lineCap = linecap;
+            }
+        }
+        return this;
+    }
+    /**
+     * Reset the rendering context's common styles to this form's styles. This supports using multiple forms on the same canvas context.
+     */
+    reset() {
+        for (let k in this._style) {
+            this._ctx[k] = this._style[k];
+        }
+        return this;
+    }
+    _paint() {
+        if (this._filled)
+            this._ctx.fill();
+        if (this._stroked)
+            this._ctx.stroke();
+    }
+    point(p, radius = 5, shape = "square") {
+        if (!CanvasForm[shape])
+            throw new Error(`${shape} is not a static function of CanvasForm`);
+        CanvasForm[shape](this._ctx, p, radius);
+        this._paint();
+        return this;
+    }
+    points(pts, radius = 5, shape = "square") {
+        if (!pts)
+            return;
+        for (let i = 0, len = pts.length; i < len; i++) {
+            this.point(pts[i], radius, shape);
+        }
+        return this;
+    }
+    static circle(ctx, pt, radius = 10) {
+        if (!pt)
+            return;
+        ctx.beginPath();
+        ctx.arc(pt[0], pt[1], radius, 0, Util_1.Const.two_pi, false);
+        ctx.closePath();
+    }
+    circle(pts) {
+        CanvasForm.circle(this._ctx, pts[0], pts[1][0]);
+        this._paint();
+        return this;
+    }
+    circles(groups) {
+        for (let i = 0, len = groups.length; i < len; i++) {
+            this.circle(groups[i]);
+        }
+        return this;
+    }
+    static ellipse(ctx, pts) {
+        if (pts.length < 2)
+            return;
+        if (pts[1].length < 2) {
+            CanvasForm.circle(ctx, pts[0], pts[1][0]);
+        }
+        else {
+            ctx.ellipse(pts[0][0], pts[0][1], pts[1][0], pts[1][1], 0, 0, Util_1.Const.two_pi);
+        }
+    }
+    ellipse(pts) {
+        CanvasForm.ellipse(this._ctx, pts);
+        return this;
+    }
+    static arc(ctx, pt, radius, startAngle, endAngle, cc) {
+        if (!pt)
+            return;
+        ctx.beginPath();
+        ctx.arc(pt[0], pt[1], radius, startAngle, endAngle, cc);
+    }
+    arc(pt, radius, startAngle, endAngle, cc) {
+        CanvasForm.arc(this._ctx, pt, radius, startAngle, endAngle, cc);
+        this._paint();
+        return this;
+    }
+    static square(ctx, pt, halfsize) {
+        if (!pt)
+            return;
+        let x1 = pt[0] - halfsize;
+        let y1 = pt[1] - halfsize;
+        let x2 = pt[0] + halfsize;
+        let y2 = pt[1] + halfsize;
+        // faster than using `rect`
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x1, y2);
+        ctx.lineTo(x2, y2);
+        ctx.lineTo(x2, y1);
+        ctx.closePath();
+    }
+    static line(ctx, pts) {
+        if (pts.length < 2)
+            return;
+        ctx.beginPath();
+        ctx.moveTo(pts[0][0], pts[0][1]);
+        for (let i = 1, len = pts.length; i < len; i++) {
+            if (pts[i])
+                ctx.lineTo(pts[i][0], pts[i][1]);
+        }
+    }
+    line(pts) {
+        CanvasForm.line(this._ctx, pts);
+        this._paint();
+        return this;
+    }
+    lines(groups) {
+        for (let i = 0, len = groups.length; i < len; i++) {
+            this.line(groups[i]);
+        }
+        return this;
+    }
+    static polygon(ctx, pts) {
+        if (pts.length < 2)
+            return;
+        ctx.beginPath();
+        ctx.moveTo(pts[0][0], pts[0][1]);
+        for (let i = 1, len = pts.length; i < len; i++) {
+            if (pts[i])
+                ctx.lineTo(pts[i][0], pts[i][1]);
+        }
+        ctx.closePath();
+    }
+    polygon(pts) {
+        CanvasForm.polygon(this._ctx, pts);
+        this._paint();
+        return this;
+    }
+    static rect(ctx, pts) {
+        if (pts.length < 2)
+            return;
+        ctx.beginPath();
+        ctx.moveTo(pts[0][0], pts[0][1]);
+        ctx.lineTo(pts[0][0], pts[1][1]);
+        ctx.lineTo(pts[1][0], pts[1][1]);
+        ctx.lineTo(pts[1][0], pts[0][1]);
+        ctx.closePath();
+    }
+    rect(pts) {
+        CanvasForm.rect(this._ctx, pts);
+        this._paint();
+        return this;
+    }
+    rects(groups) {
+        for (let i = 0, len = groups.length; i < len; i++) {
+            this.rect(groups[i]);
+        }
+        return this;
+    }
+    /**
+     * A static function to draw text
+     * @param `ctx` canvas rendering context
+     * @param `pt` a Point object to specify the anchor point
+     * @param `txt` a string of text to draw
+     * @param `maxWidth` specify a maximum width per line
+     */
+    static text(ctx, pt, txt, maxWidth) {
+        if (!pt)
+            return;
+        ctx.fillText(txt, pt[0], pt[1], maxWidth);
+    }
+    text(pt, txt, maxWidth) {
+        CanvasForm.text(this._ctx, pt, txt, maxWidth);
+        return this;
+    }
+    log(txt) {
+        this._ctx.font = "12px sans-serif";
+        let w = this._ctx.measureText(txt).width + 20;
+        this.stroke(false).fill("rgba(0,0,0,.4)").rect([[0, 0], [w, 20]]);
+        this.fill("#fff").text([10, 14], txt);
+        return this;
+    }
+    draw(ps, shape) {
+        return this;
     }
 }
-exports.Create = Create;
-
-
-/***/ }),
-/* 11 */,
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const Pt_1 = __webpack_require__(0);
-const Util_1 = __webpack_require__(1);
-const Bound_1 = __webpack_require__(3);
-const Create_1 = __webpack_require__(10);
-const CanvasSpace_1 = __webpack_require__(9);
-window["Pt"] = Pt_1.Pt;
-console.log(new Pt_1.Pt(32, 43).unit().magnitude());
-// console.log( Pts.zipOne( [new Pt(1,3), new Pt(2,4), new Pt(5,10)], 1, 0 ).toString() );
-// console.log( new Pt(1,2,3,4,5,6).slice(2,5).toString() );
-// console.log( Pts.toString( Pts.zip( [new Pt(1,2), new Pt(3,4), new Pt(5,6)] ) ) );
-// console.log( Pts.toString( Pts.zip( Pts.zip( [new Pt(1,2), new Pt(3,4), new Pt(5,6)] ) ) ) );
-console.log(Util_1.Util.split([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], 5));
-let cs = [];
-for (let i = 0; i < 500; i++) {
-    let c = new Pt_1.Pt(Math.random() * 200, Math.random() * 200);
-    cs.push(c);
-}
-var canvas = new CanvasSpace_1.CanvasSpace("#pt", ready).setup({ retina: true });
-var form = canvas.getForm();
-var form2 = canvas.getForm();
-var pt = new Pt_1.Pt(50, 50);
-var ptAdd = pt.op((a, b) => a.$add(b));
-var pto = [ptAdd(10, 10), ptAdd(20, 25)];
-var pto2 = {
-    "a": ptAdd(10, 10),
-    "b": ptAdd(20, 25)
-};
-for (var i in pto2) {
-    console.log("==>", pto2[i].toString());
-}
-console.log(pto.reduce((a, b) => a + " | " + b.toString(), ""));
-console.log(pt.toString());
-var ps = [];
-let fs = {
-    "size": (p) => {
-        let dist = p.$subtract(canvas.size.$divide(2)).magnitude();
-        return new Pt_1.Pt(dist / 8, dist / (Math.max(canvas.width, canvas.height) / 2));
-    },
-};
-function ready(bound, space) {
-    ps = Create_1.Create.distributeRandom(new Bound_1.Bound(canvas.size), 50);
-}
-canvas.add({
-    animate: (time, ftime, space) => {
-        let framerate = 1000 / ftime;
-        form.fill("#999").text(new Pt_1.Pt(20, 20), framerate + " fps");
-        form.reset();
-        form.stroke(false);
-        ps.forEach((p) => {
-            let attrs = p.op(fs);
-            form.fill(`rgba(255,0,0,${1.2 - attrs.size.y}`);
-            form.point(p, attrs.size.x, "circle");
-        });
-        // form.point( {x:50.5, y: 50.5}, 20, "circle");
-        // form.point( {x:50.5, y: 140.5}, 20, );
-        // console.log(time, fps);
-        // form.point( {x:50, y:50}, 100);    
-    },
-    action: (type, px, py) => {
-        if (type == "move") {
-            let d = canvas.boundingBox.center.$subtract(px, py);
-            let p1 = canvas.boundingBox.center.$subtract(d);
-            let bound = new Bound_1.Bound(p1, p1.$add(d.$abs().multiply(2)));
-            ps = Create_1.Create.distributeRandom(bound, 200);
-        }
-    }
-});
-canvas.bindMouse();
-canvas.playOnce(3000);
-/*
-canvas.add( {
-  animate: (time, fps, space) => {
-    form2.reset();
-    form2.fill("#fff").stroke("#000").point( {x:150.5, y: 50.5}, 20, "circle");
-    form2.fill("#ff0").stroke("#ccc").point( {x:150.5, y: 140.5}, 20, );
-    // console.log(time, fps);
-  }
-})
-*/
-//canvas.playOnce(5000);
-/*
-let vec = new Vector( [1000, 2, 3] ).add( new Vector( [2, 3, 4] ) );
-console.log(vec.toString());
-
-setInterval( () => vec.add( new Vector( [ 1, 2, 3 ]) ), 500 );
-
-let m1 = Matrix.identity(3);
-let m2 = Matrix.identity(3);
-
-
-console.log( Matrix.add(m1, m2).toString() );
-
-let pts = new Pts();
-console.log( pts );
-*/
-// console.log(pts.toString());
-// pts.pt(1,2,3);
-// pts.pt(2,3,4);
-// console.log(pts.toString());
-// console.log( Matrix.augment(m1, m2).toString() );
+exports.CanvasForm = CanvasForm;
 
 
 /***/ })

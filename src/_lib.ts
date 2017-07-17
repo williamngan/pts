@@ -1,6 +1,5 @@
 import * as _Bound from "./Bound";
-import * as _CanvasForm from "./CanvasForm";
-import * as _CanvasSpace from "./CanvasSpace";
+import * as _Canvas from "./Canvas";
 import * as _Create from "./Create";
 import * as _Form from "./Form";
 import * as _LinearAlgebra from "./LinearAlgebra";
@@ -24,8 +23,7 @@ let namespace = ( sc:object ) => {
 module.exports = {
   namespace,
   ..._Bound,
-  ..._CanvasForm,
-  ..._CanvasSpace,
+  ..._Canvas,
   ..._Create,
   ..._Form,
   ..._LinearAlgebra,

@@ -2,8 +2,7 @@ import {Pt, IPt} from './Pt';
 import {Util} from './Util';
 import {Bound} from './Bound';
 import {Create} from './Create';
-import {CanvasSpace} from "./CanvasSpace"; 
-import {CanvasForm} from "./CanvasForm"; 
+import {CanvasSpace, CanvasForm} from "./Canvas"; 
 import {Vec} from "./LinearAlgebra"; 
 
 window["Pt"] = Pt;
