@@ -3312,6 +3312,7 @@ class CanvasSpace extends Space_1.Space {
         this._pixelScale = 1;
         this._autoResize = true;
         this._bgcolor = "#e1e9f0";
+        this._offscreen = false;
         // track mouse dragging
         this._pressed = false;
         this._dragged = false;
@@ -3401,6 +3402,7 @@ class CanvasSpace extends Space_1.Space {
      * @param opt.bgcolor a hex or rgba string to set initial background color of the canvas, or use `false` or "transparent" to set a transparent background. You may also change it later with `clear()`
      * @param opt.resize a boolean to set whether `<canvas>` size should auto resize to match its container's size. You can also set it manually with `autoSize()`
      * @param opt.retina a boolean to set if device pixel scaling should be used. This may make drawings on retina displays look sharper but may reduce performance slightly. Default is `true`.
+     * @param opt.offscreen a boolean to set if a duplicate canvas should be created for offscreen rendering. Default is `false`.
      */
     setup(opt) {
         if (opt.bgcolor)
@@ -3412,12 +3414,38 @@ class CanvasSpace extends Space_1.Space {
             let r2 = this._ctx.webkitBackingStorePixelRatio || this._ctx.mozBackingStorePixelRatio || this._ctx.msBackingStorePixelRatio || this._ctx.oBackingStorePixelRatio || this._ctx.backingStorePixelRatio || 1;
             this._pixelScale = r1 / r2;
         }
+        if (opt.offscreen) {
+            this._offscreen = true;
+            this._offCanvas = this._createElement("canvas", this.id + "_offscreen");
+            this._offCtx = this._offCanvas.getContext('2d');
+        }
+        else {
+            this._offscreen = false;
+        }
         return this;
+    }
+    /**
+     * Check if an offscreen canvas is created
+     */
+    get hasOffscreen() {
+        return this._offscreen;
     }
     /**
      * Get the rendering context of canvas
      */
     get ctx() { return this._ctx; }
+    /**
+     * Get the canvas element in this space
+     */
+    get canvas() { return this._canvas; }
+    /**
+     * Get the rendering context of offscreen canvas (if created via `setup()`)
+     */
+    get offscreenCtx() { return this._offCtx; }
+    /**
+     * Get the offscreen canvas element
+     */
+    get offscreenCanvas() { return this._offCanvas; }
     /**
      * Get the mouse or touch pointer that stores the last action
      */
@@ -3476,9 +3504,19 @@ class CanvasSpace extends Space_1.Space {
         this._canvas.height = this.bound.size.y * this._pixelScale;
         this._canvas.style.width = Math.floor(this.bound.size.x) + "px";
         this._canvas.style.height = Math.floor(this.bound.size.y) + "px";
+        if (this._offscreen) {
+            this._offCanvas.width = this.bound.size.x * this._pixelScale;
+            this._offCanvas.height = this.bound.size.y * this._pixelScale;
+            // this._offCanvas.style.width = Math.floor(this.bound.size.x) + "px";
+            // this._offCanvas.style.height = Math.floor(this.bound.size.y) + "px";
+        }
         if (this._pixelScale != 1) {
             this._ctx.scale(this._pixelScale, this._pixelScale);
             this._ctx.translate(0.5, 0.5);
+            if (this._offscreen) {
+                this._offCtx.scale(this._pixelScale, this._pixelScale);
+                this._offCtx.translate(0.5, 0.5);
+            }
         }
         for (let k in this.players) {
             let p = this.players[k];
@@ -3506,6 +3544,18 @@ class CanvasSpace extends Space_1.Space {
         this._ctx.fillStyle = lastColor;
         return this;
     }
+    clearOffscreen(bg) {
+        if (this._offscreen) {
+            if (bg) {
+                this._offCtx.fillStyle = bg;
+                this._offCtx.fillRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
+            }
+            else {
+                this._offCtx.clearRect(-1, -1, this._offCanvas.width + 1, this._offCanvas.height + 1);
+            }
+        }
+        return this;
+    }
     /**
      * Main animation function. Call `Space.playItems`.
      * @param time current time
@@ -3513,8 +3563,12 @@ class CanvasSpace extends Space_1.Space {
     playItems(time) {
         if (this._isReady) {
             this._ctx.save();
+            if (this._offscreen)
+                this._offCtx.save();
             super.playItems(time);
             this._ctx.restore();
+            if (this._offscreen)
+                this._offCtx.restore();
             this.render(this._ctx);
         }
     }
@@ -3698,6 +3752,9 @@ class CanvasSpace extends Space_1.Space {
     get customRendering() { return this._renderFunc; }
 }
 exports.CanvasSpace = CanvasSpace;
+/**
+ * CanvasForm provide methods to visualize Pts on CanvasSpace
+ */
 class CanvasForm extends Form_1.Form {
     constructor(space) {
         super();
@@ -3709,6 +3766,17 @@ class CanvasForm extends Form_1.Form {
         this._ctx.strokeStyle = this._style.strokeStyle;
     }
     get space() { return this._space; }
+    useOffscreen(off = true, clear = false) {
+        if (clear)
+            this._space.clearOffscreen((typeof clear == "string") ? clear : null);
+        this._ctx = (this._space.hasOffscreen && off) ? this._space.offscreenCtx : this._space.ctx;
+        return this;
+    }
+    renderOffscreen(offsetX = 0, offsetY = 0) {
+        if (this._space.hasOffscreen) {
+            this._space.ctx.drawImage(this._space.offscreenCanvas, offsetX, offsetY, this._space.width, this._space.height);
+        }
+    }
     /**
      * Set current fill style. For example: `form.fill("#F90")` `form.fill("rgba(0,0,0,.5")` `form.fill(false)`
      * @param c fill color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle))

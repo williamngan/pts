@@ -9,7 +9,7 @@ space.add( {
 
   start: init,
 
-  animate: (time, fps) => {
+  animate: (time, ftime) => {
     guidelines();
     
     // Begin Test Code --

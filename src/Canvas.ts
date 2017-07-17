@@ -25,6 +25,10 @@ export class CanvasSpace extends Space {
   protected _bgcolor = "#e1e9f0";
   protected _ctx:PtsCanvasRenderingContext2D;
 
+  protected _offscreen = false;
+  protected _offCanvas:HTMLCanvasElement;
+  protected _offCtx:PtsCanvasRenderingContext2D;
+
   // track mouse dragging
   private _pressed = false;
   private _dragged = false;
@@ -140,8 +144,9 @@ export class CanvasSpace extends Space {
    * @param opt.bgcolor a hex or rgba string to set initial background color of the canvas, or use `false` or "transparent" to set a transparent background. You may also change it later with `clear()`    
    * @param opt.resize a boolean to set whether `<canvas>` size should auto resize to match its container's size. You can also set it manually with `autoSize()`    
    * @param opt.retina a boolean to set if device pixel scaling should be used. This may make drawings on retina displays look sharper but may reduce performance slightly. Default is `true`.    
+   * @param opt.offscreen a boolean to set if a duplicate canvas should be created for offscreen rendering. Default is `false`.    
    */
-  setup( opt:{bgcolor?:string, resize?:boolean, retina?:boolean} ):this {
+  setup( opt:{bgcolor?:string, resize?:boolean, retina?:boolean, offscreen?:boolean} ):this {
     if (opt.bgcolor) this._bgcolor = opt.bgcolor;
     
     if (opt.resize != undefined) this.autoResize( opt.resize );
@@ -151,14 +156,44 @@ export class CanvasSpace extends Space {
       let r2 = this._ctx.webkitBackingStorePixelRatio || this._ctx.mozBackingStorePixelRatio || this._ctx.msBackingStorePixelRatio || this._ctx.oBackingStorePixelRatio || this._ctx.backingStorePixelRatio || 1;      
       this._pixelScale = r1/r2;
     }
+
+    if (opt.offscreen) {
+      this._offscreen = true;
+      this._offCanvas = this._createElement( "canvas", this.id+"_offscreen" ) as HTMLCanvasElement;
+      this._offCtx = this._offCanvas.getContext('2d');
+    } else {
+      this._offscreen = false;
+    }
+
     return this;
   }
 
+  /**
+   * Check if an offscreen canvas is created
+   */
+  public get hasOffscreen():boolean {
+    return this._offscreen;
+  }
 
   /**
    * Get the rendering context of canvas
    */
   public get ctx():PtsCanvasRenderingContext2D { return this._ctx; }
+
+  /**
+   * Get the canvas element in this space
+   */
+  public get canvas():HTMLCanvasElement { return this._canvas; }
+
+  /**
+   * Get the rendering context of offscreen canvas (if created via `setup()`)
+   */
+  public get offscreenCtx():PtsCanvasRenderingContext2D { return this._offCtx; }
+
+  /**
+   * Get the offscreen canvas element
+   */
+  public get offscreenCanvas():HTMLCanvasElement { return this._offCanvas; }
 
   /**
    * Get the mouse or touch pointer that stores the last action
@@ -229,9 +264,21 @@ export class CanvasSpace extends Space {
     this._canvas.style.width = Math.floor(this.bound.size.x) + "px";
     this._canvas.style.height = Math.floor(this.bound.size.y) + "px";
 
+    if (this._offscreen) {
+      this._offCanvas.width = this.bound.size.x * this._pixelScale;
+      this._offCanvas.height = this.bound.size.y * this._pixelScale;
+      // this._offCanvas.style.width = Math.floor(this.bound.size.x) + "px";
+      // this._offCanvas.style.height = Math.floor(this.bound.size.y) + "px";
+    }
+
     if (this._pixelScale != 1) {
       this._ctx.scale( this._pixelScale, this._pixelScale );
       this._ctx.translate( 0.5, 0.5);
+
+      if (this._offscreen) {
+        this._offCtx.scale( this._pixelScale, this._pixelScale );
+        this._offCtx.translate( 0.5, 0.5);      
+      }
     }
 
     for (let k in this.players) {
@@ -266,6 +313,18 @@ export class CanvasSpace extends Space {
   }
 
 
+  clearOffscreen( bg?:string ):this {
+    if (this._offscreen) {
+      if (bg) {
+        this._offCtx.fillStyle = bg;
+        this._offCtx.fillRect( -1, -1, this._canvas.width+1, this._canvas.height+1 );
+      } else {
+        this._offCtx.clearRect( -1, -1, this._offCanvas.width+1, this._offCanvas.height+1 );
+      }
+    }
+    return this;
+  }
+
   /**
    * Main animation function. Call `Space.playItems`.
    * @param time current time
@@ -273,8 +332,10 @@ export class CanvasSpace extends Space {
   protected playItems( time: number ) {
     if (this._isReady) {
       this._ctx.save();
+      if (this._offscreen) this._offCtx.save();
       super.playItems( time );
       this._ctx.restore();
+      if (this._offscreen) this._offCtx.restore();
       this.render( this._ctx );
     }
   }
@@ -479,6 +540,16 @@ export class CanvasSpace extends Space {
 
 
 
+
+
+
+
+
+
+
+/**
+ * CanvasForm provide methods to visualize Pts on CanvasSpace
+ */
 export class CanvasForm extends Form {
 
   protected _space:CanvasSpace;
@@ -497,6 +568,20 @@ export class CanvasForm extends Form {
   }
 
   get space():CanvasSpace { return this._space; }
+
+  
+  useOffscreen( off:boolean=true, clear:boolean|string=false ) {
+    if (clear) this._space.clearOffscreen( (typeof clear == "string") ? clear : null );
+    this._ctx = (this._space.hasOffscreen && off) ? this._space.offscreenCtx : this._space.ctx;
+    return this;
+  }
+
+  renderOffscreen( offsetX:number=0, offsetY:number=0) {
+    if (this._space.hasOffscreen) {
+      this._space.ctx.drawImage( 
+        this._space.offscreenCanvas, offsetX, offsetY, this._space.width, this._space.height );
+    }
+  }
 
 
   /**

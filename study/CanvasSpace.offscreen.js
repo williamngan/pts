@@ -1,43 +1,63 @@
 Pts.namespace( window );
 
-var space = new CanvasSpace("#pt").setup({retina: true});
+var space = new CanvasSpace("#pt").setup({retina: true, offscreen: true});
 var form = space.getForm();
+
+var pts = new Group();
+var pts2 = new Group();
+
+var _useOff = true;
+
 
 
 space.add( {
 
-  start: init,
+  start: (bound, space) => {
+    init( bound, space );
+    for (let i = 0; i < 10000; i++) {
+      pts.push(new Pt( Math.random()*space.width, Math.random()*space.height ) );
+    }
+    pts2 = pts.clone();
+
+    // Create offscreen --
+    form.useOffscreen( true, true );
+    form.stroke(false).fill("rgba(0,0,0,.5)");
+    form.points( pts2, 2, "circle" );
+    form.useOffscreen( false );
+  },
 
   animate: (time, ftime) => {
     guidelines();
     
     // Begin Test Code --
-
-    // form.stroke("#000").line( poly1 );
     
-    let pts = Util.flatten( [Rectangle.corners( rect1), line1, line2] );
-    pts[3].to( space.pointer );
+    // Click to toggle offscreen or not
+    if (_useOff) {
+      form.renderOffscreen(); // just render offscreen
+    } else {
+      form.stroke(false).fill("rgba(0,0,0,.5)"); // re-render pts2
+      form.points( pts2, 2, "circle" );
+    }
 
-    form.stroke("#000",2).line( pts );
+    // render from normal ctx canvas
+    form.stroke(false).fill("rgba(255,0,0,.5)");
 
-    // close the b-spline curve
-    pts[pts.length-3].to( pts[0] );
-    pts[pts.length-2].to( pts[1] );
-    pts[pts.length-1].to( pts[2] );
+    for (let i=pts.length/2, len=pts.length; i<len; i++) {
+      pts[i].add( Math.random()-Math.random(), Math.random()-Math.random() );
+      form.point( pts[i], 2, "circle" );
+    }
 
-    let bsp1 = Curve.bspline( pts, 10 );
-    form.stroke("#f03").line( bsp1 );
+    form.fill("#f00").log( "Using offscreen: "+_useOff+" -- FPS:" + Math.floor(1000/ftime) );
 
-    let bsp2 = Curve.bspline( pts, 10, 0.7 );
-    form.stroke("#09f").line( bsp2 );
-
-    let bsp3 = Curve.bspline( pts, 10, 1.2 );
-    form.stroke("#0c3").line( bsp3 );
+    
 
     // End
   },
 
   action:( type, px, py) => {
+    if (type=="up") {
+      _useOff = !_useOff
+    }
 
   },
   
@@ -96,4 +116,4 @@ function guidelines() {
   
 space.bindMouse();
 space.play();
-// space.playOnce(200);
+// space.playOnce(5000);
