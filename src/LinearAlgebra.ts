@@ -1,3 +1,7 @@
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan)
+
+
 import {Const, Util} from "./Util"
 import {Pt, PtLike, GroupLike, Group} from "./Pt"
 import {Line} from "./Op"

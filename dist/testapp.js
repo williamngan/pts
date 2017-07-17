@@ -73,6 +73,8 @@ var Pts =
 
 "use strict";
 
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(1);
 const Num_1 = __webpack_require__(4);
@@ -560,6 +562,8 @@ exports.Group = Group;
 
 "use strict";
 
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
 exports.Const = {
@@ -680,6 +684,8 @@ exports.Util = Util;
 
 "use strict";
 
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
 const Op_1 = __webpack_require__(5);
@@ -952,6 +958,8 @@ exports.Mat = Mat;
 
 "use strict";
 
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
 class Bound extends Pt_1.Group {
@@ -1066,6 +1074,8 @@ exports.Bound = Bound;
 
 "use strict";
 
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(1);
 const Op_1 = __webpack_require__(5);
@@ -1625,6 +1635,8 @@ exports.Shaping = Shaping;
 
 "use strict";
 
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(1);
 const Num_1 = __webpack_require__(4);
@@ -2508,6 +2520,8 @@ exports.Curve = Curve;
 
 "use strict";
 
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
 class Font {
     constructor(size = 11, face = "sans-serif", style = "") {
@@ -2540,6 +2554,8 @@ exports.Form = Form;
 
 "use strict";
 
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Bound_1 = __webpack_require__(3);
 const Pt_1 = __webpack_require__(0);
@@ -2705,6 +2721,8 @@ exports.Space = Space;
 
 "use strict";
 
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
 class Create {
@@ -2841,6 +2859,8 @@ console.log( pts );
 
 "use strict";
 
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Space_1 = __webpack_require__(8);
 const Form_1 = __webpack_require__(7);

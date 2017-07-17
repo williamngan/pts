@@ -5,3 +5,6 @@ A new experiment
 ```
 typedoc --out docs src
 ```
+
+## License
+Apache License 2.0. 
