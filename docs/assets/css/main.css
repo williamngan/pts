@@ -30,7 +30,7 @@ a:active, a:hover { outline: 0; }
 /** Improve readability when focused and also mouse hovered in all browsers. */
 /* ========================================================================== Typography ========================================================================== */
 /** Address font sizes and margins set differently in IE 6/7. Address font sizes within `section` and `article` in Firefox 4+, Safari 5, and Chrome. */
-h1 { font-size: 2em; margin: 0.67em 0; }
+h1 { font-size: 3em; margin: 0.67em 0; }
 
 h2 { font-size: 2em; font-weight: normal; margin: 0; }
 
@@ -190,7 +190,9 @@ table { border-collapse: collapse; border-spacing: 0; }
 .container { max-width: 1200px; margin: 0 auto; padding: 0px; height: 100%; line-height: 60px; }
 @media (max-width: 640px) { .container { padding: 0 20px; } }
 
-.container-main { padding: 50px  100px 200px; }
+.container-main { padding: 50px 0 200px 100px; }
+footer > .container { padding: 40px 100px; }
+.container.tsd-generator { padding: 0 100px; text-align: right; font-size: 0.8em; opacity: 0.5;}
 
 .row { position: relative; margin: 0 -10px; line-height: 1.5; }
 .row:after { visibility: hidden; display: block; content: ""; clear: both; height: 0; }
