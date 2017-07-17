@@ -13,22 +13,45 @@ space.add( {
 
     // Begin Test Code --
 
-    poly1[poly1.length-2] = space.pointer;
+    let tri = new Group( line3.p1, line3.p2, space.pointer );
 
-    form.stroke("#fff", 2);
-    form.polygon( poly1 );
+    form.stroke("#000", 2);
+    form.polygon( tri );
     
     form.stroke("#f03", 2);
-    let bisect = Polygon.bisector( poly1, 1 );
-    form.line( [poly1[1], poly1[1].$add( bisect.multiply(100) )] );
+    let alt = Triangle.altitude( tri, 2 );
+    form.line( alt ); 
+
+    alt = Triangle.altitude( tri, 1 );
+    form.line( alt ); 
+
+    alt = Triangle.altitude( tri, 0 );
+    form.line( alt ); 
+
+
+    let ortho = Triangle.orthocenter( tri );
+    form.point( ortho, 10, "circle" );
 
     form.stroke("#09f", 2);
-    let bisect2 = Polygon.bisector( poly1, 2 );
-    form.line( [poly1[2], poly1[2].$add( bisect2.multiply(100) )] );
-     
+    let ln1 = Polygon.bisector( tri, 0 ).multiply(100).add(tri[0]);
+    let ln2 = Polygon.bisector( tri, 1 ).multiply(100).add( tri[1] );
+    let ln3 = Polygon.bisector( tri, 2 ).multiply(100).add( tri[2] );
+    form.lines( [[tri[0], ln1], [tri[1], ln2], [tri[2], ln3]] );
+    let incenter = Triangle.incenter( tri );
+    form.point( incenter, 5, "circle" ); 
+
+    let incircle = Triangle.incircle( tri );
+    form.circle( incircle );
+
     form.stroke("#0c3", 2);
-    let bisect3 = Polygon.bisector( poly1, 3, true ); // closePath and bisect not at middle but at the end
-    form.line( [poly1[3], poly1[3].$add( bisect3.multiply(100) )] );
+    let circumcenter = Triangle.circumcenter( tri );
+    form.point( circumcenter, 5, "circle" );
+    
+    let circumcircle = Triangle.circumcircle( tri, circumcenter );
+    form.circle( circumcircle );
+
+    form.stroke("#f90");
+    form.point( Polygon.centroid( tri ), 5 );
 
     // End   
     

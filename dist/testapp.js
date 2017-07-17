@@ -1802,6 +1802,9 @@ class Rectangle {
             new Pt_1.Group(p2, p3), new Pt_1.Group(p3, p0)
         ];
     }
+    static lines(rect) {
+        return Rectangle.sides(rect);
+    }
     static union(rects) {
         let merged = Util_1.Util.flatten(rects, false);
         let min = Pt_1.Pt.make(2, Number.MAX_VALUE);
@@ -1955,6 +1958,12 @@ class Triangle {
             return _errorLength(new Pt_1.Group(), 3);
         return Polygon.midpoints(pts, true);
     }
+    /**
+     * Given a point of the triangle, the opposite side is the side which the point doesn't touch.
+     * @param pts a Group of Pts
+     * @param index a Pt on the triangle group
+     * @returns a Group that represents a line of the opposite side
+     */
     static oppositeSide(pts, index) {
         if (pts.length < 3)
             return _errorLength(new Pt_1.Group(), 3);
@@ -1967,6 +1976,78 @@ class Triangle {
         else {
             return Pt_1.Group.fromGroup([pts[0], pts[1]]);
         }
+    }
+    /**
+     * Get a triangle's altitude, which is a line from a triangle's point to its opposite side, and perpendicular to its opposite side.
+     * @param pts a Group of Pts
+     * @param index a Pt on the triangle group
+     * @returns a Group that represents the altitude line
+     */
+    static altitude(pts, index) {
+        let opp = Triangle.oppositeSide(pts, index);
+        if (opp.length > 1) {
+            return new Pt_1.Group(pts[index], Line.perpendicularFromPt(opp, pts[index]));
+        }
+        else {
+            return new Pt_1.Group();
+        }
+    }
+    /**
+     * Get orthocenter, which is the intersection point of a triangle's 3 altitudes (the 3 lines that are perpendicular to its 3 opposite sides).
+     * @param pts a Group of Pts
+     * @returns the orthocenter as a Pt
+     */
+    static orthocenter(pts) {
+        if (pts.length < 3)
+            return _errorLength(undefined, 3);
+        let a = Triangle.altitude(pts, 0);
+        let b = Triangle.altitude(pts, 1);
+        return Line.intersectRay2D(a, b);
+    }
+    /**
+     * Get incenter, which is the center point of its inner circle, and also the intersection point of its 3 angle bisector lines (each of which cuts one of the 3 angles in half).
+     * @param pts a Group of Pts
+     * @returns the incenter as a Pt
+     */
+    static incenter(pts) {
+        if (pts.length < 3)
+            return _errorLength(undefined, 3);
+        let a = Polygon.bisector(pts, 0).add(pts[0]);
+        let b = Polygon.bisector(pts, 1).add(pts[1]);
+        return Line.intersectRay2D(new Pt_1.Group(pts[0], a), new Pt_1.Group(pts[1], b));
+    }
+    /**
+     * Get an interior circle, which is the largest circle completed enclosed by this triangle
+     * @param pts a Group of Pts
+     * @param center Optional parameter if the incenter is already known. Otherwise, leave it empty and the incenter will be calculated
+     */
+    static incircle(pts, center) {
+        let c = (center) ? center : Triangle.incenter(pts);
+        let area = Polygon.area(pts);
+        let perim = Polygon.perimeter(pts, true);
+        let r = 2 * area / perim.total;
+        return Circle.fromPt(c, r);
+    }
+    /**
+     * Get circumcenter, which is the intersection point of its 3 perpendicular bisectors lines ( each of which divides a side in half and is perpendicular to the side)
+     * @param pts a Group of Pts
+     * @returns the circumcenter as a Pt
+     */
+    static circumcenter(pts) {
+        let md = Triangle.medial(pts);
+        let a = [md[0], Num_1.Geom.perpendicular(pts[0].$subtract(md[0])).p1.$add(md[0])];
+        let b = [md[1], Num_1.Geom.perpendicular(pts[1].$subtract(md[1])).p1.$add(md[1])];
+        return Line.intersectRay2D(a, b);
+    }
+    /**
+     * Get circumcenter, which is the intersection point of its 3 perpendicular bisectors lines ( each of which divides a side in half and is perpendicular to the side)
+     * @param pts a Group of Pts
+     * @param center Optional parameter if the circumcenter is already known. Otherwise, leave it empty and the circumcenter will be calculated
+     */
+    static circumcircle(pts, center) {
+        let c = (center) ? center : Triangle.circumcenter(pts);
+        let r = pts[0].$subtract(c).magnitude();
+        return Circle.fromPt(c, r);
     }
 }
 exports.Triangle = Triangle;
@@ -2026,18 +2107,18 @@ class Polygon {
         return gs;
     }
     /**
-     * Get a bisector which is a line that split between two sides of a polygon. Usually this bisects in the middle, but you may use the `t` parameter to change the position.
+     * Get a bisector which is a line that split between two sides of a polygon equally.
      * @param pts a group of Pts
      * @param index the Pt in the polygon to bisect from
      * @param closePath a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).
-     * @param t an optional parameter to change the bisector position. Default to 0.5 which bisects in the middle.
+     * @returns a bisector Pt that's a normalized unit vector
      */
-    static bisector(pts, index, closePath = false, t = 0.5) {
-        let sides = Polygon.adjacentSides(pts, index, closePath);
+    static bisector(pts, index) {
+        let sides = Polygon.adjacentSides(pts, index, true);
         if (sides.length >= 2) {
-            let a = sides[0][1].$subtract(sides[0][0]);
-            let b = sides[1][1].$subtract(sides[1][0]);
-            return Num_1.Geom.interpolate(a, b, t).add(pts[index]);
+            let a = sides[0][1].$subtract(sides[0][0]).unit();
+            let b = sides[1][1].$subtract(sides[1][0]).unit();
+            return a.add(b).divide(2);
         }
         else {
             return undefined;
@@ -2575,17 +2656,6 @@ class CanvasForm extends Form_1.Form {
         ctx.lineTo(x2, y1);
         ctx.closePath();
     }
-    line(pts) {
-        CanvasForm.line(this._ctx, pts);
-        this._ctx.stroke();
-        return this;
-    }
-    lines(groups) {
-        for (let i = 0, len = groups.length; i < len; i++) {
-            this.line(groups[i]);
-        }
-        return this;
-    }
     static line(ctx, pts) {
         if (pts.length < 2)
             return;
@@ -2595,6 +2665,33 @@ class CanvasForm extends Form_1.Form {
             if (pts[i])
                 ctx.lineTo(pts[i][0], pts[i][1]);
         }
+    }
+    line(pts) {
+        CanvasForm.line(this._ctx, pts);
+        this._paint();
+        return this;
+    }
+    lines(groups) {
+        for (let i = 0, len = groups.length; i < len; i++) {
+            this.line(groups[i]);
+        }
+        return this;
+    }
+    static polygon(ctx, pts) {
+        if (pts.length < 2)
+            return;
+        ctx.beginPath();
+        ctx.moveTo(pts[0][0], pts[0][1]);
+        for (let i = 1, len = pts.length; i < len; i++) {
+            if (pts[i])
+                ctx.lineTo(pts[i][0], pts[i][1]);
+        }
+        ctx.closePath();
+    }
+    polygon(pts) {
+        CanvasForm.polygon(this._ctx, pts);
+        this._paint();
+        return this;
     }
     static rect(ctx, pts) {
         if (pts.length < 2)

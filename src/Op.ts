@@ -204,6 +204,11 @@ export class Rectangle {
     ];
   }
 
+  static lines( rect:GroupLike ): Group[] {
+    return Rectangle.sides( rect );
+  }
+ 
+
   static union( rects:GroupLike[] ):Group {
     let merged = Util.flatten( rects, false );
     let min = Pt.make( 2, Number.MAX_VALUE );
@@ -381,6 +386,12 @@ export class Triangle {
     return Polygon.midpoints( pts, true );
   }
 
+  /**
+   * Given a point of the triangle, the opposite side is the side which the point doesn't touch.
+   * @param pts a Group of Pts
+   * @param index a Pt on the triangle group
+   * @returns a Group that represents a line of the opposite side
+   */
   static oppositeSide( pts:GroupLike, index:number ):Group {
     if (pts.length < 3) return _errorLength( new Group(), 3 );
     if (index === 0) {
@@ -390,6 +401,81 @@ export class Triangle {
     } else {
       return Group.fromGroup( [pts[0], pts[1]] );
     }
+  }
+
+  /**
+   * Get a triangle's altitude, which is a line from a triangle's point to its opposite side, and perpendicular to its opposite side.
+   * @param pts a Group of Pts
+   * @param index a Pt on the triangle group
+   * @returns a Group that represents the altitude line
+   */
+  static altitude( pts:GroupLike, index:number ):Group {
+    let opp = Triangle.oppositeSide( pts, index );
+    if (opp.length > 1) {
+      return new Group( pts[index], Line.perpendicularFromPt( opp, pts[index] ) ); 
+    } else {
+      return new Group();
+    }
+  }
+
+  /**
+   * Get orthocenter, which is the intersection point of a triangle's 3 altitudes (the 3 lines that are perpendicular to its 3 opposite sides).
+   * @param pts a Group of Pts
+   * @returns the orthocenter as a Pt
+   */
+  static orthocenter( pts:GroupLike ):Pt {
+    if (pts.length < 3) return _errorLength( undefined, 3 );
+    let a = Triangle.altitude( pts, 0 );
+    let b = Triangle.altitude( pts, 1 );
+    return Line.intersectRay2D( a, b );
+  }
+
+  /**
+   * Get incenter, which is the center point of its inner circle, and also the intersection point of its 3 angle bisector lines (each of which cuts one of the 3 angles in half).
+   * @param pts a Group of Pts
+   * @returns the incenter as a Pt
+   */
+  static incenter( pts:GroupLike ):Pt {
+    if (pts.length < 3) return _errorLength( undefined, 3 );
+    let a = Polygon.bisector( pts, 0 ).add( pts[0] );
+    let b = Polygon.bisector( pts, 1 ).add( pts[1] );
+    return Line.intersectRay2D( new Group(pts[0], a), new Group(pts[1], b) );
+  }
+
+  /**
+   * Get an interior circle, which is the largest circle completed enclosed by this triangle
+   * @param pts a Group of Pts
+   * @param center Optional parameter if the incenter is already known. Otherwise, leave it empty and the incenter will be calculated
+   */
+  static incircle( pts:GroupLike, center?:Pt ):Group {
+    let c = (center) ? center : Triangle.incenter( pts );
+    let area = Polygon.area( pts );
+    let perim = Polygon.perimeter( pts, true );
+    let r = 2 * area / perim.total;
+    return Circle.fromPt( c, r );
+  }
+
+  /**
+   * Get circumcenter, which is the intersection point of its 3 perpendicular bisectors lines ( each of which divides a side in half and is perpendicular to the side)
+   * @param pts a Group of Pts
+   * @returns the circumcenter as a Pt
+   */
+  static circumcenter( pts:GroupLike ):Pt {
+    let md = Triangle.medial( pts );
+    let a = [ md[0], Geom.perpendicular( pts[0].$subtract( md[0] )).p1.$add( md[0] ) ];
+    let b = [ md[1], Geom.perpendicular( pts[1].$subtract( md[1] )).p1.$add( md[1] ) ];
+    return Line.intersectRay2D( a, b );
+  } 
+
+  /**
+   * Get circumcenter, which is the intersection point of its 3 perpendicular bisectors lines ( each of which divides a side in half and is perpendicular to the side)
+   * @param pts a Group of Pts
+   * @param center Optional parameter if the circumcenter is already known. Otherwise, leave it empty and the circumcenter will be calculated 
+   */
+  static circumcircle( pts:GroupLike, center?:Pt ):Group {
+    let c = (center) ? center : Triangle.circumcenter( pts );
+    let r = pts[0].$subtract( c ).magnitude();
+    return Circle.fromPt( c, r );
   }
 }
 
@@ -450,23 +536,24 @@ export class Polygon {
 
 
   /**
-   * Get a bisector which is a line that split between two sides of a polygon. Usually this bisects in the middle, but you may use the `t` parameter to change the position.
+   * Get a bisector which is a line that split between two sides of a polygon equally. 
    * @param pts a group of Pts
    * @param index the Pt in the polygon to bisect from
    * @param closePath a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).
-   * @param t an optional parameter to change the bisector position. Default to 0.5 which bisects in the middle.
+   * @returns a bisector Pt that's a normalized unit vector
    */
-  static bisector( pts:GroupLike, index:number, closePath:boolean=false, t:number=0.5 ):Pt {
-    let sides = Polygon.adjacentSides( pts, index, closePath );
+  static bisector( pts:GroupLike, index:number ):Pt {
+    
+    let sides = Polygon.adjacentSides( pts, index, true );
     if (sides.length >= 2) {
-      let a = sides[0][1].$subtract( sides[0][0] );
-      let b = sides[1][1].$subtract( sides[1][0] );
-      return Geom.interpolate( a, b, t).add( pts[index] );
+      let a = sides[0][1].$subtract( sides[0][0] ).unit();
+      let b = sides[1][1].$subtract( sides[1][0] ).unit();
+      return a.add( b ).divide( 2 ); 
     } else {
       return undefined;
     }
-  }
 
+  }
   
 
   /**

@@ -168,9 +168,19 @@ export class CanvasForm extends Form {
     ctx.closePath()
   }
 
+
+  static line( ctx:CanvasRenderingContext2D, pts:GroupLike|number[][] ) {
+    if (pts.length<2) return;
+    ctx.beginPath();
+    ctx.moveTo( pts[0][0], pts[0][1] );
+    for (let i=1, len=pts.length; i<len; i++) {
+      if (pts[i]) ctx.lineTo( pts[i][0], pts[i][1] );
+    }
+  }
+
   line( pts:GroupLike|number[][] ):this {
     CanvasForm.line( this._ctx, pts );
-    this._ctx.stroke();
+    this._paint();
     return this;
   }
 
@@ -181,14 +191,23 @@ export class CanvasForm extends Form {
     return this;
   }
 
-  static line( ctx:CanvasRenderingContext2D, pts:GroupLike|number[][] ) {
+
+  static polygon( ctx:CanvasRenderingContext2D, pts:GroupLike|number[][] ) {
     if (pts.length<2) return;
     ctx.beginPath();
     ctx.moveTo( pts[0][0], pts[0][1] );
     for (let i=1, len=pts.length; i<len; i++) {
       if (pts[i]) ctx.lineTo( pts[i][0], pts[i][1] );
     }
+    ctx.closePath();
   }
+
+  polygon( pts:GroupLike|number[][] ):this {
+    CanvasForm.polygon( this._ctx, pts );
+    this._paint();
+    return this;
+  }
+
 
 
   static rect( ctx:CanvasRenderingContext2D, pts:GroupLike|number[][] ) {
