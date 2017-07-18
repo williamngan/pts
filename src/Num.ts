@@ -61,7 +61,7 @@ export class Num {
     return (n - min) / (max - min);
   }
 
-  static sum(pts: GroupLike | number[][]): Pt {
+  static sum(pts: GroupLike|number[][]): Pt {
     let c = Pt.make(pts[0].length, 0);
     for (let i = 0, len = pts.length; i < len; i++) {
       c.add(pts[i]);
@@ -70,7 +70,7 @@ export class Num {
   }
 
 
-  static average(pts: GroupLike | number[][]): Pt {
+  static average(pts: GroupLike|number[][]): Pt {
     return Num.sum(pts).divide(pts.length);
   }
 
@@ -119,7 +119,7 @@ export class Geom {
     return new Group(minPt, maxPt);
   }
 
-  static centroid(pts: GroupLike | number[][]): Pt {
+  static centroid(pts: GroupLike|number[][]): Pt {
     return Num.average(pts);
   }
 
@@ -129,7 +129,7 @@ export class Geom {
    * @param ptOrIndex an index for the Pt array, or an external Pt
    * @param direction "to" (subtract all Pt with this anchor base) or "from" (add all Pt from this anchor base)
    */
-  static anchor(pts: GroupLike, ptOrIndex: PtLike | number = 0, direction: ("to" | "from") = "to") {
+  static anchor(pts: GroupLike, ptOrIndex: PtLike|number = 0, direction: ("to"|"from") = "to") {
     let method = (direction == "to") ? "subtract" : "add";
     for (let i = 0, len = pts.length; i < len; i++) {
       if (typeof ptOrIndex == "number") {
@@ -148,7 +148,7 @@ export class Geom {
    * @param t a ratio between 0 to 1
    * @returns interpolated point as a new Pt
    */
-  static interpolate(a: Pt | number[], b: Pt | number[], t = 0.5): Pt {
+  static interpolate(a: Pt|number[], b: Pt|number[], t = 0.5): Pt {
     let len = Math.min(a.length, b.length);
     let d = Pt.make(len);
     for (let i = 0; i < len; i++) {
@@ -162,7 +162,7 @@ export class Geom {
    * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
    * @returns an array of two Pt that are perpendicular to this Pt
    */
-  static perpendicular(pt: PtLike, axis: string | number[] = Const.xy): Group {
+  static perpendicular(pt: PtLike, axis: string|number[] = Const.xy): Group {
     let y = axis[1];
     let x = axis[0];
 
@@ -182,14 +182,14 @@ export class Geom {
   }
 
 
-  static withinBound(pt: PtLike | number[], boundPt1: PtLike | number[], boundPt2: PtLike | number[]): boolean {
+  static withinBound(pt: PtLike|number[], boundPt1: PtLike|number[], boundPt2: PtLike|number[]): boolean {
     for (let i = 0, len = Math.min(pt.length, boundPt1.length, boundPt2.length); i < len; i++) {
       if (!Num.within(pt[i], boundPt1[i], boundPt2[i])) return false;
     }
     return true;
   }
 
-  static scale(ps: Pt | GroupLike, scale:number | number[] | PtLike, anchor?: PtLike): Geom {
+  static scale(ps: Pt|GroupLike, scale:number|number[]|PtLike, anchor?: PtLike): Geom {
     let pts = (!Array.isArray(ps)) ? [ps] : ps;
     let scs = (typeof scale == "number") ? Pt.make(pts[0].length, scale) : scale;
     if (!anchor) anchor = Pt.make(pts[0].length, 0);
@@ -204,7 +204,7 @@ export class Geom {
     return Geom;
   }
 
-  static rotate2D(ps: Pt | GroupLike, angle:number, anchor?: PtLike, axis?: string): Geom {
+  static rotate2D(ps: Pt|GroupLike, angle:number, anchor?: PtLike, axis?: string): Geom {
     let pts = (!Array.isArray(ps)) ? [ps] : ps;
     let fn = (anchor) ? Mat.rotateAt2DMatrix : Mat.rotate2DMatrix;
     if (!anchor) anchor = Pt.make(pts[0].length, 0);
@@ -220,7 +220,7 @@ export class Geom {
   }
 
 
-  static shear2D(ps: Pt | GroupLike, scale:number | number[] | PtLike, anchor?: PtLike, axis?: string): Geom {
+  static shear2D(ps: Pt|GroupLike, scale:number|number[]|PtLike, anchor?: PtLike, axis?: string): Geom {
     let pts = (!Array.isArray(ps)) ? [ps] : ps;
     let s = (typeof scale == "number") ? [scale, scale] : scale;
     if (!anchor) anchor = Pt.make(pts[0].length, 0);
@@ -236,7 +236,7 @@ export class Geom {
     return Geom;
   }
 
-  static reflect2D(ps: Pt | GroupLike, line: GroupLike, axis?: string): Geom {
+  static reflect2D(ps: Pt|GroupLike, line: GroupLike, axis?: string): Geom {
     let pts = (!Array.isArray(ps)) ? [ps] : ps;
 
     for (let i = 0, len = pts.length; i < len; i++) {

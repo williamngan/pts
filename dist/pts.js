@@ -2240,6 +2240,23 @@ class Polygon {
         return g;
     }
     /**
+     * Given a target Pt, find a Pt in a Group that's nearest to it.
+     * @param pts a Group of Pt
+     * @param pt Pt to check
+     */
+    static nearestPt(pts, pt) {
+        let _near = Number.MAX_VALUE;
+        let _item = -1;
+        for (let i = 0, len = pts.length; i < len; i++) {
+            let d = pts[i].$subtract(pt).magnitudeSq();
+            if (d < _near) {
+                _near = d;
+                _item = i;
+            }
+        }
+        return (_item >= 0) ? pts[_item] : undefined;
+    }
+    /**
      * Get a bounding box for each polygon group, as well as a union bounding-box for all groups
      * @param polys an array of Groups, or an array of Pt arrays
      */
