@@ -64,7 +64,7 @@ var Pts =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 12);
+/******/ 	return __webpack_require__(__webpack_require__.s = 11);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -294,14 +294,16 @@ class Pt extends exports.PtBaseArray {
     maxValue() {
         return LinearAlgebra_1.Vec.max(this);
     }
-    $min(p) {
+    $min(...args) {
+        let p = Util_1.Util.getArgs(args);
         let m = this.clone();
         for (let i = 0, len = Math.min(this.length, p.length); i < len; i++) {
             m[i] = Math.min(this[i], p[i]);
         }
         return m;
     }
-    $max(p) {
+    $max(...args) {
+        let p = Util_1.Util.getArgs(args);
         let m = this.clone();
         for (let i = 0, len = Math.min(this.length, p.length); i < len; i++) {
             m[i] = Math.max(this[i], p[i]);
@@ -1133,6 +1135,14 @@ class Num {
             c.add(pts[i]);
         }
         return c;
+    }
+    /**
+     * Given a value between 0 to 1, returns a value that cycles between 0 -> 1 -> 0
+     * @param t a value between 0 to 1
+     * @return a value between 0 to 1
+     */
+    static cycle(t) {
+        return (Math.sin(Math.PI * 2 * t) + 1) / 2;
     }
     static average(pts) {
         return Num.sum(pts).divide(pts.length);
@@ -2531,8 +2541,7 @@ exports.Curve = Curve;
 
 
 /***/ }),
-/* 6 */,
-/* 7 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2566,7 +2575,7 @@ exports.Form = Form;
 
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2710,7 +2719,11 @@ class Space {
     /**
      * Get this space's bounding box
      */
-    get boundingBox() { return this.bound.clone(); }
+    get outerBound() { return this.bound.clone(); }
+    /**
+     * The bounding box of the canvas
+     */
+    get innerBound() { return new Bound_1.Bound(Pt_1.Pt.make(this.size.length, 0), this.size.clone()); }
     /**
      * Get the size of this bounding box as a Pt
      */
@@ -2732,8 +2745,7 @@ exports.Space = Space;
 
 
 /***/ }),
-/* 9 */,
-/* 10 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2741,146 +2753,8 @@ exports.Space = Space;
 // Source code licensed under Apache License 2.0. 
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
-const Pt_1 = __webpack_require__(0);
-class Create {
-    static distributeRandom(bound, count, dimensions = 2) {
-        let pts = [];
-        for (let i = 0; i < count; i++) {
-            let p = [bound.x + Math.random() * bound.width];
-            if (dimensions > 1)
-                p.push(bound.y + Math.random() * bound.height);
-            if (dimensions > 2)
-                p.push(bound.z + Math.random() * bound.depth);
-            pts.push(new Pt_1.Pt(p));
-        }
-        return pts;
-    }
-}
-exports.Create = Create;
-
-
-/***/ }),
-/* 11 */,
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const Pt_1 = __webpack_require__(0);
-const Util_1 = __webpack_require__(1);
-const Bound_1 = __webpack_require__(3);
-const Create_1 = __webpack_require__(10);
-const Canvas_1 = __webpack_require__(14);
-window["Pt"] = Pt_1.Pt;
-console.log(new Pt_1.Pt(32, 43).unit().magnitude());
-// console.log( Pts.zipOne( [new Pt(1,3), new Pt(2,4), new Pt(5,10)], 1, 0 ).toString() );
-// console.log( new Pt(1,2,3,4,5,6).slice(2,5).toString() );
-// console.log( Pts.toString( Pts.zip( [new Pt(1,2), new Pt(3,4), new Pt(5,6)] ) ) );
-// console.log( Pts.toString( Pts.zip( Pts.zip( [new Pt(1,2), new Pt(3,4), new Pt(5,6)] ) ) ) );
-console.log(Util_1.Util.split([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], 5));
-let cs = [];
-for (let i = 0; i < 500; i++) {
-    let c = new Pt_1.Pt(Math.random() * 200, Math.random() * 200);
-    cs.push(c);
-}
-var canvas = new Canvas_1.CanvasSpace("#pt", ready).setup({ retina: true });
-var form = canvas.getForm();
-var form2 = canvas.getForm();
-var pt = new Pt_1.Pt(50, 50);
-var ptAdd = pt.op((a, b) => a.$add(b));
-var pto = [ptAdd(10, 10), ptAdd(20, 25)];
-var pto2 = {
-    "a": ptAdd(10, 10),
-    "b": ptAdd(20, 25)
-};
-for (var i in pto2) {
-    console.log("==>", pto2[i].toString());
-}
-console.log(pto.reduce((a, b) => a + " | " + b.toString(), ""));
-console.log(pt.toString());
-var ps = [];
-let fs = {
-    "size": (p) => {
-        let dist = p.$subtract(canvas.size.$divide(2)).magnitude();
-        return new Pt_1.Pt(dist / 8, dist / (Math.max(canvas.width, canvas.height) / 2));
-    },
-};
-function ready(bound, space) {
-    ps = Create_1.Create.distributeRandom(new Bound_1.Bound(canvas.size), 50);
-}
-canvas.add({
-    animate: (time, ftime, space) => {
-        let framerate = 1000 / ftime;
-        form.fill("#999").text(new Pt_1.Pt(20, 20), framerate + " fps");
-        form.reset();
-        form.stroke(false);
-        ps.forEach((p) => {
-            let attrs = p.op(fs);
-            form.fill(`rgba(255,0,0,${1.2 - attrs.size.y}`);
-            form.point(p, attrs.size.x, "circle");
-        });
-        // form.point( {x:50.5, y: 50.5}, 20, "circle");
-        // form.point( {x:50.5, y: 140.5}, 20, );
-        // console.log(time, fps);
-        // form.point( {x:50, y:50}, 100);    
-    },
-    action: (type, px, py) => {
-        if (type == "move") {
-            let d = canvas.boundingBox.center.$subtract(px, py);
-            let p1 = canvas.boundingBox.center.$subtract(d);
-            let bound = new Bound_1.Bound(p1, p1.$add(d.$abs().multiply(2)));
-            ps = Create_1.Create.distributeRandom(bound, 200);
-        }
-    }
-});
-canvas.bindMouse();
-canvas.playOnce(3000);
-/*
-canvas.add( {
-  animate: (time, fps, space) => {
-    form2.reset();
-    form2.fill("#fff").stroke("#000").point( {x:150.5, y: 50.5}, 20, "circle");
-    form2.fill("#ff0").stroke("#ccc").point( {x:150.5, y: 140.5}, 20, );
-    // console.log(time, fps);
-  }
-})
-*/
-//canvas.playOnce(5000);
-/*
-let vec = new Vector( [1000, 2, 3] ).add( new Vector( [2, 3, 4] ) );
-console.log(vec.toString());
-
-setInterval( () => vec.add( new Vector( [ 1, 2, 3 ]) ), 500 );
-
-let m1 = Matrix.identity(3);
-let m2 = Matrix.identity(3);
-
-
-console.log( Matrix.add(m1, m2).toString() );
-
-let pts = new Pts();
-console.log( pts );
-*/
-// console.log(pts.toString());
-// pts.pt(1,2,3);
-// pts.pt(2,3,4);
-// console.log(pts.toString());
-// console.log( Matrix.augment(m1, m2).toString() );
-
-
-/***/ }),
-/* 13 */,
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-// Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan)
-Object.defineProperty(exports, "__esModule", { value: true });
-const Space_1 = __webpack_require__(8);
-const Form_1 = __webpack_require__(7);
+const Space_1 = __webpack_require__(7);
+const Form_1 = __webpack_require__(6);
 const Bound_1 = __webpack_require__(3);
 const Pt_1 = __webpack_require__(0);
 const Util_1 = __webpack_require__(1);
@@ -3581,6 +3455,164 @@ class CanvasForm extends Form_1.Form {
     }
 }
 exports.CanvasForm = CanvasForm;
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan)
+Object.defineProperty(exports, "__esModule", { value: true });
+const Pt_1 = __webpack_require__(0);
+class Create {
+    static distributeRandom(bound, count, dimensions = 2) {
+        let pts = new Pt_1.Group();
+        for (let i = 0; i < count; i++) {
+            let p = [bound.x + Math.random() * bound.width];
+            if (dimensions > 1)
+                p.push(bound.y + Math.random() * bound.height);
+            if (dimensions > 2)
+                p.push(bound.z + Math.random() * bound.depth);
+            pts.push(new Pt_1.Pt(p));
+        }
+        return pts;
+    }
+    static gridPts(bound, columns, rows, orientation = [0.5, 0.5]) {
+        let unit = bound.size.$subtract(1).$divide(columns, rows);
+        let offset = unit.$multiply(orientation);
+        let g = new Pt_1.Group();
+        for (let c = 0; c < columns; c++) {
+            for (let r = 0; r < rows; r++) {
+                g.push(bound.topLeft.$add(unit.$multiply(c, r)).add(offset));
+            }
+        }
+        return g;
+    }
+    static gridCells(bound, columns, rows) {
+        let unit = bound.size.$subtract(1).divide(columns, rows); // subtract 1 to fill whole border of rectangles
+        let g = [];
+        for (let c = 0; c < columns; c++) {
+            for (let r = 0; r < rows; r++) {
+                g.push(new Pt_1.Group(bound.topLeft.$add(unit.$multiply(c, r)), bound.topLeft.$add(unit.$multiply(c, r).add(unit))));
+            }
+        }
+        return g;
+    }
+}
+exports.Create = Create;
+
+
+/***/ }),
+/* 10 */,
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const Pt_1 = __webpack_require__(0);
+const Util_1 = __webpack_require__(1);
+const Bound_1 = __webpack_require__(3);
+const Create_1 = __webpack_require__(9);
+const Canvas_1 = __webpack_require__(8);
+window["Pt"] = Pt_1.Pt;
+console.log(new Pt_1.Pt(32, 43).unit().magnitude());
+// console.log( Pts.zipOne( [new Pt(1,3), new Pt(2,4), new Pt(5,10)], 1, 0 ).toString() );
+// console.log( new Pt(1,2,3,4,5,6).slice(2,5).toString() );
+// console.log( Pts.toString( Pts.zip( [new Pt(1,2), new Pt(3,4), new Pt(5,6)] ) ) );
+// console.log( Pts.toString( Pts.zip( Pts.zip( [new Pt(1,2), new Pt(3,4), new Pt(5,6)] ) ) ) );
+console.log(Util_1.Util.split([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], 5));
+let cs = [];
+for (let i = 0; i < 500; i++) {
+    let c = new Pt_1.Pt(Math.random() * 200, Math.random() * 200);
+    cs.push(c);
+}
+var canvas = new Canvas_1.CanvasSpace("#pt", ready).setup({ retina: true });
+var form = canvas.getForm();
+var form2 = canvas.getForm();
+var pt = new Pt_1.Pt(50, 50);
+var ptAdd = pt.op((a, b) => a.$add(b));
+var pto = [ptAdd(10, 10), ptAdd(20, 25)];
+var pto2 = {
+    "a": ptAdd(10, 10),
+    "b": ptAdd(20, 25)
+};
+for (var i in pto2) {
+    console.log("==>", pto2[i].toString());
+}
+console.log(pto.reduce((a, b) => a + " | " + b.toString(), ""));
+console.log(pt.toString());
+var ps = [];
+let fs = {
+    "size": (p) => {
+        let dist = p.$subtract(canvas.size.$divide(2)).magnitude();
+        return new Pt_1.Pt(dist / 8, dist / (Math.max(canvas.width, canvas.height) / 2));
+    },
+};
+function ready(bound, space) {
+    ps = Create_1.Create.distributeRandom(new Bound_1.Bound(canvas.size), 50);
+}
+canvas.add({
+    animate: (time, ftime, space) => {
+        let framerate = 1000 / ftime;
+        form.fill("#999").text(new Pt_1.Pt(20, 20), framerate + " fps");
+        form.reset();
+        form.stroke(false);
+        ps.forEach((p) => {
+            let attrs = p.op(fs);
+            form.fill(`rgba(255,0,0,${1.2 - attrs.size.y}`);
+            form.point(p, attrs.size.x, "circle");
+        });
+        // form.point( {x:50.5, y: 50.5}, 20, "circle");
+        // form.point( {x:50.5, y: 140.5}, 20, );
+        // console.log(time, fps);
+        // form.point( {x:50, y:50}, 100);    
+    },
+    action: (type, px, py) => {
+        if (type == "move") {
+            let d = canvas.outerBound.center.$subtract(px, py);
+            let p1 = canvas.outerBound.center.$subtract(d);
+            let bound = new Bound_1.Bound(p1, p1.$add(d.$abs().multiply(2)));
+            ps = Create_1.Create.distributeRandom(bound, 200);
+        }
+    }
+});
+canvas.bindMouse();
+canvas.playOnce(3000);
+/*
+canvas.add( {
+  animate: (time, fps, space) => {
+    form2.reset();
+    form2.fill("#fff").stroke("#000").point( {x:150.5, y: 50.5}, 20, "circle");
+    form2.fill("#ff0").stroke("#ccc").point( {x:150.5, y: 140.5}, 20, );
+    // console.log(time, fps);
+  }
+})
+*/
+//canvas.playOnce(5000);
+/*
+let vec = new Vector( [1000, 2, 3] ).add( new Vector( [2, 3, 4] ) );
+console.log(vec.toString());
+
+setInterval( () => vec.add( new Vector( [ 1, 2, 3 ]) ), 500 );
+
+let m1 = Matrix.identity(3);
+let m2 = Matrix.identity(3);
+
+
+console.log( Matrix.add(m1, m2).toString() );
+
+let pts = new Pts();
+console.log( pts );
+*/
+// console.log(pts.toString());
+// pts.pt(1,2,3);
+// pts.pt(2,3,4);
+// console.log(pts.toString());
+// console.log( Matrix.augment(m1, m2).toString() );
 
 
 /***/ })

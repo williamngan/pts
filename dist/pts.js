@@ -64,7 +64,7 @@ var Pts =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 13);
+/******/ 	return __webpack_require__(__webpack_require__.s = 12);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -294,14 +294,16 @@ class Pt extends exports.PtBaseArray {
     maxValue() {
         return LinearAlgebra_1.Vec.max(this);
     }
-    $min(p) {
+    $min(...args) {
+        let p = Util_1.Util.getArgs(args);
         let m = this.clone();
         for (let i = 0, len = Math.min(this.length, p.length); i < len; i++) {
             m[i] = Math.min(this[i], p[i]);
         }
         return m;
     }
-    $max(p) {
+    $max(...args) {
+        let p = Util_1.Util.getArgs(args);
         let m = this.clone();
         for (let i = 0, len = Math.min(this.length, p.length); i < len; i++) {
             m[i] = Math.max(this[i], p[i]);
@@ -1133,6 +1135,14 @@ class Num {
             c.add(pts[i]);
         }
         return c;
+    }
+    /**
+     * Given a value between 0 to 1, returns a value that cycles between 0 -> 1 -> 0
+     * @param t a value between 0 to 1
+     * @return a value between 0 to 1
+     */
+    static cycle(t) {
+        return (Math.sin(Math.PI * 2 * t) + 1) / 2;
     }
     static average(pts) {
         return Num.sum(pts).divide(pts.length);
@@ -2531,8 +2541,7 @@ exports.Curve = Curve;
 
 
 /***/ }),
-/* 6 */,
-/* 7 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2566,7 +2575,7 @@ exports.Form = Form;
 
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2710,7 +2719,11 @@ class Space {
     /**
      * Get this space's bounding box
      */
-    get boundingBox() { return this.bound.clone(); }
+    get outerBound() { return this.bound.clone(); }
+    /**
+     * The bounding box of the canvas
+     */
+    get innerBound() { return new Bound_1.Bound(Pt_1.Pt.make(this.size.length, 0), this.size.clone()); }
     /**
      * Get the size of this bounding box as a Pt
      */
@@ -2732,8 +2745,7 @@ exports.Space = Space;
 
 
 /***/ }),
-/* 9 */,
-/* 10 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2741,602 +2753,8 @@ exports.Space = Space;
 // Source code licensed under Apache License 2.0. 
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
-const Pt_1 = __webpack_require__(0);
-class Create {
-    static distributeRandom(bound, count, dimensions = 2) {
-        let pts = [];
-        for (let i = 0; i < count; i++) {
-            let p = [bound.x + Math.random() * bound.width];
-            if (dimensions > 1)
-                p.push(bound.y + Math.random() * bound.height);
-            if (dimensions > 2)
-                p.push(bound.z + Math.random() * bound.depth);
-            pts.push(new Pt_1.Pt(p));
-        }
-        return pts;
-    }
-}
-exports.Create = Create;
-
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-// Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan)
-Object.defineProperty(exports, "__esModule", { value: true });
-const Pt_1 = __webpack_require__(0);
-const Util_1 = __webpack_require__(1);
-const Num_1 = __webpack_require__(4);
-class Color extends Pt_1.Pt {
-    constructor(...args) {
-        super(...args);
-        this._mode = "rgb";
-        this._isNorm = false;
-    }
-    /**
-     * Create a Color object with defaults to 4 dimensions
-     * @param args a Pt-like parameters. See Pt constructor.
-     */
-    static from(...args) {
-        let p = [1, 1, 1, 1];
-        let c = Util_1.Util.getArgs(args);
-        for (let i = 0, len = p.length; i < len; i++) {
-            if (i < c.length)
-                p[i] = c[i];
-        }
-        return new Color(p);
-    }
-    /**
-     * Convert a rgb hex string like #ff000 or #f00 to a Color object
-     * @param hex a hex string, with optional '#' prefix
-     */
-    static fromHex(hex) {
-        if (hex[0] == "#")
-            hex = hex.substr(1); // remove '#' if needed
-        if (hex.length <= 3) {
-            let fn = (i) => hex[1] || "F";
-            hex = `${fn(0)}${fn(0)}${fn(1)}${fn(1)}${fn(2)}${fn(2)}`;
-        }
-        let alpha = 1;
-        if (hex.length === 8) {
-            alpha = hex.substr(6) && 0xFF / 255;
-            hex = hex.substring(0, 6);
-        }
-        let hexVal = parseInt(hex, 16);
-        return new Color(hexVal >> 16, hexVal >> 8 & 0xFF, hexVal & 0xFF, alpha);
-    }
-    /**
-     * Create RGB Color
-     * @param args a Pt-like parameters. See Pt constructor.
-     */
-    static rgb(...args) { return Color.from(...args).toMode("rgb"); }
-    /**
-     * Create HSL Color
-     * @param args a Pt-like parameters. See Pt constructor.
-     */
-    static hsl(...args) { return Color.from(...args).toMode("hsl"); }
-    /**
-     * Create HSB Color
-     * @param args a Pt-like parameters. See Pt constructor.
-     */
-    static hsb(...args) { return Color.from(...args).toMode("hsb"); }
-    /**
-     * Create LAB Color
-     * @param args a Pt-like parameters. See Pt constructor.
-     */
-    static lab(...args) { return Color.from(...args).toMode("lab"); }
-    /**
-     * Create LCH Color
-     * @param args a Pt-like parameters. See Pt constructor.
-     */
-    static lch(...args) { return Color.from(...args).toMode("lch"); }
-    /**
-     * Create LUV Color
-     * @param args a Pt-like parameters. See Pt constructor.
-     */
-    static luv(...args) { return Color.from(...args).toMode("luv"); }
-    /**
-     * Create XYZ Color
-     * @param args a Pt-like parameters. See Pt constructor.
-     */
-    static xyz(...args) { return Color.from(...args).toMode("xyz"); }
-    /**
-     * Clone this Color
-     */
-    clone() {
-        let c = new Color(this);
-        c.toMode(this._mode);
-        return c;
-    }
-    /**
-     * Create RGB Color
-     * @param mode a ColorType string: "rgb" "hsl" "hsb" "lab" "lch" "luv" "xyz";
-     * @param convert if true, convert this Color to the new color space specified in `mode`
-     */
-    toMode(mode, convert = false) {
-        if (convert) {
-            let fname = this._mode.toUpperCase() + "to" + mode.toUpperCase();
-            if (Color[fname]) {
-                this.to(Color[fname](this, this._isNorm, this._isNorm));
-            }
-            else {
-                throw new Error("Cannot convert color with " + fname);
-            }
-        }
-        this._mode = mode;
-        return this;
-    }
-    /**
-     * Get this Color's mode
-     */
-    get mode() { return this._mode; }
-    // rgb
-    get r() { return this[0]; }
-    set r(n) { this[0] = n; }
-    get g() { return this[1]; }
-    set g(n) { this[1] = n; }
-    get b() { return this[1]; }
-    set b(n) { this[2] = n; }
-    // hsl, hsb
-    get h() { return (this._mode == "lch") ? this[2] : this[0]; }
-    set h(n) {
-        let i = (this._mode == "lch") ? 2 : 0;
-        this[i] = n;
-    }
-    get s() { return this[1]; }
-    set s(n) { this[1] = n; }
-    get l() { return (this._mode == "hsl") ? this[2] : this[0]; }
-    set l(n) {
-        let i = (this._mode == "hsl") ? 2 : 0;
-        this[i] = n;
-    }
-    // lab, lch, luv
-    get a() { return this[1]; }
-    set a(n) { this[1] = n; }
-    get c() { return this[1]; }
-    set c(n) { this[1] = n; }
-    get u() { return this[1]; }
-    set u(n) { this[1] = n; }
-    get v() { return this[1]; }
-    set v(n) { this[2] = n; }
-    /**
-     * Get alpha value
-     */
-    get alpha() { return (this.length > 3) ? this[3] : 1; }
-    /**
-     * Normalize the color values to between 0 to 1, or revert it back to the min/max values in current color mode
-     * @param toNorm a boolean value specifying whether to normalize (`true`) or revert (`false`)
-     */
-    normalize(toNorm = true) {
-        if (this._isNorm == toNorm)
-            return this;
-        let ranges = Color.ranges[this._mode];
-        for (let i = 0; i < 3; i++) {
-            this[i] = (!toNorm)
-                ? Num_1.Num.mapToRange(this[i], 0, 1, ranges[i][0], ranges[i][1])
-                : Num_1.Num.mapToRange(this[i], ranges[i][0], ranges[i][1], 0, 1);
-        }
-        this._isNorm = toNorm;
-        return this;
-    }
-    /**
-     * Like `normalize()` but returns as a new Color
-     * @param toNorm a boolean value specifying whether to normalize (`true`) or revert (`false`)
-     */
-    $normalize(toNorm = true) { return this.clone().normalize(toNorm); }
-    /**
-     * Convert this Color to a string. It can be used to get a hex or rgb string for use in rendering
-     * @param format "hex", "rgb", "rgba", or "mode" which means using current color mode label. Default is "mode".
-     */
-    toString(format = "mode") {
-        if (format == "hex") {
-            let _hex = (n) => {
-                let s = Math.floor(n).toString(16);
-                return (s.length < 2) ? '0' + s : s;
-            };
-            return `#${_hex(this[0])}${_hex(this[1])}${_hex(this[2])}`;
-        }
-        else if (format == "rgba") {
-            return `rgba(${Math.floor(this[0])},${Math.floor(this[1])},${Math.floor(this[2])},${this.alpha}`;
-        }
-        else if (format == "rgb") {
-            return `rgb(${Math.floor(this[0])},${Math.floor(this[1])},${Math.floor(this[2])}`;
-        }
-        else {
-            return `${this._mode}(${this[0]},${this[1]},${this[2]},${this.alpha})`;
-        }
-    }
-    /**
-     * Convert RGB to HSL
-     * @param rgb a RGB Color
-     * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
-     * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
-     * @returns a new HSL Color
-     */
-    static RGBtoHSL(rgb, normalizedInput = false, normalizedOutput = false) {
-        let [r, g, b] = (!normalizedInput) ? rgb.$normalize() : rgb;
-        let max = Math.max(r, g, b);
-        let min = Math.min(r, g, b);
-        let h = (max + min) / 2;
-        let s = h;
-        let l = h;
-        if (max == min) {
-            h = 0;
-            s = 0; // achromatic
-        }
-        else {
-            let d = max - min;
-            s = (l > 0.5) ? d / (2 - max - min) : d / (max + min);
-            h = 0;
-            if (max === r) {
-                h = (g - b) / d + ((g < b) ? 6 : 0);
-            }
-            else if (max === g) {
-                h = (b - r) / d + 2;
-            }
-            else if (max === b) {
-                h = (r - g) / d + 4;
-            }
-        }
-        return Color.hsl(((normalizedOutput) ? h / 60 : h * 60), s, l, rgb.alpha);
-    }
-    /**
-     * Convert HSL to RGB
-     * @param hsl a HSL Color
-     * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
-     * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
-     * @returns a new RGB Color
-     */
-    static HSLtoRGB(hsl, normalizedInput = false, normalizedOutput = false) {
-        let [h, s, l] = hsl;
-        if (!normalizedInput)
-            h = h / 360;
-        if (s == 0)
-            return Color.rgb(l * 255, l * 255, l * 255, hsl.alpha);
-        let q = (l <= 0.5) ? l * (1 + s) : l + s - (l * s);
-        let p = 2 * l - q;
-        let convert = (t) => {
-            t = (t < 0) ? t + 1 : (t > 1) ? t - 1 : t;
-            if (t * 6 < 1) {
-                return p + (q - p) * t * 6;
-            }
-            else if (t * 2 < 1) {
-                return q;
-            }
-            else if (t * 3 < 2) {
-                return p + (q - p) * ((2 / 3) - t) * 6;
-            }
-            else {
-                return p;
-            }
-        };
-        let sc = (normalizedOutput) ? 1 : 255;
-        return Color.rgb(sc * convert((h + 1 / 3)), sc * convert(h), sc * convert((h - 1 / 3)), hsl.alpha);
-    }
-    /**
-     * Convert RGB to HSB
-     * @param rgb a RGB Color
-     * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
-     * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
-     * @returns a new HSB Color
-     */
-    static RGBtoHSB(rgb, normalizedInput = false, normalizedOutput = false) {
-        let [r, g, b] = (!normalizedInput) ? rgb.$normalize() : rgb;
-        let max = Math.max(r, g, b);
-        let min = Math.min(r, g, b);
-        let d = max - min;
-        let h = 0;
-        let s = (max === 0) ? 0 : d / max;
-        let v = max;
-        if (max != min) {
-            if (max === r) {
-                h = (g - b) / d + ((g < b) ? 6 : 0);
-            }
-            else if (max === g) {
-                h = (b - r) / d + 2;
-            }
-            else if (max === b) {
-                h = (r - g) / d + 4;
-            }
-        }
-        return Color.hsb(((normalizedOutput) ? h / 60 : h * 60), s, v, rgb.alpha);
-    }
-    /**
-     * Convert HSB to RGB
-     * @param hsb a HSB Color
-     * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
-     * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
-     * @returns a new RGB Color
-     */
-    static HSBtoRGB(hsb, normalizedInput = false, normalizedOutput = false) {
-        let [h, s, v] = hsb;
-        if (!normalizedInput)
-            h = h / 360;
-        let i = Math.floor(h * 6);
-        let f = h * 6 - i;
-        let p = v * (1 - s);
-        let q = v * (1 - f * s);
-        let t = v * (1 - (1 - f) * s);
-        let pick = [
-            [v, t, p], [q, v, p], [p, v, t],
-            [p, q, v], [t, p, v], [v, p, q]
-        ];
-        let c = pick[i % 6];
-        let sc = (normalizedOutput) ? 1 : 255;
-        return Color.rgb(sc * c[0], sc * c[1], sc * c[2], hsb.alpha);
-    }
-    /**
-   * Convert RGB to LAB
-   * @param rgb a RGB Color
-   * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
-   * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
-   * @returns a new LAB Color
-   */
-    static RGBtoLAB(rgb, normalizedInput = false, normalizedOutput = false) {
-        let c = (normalizedInput) ? rgb.$normalize(false) : rgb;
-        return Color.XYZtoLAB(Color.RGBtoXYZ(c), false, normalizedOutput);
-    }
-    /**
-     * Convert LAB to RGB
-     * @param lab a LAB Color
-     * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
-     * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
-     * @returns a new RGB Color
-     */
-    static LABtoRGB(lab, normalizedInput = false, normalizedOutput = false) {
-        let c = (normalizedInput) ? lab.$normalize(false) : lab;
-        return Color.XYZtoRGB(Color.LABtoXYZ(c), false, normalizedOutput);
-    }
-    /**
-     * Convert RGB to LCH
-     * @param rgb a RGB Color
-     * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
-     * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
-     * @returns a new LCH Color
-     */
-    static RGBtoLCH(rgb, normalizedInput = false, normalizedOutput = false) {
-        let c = (normalizedInput) ? rgb.$normalize(false) : rgb;
-        return Color.LABtoLCH(Color.RGBtoLAB(c), false, normalizedOutput);
-    }
-    /**
-     * Convert LCH to RGB
-     * @param lch a LCH Color
-     * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
-     * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
-     * @returns a new RGB Color
-     */
-    static LCHtoRGB(lch, normalizedInput = false, normalizedOutput = false) {
-        let c = (normalizedInput) ? lch.$normalize(false) : lch;
-        return Color.LABtoRGB(Color.LCHtoLAB(c), false, normalizedOutput);
-    }
-    /**
-     * Convert RGB to LUV
-     * @param rgb a RGB Color
-     * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
-     * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
-     * @returns a new LUV Color
-     */
-    static RGBtoLUV(rgb, normalizedInput = false, normalizedOutput = false) {
-        let c = (normalizedInput) ? rgb.$normalize(false) : rgb;
-        return Color.XYZtoLUV(Color.RGBtoXYZ(c), false, normalizedOutput);
-    }
-    /**
-     * Convert LUV to RGB
-     * @param rgb a RGB Color
-     * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
-     * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
-     * @returns a new RGB Color
-     */
-    static LUVtoRGB(luv, normalizedInput = false, normalizedOutput = false) {
-        let c = (normalizedInput) ? luv.$normalize(false) : luv;
-        return Color.XYZtoRGB(Color.LUVtoXYZ(c), false, normalizedOutput);
-    }
-    /**
-     * Convert RGB to XYZ
-     * @param rgb a RGB Color
-     * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
-     * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
-     * @returns a new XYZ Color
-     */
-    static RGBtoXYZ(rgb, normalizedInput = false, normalizedOutput = false) {
-        let c = (!normalizedInput) ? rgb.$normalize() : rgb.clone();
-        for (let i = 0; i < 3; i++) {
-            c[i] = (c[i] > 0.04045) ? Math.pow((c[i] + 0.055) / 1.055, 2.4) : c[i] / 12.92;
-            if (!normalizedOutput)
-                c[i] = c[i] * 100;
-        }
-        let cc = Color.xyz(c[0] * 0.4124564 + c[1] * 0.3575761 + c[2] * 0.1804375, c[0] * 0.2126729 + c[1] * 0.7151522 + c[2] * 0.0721750, c[0] * 0.0193339 + c[1] * 0.1191920 + c[2] * 0.9503041, rgb.alpha);
-        return (normalizedOutput) ? cc.normalize() : cc;
-    }
-    /**
-     * Convert XYZ to RGB
-     * @param xyz a XYZ Color
-     * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
-     * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
-     * @returns a new RGB Color
-     */
-    static XYZtoRGB(xyz, normalizedInput = false, normalizedOutput = false) {
-        let [x, y, z] = (!normalizedInput) ? xyz.$normalize() : xyz;
-        let rgb = [
-            x * 3.2404542 + y * -1.5371385 + z * -0.4985314,
-            x * -0.9692660 + y * 1.8760108 + z * 0.0415560,
-            x * 0.0556434 + y * -0.2040259 + z * 1.0572252
-        ];
-        // convert xyz to rgb. Note that not all colors are visible in rgb, so here we bound rgb between 0 to 1
-        for (let i = 0; i < 3; i++) {
-            rgb[i] = (rgb[i] < 0) ? 0 : (rgb[i] > 0.0031308) ? (1.055 * Math.pow(rgb[i], 1 / 2.4) - 0.055) : (12.92 * rgb[i]);
-            rgb[i] = Math.max(0, Math.min(1, rgb[i]));
-            if (!normalizedOutput)
-                rgb[i] = Math.round(rgb[i] * 255);
-        }
-        let cc = Color.rgb(rgb[0], rgb[1], rgb[2], xyz.alpha);
-        return (normalizedOutput) ? cc.normalize() : cc;
-    }
-    /**
-     * Convert XYZ to LAB
-     * @param xyz a XYZ Color
-     * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
-     * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
-     * @returns a new LAB Color
-     */
-    static XYZtoLAB(xyz, normalizedInput = false, normalizedOutput = false) {
-        let c = (normalizedInput) ? xyz.$normalize(false) : xyz.clone();
-        // adjust for D65  
-        c.divide(Color.D65);
-        let fn = (n) => (n > 0.008856) ? Math.pow(n, 1 / 3) : (7.787 * n) + 16 / 116;
-        let cy = fn(c[1]);
-        let cc = Color.lab((116 * cy) - 16, 500 * (fn(c[0]) - cy), 200 * (cy - fn(c[2])), xyz.alpha);
-        return (normalizedOutput) ? cc.normalize() : cc;
-    }
-    /**
-     * Convert LAB to XYZ
-     * @param lab a LAB Color
-     * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
-     * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
-     * @returns a new XYZ Color
-     */
-    static LABtoXYZ(lab, normalizedInput = false, normalizedOutput = false) {
-        let c = (normalizedInput) ? lab.$normalize(false) : lab;
-        let y = (c[0] + 16) / 116;
-        let x = (c[1] / 500) + y;
-        let z = y - c[2] / 200;
-        let fn = (n) => {
-            let nnn = n * n * n;
-            return (nnn > 0.008856) ? nnn : (n - 16 / 116) / 7.787;
-        };
-        let d = Color.D65;
-        // adjusted
-        let cc = Color.xyz(
-        // Math.max(0, Math.min( 100, d[0] * fn(x) )),
-        // Math.max(0, Math.min( 100, d[1] * fn(y) )),
-        // Math.max(0, Math.min( 100, d[2] * fn(z) )),
-        Math.max(0, d[0] * fn(x)), Math.max(0, d[1] * fn(y)), Math.max(0, d[2] * fn(z)), lab.alpha);
-        return (normalizedOutput) ? cc.normalize() : cc;
-    }
-    /**
-     * Convert XYZ to LUV
-     * @param xyz a XYZ Color
-     * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
-     * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
-     * @returns a new LUV Color
-     */
-    static XYZtoLUV(xyz, normalizedInput = false, normalizedOutput = false) {
-        let [x, y, z] = (normalizedInput) ? xyz.$normalize(false) : xyz;
-        let u = (4 * x) / (x + (15 * y) + (3 * z));
-        let v = (9 * y) / (x + (15 * y) + (3 * z));
-        y = y / 100;
-        y = (y > 0.008856) ? Math.pow(y, 1 / 3) : (7.787 * y + 16 / 116);
-        let refU = (4 * Color.D65[0]) / (Color.D65[0] + (15 * Color.D65[1]) + (3 * Color.D65[2]));
-        let refV = (9 * Color.D65[1]) / (Color.D65[0] + (15 * Color.D65[1]) + (3 * Color.D65[2]));
-        let L = (116 * y) - 16;
-        return Color.luv(L, 13 * L * (u - refU), 13 * L * (v - refV), xyz.alpha);
-    }
-    /**
-     * Convert LUV to XYZ
-     * @param luv a LUV Color
-     * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
-     * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
-     * @returns a new XYZ Color
-     */
-    static LUVtoXYZ(luv, normalizedInput = false, normalizedOutput = false) {
-        let [l, u, v] = (normalizedInput) ? luv.$normalize(false) : luv;
-        let y = (l + 16) / 116;
-        let cubeY = y * y * y;
-        y = (cubeY > 0.008856) ? cubeY : (y - 16 / 116) / 7.787;
-        let refU = (4 * Color.D65[0]) / (Color.D65[0] + (15 * Color.D65[1]) + (3 * Color.D65[2]));
-        let refV = (9 * Color.D65[1]) / (Color.D65[0] + (15 * Color.D65[1]) + (3 * Color.D65[2]));
-        u = u / (13 * l) + refU;
-        v = v / (13 * l) + refV;
-        y = y * 100;
-        let x = -1 * (9 * y * u) / ((u - 4) * v - u * v);
-        let z = (9 * y - (15 * v * y) - (v * x)) / (3 * v);
-        return Color.xyz(x, y, z, luv.alpha);
-    }
-    /**
-     * Convert LAB to LCH
-     * @param lab a LAB Color
-     * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
-     * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
-     * @returns a new LCH Color
-     */
-    static LABtoLCH(lab, normalizedInput = false, normalizedOutput = false) {
-        let c = (normalizedInput) ? lab.$normalize(false) : lab;
-        let h = Num_1.Geom.toDegree(Num_1.Geom.boundRadian(Math.atan2(c[2], c[1]))); // 0 to 360 degrees
-        return Color.lch(c[0], Math.sqrt(c[1] * c[1] + c[2] * c[2]), h, lab.alpha);
-    }
-    /**
-     * Convert LCH to LAB
-     * @param lch a LCH Color
-     * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
-     * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
-     * @returns a new LAB Color
-     */
-    static LCHtoLAB(lch, normalizedInput = false, normalizedOutput = false) {
-        let c = (normalizedInput) ? lch.$normalize(false) : lch;
-        let rad = Num_1.Geom.toRadian(c[2]);
-        return Color.lab(c[0], Math.cos(rad) * c[1], Math.sin(rad) * c[1], lch.alpha);
-    }
-}
-// XYZ property for Standard Observer 2deg, Daylight/sRGB illuminant D65
-Color.D65 = new Pt_1.Pt(95.047, 100, 108.883, 1);
-Color.ranges = {
-    rgb: [[0, 255], [0, 255], [0, 255]],
-    hsl: [[0, 360], [0, 1], [0, 1]],
-    hsb: [[0, 360], [0, 1], [0, 1]],
-    lab: [[0, 100], [-128, 127], [-128, 127]],
-    lch: [[0, 100], [0, 100], [0, 360]],
-    luv: [[0, 100], [-134, 220], [-140, 122]],
-    xyz: [[0, 100], [0, 100], [0, 100]],
-};
-exports.Color = Color;
-
-
-/***/ }),
-/* 12 */,
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const _Bound = __webpack_require__(3);
-const _Canvas = __webpack_require__(14);
-const _Create = __webpack_require__(10);
-const _Form = __webpack_require__(7);
-const _LinearAlgebra = __webpack_require__(2);
-const _Num = __webpack_require__(4);
-const _Op = __webpack_require__(5);
-const _Pt = __webpack_require__(0);
-const _Space = __webpack_require__(8);
-const _Color = __webpack_require__(11);
-const _Util = __webpack_require__(1);
-// A function to switch scope for Pts library. eg, Pts.scope( Pts, window );
-let namespace = (sc) => {
-    let lib = module.exports;
-    for (let k in lib) {
-        if (k != "namespace") {
-            sc[k] = lib[k];
-        }
-    }
-};
-module.exports = Object.assign({ namespace }, _Bound, _Canvas, _Create, _Form, _LinearAlgebra, _Op, _Num, _Pt, _Space, _Util, _Color);
-
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-// Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan)
-Object.defineProperty(exports, "__esModule", { value: true });
-const Space_1 = __webpack_require__(8);
-const Form_1 = __webpack_require__(7);
+const Space_1 = __webpack_require__(7);
+const Form_1 = __webpack_require__(6);
 const Bound_1 = __webpack_require__(3);
 const Pt_1 = __webpack_require__(0);
 const Util_1 = __webpack_require__(1);
@@ -4037,6 +3455,624 @@ class CanvasForm extends Form_1.Form {
     }
 }
 exports.CanvasForm = CanvasForm;
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan)
+Object.defineProperty(exports, "__esModule", { value: true });
+const Pt_1 = __webpack_require__(0);
+class Create {
+    static distributeRandom(bound, count, dimensions = 2) {
+        let pts = new Pt_1.Group();
+        for (let i = 0; i < count; i++) {
+            let p = [bound.x + Math.random() * bound.width];
+            if (dimensions > 1)
+                p.push(bound.y + Math.random() * bound.height);
+            if (dimensions > 2)
+                p.push(bound.z + Math.random() * bound.depth);
+            pts.push(new Pt_1.Pt(p));
+        }
+        return pts;
+    }
+    static gridPts(bound, columns, rows, orientation = [0.5, 0.5]) {
+        let unit = bound.size.$subtract(1).$divide(columns, rows);
+        let offset = unit.$multiply(orientation);
+        let g = new Pt_1.Group();
+        for (let c = 0; c < columns; c++) {
+            for (let r = 0; r < rows; r++) {
+                g.push(bound.topLeft.$add(unit.$multiply(c, r)).add(offset));
+            }
+        }
+        return g;
+    }
+    static gridCells(bound, columns, rows) {
+        let unit = bound.size.$subtract(1).divide(columns, rows); // subtract 1 to fill whole border of rectangles
+        let g = [];
+        for (let c = 0; c < columns; c++) {
+            for (let r = 0; r < rows; r++) {
+                g.push(new Pt_1.Group(bound.topLeft.$add(unit.$multiply(c, r)), bound.topLeft.$add(unit.$multiply(c, r).add(unit))));
+            }
+        }
+        return g;
+    }
+}
+exports.Create = Create;
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan)
+Object.defineProperty(exports, "__esModule", { value: true });
+const Pt_1 = __webpack_require__(0);
+const Util_1 = __webpack_require__(1);
+const Num_1 = __webpack_require__(4);
+class Color extends Pt_1.Pt {
+    constructor(...args) {
+        super(...args);
+        this._mode = "rgb";
+        this._isNorm = false;
+    }
+    get hex() { return this.toString("hex"); }
+    get rgb() { return this.toString("rgb"); }
+    get rgba() { return this.toString("rgba"); }
+    /**
+     * Create a Color object with defaults to 4 dimensions
+     * @param args a Pt-like parameters. See Pt constructor.
+     */
+    static from(...args) {
+        let p = [1, 1, 1, 1];
+        let c = Util_1.Util.getArgs(args);
+        for (let i = 0, len = p.length; i < len; i++) {
+            if (i < c.length)
+                p[i] = c[i];
+        }
+        return new Color(p);
+    }
+    /**
+     * Convert a rgb hex string like #ff000 or #f00 to a Color object
+     * @param hex a hex string, with optional '#' prefix
+     */
+    static fromHex(hex) {
+        if (hex[0] == "#")
+            hex = hex.substr(1); // remove '#' if needed
+        if (hex.length <= 3) {
+            let fn = (i) => hex[1] || "F";
+            hex = `${fn(0)}${fn(0)}${fn(1)}${fn(1)}${fn(2)}${fn(2)}`;
+        }
+        let alpha = 1;
+        if (hex.length === 8) {
+            alpha = hex.substr(6) && 0xFF / 255;
+            hex = hex.substring(0, 6);
+        }
+        let hexVal = parseInt(hex, 16);
+        return new Color(hexVal >> 16, hexVal >> 8 & 0xFF, hexVal & 0xFF, alpha);
+    }
+    /**
+     * Create RGB Color
+     * @param args a Pt-like parameters. See Pt constructor.
+     */
+    static rgb(...args) { return Color.from(...args).toMode("rgb"); }
+    /**
+     * Create HSL Color
+     * @param args a Pt-like parameters. See Pt constructor.
+     */
+    static hsl(...args) { return Color.from(...args).toMode("hsl"); }
+    /**
+     * Create HSB Color
+     * @param args a Pt-like parameters. See Pt constructor.
+     */
+    static hsb(...args) { return Color.from(...args).toMode("hsb"); }
+    /**
+     * Create LAB Color
+     * @param args a Pt-like parameters. See Pt constructor.
+     */
+    static lab(...args) { return Color.from(...args).toMode("lab"); }
+    /**
+     * Create LCH Color
+     * @param args a Pt-like parameters. See Pt constructor.
+     */
+    static lch(...args) { return Color.from(...args).toMode("lch"); }
+    /**
+     * Create LUV Color
+     * @param args a Pt-like parameters. See Pt constructor.
+     */
+    static luv(...args) { return Color.from(...args).toMode("luv"); }
+    /**
+     * Create XYZ Color
+     * @param args a Pt-like parameters. See Pt constructor.
+     */
+    static xyz(...args) { return Color.from(...args).toMode("xyz"); }
+    /**
+     * Clone this Color
+     */
+    clone() {
+        let c = new Color(this);
+        c.toMode(this._mode);
+        return c;
+    }
+    /**
+     * Create RGB Color
+     * @param mode a ColorType string: "rgb" "hsl" "hsb" "lab" "lch" "luv" "xyz";
+     * @param convert if true, convert this Color to the new color space specified in `mode`
+     */
+    toMode(mode, convert = false) {
+        if (convert) {
+            let fname = this._mode.toUpperCase() + "to" + mode.toUpperCase();
+            if (Color[fname]) {
+                this.to(Color[fname](this, this._isNorm, this._isNorm));
+            }
+            else {
+                throw new Error("Cannot convert color with " + fname);
+            }
+        }
+        this._mode = mode;
+        return this;
+    }
+    /**
+     * Get this Color's mode
+     */
+    get mode() { return this._mode; }
+    // rgb
+    get r() { return this[0]; }
+    set r(n) { this[0] = n; }
+    get g() { return this[1]; }
+    set g(n) { this[1] = n; }
+    get b() { return this[1]; }
+    set b(n) { this[2] = n; }
+    // hsl, hsb
+    get h() { return (this._mode == "lch") ? this[2] : this[0]; }
+    set h(n) {
+        let i = (this._mode == "lch") ? 2 : 0;
+        this[i] = n;
+    }
+    get s() { return this[1]; }
+    set s(n) { this[1] = n; }
+    get l() { return (this._mode == "hsl") ? this[2] : this[0]; }
+    set l(n) {
+        let i = (this._mode == "hsl") ? 2 : 0;
+        this[i] = n;
+    }
+    // lab, lch, luv
+    get a() { return this[1]; }
+    set a(n) { this[1] = n; }
+    get c() { return this[1]; }
+    set c(n) { this[1] = n; }
+    get u() { return this[1]; }
+    set u(n) { this[1] = n; }
+    get v() { return this[1]; }
+    set v(n) { this[2] = n; }
+    /**
+     * Get alpha value
+     */
+    get alpha() { return (this.length > 3) ? this[3] : 1; }
+    /**
+     * Normalize the color values to between 0 to 1, or revert it back to the min/max values in current color mode
+     * @param toNorm a boolean value specifying whether to normalize (`true`) or revert (`false`)
+     */
+    normalize(toNorm = true) {
+        if (this._isNorm == toNorm)
+            return this;
+        let ranges = Color.ranges[this._mode];
+        for (let i = 0; i < 3; i++) {
+            this[i] = (!toNorm)
+                ? Num_1.Num.mapToRange(this[i], 0, 1, ranges[i][0], ranges[i][1])
+                : Num_1.Num.mapToRange(this[i], ranges[i][0], ranges[i][1], 0, 1);
+        }
+        this._isNorm = toNorm;
+        return this;
+    }
+    /**
+     * Like `normalize()` but returns as a new Color
+     * @param toNorm a boolean value specifying whether to normalize (`true`) or revert (`false`)
+     */
+    $normalize(toNorm = true) { return this.clone().normalize(toNorm); }
+    /**
+     * Convert this Color to a string. It can be used to get a hex or rgb string for use in rendering
+     * @param format "hex", "rgb", "rgba", or "mode" which means using current color mode label. Default is "mode".
+     */
+    toString(format = "mode") {
+        if (format == "hex") {
+            let _hex = (n) => {
+                let s = Math.floor(n).toString(16);
+                return (s.length < 2) ? '0' + s : s;
+            };
+            return `#${_hex(this[0])}${_hex(this[1])}${_hex(this[2])}`;
+        }
+        else if (format == "rgba") {
+            return `rgba(${Math.floor(this[0])},${Math.floor(this[1])},${Math.floor(this[2])},${this.alpha}`;
+        }
+        else if (format == "rgb") {
+            return `rgb(${Math.floor(this[0])},${Math.floor(this[1])},${Math.floor(this[2])}`;
+        }
+        else {
+            return `${this._mode}(${this[0]},${this[1]},${this[2]},${this.alpha})`;
+        }
+    }
+    /**
+     * Convert RGB to HSL
+     * @param rgb a RGB Color
+     * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
+     * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
+     * @returns a new HSL Color
+     */
+    static RGBtoHSL(rgb, normalizedInput = false, normalizedOutput = false) {
+        let [r, g, b] = (!normalizedInput) ? rgb.$normalize() : rgb;
+        let max = Math.max(r, g, b);
+        let min = Math.min(r, g, b);
+        let h = (max + min) / 2;
+        let s = h;
+        let l = h;
+        if (max == min) {
+            h = 0;
+            s = 0; // achromatic
+        }
+        else {
+            let d = max - min;
+            s = (l > 0.5) ? d / (2 - max - min) : d / (max + min);
+            h = 0;
+            if (max === r) {
+                h = (g - b) / d + ((g < b) ? 6 : 0);
+            }
+            else if (max === g) {
+                h = (b - r) / d + 2;
+            }
+            else if (max === b) {
+                h = (r - g) / d + 4;
+            }
+        }
+        return Color.hsl(((normalizedOutput) ? h / 60 : h * 60), s, l, rgb.alpha);
+    }
+    /**
+     * Convert HSL to RGB
+     * @param hsl a HSL Color
+     * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
+     * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
+     * @returns a new RGB Color
+     */
+    static HSLtoRGB(hsl, normalizedInput = false, normalizedOutput = false) {
+        let [h, s, l] = hsl;
+        if (!normalizedInput)
+            h = h / 360;
+        if (s == 0)
+            return Color.rgb(l * 255, l * 255, l * 255, hsl.alpha);
+        let q = (l <= 0.5) ? l * (1 + s) : l + s - (l * s);
+        let p = 2 * l - q;
+        let convert = (t) => {
+            t = (t < 0) ? t + 1 : (t > 1) ? t - 1 : t;
+            if (t * 6 < 1) {
+                return p + (q - p) * t * 6;
+            }
+            else if (t * 2 < 1) {
+                return q;
+            }
+            else if (t * 3 < 2) {
+                return p + (q - p) * ((2 / 3) - t) * 6;
+            }
+            else {
+                return p;
+            }
+        };
+        let sc = (normalizedOutput) ? 1 : 255;
+        return Color.rgb(sc * convert((h + 1 / 3)), sc * convert(h), sc * convert((h - 1 / 3)), hsl.alpha);
+    }
+    /**
+     * Convert RGB to HSB
+     * @param rgb a RGB Color
+     * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
+     * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
+     * @returns a new HSB Color
+     */
+    static RGBtoHSB(rgb, normalizedInput = false, normalizedOutput = false) {
+        let [r, g, b] = (!normalizedInput) ? rgb.$normalize() : rgb;
+        let max = Math.max(r, g, b);
+        let min = Math.min(r, g, b);
+        let d = max - min;
+        let h = 0;
+        let s = (max === 0) ? 0 : d / max;
+        let v = max;
+        if (max != min) {
+            if (max === r) {
+                h = (g - b) / d + ((g < b) ? 6 : 0);
+            }
+            else if (max === g) {
+                h = (b - r) / d + 2;
+            }
+            else if (max === b) {
+                h = (r - g) / d + 4;
+            }
+        }
+        return Color.hsb(((normalizedOutput) ? h / 60 : h * 60), s, v, rgb.alpha);
+    }
+    /**
+     * Convert HSB to RGB
+     * @param hsb a HSB Color
+     * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
+     * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
+     * @returns a new RGB Color
+     */
+    static HSBtoRGB(hsb, normalizedInput = false, normalizedOutput = false) {
+        let [h, s, v] = hsb;
+        if (!normalizedInput)
+            h = h / 360;
+        let i = Math.floor(h * 6);
+        let f = h * 6 - i;
+        let p = v * (1 - s);
+        let q = v * (1 - f * s);
+        let t = v * (1 - (1 - f) * s);
+        let pick = [
+            [v, t, p], [q, v, p], [p, v, t],
+            [p, q, v], [t, p, v], [v, p, q]
+        ];
+        let c = pick[i % 6];
+        let sc = (normalizedOutput) ? 1 : 255;
+        return Color.rgb(sc * c[0], sc * c[1], sc * c[2], hsb.alpha);
+    }
+    /**
+   * Convert RGB to LAB
+   * @param rgb a RGB Color
+   * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
+   * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
+   * @returns a new LAB Color
+   */
+    static RGBtoLAB(rgb, normalizedInput = false, normalizedOutput = false) {
+        let c = (normalizedInput) ? rgb.$normalize(false) : rgb;
+        return Color.XYZtoLAB(Color.RGBtoXYZ(c), false, normalizedOutput);
+    }
+    /**
+     * Convert LAB to RGB
+     * @param lab a LAB Color
+     * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
+     * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
+     * @returns a new RGB Color
+     */
+    static LABtoRGB(lab, normalizedInput = false, normalizedOutput = false) {
+        let c = (normalizedInput) ? lab.$normalize(false) : lab;
+        return Color.XYZtoRGB(Color.LABtoXYZ(c), false, normalizedOutput);
+    }
+    /**
+     * Convert RGB to LCH
+     * @param rgb a RGB Color
+     * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
+     * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
+     * @returns a new LCH Color
+     */
+    static RGBtoLCH(rgb, normalizedInput = false, normalizedOutput = false) {
+        let c = (normalizedInput) ? rgb.$normalize(false) : rgb;
+        return Color.LABtoLCH(Color.RGBtoLAB(c), false, normalizedOutput);
+    }
+    /**
+     * Convert LCH to RGB
+     * @param lch a LCH Color
+     * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
+     * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
+     * @returns a new RGB Color
+     */
+    static LCHtoRGB(lch, normalizedInput = false, normalizedOutput = false) {
+        let c = (normalizedInput) ? lch.$normalize(false) : lch;
+        return Color.LABtoRGB(Color.LCHtoLAB(c), false, normalizedOutput);
+    }
+    /**
+     * Convert RGB to LUV
+     * @param rgb a RGB Color
+     * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
+     * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
+     * @returns a new LUV Color
+     */
+    static RGBtoLUV(rgb, normalizedInput = false, normalizedOutput = false) {
+        let c = (normalizedInput) ? rgb.$normalize(false) : rgb;
+        return Color.XYZtoLUV(Color.RGBtoXYZ(c), false, normalizedOutput);
+    }
+    /**
+     * Convert LUV to RGB
+     * @param rgb a RGB Color
+     * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
+     * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
+     * @returns a new RGB Color
+     */
+    static LUVtoRGB(luv, normalizedInput = false, normalizedOutput = false) {
+        let c = (normalizedInput) ? luv.$normalize(false) : luv;
+        return Color.XYZtoRGB(Color.LUVtoXYZ(c), false, normalizedOutput);
+    }
+    /**
+     * Convert RGB to XYZ
+     * @param rgb a RGB Color
+     * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
+     * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
+     * @returns a new XYZ Color
+     */
+    static RGBtoXYZ(rgb, normalizedInput = false, normalizedOutput = false) {
+        let c = (!normalizedInput) ? rgb.$normalize() : rgb.clone();
+        for (let i = 0; i < 3; i++) {
+            c[i] = (c[i] > 0.04045) ? Math.pow((c[i] + 0.055) / 1.055, 2.4) : c[i] / 12.92;
+            if (!normalizedOutput)
+                c[i] = c[i] * 100;
+        }
+        let cc = Color.xyz(c[0] * 0.4124564 + c[1] * 0.3575761 + c[2] * 0.1804375, c[0] * 0.2126729 + c[1] * 0.7151522 + c[2] * 0.0721750, c[0] * 0.0193339 + c[1] * 0.1191920 + c[2] * 0.9503041, rgb.alpha);
+        return (normalizedOutput) ? cc.normalize() : cc;
+    }
+    /**
+     * Convert XYZ to RGB
+     * @param xyz a XYZ Color
+     * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
+     * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
+     * @returns a new RGB Color
+     */
+    static XYZtoRGB(xyz, normalizedInput = false, normalizedOutput = false) {
+        let [x, y, z] = (!normalizedInput) ? xyz.$normalize() : xyz;
+        let rgb = [
+            x * 3.2404542 + y * -1.5371385 + z * -0.4985314,
+            x * -0.9692660 + y * 1.8760108 + z * 0.0415560,
+            x * 0.0556434 + y * -0.2040259 + z * 1.0572252
+        ];
+        // convert xyz to rgb. Note that not all colors are visible in rgb, so here we bound rgb between 0 to 1
+        for (let i = 0; i < 3; i++) {
+            rgb[i] = (rgb[i] < 0) ? 0 : (rgb[i] > 0.0031308) ? (1.055 * Math.pow(rgb[i], 1 / 2.4) - 0.055) : (12.92 * rgb[i]);
+            rgb[i] = Math.max(0, Math.min(1, rgb[i]));
+            if (!normalizedOutput)
+                rgb[i] = Math.round(rgb[i] * 255);
+        }
+        let cc = Color.rgb(rgb[0], rgb[1], rgb[2], xyz.alpha);
+        return (normalizedOutput) ? cc.normalize() : cc;
+    }
+    /**
+     * Convert XYZ to LAB
+     * @param xyz a XYZ Color
+     * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
+     * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
+     * @returns a new LAB Color
+     */
+    static XYZtoLAB(xyz, normalizedInput = false, normalizedOutput = false) {
+        let c = (normalizedInput) ? xyz.$normalize(false) : xyz.clone();
+        // adjust for D65  
+        c.divide(Color.D65);
+        let fn = (n) => (n > 0.008856) ? Math.pow(n, 1 / 3) : (7.787 * n) + 16 / 116;
+        let cy = fn(c[1]);
+        let cc = Color.lab((116 * cy) - 16, 500 * (fn(c[0]) - cy), 200 * (cy - fn(c[2])), xyz.alpha);
+        return (normalizedOutput) ? cc.normalize() : cc;
+    }
+    /**
+     * Convert LAB to XYZ
+     * @param lab a LAB Color
+     * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
+     * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
+     * @returns a new XYZ Color
+     */
+    static LABtoXYZ(lab, normalizedInput = false, normalizedOutput = false) {
+        let c = (normalizedInput) ? lab.$normalize(false) : lab;
+        let y = (c[0] + 16) / 116;
+        let x = (c[1] / 500) + y;
+        let z = y - c[2] / 200;
+        let fn = (n) => {
+            let nnn = n * n * n;
+            return (nnn > 0.008856) ? nnn : (n - 16 / 116) / 7.787;
+        };
+        let d = Color.D65;
+        // adjusted
+        let cc = Color.xyz(
+        // Math.max(0, Math.min( 100, d[0] * fn(x) )),
+        // Math.max(0, Math.min( 100, d[1] * fn(y) )),
+        // Math.max(0, Math.min( 100, d[2] * fn(z) )),
+        Math.max(0, d[0] * fn(x)), Math.max(0, d[1] * fn(y)), Math.max(0, d[2] * fn(z)), lab.alpha);
+        return (normalizedOutput) ? cc.normalize() : cc;
+    }
+    /**
+     * Convert XYZ to LUV
+     * @param xyz a XYZ Color
+     * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
+     * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
+     * @returns a new LUV Color
+     */
+    static XYZtoLUV(xyz, normalizedInput = false, normalizedOutput = false) {
+        let [x, y, z] = (normalizedInput) ? xyz.$normalize(false) : xyz;
+        let u = (4 * x) / (x + (15 * y) + (3 * z));
+        let v = (9 * y) / (x + (15 * y) + (3 * z));
+        y = y / 100;
+        y = (y > 0.008856) ? Math.pow(y, 1 / 3) : (7.787 * y + 16 / 116);
+        let refU = (4 * Color.D65[0]) / (Color.D65[0] + (15 * Color.D65[1]) + (3 * Color.D65[2]));
+        let refV = (9 * Color.D65[1]) / (Color.D65[0] + (15 * Color.D65[1]) + (3 * Color.D65[2]));
+        let L = (116 * y) - 16;
+        return Color.luv(L, 13 * L * (u - refU), 13 * L * (v - refV), xyz.alpha);
+    }
+    /**
+     * Convert LUV to XYZ
+     * @param luv a LUV Color
+     * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
+     * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
+     * @returns a new XYZ Color
+     */
+    static LUVtoXYZ(luv, normalizedInput = false, normalizedOutput = false) {
+        let [l, u, v] = (normalizedInput) ? luv.$normalize(false) : luv;
+        let y = (l + 16) / 116;
+        let cubeY = y * y * y;
+        y = (cubeY > 0.008856) ? cubeY : (y - 16 / 116) / 7.787;
+        let refU = (4 * Color.D65[0]) / (Color.D65[0] + (15 * Color.D65[1]) + (3 * Color.D65[2]));
+        let refV = (9 * Color.D65[1]) / (Color.D65[0] + (15 * Color.D65[1]) + (3 * Color.D65[2]));
+        u = u / (13 * l) + refU;
+        v = v / (13 * l) + refV;
+        y = y * 100;
+        let x = -1 * (9 * y * u) / ((u - 4) * v - u * v);
+        let z = (9 * y - (15 * v * y) - (v * x)) / (3 * v);
+        return Color.xyz(x, y, z, luv.alpha);
+    }
+    /**
+     * Convert LAB to LCH
+     * @param lab a LAB Color
+     * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
+     * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
+     * @returns a new LCH Color
+     */
+    static LABtoLCH(lab, normalizedInput = false, normalizedOutput = false) {
+        let c = (normalizedInput) ? lab.$normalize(false) : lab;
+        let h = Num_1.Geom.toDegree(Num_1.Geom.boundRadian(Math.atan2(c[2], c[1]))); // 0 to 360 degrees
+        return Color.lch(c[0], Math.sqrt(c[1] * c[1] + c[2] * c[2]), h, lab.alpha);
+    }
+    /**
+     * Convert LCH to LAB
+     * @param lch a LCH Color
+     * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
+     * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
+     * @returns a new LAB Color
+     */
+    static LCHtoLAB(lch, normalizedInput = false, normalizedOutput = false) {
+        let c = (normalizedInput) ? lch.$normalize(false) : lch;
+        let rad = Num_1.Geom.toRadian(c[2]);
+        return Color.lab(c[0], Math.cos(rad) * c[1], Math.sin(rad) * c[1], lch.alpha);
+    }
+}
+// XYZ property for Standard Observer 2deg, Daylight/sRGB illuminant D65
+Color.D65 = new Pt_1.Pt(95.047, 100, 108.883, 1);
+Color.ranges = {
+    rgb: [[0, 255], [0, 255], [0, 255]],
+    hsl: [[0, 360], [0, 1], [0, 1]],
+    hsb: [[0, 360], [0, 1], [0, 1]],
+    lab: [[0, 100], [-128, 127], [-128, 127]],
+    lch: [[0, 100], [0, 100], [0, 360]],
+    luv: [[0, 100], [-134, 220], [-140, 122]],
+    xyz: [[0, 100], [0, 100], [0, 100]],
+};
+exports.Color = Color;
+
+
+/***/ }),
+/* 11 */,
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const _Bound = __webpack_require__(3);
+const _Canvas = __webpack_require__(8);
+const _Create = __webpack_require__(9);
+const _Form = __webpack_require__(6);
+const _LinearAlgebra = __webpack_require__(2);
+const _Num = __webpack_require__(4);
+const _Op = __webpack_require__(5);
+const _Pt = __webpack_require__(0);
+const _Space = __webpack_require__(7);
+const _Color = __webpack_require__(10);
+const _Util = __webpack_require__(1);
+// A function to switch scope for Pts library. eg, Pts.scope( Pts, window );
+let namespace = (sc) => {
+    let lib = module.exports;
+    for (let k in lib) {
+        if (k != "namespace") {
+            sc[k] = lib[k];
+        }
+    }
+};
+module.exports = Object.assign({ namespace }, _Bound, _Canvas, _Create, _Form, _LinearAlgebra, _Op, _Num, _Pt, _Space, _Util, _Color);
 
 
 /***/ })

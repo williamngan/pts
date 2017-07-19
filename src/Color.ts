@@ -32,6 +32,10 @@ export class Color extends Pt {
     super( ...args );
   }
 
+  public get hex():string { return this.toString("hex"); }
+  public get rgb():string { return this.toString("rgb"); }
+  public get rgba():string { return this.toString("rgba"); }
+
   /**
    * Create a Color object with defaults to 4 dimensions
    * @param args a Pt-like parameters. See Pt constructor.

@@ -80,8 +80,8 @@ canvas.add( {
 
   action: (type, px, py) => {
     if (type=="move") {
-      let d = canvas.boundingBox.center.$subtract( px, py);
-      let p1 = canvas.boundingBox.center.$subtract(d);
+      let d = canvas.outerBound.center.$subtract( px, py);
+      let p1 = canvas.outerBound.center.$subtract(d);
 
       let bound = new Bound( p1, p1.$add( d.$abs().multiply(2) ) )
       ps = Create.distributeRandom( bound, 200 );

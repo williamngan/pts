@@ -3,7 +3,7 @@
 
 
 import {Bound} from "./Bound";
-import {Pt, IPt} from "./Pt";
+import {Pt, IPt, Group} from "./Pt";
 import {Form} from "./Form";
 
 type AnimateFunction = ( time?:number, frameTime?:number, currentSpace?:any ) => void;
@@ -182,7 +182,13 @@ export abstract class Space {
   /**
    * Get this space's bounding box
    */
-  get boundingBox():Bound { return this.bound.clone(); }
+  get outerBound():Bound { return this.bound.clone(); }
+
+  
+  /**
+   * The bounding box of the canvas
+   */
+  public get innerBound():Bound { return new Bound( Pt.make( this.size.length, 0 ), this.size.clone() ); }
 
 
   /**

@@ -69,6 +69,15 @@ export class Num {
     return c;
   }
 
+  /**
+   * Given a value between 0 to 1, returns a value that cycles between 0 -> 1 -> 0
+   * @param t a value between 0 to 1
+   * @return a value between 0 to 1
+   */
+  static cycle( t:number ):number {
+    return (Math.sin( Math.PI * 2 * t ) + 1) / 2;
+  }
+
 
   static average(pts: GroupLike|number[][]): Pt {
     return Num.sum(pts).divide(pts.length);

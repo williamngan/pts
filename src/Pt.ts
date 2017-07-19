@@ -281,7 +281,8 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
     return Vec.max( this );
   }
 
-  $min( p: Pt ):Pt {
+  $min( ...args ):Pt {
+    let p = Util.getArgs( args );
     let m = this.clone();
     for (let i=0, len=Math.min( this.length, p.length ); i<len; i++) {
       m[i] = Math.min( this[i], p[i] );
@@ -289,7 +290,8 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
     return m;
   }
 
-  $max( p: Pt ):Pt {
+  $max( ...args ):Pt {
+    let p = Util.getArgs( args );
     let m = this.clone();
     for (let i=0, len=Math.min( this.length, p.length ); i<len; i++) {
       m[i] = Math.max( this[i], p[i] );
