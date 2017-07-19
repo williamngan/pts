@@ -552,11 +552,11 @@ export class Group extends Array<Pt> {
     return this.sort( (a, b) => (desc) ? b[dim] - a[dim] : a[dim] - b[dim] );
   }
 
-  $add( g:GroupLike|number ):Group {
+  $matrixAdd( g:GroupLike|number ):Group {
     return Mat.add( this, g );
   }
 
-  $multiply( g:GroupLike|number, transposed:boolean=false ):Group {
+  $matrixMultiply( g:GroupLike|number, transposed:boolean=false ):Group {
     return Mat.multiply( this, g, transposed );
   }
 

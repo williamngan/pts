@@ -279,28 +279,28 @@ describe('Pt: ', () => {
 
     it('can calculate matrix-scalar addition', function() {
       let a = Group.fromArray( [[1,3,5], [2,4,6]] );
-      let m = a.$add(5);
+      let m = a.$matrixAdd(5);
       assert.isTrue( m[0][0] == 6 && m[0][1] == 8 && m[0][2] == 10 && m[1][0] == 7 && m[1][1] == 9 && m[1][2] == 11 );
     });
 
     it('can calculate matrix-matrix addition', function() {
       let a = Group.fromArray( [[1,3,5], [2,4,6]] );
       let b = Group.fromArray( [[1,2,3], [8,7,6]] );
-      let m = a.$add(b);
+      let m = a.$matrixAdd(b);
 
       assert.isTrue( m[0][0] == 2 && m[0][1] == 5 && m[0][2] == 8 && m[1][0] == 10 && m[1][1] == 11 && m[1][2] == 12 );
     });
 
     it('can calculate matrix-scalar multiplication', function() {
       let a = Group.fromArray( [[1,3,5], [2,4,6]] );
-      let m = a.$multiply(5, false);
+      let m = a.$matrixMultiply(5, false);
       assert.isTrue( m[0][0] == 5 && m[0][1] == 15 && m[0][2] == 25 && m[1][0] == 10 && m[1][1] == 20 && m[1][2] == 30 );
     });
 
     it('can calculate matrix-matrix multiplication in standard way', function() {
       let a = Group.fromArray( [[1,3,5,7], [2,4,6,8]] );
       let b = Group.fromArray( [[1,8,9], [2,7,10], [3,6,11], [4,5,12]] );
-      let m = a.$multiply(b, false);
+      let m = a.$matrixMultiply(b, false);
 
       assert.isTrue( m[0][0] == 50 && m[0][1] == 94 && m[0][2] == 178 && m[1][0] == 60 && m[1][1] == 120 && m[1][2] == 220 );
     });
@@ -308,7 +308,7 @@ describe('Pt: ', () => {
     it('can calculate matrix-matrix multiplication when second matrix is transposed', function() {
       let a = Group.fromArray( [[1,3,5,7], [2,4,6,8]] );
       let b = Group.fromArray( [[1,2,3,4], [8,7,6,5], [9,10,11,12]] );
-      let m = a.$multiply(b, true);
+      let m = a.$matrixMultiply(b, true);
 
       assert.isTrue( m[0][0] == 50 && m[0][1] == 94 && m[0][2] == 178 && m[1][0] == 60 && m[1][1] == 120 && m[1][2] == 220 );
     });

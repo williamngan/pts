@@ -519,10 +519,10 @@ class Group extends Array {
     sortByDimension(dim, desc = false) {
         return this.sort((a, b) => (desc) ? b[dim] - a[dim] : a[dim] - b[dim]);
     }
-    $add(g) {
+    $matrixAdd(g) {
         return LinearAlgebra_1.Mat.add(this, g);
     }
-    $multiply(g, transposed = false) {
+    $matrixMultiply(g, transposed = false) {
         return LinearAlgebra_1.Mat.multiply(this, g, transposed);
     }
     zipSlice(index, defaultValue = false) {
