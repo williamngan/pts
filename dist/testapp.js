@@ -519,6 +519,18 @@ class Group extends Array {
     sortByDimension(dim, desc = false) {
         return this.sort((a, b) => (desc) ? b[dim] - a[dim] : a[dim] - b[dim]);
     }
+    add(...args) {
+        return this.moveBy(...args);
+    }
+    $add(...args) {
+        return this.clone().add(...args);
+    }
+    multiply(...args) {
+        return this.scale(Util_1.Util.getArgs(args));
+    }
+    $multiply(...args) {
+        return this.clone().multiply(...args);
+    }
     $matrixAdd(g) {
         return LinearAlgebra_1.Mat.add(this, g);
     }

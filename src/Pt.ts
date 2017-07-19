@@ -552,6 +552,22 @@ export class Group extends Array<Pt> {
     return this.sort( (a, b) => (desc) ? b[dim] - a[dim] : a[dim] - b[dim] );
   }
 
+  add( ...args ):this {
+    return this.moveBy( ...args );
+  }
+
+  $add(...args):Group {
+    return this.clone().add( ...args );
+  }
+
+  multiply( ...args ):this {
+    return this.scale( Util.getArgs(args) );
+  }
+
+  $multiply(...args):Group {
+    return this.clone().multiply( ...args );
+  }
+
   $matrixAdd( g:GroupLike|number ):Group {
     return Mat.add( this, g );
   }
