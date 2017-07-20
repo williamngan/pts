@@ -166,11 +166,6 @@ class Pt extends exports.PtBaseArray {
         }
         return _ops;
     }
-    $map(fn) {
-        let m = this.clone();
-        LinearAlgebra_1.Vec.map(m, fn);
-        return m;
-    }
     /**
      * Take specific dimensional values from this Pt and create a new Pt
      * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
@@ -181,16 +176,6 @@ class Pt extends exports.PtBaseArray {
             p.push(this[axis[i]] || 0);
         }
         return new Pt(p);
-    }
-    /**
-     * Get a new Pt based on a slice of this Pt. Similar to `Array.slice()`.
-     * @param start start index
-     * @param end end index (ie, entry will not include value at this index)
-     */
-    $slice(start, end) {
-        // seems like new Pt(...).slice will return an error, must use Float64Array
-        let m = new exports.PtBaseArray(this).slice(start, end);
-        return new Pt(m);
     }
     $concat(...args) {
         return new Pt(this.toArray().concat(Util_1.Util.getArgs(args)));

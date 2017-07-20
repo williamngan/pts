@@ -120,12 +120,6 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
   }
 
 
-  $map( fn:(currentValue:number, index:number, array:PtLike) => number):Pt {
-    let m = this.clone();
-    Vec.map( m, fn );
-    return m;
-  }
-
   /**
    * Take specific dimensional values from this Pt and create a new Pt
    * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
@@ -138,17 +132,6 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
     return new Pt(p);
   }
 
-
-  /**
-   * Get a new Pt based on a slice of this Pt. Similar to `Array.slice()`.
-   * @param start start index
-   * @param end end index (ie, entry will not include value at this index)
-   */
-  $slice(start?:number, end?:number):Pt {
-    // seems like new Pt(...).slice will return an error, must use Float64Array
-    let m = new PtBaseArray( this ).slice(start, end); 
-    return new Pt( m );
-  }
 
   $concat( ...args ) {
     return new Pt( this.toArray().concat( Util.getArgs( args ) ) );

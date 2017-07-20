@@ -67,8 +67,9 @@ describe('Pt: ', () => {
       let p = new Pt([1,2,3,4,5,6]);
       let p2 = p.map( (d) => d*2 ) as Pt;
       let p3 = p2.slice( 2 ) as Pt;
+      p2.multiply( 100 );
       p3.multiply( 10 );
-      assert.isTrue( p3.length===4 && p2[2] === 6 && p3.y === 80 );
+      assert.isTrue( p3.length===4 && p2[2] === 600 && p3.y === 80 );
     });
 
     it('can check size of vector', () => {
@@ -109,10 +110,10 @@ describe('Pt: ', () => {
     });
 
     it('can map to a function', () => {
-      let p = new Pt(5,7,12).$map( (n:number, i:number, list) => {
+      let p = new Pt(5,7,12).map( (n:number, i:number, list) => {
         return n*10+2;
       });
-      assert.isTrue( p.equals( new Pt(52, 72, 122) ) )
+      assert.isTrue( (p as Pt).equals( new Pt(52, 72, 122) ) )
     });
 
     it('can take specific dimensions', () => {
@@ -140,13 +141,13 @@ describe('Pt: ', () => {
     });
 
     it('can concat with another Pt or array', () => {
-      let p = new Pt(1,2,3).$concat([2,3]).$concat(new Pt(10, 20, 30, 40));
+      let p = new Pt(1,2,3).$concat(2,3).$concat(new Pt(10, 20, 30, 40));
       assert.equal( p.length, 9 );
     })
 
     it('can get a slice of values', () => {
       let p = new Pt(1,2,3,4,5,6);
-      assert.isTrue( p.$slice(2,5).equals( new Pt(3,4,5) ) );
+      assert.isTrue( (p.slice(2,5) as Pt).equals( new Pt(3,4,5) ) );
     })
 
     it('can get a normalized unit vector', () => {

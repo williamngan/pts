@@ -33,10 +33,7 @@ Pt.make( 5, 0 ) // same as new Pt(0,0,0,0,0)
 p.fill( 0, 1, 2 )
 p.reduce( (a,b) =&gt; Math.max(a,b), 0 );
 </code></pre>
-<p>Note that some <code>Float32Array</code> functions return a new <code>Float32Array</code>. You may cast it back to <code>Pt</code> by a simple wrapping:</p>
-<pre><code>new Pt( p.slice(1,3) )
-p.$slice(1,3) // or alternatively, use $slice
-</code></pre>
+<h5>For typescript user, note that some <code>Float32Array</code> functions return a new <code>Float32Array</code>. You may cast it back to <code>Pt</code> easily, for example: <code>p.slice() as Pt</code></h5>
 <h3>Updating values</h3>
 <p>You can update a Pt's values by using <a href="#pt-pt"><code>to</code></a> function, or accessing the <a href="#pt-pt"><code>x</code></a>, <a href="#pt-pt"><code>y</code></a>, <a href="#pt-pt"><code>z</code></a>, <a href="#pt-pt"><code>w</code></a> properties.</p>
 <pre><code>p.to(1,2,3)
@@ -82,13 +79,10 @@ pt.rotate( Math.PI/3, anchorPt )
 <p><img src="./assets/bg.png" alt="js:pt_reflect"></p>
 <h5>A demo of scale and reflect transformation. The red line's length changes the scale, while its angle specifies the reflection. Take a look at the source code to see how easy this it :)</h5>
 <h3>Roll your own</h3>
-<p>Other common ways to perform calculations include <code>reduce</code> and <code>map</code>, which let you operate on an array of numbers. You may use all of Float32Array's functions with Pt, and some additional ones in Pt like <code>$map</code> and <code>op</code>. (See advanced topics for details)</p>
-<pre><code>let p1 = pt.$map( (d) =&gt; d*d )
-
-// same as pt.$map(...)
-let p2 = new Pt( pt.map( (d) =&gt; d*d ) 
+<p>You may use all of Float32Array's functions (eg, <code>slice</code>, <code>map</code>) with Pt. Some additional ones in Pt like <code>$concat</code>, <code>$take</code> make it simpler to work with TypedArray. Take a look at &quot;Op&quot; section to see how you can write your own functions to work with Pt easily.</p>
+<pre><code>// Use $concat and $take to grow and shrink a TypedArray 
+let p1 = new Pt(1, 2, 3).$concat( 4, 5 ); // becomes Pt(1,2,3,4,5)
 </code></pre>
-<h5>* Note that you may still use <code>map</code> but it will return a <code>Float32Array</code> instead of a <code>Pt</code></h5>
 </div>
 
 <ol id="menu"><a id="close" href="#">&times;</a><li><a href="Overview-0100.html">Overview</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li></ol>

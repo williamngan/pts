@@ -24,10 +24,11 @@ let g2 = Group.fromGroup( [ p1, p2, p3 ] );
 g1[2] = new Pt(1,2,3);
 ```
 
-You can also easily convert an array of number arrays into a Group:
+You can also easily convert an array of number arrays into a Group of Pts:
 ```
 let g3 = Group.fromArray( [ [1,2], [3,4], [5,6] ] );
 g3[0]; // returns Pt(1,2)
+g3.p2; // returns Pt(3,4)
 ```
 
 Remember that a Group must only contain Pts. This is different from Array which can contain different data types like strings and objects.
