@@ -83,11 +83,17 @@ exports.PtBaseArray = Float32Array;
 class Pt extends exports.PtBaseArray {
     /**
      * Create a Pt. If no parameter is provided, this will instantiate a Pt with 2 dimensions [0, 0].
+     * Note that `new Pt(3)` will only instantiate Pt with length of 3 (ie, same as `new Float32Array(3)` ). If you need a Pt with 1 dimension of value 3, use `new Pt([3])`.
      * Example: `new Pt()`, `new Pt(1,2,3,4,5)`, `new Pt([1,2])`, `new Pt({x:0, y:1})`, `new Pt(pt)`
      * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
      */
     constructor(...args) {
-        super((args.length > 0) ? Util_1.Util.getArgs(args) : [0, 0]);
+        if (args.length === 1 && typeof args[0] == "number") {
+            super(args[0]); // init with the TypedArray's length. Needed this in order to make ".map", ".slice" etc work.
+        }
+        else {
+            super((args.length > 0) ? Util_1.Util.getArgs(args) : [0, 0]);
+        }
     }
     static make(dimensions, defaultValue = 0) {
         let p = new exports.PtBaseArray(dimensions);

@@ -15,15 +15,19 @@ describe('Pt: ', () => {
       assert.equal( 6, new Pt(1,2,3,4,5,6).length )
     });
 
+    it('can init with length argument', () => {
+      assert.equal( 10, new Pt(10).length )
+    });
+
     it('can init in 1 dimensions', () => {
-      assert.equal( 1, new Pt(10).length )
+      assert.equal( 1, new Pt([10]).length )
     });
 
     it('should init with positional arguments', () => {
       let p1 = new Pt(10,100,1000,10000);
       let p2 = new Pt(11,111,1111);
       let p3 = new Pt(22,222);
-      let p4 = new Pt(3);
+      let p4 = new Pt([3]);
       assert.equal(11346, p1[0] + p1[3] + p2[2] + p3[1] + p4[0]);
     });
 
@@ -58,6 +62,14 @@ describe('Pt: ', () => {
   });
 
   describe('Pt Functions: ', () => {
+
+    it('can use Float32Array function', () => {
+      let p = new Pt([1,2,3,4,5,6]);
+      let p2 = p.map( (d) => d*2 ) as Pt;
+      let p3 = p2.slice( 2 ) as Pt;
+      p3.multiply( 10 );
+      assert.isTrue( p3.length===4 && p2[2] === 6 && p3.y === 80 );
+    });
 
     it('can check size of vector', () => {
       let p = new Pt([1,2,3,4,5,6]);

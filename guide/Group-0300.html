@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Group</title>
+	<link href="./assets/style.css" rel="stylesheet" type="text/css" />
+<meta charset="UTF-8">
+</head>
+
+<body>
+
+<a href="#menu" id="toc">&#x2261;</a>
+<div id="post"><h1>Group</h1>
+<p>A <a href="#pt-group"><code>Group</code></a> represents an array of <a href="#pt-pt"><code>Pt</code></a>. It is an abstraction that can fit many contexts. For example, you may use it to define a matrix, store a polygon, or interpolate a curve where each Pt is an anchor point.</p>
+<p>In fact, a wide range of complex forms and ideas can be represented as one of these simple structures:</p>
+<ul>
+<li>a Pt which is an array of numbers</li>
+<li>a Group which is an array of Pts</li>
+<li>an array of Groups</li>
+</ul>
+<p>The goal of <code>pts.js</code> is to help you see and express these structures in creative ways.</p>
+<h3>Creating a Group</h3>
+<p>Similar to making an Array, you can create a Group like these:</p>
+<pre><code>// Like Array constructor
+let g1 = new Group( p1, p2, p3 );
+
+// wrap an array of Pt into a group
+let g2 = Group.fromGroup( [ p1, p2, p3 ] ); 
+
+// Use it just like array too
+g1[2] = new Pt(1,2,3);
+</code></pre>
+<p>You can also easily convert an array of number arrays into a Group:</p>
+<pre><code>let g3 = Group.fromArray( [ [1,2], [3,4], [5,6] ] );
+g3[0]; // returns Pt(1,2)
+</code></pre>
+<p>Remember that a Group must only contain Pts. This is different from Array which can contain different data types like strings and objects.</p>
+<pre><code>let notOk = new Group( [1,2,3], &quot;hello&quot; ); // Don't do this
+</code></pre>
+<h3>Array functions</h3>
+<p>Since a <a href="#pt-group"><code>Group</code></a> is a subclass of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array"><code>Array</code></a>, you can use all the Array functions in a Group.</p>
+<pre><code>let g = Group.fromArray( [[1,2], [3,4]] );
+g.unshift( new Pt(5, 6) );
+g.pop();
+let g2 = g.slice(); // Array's slice method returns an Array
+g2 = Group.fromGroup( g2 ); // If needed, cast the Array back to Group
+</code></pre>
+<h5>For typescript user: if the Array function returns an Array, you may need to cast it back to Group. For example: <code>let gg = group.map( (p) =&gt; p.unit() ) as Group</code>;</h5>
+</div>
+
+<ol id="menu"><a id="close" href="#">&times;</a><li><a href="Overview-0100.html">Overview</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li></ol>
+
+<script type="text/javascript" src="../dist/pts.js"></script>
+<script type="text/javascript" src="./js/guide.js"></script>
+<script src="./js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+</body>
+</html>
