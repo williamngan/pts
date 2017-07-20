@@ -17,6 +17,7 @@
   "license": "Apache",
   "dependencies": {},
   "devDependencies": {
+    "@types/node": "^8.0.14",
     "babel-cli": "^6.24.1",
     "babel-core": "^6.25.0",
     "babel-loader": "^6.4.1",
@@ -28,12 +29,12 @@
     "mocha-loader": "^1.1.1",
     "mocha-typescript": "^1.0.23",
     "source-map": "^0.5.6",
-    "ts-loader": "^2.0.3",
-    "ts-node": "^3.0.2",
+    "ts-loader": "^2.3.1",
+    "ts-node": "^3.2.0",
     "tslint": "^4.5.1",
     "tslint-loader": "^3.4.3",
     "typedoc": "^0.5.10",
-    "typescript": "~2.3.2",
+    "typescript": "^2.4.2",
     "webpack": "^2.3.2",
     "webpack-dev-server": "^2.4.2"
   },

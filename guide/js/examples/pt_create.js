@@ -12,7 +12,8 @@
     let m = space.pointer;
     
     // drawing
-    form.stroke("#1E252C", 5).line( [new Pt( m.x, 0), m, new Pt( 0, m.y)] );
+    form.stroke("#1E252C", 5).fill(false);
+    form.line( [new Pt( m.x, 0), m, new Pt( 0, m.y)] );
     form.stroke("#FC0021").line( [new Pt(0,0), m] );
     form.stroke("#fff", 5).fill("#FC0021").point( m, 10, "circle")
     form.text( m.$add(20, 5), m.toString() );

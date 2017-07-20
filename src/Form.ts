@@ -3,7 +3,7 @@
 
 
 import {Space} from "./Space";
-import {Pt, IPt} from "./Pt";
+import {Pt, PtLike} from "./Pt";
 
 export class Font {
   public size:number;
@@ -42,7 +42,7 @@ export abstract class Form {
 
   public abstract stroke( c:string|boolean, width?:number, linejoin?:string, linecap?:string ):this;
 
-  public abstract point( p:IPt, radius:number, shape?:string ): this;
+  public abstract point( p:PtLike, radius:number, shape?:string ): this;
 
   public abstract draw( ps:Pt[], shape?:string ): this;
 

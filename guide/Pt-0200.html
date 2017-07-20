@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Pt calculations</title>
+	<title>Pt</title>
 	<link href="./assets/style.css" rel="stylesheet" type="text/css" />
 <meta charset="UTF-8">
 </head>
@@ -9,7 +9,40 @@
 <body>
 
 <a href="#menu" id="toc">&#x2261;</a>
-<div id="post"><h1>Pt calculations</h1>
+<div id="post"><h1>Pt basics</h1>
+<p>A <a href="#pt-pt"><code>Pt</code></a> represents a point in space, or more technically, an <em>n</em>-dimensional vector. You may also think of a <code>Pt</code> as an array of numeric values, a set of weights, or like an arrow coming from the origin point (0,0,0...).</p>
+<h3>Creating a Pt</h3>
+<p>You can create a <a href="#pt-pt"><code>Pt</code></a> in many different ways:</p>
+<pre><code>// defaults to (0,0)
+new Pt() 
+
+// from a series of parameters, array, or object
+new Pt( 1, 2, 3, 4 )  
+new Pt( [1,2,3] ) 
+new Pt( {x:0, y:1, z:2, w:3} )
+new Pt( anotherPt ) 
+
+Pt.make( 5, 0 ) // same as new Pt(0,0,0,0,0)
+</code></pre>
+<p>Here's a simple demo visualizing a Pt, which moves with your mouse/touch.</p>
+<p><img src="./assets/bg.png" alt="js:pt_create"></p>
+<h5>Here the red dot is the last position of your mouse/touch as a Pt. The black lines are the distances from the origin (top-left corner), which is equivalent to the Pt's position. The red line represents another way to think of this Pt -- as a vector, as an arrow from the origin of this space.</h5>
+<h3>Float32Array</h3>
+<p>Since <a href="#pt-pt"><code>Pt</code></a> is a subclass of javascript's <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array"><code>Float32Array</code></a>, it means you may use all the <code>Float32Array</code> features on a <code>Pt</code> too. For example:</p>
+<pre><code>p[0]
+p.fill( 0, 1, 2 )
+p.reduce( (a,b) =&gt; Math.max(a,b), 0 );
+</code></pre>
+<p>Note that some <code>Float32Array</code> functions return a new <code>Float32Array</code>. You may cast it back to <code>Pt</code> by a simple wrapping:</p>
+<pre><code>new Pt( p.slice(1,3) )
+p.$slice(1,3) // or alternatively, use $slice
+</code></pre>
+<h3>Updating values</h3>
+<p>You can update a Pt's values by using <a href="#pt-pt"><code>to</code></a> function, or accessing the <a href="#pt-pt"><code>x</code></a>, <a href="#pt-pt"><code>y</code></a>, <a href="#pt-pt"><code>z</code></a>, <a href="#pt-pt"><code>w</code></a> properties.</p>
+<pre><code>p.to(1,2,3)
+p.to( anotherPt )
+p.w = p.x + p.z
+</code></pre>
 <h3>Vector math</h3>
 <p>Pt provides basic functions for calculating vectors and matrices. But don't worry if you are not familiar wtih linear algrebra. To start, think of it as methods to perform calculations on arrays of values like adding or multiplying them.</p>
 <pre><code>let pt = new Pt( 10, 10 )
@@ -58,7 +91,7 @@ let p2 = new Pt( pt.map( (d) =&gt; d*d )
 <h5>* Note that you may still use <code>map</code> but it will return a <code>Float32Array</code> instead of a <code>Pt</code></h5>
 </div>
 
-<ol id="menu"><a id="close" href="#">&times;</a><li><a href="Overview-0100.html">Overview</a></li><li><a href="Pt-basics-0200.html">Pt basics</a></li><li><a href="Pt-calculations-0210.html">Pt calculations</a></li></ol>
+<ol id="menu"><a id="close" href="#">&times;</a><li><a href="Overview-0100.html">Overview</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Pt-basics-0200.html">Pt basics</a></li><li><a href="Pt-calculations-0210.html">Pt calculations</a></li><li><a href="Group-basics-0300.html">Group basics</a></li></ol>
 
 <script type="text/javascript" src="../dist/pts.js"></script>
 <script type="text/javascript" src="./js/guide.js"></script>
