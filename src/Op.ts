@@ -399,11 +399,11 @@ export class Triangle {
   static oppositeSide( pts:GroupLike, index:number ):Group {
     if (pts.length < 3) return _errorLength( new Group(), 3 );
     if (index === 0) {
-      return Group.fromGroup( [pts[1], pts[2]] );
+      return Group.fromPtArray( [pts[1], pts[2]] );
     } else if (index === 1) {
-      return Group.fromGroup( [pts[0], pts[2]] );
+      return Group.fromPtArray( [pts[0], pts[2]] );
     } else {
-      return Group.fromGroup( [pts[0], pts[1]] );
+      return Group.fromPtArray( [pts[0], pts[1]] );
     }
   }
 
@@ -500,7 +500,7 @@ export class Polygon {
     if (pts.length < 2) return _errorLength( new Group(), 2 );
     let sp = Util.split( pts, 2, 1 );
     if (closePath) sp.push( new Group( pts[pts.length-1], pts[0]) );
-    return sp.map( (g) => Group.fromGroup( g ) );
+    return sp.map( (g) => g as Group );
   }
 
   /**
@@ -513,7 +513,7 @@ export class Polygon {
     if (pts.length < 2) return _errorLength( new Group(), 2 );
     let sides = Polygon.lines( pts, closePath );
     let mids = sides.map( (s) => Geom.interpolate( s[0], s[1], t) );
-    return Group.fromGroup( mids );
+    return mids as Group;
   }
 
   /**

@@ -408,13 +408,13 @@ export class Group extends Array<Pt> {
     return g;
   }
 
-  static fromGroup( list:GroupLike ):Group {
+  static fromPtArray( list:GroupLike ):Group {
     return Group.from( list ) as Group;
   }
 
   split( chunkSize:number, stride?:number ):Group[] {
     let sp = Util.split( this, chunkSize, stride );
-    return sp.map( (g) => Group.fromGroup( g ) );
+    return sp.map( (g) => g as Group );
   }
 
   /**

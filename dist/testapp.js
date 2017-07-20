@@ -396,12 +396,12 @@ class Group extends Array {
         }
         return g;
     }
-    static fromGroup(list) {
+    static fromPtArray(list) {
         return Group.from(list);
     }
     split(chunkSize, stride) {
         let sp = Util_1.Util.split(this, chunkSize, stride);
-        return sp.map((g) => Group.fromGroup(g));
+        return sp.map((g) => g);
     }
     /**
      * Insert a Pt into this group
@@ -2002,13 +2002,13 @@ class Triangle {
         if (pts.length < 3)
             return _errorLength(new Pt_1.Group(), 3);
         if (index === 0) {
-            return Pt_1.Group.fromGroup([pts[1], pts[2]]);
+            return Pt_1.Group.fromPtArray([pts[1], pts[2]]);
         }
         else if (index === 1) {
-            return Pt_1.Group.fromGroup([pts[0], pts[2]]);
+            return Pt_1.Group.fromPtArray([pts[0], pts[2]]);
         }
         else {
-            return Pt_1.Group.fromGroup([pts[0], pts[1]]);
+            return Pt_1.Group.fromPtArray([pts[0], pts[1]]);
         }
     }
     /**
@@ -2101,7 +2101,7 @@ class Polygon {
         let sp = Util_1.Util.split(pts, 2, 1);
         if (closePath)
             sp.push(new Pt_1.Group(pts[pts.length - 1], pts[0]));
-        return sp.map((g) => Pt_1.Group.fromGroup(g));
+        return sp.map((g) => g);
     }
     /**
      * Get a new polygon group that is derived from midpoints in this polygon
@@ -2114,7 +2114,7 @@ class Polygon {
             return _errorLength(new Pt_1.Group(), 2);
         let sides = Polygon.lines(pts, closePath);
         let mids = sides.map((s) => Num_1.Geom.interpolate(s[0], s[1], t));
-        return Pt_1.Group.fromGroup(mids);
+        return mids;
     }
     /**
      * Given a Pt in the polygon group, the adjacent sides are the two sides which the Pt touches.

@@ -25,7 +25,7 @@
     var link = document.createElement("a");
     link.textContent = "source code";
     link.classList.add("sourceCodeLink");
-    link.setAttribute( "target", "_blank");
+    // link.setAttribute( "target", "_blank");
     link.setAttribute( "href", sourceCodePath+divID+".js");
     div.appendChild( link );
 
@@ -74,7 +74,7 @@
         let link = c.parentNode.getAttribute("href").replace(/#/g, "").split("-");
         c.parentNode.setAttribute( "href", `../docs/classes/_${link[0]}_.${link[1] || link[0]}.html#${c.textContent}` );
       }
-      c.parentElement.setAttribute( "target", "_blank" );
+      // c.parentElement.setAttribute( "target", "_blank" );
     }
     console.log( codes );
   }

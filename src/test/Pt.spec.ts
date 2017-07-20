@@ -204,7 +204,7 @@ describe('Pt: ', () => {
     });
 
     it('can create from GroupLike array', function() {
-      let p = Group.fromGroup( [ new Pt(1,2), new Pt(3,4), new Pt(5,6) ] ).moveBy( 10, 20 );
+      let p = Group.fromPtArray( [ new Pt(1,2), new Pt(3,4), new Pt(5,6) ] ).moveBy( 10, 20 );
       assert.equal( p[2].x, 15);
     });
 
