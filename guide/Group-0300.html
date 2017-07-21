@@ -42,13 +42,55 @@ g3.p2; // returns Pt(3,4)
 <pre><code>let g = Group.fromArray( [[1,2], [3,4]] );
 g.unshift( new Pt(5, 6) );
 g.pop();
-let g2 = g.slice(); // Array's slice method returns an Array
-g2 = Group.fromGroup( g2 ); // If needed, cast the Array back to Group
 </code></pre>
-<h5>For typescript user: if the Array function returns an Array, you may need to cast it back to Group. For example: <code>let gg = group.map( (p) =&gt; p.unit() ) as Group</code>;</h5>
+<p>There are a couple additional functions in Group that let you work with array more effectively. Take a look at <a href="#pt-group"><code>insert</code></a>, <a href="#pt-group"><code>remove</code></a>, <a href="#pt-group"><code>segments</code></a> and others.</p>
+<h5>For typescript: you may need to cast Array function result back to <code>Group</code> because the typescript compiler cannot figure it out yet (as of v2.4). For example: <code>let gg = group.map( (p) =&gt; p.unit() ) as Group</code>;</h5>
+<h3>Cheat sheet</h3>
+<p>Creating and cloning</p>
+<pre><code>new Group( new Pt(1,2), new Pt(3,4) )
+Group.fromArray( [ [1,2], [3,4] ])
+Group.fromPtArray( [new Pt(1,2), new Pt(3,4) )
+g.clone()
+</code></pre>
+<p>Getting and setting Pts</p>
+<pre><code>g[0]
+g.p1
+g[1] = new Pt()
+g.id = &quot;g01&quot;
+</code></pre>
+<p>Working with array</p>
+<pre><code>g.map( (p) =&gt; p.unit() ) // support all Array functions
+g.insert( [p1, p2], 0 )
+g.remove( 3, 2 )
+g.segments( 2, 2 )
+g.zipSlice(2)
+g.$zip()
+</code></pre>
+<p>Positions and bounds</p>
+<pre><code>g.boundingBox()
+g.anchorFrom( 3 ) // relative to absolute position
+g.anchorTo( pt ) // absolute to relative position
+g.centroid()
+g.interpolate( 0.5 )
+g.sortByDimension(1, true)
+</code></pre>
+<p>Calculate</p>
+<pre><code>g.add( 10 )
+g.$add( -10, 1 )
+g.$multiply( 0.5 )
+g.$matrixAdd( g2 )
+g.$matrixMultiply( g2, true )
+</code></pre>
+<p>Transform</p>
+<pre><code>g.moveTo( 100, 100 )
+g.moveBy( 10, 1 )
+g.scale( 0.5 ).rotate2D( Const.half_pi )
+g.shear2D( 0.2 ).reflect2D( line )
+</code></pre>
+<p>Check out the <a href="../docs/classes/_pt_.group.html">full documentation</a> too.</p>
 </div>
 
-<ol id="menu"><a id="close" href="#">&times;</a><li><a href="Overview-0100.html">Overview</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li></ol>
+<ol id="menu"><a id="close" href="#">&times;</a><li><a href="Overview-0100.html">Overview</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li></ol>
 
 <script type="text/javascript" src="../dist/pts.js"></script>
 <script type="text/javascript" src="./js/guide.js"></script>

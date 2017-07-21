@@ -33,7 +33,7 @@ Pt.make( 5, 0 ) // same as new Pt(0,0,0,0,0)
 p.fill( 0, 1, 2 )
 p.reduce( (a,b) =&gt; Math.max(a,b), 0 );
 </code></pre>
-<h5>For typescript user, note that some <code>Float32Array</code> functions return a new <code>Float32Array</code>. You may cast it back to <code>Pt</code> easily, for example: <code>p.slice() as Pt</code></h5>
+<p>Note that Float32Array doesn't allow some common Array functions like <code>push()</code> and <code>pop()</code> . If you need to grow or shrink the Pt's dimensions, either create a new one or use <a href="#pt-pt"><code>$concat</code></a> and <a href="#pt-pt"><code>$take</code></a>.</p>
 <h3>Updating values</h3>
 <p>You can update a Pt's values by using <a href="#pt-pt"><code>to</code></a> function, or accessing the <a href="#pt-pt"><code>x</code></a>, <a href="#pt-pt"><code>y</code></a>, <a href="#pt-pt"><code>z</code></a>, <a href="#pt-pt"><code>w</code></a> properties.</p>
 <pre><code>p.to(1,2,3)
@@ -55,13 +55,13 @@ let p2 = pt.$multiply( 5 ).add( 1,2,3 )
 </code></pre>
 <p>There are other basic vector operations like <a href="#pt-pt"><code>unit</code></a> (get a normalized vector), <a href="#pt-pt"><code>magnitude</code></a> (get its distance from origin), <a href="#pt-pt"><code>dot</code></a> (find dot product), <a href="#pt-pt"><code>$project</code></a> (find its projection vector). Check the docs on <a href="#pt-pt"><code>Pt</code></a> for a full list.</p>
 <h3>Angles</h3>
-<p>Since a Pt can be thought of as an arrow from origin, you can find its angle with <a href="#pt-pt"><code>angle</code></a> function. You can also find the angle between two Pts with <a href="#pt-pt"><code>angleBetween</code></a> function. A related function <a href="#pt-pt"><code>toAngle()</code></a> lets you move a Pt by specifying a target angle.</p>
+<p>Since a Pt can be thought of as an arrow from origin, you can find its angle with <a href="#pt-pt"><code>angle</code></a> function. You can also find the angle between two Pts with <a href="#pt-pt"><code>angleBetween</code></a> function. A related function <a href="#pt-pt"><code>toAngle</code></a> lets you move a Pt by specifying a target angle.</p>
 <pre><code>pt.angle()
 pt.angle(Const.yz) // get the angle of axis y-z
 pt.angleBetween( anotherPt )
 pt.toAngle( Math.PI/2 )
 </code></pre>
-<h5>* Note that all angles are specified in radian, where 180 degrees = <em>π</em> radian. (Imagine half-circle is like 180 degrees.) You can use <a href="#op-geom"><code>Geom.toRadian</code></a> and <a href="#op-geom"><code>Geom.toDegree</code></a> functions to convert between degrees and radian.</h5>
+<h5>* Note that all angles are specified in radian, where 180 degrees = <em>π</em> radian. (Imagine half-circle is like 180 degrees.) You can use <a href="#num-geom"><code>Geom.toRadian</code></a> and <a href="#num-geom"><code>Geom.toDegree</code></a> functions to convert between degrees and radian.</h5>
 <p><img src="./assets/bg.png" alt="js:pt_angle"></p>
 <h5>The above demo is put together with some basic vector operations and angle functions.</h5>
 <h3>Transformations</h3>
@@ -75,17 +75,68 @@ pt.reflect2D( [p1, p2] )
 <pre><code>pt.scale( 0.5, anchorPt )
 pt.rotate( Math.PI/3, anchorPt )
 </code></pre>
-<p>Take a look at the <a href="#op-geom"><code>Geom</code></a> class which also provides many functions to help with geometry and transformations.</p>
+<p>Take a look at the <a href="#num-geom"><code>Geom</code></a> class which also provides many functions to help with geometry and transformations.</p>
 <p><img src="./assets/bg.png" alt="js:pt_reflect"></p>
 <h5>A demo of scale and reflect transformation. The red line's length changes the scale, while its angle specifies the reflection. Take a look at the source code to see how easy this it :)</h5>
 <h3>Roll your own</h3>
 <p>You may use all of Float32Array's functions (eg, <code>slice</code>, <code>map</code>) with Pt. Some additional ones in Pt like <code>$concat</code>, <code>$take</code> make it simpler to work with TypedArray. Take a look at &quot;Op&quot; section to see how you can write your own functions to work with Pt easily.</p>
 <pre><code>// Use $concat and $take to grow and shrink a TypedArray 
 let p1 = new Pt(1, 2, 3).$concat( 4, 5 ); // becomes Pt(1,2,3,4,5)
+
+// Use op -- see how it works in Op section
+p1.op( Line.collinear );
 </code></pre>
+<h3>Cheat sheet</h3>
+<p>Creating and cloning</p>
+<pre><code>new Pt()
+new Pt( 1, 2, 3, 4 )  
+new Pt( [1,2,3] ) 
+new Pt( {x:0, y:1, z:2, w:3} )
+new Pt( anotherPt ) 
+Pt.make( 5, 0 ) // same as new Pt(0,0,0,0,0)
+pt.clone()
+</code></pre>
+<p>Getting and setting values</p>
+<pre><code>p[1]
+p[2] = p[0]
+p.x = p.y+1
+p.to( 1, 2, 3 )
+p.id = &quot;p01&quot;
+</code></pre>
+<p>Calculating</p>
+<pre><code>p.equals( p2, 0.00001 )
+p.$ceil().floor().round()
+p.abs()
+p.maxValue() - p.minValue()
+p.$min( p2 ).$max( p3 )
+</code></pre>
+<p>Vector math</p>
+<pre><code>p.add( 1,2 ).subtract( p2 ).multiply( 10 ).divide( 2 )
+p.$add( 1,2 ) // $-prefix means getting result as a new Pt
+p.angle()
+p.angleBetween( p2 )
+p.dot( p2 )
+p.$cross( p2 )
+p.$project( p2 )
+p.magnitude()
+p.magnitudeSq() // magnitude squared
+p.unit() // unit vector
+</code></pre>
+<p>Transforming</p>
+<pre><code>p.scale(0.5).rotate2D( Const.half_pi )
+p.shear2D( 0.2 ).reflect2D( line )
+p.toAngle( Math.PI/3, 100 )
+</code></pre>
+<p>Working with array values</p>
+<pre><code>p.reduce( (a,b) =&gt; Math.max(a,b), 0 ) // can use all Float32Array functions
+p.$take(&quot;xz&quot;)
+p.$concat( 10, 100 )
+p.toArray() // convert Float32Array to Array
+</code></pre>
+<p>Check out the <a href="../docs/classes/_pt_.pt.html">full documentation</a> too.</p>
 </div>
 
-<ol id="menu"><a id="close" href="#">&times;</a><li><a href="Overview-0100.html">Overview</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li></ol>
+<ol id="menu"><a id="close" href="#">&times;</a><li><a href="Overview-0100.html">Overview</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li></ol>
 
 <script type="text/javascript" src="../dist/pts.js"></script>
 <script type="text/javascript" src="./js/guide.js"></script>

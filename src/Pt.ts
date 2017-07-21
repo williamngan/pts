@@ -334,23 +334,6 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
     return [].slice.call( this );
   }
 
-
-  /**
-   * Given two groups of Pts, and a function that operate on two Pt, return a group of Pts  
-   * @param a a group of Pts
-   * @param b another array of Pts
-   * @param op a function that takes two parameters (p1, p2) and returns a Pt 
-   */
-  static combine( a:GroupLike, b:GroupLike, op:(p1:Pt, p2:Pt) => Pt ):Group {
-    let result = new Group();
-    for (let i=0, len=a.length; i<len; i++) {
-      for (let k=0, len=b.length; k<len; k++) {
-        result.push( op(a[i], b[k]) );
-      }
-    }
-    return result;
-  }
-
 }
 
 

@@ -72,7 +72,9 @@
       
       if (c.parentNode.getAttribute("href").indexOf("#") === 0 && c.textContent) {
         let link = c.parentNode.getAttribute("href").replace(/#/g, "").split("-");
-        c.parentNode.setAttribute( "href", `../docs/classes/_${link[0]}_.${link[1] || link[0]}.html#${c.textContent}` );
+        let linkAnchor = c.textContent.split(".");
+        linkAnchor = linkAnchor[linkAnchor.length-1].toLowerCase().replace(/\W/g, "_");
+        c.parentNode.setAttribute( "href", `../docs/classes/_${link[0]}_.${ link[1] || link[0]}.html#${linkAnchor}` );
       }
       // c.parentElement.setAttribute( "target", "_blank" );
     }

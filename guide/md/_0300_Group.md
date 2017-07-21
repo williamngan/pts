@@ -44,9 +44,64 @@ Since a [`Group`](#pt-group) is a subclass of [`Array`](https://developer.mozill
 let g = Group.fromArray( [[1,2], [3,4]] );
 g.unshift( new Pt(5, 6) );
 g.pop();
-let g2 = g.slice(); // Array's slice method returns an Array
-g2 = Group.fromGroup( g2 ); // If needed, cast the Array back to Group
 ```
 
-##### For typescript user: if the Array function returns an Array, you may need to cast it back to Group. For example: `let gg = group.map( (p) => p.unit() ) as Group`;
+There are a couple additional functions in Group that let you work with array more effectively. Take a look at [`insert`](#pt-group), [`remove`](#pt-group), [`segments`](#pt-group) and others.
 
+##### For typescript: you may need to cast Array function result back to `Group` because the typescript compiler cannot figure it out yet (as of v2.4). For example: `let gg = group.map( (p) => p.unit() ) as Group`;
+
+### Cheat sheet
+Creating and cloning
+```
+new Group( new Pt(1,2), new Pt(3,4) )
+Group.fromArray( [ [1,2], [3,4] ])
+Group.fromPtArray( [new Pt(1,2), new Pt(3,4) )
+g.clone()
+```
+
+Getting and setting Pts 
+```
+g[0]
+g.p1
+g[1] = new Pt()
+g.id = "g01"
+```
+
+Working with array
+```
+g.map( (p) => p.unit() ) // support all Array functions
+g.insert( [p1, p2], 0 )
+g.remove( 3, 2 )
+g.segments( 2, 2 )
+g.zipSlice(2)
+g.$zip()
+```
+
+Positions and bounds
+```
+g.boundingBox()
+g.anchorFrom( 3 ) // relative to absolute position
+g.anchorTo( pt ) // absolute to relative position
+g.centroid()
+g.interpolate( 0.5 )
+g.sortByDimension(1, true)
+```
+
+Calculate
+```
+g.add( 10 )
+g.$add( -10, 1 )
+g.$multiply( 0.5 )
+g.$matrixAdd( g2 )
+g.$matrixMultiply( g2, true )
+```
+
+Transform
+```
+g.moveTo( 100, 100 )
+g.moveBy( 10, 1 )
+g.scale( 0.5 ).rotate2D( Const.half_pi )
+g.shear2D( 0.2 ).reflect2D( line )
+```
+
+Check out the [full documentation](../docs/classes/_pt_.group.html) too.
