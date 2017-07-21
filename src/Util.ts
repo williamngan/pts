@@ -140,9 +140,31 @@ export class Util {
   }
 
 
+  /**
+   * Flatten an array of arrays such as Group[] to a flat Array or Group
+   * @param pts an array, usually an array of Groups
+   * @param flattenAsGroup a boolean to specify whether the return type should be a Group or Array. Default is `true` which returns a Group.
+   */
   static flatten( pts:any[], flattenAsGroup:boolean=true ) {
     let arr = (flattenAsGroup) ? new Group() : new Array();
     return arr.concat.apply(arr, pts);
+  }
+
+
+    /**
+   * Given two arrays of object<T>, and a function that operate on two object<T>, return an array of T  
+   * @param a an array of object<T>, eg [ Group, Group, ... ]
+   * @param b another array of object<T>
+   * @param op a function that takes two parameters (a, b) and returns a T
+   */
+  static combine<T>( a:T[], b:T[], op:(a:T, b:T) => T ):T[] {
+    let result = [];
+    for (let i=0, len=a.length; i<len; i++) {
+      for (let k=0, len=b.length; k<len; k++) {
+        result.push( op(a[i], b[k]) );
+      }
+    }
+    return result;
   }
 
 

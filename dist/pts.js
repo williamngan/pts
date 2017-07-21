@@ -332,13 +332,6 @@ class Pt extends exports.PtBaseArray {
         Num_1.Geom.reflect2D(this, line, axis);
         return this;
     }
-    /**
-     * Check if another Pt is perpendicular to this Pt
-     * @param p another Pt
-     */
-    isPerpendicular(p) {
-        return this.dot(p) == 0;
-    }
     toString() {
         return `Pt(${this.join(", ")})`;
     }
@@ -390,6 +383,11 @@ class Group extends Array {
     static fromPtArray(list) {
         return Group.from(list);
     }
+    /**
+     * Split this Group into an array of sub-groups
+     * @param chunkSize number of items per sub-group
+     * @param stride forward-steps after each sub-group
+     */
     split(chunkSize, stride) {
         let sp = Util_1.Util.split(this, chunkSize, stride);
         return sp.map((g) => g);
@@ -413,9 +411,14 @@ class Group extends Array {
         let param = (index < 0) ? [index * -1 - 1, count] : [index, count];
         return Group.prototype.splice.apply(this, param);
     }
-    segments(pts_per_segment = 2, stride = 2) { return this.split(2, stride); }
     /**
-     * Get all the lines (ie, edges in a graph) of this group
+     * Split this group into an array of sub-group segments
+     * @param pts_per_segment number of Pts in each segment
+     * @param stride forward-step to take
+     */
+    segments(pts_per_segment = 2, stride = 1) { return this.split(pts_per_segment, stride); }
+    /**
+     * Get all the line segments (ie, edges in a graph) of this group
      */
     lines() { return this.segments(2, 1); }
     centroid() {
@@ -424,7 +427,15 @@ class Group extends Array {
     boundingBox() {
         return Num_1.Geom.boundingBox(this);
     }
+    /**
+     * Anchor all the Pts in this Group using a target Pt as origin. (ie, subtract all Pt with the target anchor to get a relative position)
+     * @param ptOrIndex a Pt, or a numeric index to target a specific Pt in this Group
+     */
     anchorTo(ptOrIndex = 0) { Num_1.Geom.anchor(this, ptOrIndex, "to"); }
+    /**
+     * Anchor all the Pts in this Group by its absolute position from a target Pt. (ie, add all Pt with the target anchor to get an absolute position)
+     * @param ptOrIndex a Pt, or a numeric index to target a specific Pt in this Group
+     */
     anchorFrom(ptOrIndex = 0) { Num_1.Geom.anchor(this, ptOrIndex, "from"); }
     /**
      * Create an operation using this Group, passing this Group into a custom function's first parameter
@@ -541,21 +552,6 @@ class Group extends Array {
     }
     toString() {
         return "Group[ " + this.reduce((p, c) => p + c.toString() + " ", "") + " ]";
-    }
-    /**
-     * Given two arrays of Groups, and a function that operate on two Groups, return an array of Group
-     * @param a an array of Groups, eg [ Group, Group, ... ]
-     * @param b another array of Groups
-     * @param op a function that takes two parameters (group1, group2) and returns a Group
-     */
-    static combine(a, b, op) {
-        let result = [];
-        for (let i = 0, len = a.length; i < len; i++) {
-            for (let k = 0, len = b.length; k < len; k++) {
-                result.push(op(a[i], b[k]));
-            }
-        }
-        return result;
     }
 }
 exports.Group = Group;
@@ -674,9 +670,29 @@ class Util {
         }
         return chunks;
     }
+    /**
+     * Flatten an array of arrays such as Group[] to a flat Array or Group
+     * @param pts an array, usually an array of Groups
+     * @param flattenAsGroup a boolean to specify whether the return type should be a Group or Array. Default is `true` which returns a Group.
+     */
     static flatten(pts, flattenAsGroup = true) {
         let arr = (flattenAsGroup) ? new Pt_1.Group() : new Array();
         return arr.concat.apply(arr, pts);
+    }
+    /**
+   * Given two arrays of object<T>, and a function that operate on two object<T>, return an array of T
+   * @param a an array of object<T>, eg [ Group, Group, ... ]
+   * @param b another array of object<T>
+   * @param op a function that takes two parameters (a, b) and returns a T
+   */
+    static combine(a, b, op) {
+        let result = [];
+        for (let i = 0, len = a.length; i < len; i++) {
+            for (let k = 0, len = b.length; k < len; k++) {
+                result.push(op(a[i], b[k]));
+            }
+        }
+        return result;
     }
 }
 Util.warnLevel = "default";

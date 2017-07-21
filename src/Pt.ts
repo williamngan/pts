@@ -326,15 +326,6 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
     return this;
   }
 
-  /**
-   * Check if another Pt is perpendicular to this Pt
-   * @param p another Pt
-   */
-  isPerpendicular( p ) {
-    return this.dot(p) == 0
-  } 
-
-
   toString():string {
     return `Pt(${ this.join(", ")})`
   }
@@ -400,6 +391,11 @@ export class Group extends Array<Pt> {
     return Group.from( list ) as Group;
   }
 
+  /**
+   * Split this Group into an array of sub-groups
+   * @param chunkSize number of items per sub-group
+   * @param stride forward-steps after each sub-group
+   */
   split( chunkSize:number, stride?:number ):Group[] {
     let sp = Util.split( this, chunkSize, stride );
     return sp.map( (g) => g as Group );
@@ -426,10 +422,15 @@ export class Group extends Array<Pt> {
     return Group.prototype.splice.apply( this, param );
   }
 
-  segments( pts_per_segment:number=2, stride:number=2 ):Group[] { return this.split(2, stride); }
+  /**
+   * Split this group into an array of sub-group segments
+   * @param pts_per_segment number of Pts in each segment
+   * @param stride forward-step to take
+   */
+  segments( pts_per_segment:number=2, stride:number=1 ):Group[] { return this.split(pts_per_segment, stride); }
 
   /**
-   * Get all the lines (ie, edges in a graph) of this group
+   * Get all the line segments (ie, edges in a graph) of this group
    */
   lines():Group[] { return this.segments(2, 1); }
 
@@ -441,8 +442,16 @@ export class Group extends Array<Pt> {
     return Geom.boundingBox( this );
   }
 
+  /**
+   * Anchor all the Pts in this Group using a target Pt as origin. (ie, subtract all Pt with the target anchor to get a relative position)
+   * @param ptOrIndex a Pt, or a numeric index to target a specific Pt in this Group
+   */
   anchorTo( ptOrIndex:PtLike|number=0 ) { Geom.anchor( this, ptOrIndex, "to" ); }
 
+  /**
+   * Anchor all the Pts in this Group by its absolute position from a target Pt. (ie, add all Pt with the target anchor to get an absolute position)
+   * @param ptOrIndex a Pt, or a numeric index to target a specific Pt in this Group
+   */
   anchorFrom( ptOrIndex:PtLike|number=0 ) { Geom.anchor( this, ptOrIndex, "from" ); }
 
   /**
@@ -582,22 +591,4 @@ export class Group extends Array<Pt> {
   }
 
 
-
-
-
-  /**
-   * Given two arrays of Groups, and a function that operate on two Groups, return an array of Group  
-   * @param a an array of Groups, eg [ Group, Group, ... ]
-   * @param b another array of Groups
-   * @param op a function that takes two parameters (group1, group2) and returns a Group
-   */
-  static combine( a:Group[], b:Group[], op:(group1:Group, group2:Group) => Group ):Group[] {
-    let result = [];
-    for (let i=0, len=a.length; i<len; i++) {
-      for (let k=0, len=b.length; k<len; k++) {
-        result.push( op(a[i], b[k]) );
-      }
-    }
-    return result;
-  }
 }
