@@ -10,25 +10,33 @@
   // animation
   space.add({
     start: (bound) => {
-      group = new Group( new Pt(space.center.$subtract( 100, 0 )), new Pt(space.center), new Pt(space.center.$add( 100, 0 )) );
+      group = new Group( new Pt(space.center.$subtract( 20, 0 )), new Pt(space.center), new Pt(space.center.$add( 20, 0 )) );
     },
     
     animate: (time, ftime) => {
       
-      // record last 10 pointer positions
-      group.push( space.pointer.clone() );
-      if (group.length > 10 ) group.shift();
+      let lastPt = group[group.length-1];
+
+      // record last 50 pointer positions
+      if ( !lastPt.equals( space.pointer ) ) {
+        group.push( space.pointer.clone() );
+        if (group.length > 50 ) group.shift();
+      }
+      
       
       // drawing
       if (group.length >= 3 ) {
-
+        
         // get segments from the group to generate circle position and size
-        let cs = group.segments().map( (g) => Circle.fromPt( g[1], g[1].$subtract(g[0]).magnitude()*2 + 20 ) );
-
-        form.stroke("rgba(255,255,255,.3)", 5).fill(false).circles( cs );
-        form.stroke("#1E252C", 10).line( group );
-        form.fill("#f03").stroke(false).point( group[group.length-1], 5, "circle" );
-
+        let cs = group.segments(2, 5).map( 
+          (g) => Circle.fromPt( g[0], Math.min( 50, g[1].$subtract(g[0]).magnitude()) ) 
+        );
+        
+        form.stroke("#123", 10, "round").fill(false)
+        form.line( group );
+        form.fill("#fff").circles( cs );
+        form.fill("#f03").stroke(false).point( lastPt, 10, "circle" );
+        
       }
     }
   });

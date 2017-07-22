@@ -23,8 +23,8 @@
     let g3 = g2.clone();
     Geom.reflect2D( g3, reflectLine );
     
-    form.fill(false).stroke("#fff", 20).line(g1).stroke("#1E252C").line(g3);
-    form.stroke("#FC0021", 10).line( reflectLine );
+    form.fill(false).stroke("#fff", 20).line(g1).stroke("#123").line(g3);
+    form.stroke("#f03", 10).line( reflectLine );
     
   });
   

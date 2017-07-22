@@ -72,7 +72,7 @@ a:hover { color: #FC0021; }
 #header { padding: 30px 0 50px; }
 #footer { padding: 100px 0 30px; }
 
-h1 { font-size: 3em; line-height: 1; }
+h1 { font-size: 3em; line-height: 1; margin: 50px 0; }
 h2 { font-size: 2.0em; }
 h3 { font-size: 1.6em; margin-top: 50px;}
 h4 { font-size: 1.35em; }

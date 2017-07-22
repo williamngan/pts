@@ -7,16 +7,22 @@ import {Pt, PtLike} from "./Pt";
 
 export class Font {
   public size:number;
+  public lineHeight:number;
   public face:string;
   public style:string;
+  public weight:string;
+  
 
-  constructor( size=11, face="sans-serif", style="") {
+  constructor( size=12, face="sans-serif", weight="", style="", lineHeight=1.5 ) {
     this.size = size;
     this.face = face;
     this.style = style;
+    this.weight = weight;
+    this.lineHeight = lineHeight;
   }
 
-  get data():string { return `${this.style} ${this.size}px ${this.face}` };
+  // "italic small-caps bold 12px arial"
+  get value():string { return `${this.style} ${this.weight} ${this.size}px/${this.lineHeight} ${this.face}` };
 }
 
 
@@ -30,9 +36,8 @@ export abstract class Form {
   public get stroked():boolean { return this._stroked; }
   public set stroked( b:boolean ) { this._stroked = b; }
 
-  protected _font:Font;
-  public get font():Font { return this._font; }
-  public set font( b:Font ) { this._font = b; }
+  protected _font:Font = new Font();
+  public get currentFont():Font { return this._font; }
 
   public abstract get space():Space;
 

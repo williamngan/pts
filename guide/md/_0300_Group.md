@@ -62,6 +62,8 @@ There are also a couple additional functions in Group that let you work with arr
 
 ![js:group_segments](./assets/bg.png)
 
+##### In this demo, we keep track of the last 50 positions of the pointer in a Group, and draw one circle for every 5 segments. Take a look at the source code and note the use of common Array functions like `push` and `map` along with Group functions like `segments`.
+
 ### Transformations
 Similar to transformations in Pt, you can use [`scale`](#pt-group), [`rotate2D`](#pt-group) etc to transform a Group ot Pts. There are also [`moveBy`](#pt-group) and [`moveTo`](#pt-group) to translate its positions. Basic arithmetics like [`add`](#pt-group) and [`multiply`](#pt-group) are also included. 
 
@@ -107,10 +109,10 @@ g.sortByDimension(1, true)
 Calculate
 ```
 g.add( 10 )
-g.$add( -10, 1 )
-g.$multiply( 0.5 )
+g.multiply( 0.5 )
 g.$matrixAdd( g2 )
 g.$matrixMultiply( g2, true )
+g.forEachPt( "floor" )
 ```
 
 Transform

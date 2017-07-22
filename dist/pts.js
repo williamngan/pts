@@ -2565,12 +2565,15 @@ exports.Curve = Curve;
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
 class Font {
-    constructor(size = 11, face = "sans-serif", style = "") {
+    constructor(size = 12, face = "sans-serif", weight = "", style = "", lineHeight = 1.5) {
         this.size = size;
         this.face = face;
         this.style = style;
+        this.weight = weight;
+        this.lineHeight = lineHeight;
     }
-    get data() { return `${this.style} ${this.size}px ${this.face}`; }
+    // "italic small-caps bold 12px arial"
+    get value() { return `${this.style} ${this.weight} ${this.size}px/${this.lineHeight} ${this.face}`; }
     ;
 }
 exports.Font = Font;
@@ -2578,13 +2581,13 @@ class Form {
     constructor() {
         this._filled = true;
         this._stroked = true;
+        this._font = new Font();
     }
     get filled() { return this._filled; }
     set filled(b) { this._filled = b; }
     get stroked() { return this._stroked; }
     set stroked(b) { this._stroked = b; }
-    get font() { return this._font; }
-    set font(b) { this._font = b; }
+    get currentFont() { return this._font; }
 }
 exports.Form = Form;
 
@@ -2895,6 +2898,9 @@ class CanvasSpace extends Space_1.Space {
             this._offscreen = false;
         }
         return this;
+    }
+    get pixelScale() {
+        return this._pixelScale;
     }
     /**
      * Check if an offscreen canvas is created
@@ -3231,11 +3237,16 @@ class CanvasForm extends Form_1.Form {
     constructor(space) {
         super();
         // store common styles so that they can be restored to canvas context when using multiple forms. See `reset()`.
-        this._style = { fillStyle: "#e51c23", strokeStyle: "#fff", lineWidth: 1, lineJoin: "miter", lineCap: "butt" };
+        this._style = {
+            fillStyle: "#e51c23", strokeStyle: "#fff",
+            lineWidth: 1, lineJoin: "miter", lineCap: "butt",
+        };
+        this._font = new Form_1.Font(14, "sans-serif");
         this._space = space;
         this._ctx = this._space.ctx;
         this._ctx.fillStyle = this._style.fillStyle;
         this._ctx.strokeStyle = this._style.strokeStyle;
+        this._ctx.font = this._font.value;
     }
     get space() { return this._space; }
     useOffscreen(off = true, clear = false) {
@@ -3296,12 +3307,28 @@ class CanvasForm extends Form_1.Form {
         }
         return this;
     }
+    font(size, weight, style, lineHeight, family) {
+        if (size)
+            this._font.size = size;
+        if (family)
+            this._font.face = family;
+        if (weight)
+            this._font.weight = weight;
+        if (style)
+            this._font.style = style;
+        if (lineHeight)
+            this._font.lineHeight = lineHeight;
+        this._ctx.font = this._font.value;
+        return this;
+    }
     /**
      * Reset the rendering context's common styles to this form's styles. This supports using multiple forms on the same canvas context.
      */
     reset() {
         for (let k in this._style) {
             this._ctx[k] = this._style[k];
+            this._font = new Form_1.Font();
+            this._ctx.font = this._font.value;
         }
         return this;
     }
@@ -3326,6 +3353,14 @@ class CanvasForm extends Form_1.Form {
         }
         return this;
     }
+    _multiple(groups, shape, ...rest) {
+        if (!groups)
+            return this;
+        for (let i = 0, len = groups.length; i < len; i++) {
+            this[shape](groups[i], ...rest);
+        }
+        return this;
+    }
     static circle(ctx, pt, radius = 10) {
         if (!pt)
             return;
@@ -3339,10 +3374,7 @@ class CanvasForm extends Form_1.Form {
         return this;
     }
     circles(groups) {
-        for (let i = 0, len = groups.length; i < len; i++) {
-            this.circle(groups[i]);
-        }
-        return this;
+        return this._multiple(groups, "circle");
     }
     static ellipse(ctx, pts) {
         if (pts.length < 2)
@@ -3357,6 +3389,9 @@ class CanvasForm extends Form_1.Form {
     ellipse(pts) {
         CanvasForm.ellipse(this._ctx, pts);
         return this;
+    }
+    ellipses(groups) {
+        return this._multiple(groups, "ellipse");
     }
     static arc(ctx, pt, radius, startAngle, endAngle, cc) {
         if (!pt)
@@ -3400,10 +3435,7 @@ class CanvasForm extends Form_1.Form {
         return this;
     }
     lines(groups) {
-        for (let i = 0, len = groups.length; i < len; i++) {
-            this.line(groups[i]);
-        }
-        return this;
+        return this._multiple(groups, "line");
     }
     static polygon(ctx, pts) {
         if (pts.length < 2)
@@ -3421,6 +3453,9 @@ class CanvasForm extends Form_1.Form {
         this._paint();
         return this;
     }
+    polygons(groups) {
+        return this._multiple(groups, "polygon");
+    }
     static rect(ctx, pts) {
         if (pts.length < 2)
             return;
@@ -3437,10 +3472,7 @@ class CanvasForm extends Form_1.Form {
         return this;
     }
     rects(groups) {
-        for (let i = 0, len = groups.length; i < len; i++) {
-            this.rect(groups[i]);
-        }
-        return this;
+        return this._multiple(groups, "rect");
     }
     /**
      * A static function to draw text
@@ -3459,7 +3491,6 @@ class CanvasForm extends Form_1.Form {
         return this;
     }
     log(txt) {
-        this._ctx.font = "12px sans-serif";
         let w = this._ctx.measureText(txt).width + 20;
         this.stroke(false).fill("rgba(0,0,0,.4)").rect([[0, 0], [w, 20]]);
         this.fill("#fff").text([10, 14], txt);

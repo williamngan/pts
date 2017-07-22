@@ -3,7 +3,7 @@
 
 
 import {Space} from './Space';
-import {Form} from "./Form";
+import {Form, Font} from "./Form";
 import {Bound} from './Bound';
 import {Pt, IPt, Group, PtLike, GroupLike} from "./Pt";
 import {Const, Util} from "./Util";
@@ -170,6 +170,10 @@ export class CanvasSpace extends Space {
     }
 
     return this;
+  }
+
+  public get pixelScale():number {
+    return this._pixelScale;
   }
 
   /**
@@ -560,7 +564,12 @@ export class CanvasForm extends Form {
   protected _ctx:CanvasRenderingContext2D;
 
   // store common styles so that they can be restored to canvas context when using multiple forms. See `reset()`.
-  protected _style = {fillStyle: "#e51c23", strokeStyle:"#fff", lineWidth: 1, lineJoin: "miter", lineCap: "butt" }
+  protected _style = {
+    fillStyle: "#e51c23", strokeStyle:"#fff", 
+    lineWidth: 1, lineJoin: "miter", lineCap: "butt",
+  }
+
+  protected _font:Font = new Font( 14, "sans-serif");
 
 
   constructor( space:CanvasSpace ) {
@@ -568,7 +577,8 @@ export class CanvasForm extends Form {
     this._space = space;
     this._ctx = this._space.ctx;
     this._ctx.fillStyle = this._style.fillStyle;
-    this._ctx.strokeStyle = this._style.strokeStyle;
+    this._ctx.strokeStyle = this._style.strokeStyle;    
+    this._ctx.font = this._font.value;
   }
 
   get space():CanvasSpace { return this._space; }
@@ -637,12 +647,25 @@ export class CanvasForm extends Form {
   }
 
 
+  font( size?:number, weight?:string, style?:string, lineHeight?:number, family?:string ):this {
+    if (size) this._font.size = size;
+    if (family) this._font.face = family;
+    if (weight) this._font.weight = weight;
+    if (style) this._font.style = style;
+    if (lineHeight) this._font.lineHeight = lineHeight;
+    this._ctx.font = this._font.value;
+    return this;
+  }
+
+
   /**
    * Reset the rendering context's common styles to this form's styles. This supports using multiple forms on the same canvas context.
    */
   reset():this {
     for (let k in this._style) {
       this._ctx[k] = this._style[k];
+      this._font = new Font();
+      this._ctx.font = this._font.value;
     }
     return this;
   }
@@ -653,6 +676,7 @@ export class CanvasForm extends Form {
     if (this._stroked) this._ctx.stroke();
   }
 
+  
   point( p:PtLike, radius:number=5, shape:string="square" ):this {
     if (!CanvasForm[shape]) throw new Error(`${shape} is not a static function of CanvasForm`);
 
@@ -670,6 +694,14 @@ export class CanvasForm extends Form {
     return this;
   }
 
+  protected _multiple( groups:GroupLike[], shape:string, ...rest ):this {
+    if (!groups) return this;
+    for (let i=0, len=groups.length; i<len; i++) {
+      this[shape]( groups[i], ...rest );
+    }
+    return this;
+  }
+
   static circle( ctx:CanvasRenderingContext2D, pt:PtLike, radius:number=10 ) {
     if (!pt) return;
     ctx.beginPath()
@@ -677,18 +709,16 @@ export class CanvasForm extends Form {
     ctx.closePath();
   }
 
-  circle( pts:GroupLike ) {
+  circle( pts:GroupLike|number[][] ) {
     CanvasForm.circle( this._ctx, pts[0], pts[1][0] );
     this._paint();
     return this;
   }
 
   circles( groups:GroupLike[] ):this {
-    for (let i=0, len=groups.length; i<len; i++) {
-      this.circle( groups[i] );
-    }
-    return this;
+    return this._multiple( groups, "circle" );
   }
+  
 
   static ellipse( ctx:CanvasRenderingContext2D, pts:GroupLike|number[][] ) {
     if (pts.length<2) return;
@@ -702,6 +732,10 @@ export class CanvasForm extends Form {
   ellipse( pts:GroupLike|number[][] ):this {
     CanvasForm.ellipse( this._ctx, pts );
     return this;
+  }
+
+  ellipses( groups:GroupLike[] ):this {
+    return this._multiple( groups, "ellipse" );
   }
 
 
@@ -750,10 +784,7 @@ export class CanvasForm extends Form {
   }
 
   lines( groups:GroupLike[] ):this {
-    for (let i=0, len=groups.length; i<len; i++) {
-      this.line( groups[i] );
-    }
-    return this;
+    return this._multiple( groups, "line" );
   }
 
 
@@ -773,6 +804,9 @@ export class CanvasForm extends Form {
     return this;
   }
 
+  polygons( groups:GroupLike[] ):this {
+    return this._multiple( groups, "polygon" );
+  }
 
 
   static rect( ctx:CanvasRenderingContext2D, pts:GroupLike|number[][] ) {
@@ -793,10 +827,7 @@ export class CanvasForm extends Form {
   }
 
   rects( groups:GroupLike[] ):this {
-    for (let i=0, len=groups.length; i<len; i++) {
-      this.rect( groups[i] );
-    }
-    return this;
+    return this._multiple( groups, "rect" );
   }
 
 
@@ -819,7 +850,6 @@ export class CanvasForm extends Form {
   }
 
   log( txt ):this {
-    this._ctx.font = "12px sans-serif";
     let w = this._ctx.measureText( txt ).width + 20;
     this.stroke(false).fill("rgba(0,0,0,.4)").rect( [[0,0], [w, 20]] );
     this.fill("#fff").text( [10,14], txt );   

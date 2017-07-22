@@ -53,6 +53,7 @@ g.forEachPt( &quot;dot&quot;, new Pt(1,2) ); // Error, dot() doesn't return Pt
 </code></pre>
 <p>There are also a couple additional functions in Group that let you work with array more effectively. Take a look at <a href="#pt-group"><code>insert</code></a>, <a href="#pt-group"><code>remove</code></a>, <a href="#pt-group"><code>segments</code></a> and others.</p>
 <p><img src="./assets/bg.png" alt="js:group_segments"></p>
+<h5>In this demo, we keep track of the last 50 positions of the pointer in a Group, and draw one circle for every 5 segments. Take a look at the source code and note the use of common Array functions like <code>push</code> and <code>map</code> along with Group functions like <code>segments</code>.</h5>
 <h3>Transformations</h3>
 <p>Similar to transformations in Pt, you can use <a href="#pt-group"><code>scale</code></a>, <a href="#pt-group"><code>rotate2D</code></a> etc to transform a Group ot Pts. There are also <a href="#pt-group"><code>moveBy</code></a> and <a href="#pt-group"><code>moveTo</code></a> to translate its positions. Basic arithmetics like <a href="#pt-group"><code>add</code></a> and <a href="#pt-group"><code>multiply</code></a> are also included.</p>
 <p>Furthermore, you may use <a href="#pt-group"><code>$matrixAdd</code></a> and <a href="#pt-group"><code>$matrixMultiply</code></a> to do advanced matrix calculations.</p>
@@ -87,10 +88,10 @@ g.sortByDimension(1, true)
 </code></pre>
 <p>Calculate</p>
 <pre><code>g.add( 10 )
-g.$add( -10, 1 )
-g.$multiply( 0.5 )
+g.multiply( 0.5 )
 g.$matrixAdd( g2 )
 g.$matrixMultiply( g2, true )
+g.forEachPt( &quot;floor&quot; )
 </code></pre>
 <p>Transform</p>
 <pre><code>g.moveTo( 100, 100 )
