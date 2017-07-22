@@ -44,21 +44,28 @@ Since a [`Group`](#pt-group) is a subclass of [`Array`](https://developer.mozill
 let g = Group.fromArray( [[1,2], [3,4]] );
 g.unshift( new Pt(5, 6) );
 g.pop();
+let mags = g.map( (p) => p.magnitude() );
 ```
+
+##### Note on typescript: you may need to cast Array function result back to `Group` because the typescript compiler cannot figure it out yet (as of v2.4). For example: `let gg = group.map( (p) => p.unit() ) as Group`;
 
 It's common to apply a Pt function to all the Pts in a Group. You can use [`forEachPt`](#pt-group) to do this easily, as long as the Pt function will return a Pt.
 
 ```
 let g = new Group( new Pt(1.1, 2.2), new Pt(3.3, 4.4) );
 g.forEachPt( "floor" ); // g is now [ Pt(1,2), Pt(3,4) ]
-g.forEachPt( "$min", new Pt(2, 2) ); // g is now [ Pt(1, 2), Pt(2, 2) ]
-g.forEachPt( "dot", new Pt(1,2) ); // Error because dot() doesn't return Pt
+g.forEachPt( "$min", 2, 2 ); // g is now [ Pt(1, 2), Pt(2, 2) ]
+g.forEachPt( "dot", new Pt(1,2) ); // Error, dot() doesn't return Pt
 ```
 
-There are a couple additional functions in Group that let you work with array more effectively. Take a look at [`insert`](#pt-group), [`remove`](#pt-group), [`segments`](#pt-group) and others.
+There are also a couple additional functions in Group that let you work with array more effectively. Take a look at [`insert`](#pt-group), [`remove`](#pt-group), [`segments`](#pt-group) and others.
 
+![js:group_segments](./assets/bg.png)
 
-##### For typescript: you may need to cast Array function result back to `Group` because the typescript compiler cannot figure it out yet (as of v2.4). For example: `let gg = group.map( (p) => p.unit() ) as Group`;
+### Transformations
+Similar to transformations in Pt, you can use [`scale`](#pt-group), [`rotate2D`](#pt-group) etc to transform a Group ot Pts. There are also [`moveBy`](#pt-group) and [`moveTo`](#pt-group) to translate its positions. Basic arithmetics like [`add`](#pt-group) and [`multiply`](#pt-group) are also included. 
+
+Furthermore, you may use [`$matrixAdd`](#pt-group) and [`$matrixMultiply`](#pt-group) to do advanced matrix calculations. 
 
 ### Cheat sheet
 Creating and cloning

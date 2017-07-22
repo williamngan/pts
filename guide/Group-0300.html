@@ -42,15 +42,20 @@ g3.p2; // returns Pt(3,4)
 <pre><code>let g = Group.fromArray( [[1,2], [3,4]] );
 g.unshift( new Pt(5, 6) );
 g.pop();
+let mags = g.map( (p) =&gt; p.magnitude() );
 </code></pre>
+<h5>Note on typescript: you may need to cast Array function result back to <code>Group</code> because the typescript compiler cannot figure it out yet (as of v2.4). For example: <code>let gg = group.map( (p) =&gt; p.unit() ) as Group</code>;</h5>
 <p>It's common to apply a Pt function to all the Pts in a Group. You can use <a href="#pt-group"><code>forEachPt</code></a> to do this easily, as long as the Pt function will return a Pt.</p>
 <pre><code>let g = new Group( new Pt(1.1, 2.2), new Pt(3.3, 4.4) );
 g.forEachPt( &quot;floor&quot; ); // g is now [ Pt(1,2), Pt(3,4) ]
-g.forEachPt( &quot;$min&quot;, new Pt(2, 2) ); // g is now [ Pt(1, 2), Pt(2, 2) ]
-g.forEachPt( &quot;dot&quot;, new Pt(1,2) ); // Error because dot() doesn't return Pt
+g.forEachPt( &quot;$min&quot;, 2, 2 ); // g is now [ Pt(1, 2), Pt(2, 2) ]
+g.forEachPt( &quot;dot&quot;, new Pt(1,2) ); // Error, dot() doesn't return Pt
 </code></pre>
-<p>There are a couple additional functions in Group that let you work with array more effectively. Take a look at <a href="#pt-group"><code>insert</code></a>, <a href="#pt-group"><code>remove</code></a>, <a href="#pt-group"><code>segments</code></a> and others.</p>
-<h5>For typescript: you may need to cast Array function result back to <code>Group</code> because the typescript compiler cannot figure it out yet (as of v2.4). For example: <code>let gg = group.map( (p) =&gt; p.unit() ) as Group</code>;</h5>
+<p>There are also a couple additional functions in Group that let you work with array more effectively. Take a look at <a href="#pt-group"><code>insert</code></a>, <a href="#pt-group"><code>remove</code></a>, <a href="#pt-group"><code>segments</code></a> and others.</p>
+<p><img src="./assets/bg.png" alt="js:group_segments"></p>
+<h3>Transformations</h3>
+<p>Similar to transformations in Pt, you can use <a href="#pt-group"><code>scale</code></a>, <a href="#pt-group"><code>rotate2D</code></a> etc to transform a Group ot Pts. There are also <a href="#pt-group"><code>moveBy</code></a> and <a href="#pt-group"><code>moveTo</code></a> to translate its positions. Basic arithmetics like <a href="#pt-group"><code>add</code></a> and <a href="#pt-group"><code>multiply</code></a> are also included.</p>
+<p>Furthermore, you may use <a href="#pt-group"><code>$matrixAdd</code></a> and <a href="#pt-group"><code>$matrixMultiply</code></a> to do advanced matrix calculations.</p>
 <h3>Cheat sheet</h3>
 <p>Creating and cloning</p>
 <pre><code>new Group( new Pt(1,2), new Pt(3,4) )

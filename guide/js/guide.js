@@ -78,7 +78,6 @@
       }
       // c.parentElement.setAttribute( "target", "_blank" );
     }
-    console.log( codes );
   }
 
   window.addEventListener("load", (evt) => {
