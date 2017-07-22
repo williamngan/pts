@@ -287,6 +287,7 @@ describe('Pt: ', () => {
     it('can sort by a specifc dimension', function() {
       let p = Group.fromArray( [[1,2,0,4],[3,4,1,-1],[5,6,2,0], [7,8,10,9]] );
       p.sortByDimension( 3 );
+      p.forEachPt( "dot", new Pt(1,2,3,4));
       assert.equal( p[1].x, 5 );
     });
 

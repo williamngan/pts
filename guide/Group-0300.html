@@ -43,6 +43,12 @@ g3.p2; // returns Pt(3,4)
 g.unshift( new Pt(5, 6) );
 g.pop();
 </code></pre>
+<p>It's common to apply a Pt function to all the Pts in a Group. You can use <a href="#pt-group"><code>forEachPt</code></a> to do this easily, as long as the Pt function will return a Pt.</p>
+<pre><code>let g = new Group( new Pt(1.1, 2.2), new Pt(3.3, 4.4) );
+g.forEachPt( &quot;floor&quot; ); // g is now [ Pt(1,2), Pt(3,4) ]
+g.forEachPt( &quot;$min&quot;, new Pt(2, 2) ); // g is now [ Pt(1, 2), Pt(2, 2) ]
+g.forEachPt( &quot;dot&quot;, new Pt(1,2) ); // Error because dot() doesn't return Pt
+</code></pre>
 <p>There are a couple additional functions in Group that let you work with array more effectively. Take a look at <a href="#pt-group"><code>insert</code></a>, <a href="#pt-group"><code>remove</code></a>, <a href="#pt-group"><code>segments</code></a> and others.</p>
 <h5>For typescript: you may need to cast Array function result back to <code>Group</code> because the typescript compiler cannot figure it out yet (as of v2.4). For example: <code>let gg = group.map( (p) =&gt; p.unit() ) as Group</code>;</h5>
 <h3>Cheat sheet</h3>
