@@ -133,7 +133,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
   }
 
 
-  $concat( ...args ) {
+  $concat( ...args ):Pt {
     return new Pt( this.toArray().concat( Util.getArgs( args ) ) );
   }
 
@@ -478,11 +478,7 @@ export class Group extends Array<Pt> {
   }
 
   moveBy( ...args ):this {
-    let pt = Util.getArgs( args );
-    for (let i=0, len=this.length; i<len; i++) {
-      this[i].add( pt );
-    }
-    return this;
+    return this.add( ...args );
   }
 
   /**
@@ -532,21 +528,38 @@ export class Group extends Array<Pt> {
     return this.sort( (a, b) => (desc) ? b[dim] - a[dim] : a[dim] - b[dim] );
   }
 
-  add( ...args ):this {
-    return this.moveBy( ...args );
+  /**
+   * Update each Pt in this Group with a Pt function
+   * @param ptFn string name of an existing Pt function. Note that the function must return Pt.
+   * @param args arguments for the function specified in ptFn
+   */
+  forEachPt( ptFn:string, ...args ):this {
+    if (!this[0][ptFn]) {
+      Util.warn( `${ptFn} is not a function of Pt` );
+      return this;
+    }
+    for (let i=0, len=this.length; i<len; i++) {
+      this[i] = this[i][ptFn]( ...args );
+    }
+    return this;
   }
 
-  $add(...args):Group {
-    return this.clone().add( ...args );
+  add( ...args ):this {
+    return this.forEachPt( "add", ...args );
+  }
+
+  subtract( ...args ):this {
+    return this.forEachPt( "subtract", ...args );
   }
 
   multiply( ...args ):this {
-    return this.scale( Util.getArgs(args) );
+    return this.forEachPt( "multiply", ...args );
+  }
+  
+  divide( ...args ):this {
+    return this.forEachPt( "divide", ...args );
   }
 
-  $multiply(...args):Group {
-    return this.clone().multiply( ...args );
-  }
 
   $matrixAdd( g:GroupLike|number ):Group {
     return Mat.add( this, g );

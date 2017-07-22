@@ -459,11 +459,7 @@ class Group extends Array {
         return Num_1.Geom.interpolate(this[idx], this[Math.min(this.length - 1, idx + 1)], (t - idx * tc) * chunk);
     }
     moveBy(...args) {
-        let pt = Util_1.Util.getArgs(args);
-        for (let i = 0, len = this.length; i < len; i++) {
-            this[i].add(pt);
-        }
-        return this;
+        return this.add(...args);
     }
     /**
      * Move the first Pt in this group to a specific position, and move all the other Pts correspondingly
@@ -506,17 +502,32 @@ class Group extends Array {
     sortByDimension(dim, desc = false) {
         return this.sort((a, b) => (desc) ? b[dim] - a[dim] : a[dim] - b[dim]);
     }
-    add(...args) {
-        return this.moveBy(...args);
+    /**
+     * Update each Pt in this Group with a Pt function
+     * @param ptFn string name of an existing Pt function. Note that the function must return Pt.
+     * @param args arguments for the function specified in ptFn
+     */
+    forEachPt(ptFn, ...args) {
+        if (!this[0][ptFn]) {
+            Util_1.Util.warn(`${ptFn} is not a function of Pt`);
+            return this;
+        }
+        for (let i = 0, len = this.length; i < len; i++) {
+            this[i] = this[i][ptFn](...args);
+        }
+        return this;
     }
-    $add(...args) {
-        return this.clone().add(...args);
+    add(...args) {
+        return this.forEachPt("add", ...args);
+    }
+    subtract(...args) {
+        return this.forEachPt("subtract", ...args);
     }
     multiply(...args) {
-        return this.scale(Util_1.Util.getArgs(args));
+        return this.forEachPt("multiply", ...args);
     }
-    $multiply(...args) {
-        return this.clone().multiply(...args);
+    divide(...args) {
+        return this.forEachPt("divide", ...args);
     }
     $matrixAdd(g) {
         return LinearAlgebra_1.Mat.add(this, g);
@@ -630,7 +641,7 @@ class Util {
         }
         return pos;
     }
-    static warn(defaultReturn, message = "error") {
+    static warn(message = "error", defaultReturn = undefined) {
         if (Util.warnLevel == "error") {
             throw new Error(message);
         }
@@ -1656,8 +1667,8 @@ const Util_1 = __webpack_require__(1);
 const Num_1 = __webpack_require__(4);
 const Pt_1 = __webpack_require__(0);
 const LinearAlgebra_1 = __webpack_require__(2);
-let _errorLength = (obj, param = "expected") => Util_1.Util.warn(obj, "Group's length is less than " + param);
-let _errorOutofBound = (obj, param = "") => Util_1.Util.warn(obj, `Index ${param} is out of bound in Group`);
+let _errorLength = (obj, param = "expected") => Util_1.Util.warn("Group's length is less than " + param, obj);
+let _errorOutofBound = (obj, param = "") => Util_1.Util.warn(`Index ${param} is out of bound in Group`, obj);
 class Line {
     static slope(p1, p2) {
         return (p2[0] - p1[0] === 0) ? undefined : (p2[1] - p1[1]) / (p2[0] - p1[0]);

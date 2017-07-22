@@ -112,7 +112,7 @@ export class Util {
     return pos;
   }
 
-  static warn( defaultReturn:any, message:string="error" ):any {
+  static warn( message:string="error", defaultReturn:any=undefined ):any {
     if (Util.warnLevel == "error") {
       throw new Error( message );
     } else if (Util.warnLevel == "warn") {

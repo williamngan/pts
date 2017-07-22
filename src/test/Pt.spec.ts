@@ -290,6 +290,13 @@ describe('Pt: ', () => {
       assert.equal( p[1].x, 5 );
     });
 
+    it('can apply a Pt function to all items in Group', function() {
+      let p = Group.fromArray( [ [2.1, 1.2], [4.2, 2] ] );
+      p.forEachPt( "$max", new Pt(2.5, 2.5) ).forEachPt( "floor" );
+      assert.isTrue( p[0].y === 2 && p[1].x === 4 );
+    });
+
+
     it('can calculate matrix-scalar addition', function() {
       let a = Group.fromArray( [[1,3,5], [2,4,6]] );
       let m = a.$matrixAdd(5);

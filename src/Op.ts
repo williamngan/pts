@@ -9,8 +9,8 @@ import {Pt, PtLike, Group, GroupLike} from "./Pt";
 import {Vec, Mat} from "./LinearAlgebra";
 
 
-let _errorLength = (obj, param:number|string="expected") => Util.warn( obj, "Group's length is less than "+param  );
-let _errorOutofBound = (obj, param:number|string="") => Util.warn( obj, `Index ${param} is out of bound in Group`  );
+let _errorLength = (obj, param:number|string="expected") => Util.warn( "Group's length is less than "+param, obj  );
+let _errorOutofBound = (obj, param:number|string="") => Util.warn( `Index ${param} is out of bound in Group`, obj  );
 
 
 
