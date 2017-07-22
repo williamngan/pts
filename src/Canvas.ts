@@ -614,6 +614,11 @@ export class CanvasForm extends Form {
     return this;
   }
 
+  fillOnly( c:string|boolean ):this {
+    this.stroke( false );
+    return this.fill( c );
+  }
+
 
   /**
    * Set current stroke style. For example: `form.stroke("#F90")` `form.stroke("rgba(0,0,0,.5")` `form.stroke(false)` `form.stroke("#000", 0.5, 'round')`
@@ -646,6 +651,10 @@ export class CanvasForm extends Form {
     return this;
   }
 
+  strokeOnly( c:string|boolean, width?:number, linejoin?:string, linecap?:string ):this {
+    this.fill( false );
+    return this.stroke( c, width, linejoin, linecap );
+  }
 
   font( size?:number, weight?:string, style?:string, lineHeight?:number, family?:string ):this {
     if (size) this._font.size = size;

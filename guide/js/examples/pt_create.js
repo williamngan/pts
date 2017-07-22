@@ -12,11 +12,11 @@
     let m = space.pointer;
     
     // drawing
-    form.stroke("#123", 5).fill(false);
-    form.line( [new Pt( m.x, 0), m, new Pt( 0, m.y)] );
+    form.strokeOnly("#123", 5).line( [new Pt( m.x, 0), m, new Pt( 0, m.y)] );
     form.stroke("#f03").line( [new Pt(0,0), m] );
     form.stroke("#fff", 5).fill("#f03").point( m, 10, "circle")
     form.fill("#123").font(14, "bold").text( m.$add(20, 5), m.toString() );
+    
   });
   
   // start

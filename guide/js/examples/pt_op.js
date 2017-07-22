@@ -25,8 +25,8 @@
       
       // draw
       pts.forEach( (p) => {
-        form.stroke("#fff", 2 ).line( [p, space.pointer] );
-        form.stroke(false).fill("#f03").point( op( p, t*t*t*t ), t*4+1 );
+        form.strokeOnly("#fff", 2 ).line( [p, space.pointer] );
+        form.fillOnly("#f03").point( op( p, t*t*t*t ), t*4+1 );
         form.fill("#123").point( op( p, t*t ), t*2+1 ); 
       });  
     }

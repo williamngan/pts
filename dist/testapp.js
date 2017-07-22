@@ -3276,6 +3276,10 @@ class CanvasForm extends Form_1.Form {
         }
         return this;
     }
+    fillOnly(c) {
+        this.stroke(false);
+        return this.fill(c);
+    }
     /**
      * Set current stroke style. For example: `form.stroke("#F90")` `form.stroke("rgba(0,0,0,.5")` `form.stroke(false)` `form.stroke("#000", 0.5, 'round')`
      * @param c stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle))
@@ -3306,6 +3310,10 @@ class CanvasForm extends Form_1.Form {
             }
         }
         return this;
+    }
+    strokeOnly(c, width, linejoin, linecap) {
+        this.fill(false);
+        return this.stroke(c, width, linejoin, linecap);
     }
     font(size, weight, style, lineHeight, family) {
         if (size)

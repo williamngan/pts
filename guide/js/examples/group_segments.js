@@ -10,7 +10,8 @@
   // animation
   space.add({
     start: (bound) => {
-      group = new Group( new Pt(space.center.$subtract( 20, 0 )), new Pt(space.center), new Pt(space.center.$add( 20, 0 )) );
+      let c = space.center;
+      group = new Group( c.$subtract( 20, 0 ), c.clone(), c.$add( 20, 0 ) );
     },
     
     animate: (time, ftime) => {
@@ -32,10 +33,10 @@
           (g) => Circle.fromPt( g[0], Math.min( 50, g[1].$subtract(g[0]).magnitude()) ) 
         );
         
-        form.stroke("#123", 10, "round").fill(false)
+        form.strokeOnly("#123", 10, "round");
         form.line( group );
         form.fill("#fff").circles( cs );
-        form.fill("#f03").stroke(false).point( lastPt, 10, "circle" );
+        form.fillOnly("#f03").point( lastPt, 10, "circle" );
         
       }
     }

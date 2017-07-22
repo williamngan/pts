@@ -9,6 +9,8 @@ In fact, a wide range of complex forms and ideas can be represented as one of th
 
 The goal of `pts.js` is to help you see and express these structures in creative ways.
 
+[graphic]
+
 ### Creating a Group
 
 Similar to making an Array, you can create a Group like these:

@@ -25,7 +25,7 @@
       form.rect( cell );
     })
     
-    form.stroke(false).fill("#fff").points( pts, 10, "circle" );
+    form.fillOnly("#fff").points( pts, 10, "circle" );
     
   });
   
