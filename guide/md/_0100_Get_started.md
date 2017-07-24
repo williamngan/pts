@@ -7,22 +7,26 @@ It's easy to get started with **`pts`**. Here we'll review the core concepts and
 ##### Here's a spolier of what we will build. Touch to play it, and take a look at the source code. The core code is only ~10 lines long.
 
 ### Space, Form, and Point
-**`pts`** is built upon the abstractions of Space, Form, and Point. If that's too abstract, you can think of it like drawing: Space provides the paper, Form provides the pencil, and Point provides the idea. Given an idea, you may express it in different forms in different spaces. Would it be expressed in pixels or LEDs? Is it visible or audible? Does it look like abstract art or ASCII art? As **`pts`** develops, it will offer more Spaces and Forms that enable you to experiment with different ideas and their different expressions. 
+**`pts`** is built upon the abstractions of Space, Form, and Point. If that's too abstract, you can think of it like drawing: Space provides the paper, Form provides the pencil, and Point provides the idea. 
+
+Given an idea, you may express it in different forms in different spaces. Would it be expressed in pixels or LEDs? Is it visible or audible? Does it look like abstract art or ASCII art? As **`pts`** develops, it will offer more Spaces and Forms that enable you to experiment with different ideas and their different expressions. 
 
 But enough of abstractions for now. Let's see how it works in a concrete example. In the following sections, we will create a quick sketch step-by-step and discuss the main features of **`pts`**.
 
-##### [Here's an article](https://medium.com/@williamngan/pt-93382bf5943e) where I write about the concepts of Space, Form, and Point.
+##### You may also be interested in [this article](https://medium.com/@williamngan/pt-93382bf5943e) which discusses the concepts of Space, Form, and Point.
 
 ### Using pts with npm
 If you use npm, first [`npm install pts`](https://www.npmjs.com/package/pts) and then: 
 
 ```
 import {CanvasSpace, CanvasForm} from "pts/Canvas"
+import {Pt, Group} from "pts/Pt"
+// etc
 ```
 
-##### Note that pts is an es2015 library, so if you want to compile to es5, you'll need to configure babel accordingly. (Possibly with the [`builtin-extend`](https://github.com/loganfsmyth/babel-plugin-transform-builtin-extend) babel plugin)
+##### Note that pts is an es6 library, so if you want to compile to es5, you'll need to configure babel accordingly. (Possibly with the [`builtin-extend`](https://github.com/loganfsmyth/babel-plugin-transform-builtin-extend) babel plugin)
 
-### Using pts as a script
+### Using pts in a script
 First download the latest release and add `pts.min.js` in your html. Then create another js file for your script and add it to html too. 
 
 For convience, we usually start by adding **`pts`** into a scope first. 
@@ -31,19 +35,19 @@ For convience, we usually start by adding **`pts`** into a scope first.
 Pts.namespace( this );
 ```
 
-That means we can call `CanvasSpace`, instead of `Pts.CanvasSpace` which is a bit clumsy to write. If you don't want to "pollute" the global scope, it's common to wrap your code with a anonymous function:
+That means we can call `CanvasSpace`, instead of `Pts.CanvasSpace` which is a bit clumsy to write. If you don't want to "pollute" the global scope, it's common to wrap your code with an anonymous function:
 
 ```
 (function() {
     Pts.namespace( this );
-    ...
+    //...
 })();
 ```
 
 And that's it. We can now have some fun.
 
 ### Creating Space and Form
-In current release, **`pts`** provides a [`CanvasSpace`](#canvas-canvasspace) which enables you to use html `<canvas>` as space. You can create a `CanvasSpace` like this:
+**`pts`** provides a [`CanvasSpace`](#canvas-canvasspace) which enables you to use html `<canvas>` as space. You can create a `CanvasSpace` like this:
 
 ```
 var space = new CanvasSpace("#hello");
@@ -60,16 +64,17 @@ Next, you can get the default [`CanvasForm`](#canvas-canvasform) which, as we me
 var form = space.getForm();
 ```
 
-In future, you may create your own forms by extending `CanvasForm` or `Form` class. It's like making your own pencils. So you can also initiate your form like this:
+Do you know you can create your own forms by extending `CanvasForm` or `Form` class? It's like making your own pencils. You can initiate your custom form like this:
 
 ```
+// Initiate your own BeautifulForm class
 var form = new BeautifulForm( space );
 ```
 
 Now we have paper and pencil. What should we draw?
 
 ### Drawing a point
-The `space`, which we just created, contains some handy variables. For example, the `pointer` variable tells us the current position of pointer in space (ie, mouse or touch position). Let's use it to draw a point.
+The `space`, which we have created, contains some handy variables. For example, the `pointer` variable tells us the current position of pointer in space (ie, mouse or touch position). Let's use it to draw a point.
 
 To render an animation continuously, we need to add a "player" to the space. A "player" can be a callback function to run your animation, or an object that specifies functions for `start`, `animate`, and `action`. You may add multiple players to a space.
 
@@ -85,7 +90,7 @@ And here's the result. Touch the demo and move around.
 
 So first we add a "player" as a function to `space`, and in that function, we use `form` to draw `space.pointer` with radius of 10. By default, the point is drawn as a square with red fill-color and white stroke-color. 
 
-The animate callback function actually provides 2 parameters: `time` which gives the current running time, and `ftime` which gives the time to render a frame.
+The animate callback function actually provides 2 parameters: `time` which gives the current running time, and `ftime` which gives the time taken to render a frame.
 
 Let's modify the code above to make the circle pulsate.
 
@@ -101,3 +106,78 @@ space.add( (time, ftime) => {
 Success! The calculation `(time%1000)/1000` maps the running time to a value between 0 to 1 every second. Then we use the [`Num.cycle`](#num-num) function to make the value cycle between 0...1...0...1, and we multiply the value by 20 to get the radius. Finally, we draw the pointer with the radius as a blue circle. Pretty easy, right?
 
 ### Drawing shapes
+There are 3 basic structures in **`pts`**.
+- a Pt which is an array of numbers 
+- a Group which is an array of Pts
+- an array of Groups
+
+**`pts`** provides many classes to work with these structures. For example, a rectangular boundary can be defined by two Pts -- one at top-left and one at bottom-right, and you can also get a Group of 4 Pts from its 4 corners. 
+
+Let's make this easier to understand with an example:
+
+```
+var rect = Rectangle.fromCenter( space.center, space.size.$divide(2) );
+var poly = Rectangle.corners( rect );
+poly.shear2D( Num.cycle( time%5000/5000 ) - 0.5, space.center );    
+
+form.fillOnly("#123").polygon( poly );
+form.strokeOnly("#fff", 3).rect( rect );
+```
+
+![js:getting_started_3](./assets/bg.png)
+
+What's happening in these 5 lines of code? Let's find out. 
+
+The first line create a "rectangle" from a center point, and we specify that the center is space's center and the size is space's half-size. ([`$divide`](#pt-pt) is a `Pt` function that calculates division and returns a new Pt.) The variable `rect` stores a Group of 2 Pts — its top-left and bottom-right positions.
+
+The second line takes `rect` and get its corners. So the variable `poly` contains a Group of 4 Pts.
+
+The third line use the Group's [`shear2D`](#pt-group) function to shear the polygon at space's center. The amount of shearing cycles between -0.5 to 0.5 every 5 seconds.
+
+The 4th and 5th line just draw the rectangle and the sheared polygon.
+
+Even though it takes words to explain, the code is acutally quite simple and clear :)
+
+### Visibles from invisibles
+From here on, it's up to you. Squint your eyes and see what shapes and structures hide between those invisible points, or what motions and interactions could generate unique and expressive forms.
+
+For example, what if we take two corners of the rectangle, and join them with the pointer to draw a triangle?
+
+![js:getting_started_4](./assets/bg.png)
+
+And what if we also draw the inner circle of each triangle?
+
+![js:getting_started_5](./assets/bg.png)
+
+This is what you can do with `pts` in ~10 lines of code. Add another 10 lines and make it your own!
+
+```
+// animation
+space.add( (time, ftime) => {
+
+  // rectangle
+  var rect = Rectangle.fromCenter( space.center, space.size.$divide(2) );
+  var poly = Rectangle.corners( rect );
+  poly.shear2D( Num.cycle( time%5000/5000 ) - 0.5, space.center );
+  
+  // triangle
+  var tris = poly.segments( 2, 1, true );
+  tris.map( (t) => t.push( space.pointer ) );
+  
+  // circle
+  var circles = tris.map( (t) => Triangle.incircle( t ) );
+  
+  // drawing
+  form.fillOnly("#123").polygon( poly );
+  form.fill("#f03").circles( circles );
+  form.strokeOnly("#fff ", 3 ).polygons( tris );
+  form.fill("#123").point( space.pointer, 5 );
+  
+});
+```
+
+Hope this gives you a quick and enjoyable walkthrough. But wait, there's more: Take a look at the other guides which will explain **`pts`** features in details. 
+
+We appreciate your feedbacks and bug reports. Please file an issue at [github](https://github.com/williamngan/pts) or ping [@williamngan](https://twitter.com/williamngan) on twitter. 
+
+Enjoy and have fun!

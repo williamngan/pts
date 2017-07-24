@@ -67,6 +67,7 @@ a:hover { color: #F03; }
   color: #123;
   font-size: 1.4em;
   border-bottom: 10px solid #123; 
+  margin-bottom: 100px;
 }
 
 #post li {
@@ -323,7 +324,7 @@ pre {
   border-left: 5px solid #e2e6ef;
   padding: 5px 10px;
   font-size: 0.9em;
-  margin: 20px 0;
+  margin: 20px 0 40px;
 }
 
 code {

@@ -22,28 +22,31 @@
 <p><img src="./assets/bg.png" alt="js:getting_started"></p>
 <h5>Here's a spolier of what we will build. Touch to play it, and take a look at the source code. The core code is only ~10 lines long.</h5>
 <h3>Space, Form, and Point</h3>
-<p><strong><code>pts</code></strong> is built upon the abstractions of Space, Form, and Point. If that's too abstract, you can think of it like drawing: Space provides the paper, Form provides the pencil, and Point provides the idea. Given an idea, you may express it in different forms in different spaces. Would it be expressed in pixels or LEDs? Is it visible or audible? Does it look like abstract art or ASCII art? As <strong><code>pts</code></strong> develops, it will offer more Spaces and Forms that enable you to experiment with different ideas and their different expressions.</p>
+<p><strong><code>pts</code></strong> is built upon the abstractions of Space, Form, and Point. If that's too abstract, you can think of it like drawing: Space provides the paper, Form provides the pencil, and Point provides the idea.</p>
+<p>Given an idea, you may express it in different forms in different spaces. Would it be expressed in pixels or LEDs? Is it visible or audible? Does it look like abstract art or ASCII art? As <strong><code>pts</code></strong> develops, it will offer more Spaces and Forms that enable you to experiment with different ideas and their different expressions.</p>
 <p>But enough of abstractions for now. Let's see how it works in a concrete example. In the following sections, we will create a quick sketch step-by-step and discuss the main features of <strong><code>pts</code></strong>.</p>
-<h5><a href="https://medium.com/@williamngan/pt-93382bf5943e">Here's an article</a> where I write about the concepts of Space, Form, and Point.</h5>
+<h5>You may also be interested in <a href="https://medium.com/@williamngan/pt-93382bf5943e">this article</a> which discusses the concepts of Space, Form, and Point.</h5>
 <h3>Using pts with npm</h3>
 <p>If you use npm, first <a href="https://www.npmjs.com/package/pts"><code>npm install pts</code></a> and then:</p>
 <pre><code>import {CanvasSpace, CanvasForm} from &quot;pts/Canvas&quot;
+import {Pt, Group} from &quot;pts/Pt&quot;
+// etc
 </code></pre>
-<h5>Note that pts is an es2015 library, so if you want to compile to es5, you'll need to configure babel accordingly. (Possibly with the <a href="https://github.com/loganfsmyth/babel-plugin-transform-builtin-extend"><code>builtin-extend</code></a> babel plugin)</h5>
-<h3>Using pts as a script</h3>
+<h5>Note that pts is an es6 library, so if you want to compile to es5, you'll need to configure babel accordingly. (Possibly with the <a href="https://github.com/loganfsmyth/babel-plugin-transform-builtin-extend"><code>builtin-extend</code></a> babel plugin)</h5>
+<h3>Using pts in a script</h3>
 <p>First download the latest release and add <code>pts.min.js</code> in your html. Then create another js file for your script and add it to html too.</p>
 <p>For convience, we usually start by adding <strong><code>pts</code></strong> into a scope first.</p>
 <pre><code>Pts.namespace( this );
 </code></pre>
-<p>That means we can call <code>CanvasSpace</code>, instead of <code>Pts.CanvasSpace</code> which is a bit clumsy to write. If you don't want to &quot;pollute&quot; the global scope, it's common to wrap your code with a anonymous function:</p>
+<p>That means we can call <code>CanvasSpace</code>, instead of <code>Pts.CanvasSpace</code> which is a bit clumsy to write. If you don't want to &quot;pollute&quot; the global scope, it's common to wrap your code with an anonymous function:</p>
 <pre><code>(function() {
     Pts.namespace( this );
-    ...
+    //...
 })();
 </code></pre>
 <p>And that's it. We can now have some fun.</p>
 <h3>Creating Space and Form</h3>
-<p>In current release, <strong><code>pts</code></strong> provides a <a href="#canvas-canvasspace"><code>CanvasSpace</code></a> which enables you to use html <code>&lt;canvas&gt;</code> as space. You can create a <code>CanvasSpace</code> like this:</p>
+<p><strong><code>pts</code></strong> provides a <a href="#canvas-canvasspace"><code>CanvasSpace</code></a> which enables you to use html <code>&lt;canvas&gt;</code> as space. You can create a <code>CanvasSpace</code> like this:</p>
 <pre><code>var space = new CanvasSpace(&quot;#hello&quot;);
 space.setup({ bgcolor: &quot;#fff&quot; });
 </code></pre>
@@ -52,12 +55,13 @@ space.setup({ bgcolor: &quot;#fff&quot; });
 <p>Next, you can get the default <a href="#canvas-canvasform"><code>CanvasForm</code></a> which, as we mentioned before, provides the &quot;pencils&quot;. CanvasForm helps you draw lines, circles, curves and more on the html canvas.</p>
 <pre><code>var form = space.getForm();
 </code></pre>
-<p>In future, you may create your own forms by extending <code>CanvasForm</code> or <code>Form</code> class. It's like making your own pencils. So you can also initiate your form like this:</p>
-<pre><code>var form = new BeautifulForm( space );
+<p>Do you know you can create your own forms by extending <code>CanvasForm</code> or <code>Form</code> class? It's like making your own pencils. You can initiate your custom form like this:</p>
+<pre><code>// Initiate your own BeautifulForm class
+var form = new BeautifulForm( space );
 </code></pre>
 <p>Now we have paper and pencil. What should we draw?</p>
 <h3>Drawing a point</h3>
-<p>The <code>space</code>, which we just created, contains some handy variables. For example, the <code>pointer</code> variable tells us the current position of pointer in space (ie, mouse or touch position). Let's use it to draw a point.</p>
+<p>The <code>space</code>, which we have created, contains some handy variables. For example, the <code>pointer</code> variable tells us the current position of pointer in space (ie, mouse or touch position). Let's use it to draw a point.</p>
 <p>To render an animation continuously, we need to add a &quot;player&quot; to the space. A &quot;player&quot; can be a callback function to run your animation, or an object that specifies functions for <code>start</code>, <code>animate</code>, and <code>action</code>. You may add multiple players to a space.</p>
 <p>At its simplest form, this is how we can draw the <code>pointer</code>.</p>
 <pre><code>space.add( () =&gt; form.point( space.pointer, 10 ) );
@@ -65,7 +69,7 @@ space.setup({ bgcolor: &quot;#fff&quot; });
 <p>And here's the result. Touch the demo and move around.</p>
 <p><img src="./assets/bg.png" alt="js:getting_started_1"></p>
 <p>So first we add a &quot;player&quot; as a function to <code>space</code>, and in that function, we use <code>form</code> to draw <code>space.pointer</code> with radius of 10. By default, the point is drawn as a square with red fill-color and white stroke-color.</p>
-<p>The animate callback function actually provides 2 parameters: <code>time</code> which gives the current running time, and <code>ftime</code> which gives the time to render a frame.</p>
+<p>The animate callback function actually provides 2 parameters: <code>time</code> which gives the current running time, and <code>ftime</code> which gives the time taken to render a frame.</p>
 <p>Let's modify the code above to make the circle pulsate.</p>
 <pre><code>space.add( (time, ftime) =&gt; {
   let radius = Num.cycle( (time%1000)/1000 ) * 20;
@@ -75,6 +79,61 @@ space.setup({ bgcolor: &quot;#fff&quot; });
 <p><img src="./assets/bg.png" alt="js:getting_started_2"></p>
 <p>Success! The calculation <code>(time%1000)/1000</code> maps the running time to a value between 0 to 1 every second. Then we use the <a href="#num-num"><code>Num.cycle</code></a> function to make the value cycle between 0...1...0...1, and we multiply the value by 20 to get the radius. Finally, we draw the pointer with the radius as a blue circle. Pretty easy, right?</p>
 <h3>Drawing shapes</h3>
+<p>There are 3 basic structures in <strong><code>pts</code></strong>.</p>
+<ul>
+<li>a Pt which is an array of numbers</li>
+<li>a Group which is an array of Pts</li>
+<li>an array of Groups</li>
+</ul>
+<p><strong><code>pts</code></strong> provides many classes to work with these structures. For example, a rectangular boundary can be defined by two Pts -- one at top-left and one at bottom-right, and you can also get a Group of 4 Pts from its 4 corners.</p>
+<p>Let's make this easier to understand with an example:</p>
+<pre><code>var rect = Rectangle.fromCenter( space.center, space.size.$divide(2) );
+var poly = Rectangle.corners( rect );
+poly.shear2D( Num.cycle( time%5000/5000 ) - 0.5, space.center );    
+
+form.fillOnly(&quot;#123&quot;).polygon( poly );
+form.strokeOnly(&quot;#fff&quot;, 3).rect( rect );
+</code></pre>
+<p><img src="./assets/bg.png" alt="js:getting_started_3"></p>
+<p>What's happening in these 5 lines of code? Let's find out.</p>
+<p>The first line create a &quot;rectangle&quot; from a center point, and we specify that the center is space's center and the size is space's half-size. (<a href="#pt-pt"><code>$divide</code></a> is a <code>Pt</code> function that calculates division and returns a new Pt.) The variable <code>rect</code> stores a Group of 2 Pts — its top-left and bottom-right positions.</p>
+<p>The second line takes <code>rect</code> and get its corners. So the variable <code>poly</code> contains a Group of 4 Pts.</p>
+<p>The third line use the Group's <a href="#pt-group"><code>shear2D</code></a> function to shear the polygon at space's center. The amount of shearing cycles between -0.5 to 0.5 every 5 seconds.</p>
+<p>The 4th and 5th line just draw the rectangle and the sheared polygon.</p>
+<p>Even though it takes words to explain, the code is acutally quite simple and clear :)</p>
+<h3>Visibles from invisibles</h3>
+<p>From here on, it's up to you. Squint your eyes and see what shapes and structures hide between those invisible points, or what motions and interactions could generate unique and expressive forms.</p>
+<p>For example, what if we take two corners of the rectangle, and join them with the pointer to draw a triangle?</p>
+<p><img src="./assets/bg.png" alt="js:getting_started_4"></p>
+<p>And what if we also draw the inner circle of each triangle?</p>
+<p><img src="./assets/bg.png" alt="js:getting_started_5"></p>
+<p>This is what you can do with <code>pts</code> in ~10 lines of code. Add another 10 lines and make it your own!</p>
+<pre><code>// animation
+space.add( (time, ftime) =&gt; {
+
+  // rectangle
+  var rect = Rectangle.fromCenter( space.center, space.size.$divide(2) );
+  var poly = Rectangle.corners( rect );
+  poly.shear2D( Num.cycle( time%5000/5000 ) - 0.5, space.center );
+  
+  // triangle
+  var tris = poly.segments( 2, 1, true );
+  tris.map( (t) =&gt; t.push( space.pointer ) );
+  
+  // circle
+  var circles = tris.map( (t) =&gt; Triangle.incircle( t ) );
+  
+  // drawing
+  form.fillOnly(&quot;#123&quot;).polygon( poly );
+  form.fill(&quot;#f03&quot;).circles( circles );
+  form.strokeOnly(&quot;#fff &quot;, 3 ).polygons( tris );
+  form.fill(&quot;#123&quot;).point( space.pointer, 5 );
+  
+});
+</code></pre>
+<p>Hope this gives you a quick and enjoyable walkthrough. But wait, there's more: Take a look at the other guides which will explain <strong><code>pts</code></strong> features in details.</p>
+<p>We appreciate your feedbacks and bug reports. Please file an issue at <a href="https://github.com/williamngan/pts">github</a> or ping <a href="https://twitter.com/williamngan">@williamngan</a> on twitter.</p>
+<p>Enjoy and have fun!</p>
 </div>
 
 <ol id="menu"><a id="close" href="#">&times;</a><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li></ol>
