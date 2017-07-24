@@ -372,10 +372,11 @@ class Group extends Array {
      * Split this Group into an array of sub-groups
      * @param chunkSize number of items per sub-group
      * @param stride forward-steps after each sub-group
+     * @param loopBack if `true`, always go through the array till the end and loop back to the beginning to complete the segments if needed
      */
-    split(chunkSize, stride) {
-        let sp = Util_1.Util.split(this, chunkSize, stride);
-        return sp.map((g) => g);
+    split(chunkSize, stride, loopBack = false) {
+        let sp = Util_1.Util.split(this, chunkSize, stride, loopBack);
+        return sp;
     }
     /**
      * Insert a Pt into this group
@@ -400,8 +401,11 @@ class Group extends Array {
      * Split this group into an array of sub-group segments
      * @param pts_per_segment number of Pts in each segment
      * @param stride forward-step to take
+     * @param loopBack if `true`, always go through the array till the end and loop back to the beginning to complete the segments if needed
      */
-    segments(pts_per_segment = 2, stride = 1) { return this.split(pts_per_segment, stride); }
+    segments(pts_per_segment = 2, stride = 1, loopBack = false) {
+        return this.split(pts_per_segment, stride, loopBack);
+    }
     /**
      * Get all the line segments (ie, edges in a graph) of this group
      */
@@ -655,14 +659,25 @@ class Util {
      * @param pts an array
      * @param size chunk size, ie, number of items in a chunk
      * @param stride optional parameter to "walk through" the array in steps
+     * @param loopBack if `true`, always go through the array till the end and loop back to the beginning to complete the segments if needed
      */
-    static split(pts, size, stride) {
+    static split(pts, size, stride, loopBack = false) {
         let st = stride || size;
         let chunks = [];
         for (let i = 0; i < pts.length; i++) {
-            if (i * st + size > pts.length)
-                break;
-            chunks.push(pts.slice(i * st, i * st + size));
+            if (i * st + size > pts.length) {
+                if (loopBack) {
+                    let g = pts.slice(i * st);
+                    g = g.concat(pts.slice(0, (i * st + size) % size));
+                    chunks.push(g);
+                }
+                else {
+                    break;
+                }
+            }
+            else {
+                chunks.push(pts.slice(i * st, i * st + size));
+            }
         }
         return chunks;
     }
@@ -1813,7 +1828,7 @@ class Rectangle {
         return new Pt_1.Group(new Pt_1.Pt(topLeft), new Pt_1.Pt(topLeft).add(size));
     }
     static fromCenter(center, widthOrSize, height) {
-        let half = (typeof widthOrSize == "number") ? [widthOrSize / 2, (height || widthOrSize) / 2] : new Pt_1.Pt(widthOrSize).divide;
+        let half = (typeof widthOrSize == "number") ? [widthOrSize / 2, (height || widthOrSize) / 2] : new Pt_1.Pt(widthOrSize).divide(2);
         return new Pt_1.Group(new Pt_1.Pt(center).subtract(half), new Pt_1.Pt(center).add(half));
     }
     static toCircle(pts) {
@@ -2695,7 +2710,8 @@ class Space {
             this.clear();
         // animate all players
         for (let k in this.players) {
-            this.players[k].animate(time, this._time.diff, this);
+            if (this.players[k].animate)
+                this.players[k].animate(time, this._time.diff, this);
         }
         // stop if time ended
         if (this._time.end >= 0 && time > this._time.end) {
@@ -3238,15 +3254,18 @@ class CanvasForm extends Form_1.Form {
         super();
         // store common styles so that they can be restored to canvas context when using multiple forms. See `reset()`.
         this._style = {
-            fillStyle: "#e51c23", strokeStyle: "#fff",
-            lineWidth: 1, lineJoin: "miter", lineCap: "butt",
+            fillStyle: "#f03", strokeStyle: "#fff",
+            lineWidth: 1, lineJoin: "bevel", lineCap: "butt",
         };
         this._font = new Form_1.Font(14, "sans-serif");
         this._space = space;
-        this._ctx = this._space.ctx;
-        this._ctx.fillStyle = this._style.fillStyle;
-        this._ctx.strokeStyle = this._style.strokeStyle;
-        this._ctx.font = this._font.value;
+        this._space.add({ start: () => {
+                this._ctx = this._space.ctx;
+                this._ctx.fillStyle = this._style.fillStyle;
+                this._ctx.strokeStyle = this._style.strokeStyle;
+                this._ctx.lineJoin = "bevel";
+                this._ctx.font = this._font.value;
+            } });
     }
     get space() { return this._space; }
     useOffscreen(off = true, clear = false) {
@@ -3335,9 +3354,9 @@ class CanvasForm extends Form_1.Form {
     reset() {
         for (let k in this._style) {
             this._ctx[k] = this._style[k];
-            this._font = new Form_1.Font();
-            this._ctx.font = this._font.value;
         }
+        this._font = new Form_1.Font();
+        this._ctx.font = this._font.value;
         return this;
     }
     _paint() {

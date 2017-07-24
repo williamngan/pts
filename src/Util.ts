@@ -128,13 +128,23 @@ export class Util {
    * @param pts an array 
    * @param size chunk size, ie, number of items in a chunk
    * @param stride optional parameter to "walk through" the array in steps
+   * @param loopBack if `true`, always go through the array till the end and loop back to the beginning to complete the segments if needed
    */
-  static split( pts:any[], size:number, stride?:number ):any[][] {
+  static split( pts:any[], size:number, stride?:number, loopBack:boolean=false ):any[][] {
     let st = stride || size;
     let chunks = [];
     for (let i=0; i<pts.length; i++) {
-      if (i*st+size > pts.length) break;
-      chunks.push( pts.slice(i*st, i*st+size ) );
+      if (i*st+size > pts.length) {
+        if (loopBack) {
+          let g = pts.slice(i*st);
+          g = g.concat( pts.slice( 0, (i*st+size)%size ) );
+          chunks.push( g );
+        } else {
+          break;
+        }
+      } else {
+        chunks.push( pts.slice(i*st, i*st+size ) );
+      }
     }
     return chunks;
   }

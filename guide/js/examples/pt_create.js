@@ -1,4 +1,6 @@
 (function(){
+  // Pts.namespace( this ); // add Pts into scope if needed
+  
   var demoID = "pt_create";
   
   // create Space and Form

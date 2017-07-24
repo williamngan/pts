@@ -1,6 +1,7 @@
+Pts.namespace( this );
+
 (function() {
 
-  Pts.namespace( this );
   var sourceCodePath = "./js/examples/";
 
   var blocks = Array.from( document.querySelectorAll("img") ).filter( (f) => {

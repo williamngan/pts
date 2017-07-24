@@ -175,7 +175,7 @@ export class Rectangle {
   }
 
   static fromCenter( center:PtLike|number[], widthOrSize:number|PtLike, height?:number ):Group {
-    let half = (typeof widthOrSize == "number") ? [ widthOrSize/2, (height||widthOrSize)/2 ] : new Pt(widthOrSize).divide;
+    let half = (typeof widthOrSize == "number") ? [ widthOrSize/2, (height||widthOrSize)/2 ] : new Pt(widthOrSize).divide(2);
     return new Group(new Pt(center).subtract(half), new Pt(center).add(half));
   }
 

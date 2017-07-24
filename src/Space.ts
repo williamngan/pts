@@ -133,7 +133,7 @@ export abstract class Space {
 
     // animate all players
     for (let k in this.players) {
-      this.players[k].animate( time, this._time.diff, this );
+      if (this.players[k].animate) this.players[k].animate( time, this._time.diff, this );
     }
 
     // stop if time ended

@@ -323,11 +323,15 @@ pre {
   border-left: 5px solid #e2e6ef;
   padding: 5px 10px;
   font-size: 0.9em;
-  margin: 40px 0;
+  margin: 20px 0;
 }
 
 code {
   font-family: "Menlo", "Consolas", "Monaco", monospace;
+}
+
+code.hljs {
+  overflow: visible;
 }
 
 /* Demo elements */

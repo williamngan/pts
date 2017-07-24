@@ -378,10 +378,11 @@ export class Group extends Array<Pt> {
    * Split this Group into an array of sub-groups
    * @param chunkSize number of items per sub-group
    * @param stride forward-steps after each sub-group
+   * @param loopBack if `true`, always go through the array till the end and loop back to the beginning to complete the segments if needed
    */
-  split( chunkSize:number, stride?:number ):Group[] {
-    let sp = Util.split( this, chunkSize, stride );
-    return sp.map( (g) => g as Group );
+  split( chunkSize:number, stride?:number, loopBack:boolean=false ):Group[] {
+    let sp = Util.split( this, chunkSize, stride, loopBack );
+    return sp as Group[];
   }
 
   /**
@@ -409,8 +410,11 @@ export class Group extends Array<Pt> {
    * Split this group into an array of sub-group segments
    * @param pts_per_segment number of Pts in each segment
    * @param stride forward-step to take
+   * @param loopBack if `true`, always go through the array till the end and loop back to the beginning to complete the segments if needed
    */
-  segments( pts_per_segment:number=2, stride:number=1 ):Group[] { return this.split(pts_per_segment, stride); }
+  segments( pts_per_segment:number=2, stride:number=1, loopBack:boolean=false ):Group[] { 
+    return this.split(pts_per_segment, stride, loopBack); 
+  }
 
   /**
    * Get all the line segments (ie, edges in a graph) of this group

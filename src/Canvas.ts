@@ -565,8 +565,8 @@ export class CanvasForm extends Form {
 
   // store common styles so that they can be restored to canvas context when using multiple forms. See `reset()`.
   protected _style = {
-    fillStyle: "#e51c23", strokeStyle:"#fff", 
-    lineWidth: 1, lineJoin: "miter", lineCap: "butt",
+    fillStyle: "#f03", strokeStyle:"#fff", 
+    lineWidth: 1, lineJoin: "bevel", lineCap: "butt",
   }
 
   protected _font:Font = new Font( 14, "sans-serif");
@@ -575,10 +575,13 @@ export class CanvasForm extends Form {
   constructor( space:CanvasSpace ) {
     super();
     this._space = space;
-    this._ctx = this._space.ctx;
-    this._ctx.fillStyle = this._style.fillStyle;
-    this._ctx.strokeStyle = this._style.strokeStyle;    
-    this._ctx.font = this._font.value;
+    this._space.add( { start: () => {
+      this._ctx = this._space.ctx;
+      this._ctx.fillStyle = this._style.fillStyle;
+      this._ctx.strokeStyle = this._style.strokeStyle;    
+      this._ctx.lineJoin = "bevel";
+      this._ctx.font = this._font.value;
+    }} );
   }
 
   get space():CanvasSpace { return this._space; }
@@ -673,9 +676,9 @@ export class CanvasForm extends Form {
   reset():this {
     for (let k in this._style) {
       this._ctx[k] = this._style[k];
-      this._font = new Font();
-      this._ctx.font = this._font.value;
     }
+    this._font = new Font();
+    this._ctx.font = this._font.value;
     return this;
   }
 
