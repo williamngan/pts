@@ -30,16 +30,21 @@ export class Line {
     }
   }
 
-  static collinear( p1:PtLike|number[], p2:PtLike|number[], p3:PtLike|number[] ) {
+  static collinear( p1:PtLike|number[], p2:PtLike|number[], p3:PtLike|number[], threshold:number=0.07 ) {
     // Use cross product method
-    let a = new Pt(0,0,0).to(p2).$subtract( p1 );
-    let b = new Pt(0,0,0).to(p1).$subtract( p3 );
-    return a.$cross( b ).equals( new Pt(0,0,0) );
+    let a = new Pt(0,0,0).to(p1).$subtract( p2 );
+    let b = new Pt(0,0,0).to(p1).$subtract( p3 );    
+    return a.$cross( b ).divide(1000).equals( new Pt(0,0,0), threshold );
   }
 
   static magnitude( line:GroupLike ) {
     return (line.length >= 2) ? line[1].$subtract( line[0] ).magnitude() : 0;
   }
+
+  static magnitudeSq( line:GroupLike ) {
+    return (line.length >= 2) ? line[1].$subtract( line[0] ).magnitudeSq() : 0;
+  }
+
 
   /**
    * Find a Pt on a line that is perpendicular (shortest distance) to a target Pt

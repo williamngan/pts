@@ -1698,14 +1698,17 @@ class Line {
             return { slope: m, yi: c, xi: (m === 0) ? undefined : -c / m };
         }
     }
-    static collinear(p1, p2, p3) {
+    static collinear(p1, p2, p3, threshold = 0.07) {
         // Use cross product method
-        let a = new Pt_1.Pt(0, 0, 0).to(p2).$subtract(p1);
+        let a = new Pt_1.Pt(0, 0, 0).to(p1).$subtract(p2);
         let b = new Pt_1.Pt(0, 0, 0).to(p1).$subtract(p3);
-        return a.$cross(b).equals(new Pt_1.Pt(0, 0, 0));
+        return a.$cross(b).divide(1000).equals(new Pt_1.Pt(0, 0, 0), threshold);
     }
     static magnitude(line) {
         return (line.length >= 2) ? line[1].$subtract(line[0]).magnitude() : 0;
+    }
+    static magnitudeSq(line) {
+        return (line.length >= 2) ? line[1].$subtract(line[0]).magnitudeSq() : 0;
     }
     /**
      * Find a Pt on a line that is perpendicular (shortest distance) to a target Pt
@@ -3521,9 +3524,6 @@ class CanvasForm extends Form_1.Form {
         let w = this._ctx.measureText(txt).width + 20;
         this.stroke(false).fill("rgba(0,0,0,.4)").rect([[0, 0], [w, 20]]);
         this.fill("#fff").text([10, 14], txt);
-        return this;
-    }
-    draw(ps, shape) {
         return this;
     }
 }

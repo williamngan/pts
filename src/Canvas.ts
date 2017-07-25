@@ -869,8 +869,5 @@ export class CanvasForm extends Form {
   }
 
 
-  draw( ps:Pt[], shape?:string ):this {
-    return this;
-  }
   
 }

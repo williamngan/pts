@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Op</title>
+	<link href="./assets/style.css" rel="stylesheet" type="text/css" />
+<meta charset="UTF-8">
+</head>
+
+<body>
+<div id="header">
+  <div id="pts"><a href="../">pts<span>.</span></a>guides</div>
+  <div id="topmenu">
+    <a href="../demo"/>demos</a>
+    <a href="../study"/>studies</a>
+    <a href="../docs"/>docs</a>
+    <a href="https://github.com/williamngan/pts"/>github</a>
+  </div>
+</div>
+<a href="#menu" id="toc">&#x2261;</a>
+<div id="post"><h1>Op</h1>
+<p>We are all in the gutter, but some of us are looking at the stars, said Oscar Wilde. To him, and to many of us, a sky full of stars moves us to observe and imagine within that vast darkness. What would a sky be without stars, and what would a starry night be without us looking and imagining?</p>
+<p>A group of points is never just a mathematical concept. We actively connect the dots and find strange forms and humanistic meanings in them.</p>
+<p>In <strong><code>pts</code></strong>, these acts of imagination are known as &quot;Op&quot;. They transform a static point into an active one, a noun into a verb, a vector space into an expressive canvas.</p>
+<p>Let's begin with an example. Suppose there are 100 points randomly placed on a canvas, and a pointer moves randomly about. A simple (indeed boring) act of imagination might be to ask: which point is closest to the pointer?</p>
+<p>We can draw this whole scene a few lines of code:</p>
+<pre><code>// make 100 pts and pointer
+var pts = Create.distributeRandom( space.innerBound, 100 );
+let t = space.pointer;
+
+// sort the pts
+pts.sort( (a,b) =&gt; 
+  a.$subtract(t).magnitudeSq() - b.$subtract(t).magnitudeSq()
+);
+
+// draw the pts
+form.fillOnly(&quot;#123&quot;).points( pts, 2, &quot;circle&quot; );
+form.fill(&quot;#f03&quot;).point( pts[0], 5, &quot;circle&quot; );
+form.strokeOnly(&quot;#f03&quot;, 2).line( [pts[0], space.pointer] );
+</code></pre>
+<p><img src="./assets/bg.png" alt="js:op_closest"></p>
+<p>Notice we just used the javascript <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort"><code>sort</code></a> function to rearrange the <code>pts</code> group by comparing two points' distance to <code>space.pointer</code>. Then we draw the first point in the group (the closest) in red.</p>
+<p>The humbe <code>sort</code> function is essentially an &quot;Op&quot; by our definition. It transforms a group of points and makes it meaningful. From here on, it's easy to imagine what other structures we can derive from this simple sketch. For example, what if we visualize all points' distances to the pointer in different ways:</p>
+<pre><code>pts.forEach( (p, i) =&gt; form.point( p, 1+i/pts.length * 10) )
+</code></pre>
+<p><img src="./assets/bg.png" alt="js:op_closest_2"></p>
+<p>The group of points becomes active. It's somewhat interesting and kind of a mess. It's trying to tell us something, but what we aren't quite sure.</p>
+<p><strong><code>pts</code></strong> includes many different Ops to help you make the points meaningful. Let's look at some methods in more details.</p>
+<h3>Static Op</h3>
+<p>The <a href="../docs/modules/_op_.html">Op</a> module includes various static functions that deal with specific forms such as <a href="#op-rectangle"><code>Rectangle</code></a> and <a href="#op-curve"><code>Curve</code></a>, and the <a href="../docs/modules/_num_.html">Num</a> module includes static functions for simple numeric and geometric calculations.</p>
+<p>It's time to let our imaginary forces work on these functions. Let's try a few things.</p>
+</div>
+
+<ol id="menu"><a id="close" href="#">&times;</a><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li></ol>
+
+<script type="text/javascript" src="../dist/pts.js"></script>
+<script type="text/javascript" src="./js/guide.js"></script>
+<script src="./js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+</body>
+</html>
