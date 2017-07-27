@@ -43,11 +43,39 @@ form.strokeOnly(&quot;#f03&quot;, 2).line( [pts[0], space.pointer] );
 <pre><code>pts.forEach( (p, i) =&gt; form.point( p, 1+i/pts.length * 10) )
 </code></pre>
 <p><img src="./assets/bg.png" alt="js:op_closest_2"></p>
-<p>The group of points becomes active. It's somewhat interesting and kind of a mess. It's trying to tell us something, but what we aren't quite sure.</p>
-<p><strong><code>pts</code></strong> includes many different Ops to help you make the points meaningful. Let's look at some methods in more details.</p>
+<p>The group of points becomes active. It's somewhat interesting and kind of a mess -- a starting point for further experimentation.</p>
+<p><strong><code>pts</code></strong> includes many different Ops to help you make the points meaningful. Next we will look at them in more details.</p>
 <h3>Static Op</h3>
-<p>The <a href="../docs/modules/_op_.html">Op</a> module includes various static functions that deal with specific forms such as <a href="#op-rectangle"><code>Rectangle</code></a> and <a href="#op-curve"><code>Curve</code></a>, and the <a href="../docs/modules/_num_.html">Num</a> module includes static functions for simple numeric and geometric calculations.</p>
-<p>It's time to let our imaginary forces work on these functions. Let's try a few things.</p>
+<p>The <a href="../docs/modules/_op_.html">Op</a> module includes various static functions that deal with specific forms such as <a href="#op-rectangle"><code>Rectangle</code></a> and <a href="#op-curve"><code>Curve</code></a>, and the <a href="../docs/modules/_num_.html">Num</a> module includes static functions for simple numeric and geometric calculations. Most of them are straightforward and easy to use.</p>
+<p>It's time to let our imaginary forces work on these functions. Keeping most of the code from above, let's try the <a href="#op-line"><code>perpendicularFromPt</code></a> function. Given a line and a point, this Op finds a perpendicular line (ie, shortest distance) between the point and the line.</p>
+<pre><code>let path = [new Pt(), space.pointer];    
+let perpends = pts.map( (p) =&gt; [p, Line.perpendicularFromPt(path, p)] );
+</code></pre>
+<p><img src="./assets/bg.png" alt="js:op_perpendicular"></p>
+<p>First we create a line by joining the pointer and the top-left corner at (0,0), and then we convert the set of random points on canvas to perpendicular lines. Also note that, since we don't need additional features from <a href="#pt-group"><code>Group</code></a>, we can just use Array to store the Pts for drawing. Pretty fun and simple, right?</p>
+<p>Ops can also construct shapes out of points. Creating a rectangle or a line from 2 points is obvious, so let's get a bit more elaborate.</p>
+<pre><code>// create a group of 4 Pts from rectangle
+let c = space.center.clone()
+let corners = Rectangle.corners( Rectangle.fromCenter( c, space.height ) );
+
+// interpolate with time to make them move
+let cycle = (t, i) =&gt; Num.cycle( (t+i*500)%3000/3000 );
+let pts = corners.map( (p, i) =&gt; Geom.interpolate( p, c, cycle(time, i)) );
+
+// close the B-spline path
+pts.push( space.pointer );
+pts.insert( pts.slice(0, 3), pts.length );
+
+// draw the B-spline curve
+let curve = Curve.bspline( pts );
+form.fill(&quot;#f03&quot;).stroke(&quot;#fff&quot;, 3).polygon( curve );
+</code></pre>
+<p><img src="./assets/bg.png" alt="js:op_bspline"></p>
+<p>What's going on here? First, we use <a href="#op-rectangle"><code>Rectangle.fromCenter</code></a> to make a rectangle and then get its 4 corners as a group.</p>
+<p>Then, we define a function called <code>cycle</code> to get a value between 0 to 1 for interpolation. The function takes two parameters <code>t</code> (for time) and <code>i</code> (for index). And we map the 4 corners into 4 interpolated points, making use of <a href="#num-geom"><code>Geom.interpolate</code></a> op.</p>
+<p>Next, we add the first 3 points again to the end of the <code>pts</code> group, which is a quick way to close a b-spline curve. Finally, we get the curve from <a href="#op-curve"><code>Curve.bspline</code></a> and just draw it. Done!</p>
+<h3>Pt to Op</h3>
+<p><img src="./assets/bg.png" alt="js:op_bspline_2"></p>
 </div>
 
 <ol id="menu"><a id="close" href="#">&times;</a><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li></ol>

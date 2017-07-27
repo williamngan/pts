@@ -1,7 +1,7 @@
 (function(){
   // Pts.namespace( this ); // add Pts into scope if needed
   
-  var demoID = "op_closest_2";
+  var demoID = "op_perpendicular";
   
   // create Space and Form
   var space = new CanvasSpace("#"+demoID).setup({ retina: true, bgcolor: "#e2e6ef" });
@@ -14,17 +14,14 @@
     // would be better to init this in player's `start` function, but we are lazy here.
     if (!pts) pts = Create.distributeRandom( space.innerBound, 100 );
 
-    let t = space.pointer;
-    pts.sort( (a,b) => a.$subtract(t).magnitudeSq() - b.$subtract(t).magnitudeSq() );
-    
-    form.fillOnly("#123").points( pts, 2, "circle" );
-    form.fill("#f03").point( pts[0], 10, "circle" );
-    form.strokeOnly("#f03", 2).line( [pts[0], space.pointer] );
-    form.strokeOnly("#f03", 2).line( [pts[1], space.pointer] );
-    form.strokeOnly("#f03", 2).line( [pts[2], space.pointer] );
+    let path = [new Pt(), space.pointer];    
+    let perpends = pts.map( (p) => [p, Line.perpendicularFromPt( path, p )] );
 
-    form.strokeOnly("#123", 1);
-    pts.forEach( (p, i) => form.point( p, 1+i/pts.length * 10 ) )
+    
+    form.strokeOnly("#f03", 5).line( path );
+    form.strokeOnly("#123", 1).lines( perpends );
+    form.fillOnly("#123").points( pts, 2, "circle" );
+
 
   });
   

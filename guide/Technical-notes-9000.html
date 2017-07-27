@@ -24,6 +24,12 @@
 let p2 = p.map( (d) =&gt; d+1 ); // typescript thinks p2 is Float32Array
 let p3 = p.map( (d) =&gt; d+1 ) as Pt; // type is now cast back to Pt
 </code></pre>
+<h3>Tips</h3>
+<p>Pt is a subclass of Float32Array, and Group is a subclass of Array that should only contain Pt in it.</p>
+<p>Since objects and arrays in javascript are passed by reference, remember to clone them if you are going to change their values.</p>
+<pre><code>myGroup.push( space.center.clone() ); 
+pt.$subtract( 10 ); // use $fn to get a new Pt
+</code></pre>
 </div>
 
 <ol id="menu"><a id="close" href="#">&times;</a><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li></ol>

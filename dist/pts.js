@@ -1718,6 +1718,8 @@ class Line {
      * @returns a Pt on the line that is perpendicular to the target Pt, or a projection vector if `asProjection` is true.
      */
     static perpendicularFromPt(line, pt, asProjection = false) {
+        if (line[0].equals(line[1]))
+            throw new Error("A line's magnitude should be greater than 0.");
         let a = line[0].$subtract(line[1]);
         let b = line[1].$subtract(pt);
         let proj = b.$subtract(a.$project(b));
@@ -2223,6 +2225,7 @@ class Polygon {
     }
     /**
      * Get a convex hull of the point set using Melkman's algorithm
+     * (Reference: http://geomalgorithms.com/a12-_hull-3.html)
      * @param pts a group of Pt
      * @param sorted a boolean value to indicate if the group is pre-sorted by x position. Default is false.
      * @returns a group of Pt that defines the convex hull polygon
@@ -2232,38 +2235,52 @@ class Polygon {
             return _errorLength(new Pt_1.Group(), 3);
         if (!sorted) {
             pts = pts.slice();
-            pts.sort((a, b) => a.x - b.x);
+            pts.sort((a, b) => a[0] - b[0]);
         }
         // check if is on left of ray a-b
-        let left = (a, b, pt) => (b.x - a.x) * (pt.y - a.y) - (pt.x - a.x) * (b.y - a.y) > 0;
+        let left = (a, b, c) => {
+            return (b[0] - a[0]) * (c[1] - a[1]) - (c[0] - a[0]) * (b[1] - a[1]) > 0;
+        };
         // double end queue
-        let dq = new Pt_1.Group();
-        // first 3 pt
+        let dq = [];
+        let bot = pts.length - 2;
+        let top = bot + 3;
+        dq[bot] = pts[2];
+        dq[top] = pts[2];
+        // first 3 pt as counter-clockwise triangle
         if (left(pts[0], pts[1], pts[2])) {
-            dq.push(pts[0], pts[1]);
+            dq[bot + 1] = pts[0];
+            dq[bot + 2] = pts[1];
         }
         else {
-            dq.push(pts[1], pts[0]);
+            dq[bot + 1] = pts[1];
+            dq[bot + 2] = pts[0];
         }
-        dq.unshift(pts[0]);
-        dq.push(pts[2]);
         // remaining pts
-        let i = 3;
-        while (i < pts.length) {
+        for (let i = 3, len = pts.length; i < len; i++) {
             let pt = pts[i];
-            if (left(pt, dq[0], dq[1]) && left(dq[dq.length - 2], dq[dq.length - 1], pt)) {
-                i++;
+            // if inside the hull
+            if (left(dq[bot], dq[bot + 1], pt) && left(dq[top - 1], dq[top], pt)) {
                 continue;
             }
-            while (!left(dq[dq.length - 2], dq[dq.length - 1], pt))
-                dq.pop();
-            dq.push(pt);
-            while (!left(dq[0], dq[1], pt))
-                dq.shift();
-            dq.unshift(pt);
-            i++;
+            // rightmost tangent
+            while (!left(dq[bot], dq[bot + 1], pt)) {
+                bot += 1;
+            }
+            bot -= 1;
+            dq[bot] = pt;
+            // leftmost tangent
+            while (!left(dq[top - 1], dq[top], pt)) {
+                top -= 1;
+            }
+            top += 1;
+            dq[top] = pt;
         }
-        return dq;
+        let hull = new Pt_1.Group();
+        for (let h = 0; h < (top - bot); h++) {
+            hull.push(dq[bot + h]);
+        }
+        return hull;
     }
     static intersect2D(poly, linesOrRays, sourceIsRay = false) {
         let groups = [];

@@ -1,7 +1,7 @@
 (function(){
   // Pts.namespace( this ); // add Pts into scope if needed
   
-  var demoID = "op_closest_2";
+  var demoID = "op_bspline_2";
   
   // create Space and Form
   var space = new CanvasSpace("#"+demoID).setup({ retina: true, bgcolor: "#e2e6ef" });
@@ -17,14 +17,17 @@
     let t = space.pointer;
     pts.sort( (a,b) => a.$subtract(t).magnitudeSq() - b.$subtract(t).magnitudeSq() );
     
-    form.fillOnly("#123").points( pts, 2, "circle" );
-    form.fill("#f03").point( pts[0], 10, "circle" );
-    form.strokeOnly("#f03", 2).line( [pts[0], space.pointer] );
-    form.strokeOnly("#f03", 2).line( [pts[1], space.pointer] );
-    form.strokeOnly("#f03", 2).line( [pts[2], space.pointer] );
+    let ten = pts.slice(0, 10);
+    let curve = Polygon.convexHull( ten );
+    curve.insert( curve.slice(0, 3), curve.length );
+    
 
-    form.strokeOnly("#123", 1);
-    pts.forEach( (p, i) => form.point( p, 1+i/pts.length * 10 ) )
+    form.fillOnly("#123").points( pts, 2, "circle" );
+    form.strokeOnly("#fff",3).line( curve );
+    form.stroke("#000").polygon( Curve.bspline( curve ) );
+    
+    let pp = ten.map( (p) => [space.pointer, p] );
+    form.strokeOnly("#f03", 2).lines( pp );
 
   });
   

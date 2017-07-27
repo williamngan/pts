@@ -49,7 +49,6 @@
     form.fillOnly("#f03").points( [space.pointer, space.center], 3 );
     form.fillOnly("#09f").point( nearest.pt, 10 );
 
-    console.log( nearest.pt );
     // form.stroke("#fff", 5).fill("#f03").point( m, 10, "circle")
     // form.fill("#123").font(14, "bold").text( m.$add(20, 5), m.toString() );
     
