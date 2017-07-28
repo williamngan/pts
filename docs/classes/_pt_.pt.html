@@ -141,15 +141,14 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#_cross" class="tsd-kind-icon">$cross</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#_divide" class="tsd-kind-icon">$divide</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#_floor" class="tsd-kind-icon">$floor</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#_map" class="tsd-kind-icon">$map</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#_max" class="tsd-kind-icon">$max</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#_min" class="tsd-kind-icon">$min</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#_multiply" class="tsd-kind-icon">$multiply</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#_project" class="tsd-kind-icon">$project</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#_round" class="tsd-kind-icon">$round</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#_slice" class="tsd-kind-icon">$slice</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#_subtract" class="tsd-kind-icon">$subtract</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#_take" class="tsd-kind-icon">$take</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#_to" class="tsd-kind-icon">$to</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#_unit" class="tsd-kind-icon">$unit</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#abs" class="tsd-kind-icon">abs</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#add" class="tsd-kind-icon">add</a></li>
@@ -161,7 +160,6 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#dot" class="tsd-kind-icon">dot</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#equals" class="tsd-kind-icon">equals</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#floor" class="tsd-kind-icon">floor</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#isperpendicular" class="tsd-kind-icon">is<wbr>Perpendicular</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#magnitude" class="tsd-kind-icon">magnitude</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#magnitudesq" class="tsd-kind-icon">magnitude<wbr>Sq</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#maxvalue" class="tsd-kind-icon">max<wbr>Value</a></li>
@@ -181,7 +179,6 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#tostring" class="tsd-kind-icon">to<wbr>String</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#unit" class="tsd-kind-icon">unit</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#___iterator" class="tsd-kind-icon">__@iterator</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_pt_.pt.html#combine" class="tsd-kind-icon">combine</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#copywithin" class="tsd-kind-icon">copy<wbr>Within</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#entries" class="tsd-kind-icon">entries</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#every" class="tsd-kind-icon">every</a></li>
@@ -224,12 +221,13 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L21">Pt.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L25">Pt.ts:25</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Create a Pt. If no parameter is provided, this will instantiate a Pt with 2 dimensions [0, 0].
+										Note that <code>new Pt(3)</code> will only instantiate Pt with length of 3 (ie, same as <code>new Float32Array(3)</code> ). If you need a Pt with 1 dimension of value 3, use <code>new Pt([3])</code>.
 									Example: <code>new Pt()</code>, <code>new Pt(1,2,3,4,5)</code>, <code>new Pt([1,2])</code>, <code>new Pt({x:0, y:1})</code>, <code>new Pt(pt)</code></p>
 								</div>
 							</div>
@@ -257,7 +255,7 @@
 					<div class="tsd-signature tsd-kind-icon">_id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L21">Pt.ts:21</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L25">Pt.ts:25</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -376,7 +374,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L38">Pt.ts:38</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L47">Pt.ts:47</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -384,7 +382,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L39">Pt.ts:39</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L48">Pt.ts:48</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -408,7 +406,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L44">Pt.ts:44</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L53">Pt.ts:53</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -416,7 +414,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L49">Pt.ts:49</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L58">Pt.ts:58</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -440,7 +438,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L41">Pt.ts:41</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L50">Pt.ts:50</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -448,7 +446,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L46">Pt.ts:46</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L55">Pt.ts:55</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -472,7 +470,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L42">Pt.ts:42</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L51">Pt.ts:51</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -480,7 +478,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L47">Pt.ts:47</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L56">Pt.ts:56</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -504,7 +502,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L43">Pt.ts:43</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L52">Pt.ts:52</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -512,7 +510,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L48">Pt.ts:48</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L57">Pt.ts:57</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -538,7 +536,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L222">Pt.ts:222</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L224">Pt.ts:224</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -560,7 +558,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L153">Pt.ts:153</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L155">Pt.ts:155</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -583,7 +581,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L253">Pt.ts:253</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L255">Pt.ts:255</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -605,7 +603,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L144">Pt.ts:144</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L146">Pt.ts:146</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -628,7 +626,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L200">Pt.ts:200</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L202">Pt.ts:202</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -651,7 +649,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L177">Pt.ts:177</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L179">Pt.ts:179</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -674,7 +672,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L237">Pt.ts:237</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L239">Pt.ts:239</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -687,69 +685,22 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="_map" class="tsd-anchor"></a>
-					<h3>$map</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">$map<span class="tsd-signature-symbol">(</span>fn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L114">Pt.ts:114</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>fn: <span class="tsd-signature-type">function</span></h5>
-									<ul class="tsd-parameters">
-										<li class="tsd-parameter-siganture">
-											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
-												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>currentValue<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, index<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, array<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
-											</ul>
-											<ul class="tsd-descriptions">
-												<li class="tsd-description">
-													<h4 class="tsd-parameters-title">Parameters</h4>
-													<ul class="tsd-parameters">
-														<li>
-															<h5>currentValue: <span class="tsd-signature-type">number</span></h5>
-														</li>
-														<li>
-															<h5>index: <span class="tsd-signature-type">number</span></h5>
-														</li>
-														<li>
-															<h5>array: <a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a></h5>
-														</li>
-													</ul>
-													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-												</li>
-											</ul>
-										</li>
-									</ul>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="_max" class="tsd-anchor"></a>
 					<h3>$max</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">$max<span class="tsd-signature-symbol">(</span>p<span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
+						<li class="tsd-signature tsd-kind-icon">$max<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L288">Pt.ts:288</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L291">Pt.ts:291</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>p: <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h5>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
@@ -760,19 +711,19 @@
 					<a name="_min" class="tsd-anchor"></a>
 					<h3>$min</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">$min<span class="tsd-signature-symbol">(</span>p<span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
+						<li class="tsd-signature tsd-kind-icon">$min<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L280">Pt.ts:280</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L282">Pt.ts:282</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>p: <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h5>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
@@ -789,7 +740,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L169">Pt.ts:169</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L171">Pt.ts:171</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -812,7 +763,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L202">Pt.ts:202</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L204">Pt.ts:204</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -835,7 +786,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L268">Pt.ts:268</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L270">Pt.ts:270</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -843,43 +794,6 @@
 									<p>Get a new Pt with round values of this Pt</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="_slice" class="tsd-anchor"></a>
-					<h3>$slice</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">$slice<span class="tsd-signature-symbol">(</span>start<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, end<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L138">Pt.ts:138</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Get a new Pt based on a slice of this Pt. Similar to <code>Array.slice()</code>.</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> start: <span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>start index</p>
-									</div>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> end: <span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>end index (ie, entry will not include value at this index)</p>
-									</div>
-								</li>
-							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
 						</li>
 					</ul>
@@ -894,7 +808,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L161">Pt.ts:161</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L163">Pt.ts:163</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -917,7 +831,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L124">Pt.ts:124</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L137">Pt.ts:137</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -939,6 +853,37 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="_to" class="tsd-anchor"></a>
+					<h3>$to</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">$to<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L89">Pt.ts:89</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Like <code>to()</code> but returns a new Pt</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a list of numbers, an array of number, or an object with {x,y,z,w} properties</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="_unit" class="tsd-anchor"></a>
 					<h3>$unit</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -948,7 +893,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L196">Pt.ts:196</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L198">Pt.ts:198</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -976,7 +921,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L214">Pt.ts:214</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L216">Pt.ts:216</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -998,7 +943,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L148">Pt.ts:148</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L150">Pt.ts:150</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1021,7 +966,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L301">Pt.ts:301</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L305">Pt.ts:305</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1052,7 +997,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L310">Pt.ts:310</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L314">Pt.ts:314</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1089,7 +1034,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L245">Pt.ts:245</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L247">Pt.ts:247</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1111,7 +1056,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L52">Pt.ts:52</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L61">Pt.ts:61</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
@@ -1128,7 +1073,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L172">Pt.ts:172</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L174">Pt.ts:174</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1151,7 +1096,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L198">Pt.ts:198</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L200">Pt.ts:200</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1174,7 +1119,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L56">Pt.ts:56</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L65">Pt.ts:65</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1200,7 +1145,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L229">Pt.ts:229</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L231">Pt.ts:231</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1209,37 +1154,6 @@
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="isperpendicular" class="tsd-anchor"></a>
-					<h3>is<wbr>Perpendicular</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">is<wbr>Perpendicular<span class="tsd-signature-symbol">(</span>p<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L339">Pt.ts:339</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Check if another Pt is perpendicular to this Pt</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>p: <span class="tsd-signature-type">any</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>another Pt</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -1253,7 +1167,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L181">Pt.ts:181</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L183">Pt.ts:183</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -1270,7 +1184,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L179">Pt.ts:179</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L181">Pt.ts:181</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -1287,7 +1201,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L276">Pt.ts:276</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L278">Pt.ts:278</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">object</span></h4>
@@ -1312,7 +1226,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L272">Pt.ts:272</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L274">Pt.ts:274</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">object</span></h4>
@@ -1337,7 +1251,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L164">Pt.ts:164</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L166">Pt.ts:166</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1360,7 +1274,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L92">Pt.ts:92</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L111">Pt.ts:111</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1432,7 +1346,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L105">Pt.ts:105</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L124">Pt.ts:124</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1465,7 +1379,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L330">Pt.ts:330</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L334">Pt.ts:334</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1491,7 +1405,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L320">Pt.ts:320</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L324">Pt.ts:324</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1520,7 +1434,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L260">Pt.ts:260</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L262">Pt.ts:262</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1542,7 +1456,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L314">Pt.ts:314</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L318">Pt.ts:318</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1568,7 +1482,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L325">Pt.ts:325</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L329">Pt.ts:329</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1597,7 +1511,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L156">Pt.ts:156</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L158">Pt.ts:158</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1620,7 +1534,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L68">Pt.ts:68</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L77">Pt.ts:77</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1645,13 +1559,13 @@
 					<a name="toangle" class="tsd-anchor"></a>
 					<h3>to<wbr>Angle</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">to<wbr>Angle<span class="tsd-signature-symbol">(</span>radian<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, magnitude<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">to<wbr>Angle<span class="tsd-signature-symbol">(</span>radian<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, magnitude<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, anchorFromPt<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L81">Pt.ts:81</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L99">Pt.ts:99</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1673,6 +1587,12 @@
 										<p>Optional magnitude if known. If not provided, it&#39;ll calculate and use this Pt&#39;s magnitude.</p>
 									</div>
 								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> anchorFromPt: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>If <code>true</code>, translate to new position from current position. Default is <code>false</code> which update the position from origin (0,0);</p>
+									</div>
+								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
 						</li>
@@ -1688,7 +1608,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L348">Pt.ts:348</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L343">Pt.ts:343</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h4>
@@ -1705,7 +1625,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L344">Pt.ts:344</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L339">Pt.ts:339</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -1722,7 +1642,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L188">Pt.ts:188</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L190">Pt.ts:190</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1758,70 +1678,6 @@
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a name="combine" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> combine</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">combine<span class="tsd-signature-symbol">(</span>a<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a>, b<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a>, op<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.group.html" class="tsd-signature-type">Group</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L359">Pt.ts:359</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Given two groups of Pts, and a function that operate on two Pt, return a group of Pts</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>a: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>a group of Pts</p>
-									</div>
-								</li>
-								<li>
-									<h5>b: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>another array of Pts</p>
-									</div>
-								</li>
-								<li>
-									<h5>op: <span class="tsd-signature-type">function</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>a function that takes two parameters (p1, p2) and returns a Pt</p>
-									</div>
-									<ul class="tsd-parameters">
-										<li class="tsd-parameter-siganture">
-											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
-												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>p1<span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a>, p2<span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
-											</ul>
-											<ul class="tsd-descriptions">
-												<li class="tsd-description">
-													<h4 class="tsd-parameters-title">Parameters</h4>
-													<ul class="tsd-parameters">
-														<li>
-															<h5>p1: <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h5>
-														</li>
-														<li>
-															<h5>p2: <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h5>
-														</li>
-													</ul>
-													<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
-												</li>
-											</ul>
-										</li>
-									</ul>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -2889,7 +2745,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Pt.ts#L32">Pt.ts:32</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L41">Pt.ts:41</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3772,10 +3628,7 @@
 						<a href="../modules/_bound_.html">"<wbr>Bound"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_canvasform_.html">"<wbr>Canvas<wbr>Form"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_canvasspace_.html">"<wbr>Canvas<wbr>Space"</a>
+						<a href="../modules/_canvas_.html">"<wbr>Canvas"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_color_.html">"<wbr>Color"</a>
@@ -3806,9 +3659,6 @@
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/__app_.html">"_<wbr>app"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/__augment_.html">"_<wbr>augment"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/__lib_.html">"_<wbr>lib"</a>
@@ -3901,9 +3751,6 @@
 								<a href="_pt_.pt.html#_floor" class="tsd-kind-icon">$floor</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#_map" class="tsd-kind-icon">$map</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_pt_.pt.html#_max" class="tsd-kind-icon">$max</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
@@ -3919,13 +3766,13 @@
 								<a href="_pt_.pt.html#_round" class="tsd-kind-icon">$round</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#_slice" class="tsd-kind-icon">$slice</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_pt_.pt.html#_subtract" class="tsd-kind-icon">$subtract</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_pt_.pt.html#_take" class="tsd-kind-icon">$take</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_pt_.pt.html#_to" class="tsd-kind-icon">$to</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_pt_.pt.html#_unit" class="tsd-kind-icon">$unit</a>
@@ -3959,9 +3806,6 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_pt_.pt.html#floor" class="tsd-kind-icon">floor</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#isperpendicular" class="tsd-kind-icon">is<wbr>Perpendicular</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_pt_.pt.html#magnitude" class="tsd-kind-icon">magnitude</a>
@@ -4019,9 +3863,6 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
 								<a href="_pt_.pt.html#___iterator" class="tsd-kind-icon">__@iterator</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="_pt_.pt.html#combine" class="tsd-kind-icon">combine</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
 								<a href="_pt_.pt.html#copywithin" class="tsd-kind-icon">copy<wbr>Within</a>

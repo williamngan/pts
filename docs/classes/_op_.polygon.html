@@ -84,10 +84,17 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.polygon.html#adjacentsides" class="tsd-kind-icon">adjacent<wbr>Sides</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.polygon.html#area" class="tsd-kind-icon">area</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.polygon.html#bisector" class="tsd-kind-icon">bisector</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.polygon.html#centroid" class="tsd-kind-icon">centroid</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.polygon.html#convexhull" class="tsd-kind-icon">convex<wbr>Hull</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.polygon.html#intersect2d" class="tsd-kind-icon">intersect2D</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.polygon.html#lines" class="tsd-kind-icon">lines</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.polygon.html#midpoints" class="tsd-kind-icon">midpoints</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.polygon.html#nearestpt" class="tsd-kind-icon">nearest<wbr>Pt</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.polygon.html#network" class="tsd-kind-icon">network</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.polygon.html#perimeter" class="tsd-kind-icon">perimeter</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.polygon.html#torects" class="tsd-kind-icon">to<wbr>Rects</a></li>
 							</ul>
 						</section>
@@ -96,6 +103,118 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="adjacentsides" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> adjacent<wbr>Sides</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">adjacent<wbr>Sides<span class="tsd-signature-symbol">(</span>pts<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a>, index<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, closePath<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.group.html" class="tsd-signature-type">Group</a><span class="tsd-signature-symbol">[]</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Op.ts#L566">Op.ts:566</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Given a Pt in the polygon group, the adjacent sides are the two sides which the Pt touches.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a group of Pts</p>
+									</div>
+								</li>
+								<li>
+									<h5>index: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the target Pt</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> closePath: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a><span class="tsd-signature-symbol">[]</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="area" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> area</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">area<span class="tsd-signature-symbol">(</span>pts<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Op.ts#L633">Op.ts:633</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Find the area of a <em>convex</em> polygon.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a group of Pts</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="bisector" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> bisector</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">bisector<span class="tsd-signature-symbol">(</span>pts<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a>, index<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Op.ts#L590">Op.ts:590</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get a bisector which is a line that split between two sides of a polygon equally.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a group of Pts</p>
+									</div>
+								</li>
+								<li>
+									<h5>index: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the Pt in the polygon to bisect from</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
+							<p>a bisector Pt that&#39;s a normalized unit vector</p>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
 					<a name="centroid" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> centroid</h3>
@@ -106,7 +225,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Op.ts#L371">Op.ts:371</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Op.ts#L530">Op.ts:530</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -129,12 +248,13 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Op.ts#L381">Op.ts:381</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Op.ts#L656">Op.ts:656</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Get a convex hull of the point set using Melkman&#39;s algorithm</p>
+									<p>Get a convex hull of the point set using Melkman&#39;s algorithm
+									(Reference: <a href="http://geomalgorithms.com/a12-_hull-3.html">http://geomalgorithms.com/a12-_hull-3.html</a>)</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -167,7 +287,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Op.ts#L429">Op.ts:429</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Op.ts#L714">Op.ts:714</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -187,6 +307,124 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="lines" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> lines</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">lines<span class="tsd-signature-symbol">(</span>pts<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a>, closePath<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.group.html" class="tsd-signature-type">Group</a><span class="tsd-signature-symbol">[]</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Op.ts#L540">Op.ts:540</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get the line segments in this polygon</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of Pts</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> closePath: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a><span class="tsd-signature-symbol">[]</span></h4>
+							<p>an array of Groups which has 2 Pts in each group</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="midpoints" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> midpoints</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">midpoints<span class="tsd-signature-symbol">(</span>pts<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a>, closePath<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span>, t<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.group.html" class="tsd-signature-type">Group</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Op.ts#L553">Op.ts:553</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get a new polygon group that is derived from midpoints in this polygon</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of Pts</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> closePath: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> t: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;0.5</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a value between 0 to 1 for interpolation. Default to 0.5 which will get the middle point.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="nearestpt" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> nearest<wbr>Pt</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">nearest<wbr>Pt<span class="tsd-signature-symbol">(</span>pts<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a>, pt<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Op.ts#L736">Op.ts:736</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Given a target Pt, find a Pt in a Group that&#39;s nearest to it.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of Pt</p>
+									</div>
+								</li>
+								<li>
+									<h5>pt: <a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Pt to check</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
 					<a name="network" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> network</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
@@ -196,7 +434,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Op.ts#L438">Op.ts:438</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Op.ts#L723">Op.ts:723</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -213,6 +451,52 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="perimeter" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> perimeter</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">perimeter<span class="tsd-signature-symbol">(</span>pts<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a>, closePath<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Op.ts#L610">Op.ts:610</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Find the perimeter of this polygon, ie, the lengths of its sides.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a group of Pts</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> closePath: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">object</span></h4>
+							<p>an object with <code>total</code> length, and <code>segments</code> which is a Pt that stores each segment&#39;s length</p>
+							<ul class="tsd-parameters">
+								<li class="tsd-parameter">
+									<h5>segments<span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>total<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
 					<a name="torects" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> to<wbr>Rects</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
@@ -222,7 +506,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Op.ts#L450">Op.ts:450</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Op.ts#L753">Op.ts:753</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -252,10 +536,7 @@
 						<a href="../modules/_bound_.html">"<wbr>Bound"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_canvasform_.html">"<wbr>Canvas<wbr>Form"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_canvasspace_.html">"<wbr>Canvas<wbr>Space"</a>
+						<a href="../modules/_canvas_.html">"<wbr>Canvas"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_color_.html">"<wbr>Color"</a>
@@ -286,9 +567,6 @@
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/__app_.html">"_<wbr>app"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/__augment_.html">"_<wbr>augment"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/__lib_.html">"_<wbr>lib"</a>
@@ -324,6 +602,15 @@
 						<a href="_op_.polygon.html" class="tsd-kind-icon">Polygon</a>
 						<ul>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="_op_.polygon.html#adjacentsides" class="tsd-kind-icon">adjacent<wbr>Sides</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="_op_.polygon.html#area" class="tsd-kind-icon">area</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="_op_.polygon.html#bisector" class="tsd-kind-icon">bisector</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="_op_.polygon.html#centroid" class="tsd-kind-icon">centroid</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
@@ -333,7 +620,19 @@
 								<a href="_op_.polygon.html#intersect2d" class="tsd-kind-icon">intersect2D</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="_op_.polygon.html#lines" class="tsd-kind-icon">lines</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="_op_.polygon.html#midpoints" class="tsd-kind-icon">midpoints</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="_op_.polygon.html#nearestpt" class="tsd-kind-icon">nearest<wbr>Pt</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="_op_.polygon.html#network" class="tsd-kind-icon">network</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="_op_.polygon.html#perimeter" class="tsd-kind-icon">perimeter</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="_op_.polygon.html#torects" class="tsd-kind-icon">to<wbr>Rects</a>
@@ -344,6 +643,15 @@
 				<ul class="after-current">
 					<li class=" tsd-kind-class tsd-parent-kind-external-module">
 						<a href="_op_.rectangle.html" class="tsd-kind-icon">Rectangle</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="_op_.triangle.html" class="tsd-kind-icon">Triangle</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="../modules/_op_.html#_errorlength" class="tsd-kind-icon">_error<wbr>Length</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="../modules/_op_.html#_erroroutofbound" class="tsd-kind-icon">_error<wbr>Outof<wbr>Bound</a>
 					</li>
 				</ul>
 			</nav>

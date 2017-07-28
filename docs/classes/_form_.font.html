@@ -91,14 +91,16 @@
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_form_.font.html#face" class="tsd-kind-icon">face</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_form_.font.html#lineheight" class="tsd-kind-icon">line<wbr>Height</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_form_.font.html#size" class="tsd-kind-icon">size</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_form_.font.html#style" class="tsd-kind-icon">style</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_form_.font.html#weight" class="tsd-kind-icon">weight</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Accessors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="_form_.font.html#data" class="tsd-kind-icon">data</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="_form_.font.html#value" class="tsd-kind-icon">value</a></li>
 							</ul>
 						</section>
 					</div>
@@ -110,25 +112,31 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Font<span class="tsd-signature-symbol">(</span>size<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, face<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, style<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_form_.font.html" class="tsd-signature-type">Font</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Font<span class="tsd-signature-symbol">(</span>size<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, face<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, weight<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, style<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, lineHeight<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_form_.font.html" class="tsd-signature-type">Font</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Form.ts#L7">Form.ts:7</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Form.ts#L13">Form.ts:13</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> size: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;11</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> size: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;12</span></h5>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> face: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;sans-serif&quot;</span></h5>
 								</li>
 								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> weight: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;&quot;</span></h5>
+								</li>
+								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> style: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;&quot;</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> lineHeight: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;1.5</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_form_.font.html" class="tsd-signature-type">Font</a></h4>
@@ -144,7 +152,17 @@
 					<div class="tsd-signature tsd-kind-icon">face<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Form.ts#L6">Form.ts:6</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Form.ts#L11">Form.ts:11</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="lineheight" class="tsd-anchor"></a>
+					<h3>line<wbr>Height</h3>
+					<div class="tsd-signature tsd-kind-icon">line<wbr>Height<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Form.ts#L10">Form.ts:10</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -154,7 +172,7 @@
 					<div class="tsd-signature tsd-kind-icon">size<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Form.ts#L5">Form.ts:5</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Form.ts#L9">Form.ts:9</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -164,7 +182,17 @@
 					<div class="tsd-signature tsd-kind-icon">style<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Form.ts#L7">Form.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Form.ts#L12">Form.ts:12</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="weight" class="tsd-anchor"></a>
+					<h3>weight</h3>
+					<div class="tsd-signature tsd-kind-icon">weight<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Form.ts#L13">Form.ts:13</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -172,16 +200,16 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Accessors</h2>
 				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
-					<a name="data" class="tsd-anchor"></a>
-					<h3>data</h3>
+					<a name="value" class="tsd-anchor"></a>
+					<h3>value</h3>
 					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> data<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> value<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Form.ts#L15">Form.ts:15</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Form.ts#L25">Form.ts:25</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -200,10 +228,7 @@
 						<a href="../modules/_bound_.html">"<wbr>Bound"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_canvasform_.html">"<wbr>Canvas<wbr>Form"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_canvasspace_.html">"<wbr>Canvas<wbr>Space"</a>
+						<a href="../modules/_canvas_.html">"<wbr>Canvas"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_color_.html">"<wbr>Color"</a>
@@ -236,9 +261,6 @@
 						<a href="../modules/__app_.html">"_<wbr>app"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/__augment_.html">"_<wbr>augment"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
 						<a href="../modules/__lib_.html">"_<wbr>lib"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -269,13 +291,19 @@
 								<a href="_form_.font.html#face" class="tsd-kind-icon">face</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_form_.font.html#lineheight" class="tsd-kind-icon">line<wbr>Height</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_form_.font.html#size" class="tsd-kind-icon">size</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_form_.font.html#style" class="tsd-kind-icon">style</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_form_.font.html#weight" class="tsd-kind-icon">weight</a>
+							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
-								<a href="_form_.font.html#data" class="tsd-kind-icon">data</a>
+								<a href="_form_.font.html#value" class="tsd-kind-icon">value</a>
 							</li>
 						</ul>
 					</li>

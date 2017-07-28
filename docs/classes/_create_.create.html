@@ -85,6 +85,8 @@
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_create_.create.html#distributerandom" class="tsd-kind-icon">distribute<wbr>Random</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_create_.create.html#gridcells" class="tsd-kind-icon">grid<wbr>Cells</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_create_.create.html#gridpts" class="tsd-kind-icon">grid<wbr>Pts</a></li>
 							</ul>
 						</section>
 					</div>
@@ -96,13 +98,13 @@
 					<a name="distributerandom" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> distribute<wbr>Random</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">distribute<wbr>Random<span class="tsd-signature-symbol">(</span>bound<span class="tsd-signature-symbol">: </span><a href="_bound_.bound.html" class="tsd-signature-type">Bound</a>, count<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, dimensions<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a><span class="tsd-signature-symbol">[]</span></li>
+						<li class="tsd-signature tsd-kind-icon">distribute<wbr>Random<span class="tsd-signature-symbol">(</span>bound<span class="tsd-signature-symbol">: </span><a href="_bound_.bound.html" class="tsd-signature-type">Bound</a>, count<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, dimensions<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.group.html" class="tsd-signature-type">Group</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/e02c686/src/Create.ts#L6">Create.ts:6</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Create.ts#L10">Create.ts:10</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -117,7 +119,68 @@
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> dimensions: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;2</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a><span class="tsd-signature-symbol">[]</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="gridcells" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> grid<wbr>Cells</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">grid<wbr>Cells<span class="tsd-signature-symbol">(</span>bound<span class="tsd-signature-symbol">: </span><a href="_bound_.bound.html" class="tsd-signature-type">Bound</a>, columns<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, rows<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.group.html" class="tsd-signature-type">Group</a><span class="tsd-signature-symbol">[]</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Create.ts#L34">Create.ts:34</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>bound: <a href="_bound_.bound.html" class="tsd-signature-type">Bound</a></h5>
+								</li>
+								<li>
+									<h5>columns: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>rows: <span class="tsd-signature-type">number</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a><span class="tsd-signature-symbol">[]</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="gridpts" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> grid<wbr>Pts</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">grid<wbr>Pts<span class="tsd-signature-symbol">(</span>bound<span class="tsd-signature-symbol">: </span><a href="_bound_.bound.html" class="tsd-signature-type">Bound</a>, columns<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, rows<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, orientation<span class="tsd-signature-symbol">?: </span><a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.group.html" class="tsd-signature-type">Group</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Create.ts#L21">Create.ts:21</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>bound: <a href="_bound_.bound.html" class="tsd-signature-type">Bound</a></h5>
+								</li>
+								<li>
+									<h5>columns: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>rows: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> orientation: <a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a><span class="tsd-signature-symbol"> =&nbsp;[0.5, 0.5]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -133,10 +196,7 @@
 						<a href="../modules/_bound_.html">"<wbr>Bound"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_canvasform_.html">"<wbr>Canvas<wbr>Form"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_canvasspace_.html">"<wbr>Canvas<wbr>Space"</a>
+						<a href="../modules/_canvas_.html">"<wbr>Canvas"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_color_.html">"<wbr>Color"</a>
@@ -169,9 +229,6 @@
 						<a href="../modules/__app_.html">"_<wbr>app"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/__augment_.html">"_<wbr>augment"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
 						<a href="../modules/__lib_.html">"_<wbr>lib"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -197,6 +254,12 @@
 						<ul>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="_create_.create.html#distributerandom" class="tsd-kind-icon">distribute<wbr>Random</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="_create_.create.html#gridcells" class="tsd-kind-icon">grid<wbr>Cells</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="_create_.create.html#gridpts" class="tsd-kind-icon">grid<wbr>Pts</a>
 							</li>
 						</ul>
 					</li>
