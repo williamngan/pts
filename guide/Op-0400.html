@@ -38,12 +38,14 @@ form.fill(&quot;#f03&quot;).point( pts[0], 5, &quot;circle&quot; );
 form.strokeOnly(&quot;#f03&quot;, 2).line( [pts[0], space.pointer] );
 </code></pre>
 <p><img src="./assets/bg.png" alt="js:op_closest"></p>
+<h5>Demo: Finding the closest pt to pointer and paint it red</h5>
 <p>Notice we just used the javascript <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort"><code>sort</code></a> function to rearrange the <code>pts</code> group by comparing two points' distance to <code>space.pointer</code>. Then we draw the first point in the group (the closest) in red.</p>
 <p>The humbe <code>sort</code> function is essentially an &quot;Op&quot; by our definition. It transforms a group of points and makes it meaningful. From here on, it's easy to imagine what other structures we can derive from this simple sketch. For example, what if we visualize all points' distances to the pointer in different ways:</p>
 <pre><code>pts.forEach( (p, i) =&gt; 
     form.point( p, 20 - 20*i/pts.length, &quot;circle&quot; ) )
 </code></pre>
 <p><img src="./assets/bg.png" alt="js:op_closest_2"></p>
+<h5>Demo: Relate a circle's size to its proximity to pointer</h5>
 <p>The group of points becomes active. It's somewhat interesting and kind of a mess -- a starting point for further experimentation.</p>
 <p><strong><code>pts</code></strong> includes many different Ops to help you make the points meaningful. Next we will look at them in more details.</p>
 <h3>Static Op</h3>
@@ -53,6 +55,7 @@ form.strokeOnly(&quot;#f03&quot;, 2).line( [pts[0], space.pointer] );
 let perpends = pts.map( (p) =&gt; [p, Line.perpendicularFromPt(path, p)] );
 </code></pre>
 <p><img src="./assets/bg.png" alt="js:op_perpendicular"></p>
+<h5>Demo: Find a perpendicular line from a point onto an infinite path.</h5>
 <p>First we create a line by joining the pointer and the top-left corner at (0,0), and then we convert the set of random points on canvas to perpendicular lines. Also note that, since we don't need additional features from <a href="#pt-group"><code>Group</code></a>, we can just use Array to store the Pts for drawing. Pretty fun and simple, right?</p>
 <p>Ops can also construct shapes out of points. Creating a rectangle or a line from 2 points is obvious, so let's get a bit more elaborate.</p>
 <pre><code>// create a group of 4 Pts from rectangle
@@ -72,11 +75,13 @@ let curve = Curve.bspline( pts );
 form.fill(&quot;#f03&quot;).stroke(&quot;#fff&quot;, 3).polygon( curve );
 </code></pre>
 <p><img src="./assets/bg.png" alt="js:op_bspline"></p>
+<h5>Demo: Drawing a B-spline using 5 anchor points.</h5>
 <p>What's going on here? First, we use <a href="#op-rectangle"><code>Rectangle.fromCenter</code></a> to make a rectangle and then get its 4 corners as a group.</p>
 <p>Then, we define a function called <code>cycle</code> to get a value between 0 to 1 for interpolation. The function takes two parameters <code>t</code> (for time) and <code>i</code> (for index). And we map the 4 corners into 4 interpolated points, making use of <a href="#num-geom"><code>Geom.interpolate</code></a> op.</p>
 <p>Next, we add the first 3 points again to the end of the <code>pts</code> group, which is a quick way to close a b-spline curve. Finally, we get the curve from <a href="#op-curve"><code>Curve.bspline</code></a> and just draw it.</p>
 <p>Knowing how bspline works, we can easily apply it to our 100 random points. The following sketch also uses <a href="#op-polygon"><code>Polygon.convexHull</code></a>: think of it like a rubber band that wraps around a group of points.</p>
 <p><img src="./assets/bg.png" alt="js:op_bspline_2"></p>
+<h5>Demo: Find 10 points closest to pointer and use them as anchor points to draw a B-spline.</h5>
 <p>That was quick! By combining different ops together, you can quickly try out and compare different options in forms and interactions.</p>
 <h3>Pt to Op</h3>
 <p>If you think of code like a narrative, then the static ops are like monologues — telling the story in a dull way.</p>
@@ -101,6 +106,7 @@ let hit = new Group(space.center, space.pointer).op( Line.intersectLine2D );
 let hitPts = pairs.map( (pa) =&gt; hit( pa ) );
 </code></pre>
 <p><img src="./assets/bg.png" alt="js:op_intersect"></p>
+<h5>Demo: Creating line segments from a sorted array of points, and then check their intersections with another line drawn by pointer.</h5>
 <p>First, we take every 2 points in <code>pts</code> to make 50 lines. Next, we make a line from space's center to pointer, and immediately turn it into an op of <a href="#op-line"><code>Line.intersectLine2D</code></a>. Lastly we just apply the <code>hit</code> function to each pair and get its intersection point.</p>
 <p>This approach works best if the op will be re-used in different scenarios, or if it can make the code easier to read. Of course, you can always use the static intersectLine2D function inside the <code>map(...)</code>, or even create a custom function and call it <code>hit</code>. Just like there're many ways to tell a story, there're many ways to write code.</p>
 <h3>Cheat sheet</h3>
@@ -156,7 +162,7 @@ Curve.bspline( pts );
 <p>Check out the <a href="../docs/modules/_op_.html">full documentation</a> too.</p>
 </div>
 
-<ol id="menu"><a id="close" href="#">&times;</a><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li></ol>
+<ol id="menu"><a id="close" href="#">&times;</a><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Space-0500.html">Space</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li></ol>
 
 <script type="text/javascript" src="../dist/pts.js"></script>
 <script type="text/javascript" src="./js/guide.js"></script>

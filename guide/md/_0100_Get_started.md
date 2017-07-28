@@ -174,6 +174,8 @@ space.add( (time, ftime) => {
   form.fill("#123").point( space.pointer, 5 );
   
 });
+
+space.play().bindMouse();
 ```
 
 Hope this gives you a quick and enjoyable walkthrough. But wait, there's more: Take a look at the other guides which will explain **`pts`** features in details. 

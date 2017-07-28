@@ -2055,6 +2055,9 @@ class Triangle {
     static fromCircle(circle) {
         return Circle.toInnerTriangle(circle);
     }
+    static fromCenter(pt, radius) {
+        return Triangle.fromCircle(Circle.fromPt(pt, radius));
+    }
     /**
      * Get the medial, which is an inner triangle formed by connecting the midpoints of this triangle's sides
      * @param pts a Group of Pts
@@ -2709,10 +2712,13 @@ class Space {
         return this;
     }
     /**
-     * Add an item to this space. An item must define a callback function `animate( time, fps, context )` and will be assigned a property `animateID` automatically.
-     * An item should also define a callback function `resize:( bound, evt )`.
+     * Add an IPlayer to this space. An IPlayer can define the following callback functions:
+     * - `animate( time, ftime, space )`
+     * - `start(bound, spacE)`
+     * - `resize( size, event )`
+     * - `action( type, x, y, event )`
      * Subclasses of Space may define other callback functions.
-     * @param player an IPlayer object with animate function, or simply a function(time, fps, context){}
+     * @param player an IPlayer object with animate function, or simply a function(time, ftime){}
      */
     add(p) {
         let player = (typeof p == "function") ? { animate: p } : p;

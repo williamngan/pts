@@ -3,7 +3,7 @@ A new experiment
 
 ## Generate docs
 ```
-typedoc --out docs src
+typedoc --readme none --out docs src 
 ```
 
 ## License

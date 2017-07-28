@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Space</title>
+	<link href="./assets/style.css" rel="stylesheet" type="text/css" />
+<meta charset="UTF-8">
+</head>
+
+<body>
+<div id="header">
+  <div id="pts"><a href="../">pts<span>.</span></a>guides</div>
+  <div id="topmenu">
+    <a href="../demo"/>demos</a>
+    <a href="../study"/>studies</a>
+    <a href="../docs"/>docs</a>
+    <a href="https://github.com/williamngan/pts"/>github</a>
+  </div>
+</div>
+<a href="#menu" id="toc">&#x2261;</a>
+<div id="post"><h1>Space</h1>
+<p><a href="#space-space"><code>Space</code></a> provides a general context for its points to be expressed. Each subclass of <code>Space</code> represents a specific context. Currently <strong><code>pts</code></strong> includes <a href="#canvas-canvasspace"><code>CanvasSpace</code></a> which corresponds to html's <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API"><code>canvas</code></a> element. Soon we will also have Space for SVG, DOM, and other contexts.</p>
+<p><a href="#canvas-canvasspace"><code>CanvasSpace</code></a> can be created like this:</p>
+<pre><code>let space = new CanvasSpace( &quot;#hello&quot; );
+space.setup({ bgcolor: &quot;#123&quot;, retina: true });
+</code></pre>
+<p>The &quot;#hello&quot; is a <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector"><code>selector string</code></a> that selects an element in the html page. If the element is a <code>&lt;canvas&gt;</code>, it will be used by CanvasSpace. If the element is a <code>&lt;div&gt;</code> or other block element, a new <code>&lt;canvas&gt;</code> will be appended into it.</p>
+<p>Once the space is created, you can optionally call the <a href="#canvas-canvasspace"><code>setup</code></a> function to specify its background color (<code>bgcolor</code>) and other properties. Take a look at the <a href="#canvas-canvasspace"><code>setup</code></a> documentation for more.</p>
+<p>Now the space is set up, let's look at what it can do.</p>
+<h3>Players</h3>
+<p>A space by itself is void of form. Let's add a &quot;player&quot; to it. A player can be either a function or an object with specific properties.</p>
+<pre><code>space.add( (time, ftime) =&gt; {
+  // do things
+});
+</code></pre>
+<p>In the above, we use <a href="#canvas-canvasspace"><code>add</code></a> to add a simple callback function. It has 2 parameters: <code>time</code> which gives the current running time, and <code>ftime</code> which gives the time taken to draw the previous frame. This callback is like an animation loop, which will be called continuously when the player plays.</p>
+<p>Let's look at a more elaborate player:</p>
+<pre><code>space.add( {
+  start: (bound, space) =&gt; { 
+    // code for init 
+  },
+  animate: (time, ftime, space) =&gt; { 
+    // code for animation 
+  },
+  action: (type, x, y, event) =&gt; { 
+    // code for interaction 
+  }
+  reeize( size, event) =&gt; { 
+    // code for resize 
+  }
+} );
+</code></pre>
+<p>Here we add an object that conforms to the <a href="../docs/interfaces/_space_.iplayer.html">IPlayer</a> interface, which defines 4 optional callback functions:</p>
+<ul>
+<li><code>start</code> function is called when the space is ready. It includes 2 parameters: <code>bound</code> which returns the bounding box, and <code>space</code> which returns its space.</li>
+</ul>
+<ul>
+<li><p><code>animate</code> function is called continuously when the space plays. It includes 2 parameters: <code>time</code> which gives the current running time, and <code>ftime</code> which gives the time taken to draw the previous frame.</p></li>
+<li><p><code>action</code> function is called when an user event is detected. It includes 4 parameters: <code>type</code> is a string that returns the action's name. (&quot;up&quot;, &quot;down&quot;, &quot;move&quot;, &quot;drag&quot;, &quot;drop&quot;, &quot;over&quot;, and &quot;out&quot;). <code>x</code> and <code>y</code> returns the position at which the action happened, and <code>event</code> returns the actual event object. See also: <a href="#canvas-canvasspace"><code>bindMouse</code></a></p></li>
+<li><p><code>resize</code> function is called when the space is resized. It includes 2 parameter: <code>size</code> which returns the new size, and event which returns the event object</p></li>
+</ul>
+<p>You may add multiple players into a space, each taking care of specific parts of a scene. Use <a href="#canvas-canvasspace"><code>add</code></a> and <a href="#canvas-canvasspace"><code>remove</code></a> to manage a space's players.</p>
+<h3>Animation and interaction</h3>
+<p>You can tell a space to play or stop its players using <a href="#canvas-canvasspace"><code>play</code></a>, <a href="#canvas-canvasspace"><code>stop</code></a> and other functions:</p>
+<pre><code>space.play();
+space.playOnce( 1000 ); // play 1 sec then stop
+space.pause();
+space.resume();
+space.stop();
+</code></pre>
+<p>Using <a href="#canvas-canvasspace"><code>bindMouse</code></a>  and <a href="#canvas-canvasspace"><code>bindTouch</code></a>, you can easily make the space respond to user interactions. Once the space can receive mouse or touch events, you can track the events using a player's <code>action</code> callback function, as described above.</p>
+<pre><code>// You can chain multiple functions together
+space.bindMouse().bindTouch().play();
+</code></pre>
+<p>CanvasSpace also provides a couple convenient properties which you may access once the space is initiated. [<code>pointer</code>] gives you the current pointer position. <a href="#canvas-canvasspace"><code>size</code></a>, <a href="#canvas-canvasspace"><code>center</code></a>, <a href="#canvas-canvasspace"><code>width</code></a> and <a href="#canvas-canvasspace"><code>height</code></a> are handy to get a space's size and center point. <a href="#canvas-canvasspace"><code>element</code></a> and <a href="#canvas-canvasspace"><code>parent</code></a> returns the html elements of this space.</p>
+<p>CanvasSpace also supports offscreen rendering which may help with rendering complex scene. Take a look at the source code of <a href="../study/index.html?name=CanvasSpace.offscreen">this study</a> for more.</p>
+<h3>Form</h3>
+<p>In the <a href="./Get-started-0100.html">Get Started</a> guide, we made an analogy of paper and pencil when introducing Space and Form. So <a href="#canvas-canvasform"><code>CanvasForm</code></a> represents a pencil to draw on CanvasSpace. You can get the form with a single function call.</p>
+<pre><code>let space = new CanvasSpace(&quot;#paper&quot;);
+let form = space.getForm(); // get default CanvasForm
+</code></pre>
+<p><a href="#canvas-canvasform"><code>CanvasForm</code></a> includes many convenient functions to draw shapes on `&lt;canvas&gt;'. It's easier to use than the API provided by html canvas. Usually, you'll use form to draw a scene in a player's callback function as discussed above.</p>
+<pre><code>// Draw points inside the animate callback function
+space.add({
+  animate: (time, ftime) =&gt; {
+    form.stroke(&quot;#fff&quot;).fill(&quot;#f03&quot;).circle( c );
+    form.point( p, 10 );    
+  }
+});
+</code></pre>
+<p><img src="./assets/bg.png" alt="js:space_form"></p>
+<h5>A demo of drawing different shapes</h5>
+<p>And since both Space and Form are javascript classes, you can extend them to override its functions and add new ones. Draw something more!</p>
+<h3>Cheat sheet</h3>
+<p>The following snippet is a typical template for making a quick <strong><code>pts</code></strong> sketch. Pretty easy.</p>
+<pre><code>Pts.namespace( this );
+
+var space = new CanvasSpace(&quot;#hello&quot;).setup({ retina: true });
+var form = space.getForm();
+
+space.add( (time, ftime) =&gt; {
+  form.fill(&quot;#f03&quot;).point( space.pointer, 10, &quot;circle&quot; ); 
+} );
+
+space.bindMouse().bindTouch().play();
+</code></pre>
+<p>And if you need additional tracking in a player, you can add it as an object with these callback functions:</p>
+<pre><code>space.add( {
+
+  start: (bound, space) =&gt; {},
+
+  animate: (time, ftime) =&gt; {
+    form.fill(&quot;#f03&quot;).point( space.pointer, 10, &quot;circle&quot; );
+  },
+
+  action: (type, x, y, evt) =&gt; {},
+
+  resize: (size, evt) =&gt; {}
+  
+} );
+</code></pre>
+</div>
+
+<ol id="menu"><a id="close" href="#">&times;</a><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Space-0500.html">Space</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li></ol>
+
+<script type="text/javascript" src="../dist/pts.js"></script>
+<script type="text/javascript" src="./js/guide.js"></script>
+<script src="./js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+</body>
+</html>

@@ -421,6 +421,10 @@ export class Triangle {
     return Circle.toInnerTriangle( circle );
   }
 
+  static fromCenter( pt:PtLike, radius:number ) {
+    return Triangle.fromCircle( Circle.fromPt( pt, radius ) );
+  }
+
   /**
    * Get the medial, which is an inner triangle formed by connecting the midpoints of this triangle's sides
    * @param pts a Group of Pts

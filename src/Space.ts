@@ -11,7 +11,7 @@ type AnimateFunction = ( time?:number, frameTime?:number, currentSpace?:any ) =>
 export interface IPlayer {
   animateID?: string;
   animate?:AnimateFunction;
-  resize?( p:IPt, evt?:Event ): undefined;
+  resize?( size:IPt, evt?:Event ): undefined;
   action?( type:string, px:number, py:number, evt:Event );
   start?( bound:Bound, space:Space );
 }
@@ -53,10 +53,13 @@ export abstract class Space {
   }
 
   /**
-   * Add an item to this space. An item must define a callback function `animate( time, fps, context )` and will be assigned a property `animateID` automatically. 
-   * An item should also define a callback function `resize:( bound, evt )`. 
+   * Add an IPlayer to this space. An IPlayer can define the following callback functions:    
+   * - `animate( time, ftime, space )`
+   * - `start(bound, spacE)`   
+   * - `resize( size, event )`
+   * - `action( type, x, y, event )`  
    * Subclasses of Space may define other callback functions.
-   * @param player an IPlayer object with animate function, or simply a function(time, fps, context){}
+   * @param player an IPlayer object with animate function, or simply a function(time, ftime){}
    */
   add( p:IPlayer|AnimateFunction ):this {
     let player:IPlayer = (typeof p == "function") ? { animate: p } : p;
