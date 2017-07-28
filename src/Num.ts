@@ -62,9 +62,9 @@ export class Num {
   }
 
   static sum(pts: GroupLike|number[][]): Pt {
-    let c = Pt.make(pts[0].length, 0);
-    for (let i = 0, len = pts.length; i < len; i++) {
-      c.add(pts[i]);
+    let c = new Pt( pts[0] );
+    for (let i = 1, len = pts.length; i < len; i++) {
+      Vec.add(c, pts[i]);
     }
     return c;
   }

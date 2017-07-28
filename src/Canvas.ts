@@ -690,6 +690,7 @@ export class CanvasForm extends Form {
 
   
   point( p:PtLike, radius:number=5, shape:string="square" ):this {
+    if (!p) return;
     if (!CanvasForm[shape]) throw new Error(`${shape} is not a static function of CanvasForm`);
 
     CanvasForm[shape]( this._ctx, p, radius );

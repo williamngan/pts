@@ -83,13 +83,23 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
   }
 
   /**
+   * Like `to()` but returns a new Pt
+   * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
+   */
+  $to( ...args ):Pt {
+    return this.clone().to( ...args );
+  }
+
+  /**
    * Update the values of this Pt to point at a specific angle
    * @param radian target angle in radian
    * @param magnitude Optional magnitude if known. If not provided, it'll calculate and use this Pt's magnitude.
+   * @param anchorFromPt If `true`, translate to new position from current position. Default is `false` which update the position from origin (0,0);
    */
-  toAngle( radian:number, magnitude?:number ):this {
+  toAngle( radian:number, magnitude?:number, anchorFromPt:boolean=false ):this {
     let m = (magnitude!=undefined) ? magnitude : this.magnitude();
-    return this.to( Math.cos(radian)*m, Math.sin(radian)*m );
+    let change = [Math.cos(radian)*m, Math.sin(radian)*m];
+    return (anchorFromPt) ? this.add( change ) : this.to( change );
   }
 
   /**
@@ -582,7 +592,7 @@ export class Group extends Array<Pt> {
    * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
    * @param useLongest If true, find the longest list of values in a Pt and use its length for zipping. Default is false, which uses the first item's length for zipping.
    */
-  $zip( defaultValue:number|boolean = false, useLongest=false ):Group {
+  $zip( defaultValue:number|boolean = undefined, useLongest=false ):Group {
     return Mat.zip( this, defaultValue, useLongest );
   }
 

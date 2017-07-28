@@ -16,6 +16,12 @@ let _errorOutofBound = (obj, param:number|string="") => Util.warn( `Index ${para
 
 export class Line {
 
+  static fromAngle( anchor:PtLike, angle:number, magnitude:number ):Group {
+    let g = new Group( new Pt(anchor), new Pt(anchor) );
+    g[1].toAngle( angle, magnitude, true );
+    return g;
+  }
+
   static slope( p1:PtLike|number[], p2:PtLike|number[] ):number {
     return (p2[0] - p1[0] === 0) ? undefined : (p2[1] - p1[1]) / (p2[0] - p1[0]);
   }
@@ -30,7 +36,7 @@ export class Line {
     }
   }
 
-  static collinear( p1:PtLike|number[], p2:PtLike|number[], p3:PtLike|number[], threshold:number=0.07 ) {
+  static collinear( p1:PtLike|number[], p2:PtLike|number[], p3:PtLike|number[], threshold:number=0.01 ) {
     // Use cross product method
     let a = new Pt(0,0,0).to(p1).$subtract( p2 );
     let b = new Pt(0,0,0).to(p1).$subtract( p3 );    
@@ -381,11 +387,39 @@ export class Circle {
     return new Group( pts[0].$subtract( r ), pts[0].$add( r ) );
   }
 
+  static toInnerRect( pts:GroupLike ):Group {
+    let r = pts[1][0];
+    let half = Math.sqrt(r*r)/2
+    return new Group( pts[0].$subtract(half), pts[0].$add( half ) );
+  }
+
+  static toInnerTriangle( pts:GroupLike ):Group {
+    let ang = -Math.PI/2;
+    let inc = Math.PI * 2/3;
+    let g = new Group();
+    for (let i=0; i<3; i++) {
+      g.push( pts[0].clone().toAngle( ang, pts[1][0], true ) );
+      ang += inc;
+    }
+    return g;
+  }
+
 }
 
 
 export class Triangle {
   
+  static fromRect( rect:GroupLike ) {
+    let top = rect[0].$add( rect[1] ).divide(2);
+    top.y = rect[0][1];
+    let left = rect[1].clone();
+    left.x = rect[0][0];
+    return new Group( top, rect[1].clone(), left );
+  }
+
+  static fromCircle( circle:GroupLike ) {
+    return Circle.toInnerTriangle( circle );
+  }
 
   /**
    * Get the medial, which is an inner triangle formed by connecting the midpoints of this triangle's sides

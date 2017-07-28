@@ -18,7 +18,7 @@
 </div>
 <a href="#menu" id="toc">&#x2261;</a>
 <div id="post"><h1>Op</h1>
-<p>We are all in the gutter, but some of us are looking at the stars, said Oscar Wilde. To him, and to many of us, a sky full of stars moves us to observe and imagine within that vast darkness. What would a sky be without stars, and what would a starry night be without us looking and imagining?</p>
+<p>We are all in the gutter, but some of us are looking at the stars, said Oscar Wilde. To him, and to many of us, a sky full of stars moves us to look into that vast darkness and, with imagination, connect those scattered and flickering dots. What would a sky be without stars, and what would a starry night be without us looking and imagining?</p>
 <p>A group of points is never just a mathematical concept. We actively connect the dots and find strange forms and humanistic meanings in them.</p>
 <p>In <strong><code>pts</code></strong>, these acts of imagination are known as &quot;Op&quot;. They transform a static point into an active one, a noun into a verb, a vector space into an expressive canvas.</p>
 <p>Let's begin with an example. Suppose there are 100 points randomly placed on a canvas, and a pointer moves randomly about. A simple (indeed boring) act of imagination might be to ask: which point is closest to the pointer?</p>
@@ -40,7 +40,8 @@ form.strokeOnly(&quot;#f03&quot;, 2).line( [pts[0], space.pointer] );
 <p><img src="./assets/bg.png" alt="js:op_closest"></p>
 <p>Notice we just used the javascript <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort"><code>sort</code></a> function to rearrange the <code>pts</code> group by comparing two points' distance to <code>space.pointer</code>. Then we draw the first point in the group (the closest) in red.</p>
 <p>The humbe <code>sort</code> function is essentially an &quot;Op&quot; by our definition. It transforms a group of points and makes it meaningful. From here on, it's easy to imagine what other structures we can derive from this simple sketch. For example, what if we visualize all points' distances to the pointer in different ways:</p>
-<pre><code>pts.forEach( (p, i) =&gt; form.point( p, 1+i/pts.length * 10) )
+<pre><code>pts.forEach( (p, i) =&gt; 
+    form.point( p, 20 - 20*i/pts.length, &quot;circle&quot; ) )
 </code></pre>
 <p><img src="./assets/bg.png" alt="js:op_closest_2"></p>
 <p>The group of points becomes active. It's somewhat interesting and kind of a mess -- a starting point for further experimentation.</p>
@@ -55,16 +56,16 @@ let perpends = pts.map( (p) =&gt; [p, Line.perpendicularFromPt(path, p)] );
 <p>First we create a line by joining the pointer and the top-left corner at (0,0), and then we convert the set of random points on canvas to perpendicular lines. Also note that, since we don't need additional features from <a href="#pt-group"><code>Group</code></a>, we can just use Array to store the Pts for drawing. Pretty fun and simple, right?</p>
 <p>Ops can also construct shapes out of points. Creating a rectangle or a line from 2 points is obvious, so let's get a bit more elaborate.</p>
 <pre><code>// create a group of 4 Pts from rectangle
-let c = space.center.clone()
+let c = space.center.clone();
 let corners = Rectangle.corners( Rectangle.fromCenter( c, space.height ) );
 
 // interpolate with time to make them move
 let cycle = (t, i) =&gt; Num.cycle( (t+i*500)%3000/3000 );
 let pts = corners.map( (p, i) =&gt; Geom.interpolate( p, c, cycle(time, i)) );
 
-// close the B-spline path
+// close the B-spline by adding first 3 anchors at the end
 pts.push( space.pointer );
-pts.insert( pts.slice(0, 3), pts.length );
+pts = pts.concat( pts.slice(0, 3) );
 
 // draw the B-spline curve
 let curve = Curve.bspline( pts );
@@ -73,9 +74,85 @@ form.fill(&quot;#f03&quot;).stroke(&quot;#fff&quot;, 3).polygon( curve );
 <p><img src="./assets/bg.png" alt="js:op_bspline"></p>
 <p>What's going on here? First, we use <a href="#op-rectangle"><code>Rectangle.fromCenter</code></a> to make a rectangle and then get its 4 corners as a group.</p>
 <p>Then, we define a function called <code>cycle</code> to get a value between 0 to 1 for interpolation. The function takes two parameters <code>t</code> (for time) and <code>i</code> (for index). And we map the 4 corners into 4 interpolated points, making use of <a href="#num-geom"><code>Geom.interpolate</code></a> op.</p>
-<p>Next, we add the first 3 points again to the end of the <code>pts</code> group, which is a quick way to close a b-spline curve. Finally, we get the curve from <a href="#op-curve"><code>Curve.bspline</code></a> and just draw it. Done!</p>
-<h3>Pt to Op</h3>
+<p>Next, we add the first 3 points again to the end of the <code>pts</code> group, which is a quick way to close a b-spline curve. Finally, we get the curve from <a href="#op-curve"><code>Curve.bspline</code></a> and just draw it.</p>
+<p>Knowing how bspline works, we can easily apply it to our 100 random points. The following sketch also uses <a href="#op-polygon"><code>Polygon.convexHull</code></a>: think of it like a rubber band that wraps around a group of points.</p>
 <p><img src="./assets/bg.png" alt="js:op_bspline_2"></p>
+<p>That was quick! By combining different ops together, you can quickly try out and compare different options in forms and interactions.</p>
+<h3>Pt to Op</h3>
+<p>If you think of code like a narrative, then the static ops are like monologues — telling the story in a dull way.</p>
+<pre><code>// dull
+Polygon.convexHull( pts )
+
+// meh
+pts.convexHull()
+
+// fun
+makeRubberBand()
+</code></pre>
+<p>The <a href="#pt-pt"><code>op</code></a> function in both Pt and Group enables you to turn your dull code into an expressive one. Let's see how it works:</p>
+<pre><code>let makeRubberBand = pts.op( Polygon.convexHull );
+makeRubberBand();
+</code></pre>
+<p>When you supply <code>op</code> with a function, it applies the Pt or Group as a parameter to that function, and returns a new function with one less parameter. That's all. So here <code>Polygon.convexHull(group)</code> becomes <code>makeRubberBand()</code> since <code>pts</code> is applied as the first parameter <code>group</code>. If it's still confusing, think of it as a noun (&quot;the <code>pts</code>&quot;) turning into a verb (&quot;make rubber band using the <code>pts</code>&quot;).</p>
+<p>Let's illustrate this with a concrete example. Suppose we want to make 50 lines by pairing the 100 random points, and then find out which lines intersect with another line drawn by the pointer. What's the code?</p>
+<p>It only takes 3 lines:</p>
+<pre><code>let pairs = pts.segments(2, 2);
+let hit = new Group(space.center, space.pointer).op( Line.intersectLine2D );
+let hitPts = pairs.map( (pa) =&gt; hit( pa ) );
+</code></pre>
+<p><img src="./assets/bg.png" alt="js:op_intersect"></p>
+<p>First, we take every 2 points in <code>pts</code> to make 50 lines. Next, we make a line from space's center to pointer, and immediately turn it into an op of <a href="#op-line"><code>Line.intersectLine2D</code></a>. Lastly we just apply the <code>hit</code> function to each pair and get its intersection point.</p>
+<p>This approach works best if the op will be re-used in different scenarios, or if it can make the code easier to read. Of course, you can always use the static intersectLine2D function inside the <code>map(...)</code>, or even create a custom function and call it <code>hit</code>. Just like there're many ways to tell a story, there're many ways to write code.</p>
+<h3>Cheat sheet</h3>
+<p><a href="#num-num"><code>Num</code></a> from &quot;Num&quot; module includes  helper  functions to simplify numeric calculations.</p>
+<pre><code>Num.cycle( 0.3 ); // cycle between 0...1...0
+Num.mapToRange( 5, 1,100, 0, 2 ); // map a value to new range
+Num.lerp( 1, 100, 0.2 ); // linear interpolation
+</code></pre>
+<p><a href="#num-geom"><code>Geom</code></a> from &quot;Num&quot; module includes helper  functions to simplify geometric calculations.</p>
+<pre><code>Geom.boundAngle( 361 ); // bound between 0 to 360
+Geom.withinBound( p1, top_left, bottom_right ); 
+Geom.interpolate( p1, p2, 0.3 ); 
+</code></pre>
+<p><a href="#op-line"><code>Line</code></a> from &quot;Op&quot; module helps you create and work with lines.</p>
+<pre><code>Line.fromAngle( p1, Math.PI/3, 10 ); // create with angle and distance
+Line.collinear( p1, p2, p3 ); 
+Line.intersectRay2D( ln1, ln2 ); 
+Line.subpoints( 5 ); // get 5 evenly distributed pts on the line
+</code></pre>
+<p><a href="#op-rectangle"><code>Rectangle</code></a> from &quot;Op&quot; module helps you create and work with rectangles.</p>
+<pre><code>Rectangle.fromCenter( center, 100, 50 );
+Rectangle.corners();
+Rectangle.sides();
+Rectangle.quadrants(); // get 4 inner rectangles
+Rectangle.intersectRect2D( rect1, rect2 );
+</code></pre>
+<p><a href="#op-cirlce"><code>Circle</code></a> from &quot;Op&quot; module helps you create and work with circles.</p>
+<pre><code>Circle.fromPt( center, 10 );
+Circle.fromRect( rect );
+Circle.toRect();
+Circle.intersectCircle2D( c1, c2 );
+</code></pre>
+<p><a href="#op-triangle"><code>Triangle</code></a> from &quot;Op&quot; module helps you create and work with triangles.</p>
+<pre><code>Triangle.fromCircle( c ); // equilateral triangle
+Triangle.fromRect( rect );
+Triangle.incircle( tri );
+Triangle.orthocenter( tri );
+Triangle.medial( tri );
+</code></pre>
+<p><a href="#op-polygon"><code>Polygon</code></a> from &quot;Op&quot; module helps you create and work with polygons.</p>
+<pre><code>Polygon.centroid( poly );
+Polygon.convexHull( poly );
+Polygon.lines( poly ); // get line segments
+Polygon.intersect2D( poly, lines );
+</code></pre>
+<p><a href="#op-curve"><code>Curve</code></a> from &quot;Op&quot; module helps you create and work with curves.</p>
+<pre><code>Curve.catmullRom( pts );
+Curve.cardinal( pts );
+Curve.cardinal( pts, 20, 0.3 ); // step and tension parameters
+Curve.bezier( pts );
+Curve.bspline( pts );
+</code></pre>
 </div>
 
 <ol id="menu"><a id="close" href="#">&times;</a><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li></ol>

@@ -21,7 +21,7 @@
 
     // close the B-spline path
     pts.push( space.pointer );
-    pts.insert( pts.slice(0, 3), pts.length );
+    pts = pts.concat( pts.slice(0, 3) );
 
     // draw the B-spline curve
     let curve = Curve.bspline( pts );

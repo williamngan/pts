@@ -17,15 +17,15 @@
     let t = space.pointer;
     pts.sort( (a,b) => a.$subtract(t).magnitudeSq() - b.$subtract(t).magnitudeSq() );
     
-    form.fillOnly("#123").points( pts, 2, "circle" );
-    form.fill("#f03").point( pts[0], 10, "circle" );
-    form.strokeOnly("#f03", 2).line( [pts[0], space.pointer] );
-    form.strokeOnly("#f03", 2).line( [pts[1], space.pointer] );
-    form.strokeOnly("#f03", 2).line( [pts[2], space.pointer] );
+    form.fillOnly("#123", 1);
+    pts.forEach( (p, i) => form.point( p, 20 - 20*i/pts.length, "circle" ) )
 
-    form.strokeOnly("#123", 1);
-    pts.forEach( (p, i) => form.point( p, 1+i/pts.length * 10 ) )
+    form.fillOnly("#fff").points( pts, 2, "circle" );
 
+    let three = pts.slice(0, 3);
+    let threeLines = three.map( (p) => [p, space.pointer] );
+    form.strokeOnly("#f03", 2).lines( threeLines );
+    form.fillOnly("#f03").points( three, 3, "circle" );
   });
   
   // start

@@ -17,10 +17,14 @@ space.add( {
 
     // Begin Test Code --
 
-    let tri = new Group( line3.p1, line3.p2, space.pointer );
+    let tri = new Group( line3.p1, line1.p2, space.pointer );
+    let tri2 = Triangle.fromRect( rect1 );
+    
 
     form.stroke("#000", 2);
     form.polygon( tri );
+    form.polygon( tri2 );
+    
     
     form.stroke("#f03", 2);
     let alt = Triangle.altitude( tri, 2 );
@@ -53,6 +57,9 @@ space.add( {
     
     let circumcircle = Triangle.circumcircle( tri, circumcenter );
     form.circle( circumcircle );
+
+    let tri3 = Triangle.fromCircle( incircle );
+    form.polygon( tri3 );
 
     form.stroke("#f90");
     form.point( Polygon.centroid( tri ), 5 );
@@ -120,4 +127,4 @@ function guidelines() {
 
 space.bindMouse();
 space.play();
-// space.playOnce(5000);
+// space.playOnce(500);

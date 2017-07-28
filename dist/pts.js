@@ -133,13 +133,22 @@ class Pt extends exports.PtBaseArray {
         return this;
     }
     /**
+     * Like `to()` but returns a new Pt
+     * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
+     */
+    $to(...args) {
+        return this.clone().to(...args);
+    }
+    /**
      * Update the values of this Pt to point at a specific angle
      * @param radian target angle in radian
      * @param magnitude Optional magnitude if known. If not provided, it'll calculate and use this Pt's magnitude.
+     * @param anchorFromPt If `true`, translate to new position from current position. Default is `false` which update the position from origin (0,0);
      */
-    toAngle(radian, magnitude) {
+    toAngle(radian, magnitude, anchorFromPt = false) {
         let m = (magnitude != undefined) ? magnitude : this.magnitude();
-        return this.to(Math.cos(radian) * m, Math.sin(radian) * m);
+        let change = [Math.cos(radian) * m, Math.sin(radian) * m];
+        return (anchorFromPt) ? this.add(change) : this.to(change);
     }
     /**
      * Create an operation using this Pt, passing this Pt into a custom function's first parameter
@@ -547,7 +556,7 @@ class Group extends Array {
      * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
      * @param useLongest If true, find the longest list of values in a Pt and use its length for zipping. Default is false, which uses the first item's length for zipping.
      */
-    $zip(defaultValue = false, useLongest = false) {
+    $zip(defaultValue = undefined, useLongest = false) {
         return LinearAlgebra_1.Mat.zip(this, defaultValue, useLongest);
     }
     toString() {
@@ -704,6 +713,17 @@ class Util {
             }
         }
         return result;
+    }
+    static zip(...arrays) {
+        let z = [];
+        for (let i = 0, len = arrays[0].length; i < len; i++) {
+            let p = [];
+            for (let k = 0; k < arrays.length; k++) {
+                p.push(arrays[k][i]);
+            }
+            z.push(p);
+        }
+        return z;
     }
 }
 Util.warnLevel = "default";
@@ -1160,9 +1180,9 @@ class Num {
         return (n - min) / (max - min);
     }
     static sum(pts) {
-        let c = Pt_1.Pt.make(pts[0].length, 0);
-        for (let i = 0, len = pts.length; i < len; i++) {
-            c.add(pts[i]);
+        let c = new Pt_1.Pt(pts[0]);
+        for (let i = 1, len = pts.length; i < len; i++) {
+            LinearAlgebra_1.Vec.add(c, pts[i]);
         }
         return c;
     }
@@ -1685,6 +1705,11 @@ const LinearAlgebra_1 = __webpack_require__(2);
 let _errorLength = (obj, param = "expected") => Util_1.Util.warn("Group's length is less than " + param, obj);
 let _errorOutofBound = (obj, param = "") => Util_1.Util.warn(`Index ${param} is out of bound in Group`, obj);
 class Line {
+    static fromAngle(anchor, angle, magnitude) {
+        let g = new Pt_1.Group(new Pt_1.Pt(anchor), new Pt_1.Pt(anchor));
+        g[1].toAngle(angle, magnitude, true);
+        return g;
+    }
     static slope(p1, p2) {
         return (p2[0] - p1[0] === 0) ? undefined : (p2[1] - p1[1]) / (p2[0] - p1[0]);
     }
@@ -1698,7 +1723,7 @@ class Line {
             return { slope: m, yi: c, xi: (m === 0) ? undefined : -c / m };
         }
     }
-    static collinear(p1, p2, p3, threshold = 0.07) {
+    static collinear(p1, p2, p3, threshold = 0.01) {
         // Use cross product method
         let a = new Pt_1.Pt(0, 0, 0).to(p1).$subtract(p2);
         let b = new Pt_1.Pt(0, 0, 0).to(p1).$subtract(p3);
@@ -2002,9 +2027,34 @@ class Circle {
         let r = pts[1][0];
         return new Pt_1.Group(pts[0].$subtract(r), pts[0].$add(r));
     }
+    static toInnerRect(pts) {
+        let r = pts[1][0];
+        let half = Math.sqrt(r * r) / 2;
+        return new Pt_1.Group(pts[0].$subtract(half), pts[0].$add(half));
+    }
+    static toInnerTriangle(pts) {
+        let ang = -Math.PI / 2;
+        let inc = Math.PI * 2 / 3;
+        let g = new Pt_1.Group();
+        for (let i = 0; i < 3; i++) {
+            g.push(pts[0].clone().toAngle(ang, pts[1][0], true));
+            ang += inc;
+        }
+        return g;
+    }
 }
 exports.Circle = Circle;
 class Triangle {
+    static fromRect(rect) {
+        let top = rect[0].$add(rect[1]).divide(2);
+        top.y = rect[0][1];
+        let left = rect[1].clone();
+        left.x = rect[0][0];
+        return new Pt_1.Group(top, rect[1].clone(), left);
+    }
+    static fromCircle(circle) {
+        return Circle.toInnerTriangle(circle);
+    }
     /**
      * Get the medial, which is an inner triangle formed by connecting the midpoints of this triangle's sides
      * @param pts a Group of Pts
@@ -3386,6 +3436,8 @@ class CanvasForm extends Form_1.Form {
             this._ctx.stroke();
     }
     point(p, radius = 5, shape = "square") {
+        if (!p)
+            return;
         if (!CanvasForm[shape])
             throw new Error(`${shape} is not a static function of CanvasForm`);
         CanvasForm[shape](this._ctx, p, radius);
