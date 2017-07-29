@@ -10,6 +10,56 @@ a { color: #123; text-decoration: underline; }
 a:visited { color: #123; }
 a:hover { color: #F03; }
 
+/* Header & footer */
+
+#header {
+  font-size: 1.5em;
+  position: relative;
+  margin-bottom: 30px;
+  border-bottom: 3px solid #f03;
+  line-height: 70px;
+}
+
+#footer {
+  font-size: 1.1em;
+  color: #aeb7c1;
+  width: 50%;
+  margin-left: 40%;
+  padding: 30px 0;
+}
+
+#header a {
+  color: #123;
+  text-decoration: none;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+#header a:hover {
+  color: #f03;
+  text-decoration: underline;
+}
+
+#footer a:link, #footer a:visited { color: #aeb7c1; }
+
+
+#pts {
+  display: inline-block;
+  padding-left: 30px;
+  padding-right: 0;
+  font-weight: normal;
+}
+#pts a {
+  display: inline-block;
+  font-weight: bold;
+  padding-right: 0px;
+}
+#pts a > span {
+  color: #f03;
+  display: inline-block;
+   padding: 0 2px; 
+}
+
+/* ---------- */
 
 #menu {
   position: absolute;
@@ -77,34 +127,8 @@ a:hover { color: #F03; }
 
 #post img { max-width: 100%; }
 
-#header, #footer {
-  font-size: 1.5em;
-  position: relative;
-}
 
-#pts a {
-  padding: 20px 0;
-  display: inline-block;
-}
 
-#header a {
-  color: #123;
-  text-decoration: none;
-  padding-left: 10px;
-  padding-right: 10px;
-}
-#header a:hover {
-  color: #f03;
-  text-decoration: underline;
-}
-
-#footer a:link, #footer a:visited { color: #aeb7c1; }
-
-#header { 
-  margin-bottom: 30px;
-  border-bottom: 3px solid #f03;
-}
-#footer { padding: 100px 0 30px; }
 
 #topmenu {
   position: absolute;
@@ -115,26 +139,11 @@ a:hover { color: #F03; }
 
 #topmenu > a {
   display: inline-block;
-  line-height: 70px;
   vertical-align: middle;
   height: 100%;
 }
 
-#pts {
-  display: inline-block;
-  padding-left: 30px;
-  padding-right: 0;
-  font-weight: normal;
-}
-#pts a {
-  font-weight: bold;
-  padding-right: 0px;
-}
-#pts a > span {
-  color: #f03;
-  display: inline-block;
-   padding: 0 2px; 
-}
+
 
 
 h1 { font-size: 3em; line-height: 1; margin: 50px 0; }
@@ -176,7 +185,7 @@ a:hover > code {
   position: fixed; top: 0px; left: 0;
   display: none;
   width: 100px; height: 100px;
-  background: #fff;
+  background: transparent;
   color: #123;
   line-height: 98px;
   text-align: center;
@@ -199,7 +208,54 @@ a:hover > code {
 }
 
 /* Mobile and Responsive */
-@media screen and (max-device-width : 800px), screen and (max-width : 800px), print {
+@media screen and (max-device-width : 768px), screen and (max-width : 768px), print {
+
+  /* Header and footer */
+  
+  #header, #footer {
+    width: 70%;
+    margin: 0 auto;
+    line-height: 100px;
+  }
+  
+  #footer { 
+    line-height: 1.4;
+    padding: 100px 0 30px; 
+  }
+
+
+  #header a:first-child {
+    padding-left: 0;
+  }
+
+  #header a:last-child {
+    padding-right: 0;
+  }
+
+  #topmenu > a {
+    display: inline-block;
+    box-sizing: border-box;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  #pts {
+    padding-left: 0;
+  }
+
+  #pts a {
+    padding: 0; 
+  }
+
+  #topmenu {
+    right: 0;
+  }
+
+  #topmenu a {
+    right: 0;
+  }
+
+  /* --------- */
 
   #menu {
     position: fixed;
@@ -228,45 +284,10 @@ a:hover > code {
   #post {
     margin: 0 auto;
     width: 70%;
+    min-width: 50%;
     font-size: 1.4em;
   }
-    
 
-  #header, #footer {
-    width: 70%;
-    margin: 0 auto;
-  }
-
-  #header { 
-    padding: 20px 0; 
-  }
-  
-  #footer { padding: 100px 0 50px; }
-
-
-  #header a:first-child {
-    padding-left: 0;
-  }
-
-  #header a:last-child {
-    padding-right: 0;
-  }
-
-
-  #topmenu > a {
-    display: inline-block;
-    box-sizing: border-box;
-    padding-top: 20px;
-    padding-bottom: 20px;
-  }
-
-  #pts {
-    padding-left: 0;
-  }
-
-  #topmenu {
-    right: 0;
-  }
 
   #toc {
     display: block;
@@ -283,24 +304,35 @@ a:hover > code {
 }
 
 /* Mobile */
-@media screen and (max-device-width : 800px) {
-  h1 { margin: 1em 0;}
-  #post { font-size: 2.8em; }
-  #menu li { font-size: 4em;  }
-  #toc { width: 120px; height: 120px; line-height: 118px; font-size: 6em; }
+@media screen and (max-device-width : 767px) {
 
+  /* Header and Footer */
+
+  
   #header {
-    font-size: 2.5em;
+    padding: 0;
+    margin-left: 15%;
+    width: 85%;
+    line-height: 70px;
+    font-size: 1.2em;
   }  
 
-  #header a {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
 
-  #topmenu a {
-    line-height: 80px;
+  #topmenu > a { padding-left: 0; }
+  #topmenu > a:nth-child(3) { display: none; }
+  #topmenu > a:last-child { padding-right: 20px; }
+
+  #toc { width: 50px; height: 80px; line-height: 65px; }
+
+  /* ------- */
+
+  
+  h1 {
+    font-size: 2.5em; 
+    margin: 1em 0;
   }
+  
+  code { font-size: 0.8em; }
   
 }
 

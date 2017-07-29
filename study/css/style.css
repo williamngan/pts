@@ -3,6 +3,7 @@ body {
     font-family: "Helvetica", sans-serif;
     font-size: 10px;
     line-height: 1.35;
+    margin: 0;
 }
 html {
     overflow-x: hidden;
@@ -13,11 +14,41 @@ html * {
     box-sizing: border-box;
 }
 
+/* Header & footer */
+#header, #footer {
+  font-size: 1.5em;
+  position: relative;
+}
+
+#header a {
+    color: #123;
+    text-decoration: none;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+#header a:hover {
+    color: #f03;
+    text-decoration: underline;
+}
+
+#footer a:link, #footer a:visited { color: #aeb7c1; }
+
+#header { 
+    margin-bottom: 30px;
+    border-bottom: 3px solid #f03;
+}
+#footer { padding: 100px 0 30px; }
+
+/* ---------- */
+
+
 #board {
-    position: absolute;
-    left: 0; top: 0; bottom: 0; right: 50%;
-    overflow: hidden;
+    /* position: absolute; */
+    /* left: 0; top: 0; bottom: 0; right: 50%; */
+    /* overflow: hidden; */
     cursor: pointer;
+    width: 100%;
+    height: 60vh;
 }
 
 #pt {
@@ -28,9 +59,9 @@ html * {
 }
 
 #page {
-    position: absolute;
-    right: 0; top: 0; bottom: 0; left: 50%;
-    overflow: auto;
+    /* position: absolute; */
+    /* right: 0; top: 0; bottom: 0; left: 50%; */
+    /* overflow: auto; */
     padding: 0 10px 0 5vw;
     background-color: #fff;
 }
@@ -49,17 +80,17 @@ html * {
     width: 90%;
     white-space: normal;
     margin-bottom: 5vh;
-
+    
     -webkit-column-count: 3;
     -moz-column-count: 3;
     -ms-column-count: 3;
     column-count: 3;
-
+    
     -webkit-column-gap: 50px;
     -moz-column-gap: 50px;
     -ms-column-gap: 50px;
     column-gap: 50px;
-
+    
     text-overflow: ellipsis;
     background: #fff;
 }
@@ -84,7 +115,7 @@ html * {
 
 #menu > span.title {
     font-size: 4em;
-
+    
 }
 
 
@@ -94,7 +125,7 @@ html * {
     bottom: 30px;
     left: 5vw;
     right: 5vw;
-
+    
     font-size: 12px; color: #666;
     line-height: 1.35;
     word-wrap: normal;
@@ -163,39 +194,63 @@ a:hover {
 }
 
 @media only screen and (max-device-width : 800px) {
+    /* Header and footer */
+    
+    #header, #footer {
+        width: 70%;
+        margin: 0 auto;
+    }
+    
+    #header { 
+        padding: 20px 0; 
+    }
+    
+    #footer { padding: 100px 0 50px; }
+    
+    
+    #header a:first-child {
+        padding-left: 0;
+    }
+    
+    #header a:last-child {
+        padding-right: 0;
+    }
+    
+    /* --------- */
+    
     #board {
         bottom: 40%;
         left: 0; right: 0;
     }
-
+    
     #hint {
         bottom: auto; top: 30px; left: 30%;
         max-width: 100%;
     }
-
+    
     #menu {
         background-color: transparent;
     }
-
+    
     #menu span {
         display: none;
     }
-
+    
     #menu .title {
         display: inline-block;
     }
-
+    
     #cover {
         display: block;
         top: 22vh;
         position: absolute;
     }
-
+    
     #page {
         top: 60%;
         left: 0; right: 0;
     }
-
+    
 }
 
 @media only screen and (max-device-width : 600px) {
@@ -203,7 +258,7 @@ a:hover {
         -webkit-column-count: 2;
         column-count: 2;
     }
-
+    
     .demo {
         padding: 3px 0;
     }
@@ -213,7 +268,7 @@ a:hover {
     #cover {
         top: 25vh;
     }
-
+    
 }
 
 @media (max-height: 500px) {
