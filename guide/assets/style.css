@@ -59,6 +59,20 @@ a:hover { color: #F03; }
    padding: 0 2px; 
 }
 
+#topmenu {
+  position: absolute;
+  top: 0; right: 30px;
+  height: 100%; 
+  vertical-align: middle;
+}
+
+#topmenu > a {
+  display: inline-block;
+  vertical-align: middle;
+  height: 100%;
+}
+
+
 /* ---------- */
 
 #menu {
@@ -128,24 +142,6 @@ a:hover { color: #F03; }
 #post img { max-width: 100%; }
 
 
-
-
-#topmenu {
-  position: absolute;
-  top: 0; right: 30px;
-  height: 100%; 
-  vertical-align: middle;
-}
-
-#topmenu > a {
-  display: inline-block;
-  vertical-align: middle;
-  height: 100%;
-}
-
-
-
-
 h1 { font-size: 3em; line-height: 1; margin: 50px 0; }
 h2 { font-size: 2.0em; }
 h3 { font-size: 1.6em; margin-top: 50px;}
@@ -184,10 +180,10 @@ a:hover > code {
 #toc {
   position: fixed; top: 0px; left: 0;
   display: none;
-  width: 100px; height: 100px;
+  width: 100px; height: 80px;
   background: transparent;
   color: #123;
-  line-height: 98px;
+  line-height: 78px;
   text-align: center;
   font-size: 4em;
 }
@@ -215,7 +211,7 @@ a:hover > code {
   #header, #footer {
     width: 70%;
     margin: 0 auto;
-    line-height: 100px;
+    line-height: 80px;
   }
   
   #footer { 
@@ -239,21 +235,10 @@ a:hover > code {
     padding-right: 10px;
   }
 
-  #pts {
-    padding-left: 0;
-  }
-
-  #pts a {
-    padding: 0; 
-  }
-
-  #topmenu {
-    right: 0;
-  }
-
-  #topmenu a {
-    right: 0;
-  }
+  #pts { padding-left: 0; }
+  #pts a { padding: 0; }
+  #topmenu { right: 0; }
+  #topmenu a { right: 0; }
 
   /* --------- */
 

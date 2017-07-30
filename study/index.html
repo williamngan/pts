@@ -36,15 +36,15 @@
             src.setAttribute("src", "../study/" + qfile + ".js");
 
             var link = document.createElement("a");
+            link.setAttribute("class", "source-code");
             link.setAttribute("href", "https://github.com/williamngan/pt/blob/master/demo/" + qfile +".js");
             link.setAttribute("target", "_blank");
-            link.textContent = "(demo source code)";
+            link.textContent = "view code";
 
             src.onload = function () {
                 var hint = document.querySelector("#hint");
-                var arrow = (mobileAndTabletcheck()) ? "▲" : "◄";
                 hint.innerHTML = "";
-                hint.textContent = arrow + " " + (window.demoDescription || "") + " ";
+                hint.textContent = (window.demoDescription || "") + " ";
                 hint.appendChild( link );
             };
         }
@@ -90,11 +90,9 @@
         <span class="title"><a href="../index.html">Pts</a></span>
     </div>
     -->
+    <h1><strong>Studies</strong> try out various pts.js features. No polish.</h1>
 
     <div id="cover">
-
-        <p class="section">core demos</p>
-        <p class="section">&nbsp;</p>
         <p class="demo" data-src="Study.template"><span>Study.</span><strong>template</strong></p>
         <p class="demo" data-src="Pt.op"><span>Pt.</span><strong>op</strong></p>
         <p class="demo" data-src="Line.intersect2D"><span>Line.</span><strong>intersect2D</strong></p>
