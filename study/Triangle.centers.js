@@ -125,6 +125,6 @@ function guidelines() {
 }
 
 
-space.bindMouse();
+space.bindMouse().bindTouch();
 space.play();
 // space.playOnce(500);
