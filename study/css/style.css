@@ -269,26 +269,23 @@ a:hover {
   
   /* --------- */
 
-  body {
-    overflow: hidden;
-  }
   
   h1 {
     padding: 40px 0 30px;
   }
 
   #board {
-    position: absolute;
-    top: 83px;
+    /* position: absolute; */
+    /* top: 83px; */
     height: 40vh;
-    left: 0; right: 0;
+    /* left: 0; right: 0; */
   }
   
   #page {
-    position: absolute;
-    top: calc( 40vh + 83px );
+    /* position: absolute; */
+    /* top: calc( 40vh + 83px ); */
     height: calc( 60vh - 83px );
-    left: 0; right: 0;
+    /* left: 0; right: 0; */
   }
 
   #hint {
@@ -332,14 +329,14 @@ a:hover {
   /* ------- */
   
   #board {
-    top: 73px;
+    /* top: 73px; */
     height: 40vh;
   }
 
   #page {
-    top: calc( 40vh + 73px );
+    /* top: calc( 40vh + 73px ); */
     height: calc( 60vh - 73px );
-    overflow: auto;
+    /* overflow: auto; */
   }
 
   #cover {

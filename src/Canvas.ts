@@ -471,6 +471,7 @@ export class CanvasSpace extends Space {
   protected _mouseDown( evt:MouseEvent|TouchEvent ) {
     this._mouseAction( "down", evt );
     this._pressed = true;
+    return false;
   }
 
 
@@ -483,6 +484,7 @@ export class CanvasSpace extends Space {
     if (this._dragged) this._mouseAction( "drop", evt );
     this._pressed = false;
     this._dragged = false;
+    return false;
   }
 
 
@@ -496,6 +498,7 @@ export class CanvasSpace extends Space {
       this._dragged = true;
       this._mouseAction( "drag", evt );
     }
+    return false;
   }
 
 
@@ -505,6 +508,7 @@ export class CanvasSpace extends Space {
    */
   protected _mouseOver( evt:MouseEvent|TouchEvent ) {
     this._mouseAction( "over", evt );
+    return false;
   }
 
 
@@ -516,6 +520,7 @@ export class CanvasSpace extends Space {
     this._mouseAction( "out", evt );
     if (this._dragged) this._mouseAction( "drop", evt );
     this._dragged = false;
+    return false;
   }
 
 
@@ -526,6 +531,7 @@ export class CanvasSpace extends Space {
   protected _touchMove( evt:TouchEvent) {
     evt.preventDefault();
     this._mouseMove(evt);
+    return false;
   }
 
   
