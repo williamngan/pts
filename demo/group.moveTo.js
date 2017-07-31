@@ -1,5 +1,7 @@
 Pts.namespace( window );
 
+window.demoDescription = "hello world";
+
 var space = new CanvasSpace("#pt").setup({retina: true});
 var form = space.getForm();
 
@@ -49,6 +51,6 @@ space.add( {
   
 });
   
-space.bindMouse();
+space.bindMouse().bindTouch();
 space.play();
 // space.playOnce(5000);

@@ -27,27 +27,28 @@
 
         var src = null;
         var qfile = qs("name");
-        if (qfile) {
-            if (qfile.indexOf("/") >= 0 || qfile.split(".").length > 2 ) qfile="";
+        if (!qfile) qfile = "Circle.intersect2D";
+        
+        if (qfile.indexOf("/") >= 0 || qfile.split(".").length > 2 ) qfile="";
 
-            src = document.createElement('script');
-            src.setAttribute("type", "text/javascript");
-            src.setAttribute("id", "src");
-            src.setAttribute("src", "../study/" + qfile + ".js");
+        src = document.createElement('script');
+        src.setAttribute("type", "text/javascript");
+        src.setAttribute("id", "src");
+        src.setAttribute("src", "../study/" + qfile + ".js");
 
-            var link = document.createElement("a");
-            link.setAttribute("class", "source-code");
-            link.setAttribute("href", "https://github.com/williamngan/pt/blob/master/demo/" + qfile +".js");
-            link.setAttribute("target", "_blank");
-            link.textContent = "view code";
+        var link = document.createElement("a");
+        link.setAttribute("class", "source-code");
+        link.setAttribute("href", "https://github.com/williamngan/pt/blob/master/demo/" + qfile +".js");
+        link.setAttribute("target", "_blank");
+        link.textContent = "view code";
 
-            src.onload = function () {
-                var hint = document.querySelector("#hint");
-                hint.innerHTML = "";
-                hint.textContent = (window.demoDescription || "") + " ";
-                hint.appendChild( link );
-            };
-        }
+        src.onload = function () {
+            var hint = document.querySelector("#hint");
+            hint.innerHTML = "";
+            hint.textContent = (window.demoDescription || "") + " ";
+            hint.appendChild( link );
+        };
+    
 
         function screenshot(w, h) {
             var demo = document.querySelector( "#pt > canvas" );
@@ -70,8 +71,8 @@
 <div id="header">
   <div id="pts"><a href="../">Pts<span>.</span></a>studies</div>
   <div id="topmenu">
-    <a href="../guide/"/>guide</a>
-    <a href="../demo/"/>demos</a>
+    <a href="../guide/index.html"/>guide</a>
+    <a href="../demo/index.html"/>demos</a>
     <a href="../docs/"/>docs</a>
     <a href="https://github.com/williamngan/pts"/>github</a>
   </div>
@@ -85,11 +86,6 @@
 
 <div id="page">
 
-    <!--
-    <div id="menu">
-        <span class="title"><a href="../index.html">Pts</a></span>
-    </div>
-    -->
     <h1><strong>Studies</strong> try out various pts.js features. No polish.</h1>
 
     <div id="cover">

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<title>Pts Demos</title>
 
     <meta charset="UTF-8">
 	<script type="text/javascript" src="../dist/pts.js"></script>
@@ -27,27 +27,33 @@
 
         var src = null;
         var qfile = qs("name");
-        if (qfile) {
-            if (qfile.indexOf("/") >= 0 || qfile.split(".").length > 2 ) qfile="";
+        if (!qfile) qfile = "template";
 
-            src = document.createElement('script');
-            src.setAttribute("type", "text/javascript");
-            src.setAttribute("id", "src");
-            src.setAttribute("src", "../demo/" + qfile + ".js");
+        if (qfile.indexOf("/") >= 0 || qfile.split(".").length > 2 ) qfile="";
 
-            var link = document.createElement("a");
-            link.setAttribute("href", "https://github.com/williamngan/pt/blob/master/demo/" + qfile +".js");
-            link.setAttribute("target", "_blank");
-            link.textContent = "(demo source code)";
+        src = document.createElement('script');
+        src.setAttribute("type", "text/javascript");
+        src.setAttribute("id", "src");
+        src.setAttribute("src", "../demo/" + qfile + ".js");
 
-            src.onload = function () {
-                var hint = document.querySelector("#hint");
-                var arrow = (mobileAndTabletcheck()) ? "▲" : "◄";
-                hint.innerHTML = "";
-                hint.textContent = arrow + " " + (window.demoDescription || "") + " ";
-                hint.appendChild( link );
-            };
-        }
+        var link = document.createElement("a");
+        link.setAttribute("class", "source-code");
+        link.setAttribute("href", "https://github.com/williamngan/pt/blob/master/demo/" + qfile +".js");
+        link.setAttribute("target", "_blank");
+        link.textContent = "view code";
+
+        src.onload = function () {
+            var hint = document.querySelector("#hint");
+            hint.innerHTML = "";
+            hint.appendChild( link );
+
+            var desc = document.querySelector("#description");
+            if (window.demoDescription) {
+                desc.textContent = ": "+window.demoDescription;
+            }
+            
+        };
+    
 
         function screenshot(w, h) {
             var demo = document.querySelector( "#pt > canvas" );
@@ -67,11 +73,24 @@
 </head>
 <body>
 
+<div id="header">
+  <div id="pts"><a href="../">Pts<span>.</span></a>demos</div>
+  <div id="topmenu">
+    <a href="../guide/"/>guide</a>
+    <a href="../study/index.html"/>studies</a>
+    <a href="../docs/"/>docs</a>
+    <a href="https://github.com/williamngan/pts"/>github</a>
+  </div>
+</div>
+
+
+<div id="board">
+    <div id="pt"></div>
+</div>
+
 <div id="page">
 
-    <div id="menu">
-        <span class="title"><a href="../index.html">Pts</a></span>
-    </div>
+    <h1><strong>Demo</strong><span id="description"></span></h1>
 
     <div id="cover">
 
@@ -89,11 +108,6 @@
 </div>
 
 
-<div id="board">
-    <div id="pt"></div>
-
-
-</div>
 
 
 <script type="text/javascript">

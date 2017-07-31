@@ -4,7 +4,7 @@
 
 Pts.namespace( window );
 
-var space = new CanvasSpace("#pt").setup({retina: true});
+var space = new CanvasSpace("#pt").setup({retina: true, resize: true});
 var form = space.getForm();
 var mouse = new Pt();
 
@@ -30,6 +30,6 @@ space.add( {
   
 });
   
-space.bindMouse();
+space.bindMouse().bindTouch();
 space.play();
 // space.playOnce(5000);
