@@ -1,17 +1,17 @@
 # Get started
 
-It's easy to get started with **`pts`**. Here we'll review the core concepts and build a fun thing together. Let's do this!
+It's easy to get started with **`Pts`**. Here we'll review the core concepts and build a fun thing together. Let's do this!
 
 ![js:getting_started](./assets/bg.png)
 
 ##### Here's a spolier of what we will build. Touch to play it, and take a look at the source code. The core code is only ~10 lines long.
 
 ### Space, Form, and Point
-**`pts`** is built upon the abstractions of Space, Form, and Point. If that's too abstract, you can think of it like drawing: Space provides the paper, Form provides the pencil, and Point provides the idea. 
+**`Pts`** is built upon the abstractions of Space, Form, and Point. If that's too abstract, you can think of it like drawing: Space provides the paper, Form provides the pencil, and Point provides the idea. 
 
-Given an idea, you may express it in different forms in different spaces. Would it be expressed in pixels or LEDs? Is it visible or audible? Does it look like abstract art or ASCII art? As **`pts`** develops, it will offer more Spaces and Forms that enable you to experiment with different ideas and their different expressions. 
+Given an idea, you may express it in different forms in different spaces. Would it be expressed in pixels or LEDs? Is it visible or audible? Does it look like abstract art or ASCII art? As **`Pts`** develops, it will offer more Spaces and Forms that enable you to experiment with different ideas and their different expressions. 
 
-But enough of abstractions for now. Let's see how it works in a concrete example. In the following sections, we will create a quick sketch step-by-step and discuss the main features of **`pts`**.
+But enough of abstractions for now. Let's see how it works in a concrete example. In the following sections, we will create a quick sketch step-by-step and discuss the main features of **`Pts`**.
 
 ##### You may also be interested in [this article](https://medium.com/@williamngan/pt-93382bf5943e) which discusses the concepts of Space, Form, and Point.
 
@@ -29,7 +29,7 @@ import {Pt, Group} from "pts/Pt"
 ### Using pts in a script
 First download the latest release and add `pts.min.js` in your html. Then create another js file for your script and add it to html too. 
 
-For convience, we usually start by adding **`pts`** into a scope first. 
+For convience, we usually start by adding **`Pts`** into a scope first. 
 
 ```
 Pts.namespace( this );
@@ -47,7 +47,7 @@ That means we can call `CanvasSpace`, instead of `Pts.CanvasSpace` which is a bi
 And that's it. We can now have some fun.
 
 ### Creating Space and Form
-**`pts`** provides a [`CanvasSpace`](#canvas-canvasspace) which enables you to use html `<canvas>` as space. You can create a `CanvasSpace` like this:
+**`Pts`** provides a [`CanvasSpace`](#canvas-canvasspace) which enables you to use html `<canvas>` as space. You can create a `CanvasSpace` like this:
 
 ```
 var space = new CanvasSpace("#hello");
@@ -106,12 +106,12 @@ space.add( (time, ftime) => {
 Success! The calculation `(time%1000)/1000` maps the running time to a value between 0 to 1 every second. Then we use the [`Num.cycle`](#num-num) function to make the value cycle between 0...1...0...1, and we multiply the value by 20 to get the radius. Finally, we draw the pointer with the radius as a blue circle. Pretty easy, right?
 
 ### Drawing shapes
-There are 3 basic structures in **`pts`**.
+There are 3 basic structures in **`Pts`**.
 - a Pt which is an array of numbers 
 - a Group which is an array of Pts
 - an array of Groups
 
-**`pts`** provides many classes to work with these structures. For example, a rectangular boundary can be defined by two Pts -- one at top-left and one at bottom-right, and you can also get a Group of 4 Pts from its 4 corners. 
+**`Pts`** provides many classes to work with these structures. For example, a rectangular boundary can be defined by two Pts -- one at top-left and one at bottom-right, and you can also get a Group of 4 Pts from its 4 corners. 
 
 Let's make this easier to understand with an example:
 
@@ -178,7 +178,7 @@ space.add( (time, ftime) => {
 space.play().bindMouse();
 ```
 
-Hope this gives you a quick and enjoyable walkthrough. But wait, there's more: Take a look at the other guides which will explain **`pts`** features in details. 
+Hope this gives you a quick and enjoyable walkthrough. But wait, there's more: Take a look at the other guides which will explain **`Pts`** features in details. 
 
 We appreciate your feedbacks and bug reports. Please file an issue at [github](https://github.com/williamngan/pts) or ping [@williamngan](https://twitter.com/williamngan) on twitter. 
 

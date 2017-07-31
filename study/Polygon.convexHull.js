@@ -4,7 +4,7 @@
 
 Pts.namespace( window );
 
-var space = new CanvasSpace("#pt").setup({retina: true});
+var space = new CanvasSpace("#pt").setup({retina: true, resize: true});
 var form = space.getForm();
 
 
@@ -23,7 +23,7 @@ space.add( {
     form.points( pts );
 
     let convex = Polygon.convexHull( pts );
-    form.stroke("#000").line( convex );
+    form.stroke("#000").polygon( convex );
 
     // End
   },

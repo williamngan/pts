@@ -192,9 +192,9 @@ a:hover > code {
   display: none;
   position: absolute;
   top: 0; right: 0;
-  width: 100px; height: 100px;
-  line-height: 98px; text-align: center;
-  font-size: 4em;
+  width: 80px; height: 80px;
+  line-height: 78px; text-align: center;
+  font-size: 3em;
   text-decoration: none;
   color: #fff;
 }
@@ -256,10 +256,15 @@ a:hover > code {
   #menu li {
     color: #fff;
     font-size: 2.2em;
+    border: none;
+  }
+
+  #menu li:last-child {
+    border: none;
   }
 
   #menu li:before {
-    padding-right: 20px;
+    font-weight: normal;
   }
 
   #menu li a { color: #fff; text-decoration: none; }
@@ -307,17 +312,39 @@ a:hover > code {
   #topmenu > a:nth-child(3) { display: none; }
   #topmenu > a:last-child { padding-right: 20px; }
 
-  #toc { width: 50px; height: 80px; line-height: 65px; }
+  #toc { 
+    width: 50px; height: 80px; line-height: 65px; 
+    font-size: 2.5em;
+  }
 
   /* ------- */
 
-  
+  #menu {
+    padding: 50px;
+  }
+
+  #menu li {
+    font-size: 1.2em;
+  }
+
+  #menu li::before {
+    padding-right: 10px;
+  }
+
+
+  #close {
+    font-size: 2.2em;
+    line-height: 60px;
+    width: 60px;
+  }
+
   h1 {
     font-size: 2.5em; 
     margin: 1em 0;
   }
   
   code { font-size: 0.8em; }
+  
   
 }
 

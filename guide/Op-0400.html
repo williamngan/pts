@@ -9,7 +9,7 @@
 
 <body>
 <div id="header">
-  <div id="pts"><a href="../">pts<span>.</span></a>guides</div>
+  <div id="pts"><a href="../">Pts<span>.</span></a>guides</div>
   <div id="topmenu">
     <a href="../demo"/>demos</a>
     <a href="../study"/>studies</a>
@@ -21,7 +21,7 @@
 <div id="post"><h1>Op</h1>
 <p>We are all in the gutter, but some of us are looking at the stars, said Oscar Wilde. To him, and to many of us, a sky full of stars moves us to look into that vast darkness and, with imagination, connect those scattered and flickering dots. What would a sky be without stars, and what would a starry night be without us looking and imagining?</p>
 <p>A group of points is never just a mathematical concept. We actively connect the dots and find strange forms and humanistic meanings in them.</p>
-<p>In <strong><code>pts</code></strong>, these acts of imagination are known as &quot;Op&quot;. They transform a static point into an active one, a noun into a verb, a vector space into an expressive canvas.</p>
+<p>In <strong><code>Pts</code></strong>, these acts of imagination are known as &quot;Op&quot;. They transform a static point into an active one, a noun into a verb, a vector space into an expressive canvas.</p>
 <p>Let's begin with an example. Suppose there are 100 points randomly placed on a canvas, and a pointer moves randomly about. A simple (indeed boring) act of imagination might be to ask: which point is closest to the pointer?</p>
 <p>We can draw this whole scene a few lines of code:</p>
 <pre><code>// make 100 pts and pointer
@@ -48,7 +48,7 @@ form.strokeOnly(&quot;#f03&quot;, 2).line( [pts[0], space.pointer] );
 <p><img src="./assets/bg.png" alt="js:op_closest_2"></p>
 <h5>Demo: Relate a circle's size to its proximity to pointer</h5>
 <p>The group of points becomes active. It's somewhat interesting and kind of a mess -- a starting point for further experimentation.</p>
-<p><strong><code>pts</code></strong> includes many different Ops to help you make the points meaningful. Next we will look at them in more details.</p>
+<p><strong><code>Pts</code></strong> includes many different Ops to help you make the points meaningful. Next we will look at them in more details.</p>
 <h3>Static Op</h3>
 <p>The <a href="../docs/modules/_op_.html">Op</a> module includes various static functions that deal with specific forms such as <a href="#op-rectangle"><code>Rectangle</code></a> and <a href="#op-curve"><code>Curve</code></a>, and the <a href="../docs/modules/_num_.html">Num</a> module includes static functions for simple numeric and geometric calculations. Most of them are straightforward and easy to use.</p>
 <p>It's time to let our imaginary forces work on these functions. Keeping most of the code from above, let's try the <a href="#op-line"><code>perpendicularFromPt</code></a> function. Given a line and a point, this Op finds a perpendicular line (ie, shortest distance) between the point and the line.</p>

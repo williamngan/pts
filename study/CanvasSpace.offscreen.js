@@ -4,7 +4,7 @@
 
 Pts.namespace( window );
 
-var space = new CanvasSpace("#pt").setup({retina: true, offscreen: true});
+var space = new CanvasSpace("#pt").setup({retina: true, offscreen: true, resize: true});
 var form = space.getForm();
 
 var pts = new Group();

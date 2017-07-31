@@ -4,7 +4,7 @@
 
 Pts.namespace( window );
 
-var space = new CanvasSpace("#pt").setup({retina: true});
+var space = new CanvasSpace("#pt").setup({retina: true, resize: true});
 var form = space.getForm();
 
 space.add( {
@@ -32,10 +32,10 @@ space.add( {
         let hsb = Color.hsb( h, s, l );
         let rgb = Color.HSBtoRGB( hsb );
 
-        let sub = Rectangle.size( rect3 ).$divide( grid );
-        let pos = rect3.p1.$add( sub.$multiply( i, k ) );
+        let sub = space.size.$divide(3).$divide(grid);
+        let pos = space.center.$subtract( sub.$multiply( i, k ) );
 
-        form.fill( rgb.toString("hex") ).rect( Rectangle.fromTopLeft( pos, sub.ceil() ) );
+        form.fill( rgb.toString("hex") ).rect( Rectangle.fromTopLeft( pos, sub.$ceil() ) );
 
         // Check reverse convert
         target = "rgb";
@@ -43,14 +43,13 @@ space.add( {
         let g = Num.mapToRange( k, 0, grid-1, Color.ranges[target][1][0], Color.ranges[target][1][1] );
         let b = Num.mapToRange( i, 0, grid-1, Color.ranges[target][2][0], Color.ranges[target][2][1] );
         
-        let revRGB = Color.rgb( r, g, b, 0.7 );
+        let revRGB = Color.rgb( r, g, b );
         let revHSB = Color.RGBtoHSB( revRGB );
         let backToRGB = Color.HSBtoRGB( revHSB );
 
-        let sub2 = Rectangle.size( rect3 ).$divide( grid );
-        let pos2 = rect3.p1.$add( 0, rect3.p2.y-rect3.p1.y+20 ).add( sub.$multiply( i, k ) );
+        let pos2 = space.center.$add( sub.$multiply( i, k ) );
 
-        form.fill( backToRGB.toString("rgba") ).rect( Rectangle.fromTopLeft( pos2, sub2.ceil() ) );
+        form.fill( backToRGB.toString("rgba") ).rect( Rectangle.fromTopLeft( pos2, sub.$ceil() ) );
 
       }
       

@@ -1,6 +1,6 @@
 # Space
 
-[`Space`](#space-space) provides a general context for its points to be expressed. Each subclass of `Space` represents a specific context. Currently **`pts`** includes [`CanvasSpace`](#canvas-canvasspace) which corresponds to html's [`canvas`](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) element. Soon we will also have Space for SVG, DOM, and other contexts.
+[`Space`](#space-space) provides a general context for its points to be expressed. Each subclass of `Space` represents a specific context. Currently **`Pts`** includes [`CanvasSpace`](#canvas-canvasspace) which corresponds to html's [`canvas`](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) element. Soon we will also have Space for SVG, DOM, and other contexts.
 
 [`CanvasSpace`](#canvas-canvasspace) can be created like this:
 ```
@@ -110,7 +110,7 @@ And since both Space and Form are javascript classes, you can extend them to ove
 
 ### Cheat sheet
 
-The following snippet is a typical template for making a quick **`pts`** sketch. Pretty easy.
+The following snippet is a typical template for making a quick **`Pts`** sketch. Pretty easy.
 
 ```
 Pts.namespace( this );

@@ -84,9 +84,6 @@ html * {
 
 
 #board {
-  /* position: absolute; */
-  /* left: 0; top: 0; bottom: 0; right: 50%; */
-  /* overflow: hidden; */
   cursor: pointer;
   width: 100%;
   height: 50vh;
@@ -100,22 +97,9 @@ html * {
 }
 
 #page {
-  /* position: absolute; */
-  /* right: 0; top: 0; bottom: 0; left: 50%; */
-  /* overflow: auto; */
   padding: 0 10px 0 40px;
   position: relative;
 }
-/*
-#page:before {
-  display: inline-block;
-  content: " ";
-  width: 0;
-  height: 100%;
-  vertical-align: middle;
-  background: transparent;
-}
-*/
 
 #cover {
   display: inline-block;
@@ -161,8 +145,6 @@ html * {
   
 }
 
-
-
 #hint {
   position: absolute;
   top: 5px;
@@ -174,7 +156,6 @@ html * {
   max-width: 350px;
   text-align: right;
 }
-
 
 #hint a {
   display: block;
@@ -213,18 +194,23 @@ a:hover {
 
 .demo, .section {
   cursor: pointer;
-  font-size: 12px; line-height: 1.5; margin: 0;
-  color: #667;
+  font-size: 12px; 
+  line-height: 2; 
+  margin: 0;
+  color: #123;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .demo > span {
-  font-size: 10px;
+  /* font-weight: bold; */
+  color: #678
 }
 .demo > strong {
   font-weight: 400;
 }
-.demo:hover { color: #f03;}
+.demo:hover, .demo:hover > span { color: #f03;}
 
 .section {
   font-weight: 600;
@@ -268,26 +254,16 @@ a:hover {
   #topmenu a { right: 0; }
   
   /* --------- */
-
+  
   
   h1 {
     padding: 40px 0 30px;
   }
-
+  
   #board {
-    /* position: absolute; */
-    /* top: 83px; */
-    height: 40vh;
-    /* left: 0; right: 0; */
+    height: 50vh;
   }
   
-  #page {
-    /* position: absolute; */
-    /* top: calc( 40vh + 83px ); */
-    height: calc( 60vh - 83px );
-    /* left: 0; right: 0; */
-  }
-
   #hint {
     top: 5px; right: 10px;
   }
@@ -306,11 +282,18 @@ a:hover {
   
   #cover {
     display: block;
+    -webkit-column-count: 3;
+    -moz-column-count: 3;
+    -ms-column-count: 3;
+    column-count: 3;
   }
   
-  
+  .demo {
+    line-height: 2;
+  }
   
 }
+
 
 @media only screen and (max-device-width : 767px) {
   /* Header and Footer */
@@ -320,7 +303,6 @@ a:hover {
     font-size: 1.2em;
   }  
   
-  
   #topmenu > a { padding-left: 0; }
   #topmenu > a:nth-child(3) { display: none; }
   
@@ -329,36 +311,23 @@ a:hover {
   /* ------- */
   
   #board {
-    /* top: 73px; */
-    height: 40vh;
+    height: 50vh;
   }
-
-  #page {
-    /* top: calc( 40vh + 73px ); */
-    height: calc( 60vh - 73px );
-    /* overflow: auto; */
-  }
-
+  
   #cover {
+    
     -webkit-column-count: 2;
+    -moz-column-count: 2;
+    -ms-column-count: 2;
     column-count: 2;
+    
+    -webkit-column-gap: 20px;
+    -moz-column-gap: 20px;
+    -ms-column-gap: 20px;
+    column-gap: 20px;
   }
   
   .demo {
     padding: 3px 0;
-  }
-}
-
-@media only screen and (max-device-width : 320px) {
-  #cover {
-    top: 25vh;
-  }
-  
-}
-
-@media (max-height: 500px) {
-  .demo, #hint {
-    font-size: 10px;
-    line-height: 1.2;
   }
 }
