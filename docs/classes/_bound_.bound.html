@@ -53,7 +53,7 @@
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="../globals.html">Globals</a>
+					<a href="../index.html">Globals</a>
 				</li>
 				<li>
 					<a href="../modules/_bound_.html">&quot;Bound&quot;</a>
@@ -69,6 +69,14 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Bound is a subclass of Group that represents a rectangular boundary.
+						It includes some convenient properties such as <code>x</code>, <code>y</code>, bottomRight<code>,</code>center<code>, and</code>size`.</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -91,6 +99,12 @@
 			<section class="tsd-panel tsd-kind-class tsd-parent-kind-external-module">
 				<h3 class="tsd-before-signature">Indexable</h3>
 				<div class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">[</span>n: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">]: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></div>
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Bound is a subclass of Group that represents a rectangular boundary.
+						It includes some convenient properties such as <code>x</code>, <code>y</code>, bottomRight<code>,</code>center<code>, and</code>size`.</p>
+					</div>
+				</div>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
@@ -154,7 +168,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="_bound_.bound.html#clone" class="tsd-kind-icon">clone</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_bound_.bound.html#divide" class="tsd-kind-icon">divide</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_bound_.bound.html#foreachpt" class="tsd-kind-icon">for<wbr>Each<wbr>Pt</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_bound_.bound.html#init" class="tsd-kind-icon">init</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="_bound_.bound.html#init" class="tsd-kind-icon">init</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_bound_.bound.html#insert" class="tsd-kind-icon">insert</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_bound_.bound.html#interpolate" class="tsd-kind-icon">interpolate</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_bound_.bound.html#lines" class="tsd-kind-icon">lines</a></li>
@@ -210,20 +224,30 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Bound<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_bound_.bound.html" class="tsd-signature-type">Bound</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Bound<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_bound_.bound.html" class="tsd-signature-type">Bound</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Bound.ts#L14">Bound.ts:14</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Bound.ts#L17">Bound.ts:17</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Create a Bound. This is similar to the Group constructor.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>a list of Pt as parameters</p>
+										</div>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_bound_.bound.html" class="tsd-signature-type">Bound</a></h4>
@@ -239,7 +263,7 @@
 					<div class="tsd-signature tsd-kind-icon">_bottom<wbr>Right<span class="tsd-signature-symbol">:</span> <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a><span class="tsd-signature-symbol"> =&nbsp;new Pt()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Bound.ts#L13">Bound.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Bound.ts#L16">Bound.ts:16</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -249,7 +273,7 @@
 					<div class="tsd-signature tsd-kind-icon">_center<span class="tsd-signature-symbol">:</span> <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a><span class="tsd-signature-symbol"> =&nbsp;new Pt()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Bound.ts#L10">Bound.ts:10</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Bound.ts#L13">Bound.ts:13</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -260,7 +284,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#_id">_id</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L352">Pt.ts:352</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L353">Pt.ts:353</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -270,7 +294,7 @@
 					<div class="tsd-signature tsd-kind-icon">_inited<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Bound.ts#L14">Bound.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Bound.ts#L17">Bound.ts:17</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -280,7 +304,7 @@
 					<div class="tsd-signature tsd-kind-icon">_size<span class="tsd-signature-symbol">:</span> <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a><span class="tsd-signature-symbol"> =&nbsp;new Pt()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Bound.ts#L11">Bound.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Bound.ts#L14">Bound.ts:14</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -290,7 +314,7 @@
 					<div class="tsd-signature tsd-kind-icon">_top<wbr>Left<span class="tsd-signature-symbol">:</span> <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a><span class="tsd-signature-symbol"> =&nbsp;new Pt()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Bound.ts#L12">Bound.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Bound.ts#L15">Bound.ts:15</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -324,7 +348,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Bound.ts#L85">Bound.ts:85</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Bound.ts#L137">Bound.ts:137</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
@@ -332,7 +356,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Bound.ts#L86">Bound.ts:86</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Bound.ts#L138">Bound.ts:138</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -356,7 +380,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Bound.ts#L72">Bound.ts:72</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Bound.ts#L122">Bound.ts:122</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
@@ -364,7 +388,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Bound.ts#L73">Bound.ts:73</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Bound.ts#L123">Bound.ts:123</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -388,7 +412,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Bound.ts#L104">Bound.ts:104</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Bound.ts#L159">Bound.ts:159</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -396,7 +420,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Bound.ts#L105">Bound.ts:105</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Bound.ts#L160">Bound.ts:160</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -420,7 +444,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Bound.ts#L98">Bound.ts:98</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Bound.ts#L152">Bound.ts:152</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -428,7 +452,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Bound.ts#L99">Bound.ts:99</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Bound.ts#L153">Bound.ts:153</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -453,7 +477,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#id">id</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L358">Pt.ts:358</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L359">Pt.ts:359</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -462,7 +486,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#id">id</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L359">Pt.ts:359</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L360">Pt.ts:360</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -485,7 +509,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Bound.ts#L115">Bound.ts:115</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Bound.ts#L171">Bound.ts:171</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -503,7 +527,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#p1">p1</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L361">Pt.ts:361</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L362">Pt.ts:362</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
@@ -521,7 +545,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#p2">p2</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L362">Pt.ts:362</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L363">Pt.ts:363</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
@@ -539,7 +563,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#p3">p3</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L363">Pt.ts:363</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L364">Pt.ts:364</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
@@ -557,7 +581,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#p4">p4</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L364">Pt.ts:364</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L365">Pt.ts:365</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
@@ -575,7 +599,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Bound.ts#L66">Bound.ts:66</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Bound.ts#L115">Bound.ts:115</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
@@ -583,7 +607,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Bound.ts#L67">Bound.ts:67</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Bound.ts#L116">Bound.ts:116</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -607,7 +631,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Bound.ts#L78">Bound.ts:78</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Bound.ts#L129">Bound.ts:129</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
@@ -615,7 +639,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Bound.ts#L79">Bound.ts:79</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Bound.ts#L130">Bound.ts:130</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -639,7 +663,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Bound.ts#L92">Bound.ts:92</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Bound.ts#L145">Bound.ts:145</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -647,7 +671,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Bound.ts#L93">Bound.ts:93</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Bound.ts#L146">Bound.ts:146</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -670,7 +694,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Bound.ts#L111">Bound.ts:111</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Bound.ts#L166">Bound.ts:166</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -687,7 +711,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Bound.ts#L112">Bound.ts:112</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Bound.ts#L167">Bound.ts:167</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -704,7 +728,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Bound.ts#L113">Bound.ts:113</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Bound.ts#L168">Bound.ts:168</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -725,7 +749,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#_matrixadd">$matrixAdd</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L578">Pt.ts:578</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L579">Pt.ts:579</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -749,7 +773,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#_matrixmultiply">$matrixMultiply</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L582">Pt.ts:582</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L583">Pt.ts:583</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -776,7 +800,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#_zip">$zip</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L595">Pt.ts:595</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L596">Pt.ts:596</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -813,9 +837,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Bound.ts#L45">Bound.ts:45</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Bound.ts#L82">Bound.ts:82</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Recalculate center</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
@@ -830,9 +859,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Bound.ts#L54">Bound.ts:54</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Bound.ts#L99">Bound.ts:99</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Recalculate based on bottom-right position and size</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
@@ -847,9 +881,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Bound.ts#L59">Bound.ts:59</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Bound.ts#L108">Bound.ts:108</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Recalculate based on center position and size</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
@@ -864,9 +903,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Bound.ts#L49">Bound.ts:49</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Bound.ts#L90">Bound.ts:90</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Recalculate based on top-left position and size</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
@@ -881,9 +925,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Bound.ts#L40">Bound.ts:40</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Bound.ts#L73">Bound.ts:73</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Recalculte size and center</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
@@ -899,7 +948,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#add">add</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L561">Pt.ts:561</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L562">Pt.ts:562</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -923,7 +972,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#anchorfrom">anchorFrom</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L452">Pt.ts:452</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L453">Pt.ts:453</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -955,7 +1004,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#anchorto">anchorTo</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L446">Pt.ts:446</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L447">Pt.ts:447</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -987,7 +1036,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#boundingbox">boundingBox</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L438">Pt.ts:438</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L439">Pt.ts:439</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
@@ -1005,7 +1054,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#centroid">centroid</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L434">Pt.ts:434</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L435">Pt.ts:435</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
@@ -1023,9 +1072,14 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#clone">clone</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Bound.ts#L35">Bound.ts:35</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Bound.ts#L65">Bound.ts:65</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Clone this bound and return a new one</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <a href="_bound_.bound.html" class="tsd-signature-type">Bound</a></h4>
 						</li>
 					</ul>
@@ -1041,7 +1095,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#divide">divide</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L573">Pt.ts:573</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L574">Pt.ts:574</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1065,7 +1119,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#foreachpt">forEachPt</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L550">Pt.ts:550</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L551">Pt.ts:551</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1092,19 +1146,24 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected">
 					<a name="init" class="tsd-anchor"></a>
-					<h3>init</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> init</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
 						<li class="tsd-signature tsd-kind-icon">init<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Bound.ts#L21">Bound.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Bound.ts#L46">Bound.ts:46</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Initiate the bound&#39;s properties.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
@@ -1120,7 +1179,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#insert">insert</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L403">Pt.ts:403</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L404">Pt.ts:404</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1158,7 +1217,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#interpolate">interpolate</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L486">Pt.ts:486</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L487">Pt.ts:487</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1190,7 +1249,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#lines">lines</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L432">Pt.ts:432</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L433">Pt.ts:433</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1213,7 +1272,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#moveby">moveBy</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L494">Pt.ts:494</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L495">Pt.ts:495</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1237,7 +1296,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#moveto">moveTo</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L502">Pt.ts:502</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L503">Pt.ts:503</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1269,7 +1328,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#multiply">multiply</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L569">Pt.ts:569</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L570">Pt.ts:570</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1293,7 +1352,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#op">op</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L460">Pt.ts:460</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L461">Pt.ts:461</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1366,7 +1425,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#ops">ops</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L474">Pt.ts:474</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L475">Pt.ts:475</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1400,7 +1459,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#reflect2d">reflect2D</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L529">Pt.ts:529</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L530">Pt.ts:530</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1427,7 +1486,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#remove">remove</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L414">Pt.ts:414</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L415">Pt.ts:415</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1466,7 +1525,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#rotate2d">rotate2D</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L515">Pt.ts:515</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L516">Pt.ts:516</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1496,7 +1555,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#scale">scale</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L508">Pt.ts:508</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L509">Pt.ts:509</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1523,7 +1582,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#segments">segments</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L425">Pt.ts:425</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L426">Pt.ts:426</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1567,7 +1626,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#shear2d">shear2D</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L522">Pt.ts:522</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L523">Pt.ts:523</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1597,7 +1656,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#sortbydimension">sortByDimension</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L541">Pt.ts:541</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L542">Pt.ts:542</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1635,7 +1694,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#split">split</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L393">Pt.ts:393</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L394">Pt.ts:394</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1679,7 +1738,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#subtract">subtract</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L565">Pt.ts:565</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L566">Pt.ts:566</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1703,7 +1762,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#tostring">toString</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L599">Pt.ts:599</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L600">Pt.ts:600</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -1714,13 +1773,13 @@
 					<a name="update" class="tsd-anchor"></a>
 					<h3>update</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">update<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">update<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Bound.ts#L121">Bound.ts:121</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Bound.ts#L177">Bound.ts:177</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1729,7 +1788,7 @@
 									It&#39;s preferable to change the topLeft/bottomRight etc properties instead of changing the Group array directly.</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -1744,7 +1803,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#zipslice">zipSlice</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L586">Pt.ts:586</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L587">Pt.ts:587</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2298,7 +2357,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#fromarray">fromArray</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L374">Pt.ts:374</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L375">Pt.ts:375</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2321,16 +2380,25 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Bound.ts#L127">Bound.ts:127</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Bound.ts#L35">Bound.ts:35</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Create a Bound from a <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect">ClientRect</a> object.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>rect: <span class="tsd-signature-type">ClientRect</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an object has top/left/bottom/right/width/height properties</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_bound_.bound.html" class="tsd-signature-type">Bound</a></h4>
+							<p>a Bound object</p>
 						</li>
 					</ul>
 				</section>
@@ -2345,7 +2413,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#fromptarray">fromPtArray</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Pt.ts#L383">Pt.ts:383</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Pt.ts#L384">Pt.ts:384</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -4094,7 +4162,7 @@
 			<nav class="tsd-navigation primary">
 				<ul>
 					<li class="globals  ">
-						<a href="../globals.html"><em>Globals</em></a>
+						<a href="../index.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module">
 						<a href="../modules/_bound_.html">"<wbr>Bound"</a>
@@ -4276,7 +4344,7 @@
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 								<a href="_bound_.bound.html#foreachpt" class="tsd-kind-icon">for<wbr>Each<wbr>Pt</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
 								<a href="_bound_.bound.html#init" class="tsd-kind-icon">init</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">

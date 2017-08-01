@@ -83,9 +83,10 @@ exports.PtBaseArray = Float32Array;
 class Pt extends exports.PtBaseArray {
     /**
      * Create a Pt. If no parameter is provided, this will instantiate a Pt with 2 dimensions [0, 0].
+     *
      * Note that `new Pt(3)` will only instantiate Pt with length of 3 (ie, same as `new Float32Array(3)` ). If you need a Pt with 1 dimension of value 3, use `new Pt([3])`.
-     * Example: `new Pt()`, `new Pt(1,2,3,4,5)`, `new Pt([1,2])`, `new Pt({x:0, y:1})`, `new Pt(pt)`
-     * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
+     * @example `new Pt()`, `new Pt(1,2,3,4,5)`, `new Pt([1,2])`, `new Pt({x:0, y:1})`, `new Pt(pt)`
+     * @param args a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
      */
     constructor(...args) {
         if (args.length === 1 && typeof args[0] == "number") {
@@ -1014,7 +1015,15 @@ exports.Mat = Mat;
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
+/**
+ * Bound is a subclass of Group that represents a rectangular boundary.
+ * It includes some convenient properties such as `x`, `y`, bottomRight`, `center`, and `size`.
+ */
 class Bound extends Pt_1.Group {
+    /**
+     * Create a Bound. This is similar to the Group constructor.
+     * @param args a list of Pt as parameters
+     */
     constructor(...args) {
         super(...args);
         this._center = new Pt_1.Pt();
@@ -1024,6 +1033,20 @@ class Bound extends Pt_1.Group {
         this._inited = false;
         this.init();
     }
+    /**
+     * Create a Bound from a [ClientRect](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect) object.
+     * @param rect an object has top/left/bottom/right/width/height properties
+     * @returns a Bound object
+     */
+    static fromBoundingRect(rect) {
+        let b = new Bound(new Pt_1.Pt(rect.left || 0, rect.top || 0), new Pt_1.Pt(rect.right || 0, rect.bottom || 0));
+        if (rect.width && rect.height)
+            b.size = new Pt_1.Pt(rect.width, rect.height);
+        return b;
+    }
+    /**
+     * Initiate the bound's properties.
+     */
     init() {
         if (this.p1) {
             this._size = this.p1.clone();
@@ -1035,26 +1058,45 @@ class Bound extends Pt_1.Group {
             this.topLeft = a.$min(b);
             this._bottomRight = a.$max(b);
             this._updateSize();
+            this._inited = true;
         }
     }
+    /**
+     * Clone this bound and return a new one
+     */
     clone() {
         return new Bound(this._topLeft.clone(), this._bottomRight.clone());
     }
+    /**
+     * Recalculte size and center
+     */
     _updateSize() {
         this._size = this._bottomRight.$subtract(this._topLeft).abs();
         this._updateCenter();
     }
+    /**
+     * Recalculate center
+     */
     _updateCenter() {
         this._center = this._size.$multiply(0.5).add(this._topLeft);
     }
+    /**
+     * Recalculate based on top-left position and size
+     */
     _updatePosFromTop() {
         this._bottomRight = this._topLeft.$add(this._size);
         this._updateCenter();
     }
+    /**
+     * Recalculate based on bottom-right position and size
+     */
     _updatePosFromBottom() {
         this._topLeft = this._bottomRight.$subtract(this._size);
         this._updateCenter();
     }
+    /**
+     * Recalculate based on center position and size
+     */
     _updatePosFromCenter() {
         let half = this._size.$multiply(0.5);
         this._topLeft = this._center.$subtract(half);
@@ -1109,12 +1151,7 @@ class Bound extends Pt_1.Group {
         this._topLeft = this[0];
         this._bottomRight = this[1];
         this._updateSize();
-    }
-    static fromBoundingRect(rect) {
-        let b = new Bound(new Pt_1.Pt(rect.left || 0, rect.top || 0), new Pt_1.Pt(rect.right || 0, rect.bottom || 0));
-        if (rect.width && rect.height)
-            b.size = new Pt_1.Pt(rect.width, rect.height);
-        return b;
+        return this;
     }
 }
 exports.Bound = Bound;
@@ -1946,7 +1983,7 @@ class Circle {
         return new Pt_1.Group(Rectangle.center(pts), new Pt_1.Pt(r, r));
     }
     static fromPt(pt, radius) {
-        return new Pt_1.Group(pt, new Pt_1.Pt(radius, radius));
+        return new Pt_1.Group(new Pt_1.Pt(pt), new Pt_1.Pt(radius, radius));
     }
     static withinBound(pts, pt) {
         let d = pts[0].$subtract(pt);
@@ -2868,11 +2905,16 @@ const Form_1 = __webpack_require__(6);
 const Bound_1 = __webpack_require__(3);
 const Pt_1 = __webpack_require__(0);
 const Util_1 = __webpack_require__(1);
+/**
+ * CanvasSpace is an implementation of the abstract class Space. It represents a space for HTML Canvas.
+ * Learn more about the concept of Space in [this guide](..guide/Space-0500.html)
+ */
 class CanvasSpace extends Space_1.Space {
     /**
      * Create a CanvasSpace which represents a HTML Canvas Space
      * @param elem Specify an element by its "id" attribute as string, or by the element object itself. An element can be an existing `<canvas>`, or a `<div>` container in which a new `<canvas>` will be created. If left empty, a `<div id="pt_container"><canvas id="pt" /></div>` will be added to DOM. Use css to customize its appearance if needed.
-     * @param callback an optional callback `function(boundingBox, spaceElement)` to be called when canvas is appended and ready. A "ready" event will also be fired from the `<canvas>` element when it's appended, which can be traced with `spaceInstance.space.addEventListener("ready")`
+     * @param callback an optional callback `function(boundingBox, spaceElement)` to be called when canvas is appended and ready. Alternatively, a "ready" event will also be fired from the `<canvas>` element when it's appended, which can be traced with `spaceInstance.canvas.addEventListener("ready")`
+     * @example `new CanvasSpace( "#myElementID" )`
      */
     constructor(elem, callback) {
         super();
@@ -2930,7 +2972,6 @@ class CanvasSpace extends Space_1.Space {
         setTimeout(this._ready.bind(this, callback), 50);
         // store canvas 2d rendering context
         this._ctx = this._canvas.getContext('2d');
-        //
     }
     /**
      * Helper function to create a DOM element
@@ -2970,12 +3011,12 @@ class CanvasSpace extends Space_1.Space {
      * @param opt.resize a boolean to set whether `<canvas>` size should auto resize to match its container's size. You can also set it manually with `autoSize()`
      * @param opt.retina a boolean to set if device pixel scaling should be used. This may make drawings on retina displays look sharper but may reduce performance slightly. Default is `true`.
      * @param opt.offscreen a boolean to set if a duplicate canvas should be created for offscreen rendering. Default is `false`.
+     * @example `space.setup({ bgcolor: "#f00", retina: true, resize: true })`
      */
     setup(opt) {
         if (opt.bgcolor)
             this._bgcolor = opt.bgcolor;
-        if (opt.resize != undefined)
-            this.autoResize(opt.resize);
+        this.autoResize = (opt.resize != undefined) ? opt.resize : false;
         if (opt.retina !== false) {
             let r1 = window.devicePixelRatio || 1;
             let r2 = this._ctx.webkitBackingStorePixelRatio || this._ctx.mozBackingStorePixelRatio || this._ctx.msBackingStorePixelRatio || this._ctx.oBackingStorePixelRatio || this._ctx.backingStorePixelRatio || 1;
@@ -2991,6 +3032,23 @@ class CanvasSpace extends Space_1.Space {
         }
         return this;
     }
+    /**
+     * Set whether the canvas element should resize when its container is resized.
+     * @param auto a boolean value indicating if auto size is set
+     */
+    set autoResize(auto) {
+        this._autoResize = auto;
+        if (auto) {
+            window.addEventListener('resize', this._resizeHandler.bind(this));
+        }
+        else {
+            window.removeEventListener('resize', this._resizeHandler.bind(this));
+        }
+    }
+    get autoResize() { return this._autoResize; }
+    /**
+     * `pixelScale` property returns a number that let you determine if the screen is "retina" (when value >= 2)
+     */
     get pixelScale() {
         return this._pixelScale;
     }
@@ -3000,14 +3058,6 @@ class CanvasSpace extends Space_1.Space {
     get hasOffscreen() {
         return this._offscreen;
     }
-    /**
-     * Get the rendering context of canvas
-     */
-    get ctx() { return this._ctx; }
-    /**
-     * Get the canvas element in this space
-     */
-    get canvas() { return this._canvas; }
     /**
      * Get the rendering context of offscreen canvas (if created via `setup()`)
      */
@@ -3025,32 +3075,10 @@ class CanvasSpace extends Space_1.Space {
         return p;
     }
     /**
-     * Get a new CanvasForm for drawing
+     * Get a new `CanvasForm` for drawing
+     * @see `CanvasForm`
      */
     getForm() { return new CanvasForm(this); }
-    /**
-     * Window resize handling
-     * @param evt
-     */
-    _resizeHandler(evt) {
-        let b = (this._autoResize) ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
-        if (b)
-            this.resize(Bound_1.Bound.fromBoundingRect(b), evt);
-    }
-    /**
-     * Set whether the canvas element should resize when its container is resized. Default will auto size
-     * @param auto a boolean value indicating if auto size is set. Default is `true`.
-     */
-    autoResize(auto = true) {
-        this._autoResize = auto;
-        if (auto) {
-            window.addEventListener('resize', this._resizeHandler.bind(this));
-        }
-        else {
-            window.removeEventListener('resize', this._resizeHandler.bind(this));
-        }
-        return this;
-    }
     /**
      * Get the html canvas element
      */
@@ -3064,7 +3092,15 @@ class CanvasSpace extends Space_1.Space {
         return this._container;
     }
     /**
-     * This overrides Space's `resize` function. It's a callback function for window's resize event. Keep track of this with `resize: (bound ,evt)` callback in your added objects.
+     * Get the rendering context of canvas
+     */
+    get ctx() { return this._ctx; }
+    /**
+     * Get the canvas element in this space
+     */
+    get canvas() { return this._canvas; }
+    /**
+     * This overrides Space's `resize` function. It's used as a callback function for window's resize event and not usually called directly. You can keep track of resize events with `resize: (bound ,evt)` callback in your player objects (See `Space`'s `add()` function).
      * @param b a Bound object to resize to
      * @param evt Optionally pass a resize event
      */
@@ -3097,6 +3133,15 @@ class CanvasSpace extends Space_1.Space {
         return this;
     }
     /**
+     * Window resize handling
+     * @param evt
+     */
+    _resizeHandler(evt) {
+        let b = (this._autoResize) ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
+        if (b)
+            this.resize(Bound_1.Bound.fromBoundingRect(b), evt);
+    }
+    /**
      * Clear the canvas with its background color. Overrides Space's `clear` function.
      * @param bg Optionally specify a custom background color in hex or rgba string, or "transparent". If not defined, it will use its `bgcolor` property as background color to clear the canvas.
      */
@@ -3114,6 +3159,10 @@ class CanvasSpace extends Space_1.Space {
         this._ctx.fillStyle = lastColor;
         return this;
     }
+    /**
+     * Similiar to `clear()` but clear the offscreen canvas instead
+     * @param bg Optionally specify a custom background color in hex or rgba string, or "transparent". If not defined, it will use its `bgcolor` property as background color to clear the canvas.
+     */
     clearOffscreen(bg) {
         if (this._offscreen) {
             if (bg) {
@@ -3143,7 +3192,7 @@ class CanvasSpace extends Space_1.Space {
         }
     }
     /**
-     * Bind event listener in canvas element, for events such as mouse events
+     * Bind event listener in canvas element. You can also use `bindMouse` or `bindTouch` to bind mouse or touch events conveniently.
      * @param evt an event string such as "mousedown"
      * @param callback callback function for this event
      */
@@ -3159,8 +3208,9 @@ class CanvasSpace extends Space_1.Space {
         this._canvas.removeEventListener(evt, callback);
     }
     /**
-     * A convenient method to bind (or unbind) all mouse events in canvas element. All item added to `players` property that implements an `onMouseAction` callback will receive mouse event callbacks. The types of mouse actions are: "up", "down", "move", "drag", "drop", "over", and "out".
+     * A convenient method to bind (or unbind) all mouse events in canvas element. All "players" added to this space that implements an `action` callback property will receive mouse event callbacks. The types of mouse actions are: "up", "down", "move", "drag", "drop", "over", and "out". See `Space`'s `add()` function fore more.
      * @param _bind a boolean value to bind mouse events if set to `true`. If `false`, all mouse events will be unbound. Default is true.
+     * @see Space`'s [`add`](./_space_.space.html#add) function
      */
     bindMouse(_bind = true) {
         if (_bind) {
@@ -3182,8 +3232,9 @@ class CanvasSpace extends Space_1.Space {
         return this;
     }
     /**
-     * A convenient method to bind (or unbind) all mobile touch events in canvas element. All item added to `players` property that implements an `onTouchAction` callback will receive touch event callbacks. The types of touch actions are the same as the mouse actions: "up", "down", "move", and "out"
-     * @param _bind a boolean value to bind touch events if set to `true`. If `false`, all touch events will be unbound. Default is true.
+     * A convenient method to bind (or unbind) all touch events in canvas element. All "players" added to this space that implements an `action` callback property will receive mouse event callbacks. The types of mouse actions are: "up", "down", "move", "drag", "drop", "over", and "out".
+     * @param _bind a boolean value to bind touch events if set to `true`. If `false`, all mouse events will be unbound. Default is true.
+     * @see Space`'s [`add`](./_space_.space.html#add) function
      */
     bindTouch(_bind = true) {
         if (_bind) {
@@ -3219,9 +3270,9 @@ class CanvasSpace extends Space_1.Space {
         return ts;
     }
     /**
-     * Go through all the `players` and call its `onMouseAction` callback function
-     * @param type
-     * @param evt
+     * Go through all the `players` and call its `action` callback function
+     * @param type "up", "down", "move", "drag", "drop", "over", and "out"
+     * @param evt mouse or touch event
      */
     _mouseAction(type, evt) {
         let px = 0, py = 0;
@@ -3258,6 +3309,7 @@ class CanvasSpace extends Space_1.Space {
     _mouseDown(evt) {
         this._mouseAction("down", evt);
         this._pressed = true;
+        return false;
     }
     /**
      * MouseUp handler
@@ -3269,6 +3321,7 @@ class CanvasSpace extends Space_1.Space {
             this._mouseAction("drop", evt);
         this._pressed = false;
         this._dragged = false;
+        return false;
     }
     /**
      * MouseMove handler
@@ -3280,6 +3333,7 @@ class CanvasSpace extends Space_1.Space {
             this._dragged = true;
             this._mouseAction("drag", evt);
         }
+        return false;
     }
     /**
      * MouseOver handler
@@ -3287,6 +3341,7 @@ class CanvasSpace extends Space_1.Space {
      */
     _mouseOver(evt) {
         this._mouseAction("over", evt);
+        return false;
     }
     /**
      * MouseOut handler
@@ -3297,6 +3352,7 @@ class CanvasSpace extends Space_1.Space {
         if (this._dragged)
             this._mouseAction("drop", evt);
         this._dragged = false;
+        return false;
     }
     /**
      * TouchMove handler
@@ -3305,6 +3361,7 @@ class CanvasSpace extends Space_1.Space {
     _touchMove(evt) {
         evt.preventDefault();
         this._mouseMove(evt);
+        return false;
     }
     /**
      * Custom rendering
@@ -3323,12 +3380,19 @@ class CanvasSpace extends Space_1.Space {
 }
 exports.CanvasSpace = CanvasSpace;
 /**
- * CanvasForm provide methods to visualize Pts on CanvasSpace
+ * CanvasForm is an implementation of abstract class Form. It provide methods to express Pts on CanvasSpace.
+ * You may extend CanvasForm to implement your own expressions for CanvasSpace.
  */
 class CanvasForm extends Form_1.Form {
+    /**
+     * Create a new CanvasForm. You may also use `space.getForm()` to get the default form.
+     * @param space an instance of CanvasSpace
+     */
     constructor(space) {
         super();
-        // store common styles so that they can be restored to canvas context when using multiple forms. See `reset()`.
+        /**
+         * store common styles so that they can be restored to canvas context when using multiple forms. See `reset()`.
+         */
         this._style = {
             fillStyle: "#f03", strokeStyle: "#fff",
             lineWidth: 1, lineJoin: "bevel", lineCap: "butt",
@@ -3343,22 +3407,34 @@ class CanvasForm extends Form_1.Form {
                 this._ctx.font = this._font.value;
             } });
     }
+    /**
+     * get the CanvasSpace instance that this form is associated with
+     */
     get space() { return this._space; }
+    /**
+     * Toggle whether to draw on offscreen canvas (if offscreen is set in CanvasSpace)
+     * @param off if `true`, draw on offscreen canvas instead of the visible canvas. Default is `true`
+     * @param clear optionally provide a valid color string to fill a bg color. see CanvasSpace's `clearOffscreen` function.
+     */
     useOffscreen(off = true, clear = false) {
         if (clear)
             this._space.clearOffscreen((typeof clear == "string") ? clear : null);
         this._ctx = (this._space.hasOffscreen && off) ? this._space.offscreenCtx : this._space.ctx;
         return this;
     }
-    renderOffscreen(offsetX = 0, offsetY = 0) {
+    /**
+     * Render the offscreen canvas's content on the visible canvas
+     * @param offset Optional offset on the top-left position when drawing on the visible canvas
+     */
+    renderOffscreen(offset = [0, 0]) {
         if (this._space.hasOffscreen) {
-            this._space.ctx.drawImage(this._space.offscreenCanvas, offsetX, offsetY, this._space.width, this._space.height);
+            this._space.ctx.drawImage(this._space.offscreenCanvas, offset[0], offset[1], this._space.width, this._space.height);
         }
     }
     /**
-     * Set current fill style. For example: `form.fill("#F90")` `form.fill("rgba(0,0,0,.5")` `form.fill(false)`
+     * Set current fill style. Provide a valid color string or `false` to specify no fill color.
+     * @example `form.fill("#F90")`, `form.fill("rgba(0,0,0,.5")`, `form.fill(false)`
      * @param c fill color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle))
-     * @return this
      */
     fill(c) {
         if (typeof c == "boolean") {
@@ -3371,17 +3447,22 @@ class CanvasForm extends Form_1.Form {
         }
         return this;
     }
+    /**
+     * Set current fill style and without stroke.
+     * @example `form.fillOnly("#F90")`, `form.fillOnly("rgba(0,0,0,.5")`
+     * @param c fill color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle))
+     */
     fillOnly(c) {
         this.stroke(false);
         return this.fill(c);
     }
     /**
-     * Set current stroke style. For example: `form.stroke("#F90")` `form.stroke("rgba(0,0,0,.5")` `form.stroke(false)` `form.stroke("#000", 0.5, 'round')`
+     * Set current stroke style. Provide a valid color string or `false` to specify no stroke color.
+     * @example `form.stroke("#F90")`, `form.stroke("rgba(0,0,0,.5")`, `form.stroke(false)`, `form.stroke("#000", 0.5, 'round', 'square')`
      * @param c stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle))
      * @param width Optional value (can be floating point) to set line width
      * @param linejoin Optional string to set line joint style. Can be "miter", "bevel", or "round".
      * @param linecap Optional string to set line cap style. Can be "butt", "round", or "square".
-     * @return this
      */
     stroke(c, width, linejoin, linecap) {
         if (typeof c == "boolean") {
@@ -3406,22 +3487,40 @@ class CanvasForm extends Form_1.Form {
         }
         return this;
     }
+    /**
+     * Set current stroke style and without fill.
+     * @example `form.strokeOnly("#F90")`, `form.strokeOnly("#000", 0.5, 'round', 'square')`
+     * @param c stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle)
+     */
     strokeOnly(c, width, linejoin, linecap) {
         this.fill(false);
         return this.stroke(c, width, linejoin, linecap);
     }
-    font(size, weight, style, lineHeight, family) {
-        if (size)
-            this._font.size = size;
-        if (family)
-            this._font.face = family;
-        if (weight)
-            this._font.weight = weight;
-        if (style)
-            this._font.style = style;
-        if (lineHeight)
-            this._font.lineHeight = lineHeight;
-        this._ctx.font = this._font.value;
+    /**
+     * Set the current font
+     * @param sizeOrFont either a number to specify font-size, or a `Font` object to specify all font properties
+     * @param weight Optional font-weight string such as "bold"
+     * @param style Optional font-style string such as "italic"
+     * @param lineHeight Optional line-height number suchas 1.5
+     * @param family Optional font-family such as "Helvetica, sans-serif"
+     * @example `form.font( myFont )`, `form.font(14, "bold")`
+     */
+    font(sizeOrFont, weight, style, lineHeight, family) {
+        if (typeof sizeOrFont == "number") {
+            this._font.size = sizeOrFont;
+            if (family)
+                this._font.face = family;
+            if (weight)
+                this._font.weight = weight;
+            if (style)
+                this._font.style = style;
+            if (lineHeight)
+                this._font.lineHeight = lineHeight;
+            this._ctx.font = this._font.value;
+        }
+        else {
+            this._font = sizeOrFont;
+        }
         return this;
     }
     /**
@@ -3441,6 +3540,21 @@ class CanvasForm extends Form_1.Form {
         if (this._stroked)
             this._ctx.stroke();
     }
+    _multiple(groups, shape, ...rest) {
+        if (!groups)
+            return this;
+        for (let i = 0, len = groups.length; i < len; i++) {
+            this[shape](groups[i], ...rest);
+        }
+        return this;
+    }
+    /**
+     * Draws a point
+     * @param p a Pt object
+     * @param radius radius of the point. Default is 5.
+     * @param shape The shape of the point. Defaults to "square", but it can be "circle" or a custom shape function in your own implementation.
+     * @example `form.point( p )`, `form.point( p, 10, "circle" )`
+     */
     point(p, radius = 5, shape = "square") {
         if (!p)
             return;
@@ -3450,6 +3564,12 @@ class CanvasForm extends Form_1.Form {
         this._paint();
         return this;
     }
+    /**
+     * Draw multiple points at once
+     * @param pts an array of Pt or an array of number arrays
+     * @param radius radius of the point. Default is 5.
+     * @param shape The shape of the point. Defaults to "square", but it can be "circle" or a custom shape function in your own implementation.
+     */
     points(pts, radius = 5, shape = "square") {
         if (!pts)
             return;
@@ -3458,14 +3578,12 @@ class CanvasForm extends Form_1.Form {
         }
         return this;
     }
-    _multiple(groups, shape, ...rest) {
-        if (!groups)
-            return this;
-        for (let i = 0, len = groups.length; i < len; i++) {
-            this[shape](groups[i], ...rest);
-        }
-        return this;
-    }
+    /**
+     * A static function to draw a circle
+     * @param ctx canvas rendering context
+     * @param pt center position of the circle
+     * @param radius radius of the circle
+     */
     static circle(ctx, pt, radius = 10) {
         if (!pt)
             return;
@@ -3473,42 +3591,57 @@ class CanvasForm extends Form_1.Form {
         ctx.arc(pt[0], pt[1], radius, 0, Util_1.Const.two_pi, false);
         ctx.closePath();
     }
+    /**
+     * Draw a circle
+     * @param pts usually a Group of 2 Pts, but it can also take an array of two numeric arrays [ [position], [size] ]
+     * @see [`Circle.fromPt`](./_op_.circle.html#frompt)
+     */
     circle(pts) {
         CanvasForm.circle(this._ctx, pts[0], pts[1][0]);
         this._paint();
         return this;
     }
+    /**
+     * Draw multiple circles at once
+     * @param groups an array of Groups that defines multiple circles
+     */
     circles(groups) {
         return this._multiple(groups, "circle");
     }
-    static ellipse(ctx, pts) {
-        if (pts.length < 2)
-            return;
-        if (pts[1].length < 2) {
-            CanvasForm.circle(ctx, pts[0], pts[1][0]);
-        }
-        else {
-            ctx.ellipse(pts[0][0], pts[0][1], pts[1][0], pts[1][1], 0, 0, Util_1.Const.two_pi);
-        }
-    }
-    ellipse(pts) {
-        CanvasForm.ellipse(this._ctx, pts);
-        return this;
-    }
-    ellipses(groups) {
-        return this._multiple(groups, "ellipse");
-    }
+    /**
+     * A static function to draw an arc.
+     * @param ctx canvas rendering context
+     * @param pt center position
+     * @param radius radius of the arc circle
+     * @param startAngle start angle of the arc
+     * @param endAngle end angle of the arc
+     * @param cc an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.
+     */
     static arc(ctx, pt, radius, startAngle, endAngle, cc) {
         if (!pt)
             return;
         ctx.beginPath();
         ctx.arc(pt[0], pt[1], radius, startAngle, endAngle, cc);
     }
+    /**
+     * Draw an arc.
+     * @param pt center position
+     * @param radius radius of the arc circle
+     * @param startAngle start angle of the arc
+     * @param endAngle end angle of the arc
+     * @param cc an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.
+     */
     arc(pt, radius, startAngle, endAngle, cc) {
         CanvasForm.arc(this._ctx, pt, radius, startAngle, endAngle, cc);
         this._paint();
         return this;
     }
+    /**
+     * A static function to draw a square
+     * @param ctx canvas rendering context
+     * @param pt center position of the square
+     * @param halfsize half size of the square
+     */
     static square(ctx, pt, halfsize) {
         if (!pt)
             return;
@@ -3524,6 +3657,11 @@ class CanvasForm extends Form_1.Form {
         ctx.lineTo(x2, y1);
         ctx.closePath();
     }
+    /**
+     * A static function to draw a line
+     * @param ctx canvas rendering context
+     * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
+     */
     static line(ctx, pts) {
         if (pts.length < 2)
             return;
@@ -3534,14 +3672,27 @@ class CanvasForm extends Form_1.Form {
                 ctx.lineTo(pts[i][0], pts[i][1]);
         }
     }
+    /**
+     * Draw a line or polyline
+     * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
+     */
     line(pts) {
         CanvasForm.line(this._ctx, pts);
         this._paint();
         return this;
     }
+    /**
+     * Draw multiple lines at once
+     * @param groups An array of Groups of Pts
+     */
     lines(groups) {
         return this._multiple(groups, "line");
     }
+    /**
+     * A static function to draw polygon
+     * @param ctx canvas rendering context
+     * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
+     */
     static polygon(ctx, pts) {
         if (pts.length < 2)
             return;
@@ -3553,14 +3704,27 @@ class CanvasForm extends Form_1.Form {
         }
         ctx.closePath();
     }
+    /**
+     * Draw a polygon
+     * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
+     */
     polygon(pts) {
         CanvasForm.polygon(this._ctx, pts);
         this._paint();
         return this;
     }
+    /**
+     * Draw multiple polygons at once
+     * @param groups An array of Groups of Pts
+     */
     polygons(groups) {
         return this._multiple(groups, "polygon");
     }
+    /**
+     * A static function to draw a rectangle
+     * @param ctx canvas rendering context
+     * @param pts usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.
+     */
     static rect(ctx, pts) {
         if (pts.length < 2)
             return;
@@ -3571,17 +3735,25 @@ class CanvasForm extends Form_1.Form {
         ctx.lineTo(pts[1][0], pts[0][1]);
         ctx.closePath();
     }
+    /**
+     * Draw a rectangle
+     * @param pts usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.
+     */
     rect(pts) {
         CanvasForm.rect(this._ctx, pts);
         this._paint();
         return this;
     }
+    /**
+     * Draw multiple rectangles at once
+     * @param groups An array of Groups of Pts
+     */
     rects(groups) {
         return this._multiple(groups, "rect");
     }
     /**
      * A static function to draw text
-     * @param `ctx` canvas rendering context
+     * @param ctx canvas rendering context
      * @param `pt` a Point object to specify the anchor point
      * @param `txt` a string of text to draw
      * @param `maxWidth` specify a maximum width per line
@@ -3591,10 +3763,20 @@ class CanvasForm extends Form_1.Form {
             return;
         ctx.fillText(txt, pt[0], pt[1], maxWidth);
     }
+    /**
+     * Draw text on canvas
+     * @param `pt` a Pt or numeric array to specify the anchor point
+     * @param `txt` text
+     * @param `maxWidth` specify a maximum width per line
+     */
     text(pt, txt, maxWidth) {
         CanvasForm.text(this._ctx, pt, txt, maxWidth);
         return this;
     }
+    /**
+     * A convenient way to draw some text on canvas for logging or debugging. It'll be draw on the top-left of the canvas as an overlay.
+     * @param txt text
+     */
     log(txt) {
         let w = this._ctx.measureText(txt).width + 20;
         this.stroke(false).fill("rgba(0,0,0,.4)").rect([[0, 0], [w, 20]]);

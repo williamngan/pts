@@ -53,7 +53,7 @@
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="../globals.html">Globals</a>
+					<a href="../index.html">Globals</a>
 				</li>
 				<li>
 					<a href="../modules/_canvas_.html">&quot;Canvas&quot;</a>
@@ -72,7 +72,8 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>CanvasForm provide methods to visualize Pts on CanvasSpace</p>
+						<p>CanvasForm is an implementation of abstract class Form. It provide methods to express Pts on CanvasSpace.
+						You may extend CanvasForm to implement your own expressions for CanvasSpace.</p>
 					</div>
 				</div>
 			</section>
@@ -126,8 +127,6 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_canvas_.canvasform.html#arc" class="tsd-kind-icon">arc</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_canvas_.canvasform.html#circle" class="tsd-kind-icon">circle</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_canvas_.canvasform.html#circles" class="tsd-kind-icon">circles</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_canvas_.canvasform.html#ellipse" class="tsd-kind-icon">ellipse</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_canvas_.canvasform.html#ellipses" class="tsd-kind-icon">ellipses</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="_canvas_.canvasform.html#fill" class="tsd-kind-icon">fill</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_canvas_.canvasform.html#fillonly" class="tsd-kind-icon">fill<wbr>Only</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_canvas_.canvasform.html#font" class="tsd-kind-icon">font</a></li>
@@ -148,7 +147,6 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_canvas_.canvasform.html#useoffscreen" class="tsd-kind-icon">use<wbr>Offscreen</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_canvas_.canvasform.html#arc-1" class="tsd-kind-icon">arc</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_canvas_.canvasform.html#circle-1" class="tsd-kind-icon">circle</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_canvas_.canvasform.html#ellipse-1" class="tsd-kind-icon">ellipse</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_canvas_.canvasform.html#line-1" class="tsd-kind-icon">line</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_canvas_.canvasform.html#polygon-1" class="tsd-kind-icon">polygon</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_canvas_.canvasform.html#rect-1" class="tsd-kind-icon">rect</a></li>
@@ -177,13 +175,23 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L572">Canvas.ts:572</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L600">Canvas.ts:600</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Create a new CanvasForm. You may also use <code>space.getForm()</code> to get the default form.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>space: <a href="_canvas_.canvasspace.html" class="tsd-signature-type">CanvasSpace</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>an instance of CanvasSpace</p>
+										</div>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_canvas_.canvasform.html" class="tsd-signature-type">CanvasForm</a></h4>
@@ -199,7 +207,7 @@
 					<div class="tsd-signature tsd-kind-icon">_ctx<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">CanvasRenderingContext2D</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L564">Canvas.ts:564</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L590">Canvas.ts:590</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -210,7 +218,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_form_.form.html">Form</a>.<a href="_form_.form.html#_filled">_filled</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Form.ts#L31">Form.ts:31</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Form.ts#L31">Form.ts:31</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -221,7 +229,7 @@
 					<aside class="tsd-sources">
 						<p>Overrides <a href="_form_.form.html">Form</a>.<a href="_form_.form.html#_font">_font</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L572">Canvas.ts:572</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L600">Canvas.ts:600</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -231,7 +239,7 @@
 					<div class="tsd-signature tsd-kind-icon">_space<span class="tsd-signature-symbol">:</span> <a href="_canvas_.canvasspace.html" class="tsd-signature-type">CanvasSpace</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L563">Canvas.ts:563</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L589">Canvas.ts:589</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -242,7 +250,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_form_.form.html">Form</a>.<a href="_form_.form.html#_stroked">_stroked</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Form.ts#L35">Form.ts:35</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Form.ts#L35">Form.ts:35</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -260,7 +268,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_form_.form.html">Form</a>.<a href="_form_.form.html#currentfont">currentFont</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Form.ts#L40">Form.ts:40</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Form.ts#L40">Form.ts:40</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_form_.font.html" class="tsd-signature-type">Font</a></h4>
@@ -279,7 +287,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_form_.form.html">Form</a>.<a href="_form_.form.html#filled">filled</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Form.ts#L32">Form.ts:32</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Form.ts#L32">Form.ts:32</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -288,7 +296,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_form_.form.html">Form</a>.<a href="_form_.form.html#filled">filled</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Form.ts#L33">Form.ts:33</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Form.ts#L33">Form.ts:33</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -312,9 +320,14 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_form_.form.html">Form</a>.<a href="_form_.form.html#space">space</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L587">Canvas.ts:587</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L622">Canvas.ts:622</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>get the CanvasSpace instance that this form is associated with</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <a href="_canvas_.canvasspace.html" class="tsd-signature-type">CanvasSpace</a></h4>
 						</li>
 					</ul>
@@ -331,7 +344,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_form_.form.html">Form</a>.<a href="_form_.form.html#stroked">stroked</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Form.ts#L36">Form.ts:36</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Form.ts#L36">Form.ts:36</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -340,7 +353,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_form_.form.html">Form</a>.<a href="_form_.form.html#stroked">stroked</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Form.ts#L37">Form.ts:37</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Form.ts#L37">Form.ts:37</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -366,7 +379,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L710">Canvas.ts:710</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L764">Canvas.ts:764</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -395,7 +408,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L686">Canvas.ts:686</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L758">Canvas.ts:758</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -412,25 +425,45 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L761">Canvas.ts:761</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L865">Canvas.ts:865</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Draw an arc.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>pt: <a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>center position</p>
+									</div>
 								</li>
 								<li>
 									<h5>radius: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>radius of the arc circle</p>
+									</div>
 								</li>
 								<li>
 									<h5>startAngle: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>start angle of the arc</p>
+									</div>
 								</li>
 								<li>
 									<h5>endAngle: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>end angle of the arc</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> cc: <span class="tsd-signature-type">boolean</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an optional boolean value to specify if it should be drawn clockwise (<code>false</code>) or counter-clockwise (<code>true</code>). Default is clockwise.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -447,13 +480,26 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L725">Canvas.ts:725</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L825">Canvas.ts:825</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Draw a circle</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>see</dt>
+									<dd><p><a href="./_op_.circle.html#frompt"><code>Circle.fromPt</code></a></p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>usually a Group of 2 Pts, but it can also take an array of two numeric arrays [ [position], [size] ]</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -470,59 +516,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L731">Canvas.ts:731</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L836">Canvas.ts:836</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Draw multiple circles at once</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>groups: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol">[]</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="ellipse" class="tsd-anchor"></a>
-					<h3>ellipse</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">ellipse<span class="tsd-signature-symbol">(</span>pts<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L745">Canvas.ts:745</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="ellipses" class="tsd-anchor"></a>
-					<h3>ellipses</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">ellipses<span class="tsd-signature-symbol">(</span>groups<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L750">Canvas.ts:750</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>groups: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an array of Groups that defines multiple circles</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -540,13 +548,18 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_form_.form.html">Form</a>.<a href="_form_.form.html#fill">fill</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L609">Canvas.ts:609</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L654">Canvas.ts:654</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Set current fill style. For example: <code>form.fill(&quot;#F90&quot;)</code> <code>form.fill(&quot;rgba(0,0,0,.5&quot;)</code> <code>form.fill(false)</code></p>
+									<p>Set current fill style. Provide a valid color string or <code>false</code> to specify no fill color.</p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>example</dt>
+									<dd><p><code>form.fill(&quot;#F90&quot;)</code>, <code>form.fill(&quot;rgba(0,0,0,.5&quot;)</code>, <code>form.fill(false)</code></p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -558,7 +571,6 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
-							<p>this</p>
 						</li>
 					</ul>
 				</section>
@@ -572,13 +584,26 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L620">Canvas.ts:620</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L670">Canvas.ts:670</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Set current fill style and without stroke.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>example</dt>
+									<dd><p><code>form.fillOnly(&quot;#F90&quot;)</code>, <code>form.fillOnly(&quot;rgba(0,0,0,.5&quot;)</code></p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>c: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>fill color which can be as color, gradient, or pattern. (See <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle">canvas documentation</a>)</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -589,31 +614,56 @@
 					<a name="font" class="tsd-anchor"></a>
 					<h3>font</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">font<span class="tsd-signature-symbol">(</span>size<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, weight<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, style<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, lineHeight<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, family<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">font<span class="tsd-signature-symbol">(</span>sizeOrFont<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><a href="_form_.font.html" class="tsd-signature-type">Font</a>, weight<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, style<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, lineHeight<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, family<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L662">Canvas.ts:662</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L728">Canvas.ts:728</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Set the current font</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>example</dt>
+									<dd><p><code>form.font( myFont )</code>, <code>form.font(14, &quot;bold&quot;)</code></p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> size: <span class="tsd-signature-type">number</span></h5>
+									<h5>sizeOrFont: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><a href="_form_.font.html" class="tsd-signature-type">Font</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>either a number to specify font-size, or a <code>Font</code> object to specify all font properties</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> weight: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Optional font-weight string such as &quot;bold&quot;</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> style: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Optional font-style string such as &quot;italic&quot;</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> lineHeight: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Optional line-height number suchas 1.5</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> family: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Optional font-family such as &quot;Helvetica, sans-serif&quot;</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -630,13 +680,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L793">Canvas.ts:793</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L914">Canvas.ts:914</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Draw a line or polyline</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of multiple Pts, or an array of multiple numeric arrays</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -653,13 +711,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L799">Canvas.ts:799</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L925">Canvas.ts:925</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Draw multiple lines at once</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>groups: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>An array of Groups of Pts</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -676,13 +742,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L865">Canvas.ts:865</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L1031">Canvas.ts:1031</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A convenient way to draw some text on canvas for logging or debugging. It&#39;ll be draw on the top-left of the canvas as an overlay.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>txt: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>text</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -699,19 +773,38 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L692">Canvas.ts:692</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L780">Canvas.ts:780</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Draws a point</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>example</dt>
+									<dd><p><code>form.point( p )</code>, <code>form.point( p, 10, &quot;circle&quot; )</code></p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>p: <a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Pt object</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> radius: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;5</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>radius of the point. Default is 5.</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> shape: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;square&quot;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The shape of the point. Defaults to &quot;square&quot;, but it can be &quot;circle&quot; or a custom shape function in your own implementation.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -728,19 +821,33 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L702">Canvas.ts:702</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L797">Canvas.ts:797</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Draw multiple points at once</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an array of Pt or an array of number arrays</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> radius: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;5</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>radius of the point. Default is 5.</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> shape: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;square&quot;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The shape of the point. Defaults to &quot;square&quot;, but it can be &quot;circle&quot; or a custom shape function in your own implementation.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -757,13 +864,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L814">Canvas.ts:814</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L950">Canvas.ts:950</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Draw a polygon</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of multiple Pts, or an array of multiple numeric arrays</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -780,13 +895,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L820">Canvas.ts:820</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L961">Canvas.ts:961</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Draw multiple polygons at once</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>groups: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>An array of Groups of Pts</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -803,13 +926,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L836">Canvas.ts:836</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L986">Canvas.ts:986</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Draw a rectangle</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>pts: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -826,13 +957,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L842">Canvas.ts:842</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L997">Canvas.ts:997</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Draw multiple rectangles at once</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>groups: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>An array of Groups of Pts</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -843,22 +982,27 @@
 					<a name="renderoffscreen" class="tsd-anchor"></a>
 					<h3>render<wbr>Offscreen</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">render<wbr>Offscreen<span class="tsd-signature-symbol">(</span>offsetX<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, offsetY<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">render<wbr>Offscreen<span class="tsd-signature-symbol">(</span>offset<span class="tsd-signature-symbol">?: </span><a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L596">Canvas.ts:596</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L641">Canvas.ts:641</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Render the offscreen canvas&#39;s content on the visible canvas</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> offsetX: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;0</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> offsetY: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;0</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> offset: <a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a><span class="tsd-signature-symbol"> =&nbsp;[0,0]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Optional offset on the top-left position when drawing on the visible canvas</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -876,7 +1020,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_form_.form.html">Form</a>.<a href="_form_.form.html#reset">reset</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L676">Canvas.ts:676</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L748">Canvas.ts:748</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -899,13 +1043,18 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_form_.form.html">Form</a>.<a href="_form_.form.html#stroke">stroke</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L634">Canvas.ts:634</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L684">Canvas.ts:684</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Set current stroke style. For example: <code>form.stroke(&quot;#F90&quot;)</code> <code>form.stroke(&quot;rgba(0,0,0,.5&quot;)</code> <code>form.stroke(false)</code> <code>form.stroke(&quot;#000&quot;, 0.5, &#39;round&#39;)</code></p>
+									<p>Set current stroke style. Provide a valid color string or <code>false</code> to specify no stroke color.</p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>example</dt>
+									<dd><p><code>form.stroke(&quot;#F90&quot;)</code>, <code>form.stroke(&quot;rgba(0,0,0,.5&quot;)</code>, <code>form.stroke(false)</code>, <code>form.stroke(&quot;#000&quot;, 0.5, &#39;round&#39;, &#39;square&#39;)</code></p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -935,7 +1084,6 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
-							<p>this</p>
 						</li>
 					</ul>
 				</section>
@@ -949,13 +1097,26 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L657">Canvas.ts:657</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L713">Canvas.ts:713</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Set current stroke style and without fill.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>example</dt>
+									<dd><p><code>form.strokeOnly(&quot;#F90&quot;)</code>, <code>form.strokeOnly(&quot;#000&quot;, 0.5, &#39;round&#39;, &#39;square&#39;)</code></p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>c: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>stroke color which can be as color, gradient, or pattern. (See <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle">canvas documentation</a></p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> width: <span class="tsd-signature-type">number</span></h5>
@@ -981,9 +1142,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L860">Canvas.ts:860</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L1021">Canvas.ts:1021</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Draw text on canvas</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -1010,16 +1176,27 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L590">Canvas.ts:590</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L630">Canvas.ts:630</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Toggle whether to draw on offscreen canvas (if offscreen is set in CanvasSpace)</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> off: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;true</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>if <code>true</code>, draw on offscreen canvas instead of the visible canvas. Default is <code>true</code></p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> clear: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>optionally provide a valid color string to fill a bg color. see CanvasSpace&#39;s <code>clearOffscreen</code> function.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -1036,28 +1213,51 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L755">Canvas.ts:755</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L850">Canvas.ts:850</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A static function to draw an arc.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>ctx: <span class="tsd-signature-type">CanvasRenderingContext2D</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>canvas rendering context</p>
+									</div>
 								</li>
 								<li>
 									<h5>pt: <a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>center position</p>
+									</div>
 								</li>
 								<li>
 									<h5>radius: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>radius of the arc circle</p>
+									</div>
 								</li>
 								<li>
 									<h5>startAngle: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>start angle of the arc</p>
+									</div>
 								</li>
 								<li>
 									<h5>endAngle: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>end angle of the arc</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> cc: <span class="tsd-signature-type">boolean</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an optional boolean value to specify if it should be drawn clockwise (<code>false</code>) or counter-clockwise (<code>true</code>). Default is clockwise.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -1074,45 +1274,33 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L718">Canvas.ts:718</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L812">Canvas.ts:812</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A static function to draw a circle</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>ctx: <span class="tsd-signature-type">CanvasRenderingContext2D</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>canvas rendering context</p>
+									</div>
 								</li>
 								<li>
 									<h5>pt: <a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>center position of the circle</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> radius: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;10</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a name="ellipse-1" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> ellipse</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">ellipse<span class="tsd-signature-symbol">(</span>ctx<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">CanvasRenderingContext2D</span>, pts<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L736">Canvas.ts:736</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>ctx: <span class="tsd-signature-type">CanvasRenderingContext2D</span></h5>
-								</li>
-								<li>
-									<h5>pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>radius of the circle</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -1129,16 +1317,27 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L784">Canvas.ts:784</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L900">Canvas.ts:900</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A static function to draw a line</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>ctx: <span class="tsd-signature-type">CanvasRenderingContext2D</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>canvas rendering context</p>
+									</div>
 								</li>
 								<li>
 									<h5>pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of multiple Pts, or an array of multiple numeric arrays</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -1155,16 +1354,27 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L804">Canvas.ts:804</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L935">Canvas.ts:935</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A static function to draw polygon</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>ctx: <span class="tsd-signature-type">CanvasRenderingContext2D</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>canvas rendering context</p>
+									</div>
 								</li>
 								<li>
 									<h5>pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of multiple Pts, or an array of multiple numeric arrays</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -1181,16 +1391,27 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L825">Canvas.ts:825</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L971">Canvas.ts:971</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A static function to draw a rectangle</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>ctx: <span class="tsd-signature-type">CanvasRenderingContext2D</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>canvas rendering context</p>
+									</div>
 								</li>
 								<li>
 									<h5>pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -1207,19 +1428,33 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L767">Canvas.ts:767</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L878">Canvas.ts:878</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A static function to draw a square</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>ctx: <span class="tsd-signature-type">CanvasRenderingContext2D</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>canvas rendering context</p>
+									</div>
 								</li>
 								<li>
 									<h5>pt: <a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>center position of the square</p>
+									</div>
 								</li>
 								<li>
 									<h5>halfsize: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>half size of the square</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -1236,7 +1471,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L854">Canvas.ts:854</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L1009">Canvas.ts:1009</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1248,6 +1483,9 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5>ctx: <span class="tsd-signature-type">CanvasRenderingContext2D</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>canvas rendering context</p>
+									</div>
 								</li>
 								<li>
 									<h5>pt: <a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a></h5>
@@ -1272,16 +1510,21 @@
 					<div class="tsd-signature tsd-kind-icon">_style<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L567">Canvas.ts:567</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L595">Canvas.ts:595</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>store common styles so that they can be restored to canvas context when using multiple forms. See <code>reset()</code>.</p>
+						</div>
+					</div>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
 						<a name="_style.fillstyle" class="tsd-anchor"></a>
 						<h3>fill<wbr>Style</h3>
 						<div class="tsd-signature tsd-kind-icon">fill<wbr>Style<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;#f03&quot;</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L568">Canvas.ts:568</a></li>
+								<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L596">Canvas.ts:596</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -1291,7 +1534,7 @@
 						<div class="tsd-signature tsd-kind-icon">line<wbr>Cap<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;butt&quot;</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L569">Canvas.ts:569</a></li>
+								<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L597">Canvas.ts:597</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -1301,7 +1544,7 @@
 						<div class="tsd-signature tsd-kind-icon">line<wbr>Join<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;bevel&quot;</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L569">Canvas.ts:569</a></li>
+								<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L597">Canvas.ts:597</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -1311,7 +1554,7 @@
 						<div class="tsd-signature tsd-kind-icon">line<wbr>Width<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;1</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L569">Canvas.ts:569</a></li>
+								<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L597">Canvas.ts:597</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -1321,7 +1564,7 @@
 						<div class="tsd-signature tsd-kind-icon">stroke<wbr>Style<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;#fff&quot;</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L568">Canvas.ts:568</a></li>
+								<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L596">Canvas.ts:596</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -1332,7 +1575,7 @@
 			<nav class="tsd-navigation primary">
 				<ul>
 					<li class="globals  ">
-						<a href="../globals.html"><em>Globals</em></a>
+						<a href="../index.html"><em>Globals</em></a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_bound_.html">"<wbr>Bound"</a>
@@ -1439,12 +1682,6 @@
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_canvas_.canvasform.html#circles" class="tsd-kind-icon">circles</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_canvas_.canvasform.html#ellipse" class="tsd-kind-icon">ellipse</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_canvas_.canvasform.html#ellipses" class="tsd-kind-icon">ellipses</a>
-							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 								<a href="_canvas_.canvasform.html#fill" class="tsd-kind-icon">fill</a>
 							</li>
@@ -1504,9 +1741,6 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="_canvas_.canvasform.html#circle-1" class="tsd-kind-icon">circle</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="_canvas_.canvasform.html#ellipse-1" class="tsd-kind-icon">ellipse</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="_canvas_.canvasform.html#line-1" class="tsd-kind-icon">line</a>

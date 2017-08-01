@@ -53,7 +53,7 @@
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="../globals.html">Globals</a>
+					<a href="../index.html">Globals</a>
 				</li>
 				<li>
 					<a href="../modules/_canvas_.html">&quot;Canvas&quot;</a>
@@ -69,6 +69,14 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>CanvasSpace is an implementation of the abstract class Space. It represents a space for HTML Canvas.
+						Learn more about the concept of Space in <a href="..guide/Space-0500.html">this guide</a></p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -120,6 +128,7 @@
 						<section class="tsd-index-section ">
 							<h3>Accessors</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-accessor tsd-parent-kind-class"><a href="_canvas_.canvasspace.html#autoresize" class="tsd-kind-icon">auto<wbr>Resize</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="_canvas_.canvasspace.html#canvas" class="tsd-kind-icon">canvas</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="_canvas_.canvasspace.html#center" class="tsd-kind-icon">center</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="_canvas_.canvasspace.html#ctx" class="tsd-kind-icon">ctx</a></li>
@@ -152,7 +161,6 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="_canvas_.canvasspace.html#_resizehandler" class="tsd-kind-icon">_resize<wbr>Handler</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="_canvas_.canvasspace.html#_touchmove" class="tsd-kind-icon">_touch<wbr>Move</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_canvas_.canvasspace.html#add" class="tsd-kind-icon">add</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_canvas_.canvasspace.html#autoresize" class="tsd-kind-icon">auto<wbr>Resize</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_canvas_.canvasspace.html#bindcanvas" class="tsd-kind-icon">bind<wbr>Canvas</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_canvas_.canvasspace.html#bindmouse" class="tsd-kind-icon">bind<wbr>Mouse</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_canvas_.canvasspace.html#bindtouch" class="tsd-kind-icon">bind<wbr>Touch</a></li>
@@ -197,13 +205,18 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L44">Canvas.ts:44</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L49">Canvas.ts:49</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Create a CanvasSpace which represents a HTML Canvas Space</p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>example</dt>
+									<dd><p><code>new CanvasSpace( &quot;#myElementID&quot; )</code></p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -219,7 +232,7 @@
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> callback: <span class="tsd-signature-type">Function</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
-											<p>an optional callback <code>function(boundingBox, spaceElement)</code> to be called when canvas is appended and ready. A &quot;ready&quot; event will also be fired from the <code>&lt;canvas&gt;</code> element when it&#39;s appended, which can be traced with <code>spaceInstance.space.addEventListener(&quot;ready&quot;)</code></p>
+											<p>an optional callback <code>function(boundingBox, spaceElement)</code> to be called when canvas is appended and ready. Alternatively, a &quot;ready&quot; event will also be fired from the <code>&lt;canvas&gt;</code> element when it&#39;s appended, which can be traced with <code>spaceInstance.canvas.addEventListener(&quot;ready&quot;)</code></p>
 										</div>
 									</div>
 								</li>
@@ -237,7 +250,7 @@
 					<div class="tsd-signature tsd-kind-icon">_auto<wbr>Resize<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L28">Canvas.ts:28</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L33">Canvas.ts:33</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -247,7 +260,7 @@
 					<div class="tsd-signature tsd-kind-icon">_bgcolor<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;#e1e9f0&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L29">Canvas.ts:29</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L34">Canvas.ts:34</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -257,7 +270,7 @@
 					<div class="tsd-signature tsd-kind-icon">_canvas<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">HTMLCanvasElement</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L24">Canvas.ts:24</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L29">Canvas.ts:29</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -267,7 +280,7 @@
 					<div class="tsd-signature tsd-kind-icon">_container<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Element</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L26">Canvas.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L31">Canvas.ts:31</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -278,7 +291,7 @@
 					<aside class="tsd-sources">
 						<p>Overrides <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#_ctx">_ctx</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L30">Canvas.ts:30</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L35">Canvas.ts:35</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -288,7 +301,7 @@
 					<div class="tsd-signature tsd-kind-icon">_dragged<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L38">Canvas.ts:38</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L43">Canvas.ts:43</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -298,7 +311,7 @@
 					<div class="tsd-signature tsd-kind-icon">_has<wbr>Mouse<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L40">Canvas.ts:40</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L45">Canvas.ts:45</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -308,7 +321,7 @@
 					<div class="tsd-signature tsd-kind-icon">_has<wbr>Touch<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L41">Canvas.ts:41</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L46">Canvas.ts:46</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -318,7 +331,7 @@
 					<div class="tsd-signature tsd-kind-icon">_is<wbr>Ready<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L44">Canvas.ts:44</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L49">Canvas.ts:49</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -328,7 +341,7 @@
 					<div class="tsd-signature tsd-kind-icon">_off<wbr>Canvas<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">HTMLCanvasElement</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L33">Canvas.ts:33</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L38">Canvas.ts:38</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -338,7 +351,7 @@
 					<div class="tsd-signature tsd-kind-icon">_off<wbr>Ctx<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_canvas_.ptscanvasrenderingcontext2d.html" class="tsd-signature-type">PtsCanvasRenderingContext2D</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L34">Canvas.ts:34</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L39">Canvas.ts:39</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -348,7 +361,7 @@
 					<div class="tsd-signature tsd-kind-icon">_offscreen<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L32">Canvas.ts:32</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L37">Canvas.ts:37</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -358,7 +371,7 @@
 					<div class="tsd-signature tsd-kind-icon">_pixel<wbr>Scale<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;1</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L27">Canvas.ts:27</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L32">Canvas.ts:32</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -369,7 +382,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#_pointer">_pointer</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Space.ts#L44">Space.ts:44</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Space.ts#L44">Space.ts:44</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -379,7 +392,7 @@
 					<div class="tsd-signature tsd-kind-icon">_pressed<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L37">Canvas.ts:37</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L42">Canvas.ts:42</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -389,7 +402,7 @@
 					<div class="tsd-signature tsd-kind-icon">_render<wbr>Func<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol"> =&nbsp;undefined</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L43">Canvas.ts:43</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L48">Canvas.ts:48</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -400,7 +413,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#bound">bound</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Space.ts#L32">Space.ts:32</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Space.ts#L32">Space.ts:32</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -411,7 +424,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#id">id</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Space.ts#L31">Space.ts:31</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Space.ts#L31">Space.ts:31</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -422,7 +435,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#playercount">playerCount</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Space.ts#L36">Space.ts:36</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Space.ts#L36">Space.ts:36</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -433,13 +446,60 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#players">players</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Space.ts#L35">Space.ts:35</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Space.ts#L35">Space.ts:35</a></li>
 						</ul>
 					</aside>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Accessors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-accessor tsd-parent-kind-class">
+					<a name="autoresize" class="tsd-anchor"></a>
+					<h3>auto<wbr>Resize</h3>
+					<ul class="tsd-signatures tsd-kind-accessor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> autoResize<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">set</span> autoResize<span class="tsd-signature-symbol">(</span>auto<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L191">Canvas.ts:191</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Set whether the canvas element should resize when its container is resized.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L183">Canvas.ts:183</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Set whether the canvas element should resize when its container is resized.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>auto: <span class="tsd-signature-type">boolean</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>a boolean value indicating if auto size is set</p>
+										</div>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
 					<a name="canvas" class="tsd-anchor"></a>
 					<h3>canvas</h3>
@@ -450,7 +510,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L194">Canvas.ts:194</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L264">Canvas.ts:264</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -473,7 +533,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#center">center</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Space.ts#L202">Space.ts:202</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Space.ts#L205">Space.ts:205</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -495,7 +555,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L189">Canvas.ts:189</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L258">Canvas.ts:258</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -518,7 +578,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L546">Canvas.ts:546</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L575">Canvas.ts:575</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -531,7 +591,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L545">Canvas.ts:545</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L574">Canvas.ts:574</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -559,7 +619,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L249">Canvas.ts:249</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L242">Canvas.ts:242</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -581,7 +641,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L182">Canvas.ts:182</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L206">Canvas.ts:206</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -604,7 +664,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#height">height</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Space.ts#L212">Space.ts:212</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Space.ts#L215">Space.ts:215</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -627,7 +687,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#innerbound">innerBound</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Space.ts#L191">Space.ts:191</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Space.ts#L194">Space.ts:194</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -649,7 +709,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L204">Canvas.ts:204</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L220">Canvas.ts:220</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -671,7 +731,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L199">Canvas.ts:199</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L214">Canvas.ts:214</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -694,7 +754,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#outerbound">outerBound</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Space.ts#L185">Space.ts:185</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Space.ts#L188">Space.ts:188</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -716,7 +776,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L256">Canvas.ts:256</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L250">Canvas.ts:250</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -738,9 +798,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L175">Canvas.ts:175</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L198">Canvas.ts:198</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><code>pixelScale</code> property returns a number that let you determine if the screen is &quot;retina&quot; (when value &gt;= 2)</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 						</li>
 					</ul>
@@ -755,7 +820,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L209">Canvas.ts:209</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L226">Canvas.ts:226</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -778,7 +843,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#size">size</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Space.ts#L197">Space.ts:197</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Space.ts#L200">Space.ts:200</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -801,7 +866,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#width">width</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Space.ts#L207">Space.ts:207</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Space.ts#L210">Space.ts:210</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -826,7 +891,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L113">Canvas.ts:113</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L115">Canvas.ts:115</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -863,22 +928,26 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L440">Canvas.ts:440</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L463">Canvas.ts:463</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Go through all the <code>players</code> and call its <code>onMouseAction</code> callback function</p>
+									<p>Go through all the <code>players</code> and call its <code>action</code> callback function</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>type: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>&quot;up&quot;, &quot;down&quot;, &quot;move&quot;, &quot;drag&quot;, &quot;drop&quot;, &quot;over&quot;, and &quot;out&quot;</p>
+									</div>
 								</li>
 								<li>
 									<h5>evt: <span class="tsd-signature-type">MouseEvent</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TouchEvent</span></h5>
 									<div class="tsd-comment tsd-typography">
+										<p>mouse or touch event</p>
 									</div>
 								</li>
 							</ul>
@@ -890,13 +959,13 @@
 					<a name="_mousedown" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _mouse<wbr>Down</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon">_mouse<wbr>Down<span class="tsd-signature-symbol">(</span>evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MouseEvent</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TouchEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">_mouse<wbr>Down<span class="tsd-signature-symbol">(</span>evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MouseEvent</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TouchEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L471">Canvas.ts:471</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L494">Canvas.ts:494</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -912,7 +981,7 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -920,13 +989,13 @@
 					<a name="_mousemove" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _mouse<wbr>Move</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon">_mouse<wbr>Move<span class="tsd-signature-symbol">(</span>evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MouseEvent</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TouchEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">_mouse<wbr>Move<span class="tsd-signature-symbol">(</span>evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MouseEvent</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TouchEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L493">Canvas.ts:493</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L518">Canvas.ts:518</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -942,7 +1011,7 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -950,13 +1019,13 @@
 					<a name="_mouseout" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _mouse<wbr>Out</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon">_mouse<wbr>Out<span class="tsd-signature-symbol">(</span>evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MouseEvent</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TouchEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">_mouse<wbr>Out<span class="tsd-signature-symbol">(</span>evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MouseEvent</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TouchEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L515">Canvas.ts:515</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L542">Canvas.ts:542</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -972,7 +1041,7 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -980,13 +1049,13 @@
 					<a name="_mouseover" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _mouse<wbr>Over</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon">_mouse<wbr>Over<span class="tsd-signature-symbol">(</span>evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MouseEvent</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TouchEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">_mouse<wbr>Over<span class="tsd-signature-symbol">(</span>evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MouseEvent</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TouchEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L506">Canvas.ts:506</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L532">Canvas.ts:532</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1002,7 +1071,7 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -1010,13 +1079,13 @@
 					<a name="_mouseup" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _mouse<wbr>Up</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon">_mouse<wbr>Up<span class="tsd-signature-symbol">(</span>evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MouseEvent</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TouchEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">_mouse<wbr>Up<span class="tsd-signature-symbol">(</span>evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MouseEvent</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TouchEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L481">Canvas.ts:481</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L505">Canvas.ts:505</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1032,7 +1101,7 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -1046,7 +1115,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L124">Canvas.ts:124</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L126">Canvas.ts:126</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1076,7 +1145,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L225">Canvas.ts:225</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L313">Canvas.ts:313</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1100,13 +1169,13 @@
 					<a name="_touchmove" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _touch<wbr>Move</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon">_touch<wbr>Move<span class="tsd-signature-symbol">(</span>evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TouchEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">_touch<wbr>Move<span class="tsd-signature-symbol">(</span>evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TouchEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L526">Canvas.ts:526</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L554">Canvas.ts:554</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1122,7 +1191,7 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -1137,51 +1206,25 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#add">add</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Space.ts#L61">Space.ts:61</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Space.ts#L64">Space.ts:64</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Add an item to this space. An item must define a callback function <code>animate( time, fps, context )</code> and will be assigned a property <code>animateID</code> automatically.
-										An item should also define a callback function <code>resize:( bound, evt )</code>.
-									Subclasses of Space may define other callback functions.</p>
+									<p>Add an IPlayer to this space. An IPlayer can define the following callback functions:</p>
+									<ul>
+										<li><code>animate( time, ftime, space )</code></li>
+										<li><code>start(bound, spacE)</code></li>
+										<li><code>resize( size, event )</code></li>
+										<li><code>action( type, x, y, event )</code>
+										Subclasses of Space may define other callback functions.</li>
+									</ul>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>p: <a href="../interfaces/_space_.iplayer.html" class="tsd-signature-type">IPlayer</a><span class="tsd-signature-symbol"> | </span><a href="../modules/_space_.html#animatefunction" class="tsd-signature-type">AnimateFunction</a></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="autoresize" class="tsd-anchor"></a>
-					<h3>auto<wbr>Resize</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">auto<wbr>Resize<span class="tsd-signature-symbol">(</span>auto<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L235">Canvas.ts:235</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Set whether the canvas element should resize when its container is resized. Default will auto size</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> auto: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;true</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>a boolean value indicating if auto size is set. Default is <code>true</code>.</p>
-									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -1198,12 +1241,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L357">Canvas.ts:357</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L378">Canvas.ts:378</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Bind event listener in canvas element, for events such as mouse events</p>
+									<p>Bind event listener in canvas element. You can also use <code>bindMouse</code> or <code>bindTouch</code> to bind mouse or touch events conveniently.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1235,13 +1278,18 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L376">Canvas.ts:376</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L398">Canvas.ts:398</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>A convenient method to bind (or unbind) all mouse events in canvas element. All item added to <code>players</code> property that implements an <code>onMouseAction</code> callback will receive mouse event callbacks. The types of mouse actions are: &quot;up&quot;, &quot;down&quot;, &quot;move&quot;, &quot;drag&quot;, &quot;drop&quot;, &quot;over&quot;, and &quot;out&quot;.</p>
+									<p>A convenient method to bind (or unbind) all mouse events in canvas element. All &quot;players&quot; added to this space that implements an <code>action</code> callback property will receive mouse event callbacks. The types of mouse actions are: &quot;up&quot;, &quot;down&quot;, &quot;move&quot;, &quot;drag&quot;, &quot;drop&quot;, &quot;over&quot;, and &quot;out&quot;. See <code>Space</code>&#39;s <code>add()</code> function fore more.</p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>see</dt>
+									<dd><p>Space<code>&#39;s [</code>add`](./<em>space</em>.space.html#add) function</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1266,20 +1314,25 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L400">Canvas.ts:400</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L423">Canvas.ts:423</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>A convenient method to bind (or unbind) all mobile touch events in canvas element. All item added to <code>players</code> property that implements an <code>onTouchAction</code> callback will receive touch event callbacks. The types of touch actions are the same as the mouse actions: &quot;up&quot;, &quot;down&quot;, &quot;move&quot;, and &quot;out&quot;</p>
+									<p>A convenient method to bind (or unbind) all touch events in canvas element. All &quot;players&quot; added to this space that implements an <code>action</code> callback property will receive mouse event callbacks. The types of mouse actions are: &quot;up&quot;, &quot;down&quot;, &quot;move&quot;, &quot;drag&quot;, &quot;drop&quot;, &quot;over&quot;, and &quot;out&quot;.</p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>see</dt>
+									<dd><p>Space<code>&#39;s [</code>add`](./<em>space</em>.space.html#add) function</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> _bind: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;true</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>a boolean value to bind touch events if set to <code>true</code>. If <code>false</code>, all touch events will be unbound. Default is true.</p>
+										<p>a boolean value to bind touch events if set to <code>true</code>. If <code>false</code>, all mouse events will be unbound. Default is true.</p>
 									</div>
 								</li>
 							</ul>
@@ -1298,7 +1351,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#clear">clear</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L307">Canvas.ts:307</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L323">Canvas.ts:323</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1329,13 +1382,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L324">Canvas.ts:324</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L344">Canvas.ts:344</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Similiar to <code>clear()</code> but clear the offscreen canvas instead</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> bg: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Optionally specify a custom background color in hex or rgba string, or &quot;transparent&quot;. If not defined, it will use its <code>bgcolor</code> property as background color to clear the canvas.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -1353,13 +1414,18 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#getform">getForm</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L218">Canvas.ts:218</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L236">Canvas.ts:236</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Get a new CanvasForm for drawing</p>
+									<p>Get a new <code>CanvasForm</code> for drawing</p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>see</dt>
+									<dd><p><code>CanvasForm</code></p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-returns-title">Returns <a href="_canvas_.canvasform.html" class="tsd-signature-type">CanvasForm</a></h4>
 						</li>
@@ -1376,7 +1442,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#pause">pause</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Space.ts#L149">Space.ts:149</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Space.ts#L152">Space.ts:152</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1408,7 +1474,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#play">play</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Space.ts#L99">Space.ts:99</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Space.ts#L102">Space.ts:102</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1441,7 +1507,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#playitems">playItems</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L340">Canvas.ts:340</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L361">Canvas.ts:361</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1473,7 +1539,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#playonce">playOnce</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Space.ts#L175">Space.ts:175</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Space.ts#L178">Space.ts:178</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1505,7 +1571,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#refresh">refresh</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Space.ts#L50">Space.ts:50</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Space.ts#L50">Space.ts:50</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1537,7 +1603,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#remove">remove</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Space.ts#L81">Space.ts:81</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Space.ts#L84">Space.ts:84</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1569,7 +1635,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#removeall">removeAll</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Space.ts#L89">Space.ts:89</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Space.ts#L92">Space.ts:92</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1591,7 +1657,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L536">Canvas.ts:536</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L565">Canvas.ts:565</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1623,7 +1689,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#replay">replay</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Space.ts#L121">Space.ts:121</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Space.ts#L124">Space.ts:124</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1647,12 +1713,12 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#resize">resize</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L266">Canvas.ts:266</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L272">Canvas.ts:272</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>This overrides Space&#39;s <code>resize</code> function. It&#39;s a callback function for window&#39;s resize event. Keep track of this with <code>resize: (bound ,evt)</code> callback in your added objects.</p>
+									<p>This overrides Space&#39;s <code>resize</code> function. It&#39;s used as a callback function for window&#39;s resize event and not usually called directly. You can keep track of resize events with <code>resize: (bound ,evt)</code> callback in your player objects (See <code>Space</code>&#39;s <code>add()</code> function).</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1685,7 +1751,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#resume">resume</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Space.ts#L157">Space.ts:157</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Space.ts#L160">Space.ts:160</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1707,13 +1773,18 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L153">Canvas.ts:153</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L156">Canvas.ts:156</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Set up various options for CanvasSpace. The <code>opt</code> parameter is an object with the following fields. This is usually set during instantiation, eg <code>new CanvasSpace(...).setup( { opt } )</code></p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>example</dt>
+									<dd><p><code>space.setup({ bgcolor: &quot;#f00&quot;, retina: true, resize: true })</code></p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -1765,7 +1836,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#stop">stop</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Space.ts#L166">Space.ts:166</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Space.ts#L169">Space.ts:169</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1796,7 +1867,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L424">Canvas.ts:424</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L447">Canvas.ts:447</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1834,7 +1905,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Canvas.ts#L367">Canvas.ts:367</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Canvas.ts#L388">Canvas.ts:388</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1871,7 +1942,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#_time">_time</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Space.ts#L34">Space.ts:34</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Space.ts#L34">Space.ts:34</a></li>
 						</ul>
 					</aside>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
@@ -1880,7 +1951,7 @@
 						<div class="tsd-signature tsd-kind-icon">diff<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;0</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Space.ts#L34">Space.ts:34</a></li>
+								<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Space.ts#L34">Space.ts:34</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -1890,7 +1961,7 @@
 						<div class="tsd-signature tsd-kind-icon">end<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;-1</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Space.ts#L34">Space.ts:34</a></li>
+								<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Space.ts#L34">Space.ts:34</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -1900,7 +1971,7 @@
 						<div class="tsd-signature tsd-kind-icon">prev<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;0</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/williamngan/ptx/blob/75aec96/src/Space.ts#L34">Space.ts:34</a></li>
+								<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Space.ts#L34">Space.ts:34</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -1911,7 +1982,7 @@
 			<nav class="tsd-navigation primary">
 				<ul>
 					<li class="globals  ">
-						<a href="../globals.html"><em>Globals</em></a>
+						<a href="../index.html"><em>Globals</em></a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_bound_.html">"<wbr>Bound"</a>
@@ -2039,6 +2110,9 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 								<a href="_canvas_.canvasspace.html#players" class="tsd-kind-icon">players</a>
 							</li>
+							<li class=" tsd-kind-accessor tsd-parent-kind-class">
+								<a href="_canvas_.canvasspace.html#autoresize" class="tsd-kind-icon">auto<wbr>Resize</a>
+							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
 								<a href="_canvas_.canvasspace.html#canvas" class="tsd-kind-icon">canvas</a>
 							</li>
@@ -2119,9 +2193,6 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 								<a href="_canvas_.canvasspace.html#add" class="tsd-kind-icon">add</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_canvas_.canvasspace.html#autoresize" class="tsd-kind-icon">auto<wbr>Resize</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_canvas_.canvasspace.html#bindcanvas" class="tsd-kind-icon">bind<wbr>Canvas</a>

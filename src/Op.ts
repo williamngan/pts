@@ -295,7 +295,7 @@ export class Circle {
   }
 
   static fromPt( pt:PtLike, radius:number ):Group {
-    return new Group( pt, new Pt(radius, radius) );
+    return new Group( new Pt(pt), new Pt(radius, radius) );
   }
 
   static withinBound( pts:GroupLike, pt:PtLike ):boolean  {

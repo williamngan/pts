@@ -9,6 +9,10 @@ import {Vec} from "./LinearAlgebra"
 
 export type ColorType = "rgb"|"hsl"|"hsb"|"lab"|"lch"|"luv"|"xyz";
 
+
+/**
+ * `Color` is 
+ */
 export class Color extends Pt {
 
   // XYZ property for Standard Observer 2deg, Daylight/sRGB illuminant D65
