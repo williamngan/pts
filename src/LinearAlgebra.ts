@@ -245,9 +245,7 @@ export class Mat {
       if (elementwise) {
         if (a.length != b.length) throw "Cannot multiply matrix element-wise because the matrices' sizes don't match."
         for (let ai = 0, alen = a.length; ai < alen; ai++) {
-          let p = new Pt( a[ai] );  
-          Vec.multiply( p, b[ai] );
-          g.push(p);
+          g.push( a[ai].$multiply( b[ai] ) );
         }
 
       } else {
@@ -260,7 +258,7 @@ export class Mat {
         for (let ai = 0, alen = a.length; ai < alen; ai++) {
           let p = Pt.make( b.length, 0 );
           for (let bi = 0, blen = b.length; bi < blen; bi++) {
-            p[bi] = a[ai].dot( b[bi] );
+            p[bi] = Vec.dot( a[ai], b[bi] );
           }
           g.push(p);
         }
