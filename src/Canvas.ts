@@ -3,7 +3,7 @@
 
 
 import {Space} from './Space';
-import {Form, Font} from "./Form";
+import {VisualForm, Font} from "./Form";
 import {Bound} from './Bound';
 import {Pt, IPt, Group, PtLike, GroupLike} from "./Pt";
 import {Const, Util} from "./Util";
@@ -579,12 +579,11 @@ export class CanvasSpace extends Space {
 
 
 
-
 /**
- * CanvasForm is an implementation of abstract class Form. It provide methods to express Pts on CanvasSpace.   
+ * CanvasForm is an implementation of abstract class VisualForm. It provide methods to express Pts on CanvasSpace.   
  * You may extend CanvasForm to implement your own expressions for CanvasSpace.
  */
-export class CanvasForm extends Form {
+export class CanvasForm extends VisualForm {
 
   protected _space:CanvasSpace;
   protected _ctx:CanvasRenderingContext2D;
@@ -822,7 +821,7 @@ export class CanvasForm extends Form {
    * @param pts usually a Group of 2 Pts, but it can also take an array of two numeric arrays [ [position], [size] ]
    * @see [`Circle.fromPt`](./_op_.circle.html#frompt)
    */
-  circle( pts:GroupLike|number[][] ) {
+  circle( pts:GroupLike|number[][] ):this {
     CanvasForm.circle( this._ctx, pts[0], pts[1][0] );
     this._paint();
     return this;

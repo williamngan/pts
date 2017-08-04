@@ -7,8 +7,15 @@ import {Pt, PtLike, GroupLike, Group} from "./Pt"
 import {Line} from "./Op"
 
 
+/**
+ * Vec provides static function for vector operations. It's not yet optimized but good enough to use.
+ */
 export class Vec {
 
+  /**
+   * Add b to vector `a`
+   * @returns vector `a`
+   */
   static add( a:PtLike, b:PtLike|number ):PtLike {
     if (typeof b == "number") {
       for (let i=0, len=a.length; i<len; i++) a[i] += b;
@@ -18,6 +25,10 @@ export class Vec {
     return a;
   }
 
+  /**
+   * Subtract `b` from vector `a`
+   * @returns vector `a`
+   */
   static subtract( a:PtLike, b:PtLike|number ):PtLike {
     if (typeof b == "number") {
       for (let i=0, len=a.length; i<len; i++) a[i] -= b;
@@ -27,6 +38,10 @@ export class Vec {
     return a;
   }
 
+  /**
+   * Multiply `b` with vector `a`
+   * @returns vector `a`
+   */
   static multiply( a:PtLike, b:PtLike|number ):PtLike {
     if (typeof b == "number") {
       for (let i=0, len=a.length; i<len; i++) a[i] *= b;
@@ -39,6 +54,11 @@ export class Vec {
     return a;
   }
 
+
+  /**
+   * Divide `a` over `b`
+   * @returns vector `a`
+   */
   static divide( a:PtLike, b:PtLike|number ):PtLike {
     if (typeof b == "number") {
       if (b === 0) throw "Cannot divide by zero"
@@ -52,6 +72,10 @@ export class Vec {
     return a;
   }
 
+
+  /**
+   * Dot product of `a` and `b`
+   */
   static dot( a:PtLike, b:PtLike ):number {
     if (a.length != b.length) throw "Array lengths don't match"
     let d = 0;
@@ -61,35 +85,72 @@ export class Vec {
     return d;
   } 
 
+
+  /**
+   * Cross product of `a` and `b` (3D only)
+   */
   static cross( a:PtLike, b:PtLike ):Pt {
     return new Pt( (a[1]*b[2] - a[2]*b[1]), (a[2]*b[0] - a[0]*b[2]), (a[0]*b[1] - a[1]*b[0]) );
   }
 
+
+  /**
+   * Magnitude of `a`
+   */
   static magnitude( a:PtLike ):number {
     return Math.sqrt( Vec.dot( a, a ) );
   }
 
+
+  /**
+   * Unit vector of `a`. If magnitude of `a` is already known, pass it in the second paramter to optimize calculation.
+   */
   static unit( a:PtLike, magnitude:number=undefined ):PtLike {
     let m = (magnitude===undefined) ? Vec.magnitude(a) : magnitude;
     return Vec.divide( a, m );
   }
 
+
+  /**
+   * Set `a` to its absolute value in each dimension
+   * @returns vector `a`
+   */
   static abs( a:PtLike ):PtLike {
     return Vec.map( a, Math.abs );
   }
 
+
+  /**
+   * Set `a` to its floor value in each dimension
+   * @returns vector `a`
+   */
   static floor( a:PtLike ):PtLike {
     return Vec.map( a, Math.floor );
   }
 
+
+  /**
+   * Set `a` to its ceiling value in each dimension
+   * @returns vector `a`
+   */
   static ceil( a:PtLike ):PtLike {
     return Vec.map( a, Math.ceil );
   }
 
+
+  /**
+   * Set `a` to its rounded value in each dimension
+   * @returns vector `a`
+   */
   static round( a:PtLike ):PtLike {
     return Vec.map( a, Math.round );
   }
 
+  
+  /**
+   * Find the max value within a vector's dimensions
+   * @returns an object with `value` and `index` that specifies the max value and its corresponding dimension.
+   */
   static max( a:PtLike ):{value, index} {
     let m = Number.MIN_VALUE;
     let index = 0;
@@ -100,6 +161,11 @@ export class Vec {
     return {value: m, index: index};
   }
 
+
+  /**
+   * Find the min value within a vector's dimensions
+   * @returns an object with `value` and `index` that specifies the min value and its corresponding dimension.
+   */
   static min( a:PtLike ):{value, index} {
     let m = Number.MAX_VALUE;
     let index = 0;
@@ -110,12 +176,21 @@ export class Vec {
     return {value: m, index: index};
   }
 
+
+  /**
+   * Sum all the dimensions' values
+   */
   static sum( a:PtLike ):number {
     let s = 0;
     for (let i=0, len=a.length; i<len; i++) s += a[i];
     return s;
   }
 
+
+  /**
+   * Given a mapping function, update `a`'s value in each dimension
+   * @returns vector `a`
+   */
   static map( a:PtLike, fn:(n:number, index:number, arr) => number ):PtLike {
     for (let i=0, len=a.length; i<len; i++) {
       a[i] = fn( a[i], i, a );
@@ -126,6 +201,9 @@ export class Vec {
 }
 
 
+/**
+ * Mat provides static function for matrix operations. It's not yet optimized but good enough to use.
+ */
 export class Mat {
 
   /**
@@ -154,25 +232,38 @@ export class Mat {
    * Matrix multiplication
    * @param a a Group of M Pts, each with K dimensions (M-rows, K-columns)
    * @param b a scalar number, or a Group of K Pts, each with N dimensions (K-rows, N-columns) -- or if transposed is true, then N Pts with K dimensions
-   * @param transposed if true, then a and b's columns should match (ie, each Pt should have the same dimensions). 
+   * @param transposed (Only applicable if it's not elementwise multiplication) If true, then a and b's columns should match (ie, each Pt should have the same dimensions). 
+   * @param elementwise if true, then the multiplication is done element-wise. Default is false.
    * @returns a group with M Pt, each with N dimensions (M-rows, N-columns)
    */
-  static multiply( a:GroupLike, b:GroupLike|number, transposed:boolean=false ):Group {
+  static multiply( a:GroupLike, b:GroupLike|number, transposed:boolean=false, elementwise:boolean=false ):Group {
     
     let g = new Group();
 
     if (typeof b != "number") {
-      if (!transposed && a[0].length != b.length) throw "Cannot multiply matrix if rows in matrix-a don't match columns in matrix-b."
-      if (transposed && a[0].length != b[0].length) throw "Cannot multiply matrix if transposed and the columns in both matrices don't match."
 
-      if (!transposed) b = Mat.transpose( b );
-
-      for (let ai = 0, alen = a.length; ai < alen; ai++) {
-        let p = Pt.make( b.length, 0 );
-        for (let bi = 0, blen = b.length; bi < blen; bi++) {
-          p[bi] = a[ai].dot( b[bi] );
+      if (elementwise) {
+        if (a.length != b.length) throw "Cannot multiply matrix element-wise because the matrices' sizes don't match."
+        for (let ai = 0, alen = a.length; ai < alen; ai++) {
+          let p = new Pt( a[ai] );  
+          Vec.multiply( p, b[ai] );
+          g.push(p);
         }
-        g.push(p);
+
+      } else {
+        
+        if (!transposed && a[0].length != b.length) throw "Cannot multiply matrix if rows in matrix-a don't match columns in matrix-b."
+        if (transposed && a[0].length != b[0].length) throw "Cannot multiply matrix if transposed and the columns in both matrices don't match."
+
+        if (!transposed) b = Mat.transpose( b );
+
+        for (let ai = 0, alen = a.length; ai < alen; ai++) {
+          let p = Pt.make( b.length, 0 );
+          for (let bi = 0, blen = b.length; bi < blen; bi++) {
+            p[bi] = a[ai].dot( b[bi] );
+          }
+          g.push(p);
+        }
       }
 
     } else {
@@ -217,16 +308,31 @@ export class Mat {
     return ps;
   }
 
-  static transpose( g:GroupLike ) {
-    return Mat.zip( g )
+
+  /**
+   * Same as `zip`
+   */
+  static transpose( g:GroupLike, defaultValue:number|boolean = false, useLongest=false ):Group {
+    return Mat.zip( g, defaultValue, useLongest )
   }
 
+
+  /**
+   * Transform a 2D point given a 2x3 or 3x3 matrix
+   * @param pt a Pt to be transformed
+   * @param m 2x3 or 3x3 matrix
+   * @returns a new transformed Pt
+   */
   static transform2D( pt:PtLike, m:GroupLike|number[][] ):Pt {
     let x = pt[0] * m[0][0] + pt[1] * m[1][0] + m[2][0];
     let y = pt[0] * m[0][1] + pt[1] * m[1][1] + m[2][1];
     return new Pt(x, y);
   }
 
+
+  /**
+   * Get a scale matrix for use in `transform2D`
+   */
   static scale2DMatrix( x:number, y:number ):GroupLike {
     return new Group(
       new Pt( x, 0, 0 ),
@@ -235,6 +341,10 @@ export class Mat {
     );
   }
 
+
+  /**
+   * Get a rotate matrix for use in `transform2D`
+   */
   static rotate2DMatrix( cosA:number, sinA:number ):GroupLike {
     return new Group(
       new Pt( cosA, sinA, 0 ),
@@ -243,6 +353,10 @@ export class Mat {
     );
   }
 
+
+  /**
+   * Get a shear matrix for use in `transform2D`
+   */
   static shear2DMatrix( tanX:number, tanY:number ):GroupLike {
     return new Group(
       new Pt( 1, tanX, 0 ),
@@ -251,6 +365,10 @@ export class Mat {
     );
   }
 
+
+  /**
+   * Get a translate matrix for use in `transform2D`
+   */
   static translate2DMatrix( x:number, y:number ):GroupLike {
     return new Group(
       new Pt( 1, 0, 0 ),
@@ -259,6 +377,10 @@ export class Mat {
     );
   }
 
+
+  /**
+   * Get a matrix to scale a point from an origin point. For use in `transform2D`
+   */
   static scaleAt2DMatrix( sx:number, sy:number, at:PtLike ):GroupLike {
     let m = Mat.scale2DMatrix(sx, sy);
     m[2][0] = -at[0]*sx + at[0];
@@ -267,6 +389,9 @@ export class Mat {
   }
 
 
+  /**
+   * Get a matrix to rotate a point from an origin point. For use in `transform2D`
+   */
   static rotateAt2DMatrix( cosA:number, sinA:number, at:PtLike ):GroupLike {
     let m = Mat.rotate2DMatrix(cosA, sinA);
     m[2][0] = at[0]*(1-cosA) + at[1]*sinA;
@@ -274,6 +399,10 @@ export class Mat {
     return m;
   }
 
+
+  /**
+   * Get a matrix to shear a point from an origin point. For use in `transform2D`
+   */
   static shearAt2DMatrix( tanX:number, tanY:number, at:PtLike ):GroupLike {
     let m = Mat.shear2DMatrix(tanX, tanY);
     m[2][0] = -at[1]*tanY;
@@ -281,6 +410,12 @@ export class Mat {
     return m;
   }
 
+
+  /**
+   * Get a matrix to reflect a point along a line. For use in `transform2D`
+   * @param p1 first end point to define the reflection line
+   * @param p1 second end point to define the reflection line
+   */
   static reflectAt2DMatrix( p1:PtLike, p2:PtLike ) {
     let intercept = Line.intercept( p1, p2 );
     

@@ -11,38 +11,55 @@ export type ColorType = "rgb"|"hsl"|"hsb"|"lab"|"lch"|"luv"|"xyz";
 
 
 /**
- * `Color` is 
+ * Color is a subclass of Pt. You can think of a color as a point in a color space. The Color class provides support for many color spaces.
  */
 export class Color extends Pt {
 
   // XYZ property for Standard Observer 2deg, Daylight/sRGB illuminant D65
-  private static D65 = new Pt(95.047, 100, 108.883, 1);
+  private static D65:PtLike = new Pt(95.047, 100, 108.883, 1);
 
   protected _mode:ColorType = "rgb";
   private _isNorm:boolean = false;
 
-  static ranges = {
+  /**
+   * Value range for each color space
+   */
+  static ranges:{ [name: string]: PtLike[] } = {
     rgb: [[0,255], [0,255], [0,255]],
     hsl: [[0,360], [0,1], [0,1]],
     hsb: [[0,360], [0,1], [0,1]],
     lab: [[0,100], [-128,127], [-128, 127]],
     lch: [[0,100], [0,100], [0,360]],
     luv: [[0,100], [-134,220], [-140,122]],
-    xyz: [[0,100], [0,100], [0,100]],
-
+    xyz: [[0,100], [0,100], [0,100]]
   }
 
+  /**
+   * Create a Color. Same as creating a Pt.
+   * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
+   */
   constructor( ...args ) {
     super( ...args );
   }
 
+  /**
+   * Get a hex string such as "#FF0000". Same as `toString("hex")`
+   */
   public get hex():string { return this.toString("hex"); }
+
+  /**
+   * Get a rgb string such as "rgb(255,0,0)". Same as `toString("rgb")`
+   */
   public get rgb():string { return this.toString("rgb"); }
+
+  /**
+   * Get a rgba string such as "rgb(255,0,0,0.5)". Same as `toString("rgba")`
+   */
   public get rgba():string { return this.toString("rgba"); }
 
   /**
    * Create a Color object with defaults to 4 dimensions
-   * @param args a Pt-like parameters. See Pt constructor.
+   * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
    */
   static from( ...args ):Color {
     let p = [1,1,1,1];
@@ -55,7 +72,7 @@ export class Color extends Pt {
 
 
   /**
-   * Convert a rgb hex string like #ff000 or #f00 to a Color object
+   * Convert a rgb hex string like #FF0000 or #F00 to a Color object
    * @param hex a hex string, with optional '#' prefix
    */
   static fromHex( hex:string ):Color {
@@ -80,43 +97,43 @@ export class Color extends Pt {
 
   /**
    * Create RGB Color
-   * @param args a Pt-like parameters. See Pt constructor.
+   * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
   static rgb( ...args ):Color { return Color.from( ...args ).toMode( "rgb" ); }
   
   /**
    * Create HSL Color
-   * @param args a Pt-like parameters. See Pt constructor.
+   * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
   static hsl( ...args ):Color { return Color.from( ...args ).toMode( "hsl" ); }
 
   /**
    * Create HSB Color
-   * @param args a Pt-like parameters. See Pt constructor.
+   * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
   static hsb( ...args ):Color { return Color.from( ...args ).toMode( "hsb" ); }
   
   /**
    * Create LAB Color
-   * @param args a Pt-like parameters. See Pt constructor.
+   * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
   static lab( ...args ):Color { return Color.from( ...args ).toMode( "lab" ); }
 
   /**
    * Create LCH Color
-   * @param args a Pt-like parameters. See Pt constructor.
+   * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
   static lch( ...args ):Color { return Color.from( ...args ).toMode( "lch" ); }
 
   /**
    * Create LUV Color
-   * @param args a Pt-like parameters. See Pt constructor.
+   * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
   static luv( ...args ):Color { return Color.from( ...args ).toMode( "luv" ); }
 
   /**
    * Create XYZ Color
-   * @param args a Pt-like parameters. See Pt constructor.
+   * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
   static xyz( ...args ):Color { return Color.from( ...args ).toMode( "xyz" ); }
 
@@ -131,9 +148,9 @@ export class Color extends Pt {
   }
 
   /**
-   * Create RGB Color
+   * Convert this color from current color space to another color space
    * @param mode a ColorType string: "rgb" "hsl" "hsb" "lab" "lch" "luv" "xyz";
-   * @param convert if true, convert this Color to the new color space specified in `mode`
+   * @param convert if `true`, convert this Color to the new color space specified in `mode`. Default is `false`, which only sets the color mode without converting color values.
    */
   toMode( mode:ColorType, convert:boolean=false ):this { 
     
@@ -225,6 +242,7 @@ export class Color extends Pt {
   /**
    * Like `normalize()` but returns as a new Color
    * @param toNorm a boolean value specifying whether to normalize (`true`) or revert (`false`)
+   * @returns new Color
    */
   $normalize( toNorm:boolean=true ):Color { return this.clone().normalize( toNorm ); }
 

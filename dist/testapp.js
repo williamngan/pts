@@ -742,7 +742,14 @@ exports.Util = Util;
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
 const Op_1 = __webpack_require__(5);
+/**
+ * Vec provides static function for vector operations. It's not yet optimized but good enough to use.
+ */
 class Vec {
+    /**
+     * Add b to vector `a`
+     * @returns vector `a`
+     */
     static add(a, b) {
         if (typeof b == "number") {
             for (let i = 0, len = a.length; i < len; i++)
@@ -754,6 +761,10 @@ class Vec {
         }
         return a;
     }
+    /**
+     * Subtract `b` from vector `a`
+     * @returns vector `a`
+     */
     static subtract(a, b) {
         if (typeof b == "number") {
             for (let i = 0, len = a.length; i < len; i++)
@@ -765,6 +776,10 @@ class Vec {
         }
         return a;
     }
+    /**
+     * Multiply `b` with vector `a`
+     * @returns vector `a`
+     */
     static multiply(a, b) {
         if (typeof b == "number") {
             for (let i = 0, len = a.length; i < len; i++)
@@ -779,6 +794,10 @@ class Vec {
         }
         return a;
     }
+    /**
+     * Divide `a` over `b`
+     * @returns vector `a`
+     */
     static divide(a, b) {
         if (typeof b == "number") {
             if (b === 0)
@@ -795,6 +814,9 @@ class Vec {
         }
         return a;
     }
+    /**
+     * Dot product of `a` and `b`
+     */
     static dot(a, b) {
         if (a.length != b.length)
             throw "Array lengths don't match";
@@ -804,28 +826,57 @@ class Vec {
         }
         return d;
     }
+    /**
+     * Cross product of `a` and `b` (3D only)
+     */
     static cross(a, b) {
         return new Pt_1.Pt((a[1] * b[2] - a[2] * b[1]), (a[2] * b[0] - a[0] * b[2]), (a[0] * b[1] - a[1] * b[0]));
     }
+    /**
+     * Magnitude of `a`
+     */
     static magnitude(a) {
         return Math.sqrt(Vec.dot(a, a));
     }
+    /**
+     * Unit vector of `a`. If magnitude of `a` is already known, pass it in the second paramter to optimize calculation.
+     */
     static unit(a, magnitude = undefined) {
         let m = (magnitude === undefined) ? Vec.magnitude(a) : magnitude;
         return Vec.divide(a, m);
     }
+    /**
+     * Set `a` to its absolute value in each dimension
+     * @returns vector `a`
+     */
     static abs(a) {
         return Vec.map(a, Math.abs);
     }
+    /**
+     * Set `a` to its floor value in each dimension
+     * @returns vector `a`
+     */
     static floor(a) {
         return Vec.map(a, Math.floor);
     }
+    /**
+     * Set `a` to its ceiling value in each dimension
+     * @returns vector `a`
+     */
     static ceil(a) {
         return Vec.map(a, Math.ceil);
     }
+    /**
+     * Set `a` to its rounded value in each dimension
+     * @returns vector `a`
+     */
     static round(a) {
         return Vec.map(a, Math.round);
     }
+    /**
+     * Find the max value within a vector's dimensions
+     * @returns an object with `value` and `index` that specifies the max value and its corresponding dimension.
+     */
     static max(a) {
         let m = Number.MIN_VALUE;
         let index = 0;
@@ -836,6 +887,10 @@ class Vec {
         }
         return { value: m, index: index };
     }
+    /**
+     * Find the min value within a vector's dimensions
+     * @returns an object with `value` and `index` that specifies the min value and its corresponding dimension.
+     */
     static min(a) {
         let m = Number.MAX_VALUE;
         let index = 0;
@@ -846,12 +901,19 @@ class Vec {
         }
         return { value: m, index: index };
     }
+    /**
+     * Sum all the dimensions' values
+     */
     static sum(a) {
         let s = 0;
         for (let i = 0, len = a.length; i < len; i++)
             s += a[i];
         return s;
     }
+    /**
+     * Given a mapping function, update `a`'s value in each dimension
+     * @returns vector `a`
+     */
     static map(a, fn) {
         for (let i = 0, len = a.length; i < len; i++) {
             a[i] = fn(a[i], i, a);
@@ -860,6 +922,9 @@ class Vec {
     }
 }
 exports.Vec = Vec;
+/**
+ * Mat provides static function for matrix operations. It's not yet optimized but good enough to use.
+ */
 class Mat {
     /**
      * Matrix additions. Matrices should have the same rows and columns.
@@ -885,24 +950,36 @@ class Mat {
      * Matrix multiplication
      * @param a a Group of M Pts, each with K dimensions (M-rows, K-columns)
      * @param b a scalar number, or a Group of K Pts, each with N dimensions (K-rows, N-columns) -- or if transposed is true, then N Pts with K dimensions
-     * @param transposed if true, then a and b's columns should match (ie, each Pt should have the same dimensions).
+     * @param transposed (Only applicable if it's not elementwise multiplication) If true, then a and b's columns should match (ie, each Pt should have the same dimensions).
+     * @param elementwise if true, then the multiplication is done element-wise. Default is false.
      * @returns a group with M Pt, each with N dimensions (M-rows, N-columns)
      */
-    static multiply(a, b, transposed = false) {
+    static multiply(a, b, transposed = false, elementwise = false) {
         let g = new Pt_1.Group();
         if (typeof b != "number") {
-            if (!transposed && a[0].length != b.length)
-                throw "Cannot multiply matrix if rows in matrix-a don't match columns in matrix-b.";
-            if (transposed && a[0].length != b[0].length)
-                throw "Cannot multiply matrix if transposed and the columns in both matrices don't match.";
-            if (!transposed)
-                b = Mat.transpose(b);
-            for (let ai = 0, alen = a.length; ai < alen; ai++) {
-                let p = Pt_1.Pt.make(b.length, 0);
-                for (let bi = 0, blen = b.length; bi < blen; bi++) {
-                    p[bi] = a[ai].dot(b[bi]);
+            if (elementwise) {
+                if (a.length != b.length)
+                    throw "Cannot multiply matrix element-wise because the matrices' sizes don't match.";
+                for (let ai = 0, alen = a.length; ai < alen; ai++) {
+                    let p = new Pt_1.Pt(a[ai]);
+                    Vec.multiply(p, b[ai]);
+                    g.push(p);
                 }
-                g.push(p);
+            }
+            else {
+                if (!transposed && a[0].length != b.length)
+                    throw "Cannot multiply matrix if rows in matrix-a don't match columns in matrix-b.";
+                if (transposed && a[0].length != b[0].length)
+                    throw "Cannot multiply matrix if transposed and the columns in both matrices don't match.";
+                if (!transposed)
+                    b = Mat.transpose(b);
+                for (let ai = 0, alen = a.length; ai < alen; ai++) {
+                    let p = Pt_1.Pt.make(b.length, 0);
+                    for (let bi = 0, blen = b.length; bi < blen; bi++) {
+                        p[bi] = a[ai].dot(b[bi]);
+                    }
+                    g.push(p);
+                }
             }
         }
         else {
@@ -942,44 +1019,79 @@ class Mat {
         }
         return ps;
     }
-    static transpose(g) {
-        return Mat.zip(g);
+    /**
+     * Same as `zip`
+     */
+    static transpose(g, defaultValue = false, useLongest = false) {
+        return Mat.zip(g, defaultValue, useLongest);
     }
+    /**
+     * Transform a 2D point given a 2x3 or 3x3 matrix
+     * @param pt a Pt to be transformed
+     * @param m 2x3 or 3x3 matrix
+     * @returns a new transformed Pt
+     */
     static transform2D(pt, m) {
         let x = pt[0] * m[0][0] + pt[1] * m[1][0] + m[2][0];
         let y = pt[0] * m[0][1] + pt[1] * m[1][1] + m[2][1];
         return new Pt_1.Pt(x, y);
     }
+    /**
+     * Get a scale matrix for use in `transform2D`
+     */
     static scale2DMatrix(x, y) {
         return new Pt_1.Group(new Pt_1.Pt(x, 0, 0), new Pt_1.Pt(0, y, 0), new Pt_1.Pt(0, 0, 1));
     }
+    /**
+     * Get a rotate matrix for use in `transform2D`
+     */
     static rotate2DMatrix(cosA, sinA) {
         return new Pt_1.Group(new Pt_1.Pt(cosA, sinA, 0), new Pt_1.Pt(-sinA, cosA, 0), new Pt_1.Pt(0, 0, 1));
     }
+    /**
+     * Get a shear matrix for use in `transform2D`
+     */
     static shear2DMatrix(tanX, tanY) {
         return new Pt_1.Group(new Pt_1.Pt(1, tanX, 0), new Pt_1.Pt(tanY, 1, 0), new Pt_1.Pt(0, 0, 1));
     }
+    /**
+     * Get a translate matrix for use in `transform2D`
+     */
     static translate2DMatrix(x, y) {
         return new Pt_1.Group(new Pt_1.Pt(1, 0, 0), new Pt_1.Pt(0, 1, 0), new Pt_1.Pt(x, y, 1));
     }
+    /**
+     * Get a matrix to scale a point from an origin point. For use in `transform2D`
+     */
     static scaleAt2DMatrix(sx, sy, at) {
         let m = Mat.scale2DMatrix(sx, sy);
         m[2][0] = -at[0] * sx + at[0];
         m[2][1] = -at[1] * sy + at[1];
         return m;
     }
+    /**
+     * Get a matrix to rotate a point from an origin point. For use in `transform2D`
+     */
     static rotateAt2DMatrix(cosA, sinA, at) {
         let m = Mat.rotate2DMatrix(cosA, sinA);
         m[2][0] = at[0] * (1 - cosA) + at[1] * sinA;
         m[2][1] = at[1] * (1 - cosA) - at[0] * sinA;
         return m;
     }
+    /**
+     * Get a matrix to shear a point from an origin point. For use in `transform2D`
+     */
     static shearAt2DMatrix(tanX, tanY, at) {
         let m = Mat.shear2DMatrix(tanX, tanY);
         m[2][0] = -at[1] * tanY;
         m[2][1] = -at[0] * tanX;
         return m;
     }
+    /**
+     * Get a matrix to reflect a point along a line. For use in `transform2D`
+     * @param p1 first end point to define the reflection line
+     * @param p1 second end point to define the reflection line
+     */
     static reflectAt2DMatrix(p1, p2) {
         let intercept = Op_1.Line.intercept(p1, p2);
         if (intercept == undefined) {
@@ -2689,21 +2801,19 @@ exports.Curve = Curve;
 // Source code licensed under Apache License 2.0. 
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
-class Font {
-    constructor(size = 12, face = "sans-serif", weight = "", style = "", lineHeight = 1.5) {
-        this.size = size;
-        this.face = face;
-        this.style = style;
-        this.weight = weight;
-        this.lineHeight = lineHeight;
-    }
-    // "italic small-caps bold 12px arial"
-    get value() { return `${this.style} ${this.weight} ${this.size}px/${this.lineHeight} ${this.face}`; }
-    ;
-}
-exports.Font = Font;
+/**
+ * Form is an abstract class that represents a form that's used in a Space for expressions.
+ */
 class Form {
+}
+exports.Form = Form;
+/**
+ * VisualForm is an abstract class that represents a form that can be used to express Pts visually.
+ * For example, CanvasForm is an implementation of VisualForm that draws on CanvasSpace which represents a html canvas.
+ */
+class VisualForm extends Form {
     constructor() {
+        super(...arguments);
         this._filled = true;
         this._stroked = true;
         this._font = new Font();
@@ -2714,7 +2824,38 @@ class Form {
     set stroked(b) { this._stroked = b; }
     get currentFont() { return this._font; }
 }
-exports.Form = Form;
+exports.VisualForm = VisualForm;
+/**
+ * Font class lets you create a specific font style with properties for its size and style
+ */
+class Font {
+    /**
+     * Create a font style
+     * @param size font size. Defaults is 12px.
+     * @param face Optional font-family, use css-like string such as "Helvetica" or "Helvetica, sans-serif". Default is "sans-serif".
+     * @param weight Optional font weight such as "bold". Default is "" (none).
+     * @param style Optional font style such as "italic". Default is "" (none).
+     * @param lineHeight Optional line height. Default is 1.5.
+     * @example `new Font(12, "Frutiger, sans-serif", "bold", "underline", 1.5)`
+     */
+    constructor(size = 12, face = "sans-serif", weight = "", style = "", lineHeight = 1.5) {
+        this.size = size;
+        this.face = face;
+        this.style = style;
+        this.weight = weight;
+        this.lineHeight = lineHeight;
+    }
+    /**
+     * Get a string representing the font style, in css-like string such as "italic bold 12px/1.5 sans-serif"
+     */
+    get value() { return `${this.style} ${this.weight} ${this.size}px/${this.lineHeight} ${this.face}`; }
+    ;
+    /**
+     * Get a string representing the font style, in css-like string such as "italic bold 12px/1.5 sans-serif"
+     */
+    toString() { return this.value; }
+}
+exports.Font = Font;
 
 
 /***/ }),
@@ -3380,10 +3521,10 @@ class CanvasSpace extends Space_1.Space {
 }
 exports.CanvasSpace = CanvasSpace;
 /**
- * CanvasForm is an implementation of abstract class Form. It provide methods to express Pts on CanvasSpace.
+ * CanvasForm is an implementation of abstract class VisualForm. It provide methods to express Pts on CanvasSpace.
  * You may extend CanvasForm to implement your own expressions for CanvasSpace.
  */
-class CanvasForm extends Form_1.Form {
+class CanvasForm extends Form_1.VisualForm {
     /**
      * Create a new CanvasForm. You may also use `space.getForm()` to get the default form.
      * @param space an instance of CanvasSpace
@@ -3797,7 +3938,16 @@ exports.CanvasForm = CanvasForm;
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
+/**
+ * The `Create` class provides various convenient functions to create structures or shapes.
+ */
 class Create {
+    /**
+     * Create a set of random points inside a bounday
+     * @param bound the rectangular boundary
+     * @param count number of random points to create
+     * @param dimensions number of dimensions in each point
+     */
     static distributeRandom(bound, count, dimensions = 2) {
         let pts = new Pt_1.Group();
         for (let i = 0; i < count; i++) {
@@ -3810,6 +3960,14 @@ class Create {
         }
         return pts;
     }
+    /**
+     * Create an evenly distributed set of points (like a grid of points) inside a boundary.
+     * @param bound the rectangular boundary
+     * @param columns number of columns
+     * @param rows number of rows
+     * @param orientation a Pt or number array to specify where the point should be inside a cell. Default is [0.5, 0.5] which places the point in the middle.
+     * @returns a Group of Pts
+     */
     static gridPts(bound, columns, rows, orientation = [0.5, 0.5]) {
         let unit = bound.size.$subtract(1).$divide(columns, rows);
         let offset = unit.$multiply(orientation);
@@ -3821,6 +3979,13 @@ class Create {
         }
         return g;
     }
+    /**
+     * Create a grid inside a boundary
+     * @param bound the rectangular boundary
+     * @param columns number of columns
+     * @param rows number of rows
+     * @returns an array of Groups, where each group represents a rectangular cell
+     */
     static gridCells(bound, columns, rows) {
         let unit = bound.size.$subtract(1).divide(columns, rows); // subtract 1 to fill whole border of rectangles
         let g = [];
