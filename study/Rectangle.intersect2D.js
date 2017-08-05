@@ -22,7 +22,7 @@ space.add( {
     form.stroke("#000").rect( rect2 );
 
     let r = Rectangle.fromCenter( space.pointer, 50, 90 );
-    let strokeWeight = Rectangle.intersectBound2D( r, rect1) ? 5 : 2;
+    let strokeWeight = Rectangle.hasIntersectRect2D( r, rect1) ? 5 : 2;
     form.stroke("#f00", strokeWeight ).rect( r );
 
     let ps = Rectangle.intersectRect2D( r, rect1 );
@@ -86,7 +86,7 @@ function init(bound, space) {
   circle1 = Circle.fromRect(rect1);
   circle2 = Circle.fromRect(rect1, true);
   circle3 = Circle.fromRect(rect2, true);
-  rect3 = Rectangle.union([rect1, rect2]);
+  rect3 = Rectangle.boundingBox([rect1, rect2]);
 };
 
 function guidelines() {

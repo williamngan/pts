@@ -114,7 +114,7 @@ function init(bound, space) {
   circle1 = Circle.fromRect(rect1);
   circle2 = Circle.fromRect(rect1, true);
   circle3 = Circle.fromRect(rect2, true);
-  rect3 = Rectangle.union([rect1, rect2]);
+  rect3 = Rectangle.boundingBox([rect1, rect2]);
 };
 
 function guidelines() {
