@@ -209,10 +209,10 @@ export class Mat {
   /**
    * Matrix additions. Matrices should have the same rows and columns.
    * @param a a group of Pt
-   * @param b a scalar number or a group of Pt
+   * @param b a scalar number, an array of numeric arrays, or a group of Pt
    * @returns a group with the same rows and columns as a and b
    */
-  static add( a:GroupLike, b:GroupLike|number ):Group {
+  static add( a:GroupLike, b:GroupLike|number[][]|number ):Group {
     if ( typeof b != "number" ) {
       if (a[0].length != b[0].length) throw "Cannot add matrix if rows' and columns' size don't match."
       if (a.length != b.length) throw "Cannot add matrix if rows' and columns' size don't match."
@@ -231,12 +231,12 @@ export class Mat {
   /**
    * Matrix multiplication
    * @param a a Group of M Pts, each with K dimensions (M-rows, K-columns)
-   * @param b a scalar number, or a Group of K Pts, each with N dimensions (K-rows, N-columns) -- or if transposed is true, then N Pts with K dimensions
-   * @param transposed (Only applicable if it's not elementwise multiplication) If true, then a and b's columns should match (ie, each Pt should have the same dimensions). 
-   * @param elementwise if true, then the multiplication is done element-wise. Default is false.
-   * @returns a group with M Pt, each with N dimensions (M-rows, N-columns)
+   * @param b a scalar number, an array of numeric arrays, or a Group of K Pts, each with N dimensions (K-rows, N-columns) -- or if transposed is true, then N Pts with K dimensions
+   * @param transposed (Only applicable if it's not elementwise multiplication) If true, then a and b's columns should match (ie, each Pt should have the same dimensions). Default is `false`.
+   * @param elementwise if true, then the multiplication is done element-wise. Default is `false`.
+   * @returns If not elementwise, this will return a group with M Pt, each with N dimensions (M-rows, N-columns).
    */
-  static multiply( a:GroupLike, b:GroupLike|number, transposed:boolean=false, elementwise:boolean=false ):Group {
+  static multiply( a:GroupLike, b:GroupLike|number[][]|number, transposed:boolean=false, elementwise:boolean=false ):Group {
     
     let g = new Group();
 
@@ -275,7 +275,7 @@ export class Mat {
 
 
   /**
-   * Zip one slice of an array of Pt
+   * Zip one slice of an array of Pt. Imagine the Pts are organized in rows, then this function will take the values in a specific column.
    * @param g a group of Pt
    * @param idx index to zip at
    * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
@@ -297,9 +297,9 @@ export class Mat {
    * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
    * @param useLongest If true, find the longest list of values in a Pt and use its length for zipping. Default is false, which uses the first item's length for zipping.
    */
-  static zip( g:GroupLike, defaultValue:number|boolean = false, useLongest=false ):Group {
+  static zip( g:GroupLike|number[][], defaultValue:number|boolean = false, useLongest=false ):Group {
     let ps = new Group();
-    let len = (useLongest) ? g.reduce( (a,b) => Math.max(a, b.length), 0 ) : g[0].length;
+    let len:number = (useLongest) ? (g as Array<number[]|Pt>).reduce( (a,b) => Math.max(a, b.length), 0 ) : g[0].length;
     for (let i=0; i<len; i++) {
       ps.push( Mat.zipSlice( g, i, defaultValue ) )
     }
@@ -308,11 +308,9 @@ export class Mat {
 
 
   /**
-   * Same as `zip`
+   * Same as `zip` function
    */
-  static transpose( g:GroupLike, defaultValue:number|boolean = false, useLongest=false ):Group {
-    return Mat.zip( g, defaultValue, useLongest )
-  }
+  static transpose = Mat.zip;
 
 
   /**
