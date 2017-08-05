@@ -1955,8 +1955,8 @@ const LinearAlgebra_1 = __webpack_require__(2);
 let _errorLength = (obj, param = "expected") => Util_1.Util.warn("Group's length is less than " + param, obj);
 let _errorOutofBound = (obj, param = "") => Util_1.Util.warn(`Index ${param} is out of bound in Group`, obj);
 /**
- * Line class provides static functions to create and operate on lines.
- * Lines are usually represented by a Group of Pts. You can use the static function as-is, or apply the `op` method in Group or Pt to many of these functions.
+ * Line class provides static functions to create and operate on lines. A line is usually represented as a Group of 2 Pts.
+ * You can use the static function as-is, or apply the `op` method in Group or Pt to many of these functions.
  * See [Op guide](../../guide/Op-0400.html) for details.
  */
 class Line {
@@ -2111,7 +2111,7 @@ class Line {
      * Given a line segemnt and a ray (infinite line), find its intersection point(s) with a polygon.
      * @param lineOrRay a Group of 2 Pts representing a line or ray
      * @param poly a Group of Pts representing a polygon
-     * @param sourceIsRay a boolean value to treat the line as a ray. Default is `false`.
+     * @param sourceIsRay a boolean value to treat the line as a ray (infinite line). Default is `false`.
      */
     static intersectPolygon2D(lineOrRay, poly, sourceIsRay = false) {
         let fn = sourceIsRay ? Line.intersectLineWithRay2D : Line.intersectLine2D;
@@ -2184,8 +2184,8 @@ class Line {
 }
 exports.Line = Line;
 /**
- * Rectangle class provides static functions to create and operate on rectangles.
- * Rectangles are usually represented by a Group of Pts. You can use the static function as-is, or apply the `op` method in Group or Pt to many of these functions.
+ * Rectangle class provides static functions to create and operate on rectangles. A rectangle is usually represented as a Group of 2 Pts, marking the top-left and bottom-right corners of the rectangle.
+ * You can use the static function as-is, or apply the `op` method in Group or Pt to many of these functions.
  * See [Op guide](../../guide/Op-0400.html) for details.
  */
 class Rectangle {
@@ -2333,7 +2333,17 @@ class Rectangle {
     }
 }
 exports.Rectangle = Rectangle;
+/**
+ * Circle class provides static functions to create and operate on circles. A circle is usually represented as a Group of 2 Pts, where the first Pt specifies the center, and the second Pt specifies the radius.
+ * You can use the static function as-is, or apply the `op` method in Group or Pt to many of these functions.
+ * See [Op guide](../../guide/Op-0400.html) for details.
+ */
 class Circle {
+    /**
+     * Create a circle that either fits within or encloses a rectangle
+     * @param pts a Group of 2 Pts representing a rectangle
+     * @param enclose if `true`, the circle will enclose the rectangle. Default is `false`, which will fit the circle inside the rectangle.
+     */
     static fromRect(pts, enclose = false) {
         let r = 0;
         let min = r = Rectangle.size(pts).minValue().value / 2;
@@ -2346,13 +2356,29 @@ class Circle {
         }
         return new Pt_1.Group(Rectangle.center(pts), new Pt_1.Pt(r, r));
     }
+    /**
+     * Create a circle based on a center point and a radius
+     * @param pt center point of circle
+     * @param radius radius of circle
+     */
     static fromPt(pt, radius) {
         return new Pt_1.Group(new Pt_1.Pt(pt), new Pt_1.Pt(radius, radius));
     }
+    /**
+     * Check if a point is within a circle
+     * @param pts a Group of 2 Pts representing a circle
+     * @param pt the point to checks
+     */
     static withinBound(pts, pt) {
         let d = pts[0].$subtract(pt);
         return d.dot(d) < pts[1].x * pts[1].x;
     }
+    /**
+     * Get the intersection points between a circle and a ray (infinite line)
+     * @param pts a Group of 2 Pts representing a circle
+     * @param ray a Group of 2 Pts representing a ray
+     * @returns a Group of intersection points, or an empty Group if no intersection is found
+     */
     static intersectRay2D(pts, ray) {
         let d = ray[0].$subtract(ray[1]);
         let f = pts[0].$subtract(ray[0]);
@@ -2376,6 +2402,12 @@ class Circle {
             return new Pt_1.Group(p1, p2);
         }
     }
+    /**
+     * Get the intersection points between a circle and a line segment
+     * @param pts a Group of 2 Pts representing a circle
+     * @param ray a Group of 2 Pts representing a line
+     * @returns a Group of intersection points, or an empty Group if no intersection is found
+     */
     static intersectLine2D(pts, line) {
         let ps = Circle.intersectRay2D(pts, line);
         let g = new Pt_1.Group();
@@ -2387,6 +2419,12 @@ class Circle {
         }
         return g;
     }
+    /**
+     * Get the intersection points between two circles
+     * @param pts a Group of 2 Pts representing a circle
+     * @param circle a Group of 2 Pts representing a circle
+     * @returns a Group of intersection points, or an empty Group if no intersection is found
+     */
     static intersectCircle2D(pts, circle) {
         let dv = circle[0].$subtract(pts[0]);
         let dr2 = dv.magnitudeSq();
@@ -2409,10 +2447,11 @@ class Circle {
         }
     }
     /**
-     * Quick way to check rectangle intersection.
+     * Quick way to check rectangle intersection with a circle.
      * For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersect2D()`.
-     * @param pts a Group representing a circle
-     * @param rect a Group representing a rectangle
+     * @param pts a Group of 2 Pts representing a circle
+     * @param rect a Group of 2 Pts representing a rectangle
+     * @returns a Group of intersection points, or an empty Group if no intersection is found
      */
     static intersectRect2D(pts, rect) {
         let sides = Rectangle.sides(rect);
@@ -2424,15 +2463,27 @@ class Circle {
         }
         return Util_1.Util.flatten(g);
     }
+    /**
+     * Convert this cirlce to a rectangle that encloses this circle
+     * @param pts a Group of 2 Pts representing a circle
+     */
     static toRect(pts) {
         let r = pts[1][0];
         return new Pt_1.Group(pts[0].$subtract(r), pts[0].$add(r));
     }
+    /**
+     * Convert this cirlce to a rectangle that fits within this circle
+     * @param pts a Group of 2 Pts representing a circle
+     */
     static toInnerRect(pts) {
         let r = pts[1][0];
         let half = Math.sqrt(r * r) / 2;
         return new Pt_1.Group(pts[0].$subtract(half), pts[0].$add(half));
     }
+    /**
+     * Convert this cirlce to a triangle that fits within this circle
+     * @param pts a Group of 2 Pts representing a circle
+     */
     static toInnerTriangle(pts) {
         let ang = -Math.PI / 2;
         let inc = Math.PI * 2 / 3;
@@ -2445,7 +2496,16 @@ class Circle {
     }
 }
 exports.Circle = Circle;
+/**
+ * Triangle class provides static functions to create and operate on trianges. A triange is usually represented as a Group of 3 Pts.
+ * You can use the static function as-is, or apply the `op` method in Group or Pt to many of these functions.
+ * See [Op guide](../../guide/Op-0400.html) for details.
+ */
 class Triangle {
+    /**
+     * Create a triangle from a rectangle. The triangle will be isosceles, with the bottom of the rectangle as its base.
+     * @param rect a Group of 2 Pts representing a rectangle
+     */
     static fromRect(rect) {
         let top = rect[0].$add(rect[1]).divide(2);
         top.y = rect[0][1];
@@ -2453,11 +2513,20 @@ class Triangle {
         left.x = rect[0][0];
         return new Pt_1.Group(top, rect[1].clone(), left);
     }
+    /**
+     * Create a triangle that fits within a circle
+     * @param circle a Group of 2 Pts representing a circle
+     */
     static fromCircle(circle) {
         return Circle.toInnerTriangle(circle);
     }
-    static fromCenter(pt, radius) {
-        return Triangle.fromCircle(Circle.fromPt(pt, radius));
+    /**
+     * Create an equilateral triangle based on a center point and a size
+     * @param pt the center point
+     * @param size size is the magnitude of lines from center to the triangle's vertices, like a "radius".
+     */
+    static fromCenter(pt, size) {
+        return Triangle.fromCircle(Circle.fromPt(pt, size));
     }
     /**
      * Get the medial, which is an inner triangle formed by connecting the midpoints of this triangle's sides
@@ -2562,7 +2631,16 @@ class Triangle {
     }
 }
 exports.Triangle = Triangle;
+/**
+ * Polygon class provides static functions to create and operate on polygons. A polygon is usually represented as a Group of 3 or more Pts.
+ * You can use the static function as-is, or apply the `op` method in Group or Pt to many of these functions.
+ * See [Op guide](../../guide/Op-0400.html) for details.
+ */
 class Polygon {
+    /**
+     * Get the centroid of a polygon, which is the average of all its points.
+     * @param pts a Group of Pts representing a polygon
+     */
     static centroid(pts) {
         return Num_1.Geom.centroid(pts);
     }
@@ -2736,6 +2814,12 @@ class Polygon {
         }
         return hull;
     }
+    /**
+     * Find intersection points of 2 polygons
+     * @param poly a Group representing a polygon
+     * @param linesOrRays an array of Groups representing lines
+     * @param sourceIsRay a boolean value to treat the line as a ray (infinite line). Default is `false`.
+     */
     static intersect2D(poly, linesOrRays, sourceIsRay = false) {
         let groups = [];
         for (let i = 0, len = linesOrRays.length; i < len; i++) {
@@ -2745,6 +2829,11 @@ class Polygon {
         }
         return groups;
     }
+    /**
+     * Given a point in the polygon as an origin, get an array of lines that connect all the remaining points to the origin point.
+     * @param pts a Group representing a polygon
+     * @param originIndex the origin point's index in the polygon
+     */
     static network(pts, originIndex = 0) {
         let g = [];
         for (let i = 0, len = pts.length; i < len; i++) {
@@ -2782,6 +2871,11 @@ class Polygon {
     }
 }
 exports.Polygon = Polygon;
+/**
+ * Curve class provides static functions to interpolate curves. A curve is usually represented as a Group of 3 control points.
+ * You can use the static function as-is, or apply the `op` method in Group or Pt to many of these functions.
+ * See [Op guide](../../guide/Op-0400.html) for details.
+ */
 class Curve {
     /**
      * Get a precalculated coefficients per step
