@@ -13,19 +13,43 @@ let _errorLength = (obj, param:number|string="expected") => Util.warn( "Group's 
 let _errorOutofBound = (obj, param:number|string="") => Util.warn( `Index ${param} is out of bound in Group`, obj  );
 
 
-
+/**
+ * Line class provides static functions to create and operate on lines.  
+ * Lines are usually represented by a Group of Pts. You can use the static function as-is, or apply the `op` method in Group or Pt to many of these functions.
+ * See [Op guide](../../guide/Op-0400.html) for details.
+ */
 export class Line {
 
+  /**
+   * Create a line by "drawing" from an anchor point, given an angle and a magnitude
+   * @param anchor an anchor Pt
+   * @param angle an angle in radian
+   * @param magnitude magnitude of the line
+   * @return a Group of 2 Pts representing a line segement
+   */
   static fromAngle( anchor:PtLike, angle:number, magnitude:number ):Group {
     let g = new Group( new Pt(anchor), new Pt(anchor) );
     g[1].toAngle( angle, magnitude, true );
     return g;
   }
 
+
+  /**
+   * Calculate the slope of a line
+   * @param p1 line's first end point
+   * @param p2 line's second end point
+   */
   static slope( p1:PtLike|number[], p2:PtLike|number[] ):number {
     return (p2[0] - p1[0] === 0) ? undefined : (p2[1] - p1[1]) / (p2[0] - p1[0]);
   }
 
+
+  /**
+   * Calculate the slope and xy intercepts of a line
+   * @param p1 line's first end point
+   * @param p2 line's second end point
+   * @returns an object with `slope`, `xi`, `yi` properties 
+   */
   static intercept( p1:PtLike|number[], p2:PtLike|number[] ):{ slope:number, xi:number, yi:number } {
     if (p2[0] - p1[0] === 0) {
       return undefined;
@@ -36,24 +60,42 @@ export class Line {
     }
   }
 
-  static collinear( p1:PtLike|number[], p2:PtLike|number[], p3:PtLike|number[], threshold:number=0.01 ) {
+
+  /**
+   * Check if three Pts are collinear, ie, on the same straight path.
+   * @param p1 first Pt
+   * @param p2 second Pt
+   * @param p3 third Pt
+   * @param threshold a threshold where a smaller value means higher precision threshold for the straight line. Default is 0.01.
+   */
+  static collinear( p1:PtLike|number[], p2:PtLike|number[], p3:PtLike|number[], threshold:number=0.01 ):boolean {
     // Use cross product method
     let a = new Pt(0,0,0).to(p1).$subtract( p2 );
     let b = new Pt(0,0,0).to(p1).$subtract( p3 );    
     return a.$cross( b ).divide(1000).equals( new Pt(0,0,0), threshold );
   }
 
-  static magnitude( line:GroupLike ) {
+
+  /**
+   * Get magnitude of a line segment
+   * @param line a Group of at least 2 Pts
+   */
+  static magnitude( line:GroupLike ):number {
     return (line.length >= 2) ? line[1].$subtract( line[0] ).magnitude() : 0;
   }
 
-  static magnitudeSq( line:GroupLike ) {
+
+  /**
+   * Get squared magnitude of a line segment
+   * @param line a Group of at least 2 Pts
+   */
+  static magnitudeSq( line:GroupLike ):number {
     return (line.length >= 2) ? line[1].$subtract( line[0] ).magnitudeSq() : 0;
   }
 
 
   /**
-   * Find a Pt on a line that is perpendicular (shortest distance) to a target Pt
+   * Find a point on a line that is perpendicular (shortest distance) to a target point
    * @param pt a target Pt 
    * @param ln a group of Pts that defines a line
    * @param asProjection if true, this returns the projection vector instead. Default is false.
@@ -68,10 +110,25 @@ export class Line {
     return (asProjection) ? proj : proj.$add( pt );
   }
 
+
+  /**
+   * Given a line and a point, find the shortest distance from the point to the line
+   * @param line a Group of 2 Pts
+   * @param pt a Pt
+   * @param asProjection if true, this uses the projection vector instead. Default is false.
+   * @see `Line.perpendicularFromPt`
+   */
   static distanceFromPt( line:GroupLike, pt:PtLike|number[], asProjection:boolean=false ):number {
     return Line.perpendicularFromPt( line, pt, true ).magnitude();
   }
 
+
+  /**
+   * Given two lines as rays (infinite lines), find their intersection point if any.
+   * @param la a Group of 2 Pts representing a ray
+   * @param lb a Group of 2 Pts representing a ray
+   * @returns an intersection Pt or undefined if no intersection
+   */
   static intersectRay2D( la:GroupLike, lb:GroupLike ):Pt {
 
     let a = Line.intercept( la[0], la[1] );
@@ -107,17 +164,38 @@ export class Line {
     }
   }
 
+
+  /**
+   * Given two line segemnts, find their intersection point if any.
+   * @param la a Group of 2 Pts representing a line segment
+   * @param lb a Group of 2 Pts representing a line segment
+   * @returns an intersection Pt or undefined if no intersection
+   */
   static intersectLine2D( la:GroupLike, lb:GroupLike ):Pt {
     let pt = Line.intersectRay2D( la, lb );
     return ( pt && Geom.withinBound( pt, la[0], la[1] ) && Geom.withinBound(pt, lb[0], lb[1]) ) ? pt : undefined;
   }
 
+
+  /**
+   * Given a line segemnt and a ray (infinite line), find their intersection point if any.
+   * @param line a Group of 2 Pts representing a line segment
+   * @param ray a Group of 2 Pts representing a ray
+   * @returns an intersection Pt or undefined if no intersection
+   */
   static intersectLineWithRay2D( line:GroupLike, ray:GroupLike ):Pt {
     let pt = Line.intersectRay2D( line, ray );
     return ( pt && Geom.withinBound( pt, line[0], line[1] )) ? pt : undefined;
   }
 
-  static intersectPolygon2D( lineOrRay:GroupLike, poly:GroupLike[], sourceIsRay:boolean = false ):Group {
+
+  /**
+   * Given a line segemnt and a ray (infinite line), find its intersection point(s) with a polygon.
+   * @param lineOrRay a Group of 2 Pts representing a line or ray
+   * @param poly a Group of Pts representing a polygon
+   * @param sourceIsRay a boolean value to treat the line as a ray. Default is `false`.
+   */
+  static intersectPolygon2D( lineOrRay:GroupLike, poly:GroupLike[], sourceIsRay:boolean=false ):Group {
     let fn = sourceIsRay ? Line.intersectLineWithRay2D : Line.intersectLine2D; 
     let pts = new Group();
     for (let i=0, len=poly.length; i<len; i++) {
@@ -127,8 +205,9 @@ export class Line {
     return (pts.length > 0) ? pts : undefined;
   } 
 
+
   /**
-   * Get two intersection Pts on a standard xy grid
+   * Get two intersection Pts of a ray with a 2D grid point
    * @param ray a ray specified by 2 Pts
    * @param gridPt a Pt on the grid
    * @returns a group of two intersecting Pts. The first one is horizontal intersection and the second one is vertical intersection.
@@ -141,6 +220,13 @@ export class Line {
     return g;
   }  
 
+
+  /**
+   * Get two intersection Pts of a line segment with a 2D grid point
+   * @param ray a ray specified by 2 Pts
+   * @param gridPt a Pt on the grid
+   * @returns a group of two intersecting Pts. The first one is horizontal intersection and the second one is vertical intersection.
+   */
   static intersectGridWithLine2D( line:GroupLike, gridPt:PtLike|number[] ):Group {
     let g = Line.intersectGridWithRay2D( line, gridPt );
     let gg = new Group();
@@ -149,6 +235,7 @@ export class Line {
     }
     return gg;
   }
+
 
   /**
    * Quick way to check rectangle intersection. 
@@ -160,6 +247,12 @@ export class Line {
     return Rectangle.intersectRect2D( Line.toRect(line), rect );
   }
 
+
+  /**
+   * Get evenly distributed points on a line
+   * @param line a Group representing a line
+   * @param num number of points to get
+   */
   static subpoints( line:GroupLike|number[][], num:number ) {
     let pts = new Group();
     for (let i=1; i<=num; i++) {
@@ -168,44 +261,92 @@ export class Line {
     return pts;
   }
 
+
+  /**
+   * Convert this line to a rectangle representation
+   * @param line a Group representing a line
+   */
   static toRect( line:GroupLike ) {
     return new Group( line[0].$min( line[1] ), line[0].$max( line[1] ) );
   }
 
-
 }
 
 
+
+/**
+ * Rectangle class provides static functions to create and operate on rectangles.  
+ * Rectangles are usually represented by a Group of Pts. You can use the static function as-is, or apply the `op` method in Group or Pt to many of these functions.
+ * See [Op guide](../../guide/Op-0400.html) for details.
+ */
 export class Rectangle {
 
+  /**
+   * Same as `Rectangle.fromTopLeft`
+   */
   static from( topLeft:PtLike|number[], widthOrSize:number|PtLike, height?:number ):Group {
     return Rectangle.fromTopLeft( topLeft, widthOrSize, height );
   }
 
+
+  /**
+   * Create a rectangle given a top-left position and a size
+   * @param topLeft top-left point
+   * @param widthOrSize width as a number, or a Pt that defines its size
+   * @param height optional height as a number
+   */
   static fromTopLeft( topLeft:PtLike|number[], widthOrSize:number|PtLike, height?:number ):Group {
     let size = (typeof widthOrSize == "number") ? [widthOrSize, (height||widthOrSize) ] : widthOrSize;
     return new Group(new Pt(topLeft), new Pt(topLeft).add( size ) );
   }
 
+
+  /**
+   * Create a rectangle given a center position and a size
+   * @param topLeft top-left point
+   * @param widthOrSize width as a number, or a Pt that defines its size
+   * @param height optional height as a number
+   */
   static fromCenter( center:PtLike|number[], widthOrSize:number|PtLike, height?:number ):Group {
     let half = (typeof widthOrSize == "number") ? [ widthOrSize/2, (height||widthOrSize)/2 ] : new Pt(widthOrSize).divide(2);
     return new Group(new Pt(center).subtract(half), new Pt(center).add(half));
   }
 
-  static toCircle( pts:GroupLike ) {
+
+  /**
+   * Convert this rectangle to a circle that fits within the rectangle
+   * @returns a Group that represents a circle
+   * @see `Circle`
+   */
+  static toCircle( pts:GroupLike ):Group {
     return Circle.fromRect( pts );
   }
 
-  static size( pts:GroupLike ): Pt {
+
+  /**
+   * Get the size of this rectangle as a Pt
+   * @param pts a Group of 2 Pts representing a Rectangle
+   */
+  static size( pts:GroupLike ):Pt {
     return pts[0].$max( pts[1] ).subtract( pts[0].$min( pts[1] ) );
   }
 
-  static center( pts:GroupLike ): Pt {
+
+  /**
+   * Get the center of this rectangle 
+   * @param pts a Group of 2 Pts representing a Rectangle
+   */
+  static center( pts:GroupLike ):Pt {
     let min = pts[0].$min( pts[1] );
     let max = pts[0].$max( pts[1] );
     return min.add( max.$subtract( min ).divide( 2 ) );
   }
 
+
+  /**
+   * Get the 4 corners of this rectangle as a Group
+   * @param rect a Group of 2 Pts representing a Rectangle
+   */
   static corners( rect:GroupLike ):Group {
     let p0 = rect[0].$min(rect[1]);
     let p2 = rect[0].$max(rect[1]);
@@ -213,6 +354,11 @@ export class Rectangle {
   }
 
 
+  /**
+   * Get the 4 sides of this rectangle as an array of 4 Groups
+   * @param rect a Group of 2 Pts representing a Rectangle
+   * @returns an array of 4 Groups, each of which represents a line segment
+   */
   static sides( rect:GroupLike ):Group[] {
     let [p0, p1, p2, p3] = Rectangle.corners( rect );
     return [
@@ -221,12 +367,21 @@ export class Rectangle {
     ];
   }
 
+  
+  /**
+   * Same as `Rectangle.sides`
+   */
   static lines( rect:GroupLike ): Group[] {
     return Rectangle.sides( rect );
   }
  
 
-  static union( rects:GroupLike[] ):Group {
+  /**
+   * Given an array of rectangles, get a rectangle that bounds all of them
+   * @param rects an array of Groups that represent rectangles
+   * @returns the bounding rectangle as a Group
+   */
+  static boundingBox( rects:GroupLike[] ):Group {
     let merged = Util.flatten( rects, false );
     let min = Pt.make( 2, Number.MAX_VALUE );
     let max = Pt.make( 2, Number.MIN_VALUE );
@@ -241,23 +396,44 @@ export class Rectangle {
     return new Group( min, max );
   }
 
+
+  /**
+   * Convert this rectangle into a Group representing a polygon
+   * @param rect a Group of 2 Pts representing a Rectangle
+   */
   static polygon( rect:GroupLike ):Group {
-    let corners = Rectangle.corners( rect );
-    corners.push( corners[0].clone() );
-    return corners;
+    return Rectangle.corners( rect );
   }
 
+
+  /**
+   * Subdivide this rectangle into 4 rectangles, one for each quadrant
+   * @param rect a Group of 2 Pts representing a Rectangle
+   * @returns an array of 4 Groups
+   */
   static quadrants( rect:GroupLike ):Group[] {
     let corners = Rectangle.corners( rect );
     let center = Geom.interpolate( rect[0], rect[1], 0.5 );
     return corners.map( (c) => new Group(c, center.clone()) );
   }
 
-  static withinBound( rect:GroupLike, pt:PtLike ) {
+
+  /**
+   * Check if a point is within a rectangle
+   * @param rect a Group of 2 Pts representing a Rectangle
+   * @param pt the point to check
+   */
+  static withinBound( rect:GroupLike, pt:PtLike ):boolean {
     return Geom.withinBound( pt, rect[0], rect[1] );
   }
 
-  static intersectBound2D( rect1:GroupLike, rect2:GroupLike ) {
+
+  /**
+   * Check if a rectangle is within the bounds of another rectangle
+   * @param rect1 a Group of 2 Pts representing a rectangle
+   * @param rect2 a Group of 2 Pts representing a rectangle
+   */
+  static hasIntersectRect2D( rect1:GroupLike, rect2:GroupLike ):boolean {
     let pts = Rectangle.corners( rect1 );
     for (let i=0, len=pts.length; i<len; i++) {
       if (Geom.withinBound( pts[i], rect2[0], rect2[1])) return true;
@@ -265,11 +441,12 @@ export class Rectangle {
     return false;
   }
 
+  
   /**
    * Quick way to check rectangle intersection. 
    * For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersect2D()`.
-   * @param rect1 a Group representing a rectangle
-   * @param rect2 a Group representing a rectangle
+   * @param rect1 a Group of 2 Pts representing a rectangle
+   * @param rect2 a Group of 2 Pts representing a rectangle
    */
   static intersectRect2D( rect1:GroupLike, rect2:GroupLike ):Group {
     return Util.flatten(

@@ -485,7 +485,7 @@ export class Group extends Array<Pt> {
    * @param t a value between 0 to 1 usually
    */
   interpolate( t:number ):Pt {
-    t = Num.limitValue( t, 0, 1 );
+    t = Num.clamp( t, 0, 1 );
     let chunk = this.length-1;
     let tc = 1/(this.length-1);
     let idx = Math.floor( t / tc );

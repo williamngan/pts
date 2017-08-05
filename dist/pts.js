@@ -466,7 +466,7 @@ class Group extends Array {
      * @param t a value between 0 to 1 usually
      */
     interpolate(t) {
-        t = Num_1.Num.limitValue(t, 0, 1);
+        t = Num_1.Num.clamp(t, 0, 1);
         let chunk = this.length - 1;
         let tc = 1 / (this.length - 1);
         let idx = Math.floor(t / tc);
@@ -1281,29 +1281,42 @@ const Op_1 = __webpack_require__(5);
 const Pt_1 = __webpack_require__(0);
 const LinearAlgebra_1 = __webpack_require__(2);
 /**
- * A collection of helper functions for basic numeric operations
+ * Num class provides various helper functions for basic numeric operations
  */
 class Num {
+    /**
+     * Check if two numbers are equal or almost equal within a threshold
+     * @param a number a
+     * @param b number b
+     * @param threshold a threshold within which the two numbers are considered equal
+     */
     static equals(a, b, threshold = 0.00001) {
         return Math.abs(a - b) < threshold;
     }
+    /**
+     * Linear interpolation
+     * @param a start value
+     * @param b end value
+     * @param t usually a value between 0 to 1
+     */
     static lerp(a, b, t) {
         return (1 - t) * a + t * b;
     }
     /**
      * Clamp values between min and max
-     * @param val
-     * @param min
-     * @param max
+     * @param val value to clamp
+     * @param min min value
+     * @param max max value
      */
-    static limitValue(val, min, max) {
+    static clamp(val, min, max) {
         return Math.max(min, Math.min(max, val));
     }
     /**
-     * Different from Num.limitValue in that the value out-of-bound will be "looped back" to the other end.
-     * @param val
-     * @param min
-     * @param max
+     * Different from Num.clamp in that the value out-of-bound will be "looped back" to the other end.
+     * @param val value to bound
+     * @param min min value
+     * @param max max value
+     * @example `boundValue(361, 0, 360)` will return 1
      */
     static boundValue(val, min, max) {
         let len = Math.abs(max - min);
@@ -1314,18 +1327,40 @@ class Num {
             a += len;
         return a;
     }
+    /**
+     * Check if a value is within
+     * @param p
+     * @param a
+     * @param b
+     */
     static within(p, a, b) {
         return p >= Math.min(a, b) && p <= Math.max(a, b);
     }
+    /**
+     * Get a random number within a range
+     * @param a range value 1
+     * @param b range value 2
+     */
     static randomRange(a, b = 0) {
         let r = (a > b) ? (a - b) : (b - a);
         return a + Math.random() * r;
     }
+    /**
+     * Normalize a value within a range
+     * @param n the value to normalize
+     * @param a range value 1
+     * @param b range value 1
+     */
     static normalizeValue(n, a, b) {
         let min = Math.min(a, b);
         let max = Math.max(a, b);
         return (n - min) / (max - min);
     }
+    /**
+     * Sum a group of numeric arrays
+     * @param pts an array of numeric arrays
+     * @returns a array of sums
+     */
     static sum(pts) {
         let c = new Pt_1.Pt(pts[0]);
         for (let i = 1, len = pts.length; i < len; i++) {
@@ -1334,15 +1369,20 @@ class Num {
         return c;
     }
     /**
-     * Given a value between 0 to 1, returns a value that cycles between 0 -> 1 -> 0
+     * Sum a group of numeric arrays
+     * @param pts an array of numeric arrays
+     * @returns a array of sums
+     */
+    static average(pts) {
+        return Num.sum(pts).divide(pts.length);
+    }
+    /**
+     * Given a value between 0 to 1, returns a value that cycles between 0 -> 1 -> 0 using sine method.
      * @param t a value between 0 to 1
      * @return a value between 0 to 1
      */
     static cycle(t) {
         return (Math.sin(Math.PI * 2 * t) + 1) / 2;
-    }
-    static average(pts) {
-        return Num.sum(pts).divide(pts.length);
     }
     /**
      * Map a value from one range to another
@@ -1362,24 +1402,49 @@ class Num {
     }
 }
 exports.Num = Num;
+/**
+ * Geom class provides various helper functions for basic geometric operations
+ */
 class Geom {
+    /**
+     * Bound an angle between 0 to 360 degrees
+     */
     static boundAngle(angle) {
         return Num.boundValue(angle, 0, 360);
     }
+    /**
+     * Bound a radian between 0 to 2-PI
+     */
     static boundRadian(angle) {
         return Num.boundValue(angle, 0, Util_1.Const.two_pi);
     }
+    /**
+     * Convert an angle in degree to radian
+     */
     static toRadian(angle) {
         return angle * Util_1.Const.deg_to_rad;
     }
+    /**
+     * Convert an angle in radian to degree
+     */
     static toDegree(radian) {
         return radian * Util_1.Const.rad_to_deg;
     }
+    /**
+     * Get a bounding box for a set of Pts
+     * @param pts a Group or an array of Pts
+     * @return a Group of two Pts, representing the top-left and bottom-right corners.
+     */
     static boundingBox(pts) {
         let minPt = pts.reduce((a, p) => a.$min(p));
         let maxPt = pts.reduce((a, p) => a.$max(p));
         return new Pt_1.Group(minPt, maxPt);
     }
+    /**
+     * Get a centroid (the average middle point) for a set of Pts
+     * @param pts a Group or an array of Pts
+     * @return a centroid Pt
+     */
     static centroid(pts) {
         return Num.average(pts);
     }
@@ -1405,7 +1470,7 @@ class Geom {
      * Get an interpolated value between two Pts
      * @param a first Pt
      * @param b second Pt
-     * @param t a ratio between 0 to 1
+     * @param t usually a ratio between 0 to 1
      * @returns interpolated point as a new Pt
      */
     static interpolate(a, b, t = 0.5) {
@@ -1433,9 +1498,18 @@ class Geom {
         pb[y] = -p[x];
         return new Pt_1.Group(pa, pb);
     }
+    /**
+     * Check if two Pts (vectors) are perpendicular to each other
+     */
     static isPerpendicular(p1, p2) {
         return new Pt_1.Pt(p1).dot(p2) === 0;
     }
+    /**
+     * Check if a Pt is within the rectangular boundary defined by two Pts
+     * @param pt the Pt to check
+     * @param boundPt1 boundary Pt 1
+     * @param boundPt2 boundary Pt 2
+     */
     static withinBound(pt, boundPt1, boundPt2) {
         for (let i = 0, len = Math.min(pt.length, boundPt1.length, boundPt2.length); i < len; i++) {
             if (!Num.within(pt[i], boundPt1[i], boundPt2[i]))
@@ -1443,6 +1517,12 @@ class Geom {
         }
         return true;
     }
+    /**
+     * Scale a Pt or a Group of Pts
+     * @param ps a Pt or a Group of Pts
+     * @param scale scale value
+     * @param anchor optional anchor point to scale from
+     */
     static scale(ps, scale, anchor) {
         let pts = (!Array.isArray(ps)) ? [ps] : ps;
         let scs = (typeof scale == "number") ? Pt_1.Pt.make(pts[0].length, scale) : scale;
@@ -1456,6 +1536,13 @@ class Geom {
         }
         return Geom;
     }
+    /**
+     * Rotate a Pt or a Group of Pts in 2D space
+     * @param ps a Pt or a Group of Pts
+     * @param angle rotate angle
+     * @param anchor optional anchor point to rotate from
+     * @param axis optional axis such as "yz" to define a 2D plane of rotation
+     */
     static rotate2D(ps, angle, anchor, axis) {
         let pts = (!Array.isArray(ps)) ? [ps] : ps;
         let fn = (anchor) ? LinearAlgebra_1.Mat.rotateAt2DMatrix : LinearAlgebra_1.Mat.rotate2DMatrix;
@@ -1469,6 +1556,13 @@ class Geom {
         }
         return Geom;
     }
+    /**
+     * Shear a Pt or a Group of Pts in 2D space
+     * @param ps a Pt or a Group of Pts
+     * @param scale shearing value which can be a number or an array of 2 numbers
+     * @param anchor optional anchor point to shear from
+     * @param axis optional axis such as "yz" to define a 2D plane of shearing
+     */
     static shear2D(ps, scale, anchor, axis) {
         let pts = (!Array.isArray(ps)) ? [ps] : ps;
         let s = (typeof scale == "number") ? [scale, scale] : scale;
@@ -1483,6 +1577,12 @@ class Geom {
         }
         return Geom;
     }
+    /**
+     * Reflect a Pt or a Group of Pts along a 2D line
+     * @param ps a Pt or a Group of Pts
+     * @param line a Group of 2 Pts that defines a line for reflection
+     * @param axis optional axis such as "yz" to define a 2D plane of reflection
+     */
     static reflect2D(ps, line, axis) {
         let pts = (!Array.isArray(ps)) ? [ps] : ps;
         for (let i = 0, len = pts.length; i < len; i++) {
@@ -1515,6 +1615,9 @@ class Geom {
     }
 }
 exports.Geom = Geom;
+/**
+ * Shaping provides various shaping/easing functions to interpolate a value non-linearly.
+ */
 class Shaping {
     /**
      * Linear mapping
@@ -1851,15 +1954,38 @@ const Pt_1 = __webpack_require__(0);
 const LinearAlgebra_1 = __webpack_require__(2);
 let _errorLength = (obj, param = "expected") => Util_1.Util.warn("Group's length is less than " + param, obj);
 let _errorOutofBound = (obj, param = "") => Util_1.Util.warn(`Index ${param} is out of bound in Group`, obj);
+/**
+ * Line class provides static functions to create and operate on lines.
+ * Lines are usually represented by a Group of Pts. You can use the static function as-is, or apply the `op` method in Group or Pt to many of these functions.
+ * See [Op guide](../../guide/Op-0400.html) for details.
+ */
 class Line {
+    /**
+     * Create a line by "drawing" from an anchor point, given an angle and a magnitude
+     * @param anchor an anchor Pt
+     * @param angle an angle in radian
+     * @param magnitude magnitude of the line
+     * @return a Group of 2 Pts representing a line segement
+     */
     static fromAngle(anchor, angle, magnitude) {
         let g = new Pt_1.Group(new Pt_1.Pt(anchor), new Pt_1.Pt(anchor));
         g[1].toAngle(angle, magnitude, true);
         return g;
     }
+    /**
+     * Calculate the slope of a line
+     * @param p1 line's first end point
+     * @param p2 line's second end point
+     */
     static slope(p1, p2) {
         return (p2[0] - p1[0] === 0) ? undefined : (p2[1] - p1[1]) / (p2[0] - p1[0]);
     }
+    /**
+     * Calculate the slope and xy intercepts of a line
+     * @param p1 line's first end point
+     * @param p2 line's second end point
+     * @returns an object with `slope`, `xi`, `yi` properties
+     */
     static intercept(p1, p2) {
         if (p2[0] - p1[0] === 0) {
             return undefined;
@@ -1870,20 +1996,35 @@ class Line {
             return { slope: m, yi: c, xi: (m === 0) ? undefined : -c / m };
         }
     }
+    /**
+     * Check if three Pts are collinear, ie, on the same straight path.
+     * @param p1 first Pt
+     * @param p2 second Pt
+     * @param p3 third Pt
+     * @param threshold a threshold where a smaller value means higher precision threshold for the straight line. Default is 0.01.
+     */
     static collinear(p1, p2, p3, threshold = 0.01) {
         // Use cross product method
         let a = new Pt_1.Pt(0, 0, 0).to(p1).$subtract(p2);
         let b = new Pt_1.Pt(0, 0, 0).to(p1).$subtract(p3);
         return a.$cross(b).divide(1000).equals(new Pt_1.Pt(0, 0, 0), threshold);
     }
+    /**
+     * Get magnitude of a line segment
+     * @param line a Group of at least 2 Pts
+     */
     static magnitude(line) {
         return (line.length >= 2) ? line[1].$subtract(line[0]).magnitude() : 0;
     }
+    /**
+     * Get squared magnitude of a line segment
+     * @param line a Group of at least 2 Pts
+     */
     static magnitudeSq(line) {
         return (line.length >= 2) ? line[1].$subtract(line[0]).magnitudeSq() : 0;
     }
     /**
-     * Find a Pt on a line that is perpendicular (shortest distance) to a target Pt
+     * Find a point on a line that is perpendicular (shortest distance) to a target point
      * @param pt a target Pt
      * @param ln a group of Pts that defines a line
      * @param asProjection if true, this returns the projection vector instead. Default is false.
@@ -1897,9 +2038,22 @@ class Line {
         let proj = b.$subtract(a.$project(b));
         return (asProjection) ? proj : proj.$add(pt);
     }
+    /**
+     * Given a line and a point, find the shortest distance from the point to the line
+     * @param line a Group of 2 Pts
+     * @param pt a Pt
+     * @param asProjection if true, this uses the projection vector instead. Default is false.
+     * @see `Line.perpendicularFromPt`
+     */
     static distanceFromPt(line, pt, asProjection = false) {
         return Line.perpendicularFromPt(line, pt, true).magnitude();
     }
+    /**
+     * Given two lines as rays (infinite lines), find their intersection point if any.
+     * @param la a Group of 2 Pts representing a ray
+     * @param lb a Group of 2 Pts representing a ray
+     * @returns an intersection Pt or undefined if no intersection
+     */
     static intersectRay2D(la, lb) {
         let a = Line.intercept(la[0], la[1]);
         let b = Line.intercept(lb[0], lb[1]);
@@ -1933,14 +2087,32 @@ class Line {
             }
         }
     }
+    /**
+     * Given two line segemnts, find their intersection point if any.
+     * @param la a Group of 2 Pts representing a line segment
+     * @param lb a Group of 2 Pts representing a line segment
+     * @returns an intersection Pt or undefined if no intersection
+     */
     static intersectLine2D(la, lb) {
         let pt = Line.intersectRay2D(la, lb);
         return (pt && Num_1.Geom.withinBound(pt, la[0], la[1]) && Num_1.Geom.withinBound(pt, lb[0], lb[1])) ? pt : undefined;
     }
+    /**
+     * Given a line segemnt and a ray (infinite line), find their intersection point if any.
+     * @param line a Group of 2 Pts representing a line segment
+     * @param ray a Group of 2 Pts representing a ray
+     * @returns an intersection Pt or undefined if no intersection
+     */
     static intersectLineWithRay2D(line, ray) {
         let pt = Line.intersectRay2D(line, ray);
         return (pt && Num_1.Geom.withinBound(pt, line[0], line[1])) ? pt : undefined;
     }
+    /**
+     * Given a line segemnt and a ray (infinite line), find its intersection point(s) with a polygon.
+     * @param lineOrRay a Group of 2 Pts representing a line or ray
+     * @param poly a Group of Pts representing a polygon
+     * @param sourceIsRay a boolean value to treat the line as a ray. Default is `false`.
+     */
     static intersectPolygon2D(lineOrRay, poly, sourceIsRay = false) {
         let fn = sourceIsRay ? Line.intersectLineWithRay2D : Line.intersectLine2D;
         let pts = new Pt_1.Group();
@@ -1952,7 +2124,7 @@ class Line {
         return (pts.length > 0) ? pts : undefined;
     }
     /**
-     * Get two intersection Pts on a standard xy grid
+     * Get two intersection Pts of a ray with a 2D grid point
      * @param ray a ray specified by 2 Pts
      * @param gridPt a Pt on the grid
      * @returns a group of two intersecting Pts. The first one is horizontal intersection and the second one is vertical intersection.
@@ -1966,6 +2138,12 @@ class Line {
             g.push(new Pt_1.Pt(gridPt[0], gridPt[1] + t.yi));
         return g;
     }
+    /**
+     * Get two intersection Pts of a line segment with a 2D grid point
+     * @param ray a ray specified by 2 Pts
+     * @param gridPt a Pt on the grid
+     * @returns a group of two intersecting Pts. The first one is horizontal intersection and the second one is vertical intersection.
+     */
     static intersectGridWithLine2D(line, gridPt) {
         let g = Line.intersectGridWithRay2D(line, gridPt);
         let gg = new Pt_1.Group();
@@ -1984,6 +2162,11 @@ class Line {
     static intersectRect2D(line, rect) {
         return Rectangle.intersectRect2D(Line.toRect(line), rect);
     }
+    /**
+     * Get evenly distributed points on a line
+     * @param line a Group representing a line
+     * @param num number of points to get
+     */
     static subpoints(line, num) {
         let pts = new Pt_1.Group();
         for (let i = 1; i <= num; i++) {
@@ -1991,39 +2174,85 @@ class Line {
         }
         return pts;
     }
+    /**
+     * Convert this line to a rectangle representation
+     * @param line a Group representing a line
+     */
     static toRect(line) {
         return new Pt_1.Group(line[0].$min(line[1]), line[0].$max(line[1]));
     }
 }
 exports.Line = Line;
+/**
+ * Rectangle class provides static functions to create and operate on rectangles.
+ * Rectangles are usually represented by a Group of Pts. You can use the static function as-is, or apply the `op` method in Group or Pt to many of these functions.
+ * See [Op guide](../../guide/Op-0400.html) for details.
+ */
 class Rectangle {
+    /**
+     * Same as `Rectangle.fromTopLeft`
+     */
     static from(topLeft, widthOrSize, height) {
         return Rectangle.fromTopLeft(topLeft, widthOrSize, height);
     }
+    /**
+     * Create a rectangle given a top-left position and a size
+     * @param topLeft top-left point
+     * @param widthOrSize width as a number, or a Pt that defines its size
+     * @param height optional height as a number
+     */
     static fromTopLeft(topLeft, widthOrSize, height) {
         let size = (typeof widthOrSize == "number") ? [widthOrSize, (height || widthOrSize)] : widthOrSize;
         return new Pt_1.Group(new Pt_1.Pt(topLeft), new Pt_1.Pt(topLeft).add(size));
     }
+    /**
+     * Create a rectangle given a center position and a size
+     * @param topLeft top-left point
+     * @param widthOrSize width as a number, or a Pt that defines its size
+     * @param height optional height as a number
+     */
     static fromCenter(center, widthOrSize, height) {
         let half = (typeof widthOrSize == "number") ? [widthOrSize / 2, (height || widthOrSize) / 2] : new Pt_1.Pt(widthOrSize).divide(2);
         return new Pt_1.Group(new Pt_1.Pt(center).subtract(half), new Pt_1.Pt(center).add(half));
     }
+    /**
+     * Convert this rectangle to a circle that fits within the rectangle
+     * @returns a Group that represents a circle
+     * @see `Circle`
+     */
     static toCircle(pts) {
         return Circle.fromRect(pts);
     }
+    /**
+     * Get the size of this rectangle as a Pt
+     * @param pts a Group of 2 Pts representing a Rectangle
+     */
     static size(pts) {
         return pts[0].$max(pts[1]).subtract(pts[0].$min(pts[1]));
     }
+    /**
+     * Get the center of this rectangle
+     * @param pts a Group of 2 Pts representing a Rectangle
+     */
     static center(pts) {
         let min = pts[0].$min(pts[1]);
         let max = pts[0].$max(pts[1]);
         return min.add(max.$subtract(min).divide(2));
     }
+    /**
+     * Get the 4 corners of this rectangle as a Group
+     * @param rect a Group of 2 Pts representing a Rectangle
+     */
     static corners(rect) {
         let p0 = rect[0].$min(rect[1]);
         let p2 = rect[0].$max(rect[1]);
         return new Pt_1.Group(p0, new Pt_1.Pt(p2.x, p0.y), p2, new Pt_1.Pt(p0.x, p2.y));
     }
+    /**
+     * Get the 4 sides of this rectangle as an array of 4 Groups
+     * @param rect a Group of 2 Pts representing a Rectangle
+     * @returns an array of 4 Groups, each of which represents a line segment
+     */
     static sides(rect) {
         let [p0, p1, p2, p3] = Rectangle.corners(rect);
         return [
@@ -2031,10 +2260,18 @@ class Rectangle {
             new Pt_1.Group(p2, p3), new Pt_1.Group(p3, p0)
         ];
     }
+    /**
+     * Same as `Rectangle.sides`
+     */
     static lines(rect) {
         return Rectangle.sides(rect);
     }
-    static union(rects) {
+    /**
+     * Given an array of rectangles, get a rectangle that bounds all of them
+     * @param rects an array of Groups that represent rectangles
+     * @returns the bounding rectangle as a Group
+     */
+    static boundingBox(rects) {
         let merged = Util_1.Util.flatten(rects, false);
         let min = Pt_1.Pt.make(2, Number.MAX_VALUE);
         let max = Pt_1.Pt.make(2, Number.MIN_VALUE);
@@ -2047,20 +2284,37 @@ class Rectangle {
         }
         return new Pt_1.Group(min, max);
     }
+    /**
+     * Convert this rectangle into a Group representing a polygon
+     * @param rect a Group of 2 Pts representing a Rectangle
+     */
     static polygon(rect) {
-        let corners = Rectangle.corners(rect);
-        corners.push(corners[0].clone());
-        return corners;
+        return Rectangle.corners(rect);
     }
+    /**
+     * Subdivide this rectangle into 4 rectangles, one for each quadrant
+     * @param rect a Group of 2 Pts representing a Rectangle
+     * @returns an array of 4 Groups
+     */
     static quadrants(rect) {
         let corners = Rectangle.corners(rect);
         let center = Num_1.Geom.interpolate(rect[0], rect[1], 0.5);
         return corners.map((c) => new Pt_1.Group(c, center.clone()));
     }
+    /**
+     * Check if a point is within a rectangle
+     * @param rect a Group of 2 Pts representing a Rectangle
+     * @param pt the point to check
+     */
     static withinBound(rect, pt) {
         return Num_1.Geom.withinBound(pt, rect[0], rect[1]);
     }
-    static intersectBound2D(rect1, rect2) {
+    /**
+     * Check if a rectangle is within the bounds of another rectangle
+     * @param rect1 a Group of 2 Pts representing a rectangle
+     * @param rect2 a Group of 2 Pts representing a rectangle
+     */
+    static hasIntersectRect2D(rect1, rect2) {
         let pts = Rectangle.corners(rect1);
         for (let i = 0, len = pts.length; i < len; i++) {
             if (Num_1.Geom.withinBound(pts[i], rect2[0], rect2[1]))
@@ -2071,8 +2325,8 @@ class Rectangle {
     /**
      * Quick way to check rectangle intersection.
      * For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersect2D()`.
-     * @param rect1 a Group representing a rectangle
-     * @param rect2 a Group representing a rectangle
+     * @param rect1 a Group of 2 Pts representing a rectangle
+     * @param rect2 a Group of 2 Pts representing a rectangle
      */
     static intersectRect2D(rect1, rect2) {
         return Util_1.Util.flatten(Polygon.intersect2D(Rectangle.sides(rect1), Rectangle.sides(rect2)));

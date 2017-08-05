@@ -8,35 +8,51 @@ import { Pt, PtLike, Group, GroupLike } from "./Pt";
 import { Vec, Mat } from "./LinearAlgebra";
 
 /**
- * A collection of helper functions for basic numeric operations
+ * Num class provides various helper functions for basic numeric operations
  */
 export class Num {
 
-  static equals( a:number, b:number, threshold=0.00001) {
+  /**
+   * Check if two numbers are equal or almost equal within a threshold
+   * @param a number a
+   * @param b number b
+   * @param threshold a threshold within which the two numbers are considered equal
+   */
+  static equals( a:number, b:number, threshold=0.00001 ):boolean {
     return Math.abs( a-b ) < threshold;
   }
 
-  static lerp(a:number, b:number, t:number):number {
+
+  /**
+   * Linear interpolation
+   * @param a start value
+   * @param b end value
+   * @param t usually a value between 0 to 1
+   */
+  static lerp( a:number, b:number, t:number ):number {
     return (1 - t) * a + t * b;
   }
 
+
   /**
    * Clamp values between min and max
-   * @param val 
-   * @param min 
-   * @param max 
+   * @param val value to clamp
+   * @param min min value
+   * @param max max value
    */
-  static limitValue(val:number, min:number, max:number) {
+  static clamp( val:number, min:number, max:number ):number {
     return Math.max(min, Math.min(max, val));
   }
 
+
   /**
-   * Different from Num.limitValue in that the value out-of-bound will be "looped back" to the other end.
-   * @param val 
-   * @param min 
-   * @param max 
+   * Different from Num.clamp in that the value out-of-bound will be "looped back" to the other end.
+   * @param val value to bound
+   * @param min min value
+   * @param max max value
+   * @example `boundValue(361, 0, 360)` will return 1
    */
-  static boundValue(val:number, min:number, max:number):number {
+  static boundValue( val:number, min:number, max:number ):number {
     let len = Math.abs(max - min);
     let a = val % len;
 
@@ -46,21 +62,47 @@ export class Num {
     return a;
   }
 
-  static within(p:number, a:number, b:number) {
+
+  /**
+   * Check if a value is within 
+   * @param p 
+   * @param a 
+   * @param b 
+   */
+  static within( p:number, a:number, b:number ):boolean {
     return p >= Math.min(a, b) && p <= Math.max(a, b);
   }
 
-  static randomRange(a:number, b:number = 0) {
+
+  /**
+   * Get a random number within a range
+   * @param a range value 1
+   * @param b range value 2
+   */
+  static randomRange( a:number, b:number = 0 ):number {
     let r = (a > b) ? (a - b) : (b - a);
     return a + Math.random() * r;
   }
 
+
+  /**
+   * Normalize a value within a range
+   * @param n the value to normalize
+   * @param a range value 1
+   * @param b range value 1
+   */
   static normalizeValue(n:number, a:number, b:number):number {
     let min = Math.min(a, b);
     let max = Math.max(a, b);
     return (n - min) / (max - min);
   }
 
+
+  /**
+   * Sum a group of numeric arrays
+   * @param pts an array of numeric arrays
+   * @returns a array of sums
+   */
   static sum(pts: GroupLike|number[][]): Pt {
     let c = new Pt( pts[0] );
     for (let i = 1, len = pts.length; i < len; i++) {
@@ -69,8 +111,19 @@ export class Num {
     return c;
   }
 
+
   /**
-   * Given a value between 0 to 1, returns a value that cycles between 0 -> 1 -> 0
+   * Sum a group of numeric arrays
+   * @param pts an array of numeric arrays
+   * @returns a array of sums
+   */
+  static average(pts: GroupLike|number[][]): Pt {
+    return Num.sum(pts).divide(pts.length);
+  }
+
+
+  /**
+   * Given a value between 0 to 1, returns a value that cycles between 0 -> 1 -> 0 using sine method.
    * @param t a value between 0 to 1
    * @return a value between 0 to 1
    */
@@ -78,10 +131,6 @@ export class Num {
     return (Math.sin( Math.PI * 2 * t ) + 1) / 2;
   }
 
-
-  static average(pts: GroupLike|number[][]): Pt {
-    return Num.sum(pts).divide(pts.length);
-  }
 
   /**  
    * Map a value from one range to another
@@ -102,35 +151,64 @@ export class Num {
 
 
 
-
+/**
+ * Geom class provides various helper functions for basic geometric operations
+ */
 export class Geom {
 
-
-  static boundAngle(angle:number) {
+  /**
+   * Bound an angle between 0 to 360 degrees
+   */
+  static boundAngle( angle:number ):number {
     return Num.boundValue(angle, 0, 360);
   }
 
-  static boundRadian(angle:number) {
+
+  /**
+   * Bound a radian between 0 to 2-PI
+   */
+  static boundRadian( angle:number ):number {
     return Num.boundValue(angle, 0, Const.two_pi);
   }
 
-  static toRadian(angle:number):number {
+
+  /**
+   * Convert an angle in degree to radian
+   */
+  static toRadian( angle:number ):number {
     return angle * Const.deg_to_rad;
   }
 
-  static toDegree(radian:number):number {
+
+  /**
+   * Convert an angle in radian to degree
+   */
+  static toDegree( radian:number ):number {
     return radian * Const.rad_to_deg;
   }
 
-  static boundingBox(pts: GroupLike): Group {
+
+  /**
+   * Get a bounding box for a set of Pts
+   * @param pts a Group or an array of Pts
+   * @return a Group of two Pts, representing the top-left and bottom-right corners.
+   */
+  static boundingBox( pts:GroupLike ): Group {
     let minPt = pts.reduce((a: Pt, p: Pt) => a.$min(p));
     let maxPt = pts.reduce((a: Pt, p: Pt) => a.$max(p));
     return new Group(minPt, maxPt);
   }
 
-  static centroid(pts: GroupLike|number[][]): Pt {
+
+  /**
+   * Get a centroid (the average middle point) for a set of Pts
+   * @param pts a Group or an array of Pts
+   * @return a centroid Pt 
+   */
+  static centroid( pts:GroupLike|number[][] ):Pt {
     return Num.average(pts);
   }
+
 
   /**
    * Given an anchor Pt, rebase all Pts in this group either to or from this anchor base.
@@ -138,7 +216,7 @@ export class Geom {
    * @param ptOrIndex an index for the Pt array, or an external Pt
    * @param direction "to" (subtract all Pt with this anchor base) or "from" (add all Pt from this anchor base)
    */
-  static anchor(pts: GroupLike, ptOrIndex: PtLike|number = 0, direction: ("to"|"from") = "to") {
+  static anchor( pts:GroupLike, ptOrIndex:PtLike|number=0, direction:("to"|"from")="to") {
     let method = (direction == "to") ? "subtract" : "add";
     for (let i = 0, len = pts.length; i < len; i++) {
       if (typeof ptOrIndex == "number") {
@@ -154,10 +232,10 @@ export class Geom {
    * Get an interpolated value between two Pts
    * @param a first Pt
    * @param b second Pt
-   * @param t a ratio between 0 to 1
+   * @param t usually a ratio between 0 to 1
    * @returns interpolated point as a new Pt
    */
-  static interpolate(a: Pt|number[], b: Pt|number[], t = 0.5): Pt {
+  static interpolate( a:Pt|number[], b:Pt|number[], t:number=0.5 ):Pt {
     let len = Math.min(a.length, b.length);
     let d = Pt.make(len);
     for (let i = 0; i < len; i++) {
@@ -166,12 +244,13 @@ export class Geom {
     return d;
   }
 
+
   /**
    * Find two Pt that are perpendicular to this Pt (2D)
    * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
    * @returns an array of two Pt that are perpendicular to this Pt
    */
-  static perpendicular(pt: PtLike, axis: string|number[] = Const.xy): Group {
+  static perpendicular( pt:PtLike, axis:string|number[]=Const.xy ):Group {
     let y = axis[1];
     let x = axis[0];
 
@@ -186,19 +265,36 @@ export class Geom {
     return new Group(pa, pb);
   }
 
-  static isPerpendicular(p1: PtLike, p2: PtLike): boolean {
+
+  /**
+   * Check if two Pts (vectors) are perpendicular to each other 
+   */
+  static isPerpendicular( p1:PtLike, p2:PtLike ):boolean {
     return new Pt(p1).dot(p2) === 0;
   }
 
 
-  static withinBound(pt: PtLike|number[], boundPt1: PtLike|number[], boundPt2: PtLike|number[]): boolean {
+  /**
+   * Check if a Pt is within the rectangular boundary defined by two Pts
+   * @param pt the Pt to check
+   * @param boundPt1 boundary Pt 1
+   * @param boundPt2 boundary Pt 2
+   */
+  static withinBound( pt:PtLike|number[], boundPt1:PtLike|number[], boundPt2:PtLike|number[] ):boolean {
     for (let i = 0, len = Math.min(pt.length, boundPt1.length, boundPt2.length); i < len; i++) {
       if (!Num.within(pt[i], boundPt1[i], boundPt2[i])) return false;
     }
     return true;
   }
 
-  static scale(ps: Pt|GroupLike, scale:number|number[]|PtLike, anchor?: PtLike): Geom {
+
+  /**
+   * Scale a Pt or a Group of Pts
+   * @param ps a Pt or a Group of Pts
+   * @param scale scale value
+   * @param anchor optional anchor point to scale from
+   */
+  static scale( ps:Pt|GroupLike, scale:number|number[]|PtLike, anchor?:PtLike ):Geom {
     let pts = (!Array.isArray(ps)) ? [ps] : ps;
     let scs = (typeof scale == "number") ? Pt.make(pts[0].length, scale) : scale;
     if (!anchor) anchor = Pt.make(pts[0].length, 0);
@@ -213,7 +309,15 @@ export class Geom {
     return Geom;
   }
 
-  static rotate2D(ps: Pt|GroupLike, angle:number, anchor?: PtLike, axis?: string): Geom {
+
+  /**
+   * Rotate a Pt or a Group of Pts in 2D space
+   * @param ps a Pt or a Group of Pts
+   * @param angle rotate angle
+   * @param anchor optional anchor point to rotate from
+   * @param axis optional axis such as "yz" to define a 2D plane of rotation
+   */
+  static rotate2D( ps:Pt|GroupLike, angle:number, anchor?:PtLike, axis?:string ):Geom {
     let pts = (!Array.isArray(ps)) ? [ps] : ps;
     let fn = (anchor) ? Mat.rotateAt2DMatrix : Mat.rotate2DMatrix;
     if (!anchor) anchor = Pt.make(pts[0].length, 0);
@@ -229,7 +333,14 @@ export class Geom {
   }
 
 
-  static shear2D(ps: Pt|GroupLike, scale:number|number[]|PtLike, anchor?: PtLike, axis?: string): Geom {
+  /**
+   * Shear a Pt or a Group of Pts in 2D space
+   * @param ps a Pt or a Group of Pts
+   * @param scale shearing value which can be a number or an array of 2 numbers
+   * @param anchor optional anchor point to shear from
+   * @param axis optional axis such as "yz" to define a 2D plane of shearing
+   */
+  static shear2D( ps:Pt|GroupLike, scale:number|number[]|PtLike, anchor?:PtLike, axis?:string):Geom {
     let pts = (!Array.isArray(ps)) ? [ps] : ps;
     let s = (typeof scale == "number") ? [scale, scale] : scale;
     if (!anchor) anchor = Pt.make(pts[0].length, 0);
@@ -245,7 +356,14 @@ export class Geom {
     return Geom;
   }
 
-  static reflect2D(ps: Pt|GroupLike, line: GroupLike, axis?: string): Geom {
+
+  /**
+   * Reflect a Pt or a Group of Pts along a 2D line
+   * @param ps a Pt or a Group of Pts
+   * @param line a Group of 2 Pts that defines a line for reflection
+   * @param axis optional axis such as "yz" to define a 2D plane of reflection
+   */
+  static reflect2D( ps:Pt|GroupLike, line:GroupLike, axis?:string ):Geom {
     let pts = (!Array.isArray(ps)) ? [ps] : ps;
 
     for (let i = 0, len = pts.length; i < len; i++) {
@@ -286,6 +404,9 @@ export class Geom {
 
 
 
+/**
+ * Shaping provides various shaping/easing functions to interpolate a value non-linearly.
+ */
 export class Shaping {
 
   /**
