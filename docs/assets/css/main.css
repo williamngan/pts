@@ -672,7 +672,7 @@ dl.tsd-comment-tags p { margin: 0; }
 
 .toggle-externals .tsd-is-external { display: none; }
 
-#tsd-filter { position: relative; display: inline-block; height: 40px; vertical-align: bottom; }
+#tsd-filter { position: relative; display: none; height: 40px; vertical-align: bottom; }
 .no-filter #tsd-filter { display: none; }
 #tsd-filter .tsd-filter-group { display: inline-block; height: 40px; vertical-align: bottom; white-space: nowrap; }
 #tsd-filter input { display: none; }
