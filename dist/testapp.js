@@ -772,6 +772,9 @@ exports.Group = Group;
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
+/**
+ * Various constant values for enumerations and calculations
+ */
 exports.Const = {
     xy: "xy",
     yz: "yz",
@@ -820,6 +823,9 @@ exports.Const = {
     /* Gaussian constant (1 / Math.sqrt(2 * Math.PI)) */
     gaussian: 0.3989422804014327
 };
+/**
+ * Util provides various helper functions
+ */
 class Util {
     /**
      * Convert different kinds of parameters (arguments, array, object) into an array of numbers
@@ -850,6 +856,11 @@ class Util {
         }
         return pos;
     }
+    /**
+     * Send a warning message based on Util.warnLevel global setting. This allows you to dynamically set whether minor errors should be thrown or printed in console or muted.
+     * @param message any error or warning message
+     * @param defaultReturn optional return value
+     */
     static warn(message = "error", defaultReturn = undefined) {
         if (Util.warnLevel == "error") {
             throw new Error(message);
@@ -910,6 +921,10 @@ class Util {
         }
         return result;
     }
+    /**
+     * Zip arrays. eg, [[1,2],[3,4],[5,6]] => [[1,3,5],[2,4,6]]
+     * @param arrays an array of arrays
+     */
     static zip(...arrays) {
         let z = [];
         for (let i = 0, len = arrays[0].length; i < len; i++) {
@@ -1213,6 +1228,12 @@ class Mat {
         return ps;
     }
     /**
+     * Same as `zip` function
+     */
+    static transpose(g, defaultValue = false, useLongest = false) {
+        return Mat.zip(g, defaultValue, useLongest);
+    }
+    /**
      * Transform a 2D point given a 2x3 or 3x3 matrix
      * @param pt a Pt to be transformed
      * @param m 2x3 or 3x3 matrix
@@ -1301,10 +1322,6 @@ class Mat {
         }
     }
 }
-/**
- * Same as `zip` function
- */
-Mat.transpose = Mat.zip;
 exports.Mat = Mat;
 
 
@@ -3408,6 +3425,10 @@ exports.Font = Font;
 Object.defineProperty(exports, "__esModule", { value: true });
 const Bound_1 = __webpack_require__(3);
 const Pt_1 = __webpack_require__(0);
+/**
+ * Space is an abstract class that represents a general context for expressing Pts.
+ * See [Space guide](../../guide/Space-0500.html) for details.
+ */
 class Space {
     constructor() {
         this.id = "space";

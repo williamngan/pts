@@ -69,6 +69,15 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Circle class provides static functions to create and operate on circles. A circle is usually represented as a Group of 2 Pts, where the first Pt specifies the center, and the second Pt specifies the radius.
+							You can use the static function as-is, or apply the <code>op</code> method in Group or Pt to many of these functions.
+						See <a href="../../guide/Op-0400.html">Op guide</a> for details.</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -111,16 +120,27 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L297">Op.ts:297</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L492">Op.ts:492</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Create a circle based on a center point and a radius</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>pt: <a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>center point of circle</p>
+									</div>
 								</li>
 								<li>
 									<h5>radius: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>radius of circle</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
@@ -137,16 +157,27 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L285">Op.ts:285</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L474">Op.ts:474</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Create a circle that either fits within or encloses a rectangle</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of 2 Pts representing a rectangle</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> enclose: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>if <code>true</code>, the circle will enclose the rectangle. Default is <code>false</code>, which will fit the circle inside the rectangle.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
@@ -163,19 +194,31 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L343">Op.ts:343</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L565">Op.ts:565</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get the intersection points between two circles</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of 2 Pts representing a circle</p>
+									</div>
 								</li>
 								<li>
 									<h5>circle: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of 2 Pts representing a circle</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
+							<p>a Group of intersection points, or an empty Group if no intersection is found</p>
 						</li>
 					</ul>
 				</section>
@@ -189,19 +232,28 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L332">Op.ts:332</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L547">Op.ts:547</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get the intersection points between a circle and a line segment</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of 2 Pts representing a circle</p>
+									</div>
 								</li>
 								<li>
 									<h5>line: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
+							<p>a Group of intersection points, or an empty Group if no intersection is found</p>
 						</li>
 					</ul>
 				</section>
@@ -215,19 +267,31 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L306">Op.ts:306</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L514">Op.ts:514</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get the intersection points between a circle and a ray (infinite line)</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of 2 Pts representing a circle</p>
+									</div>
 								</li>
 								<li>
 									<h5>ray: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of 2 Pts representing a ray</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
+							<p>a Group of intersection points, or an empty Group if no intersection is found</p>
 						</li>
 					</ul>
 				</section>
@@ -241,12 +305,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L375">Op.ts:375</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L599">Op.ts:599</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Quick way to check rectangle intersection.
+									<p>Quick way to check rectangle intersection with a circle.
 									For more optimized implementation, store the rectangle&#39;s sides separately (eg, <code>Rectangle.sides()</code>) and use <code>Polygon.intersect2D()</code>.</p>
 								</div>
 							</div>
@@ -255,17 +319,18 @@
 								<li>
 									<h5>pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>a Group representing a circle</p>
+										<p>a Group of 2 Pts representing a circle</p>
 									</div>
 								</li>
 								<li>
 									<h5>rect: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>a Group representing a rectangle</p>
+										<p>a Group of 2 Pts representing a rectangle</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
+							<p>a Group of intersection points, or an empty Group if no intersection is found</p>
 						</li>
 					</ul>
 				</section>
@@ -279,13 +344,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L390">Op.ts:390</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L624">Op.ts:624</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Convert this cirlce to a rectangle that fits within this circle</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of 2 Pts representing a circle</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
@@ -302,13 +375,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L396">Op.ts:396</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L635">Op.ts:635</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Convert this cirlce to a triangle that fits within this circle</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of 2 Pts representing a circle</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
@@ -325,13 +406,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L385">Op.ts:385</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L614">Op.ts:614</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Convert this cirlce to a rectangle that encloses this circle</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of 2 Pts representing a circle</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
@@ -348,16 +437,27 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L301">Op.ts:301</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L502">Op.ts:502</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Check if a point is within a circle</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of 2 Pts representing a circle</p>
+									</div>
 								</li>
 								<li>
 									<h5>pt: <a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the point to checks</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>

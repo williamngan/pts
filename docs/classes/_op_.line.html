@@ -69,6 +69,15 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Line class provides static functions to create and operate on lines. A line is usually represented as a Group of 2 Pts.
+							You can use the static function as-is, or apply the <code>op</code> method in Group or Pt to many of these functions.
+						See <a href="../../guide/Op-0400.html">Op guide</a> for details.</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -118,22 +127,39 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L39">Op.ts:39</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L71">Op.ts:71</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Check if three Pts are collinear, ie, on the same straight path.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>p1: <a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>first Pt</p>
+									</div>
 								</li>
 								<li>
 									<h5>p2: <a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>second Pt</p>
+									</div>
 								</li>
 								<li>
 									<h5>p3: <a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>third Pt</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> threshold: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;0.01</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a threshold where a smaller value means higher precision threshold for the straight line. Default is 0.01.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -150,19 +176,38 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L71">Op.ts:71</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L121">Op.ts:121</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Given a line and a point, find the shortest distance from the point to the line</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>see</dt>
+									<dd><p><code>Line.perpendicularFromPt</code></p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>line: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of 2 Pts</p>
+									</div>
 								</li>
 								<li>
 									<h5>pt: <a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Pt</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> asProjection: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>if true, this uses the projection vector instead. Default is false.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -179,22 +224,37 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L19">Op.ts:19</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L30">Op.ts:30</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Create a line by &quot;drawing&quot; from an anchor point, given an angle and a magnitude</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>anchor: <a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an anchor Pt</p>
+									</div>
 								</li>
 								<li>
 									<h5>angle: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an angle in radian</p>
+									</div>
 								</li>
 								<li>
 									<h5>magnitude: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>magnitude of the line</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
+							<p>a Group of 2 Pts representing a line segement</p>
 						</li>
 					</ul>
 				</section>
@@ -208,19 +268,31 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L29">Op.ts:29</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L53">Op.ts:53</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Calculate the slope and xy intercepts of a line</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>p1: <a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>line&#39;s first end point</p>
+									</div>
 								</li>
 								<li>
 									<h5>p2: <a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>line&#39;s second end point</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">object</span></h4>
+							<p>an object with <code>slope</code>, <code>xi</code>, <code>yi</code> properties</p>
 							<ul class="tsd-parameters">
 								<li class="tsd-parameter">
 									<h5>slope<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
@@ -245,9 +317,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L144">Op.ts:144</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L230">Op.ts:230</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get two intersection Pts of a line segment with a 2D grid point</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -255,9 +332,13 @@
 								</li>
 								<li>
 									<h5>gridPt: <a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Pt on the grid</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
+							<p>a group of two intersecting Pts. The first one is horizontal intersection and the second one is vertical intersection.</p>
 						</li>
 					</ul>
 				</section>
@@ -271,12 +352,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L136">Op.ts:136</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L215">Op.ts:215</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Get two intersection Pts on a standard xy grid</p>
+									<p>Get two intersection Pts of a ray with a 2D grid point</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -309,19 +390,31 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L110">Op.ts:110</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L174">Op.ts:174</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Given two line segemnts, find their intersection point if any.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>la: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of 2 Pts representing a line segment</p>
+									</div>
 								</li>
 								<li>
 									<h5>lb: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of 2 Pts representing a line segment</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
+							<p>an intersection Pt or undefined if no intersection</p>
 						</li>
 					</ul>
 				</section>
@@ -335,19 +428,31 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L115">Op.ts:115</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L186">Op.ts:186</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Given a line segemnt and a ray (infinite line), find their intersection point if any.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>line: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of 2 Pts representing a line segment</p>
+									</div>
 								</li>
 								<li>
 									<h5>ray: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of 2 Pts representing a ray</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
+							<p>an intersection Pt or undefined if no intersection</p>
 						</li>
 					</ul>
 				</section>
@@ -361,19 +466,33 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L120">Op.ts:120</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L198">Op.ts:198</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Given a line segemnt and a ray (infinite line), find its intersection point(s) with a polygon.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>lineOrRay: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of 2 Pts representing a line or ray</p>
+									</div>
 								</li>
 								<li>
 									<h5>poly: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of Pts representing a polygon</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> sourceIsRay: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a boolean value to treat the line as a ray (infinite line). Default is <code>false</code>.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
@@ -390,19 +509,31 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L75">Op.ts:75</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L132">Op.ts:132</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Given two lines as rays (infinite lines), find their intersection point if any.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>la: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of 2 Pts representing a ray</p>
+									</div>
 								</li>
 								<li>
 									<h5>lb: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of 2 Pts representing a ray</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
+							<p>an intersection Pt or undefined if no intersection</p>
 						</li>
 					</ul>
 				</section>
@@ -416,7 +547,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L159">Op.ts:159</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L246">Op.ts:246</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -454,13 +585,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L46">Op.ts:46</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L83">Op.ts:83</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get magnitude of a line segment</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>line: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of at least 2 Pts</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -477,13 +616,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L50">Op.ts:50</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L92">Op.ts:92</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get squared magnitude of a line segment</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>line: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of at least 2 Pts</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -500,12 +647,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L62">Op.ts:62</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L104">Op.ts:104</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Find a Pt on a line that is perpendicular (shortest distance) to a target Pt</p>
+									<p>Find a point on a line that is perpendicular (shortest distance) to a target point</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -541,16 +688,27 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L25">Op.ts:25</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L42">Op.ts:42</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Calculate the slope of a line</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>p1: <a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>line&#39;s first end point</p>
+									</div>
 								</li>
 								<li>
 									<h5>p2: <a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>line&#39;s second end point</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -567,16 +725,27 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L163">Op.ts:163</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L256">Op.ts:256</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get evenly distributed points on a line</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>line: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group representing a line</p>
+									</div>
 								</li>
 								<li>
 									<h5>num: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>number of points to get</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
@@ -593,13 +762,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L171">Op.ts:171</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L269">Op.ts:269</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Convert this line to a rectangle representation</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>line: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group representing a line</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>

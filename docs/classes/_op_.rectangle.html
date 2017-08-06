@@ -69,6 +69,15 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Rectangle class provides static functions to create and operate on rectangles. A rectangle is usually represented as a Group of 2 Pts, marking the top-left and bottom-right corners of the rectangle.
+							You can use the static function as-is, or apply the <code>op</code> method in Group or Pt to many of these functions.
+						See <a href="../../guide/Op-0400.html">Op guide</a> for details.</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -84,12 +93,13 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.rectangle.html#boundingbox" class="tsd-kind-icon">bounding<wbr>Box</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.rectangle.html#center" class="tsd-kind-icon">center</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.rectangle.html#corners" class="tsd-kind-icon">corners</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.rectangle.html#from" class="tsd-kind-icon">from</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.rectangle.html#fromcenter" class="tsd-kind-icon">from<wbr>Center</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.rectangle.html#fromtopleft" class="tsd-kind-icon">from<wbr>Top<wbr>Left</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.rectangle.html#intersectbound2d" class="tsd-kind-icon">intersect<wbr>Bound2D</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.rectangle.html#hasintersectrect2d" class="tsd-kind-icon">has<wbr>Intersect<wbr>Rect2D</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.rectangle.html#intersectrect2d" class="tsd-kind-icon">intersect<wbr>Rect2D</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.rectangle.html#lines" class="tsd-kind-icon">lines</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.rectangle.html#polygon" class="tsd-kind-icon">polygon</a></li>
@@ -97,7 +107,6 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.rectangle.html#sides" class="tsd-kind-icon">sides</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.rectangle.html#size" class="tsd-kind-icon">size</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.rectangle.html#tocircle" class="tsd-kind-icon">to<wbr>Circle</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.rectangle.html#union" class="tsd-kind-icon">union</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_op_.rectangle.html#withinbound" class="tsd-kind-icon">within<wbr>Bound</a></li>
 							</ul>
 						</section>
@@ -106,6 +115,38 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="boundingbox" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> bounding<wbr>Box</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">bounding<wbr>Box<span class="tsd-signature-symbol">(</span>rects<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.group.html" class="tsd-signature-type">Group</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L384">Op.ts:384</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Given an array of rectangles, get a rectangle that bounds all of them</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>rects: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an array of Groups that represent rectangles</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
+							<p>the bounding rectangle as a Group</p>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
 					<a name="center" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> center</h3>
@@ -116,13 +157,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L203">Op.ts:203</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L339">Op.ts:339</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get the center of this rectangle</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of 2 Pts representing a Rectangle</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
@@ -139,13 +188,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L209">Op.ts:209</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L350">Op.ts:350</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get the 4 corners of this rectangle as a Group</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>rect: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of 2 Pts representing a Rectangle</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
@@ -162,9 +219,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L181">Op.ts:181</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L287">Op.ts:287</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Same as <code>Rectangle.fromTopLeft</code></p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -191,9 +253,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L190">Op.ts:190</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L310">Op.ts:310</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Create a rectangle given a center position and a size</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -201,9 +268,15 @@
 								</li>
 								<li>
 									<h5>widthOrSize: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>width as a number, or a Pt that defines its size</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> height: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>optional height as a number</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
@@ -220,19 +293,33 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L185">Op.ts:185</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L298">Op.ts:298</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Create a rectangle given a top-left position and a size</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>topLeft: <a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>top-left point</p>
+									</div>
 								</li>
 								<li>
 									<h5>widthOrSize: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>width as a number, or a Pt that defines its size</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> height: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>optional height as a number</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
@@ -240,25 +327,36 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a name="intersectbound2d" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> intersect<wbr>Bound2D</h3>
+					<a name="hasintersectrect2d" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> has<wbr>Intersect<wbr>Rect2D</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">intersect<wbr>Bound2D<span class="tsd-signature-symbol">(</span>rect1<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a>, rect2<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">has<wbr>Intersect<wbr>Rect2D<span class="tsd-signature-symbol">(</span>rect1<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a>, rect2<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L260">Op.ts:260</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L436">Op.ts:436</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Check if a rectangle is within the bounds of another rectangle</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>rect1: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of 2 Pts representing a rectangle</p>
+									</div>
 								</li>
 								<li>
 									<h5>rect2: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of 2 Pts representing a rectangle</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -275,7 +373,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L274">Op.ts:274</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L451">Op.ts:451</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -289,13 +387,13 @@
 								<li>
 									<h5>rect1: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>a Group representing a rectangle</p>
+										<p>a Group of 2 Pts representing a rectangle</p>
 									</div>
 								</li>
 								<li>
 									<h5>rect2: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>a Group representing a rectangle</p>
+										<p>a Group of 2 Pts representing a rectangle</p>
 									</div>
 								</li>
 							</ul>
@@ -313,9 +411,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L224">Op.ts:224</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L374">Op.ts:374</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Same as <code>Rectangle.sides</code></p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -336,13 +439,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L244">Op.ts:244</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L404">Op.ts:404</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Convert this rectangle into a Group representing a polygon</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>rect: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of 2 Pts representing a Rectangle</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
@@ -359,16 +470,25 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L250">Op.ts:250</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L414">Op.ts:414</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Subdivide this rectangle into 4 rectangles, one for each quadrant</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>rect: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of 2 Pts representing a Rectangle</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a><span class="tsd-signature-symbol">[]</span></h4>
+							<p>an array of 4 Groups</p>
 						</li>
 					</ul>
 				</section>
@@ -382,16 +502,25 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L216">Op.ts:216</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L362">Op.ts:362</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get the 4 sides of this rectangle as an array of 4 Groups</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>rect: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of 2 Pts representing a Rectangle</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a><span class="tsd-signature-symbol">[]</span></h4>
+							<p>an array of 4 Groups, each of which represents a line segment</p>
 						</li>
 					</ul>
 				</section>
@@ -405,13 +534,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L199">Op.ts:199</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L330">Op.ts:330</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get the size of this rectangle as a Pt</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of 2 Pts representing a Rectangle</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
@@ -428,9 +565,19 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L195">Op.ts:195</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L321">Op.ts:321</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Convert this rectangle to a circle that fits within the rectangle</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>see</dt>
+									<dd><p><code>Circle</code></p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -438,29 +585,7 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a name="union" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> union</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">union<span class="tsd-signature-symbol">(</span>rects<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.group.html" class="tsd-signature-type">Group</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L229">Op.ts:229</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>rects: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol">[]</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
+							<p>a Group that represents a circle</p>
 						</li>
 					</ul>
 				</section>
@@ -474,16 +599,27 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L256">Op.ts:256</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L426">Op.ts:426</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Check if a point is within a rectangle</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>rect: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of 2 Pts representing a Rectangle</p>
+									</div>
 								</li>
 								<li>
 									<h5>pt: <a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the point to check</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -571,6 +707,9 @@
 						<a href="_op_.rectangle.html" class="tsd-kind-icon">Rectangle</a>
 						<ul>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="_op_.rectangle.html#boundingbox" class="tsd-kind-icon">bounding<wbr>Box</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="_op_.rectangle.html#center" class="tsd-kind-icon">center</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
@@ -586,7 +725,7 @@
 								<a href="_op_.rectangle.html#fromtopleft" class="tsd-kind-icon">from<wbr>Top<wbr>Left</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="_op_.rectangle.html#intersectbound2d" class="tsd-kind-icon">intersect<wbr>Bound2D</a>
+								<a href="_op_.rectangle.html#hasintersectrect2d" class="tsd-kind-icon">has<wbr>Intersect<wbr>Rect2D</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="_op_.rectangle.html#intersectrect2d" class="tsd-kind-icon">intersect<wbr>Rect2D</a>
@@ -608,9 +747,6 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="_op_.rectangle.html#tocircle" class="tsd-kind-icon">to<wbr>Circle</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="_op_.rectangle.html#union" class="tsd-kind-icon">union</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="_op_.rectangle.html#withinbound" class="tsd-kind-icon">within<wbr>Bound</a>

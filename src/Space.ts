@@ -8,6 +8,10 @@ import {Form} from "./Form";
 
 type AnimateFunction = ( time?:number, frameTime?:number, currentSpace?:any ) => void;
 
+
+/**
+ * Interface of a "player" object that can be added into a Space
+ */
 export interface IPlayer {
   animateID?: string;
   animate?:AnimateFunction;
@@ -26,6 +30,11 @@ export interface ITimer {
   end: number;
 }
 
+
+/**
+ * Space is an abstract class that represents a general context for expressing Pts.
+ * See [Space guide](../../guide/Space-0500.html) for details.
+ */
 export abstract class Space {
 
   id: string = "space";
@@ -43,6 +52,7 @@ export abstract class Space {
 
   protected _pointer:Pt = new Pt();
 
+
   /**
    * Set whether the rendering should be repainted on each frame
    * @param b a boolean value to set whether to repaint each frame
@@ -51,6 +61,7 @@ export abstract class Space {
     this._refresh = b;
     return this;
   }
+
 
   /**
    * Add an IPlayer to this space. An IPlayer can define the following callback functions:    
@@ -77,6 +88,7 @@ export abstract class Space {
     return this;
   }
 
+
   /**
    * Remove a player from this Space
    * @param player an IPlayer that has an `animateID` property
@@ -86,6 +98,7 @@ export abstract class Space {
     return this;
   }
 
+
   /**
    * Remove all players from this Space
    */
@@ -93,6 +106,7 @@ export abstract class Space {
     this.players = {};
     return this;
   }
+
 
   /**
    * Main play loop. This implements window.requestAnimationFrame and calls it recursively. 
@@ -117,6 +131,7 @@ export abstract class Space {
     return this;
   }
 
+
   /**
    * Replay the animation after `stop()`. This resets the end-time counter.
    * You may also use `pause()` and `resume()` for temporary pause.
@@ -125,6 +140,7 @@ export abstract class Space {
     this._time.end = -1;
     this.play();
   }
+
 
   /**
    * Main animate function. This calls all the items to perform
@@ -145,6 +161,7 @@ export abstract class Space {
     }
   }
 
+
   /**
    * Pause the animation
    * @param toggle a boolean value to set if this function call should be a toggle (between pause and resume)
@@ -154,6 +171,7 @@ export abstract class Space {
     return this;
   }
 
+
   /**
    * Resume the pause animation
    */
@@ -161,6 +179,7 @@ export abstract class Space {
     this._pause = false;
     return this;
   }
+
 
   /**
    * Specify when the animation should stop: immediately, after a time period, or never stops.
@@ -170,6 +189,7 @@ export abstract class Space {
     this._time.end = t;
     return this;
   }
+
 
   /**
    * Play animation loop, and then stop after `duration` time has passed.
@@ -199,21 +219,23 @@ export abstract class Space {
    */
   get size():Pt { return this.bound.size.clone(); }
 
+
   /**
    * Get the size of this bounding box as a Pt
    */
   get center():Pt { return this.size.divide(2); }
+
 
   /**
    * Get width of canvas
    */
   get width():number { return this.bound.width; }
 
+
   /**
    * Get height of canvas
    */
   get height():number { return this.bound.height; }
-
 
 
   /**

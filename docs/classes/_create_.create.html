@@ -69,6 +69,13 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>The <code>Create</code> class provides various convenient functions to create structures or shapes.</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -104,19 +111,33 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Create.ts#L10">Create.ts:10</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Create.ts#L21">Create.ts:21</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Create a set of random points inside a bounday</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>bound: <a href="_bound_.bound.html" class="tsd-signature-type">Bound</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the rectangular boundary</p>
+									</div>
 								</li>
 								<li>
 									<h5>count: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>number of random points to create</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> dimensions: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;2</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>number of dimensions in each point</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
@@ -133,22 +154,37 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Create.ts#L34">Create.ts:34</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Create.ts#L61">Create.ts:61</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Create a grid inside a boundary</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>bound: <a href="_bound_.bound.html" class="tsd-signature-type">Bound</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the rectangular boundary</p>
+									</div>
 								</li>
 								<li>
 									<h5>columns: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>number of columns</p>
+									</div>
 								</li>
 								<li>
 									<h5>rows: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>number of rows</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a><span class="tsd-signature-symbol">[]</span></h4>
+							<p>an array of Groups, where each group represents a rectangular cell</p>
 						</li>
 					</ul>
 				</section>
@@ -162,25 +198,43 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Create.ts#L21">Create.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Create.ts#L41">Create.ts:41</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Create an evenly distributed set of points (like a grid of points) inside a boundary.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>bound: <a href="_bound_.bound.html" class="tsd-signature-type">Bound</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the rectangular boundary</p>
+									</div>
 								</li>
 								<li>
 									<h5>columns: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>number of columns</p>
+									</div>
 								</li>
 								<li>
 									<h5>rows: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>number of rows</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> orientation: <a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a><span class="tsd-signature-symbol"> =&nbsp;[0.5, 0.5]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Pt or number array to specify where the point should be inside a cell. Default is [0.5, 0.5] which places the point in the middle.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
+							<p>a Group of Pts</p>
 						</li>
 					</ul>
 				</section>

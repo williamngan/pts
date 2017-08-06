@@ -4,6 +4,10 @@
 
 import {Pt, PtLike, Group, GroupLike} from "./Pt";
 
+
+/**
+ * Various constant values for enumerations and calculations
+ */
 export const Const = {
   xy: "xy",
   yz: "yz",
@@ -76,6 +80,9 @@ export const Const = {
 };
 
 
+/**
+ * Util provides various helper functions
+ */
 export class Util {
 
   static warnLevel:"error"|"warn"|"default" = "default"; 
@@ -112,6 +119,12 @@ export class Util {
     return pos;
   }
 
+
+  /**
+   * Send a warning message based on Util.warnLevel global setting. This allows you to dynamically set whether minor errors should be thrown or printed in console or muted.
+   * @param message any error or warning message
+   * @param defaultReturn optional return value
+   */
   static warn( message:string="error", defaultReturn:any=undefined ):any {
     if (Util.warnLevel == "error") {
       throw new Error( message );
@@ -178,6 +191,10 @@ export class Util {
   }
 
 
+  /**
+   * Zip arrays. eg, [[1,2],[3,4],[5,6]] => [[1,3,5],[2,4,6]]
+   * @param arrays an array of arrays 
+   */
   static zip( ...arrays:Array<any>[] ) {
     let z = [];
     for (let i=0, len=arrays[0].length; i<len; i++) {

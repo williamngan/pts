@@ -700,7 +700,7 @@ footer .tsd-legend { display: inline-block; width: 25%; padding: 0; font-size: 1
 .tsd-panel.tsd-index-panel { margin-top: 0; }
 .tsd-index-panel .tsd-index-content { margin-bottom: -30px !important; }
 .tsd-index-panel .tsd-index-section { margin-bottom: 30px !important; }
-.tsd-index-panel h3 { margin: 0 -20px 10px -20px; padding: 0 20px 10px 20px; border-bottom: 1px solid #e5e9f1; }
+.tsd-index-panel h3 { margin: 0 0px 10px 0px; padding: 0 0px 10px 0px; border-bottom: 1px solid #e5e9f1; }
 .tsd-index-panel ul.tsd-index-list { -webkit-column-count: 3; -moz-column-count: 3; -ms-column-count: 3; -o-column-count: 3; column-count: 3; -webkit-column-gap: 20px; -moz-column-gap: 20px; -ms-column-gap: 20px; -o-column-gap: 20px; column-gap: 20px; padding: 0; list-style: none; line-height: 1.333em; }
 @media (max-width: 900px) { .tsd-index-panel ul.tsd-index-list { -webkit-column-count: 1; -moz-column-count: 1; -ms-column-count: 1; -o-column-count: 1; column-count: 1; } }
 @media (min-width: 901px) and (max-width: 1024px) { .tsd-index-panel ul.tsd-index-list { -webkit-column-count: 2; -moz-column-count: 2; -ms-column-count: 2; -o-column-count: 2; column-count: 2; } }
@@ -725,7 +725,7 @@ footer .tsd-legend { display: inline-block; width: 25%; padding: 0; font-size: 1
 
 .tsd-member { position: relative; }
 .tsd-member h3 { text-transform: none; color: #000; font-size: 1.4em; }
-.tsd-member .tsd-anchor + h3 { margin-top: 0; margin-bottom: 10px; border-bottom: none; font-weight: bold; }
+.tsd-member .tsd-anchor + h3 { margin-top: 0; margin-bottom: 0px; border-bottom: none; font-weight: bold; }
 
 .tsd-navigation { padding: 0 0 0 40px; }
 .tsd-navigation a { display: block; padding-top: 2px; padding-bottom: 2px; border-left: 2px solid transparent; color: #000; text-decoration: none; transition: border-left-color 0.1s; }
@@ -803,13 +803,13 @@ footer .tsd-legend { display: inline-block; width: 25%; padding: 0; font-size: 1
 }
 #tsd-search .field label { position: absolute; overflow: hidden; right: 0px; height: 100%; }
 #tsd-search .field input, #tsd-search .title { transition: opacity 0.2s; }
-#tsd-search .results { position: absolute; visibility: hidden; top: 60px; background: #fff; left: 0; width: 100%; margin: 0; padding: 0; list-style: none; border: 3px solid #000; border-left: none; border-right: none; }
-#tsd-search .results li { padding: 0 10px; background-color: #fff; }
+#tsd-search .results { position: fixed; visibility: hidden; top: 60px; background: #fff; left: 0; width: 100%; margin: 0; padding: 0; list-style: none; border: 3px solid #000; border-left: none; border-right: none; }
+#tsd-search .results li { padding: 0 20px; background-color: #fff; line-height: 4;}
 #tsd-search .results li:nth-child(even) { background-color: #fff; }
 #tsd-search .results li.state { display: none; }
 #tsd-search .results li.current, #tsd-search .results li:hover { background-color: #e5e9f1; }
-#tsd-search .results a { display: block; }
-#tsd-search .results a:before { top: 10px; }
+#tsd-search .results a { display: block; font-weight: bold; }
+#tsd-search .results a:before { display: none; }
 #tsd-search .results span.parent { color: #95979a; font-weight: normal; }
 #tsd-search.has-focus { background-color: #f1f3f9; }
 #tsd-search.has-focus .field input { top: 0; opacity: 1; }
@@ -819,11 +819,8 @@ footer .tsd-legend { display: inline-block; width: 25%; padding: 0; font-size: 1
 #tsd-search.failure .results li.state.failure { display: block; }
 
 
-.tsd-signature { margin: 0 0 1em 0; padding: 10px; border: 1px solid #e5e9f1; font-family: Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px; }
-.tsd-signature.tsd-kind-icon { padding-left: 30px; }
+.tsd-signature { margin: 0 0 1em 0; padding: 10px; font-family: Menlo, Monaco, Consolas, "Courier New", monospace; text-indent: 0; }
 .tsd-signature.tsd-kind-icon:before { top: 10px; left: 10px; }
-.tsd-panel > .tsd-signature { margin-left: -20px; margin-right: -20px; border-width: 1px 0; }
-.tsd-panel > .tsd-signature.tsd-kind-icon { padding-left: 40px; }
 .tsd-panel > .tsd-signature.tsd-kind-icon:before { left: 20px;  }
 .tsd-signature.tsd-kind-icon:before { left: 20px; content: ""; display: none; }
 
@@ -834,12 +831,16 @@ footer .tsd-legend { display: inline-block; width: 25%; padding: 0; font-size: 1
 .tsd-signatures { padding: 0; margin: 0; border: 1px solid #e5e9f1; margin-bottom: 10px; }
 .tsd-signatures .tsd-signature { margin: 0; border-width: 1px 0 0 0; transition: background-color 0.1s; }
 .tsd-signatures .tsd-signature:first-child { border-top-width: 0; }
-/*.tsd-signatures .tsd-signature.current { border: 2px solid #0c3;  }*/
 .tsd-signatures.active > .tsd-signature { cursor: pointer; }
-.tsd-panel > .tsd-signatures { margin-left: -20px; margin-right: -20px; border-width: 1px 0; }
-.tsd-panel > .tsd-signatures .tsd-signature.tsd-kind-icon { padding-left: 40px; }
 .tsd-panel > .tsd-signatures .tsd-signature.tsd-kind-icon:before { left: 20px; }
 .tsd-panel > a.anchor + .tsd-signatures { border-top-width: 0; margin-top: -20px; }
+.tsd-panel.tsd-member { border-top: 1px solid #e5e9f1; margin-bottom: 40px; }
+.tsd-panel.tsd-member > .tsd-signatures { border: none; padding-left: 0; }
+.tsd-panel.tsd-member .tsd-signature { padding-left: 0; }
+.tsd-panel.tsd-member .tsd-signature:before { display: inline-block; color: #f03; content: "›"; font-size: 24px; background-image: none; vertical-align: middle; line-height: 16px; }
+
+.tsd-panel.tsd-parent-kind-external-module .lead { display: none; }
+.tsd-panel.tsd-comment { padding-top: 0; }
 
 ul.tsd-descriptions { position: static; overflow: hidden; margin: 0; transition: height 0.3s; padding: 0; list-style: none; }
 ul.tsd-descriptions.active > .tsd-description { display: none; }
@@ -855,7 +856,7 @@ ul.tsd-parameters .tsd-comment, ul.tsd-type-parameters .tsd-comment { margin-top
 .tsd-comment code { font-size: 0.85em; display: inline-block; padding: 0 5px;}
 ul.tsd-parameters li { padding: 10px 0 5px 10px; }
 ul.tsd-parameters li h5 { font-weight: bold; margin: 0; }
-.tsd-parameters-title, .tsd-returns-title { font-size: 11px; letter-spacing: .05em; font-weight: bold; color: #0c3 !important; text-transform: uppercase; padding-top: 20px;}
+.tsd-member .tsd-parameters-title, .tsd-member .tsd-returns-title { font-size: 11px; letter-spacing: .05em; font-weight: normal; color: #f03; text-transform: uppercase; padding-top: 20px;}
 .tsd-returns-title .tsd-signature-type { font-weight: bold; color: #000; }
 .tsd-signature-type { font-size: 14px; text-transform: none; }
 

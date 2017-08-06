@@ -69,6 +69,15 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Polygon class provides static functions to create and operate on polygons. A polygon is usually represented as a Group of 3 or more Pts.
+							You can use the static function as-is, or apply the <code>op</code> method in Group or Pt to many of these functions.
+						See <a href="../../guide/Op-0400.html">Op guide</a> for details.</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -113,7 +122,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L570">Op.ts:570</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L842">Op.ts:842</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -156,7 +165,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L637">Op.ts:637</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L909">Op.ts:909</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -187,7 +196,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L594">Op.ts:594</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L866">Op.ts:866</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -225,13 +234,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L534">Op.ts:534</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L806">Op.ts:806</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get the centroid of a polygon, which is the average of all its points.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group of Pts representing a polygon</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
@@ -248,7 +265,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L660">Op.ts:660</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L932">Op.ts:932</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -287,19 +304,33 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L718">Op.ts:718</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L997">Op.ts:997</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Find intersection points of 2 polygons</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>poly: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group representing a polygon</p>
+									</div>
 								</li>
 								<li>
 									<h5>linesOrRays: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an array of Groups representing lines</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> sourceIsRay: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a boolean value to treat the line as a ray (infinite line). Default is <code>false</code>.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a><span class="tsd-signature-symbol">[]</span></h4>
@@ -316,7 +347,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L544">Op.ts:544</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L816">Op.ts:816</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -354,7 +385,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L557">Op.ts:557</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L829">Op.ts:829</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -397,7 +428,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L740">Op.ts:740</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L1026">Op.ts:1026</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -434,16 +465,27 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L727">Op.ts:727</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L1012">Op.ts:1012</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Given a point in the polygon as an origin, get an array of lines that connect all the remaining points to the origin point.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Group representing a polygon</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> originIndex: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;0</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the origin point&#39;s index in the polygon</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a><span class="tsd-signature-symbol">[]</span></h4>
@@ -460,7 +502,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L614">Op.ts:614</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L886">Op.ts:886</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -506,7 +548,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/Op.ts#L757">Op.ts:757</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/Op.ts#L1044">Op.ts:1044</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">

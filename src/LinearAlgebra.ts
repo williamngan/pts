@@ -310,7 +310,9 @@ export class Mat {
   /**
    * Same as `zip` function
    */
-  static transpose = Mat.zip;
+  static transpose( g:GroupLike|number[][], defaultValue:number|boolean = false, useLongest=false ):Group {
+    return Mat.zip( g, defaultValue, useLongest );
+  }
 
 
   /**

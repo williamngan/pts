@@ -69,6 +69,13 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Mat provides static function for matrix operations. It&#39;s not yet optimized but good enough to use.</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -109,13 +116,13 @@
 					<a name="add" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> add</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">add<span class="tsd-signature-symbol">(</span>a<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a>, b<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.group.html" class="tsd-signature-type">Group</a></li>
+						<li class="tsd-signature tsd-kind-icon">add<span class="tsd-signature-symbol">(</span>a<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a>, b<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.group.html" class="tsd-signature-type">Group</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/LinearAlgebra.ts#L137">LinearAlgebra.ts:137</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/LinearAlgebra.ts#L215">LinearAlgebra.ts:215</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -132,9 +139,9 @@
 									</div>
 								</li>
 								<li>
-									<h5>b: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
+									<h5>b: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>a scalar number or a group of Pt</p>
+										<p>a scalar number, an array of numeric arrays, or a group of Pt</p>
 									</div>
 								</li>
 							</ul>
@@ -147,13 +154,13 @@
 					<a name="multiply" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> multiply</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">multiply<span class="tsd-signature-symbol">(</span>a<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a>, b<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span>, transposed<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.group.html" class="tsd-signature-type">Group</a></li>
+						<li class="tsd-signature tsd-kind-icon">multiply<span class="tsd-signature-symbol">(</span>a<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a>, b<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span>, transposed<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span>, elementwise<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.group.html" class="tsd-signature-type">Group</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/LinearAlgebra.ts#L160">LinearAlgebra.ts:160</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/LinearAlgebra.ts#L239">LinearAlgebra.ts:239</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -170,20 +177,26 @@
 									</div>
 								</li>
 								<li>
-									<h5>b: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
+									<h5>b: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>a scalar number, or a Group of K Pts, each with N dimensions (K-rows, N-columns) -- or if transposed is true, then N Pts with K dimensions</p>
+										<p>a scalar number, an array of numeric arrays, or a Group of K Pts, each with N dimensions (K-rows, N-columns) -- or if transposed is true, then N Pts with K dimensions</p>
 									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> transposed: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>if true, then a and b&#39;s columns should match (ie, each Pt should have the same dimensions).</p>
+										<p>(Only applicable if it&#39;s not elementwise multiplication) If true, then a and b&#39;s columns should match (ie, each Pt should have the same dimensions). Default is <code>false</code>.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> elementwise: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>if true, then the multiplication is done element-wise. Default is <code>false</code>.</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
-							<p>a group with M Pt, each with N dimensions (M-rows, N-columns)</p>
+							<p>If not elementwise, this will return a group with M Pt, each with N dimensions (M-rows, N-columns).</p>
 						</li>
 					</ul>
 				</section>
@@ -197,13 +210,23 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/LinearAlgebra.ts#L284">LinearAlgebra.ts:284</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/LinearAlgebra.ts#L417">LinearAlgebra.ts:417</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get a matrix to reflect a point along a line. For use in <code>transform2D</code></p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>p1: <a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>second end point to define the reflection line</p>
+										</div>
+									</div>
 								</li>
 								<li>
 									<h5>p2: <a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a></h5>
@@ -223,9 +246,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/LinearAlgebra.ts#L238">LinearAlgebra.ts:238</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/LinearAlgebra.ts#L346">LinearAlgebra.ts:346</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get a rotate matrix for use in <code>transform2D</code></p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -249,9 +277,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/LinearAlgebra.ts#L270">LinearAlgebra.ts:270</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/LinearAlgebra.ts#L393">LinearAlgebra.ts:393</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get a matrix to rotate a point from an origin point. For use in <code>transform2D</code></p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -278,9 +311,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/LinearAlgebra.ts#L230">LinearAlgebra.ts:230</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/LinearAlgebra.ts#L334">LinearAlgebra.ts:334</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get a scale matrix for use in <code>transform2D</code></p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -304,9 +342,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/LinearAlgebra.ts#L262">LinearAlgebra.ts:262</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/LinearAlgebra.ts#L382">LinearAlgebra.ts:382</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get a matrix to scale a point from an origin point. For use in <code>transform2D</code></p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -333,9 +376,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/LinearAlgebra.ts#L246">LinearAlgebra.ts:246</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/LinearAlgebra.ts#L358">LinearAlgebra.ts:358</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get a shear matrix for use in <code>transform2D</code></p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -359,9 +407,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/LinearAlgebra.ts#L277">LinearAlgebra.ts:277</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/LinearAlgebra.ts#L404">LinearAlgebra.ts:404</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get a matrix to shear a point from an origin point. For use in <code>transform2D</code></p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -388,19 +441,31 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/LinearAlgebra.ts#L224">LinearAlgebra.ts:224</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/LinearAlgebra.ts#L324">LinearAlgebra.ts:324</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Transform a 2D point given a 2x3 or 3x3 matrix</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>pt: <a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a Pt to be transformed</p>
+									</div>
 								</li>
 								<li>
 									<h5>m: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>2x3 or 3x3 matrix</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
+							<p>a new transformed Pt</p>
 						</li>
 					</ul>
 				</section>
@@ -414,9 +479,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/LinearAlgebra.ts#L254">LinearAlgebra.ts:254</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/LinearAlgebra.ts#L370">LinearAlgebra.ts:370</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get a translate matrix for use in <code>transform2D</code></p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -434,19 +504,30 @@
 					<a name="transpose" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> transpose</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">transpose<span class="tsd-signature-symbol">(</span>g<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.group.html" class="tsd-signature-type">Group</a></li>
+						<li class="tsd-signature tsd-kind-icon">transpose<span class="tsd-signature-symbol">(</span>g<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span>, defaultValue<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span>, useLongest<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.group.html" class="tsd-signature-type">Group</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/LinearAlgebra.ts#L220">LinearAlgebra.ts:220</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/LinearAlgebra.ts#L313">LinearAlgebra.ts:313</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Same as <code>zip</code> function</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>g: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<h5>g: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> defaultValue: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> useLongest: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
@@ -457,13 +538,13 @@
 					<a name="zip" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> zip</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">zip<span class="tsd-signature-symbol">(</span>g<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a>, defaultValue<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span>, useLongest<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.group.html" class="tsd-signature-type">Group</a></li>
+						<li class="tsd-signature tsd-kind-icon">zip<span class="tsd-signature-symbol">(</span>g<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span>, defaultValue<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span>, useLongest<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.group.html" class="tsd-signature-type">Group</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/LinearAlgebra.ts#L211">LinearAlgebra.ts:211</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/LinearAlgebra.ts#L300">LinearAlgebra.ts:300</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -474,7 +555,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>g: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<h5>g: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>a group of Pt</p>
 									</div>
@@ -506,12 +587,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/0743609/src/LinearAlgebra.ts#L194">LinearAlgebra.ts:194</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/1f5d4f0/src/LinearAlgebra.ts#L283">LinearAlgebra.ts:283</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Zip one slice of an array of Pt</p>
+									<p>Zip one slice of an array of Pt. Imagine the Pts are organized in rows, then this function will take the values in a specific column.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
