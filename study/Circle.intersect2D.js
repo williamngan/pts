@@ -19,7 +19,7 @@ space.add( {
     
     form.stroke("#000", 2);
     let ln = new Group( space.center.$add( 100 ), space.pointer );
-    let cc = Circle.fromPt( space.pointer, 25 );
+    let cc = Circle.fromCenter( space.pointer, 25 );
     form.line( ln );
     form.circle( cc );
 

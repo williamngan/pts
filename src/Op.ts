@@ -489,7 +489,7 @@ export class Circle {
    * @param pt center point of circle
    * @param radius radius of circle
    */
-  static fromPt( pt:PtLike, radius:number ):Group {
+  static fromCenter( pt:PtLike, radius:number ):Group {
     return new Group( new Pt(pt), new Pt(radius, radius) );
   }
 
@@ -682,7 +682,7 @@ export class Triangle {
    * @param size size is the magnitude of lines from center to the triangle's vertices, like a "radius".
    */
   static fromCenter( pt:PtLike, size:number ):Group {
-    return Triangle.fromCircle( Circle.fromPt( pt, size ) );
+    return Triangle.fromCircle( Circle.fromCenter( pt, size ) );
   }
 
 
@@ -763,7 +763,7 @@ export class Triangle {
     let area = Polygon.area( pts );
     let perim = Polygon.perimeter( pts, true );
     let r = 2 * area / perim.total;
-    return Circle.fromPt( c, r );
+    return Circle.fromCenter( c, r );
   }
 
   /**
@@ -786,7 +786,7 @@ export class Triangle {
   static circumcircle( pts:GroupLike, center?:Pt ):Group {
     let c = (center) ? center : Triangle.circumcenter( pts );
     let r = pts[0].$subtract( c ).magnitude();
-    return Circle.fromPt( c, r );
+    return Circle.fromCenter( c, r );
   }
 }
 

@@ -32,7 +32,7 @@
         
         // get segments from the group to generate circle position and size
         let cs = group.segments(2, 5).map( 
-          (g) => Circle.fromPt( g[0], Math.min( 50, g[1].$subtract(g[0]).magnitude()) ) 
+          (g) => Circle.fromCenter( g[0], Math.min( 50, g[1].$subtract(g[0]).magnitude()) ) 
         );
         
         form.strokeOnly("#123", 10, "round");

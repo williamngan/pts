@@ -2571,7 +2571,7 @@ class Circle {
      * @param pt center point of circle
      * @param radius radius of circle
      */
-    static fromPt(pt, radius) {
+    static fromCenter(pt, radius) {
         return new Pt_1.Group(new Pt_1.Pt(pt), new Pt_1.Pt(radius, radius));
     }
     /**
@@ -2736,7 +2736,7 @@ class Triangle {
      * @param size size is the magnitude of lines from center to the triangle's vertices, like a "radius".
      */
     static fromCenter(pt, size) {
-        return Triangle.fromCircle(Circle.fromPt(pt, size));
+        return Triangle.fromCircle(Circle.fromCenter(pt, size));
     }
     /**
      * Get the medial, which is an inner triangle formed by connecting the midpoints of this triangle's sides
@@ -2816,7 +2816,7 @@ class Triangle {
         let area = Polygon.area(pts);
         let perim = Polygon.perimeter(pts, true);
         let r = 2 * area / perim.total;
-        return Circle.fromPt(c, r);
+        return Circle.fromCenter(c, r);
     }
     /**
      * Get circumcenter, which is the intersection point of its 3 perpendicular bisectors lines ( each of which divides a side in half and is perpendicular to the side)
@@ -2837,7 +2837,7 @@ class Triangle {
     static circumcircle(pts, center) {
         let c = (center) ? center : Triangle.circumcenter(pts);
         let r = pts[0].$subtract(c).magnitude();
-        return Circle.fromPt(c, r);
+        return Circle.fromCenter(c, r);
     }
 }
 exports.Triangle = Triangle;
@@ -4295,7 +4295,7 @@ class CanvasForm extends Form_1.VisualForm {
     /**
      * Draw a circle
      * @param pts usually a Group of 2 Pts, but it can also take an array of two numeric arrays [ [position], [size] ]
-     * @see [`Circle.fromPt`](./_op_.circle.html#frompt)
+     * @see [`Circle.fromCenter`](./_op_.circle.html#frompt)
      */
     circle(pts) {
         CanvasForm.circle(this._ctx, pts[0], pts[1][0]);

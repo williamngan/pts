@@ -80,7 +80,7 @@ export abstract class VisualForm extends Form {
   /**
    * Abstract circle drawing
    * @param pts usually a Group of 2 Pts, but it can also take an array of two numeric arrays [ [position], [size] ]
-   * @see [`Circle.fromPt`](./_op_.circle.html#frompt)
+   * @see [`Circle.fromCenter`](./_op_.circle.html#frompt)
    */
   abstract circle( pts:GroupLike|number[][] ):this;
 

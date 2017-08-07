@@ -12,7 +12,7 @@
     
     let cycle = (off) => space.center.y * ( Num.cycle( (time+off)%2000/2000 ) - 0.5 );
 
-    let circle = Circle.fromPt( space.center.$add( 0, cycle(0) ), 30 );
+    let circle = Circle.fromCenter( space.center.$add( 0, cycle(0) ), 30 );
     let rect = Rectangle.fromCenter( space.center.$add( cycle(1000), 0 ), 50 );
     let triangle = Triangle.fromCenter( space.center.$add( cycle(0)/2, cycle(500) ), 30 );
     let curve = new Group( space.pointer, circle.p1, rect.p1, triangle.p1, space.pointer );
