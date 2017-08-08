@@ -411,10 +411,10 @@ export class Rectangle {
    * @param rect a Group of 2 Pts representing a Rectangle
    * @returns an array of 4 Groups
    */
-  static quadrants( rect:GroupLike ):Group[] {
+  static quadrants( rect:GroupLike, center?:PtLike ):Group[] {
     let corners = Rectangle.corners( rect );
-    let center = Geom.interpolate( rect[0], rect[1], 0.5 );
-    return corners.map( (c) => new Group(c, center.clone()) );
+    let _center = (center!=undefined) ? new Pt(center) : Geom.interpolate( rect[0], rect[1], 0.5 );
+    return corners.map( (c) => new Group(c, _center).boundingBox() );
   }
 
 

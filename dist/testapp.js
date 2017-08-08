@@ -2506,10 +2506,10 @@ class Rectangle {
      * @param rect a Group of 2 Pts representing a Rectangle
      * @returns an array of 4 Groups
      */
-    static quadrants(rect) {
+    static quadrants(rect, center) {
         let corners = Rectangle.corners(rect);
-        let center = Num_1.Geom.interpolate(rect[0], rect[1], 0.5);
-        return corners.map((c) => new Pt_1.Group(c, center.clone()));
+        let _center = (center != undefined) ? new Pt_1.Pt(center) : Num_1.Geom.interpolate(rect[0], rect[1], 0.5);
+        return corners.map((c) => new Pt_1.Group(c, _center).boundingBox());
     }
     /**
      * Check if a point is within a rectangle

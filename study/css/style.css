@@ -5,7 +5,7 @@ html{font-family:sans-serif;line-height:1.15;-ms-text-size-adjust:100%;-webkit-t
 body {
   background: #fff;
   font-family: "Helvetica", sans-serif;
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.35;
   margin: 0;
 }
@@ -44,7 +44,7 @@ html * {
 }
 #header a:hover {
   color: #f03;
-  text-decoration: underline;
+  border-bottom: none;
 }
 
 #footer a:link, #footer a:visited { color: #aeb7c1; }

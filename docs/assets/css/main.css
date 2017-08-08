@@ -794,7 +794,7 @@ footer .tsd-legend { display: inline-block; width: 25%; padding: 0; font-size: 1
 .tsd-panel-group { margin: 60px 0; }
 .tsd-panel-group > h1, .tsd-panel-group > h2, .tsd-panel-group > h3 { padding-left: 0px; padding-right: 20px; }
 
-#tsd-search { transition: background-color 0.2s; padding: 0 20px; margin-right: 20px; }
+#tsd-search { transition: background-color 0.2s; padding: 0 40px; margin-right: 20px; font-size: 18px; }
 #tsd-search .title { position: relative; z-index: 2; }
 #tsd-search .field { position: absolute; left: 0; top: 0; right: 20px; height: 70px; }
 #tsd-search .field input { 
@@ -802,7 +802,9 @@ footer .tsd-legend { display: inline-block; width: 25%; padding: 0; font-size: 1
   width: 50%; padding: 0 20px; opacity: 0; outline: 0; border: 0;
   background: transparent; color: #000; 
 }
-#tsd-search .field label { position: absolute; overflow: hidden; right: 0px; height: 100%; }
+#tsd-search .field label { position: absolute; overflow: hidden; right: 0px; height: 100%; padding-left: 50px; padding-right: 20px; }
+#tsd-search .field label:hover { text-decoration: underline; }
+
 #tsd-search .field input, #tsd-search .title { transition: opacity 0.2s; }
 #tsd-search .results { position: fixed; visibility: hidden; top: 70px; background: #fff; left: 0; width: 100%; margin: 0; padding: 0; list-style: none; border: 3px solid #000; border-left: none; border-right: none; }
 #tsd-search .results li { padding: 0 20px; background-color: #fff; line-height: 4;}

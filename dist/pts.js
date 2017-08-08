@@ -2506,10 +2506,10 @@ class Rectangle {
      * @param rect a Group of 2 Pts representing a Rectangle
      * @returns an array of 4 Groups
      */
-    static quadrants(rect) {
+    static quadrants(rect, center) {
         let corners = Rectangle.corners(rect);
-        let center = Num_1.Geom.interpolate(rect[0], rect[1], 0.5);
-        return corners.map((c) => new Pt_1.Group(c, center.clone()));
+        let _center = (center != undefined) ? new Pt_1.Pt(center) : Num_1.Geom.interpolate(rect[0], rect[1], 0.5);
+        return corners.map((c) => new Pt_1.Group(c, _center).boundingBox());
     }
     /**
      * Check if a point is within a rectangle
@@ -4690,6 +4690,7 @@ class Color extends Pt_1.Pt {
         this._mode = mode;
         return this;
     }
+    static maxValues(mode) { return Color.ranges[mode].zipSlice(1).$take([0, 1, 2]); }
     /**
      * Get this Color's mode
      */
@@ -5108,13 +5109,13 @@ Color.D65 = new Pt_1.Pt(95.047, 100, 108.883, 1);
  * Value range for each color space
  */
 Color.ranges = {
-    rgb: [[0, 255], [0, 255], [0, 255]],
-    hsl: [[0, 360], [0, 1], [0, 1]],
-    hsb: [[0, 360], [0, 1], [0, 1]],
-    lab: [[0, 100], [-128, 127], [-128, 127]],
-    lch: [[0, 100], [0, 100], [0, 360]],
-    luv: [[0, 100], [-134, 220], [-140, 122]],
-    xyz: [[0, 100], [0, 100], [0, 100]]
+    rgb: new Pt_1.Group(new Pt_1.Pt(0, 255), new Pt_1.Pt(0, 255), new Pt_1.Pt(0, 255)),
+    hsl: new Pt_1.Group(new Pt_1.Pt(0, 360), new Pt_1.Pt(0, 1), new Pt_1.Pt(0, 1)),
+    hsb: new Pt_1.Group(new Pt_1.Pt(0, 360), new Pt_1.Pt(0, 1), new Pt_1.Pt(0, 1)),
+    lab: new Pt_1.Group(new Pt_1.Pt(0, 100), new Pt_1.Pt(-128, 127), new Pt_1.Pt(-128, 127)),
+    lch: new Pt_1.Group(new Pt_1.Pt(0, 100), new Pt_1.Pt(0, 100), new Pt_1.Pt(0, 360)),
+    luv: new Pt_1.Group(new Pt_1.Pt(0, 100), new Pt_1.Pt(-134, 220), new Pt_1.Pt(-140, 122)),
+    xyz: new Pt_1.Group(new Pt_1.Pt(0, 100), new Pt_1.Pt(0, 100), new Pt_1.Pt(0, 100))
 };
 exports.Color = Color;
 

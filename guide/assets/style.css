@@ -36,7 +36,7 @@ a:hover { color: #F03; }
 }
 #header a:hover {
   color: #f03;
-  text-decoration: underline;
+  border-bottom: none;
 }
 
 #footer a:link, #footer a:visited { color: #aeb7c1; }

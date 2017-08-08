@@ -24,14 +24,14 @@ export class Color extends Pt {
   /**
    * Value range for each color space
    */
-  static ranges:{ [name: string]: PtLike[] } = {
-    rgb: [[0,255], [0,255], [0,255]],
-    hsl: [[0,360], [0,1], [0,1]],
-    hsb: [[0,360], [0,1], [0,1]],
-    lab: [[0,100], [-128,127], [-128, 127]],
-    lch: [[0,100], [0,100], [0,360]],
-    luv: [[0,100], [-134,220], [-140,122]],
-    xyz: [[0,100], [0,100], [0,100]]
+  static ranges:{ [name: string]: Group } = {
+    rgb: new Group( new Pt(0,255), new Pt(0,255), new Pt(0,255) ),
+    hsl: new Group( new Pt(0,360), new Pt(0,1), new Pt(0,1) ),
+    hsb: new Group( new Pt(0,360), new Pt(0,1), new Pt(0,1) ),
+    lab: new Group( new Pt(0,100), new Pt(-128,127), new Pt(-128, 127) ),
+    lch: new Group( new Pt(0,100), new Pt(0,100), new Pt(0,360) ),
+    luv: new Group( new Pt(0,100), new Pt(-134,220), new Pt(-140,122) ),
+    xyz: new Group( new Pt(0,100), new Pt(0,100), new Pt(0,100) )
   }
 
   /**
@@ -167,10 +167,13 @@ export class Color extends Pt {
     return this;
   }
 
+  static maxValues( mode:string ):Pt { return Color.ranges[mode].zipSlice(1).$take([0,1,2]); }
+
   /**
    * Get this Color's mode
    */
   get mode():ColorType { return this._mode; }
+
 
   // rgb
   get r():number { return this[0]; }
