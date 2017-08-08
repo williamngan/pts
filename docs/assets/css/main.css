@@ -796,6 +796,8 @@ footer .tsd-legend { display: inline-block; width: 25%; padding: 0; font-size: 1
 
 #tsd-search { transition: background-color 0.2s; padding: 0 40px; margin-right: 20px; font-size: 18px; }
 #tsd-search .title { position: relative; z-index: 2; }
+#tsd-search .title:hover { color: #f03; text-decoration: none; }
+#tsd-search .title:after { display: inline; content: ".docs"; font-weight: normal; }
 #tsd-search .field { position: absolute; left: 0; top: 0; right: 20px; height: 70px; }
 #tsd-search .field input { 
   box-sizing: border-box; position: relative; top: -50px; z-index: 1; 
