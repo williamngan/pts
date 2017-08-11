@@ -474,6 +474,14 @@ class Group extends Array {
     get p3() { return this[2]; }
     /** The forth Pt in this group */
     get p4() { return this[3]; }
+    /** The last Pt in this group */
+    get q1() { return this[this.length - 1]; }
+    /** The second-last Pt in this group */
+    get q2() { return this[this.length - 2]; }
+    /** The third-last Pt in this group */
+    get q3() { return this[this.length - 3]; }
+    /** The forth-last Pt in this group */
+    get q4() { return this[this.length - 4]; }
     /**
      * Depp clone this group and its Pts
      */

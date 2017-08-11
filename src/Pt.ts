@@ -517,6 +517,20 @@ export class Group extends Array<Pt> {
   /** The forth Pt in this group */
   get p4():Pt { return this[3]; }
 
+    /** The last Pt in this group */
+  get q1():Pt { return this[this.length-1]; }
+
+  /** The second-last Pt in this group */
+  get q2():Pt { return this[this.length-2]; }
+
+  /** The third-last Pt in this group */
+  get q3():Pt { return this[this.length-3]; }
+
+  /** The forth-last Pt in this group */
+  get q4():Pt { return this[this.length-4]; }
+
+  
+
 
   /**
    * Depp clone this group and its Pts

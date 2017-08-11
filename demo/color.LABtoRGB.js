@@ -35,10 +35,9 @@ window.demoDescription = "Create a gradient grid using Lab color space. The poin
         return Color.LABtoRGB( c1 ).toString("rgb");
       }
 
-      // form.stroke("rgba(0,0,0,.05)")
       for (let i=0, len=grid.length; i<len; i++) {
         grid[i][1].ceil();
-        let c = grid[i].interpolate( Num.cycle( (time+i*60)%1000/1000 ) ); // subtle animation
+        let c = grid[i].interpolate( Num.cycle( (time+i*60)%1000/1000 ) );
         form.fillOnly( color( c ) ).rect( grid[i] );
       }
     },
