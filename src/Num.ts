@@ -229,10 +229,10 @@ export class Geom {
 
 
   /**
-   * Get an interpolated value between two Pts
+   * Get an interpolated (or extrapolated) value between two Pts
    * @param a first Pt
    * @param b second Pt
-   * @param t usually a ratio between 0 to 1
+   * @param t a value between 0 to 1 to interpolate, or any other value to extrapolate
    * @returns interpolated point as a new Pt
    */
   static interpolate( a:Pt|number[], b:Pt|number[], t:number=0.5 ):Pt {

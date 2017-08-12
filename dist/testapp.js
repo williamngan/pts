@@ -1685,10 +1685,10 @@ class Geom {
         }
     }
     /**
-     * Get an interpolated value between two Pts
+     * Get an interpolated (or extrapolated) value between two Pts
      * @param a first Pt
      * @param b second Pt
-     * @param t usually a ratio between 0 to 1
+     * @param t a value between 0 to 1 to interpolate, or any other value to extrapolate
      * @returns interpolated point as a new Pt
      */
     static interpolate(a, b, t = 0.5) {
@@ -4506,6 +4506,7 @@ exports.CanvasForm = CanvasForm;
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
+const Util_1 = __webpack_require__(1);
 /**
  * The `Create` class provides various convenient functions to create structures or shapes.
  */
@@ -4561,6 +4562,20 @@ class Create {
             for (let r = 0; r < rows; r++) {
                 g.push(new Pt_1.Group(bound.topLeft.$add(unit.$multiply(c, r)), bound.topLeft.$add(unit.$multiply(c, r).add(unit))));
             }
+        }
+        return g;
+    }
+    /**
+     * Create a set of Pts around a circular path
+     * @param center circle center
+     * @param radius circle radius
+     * @param count number of Pts to create
+     */
+    static radialPts(center, radius, count) {
+        let g = new Pt_1.Group();
+        let a = Util_1.Const.two_pi / count;
+        for (let i = 0; i < count; i++) {
+            g.push(new Pt_1.Pt(center).toAngle(a * i - Util_1.Const.half_pi, radius, true));
         }
         return g;
     }

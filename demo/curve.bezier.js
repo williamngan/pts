@@ -1,4 +1,4 @@
-window.demoDescription = "A set of points records the mouse trail as the mouse moves. When mouse is down and dragging, the trail will extend. When released, the trail gradually shortens.";
+window.demoDescription = "Add a point to a trail as the pointer moves. Use those points as controls for a continuous bezier curve.";
 
 (function() {
 

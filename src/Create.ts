@@ -4,6 +4,7 @@
 
 import {Pt, Group, PtLike} from "./Pt";
 import {Bound} from "./Bound";
+import {Const} from "./Util";
 
 
 /**
@@ -68,6 +69,22 @@ export class Create {
           bound.topLeft.$add( unit.$multiply(c, r).add( unit ) )
         ));
       }
+    }
+    return g;
+  }
+
+
+  /**
+   * Create a set of Pts around a circular path
+   * @param center circle center
+   * @param radius circle radius
+   * @param count number of Pts to create
+   */
+  static radialPts( center:PtLike, radius:number, count:number ):Group {
+    let g = new Group();
+    let a = Const.two_pi/count;
+    for (let i=0; i<count; i++) {
+      g.push( new Pt(center).toAngle( a*i - Const.half_pi, radius, true ) );
     }
     return g;
   }
