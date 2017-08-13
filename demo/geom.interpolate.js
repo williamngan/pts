@@ -1,42 +1,42 @@
-Pts.namespace( window );
+window.demoDescription = "Interpolate every 2 corners of a rectangle to draw inner rectangles recursively.";
 
-var space = new CanvasSpace("#pt").setup({retina: true, resize: true});
-var form = space.getForm();
-
-
-space.add( {
-  animate: (time, ftime) => {
-    let ratio = Num.limitValue( Num.normalizeValue( space.pointer.x, 0, space.size.x), 0, 1 );
-    form.log( 1000/ftime + " fps" );
-
-    var center = space.size.$divide(2);
-    let a = new Pt(100, 40);
-    let b = new Pt(-50, 200);
-    let c = new Pt(-100, -250);
-    
-    form.stroke("#f00").line( [a.$add(center), b.$add(center)] );
-    form.stroke("#0f0").line( [b.$add(center), c.$add(center)] );
-    form.stroke("#00f").line( [c.$add(center), a.$add(center)] );
-    
-    let p1 = Geom.interpolate( a, b, ratio );
-    let p2 = Geom.interpolate( b, c, ratio );
-    let p3 = Geom.interpolate( c, a, ratio );
-
-    form.fill(false);
-    form.stroke("#333").line([center.$add(p1), center] );
-    form.stroke("#333").line([center.$add(p2), center] );
-    form.stroke("#333").line([center.$add(p3), center] );
-
-    let graph = new Group( a, b, c, a );
-    let p4 = graph.interpolate( ratio );
-    form.stroke(false).fill("#f00").point( center.$add(p4), 10, "circle");
-    // form.stroke("#999").line([center.$add(p1), center.$add(p2), center.$add(p3), center.$add(p1)] );
-
-  },
-  resize:( bound, evt) => {
-    console.log( bound.width, bound.height );
-  }
-})
+(function() {
   
-space.bindMouse();
-space.play();
+  Pts.namespace( this );
+  var space = new CanvasSpace("#pt").setup({bgcolor: "#fe3", resize: true, retina: true});
+  var form = space.getForm();
+  
+  
+  //// Demo code ---
+  
+  // Recusively draw interpolated squares up to max depth
+  var interpolate = (pts, _t, depth, max) => {
+    if (depth > max) return;
+    let g = new Group();
+    let t = Num.boundValue( _t, 0, 1 );
+
+    for (let i=1, len=pts.length; i<len; i++) {
+      g.push( Geom.interpolate( pts[i-1], pts[i], t ) );
+    }
+    g.push( Geom.interpolate( pts[pts.length-1], pts[0], t ) );
+    
+    form.fillOnly( (depth%2===0) ? "#fff" : "#123" ).polygon( g );
+    interpolate( g, t+0.02, depth+1, max );
+  }
+  
+  space.add( (time, ftime) => {
+    
+    let size = space.size.$multiply( 0.5).minValue().value;
+    let rect = Rectangle.corners( [space.center.$subtract( size ), space.center.$add( size )] );    
+    let t = (space.pointer.x / space.size.x) + (time%10000/10000);
+    
+    interpolate( rect, t, 0, 20 );
+    
+  });
+  
+  //// ----
+  
+  
+  space.bindMouse().bindTouch().play();
+  
+})();

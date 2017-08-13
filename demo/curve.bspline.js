@@ -23,12 +23,14 @@ window.demoDescription = "Create a set of points around a center point, varying 
 
     animate: (time, ftime) => {
 
+      let r = radius + radius * (Num.cycle(time%3000/3000) * 0.2);
+
       for (let i=0, len=temp.length; i<len; i++) {
         let d = pts[i].$subtract( space.pointer );
 
         // push out if inside threshold 
-        if ( d.magnitudeSq() < radius*radius ) {
-          temp[i].to( space.pointer.$add( d.unit().$multiply( radius   ) ) );
+        if ( d.magnitudeSq() < r*r ) {
+          temp[i].to( space.pointer.$add( d.unit().$multiply( r ) ) );
 
         // pull in if outside threshold
         } else {
