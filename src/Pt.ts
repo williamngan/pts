@@ -43,9 +43,14 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
     }    
   }
 
-  static make( dimensions:number, defaultValue:number=0 ):Pt {
+  static make( dimensions:number, defaultValue:number=0, randomize:boolean=false ):Pt {
     let p = new PtBaseArray(dimensions);
     if (defaultValue) p.fill( defaultValue );
+    if (randomize) {
+      for (let i=0, len=p.length; i<len; i++) {
+        p[i] = p[i]*Math.random();
+      }
+    }
     return new Pt( p );
   }
 

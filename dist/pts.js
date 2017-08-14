@@ -100,10 +100,15 @@ class Pt extends exports.PtBaseArray {
             super((args.length > 0) ? Util_1.Util.getArgs(args) : [0, 0]);
         }
     }
-    static make(dimensions, defaultValue = 0) {
+    static make(dimensions, defaultValue = 0, randomize = false) {
         let p = new exports.PtBaseArray(dimensions);
         if (defaultValue)
             p.fill(defaultValue);
+        if (randomize) {
+            for (let i = 0, len = p.length; i < len; i++) {
+                p[i] = p[i] * Math.random();
+            }
+        }
         return new Pt(p);
     }
     get id() { return this._id; }
@@ -2213,6 +2218,15 @@ class Line {
             let c = p1[1] - m * p1[0];
             return { slope: m, yi: c, xi: (m === 0) ? undefined : -c / m };
         }
+    }
+    /**
+     * Given a 2D path and a point, find whether the point is on left or right side of the line
+     * @param line  a Group of at least 2 Pts
+     * @param pt a Pt
+     * @returns a negative value if on left and a positive value if on right. If collinear, then the return value is 0.
+     */
+    static sideOfPt2D(line, pt) {
+        return (line[1][0] - line[0][0]) * (pt[1] - line[0][1]) - (pt[0] - line[0][0]) * (line[1][1] - line[0][1]);
     }
     /**
      * Check if three Pts are collinear, ie, on the same straight path.

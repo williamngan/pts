@@ -62,6 +62,17 @@ export class Line {
 
 
   /**
+   * Given a 2D path and a point, find whether the point is on left or right side of the line
+   * @param line  a Group of at least 2 Pts
+   * @param pt a Pt
+   * @returns a negative value if on left and a positive value if on right. If collinear, then the return value is 0.
+   */
+  static sideOfPt2D( line:GroupLike, pt:PtLike ):number {
+    return (line[1][0] - line[0][0]) * (pt[1] - line[0][1]) - (pt[0] - line[0][0]) * (line[1][1] - line[0][1]);
+  }
+
+
+  /**
    * Check if three Pts are collinear, ie, on the same straight path.
    * @param p1 first Pt
    * @param p2 second Pt
