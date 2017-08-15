@@ -2264,7 +2264,7 @@ class Line {
      */
     static perpendicularFromPt(line, pt, asProjection = false) {
         if (line[0].equals(line[1]))
-            throw new Error("A line's magnitude should be greater than 0.");
+            return undefined;
         let a = line[0].$subtract(line[1]);
         let b = line[1].$subtract(pt);
         let proj = b.$subtract(a.$project(b));
@@ -2274,10 +2274,9 @@ class Line {
      * Given a line and a point, find the shortest distance from the point to the line
      * @param line a Group of 2 Pts
      * @param pt a Pt
-     * @param asProjection if true, this uses the projection vector instead. Default is false.
      * @see `Line.perpendicularFromPt`
      */
-    static distanceFromPt(line, pt, asProjection = false) {
+    static distanceFromPt(line, pt) {
         return Line.perpendicularFromPt(line, pt, true).magnitude();
     }
     /**

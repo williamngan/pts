@@ -9,6 +9,8 @@ window.demoDescription = "A circle moves in a field of line segments. Check inte
   
   //// Demo code ---
   var lines = [];
+
+  // function to create random lines
   var createLines = () => {
     lines = [];
     var ps = Create.distributeRandom( space.innerBound, 50 );
@@ -23,12 +25,13 @@ window.demoDescription = "A circle moves in a field of line segments. Check inte
     
     animate: (time, ftime) => {
       
+      // define a range from the pointer
       let range = Circle.fromCenter( space.pointer, 100 );
       form.stroke( "#fff" ).lines( lines );
       
       for (let i=0, len=lines.length; i<len; i++) {
 
-        // check rays and lines intersection with mouse's range
+        // check rays and lines intersection with pointer's range
         let inPath = Circle.intersectRay2D( range, lines[i] );
         let inLine = Circle.intersectLine2D( range, lines[i] );
 

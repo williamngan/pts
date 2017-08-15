@@ -14,6 +14,7 @@ window.demoDescription = "A set of points records the mouse trail as the mouse m
 
   space.add({ 
     animate: (time, ftime) => {
+      // shorten the line when it's not stretching
       if (chain.length > ((stretch) ? 100 : 10)) chain.shift();
 
       form.strokeOnly("#123", 3).line( chain );
@@ -21,8 +22,11 @@ window.demoDescription = "A set of points records the mouse trail as the mouse m
     },
 
     action:( type, px, py ) => {
+      // stretch the line when mouse is down
       if (type == "down") stretch = true;
       if (type == "up") stretch = false; 
+
+      // add a point to the line when mouse moves
       if (type == "move") chain.push( new Pt(px, py) );  
     } 
   });

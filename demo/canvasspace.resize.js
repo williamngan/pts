@@ -14,6 +14,7 @@ window.demoDescription = "Draw shapes based on the size of space. Resize the win
 
   space.add({ 
     animate: (time, ftime) => {
+      // create a circles in each quarter
       let quads = Rectangle.quadrants( [new Pt(), currBound.size] );
       let circles = quads.map( (q) => Rectangle.toCircle( q ) );
       

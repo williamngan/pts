@@ -1,4 +1,4 @@
-window.demoDescription = "A set of points records the mouse trail as the mouse moves. When mouse is down and dragging, the trail will extend. When released, the trail gradually shortens.";
+window.demoDescription = "A set of lines revolves around a center point. Each line's color depends on whether the pointer lies on its left or right side, and if it's collinear with the pointer.";
 
 (function() {
 

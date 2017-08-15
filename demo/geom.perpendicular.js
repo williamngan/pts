@@ -1,36 +1,48 @@
-Pts.namespace( window );
+window.demoDescription = "Draw a series of perpendicular lines along a diagonal path to visualize sine waves.";
 
-var space = new CanvasSpace("#pt").setup({retina: true});
-var form = space.getForm();
-
-let ang = Math.random() * Const.two_pi;
-
-space.add( {
-  animate: (time, ftime) => {
-    let p = space.pointer.$subtract( space.center );
-    let c = space.center;
-
-    let ang = p.angle();
-    form.log( Geom.toDegree( ang ) );
-
-    // line to mouse
-    let pm = new Pt( c.x+p.magnitude(), c.y);
-    form.stroke("#ccc").line( [c, pm] );
-    form.fill(false).arc( c, 20, 0, ang );
-
-    // line at specific angle
-    let d = p.clone().toAngle( ang + Math.PI );
-    form.stroke("#f99").line( [c, c.$add(d)] );
-
-    // line at angle 0    
-    form.stroke("#f00").line( [c, space.center.add(p)] );
-
-    // perpendicular lines
-    perpends = Geom.perpendicular( p ).map( (p) => p.$add( c ) );    
-    form.stroke("#0f0").line( perpends );
-
-  }
-});
+(function() {
   
-space.bindMouse();
-space.play();
+  Pts.namespace( this );
+  var space = new CanvasSpace("#pt").setup({bgcolor: "#123", resize: true, retina: true});
+  var form = space.getForm();
+  
+  
+  //// Demo code ---
+  
+  
+  space.add( (time, ftime) => {
+
+    // create a line and get 200 interpolated points
+    let offset = space.size.$multiply(0.2).y;
+    let line = new Group( new Pt( 0, offset ), new Pt( space.size.x, space.size.y-offset ) );
+    let pts = Line.subpoints( line, 200 );
+
+    // get perpendicular unit vectors from each points on the line
+    let pps = pts.map( (p) => Geom.perpendicular( p.$subtract( line[0] ).unit() ).add(p) );
+
+    let angle = space.pointer.x/space.size.x * Const.two_pi * 2;
+
+    // draw each perpendicular like a sine-wave
+    pps.forEach( (pp, i) => {
+      let t = i/200 * Const.two_pi + angle + Num.cycle(time%10000/10000);
+
+      if (i%2===0) {
+        pp[0].to( Geom.interpolate( pts[i], pp[0], Math.sin( t )*offset*2 ) );
+        pp[1].to( pts[i] );
+        form.stroke("#0c6").line(pp);
+      } else {
+        pp[0].to( pts[i] );
+        pp[1].to( Geom.interpolate( pts[i], pp[1], Math.cos( t )*offset*2 ) );
+        form.stroke("#f03").line(pp);
+      }
+      
+    });
+
+  });
+  
+  //// ----
+  
+  
+  space.bindMouse().bindTouch().play();
+  
+})();
