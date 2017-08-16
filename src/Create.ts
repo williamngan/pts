@@ -40,6 +40,7 @@ export class Create {
    * @returns a Group of Pts
    */
   static gridPts( bound:Bound, columns:number, rows:number, orientation:PtLike=[0.5, 0.5] ):Group {
+    if (columns === 0 || rows === 0) throw "grid columns and rows cannot be 0";
     let unit = bound.size.$subtract(1).$divide( columns, rows );
     let offset = unit.$multiply( orientation );
     let g = new Group();
@@ -60,6 +61,7 @@ export class Create {
    * @returns an array of Groups, where each group represents a rectangular cell
    */
   static gridCells( bound:Bound, columns:number, rows:number  ):Group[] {
+    if (columns === 0 || rows === 0) throw "grid columns and rows cannot be 0";
     let unit = bound.size.$subtract(1).divide( columns, rows ); // subtract 1 to fill whole border of rectangles
     let g = [];
     for (let c=0; c<columns; c++) {

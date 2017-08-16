@@ -883,6 +883,9 @@ class Util {
         }
         return defaultReturn;
     }
+    static randomInt(range, start = 0) {
+        return Math.floor(Math.random() * range) + start;
+    }
     /**
      * Split an array into chunks of sub-array
      * @param pts an array
@@ -1066,6 +1069,8 @@ class Vec {
      */
     static unit(a, magnitude = undefined) {
         let m = (magnitude === undefined) ? Vec.magnitude(a) : magnitude;
+        if (m === 0)
+            throw "Cannot calculate unit vector because magnitude is 0";
         return Vec.divide(a, m);
     }
     /**
@@ -4551,6 +4556,8 @@ class Create {
      * @returns a Group of Pts
      */
     static gridPts(bound, columns, rows, orientation = [0.5, 0.5]) {
+        if (columns === 0 || rows === 0)
+            throw "grid columns and rows cannot be 0";
         let unit = bound.size.$subtract(1).$divide(columns, rows);
         let offset = unit.$multiply(orientation);
         let g = new Pt_1.Group();
@@ -4569,6 +4576,8 @@ class Create {
      * @returns an array of Groups, where each group represents a rectangular cell
      */
     static gridCells(bound, columns, rows) {
+        if (columns === 0 || rows === 0)
+            throw "grid columns and rows cannot be 0";
         let unit = bound.size.$subtract(1).divide(columns, rows); // subtract 1 to fill whole border of rectangles
         let g = [];
         for (let c = 0; c < columns; c++) {

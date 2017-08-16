@@ -136,6 +136,10 @@ export class Util {
   }
 
 
+  static randomInt( range:number, start:number=0 ) {
+    return Math.floor( Math.random()*range ) + start;
+  }
+
   /**
    * Split an array into chunks of sub-array
    * @param pts an array 

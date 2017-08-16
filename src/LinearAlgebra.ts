@@ -107,6 +107,7 @@ export class Vec {
    */
   static unit( a:PtLike, magnitude:number=undefined ):PtLike {
     let m = (magnitude===undefined) ? Vec.magnitude(a) : magnitude;
+    if (m===0) throw "Cannot calculate unit vector because magnitude is 0";
     return Vec.divide( a, m );
   }
 

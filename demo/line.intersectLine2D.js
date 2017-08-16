@@ -15,8 +15,8 @@ window.demoDescription = "Lines rotating in a grid. Intersections between lines 
   // check intersect of a line with other lines
   var intersect = (ln, k) => {
     let ps = new Group();
-    for (let i=0, len=lines.length; i<len; i++) {
-      if (i!==k) {
+    for (let i=0, len=lines.length; i<len; i++) { // this loop can be optimized
+      if (i!==k) { 
         let ip = Line.intersectLine2D( lines[i], ln );
         if (ip) ps.push( ip );
       }
@@ -40,8 +40,9 @@ window.demoDescription = "Lines rotating in a grid. Intersections between lines 
       lines.forEach( (ln, i) => {
         ln[1].rotate2D(0.02 * speed, ln[0]);
         let ips = intersect( ln, i );
-        form.fillOnly("#fff").points( ips, 7, "circle" );
-        form.stroke( (ips.length > 0) ? "#fff" : "rgba(255,255,255,.3)").line( ln );
+        
+        form.stroke( (ips.length > 0) ? "#fff" : "rgba(255,255,255,.3)", 2).line( ln );
+        form.strokeOnly("#f03",2).points( ips, 5, "circle" );
       });
       
     }
