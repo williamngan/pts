@@ -3,7 +3,7 @@ window.demoDescription = "Draw a series of perpendicular lines along a diagonal 
 (function() {
   
   Pts.namespace( this );
-  var space = new CanvasSpace("#pt").setup({bgcolor: "#123", resize: true, retina: true});
+  var space = new CanvasSpace("#pt").setup({bgcolor: "#f1f3f7", resize: true, retina: true});
   var form = space.getForm();
   
   
@@ -29,11 +29,11 @@ window.demoDescription = "Draw a series of perpendicular lines along a diagonal 
       if (i%2===0) {
         pp[0].to( Geom.interpolate( pts[i], pp[0], Math.sin( t )*offset*2 ) );
         pp[1].to( pts[i] );
-        form.stroke("#0c6").line(pp);
+        form.stroke("#0c6", 2).line(pp);
       } else {
         pp[0].to( pts[i] );
         pp[1].to( Geom.interpolate( pts[i], pp[1], Math.cos( t )*offset*2 ) );
-        form.stroke("#f03").line(pp);
+        form.stroke("#f03", 2).line(pp);
       }
       
     });
