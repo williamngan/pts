@@ -1,4 +1,4 @@
-window.demoDescription = "A set of points records the mouse trail as the mouse moves. When mouse is down and dragging, the trail will extend. When released, the trail gradually shortens.";
+window.demoDescription = "Four circles fit within the triangles, and four other circles encloses them. Move the pointer to change the triangles.";
 
 (function() {
   

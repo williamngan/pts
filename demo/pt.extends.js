@@ -1,4 +1,4 @@
-window.demoDescription = "A demo that creates 'confetti' by extending Pt class";
+window.demoDescription = "Move the pointer to creates confetti. A simple example to show how to extend Pt class.";
 
 (function() {
 

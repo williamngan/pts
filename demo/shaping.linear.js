@@ -1,4 +1,4 @@
-window.demoDescription = "A set of points records the mouse trail as the mouse moves. When mouse is down and dragging, the trail will extend. When released, the trail gradually shortens.";
+window.demoDescription = "A visualization of various shaping functions, which are also applied to change the circles' sizes correspondingly. Based on the algorithms from Robert Penner and Golan Levin";
 
 (function() {
 
