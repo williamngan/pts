@@ -26,7 +26,7 @@ window.demoDescription = "Four circles fit within the triangles, and four other 
     
     // drawing
     form.fillOnly("rgba(255,255,255,.2)", 1 ).circles( circums );
-    form.fillOnly("#0c6").polygon( poly );
+    form.fillOnly("#123").polygon( poly );
     form.fill("#f03").circles( circles );
     form.strokeOnly("#fff ", 3 ).polygons( tris );
     form.fill("#123").point( space.pointer, 5 );
