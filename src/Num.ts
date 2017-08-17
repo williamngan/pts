@@ -712,7 +712,7 @@ export class Shaping {
    */
   static cubicBezier(t:number, c:number = 1, p1:PtLike=[0.1, 0.7], p2:PtLike=[0.9, 0.2] ):number {
     let curve = new Group( new Pt(0, 0), new Pt(p1), new Pt(p2), new Pt(1, 1) );
-    return c * Curve.bezierStep(new Pt(t, t * t, t * t * t), Curve.controlPoints(curve)).y;
+    return c * Curve.bezierStep(new Pt(t*t*t, t*t, t, 1), Curve.controlPoints(curve)).y;
   }
 
 

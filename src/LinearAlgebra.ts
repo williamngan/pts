@@ -61,7 +61,7 @@ export class Vec {
    */
   static divide( a:PtLike, b:PtLike|number ):PtLike {
     if (typeof b == "number") {
-      if (b === 0) throw "Cannot divide by zero"
+      if (b === 0) throw new Error("Cannot divide by zero");
       for (let i=0, len=a.length; i<len; i++) a[i] /= b;
     } else {
       if (a.length != b.length) {
@@ -77,7 +77,7 @@ export class Vec {
    * Dot product of `a` and `b`
    */
   static dot( a:PtLike, b:PtLike ):number {
-    if (a.length != b.length) throw "Array lengths don't match"
+    if (a.length != b.length) throw new Error("Array lengths don't match");
     let d = 0;
     for (let i=0, len=a.length; i<len; i++) {
       d += a[i]*b[i];
@@ -107,7 +107,7 @@ export class Vec {
    */
   static unit( a:PtLike, magnitude:number=undefined ):PtLike {
     let m = (magnitude===undefined) ? Vec.magnitude(a) : magnitude;
-    if (m===0) throw "Cannot calculate unit vector because magnitude is 0";
+    if (m===0) throw new Error("Cannot calculate unit vector because magnitude is 0");
     return Vec.divide( a, m );
   }
 
@@ -215,8 +215,8 @@ export class Mat {
    */
   static add( a:GroupLike, b:GroupLike|number[][]|number ):Group {
     if ( typeof b != "number" ) {
-      if (a[0].length != b[0].length) throw "Cannot add matrix if rows' and columns' size don't match."
-      if (a.length != b.length) throw "Cannot add matrix if rows' and columns' size don't match."
+      if (a[0].length != b[0].length) throw new Error("Cannot add matrix if rows' and columns' size don't match.");
+      if (a.length != b.length) throw new Error("Cannot add matrix if rows' and columns' size don't match.");
     }
 
     let g = new Group();
@@ -244,15 +244,15 @@ export class Mat {
     if (typeof b != "number") {
 
       if (elementwise) {
-        if (a.length != b.length) throw "Cannot multiply matrix element-wise because the matrices' sizes don't match."
+        if (a.length != b.length) throw new Error("Cannot multiply matrix element-wise because the matrices' sizes don't match.");
         for (let ai = 0, alen = a.length; ai < alen; ai++) {
           g.push( a[ai].$multiply( b[ai] ) );
         }
 
       } else {
         
-        if (!transposed && a[0].length != b.length) throw "Cannot multiply matrix if rows in matrix-a don't match columns in matrix-b."
-        if (transposed && a[0].length != b[0].length) throw "Cannot multiply matrix if transposed and the columns in both matrices don't match."
+        if (!transposed && a[0].length != b.length) throw new Error("Cannot multiply matrix if rows in matrix-a don't match columns in matrix-b.");
+        if (transposed && a[0].length != b[0].length) throw new Error("Cannot multiply matrix if transposed and the columns in both matrices don't match.");
 
         if (!transposed) b = Mat.transpose( b );
 

@@ -1027,7 +1027,7 @@ class Vec {
     static divide(a, b) {
         if (typeof b == "number") {
             if (b === 0)
-                throw "Cannot divide by zero";
+                throw new Error("Cannot divide by zero");
             for (let i = 0, len = a.length; i < len; i++)
                 a[i] /= b;
         }
@@ -1045,7 +1045,7 @@ class Vec {
      */
     static dot(a, b) {
         if (a.length != b.length)
-            throw "Array lengths don't match";
+            throw new Error("Array lengths don't match");
         let d = 0;
         for (let i = 0, len = a.length; i < len; i++) {
             d += a[i] * b[i];
@@ -1070,7 +1070,7 @@ class Vec {
     static unit(a, magnitude = undefined) {
         let m = (magnitude === undefined) ? Vec.magnitude(a) : magnitude;
         if (m === 0)
-            throw "Cannot calculate unit vector because magnitude is 0";
+            throw new Error("Cannot calculate unit vector because magnitude is 0");
         return Vec.divide(a, m);
     }
     /**
@@ -1163,9 +1163,9 @@ class Mat {
     static add(a, b) {
         if (typeof b != "number") {
             if (a[0].length != b[0].length)
-                throw "Cannot add matrix if rows' and columns' size don't match.";
+                throw new Error("Cannot add matrix if rows' and columns' size don't match.");
             if (a.length != b.length)
-                throw "Cannot add matrix if rows' and columns' size don't match.";
+                throw new Error("Cannot add matrix if rows' and columns' size don't match.");
         }
         let g = new Pt_1.Group();
         let isNum = typeof b == "number";
@@ -1187,16 +1187,16 @@ class Mat {
         if (typeof b != "number") {
             if (elementwise) {
                 if (a.length != b.length)
-                    throw "Cannot multiply matrix element-wise because the matrices' sizes don't match.";
+                    throw new Error("Cannot multiply matrix element-wise because the matrices' sizes don't match.");
                 for (let ai = 0, alen = a.length; ai < alen; ai++) {
                     g.push(a[ai].$multiply(b[ai]));
                 }
             }
             else {
                 if (!transposed && a[0].length != b.length)
-                    throw "Cannot multiply matrix if rows in matrix-a don't match columns in matrix-b.";
+                    throw new Error("Cannot multiply matrix if rows in matrix-a don't match columns in matrix-b.");
                 if (transposed && a[0].length != b[0].length)
-                    throw "Cannot multiply matrix if transposed and the columns in both matrices don't match.";
+                    throw new Error("Cannot multiply matrix if transposed and the columns in both matrices don't match.");
                 if (!transposed)
                     b = Mat.transpose(b);
                 for (let ai = 0, alen = a.length; ai < alen; ai++) {
@@ -2125,7 +2125,7 @@ class Shaping {
      */
     static cubicBezier(t, c = 1, p1 = [0.1, 0.7], p2 = [0.9, 0.2]) {
         let curve = new Pt_1.Group(new Pt_1.Pt(0, 0), new Pt_1.Pt(p1), new Pt_1.Pt(p2), new Pt_1.Pt(1, 1));
-        return c * Op_1.Curve.bezierStep(new Pt_1.Pt(t, t * t, t * t * t), Op_1.Curve.controlPoints(curve)).y;
+        return c * Op_1.Curve.bezierStep(new Pt_1.Pt(t * t * t, t * t, t, 1), Op_1.Curve.controlPoints(curve)).y;
     }
     /**
      * Give a Pt, draw a quadratic curve that will pass through that Pt as closely as possible. Adapted from Golan Levin's [shaping functions](http://www.flong.com/texts/code/shapers_poly/)
@@ -4557,7 +4557,7 @@ class Create {
      */
     static gridPts(bound, columns, rows, orientation = [0.5, 0.5]) {
         if (columns === 0 || rows === 0)
-            throw "grid columns and rows cannot be 0";
+            throw new Error("grid columns and rows cannot be 0");
         let unit = bound.size.$subtract(1).$divide(columns, rows);
         let offset = unit.$multiply(orientation);
         let g = new Pt_1.Group();
@@ -4577,7 +4577,7 @@ class Create {
      */
     static gridCells(bound, columns, rows) {
         if (columns === 0 || rows === 0)
-            throw "grid columns and rows cannot be 0";
+            throw new Error("grid columns and rows cannot be 0");
         let unit = bound.size.$subtract(1).divide(columns, rows); // subtract 1 to fill whole border of rectangles
         let g = [];
         for (let c = 0; c < columns; c++) {
