@@ -31,8 +31,8 @@ module.exports = {
 module.exports = {
   
   entry: {
-    pts: LIB_PATH,
-    testapp: APP_PATH
+    pts: LIB_PATH
+    // testapp: APP_PATH
   },
 
   output: {

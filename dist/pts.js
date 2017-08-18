@@ -64,7 +64,7 @@ var Pts =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 12);
+/******/ 	return __webpack_require__(__webpack_require__.s = 11);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -77,7 +77,7 @@ var Pts =
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(1);
-const Num_1 = __webpack_require__(4);
+const Num_1 = __webpack_require__(3);
 const LinearAlgebra_1 = __webpack_require__(2);
 exports.PtBaseArray = Float32Array;
 /**
@@ -1352,158 +1352,6 @@ exports.Mat = Mat;
 // Source code licensed under Apache License 2.0. 
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
-const Pt_1 = __webpack_require__(0);
-/**
- * Bound is a subclass of Group that represents a rectangular boundary.
- * It includes some convenient properties such as `x`, `y`, bottomRight`, `center`, and `size`.
- */
-class Bound extends Pt_1.Group {
-    /**
-     * Create a Bound. This is similar to the Group constructor.
-     * @param args a list of Pt as parameters
-     */
-    constructor(...args) {
-        super(...args);
-        this._center = new Pt_1.Pt();
-        this._size = new Pt_1.Pt();
-        this._topLeft = new Pt_1.Pt();
-        this._bottomRight = new Pt_1.Pt();
-        this._inited = false;
-        this.init();
-    }
-    /**
-     * Create a Bound from a [ClientRect](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect) object.
-     * @param rect an object has top/left/bottom/right/width/height properties
-     * @returns a Bound object
-     */
-    static fromBoundingRect(rect) {
-        let b = new Bound(new Pt_1.Pt(rect.left || 0, rect.top || 0), new Pt_1.Pt(rect.right || 0, rect.bottom || 0));
-        if (rect.width && rect.height)
-            b.size = new Pt_1.Pt(rect.width, rect.height);
-        return b;
-    }
-    /**
-     * Initiate the bound's properties.
-     */
-    init() {
-        if (this.p1) {
-            this._size = this.p1.clone();
-            this._inited = true;
-        }
-        if (this.p1 && this.p2) {
-            let a = this.p1;
-            let b = this.p2;
-            this.topLeft = a.$min(b);
-            this._bottomRight = a.$max(b);
-            this._updateSize();
-            this._inited = true;
-        }
-    }
-    /**
-     * Clone this bound and return a new one
-     */
-    clone() {
-        return new Bound(this._topLeft.clone(), this._bottomRight.clone());
-    }
-    /**
-     * Recalculte size and center
-     */
-    _updateSize() {
-        this._size = this._bottomRight.$subtract(this._topLeft).abs();
-        this._updateCenter();
-    }
-    /**
-     * Recalculate center
-     */
-    _updateCenter() {
-        this._center = this._size.$multiply(0.5).add(this._topLeft);
-    }
-    /**
-     * Recalculate based on top-left position and size
-     */
-    _updatePosFromTop() {
-        this._bottomRight = this._topLeft.$add(this._size);
-        this._updateCenter();
-    }
-    /**
-     * Recalculate based on bottom-right position and size
-     */
-    _updatePosFromBottom() {
-        this._topLeft = this._bottomRight.$subtract(this._size);
-        this._updateCenter();
-    }
-    /**
-     * Recalculate based on center position and size
-     */
-    _updatePosFromCenter() {
-        let half = this._size.$multiply(0.5);
-        this._topLeft = this._center.$subtract(half);
-        this._bottomRight = this._center.$add(half);
-    }
-    get size() { return new Pt_1.Pt(this._size); }
-    set size(p) {
-        this._size = new Pt_1.Pt(p);
-        this._updatePosFromTop();
-    }
-    get center() { return new Pt_1.Pt(this._center); }
-    set center(p) {
-        this._center = new Pt_1.Pt(p);
-        this._updatePosFromCenter();
-    }
-    get topLeft() { return new Pt_1.Pt(this._topLeft); }
-    set topLeft(p) {
-        this._topLeft = new Pt_1.Pt(p);
-        this[0] = this._topLeft;
-        this._updateSize();
-    }
-    get bottomRight() { return new Pt_1.Pt(this._bottomRight); }
-    set bottomRight(p) {
-        this._bottomRight = new Pt_1.Pt(p);
-        this[1] = this._bottomRight;
-        this._updateSize();
-    }
-    get width() { return (this._size.length > 0) ? this._size.x : 0; }
-    set width(w) {
-        this._size.x = w;
-        this._updatePosFromTop();
-    }
-    get height() { return (this._size.length > 1) ? this._size.y : 0; }
-    set height(h) {
-        this._size.y = h;
-        this._updatePosFromTop();
-    }
-    get depth() { return (this._size.length > 2) ? this._size.z : 0; }
-    set depth(d) {
-        this._size.z = d;
-        this._updatePosFromTop();
-    }
-    get x() { return this.topLeft.x; }
-    get y() { return this.topLeft.y; }
-    get z() { return this.topLeft.z; }
-    get inited() { return this._inited; }
-    /**
-     * If the Group elements are changed, call this function to update the Bound's properties.
-     * It's preferable to change the topLeft/bottomRight etc properties instead of changing the Group array directly.
-     */
-    update() {
-        this._topLeft = this[0];
-        this._bottomRight = this[1];
-        this._updateSize();
-        return this;
-    }
-}
-exports.Bound = Bound;
-
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-// Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan)
-Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(1);
 const Op_1 = __webpack_require__(5);
 const Pt_1 = __webpack_require__(0);
@@ -2168,6 +2016,158 @@ exports.Shaping = Shaping;
 
 
 /***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan)
+Object.defineProperty(exports, "__esModule", { value: true });
+const Pt_1 = __webpack_require__(0);
+/**
+ * Bound is a subclass of Group that represents a rectangular boundary.
+ * It includes some convenient properties such as `x`, `y`, bottomRight`, `center`, and `size`.
+ */
+class Bound extends Pt_1.Group {
+    /**
+     * Create a Bound. This is similar to the Group constructor.
+     * @param args a list of Pt as parameters
+     */
+    constructor(...args) {
+        super(...args);
+        this._center = new Pt_1.Pt();
+        this._size = new Pt_1.Pt();
+        this._topLeft = new Pt_1.Pt();
+        this._bottomRight = new Pt_1.Pt();
+        this._inited = false;
+        this.init();
+    }
+    /**
+     * Create a Bound from a [ClientRect](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect) object.
+     * @param rect an object has top/left/bottom/right/width/height properties
+     * @returns a Bound object
+     */
+    static fromBoundingRect(rect) {
+        let b = new Bound(new Pt_1.Pt(rect.left || 0, rect.top || 0), new Pt_1.Pt(rect.right || 0, rect.bottom || 0));
+        if (rect.width && rect.height)
+            b.size = new Pt_1.Pt(rect.width, rect.height);
+        return b;
+    }
+    /**
+     * Initiate the bound's properties.
+     */
+    init() {
+        if (this.p1) {
+            this._size = this.p1.clone();
+            this._inited = true;
+        }
+        if (this.p1 && this.p2) {
+            let a = this.p1;
+            let b = this.p2;
+            this.topLeft = a.$min(b);
+            this._bottomRight = a.$max(b);
+            this._updateSize();
+            this._inited = true;
+        }
+    }
+    /**
+     * Clone this bound and return a new one
+     */
+    clone() {
+        return new Bound(this._topLeft.clone(), this._bottomRight.clone());
+    }
+    /**
+     * Recalculte size and center
+     */
+    _updateSize() {
+        this._size = this._bottomRight.$subtract(this._topLeft).abs();
+        this._updateCenter();
+    }
+    /**
+     * Recalculate center
+     */
+    _updateCenter() {
+        this._center = this._size.$multiply(0.5).add(this._topLeft);
+    }
+    /**
+     * Recalculate based on top-left position and size
+     */
+    _updatePosFromTop() {
+        this._bottomRight = this._topLeft.$add(this._size);
+        this._updateCenter();
+    }
+    /**
+     * Recalculate based on bottom-right position and size
+     */
+    _updatePosFromBottom() {
+        this._topLeft = this._bottomRight.$subtract(this._size);
+        this._updateCenter();
+    }
+    /**
+     * Recalculate based on center position and size
+     */
+    _updatePosFromCenter() {
+        let half = this._size.$multiply(0.5);
+        this._topLeft = this._center.$subtract(half);
+        this._bottomRight = this._center.$add(half);
+    }
+    get size() { return new Pt_1.Pt(this._size); }
+    set size(p) {
+        this._size = new Pt_1.Pt(p);
+        this._updatePosFromTop();
+    }
+    get center() { return new Pt_1.Pt(this._center); }
+    set center(p) {
+        this._center = new Pt_1.Pt(p);
+        this._updatePosFromCenter();
+    }
+    get topLeft() { return new Pt_1.Pt(this._topLeft); }
+    set topLeft(p) {
+        this._topLeft = new Pt_1.Pt(p);
+        this[0] = this._topLeft;
+        this._updateSize();
+    }
+    get bottomRight() { return new Pt_1.Pt(this._bottomRight); }
+    set bottomRight(p) {
+        this._bottomRight = new Pt_1.Pt(p);
+        this[1] = this._bottomRight;
+        this._updateSize();
+    }
+    get width() { return (this._size.length > 0) ? this._size.x : 0; }
+    set width(w) {
+        this._size.x = w;
+        this._updatePosFromTop();
+    }
+    get height() { return (this._size.length > 1) ? this._size.y : 0; }
+    set height(h) {
+        this._size.y = h;
+        this._updatePosFromTop();
+    }
+    get depth() { return (this._size.length > 2) ? this._size.z : 0; }
+    set depth(d) {
+        this._size.z = d;
+        this._updatePosFromTop();
+    }
+    get x() { return this.topLeft.x; }
+    get y() { return this.topLeft.y; }
+    get z() { return this.topLeft.z; }
+    get inited() { return this._inited; }
+    /**
+     * If the Group elements are changed, call this function to update the Bound's properties.
+     * It's preferable to change the topLeft/bottomRight etc properties instead of changing the Group array directly.
+     */
+    update() {
+        this._topLeft = this[0];
+        this._bottomRight = this[1];
+        this._updateSize();
+        return this;
+    }
+}
+exports.Bound = Bound;
+
+
+/***/ }),
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2177,7 +2177,7 @@ exports.Shaping = Shaping;
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(1);
-const Num_1 = __webpack_require__(4);
+const Num_1 = __webpack_require__(3);
 const Pt_1 = __webpack_require__(0);
 const LinearAlgebra_1 = __webpack_require__(2);
 let _errorLength = (obj, param = "expected") => Util_1.Util.warn("Group's length is less than " + param, obj);
@@ -3449,7 +3449,7 @@ exports.Font = Font;
 // Source code licensed under Apache License 2.0. 
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
-const Bound_1 = __webpack_require__(3);
+const Bound_1 = __webpack_require__(4);
 const Pt_1 = __webpack_require__(0);
 /**
  * Space is an abstract class that represents a general context for expressing Pts.
@@ -3629,7 +3629,7 @@ exports.Space = Space;
 Object.defineProperty(exports, "__esModule", { value: true });
 const Space_1 = __webpack_require__(7);
 const Form_1 = __webpack_require__(6);
-const Bound_1 = __webpack_require__(3);
+const Bound_1 = __webpack_require__(4);
 const Pt_1 = __webpack_require__(0);
 const Util_1 = __webpack_require__(1);
 /**
@@ -4525,98 +4525,7 @@ exports.CanvasForm = CanvasForm;
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
 const Util_1 = __webpack_require__(1);
-/**
- * The `Create` class provides various convenient functions to create structures or shapes.
- */
-class Create {
-    /**
-     * Create a set of random points inside a bounday
-     * @param bound the rectangular boundary
-     * @param count number of random points to create
-     * @param dimensions number of dimensions in each point
-     */
-    static distributeRandom(bound, count, dimensions = 2) {
-        let pts = new Pt_1.Group();
-        for (let i = 0; i < count; i++) {
-            let p = [bound.x + Math.random() * bound.width];
-            if (dimensions > 1)
-                p.push(bound.y + Math.random() * bound.height);
-            if (dimensions > 2)
-                p.push(bound.z + Math.random() * bound.depth);
-            pts.push(new Pt_1.Pt(p));
-        }
-        return pts;
-    }
-    /**
-     * Create an evenly distributed set of points (like a grid of points) inside a boundary.
-     * @param bound the rectangular boundary
-     * @param columns number of columns
-     * @param rows number of rows
-     * @param orientation a Pt or number array to specify where the point should be inside a cell. Default is [0.5, 0.5] which places the point in the middle.
-     * @returns a Group of Pts
-     */
-    static gridPts(bound, columns, rows, orientation = [0.5, 0.5]) {
-        if (columns === 0 || rows === 0)
-            throw new Error("grid columns and rows cannot be 0");
-        let unit = bound.size.$subtract(1).$divide(columns, rows);
-        let offset = unit.$multiply(orientation);
-        let g = new Pt_1.Group();
-        for (let c = 0; c < columns; c++) {
-            for (let r = 0; r < rows; r++) {
-                g.push(bound.topLeft.$add(unit.$multiply(c, r)).add(offset));
-            }
-        }
-        return g;
-    }
-    /**
-     * Create a grid inside a boundary
-     * @param bound the rectangular boundary
-     * @param columns number of columns
-     * @param rows number of rows
-     * @returns an array of Groups, where each group represents a rectangular cell
-     */
-    static gridCells(bound, columns, rows) {
-        if (columns === 0 || rows === 0)
-            throw new Error("grid columns and rows cannot be 0");
-        let unit = bound.size.$subtract(1).divide(columns, rows); // subtract 1 to fill whole border of rectangles
-        let g = [];
-        for (let c = 0; c < columns; c++) {
-            for (let r = 0; r < rows; r++) {
-                g.push(new Pt_1.Group(bound.topLeft.$add(unit.$multiply(c, r)), bound.topLeft.$add(unit.$multiply(c, r).add(unit))));
-            }
-        }
-        return g;
-    }
-    /**
-     * Create a set of Pts around a circular path
-     * @param center circle center
-     * @param radius circle radius
-     * @param count number of Pts to create
-     */
-    static radialPts(center, radius, count) {
-        let g = new Pt_1.Group();
-        let a = Util_1.Const.two_pi / count;
-        for (let i = 0; i < count; i++) {
-            g.push(new Pt_1.Pt(center).toAngle(a * i - Util_1.Const.half_pi, radius, true));
-        }
-        return g;
-    }
-}
-exports.Create = Create;
-
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-// Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan)
-Object.defineProperty(exports, "__esModule", { value: true });
-const Pt_1 = __webpack_require__(0);
-const Util_1 = __webpack_require__(1);
-const Num_1 = __webpack_require__(4);
+const Num_1 = __webpack_require__(3);
 /**
  * Color is a subclass of Pt. You can think of a color as a point in a color space. The Color class provides support for many color spaces.
  */
@@ -5166,23 +5075,113 @@ exports.Color = Color;
 
 
 /***/ }),
-/* 11 */,
-/* 12 */
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan)
+Object.defineProperty(exports, "__esModule", { value: true });
+const Pt_1 = __webpack_require__(0);
+const Util_1 = __webpack_require__(1);
+/**
+ * The `Create` class provides various convenient functions to create structures or shapes.
+ */
+class Create {
+    /**
+     * Create a set of random points inside a bounday
+     * @param bound the rectangular boundary
+     * @param count number of random points to create
+     * @param dimensions number of dimensions in each point
+     */
+    static distributeRandom(bound, count, dimensions = 2) {
+        let pts = new Pt_1.Group();
+        for (let i = 0; i < count; i++) {
+            let p = [bound.x + Math.random() * bound.width];
+            if (dimensions > 1)
+                p.push(bound.y + Math.random() * bound.height);
+            if (dimensions > 2)
+                p.push(bound.z + Math.random() * bound.depth);
+            pts.push(new Pt_1.Pt(p));
+        }
+        return pts;
+    }
+    /**
+     * Create an evenly distributed set of points (like a grid of points) inside a boundary.
+     * @param bound the rectangular boundary
+     * @param columns number of columns
+     * @param rows number of rows
+     * @param orientation a Pt or number array to specify where the point should be inside a cell. Default is [0.5, 0.5] which places the point in the middle.
+     * @returns a Group of Pts
+     */
+    static gridPts(bound, columns, rows, orientation = [0.5, 0.5]) {
+        if (columns === 0 || rows === 0)
+            throw new Error("grid columns and rows cannot be 0");
+        let unit = bound.size.$subtract(1).$divide(columns, rows);
+        let offset = unit.$multiply(orientation);
+        let g = new Pt_1.Group();
+        for (let c = 0; c < columns; c++) {
+            for (let r = 0; r < rows; r++) {
+                g.push(bound.topLeft.$add(unit.$multiply(c, r)).add(offset));
+            }
+        }
+        return g;
+    }
+    /**
+     * Create a grid inside a boundary
+     * @param bound the rectangular boundary
+     * @param columns number of columns
+     * @param rows number of rows
+     * @returns an array of Groups, where each group represents a rectangular cell
+     */
+    static gridCells(bound, columns, rows) {
+        if (columns === 0 || rows === 0)
+            throw new Error("grid columns and rows cannot be 0");
+        let unit = bound.size.$subtract(1).divide(columns, rows); // subtract 1 to fill whole border of rectangles
+        let g = [];
+        for (let c = 0; c < columns; c++) {
+            for (let r = 0; r < rows; r++) {
+                g.push(new Pt_1.Group(bound.topLeft.$add(unit.$multiply(c, r)), bound.topLeft.$add(unit.$multiply(c, r).add(unit))));
+            }
+        }
+        return g;
+    }
+    /**
+     * Create a set of Pts around a circular path
+     * @param center circle center
+     * @param radius circle radius
+     * @param count number of Pts to create
+     */
+    static radialPts(center, radius, count) {
+        let g = new Pt_1.Group();
+        let a = Util_1.Const.two_pi / count;
+        for (let i = 0; i < count; i++) {
+            g.push(new Pt_1.Pt(center).toAngle(a * i - Util_1.Const.half_pi, radius, true));
+        }
+        return g;
+    }
+}
+exports.Create = Create;
+
+
+/***/ }),
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const _Bound = __webpack_require__(3);
+const _Bound = __webpack_require__(4);
 const _Canvas = __webpack_require__(8);
-const _Create = __webpack_require__(9);
+const _Create = __webpack_require__(10);
 const _Form = __webpack_require__(6);
 const _LinearAlgebra = __webpack_require__(2);
-const _Num = __webpack_require__(4);
+const _Num = __webpack_require__(3);
 const _Op = __webpack_require__(5);
 const _Pt = __webpack_require__(0);
 const _Space = __webpack_require__(7);
-const _Color = __webpack_require__(10);
+const _Color = __webpack_require__(9);
 const _Util = __webpack_require__(1);
 // A function to switch scope for Pts library. eg, Pts.scope( Pts, window );
 let namespace = (sc) => {
