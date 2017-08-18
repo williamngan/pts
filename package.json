@@ -1,6 +1,6 @@
 {
   "name": "pts",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "pts",
   "main": "dist/pts.js",
   "scripts": {
