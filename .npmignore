@@ -10,3 +10,4 @@ webpack.config.js
 mocha.opts
 index.html
 CNAME
+dist/files

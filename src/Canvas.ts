@@ -9,7 +9,7 @@ import {Pt, IPt, Group, PtLike, GroupLike} from "./Pt";
 import {Const, Util} from "./Util";
 
 
-interface PtsCanvasRenderingContext2D extends CanvasRenderingContext2D {
+export interface PtsCanvasRenderingContext2D extends CanvasRenderingContext2D {
   webkitBackingStorePixelRatio?:number;
   mozBackingStorePixelRatio?:number;
   msBackingStorePixelRatio?:number;

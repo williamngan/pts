@@ -4,13 +4,14 @@
     "module": "commonjs",
     "noImplicitAny": false,
     "sourceMap": true,
-    "outDir": "dist/es6",
+    "outDir": "dist/files",
+    "declaration": true,
     "rootDir": "src",
     "downlevelIteration": true
   },
 
   "include": [
-    "./src/**/*"
+    "./src/*"
   ],
 
   "exclude": [

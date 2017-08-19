@@ -6,7 +6,7 @@ import {Bound} from "./Bound";
 import {Pt, IPt, Group} from "./Pt";
 import {Form} from "./Form";
 
-type AnimateFunction = ( time?:number, frameTime?:number, currentSpace?:any ) => void;
+export type AnimateFunction = ( time?:number, frameTime?:number, currentSpace?:any ) => void;
 
 
 /**
@@ -20,7 +20,7 @@ export interface IPlayer {
   start?( bound:Bound, space:Space );
 }
 
-interface ISpacePlayers { 
+export interface ISpacePlayers { 
   [key: string]: IPlayer;
 }
 
