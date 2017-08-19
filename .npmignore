@@ -9,3 +9,4 @@ tsconfig.json
 webpack.config.js
 mocha.opts
 index.html
+CNAME

@@ -94,6 +94,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_create_.create.html#distributerandom" class="tsd-kind-icon">distribute<wbr>Random</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_create_.create.html#gridcells" class="tsd-kind-icon">grid<wbr>Cells</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_create_.create.html#gridpts" class="tsd-kind-icon">grid<wbr>Pts</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_create_.create.html#radialpts" class="tsd-kind-icon">radial<wbr>Pts</a></li>
 							</ul>
 						</section>
 					</div>
@@ -111,7 +112,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/c9354ca/src/Create.ts#L21">Create.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/e2b562f/src/Create.ts#L22">Create.ts:22</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -154,7 +155,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/c9354ca/src/Create.ts#L61">Create.ts:61</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/e2b562f/src/Create.ts#L63">Create.ts:63</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -198,7 +199,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/ptx/blob/c9354ca/src/Create.ts#L41">Create.ts:41</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/e2b562f/src/Create.ts#L42">Create.ts:42</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -235,6 +236,49 @@
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
 							<p>a Group of Pts</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="radialpts" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> radial<wbr>Pts</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">radial<wbr>Pts<span class="tsd-signature-symbol">(</span>center<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a>, radius<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, count<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.group.html" class="tsd-signature-type">Group</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/e2b562f/src/Create.ts#L85">Create.ts:85</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Create a set of Pts around a circular path</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>center: <a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>circle center</p>
+									</div>
+								</li>
+								<li>
+									<h5>radius: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>circle radius</p>
+									</div>
+								</li>
+								<li>
+									<h5>count: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>number of Pts to create</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -280,9 +324,6 @@
 						<a href="../modules/_util_.html">"<wbr>Util"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/__app_.html">"_<wbr>app"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
 						<a href="../modules/__lib_.html">"_<wbr>lib"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -314,6 +355,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="_create_.create.html#gridpts" class="tsd-kind-icon">grid<wbr>Pts</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="_create_.create.html#radialpts" class="tsd-kind-icon">radial<wbr>Pts</a>
 							</li>
 						</ul>
 					</li>
