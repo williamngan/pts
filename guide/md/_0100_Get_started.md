@@ -19,9 +19,7 @@ But enough of abstractions for now. Let's see how it works in a concrete example
 If you use npm, first [`npm install pts`](https://www.npmjs.com/package/pts) and then: 
 
 ```
-import {CanvasSpace, CanvasForm} from "pts/Canvas"
-import {Pt, Group} from "pts/Pt"
-// etc
+import {CanvasSpace, Pt, Group} from "pts" 
 ```
 
 ##### Note that pts is an es6 library, so if you want to compile to es5, you'll need to configure babel accordingly. (Possibly with the [`builtin-extend`](https://github.com/loganfsmyth/babel-plugin-transform-builtin-extend) babel plugin)

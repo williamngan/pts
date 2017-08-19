@@ -1,9 +1,11 @@
 # Pts
 
 ![image](./guide/assets/pts.png)
-Pts is a typescript/es6 library that enables you to compose and express points in spaces.
+Pts is a new typescript/es6 library that enables you to compose and visualize points in spaces.
 
-Get started at [ptsjs.org](https://ptsjs.org)
+This project is currently still in development. Almost there!
+
+Take a peek at [ptsjs.org](https://ptsjs.org)
 
 
 ## Build and test
