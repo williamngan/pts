@@ -37,7 +37,7 @@ module.exports = {
 
   output: {
     library: 'Pts',
-    libraryTarget: 'var',
+    libraryTarget: 'umd',
     path: BUILD_PATH,
     filename: prod ? '[name].min.js' : '[name].js'
   },
