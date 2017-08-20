@@ -128,8 +128,8 @@
 
     if (src) document.querySelector("body").appendChild( src );
 
-    var index = window.location.href.indexOf("index.html");
-    if ( index < 0 || index === window.location.href.length-10 ) {
+    var index = window.location.href.indexOf("?name");
+    if ( index < 0 ) {
         window.location.href = window.location.origin+window.location.pathname+"?name=circle.intersectCircle2D";
     }
 
