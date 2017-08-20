@@ -499,6 +499,7 @@ class CanvasForm extends Form_1.VisualForm {
     */
     constructor(space) {
         super();
+        this._ready = false;
         /**
         * store common styles so that they can be restored to canvas context when using multiple forms. See `reset()`.
         */
@@ -514,12 +515,17 @@ class CanvasForm extends Form_1.VisualForm {
                 this._ctx.strokeStyle = this._style.strokeStyle;
                 this._ctx.lineJoin = "bevel";
                 this._ctx.font = this._font.value;
+                this._ready = true;
             } });
     }
     /**
     * get the CanvasSpace instance that this form is associated with
     */
     get space() { return this._space; }
+    /**
+     * get whether the CanvasForm has received the Space's rendering context
+     */
+    get ready() { return this._ready; }
     /**
     * Toggle whether to draw on offscreen canvas (if offscreen is set in CanvasSpace)
     * @param off if `true`, draw on offscreen canvas instead of the visible canvas. Default is `true`

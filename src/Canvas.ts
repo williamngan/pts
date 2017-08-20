@@ -593,7 +593,8 @@ export class CanvasForm extends VisualForm {
   
   protected _space:CanvasSpace;
   protected _ctx:CanvasRenderingContext2D;
-  
+  protected _ready:boolean = false;
+
   /** 
   * store common styles so that they can be restored to canvas context when using multiple forms. See `reset()`.
   */
@@ -611,12 +612,14 @@ export class CanvasForm extends VisualForm {
   constructor( space:CanvasSpace ) {
     super();
     this._space = space;
+    
     this._space.add( { start: () => {
       this._ctx = this._space.ctx;
       this._ctx.fillStyle = this._style.fillStyle;
       this._ctx.strokeStyle = this._style.strokeStyle;    
       this._ctx.lineJoin = "bevel";
       this._ctx.font = this._font.value;
+      this._ready = true;
     }} );
   }
   
@@ -626,7 +629,13 @@ export class CanvasForm extends VisualForm {
   */
   get space():CanvasSpace { return this._space; }
   
+
+  /**
+   * get whether the CanvasForm has received the Space's rendering context
+   */
+  get ready():boolean { return this._ready; }
   
+
   /**
   * Toggle whether to draw on offscreen canvas (if offscreen is set in CanvasSpace)
   * @param off if `true`, draw on offscreen canvas instead of the visible canvas. Default is `true`
