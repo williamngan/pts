@@ -119,6 +119,11 @@
         <p class="demo" data-src="triangle.incircle"><span>Triangle.</span><strong>incircle</strong></p>
         <p class="demo" data-src="shaping.linear"><span>Shaping.</span><strong>linear</strong></p>
 
+        <p class="section">&nbsp;</p>
+        <p class="section">Others</p>
+
+        <p class="demo" data-src="https://github.com/williamngan/pts-react-example"><span>React example ↗</span></p>
+
     </div>
     <div id="hint"></div>
 </div>
@@ -139,7 +144,11 @@
         var file = demos[i].getAttribute("data-src");
 		demos[i].addEventListener("click", function() {
             var sel = this.getAttribute("data-src");
-            window.location.href = window.location.origin+window.location.pathname+"?name="+sel;
+            if (sel.indexOf("https://") === 0) {
+                window.open( sel, "pts_demo" );
+            } else {
+                window.location.href = window.location.origin+window.location.pathname+"?name="+sel;
+            }
         }.bind( demos[i] ) );
 	}
 
