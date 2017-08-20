@@ -1,5 +1,5 @@
 "use strict";
-// Source code licensed under Apache License 2.0. 
+// Source code licensed under Apache License 2.0.
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = require("./Pt");
@@ -65,8 +65,8 @@ class Util {
     static getArgs(args) {
         if (args.length < 1)
             return [];
-        var pos = [];
-        var isArray = Array.isArray(args[0]) || ArrayBuffer.isView(args[0]);
+        let pos = [];
+        let isArray = Array.isArray(args[0]) || ArrayBuffer.isView(args[0]);
         // positional arguments: x,y,z,w,...
         if (typeof args[0] === 'number') {
             pos = Array.prototype.slice.call(args);
@@ -149,7 +149,7 @@ class Util {
     static combine(a, b, op) {
         let result = [];
         for (let i = 0, len = a.length; i < len; i++) {
-            for (let k = 0, len = b.length; k < len; k++) {
+            for (let k = 0, lenB = b.length; k < lenB; k++) {
                 result.push(op(a[i], b[k]));
             }
         }

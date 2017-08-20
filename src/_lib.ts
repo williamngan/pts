@@ -13,12 +13,12 @@ import * as _Util from "./Util";
 // A function to switch scope for Pts library. eg, Pts.scope( Pts, window );
 let namespace = ( sc:object ) => {
   let lib = module.exports;
-  for (let k in lib) {    
+  for (let k in lib) {
     if (k!="namespace") {
       sc[k] = lib[k];
     }
   }
-}
+};
 
 module.exports = {
   namespace,
@@ -33,4 +33,4 @@ module.exports = {
   ..._Space,
   ..._Util,
   ..._Color
-}
+};

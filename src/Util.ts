@@ -1,8 +1,8 @@
-// Source code licensed under Apache License 2.0. 
+// Source code licensed under Apache License 2.0.
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 
 
-import {Pt, PtLike, Group, GroupLike} from "./Pt";
+import {Group} from "./Pt";
 
 
 /**
@@ -85,8 +85,8 @@ export const Const = {
  */
 export class Util {
 
-  static warnLevel:"error"|"warn"|"default" = "default"; 
-  
+  static warnLevel:"error"|"warn"|"default" = "default";
+
   /**
    * Convert different kinds of parameters (arguments, array, object) into an array of numbers
    * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
@@ -94,9 +94,9 @@ export class Util {
   static getArgs( args:any[] ):Array<number> {
     if (args.length<1) return [];
 
-    var pos = [];
+    let pos = [];
     
-    var isArray = Array.isArray( args[0] ) || ArrayBuffer.isView( args[0] );
+    let isArray = Array.isArray( args[0] ) || ArrayBuffer.isView( args[0] );
     
     // positional arguments: x,y,z,w,...
     if (typeof args[0] === 'number') {
@@ -187,7 +187,7 @@ export class Util {
   static combine<T>( a:T[], b:T[], op:(a:T, b:T) => T ):T[] {
     let result = [];
     for (let i=0, len=a.length; i<len; i++) {
-      for (let k=0, len=b.length; k<len; k++) {
+      for (let k=0, lenB=b.length; k<lenB; k++) {
         result.push( op(a[i], b[k]) );
       }
     }

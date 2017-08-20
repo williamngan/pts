@@ -19,18 +19,6 @@ export declare class Color extends Pt {
      */
     constructor(...args: any[]);
     /**
-     * Get a hex string such as "#FF0000". Same as `toString("hex")`
-     */
-    readonly hex: string;
-    /**
-     * Get a rgb string such as "rgb(255,0,0)". Same as `toString("rgb")`
-     */
-    readonly rgb: string;
-    /**
-     * Get a rgba string such as "rgb(255,0,0,0.5)". Same as `toString("rgba")`
-     */
-    readonly rgba: string;
-    /**
      * Create a Color object with defaults to 4 dimensions
      * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
      */
@@ -76,6 +64,24 @@ export declare class Color extends Pt {
      */
     static xyz(...args: any[]): Color;
     /**
+     * Get a Color object whose values are the maximum of its mode
+     * @param mode a mode string such as "rgb" or "lab"
+     * @example Color.maxValue("rgb") will return a rgb Color object with values (255,255,255)
+     */
+    static maxValues(mode: string): Pt;
+    /**
+     * Get a hex string such as "#FF0000". Same as `toString("hex")`
+     */
+    readonly hex: string;
+    /**
+     * Get a rgb string such as "rgb(255,0,0)". Same as `toString("rgb")`
+     */
+    readonly rgb: string;
+    /**
+     * Get a rgba string such as "rgb(255,0,0,0.5)". Same as `toString("rgba")`
+     */
+    readonly rgba: string;
+    /**
      * Clone this Color
      */
     clone(): Color;
@@ -85,7 +91,6 @@ export declare class Color extends Pt {
      * @param convert if `true`, convert this Color to the new color space specified in `mode`. Default is `false`, which only sets the color mode without converting color values.
      */
     toMode(mode: ColorType, convert?: boolean): this;
-    static maxValues(mode: string): Pt;
     /**
      * Get this Color's mode
      */

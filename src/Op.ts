@@ -2,11 +2,10 @@
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 
 
-import {Util, Const} from "./Util";
-import {Num, Geom} from "./Num";
-import {Bound} from "./Bound";
+import {Util} from "./Util";
+import {Geom} from "./Num";
 import {Pt, PtLike, Group, GroupLike} from "./Pt";
-import {Vec, Mat} from "./LinearAlgebra";
+import {Mat} from "./LinearAlgebra";
 
 
 let _errorLength = (obj, param:number|string="expected") => Util.warn( "Group's length is less than "+param, obj  );
@@ -157,12 +156,12 @@ export class Line {
       // diff slope, or b slope is vertical line
       if (b == undefined) {
         let y1 = -a.slope *  (pa[0] - pb[0]) + pa[1];
-        return new Pt( pb[0], y1 )
+        return new Pt( pb[0], y1 );
 
       } else if (b.slope != a.slope) {
-        let px = (a.slope * pa[0] - b.slope * pb[0] + pb[1] - pa[1]) / (a.slope - b.slope)
-        let py = a.slope * ( px - pa[0] ) + pa[1]
-        return new Pt( px, py )
+        let px = (a.slope * pa[0] - b.slope * pb[0] + pb[1] - pa[1]) / (a.slope - b.slope);
+        let py = a.slope * ( px - pa[0] ) + pa[1];
+        return new Pt( px, py );
         
       } else {
         if (a.yi == b.yi) { // exactly along the same path
@@ -490,7 +489,7 @@ export class Circle {
     } else {
       r = min;
     }
-    return new Group( Rectangle.center( pts ), new Pt(r, r) )
+    return new Group( Rectangle.center( pts ), new Pt(r, r) );
   }
 
 
@@ -594,7 +593,7 @@ export class Circle {
       return new Group(  
         new Pt( p.x + h*dv.y/dr, p.y - h*dv.x/dr ),
         new Pt( p.x - h*dv.y/dr, p.y + h*dv.x/dr )
-      )
+      );
     }
   }
 
@@ -633,7 +632,7 @@ export class Circle {
    */
   static toInnerRect( pts:GroupLike ):Group {
     let r = pts[1][0];
-    let half = Math.sqrt(r*r)/2
+    let half = Math.sqrt(r*r)/2;
     return new Group( pts[0].$subtract(half), pts[0].$add( half ) );
   }
 
@@ -908,7 +907,7 @@ export class Polygon {
     return {
       total: mag,
       segments: p
-    }
+    };
   }
 
   
@@ -950,7 +949,7 @@ export class Polygon {
     // check if is on left of ray a-b
     let left = (a, b, c) => {
       return (b[0] - a[0]) * (c[1] - a[1]) - (c[0] - a[0]) * (b[1] - a[1]) > 0;
-    }
+    };
     
     // double end queue
     let dq = [];
@@ -974,7 +973,7 @@ export class Polygon {
       
       // if inside the hull
       if ( left( dq[bot], dq[bot+1], pt ) && left(dq[top-1], dq[top], pt)) {
-        continue
+        continue;
       }
 
       // rightmost tangent
@@ -1020,7 +1019,7 @@ export class Polygon {
    * @param originIndex the origin point's index in the polygon
    */
   static network( pts:GroupLike, originIndex:number=0 ):Group[] {
-    let g = []
+    let g = [];
     for (let i=0, len=pts.length; i<len; i++) {
       if (i != originIndex) g.push( new Group( pts[originIndex], pts[i] ) );
     }
@@ -1037,7 +1036,7 @@ export class Polygon {
     let _near = Number.MAX_VALUE;
     let _item = -1;
     for (let i=0, len=pts.length; i<len; i++) {
-      let d = pts[i].$subtract( pt ).magnitudeSq()
+      let d = pts[i].$subtract( pt ).magnitudeSq();
       if (d < _near) {
         _near = d;
         _item = i;
@@ -1109,8 +1108,8 @@ export class Curve {
    * @param params parameters
    */
   static _calcPt( ctrls:GroupLike, params:PtLike ):Pt {
-    let x = ctrls.reduce( (a, c, i) => a + c.x*params[i], 0 )
-    let y = ctrls.reduce( (a, c, i) => a + c.y*params[i], 0 )
+    let x = ctrls.reduce( (a, c, i) => a + c.x*params[i], 0 );
+    let y = ctrls.reduce( (a, c, i) => a + c.y*params[i], 0 );
     if (ctrls[0].length > 2) {
       let z = ctrls.reduce( (a, c, i) => a + c.z*params[i], 0 );
       return new Pt( x, y, z );
@@ -1138,12 +1137,12 @@ export class Curve {
 
     let k = 0;
     while ( k < pts.length-2 ) {
-      let c = Curve.controlPoints( pts, k );
-      if (c.length > 0) {
+      let cp = Curve.controlPoints( pts, k );
+      if (cp.length > 0) {
         for (let i=0; i<=steps; i++) {
-          ps.push( Curve.catmullRomStep( ts[i], c ) );
+          ps.push( Curve.catmullRomStep( ts[i], cp ) );
         }
-        k++
+        k++;
       }
     }
 
@@ -1197,12 +1196,12 @@ export class Curve {
 
     let k = 0;
     while ( k < pts.length-2 ) {
-      let c = Curve.controlPoints( pts, k );
-      if (c.length > 0) {
+      let cp = Curve.controlPoints( pts, k );
+      if (cp.length > 0) {
         for (let i=0; i<=steps; i++) {
-          ps.push( Curve.cardinalStep( ts[i], c, tension ) );
+          ps.push( Curve.cardinalStep( ts[i], cp, tension ) );
         }
-        k++
+        k++;
       }
     }
 
@@ -1268,7 +1267,7 @@ export class Curve {
         }
 
         // go to the next set of point, but assume current end pt is next start pt
-        k+=3
+        k+=3;
       }
     }
 
@@ -1327,7 +1326,7 @@ export class Curve {
             ps.push( Curve.bsplineStep( ts[i], c ) );
           }
         }
-        k++
+        k++;
       }
     }
 

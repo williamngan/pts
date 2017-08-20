@@ -2,9 +2,8 @@
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 
 
-import {Const, Util} from "./Util"
-import {Pt, PtLike, GroupLike, Group} from "./Pt"
-import {Line} from "./Op"
+import {Pt, PtLike, GroupLike, Group} from "./Pt";
+import {Line} from "./Op";
 
 
 /**
@@ -282,7 +281,6 @@ export class Mat {
    * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
    */
   static zipSlice( g:GroupLike|number[][], index:number, defaultValue:number|boolean = false ):Pt {
-    let f = (typeof defaultValue == "boolean") ? "get" : "at"; // choose `get` or `at` function
     let z = [];
     for (let i=0, len=g.length; i<len; i++) {
       if (g[i].length-1 < index && defaultValue === false) throw `Index ${index} is out of bounds`;
@@ -302,7 +300,7 @@ export class Mat {
     let ps = new Group();
     let len:number = (useLongest) ? (g as Array<number[]|Pt>).reduce( (a,b) => Math.max(a, b.length), 0 ) : g[0].length;
     for (let i=0; i<len; i++) {
-      ps.push( Mat.zipSlice( g, i, defaultValue ) )
+      ps.push( Mat.zipSlice( g, i, defaultValue ) );
     }
     return ps;
   }
@@ -423,7 +421,7 @@ export class Mat {
         new Pt( [-1, 0, 0] ),
         new Pt( [0, 1, 0] ),
         new Pt( [p1[0]+p2[0], 0, 1] )  
-      ]
+      ];
     } else {
 
       let yi = intercept.yi;
@@ -435,7 +433,7 @@ export class Mat {
         new Pt( [cosA, sinA, 0] ),
         new Pt( [sinA, -cosA, 0] ),
         new Pt( [-yi*sinA, yi + yi*cosA, 1] )
-      ]
+      ];
     }
   }
 

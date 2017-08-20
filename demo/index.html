@@ -130,7 +130,7 @@
 
     var index = window.location.href.indexOf("index.html");
     if ( index < 0 || index === window.location.href.length-10 ) {
-        window.location.href = window.location.href+"?name=circle.intersectCircle2D";
+        window.location.href = window.location.origin+window.location.pathname+"?name=circle.intersectCircle2D";
     }
 
     var demos = document.querySelectorAll(".demo");

@@ -2,7 +2,7 @@
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 
 
-import { Util, Const } from "./Util";
+import { Const } from "./Util";
 import { Curve } from "./Op";
 import { Pt, PtLike, Group, GroupLike } from "./Pt";
 import { Vec, Mat } from "./LinearAlgebra";
@@ -239,7 +239,7 @@ export class Geom {
     let len = Math.min(a.length, b.length);
     let d = Pt.make(len);
     for (let i = 0; i < len; i++) {
-      d[i] = a[i] * (1 - t) + b[i] * t
+      d[i] = a[i] * (1 - t) + b[i] * t;
     }
     return d;
   }
@@ -424,7 +424,7 @@ export class Shaping {
    * @parma c the value to shape, default is 1
   */
   static quadraticIn(t:number, c:number = 1):number {
-    return c * t * t
+    return c * t * t;
   }
 
   /** 
@@ -433,7 +433,7 @@ export class Shaping {
    * @parma c the value to shape, default is 1
   */
   static quadraticOut(t:number, c:number = 1):number {
-    return -c * t * (t - 2)
+    return -c * t * (t - 2);
   }
 
   /** 
@@ -442,8 +442,8 @@ export class Shaping {
    * @parma c the value to shape, default is 1
    */
   static quadraticInOut(t:number, c:number = 1):number {
-    let dt = t * 2
-    return (t < 0.5) ? c / 2 * t * t * 4 : -c / 2 * ((dt - 1) * (dt - 3) - 1)
+    let dt = t * 2;
+    return (t < 0.5) ? c / 2 * t * t * 4 : -c / 2 * ((dt - 1) * (dt - 3) - 1);
   }
 
   /** 
@@ -452,7 +452,7 @@ export class Shaping {
    * @parma c the value to shape, default is 1
    */
   static cubicIn(t:number, c:number = 1):number {
-    return c * t * t * t
+    return c * t * t * t;
   }
 
   /** 
@@ -461,8 +461,8 @@ export class Shaping {
    * @parma c the value to shape, default is 1
    */
   static cubicOut(t:number, c:number = 1):number {
-    let dt = t - 1
-    return c * (dt * dt * dt + 1)
+    let dt = t - 1;
+    return c * (dt * dt * dt + 1);
   }
 
   /** 
@@ -471,8 +471,8 @@ export class Shaping {
    * @parma c the value to shape, default is 1
    */
   static cubicInOut(t:number, c:number = 1):number {
-    let dt = t * 2
-    return (t < 0.5) ? c / 2 * dt * dt * dt : c / 2 * ((dt - 2) * (dt - 2) * (dt - 2) + 2)
+    let dt = t * 2;
+    return (t < 0.5) ? c / 2 * dt * dt * dt : c / 2 * ((dt - 2) * (dt - 2) * (dt - 2) + 2);
   }
 
   /** 
@@ -739,7 +739,7 @@ export class Shaping {
    * @parma p usually a value between 0 to 1, which specify the Pt to "jump". Default is 0.5 which is in the middle.
    */
   static cliff(t:number, c:number = 1, p:number = 0.5):number {
-    return (t > p) ? c : 0
+    return (t > p) ? c : 0;
   }
 
   /** 
@@ -751,8 +751,8 @@ export class Shaping {
    * @parma args optional paramters to pass to original function
    */
   static step(fn: Function, steps:number, t:number, c:number, ...args:any[]) {
-    let s = 1 / steps
-    let tt = Math.floor(t / s) * s
+    let s = 1 / steps;
+    let tt = Math.floor(t / s) * s;
     return fn(tt, c, ...args);
   }
 

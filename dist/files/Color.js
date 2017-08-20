@@ -19,18 +19,6 @@ class Color extends Pt_1.Pt {
         this._isNorm = false;
     }
     /**
-     * Get a hex string such as "#FF0000". Same as `toString("hex")`
-     */
-    get hex() { return this.toString("hex"); }
-    /**
-     * Get a rgb string such as "rgb(255,0,0)". Same as `toString("rgb")`
-     */
-    get rgb() { return this.toString("rgb"); }
-    /**
-     * Get a rgba string such as "rgb(255,0,0,0.5)". Same as `toString("rgba")`
-     */
-    get rgba() { return this.toString("rgba"); }
-    /**
      * Create a Color object with defaults to 4 dimensions
      * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
      */
@@ -98,6 +86,24 @@ class Color extends Pt_1.Pt {
      */
     static xyz(...args) { return Color.from(...args).toMode("xyz"); }
     /**
+     * Get a Color object whose values are the maximum of its mode
+     * @param mode a mode string such as "rgb" or "lab"
+     * @example Color.maxValue("rgb") will return a rgb Color object with values (255,255,255)
+     */
+    static maxValues(mode) { return Color.ranges[mode].zipSlice(1).$take([0, 1, 2]); }
+    /**
+     * Get a hex string such as "#FF0000". Same as `toString("hex")`
+     */
+    get hex() { return this.toString("hex"); }
+    /**
+     * Get a rgb string such as "rgb(255,0,0)". Same as `toString("rgb")`
+     */
+    get rgb() { return this.toString("rgb"); }
+    /**
+     * Get a rgba string such as "rgb(255,0,0,0.5)". Same as `toString("rgba")`
+     */
+    get rgba() { return this.toString("rgba"); }
+    /**
      * Clone this Color
      */
     clone() {
@@ -123,7 +129,6 @@ class Color extends Pt_1.Pt {
         this._mode = mode;
         return this;
     }
-    static maxValues(mode) { return Color.ranges[mode].zipSlice(1).$take([0, 1, 2]); }
     /**
      * Get this Color's mode
      */

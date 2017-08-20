@@ -2,7 +2,7 @@
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 
 
-import {Pt, IPt, PtLike, Group} from "./Pt"
+import {Pt, IPt, Group} from "./Pt";
 
 /**
  * Bound is a subclass of Group that represents a rectangular boundary.

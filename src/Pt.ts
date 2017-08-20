@@ -2,17 +2,16 @@
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 
 
-import {Util, Const} from "./Util"
-import {Geom, Num} from "./Num"
-import {Bound} from "./Bound"
-import {Vec, Mat} from "./LinearAlgebra"
+import {Util, Const} from "./Util";
+import {Geom, Num} from "./Num";
+import {Vec, Mat} from "./LinearAlgebra";
 
 
 export interface IPt {
-  x?:number,
-  y?:number,
-  z?:number,
-  w?:number
+  x?:number;
+  y?:number;
+  z?:number;
+  w?:number;
 }
 
 export var PtBaseArray = Float32Array;
@@ -134,7 +133,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
     let self = this;
     return ( ...params:any[] ) => {
       return fn( self, ...params );
-    }
+    };
   }
 
 
@@ -188,7 +187,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
   /**
    * Like `add`, but returns result as a new Pt
    */
-  $add(...args): Pt { return this.clone().add(...args) };
+  $add(...args): Pt { return this.clone().add(...args); }
 
 
   /**
@@ -204,7 +203,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
   /**
    * Like `subtract`, but returns result as a new Pt
    */
-  $subtract(...args): Pt { return this.clone().subtract(...args) };
+  $subtract(...args): Pt { return this.clone().subtract(...args); }
 
 
   /**
@@ -220,7 +219,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
   /**
    * Like `multiply`, but returns result as a new Pt
    */
-  $multiply(...args): Pt { return this.clone().multiply(...args) };
+  $multiply(...args): Pt { return this.clone().multiply(...args); }
 
 
   /**
@@ -236,7 +235,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
   /**
    * Like `divide`, but returns result as a new Pt
    */
-  $divide(...args): Pt { return this.clone().divide(...args) };
+  $divide(...args): Pt { return this.clone().divide(...args); }
 
 
   /**
@@ -477,7 +476,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
    * A string representation of this Pt: "Pt(1, 2, 3)"
    */
   toString():string {
-    return `Pt(${ this.join(", ")})`
+    return `Pt(${ this.join(", ")})`;
   }
 
 
@@ -591,7 +590,7 @@ export class Group extends Array<Pt> {
    * @param index the index position to insert into
    */
   insert( pts:GroupLike, index=0 ):this {
-    let g = Group.prototype.splice.apply( this, [index, 0, ...pts] );
+    Group.prototype.splice.apply( this, [index, 0, ...pts] );
     return this;
   }
   
@@ -666,7 +665,7 @@ export class Group extends Array<Pt> {
     let self = this;
     return ( ...params:any[] ) => {
       return fn( self, ...params );
-    }
+    };
   }
 
 

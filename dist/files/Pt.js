@@ -149,7 +149,6 @@ class Pt extends exports.PtBaseArray {
      * Like `add`, but returns result as a new Pt
      */
     $add(...args) { return this.clone().add(...args); }
-    ;
     /**
      * Subtract scalar or vector values from this Pt
      * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
@@ -162,7 +161,6 @@ class Pt extends exports.PtBaseArray {
      * Like `subtract`, but returns result as a new Pt
      */
     $subtract(...args) { return this.clone().subtract(...args); }
-    ;
     /**
      * Multiply scalar or vector values (as element-wise) with this Pt.
      * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
@@ -175,7 +173,6 @@ class Pt extends exports.PtBaseArray {
      * Like `multiply`, but returns result as a new Pt
      */
     $multiply(...args) { return this.clone().multiply(...args); }
-    ;
     /**
      * Divide this Pt over scalar or vector values (as element-wise)
      * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
@@ -188,7 +185,6 @@ class Pt extends exports.PtBaseArray {
      * Like `divide`, but returns result as a new Pt
      */
     $divide(...args) { return this.clone().divide(...args); }
-    ;
     /**
      * Get the sqaured distance (magnitude) of this Pt from origin
      */
@@ -459,7 +455,7 @@ class Group extends Array {
      * @param index the index position to insert into
      */
     insert(pts, index = 0) {
-        let g = Group.prototype.splice.apply(this, [index, 0, ...pts]);
+        Group.prototype.splice.apply(this, [index, 0, ...pts]);
         return this;
     }
     /**

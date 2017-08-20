@@ -999,10 +999,10 @@ class Curve {
         }
         let k = 0;
         while (k < pts.length - 2) {
-            let c = Curve.controlPoints(pts, k);
-            if (c.length > 0) {
+            let cp = Curve.controlPoints(pts, k);
+            if (cp.length > 0) {
                 for (let i = 0; i <= steps; i++) {
-                    ps.push(Curve.catmullRomStep(ts[i], c));
+                    ps.push(Curve.catmullRomStep(ts[i], cp));
                 }
                 k++;
             }
@@ -1045,10 +1045,10 @@ class Curve {
         }
         let k = 0;
         while (k < pts.length - 2) {
-            let c = Curve.controlPoints(pts, k);
-            if (c.length > 0) {
+            let cp = Curve.controlPoints(pts, k);
+            if (cp.length > 0) {
                 for (let i = 0; i <= steps; i++) {
-                    ps.push(Curve.cardinalStep(ts[i], c, tension));
+                    ps.push(Curve.cardinalStep(ts[i], cp, tension));
                 }
                 k++;
             }

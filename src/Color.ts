@@ -2,10 +2,9 @@
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 
 
-import {Pt, Group, PtLike, GroupLike} from "./Pt"
-import {Util} from "./Util"
-import {Num, Geom} from "./Num"
-import {Vec} from "./LinearAlgebra"
+import {Pt, Group, PtLike} from "./Pt";
+import {Util} from "./Util";
+import {Num, Geom} from "./Num";
 
 export type ColorType = "rgb"|"hsl"|"hsb"|"lab"|"lch"|"luv"|"xyz";
 
@@ -32,7 +31,7 @@ export class Color extends Pt {
     lch: new Group( new Pt(0,100), new Pt(0,100), new Pt(0,360) ),
     luv: new Group( new Pt(0,100), new Pt(-134,220), new Pt(-140,122) ),
     xyz: new Group( new Pt(0,100), new Pt(0,100), new Pt(0,100) )
-  }
+  };
 
   /**
    * Create a Color. Same as creating a Pt.
@@ -42,20 +41,6 @@ export class Color extends Pt {
     super( ...args );
   }
 
-  /**
-   * Get a hex string such as "#FF0000". Same as `toString("hex")`
-   */
-  public get hex():string { return this.toString("hex"); }
-
-  /**
-   * Get a rgb string such as "rgb(255,0,0)". Same as `toString("rgb")`
-   */
-  public get rgb():string { return this.toString("rgb"); }
-
-  /**
-   * Get a rgba string such as "rgb(255,0,0,0.5)". Same as `toString("rgba")`
-   */
-  public get rgba():string { return this.toString("rgba"); }
 
   /**
    * Create a Color object with defaults to 4 dimensions
@@ -80,7 +65,7 @@ export class Color extends Pt {
     if (hex[0] == "#") hex = hex.substr(1); // remove '#' if needed
     if (hex.length <= 3) {
       let fn = (i) => hex[1]||"F";
-      hex = `${fn(0)}${fn(0)}${fn(1)}${fn(1)}${fn(2)}${fn(2)}`
+      hex = `${fn(0)}${fn(0)}${fn(1)}${fn(1)}${fn(2)}${fn(2)}`;
     }
 
     let alpha = 1;
@@ -139,6 +124,30 @@ export class Color extends Pt {
 
 
   /**
+   * Get a Color object whose values are the maximum of its mode
+   * @param mode a mode string such as "rgb" or "lab"
+   * @example Color.maxValue("rgb") will return a rgb Color object with values (255,255,255)
+   */
+  static maxValues( mode:string ):Pt { return Color.ranges[mode].zipSlice(1).$take([0,1,2]); }
+
+
+  /**
+   * Get a hex string such as "#FF0000". Same as `toString("hex")`
+   */
+  public get hex():string { return this.toString("hex"); }
+  
+  /**
+   * Get a rgb string such as "rgb(255,0,0)". Same as `toString("rgb")`
+   */
+  public get rgb():string { return this.toString("rgb"); }
+
+  /**
+   * Get a rgba string such as "rgb(255,0,0,0.5)". Same as `toString("rgba")`
+   */
+  public get rgba():string { return this.toString("rgba"); }
+  
+
+  /**
    * Clone this Color
    */
   clone():Color {
@@ -167,7 +176,6 @@ export class Color extends Pt {
     return this;
   }
 
-  static maxValues( mode:string ):Pt { return Color.ranges[mode].zipSlice(1).$take([0,1,2]); }
 
   /**
    * Get this Color's mode
@@ -233,7 +241,7 @@ export class Color extends Pt {
     for (let i=0; i<3; i++) {
       this[i] = (!toNorm) 
         ? Num.mapToRange( this[i], 0, 1, ranges[i][0], ranges[i][1] ) 
-        : Num.mapToRange( this[i], ranges[i][0], ranges[i][1], 0, 1 ) 
+        : Num.mapToRange( this[i], ranges[i][0], ranges[i][1], 0, 1 );
     }
     
     this._isNorm = toNorm;
@@ -259,7 +267,7 @@ export class Color extends Pt {
       let _hex = (n:number) => {
         let s = Math.floor(n).toString(16);
         return (s.length < 2) ? '0'+s : s;
-      }
+      };
       return `#${_hex(this[0])}${_hex(this[1])}${_hex(this[2])}`;
 
     } else if (format == "rgba") {
@@ -294,7 +302,7 @@ export class Color extends Pt {
       h = 0;
       s = 0; // achromatic
     } else {
-      let d = max - min
+      let d = max - min;
       s = (l > 0.5) ? d / (2 - max - min) : d / (max + min);
 
       h = 0;
@@ -323,7 +331,7 @@ export class Color extends Pt {
     
     if (s == 0) return Color.rgb( l*255, l*255, l*255, hsl.alpha );
 
-    let q = (l <= 0.5) ? l * (1 + s) : l + s - (l * s)
+    let q = (l <= 0.5) ? l * (1 + s) : l + s - (l * s);
     let p = 2 * l - q;
 
     let convert = (t) => {
@@ -335,9 +343,9 @@ export class Color extends Pt {
       } else if (t * 3 < 2) {
         return p + (q - p) * ((2 / 3) - t) * 6;
       } else {
-        return p
+        return p;
       }
-    }
+    };
 
     let sc = (normalizedOutput) ? 1 : 255; 
     
@@ -394,9 +402,9 @@ export class Color extends Pt {
 
     let i = Math.floor( h * 6 );
     let f = h * 6 - i;
-    let p = v * (1 - s)
-    let q = v * (1 - f * s)
-    let t = v * (1 - (1 - f) * s)
+    let p = v * (1 - s);
+    let q = v * (1 - f * s);
+    let t = v * (1 - (1 - f) * s);
     
     let pick = [
       [v, t, p], [q, v, p], [p, v, t],
@@ -587,7 +595,7 @@ export class Color extends Pt {
     let fn = (n) => {
       let nnn = n*n*n;
       return ( nnn > 0.008856 ) ? nnn : ( n - 16 / 116 ) / 7.787;
-    }
+    };
 
     let d = Color.D65;
 
@@ -621,8 +629,8 @@ export class Color extends Pt {
     y = y / 100;
     y = ( y > 0.008856 ) ? Math.pow( y, 1/3 ) : ( 7.787 * y + 16 / 116 );
 
-    let refU = (4 * Color.D65[0]) / (Color.D65[0] + (15 * Color.D65[1]) + ( 3 * Color.D65[2]))
-    let refV = (9 * Color.D65[1]) / (Color.D65[0] + (15 * Color.D65[1]) + ( 3 * Color.D65[2]))
+    let refU = (4 * Color.D65[0]) / (Color.D65[0] + (15 * Color.D65[1]) + ( 3 * Color.D65[2]));
+    let refV = (9 * Color.D65[1]) / (Color.D65[0] + (15 * Color.D65[1]) + ( 3 * Color.D65[2]));
 
     let L = (116 * y) - 16;
     return Color.luv(
@@ -640,8 +648,8 @@ export class Color extends Pt {
    */
   static LUVtoXYZ( luv:Color, normalizedInput:boolean=false, normalizedOutput:boolean=false):Color {
     let [l,u,v] = (normalizedInput) ? luv.$normalize(false) : luv;
-    let y = ( l + 16 ) / 116
-    let cubeY = y*y*y
+    let y = ( l + 16 ) / 116;
+    let cubeY = y*y*y;
     y = (cubeY > 0.008856) ? cubeY : (y - 16/116) / 7.787;
 
     let refU = (4 * Color.D65[0]) / ( Color.D65[0] + (15 * Color.D65[1]) + (3 * Color.D65[2]) );
@@ -686,7 +694,7 @@ export class Color extends Pt {
     let rad = Geom.toRadian( c[2] );
     return Color.lab(
       c[0], Math.cos( rad ) * c[1], Math.sin( rad ) * c[1], lch.alpha
-    )
+    );
   }
 
 

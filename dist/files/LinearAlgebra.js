@@ -258,7 +258,6 @@ class Mat {
      * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
      */
     static zipSlice(g, index, defaultValue = false) {
-        let f = (typeof defaultValue == "boolean") ? "get" : "at"; // choose `get` or `at` function
         let z = [];
         for (let i = 0, len = g.length; i < len; i++) {
             if (g[i].length - 1 < index && defaultValue === false)

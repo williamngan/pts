@@ -50,7 +50,6 @@ class Font {
      * Get a string representing the font style, in css-like string such as "italic bold 12px/1.5 sans-serif"
      */
     get value() { return `${this.style} ${this.weight} ${this.size}px/${this.lineHeight} ${this.face}`; }
-    ;
     /**
      * Get a string representing the font style, in css-like string such as "italic bold 12px/1.5 sans-serif"
      */

@@ -3,7 +3,7 @@
 
 
 import {Bound} from "./Bound";
-import {Pt, IPt, Group} from "./Pt";
+import {Pt, IPt} from "./Pt";
 import {Form} from "./Form";
 
 export type AnimateFunction = ( time?:number, frameTime?:number, currentSpace?:any ) => void;
