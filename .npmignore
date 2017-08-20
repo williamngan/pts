@@ -11,3 +11,7 @@ mocha.opts
 index.html
 CNAME
 dist/files
+.vscode
+favicon.ico
+.babelrc
+.nojekyll
