@@ -19,6 +19,11 @@
 </div>
 <a href="#menu" id="toc">&#x2261;</a>
 <div id="post"><h1>Technical notes</h1>
+<h3>Working with React and other libraries</h3>
+<p>When using Pts as a <a href="https://www.npmjs.com/package/pts">npm package</a>, you can choose to import only a small part of Pts in your own project. Perhaps just a couple of Line functions are all you need:</p>
+<pre><code>import {Pt, Line} from &quot;pts&quot;
+</code></pre>
+<p>Also take a look at <a href="https://github.com/williamngan/pts-react-example">this example repo</a> which uses Pts to create a charting component in React.</p>
 <h3>Cloning Pt with <code>clone()</code> or <code>$...</code></h3>
 <p>Pt is a subclass of Float32Array, and Group is a subclass of Array that should only contain Pt in it.</p>
 <p>Since objects and arrays in javascript are passed by reference, remember to clone them if you are going to change their values. Functions starting with <code>$</code> such as <code>$add</code> means it will return a new Pt and keeping the original unchanged.</p>
@@ -39,7 +44,7 @@ let p3 = p.map( (d) =&gt; d+1 ) as Pt; // type is now cast back to Pt
 <li><p>Pts is a new library in beta so we don't recommend using it in production system yet. For now, just experiment and have fun!</p></li>
 </ul>
 <h3>Remember to file issues and feedbacks</h3>
-<p>Support this open-source project by filing bugs and pull requests on <a href="https://github.com/williamngan/pts">github</a>. If you have other feedbacks or want to show what you have made with Pts, please ping <a href="https://twitter.com/williamngan">@williamngan</a>.</p>
+<p>Support this open-source project by filing bugs and pull requests on <a href="https://github.com/williamngan/pts">github</a>. If you have other feedbacks, please ping <a href="https://twitter.com/williamngan">@williamngan</a>. Show us what you have made with Pts too!</p>
 </div>
 
 <ol id="menu"><a id="close" href="#">&times;</a><li><a href="Introduction-0000.html">Introduction</a></li><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Space-0500.html">Space</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li></ol>

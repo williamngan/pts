@@ -1,5 +1,16 @@
 # Technical notes
 
+### Working with React and other libraries
+
+When using Pts as a [npm package](https://www.npmjs.com/package/pts), you can choose to import only a small part of Pts in your own project. Perhaps just a couple of Line functions are all you need:
+
+```
+import {Pt, Line} from "pts"
+```
+
+Also take a look at [this example repo](https://github.com/williamngan/pts-react-example) which uses Pts to create a charting component in React. 
+
+
 ### Cloning Pt with `clone()` or `$...`
 Pt is a subclass of Float32Array, and Group is a subclass of Array that should only contain Pt in it. 
 
@@ -31,4 +42,4 @@ The javascript ecosystem is moving so fast it's difficult to keep up. Pts is int
 
 ### Remember to file issues and feedbacks
 
-Support this open-source project by filing bugs and pull requests on [github](https://github.com/williamngan/pts). If you have other feedbacks or want to show what you have made with Pts, please ping [@williamngan](https://twitter.com/williamngan). 
+Support this open-source project by filing bugs and pull requests on [github](https://github.com/williamngan/pts). If you have other feedbacks, please ping [@williamngan](https://twitter.com/williamngan). Show us what you have made with Pts too!
