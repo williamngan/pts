@@ -12,7 +12,7 @@ This library is currently in beta. Please give it a try, [file issues](https://g
 
 ### Usage
 
-**Option 1:** Download the [latest release](https://github.com/williamngan/pts/releases) and use `pts.js` or `pts.min.js` directly. 
+**Option 1:** Download the [latest release](https://github.com/williamngan/pts/releases) and get `pts.js` or `pts.min.js` (under "dist" folder). 
 ```
 <script type="text/javascript" src="pts.js"></script>
 ```
