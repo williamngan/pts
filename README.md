@@ -42,7 +42,7 @@ typedoc --readme none --out docs src --name Pts
 
 ### Generate typescript declaration files
 ```
-tsc
+tsc -d
 dts-bundle --name pts --main dist/files/*.d.ts --out ../pts.d.ts
 ```
 

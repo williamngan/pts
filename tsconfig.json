@@ -5,7 +5,7 @@
     "noImplicitAny": false,
     "sourceMap": true,
     "outDir": "./dist/files",
-    "declaration": true,
+    "declaration": false,
     "rootDir": "src",
     "downlevelIteration": true
   },
