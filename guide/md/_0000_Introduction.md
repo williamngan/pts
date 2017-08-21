@@ -1,11 +1,10 @@
 # Pts
 
-Pts is a new libray based on the ideas of Pt, [an experiment library](https://williamngan.github.io/pt/) on Point, Form, and Space. 
+Pts is a new javascript libray that enables you to compose and visualize points in spaces. It revisited the ideas introduced in [Pt](https://williamngan.github.io/pt/) (an experiment library released 2 years ago), and revised its code and structure from the bottom up.
 
-A point represents the smallest irreducible idea in the context of a space, and is expressed in a form. If it seems too abstract, imagine you are the first human on earth looking at a sky full of stars. What kinds of forms and meanings would you envision? And so by studying the compositions and movements of points, what kind of new expressions can you create? Pts is a library that enables you to experiment with these ideas.
+![Pt](./assets/pt.jpg) 
 
-![Pt](./assets/pt.jpg)   
-##### Remember to take a look at [some fun demos](../demo/index.html)
+A point represents the smallest irreducible idea in the context of a space, and is expressed in a form. If it seems too abstract, imagine you are the first human on earth looking at a sky full of stars. What kinds of forms and meanings would you envision? And by studying these compositions and movements of points, what kind of new expressions can you create? Pts lets you experiment and iterate on these ideas quickly and easily.
 
 In terms of the library itself, Pts simplifies many of Pt's functions, and prefers composition over inheritance. It is written in typescript and compiled to es6 javascript. It's structured so that you may easily incorporate all or part of it into your own projects.
 
