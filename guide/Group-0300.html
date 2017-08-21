@@ -27,9 +27,8 @@
 <li>an array of Groups</li>
 </ul>
 <p>The goal of <code>pts.js</code> is to help you see and express these structures in creative ways.</p>
-<p>[graphic]</p>
 <h3>Creating a Group</h3>
-<p>Similar to making an Array, you can create a Group like these:</p>
+<p><a href="#pt-group"><code>Group</code></a> is a subclass of javascript <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array"><code>Array</code></a>. Therefore, similar to creating an Array, you can create a Group like these:</p>
 <pre><code>// Like Array constructor
 let g1 = new Group( p1, p2, p3 );
 
@@ -44,13 +43,12 @@ g1[2] = new Pt(1,2,3);
 g3[0]; // returns Pt(1,2)
 g3.p2; // returns Pt(3,4)
 </code></pre>
-<p>Remember that a Group must only contain Pts. This is different from Array which can contain different data types like strings and objects.</p>
+<p>Remember that a Group must only contain Pt. This is different from Array which can contain different data types like strings and objects.</p>
 <pre><code>let notOk = new Group( [1,2,3], &quot;hello&quot; ); // Don't do this
 </code></pre>
 <h3>Array functions</h3>
-<p>Since a <a href="#pt-group"><code>Group</code></a> is a subclass of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array"><code>Array</code></a>, you can use all the Array functions in a Group.</p>
-<pre><code>let g = Group.fromArray( [[1,2], [3,4]] );
-g.unshift( new Pt(5, 6) );
+<p>You can use all the javascript's Array functions in a Group. No need to learn a new API.</p>
+<pre><code>g.unshift( new Pt(5, 6) );
 g.pop();
 let mags = g.map( (p) =&gt; p.magnitude() );
 </code></pre>

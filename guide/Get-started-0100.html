@@ -28,13 +28,17 @@
 <p>But enough of abstractions for now. Let's see how it works in a concrete example. In the following sections, we will create a quick sketch step-by-step and discuss the main features of <strong><code>Pts</code></strong>.</p>
 <h5>You may also be interested in <a href="https://medium.com/@williamngan/pt-93382bf5943e">this article</a> which discusses the concepts of Space, Form, and Point.</h5>
 <h3>Using pts with npm</h3>
-<p>If you use npm, first <a href="https://www.npmjs.com/package/pts"><code>npm install pts</code></a> and then:</p>
+<p>If you use npm, first <a href="https://www.npmjs.com/package/pts"><code>npm install pts</code></a> and then import the classes you need:</p>
 <pre><code>import {CanvasSpace, Pt, Group} from &quot;pts&quot; 
 </code></pre>
+<p>And you're good to go!</p>
 <h5>Note that pts is an es6 library, so if you want to compile to es5, you'll need to configure babel accordingly. (Possibly with the <a href="https://github.com/loganfsmyth/babel-plugin-transform-builtin-extend"><code>builtin-extend</code></a> babel plugin)</h5>
 <h3>Using pts in a script</h3>
-<p>First download the latest release and add <code>pts.min.js</code> in your html. Then create another js file for your script and add it to html too.</p>
-<p>For convience, we usually start by adding <strong><code>Pts</code></strong> into a scope first.</p>
+<p>First go to the latest release and get <code>pts.js</code> (<a href="https://raw.githubusercontent.com/williamngan/pts/master/dist/pts.js">direct link</a> or <a href="https://github.com/williamngan/pts">github</a>). Include it in your html. Then create another js file for your script and add it too.</p>
+<pre><code>&lt;script type=&quot;text/javascript&quot; src=&quot;path/to/pts.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;path/to/my_script.js&quot;&gt;&lt;/script&gt;
+</code></pre>
+<p>When using as a script, we usually start by adding <strong><code>Pts</code></strong> into a scope first.</p>
 <pre><code>Pts.namespace( this );
 </code></pre>
 <p>That means we can call <code>CanvasSpace</code>, instead of <code>Pts.CanvasSpace</code> which is a bit clumsy to write. If you don't want to &quot;pollute&quot; the global scope, it's common to wrap your code with an anonymous function:</p>
@@ -49,7 +53,7 @@
 <pre><code>var space = new CanvasSpace(&quot;#hello&quot;);
 space.setup({ bgcolor: &quot;#fff&quot; });
 </code></pre>
-<p>This assumes you have an element with <code>id=&quot;hello&quot;</code> in your html. If your element is <code>&lt;canvas id=&quot;hello&quot;&gt;</code>, CanvasSpace will target that canvas. Otherwise if your element is a container like <code>&lt;div id=&quot;hello&quot;&gt;</code>, a new canvas will be created and appended into it.</p>
+<p>This assumes you have an element with <code>id=&quot;hello&quot;</code> in your html. If your element is <code>&lt;canvas id=&quot;hello&quot;&gt;</code>, CanvasSpace will target that canvas. Otherwise if your element is a container like <code>&lt;div id=&quot;hello&quot;&gt;</code>, a new canvas will be created and appended into it. You may also pass an HTMLElement instance directly into <code>CanvasSpace</code>.</p>
 <p>The <a href="#canvas-canvasspace"><code>setup</code></a> function allows you to initiate the space with an object that specifies some setup options, like background-color and auto-resize.</p>
 <p>Next, you can get the default <a href="#canvas-canvasform"><code>CanvasForm</code></a> which, as we mentioned before, provides the &quot;pencils&quot;. CanvasForm helps you draw lines, circles, curves and more on the html canvas.</p>
 <pre><code>var form = space.getForm();
@@ -78,11 +82,11 @@ var form = new BeautifulForm( space );
 <p><img src="./assets/bg.png" alt="js:getting_started_2"></p>
 <p>Success! The calculation <code>(time%1000)/1000</code> maps the running time to a value between 0 to 1 every second. Then we use the <a href="#num-num"><code>Num.cycle</code></a> function to make the value cycle between 0...1...0...1, and we multiply the value by 20 to get the radius. Finally, we draw the pointer with the radius as a blue circle. Pretty easy, right?</p>
 <h3>Drawing shapes</h3>
-<p>There are 3 basic structures in <strong><code>Pts</code></strong>.</p>
+<p>There are 3 basic structures in <strong><code>Pts</code></strong></p>
 <ul>
-<li>a Pt which is an array of numbers</li>
-<li>a Group which is an array of Pts</li>
-<li>an array of Groups</li>
+<li>a Pt which is an array of numbers (1D tensor)</li>
+<li>a Group which is an array of Pts (2D tensor)</li>
+<li>an array of Groups (3D tensor)</li>
 </ul>
 <p><strong><code>Pts</code></strong> provides many classes to work with these structures. For example, a rectangular boundary can be defined by two Pts -- one at top-left and one at bottom-right, and you can also get a Group of 4 Pts from its 4 corners.</p>
 <p>Let's make this easier to understand with an example:</p>
@@ -99,7 +103,7 @@ form.strokeOnly(&quot;#fff&quot;, 3).rect( rect );
 <p>The second line takes <code>rect</code> and get its corners. So the variable <code>poly</code> contains a Group of 4 Pts.</p>
 <p>The third line use the Group's <a href="#pt-group"><code>shear2D</code></a> function to shear the polygon at space's center. The amount of shearing cycles between -0.5 to 0.5 every 5 seconds.</p>
 <p>The 4th and 5th line just draw the rectangle and the sheared polygon.</p>
-<p>Even though it takes words to explain, the code is acutally quite simple and clear :)</p>
+<p>Even though it takes words to explain, the code is acutally quite simple :)</p>
 <h3>Visibles from invisibles</h3>
 <p>From here on, it's up to you. Squint your eyes and see what shapes and structures hide between those invisible points, or what motions and interactions could generate unique and expressive forms.</p>
 <p>For example, what if we take two corners of the rectangle, and join them with the pointer to draw a triangle?</p>

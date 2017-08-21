@@ -19,24 +19,27 @@
 </div>
 <a href="#menu" id="toc">&#x2261;</a>
 <div id="post"><h1>Technical notes</h1>
-<h3>Typescript notes</h3>
-<p>While <a href="#pt_pt"><code>Pt</code></a> extends <code>Float32Array</code> and <a href="#pt_group"><code>Group</code></a> extends Array, typescript compiler at the moment (2.4.2) isn't smart enough to auto-cast the return type when you use an Array or Float32Array function. That means if you use typescript, you may need to recast some native Array functions such as <code>map</code> or <code>slice</code>.</p>
-<pre><code>let p:Pt = new Pt(1,2,3);
-let p2 = p.map( (d) =&gt; d+1 ); // typescript thinks p2 is Float32Array
-let p3 = p.map( (d) =&gt; d+1 ) as Pt; // type is now cast back to Pt
-</code></pre>
 <h3>Cloning Pt with <code>clone()</code> or <code>$...</code></h3>
 <p>Pt is a subclass of Float32Array, and Group is a subclass of Array that should only contain Pt in it.</p>
 <p>Since objects and arrays in javascript are passed by reference, remember to clone them if you are going to change their values. Functions starting with <code>$</code> such as <code>$add</code> means it will return a new Pt and keeping the original unchanged.</p>
 <pre><code>myGroup.push( space.center.clone() ); 
 pt.$subtract( 10 ); // use $fn to get a new Pt
 </code></pre>
+<h3>Typescript notes</h3>
+<p>While <a href="#pt_pt"><code>Pt</code></a> extends <code>Float32Array</code> and <a href="#pt_group"><code>Group</code></a> extends Array, typescript compiler at the moment (2.4.2) isn't smart enough to auto-cast the return type when you use an Array or Float32Array function. That means if you use typescript, you may need to recast some native Array functions such as <code>map</code> or <code>slice</code>.</p>
+<pre><code>let p:Pt = new Pt(1,2,3);
+let p2 = p.map( (d) =&gt; d+1 ); // typescript thinks p2 is Float32Array
+let p3 = p.map( (d) =&gt; d+1 ) as Pt; // type is now cast back to Pt
+</code></pre>
 <h3>Javascript ecosystem</h3>
 <p>The javascript ecosystem is moving so fast it's difficult to keep up. Pts is intended for modern browsers supporting es6+. Therefore, if you need to target es5 or older browsers, you'll need to configure your build tools accordingly. Some pointers:</p>
 <ul>
 <li><p>If you're using babel, you may need the <a href="https://github.com/loganfsmyth/babel-plugin-transform-builtin-extend">builtin-extend plugin</a> because Pts extends built-in types like Array and Float32Array.</p></li>
-<li><p>UglifyJS doesn't seem to support extending built-in types unless the code is transformed to es5 first. Alternatively, consider other minify tool such as <a href="https://github.com/babel/minify">babili</a></p></li>
+<li><p>UglifyJS doesn't seem to support minifying es6 so the code is transformed to es5 first. Alternatively, consider other minify tool such as <a href="https://github.com/babel/minify">babili</a>.</p></li>
+<li><p>Pts is a new library in beta so we don't recommend using it in production system yet. For now, just experiment and have fun!</p></li>
 </ul>
+<h3>Remember to file issues and feedbacks</h3>
+<p>Support this open-source project by filing bugs and pull requests on <a href="https://github.com/williamngan/pts">github</a>. If you have other feedbacks or want to show what you have made with Pts, please ping <a href="https://twitter.com/williamngan">@williamngan</a>.</p>
 </div>
 
 <ol id="menu"><a id="close" href="#">&times;</a><li><a href="Introduction-0000.html">Introduction</a></li><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Space-0500.html">Space</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li></ol>

@@ -9,11 +9,9 @@ In fact, a wide range of complex forms and ideas can be represented as one of th
 
 The goal of `pts.js` is to help you see and express these structures in creative ways.
 
-[graphic]
-
 ### Creating a Group
 
-Similar to making an Array, you can create a Group like these:
+[`Group`](#pt-group) is a subclass of javascript [`Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array). Therefore, similar to creating an Array, you can create a Group like these:
 
 ```
 // Like Array constructor
@@ -33,17 +31,16 @@ g3[0]; // returns Pt(1,2)
 g3.p2; // returns Pt(3,4)
 ```
 
-Remember that a Group must only contain Pts. This is different from Array which can contain different data types like strings and objects.
+Remember that a Group must only contain Pt. This is different from Array which can contain different data types like strings and objects.
 
 ```
 let notOk = new Group( [1,2,3], "hello" ); // Don't do this
 ```
 
 ### Array functions
-Since a [`Group`](#pt-group) is a subclass of [`Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array), you can use all the Array functions in a Group. 
+You can use all the javascript's Array functions in a Group. No need to learn a new API.
 
 ```
-let g = Group.fromArray( [[1,2], [3,4]] );
 g.unshift( new Pt(5, 6) );
 g.pop();
 let mags = g.map( (p) => p.magnitude() );

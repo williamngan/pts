@@ -19,7 +19,7 @@
 </div>
 <a href="#menu" id="toc">&#x2261;</a>
 <div id="post"><h1>Op</h1>
-<p>We are all in the gutter, but some of us are looking at the stars, said Oscar Wilde. To him, and to many of us, a sky full of stars moves us to look into that vast darkness and, with imagination, connect those scattered and flickering dots. What would a sky be without stars, and what would a starry night be without us looking and imagining?</p>
+<p>We are all in the gutter, but some of us are looking at the stars, said Oscar Wilde. To him, and to many of us, a sky full of stars moves us to look into that vast darkness and, with imagination, connect those scattered and flickering dots. What would a sky be without stars, and what would a starry night be without us looking and imagining!</p>
 <p>A group of points is never just a mathematical concept. We actively connect the dots and find strange forms and humanistic meanings in them.</p>
 <p>In <strong><code>Pts</code></strong>, these acts of imagination are known as &quot;Op&quot;. They transform a static point into an active one, a noun into a verb, a vector space into an expressive canvas.</p>
 <p>Let's begin with an example. Suppose there are 100 points randomly placed on a canvas, and a pointer moves randomly about. A simple (indeed boring) act of imagination might be to ask: which point is closest to the pointer?</p>
@@ -60,7 +60,7 @@ let perpends = pts.map( (p) =&gt; [p, Line.perpendicularFromPt(path, p)] );
 <p>First we create a line by joining the pointer and the top-left corner at (0,0), and then we convert the set of random points on canvas to perpendicular lines. Also note that, since we don't need additional features from <a href="#pt-group"><code>Group</code></a>, we can just use Array to store the Pts for drawing. Pretty fun and simple, right?</p>
 <p>Ops can also construct shapes out of points. Creating a rectangle or a line from 2 points is obvious, so let's get a bit more elaborate.</p>
 <pre><code>// create a group of 4 Pts from rectangle
-let c = space.center.clone();
+let c = space.center;
 let corners = Rectangle.corners( Rectangle.fromCenter( c, space.height ) );
 
 // interpolate with time to make them move

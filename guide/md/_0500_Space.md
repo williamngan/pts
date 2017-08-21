@@ -8,7 +8,7 @@ let space = new CanvasSpace( "#hello" );
 space.setup({ bgcolor: "#123", retina: true });
 ```
 
-The "#hello" is a [`selector string`](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector) that selects an element in the html page. If the element is a `<canvas>`, it will be used by CanvasSpace. If the element is a `<div>` or other block element, a new `<canvas>` will be appended into it.
+The "#hello" is a [`selector string`](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector) that selects an element in the html page. If the element is a `<canvas>`, it will be used by CanvasSpace. If the element is a `<div>` or other block element, a new `<canvas>` will be appended into it. You may also pass a HTMLElement directly, instead of a query selector string.
 
 Once the space is created, you can optionally call the [`setup`](#canvas-canvasspace) function to specify its background color (`bgcolor`) and other properties. Take a look at the [`setup`](#canvas-canvasspace) documentation for more.
 
@@ -76,7 +76,7 @@ Using [`bindMouse`](#canvas-canvasspace)  and [`bindTouch`](#canvas-canvasspace)
 space.bindMouse().bindTouch().play();
 ```
 
-CanvasSpace also provides a couple convenient properties which you may access once the space is initiated. [`pointer`] gives you the current pointer position. [`size`](#canvas-canvasspace), [`center`](#canvas-canvasspace), [`width`](#canvas-canvasspace) and [`height`](#canvas-canvasspace) are handy to get a space's size and center point. [`element`](#canvas-canvasspace) and [`parent`](#canvas-canvasspace) returns the html elements of this space.
+CanvasSpace also provides a couple convenient properties which you may access once the space is initiated. [`pointer`](#canvas-canvasspace) gives you the current pointer position. [`size`](#canvas-canvasspace), [`center`](#canvas-canvasspace), [`width`](#canvas-canvasspace), [`height`](#canvas-canvasspace) and [`innerBound`](#canvas-canvasspace) are handy to get a space's size and center point. [`element`](#canvas-canvasspace) and [`parent`](#canvas-canvasspace) returns the html elements of this space.
 
 CanvasSpace also supports offscreen rendering which may help with rendering complex scene. Take a look at the source code of [this study](../study/index.html?name=CanvasSpace.offscreen) for more.
 
@@ -90,7 +90,7 @@ let space = new CanvasSpace("#paper");
 let form = space.getForm(); // get default CanvasForm
 ```
 
-[`CanvasForm`](#canvas-canvasform) includes many convenient functions to draw shapes on `<canvas>'. It's easier to use than the API provided by html canvas. Usually, you'll use form to draw a scene in a player's callback function as discussed above.
+[`CanvasForm`](#canvas-canvasform) includes many convenient functions to draw shapes on `<canvas>`. It's easier to use than the API provided by html canvas. Usually, you'll use form to draw a scene in a player's callback function as discussed above.
 
 ```
 // Draw points inside the animate callback function
@@ -106,14 +106,14 @@ space.add({
 
 ##### A demo of drawing different shapes
 
-And since both Space and Form are javascript classes, you can extend them to override its functions and add new ones. Draw something more!
+And since both Space and Form are javascript classes, you can extend them to override its functions and add new ones. 
 
 ### Cheat sheet
 
 The following snippet is a typical template for making a quick **`Pts`** sketch. Pretty easy.
 
 ```
-Pts.namespace( this );
+Pts.namespace( this ); // not needed if using npm package
 
 var space = new CanvasSpace("#hello").setup({ retina: true });
 var form = space.getForm();

@@ -19,7 +19,7 @@
 </div>
 <a href="#menu" id="toc">&#x2261;</a>
 <div id="post"><h1>Pt</h1>
-<p>A <a href="#pt-pt"><code>Pt</code></a> represents a point in space, or more technically, an <em>n</em>-dimensional vector. You may also think of a <code>Pt</code> as an array of numeric values, a set of weights, or like an arrow coming from the origin point (0,0,0...).</p>
+<p>A <a href="#pt-pt"><code>Pt</code></a> represents a point in space, or more technically, an <em>n</em>-dimensional vector. You may also think of a <code>Pt</code> as an array of numeric values, a set of weights, or an arrow coming from the origin point (0,0,0...).</p>
 <h3>Creating a Pt</h3>
 <p>You can create a <a href="#pt-pt"><code>Pt</code></a> in many different ways:</p>
 <pre><code>// defaults to (0,0)
@@ -45,19 +45,19 @@ p.reduce( (a,b) =&gt; Math.max(a,b), 0 );
 <p>Note that Float32Array doesn't allow some common Array functions like <code>push()</code> and <code>pop()</code> . If you need to grow or shrink the Pt's dimensions, either create a new one or use <a href="#pt-pt"><code>$concat</code></a> and <a href="#pt-pt"><code>$take</code></a>.</p>
 <h3>Updating values</h3>
 <p>You can update a Pt's values by using <a href="#pt-pt"><code>to</code></a> function, or accessing the <a href="#pt-pt"><code>x</code></a>, <a href="#pt-pt"><code>y</code></a>, <a href="#pt-pt"><code>z</code></a>, <a href="#pt-pt"><code>w</code></a> properties.</p>
-<pre><code>p.to(1,2,3)
+<pre><code>p.to( 1, 2, 3 )
 p.to( anotherPt )
 p.w = p.x + p.z
 </code></pre>
 <h3>Vector math</h3>
-<p>Pt provides basic functions for calculating vectors and matrices. But don't worry if you are not familiar wtih linear algrebra. To start, think of it as methods to perform calculations on arrays of values like adding or multiplying them.</p>
+<p>Pt provides basic functions for calculating vectors and matrices. But don't worry if you are not familiar wtih linear algrebra. To start, think of it as methods to do calculations on arrays of values, like adding or multiplying them.</p>
 <pre><code>let pt = new Pt( 10, 10 )
 pt.add( 1, 2 ) // pt is now (11, 12)
 pt.divide( 2 ) // divide each value by 2
 pt.multiply( {x: 2, y: 1} )
 pt.subtract( anotherPt ).multiply( 5 ).add( [1,2,3] )
 </code></pre>
-<p>The above functions like <a href="#pt-pt"><code>add</code></a> will update the values of <code>pt</code> instance. If you want to get the results as a new Pt, using <a href="#pt-pt"><code>$add</code></a> etc instead.</p>
+<p>The above functions like <a href="#pt-pt"><code>add</code></a> will update the values of <code>pt</code> instance. If you want to get the results as a new Pt, using <a href="#pt-pt"><code>$add</code></a> etc instead. If a function's name starts with <code>$</code>, it indicates that its return value will be a new Pt.</p>
 <pre><code>let p1 = pt.$add( 1,2,3 );
 let p2 = pt.$multiply( 5 ).add( 1,2,3 )
 
@@ -72,9 +72,9 @@ pt.toAngle( Math.PI/2 )
 </code></pre>
 <h5>* Note that all angles are specified in radian, where 180 degrees = <em>π</em> radian. (Imagine half-circle is like 180 degrees.) You can use <a href="#num-geom"><code>Geom.toRadian</code></a> and <a href="#num-geom"><code>Geom.toDegree</code></a> functions to convert between degrees and radian.</h5>
 <p><img src="./assets/bg.png" alt="js:pt_angle"></p>
-<h5>The above demo is put together with some basic vector operations and angle functions.</h5>
+<h5>The above demo uses some basic vector operations and angle functions.</h5>
 <h3>Transformations</h3>
-<p>If you use Illustrator or other graphics software, you'll probably know operations to rotate or scale a shape. Pt also provides these transformation functions:</p>
+<p>If you have used Illustrator or other graphics software before, you probably know the operations to rotate or scale a shape. Pt also provides these transformation functions:</p>
 <pre><code>pt.scale( 0.5 )
 pt.rotate2D( Math.PI/3 )
 pt.shear2D( [0.3, 1.2] )

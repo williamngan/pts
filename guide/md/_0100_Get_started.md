@@ -16,18 +16,24 @@ But enough of abstractions for now. Let's see how it works in a concrete example
 ##### You may also be interested in [this article](https://medium.com/@williamngan/pt-93382bf5943e) which discusses the concepts of Space, Form, and Point.
 
 ### Using pts with npm
-If you use npm, first [`npm install pts`](https://www.npmjs.com/package/pts) and then: 
+If you use npm, first [`npm install pts`](https://www.npmjs.com/package/pts) and then import the classes you need:
 
 ```
 import {CanvasSpace, Pt, Group} from "pts" 
 ```
+And you're good to go!
 
 ##### Note that pts is an es6 library, so if you want to compile to es5, you'll need to configure babel accordingly. (Possibly with the [`builtin-extend`](https://github.com/loganfsmyth/babel-plugin-transform-builtin-extend) babel plugin)
 
 ### Using pts in a script
-First download the latest release and add `pts.min.js` in your html. Then create another js file for your script and add it to html too. 
+First go to the latest release and get `pts.js` ([direct link](https://raw.githubusercontent.com/williamngan/pts/master/dist/pts.js) or [github](https://github.com/williamngan/pts)). Include it in your html. Then create another js file for your script and add it too.
 
-For convience, we usually start by adding **`Pts`** into a scope first. 
+```
+<script type="text/javascript" src="path/to/pts.js"></script>
+<script type="text/javascript" src="path/to/my_script.js"></script>
+``` 
+
+When using as a script, we usually start by adding **`Pts`** into a scope first. 
 
 ```
 Pts.namespace( this );
@@ -52,7 +58,7 @@ var space = new CanvasSpace("#hello");
 space.setup({ bgcolor: "#fff" });
 ```
 
-This assumes you have an element with `id="hello"` in your html. If your element is `<canvas id="hello">`, CanvasSpace will target that canvas. Otherwise if your element is a container like `<div id="hello">`, a new canvas will be created and appended into it.
+This assumes you have an element with `id="hello"` in your html. If your element is `<canvas id="hello">`, CanvasSpace will target that canvas. Otherwise if your element is a container like `<div id="hello">`, a new canvas will be created and appended into it. You may also pass an HTMLElement instance directly into `CanvasSpace`.
 
 The [`setup`](#canvas-canvasspace) function allows you to initiate the space with an object that specifies some setup options, like background-color and auto-resize.
 
@@ -104,10 +110,10 @@ space.add( (time, ftime) => {
 Success! The calculation `(time%1000)/1000` maps the running time to a value between 0 to 1 every second. Then we use the [`Num.cycle`](#num-num) function to make the value cycle between 0...1...0...1, and we multiply the value by 20 to get the radius. Finally, we draw the pointer with the radius as a blue circle. Pretty easy, right?
 
 ### Drawing shapes
-There are 3 basic structures in **`Pts`**.
-- a Pt which is an array of numbers 
-- a Group which is an array of Pts
-- an array of Groups
+There are 3 basic structures in **`Pts`** 
+- a Pt which is an array of numbers (1D tensor)
+- a Group which is an array of Pts (2D tensor)
+- an array of Groups (3D tensor)
 
 **`Pts`** provides many classes to work with these structures. For example, a rectangular boundary can be defined by two Pts -- one at top-left and one at bottom-right, and you can also get a Group of 4 Pts from its 4 corners. 
 
@@ -134,7 +140,7 @@ The third line use the Group's [`shear2D`](#pt-group) function to shear the poly
 
 The 4th and 5th line just draw the rectangle and the sheared polygon.
 
-Even though it takes words to explain, the code is acutally quite simple and clear :)
+Even though it takes words to explain, the code is acutally quite simple :)
 
 ### Visibles from invisibles
 From here on, it's up to you. Squint your eyes and see what shapes and structures hide between those invisible points, or what motions and interactions could generate unique and expressive forms.
