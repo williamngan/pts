@@ -39,7 +39,7 @@ space.add( {
   action: (type, x, y, event) => { 
     // code for interaction 
   }
-  reeize( size, event) => { 
+  resize( size, event) => { 
     // code for resize 
   }
 } );

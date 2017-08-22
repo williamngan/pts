@@ -1,6 +1,6 @@
 # What is Pts?
 
-Pts is a new libray that enables you to compose and visualize points. It revisited the ideas introduced in [Pt](https://medium.com/@williamngan/pt-93382bf5943e) (an experiment [library](https://williamngan.github.io/pt/) released 2 years ago), and updated its code and structure from the bottom up.
+Pts is a new library that enables you to compose and visualize points. It revisited the ideas introduced in [Pt](https://medium.com/@williamngan/pt-93382bf5943e) (an experiment [library](https://williamngan.github.io/pt/) released 2 years ago), and updated its code and structure from the bottom up.
 
 ![Pt](./assets/pt.jpg) 
 
