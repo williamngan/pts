@@ -38,10 +38,11 @@
         src.setAttribute("src", "../study/" + qfile + ".js");
 
         var link = document.createElement("a");
-        link.setAttribute("class", "source-code");
-        link.setAttribute("href", "https://github.com/williamngan/pt/blob/master/demo/" + qfile +".js");
-        link.setAttribute("target", "_blank");
-        link.textContent = "view code";
+        link.setAttribute("class", "source-code");        
+        link.setAttribute("href", "https://github.com/williamngan/pts/blob/master/study/" + qfile +".js");
+        link.setAttribute("target", "pts_github");
+        link.textContent = "source code ↗";
+
 
         src.onload = function () {
             var hint = document.querySelector("#hint");
