@@ -237,6 +237,8 @@ a:hover {
   #pts a { padding: 0; }
 
   #start {
+    position: fixed;
+    z-index: 100;
     top: auto;
     bottom: 15%;
     right: 50%;
