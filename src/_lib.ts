@@ -9,6 +9,7 @@ import * as _Pt from "./Pt";
 import * as _Space from "./Space";
 import * as _Color from "./Color";
 import * as _Util from "./Util";
+import * as _Dom from "./Dom";
 
 // A function to switch scope for Pts library. eg, Pts.scope( Pts, window );
 let namespace = ( sc:object ) => {
@@ -32,5 +33,6 @@ module.exports = {
   ..._Pt,
   ..._Space,
   ..._Util,
-  ..._Color
+  ..._Color,
+  ..._Dom
 };
