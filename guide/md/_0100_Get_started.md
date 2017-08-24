@@ -33,20 +33,13 @@ First go to the latest release and get `pts.js` ([direct link](https://raw.githu
 <script type="text/javascript" src="path/to/my_script.js"></script>
 ``` 
 
-When using as a script, we usually start by adding **`Pts`** into a scope first. 
+When using as a script, we usually start by adding **`Pts`** into the global scope first. 
 
 ```
-Pts.namespace( this );
+Pts.namespace( window );
 ```
 
-That means we can call `CanvasSpace`, instead of `Pts.CanvasSpace` which is a bit clumsy to write. If you don't want to "pollute" the global scope, it's common to wrap your code with an anonymous function:
-
-```
-(function() {
-    Pts.namespace( this );
-    //...
-})();
-```
+That means we can call all Pts classes like `Group` directly, instead of `Pts.Group` which is a bit clumsy to write.
 
 And that's it. We can now have some fun.
 

@@ -38,15 +38,10 @@
 <pre><code>&lt;script type=&quot;text/javascript&quot; src=&quot;path/to/pts.js&quot;&gt;&lt;/script&gt;
 &lt;script type=&quot;text/javascript&quot; src=&quot;path/to/my_script.js&quot;&gt;&lt;/script&gt;
 </code></pre>
-<p>When using as a script, we usually start by adding <strong><code>Pts</code></strong> into a scope first.</p>
-<pre><code>Pts.namespace( this );
+<p>When using as a script, we usually start by adding <strong><code>Pts</code></strong> into the global scope first.</p>
+<pre><code>Pts.namespace( window );
 </code></pre>
-<p>That means we can call <code>CanvasSpace</code>, instead of <code>Pts.CanvasSpace</code> which is a bit clumsy to write. If you don't want to &quot;pollute&quot; the global scope, it's common to wrap your code with an anonymous function:</p>
-<pre><code>(function() {
-    Pts.namespace( this );
-    //...
-})();
-</code></pre>
+<p>That means we can call all Pts classes like <code>Group</code> directly, instead of <code>Pts.Group</code> which is a bit clumsy to write.</p>
 <p>And that's it. We can now have some fun.</p>
 <h3>Creating Space and Form</h3>
 <p><strong><code>Pts</code></strong> provides a <a href="#canvas-canvasspace"><code>CanvasSpace</code></a> which enables you to use html <code>&lt;canvas&gt;</code> as space. You can create a <code>CanvasSpace</code> like this:</p>
