@@ -1,10 +1,12 @@
 import {Space, IPlayer} from './Space';
 import {Form} from "./Form";
 import {Bound} from './Bound';
+import {PtLike} from './Pt';
 
 
-export class DomSpace extends Space {
+export class DOMSpace extends Space {
 
+  id: string = "domspace";
   protected _element:HTMLElement|SVGElement;
   protected _container:Element;
   // protected _ctx = {};
@@ -71,8 +73,25 @@ export class DomSpace extends Space {
   }
 
   getForm():Form {
-    return new DomForm( this );
+    return new DOMForm( this );
   }
+
+  /**
+  * Get the html element
+  */
+  get element():Element {
+    return this._element;
+  }
+  
+  
+  /**
+  * Get the parent element that contains the html element
+  */
+  get parent():Element {
+    return this._container;
+  }
+
+  get ready():boolean { return this._isReady; }
 
   /**
   * Handle callbacks after element is mounted in DOM
@@ -88,9 +107,12 @@ export class DomSpace extends Space {
     
     this.clear( this._bgcolor );
     this._element.dispatchEvent( new Event("ready") );
+
     
     for (let k in this.players) {
-      if (this.players[k].start) this.players[k].start( this.bound.clone(), this );
+      if (this.players.hasOwnProperty(k)) {
+        if (this.players[k].start) this.players[k].start( this.bound.clone(), this );
+      }
     }
     
     this._pointer = this.center;
@@ -202,18 +224,24 @@ export class DomSpace extends Space {
 }
 
 
-export class DomForm extends Form {
-  protected _space:DomSpace;
+export class DOMForm extends Form {
+  protected _space:DOMSpace;
 
-  constructor( space:DomSpace ) {
+  constructor( space:DOMSpace ) {
     super();
     this._space = space;
   }
 
-  get space():DomSpace { return this._space; }
+  get space():DOMSpace { return this._space; }
 }
 
-export class SVGSpace extends DomSpace {
+
+
+export class SVGSpace extends DOMSpace {
+
+  id: string = "svgspace";
+  protected _bgcolor:string = "#999";
+  
 
   constructor( elem:string|Element, callback?:Function ) {
     super( elem, callback );
@@ -227,13 +255,23 @@ export class SVGSpace extends DomSpace {
     
   }
 
+  getForm():SVGForm { return new SVGForm( this ); }
+
+  /**
+  * Get the html element
+  */
+  get element():Element {
+    return this._element;
+  }
+
   static svgElement( parent:Element, name:string, id?:string ):SVGElement {
     if (!parent || !parent.appendChild ) throw new Error( "parent is not a valid DOM element" );
 
     let elem = document.querySelector(`#${id}`);
-    if (!id || !elem) {
+    if (!elem) {
       elem = document.createElementNS( "http://www.w3.org/2000/svg", name );
       elem.setAttribute( "id", id );
+      
       elem.setAttribute( "class",id.substring(0, id.indexOf("-")) );
       parent.appendChild( elem );
     }
@@ -242,9 +280,38 @@ export class SVGSpace extends DomSpace {
 
   _createElement( elem:string="svg", id:string ):Element {
     let d = document.createElementNS( "http://www.w3.org/2000/svg", elem );
-    if (id) d.setAttribute( "id,", id );
+    if (id) d.setAttribute( "id", id );
     return d;
   }
+
+  setup( opt:{bgcolor?:string, resize?:boolean} ):this {
+    if (opt.bgcolor) {
+      this.bgcolor = opt.bgcolor;
+    }
+
+    if (opt.resize) {
+      this._element.setAttribute("width", "100%");
+      this._element.setAttribute("height", "100%");
+    } 
+    
+    return this;
+  }
+
+  clear( bg?:string ):this {
+    this._element.innerHTML = "";
+    this.bgcolor = bg;
+    return this;
+  }
+
+  set bgcolor( bg:string ) {
+    this._bgcolor = bg;
+    this._element.setAttribute( "fill", bg );
+  }
+
+  get bgcolor():string {
+    return this._bgcolor;
+  }
+  
 
   // remove( item ):this
 
@@ -252,18 +319,26 @@ export class SVGSpace extends DomSpace {
 
 }
 
+export type SVGFormContext = {
+  group:Element, groupID:string, groupCount:number,
+  currentID:string,
+  style:object,
+  font:string, fontSize:number, fontFamily:string
+};
+
+
 
 
 export class SVGForm extends Form {
 
-  protected _ctx = {
+  protected _ctx:SVGFormContext = {
     group: null,
     groupID: "pts",
     groupCount: 0,
     currentID: "pts0",
     style: {
-      "filled": false,
-      "stroked": false,
+      "filled": true,
+      "stroked": true,
       "fill": "#f03",
       "stroke": "#fff",
       "stroke-width": 1,
@@ -272,7 +347,7 @@ export class SVGForm extends Form {
     },
     font: "11px sans-serif",
     fontSize: 11,
-    fontFace: "sans-serif"
+    fontFamily: "sans-serif"
   };
 
   static domID:number = 0;
@@ -283,9 +358,18 @@ export class SVGForm extends Form {
   constructor( space:SVGSpace ) {
     super();
     this._space = space;
+    
+    
+    this._space.add( { start: () => {
+      this._ctx.group = this._space.element;
+      this._ready = true;
+      console.log( "READY" );
+    }} );
   }
 
   get space():SVGSpace { return this._space; }
+
+  
 
 
   protected styleTo( k, v ) { 
@@ -316,28 +400,28 @@ export class SVGForm extends Form {
     return this;
   }
 
-  branch( group_id:string, group:boolean=false ):object {
-    // this._ctx.group = group;
+  branch( group_id:string, group?:Element ):object {
+    this._ctx.group = group;
     this._ctx.groupID = group_id;
     this._ctx.groupCount = 0;
     this.nextID();
     return this._ctx;
   }
 
-  context( item:IPlayer ) {
+  base( item:IPlayer ) {
     if (!item || item.animateID == null ) throw new Error("item not defined or not yet added to Space");
-    return this.branch( this._branchID( item ) );
+    return this.branch( this._branchID( item ), this.space.element );
   }
 
-  
-  currentID():string {
-    return this._ctx.currentID || `p-${SVGForm.domID++}`;
-  }
 
   nextID():string {
     this._ctx.groupCount++;
     this._ctx.currentID = `${this._ctx.groupID}-${this._ctx.groupCount}`;
     return this._ctx.currentID;
+  }
+
+  static getID( ctx ):string {
+    return ctx.currentID || `p-${SVGForm.domID++}`;
   }
 
   static style( elem:SVGElement, styles:object) {
@@ -358,11 +442,32 @@ export class SVGForm extends Form {
       }
     }
 
-    return DomSpace.attr( elem, {style: st.join(";")} );
+    return DOMSpace.attr( elem, {style: st.join(";")} );
   }
 
 
   protected _branchID( item:IPlayer ):string {
     return `item-${item.animateID}`;
+  }
+
+
+  static point( ctx:SVGFormContext, pt:PtLike, radius:number=5, shape:string="rect" ):SVGElement {
+    let elem = SVGSpace.svgElement( ctx.group, shape, SVGForm.getID( ctx ) );
+    if (!elem) return undefined;
+
+    if (shape == "circle") {
+      DOMSpace.attr( elem, { cx: pt[0], cy: pt[1], r:radius } );
+    } else {
+      DOMSpace.attr( elem, {x: pt[0]-radius, y:pt[1]-radius, width: radius*2, height: radius*2} );
+    }
+
+    SVGForm.style( elem, ctx.style );
+    return elem;
+  }
+
+  point( pt:PtLike, radius:number=5, shape:string="rect" ):this {
+    this.nextID();
+    SVGForm.point( this._ctx, pt, radius, shape );
+    return this;
   }
 }

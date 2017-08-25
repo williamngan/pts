@@ -66,7 +66,7 @@ export abstract class Space {
   /**
    * Add an IPlayer to this space. An IPlayer can define the following callback functions:    
    * - `animate( time, ftime, space )`
-   * - `start(bound, spacE)`   
+   * - `start(bound, space)`   
    * - `resize( size, event )`
    * - `action( type, x, y, event )`  
    * Subclasses of Space may define other callback functions.

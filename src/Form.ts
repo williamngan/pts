@@ -11,10 +11,18 @@ import {Pt, PtLike, GroupLike} from "./Pt";
  * Form is an abstract class that represents a form that's used in a Space for expressions.
  */
 export abstract class Form {
+
+  protected _ready:boolean = false;
+
   /**
    * A property to get the form's Space
    */
   abstract get space():Space;
+
+  /**
+   * get whether the Form has received the Space's rendering context
+   */
+  get ready():boolean { return this._ready; }
 }
 
 
@@ -25,6 +33,7 @@ export abstract class Form {
  * For example, CanvasForm is an implementation of VisualForm that draws on CanvasSpace which represents a html canvas.
  */
 export abstract class VisualForm extends Form {
+  
 
   protected _filled = true;
   get filled():boolean { return this._filled; }

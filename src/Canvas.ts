@@ -135,7 +135,9 @@ export class CanvasSpace extends Space {
     this._canvas.dispatchEvent( new Event("ready") );
     
     for (let k in this.players) {
-      if (this.players[k].start) this.players[k].start( this.bound.clone(), this );
+      if (this.players.hasOwnProperty(k)) {
+        if (this.players[k].start) this.players[k].start( this.bound.clone(), this );
+      }
     }
     
     this._pointer = this.center;
@@ -592,8 +594,7 @@ export class CanvasSpace extends Space {
 export class CanvasForm extends VisualForm {
   
   protected _space:CanvasSpace;
-  protected _ctx:CanvasRenderingContext2D;
-  protected _ready:boolean = false;
+  protected _ctx:CanvasRenderingContext2D;  
 
   /** 
   * store common styles so that they can be restored to canvas context when using multiple forms. See `reset()`.
@@ -628,12 +629,6 @@ export class CanvasForm extends VisualForm {
   * get the CanvasSpace instance that this form is associated with
   */
   get space():CanvasSpace { return this._space; }
-  
-
-  /**
-   * get whether the CanvasForm has received the Space's rendering context
-   */
-  get ready():boolean { return this._ready; }
   
 
   /**

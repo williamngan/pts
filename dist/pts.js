@@ -86,8 +86,8 @@ return /******/ (function(modules) { // webpackBootstrap
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(1);
-const Num_1 = __webpack_require__(3);
-const LinearAlgebra_1 = __webpack_require__(2);
+const Num_1 = __webpack_require__(4);
+const LinearAlgebra_1 = __webpack_require__(3);
 exports.PtBaseArray = Float32Array;
 /**
  * Pt is a subclass of Float32Array with additional properties and functions to support vector and geometric calculations.
@@ -972,7 +972,159 @@ exports.Util = Util;
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
-const Op_1 = __webpack_require__(5);
+/**
+ * Bound is a subclass of Group that represents a rectangular boundary.
+ * It includes some convenient properties such as `x`, `y`, bottomRight`, `center`, and `size`.
+ */
+class Bound extends Pt_1.Group {
+    /**
+     * Create a Bound. This is similar to the Group constructor.
+     * @param args a list of Pt as parameters
+     */
+    constructor(...args) {
+        super(...args);
+        this._center = new Pt_1.Pt();
+        this._size = new Pt_1.Pt();
+        this._topLeft = new Pt_1.Pt();
+        this._bottomRight = new Pt_1.Pt();
+        this._inited = false;
+        this.init();
+    }
+    /**
+     * Create a Bound from a [ClientRect](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect) object.
+     * @param rect an object has top/left/bottom/right/width/height properties
+     * @returns a Bound object
+     */
+    static fromBoundingRect(rect) {
+        let b = new Bound(new Pt_1.Pt(rect.left || 0, rect.top || 0), new Pt_1.Pt(rect.right || 0, rect.bottom || 0));
+        if (rect.width && rect.height)
+            b.size = new Pt_1.Pt(rect.width, rect.height);
+        return b;
+    }
+    /**
+     * Initiate the bound's properties.
+     */
+    init() {
+        if (this.p1) {
+            this._size = this.p1.clone();
+            this._inited = true;
+        }
+        if (this.p1 && this.p2) {
+            let a = this.p1;
+            let b = this.p2;
+            this.topLeft = a.$min(b);
+            this._bottomRight = a.$max(b);
+            this._updateSize();
+            this._inited = true;
+        }
+    }
+    /**
+     * Clone this bound and return a new one
+     */
+    clone() {
+        return new Bound(this._topLeft.clone(), this._bottomRight.clone());
+    }
+    /**
+     * Recalculte size and center
+     */
+    _updateSize() {
+        this._size = this._bottomRight.$subtract(this._topLeft).abs();
+        this._updateCenter();
+    }
+    /**
+     * Recalculate center
+     */
+    _updateCenter() {
+        this._center = this._size.$multiply(0.5).add(this._topLeft);
+    }
+    /**
+     * Recalculate based on top-left position and size
+     */
+    _updatePosFromTop() {
+        this._bottomRight = this._topLeft.$add(this._size);
+        this._updateCenter();
+    }
+    /**
+     * Recalculate based on bottom-right position and size
+     */
+    _updatePosFromBottom() {
+        this._topLeft = this._bottomRight.$subtract(this._size);
+        this._updateCenter();
+    }
+    /**
+     * Recalculate based on center position and size
+     */
+    _updatePosFromCenter() {
+        let half = this._size.$multiply(0.5);
+        this._topLeft = this._center.$subtract(half);
+        this._bottomRight = this._center.$add(half);
+    }
+    get size() { return new Pt_1.Pt(this._size); }
+    set size(p) {
+        this._size = new Pt_1.Pt(p);
+        this._updatePosFromTop();
+    }
+    get center() { return new Pt_1.Pt(this._center); }
+    set center(p) {
+        this._center = new Pt_1.Pt(p);
+        this._updatePosFromCenter();
+    }
+    get topLeft() { return new Pt_1.Pt(this._topLeft); }
+    set topLeft(p) {
+        this._topLeft = new Pt_1.Pt(p);
+        this[0] = this._topLeft;
+        this._updateSize();
+    }
+    get bottomRight() { return new Pt_1.Pt(this._bottomRight); }
+    set bottomRight(p) {
+        this._bottomRight = new Pt_1.Pt(p);
+        this[1] = this._bottomRight;
+        this._updateSize();
+    }
+    get width() { return (this._size.length > 0) ? this._size.x : 0; }
+    set width(w) {
+        this._size.x = w;
+        this._updatePosFromTop();
+    }
+    get height() { return (this._size.length > 1) ? this._size.y : 0; }
+    set height(h) {
+        this._size.y = h;
+        this._updatePosFromTop();
+    }
+    get depth() { return (this._size.length > 2) ? this._size.z : 0; }
+    set depth(d) {
+        this._size.z = d;
+        this._updatePosFromTop();
+    }
+    get x() { return this.topLeft.x; }
+    get y() { return this.topLeft.y; }
+    get z() { return this.topLeft.z; }
+    get inited() { return this._inited; }
+    /**
+     * If the Group elements are changed, call this function to update the Bound's properties.
+     * It's preferable to change the topLeft/bottomRight etc properties instead of changing the Group array directly.
+     */
+    update() {
+        this._topLeft = this[0];
+        this._bottomRight = this[1];
+        this._updateSize();
+        return this;
+    }
+}
+exports.Bound = Bound;
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan)
+Object.defineProperty(exports, "__esModule", { value: true });
+const Pt_1 = __webpack_require__(0);
+const Op_1 = __webpack_require__(6);
 /**
  * Vec provides static function for vector operations. It's not yet optimized but good enough to use.
  */
@@ -1348,7 +1500,7 @@ exports.Mat = Mat;
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1357,9 +1509,9 @@ exports.Mat = Mat;
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(1);
-const Op_1 = __webpack_require__(5);
+const Op_1 = __webpack_require__(6);
 const Pt_1 = __webpack_require__(0);
-const LinearAlgebra_1 = __webpack_require__(2);
+const LinearAlgebra_1 = __webpack_require__(3);
 /**
  * Num class provides various helper functions for basic numeric operations
  */
@@ -2020,158 +2172,6 @@ exports.Shaping = Shaping;
 
 
 /***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-// Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan)
-Object.defineProperty(exports, "__esModule", { value: true });
-const Pt_1 = __webpack_require__(0);
-/**
- * Bound is a subclass of Group that represents a rectangular boundary.
- * It includes some convenient properties such as `x`, `y`, bottomRight`, `center`, and `size`.
- */
-class Bound extends Pt_1.Group {
-    /**
-     * Create a Bound. This is similar to the Group constructor.
-     * @param args a list of Pt as parameters
-     */
-    constructor(...args) {
-        super(...args);
-        this._center = new Pt_1.Pt();
-        this._size = new Pt_1.Pt();
-        this._topLeft = new Pt_1.Pt();
-        this._bottomRight = new Pt_1.Pt();
-        this._inited = false;
-        this.init();
-    }
-    /**
-     * Create a Bound from a [ClientRect](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect) object.
-     * @param rect an object has top/left/bottom/right/width/height properties
-     * @returns a Bound object
-     */
-    static fromBoundingRect(rect) {
-        let b = new Bound(new Pt_1.Pt(rect.left || 0, rect.top || 0), new Pt_1.Pt(rect.right || 0, rect.bottom || 0));
-        if (rect.width && rect.height)
-            b.size = new Pt_1.Pt(rect.width, rect.height);
-        return b;
-    }
-    /**
-     * Initiate the bound's properties.
-     */
-    init() {
-        if (this.p1) {
-            this._size = this.p1.clone();
-            this._inited = true;
-        }
-        if (this.p1 && this.p2) {
-            let a = this.p1;
-            let b = this.p2;
-            this.topLeft = a.$min(b);
-            this._bottomRight = a.$max(b);
-            this._updateSize();
-            this._inited = true;
-        }
-    }
-    /**
-     * Clone this bound and return a new one
-     */
-    clone() {
-        return new Bound(this._topLeft.clone(), this._bottomRight.clone());
-    }
-    /**
-     * Recalculte size and center
-     */
-    _updateSize() {
-        this._size = this._bottomRight.$subtract(this._topLeft).abs();
-        this._updateCenter();
-    }
-    /**
-     * Recalculate center
-     */
-    _updateCenter() {
-        this._center = this._size.$multiply(0.5).add(this._topLeft);
-    }
-    /**
-     * Recalculate based on top-left position and size
-     */
-    _updatePosFromTop() {
-        this._bottomRight = this._topLeft.$add(this._size);
-        this._updateCenter();
-    }
-    /**
-     * Recalculate based on bottom-right position and size
-     */
-    _updatePosFromBottom() {
-        this._topLeft = this._bottomRight.$subtract(this._size);
-        this._updateCenter();
-    }
-    /**
-     * Recalculate based on center position and size
-     */
-    _updatePosFromCenter() {
-        let half = this._size.$multiply(0.5);
-        this._topLeft = this._center.$subtract(half);
-        this._bottomRight = this._center.$add(half);
-    }
-    get size() { return new Pt_1.Pt(this._size); }
-    set size(p) {
-        this._size = new Pt_1.Pt(p);
-        this._updatePosFromTop();
-    }
-    get center() { return new Pt_1.Pt(this._center); }
-    set center(p) {
-        this._center = new Pt_1.Pt(p);
-        this._updatePosFromCenter();
-    }
-    get topLeft() { return new Pt_1.Pt(this._topLeft); }
-    set topLeft(p) {
-        this._topLeft = new Pt_1.Pt(p);
-        this[0] = this._topLeft;
-        this._updateSize();
-    }
-    get bottomRight() { return new Pt_1.Pt(this._bottomRight); }
-    set bottomRight(p) {
-        this._bottomRight = new Pt_1.Pt(p);
-        this[1] = this._bottomRight;
-        this._updateSize();
-    }
-    get width() { return (this._size.length > 0) ? this._size.x : 0; }
-    set width(w) {
-        this._size.x = w;
-        this._updatePosFromTop();
-    }
-    get height() { return (this._size.length > 1) ? this._size.y : 0; }
-    set height(h) {
-        this._size.y = h;
-        this._updatePosFromTop();
-    }
-    get depth() { return (this._size.length > 2) ? this._size.z : 0; }
-    set depth(d) {
-        this._size.z = d;
-        this._updatePosFromTop();
-    }
-    get x() { return this.topLeft.x; }
-    get y() { return this.topLeft.y; }
-    get z() { return this.topLeft.z; }
-    get inited() { return this._inited; }
-    /**
-     * If the Group elements are changed, call this function to update the Bound's properties.
-     * It's preferable to change the topLeft/bottomRight etc properties instead of changing the Group array directly.
-     */
-    update() {
-        this._topLeft = this[0];
-        this._bottomRight = this[1];
-        this._updateSize();
-        return this;
-    }
-}
-exports.Bound = Bound;
-
-
-/***/ }),
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2180,10 +2180,82 @@ exports.Bound = Bound;
 // Source code licensed under Apache License 2.0. 
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Form is an abstract class that represents a form that's used in a Space for expressions.
+ */
+class Form {
+    constructor() {
+        this._ready = false;
+    }
+    /**
+     * get whether the Form has received the Space's rendering context
+     */
+    get ready() { return this._ready; }
+}
+exports.Form = Form;
+/**
+ * VisualForm is an abstract class that represents a form that can be used to express Pts visually.
+ * For example, CanvasForm is an implementation of VisualForm that draws on CanvasSpace which represents a html canvas.
+ */
+class VisualForm extends Form {
+    constructor() {
+        super(...arguments);
+        this._filled = true;
+        this._stroked = true;
+        this._font = new Font();
+    }
+    get filled() { return this._filled; }
+    set filled(b) { this._filled = b; }
+    get stroked() { return this._stroked; }
+    set stroked(b) { this._stroked = b; }
+    get currentFont() { return this._font; }
+}
+exports.VisualForm = VisualForm;
+/**
+ * Font class lets you create a specific font style with properties for its size and style
+ */
+class Font {
+    /**
+     * Create a font style
+     * @param size font size. Defaults is 12px.
+     * @param face Optional font-family, use css-like string such as "Helvetica" or "Helvetica, sans-serif". Default is "sans-serif".
+     * @param weight Optional font weight such as "bold". Default is "" (none).
+     * @param style Optional font style such as "italic". Default is "" (none).
+     * @param lineHeight Optional line height. Default is 1.5.
+     * @example `new Font(12, "Frutiger, sans-serif", "bold", "underline", 1.5)`
+     */
+    constructor(size = 12, face = "sans-serif", weight = "", style = "", lineHeight = 1.5) {
+        this.size = size;
+        this.face = face;
+        this.style = style;
+        this.weight = weight;
+        this.lineHeight = lineHeight;
+    }
+    /**
+     * Get a string representing the font style, in css-like string such as "italic bold 12px/1.5 sans-serif"
+     */
+    get value() { return `${this.style} ${this.weight} ${this.size}px/${this.lineHeight} ${this.face}`; }
+    /**
+     * Get a string representing the font style, in css-like string such as "italic bold 12px/1.5 sans-serif"
+     */
+    toString() { return this.value; }
+}
+exports.Font = Font;
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan)
+Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(1);
-const Num_1 = __webpack_require__(3);
+const Num_1 = __webpack_require__(4);
 const Pt_1 = __webpack_require__(0);
-const LinearAlgebra_1 = __webpack_require__(2);
+const LinearAlgebra_1 = __webpack_require__(3);
 let _errorLength = (obj, param = "expected") => Util_1.Util.warn("Group's length is less than " + param, obj);
 let _errorOutofBound = (obj, param = "") => Util_1.Util.warn(`Index ${param} is out of bound in Group`, obj);
 /**
@@ -3379,71 +3451,6 @@ exports.Curve = Curve;
 
 
 /***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-// Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan)
-Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * Form is an abstract class that represents a form that's used in a Space for expressions.
- */
-class Form {
-}
-exports.Form = Form;
-/**
- * VisualForm is an abstract class that represents a form that can be used to express Pts visually.
- * For example, CanvasForm is an implementation of VisualForm that draws on CanvasSpace which represents a html canvas.
- */
-class VisualForm extends Form {
-    constructor() {
-        super(...arguments);
-        this._filled = true;
-        this._stroked = true;
-        this._font = new Font();
-    }
-    get filled() { return this._filled; }
-    set filled(b) { this._filled = b; }
-    get stroked() { return this._stroked; }
-    set stroked(b) { this._stroked = b; }
-    get currentFont() { return this._font; }
-}
-exports.VisualForm = VisualForm;
-/**
- * Font class lets you create a specific font style with properties for its size and style
- */
-class Font {
-    /**
-     * Create a font style
-     * @param size font size. Defaults is 12px.
-     * @param face Optional font-family, use css-like string such as "Helvetica" or "Helvetica, sans-serif". Default is "sans-serif".
-     * @param weight Optional font weight such as "bold". Default is "" (none).
-     * @param style Optional font style such as "italic". Default is "" (none).
-     * @param lineHeight Optional line height. Default is 1.5.
-     * @example `new Font(12, "Frutiger, sans-serif", "bold", "underline", 1.5)`
-     */
-    constructor(size = 12, face = "sans-serif", weight = "", style = "", lineHeight = 1.5) {
-        this.size = size;
-        this.face = face;
-        this.style = style;
-        this.weight = weight;
-        this.lineHeight = lineHeight;
-    }
-    /**
-     * Get a string representing the font style, in css-like string such as "italic bold 12px/1.5 sans-serif"
-     */
-    get value() { return `${this.style} ${this.weight} ${this.size}px/${this.lineHeight} ${this.face}`; }
-    /**
-     * Get a string representing the font style, in css-like string such as "italic bold 12px/1.5 sans-serif"
-     */
-    toString() { return this.value; }
-}
-exports.Font = Font;
-
-
-/***/ }),
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3452,7 +3459,7 @@ exports.Font = Font;
 // Source code licensed under Apache License 2.0. 
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
-const Bound_1 = __webpack_require__(4);
+const Bound_1 = __webpack_require__(2);
 const Pt_1 = __webpack_require__(0);
 /**
  * Space is an abstract class that represents a general context for expressing Pts.
@@ -3481,7 +3488,7 @@ class Space {
     /**
      * Add an IPlayer to this space. An IPlayer can define the following callback functions:
      * - `animate( time, ftime, space )`
-     * - `start(bound, spacE)`
+     * - `start(bound, space)`
      * - `resize( size, event )`
      * - `action( type, x, y, event )`
      * Subclasses of Space may define other callback functions.
@@ -3631,8 +3638,8 @@ exports.Space = Space;
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Space_1 = __webpack_require__(7);
-const Form_1 = __webpack_require__(6);
-const Bound_1 = __webpack_require__(4);
+const Form_1 = __webpack_require__(5);
+const Bound_1 = __webpack_require__(2);
 const Pt_1 = __webpack_require__(0);
 const Util_1 = __webpack_require__(1);
 /**
@@ -3727,8 +3734,10 @@ class CanvasSpace extends Space_1.Space {
         this.clear(this._bgcolor);
         this._canvas.dispatchEvent(new Event("ready"));
         for (let k in this.players) {
-            if (this.players[k].start)
-                this.players[k].start(this.bound.clone(), this);
+            if (this.players.hasOwnProperty(k)) {
+                if (this.players[k].start)
+                    this.players[k].start(this.bound.clone(), this);
+            }
         }
         this._pointer = this.center;
         if (callback)
@@ -4127,7 +4136,6 @@ class CanvasForm extends Form_1.VisualForm {
     */
     constructor(space) {
         super();
-        this._ready = false;
         /**
         * store common styles so that they can be restored to canvas context when using multiple forms. See `reset()`.
         */
@@ -4150,10 +4158,6 @@ class CanvasForm extends Form_1.VisualForm {
     * get the CanvasSpace instance that this form is associated with
     */
     get space() { return this._space; }
-    /**
-     * get whether the CanvasForm has received the Space's rendering context
-     */
-    get ready() { return this._ready; }
     /**
     * Toggle whether to draw on offscreen canvas (if offscreen is set in CanvasSpace)
     * @param off if `true`, draw on offscreen canvas instead of the visible canvas. Default is `true`
@@ -4543,7 +4547,7 @@ exports.CanvasForm = CanvasForm;
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
 const Util_1 = __webpack_require__(1);
-const Num_1 = __webpack_require__(3);
+const Num_1 = __webpack_require__(4);
 /**
  * Color is a subclass of Pt. You can think of a color as a point in a color space. The Color class provides support for many color spaces.
  */
@@ -5196,11 +5200,12 @@ exports.Create = Create;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const Space_1 = __webpack_require__(7);
-const Form_1 = __webpack_require__(6);
-const Bound_1 = __webpack_require__(4);
-class DomSpace extends Space_1.Space {
+const Form_1 = __webpack_require__(5);
+const Bound_1 = __webpack_require__(2);
+class DOMSpace extends Space_1.Space {
     constructor(elem, callback) {
         super();
+        this.id = "domspace";
         // protected _ctx = {};
         this._autoResize = true;
         this._bgcolor = "#e1e9f0";
@@ -5249,8 +5254,21 @@ class DomSpace extends Space_1.Space {
         return d;
     }
     getForm() {
-        return new DomForm(this);
+        return new DOMForm(this);
     }
+    /**
+    * Get the html element
+    */
+    get element() {
+        return this._element;
+    }
+    /**
+    * Get the parent element that contains the html element
+    */
+    get parent() {
+        return this._container;
+    }
+    get ready() { return this._isReady; }
     /**
     * Handle callbacks after element is mounted in DOM
     * @param callback
@@ -5265,8 +5283,10 @@ class DomSpace extends Space_1.Space {
         this.clear(this._bgcolor);
         this._element.dispatchEvent(new Event("ready"));
         for (let k in this.players) {
-            if (this.players[k].start)
-                this.players[k].start(this.bound.clone(), this);
+            if (this.players.hasOwnProperty(k)) {
+                if (this.players[k].start)
+                    this.players[k].start(this.bound.clone(), this);
+            }
         }
         this._pointer = this.center;
         if (callback)
@@ -5366,18 +5386,20 @@ class DomSpace extends Space_1.Space {
         return str;
     }
 }
-exports.DomSpace = DomSpace;
-class DomForm extends Form_1.Form {
+exports.DOMSpace = DOMSpace;
+class DOMForm extends Form_1.Form {
     constructor(space) {
         super();
         this._space = space;
     }
     get space() { return this._space; }
 }
-exports.DomForm = DomForm;
-class SVGSpace extends DomSpace {
+exports.DOMForm = DOMForm;
+class SVGSpace extends DOMSpace {
     constructor(elem, callback) {
         super(elem, callback);
+        this.id = "svgspace";
+        this._bgcolor = "#999";
         if (this._element.nodeName.toLowerCase() != "svg") {
             let s = this._createElement("svg", `${this.id}_svg`);
             this._element.appendChild(s);
@@ -5385,11 +5407,18 @@ class SVGSpace extends DomSpace {
             this._element = s;
         }
     }
+    getForm() { return new SVGForm(this); }
+    /**
+    * Get the html element
+    */
+    get element() {
+        return this._element;
+    }
     static svgElement(parent, name, id) {
         if (!parent || !parent.appendChild)
             throw new Error("parent is not a valid DOM element");
         let elem = document.querySelector(`#${id}`);
-        if (!id || !elem) {
+        if (!elem) {
             elem = document.createElementNS("http://www.w3.org/2000/svg", name);
             elem.setAttribute("id", id);
             elem.setAttribute("class", id.substring(0, id.indexOf("-")));
@@ -5400,8 +5429,30 @@ class SVGSpace extends DomSpace {
     _createElement(elem = "svg", id) {
         let d = document.createElementNS("http://www.w3.org/2000/svg", elem);
         if (id)
-            d.setAttribute("id,", id);
+            d.setAttribute("id", id);
         return d;
+    }
+    setup(opt) {
+        if (opt.bgcolor) {
+            this.bgcolor = opt.bgcolor;
+        }
+        if (opt.resize) {
+            this._element.setAttribute("width", "100%");
+            this._element.setAttribute("height", "100%");
+        }
+        return this;
+    }
+    clear(bg) {
+        this._element.innerHTML = "";
+        this.bgcolor = bg;
+        return this;
+    }
+    set bgcolor(bg) {
+        this._bgcolor = bg;
+        this._element.setAttribute("fill", bg);
+    }
+    get bgcolor() {
+        return this._bgcolor;
     }
 }
 exports.SVGSpace = SVGSpace;
@@ -5414,8 +5465,8 @@ class SVGForm extends Form_1.Form {
             groupCount: 0,
             currentID: "pts0",
             style: {
-                "filled": false,
-                "stroked": false,
+                "filled": true,
+                "stroked": true,
                 "fill": "#f03",
                 "stroke": "#fff",
                 "stroke-width": 1,
@@ -5424,10 +5475,15 @@ class SVGForm extends Form_1.Form {
             },
             font: "11px sans-serif",
             fontSize: 11,
-            fontFace: "sans-serif"
+            fontFamily: "sans-serif"
         };
         this._ready = false;
         this._space = space;
+        this._space.add({ start: () => {
+                this._ctx.group = this._space.element;
+                this._ready = true;
+                console.log("READY");
+            } });
     }
     get space() { return this._space; }
     styleTo(k, v) {
@@ -5461,25 +5517,25 @@ class SVGForm extends Form_1.Form {
         }
         return this;
     }
-    branch(group_id, group = false) {
-        // this._ctx.group = group;
+    branch(group_id, group) {
+        this._ctx.group = group;
         this._ctx.groupID = group_id;
         this._ctx.groupCount = 0;
         this.nextID();
         return this._ctx;
     }
-    context(item) {
+    base(item) {
         if (!item || item.animateID == null)
             throw new Error("item not defined or not yet added to Space");
-        return this.branch(this._branchID(item));
-    }
-    currentID() {
-        return this._ctx.currentID || `p-${SVGForm.domID++}`;
+        return this.branch(this._branchID(item), this.space.element);
     }
     nextID() {
         this._ctx.groupCount++;
         this._ctx.currentID = `${this._ctx.groupID}-${this._ctx.groupCount}`;
         return this._ctx.currentID;
+    }
+    static getID(ctx) {
+        return ctx.currentID || `p-${SVGForm.domID++}`;
     }
     static style(elem, styles) {
         let st = [];
@@ -5499,10 +5555,28 @@ class SVGForm extends Form_1.Form {
                 }
             }
         }
-        return DomSpace.attr(elem, { style: st.join(";") });
+        return DOMSpace.attr(elem, { style: st.join(";") });
     }
     _branchID(item) {
         return `item-${item.animateID}`;
+    }
+    static point(ctx, pt, radius = 5, shape = "rect") {
+        let elem = SVGSpace.svgElement(ctx.group, shape, SVGForm.getID(ctx));
+        if (!elem)
+            return undefined;
+        if (shape == "circle") {
+            DOMSpace.attr(elem, { cx: pt[0], cy: pt[1], r: radius });
+        }
+        else {
+            DOMSpace.attr(elem, { x: pt[0] - radius, y: pt[1] - radius, width: radius * 2, height: radius * 2 });
+        }
+        SVGForm.style(elem, ctx.style);
+        return elem;
+    }
+    point(pt, radius = 5, shape = "rect") {
+        this.nextID();
+        SVGForm.point(this._ctx, pt, radius, shape);
+        return this;
     }
 }
 SVGForm.domID = 0;
@@ -5516,13 +5590,13 @@ exports.SVGForm = SVGForm;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const _Bound = __webpack_require__(4);
+const _Bound = __webpack_require__(2);
 const _Canvas = __webpack_require__(8);
 const _Create = __webpack_require__(10);
-const _Form = __webpack_require__(6);
-const _LinearAlgebra = __webpack_require__(2);
-const _Num = __webpack_require__(3);
-const _Op = __webpack_require__(5);
+const _Form = __webpack_require__(5);
+const _LinearAlgebra = __webpack_require__(3);
+const _Num = __webpack_require__(4);
+const _Op = __webpack_require__(6);
 const _Pt = __webpack_require__(0);
 const _Space = __webpack_require__(7);
 const _Color = __webpack_require__(9);
