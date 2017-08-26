@@ -772,14 +772,6 @@ export class CanvasForm extends VisualForm {
     }
     
     
-    protected _multiple( groups:GroupLike[], shape:string, ...rest ):this {
-      if (!groups) return this;
-      for (let i=0, len=groups.length; i<len; i++) {
-        this[shape]( groups[i], ...rest );
-      }
-      return this;
-    }
-    
     
     /**
     * Draws a point
@@ -795,21 +787,6 @@ export class CanvasForm extends VisualForm {
       CanvasForm[shape]( this._ctx, p, radius );
       this._paint();
       
-      return this;
-    }
-    
-    
-    /**
-    * Draw multiple points at once
-    * @param pts an array of Pt or an array of number arrays
-    * @param radius radius of the point. Default is 5.
-    * @param shape The shape of the point. Defaults to "square", but it can be "circle" or a custom shape function in your own implementation.
-    */
-    points( pts:GroupLike|number[][], radius:number=5, shape:string="square" ): this {
-      if (!pts) return;
-      for (let i=0, len=pts.length; i<len; i++) {
-        this.point( pts[i], radius, shape );
-      }
       return this;
     }
     
@@ -837,15 +814,6 @@ export class CanvasForm extends VisualForm {
       CanvasForm.circle( this._ctx, pts[0], pts[1][0] );
       this._paint();
       return this;
-    }
-    
-    
-    /**
-    * Draw multiple circles at once
-    * @param groups an array of Groups that defines multiple circles
-    */
-    circles( groups:GroupLike[] ):this {
-      return this._multiple( groups, "circle" );
     }
     
     
@@ -930,15 +898,6 @@ export class CanvasForm extends VisualForm {
     
     
     /**
-    * Draw multiple lines at once
-    * @param groups An array of Groups of Pts
-    */
-    lines( groups:GroupLike[] ):this {
-      return this._multiple( groups, "line" );
-    }
-    
-    
-    /**
     * A static function to draw polygon
     * @param ctx canvas rendering context
     * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
@@ -966,15 +925,6 @@ export class CanvasForm extends VisualForm {
     
     
     /**
-    * Draw multiple polygons at once
-    * @param groups An array of Groups of Pts
-    */
-    polygons( groups:GroupLike[] ):this {
-      return this._multiple( groups, "polygon" );
-    }
-    
-    
-    /**
     * A static function to draw a rectangle
     * @param ctx canvas rendering context
     * @param pts usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.
@@ -998,15 +948,6 @@ export class CanvasForm extends VisualForm {
       CanvasForm.rect( this._ctx, pts );
       this._paint();
       return this;
-    }
-    
-    
-    /**
-    * Draw multiple rectangles at once
-    * @param groups An array of Groups of Pts
-    */
-    rects( groups:GroupLike[] ):this {
-      return this._multiple( groups, "rect" );
     }
     
     

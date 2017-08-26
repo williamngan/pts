@@ -2181,22 +2181,22 @@ exports.Shaping = Shaping;
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
- * Form is an abstract class that represents a form that's used in a Space for expressions.
- */
+* Form is an abstract class that represents a form that's used in a Space for expressions.
+*/
 class Form {
     constructor() {
         this._ready = false;
     }
     /**
-     * get whether the Form has received the Space's rendering context
-     */
+    * get whether the Form has received the Space's rendering context
+    */
     get ready() { return this._ready; }
 }
 exports.Form = Form;
 /**
- * VisualForm is an abstract class that represents a form that can be used to express Pts visually.
- * For example, CanvasForm is an implementation of VisualForm that draws on CanvasSpace which represents a html canvas.
- */
+* VisualForm is an abstract class that represents a form that can be used to express Pts visually.
+* For example, CanvasForm is an implementation of VisualForm that draws on CanvasSpace which represents a html canvas.
+*/
 class VisualForm extends Form {
     constructor() {
         super(...arguments);
@@ -2209,21 +2209,71 @@ class VisualForm extends Form {
     get stroked() { return this._stroked; }
     set stroked(b) { this._stroked = b; }
     get currentFont() { return this._font; }
+    _multiple(groups, shape, ...rest) {
+        if (!groups)
+            return this;
+        for (let i = 0, len = groups.length; i < len; i++) {
+            this[shape](groups[i], ...rest);
+        }
+        return this;
+    }
+    /**
+    * Draw multiple points at once
+    * @param pts an array of Pt or an array of number arrays
+    * @param radius radius of the point. Default is 5.
+    * @param shape The shape of the point. Defaults to "square", but it can be "circle" or a custom shape function in your own implementation.
+    */
+    points(pts, radius, shape) {
+        if (!pts)
+            return;
+        for (let i = 0, len = pts.length; i < len; i++) {
+            this.point(pts[i], radius, shape);
+        }
+        return this;
+    }
+    /**
+    * Draw multiple circles at once
+    * @param groups an array of Groups that defines multiple circles
+    */
+    circles(groups) {
+        return this._multiple(groups, "circle");
+    }
+    /**
+    * Draw multiple lines at once
+    * @param groups An array of Groups of Pts
+    */
+    lines(groups) {
+        return this._multiple(groups, "line");
+    }
+    /**
+    * Draw multiple polygons at once
+    * @param groups An array of Groups of Pts
+    */
+    polygons(groups) {
+        return this._multiple(groups, "polygon");
+    }
+    /**
+    * Draw multiple rectangles at once
+    * @param groups An array of Groups of Pts
+    */
+    rects(groups) {
+        return this._multiple(groups, "rect");
+    }
 }
 exports.VisualForm = VisualForm;
 /**
- * Font class lets you create a specific font style with properties for its size and style
- */
+* Font class lets you create a specific font style with properties for its size and style
+*/
 class Font {
     /**
-     * Create a font style
-     * @param size font size. Defaults is 12px.
-     * @param face Optional font-family, use css-like string such as "Helvetica" or "Helvetica, sans-serif". Default is "sans-serif".
-     * @param weight Optional font weight such as "bold". Default is "" (none).
-     * @param style Optional font style such as "italic". Default is "" (none).
-     * @param lineHeight Optional line height. Default is 1.5.
-     * @example `new Font(12, "Frutiger, sans-serif", "bold", "underline", 1.5)`
-     */
+    * Create a font style
+    * @param size font size. Defaults is 12px.
+    * @param face Optional font-family, use css-like string such as "Helvetica" or "Helvetica, sans-serif". Default is "sans-serif".
+    * @param weight Optional font weight such as "bold". Default is "" (none).
+    * @param style Optional font style such as "italic". Default is "" (none).
+    * @param lineHeight Optional line height. Default is 1.5.
+    * @example `new Font(12, "Frutiger, sans-serif", "bold", "underline", 1.5)`
+    */
     constructor(size = 12, face = "sans-serif", weight = "", style = "", lineHeight = 1.5) {
         this.size = size;
         this.face = face;
@@ -2232,12 +2282,12 @@ class Font {
         this.lineHeight = lineHeight;
     }
     /**
-     * Get a string representing the font style, in css-like string such as "italic bold 12px/1.5 sans-serif"
-     */
+    * Get a string representing the font style, in css-like string such as "italic bold 12px/1.5 sans-serif"
+    */
     get value() { return `${this.style} ${this.weight} ${this.size}px/${this.lineHeight} ${this.face}`; }
     /**
-     * Get a string representing the font style, in css-like string such as "italic bold 12px/1.5 sans-serif"
-     */
+    * Get a string representing the font style, in css-like string such as "italic bold 12px/1.5 sans-serif"
+    */
     toString() { return this.value; }
 }
 exports.Font = Font;
@@ -4289,14 +4339,6 @@ class CanvasForm extends Form_1.VisualForm {
         if (this._stroked)
             this._ctx.stroke();
     }
-    _multiple(groups, shape, ...rest) {
-        if (!groups)
-            return this;
-        for (let i = 0, len = groups.length; i < len; i++) {
-            this[shape](groups[i], ...rest);
-        }
-        return this;
-    }
     /**
     * Draws a point
     * @param p a Pt object
@@ -4311,20 +4353,6 @@ class CanvasForm extends Form_1.VisualForm {
             throw new Error(`${shape} is not a static function of CanvasForm`);
         CanvasForm[shape](this._ctx, p, radius);
         this._paint();
-        return this;
-    }
-    /**
-    * Draw multiple points at once
-    * @param pts an array of Pt or an array of number arrays
-    * @param radius radius of the point. Default is 5.
-    * @param shape The shape of the point. Defaults to "square", but it can be "circle" or a custom shape function in your own implementation.
-    */
-    points(pts, radius = 5, shape = "square") {
-        if (!pts)
-            return;
-        for (let i = 0, len = pts.length; i < len; i++) {
-            this.point(pts[i], radius, shape);
-        }
         return this;
     }
     /**
@@ -4349,13 +4377,6 @@ class CanvasForm extends Form_1.VisualForm {
         CanvasForm.circle(this._ctx, pts[0], pts[1][0]);
         this._paint();
         return this;
-    }
-    /**
-    * Draw multiple circles at once
-    * @param groups an array of Groups that defines multiple circles
-    */
-    circles(groups) {
-        return this._multiple(groups, "circle");
     }
     /**
     * A static function to draw an arc.
@@ -4431,13 +4452,6 @@ class CanvasForm extends Form_1.VisualForm {
         return this;
     }
     /**
-    * Draw multiple lines at once
-    * @param groups An array of Groups of Pts
-    */
-    lines(groups) {
-        return this._multiple(groups, "line");
-    }
-    /**
     * A static function to draw polygon
     * @param ctx canvas rendering context
     * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
@@ -4463,13 +4477,6 @@ class CanvasForm extends Form_1.VisualForm {
         return this;
     }
     /**
-    * Draw multiple polygons at once
-    * @param groups An array of Groups of Pts
-    */
-    polygons(groups) {
-        return this._multiple(groups, "polygon");
-    }
-    /**
     * A static function to draw a rectangle
     * @param ctx canvas rendering context
     * @param pts usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.
@@ -4492,13 +4499,6 @@ class CanvasForm extends Form_1.VisualForm {
         CanvasForm.rect(this._ctx, pts);
         this._paint();
         return this;
-    }
-    /**
-    * Draw multiple rectangles at once
-    * @param groups An array of Groups of Pts
-    */
-    rects(groups) {
-        return this._multiple(groups, "rect");
     }
     /**
     * A static function to draw text
@@ -5253,6 +5253,16 @@ class DOMSpace extends Space_1.Space {
             d.setAttribute("id,", id);
         return d;
     }
+    setup(opt) {
+        if (opt.bgcolor) {
+            this._bgcolor = opt.bgcolor;
+        }
+        if (opt.resize) {
+            this._element.setAttribute("width", "100%");
+            this._element.setAttribute("height", "100%");
+        }
+        return this;
+    }
     getForm() {
         return new DOMForm(this);
     }
@@ -5320,8 +5330,7 @@ class DOMSpace extends Space_1.Space {
     }
     set background(bg) {
         this._bgcolor = bg;
-        this.style("backgroundColor", this._bgcolor);
-        this._element.style.backgroundColor = this._bgcolor;
+        this._container.style.backgroundColor = this._bgcolor;
     }
     get background() { return this._bgcolor; }
     /**
@@ -5432,28 +5441,6 @@ class SVGSpace extends DOMSpace {
             d.setAttribute("id", id);
         return d;
     }
-    setup(opt) {
-        if (opt.bgcolor) {
-            this.bgcolor = opt.bgcolor;
-        }
-        if (opt.resize) {
-            this._element.setAttribute("width", "100%");
-            this._element.setAttribute("height", "100%");
-        }
-        return this;
-    }
-    clear(bg) {
-        this._element.innerHTML = "";
-        this.bgcolor = bg;
-        return this;
-    }
-    set bgcolor(bg) {
-        this._bgcolor = bg;
-        this._element.setAttribute("fill", bg);
-    }
-    get bgcolor() {
-        return this._bgcolor;
-    }
 }
 exports.SVGSpace = SVGSpace;
 class SVGForm extends Form_1.Form {
@@ -5482,7 +5469,6 @@ class SVGForm extends Form_1.Form {
         this._space.add({ start: () => {
                 this._ctx.group = this._space.element;
                 this._ready = true;
-                console.log("READY");
             } });
     }
     get space() { return this._space; }
@@ -5516,6 +5502,15 @@ class SVGForm extends Form_1.Form {
                 this.styleTo("stroke-linecap", linecap);
         }
         return this;
+    }
+    /**
+    * Set current stroke style and without fill.
+    * @example `form.strokeOnly("#F90")`, `form.strokeOnly("#000", 0.5, 'round', 'square')`
+    * @param c stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle)
+    */
+    strokeOnly(c, width, linejoin, linecap) {
+        this.fill(false);
+        return this.stroke(c, width, linejoin, linecap);
     }
     branch(group_id, group) {
         this._ctx.group = group;
@@ -5576,6 +5571,24 @@ class SVGForm extends Form_1.Form {
     point(pt, radius = 5, shape = "rect") {
         this.nextID();
         SVGForm.point(this._ctx, pt, radius, shape);
+        return this;
+    }
+    static line(ctx, pts) {
+        if (pts.length < 2)
+            return;
+        let elem = SVGSpace.svgElement(ctx.group, "line", SVGForm.getID(ctx));
+        DOMSpace.attr(elem, {
+            x1: pts[0][0],
+            y1: pts[0][1],
+            x2: pts[1][0],
+            y2: pts[1][1]
+        });
+        SVGForm.style(elem, ctx.style);
+        return elem;
+    }
+    line(pts) {
+        this.nextID();
+        SVGForm.line(this._ctx, pts);
         return this;
     }
 }

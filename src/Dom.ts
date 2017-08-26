@@ -1,7 +1,7 @@
 import {Space, IPlayer} from './Space';
 import {Form} from "./Form";
 import {Bound} from './Bound';
-import {PtLike} from './Pt';
+import {PtLike, GroupLike} from './Pt';
 
 
 export class DOMSpace extends Space {
@@ -70,6 +70,19 @@ export class DOMSpace extends Space {
     let d = document.createElement( elem );
     if (id) d.setAttribute( "id,", id );
     return d;
+  }
+
+  setup( opt:{bgcolor?:string, resize?:boolean} ):this {
+    if (opt.bgcolor) {
+      this._bgcolor = opt.bgcolor;
+    }
+
+    if (opt.resize) {
+      this._element.setAttribute("width", "100%");
+      this._element.setAttribute("height", "100%");
+    } 
+    
+    return this;
   }
 
   getForm():Form {
@@ -149,8 +162,7 @@ export class DOMSpace extends Space {
 
   set background( bg:string ) {
     this._bgcolor = bg;
-    this.style( "backgroundColor", this._bgcolor );
-    this._element.style.backgroundColor = this._bgcolor;
+    (this._container as HTMLElement).style.backgroundColor = this._bgcolor;
   }
   
   get background():string { return this._bgcolor; }
@@ -284,34 +296,7 @@ export class SVGSpace extends DOMSpace {
     return d;
   }
 
-  setup( opt:{bgcolor?:string, resize?:boolean} ):this {
-    if (opt.bgcolor) {
-      this.bgcolor = opt.bgcolor;
-    }
 
-    if (opt.resize) {
-      this._element.setAttribute("width", "100%");
-      this._element.setAttribute("height", "100%");
-    } 
-    
-    return this;
-  }
-
-  clear( bg?:string ):this {
-    this._element.innerHTML = "";
-    this.bgcolor = bg;
-    return this;
-  }
-
-  set bgcolor( bg:string ) {
-    this._bgcolor = bg;
-    this._element.setAttribute( "fill", bg );
-  }
-
-  get bgcolor():string {
-    return this._bgcolor;
-  }
-  
 
   // remove( item ):this
 
@@ -363,7 +348,6 @@ export class SVGForm extends Form {
     this._space.add( { start: () => {
       this._ctx.group = this._space.element;
       this._ready = true;
-      console.log( "READY" );
     }} );
   }
 
@@ -399,6 +383,18 @@ export class SVGForm extends Form {
     }
     return this;
   }
+
+
+  /**
+  * Set current stroke style and without fill.
+  * @example `form.strokeOnly("#F90")`, `form.strokeOnly("#000", 0.5, 'round', 'square')`
+  * @param c stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle)
+  */
+  strokeOnly( c:string|boolean, width?:number, linejoin?:string, linecap?:string ):this {
+    this.fill( false );
+    return this.stroke( c, width, linejoin, linecap );
+  }
+    
 
   branch( group_id:string, group?:Element ):object {
     this._ctx.group = group;
@@ -470,4 +466,27 @@ export class SVGForm extends Form {
     SVGForm.point( this._ctx, pt, radius, shape );
     return this;
   }
+
+  static line( ctx:SVGFormContext, pts:GroupLike|number[][] ):SVGElement {
+    if (pts.length<2) return;
+    let elem = SVGSpace.svgElement( ctx.group, "line", SVGForm.getID( ctx ) );
+
+    DOMSpace.attr( elem, {
+      x1: pts[0][0],
+      y1: pts[0][1],
+      x2: pts[1][0],
+      y2: pts[1][1]
+    });
+
+    SVGForm.style( elem, ctx.style );
+    return elem;
+  }
+
+  line( pts:GroupLike|number[][] ):this {
+    this.nextID();
+    SVGForm.line( this._ctx, pts );
+    return this;
+  }
+  
+
 }
