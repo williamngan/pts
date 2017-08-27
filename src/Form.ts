@@ -117,6 +117,15 @@ export abstract class VisualForm extends Form {
   circles( groups:GroupLike[] ):this {
     return this._multiple( groups, "circle" );
   }
+
+
+  /**
+  * Draw multiple squares at once
+  * @param groups an array of Groups that defines multiple circles
+  */
+  squares( groups:GroupLike[] ):this {
+    return this._multiple( groups, "square" );
+  }
   
   
   /**

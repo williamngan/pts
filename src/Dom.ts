@@ -1,7 +1,9 @@
 import {Space, IPlayer} from './Space';
 import {Form} from "./Form";
 import {Bound} from './Bound';
-import {PtLike, GroupLike} from './Pt';
+import {Geom} from './Num';
+import {Const, Util} from './Util';
+import {Pt, PtLike, GroupLike} from './Pt';
 
 
 export class DOMSpace extends Space {
@@ -447,18 +449,12 @@ export class SVGForm extends Form {
   }
 
 
-  static point( ctx:SVGFormContext, pt:PtLike, radius:number=5, shape:string="rect" ):SVGElement {
-    let elem = SVGSpace.svgElement( ctx.group, shape, SVGForm.getID( ctx ) );
-    if (!elem) return undefined;
-
-    if (shape == "circle") {
-      DOMSpace.attr( elem, { cx: pt[0], cy: pt[1], r:radius } );
+  static point( ctx:SVGFormContext, pt:PtLike, radius:number=5, shape:string="square" ):SVGElement {
+    if (shape === "circle") {
+      return SVGForm.circle( ctx, pt, radius );
     } else {
-      DOMSpace.attr( elem, {x: pt[0]-radius, y:pt[1]-radius, width: radius*2, height: radius*2} );
+      return SVGForm.square( ctx, pt, radius );
     }
-
-    SVGForm.style( elem, ctx.style );
-    return elem;
   }
 
   point( pt:PtLike, radius:number=5, shape:string="rect" ):this {
@@ -467,8 +463,69 @@ export class SVGForm extends Form {
     return this;
   }
 
+  static circle( ctx:SVGFormContext, pt:PtLike, radius:number=10 ):SVGElement {
+    let elem = SVGSpace.svgElement( ctx.group, "circle", SVGForm.getID(ctx) );
+
+    DOMSpace.attr( elem, {
+      cx: pt[0],
+      cy: pt[1],
+      r: radius
+    });
+
+    SVGForm.style( elem, ctx.style );
+    return elem;
+  }
+
+  circle( pts:GroupLike|number[][] ):this {
+    this.nextID();
+    SVGForm.circle( this._ctx, pts[0], pts[1][0] );
+    return this;
+  }
+
+  static arc( ctx:SVGFormContext, pt:PtLike, radius:number, startAngle:number, endAngle:number, cc?:boolean ):SVGElement {
+    let elem = SVGSpace.svgElement( ctx.group, "path", SVGForm.getID( ctx ) );
+
+    const start = new Pt(pt).toAngle( startAngle, radius, true );
+    const end = new Pt(pt).toAngle( endAngle, radius, true );
+    const diff = Geom.boundAngle(endAngle) - Geom.boundAngle(startAngle);
+    let largeArc = ( diff > Const.pi ) ? true : false;
+    if (cc) largeArc = !largeArc;
+    const sweep = (cc) ? "0" : "1";
+    
+    const d = `M ${start[0]} ${start[1]} A ${radius} ${radius} 0 ${largeArc ? "1" : "0"} ${sweep} ${end[0]} ${end[1]}`;
+
+    DOMSpace.attr( elem, { d: d } );
+    SVGForm.style( elem, ctx.style );
+    return elem;
+  }
+
+  arc( pt:PtLike, radius:number, startAngle:number, endAngle:number, cc?:boolean ):this {
+    this.nextID();
+    SVGForm.arc( this._ctx, pt, radius, startAngle, endAngle, cc );
+    return this;
+  }
+
+  static square( ctx:SVGFormContext, pt:PtLike, halfsize:number ) {
+    let elem = SVGSpace.svgElement( ctx.group, "rect", SVGForm.getID( ctx ) );
+    DOMSpace.attr( elem, {x: pt[0]-halfsize, y:pt[1]-halfsize, width: halfsize*2, height: halfsize*2} );
+    SVGForm.style( elem, ctx.style );
+    return elem;
+  }
+
+  square( pt:PtLike, halfsize:number ):this {
+    this.nextID();
+    SVGForm.square( this._ctx, pt, halfsize );
+    return this;
+  } 
+
   static line( ctx:SVGFormContext, pts:GroupLike|number[][] ):SVGElement {
-    if (pts.length<2) return;
+    if (pts.length < 2) {
+      Util.warn( "Requires 2 or more Pts to draw a line" );
+      return;
+    }
+
+    if (pts.length > 2) return SVGForm._poly( ctx, pts, false );
+
     let elem = SVGSpace.svgElement( ctx.group, "line", SVGForm.getID( ctx ) );
 
     DOMSpace.attr( elem, {
@@ -487,6 +544,28 @@ export class SVGForm extends Form {
     SVGForm.line( this._ctx, pts );
     return this;
   }
+
+
+
+  static _poly( ctx:SVGFormContext, pts:GroupLike|number[][], closePath:boolean=true) {
+    if (pts.length < 2) {
+      Util.warn( "Requires 2 or more Pts to draw a polygon" );
+      return;
+    }
+
+    let elem = SVGSpace.svgElement( ctx.group, ((closePath) ? "polygon" : "polyline"), SVGForm.getID(ctx) );
+    let points:string = (pts as number[][]).reduce( (a, p) => a+`${p[0]},${p[1]} `, "");
+    DOMSpace.attr( elem, {points: points} );    
+    SVGForm.style( elem, ctx.style );
+    return elem;
+  }
+
+
+  static polygon( ctx:SVGFormContext, pts:GroupLike|number[][] ):SVGElement {
+    return SVGForm._poly( ctx, pts, true );
+  }
+
+  
   
 
 }

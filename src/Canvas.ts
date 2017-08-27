@@ -872,6 +872,18 @@ export class CanvasForm extends VisualForm {
     
     
     /**
+     * Draw a square, given a center and its half-size
+     * @param pt center Pt
+     * @param halfsize half-size
+     */
+    square( pt:PtLike, halfsize:number ) {
+      CanvasForm.square( this._ctx, pt, halfsize );
+      this._paint();
+      return this;
+    }
+
+    
+    /**
     * A static function to draw a line
     * @param ctx canvas rendering context
     * @param pts a Group of multiple Pts, or an array of multiple numeric arrays

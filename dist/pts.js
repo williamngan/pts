@@ -2239,6 +2239,13 @@ class VisualForm extends Form {
         return this._multiple(groups, "circle");
     }
     /**
+    * Draw multiple squares at once
+    * @param groups an array of Groups that defines multiple circles
+    */
+    squares(groups) {
+        return this._multiple(groups, "square");
+    }
+    /**
     * Draw multiple lines at once
     * @param groups An array of Groups of Pts
     */
@@ -4428,6 +4435,16 @@ class CanvasForm extends Form_1.VisualForm {
         ctx.closePath();
     }
     /**
+     * Draw a square, given a center and its half-size
+     * @param pt center Pt
+     * @param halfsize half-size
+     */
+    square(pt, halfsize) {
+        CanvasForm.square(this._ctx, pt, halfsize);
+        this._paint();
+        return this;
+    }
+    /**
     * A static function to draw a line
     * @param ctx canvas rendering context
     * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
@@ -5202,6 +5219,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Space_1 = __webpack_require__(7);
 const Form_1 = __webpack_require__(5);
 const Bound_1 = __webpack_require__(2);
+const Num_1 = __webpack_require__(4);
+const Util_1 = __webpack_require__(1);
+const Pt_1 = __webpack_require__(0);
 class DOMSpace extends Space_1.Space {
     constructor(elem, callback) {
         super();
@@ -5555,27 +5575,71 @@ class SVGForm extends Form_1.Form {
     _branchID(item) {
         return `item-${item.animateID}`;
     }
-    static point(ctx, pt, radius = 5, shape = "rect") {
-        let elem = SVGSpace.svgElement(ctx.group, shape, SVGForm.getID(ctx));
-        if (!elem)
-            return undefined;
-        if (shape == "circle") {
-            DOMSpace.attr(elem, { cx: pt[0], cy: pt[1], r: radius });
+    static point(ctx, pt, radius = 5, shape = "square") {
+        if (shape === "circle") {
+            return SVGForm.circle(ctx, pt, radius);
         }
         else {
-            DOMSpace.attr(elem, { x: pt[0] - radius, y: pt[1] - radius, width: radius * 2, height: radius * 2 });
+            return SVGForm.square(ctx, pt, radius);
         }
-        SVGForm.style(elem, ctx.style);
-        return elem;
     }
     point(pt, radius = 5, shape = "rect") {
         this.nextID();
         SVGForm.point(this._ctx, pt, radius, shape);
         return this;
     }
+    static circle(ctx, pt, radius = 10) {
+        let elem = SVGSpace.svgElement(ctx.group, "circle", SVGForm.getID(ctx));
+        DOMSpace.attr(elem, {
+            cx: pt[0],
+            cy: pt[1],
+            r: radius
+        });
+        SVGForm.style(elem, ctx.style);
+        return elem;
+    }
+    circle(pts) {
+        this.nextID();
+        SVGForm.circle(this._ctx, pts[0], pts[1][0]);
+        return this;
+    }
+    static arc(ctx, pt, radius, startAngle, endAngle, cc) {
+        let elem = SVGSpace.svgElement(ctx.group, "path", SVGForm.getID(ctx));
+        const start = new Pt_1.Pt(pt).toAngle(startAngle, radius, true);
+        const end = new Pt_1.Pt(pt).toAngle(endAngle, radius, true);
+        const diff = Num_1.Geom.boundAngle(endAngle) - Num_1.Geom.boundAngle(startAngle);
+        let largeArc = (diff > Util_1.Const.pi) ? true : false;
+        if (cc)
+            largeArc = !largeArc;
+        const sweep = (cc) ? "0" : "1";
+        const d = `M ${start[0]} ${start[1]} A ${radius} ${radius} 0 ${largeArc ? "1" : "0"} ${sweep} ${end[0]} ${end[1]}`;
+        DOMSpace.attr(elem, { d: d });
+        SVGForm.style(elem, ctx.style);
+        return elem;
+    }
+    arc(pt, radius, startAngle, endAngle, cc) {
+        this.nextID();
+        SVGForm.arc(this._ctx, pt, radius, startAngle, endAngle, cc);
+        return this;
+    }
+    static square(ctx, pt, halfsize) {
+        let elem = SVGSpace.svgElement(ctx.group, "rect", SVGForm.getID(ctx));
+        DOMSpace.attr(elem, { x: pt[0] - halfsize, y: pt[1] - halfsize, width: halfsize * 2, height: halfsize * 2 });
+        SVGForm.style(elem, ctx.style);
+        return elem;
+    }
+    square(pt, halfsize) {
+        this.nextID();
+        SVGForm.square(this._ctx, pt, halfsize);
+        return this;
+    }
     static line(ctx, pts) {
-        if (pts.length < 2)
+        if (pts.length < 2) {
+            Util_1.Util.warn("Requires 2 or more Pts to draw a line");
             return;
+        }
+        if (pts.length > 2)
+            return SVGForm._poly(ctx, pts, false);
         let elem = SVGSpace.svgElement(ctx.group, "line", SVGForm.getID(ctx));
         DOMSpace.attr(elem, {
             x1: pts[0][0],
@@ -5590,6 +5654,20 @@ class SVGForm extends Form_1.Form {
         this.nextID();
         SVGForm.line(this._ctx, pts);
         return this;
+    }
+    static _poly(ctx, pts, closePath = true) {
+        if (pts.length < 2) {
+            Util_1.Util.warn("Requires 2 or more Pts to draw a polygon");
+            return;
+        }
+        let elem = SVGSpace.svgElement(ctx.group, ((closePath) ? "polygon" : "polyline"), SVGForm.getID(ctx));
+        let points = pts.reduce((a, p) => a + `${p[0]},${p[1]} `, "");
+        DOMSpace.attr(elem, { points: points });
+        SVGForm.style(elem, ctx.style);
+        return elem;
+    }
+    static polygon(ctx, pts) {
+        return SVGForm._poly(ctx, pts, true);
     }
 }
 SVGForm.domID = 0;
