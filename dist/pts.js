@@ -5222,6 +5222,7 @@ const Bound_1 = __webpack_require__(2);
 const Num_1 = __webpack_require__(4);
 const Util_1 = __webpack_require__(1);
 const Pt_1 = __webpack_require__(0);
+const Op_1 = __webpack_require__(6);
 class DOMSpace extends Space_1.Space {
     constructor(elem, callback) {
         super();
@@ -5492,6 +5493,13 @@ class SVGForm extends Form_1.Form {
             } });
     }
     get space() { return this._space; }
+    static _checkSize(pts) {
+        if (pts.length < 2) {
+            Util_1.Util.warn("Requires 2 or more Pts in this Group.");
+            return false;
+        }
+        return true;
+    }
     styleTo(k, v) {
         if (this._ctx.style[k] === undefined)
             throw new Error(`${k} style property doesn't exist`);
@@ -5583,7 +5591,7 @@ class SVGForm extends Form_1.Form {
             return SVGForm.square(ctx, pt, radius);
         }
     }
-    point(pt, radius = 5, shape = "rect") {
+    point(pt, radius = 5, shape = "square") {
         this.nextID();
         SVGForm.point(this._ctx, pt, radius, shape);
         return this;
@@ -5634,10 +5642,8 @@ class SVGForm extends Form_1.Form {
         return this;
     }
     static line(ctx, pts) {
-        if (pts.length < 2) {
-            Util_1.Util.warn("Requires 2 or more Pts to draw a line");
+        if (!this._checkSize(pts))
             return;
-        }
         if (pts.length > 2)
             return SVGForm._poly(ctx, pts, false);
         let elem = SVGSpace.svgElement(ctx.group, "line", SVGForm.getID(ctx));
@@ -5656,10 +5662,8 @@ class SVGForm extends Form_1.Form {
         return this;
     }
     static _poly(ctx, pts, closePath = true) {
-        if (pts.length < 2) {
-            Util_1.Util.warn("Requires 2 or more Pts to draw a polygon");
+        if (!this._checkSize(pts))
             return;
-        }
         let elem = SVGSpace.svgElement(ctx.group, ((closePath) ? "polygon" : "polyline"), SVGForm.getID(ctx));
         let points = pts.reduce((a, p) => a + `${p[0]},${p[1]} `, "");
         DOMSpace.attr(elem, { points: points });
@@ -5668,6 +5672,52 @@ class SVGForm extends Form_1.Form {
     }
     static polygon(ctx, pts) {
         return SVGForm._poly(ctx, pts, true);
+    }
+    polygon(pts) {
+        this.nextID();
+        SVGForm.polygon(this._ctx, pts);
+        return this;
+    }
+    static rect(ctx, pts) {
+        if (!this._checkSize(pts))
+            return;
+        let elem = SVGSpace.svgElement(ctx.group, "rect", SVGForm.getID(ctx));
+        let bound = Pt_1.Group.fromArray(pts).boundingBox();
+        let size = Op_1.Rectangle.size(bound);
+        DOMSpace.attr(elem, {
+            x: bound[0][0],
+            y: bound[0][1],
+            width: size[0],
+            height: size[1]
+        });
+        SVGForm.style(elem, ctx.style);
+        return elem;
+    }
+    rect(pts) {
+        this.nextID();
+        SVGForm.rect(this._ctx, pts);
+        return this;
+    }
+    static text(ctx, pt, txt) {
+        let elem = SVGSpace.svgElement(ctx.group, "text", SVGForm.getID(ctx));
+        DOMSpace.attr(elem, {
+            "pointer-events": "none",
+            x: pt[0],
+            y: pt[1],
+            dx: 0, dy: 0
+        });
+        elem.textContent = txt;
+        SVGForm.style(elem, ctx.style);
+        return elem;
+    }
+    text(pt, txt) {
+        this.nextID();
+        SVGForm.text(this._ctx, pt, txt);
+        return this;
+    }
+    log(txt) {
+        this.fill("#000").stroke("#fff", 0.5).text([10, 14], txt);
+        return this;
     }
 }
 SVGForm.domID = 0;

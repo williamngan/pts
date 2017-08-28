@@ -3,7 +3,8 @@ import {Form} from "./Form";
 import {Bound} from './Bound';
 import {Geom} from './Num';
 import {Const, Util} from './Util';
-import {Pt, PtLike, GroupLike} from './Pt';
+import {Pt, PtLike, GroupLike, Group} from './Pt';
+import {Rectangle} from "./Op";
 
 
 export class DOMSpace extends Space {
@@ -356,6 +357,13 @@ export class SVGForm extends Form {
   get space():SVGSpace { return this._space; }
 
   
+  static _checkSize( pts:GroupLike|number[][] ):boolean {
+    if (pts.length < 2) {
+      Util.warn( "Requires 2 or more Pts in this Group." );
+      return false;
+    } 
+    return true;
+  }
 
 
   protected styleTo( k, v ) { 
@@ -457,7 +465,7 @@ export class SVGForm extends Form {
     }
   }
 
-  point( pt:PtLike, radius:number=5, shape:string="rect" ):this {
+  point( pt:PtLike, radius:number=5, shape:string="square" ):this {
     this.nextID();
     SVGForm.point( this._ctx, pt, radius, shape );
     return this;
@@ -519,10 +527,7 @@ export class SVGForm extends Form {
   } 
 
   static line( ctx:SVGFormContext, pts:GroupLike|number[][] ):SVGElement {
-    if (pts.length < 2) {
-      Util.warn( "Requires 2 or more Pts to draw a line" );
-      return;
-    }
+    if (!this._checkSize( pts)) return;
 
     if (pts.length > 2) return SVGForm._poly( ctx, pts, false );
 
@@ -548,10 +553,7 @@ export class SVGForm extends Form {
 
 
   static _poly( ctx:SVGFormContext, pts:GroupLike|number[][], closePath:boolean=true) {
-    if (pts.length < 2) {
-      Util.warn( "Requires 2 or more Pts to draw a polygon" );
-      return;
-    }
+    if (!this._checkSize( pts)) return;
 
     let elem = SVGSpace.svgElement( ctx.group, ((closePath) ? "polygon" : "polyline"), SVGForm.getID(ctx) );
     let points:string = (pts as number[][]).reduce( (a, p) => a+`${p[0]},${p[1]} `, "");
@@ -565,7 +567,66 @@ export class SVGForm extends Form {
     return SVGForm._poly( ctx, pts, true );
   }
 
+  polygon( pts:GroupLike|number[][] ):this {
+    this.nextID();
+    SVGForm.polygon( this._ctx, pts );
+    return this;
+  }
   
+
+  static rect( ctx:SVGFormContext, pts:GroupLike|number[][] ):SVGElement {
+    if (!this._checkSize( pts)) return;
+
+    let elem = SVGSpace.svgElement( ctx.group, "rect", SVGForm.getID(ctx) );
+    let bound = Group.fromArray( pts ).boundingBox();
+    let size = Rectangle.size( bound );
+    
+    DOMSpace.attr( elem, {
+      x: bound[0][0],
+      y: bound[0][1],
+      width: size[0],
+      height: size[1]
+    });
+    
+    SVGForm.style( elem, ctx.style );
+    return elem;
+  }
   
+
+  rect( pts:number[][]|Pt[] ):this {
+    this.nextID();
+    SVGForm.rect( this._ctx, pts );
+    return this;
+  }
+
+
+  static text( ctx:SVGFormContext, pt:PtLike, txt:string ):SVGElement {
+    let elem = SVGSpace.svgElement( ctx.group, "text", SVGForm.getID(ctx) );
+    
+    DOMSpace.attr( elem, {
+      "pointer-events": "none",
+      x: pt[0],
+      y: pt[1],
+      dx: 0, dy: 0
+    });
+
+    elem.textContent = txt;
+
+    SVGForm.style( elem, ctx.style );
+
+    return elem;
+  }
+
+  text( pt:PtLike, txt:string ): this {
+    this.nextID();
+    SVGForm.text( this._ctx, pt, txt );
+    return this;
+  }
+
+  log( txt ):this {
+    this.fill("#000").stroke("#fff", 0.5).text( [10,14], txt );   
+    return this;
+  }
+
 
 }
