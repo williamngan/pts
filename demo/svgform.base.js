@@ -3,15 +3,14 @@ window.demoDescription = "SVG Test";
 (function() {
   
   Pts.namespace( this );
-  var space = new SVGSpace("#pt").setup({bgcolor: "#123", resize: true, retina: true});
+  var space = new SVGSpace("#pt").setup({bgcolor: "#123", resize: false });
   var form = space.getForm();
   
-  console.log( form );
   
   //// Demo code ---
   
   let pts = new Group();
-  
+
   space.add( {
     start: function (bound) {
       pts = Create.distributeRandom( space.innerBound, 100 );
@@ -36,11 +35,12 @@ window.demoDescription = "SVG Test";
 
         form.arc( new Pt( 200, 200), 50, 0, 5.5, false);
         // form.arc( new Pt( 200, 200), 50, 0, Const.pi-1.571);
-        form.point( new Pt(200,200));
+        form.point( space.pointer );
 
-        form.fill("#09f").stroke(false).text( new Pt(400, 200), "hello world");
+        form.fill("#09f").stroke(false).text( space.pointer,  space.pointer.toString() );
         form.log("log text")
         // form.arc( new Pt( 200, 200), 50, 0, Const.quarter_pi+Const.pi+0.4);
+        
         
 
         // let pairs = pts.split( 2, 2 );
@@ -52,7 +52,7 @@ window.demoDescription = "SVG Test";
   
   //// ----
   
-  space.playOnce(200);
-  // space.bindMouse().bindTouch().play();
+  // space.playOnce(2000);
+  space.bindMouse().bindTouch().playOnce(5000);
   
 })();

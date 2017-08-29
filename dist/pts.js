@@ -3519,9 +3519,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Bound_1 = __webpack_require__(2);
 const Pt_1 = __webpack_require__(0);
 /**
- * Space is an abstract class that represents a general context for expressing Pts.
- * See [Space guide](../../guide/Space-0500.html) for details.
- */
+* Space is an abstract class that represents a general context for expressing Pts.
+* See [Space guide](../../guide/Space-0500.html) for details.
+*/
 class Space {
     constructor() {
         this.id = "space";
@@ -3535,22 +3535,22 @@ class Space {
         this._pointer = new Pt_1.Pt();
     }
     /**
-     * Set whether the rendering should be repainted on each frame
-     * @param b a boolean value to set whether to repaint each frame
-     */
+    * Set whether the rendering should be repainted on each frame
+    * @param b a boolean value to set whether to repaint each frame
+    */
     refresh(b) {
         this._refresh = b;
         return this;
     }
     /**
-     * Add an IPlayer to this space. An IPlayer can define the following callback functions:
-     * - `animate( time, ftime, space )`
-     * - `start(bound, space)`
-     * - `resize( size, event )`
-     * - `action( type, x, y, event )`
-     * Subclasses of Space may define other callback functions.
-     * @param player an IPlayer object with animate function, or simply a function(time, ftime){}
-     */
+    * Add an IPlayer to this space. An IPlayer can define the following callback functions:
+    * - `animate( time, ftime, space )`
+    * - `start(bound, space)`
+    * - `resize( size, event )`
+    * - `action( type, x, y, event )`
+    * Subclasses of Space may define other callback functions.
+    * @param player an IPlayer object with animate function, or simply a function(time, ftime){}
+    */
     add(p) {
         let player = (typeof p == "function") ? { animate: p } : p;
         let k = this.playerCount++;
@@ -3565,25 +3565,25 @@ class Space {
         return this;
     }
     /**
-     * Remove a player from this Space
-     * @param player an IPlayer that has an `animateID` property
-     */
+    * Remove a player from this Space
+    * @param player an IPlayer that has an `animateID` property
+    */
     remove(player) {
         delete this.players[player.animateID];
         return this;
     }
     /**
-     * Remove all players from this Space
-     */
+    * Remove all players from this Space
+    */
     removeAll() {
         this.players = {};
         return this;
     }
     /**
-     * Main play loop. This implements window.requestAnimationFrame and calls it recursively.
-     * Override this `play()` function to implemenet your own animation loop.
-     * @param time current time
-     */
+    * Main play loop. This implements window.requestAnimationFrame and calls it recursively.
+    * Override this `play()` function to implemenet your own animation loop.
+    * @param time current time
+    */
     play(time = 0) {
         this._animID = requestAnimationFrame(this.play.bind(this));
         if (this._pause)
@@ -3600,17 +3600,17 @@ class Space {
         return this;
     }
     /**
-     * Replay the animation after `stop()`. This resets the end-time counter.
-     * You may also use `pause()` and `resume()` for temporary pause.
-     */
+    * Replay the animation after `stop()`. This resets the end-time counter.
+    * You may also use `pause()` and `resume()` for temporary pause.
+    */
     replay() {
         this._time.end = -1;
         this.play();
     }
     /**
-     * Main animate function. This calls all the items to perform
-     * @param time current time
-     */
+    * Main animate function. This calls all the items to perform
+    * @param time current time
+    */
     playItems(time) {
         // clear before draw if refresh is true
         if (this._refresh)
@@ -3626,242 +3626,86 @@ class Space {
         }
     }
     /**
-     * Pause the animation
-     * @param toggle a boolean value to set if this function call should be a toggle (between pause and resume)
-     */
+    * Pause the animation
+    * @param toggle a boolean value to set if this function call should be a toggle (between pause and resume)
+    */
     pause(toggle = false) {
         this._pause = (toggle) ? !this._pause : true;
         return this;
     }
     /**
-     * Resume the pause animation
-     */
+    * Resume the pause animation
+    */
     resume() {
         this._pause = false;
         return this;
     }
     /**
-     * Specify when the animation should stop: immediately, after a time period, or never stops.
-     * @param t a value in millisecond to specify a time period to play before stopping, or `-1` to play forever, or `0` to end immediately. Default is 0 which will stop the animation immediately.
-     */
+    * Specify when the animation should stop: immediately, after a time period, or never stops.
+    * @param t a value in millisecond to specify a time period to play before stopping, or `-1` to play forever, or `0` to end immediately. Default is 0 which will stop the animation immediately.
+    */
     stop(t = 0) {
         this._time.end = t;
         return this;
     }
     /**
-     * Play animation loop, and then stop after `duration` time has passed.
-     * @param duration a value in millisecond to specify a time period to play before stopping, or `-1` to play forever
-     */
+    * Play animation loop, and then stop after `duration` time has passed.
+    * @param duration a value in millisecond to specify a time period to play before stopping, or `-1` to play forever
+    */
     playOnce(duration = 5000) {
         this.play();
         this.stop(duration);
         return this;
     }
     /**
-     * Get this space's bounding box
-     */
+    * Custom rendering
+    * @param context rendering context
+    */
+    render(context) {
+        if (this._renderFunc)
+            this._renderFunc(context, this);
+        return this;
+    }
+    /**
+    * Set a custom rendering `function(graphics_context, canvas_space)` if needed
+    */
+    set customRendering(f) { this._renderFunc = f; }
+    get customRendering() { return this._renderFunc; }
+    /**
+    * Get this space's bounding box
+    */
     get outerBound() { return this.bound.clone(); }
     /**
-     * The bounding box of the canvas
-     */
+    * The bounding box of the canvas
+    */
     get innerBound() { return new Bound_1.Bound(Pt_1.Pt.make(this.size.length, 0), this.size.clone()); }
     /**
-     * Get the size of this bounding box as a Pt
-     */
+    * Get the size of this bounding box as a Pt
+    */
     get size() { return this.bound.size.clone(); }
     /**
-     * Get the size of this bounding box as a Pt
-     */
+    * Get the size of this bounding box as a Pt
+    */
     get center() { return this.size.divide(2); }
     /**
-     * Get width of canvas
-     */
+    * Get width of canvas
+    */
     get width() { return this.bound.width; }
     /**
-     * Get height of canvas
-     */
+    * Get height of canvas
+    */
     get height() { return this.bound.height; }
 }
 exports.Space = Space;
-
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-// Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan)
-Object.defineProperty(exports, "__esModule", { value: true });
-const Space_1 = __webpack_require__(7);
-const Form_1 = __webpack_require__(5);
-const Bound_1 = __webpack_require__(2);
-const Pt_1 = __webpack_require__(0);
-const Util_1 = __webpack_require__(1);
-/**
-* CanvasSpace is an implementation of the abstract class Space. It represents a space for HTML Canvas.
-* Learn more about the concept of Space in [this guide](..guide/Space-0500.html)
-*/
-class CanvasSpace extends Space_1.Space {
-    /**
-    * Create a CanvasSpace which represents a HTML Canvas Space
-    * @param elem Specify an element by its "id" attribute as string, or by the element object itself. An element can be an existing `<canvas>`, or a `<div>` container in which a new `<canvas>` will be created. If left empty, a `<div id="pt_container"><canvas id="pt" /></div>` will be added to DOM. Use css to customize its appearance if needed.
-    * @param callback an optional callback `function(boundingBox, spaceElement)` to be called when canvas is appended and ready. Alternatively, a "ready" event will also be fired from the `<canvas>` element when it's appended, which can be traced with `spaceInstance.canvas.addEventListener("ready")`
-    * @example `new CanvasSpace( "#myElementID" )`
-    */
-    constructor(elem, callback) {
-        super();
-        this._pixelScale = 1;
-        this._autoResize = true;
-        this._bgcolor = "#e1e9f0";
-        this._offscreen = false;
+class MultiTouchSpace extends Space {
+    constructor() {
+        super(...arguments);
         // track mouse dragging
         this._pressed = false;
         this._dragged = false;
         this._hasMouse = false;
         this._hasTouch = false;
-        this._renderFunc = undefined;
-        this._isReady = false;
-        var _selector = null;
-        var _existed = false;
-        this.id = "pt";
-        // check element or element id string
-        if (elem instanceof Element) {
-            _selector = elem;
-            this.id = "pts_existing_space";
-        }
-        else {
-            ;
-            _selector = document.querySelector(elem);
-            _existed = true;
-            this.id = elem;
-        }
-        // if selector is not defined, create a canvas
-        if (!_selector) {
-            this._container = this._createElement("div", this.id + "_container");
-            this._canvas = this._createElement("canvas", this.id);
-            this._container.appendChild(this._canvas);
-            document.body.appendChild(this._container);
-            _existed = false;
-            // if selector is element but not canvas, create a canvas inside it
-        }
-        else if (_selector.nodeName.toLowerCase() != "canvas") {
-            this._container = _selector;
-            this._canvas = this._createElement("canvas", this.id + "_canvas");
-            this._container.appendChild(this._canvas);
-            // if selector is an existing canvas
-        }
-        else {
-            this._canvas = _selector;
-            this._container = _selector.parentElement;
-            this._autoResize = false;
-        }
-        // if size is known then set it immediately
-        // if (_existed) {
-        // let b = this._container.getBoundingClientRect();
-        // this.resize( Bound.fromBoundingRect(b) );
-        // }
-        // no mutation observer, so we set a timeout for ready event
-        setTimeout(this._ready.bind(this, callback), 50);
-        // store canvas 2d rendering context
-        this._ctx = this._canvas.getContext('2d');
     }
-    /**
-    * Helper function to create a DOM element
-    * @param elem element tag name
-    * @param id element id attribute
-    */
-    _createElement(elem = "div", id) {
-        let d = document.createElement(elem);
-        d.setAttribute("id", id);
-        return d;
-    }
-    /**
-    * Handle callbacks after element is mounted in DOM
-    * @param callback
-    */
-    _ready(callback) {
-        if (!this._container)
-            throw new Error(`Cannot initiate #${this.id} element`);
-        this._isReady = true;
-        let b = (this._autoResize) ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
-        if (b)
-            this.resize(Bound_1.Bound.fromBoundingRect(b));
-        this.clear(this._bgcolor);
-        this._canvas.dispatchEvent(new Event("ready"));
-        for (let k in this.players) {
-            if (this.players.hasOwnProperty(k)) {
-                if (this.players[k].start)
-                    this.players[k].start(this.bound.clone(), this);
-            }
-        }
-        this._pointer = this.center;
-        if (callback)
-            callback(this.bound, this._canvas);
-    }
-    /**
-    * Set up various options for CanvasSpace. The `opt` parameter is an object with the following fields. This is usually set during instantiation, eg `new CanvasSpace(...).setup( { opt } )`
-    * @param opt an object with optional settings, as follows.
-    * @param opt.bgcolor a hex or rgba string to set initial background color of the canvas, or use `false` or "transparent" to set a transparent background. You may also change it later with `clear()`
-    * @param opt.resize a boolean to set whether `<canvas>` size should auto resize to match its container's size. You can also set it manually with `autoSize()`
-    * @param opt.retina a boolean to set if device pixel scaling should be used. This may make drawings on retina displays look sharper but may reduce performance slightly. Default is `true`.
-    * @param opt.offscreen a boolean to set if a duplicate canvas should be created for offscreen rendering. Default is `false`.
-    * @example `space.setup({ bgcolor: "#f00", retina: true, resize: true })`
-    */
-    setup(opt) {
-        if (opt.bgcolor)
-            this._bgcolor = opt.bgcolor;
-        this.autoResize = (opt.resize != undefined) ? opt.resize : false;
-        if (opt.retina !== false) {
-            let r1 = window.devicePixelRatio || 1;
-            let r2 = this._ctx.webkitBackingStorePixelRatio || this._ctx.mozBackingStorePixelRatio || this._ctx.msBackingStorePixelRatio || this._ctx.oBackingStorePixelRatio || this._ctx.backingStorePixelRatio || 1;
-            this._pixelScale = r1 / r2;
-        }
-        if (opt.offscreen) {
-            this._offscreen = true;
-            this._offCanvas = this._createElement("canvas", this.id + "_offscreen");
-            this._offCtx = this._offCanvas.getContext('2d');
-        }
-        else {
-            this._offscreen = false;
-        }
-        return this;
-    }
-    /**
-    * Set whether the canvas element should resize when its container is resized.
-    * @param auto a boolean value indicating if auto size is set
-    */
-    set autoResize(auto) {
-        this._autoResize = auto;
-        if (auto) {
-            window.addEventListener('resize', this._resizeHandler.bind(this));
-        }
-        else {
-            window.removeEventListener('resize', this._resizeHandler.bind(this));
-        }
-    }
-    get autoResize() { return this._autoResize; }
-    /**
-    * `pixelScale` property returns a number that let you determine if the screen is "retina" (when value >= 2)
-    */
-    get pixelScale() {
-        return this._pixelScale;
-    }
-    /**
-    * Check if an offscreen canvas is created
-    */
-    get hasOffscreen() {
-        return this._offscreen;
-    }
-    /**
-    * Get the rendering context of offscreen canvas (if created via `setup()`)
-    */
-    get offscreenCtx() { return this._offCtx; }
-    /**
-    * Get the offscreen canvas element
-    */
-    get offscreenCanvas() { return this._offCanvas; }
     /**
     * Get the mouse or touch pointer that stores the last action
     */
@@ -3869,126 +3713,6 @@ class CanvasSpace extends Space_1.Space {
         let p = this._pointer.clone();
         p.id = this._pointer.id;
         return p;
-    }
-    /**
-    * Get a new `CanvasForm` for drawing
-    * @see `CanvasForm`
-    */
-    getForm() { return new CanvasForm(this); }
-    /**
-    * Get the html canvas element
-    */
-    get element() {
-        return this._canvas;
-    }
-    /**
-    * Get the parent element that contains the canvas element
-    */
-    get parent() {
-        return this._container;
-    }
-    /**
-    * Get the rendering context of canvas
-    */
-    get ctx() { return this._ctx; }
-    /**
-    * Get the canvas element in this space
-    */
-    get canvas() { return this._canvas; }
-    /**
-    * This overrides Space's `resize` function. It's used as a callback function for window's resize event and not usually called directly. You can keep track of resize events with `resize: (bound ,evt)` callback in your player objects (See `Space`'s `add()` function).
-    * @param b a Bound object to resize to
-    * @param evt Optionally pass a resize event
-    */
-    resize(b, evt) {
-        this.bound = b;
-        this._canvas.width = this.bound.size.x * this._pixelScale;
-        this._canvas.height = this.bound.size.y * this._pixelScale;
-        this._canvas.style.width = Math.floor(this.bound.size.x) + "px";
-        this._canvas.style.height = Math.floor(this.bound.size.y) + "px";
-        if (this._offscreen) {
-            this._offCanvas.width = this.bound.size.x * this._pixelScale;
-            this._offCanvas.height = this.bound.size.y * this._pixelScale;
-            // this._offCanvas.style.width = Math.floor(this.bound.size.x) + "px";
-            // this._offCanvas.style.height = Math.floor(this.bound.size.y) + "px";
-        }
-        if (this._pixelScale != 1) {
-            this._ctx.scale(this._pixelScale, this._pixelScale);
-            this._ctx.translate(0.5, 0.5);
-            if (this._offscreen) {
-                this._offCtx.scale(this._pixelScale, this._pixelScale);
-                this._offCtx.translate(0.5, 0.5);
-            }
-        }
-        for (let k in this.players) {
-            if (this.players.hasOwnProperty(k)) {
-                let p = this.players[k];
-                if (p.resize)
-                    p.resize(this.bound, evt);
-            }
-        }
-        ;
-        this.render(this._ctx);
-        return this;
-    }
-    /**
-    * Window resize handling
-    * @param evt
-    */
-    _resizeHandler(evt) {
-        let b = (this._autoResize) ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
-        if (b)
-            this.resize(Bound_1.Bound.fromBoundingRect(b), evt);
-    }
-    /**
-    * Clear the canvas with its background color. Overrides Space's `clear` function.
-    * @param bg Optionally specify a custom background color in hex or rgba string, or "transparent". If not defined, it will use its `bgcolor` property as background color to clear the canvas.
-    */
-    clear(bg) {
-        if (bg)
-            this._bgcolor = bg;
-        let lastColor = this._ctx.fillStyle;
-        if (this._bgcolor && this._bgcolor != "transparent") {
-            this._ctx.fillStyle = this._bgcolor;
-            this._ctx.fillRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
-        }
-        else {
-            this._ctx.clearRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
-        }
-        this._ctx.fillStyle = lastColor;
-        return this;
-    }
-    /**
-    * Similiar to `clear()` but clear the offscreen canvas instead
-    * @param bg Optionally specify a custom background color in hex or rgba string, or "transparent". If not defined, it will use its `bgcolor` property as background color to clear the canvas.
-    */
-    clearOffscreen(bg) {
-        if (this._offscreen) {
-            if (bg) {
-                this._offCtx.fillStyle = bg;
-                this._offCtx.fillRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
-            }
-            else {
-                this._offCtx.clearRect(-1, -1, this._offCanvas.width + 1, this._offCanvas.height + 1);
-            }
-        }
-        return this;
-    }
-    /**
-    * Main animation function. Call `Space.playItems`.
-    * @param time current time
-    */
-    playItems(time) {
-        if (this._isReady) {
-            this._ctx.save();
-            if (this._offscreen)
-                this._offCtx.save();
-            super.playItems(time);
-            this._ctx.restore();
-            if (this._offscreen)
-                this._offCtx.restore();
-            this.render(this._ctx);
-        }
     }
     /**
     * Bind event listener in canvas element. You can also use `bindMouse` or `bindTouch` to bind mouse or touch events conveniently.
@@ -4092,9 +3816,8 @@ class CanvasSpace extends Space_1.Space {
                     let v = this.players[k];
                     let c = evt.changedTouches && evt.changedTouches.length > 0;
                     let touch = evt.changedTouches.item(0);
-                    let bound = this._canvas.getBoundingClientRect();
-                    px = (c) ? touch.clientX - bound.left : 0;
-                    py = (c) ? touch.clientY - bound.top : 0;
+                    px = (c) ? touch.clientX - this.innerBound.x : 0;
+                    py = (c) ? touch.clientY - this.innerBound.y : 0;
                     if (v.action)
                         v.action(type, px, py, evt);
                 }
@@ -4166,20 +3889,300 @@ class CanvasSpace extends Space_1.Space {
         this._mouseMove(evt);
         return false;
     }
+}
+exports.MultiTouchSpace = MultiTouchSpace;
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan)
+Object.defineProperty(exports, "__esModule", { value: true });
+const Space_1 = __webpack_require__(7);
+const Form_1 = __webpack_require__(5);
+const Bound_1 = __webpack_require__(2);
+const Util_1 = __webpack_require__(1);
+/**
+* CanvasSpace is an implementation of the abstract class Space. It represents a space for HTML Canvas.
+* Learn more about the concept of Space in [this guide](..guide/Space-0500.html)
+*/
+class CanvasSpace extends Space_1.MultiTouchSpace {
     /**
-    * Custom rendering
-    * @param context rendering context
+    * Create a CanvasSpace which represents a HTML Canvas Space
+    * @param elem Specify an element by its "id" attribute as string, or by the element object itself. An element can be an existing `<canvas>`, or a `<div>` container in which a new `<canvas>` will be created. If left empty, a `<div id="pt_container"><canvas id="pt" /></div>` will be added to DOM. Use css to customize its appearance if needed.
+    * @param callback an optional callback `function(boundingBox, spaceElement)` to be called when canvas is appended and ready. Alternatively, a "ready" event will also be fired from the `<canvas>` element when it's appended, which can be traced with `spaceInstance.canvas.addEventListener("ready")`
+    * @example `new CanvasSpace( "#myElementID" )`
     */
-    render(context) {
-        if (this._renderFunc)
-            this._renderFunc(context, this);
+    constructor(elem, callback) {
+        super();
+        this._pixelScale = 1;
+        this._autoResize = true;
+        this._bgcolor = "#e1e9f0";
+        this._offscreen = false;
+        this._isReady = false;
+        var _selector = null;
+        var _existed = false;
+        this.id = "pt";
+        // check element or element id string
+        if (elem instanceof Element) {
+            _selector = elem;
+            this.id = "pts_existing_space";
+        }
+        else {
+            ;
+            _selector = document.querySelector(elem);
+            _existed = true;
+            this.id = elem;
+        }
+        // if selector is not defined, create a canvas
+        if (!_selector) {
+            this._container = this._createElement("div", this.id + "_container");
+            this._canvas = this._createElement("canvas", this.id);
+            this._container.appendChild(this._canvas);
+            document.body.appendChild(this._container);
+            _existed = false;
+            // if selector is element but not canvas, create a canvas inside it
+        }
+        else if (_selector.nodeName.toLowerCase() != "canvas") {
+            this._container = _selector;
+            this._canvas = this._createElement("canvas", this.id + "_canvas");
+            this._container.appendChild(this._canvas);
+            // if selector is an existing canvas
+        }
+        else {
+            this._canvas = _selector;
+            this._container = _selector.parentElement;
+            this._autoResize = false;
+        }
+        // if size is known then set it immediately
+        // if (_existed) {
+        // let b = this._container.getBoundingClientRect();
+        // this.resize( Bound.fromBoundingRect(b) );
+        // }
+        // no mutation observer, so we set a timeout for ready event
+        setTimeout(this._ready.bind(this, callback), 50);
+        // store canvas 2d rendering context
+        this._ctx = this._canvas.getContext('2d');
+    }
+    /**
+    * Helper function to create a DOM element
+    * @param elem element tag name
+    * @param id element id attribute
+    */
+    _createElement(elem = "div", id) {
+        let d = document.createElement(elem);
+        d.setAttribute("id", id);
+        return d;
+    }
+    /**
+    * Handle callbacks after element is mounted in DOM
+    * @param callback
+    */
+    _ready(callback) {
+        if (!this._container)
+            throw new Error(`Cannot initiate #${this.id} element`);
+        this._isReady = true;
+        this._resizeHandler(null);
+        this.clear(this._bgcolor);
+        this._canvas.dispatchEvent(new Event("ready"));
+        for (let k in this.players) {
+            if (this.players.hasOwnProperty(k)) {
+                if (this.players[k].start)
+                    this.players[k].start(this.bound.clone(), this);
+            }
+        }
+        this._pointer = this.center;
+        if (callback)
+            callback(this.bound, this._canvas);
+    }
+    /**
+    * Set up various options for CanvasSpace. The `opt` parameter is an object with the following fields. This is usually set during instantiation, eg `new CanvasSpace(...).setup( { opt } )`
+    * @param opt an object with optional settings, as follows.
+    * @param opt.bgcolor a hex or rgba string to set initial background color of the canvas, or use `false` or "transparent" to set a transparent background. You may also change it later with `clear()`
+    * @param opt.resize a boolean to set whether `<canvas>` size should auto resize to match its container's size. You can also set it manually with `autoSize()`
+    * @param opt.retina a boolean to set if device pixel scaling should be used. This may make drawings on retina displays look sharper but may reduce performance slightly. Default is `true`.
+    * @param opt.offscreen a boolean to set if a duplicate canvas should be created for offscreen rendering. Default is `false`.
+    * @example `space.setup({ bgcolor: "#f00", retina: true, resize: true })`
+    */
+    setup(opt) {
+        if (opt.bgcolor)
+            this._bgcolor = opt.bgcolor;
+        this.autoResize = (opt.resize != undefined) ? opt.resize : false;
+        if (opt.retina !== false) {
+            let r1 = window.devicePixelRatio || 1;
+            let r2 = this._ctx.webkitBackingStorePixelRatio || this._ctx.mozBackingStorePixelRatio || this._ctx.msBackingStorePixelRatio || this._ctx.oBackingStorePixelRatio || this._ctx.backingStorePixelRatio || 1;
+            this._pixelScale = r1 / r2;
+        }
+        if (opt.offscreen) {
+            this._offscreen = true;
+            this._offCanvas = this._createElement("canvas", this.id + "_offscreen");
+            this._offCtx = this._offCanvas.getContext('2d');
+        }
+        else {
+            this._offscreen = false;
+        }
         return this;
     }
     /**
-    * Set a custom rendering `function(graphics_context, canvas_space)` if needed
+    * Set whether the canvas element should resize when its container is resized.
+    * @param auto a boolean value indicating if auto size is set
     */
-    set customRendering(f) { this._renderFunc = f; }
-    get customRendering() { return this._renderFunc; }
+    set autoResize(auto) {
+        this._autoResize = auto;
+        if (auto) {
+            window.addEventListener('resize', this._resizeHandler.bind(this));
+        }
+        else {
+            window.removeEventListener('resize', this._resizeHandler.bind(this));
+        }
+    }
+    get autoResize() { return this._autoResize; }
+    /**
+  * This overrides Space's `resize` function. It's used as a callback function for window's resize event and not usually called directly. You can keep track of resize events with `resize: (bound ,evt)` callback in your player objects (See `Space`'s `add()` function).
+  * @param b a Bound object to resize to
+  * @param evt Optionally pass a resize event
+  */
+    resize(b, evt) {
+        this.bound = b;
+        this._canvas.width = this.bound.size.x * this._pixelScale;
+        this._canvas.height = this.bound.size.y * this._pixelScale;
+        this._canvas.style.width = Math.floor(this.bound.size.x) + "px";
+        this._canvas.style.height = Math.floor(this.bound.size.y) + "px";
+        if (this._offscreen) {
+            this._offCanvas.width = this.bound.size.x * this._pixelScale;
+            this._offCanvas.height = this.bound.size.y * this._pixelScale;
+            // this._offCanvas.style.width = Math.floor(this.bound.size.x) + "px";
+            // this._offCanvas.style.height = Math.floor(this.bound.size.y) + "px";
+        }
+        if (this._pixelScale != 1) {
+            this._ctx.scale(this._pixelScale, this._pixelScale);
+            this._ctx.translate(0.5, 0.5);
+            if (this._offscreen) {
+                this._offCtx.scale(this._pixelScale, this._pixelScale);
+                this._offCtx.translate(0.5, 0.5);
+            }
+        }
+        for (let k in this.players) {
+            if (this.players.hasOwnProperty(k)) {
+                let p = this.players[k];
+                if (p.resize)
+                    p.resize(this.bound, evt);
+            }
+        }
+        ;
+        this.render(this._ctx);
+        return this;
+    }
+    /**
+    * Window resize handling
+    * @param evt
+    */
+    _resizeHandler(evt) {
+        let b = (this._autoResize) ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
+        if (b)
+            this.resize(Bound_1.Bound.fromBoundingRect(b), evt);
+    }
+    /**
+    * `pixelScale` property returns a number that let you determine if the screen is "retina" (when value >= 2)
+    */
+    get pixelScale() {
+        return this._pixelScale;
+    }
+    /**
+    * Check if an offscreen canvas is created
+    */
+    get hasOffscreen() {
+        return this._offscreen;
+    }
+    /**
+    * Get the rendering context of offscreen canvas (if created via `setup()`)
+    */
+    get offscreenCtx() { return this._offCtx; }
+    /**
+    * Get the offscreen canvas element
+    */
+    get offscreenCanvas() { return this._offCanvas; }
+    /**
+    * Get a new `CanvasForm` for drawing
+    * @see `CanvasForm`
+    */
+    getForm() { return new CanvasForm(this); }
+    /**
+    * Get the html canvas element
+    */
+    get element() {
+        return this._canvas;
+    }
+    /**
+    * Get the parent element that contains the canvas element
+    */
+    get parent() {
+        return this._container;
+    }
+    /**
+     * A property to indicate if the Space is ready
+     */
+    get ready() {
+        return this._isReady;
+    }
+    /**
+    * Get the rendering context of canvas
+    */
+    get ctx() { return this._ctx; }
+    /**
+    * Clear the canvas with its background color. Overrides Space's `clear` function.
+    * @param bg Optionally specify a custom background color in hex or rgba string, or "transparent". If not defined, it will use its `bgcolor` property as background color to clear the canvas.
+    */
+    clear(bg) {
+        if (bg)
+            this._bgcolor = bg;
+        let lastColor = this._ctx.fillStyle;
+        if (this._bgcolor && this._bgcolor != "transparent") {
+            this._ctx.fillStyle = this._bgcolor;
+            this._ctx.fillRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
+        }
+        else {
+            this._ctx.clearRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
+        }
+        this._ctx.fillStyle = lastColor;
+        return this;
+    }
+    /**
+    * Similiar to `clear()` but clear the offscreen canvas instead
+    * @param bg Optionally specify a custom background color in hex or rgba string, or "transparent". If not defined, it will use its `bgcolor` property as background color to clear the canvas.
+    */
+    clearOffscreen(bg) {
+        if (this._offscreen) {
+            if (bg) {
+                this._offCtx.fillStyle = bg;
+                this._offCtx.fillRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
+            }
+            else {
+                this._offCtx.clearRect(-1, -1, this._offCanvas.width + 1, this._offCanvas.height + 1);
+            }
+        }
+        return this;
+    }
+    /**
+    * Main animation function. Call `Space.playItems`.
+    * @param time current time
+    */
+    playItems(time) {
+        if (this._isReady) {
+            this._ctx.save();
+            if (this._offscreen)
+                this._offCtx.save();
+            super.playItems(time);
+            this._ctx.restore();
+            if (this._offscreen)
+                this._offCtx.restore();
+            this.render(this._ctx);
+        }
+    }
 }
 exports.CanvasSpace = CanvasSpace;
 /**
@@ -5223,20 +5226,19 @@ const Num_1 = __webpack_require__(4);
 const Util_1 = __webpack_require__(1);
 const Pt_1 = __webpack_require__(0);
 const Op_1 = __webpack_require__(6);
-class DOMSpace extends Space_1.Space {
+class DOMSpace extends Space_1.MultiTouchSpace {
+    /**
+    * Create a DOMSpace which represents a Space for HTML Element
+    * @param elem Specify an element by its "id" attribute as string, or by the element object itself. An element can be an existing `<canvas>`, or a `<div>` container in which a new `<canvas>` will be created. If left empty, a `<div id="pt_container"><canvas id="pt" /></div>` will be added to DOM. Use css to customize its appearance if needed.
+    * @param callback an optional callback `function(boundingBox, spaceElement)` to be called when canvas is appended and ready. Alternatively, a "ready" event will also be fired from the `<canvas>` element when it's appended, which can be traced with `spaceInstance.canvas.addEventListener("ready")`
+    * @example `new DOMSpace( "#myElementID" )`
+    */
     constructor(elem, callback) {
         super();
         this.id = "domspace";
-        // protected _ctx = {};
         this._autoResize = true;
         this._bgcolor = "#e1e9f0";
         this._css = {};
-        // track mouse dragging
-        // private _pressed = false;
-        // private _dragged = false;
-        // private _hasMouse = false;
-        // private _hasTouch = false;
-        // private _renderFunc: Function = undefined;
         this._isReady = false;
         var _selector = null;
         var _existed = false;
@@ -5254,52 +5256,29 @@ class DOMSpace extends Space_1.Space {
         // if selector is not defined, create a canvas
         if (!_selector) {
             this._container = this._createElement("div", "pts_container");
-            this._element = this._createElement("div", "pts_element");
-            this._container.appendChild(this._element);
+            this._canvas = this._createElement("div", "pts_element");
+            this._container.appendChild(this._canvas);
             document.body.appendChild(this._container);
             _existed = false;
         }
         else {
-            this._element = _selector;
+            this._canvas = _selector;
             this._container = _selector.parentElement;
         }
         // no mutation observer, so we set a timeout for ready event
         setTimeout(this._ready.bind(this, callback), 50);
-        // store canvas 2d rendering context
-        // this._ctx = {};
     }
+    /**
+    * Helper function to create a DOM element
+    * @param elem element tag name
+    * @param id element id attribute
+    */
     _createElement(elem = "div", id) {
         let d = document.createElement(elem);
         if (id)
             d.setAttribute("id,", id);
         return d;
     }
-    setup(opt) {
-        if (opt.bgcolor) {
-            this._bgcolor = opt.bgcolor;
-        }
-        if (opt.resize) {
-            this._element.setAttribute("width", "100%");
-            this._element.setAttribute("height", "100%");
-        }
-        return this;
-    }
-    getForm() {
-        return new DOMForm(this);
-    }
-    /**
-    * Get the html element
-    */
-    get element() {
-        return this._element;
-    }
-    /**
-    * Get the parent element that contains the html element
-    */
-    get parent() {
-        return this._container;
-    }
-    get ready() { return this._isReady; }
     /**
     * Handle callbacks after element is mounted in DOM
     * @param callback
@@ -5308,11 +5287,9 @@ class DOMSpace extends Space_1.Space {
         if (!this._container)
             throw new Error(`Cannot initiate #${this.id} element`);
         this._isReady = true;
-        let b = (this._autoResize) ? this._container.getBoundingClientRect() : this._element.getBoundingClientRect();
-        if (b)
-            this.resize(Bound_1.Bound.fromBoundingRect(b));
+        this._resizeHandler(null);
         this.clear(this._bgcolor);
-        this._element.dispatchEvent(new Event("ready"));
+        this._canvas.dispatchEvent(new Event("ready"));
         for (let k in this.players) {
             if (this.players.hasOwnProperty(k)) {
                 if (this.players[k].start)
@@ -5321,54 +5298,20 @@ class DOMSpace extends Space_1.Space {
         }
         this._pointer = this.center;
         if (callback)
-            callback(this.bound, this._element);
+            callback(this.bound, this._canvas);
     }
-    style(key, val, update = false) {
-        this._css[key] = val;
-        if (update)
-            this._element.style[key] = val;
-        return this;
-    }
-    styles(st, update = false) {
-        for (let k in st) {
-            if (st.hasOwnProperty(k))
-                this.style(k, st[k], update);
-        }
-        return this;
-    }
-    updateStyles() {
-        for (let k in this._css) {
-            if (this._css.hasOwnProperty(k))
-                this._element.style[k] = this._css[k];
-        }
-        return this;
-    }
-    clear(bg) {
-        if (bg)
-            this.background = bg;
-        this._element.innerHTML = "";
-        return this;
-    }
-    set background(bg) {
-        this._bgcolor = bg;
-        this._container.style.backgroundColor = this._bgcolor;
-    }
-    get background() { return this._bgcolor; }
     /**
-  * This overrides Space's `resize` function. It's used as a callback function for window's resize event and not usually called directly. You can keep track of resize events with `resize: (bound ,evt)` callback in your player objects (See `Space`'s `add()` function).
-  * @param b a Bound object to resize to
-  * @param evt Optionally pass a resize event
-  */
-    resize(b, evt) {
-        this.bound = b;
-        for (let k in this.players) {
-            if (this.players.hasOwnProperty(k)) {
-                let p = this.players[k];
-                if (p.resize)
-                    p.resize(this.bound, evt);
-            }
+    * Set up various options for CanvasSpace. The `opt` parameter is an object with the following fields. This is usually set during instantiation, eg `new CanvasSpace(...).setup( { opt } )`
+    * @param opt an object with optional settings, as follows.
+    * @param opt.bgcolor a hex or rgba string to set initial background color of the canvas, or use `false` or "transparent" to set a transparent background. You may also change it later with `clear()`
+    * @param opt.resize a boolean to set whether `<canvas>` size should auto resize to match its container's size. You can also set it manually with `autoSize()`
+    * @example `space.setup({ bgcolor: "#f00", resize: true })`
+    */
+    setup(opt) {
+        if (opt.bgcolor) {
+            this._bgcolor = opt.bgcolor;
         }
-        ;
+        this.autoResize = (opt.resize != undefined) ? opt.resize : false;
         return this;
     }
     /**
@@ -5389,15 +5332,108 @@ class DOMSpace extends Space_1.Space {
     }
     get autoResize() { return this._autoResize; }
     /**
+    * This overrides Space's `resize` function. It's used as a callback function for window's resize event and not usually called directly. You can keep track of resize events with `resize: (bound ,evt)` callback in your player objects (See `Space`'s `add()` function).
+    * @param b a Bound object to resize to
+    * @param evt Optionally pass a resize event
+    */
+    resize(b, evt) {
+        this.bound = b;
+        for (let k in this.players) {
+            if (this.players.hasOwnProperty(k)) {
+                let p = this.players[k];
+                if (p.resize)
+                    p.resize(this.bound, evt);
+            }
+        }
+        ;
+        return this;
+    }
+    /**
     * Window resize handling
     * @param evt
     */
     _resizeHandler(evt) {
-        let b = (this._autoResize) ? this._container.getBoundingClientRect() : this._element.getBoundingClientRect();
-        if (b)
-            this.resize(Bound_1.Bound.fromBoundingRect(b), evt);
+        if (this._autoResize) {
+            let b = Bound_1.Bound.fromBoundingRect(this._canvas.getBoundingClientRect());
+            this.styles({ width: "100%", height: "100%" }, true);
+            this.resize(b, evt);
+        }
+        else {
+            let b = Bound_1.Bound.fromBoundingRect(this._container.getBoundingClientRect());
+            this.styles({ width: `${b.width}px`, height: `${b.height}px` }, true);
+        }
     }
-    static attr(elem, data) {
+    /**
+    * Get a new `DOMForm` for drawing
+    * @see `DOMForm`
+    */
+    getForm() {
+        return new DOMForm(this);
+    }
+    /**
+    * Get the html element
+    */
+    get element() {
+        return this._canvas;
+    }
+    /**
+    * Get the parent element that contains the html element
+    */
+    get parent() {
+        return this._container;
+    }
+    /**
+    * A property to indicate if the Space is ready
+    */
+    get ready() { return this._isReady; }
+    /**
+    * Clear the element's contents, and ptionally set a new backgrounc color. Overrides Space's `clear` function.
+    * @param bg Optionally specify a custom background color in hex or rgba string, or "transparent". If not defined, it will use its `bgcolor` property as background color to clear the canvas.
+    */
+    clear(bg) {
+        if (bg)
+            this.background = bg;
+        this._canvas.innerHTML = "";
+        return this;
+    }
+    /**
+     * Set a background color on the container element
+     */
+    set background(bg) {
+        this._bgcolor = bg;
+        this._container.style.backgroundColor = this._bgcolor;
+    }
+    get background() { return this._bgcolor; }
+    /**
+     * Add or update a style definition, and optionally update that style in the Element
+     * @param key style name
+     * @param val style value
+     * @param update a boolean to update the element's style immediately if set to `true`. Default is `false`.
+     */
+    style(key, val, update = false) {
+        this._css[key] = val;
+        if (update)
+            this._canvas.style[key] = val;
+        return this;
+    }
+    /**
+     * Add of update a list of style definitions, and optionally update those styles in the Element
+     * @param styles a key-value objects of style definitions
+     * @param update a boolean to update the element's style immediately if set to `true`. Default is `false`.
+     */
+    styles(styles, update = false) {
+        for (let k in styles) {
+            if (styles.hasOwnProperty(k))
+                this.style(k, styles[k], update);
+        }
+        return this;
+    }
+    /**
+     * A static helper function to add or update Element attributes
+     * @param elem Element to update
+     * @param data an object with key-value pairs
+     */
+    static setAttr(elem, data) {
         for (let k in data) {
             if (data.hasOwnProperty(k)) {
                 elem.setAttribute(k, data[k]);
@@ -5405,7 +5441,13 @@ class DOMSpace extends Space_1.Space {
         }
         return elem;
     }
-    static css(data) {
+    /**
+     * A static helper function to compose an inline style string from a object of styles
+     * @param elem Element to update
+     * @param data an object with key-value pairs
+     * @exmaple DOMSpace.getInlineStyles( {width: "100px", "font-size": "10px"} ); // returns "width: 100px; font-size: 10px"
+     */
+    static getInlineStyles(data) {
         let str = "";
         for (let k in data) {
             if (data.hasOwnProperty(k)) {
@@ -5430,11 +5472,11 @@ class SVGSpace extends DOMSpace {
         super(elem, callback);
         this.id = "svgspace";
         this._bgcolor = "#999";
-        if (this._element.nodeName.toLowerCase() != "svg") {
+        if (this._canvas.nodeName.toLowerCase() != "svg") {
             let s = this._createElement("svg", `${this.id}_svg`);
-            this._element.appendChild(s);
-            this._container = this._element;
-            this._element = s;
+            this._canvas.appendChild(s);
+            this._container = this._canvas;
+            this._canvas = s;
         }
     }
     getForm() { return new SVGForm(this); }
@@ -5442,7 +5484,7 @@ class SVGSpace extends DOMSpace {
     * Get the html element
     */
     get element() {
-        return this._element;
+        return this._canvas;
     }
     static svgElement(parent, name, id) {
         if (!parent || !parent.appendChild)
@@ -5578,7 +5620,7 @@ class SVGForm extends Form_1.Form {
                 }
             }
         }
-        return DOMSpace.attr(elem, { style: st.join(";") });
+        return DOMSpace.setAttr(elem, { style: st.join(";") });
     }
     _branchID(item) {
         return `item-${item.animateID}`;
@@ -5598,7 +5640,7 @@ class SVGForm extends Form_1.Form {
     }
     static circle(ctx, pt, radius = 10) {
         let elem = SVGSpace.svgElement(ctx.group, "circle", SVGForm.getID(ctx));
-        DOMSpace.attr(elem, {
+        DOMSpace.setAttr(elem, {
             cx: pt[0],
             cy: pt[1],
             r: radius
@@ -5621,7 +5663,7 @@ class SVGForm extends Form_1.Form {
             largeArc = !largeArc;
         const sweep = (cc) ? "0" : "1";
         const d = `M ${start[0]} ${start[1]} A ${radius} ${radius} 0 ${largeArc ? "1" : "0"} ${sweep} ${end[0]} ${end[1]}`;
-        DOMSpace.attr(elem, { d: d });
+        DOMSpace.setAttr(elem, { d: d });
         SVGForm.style(elem, ctx.style);
         return elem;
     }
@@ -5632,7 +5674,7 @@ class SVGForm extends Form_1.Form {
     }
     static square(ctx, pt, halfsize) {
         let elem = SVGSpace.svgElement(ctx.group, "rect", SVGForm.getID(ctx));
-        DOMSpace.attr(elem, { x: pt[0] - halfsize, y: pt[1] - halfsize, width: halfsize * 2, height: halfsize * 2 });
+        DOMSpace.setAttr(elem, { x: pt[0] - halfsize, y: pt[1] - halfsize, width: halfsize * 2, height: halfsize * 2 });
         SVGForm.style(elem, ctx.style);
         return elem;
     }
@@ -5647,7 +5689,7 @@ class SVGForm extends Form_1.Form {
         if (pts.length > 2)
             return SVGForm._poly(ctx, pts, false);
         let elem = SVGSpace.svgElement(ctx.group, "line", SVGForm.getID(ctx));
-        DOMSpace.attr(elem, {
+        DOMSpace.setAttr(elem, {
             x1: pts[0][0],
             y1: pts[0][1],
             x2: pts[1][0],
@@ -5666,7 +5708,7 @@ class SVGForm extends Form_1.Form {
             return;
         let elem = SVGSpace.svgElement(ctx.group, ((closePath) ? "polygon" : "polyline"), SVGForm.getID(ctx));
         let points = pts.reduce((a, p) => a + `${p[0]},${p[1]} `, "");
-        DOMSpace.attr(elem, { points: points });
+        DOMSpace.setAttr(elem, { points: points });
         SVGForm.style(elem, ctx.style);
         return elem;
     }
@@ -5684,7 +5726,7 @@ class SVGForm extends Form_1.Form {
         let elem = SVGSpace.svgElement(ctx.group, "rect", SVGForm.getID(ctx));
         let bound = Pt_1.Group.fromArray(pts).boundingBox();
         let size = Op_1.Rectangle.size(bound);
-        DOMSpace.attr(elem, {
+        DOMSpace.setAttr(elem, {
             x: bound[0][0],
             y: bound[0][1],
             width: size[0],
@@ -5700,7 +5742,7 @@ class SVGForm extends Form_1.Form {
     }
     static text(ctx, pt, txt) {
         let elem = SVGSpace.svgElement(ctx.group, "text", SVGForm.getID(ctx));
-        DOMSpace.attr(elem, {
+        DOMSpace.setAttr(elem, {
             "pointer-events": "none",
             x: pt[0],
             y: pt[1],
