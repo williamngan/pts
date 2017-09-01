@@ -36,7 +36,6 @@ export class CanvasSpace extends MultiTouchSpace {
   protected _offCanvas:HTMLCanvasElement;
   protected _offCtx:PtsCanvasRenderingContext2D;
   
-  private _isReady = false;
 
   
   /**

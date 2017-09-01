@@ -52,6 +52,8 @@ export abstract class Space {
   private _renderFunc: (context:any, self:Space) => null;
   
   protected _pointer:Pt = new Pt();
+
+  protected _isReady = false;
   
   
   /**
@@ -148,12 +150,15 @@ export abstract class Space {
   * @param time current time
   */
   protected playItems( time: number ) {
+    
     // clear before draw if refresh is true
     if (this._refresh) this.clear();
     
     // animate all players
-    for (let k in this.players) {
-      if (this.players[k].animate) this.players[k].animate( time, this._time.diff, this );
+    if (this._isReady) {
+      for (let k in this.players) {
+        if (this.players[k].animate) this.players[k].animate( time, this._time.diff, this );
+      }
     }
     
     // stop if time ended

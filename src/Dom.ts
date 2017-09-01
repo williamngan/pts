@@ -20,7 +20,6 @@ export class DOMSpace extends MultiTouchSpace {
   protected _bgcolor = "#e1e9f0";
   
   protected _css = {};
-  private _isReady = false;
   
   
   /**

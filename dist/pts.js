@@ -3563,6 +3563,7 @@ class Space {
         this._pause = false;
         this._refresh = undefined;
         this._pointer = new Pt_1.Pt();
+        this._isReady = false;
     }
     /**
     * Set whether the rendering should be repainted on each frame
@@ -3646,9 +3647,11 @@ class Space {
         if (this._refresh)
             this.clear();
         // animate all players
-        for (let k in this.players) {
-            if (this.players[k].animate)
-                this.players[k].animate(time, this._time.diff, this);
+        if (this._isReady) {
+            for (let k in this.players) {
+                if (this.players[k].animate)
+                    this.players[k].animate(time, this._time.diff, this);
+            }
         }
         // stop if time ended
         if (this._time.end >= 0 && time > this._time.end) {
@@ -3953,7 +3956,6 @@ class CanvasSpace extends Space_1.MultiTouchSpace {
         this._autoResize = true;
         this._bgcolor = "#e1e9f0";
         this._offscreen = false;
-        this._isReady = false;
         var _selector = null;
         var _existed = false;
         this.id = "pt";
@@ -5253,7 +5255,6 @@ class DOMSpace extends Space_1.MultiTouchSpace {
         this._autoResize = true;
         this._bgcolor = "#e1e9f0";
         this._css = {};
-        this._isReady = false;
         var _selector = null;
         var _existed = false;
         this.id = "pts";
