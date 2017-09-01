@@ -2,7 +2,6 @@
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 
 
-import {Space} from "./Space";
 import {Pt, PtLike, GroupLike} from "./Pt";
 
 
@@ -13,11 +12,6 @@ import {Pt, PtLike, GroupLike} from "./Pt";
 export abstract class Form {
   
   protected _ready:boolean = false;
-  
-  /**
-  * A property to get the form's Space
-  */
-  abstract get space():Space;
   
   /**
   * get whether the Form has received the Space's rendering context
@@ -43,7 +37,7 @@ export abstract class VisualForm extends Form {
   get stroked():boolean { return this._stroked; }
   set stroked( b:boolean ) { this._stroked = b; }
   
-  protected _font:Font = new Font();
+  protected _font:Font = new Font( 14, "sans-serif");
   get currentFont():Font { return this._font; }
   
   
@@ -63,18 +57,41 @@ export abstract class VisualForm extends Form {
   
   
   /**
-  * Abstract set fill color
+  * Set fill color (not implemented)
   */
-  abstract fill( c:string|boolean ):this;
-  abstract fillOnly( c:string|boolean ):this;
+  fill( c:string|boolean ):this {
+    return this;
+  }
   
   
   /**
-  * Abstract set stroke style
+  * Set current fill style and without stroke.
+  * @example `form.fillOnly("#F90")`, `form.fillOnly("rgba(0,0,0,.5")`
+  * @param c fill color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle))
   */
-  abstract stroke( c:string|boolean, width?:number, linejoin?:string, linecap?:string ):this;
-  abstract strokeOnly( c:string|boolean, width?:number, linejoin?:string, linecap?:string ):this;
+  fillOnly( c:string|boolean ):this {
+    this.stroke( false );
+    return this.fill( c );
+  }
   
+  
+  /**
+  * Set stroke style (not implemented)
+  */
+  stroke( c:string|boolean, width?:number, linejoin?:string, linecap?:string ):this {
+    return this;
+  }
+  
+  
+  /**
+  * Set current stroke style and without fill.
+  * @example `form.strokeOnly("#F90")`, `form.strokeOnly("#000", 0.5, 'round', 'square')`
+  * @param c stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle)
+  */
+  strokeOnly( c:string|boolean, width?:number, linejoin?:string, linecap?:string ):this {
+    this.fill( false );
+    return this.stroke( c, width, linejoin, linecap );
+  }
   
   /**
   * Abstract point drawing
@@ -117,8 +134,8 @@ export abstract class VisualForm extends Form {
   circles( groups:GroupLike[] ):this {
     return this._multiple( groups, "circle" );
   }
-
-
+  
+  
   /**
   * Draw multiple squares at once
   * @param groups an array of Groups that defines multiple circles

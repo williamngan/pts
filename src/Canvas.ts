@@ -383,7 +383,6 @@ export class CanvasForm extends VisualForm {
     lineWidth: 1, lineJoin: "bevel", lineCap: "butt",
   };
   
-  protected _font:Font = new Font( 14, "sans-serif");
   
   /**
   * Create a new CanvasForm. You may also use `space.getForm()` to get the default form.
@@ -450,15 +449,6 @@ export class CanvasForm extends VisualForm {
       return this;
     }
     
-    /**
-    * Set current fill style and without stroke.
-    * @example `form.fillOnly("#F90")`, `form.fillOnly("rgba(0,0,0,.5")`
-    * @param c fill color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle))
-    */
-    fillOnly( c:string|boolean ):this {
-      this.stroke( false );
-      return this.fill( c );
-    }
     
     
     /**
@@ -492,16 +482,6 @@ export class CanvasForm extends VisualForm {
       return this;
     }
     
-    
-    /**
-    * Set current stroke style and without fill.
-    * @example `form.strokeOnly("#F90")`, `form.strokeOnly("#000", 0.5, 'round', 'square')`
-    * @param c stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle)
-    */
-    strokeOnly( c:string|boolean, width?:number, linejoin?:string, linecap?:string ):this {
-      this.fill( false );
-      return this.stroke( c, width, linejoin, linecap );
-    }
     
     
     /**

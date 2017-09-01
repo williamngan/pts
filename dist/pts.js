@@ -86,8 +86,8 @@ return /******/ (function(modules) { // webpackBootstrap
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(1);
-const Num_1 = __webpack_require__(4);
-const LinearAlgebra_1 = __webpack_require__(3);
+const Num_1 = __webpack_require__(2);
+const LinearAlgebra_1 = __webpack_require__(4);
 exports.PtBaseArray = Float32Array;
 /**
  * Pt is a subclass of Float32Array with additional properties and functions to support vector and geometric calculations.
@@ -971,547 +971,10 @@ exports.Util = Util;
 // Source code licensed under Apache License 2.0. 
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
-const Pt_1 = __webpack_require__(0);
-/**
- * Bound is a subclass of Group that represents a rectangular boundary.
- * It includes some convenient properties such as `x`, `y`, bottomRight`, `center`, and `size`.
- */
-class Bound extends Pt_1.Group {
-    /**
-     * Create a Bound. This is similar to the Group constructor.
-     * @param args a list of Pt as parameters
-     */
-    constructor(...args) {
-        super(...args);
-        this._center = new Pt_1.Pt();
-        this._size = new Pt_1.Pt();
-        this._topLeft = new Pt_1.Pt();
-        this._bottomRight = new Pt_1.Pt();
-        this._inited = false;
-        this.init();
-    }
-    /**
-     * Create a Bound from a [ClientRect](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect) object.
-     * @param rect an object has top/left/bottom/right/width/height properties
-     * @returns a Bound object
-     */
-    static fromBoundingRect(rect) {
-        let b = new Bound(new Pt_1.Pt(rect.left || 0, rect.top || 0), new Pt_1.Pt(rect.right || 0, rect.bottom || 0));
-        if (rect.width && rect.height)
-            b.size = new Pt_1.Pt(rect.width, rect.height);
-        return b;
-    }
-    /**
-     * Initiate the bound's properties.
-     */
-    init() {
-        if (this.p1) {
-            this._size = this.p1.clone();
-            this._inited = true;
-        }
-        if (this.p1 && this.p2) {
-            let a = this.p1;
-            let b = this.p2;
-            this.topLeft = a.$min(b);
-            this._bottomRight = a.$max(b);
-            this._updateSize();
-            this._inited = true;
-        }
-    }
-    /**
-     * Clone this bound and return a new one
-     */
-    clone() {
-        return new Bound(this._topLeft.clone(), this._bottomRight.clone());
-    }
-    /**
-     * Recalculte size and center
-     */
-    _updateSize() {
-        this._size = this._bottomRight.$subtract(this._topLeft).abs();
-        this._updateCenter();
-    }
-    /**
-     * Recalculate center
-     */
-    _updateCenter() {
-        this._center = this._size.$multiply(0.5).add(this._topLeft);
-    }
-    /**
-     * Recalculate based on top-left position and size
-     */
-    _updatePosFromTop() {
-        this._bottomRight = this._topLeft.$add(this._size);
-        this._updateCenter();
-    }
-    /**
-     * Recalculate based on bottom-right position and size
-     */
-    _updatePosFromBottom() {
-        this._topLeft = this._bottomRight.$subtract(this._size);
-        this._updateCenter();
-    }
-    /**
-     * Recalculate based on center position and size
-     */
-    _updatePosFromCenter() {
-        let half = this._size.$multiply(0.5);
-        this._topLeft = this._center.$subtract(half);
-        this._bottomRight = this._center.$add(half);
-    }
-    get size() { return new Pt_1.Pt(this._size); }
-    set size(p) {
-        this._size = new Pt_1.Pt(p);
-        this._updatePosFromTop();
-    }
-    get center() { return new Pt_1.Pt(this._center); }
-    set center(p) {
-        this._center = new Pt_1.Pt(p);
-        this._updatePosFromCenter();
-    }
-    get topLeft() { return new Pt_1.Pt(this._topLeft); }
-    set topLeft(p) {
-        this._topLeft = new Pt_1.Pt(p);
-        this[0] = this._topLeft;
-        this._updateSize();
-    }
-    get bottomRight() { return new Pt_1.Pt(this._bottomRight); }
-    set bottomRight(p) {
-        this._bottomRight = new Pt_1.Pt(p);
-        this[1] = this._bottomRight;
-        this._updateSize();
-    }
-    get width() { return (this._size.length > 0) ? this._size.x : 0; }
-    set width(w) {
-        this._size.x = w;
-        this._updatePosFromTop();
-    }
-    get height() { return (this._size.length > 1) ? this._size.y : 0; }
-    set height(h) {
-        this._size.y = h;
-        this._updatePosFromTop();
-    }
-    get depth() { return (this._size.length > 2) ? this._size.z : 0; }
-    set depth(d) {
-        this._size.z = d;
-        this._updatePosFromTop();
-    }
-    get x() { return this.topLeft.x; }
-    get y() { return this.topLeft.y; }
-    get z() { return this.topLeft.z; }
-    get inited() { return this._inited; }
-    /**
-     * If the Group elements are changed, call this function to update the Bound's properties.
-     * It's preferable to change the topLeft/bottomRight etc properties instead of changing the Group array directly.
-     */
-    update() {
-        this._topLeft = this[0];
-        this._bottomRight = this[1];
-        this._updateSize();
-        return this;
-    }
-}
-exports.Bound = Bound;
-
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-// Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan)
-Object.defineProperty(exports, "__esModule", { value: true });
-const Pt_1 = __webpack_require__(0);
-const Op_1 = __webpack_require__(6);
-/**
- * Vec provides static function for vector operations. It's not yet optimized but good enough to use.
- */
-class Vec {
-    /**
-     * Add b to vector `a`
-     * @returns vector `a`
-     */
-    static add(a, b) {
-        if (typeof b == "number") {
-            for (let i = 0, len = a.length; i < len; i++)
-                a[i] += b;
-        }
-        else {
-            for (let i = 0, len = a.length; i < len; i++)
-                a[i] += b[i] || 0;
-        }
-        return a;
-    }
-    /**
-     * Subtract `b` from vector `a`
-     * @returns vector `a`
-     */
-    static subtract(a, b) {
-        if (typeof b == "number") {
-            for (let i = 0, len = a.length; i < len; i++)
-                a[i] -= b;
-        }
-        else {
-            for (let i = 0, len = a.length; i < len; i++)
-                a[i] -= b[i] || 0;
-        }
-        return a;
-    }
-    /**
-     * Multiply `b` with vector `a`
-     * @returns vector `a`
-     */
-    static multiply(a, b) {
-        if (typeof b == "number") {
-            for (let i = 0, len = a.length; i < len; i++)
-                a[i] *= b;
-        }
-        else {
-            if (a.length != b.length) {
-                throw new Error(`Cannot do element-wise multiply since the array lengths don't match: ${a.toString()} multiply-with ${b.toString()}`);
-            }
-            for (let i = 0, len = a.length; i < len; i++)
-                a[i] *= b[i];
-        }
-        return a;
-    }
-    /**
-     * Divide `a` over `b`
-     * @returns vector `a`
-     */
-    static divide(a, b) {
-        if (typeof b == "number") {
-            if (b === 0)
-                throw new Error("Cannot divide by zero");
-            for (let i = 0, len = a.length; i < len; i++)
-                a[i] /= b;
-        }
-        else {
-            if (a.length != b.length) {
-                throw new Error(`Cannot do element-wise divide since the array lengths don't match. ${a.toString()} divide-by ${b.toString()}`);
-            }
-            for (let i = 0, len = a.length; i < len; i++)
-                a[i] /= b[i];
-        }
-        return a;
-    }
-    /**
-     * Dot product of `a` and `b`
-     */
-    static dot(a, b) {
-        if (a.length != b.length)
-            throw new Error("Array lengths don't match");
-        let d = 0;
-        for (let i = 0, len = a.length; i < len; i++) {
-            d += a[i] * b[i];
-        }
-        return d;
-    }
-    /**
-     * Cross product of `a` and `b` (3D only)
-     */
-    static cross(a, b) {
-        return new Pt_1.Pt((a[1] * b[2] - a[2] * b[1]), (a[2] * b[0] - a[0] * b[2]), (a[0] * b[1] - a[1] * b[0]));
-    }
-    /**
-     * Magnitude of `a`
-     */
-    static magnitude(a) {
-        return Math.sqrt(Vec.dot(a, a));
-    }
-    /**
-     * Unit vector of `a`. If magnitude of `a` is already known, pass it in the second paramter to optimize calculation.
-     */
-    static unit(a, magnitude = undefined) {
-        let m = (magnitude === undefined) ? Vec.magnitude(a) : magnitude;
-        if (m === 0)
-            throw new Error("Cannot calculate unit vector because magnitude is 0");
-        return Vec.divide(a, m);
-    }
-    /**
-     * Set `a` to its absolute value in each dimension
-     * @returns vector `a`
-     */
-    static abs(a) {
-        return Vec.map(a, Math.abs);
-    }
-    /**
-     * Set `a` to its floor value in each dimension
-     * @returns vector `a`
-     */
-    static floor(a) {
-        return Vec.map(a, Math.floor);
-    }
-    /**
-     * Set `a` to its ceiling value in each dimension
-     * @returns vector `a`
-     */
-    static ceil(a) {
-        return Vec.map(a, Math.ceil);
-    }
-    /**
-     * Set `a` to its rounded value in each dimension
-     * @returns vector `a`
-     */
-    static round(a) {
-        return Vec.map(a, Math.round);
-    }
-    /**
-     * Find the max value within a vector's dimensions
-     * @returns an object with `value` and `index` that specifies the max value and its corresponding dimension.
-     */
-    static max(a) {
-        let m = Number.MIN_VALUE;
-        let index = 0;
-        for (let i = 0, len = a.length; i < len; i++) {
-            m = Math.max(m, a[i]);
-            if (m === a[i])
-                index = i;
-        }
-        return { value: m, index: index };
-    }
-    /**
-     * Find the min value within a vector's dimensions
-     * @returns an object with `value` and `index` that specifies the min value and its corresponding dimension.
-     */
-    static min(a) {
-        let m = Number.MAX_VALUE;
-        let index = 0;
-        for (let i = 0, len = a.length; i < len; i++) {
-            m = Math.min(m, a[i]);
-            if (m === a[i])
-                index = i;
-        }
-        return { value: m, index: index };
-    }
-    /**
-     * Sum all the dimensions' values
-     */
-    static sum(a) {
-        let s = 0;
-        for (let i = 0, len = a.length; i < len; i++)
-            s += a[i];
-        return s;
-    }
-    /**
-     * Given a mapping function, update `a`'s value in each dimension
-     * @returns vector `a`
-     */
-    static map(a, fn) {
-        for (let i = 0, len = a.length; i < len; i++) {
-            a[i] = fn(a[i], i, a);
-        }
-        return a;
-    }
-}
-exports.Vec = Vec;
-/**
- * Mat provides static function for matrix operations. It's not yet optimized but good enough to use.
- */
-class Mat {
-    /**
-     * Matrix additions. Matrices should have the same rows and columns.
-     * @param a a group of Pt
-     * @param b a scalar number, an array of numeric arrays, or a group of Pt
-     * @returns a group with the same rows and columns as a and b
-     */
-    static add(a, b) {
-        if (typeof b != "number") {
-            if (a[0].length != b[0].length)
-                throw new Error("Cannot add matrix if rows' and columns' size don't match.");
-            if (a.length != b.length)
-                throw new Error("Cannot add matrix if rows' and columns' size don't match.");
-        }
-        let g = new Pt_1.Group();
-        let isNum = typeof b == "number";
-        for (let i = 0, len = a.length; i < len; i++) {
-            g.push(a[i].$add((isNum) ? b : b[i]));
-        }
-        return g;
-    }
-    /**
-     * Matrix multiplication
-     * @param a a Group of M Pts, each with K dimensions (M-rows, K-columns)
-     * @param b a scalar number, an array of numeric arrays, or a Group of K Pts, each with N dimensions (K-rows, N-columns) -- or if transposed is true, then N Pts with K dimensions
-     * @param transposed (Only applicable if it's not elementwise multiplication) If true, then a and b's columns should match (ie, each Pt should have the same dimensions). Default is `false`.
-     * @param elementwise if true, then the multiplication is done element-wise. Default is `false`.
-     * @returns If not elementwise, this will return a group with M Pt, each with N dimensions (M-rows, N-columns).
-     */
-    static multiply(a, b, transposed = false, elementwise = false) {
-        let g = new Pt_1.Group();
-        if (typeof b != "number") {
-            if (elementwise) {
-                if (a.length != b.length)
-                    throw new Error("Cannot multiply matrix element-wise because the matrices' sizes don't match.");
-                for (let ai = 0, alen = a.length; ai < alen; ai++) {
-                    g.push(a[ai].$multiply(b[ai]));
-                }
-            }
-            else {
-                if (!transposed && a[0].length != b.length)
-                    throw new Error("Cannot multiply matrix if rows in matrix-a don't match columns in matrix-b.");
-                if (transposed && a[0].length != b[0].length)
-                    throw new Error("Cannot multiply matrix if transposed and the columns in both matrices don't match.");
-                if (!transposed)
-                    b = Mat.transpose(b);
-                for (let ai = 0, alen = a.length; ai < alen; ai++) {
-                    let p = Pt_1.Pt.make(b.length, 0);
-                    for (let bi = 0, blen = b.length; bi < blen; bi++) {
-                        p[bi] = Vec.dot(a[ai], b[bi]);
-                    }
-                    g.push(p);
-                }
-            }
-        }
-        else {
-            for (let ai = 0, alen = a.length; ai < alen; ai++) {
-                g.push(a[ai].$multiply(b));
-            }
-        }
-        return g;
-    }
-    /**
-     * Zip one slice of an array of Pt. Imagine the Pts are organized in rows, then this function will take the values in a specific column.
-     * @param g a group of Pt
-     * @param idx index to zip at
-     * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
-     */
-    static zipSlice(g, index, defaultValue = false) {
-        let z = [];
-        for (let i = 0, len = g.length; i < len; i++) {
-            if (g[i].length - 1 < index && defaultValue === false)
-                throw `Index ${index} is out of bounds`;
-            z.push(g[i][index] || defaultValue);
-        }
-        return new Pt_1.Pt(z);
-    }
-    /**
-     * Zip a group of Pt. eg, [[1,2],[3,4],[5,6]] => [[1,3,5],[2,4,6]]
-     * @param g a group of Pt
-     * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
-     * @param useLongest If true, find the longest list of values in a Pt and use its length for zipping. Default is false, which uses the first item's length for zipping.
-     */
-    static zip(g, defaultValue = false, useLongest = false) {
-        let ps = new Pt_1.Group();
-        let len = (useLongest) ? g.reduce((a, b) => Math.max(a, b.length), 0) : g[0].length;
-        for (let i = 0; i < len; i++) {
-            ps.push(Mat.zipSlice(g, i, defaultValue));
-        }
-        return ps;
-    }
-    /**
-     * Same as `zip` function
-     */
-    static transpose(g, defaultValue = false, useLongest = false) {
-        return Mat.zip(g, defaultValue, useLongest);
-    }
-    /**
-     * Transform a 2D point given a 2x3 or 3x3 matrix
-     * @param pt a Pt to be transformed
-     * @param m 2x3 or 3x3 matrix
-     * @returns a new transformed Pt
-     */
-    static transform2D(pt, m) {
-        let x = pt[0] * m[0][0] + pt[1] * m[1][0] + m[2][0];
-        let y = pt[0] * m[0][1] + pt[1] * m[1][1] + m[2][1];
-        return new Pt_1.Pt(x, y);
-    }
-    /**
-     * Get a scale matrix for use in `transform2D`
-     */
-    static scale2DMatrix(x, y) {
-        return new Pt_1.Group(new Pt_1.Pt(x, 0, 0), new Pt_1.Pt(0, y, 0), new Pt_1.Pt(0, 0, 1));
-    }
-    /**
-     * Get a rotate matrix for use in `transform2D`
-     */
-    static rotate2DMatrix(cosA, sinA) {
-        return new Pt_1.Group(new Pt_1.Pt(cosA, sinA, 0), new Pt_1.Pt(-sinA, cosA, 0), new Pt_1.Pt(0, 0, 1));
-    }
-    /**
-     * Get a shear matrix for use in `transform2D`
-     */
-    static shear2DMatrix(tanX, tanY) {
-        return new Pt_1.Group(new Pt_1.Pt(1, tanX, 0), new Pt_1.Pt(tanY, 1, 0), new Pt_1.Pt(0, 0, 1));
-    }
-    /**
-     * Get a translate matrix for use in `transform2D`
-     */
-    static translate2DMatrix(x, y) {
-        return new Pt_1.Group(new Pt_1.Pt(1, 0, 0), new Pt_1.Pt(0, 1, 0), new Pt_1.Pt(x, y, 1));
-    }
-    /**
-     * Get a matrix to scale a point from an origin point. For use in `transform2D`
-     */
-    static scaleAt2DMatrix(sx, sy, at) {
-        let m = Mat.scale2DMatrix(sx, sy);
-        m[2][0] = -at[0] * sx + at[0];
-        m[2][1] = -at[1] * sy + at[1];
-        return m;
-    }
-    /**
-     * Get a matrix to rotate a point from an origin point. For use in `transform2D`
-     */
-    static rotateAt2DMatrix(cosA, sinA, at) {
-        let m = Mat.rotate2DMatrix(cosA, sinA);
-        m[2][0] = at[0] * (1 - cosA) + at[1] * sinA;
-        m[2][1] = at[1] * (1 - cosA) - at[0] * sinA;
-        return m;
-    }
-    /**
-     * Get a matrix to shear a point from an origin point. For use in `transform2D`
-     */
-    static shearAt2DMatrix(tanX, tanY, at) {
-        let m = Mat.shear2DMatrix(tanX, tanY);
-        m[2][0] = -at[1] * tanY;
-        m[2][1] = -at[0] * tanX;
-        return m;
-    }
-    /**
-     * Get a matrix to reflect a point along a line. For use in `transform2D`
-     * @param p1 first end point to define the reflection line
-     * @param p1 second end point to define the reflection line
-     */
-    static reflectAt2DMatrix(p1, p2) {
-        let intercept = Op_1.Line.intercept(p1, p2);
-        if (intercept == undefined) {
-            return [
-                new Pt_1.Pt([-1, 0, 0]),
-                new Pt_1.Pt([0, 1, 0]),
-                new Pt_1.Pt([p1[0] + p2[0], 0, 1])
-            ];
-        }
-        else {
-            let yi = intercept.yi;
-            let ang2 = Math.atan(intercept.slope) * 2;
-            let cosA = Math.cos(ang2);
-            let sinA = Math.sin(ang2);
-            return [
-                new Pt_1.Pt([cosA, sinA, 0]),
-                new Pt_1.Pt([sinA, -cosA, 0]),
-                new Pt_1.Pt([-yi * sinA, yi + yi * cosA, 1])
-            ];
-        }
-    }
-}
-exports.Mat = Mat;
-
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-// Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan)
-Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(1);
-const Op_1 = __webpack_require__(6);
+const Op_1 = __webpack_require__(5);
 const Pt_1 = __webpack_require__(0);
-const LinearAlgebra_1 = __webpack_require__(3);
+const LinearAlgebra_1 = __webpack_require__(4);
 /**
  * Num class provides various helper functions for basic numeric operations
  */
@@ -2172,6 +1635,543 @@ exports.Shaping = Shaping;
 
 
 /***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan)
+Object.defineProperty(exports, "__esModule", { value: true });
+const Pt_1 = __webpack_require__(0);
+/**
+ * Bound is a subclass of Group that represents a rectangular boundary.
+ * It includes some convenient properties such as `x`, `y`, bottomRight`, `center`, and `size`.
+ */
+class Bound extends Pt_1.Group {
+    /**
+     * Create a Bound. This is similar to the Group constructor.
+     * @param args a list of Pt as parameters
+     */
+    constructor(...args) {
+        super(...args);
+        this._center = new Pt_1.Pt();
+        this._size = new Pt_1.Pt();
+        this._topLeft = new Pt_1.Pt();
+        this._bottomRight = new Pt_1.Pt();
+        this._inited = false;
+        this.init();
+    }
+    /**
+     * Create a Bound from a [ClientRect](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect) object.
+     * @param rect an object has top/left/bottom/right/width/height properties
+     * @returns a Bound object
+     */
+    static fromBoundingRect(rect) {
+        let b = new Bound(new Pt_1.Pt(rect.left || 0, rect.top || 0), new Pt_1.Pt(rect.right || 0, rect.bottom || 0));
+        if (rect.width && rect.height)
+            b.size = new Pt_1.Pt(rect.width, rect.height);
+        return b;
+    }
+    /**
+     * Initiate the bound's properties.
+     */
+    init() {
+        if (this.p1) {
+            this._size = this.p1.clone();
+            this._inited = true;
+        }
+        if (this.p1 && this.p2) {
+            let a = this.p1;
+            let b = this.p2;
+            this.topLeft = a.$min(b);
+            this._bottomRight = a.$max(b);
+            this._updateSize();
+            this._inited = true;
+        }
+    }
+    /**
+     * Clone this bound and return a new one
+     */
+    clone() {
+        return new Bound(this._topLeft.clone(), this._bottomRight.clone());
+    }
+    /**
+     * Recalculte size and center
+     */
+    _updateSize() {
+        this._size = this._bottomRight.$subtract(this._topLeft).abs();
+        this._updateCenter();
+    }
+    /**
+     * Recalculate center
+     */
+    _updateCenter() {
+        this._center = this._size.$multiply(0.5).add(this._topLeft);
+    }
+    /**
+     * Recalculate based on top-left position and size
+     */
+    _updatePosFromTop() {
+        this._bottomRight = this._topLeft.$add(this._size);
+        this._updateCenter();
+    }
+    /**
+     * Recalculate based on bottom-right position and size
+     */
+    _updatePosFromBottom() {
+        this._topLeft = this._bottomRight.$subtract(this._size);
+        this._updateCenter();
+    }
+    /**
+     * Recalculate based on center position and size
+     */
+    _updatePosFromCenter() {
+        let half = this._size.$multiply(0.5);
+        this._topLeft = this._center.$subtract(half);
+        this._bottomRight = this._center.$add(half);
+    }
+    get size() { return new Pt_1.Pt(this._size); }
+    set size(p) {
+        this._size = new Pt_1.Pt(p);
+        this._updatePosFromTop();
+    }
+    get center() { return new Pt_1.Pt(this._center); }
+    set center(p) {
+        this._center = new Pt_1.Pt(p);
+        this._updatePosFromCenter();
+    }
+    get topLeft() { return new Pt_1.Pt(this._topLeft); }
+    set topLeft(p) {
+        this._topLeft = new Pt_1.Pt(p);
+        this[0] = this._topLeft;
+        this._updateSize();
+    }
+    get bottomRight() { return new Pt_1.Pt(this._bottomRight); }
+    set bottomRight(p) {
+        this._bottomRight = new Pt_1.Pt(p);
+        this[1] = this._bottomRight;
+        this._updateSize();
+    }
+    get width() { return (this._size.length > 0) ? this._size.x : 0; }
+    set width(w) {
+        this._size.x = w;
+        this._updatePosFromTop();
+    }
+    get height() { return (this._size.length > 1) ? this._size.y : 0; }
+    set height(h) {
+        this._size.y = h;
+        this._updatePosFromTop();
+    }
+    get depth() { return (this._size.length > 2) ? this._size.z : 0; }
+    set depth(d) {
+        this._size.z = d;
+        this._updatePosFromTop();
+    }
+    get x() { return this.topLeft.x; }
+    get y() { return this.topLeft.y; }
+    get z() { return this.topLeft.z; }
+    get inited() { return this._inited; }
+    /**
+     * If the Group elements are changed, call this function to update the Bound's properties.
+     * It's preferable to change the topLeft/bottomRight etc properties instead of changing the Group array directly.
+     */
+    update() {
+        this._topLeft = this[0];
+        this._bottomRight = this[1];
+        this._updateSize();
+        return this;
+    }
+}
+exports.Bound = Bound;
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan)
+Object.defineProperty(exports, "__esModule", { value: true });
+const Pt_1 = __webpack_require__(0);
+const Op_1 = __webpack_require__(5);
+/**
+ * Vec provides static function for vector operations. It's not yet optimized but good enough to use.
+ */
+class Vec {
+    /**
+     * Add b to vector `a`
+     * @returns vector `a`
+     */
+    static add(a, b) {
+        if (typeof b == "number") {
+            for (let i = 0, len = a.length; i < len; i++)
+                a[i] += b;
+        }
+        else {
+            for (let i = 0, len = a.length; i < len; i++)
+                a[i] += b[i] || 0;
+        }
+        return a;
+    }
+    /**
+     * Subtract `b` from vector `a`
+     * @returns vector `a`
+     */
+    static subtract(a, b) {
+        if (typeof b == "number") {
+            for (let i = 0, len = a.length; i < len; i++)
+                a[i] -= b;
+        }
+        else {
+            for (let i = 0, len = a.length; i < len; i++)
+                a[i] -= b[i] || 0;
+        }
+        return a;
+    }
+    /**
+     * Multiply `b` with vector `a`
+     * @returns vector `a`
+     */
+    static multiply(a, b) {
+        if (typeof b == "number") {
+            for (let i = 0, len = a.length; i < len; i++)
+                a[i] *= b;
+        }
+        else {
+            if (a.length != b.length) {
+                throw new Error(`Cannot do element-wise multiply since the array lengths don't match: ${a.toString()} multiply-with ${b.toString()}`);
+            }
+            for (let i = 0, len = a.length; i < len; i++)
+                a[i] *= b[i];
+        }
+        return a;
+    }
+    /**
+     * Divide `a` over `b`
+     * @returns vector `a`
+     */
+    static divide(a, b) {
+        if (typeof b == "number") {
+            if (b === 0)
+                throw new Error("Cannot divide by zero");
+            for (let i = 0, len = a.length; i < len; i++)
+                a[i] /= b;
+        }
+        else {
+            if (a.length != b.length) {
+                throw new Error(`Cannot do element-wise divide since the array lengths don't match. ${a.toString()} divide-by ${b.toString()}`);
+            }
+            for (let i = 0, len = a.length; i < len; i++)
+                a[i] /= b[i];
+        }
+        return a;
+    }
+    /**
+     * Dot product of `a` and `b`
+     */
+    static dot(a, b) {
+        if (a.length != b.length)
+            throw new Error("Array lengths don't match");
+        let d = 0;
+        for (let i = 0, len = a.length; i < len; i++) {
+            d += a[i] * b[i];
+        }
+        return d;
+    }
+    /**
+     * Cross product of `a` and `b` (3D only)
+     */
+    static cross(a, b) {
+        return new Pt_1.Pt((a[1] * b[2] - a[2] * b[1]), (a[2] * b[0] - a[0] * b[2]), (a[0] * b[1] - a[1] * b[0]));
+    }
+    /**
+     * Magnitude of `a`
+     */
+    static magnitude(a) {
+        return Math.sqrt(Vec.dot(a, a));
+    }
+    /**
+     * Unit vector of `a`. If magnitude of `a` is already known, pass it in the second paramter to optimize calculation.
+     */
+    static unit(a, magnitude = undefined) {
+        let m = (magnitude === undefined) ? Vec.magnitude(a) : magnitude;
+        if (m === 0)
+            throw new Error("Cannot calculate unit vector because magnitude is 0");
+        return Vec.divide(a, m);
+    }
+    /**
+     * Set `a` to its absolute value in each dimension
+     * @returns vector `a`
+     */
+    static abs(a) {
+        return Vec.map(a, Math.abs);
+    }
+    /**
+     * Set `a` to its floor value in each dimension
+     * @returns vector `a`
+     */
+    static floor(a) {
+        return Vec.map(a, Math.floor);
+    }
+    /**
+     * Set `a` to its ceiling value in each dimension
+     * @returns vector `a`
+     */
+    static ceil(a) {
+        return Vec.map(a, Math.ceil);
+    }
+    /**
+     * Set `a` to its rounded value in each dimension
+     * @returns vector `a`
+     */
+    static round(a) {
+        return Vec.map(a, Math.round);
+    }
+    /**
+     * Find the max value within a vector's dimensions
+     * @returns an object with `value` and `index` that specifies the max value and its corresponding dimension.
+     */
+    static max(a) {
+        let m = Number.MIN_VALUE;
+        let index = 0;
+        for (let i = 0, len = a.length; i < len; i++) {
+            m = Math.max(m, a[i]);
+            if (m === a[i])
+                index = i;
+        }
+        return { value: m, index: index };
+    }
+    /**
+     * Find the min value within a vector's dimensions
+     * @returns an object with `value` and `index` that specifies the min value and its corresponding dimension.
+     */
+    static min(a) {
+        let m = Number.MAX_VALUE;
+        let index = 0;
+        for (let i = 0, len = a.length; i < len; i++) {
+            m = Math.min(m, a[i]);
+            if (m === a[i])
+                index = i;
+        }
+        return { value: m, index: index };
+    }
+    /**
+     * Sum all the dimensions' values
+     */
+    static sum(a) {
+        let s = 0;
+        for (let i = 0, len = a.length; i < len; i++)
+            s += a[i];
+        return s;
+    }
+    /**
+     * Given a mapping function, update `a`'s value in each dimension
+     * @returns vector `a`
+     */
+    static map(a, fn) {
+        for (let i = 0, len = a.length; i < len; i++) {
+            a[i] = fn(a[i], i, a);
+        }
+        return a;
+    }
+}
+exports.Vec = Vec;
+/**
+ * Mat provides static function for matrix operations. It's not yet optimized but good enough to use.
+ */
+class Mat {
+    /**
+     * Matrix additions. Matrices should have the same rows and columns.
+     * @param a a group of Pt
+     * @param b a scalar number, an array of numeric arrays, or a group of Pt
+     * @returns a group with the same rows and columns as a and b
+     */
+    static add(a, b) {
+        if (typeof b != "number") {
+            if (a[0].length != b[0].length)
+                throw new Error("Cannot add matrix if rows' and columns' size don't match.");
+            if (a.length != b.length)
+                throw new Error("Cannot add matrix if rows' and columns' size don't match.");
+        }
+        let g = new Pt_1.Group();
+        let isNum = typeof b == "number";
+        for (let i = 0, len = a.length; i < len; i++) {
+            g.push(a[i].$add((isNum) ? b : b[i]));
+        }
+        return g;
+    }
+    /**
+     * Matrix multiplication
+     * @param a a Group of M Pts, each with K dimensions (M-rows, K-columns)
+     * @param b a scalar number, an array of numeric arrays, or a Group of K Pts, each with N dimensions (K-rows, N-columns) -- or if transposed is true, then N Pts with K dimensions
+     * @param transposed (Only applicable if it's not elementwise multiplication) If true, then a and b's columns should match (ie, each Pt should have the same dimensions). Default is `false`.
+     * @param elementwise if true, then the multiplication is done element-wise. Default is `false`.
+     * @returns If not elementwise, this will return a group with M Pt, each with N dimensions (M-rows, N-columns).
+     */
+    static multiply(a, b, transposed = false, elementwise = false) {
+        let g = new Pt_1.Group();
+        if (typeof b != "number") {
+            if (elementwise) {
+                if (a.length != b.length)
+                    throw new Error("Cannot multiply matrix element-wise because the matrices' sizes don't match.");
+                for (let ai = 0, alen = a.length; ai < alen; ai++) {
+                    g.push(a[ai].$multiply(b[ai]));
+                }
+            }
+            else {
+                if (!transposed && a[0].length != b.length)
+                    throw new Error("Cannot multiply matrix if rows in matrix-a don't match columns in matrix-b.");
+                if (transposed && a[0].length != b[0].length)
+                    throw new Error("Cannot multiply matrix if transposed and the columns in both matrices don't match.");
+                if (!transposed)
+                    b = Mat.transpose(b);
+                for (let ai = 0, alen = a.length; ai < alen; ai++) {
+                    let p = Pt_1.Pt.make(b.length, 0);
+                    for (let bi = 0, blen = b.length; bi < blen; bi++) {
+                        p[bi] = Vec.dot(a[ai], b[bi]);
+                    }
+                    g.push(p);
+                }
+            }
+        }
+        else {
+            for (let ai = 0, alen = a.length; ai < alen; ai++) {
+                g.push(a[ai].$multiply(b));
+            }
+        }
+        return g;
+    }
+    /**
+     * Zip one slice of an array of Pt. Imagine the Pts are organized in rows, then this function will take the values in a specific column.
+     * @param g a group of Pt
+     * @param idx index to zip at
+     * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
+     */
+    static zipSlice(g, index, defaultValue = false) {
+        let z = [];
+        for (let i = 0, len = g.length; i < len; i++) {
+            if (g[i].length - 1 < index && defaultValue === false)
+                throw `Index ${index} is out of bounds`;
+            z.push(g[i][index] || defaultValue);
+        }
+        return new Pt_1.Pt(z);
+    }
+    /**
+     * Zip a group of Pt. eg, [[1,2],[3,4],[5,6]] => [[1,3,5],[2,4,6]]
+     * @param g a group of Pt
+     * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
+     * @param useLongest If true, find the longest list of values in a Pt and use its length for zipping. Default is false, which uses the first item's length for zipping.
+     */
+    static zip(g, defaultValue = false, useLongest = false) {
+        let ps = new Pt_1.Group();
+        let len = (useLongest) ? g.reduce((a, b) => Math.max(a, b.length), 0) : g[0].length;
+        for (let i = 0; i < len; i++) {
+            ps.push(Mat.zipSlice(g, i, defaultValue));
+        }
+        return ps;
+    }
+    /**
+     * Same as `zip` function
+     */
+    static transpose(g, defaultValue = false, useLongest = false) {
+        return Mat.zip(g, defaultValue, useLongest);
+    }
+    /**
+     * Transform a 2D point given a 2x3 or 3x3 matrix
+     * @param pt a Pt to be transformed
+     * @param m 2x3 or 3x3 matrix
+     * @returns a new transformed Pt
+     */
+    static transform2D(pt, m) {
+        let x = pt[0] * m[0][0] + pt[1] * m[1][0] + m[2][0];
+        let y = pt[0] * m[0][1] + pt[1] * m[1][1] + m[2][1];
+        return new Pt_1.Pt(x, y);
+    }
+    /**
+     * Get a scale matrix for use in `transform2D`
+     */
+    static scale2DMatrix(x, y) {
+        return new Pt_1.Group(new Pt_1.Pt(x, 0, 0), new Pt_1.Pt(0, y, 0), new Pt_1.Pt(0, 0, 1));
+    }
+    /**
+     * Get a rotate matrix for use in `transform2D`
+     */
+    static rotate2DMatrix(cosA, sinA) {
+        return new Pt_1.Group(new Pt_1.Pt(cosA, sinA, 0), new Pt_1.Pt(-sinA, cosA, 0), new Pt_1.Pt(0, 0, 1));
+    }
+    /**
+     * Get a shear matrix for use in `transform2D`
+     */
+    static shear2DMatrix(tanX, tanY) {
+        return new Pt_1.Group(new Pt_1.Pt(1, tanX, 0), new Pt_1.Pt(tanY, 1, 0), new Pt_1.Pt(0, 0, 1));
+    }
+    /**
+     * Get a translate matrix for use in `transform2D`
+     */
+    static translate2DMatrix(x, y) {
+        return new Pt_1.Group(new Pt_1.Pt(1, 0, 0), new Pt_1.Pt(0, 1, 0), new Pt_1.Pt(x, y, 1));
+    }
+    /**
+     * Get a matrix to scale a point from an origin point. For use in `transform2D`
+     */
+    static scaleAt2DMatrix(sx, sy, at) {
+        let m = Mat.scale2DMatrix(sx, sy);
+        m[2][0] = -at[0] * sx + at[0];
+        m[2][1] = -at[1] * sy + at[1];
+        return m;
+    }
+    /**
+     * Get a matrix to rotate a point from an origin point. For use in `transform2D`
+     */
+    static rotateAt2DMatrix(cosA, sinA, at) {
+        let m = Mat.rotate2DMatrix(cosA, sinA);
+        m[2][0] = at[0] * (1 - cosA) + at[1] * sinA;
+        m[2][1] = at[1] * (1 - cosA) - at[0] * sinA;
+        return m;
+    }
+    /**
+     * Get a matrix to shear a point from an origin point. For use in `transform2D`
+     */
+    static shearAt2DMatrix(tanX, tanY, at) {
+        let m = Mat.shear2DMatrix(tanX, tanY);
+        m[2][0] = -at[1] * tanY;
+        m[2][1] = -at[0] * tanX;
+        return m;
+    }
+    /**
+     * Get a matrix to reflect a point along a line. For use in `transform2D`
+     * @param p1 first end point to define the reflection line
+     * @param p1 second end point to define the reflection line
+     */
+    static reflectAt2DMatrix(p1, p2) {
+        let intercept = Op_1.Line.intercept(p1, p2);
+        if (intercept == undefined) {
+            return [
+                new Pt_1.Pt([-1, 0, 0]),
+                new Pt_1.Pt([0, 1, 0]),
+                new Pt_1.Pt([p1[0] + p2[0], 0, 1])
+            ];
+        }
+        else {
+            let yi = intercept.yi;
+            let ang2 = Math.atan(intercept.slope) * 2;
+            let cosA = Math.cos(ang2);
+            let sinA = Math.sin(ang2);
+            return [
+                new Pt_1.Pt([cosA, sinA, 0]),
+                new Pt_1.Pt([sinA, -cosA, 0]),
+                new Pt_1.Pt([-yi * sinA, yi + yi * cosA, 1])
+            ];
+        }
+    }
+}
+exports.Mat = Mat;
+
+
+/***/ }),
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2180,139 +2180,10 @@ exports.Shaping = Shaping;
 // Source code licensed under Apache License 2.0. 
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
-/**
-* Form is an abstract class that represents a form that's used in a Space for expressions.
-*/
-class Form {
-    constructor() {
-        this._ready = false;
-    }
-    /**
-    * get whether the Form has received the Space's rendering context
-    */
-    get ready() { return this._ready; }
-}
-exports.Form = Form;
-/**
-* VisualForm is an abstract class that represents a form that can be used to express Pts visually.
-* For example, CanvasForm is an implementation of VisualForm that draws on CanvasSpace which represents a html canvas.
-*/
-class VisualForm extends Form {
-    constructor() {
-        super(...arguments);
-        this._filled = true;
-        this._stroked = true;
-        this._font = new Font();
-    }
-    get filled() { return this._filled; }
-    set filled(b) { this._filled = b; }
-    get stroked() { return this._stroked; }
-    set stroked(b) { this._stroked = b; }
-    get currentFont() { return this._font; }
-    _multiple(groups, shape, ...rest) {
-        if (!groups)
-            return this;
-        for (let i = 0, len = groups.length; i < len; i++) {
-            this[shape](groups[i], ...rest);
-        }
-        return this;
-    }
-    /**
-    * Draw multiple points at once
-    * @param pts an array of Pt or an array of number arrays
-    * @param radius radius of the point. Default is 5.
-    * @param shape The shape of the point. Defaults to "square", but it can be "circle" or a custom shape function in your own implementation.
-    */
-    points(pts, radius, shape) {
-        if (!pts)
-            return;
-        for (let i = 0, len = pts.length; i < len; i++) {
-            this.point(pts[i], radius, shape);
-        }
-        return this;
-    }
-    /**
-    * Draw multiple circles at once
-    * @param groups an array of Groups that defines multiple circles
-    */
-    circles(groups) {
-        return this._multiple(groups, "circle");
-    }
-    /**
-    * Draw multiple squares at once
-    * @param groups an array of Groups that defines multiple circles
-    */
-    squares(groups) {
-        return this._multiple(groups, "square");
-    }
-    /**
-    * Draw multiple lines at once
-    * @param groups An array of Groups of Pts
-    */
-    lines(groups) {
-        return this._multiple(groups, "line");
-    }
-    /**
-    * Draw multiple polygons at once
-    * @param groups An array of Groups of Pts
-    */
-    polygons(groups) {
-        return this._multiple(groups, "polygon");
-    }
-    /**
-    * Draw multiple rectangles at once
-    * @param groups An array of Groups of Pts
-    */
-    rects(groups) {
-        return this._multiple(groups, "rect");
-    }
-}
-exports.VisualForm = VisualForm;
-/**
-* Font class lets you create a specific font style with properties for its size and style
-*/
-class Font {
-    /**
-    * Create a font style
-    * @param size font size. Defaults is 12px.
-    * @param face Optional font-family, use css-like string such as "Helvetica" or "Helvetica, sans-serif". Default is "sans-serif".
-    * @param weight Optional font weight such as "bold". Default is "" (none).
-    * @param style Optional font style such as "italic". Default is "" (none).
-    * @param lineHeight Optional line height. Default is 1.5.
-    * @example `new Font(12, "Frutiger, sans-serif", "bold", "underline", 1.5)`
-    */
-    constructor(size = 12, face = "sans-serif", weight = "", style = "", lineHeight = 1.5) {
-        this.size = size;
-        this.face = face;
-        this.style = style;
-        this.weight = weight;
-        this.lineHeight = lineHeight;
-    }
-    /**
-    * Get a string representing the font style, in css-like string such as "italic bold 12px/1.5 sans-serif"
-    */
-    get value() { return `${this.style} ${this.weight} ${this.size}px/${this.lineHeight} ${this.face}`; }
-    /**
-    * Get a string representing the font style, in css-like string such as "italic bold 12px/1.5 sans-serif"
-    */
-    toString() { return this.value; }
-}
-exports.Font = Font;
-
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-// Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan)
-Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(1);
-const Num_1 = __webpack_require__(4);
+const Num_1 = __webpack_require__(2);
 const Pt_1 = __webpack_require__(0);
-const LinearAlgebra_1 = __webpack_require__(3);
+const LinearAlgebra_1 = __webpack_require__(4);
 let _errorLength = (obj, param = "expected") => Util_1.Util.warn("Group's length is less than " + param, obj);
 let _errorOutofBound = (obj, param = "") => Util_1.Util.warn(`Index ${param} is out of bound in Group`, obj);
 /**
@@ -3508,6 +3379,165 @@ exports.Curve = Curve;
 
 
 /***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan)
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+* Form is an abstract class that represents a form that's used in a Space for expressions.
+*/
+class Form {
+    constructor() {
+        this._ready = false;
+    }
+    /**
+    * get whether the Form has received the Space's rendering context
+    */
+    get ready() { return this._ready; }
+}
+exports.Form = Form;
+/**
+* VisualForm is an abstract class that represents a form that can be used to express Pts visually.
+* For example, CanvasForm is an implementation of VisualForm that draws on CanvasSpace which represents a html canvas.
+*/
+class VisualForm extends Form {
+    constructor() {
+        super(...arguments);
+        this._filled = true;
+        this._stroked = true;
+        this._font = new Font(14, "sans-serif");
+    }
+    get filled() { return this._filled; }
+    set filled(b) { this._filled = b; }
+    get stroked() { return this._stroked; }
+    set stroked(b) { this._stroked = b; }
+    get currentFont() { return this._font; }
+    _multiple(groups, shape, ...rest) {
+        if (!groups)
+            return this;
+        for (let i = 0, len = groups.length; i < len; i++) {
+            this[shape](groups[i], ...rest);
+        }
+        return this;
+    }
+    /**
+    * Set fill color (not implemented)
+    */
+    fill(c) {
+        return this;
+    }
+    /**
+    * Set current fill style and without stroke.
+    * @example `form.fillOnly("#F90")`, `form.fillOnly("rgba(0,0,0,.5")`
+    * @param c fill color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle))
+    */
+    fillOnly(c) {
+        this.stroke(false);
+        return this.fill(c);
+    }
+    /**
+    * Set stroke style (not implemented)
+    */
+    stroke(c, width, linejoin, linecap) {
+        return this;
+    }
+    /**
+    * Set current stroke style and without fill.
+    * @example `form.strokeOnly("#F90")`, `form.strokeOnly("#000", 0.5, 'round', 'square')`
+    * @param c stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle)
+    */
+    strokeOnly(c, width, linejoin, linecap) {
+        this.fill(false);
+        return this.stroke(c, width, linejoin, linecap);
+    }
+    /**
+    * Draw multiple points at once
+    * @param pts an array of Pt or an array of number arrays
+    * @param radius radius of the point. Default is 5.
+    * @param shape The shape of the point. Defaults to "square", but it can be "circle" or a custom shape function in your own implementation.
+    */
+    points(pts, radius, shape) {
+        if (!pts)
+            return;
+        for (let i = 0, len = pts.length; i < len; i++) {
+            this.point(pts[i], radius, shape);
+        }
+        return this;
+    }
+    /**
+    * Draw multiple circles at once
+    * @param groups an array of Groups that defines multiple circles
+    */
+    circles(groups) {
+        return this._multiple(groups, "circle");
+    }
+    /**
+    * Draw multiple squares at once
+    * @param groups an array of Groups that defines multiple circles
+    */
+    squares(groups) {
+        return this._multiple(groups, "square");
+    }
+    /**
+    * Draw multiple lines at once
+    * @param groups An array of Groups of Pts
+    */
+    lines(groups) {
+        return this._multiple(groups, "line");
+    }
+    /**
+    * Draw multiple polygons at once
+    * @param groups An array of Groups of Pts
+    */
+    polygons(groups) {
+        return this._multiple(groups, "polygon");
+    }
+    /**
+    * Draw multiple rectangles at once
+    * @param groups An array of Groups of Pts
+    */
+    rects(groups) {
+        return this._multiple(groups, "rect");
+    }
+}
+exports.VisualForm = VisualForm;
+/**
+* Font class lets you create a specific font style with properties for its size and style
+*/
+class Font {
+    /**
+    * Create a font style
+    * @param size font size. Defaults is 12px.
+    * @param face Optional font-family, use css-like string such as "Helvetica" or "Helvetica, sans-serif". Default is "sans-serif".
+    * @param weight Optional font weight such as "bold". Default is "" (none).
+    * @param style Optional font style such as "italic". Default is "" (none).
+    * @param lineHeight Optional line height. Default is 1.5.
+    * @example `new Font(12, "Frutiger, sans-serif", "bold", "underline", 1.5)`
+    */
+    constructor(size = 12, face = "sans-serif", weight = "", style = "", lineHeight = 1.5) {
+        this.size = size;
+        this.face = face;
+        this.style = style;
+        this.weight = weight;
+        this.lineHeight = lineHeight;
+    }
+    /**
+    * Get a string representing the font style, in css-like string such as "italic bold 12px/1.5 sans-serif"
+    */
+    get value() { return `${this.style} ${this.weight} ${this.size}px/${this.lineHeight} ${this.face}`; }
+    /**
+    * Get a string representing the font style, in css-like string such as "italic bold 12px/1.5 sans-serif"
+    */
+    toString() { return this.value; }
+}
+exports.Font = Font;
+
+
+/***/ }),
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3516,7 +3546,7 @@ exports.Curve = Curve;
 // Source code licensed under Apache License 2.0. 
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
-const Bound_1 = __webpack_require__(2);
+const Bound_1 = __webpack_require__(3);
 const Pt_1 = __webpack_require__(0);
 /**
 * Space is an abstract class that represents a general context for expressing Pts.
@@ -3903,8 +3933,8 @@ exports.MultiTouchSpace = MultiTouchSpace;
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Space_1 = __webpack_require__(7);
-const Form_1 = __webpack_require__(5);
-const Bound_1 = __webpack_require__(2);
+const Form_1 = __webpack_require__(6);
+const Bound_1 = __webpack_require__(3);
 const Util_1 = __webpack_require__(1);
 /**
 * CanvasSpace is an implementation of the abstract class Space. It represents a space for HTML Canvas.
@@ -4203,7 +4233,6 @@ class CanvasForm extends Form_1.VisualForm {
             fillStyle: "#f03", strokeStyle: "#fff",
             lineWidth: 1, lineJoin: "bevel", lineCap: "butt",
         };
-        this._font = new Form_1.Font(14, "sans-serif");
         this._space = space;
         this._space.add({ start: () => {
                 this._ctx = this._space.ctx;
@@ -4255,15 +4284,6 @@ class CanvasForm extends Form_1.VisualForm {
         return this;
     }
     /**
-    * Set current fill style and without stroke.
-    * @example `form.fillOnly("#F90")`, `form.fillOnly("rgba(0,0,0,.5")`
-    * @param c fill color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle))
-    */
-    fillOnly(c) {
-        this.stroke(false);
-        return this.fill(c);
-    }
-    /**
     * Set current stroke style. Provide a valid color string or `false` to specify no stroke color.
     * @example `form.stroke("#F90")`, `form.stroke("rgba(0,0,0,.5")`, `form.stroke(false)`, `form.stroke("#000", 0.5, 'round', 'square')`
     * @param c stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle))
@@ -4293,15 +4313,6 @@ class CanvasForm extends Form_1.VisualForm {
             }
         }
         return this;
-    }
-    /**
-    * Set current stroke style and without fill.
-    * @example `form.strokeOnly("#F90")`, `form.strokeOnly("#000", 0.5, 'round', 'square')`
-    * @param c stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle)
-    */
-    strokeOnly(c, width, linejoin, linecap) {
-        this.fill(false);
-        return this.stroke(c, width, linejoin, linecap);
     }
     /**
     * Set the current font
@@ -4567,7 +4578,7 @@ exports.CanvasForm = CanvasForm;
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
 const Util_1 = __webpack_require__(1);
-const Num_1 = __webpack_require__(4);
+const Num_1 = __webpack_require__(2);
 /**
  * Color is a subclass of Pt. You can think of a color as a point in a color space. The Color class provides support for many color spaces.
  */
@@ -5220,12 +5231,15 @@ exports.Create = Create;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const Space_1 = __webpack_require__(7);
-const Form_1 = __webpack_require__(5);
-const Bound_1 = __webpack_require__(2);
-const Num_1 = __webpack_require__(4);
+const Form_1 = __webpack_require__(6);
+const Bound_1 = __webpack_require__(3);
+const Num_1 = __webpack_require__(2);
 const Util_1 = __webpack_require__(1);
 const Pt_1 = __webpack_require__(0);
-const Op_1 = __webpack_require__(6);
+const Op_1 = __webpack_require__(5);
+/**
+ * A Space for DOM elements
+ */
 class DOMSpace extends Space_1.MultiTouchSpace {
     /**
     * Create a DOMSpace which represents a Space for HTML Element
@@ -5397,19 +5411,19 @@ class DOMSpace extends Space_1.MultiTouchSpace {
         return this;
     }
     /**
-     * Set a background color on the container element
-     */
+    * Set a background color on the container element
+    */
     set background(bg) {
         this._bgcolor = bg;
         this._container.style.backgroundColor = this._bgcolor;
     }
     get background() { return this._bgcolor; }
     /**
-     * Add or update a style definition, and optionally update that style in the Element
-     * @param key style name
-     * @param val style value
-     * @param update a boolean to update the element's style immediately if set to `true`. Default is `false`.
-     */
+    * Add or update a style definition, and optionally update that style in the Element
+    * @param key style name
+    * @param val style value
+    * @param update a boolean to update the element's style immediately if set to `true`. Default is `false`.
+    */
     style(key, val, update = false) {
         this._css[key] = val;
         if (update)
@@ -5417,10 +5431,10 @@ class DOMSpace extends Space_1.MultiTouchSpace {
         return this;
     }
     /**
-     * Add of update a list of style definitions, and optionally update those styles in the Element
-     * @param styles a key-value objects of style definitions
-     * @param update a boolean to update the element's style immediately if set to `true`. Default is `false`.
-     */
+    * Add of update a list of style definitions, and optionally update those styles in the Element
+    * @param styles a key-value objects of style definitions
+    * @param update a boolean to update the element's style immediately if set to `true`. Default is `false`.
+    */
     styles(styles, update = false) {
         for (let k in styles) {
             if (styles.hasOwnProperty(k))
@@ -5429,10 +5443,10 @@ class DOMSpace extends Space_1.MultiTouchSpace {
         return this;
     }
     /**
-     * A static helper function to add or update Element attributes
-     * @param elem Element to update
-     * @param data an object with key-value pairs
-     */
+    * A static helper function to add or update Element attributes
+    * @param elem Element to update
+    * @param data an object with key-value pairs
+    */
     static setAttr(elem, data) {
         for (let k in data) {
             if (data.hasOwnProperty(k)) {
@@ -5442,11 +5456,11 @@ class DOMSpace extends Space_1.MultiTouchSpace {
         return elem;
     }
     /**
-     * A static helper function to compose an inline style string from a object of styles
-     * @param elem Element to update
-     * @param data an object with key-value pairs
-     * @exmaple DOMSpace.getInlineStyles( {width: "100px", "font-size": "10px"} ); // returns "width: 100px; font-size: 10px"
-     */
+    * A static helper function to compose an inline style string from a object of styles
+    * @param elem Element to update
+    * @param data an object with key-value pairs
+    * @exmaple DOMSpace.getInlineStyles( {width: "100px", "font-size": "10px"} ); // returns "width: 100px; font-size: 10px"
+    */
     static getInlineStyles(data) {
         let str = "";
         for (let k in data) {
@@ -5459,6 +5473,9 @@ class DOMSpace extends Space_1.MultiTouchSpace {
     }
 }
 exports.DOMSpace = DOMSpace;
+/**
+ * Form for DOMSpace. Note that this is currently not implemented.
+ */
 class DOMForm extends Form_1.Form {
     constructor(space) {
         super();
@@ -5467,6 +5484,9 @@ class DOMForm extends Form_1.Form {
     get space() { return this._space; }
 }
 exports.DOMForm = DOMForm;
+/**
+ * A Space for SVG elements
+ */
 class SVGSpace extends DOMSpace {
     constructor(elem, callback) {
         super(elem, callback);
@@ -5504,9 +5524,24 @@ class SVGSpace extends DOMSpace {
             d.setAttribute("id", id);
         return d;
     }
+    /**
+    * Remove an item from this Space
+    * @param item
+    */
+    remove(player) {
+        let temp = this._container.querySelectorAll("." + SVGForm.scopeID(player));
+        temp.forEach((el) => {
+            el.parentNode.removeChild(el);
+        });
+        return super.remove(player);
+    }
+    removeAll() {
+        this._container.innerHTML = "";
+        return super.removeAll();
+    }
 }
 exports.SVGSpace = SVGSpace;
-class SVGForm extends Form_1.Form {
+class SVGForm extends Form_1.VisualForm {
     constructor(space) {
         super();
         this._ctx = {
@@ -5559,7 +5594,7 @@ class SVGForm extends Form_1.Form {
     }
     stroke(c, width, linejoin, linecap) {
         if (typeof c == "boolean") {
-            this.styleTo("stroke", c);
+            this.styleTo("stroked", c);
         }
         else {
             this.styleTo("stroked", true);
@@ -5574,25 +5609,55 @@ class SVGForm extends Form_1.Form {
         return this;
     }
     /**
-    * Set current stroke style and without fill.
-    * @example `form.strokeOnly("#F90")`, `form.strokeOnly("#000", 0.5, 'round', 'square')`
-    * @param c stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle)
+    * Set the current font
+    * @param sizeOrFont either a number to specify font-size, or a `Font` object to specify all font properties
+    * @param weight Optional font-weight string such as "bold"
+    * @param style Optional font-style string such as "italic"
+    * @param lineHeight Optional line-height number suchas 1.5
+    * @param family Optional font-family such as "Helvetica, sans-serif"
+    * @example `form.font( myFont )`, `form.font(14, "bold")`
     */
-    strokeOnly(c, width, linejoin, linecap) {
-        this.fill(false);
-        return this.stroke(c, width, linejoin, linecap);
+    font(sizeOrFont, weight, style, lineHeight, family) {
+        if (typeof sizeOrFont == "number") {
+            this._font.size = sizeOrFont;
+            if (family)
+                this._font.face = family;
+            if (weight)
+                this._font.weight = weight;
+            if (style)
+                this._font.style = style;
+            if (lineHeight)
+                this._font.lineHeight = lineHeight;
+            this._ctx.font = this._font.value;
+        }
+        else {
+            this._font = sizeOrFont;
+        }
+        return this;
     }
-    branch(group_id, group) {
+    reset() {
+        this._ctx.style = {
+            "filled": true, "stroked": true,
+            "fill": "#f03", "stroke": "#fff",
+            "stroke-width": 1,
+            "stroke-linejoin": "bevel",
+            "stroke-linecap": "sqaure"
+        };
+        this._font = new Form_1.Font(14, "sans-serif");
+        this._ctx.font = this._font.value;
+        return this;
+    }
+    updateScope(group_id, group) {
         this._ctx.group = group;
         this._ctx.groupID = group_id;
         this._ctx.groupCount = 0;
         this.nextID();
         return this._ctx;
     }
-    base(item) {
+    scope(item) {
         if (!item || item.animateID == null)
             throw new Error("item not defined or not yet added to Space");
-        return this.branch(this._branchID(item), this.space.element);
+        return this.updateScope(SVGForm.scopeID(item), this.space.element);
     }
     nextID() {
         this._ctx.groupCount++;
@@ -5604,15 +5669,19 @@ class SVGForm extends Form_1.Form {
     }
     static style(elem, styles) {
         let st = [];
+        if (!styles["filled"])
+            st.push("fill: none");
+        if (!styles["stroked"])
+            st.push("stroke: none");
         for (let k in styles) {
-            if (styles.hasOwnProperty(k)) {
+            if (styles.hasOwnProperty(k) && k != "filled" && k != "stroked") {
                 let v = styles[k];
                 if (v) {
-                    if (k == "fill" && styles["filled"] !== true) {
-                        st.push("fill: none");
+                    if (!styles["filled"] && k.indexOf('fill') === 0) {
+                        continue;
                     }
-                    else if (k == "stroke" && styles["stroked"] !== true) {
-                        st.push("stroke: none");
+                    else if (!styles["stroked"] && k.indexOf('stroke') === 0) {
+                        continue;
                     }
                     else {
                         st.push(`${k}: ${v}`);
@@ -5622,7 +5691,7 @@ class SVGForm extends Form_1.Form {
         }
         return DOMSpace.setAttr(elem, { style: st.join(";") });
     }
-    _branchID(item) {
+    static scopeID(item) {
         return `item-${item.animateID}`;
     }
     static point(ctx, pt, radius = 5, shape = "square") {
@@ -5773,13 +5842,13 @@ exports.SVGForm = SVGForm;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const _Bound = __webpack_require__(2);
+const _Bound = __webpack_require__(3);
 const _Canvas = __webpack_require__(8);
 const _Create = __webpack_require__(10);
-const _Form = __webpack_require__(5);
-const _LinearAlgebra = __webpack_require__(3);
-const _Num = __webpack_require__(4);
-const _Op = __webpack_require__(6);
+const _Form = __webpack_require__(6);
+const _LinearAlgebra = __webpack_require__(4);
+const _Num = __webpack_require__(2);
+const _Op = __webpack_require__(5);
 const _Pt = __webpack_require__(0);
 const _Space = __webpack_require__(7);
 const _Color = __webpack_require__(9);

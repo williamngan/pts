@@ -1,5 +1,5 @@
 import {MultiTouchSpace, IPlayer} from './Space';
-import {Form} from "./Form";
+import {Form, VisualForm, Font} from "./Form";
 import {Bound} from './Bound';
 import {Geom} from './Num';
 import {Const, Util} from './Util';
@@ -7,6 +7,9 @@ import {Pt, PtLike, GroupLike, Group} from './Pt';
 import {Rectangle} from "./Op";
 
 
+/**
+ * A Space for DOM elements
+ */
 export class DOMSpace extends MultiTouchSpace {
   
   protected _canvas:HTMLElement|SVGElement;
@@ -177,7 +180,7 @@ export class DOMSpace extends MultiTouchSpace {
     
   }
   
-
+  
   /**
   * Get a new `DOMForm` for drawing
   * @see `DOMForm`
@@ -186,7 +189,7 @@ export class DOMSpace extends MultiTouchSpace {
     return new DOMForm( this );
   }
   
-
+  
   /**
   * Get the html element
   */
@@ -221,46 +224,46 @@ export class DOMSpace extends MultiTouchSpace {
   
   
   /**
-   * Set a background color on the container element
-   */
+  * Set a background color on the container element
+  */
   set background( bg:string ) {
     this._bgcolor = bg;
     (this._container as HTMLElement).style.backgroundColor = this._bgcolor;
   }
   get background():string { return this._bgcolor; }
   
-
+  
   /**
-   * Add or update a style definition, and optionally update that style in the Element
-   * @param key style name
-   * @param val style value
-   * @param update a boolean to update the element's style immediately if set to `true`. Default is `false`.
-   */
+  * Add or update a style definition, and optionally update that style in the Element
+  * @param key style name
+  * @param val style value
+  * @param update a boolean to update the element's style immediately if set to `true`. Default is `false`.
+  */
   style( key:string, val:string, update:boolean=false ):this {
     this._css[key] = val;
     if (update) this._canvas.style[key] = val;
     return this;
   }
   
-
+  
   /**
-   * Add of update a list of style definitions, and optionally update those styles in the Element
-   * @param styles a key-value objects of style definitions 
-   * @param update a boolean to update the element's style immediately if set to `true`. Default is `false`.
-   */
+  * Add of update a list of style definitions, and optionally update those styles in the Element
+  * @param styles a key-value objects of style definitions 
+  * @param update a boolean to update the element's style immediately if set to `true`. Default is `false`.
+  */
   styles( styles:object, update:boolean=false ):this {
     for (let k in styles) {
       if ( styles.hasOwnProperty(k) ) this.style( k, styles[k], update );
     }
     return this;
   }
-
+  
   
   /**
-   * A static helper function to add or update Element attributes
-   * @param elem Element to update
-   * @param data an object with key-value pairs
-   */
+  * A static helper function to add or update Element attributes
+  * @param elem Element to update
+  * @param data an object with key-value pairs
+  */
   static setAttr( elem:Element, data:object ):Element {
     for (let k in data) {
       if (data.hasOwnProperty(k)) {
@@ -272,11 +275,11 @@ export class DOMSpace extends MultiTouchSpace {
   
   
   /**
-   * A static helper function to compose an inline style string from a object of styles
-   * @param elem Element to update
-   * @param data an object with key-value pairs
-   * @exmaple DOMSpace.getInlineStyles( {width: "100px", "font-size": "10px"} ); // returns "width: 100px; font-size: 10px"
-   */
+  * A static helper function to compose an inline style string from a object of styles
+  * @param elem Element to update
+  * @param data an object with key-value pairs
+  * @exmaple DOMSpace.getInlineStyles( {width: "100px", "font-size": "10px"} ); // returns "width: 100px; font-size: 10px"
+  */
   static getInlineStyles( data:object ):string {
     let str = "";
     for (let k in data) {
@@ -287,13 +290,13 @@ export class DOMSpace extends MultiTouchSpace {
     return str;
   }
   
-  
 }
 
 
 
-
-
+/**
+ * Form for DOMSpace. Note that this is currently not implemented.
+ */
 export class DOMForm extends Form {
   protected _space:DOMSpace;
   
@@ -307,6 +310,9 @@ export class DOMForm extends Form {
 
 
 
+/**
+ * A Space for SVG elements
+ */
 export class SVGSpace extends DOMSpace {
   
   id: string = "svgspace";
@@ -354,6 +360,26 @@ export class SVGSpace extends DOMSpace {
   }
   
   
+  /**
+  * Remove an item from this Space
+  * @param item
+  */
+  remove( player:IPlayer ):this {
+    let temp = this._container.querySelectorAll( "."+SVGForm.scopeID( player ) );
+    
+    temp.forEach( (el:Element) => { 
+      el.parentNode.removeChild( el );
+    });
+    
+    return super.remove( player );
+  }
+  
+  
+  removeAll():this {
+    this._container.innerHTML = "";
+    return super.removeAll();
+  }
+  
   
   // remove( item ):this
   
@@ -371,7 +397,7 @@ export type SVGFormContext = {
 
 
 
-export class SVGForm extends Form {
+export class SVGForm extends VisualForm {
   
   protected _ctx:SVGFormContext = {
     group: null,
@@ -437,7 +463,7 @@ export class SVGForm extends Form {
   
   stroke( c:string|boolean, width?:number, linejoin?:string, linecap?:string ):this {
     if (typeof c == "boolean") {
-      this.styleTo( "stroke", c );
+      this.styleTo( "stroked", c );
     } else {
       this.styleTo( "stroked", true );
       this.styleTo( "stroke", c );
@@ -450,17 +476,49 @@ export class SVGForm extends Form {
   
   
   /**
-  * Set current stroke style and without fill.
-  * @example `form.strokeOnly("#F90")`, `form.strokeOnly("#000", 0.5, 'round', 'square')`
-  * @param c stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle)
+  * Set the current font 
+  * @param sizeOrFont either a number to specify font-size, or a `Font` object to specify all font properties
+  * @param weight Optional font-weight string such as "bold"
+  * @param style Optional font-style string such as "italic"
+  * @param lineHeight Optional line-height number suchas 1.5
+  * @param family Optional font-family such as "Helvetica, sans-serif"
+  * @example `form.font( myFont )`, `form.font(14, "bold")`
   */
-  strokeOnly( c:string|boolean, width?:number, linejoin?:string, linecap?:string ):this {
-    this.fill( false );
-    return this.stroke( c, width, linejoin, linecap );
+  font( sizeOrFont:number|Font, weight?:string, style?:string, lineHeight?:number, family?:string ):this {
+    if (typeof sizeOrFont == "number") {
+      
+      this._font.size = sizeOrFont;
+      if (family) this._font.face = family;
+      if (weight) this._font.weight = weight;
+      if (style) this._font.style = style;
+      if (lineHeight) this._font.lineHeight = lineHeight;
+      this._ctx.font = this._font.value;
+      
+    } else {
+      this._font = sizeOrFont;
+    }
+    return this;
   }
   
+
+  reset():this {
+    this._ctx.style = {
+      "filled": true, "stroked": true,
+      "fill": "#f03", "stroke": "#fff",
+      "stroke-width": 1,
+      "stroke-linejoin": "bevel",
+      "stroke-linecap": "sqaure"
+    };
+
+    this._font = new Font( 14, "sans-serif");
+    this._ctx.font = this._font.value;
+
+    return this;
+  }
+
+
   
-  branch( group_id:string, group?:Element ):object {
+  updateScope( group_id:string, group?:Element ):object {
     this._ctx.group = group;
     this._ctx.groupID = group_id;
     this._ctx.groupCount = 0;
@@ -468,9 +526,9 @@ export class SVGForm extends Form {
     return this._ctx;
   }
   
-  base( item:IPlayer ) {
+  scope( item:IPlayer ) {
     if (!item || item.animateID == null ) throw new Error("item not defined or not yet added to Space");
-    return this.branch( this._branchID( item ), this.space.element );
+    return this.updateScope( SVGForm.scopeID( item ), this.space.element );
   }
   
   
@@ -486,15 +544,18 @@ export class SVGForm extends Form {
   
   static style( elem:SVGElement, styles:object) {
     let st = [];
-    
+
+    if ( !styles["filled"] ) st.push( "fill: none");
+    if ( !styles["stroked"] ) st.push( "stroke: none");
+        
     for (let k in styles) {
-      if ( styles.hasOwnProperty(k) ) {
+      if ( styles.hasOwnProperty(k) && k != "filled" && k != "stroked" ) {
         let v = styles[k];
         if (v) {
-          if (k=="fill" && styles["filled"] !== true) {
-            st.push( "fill: none");
-          } else if (k=="stroke" && styles["stroked"] !== true) {
-            st.push( "stroke: none");
+          if ( !styles["filled"] && k.indexOf('fill') === 0 ) {
+            continue;
+          } else if ( !styles["stroked"] && k.indexOf('stroke') === 0 ) {
+            continue;
           } else {
             st.push( `${k}: ${v}` );
           }
@@ -506,7 +567,7 @@ export class SVGForm extends Form {
   }
   
   
-  protected _branchID( item:IPlayer ):string {
+  static scopeID( item:IPlayer ):string {
     return `item-${item.animateID}`;
   }
   
