@@ -1,4 +1,4 @@
-window.demoDescription = ".";
+window.demoDescription = "A retro-style dazzling effect created by a grid whose cells change color and size based on their distances to the pointer.";
 
 (function() {
 
