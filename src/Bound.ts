@@ -2,7 +2,7 @@
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 
 
-import {Pt, IPt, Group} from "./Pt";
+import {Pt, IPt, Group, GroupLike} from "./Pt";
 
 /**
  * Bound is a subclass of Group that represents a rectangular boundary.
@@ -32,12 +32,16 @@ export class Bound extends Group implements IPt {
    * @param rect an object has top/left/bottom/right/width/height properties
    * @returns a Bound object
    */
-  static fromBoundingRect( rect:ClientRect ) {
+  static fromBoundingRect( rect:ClientRect ):Bound {
     let b = new Bound( new Pt( rect.left||0, rect.top||0 ), new Pt( rect.right||0, rect.bottom||0 ) );
     if (rect.width && rect.height) b.size = new Pt(rect.width, rect.height);
     return b;
   }
 
+  static fromGroup( g:GroupLike ):Bound {
+    if (g.length < 2) throw new Error( "Cannot create a Bound from a group that has less than 2 Pt" );
+    return new Bound( g[0], g[g.length-1] );
+  }
 
 
   /**

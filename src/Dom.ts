@@ -2,7 +2,7 @@ import {MultiTouchSpace, IPlayer} from './Space';
 import {Form, VisualForm, Font} from "./Form";
 import {Bound} from './Bound';
 import {Geom} from './Num';
-import {Const, Util} from './Util';
+import {Const} from './Util';
 import {Pt, PtLike, GroupLike, Group} from './Pt';
 import {Rectangle} from "./Op";
 
@@ -99,6 +99,7 @@ export class DOMSpace extends MultiTouchSpace {
     
     this._pointer = this.center;
     
+    console.log( "------------", this.bound );
     if (callback) callback( this.bound, this._canvas );
   }
   
@@ -165,16 +166,15 @@ export class DOMSpace extends MultiTouchSpace {
   */
   protected _resizeHandler( evt:Event ) {
     
+    let b = Bound.fromBoundingRect( this._container.getBoundingClientRect() );
+
     if (this._autoResize) {
-      let b = Bound.fromBoundingRect( this._canvas.getBoundingClientRect() );
       this.styles( {width: "100%", height: "100%"}, true );
-      this.resize( b, evt );
-      
     } else {
-      
-      let b = Bound.fromBoundingRect( this._container.getBoundingClientRect() );
       this.styles( {width: `${b.width}px`, height: `${b.height}px`}, true );
     }
+
+    this.resize( b, evt );
     
   }
   
@@ -298,7 +298,30 @@ export class DOMSpace extends MultiTouchSpace {
  * Form for DOMSpace. Note that this is currently not implemented.
  */
 export class DOMForm extends Form {
+
+  protected _ctx:DOMFormContext = {
+    group: null,
+    groupID: "pts",
+    groupCount: 0,
+    currentID: "pts0",
+    style: {
+      "filled": true,
+      "stroked": true,
+      "background": "#f03",
+      "border-color": "#fff",
+      "border-width": 1,
+      "stroke-linejoin": "none",
+      "stroke-linecap": "none"
+    },
+    font: "11px sans-serif",
+    fontSize: 11,
+    fontFamily: "sans-serif"
+  };
+
+  static domID:number = 0;
+  
   protected _space:DOMSpace;
+  protected _ready:boolean = false;
   
   constructor( space:DOMSpace ) {
     super();
@@ -414,7 +437,7 @@ export class SVGSpace extends DOMSpace {
 /**
  * A type that represents the current context for an SVGForm
  */
-export type SVGFormContext = {
+export type DOMFormContext = {
   group:Element, groupID:string, groupCount:number,
   currentID:string,
   style:object,
@@ -428,7 +451,7 @@ export type SVGFormContext = {
 */
 export class SVGForm extends VisualForm {
   
-  protected _ctx:SVGFormContext = {
+  protected _ctx:DOMFormContext = {
     group: null,
     groupID: "pts",
     groupCount: 0,
@@ -472,19 +495,6 @@ export class SVGForm extends VisualForm {
   * get the SVGSpace instance that this form is associated with
   */
   get space():SVGSpace { return this._space; }
-  
-  
-  /**
-   * Check number of items in a Group against a required number
-   * @param pts 
-   */
-  static _checkSize( pts:GroupLike|number[][], required:number=2 ):boolean {
-    if (pts.length < required) {
-      Util.warn( "Requires 2 or more Pts in this Group." );
-      return false;
-    } 
-    return true;
-  }
   
   
   /**
@@ -676,7 +686,7 @@ export class SVGForm extends VisualForm {
     * @param shape The shape of the point. Defaults to "square", but it can be "circle" or a custom shape function in your own implementation.
     * @example `SVGForm.point( p )`, `SVGForm.point( p, 10, "circle" )`
     */
-  static point( ctx:SVGFormContext, pt:PtLike, radius:number=5, shape:string="square" ):SVGElement {
+  static point( ctx:DOMFormContext, pt:PtLike, radius:number=5, shape:string="square" ):SVGElement {
     if (shape === "circle") {
       return SVGForm.circle( ctx, pt, radius );
     } else {
@@ -705,7 +715,7 @@ export class SVGForm extends VisualForm {
     * @param pt center position of the circle
     * @param radius radius of the circle
     */
-  static circle( ctx:SVGFormContext, pt:PtLike, radius:number=10 ):SVGElement {
+  static circle( ctx:DOMFormContext, pt:PtLike, radius:number=10 ):SVGElement {
     let elem = SVGSpace.svgElement( ctx.group, "circle", SVGForm.getID(ctx) );
     
     DOMSpace.setAttr( elem, {
@@ -740,7 +750,7 @@ export class SVGForm extends VisualForm {
     * @param endAngle end angle of the arc
     * @param cc an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.
     */
-  static arc( ctx:SVGFormContext, pt:PtLike, radius:number, startAngle:number, endAngle:number, cc?:boolean ):SVGElement {
+  static arc( ctx:DOMFormContext, pt:PtLike, radius:number, startAngle:number, endAngle:number, cc?:boolean ):SVGElement {
     let elem = SVGSpace.svgElement( ctx.group, "path", SVGForm.getID( ctx ) );
     
     const start = new Pt(pt).toAngle( startAngle, radius, true );
@@ -779,7 +789,7 @@ export class SVGForm extends VisualForm {
     * @param pt center position of the square
     * @param halfsize half size of the square
     */
-  static square( ctx:SVGFormContext, pt:PtLike, halfsize:number ) {
+  static square( ctx:DOMFormContext, pt:PtLike, halfsize:number ) {
     let elem = SVGSpace.svgElement( ctx.group, "rect", SVGForm.getID( ctx ) );
     DOMSpace.setAttr( elem, {x: pt[0]-halfsize, y:pt[1]-halfsize, width: halfsize*2, height: halfsize*2} );
     SVGForm.style( elem, ctx.style );
@@ -804,7 +814,7 @@ export class SVGForm extends VisualForm {
   * @param ctx a context object of SVGForm
   * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
   */
-  static line( ctx:SVGFormContext, pts:GroupLike|number[][] ):SVGElement {
+  static line( ctx:DOMFormContext, pts:GroupLike|number[][] ):SVGElement {
     if (!this._checkSize( pts)) return;
     
     if (pts.length > 2) return SVGForm._poly( ctx, pts, false );
@@ -840,7 +850,7 @@ export class SVGForm extends VisualForm {
    * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
    * @param closePath a boolean to specify if the polygon path should be closed
    */
-  static _poly( ctx:SVGFormContext, pts:GroupLike|number[][], closePath:boolean=true) {
+  static _poly( ctx:DOMFormContext, pts:GroupLike|number[][], closePath:boolean=true) {
     if (!this._checkSize( pts)) return;
     
     let elem = SVGSpace.svgElement( ctx.group, ((closePath) ? "polygon" : "polyline"), SVGForm.getID(ctx) );
@@ -856,7 +866,7 @@ export class SVGForm extends VisualForm {
     * @param ctx a context object of SVGForm
     * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
     */
-  static polygon( ctx:SVGFormContext, pts:GroupLike|number[][] ):SVGElement {
+  static polygon( ctx:DOMFormContext, pts:GroupLike|number[][] ):SVGElement {
     return SVGForm._poly( ctx, pts, true );
   }
   
@@ -877,7 +887,7 @@ export class SVGForm extends VisualForm {
   * @param ctx a context object of SVGForm
   * @param pts usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.
   */
-  static rect( ctx:SVGFormContext, pts:GroupLike|number[][] ):SVGElement {
+  static rect( ctx:DOMFormContext, pts:GroupLike|number[][] ):SVGElement {
     if (!this._checkSize( pts)) return;
     
     let elem = SVGSpace.svgElement( ctx.group, "rect", SVGForm.getID(ctx) );
@@ -914,7 +924,7 @@ export class SVGForm extends VisualForm {
     * @param `txt` a string of text to draw
     * @param `maxWidth` specify a maximum width per line
     */
-  static text( ctx:SVGFormContext, pt:PtLike, txt:string ):SVGElement {
+  static text( ctx:DOMFormContext, pt:PtLike, txt:string ):SVGElement {
     let elem = SVGSpace.svgElement( ctx.group, "text", SVGForm.getID(ctx) );
     
     DOMSpace.setAttr( elem, {

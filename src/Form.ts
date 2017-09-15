@@ -3,7 +3,7 @@
 
 
 import {Pt, PtLike, GroupLike} from "./Pt";
-
+import {Util} from "./Util";
 
 
 /**
@@ -17,6 +17,19 @@ export abstract class Form {
   * get whether the Form has received the Space's rendering context
   */
   get ready():boolean { return this._ready; }
+
+
+  /**
+   * Check number of items in a Group against a required number
+   * @param pts 
+   */
+  static _checkSize( pts:GroupLike|number[][], required:number=2 ):boolean {
+    if (pts.length < required) {
+      Util.warn( "Requires 2 or more Pts in this Group." );
+      return false;
+    } 
+    return true;
+  }
 }
 
 

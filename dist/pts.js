@@ -1673,6 +1673,11 @@ class Bound extends Pt_1.Group {
             b.size = new Pt_1.Pt(rect.width, rect.height);
         return b;
     }
+    static fromGroup(g) {
+        if (g.length < 2)
+            throw new Error("Cannot create a Bound from a group that has less than 2 Pt");
+        return new Bound(g[0], g[g.length - 1]);
+    }
     /**
      * Initiate the bound's properties.
      */
@@ -2462,6 +2467,16 @@ class Rectangle {
      */
     static toCircle(pts) {
         return Circle.fromRect(pts);
+    }
+    /**
+     * Create a square that either fits within or encloses a rectangle
+     * @param pts a Group of 2 Pts representing a rectangle
+     * @param enclose if `true`, the square will enclose the rectangle. Default is `false`, which will fit the square inside the rectangle.
+     */
+    static toSquare(pts, enclose = false) {
+        let s = Rectangle.size(pts);
+        let m = (enclose) ? s.maxValue().value : s.minValue().value;
+        return Rectangle.fromCenter(Rectangle.center(pts), m, m);
     }
     /**
      * Get the size of this rectangle as a Pt
@@ -3387,6 +3402,7 @@ exports.Curve = Curve;
 // Source code licensed under Apache License 2.0. 
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
+const Util_1 = __webpack_require__(1);
 /**
 * Form is an abstract class that represents a form that's used in a Space for expressions.
 */
@@ -3398,6 +3414,17 @@ class Form {
     * get whether the Form has received the Space's rendering context
     */
     get ready() { return this._ready; }
+    /**
+     * Check number of items in a Group against a required number
+     * @param pts
+     */
+    static _checkSize(pts, required = 2) {
+        if (pts.length < required) {
+            Util_1.Util.warn("Requires 2 or more Pts in this Group.");
+            return false;
+        }
+        return true;
+    }
 }
 exports.Form = Form;
 /**
@@ -5312,6 +5339,7 @@ class DOMSpace extends Space_1.MultiTouchSpace {
             }
         }
         this._pointer = this.center;
+        console.log("------------", this.bound);
         if (callback)
             callback(this.bound, this._canvas);
     }
@@ -5368,15 +5396,14 @@ class DOMSpace extends Space_1.MultiTouchSpace {
     * @param evt
     */
     _resizeHandler(evt) {
+        let b = Bound_1.Bound.fromBoundingRect(this._container.getBoundingClientRect());
         if (this._autoResize) {
-            let b = Bound_1.Bound.fromBoundingRect(this._canvas.getBoundingClientRect());
             this.styles({ width: "100%", height: "100%" }, true);
-            this.resize(b, evt);
         }
         else {
-            let b = Bound_1.Bound.fromBoundingRect(this._container.getBoundingClientRect());
             this.styles({ width: `${b.width}px`, height: `${b.height}px` }, true);
         }
+        this.resize(b, evt);
     }
     /**
     * Get a new `DOMForm` for drawing
@@ -5483,10 +5510,30 @@ exports.DOMSpace = DOMSpace;
 class DOMForm extends Form_1.Form {
     constructor(space) {
         super();
+        this._ctx = {
+            group: null,
+            groupID: "pts",
+            groupCount: 0,
+            currentID: "pts0",
+            style: {
+                "filled": true,
+                "stroked": true,
+                "background": "#f03",
+                "border-color": "#fff",
+                "border-width": 1,
+                "stroke-linejoin": "none",
+                "stroke-linecap": "none"
+            },
+            font: "11px sans-serif",
+            fontSize: 11,
+            fontFamily: "sans-serif"
+        };
+        this._ready = false;
         this._space = space;
     }
     get space() { return this._space; }
 }
+DOMForm.domID = 0;
 exports.DOMForm = DOMForm;
 /**
  * A Space for SVG elements
@@ -5609,17 +5656,6 @@ class SVGForm extends Form_1.VisualForm {
     * get the SVGSpace instance that this form is associated with
     */
     get space() { return this._space; }
-    /**
-     * Check number of items in a Group against a required number
-     * @param pts
-     */
-    static _checkSize(pts, required = 2) {
-        if (pts.length < required) {
-            Util_1.Util.warn("Requires 2 or more Pts in this Group.");
-            return false;
-        }
-        return true;
-    }
     /**
      * Update a style in _ctx context or throw an Erorr if the style doesn't exist
      * @param k style key
