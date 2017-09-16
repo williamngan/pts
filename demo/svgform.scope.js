@@ -40,8 +40,13 @@ window.demoDescription = "SVG Test";
             form.fillOnly("#fe3").rect( e[i] );
           }
         }    
+    },
+
+    resize: function( bound ) {
+      pts = Create.gridCells( space.innerBound, 4, 1 );
     }
   });
+
   
   //// ----
   

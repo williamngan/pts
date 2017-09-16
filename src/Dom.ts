@@ -99,7 +99,6 @@ export class DOMSpace extends MultiTouchSpace {
     
     this._pointer = this.center;
     
-    console.log( "------------", this.bound );
     if (callback) callback( this.bound, this._canvas );
   }
   
@@ -129,7 +128,6 @@ export class DOMSpace extends MultiTouchSpace {
   set autoResize( auto:boolean ) {
     this._autoResize = auto;
     if (auto) {
-      this.styles( {width: "100%", height: "100%"}, true );
       window.addEventListener( 'resize', this._resizeHandler.bind(this) );
     } else {
       delete this._css['width'];
@@ -148,7 +146,8 @@ export class DOMSpace extends MultiTouchSpace {
   resize( b:Bound, evt?:Event):this {
     
     this.bound = b;
-    
+    this.styles( {width: `${b.width}px`, height: `${b.height}px`}, true );
+
     for (let k in this.players) {
       if (this.players.hasOwnProperty(k)) {
         let p = this.players[k];
@@ -372,6 +371,19 @@ export class SVGSpace extends DOMSpace {
   */
   get element():Element {
     return this._canvas;
+  }
+
+  /**
+  * This overrides Space's `resize` function. It's used as a callback function for window's resize event and not usually called directly. You can keep track of resize events with `resize: (bound ,evt)` callback in your player objects (See `Space`'s `add()` function). 
+  * @param b a Bound object to resize to
+  * @param evt Optionally pass a resize event
+  */
+  resize( b:Bound, evt?:Event):this {
+    super.resize( b, evt );
+    this.element.setAttribute("viewBox", `0 0 ${this.bound.width} ${this.bound.height}`);
+    this.element.setAttribute("width", `${this.bound.width}px`);
+    this.element.setAttribute("height", `${this.bound.height}px`);
+    return this;
   }
   
 

@@ -5339,7 +5339,6 @@ class DOMSpace extends Space_1.MultiTouchSpace {
             }
         }
         this._pointer = this.center;
-        console.log("------------", this.bound);
         if (callback)
             callback(this.bound, this._canvas);
     }
@@ -5364,7 +5363,6 @@ class DOMSpace extends Space_1.MultiTouchSpace {
     set autoResize(auto) {
         this._autoResize = auto;
         if (auto) {
-            this.styles({ width: "100%", height: "100%" }, true);
             window.addEventListener('resize', this._resizeHandler.bind(this));
         }
         else {
@@ -5381,6 +5379,7 @@ class DOMSpace extends Space_1.MultiTouchSpace {
     */
     resize(b, evt) {
         this.bound = b;
+        this.styles({ width: `${b.width}px`, height: `${b.height}px` }, true);
         for (let k in this.players) {
             if (this.players.hasOwnProperty(k)) {
                 let p = this.players[k];
@@ -5566,6 +5565,18 @@ class SVGSpace extends DOMSpace {
     */
     get element() {
         return this._canvas;
+    }
+    /**
+    * This overrides Space's `resize` function. It's used as a callback function for window's resize event and not usually called directly. You can keep track of resize events with `resize: (bound ,evt)` callback in your player objects (See `Space`'s `add()` function).
+    * @param b a Bound object to resize to
+    * @param evt Optionally pass a resize event
+    */
+    resize(b, evt) {
+        super.resize(b, evt);
+        this.element.setAttribute("viewBox", `0 0 ${this.bound.width} ${this.bound.height}`);
+        this.element.setAttribute("width", `${this.bound.width}px`);
+        this.element.setAttribute("height", `${this.bound.height}px`);
+        return this;
     }
     /**
      * A static function to add a svg element inside a node. Usually you don't need to use this directly. See methods in `SVGForm` instead.
