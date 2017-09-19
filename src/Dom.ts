@@ -2,7 +2,7 @@ import {MultiTouchSpace, IPlayer} from './Space';
 import {Form, VisualForm, Font} from "./Form";
 import {Bound} from './Bound';
 import {Geom} from './Num';
-import {Const} from './Util';
+import {Const, Util} from './Util';
 import {Pt, PtLike, GroupLike, Group} from './Pt';
 import {Rectangle} from "./Op";
 
@@ -47,8 +47,8 @@ export class DOMSpace extends MultiTouchSpace {
     
     // if selector is not defined, create a canvas
     if (!_selector) {      
-      this._container = this._createElement( "div", "pts_container" );
-      this._canvas = this._createElement( "div", "pts_element" ) as HTMLElement;
+      this._container = DOMSpace.createElement( "div", "pts_container" );
+      this._canvas = DOMSpace.createElement( "div", "pts_element" ) as HTMLElement;
       this._container.appendChild( this._canvas );
       document.body.appendChild( this._container );
       _existed = false;
@@ -62,16 +62,39 @@ export class DOMSpace extends MultiTouchSpace {
     setTimeout( this._ready.bind( this, callback ), 50 );
 
   }
+
+  /**
+   * A static function to add a DOM element inside a node. Usually you don't need to use this directly. See methods in `SVGForm` instead.
+   * @param parent the parent element, or `null` to use current `<svg>` as parent.
+   * @param name a string of element name,  such as `rect` or `circle`
+   * @param id id attribute of the new element
+   * @param autoClass add a class based on the id (from char 0 to index of "-"). Default is true.
+   */
+  static domElement( parent:Element, name:string, id?:string, autoClass:boolean=true ):SVGElement {
+    if (!parent || !parent.appendChild ) throw new Error( "parent is not a valid DOM element" );
+    
+    let elem = document.querySelector(`#${id}`);
+    if (!elem) {
+      elem = document.createElement( name );
+      elem.setAttribute( "id", id );
+      
+      elem.setAttribute( "class",id.substring(0, id.indexOf("-")) );
+      parent.appendChild( elem );
+    }
+    return elem as SVGElement;
+  }
   
   
   /**
   * Helper function to create a DOM element
   * @param elem element tag name
   * @param id element id attribute
+  * @param appendTo Optional, if specified, the created element will be appended to this element
   */
-  protected _createElement( elem:string="div", id:string ):Element {
+  static createElement( elem:string="div", id:string, appendTo?:Element ):Element {
     let d = document.createElement( elem );
-    if (id) d.setAttribute( "id,", id );
+    if (id) d.setAttribute( "id", id );
+    if (appendTo && appendTo.appendChild) appendTo.appendChild( d );
     return d;
     
   }
@@ -296,7 +319,7 @@ export class DOMSpace extends MultiTouchSpace {
 /**
  * Form for DOMSpace. Note that this is currently not implemented.
  */
-export class DOMForm extends Form {
+export class DOMForm extends VisualForm {
 
   protected _ctx:DOMFormContext = {
     group: null,
@@ -308,15 +331,22 @@ export class DOMForm extends Form {
       "stroked": true,
       "background": "#f03",
       "border-color": "#fff",
-      "border-width": 1,
-      "stroke-linejoin": "none",
-      "stroke-linecap": "none"
+      "border-width": "1px",
+      "border-radius": "none",
+      "border-style": "solid",
+      "position": "absolute",
+      "pointer-events": "none",
+      "top": 0,
+      "left": 0,
+      "width": 0,
+      "height": 0
     },
     font: "11px sans-serif",
     fontSize: 11,
     fontFamily: "sans-serif"
   };
 
+  static groupID:number = 0;
   static domID:number = 0;
   
   protected _space:DOMSpace;
@@ -325,9 +355,401 @@ export class DOMForm extends Form {
   constructor( space:DOMSpace ) {
     super();
     this._space = space;
+    
+    this._space.add( { start: () => {
+      this._ctx.group = this._space.element;
+      this._ctx.groupID = "pts_dom_"+(DOMForm.groupID++);
+      this._ready = true;
+    }} );
   }
   
   get space():DOMSpace { return this._space; }
+
+
+  /**
+   * Update a style in _ctx context or throw an Erorr if the style doesn't exist
+   * @param k style key
+   * @param v  style value
+   * @param unit Optional unit like 'px' to append to value
+   */
+  protected styleTo( k, v, unit:string='' ) { 
+    if (this._ctx.style[k] === undefined) throw new Error(`${k} style property doesn't exist`);
+    this._ctx.style[k] = `${v}${unit}`; 
+  }
+
+  /**
+   * A helper function to set top, left, width, height of DOM element
+   * @param x left position
+   * @param y top position
+   * @param w width
+   * @param h height
+   */
+  protected rectStyleTo( x, y, w, h ) {
+    this.styleTo( "left", x, "px" );
+    this.styleTo( "top", y, "px" );
+    this.styleTo( "width", w, "px" );
+    this.styleTo( "height", h, "px" );
+  }
+
+  /**
+  * Set current fill style. Provide a valid color string or `false` to specify no fill color.
+  * @example `form.fill("#F90")`, `form.fill("rgba(0,0,0,.5")`, `form.fill(false)`
+  * @param c fill color
+  */
+  fill( c:string|boolean ):this {
+    if (typeof c == "boolean") {
+      this.styleTo( "filled", c );
+    } else {
+      this.styleTo( "filled", true );
+      this.styleTo( "background", c );
+    }
+    return this;
+  }
+
+  /**
+  * Set current stroke style. Provide a valid color string or `false` to specify no stroke color.
+  * @example `form.stroke("#F90")`, `form.stroke("rgba(0,0,0,.5")`, `form.stroke(false)`, `form.stroke("#000", 0.5, 'round', 'square')`
+  * @param c stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle))
+  * @param width Optional value (can be floating point) to set line width
+  * @param linejoin not implemented in DOMForm
+  * @param linecap not implemented in DOMForm
+  */
+  stroke( c:string|boolean, width?:number, linejoin?:string, linecap?:string ):this {
+    if (typeof c == "boolean") {
+      this.styleTo( "stroked", c );
+    } else {
+      this.styleTo( "stroked", true );
+      this.styleTo( "border-color", c );
+      if (width) this.styleTo( "border-width", width+"px" );
+    }
+    return this;
+  }
+  
+  /**
+  * Set the current font 
+  * @param sizeOrFont either a number to specify font-size, or a `Font` object to specify all font properties
+  * @param weight Optional font-weight string such as "bold"
+  * @param style Optional font-style string such as "italic"
+  * @param lineHeight Optional line-height number suchas 1.5
+  * @param family Optional font-family such as "Helvetica, sans-serif"
+  * @example `form.font( myFont )`, `form.font(14, "bold")`
+  */
+  font( sizeOrFont:number|Font, weight?:string, style?:string, lineHeight?:number, family?:string ):this {
+    if (typeof sizeOrFont == "number") {
+      
+      this._font.size = sizeOrFont;
+      if (family) this._font.face = family;
+      if (weight) this._font.weight = weight;
+      if (style) this._font.style = style;
+      if (lineHeight) this._font.lineHeight = lineHeight;
+      this._ctx.font = this._font.value;
+      
+    } else {
+      this._font = sizeOrFont;
+    }
+    return this;
+  }
+
+  /**
+  * Reset the context's common styles to this form's styles. This supports using multiple forms on the same canvas context.
+  */
+  reset():this {
+    this._ctx.style = {
+      "filled": true, "stroked": true,
+      "background": "#f03", "border-color": "#fff",
+      "border-width": "1px"
+    };
+
+    this._font = new Font( 14, "sans-serif");
+    this._ctx.font = this._font.value;
+
+    return this;
+  }
+
+  /**
+   * Set this form's group scope by an ID, and optionally define the group's parent element. A group scope keeps track of elements by their generated IDs, and updates their properties as needed. See also `scope()`.
+   * @param group_id a string to use as prefix for the group's id. For example, group_id "hello" will create elements with id like "hello-1", "hello-2", etc
+   * @param group Optional DOM or SVG element to define this group's parent element
+   * @returns this form's context
+   */
+  updateScope( group_id:string, group?:Element ):object {
+    this._ctx.group = group;
+    this._ctx.groupID = group_id;
+    this._ctx.groupCount = 0;
+    this.nextID();
+    return this._ctx;
+  }
+  
+
+  /**
+   * Set the current group scope to an item added into space, in order to keep track of any point, circle, etc created within it. The item must have an `animateID` property, so that elements created within the item will have generated IDs like "item-{animateID}-{count}".
+   * @param item a "player" item that's added to space (see `space.add(...)`) and has an `animateID` property
+   * @returns this form's context
+   */
+  scope( item:IPlayer ) {
+    if (!item || item.animateID == null ) throw new Error("item not defined or not yet added to Space");
+    return this.updateScope( DOMForm.scopeID( item ), this.space.element );
+  }
+  
+  
+  /**
+   * Get next available id in the current group
+   * @returns an id string
+   */
+  nextID():string {
+    this._ctx.groupCount++;
+    this._ctx.currentID = `${this._ctx.groupID}-${this._ctx.groupCount}`;
+    return this._ctx.currentID;
+  }
+  
+
+  /**
+   * A static function to generate an ID string based on a context object
+   * @param ctx a context object for an DOMForm
+   */
+  static getID( ctx ):string {
+    return ctx.currentID || `p-${DOMForm.domID++}`;
+  }
+
+
+  /**
+   * A static function to generate an ID string for a scope, based on a "player" item in the Space
+   * @param item a "player" item that's added to space (see `space.add(...)`) and has an `animateID` property
+   */
+  static scopeID( item:IPlayer ):string {
+    return `item-${item.animateID}`;
+  }
+  
+  
+  /**
+   * A static function to help adding style object to an element. This put all styles into `style` attribute instead of individual attributes, so that the styles can be parsed by Adobe Illustrator.
+   * @param elem A DOM element to add to
+   * @param styles an object of style properties
+   * @example `DOMForm.style(elem, {fill: "#f90", stroke: false})`
+   * @returns this DOM element 
+   */
+  static style( elem:Element, styles:object) {
+    let st = [];
+
+    if ( !styles["filled"] ) st.push( "background: none");
+    if ( !styles["stroked"] ) st.push( "border: none");
+        
+    for (let k in styles) {
+      if ( styles.hasOwnProperty(k) && k != "filled" && k != "stroked" ) {
+        let v = styles[k];
+        if (v) {
+          if ( !styles["filled"] && k.indexOf('background') === 0 ) {
+            continue;
+          } else if ( !styles["stroked"] && k.indexOf('border-width') === 0 ) {
+            continue;
+          } else {
+            st.push( `${k}: ${v}` );
+          }
+        }
+      }
+    }
+    
+    return DOMSpace.setAttr( elem, {style: st.join(";")} );
+  }
+
+  
+  /**
+  * Draws a point
+  * @param ctx a context object of DOMForm
+  * @param pt a Pt object or numeric array
+  * @param radius radius of the point. Default is 5.
+  * @param shape The shape of the point. Defaults to "square", but it can be "circle" or a custom shape function in your own implementation.
+  * @example `DOMForm.point( p )`, `DOMForm.point( p, 10, "circle" )`
+  */
+  static point( ctx:DOMFormContext, pt:PtLike, radius:number=5, shape:string="square" ):Element {
+    if (shape === "circle") {
+      return DOMForm.circle( ctx, pt, radius );
+    } else {
+      return DOMForm.square( ctx, pt, radius );
+    }
+  }
+
+
+  /**
+  * Draws a point
+  * @param p a Pt object
+  * @param radius radius of the point. Default is 5.
+  * @param shape The shape of the point. Defaults to "square", but it can be "circle" or a custom shape function in your own implementation.
+  * @example `form.point( p )`, `form.point( p, 10, "circle" )`
+  */
+  point( pt:PtLike, radius:number=5, shape:string="square" ):this {
+    this.nextID();
+    this.rectStyleTo( pt[0], pt[1], radius, radius );
+    if (shape == "circle") this.styleTo("border-radius", "100%");
+    DOMForm.point( this._ctx, pt, radius, shape );
+    return this;
+  }
+
+  
+  /**
+  * A static function to draw a circle
+  * @param ctx a context object of DOMForm
+  * @param pt center position of the circle
+  * @param radius radius of the circle
+  */
+  static circle( ctx:DOMFormContext, pt:PtLike, radius:number=10 ):Element {
+    let elem = DOMSpace.domElement( ctx.group, "div", DOMForm.getID(ctx) );
+    DOMSpace.setAttr( elem, {class: 'pts-circle'} );
+    DOMForm.style( elem, ctx.style );
+    return elem;
+  }  
+
+
+  /**
+  * Draw a circle
+  * @param pts usually a Group of 2 Pts, but it can also take an array of two numeric arrays [ [position], [size] ]
+  * @see [`Circle.fromCenter`](./_op_.circle.html#frompt)
+  */
+  circle( pts:GroupLike|number[][] ):this {
+    this.nextID();
+    this.rectStyleTo( pts[0][0], pts[0][1], pts[1][0], pts[1][0] );
+    this.styleTo("border-radius", "100%");
+    DOMForm.circle( this._ctx, pts[0], pts[1][0] );
+    return this;
+  }
+
+
+  /**
+  * A static function to draw a square 
+  * @param ctx a context object of DOMForm
+  * @param pt center position of the square
+  * @param halfsize half size of the square
+  */
+  static square( ctx:DOMFormContext, pt:PtLike, halfsize:number ) {
+    let elem = DOMSpace.domElement( ctx.group, "div", DOMForm.getID(ctx) );
+
+    DOMSpace.setAttr( elem, {
+      position: 'absolute',
+      class: 'pts-square',
+      x: pt[0]-halfsize, 
+      y:pt[1]-halfsize, 
+      width: halfsize*2, 
+      height: halfsize*2
+    });
+    DOMForm.style( elem, ctx.style );
+    return elem;
+  }
+  
+
+  /**
+   * Draw a square, given a center and its half-size
+   * @param pt center Pt
+   * @param halfsize half-size
+   */
+  square( pt:PtLike, halfsize:number ):this {
+    this.nextID();
+    DOMForm.square( this._ctx, pt, halfsize );
+    return this;
+  } 
+
+
+  /**
+  * A static function to draw a rectangle
+  * @param ctx a context object of DOMForm
+  * @param pts usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.
+  */
+  static rect( ctx:DOMFormContext, pts:GroupLike|number[][] ):Element {
+    if (!this._checkSize( pts)) return;
+    
+    let elem = DOMSpace.domElement( ctx.group, "div", DOMForm.getID(ctx) );
+    
+    DOMSpace.setAttr( elem, { class: 'pts-rect' });
+    DOMForm.style( elem, ctx.style );
+    return elem;
+  }
+
+
+  /**
+  * Draw a rectangle
+  * @param pts usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.
+  */
+  rect( pts:number[][]|Pt[] ):this {
+    this.nextID();
+    this.rectStyleTo( pts[0][0], pts[0][1], pts[1][0]-pts[0][0], pts[1][1]-pts[0][1] );
+    this.styleTo( "border-radius", "none" );
+    DOMForm.rect( this._ctx, pts );
+    return this;
+  }
+
+
+  /**
+  * A static function to draw text
+  * @param ctx a context object of DOMForm
+  * @param `pt` a Point object to specify the anchor point
+  * @param `txt` a string of text to draw
+  * @param `maxWidth` specify a maximum width per line
+  */
+  static text( ctx:DOMFormContext, pt:PtLike, txt:string ):Element {
+    let elem = DOMSpace.domElement( ctx.group, "div", DOMForm.getID(ctx) );
+    
+    DOMSpace.setAttr( elem, {
+      position: 'absolute',
+      class: 'pts-text',
+      x: pt[0],
+      y: pt[1],
+    });
+    
+    elem.textContent = txt;
+    
+    DOMForm.style( elem, ctx.style );
+    
+    return elem;
+  }
+
+  /**
+  * Draw text on canvas
+  * @param `pt` a Pt or numeric array to specify the anchor point
+  * @param `txt` text
+  * @param `maxWidth` specify a maximum width per line
+  */
+  text( pt:PtLike, txt:string ): this {
+    this.nextID();
+    DOMForm.text( this._ctx, pt, txt );
+    return this;
+  }
+  
+
+  /**
+  * A convenient way to draw some text on canvas for logging or debugging. It'll be draw on the top-left of the canvas as an overlay.
+  * @param txt text
+  */
+  log( txt ):this {
+    this.fill("#000").stroke("#fff", 0.5).text( [10,14], txt );   
+    return this;
+  }
+  
+
+  /**
+   * Arc is not implemented in DOMForm
+   */
+  arc( pt:PtLike, radius:number, startAngle:number, endAngle:number, cc?:boolean ):this {
+    Util.warn( "arc is not implemented in DOMForm" );
+    return this;
+  }
+
+
+  /**
+   * Line is not implemented in DOMForm
+   */
+  line( pts:GroupLike|number[][] ):this {
+    Util.warn( "line is not implemented in DOMForm" );
+    return this;
+  }
+
+
+  /**
+   * Polygon is not implemented in DOMForm
+   * @param pts 
+   */
+  polygon( pts:GroupLike|number[][] ):this {
+    Util.warn( "polygon is not implemented in DOMForm" );
+    return this;
+  }
 }
 
 
@@ -351,8 +773,7 @@ export class SVGSpace extends DOMSpace {
     super( elem, callback );
     
     if (this._canvas.nodeName.toLowerCase() != "svg") {
-      let s = this._createElement( "svg", `${this.id}_svg` );
-      this._canvas.appendChild( s );
+      let s = SVGSpace.svgElement( this._canvas, "svg", `${this.id}_svg`, false );
       this._container = this._canvas;
       this._canvas = s as SVGElement;
     }
@@ -380,9 +801,13 @@ export class SVGSpace extends DOMSpace {
   */
   resize( b:Bound, evt?:Event):this {
     super.resize( b, evt );
-    this.element.setAttribute("viewBox", `0 0 ${this.bound.width} ${this.bound.height}`);
-    this.element.setAttribute("width", `${this.bound.width}px`);
-    this.element.setAttribute("height", `${this.bound.height}px`);
+    SVGSpace.setAttr( this.element, {
+      "viewBox": `0 0 ${this.bound.width} ${this.bound.height}`,
+      "width": `${this.bound.width}`,
+      "height": `${this.bound.height}`,
+      "xmlns": "http://www.w3.org/2000/svg",
+      "version": "1.1"
+    });
     return this;
   }
   
@@ -392,8 +817,9 @@ export class SVGSpace extends DOMSpace {
    * @param parent the parent element, or `null` to use current `<svg>` as parent.
    * @param name a string of element name,  such as `rect` or `circle`
    * @param id id attribute of the new element
+   * @param autoClass add a class based on the id (from char 0 to index of "-"). Default is true.
    */
-  static svgElement( parent:Element, name:string, id?:string ):SVGElement {
+  static svgElement( parent:Element, name:string, id?:string, autoClass:boolean=true ):SVGElement {
     if (!parent || !parent.appendChild ) throw new Error( "parent is not a valid DOM element" );
     
     let elem = document.querySelector(`#${id}`);
@@ -413,7 +839,7 @@ export class SVGSpace extends DOMSpace {
    * @param elem tag name
    * @param id id string
    */
-  _createElement( elem:string="svg", id:string ):Element {
+  createElement( elem:string="svg", id:string ):Element {
     let d = document.createElementNS( "http://www.w3.org/2000/svg", elem );
     if (id) d.setAttribute( "id", id );
     return d;
@@ -482,6 +908,7 @@ export class SVGForm extends VisualForm {
     fontFamily: "sans-serif"
   };
   
+  static groupID:number = 0;
   static domID:number = 0;
   
   protected _space:SVGSpace;
@@ -498,6 +925,7 @@ export class SVGForm extends VisualForm {
     
     this._space.add( { start: () => {
       this._ctx.group = this._space.element;
+      this._ctx.groupID = "pts_svg_"+(SVGForm.groupID++);
       this._ready = true;
     }} );
   }
