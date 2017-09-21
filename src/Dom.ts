@@ -11,6 +11,7 @@ import {Pt, PtLike, GroupLike} from './Pt';
 export type DOMFormContext = {
   group:Element, groupID:string, groupCount:number,
   currentID:string,
+  currentClass?:string,
   style:object,
   font:string, fontSize:number, fontFamily:string
 };
@@ -374,6 +375,7 @@ export class HTMLForm extends VisualForm {
     groupID: "pts",
     groupCount: 0,
     currentID: "pts0",
+    currentClass: "",
     style: {
       "filled": true,
       "stroked": true,
@@ -471,7 +473,23 @@ export class HTMLForm extends VisualForm {
     }
     return this;
   }
+
+
+  /**
+   * Add custom class to the created element
+   * @param c custom class name or `false` to reset it
+   * @example `form.fill("#f00").cls("myClass").rects(r)` `form.cls(false).circles(c)`
+   */
+  cls( c:string|boolean ) {
+    if (typeof c == "boolean") {
+      this._ctx.currentClass = "";
+    } else {
+      this._ctx.currentClass = c;
+    }
+    return this;
+  }
   
+
   /**
   * Set the current font 
   * @param sizeOrFont either a number to specify font-size, or a `Font` object to specify all font properties
@@ -641,7 +659,7 @@ export class HTMLForm extends VisualForm {
   */
   static circle( ctx:DOMFormContext, pt:PtLike, radius:number=10 ):Element {
     let elem = HTMLSpace.htmlElement( ctx.group, "div", HTMLForm.getID(ctx) );
-    HTMLSpace.setAttr( elem, {class: 'pts-form pts-circle'} );
+    HTMLSpace.setAttr( elem, {class: `pts-form pts-circle ${ctx.currentClass}` });
     HTMLForm.style( elem, ctx.style );
     return elem;
   }  
@@ -672,7 +690,7 @@ export class HTMLForm extends VisualForm {
 
     HTMLSpace.setAttr( elem, {
       position: 'absolute',
-      class: 'pts-form pts-square',
+      class: `pts-form pts-square ${ctx.currentClass}`,
       x: pt[0]-halfsize, 
       y:pt[1]-halfsize, 
       width: halfsize*2, 
@@ -705,7 +723,7 @@ export class HTMLForm extends VisualForm {
     
     let elem = HTMLSpace.htmlElement( ctx.group, "div", HTMLForm.getID(ctx) );
     
-    HTMLSpace.setAttr( elem, { class: 'pts-form pts-rect' });
+    HTMLSpace.setAttr( elem, { class: `pts-form pts-rect ${ctx.currentClass}` });
     HTMLForm.style( elem, ctx.style );
     return elem;
   }
@@ -736,7 +754,7 @@ export class HTMLForm extends VisualForm {
     
     HTMLSpace.setAttr( elem, {
       position: 'absolute',
-      class: 'pts-form pts-text',
+      class: `pts-form pts-text ${ctx.currentClass}`,
       x: pt[0],
       y: pt[1],
     });

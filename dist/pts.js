@@ -4266,6 +4266,7 @@ class HTMLForm extends Form_1.VisualForm {
             groupID: "pts",
             groupCount: 0,
             currentID: "pts0",
+            currentClass: "",
             style: {
                 "filled": true,
                 "stroked": true,
@@ -4349,6 +4350,20 @@ class HTMLForm extends Form_1.VisualForm {
             this.styleTo("border-color", c);
             if (width)
                 this.styleTo("border-width", width + "px");
+        }
+        return this;
+    }
+    /**
+     * Add custom class to the created element
+     * @param c custom class name or `false` to reset it
+     * @example `form.fill("#f00").cls("myClass").rects(r)` `form.cls(false).circles(c)`
+     */
+    cls(c) {
+        if (typeof c == "boolean") {
+            this._ctx.currentClass = "";
+        }
+        else {
+            this._ctx.currentClass = c;
         }
         return this;
     }
@@ -4508,7 +4523,7 @@ class HTMLForm extends Form_1.VisualForm {
     */
     static circle(ctx, pt, radius = 10) {
         let elem = HTMLSpace.htmlElement(ctx.group, "div", HTMLForm.getID(ctx));
-        HTMLSpace.setAttr(elem, { class: 'pts-form pts-circle' });
+        HTMLSpace.setAttr(elem, { class: `pts-form pts-circle ${ctx.currentClass}` });
         HTMLForm.style(elem, ctx.style);
         return elem;
     }
@@ -4534,7 +4549,7 @@ class HTMLForm extends Form_1.VisualForm {
         let elem = HTMLSpace.htmlElement(ctx.group, "div", HTMLForm.getID(ctx));
         HTMLSpace.setAttr(elem, {
             position: 'absolute',
-            class: 'pts-form pts-square',
+            class: `pts-form pts-square ${ctx.currentClass}`,
             x: pt[0] - halfsize,
             y: pt[1] - halfsize,
             width: halfsize * 2,
@@ -4562,7 +4577,7 @@ class HTMLForm extends Form_1.VisualForm {
         if (!this._checkSize(pts))
             return;
         let elem = HTMLSpace.htmlElement(ctx.group, "div", HTMLForm.getID(ctx));
-        HTMLSpace.setAttr(elem, { class: 'pts-form pts-rect' });
+        HTMLSpace.setAttr(elem, { class: `pts-form pts-rect ${ctx.currentClass}` });
         HTMLForm.style(elem, ctx.style);
         return elem;
     }
@@ -4588,7 +4603,7 @@ class HTMLForm extends Form_1.VisualForm {
         let elem = HTMLSpace.htmlElement(ctx.group, "div", HTMLForm.getID(ctx));
         HTMLSpace.setAttr(elem, {
             position: 'absolute',
-            class: 'pts-form pts-text',
+            class: `pts-form pts-text ${ctx.currentClass}`,
             x: pt[0],
             y: pt[1],
         });
@@ -6007,16 +6022,14 @@ class SVGSpace extends Dom_1.DOMSpace {
      * @param parent the parent element, or `null` to use current `<svg>` as parent.
      * @param name a string of element name,  such as `rect` or `circle`
      * @param id id attribute of the new element
-     * @param autoClass add a class based on the id (from char 0 to index of "-"). Default is true.
      */
-    static svgElement(parent, name, id, autoClass = true) {
+    static svgElement(parent, name, id) {
         if (!parent || !parent.appendChild)
             throw new Error("parent is not a valid DOM element");
         let elem = document.querySelector(`#${id}`);
         if (!elem) {
             elem = document.createElementNS("http://www.w3.org/2000/svg", name);
             elem.setAttribute("id", id);
-            elem.setAttribute("class", id.substring(0, id.indexOf("-")));
             parent.appendChild(elem);
         }
         return elem;
@@ -6057,6 +6070,7 @@ class SVGForm extends Form_1.VisualForm {
             groupID: "pts",
             groupCount: 0,
             currentID: "pts0",
+            currentClass: "",
             style: {
                 "filled": true,
                 "stroked": true,
@@ -6128,6 +6142,20 @@ class SVGForm extends Form_1.VisualForm {
                 this.styleTo("stroke-linejoin", linejoin);
             if (linecap)
                 this.styleTo("stroke-linecap", linecap);
+        }
+        return this;
+    }
+    /**
+     * Add custom class to the created element
+     * @param c custom class name or `false` to reset it
+     * @example `form.fill("#f00").cls("myClass").rects(r)` `form.cls(false).circles(c)`
+     */
+    cls(c) {
+        if (typeof c == "boolean") {
+            this._ctx.currentClass = "";
+        }
+        else {
+            this._ctx.currentClass = c;
         }
         return this;
     }
@@ -6289,7 +6317,8 @@ class SVGForm extends Form_1.VisualForm {
         Dom_1.DOMSpace.setAttr(elem, {
             cx: pt[0],
             cy: pt[1],
-            r: radius
+            r: radius,
+            'class': `pts-svgform pts-circle ${ctx.currentClass}`,
         });
         SVGForm.style(elem, ctx.style);
         return elem;
@@ -6323,7 +6352,10 @@ class SVGForm extends Form_1.VisualForm {
             largeArc = !largeArc;
         const sweep = (cc) ? "0" : "1";
         const d = `M ${start[0]} ${start[1]} A ${radius} ${radius} 0 ${largeArc ? "1" : "0"} ${sweep} ${end[0]} ${end[1]}`;
-        Dom_1.DOMSpace.setAttr(elem, { d: d });
+        Dom_1.DOMSpace.setAttr(elem, {
+            d: d,
+            'class': `pts-svgform pts-arc ${ctx.currentClass}`,
+        });
         SVGForm.style(elem, ctx.style);
         return elem;
     }
@@ -6348,7 +6380,13 @@ class SVGForm extends Form_1.VisualForm {
       */
     static square(ctx, pt, halfsize) {
         let elem = SVGSpace.svgElement(ctx.group, "rect", SVGForm.getID(ctx));
-        Dom_1.DOMSpace.setAttr(elem, { x: pt[0] - halfsize, y: pt[1] - halfsize, width: halfsize * 2, height: halfsize * 2 });
+        Dom_1.DOMSpace.setAttr(elem, {
+            x: pt[0] - halfsize,
+            y: pt[1] - halfsize,
+            width: halfsize * 2,
+            height: halfsize * 2,
+            'class': `pts-svgform pts-square ${ctx.currentClass}`,
+        });
         SVGForm.style(elem, ctx.style);
         return elem;
     }
@@ -6377,7 +6415,8 @@ class SVGForm extends Form_1.VisualForm {
             x1: pts[0][0],
             y1: pts[0][1],
             x2: pts[1][0],
-            y2: pts[1][1]
+            y2: pts[1][1],
+            'class': `pts-svgform pts-line ${ctx.currentClass}`,
         });
         SVGForm.style(elem, ctx.style);
         return elem;
@@ -6402,7 +6441,10 @@ class SVGForm extends Form_1.VisualForm {
             return;
         let elem = SVGSpace.svgElement(ctx.group, ((closePath) ? "polygon" : "polyline"), SVGForm.getID(ctx));
         let points = pts.reduce((a, p) => a + `${p[0]},${p[1]} `, "");
-        Dom_1.DOMSpace.setAttr(elem, { points: points });
+        Dom_1.DOMSpace.setAttr(elem, {
+            points: points,
+            'class': `pts-svgform pts-polygon ${ctx.currentClass}`,
+        });
         SVGForm.style(elem, ctx.style);
         return elem;
     }
@@ -6438,7 +6480,8 @@ class SVGForm extends Form_1.VisualForm {
             x: bound[0][0],
             y: bound[0][1],
             width: size[0],
-            height: size[1]
+            height: size[1],
+            'class': `pts-svgform pts-rect ${ctx.currentClass}`,
         });
         SVGForm.style(elem, ctx.style);
         return elem;
@@ -6465,7 +6508,8 @@ class SVGForm extends Form_1.VisualForm {
             "pointer-events": "none",
             x: pt[0],
             y: pt[1],
-            dx: 0, dy: 0
+            dx: 0, dy: 0,
+            'class': `pts-svgform pts-text ${ctx.currentClass}`,
         });
         elem.textContent = txt;
         SVGForm.style(elem, ctx.style);

@@ -72,9 +72,8 @@ export class SVGSpace extends DOMSpace {
    * @param parent the parent element, or `null` to use current `<svg>` as parent.
    * @param name a string of element name,  such as `rect` or `circle`
    * @param id id attribute of the new element
-   * @param autoClass add a class based on the id (from char 0 to index of "-"). Default is true.
    */
-  static svgElement( parent:Element, name:string, id?:string, autoClass:boolean=true ):SVGElement {
+  static svgElement( parent:Element, name:string, id?:string ):SVGElement {
     if (!parent || !parent.appendChild ) throw new Error( "parent is not a valid DOM element" );
     
     let elem = document.querySelector(`#${id}`);
@@ -83,7 +82,6 @@ export class SVGSpace extends DOMSpace {
       elem = document.createElementNS( "http://www.w3.org/2000/svg", name );
       elem.setAttribute( "id", id );
       
-      elem.setAttribute( "class",id.substring(0, id.indexOf("-")) );
       parent.appendChild( elem );
     }
     return elem as SVGElement;
@@ -128,6 +126,7 @@ export class SVGForm extends VisualForm {
     groupID: "pts",
     groupCount: 0,
     currentID: "pts0",
+    currentClass: "",
     style: {
       "filled": true,
       "stroked": true,
@@ -215,6 +214,21 @@ export class SVGForm extends VisualForm {
       if (width) this.styleTo( "stroke-width", width );
       if (linejoin) this.styleTo( "stroke-linejoin", linejoin );
       if (linecap) this.styleTo( "stroke-linecap", linecap );
+    }
+    return this;
+  }
+
+
+  /**
+   * Add custom class to the created element
+   * @param c custom class name or `false` to reset it
+   * @example `form.fill("#f00").cls("myClass").rects(r)` `form.cls(false).circles(c)`
+   */
+  cls( c:string|boolean ) {
+    if (typeof c == "boolean") {
+      this._ctx.currentClass = "";
+    } else {
+      this._ctx.currentClass = c;
     }
     return this;
   }
@@ -395,7 +409,8 @@ export class SVGForm extends VisualForm {
     DOMSpace.setAttr( elem, {
       cx: pt[0],
       cy: pt[1],
-      r: radius
+      r: radius,
+      'class': `pts-svgform pts-circle ${ctx.currentClass}`,
     });
     
     SVGForm.style( elem, ctx.style );
@@ -436,7 +451,10 @@ export class SVGForm extends VisualForm {
     
     const d = `M ${start[0]} ${start[1]} A ${radius} ${radius} 0 ${largeArc ? "1" : "0"} ${sweep} ${end[0]} ${end[1]}`;
     
-    DOMSpace.setAttr( elem, { d: d } );
+    DOMSpace.setAttr( elem, { 
+      d: d,
+      'class': `pts-svgform pts-arc ${ctx.currentClass}`,
+    } );
     SVGForm.style( elem, ctx.style );
     return elem;
   }
@@ -465,7 +483,13 @@ export class SVGForm extends VisualForm {
     */
   static square( ctx:DOMFormContext, pt:PtLike, halfsize:number ) {
     let elem = SVGSpace.svgElement( ctx.group, "rect", SVGForm.getID( ctx ) );
-    DOMSpace.setAttr( elem, {x: pt[0]-halfsize, y:pt[1]-halfsize, width: halfsize*2, height: halfsize*2} );
+    DOMSpace.setAttr( elem, {
+      x: pt[0]-halfsize, 
+      y:pt[1]-halfsize, 
+      width: halfsize*2, 
+      height: halfsize*2,
+      'class': `pts-svgform pts-square ${ctx.currentClass}`,
+    });
     SVGForm.style( elem, ctx.style );
     return elem;
   }
@@ -499,7 +523,8 @@ export class SVGForm extends VisualForm {
       x1: pts[0][0],
       y1: pts[0][1],
       x2: pts[1][0],
-      y2: pts[1][1]
+      y2: pts[1][1],
+      'class': `pts-svgform pts-line ${ctx.currentClass}`,
     });
     
     SVGForm.style( elem, ctx.style );
@@ -529,7 +554,10 @@ export class SVGForm extends VisualForm {
     
     let elem = SVGSpace.svgElement( ctx.group, ((closePath) ? "polygon" : "polyline"), SVGForm.getID(ctx) );
     let points:string = (pts as number[][]).reduce( (a, p) => a+`${p[0]},${p[1]} `, "");
-    DOMSpace.setAttr( elem, {points: points} );    
+    DOMSpace.setAttr( elem, {
+      points: points,
+      'class': `pts-svgform pts-polygon ${ctx.currentClass}`,
+    });    
     SVGForm.style( elem, ctx.style );
     return elem;
   }
@@ -572,7 +600,8 @@ export class SVGForm extends VisualForm {
       x: bound[0][0],
       y: bound[0][1],
       width: size[0],
-      height: size[1]
+      height: size[1],
+      'class': `pts-svgform pts-rect ${ctx.currentClass}`,
     });
     
     SVGForm.style( elem, ctx.style );
@@ -605,7 +634,8 @@ export class SVGForm extends VisualForm {
       "pointer-events": "none",
       x: pt[0],
       y: pt[1],
-      dx: 0, dy: 0
+      dx: 0, dy: 0,
+      'class': `pts-svgform pts-text ${ctx.currentClass}`,
     });
     
     elem.textContent = txt;
