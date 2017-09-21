@@ -407,8 +407,8 @@ export abstract class MultiTouchSpace extends Space {
       for (let k in this.players) {
         if (this.players.hasOwnProperty(k)) {
           let v = this.players[k];
-          px = evt.offsetX || evt.layerX;
-          py = evt.offsetY || evt.layerY;
+          px = evt.pageX - this.outerBound.x;
+          py = evt.pageY - this.outerBound.y;
           if (v.action) v.action( type, px, py, evt );
         }
       }
@@ -418,8 +418,8 @@ export abstract class MultiTouchSpace extends Space {
           let v = this.players[k];
           let c = evt.changedTouches && evt.changedTouches.length > 0;
           let touch = evt.changedTouches.item(0);
-          px = (c) ? touch.clientX - this.innerBound.x : 0;
-          py = (c) ? touch.clientY - this.innerBound.y : 0;
+          px = (c) ? touch.pageX - this.outerBound.x : 0;
+          py = (c) ? touch.pageY - this.outerBound.y : 0;
           if (v.action) v.action( type, px, py, evt );
         }
       }
@@ -496,8 +496,8 @@ export abstract class MultiTouchSpace extends Space {
   * @param evt 
   */
   protected _touchMove( evt:TouchEvent) {
-    evt.preventDefault();
     this._mouseMove(evt);
+    evt.preventDefault();
     return false;
   }
   

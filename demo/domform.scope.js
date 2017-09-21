@@ -1,9 +1,9 @@
-window.demoDescription = "This sketch is rendered in DOM elements. Take a look using your browser's DOM inspector.";
+window.demoDescription = "This sketch is rendered in HTML elements. Take a look using your browser's DOM inspector.";
 
 (function() {
   
   Pts.namespace( this );
-  var space = new DOMSpace("#pt").setup({bgcolor: "#90f", resize: true });
+  var space = new HTMLSpace("#pt").setup({bgcolor: "#90f", resize: true });
   var form = space.getForm();
   
   
@@ -41,6 +41,6 @@ window.demoDescription = "This sketch is rendered in DOM elements. Take a look u
 
   
   //// ----
-  space.bindMouse().bindTouch().playOnce(2000);
+  space.bindMouse().bindTouch().play(5000);
   
 })();
