@@ -5,13 +5,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Space_1 = require("./Space");
 const Form_1 = require("./Form");
 const Bound_1 = require("./Bound");
-const Pt_1 = require("./Pt");
 const Util_1 = require("./Util");
 /**
 * CanvasSpace is an implementation of the abstract class Space. It represents a space for HTML Canvas.
 * Learn more about the concept of Space in [this guide](..guide/Space-0500.html)
 */
-class CanvasSpace extends Space_1.Space {
+class CanvasSpace extends Space_1.MultiTouchSpace {
     /**
     * Create a CanvasSpace which represents a HTML Canvas Space
     * @param elem Specify an element by its "id" attribute as string, or by the element object itself. An element can be an existing `<canvas>`, or a `<div>` container in which a new `<canvas>` will be created. If left empty, a `<div id="pt_container"><canvas id="pt" /></div>` will be added to DOM. Use css to customize its appearance if needed.
@@ -24,13 +23,6 @@ class CanvasSpace extends Space_1.Space {
         this._autoResize = true;
         this._bgcolor = "#e1e9f0";
         this._offscreen = false;
-        // track mouse dragging
-        this._pressed = false;
-        this._dragged = false;
-        this._hasMouse = false;
-        this._hasTouch = false;
-        this._renderFunc = undefined;
-        this._isReady = false;
         var _selector = null;
         var _existed = false;
         this.id = "pt";
@@ -93,14 +85,14 @@ class CanvasSpace extends Space_1.Space {
         if (!this._container)
             throw new Error(`Cannot initiate #${this.id} element`);
         this._isReady = true;
-        let b = (this._autoResize) ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
-        if (b)
-            this.resize(Bound_1.Bound.fromBoundingRect(b));
+        this._resizeHandler(null);
         this.clear(this._bgcolor);
         this._canvas.dispatchEvent(new Event("ready"));
         for (let k in this.players) {
-            if (this.players[k].start)
-                this.players[k].start(this.bound.clone(), this);
+            if (this.players.hasOwnProperty(k)) {
+                if (this.players[k].start)
+                    this.players[k].start(this.bound.clone(), this);
+            }
         }
         this._pointer = this.center;
         if (callback)
@@ -149,63 +141,10 @@ class CanvasSpace extends Space_1.Space {
     }
     get autoResize() { return this._autoResize; }
     /**
-    * `pixelScale` property returns a number that let you determine if the screen is "retina" (when value >= 2)
-    */
-    get pixelScale() {
-        return this._pixelScale;
-    }
-    /**
-    * Check if an offscreen canvas is created
-    */
-    get hasOffscreen() {
-        return this._offscreen;
-    }
-    /**
-    * Get the rendering context of offscreen canvas (if created via `setup()`)
-    */
-    get offscreenCtx() { return this._offCtx; }
-    /**
-    * Get the offscreen canvas element
-    */
-    get offscreenCanvas() { return this._offCanvas; }
-    /**
-    * Get the mouse or touch pointer that stores the last action
-    */
-    get pointer() {
-        let p = this._pointer.clone();
-        p.id = this._pointer.id;
-        return p;
-    }
-    /**
-    * Get a new `CanvasForm` for drawing
-    * @see `CanvasForm`
-    */
-    getForm() { return new CanvasForm(this); }
-    /**
-    * Get the html canvas element
-    */
-    get element() {
-        return this._canvas;
-    }
-    /**
-    * Get the parent element that contains the canvas element
-    */
-    get parent() {
-        return this._container;
-    }
-    /**
-    * Get the rendering context of canvas
-    */
-    get ctx() { return this._ctx; }
-    /**
-    * Get the canvas element in this space
-    */
-    get canvas() { return this._canvas; }
-    /**
-    * This overrides Space's `resize` function. It's used as a callback function for window's resize event and not usually called directly. You can keep track of resize events with `resize: (bound ,evt)` callback in your player objects (See `Space`'s `add()` function).
-    * @param b a Bound object to resize to
-    * @param evt Optionally pass a resize event
-    */
+  * This overrides Space's `resize` function. It's used as a callback function for window's resize event and not usually called directly. You can keep track of resize events with `resize: (bound ,evt)` callback in your player objects (See `Space`'s `add()` function).
+  * @param b a Bound object to resize to
+  * @param evt Optionally pass a resize event
+  */
     resize(b, evt) {
         this.bound = b;
         this._canvas.width = this.bound.size.x * this._pixelScale;
@@ -246,6 +185,53 @@ class CanvasSpace extends Space_1.Space {
         if (b)
             this.resize(Bound_1.Bound.fromBoundingRect(b), evt);
     }
+    /**
+    * `pixelScale` property returns a number that let you determine if the screen is "retina" (when value >= 2)
+    */
+    get pixelScale() {
+        return this._pixelScale;
+    }
+    /**
+    * Check if an offscreen canvas is created
+    */
+    get hasOffscreen() {
+        return this._offscreen;
+    }
+    /**
+    * Get the rendering context of offscreen canvas (if created via `setup()`)
+    */
+    get offscreenCtx() { return this._offCtx; }
+    /**
+    * Get the offscreen canvas element
+    */
+    get offscreenCanvas() { return this._offCanvas; }
+    /**
+    * Get a new `CanvasForm` for drawing
+    * @see `CanvasForm`
+    */
+    getForm() { return new CanvasForm(this); }
+    /**
+    * Get the html canvas element
+    */
+    get element() {
+        return this._canvas;
+    }
+    /**
+    * Get the parent element that contains the canvas element
+    */
+    get parent() {
+        return this._container;
+    }
+    /**
+     * A property to indicate if the Space is ready
+     */
+    get ready() {
+        return this._isReady;
+    }
+    /**
+    * Get the rendering context of canvas
+    */
+    get ctx() { return this._ctx; }
     /**
     * Clear the canvas with its background color. Overrides Space's `clear` function.
     * @param bg Optionally specify a custom background color in hex or rgba string, or "transparent". If not defined, it will use its `bgcolor` property as background color to clear the canvas.
@@ -296,196 +282,6 @@ class CanvasSpace extends Space_1.Space {
             this.render(this._ctx);
         }
     }
-    /**
-    * Bind event listener in canvas element. You can also use `bindMouse` or `bindTouch` to bind mouse or touch events conveniently.
-    * @param evt an event string such as "mousedown"
-    * @param callback callback function for this event
-    */
-    bindCanvas(evt, callback) {
-        this._canvas.addEventListener(evt, callback);
-    }
-    /**
-    * Unbind a callback from the event listener
-    * @param evt an event string such as "mousedown"
-    * @param callback callback function to unbind
-    */
-    unbindCanvas(evt, callback) {
-        this._canvas.removeEventListener(evt, callback);
-    }
-    /**
-    * A convenient method to bind (or unbind) all mouse events in canvas element. All "players" added to this space that implements an `action` callback property will receive mouse event callbacks. The types of mouse actions are: "up", "down", "move", "drag", "drop", "over", and "out". See `Space`'s `add()` function fore more.
-    * @param _bind a boolean value to bind mouse events if set to `true`. If `false`, all mouse events will be unbound. Default is true.
-    * @see Space`'s [`add`](./_space_.space.html#add) function
-    */
-    bindMouse(_bind = true) {
-        if (_bind) {
-            this.bindCanvas("mousedown", this._mouseDown.bind(this));
-            this.bindCanvas("mouseup", this._mouseUp.bind(this));
-            this.bindCanvas("mouseover", this._mouseOver.bind(this));
-            this.bindCanvas("mouseout", this._mouseOut.bind(this));
-            this.bindCanvas("mousemove", this._mouseMove.bind(this));
-            this._hasMouse = true;
-        }
-        else {
-            this.unbindCanvas("mousedown", this._mouseDown.bind(this));
-            this.unbindCanvas("mouseup", this._mouseUp.bind(this));
-            this.unbindCanvas("mouseover", this._mouseOver.bind(this));
-            this.unbindCanvas("mouseout", this._mouseOut.bind(this));
-            this.unbindCanvas("mousemove", this._mouseMove.bind(this));
-            this._hasMouse = false;
-        }
-        return this;
-    }
-    /**
-    * A convenient method to bind (or unbind) all touch events in canvas element. All "players" added to this space that implements an `action` callback property will receive mouse event callbacks. The types of mouse actions are: "up", "down", "move", "drag", "drop", "over", and "out".
-    * @param _bind a boolean value to bind touch events if set to `true`. If `false`, all mouse events will be unbound. Default is true.
-    * @see Space`'s [`add`](./_space_.space.html#add) function
-    */
-    bindTouch(_bind = true) {
-        if (_bind) {
-            this.bindCanvas("touchstart", this._mouseDown.bind(this));
-            this.bindCanvas("touchend", this._mouseUp.bind(this));
-            this.bindCanvas("touchmove", this._touchMove.bind(this));
-            this.bindCanvas("touchcancel", this._mouseOut.bind(this));
-            this._hasTouch = true;
-        }
-        else {
-            this.unbindCanvas("touchstart", this._mouseDown.bind(this));
-            this.unbindCanvas("touchend", this._mouseUp.bind(this));
-            this.unbindCanvas("touchmove", this._touchMove.bind(this));
-            this.unbindCanvas("touchcancel", this._mouseOut.bind(this));
-            this._hasTouch = false;
-        }
-        return this;
-    }
-    /**
-    * A convenient method to convert the touch points in a touch event to an array of `Pt`.
-    * @param evt a touch event which contains touches, changedTouches, and targetTouches list
-    * @param which a string to select a touches list: "touches", "changedTouches", or "targetTouches". Default is "touches"
-    * @return an array of Pt, whose origin position (0,0) is offset to the top-left of this space
-    */
-    touchesToPoints(evt, which = "touches") {
-        if (!evt || !evt[which])
-            return [];
-        let ts = [];
-        for (var i = 0; i < evt[which].length; i++) {
-            let t = evt[which].item(i);
-            ts.push(new Pt_1.Pt(t.pageX - this.bound.topLeft.x, t.pageY - this.bound.topLeft.y));
-        }
-        return ts;
-    }
-    /**
-    * Go through all the `players` and call its `action` callback function
-    * @param type "up", "down", "move", "drag", "drop", "over", and "out"
-    * @param evt mouse or touch event
-    */
-    _mouseAction(type, evt) {
-        let px = 0, py = 0;
-        if (evt instanceof MouseEvent) {
-            for (let k in this.players) {
-                if (this.players.hasOwnProperty(k)) {
-                    let v = this.players[k];
-                    px = evt.offsetX || evt.layerX;
-                    py = evt.offsetY || evt.layerY;
-                    if (v.action)
-                        v.action(type, px, py, evt);
-                }
-            }
-        }
-        else {
-            for (let k in this.players) {
-                if (this.players.hasOwnProperty(k)) {
-                    let v = this.players[k];
-                    let c = evt.changedTouches && evt.changedTouches.length > 0;
-                    let touch = evt.changedTouches.item(0);
-                    let bound = this._canvas.getBoundingClientRect();
-                    px = (c) ? touch.clientX - bound.left : 0;
-                    py = (c) ? touch.clientY - bound.top : 0;
-                    if (v.action)
-                        v.action(type, px, py, evt);
-                }
-            }
-        }
-        if (type) {
-            this._pointer.to(px, py);
-            this._pointer.id = type;
-        }
-    }
-    /**
-    * MouseDown handler
-    * @param evt
-    */
-    _mouseDown(evt) {
-        this._mouseAction("down", evt);
-        this._pressed = true;
-        return false;
-    }
-    /**
-    * MouseUp handler
-    * @param evt
-    */
-    _mouseUp(evt) {
-        this._mouseAction("up", evt);
-        if (this._dragged)
-            this._mouseAction("drop", evt);
-        this._pressed = false;
-        this._dragged = false;
-        return false;
-    }
-    /**
-    * MouseMove handler
-    * @param evt
-    */
-    _mouseMove(evt) {
-        this._mouseAction("move", evt);
-        if (this._pressed) {
-            this._dragged = true;
-            this._mouseAction("drag", evt);
-        }
-        return false;
-    }
-    /**
-    * MouseOver handler
-    * @param evt
-    */
-    _mouseOver(evt) {
-        this._mouseAction("over", evt);
-        return false;
-    }
-    /**
-    * MouseOut handler
-    * @param evt
-    */
-    _mouseOut(evt) {
-        this._mouseAction("out", evt);
-        if (this._dragged)
-            this._mouseAction("drop", evt);
-        this._dragged = false;
-        return false;
-    }
-    /**
-    * TouchMove handler
-    * @param evt
-    */
-    _touchMove(evt) {
-        evt.preventDefault();
-        this._mouseMove(evt);
-        return false;
-    }
-    /**
-    * Custom rendering
-    * @param context rendering context
-    */
-    render(context) {
-        if (this._renderFunc)
-            this._renderFunc(context, this);
-        return this;
-    }
-    /**
-    * Set a custom rendering `function(graphics_context, canvas_space)` if needed
-    */
-    set customRendering(f) { this._renderFunc = f; }
-    get customRendering() { return this._renderFunc; }
 }
 exports.CanvasSpace = CanvasSpace;
 /**
@@ -499,7 +295,6 @@ class CanvasForm extends Form_1.VisualForm {
     */
     constructor(space) {
         super();
-        this._ready = false;
         /**
         * store common styles so that they can be restored to canvas context when using multiple forms. See `reset()`.
         */
@@ -507,7 +302,6 @@ class CanvasForm extends Form_1.VisualForm {
             fillStyle: "#f03", strokeStyle: "#fff",
             lineWidth: 1, lineJoin: "bevel", lineCap: "butt",
         };
-        this._font = new Form_1.Font(14, "sans-serif");
         this._space = space;
         this._space.add({ start: () => {
                 this._ctx = this._space.ctx;
@@ -522,10 +316,6 @@ class CanvasForm extends Form_1.VisualForm {
     * get the CanvasSpace instance that this form is associated with
     */
     get space() { return this._space; }
-    /**
-     * get whether the CanvasForm has received the Space's rendering context
-     */
-    get ready() { return this._ready; }
     /**
     * Toggle whether to draw on offscreen canvas (if offscreen is set in CanvasSpace)
     * @param off if `true`, draw on offscreen canvas instead of the visible canvas. Default is `true`
@@ -563,15 +353,6 @@ class CanvasForm extends Form_1.VisualForm {
         return this;
     }
     /**
-    * Set current fill style and without stroke.
-    * @example `form.fillOnly("#F90")`, `form.fillOnly("rgba(0,0,0,.5")`
-    * @param c fill color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle))
-    */
-    fillOnly(c) {
-        this.stroke(false);
-        return this.fill(c);
-    }
-    /**
     * Set current stroke style. Provide a valid color string or `false` to specify no stroke color.
     * @example `form.stroke("#F90")`, `form.stroke("rgba(0,0,0,.5")`, `form.stroke(false)`, `form.stroke("#000", 0.5, 'round', 'square')`
     * @param c stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle))
@@ -601,15 +382,6 @@ class CanvasForm extends Form_1.VisualForm {
             }
         }
         return this;
-    }
-    /**
-    * Set current stroke style and without fill.
-    * @example `form.strokeOnly("#F90")`, `form.strokeOnly("#000", 0.5, 'round', 'square')`
-    * @param c stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle)
-    */
-    strokeOnly(c, width, linejoin, linecap) {
-        this.fill(false);
-        return this.stroke(c, width, linejoin, linecap);
     }
     /**
     * Set the current font
@@ -657,14 +429,6 @@ class CanvasForm extends Form_1.VisualForm {
         if (this._stroked)
             this._ctx.stroke();
     }
-    _multiple(groups, shape, ...rest) {
-        if (!groups)
-            return this;
-        for (let i = 0, len = groups.length; i < len; i++) {
-            this[shape](groups[i], ...rest);
-        }
-        return this;
-    }
     /**
     * Draws a point
     * @param p a Pt object
@@ -679,20 +443,6 @@ class CanvasForm extends Form_1.VisualForm {
             throw new Error(`${shape} is not a static function of CanvasForm`);
         CanvasForm[shape](this._ctx, p, radius);
         this._paint();
-        return this;
-    }
-    /**
-    * Draw multiple points at once
-    * @param pts an array of Pt or an array of number arrays
-    * @param radius radius of the point. Default is 5.
-    * @param shape The shape of the point. Defaults to "square", but it can be "circle" or a custom shape function in your own implementation.
-    */
-    points(pts, radius = 5, shape = "square") {
-        if (!pts)
-            return;
-        for (let i = 0, len = pts.length; i < len; i++) {
-            this.point(pts[i], radius, shape);
-        }
         return this;
     }
     /**
@@ -717,13 +467,6 @@ class CanvasForm extends Form_1.VisualForm {
         CanvasForm.circle(this._ctx, pts[0], pts[1][0]);
         this._paint();
         return this;
-    }
-    /**
-    * Draw multiple circles at once
-    * @param groups an array of Groups that defines multiple circles
-    */
-    circles(groups) {
-        return this._multiple(groups, "circle");
     }
     /**
     * A static function to draw an arc.
@@ -775,6 +518,16 @@ class CanvasForm extends Form_1.VisualForm {
         ctx.closePath();
     }
     /**
+     * Draw a square, given a center and its half-size
+     * @param pt center Pt
+     * @param halfsize half-size
+     */
+    square(pt, halfsize) {
+        CanvasForm.square(this._ctx, pt, halfsize);
+        this._paint();
+        return this;
+    }
+    /**
     * A static function to draw a line
     * @param ctx canvas rendering context
     * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
@@ -797,13 +550,6 @@ class CanvasForm extends Form_1.VisualForm {
         CanvasForm.line(this._ctx, pts);
         this._paint();
         return this;
-    }
-    /**
-    * Draw multiple lines at once
-    * @param groups An array of Groups of Pts
-    */
-    lines(groups) {
-        return this._multiple(groups, "line");
     }
     /**
     * A static function to draw polygon
@@ -831,13 +577,6 @@ class CanvasForm extends Form_1.VisualForm {
         return this;
     }
     /**
-    * Draw multiple polygons at once
-    * @param groups An array of Groups of Pts
-    */
-    polygons(groups) {
-        return this._multiple(groups, "polygon");
-    }
-    /**
     * A static function to draw a rectangle
     * @param ctx canvas rendering context
     * @param pts usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.
@@ -860,13 +599,6 @@ class CanvasForm extends Form_1.VisualForm {
         CanvasForm.rect(this._ctx, pts);
         this._paint();
         return this;
-    }
-    /**
-    * Draw multiple rectangles at once
-    * @param groups An array of Groups of Pts
-    */
-    rects(groups) {
-        return this._multiple(groups, "rect");
     }
     /**
     * A static function to draw text

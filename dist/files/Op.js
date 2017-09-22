@@ -286,6 +286,16 @@ class Rectangle {
         return Circle.fromRect(pts);
     }
     /**
+     * Create a square that either fits within or encloses a rectangle
+     * @param pts a Group of 2 Pts representing a rectangle
+     * @param enclose if `true`, the square will enclose the rectangle. Default is `false`, which will fit the square inside the rectangle.
+     */
+    static toSquare(pts, enclose = false) {
+        let s = Rectangle.size(pts);
+        let m = (enclose) ? s.maxValue().value : s.minValue().value;
+        return Rectangle.fromCenter(Rectangle.center(pts), m, m);
+    }
+    /**
      * Get the size of this rectangle as a Pt
      * @param pts a Group of 2 Pts representing a Rectangle
      */

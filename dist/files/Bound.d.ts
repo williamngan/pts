@@ -1,4 +1,4 @@
-import { Pt, IPt, Group } from "./Pt";
+import { Pt, IPt, Group, GroupLike } from "./Pt";
 /**
  * Bound is a subclass of Group that represents a rectangular boundary.
  * It includes some convenient properties such as `x`, `y`, bottomRight`, `center`, and `size`.
@@ -20,6 +20,7 @@ export declare class Bound extends Group implements IPt {
      * @returns a Bound object
      */
     static fromBoundingRect(rect: ClientRect): Bound;
+    static fromGroup(g: GroupLike): Bound;
     /**
      * Initiate the bound's properties.
      */

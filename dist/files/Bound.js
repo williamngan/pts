@@ -32,6 +32,11 @@ class Bound extends Pt_1.Group {
             b.size = new Pt_1.Pt(rect.width, rect.height);
         return b;
     }
+    static fromGroup(g) {
+        if (g.length < 2)
+            throw new Error("Cannot create a Bound from a group that has less than 2 Pt");
+        return new Bound(g[0], g[g.length - 1]);
+    }
     /**
      * Initiate the bound's properties.
      */

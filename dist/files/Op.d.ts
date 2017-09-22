@@ -162,6 +162,12 @@ export declare class Rectangle {
      */
     static toCircle(pts: GroupLike): Group;
     /**
+     * Create a square that either fits within or encloses a rectangle
+     * @param pts a Group of 2 Pts representing a rectangle
+     * @param enclose if `true`, the square will enclose the rectangle. Default is `false`, which will fit the square inside the rectangle.
+     */
+    static toSquare(pts: GroupLike, enclose?: boolean): Group;
+    /**
      * Get the size of this rectangle as a Pt
      * @param pts a Group of 2 Pts representing a Rectangle
      */
