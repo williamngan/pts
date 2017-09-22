@@ -3964,6 +3964,7 @@ const Space_1 = __webpack_require__(7);
 const Form_1 = __webpack_require__(4);
 const Bound_1 = __webpack_require__(3);
 const Util_1 = __webpack_require__(1);
+const Pt_1 = __webpack_require__(0);
 /**
  * A Space for DOM elements
  */
@@ -4272,8 +4273,9 @@ class HTMLForm extends Form_1.VisualForm {
                 "stroked": true,
                 "background": "#f03",
                 "border-color": "#fff",
+                "color": "#000",
                 "border-width": "1px",
-                "border-radius": "none",
+                "border-radius": "0",
                 "border-style": "solid",
                 "position": "absolute",
                 "top": 0,
@@ -4306,19 +4308,6 @@ class HTMLForm extends Form_1.VisualForm {
         this._ctx.style[k] = `${v}${unit}`;
     }
     /**
-     * A helper function to set top, left, width, height of DOM element
-     * @param x left position
-     * @param y top position
-     * @param w width
-     * @param h height
-     */
-    rectStyleTo(x, y, w, h) {
-        this.styleTo("left", x, "px");
-        this.styleTo("top", y, "px");
-        this.styleTo("width", w, "px");
-        this.styleTo("height", h, "px");
-    }
-    /**
     * Set current fill style. Provide a valid color string or `false` to specify no fill color.
     * @example `form.fill("#F90")`, `form.fill("rgba(0,0,0,.5")`, `form.fill(false)`
     * @param c fill color
@@ -4326,6 +4315,8 @@ class HTMLForm extends Form_1.VisualForm {
     fill(c) {
         if (typeof c == "boolean") {
             this.styleTo("filled", c);
+            if (!c)
+                this.styleTo("background", "transparent");
         }
         else {
             this.styleTo("filled", true);
@@ -4344,13 +4335,23 @@ class HTMLForm extends Form_1.VisualForm {
     stroke(c, width, linejoin, linecap) {
         if (typeof c == "boolean") {
             this.styleTo("stroked", c);
+            if (!c)
+                this.styleTo("border-width", 0);
         }
         else {
             this.styleTo("stroked", true);
             this.styleTo("border-color", c);
-            if (width)
-                this.styleTo("border-width", width + "px");
+            this.styleTo("border-width", (width || 1) + "px");
         }
+        return this;
+    }
+    /**
+    * Set current text color style. Provide a valid color string.
+    * @example `form.fill("#F90")`, `form.fill("rgba(0,0,0,.5")`, `form.fill(false)`
+    * @param c fill color
+    */
+    fillText(c) {
+        this.styleTo("color", c);
         return this;
     }
     /**
@@ -4458,7 +4459,7 @@ class HTMLForm extends Form_1.VisualForm {
      * @param elem A DOM element to add to
      * @param styles an object of style properties
      * @example `HTMLForm.style(elem, {fill: "#f90", stroke: false})`
-     * @returns this DOM element
+     * @returns DOM element
      */
     static style(elem, styles) {
         let st = [];
@@ -4485,6 +4486,20 @@ class HTMLForm extends Form_1.VisualForm {
         return HTMLSpace.setAttr(elem, { style: st.join(";") });
     }
     /**
+   * A helper function to set top, left, width, height of DOM element
+   * @param x left position
+   * @param y top position
+   * @param w width
+   * @param h height
+   */
+    static rectStyle(ctx, pt, size) {
+        ctx.style["left"] = pt[0] + "px";
+        ctx.style["top"] = pt[1] + "px";
+        ctx.style["width"] = size[0] + "px";
+        ctx.style["height"] = size[1] + "px";
+        return ctx;
+    }
+    /**
     * Draws a point
     * @param ctx a context object of HTMLForm
     * @param pt a Pt object or numeric array
@@ -4509,7 +4524,6 @@ class HTMLForm extends Form_1.VisualForm {
     */
     point(pt, radius = 5, shape = "square") {
         this.nextID();
-        this.rectStyleTo(pt[0], pt[1], radius, radius);
         if (shape == "circle")
             this.styleTo("border-radius", "100%");
         HTMLForm.point(this._ctx, pt, radius, shape);
@@ -4524,6 +4538,7 @@ class HTMLForm extends Form_1.VisualForm {
     static circle(ctx, pt, radius = 10) {
         let elem = HTMLSpace.htmlElement(ctx.group, "div", HTMLForm.getID(ctx));
         HTMLSpace.setAttr(elem, { class: `pts-form pts-circle ${ctx.currentClass}` });
+        HTMLForm.rectStyle(ctx, new Pt_1.Pt(pt).$subtract(radius), new Pt_1.Pt(radius * 2, radius * 2));
         HTMLForm.style(elem, ctx.style);
         return elem;
     }
@@ -4534,7 +4549,6 @@ class HTMLForm extends Form_1.VisualForm {
     */
     circle(pts) {
         this.nextID();
-        this.rectStyleTo(pts[0][0], pts[0][1], pts[1][0], pts[1][0]);
         this.styleTo("border-radius", "100%");
         HTMLForm.circle(this._ctx, pts[0], pts[1][0]);
         return this;
@@ -4547,14 +4561,8 @@ class HTMLForm extends Form_1.VisualForm {
     */
     static square(ctx, pt, halfsize) {
         let elem = HTMLSpace.htmlElement(ctx.group, "div", HTMLForm.getID(ctx));
-        HTMLSpace.setAttr(elem, {
-            position: 'absolute',
-            class: `pts-form pts-square ${ctx.currentClass}`,
-            x: pt[0] - halfsize,
-            y: pt[1] - halfsize,
-            width: halfsize * 2,
-            height: halfsize * 2
-        });
+        HTMLSpace.setAttr(elem, { class: `pts-form pts-square ${ctx.currentClass}` });
+        HTMLForm.rectStyle(ctx, new Pt_1.Pt(pt).$subtract(halfsize), new Pt_1.Pt(halfsize * 2, halfsize * 2));
         HTMLForm.style(elem, ctx.style);
         return elem;
     }
@@ -4578,6 +4586,7 @@ class HTMLForm extends Form_1.VisualForm {
             return;
         let elem = HTMLSpace.htmlElement(ctx.group, "div", HTMLForm.getID(ctx));
         HTMLSpace.setAttr(elem, { class: `pts-form pts-rect ${ctx.currentClass}` });
+        HTMLForm.rectStyle(ctx, pts[0], pts[1]);
         HTMLForm.style(elem, ctx.style);
         return elem;
     }
@@ -4587,8 +4596,7 @@ class HTMLForm extends Form_1.VisualForm {
     */
     rect(pts) {
         this.nextID();
-        this.rectStyleTo(pts[0][0], pts[0][1], pts[1][0] - pts[0][0], pts[1][1] - pts[0][1]);
-        this.styleTo("border-radius", "none");
+        this.styleTo("border-radius", "0");
         HTMLForm.rect(this._ctx, pts);
         return this;
     }
@@ -4604,8 +4612,8 @@ class HTMLForm extends Form_1.VisualForm {
         HTMLSpace.setAttr(elem, {
             position: 'absolute',
             class: `pts-form pts-text ${ctx.currentClass}`,
-            x: pt[0],
-            y: pt[1],
+            left: pt[0],
+            top: pt[1],
         });
         elem.textContent = txt;
         HTMLForm.style(elem, ctx.style);
@@ -5985,7 +5993,7 @@ class SVGSpace extends Dom_1.DOMSpace {
         this.id = "svgspace";
         this._bgcolor = "#999";
         if (this._canvas.nodeName.toLowerCase() != "svg") {
-            let s = SVGSpace.svgElement(this._canvas, "svg", `${this.id}_svg`, false);
+            let s = SVGSpace.svgElement(this._canvas, "svg", `${this.id}_svg`);
             this._container = this._canvas;
             this._canvas = s;
         }

@@ -28,7 +28,7 @@ export class SVGSpace extends DOMSpace {
     super( elem, callback );
     
     if (this._canvas.nodeName.toLowerCase() != "svg") {
-      let s = SVGSpace.svgElement( this._canvas, "svg", `${this.id}_svg`, false );
+      let s = SVGSpace.svgElement( this._canvas, "svg", `${this.id}_svg` );
       this._container = this._canvas;
       this._canvas = s as SVGElement;
     }
