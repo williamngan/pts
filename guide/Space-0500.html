@@ -19,7 +19,7 @@
 </div>
 <a href="#menu" id="toc">&#x2261;</a>
 <div id="post"><h1>Space</h1>
-<p><a href="#space-space"><code>Space</code></a> provides a general context for its points to be expressed. Each subclass of <code>Space</code> represents a specific context. Currently <strong><code>Pts</code></strong> includes <a href="#canvas-canvasspace"><code>CanvasSpace</code></a> which corresponds to html's <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API"><code>canvas</code></a> element. Soon we will also have Space for SVG, DOM, and other contexts.</p>
+<p><a href="#space-space"><code>Space</code></a> provides a general context for its points to be expressed. Each subclass of <code>Space</code> represents a specific context. Currently <strong><code>Pts</code></strong> includes <a href="#canvas-canvasspace"><code>CanvasSpace</code></a> which corresponds to the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API"><code>canvas</code></a> element, and <a href="#svg-svgspace"><code>SVGSpace</code></a> which lets you create vector graphics in svg format instead. There is also an experimental <a href="#dom-htmlspace"><code>HTMLSpace</code></a> which renders forms in basic html elements. Soon we will have spaces for other contexts too.</p>
 <p><a href="#canvas-canvasspace"><code>CanvasSpace</code></a> can be created like this:</p>
 <pre><code>let space = new CanvasSpace( &quot;#hello&quot; );
 space.setup({ bgcolor: &quot;#123&quot;, retina: true });
@@ -91,6 +91,25 @@ space.add({
 <p><img src="./assets/bg.png" alt="js:space_form"></p>
 <h5>A demo of drawing different shapes</h5>
 <p>And since both Space and Form are javascript classes, you can extend them to override its functions and add new ones.</p>
+<h3>SVG Space</h3>
+<p>You can easily switch you code from <a href="#canvas-canvasspace"><code>CanvasSpace</code></a> to <a href="#svg-svgspace"><code>SVGSpace</code></a> in 3 easy steps:</p>
+<p>First, initiate space as <code>SVGSpace</code> instead of <code>CanvasSpace</code>. If you use <code>space.getForm()</code>, then it will return an <code>SVGForm</code> instead of <code>CanvasForm</code> automatically.</p>
+<p>Second, in the beginning of your animate callback function, add this line:</p>
+<pre><code>form.scope( this );
+</code></pre>
+<p>This keeps track of the created svg or dom elements to optimize rendering.</p>
+<p>Lastly, if you use es6 arrow function in a player's callback functions, for example:</p>
+<pre><code>animate: (time, ftime) =&gt; ...
+</code></pre>
+<p>You should change it back to the standard form:</p>
+<pre><code>animate: function( time, ftime) ...
+</code></pre>
+<p>The arrow function automatically binds <code>this</code> and will confuse the <code>form.scope(this)</code> call.</p>
+<p>Take a look at the source code of the <a href="https://ptsjs.org/demo/index.html?name=svgform.scope">svg demo</a>. It's pretty straightforward.</p>
+<h3>HTML Space</h3>
+<p>There's also experimental support for rendering HTML elements using <a href="#dom-htmlspace"><code>HTMLSpace</code></a>, which you can use by making similar changes in your code as described in SVG section above.</p>
+<p>Take a look at the <a href="https://ptsjs.org/pts/demo/index.html?name=htmlform.scope">html demo</a> and its source code. Because of the limitations of HTML, you cannot draw polygon, arc, and some other shapes with it.</p>
+<p>If you use Pts with React or other web rendering frameworks, it will be better to use the props and states of their virtual DOM implementations instead.</p>
 <h3>Cheat sheet</h3>
 <p>The following snippet is a typical template for making a quick <strong><code>Pts</code></strong> sketch. Pretty easy.</p>
 <pre><code>Pts.namespace( this ); // not needed if using npm package
