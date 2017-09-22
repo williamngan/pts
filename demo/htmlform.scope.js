@@ -13,7 +13,7 @@ window.demoDescription = "Pts also provides experimental support for rendering H
   // css for testing
   var css = document.createElement("style");
   css.type = "text/css";
-  css.innerHTML = ".pts-rect { font-size: 30vw; line-height: 1; overflow: hidden; } .r2 { opacity: 0.9 } .r1a { border-bottom-color: #fff !important; }";
+  css.innerHTML = ".pts-rect { font-size: 30vw; line-height: 50vh; overflow: hidden; } .r2 { opacity: 0.9 } .r1a { border-bottom-color: #fff !important; }";
   document.body.appendChild(css);
 
 
