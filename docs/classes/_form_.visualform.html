@@ -89,6 +89,12 @@
 									<li>
 										<a href="_canvas_.canvasform.html" class="tsd-signature-type">CanvasForm</a>
 									</li>
+									<li>
+										<a href="_dom_.htmlform.html" class="tsd-signature-type">HTMLForm</a>
+									</li>
+									<li>
+										<a href="_svg_.svgform.html" class="tsd-signature-type">SVGForm</a>
+									</li>
 								</ul>
 							</li>
 						</ul>
@@ -104,6 +110,7 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_form_.visualform.html#_filled" class="tsd-kind-icon">_filled</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_form_.visualform.html#_font" class="tsd-kind-icon">_font</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="_form_.visualform.html#_ready" class="tsd-kind-icon">_ready</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_form_.visualform.html#_stroked" class="tsd-kind-icon">_stroked</a></li>
 							</ul>
 						</section>
@@ -112,13 +119,14 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="_form_.visualform.html#currentfont" class="tsd-kind-icon">current<wbr>Font</a></li>
 								<li class="tsd-kind-accessor tsd-parent-kind-class"><a href="_form_.visualform.html#filled" class="tsd-kind-icon">filled</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="_form_.visualform.html#space" class="tsd-kind-icon">space</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="_form_.visualform.html#ready" class="tsd-kind-icon">ready</a></li>
 								<li class="tsd-kind-accessor tsd-parent-kind-class"><a href="_form_.visualform.html#stroked" class="tsd-kind-icon">stroked</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="_form_.visualform.html#_multiple" class="tsd-kind-icon">_multiple</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_form_.visualform.html#arc" class="tsd-kind-icon">arc</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_form_.visualform.html#circle" class="tsd-kind-icon">circle</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_form_.visualform.html#circles" class="tsd-kind-icon">circles</a></li>
@@ -134,9 +142,11 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_form_.visualform.html#rect" class="tsd-kind-icon">rect</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_form_.visualform.html#rects" class="tsd-kind-icon">rects</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_form_.visualform.html#reset" class="tsd-kind-icon">reset</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_form_.visualform.html#squares" class="tsd-kind-icon">squares</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_form_.visualform.html#stroke" class="tsd-kind-icon">stroke</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_form_.visualform.html#strokeonly" class="tsd-kind-icon">stroke<wbr>Only</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_form_.visualform.html#text" class="tsd-kind-icon">text</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_form_.visualform.html#_checksize" class="tsd-kind-icon">_check<wbr>Size</a></li>
 							</ul>
 						</section>
 					</div>
@@ -150,17 +160,28 @@
 					<div class="tsd-signature tsd-kind-icon">_filled<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/pts/blob/fc782cc/src/Form.ts#L29">Form.ts:29</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Form.ts#L45">Form.ts:45</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 					<a name="_font" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _font</h3>
-					<div class="tsd-signature tsd-kind-icon">_font<span class="tsd-signature-symbol">:</span> <a href="_form_.font.html" class="tsd-signature-type">Font</a><span class="tsd-signature-symbol"> =&nbsp;new Font()</span></div>
+					<div class="tsd-signature tsd-kind-icon">_font<span class="tsd-signature-symbol">:</span> <a href="_form_.font.html" class="tsd-signature-type">Font</a><span class="tsd-signature-symbol"> =&nbsp;new Font( 14, &quot;sans-serif&quot;)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/pts/blob/fc782cc/src/Form.ts#L37">Form.ts:37</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Form.ts#L53">Form.ts:53</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+					<a name="_ready" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _ready</h3>
+					<div class="tsd-signature tsd-kind-icon">_ready<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="_form_.form.html">Form</a>.<a href="_form_.form.html#_ready">_ready</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Form.ts#L14">Form.ts:14</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -170,7 +191,7 @@
 					<div class="tsd-signature tsd-kind-icon">_stroked<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/pts/blob/fc782cc/src/Form.ts#L33">Form.ts:33</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Form.ts#L49">Form.ts:49</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -187,7 +208,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/fc782cc/src/Form.ts#L38">Form.ts:38</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Form.ts#L54">Form.ts:54</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_form_.font.html" class="tsd-signature-type">Font</a></h4>
@@ -205,7 +226,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/fc782cc/src/Form.ts#L30">Form.ts:30</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Form.ts#L46">Form.ts:46</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -213,7 +234,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/fc782cc/src/Form.ts#L31">Form.ts:31</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Form.ts#L47">Form.ts:47</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -227,25 +248,25 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
-					<a name="space" class="tsd-anchor"></a>
-					<h3>space</h3>
+					<a name="ready" class="tsd-anchor"></a>
+					<h3>ready</h3>
 					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> space<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_space_.space.html" class="tsd-signature-type">Space</a></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> ready<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="_form_.form.html">Form</a>.<a href="_form_.form.html#space">space</a></p>
+								<p>Inherited from <a href="_form_.form.html">Form</a>.<a href="_form_.form.html#ready">ready</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/fc782cc/src/Form.ts#L17">Form.ts:17</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Form.ts#L19">Form.ts:19</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>A property to get the form&#39;s Space</p>
+									<p>get whether the Form has received the Space&#39;s rendering context</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <a href="_space_.space.html" class="tsd-signature-type">Space</a></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -260,7 +281,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/fc782cc/src/Form.ts#L34">Form.ts:34</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Form.ts#L50">Form.ts:50</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -268,7 +289,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/fc782cc/src/Form.ts#L35">Form.ts:35</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Form.ts#L51">Form.ts:51</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -284,6 +305,35 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+					<a name="_multiple" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _multiple</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+						<li class="tsd-signature tsd-kind-icon">_multiple<span class="tsd-signature-symbol">(</span>groups<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol">[]</span>, shape<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, <span class="tsd-signature-symbol">...</span>rest<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Form.ts#L57">Form.ts:57</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>groups: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li>
+									<h5>shape: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>rest: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="arc" class="tsd-anchor"></a>
 					<h3>arc</h3>
@@ -294,7 +344,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/fc782cc/src/Form.ts#L103">Form.ts:103</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Form.ts#L169">Form.ts:169</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -349,7 +399,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/fc782cc/src/Form.ts#L85">Form.ts:85</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Form.ts#L139">Form.ts:139</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -385,12 +435,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/fc782cc/src/Form.ts#L92">Form.ts:92</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Form.ts#L147">Form.ts:147</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Abstract multiple circles drawing</p>
+									<p>Draw multiple circles at once</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -416,12 +466,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/fc782cc/src/Form.ts#L50">Form.ts:50</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Form.ts#L75">Form.ts:75</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Abstract set fill color</p>
+									<p>Set fill color (not implemented)</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -444,13 +494,26 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/fc782cc/src/Form.ts#L51">Form.ts:51</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Form.ts#L85">Form.ts:85</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Set current fill style and without stroke.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>example</dt>
+									<dd><p><code>form.fillOnly(&quot;#F90&quot;)</code>, <code>form.fillOnly(&quot;rgba(0,0,0,.5&quot;)</code></p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>c: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>fill color which can be as color, gradient, or pattern. (See <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle">canvas documentation</a>)</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -467,7 +530,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/fc782cc/src/Form.ts#L167">Form.ts:167</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Form.ts#L240">Form.ts:240</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -530,7 +593,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/fc782cc/src/Form.ts#L110">Form.ts:110</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Form.ts#L176">Form.ts:176</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -561,12 +624,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/fc782cc/src/Form.ts#L117">Form.ts:117</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Form.ts#L183">Form.ts:183</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Abstract multiple lines drawing</p>
+									<p>Draw multiple lines at once</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -592,7 +655,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/fc782cc/src/Form.ts#L68">Form.ts:68</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Form.ts#L116">Form.ts:116</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -640,7 +703,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/fc782cc/src/Form.ts#L77">Form.ts:77</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Form.ts#L125">Form.ts:125</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -683,7 +746,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/fc782cc/src/Form.ts#L124">Form.ts:124</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Form.ts#L192">Form.ts:192</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -714,12 +777,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/fc782cc/src/Form.ts#L131">Form.ts:131</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Form.ts#L199">Form.ts:199</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Abstract multiple polygons drawing</p>
+									<p>Draw multiple polygons at once</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -745,7 +808,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/fc782cc/src/Form.ts#L138">Form.ts:138</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Form.ts#L209">Form.ts:209</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -776,12 +839,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/fc782cc/src/Form.ts#L145">Form.ts:145</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Form.ts#L216">Form.ts:216</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Abstract multiple rectangles drawing</p>
+									<p>Draw multiple rectangles at once</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -807,7 +870,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/fc782cc/src/Form.ts#L44">Form.ts:44</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Form.ts#L69">Form.ts:69</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -815,6 +878,37 @@
 									<p>Abstract reset style</p>
 								</div>
 							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="squares" class="tsd-anchor"></a>
+					<h3>squares</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">squares<span class="tsd-signature-symbol">(</span>groups<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Form.ts#L156">Form.ts:156</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Draw multiple squares at once</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>groups: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an array of Groups that defines multiple circles</p>
+									</div>
+								</li>
+							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
 						</li>
 					</ul>
@@ -829,12 +923,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/fc782cc/src/Form.ts#L57">Form.ts:57</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Form.ts#L94">Form.ts:94</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Abstract set stroke style</p>
+									<p>Set stroke style (not implemented)</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -866,13 +960,26 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/fc782cc/src/Form.ts#L58">Form.ts:58</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Form.ts#L104">Form.ts:104</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Set current stroke style and without fill.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>example</dt>
+									<dd><p><code>form.strokeOnly(&quot;#F90&quot;)</code>, <code>form.strokeOnly(&quot;#000&quot;, 0.5, &#39;round&#39;, &#39;square&#39;)</code></p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>c: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>stroke color which can be as color, gradient, or pattern. (See <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle">canvas documentation</a></p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> width: <span class="tsd-signature-type">number</span></h5>
@@ -898,7 +1005,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/fc782cc/src/Form.ts#L154">Form.ts:154</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Form.ts#L227">Form.ts:227</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -922,6 +1029,40 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
+					<a name="_checksize" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> _check<wbr>Size</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">_check<wbr>Size<span class="tsd-signature-symbol">(</span>pts<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span>, required<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="_form_.form.html">Form</a>.<a href="_form_.form.html#_checksize">_checkSize</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Form.ts#L26">Form.ts:26</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Check number of items in a Group against a required number</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> required: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;2</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
 			</section>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -942,6 +1083,9 @@
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_create_.html">"<wbr>Create"</a>
 					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_dom_.html">"<wbr>Dom"</a>
+					</li>
 					<li class="current tsd-kind-external-module">
 						<a href="../modules/_form_.html">"<wbr>Form"</a>
 					</li>
@@ -959,6 +1103,9 @@
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_space_.html">"<wbr>Space"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_svg_.html">"<wbr>Svg"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_util_.html">"<wbr>Util"</a>
@@ -987,6 +1134,9 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 								<a href="_form_.visualform.html#_font" class="tsd-kind-icon">_font</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+								<a href="_form_.visualform.html#_ready" class="tsd-kind-icon">_ready</a>
+							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 								<a href="_form_.visualform.html#_stroked" class="tsd-kind-icon">_stroked</a>
 							</li>
@@ -997,10 +1147,13 @@
 								<a href="_form_.visualform.html#filled" class="tsd-kind-icon">filled</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
-								<a href="_form_.visualform.html#space" class="tsd-kind-icon">space</a>
+								<a href="_form_.visualform.html#ready" class="tsd-kind-icon">ready</a>
 							</li>
 							<li class=" tsd-kind-accessor tsd-parent-kind-class">
 								<a href="_form_.visualform.html#stroked" class="tsd-kind-icon">stroked</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+								<a href="_form_.visualform.html#_multiple" class="tsd-kind-icon">_multiple</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_form_.visualform.html#arc" class="tsd-kind-icon">arc</a>
@@ -1048,6 +1201,9 @@
 								<a href="_form_.visualform.html#reset" class="tsd-kind-icon">reset</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_form_.visualform.html#squares" class="tsd-kind-icon">squares</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_form_.visualform.html#stroke" class="tsd-kind-icon">stroke</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
@@ -1055,6 +1211,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_form_.visualform.html#text" class="tsd-kind-icon">text</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
+								<a href="_form_.visualform.html#_checksize" class="tsd-kind-icon">_check<wbr>Size</a>
 							</li>
 						</ul>
 					</li>

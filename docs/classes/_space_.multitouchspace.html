@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>CanvasSpace | Pts</title>
+	<title>MultiTouchSpace | Pts</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,35 +56,35 @@
 					<a href="../index.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_canvas_.html">&quot;Canvas&quot;</a>
+					<a href="../modules/_space_.html">&quot;Space&quot;</a>
 				</li>
 				<li>
-					<a href="_canvas_.canvasspace.html">CanvasSpace</a>
+					<a href="_space_.multitouchspace.html">MultiTouchSpace</a>
 				</li>
 			</ul>
-			<h1>Class CanvasSpace</h1>
+			<h1>Class MultiTouchSpace</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-comment">
-				<div class="tsd-comment tsd-typography">
-					<div class="lead">
-						<p>CanvasSpace is an implementation of the abstract class Space. It represents a space for HTML Canvas.
-						Learn more about the concept of Space in <a href="..guide/Space-0500.html">this guide</a></p>
-					</div>
-				</div>
-			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="_space_.multitouchspace.html" class="tsd-signature-type">MultiTouchSpace</a>
+						<a href="_space_.space.html" class="tsd-signature-type">Space</a>
 						<ul class="tsd-hierarchy">
 							<li>
-								<span class="target">CanvasSpace</span>
+								<span class="target">MultiTouchSpace</span>
+								<ul class="tsd-hierarchy">
+									<li>
+										<a href="_canvas_.canvasspace.html" class="tsd-signature-type">CanvasSpace</a>
+									</li>
+									<li>
+										<a href="_dom_.domspace.html" class="tsd-signature-type">DOMSpace</a>
+									</li>
+								</ul>
 							</li>
 						</ul>
 					</li>
@@ -95,234 +95,124 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Constructors</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="_canvas_.canvasspace.html#constructor" class="tsd-kind-icon">constructor</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_canvas_.canvasspace.html#_autoresize" class="tsd-kind-icon">_auto<wbr>Resize</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_canvas_.canvasspace.html#_bgcolor" class="tsd-kind-icon">_bgcolor</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-protected"><a href="_canvas_.canvasspace.html#_canvas" class="tsd-kind-icon">_canvas</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_canvas_.canvasspace.html#_container" class="tsd-kind-icon">_container</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-protected"><a href="_canvas_.canvasspace.html#_ctx" class="tsd-kind-icon">_ctx</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="_canvas_.canvasspace.html#_dragged" class="tsd-kind-icon">_dragged</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="_canvas_.canvasspace.html#_hasmouse" class="tsd-kind-icon">_has<wbr>Mouse</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="_canvas_.canvasspace.html#_hastouch" class="tsd-kind-icon">_has<wbr>Touch</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="_canvas_.canvasspace.html#_isready" class="tsd-kind-icon">_is<wbr>Ready</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_canvas_.canvasspace.html#_offcanvas" class="tsd-kind-icon">_off<wbr>Canvas</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_canvas_.canvasspace.html#_offctx" class="tsd-kind-icon">_off<wbr>Ctx</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_canvas_.canvasspace.html#_offscreen" class="tsd-kind-icon">_offscreen</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_canvas_.canvasspace.html#_pixelscale" class="tsd-kind-icon">_pixel<wbr>Scale</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="_canvas_.canvasspace.html#_pointer" class="tsd-kind-icon">_pointer</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="_canvas_.canvasspace.html#_pressed" class="tsd-kind-icon">_pressed</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="_canvas_.canvasspace.html#bound" class="tsd-kind-icon">bound</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_canvas_.canvasspace.html#id" class="tsd-kind-icon">id</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="_canvas_.canvasspace.html#playercount" class="tsd-kind-icon">player<wbr>Count</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="_canvas_.canvasspace.html#players" class="tsd-kind-icon">players</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_space_.multitouchspace.html#_canvas" class="tsd-kind-icon">_canvas</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="_space_.multitouchspace.html#_ctx" class="tsd-kind-icon">_ctx</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_space_.multitouchspace.html#_dragged" class="tsd-kind-icon">_dragged</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_space_.multitouchspace.html#_hasmouse" class="tsd-kind-icon">_has<wbr>Mouse</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_space_.multitouchspace.html#_hastouch" class="tsd-kind-icon">_has<wbr>Touch</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="_space_.multitouchspace.html#_isready" class="tsd-kind-icon">_is<wbr>Ready</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="_space_.multitouchspace.html#_pointer" class="tsd-kind-icon">_pointer</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_space_.multitouchspace.html#_pressed" class="tsd-kind-icon">_pressed</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="_space_.multitouchspace.html#bound" class="tsd-kind-icon">bound</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_space_.multitouchspace.html#id" class="tsd-kind-icon">id</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="_space_.multitouchspace.html#playercount" class="tsd-kind-icon">player<wbr>Count</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="_space_.multitouchspace.html#players" class="tsd-kind-icon">players</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Accessors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-accessor tsd-parent-kind-class"><a href="_canvas_.canvasspace.html#autoresize" class="tsd-kind-icon">auto<wbr>Resize</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="_canvas_.canvasspace.html#center" class="tsd-kind-icon">center</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="_canvas_.canvasspace.html#ctx" class="tsd-kind-icon">ctx</a></li>
-								<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><a href="_canvas_.canvasspace.html#customrendering" class="tsd-kind-icon">custom<wbr>Rendering</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="_canvas_.canvasspace.html#element" class="tsd-kind-icon">element</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="_canvas_.canvasspace.html#hasoffscreen" class="tsd-kind-icon">has<wbr>Offscreen</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="_canvas_.canvasspace.html#height" class="tsd-kind-icon">height</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="_canvas_.canvasspace.html#innerbound" class="tsd-kind-icon">inner<wbr>Bound</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="_canvas_.canvasspace.html#offscreencanvas" class="tsd-kind-icon">offscreen<wbr>Canvas</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="_canvas_.canvasspace.html#offscreenctx" class="tsd-kind-icon">offscreen<wbr>Ctx</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="_canvas_.canvasspace.html#outerbound" class="tsd-kind-icon">outer<wbr>Bound</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="_canvas_.canvasspace.html#parent" class="tsd-kind-icon">parent</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="_canvas_.canvasspace.html#pixelscale" class="tsd-kind-icon">pixel<wbr>Scale</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="_canvas_.canvasspace.html#pointer" class="tsd-kind-icon">pointer</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="_canvas_.canvasspace.html#ready" class="tsd-kind-icon">ready</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="_canvas_.canvasspace.html#size" class="tsd-kind-icon">size</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="_canvas_.canvasspace.html#width" class="tsd-kind-icon">width</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="_space_.multitouchspace.html#center" class="tsd-kind-icon">center</a></li>
+								<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><a href="_space_.multitouchspace.html#customrendering" class="tsd-kind-icon">custom<wbr>Rendering</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="_space_.multitouchspace.html#height" class="tsd-kind-icon">height</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="_space_.multitouchspace.html#innerbound" class="tsd-kind-icon">inner<wbr>Bound</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="_space_.multitouchspace.html#outerbound" class="tsd-kind-icon">outer<wbr>Bound</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="_space_.multitouchspace.html#pointer" class="tsd-kind-icon">pointer</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="_space_.multitouchspace.html#size" class="tsd-kind-icon">size</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="_space_.multitouchspace.html#width" class="tsd-kind-icon">width</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="_canvas_.canvasspace.html#_createelement" class="tsd-kind-icon">_create<wbr>Element</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="_canvas_.canvasspace.html#_mouseaction" class="tsd-kind-icon">_mouse<wbr>Action</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="_canvas_.canvasspace.html#_mousedown" class="tsd-kind-icon">_mouse<wbr>Down</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="_canvas_.canvasspace.html#_mousemove" class="tsd-kind-icon">_mouse<wbr>Move</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="_canvas_.canvasspace.html#_mouseout" class="tsd-kind-icon">_mouse<wbr>Out</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="_canvas_.canvasspace.html#_mouseover" class="tsd-kind-icon">_mouse<wbr>Over</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="_canvas_.canvasspace.html#_mouseup" class="tsd-kind-icon">_mouse<wbr>Up</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="_canvas_.canvasspace.html#_ready" class="tsd-kind-icon">_ready</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="_canvas_.canvasspace.html#_resizehandler" class="tsd-kind-icon">_resize<wbr>Handler</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="_canvas_.canvasspace.html#_touchmove" class="tsd-kind-icon">_touch<wbr>Move</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_canvas_.canvasspace.html#add" class="tsd-kind-icon">add</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_canvas_.canvasspace.html#bindcanvas" class="tsd-kind-icon">bind<wbr>Canvas</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_canvas_.canvasspace.html#bindmouse" class="tsd-kind-icon">bind<wbr>Mouse</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_canvas_.canvasspace.html#bindtouch" class="tsd-kind-icon">bind<wbr>Touch</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="_canvas_.canvasspace.html#clear" class="tsd-kind-icon">clear</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_canvas_.canvasspace.html#clearoffscreen" class="tsd-kind-icon">clear<wbr>Offscreen</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="_canvas_.canvasspace.html#getform" class="tsd-kind-icon">get<wbr>Form</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_canvas_.canvasspace.html#pause" class="tsd-kind-icon">pause</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_canvas_.canvasspace.html#play" class="tsd-kind-icon">play</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected"><a href="_canvas_.canvasspace.html#playitems" class="tsd-kind-icon">play<wbr>Items</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_canvas_.canvasspace.html#playonce" class="tsd-kind-icon">play<wbr>Once</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_canvas_.canvasspace.html#refresh" class="tsd-kind-icon">refresh</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_canvas_.canvasspace.html#remove" class="tsd-kind-icon">remove</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_canvas_.canvasspace.html#removeall" class="tsd-kind-icon">remove<wbr>All</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="_canvas_.canvasspace.html#render" class="tsd-kind-icon">render</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_canvas_.canvasspace.html#replay" class="tsd-kind-icon">replay</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="_canvas_.canvasspace.html#resize" class="tsd-kind-icon">resize</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_canvas_.canvasspace.html#resume" class="tsd-kind-icon">resume</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_canvas_.canvasspace.html#setup" class="tsd-kind-icon">setup</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_canvas_.canvasspace.html#stop" class="tsd-kind-icon">stop</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_canvas_.canvasspace.html#touchestopoints" class="tsd-kind-icon">touches<wbr>ToPoints</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_canvas_.canvasspace.html#unbindcanvas" class="tsd-kind-icon">unbind<wbr>Canvas</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="_space_.multitouchspace.html#_mouseaction" class="tsd-kind-icon">_mouse<wbr>Action</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="_space_.multitouchspace.html#_mousedown" class="tsd-kind-icon">_mouse<wbr>Down</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="_space_.multitouchspace.html#_mousemove" class="tsd-kind-icon">_mouse<wbr>Move</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="_space_.multitouchspace.html#_mouseout" class="tsd-kind-icon">_mouse<wbr>Out</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="_space_.multitouchspace.html#_mouseover" class="tsd-kind-icon">_mouse<wbr>Over</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="_space_.multitouchspace.html#_mouseup" class="tsd-kind-icon">_mouse<wbr>Up</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="_space_.multitouchspace.html#_touchmove" class="tsd-kind-icon">_touch<wbr>Move</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_space_.multitouchspace.html#add" class="tsd-kind-icon">add</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_space_.multitouchspace.html#bindcanvas" class="tsd-kind-icon">bind<wbr>Canvas</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_space_.multitouchspace.html#bindmouse" class="tsd-kind-icon">bind<wbr>Mouse</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_space_.multitouchspace.html#bindtouch" class="tsd-kind-icon">bind<wbr>Touch</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_space_.multitouchspace.html#clear" class="tsd-kind-icon">clear</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_space_.multitouchspace.html#getform" class="tsd-kind-icon">get<wbr>Form</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_space_.multitouchspace.html#pause" class="tsd-kind-icon">pause</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_space_.multitouchspace.html#play" class="tsd-kind-icon">play</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="_space_.multitouchspace.html#playitems" class="tsd-kind-icon">play<wbr>Items</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_space_.multitouchspace.html#playonce" class="tsd-kind-icon">play<wbr>Once</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_space_.multitouchspace.html#refresh" class="tsd-kind-icon">refresh</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_space_.multitouchspace.html#remove" class="tsd-kind-icon">remove</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_space_.multitouchspace.html#removeall" class="tsd-kind-icon">remove<wbr>All</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="_space_.multitouchspace.html#render" class="tsd-kind-icon">render</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_space_.multitouchspace.html#replay" class="tsd-kind-icon">replay</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_space_.multitouchspace.html#resize" class="tsd-kind-icon">resize</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_space_.multitouchspace.html#resume" class="tsd-kind-icon">resume</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_space_.multitouchspace.html#stop" class="tsd-kind-icon">stop</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_space_.multitouchspace.html#touchestopoints" class="tsd-kind-icon">touches<wbr>ToPoints</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_space_.multitouchspace.html#unbindcanvas" class="tsd-kind-icon">unbind<wbr>Canvas</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-inherited tsd-is-private-protected">
 							<h3>Object literals</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-object-literal tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="_canvas_.canvasspace.html#_time" class="tsd-kind-icon">_time</a></li>
+								<li class="tsd-kind-object-literal tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="_space_.multitouchspace.html#_time" class="tsd-kind-icon">_time</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Constructors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
-					<a name="constructor" class="tsd-anchor"></a>
-					<h3>constructor</h3>
-					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Canvas<wbr>Space<span class="tsd-signature-symbol">(</span>elem<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Element</span>, callback<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_canvas_.canvasspace.html" class="tsd-signature-type">CanvasSpace</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Canvas.ts#L37">Canvas.ts:37</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Create a CanvasSpace which represents a HTML Canvas Space</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>example</dt>
-									<dd><p><code>new CanvasSpace( &quot;#myElementID&quot; )</code></p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>elem: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Element</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>Specify an element by its &quot;id&quot; attribute as string, or by the element object itself. An element can be an existing <code>&lt;canvas&gt;</code>, or a <code>&lt;div&gt;</code> container in which a new <code>&lt;canvas&gt;</code> will be created. If left empty, a <code>&lt;div id=&quot;pt_container&quot;&gt;&lt;canvas id=&quot;pt&quot; /&gt;&lt;/div&gt;</code> will be added to DOM. Use css to customize its appearance if needed.</p>
-										</div>
-									</div>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> callback: <span class="tsd-signature-type">Function</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>an optional callback <code>function(boundingBox, spaceElement)</code> to be called when canvas is appended and ready. Alternatively, a &quot;ready&quot; event will also be fired from the <code>&lt;canvas&gt;</code> element when it&#39;s appended, which can be traced with <code>spaceInstance.canvas.addEventListener(&quot;ready&quot;)</code></p>
-										</div>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_canvas_.canvasspace.html" class="tsd-signature-type">CanvasSpace</a></h4>
-						</li>
-					</ul>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-					<a name="_autoresize" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _auto<wbr>Resize</h3>
-					<div class="tsd-signature tsd-kind-icon">_auto<wbr>Resize<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;true</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Canvas.ts#L31">Canvas.ts:31</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-					<a name="_bgcolor" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _bgcolor</h3>
-					<div class="tsd-signature tsd-kind-icon">_bgcolor<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;#e1e9f0&quot;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Canvas.ts#L32">Canvas.ts:32</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
 					<a name="_canvas" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _canvas</h3>
-					<div class="tsd-signature tsd-kind-icon">_canvas<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">HTMLCanvasElement</span></div>
-					<aside class="tsd-sources">
-						<p>Overrides <a href="_space_.multitouchspace.html">MultiTouchSpace</a>.<a href="_space_.multitouchspace.html#_canvas">_canvas</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Canvas.ts#L27">Canvas.ts:27</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-					<a name="_container" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _container</h3>
-					<div class="tsd-signature tsd-kind-icon">_container<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Element</span></div>
+					<div class="tsd-signature tsd-kind-icon">_canvas<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">EventTarget</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Canvas.ts#L28">Canvas.ts:28</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
-					<a name="_ctx" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _ctx</h3>
-					<div class="tsd-signature tsd-kind-icon">_ctx<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_canvas_.ptscanvasrenderingcontext2d.html" class="tsd-signature-type">PtsCanvasRenderingContext2D</a></div>
-					<aside class="tsd-sources">
-						<p>Overrides <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#_ctx">_ctx</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Canvas.ts#L33">Canvas.ts:33</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Space.ts#L301">Space.ts:301</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+					<a name="_ctx" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _ctx</h3>
+					<div class="tsd-signature tsd-kind-icon">_ctx<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#_ctx">_ctx</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Space.ts#L46">Space.ts:46</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 					<a name="_dragged" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _dragged</h3>
 					<div class="tsd-signature tsd-kind-icon">_dragged<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="_space_.multitouchspace.html">MultiTouchSpace</a>.<a href="_space_.multitouchspace.html#_dragged">_dragged</a></p>
 						<ul>
 							<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Space.ts#L295">Space.ts:295</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 					<a name="_hasmouse" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _has<wbr>Mouse</h3>
 					<div class="tsd-signature tsd-kind-icon">_has<wbr>Mouse<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="_space_.multitouchspace.html">MultiTouchSpace</a>.<a href="_space_.multitouchspace.html#_hasmouse">_hasMouse</a></p>
 						<ul>
 							<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Space.ts#L297">Space.ts:297</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 					<a name="_hastouch" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _has<wbr>Touch</h3>
 					<div class="tsd-signature tsd-kind-icon">_has<wbr>Touch<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="_space_.multitouchspace.html">MultiTouchSpace</a>.<a href="_space_.multitouchspace.html#_hastouch">_hasTouch</a></p>
 						<ul>
 							<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Space.ts#L298">Space.ts:298</a></li>
 						</ul>
@@ -339,46 +229,6 @@
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-					<a name="_offcanvas" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _off<wbr>Canvas</h3>
-					<div class="tsd-signature tsd-kind-icon">_off<wbr>Canvas<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">HTMLCanvasElement</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Canvas.ts#L36">Canvas.ts:36</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-					<a name="_offctx" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _off<wbr>Ctx</h3>
-					<div class="tsd-signature tsd-kind-icon">_off<wbr>Ctx<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_canvas_.ptscanvasrenderingcontext2d.html" class="tsd-signature-type">PtsCanvasRenderingContext2D</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Canvas.ts#L37">Canvas.ts:37</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-					<a name="_offscreen" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _offscreen</h3>
-					<div class="tsd-signature tsd-kind-icon">_offscreen<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Canvas.ts#L35">Canvas.ts:35</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-					<a name="_pixelscale" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _pixel<wbr>Scale</h3>
-					<div class="tsd-signature tsd-kind-icon">_pixel<wbr>Scale<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;1</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Canvas.ts#L30">Canvas.ts:30</a></li>
-						</ul>
-					</aside>
-				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 					<a name="_pointer" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _pointer</h3>
@@ -390,12 +240,11 @@
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 					<a name="_pressed" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _pressed</h3>
 					<div class="tsd-signature tsd-kind-icon">_pressed<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="_space_.multitouchspace.html">MultiTouchSpace</a>.<a href="_space_.multitouchspace.html#_pressed">_pressed</a></p>
 						<ul>
 							<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Space.ts#L294">Space.ts:294</a></li>
 						</ul>
@@ -448,53 +297,6 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Accessors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-accessor tsd-parent-kind-class">
-					<a name="autoresize" class="tsd-anchor"></a>
-					<h3>auto<wbr>Resize</h3>
-					<ul class="tsd-signatures tsd-kind-accessor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> autoResize<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">set</span> autoResize<span class="tsd-signature-symbol">(</span>auto<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Canvas.ts#L181">Canvas.ts:181</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Set whether the canvas element should resize when its container is resized.</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
-						</li>
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Canvas.ts#L173">Canvas.ts:173</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Set whether the canvas element should resize when its container is resized.</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>auto: <span class="tsd-signature-type">boolean</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>a boolean value indicating if auto size is set</p>
-										</div>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
 				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
 					<a name="center" class="tsd-anchor"></a>
 					<h3>center</h3>
@@ -515,28 +317,6 @@
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
-					<a name="ctx" class="tsd-anchor"></a>
-					<h3>ctx</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> ctx<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_canvas_.ptscanvasrenderingcontext2d.html" class="tsd-signature-type">PtsCanvasRenderingContext2D</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Canvas.ts#L303">Canvas.ts:303</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Get the rendering context of canvas</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_canvas_.ptscanvasrenderingcontext2d.html" class="tsd-signature-type">PtsCanvasRenderingContext2D</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -626,50 +406,6 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
-					<a name="element" class="tsd-anchor"></a>
-					<h3>element</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> element<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLCanvasElement</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Canvas.ts#L279">Canvas.ts:279</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Get the html canvas element</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">HTMLCanvasElement</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
-					<a name="hasoffscreen" class="tsd-anchor"></a>
-					<h3>has<wbr>Offscreen</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> hasOffscreen<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Canvas.ts#L250">Canvas.ts:250</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Check if an offscreen canvas is created</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
-						</li>
-					</ul>
-				</section>
 				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
 					<a name="height" class="tsd-anchor"></a>
 					<h3>height</h3>
@@ -716,50 +452,6 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
-					<a name="offscreencanvas" class="tsd-anchor"></a>
-					<h3>offscreen<wbr>Canvas</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> offscreenCanvas<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLCanvasElement</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Canvas.ts#L264">Canvas.ts:264</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Get the offscreen canvas element</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">HTMLCanvasElement</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
-					<a name="offscreenctx" class="tsd-anchor"></a>
-					<h3>offscreen<wbr>Ctx</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> offscreenCtx<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_canvas_.ptscanvasrenderingcontext2d.html" class="tsd-signature-type">PtsCanvasRenderingContext2D</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Canvas.ts#L258">Canvas.ts:258</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Get the rendering context of offscreen canvas (if created via <code>setup()</code>)</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_canvas_.ptscanvasrenderingcontext2d.html" class="tsd-signature-type">PtsCanvasRenderingContext2D</a></h4>
-						</li>
-					</ul>
-				</section>
 				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
 					<a name="outerbound" class="tsd-anchor"></a>
 					<h3>outer<wbr>Bound</h3>
@@ -784,59 +476,14 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
-					<a name="parent" class="tsd-anchor"></a>
-					<h3>parent</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> parent<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Element</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Canvas.ts#L287">Canvas.ts:287</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Get the parent element that contains the canvas element</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Element</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
-					<a name="pixelscale" class="tsd-anchor"></a>
-					<h3>pixel<wbr>Scale</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> pixelScale<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Canvas.ts#L242">Canvas.ts:242</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p><code>pixelScale</code> property returns a number that let you determine if the screen is &quot;retina&quot; (when value &gt;= 2)</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
 					<a name="pointer" class="tsd-anchor"></a>
 					<h3>pointer</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> pointer<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="_space_.multitouchspace.html">MultiTouchSpace</a>.<a href="_space_.multitouchspace.html#pointer">pointer</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Space.ts#L306">Space.ts:306</a></li>
 								</ul>
@@ -847,28 +494,6 @@
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
-					<a name="ready" class="tsd-anchor"></a>
-					<h3>ready</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> ready<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Canvas.ts#L295">Canvas.ts:295</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>A property to indicate if the Space is ready</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -922,52 +547,14 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected">
-					<a name="_createelement" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _create<wbr>Element</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon">_create<wbr>Element<span class="tsd-signature-symbol">(</span>elem<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLElement</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Canvas.ts#L105">Canvas.ts:105</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Helper function to create a DOM element</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> elem: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;div&quot;</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>element tag name</p>
-									</div>
-								</li>
-								<li>
-									<h5>id: <span class="tsd-signature-type">any</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>element id attribute</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">HTMLElement</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 					<a name="_mouseaction" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _mouse<wbr>Action</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
 						<li class="tsd-signature tsd-kind-icon">_mouse<wbr>Action<span class="tsd-signature-symbol">(</span>type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MouseEvent</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TouchEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="_space_.multitouchspace.html">MultiTouchSpace</a>.<a href="_space_.multitouchspace.html#_mouseaction">_mouseAction</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Space.ts#L404">Space.ts:404</a></li>
 								</ul>
@@ -996,16 +583,15 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected">
 					<a name="_mousedown" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _mouse<wbr>Down</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
 						<li class="tsd-signature tsd-kind-icon">_mouse<wbr>Down<span class="tsd-signature-symbol">(</span>evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MouseEvent</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TouchEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="_space_.multitouchspace.html">MultiTouchSpace</a>.<a href="_space_.multitouchspace.html#_mousedown">_mouseDown</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Space.ts#L438">Space.ts:438</a></li>
 								</ul>
@@ -1027,16 +613,15 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected">
 					<a name="_mousemove" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _mouse<wbr>Move</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
 						<li class="tsd-signature tsd-kind-icon">_mouse<wbr>Move<span class="tsd-signature-symbol">(</span>evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MouseEvent</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TouchEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="_space_.multitouchspace.html">MultiTouchSpace</a>.<a href="_space_.multitouchspace.html#_mousemove">_mouseMove</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Space.ts#L462">Space.ts:462</a></li>
 								</ul>
@@ -1058,16 +643,15 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected">
 					<a name="_mouseout" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _mouse<wbr>Out</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
 						<li class="tsd-signature tsd-kind-icon">_mouse<wbr>Out<span class="tsd-signature-symbol">(</span>evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MouseEvent</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TouchEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="_space_.multitouchspace.html">MultiTouchSpace</a>.<a href="_space_.multitouchspace.html#_mouseout">_mouseOut</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Space.ts#L486">Space.ts:486</a></li>
 								</ul>
@@ -1089,16 +673,15 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected">
 					<a name="_mouseover" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _mouse<wbr>Over</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
 						<li class="tsd-signature tsd-kind-icon">_mouse<wbr>Over<span class="tsd-signature-symbol">(</span>evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MouseEvent</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TouchEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="_space_.multitouchspace.html">MultiTouchSpace</a>.<a href="_space_.multitouchspace.html#_mouseover">_mouseOver</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Space.ts#L476">Space.ts:476</a></li>
 								</ul>
@@ -1120,16 +703,15 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected">
 					<a name="_mouseup" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _mouse<wbr>Up</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
 						<li class="tsd-signature tsd-kind-icon">_mouse<wbr>Up<span class="tsd-signature-symbol">(</span>evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MouseEvent</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TouchEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="_space_.multitouchspace.html">MultiTouchSpace</a>.<a href="_space_.multitouchspace.html#_mouseup">_mouseUp</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Space.ts#L449">Space.ts:449</a></li>
 								</ul>
@@ -1151,76 +733,15 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
-					<a name="_ready" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _ready</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
-						<li class="tsd-signature tsd-kind-icon">_ready<span class="tsd-signature-symbol">(</span>callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Canvas.ts#L116">Canvas.ts:116</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Handle callbacks after element is mounted in DOM</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>callback: <span class="tsd-signature-type">Function</span></h5>
-									<div class="tsd-comment tsd-typography">
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected">
-					<a name="_resizehandler" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _resize<wbr>Handler</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon">_resize<wbr>Handler<span class="tsd-signature-symbol">(</span>evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Event</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Canvas.ts#L232">Canvas.ts:232</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Window resize handling</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>evt: <span class="tsd-signature-type">Event</span></h5>
-									<div class="tsd-comment tsd-typography">
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 					<a name="_touchmove" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _touch<wbr>Move</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
 						<li class="tsd-signature tsd-kind-icon">_touch<wbr>Move<span class="tsd-signature-symbol">(</span>evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TouchEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="_space_.multitouchspace.html">MultiTouchSpace</a>.<a href="_space_.multitouchspace.html#_touchmove">_touchMove</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Space.ts#L498">Space.ts:498</a></li>
 								</ul>
@@ -1278,16 +799,15 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="bindcanvas" class="tsd-anchor"></a>
 					<h3>bind<wbr>Canvas</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">bind<wbr>Canvas<span class="tsd-signature-symbol">(</span>evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">EventListener</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="_space_.multitouchspace.html">MultiTouchSpace</a>.<a href="_space_.multitouchspace.html#bindcanvas">bindCanvas</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Space.ts#L317">Space.ts:317</a></li>
 								</ul>
@@ -1316,16 +836,15 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="bindmouse" class="tsd-anchor"></a>
 					<h3>bind<wbr>Mouse</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">bind<wbr>Mouse<span class="tsd-signature-symbol">(</span>_bind<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="_space_.multitouchspace.html">MultiTouchSpace</a>.<a href="_space_.multitouchspace.html#bindmouse">bindMouse</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Space.ts#L337">Space.ts:337</a></li>
 								</ul>
@@ -1353,16 +872,15 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="bindtouch" class="tsd-anchor"></a>
 					<h3>bind<wbr>Touch</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">bind<wbr>Touch<span class="tsd-signature-symbol">(</span>_bind<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="_space_.multitouchspace.html">MultiTouchSpace</a>.<a href="_space_.multitouchspace.html#bindtouch">bindTouch</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Space.ts#L362">Space.ts:362</a></li>
 								</ul>
@@ -1390,94 +908,49 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="clear" class="tsd-anchor"></a>
 					<h3>clear</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">clear<span class="tsd-signature-symbol">(</span>bg<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">clear<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#clear">clear</a></p>
+								<p>Inherited from <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#clear">clear</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Canvas.ts#L311">Canvas.ts:311</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Space.ts#L274">Space.ts:274</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Clear the canvas with its background color. Overrides Space&#39;s <code>clear</code> function.</p>
+									<p>clear all contents in the space</p>
 								</div>
 							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> bg: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Optionally specify a custom background color in hex or rgba string, or &quot;transparent&quot;. If not defined, it will use its <code>bgcolor</code> property as background color to clear the canvas.</p>
-									</div>
-								</li>
-							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="clearoffscreen" class="tsd-anchor"></a>
-					<h3>clear<wbr>Offscreen</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">clear<wbr>Offscreen<span class="tsd-signature-symbol">(</span>bg<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Canvas.ts#L332">Canvas.ts:332</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Similiar to <code>clear()</code> but clear the offscreen canvas instead</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> bg: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Optionally specify a custom background color in hex or rgba string, or &quot;transparent&quot;. If not defined, it will use its <code>bgcolor</code> property as background color to clear the canvas.</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="getform" class="tsd-anchor"></a>
 					<h3>get<wbr>Form</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Form<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_canvas_.canvasform.html" class="tsd-signature-type">CanvasForm</a></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Form<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_form_.form.html" class="tsd-signature-type">Form</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#getform">getForm</a></p>
+								<p>Inherited from <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#getform">getForm</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Canvas.ts#L273">Canvas.ts:273</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Space.ts#L280">Space.ts:280</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Get a new <code>CanvasForm</code> for drawing</p>
+									<p>Get a default form for drawing in this space</p>
 								</div>
-								<dl class="tsd-comment-tags">
-									<dt>see</dt>
-									<dd><p><code>CanvasForm</code></p>
-									</dd>
-								</dl>
 							</div>
-							<h4 class="tsd-returns-title">Returns <a href="_canvas_.canvasform.html" class="tsd-signature-type">CanvasForm</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="_form_.form.html" class="tsd-signature-type">Form</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -1546,23 +1019,23 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 					<a name="playitems" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> play<wbr>Items</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 						<li class="tsd-signature tsd-kind-icon">play<wbr>Items<span class="tsd-signature-symbol">(</span>time<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#playitems">playItems</a></p>
+								<p>Inherited from <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#playitems">playItems</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Canvas.ts#L349">Canvas.ts:349</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Space.ts#L152">Space.ts:152</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Main animation function. Call <code>Space.playItems</code>.</p>
+									<p>Main animate function. This calls all the items to perform</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1753,38 +1226,32 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="resize" class="tsd-anchor"></a>
 					<h3>resize</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">resize<span class="tsd-signature-symbol">(</span>b<span class="tsd-signature-symbol">: </span><a href="_bound_.bound.html" class="tsd-signature-type">Bound</a>, evt<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Event</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">resize<span class="tsd-signature-symbol">(</span>b<span class="tsd-signature-symbol">: </span><a href="../interfaces/_pt_.ipt.html" class="tsd-signature-type">IPt</a>, evt<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Event</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#resize">resize</a></p>
+								<p>Inherited from <a href="_space_.space.html">Space</a>.<a href="_space_.space.html#resize">resize</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Canvas.ts#L189">Canvas.ts:189</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Space.ts#L268">Space.ts:268</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>This overrides Space&#39;s <code>resize</code> function. It&#39;s used as a callback function for window&#39;s resize event and not usually called directly. You can keep track of resize events with <code>resize: (bound ,evt)</code> callback in your player objects (See <code>Space</code>&#39;s <code>add()</code> function).</p>
+									<p>Resize the space</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>b: <a href="_bound_.bound.html" class="tsd-signature-type">Bound</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>a Bound object to resize to</p>
-									</div>
+									<h5>b: <a href="../interfaces/_pt_.ipt.html" class="tsd-signature-type">IPt</a></h5>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> evt: <span class="tsd-signature-type">Event</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Optionally pass a resize event</p>
-									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -1810,68 +1277,6 @@
 									<p>Resume the pause animation</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="setup" class="tsd-anchor"></a>
-					<h3>setup</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">setup<span class="tsd-signature-symbol">(</span>opt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Canvas.ts#L146">Canvas.ts:146</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Set up various options for CanvasSpace. The <code>opt</code> parameter is an object with the following fields. This is usually set during instantiation, eg <code>new CanvasSpace(...).setup( { opt } )</code></p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>example</dt>
-									<dd><p><code>space.setup({ bgcolor: &quot;#f00&quot;, retina: true, resize: true })</code></p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>opt: <span class="tsd-signature-type">object</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>an object with optional settings, as follows.</p>
-									</div>
-									<ul class="tsd-parameters">
-										<li class="tsd-parameter">
-											<h5><span class="tsd-flag ts-flagOptional">Optional</span> bgcolor<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span></h5>
-											<div class="tsd-comment tsd-typography">
-												<p>a hex or rgba string to set initial background color of the canvas, or use <code>false</code> or &quot;transparent&quot; to set a transparent background. You may also change it later with <code>clear()</code></p>
-											</div>
-										</li>
-										<li class="tsd-parameter">
-											<h5><span class="tsd-flag ts-flagOptional">Optional</span> offscreen<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span></h5>
-											<div class="tsd-comment tsd-typography">
-												<p>a boolean to set if a duplicate canvas should be created for offscreen rendering. Default is <code>false</code>.</p>
-											</div>
-										</li>
-										<li class="tsd-parameter">
-											<h5><span class="tsd-flag ts-flagOptional">Optional</span> resize<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span></h5>
-											<div class="tsd-comment tsd-typography">
-												<p>a boolean to set whether <code>&lt;canvas&gt;</code> size should auto resize to match its container&#39;s size. You can also set it manually with <code>autoSize()</code></p>
-											</div>
-										</li>
-										<li class="tsd-parameter">
-											<h5><span class="tsd-flag ts-flagOptional">Optional</span> retina<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span></h5>
-											<div class="tsd-comment tsd-typography">
-												<p>a boolean to set if device pixel scaling should be used. This may make drawings on retina displays look sharper but may reduce performance slightly. Default is <code>true</code>.</p>
-											</div>
-										</li>
-									</ul>
-								</li>
-							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
 						</li>
 					</ul>
@@ -1908,16 +1313,15 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="touchestopoints" class="tsd-anchor"></a>
 					<h3>touches<wbr>ToPoints</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">touches<wbr>ToPoints<span class="tsd-signature-symbol">(</span>evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TouchEvent</span>, which<span class="tsd-signature-symbol">?: </span><a href="../modules/_space_.html#touchpointskey" class="tsd-signature-type">TouchPointsKey</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a><span class="tsd-signature-symbol">[]</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="_space_.multitouchspace.html">MultiTouchSpace</a>.<a href="_space_.multitouchspace.html#touchestopoints">touchesToPoints</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Space.ts#L388">Space.ts:388</a></li>
 								</ul>
@@ -1947,16 +1351,15 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="unbindcanvas" class="tsd-anchor"></a>
 					<h3>unbind<wbr>Canvas</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">unbind<wbr>Canvas<span class="tsd-signature-symbol">(</span>evt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">EventListener</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="_space_.multitouchspace.html">MultiTouchSpace</a>.<a href="_space_.multitouchspace.html#unbindcanvas">unbindCanvas</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/84b2446/src/Space.ts#L327">Space.ts:327</a></li>
 								</ul>
@@ -2040,7 +1443,7 @@
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_bound_.html">"<wbr>Bound"</a>
 					</li>
-					<li class="current tsd-kind-external-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_canvas_.html">"<wbr>Canvas"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -2067,7 +1470,7 @@
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_pt_.html">"<wbr>Pt"</a>
 					</li>
-					<li class=" tsd-kind-external-module">
+					<li class="current tsd-kind-external-module">
 						<a href="../modules/_space_.html">"<wbr>Space"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -2083,230 +1486,179 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="_canvas_.canvasform.html" class="tsd-kind-icon">Canvas<wbr>Form</a>
-					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-external-module">
-						<a href="_canvas_.canvasspace.html" class="tsd-kind-icon">Canvas<wbr>Space</a>
+						<a href="_space_.multitouchspace.html" class="tsd-kind-icon">Multi<wbr>Touch<wbr>Space</a>
 						<ul>
-							<li class=" tsd-kind-constructor tsd-parent-kind-class">
-								<a href="_canvas_.canvasspace.html#constructor" class="tsd-kind-icon">constructor</a>
-							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-								<a href="_canvas_.canvasspace.html#_autoresize" class="tsd-kind-icon">_auto<wbr>Resize</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-								<a href="_canvas_.canvasspace.html#_bgcolor" class="tsd-kind-icon">_bgcolor</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
-								<a href="_canvas_.canvasspace.html#_canvas" class="tsd-kind-icon">_canvas</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-								<a href="_canvas_.canvasspace.html#_container" class="tsd-kind-icon">_container</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
-								<a href="_canvas_.canvasspace.html#_ctx" class="tsd-kind-icon">_ctx</a>
+								<a href="_space_.multitouchspace.html#_canvas" class="tsd-kind-icon">_canvas</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-								<a href="_canvas_.canvasspace.html#_dragged" class="tsd-kind-icon">_dragged</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-								<a href="_canvas_.canvasspace.html#_hasmouse" class="tsd-kind-icon">_has<wbr>Mouse</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-								<a href="_canvas_.canvasspace.html#_hastouch" class="tsd-kind-icon">_has<wbr>Touch</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-								<a href="_canvas_.canvasspace.html#_isready" class="tsd-kind-icon">_is<wbr>Ready</a>
+								<a href="_space_.multitouchspace.html#_ctx" class="tsd-kind-icon">_ctx</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-								<a href="_canvas_.canvasspace.html#_offcanvas" class="tsd-kind-icon">_off<wbr>Canvas</a>
+								<a href="_space_.multitouchspace.html#_dragged" class="tsd-kind-icon">_dragged</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-								<a href="_canvas_.canvasspace.html#_offctx" class="tsd-kind-icon">_off<wbr>Ctx</a>
+								<a href="_space_.multitouchspace.html#_hasmouse" class="tsd-kind-icon">_has<wbr>Mouse</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-								<a href="_canvas_.canvasspace.html#_offscreen" class="tsd-kind-icon">_offscreen</a>
+								<a href="_space_.multitouchspace.html#_hastouch" class="tsd-kind-icon">_has<wbr>Touch</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+								<a href="_space_.multitouchspace.html#_isready" class="tsd-kind-icon">_is<wbr>Ready</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+								<a href="_space_.multitouchspace.html#_pointer" class="tsd-kind-icon">_pointer</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-								<a href="_canvas_.canvasspace.html#_pixelscale" class="tsd-kind-icon">_pixel<wbr>Scale</a>
+								<a href="_space_.multitouchspace.html#_pressed" class="tsd-kind-icon">_pressed</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-								<a href="_canvas_.canvasspace.html#_pointer" class="tsd-kind-icon">_pointer</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-								<a href="_canvas_.canvasspace.html#_pressed" class="tsd-kind-icon">_pressed</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-								<a href="_canvas_.canvasspace.html#bound" class="tsd-kind-icon">bound</a>
+								<a href="_space_.multitouchspace.html#bound" class="tsd-kind-icon">bound</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
-								<a href="_canvas_.canvasspace.html#id" class="tsd-kind-icon">id</a>
+								<a href="_space_.multitouchspace.html#id" class="tsd-kind-icon">id</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-								<a href="_canvas_.canvasspace.html#playercount" class="tsd-kind-icon">player<wbr>Count</a>
+								<a href="_space_.multitouchspace.html#playercount" class="tsd-kind-icon">player<wbr>Count</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-								<a href="_canvas_.canvasspace.html#players" class="tsd-kind-icon">players</a>
-							</li>
-							<li class=" tsd-kind-accessor tsd-parent-kind-class">
-								<a href="_canvas_.canvasspace.html#autoresize" class="tsd-kind-icon">auto<wbr>Resize</a>
+								<a href="_space_.multitouchspace.html#players" class="tsd-kind-icon">players</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
-								<a href="_canvas_.canvasspace.html#center" class="tsd-kind-icon">center</a>
-							</li>
-							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
-								<a href="_canvas_.canvasspace.html#ctx" class="tsd-kind-icon">ctx</a>
+								<a href="_space_.multitouchspace.html#center" class="tsd-kind-icon">center</a>
 							</li>
 							<li class=" tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited">
-								<a href="_canvas_.canvasspace.html#customrendering" class="tsd-kind-icon">custom<wbr>Rendering</a>
-							</li>
-							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
-								<a href="_canvas_.canvasspace.html#element" class="tsd-kind-icon">element</a>
-							</li>
-							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
-								<a href="_canvas_.canvasspace.html#hasoffscreen" class="tsd-kind-icon">has<wbr>Offscreen</a>
+								<a href="_space_.multitouchspace.html#customrendering" class="tsd-kind-icon">custom<wbr>Rendering</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
-								<a href="_canvas_.canvasspace.html#height" class="tsd-kind-icon">height</a>
+								<a href="_space_.multitouchspace.html#height" class="tsd-kind-icon">height</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
-								<a href="_canvas_.canvasspace.html#innerbound" class="tsd-kind-icon">inner<wbr>Bound</a>
-							</li>
-							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
-								<a href="_canvas_.canvasspace.html#offscreencanvas" class="tsd-kind-icon">offscreen<wbr>Canvas</a>
-							</li>
-							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
-								<a href="_canvas_.canvasspace.html#offscreenctx" class="tsd-kind-icon">offscreen<wbr>Ctx</a>
+								<a href="_space_.multitouchspace.html#innerbound" class="tsd-kind-icon">inner<wbr>Bound</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
-								<a href="_canvas_.canvasspace.html#outerbound" class="tsd-kind-icon">outer<wbr>Bound</a>
+								<a href="_space_.multitouchspace.html#outerbound" class="tsd-kind-icon">outer<wbr>Bound</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
-								<a href="_canvas_.canvasspace.html#parent" class="tsd-kind-icon">parent</a>
-							</li>
-							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
-								<a href="_canvas_.canvasspace.html#pixelscale" class="tsd-kind-icon">pixel<wbr>Scale</a>
+								<a href="_space_.multitouchspace.html#pointer" class="tsd-kind-icon">pointer</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
-								<a href="_canvas_.canvasspace.html#pointer" class="tsd-kind-icon">pointer</a>
-							</li>
-							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
-								<a href="_canvas_.canvasspace.html#ready" class="tsd-kind-icon">ready</a>
+								<a href="_space_.multitouchspace.html#size" class="tsd-kind-icon">size</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
-								<a href="_canvas_.canvasspace.html#size" class="tsd-kind-icon">size</a>
-							</li>
-							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
-								<a href="_canvas_.canvasspace.html#width" class="tsd-kind-icon">width</a>
+								<a href="_space_.multitouchspace.html#width" class="tsd-kind-icon">width</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
-								<a href="_canvas_.canvasspace.html#_createelement" class="tsd-kind-icon">_create<wbr>Element</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-								<a href="_canvas_.canvasspace.html#_mouseaction" class="tsd-kind-icon">_mouse<wbr>Action</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-								<a href="_canvas_.canvasspace.html#_mousedown" class="tsd-kind-icon">_mouse<wbr>Down</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-								<a href="_canvas_.canvasspace.html#_mousemove" class="tsd-kind-icon">_mouse<wbr>Move</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-								<a href="_canvas_.canvasspace.html#_mouseout" class="tsd-kind-icon">_mouse<wbr>Out</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-								<a href="_canvas_.canvasspace.html#_mouseover" class="tsd-kind-icon">_mouse<wbr>Over</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-								<a href="_canvas_.canvasspace.html#_mouseup" class="tsd-kind-icon">_mouse<wbr>Up</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
-								<a href="_canvas_.canvasspace.html#_ready" class="tsd-kind-icon">_ready</a>
+								<a href="_space_.multitouchspace.html#_mouseaction" class="tsd-kind-icon">_mouse<wbr>Action</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
-								<a href="_canvas_.canvasspace.html#_resizehandler" class="tsd-kind-icon">_resize<wbr>Handler</a>
+								<a href="_space_.multitouchspace.html#_mousedown" class="tsd-kind-icon">_mouse<wbr>Down</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-								<a href="_canvas_.canvasspace.html#_touchmove" class="tsd-kind-icon">_touch<wbr>Move</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+								<a href="_space_.multitouchspace.html#_mousemove" class="tsd-kind-icon">_mouse<wbr>Move</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+								<a href="_space_.multitouchspace.html#_mouseout" class="tsd-kind-icon">_mouse<wbr>Out</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+								<a href="_space_.multitouchspace.html#_mouseover" class="tsd-kind-icon">_mouse<wbr>Over</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+								<a href="_space_.multitouchspace.html#_mouseup" class="tsd-kind-icon">_mouse<wbr>Up</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+								<a href="_space_.multitouchspace.html#_touchmove" class="tsd-kind-icon">_touch<wbr>Move</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_canvas_.canvasspace.html#add" class="tsd-kind-icon">add</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_canvas_.canvasspace.html#bindcanvas" class="tsd-kind-icon">bind<wbr>Canvas</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_canvas_.canvasspace.html#bindmouse" class="tsd-kind-icon">bind<wbr>Mouse</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_canvas_.canvasspace.html#bindtouch" class="tsd-kind-icon">bind<wbr>Touch</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-								<a href="_canvas_.canvasspace.html#clear" class="tsd-kind-icon">clear</a>
+								<a href="_space_.multitouchspace.html#add" class="tsd-kind-icon">add</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_canvas_.canvasspace.html#clearoffscreen" class="tsd-kind-icon">clear<wbr>Offscreen</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-								<a href="_canvas_.canvasspace.html#getform" class="tsd-kind-icon">get<wbr>Form</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_canvas_.canvasspace.html#pause" class="tsd-kind-icon">pause</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_canvas_.canvasspace.html#play" class="tsd-kind-icon">play</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
-								<a href="_canvas_.canvasspace.html#playitems" class="tsd-kind-icon">play<wbr>Items</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_canvas_.canvasspace.html#playonce" class="tsd-kind-icon">play<wbr>Once</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_canvas_.canvasspace.html#refresh" class="tsd-kind-icon">refresh</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_canvas_.canvasspace.html#remove" class="tsd-kind-icon">remove</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_canvas_.canvasspace.html#removeall" class="tsd-kind-icon">remove<wbr>All</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-								<a href="_canvas_.canvasspace.html#render" class="tsd-kind-icon">render</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_canvas_.canvasspace.html#replay" class="tsd-kind-icon">replay</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-								<a href="_canvas_.canvasspace.html#resize" class="tsd-kind-icon">resize</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_canvas_.canvasspace.html#resume" class="tsd-kind-icon">resume</a>
+								<a href="_space_.multitouchspace.html#bindcanvas" class="tsd-kind-icon">bind<wbr>Canvas</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_canvas_.canvasspace.html#setup" class="tsd-kind-icon">setup</a>
+								<a href="_space_.multitouchspace.html#bindmouse" class="tsd-kind-icon">bind<wbr>Mouse</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_space_.multitouchspace.html#bindtouch" class="tsd-kind-icon">bind<wbr>Touch</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_canvas_.canvasspace.html#stop" class="tsd-kind-icon">stop</a>
+								<a href="_space_.multitouchspace.html#clear" class="tsd-kind-icon">clear</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_canvas_.canvasspace.html#touchestopoints" class="tsd-kind-icon">touches<wbr>ToPoints</a>
+								<a href="_space_.multitouchspace.html#getform" class="tsd-kind-icon">get<wbr>Form</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_canvas_.canvasspace.html#unbindcanvas" class="tsd-kind-icon">unbind<wbr>Canvas</a>
+								<a href="_space_.multitouchspace.html#pause" class="tsd-kind-icon">pause</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_space_.multitouchspace.html#play" class="tsd-kind-icon">play</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+								<a href="_space_.multitouchspace.html#playitems" class="tsd-kind-icon">play<wbr>Items</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_space_.multitouchspace.html#playonce" class="tsd-kind-icon">play<wbr>Once</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_space_.multitouchspace.html#refresh" class="tsd-kind-icon">refresh</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_space_.multitouchspace.html#remove" class="tsd-kind-icon">remove</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_space_.multitouchspace.html#removeall" class="tsd-kind-icon">remove<wbr>All</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+								<a href="_space_.multitouchspace.html#render" class="tsd-kind-icon">render</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_space_.multitouchspace.html#replay" class="tsd-kind-icon">replay</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_space_.multitouchspace.html#resize" class="tsd-kind-icon">resize</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_space_.multitouchspace.html#resume" class="tsd-kind-icon">resume</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_space_.multitouchspace.html#stop" class="tsd-kind-icon">stop</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_space_.multitouchspace.html#touchestopoints" class="tsd-kind-icon">touches<wbr>ToPoints</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_space_.multitouchspace.html#unbindcanvas" class="tsd-kind-icon">unbind<wbr>Canvas</a>
 							</li>
 							<li class=" tsd-kind-object-literal tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-								<a href="_canvas_.canvasspace.html#_time" class="tsd-kind-icon">_time</a>
+								<a href="_space_.multitouchspace.html#_time" class="tsd-kind-icon">_time</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="_space_.space.html" class="tsd-kind-icon">Space</a>
+					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="../interfaces/_canvas_.ptscanvasrenderingcontext2d.html" class="tsd-kind-icon">Pts<wbr>Canvas<wbr>Rendering<wbr>Context2D</a>
+						<a href="../interfaces/_space_.iplayer.html" class="tsd-kind-icon">IPlayer</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="../interfaces/_space_.ispaceplayers.html" class="tsd-kind-icon">ISpace<wbr>Players</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="../interfaces/_space_.itimer.html" class="tsd-kind-icon">ITimer</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="../interfaces/_space_.multitouchelement.html" class="tsd-kind-icon">Multi<wbr>Touch<wbr>Element</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
+						<a href="../modules/_space_.html#animatefunction" class="tsd-kind-icon">Animate<wbr>Function</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
+						<a href="../modules/_space_.html#touchpointskey" class="tsd-kind-icon">Touch<wbr>Points<wbr>Key</a>
 					</li>
 				</ul>
 			</nav>
