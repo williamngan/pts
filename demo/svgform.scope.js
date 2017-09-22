@@ -29,9 +29,10 @@ window.demoDescription = "This sketch is rendered as SVG. Using your browser's i
       let o = Rectangle.toCircle( pts[1] );
       let ang1 = (time%6000 / 6000) * Const.two_pi;
       let ang2 = Geom.boundRadian( space.pointer.subtract( o[0] ).angle() );
-      form.fillOnly("#0c9").arc( o[0], o[1][0], Math.min(ang1, ang2), Math.max(ang1, ang2) );
+      form.fillOnly("#0c9").arc( o[0].subtract(20, 0), o[1][0], Math.min(ang1, ang2), Math.max(ang1, ang2) );
         
       let v = Rectangle.corners( Rectangle.toSquare( pts[2] ) );
+      v.subtract(20, 0);
       form.strokeOnly("#fff", 2).line( new Group( v[0], Geom.interpolate(v[2], v[3], 0.5), v[1] ) );
 
       let e = Create.gridCells( Bound.fromGroup( Rectangle.toSquare( pts[3] ) ), 1, 10 );
