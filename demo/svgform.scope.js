@@ -34,7 +34,7 @@ window.demoDescription = "This sketch is rendered as SVG. Using your browser's i
       let v = Rectangle.corners( Rectangle.toSquare( pts[2] ) );
       form.strokeOnly("#fff", 2).line( new Group( v[0], Geom.interpolate(v[2], v[3], 0.5), v[1] ) );
 
-      let e = Create.gridCells( Bound.fromGroup( Rectangle.toSquare( pts[3] ) ), 1, 9 );
+      let e = Create.gridCells( Bound.fromGroup( Rectangle.toSquare( pts[3] ) ), 1, 10 );
       for (let i=0, len=e.length; i<len; i++) {
         if ( Math.abs(Math.floor(time % 5000 / 500) - i) % 4 === 0 ) {
           form.fillOnly("#fe3").rect( e[i] );
