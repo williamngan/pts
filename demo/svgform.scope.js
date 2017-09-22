@@ -22,19 +22,23 @@ window.demoDescription = "This sketch is rendered as SVG. Using your browser's i
       // SVG scope starts
       form.scope( this );
 
+      // "L" is for the way you look at me
       let l = Rectangle.corners( Rectangle.toSquare( pts[0] ) );
       l.remove(1, 1);
       form.fillOnly("#f03").polygon( l );
 
+      // "O" is for the only one I see
       let o = Rectangle.toCircle( pts[1] );
       let ang1 = (time%6000 / 6000) * Const.two_pi;
       let ang2 = Geom.boundRadian( space.pointer.subtract( o[0] ).angle() );
       form.fillOnly("#0c9").arc( o[0].subtract(20, 0), o[1][0], Math.min(ang1, ang2), Math.max(ang1, ang2) );
         
+      // "V" is very, very extraordinary
       let v = Rectangle.corners( Rectangle.toSquare( pts[2] ) );
       v.subtract(20, 0);
       form.strokeOnly("#fff", 2).line( new Group( v[0], Geom.interpolate(v[2], v[3], 0.5), v[1] ) );
 
+      // "E" is even more than anyone that you adore
       let e = Create.gridCells( Bound.fromGroup( Rectangle.toSquare( pts[3] ) ), 1, 10 );
       for (let i=0, len=e.length; i<len; i++) {
         if ( Math.abs(Math.floor(time % 5000 / 500) - i) % 4 === 0 ) {
