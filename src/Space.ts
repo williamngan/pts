@@ -54,6 +54,7 @@ export abstract class Space {
   protected _pointer:Pt = new Pt();
 
   protected _isReady = false;
+  protected _playing = false;
   
   
   /**
@@ -128,6 +129,7 @@ export abstract class Space {
       this.playItems( time );
     } catch (err) {
       cancelAnimationFrame( this._animID );
+      this._playing = false;
       throw err;
     }
     
@@ -150,6 +152,8 @@ export abstract class Space {
   * @param time current time
   */
   protected playItems( time: number ) {
+
+    this._playing = true;
     
     // clear before draw if refresh is true
     if (this._refresh) this.clear();
@@ -164,6 +168,7 @@ export abstract class Space {
     // stop if time ended
     if (this._time.end >= 0 && time > this._time.end) {
       cancelAnimationFrame( this._animID );
+      this._playing = false;
     }
   }
   
@@ -223,7 +228,13 @@ export abstract class Space {
   set customRendering( f:(context:any, self:Space) => null ) { this._renderFunc = f; }
   get customRendering():(context:any, self:Space) => null { return this._renderFunc; }
   
-  
+
+  /**
+   * Get a boolean to indicate whether the animation is playing
+   */
+  get isPlaying():boolean { return this._playing; }
+
+
   /**
   * Get this space's bounding box
   */
@@ -403,6 +414,7 @@ export abstract class MultiTouchSpace extends Space {
   */
   protected _mouseAction( type:string, evt:MouseEvent|TouchEvent ) {
     let px = 0, py = 0;
+    
     if (evt instanceof MouseEvent) {
       for (let k in this.players) {
         if (this.players.hasOwnProperty(k)) {

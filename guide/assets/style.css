@@ -139,7 +139,7 @@ a:hover { color: #F03; }
   /* margin-bottom: 0.5em; */
 }
 
-#post img { max-width: 100%; }
+#post img { max-width: 100%; width: 100%; }
 
 
 h1 { font-size: 3em; line-height: 1; margin: 50px 0; }
@@ -389,12 +389,12 @@ p {
 .demoOverlay {
   position: absolute;
   top: 0; left: 0; bottom: 0; right: 0;
-  background: rgba(0,0,0,.2);
+  /* background: rgba(0,0,0,.2); */
   box-sizing: border-box;
 }
 
 .demoOverlay > canvas{
-  width: 100% !important; height: 100% !important;
+  /* width: 100% !important; height: 100% !important; */
 }
 
 .demoOverlay::after, .demoOverlay .sourceCodeLink {

@@ -4,7 +4,7 @@
   var demoID = "op_intersect";
   
   // create Space and Form
-  var space = new CanvasSpace("#"+demoID).setup({ retina: true, bgcolor: "#e2e6ef" });
+  var space = new CanvasSpace("#"+demoID).setup({ retina: true, bgcolor: "#e2e6ef", resize: true });
   var form = space.getForm();
   var pts = undefined;
 

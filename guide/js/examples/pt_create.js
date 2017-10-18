@@ -4,7 +4,7 @@
   var demoID = "pt_create";
   
   // create Space and Form
-  var space = new CanvasSpace("#"+demoID).setup({ retina: true, bgcolor: "#e2e6ef" });
+  var space = new CanvasSpace("#"+demoID).setup({ retina: true, bgcolor: "#e2e6ef", resize: true });
   var form = space.getForm();
   
   // animation

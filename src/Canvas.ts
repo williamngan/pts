@@ -35,6 +35,8 @@ export class CanvasSpace extends MultiTouchSpace {
   protected _offscreen = false;
   protected _offCanvas:HTMLCanvasElement;
   protected _offCtx:PtsCanvasRenderingContext2D;
+
+  protected _initialResize = false;
   
 
   
@@ -74,6 +76,7 @@ export class CanvasSpace extends MultiTouchSpace {
       this._container = _selector;
       this._canvas = this._createElement( "canvas", this.id+"_canvas" ) as HTMLCanvasElement;
       this._container.appendChild( this._canvas );
+      this._initialResize = true;
       
       // if selector is an existing canvas
     } else {
@@ -89,7 +92,7 @@ export class CanvasSpace extends MultiTouchSpace {
     // }
     
     // no mutation observer, so we set a timeout for ready event
-    setTimeout( this._ready.bind( this, callback ), 50 );
+    setTimeout( this._ready.bind( this, callback ), 100 );
     
     // store canvas 2d rendering context
     this._ctx = this._canvas.getContext('2d');
@@ -119,6 +122,7 @@ export class CanvasSpace extends MultiTouchSpace {
     this._isReady = true;
     
     this._resizeHandler( null );
+
     this.clear( this._bgcolor );
     this._canvas.dispatchEvent( new Event("ready") );
     
@@ -129,6 +133,7 @@ export class CanvasSpace extends MultiTouchSpace {
     }
     
     this._pointer = this.center;
+    this._initialResize = false; // unset
     
     if (callback) callback( this.bound, this._canvas );
   }
@@ -189,7 +194,7 @@ export class CanvasSpace extends MultiTouchSpace {
   resize( b:Bound, evt?:Event):this {
     
     this.bound = b;
-    
+
     this._canvas.width = this.bound.size.x * this._pixelScale;
     this._canvas.height = this.bound.size.y * this._pixelScale;
     this._canvas.style.width = Math.floor(this.bound.size.x) + "px";
@@ -220,6 +225,9 @@ export class CanvasSpace extends MultiTouchSpace {
     };
     
     this.render( this._ctx );
+
+    // if it's a valid resize event and space is not playing, repaint the canvas once
+    if (evt && !this.isPlaying) this.playOnce( 0 ); 
     
     return this;
   }
@@ -230,8 +238,15 @@ export class CanvasSpace extends MultiTouchSpace {
   * @param evt 
   */
   protected _resizeHandler( evt:Event ) {
-    let b = (this._autoResize) ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
-    if (b) this.resize( Bound.fromBoundingRect(b), evt );
+    let b = (this._autoResize || this._initialResize) ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
+
+    if (b) {
+      let box = Bound.fromBoundingRect(b);
+      
+      // Need to compute offset from window scroll. See outerBound calculation in Space's _mouseAction 
+      box.center = box.center.add( window.pageXOffset, window.pageYOffset ); 
+      this.resize( box, evt );
+    }
   }
   
 
