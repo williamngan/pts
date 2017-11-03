@@ -4,7 +4,7 @@
 
 import { Const } from "./Util";
 import { Curve } from "./Op";
-import { Pt, PtLike, Group, GroupLike } from "./Pt";
+import { Axis, Group, GroupLike, Pt, PtLike } from "./Pt";
 import { Vec, Mat } from "./LinearAlgebra";
 
 /**
@@ -250,9 +250,9 @@ export class Geom {
    * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
    * @returns an array of two Pt that are perpendicular to this Pt
    */
-  static perpendicular( pt:PtLike, axis:string|number[]=Const.xy ):Group {
-    let y = axis[1];
-    let x = axis[0];
+  static perpendicular( pt:PtLike, axis:Axis|number[]=Const.xy ):Group {
+    let y = axis[1] as "x"|"y"|"z"|number;
+    let x = axis[0] as "x"|"y"|"z"|number;
 
     let p = new Pt(pt);
     let pa = new Pt(p);
@@ -317,7 +317,7 @@ export class Geom {
    * @param anchor optional anchor point to rotate from
    * @param axis optional axis such as "yz" to define a 2D plane of rotation
    */
-  static rotate2D( ps:Pt|GroupLike, angle:number, anchor?:PtLike, axis?:string ):Geom {
+  static rotate2D( ps:Pt|GroupLike, angle:number, anchor?:PtLike, axis?:Axis ):Geom {
     let pts = (!Array.isArray(ps)) ? [ps] : ps;
     let fn = (anchor) ? Mat.rotateAt2DMatrix : Mat.rotate2DMatrix;
     if (!anchor) anchor = Pt.make(pts[0].length, 0);
@@ -340,7 +340,7 @@ export class Geom {
    * @param anchor optional anchor point to shear from
    * @param axis optional axis such as "yz" to define a 2D plane of shearing
    */
-  static shear2D( ps:Pt|GroupLike, scale:number|number[]|PtLike, anchor?:PtLike, axis?:string):Geom {
+  static shear2D( ps:Pt|GroupLike, scale:number|number[]|PtLike, anchor?:PtLike, axis?:Axis):Geom {
     let pts = (!Array.isArray(ps)) ? [ps] : ps;
     let s = (typeof scale == "number") ? [scale, scale] : scale;
     if (!anchor) anchor = Pt.make(pts[0].length, 0);
@@ -363,7 +363,7 @@ export class Geom {
    * @param line a Group of 2 Pts that defines a line for reflection
    * @param axis optional axis such as "yz" to define a 2D plane of reflection
    */
-  static reflect2D( ps:Pt|GroupLike, line:GroupLike, axis?:string ):Geom {
+  static reflect2D( ps:Pt|GroupLike, line:GroupLike, axis?:Axis ):Geom {
     let pts = (!Array.isArray(ps)) ? [ps] : ps;
 
     for (let i = 0, len = pts.length; i < len; i++) {

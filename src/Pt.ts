@@ -6,6 +6,7 @@ import {Util, Const} from "./Util";
 import {Geom, Num} from "./Num";
 import {Vec, Mat} from "./LinearAlgebra";
 
+export type Axis = "xy" | "yz" | "xz" |"xyz";
 
 export interface IPt {
   x?:number;
@@ -156,10 +157,11 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
    * Take specific dimensional values from this Pt and create a new Pt
    * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
    */
-  $take( axis:string|number[] ):Pt {
+  $take( axis:Axis|number[] ):Pt {
     let p = [];
     for (let i=0, len=axis.length; i<len; i++) {
-      p.push( this[axis[i]] || 0 );
+      const indexer = axis[i] as "x"|"y"|"z"|number;
+      p.push( this[indexer] || 0 );
     }
     return new Pt(p);
   }
@@ -411,8 +413,8 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
    * Get angle of this vector from origin
    * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
    */
-  angle( axis:string|number[]=Const.xy ):number {
-    return Math.atan2( this[axis[1]], this[axis[0]] );
+  angle( axis:Axis|number[]=Const.xy ):number {
+    return Math.atan2( this[axis[1] as "x"|"y"|"z"|number], this[axis[0] as "x"|"y"|"z"|number] );
   }
 
 
@@ -421,7 +423,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
    * @param p the other Pt
    * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
    */
-  angleBetween( p:Pt, axis:string|number[]=Const.xy ):number {
+  angleBetween( p:Pt, axis:Axis|number[]=Const.xy ):number {
     return Geom.boundRadian( this.angle(axis) ) - Geom.boundRadian( p.angle(axis) );
   }
 
@@ -443,7 +445,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
    * @param anchor optional anchor point to scale from
    * @param axis optional string such as "yz" to specify a 2D plane
    */
-  rotate2D( angle:number, anchor?:PtLike, axis?:string ) {    
+  rotate2D( angle:number, anchor?:PtLike, axis?:Axis ) {    
     Geom.rotate2D( this, angle, anchor || Pt.make( this.length, 0), axis );
     return this;
   }
@@ -455,7 +457,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
    * @param anchor optional anchor point to scale from
    * @param axis optional string such as "yz" to specify a 2D plane
    */
-  shear2D( scale:number|number[]|PtLike, anchor?:PtLike, axis?:string) {
+  shear2D( scale:number|number[]|PtLike, anchor?:PtLike, axis?:Axis) {
     Geom.shear2D( this, scale, anchor || Pt.make( this.length, 0), axis );
     return this;
   }
@@ -466,7 +468,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
    * @param line a Group of 2 Pts that defines a line for reflection
    * @param axis optional axis such as "yz" to define a 2D plane of reflection
    */
-  reflect2D( line:GroupLike, axis?:string):this {
+  reflect2D( line:GroupLike, axis?:Axis):this {
     Geom.reflect2D( this, line, axis );
     return this;
   }
@@ -735,7 +737,7 @@ export class Group extends Array<Pt> {
    * @param anchor optional anchor point to scale from
    * @param axis optional string such as "yz" to specify a 2D plane
    */
-  rotate2D( angle:number, anchor?:PtLike, axis?:string ):this {   
+  rotate2D( angle:number, anchor?:PtLike, axis?:Axis ):this {   
     for (let i=0, len=this.length; i<len; i++) {
       Geom.rotate2D( this[i], angle, anchor || this[0], axis );
     } 
@@ -749,7 +751,7 @@ export class Group extends Array<Pt> {
    * @param anchor optional anchor point to scale from
    * @param axis optional string such as "yz" to specify a 2D plane
    */
-  shear2D( scale:number|number[]|PtLike, anchor?:PtLike, axis?:string):this {
+  shear2D( scale:number|number[]|PtLike, anchor?:PtLike, axis?:Axis):this {
     for (let i=0, len=this.length; i<len; i++) {
       Geom.shear2D( this[i], scale, anchor || this[0], axis );
     }
@@ -762,7 +764,7 @@ export class Group extends Array<Pt> {
    * @param line a Group of 2 Pts that defines a line for reflection
    * @param axis optional axis such as "yz" to define a 2D plane of reflection
    */
-  reflect2D( line:GroupLike, axis?:string):this {
+  reflect2D( line:GroupLike, axis?:Axis):this {
     for (let i=0, len=this.length; i<len; i++) {
       Geom.reflect2D( this[i], line, axis );
     }
