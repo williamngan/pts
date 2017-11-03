@@ -73,7 +73,7 @@ export class SVGSpace extends DOMSpace {
    * @param name a string of element name,  such as `rect` or `circle`
    * @param id id attribute of the new element
    */
-  static svgElement( parent:Element, name:string, id:string ):SVGElement {
+  static svgElement( parent:Element|null, name:string, id:string ):SVGElement {
     if (!parent || !parent.appendChild ) throw new Error( "parent is not a valid DOM element" );
     
     let elem = document.querySelector(`#${id}`);
@@ -97,7 +97,7 @@ export class SVGSpace extends DOMSpace {
     let temp = this._container.querySelectorAll( "."+SVGForm.scopeID( player ) );
     
     temp.forEach( (el:Element) => { 
-      el.parentNode.removeChild( el );
+      el.parentNode!.removeChild( el );
     });
     
     return super.remove( player );
@@ -286,7 +286,7 @@ export class SVGForm extends VisualForm {
    * @returns this form's context
    */
   updateScope( group_id:string, group?:Element ):object {
-    this._ctx.group = group;
+    this._ctx.group = group === undefined?null:group;
     this._ctx.groupID = group_id;
     this._ctx.groupCount = 0;
     this.nextID();
@@ -512,7 +512,7 @@ export class SVGForm extends VisualForm {
   * @param ctx a context object of SVGForm
   * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
   */
-  static line( ctx:DOMFormContext, pts:GroupLike|number[][] ):SVGElement {
+  static line( ctx:DOMFormContext, pts:GroupLike|number[][] ):SVGElement|undefined {
     if (!this._checkSize( pts)) return;
     
     if (pts.length > 2) return SVGForm._poly( ctx, pts, false );
@@ -568,7 +568,7 @@ export class SVGForm extends VisualForm {
     * @param ctx a context object of SVGForm
     * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
     */
-  static polygon( ctx:DOMFormContext, pts:GroupLike|number[][] ):SVGElement {
+  static polygon( ctx:DOMFormContext, pts:GroupLike|number[][] ):SVGElement|undefined {
     return SVGForm._poly( ctx, pts, true );
   }
   
@@ -589,7 +589,7 @@ export class SVGForm extends VisualForm {
   * @param ctx a context object of SVGForm
   * @param pts usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.
   */
-  static rect( ctx:DOMFormContext, pts:GroupLike|number[][] ):SVGElement {
+  static rect( ctx:DOMFormContext, pts:GroupLike|number[][] ):SVGElement|undefined {
     if (!this._checkSize( pts)) return;
     
     let elem = SVGSpace.svgElement( ctx.group, "rect", SVGForm.getID(ctx) );

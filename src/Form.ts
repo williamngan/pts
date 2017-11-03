@@ -57,7 +57,7 @@ export abstract class VisualForm extends Form {
   protected _multiple( groups:GroupLike[], shape:string, ...rest:any[] ):this {
     if (!groups) return this;
     for (let i=0, len=groups.length; i<len; i++) {
-      this[shape]( groups[i], ...rest );
+      (<any>this)[shape]( groups[i], ...rest );
     }
     return this;
   }
@@ -123,7 +123,7 @@ export abstract class VisualForm extends Form {
   * @param shape The shape of the point. Defaults to "square", but it can be "circle" or a custom shape function in your own implementation.
   */
   points( pts:GroupLike|number[][], radius:number, shape:string ): this {
-    if (!pts) return;
+    if (!pts) return this;
     for (let i=0, len=pts.length; i<len; i++) {
       this.point( pts[i], radius, shape );
     }

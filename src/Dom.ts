@@ -9,7 +9,7 @@ import {Pt, PtLike, GroupLike} from './Pt';
  * A type that represents the current context for an DOMForm
  */
 export type DOMFormContext = {
-  group:Element, groupID:string, groupCount:number,
+  group:Element|null, groupID:string, groupCount:number,
   currentID:string,
   currentClass?:string,
   style:object,
@@ -28,7 +28,7 @@ export class DOMSpace extends MultiTouchSpace {
   id: string = "domspace";
   protected _autoResize = true;
   protected _bgcolor = "#e1e9f0";
-  protected _css = {};
+  protected _css: Partial<CSSStyleDeclaration> = {};
   
   
   /**
@@ -40,7 +40,7 @@ export class DOMSpace extends MultiTouchSpace {
   constructor( elem:string|Element, callback?:Function) {
     super();
     
-    var _selector:Element = null;
+    var _selector:Element|null = null;
     var _existed = false;
     this.id = "pts";
     
@@ -64,7 +64,7 @@ export class DOMSpace extends MultiTouchSpace {
       
     } else {
       this._canvas = _selector as HTMLElement;
-      this._container = _selector.parentElement;
+      this._container = _selector.parentElement as HTMLElement;
     }
     
     // no mutation observer, so we set a timeout for ready event
@@ -97,15 +97,18 @@ export class DOMSpace extends MultiTouchSpace {
     
     this._isReady = true;
     
-    this._resizeHandler( null );
+    this._resizeHandler( );
     this.clear( this._bgcolor );
     this._canvas.dispatchEvent( new Event("ready") );
     
     
     for (let k in this.players) {
       if (this.players.hasOwnProperty(k)) {
-        if (this.players[k].start) this.players[k].start( this.bound.clone(), this );
+        const start = this.players[k].start;
+        if (start) {
+          start( this.bound.clone(), this );
       }
+    }
     }
     
     this._pointer = this.center;
@@ -183,7 +186,7 @@ export class DOMSpace extends MultiTouchSpace {
   * Window resize handling
   * @param evt 
   */
-  protected _resizeHandler( evt:Event ) {
+  protected _resizeHandler( evt?:Event ) {
     
     let b = Bound.fromBoundingRect( this._container.getBoundingClientRect() );
 
@@ -248,7 +251,7 @@ export class DOMSpace extends MultiTouchSpace {
   * @param val style value
   * @param update a boolean to update the element's style immediately if set to `true`. Default is `false`.
   */
-  style( key:string, val:string, update:boolean=false ):this {
+  style( key:keyof CSSStyleDeclaration, val:string, update:boolean=false ):this {
     this._css[key] = val;
     if (update) this._canvas.style[key] = val;
     return this;
@@ -261,7 +264,7 @@ export class DOMSpace extends MultiTouchSpace {
   * @param update a boolean to update the element's style immediately if set to `true`. Default is `false`.
   * @return this
   */
-  styles( styles:object, update:boolean=false ):this {
+  styles( styles:Partial<CSSStyleDeclaration>, update:boolean=false ):this {
     for (let k in styles) {
       if ( styles.hasOwnProperty(k) ) this.style( k, styles[k], update );
     }
@@ -324,7 +327,7 @@ export class HTMLSpace extends DOMSpace {
    * @param id id attribute of the new element
    * @param autoClass add a class based on the id (from char 0 to index of "-"). Default is true.
    */
-  static htmlElement( parent:Element, name:string, id?:string, autoClass:boolean=true ):HTMLElement {
+  static htmlElement( parent:Element | null, name:string, id:string, autoClass:boolean=true ):HTMLElement {
     
     if (!parent || !parent.appendChild ) throw new Error( "parent is not a valid DOM element" );
     
@@ -348,7 +351,7 @@ export class HTMLSpace extends DOMSpace {
     let temp = this._container.querySelectorAll( "."+HTMLForm.scopeID( player ) );
     
     temp.forEach( (el:Element) => { 
-      el.parentNode.removeChild( el );
+      el.parentNode!.removeChild( el );
     });
     
     return super.remove( player );
@@ -539,7 +542,7 @@ export class HTMLForm extends VisualForm {
    * @returns this form's context
    */
   updateScope( group_id:string, group?:Element ):object {
-    this._ctx.group = group;
+    this._ctx.group = group === undefined?null:group;
     this._ctx.groupID = group_id;
     this._ctx.groupCount = 0;
     this.nextID();
@@ -594,7 +597,7 @@ export class HTMLForm extends VisualForm {
    * @example `HTMLForm.style(elem, {fill: "#f90", stroke: false})`
    * @returns DOM element 
    */
-  static style( elem:Element, styles:object):Element {
+  static style( elem:Element, styles:Partial<CSSStyleDeclaration>):Element {
     let st = [];
 
     if ( !styles["filled"] ) st.push( "background: none");
@@ -725,8 +728,8 @@ export class HTMLForm extends VisualForm {
   * @param ctx a context object of HTMLForm
   * @param pts usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.
   */
-  static rect( ctx:DOMFormContext, pts:GroupLike|number[][] ):Element {
-    if (!this._checkSize( pts)) return;
+  static rect( ctx:DOMFormContext, pts:GroupLike|number[][] ):Element|null {
+    if (!this._checkSize( pts)) return null;
 
     let elem = HTMLSpace.htmlElement( ctx.group, "div", HTMLForm.getID(ctx) );    
     HTMLSpace.setAttr( elem, { class: `pts-form pts-rect ${ctx.currentClass}` });

@@ -53,7 +53,7 @@ export class CanvasSpace extends MultiTouchSpace {
   constructor( elem:string|Element, callback?:Function) {
     super();
     
-    var _selector:Element = null;
+    var _selector:Element|null = null;
     var _existed = false;
     this.id = "pt";
     
@@ -61,8 +61,8 @@ export class CanvasSpace extends MultiTouchSpace {
     if ( elem instanceof Element ) {
       _selector = elem;
       this.id = "pts_existing_space";
-    } else {;
-      _selector = document.querySelector( <string>elem );
+    } else {
+      _selector = document.querySelector( elem );
       _existed = true;
       this.id = elem;
     }
@@ -85,7 +85,7 @@ export class CanvasSpace extends MultiTouchSpace {
       // if selector is an existing canvas
     } else {
       this._canvas = _selector as HTMLCanvasElement;
-      this._container = _selector.parentElement;
+      this._container = _selector.parentElement as HTMLElement;
       this._autoResize = false;
     }
     
@@ -125,14 +125,17 @@ export class CanvasSpace extends MultiTouchSpace {
     
     this._isReady = true;
     
-    this._resizeHandler( null );
+    this._resizeHandler();
 
     this.clear( this._bgcolor );
     this._canvas.dispatchEvent( new Event("ready") );
     
     for (let k in this.players) {
       if (this.players.hasOwnProperty(k)) {
-        if (this.players[k].start) this.players[k].start( this.bound.clone(), this );
+        const start = this.players[k].start;
+        if (start) {
+          start( this.bound.clone(), this );
+        }
       }
     }
     
@@ -166,7 +169,7 @@ export class CanvasSpace extends MultiTouchSpace {
     if (opt.offscreen) {
       this._offscreen = true;
       this._offCanvas = this._createElement( "canvas", this.id+"_offscreen" ) as HTMLCanvasElement;
-      this._offCtx = this._offCanvas.getContext('2d');
+      this._offCtx = this._offCanvas.getContext('2d') as CanvasRenderingContext2D;
     } else {
       this._offscreen = false;
     }
@@ -241,7 +244,7 @@ export class CanvasSpace extends MultiTouchSpace {
   * Window resize handling
   * @param evt 
   */
-  protected _resizeHandler( evt:Event ) {
+  protected _resizeHandler( evt?:Event ) {
     let b = (this._autoResize || this._initialResize) ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
 
     if (b) {
@@ -557,7 +560,7 @@ export class CanvasForm extends VisualForm {
     * @example `form.point( p )`, `form.point( p, 10, "circle" )`
     */
     point( p:PtLike, radius:number=5, shape:string="square" ):this {
-      if (!p) return;
+      if (!p) return this;
       if (!CanvasForm[shape]) throw new Error(`${shape} is not a static function of CanvasForm`);
       
       CanvasForm[shape]( this._ctx, p, radius );

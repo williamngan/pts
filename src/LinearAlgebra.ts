@@ -219,9 +219,12 @@ export class Mat {
     }
 
     let g = new Group();
-    let isNum = typeof b == "number"; 
     for (let i=0, len=a.length; i<len; i++) {
-      g.push( a[i].$add( (isNum) ? b : b[i] ) );
+      if (typeof b == "number") {
+        g.push( a[i].$add( b ));
+      } else {
+        g.push( a[i].$add( b[i] ) );
+      }
     }
 
     return g;
@@ -281,10 +284,10 @@ export class Mat {
    * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
    */
   static zipSlice( g:GroupLike|number[][], index:number, defaultValue:number|false = false ):Pt {
-    let z = [];
+    let z: number[] = [];
     for (let i=0, len=g.length; i<len; i++) {
       if (g[i].length-1 < index && defaultValue === false) throw `Index ${index} is out of bounds`;
-      z.push( g[i][index] || defaultValue );
+      z.push( g[i][index] || (defaultValue || 0) );
     }
     return new Pt(z);
   }

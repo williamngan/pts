@@ -16,8 +16,8 @@ export interface IPlayer {
   animateID?: string;
   animate?:AnimateFunction;
   resize?( size:IPt, evt?:Event ): undefined;
-  action?( type:string, px:number, py:number, evt:Event ):any;
-  start?( bound:Bound, space:Space ):any;
+  action?( type:string, px:number, py:number, evt:Event ):void;
+  start?( bound:Bound, space:Space ):void;
 }
 
 export interface ISpacePlayers { 
@@ -98,7 +98,9 @@ export abstract class Space {
   * @param player an IPlayer that has an `animateID` property
   */
   remove( player:IPlayer ):this {
-    delete this.players[ player.animateID ];
+    if (player.animateID !== undefined) {
+      delete this.players[ player.animateID ];
+    }
     return this;
   }
   
@@ -161,7 +163,12 @@ export abstract class Space {
     // animate all players
     if (this._isReady) {
       for (let k in this.players) {
-        if (this.players[k].animate) this.players[k].animate( time, this._time.diff, this );
+        if (this.players.hasOwnProperty(k)) {          
+          const animate = this.players[k].animate; 
+          if (animate !== undefined) {
+            animate( time, this._time.diff, this );
+          }
+        }
       }
     }
     
@@ -401,7 +408,7 @@ export abstract class MultiTouchSpace extends Space {
     let ts = [];
     for (var i=0; i<evt[which].length; i++) {
       let t = evt[which].item(i);
-      ts.push( new Pt( t.pageX - this.bound.topLeft.x, t.pageY - this.bound.topLeft.y ) );
+      ts.push( new Pt( t!.pageX - this.bound.topLeft.x, t!.pageY - this.bound.topLeft.y ) );
     }
     return ts;
   }
@@ -430,8 +437,8 @@ export abstract class MultiTouchSpace extends Space {
           let v = this.players[k];
           let c = evt.changedTouches && evt.changedTouches.length > 0;
           let touch = evt.changedTouches.item(0);
-          px = (c) ? touch.pageX - this.outerBound.x : 0;
-          py = (c) ? touch.pageY - this.outerBound.y : 0;
+          px = (c) ? touch!.pageX - this.outerBound.x : 0;
+          py = (c) ? touch!.pageY - this.outerBound.y : 0;
           if (v.action) v.action( type, px, py, evt );
         }
       }
