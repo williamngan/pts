@@ -12,7 +12,8 @@
     "build": "webpack",
     "minify": "babel dist/pts.js --out-file dist/pts.min.js",
     "test": "mocha --opts mocha.opts",
-    "test:auto": "mocha --opts mocha.opts --watch"
+    "test:auto": "mocha --opts mocha.opts --watch",
+    "prepare": "npm run build && npm run typings && npm run minify"
   },
   "repository": {
     "type": "git",
