@@ -1,13 +1,8 @@
-import chai = require('chai');
-import mocha = require('mocha');
+import 'mocha';
+import { assert } from 'chai';
 import {Pt, Group} from '../Pt';
-import {Util} from '../Util';
 import {Num, Geom} from '../Num';
 import {Line, Polygon} from '../Op';
-
-var {assert} = chai;
-var {describe, it} = mocha;
-
 
 describe('Op: ', function() {
 
@@ -75,7 +70,7 @@ describe('Op: ', function() {
     });
 
     it('can find perpendicular pts', function() {
-      let ps = Geom.perpendicular( [10, 3] )
+      let ps = Geom.perpendicular( [10, 3] );
       assert.isTrue( Num.equals( ps[0].x, -3) && Num.equals( ps[1].y, -10 ) );
     });
 
@@ -119,14 +114,14 @@ describe('Op: ', function() {
 
     it('can reflect a group in 2D', function() {
       let ps = [new Pt(218, 454), new Pt( 218, 404) ];
-      let reflect = Group.fromArray( [[230, 497], [268, 454]] )
+      let reflect = Group.fromArray( [[230, 497], [268, 454]] );
       Geom.reflect2D( ps, reflect );
       assert.isTrue( Num.equals(ps[0].x, 274.14938) &&  Num.equals(ps[1].y, 497.4710) );
     });
 
     it('can reflect a group in 2D', function() {
       let ps = [new Pt(218, 454), new Pt( 218, 404) ];
-      let reflect = Group.fromArray( [[230, 497], [268, 454]] )
+      let reflect = Group.fromArray( [[230, 497], [268, 454]] );
       Geom.reflect2D( ps, reflect );
       assert.isTrue( Num.equals(ps[0].x, 274.14938) &&  Num.equals(ps[1].y, 497.4710) );
     });

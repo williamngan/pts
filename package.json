@@ -23,6 +23,8 @@
   "license": "Apache",
   "dependencies": {},
   "devDependencies": {
+    "@types/chai": "4.0.4",
+    "@types/mocha": "2.2.44",
     "@types/node": "^8.0.26",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",

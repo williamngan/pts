@@ -1,11 +1,6 @@
-import chai = require('chai');
-import mocha = require('mocha');
-import {Pt, Group} from '../Pt';
-import {Geom, Num} from '../Num';
-import {Color} from '../Color';
-
-var {assert} = chai;
-var {describe, it} = mocha;
+import 'mocha';
+import { assert } from 'chai';
+import { Color } from '../Color';
 
 describe('Color: ', function() {
 
@@ -14,7 +9,6 @@ describe('Color: ', function() {
       const actual = Color.fromHex("#FFFF00");
       const expected = [255, 255, 0];
       assert.isTrue( actual.equals(expected));
-      // assert.equal( [actual.r,actual.g, actual.b], expected );
     });
 
     it('works without explicit hash in input string', function() {

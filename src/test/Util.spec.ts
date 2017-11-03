@@ -1,13 +1,6 @@
-import chai = require('chai');
-import mocha = require('mocha');
-import {Pt} from '../Pt';
+import 'mocha';
+import { assert } from 'chai';
 import {Const, Util} from '../Util';
-import {Num, Geom} from '../Num';
-import {Line} from '../Op';
-
-var {assert} = chai;
-var {describe, it} = mocha;
-
 
 describe('Util: ', function() {
 
@@ -24,7 +17,7 @@ describe('Util: ', function() {
   describe('Util: ', function() {
 
     it('can getArgs with list of numbers', function() {
-      let c = Util.getArgs( [1,2,3] )
+      let c = Util.getArgs( [1,2,3] );
       assert.equal( c[1], 2 );
     });
 
