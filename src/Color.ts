@@ -165,8 +165,9 @@ export class Color extends Pt {
     
     if (convert) {
       let fname = this._mode.toUpperCase()+"to"+mode.toUpperCase();      
-      if (Color[fname]) {
-        this.to( Color[fname]( this, this._isNorm, this._isNorm ) );
+      const conversion = Util.get(Color, fname) as ( col:Color, normalizedInput:boolean, normalizedOutput:boolean) => Color;
+      if (conversion) {
+        this.to( conversion( this, this._isNorm, this._isNorm ) );
       } else {
         throw new Error( "Cannot convert color with "+fname);
       }

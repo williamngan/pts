@@ -252,8 +252,10 @@ export class DOMSpace extends MultiTouchSpace {
   * @param update a boolean to update the element's style immediately if set to `true`. Default is `false`.
   */
   style( key:keyof CSSStyleDeclaration, val:string, update:boolean=false ):this {
-    this._css[key] = val;
-    if (update) this._canvas.style[key] = val;
+    Util.set(this._css, key, val);
+    if (update) {
+      Util.set(this._canvas.style, key, val);
+    }
     return this;
   }
   
@@ -266,7 +268,9 @@ export class DOMSpace extends MultiTouchSpace {
   */
   styles( styles:Partial<CSSStyleDeclaration>, update:boolean=false ):this {
     for (let k in styles) {
-      if ( styles.hasOwnProperty(k) ) this.style( k, styles[k], update );
+      if ( styles.hasOwnProperty(k) ) {
+        this.style( k as keyof CSSStyleDeclaration, Util.get(styles, k), update );
+    }
     }
     return this;
   }
@@ -281,7 +285,7 @@ export class DOMSpace extends MultiTouchSpace {
   static setAttr( elem:Element, data:object ):Element {
     for (let k in data) {
       if (data.hasOwnProperty(k)) {
-        elem.setAttribute( k, data[k] );
+        elem.setAttribute( k, Util.get(data, k));
       }
     }
     return elem;
@@ -298,7 +302,7 @@ export class DOMSpace extends MultiTouchSpace {
     let str = "";
     for (let k in data) {
       if (data.hasOwnProperty(k)) {
-        if (data[k]) str += `${k}: ${data[k]}; `;
+        if (Util.get(data,k)) str += `${k}: ${Util.get(data,k)}; `;
       }
     }
     return str;
@@ -426,8 +430,8 @@ export class HTMLForm extends VisualForm {
    * @param unit Optional unit like 'px' to append to value
    */
   protected styleTo( k: string, v: any, unit:string='' ) { 
-    if (this._ctx.style[k] === undefined) throw new Error(`${k} style property doesn't exist`);
-    this._ctx.style[k] = `${v}${unit}`; 
+    if (Util.get(this._ctx.style, k) === undefined) throw new Error(`${k} style property doesn't exist`);
+    Util.set(this._ctx.style,k,`${v}${unit}`); 
   }
 
 
@@ -600,16 +604,16 @@ export class HTMLForm extends VisualForm {
   static style( elem:Element, styles:Partial<CSSStyleDeclaration>):Element {
     let st = [];
 
-    if ( !styles["filled"] ) st.push( "background: none");
-    if ( !styles["stroked"] ) st.push( "border: none");
+    if ( !Util.get(styles, "filled") ) st.push( "background: none");
+    if ( !Util.get(styles, "stroked") ) st.push( "border: none");
         
     for (let k in styles) {
       if ( styles.hasOwnProperty(k) && k != "filled" && k != "stroked" ) {
-        let v = styles[k];
+        let v = Util.get(styles, k);
         if (v) {
-          if ( !styles["filled"] && k.indexOf('background') === 0 ) {
+          if ( !Util.get(styles, "filled") && k.indexOf('background') === 0 ) {
             continue;
-          } else if ( !styles["stroked"] && k.indexOf('border-width') === 0 ) {
+          } else if ( !Util.get(styles, "stroked") && k.indexOf('border-width') === 0 ) {
             continue;
           } else {
             st.push( `${k}: ${v}` );
@@ -629,10 +633,10 @@ export class HTMLForm extends VisualForm {
    * @param h height
    */
   static rectStyle( ctx:DOMFormContext, pt:PtLike, size:PtLike ):DOMFormContext {
-    ctx.style["left"] = pt[0]+"px"; 
-    ctx.style["top"] = pt[1]+"px"; 
-    ctx.style["width"] = size[0]+"px"; 
-    ctx.style["height"] = size[1]+"px"; 
+    Util.set(ctx.style, "left", pt[0]+"px"); 
+    Util.set(ctx.style, "top", pt[1]+"px"); 
+    Util.set(ctx.style, "width", size[0]+"px"); 
+    Util.set(ctx.style, "height", size[1]+"px"); 
     return ctx;
   }
   

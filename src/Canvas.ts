@@ -6,7 +6,7 @@ import {MultiTouchSpace} from './Space';
 import {VisualForm, Font} from "./Form";
 import {Bound} from './Bound';
 import {Pt, PtLike, GroupLike} from "./Pt";
-import {Const} from "./Util";
+import {Const, Util} from "./Util";
 
 export type CommonStyle = {
   fillStyle: string, strokeStyle:string, 
@@ -436,7 +436,7 @@ export class CanvasForm extends VisualForm {
   * @param clear optionally provide a valid color string to fill a bg color. see CanvasSpace's `clearOffscreen` function.
   */
   useOffscreen( off:boolean=true, clear:boolean|string=false ) {
-    if (clear) this._space.clearOffscreen( (typeof clear == "string") ? clear : null );
+    if (clear) this._space.clearOffscreen( (typeof clear == "string") ? clear : undefined );
     this._ctx = (this._space.hasOffscreen && off) ? this._space.offscreenCtx : this._space.ctx;
     return this;
   }
@@ -561,9 +561,10 @@ export class CanvasForm extends VisualForm {
     */
     point( p:PtLike, radius:number=5, shape:string="square" ):this {
       if (!p) return this;
-      if (!CanvasForm[shape]) throw new Error(`${shape} is not a static function of CanvasForm`);
+      const fun = Util.get(CanvasForm, shape) as any;
+      if (!fun) throw new Error(`${shape} is not a static function of CanvasForm`);
       
-      CanvasForm[shape]( this._ctx, p, radius );
+      fun( this._ctx, p, radius );
       this._paint();
       
       return this;

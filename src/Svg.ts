@@ -2,7 +2,7 @@ import {IPlayer} from './Space';
 import {VisualForm, Font} from "./Form";
 import {Bound} from './Bound';
 import {Geom} from './Num';
-import {Const} from './Util';
+import {Const, Util} from './Util';
 import {Pt, PtLike, GroupLike, Group} from './Pt';
 import {Rectangle} from "./Op";
 import {DOMSpace, DOMFormContext} from "./Dom";
@@ -176,8 +176,8 @@ export class SVGForm extends VisualForm {
    * @param v  style value
    */
   protected styleTo( k: string, v: any ) { 
-    if (this._ctx.style[k] === undefined) throw new Error(`${k} style property doesn't exist`);
-    this._ctx.style[k] = v; 
+    if (Util.get(this._ctx.style, k) === undefined) throw new Error(`${k} style property doesn't exist`);
+    Util.set(this._ctx.style, k, v); 
   }
   
 
@@ -344,16 +344,16 @@ export class SVGForm extends VisualForm {
   static style( elem:SVGElement, styles:object) {
     let st = [];
 
-    if ( !styles["filled"] ) st.push( "fill: none");
-    if ( !styles["stroked"] ) st.push( "stroke: none");
+    if ( !Util.get(styles, "filled") ) st.push( "fill: none");
+    if ( !Util.get(styles, "stroked") ) st.push( "stroke: none");
         
     for (let k in styles) {
       if ( styles.hasOwnProperty(k) && k != "filled" && k != "stroked" ) {
-        let v = styles[k];
+        let v = Util.get(styles, k);
         if (v) {
-          if ( !styles["filled"] && k.indexOf('fill') === 0 ) {
+          if ( !Util.get(styles, "filled") && k.indexOf('fill') === 0 ) {
             continue;
-          } else if ( !styles["stroked"] && k.indexOf('stroke') === 0 ) {
+          } else if ( !Util.get(styles, "stroked") && k.indexOf('stroke') === 0 ) {
             continue;
           } else {
             st.push( `${k}: ${v}` );

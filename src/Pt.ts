@@ -788,12 +788,12 @@ export class Group extends Array<Pt> {
    * @param args arguments for the function specified in ptFn
    */
   forEachPt( ptFn:string, ...args:any[] ):this {
-    if (!this[0][ptFn]) {
+    if (!Util.get(this[0], ptFn)) {
       Util.warn( `${ptFn} is not a function of Pt` );
       return this;
     }
     for (let i=0, len=this.length; i<len; i++) {
-      this[i] = this[i][ptFn]( ...args );
+      this[i] = (<any>this[i])[ptFn]( ...args );
     }
     return this;
   }

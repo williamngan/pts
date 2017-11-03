@@ -280,5 +280,15 @@ export class Util {
     return z;
   }
 
+  static set<T, S extends keyof T>(object:T, key:any, val: T[S]):void;
+  static set<T, S extends keyof T>(object:T, key:S, val: T[S]):void;
+  static set<T, S extends keyof T>(object:T, key:S, val: T[S]):void {
+    object[key] = val;
+  }
+  static get<T, S extends keyof T>(object:T, key:any):T[S];
+  static get<T, S extends keyof T>(object:T, key:S):T[S];
+  static get<T, S extends keyof T>(object:T, key:S):T[S] {
+    return object[key];
+  }
 
 }
