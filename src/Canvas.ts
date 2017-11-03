@@ -8,6 +8,10 @@ import {Bound} from './Bound';
 import {Pt, PtLike, GroupLike} from "./Pt";
 import {Const} from "./Util";
 
+export type CommonStyle = {
+  fillStyle: string, strokeStyle:string, 
+  lineWidth: number, lineJoin: string, lineCap: string,
+};
 
 export interface PtsCanvasRenderingContext2D extends CanvasRenderingContext2D {
   webkitBackingStorePixelRatio?:number;
@@ -392,7 +396,7 @@ export class CanvasForm extends VisualForm {
   /** 
   * store common styles so that they can be restored to canvas context when using multiple forms. See `reset()`.
   */
-  protected _style = {
+  protected _style: CommonStyle = {
     fillStyle: "#f03", strokeStyle:"#fff", 
     lineWidth: 1, lineJoin: "bevel", lineCap: "butt",
   };
@@ -530,7 +534,7 @@ export class CanvasForm extends VisualForm {
     reset():this {
       for (let k in this._style) {
         if (this._style.hasOwnProperty(k)) {
-          this._ctx[k] = this._style[k];
+          this._ctx[k as keyof CommonStyle] = this._style[k as keyof CommonStyle];
         }
       }
       this._font = new Font();
