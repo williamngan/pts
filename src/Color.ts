@@ -64,7 +64,7 @@ export class Color extends Pt {
 
     if (hex[0] == "#") hex = hex.substr(1); // remove '#' if needed
     if (hex.length <= 3) {
-      let fn = (i) => hex[i]||"F";
+      let fn = (i:number) => hex[i]||"F";
       hex = `${fn(0)}${fn(0)}${fn(1)}${fn(1)}${fn(2)}${fn(2)}`;
     }
 
@@ -334,7 +334,7 @@ export class Color extends Pt {
     let q = (l <= 0.5) ? l * (1 + s) : l + s - (l * s);
     let p = 2 * l - q;
 
-    let convert = (t) => {
+    let convert = (t:number) => {
       t = (t < 0) ? t + 1 : (t > 1) ? t - 1 : t;
       if (t * 6 < 1) {
         return p + (q - p) * t * 6;
@@ -567,7 +567,7 @@ export class Color extends Pt {
     // adjust for D65  
     c.divide( Color.D65 );
 
-    let fn = (n)=> ( n > 0.008856 ) ? Math.pow(n, 1/3) : (7.787 * n) + 16/116;
+    let fn = (n:number)=> ( n > 0.008856 ) ? Math.pow(n, 1/3) : (7.787 * n) + 16/116;
     let cy = fn( c[1] );
 
     let cc = Color.lab(
@@ -592,7 +592,7 @@ export class Color extends Pt {
     let x = (c[1] / 500) + y;
     let z = y - c[2]/200;
 
-    let fn = (n) => {
+    let fn = (n:number) => {
       let nnn = n*n*n;
       return ( nnn > 0.008856 ) ? nnn : ( n - 16 / 116 ) / 7.787;
     };

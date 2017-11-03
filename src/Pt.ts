@@ -254,7 +254,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
    * Convert to a unit vector, which is a normalized vector whose magnitude equals 1.
    * @param magnitude Optional: if the magnitude is known, pass it as a parameter to avoid duplicate calculation.
    */
-  unit( magnitude:number=undefined ):Pt {
+  unit( magnitude?:number ):Pt {
     Vec.unit( this, magnitude );
     return this;
   }
@@ -263,7 +263,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
   /**
    * Get a unit vector from this Pt
    */
-  $unit( magnitude:number=undefined ):Pt { return this.clone().unit( magnitude ); }
+  $unit( magnitude?:number ):Pt { return this.clone().unit( magnitude ); }
 
 
   /**
@@ -785,7 +785,7 @@ export class Group extends Array<Pt> {
    * @param ptFn string name of an existing Pt function. Note that the function must return Pt.
    * @param args arguments for the function specified in ptFn
    */
-  forEachPt( ptFn:string, ...args ):this {
+  forEachPt( ptFn:string, ...args:any[] ):this {
     if (!this[0][ptFn]) {
       Util.warn( `${ptFn} is not a function of Pt` );
       return this;
@@ -860,7 +860,7 @@ export class Group extends Array<Pt> {
    * @param idx index to zip at
    * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
    */
-  zipSlice( index:number, defaultValue:number|boolean = false ):Pt {
+  zipSlice( index:number, defaultValue:number|false = false ):Pt {
     return Mat.zipSlice( this, index, defaultValue );
   }
 
@@ -869,7 +869,7 @@ export class Group extends Array<Pt> {
    * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
    * @param useLongest If true, find the longest list of values in a Pt and use its length for zipping. Default is false, which uses the first item's length for zipping.
    */
-  $zip( defaultValue:number|boolean = undefined, useLongest=false ):Group {
+  $zip( defaultValue?:number|false, useLongest=false ):Group {
     return Mat.zip( this, defaultValue, useLongest );
   }
 

@@ -54,7 +54,7 @@ export abstract class VisualForm extends Form {
   get currentFont():Font { return this._font; }
   
   
-  protected _multiple( groups:GroupLike[], shape:string, ...rest ):this {
+  protected _multiple( groups:GroupLike[], shape:string, ...rest:any[] ):this {
     if (!groups) return this;
     for (let i=0, len=groups.length; i<len; i++) {
       this[shape]( groups[i], ...rest );

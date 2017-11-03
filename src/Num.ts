@@ -141,7 +141,7 @@ export class Num {
    * @param targetMax upper bound of the second range
    * @returns a remapped value in the second range
    */
-  static mapToRange(n:number, currA, currB, targetA, targetB) {
+  static mapToRange(n:number, currA:number, currB:number, targetA:number, targetB:number) {
     if (currA == currB) throw new Error("[currMin, currMax] must define a range that is not zero");
     let min = Math.min(targetA, targetB);
     let max = Math.max(targetA, targetB);
@@ -217,7 +217,7 @@ export class Geom {
    * @param direction "to" (subtract all Pt with this anchor base) or "from" (add all Pt from this anchor base)
    */
   static anchor( pts:GroupLike, ptOrIndex:PtLike|number=0, direction:("to"|"from")="to") {
-    let method = (direction == "to") ? "subtract" : "add";
+    let method:"subtract" | "add" = (direction == "to") ? "subtract" : "add";
     for (let i = 0, len = pts.length; i < len; i++) {
       if (typeof ptOrIndex == "number") {
         if (ptOrIndex !== i) pts[i][method](pts[ptOrIndex]);

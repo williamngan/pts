@@ -104,7 +104,7 @@ export class Vec {
   /**
    * Unit vector of `a`. If magnitude of `a` is already known, pass it in the second paramter to optimize calculation.
    */
-  static unit( a:PtLike, magnitude:number=undefined ):PtLike {
+  static unit( a:PtLike, magnitude?:number ):PtLike {
     let m = (magnitude===undefined) ? Vec.magnitude(a) : magnitude;
     if (m===0) throw new Error("Cannot calculate unit vector because magnitude is 0");
     return Vec.divide( a, m );
@@ -151,7 +151,7 @@ export class Vec {
    * Find the max value within a vector's dimensions
    * @returns an object with `value` and `index` that specifies the max value and its corresponding dimension.
    */
-  static max( a:PtLike ):{value, index} {
+  static max( a:PtLike ):{value:number, index:number} {
     let m = Number.MIN_VALUE;
     let index = 0;
     for (let i=0, len=a.length; i<len; i++) {
@@ -166,7 +166,7 @@ export class Vec {
    * Find the min value within a vector's dimensions
    * @returns an object with `value` and `index` that specifies the min value and its corresponding dimension.
    */
-  static min( a:PtLike ):{value, index} {
+  static min( a:PtLike ):{value:number, index:number} {
     let m = Number.MAX_VALUE;
     let index = 0;
     for (let i=0, len=a.length; i<len; i++) {
@@ -191,7 +191,7 @@ export class Vec {
    * Given a mapping function, update `a`'s value in each dimension
    * @returns vector `a`
    */
-  static map( a:PtLike, fn:(n:number, index:number, arr) => number ):PtLike {
+  static map( a:PtLike, fn:(n:number, index:number, arr:PtLike) => number ):PtLike {
     for (let i=0, len=a.length; i<len; i++) {
       a[i] = fn( a[i], i, a );
     }
@@ -280,7 +280,7 @@ export class Mat {
    * @param idx index to zip at
    * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
    */
-  static zipSlice( g:GroupLike|number[][], index:number, defaultValue:number|boolean = false ):Pt {
+  static zipSlice( g:GroupLike|number[][], index:number, defaultValue:number|false = false ):Pt {
     let z = [];
     for (let i=0, len=g.length; i<len; i++) {
       if (g[i].length-1 < index && defaultValue === false) throw `Index ${index} is out of bounds`;
@@ -296,7 +296,7 @@ export class Mat {
    * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
    * @param useLongest If true, find the longest list of values in a Pt and use its length for zipping. Default is false, which uses the first item's length for zipping.
    */
-  static zip( g:GroupLike|number[][], defaultValue:number|boolean = false, useLongest=false ):Group {
+  static zip( g:GroupLike|number[][], defaultValue:number|false = false, useLongest=false ):Group {
     let ps = new Group();
     let len:number = (useLongest) ? (g as Array<number[]|Pt>).reduce( (a,b) => Math.max(a, b.length), 0 ) : g[0].length;
     for (let i=0; i<len; i++) {
@@ -309,7 +309,7 @@ export class Mat {
   /**
    * Same as `zip` function
    */
-  static transpose( g:GroupLike|number[][], defaultValue:number|boolean = false, useLongest=false ):Group {
+  static transpose( g:GroupLike|number[][], defaultValue:number|false = false, useLongest=false ):Group {
     return Mat.zip( g, defaultValue, useLongest );
   }
 

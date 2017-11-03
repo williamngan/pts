@@ -16,8 +16,8 @@ export interface IPlayer {
   animateID?: string;
   animate?:AnimateFunction;
   resize?( size:IPt, evt?:Event ): undefined;
-  action?( type:string, px:number, py:number, evt:Event );
-  start?( bound:Bound, space:Space );
+  action?( type:string, px:number, py:number, evt:Event ):any;
+  start?( bound:Bound, space:Space ):any;
 }
 
 export interface ISpacePlayers { 
@@ -48,7 +48,7 @@ export abstract class Space {
   private _animID:number = -1;
   
   private _pause:boolean = false;
-  private _refresh:boolean = undefined;
+  private _refresh?:boolean = undefined;
   private _renderFunc: (context:any, self:Space) => null;
   
   protected _pointer:Pt = new Pt();
@@ -295,8 +295,8 @@ export abstract class Space {
 export type TouchPointsKey = "touches" | "changedTouches" | "targetTouches";
 
 export interface MultiTouchElement {
-  addEventListener( evt:any, callback:Function );
-  removeEventListener( evt:any, callback:Function );
+  addEventListener( evt:any, callback:Function ):void;
+  removeEventListener( evt:any, callback:Function ):void;
 }
 
 export abstract class MultiTouchSpace extends Space {

@@ -105,7 +105,7 @@ export class CanvasSpace extends MultiTouchSpace {
   * @param elem element tag name
   * @param id element id attribute
   */
-  protected _createElement( elem="div", id ) {
+  protected _createElement( elem="div", id:string ) {
     let d = document.createElement( elem );
     d.setAttribute("id", id);
     return d;
@@ -764,7 +764,7 @@ export class CanvasForm extends VisualForm {
     * A convenient way to draw some text on canvas for logging or debugging. It'll be draw on the top-left of the canvas as an overlay.
     * @param txt text
     */
-    log( txt ):this {
+    log( txt: string ):this {
       let w = this._ctx.measureText( txt ).width + 20;
       this.stroke(false).fill("rgba(0,0,0,.4)").rect( [[0,0], [w, 20]] );
       this.fill("#fff").text( [10,14], txt );   

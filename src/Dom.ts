@@ -422,7 +422,7 @@ export class HTMLForm extends VisualForm {
    * @param v  style value
    * @param unit Optional unit like 'px' to append to value
    */
-  protected styleTo( k, v, unit:string='' ) { 
+  protected styleTo( k: string, v: any, unit:string='' ) { 
     if (this._ctx.style[k] === undefined) throw new Error(`${k} style property doesn't exist`);
     this._ctx.style[k] = `${v}${unit}`; 
   }
@@ -573,7 +573,7 @@ export class HTMLForm extends VisualForm {
    * A static function to generate an ID string based on a context object
    * @param ctx a context object for an HTMLForm
    */
-  static getID( ctx ):string {
+  static getID( ctx:DOMFormContext ):string {
     return ctx.currentID || `p-${HTMLForm.domID++}`;
   }
 
@@ -788,7 +788,7 @@ export class HTMLForm extends VisualForm {
   * A convenient way to draw some text on canvas for logging or debugging. It'll be draw on the top-left of the canvas as an overlay.
   * @param txt text
   */
-  log( txt ):this {
+  log( txt: string ):this {
     this.fill("#000").stroke("#fff", 0.5).text( [10,14], txt );   
     return this;
   }

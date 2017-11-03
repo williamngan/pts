@@ -13,7 +13,7 @@ import * as _Dom from "./Dom";
 import * as _Svg from "./Svg";
 
 // A function to switch scope for Pts library. eg, Pts.scope( Pts, window );
-let namespace = ( sc:object ) => {
+let namespace = ( sc:any ) => {
   let lib = module.exports;
   for (let k in lib) {
     if (k!="namespace") {

@@ -8,8 +8,8 @@ import {Pt, PtLike, Group, GroupLike} from "./Pt";
 import {Mat} from "./LinearAlgebra";
 
 
-let _errorLength = (obj, param:number|string="expected") => Util.warn( "Group's length is less than "+param, obj  );
-let _errorOutofBound = (obj, param:number|string="") => Util.warn( `Index ${param} is out of bound in Group`, obj  );
+let _errorLength = (obj?:{}, param:number|string="expected") => Util.warn( "Group's length is less than "+param, obj  );
+let _errorOutofBound = (obj?:{}, param:number|string="") => Util.warn( `Index ${param} is out of bound in Group`, obj  );
 
 
 /**
@@ -930,7 +930,7 @@ export class Polygon {
   static area( pts:GroupLike ) {
     if (pts.length < 3) return _errorLength( new Group(), 3 );
     // determinant
-    let det = (a, b) => a[0] * b[1] - a[1] * b[0];
+    let det = (a:PtLike, b:PtLike) => a[0] * b[1] - a[1] * b[0];
 
     let area = 0;
     for (let i=0, len=pts.length; i<len; i++) {
@@ -959,7 +959,7 @@ export class Polygon {
     } 
 
     // check if is on left of ray a-b
-    let left = (a, b, c) => {
+    let left = (a:PtLike, b:PtLike, c:PtLike) => {
       return (b[0] - a[0]) * (c[1] - a[1]) - (c[0] - a[0]) * (b[1] - a[1]) > 0;
     };
     
@@ -1102,7 +1102,7 @@ export class Curve {
    */
   static controlPoints( pts:GroupLike, index:number=0, copyStart:boolean=false):Group {
     if (index > pts.length-1) return new Group();
-    let _index = (i) => (i < pts.length-1) ? i : pts.length-1;
+    let _index = (i:number) => (i < pts.length-1) ? i : pts.length-1;
 
     let p0 = pts[index];
     index = (copyStart) ? index : index+1;

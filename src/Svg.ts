@@ -73,7 +73,7 @@ export class SVGSpace extends DOMSpace {
    * @param name a string of element name,  such as `rect` or `circle`
    * @param id id attribute of the new element
    */
-  static svgElement( parent:Element, name:string, id?:string ):SVGElement {
+  static svgElement( parent:Element, name:string, id:string ):SVGElement {
     if (!parent || !parent.appendChild ) throw new Error( "parent is not a valid DOM element" );
     
     let elem = document.querySelector(`#${id}`);
@@ -175,7 +175,7 @@ export class SVGForm extends VisualForm {
    * @param k style key
    * @param v  style value
    */
-  protected styleTo( k, v ) { 
+  protected styleTo( k: string, v: any ) { 
     if (this._ctx.style[k] === undefined) throw new Error(`${k} style property doesn't exist`);
     this._ctx.style[k] = v; 
   }
@@ -320,7 +320,7 @@ export class SVGForm extends VisualForm {
    * A static function to generate an ID string based on a context object
    * @param ctx a context object for an SVGForm
    */
-  static getID( ctx ):string {
+  static getID( ctx:DOMFormContext ):string {
     return ctx.currentID || `p-${SVGForm.domID++}`;
   }
 
@@ -663,7 +663,7 @@ export class SVGForm extends VisualForm {
     * A convenient way to draw some text on canvas for logging or debugging. It'll be draw on the top-left of the canvas as an overlay.
     * @param txt text
     */
-  log( txt ):this {
+  log( txt: string ):this {
     this.fill("#000").stroke("#fff", 0.5).text( [10,14], txt );   
     return this;
   }
