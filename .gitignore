@@ -4,3 +4,4 @@ node_modules/
 temp/
 *.js.map
 .DS_Store
+dist/
