@@ -5373,7 +5373,7 @@ class Color extends Pt_1.Pt {
         if (hex[0] == "#")
             hex = hex.substr(1); // remove '#' if needed
         if (hex.length <= 3) {
-            let fn = (i) => hex[1] || "F";
+            let fn = (i) => hex[i] || "F";
             hex = `${fn(0)}${fn(0)}${fn(1)}${fn(1)}${fn(2)}${fn(2)}`;
         }
         let alpha = 1;
