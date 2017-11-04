@@ -99,7 +99,11 @@ export class CanvasSpace extends MultiTouchSpace {
     setTimeout( this._ready.bind( this, callback ), 100 );
     
     // store canvas 2d rendering context
-    this._ctx = this._canvas.getContext('2d');
+    const ctx = this._canvas.getContext('2d');
+    if (ctx === null) {
+      throw new Error('Got null 2d context. Probably context of different kind were requested earlier');
+    }
+    this._ctx = ctx;
     
   }
   
@@ -534,8 +538,8 @@ export class CanvasForm extends VisualForm {
     /**
     * Reset the rendering context's common styles to this form's styles. This supports using multiple forms on the same canvas context.
     */
-    reset():this {
-      for (let k in this._style) {
+    reset():this {      
+      for (let k in this._style) {        
         if (this._style.hasOwnProperty(k)) {
           this._ctx[k as keyof CommonStyle] = this._style[k as keyof CommonStyle];
         }
