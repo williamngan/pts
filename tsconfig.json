@@ -2,18 +2,16 @@
   "compilerOptions": {
     "target": "ES2015",
     "module": "commonjs",
-    "noImplicitAny": false,
     "sourceMap": true,
     "outDir": "./dist/files",
     "declaration": false,
     "rootDir": "src",
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "strict": true
   },
-
   "include": [
     "./src/*"
   ],
-
   "exclude": [
     "node_modules",
     "dist"
