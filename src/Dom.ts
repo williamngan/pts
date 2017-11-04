@@ -107,8 +107,8 @@ export class DOMSpace extends MultiTouchSpace {
         const start = this.players[k].start;
         if (start) {
           start( this.bound.clone(), this );
+        }
       }
-    }
     }
     
     this._pointer = this.center;
@@ -141,7 +141,7 @@ export class DOMSpace extends MultiTouchSpace {
    * Not implemented. See SVGSpace and HTMLSpace for implementation
    */
   getForm():Form {
-    return null;
+    throw new Error('getForm is not implemented for DomSpace');
   }
   
   /**
@@ -270,7 +270,7 @@ export class DOMSpace extends MultiTouchSpace {
     for (let k in styles) {
       if ( styles.hasOwnProperty(k) ) {
         this.style( k as keyof CSSStyleDeclaration, Util.get(styles, k), update );
-    }
+      }
     }
     return this;
   }
