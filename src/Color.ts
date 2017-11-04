@@ -37,7 +37,10 @@ export class Color extends Pt {
    * Create a Color. Same as creating a Pt.
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
    */
-  constructor( ...args ) {
+  constructor(length: number);
+  constructor(args: PtLike);
+  constructor(...args: number[]);
+  constructor( ...args:any[] ) {
     super( ...args );
   }
 
@@ -46,9 +49,12 @@ export class Color extends Pt {
    * Create a Color object with defaults to 4 dimensions
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
    */
-  static from( ...args ):Color {
+  static from(args: {x:number, y?: number, z?: number, w?: number}):Color;
+  static from(args: number[]):Color;
+  static from(x: number, y?: number, z?: number, w?: number):Color;
+  static from(x: any, y?: number, z?: number, w?: number):Color {
     let p = [1,1,1,1];
-    let c = Util.getArgs( args );
+    let c = Util.getArgs( [x,y,z,w] );
     for (let i=0, len=p.length; i<len; i++) {
       if (i < c.length) p[i] = c[i];
     }
@@ -68,14 +74,14 @@ export class Color extends Pt {
       hex = `${fn(0)}${fn(0)}${fn(1)}${fn(1)}${fn(2)}${fn(2)}`;
     }
 
-    let alpha = 1;
+    let alpha: number | "" = 1;
     if (hex.length === 8) {
       alpha = hex.substr(6) && 0xFF / 255;
       hex = hex.substring( 0, 6 );
     }
 
     let hexVal = parseInt( hex, 16 );
-    return new Color( hexVal >> 16, hexVal >> 8 & 0xFF, hexVal & 0xFF, alpha );
+    return new Color( hexVal >> 16, hexVal >> 8 & 0xFF, hexVal & 0xFF, alpha === ""?0:alpha );
 
   }
 
@@ -84,43 +90,64 @@ export class Color extends Pt {
    * Create RGB Color
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
-  static rgb( ...args ):Color { return Color.from( ...args ).toMode( "rgb" ); }
+  static rgb(args: {x:number, y?: number, z?: number, w?: number}):Color;
+  static rgb(args: number[]):Color;
+  static rgb(x: number, y?: number, z?: number, w?: number):Color;
+  static rgb( ...args: any[] ):Color { return Color.from( args ).toMode( "rgb" ); }
   
   /**
    * Create HSL Color
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
-  static hsl( ...args ):Color { return Color.from( ...args ).toMode( "hsl" ); }
+  static hsl(args: {x:number, y?: number, z?: number, w?: number}):Color;
+  static hsl(args: number[]):Color;
+  static hsl(x: number, y?: number, z?: number, w?: number):Color;
+  static hsl( ...args: any[] ):Color { return Color.from( args ).toMode( "hsl" ); }
 
   /**
    * Create HSB Color
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
-  static hsb( ...args ):Color { return Color.from( ...args ).toMode( "hsb" ); }
+  static hsb(args: {x:number, y?: number, z?: number, w?: number}):Color;
+  static hsb(args: number[]):Color;
+  static hsb(x: number, y?: number, z?: number, w?: number):Color;
+  static hsb( ...args: any[] ):Color { return Color.from( args ).toMode( "hsb" ); }
   
   /**
    * Create LAB Color
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
-  static lab( ...args ):Color { return Color.from( ...args ).toMode( "lab" ); }
+  static lab(args: {x:number, y?: number, z?: number, w?: number}):Color;
+  static lab(args: number[]):Color;
+  static lab(x: number, y?: number, z?: number, w?: number):Color;
+  static lab( ...args: any[] ):Color { return Color.from( args ).toMode( "lab" ); }
 
   /**
    * Create LCH Color
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
-  static lch( ...args ):Color { return Color.from( ...args ).toMode( "lch" ); }
+  static lch(args: {x:number, y?: number, z?: number, w?: number}):Color;
+  static lch(args: number[]):Color;
+  static lch(x: number, y?: number, z?: number, w?: number):Color;
+  static lch( ...args: any[] ):Color { return Color.from( args ).toMode( "lch" ); }
 
   /**
    * Create LUV Color
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
-  static luv( ...args ):Color { return Color.from( ...args ).toMode( "luv" ); }
+  static luv(args: {x:number, y?: number, z?: number, w?: number}):Color;
+  static luv(args: number[]):Color;
+  static luv(x: number, y?: number, z?: number, w?: number):Color;
+  static luv( ...args: any[] ):Color { return Color.from( args ).toMode( "luv" ); }
 
   /**
    * Create XYZ Color
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
-  static xyz( ...args ):Color { return Color.from( ...args ).toMode( "xyz" ); }
+  static xyz(args: {x:number, y?: number, z?: number, w?: number}):Color;
+  static xyz(args: number[]):Color;
+  static xyz(x: number, y?: number, z?: number, w?: number):Color;
+  static xyz( ...args: any[] ):Color { return Color.from( args ).toMode( "xyz" ); }
 
 
   /**
