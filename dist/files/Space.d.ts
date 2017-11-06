@@ -37,6 +37,7 @@ export declare abstract class Space {
     private _renderFunc;
     protected _pointer: Pt;
     protected _isReady: boolean;
+    protected _playing: boolean;
     /**
     * Set whether the rendering should be repainted on each frame
     * @param b a boolean value to set whether to repaint each frame
@@ -105,6 +106,10 @@ export declare abstract class Space {
     * Set a custom rendering `function(graphics_context, canvas_space)` if needed
     */
     customRendering: (context: any, self: Space) => null;
+    /**
+     * Get a boolean to indicate whether the animation is playing
+     */
+    readonly isPlaying: boolean;
     /**
     * Get this space's bounding box
     */

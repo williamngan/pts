@@ -23,6 +23,7 @@ export declare class CanvasSpace extends MultiTouchSpace {
     protected _offscreen: boolean;
     protected _offCanvas: HTMLCanvasElement;
     protected _offCtx: PtsCanvasRenderingContext2D;
+    protected _initialResize: boolean;
     /**
     * Create a CanvasSpace which represents a HTML Canvas Space
     * @param elem Specify an element by its "id" attribute as string, or by the element object itself. An element can be an existing `<canvas>`, or a `<div>` container in which a new `<canvas>` will be created. If left empty, a `<div id="pt_container"><canvas id="pt" /></div>` will be added to DOM. Use css to customize its appearance if needed.

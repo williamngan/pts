@@ -20,6 +20,7 @@ class Space {
         this._refresh = undefined;
         this._pointer = new Pt_1.Pt();
         this._isReady = false;
+        this._playing = false;
     }
     /**
     * Set whether the rendering should be repainted on each frame
@@ -82,6 +83,7 @@ class Space {
         }
         catch (err) {
             cancelAnimationFrame(this._animID);
+            this._playing = false;
             throw err;
         }
         return this;
@@ -99,6 +101,7 @@ class Space {
     * @param time current time
     */
     playItems(time) {
+        this._playing = true;
         // clear before draw if refresh is true
         if (this._refresh)
             this.clear();
@@ -112,6 +115,7 @@ class Space {
         // stop if time ended
         if (this._time.end >= 0 && time > this._time.end) {
             cancelAnimationFrame(this._animID);
+            this._playing = false;
         }
     }
     /**
@@ -160,6 +164,10 @@ class Space {
     */
     set customRendering(f) { this._renderFunc = f; }
     get customRendering() { return this._renderFunc; }
+    /**
+     * Get a boolean to indicate whether the animation is playing
+     */
+    get isPlaying() { return this._playing; }
     /**
     * Get this space's bounding box
     */

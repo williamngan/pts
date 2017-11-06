@@ -23,6 +23,7 @@ class CanvasSpace extends Space_1.MultiTouchSpace {
         this._autoResize = true;
         this._bgcolor = "#e1e9f0";
         this._offscreen = false;
+        this._initialResize = false;
         var _selector = null;
         var _existed = false;
         this.id = "pt";
@@ -50,6 +51,7 @@ class CanvasSpace extends Space_1.MultiTouchSpace {
             this._container = _selector;
             this._canvas = this._createElement("canvas", this.id + "_canvas");
             this._container.appendChild(this._canvas);
+            this._initialResize = true;
             // if selector is an existing canvas
         }
         else {
@@ -63,7 +65,7 @@ class CanvasSpace extends Space_1.MultiTouchSpace {
         // this.resize( Bound.fromBoundingRect(b) );
         // }
         // no mutation observer, so we set a timeout for ready event
-        setTimeout(this._ready.bind(this, callback), 50);
+        setTimeout(this._ready.bind(this, callback), 100);
         // store canvas 2d rendering context
         this._ctx = this._canvas.getContext('2d');
     }
@@ -95,6 +97,7 @@ class CanvasSpace extends Space_1.MultiTouchSpace {
             }
         }
         this._pointer = this.center;
+        this._initialResize = false; // unset
         if (callback)
             callback(this.bound, this._canvas);
     }
@@ -174,6 +177,9 @@ class CanvasSpace extends Space_1.MultiTouchSpace {
         }
         ;
         this.render(this._ctx);
+        // if it's a valid resize event and space is not playing, repaint the canvas once
+        if (evt && !this.isPlaying)
+            this.playOnce(0);
         return this;
     }
     /**
@@ -181,9 +187,13 @@ class CanvasSpace extends Space_1.MultiTouchSpace {
     * @param evt
     */
     _resizeHandler(evt) {
-        let b = (this._autoResize) ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
-        if (b)
-            this.resize(Bound_1.Bound.fromBoundingRect(b), evt);
+        let b = (this._autoResize || this._initialResize) ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
+        if (b) {
+            let box = Bound_1.Bound.fromBoundingRect(b);
+            // Need to compute offset from window scroll. See outerBound calculation in Space's _mouseAction 
+            box.center = box.center.add(window.pageXOffset, window.pageYOffset);
+            this.resize(box, evt);
+        }
     }
     /**
     * `pixelScale` property returns a number that let you determine if the screen is "retina" (when value >= 2)
