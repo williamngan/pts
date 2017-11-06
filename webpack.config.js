@@ -44,7 +44,6 @@ module.exports = {
 
   devtool: 'source-map',
 
-  watch: !prod,
   watchOptions: { poll: true }, // seems to need this for Windows Linux subsystem to watch
 
   resolve: {

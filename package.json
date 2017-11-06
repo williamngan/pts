@@ -6,7 +6,11 @@
   "types": "./dist/pts.d.ts",
   "scripts": {
     "start": "webpack --watch",
-    "build": "babel dist/pts.js --out-file dist/pts.min.js",
+    "generate-typings": "tsc -d",
+    "bundle-typings": "dts-bundle --name pts --outputAsModuleFolder true --main dist/files/**/*.d.ts --out ../pts.d.ts",
+    "typings": "npm run generate-typings && npm run bundle-typings",
+    "build": "webpack",
+    "minify": "babel dist/pts.js --out-file dist/pts.min.js",
     "test": "mocha --opts mocha.opts",
     "test:auto": "mocha --opts mocha.opts --watch"
   },
