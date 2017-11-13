@@ -1,9 +1,9 @@
-window.demoDescription = "Perlin noise demo.";
+window.demoDescription = "Using Perlin noise to animate a line and a grid. It's easy and fun.";
 
 (function() {
 
   Pts.namespace( this );
-  var space = new CanvasSpace("#pt").setup({bgcolor: "#fe3", resize: true, retina: true});
+  var space = new CanvasSpace("#pt").setup({bgcolor: "#f1f5f9", resize: true, retina: true});
   var form = space.getForm();
 
 
@@ -13,8 +13,11 @@ window.demoDescription = "Perlin noise demo.";
   let noiseGrid = [];
 
   space.add({ 
+
     start: (bound) => {
-      let ln = Create.distributeLinear( [new Pt(0, space.center.y), new Pt(space.width, space.center.y)], 50 );
+
+      // Create a line and a grid, and convert them to `Noise` points
+      let ln = Create.distributeLinear( [new Pt(0, space.center.y), new Pt(space.width, space.center.y)], 30 );
       let gd = Create.gridPts( space.innerBound, 20, 20 );
       noiseLine = Create.noisePts( ln, 0.1, 0.1 );
       noiseGrid = Create.noisePts( gd, 0.05, 0.1, 20, 20 );
@@ -22,26 +25,27 @@ window.demoDescription = "Perlin noise demo.";
 
     animate: (time, ftime) => {
 
-      let nx = (space.pointer.x / space.width)*100 + 0.01;
-      let ny = (space.pointer.y / space.height)*100 + 0.01;
+      // Use pointer position to change speed
+      let speed = space.pointer.$subtract( space.center ).divide( space.center ).abs();
 
+      // Generate noise in a grid
       noiseGrid.map( (p) => {
-        p.step( 0.0001*nx, 0.0001*ny );
-        form.point( p, Math.abs(p.noise2D()*20), "circle" );
+        p.step( 0.01*speed.x, 0.01*(1-speed.y) );
+        form.fillOnly("#123").point( p, Math.abs( p.noise2D() * space.size.x/18 ) );
       });
 
+      // Generate noise in a line
       let nps = noiseLine.map( (p) => {
-        p.step( 0.01, 0.01 );
+        p.step( 0.01*(1-speed.x), 0.05*speed.y );
         return p.$add( 0, p.noise2D()*space.center.y );
       });
 
-      form.strokeOnly("#000").line( nps );
-      form.fillOnly("#f00").points( nps, 3);
-    },
-
-    action:( type, px, py ) => {
-
-    } 
+      // Draw wave
+      nps = nps.concat( [space.size, new Pt( 0, space.size.y )] );
+      form.fillOnly("rgba(0,140,255,.65)").polygon( nps );
+      form.fill("#fff").points( nps, 2, "circle");
+    }
+  
   });
   
   //// ----

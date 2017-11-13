@@ -5934,7 +5934,10 @@ class Create {
      * @param count number of points to create
      */
     static distributeLinear(line, count) {
-        return Op_1.Line.subpoints(line, count);
+        let ln = Op_1.Line.subpoints(line, count - 2);
+        ln.unshift(line[0]);
+        ln.push(line[line.length - 1]);
+        return ln;
     }
     /**
      * Create an evenly distributed set of points (like a grid of points) inside a boundary.

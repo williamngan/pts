@@ -40,7 +40,10 @@ export class Create {
    * @param count number of points to create
    */
   static distributeLinear( line:GroupLike, count:number ):Group {
-    return Line.subpoints( line, count );
+    let ln = Line.subpoints( line, count-2 );
+    ln.unshift( line[0] );
+    ln.push( line[line.length-1] );
+    return ln;
   }
   
 
