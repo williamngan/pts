@@ -1,4 +1,4 @@
-window.demoDescription = "Using Perlin noise to animate a line and a grid. It's easy and fun.";
+window.demoDescription = "Using Perlin noise to animate a line and a grid. Move mouse or touch around the canvas to change speed.";
 
 (function() {
 
