@@ -646,6 +646,12 @@ export class Create {
             */
         static distributeRandom(bound: Bound, count: number, dimensions?: number): Group;
         /**
+            * Create a set of points that distribute evenly on a line
+            * @param line a Group representing a line
+            * @param count number of points to create
+            */
+        static distributeLinear(line: GroupLike, count: number): Group;
+        /**
             * Create an evenly distributed set of points (like a grid of points) inside a boundary.
             * @param bound the rectangular boundary
             * @param columns number of columns
@@ -669,6 +675,48 @@ export class Create {
             * @param count number of Pts to create
             */
         static radialPts(center: PtLike, radius: number, count: number): Group;
+        /**
+            * Given a group of Pts, return a new group of `Noise` Pts.
+            * @param pts a Group or an array of Pts
+            * @param dx small increment value in x dimension
+            * @param dy small increment value in y dimension
+            * @param rows Optional row count to generate 2D noise
+            * @param columns Optional column count to generate 2D noise
+            */
+        static noisePts(pts: GroupLike, dx?: number, dy?: number, rows?: number, columns?: number): Group;
+}
+/**
+    * A class to generate Perlin noise. Currently it implements a basic 2D noise. More to follow.
+    * Based on https://gist.github.com/banksean/304522
+    */
+export class Noise extends Pt {
+        protected perm: number[];
+        /**
+            * Create a Noise Pt that's capable of generating noise
+            * @param args a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
+            */
+        constructor(...args: any[]);
+        /**
+            * Set the initial noise values
+            * @param args a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
+            * @example `noise.initNoise( 0.01, 0.1 )`
+            */
+        initNoise(...args: any[]): void;
+        /**
+            * Add a small increment to the noise values
+            * @param x step in x dimension
+            * @param y step in y dimension
+            */
+        step(x?: number, y?: number): void;
+        /**
+            * Specify a seed for this Noise
+            * @param s seed value
+            */
+        seed(s: any): void;
+        /**
+            * Generate a 2D Perlin noise value
+            */
+        noise2D(): number;
 }
 
 /**
