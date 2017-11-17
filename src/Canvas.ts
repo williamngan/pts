@@ -6,8 +6,12 @@ import {MultiTouchSpace} from './Space';
 import {VisualForm, Font} from "./Form";
 import {Bound} from './Bound';
 import {Pt, PtLike, GroupLike} from "./Pt";
-import {Const} from "./Util";
+import {Const, Util} from "./Util";
 
+export type CommonStyle = {
+  fillStyle: string, strokeStyle:string, 
+  lineWidth: number, lineJoin: string, lineCap: string,
+};
 
 export interface PtsCanvasRenderingContext2D extends CanvasRenderingContext2D {
   webkitBackingStorePixelRatio?:number;
@@ -49,7 +53,7 @@ export class CanvasSpace extends MultiTouchSpace {
   constructor( elem:string|Element, callback?:Function) {
     super();
     
-    var _selector:Element = null;
+    var _selector:Element|null = null;
     var _existed = false;
     this.id = "pt";
     
@@ -57,8 +61,8 @@ export class CanvasSpace extends MultiTouchSpace {
     if ( elem instanceof Element ) {
       _selector = elem;
       this.id = "pts_existing_space";
-    } else {;
-      _selector = document.querySelector( <string>elem );
+    } else {
+      _selector = document.querySelector( elem );
       _existed = true;
       this.id = elem;
     }
@@ -81,7 +85,7 @@ export class CanvasSpace extends MultiTouchSpace {
       // if selector is an existing canvas
     } else {
       this._canvas = _selector as HTMLCanvasElement;
-      this._container = _selector.parentElement;
+      this._container = _selector.parentElement as HTMLElement;
       this._autoResize = false;
     }
     
@@ -95,7 +99,11 @@ export class CanvasSpace extends MultiTouchSpace {
     setTimeout( this._ready.bind( this, callback ), 100 );
     
     // store canvas 2d rendering context
-    this._ctx = this._canvas.getContext('2d');
+    const ctx = this._canvas.getContext('2d');
+    if (ctx === null) {
+      throw new Error('Got null 2d context. Probably context of different kind were requested earlier');
+    }
+    this._ctx = ctx;
     
   }
   
@@ -105,7 +113,7 @@ export class CanvasSpace extends MultiTouchSpace {
   * @param elem element tag name
   * @param id element id attribute
   */
-  protected _createElement( elem="div", id ) {
+  protected _createElement( elem="div", id:string ) {
     let d = document.createElement( elem );
     d.setAttribute("id", id);
     return d;
@@ -121,14 +129,17 @@ export class CanvasSpace extends MultiTouchSpace {
     
     this._isReady = true;
     
-    this._resizeHandler( null );
+    this._resizeHandler();
 
     this.clear( this._bgcolor );
     this._canvas.dispatchEvent( new Event("ready") );
     
     for (let k in this.players) {
       if (this.players.hasOwnProperty(k)) {
-        if (this.players[k].start) this.players[k].start( this.bound.clone(), this );
+        const start = this.players[k].start;
+        if (start) {
+          start( this.bound.clone(), this );
+        }
       }
     }
     
@@ -162,7 +173,7 @@ export class CanvasSpace extends MultiTouchSpace {
     if (opt.offscreen) {
       this._offscreen = true;
       this._offCanvas = this._createElement( "canvas", this.id+"_offscreen" ) as HTMLCanvasElement;
-      this._offCtx = this._offCanvas.getContext('2d');
+      this._offCtx = this._offCanvas.getContext('2d') as CanvasRenderingContext2D;
     } else {
       this._offscreen = false;
     }
@@ -237,7 +248,7 @@ export class CanvasSpace extends MultiTouchSpace {
   * Window resize handling
   * @param evt 
   */
-  protected _resizeHandler( evt:Event ) {
+  protected _resizeHandler( evt?:Event ) {
     let b = (this._autoResize || this._initialResize) ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
 
     if (b) {
@@ -392,7 +403,7 @@ export class CanvasForm extends VisualForm {
   /** 
   * store common styles so that they can be restored to canvas context when using multiple forms. See `reset()`.
   */
-  protected _style = {
+  protected _style: CommonStyle = {
     fillStyle: "#f03", strokeStyle:"#fff", 
     lineWidth: 1, lineJoin: "bevel", lineCap: "butt",
   };
@@ -429,7 +440,7 @@ export class CanvasForm extends VisualForm {
   * @param clear optionally provide a valid color string to fill a bg color. see CanvasSpace's `clearOffscreen` function.
   */
   useOffscreen( off:boolean=true, clear:boolean|string=false ) {
-    if (clear) this._space.clearOffscreen( (typeof clear == "string") ? clear : null );
+    if (clear) this._space.clearOffscreen( (typeof clear == "string") ? clear : undefined );
     this._ctx = (this._space.hasOffscreen && off) ? this._space.offscreenCtx : this._space.ctx;
     return this;
   }
@@ -527,10 +538,10 @@ export class CanvasForm extends VisualForm {
     /**
     * Reset the rendering context's common styles to this form's styles. This supports using multiple forms on the same canvas context.
     */
-    reset():this {
-      for (let k in this._style) {
+    reset():this {      
+      for (let k in this._style) {        
         if (this._style.hasOwnProperty(k)) {
-          this._ctx[k] = this._style[k];
+          this._ctx[k as keyof CommonStyle] = this._style[k as keyof CommonStyle];
         }
       }
       this._font = new Font();
@@ -553,10 +564,11 @@ export class CanvasForm extends VisualForm {
     * @example `form.point( p )`, `form.point( p, 10, "circle" )`
     */
     point( p:PtLike, radius:number=5, shape:string="square" ):this {
-      if (!p) return;
-      if (!CanvasForm[shape]) throw new Error(`${shape} is not a static function of CanvasForm`);
+      if (!p) return this;
+      const fun = Util.get(CanvasForm, shape) as any;
+      if (!fun) throw new Error(`${shape} is not a static function of CanvasForm`);
       
-      CanvasForm[shape]( this._ctx, p, radius );
+      fun( this._ctx, p, radius );
       this._paint();
       
       return this;
@@ -764,7 +776,7 @@ export class CanvasForm extends VisualForm {
     * A convenient way to draw some text on canvas for logging or debugging. It'll be draw on the top-left of the canvas as an overlay.
     * @param txt text
     */
-    log( txt ):this {
+    log( txt: string ):this {
       let w = this._ctx.measureText( txt ).width + 20;
       this.stroke(false).fill("rgba(0,0,0,.4)").rect( [[0,0], [w, 20]] );
       this.fill("#fff").text( [10,14], txt );   

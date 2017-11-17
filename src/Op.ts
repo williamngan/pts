@@ -8,8 +8,8 @@ import {Pt, PtLike, Group, GroupLike} from "./Pt";
 import {Mat} from "./LinearAlgebra";
 
 
-let _errorLength = (obj, param:number|string="expected") => Util.warn( "Group's length is less than "+param, obj  );
-let _errorOutofBound = (obj, param:number|string="") => Util.warn( `Index ${param} is out of bound in Group`, obj  );
+let _errorLength = (obj?:{}, param:number|string="expected") => Util.warn( "Group's length is less than "+param, obj  );
+let _errorOutofBound = (obj?:{}, param:number|string="") => Util.warn( `Index ${param} is out of bound in Group`, obj  );
 
 
 /**
@@ -38,7 +38,7 @@ export class Line {
    * @param p1 line's first end point
    * @param p2 line's second end point
    */
-  static slope( p1:PtLike|number[], p2:PtLike|number[] ):number {
+  static slope( p1:PtLike|number[], p2:PtLike|number[] ):number|undefined {
     return (p2[0] - p1[0] === 0) ? undefined : (p2[1] - p1[1]) / (p2[0] - p1[0]);
   }
 
@@ -49,7 +49,7 @@ export class Line {
    * @param p2 line's second end point
    * @returns an object with `slope`, `xi`, `yi` properties 
    */
-  static intercept( p1:PtLike|number[], p2:PtLike|number[] ):{ slope:number, xi:number, yi:number } {
+  static intercept( p1:PtLike|number[], p2:PtLike|number[] ):{ slope:number, xi?:number, yi:number } | undefined {
     if (p2[0] - p1[0] === 0) {
       return undefined;
     } else {
@@ -111,7 +111,7 @@ export class Line {
    * @param asProjection if true, this returns the projection vector instead. Default is false.
    * @returns a Pt on the line that is perpendicular to the target Pt, or a projection vector if `asProjection` is true.
    */
-  static perpendicularFromPt( line:GroupLike, pt:PtLike|number[], asProjection:boolean=false ):Pt {
+  static perpendicularFromPt( line:GroupLike, pt:PtLike|number[], asProjection:boolean=false ):Pt|undefined {
     if (line[0].equals(line[1])) return undefined;
     let a = line[0].$subtract( line[1] );
     let b = line[1].$subtract( pt );
@@ -127,8 +127,9 @@ export class Line {
    * @param pt a Pt
    * @see `Line.perpendicularFromPt`
    */
-  static distanceFromPt( line:GroupLike, pt:PtLike|number[] ):number {
-    return Line.perpendicularFromPt( line, pt, true ).magnitude();
+  static distanceFromPt( line:GroupLike, pt:PtLike|number[] ):number|undefined {
+    const pp = Line.perpendicularFromPt( line, pt, true );
+    return pp === undefined? pp : pp.magnitude();
   }
 
 
@@ -138,7 +139,7 @@ export class Line {
    * @param lb a Group of 2 Pts representing a ray
    * @returns an intersection Pt or undefined if no intersection
    */
-  static intersectRay2D( la:GroupLike, lb:GroupLike ):Pt {
+  static intersectRay2D( la:GroupLike, lb:GroupLike ):Pt|undefined {
 
     let a = Line.intercept( la[0], la[1] );
     let b = Line.intercept( lb[0], lb[1] );
@@ -180,7 +181,7 @@ export class Line {
    * @param lb a Group of 2 Pts representing a line segment
    * @returns an intersection Pt or undefined if no intersection
    */
-  static intersectLine2D( la:GroupLike, lb:GroupLike ):Pt {
+  static intersectLine2D( la:GroupLike, lb:GroupLike ):Pt|undefined {
     let pt = Line.intersectRay2D( la, lb );
     return ( pt && Geom.withinBound( pt, la[0], la[1] ) && Geom.withinBound(pt, lb[0], lb[1]) ) ? pt : undefined;
   }
@@ -192,7 +193,7 @@ export class Line {
    * @param ray a Group of 2 Pts representing a ray
    * @returns an intersection Pt or undefined if no intersection
    */
-  static intersectLineWithRay2D( line:GroupLike, ray:GroupLike ):Pt {
+  static intersectLineWithRay2D( line:GroupLike, ray:GroupLike ):Pt|undefined {
     let pt = Line.intersectRay2D( line, ray );
     return ( pt && Geom.withinBound( pt, line[0], line[1] )) ? pt : undefined;
   }
@@ -204,7 +205,7 @@ export class Line {
    * @param poly a Group of Pts representing a polygon
    * @param sourceIsRay a boolean value to treat the line as a ray (infinite line). Default is `false`.
    */
-  static intersectPolygon2D( lineOrRay:GroupLike, poly:GroupLike[], sourceIsRay:boolean=false ):Group {
+  static intersectPolygon2D( lineOrRay:GroupLike, poly:GroupLike[], sourceIsRay:boolean=false ):Group|undefined {
     let fn = sourceIsRay ? Line.intersectLineWithRay2D : Line.intersectLine2D; 
     let pts = new Group();
     for (let i=0, len=poly.length; i<len; i++) {
@@ -744,7 +745,11 @@ export class Triangle {
   static altitude( pts:GroupLike, index:number ):Group {
     let opp = Triangle.oppositeSide( pts, index );
     if (opp.length > 1) {
-      return new Group( pts[index], Line.perpendicularFromPt( opp, pts[index] ) ); 
+      const pp = Line.perpendicularFromPt( opp, pts[index] );
+      if (pp !== undefined) {
+        return new Group( pts[index],  pp);
+      } 
+        return new Group(pts[index]); 
     } else {
       return new Group();
     }
@@ -755,7 +760,7 @@ export class Triangle {
    * @param pts a Group of Pts
    * @returns the orthocenter as a Pt
    */
-  static orthocenter( pts:GroupLike ):Pt {
+  static orthocenter( pts:GroupLike ):Pt|undefined {
     if (pts.length < 3) return _errorLength( undefined, 3 );
     let a = Triangle.altitude( pts, 0 );
     let b = Triangle.altitude( pts, 1 );
@@ -769,9 +774,9 @@ export class Triangle {
    */
   static incenter( pts:GroupLike ):Pt {
     if (pts.length < 3) return _errorLength( undefined, 3 );
-    let a = Polygon.bisector( pts, 0 ).add( pts[0] );
-    let b = Polygon.bisector( pts, 1 ).add( pts[1] );
-    return Line.intersectRay2D( new Group(pts[0], a), new Group(pts[1], b) );
+    let a = Polygon.bisector( pts, 0 )!.add( pts[0] );
+    let b = Polygon.bisector( pts, 1 )!.add( pts[1] );
+    return Line.intersectRay2D( new Group(pts[0], a), new Group(pts[1], b) )!;
   }
 
   /**
@@ -796,7 +801,7 @@ export class Triangle {
     let md = Triangle.medial( pts );
     let a = [ md[0], Geom.perpendicular( pts[0].$subtract( md[0] )).p1.$add( md[0] ) ];
     let b = [ md[1], Geom.perpendicular( pts[1].$subtract( md[1] )).p1.$add( md[1] ) ];
-    return Line.intersectRay2D( a, b );
+    return Line.intersectRay2D( a, b )!;
   } 
 
   /**
@@ -884,7 +889,7 @@ export class Polygon {
    * @param closePath a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).
    * @returns a bisector Pt that's a normalized unit vector
    */
-  static bisector( pts:GroupLike, index:number ):Pt {
+  static bisector( pts:GroupLike, index:number ):Pt|undefined {
     
     let sides = Polygon.adjacentSides( pts, index, true );
     if (sides.length >= 2) {
@@ -930,7 +935,7 @@ export class Polygon {
   static area( pts:GroupLike ) {
     if (pts.length < 3) return _errorLength( new Group(), 3 );
     // determinant
-    let det = (a, b) => a[0] * b[1] - a[1] * b[0];
+    let det = (a:PtLike, b:PtLike) => a[0] * b[1] - a[1] * b[0];
 
     let area = 0;
     for (let i=0, len=pts.length; i<len; i++) {
@@ -959,7 +964,7 @@ export class Polygon {
     } 
 
     // check if is on left of ray a-b
-    let left = (a, b, c) => {
+    let left = (a:PtLike, b:PtLike, c:PtLike) => {
       return (b[0] - a[0]) * (c[1] - a[1]) - (c[0] - a[0]) * (b[1] - a[1]) > 0;
     };
     
@@ -1102,7 +1107,7 @@ export class Curve {
    */
   static controlPoints( pts:GroupLike, index:number=0, copyStart:boolean=false):Group {
     if (index > pts.length-1) return new Group();
-    let _index = (i) => (i < pts.length-1) ? i : pts.length-1;
+    let _index = (i:number) => (i < pts.length-1) ? i : pts.length-1;
 
     let p0 = pts[index];
     index = (copyStart) ? index : index+1;

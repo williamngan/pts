@@ -6,12 +6,17 @@ import {Util, Const} from "./Util";
 import {Geom, Num} from "./Num";
 import {Vec, Mat} from "./LinearAlgebra";
 
+export type Axis = "xy" | "yz" | "xz" |"xyz";
 
 export interface IPt {
   x?:number;
   y?:number;
   z?:number;
   w?:number;
+  ["x"]?: number;
+  ["y"]?: number;
+  ["z"]?: number;
+  ["w"]?: number;
 }
 
 export var PtBaseArray = Float32Array;
@@ -34,7 +39,11 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
    * @example `new Pt()`, `new Pt(1,2,3,4,5)`, `new Pt([1,2])`, `new Pt({x:0, y:1})`, `new Pt(pt)`
    * @param args a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
    */
-  constructor(...args) {
+    constructor(length: number);
+    constructor(args: PtLike);
+    constructor(arg: {x:number, y?: number, z?:number, w?:number});
+    constructor(...args: number[]);
+    constructor(...args: any[]) {
     if (args.length === 1 && typeof args[0] == "number") {
       super( args[0] ); // init with the TypedArray's length. Needed this in order to make ".map", ".slice" etc work.
     } else {
@@ -65,8 +74,8 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
   set y( n:number ) { this[1] = n; }
   set z( n:number ) { this[2] = n; }
   set w( n:number ) { this[3] = n; }
-  
 
+  
   /**
    * Clone this Pt
    */
@@ -92,7 +101,10 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
    * Update the values of this Pt
    * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
    */
-  to( ...args ):this {
+  to(x:number, y?: number, z?:number, w?:number):this;
+  to(arg: {x:number, y?: number, z?:number, w?:number}):this;
+  to(arg:PtLike):this;
+  to( ...args: any[] ):this {
     let p = Util.getArgs( args );
     for (let i=0, len=Math.min(this.length, p.length); i<len; i++) {
       this[i] = p[i];
@@ -105,8 +117,11 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
    * Like `to()` but returns a new Pt
    * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
    */
-  $to( ...args ):Pt {
-    return this.clone().to( ...args );
+  $to(x:number, y?: number, z?:number, w?:number):this;
+  $to(arg: {x:number, y?: number, z?:number, w?:number}):this;
+  $to(arg:PtLike):this;
+  $to( ...args: any[] ):Pt {
+    return this.clone().to( args );
   }
 
 
@@ -154,12 +169,13 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
 
   /**
    * Take specific dimensional values from this Pt and create a new Pt
-   * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
+   * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions   
    */
-  $take( axis:string|number[] ):Pt {
+  $take( axis:Axis|number[] ):Pt {
     let p = [];
     for (let i=0, len=axis.length; i<len; i++) {
-      p.push( this[axis[i]] || 0 );
+      const indexer = axis[i] as "x"|"y"|"z"|number;
+      p.push( this[indexer] || 0 );
     }
     return new Pt(p);
   }
@@ -169,7 +185,10 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
    * Concatenate this Pt with addition dimensional values and return as a new Pt
    * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
    */
-  $concat( ...args ):Pt {
+  $concat(x:number, y?: number, z?:number, w?:number):Pt;
+  $concat(arg: {x:number, y?: number, z?:number, w?:number}):Pt;
+  $concat(arg:PtLike):Pt;
+  $concat( ...args:any[] ):Pt {
     return new Pt( this.toArray().concat( Util.getArgs( args ) ) );
   }
 
@@ -178,7 +197,11 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
    * Add scalar or vector values to this Pt
    * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
    */
-  add(...args): this { 
+  add(x:number, y?: number, z?:number, w?:number):this;
+  add(arg: {x:number, y?: number, z?:number, w?:number}):this;
+  add(arg:PtLike):this;
+  add(...input: any[]): this { 
+    const args = Util.getArgs(input);
     (args.length === 1 && typeof args[0] == "number") ? Vec.add( this, args[0] ) : Vec.add( this, Util.getArgs(args) );
     return this; 
   }
@@ -187,14 +210,21 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
   /**
    * Like `add`, but returns result as a new Pt
    */
-  $add(...args): Pt { return this.clone().add(...args); }
+  $add(x:number, y?: number, z?:number, w?:number):Pt;
+  $add(arg: {x:number, y?: number, z?:number, w?:number}):Pt;
+  $add(arg:PtLike):Pt;
+  $add(...args:any[]): Pt { return this.clone().add(args); }
 
 
   /**
    * Subtract scalar or vector values from this Pt
    * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
    */
-  subtract(...args): this { 
+  subtract(x:number, y?: number, z?:number, w?:number):this;
+  subtract(arg: {x:number, y?: number, z?:number, w?:number}):this;
+  subtract(arg:PtLike):this;
+  subtract(...input: any[]): this { 
+    const args = Util.getArgs(input);
     (args.length === 1 && typeof args[0] == "number") ? Vec.subtract( this, args[0] ) : Vec.subtract( this, Util.getArgs(args) );
     return this; 
   }
@@ -203,14 +233,21 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
   /**
    * Like `subtract`, but returns result as a new Pt
    */
-  $subtract(...args): Pt { return this.clone().subtract(...args); }
+  $subtract(x:number, y?: number, z?:number, w?:number):Pt;
+  $subtract(arg: {x:number, y?: number, z?:number, w?:number}):Pt;
+  $subtract(arg:PtLike):Pt;
+  $subtract(...args: any[]): Pt { return this.clone().subtract(args); }
 
 
   /**
    * Multiply scalar or vector values (as element-wise) with this Pt.
    * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
    */
-  multiply(...args): this { 
+  multiply(x:number, y?: number, z?:number, w?:number):this;
+  multiply(arg: {x:number, y?: number, z?:number, w?:number}):this;
+  multiply(arg:PtLike):this;
+  multiply(...input: any[]): this { 
+    const args = Util.getArgs(input);        
     (args.length === 1 && typeof args[0] == "number") ? Vec.multiply( this, args[0] ) : Vec.multiply( this, Util.getArgs(args) );
     return this;
   }
@@ -219,14 +256,21 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
   /**
    * Like `multiply`, but returns result as a new Pt
    */
-  $multiply(...args): Pt { return this.clone().multiply(...args); }
+  $multiply(x:number, y?: number, z?:number, w?:number):Pt;
+  $multiply(arg: {x:number, y?: number, z?:number, w?:number}):Pt;
+  $multiply(arg:PtLike):Pt;
+  $multiply(...args: any[]): Pt { return this.clone().multiply(args); }
 
 
   /**
    * Divide this Pt over scalar or vector values (as element-wise)
    * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
    */
-  divide(...args): this { 
+  divide(x:number, y?: number, z?:number, w?:number):this;
+  divide(arg: {x:number, y?: number, z?:number, w?:number}):this;
+  divide(arg:PtLike):this;
+  divide(...input: any[]): this { 
+    const args = Util.getArgs(input);    
     (args.length === 1 && typeof args[0] == "number") ? Vec.divide( this, args[0] ) : Vec.divide( this, Util.getArgs(args) );
     return this; 
   }
@@ -235,7 +279,10 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
   /**
    * Like `divide`, but returns result as a new Pt
    */
-  $divide(...args): Pt { return this.clone().divide(...args); }
+  $divide(x:number, y?: number, z?:number, w?:number):Pt;
+  $divide(arg: {x:number, y?: number, z?:number, w?:number}):Pt;
+  $divide(arg:PtLike):Pt;
+  $divide(...args: any[]): Pt { return this.clone().divide(args); }
 
 
   /**
@@ -254,7 +301,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
    * Convert to a unit vector, which is a normalized vector whose magnitude equals 1.
    * @param magnitude Optional: if the magnitude is known, pass it as a parameter to avoid duplicate calculation.
    */
-  unit( magnitude:number=undefined ):Pt {
+  unit( magnitude?:number ):Pt {
     Vec.unit( this, magnitude );
     return this;
   }
@@ -263,21 +310,27 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
   /**
    * Get a unit vector from this Pt
    */
-  $unit( magnitude:number=undefined ):Pt { return this.clone().unit( magnitude ); }
+  $unit( magnitude?:number ):Pt { return this.clone().unit( magnitude ); }
 
 
   /**
    * Dot product of this Pt and another Pt
    * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
    */
-  dot( ...args ):number { return Vec.dot( this, Util.getArgs(args) ); }
+  dot(x:number, y?: number, z?:number, w?:number):number;
+  dot(arg: {x:number, y?: number, z?:number, w?:number}):number;
+  dot(arg:PtLike):number;
+  dot( ...args:any[] ):number { return Vec.dot( this, Util.getArgs(args) ); }
 
 
   /**
    * 3D Cross product of this Pt and another Pt. Return results as a new Pt.
    * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
    */
-  $cross( ...args ): Pt { return Vec.cross( this, Util.getArgs( args ) ); }
+  $cross(x:number, y?: number, z?:number, w?:number):Pt;
+  $cross(arg: {x:number, y?: number, z?:number, w?:number}):Pt;
+  $cross(arg:PtLike):Pt;
+  $cross( ...args:any[] ): Pt { return Vec.cross( this, Util.getArgs( args ) ); }
 
 
   /**
@@ -383,7 +436,10 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
    * Get a new Pt that has the minimum dimensional values of this Pt and another Pt
    * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
    */
-  $min( ...args ):Pt {
+  $min(x:number, y?: number, z?:number, w?:number):Pt;
+  $min(arg: {x:number, y?: number, z?:number, w?:number}):Pt;
+  $min(arg:PtLike):Pt;
+  $min( ...args: any[] ):Pt {
     let p = Util.getArgs( args );
     let m = this.clone();
     for (let i=0, len=Math.min( this.length, p.length ); i<len; i++) {
@@ -397,7 +453,10 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
    * Get a new Pt that has the maximum dimensional values of this Pt and another Pt
    * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
    */
-  $max( ...args ):Pt {
+  $max(x:number, y?: number, z?:number, w?:number):Pt;
+  $max(arg: {x:number, y?: number, z?:number, w?:number}):Pt;
+  $max(arg:PtLike):Pt;
+  $max( ...args: any[] ):Pt {
     let p = Util.getArgs( args );
     let m = this.clone();
     for (let i=0, len=Math.min( this.length, p.length ); i<len; i++) {
@@ -411,8 +470,8 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
    * Get angle of this vector from origin
    * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
    */
-  angle( axis:string|number[]=Const.xy ):number {
-    return Math.atan2( this[axis[1]], this[axis[0]] );
+  angle( axis:Axis|number[]=Const.xy ):number {
+    return Math.atan2( this[axis[1] as "x"|"y"|"z"|number], this[axis[0] as "x"|"y"|"z"|number] );
   }
 
 
@@ -421,7 +480,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
    * @param p the other Pt
    * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
    */
-  angleBetween( p:Pt, axis:string|number[]=Const.xy ):number {
+  angleBetween( p:Pt, axis:Axis|number[]=Const.xy ):number {
     return Geom.boundRadian( this.angle(axis) ) - Geom.boundRadian( p.angle(axis) );
   }
 
@@ -443,7 +502,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
    * @param anchor optional anchor point to scale from
    * @param axis optional string such as "yz" to specify a 2D plane
    */
-  rotate2D( angle:number, anchor?:PtLike, axis?:string ) {    
+  rotate2D( angle:number, anchor?:PtLike, axis?:Axis ) {    
     Geom.rotate2D( this, angle, anchor || Pt.make( this.length, 0), axis );
     return this;
   }
@@ -455,7 +514,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
    * @param anchor optional anchor point to scale from
    * @param axis optional string such as "yz" to specify a 2D plane
    */
-  shear2D( scale:number|number[]|PtLike, anchor?:PtLike, axis?:string) {
+  shear2D( scale:number|number[]|PtLike, anchor?:PtLike, axis?:Axis) {
     Geom.shear2D( this, scale, anchor || Pt.make( this.length, 0), axis );
     return this;
   }
@@ -466,7 +525,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
    * @param line a Group of 2 Pts that defines a line for reflection
    * @param axis optional axis such as "yz" to define a 2D plane of reflection
    */
-  reflect2D( line:GroupLike, axis?:string):this {
+  reflect2D( line:GroupLike, axis?:Axis):this {
     Geom.reflect2D( this, line, axis );
     return this;
   }
@@ -701,15 +760,21 @@ export class Group extends Array<Pt> {
    * Move every Pt's position by a specific amount. Same as `add`.
    * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
    */
-  moveBy( ...args ):this {
-    return this.add( ...args );
+  moveBy(x:number, y?: number, z?:number, w?:number):this;
+  moveBy(arg: {x:number, y?: number, z?:number, w?:number}):this;
+  moveBy(arg:PtLike):this;
+  moveBy( ...args: any[] ):this {
+    return this.add( args );
   }
 
   /**
    * Move the first Pt in this group to a specific position, and move all the other Pts correspondingly
    * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
    */
-  moveTo( ...args ):this {
+  moveTo(x:number, y?: number, z?:number, w?:number):this;
+  moveTo(arg: {x:number, y?: number, z?:number, w?:number}):this;
+  moveTo(arg:PtLike):this;
+  moveTo( ...args: any[] ):this {
     let d = new Pt( Util.getArgs(args) ).subtract( this[0] );
     this.moveBy( d );
     return this; 
@@ -735,7 +800,7 @@ export class Group extends Array<Pt> {
    * @param anchor optional anchor point to scale from
    * @param axis optional string such as "yz" to specify a 2D plane
    */
-  rotate2D( angle:number, anchor?:PtLike, axis?:string ):this {   
+  rotate2D( angle:number, anchor?:PtLike, axis?:Axis ):this {   
     for (let i=0, len=this.length; i<len; i++) {
       Geom.rotate2D( this[i], angle, anchor || this[0], axis );
     } 
@@ -749,7 +814,7 @@ export class Group extends Array<Pt> {
    * @param anchor optional anchor point to scale from
    * @param axis optional string such as "yz" to specify a 2D plane
    */
-  shear2D( scale:number|number[]|PtLike, anchor?:PtLike, axis?:string):this {
+  shear2D( scale:number|number[]|PtLike, anchor?:PtLike, axis?:Axis):this {
     for (let i=0, len=this.length; i<len; i++) {
       Geom.shear2D( this[i], scale, anchor || this[0], axis );
     }
@@ -762,7 +827,7 @@ export class Group extends Array<Pt> {
    * @param line a Group of 2 Pts that defines a line for reflection
    * @param axis optional axis such as "yz" to define a 2D plane of reflection
    */
-  reflect2D( line:GroupLike, axis?:string):this {
+  reflect2D( line:GroupLike, axis?:Axis):this {
     for (let i=0, len=this.length; i<len; i++) {
       Geom.reflect2D( this[i], line, axis );
     }
@@ -785,13 +850,13 @@ export class Group extends Array<Pt> {
    * @param ptFn string name of an existing Pt function. Note that the function must return Pt.
    * @param args arguments for the function specified in ptFn
    */
-  forEachPt( ptFn:string, ...args ):this {
-    if (!this[0][ptFn]) {
+  forEachPt( ptFn:string, ...args:any[] ):this {
+    if (!Util.get(this[0], ptFn)) {
       Util.warn( `${ptFn} is not a function of Pt` );
       return this;
     }
     for (let i=0, len=this.length; i<len; i++) {
-      this[i] = this[i][ptFn]( ...args );
+      this[i] = (<any>this[i])[ptFn]( ...args );
     }
     return this;
   }
@@ -801,7 +866,10 @@ export class Group extends Array<Pt> {
    * Add scalar or vector values to this group's Pts.
    * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
    */
-  add( ...args ):this {
+  add(x:number, y?: number, z?:number, w?:number):this;
+  add(arg: {x:number, y?: number, z?:number, w?:number}):this;
+  add(arg:PtLike):this;
+  add( ...args:any[] ):this {
     return this.forEachPt( "add", ...args );
   }
 
@@ -810,7 +878,10 @@ export class Group extends Array<Pt> {
    * Subtract scalar or vector values from this group's Pts.
    * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
    */
-  subtract( ...args ):this {
+  subtract(x:number, y?: number, z?:number, w?:number):this;
+  subtract(arg: {x:number, y?: number, z?:number, w?:number}):this;
+  subtract(arg:PtLike):this;
+  subtract( ...args:any[] ):this {
     return this.forEachPt( "subtract", ...args );
   }
 
@@ -819,7 +890,10 @@ export class Group extends Array<Pt> {
    * Multiply scalar or vector values (as element-wise) with this group's Pts.
    * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
    */
-  multiply( ...args ):this {
+  multiply(x:number, y?: number, z?:number, w?:number):this;
+  multiply(arg: {x:number, y?: number, z?:number, w?:number}):this;
+  multiply(arg:PtLike):this;
+  multiply( ...args:any[] ):this {
     return this.forEachPt( "multiply", ...args );
   }
   
@@ -828,7 +902,10 @@ export class Group extends Array<Pt> {
    * Divide this group's Pts over scalar or vector values (as element-wise)
    * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
    */
-  divide( ...args ):this {
+  divide(x:number, y?: number, z?:number, w?:number):this;
+  divide(arg: {x:number, y?: number, z?:number, w?:number}):this;
+  divide(arg:PtLike):this;
+  divide( ...args:any[] ):this {
     return this.forEachPt( "divide", ...args );
   }
 
@@ -860,7 +937,7 @@ export class Group extends Array<Pt> {
    * @param idx index to zip at
    * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
    */
-  zipSlice( index:number, defaultValue:number|boolean = false ):Pt {
+  zipSlice( index:number, defaultValue:number|false = false ):Pt {
     return Mat.zipSlice( this, index, defaultValue );
   }
 
@@ -869,7 +946,7 @@ export class Group extends Array<Pt> {
    * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
    * @param useLongest If true, find the longest list of values in a Pt and use its length for zipping. Default is false, which uses the first item's length for zipping.
    */
-  $zip( defaultValue:number|boolean = undefined, useLongest=false ):Group {
+  $zip( defaultValue?:number|false, useLongest=false ):Group {
     return Mat.zip( this, defaultValue, useLongest );
   }
 

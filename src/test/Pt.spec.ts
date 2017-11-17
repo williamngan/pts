@@ -1,26 +1,21 @@
-import chai = require('chai');
-import mocha = require('mocha');
+import 'mocha';
+import { assert } from 'chai';
 import {Pt, Group} from '../Pt';
 import {Geom, Num} from '../Num';
-import {Util} from '../Util';
-
-var {assert} = chai;
-var {describe, it} = mocha;
-
 
 describe('Pt: ', () => {
 
   describe('Pt Constructor: ', () => {
     it('can init multi-dimensions', () => {
-      assert.equal( 6, new Pt(1,2,3,4,5,6).length )
+      assert.equal( 6, new Pt(1,2,3,4,5,6).length );
     });
 
     it('can init with length argument', () => {
-      assert.equal( 10, new Pt(10).length )
+      assert.equal( 10, new Pt(10).length );
     });
 
     it('can init in 1 dimensions', () => {
-      assert.equal( 1, new Pt([10]).length )
+      assert.equal( 1, new Pt([10]).length );
     });
 
     it('should init with positional arguments', () => {
@@ -90,14 +85,15 @@ describe('Pt: ', () => {
     });
 
     it('can apply operations with op', () => {
+      let p = new Pt(3,4,5);
+      
       let f1 = (a:Pt):Pt => a.$add(1);
       let f2 = (b:Pt, n:number):Pt => p.$multiply(n);
       
-      let p = new Pt(3,4,5);
       let pf1 = p.op( f1 );
       let pf2 = pf1().op( f2 );
       let r1 = pf2(2);
-      let r2 = r1.op( (p:Pt) => p.$multiply(3) ); 
+      let r2 = r1.op( (pp:Pt) => pp.$multiply(3) ); 
 
       assert.isTrue( r2().equals( new Pt(18, 24, 30) ) );
     });
@@ -106,14 +102,14 @@ describe('Pt: ', () => {
       let p = new Pt(1,2,3);
       let ops = p.ops([ (a:Pt):Pt => a.$add(1,2,3), (b:Pt, n:number):Pt => p.$multiply(n) ]);
       let q = ops[0]().$add( ops[1](3) );
-      assert.equal( q.z, 15 )
+      assert.equal( q.z, 15 );
     });
 
     it('can map to a function', () => {
       let p = new Pt(5,7,12).map( (n:number, i:number, list) => {
         return n*10+2;
       });
-      assert.isTrue( (p as Pt).equals( new Pt(52, 72, 122) ) )
+      assert.isTrue( (p as Pt).equals( new Pt(52, 72, 122) ) );
     });
 
     it('can take specific dimensions', () => {
@@ -135,7 +131,7 @@ describe('Pt: ', () => {
       let p = new Pt([1,2,3,4,5,6]);
       let d = 0;
       for (let k of p) {
-        d += k
+        d += k;
       }
       assert.equal( d, 21 );
     });
@@ -143,62 +139,62 @@ describe('Pt: ', () => {
     it('can concat with another Pt or array', () => {
       let p = new Pt(1,2,3).$concat(2,3).$concat(new Pt(10, 20, 30, 40));
       assert.equal( p.length, 9 );
-    })
+    });
 
     it('can get a slice of values', () => {
       let p = new Pt(1,2,3,4,5,6);
       assert.isTrue( (p.slice(2,5) as Pt).equals( new Pt(3,4,5) ) );
-    })
+    });
 
     it('can get a normalized unit vector', () => {
       let p = new Pt(123,3453,293);
       assert.isTrue( Math.abs(p.unit().magnitude()-1) < 0.00001 );
-    })
+    });
 
     it('can calculate dot product', () => {
       let p = new Pt(1,2,3,4).dot( 10,9,8,7 );
       assert.equal( p, 80 );
-    })
+    });
 
     it('can calculate projection', () => {
       let p = new Pt(1, 2).$project(new Pt(-4, 1)).equals( new Pt(-2/5, -4/5), 0.001 );
       assert.isTrue( p );
-    })
+    });
 
     it('can calculate cross product', () => {
       let p = new Pt(3, -3, 1).$cross( new Pt(4, 9, 2) );
       assert.isTrue( p.equals( new Pt(-15, -2, 39) ));
-    })
+    });
 
     it('can calculate abs', () => {
       let p = new Pt(3, -3, 1).$abs();
       assert.isTrue( p.equals( new Pt(3,3,1) ));
-    })
+    });
 
     it('can calculate angle', () => {
       let p = new Pt(0.5, 0.9, 0.8).angle('yz');
       assert.isTrue( Math.abs(p-0.7266) < 0.0001);
-    })
+    });
 
     it('can calculate angle between two Pt', () => {
       let p = new Pt(0.5, 0.9, 0.8).angleBetween( new Pt(0.7, 0.5) );
       assert.isTrue( Math.abs(p-0.4434) < 0.0001);
-    })
+    });
 
     it('can move to a new direction', () => {
       let p = new Pt(10,0).toAngle( Math.PI/2  );
       assert.isTrue( Math.abs(p.x-0) < 0.00001 && Math.abs(p.y-10) < 0.00001);
-    })
+    });
 
     it('can find minimum point', () => {
       let p = new Pt(3, -3, 1, -10).$min( new Pt(4, 9, -2, 0) );
       assert.isTrue( p.equals( new Pt(3, -3, -2, -10) ));
-    })
+    });
 
     it('can find maximum point', () => {
       let p = new Pt(3, -3, 1, -10).$max( new Pt(4, 9, -2, 0) );
       assert.isTrue( p.equals( new Pt(4, 9, 1, 0) ));
-    })
+    });
     
   });
 
@@ -224,19 +220,19 @@ describe('Pt: ', () => {
     it('can split into an array of subgroups', function() {
       let p = Group.fromArray( [[1,2],[3,4],[5,6],[7,8],[9,10]] );
       let sp = p.split(2);
-      assert.isTrue( sp.length == 2 && sp[1][1].y == 8 )
+      assert.isTrue( sp.length == 2 && sp[1][1].y == 8 );
     });
 
     it('can split into an array of subgroups with stride', function() {
       let p = Group.fromArray( [[1,2],[3,4],[5,6],[7,8],[9,10]] );
       let sp = p.split(4,1);
-      assert.isTrue( sp.length == 2 && sp[1][3].y == 10 )
+      assert.isTrue( sp.length == 2 && sp[1][3].y == 10 );
     });
 
     it('can insert another group into a specific position', function() {
       let a = Group.fromArray( [[1,2],[3,4],[5,6]] );
       let b = Group.fromArray( [[7,8],[9,10]] );
-      a.insert( new Group(new Pt(7,8), new Pt(9,10)), 1 );
+      a.insert( b, 1 );
       assert.isTrue( a.length == 5 && a[1].y == 8);
     });
 
@@ -335,12 +331,12 @@ describe('Pt: ', () => {
     
     it('can zip one slice', function() {
       let p = new Group( new Pt(1,3,5,7), new Pt(2,4,6,8), new Pt(5,10,15,20) ).zipSlice( 2 );
-      assert.isTrue( p.equals( new Pt(5,6,15) ) )
+      assert.isTrue( p.equals( new Pt(5,6,15) ) );
     });
 
     it('can zip one slice with default', function() {
       let p = new Group(new Pt(1), new Pt(2,4,6), new Pt(5,10)).zipSlice( 2, -1 );
-      assert.isTrue( p.equals( new Pt(-1, 6, -1) ) )
+      assert.isTrue( p.equals( new Pt(-1, 6, -1) ) );
     });
 
     it('can zip an array of Pt', function() {
@@ -402,8 +398,7 @@ describe('Pt: ', () => {
 
       it('can reflect a group in 2D', function() {
         let ps = new Group( new Pt(218, 454), new Pt( 218, 404) );
-        let reflect = Group.fromArray( [[230, 497], [268, 454]] )
-        let scale = [-0.5154185022026432, 0];
+        let reflect = Group.fromArray( [[230, 497], [268, 454]] );
         ps.reflect2D( reflect );
         assert.isTrue( Num.equals(ps[0].x, 274.14938) &&  Num.equals(ps[1].y, 497.4710) );
       });

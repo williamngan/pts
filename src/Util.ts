@@ -8,7 +8,76 @@ import {Group} from "./Pt";
 /**
  * Various constant values for enumerations and calculations
  */
-export const Const = {
+export const Const: {
+  xy: "xy",
+  yz: "yz",
+  xz: "xz",
+  xyz: "xyz",
+
+  horizontal: number,
+  vertical: number,
+
+  /* represents identical point or value */
+  identical: number,
+
+  /* represents right position or direction */
+  right: number,
+
+  /* represents bottom right position or direction */
+  bottom_right: number,
+
+  /* represents bottom position or direction */
+  bottom: number,
+
+  /* represents bottom left position or direction */
+  bottom_left: number,
+
+  /* represents left position or direction */
+  left: number,
+
+  /* represents top left position or direction */
+  top_left: number,
+
+  /* represents top position or direction */
+  top: number,
+
+  /* represents top right position or direction */
+  top_right: number,
+
+  /* represents an arbitrary very small number. It is set as 0.0001 here. */
+  epsilon : number,
+
+  /* pi radian (180 deg) */
+  pi: number,
+
+  /* two pi radian (360deg) */
+  two_pi : number,
+
+  /* half pi radian (90deg) */
+  half_pi :number,
+
+  /* pi/4 radian (45deg) */
+  quarter_pi : number,
+
+  /* pi/180: 1 degree in radian */
+  one_degree: number,
+
+  /* multiply this constant with a radian to get a degree */
+  rad_to_deg: number,
+
+  /* multiply this constant with a degree to get a radian */
+  deg_to_rad: number,
+
+  /* Gravity acceleration (unit: m/s^2) and gravity force (unit: Newton) on 1kg of mass. */
+  gravity: number,
+
+  /* 1 Newton: 0.10197 Kilogram-force */
+  newton: number,
+
+  /* Gaussian constant (1 / Math.sqrt(2 * Math.PI)) */
+  gaussian: number
+
+} = {
   xy: "xy",
   yz: "yz",
   xz: "xz",
@@ -91,7 +160,12 @@ export class Util {
    * Convert different kinds of parameters (arguments, array, object) into an array of numbers
    * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
    */
-  static getArgs( args:any[] ):Array<number> {
+  static getArgs(x:number, y?: number, z?:number, w?:number):Array<number>;
+  static getArgs(arg: {x:number, y?: number, z?:number, w?:number}):Array<number>;
+  static getArgs(arg: {x:number, y?: number, z?:number, w?:number}[]):Array<number>;
+  static getArgs(arg:number[]):Array<number>;
+  static getArgs(arg:number[][]):Array<number>;
+  static getArgs(args: any):Array<number> {
     if (args.length<1) return [];
 
     let pos = [];
@@ -211,5 +285,15 @@ export class Util {
     return z;
   }
 
+  static set<T, S extends keyof T>(object:T, key:any, val: T[S]):void;
+  static set<T, S extends keyof T>(object:T, key:S, val: T[S]):void;
+  static set<T, S extends keyof T>(object:T, key:S, val: T[S]):void {
+    object[key] = val;
+  }
+  static get<T, S extends keyof T>(object:T, key:any):T[S];
+  static get<T, S extends keyof T>(object:T, key:S):T[S];
+  static get<T, S extends keyof T>(object:T, key:S):T[S] {
+    return object[key];
+  }
 
 }

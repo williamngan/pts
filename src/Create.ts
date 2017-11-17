@@ -174,7 +174,11 @@ export class Noise extends Pt {
    * Create a Noise Pt that's capable of generating noise
    * @param args a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
    */
-  constructor(...args) {
+  constructor(length: number);
+  constructor(args: PtLike);
+  constructor(arg: {x:number, y?: number, z?:number, w?:number});
+  constructor(...args: number[]);
+  constructor(...args: any[]) {
     super( ...args );
 
     // For easier index wrapping, double the permutation table length
@@ -187,7 +191,11 @@ export class Noise extends Pt {
    * @param args a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
    * @example `noise.initNoise( 0.01, 0.1 )`
    */
-  initNoise( ...args ) {
+  initNoise(length: number): void;
+  initNoise(args: PtLike): void;
+  initNoise(arg: {x:number, y?: number, z?:number, w?:number}): void;
+  initNoise(...args: number[]): void;
+  initNoise(...args: any[]) {
     this._n = new Pt( ...args );
   }
 
@@ -205,7 +213,7 @@ export class Noise extends Pt {
    * Specify a seed for this Noise
    * @param s seed value
    */
-  seed( s ) {
+  seed( s: number ) {
     if (s > 0 && s < 1) s *= 65536;
     
     s = Math.floor(s);
@@ -233,7 +241,7 @@ export class Noise extends Pt {
     let n10 = Vec.dot(grad3[ (i+1+this.perm[j]) % 12 ], [x-1, y, 0] );
     let n11 = Vec.dot(grad3[ (i+1+this.perm[j+1]) % 12 ], [x-1, y-1, 0] );
 
-    let _fade = (f) => f*f*f*(f*(f*6-15)+10);
+    let _fade = (f:number) => f*f*f*(f*(f*6-15)+10);
     let tx = _fade(x);
     return Num.lerp( Num.lerp(n00, n10, tx), Num.lerp(n01, n11, tx), _fade(y) );
   }

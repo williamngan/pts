@@ -1,13 +1,8 @@
-import chai = require('chai');
-import mocha = require('mocha');
+import 'mocha';
+import { assert } from 'chai';
 import {Pt, Group} from '../Pt';
-import {Util} from '../Util';
 import {Num, Geom} from '../Num';
 import {Line, Polygon} from '../Op';
-
-var {assert} = chai;
-var {describe, it} = mocha;
-
 
 describe('Op: ', function() {
 
@@ -75,7 +70,7 @@ describe('Op: ', function() {
     });
 
     it('can find perpendicular pts', function() {
-      let ps = Geom.perpendicular( [10, 3] )
+      let ps = Geom.perpendicular( [10, 3] );
       assert.isTrue( Num.equals( ps[0].x, -3) && Num.equals( ps[1].y, -10 ) );
     });
 
@@ -119,14 +114,14 @@ describe('Op: ', function() {
 
     it('can reflect a group in 2D', function() {
       let ps = [new Pt(218, 454), new Pt( 218, 404) ];
-      let reflect = Group.fromArray( [[230, 497], [268, 454]] )
+      let reflect = Group.fromArray( [[230, 497], [268, 454]] );
       Geom.reflect2D( ps, reflect );
       assert.isTrue( Num.equals(ps[0].x, 274.14938) &&  Num.equals(ps[1].y, 497.4710) );
     });
 
     it('can reflect a group in 2D', function() {
       let ps = [new Pt(218, 454), new Pt( 218, 404) ];
-      let reflect = Group.fromArray( [[230, 497], [268, 454]] )
+      let reflect = Group.fromArray( [[230, 497], [268, 454]] );
       Geom.reflect2D( ps, reflect );
       assert.isTrue( Num.equals(ps[0].x, 274.14938) &&  Num.equals(ps[1].y, 497.4710) );
     });
@@ -145,12 +140,12 @@ describe('Op: ', function() {
     });
 
     it('find x-intercept', function() {
-      let intercept = Line.intercept([7,3], [3,-4]);
+      let intercept = Line.intercept([7,3], [3,-4])!;
       assert.isTrue( Num.equals( intercept.xi, 37/7 ) );
     });
 
     it('find y-intercept', function() {
-      let intercept = Line.intercept([6,4], [2,2]);
+      let intercept = Line.intercept([6,4], [2,2])!;
       assert.isTrue( Num.equals( intercept.yi, 1 ) );
     });
 
@@ -160,7 +155,7 @@ describe('Op: ', function() {
 
     it('can find Pt on a line that is perpendicular to a target Pt', function() {
       let ln = Group.fromArray([[368,654], [418,514]]);
-      let p = Line.perpendicularFromPt( ln, [358, 474] );
+      let p = Line.perpendicularFromPt( ln, [358, 474] )!;
       assert.isTrue( Num.equals( p.x, 423.8823547363281 ) );
     });
 
@@ -172,7 +167,7 @@ describe('Op: ', function() {
     it('can check 2D ray intersection', function() {
       let r1 = Group.fromArray([[5, 4.5], [10, 2]]);
       let r2 = Group.fromArray([[0, 3], [-4, -5]]);
-      assert.isTrue( Line.intersectRay2D(r1, r2).equals([1.6, 6.2]) );
+      assert.isTrue( Line.intersectRay2D(r1, r2)!.equals([1.6, 6.2]) );
     });
 
     it('can check 2D ray intersection with line segment', function() {
@@ -184,7 +179,7 @@ describe('Op: ', function() {
     it('can check 2D line segment intersection', function() {
       let r1 = Group.fromArray([[0, 0], [60, 160]]);
       let r2 = Group.fromArray([[0, 80], [80, 0]]);
-      assert.isTrue( Line.intersectLine2D(r1, r2).equals([21.81818181, 58.1818199], 0.00001) );
+      assert.isTrue( Line.intersectLine2D(r1, r2)!.equals([21.81818181, 58.1818199], 0.00001) );
     });
 
     it('can check 2D grid intersection with ray', function() {

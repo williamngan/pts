@@ -2,7 +2,7 @@ import {IPlayer} from './Space';
 import {VisualForm, Font} from "./Form";
 import {Bound} from './Bound';
 import {Geom} from './Num';
-import {Const} from './Util';
+import {Const, Util} from './Util';
 import {Pt, PtLike, GroupLike, Group} from './Pt';
 import {Rectangle} from "./Op";
 import {DOMSpace, DOMFormContext} from "./Dom";
@@ -73,7 +73,7 @@ export class SVGSpace extends DOMSpace {
    * @param name a string of element name,  such as `rect` or `circle`
    * @param id id attribute of the new element
    */
-  static svgElement( parent:Element, name:string, id?:string ):SVGElement {
+  static svgElement( parent:Element|null, name:string, id:string ):SVGElement {
     if (!parent || !parent.appendChild ) throw new Error( "parent is not a valid DOM element" );
     
     let elem = document.querySelector(`#${id}`);
@@ -97,7 +97,7 @@ export class SVGSpace extends DOMSpace {
     let temp = this._container.querySelectorAll( "."+SVGForm.scopeID( player ) );
     
     temp.forEach( (el:Element) => { 
-      el.parentNode.removeChild( el );
+      el.parentNode!.removeChild( el );
     });
     
     return super.remove( player );
@@ -175,9 +175,9 @@ export class SVGForm extends VisualForm {
    * @param k style key
    * @param v  style value
    */
-  protected styleTo( k, v ) { 
-    if (this._ctx.style[k] === undefined) throw new Error(`${k} style property doesn't exist`);
-    this._ctx.style[k] = v; 
+  protected styleTo( k: string, v: any ) { 
+    if (Util.get(this._ctx.style, k) === undefined) throw new Error(`${k} style property doesn't exist`);
+    Util.set(this._ctx.style, k, v); 
   }
   
 
@@ -286,7 +286,7 @@ export class SVGForm extends VisualForm {
    * @returns this form's context
    */
   updateScope( group_id:string, group?:Element ):object {
-    this._ctx.group = group;
+    this._ctx.group = group === undefined?null:group;
     this._ctx.groupID = group_id;
     this._ctx.groupCount = 0;
     this.nextID();
@@ -320,7 +320,7 @@ export class SVGForm extends VisualForm {
    * A static function to generate an ID string based on a context object
    * @param ctx a context object for an SVGForm
    */
-  static getID( ctx ):string {
+  static getID( ctx:DOMFormContext ):string {
     return ctx.currentID || `p-${SVGForm.domID++}`;
   }
 
@@ -344,16 +344,16 @@ export class SVGForm extends VisualForm {
   static style( elem:SVGElement, styles:object) {
     let st = [];
 
-    if ( !styles["filled"] ) st.push( "fill: none");
-    if ( !styles["stroked"] ) st.push( "stroke: none");
+    if ( !Util.get(styles, "filled") ) st.push( "fill: none");
+    if ( !Util.get(styles, "stroked") ) st.push( "stroke: none");
         
     for (let k in styles) {
       if ( styles.hasOwnProperty(k) && k != "filled" && k != "stroked" ) {
-        let v = styles[k];
+        let v = Util.get(styles, k);
         if (v) {
-          if ( !styles["filled"] && k.indexOf('fill') === 0 ) {
+          if ( !Util.get(styles, "filled") && k.indexOf('fill') === 0 ) {
             continue;
-          } else if ( !styles["stroked"] && k.indexOf('stroke') === 0 ) {
+          } else if ( !Util.get(styles, "stroked") && k.indexOf('stroke') === 0 ) {
             continue;
           } else {
             st.push( `${k}: ${v}` );
@@ -512,7 +512,7 @@ export class SVGForm extends VisualForm {
   * @param ctx a context object of SVGForm
   * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
   */
-  static line( ctx:DOMFormContext, pts:GroupLike|number[][] ):SVGElement {
+  static line( ctx:DOMFormContext, pts:GroupLike|number[][] ):SVGElement|undefined {
     if (!this._checkSize( pts)) return;
     
     if (pts.length > 2) return SVGForm._poly( ctx, pts, false );
@@ -568,7 +568,7 @@ export class SVGForm extends VisualForm {
     * @param ctx a context object of SVGForm
     * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
     */
-  static polygon( ctx:DOMFormContext, pts:GroupLike|number[][] ):SVGElement {
+  static polygon( ctx:DOMFormContext, pts:GroupLike|number[][] ):SVGElement|undefined {
     return SVGForm._poly( ctx, pts, true );
   }
   
@@ -589,7 +589,7 @@ export class SVGForm extends VisualForm {
   * @param ctx a context object of SVGForm
   * @param pts usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.
   */
-  static rect( ctx:DOMFormContext, pts:GroupLike|number[][] ):SVGElement {
+  static rect( ctx:DOMFormContext, pts:GroupLike|number[][] ):SVGElement|undefined {
     if (!this._checkSize( pts)) return;
     
     let elem = SVGSpace.svgElement( ctx.group, "rect", SVGForm.getID(ctx) );
@@ -663,7 +663,7 @@ export class SVGForm extends VisualForm {
     * A convenient way to draw some text on canvas for logging or debugging. It'll be draw on the top-left of the canvas as an overlay.
     * @param txt text
     */
-  log( txt ):this {
+  log( txt: string ):this {
     this.fill("#000").stroke("#fff", 0.5).text( [10,14], txt );   
     return this;
   }

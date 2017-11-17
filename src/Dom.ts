@@ -9,7 +9,7 @@ import {Pt, PtLike, GroupLike} from './Pt';
  * A type that represents the current context for an DOMForm
  */
 export type DOMFormContext = {
-  group:Element, groupID:string, groupCount:number,
+  group:Element|null, groupID:string, groupCount:number,
   currentID:string,
   currentClass?:string,
   style:object,
@@ -28,7 +28,7 @@ export class DOMSpace extends MultiTouchSpace {
   id: string = "domspace";
   protected _autoResize = true;
   protected _bgcolor = "#e1e9f0";
-  protected _css = {};
+  protected _css: Partial<CSSStyleDeclaration> = {};
   
   
   /**
@@ -40,7 +40,7 @@ export class DOMSpace extends MultiTouchSpace {
   constructor( elem:string|Element, callback?:Function) {
     super();
     
-    var _selector:Element = null;
+    var _selector:Element|null = null;
     var _existed = false;
     this.id = "pts";
     
@@ -64,7 +64,7 @@ export class DOMSpace extends MultiTouchSpace {
       
     } else {
       this._canvas = _selector as HTMLElement;
-      this._container = _selector.parentElement;
+      this._container = _selector.parentElement as HTMLElement;
     }
     
     // no mutation observer, so we set a timeout for ready event
@@ -97,14 +97,17 @@ export class DOMSpace extends MultiTouchSpace {
     
     this._isReady = true;
     
-    this._resizeHandler( null );
+    this._resizeHandler( );
     this.clear( this._bgcolor );
     this._canvas.dispatchEvent( new Event("ready") );
     
     
     for (let k in this.players) {
       if (this.players.hasOwnProperty(k)) {
-        if (this.players[k].start) this.players[k].start( this.bound.clone(), this );
+        const start = this.players[k].start;
+        if (start) {
+          start( this.bound.clone(), this );
+        }
       }
     }
     
@@ -138,7 +141,7 @@ export class DOMSpace extends MultiTouchSpace {
    * Not implemented. See SVGSpace and HTMLSpace for implementation
    */
   getForm():Form {
-    return null;
+    throw new Error('getForm is not implemented for DomSpace');
   }
   
   /**
@@ -183,7 +186,7 @@ export class DOMSpace extends MultiTouchSpace {
   * Window resize handling
   * @param evt 
   */
-  protected _resizeHandler( evt:Event ) {
+  protected _resizeHandler( evt?:Event ) {
     
     let b = Bound.fromBoundingRect( this._container.getBoundingClientRect() );
 
@@ -248,9 +251,11 @@ export class DOMSpace extends MultiTouchSpace {
   * @param val style value
   * @param update a boolean to update the element's style immediately if set to `true`. Default is `false`.
   */
-  style( key:string, val:string, update:boolean=false ):this {
-    this._css[key] = val;
-    if (update) this._canvas.style[key] = val;
+  style( key:keyof CSSStyleDeclaration, val:string, update:boolean=false ):this {
+    Util.set(this._css, key, val);
+    if (update) {
+      Util.set(this._canvas.style, key, val);
+    }
     return this;
   }
   
@@ -261,9 +266,11 @@ export class DOMSpace extends MultiTouchSpace {
   * @param update a boolean to update the element's style immediately if set to `true`. Default is `false`.
   * @return this
   */
-  styles( styles:object, update:boolean=false ):this {
+  styles( styles:Partial<CSSStyleDeclaration>, update:boolean=false ):this {
     for (let k in styles) {
-      if ( styles.hasOwnProperty(k) ) this.style( k, styles[k], update );
+      if ( styles.hasOwnProperty(k) ) {
+        this.style( k as keyof CSSStyleDeclaration, Util.get(styles, k), update );
+      }
     }
     return this;
   }
@@ -278,7 +285,7 @@ export class DOMSpace extends MultiTouchSpace {
   static setAttr( elem:Element, data:object ):Element {
     for (let k in data) {
       if (data.hasOwnProperty(k)) {
-        elem.setAttribute( k, data[k] );
+        elem.setAttribute( k, Util.get(data, k));
       }
     }
     return elem;
@@ -295,7 +302,7 @@ export class DOMSpace extends MultiTouchSpace {
     let str = "";
     for (let k in data) {
       if (data.hasOwnProperty(k)) {
-        if (data[k]) str += `${k}: ${data[k]}; `;
+        if (Util.get(data,k)) str += `${k}: ${Util.get(data,k)}; `;
       }
     }
     return str;
@@ -324,7 +331,7 @@ export class HTMLSpace extends DOMSpace {
    * @param id id attribute of the new element
    * @param autoClass add a class based on the id (from char 0 to index of "-"). Default is true.
    */
-  static htmlElement( parent:Element, name:string, id?:string, autoClass:boolean=true ):HTMLElement {
+  static htmlElement( parent:Element | null, name:string, id:string, autoClass:boolean=true ):HTMLElement {
     
     if (!parent || !parent.appendChild ) throw new Error( "parent is not a valid DOM element" );
     
@@ -348,7 +355,7 @@ export class HTMLSpace extends DOMSpace {
     let temp = this._container.querySelectorAll( "."+HTMLForm.scopeID( player ) );
     
     temp.forEach( (el:Element) => { 
-      el.parentNode.removeChild( el );
+      el.parentNode!.removeChild( el );
     });
     
     return super.remove( player );
@@ -422,9 +429,9 @@ export class HTMLForm extends VisualForm {
    * @param v  style value
    * @param unit Optional unit like 'px' to append to value
    */
-  protected styleTo( k, v, unit:string='' ) { 
-    if (this._ctx.style[k] === undefined) throw new Error(`${k} style property doesn't exist`);
-    this._ctx.style[k] = `${v}${unit}`; 
+  protected styleTo( k: string, v: any, unit:string='' ) { 
+    if (Util.get(this._ctx.style, k) === undefined) throw new Error(`${k} style property doesn't exist`);
+    Util.set(this._ctx.style,k,`${v}${unit}`); 
   }
 
 
@@ -539,7 +546,7 @@ export class HTMLForm extends VisualForm {
    * @returns this form's context
    */
   updateScope( group_id:string, group?:Element ):object {
-    this._ctx.group = group;
+    this._ctx.group = group === undefined?null:group;
     this._ctx.groupID = group_id;
     this._ctx.groupCount = 0;
     this.nextID();
@@ -573,7 +580,7 @@ export class HTMLForm extends VisualForm {
    * A static function to generate an ID string based on a context object
    * @param ctx a context object for an HTMLForm
    */
-  static getID( ctx ):string {
+  static getID( ctx:DOMFormContext ):string {
     return ctx.currentID || `p-${HTMLForm.domID++}`;
   }
 
@@ -594,19 +601,19 @@ export class HTMLForm extends VisualForm {
    * @example `HTMLForm.style(elem, {fill: "#f90", stroke: false})`
    * @returns DOM element 
    */
-  static style( elem:Element, styles:object):Element {
+  static style( elem:Element, styles:Partial<CSSStyleDeclaration>):Element {
     let st = [];
 
-    if ( !styles["filled"] ) st.push( "background: none");
-    if ( !styles["stroked"] ) st.push( "border: none");
+    if ( !Util.get(styles, "filled") ) st.push( "background: none");
+    if ( !Util.get(styles, "stroked") ) st.push( "border: none");
         
     for (let k in styles) {
       if ( styles.hasOwnProperty(k) && k != "filled" && k != "stroked" ) {
-        let v = styles[k];
+        let v = Util.get(styles, k);
         if (v) {
-          if ( !styles["filled"] && k.indexOf('background') === 0 ) {
+          if ( !Util.get(styles, "filled") && k.indexOf('background') === 0 ) {
             continue;
-          } else if ( !styles["stroked"] && k.indexOf('border-width') === 0 ) {
+          } else if ( !Util.get(styles, "stroked") && k.indexOf('border-width') === 0 ) {
             continue;
           } else {
             st.push( `${k}: ${v}` );
@@ -626,10 +633,10 @@ export class HTMLForm extends VisualForm {
    * @param h height
    */
   static rectStyle( ctx:DOMFormContext, pt:PtLike, size:PtLike ):DOMFormContext {
-    ctx.style["left"] = pt[0]+"px"; 
-    ctx.style["top"] = pt[1]+"px"; 
-    ctx.style["width"] = size[0]+"px"; 
-    ctx.style["height"] = size[1]+"px"; 
+    Util.set(ctx.style, "left", pt[0]+"px"); 
+    Util.set(ctx.style, "top", pt[1]+"px"); 
+    Util.set(ctx.style, "width", size[0]+"px"); 
+    Util.set(ctx.style, "height", size[1]+"px"); 
     return ctx;
   }
   
@@ -725,8 +732,8 @@ export class HTMLForm extends VisualForm {
   * @param ctx a context object of HTMLForm
   * @param pts usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.
   */
-  static rect( ctx:DOMFormContext, pts:GroupLike|number[][] ):Element {
-    if (!this._checkSize( pts)) return;
+  static rect( ctx:DOMFormContext, pts:GroupLike|number[][] ):Element|null {
+    if (!this._checkSize( pts)) return null;
 
     let elem = HTMLSpace.htmlElement( ctx.group, "div", HTMLForm.getID(ctx) );    
     HTMLSpace.setAttr( elem, { class: `pts-form pts-rect ${ctx.currentClass}` });
@@ -788,7 +795,7 @@ export class HTMLForm extends VisualForm {
   * A convenient way to draw some text on canvas for logging or debugging. It'll be draw on the top-left of the canvas as an overlay.
   * @param txt text
   */
-  log( txt ):this {
+  log( txt: string ):this {
     this.fill("#000").stroke("#fff", 0.5).text( [10,14], txt );   
     return this;
   }
