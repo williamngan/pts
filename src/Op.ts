@@ -519,10 +519,11 @@ export class Circle {
    * Check if a point is within a circle
    * @param pts a Group of 2 Pts representing a circle
    * @param pt the point to checks
+   * @param threshold an optional small number to set threshold. Default is 0.
    */
-  static withinBound( pts:GroupLike, pt:PtLike ):boolean  {
+  static withinBound( pts:GroupLike, pt:PtLike, threshold:number=0 ):boolean  {
     let d = pts[0].$subtract( pt );
-    return d.dot(d) < pts[1].x * pts[1].x;
+    return d.dot(d) + threshold < pts[1].x * pts[1].x;
   }
 
 

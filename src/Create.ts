@@ -3,7 +3,7 @@
 
 
 import {Pt, Group, PtLike, GroupLike} from "./Pt";
-import {Line} from "./Op";
+import {Line, Triangle} from "./Op";
 import {Bound} from "./Bound";
 import {Const} from "./Util";
 import {Num} from "./Num";
@@ -238,5 +238,172 @@ export class Noise extends Pt {
     return Num.lerp( Num.lerp(n00, n10, tx), Num.lerp(n01, n11, tx), _fade(y) );
   }
   
+
+}
+
+
+/**
+ * A DelaunayShape is an object with 3 indices, a Triangle Group and a Circle Group.
+ */
+type DelaunayShape = {i:number, j:number, k:number, triangle:GroupLike, circle:Group };
+
+
+/**
+ * Delaunay triangulation ported from [Pt](https://github.com/williamngan/pt)
+ * This implementation is based on [Paul Bourke's algorithm](http://paulbourke.net/papers/triangulate/)
+ * with reference to its [javascript implementation by ironwallaby](https://github.com/ironwallaby/delaunay)
+ */
+export class Delaunay extends Group {
+
+  /**
+   * Calculate delaunay triangulation
+   * @returns an array of {i, j, k, triangle, circle} which records the indices of the vertices, and the calculated triangles and circumcircles
+   */
+  generate():DelaunayShape[] {
+    if (this.length < 3) return [];
+
+    let n = this.length;
+
+    // sort the points and store the sorted index
+    let indices:number[] = [];
+    for (let i=0; i<n; i++) indices[i] = i;
+    indices.sort( (i,j) => this[j][0] - this[i][0] );
+
+    // duplicate the points list and add super triangle's points to it
+    let pts = this.slice();
+    let st = this._superTriangle();
+    pts = pts.concat( st );
+
+    // arrays to store edge buffer and opened triangles
+    let opened:DelaunayShape[] = [ this._circum( n, n+1, n+2, st) ];
+    let closed:DelaunayShape[] = [];
+
+    // Go through each point using the sorted indices
+    for (let i=0, len=indices.length; i<len; i++) {
+      let c = indices[i];
+      let edges:number[] = [];
+      let j = opened.length;
+
+      // Go through each opened triangles
+      while (j--) {
+        let circum:DelaunayShape = opened[j];
+        let radius = circum.circle[1][0];
+        let d = pts[c].$subtract( circum.circle[0] );
+
+        // if point is to the right of circumcircle, add it to closed list and don't check again
+        if (d[0] > 0 && d[0]*d[0] > radius*radius) {
+          closed.push( circum );
+          opened.splice(j, 1);
+          continue;
+        }
+
+        // if it's outside the circumcircle, skip
+        if ( d[0]*d[0] + d[1]*d[1] - radius*radius > Const.epsilon) {
+          continue;
+        }
+
+        // otherwise it's inside the circumcircle, so we add to edge buffer and remove it from the opened list
+        edges.push( circum.i, circum.j,    circum.j, circum.k,    circum.k, circum.i );
+        opened.splice(j, 1);
+      }
+
+      // dedup edges
+      Delaunay._dedupe( edges );
+
+      // Go through the edge buffer and create a triangle for each edge
+      j = edges.length;
+      while (j > 1) {
+        opened.push( this._circum( edges[--j], edges[--j], c, false, pts) );
+      }
+
+    }
+
+    for (let i=0, len=opened.length; i<len; i++) {
+      let o = opened[i];
+      if (o.i < n && o.j < n && o.k < n) closed.push( o );
+    }
+
+    return closed;
+  }
+
+
+  /**
+   * Get the initial "super triangle" that contains all the points in this set
+   * @returns a Group representing a triangle
+   */
+  protected _superTriangle():Group {
+    let minPt = this[0];
+    let maxPt = this[0];
+    for (let i=1, len=this.length; i<len; i++) {
+      minPt = minPt.$min( this[i] );
+      maxPt = maxPt.$max( this[i] );
+    }
+
+    let d = maxPt.$subtract( minPt );
+    let mid = minPt.$add( maxPt ).divide(2);
+    let dmax = Math.max( d[0], d[1] );
+
+    return new Group( mid.$subtract(20*dmax, dmax), mid.$add( 0, 20*dmax), mid.$add(20*dmax, -dmax) );
+  }
+
+
+  /**
+   * Get a triangle from 3 points in a list of points
+   * @param i index 1
+   * @param j index 2
+   * @param k index 3
+   * @param pts a Group of Pts
+   */
+  protected _triangle( i:number, j:number, k:number, pts:GroupLike=this):Group {
+    return new Group( pts[i], pts[j], pts[k] );
+  }
+
+
+  /**
+   * Get a circumcircle and triangle from 3 points in a list of points
+   * @param i index 1
+   * @param j index 2
+   * @param k index 3
+   * @param tri a Group representing a triangle, or `false` to create it from indices
+   * @param pts a Group of Pts
+   */
+  protected _circum(i:number, j:number, k:number, tri:GroupLike|false, pts:GroupLike=this):DelaunayShape {
+    let t = tri || this._triangle( i, j, k, pts );
+    return {
+      i: i,
+      j: j,
+      k: k,
+      triangle: t,
+      circle: Triangle.circumcircle( t )
+    };
+  }
+
+
+  /**
+   * Dedupe the edges array
+   * @param edges 
+   */
+  protected static _dedupe( edges:number[] ):number[] {
+    let j = edges.length;
+
+    while (j > 1) {
+      let b = edges[--j];
+      let a = edges[--j];
+      let i=j;
+
+      while (i > 1) {
+        let n = edges[--i];
+        let m = edges[--i];
+
+        if ((a == m && b == n) || (a == n && b == m)) {
+          edges.splice(j, 2);
+          edges.splice(i, 2);
+          break;
+        }
+      }
+    }
+
+    return edges;
+  }
 
 }

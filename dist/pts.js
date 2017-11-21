@@ -2794,10 +2794,11 @@ class Circle {
      * Check if a point is within a circle
      * @param pts a Group of 2 Pts representing a circle
      * @param pt the point to checks
+     * @param threshold an optional small number to set threshold. Default is 0.
      */
-    static withinBound(pts, pt) {
+    static withinBound(pts, pt, threshold = 0) {
         let d = pts[0].$subtract(pt);
-        return d.dot(d) < pts[1].x * pts[1].x;
+        return d.dot(d) + threshold < pts[1].x * pts[1].x;
     }
     /**
      * Get the intersection points between a circle and a ray (infinite line)
@@ -6106,6 +6107,139 @@ class Noise extends Pt_1.Pt {
     }
 }
 exports.Noise = Noise;
+/**
+ * Delaunay triangulation ported from [Pt](https://github.com/williamngan/pt)
+ * This implementation is based on [Paul Bourke's algorithm](http://paulbourke.net/papers/triangulate/)
+ * with reference to its [javascript implementation by ironwallaby](https://github.com/ironwallaby/delaunay)
+ */
+class Delaunay extends Pt_1.Group {
+    /**
+     * Calculate delaunay triangulation
+     * @returns an array of {i, j, k, triangle, circle} which records the indices of the vertices, and the calculated triangles and circumcircles
+     */
+    generate() {
+        if (this.length < 3)
+            return [];
+        let n = this.length;
+        // sort the points and store the sorted index
+        let indices = [];
+        for (let i = 0; i < n; i++)
+            indices[i] = i;
+        indices.sort((i, j) => this[j][0] - this[i][0]);
+        // duplicate the points list and add super triangle's points to it
+        let pts = this.slice();
+        let st = this._superTriangle();
+        pts = pts.concat(st);
+        // arrays to store edge buffer and opened triangles
+        let opened = [this._circum(n, n + 1, n + 2, st)];
+        let closed = [];
+        // Go through each point using the sorted indices
+        for (let i = 0, len = indices.length; i < len; i++) {
+            let c = indices[i];
+            let edges = [];
+            let j = opened.length;
+            // Go through each opened triangles
+            while (j--) {
+                let circum = opened[j];
+                let radius = circum.circle[1][0];
+                let d = pts[c].$subtract(circum.circle[0]);
+                // if point is to the right of circumcircle, add it to closed list and don't check again
+                if (d[0] > 0 && d[0] * d[0] > radius * radius) {
+                    closed.push(circum);
+                    opened.splice(j, 1);
+                    continue;
+                }
+                // if it's outside the circumcircle, skip
+                if (d[0] * d[0] + d[1] * d[1] - radius * radius > Util_1.Const.epsilon) {
+                    continue;
+                }
+                // otherwise it's inside the circumcircle, so we add to edge buffer and remove it from the opened list
+                edges.push(circum.i, circum.j, circum.j, circum.k, circum.k, circum.i);
+                opened.splice(j, 1);
+            }
+            // dedup edges
+            Delaunay._dedupe(edges);
+            // Go through the edge buffer and create a triangle for each edge
+            j = edges.length;
+            while (j > 1) {
+                opened.push(this._circum(edges[--j], edges[--j], c, false, pts));
+            }
+        }
+        for (let i = 0, len = opened.length; i < len; i++) {
+            let o = opened[i];
+            if (o.i < n && o.j < n && o.k < n)
+                closed.push(o);
+        }
+        return closed;
+    }
+    /**
+     * Get the initial "super triangle" that contains all the points in this set
+     * @returns a Group representing a triangle
+     */
+    _superTriangle() {
+        let minPt = this[0];
+        let maxPt = this[0];
+        for (let i = 1, len = this.length; i < len; i++) {
+            minPt = minPt.$min(this[i]);
+            maxPt = maxPt.$max(this[i]);
+        }
+        let d = maxPt.$subtract(minPt);
+        let mid = minPt.$add(maxPt).divide(2);
+        let dmax = Math.max(d[0], d[1]);
+        return new Pt_1.Group(mid.$subtract(20 * dmax, dmax), mid.$add(0, 20 * dmax), mid.$add(20 * dmax, -dmax));
+    }
+    /**
+     * Get a triangle from 3 points in a list of points
+     * @param i index 1
+     * @param j index 2
+     * @param k index 3
+     * @param pts a Group of Pts
+     */
+    _triangle(i, j, k, pts = this) {
+        return new Pt_1.Group(pts[i], pts[j], pts[k]);
+    }
+    /**
+     * Get a circumcircle and triangle from 3 points in a list of points
+     * @param i index 1
+     * @param j index 2
+     * @param k index 3
+     * @param tri a Group representing a triangle, or `false` to create it from indices
+     * @param pts a Group of Pts
+     */
+    _circum(i, j, k, tri, pts = this) {
+        let t = tri || this._triangle(i, j, k, pts);
+        return {
+            i: i,
+            j: j,
+            k: k,
+            triangle: t,
+            circle: Op_1.Triangle.circumcircle(t)
+        };
+    }
+    /**
+     * Dedupe the edges array
+     * @param edges
+     */
+    static _dedupe(edges) {
+        let j = edges.length;
+        while (j > 1) {
+            let b = edges[--j];
+            let a = edges[--j];
+            let i = j;
+            while (i > 1) {
+                let n = edges[--i];
+                let m = edges[--i];
+                if ((a == m && b == n) || (a == n && b == m)) {
+                    edges.splice(j, 2);
+                    edges.splice(i, 2);
+                    break;
+                }
+            }
+        }
+        return edges;
+    }
+}
+exports.Delaunay = Delaunay;
 
 
 /***/ }),
