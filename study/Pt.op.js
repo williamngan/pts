@@ -20,19 +20,15 @@ space.add( {
 
     form.stroke("#000", 2);
     form.line( poly1 );
-    
-    // first op: find the closest pt in poly1
-    let nearestToPoly = poly1.op( Polygon.nearestPt );
 
-    // second op: interpolate a pt with pointer
-    let getMiddle = space.pointer.op( Geom.interpolate );
-
+    let np = poly1[ Polygon.nearestPt( poly1, space.pointer ) ];
     let animTimer = (time % 1000)/1000;
 
-    // Apply first op: with space.pointer
-    let np = nearestToPoly( space.pointer );
+    // op: interpolate a pt with pointer
+    let getMiddle = space.pointer.op( Geom.interpolate );
 
-    // Apply second op: with resulting Pt from first pt
+
+    // Apply op: with resulting Pt from first pt
     let ip = getMiddle( np, animTimer )
 
     // draw results

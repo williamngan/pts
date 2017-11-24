@@ -288,7 +288,11 @@ export class Geom {
   }
 
 
-  // https://stackoverflow.com/questions/6989100/sort-points-in-clockwise-order
+  /**
+   * Sort the Pts so that their edges will form a non-overlapping polygon
+   * Ref: https://stackoverflow.com/questions/6989100/sort-points-in-clockwise-order
+   * @param pts an array of Pts
+   */
   static sortEdges( pts:GroupLike ):GroupLike {
 
     let bounds = Geom.boundingBox( pts );

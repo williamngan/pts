@@ -1044,8 +1044,9 @@ export class Polygon {
    * Given a target Pt, find a Pt in a Group that's nearest to it.
    * @param pts a Group of Pt
    * @param pt Pt to check
+   * @returns an index in the pts indicating the nearest Pt, or -1 if none found
    */
-  static nearestPt( pts:GroupLike, pt:PtLike ) {
+  static nearestPt( pts:GroupLike, pt:PtLike ):number {
     let _near = Number.MAX_VALUE;
     let _item = -1;
     for (let i=0, len=pts.length; i<len; i++) {
@@ -1055,7 +1056,7 @@ export class Polygon {
         _item = i;
       }
     }
-    return (_item >= 0) ? pts[_item] : undefined;
+    return _item;
   }
 
 

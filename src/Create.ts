@@ -6,7 +6,7 @@ import {Pt, Group, PtLike, GroupLike} from "./Pt";
 import {Line, Triangle} from "./Op";
 import {Bound} from "./Bound";
 import {Const} from "./Util";
-import {Num} from "./Num";
+import {Num, Geom} from "./Num";
 import {Vec} from "./LinearAlgebra";
 
 
@@ -132,6 +132,11 @@ export class Create {
   
 }
 
+
+
+
+
+
 /**
  * Perlin noise gradient indices
  */
@@ -242,29 +247,36 @@ export class Noise extends Pt {
 }
 
 
+
+
+
+
+
 /**
  * A DelaunayShape is an object with 3 indices, a Triangle Group and a Circle Group.
  */
 type DelaunayShape = {i:number, j:number, k:number, triangle:GroupLike, circle:Group };
+type DelaunayMesh = {[key:string]:DelaunayShape}[];
 
 
 /**
- * Delaunay triangulation ported from [Pt](https://github.com/williamngan/pt)
+ * Delaunay is a Group of Pts that can generate Delaunay and Voronoi tessellations. The triangulation algorithm is ported from [Pt](https://github.com/williamngan/pt)
  * This implementation is based on [Paul Bourke's algorithm](http://paulbourke.net/papers/triangulate/)
  * with reference to its [javascript implementation by ironwallaby](https://github.com/ironwallaby/delaunay)
  */
 export class Delaunay extends Group {
 
-  private _network = {};
+  private _mesh:DelaunayMesh = [];
 
   /**
-   * Calculate delaunay triangulation
-   * @returns an array of {i, j, k, triangle, circle} which records the indices of the vertices, and the calculated triangles and circumcircles
+   * Generate Delaunay triangles. This function also caches the mesh that is used to generate Voronoi tessellation in `voronoi()`.
+   * @param triangleOnly if true, returns an array of triangles in Groups, otherwise return the whole DelaunayShape
+   * @returns an array of Groups or an array of DelaunayShapes `{i, j, k, triangle, circle}` which records the indices of the vertices, and the calculated triangles and circumcircles
    */
-  generate():DelaunayShape[] {
+  delaunay( triangleOnly:boolean=true ):GroupLike[]|DelaunayShape[] {
     if (this.length < 3) return [];
 
-    this._network = [];
+    this._mesh = [];
 
     let n = this.length;
 
@@ -281,13 +293,14 @@ export class Delaunay extends Group {
     // arrays to store edge buffer and opened triangles
     let opened:DelaunayShape[] = [ this._circum( n, n+1, n+2, st) ];
     let closed:DelaunayShape[] = [];
+    let tris:GroupLike[] = [];
 
     // Go through each point using the sorted indices
     for (let i=0, len=indices.length; i<len; i++) {
       let c = indices[i];
       let edges:number[] = [];
       let j = opened.length;
-      if (!this._network[c]) this._network[c] = {};
+      if (!this._mesh[c]) this._mesh[c] = {};
 
       // Go through each opened triangles
       while (j--) {
@@ -298,6 +311,7 @@ export class Delaunay extends Group {
         // if point is to the right of circumcircle, add it to closed list and don't check again
         if (d[0] > 0 && d[0]*d[0] > radius*radius) {
           closed.push( circum );
+          tris.push( circum.triangle );
           opened.splice(j, 1);
           continue;
         }
@@ -327,26 +341,77 @@ export class Delaunay extends Group {
       let o = opened[i];
       if (o.i < n && o.j < n && o.k < n) {
         closed.push( o );
-        this._recordNetwork( this._network, o );
+        tris.push( o.triangle );
+        this._cache( o );
       }
     }
 
-    return closed;
+    return (triangleOnly) ? tris : closed;
   }
 
 
-  protected _recordNetwork( c, o ) {
-    this._network[o.i][`${Math.min(o.j,o.k)}-${Math.max(o.j,o.k)}`] = o;
-    this._network[o.j][`${Math.min(o.i,o.k)}-${Math.max(o.i,o.k)}`] = o;
-    this._network[o.k][`${Math.min(o.i,o.j)}-${Math.max(o.i,o.j)}`] = o;
-    // if (this._network[o.i].indexOf( o.k ) < 0) this._network[o.i].push( o.k );
-    // if (this._network[o.j].indexOf( o.k ) < 0) this._network[o.j].push( o.k );
-    // if (this._network[o.k].indexOf( o.i ) < 0) this._network[o.k].push( o.i );
-    // if (this._network[o.k].indexOf( o.j ) < 0) this._network[o.k].push( o.j );
+  /**
+   * Generate Voronoi cells. `delaunay()` must be called before calling this function.
+   * @returns an array of Groups, each of which represents a Voronoi cell
+   */
+  voronoi():Group[] {
+    let vs = [];
+    let n = this._mesh;
+    for (let i=0, len=n.length; i<len; i++) {
+      vs.push( this.neighborPts( i, true ) );
+    }
+    return vs;
   }
 
-  network() {
-    return this._network;
+
+  /**
+   * Get the cached mesh. The mesh is an array of objects, each of which representing the enclosing triangles around a Pt in this Delaunay group
+   * @return an array of objects that store a series of DelaunayShapes
+   */
+  mesh():DelaunayMesh {
+    return this._mesh;
+  }
+
+
+  /**
+   * Given an index of a Pt in this Delaunay Group, returns its neighboring Pts in the network
+   * @param i index of a Pt
+   * @param sort if true, sort the neighbors so that their edges will form a polygon
+   * @returns an array of Pts
+   */
+  neighborPts( i:number, sort=false ):GroupLike {
+    let cs = new Group();
+    let n = this._mesh;
+    for (let k in n[i]) {
+      if (n[i].hasOwnProperty(k)) cs.push( n[i][k].circle[0] );
+    }
+    return (sort) ? Geom.sortEdges( cs ) : cs;
+  }
+
+
+  /**
+   * Given an index of a Pt in this Delaunay Group, returns its neighboring DelaunayShapes
+   * @param i index of a Pt
+   * @returns an array of DelaunayShapes `{i, j, k, triangle, circle}`
+   */
+  neighbors( i:number ):DelaunayShape[] {
+    let cs = [];
+    let n = this._mesh;
+    for (let k in n[i]) {
+      if (n[i].hasOwnProperty(k)) cs.push( n[i][k] );
+    }
+    return cs;
+  }
+
+
+  /**
+   * Record a DelaunayShape in the mesh
+   * @param o DelaunayShape instance
+   */
+  protected _cache( o ):void {
+    this._mesh[o.i][`${Math.min(o.j,o.k)}-${Math.max(o.j,o.k)}`] = o;
+    this._mesh[o.j][`${Math.min(o.i,o.k)}-${Math.max(o.i,o.k)}`] = o;
+    this._mesh[o.k][`${Math.min(o.i,o.j)}-${Math.max(o.i,o.j)}`] = o;
   }
 
 
@@ -429,20 +494,5 @@ export class Delaunay extends Group {
     return edges;
   }
 
-
-  _neighbors( ts ) {
-    console.log( ts  );
-    let ns = [];
-    for (let i=0, len=ts.length; i<len; i++) {
-      let ti = ts.k;
-      if (!ns[ti]) {
-        ns = [ ts.i, ts.j ];
-      } else {
-        ns.push( ts.i );
-        ns.push( ts.j );
-      }
-    }
-    return ns;
-  }
 
 }
