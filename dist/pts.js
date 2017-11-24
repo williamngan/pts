@@ -87,7 +87,7 @@ return /******/ (function(modules) { // webpackBootstrap
 Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(1);
 const Num_1 = __webpack_require__(2);
-const LinearAlgebra_1 = __webpack_require__(3);
+const LinearAlgebra_1 = __webpack_require__(5);
 exports.PtBaseArray = Float32Array;
 /**
  * Pt is a subclass of Float32Array with additional properties and functions to support vector and geometric calculations.
@@ -293,6 +293,11 @@ class Pt extends exports.PtBaseArray {
      * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
      */
     dot(...args) { return LinearAlgebra_1.Vec.dot(this, Util_1.Util.getArgs(args)); }
+    /**
+     * 2D Cross product of this Pt and another Pt. Return results as a new Pt.
+     * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
+     */
+    cross2D(...args) { return LinearAlgebra_1.Vec.cross2D(this, Util_1.Util.getArgs(args)); }
     /**
      * 3D Cross product of this Pt and another Pt. Return results as a new Pt.
      * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
@@ -974,7 +979,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(1);
 const Op_1 = __webpack_require__(6);
 const Pt_1 = __webpack_require__(0);
-const LinearAlgebra_1 = __webpack_require__(3);
+const LinearAlgebra_1 = __webpack_require__(5);
 /**
  * Num class provides various helper functions for basic numeric operations
  */
@@ -1211,6 +1216,36 @@ class Geom {
                 return false;
         }
         return true;
+    }
+    // https://stackoverflow.com/questions/6989100/sort-points-in-clockwise-order
+    static sortEdges(pts) {
+        let bounds = Geom.boundingBox(pts);
+        let center = bounds[1].add(bounds[0]).divide(2);
+        let fn = (a, b) => {
+            if (a.length < 2 || b.length < 2)
+                throw new Error("Pt dimension cannot be less than 2");
+            let da = a.$subtract(center);
+            let db = b.$subtract(center);
+            if (da[0] >= 0 && db[0] < 0)
+                return 1;
+            if (da[0] < 0 && db[0] >= 0)
+                return -1;
+            if (da[0] == 0 && db[0] == 0) {
+                if (da[1] >= 0 || db[1] >= 0)
+                    return (da[1] > db[1]) ? 1 : -1;
+                return (db[1] > da[1]) ? 1 : -1;
+            }
+            // compute the cross product of vectors (center -> a) x (center -> b)
+            let det = da.cross2D(db);
+            if (det < 0)
+                return 1;
+            if (det > 0)
+                return -1;
+            // points a and b are on the same line from the center
+            // check which point is closer to the center
+            return (da[0] * da[0] + da[1] * da[1] > db[0] * db[0] + db[1] * db[1]) ? 1 : -1;
+        };
+        return pts.sort(fn);
     }
     /**
      * Scale a Pt or a Group of Pts
@@ -1644,6 +1679,334 @@ exports.Shaping = Shaping;
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
+/**
+ * Bound is a subclass of Group that represents a rectangular boundary.
+ * It includes some convenient properties such as `x`, `y`, bottomRight`, `center`, and `size`.
+ */
+class Bound extends Pt_1.Group {
+    /**
+     * Create a Bound. This is similar to the Group constructor.
+     * @param args a list of Pt as parameters
+     */
+    constructor(...args) {
+        super(...args);
+        this._center = new Pt_1.Pt();
+        this._size = new Pt_1.Pt();
+        this._topLeft = new Pt_1.Pt();
+        this._bottomRight = new Pt_1.Pt();
+        this._inited = false;
+        this.init();
+    }
+    /**
+     * Create a Bound from a [ClientRect](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect) object.
+     * @param rect an object has top/left/bottom/right/width/height properties
+     * @returns a Bound object
+     */
+    static fromBoundingRect(rect) {
+        let b = new Bound(new Pt_1.Pt(rect.left || 0, rect.top || 0), new Pt_1.Pt(rect.right || 0, rect.bottom || 0));
+        if (rect.width && rect.height)
+            b.size = new Pt_1.Pt(rect.width, rect.height);
+        return b;
+    }
+    static fromGroup(g) {
+        if (g.length < 2)
+            throw new Error("Cannot create a Bound from a group that has less than 2 Pt");
+        return new Bound(g[0], g[g.length - 1]);
+    }
+    /**
+     * Initiate the bound's properties.
+     */
+    init() {
+        if (this.p1) {
+            this._size = this.p1.clone();
+            this._inited = true;
+        }
+        if (this.p1 && this.p2) {
+            let a = this.p1;
+            let b = this.p2;
+            this.topLeft = a.$min(b);
+            this._bottomRight = a.$max(b);
+            this._updateSize();
+            this._inited = true;
+        }
+    }
+    /**
+     * Clone this bound and return a new one
+     */
+    clone() {
+        return new Bound(this._topLeft.clone(), this._bottomRight.clone());
+    }
+    /**
+     * Recalculte size and center
+     */
+    _updateSize() {
+        this._size = this._bottomRight.$subtract(this._topLeft).abs();
+        this._updateCenter();
+    }
+    /**
+     * Recalculate center
+     */
+    _updateCenter() {
+        this._center = this._size.$multiply(0.5).add(this._topLeft);
+    }
+    /**
+     * Recalculate based on top-left position and size
+     */
+    _updatePosFromTop() {
+        this._bottomRight = this._topLeft.$add(this._size);
+        this._updateCenter();
+    }
+    /**
+     * Recalculate based on bottom-right position and size
+     */
+    _updatePosFromBottom() {
+        this._topLeft = this._bottomRight.$subtract(this._size);
+        this._updateCenter();
+    }
+    /**
+     * Recalculate based on center position and size
+     */
+    _updatePosFromCenter() {
+        let half = this._size.$multiply(0.5);
+        this._topLeft = this._center.$subtract(half);
+        this._bottomRight = this._center.$add(half);
+    }
+    get size() { return new Pt_1.Pt(this._size); }
+    set size(p) {
+        this._size = new Pt_1.Pt(p);
+        this._updatePosFromTop();
+    }
+    get center() { return new Pt_1.Pt(this._center); }
+    set center(p) {
+        this._center = new Pt_1.Pt(p);
+        this._updatePosFromCenter();
+    }
+    get topLeft() { return new Pt_1.Pt(this._topLeft); }
+    set topLeft(p) {
+        this._topLeft = new Pt_1.Pt(p);
+        this[0] = this._topLeft;
+        this._updateSize();
+    }
+    get bottomRight() { return new Pt_1.Pt(this._bottomRight); }
+    set bottomRight(p) {
+        this._bottomRight = new Pt_1.Pt(p);
+        this[1] = this._bottomRight;
+        this._updateSize();
+    }
+    get width() { return (this._size.length > 0) ? this._size.x : 0; }
+    set width(w) {
+        this._size.x = w;
+        this._updatePosFromTop();
+    }
+    get height() { return (this._size.length > 1) ? this._size.y : 0; }
+    set height(h) {
+        this._size.y = h;
+        this._updatePosFromTop();
+    }
+    get depth() { return (this._size.length > 2) ? this._size.z : 0; }
+    set depth(d) {
+        this._size.z = d;
+        this._updatePosFromTop();
+    }
+    get x() { return this.topLeft.x; }
+    get y() { return this.topLeft.y; }
+    get z() { return this.topLeft.z; }
+    get inited() { return this._inited; }
+    /**
+     * If the Group elements are changed, call this function to update the Bound's properties.
+     * It's preferable to change the topLeft/bottomRight etc properties instead of changing the Group array directly.
+     */
+    update() {
+        this._topLeft = this[0];
+        this._bottomRight = this[1];
+        this._updateSize();
+        return this;
+    }
+}
+exports.Bound = Bound;
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan)
+Object.defineProperty(exports, "__esModule", { value: true });
+const Util_1 = __webpack_require__(1);
+/**
+* Form is an abstract class that represents a form that's used in a Space for expressions.
+*/
+class Form {
+    constructor() {
+        this._ready = false;
+    }
+    /**
+    * get whether the Form has received the Space's rendering context
+    */
+    get ready() { return this._ready; }
+    /**
+     * Check number of items in a Group against a required number
+     * @param pts
+     */
+    static _checkSize(pts, required = 2) {
+        if (pts.length < required) {
+            Util_1.Util.warn("Requires 2 or more Pts in this Group.");
+            return false;
+        }
+        return true;
+    }
+}
+exports.Form = Form;
+/**
+* VisualForm is an abstract class that represents a form that can be used to express Pts visually.
+* For example, CanvasForm is an implementation of VisualForm that draws on CanvasSpace which represents a html canvas.
+*/
+class VisualForm extends Form {
+    constructor() {
+        super(...arguments);
+        this._filled = true;
+        this._stroked = true;
+        this._font = new Font(14, "sans-serif");
+    }
+    get filled() { return this._filled; }
+    set filled(b) { this._filled = b; }
+    get stroked() { return this._stroked; }
+    set stroked(b) { this._stroked = b; }
+    get currentFont() { return this._font; }
+    _multiple(groups, shape, ...rest) {
+        if (!groups)
+            return this;
+        for (let i = 0, len = groups.length; i < len; i++) {
+            this[shape](groups[i], ...rest);
+        }
+        return this;
+    }
+    /**
+    * Set fill color (not implemented)
+    */
+    fill(c) {
+        return this;
+    }
+    /**
+    * Set current fill style and without stroke.
+    * @example `form.fillOnly("#F90")`, `form.fillOnly("rgba(0,0,0,.5")`
+    * @param c fill color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle))
+    */
+    fillOnly(c) {
+        this.stroke(false);
+        return this.fill(c);
+    }
+    /**
+    * Set stroke style (not implemented)
+    */
+    stroke(c, width, linejoin, linecap) {
+        return this;
+    }
+    /**
+    * Set current stroke style and without fill.
+    * @example `form.strokeOnly("#F90")`, `form.strokeOnly("#000", 0.5, 'round', 'square')`
+    * @param c stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle)
+    */
+    strokeOnly(c, width, linejoin, linecap) {
+        this.fill(false);
+        return this.stroke(c, width, linejoin, linecap);
+    }
+    /**
+    * Draw multiple points at once
+    * @param pts an array of Pt or an array of number arrays
+    * @param radius radius of the point. Default is 5.
+    * @param shape The shape of the point. Defaults to "square", but it can be "circle" or a custom shape function in your own implementation.
+    */
+    points(pts, radius, shape) {
+        if (!pts)
+            return;
+        for (let i = 0, len = pts.length; i < len; i++) {
+            this.point(pts[i], radius, shape);
+        }
+        return this;
+    }
+    /**
+    * Draw multiple circles at once
+    * @param groups an array of Groups that defines multiple circles
+    */
+    circles(groups) {
+        return this._multiple(groups, "circle");
+    }
+    /**
+    * Draw multiple squares at once
+    * @param groups an array of Groups that defines multiple circles
+    */
+    squares(groups) {
+        return this._multiple(groups, "square");
+    }
+    /**
+    * Draw multiple lines at once
+    * @param groups An array of Groups of Pts
+    */
+    lines(groups) {
+        return this._multiple(groups, "line");
+    }
+    /**
+    * Draw multiple polygons at once
+    * @param groups An array of Groups of Pts
+    */
+    polygons(groups) {
+        return this._multiple(groups, "polygon");
+    }
+    /**
+    * Draw multiple rectangles at once
+    * @param groups An array of Groups of Pts
+    */
+    rects(groups) {
+        return this._multiple(groups, "rect");
+    }
+}
+exports.VisualForm = VisualForm;
+/**
+* Font class lets you create a specific font style with properties for its size and style
+*/
+class Font {
+    /**
+    * Create a font style
+    * @param size font size. Defaults is 12px.
+    * @param face Optional font-family, use css-like string such as "Helvetica" or "Helvetica, sans-serif". Default is "sans-serif".
+    * @param weight Optional font weight such as "bold". Default is "" (none).
+    * @param style Optional font style such as "italic". Default is "" (none).
+    * @param lineHeight Optional line height. Default is 1.5.
+    * @example `new Font(12, "Frutiger, sans-serif", "bold", "underline", 1.5)`
+    */
+    constructor(size = 12, face = "sans-serif", weight = "", style = "", lineHeight = 1.5) {
+        this.size = size;
+        this.face = face;
+        this.style = style;
+        this.weight = weight;
+        this.lineHeight = lineHeight;
+    }
+    /**
+    * Get a string representing the font style, in css-like string such as "italic bold 12px/1.5 sans-serif"
+    */
+    get value() { return `${this.style} ${this.weight} ${this.size}px/${this.lineHeight} ${this.face}`; }
+    /**
+    * Get a string representing the font style, in css-like string such as "italic bold 12px/1.5 sans-serif"
+    */
+    toString() { return this.value; }
+}
+exports.Font = Font;
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan)
+Object.defineProperty(exports, "__esModule", { value: true });
+const Pt_1 = __webpack_require__(0);
 const Op_1 = __webpack_require__(6);
 /**
  * Vec provides static function for vector operations. It's not yet optimized but good enough to use.
@@ -1730,7 +2093,13 @@ class Vec {
         return d;
     }
     /**
-     * Cross product of `a` and `b` (3D only)
+     * 2D cross product of `a` and `b`
+     */
+    static cross2D(a, b) {
+        return a[0] * b[1] - a[1] * b[0];
+    }
+    /**
+     * 3D Cross product of `a` and `b`
      */
     static cross(a, b) {
         return new Pt_1.Pt((a[1] * b[2] - a[2] * b[1]), (a[2] * b[0] - a[0] * b[2]), (a[0] * b[1] - a[1] * b[0]));
@@ -2020,334 +2389,6 @@ exports.Mat = Mat;
 
 
 /***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-// Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan)
-Object.defineProperty(exports, "__esModule", { value: true });
-const Pt_1 = __webpack_require__(0);
-/**
- * Bound is a subclass of Group that represents a rectangular boundary.
- * It includes some convenient properties such as `x`, `y`, bottomRight`, `center`, and `size`.
- */
-class Bound extends Pt_1.Group {
-    /**
-     * Create a Bound. This is similar to the Group constructor.
-     * @param args a list of Pt as parameters
-     */
-    constructor(...args) {
-        super(...args);
-        this._center = new Pt_1.Pt();
-        this._size = new Pt_1.Pt();
-        this._topLeft = new Pt_1.Pt();
-        this._bottomRight = new Pt_1.Pt();
-        this._inited = false;
-        this.init();
-    }
-    /**
-     * Create a Bound from a [ClientRect](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect) object.
-     * @param rect an object has top/left/bottom/right/width/height properties
-     * @returns a Bound object
-     */
-    static fromBoundingRect(rect) {
-        let b = new Bound(new Pt_1.Pt(rect.left || 0, rect.top || 0), new Pt_1.Pt(rect.right || 0, rect.bottom || 0));
-        if (rect.width && rect.height)
-            b.size = new Pt_1.Pt(rect.width, rect.height);
-        return b;
-    }
-    static fromGroup(g) {
-        if (g.length < 2)
-            throw new Error("Cannot create a Bound from a group that has less than 2 Pt");
-        return new Bound(g[0], g[g.length - 1]);
-    }
-    /**
-     * Initiate the bound's properties.
-     */
-    init() {
-        if (this.p1) {
-            this._size = this.p1.clone();
-            this._inited = true;
-        }
-        if (this.p1 && this.p2) {
-            let a = this.p1;
-            let b = this.p2;
-            this.topLeft = a.$min(b);
-            this._bottomRight = a.$max(b);
-            this._updateSize();
-            this._inited = true;
-        }
-    }
-    /**
-     * Clone this bound and return a new one
-     */
-    clone() {
-        return new Bound(this._topLeft.clone(), this._bottomRight.clone());
-    }
-    /**
-     * Recalculte size and center
-     */
-    _updateSize() {
-        this._size = this._bottomRight.$subtract(this._topLeft).abs();
-        this._updateCenter();
-    }
-    /**
-     * Recalculate center
-     */
-    _updateCenter() {
-        this._center = this._size.$multiply(0.5).add(this._topLeft);
-    }
-    /**
-     * Recalculate based on top-left position and size
-     */
-    _updatePosFromTop() {
-        this._bottomRight = this._topLeft.$add(this._size);
-        this._updateCenter();
-    }
-    /**
-     * Recalculate based on bottom-right position and size
-     */
-    _updatePosFromBottom() {
-        this._topLeft = this._bottomRight.$subtract(this._size);
-        this._updateCenter();
-    }
-    /**
-     * Recalculate based on center position and size
-     */
-    _updatePosFromCenter() {
-        let half = this._size.$multiply(0.5);
-        this._topLeft = this._center.$subtract(half);
-        this._bottomRight = this._center.$add(half);
-    }
-    get size() { return new Pt_1.Pt(this._size); }
-    set size(p) {
-        this._size = new Pt_1.Pt(p);
-        this._updatePosFromTop();
-    }
-    get center() { return new Pt_1.Pt(this._center); }
-    set center(p) {
-        this._center = new Pt_1.Pt(p);
-        this._updatePosFromCenter();
-    }
-    get topLeft() { return new Pt_1.Pt(this._topLeft); }
-    set topLeft(p) {
-        this._topLeft = new Pt_1.Pt(p);
-        this[0] = this._topLeft;
-        this._updateSize();
-    }
-    get bottomRight() { return new Pt_1.Pt(this._bottomRight); }
-    set bottomRight(p) {
-        this._bottomRight = new Pt_1.Pt(p);
-        this[1] = this._bottomRight;
-        this._updateSize();
-    }
-    get width() { return (this._size.length > 0) ? this._size.x : 0; }
-    set width(w) {
-        this._size.x = w;
-        this._updatePosFromTop();
-    }
-    get height() { return (this._size.length > 1) ? this._size.y : 0; }
-    set height(h) {
-        this._size.y = h;
-        this._updatePosFromTop();
-    }
-    get depth() { return (this._size.length > 2) ? this._size.z : 0; }
-    set depth(d) {
-        this._size.z = d;
-        this._updatePosFromTop();
-    }
-    get x() { return this.topLeft.x; }
-    get y() { return this.topLeft.y; }
-    get z() { return this.topLeft.z; }
-    get inited() { return this._inited; }
-    /**
-     * If the Group elements are changed, call this function to update the Bound's properties.
-     * It's preferable to change the topLeft/bottomRight etc properties instead of changing the Group array directly.
-     */
-    update() {
-        this._topLeft = this[0];
-        this._bottomRight = this[1];
-        this._updateSize();
-        return this;
-    }
-}
-exports.Bound = Bound;
-
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-// Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan)
-Object.defineProperty(exports, "__esModule", { value: true });
-const Util_1 = __webpack_require__(1);
-/**
-* Form is an abstract class that represents a form that's used in a Space for expressions.
-*/
-class Form {
-    constructor() {
-        this._ready = false;
-    }
-    /**
-    * get whether the Form has received the Space's rendering context
-    */
-    get ready() { return this._ready; }
-    /**
-     * Check number of items in a Group against a required number
-     * @param pts
-     */
-    static _checkSize(pts, required = 2) {
-        if (pts.length < required) {
-            Util_1.Util.warn("Requires 2 or more Pts in this Group.");
-            return false;
-        }
-        return true;
-    }
-}
-exports.Form = Form;
-/**
-* VisualForm is an abstract class that represents a form that can be used to express Pts visually.
-* For example, CanvasForm is an implementation of VisualForm that draws on CanvasSpace which represents a html canvas.
-*/
-class VisualForm extends Form {
-    constructor() {
-        super(...arguments);
-        this._filled = true;
-        this._stroked = true;
-        this._font = new Font(14, "sans-serif");
-    }
-    get filled() { return this._filled; }
-    set filled(b) { this._filled = b; }
-    get stroked() { return this._stroked; }
-    set stroked(b) { this._stroked = b; }
-    get currentFont() { return this._font; }
-    _multiple(groups, shape, ...rest) {
-        if (!groups)
-            return this;
-        for (let i = 0, len = groups.length; i < len; i++) {
-            this[shape](groups[i], ...rest);
-        }
-        return this;
-    }
-    /**
-    * Set fill color (not implemented)
-    */
-    fill(c) {
-        return this;
-    }
-    /**
-    * Set current fill style and without stroke.
-    * @example `form.fillOnly("#F90")`, `form.fillOnly("rgba(0,0,0,.5")`
-    * @param c fill color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle))
-    */
-    fillOnly(c) {
-        this.stroke(false);
-        return this.fill(c);
-    }
-    /**
-    * Set stroke style (not implemented)
-    */
-    stroke(c, width, linejoin, linecap) {
-        return this;
-    }
-    /**
-    * Set current stroke style and without fill.
-    * @example `form.strokeOnly("#F90")`, `form.strokeOnly("#000", 0.5, 'round', 'square')`
-    * @param c stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle)
-    */
-    strokeOnly(c, width, linejoin, linecap) {
-        this.fill(false);
-        return this.stroke(c, width, linejoin, linecap);
-    }
-    /**
-    * Draw multiple points at once
-    * @param pts an array of Pt or an array of number arrays
-    * @param radius radius of the point. Default is 5.
-    * @param shape The shape of the point. Defaults to "square", but it can be "circle" or a custom shape function in your own implementation.
-    */
-    points(pts, radius, shape) {
-        if (!pts)
-            return;
-        for (let i = 0, len = pts.length; i < len; i++) {
-            this.point(pts[i], radius, shape);
-        }
-        return this;
-    }
-    /**
-    * Draw multiple circles at once
-    * @param groups an array of Groups that defines multiple circles
-    */
-    circles(groups) {
-        return this._multiple(groups, "circle");
-    }
-    /**
-    * Draw multiple squares at once
-    * @param groups an array of Groups that defines multiple circles
-    */
-    squares(groups) {
-        return this._multiple(groups, "square");
-    }
-    /**
-    * Draw multiple lines at once
-    * @param groups An array of Groups of Pts
-    */
-    lines(groups) {
-        return this._multiple(groups, "line");
-    }
-    /**
-    * Draw multiple polygons at once
-    * @param groups An array of Groups of Pts
-    */
-    polygons(groups) {
-        return this._multiple(groups, "polygon");
-    }
-    /**
-    * Draw multiple rectangles at once
-    * @param groups An array of Groups of Pts
-    */
-    rects(groups) {
-        return this._multiple(groups, "rect");
-    }
-}
-exports.VisualForm = VisualForm;
-/**
-* Font class lets you create a specific font style with properties for its size and style
-*/
-class Font {
-    /**
-    * Create a font style
-    * @param size font size. Defaults is 12px.
-    * @param face Optional font-family, use css-like string such as "Helvetica" or "Helvetica, sans-serif". Default is "sans-serif".
-    * @param weight Optional font weight such as "bold". Default is "" (none).
-    * @param style Optional font style such as "italic". Default is "" (none).
-    * @param lineHeight Optional line height. Default is 1.5.
-    * @example `new Font(12, "Frutiger, sans-serif", "bold", "underline", 1.5)`
-    */
-    constructor(size = 12, face = "sans-serif", weight = "", style = "", lineHeight = 1.5) {
-        this.size = size;
-        this.face = face;
-        this.style = style;
-        this.weight = weight;
-        this.lineHeight = lineHeight;
-    }
-    /**
-    * Get a string representing the font style, in css-like string such as "italic bold 12px/1.5 sans-serif"
-    */
-    get value() { return `${this.style} ${this.weight} ${this.size}px/${this.lineHeight} ${this.face}`; }
-    /**
-    * Get a string representing the font style, in css-like string such as "italic bold 12px/1.5 sans-serif"
-    */
-    toString() { return this.value; }
-}
-exports.Font = Font;
-
-
-/***/ }),
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2359,7 +2400,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(1);
 const Num_1 = __webpack_require__(2);
 const Pt_1 = __webpack_require__(0);
-const LinearAlgebra_1 = __webpack_require__(3);
+const LinearAlgebra_1 = __webpack_require__(5);
 let _errorLength = (obj, param = "expected") => Util_1.Util.warn("Group's length is less than " + param, obj);
 let _errorOutofBound = (obj, param = "") => Util_1.Util.warn(`Index ${param} is out of bound in Group`, obj);
 /**
@@ -3574,7 +3615,7 @@ exports.Curve = Curve;
 // Source code licensed under Apache License 2.0. 
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
-const Bound_1 = __webpack_require__(4);
+const Bound_1 = __webpack_require__(3);
 const Pt_1 = __webpack_require__(0);
 /**
 * Space is an abstract class that represents a general context for expressing Pts.
@@ -3970,8 +4011,8 @@ exports.MultiTouchSpace = MultiTouchSpace;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const Space_1 = __webpack_require__(7);
-const Form_1 = __webpack_require__(5);
-const Bound_1 = __webpack_require__(4);
+const Form_1 = __webpack_require__(4);
+const Bound_1 = __webpack_require__(3);
 const Util_1 = __webpack_require__(1);
 const Pt_1 = __webpack_require__(0);
 /**
@@ -4685,8 +4726,8 @@ exports.HTMLForm = HTMLForm;
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Space_1 = __webpack_require__(7);
-const Form_1 = __webpack_require__(5);
-const Bound_1 = __webpack_require__(4);
+const Form_1 = __webpack_require__(4);
+const Bound_1 = __webpack_require__(3);
 const Util_1 = __webpack_require__(1);
 /**
 * CanvasSpace is an implementation of the abstract class Space. It represents a space for HTML Canvas.
@@ -5906,7 +5947,7 @@ const Pt_1 = __webpack_require__(0);
 const Op_1 = __webpack_require__(6);
 const Util_1 = __webpack_require__(1);
 const Num_1 = __webpack_require__(2);
-const LinearAlgebra_1 = __webpack_require__(3);
+const LinearAlgebra_1 = __webpack_require__(5);
 /**
  * The `Create` class provides various convenient functions to create structures or shapes.
  */
@@ -6113,6 +6154,10 @@ exports.Noise = Noise;
  * with reference to its [javascript implementation by ironwallaby](https://github.com/ironwallaby/delaunay)
  */
 class Delaunay extends Pt_1.Group {
+    constructor() {
+        super(...arguments);
+        this._network = {};
+    }
     /**
      * Calculate delaunay triangulation
      * @returns an array of {i, j, k, triangle, circle} which records the indices of the vertices, and the calculated triangles and circumcircles
@@ -6120,6 +6165,7 @@ class Delaunay extends Pt_1.Group {
     generate() {
         if (this.length < 3)
             return [];
+        this._network = [];
         let n = this.length;
         // sort the points and store the sorted index
         let indices = [];
@@ -6138,6 +6184,8 @@ class Delaunay extends Pt_1.Group {
             let c = indices[i];
             let edges = [];
             let j = opened.length;
+            if (!this._network[c])
+                this._network[c] = {};
             // Go through each opened triangles
             while (j--) {
                 let circum = opened[j];
@@ -6167,10 +6215,24 @@ class Delaunay extends Pt_1.Group {
         }
         for (let i = 0, len = opened.length; i < len; i++) {
             let o = opened[i];
-            if (o.i < n && o.j < n && o.k < n)
+            if (o.i < n && o.j < n && o.k < n) {
                 closed.push(o);
+                this._recordNetwork(this._network, o);
+            }
         }
         return closed;
+    }
+    _recordNetwork(c, o) {
+        this._network[o.i][`${Math.min(o.j, o.k)}-${Math.max(o.j, o.k)}`] = o;
+        this._network[o.j][`${Math.min(o.i, o.k)}-${Math.max(o.i, o.k)}`] = o;
+        this._network[o.k][`${Math.min(o.i, o.j)}-${Math.max(o.i, o.j)}`] = o;
+        // if (this._network[o.i].indexOf( o.k ) < 0) this._network[o.i].push( o.k );
+        // if (this._network[o.j].indexOf( o.k ) < 0) this._network[o.j].push( o.k );
+        // if (this._network[o.k].indexOf( o.i ) < 0) this._network[o.k].push( o.i );
+        // if (this._network[o.k].indexOf( o.j ) < 0) this._network[o.k].push( o.j );
+    }
+    network() {
+        return this._network;
     }
     /**
      * Get the initial "super triangle" that contains all the points in this set
@@ -6238,6 +6300,21 @@ class Delaunay extends Pt_1.Group {
         }
         return edges;
     }
+    _neighbors(ts) {
+        console.log(ts);
+        let ns = [];
+        for (let i = 0, len = ts.length; i < len; i++) {
+            let ti = ts.k;
+            if (!ns[ti]) {
+                ns = [ts.i, ts.j];
+            }
+            else {
+                ns.push(ts.i);
+                ns.push(ts.j);
+            }
+        }
+        return ns;
+    }
 }
 exports.Delaunay = Delaunay;
 
@@ -6249,7 +6326,7 @@ exports.Delaunay = Delaunay;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const Form_1 = __webpack_require__(5);
+const Form_1 = __webpack_require__(4);
 const Num_1 = __webpack_require__(2);
 const Util_1 = __webpack_require__(1);
 const Pt_1 = __webpack_require__(0);
@@ -6832,11 +6909,11 @@ exports.SVGForm = SVGForm;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const _Bound = __webpack_require__(4);
+const _Bound = __webpack_require__(3);
 const _Canvas = __webpack_require__(9);
 const _Create = __webpack_require__(11);
-const _Form = __webpack_require__(5);
-const _LinearAlgebra = __webpack_require__(3);
+const _Form = __webpack_require__(4);
+const _LinearAlgebra = __webpack_require__(5);
 const _Num = __webpack_require__(2);
 const _Op = __webpack_require__(6);
 const _Pt = __webpack_require__(0);

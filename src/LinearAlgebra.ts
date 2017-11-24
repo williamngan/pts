@@ -84,9 +84,16 @@ export class Vec {
     return d;
   } 
 
+  
+  /**
+   * 2D cross product of `a` and `b`
+   */
+  static cross2D( a:PtLike, b:PtLike ):number {
+    return a[0]*b[1] - a[1]*b[0];
+  }
 
   /**
-   * Cross product of `a` and `b` (3D only)
+   * 3D Cross product of `a` and `b`
    */
   static cross( a:PtLike, b:PtLike ):Pt {
     return new Pt( (a[1]*b[2] - a[2]*b[1]), (a[2]*b[0] - a[0]*b[2]), (a[0]*b[1] - a[1]*b[0]) );

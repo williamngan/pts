@@ -274,6 +274,13 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
 
 
   /**
+   * 2D Cross product of this Pt and another Pt. Return results as a new Pt.
+   * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
+   */
+  cross2D( ...args ):number { return Vec.cross2D( this, Util.getArgs(args) ); }
+
+  
+  /**
    * 3D Cross product of this Pt and another Pt. Return results as a new Pt.
    * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
    */

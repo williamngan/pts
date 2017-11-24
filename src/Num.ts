@@ -288,6 +288,40 @@ export class Geom {
   }
 
 
+  // https://stackoverflow.com/questions/6989100/sort-points-in-clockwise-order
+  static sortEdges( pts:GroupLike ):GroupLike {
+
+    let bounds = Geom.boundingBox( pts );
+    let center = bounds[1].add(bounds[0]).divide(2);
+    
+    let fn = ( a:Pt, b:Pt ):number => {
+      if (a.length < 2 || b.length < 2) throw new Error( "Pt dimension cannot be less than 2");
+
+      let da = a.$subtract( center );
+      let db = b.$subtract( center );
+      
+      if (da[0] >= 0 && db[0] < 0) return 1;
+      if (da[0] < 0 && db[0] >= 0) return -1;
+      if (da[0] == 0 && db[0] == 0) {
+          if (da[1] >= 0 || db[1] >= 0)
+              return (da[1] > db[1]) ? 1 : -1;
+          return (db[1] > da[1]) ? 1 : -1;
+      }
+
+      // compute the cross product of vectors (center -> a) x (center -> b)
+      let det = da.cross2D( db );
+      if (det < 0) return 1;
+      if (det > 0) return -1;
+      
+      // points a and b are on the same line from the center
+      // check which point is closer to the center
+      return (da[0]*da[0] + da[1]*da[1] > db[0]*db[0] + db[1]*db[1]) ? 1 : -1;
+    };
+
+    return pts.sort( fn );
+  }
+
+
   /**
    * Scale a Pt or a Group of Pts
    * @param ps a Pt or a Group of Pts

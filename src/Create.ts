@@ -255,12 +255,16 @@ type DelaunayShape = {i:number, j:number, k:number, triangle:GroupLike, circle:G
  */
 export class Delaunay extends Group {
 
+  private _network = {};
+
   /**
    * Calculate delaunay triangulation
    * @returns an array of {i, j, k, triangle, circle} which records the indices of the vertices, and the calculated triangles and circumcircles
    */
   generate():DelaunayShape[] {
     if (this.length < 3) return [];
+
+    this._network = [];
 
     let n = this.length;
 
@@ -283,6 +287,7 @@ export class Delaunay extends Group {
       let c = indices[i];
       let edges:number[] = [];
       let j = opened.length;
+      if (!this._network[c]) this._network[c] = {};
 
       // Go through each opened triangles
       while (j--) {
@@ -320,10 +325,28 @@ export class Delaunay extends Group {
 
     for (let i=0, len=opened.length; i<len; i++) {
       let o = opened[i];
-      if (o.i < n && o.j < n && o.k < n) closed.push( o );
+      if (o.i < n && o.j < n && o.k < n) {
+        closed.push( o );
+        this._recordNetwork( this._network, o );
+      }
     }
 
     return closed;
+  }
+
+
+  protected _recordNetwork( c, o ) {
+    this._network[o.i][`${Math.min(o.j,o.k)}-${Math.max(o.j,o.k)}`] = o;
+    this._network[o.j][`${Math.min(o.i,o.k)}-${Math.max(o.i,o.k)}`] = o;
+    this._network[o.k][`${Math.min(o.i,o.j)}-${Math.max(o.i,o.j)}`] = o;
+    // if (this._network[o.i].indexOf( o.k ) < 0) this._network[o.i].push( o.k );
+    // if (this._network[o.j].indexOf( o.k ) < 0) this._network[o.j].push( o.k );
+    // if (this._network[o.k].indexOf( o.i ) < 0) this._network[o.k].push( o.i );
+    // if (this._network[o.k].indexOf( o.j ) < 0) this._network[o.k].push( o.j );
+  }
+
+  network() {
+    return this._network;
   }
 
 
@@ -404,6 +427,22 @@ export class Delaunay extends Group {
     }
 
     return edges;
+  }
+
+
+  _neighbors( ts ) {
+    console.log( ts  );
+    let ns = [];
+    for (let i=0, len=ts.length; i<len; i++) {
+      let ti = ts.k;
+      if (!ns[ti]) {
+        ns = [ ts.i, ts.j ];
+      } else {
+        ns.push( ts.i );
+        ns.push( ts.j );
+      }
+    }
+    return ns;
   }
 
 }
