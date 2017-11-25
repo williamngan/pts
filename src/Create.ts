@@ -129,6 +129,16 @@ export class Create {
     }
     return g;
   }
+
+
+  /**
+   * Create a Delaunay Group. Use the `.delaunay()` and `.voronoi()` functions in the returned group to generate tessellations.
+   * @param pts a Group or an array of Pts
+   * @returns an instance of the Delaunay class
+   */
+  static delaunay( pts:GroupLike ):Delaunay {
+    return Delaunay.from( pts ) as Delaunay;
+  }
   
 }
 
