@@ -95,6 +95,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_linearalgebra_.vec.html#add" class="tsd-kind-icon">add</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_linearalgebra_.vec.html#ceil" class="tsd-kind-icon">ceil</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_linearalgebra_.vec.html#cross" class="tsd-kind-icon">cross</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_linearalgebra_.vec.html#cross2d" class="tsd-kind-icon">cross2D</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_linearalgebra_.vec.html#divide" class="tsd-kind-icon">divide</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_linearalgebra_.vec.html#dot" class="tsd-kind-icon">dot</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_linearalgebra_.vec.html#floor" class="tsd-kind-icon">floor</a></li>
@@ -124,7 +125,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/cdb27b6/src/LinearAlgebra.ts#L118">LinearAlgebra.ts:118</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/c3e143a/src/LinearAlgebra.ts#L125">LinearAlgebra.ts:125</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -153,7 +154,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/cdb27b6/src/LinearAlgebra.ts#L18">LinearAlgebra.ts:18</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/c3e143a/src/LinearAlgebra.ts#L18">LinearAlgebra.ts:18</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -185,7 +186,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/cdb27b6/src/LinearAlgebra.ts#L136">LinearAlgebra.ts:136</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/c3e143a/src/LinearAlgebra.ts#L143">LinearAlgebra.ts:143</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -214,12 +215,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/cdb27b6/src/LinearAlgebra.ts#L91">LinearAlgebra.ts:91</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/c3e143a/src/LinearAlgebra.ts#L98">LinearAlgebra.ts:98</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Cross product of <code>a</code> and <code>b</code> (3D only)</p>
+									<p>3D Cross product of <code>a</code> and <code>b</code></p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -236,6 +237,37 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="cross2d" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> cross2D</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">cross2D<span class="tsd-signature-symbol">(</span>a<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a>, b<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/c3e143a/src/LinearAlgebra.ts#L91">LinearAlgebra.ts:91</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>2D cross product of <code>a</code> and <code>b</code></p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>a: <a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a></h5>
+								</li>
+								<li>
+									<h5>b: <a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
 					<a name="divide" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> divide</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
@@ -245,7 +277,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/cdb27b6/src/LinearAlgebra.ts#L61">LinearAlgebra.ts:61</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/c3e143a/src/LinearAlgebra.ts#L61">LinearAlgebra.ts:61</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -277,7 +309,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/cdb27b6/src/LinearAlgebra.ts#L78">LinearAlgebra.ts:78</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/c3e143a/src/LinearAlgebra.ts#L78">LinearAlgebra.ts:78</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -308,7 +340,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/cdb27b6/src/LinearAlgebra.ts#L127">LinearAlgebra.ts:127</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/c3e143a/src/LinearAlgebra.ts#L134">LinearAlgebra.ts:134</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -337,7 +369,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/cdb27b6/src/LinearAlgebra.ts#L99">LinearAlgebra.ts:99</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/c3e143a/src/LinearAlgebra.ts#L106">LinearAlgebra.ts:106</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -365,7 +397,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/cdb27b6/src/LinearAlgebra.ts#L194">LinearAlgebra.ts:194</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/c3e143a/src/LinearAlgebra.ts#L201">LinearAlgebra.ts:201</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -421,7 +453,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/cdb27b6/src/LinearAlgebra.ts#L154">LinearAlgebra.ts:154</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/c3e143a/src/LinearAlgebra.ts#L161">LinearAlgebra.ts:161</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -458,7 +490,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/cdb27b6/src/LinearAlgebra.ts#L169">LinearAlgebra.ts:169</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/c3e143a/src/LinearAlgebra.ts#L176">LinearAlgebra.ts:176</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -495,7 +527,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/cdb27b6/src/LinearAlgebra.ts#L44">LinearAlgebra.ts:44</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/c3e143a/src/LinearAlgebra.ts#L44">LinearAlgebra.ts:44</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -527,7 +559,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/cdb27b6/src/LinearAlgebra.ts#L145">LinearAlgebra.ts:145</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/c3e143a/src/LinearAlgebra.ts#L152">LinearAlgebra.ts:152</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -556,7 +588,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/cdb27b6/src/LinearAlgebra.ts#L31">LinearAlgebra.ts:31</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/c3e143a/src/LinearAlgebra.ts#L31">LinearAlgebra.ts:31</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -588,7 +620,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/cdb27b6/src/LinearAlgebra.ts#L183">LinearAlgebra.ts:183</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/c3e143a/src/LinearAlgebra.ts#L190">LinearAlgebra.ts:190</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -616,7 +648,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/cdb27b6/src/LinearAlgebra.ts#L107">LinearAlgebra.ts:107</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/c3e143a/src/LinearAlgebra.ts#L114">LinearAlgebra.ts:114</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -710,6 +742,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="_linearalgebra_.vec.html#cross" class="tsd-kind-icon">cross</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="_linearalgebra_.vec.html#cross2d" class="tsd-kind-icon">cross2D</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="_linearalgebra_.vec.html#divide" class="tsd-kind-icon">divide</a>
