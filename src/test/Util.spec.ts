@@ -55,6 +55,25 @@ describe('Util: ', function() {
       assert.equal( g[1][2], 7 );
     });
 
+    it('can create and run a stepper', function() {
+      let g = Util.stepper( 50, 0, 3 );
+      let c = 0;
+      for (let i=0; i<61; i++) {
+        c = g();
+      }
+      assert.equal( c, 33 );
+    });
+
+    it('can loop with a range', function() {
+      let k = 0;
+      let f = (i) => {
+        k += i;
+        return {id: `id${i}`, value:i*2}
+      };
+      let g = Util.forRange( f, 100 );
+      assert.isTrue( g[12].id == "id12" && k === 4950 );
+    })
+
   });
 
 });

@@ -212,4 +212,39 @@ export class Util {
   }
 
 
+  /**
+   * Create a convenient stepper. This returns a function which you can call repeatedly to step a counter.
+   * @param max Maximum of the stepper range. The resulting stepper will return (min to max-1) values.
+   * @param min Minimum of the stepper range. Default is 0.
+   * @param stride Stride of the step. Default is 1.
+   * @param callback An optional callback function( step ), which will be called each tiem when stepper function is called.
+   * @example `let counter = stepper(100); let c = counter(); c = counter(); ...`
+   * @returns a function which will increment the stepper and return its value at each call.
+   */
+  static stepper( max:number, min:number=0, stride:number=1, callback?:(n:number) => void ):(() => number) {
+    let c = min;
+    return function() {
+      c += stride;
+      if (c >= max) {
+        c = min + (c-max);
+      }
+      if (callback) callback(c);
+      return c;
+    };
+  }
+
+
+  /**
+   * A convenient way to step through a range. Same as `for (i=0; i<range; i++)`, except this also stores the resulting return values at each step and return them as an array.
+   * @param range a range to step through
+   * @param fn a callback function(index). If this function returns a value, it will be stored at each step
+   * @returns an array of returned values at each step  
+   */
+  static forRange( fn:(index:number) => any, range:number, start:number=0, step:number=1  ):any[] {
+    let temp = [];
+    for (let i=start, len=range; i<len; i+=step) {
+      temp[i] = fn(i);
+    }
+    return temp;
+  }
 }
