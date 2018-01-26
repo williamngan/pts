@@ -250,6 +250,13 @@ export class CanvasSpace extends MultiTouchSpace {
   }
   
 
+  /**
+  * Set a background color for this canvas. Alternatively, you may use `clear()` function.
+  @param bg background color as hex or rgba string
+  */
+  set background( bg:string ) { this._bgcolor = bg; }
+  get background():string { return this._bgcolor; }
+
   
   /**
   * `pixelScale` property returns a number that let you determine if the screen is "retina" (when value >= 2)
