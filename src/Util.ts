@@ -47,6 +47,12 @@ export const Const = {
   /* represents an arbitrary very small number. It is set as 0.0001 here. */
   epsilon : 0.0001,
 
+  /* represents Number.MAX_VALUE */
+  max: Number.MAX_VALUE,
+
+  /* represents Number.MIN_VALUE */
+  min: Number.MIN_VALUE,
+
   /* pi radian (180 deg) */
   pi: Math.PI,
 

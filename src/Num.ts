@@ -795,3 +795,125 @@ export class Shaping {
   }
 
 }
+
+
+/**
+ * Range object keeps track of a Group of n-dimensional Pts to provide its minimum, maximum, and magnitude in each dimension. 
+ * It also provides convenient functions such as mapping the Group to another range.
+ */
+export class Range {
+
+  protected _source:Group;
+  protected _max:Pt;
+  protected _min:Pt;
+  protected _mag:Pt;
+  protected _dims:number = 0;
+
+
+  /**
+   * Construct a Range instance for a Group of Pts, 
+   * @param g a Group or an array of Pts
+   */
+  constructor( g:GroupLike ) {
+    this._source = Group.fromPtArray( g );
+    this.calc();
+  }
+
+  /**
+   * Get this Range's maximum values per dimension
+   */
+  get max():Pt { return this._max.clone(); }
+  
+  /**
+   * Get this Range's minimum values per dimension
+   */
+  get min():Pt { return this._min.clone(); }
+  
+  /**
+   * Get this Range's magnitude in each dimension
+   */
+  get magnitude():Pt { return this._mag.clone(); }
+
+
+  /**
+   * Go through the group and find its min and max values.
+   * Usually you don't need to call this function directly.
+   */
+  calc():this {
+    if (!this._source) return;
+    let dims = this._source[0].length;
+    this._dims = dims;
+    let max = new Pt( dims );
+    let min = new Pt( dims );
+    let mag = new Pt( dims );
+
+    for (let i=0; i<dims; i++) {
+      max[i] = Const.min;
+      min[i] = Const.max;
+      mag[i] = 0;
+
+      let s = this._source.zipSlice( i );
+      for (let k=0, len=s.length; k<len; k++) {
+        max[i] = Math.max( max[i], s[k] );
+        min[i] = Math.min( min[i], s[k] );
+        mag[i] = max[i] - min[i];
+      }
+    }
+
+    this._max = max;
+    this._min = min;
+    this._mag = mag;
+    return this;
+  }
+
+
+  /**
+   * Map this Range to another range of values
+   * @param min target range's minimum value
+   * @param max target range's maximum value
+   * @param exclude Optional boolean array where `true` means excluding the conversion in that specific dimension.
+   */
+  mapTo( min:number, max:number, exclude?:boolean[] ):Group {
+    let target = new Group();
+    for (let i=0, len=this._source.length; i<len; i++) {
+      let g = this._source[i];
+      let n = new Pt( this._dims );
+      for (let k=0; k<this._dims; k++) {
+        n[k] = (exclude && exclude[k]) ? g[k] : Num.mapToRange( g[k], this._min[k], this._max[k], min, max ); 
+      }
+      target.push( n ); 
+    }
+    return target;
+  }
+
+
+  /**
+   * Add more Pts to this Range and recalculate its min and max values
+   * @param g a Group or an array of Pts to append to this Range
+   * @param update Optional. Set the parameter to `false` if you want to append without immediately updating this Range's min and max values. Default is `true`.
+   */
+  append( g:GroupLike, update:boolean=true ):this {
+    if (g[0].length !== this._dims) throw new Error(`Dimensions don't match. ${this._dims} dimensions in Range and ${g[0].length} provided in parameter. `);
+    this._source = this._source.concat( g ) as Group;
+    if (update) this.calc();
+    return this;
+  }
+
+
+  /**
+   * Create a number of evenly spaced "ticks" that span this Range's min and max value.
+   * @param count number of subdivision. For example, 10 subdivision will return 11 tick values, which include first(min) and last(max) values.
+   */
+  ticks( count:number ):Group {
+    let g = new Group();
+    for (let i=0; i<=count; i++) {
+      let p = new Pt( this._dims );
+      for (let k=0, len=this._max.length; k<len; k++) {
+        p[k] = Num.lerp( this._min[k], this._max[k], i/count );
+      }
+      g.push( p );
+    }
+    return g;
+  }
+
+}

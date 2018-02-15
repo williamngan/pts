@@ -825,6 +825,10 @@ exports.Const = {
     top_right: 3,
     /* represents an arbitrary very small number. It is set as 0.0001 here. */
     epsilon: 0.0001,
+    /* represents Number.MAX_VALUE */
+    max: Number.MAX_VALUE,
+    /* represents Number.MIN_VALUE */
+    min: Number.MIN_VALUE,
     /* pi radian (180 deg) */
     pi: Math.PI,
     /* two pi radian (360deg) */
@@ -1705,6 +1709,108 @@ class Shaping {
     }
 }
 exports.Shaping = Shaping;
+/**
+ * Range object keeps track of a Group of n-dimensional Pts to provide its minimum, maximum, and magnitude in each dimension.
+ * It also provides convenient functions such as mapping the Group to another range.
+ */
+class Range {
+    /**
+     * Construct a Range instance for a Group of Pts,
+     * @param g a Group or an array of Pts
+     */
+    constructor(g) {
+        this._dims = 0;
+        this._source = Pt_1.Group.fromPtArray(g);
+        this.calc();
+    }
+    /**
+     * Get this Range's maximum values per dimension
+     */
+    get max() { return this._max.clone(); }
+    /**
+     * Get this Range's minimum values per dimension
+     */
+    get min() { return this._min.clone(); }
+    /**
+     * Get this Range's magnitude in each dimension
+     */
+    get magnitude() { return this._mag.clone(); }
+    /**
+     * Go through the group and find its min and max values.
+     * Usually you don't need to call this function directly.
+     */
+    calc() {
+        if (!this._source)
+            return;
+        let dims = this._source[0].length;
+        this._dims = dims;
+        let max = new Pt_1.Pt(dims);
+        let min = new Pt_1.Pt(dims);
+        let mag = new Pt_1.Pt(dims);
+        for (let i = 0; i < dims; i++) {
+            max[i] = Util_1.Const.min;
+            min[i] = Util_1.Const.max;
+            mag[i] = 0;
+            let s = this._source.zipSlice(i);
+            for (let k = 0, len = s.length; k < len; k++) {
+                max[i] = Math.max(max[i], s[k]);
+                min[i] = Math.min(min[i], s[k]);
+                mag[i] = max[i] - min[i];
+            }
+        }
+        this._max = max;
+        this._min = min;
+        this._mag = mag;
+        return this;
+    }
+    /**
+     * Map this Range to another range of values
+     * @param min target range's minimum value
+     * @param max target range's maximum value
+     * @param exclude Optional boolean array where `true` means excluding the conversion in that specific dimension.
+     */
+    mapTo(min, max, exclude) {
+        let target = new Pt_1.Group();
+        for (let i = 0, len = this._source.length; i < len; i++) {
+            let g = this._source[i];
+            let n = new Pt_1.Pt(this._dims);
+            for (let k = 0; k < this._dims; k++) {
+                n[k] = (exclude && exclude[k]) ? g[k] : Num.mapToRange(g[k], this._min[k], this._max[k], min, max);
+            }
+            target.push(n);
+        }
+        return target;
+    }
+    /**
+     * Add more Pts to this Range and recalculate its min and max values
+     * @param g a Group or an array of Pts to append to this Range
+     * @param update Optional. Set the parameter to `false` if you want to append without immediately updating this Range's min and max values. Default is `true`.
+     */
+    append(g, update = true) {
+        if (g[0].length !== this._dims)
+            throw new Error(`Dimensions don't match. ${this._dims} dimensions in Range and ${g[0].length} provided in parameter. `);
+        this._source = this._source.concat(g);
+        if (update)
+            this.calc();
+        return this;
+    }
+    /**
+     * Create a number of evenly spaced "ticks" that span this Range's min and max value.
+     * @param count number of subdivision. For example, 10 subdivision will return 11 tick values, which include first(min) and last(max) values.
+     */
+    ticks(count) {
+        let g = new Pt_1.Group();
+        for (let i = 0; i <= count; i++) {
+            let p = new Pt_1.Pt(this._dims);
+            for (let k = 0, len = this._max.length; k < len; k++) {
+                p[k] = Num.lerp(this._min[k], this._max[k], i / count);
+            }
+            g.push(p);
+        }
+        return g;
+    }
+}
+exports.Range = Range;
 
 
 /***/ }),
