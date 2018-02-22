@@ -3762,6 +3762,7 @@ exports.Font = Font;
 Object.defineProperty(exports, "__esModule", { value: true });
 const Bound_1 = __webpack_require__(5);
 const Pt_1 = __webpack_require__(0);
+const UI_1 = __webpack_require__(14);
 /**
 * Space is an abstract class that represents a general context for expressing Pts.
 * See [Space guide](../../guide/Space-0500.html) for details.
@@ -3986,7 +3987,7 @@ class MultiTouchSpace extends Space {
         this._canvas.removeEventListener(evt, callback);
     }
     /**
-    * A convenient method to bind (or unbind) all mouse events in canvas element. All "players" added to this space that implements an `action` callback property will receive mouse event callbacks. The types of mouse actions are: "up", "down", "move", "drag", "drop", "over", and "out". See `Space`'s `add()` function fore more.
+    * A convenient method to bind (or unbind) all mouse events in canvas element. All "players" added to this space that implements an `action` callback property will receive mouse event callbacks. The types of mouse actions are defined by UIPointerActions constants: "up", "down", "move", "drag", "drop", "over", and "out". See `Space`'s `add()` function for more details.
     * @param _bind a boolean value to bind mouse events if set to `true`. If `false`, all mouse events will be unbound. Default is true.
     * @see Space`'s [`add`](./_space_.space.html#add) function
     */
@@ -4049,7 +4050,7 @@ class MultiTouchSpace extends Space {
     }
     /**
     * Go through all the `players` and call its `action` callback function
-    * @param type "up", "down", "move", "drag", "drop", "over", and "out"
+    * @param type an UIPointerActions constant or string: "up", "down", "move", "drag", "drop", "over", and "out"
     * @param evt mouse or touch event
     */
     _mouseAction(type, evt) {
@@ -4088,7 +4089,7 @@ class MultiTouchSpace extends Space {
     * @param evt
     */
     _mouseDown(evt) {
-        this._mouseAction("down", evt);
+        this._mouseAction(UI_1.UIPointerActions.down, evt);
         this._pressed = true;
         return false;
     }
@@ -4097,9 +4098,9 @@ class MultiTouchSpace extends Space {
     * @param evt
     */
     _mouseUp(evt) {
-        this._mouseAction("up", evt);
+        this._mouseAction(UI_1.UIPointerActions.up, evt);
         if (this._dragged)
-            this._mouseAction("drop", evt);
+            this._mouseAction(UI_1.UIPointerActions.down, evt);
         this._pressed = false;
         this._dragged = false;
         return false;
@@ -4109,10 +4110,10 @@ class MultiTouchSpace extends Space {
     * @param evt
     */
     _mouseMove(evt) {
-        this._mouseAction("move", evt);
+        this._mouseAction(UI_1.UIPointerActions.move, evt);
         if (this._pressed) {
             this._dragged = true;
-            this._mouseAction("drag", evt);
+            this._mouseAction(UI_1.UIPointerActions.drag, evt);
         }
         return false;
     }
@@ -4121,7 +4122,7 @@ class MultiTouchSpace extends Space {
     * @param evt
     */
     _mouseOver(evt) {
-        this._mouseAction("over", evt);
+        this._mouseAction(UI_1.UIPointerActions.over, evt);
         return false;
     }
     /**
@@ -4129,9 +4130,9 @@ class MultiTouchSpace extends Space {
     * @param evt
     */
     _mouseOut(evt) {
-        this._mouseAction("out", evt);
+        this._mouseAction(UI_1.UIPointerActions.out, evt);
         if (this._dragged)
-            this._mouseAction("drop", evt);
+            this._mouseAction(UI_1.UIPointerActions.drop, evt);
         this._dragged = false;
         return false;
     }
@@ -7125,6 +7126,145 @@ let namespace = (sc) => {
     }
 };
 module.exports = Object.assign({ namespace }, _Bound, _Canvas, _Create, _Form, _LinearAlgebra, _Op, _Num, _Pt, _Space, _Util, _Color, _Dom, _Svg);
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const Op_1 = __webpack_require__(4);
+/**
+ * An enumeration of different UI types
+ */
+var UIShape;
+(function (UIShape) {
+    UIShape[UIShape["Rectangle"] = 0] = "Rectangle";
+    UIShape[UIShape["Circle"] = 1] = "Circle";
+    UIShape[UIShape["Polygon"] = 2] = "Polygon";
+    UIShape[UIShape["Polyline"] = 3] = "Polyline";
+    UIShape[UIShape["Line"] = 4] = "Line";
+})(UIShape = exports.UIShape || (exports.UIShape = {}));
+exports.UIPointerActions = {
+    up: "up", down: "down", move: "move", drag: "drag", drop: "drop", over: "over", out: "out"
+};
+class UI {
+    /**
+     * Wrap an UI insider a group
+     */
+    constructor(group, shape, states, id) {
+        this.group = group;
+        this.shape = shape;
+        this._id = id;
+        this._states = states;
+        this._actions = {};
+    }
+    /**
+     * Get and set uique id
+     */
+    get id() { return this._id; }
+    set id(d) { this._id = d; }
+    /**
+     * Get a state
+     * @param key state's name
+     */
+    state(key) {
+        return this._states[key] || false;
+    }
+    /**
+     * Add an event handler
+     * @param key event key
+     * @param fn handler function
+     */
+    on(key, fn) {
+        this._actions[key] = fn;
+        return this;
+    }
+    /**
+     * Remove an event handler
+     * @param key even key
+     * @param fn
+     */
+    off(key) {
+        delete this._actions[key];
+        return this;
+    }
+    /**
+     * Listen for interactions and trigger action handlers
+     * @param key action key
+     * @param p point to check
+     */
+    listen(key, p) {
+        if (this._actions[key] !== undefined) {
+            if (this._trigger(p)) {
+                this._actions[key](p, this, key);
+                return true;
+            }
+        }
+        return false;
+    }
+    /**
+     * Take a custom render function to render this UI
+     * @param fn render function
+     */
+    render(fn) {
+        fn(this.group, this._states);
+    }
+    /**
+     * Check intersection using a specific function based on UIShape
+     * @param p a point to check
+     */
+    _trigger(p) {
+        let fn = null;
+        if (this.shape === UIShape.Rectangle) {
+            fn = Op_1.Rectangle.withinBound;
+        }
+        else if (this.shape === UIShape.Circle) {
+            fn = Op_1.Circle.withinBound;
+        }
+        else if (this.shape === UIShape.Polygon) {
+            fn = Op_1.Rectangle.withinBound;
+        }
+        else {
+            return false;
+        }
+        return fn(this.group, p);
+    }
+}
+exports.UI = UI;
+/**
+ * A simple UI button that can track clicks and hovers
+ */
+class UIButton extends UI {
+    constructor(group, shape, states, id) {
+        super(group, shape, states, id);
+        this._clicks = 0;
+    }
+    /**
+     * Get the total number of clicks on this UIButton
+     */
+    get clicks() { return this._clicks; }
+    /**
+     * Add a click handler
+     * @param fn a function to handle clicks
+     */
+    onClick(fn) {
+        this._clicks++;
+        this.on(exports.UIPointerActions.up, fn);
+    }
+    /**
+     * Add hover handler
+     * @param over a function to handle when pointer enters hover
+     * @param out a function to handle when pointer exits hover
+     */
+    onHover(over, out) {
+        this.on(exports.UIPointerActions.over, over);
+        this.on(exports.UIPointerActions.out, out);
+    }
+}
+exports.UIButton = UIButton;
 
 
 /***/ })

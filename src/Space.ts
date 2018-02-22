@@ -5,6 +5,7 @@
 import {Bound} from "./Bound";
 import {Pt, IPt} from "./Pt";
 import {Form} from "./Form";
+import {UIPointerActions as UIA}  from "./UI";
 
 export type AnimateFunction = ( time?:number, frameTime?:number, currentSpace?:any ) => void;
 
@@ -341,7 +342,7 @@ export abstract class MultiTouchSpace extends Space {
   
   
   /**
-  * A convenient method to bind (or unbind) all mouse events in canvas element. All "players" added to this space that implements an `action` callback property will receive mouse event callbacks. The types of mouse actions are: "up", "down", "move", "drag", "drop", "over", and "out". See `Space`'s `add()` function fore more.
+  * A convenient method to bind (or unbind) all mouse events in canvas element. All "players" added to this space that implements an `action` callback property will receive mouse event callbacks. The types of mouse actions are defined by UIPointerActions constants: "up", "down", "move", "drag", "drop", "over", and "out". See `Space`'s `add()` function for more details.
   * @param _bind a boolean value to bind mouse events if set to `true`. If `false`, all mouse events will be unbound. Default is true.
   * @see Space`'s [`add`](./_space_.space.html#add) function
   */
@@ -409,7 +410,7 @@ export abstract class MultiTouchSpace extends Space {
   
   /**
   * Go through all the `players` and call its `action` callback function
-  * @param type "up", "down", "move", "drag", "drop", "over", and "out"
+  * @param type an UIPointerActions constant or string: "up", "down", "move", "drag", "drop", "over", and "out"
   * @param evt mouse or touch event
   */
   protected _mouseAction( type:string, evt:MouseEvent|TouchEvent ) {
@@ -448,7 +449,7 @@ export abstract class MultiTouchSpace extends Space {
   * @param evt 
   */
   protected _mouseDown( evt:MouseEvent|TouchEvent ) {
-    this._mouseAction( "down", evt );
+    this._mouseAction( UIA.down, evt );
     this._pressed = true;
     return false;
   }
@@ -459,8 +460,8 @@ export abstract class MultiTouchSpace extends Space {
   * @param evt 
   */
   protected _mouseUp( evt:MouseEvent|TouchEvent ) {
-    this._mouseAction( "up", evt );
-    if (this._dragged) this._mouseAction( "drop", evt );
+    this._mouseAction( UIA.up, evt );
+    if (this._dragged) this._mouseAction( UIA.down, evt );
     this._pressed = false;
     this._dragged = false;
     return false;
@@ -472,10 +473,10 @@ export abstract class MultiTouchSpace extends Space {
   * @param evt 
   */
   protected _mouseMove( evt:MouseEvent|TouchEvent ) {
-    this._mouseAction( "move", evt );
+    this._mouseAction( UIA.move, evt );
     if (this._pressed) {
       this._dragged = true;
-      this._mouseAction( "drag", evt );
+      this._mouseAction( UIA.drag, evt );
     }
     return false;
   }
@@ -486,7 +487,7 @@ export abstract class MultiTouchSpace extends Space {
   * @param evt 
   */
   protected _mouseOver( evt:MouseEvent|TouchEvent ) {
-    this._mouseAction( "over", evt );
+    this._mouseAction( UIA.over, evt );
     return false;
   }
   
@@ -496,8 +497,8 @@ export abstract class MultiTouchSpace extends Space {
   * @param evt 
   */
   protected _mouseOut( evt:MouseEvent|TouchEvent ) {
-    this._mouseAction( "out", evt );
-    if (this._dragged) this._mouseAction( "drop", evt );
+    this._mouseAction( UIA.out, evt );
+    if (this._dragged) this._mouseAction( UIA.drop, evt );
     this._dragged = false;
     return false;
   }
