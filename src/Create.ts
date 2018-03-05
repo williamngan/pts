@@ -60,8 +60,8 @@ export class Create {
     let unit = bound.size.$subtract(1).$divide( columns, rows );
     let offset = unit.$multiply( orientation );
     let g = new Group();
-    for (let c=0; c<columns; c++) {
-      for (let r=0; r<rows; r++) {
+    for (let r=0; r<rows; r++) {
+      for (let c=0; c<columns; c++) {
         g.push( bound.topLeft.$add( unit.$multiply(c, r) ).add( offset ) );
       }
     }
@@ -80,8 +80,8 @@ export class Create {
     if (columns === 0 || rows === 0) throw new Error("grid columns and rows cannot be 0");
     let unit = bound.size.$subtract(1).divide( columns, rows ); // subtract 1 to fill whole border of rectangles
     let g = [];
-    for (let c=0; c<columns; c++) {
-      for (let r=0; r<rows; r++) {
+    for (let r=0; r<rows; r++) {
+      for (let c=0; c<columns; c++) {
         g.push( new Group(
           bound.topLeft.$add( unit.$multiply(c, r) ),
           bound.topLeft.$add( unit.$multiply(c, r).add( unit ) )
