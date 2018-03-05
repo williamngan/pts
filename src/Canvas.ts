@@ -5,8 +5,10 @@
 import {MultiTouchSpace} from './Space';
 import {VisualForm, Font} from "./Form";
 import {Bound} from './Bound';
-import {Pt, PtLike, GroupLike} from "./Pt";
+import {Pt, PtLike, GroupLike, Group} from "./Pt";
 import {Const} from "./Util";
+import {Typography as Typo} from "./Typography";
+import { Rectangle } from './Op';
 
 
 export interface PtsCanvasRenderingContext2D extends CanvasRenderingContext2D {
@@ -395,6 +397,7 @@ export class CanvasForm extends VisualForm {
   
   protected _space:CanvasSpace;
   protected _ctx:CanvasRenderingContext2D;  
+  protected _estimateTextWidth:(string) => number;
 
   /** 
   * store common styles so that they can be restored to canvas context when using multiple forms. See `reset()`.
@@ -527,7 +530,68 @@ export class CanvasForm extends VisualForm {
       } else {
         this._font = sizeOrFont;
       }
+
+      // If using estimate, reapply it when font changes.
+      if (this._estimateTextWidth) this.fontWidthEstimate( true );
+
       return this;
+    }
+
+
+    /**
+     * Set whether to use ctx.measureText or a faster but less accurate heuristic function.
+     * @param estimate `true` to use heuristic function, or `false` to use ctx.measureText
+     */
+    fontWidthEstimate( estimate:boolean=true ):this {
+      this._estimateTextWidth = (estimate) ? Typo.textWidthEstimator( ((c:string) => this._ctx.measureText(c).width) ) : undefined;
+      return this;
+    }
+
+
+    /**
+     * Get the width of this text. It will return an actual measurement or an estimate based on `fontWidthEstimate` setting. Default is an actual measurement using canvas context's measureText.
+     * @param c a string of text contents
+     */
+    getTextWidth(c:string):number {
+      return (!this._estimateTextWidth) ? this._ctx.measureText(c).width : this._estimateTextWidth( c );
+    }
+
+
+    /**
+     * Truncate text to fit width
+     * @param str text to truncate
+     * @param width width to fit
+     * @param tail text to indicate overflow such as "...". Default is empty "".
+     */
+    protected _textTruncate( str:string, width:number, tail:string="" ):[string, number] {
+      return Typo.truncate( this.getTextWidth.bind(this), str, width, tail );
+    }
+
+
+    /**
+     * Align text within a rectangle box
+     * @param box a Group that defines a rectangular box
+     * @param vertical a string that specifies the vertical alignment in the box: "top", "bottom", "middle", "start", "end"
+     * @param offset Optional offset from the edge (like padding)
+     * @param center Optional center position 
+     */
+    protected _textAlign( box:GroupLike, vertical:string, offset?:PtLike, center?:Pt ):Pt {
+      if (!center) center = Rectangle.center( box );
+      var px = box[0][0];
+      if (this._ctx.textAlign == "end" || this._ctx.textAlign == "right") {
+        px = box[1][0];
+      } else if (this._ctx.textAlign == "center" || this._ctx.textAlign == "middle") {
+        px = center[0];
+      }
+
+      var py = center[1];
+      if (vertical == "top" || vertical == "start") {
+        py = box[0][1];
+      } else if (vertical == "end" || vertical == "bottom") {
+        py = box[1][1];
+      }
+
+      return (offset) ? new Pt( px+offset[0], py+offset[1] ) : new Pt(px, py);
     }
     
     
@@ -766,6 +830,98 @@ export class CanvasForm extends VisualForm {
       return this;
     }
     
+
+    /**
+     * Fit a single-line text in a rectangular box
+     * @param box a rectangle box defined by a Group
+     * @param txt string of text
+     * @param tail text to indicate overflow such as "...". Default is empty "".
+     * @param verticalAlign "top", "middle", or "bottom" to specify vertical alignment inside the box
+     * @param overrideBaseline If `true`, use the corresponding baseline as verticalAlign. If `false`, use the current canvas context's textBaseline setting. Default is `true`.
+     */
+    textBox( box:GroupLike, txt:string, tail:string="", verticalAlign:string="middle", overrideBaseline:boolean=true): this {
+      if (overrideBaseline) this._ctx.textBaseline = verticalAlign;
+      let size = Rectangle.size( box );
+      let t = this._textTruncate( txt, size[0], tail );
+      this.text( this._textAlign( box, verticalAlign ), t[0] );
+      return this;
+    }
+
+
+    /**
+     * Fit multi-line text in a rectangular box. Note that this will also set canvas context's textBaseline to "top".
+     * @param box a rectangle box defined by a Group
+     * @param txt string of text
+     * @param lineHeight line height as a ratio of font size. Default is 1.2.
+     * @param verticalAlign "top", "middle", or "bottom" to specify vertical alignment inside the box
+     * @param crop a boolean to specify whether to crop text when overflowing
+     */
+    paragraphBox( box:GroupLike, txt:string, lineHeight:number=1.2, verticalAlign:string="top", crop:boolean=true ):this {
+      let size = Rectangle.size( box );
+      this._ctx.textBaseline = "top"; // override textBaseline
+      
+      let lstep = this._font.size * lineHeight;
+
+      // find next lines recursively
+      let nextLine = (sub:string, buffer:string[]=[], cc:number=0 ) => {
+        if (!sub) return buffer;
+        if (!crop && cc*lstep > size[1]-lstep*2) return buffer;
+        if (cc>10000) throw new Error("max recursion reached (10000)");
+
+        let t = this._textTruncate( sub, size[0], "" );
+
+        // new line
+        let newln = t[0].indexOf("\n");
+        if (newln >= 0) {
+          buffer.push( t[0].substr(0, newln-1) );
+          return nextLine( sub.substr( newln+1 ), buffer, cc+1 ); 
+        }
+
+        // word wrap
+        let dt = t[0].lastIndexOf( " " ) + 1;
+        if ( dt <= 0 || t[1] === sub.length ) dt = undefined;
+        let line = t[0].substr(0, dt );
+        buffer.push( line );
+
+        return (t[1] <= 0 || t[1] === sub.length) ? buffer : nextLine( sub.substr( (dt || t[1]) ), buffer, cc+1 );
+      };
+
+      let lines = nextLine( txt ); // go through all lines
+      let lsize = lines.length * lstep; // total height
+      let lpad = (size[1] - lsize) / 2; 
+      if (!crop) lpad = Math.max( 0, lpad );
+      let lbox = box;
+
+      if (verticalAlign == "middle" || verticalAlign == "center") {
+        lbox = new Group( box[0].$add(0, lpad), box[1].$subtract(0, lpad) );
+      } else if (verticalAlign == "bottom") {
+        lbox = new Group( box[0].$add( 0, size[1]-lsize ), box[1] );
+      } else {
+        lbox = new Group( box[0], box[0].$add(size[0], lsize) );
+      }
+
+      let center = Rectangle.center( lbox );
+      for (let i=0, len=lines.length; i<len; i++) {
+        this.text( this._textAlign( lbox, "top", [0, i*lstep], center ), lines[i] );
+      }
+
+      return this;
+    }
+
+
+    /**
+     * Set text alignment and baseline (eg, vertical-align)
+     * @param alignment Canvas' textAlign option: "left", "right", "center", "start", or "end"
+     * @param baseline Canvas' textBaseline option: "top", "hanging", "middle", "alphabetic", "ideographic", "bottom". For convenience, you can also use "center" (same as "middle"), and "baseline" (same as "alphabetic")
+     */
+    alignText( alignment:string="left", baseline:string="alphabetic") {
+      if (baseline == "center") baseline = "middle";
+      if (baseline == "baseline") baseline = "alphabetic";
+      this._ctx.textAlign = alignment;
+      this._ctx.textBaseline = baseline;
+      return this;
+    }
+
     
     /**
     * A convenient way to draw some text on canvas for logging or debugging. It'll be draw on the top-left of the canvas as an overlay.
