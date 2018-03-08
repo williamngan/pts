@@ -13,6 +13,7 @@ const _Color = require("./Color");
 const _Util = require("./Util");
 const _Dom = require("./Dom");
 const _Svg = require("./Svg");
+const _Typography = require("./Typography");
 // A function to switch scope for Pts library. eg, Pts.scope( Pts, window );
 let namespace = (sc) => {
     let lib = module.exports;
@@ -22,5 +23,5 @@ let namespace = (sc) => {
         }
     }
 };
-module.exports = Object.assign({ namespace }, _Bound, _Canvas, _Create, _Form, _LinearAlgebra, _Op, _Num, _Pt, _Space, _Util, _Color, _Dom, _Svg);
+module.exports = Object.assign({ namespace }, _Bound, _Canvas, _Create, _Form, _LinearAlgebra, _Op, _Num, _Pt, _Space, _Util, _Color, _Dom, _Svg, _Typography);
 //# sourceMappingURL=_lib.js.map

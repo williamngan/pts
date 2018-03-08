@@ -4,6 +4,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Bound_1 = require("./Bound");
 const Pt_1 = require("./Pt");
+const UI_1 = require("./UI");
 /**
 * Space is an abstract class that represents a general context for expressing Pts.
 * See [Space guide](../../guide/Space-0500.html) for details.
@@ -228,7 +229,7 @@ class MultiTouchSpace extends Space {
         this._canvas.removeEventListener(evt, callback);
     }
     /**
-    * A convenient method to bind (or unbind) all mouse events in canvas element. All "players" added to this space that implements an `action` callback property will receive mouse event callbacks. The types of mouse actions are: "up", "down", "move", "drag", "drop", "over", and "out". See `Space`'s `add()` function fore more.
+    * A convenient method to bind (or unbind) all mouse events in canvas element. All "players" added to this space that implements an `action` callback property will receive mouse event callbacks. The types of mouse actions are defined by UIPointerActions constants: "up", "down", "move", "drag", "drop", "over", and "out". See `Space`'s `add()` function for more details.
     * @param _bind a boolean value to bind mouse events if set to `true`. If `false`, all mouse events will be unbound. Default is true.
     * @see Space`'s [`add`](./_space_.space.html#add) function
     */
@@ -291,7 +292,7 @@ class MultiTouchSpace extends Space {
     }
     /**
     * Go through all the `players` and call its `action` callback function
-    * @param type "up", "down", "move", "drag", "drop", "over", and "out"
+    * @param type an UIPointerActions constant or string: "up", "down", "move", "drag", "drop", "over", and "out"
     * @param evt mouse or touch event
     */
     _mouseAction(type, evt) {
@@ -330,7 +331,7 @@ class MultiTouchSpace extends Space {
     * @param evt
     */
     _mouseDown(evt) {
-        this._mouseAction("down", evt);
+        this._mouseAction(UI_1.UIPointerActions.down, evt);
         this._pressed = true;
         return false;
     }
@@ -339,9 +340,9 @@ class MultiTouchSpace extends Space {
     * @param evt
     */
     _mouseUp(evt) {
-        this._mouseAction("up", evt);
+        this._mouseAction(UI_1.UIPointerActions.up, evt);
         if (this._dragged)
-            this._mouseAction("drop", evt);
+            this._mouseAction(UI_1.UIPointerActions.down, evt);
         this._pressed = false;
         this._dragged = false;
         return false;
@@ -351,10 +352,10 @@ class MultiTouchSpace extends Space {
     * @param evt
     */
     _mouseMove(evt) {
-        this._mouseAction("move", evt);
+        this._mouseAction(UI_1.UIPointerActions.move, evt);
         if (this._pressed) {
             this._dragged = true;
-            this._mouseAction("drag", evt);
+            this._mouseAction(UI_1.UIPointerActions.drag, evt);
         }
         return false;
     }
@@ -363,7 +364,7 @@ class MultiTouchSpace extends Space {
     * @param evt
     */
     _mouseOver(evt) {
-        this._mouseAction("over", evt);
+        this._mouseAction(UI_1.UIPointerActions.over, evt);
         return false;
     }
     /**
@@ -371,9 +372,9 @@ class MultiTouchSpace extends Space {
     * @param evt
     */
     _mouseOut(evt) {
-        this._mouseAction("out", evt);
+        this._mouseAction(UI_1.UIPointerActions.out, evt);
         if (this._dragged)
-            this._mouseAction("drop", evt);
+            this._mouseAction(UI_1.UIPointerActions.drop, evt);
         this._dragged = false;
         return false;
     }

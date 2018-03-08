@@ -146,6 +146,12 @@ export declare class Geom {
      */
     static withinBound(pt: PtLike | number[], boundPt1: PtLike | number[], boundPt2: PtLike | number[]): boolean;
     /**
+     * Sort the Pts so that their edges will form a non-overlapping polygon
+     * Ref: https://stackoverflow.com/questions/6989100/sort-points-in-clockwise-order
+     * @param pts an array of Pts
+     */
+    static sortEdges(pts: GroupLike): GroupLike;
+    /**
      * Scale a Pt or a Group of Pts
      * @param ps a Pt or a Group of Pts
      * @param scale scale value
@@ -392,4 +398,55 @@ export declare class Shaping {
      * @parma args optional paramters to pass to original function
      */
     static step(fn: Function, steps: number, t: number, c: number, ...args: any[]): any;
+}
+/**
+ * Range object keeps track of a Group of n-dimensional Pts to provide its minimum, maximum, and magnitude in each dimension.
+ * It also provides convenient functions such as mapping the Group to another range.
+ */
+export declare class Range {
+    protected _source: Group;
+    protected _max: Pt;
+    protected _min: Pt;
+    protected _mag: Pt;
+    protected _dims: number;
+    /**
+     * Construct a Range instance for a Group of Pts,
+     * @param g a Group or an array of Pts
+     */
+    constructor(g: GroupLike);
+    /**
+     * Get this Range's maximum values per dimension
+     */
+    readonly max: Pt;
+    /**
+     * Get this Range's minimum values per dimension
+     */
+    readonly min: Pt;
+    /**
+     * Get this Range's magnitude in each dimension
+     */
+    readonly magnitude: Pt;
+    /**
+     * Go through the group and find its min and max values.
+     * Usually you don't need to call this function directly.
+     */
+    calc(): this;
+    /**
+     * Map this Range to another range of values
+     * @param min target range's minimum value
+     * @param max target range's maximum value
+     * @param exclude Optional boolean array where `true` means excluding the conversion in that specific dimension.
+     */
+    mapTo(min: number, max: number, exclude?: boolean[]): Group;
+    /**
+     * Add more Pts to this Range and recalculate its min and max values
+     * @param g a Group or an array of Pts to append to this Range
+     * @param update Optional. Set the parameter to `false` if you want to append without immediately updating this Range's min and max values. Default is `true`.
+     */
+    append(g: GroupLike, update?: boolean): this;
+    /**
+     * Create a number of evenly spaced "ticks" that span this Range's min and max value.
+     * @param count number of subdivision. For example, 10 subdivision will return 11 tick values, which include first(min) and last(max) values.
+     */
+    ticks(count: number): Group;
 }

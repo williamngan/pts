@@ -74,6 +74,11 @@ export declare class CanvasSpace extends MultiTouchSpace {
     */
     protected _resizeHandler(evt: Event): void;
     /**
+    * Set a background color for this canvas. Alternatively, you may use `clear()` function.
+    @param bg background color as hex or rgba string
+    */
+    background: string;
+    /**
     * `pixelScale` property returns a number that let you determine if the screen is "retina" (when value >= 2)
     */
     readonly pixelScale: number;
@@ -133,6 +138,7 @@ export declare class CanvasSpace extends MultiTouchSpace {
 export declare class CanvasForm extends VisualForm {
     protected _space: CanvasSpace;
     protected _ctx: CanvasRenderingContext2D;
+    protected _estimateTextWidth: (string) => number;
     /**
     * store common styles so that they can be restored to canvas context when using multiple forms. See `reset()`.
     */
@@ -188,6 +194,31 @@ export declare class CanvasForm extends VisualForm {
     * @example `form.font( myFont )`, `form.font(14, "bold")`
     */
     font(sizeOrFont: number | Font, weight?: string, style?: string, lineHeight?: number, family?: string): this;
+    /**
+     * Set whether to use ctx.measureText or a faster but less accurate heuristic function.
+     * @param estimate `true` to use heuristic function, or `false` to use ctx.measureText
+     */
+    fontWidthEstimate(estimate?: boolean): this;
+    /**
+     * Get the width of this text. It will return an actual measurement or an estimate based on `fontWidthEstimate` setting. Default is an actual measurement using canvas context's measureText.
+     * @param c a string of text contents
+     */
+    getTextWidth(c: string): number;
+    /**
+     * Truncate text to fit width
+     * @param str text to truncate
+     * @param width width to fit
+     * @param tail text to indicate overflow such as "...". Default is empty "".
+     */
+    protected _textTruncate(str: string, width: number, tail?: string): [string, number];
+    /**
+     * Align text within a rectangle box
+     * @param box a Group that defines a rectangular box
+     * @param vertical a string that specifies the vertical alignment in the box: "top", "bottom", "middle", "start", "end"
+     * @param offset Optional offset from the edge (like padding)
+     * @param center Optional center position
+     */
+    protected _textAlign(box: GroupLike, vertical: string, offset?: PtLike, center?: Pt): Pt;
     /**
     * Reset the rendering context's common styles to this form's styles. This supports using multiple forms on the same canvas context.
     */
@@ -294,6 +325,30 @@ export declare class CanvasForm extends VisualForm {
     * @param `maxWidth` specify a maximum width per line
     */
     text(pt: PtLike, txt: string, maxWidth?: number): this;
+    /**
+     * Fit a single-line text in a rectangular box
+     * @param box a rectangle box defined by a Group
+     * @param txt string of text
+     * @param tail text to indicate overflow such as "...". Default is empty "".
+     * @param verticalAlign "top", "middle", or "bottom" to specify vertical alignment inside the box
+     * @param overrideBaseline If `true`, use the corresponding baseline as verticalAlign. If `false`, use the current canvas context's textBaseline setting. Default is `true`.
+     */
+    textBox(box: GroupLike, txt: string, verticalAlign?: string, tail?: string, overrideBaseline?: boolean): this;
+    /**
+     * Fit multi-line text in a rectangular box. Note that this will also set canvas context's textBaseline to "top".
+     * @param box a rectangle box defined by a Group
+     * @param txt string of text
+     * @param lineHeight line height as a ratio of font size. Default is 1.2.
+     * @param verticalAlign "top", "middle", or "bottom" to specify vertical alignment inside the box
+     * @param crop a boolean to specify whether to crop text when overflowing
+     */
+    paragraphBox(box: GroupLike, txt: string, lineHeight?: number, verticalAlign?: string, crop?: boolean): this;
+    /**
+     * Set text alignment and baseline (eg, vertical-align)
+     * @param alignment Canvas' textAlign option: "left", "right", "center", "start", or "end"
+     * @param baseline Canvas' textBaseline option: "top", "hanging", "middle", "alphabetic", "ideographic", "bottom". For convenience, you can also use "center" (same as "middle"), and "baseline" (same as "alphabetic")
+     */
+    alignText(alignment?: string, baseline?: string): this;
     /**
     * A convenient way to draw some text on canvas for logging or debugging. It'll be draw on the top-left of the canvas as an overlay.
     * @param txt text

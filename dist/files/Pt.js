@@ -211,6 +211,11 @@ class Pt extends exports.PtBaseArray {
      */
     dot(...args) { return LinearAlgebra_1.Vec.dot(this, Util_1.Util.getArgs(args)); }
     /**
+     * 2D Cross product of this Pt and another Pt. Return results as a new Pt.
+     * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
+     */
+    cross2D(...args) { return LinearAlgebra_1.Vec.cross2D(this, Util_1.Util.getArgs(args)); }
+    /**
      * 3D Cross product of this Pt and another Pt. Return results as a new Pt.
      * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
      */

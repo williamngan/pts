@@ -364,14 +364,29 @@ class Rectangle {
         return Rectangle.corners(rect);
     }
     /**
-     * Subdivide this rectangle into 4 rectangles, one for each quadrant
+     * Subdivide a rectangle into 4 rectangles, one for each quadrant
      * @param rect a Group of 2 Pts representing a Rectangle
-     * @returns an array of 4 Groups
+     * @returns an array of 4 Groups of rectangles
      */
     static quadrants(rect, center) {
         let corners = Rectangle.corners(rect);
-        let _center = (center != undefined) ? new Pt_1.Pt(center) : Num_1.Geom.interpolate(rect[0], rect[1], 0.5);
+        let _center = (center != undefined) ? new Pt_1.Pt(center) : Rectangle.center(rect);
         return corners.map((c) => new Pt_1.Group(c, _center).boundingBox());
+    }
+    /**
+     * Subdivde a rectangle into 2 rectangles, by row or by column
+     * @param rect Group of 2 Pts representing a Rectangle
+     * @param ratio a value between 0 to 1 to indicate the split ratio
+     * @param asRows if `true`, split into 2 rows. Default is `false` which splits into 2 columns.
+     * @returns an array of 2 Groups of rectangles
+     */
+    static halves(rect, ratio = 0.5, asRows = false) {
+        let min = rect[0].$min(rect[1]);
+        let max = rect[0].$max(rect[1]);
+        let mid = (asRows) ? Num_1.Num.lerp(min[1], max[1], ratio) : Num_1.Num.lerp(min[0], max[0], ratio);
+        return (asRows)
+            ? [new Pt_1.Group(min, new Pt_1.Pt(max[0], mid)), new Pt_1.Group(new Pt_1.Pt(min[0], mid), max)]
+            : [new Pt_1.Group(min, new Pt_1.Pt(mid, max[1])), new Pt_1.Group(new Pt_1.Pt(mid, min[1]), max)];
     }
     /**
      * Check if a point is within a rectangle
@@ -440,10 +455,11 @@ class Circle {
      * Check if a point is within a circle
      * @param pts a Group of 2 Pts representing a circle
      * @param pt the point to checks
+     * @param threshold an optional small number to set threshold. Default is 0.
      */
-    static withinBound(pts, pt) {
+    static withinBound(pts, pt, threshold = 0) {
         let d = pts[0].$subtract(pt);
-        return d.dot(d) < pts[1].x * pts[1].x;
+        return d.dot(d) + threshold < pts[1].x * pts[1].x;
     }
     /**
      * Get the intersection points between a circle and a ray (infinite line)
@@ -918,6 +934,7 @@ class Polygon {
      * Given a target Pt, find a Pt in a Group that's nearest to it.
      * @param pts a Group of Pt
      * @param pt Pt to check
+     * @returns an index in the pts indicating the nearest Pt, or -1 if none found
      */
     static nearestPt(pts, pt) {
         let _near = Number.MAX_VALUE;
@@ -929,7 +946,7 @@ class Polygon {
                 _item = i;
             }
         }
-        return (_item >= 0) ? pts[_item] : undefined;
+        return _item;
     }
     /**
      * Get a bounding box for each polygon group, as well as a union bounding-box for all groups

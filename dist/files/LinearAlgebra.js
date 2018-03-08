@@ -89,7 +89,13 @@ class Vec {
         return d;
     }
     /**
-     * Cross product of `a` and `b` (3D only)
+     * 2D cross product of `a` and `b`
+     */
+    static cross2D(a, b) {
+        return a[0] * b[1] - a[1] * b[0];
+    }
+    /**
+     * 3D Cross product of `a` and `b`
      */
     static cross(a, b) {
         return new Pt_1.Pt((a[1] * b[2] - a[2] * b[1]), (a[2] * b[0] - a[0] * b[2]), (a[0] * b[1] - a[1] * b[0]));

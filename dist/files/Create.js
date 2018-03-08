@@ -54,8 +54,8 @@ class Create {
         let unit = bound.size.$subtract(1).$divide(columns, rows);
         let offset = unit.$multiply(orientation);
         let g = new Pt_1.Group();
-        for (let c = 0; c < columns; c++) {
-            for (let r = 0; r < rows; r++) {
+        for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < columns; c++) {
                 g.push(bound.topLeft.$add(unit.$multiply(c, r)).add(offset));
             }
         }
@@ -73,8 +73,8 @@ class Create {
             throw new Error("grid columns and rows cannot be 0");
         let unit = bound.size.$subtract(1).divide(columns, rows); // subtract 1 to fill whole border of rectangles
         let g = [];
-        for (let c = 0; c < columns; c++) {
-            for (let r = 0; r < rows; r++) {
+        for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < columns; c++) {
                 g.push(new Pt_1.Group(bound.topLeft.$add(unit.$multiply(c, r)), bound.topLeft.$add(unit.$multiply(c, r).add(unit))));
             }
         }
@@ -114,6 +114,14 @@ class Create {
             g.push(np);
         }
         return g;
+    }
+    /**
+     * Create a Delaunay Group. Use the `.delaunay()` and `.voronoi()` functions in the returned group to generate tessellations.
+     * @param pts a Group or an array of Pts
+     * @returns an instance of the Delaunay class
+     */
+    static delaunay(pts) {
+        return Delaunay.from(pts);
     }
 }
 exports.Create = Create;
@@ -207,4 +215,207 @@ class Noise extends Pt_1.Pt {
     }
 }
 exports.Noise = Noise;
+/**
+ * Delaunay is a Group of Pts that can generate Delaunay and Voronoi tessellations. The triangulation algorithm is ported from [Pt](https://github.com/williamngan/pt)
+ * This implementation is based on [Paul Bourke's algorithm](http://paulbourke.net/papers/triangulate/)
+ * with reference to its [javascript implementation by ironwallaby](https://github.com/ironwallaby/delaunay)
+ */
+class Delaunay extends Pt_1.Group {
+    constructor() {
+        super(...arguments);
+        this._mesh = [];
+    }
+    /**
+     * Generate Delaunay triangles. This function also caches the mesh that is used to generate Voronoi tessellation in `voronoi()`.
+     * @param triangleOnly if true, returns an array of triangles in Groups, otherwise return the whole DelaunayShape
+     * @returns an array of Groups or an array of DelaunayShapes `{i, j, k, triangle, circle}` which records the indices of the vertices, and the calculated triangles and circumcircles
+     */
+    delaunay(triangleOnly = true) {
+        if (this.length < 3)
+            return [];
+        this._mesh = [];
+        let n = this.length;
+        // sort the points and store the sorted index
+        let indices = [];
+        for (let i = 0; i < n; i++)
+            indices[i] = i;
+        indices.sort((i, j) => this[j][0] - this[i][0]);
+        // duplicate the points list and add super triangle's points to it
+        let pts = this.slice();
+        let st = this._superTriangle();
+        pts = pts.concat(st);
+        // arrays to store edge buffer and opened triangles
+        let opened = [this._circum(n, n + 1, n + 2, st)];
+        let closed = [];
+        let tris = [];
+        // Go through each point using the sorted indices
+        for (let i = 0, len = indices.length; i < len; i++) {
+            let c = indices[i];
+            let edges = [];
+            let j = opened.length;
+            if (!this._mesh[c])
+                this._mesh[c] = {};
+            // Go through each opened triangles
+            while (j--) {
+                let circum = opened[j];
+                let radius = circum.circle[1][0];
+                let d = pts[c].$subtract(circum.circle[0]);
+                // if point is to the right of circumcircle, add it to closed list and don't check again
+                if (d[0] > 0 && d[0] * d[0] > radius * radius) {
+                    closed.push(circum);
+                    tris.push(circum.triangle);
+                    opened.splice(j, 1);
+                    continue;
+                }
+                // if it's outside the circumcircle, skip
+                if (d[0] * d[0] + d[1] * d[1] - radius * radius > Util_1.Const.epsilon) {
+                    continue;
+                }
+                // otherwise it's inside the circumcircle, so we add to edge buffer and remove it from the opened list
+                edges.push(circum.i, circum.j, circum.j, circum.k, circum.k, circum.i);
+                opened.splice(j, 1);
+            }
+            // dedup edges
+            Delaunay._dedupe(edges);
+            // Go through the edge buffer and create a triangle for each edge
+            j = edges.length;
+            while (j > 1) {
+                opened.push(this._circum(edges[--j], edges[--j], c, false, pts));
+            }
+        }
+        for (let i = 0, len = opened.length; i < len; i++) {
+            let o = opened[i];
+            if (o.i < n && o.j < n && o.k < n) {
+                closed.push(o);
+                tris.push(o.triangle);
+                this._cache(o);
+            }
+        }
+        return (triangleOnly) ? tris : closed;
+    }
+    /**
+     * Generate Voronoi cells. `delaunay()` must be called before calling this function.
+     * @returns an array of Groups, each of which represents a Voronoi cell
+     */
+    voronoi() {
+        let vs = [];
+        let n = this._mesh;
+        for (let i = 0, len = n.length; i < len; i++) {
+            vs.push(this.neighborPts(i, true));
+        }
+        return vs;
+    }
+    /**
+     * Get the cached mesh. The mesh is an array of objects, each of which representing the enclosing triangles around a Pt in this Delaunay group
+     * @return an array of objects that store a series of DelaunayShapes
+     */
+    mesh() {
+        return this._mesh;
+    }
+    /**
+     * Given an index of a Pt in this Delaunay Group, returns its neighboring Pts in the network
+     * @param i index of a Pt
+     * @param sort if true, sort the neighbors so that their edges will form a polygon
+     * @returns an array of Pts
+     */
+    neighborPts(i, sort = false) {
+        let cs = new Pt_1.Group();
+        let n = this._mesh;
+        for (let k in n[i]) {
+            if (n[i].hasOwnProperty(k))
+                cs.push(n[i][k].circle[0]);
+        }
+        return (sort) ? Num_1.Geom.sortEdges(cs) : cs;
+    }
+    /**
+     * Given an index of a Pt in this Delaunay Group, returns its neighboring DelaunayShapes
+     * @param i index of a Pt
+     * @returns an array of DelaunayShapes `{i, j, k, triangle, circle}`
+     */
+    neighbors(i) {
+        let cs = [];
+        let n = this._mesh;
+        for (let k in n[i]) {
+            if (n[i].hasOwnProperty(k))
+                cs.push(n[i][k]);
+        }
+        return cs;
+    }
+    /**
+     * Record a DelaunayShape in the mesh
+     * @param o DelaunayShape instance
+     */
+    _cache(o) {
+        this._mesh[o.i][`${Math.min(o.j, o.k)}-${Math.max(o.j, o.k)}`] = o;
+        this._mesh[o.j][`${Math.min(o.i, o.k)}-${Math.max(o.i, o.k)}`] = o;
+        this._mesh[o.k][`${Math.min(o.i, o.j)}-${Math.max(o.i, o.j)}`] = o;
+    }
+    /**
+     * Get the initial "super triangle" that contains all the points in this set
+     * @returns a Group representing a triangle
+     */
+    _superTriangle() {
+        let minPt = this[0];
+        let maxPt = this[0];
+        for (let i = 1, len = this.length; i < len; i++) {
+            minPt = minPt.$min(this[i]);
+            maxPt = maxPt.$max(this[i]);
+        }
+        let d = maxPt.$subtract(minPt);
+        let mid = minPt.$add(maxPt).divide(2);
+        let dmax = Math.max(d[0], d[1]);
+        return new Pt_1.Group(mid.$subtract(20 * dmax, dmax), mid.$add(0, 20 * dmax), mid.$add(20 * dmax, -dmax));
+    }
+    /**
+     * Get a triangle from 3 points in a list of points
+     * @param i index 1
+     * @param j index 2
+     * @param k index 3
+     * @param pts a Group of Pts
+     */
+    _triangle(i, j, k, pts = this) {
+        return new Pt_1.Group(pts[i], pts[j], pts[k]);
+    }
+    /**
+     * Get a circumcircle and triangle from 3 points in a list of points
+     * @param i index 1
+     * @param j index 2
+     * @param k index 3
+     * @param tri a Group representing a triangle, or `false` to create it from indices
+     * @param pts a Group of Pts
+     */
+    _circum(i, j, k, tri, pts = this) {
+        let t = tri || this._triangle(i, j, k, pts);
+        return {
+            i: i,
+            j: j,
+            k: k,
+            triangle: t,
+            circle: Op_1.Triangle.circumcircle(t)
+        };
+    }
+    /**
+     * Dedupe the edges array
+     * @param edges
+     */
+    static _dedupe(edges) {
+        let j = edges.length;
+        while (j > 1) {
+            let b = edges[--j];
+            let a = edges[--j];
+            let i = j;
+            while (i > 1) {
+                let n = edges[--i];
+                let m = edges[--i];
+                if ((a == m && b == n) || (a == n && b == m)) {
+                    edges.splice(j, 2);
+                    edges.splice(i, 2);
+                    break;
+                }
+            }
+        }
+        return edges;
+    }
+}
+exports.Delaunay = Delaunay;
 //# sourceMappingURL=Create.js.map

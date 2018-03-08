@@ -137,6 +137,11 @@ export class CanvasSpace extends MultiTouchSpace {
          */
         protected _resizeHandler(evt: Event): void;
         /**
+         * Set a background color for this canvas. Alternatively, you may use `clear()` function.
+        @param bg background color as hex or rgba string
+         */
+        background: string;
+        /**
          * `pixelScale` property returns a number that let you determine if the screen is "retina" (when value >= 2)
          */
         readonly pixelScale: number;
@@ -196,6 +201,7 @@ export class CanvasSpace extends MultiTouchSpace {
 export class CanvasForm extends VisualForm {
         protected _space: CanvasSpace;
         protected _ctx: CanvasRenderingContext2D;
+        protected _estimateTextWidth: (string) => number;
         /**
          * store common styles so that they can be restored to canvas context when using multiple forms. See `reset()`.
          */
@@ -251,6 +257,31 @@ export class CanvasForm extends VisualForm {
          * @example `form.font( myFont )`, `form.font(14, "bold")`
          */
         font(sizeOrFont: number | Font, weight?: string, style?: string, lineHeight?: number, family?: string): this;
+        /**
+            * Set whether to use ctx.measureText or a faster but less accurate heuristic function.
+            * @param estimate `true` to use heuristic function, or `false` to use ctx.measureText
+            */
+        fontWidthEstimate(estimate?: boolean): this;
+        /**
+            * Get the width of this text. It will return an actual measurement or an estimate based on `fontWidthEstimate` setting. Default is an actual measurement using canvas context's measureText.
+            * @param c a string of text contents
+            */
+        getTextWidth(c: string): number;
+        /**
+            * Truncate text to fit width
+            * @param str text to truncate
+            * @param width width to fit
+            * @param tail text to indicate overflow such as "...". Default is empty "".
+            */
+        protected _textTruncate(str: string, width: number, tail?: string): [string, number];
+        /**
+            * Align text within a rectangle box
+            * @param box a Group that defines a rectangular box
+            * @param vertical a string that specifies the vertical alignment in the box: "top", "bottom", "middle", "start", "end"
+            * @param offset Optional offset from the edge (like padding)
+            * @param center Optional center position
+            */
+        protected _textAlign(box: GroupLike, vertical: string, offset?: PtLike, center?: Pt): Pt;
         /**
          * Reset the rendering context's common styles to this form's styles. This supports using multiple forms on the same canvas context.
          */
@@ -357,6 +388,30 @@ export class CanvasForm extends VisualForm {
          * @param `maxWidth` specify a maximum width per line
          */
         text(pt: PtLike, txt: string, maxWidth?: number): this;
+        /**
+            * Fit a single-line text in a rectangular box
+            * @param box a rectangle box defined by a Group
+            * @param txt string of text
+            * @param tail text to indicate overflow such as "...". Default is empty "".
+            * @param verticalAlign "top", "middle", or "bottom" to specify vertical alignment inside the box
+            * @param overrideBaseline If `true`, use the corresponding baseline as verticalAlign. If `false`, use the current canvas context's textBaseline setting. Default is `true`.
+            */
+        textBox(box: GroupLike, txt: string, verticalAlign?: string, tail?: string, overrideBaseline?: boolean): this;
+        /**
+            * Fit multi-line text in a rectangular box. Note that this will also set canvas context's textBaseline to "top".
+            * @param box a rectangle box defined by a Group
+            * @param txt string of text
+            * @param lineHeight line height as a ratio of font size. Default is 1.2.
+            * @param verticalAlign "top", "middle", or "bottom" to specify vertical alignment inside the box
+            * @param crop a boolean to specify whether to crop text when overflowing
+            */
+        paragraphBox(box: GroupLike, txt: string, lineHeight?: number, verticalAlign?: string, crop?: boolean): this;
+        /**
+            * Set text alignment and baseline (eg, vertical-align)
+            * @param alignment Canvas' textAlign option: "left", "right", "center", "start", or "end"
+            * @param baseline Canvas' textBaseline option: "top", "hanging", "middle", "alphabetic", "ideographic", "bottom". For convenience, you can also use "center" (same as "middle"), and "baseline" (same as "alphabetic")
+            */
+        alignText(alignment?: string, baseline?: string): this;
         /**
          * A convenient way to draw some text on canvas for logging or debugging. It'll be draw on the top-left of the canvas as an overlay.
          * @param txt text
@@ -684,6 +739,12 @@ export class Create {
             * @param columns Optional column count to generate 2D noise
             */
         static noisePts(pts: GroupLike, dx?: number, dy?: number, rows?: number, columns?: number): Group;
+        /**
+            * Create a Delaunay Group. Use the `.delaunay()` and `.voronoi()` functions in the returned group to generate tessellations.
+            * @param pts a Group or an array of Pts
+            * @returns an instance of the Delaunay class
+            */
+        static delaunay(pts: GroupLike): Delaunay;
 }
 /**
     * A class to generate Perlin noise. Currently it implements a basic 2D noise. More to follow.
@@ -717,6 +778,87 @@ export class Noise extends Pt {
             * Generate a 2D Perlin noise value
             */
         noise2D(): number;
+}
+/**
+    * A DelaunayShape is an object with 3 indices, a Triangle Group and a Circle Group.
+    */
+export type DelaunayShape = {
+        i: number;
+        j: number;
+        k: number;
+        triangle: GroupLike;
+        circle: Group;
+};
+export type DelaunayMesh = {
+        [key: string]: DelaunayShape;
+}[];
+/**
+    * Delaunay is a Group of Pts that can generate Delaunay and Voronoi tessellations. The triangulation algorithm is ported from [Pt](https://github.com/williamngan/pt)
+    * This implementation is based on [Paul Bourke's algorithm](http://paulbourke.net/papers/triangulate/)
+    * with reference to its [javascript implementation by ironwallaby](https://github.com/ironwallaby/delaunay)
+    */
+export class Delaunay extends Group {
+        /**
+            * Generate Delaunay triangles. This function also caches the mesh that is used to generate Voronoi tessellation in `voronoi()`.
+            * @param triangleOnly if true, returns an array of triangles in Groups, otherwise return the whole DelaunayShape
+            * @returns an array of Groups or an array of DelaunayShapes `{i, j, k, triangle, circle}` which records the indices of the vertices, and the calculated triangles and circumcircles
+            */
+        delaunay(triangleOnly?: boolean): GroupLike[] | DelaunayShape[];
+        /**
+            * Generate Voronoi cells. `delaunay()` must be called before calling this function.
+            * @returns an array of Groups, each of which represents a Voronoi cell
+            */
+        voronoi(): Group[];
+        /**
+            * Get the cached mesh. The mesh is an array of objects, each of which representing the enclosing triangles around a Pt in this Delaunay group
+            * @return an array of objects that store a series of DelaunayShapes
+            */
+        mesh(): DelaunayMesh;
+        /**
+            * Given an index of a Pt in this Delaunay Group, returns its neighboring Pts in the network
+            * @param i index of a Pt
+            * @param sort if true, sort the neighbors so that their edges will form a polygon
+            * @returns an array of Pts
+            */
+        neighborPts(i: number, sort?: boolean): GroupLike;
+        /**
+            * Given an index of a Pt in this Delaunay Group, returns its neighboring DelaunayShapes
+            * @param i index of a Pt
+            * @returns an array of DelaunayShapes `{i, j, k, triangle, circle}`
+            */
+        neighbors(i: number): DelaunayShape[];
+        /**
+            * Record a DelaunayShape in the mesh
+            * @param o DelaunayShape instance
+            */
+        protected _cache(o: any): void;
+        /**
+            * Get the initial "super triangle" that contains all the points in this set
+            * @returns a Group representing a triangle
+            */
+        protected _superTriangle(): Group;
+        /**
+            * Get a triangle from 3 points in a list of points
+            * @param i index 1
+            * @param j index 2
+            * @param k index 3
+            * @param pts a Group of Pts
+            */
+        protected _triangle(i: number, j: number, k: number, pts?: GroupLike): Group;
+        /**
+            * Get a circumcircle and triangle from 3 points in a list of points
+            * @param i index 1
+            * @param j index 2
+            * @param k index 3
+            * @param tri a Group representing a triangle, or `false` to create it from indices
+            * @param pts a Group of Pts
+            */
+        protected _circum(i: number, j: number, k: number, tri: GroupLike | false, pts?: GroupLike): DelaunayShape;
+        /**
+            * Dedupe the edges array
+            * @param edges
+            */
+        protected static _dedupe(edges: number[]): number[];
 }
 
 /**
@@ -1256,7 +1398,11 @@ export class Vec {
             */
         static dot(a: PtLike, b: PtLike): number;
         /**
-            * Cross product of `a` and `b` (3D only)
+            * 2D cross product of `a` and `b`
+            */
+        static cross2D(a: PtLike, b: PtLike): number;
+        /**
+            * 3D Cross product of `a` and `b`
             */
         static cross(a: PtLike, b: PtLike): Pt;
         /**
@@ -1541,6 +1687,12 @@ export class Geom {
             */
         static withinBound(pt: PtLike | number[], boundPt1: PtLike | number[], boundPt2: PtLike | number[]): boolean;
         /**
+            * Sort the Pts so that their edges will form a non-overlapping polygon
+            * Ref: https://stackoverflow.com/questions/6989100/sort-points-in-clockwise-order
+            * @param pts an array of Pts
+            */
+        static sortEdges(pts: GroupLike): GroupLike;
+        /**
             * Scale a Pt or a Group of Pts
             * @param ps a Pt or a Group of Pts
             * @param scale scale value
@@ -1788,6 +1940,57 @@ export class Shaping {
             */
         static step(fn: Function, steps: number, t: number, c: number, ...args: any[]): any;
 }
+/**
+    * Range object keeps track of a Group of n-dimensional Pts to provide its minimum, maximum, and magnitude in each dimension.
+    * It also provides convenient functions such as mapping the Group to another range.
+    */
+export class Range {
+        protected _source: Group;
+        protected _max: Pt;
+        protected _min: Pt;
+        protected _mag: Pt;
+        protected _dims: number;
+        /**
+            * Construct a Range instance for a Group of Pts,
+            * @param g a Group or an array of Pts
+            */
+        constructor(g: GroupLike);
+        /**
+            * Get this Range's maximum values per dimension
+            */
+        readonly max: Pt;
+        /**
+            * Get this Range's minimum values per dimension
+            */
+        readonly min: Pt;
+        /**
+            * Get this Range's magnitude in each dimension
+            */
+        readonly magnitude: Pt;
+        /**
+            * Go through the group and find its min and max values.
+            * Usually you don't need to call this function directly.
+            */
+        calc(): this;
+        /**
+            * Map this Range to another range of values
+            * @param min target range's minimum value
+            * @param max target range's maximum value
+            * @param exclude Optional boolean array where `true` means excluding the conversion in that specific dimension.
+            */
+        mapTo(min: number, max: number, exclude?: boolean[]): Group;
+        /**
+            * Add more Pts to this Range and recalculate its min and max values
+            * @param g a Group or an array of Pts to append to this Range
+            * @param update Optional. Set the parameter to `false` if you want to append without immediately updating this Range's min and max values. Default is `true`.
+            */
+        append(g: GroupLike, update?: boolean): this;
+        /**
+            * Create a number of evenly spaced "ticks" that span this Range's min and max value.
+            * @param count number of subdivision. For example, 10 subdivision will return 11 tick values, which include first(min) and last(max) values.
+            */
+        ticks(count: number): Group;
+}
 
 /**
     * Line class provides static functions to create and operate on lines. A line is usually represented as a Group of 2 Pts.
@@ -1994,11 +2197,19 @@ export class Rectangle {
             */
         static polygon(rect: GroupLike): Group;
         /**
-            * Subdivide this rectangle into 4 rectangles, one for each quadrant
+            * Subdivide a rectangle into 4 rectangles, one for each quadrant
             * @param rect a Group of 2 Pts representing a Rectangle
-            * @returns an array of 4 Groups
+            * @returns an array of 4 Groups of rectangles
             */
         static quadrants(rect: GroupLike, center?: PtLike): Group[];
+        /**
+            * Subdivde a rectangle into 2 rectangles, by row or by column
+            * @param rect Group of 2 Pts representing a Rectangle
+            * @param ratio a value between 0 to 1 to indicate the split ratio
+            * @param asRows if `true`, split into 2 rows. Default is `false` which splits into 2 columns.
+            * @returns an array of 2 Groups of rectangles
+            */
+        static halves(rect: GroupLike, ratio?: number, asRows?: boolean): Group[];
         /**
             * Check if a point is within a rectangle
             * @param rect a Group of 2 Pts representing a Rectangle
@@ -2041,8 +2252,9 @@ export class Circle {
             * Check if a point is within a circle
             * @param pts a Group of 2 Pts representing a circle
             * @param pt the point to checks
+            * @param threshold an optional small number to set threshold. Default is 0.
             */
-        static withinBound(pts: GroupLike, pt: PtLike): boolean;
+        static withinBound(pts: GroupLike, pt: PtLike, threshold?: number): boolean;
         /**
             * Get the intersection points between a circle and a ray (infinite line)
             * @param pts a Group of 2 Pts representing a circle
@@ -2241,8 +2453,9 @@ export class Polygon {
             * Given a target Pt, find a Pt in a Group that's nearest to it.
             * @param pts a Group of Pt
             * @param pt Pt to check
+            * @returns an index in the pts indicating the nearest Pt, or -1 if none found
             */
-        static nearestPt(pts: GroupLike, pt: PtLike): Pt;
+        static nearestPt(pts: GroupLike, pt: PtLike): number;
         /**
             * Get a bounding box for each polygon group, as well as a union bounding-box for all groups
             * @param polys an array of Groups, or an array of Pt arrays
@@ -2481,6 +2694,11 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
             * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
             */
         dot(...args: any[]): number;
+        /**
+            * 2D Cross product of this Pt and another Pt. Return results as a new Pt.
+            * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
+            */
+        cross2D(...args: any[]): number;
         /**
             * 3D Cross product of this Pt and another Pt. Return results as a new Pt.
             * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
@@ -2975,7 +3193,7 @@ export abstract class MultiTouchSpace extends Space {
          */
         unbindCanvas(evt: string, callback: EventListener): void;
         /**
-         * A convenient method to bind (or unbind) all mouse events in canvas element. All "players" added to this space that implements an `action` callback property will receive mouse event callbacks. The types of mouse actions are: "up", "down", "move", "drag", "drop", "over", and "out". See `Space`'s `add()` function fore more.
+         * A convenient method to bind (or unbind) all mouse events in canvas element. All "players" added to this space that implements an `action` callback property will receive mouse event callbacks. The types of mouse actions are defined by UIPointerActions constants: "up", "down", "move", "drag", "drop", "over", and "out". See `Space`'s `add()` function for more details.
          * @param _bind a boolean value to bind mouse events if set to `true`. If `false`, all mouse events will be unbound. Default is true.
          * @see Space`'s [`add`](./_space_.space.html#add) function
          */
@@ -2995,7 +3213,7 @@ export abstract class MultiTouchSpace extends Space {
         touchesToPoints(evt: TouchEvent, which?: TouchPointsKey): Pt[];
         /**
          * Go through all the `players` and call its `action` callback function
-         * @param type "up", "down", "move", "drag", "drop", "over", and "out"
+         * @param type an UIPointerActions constant or string: "up", "down", "move", "drag", "drop", "over", and "out"
          * @param evt mouse or touch event
          */
         protected _mouseAction(type: string, evt: MouseEvent | TouchEvent): void;
@@ -3296,6 +3514,133 @@ export class SVGForm extends VisualForm {
         log(txt: any): this;
 }
 
+/** Various functions to support typography */
+export class Typography {
+        /**
+            * Create a heuristic text width estimate function. It will be less accurate but faster.
+            * @param fn a reference function that can measure text width accurately
+            * @param samples a list of string samples. Default is ["M", "n", "."]
+            * @param distribution a list of the samples' probability distribution. Default is [0.06, 0.8, 0.14].
+            * @return a function that can estimate text width
+            */
+        static textWidthEstimator(fn: (string) => number, samples?: string[], distribution?: number[]): (string) => number;
+        /**
+            * Truncate text to fit width
+            * @param fn a function that can measure text width
+            * @param str text to truncate
+            * @param width width to fit
+            * @param tail text to indicate overflow such as "...". Default is empty "".
+            */
+        static truncate(fn: (string) => number, str: string, width: number, tail?: string): [string, number];
+        /**
+            * Get a function to scale font size proportionally to text box size changes.
+            * @param box Initial box as a Group
+            * @param ratio font-size change ratio. Default is 1.
+            * @returns a function where input parameter is a new box, and returns the new font size value
+            */
+        static fontSizeToBox(box: GroupLike, ratio?: number): (b: GroupLike) => number;
+}
+
+/**
+    * An enumeration of different UI types
+    */
+export enum UIShape {
+        Rectangle = 0,
+        Circle = 1,
+        Polygon = 2,
+        Polyline = 3,
+        Line = 4,
+}
+export const UIPointerActions: {
+        up: string;
+        down: string;
+        move: string;
+        drag: string;
+        drop: string;
+        over: string;
+        out: string;
+};
+/**
+    * UIListener type
+    */
+export type UIHandler = (pt: Pt, target: UI, type: string) => void;
+export class UI {
+        group: Group;
+        shape: UIShape;
+        protected _id: string;
+        protected _actions: {
+                [key: string]: UIHandler;
+        };
+        protected _states: {
+                [key: string]: any;
+        };
+        /**
+            * Wrap an UI insider a group
+            */
+        constructor(group: Group, shape: UIShape, states: {}, id?: string);
+        /**
+            * Get and set uique id
+            */
+        id: string;
+        /**
+            * Get a state
+            * @param key state's name
+            */
+        state(key: string): any;
+        /**
+            * Add an event handler
+            * @param key event key
+            * @param fn handler function
+            */
+        on(key: string, fn: UIHandler): this;
+        /**
+            * Remove an event handler
+            * @param key even key
+            * @param fn
+            */
+        off(key: string): this;
+        /**
+            * Listen for interactions and trigger action handlers
+            * @param key action key
+            * @param p point to check
+            */
+        listen(key: string, p: Pt): boolean;
+        /**
+            * Take a custom render function to render this UI
+            * @param fn render function
+            */
+        render(fn: (group: Group, states: {
+                [key: string]: any;
+        }) => void): void;
+        /**
+            * Check intersection using a specific function based on UIShape
+            * @param p a point to check
+            */
+        protected _trigger(p: Pt): boolean;
+}
+/**
+    * A simple UI button that can track clicks and hovers
+    */
+export class UIButton extends UI {
+        _clicks: number;
+        constructor(group: Group, shape: UIShape, states: {}, id?: string);
+        /**
+            * Get the total number of clicks on this UIButton
+            */
+        readonly clicks: number;
+        /**
+            * Add a click handler
+            * @param fn a function to handle clicks
+            */
+        onClick(fn: UIHandler): void;
+        /**
+            * Add hover handler
+            * @param over a function to handle when pointer enters hover
+            * @param out a function to handle when pointer exits hover
+            */
+        onHover(over: UIHandler, out: UIHandler): void;
+}
+
 /**
     * Various constant values for enumerations and calculations
     */
@@ -3316,6 +3661,8 @@ export const Const: {
         top: number;
         top_right: number;
         epsilon: number;
+        max: number;
+        min: number;
         pi: number;
         two_pi: number;
         half_pi: number;
@@ -3370,5 +3717,22 @@ export class Util {
             * @param arrays an array of arrays
             */
         static zip(...arrays: Array<any>[]): any[];
+        /**
+            * Create a convenient stepper. This returns a function which you can call repeatedly to step a counter.
+            * @param max Maximum of the stepper range. The resulting stepper will return (min to max-1) values.
+            * @param min Minimum of the stepper range. Default is 0.
+            * @param stride Stride of the step. Default is 1.
+            * @param callback An optional callback function( step ), which will be called each tiem when stepper function is called.
+            * @example `let counter = stepper(100); let c = counter(); c = counter(); ...`
+            * @returns a function which will increment the stepper and return its value at each call.
+            */
+        static stepper(max: number, min?: number, stride?: number, callback?: (n: number) => void): (() => number);
+        /**
+            * A convenient way to step through a range. Same as `for (i=0; i<range; i++)`, except this also stores the resulting return values at each step and return them as an array.
+            * @param range a range to step through
+            * @param fn a callback function(index). If this function returns a value, it will be stored at each step
+            * @returns an array of returned values at each step
+            */
+        static forRange(fn: (index: number) => any, range: number, start?: number, step?: number): any[];
 }
 

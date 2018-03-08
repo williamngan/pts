@@ -265,8 +265,8 @@ export class Noise extends Pt {
 /**
  * A DelaunayShape is an object with 3 indices, a Triangle Group and a Circle Group.
  */
-type DelaunayShape = {i:number, j:number, k:number, triangle:GroupLike, circle:Group };
-type DelaunayMesh = {[key:string]:DelaunayShape}[];
+export type DelaunayShape = {i:number, j:number, k:number, triangle:GroupLike, circle:Group };
+export type DelaunayMesh = {[key:string]:DelaunayShape}[];
 
 
 /**

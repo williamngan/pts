@@ -28,7 +28,11 @@ export declare class Vec {
      */
     static dot(a: PtLike, b: PtLike): number;
     /**
-     * Cross product of `a` and `b` (3D only)
+     * 2D cross product of `a` and `b`
+     */
+    static cross2D(a: PtLike, b: PtLike): number;
+    /**
+     * 3D Cross product of `a` and `b`
      */
     static cross(a: PtLike, b: PtLike): Pt;
     /**

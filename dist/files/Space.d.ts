@@ -177,7 +177,7 @@ export declare abstract class MultiTouchSpace extends Space {
     */
     unbindCanvas(evt: string, callback: EventListener): void;
     /**
-    * A convenient method to bind (or unbind) all mouse events in canvas element. All "players" added to this space that implements an `action` callback property will receive mouse event callbacks. The types of mouse actions are: "up", "down", "move", "drag", "drop", "over", and "out". See `Space`'s `add()` function fore more.
+    * A convenient method to bind (or unbind) all mouse events in canvas element. All "players" added to this space that implements an `action` callback property will receive mouse event callbacks. The types of mouse actions are defined by UIPointerActions constants: "up", "down", "move", "drag", "drop", "over", and "out". See `Space`'s `add()` function for more details.
     * @param _bind a boolean value to bind mouse events if set to `true`. If `false`, all mouse events will be unbound. Default is true.
     * @see Space`'s [`add`](./_space_.space.html#add) function
     */
@@ -197,7 +197,7 @@ export declare abstract class MultiTouchSpace extends Space {
     touchesToPoints(evt: TouchEvent, which?: TouchPointsKey): Pt[];
     /**
     * Go through all the `players` and call its `action` callback function
-    * @param type "up", "down", "move", "drag", "drop", "over", and "out"
+    * @param type an UIPointerActions constant or string: "up", "down", "move", "drag", "drop", "over", and "out"
     * @param evt mouse or touch event
     */
     protected _mouseAction(type: string, evt: MouseEvent | TouchEvent): void;

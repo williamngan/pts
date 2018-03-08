@@ -46,9 +46,10 @@ npm test
 typedoc --readme none --out docs src --name Pts
 ```
 
-#### Generate typescript declaration files
+#### Generate typescript declaration files and minify
 ```
 npm run typings
+npm run minify
 ```
 
 ---    

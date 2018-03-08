@@ -5,7 +5,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Space_1 = require("./Space");
 const Form_1 = require("./Form");
 const Bound_1 = require("./Bound");
+const Pt_1 = require("./Pt");
 const Util_1 = require("./Util");
+const Typography_1 = require("./Typography");
+const Op_1 = require("./Op");
 /**
 * CanvasSpace is an implementation of the abstract class Space. It represents a space for HTML Canvas.
 * Learn more about the concept of Space in [this guide](..guide/Space-0500.html)
@@ -195,6 +198,12 @@ class CanvasSpace extends Space_1.MultiTouchSpace {
             this.resize(box, evt);
         }
     }
+    /**
+    * Set a background color for this canvas. Alternatively, you may use `clear()` function.
+    @param bg background color as hex or rgba string
+    */
+    set background(bg) { this._bgcolor = bg; }
+    get background() { return this._bgcolor; }
     /**
     * `pixelScale` property returns a number that let you determine if the screen is "retina" (when value >= 2)
     */
@@ -418,7 +427,60 @@ class CanvasForm extends Form_1.VisualForm {
         else {
             this._font = sizeOrFont;
         }
+        // If using estimate, reapply it when font changes.
+        if (this._estimateTextWidth)
+            this.fontWidthEstimate(true);
         return this;
+    }
+    /**
+     * Set whether to use ctx.measureText or a faster but less accurate heuristic function.
+     * @param estimate `true` to use heuristic function, or `false` to use ctx.measureText
+     */
+    fontWidthEstimate(estimate = true) {
+        this._estimateTextWidth = (estimate) ? Typography_1.Typography.textWidthEstimator(((c) => this._ctx.measureText(c).width)) : undefined;
+        return this;
+    }
+    /**
+     * Get the width of this text. It will return an actual measurement or an estimate based on `fontWidthEstimate` setting. Default is an actual measurement using canvas context's measureText.
+     * @param c a string of text contents
+     */
+    getTextWidth(c) {
+        return (!this._estimateTextWidth) ? this._ctx.measureText(c).width : this._estimateTextWidth(c);
+    }
+    /**
+     * Truncate text to fit width
+     * @param str text to truncate
+     * @param width width to fit
+     * @param tail text to indicate overflow such as "...". Default is empty "".
+     */
+    _textTruncate(str, width, tail = "") {
+        return Typography_1.Typography.truncate(this.getTextWidth.bind(this), str, width, tail);
+    }
+    /**
+     * Align text within a rectangle box
+     * @param box a Group that defines a rectangular box
+     * @param vertical a string that specifies the vertical alignment in the box: "top", "bottom", "middle", "start", "end"
+     * @param offset Optional offset from the edge (like padding)
+     * @param center Optional center position
+     */
+    _textAlign(box, vertical, offset, center) {
+        if (!center)
+            center = Op_1.Rectangle.center(box);
+        var px = box[0][0];
+        if (this._ctx.textAlign == "end" || this._ctx.textAlign == "right") {
+            px = box[1][0];
+        }
+        else if (this._ctx.textAlign == "center" || this._ctx.textAlign == "middle") {
+            px = center[0];
+        }
+        var py = center[1];
+        if (vertical == "top" || vertical == "start") {
+            py = box[0][1];
+        }
+        else if (vertical == "end" || vertical == "bottom") {
+            py = box[1][1];
+        }
+        return (offset) ? new Pt_1.Pt(px + offset[0], py + offset[1]) : new Pt_1.Pt(px, py);
     }
     /**
     * Reset the rendering context's common styles to this form's styles. This supports using multiple forms on the same canvas context.
@@ -630,6 +692,92 @@ class CanvasForm extends Form_1.VisualForm {
     */
     text(pt, txt, maxWidth) {
         CanvasForm.text(this._ctx, pt, txt, maxWidth);
+        return this;
+    }
+    /**
+     * Fit a single-line text in a rectangular box
+     * @param box a rectangle box defined by a Group
+     * @param txt string of text
+     * @param tail text to indicate overflow such as "...". Default is empty "".
+     * @param verticalAlign "top", "middle", or "bottom" to specify vertical alignment inside the box
+     * @param overrideBaseline If `true`, use the corresponding baseline as verticalAlign. If `false`, use the current canvas context's textBaseline setting. Default is `true`.
+     */
+    textBox(box, txt, verticalAlign = "middle", tail = "", overrideBaseline = true) {
+        if (overrideBaseline)
+            this._ctx.textBaseline = verticalAlign;
+        let size = Op_1.Rectangle.size(box);
+        let t = this._textTruncate(txt, size[0], tail);
+        this.text(this._textAlign(box, verticalAlign), t[0]);
+        return this;
+    }
+    /**
+     * Fit multi-line text in a rectangular box. Note that this will also set canvas context's textBaseline to "top".
+     * @param box a rectangle box defined by a Group
+     * @param txt string of text
+     * @param lineHeight line height as a ratio of font size. Default is 1.2.
+     * @param verticalAlign "top", "middle", or "bottom" to specify vertical alignment inside the box
+     * @param crop a boolean to specify whether to crop text when overflowing
+     */
+    paragraphBox(box, txt, lineHeight = 1.2, verticalAlign = "top", crop = true) {
+        let size = Op_1.Rectangle.size(box);
+        this._ctx.textBaseline = "top"; // override textBaseline
+        let lstep = this._font.size * lineHeight;
+        // find next lines recursively
+        let nextLine = (sub, buffer = [], cc = 0) => {
+            if (!sub)
+                return buffer;
+            if (crop && cc * lstep > size[1] - lstep * 2)
+                return buffer;
+            if (cc > 10000)
+                throw new Error("max recursion reached (10000)");
+            let t = this._textTruncate(sub, size[0], "");
+            // new line
+            let newln = t[0].indexOf("\n");
+            if (newln >= 0) {
+                buffer.push(t[0].substr(0, newln));
+                return nextLine(sub.substr(newln + 1), buffer, cc + 1);
+            }
+            // word wrap
+            let dt = t[0].lastIndexOf(" ") + 1;
+            if (dt <= 0 || t[1] === sub.length)
+                dt = undefined;
+            let line = t[0].substr(0, dt);
+            buffer.push(line);
+            return (t[1] <= 0 || t[1] === sub.length) ? buffer : nextLine(sub.substr((dt || t[1])), buffer, cc + 1);
+        };
+        let lines = nextLine(txt); // go through all lines
+        let lsize = lines.length * lstep; // total height
+        let lbox = box;
+        if (verticalAlign == "middle" || verticalAlign == "center") {
+            let lpad = (size[1] - lsize) / 2;
+            if (crop)
+                lpad = Math.max(0, lpad);
+            lbox = new Pt_1.Group(box[0].$add(0, lpad), box[1].$subtract(0, lpad));
+        }
+        else if (verticalAlign == "bottom") {
+            lbox = new Pt_1.Group(box[0].$add(0, size[1] - lsize), box[1]);
+        }
+        else {
+            lbox = new Pt_1.Group(box[0], box[0].$add(size[0], lsize));
+        }
+        let center = Op_1.Rectangle.center(lbox);
+        for (let i = 0, len = lines.length; i < len; i++) {
+            this.text(this._textAlign(lbox, "top", [0, i * lstep], center), lines[i]);
+        }
+        return this;
+    }
+    /**
+     * Set text alignment and baseline (eg, vertical-align)
+     * @param alignment Canvas' textAlign option: "left", "right", "center", "start", or "end"
+     * @param baseline Canvas' textBaseline option: "top", "hanging", "middle", "alphabetic", "ideographic", "bottom". For convenience, you can also use "center" (same as "middle"), and "baseline" (same as "alphabetic")
+     */
+    alignText(alignment = "left", baseline = "alphabetic") {
+        if (baseline == "center")
+            baseline = "middle";
+        if (baseline == "baseline")
+            baseline = "alphabetic";
+        this._ctx.textAlign = alignment;
+        this._ctx.textBaseline = baseline;
         return this;
     }
     /**
