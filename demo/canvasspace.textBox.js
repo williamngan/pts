@@ -1,4 +1,4 @@
-window.demoDescription = "Textbox";
+window.demoDescription = "Canvas textbox that fit single and multiline text in boxes with truncations. Resize browser window to reflow text.";
 
 (function() {
 
