@@ -11,6 +11,7 @@ import * as _Color from "./Color";
 import * as _Util from "./Util";
 import * as _Dom from "./Dom";
 import * as _Svg from "./Svg";
+import * as _Typography from "./Typography";
 
 // A function to switch scope for Pts library. eg, Pts.scope( Pts, window );
 let namespace = ( sc:object ) => {
@@ -36,5 +37,6 @@ module.exports = {
   ..._Util,
   ..._Color,
   ..._Dom,
-  ..._Svg
+  ..._Svg,
+  ..._Typography
 };

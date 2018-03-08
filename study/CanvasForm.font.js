@@ -24,17 +24,17 @@ space.add( {
     form.strokeOnly("#abc", 1).rects( cells );
 
     form.fill("#345").font( 18 ).fontWidthEstimate( false );
-    form.alignText("left", "middle").textBox( cells[0], sample1, "...", "top" );
-    form.alignText("left", "middle").textBox( cells[0], sample1, "...", "middle" );
-    form.alignText("left", "top").textBox( cells[0], sample1, "...", "bottom" );
+    form.alignText("left", "middle").textBox( cells[0], sample1, "top", "..." );
+    form.alignText("left", "middle").textBox( cells[0], sample1, "middle", "..." );
+    form.alignText("left", "top").textBox( cells[0], sample1, "bottom", "..." );
 
-    form.alignText("center", "top").textBox( cells[1], sample1, "...", "top" );
-    form.alignText("center", "middle").textBox( cells[1], sample1, "...", "middle" );
-    form.alignText("center", "bottom").textBox( cells[1], sample1, "...", "bottom" );
+    form.alignText("center", "top").textBox( cells[1], sample1, "top", "..." );
+    form.alignText("center", "middle").textBox( cells[1], sample1, "middle", "..." );
+    form.alignText("center", "bottom").textBox( cells[1], sample1, "bottom", "..." );
 
-    form.alignText("right", "top").textBox( cells[2], sample1, "...", "top" );
-    form.alignText("right", "middle").textBox( cells[2], sample1, "...", "middle" );
-    form.alignText("right", "bottom").textBox( cells[2], sample1, "...", "bottom" );
+    form.alignText("right", "top").textBox( cells[2], sample1, "top", "..." );
+    form.alignText("right", "middle").textBox( cells[2], sample1, "middle", "..." );
+    form.alignText("right", "bottom").textBox( cells[2], sample1, "bottom", "..." );
 
     form.alignText("left").paragraphBox( cells[3], sample2, 1.2, "top" );
     form.alignText("left").paragraphBox( cells[3], sample2, 1.2, "middle" );
@@ -48,7 +48,7 @@ space.add( {
     form.alignText("right").paragraphBox( cells[5], sample2, 1, "middle" );
     form.alignText("right").paragraphBox( cells[5], sample2, 1, "bottom" );
 
-    form.font(14).alignText("center").paragraphBox( cells[6], sample3, 1.2, "top");
+    form.font(14).alignText("center").paragraphBox( cells[6], sample3, 1.2, "middle");
     form.font(26).alignText("center", "middle").textBox( cells[7], sample3, "...", "middle");
 
 

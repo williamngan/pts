@@ -1,4 +1,4 @@
-import {Pt} from "./Pt";
+import {Pt, GroupLike} from "./Pt";
 
 /** Various functions to support typography */
 export class Typography {
@@ -32,6 +32,22 @@ export class Typography {
     } else {
       return [str, str.length];
     }
+  }
+
+
+  /**
+   * Get a function to scale font size proportionally to text box size changes.
+   * @param box Initial box as a Group
+   * @param ratio font-size change ratio. Default is 1.
+   * @returns a function where input parameter is a new box, and returns the new font size value
+   */
+  static fontSizeToBox( box:GroupLike, ratio:number=1 ) {
+    let h = (box[1][1] - box[0][1]);
+    let f = ratio * h;
+    return function( b:GroupLike ) {
+      let nh = (b[1][1] - b[0][1]) / h;
+      return f * nh;
+    };
   }
 }
 

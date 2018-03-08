@@ -3,7 +3,7 @@
 
 
 import {Util} from "./Util";
-import {Geom} from "./Num";
+import {Geom, Num} from "./Num";
 import {Pt, PtLike, Group, GroupLike} from "./Pt";
 import {Mat} from "./LinearAlgebra";
 
@@ -428,14 +428,31 @@ export class Rectangle {
 
 
   /**
-   * Subdivide this rectangle into 4 rectangles, one for each quadrant
+   * Subdivide a rectangle into 4 rectangles, one for each quadrant
    * @param rect a Group of 2 Pts representing a Rectangle
-   * @returns an array of 4 Groups
+   * @returns an array of 4 Groups of rectangles
    */
   static quadrants( rect:GroupLike, center?:PtLike ):Group[] {
     let corners = Rectangle.corners( rect );
-    let _center = (center!=undefined) ? new Pt(center) : Geom.interpolate( rect[0], rect[1], 0.5 );
+    let _center = (center!=undefined) ? new Pt(center) : Rectangle.center( rect );
     return corners.map( (c) => new Group(c, _center).boundingBox() );
+  }
+
+
+  /**
+   * Subdivde a rectangle into 2 rectangles, by row or by column
+   * @param rect Group of 2 Pts representing a Rectangle
+   * @param ratio a value between 0 to 1 to indicate the split ratio
+   * @param asRows if `true`, split into 2 rows. Default is `false` which splits into 2 columns.
+   * @returns an array of 2 Groups of rectangles
+   */
+  static halves( rect:GroupLike, ratio:number=0.5, asRows:boolean=false ):Group[] {
+    let min = rect[0].$min( rect[1] );
+    let max = rect[0].$max( rect[1] );
+    let mid = (asRows) ? Num.lerp( min[1], max[1], ratio ) : Num.lerp( min[0], max[0], ratio );
+    return (asRows) 
+            ? [new Group( min, new Pt(max[0],mid) ), new Group( new Pt(min[0],mid), max )]
+            : [new Group( min, new Pt(mid,max[1]) ), new Group( new Pt(mid,min[1]), max )];
   }
 
 

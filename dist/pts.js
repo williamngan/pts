@@ -1376,14 +1376,29 @@ class Rectangle {
         return Rectangle.corners(rect);
     }
     /**
-     * Subdivide this rectangle into 4 rectangles, one for each quadrant
+     * Subdivide a rectangle into 4 rectangles, one for each quadrant
      * @param rect a Group of 2 Pts representing a Rectangle
-     * @returns an array of 4 Groups
+     * @returns an array of 4 Groups of rectangles
      */
     static quadrants(rect, center) {
         let corners = Rectangle.corners(rect);
-        let _center = (center != undefined) ? new Pt_1.Pt(center) : Num_1.Geom.interpolate(rect[0], rect[1], 0.5);
+        let _center = (center != undefined) ? new Pt_1.Pt(center) : Rectangle.center(rect);
         return corners.map((c) => new Pt_1.Group(c, _center).boundingBox());
+    }
+    /**
+     * Subdivde a rectangle into 2 rectangles, by row or by column
+     * @param rect Group of 2 Pts representing a Rectangle
+     * @param ratio a value between 0 to 1 to indicate the split ratio
+     * @param asRows if `true`, split into 2 rows. Default is `false` which splits into 2 columns.
+     * @returns an array of 2 Groups of rectangles
+     */
+    static halves(rect, ratio = 0.5, asRows = false) {
+        let min = rect[0].$min(rect[1]);
+        let max = rect[0].$max(rect[1]);
+        let mid = (asRows) ? Num_1.Num.lerp(min[1], max[1], ratio) : Num_1.Num.lerp(min[0], max[0], ratio);
+        return (asRows)
+            ? [new Pt_1.Group(min, new Pt_1.Pt(max[0], mid)), new Pt_1.Group(new Pt_1.Pt(min[0], mid), max)]
+            : [new Pt_1.Group(min, new Pt_1.Pt(mid, max[1])), new Pt_1.Group(new Pt_1.Pt(mid, min[1]), max)];
     }
     /**
      * Check if a point is within a rectangle
@@ -4868,6 +4883,63 @@ exports.HTMLForm = HTMLForm;
 
 "use strict";
 
+Object.defineProperty(exports, "__esModule", { value: true });
+const Pt_1 = __webpack_require__(0);
+/** Various functions to support typography */
+class Typography {
+    /**
+     * Create a heuristic text width estimate function. It will be less accurate but faster.
+     * @param fn a reference function that can measure text width accurately
+     * @param samples a list of string samples. Default is ["M", "n", "."]
+     * @param distribution a list of the samples' probability distribution. Default is [0.06, 0.8, 0.14].
+     * @return a function that can estimate text width
+     */
+    static textWidthEstimator(fn, samples = ["M", "n", "."], distribution = [0.06, 0.8, 0.14]) {
+        let m = samples.map(fn);
+        let avg = new Pt_1.Pt(distribution).dot(m);
+        return (str) => str.length * avg;
+    }
+    /**
+     * Truncate text to fit width
+     * @param fn a function that can measure text width
+     * @param str text to truncate
+     * @param width width to fit
+     * @param tail text to indicate overflow such as "...". Default is empty "".
+     */
+    static truncate(fn, str, width, tail = "") {
+        let trim = Math.floor(str.length * Math.min(1, width / (fn(str) * 1.1)));
+        if (trim < str.length) {
+            trim = Math.max(0, trim - tail.length);
+            return [str.substr(0, trim) + tail, trim];
+        }
+        else {
+            return [str, str.length];
+        }
+    }
+    /**
+     * Get a function to scale font size proportionally to text box size changes.
+     * @param box Initial box as a Group
+     * @param ratio font-size change ratio. Default is 1.
+     * @returns a function where input parameter is a new box, and returns the new font size value
+     */
+    static fontSizeToBox(box, ratio = 1) {
+        let h = (box[1][1] - box[0][1]);
+        let f = ratio * h;
+        return function (b) {
+            let nh = (b[1][1] - b[0][1]) / h;
+            return f * nh;
+        };
+    }
+}
+exports.Typography = Typography;
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 // Source code licensed under Apache License 2.0. 
 // Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -4876,7 +4948,7 @@ const Form_1 = __webpack_require__(6);
 const Bound_1 = __webpack_require__(5);
 const Pt_1 = __webpack_require__(0);
 const Util_1 = __webpack_require__(1);
-const Typography_1 = __webpack_require__(13);
+const Typography_1 = __webpack_require__(9);
 const Op_1 = __webpack_require__(2);
 /**
 * CanvasSpace is an implementation of the abstract class Space. It represents a space for HTML Canvas.
@@ -5571,7 +5643,7 @@ class CanvasForm extends Form_1.VisualForm {
      * @param verticalAlign "top", "middle", or "bottom" to specify vertical alignment inside the box
      * @param overrideBaseline If `true`, use the corresponding baseline as verticalAlign. If `false`, use the current canvas context's textBaseline setting. Default is `true`.
      */
-    textBox(box, txt, tail = "", verticalAlign = "middle", overrideBaseline = true) {
+    textBox(box, txt, verticalAlign = "middle", tail = "", overrideBaseline = true) {
         if (overrideBaseline)
             this._ctx.textBaseline = verticalAlign;
         let size = Op_1.Rectangle.size(box);
@@ -5595,7 +5667,7 @@ class CanvasForm extends Form_1.VisualForm {
         let nextLine = (sub, buffer = [], cc = 0) => {
             if (!sub)
                 return buffer;
-            if (!crop && cc * lstep > size[1] - lstep * 2)
+            if (crop && cc * lstep > size[1] - lstep * 2)
                 return buffer;
             if (cc > 10000)
                 throw new Error("max recursion reached (10000)");
@@ -5603,7 +5675,7 @@ class CanvasForm extends Form_1.VisualForm {
             // new line
             let newln = t[0].indexOf("\n");
             if (newln >= 0) {
-                buffer.push(t[0].substr(0, newln - 1));
+                buffer.push(t[0].substr(0, newln));
                 return nextLine(sub.substr(newln + 1), buffer, cc + 1);
             }
             // word wrap
@@ -5616,11 +5688,11 @@ class CanvasForm extends Form_1.VisualForm {
         };
         let lines = nextLine(txt); // go through all lines
         let lsize = lines.length * lstep; // total height
-        let lpad = (size[1] - lsize) / 2;
-        if (!crop)
-            lpad = Math.max(0, lpad);
         let lbox = box;
         if (verticalAlign == "middle" || verticalAlign == "center") {
+            let lpad = (size[1] - lsize) / 2;
+            if (crop)
+                lpad = Math.max(0, lpad);
             lbox = new Pt_1.Group(box[0].$add(0, lpad), box[1].$subtract(0, lpad));
         }
         else if (verticalAlign == "bottom") {
@@ -5664,7 +5736,7 @@ exports.CanvasForm = CanvasForm;
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6229,7 +6301,7 @@ exports.Color = Color;
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6656,7 +6728,7 @@ exports.Delaunay = Delaunay;
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7239,49 +7311,6 @@ exports.SVGForm = SVGForm;
 
 
 /***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const Pt_1 = __webpack_require__(0);
-/** Various functions to support typography */
-class Typography {
-    /**
-     * Create a heuristic text width estimate function. It will be less accurate but faster.
-     * @param fn a reference function that can measure text width accurately
-     * @param samples a list of string samples. Default is ["M", "n", "."]
-     * @param distribution a list of the samples' probability distribution. Default is [0.06, 0.8, 0.14].
-     * @return a function that can estimate text width
-     */
-    static textWidthEstimator(fn, samples = ["M", "n", "."], distribution = [0.06, 0.8, 0.14]) {
-        let m = samples.map(fn);
-        let avg = new Pt_1.Pt(distribution).dot(m);
-        return (str) => str.length * avg;
-    }
-    /**
-     * Truncate text to fit width
-     * @param fn a function that can measure text width
-     * @param str text to truncate
-     * @param width width to fit
-     * @param tail text to indicate overflow such as "...". Default is empty "".
-     */
-    static truncate(fn, str, width, tail = "") {
-        let trim = Math.floor(str.length * Math.min(1, width / (fn(str) * 1.1)));
-        if (trim < str.length) {
-            trim = Math.max(0, trim - tail.length);
-            return [str.substr(0, trim) + tail, trim];
-        }
-        else {
-            return [str, str.length];
-        }
-    }
-}
-exports.Typography = Typography;
-
-
-/***/ }),
 /* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -7428,18 +7457,19 @@ exports.UIButton = UIButton;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const _Bound = __webpack_require__(5);
-const _Canvas = __webpack_require__(9);
-const _Create = __webpack_require__(11);
+const _Canvas = __webpack_require__(10);
+const _Create = __webpack_require__(12);
 const _Form = __webpack_require__(6);
 const _LinearAlgebra = __webpack_require__(4);
 const _Num = __webpack_require__(3);
 const _Op = __webpack_require__(2);
 const _Pt = __webpack_require__(0);
 const _Space = __webpack_require__(7);
-const _Color = __webpack_require__(10);
+const _Color = __webpack_require__(11);
 const _Util = __webpack_require__(1);
 const _Dom = __webpack_require__(8);
-const _Svg = __webpack_require__(12);
+const _Svg = __webpack_require__(13);
+const _Typography = __webpack_require__(9);
 // A function to switch scope for Pts library. eg, Pts.scope( Pts, window );
 let namespace = (sc) => {
     let lib = module.exports;
@@ -7449,7 +7479,7 @@ let namespace = (sc) => {
         }
     }
 };
-module.exports = Object.assign({ namespace }, _Bound, _Canvas, _Create, _Form, _LinearAlgebra, _Op, _Num, _Pt, _Space, _Util, _Color, _Dom, _Svg);
+module.exports = Object.assign({ namespace }, _Bound, _Canvas, _Create, _Form, _LinearAlgebra, _Op, _Num, _Pt, _Space, _Util, _Color, _Dom, _Svg, _Typography);
 
 
 /***/ })

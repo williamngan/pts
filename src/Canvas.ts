@@ -839,7 +839,7 @@ export class CanvasForm extends VisualForm {
      * @param verticalAlign "top", "middle", or "bottom" to specify vertical alignment inside the box
      * @param overrideBaseline If `true`, use the corresponding baseline as verticalAlign. If `false`, use the current canvas context's textBaseline setting. Default is `true`.
      */
-    textBox( box:GroupLike, txt:string, tail:string="", verticalAlign:string="middle", overrideBaseline:boolean=true): this {
+    textBox( box:GroupLike, txt:string, verticalAlign:string="middle", tail:string="", overrideBaseline:boolean=true): this {
       if (overrideBaseline) this._ctx.textBaseline = verticalAlign;
       let size = Rectangle.size( box );
       let t = this._textTruncate( txt, size[0], tail );
@@ -865,7 +865,7 @@ export class CanvasForm extends VisualForm {
       // find next lines recursively
       let nextLine = (sub:string, buffer:string[]=[], cc:number=0 ) => {
         if (!sub) return buffer;
-        if (!crop && cc*lstep > size[1]-lstep*2) return buffer;
+        if (crop && cc*lstep > size[1]-lstep*2) return buffer;
         if (cc>10000) throw new Error("max recursion reached (10000)");
 
         let t = this._textTruncate( sub, size[0], "" );
@@ -873,7 +873,7 @@ export class CanvasForm extends VisualForm {
         // new line
         let newln = t[0].indexOf("\n");
         if (newln >= 0) {
-          buffer.push( t[0].substr(0, newln-1) );
+          buffer.push( t[0].substr(0, newln) );
           return nextLine( sub.substr( newln+1 ), buffer, cc+1 ); 
         }
 
@@ -888,11 +888,12 @@ export class CanvasForm extends VisualForm {
 
       let lines = nextLine( txt ); // go through all lines
       let lsize = lines.length * lstep; // total height
-      let lpad = (size[1] - lsize) / 2; 
-      if (!crop) lpad = Math.max( 0, lpad );
       let lbox = box;
+      
 
       if (verticalAlign == "middle" || verticalAlign == "center") {
+        let lpad = (size[1] - lsize) / 2; 
+        if (crop) lpad = Math.max( 0, lpad );  
         lbox = new Group( box[0].$add(0, lpad), box[1].$subtract(0, lpad) );
       } else if (verticalAlign == "bottom") {
         lbox = new Group( box[0].$add( 0, size[1]-lsize ), box[1] );
