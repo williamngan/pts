@@ -1,3 +1,6 @@
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
+
 window.demoDescription = "Draw shapes based on the size of space. Resize the window and the drawing will update.";
 
 (function() {

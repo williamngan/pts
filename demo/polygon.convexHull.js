@@ -1,3 +1,6 @@
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
+
 window.demoDescription = "Use convex hull to envelope a set of points. Move the pointer to modify the boundary.";
 
 (function() {

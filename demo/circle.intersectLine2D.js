@@ -1,3 +1,6 @@
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
+
 window.demoDescription = "A circle moves in a field of line segments. Check intersections on both line paths and line segments, and highlight the intersection points and paths.";
 
 (function() {

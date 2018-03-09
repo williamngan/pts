@@ -1,3 +1,6 @@
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
+
 window.demoDescription = "A circle and a donut meets. Indicate their points of intersections.";
 
 (function() {

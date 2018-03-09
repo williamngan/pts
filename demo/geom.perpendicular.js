@@ -1,3 +1,6 @@
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
+
 window.demoDescription = "Draw a series of perpendicular lines along a diagonal path to visualize sine waves.";
 
 (function() {

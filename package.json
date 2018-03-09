@@ -5,12 +5,12 @@
   "main": "./dist/pts.js",
   "types": "./dist/pts.d.ts",
   "scripts": {
-    "start": "webpack --watch",
+    "start": "webpack --watch --config webpack.dev.js",
     "generate-typings": "tsc -d",
     "bundle-typings": "dts-bundle --name pts --outputAsModuleFolder true --main dist/files/**/*.d.ts --out ../pts.d.ts",
     "typings": "npm run generate-typings && npm run bundle-typings",
-    "build": "webpack",
-    "minify": "babel dist/pts.js --out-file dist/pts.min.js",
+    "build": "webpack --config webpack.dev.js",
+    "minify": "webpack --config webpack.prod.js",
     "test": "mocha --opts mocha.opts",
     "test:auto": "mocha --opts mocha.opts --watch"
   },
@@ -27,10 +27,10 @@
     "babel-core": "^6.26.0",
     "babel-loader": "^6.4.1",
     "babel-minify": "^0.2.0",
+    "babel-minify-webpack-plugin": "^0.3.0",
     "babel-plugin-transform-builtin-extend": "^1.1.2",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-minify": "^0.2.0",
-    "babili-webpack-plugin": "^0.1.2",
     "chai": "^3.5.0",
     "dts-bundle": "^0.7.3",
     "mocha": "^3.5.0",
@@ -44,7 +44,8 @@
     "typedoc": "^0.5.10",
     "typescript": "^2.5.2",
     "webpack": "^2.7.0",
-    "webpack-dev-server": "^2.7.1"
+    "webpack-dev-server": "^2.7.1",
+    "webpack-merge": "^4.1.2"
   },
   "bugs": {
     "url": "https://github.com/williamngan/pts/issues"

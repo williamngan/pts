@@ -1,3 +1,6 @@
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
+
 window.demoDescription = "Generate Delaunay and Voronoi tessellations. When 100 points are added, the diagram will animate and display guidelines at pointer position.";
 
 (function() {

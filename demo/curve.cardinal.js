@@ -1,3 +1,6 @@
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
+
 window.demoDescription = "Draw three cardinal curves with different tensions. Move pointer near the control points to modify the curve.";
 
 (function() {

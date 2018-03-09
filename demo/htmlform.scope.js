@@ -1,3 +1,6 @@
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
+
 window.demoDescription = "Pts also provides experimental support for rendering HTML elements. Take a look using your browser's DOM inspector.";
 
 (function() {

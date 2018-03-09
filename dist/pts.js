@@ -1,3 +1,8 @@
+/*!
+ * pts.js - Copyright © 2017-2018 William Ngan and contributors.
+ * Licensed under Apache 2.0 License.
+ * See https://github.com/williamngan/pts for details.
+ */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -4883,6 +4888,8 @@ exports.HTMLForm = HTMLForm;
 
 "use strict";
 
+// Source code licensed under Apache License 2.0.
+// Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
 /** Various functions to support typography */
@@ -7316,6 +7323,8 @@ exports.SVGForm = SVGForm;
 
 "use strict";
 
+// Source code licensed under Apache License 2.0.
+// Copyright © 2017 William Ngan. (https://github.com/williamngan)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Op_1 = __webpack_require__(2);
 /**

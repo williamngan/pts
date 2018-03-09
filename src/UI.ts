@@ -1,3 +1,7 @@
+// Source code licensed under Apache License 2.0.
+// Copyright © 2017 William Ngan. (https://github.com/williamngan)
+
+
 import {Pt, Group} from "./Pt";
 import { Rectangle, Circle } from "./Op";
 

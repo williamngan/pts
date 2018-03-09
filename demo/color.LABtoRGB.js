@@ -1,3 +1,6 @@
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
+
 window.demoDescription = "Create a gradient grid using Lab color space. The pointer position updates the lightness. With subtle wave-like animation.";
 
 (function() {

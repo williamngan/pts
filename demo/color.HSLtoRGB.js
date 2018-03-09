@@ -1,3 +1,6 @@
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
+
 window.demoDescription = "Create a subdivided grid colored with HSL color space. The pointer position updates the hue.";
 
 (function() {

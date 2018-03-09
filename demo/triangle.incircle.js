@@ -1,4 +1,5 @@
-window.demoDescription = "Four circles fit within the triangles, and four other circles encloses them. Move the pointer to change the triangles.";
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 
 (function() {
   

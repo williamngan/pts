@@ -1,3 +1,6 @@
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
+
 window.demoDescription = "In a field of points that revolves around a center, draw a perpendicular line from each point to a path.";
 
 (function() {

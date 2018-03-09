@@ -1,6 +1,5 @@
 var webpack = require('webpack');
 var path = require('path');
-// var BabiliPlugin = require("babili-webpack-plugin");
 
 var TARGET = process.env.npm_lifecycle_event
 process.env.BABEL_ENV = TARGET
@@ -8,25 +7,6 @@ process.env.BABEL_ENV = TARGET
 var APP_PATH = path.resolve(__dirname, 'src/_app.ts')
 var LIB_PATH = path.resolve(__dirname, 'src/_lib.ts')
 var BUILD_PATH = path.resolve(__dirname, 'dist')
-var prod = process.argv.indexOf('-p') !== -1
-
-/*
-module.exports = {
-    entry: {
-        front: "./static/src/js/Front.js",
-        account: "./static/src/js/Account.js"
-    },
-    output: {
-        path: "./static/dist",
-        filename: "[name]-bundle.js"
-    }
-};
-
-    filename: '[name].js',
-    libraryTarget: 'var',
-    // `library` determines the name of the global variable
-    library: '[name]'
-*/
 
 module.exports = {
   
@@ -39,7 +19,7 @@ module.exports = {
     library: 'Pts',
     libraryTarget: 'umd',
     path: BUILD_PATH,
-    filename: prod ? '[name].min.js' : '[name].js'
+    filename: 'pts.js'
   },
 
   devtool: 'source-map',
@@ -63,4 +43,8 @@ module.exports = {
     ],
   },
 
-}
+  plugins: [
+    new webpack.BannerPlugin("pts.js - Copyright © 2017-2018 William Ngan and contributors.\nLicensed under Apache 2.0 License.\nSee https://github.com/williamngan/pts for details.")
+  ]
+
+};

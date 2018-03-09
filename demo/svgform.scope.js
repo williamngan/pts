@@ -1,3 +1,6 @@
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
+
 window.demoDescription = "This sketch is rendered as SVG. Using your browser's inspector, you can take a look at the svg element and copy it into a svg file too.";
 
 (function() {

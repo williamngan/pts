@@ -1,3 +1,6 @@
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
+
 Pts.namespace( window );
 
 var space = new CanvasSpace("#pt").setup({retina: true});

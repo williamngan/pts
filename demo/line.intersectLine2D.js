@@ -1,3 +1,6 @@
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
+
 window.demoDescription = "Lines rotating in a grid. Intersections between lines are marked with circles. Move the pointer to change the rotation speed.";
 
 (function() {

@@ -1,3 +1,6 @@
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
+
 window.demoDescription = "Calculate a unit vector from center to mouse position. Use its direction to control a grid of lines.";
 
 (function() {

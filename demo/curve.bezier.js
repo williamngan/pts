@@ -1,3 +1,6 @@
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
+
 window.demoDescription = "Add a point to a trail as the pointer moves. Use those points as controls for a continuous bezier curve.";
 
 (function() {

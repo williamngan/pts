@@ -16,7 +16,7 @@ This library is currently in beta. Please give it a try, [file issues](https://g
 ```
 <script type="text/javascript" src="pts.js"></script>
 ```
-Pts is pretty lightweight. Currently at 69kb minified and 19kb gzipped.
+Pts is pretty lightweight. Currently at 80kb minified and 23kb gzipped.
 
 
 **Option 2:** Install via `npm install pts`. Then you can choose to import some parts of Pts into your project as needed. 

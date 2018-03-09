@@ -1,3 +1,6 @@
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
+
 window.demoDescription = "Move the pointer to creates confetti. A simple example to show how to extend Pt class.";
 
 (function() {

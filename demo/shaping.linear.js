@@ -1,3 +1,6 @@
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
+
 window.demoDescription = "A visualization of various shaping functions, which are also applied to change the circles' sizes correspondingly. Based on the algorithms from Robert Penner and Golan Levin";
 
 (function() {

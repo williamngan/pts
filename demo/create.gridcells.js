@@ -1,3 +1,6 @@
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
+
 window.demoDescription = "A retro-style dazzling effect created by a grid whose cells change color and size based on their distances to the pointer.";
 
 (function() {

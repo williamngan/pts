@@ -1,3 +1,6 @@
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
+
 window.demoDescription = "Canvas textbox that fit single and multiline text in boxes with truncations. Resize browser window to reflow text.";
 
 (function() {

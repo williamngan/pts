@@ -1,3 +1,6 @@
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
+
 window.demoDescription = "Create a set of points around a center point, varying each's radius slightly. Draw a b-spline curve around the points.";
 
 (function() {
