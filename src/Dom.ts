@@ -1,3 +1,7 @@
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
+
+
 import {MultiTouchSpace, IPlayer} from './Space';
 import {Form, VisualForm, Font} from "./Form";
 import {Bound} from './Bound';

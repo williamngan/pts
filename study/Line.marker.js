@@ -14,20 +14,27 @@ space.add( {
 
   animate: (time, ftime) => {
     guidelines();
-
+    
     // Begin Test Code --
-
-    poly1[poly1.length-1] = space.pointer;
-
-    form.stroke("#fff", 2);
-    form.line( poly1 );
     
     form.stroke("#f00", 2);
-    let rects = Polygon.toRects( poly1.lines() );
-    form.rects( rects ); 
+    let ln = new Group( Rectangle.center( rect1 ), space.pointer );
 
-    // End   
-    
+    let c1 = Circle.fromCenter( space.pointer, 30 );
+    let mSize = new Pt(10, 40);
+
+    ln[0] = Line.crop( ln, Rectangle.size(rect1), 0, false );
+    ln[1] = Line.crop( ln, c1[1], 1, true );
+
+    let headMark = Line.marker( ln, mSize, "arrow", true );
+    let tailMark = Line.marker( ln, mSize, "line", false );
+
+
+    form.line( ln ).polygon( headMark ).polygon( tailMark );
+
+    form.circle( c1 ).rect( rect1 );
+
+    // End
   },
 
   action:( type, px, py) => {
@@ -39,7 +46,6 @@ space.add( {
   }
   
 });
-  
 
 // Template: Predefined shapes for testing ---
 
@@ -87,6 +93,7 @@ function guidelines() {
 }
 
 
+  
 space.bindMouse().bindTouch();
 space.play();
 // space.playOnce(5000);

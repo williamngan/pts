@@ -1,5 +1,5 @@
 // Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan)
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 
 
 import {Pt, PtLike, GroupLike, Group} from "./Pt";

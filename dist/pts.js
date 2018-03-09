@@ -88,7 +88,7 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 // Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan)
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(1);
 const Num_1 = __webpack_require__(3);
@@ -797,7 +797,7 @@ exports.Group = Group;
 "use strict";
 
 // Source code licensed under Apache License 2.0.
-// Copyright © 2017 William Ngan. (https://github.com/williamngan)
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
 /**
@@ -1017,7 +1017,7 @@ exports.Util = Util;
 "use strict";
 
 // Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan)
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(1);
 const Num_1 = __webpack_require__(3);
@@ -1252,6 +1252,60 @@ class Line {
             pts.push(Num_1.Geom.interpolate(line[0], line[1], i / (num + 1)));
         }
         return pts;
+    }
+    /**
+     * Crop this line by a circle or rectangle at end point.
+     * @param line line to crop
+     * @param size size of circle or rectangle as Pt
+     * @param index line's end point index, ie, 0 = start and 1 = end.
+     * @param cropAsCircle a boolean to specify whether the `size` parameter should be treated as circle. Default is `true`.
+     * @return an intersecting point on the line that can be used for cropping.
+     */
+    static crop(line, size, index = 0, cropAsCircle = true) {
+        let tdx = (index === 0) ? 1 : 0;
+        let ls = line[tdx].$subtract(line[index]);
+        if (ls[0] === 0 || size[0] === 0)
+            return line[index];
+        if (cropAsCircle) {
+            let d = ls.unit().multiply(size[1]);
+            return line[index].$add(d);
+        }
+        else {
+            let rect = Rectangle.fromCenter(line[index], size);
+            let sides = Rectangle.sides(rect);
+            let sideIdx = 0;
+            if (Math.abs(ls[1] / ls[0]) > Math.abs(size[1] / size[0])) {
+                sideIdx = (ls[1] < 0) ? 0 : 2;
+            }
+            else {
+                sideIdx = (ls[0] < 0) ? 3 : 1;
+            }
+            return Line.intersectRay2D(sides[sideIdx], line);
+        }
+    }
+    /**
+     * Create an marker arrow or line, placed at an end point of this line
+     * @param line line to place marker
+     * @param size size of the marker as Pt
+     * @param graphic either "arrow" or "line"
+     * @param atTail a boolean, if `true`, the marker will be positioned at tail of the line (ie, index = 1). Default is `true`.
+     * @returns a Group that defines the marker's shape
+     */
+    static marker(line, size, graphic = ("arrow" || "line"), atTail = true) {
+        let h = atTail ? 0 : 1;
+        let t = atTail ? 1 : 0;
+        let unit = line[h].$subtract(line[t]);
+        if (unit.magnitudeSq() === 0)
+            return new Pt_1.Group();
+        unit.unit();
+        let ps = Num_1.Geom.perpendicular(unit).multiply(size[0]).add(line[t]);
+        if (graphic == "arrow") {
+            ps.add(unit.$multiply(size[1]));
+            return new Pt_1.Group(line[t], ps[0], ps[1]);
+        }
+        else {
+            return new Pt_1.Group(ps[0], ps[1]);
+        }
     }
     /**
      * Convert this line to a rectangle representation
@@ -2251,7 +2305,7 @@ exports.Curve = Curve;
 "use strict";
 
 // Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan)
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(1);
 const Op_1 = __webpack_require__(2);
@@ -3059,7 +3113,7 @@ exports.Range = Range;
 "use strict";
 
 // Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan)
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
 const Op_1 = __webpack_require__(2);
@@ -3450,7 +3504,7 @@ exports.Mat = Mat;
 "use strict";
 
 // Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan)
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
 /**
@@ -3607,7 +3661,7 @@ exports.Bound = Bound;
 "use strict";
 
 // Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan)
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(1);
 /**
@@ -3778,7 +3832,7 @@ exports.Font = Font;
 "use strict";
 
 // Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan)
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Bound_1 = __webpack_require__(5);
 const Pt_1 = __webpack_require__(0);
@@ -4175,6 +4229,8 @@ exports.MultiTouchSpace = MultiTouchSpace;
 
 "use strict";
 
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Space_1 = __webpack_require__(7);
 const Form_1 = __webpack_require__(6);
@@ -4889,7 +4945,7 @@ exports.HTMLForm = HTMLForm;
 "use strict";
 
 // Source code licensed under Apache License 2.0.
-// Copyright © 2017 William Ngan. (https://github.com/williamngan)
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
 /** Various functions to support typography */
@@ -4948,7 +5004,7 @@ exports.Typography = Typography;
 "use strict";
 
 // Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan)
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Space_1 = __webpack_require__(7);
 const Form_1 = __webpack_require__(6);
@@ -5749,7 +5805,7 @@ exports.CanvasForm = CanvasForm;
 "use strict";
 
 // Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan)
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
 const Util_1 = __webpack_require__(1);
@@ -6314,7 +6370,7 @@ exports.Color = Color;
 "use strict";
 
 // Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan)
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
 const Op_1 = __webpack_require__(2);
@@ -6740,6 +6796,8 @@ exports.Delaunay = Delaunay;
 
 "use strict";
 
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Form_1 = __webpack_require__(6);
 const Num_1 = __webpack_require__(3);
@@ -7324,7 +7382,7 @@ exports.SVGForm = SVGForm;
 "use strict";
 
 // Source code licensed under Apache License 2.0.
-// Copyright © 2017 William Ngan. (https://github.com/williamngan)
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Op_1 = __webpack_require__(2);
 /**

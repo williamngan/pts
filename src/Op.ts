@@ -1,5 +1,5 @@
 // Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan)
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 
 
 import {Util} from "./Util";
@@ -270,6 +270,63 @@ export class Line {
     return pts;
   }
 
+
+  /**
+   * Crop this line by a circle or rectangle at end point.
+   * @param line line to crop
+   * @param size size of circle or rectangle as Pt
+   * @param index line's end point index, ie, 0 = start and 1 = end.
+   * @param cropAsCircle a boolean to specify whether the `size` parameter should be treated as circle. Default is `true`.
+   * @return an intersecting point on the line that can be used for cropping.
+   */
+  static crop( line:GroupLike, size:PtLike, index:number=0, cropAsCircle:boolean=true ):Pt {
+    let tdx = (index === 0) ? 1 : 0;
+    let ls = line[tdx].$subtract( line[index] );
+    if (ls[0] === 0 || size[0] === 0) return line[index];
+
+    if (cropAsCircle) {
+      let d = ls.unit().multiply( size[1] );
+      return line[index].$add( d );
+
+    } else {
+      let rect = Rectangle.fromCenter( line[index], size );
+      let sides = Rectangle.sides( rect );
+      let sideIdx = 0;
+
+      if ( Math.abs( ls[1]/ls[0] ) > Math.abs( size[1]/size[0] ) ) {
+        sideIdx = (ls[1] < 0) ? 0 : 2;
+      } else {
+        sideIdx = (ls[0] < 0) ? 3 : 1;
+      }
+      return Line.intersectRay2D( sides[sideIdx], line );
+
+    }
+  }
+
+  /**
+   * Create an marker arrow or line, placed at an end point of this line
+   * @param line line to place marker
+   * @param size size of the marker as Pt
+   * @param graphic either "arrow" or "line"
+   * @param atTail a boolean, if `true`, the marker will be positioned at tail of the line (ie, index = 1). Default is `true`.
+   * @returns a Group that defines the marker's shape
+   */
+  static marker( line:GroupLike, size:PtLike, graphic:string=("arrow"||"line"), atTail:boolean=true ):Group {
+    let h = atTail ? 0 : 1;
+    let t = atTail ? 1 : 0;
+    let unit = line[h].$subtract( line[t] );
+    if (unit.magnitudeSq() === 0) return new Group();
+    unit.unit();
+    
+    let ps = Geom.perpendicular( unit ).multiply( size[0] ).add( line[t] );
+    if (graphic == "arrow") {
+      ps.add( unit.$multiply( size[1]) );
+      return new Group( line[t], ps[0], ps[1] );
+    } else {
+      return new Group( ps[0], ps[1] );
+    }
+
+  }
 
   /**
    * Convert this line to a rectangle representation
