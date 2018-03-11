@@ -12,7 +12,7 @@
 		exports["Pts"] = factory();
 	else
 		root["Pts"] = factory();
-})(typeof self !== 'undefined' ? self : this, function() {
+})(this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -48,6 +48,9 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
 /******/
+/******/ 	// identity function for calling harmony imports with the correct context
+/******/ 	__webpack_require__.i = function(value) { return value; };
+/******/
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
@@ -75,7 +78,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 10);
+/******/ 	return __webpack_require__(__webpack_require__.s = 16);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -3833,7 +3836,7 @@ exports.Font = Font;
 Object.defineProperty(exports, "__esModule", { value: true });
 const Bound_1 = __webpack_require__(5);
 const Pt_1 = __webpack_require__(0);
-const UI_1 = __webpack_require__(12);
+const UI_1 = __webpack_require__(15);
 /**
 * Space is an abstract class that represents a general context for expressing Pts.
 * See [Space guide](../../guide/Space-0500.html) for details.
@@ -4226,83 +4229,6 @@ exports.MultiTouchSpace = MultiTouchSpace;
 
 "use strict";
 
-// Source code licensed under Apache License 2.0.
-// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
-Object.defineProperty(exports, "__esModule", { value: true });
-const Pt_1 = __webpack_require__(0);
-/** Various functions to support typography */
-class Typography {
-    /**
-     * Create a heuristic text width estimate function. It will be less accurate but faster.
-     * @param fn a reference function that can measure text width accurately
-     * @param samples a list of string samples. Default is ["M", "n", "."]
-     * @param distribution a list of the samples' probability distribution. Default is [0.06, 0.8, 0.14].
-     * @return a function that can estimate text width
-     */
-    static textWidthEstimator(fn, samples = ["M", "n", "."], distribution = [0.06, 0.8, 0.14]) {
-        let m = samples.map(fn);
-        let avg = new Pt_1.Pt(distribution).dot(m);
-        return (str) => str.length * avg;
-    }
-    /**
-     * Truncate text to fit width
-     * @param fn a function that can measure text width
-     * @param str text to truncate
-     * @param width width to fit
-     * @param tail text to indicate overflow such as "...". Default is empty "".
-     */
-    static truncate(fn, str, width, tail = "") {
-        let trim = Math.floor(str.length * Math.min(1, width / fn(str)));
-        if (trim < str.length) {
-            trim = Math.max(0, trim - tail.length);
-            return [str.substr(0, trim) + tail, trim];
-        }
-        else {
-            return [str, str.length];
-        }
-    }
-    /**
-     * Get a function to scale font size proportionally to text box size changes.
-     * @param box Initial box as a Group
-     * @param ratio font-size change ratio. Default is 1.
-     * @returns a function where input parameter is a new box, and returns the new font size value
-     */
-    static fontSizeToBox(box, ratio = 1, byHeight = true) {
-        let i = byHeight ? 1 : 0;
-        let h = (box[1][i] - box[0][i]);
-        let f = ratio * h;
-        return function (b) {
-            let nh = (b[1][i] - b[0][i]) / h;
-            return f * nh;
-        };
-    }
-    /**
-     * Get a function to scale font size based on a threshold value
-     * @param defaultSize default font size to base on
-     * @param threshold threshold value
-     * @param direction if negative, get a font size <= defaultSize; if positive, get a font size >= defaultSize; Default is 0 which will scale font without min or max limits.
-     * @returns a function where input parameter is the default font size and a value to compare with threshold, and returns new font size value
-     */
-    static fontSizeToThreshold(threshold, direction = 0) {
-        return function (defaultSize, val) {
-            let d = defaultSize * val / threshold;
-            if (direction < 0)
-                return Math.min(d, defaultSize);
-            if (direction > 0)
-                return Math.max(d, defaultSize);
-            return d;
-        };
-    }
-}
-exports.Typography = Typography;
-
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
 // Source code licensed under Apache License 2.0. 
 // Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -4442,6 +4368,7 @@ class DOMSpace extends Space_1.MultiTouchSpace {
                     p.resize(this.bound, evt);
             }
         }
+        ;
         return this;
     }
     /**
@@ -5012,40 +4939,66 @@ exports.HTMLForm = HTMLForm;
 
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
+// Source code licensed under Apache License 2.0.
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 Object.defineProperty(exports, "__esModule", { value: true });
-const _Bound = __webpack_require__(5);
-const _Canvas = __webpack_require__(11);
-const _Create = __webpack_require__(13);
-const _Form = __webpack_require__(6);
-const _LinearAlgebra = __webpack_require__(4);
-const _Num = __webpack_require__(3);
-const _Op = __webpack_require__(2);
-const _Pt = __webpack_require__(0);
-const _Space = __webpack_require__(7);
-const _Color = __webpack_require__(14);
-const _Util = __webpack_require__(1);
-const _Dom = __webpack_require__(9);
-const _Svg = __webpack_require__(15);
-const _Typography = __webpack_require__(8);
-// A function to switch scope for Pts library. eg, Pts.scope( Pts, window );
-let namespace = (sc) => {
-    let lib = module.exports;
-    for (let k in lib) {
-        if (k != "namespace") {
-            sc[k] = lib[k];
+const Pt_1 = __webpack_require__(0);
+/** Various functions to support typography */
+class Typography {
+    /**
+     * Create a heuristic text width estimate function. It will be less accurate but faster.
+     * @param fn a reference function that can measure text width accurately
+     * @param samples a list of string samples. Default is ["M", "n", "."]
+     * @param distribution a list of the samples' probability distribution. Default is [0.06, 0.8, 0.14].
+     * @return a function that can estimate text width
+     */
+    static textWidthEstimator(fn, samples = ["M", "n", "."], distribution = [0.06, 0.8, 0.14]) {
+        let m = samples.map(fn);
+        let avg = new Pt_1.Pt(distribution).dot(m);
+        return (str) => str.length * avg;
+    }
+    /**
+     * Truncate text to fit width
+     * @param fn a function that can measure text width
+     * @param str text to truncate
+     * @param width width to fit
+     * @param tail text to indicate overflow such as "...". Default is empty "".
+     */
+    static truncate(fn, str, width, tail = "") {
+        let trim = Math.floor(str.length * Math.min(1, width / fn(str)));
+        if (trim < str.length) {
+            trim = Math.max(0, trim - tail.length);
+            return [str.substr(0, trim) + tail, trim];
+        }
+        else {
+            return [str, str.length];
         }
     }
-};
-module.exports = Object.assign({ namespace }, _Bound, _Canvas, _Create, _Form, _LinearAlgebra, _Op, _Num, _Pt, _Space, _Util, _Color, _Dom, _Svg, _Typography);
+    /**
+     * Get a function to scale font size proportionally to text box size changes.
+     * @param box Initial box as a Group
+     * @param ratio font-size change ratio. Default is 1.
+     * @returns a function where input parameter is a new box, and returns the new font size value
+     */
+    static fontSizeToBox(box, ratio = 1) {
+        let h = (box[1][1] - box[0][1]);
+        let f = ratio * h;
+        return function (b) {
+            let nh = (b[1][1] - b[0][1]) / h;
+            return f * nh;
+        };
+    }
+}
+exports.Typography = Typography;
 
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5058,7 +5011,7 @@ const Form_1 = __webpack_require__(6);
 const Bound_1 = __webpack_require__(5);
 const Pt_1 = __webpack_require__(0);
 const Util_1 = __webpack_require__(1);
-const Typography_1 = __webpack_require__(8);
+const Typography_1 = __webpack_require__(9);
 const Op_1 = __webpack_require__(2);
 /**
 * CanvasSpace is an implementation of the abstract class Space. It represents a space for HTML Canvas.
@@ -5087,6 +5040,7 @@ class CanvasSpace extends Space_1.MultiTouchSpace {
             this.id = "pts_existing_space";
         }
         else {
+            ;
             _selector = document.querySelector(elem);
             _existed = true;
             this.id = elem;
@@ -5228,6 +5182,7 @@ class CanvasSpace extends Space_1.MultiTouchSpace {
                     p.resize(this.bound, evt);
             }
         }
+        ;
         this.render(this._ctx);
         // if it's a valid resize event and space is not playing, repaint the canvas once
         if (evt && !this.isPlaying)
@@ -5844,575 +5799,7 @@ exports.CanvasForm = CanvasForm;
 
 
 /***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-// Source code licensed under Apache License 2.0.
-// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
-Object.defineProperty(exports, "__esModule", { value: true });
-const Op_1 = __webpack_require__(2);
-/**
- * An enumeration of different UI types
- */
-var UIShape;
-(function (UIShape) {
-    UIShape[UIShape["Rectangle"] = 0] = "Rectangle";
-    UIShape[UIShape["Circle"] = 1] = "Circle";
-    UIShape[UIShape["Polygon"] = 2] = "Polygon";
-    UIShape[UIShape["Polyline"] = 3] = "Polyline";
-    UIShape[UIShape["Line"] = 4] = "Line";
-})(UIShape = exports.UIShape || (exports.UIShape = {}));
-exports.UIPointerActions = {
-    up: "up", down: "down", move: "move", drag: "drag", drop: "drop", over: "over", out: "out"
-};
-class UI {
-    /**
-     * Wrap an UI insider a group
-     */
-    constructor(group, shape, states, id) {
-        this.group = group;
-        this.shape = shape;
-        this._id = id;
-        this._states = states;
-        this._actions = {};
-    }
-    /**
-     * Get and set uique id
-     */
-    get id() { return this._id; }
-    set id(d) { this._id = d; }
-    /**
-     * Get a state
-     * @param key state's name
-     */
-    state(key) {
-        return this._states[key] || false;
-    }
-    /**
-     * Add an event handler
-     * @param key event key
-     * @param fn handler function
-     */
-    on(key, fn) {
-        this._actions[key] = fn;
-        return this;
-    }
-    /**
-     * Remove an event handler
-     * @param key even key
-     * @param fn
-     */
-    off(key) {
-        delete this._actions[key];
-        return this;
-    }
-    /**
-     * Listen for interactions and trigger action handlers
-     * @param key action key
-     * @param p point to check
-     */
-    listen(key, p) {
-        if (this._actions[key] !== undefined) {
-            if (this._trigger(p)) {
-                this._actions[key](p, this, key);
-                return true;
-            }
-        }
-        return false;
-    }
-    /**
-     * Take a custom render function to render this UI
-     * @param fn render function
-     */
-    render(fn) {
-        fn(this.group, this._states);
-    }
-    /**
-     * Check intersection using a specific function based on UIShape
-     * @param p a point to check
-     */
-    _trigger(p) {
-        let fn = null;
-        if (this.shape === UIShape.Rectangle) {
-            fn = Op_1.Rectangle.withinBound;
-        }
-        else if (this.shape === UIShape.Circle) {
-            fn = Op_1.Circle.withinBound;
-        }
-        else if (this.shape === UIShape.Polygon) {
-            fn = Op_1.Rectangle.withinBound;
-        }
-        else {
-            return false;
-        }
-        return fn(this.group, p);
-    }
-}
-exports.UI = UI;
-/**
- * A simple UI button that can track clicks and hovers
- */
-class UIButton extends UI {
-    constructor(group, shape, states, id) {
-        super(group, shape, states, id);
-        this._clicks = 0;
-    }
-    /**
-     * Get the total number of clicks on this UIButton
-     */
-    get clicks() { return this._clicks; }
-    /**
-     * Add a click handler
-     * @param fn a function to handle clicks
-     */
-    onClick(fn) {
-        this._clicks++;
-        this.on(exports.UIPointerActions.up, fn);
-    }
-    /**
-     * Add hover handler
-     * @param over a function to handle when pointer enters hover
-     * @param out a function to handle when pointer exits hover
-     */
-    onHover(over, out) {
-        this.on(exports.UIPointerActions.over, over);
-        this.on(exports.UIPointerActions.out, out);
-    }
-}
-exports.UIButton = UIButton;
-
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-// Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
-Object.defineProperty(exports, "__esModule", { value: true });
-const Pt_1 = __webpack_require__(0);
-const Op_1 = __webpack_require__(2);
-const Util_1 = __webpack_require__(1);
-const Num_1 = __webpack_require__(3);
-const LinearAlgebra_1 = __webpack_require__(4);
-/**
- * The `Create` class provides various convenient functions to create structures or shapes.
- */
-class Create {
-    /**
-     * Create a set of random points inside a bounday
-     * @param bound the rectangular boundary
-     * @param count number of random points to create
-     * @param dimensions number of dimensions in each point
-     */
-    static distributeRandom(bound, count, dimensions = 2) {
-        let pts = new Pt_1.Group();
-        for (let i = 0; i < count; i++) {
-            let p = [bound.x + Math.random() * bound.width];
-            if (dimensions > 1)
-                p.push(bound.y + Math.random() * bound.height);
-            if (dimensions > 2)
-                p.push(bound.z + Math.random() * bound.depth);
-            pts.push(new Pt_1.Pt(p));
-        }
-        return pts;
-    }
-    /**
-     * Create a set of points that distribute evenly on a line
-     * @param line a Group representing a line
-     * @param count number of points to create
-     */
-    static distributeLinear(line, count) {
-        let ln = Op_1.Line.subpoints(line, count - 2);
-        ln.unshift(line[0]);
-        ln.push(line[line.length - 1]);
-        return ln;
-    }
-    /**
-     * Create an evenly distributed set of points (like a grid of points) inside a boundary.
-     * @param bound the rectangular boundary
-     * @param columns number of columns
-     * @param rows number of rows
-     * @param orientation a Pt or number array to specify where the point should be inside a cell. Default is [0.5, 0.5] which places the point in the middle.
-     * @returns a Group of Pts
-     */
-    static gridPts(bound, columns, rows, orientation = [0.5, 0.5]) {
-        if (columns === 0 || rows === 0)
-            throw new Error("grid columns and rows cannot be 0");
-        let unit = bound.size.$subtract(1).$divide(columns, rows);
-        let offset = unit.$multiply(orientation);
-        let g = new Pt_1.Group();
-        for (let r = 0; r < rows; r++) {
-            for (let c = 0; c < columns; c++) {
-                g.push(bound.topLeft.$add(unit.$multiply(c, r)).add(offset));
-            }
-        }
-        return g;
-    }
-    /**
-     * Create a grid inside a boundary
-     * @param bound the rectangular boundary
-     * @param columns number of columns
-     * @param rows number of rows
-     * @returns an array of Groups, where each group represents a rectangular cell
-     */
-    static gridCells(bound, columns, rows) {
-        if (columns === 0 || rows === 0)
-            throw new Error("grid columns and rows cannot be 0");
-        let unit = bound.size.$subtract(1).divide(columns, rows); // subtract 1 to fill whole border of rectangles
-        let g = [];
-        for (let r = 0; r < rows; r++) {
-            for (let c = 0; c < columns; c++) {
-                g.push(new Pt_1.Group(bound.topLeft.$add(unit.$multiply(c, r)), bound.topLeft.$add(unit.$multiply(c, r).add(unit))));
-            }
-        }
-        return g;
-    }
-    /**
-     * Create a set of Pts around a circular path
-     * @param center circle center
-     * @param radius circle radius
-     * @param count number of Pts to create
-     */
-    static radialPts(center, radius, count) {
-        let g = new Pt_1.Group();
-        let a = Util_1.Const.two_pi / count;
-        for (let i = 0; i < count; i++) {
-            g.push(new Pt_1.Pt(center).toAngle(a * i - Util_1.Const.half_pi, radius, true));
-        }
-        return g;
-    }
-    /**
-     * Given a group of Pts, return a new group of `Noise` Pts.
-     * @param pts a Group or an array of Pts
-     * @param dx small increment value in x dimension
-     * @param dy small increment value in y dimension
-     * @param rows Optional row count to generate 2D noise
-     * @param columns Optional column count to generate 2D noise
-     */
-    static noisePts(pts, dx = 0.01, dy = 0.01, rows = 0, columns = 0) {
-        let seed = Math.random();
-        let g = new Pt_1.Group();
-        for (let i = 0, len = pts.length; i < len; i++) {
-            let np = new Noise(pts[i]);
-            let r = (rows && rows > 0) ? Math.floor(i / rows) : i;
-            let c = (columns && columns > 0) ? i % columns : i;
-            np.initNoise(dx * c, dy * r);
-            np.seed(seed);
-            g.push(np);
-        }
-        return g;
-    }
-    /**
-     * Create a Delaunay Group. Use the `.delaunay()` and `.voronoi()` functions in the returned group to generate tessellations.
-     * @param pts a Group or an array of Pts
-     * @returns an instance of the Delaunay class
-     */
-    static delaunay(pts) {
-        return Delaunay.from(pts);
-    }
-}
-exports.Create = Create;
-/**
- * Perlin noise gradient indices
- */
-const grad3 = [
-    [1, 1, 0], [-1, 1, 0], [1, -1, 0], [-1, -1, 0],
-    [1, 0, 1], [-1, 0, 1], [1, 0, -1], [-1, 0, -1],
-    [0, 1, 1], [0, -1, 1], [0, 1, -1], [0, -1, -1]
-];
-/**
- * Perlin noise permutation table
- */
-const permTable = [151, 160, 137, 91, 90, 15,
-    131, 13, 201, 95, 96, 53, 194, 233, 7, 225, 140, 36, 103, 30, 69, 142, 8, 99, 37, 240, 21, 10, 23,
-    190, 6, 148, 247, 120, 234, 75, 0, 26, 197, 62, 94, 252, 219, 203, 117, 35, 11, 32, 57, 177, 33,
-    88, 237, 149, 56, 87, 174, 20, 125, 136, 171, 168, 68, 175, 74, 165, 71, 134, 139, 48, 27, 166,
-    77, 146, 158, 231, 83, 111, 229, 122, 60, 211, 133, 230, 220, 105, 92, 41, 55, 46, 245, 40, 244,
-    102, 143, 54, 65, 25, 63, 161, 1, 216, 80, 73, 209, 76, 132, 187, 208, 89, 18, 169, 200, 196,
-    135, 130, 116, 188, 159, 86, 164, 100, 109, 198, 173, 186, 3, 64, 52, 217, 226, 250, 124, 123,
-    5, 202, 38, 147, 118, 126, 255, 82, 85, 212, 207, 206, 59, 227, 47, 16, 58, 17, 182, 189, 28, 42,
-    223, 183, 170, 213, 119, 248, 152, 2, 44, 154, 163, 70, 221, 153, 101, 155, 167, 43, 172, 9,
-    129, 22, 39, 253, 9, 98, 108, 110, 79, 113, 224, 232, 178, 185, 112, 104, 218, 246, 97, 228,
-    251, 34, 242, 193, 238, 210, 144, 12, 191, 179, 162, 241, 81, 51, 145, 235, 249, 14, 239, 107,
-    49, 192, 214, 31, 181, 199, 106, 157, 184, 84, 204, 176, 115, 121, 50, 45, 127, 4, 150, 254,
-    138, 236, 205, 93, 222, 114, 67, 29, 24, 72, 243, 141, 128, 195, 78, 66, 215, 61, 156, 180
-];
-/**
- * A class to generate Perlin noise. Currently it implements a basic 2D noise. More to follow.
- * Based on https://gist.github.com/banksean/304522
- */
-class Noise extends Pt_1.Pt {
-    /**
-     * Create a Noise Pt that's capable of generating noise
-     * @param args a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
-     */
-    constructor(...args) {
-        super(...args);
-        this.perm = [];
-        this._n = new Pt_1.Pt(0.01, 0.01);
-        // For easier index wrapping, double the permutation table length
-        this.perm = permTable.concat(permTable);
-    }
-    /**
-     * Set the initial noise values
-     * @param args a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
-     * @example `noise.initNoise( 0.01, 0.1 )`
-     */
-    initNoise(...args) {
-        this._n = new Pt_1.Pt(...args);
-    }
-    /**
-     * Add a small increment to the noise values
-     * @param x step in x dimension
-     * @param y step in y dimension
-     */
-    step(x = 0, y = 0) {
-        this._n.add(x, y);
-    }
-    /**
-     * Specify a seed for this Noise
-     * @param s seed value
-     */
-    seed(s) {
-        if (s > 0 && s < 1)
-            s *= 65536;
-        s = Math.floor(s);
-        if (s < 256)
-            s |= s << 8;
-        for (let i = 0; i < 255; i++) {
-            let v = (i & 1) ? permTable[i] ^ (s & 255) : permTable[i] ^ ((s >> 8) & 255);
-            this.perm[i] = this.perm[i + 256] = v;
-        }
-    }
-    /**
-     * Generate a 2D Perlin noise value
-     */
-    noise2D() {
-        let i = Math.floor(this._n[0]) % 255;
-        let j = Math.floor(this._n[1]) % 255;
-        let x = (this._n[0] % 255) - i;
-        let y = (this._n[1] % 255) - j;
-        let n00 = LinearAlgebra_1.Vec.dot(grad3[(i + this.perm[j]) % 12], [x, y, 0]);
-        let n01 = LinearAlgebra_1.Vec.dot(grad3[(i + this.perm[j + 1]) % 12], [x, y - 1, 0]);
-        let n10 = LinearAlgebra_1.Vec.dot(grad3[(i + 1 + this.perm[j]) % 12], [x - 1, y, 0]);
-        let n11 = LinearAlgebra_1.Vec.dot(grad3[(i + 1 + this.perm[j + 1]) % 12], [x - 1, y - 1, 0]);
-        let _fade = (f) => f * f * f * (f * (f * 6 - 15) + 10);
-        let tx = _fade(x);
-        return Num_1.Num.lerp(Num_1.Num.lerp(n00, n10, tx), Num_1.Num.lerp(n01, n11, tx), _fade(y));
-    }
-}
-exports.Noise = Noise;
-/**
- * Delaunay is a Group of Pts that can generate Delaunay and Voronoi tessellations. The triangulation algorithm is ported from [Pt](https://github.com/williamngan/pt)
- * This implementation is based on [Paul Bourke's algorithm](http://paulbourke.net/papers/triangulate/)
- * with reference to its [javascript implementation by ironwallaby](https://github.com/ironwallaby/delaunay)
- */
-class Delaunay extends Pt_1.Group {
-    constructor() {
-        super(...arguments);
-        this._mesh = [];
-    }
-    /**
-     * Generate Delaunay triangles. This function also caches the mesh that is used to generate Voronoi tessellation in `voronoi()`.
-     * @param triangleOnly if true, returns an array of triangles in Groups, otherwise return the whole DelaunayShape
-     * @returns an array of Groups or an array of DelaunayShapes `{i, j, k, triangle, circle}` which records the indices of the vertices, and the calculated triangles and circumcircles
-     */
-    delaunay(triangleOnly = true) {
-        if (this.length < 3)
-            return [];
-        this._mesh = [];
-        let n = this.length;
-        // sort the points and store the sorted index
-        let indices = [];
-        for (let i = 0; i < n; i++)
-            indices[i] = i;
-        indices.sort((i, j) => this[j][0] - this[i][0]);
-        // duplicate the points list and add super triangle's points to it
-        let pts = this.slice();
-        let st = this._superTriangle();
-        pts = pts.concat(st);
-        // arrays to store edge buffer and opened triangles
-        let opened = [this._circum(n, n + 1, n + 2, st)];
-        let closed = [];
-        let tris = [];
-        // Go through each point using the sorted indices
-        for (let i = 0, len = indices.length; i < len; i++) {
-            let c = indices[i];
-            let edges = [];
-            let j = opened.length;
-            if (!this._mesh[c])
-                this._mesh[c] = {};
-            // Go through each opened triangles
-            while (j--) {
-                let circum = opened[j];
-                let radius = circum.circle[1][0];
-                let d = pts[c].$subtract(circum.circle[0]);
-                // if point is to the right of circumcircle, add it to closed list and don't check again
-                if (d[0] > 0 && d[0] * d[0] > radius * radius) {
-                    closed.push(circum);
-                    tris.push(circum.triangle);
-                    opened.splice(j, 1);
-                    continue;
-                }
-                // if it's outside the circumcircle, skip
-                if (d[0] * d[0] + d[1] * d[1] - radius * radius > Util_1.Const.epsilon) {
-                    continue;
-                }
-                // otherwise it's inside the circumcircle, so we add to edge buffer and remove it from the opened list
-                edges.push(circum.i, circum.j, circum.j, circum.k, circum.k, circum.i);
-                opened.splice(j, 1);
-            }
-            // dedup edges
-            Delaunay._dedupe(edges);
-            // Go through the edge buffer and create a triangle for each edge
-            j = edges.length;
-            while (j > 1) {
-                opened.push(this._circum(edges[--j], edges[--j], c, false, pts));
-            }
-        }
-        for (let i = 0, len = opened.length; i < len; i++) {
-            let o = opened[i];
-            if (o.i < n && o.j < n && o.k < n) {
-                closed.push(o);
-                tris.push(o.triangle);
-                this._cache(o);
-            }
-        }
-        return (triangleOnly) ? tris : closed;
-    }
-    /**
-     * Generate Voronoi cells. `delaunay()` must be called before calling this function.
-     * @returns an array of Groups, each of which represents a Voronoi cell
-     */
-    voronoi() {
-        let vs = [];
-        let n = this._mesh;
-        for (let i = 0, len = n.length; i < len; i++) {
-            vs.push(this.neighborPts(i, true));
-        }
-        return vs;
-    }
-    /**
-     * Get the cached mesh. The mesh is an array of objects, each of which representing the enclosing triangles around a Pt in this Delaunay group
-     * @return an array of objects that store a series of DelaunayShapes
-     */
-    mesh() {
-        return this._mesh;
-    }
-    /**
-     * Given an index of a Pt in this Delaunay Group, returns its neighboring Pts in the network
-     * @param i index of a Pt
-     * @param sort if true, sort the neighbors so that their edges will form a polygon
-     * @returns an array of Pts
-     */
-    neighborPts(i, sort = false) {
-        let cs = new Pt_1.Group();
-        let n = this._mesh;
-        for (let k in n[i]) {
-            if (n[i].hasOwnProperty(k))
-                cs.push(n[i][k].circle[0]);
-        }
-        return (sort) ? Num_1.Geom.sortEdges(cs) : cs;
-    }
-    /**
-     * Given an index of a Pt in this Delaunay Group, returns its neighboring DelaunayShapes
-     * @param i index of a Pt
-     * @returns an array of DelaunayShapes `{i, j, k, triangle, circle}`
-     */
-    neighbors(i) {
-        let cs = [];
-        let n = this._mesh;
-        for (let k in n[i]) {
-            if (n[i].hasOwnProperty(k))
-                cs.push(n[i][k]);
-        }
-        return cs;
-    }
-    /**
-     * Record a DelaunayShape in the mesh
-     * @param o DelaunayShape instance
-     */
-    _cache(o) {
-        this._mesh[o.i][`${Math.min(o.j, o.k)}-${Math.max(o.j, o.k)}`] = o;
-        this._mesh[o.j][`${Math.min(o.i, o.k)}-${Math.max(o.i, o.k)}`] = o;
-        this._mesh[o.k][`${Math.min(o.i, o.j)}-${Math.max(o.i, o.j)}`] = o;
-    }
-    /**
-     * Get the initial "super triangle" that contains all the points in this set
-     * @returns a Group representing a triangle
-     */
-    _superTriangle() {
-        let minPt = this[0];
-        let maxPt = this[0];
-        for (let i = 1, len = this.length; i < len; i++) {
-            minPt = minPt.$min(this[i]);
-            maxPt = maxPt.$max(this[i]);
-        }
-        let d = maxPt.$subtract(minPt);
-        let mid = minPt.$add(maxPt).divide(2);
-        let dmax = Math.max(d[0], d[1]);
-        return new Pt_1.Group(mid.$subtract(20 * dmax, dmax), mid.$add(0, 20 * dmax), mid.$add(20 * dmax, -dmax));
-    }
-    /**
-     * Get a triangle from 3 points in a list of points
-     * @param i index 1
-     * @param j index 2
-     * @param k index 3
-     * @param pts a Group of Pts
-     */
-    _triangle(i, j, k, pts = this) {
-        return new Pt_1.Group(pts[i], pts[j], pts[k]);
-    }
-    /**
-     * Get a circumcircle and triangle from 3 points in a list of points
-     * @param i index 1
-     * @param j index 2
-     * @param k index 3
-     * @param tri a Group representing a triangle, or `false` to create it from indices
-     * @param pts a Group of Pts
-     */
-    _circum(i, j, k, tri, pts = this) {
-        let t = tri || this._triangle(i, j, k, pts);
-        return {
-            i: i,
-            j: j,
-            k: k,
-            triangle: t,
-            circle: Op_1.Triangle.circumcircle(t)
-        };
-    }
-    /**
-     * Dedupe the edges array
-     * @param edges
-     */
-    static _dedupe(edges) {
-        let j = edges.length;
-        while (j > 1) {
-            let b = edges[--j];
-            let a = edges[--j];
-            let i = j;
-            while (i > 1) {
-                let n = edges[--i];
-                let m = edges[--i];
-                if ((a == m && b == n) || (a == n && b == m)) {
-                    edges.splice(j, 2);
-                    edges.splice(i, 2);
-                    break;
-                }
-            }
-        }
-        return edges;
-    }
-}
-exports.Delaunay = Delaunay;
-
-
-/***/ }),
-/* 14 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6977,7 +6364,533 @@ exports.Color = Color;
 
 
 /***/ }),
-/* 15 */
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
+Object.defineProperty(exports, "__esModule", { value: true });
+const Pt_1 = __webpack_require__(0);
+const Op_1 = __webpack_require__(2);
+const Util_1 = __webpack_require__(1);
+const Num_1 = __webpack_require__(3);
+const LinearAlgebra_1 = __webpack_require__(4);
+/**
+ * The `Create` class provides various convenient functions to create structures or shapes.
+ */
+class Create {
+    /**
+     * Create a set of random points inside a bounday
+     * @param bound the rectangular boundary
+     * @param count number of random points to create
+     * @param dimensions number of dimensions in each point
+     */
+    static distributeRandom(bound, count, dimensions = 2) {
+        let pts = new Pt_1.Group();
+        for (let i = 0; i < count; i++) {
+            let p = [bound.x + Math.random() * bound.width];
+            if (dimensions > 1)
+                p.push(bound.y + Math.random() * bound.height);
+            if (dimensions > 2)
+                p.push(bound.z + Math.random() * bound.depth);
+            pts.push(new Pt_1.Pt(p));
+        }
+        return pts;
+    }
+    /**
+     * Create a set of points that distribute evenly on a line
+     * @param line a Group representing a line
+     * @param count number of points to create
+     */
+    static distributeLinear(line, count) {
+        let ln = Op_1.Line.subpoints(line, count - 2);
+        ln.unshift(line[0]);
+        ln.push(line[line.length - 1]);
+        return ln;
+    }
+    /**
+     * Create an evenly distributed set of points (like a grid of points) inside a boundary.
+     * @param bound the rectangular boundary
+     * @param columns number of columns
+     * @param rows number of rows
+     * @param orientation a Pt or number array to specify where the point should be inside a cell. Default is [0.5, 0.5] which places the point in the middle.
+     * @returns a Group of Pts
+     */
+    static gridPts(bound, columns, rows, orientation = [0.5, 0.5]) {
+        if (columns === 0 || rows === 0)
+            throw new Error("grid columns and rows cannot be 0");
+        let unit = bound.size.$subtract(1).$divide(columns, rows);
+        let offset = unit.$multiply(orientation);
+        let g = new Pt_1.Group();
+        for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < columns; c++) {
+                g.push(bound.topLeft.$add(unit.$multiply(c, r)).add(offset));
+            }
+        }
+        return g;
+    }
+    /**
+     * Create a grid inside a boundary
+     * @param bound the rectangular boundary
+     * @param columns number of columns
+     * @param rows number of rows
+     * @returns an array of Groups, where each group represents a rectangular cell
+     */
+    static gridCells(bound, columns, rows) {
+        if (columns === 0 || rows === 0)
+            throw new Error("grid columns and rows cannot be 0");
+        let unit = bound.size.$subtract(1).divide(columns, rows); // subtract 1 to fill whole border of rectangles
+        let g = [];
+        for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < columns; c++) {
+                g.push(new Pt_1.Group(bound.topLeft.$add(unit.$multiply(c, r)), bound.topLeft.$add(unit.$multiply(c, r).add(unit))));
+            }
+        }
+        return g;
+    }
+    /**
+     * Create a set of Pts around a circular path
+     * @param center circle center
+     * @param radius circle radius
+     * @param count number of Pts to create
+     */
+    static radialPts(center, radius, count) {
+        let g = new Pt_1.Group();
+        let a = Util_1.Const.two_pi / count;
+        for (let i = 0; i < count; i++) {
+            g.push(new Pt_1.Pt(center).toAngle(a * i - Util_1.Const.half_pi, radius, true));
+        }
+        return g;
+    }
+    /**
+     * Given a group of Pts, return a new group of `Noise` Pts.
+     * @param pts a Group or an array of Pts
+     * @param dx small increment value in x dimension
+     * @param dy small increment value in y dimension
+     * @param rows Optional row count to generate 2D noise
+     * @param columns Optional column count to generate 2D noise
+     */
+    static noisePts(pts, dx = 0.01, dy = 0.01, rows = 0, columns = 0) {
+        let seed = Math.random();
+        let g = new Pt_1.Group();
+        for (let i = 0, len = pts.length; i < len; i++) {
+            let np = new Noise(pts[i]);
+            let r = (rows && rows > 0) ? Math.floor(i / rows) : i;
+            let c = (columns && columns > 0) ? i % columns : i;
+            np.initNoise(dx * c, dy * r);
+            np.seed(seed);
+            g.push(np);
+        }
+        return g;
+    }
+    /**
+     * Create a Delaunay Group. Use the `.delaunay()` and `.voronoi()` functions in the returned group to generate tessellations.
+     * @param pts a Group or an array of Pts
+     * @returns an instance of the Delaunay class
+     */
+    static delaunay(pts) {
+        return Delaunay.from(pts);
+    }
+}
+exports.Create = Create;
+/**
+ * Perlin noise gradient indices
+ */
+const grad3 = [
+    [1, 1, 0], [-1, 1, 0], [1, -1, 0], [-1, -1, 0],
+    [1, 0, 1], [-1, 0, 1], [1, 0, -1], [-1, 0, -1],
+    [0, 1, 1], [0, -1, 1], [0, 1, -1], [0, -1, -1]
+];
+/**
+ * Perlin noise permutation table
+ */
+const permTable = [151, 160, 137, 91, 90, 15,
+    131, 13, 201, 95, 96, 53, 194, 233, 7, 225, 140, 36, 103, 30, 69, 142, 8, 99, 37, 240, 21, 10, 23,
+    190, 6, 148, 247, 120, 234, 75, 0, 26, 197, 62, 94, 252, 219, 203, 117, 35, 11, 32, 57, 177, 33,
+    88, 237, 149, 56, 87, 174, 20, 125, 136, 171, 168, 68, 175, 74, 165, 71, 134, 139, 48, 27, 166,
+    77, 146, 158, 231, 83, 111, 229, 122, 60, 211, 133, 230, 220, 105, 92, 41, 55, 46, 245, 40, 244,
+    102, 143, 54, 65, 25, 63, 161, 1, 216, 80, 73, 209, 76, 132, 187, 208, 89, 18, 169, 200, 196,
+    135, 130, 116, 188, 159, 86, 164, 100, 109, 198, 173, 186, 3, 64, 52, 217, 226, 250, 124, 123,
+    5, 202, 38, 147, 118, 126, 255, 82, 85, 212, 207, 206, 59, 227, 47, 16, 58, 17, 182, 189, 28, 42,
+    223, 183, 170, 213, 119, 248, 152, 2, 44, 154, 163, 70, 221, 153, 101, 155, 167, 43, 172, 9,
+    129, 22, 39, 253, 9, 98, 108, 110, 79, 113, 224, 232, 178, 185, 112, 104, 218, 246, 97, 228,
+    251, 34, 242, 193, 238, 210, 144, 12, 191, 179, 162, 241, 81, 51, 145, 235, 249, 14, 239, 107,
+    49, 192, 214, 31, 181, 199, 106, 157, 184, 84, 204, 176, 115, 121, 50, 45, 127, 4, 150, 254,
+    138, 236, 205, 93, 222, 114, 67, 29, 24, 72, 243, 141, 128, 195, 78, 66, 215, 61, 156, 180
+];
+/**
+ * A class to generate Perlin noise. Currently it implements a basic 2D noise. More to follow.
+ * Based on https://gist.github.com/banksean/304522
+ */
+class Noise extends Pt_1.Pt {
+    /**
+     * Create a Noise Pt that's capable of generating noise
+     * @param args a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
+     */
+    constructor(...args) {
+        super(...args);
+        this.perm = [];
+        this._n = new Pt_1.Pt(0.01, 0.01);
+        // For easier index wrapping, double the permutation table length
+        this.perm = permTable.concat(permTable);
+    }
+    /**
+     * Set the initial noise values
+     * @param args a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
+     * @example `noise.initNoise( 0.01, 0.1 )`
+     */
+    initNoise(...args) {
+        this._n = new Pt_1.Pt(...args);
+    }
+    /**
+     * Add a small increment to the noise values
+     * @param x step in x dimension
+     * @param y step in y dimension
+     */
+    step(x = 0, y = 0) {
+        this._n.add(x, y);
+    }
+    /**
+     * Specify a seed for this Noise
+     * @param s seed value
+     */
+    seed(s) {
+        if (s > 0 && s < 1)
+            s *= 65536;
+        s = Math.floor(s);
+        if (s < 256)
+            s |= s << 8;
+        for (let i = 0; i < 255; i++) {
+            let v = (i & 1) ? permTable[i] ^ (s & 255) : permTable[i] ^ ((s >> 8) & 255);
+            this.perm[i] = this.perm[i + 256] = v;
+        }
+    }
+    /**
+     * Generate a 2D Perlin noise value
+     */
+    noise2D() {
+        let i = Math.floor(this._n[0]) % 255;
+        let j = Math.floor(this._n[1]) % 255;
+        let x = (this._n[0] % 255) - i;
+        let y = (this._n[1] % 255) - j;
+        let n00 = LinearAlgebra_1.Vec.dot(grad3[(i + this.perm[j]) % 12], [x, y, 0]);
+        let n01 = LinearAlgebra_1.Vec.dot(grad3[(i + this.perm[j + 1]) % 12], [x, y - 1, 0]);
+        let n10 = LinearAlgebra_1.Vec.dot(grad3[(i + 1 + this.perm[j]) % 12], [x - 1, y, 0]);
+        let n11 = LinearAlgebra_1.Vec.dot(grad3[(i + 1 + this.perm[j + 1]) % 12], [x - 1, y - 1, 0]);
+        let _fade = (f) => f * f * f * (f * (f * 6 - 15) + 10);
+        let tx = _fade(x);
+        return Num_1.Num.lerp(Num_1.Num.lerp(n00, n10, tx), Num_1.Num.lerp(n01, n11, tx), _fade(y));
+    }
+}
+exports.Noise = Noise;
+/**
+ * Delaunay is a Group of Pts that can generate Delaunay and Voronoi tessellations. The triangulation algorithm is ported from [Pt](https://github.com/williamngan/pt)
+ * This implementation is based on [Paul Bourke's algorithm](http://paulbourke.net/papers/triangulate/)
+ * with reference to its [javascript implementation by ironwallaby](https://github.com/ironwallaby/delaunay)
+ */
+class Delaunay extends Pt_1.Group {
+    constructor() {
+        super(...arguments);
+        this._mesh = [];
+    }
+    /**
+     * Generate Delaunay triangles. This function also caches the mesh that is used to generate Voronoi tessellation in `voronoi()`.
+     * @param triangleOnly if true, returns an array of triangles in Groups, otherwise return the whole DelaunayShape
+     * @returns an array of Groups or an array of DelaunayShapes `{i, j, k, triangle, circle}` which records the indices of the vertices, and the calculated triangles and circumcircles
+     */
+    delaunay(triangleOnly = true) {
+        if (this.length < 3)
+            return [];
+        this._mesh = [];
+        let n = this.length;
+        // sort the points and store the sorted index
+        let indices = [];
+        for (let i = 0; i < n; i++)
+            indices[i] = i;
+        indices.sort((i, j) => this[j][0] - this[i][0]);
+        // duplicate the points list and add super triangle's points to it
+        let pts = this.slice();
+        let st = this._superTriangle();
+        pts = pts.concat(st);
+        // arrays to store edge buffer and opened triangles
+        let opened = [this._circum(n, n + 1, n + 2, st)];
+        let closed = [];
+        let tris = [];
+        // Go through each point using the sorted indices
+        for (let i = 0, len = indices.length; i < len; i++) {
+            let c = indices[i];
+            let edges = [];
+            let j = opened.length;
+            if (!this._mesh[c])
+                this._mesh[c] = {};
+            // Go through each opened triangles
+            while (j--) {
+                let circum = opened[j];
+                let radius = circum.circle[1][0];
+                let d = pts[c].$subtract(circum.circle[0]);
+                // if point is to the right of circumcircle, add it to closed list and don't check again
+                if (d[0] > 0 && d[0] * d[0] > radius * radius) {
+                    closed.push(circum);
+                    tris.push(circum.triangle);
+                    opened.splice(j, 1);
+                    continue;
+                }
+                // if it's outside the circumcircle, skip
+                if (d[0] * d[0] + d[1] * d[1] - radius * radius > Util_1.Const.epsilon) {
+                    continue;
+                }
+                // otherwise it's inside the circumcircle, so we add to edge buffer and remove it from the opened list
+                edges.push(circum.i, circum.j, circum.j, circum.k, circum.k, circum.i);
+                opened.splice(j, 1);
+            }
+            // dedup edges
+            Delaunay._dedupe(edges);
+            // Go through the edge buffer and create a triangle for each edge
+            j = edges.length;
+            while (j > 1) {
+                opened.push(this._circum(edges[--j], edges[--j], c, false, pts));
+            }
+        }
+        for (let i = 0, len = opened.length; i < len; i++) {
+            let o = opened[i];
+            if (o.i < n && o.j < n && o.k < n) {
+                closed.push(o);
+                tris.push(o.triangle);
+                this._cache(o);
+            }
+        }
+        return (triangleOnly) ? tris : closed;
+    }
+    /**
+     * Generate Voronoi cells. `delaunay()` must be called before calling this function.
+     * @returns an array of Groups, each of which represents a Voronoi cell
+     */
+    voronoi() {
+        let vs = [];
+        let n = this._mesh;
+        for (let i = 0, len = n.length; i < len; i++) {
+            vs.push(this.neighborPts(i, true));
+        }
+        return vs;
+    }
+    /**
+     * Get the cached mesh. The mesh is an array of objects, each of which representing the enclosing triangles around a Pt in this Delaunay group
+     * @return an array of objects that store a series of DelaunayShapes
+     */
+    mesh() {
+        return this._mesh;
+    }
+    /**
+     * Given an index of a Pt in this Delaunay Group, returns its neighboring Pts in the network
+     * @param i index of a Pt
+     * @param sort if true, sort the neighbors so that their edges will form a polygon
+     * @returns an array of Pts
+     */
+    neighborPts(i, sort = false) {
+        let cs = new Pt_1.Group();
+        let n = this._mesh;
+        for (let k in n[i]) {
+            if (n[i].hasOwnProperty(k))
+                cs.push(n[i][k].circle[0]);
+        }
+        return (sort) ? Num_1.Geom.sortEdges(cs) : cs;
+    }
+    /**
+     * Given an index of a Pt in this Delaunay Group, returns its neighboring DelaunayShapes
+     * @param i index of a Pt
+     * @returns an array of DelaunayShapes `{i, j, k, triangle, circle}`
+     */
+    neighbors(i) {
+        let cs = [];
+        let n = this._mesh;
+        for (let k in n[i]) {
+            if (n[i].hasOwnProperty(k))
+                cs.push(n[i][k]);
+        }
+        return cs;
+    }
+    /**
+     * Record a DelaunayShape in the mesh
+     * @param o DelaunayShape instance
+     */
+    _cache(o) {
+        this._mesh[o.i][`${Math.min(o.j, o.k)}-${Math.max(o.j, o.k)}`] = o;
+        this._mesh[o.j][`${Math.min(o.i, o.k)}-${Math.max(o.i, o.k)}`] = o;
+        this._mesh[o.k][`${Math.min(o.i, o.j)}-${Math.max(o.i, o.j)}`] = o;
+    }
+    /**
+     * Get the initial "super triangle" that contains all the points in this set
+     * @returns a Group representing a triangle
+     */
+    _superTriangle() {
+        let minPt = this[0];
+        let maxPt = this[0];
+        for (let i = 1, len = this.length; i < len; i++) {
+            minPt = minPt.$min(this[i]);
+            maxPt = maxPt.$max(this[i]);
+        }
+        let d = maxPt.$subtract(minPt);
+        let mid = minPt.$add(maxPt).divide(2);
+        let dmax = Math.max(d[0], d[1]);
+        return new Pt_1.Group(mid.$subtract(20 * dmax, dmax), mid.$add(0, 20 * dmax), mid.$add(20 * dmax, -dmax));
+    }
+    /**
+     * Get a triangle from 3 points in a list of points
+     * @param i index 1
+     * @param j index 2
+     * @param k index 3
+     * @param pts a Group of Pts
+     */
+    _triangle(i, j, k, pts = this) {
+        return new Pt_1.Group(pts[i], pts[j], pts[k]);
+    }
+    /**
+     * Get a circumcircle and triangle from 3 points in a list of points
+     * @param i index 1
+     * @param j index 2
+     * @param k index 3
+     * @param tri a Group representing a triangle, or `false` to create it from indices
+     * @param pts a Group of Pts
+     */
+    _circum(i, j, k, tri, pts = this) {
+        let t = tri || this._triangle(i, j, k, pts);
+        return {
+            i: i,
+            j: j,
+            k: k,
+            triangle: t,
+            circle: Op_1.Triangle.circumcircle(t)
+        };
+    }
+    /**
+     * Dedupe the edges array
+     * @param edges
+     */
+    static _dedupe(edges) {
+        let j = edges.length;
+        while (j > 1) {
+            let b = edges[--j];
+            let a = edges[--j];
+            let i = j;
+            while (i > 1) {
+                let n = edges[--i];
+                let m = edges[--i];
+                if ((a == m && b == n) || (a == n && b == m)) {
+                    edges.splice(j, 2);
+                    edges.splice(i, 2);
+                    break;
+                }
+            }
+        }
+        return edges;
+    }
+}
+exports.Delaunay = Delaunay;
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const Pt_1 = __webpack_require__(0);
+class Physics extends Array {
+    constructor(...args) {
+        super(...args);
+        this._gravity = new Pt_1.Pt();
+        this._friction = 1;
+        this._lastTime = null;
+    }
+    get gravity() { return this._gravity; }
+    set gravity(g) { this._gravity = g; }
+    get friction() { return this._friction; }
+    set friction(f) { this._friction = f; }
+    integrate(p, dt, prevDt) {
+        // console.log( "-->", p.toString() );
+        p.addForce(this._gravity);
+        // console.log( ">>>>", p.toString() );
+        // p.multiplyForce( this._friction );
+        // console.log( ">>>>!!", p.toString() );
+        // let dd = p.changed.multiply( this._friction );
+        // console.log( dd, "!" );
+        // let step = p.multiplyForce( dt*dt );
+        // console.log( dd.$add( step ), "!!!" );
+        // p.step( dd.add( step ), true );
+        p.verlet(dt, this._friction, prevDt);
+        return p;
+    }
+    integrateAll(dt, timeCorrected = true) {
+        let t = (timeCorrected) ? this._lastTime : undefined;
+        for (let i = 0, len = this.length; i < len; i++) {
+            this.integrate(this[i], dt, t);
+        }
+        this._lastTime = dt;
+    }
+    static constraintSpring(p1, p2, stiff, damp) {
+        const m1 = 1 / (p1.mass || 1);
+        const m2 = 1 / (p2.mass || 1);
+        const mm = m1 + m2;
+        let d = p2.previous.$subtract(p1.previous);
+        d.multiply(stiff * damp + mm);
+        p1.addForce(d);
+        return p1;
+    }
+}
+exports.Physics = Physics;
+class Particle extends Pt_1.Pt {
+    constructor(...args) {
+        super(...args);
+        this._mass = 1;
+        this._radius = 0;
+        this._force = new Pt_1.Pt();
+        this._prev = new Pt_1.Pt();
+        this._prev = this.clone();
+    }
+    get mass() { return this._mass; }
+    set mass(m) { this._mass = m; }
+    get radius() { return this._radius; }
+    set radius(f) { this._radius = f; }
+    get force() { return this._force; }
+    set force(g) { this._force = g; }
+    get previous() { return this._prev; }
+    get changed() { return this.$subtract(this._prev); }
+    addForce(...args) {
+        this._force.add(...args);
+        return this._force;
+    }
+    multiplyForce(...args) {
+        this._force.multiply(...args);
+        return this._force;
+    }
+    verlet(dt, damp, lastDt) {
+        // let dd = p.changed.multiply( this._friction );
+        // console.log( dd, "!" );
+        // let step = p.multiplyForce( dt*dt );
+        // let dd = this.changed.multiply( friction );
+        let a = this._force.$divide(this._mass).multiply(dt * dt);
+        let t = (lastDt) ? dt / lastDt : 1; // time corrected
+        let v = this.changed.multiply(damp * t);
+        this._prev = this.clone();
+        this.add(v.add(a));
+        this._force = new Pt_1.Pt();
+        return this;
+    }
+    impulse(f) {
+        this._prev.subtract(f.$divide(this._mass));
+    }
+    toString() {
+        return `Particle: ${this[0]} ${this[1]} | prev ${this._prev[0]} ${this._prev[1]} | mass ${this._mass}`;
+    }
+}
+exports.Particle = Particle;
+
+
+/***/ }),
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6990,7 +6903,7 @@ const Num_1 = __webpack_require__(3);
 const Util_1 = __webpack_require__(1);
 const Pt_1 = __webpack_require__(0);
 const Op_1 = __webpack_require__(2);
-const Dom_1 = __webpack_require__(9);
+const Dom_1 = __webpack_require__(8);
 /**
  * A Space for SVG elements
  */
@@ -7559,6 +7472,181 @@ class SVGForm extends Form_1.VisualForm {
 SVGForm.groupID = 0;
 SVGForm.domID = 0;
 exports.SVGForm = SVGForm;
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// Source code licensed under Apache License 2.0.
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
+Object.defineProperty(exports, "__esModule", { value: true });
+const Op_1 = __webpack_require__(2);
+/**
+ * An enumeration of different UI types
+ */
+var UIShape;
+(function (UIShape) {
+    UIShape[UIShape["Rectangle"] = 0] = "Rectangle";
+    UIShape[UIShape["Circle"] = 1] = "Circle";
+    UIShape[UIShape["Polygon"] = 2] = "Polygon";
+    UIShape[UIShape["Polyline"] = 3] = "Polyline";
+    UIShape[UIShape["Line"] = 4] = "Line";
+})(UIShape = exports.UIShape || (exports.UIShape = {}));
+exports.UIPointerActions = {
+    up: "up", down: "down", move: "move", drag: "drag", drop: "drop", over: "over", out: "out"
+};
+class UI {
+    /**
+     * Wrap an UI insider a group
+     */
+    constructor(group, shape, states, id) {
+        this.group = group;
+        this.shape = shape;
+        this._id = id;
+        this._states = states;
+        this._actions = {};
+    }
+    /**
+     * Get and set uique id
+     */
+    get id() { return this._id; }
+    set id(d) { this._id = d; }
+    /**
+     * Get a state
+     * @param key state's name
+     */
+    state(key) {
+        return this._states[key] || false;
+    }
+    /**
+     * Add an event handler
+     * @param key event key
+     * @param fn handler function
+     */
+    on(key, fn) {
+        this._actions[key] = fn;
+        return this;
+    }
+    /**
+     * Remove an event handler
+     * @param key even key
+     * @param fn
+     */
+    off(key) {
+        delete this._actions[key];
+        return this;
+    }
+    /**
+     * Listen for interactions and trigger action handlers
+     * @param key action key
+     * @param p point to check
+     */
+    listen(key, p) {
+        if (this._actions[key] !== undefined) {
+            if (this._trigger(p)) {
+                this._actions[key](p, this, key);
+                return true;
+            }
+        }
+        return false;
+    }
+    /**
+     * Take a custom render function to render this UI
+     * @param fn render function
+     */
+    render(fn) {
+        fn(this.group, this._states);
+    }
+    /**
+     * Check intersection using a specific function based on UIShape
+     * @param p a point to check
+     */
+    _trigger(p) {
+        let fn = null;
+        if (this.shape === UIShape.Rectangle) {
+            fn = Op_1.Rectangle.withinBound;
+        }
+        else if (this.shape === UIShape.Circle) {
+            fn = Op_1.Circle.withinBound;
+        }
+        else if (this.shape === UIShape.Polygon) {
+            fn = Op_1.Rectangle.withinBound;
+        }
+        else {
+            return false;
+        }
+        return fn(this.group, p);
+    }
+}
+exports.UI = UI;
+/**
+ * A simple UI button that can track clicks and hovers
+ */
+class UIButton extends UI {
+    constructor(group, shape, states, id) {
+        super(group, shape, states, id);
+        this._clicks = 0;
+    }
+    /**
+     * Get the total number of clicks on this UIButton
+     */
+    get clicks() { return this._clicks; }
+    /**
+     * Add a click handler
+     * @param fn a function to handle clicks
+     */
+    onClick(fn) {
+        this._clicks++;
+        this.on(exports.UIPointerActions.up, fn);
+    }
+    /**
+     * Add hover handler
+     * @param over a function to handle when pointer enters hover
+     * @param out a function to handle when pointer exits hover
+     */
+    onHover(over, out) {
+        this.on(exports.UIPointerActions.over, over);
+        this.on(exports.UIPointerActions.out, out);
+    }
+}
+exports.UIButton = UIButton;
+
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const _Bound = __webpack_require__(5);
+const _Canvas = __webpack_require__(10);
+const _Create = __webpack_require__(12);
+const _Form = __webpack_require__(6);
+const _LinearAlgebra = __webpack_require__(4);
+const _Num = __webpack_require__(3);
+const _Op = __webpack_require__(2);
+const _Pt = __webpack_require__(0);
+const _Space = __webpack_require__(7);
+const _Color = __webpack_require__(11);
+const _Util = __webpack_require__(1);
+const _Dom = __webpack_require__(8);
+const _Svg = __webpack_require__(14);
+const _Typography = __webpack_require__(9);
+const _Physics = __webpack_require__(13);
+// A function to switch scope for Pts library. eg, Pts.scope( Pts, window );
+let namespace = (sc) => {
+    let lib = module.exports;
+    for (let k in lib) {
+        if (k != "namespace") {
+            sc[k] = lib[k];
+        }
+    }
+};
+module.exports = Object.assign({ namespace }, _Bound, _Canvas, _Create, _Form, _LinearAlgebra, _Op, _Num, _Pt, _Space, _Util, _Color, _Dom, _Svg, _Typography, _Physics);
 
 
 /***/ })
