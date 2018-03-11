@@ -1,4 +1,4 @@
-// Source code licensed under Apache License 2.0. 
+// Source code licensed under Apache License 2.0.
 // Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 
 
@@ -25,7 +25,7 @@ export interface PtsCanvasRenderingContext2D extends CanvasRenderingContext2D {
 * Learn more about the concept of Space in [this guide](..guide/Space-0500.html)
 */
 export class CanvasSpace extends MultiTouchSpace {
-  
+
   protected _canvas:HTMLCanvasElement;
   protected _container:Element;
 
@@ -33,15 +33,15 @@ export class CanvasSpace extends MultiTouchSpace {
   protected _autoResize = true;
   protected _bgcolor = "#e1e9f0";
   protected _ctx:PtsCanvasRenderingContext2D;
-  
+
   protected _offscreen = false;
   protected _offCanvas:HTMLCanvasElement;
   protected _offCtx:PtsCanvasRenderingContext2D;
 
   protected _initialResize = false;
-  
 
-  
+
+
   /**
   * Create a CanvasSpace which represents a HTML Canvas Space
   * @param elem Specify an element by its "id" attribute as string, or by the element object itself. An element can be an existing `<canvas>`, or a `<div>` container in which a new `<canvas>` will be created. If left empty, a `<div id="pt_container"><canvas id="pt" /></div>` will be added to DOM. Use css to customize its appearance if needed.
@@ -50,58 +50,58 @@ export class CanvasSpace extends MultiTouchSpace {
   */
   constructor( elem:string|Element, callback?:Function) {
     super();
-    
+
     var _selector:Element = null;
     var _existed = false;
     this.id = "pt";
-    
+
     // check element or element id string
     if ( elem instanceof Element ) {
       _selector = elem;
       this.id = "pts_existing_space";
-    } else {;
+    } else {
       _selector = document.querySelector( <string>elem );
       _existed = true;
-      this.id = elem;
+      this.id = _selector.id;
     }
-    
+
     // if selector is not defined, create a canvas
-    if (!_selector) {      
+    if (!_selector) {
       this._container = this._createElement( "div", this.id+"_container" );
       this._canvas = this._createElement( "canvas", this.id ) as HTMLCanvasElement;
       this._container.appendChild( this._canvas );
       document.body.appendChild( this._container );
       _existed = false;
-      
+
       // if selector is element but not canvas, create a canvas inside it
-    } else if (_selector.nodeName.toLowerCase() != "canvas") {      
+    } else if (_selector.nodeName.toLowerCase() != "canvas") {
       this._container = _selector;
       this._canvas = this._createElement( "canvas", this.id+"_canvas" ) as HTMLCanvasElement;
       this._container.appendChild( this._canvas );
       this._initialResize = true;
-      
+
       // if selector is an existing canvas
     } else {
       this._canvas = _selector as HTMLCanvasElement;
       this._container = _selector.parentElement;
       this._autoResize = false;
     }
-    
+
     // if size is known then set it immediately
     // if (_existed) {
     // let b = this._container.getBoundingClientRect();
     // this.resize( Bound.fromBoundingRect(b) );
     // }
-    
+
     // no mutation observer, so we set a timeout for ready event
     setTimeout( this._ready.bind( this, callback ), 100 );
-    
+
     // store canvas 2d rendering context
     this._ctx = this._canvas.getContext('2d');
-    
+
   }
-  
-  
+
+
   /**
   * Helper function to create a DOM element
   * @param elem element tag name
@@ -112,55 +112,55 @@ export class CanvasSpace extends MultiTouchSpace {
     d.setAttribute("id", id);
     return d;
   }
-  
-  
+
+
   /**
   * Handle callbacks after element is mounted in DOM
-  * @param callback 
+  * @param callback
   */
   private _ready( callback:Function ) {
     if (!this._container) throw new Error(`Cannot initiate #${this.id} element`);
-    
+
     this._isReady = true;
-    
+
     this._resizeHandler( null );
 
     this.clear( this._bgcolor );
     this._canvas.dispatchEvent( new Event("ready") );
-    
+
     for (let k in this.players) {
       if (this.players.hasOwnProperty(k)) {
         if (this.players[k].start) this.players[k].start( this.bound.clone(), this );
       }
     }
-    
+
     this._pointer = this.center;
     this._initialResize = false; // unset
-    
+
     if (callback) callback( this.bound, this._canvas );
   }
-  
-  
+
+
   /**
   * Set up various options for CanvasSpace. The `opt` parameter is an object with the following fields. This is usually set during instantiation, eg `new CanvasSpace(...).setup( { opt } )`
   * @param opt an object with optional settings, as follows.
-  * @param opt.bgcolor a hex or rgba string to set initial background color of the canvas, or use `false` or "transparent" to set a transparent background. You may also change it later with `clear()`    
-  * @param opt.resize a boolean to set whether `<canvas>` size should auto resize to match its container's size. You can also set it manually with `autoSize()`    
-  * @param opt.retina a boolean to set if device pixel scaling should be used. This may make drawings on retina displays look sharper but may reduce performance slightly. Default is `true`.    
-  * @param opt.offscreen a boolean to set if a duplicate canvas should be created for offscreen rendering. Default is `false`.    
+  * @param opt.bgcolor a hex or rgba string to set initial background color of the canvas, or use `false` or "transparent" to set a transparent background. You may also change it later with `clear()`
+  * @param opt.resize a boolean to set whether `<canvas>` size should auto resize to match its container's size. You can also set it manually with `autoSize()`
+  * @param opt.retina a boolean to set if device pixel scaling should be used. This may make drawings on retina displays look sharper but may reduce performance slightly. Default is `true`.
+  * @param opt.offscreen a boolean to set if a duplicate canvas should be created for offscreen rendering. Default is `false`.
   * @example `space.setup({ bgcolor: "#f00", retina: true, resize: true })`
   */
   setup( opt:{bgcolor?:string, resize?:boolean, retina?:boolean, offscreen?:boolean} ):this {
     if (opt.bgcolor) this._bgcolor = opt.bgcolor;
-    
+
     this.autoResize = (opt.resize != undefined) ? opt.resize : false;
-    
+
     if (opt.retina !== false) {
       let r1 = window.devicePixelRatio || 1;
-      let r2 = this._ctx.webkitBackingStorePixelRatio || this._ctx.mozBackingStorePixelRatio || this._ctx.msBackingStorePixelRatio || this._ctx.oBackingStorePixelRatio || this._ctx.backingStorePixelRatio || 1;      
+      let r2 = this._ctx.webkitBackingStorePixelRatio || this._ctx.mozBackingStorePixelRatio || this._ctx.msBackingStorePixelRatio || this._ctx.oBackingStorePixelRatio || this._ctx.backingStorePixelRatio || 1;
       this._pixelScale = r1/r2;
     }
-    
+
     if (opt.offscreen) {
       this._offscreen = true;
       this._offCanvas = this._createElement( "canvas", this.id+"_offscreen" ) as HTMLCanvasElement;
@@ -168,13 +168,13 @@ export class CanvasSpace extends MultiTouchSpace {
     } else {
       this._offscreen = false;
     }
-    
+
     return this;
   }
-  
-  
+
+
   /**
-  * Set whether the canvas element should resize when its container is resized. 
+  * Set whether the canvas element should resize when its container is resized.
   * @param auto a boolean value indicating if auto size is set
   */
   set autoResize( auto ) {
@@ -186,71 +186,71 @@ export class CanvasSpace extends MultiTouchSpace {
     }
   }
   get autoResize(): boolean { return this._autoResize; }
-  
-  
+
+
     /**
-  * This overrides Space's `resize` function. It's used as a callback function for window's resize event and not usually called directly. You can keep track of resize events with `resize: (bound ,evt)` callback in your player objects (See `Space`'s `add()` function). 
+  * This overrides Space's `resize` function. It's used as a callback function for window's resize event and not usually called directly. You can keep track of resize events with `resize: (bound ,evt)` callback in your player objects (See `Space`'s `add()` function).
   * @param b a Bound object to resize to
   * @param evt Optionally pass a resize event
   */
   resize( b:Bound, evt?:Event):this {
-    
+
     this.bound = b;
 
     this._canvas.width = this.bound.size.x * this._pixelScale;
     this._canvas.height = this.bound.size.y * this._pixelScale;
     this._canvas.style.width = Math.floor(this.bound.size.x) + "px";
     this._canvas.style.height = Math.floor(this.bound.size.y) + "px";
-    
+
     if (this._offscreen) {
       this._offCanvas.width = this.bound.size.x * this._pixelScale;
       this._offCanvas.height = this.bound.size.y * this._pixelScale;
       // this._offCanvas.style.width = Math.floor(this.bound.size.x) + "px";
       // this._offCanvas.style.height = Math.floor(this.bound.size.y) + "px";
     }
-    
+
     if (this._pixelScale != 1) {
       this._ctx.scale( this._pixelScale, this._pixelScale );
       this._ctx.translate( 0.5, 0.5);
-      
+
       if (this._offscreen) {
         this._offCtx.scale( this._pixelScale, this._pixelScale );
-        this._offCtx.translate( 0.5, 0.5);      
+        this._offCtx.translate( 0.5, 0.5);
       }
     }
-    
+
     for (let k in this.players) {
       if (this.players.hasOwnProperty(k)) {
         let p = this.players[k];
         if (p.resize) p.resize( this.bound, evt);
       }
     };
-    
+
     this.render( this._ctx );
 
     // if it's a valid resize event and space is not playing, repaint the canvas once
-    if (evt && !this.isPlaying) this.playOnce( 0 ); 
-    
+    if (evt && !this.isPlaying) this.playOnce( 0 );
+
     return this;
   }
-  
-  
+
+
   /**
   * Window resize handling
-  * @param evt 
+  * @param evt
   */
   protected _resizeHandler( evt:Event ) {
     let b = (this._autoResize || this._initialResize) ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
 
     if (b) {
       let box = Bound.fromBoundingRect(b);
-      
-      // Need to compute offset from window scroll. See outerBound calculation in Space's _mouseAction 
-      box.center = box.center.add( window.pageXOffset, window.pageYOffset ); 
+
+      // Need to compute offset from window scroll. See outerBound calculation in Space's _mouseAction
+      box.center = box.center.add( window.pageXOffset, window.pageYOffset );
       this.resize( box, evt );
     }
   }
-  
+
 
   /**
   * Set a background color for this canvas. Alternatively, you may use `clear()` function.
@@ -259,52 +259,52 @@ export class CanvasSpace extends MultiTouchSpace {
   set background( bg:string ) { this._bgcolor = bg; }
   get background():string { return this._bgcolor; }
 
-  
+
   /**
   * `pixelScale` property returns a number that let you determine if the screen is "retina" (when value >= 2)
   */
   public get pixelScale():number {
     return this._pixelScale;
   }
-  
-  
+
+
   /**
   * Check if an offscreen canvas is created
   */
   public get hasOffscreen():boolean {
     return this._offscreen;
   }
-  
-  
+
+
   /**
   * Get the rendering context of offscreen canvas (if created via `setup()`)
   */
   public get offscreenCtx():PtsCanvasRenderingContext2D { return this._offCtx; }
-  
-  
+
+
   /**
   * Get the offscreen canvas element
   */
   public get offscreenCanvas():HTMLCanvasElement { return this._offCanvas; }
-  
-  
 
-  
+
+
+
   /**
   * Get a new `CanvasForm` for drawing
   * @see `CanvasForm`
   */
   public getForm():CanvasForm { return new CanvasForm(this); }
-  
-  
+
+
   /**
   * Get the html canvas element
   */
   get element():HTMLCanvasElement {
     return this._canvas;
   }
-  
-  
+
+
   /**
   * Get the parent element that contains the canvas element
   */
@@ -316,39 +316,39 @@ export class CanvasSpace extends MultiTouchSpace {
   /**
    * A property to indicate if the Space is ready
    */
-  get ready():boolean { 
-    return this._isReady; 
+  get ready():boolean {
+    return this._isReady;
   }
-  
-  
+
+
   /**
   * Get the rendering context of canvas
   */
   public get ctx():PtsCanvasRenderingContext2D { return this._ctx; }
-  
-  
-  
+
+
+
   /**
   * Clear the canvas with its background color. Overrides Space's `clear` function.
   * @param bg Optionally specify a custom background color in hex or rgba string, or "transparent". If not defined, it will use its `bgcolor` property as background color to clear the canvas.
   */
   clear( bg?:string ):this {
-    
+
     if (bg) this._bgcolor = bg;
     let lastColor = this._ctx.fillStyle;
-    
+
     if (this._bgcolor && this._bgcolor != "transparent") {
       this._ctx.fillStyle = this._bgcolor;
       this._ctx.fillRect( -1, -1, this._canvas.width+1, this._canvas.height+1 );
     } else {
       this._ctx.clearRect( -1, -1, this._canvas.width+1, this._canvas.height+1 );
     }
-    
+
     this._ctx.fillStyle = lastColor;
     return this;
   }
-  
-  
+
+
   /**
   * Similiar to `clear()` but clear the offscreen canvas instead
   * @param bg Optionally specify a custom background color in hex or rgba string, or "transparent". If not defined, it will use its `bgcolor` property as background color to clear the canvas.
@@ -364,8 +364,8 @@ export class CanvasSpace extends MultiTouchSpace {
     }
     return this;
   }
-  
-  
+
+
   /**
   * Main animation function. Call `Space.playItems`.
   * @param time current time
@@ -380,8 +380,8 @@ export class CanvasSpace extends MultiTouchSpace {
       this.render( this._ctx );
     }
   }
-  
-  
+
+
 
 }
 
@@ -390,24 +390,24 @@ export class CanvasSpace extends MultiTouchSpace {
 
 
 /**
-* CanvasForm is an implementation of abstract class VisualForm. It provide methods to express Pts on CanvasSpace.   
+* CanvasForm is an implementation of abstract class VisualForm. It provide methods to express Pts on CanvasSpace.
 * You may extend CanvasForm to implement your own expressions for CanvasSpace.
 */
 export class CanvasForm extends VisualForm {
-  
+
   protected _space:CanvasSpace;
-  protected _ctx:CanvasRenderingContext2D;  
+  protected _ctx:CanvasRenderingContext2D;
   protected _estimateTextWidth:(string) => number;
 
-  /** 
+  /**
   * store common styles so that they can be restored to canvas context when using multiple forms. See `reset()`.
   */
   protected _style = {
-    fillStyle: "#f03", strokeStyle:"#fff", 
+    fillStyle: "#f03", strokeStyle:"#fff",
     lineWidth: 1, lineJoin: "bevel", lineCap: "butt",
   };
-  
-  
+
+
   /**
   * Create a new CanvasForm. You may also use `space.getForm()` to get the default form.
   * @param space an instance of CanvasSpace
@@ -415,23 +415,23 @@ export class CanvasForm extends VisualForm {
   constructor( space:CanvasSpace ) {
     super();
     this._space = space;
-    
+
     this._space.add( { start: () => {
       this._ctx = this._space.ctx;
       this._ctx.fillStyle = this._style.fillStyle;
-      this._ctx.strokeStyle = this._style.strokeStyle;    
+      this._ctx.strokeStyle = this._style.strokeStyle;
       this._ctx.lineJoin = "bevel";
       this._ctx.font = this._font.value;
       this._ready = true;
     }} );
   }
-  
-  
+
+
   /**
   * get the CanvasSpace instance that this form is associated with
   */
   get space():CanvasSpace { return this._space; }
-  
+
 
   /**
   * Toggle whether to draw on offscreen canvas (if offscreen is set in CanvasSpace)
@@ -443,20 +443,20 @@ export class CanvasForm extends VisualForm {
     this._ctx = (this._space.hasOffscreen && off) ? this._space.offscreenCtx : this._space.ctx;
     return this;
   }
-  
-  
+
+
   /**
   * Render the offscreen canvas's content on the visible canvas
   * @param offset Optional offset on the top-left position when drawing on the visible canvas
   */
   renderOffscreen( offset:PtLike=[0,0] ) {
     if (this._space.hasOffscreen) {
-      this._space.ctx.drawImage( 
+      this._space.ctx.drawImage(
         this._space.offscreenCanvas, offset[0], offset[1], this._space.width, this._space.height );
       }
     }
-    
-    
+
+
     /**
     * Set current fill style. Provide a valid color string or `false` to specify no fill color.
     * @example `form.fill("#F90")`, `form.fill("rgba(0,0,0,.5")`, `form.fill(false)`
@@ -472,9 +472,9 @@ export class CanvasForm extends VisualForm {
       }
       return this;
     }
-    
-    
-    
+
+
+
     /**
     * Set current stroke style. Provide a valid color string or `false` to specify no stroke color.
     * @example `form.stroke("#F90")`, `form.stroke("rgba(0,0,0,.5")`, `form.stroke(false)`, `form.stroke("#000", 0.5, 'round', 'square')`
@@ -505,11 +505,11 @@ export class CanvasForm extends VisualForm {
       }
       return this;
     }
-    
-    
-    
+
+
+
     /**
-    * Set the current font 
+    * Set the current font
     * @param sizeOrFont either a number to specify font-size, or a `Font` object to specify all font properties
     * @param weight Optional font-weight string such as "bold"
     * @param style Optional font-style string such as "italic"
@@ -519,14 +519,14 @@ export class CanvasForm extends VisualForm {
     */
     font( sizeOrFont:number|Font, weight?:string, style?:string, lineHeight?:number, family?:string ):this {
       if (typeof sizeOrFont == "number") {
-        
+
         this._font.size = sizeOrFont;
         if (family) this._font.face = family;
         if (weight) this._font.weight = weight;
         if (style) this._font.style = style;
         if (lineHeight) this._font.lineHeight = lineHeight;
         this._ctx.font = this._font.value;
-        
+
       } else {
         this._font = sizeOrFont;
       }
@@ -573,7 +573,7 @@ export class CanvasForm extends VisualForm {
      * @param box a Group that defines a rectangular box
      * @param vertical a string that specifies the vertical alignment in the box: "top", "bottom", "middle", "start", "end"
      * @param offset Optional offset from the edge (like padding)
-     * @param center Optional center position 
+     * @param center Optional center position
      */
     protected _textAlign( box:GroupLike, vertical:string, offset?:PtLike, center?:Pt ):Pt {
       if (!center) center = Rectangle.center( box );
@@ -593,8 +593,8 @@ export class CanvasForm extends VisualForm {
 
       return (offset) ? new Pt( px+offset[0], py+offset[1] ) : new Pt(px, py);
     }
-    
-    
+
+
     /**
     * Reset the rendering context's common styles to this form's styles. This supports using multiple forms on the same canvas context.
     */
@@ -608,14 +608,14 @@ export class CanvasForm extends VisualForm {
       this._ctx.font = this._font.value;
       return this;
     }
-    
-    
+
+
     protected _paint() {
       if (this._filled) this._ctx.fill();
       if (this._stroked) this._ctx.stroke();
     }
-    
-    
+
+
     /**
     * Draws a point
     * @param p a Pt object
@@ -626,14 +626,14 @@ export class CanvasForm extends VisualForm {
     point( p:PtLike, radius:number=5, shape:string="square" ):this {
       if (!p) return;
       if (!CanvasForm[shape]) throw new Error(`${shape} is not a static function of CanvasForm`);
-      
+
       CanvasForm[shape]( this._ctx, p, radius );
       this._paint();
-      
+
       return this;
     }
-    
-    
+
+
     /**
     * A static function to draw a circle
     * @param ctx canvas rendering context
@@ -646,8 +646,8 @@ export class CanvasForm extends VisualForm {
       ctx.arc( pt[0], pt[1], radius, 0, Const.two_pi, false );
       ctx.closePath();
     }
-    
-    
+
+
     /**
     * Draw a circle
     * @param pts usually a Group of 2 Pts, but it can also take an array of two numeric arrays [ [position], [size] ]
@@ -658,12 +658,12 @@ export class CanvasForm extends VisualForm {
       this._paint();
       return this;
     }
-    
-    
+
+
     /**
     * A static function to draw an arc.
     * @param ctx canvas rendering context
-    * @param pt center position 
+    * @param pt center position
     * @param radius radius of the arc circle
     * @param startAngle start angle of the arc
     * @param endAngle end angle of the arc
@@ -674,8 +674,8 @@ export class CanvasForm extends VisualForm {
       ctx.beginPath();
       ctx.arc( pt[0], pt[1], radius, startAngle, endAngle, cc );
     }
-    
-    
+
+
     /**
     * Draw an arc.
     * @param pt center position
@@ -689,10 +689,10 @@ export class CanvasForm extends VisualForm {
       this._paint();
       return this;
     }
-    
-    
+
+
     /**
-    * A static function to draw a square 
+    * A static function to draw a square
     * @param ctx canvas rendering context
     * @param pt center position of the square
     * @param halfsize half size of the square
@@ -703,7 +703,7 @@ export class CanvasForm extends VisualForm {
       let y1 = pt[1]-halfsize;
       let x2 = pt[0]+halfsize;
       let y2 = pt[1]+halfsize;
-      
+
       // faster than using `rect`
       ctx.beginPath();
       ctx.moveTo( x1, y1 );
@@ -712,8 +712,8 @@ export class CanvasForm extends VisualForm {
       ctx.lineTo( x2, y1 );
       ctx.closePath();
     }
-    
-    
+
+
     /**
      * Draw a square, given a center and its half-size
      * @param pt center Pt
@@ -725,7 +725,7 @@ export class CanvasForm extends VisualForm {
       return this;
     }
 
-    
+
     /**
     * A static function to draw a line
     * @param ctx canvas rendering context
@@ -739,8 +739,8 @@ export class CanvasForm extends VisualForm {
         if (pts[i]) ctx.lineTo( pts[i][0], pts[i][1] );
       }
     }
-    
-    
+
+
     /**
     * Draw a line or polyline
     * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
@@ -750,8 +750,8 @@ export class CanvasForm extends VisualForm {
       this._paint();
       return this;
     }
-    
-    
+
+
     /**
     * A static function to draw polygon
     * @param ctx canvas rendering context
@@ -766,8 +766,8 @@ export class CanvasForm extends VisualForm {
       }
       ctx.closePath();
     }
-    
-    
+
+
     /**
     * Draw a polygon
     * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
@@ -777,8 +777,8 @@ export class CanvasForm extends VisualForm {
       this._paint();
       return this;
     }
-    
-    
+
+
     /**
     * A static function to draw a rectangle
     * @param ctx canvas rendering context
@@ -793,8 +793,8 @@ export class CanvasForm extends VisualForm {
       ctx.lineTo( pts[1][0], pts[0][1] );
       ctx.closePath();
     }
-    
-    
+
+
     /**
     * Draw a rectangle
     * @param pts usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.
@@ -804,8 +804,8 @@ export class CanvasForm extends VisualForm {
       this._paint();
       return this;
     }
-    
-    
+
+
     /**
     * A static function to draw text
     * @param ctx canvas rendering context
@@ -817,8 +817,8 @@ export class CanvasForm extends VisualForm {
       if (!pt) return;
       ctx.fillText( txt, pt[0], pt[1], maxWidth );
     }
-    
-    
+
+
     /**
     * Draw text on canvas
     * @param `pt` a Pt or numeric array to specify the anchor point
@@ -829,7 +829,7 @@ export class CanvasForm extends VisualForm {
       CanvasForm.text( this._ctx, pt, txt, maxWidth );
       return this;
     }
-    
+
 
     /**
      * Fit a single-line text in a rectangular box
@@ -859,7 +859,7 @@ export class CanvasForm extends VisualForm {
     paragraphBox( box:GroupLike, txt:string, lineHeight:number=1.2, verticalAlign:string="top", crop:boolean=true ):this {
       let size = Rectangle.size( box );
       this._ctx.textBaseline = "top"; // override textBaseline
-      
+
       let lstep = this._font.size * lineHeight;
 
       // find next lines recursively
@@ -874,7 +874,7 @@ export class CanvasForm extends VisualForm {
         let newln = t[0].indexOf("\n");
         if (newln >= 0) {
           buffer.push( t[0].substr(0, newln) );
-          return nextLine( sub.substr( newln+1 ), buffer, cc+1 ); 
+          return nextLine( sub.substr( newln+1 ), buffer, cc+1 );
         }
 
         // word wrap
@@ -889,11 +889,11 @@ export class CanvasForm extends VisualForm {
       let lines = nextLine( txt ); // go through all lines
       let lsize = lines.length * lstep; // total height
       let lbox = box;
-      
+
 
       if (verticalAlign == "middle" || verticalAlign == "center") {
-        let lpad = (size[1] - lsize) / 2; 
-        if (crop) lpad = Math.max( 0, lpad );  
+        let lpad = (size[1] - lsize) / 2;
+        if (crop) lpad = Math.max( 0, lpad );
         lbox = new Group( box[0].$add(0, lpad), box[1].$subtract(0, lpad) );
       } else if (verticalAlign == "bottom") {
         lbox = new Group( box[0].$add( 0, size[1]-lsize ), box[1] );
@@ -923,7 +923,7 @@ export class CanvasForm extends VisualForm {
       return this;
     }
 
-    
+
     /**
     * A convenient way to draw some text on canvas for logging or debugging. It'll be draw on the top-left of the canvas as an overlay.
     * @param txt text
@@ -931,8 +931,8 @@ export class CanvasForm extends VisualForm {
     log( txt ):this {
       let w = this._ctx.measureText( txt ).width + 20;
       this.stroke(false).fill("rgba(0,0,0,.4)").rect( [[0,0], [w, 20]] );
-      this.fill("#fff").text( [10,14], txt );   
+      this.fill("#fff").text( [10,14], txt );
       return this;
     }
-    
+
   }
