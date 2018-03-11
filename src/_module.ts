@@ -12,6 +12,7 @@ import * as _Util from "./Util";
 import * as _Dom from "./Dom";
 import * as _Svg from "./Svg";
 import * as _Typography from "./Typography";
+import * as _Physics from "./Physics";
 
 
 module.exports = {
@@ -28,5 +29,6 @@ module.exports = {
   ..._Color,
   ..._Dom,
   ..._Svg,
-  ..._Typography
+  ..._Typography,
+  ..._Physics,
 };
