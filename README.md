@@ -23,7 +23,11 @@ Pts is pretty lightweight. Currently at 80kb minified and 23kb gzipped.
 ```
 import {CanvasSpace, Pt, Group, Line} from 'pts';
 ```
-See this example of using Pts in a React component [here](https://github.com/williamngan/pts-react-example).
+
+To quickly get started, try download or clone these repos:
+- [pts-starter-kit](https://github.com/williamngan/pts-starter-kit): Get started with a sample app using npm and webpack
+- [pts-react-example]((https://github.com/williamngan/pts-react-example)): Try an example of using Pts with React. (Note that you'll need to custom your own production/minified builds.)
+
 
 ---    
 
