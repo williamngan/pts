@@ -78,7 +78,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 15);
+/******/ 	return __webpack_require__(__webpack_require__.s = 16);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -3836,7 +3836,7 @@ exports.Font = Font;
 Object.defineProperty(exports, "__esModule", { value: true });
 const Bound_1 = __webpack_require__(5);
 const Pt_1 = __webpack_require__(0);
-const UI_1 = __webpack_require__(14);
+const UI_1 = __webpack_require__(15);
 /**
 * Space is an abstract class that represents a general context for expressing Pts.
 * See [Space guide](../../guide/Space-0500.html) for details.
@@ -6796,6 +6796,105 @@ exports.Delaunay = Delaunay;
 
 "use strict";
 
+Object.defineProperty(exports, "__esModule", { value: true });
+const Pt_1 = __webpack_require__(0);
+class Physics extends Array {
+    constructor(...args) {
+        super(...args);
+        this._gravity = new Pt_1.Pt();
+        this._friction = 1;
+        this._lastTime = null;
+    }
+    get gravity() { return this._gravity; }
+    set gravity(g) { this._gravity = g; }
+    get friction() { return this._friction; }
+    set friction(f) { this._friction = f; }
+    integrate(p, dt, prevDt) {
+        // console.log( "-->", p.toString() );
+        p.addForce(this._gravity);
+        // console.log( ">>>>", p.toString() );
+        // p.multiplyForce( this._friction );
+        // console.log( ">>>>!!", p.toString() );
+        // let dd = p.changed.multiply( this._friction );
+        // console.log( dd, "!" );
+        // let step = p.multiplyForce( dt*dt );
+        // console.log( dd.$add( step ), "!!!" );
+        // p.step( dd.add( step ), true );
+        p.verlet(dt, this._friction, prevDt);
+        return p;
+    }
+    integrateAll(dt, timeCorrected = true) {
+        let t = (timeCorrected) ? this._lastTime : undefined;
+        for (let i = 0, len = this.length; i < len; i++) {
+            this.integrate(this[i], dt, t);
+        }
+        this._lastTime = dt;
+    }
+    static constraintSpring(p1, p2, stiff, damp) {
+        const m1 = 1 / (p1.mass || 1);
+        const m2 = 1 / (p2.mass || 1);
+        const mm = m1 + m2;
+        let d = p2.previous.$subtract(p1.previous);
+        d.multiply(stiff * damp + mm);
+        p1.addForce(d);
+        return p1;
+    }
+}
+exports.Physics = Physics;
+class Particle extends Pt_1.Pt {
+    constructor(...args) {
+        super(...args);
+        this._mass = 1;
+        this._radius = 0;
+        this._force = new Pt_1.Pt();
+        this._prev = new Pt_1.Pt();
+        this._prev = this.clone();
+    }
+    get mass() { return this._mass; }
+    set mass(m) { this._mass = m; }
+    get radius() { return this._radius; }
+    set radius(f) { this._radius = f; }
+    get force() { return this._force; }
+    set force(g) { this._force = g; }
+    get previous() { return this._prev; }
+    get changed() { return this.$subtract(this._prev); }
+    addForce(...args) {
+        this._force.add(...args);
+        return this._force;
+    }
+    multiplyForce(...args) {
+        this._force.multiply(...args);
+        return this._force;
+    }
+    verlet(dt, damp, lastDt) {
+        // let dd = p.changed.multiply( this._friction );
+        // console.log( dd, "!" );
+        // let step = p.multiplyForce( dt*dt );
+        // let dd = this.changed.multiply( friction );
+        let a = this._force.$divide(this._mass).multiply(dt * dt);
+        let t = (lastDt) ? dt / lastDt : 1; // time corrected
+        let v = this.changed.multiply(damp * t);
+        this._prev = this.clone();
+        this.add(v.add(a));
+        this._force = new Pt_1.Pt();
+        return this;
+    }
+    impulse(f) {
+        this._prev.subtract(f.$divide(this._mass));
+    }
+    toString() {
+        return `Particle: ${this[0]} ${this[1]} | prev ${this._prev[0]} ${this._prev[1]} | mass ${this._mass}`;
+    }
+}
+exports.Particle = Particle;
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 // Source code licensed under Apache License 2.0. 
 // Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -7376,7 +7475,7 @@ exports.SVGForm = SVGForm;
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7517,7 +7616,7 @@ exports.UIButton = UIButton;
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7535,8 +7634,9 @@ const _Space = __webpack_require__(7);
 const _Color = __webpack_require__(11);
 const _Util = __webpack_require__(1);
 const _Dom = __webpack_require__(8);
-const _Svg = __webpack_require__(13);
+const _Svg = __webpack_require__(14);
 const _Typography = __webpack_require__(9);
+const _Physics = __webpack_require__(13);
 // A function to switch scope for Pts library. eg, Pts.scope( Pts, window );
 let namespace = (sc) => {
     let lib = module.exports;
@@ -7546,7 +7646,7 @@ let namespace = (sc) => {
         }
     }
 };
-module.exports = Object.assign({ namespace }, _Bound, _Canvas, _Create, _Form, _LinearAlgebra, _Op, _Num, _Pt, _Space, _Util, _Color, _Dom, _Svg, _Typography);
+module.exports = Object.assign({ namespace }, _Bound, _Canvas, _Create, _Form, _LinearAlgebra, _Op, _Num, _Pt, _Space, _Util, _Color, _Dom, _Svg, _Typography, _Physics);
 
 
 /***/ })
