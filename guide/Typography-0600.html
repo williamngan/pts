@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Typography</title>
+	<link href="./assets/style.css" rel="stylesheet" type="text/css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+</head>
+
+<body>
+<div id="header">
+  <div id="pts"><a href="../">Pts<span>.</span></a>guides</div>
+  <div id="topmenu">
+    <a href="../demo/index.html"/>demos</a>
+    <a href="../study/index.html"/>studies</a>
+    <a href="../docs/"/>docs</a>
+    <a href="https://github.com/williamngan/pts"/>github</a>
+  </div>
+</div>
+<a href="#menu" id="toc">&#x2261;</a>
+<div id="post"><h1>Typography</h1>
+<p>Canvas element has only basic supports for text, making it difficult to create and experiment with typographic layouts. Pts provides additional functions to help you position text contents on canvas. In this guide, we will take a look at these features.</p>
+<p><img src="./assets/textbox.png" alt="demo"></p>
+<h5>You can view this typographic layout demo on the <a href="http://ptsjs.org/demo/?name=canvasform.textBox">demo page</a>.</h5>
+<h3>Text Box</h3>
+<p>The <a href="#canvas-canvasform"><code>textBox</code></a> function in <a href="#canvas-canvasform"><code>CanvasForm</code></a> lets you control how a single-line text should be displayed inside a box.</p>
+<p>First, specify a rectangular area (specified by a <a href="./Group-0300.html"><code>Group</code></a>) and a text string. Optionally, you can also specify where the text should be placed vertically, as well as the characters used for abbreviation when the text truncates. For example:</p>
+<pre><code>form.textBox( area, &quot;hello world&quot;, &quot;bottom&quot;, &quot;...&quot; ); 
+</code></pre>
+<p>Below is a demo of truncated text at placed at top, middle, and bottom of a a rectangle. Move your pointer over to change the size of the area.</p>
+<p><img src="./assets/bg.png" alt="js:canvas_textbox"></p>
+<h3>Aligment</h3>
+<p>Canvas API already provides <code>textBaseline</code> and <code>textAlign</code> for text alignments. Pts makes these more convenient via <a href="#canvas-canvasform"><code>alignText</code></a> function. Use it with <a href="#canvas-canvasform"><code>textBox</code></a> to position your text within a rectangular area.</p>
+<p><img src="./assets/bg.png" alt="js:canvas_aligntext"></p>
+<h5>Combining <code>alignText</code> with <code>textBox</code> gives you lots of options to organize your typographic layout.</h5>
+<h3>Paragraph</h3>
+<p>For multi-line text, you may use the <a href="#canvas-canvasform"><code>paragraphBox</code></a> function. It works similar to <a href="#canvas-canvasform"><code>textBox</code></a> with extra options to specify line-height and overflow. For example:</p>
+<pre><code>form.paragraphBox( area, &quot;hello world&quot;, 1.5, &quot;middle&quot; ); 
+</code></pre>
+<p><img src="./assets/bg.png" alt="js:canvas_paragraphbox"></p>
+<h5>A paragraph placed in the middle of the text box. Move your pointer to change the box size.</h5>
+<p>The text overflow will be cropped by default. If you prefer to let them overflow, set the <code>crop</code> parameter to <code>false</code>. If your text contains multiple paragraphs, you may separate them with line breaks (<code>\n</code>). For example:</p>
+<pre><code>form.paragraphBox( area, &quot;hello \n\n world&quot;, 1.5, &quot;middle&quot;, false ); 
+</code></pre>
+<p>The following demo shows 2 paragraphs with different line-height and alignments and no crop.</p>
+<p><img src="./assets/bg.png" alt="js:canvas_paragraphbox2"></p>
+<h5>You may combine <code>alignText</code> with <code>paragraphBox</code> too.</h5>
+<p>For long paragraphs, you may consider using <a href="#canvas-canvasform"><code>fontWidthEstimate</code></a>. This will use a simple heuristic to estimate text width, which is less accurate but may be faster.</p>
+<h3>Considerations</h3>
+<p>Hope these functions will give you more control over text on canvas, especially when you want to play with typographic experiments. However, putting text on canvas may not be a good approach in many cases. For example, it has poor accessibility (cannot be read for screen reader) and cannot be indexed by search engines.</p>
+<p>And we will be adding similar functions to support for SVG text too. Stay tuned!</p>
+<h3>Cheatsheet</h3>
+<p>The text layout functions are currently implemented in <a href="#canvas-canvasform"><code>CanvasForm</code></a>.</p>
+<pre><code>// put text content in an area defined by a Group
+form.textBox( area, content ); 
+
+// put in bottom, use &quot;...&quot; when truncated
+form.textBox( area, content, &quot;bottom&quot;, &quot;...&quot; ); 
+
+// align text before putting into textBox
+form.alignText(&quot;left&quot;, &quot;top&quot;).textBox( area, content ); 
+
+// put multi-line text in a box with line-height of 1.5
+form.paragraphBox( area, content, 1.5 );
+
+// multi-line text center aligned, place in middle and allow overflow
+form.alignText(&quot;center&quot;).paragraphBox( area, content, 1.5, &quot;middle&quot;, false );
+
+// Use heuristics to estimate font width
+form.fontWidthEstimate(true).paragraphBox( area, content );
+</code></pre>
+</div>
+
+<ol id="menu"><a id="close" href="#">&times;</a><li><a href="Introduction-0000.html">Introduction</a></li><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Space-0500.html">Space</a></li><li><a href="Typography-0600.html">Typography</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li></ol>
+
+<div id="footer"><strong>pts</strong> is an open source project started by <a href="https://twitter.com/williamngan">@williamngan</a>. 
+  See&nbsp;<a href="https://github.com/williamngan/pts">its&nbsp;repository</a>&nbsp;for&nbsp;Apache&nbsp;license and copyright info.</div>
+
+<script type="text/javascript" src="../dist/pts.js"></script>
+<script type="text/javascript" src="./js/guide.js"></script>
+<script src="./js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-104913373-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>

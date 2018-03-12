@@ -553,7 +553,7 @@ export class CanvasForm extends VisualForm {
      * @param c a string of text contents
      */
     getTextWidth(c:string):number {
-      return (!this._estimateTextWidth) ? this._ctx.measureText(c).width : this._estimateTextWidth( c );
+      return (!this._estimateTextWidth) ? this._ctx.measureText(c+" .").width : this._estimateTextWidth( c );
     }
 
 
@@ -577,6 +577,7 @@ export class CanvasForm extends VisualForm {
      */
     protected _textAlign( box:GroupLike, vertical:string, offset?:PtLike, center?:Pt ):Pt {
       if (!center) center = Rectangle.center( box );
+
       var px = box[0][0];
       if (this._ctx.textAlign == "end" || this._ctx.textAlign == "right") {
         px = box[1][0];

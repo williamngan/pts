@@ -146,7 +146,7 @@ h1 { font-size: 3em; line-height: 1; margin: 50px 0; }
 h2 { font-size: 2.0em; }
 h3 { font-size: 1.6em; margin-top: 50px;}
 h4 { font-size: 1.35em; }
-h5 { font-size: 0.8em; font-weight: normal; color: #90959C; }
+h5 { font-size: 0.8em; font-weight: normal; color: #90959C; margin-top: -0.8em; margin-bottom: 2.5em; }
 
 code { 
   display: inline-block; 

@@ -29,7 +29,7 @@ export class Typography {
    * @param tail text to indicate overflow such as "...". Default is empty "".
    */
   static truncate( fn:(string) => number, str:string, width:number, tail:string="" ):[string, number] {
-    let trim = Math.floor( str.length * Math.min( 1, width / (fn(str)*1.1) ) );
+    let trim = Math.floor( str.length * Math.min( 1, width / fn(str)) );
     if (trim < str.length) {
       trim = Math.max( 0, trim - tail.length );
       return [str.substr(0, trim) + tail, trim];
