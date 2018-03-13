@@ -5021,7 +5021,7 @@ exports.Typography = Typography;
 
 "use strict";
 
-// Source code licensed under Apache License 2.0. 
+// Source code licensed under Apache License 2.0.
 // Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Space_1 = __webpack_require__(7);
@@ -5058,10 +5058,9 @@ class CanvasSpace extends Space_1.MultiTouchSpace {
             this.id = "pts_existing_space";
         }
         else {
-            ;
             _selector = document.querySelector(elem);
             _existed = true;
-            this.id = elem;
+            this.id = _selector.id;
         }
         // if selector is not defined, create a canvas
         if (!_selector) {
@@ -5215,7 +5214,7 @@ class CanvasSpace extends Space_1.MultiTouchSpace {
         let b = (this._autoResize || this._initialResize) ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
         if (b) {
             let box = Bound_1.Bound.fromBoundingRect(b);
-            // Need to compute offset from window scroll. See outerBound calculation in Space's _mouseAction 
+            // Need to compute offset from window scroll. See outerBound calculation in Space's _mouseAction
             box.center = box.center.add(window.pageXOffset, window.pageYOffset);
             this.resize(box, evt);
         }
