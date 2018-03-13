@@ -45,12 +45,30 @@ export class Typography {
    * @param ratio font-size change ratio. Default is 1.
    * @returns a function where input parameter is a new box, and returns the new font size value
    */
-  static fontSizeToBox( box:GroupLike, ratio:number=1 ) {
-    let h = (box[1][1] - box[0][1]);
+  static fontSizeToBox( box:GroupLike, ratio:number=1, byHeight:boolean=true ): (GroupLike) => number {
+    let i = byHeight ? 1 : 0;
+    let h = (box[1][i] - box[0][i]);
     let f = ratio * h;
     return function( b:GroupLike ) {
-      let nh = (b[1][1] - b[0][1]) / h;
+      let nh = (b[1][i] - b[0][i]) / h;
       return f * nh;
+    };
+  }
+
+
+  /**
+   * Get a function to scale font size based on a threshold value
+   * @param defaultSize default font size to base on
+   * @param threshold threshold value
+   * @param direction if negative, get a font size <= defaultSize; if positive, get a font size >= defaultSize; Default is 0 which will scale font without min or max limits.
+   * @returns a function where input parameter is the default font size and a value to compare with threshold, and returns new font size value
+   */
+  static fontSizeToThreshold( threshold:number, direction:number=0 ): (a:number, b:number) => number {
+    return function( defaultSize:number, val:number ) {
+      let d = defaultSize * val / threshold; 
+      if (direction < 0) return Math.min( d, defaultSize );
+      if (direction > 0) return Math.max( d, defaultSize );
+      return d;
     };
   }
 }
