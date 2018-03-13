@@ -16,31 +16,43 @@ window.demoDescription = "...";
   space.add( {
 
     start: (bound, space) => {
-      world = new Physics();
-      world.gravity = new Pt(0, 10);
+      world = new World().setup( space.innerBound, 0.99, new Pt(0, 1000) );
       
-      
-      let ps = Create.distributeRandom( space.innerBound, 4 );
-      for (let i=0, len=ps.length; i<len; i++) {
-        let p = new Particle( ps[i] );
-        p.mass = (i+1)*2;
-        // p.impulse( new Pt( 30, 15 ) );
+      let rect = Rectangle.corners( Rectangle.fromCenter( space.center, 50 ) );
+      for (let i=0, len=rect.length; i<len; i++) {
+        let p = new Particle( rect[i] );
+        p.mass = 3;
         world.push( p );
       }
+
+      world[0].impulse( new Pt(120, -50));
 
     },
 
     animate: (time, ftime) => {
+
+
       world.integrateAll( ftime/1000 );
-      // console.log( world[0].toString() );
+      
+      let diagonal = Math.sqrt( 20000 );
+      Physics.constraintEdge( world[1], world[3], diagonal );
+      Physics.constraintEdge( world[0], world[2], diagonal );
+
+      form.strokeOnly("#fff").line( [world[1], world[3]] );
+      form.strokeOnly("#fff").line( [world[0], world[2]] );
+
       for (let i=0, len=world.length; i<len; i++) {
-        form.point( world[i], world[i].mass, "circle" );
-        for (let k=0; k<len; k++) {
-          if (i!==k) {
-            // Physics.constraintSpring( world[i], world[k], 0.5, 0.1 );
-          }
-        }
+        form.fillOnly("#f00").point( world[i], world[i].mass, "circle" );
+        
+        let k = (i<len-1) ? i+1 : 0;
+        Physics.constraintEdge( world[i], world[k], 100 );
+        Physics.constraintBound( world[i], space.innerBound );
+
+        form.strokeOnly("#9ab").line( [world[i], world[k]] );
+
+
       }
+
       
     },
 
