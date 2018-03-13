@@ -6798,29 +6798,49 @@ exports.Delaunay = Delaunay;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
+const Bound_1 = __webpack_require__(5);
 class Physics extends Array {
+    static constraintEdge(p1, p2, dist, stiff = 0.9) {
+        const m1 = 1 / (p1.mass || 1);
+        const m2 = 1 / (p2.mass || 1);
+        const mm = m1 + m2;
+        let delta = p2.$subtract(p1);
+        let distSq = dist * dist;
+        let d = distSq / (delta.dot(delta) + distSq) - 0.5; // approx square root
+        let f = delta.$multiply(d * stiff);
+        p1.subtract(f.$multiply(m1 / mm));
+        p2.add(f.$multiply(m2 / mm));
+        return p1;
+    }
+    static constraintBound(p, rect) {
+        let bound = rect.boundingBox();
+        let d = p.$subtract(p.$min(bound[1]).$max(bound[0]));
+        p.subtract(d);
+        // p.addForce( d.multiply( -friction ) );
+    }
+}
+exports.Physics = Physics;
+class World extends Array {
     constructor(...args) {
         super(...args);
         this._gravity = new Pt_1.Pt();
         this._friction = 1;
         this._lastTime = null;
     }
+    setup(bound, friction = 1, gravity) {
+        this._bound = Bound_1.Bound.fromGroup(bound);
+        this._friction = friction;
+        if (gravity)
+            this._gravity = gravity;
+        return this;
+    }
     get gravity() { return this._gravity; }
     set gravity(g) { this._gravity = g; }
     get friction() { return this._friction; }
     set friction(f) { this._friction = f; }
     integrate(p, dt, prevDt) {
-        // console.log( "-->", p.toString() );
-        p.addForce(this._gravity);
-        // console.log( ">>>>", p.toString() );
-        // p.multiplyForce( this._friction );
-        // console.log( ">>>>!!", p.toString() );
-        // let dd = p.changed.multiply( this._friction );
-        // console.log( dd, "!" );
-        // let step = p.multiplyForce( dt*dt );
-        // console.log( dd.$add( step ), "!!!" );
-        // p.step( dd.add( step ), true );
-        p.verlet(dt, this._friction, prevDt);
+        p.addForce(this._gravity.$multiply(p.mass));
+        p.positionVerlet(dt, this._friction, prevDt);
         return p;
     }
     integrateAll(dt, timeCorrected = true) {
@@ -6830,17 +6850,8 @@ class Physics extends Array {
         }
         this._lastTime = dt;
     }
-    static constraintSpring(p1, p2, stiff, damp) {
-        const m1 = 1 / (p1.mass || 1);
-        const m2 = 1 / (p2.mass || 1);
-        const mm = m1 + m2;
-        let d = p2.previous.$subtract(p1.previous);
-        d.multiply(stiff * damp + mm);
-        p1.addForce(d);
-        return p1;
-    }
 }
-exports.Physics = Physics;
+exports.World = World;
 class Particle extends Pt_1.Pt {
     constructor(...args) {
         super(...args);
@@ -6862,20 +6873,13 @@ class Particle extends Pt_1.Pt {
         this._force.add(...args);
         return this._force;
     }
-    multiplyForce(...args) {
-        this._force.multiply(...args);
-        return this._force;
-    }
-    verlet(dt, damp, lastDt) {
-        // let dd = p.changed.multiply( this._friction );
-        // console.log( dd, "!" );
-        // let step = p.multiplyForce( dt*dt );
-        // let dd = this.changed.multiply( friction );
+    positionVerlet(dt, friction, lastDt) {
+        // Positional verlet: curr + (curr - prev) + a * dt * dt
         let a = this._force.$divide(this._mass).multiply(dt * dt);
         let t = (lastDt) ? dt / lastDt : 1; // time corrected
-        let v = this.changed.multiply(damp * t);
+        let v = this.changed.multiply(friction * t).add(a);
         this._prev = this.clone();
-        this.add(v.add(a));
+        this.add(v);
         this._force = new Pt_1.Pt();
         return this;
     }
