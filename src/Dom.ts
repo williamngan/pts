@@ -177,7 +177,7 @@ export class DOMSpace extends MultiTouchSpace {
         let p = this.players[k];
         if (p.resize) p.resize( this.bound, evt);
       }
-    };
+    }
     
     return this;
   }

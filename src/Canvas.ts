@@ -59,7 +59,7 @@ export class CanvasSpace extends MultiTouchSpace {
     if ( elem instanceof Element ) {
       _selector = elem;
       this.id = "pts_existing_space";
-    } else {;
+    } else {
       _selector = document.querySelector( <string>elem );
       _existed = true;
       this.id = elem;
@@ -224,7 +224,7 @@ export class CanvasSpace extends MultiTouchSpace {
         let p = this.players[k];
         if (p.resize) p.resize( this.bound, evt);
       }
-    };
+    }
     
     this.render( this._ctx );
 
