@@ -21,12 +21,15 @@ If you use npm, first [`npm install pts`](https://www.npmjs.com/package/pts) and
 ```
 import {CanvasSpace, Pt, Group} from "pts" 
 ```
-And you're good to go!
 
-##### Note that pts is an es6 library, so if you want to compile to es5, you'll need to configure babel accordingly. (Possibly with the [`builtin-extend`](https://github.com/loganfsmyth/babel-plugin-transform-builtin-extend) babel plugin)
+To get started quickly with a webpack es6 build, try [pts-starter-kit](https://github.com/williamngan/pts-starter-kit). 
 
-### Using pts in a script
-First go to the latest release and get `pts.js` ([direct link](https://raw.githubusercontent.com/williamngan/pts/master/dist/pts.js) or [github](https://github.com/williamngan/pts)). Include it in your html. Then create another js file for your script and add it too.
+For using Pts in React, take a look at [pts-react-example](https://github.com/williamngan/pts-react-example).
+
+##### (Note that pts is an es6 library, so if you want to compile to es5, you'll need to configure babel accordingly.)
+
+### Using pts as a script
+First go to the latest release and get `pts.js` or `pts.min.js` ([direct link](https://raw.githubusercontent.com/williamngan/pts/master/dist/pts.js) or [github](https://github.com/williamngan/pts)). Include it in your html. Then create another js file for your script and add it too.
 
 ```
 <script type="text/javascript" src="path/to/pts.js"></script>
