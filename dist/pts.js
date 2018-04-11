@@ -7584,18 +7584,45 @@ class Physics extends Array {
         p2.add(f.$multiply(m2 / mm));
         return p1;
     }
-    static constraintBound(p, rect, radius = 0, friction = 0.9) {
+    static constraintBound(p, rect, damp = 0.9, keepImpulse = true) {
         let bound = rect.boundingBox();
-        let np = p.$min(bound[1].subtract(radius)).$max(bound[0].add(radius));
-        if (np[0] === bound[0][0] || np[0] === bound[1][0]) {
-            let c = p.changed;
-            p.previous = np.$subtract(new Pt_1.Pt(c[0] * -1 * friction, c[1]));
-        }
-        else if (np[1] === bound[0][1] || np[1] === bound[1][1]) {
-            let c = p.changed;
-            p.previous = np.$subtract(new Pt_1.Pt(c[0], c[1] * -1 * friction));
+        let np = p.$min(bound[1].subtract(p.radius)).$max(bound[0].add(p.radius));
+        if (keepImpulse) {
+            if (np[0] === bound[0][0] || np[0] === bound[1][0]) {
+                let c = p.changed;
+                p.previous = np.$subtract(new Pt_1.Pt(c[0] * -1 * damp, c[1]));
+            }
+            else if (np[1] === bound[0][1] || np[1] === bound[1][1]) {
+                let c = p.changed;
+                p.previous = np.$subtract(new Pt_1.Pt(c[0], c[1] * -1 * damp));
+            }
         }
         p.to(np);
+    }
+    // Inspired by http://codeflow.org/entries/2010/nov/29/verlet-collision-with-impulse-preservation/
+    static collideParticle(p1, p2, damp = 0.9, keepImpulse = true) {
+        let dp = p1.$subtract(p2);
+        let distSq = dp.magnitudeSq();
+        let dr = p1.radius + p2.radius;
+        if (distSq < dr * dr) {
+            let c1 = p1.changed;
+            let c2 = p2.changed;
+            let dist = Math.sqrt(distSq);
+            let d = dp.$multiply(((dist - dr) / dist) / 2);
+            p1.subtract(d);
+            p2.add(d);
+            if (keepImpulse) {
+                let df1 = dp.$multiply(damp * dp.dot(c1) / distSq);
+                let df2 = dp.$multiply(damp * dp.dot(c2) / distSq);
+                let df = df2.subtract(df1);
+                let dm1 = p1.mass / (p1.mass + p2.mass);
+                let dm2 = p2.mass / (p1.mass + p2.mass);
+                c1.add(df.$multiply(dm2));
+                c2.add(df.multiply(-dm1));
+                p1.previous = p1.$subtract(c1);
+                p2.previous = p2.$subtract(c2);
+            }
+        }
     }
 }
 exports.Physics = Physics;
@@ -7665,6 +7692,11 @@ class Particle extends Pt_1.Pt {
     }
     impulse(...args) {
         this._prev.subtract(new Pt_1.Pt(...args).$divide(this._mass));
+    }
+    inertia() {
+        let p = this.changed.add(this);
+        this.previous = this.clone();
+        this.to(p);
     }
     toString() {
         return `Particle: ${this[0]} ${this[1]} | prev ${this._prev[0]} ${this._prev[1]} | mass ${this._mass}`;

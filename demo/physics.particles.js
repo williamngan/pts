@@ -12,18 +12,20 @@ window.demoDescription = "...";
 
 
   var world;
+  var preserve = false;
 
   space.add( {
 
     start: (bound, space) => {
-      world = new World().setup( space.innerBound, 0.995, new Pt(0, 1000) );
+      world = new World().setup( space.innerBound, 0.99, new Pt(0, 500) );
 
-      let pts = Create.distributeRandom( space.innerBound, 20 );
+      let pts = Create.distributeRandom( space.innerBound, 100 );
       
       for (let i=0, len=pts.length; i<len; i++) {
         let p = new Particle( pts[i] );
-        p.mass = Math.random()*20 + 2;
-        p.impulse( Num.randomRange(-300,300), Num.randomRange(-100, 100) );
+        p.mass = 15 + Math.random()*10;
+        p.radius = p.mass;
+        p.impulse( Num.randomRange(-400,400), Num.randomRange(-100, 100) );
         world.push( p );
       }
 
@@ -34,9 +36,18 @@ window.demoDescription = "...";
 
     animate: (time, ftime) => {
 
+      preserve = !preserve; 
+
       for (let i=0, len=world.length; i<len; i++) {
-        form.fillOnly("#f00").point( world[i], world[i].mass, "circle" );
-        Physics.constraintBound( world[i], space.innerBound, world[i].mass );
+        form.fillOnly("#f00").point( world[i], world[i].radius, "circle" );
+
+        for (let k=0, klen=world.length; k<len; k++) {
+          if (i!==k) {
+            Physics.collideParticle( world[i], world[k], 0.99, preserve );
+          }
+        }
+
+        Physics.constraintBound( world[i], space.innerBound, 0.99, preserve );
       }
 
       world.integrateAll( ftime/1000 );

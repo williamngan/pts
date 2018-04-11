@@ -23,21 +23,105 @@ export class Physics extends Array<Particle> {
 
 
 
-  static constraintBound( p:Particle, rect:Group, radius:number=0, friction:number=0.9 ) {
+  static constraintBound( p:Particle, rect:Group, damp:number=0.9, keepImpulse:boolean=true ) {
     let bound = rect.boundingBox();
-    let np = p.$min( bound[1].subtract( radius ) ).$max( bound[0].add( radius ) );
+    let np = p.$min( bound[1].subtract( p.radius ) ).$max( bound[0].add( p.radius ) );
 
-    if (np[0] === bound[0][0] || np[0] === bound[1][0]) { // hit vertical walls
-      let c = p.changed;
-      p.previous = np.$subtract( new Pt( c[0]*-1*friction, c[1] ) );
-    } else if (np[1] === bound[0][1] || np[1] === bound[1][1]) { // hit horizontal walls
-      let c = p.changed;
-      p.previous = np.$subtract( new Pt( c[0], c[1]*-1*friction ) );
+    if (keepImpulse) {
+      if (np[0] === bound[0][0] || np[0] === bound[1][0]) { // hit vertical walls
+        let c = p.changed;
+        p.previous = np.$subtract( new Pt( c[0]*-1*damp, c[1] ) );
+      } else if (np[1] === bound[0][1] || np[1] === bound[1][1]) { // hit horizontal walls
+        let c = p.changed;
+        p.previous = np.$subtract( new Pt( c[0], c[1]*-1*damp ) );
+      }
     }
-
     p.to( np );
 
   }
+
+  // Inspired by http://codeflow.org/entries/2010/nov/29/verlet-collision-with-impulse-preservation/
+  static collideParticle( p1:Particle, p2:Particle, damp:number=0.9, keepImpulse:boolean=true ) {
+    let dp = p1.$subtract( p2 );
+    let distSq = dp.magnitudeSq();
+    let dr = p1.radius + p2.radius;
+    if ( distSq < dr*dr ) {
+
+      let c1 = p1.changed;
+      let c2 = p2.changed;
+
+      let dist = Math.sqrt( distSq );
+      let d =  dp.$multiply( ((dist-dr) / dist) / 2 );
+      
+      p1.subtract( d );
+      p2.add( d );
+
+      if (keepImpulse) {
+        
+        let df1 = dp.$multiply( damp * dp.dot( c1 ) / distSq );
+        let df2 = dp.$multiply( damp * dp.dot( c2 ) / distSq );
+        let df = df2.subtract( df1 );
+
+        let dm1 = p1.mass / (p1.mass+p2.mass);
+        let dm2 = p2.mass / (p1.mass+p2.mass);
+
+        c1.add( df.$multiply( dm2 ) );
+        c2.add( df.multiply(-dm1) );
+
+        p1.previous = p1.$subtract( c1 );
+        p2.previous = p2.$subtract( c2 );
+
+      }
+      
+    }
+  }
+
+
+  /*
+
+  // compute the projected component factors
+    var f1 = (damping*(x*v1x+y*v1y))/slength;
+    var f2 = (damping*(x*v2x+y*v2y))/slength;
+
+    // swap the projected components
+    v1x += f2*x-f1*x;
+    v1y += f2*y-f1*y;
+    v2x += f1*x-f2*x;
+    v2y += f1*y-f2*y;
+    
+
+    // the previous position is adjusted
+    // to represent the new velocity
+    body1.px = body1.x - v1x;
+    body1.py = body1.y - v1y;
+    body2.px = body2.x - v2x;
+    body2.py = body2.y - v2y;
+
+var collide = function(){
+    for(var i=0, l=bodies.length; i<l; i++){
+        var body1 = bodies[i];
+        for(var j=i+1; j<l; j++){
+            var body2 = bodies[j];
+            var x = body1.x - body2.x;
+            var y = body1.y - body2.y;
+            var slength = x*x+y*y;
+            var length = Math.sqrt(slength);
+            var target = body1.radius + body2.radius;
+
+            // if the spheres are closer
+            // then their radii combined
+            if(length < target){ 
+                var factor = (length-target)/length;
+                // move the spheres away from each other
+                // by half the conflicting length
+                body1.x -= x*factor*0.5;
+                body1.y -= y*factor*0.5;
+                body2.x += x*factor*0.5;
+                body2.y += y*factor*0.5;
+            }
+        }
+    }
+    */
 
 }
 
@@ -140,9 +224,17 @@ export class Particle extends Pt {
     this._prev.subtract( new Pt(...args).$divide( this._mass ) );
   }
 
+  inertia() {
+    let p = this.changed.add( this );
+    this.previous = this.clone();
+    this.to( p );
+  }
+
   toString() {
     return `Particle: ${this[0]} ${this[1]} | prev ${this._prev[0]} ${this._prev[1]} | mass ${this._mass}`;
   }
 
 }
+
+
 
