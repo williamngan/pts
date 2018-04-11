@@ -21,18 +21,18 @@ window.demoDescription = "...";
       let rect = Rectangle.corners( Rectangle.fromCenter( space.center, 50 ) );
       for (let i=0, len=rect.length; i<len; i++) {
         let p = new Particle( rect[i] );
-        p.mass = 3;
+        p.mass = 5;
         world.push( p );
       }
 
-      world[0].impulse( new Pt(120, -50));
+      world[0].impulse( new Pt(300, -50));
 
     },
 
     animate: (time, ftime) => {
 
 
-      world.integrateAll( ftime/1000 );
+      
       
       let diagonal = Math.sqrt( 20000 );
       Physics.constraintEdge( world[1], world[3], diagonal );
@@ -49,9 +49,9 @@ window.demoDescription = "...";
         Physics.constraintBound( world[i], space.innerBound );
 
         form.strokeOnly("#9ab").line( [world[i], world[k]] );
-
-
       }
+
+      world.integrateAll( ftime/1000 );
 
       
     },

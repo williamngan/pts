@@ -1,4 +1,4 @@
-import {Pt, Group} from "./Pt";
+import {Pt, PtLike, Group} from "./Pt";
 import {Bound} from "./Bound";
 
 
@@ -21,12 +21,19 @@ export class Physics extends Array<Particle> {
   }
 
 
-  static constraintBound( p:Particle, rect:Group ) {
+  static constraintBound( p:Particle, rect:Group, radius:number=0, friction:number=0.9 ) {
     let bound = rect.boundingBox();
-    let d = p.$subtract( p.$min( bound[1] ).$max( bound[0] ) );
-    p.subtract( d );
-    
-    // p.addForce( d.multiply( -friction ) );
+    let np = p.$min( bound[1].subtract( radius ) ).$max( bound[0].add( radius ) );
+
+    if (np[0] === bound[0][0] || np[0] === bound[1][0]) { // hit vertical walls
+      let c = p.changed;
+      p.previous = np.$subtract( new Pt( c[0]*-1*friction, c[1] ) );
+    } else if (np[1] === bound[0][1] || np[1] === bound[1][1]) { // hit horizontal walls
+      let c = p.changed;
+      p.previous = np.$subtract( new Pt( c[0], c[1]*-1*friction ) );
+    }
+
+    p.to( np );
   }
 
 }
@@ -59,7 +66,7 @@ export class World extends Array<Particle> {
 
   integrate( p:Particle, dt:number, prevDt?:number ):Particle {
 
-    p.addForce( this._gravity.$multiply( p.mass ) );
+    p.addForce( this._gravity.$multiply( p.mass ) ); // multiply mass to cancel it out later
     p.positionVerlet( dt, this._friction, prevDt );
 
     return p;
@@ -103,6 +110,7 @@ export class Particle extends Pt {
   set force( g:Pt ) { this._force = g; }
   
   get previous():Pt { return this._prev; }
+  set previous( p:Pt ) { this._prev = p; }
 
   get changed():Pt { return this.$subtract( this._prev ); }
 
@@ -125,8 +133,8 @@ export class Particle extends Pt {
     return this;
   }
 
-  impulse( f:Pt ) {
-    this._prev.subtract( f.$divide( this._mass ) );
+  impulse( ...args ) {
+    this._prev.subtract( new Pt(...args).$divide( this._mass ) );
   }
 
   toString() {
