@@ -1,3 +1,4 @@
+
 import {Pt, PtLike, Group} from "./Pt";
 import {Bound} from "./Bound";
 
@@ -21,6 +22,7 @@ export class Physics extends Array<Particle> {
   }
 
 
+
   static constraintBound( p:Particle, rect:Group, radius:number=0, friction:number=0.9 ) {
     let bound = rect.boundingBox();
     let np = p.$min( bound[1].subtract( radius ) ).$max( bound[0].add( radius ) );
@@ -34,6 +36,7 @@ export class Physics extends Array<Particle> {
     }
 
     p.to( np );
+
   }
 
 }
