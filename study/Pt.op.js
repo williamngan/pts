@@ -18,8 +18,13 @@ space.add( {
     
     // Begin Test Code --
 
-    form.stroke("#000", 2);
+    form.stroke("#000", 5);
     form.line( poly1 );
+    form.stroke("#f09", 3).line( line1 );
+    form.stroke("#f3f", 3).line( [line1[0], space.pointer] );
+
+    let proj = line1[1].$subtract( line1[0] ).$project( space.pointer.$subtract( line1[0] ) );
+    form.stroke( "rgba(0,0,0,.5", 5).line( [line1[0], proj.$add(line1[0])] )
 
     let np = poly1[ Polygon.nearestPt( poly1, space.pointer ) ];
     let animTimer = (time % 1000)/1000;
@@ -71,6 +76,8 @@ space.add( {
     trans.map( (t, i) => t( [animTimer*Math.PI, animTimer, animTimer*2][i], space.pointer )  );
     form.stroke("#09f", 5).line( g2 );
     // End
+    
+
     
   },
 

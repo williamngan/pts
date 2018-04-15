@@ -288,18 +288,24 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
 
 
   /**
-   * Calculate vector projection of this Pt on another Pt. Returns result as a new Pt.
+   * Calculate vector projection of this Pt on another Pt. 
    * @param p a list of numbers, an array of number, or an object with {x,y,z,w} properties
+   * @returns the projection vector as a Pt
    */
-  $project( p:Pt ):Pt {
-    let m = p.magnitude();
-    let a = this.$unit();
-    let b = p.$divide(m);
-    let dot = a.dot( b );
-    return a.multiply( m * dot );
+  $project( ...args ):Pt {
+    return this.$multiply( this.dot( ...args ) / this.magnitudeSq() );
   }
 
 
+  /**
+   * Calculate scalar projection
+   * @param p a list of numbers, an array of number, or an object with {x,y,z,w} properties
+   */
+  projectScalar( ...args ):number {
+    return this.dot( ...args ) / this.magnitude();
+  }
+
+  
   /**
    * Absolute values for all values in this pt
    */

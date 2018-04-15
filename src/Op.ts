@@ -937,7 +937,7 @@ export class Polygon {
    * @param closePath a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).
    * @returns an array of Groups which has 2 Pts in each group
    */
-  static lines( pts:GroupLike, closePath:boolean=false ):Group[] {
+  static lines( pts:GroupLike, closePath:boolean=true ):Group[] {
     if (pts.length < 2) return _errorLength( new Group(), 2 );
     let sp = Util.split( pts, 2, 1 );
     if (closePath) sp.push( new Group( pts[pts.length-1], pts[0]) );
