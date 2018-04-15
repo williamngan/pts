@@ -931,6 +931,12 @@ export class Polygon {
     return Geom.centroid( pts );
   }
 
+
+  static lineAt( pts:GroupLike, idx:number ) {
+    if (idx < 0 || idx >= pts.length) throw new Error( "index out of the Polygon's range" );
+    return new Group( pts[idx], (idx === pts.length-1) ? pts[0] : pts[idx+1] );
+  }
+
   /**
    * Get the line segments in this polygon
    * @param pts a Group of Pts
@@ -1159,6 +1165,39 @@ export class Polygon {
       }
     }
     return _item;
+  }
+
+
+  /**
+   * Check if two polygons has intersections using Separating Axis Theorem. 
+   * @param poly1 a Group representing a polygon
+   * @param poly2 a Group representing a polygon
+   */
+  static hasIntersectPolygon( poly1:GroupLike, poly2:GroupLike ):boolean {
+    
+    // Reference: https://www.gamedev.net/articles/programming/math-and-physics/a-verlet-based-approach-for-2d-game-physics-r2714/
+    
+    for (let i=0; i<(poly1.length + poly2.length); i++) {
+
+      let edge = (i < poly1.length) ? Polygon.lineAt( poly1, i ) : Polygon.lineAt( poly2, i-poly1.length );
+      let axis = new Pt( edge[0].y - edge[1].y, edge[1].x - edge[0].x ).unit(); // unit of normal vector
+      
+      const project = ( ps, a ) => {
+        let d = [Number.MAX_VALUE, Number.MIN_VALUE];
+        for (let n=0, len=ps.length; n<len; n++) {
+          let dot = a.dot( ps[n] );
+          d = [Math.min( dot, d[0] ), Math.max( dot, d[1] )];
+        }
+        return d;
+      };
+
+      let pa = project( poly1, axis );
+      let pb = project( poly2, axis );
+      let dist = ( pa[0] < pb[0] ) ? pb[0]-pa[1] : pa[0] - pb[1];
+      if (dist > 0) return false;
+    } 
+
+    return true;
   }
 
 
