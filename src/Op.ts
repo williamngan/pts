@@ -204,15 +204,35 @@ export class Line {
    * @param poly a Group of Pts representing a polygon
    * @param sourceIsRay a boolean value to treat the line as a ray (infinite line). Default is `false`.
    */
-  static intersectPolygon2D( lineOrRay:GroupLike, poly:GroupLike[], sourceIsRay:boolean=false ):Group {
+  static intersectPolygon2D( lineOrRay:GroupLike, poly:GroupLike, sourceIsRay:boolean=false ):Group {
     let fn = sourceIsRay ? Line.intersectLineWithRay2D : Line.intersectLine2D; 
     let pts = new Group();
     for (let i=0, len=poly.length; i<len; i++) {
-      let d = fn( poly[i], lineOrRay );
+      let next = (i === len-1) ? 0 : i+1;
+      let d = fn( [poly[i], poly[next]], lineOrRay );
       if (d) pts.push( d ); 
     }
     return (pts.length > 0) ? pts : undefined;
   } 
+
+
+  /**
+   * Find intersection points of 2 polygons. This checks all line segments in the two lists. Consider using a bounding-box check before calling this.
+   * @param lines1 an array of line segments
+   * @param lines2 an array of line segments
+   * @param isRay a boolean value to treat the line as a ray (infinite line). Default is `false`.
+   */
+  static intersectLines2D( lines1:GroupLike[], lines2:GroupLike[], isRay:boolean=false):Group {
+    let group = new Group();
+    let fn = isRay ? Line.intersectLineWithRay2D : Line.intersectLine2D; 
+    for (let i=0, len=lines1.length; i<len; i++) {
+      for (let k=0, lenk=lines2.length; k<lenk; k++) {
+        let _ip = fn( lines1[i], lines2[k] );
+        if (_ip) group.push( _ip );
+      }
+    }
+    return group;
+  }
 
 
   /**
@@ -251,9 +271,12 @@ export class Line {
    * For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersect2D()`.
    * @param line a Group representing a line
    * @param rect a Group representing a rectangle
+   * @returns a Group of intersecting Pts
    */
   static intersectRect2D( line:GroupLike, rect:GroupLike ):Group {
-    return Rectangle.intersectRect2D( Line.toRect(line), rect );
+    let box = Geom.boundingBox( Group.fromPtArray( line ) );
+    if ( !Rectangle.hasIntersectRect2D( box, rect) ) return new Group();
+    return Line.intersectLines2D( [line], Rectangle.sides(rect) );
   }
 
 
@@ -527,13 +550,19 @@ export class Rectangle {
    * Check if a rectangle is within the bounds of another rectangle
    * @param rect1 a Group of 2 Pts representing a rectangle
    * @param rect2 a Group of 2 Pts representing a rectangle
+   * @param resetBoundingBox if `true`, reset the bounding box. Default is `false` which assumes the rect's first Pt at is its top-left corner.
    */
-  static hasIntersectRect2D( rect1:GroupLike, rect2:GroupLike ):boolean {
-    let pts = Rectangle.corners( rect1 );
-    for (let i=0, len=pts.length; i<len; i++) {
-      if (Geom.withinBound( pts[i], rect2[0], rect2[1])) return true;
+  static hasIntersectRect2D( rect1:GroupLike, rect2:GroupLike, resetBoundingBox:boolean=false ):boolean {
+
+    if (resetBoundingBox) {
+      rect1 = Geom.boundingBox( rect1 );
+      rect2 = Geom.boundingBox( rect2 );
     }
-    return false;
+
+    if (rect1[0][0] > rect2[1][0] || rect2[0][0] > rect1[1][0]) return false;
+    if (rect1[0][1] > rect2[1][1] || rect2[0][1] > rect1[1][1]) return false; 
+    return true;
+    
   }
 
 
@@ -544,9 +573,8 @@ export class Rectangle {
    * @param rect2 a Group of 2 Pts representing a rectangle
    */
   static intersectRect2D( rect1:GroupLike, rect2:GroupLike ):Group {
-    return Util.flatten(
-      Polygon.intersect2D( Rectangle.sides( rect1 ), Rectangle.sides( rect2 ) )
-    );
+    if ( !Rectangle.hasIntersectRect2D( rect1, rect2) ) return new Group();
+    return Line.intersectLines2D( Rectangle.sides( rect1 ), Rectangle.sides( rect2 ) );
   }
 
 }
@@ -1086,17 +1114,17 @@ export class Polygon {
 
   /**
    * Find intersection points of 2 polygons
-   * @param poly a Group representing a polygon
-   * @param linesOrRays an array of Groups representing lines
-   * @param sourceIsRay a boolean value to treat the line as a ray (infinite line). Default is `false`.
+   * @param poly1 a Group representing a polygon 
+   * @param poly2 another Group representing a polygon
    */
-  static intersect2D( poly:GroupLike[], linesOrRays:GroupLike[], sourceIsRay:boolean=false):Group[] {
-    let groups = [];
-    for (let i=0, len=linesOrRays.length; i<len; i++) {
-      let _ip = Line.intersectPolygon2D( linesOrRays[i], poly, sourceIsRay );
-      if (_ip) groups.push( _ip );
+  static intersect2D( poly1:GroupLike, poly2:GroupLike ):Group {
+    let lp = Polygon.lines( poly1 );
+    let g = [];
+    for (let i=0, len=lp.length; i<len; i++) {
+      let ins = Line.intersectPolygon2D( lp[i], poly2, false );
+      if (ins) g.push( ins );
     }
-    return groups;
+    return Util.flatten( g, true ) as Group;
   }
 
 
@@ -1138,8 +1166,8 @@ export class Polygon {
    * Get a bounding box for each polygon group, as well as a union bounding-box for all groups
    * @param polys an array of Groups, or an array of Pt arrays
    */
-  static toRects( poly:GroupLike[] ):GroupLike[] {
-    let boxes = poly.map( (g) => Geom.boundingBox(g) );
+  static toRects( polys:GroupLike[] ):GroupLike[] {
+    let boxes = polys.map( (g) => Geom.boundingBox(g) );
     let merged = Util.flatten( boxes, false );
     boxes.unshift( Geom.boundingBox( merged ) );
     return boxes;

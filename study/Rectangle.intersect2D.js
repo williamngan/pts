@@ -21,20 +21,22 @@ space.add( {
     form.stroke("#09f").rect( rect1 );
     form.stroke("#000").rect( rect2 );
 
+  
     let r = Rectangle.fromCenter( space.pointer, 50, 90 );
-    let strokeWeight = Rectangle.hasIntersectRect2D( r, rect1) ? 5 : 2;
-    form.stroke("#f00", strokeWeight ).rect( r );
+    let strokeWeight = Rectangle.hasIntersectRect2D( r, rect2) ? 5 : 2;
+    form.strokeOnly("#f00", strokeWeight ).rect( r );
 
     let ps = Rectangle.intersectRect2D( r, rect1 );
     form.stroke(false).fill("#09f").points( ps );
 
     // more optimized if the sides are stored separately
     let sides = Rectangle.sides( r );
-    let ips = Polygon.intersect2D( sides, Rectangle.sides( rect2 ) );
-    ips.forEach( (p) => form.stroke(false).fill("#000").points( p ) );
+    let ips = Line.intersectLines2D( sides, Rectangle.sides( rect2 ) );
+    form.stroke(false).fill("#000").points( ips );
 
-    ips = Polygon.intersect2D( sides, [line1, line3] );
-    ips.forEach( (p) => form.stroke(false).fill("#f90").points( p ) );
+    ips = Line.intersectLines2D( sides, [line1, line3] );
+    form.stroke(false).fill("#f90").points( ips ) 
+    
     
     form.stroke("#f90",1).lines( [line1, line3] );
     
