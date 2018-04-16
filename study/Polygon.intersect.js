@@ -19,7 +19,7 @@ space.add( {
     // Begin Test Code --
     
     form.stroke("#f00", 2);
-    // ang += 0.3;
+    ang += 0.3;
 
     let pts = Util.flatten( [line1, poly1, rect1 ] );
     // form.points( pts );

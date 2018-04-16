@@ -1173,19 +1173,25 @@ export class Polygon {
    * @param poly1 a Group representing a polygon
    * @param poly2 a Group representing a polygon
    */
-  static hasIntersectPolygon( poly1:GroupLike, poly2:GroupLike ):boolean {
+  static hasIntersectPolygon( poly1:GroupLike, poly2:GroupLike, callback?:( polys:GroupLike[], edge:Group, axis:Pt, v:Pt, dist:number ) => void ):boolean {
     
     // Reference: https://www.gamedev.net/articles/programming/math-and-physics/a-verlet-based-approach-for-2d-game-physics-r2714/
-    
+
+    let minDist = Number.MAX_VALUE;
+    let _axis = new Pt();
+    let _edge = new Group();
+    let b1, b2;
+
     for (let i=0; i<(poly1.length + poly2.length); i++) {
 
       let edge = (i < poly1.length) ? Polygon.lineAt( poly1, i ) : Polygon.lineAt( poly2, i-poly1.length );
       let axis = new Pt( edge[0].y - edge[1].y, edge[1].x - edge[0].x ).unit(); // unit of normal vector
       
       const project = ( ps, a ) => {
-        let d = [Number.MAX_VALUE, Number.MIN_VALUE];
-        for (let n=0, len=ps.length; n<len; n++) {
-          let dot = a.dot( ps[n] );
+        let dot = a.dot( ps[0] );
+        let d = [dot, dot];
+        for (let n=1, len=ps.length; n<len; n++) {
+          dot = a.dot( ps[n] );
           d = [Math.min( dot, d[0] ), Math.max( dot, d[1] )];
         }
         return d;
@@ -1194,8 +1200,38 @@ export class Polygon {
       let pa = project( poly1, axis );
       let pb = project( poly2, axis );
       let dist = ( pa[0] < pb[0] ) ? pb[0]-pa[1] : pa[0] - pb[1];
-      if (dist > 0) return false;
+
+      if (dist > 0) {
+        return false;
+      } else if ( Math.abs(dist) < minDist && callback) {
+        // _edge = edge;
+        // _axis = axis;
+        // minDist = Math.abs(dist);
+
+        // b1 = (i < poly1.length) ? poly1 : poly2;
+        // b2 = (i < poly1.length) ? poly2 : poly1;
+      }
     } 
+
+    // if (callback) {
+    //   let c1 = Polygon.centroid( poly1 );
+    //   let c2 = Polygon.centroid( poly2 );
+    //   let dir = c1.$subtract( c2 ).dot( _axis );
+    //   if (dir<0) _axis.multiply(-1);
+
+    //   let smallest = Number.MAX_VALUE;
+    //   let _v = new Pt();
+      
+    //   for (let i=0, len=b1.length; i<len; i++) {
+    //     let d = b1[i].$subtract( c2 );
+    //     if (d < smallest) {
+    //       smallest = d;
+    //       _v.to( b1[i] );
+    //     }
+    //   }
+
+    //   callback( [poly1, poly2], _edge, _axis, _v, minDist );
+    // }
 
     return true;
   }
