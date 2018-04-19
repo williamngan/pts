@@ -1,6 +1,7 @@
 
-import {Pt, PtLike, Group} from "./Pt";
+import {Pt, PtLike, Group, GroupLike} from "./Pt";
 import {Bound} from "./Bound";
+import { Rectangle, Polygon } from "./Op";
 
 
 export class Physics extends Array<Particle> {
@@ -17,7 +18,7 @@ export class Physics extends Array<Particle> {
 
     p1.subtract( f.$multiply( m1/mm ) );
     p2.add( f.$multiply( m2/mm ) );
-
+    
     return p1;
   }
 
@@ -76,65 +77,18 @@ export class Physics extends Array<Particle> {
     }
   }
 
-
-  /*
-
-  // compute the projected component factors
-    var f1 = (damping*(x*v1x+y*v1y))/slength;
-    var f2 = (damping*(x*v2x+y*v2y))/slength;
-
-    // swap the projected components
-    v1x += f2*x-f1*x;
-    v1y += f2*y-f1*y;
-    v2x += f1*x-f2*x;
-    v2y += f1*y-f2*y;
-    
-
-    // the previous position is adjusted
-    // to represent the new velocity
-    body1.px = body1.x - v1x;
-    body1.py = body1.y - v1y;
-    body2.px = body2.x - v2x;
-    body2.py = body2.y - v2y;
-
-var collide = function(){
-    for(var i=0, l=bodies.length; i<l; i++){
-        var body1 = bodies[i];
-        for(var j=i+1; j<l; j++){
-            var body2 = bodies[j];
-            var x = body1.x - body2.x;
-            var y = body1.y - body2.y;
-            var slength = x*x+y*y;
-            var length = Math.sqrt(slength);
-            var target = body1.radius + body2.radius;
-
-            // if the spheres are closer
-            // then their radii combined
-            if(length < target){ 
-                var factor = (length-target)/length;
-                // move the spheres away from each other
-                // by half the conflicting length
-                body1.x -= x*factor*0.5;
-                body1.y -= y*factor*0.5;
-                body2.x += x*factor*0.5;
-                body2.y += y*factor*0.5;
-            }
-        }
-    }
-    */
-
 }
 
-export class World extends Array<Particle> {
+export class World {
 
   protected _gravity:Pt = new Pt();
   protected _friction:number = 1;
   protected _bound:Bound;
   private _lastTime:number = null;
 
-  constructor(...args) {
-    super(...args);  
-  }
+  protected _particles:Particle[] = [];
+  protected _bodies:Body[] = [];
+
 
   setup( bound:Group, friction:number=1, gravity?:Pt ):this {
     this._bound = Bound.fromGroup( bound );
@@ -150,11 +104,27 @@ export class World extends Array<Particle> {
   get friction():number { return this._friction; }
   set friction( f:number ) { this._friction = f; }
 
+  get bodyCount():number { return this._bodies.length; }
+  get particleCount():number { return this._particles.length; }
+
+  addParticle( p:Particle ) {
+    this._particles.push( p );
+  }
+
+  addBody( b:Body ) {
+    this._bodies.push( b );
+  }
+
+  body( index:number ) { return this._bodies[index]; }
+  particle( index:number ) { return this._particles[index]; }
+
+  
+
 
   integrate( p:Particle, dt:number, prevDt?:number ):Particle {
 
     p.addForce( this._gravity.$multiply( p.mass ) ); // multiply mass to cancel it out later
-    p.positionVerlet( dt, this._friction, prevDt );
+    p.verlet( dt, this._friction, prevDt );
 
     return p;
   }
@@ -162,12 +132,31 @@ export class World extends Array<Particle> {
 
   integrateAll( dt:number, timeCorrected:boolean=true ):void {
     let t = (timeCorrected) ? this._lastTime : undefined;
-    for (let i=0, len=this.length; i<len; i++) {
+    
+    for (let i=0, len=this._particles.length; i<len; i++) {
       this.integrate( this[i], dt, t );
+    }
+
+    for (let i=0, len=this._bodies.length; i<len; i++) {
+      let b = this._bodies[i];
+      for (let k=0, klen=b.length; k<klen; k++) {
+        this.integrate( b[k] as Particle, dt, t );
+      }
     }
     this._lastTime = dt;
   }
 
+
+  constrainAll() {
+    for (let i=0, len=this._bodies.length; i<len; i++) {
+      let b = this._bodies[i];
+      b.constrain();
+
+      for (let k=0, klen=b.length; k<klen; k++) {
+        Physics.constraintBound( b[k] as Particle, this._bound );
+      }
+    }
+  }
 
   
 }
@@ -181,6 +170,7 @@ export class Particle extends Pt {
   protected _radius:number = 0;
   protected _force:Pt = new Pt();
   protected _prev:Pt = new Pt();
+  protected _body:Body;
 
   constructor( ...args ) {
     super( ...args );
@@ -199,6 +189,9 @@ export class Particle extends Pt {
   get previous():Pt { return this._prev; }
   set previous( p:Pt ) { this._prev = p; }
 
+  get body():Body { return this._body; }
+  set body( b:Body ) { this._body = b; }
+
   get changed():Pt { return this.$subtract( this._prev ); }
 
   addForce( ...args ):Pt {
@@ -207,7 +200,7 @@ export class Particle extends Pt {
   }
 
 
-  positionVerlet( dt:number, friction:number, lastDt?:number ):this {
+  verlet( dt:number, friction:number, lastDt?:number ):this {
     // Positional verlet: curr + (curr - prev) + a * dt * dt
     let a = this._force.$divide( this._mass ).multiply( dt*dt );
     let t = (lastDt) ? dt/lastDt : 1; // time corrected
@@ -220,7 +213,7 @@ export class Particle extends Pt {
     return this;
   }
 
-  impulse( ...args ) {
+  hit( ...args ) {
     this._prev.subtract( new Pt(...args).$divide( this._mass ) );
   }
 
@@ -238,3 +231,93 @@ export class Particle extends Pt {
 
 
 
+export class Body extends Group {
+
+  protected _cs:Array<number[]> = [];
+
+
+  static rectangle( rect:GroupLike, stiff:number=0.95 ):Body {
+    let pts = Rectangle.corners( rect );
+    let body = new Body().init( pts );
+    return body.link(0, 1, stiff).link(1, 2, stiff).link(2, 3, stiff).link( 3, 0, stiff ).link(1, 3, stiff).link(0, 2, stiff);
+  }
+
+  
+  init( list:GroupLike ):this {
+    let c = new Pt();
+    for (let i=0, len=list.length; i<len; i++) {
+      let p = new Particle( list[i] );
+      p.body = this;
+      c.add( list[i] );
+      this.push( p );
+    }
+    
+    return this;
+  } 
+
+
+
+  link( index1:number, index2:number, stiff:number=0.5 ):this {
+    if (index1 < 0 || index1 >= this.length) throw new Error( "index1 is not in the Group's indices");
+    if (index2 < 0 || index2 >= this.length) throw new Error( "index1 is not in the Group's indices");
+
+    let d = this[index1].$subtract( this[index2] ).magnitude();
+    this._cs.push( [index1, index2, d, stiff] );
+    return this;
+  }
+
+
+  constrain() {
+    for (let i=0, len=this._cs.length; i<len; i++) {
+      let [m, n, d, s] = this._cs[i];
+      Physics.constraintEdge( this[m] as Particle, this[n] as Particle, d, s );
+    }
+  }
+
+
+  process( b:Body ) {
+
+    let b1 = this;
+    let b2 = b;
+
+    let hit = Polygon.hasIntersectPolygon( b1, b2 );
+
+    if (hit) {
+      let cv = hit.normal.$multiply( hit.dist );
+    
+      let t;    
+      let eg = hit.edge;
+      if ( Math.abs( eg[0][0] - eg[1][0] ) > Math.abs( eg[0][1] - eg[1][1] ) ) {
+        t = ( hit.vertex[0] - cv[0] - eg[0][0]) / (eg[1][0] - eg[0][0]);
+      } else {
+        t = ( hit.vertex[1] - cv[1] - eg[0][1] )/( eg[1][1] - eg[0][1]);
+      }
+
+      let lambda = 1/(t*t + (1-t)*(1-t));
+
+      eg[0].subtract( cv.$multiply( (1-t)*lambda/2 ) );
+      eg[1].subtract( cv.$multiply( t*lambda/2 ) );
+
+      hit.vertex.add( cv.$multiply(0.5) );
+    }
+
+    // let cv = axis.multiply( dist );
+    // let t;
+
+    // if ( Math.abs( edge[0][0] - edge[1][0] ) > Math.abs( edge[0][1] - edge[1][1] ) ) {
+    //   t = (v[0] - cv[0] - edge[0][0]) / (edge[1][0] - edge[0][0]);
+    // } else {
+    //   t = (v[1] - cv[1] - edge[0][1] )/( edge[1][1] - edge[0][1]);
+    // }
+
+    // let lambda = 1/(t*t + (1-t)*(1-t));
+
+    // edge[0].subtract( cv.$multiply( (1-t)*lambda/2 ) );
+    // edge[1].subtract( cv.$multiply( t*lambda/2 ) );
+
+    // v.add( cv.divide(2) );
+  }
+
+  
+
+}

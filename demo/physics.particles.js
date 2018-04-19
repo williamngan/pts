@@ -26,7 +26,7 @@ window.demoDescription = "...";
         p.mass = 15 + Math.random()*10;
         p.radius = p.mass;
         p.impulse( Num.randomRange(-400,400), Num.randomRange(-100, 100) );
-        world.push( p );
+        world.addParticle( p );
       }
 
       world[0].impulse( new Pt(300, -50));

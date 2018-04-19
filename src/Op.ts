@@ -11,6 +11,14 @@ import {Mat} from "./LinearAlgebra";
 let _errorLength = (obj, param:number|string="expected") => Util.warn( "Group's length is less than "+param, obj  );
 let _errorOutofBound = (obj, param:number|string="") => Util.warn( `Index ${param} is out of bound in Group`, obj  );
 
+export type IntersectContext = {
+  which: number,
+  dist: number,
+  normal: Pt,
+  vertex: Pt,
+  edge: Group,
+};
+
 
 /**
  * Line class provides static functions to create and operate on lines. A line is usually represented as a Group of 2 Pts.
@@ -1167,26 +1175,34 @@ export class Polygon {
     return _item;
   }
 
+  
 
   /**
    * Check if two polygons has intersections using Separating Axis Theorem. 
    * @param poly1 a Group representing a polygon
    * @param poly2 a Group representing a polygon
+   * @return an object that stores the intersection info, or undefined if there's no intersection
    */
-  static hasIntersectPolygon( poly1:GroupLike, poly2:GroupLike, callback?:( polys:GroupLike[], edge:Group, axis:Pt, v:Pt, dist:number ) => void ):boolean {
+  static hasIntersectPolygon( poly1:GroupLike, poly2:GroupLike ):IntersectContext {
     
     // Reference: https://www.gamedev.net/articles/programming/math-and-physics/a-verlet-based-approach-for-2d-game-physics-r2714/
 
-    let minDist = Number.MAX_VALUE;
-    let _axis = new Pt();
-    let _edge = new Group();
-    let b1, b2;
+    let info = {
+      which: -1, // 0 if vertex is on second polygon and edge is on first polygon. 1 if the other way round.
+      dist: 0,
+      normal: new Pt(), // perpendicular to edge
+      edge: new Group(), // the edge where the intersection occur
+      vertex: new Pt() // the vertex on a polygon that has intersected
+    };
+
+    let minDist = Number.MAX_SAFE_INTEGER;
 
     for (let i=0; i<(poly1.length + poly2.length); i++) {
-
-      let edge = (i < poly1.length) ? Polygon.lineAt( poly1, i ) : Polygon.lineAt( poly2, i-poly1.length );
-      let axis = new Pt( edge[0].y - edge[1].y, edge[1].x - edge[0].x ).unit(); // unit of normal vector
       
+      let edge = (i < poly1.length) ? Polygon.lineAt( poly1, i ) : Polygon.lineAt( poly2, i-poly1.length );
+      let axis = new Pt( edge[0].y - edge[1].y, edge[1].x - edge[0].x ).unit(); // unit of a perpendicular vector
+      
+      // project axis
       const project = ( ps, a ) => {
         let dot = a.dot( ps[0] );
         let d = [dot, dot];
@@ -1199,41 +1215,44 @@ export class Polygon {
 
       let pa = project( poly1, axis );
       let pb = project( poly2, axis );
-      let dist = ( pa[0] < pb[0] ) ? pb[0]-pa[1] : pa[0] - pb[1];
+      let dist = ( pa[0] < pb[0] ) ? pb[0]-pa[1] : pa[0]-pb[1];
 
       if (dist > 0) {
-        return false;
-      } else if ( Math.abs(dist) < minDist && callback) {
-        // _edge = edge;
-        // _axis = axis;
-        // minDist = Math.abs(dist);
+        return null;
 
-        // b1 = (i < poly1.length) ? poly1 : poly2;
-        // b2 = (i < poly1.length) ? poly2 : poly1;
+      } else if ( Math.abs(dist) < minDist) {
+        // store intersected edge and a normal vector
+        info.edge = edge;
+        info.normal = axis;
+        minDist = Math.abs(dist);
+        info.which = (i < poly1.length) ? 0 : 1;
       }
     } 
 
-    // if (callback) {
-    //   let c1 = Polygon.centroid( poly1 );
-    //   let c2 = Polygon.centroid( poly2 );
-    //   let dir = c1.$subtract( c2 ).dot( _axis );
-    //   if (dir<0) _axis.multiply(-1);
+    info.dist = minDist;
 
-    //   let smallest = Number.MAX_VALUE;
-    //   let _v = new Pt();
-      
-    //   for (let i=0, len=b1.length; i<len; i++) {
-    //     let d = b1[i].$subtract( c2 );
-    //     if (d < smallest) {
-    //       smallest = d;
-    //       _v.to( b1[i] );
-    //     }
-    //   }
+    // flip if neded to make sure vertex and edge are in corresponding polygons
+    let b1 = (info.which === 0) ? poly2 : poly1;
+    let b2 = (info.which === 0) ? poly1 : poly2;
+    
+    let c1 = Polygon.centroid( b1 );
+    let c2 = Polygon.centroid( b2 );
 
-    //   callback( [poly1, poly2], _edge, _axis, _v, minDist );
-    // }
+    // direction
+    let dir = c1.$subtract( c2 ).dot( info.normal );
+    if (dir<0) info.normal.multiply(-1);
 
-    return true;
+    // find vertex at smallest distance
+    let smallest = Number.MAX_SAFE_INTEGER; 
+    for (let i=0, len=b1.length; i<len; i++) {
+      let d = info.normal.dot( b1[i].$subtract( c2 ) );
+      if ( d < smallest) {
+        smallest = d;
+        info.vertex = b1[i];
+      }
+    }
+
+    return info;
   }
 
 

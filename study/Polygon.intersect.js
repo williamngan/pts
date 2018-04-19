@@ -19,7 +19,7 @@ space.add( {
     // Begin Test Code --
     
     form.stroke("#f00", 2);
-    ang += 0.3;
+    // ang += 0.3;
 
     let pts = Util.flatten( [line1, poly1, rect1 ] );
     // form.points( pts );
@@ -32,10 +32,18 @@ space.add( {
     let inpts = Polygon.intersect2D( poly, convex );
     form.points( inpts );
 
-    let hasIntersect = Polygon.hasIntersectPolygon( poly, convex );
+    let hit = Polygon.hasIntersectPolygon( poly, convex );
 
-    form.stroke("#000").polygon( convex );
-    form.stroke("#f00", (hasIntersect) ? 5 : 1 ).polygon( poly );
+    if (hit) {
+      form.stroke("#f00", 5);
+      form.line( hit.edge );
+      form.line( [hit.vertex, hit.vertex.$add( hit.normal.$multiply( hit.dist ) )] );
+      form.point( hit.vertex, 5);
+      
+    }
+
+    form.stroke("#000", 1).polygon( convex );
+    form.stroke("#f00", 1 ).polygon( poly );
 
     // End
   },

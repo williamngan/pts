@@ -88,7 +88,7 @@ return /******/ (function(modules) { // webpackBootstrap
 // Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(1);
-const Num_1 = __webpack_require__(3);
+const Num_1 = __webpack_require__(4);
 const LinearAlgebra_1 = __webpack_require__(5);
 exports.PtBaseArray = Float32Array;
 /**
@@ -306,15 +306,19 @@ class Pt extends exports.PtBaseArray {
      */
     $cross(...args) { return LinearAlgebra_1.Vec.cross(this, Util_1.Util.getArgs(args)); }
     /**
-     * Calculate vector projection of this Pt on another Pt. Returns result as a new Pt.
+     * Calculate vector projection of this Pt on another Pt.
+     * @param p a list of numbers, an array of number, or an object with {x,y,z,w} properties
+     * @returns the projection vector as a Pt
+     */
+    $project(...args) {
+        return this.$multiply(this.dot(...args) / this.magnitudeSq());
+    }
+    /**
+     * Calculate scalar projection
      * @param p a list of numbers, an array of number, or an object with {x,y,z,w} properties
      */
-    $project(p) {
-        let m = p.magnitude();
-        let a = this.$unit();
-        let b = p.$divide(m);
-        let dot = a.dot(b);
-        return a.multiply(m * dot);
+    projectScalar(...args) {
+        return this.dot(...args) / this.magnitude();
     }
     /**
      * Absolute values for all values in this pt
@@ -1017,7 +1021,7 @@ exports.Util = Util;
 // Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(1);
-const Num_1 = __webpack_require__(3);
+const Num_1 = __webpack_require__(4);
 const Pt_1 = __webpack_require__(0);
 const LinearAlgebra_1 = __webpack_require__(5);
 let _errorLength = (obj, param = "expected") => Util_1.Util.warn("Group's length is less than " + param, obj);
@@ -1193,11 +1197,30 @@ class Line {
         let fn = sourceIsRay ? Line.intersectLineWithRay2D : Line.intersectLine2D;
         let pts = new Pt_1.Group();
         for (let i = 0, len = poly.length; i < len; i++) {
-            let d = fn(poly[i], lineOrRay);
+            let next = (i === len - 1) ? 0 : i + 1;
+            let d = fn([poly[i], poly[next]], lineOrRay);
             if (d)
                 pts.push(d);
         }
         return (pts.length > 0) ? pts : undefined;
+    }
+    /**
+     * Find intersection points of 2 polygons. This checks all line segments in the two lists. Consider using a bounding-box check before calling this.
+     * @param lines1 an array of line segments
+     * @param lines2 an array of line segments
+     * @param isRay a boolean value to treat the line as a ray (infinite line). Default is `false`.
+     */
+    static intersectLines2D(lines1, lines2, isRay = false) {
+        let group = new Pt_1.Group();
+        let fn = isRay ? Line.intersectLineWithRay2D : Line.intersectLine2D;
+        for (let i = 0, len = lines1.length; i < len; i++) {
+            for (let k = 0, lenk = lines2.length; k < lenk; k++) {
+                let _ip = fn(lines1[i], lines2[k]);
+                if (_ip)
+                    group.push(_ip);
+            }
+        }
+        return group;
     }
     /**
      * Get two intersection Pts of a ray with a 2D grid point
@@ -1234,9 +1257,13 @@ class Line {
      * For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersect2D()`.
      * @param line a Group representing a line
      * @param rect a Group representing a rectangle
+     * @returns a Group of intersecting Pts
      */
     static intersectRect2D(line, rect) {
-        return Rectangle.intersectRect2D(Line.toRect(line), rect);
+        let box = Num_1.Geom.boundingBox(Pt_1.Group.fromPtArray(line));
+        if (!Rectangle.hasIntersectRect2D(box, rect))
+            return new Pt_1.Group();
+        return Line.intersectLines2D([line], Rectangle.sides(rect));
     }
     /**
      * Get evenly distributed points on a line
@@ -1468,14 +1495,18 @@ class Rectangle {
      * Check if a rectangle is within the bounds of another rectangle
      * @param rect1 a Group of 2 Pts representing a rectangle
      * @param rect2 a Group of 2 Pts representing a rectangle
+     * @param resetBoundingBox if `true`, reset the bounding box. Default is `false` which assumes the rect's first Pt at is its top-left corner.
      */
-    static hasIntersectRect2D(rect1, rect2) {
-        let pts = Rectangle.corners(rect1);
-        for (let i = 0, len = pts.length; i < len; i++) {
-            if (Num_1.Geom.withinBound(pts[i], rect2[0], rect2[1]))
-                return true;
+    static hasIntersectRect2D(rect1, rect2, resetBoundingBox = false) {
+        if (resetBoundingBox) {
+            rect1 = Num_1.Geom.boundingBox(rect1);
+            rect2 = Num_1.Geom.boundingBox(rect2);
         }
-        return false;
+        if (rect1[0][0] > rect2[1][0] || rect2[0][0] > rect1[1][0])
+            return false;
+        if (rect1[0][1] > rect2[1][1] || rect2[0][1] > rect1[1][1])
+            return false;
+        return true;
     }
     /**
      * Quick way to check rectangle intersection.
@@ -1484,7 +1515,9 @@ class Rectangle {
      * @param rect2 a Group of 2 Pts representing a rectangle
      */
     static intersectRect2D(rect1, rect2) {
-        return Util_1.Util.flatten(Polygon.intersect2D(Rectangle.sides(rect1), Rectangle.sides(rect2)));
+        if (!Rectangle.hasIntersectRect2D(rect1, rect2))
+            return new Pt_1.Group();
+        return Line.intersectLines2D(Rectangle.sides(rect1), Rectangle.sides(rect2));
     }
 }
 exports.Rectangle = Rectangle;
@@ -1800,13 +1833,18 @@ class Polygon {
     static centroid(pts) {
         return Num_1.Geom.centroid(pts);
     }
+    static lineAt(pts, idx) {
+        if (idx < 0 || idx >= pts.length)
+            throw new Error("index out of the Polygon's range");
+        return new Pt_1.Group(pts[idx], (idx === pts.length - 1) ? pts[0] : pts[idx + 1]);
+    }
     /**
      * Get the line segments in this polygon
      * @param pts a Group of Pts
      * @param closePath a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).
      * @returns an array of Groups which has 2 Pts in each group
      */
-    static lines(pts, closePath = false) {
+    static lines(pts, closePath = true) {
         if (pts.length < 2)
             return _errorLength(new Pt_1.Group(), 2);
         let sp = Util_1.Util.split(pts, 2, 1);
@@ -1972,18 +2010,18 @@ class Polygon {
     }
     /**
      * Find intersection points of 2 polygons
-     * @param poly a Group representing a polygon
-     * @param linesOrRays an array of Groups representing lines
-     * @param sourceIsRay a boolean value to treat the line as a ray (infinite line). Default is `false`.
+     * @param poly1 a Group representing a polygon
+     * @param poly2 another Group representing a polygon
      */
-    static intersect2D(poly, linesOrRays, sourceIsRay = false) {
-        let groups = [];
-        for (let i = 0, len = linesOrRays.length; i < len; i++) {
-            let _ip = Line.intersectPolygon2D(linesOrRays[i], poly, sourceIsRay);
-            if (_ip)
-                groups.push(_ip);
+    static intersect2D(poly1, poly2) {
+        let lp = Polygon.lines(poly1);
+        let g = [];
+        for (let i = 0, len = lp.length; i < len; i++) {
+            let ins = Line.intersectPolygon2D(lp[i], poly2, false);
+            if (ins)
+                g.push(ins);
         }
-        return groups;
+        return Util_1.Util.flatten(g, true);
     }
     /**
      * Given a point in the polygon as an origin, get an array of lines that connect all the remaining points to the origin point.
@@ -2017,11 +2055,75 @@ class Polygon {
         return _item;
     }
     /**
+     * Check if two polygons has intersections using Separating Axis Theorem.
+     * @param poly1 a Group representing a polygon
+     * @param poly2 a Group representing a polygon
+     * @return an object that stores the intersection info, or undefined if there's no intersection
+     */
+    static hasIntersectPolygon(poly1, poly2) {
+        // Reference: https://www.gamedev.net/articles/programming/math-and-physics/a-verlet-based-approach-for-2d-game-physics-r2714/
+        let info = {
+            which: -1,
+            dist: 0,
+            normal: new Pt_1.Pt(),
+            edge: new Pt_1.Group(),
+            vertex: new Pt_1.Pt() // the vertex on a polygon that has intersected
+        };
+        let minDist = Number.MAX_SAFE_INTEGER;
+        for (let i = 0; i < (poly1.length + poly2.length); i++) {
+            let edge = (i < poly1.length) ? Polygon.lineAt(poly1, i) : Polygon.lineAt(poly2, i - poly1.length);
+            let axis = new Pt_1.Pt(edge[0].y - edge[1].y, edge[1].x - edge[0].x).unit(); // unit of a perpendicular vector
+            // project axis
+            const project = (ps, a) => {
+                let dot = a.dot(ps[0]);
+                let d = [dot, dot];
+                for (let n = 1, len = ps.length; n < len; n++) {
+                    dot = a.dot(ps[n]);
+                    d = [Math.min(dot, d[0]), Math.max(dot, d[1])];
+                }
+                return d;
+            };
+            let pa = project(poly1, axis);
+            let pb = project(poly2, axis);
+            let dist = (pa[0] < pb[0]) ? pb[0] - pa[1] : pa[0] - pb[1];
+            if (dist > 0) {
+                return null;
+            }
+            else if (Math.abs(dist) < minDist) {
+                // store intersected edge and a normal vector
+                info.edge = edge;
+                info.normal = axis;
+                minDist = Math.abs(dist);
+                info.which = (i < poly1.length) ? 0 : 1;
+            }
+        }
+        info.dist = minDist;
+        // flip if neded to make sure vertex and edge are in corresponding polygons
+        let b1 = (info.which === 0) ? poly2 : poly1;
+        let b2 = (info.which === 0) ? poly1 : poly2;
+        let c1 = Polygon.centroid(b1);
+        let c2 = Polygon.centroid(b2);
+        // direction
+        let dir = c1.$subtract(c2).dot(info.normal);
+        if (dir < 0)
+            info.normal.multiply(-1);
+        // find vertex at smallest distance
+        let smallest = Number.MAX_SAFE_INTEGER;
+        for (let i = 0, len = b1.length; i < len; i++) {
+            let d = info.normal.dot(b1[i].$subtract(c2));
+            if (d < smallest) {
+                smallest = d;
+                info.vertex = b1[i];
+            }
+        }
+        return info;
+    }
+    /**
      * Get a bounding box for each polygon group, as well as a union bounding-box for all groups
      * @param polys an array of Groups, or an array of Pt arrays
      */
-    static toRects(poly) {
-        let boxes = poly.map((g) => Num_1.Geom.boundingBox(g));
+    static toRects(polys) {
+        let boxes = polys.map((g) => Num_1.Geom.boundingBox(g));
         let merged = Util_1.Util.flatten(boxes, false);
         boxes.unshift(Num_1.Geom.boundingBox(merged));
         return boxes;
@@ -2297,6 +2399,163 @@ exports.Curve = Curve;
 
 /***/ }),
 /* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
+Object.defineProperty(exports, "__esModule", { value: true });
+const Pt_1 = __webpack_require__(0);
+/**
+ * Bound is a subclass of Group that represents a rectangular boundary.
+ * It includes some convenient properties such as `x`, `y`, bottomRight`, `center`, and `size`.
+ */
+class Bound extends Pt_1.Group {
+    /**
+     * Create a Bound. This is similar to the Group constructor.
+     * @param args a list of Pt as parameters
+     */
+    constructor(...args) {
+        super(...args);
+        this._center = new Pt_1.Pt();
+        this._size = new Pt_1.Pt();
+        this._topLeft = new Pt_1.Pt();
+        this._bottomRight = new Pt_1.Pt();
+        this._inited = false;
+        this.init();
+    }
+    /**
+     * Create a Bound from a [ClientRect](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect) object.
+     * @param rect an object has top/left/bottom/right/width/height properties
+     * @returns a Bound object
+     */
+    static fromBoundingRect(rect) {
+        let b = new Bound(new Pt_1.Pt(rect.left || 0, rect.top || 0), new Pt_1.Pt(rect.right || 0, rect.bottom || 0));
+        if (rect.width && rect.height)
+            b.size = new Pt_1.Pt(rect.width, rect.height);
+        return b;
+    }
+    static fromGroup(g) {
+        if (g.length < 2)
+            throw new Error("Cannot create a Bound from a group that has less than 2 Pt");
+        return new Bound(g[0], g[g.length - 1]);
+    }
+    /**
+     * Initiate the bound's properties.
+     */
+    init() {
+        if (this.p1) {
+            this._size = this.p1.clone();
+            this._inited = true;
+        }
+        if (this.p1 && this.p2) {
+            let a = this.p1;
+            let b = this.p2;
+            this.topLeft = a.$min(b);
+            this._bottomRight = a.$max(b);
+            this._updateSize();
+            this._inited = true;
+        }
+    }
+    /**
+     * Clone this bound and return a new one
+     */
+    clone() {
+        return new Bound(this._topLeft.clone(), this._bottomRight.clone());
+    }
+    /**
+     * Recalculte size and center
+     */
+    _updateSize() {
+        this._size = this._bottomRight.$subtract(this._topLeft).abs();
+        this._updateCenter();
+    }
+    /**
+     * Recalculate center
+     */
+    _updateCenter() {
+        this._center = this._size.$multiply(0.5).add(this._topLeft);
+    }
+    /**
+     * Recalculate based on top-left position and size
+     */
+    _updatePosFromTop() {
+        this._bottomRight = this._topLeft.$add(this._size);
+        this._updateCenter();
+    }
+    /**
+     * Recalculate based on bottom-right position and size
+     */
+    _updatePosFromBottom() {
+        this._topLeft = this._bottomRight.$subtract(this._size);
+        this._updateCenter();
+    }
+    /**
+     * Recalculate based on center position and size
+     */
+    _updatePosFromCenter() {
+        let half = this._size.$multiply(0.5);
+        this._topLeft = this._center.$subtract(half);
+        this._bottomRight = this._center.$add(half);
+    }
+    get size() { return new Pt_1.Pt(this._size); }
+    set size(p) {
+        this._size = new Pt_1.Pt(p);
+        this._updatePosFromTop();
+    }
+    get center() { return new Pt_1.Pt(this._center); }
+    set center(p) {
+        this._center = new Pt_1.Pt(p);
+        this._updatePosFromCenter();
+    }
+    get topLeft() { return new Pt_1.Pt(this._topLeft); }
+    set topLeft(p) {
+        this._topLeft = new Pt_1.Pt(p);
+        this[0] = this._topLeft;
+        this._updateSize();
+    }
+    get bottomRight() { return new Pt_1.Pt(this._bottomRight); }
+    set bottomRight(p) {
+        this._bottomRight = new Pt_1.Pt(p);
+        this[1] = this._bottomRight;
+        this._updateSize();
+    }
+    get width() { return (this._size.length > 0) ? this._size.x : 0; }
+    set width(w) {
+        this._size.x = w;
+        this._updatePosFromTop();
+    }
+    get height() { return (this._size.length > 1) ? this._size.y : 0; }
+    set height(h) {
+        this._size.y = h;
+        this._updatePosFromTop();
+    }
+    get depth() { return (this._size.length > 2) ? this._size.z : 0; }
+    set depth(d) {
+        this._size.z = d;
+        this._updatePosFromTop();
+    }
+    get x() { return this.topLeft.x; }
+    get y() { return this.topLeft.y; }
+    get z() { return this.topLeft.z; }
+    get inited() { return this._inited; }
+    /**
+     * If the Group elements are changed, call this function to update the Bound's properties.
+     * It's preferable to change the topLeft/bottomRight etc properties instead of changing the Group array directly.
+     */
+    update() {
+        this._topLeft = this[0];
+        this._bottomRight = this[1];
+        this._updateSize();
+        return this;
+    }
+}
+exports.Bound = Bound;
+
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3104,163 +3363,6 @@ exports.Range = Range;
 
 
 /***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-// Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
-Object.defineProperty(exports, "__esModule", { value: true });
-const Pt_1 = __webpack_require__(0);
-/**
- * Bound is a subclass of Group that represents a rectangular boundary.
- * It includes some convenient properties such as `x`, `y`, bottomRight`, `center`, and `size`.
- */
-class Bound extends Pt_1.Group {
-    /**
-     * Create a Bound. This is similar to the Group constructor.
-     * @param args a list of Pt as parameters
-     */
-    constructor(...args) {
-        super(...args);
-        this._center = new Pt_1.Pt();
-        this._size = new Pt_1.Pt();
-        this._topLeft = new Pt_1.Pt();
-        this._bottomRight = new Pt_1.Pt();
-        this._inited = false;
-        this.init();
-    }
-    /**
-     * Create a Bound from a [ClientRect](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect) object.
-     * @param rect an object has top/left/bottom/right/width/height properties
-     * @returns a Bound object
-     */
-    static fromBoundingRect(rect) {
-        let b = new Bound(new Pt_1.Pt(rect.left || 0, rect.top || 0), new Pt_1.Pt(rect.right || 0, rect.bottom || 0));
-        if (rect.width && rect.height)
-            b.size = new Pt_1.Pt(rect.width, rect.height);
-        return b;
-    }
-    static fromGroup(g) {
-        if (g.length < 2)
-            throw new Error("Cannot create a Bound from a group that has less than 2 Pt");
-        return new Bound(g[0], g[g.length - 1]);
-    }
-    /**
-     * Initiate the bound's properties.
-     */
-    init() {
-        if (this.p1) {
-            this._size = this.p1.clone();
-            this._inited = true;
-        }
-        if (this.p1 && this.p2) {
-            let a = this.p1;
-            let b = this.p2;
-            this.topLeft = a.$min(b);
-            this._bottomRight = a.$max(b);
-            this._updateSize();
-            this._inited = true;
-        }
-    }
-    /**
-     * Clone this bound and return a new one
-     */
-    clone() {
-        return new Bound(this._topLeft.clone(), this._bottomRight.clone());
-    }
-    /**
-     * Recalculte size and center
-     */
-    _updateSize() {
-        this._size = this._bottomRight.$subtract(this._topLeft).abs();
-        this._updateCenter();
-    }
-    /**
-     * Recalculate center
-     */
-    _updateCenter() {
-        this._center = this._size.$multiply(0.5).add(this._topLeft);
-    }
-    /**
-     * Recalculate based on top-left position and size
-     */
-    _updatePosFromTop() {
-        this._bottomRight = this._topLeft.$add(this._size);
-        this._updateCenter();
-    }
-    /**
-     * Recalculate based on bottom-right position and size
-     */
-    _updatePosFromBottom() {
-        this._topLeft = this._bottomRight.$subtract(this._size);
-        this._updateCenter();
-    }
-    /**
-     * Recalculate based on center position and size
-     */
-    _updatePosFromCenter() {
-        let half = this._size.$multiply(0.5);
-        this._topLeft = this._center.$subtract(half);
-        this._bottomRight = this._center.$add(half);
-    }
-    get size() { return new Pt_1.Pt(this._size); }
-    set size(p) {
-        this._size = new Pt_1.Pt(p);
-        this._updatePosFromTop();
-    }
-    get center() { return new Pt_1.Pt(this._center); }
-    set center(p) {
-        this._center = new Pt_1.Pt(p);
-        this._updatePosFromCenter();
-    }
-    get topLeft() { return new Pt_1.Pt(this._topLeft); }
-    set topLeft(p) {
-        this._topLeft = new Pt_1.Pt(p);
-        this[0] = this._topLeft;
-        this._updateSize();
-    }
-    get bottomRight() { return new Pt_1.Pt(this._bottomRight); }
-    set bottomRight(p) {
-        this._bottomRight = new Pt_1.Pt(p);
-        this[1] = this._bottomRight;
-        this._updateSize();
-    }
-    get width() { return (this._size.length > 0) ? this._size.x : 0; }
-    set width(w) {
-        this._size.x = w;
-        this._updatePosFromTop();
-    }
-    get height() { return (this._size.length > 1) ? this._size.y : 0; }
-    set height(h) {
-        this._size.y = h;
-        this._updatePosFromTop();
-    }
-    get depth() { return (this._size.length > 2) ? this._size.z : 0; }
-    set depth(d) {
-        this._size.z = d;
-        this._updatePosFromTop();
-    }
-    get x() { return this.topLeft.x; }
-    get y() { return this.topLeft.y; }
-    get z() { return this.topLeft.z; }
-    get inited() { return this._inited; }
-    /**
-     * If the Group elements are changed, call this function to update the Bound's properties.
-     * It's preferable to change the topLeft/bottomRight etc properties instead of changing the Group array directly.
-     */
-    update() {
-        this._topLeft = this[0];
-        this._bottomRight = this[1];
-        this._updateSize();
-        return this;
-    }
-}
-exports.Bound = Bound;
-
-
-/***/ }),
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3831,7 +3933,7 @@ exports.Font = Font;
 // Source code licensed under Apache License 2.0. 
 // Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 Object.defineProperty(exports, "__esModule", { value: true });
-const Bound_1 = __webpack_require__(4);
+const Bound_1 = __webpack_require__(3);
 const Pt_1 = __webpack_require__(0);
 const UI_1 = __webpack_require__(12);
 /**
@@ -4308,7 +4410,7 @@ exports.Typography = Typography;
 Object.defineProperty(exports, "__esModule", { value: true });
 const Space_1 = __webpack_require__(7);
 const Form_1 = __webpack_require__(6);
-const Bound_1 = __webpack_require__(4);
+const Bound_1 = __webpack_require__(3);
 const Util_1 = __webpack_require__(1);
 const Pt_1 = __webpack_require__(0);
 /**
@@ -5018,12 +5120,12 @@ exports.HTMLForm = HTMLForm;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const _Bound = __webpack_require__(4);
+const _Bound = __webpack_require__(3);
 const _Canvas = __webpack_require__(11);
 const _Create = __webpack_require__(13);
 const _Form = __webpack_require__(6);
 const _LinearAlgebra = __webpack_require__(5);
-const _Num = __webpack_require__(3);
+const _Num = __webpack_require__(4);
 const _Op = __webpack_require__(2);
 const _Pt = __webpack_require__(0);
 const _Space = __webpack_require__(7);
@@ -5056,7 +5158,7 @@ module.exports = Object.assign({ namespace }, _Bound, _Canvas, _Create, _Form, _
 Object.defineProperty(exports, "__esModule", { value: true });
 const Space_1 = __webpack_require__(7);
 const Form_1 = __webpack_require__(6);
-const Bound_1 = __webpack_require__(4);
+const Bound_1 = __webpack_require__(3);
 const Pt_1 = __webpack_require__(0);
 const Util_1 = __webpack_require__(1);
 const Typography_1 = __webpack_require__(8);
@@ -5997,7 +6099,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
 const Op_1 = __webpack_require__(2);
 const Util_1 = __webpack_require__(1);
-const Num_1 = __webpack_require__(3);
+const Num_1 = __webpack_require__(4);
 const LinearAlgebra_1 = __webpack_require__(5);
 /**
  * The `Create` class provides various convenient functions to create structures or shapes.
@@ -6423,7 +6525,7 @@ exports.Delaunay = Delaunay;
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
 const Util_1 = __webpack_require__(1);
-const Num_1 = __webpack_require__(3);
+const Num_1 = __webpack_require__(4);
 /**
  * Color is a subclass of Pt. You can think of a color as a point in a color space. The Color class provides support for many color spaces.
  */
@@ -6987,7 +7089,7 @@ exports.Color = Color;
 // Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Form_1 = __webpack_require__(6);
-const Num_1 = __webpack_require__(3);
+const Num_1 = __webpack_require__(4);
 const Util_1 = __webpack_require__(1);
 const Pt_1 = __webpack_require__(0);
 const Op_1 = __webpack_require__(2);
@@ -7570,7 +7672,8 @@ exports.SVGForm = SVGForm;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
-const Bound_1 = __webpack_require__(4);
+const Bound_1 = __webpack_require__(3);
+const Op_1 = __webpack_require__(2);
 class Physics extends Array {
     static constraintEdge(p1, p2, dist, stiff = 0.9) {
         const m1 = 1 / (p1.mass || 1);
@@ -7626,12 +7729,13 @@ class Physics extends Array {
     }
 }
 exports.Physics = Physics;
-class World extends Array {
-    constructor(...args) {
-        super(...args);
+class World {
+    constructor() {
         this._gravity = new Pt_1.Pt();
         this._friction = 1;
         this._lastTime = null;
+        this._particles = [];
+        this._bodies = [];
     }
     setup(bound, friction = 1, gravity) {
         this._bound = Bound_1.Bound.fromGroup(bound);
@@ -7644,17 +7748,42 @@ class World extends Array {
     set gravity(g) { this._gravity = g; }
     get friction() { return this._friction; }
     set friction(f) { this._friction = f; }
+    get bodyCount() { return this._bodies.length; }
+    get particleCount() { return this._particles.length; }
+    addParticle(p) {
+        this._particles.push(p);
+    }
+    addBody(b) {
+        this._bodies.push(b);
+    }
+    body(index) { return this._bodies[index]; }
+    particle(index) { return this._particles[index]; }
     integrate(p, dt, prevDt) {
         p.addForce(this._gravity.$multiply(p.mass)); // multiply mass to cancel it out later
-        p.positionVerlet(dt, this._friction, prevDt);
+        p.verlet(dt, this._friction, prevDt);
         return p;
     }
     integrateAll(dt, timeCorrected = true) {
         let t = (timeCorrected) ? this._lastTime : undefined;
-        for (let i = 0, len = this.length; i < len; i++) {
+        for (let i = 0, len = this._particles.length; i < len; i++) {
             this.integrate(this[i], dt, t);
         }
+        for (let i = 0, len = this._bodies.length; i < len; i++) {
+            let b = this._bodies[i];
+            for (let k = 0, klen = b.length; k < klen; k++) {
+                this.integrate(b[k], dt, t);
+            }
+        }
         this._lastTime = dt;
+    }
+    constrainAll() {
+        for (let i = 0, len = this._bodies.length; i < len; i++) {
+            let b = this._bodies[i];
+            b.constrain();
+            for (let k = 0, klen = b.length; k < klen; k++) {
+                Physics.constraintBound(b[k], this._bound);
+            }
+        }
     }
 }
 exports.World = World;
@@ -7675,12 +7804,14 @@ class Particle extends Pt_1.Pt {
     set force(g) { this._force = g; }
     get previous() { return this._prev; }
     set previous(p) { this._prev = p; }
+    get body() { return this._body; }
+    set body(b) { this._body = b; }
     get changed() { return this.$subtract(this._prev); }
     addForce(...args) {
         this._force.add(...args);
         return this._force;
     }
-    positionVerlet(dt, friction, lastDt) {
+    verlet(dt, friction, lastDt) {
         // Positional verlet: curr + (curr - prev) + a * dt * dt
         let a = this._force.$divide(this._mass).multiply(dt * dt);
         let t = (lastDt) ? dt / lastDt : 1; // time corrected
@@ -7690,7 +7821,7 @@ class Particle extends Pt_1.Pt {
         this._force = new Pt_1.Pt();
         return this;
     }
-    impulse(...args) {
+    hit(...args) {
         this._prev.subtract(new Pt_1.Pt(...args).$divide(this._mass));
     }
     inertia() {
@@ -7703,6 +7834,74 @@ class Particle extends Pt_1.Pt {
     }
 }
 exports.Particle = Particle;
+class Body extends Pt_1.Group {
+    constructor() {
+        super(...arguments);
+        this._cs = [];
+    }
+    static rectangle(rect, stiff = 0.95) {
+        let pts = Op_1.Rectangle.corners(rect);
+        let body = new Body().init(pts);
+        return body.link(0, 1, stiff).link(1, 2, stiff).link(2, 3, stiff).link(3, 0, stiff).link(1, 3, stiff).link(0, 2, stiff);
+    }
+    init(list) {
+        let c = new Pt_1.Pt();
+        for (let i = 0, len = list.length; i < len; i++) {
+            let p = new Particle(list[i]);
+            p.body = this;
+            c.add(list[i]);
+            this.push(p);
+        }
+        return this;
+    }
+    link(index1, index2, stiff = 0.5) {
+        if (index1 < 0 || index1 >= this.length)
+            throw new Error("index1 is not in the Group's indices");
+        if (index2 < 0 || index2 >= this.length)
+            throw new Error("index1 is not in the Group's indices");
+        let d = this[index1].$subtract(this[index2]).magnitude();
+        this._cs.push([index1, index2, d, stiff]);
+        return this;
+    }
+    constrain() {
+        for (let i = 0, len = this._cs.length; i < len; i++) {
+            let [m, n, d, s] = this._cs[i];
+            Physics.constraintEdge(this[m], this[n], d, s);
+        }
+    }
+    process(b) {
+        let b1 = this;
+        let b2 = b;
+        let hit = Op_1.Polygon.hasIntersectPolygon(b1, b2);
+        if (hit) {
+            let cv = hit.normal.$multiply(hit.dist);
+            let t;
+            let eg = hit.edge;
+            if (Math.abs(eg[0][0] - eg[1][0]) > Math.abs(eg[0][1] - eg[1][1])) {
+                t = (hit.vertex[0] - cv[0] - eg[0][0]) / (eg[1][0] - eg[0][0]);
+            }
+            else {
+                t = (hit.vertex[1] - cv[1] - eg[0][1]) / (eg[1][1] - eg[0][1]);
+            }
+            let lambda = 1 / (t * t + (1 - t) * (1 - t));
+            eg[0].subtract(cv.$multiply((1 - t) * lambda / 2));
+            eg[1].subtract(cv.$multiply(t * lambda / 2));
+            hit.vertex.add(cv.$multiply(0.5));
+        }
+        // let cv = axis.multiply( dist );
+        // let t;
+        // if ( Math.abs( edge[0][0] - edge[1][0] ) > Math.abs( edge[0][1] - edge[1][1] ) ) {
+        //   t = (v[0] - cv[0] - edge[0][0]) / (edge[1][0] - edge[0][0]);
+        // } else {
+        //   t = (v[1] - cv[1] - edge[0][1] )/( edge[1][1] - edge[0][1]);
+        // }
+        // let lambda = 1/(t*t + (1-t)*(1-t));
+        // edge[0].subtract( cv.$multiply( (1-t)*lambda/2 ) );
+        // edge[1].subtract( cv.$multiply( t*lambda/2 ) );
+        // v.add( cv.divide(2) );
+    }
+}
+exports.Body = Body;
 
 
 /***/ })
