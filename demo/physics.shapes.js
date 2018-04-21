@@ -31,7 +31,7 @@ window.demoDescription = "...";
       //   world.push( p );
       // }
 
-      body1[0].hit( new Pt(250, -50));
+      body1[0].hit( new Pt(100, -50));
       body2[0].hit( new Pt(40, -20));
       body3[0].hit( new Pt(60, -50));
 
@@ -49,9 +49,10 @@ window.demoDescription = "...";
       for (let i=0, len=world.bodyCount; i<len; i++) {
         let b = world.body(i);  
         
+        form.fillOnly("#0ab").polygon( b );
         form.strokeOnly("#fff").line( [b[1], b[3]] );
         form.strokeOnly("#fff").line( [b[0], b[2]] );
-        form.strokeOnly("#0ab").polygon( b );
+        
         form.fillOnly("#9ff").point( b[0], 3 );
 
         for (let k=i+1, klen=world.bodyCount; k<len; k++) {

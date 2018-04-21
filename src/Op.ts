@@ -6,6 +6,7 @@ import {Util} from "./Util";
 import {Geom, Num} from "./Num";
 import {Pt, PtLike, Group, GroupLike} from "./Pt";
 import {Mat} from "./LinearAlgebra";
+import { normalize } from "path";
 
 
 let _errorLength = (obj, param:number|string="expected") => Util.warn( "Group's length is less than "+param, obj  );
@@ -1175,6 +1176,62 @@ export class Polygon {
     return _item;
   }
 
+
+  static hasIntersectPoint( poly:GroupLike, pt:PtLike ) {
+
+    let c = false;
+    for (let i=0, len=poly.length; i<len; i++) {
+      let ln = Polygon.lineAt( poly, i );
+      if ( ((ln[0][1]>pt[1]) != (ln[1][1]>pt[1])) &&
+          (pt[0] < (ln[1][0]-ln[0][0]) * (pt[1]-ln[0][1]) / (ln[1][1]-ln[0][1]) + ln[0][0]) ) {
+        c = !c;
+      }
+    }
+    return c;
+
+  }
+
+  static hasIntersectCircle( poly:GroupLike, circle:GroupLike ):IntersectContext {
+    let info = {
+      which: -1, // 0 if vertex is on second polygon and edge is on first polygon. 1 if the other way round.
+      dist: 0,
+      normal: new Pt(), // perpendicular to edge
+      edge: new Group(), // the edge where the intersection occur
+      vertex: new Pt() // the vertex on a polygon that has intersected
+    };
+
+    let minDist = Number.MAX_SAFE_INTEGER;
+    let side = 1;
+
+    for (let i=0, len=poly.length; i<len; i++) {
+      let p = Line.perpendicularFromPt( Polygon.lineAt( poly, i ), circle[0] );
+
+      let edge = Polygon.lineAt( poly, i );
+      let d = p.$subtract( circle[0] );
+      let dm = d.magnitudeSq();
+
+      
+      
+      if (dm < minDist && Rectangle.withinBound( edge, p )) {
+        minDist = dm;
+        info.vertex = p;
+        info.edge = edge;
+        info.normal = d;
+        side = Line.sideOfPt2D( edge, circle[0] );
+        side = side/Math.abs(side);
+      }
+    }
+
+    if (minDist < circle[1][0]*circle[1][0] || Polygon.hasIntersectPoint( poly, circle[0] ) ) {
+      let dist = Math.sqrt( minDist );
+      info.normal.divide(dist).multiply( -side );
+      info.dist = circle[1][0] + dist*side; 
+      return info;
+    } else {
+      return null;
+    }
+    
+  }
   
 
   /**
@@ -1197,7 +1254,7 @@ export class Polygon {
 
     let minDist = Number.MAX_SAFE_INTEGER;
 
-    for (let i=0; i<(poly1.length + poly2.length); i++) {
+    for (let i=0, plen=(poly1.length + poly2.length); i<plen; i++) {
       
       let edge = (i < poly1.length) ? Polygon.lineAt( poly1, i ) : Polygon.lineAt( poly2, i-poly1.length );
       let axis = new Pt( edge[0].y - edge[1].y, edge[1].x - edge[0].x ).unit(); // unit of a perpendicular vector

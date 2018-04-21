@@ -6,7 +6,7 @@ import { Rectangle, Polygon } from "./Op";
 
 export class Physics extends Array<Particle> {
 
-  static constraintEdge( p1:Particle, p2:Particle, dist:number, stiff:number=0.9 ) {
+  static constraintEdge( p1:Particle, p2:Particle, dist:number, stiff:number=0.95 ) {
     const m1 = 1 / (p1.mass || 1);
     const m2 = 1 / (p2.mass || 1);
     const mm = m1 + m2;
@@ -24,7 +24,7 @@ export class Physics extends Array<Particle> {
 
 
 
-  static constraintBound( p:Particle, rect:Group, damp:number=0.9, keepImpulse:boolean=true ) {
+  static constraintBound( p:Particle, rect:Group, damp:number=0.95, keepImpulse:boolean=true ) {
     let bound = rect.boundingBox();
     let np = p.$min( bound[1].subtract( p.radius ) ).$max( bound[0].add( p.radius ) );
 
@@ -42,7 +42,7 @@ export class Physics extends Array<Particle> {
   }
 
   // Inspired by http://codeflow.org/entries/2010/nov/29/verlet-collision-with-impulse-preservation/
-  static collideParticle( p1:Particle, p2:Particle, damp:number=0.9, keepImpulse:boolean=true ) {
+  static collideParticle( p1:Particle, p2:Particle, damp:number=0.95, keepImpulse:boolean=true ) {
     let dp = p1.$subtract( p2 );
     let distSq = dp.magnitudeSq();
     let dr = p1.radius + p2.radius;
@@ -257,7 +257,7 @@ export class Body extends Group {
 
 
 
-  link( index1:number, index2:number, stiff:number=0.5 ):this {
+  link( index1:number, index2:number, stiff:number=0.95 ):this {
     if (index1 < 0 || index1 >= this.length) throw new Error( "index1 is not in the Group's indices");
     if (index2 < 0 || index2 >= this.length) throw new Error( "index1 is not in the Group's indices");
 

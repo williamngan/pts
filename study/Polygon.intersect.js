@@ -27,23 +27,43 @@ space.add( {
     let poly = new Group( space.pointer.subtract(90, 30), space.pointer.add(30, 10), space.pointer.add(20, 80), space.pointer.add( -50, 40) ); 
     let convex = Polygon.convexHull( pts );
 
+    let circle = new Group( space.pointer.$subtract( space.size ).abs(), new Pt(50,50) );
+
     poly.rotate2D( Geom.toRadian(ang), space.pointer );
 
-    let inpts = Polygon.intersect2D( poly, convex );
-    form.points( inpts );
+    
 
     let hit = Polygon.hasIntersectPolygon( poly, convex );
+    let hitc = Polygon.hasIntersectCircle( convex, circle );
 
     if (hit) {
-      form.stroke("#f00", 5);
+      let pnt = Polygon.intersect2D( poly, convex );
+      form.points( pnt );
+
+      form.stroke("#f03", 5);
       form.line( hit.edge );
       form.line( [hit.vertex, hit.vertex.$add( hit.normal.$multiply( hit.dist ) )] );
       form.point( hit.vertex, 5);
       
     }
 
-    form.stroke("#000", 1).polygon( convex );
-    form.stroke("#f00", 1 ).polygon( poly );
+    let inside = Polygon.hasIntersectPoint( convex, circle[0] );
+    
+    if (inside) form.fillOnly("#999").point( circle[0], 5 );
+
+    if (hitc) {
+      form.stroke("#06f", 3);
+      form.line( hitc.edge );
+      // form.line( [circle[0], circle[0].$add( hitc.normal.$multiply( hitc.dist ) )] );
+      form.line( [ hitc.vertex, hitc.vertex.$add( hitc.normal.$multiply( hitc.dist ) )] );
+      form.point( hitc.vertex, 5);
+    }
+
+
+    form.strokeOnly("#000", 1).polygon( convex );
+    form.stroke("#0f3", 1 ).polygon( poly ).circle( circle );
+
+    
 
     // End
   },

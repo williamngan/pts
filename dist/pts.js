@@ -2054,6 +2054,51 @@ class Polygon {
         }
         return _item;
     }
+    static hasIntersectPoint(poly, pt) {
+        let c = false;
+        for (let i = 0, len = poly.length; i < len; i++) {
+            let ln = Polygon.lineAt(poly, i);
+            if (((ln[0][1] > pt[1]) != (ln[1][1] > pt[1])) &&
+                (pt[0] < (ln[1][0] - ln[0][0]) * (pt[1] - ln[0][1]) / (ln[1][1] - ln[0][1]) + ln[0][0])) {
+                c = !c;
+            }
+        }
+        return c;
+    }
+    static hasIntersectCircle(poly, circle) {
+        let info = {
+            which: -1,
+            dist: 0,
+            normal: new Pt_1.Pt(),
+            edge: new Pt_1.Group(),
+            vertex: new Pt_1.Pt() // the vertex on a polygon that has intersected
+        };
+        let minDist = Number.MAX_SAFE_INTEGER;
+        let side = 1;
+        for (let i = 0, len = poly.length; i < len; i++) {
+            let p = Line.perpendicularFromPt(Polygon.lineAt(poly, i), circle[0]);
+            let edge = Polygon.lineAt(poly, i);
+            let d = p.$subtract(circle[0]);
+            let dm = d.magnitudeSq();
+            if (dm < minDist && Rectangle.withinBound(edge, p)) {
+                minDist = dm;
+                info.vertex = p;
+                info.edge = edge;
+                info.normal = d;
+                side = Line.sideOfPt2D(edge, circle[0]);
+                side = side / Math.abs(side);
+            }
+        }
+        if (minDist < circle[1][0] * circle[1][0] || Polygon.hasIntersectPoint(poly, circle[0])) {
+            let dist = Math.sqrt(minDist);
+            info.normal.divide(dist).multiply(-side);
+            info.dist = circle[1][0] + dist * side;
+            return info;
+        }
+        else {
+            return null;
+        }
+    }
     /**
      * Check if two polygons has intersections using Separating Axis Theorem.
      * @param poly1 a Group representing a polygon
@@ -2070,7 +2115,7 @@ class Polygon {
             vertex: new Pt_1.Pt() // the vertex on a polygon that has intersected
         };
         let minDist = Number.MAX_SAFE_INTEGER;
-        for (let i = 0; i < (poly1.length + poly2.length); i++) {
+        for (let i = 0, plen = (poly1.length + poly2.length); i < plen; i++) {
             let edge = (i < poly1.length) ? Polygon.lineAt(poly1, i) : Polygon.lineAt(poly2, i - poly1.length);
             let axis = new Pt_1.Pt(edge[0].y - edge[1].y, edge[1].x - edge[0].x).unit(); // unit of a perpendicular vector
             // project axis
@@ -7675,7 +7720,7 @@ const Pt_1 = __webpack_require__(0);
 const Bound_1 = __webpack_require__(3);
 const Op_1 = __webpack_require__(2);
 class Physics extends Array {
-    static constraintEdge(p1, p2, dist, stiff = 0.9) {
+    static constraintEdge(p1, p2, dist, stiff = 0.95) {
         const m1 = 1 / (p1.mass || 1);
         const m2 = 1 / (p2.mass || 1);
         const mm = m1 + m2;
@@ -7687,7 +7732,7 @@ class Physics extends Array {
         p2.add(f.$multiply(m2 / mm));
         return p1;
     }
-    static constraintBound(p, rect, damp = 0.9, keepImpulse = true) {
+    static constraintBound(p, rect, damp = 0.95, keepImpulse = true) {
         let bound = rect.boundingBox();
         let np = p.$min(bound[1].subtract(p.radius)).$max(bound[0].add(p.radius));
         if (keepImpulse) {
@@ -7703,7 +7748,7 @@ class Physics extends Array {
         p.to(np);
     }
     // Inspired by http://codeflow.org/entries/2010/nov/29/verlet-collision-with-impulse-preservation/
-    static collideParticle(p1, p2, damp = 0.9, keepImpulse = true) {
+    static collideParticle(p1, p2, damp = 0.95, keepImpulse = true) {
         let dp = p1.$subtract(p2);
         let distSq = dp.magnitudeSq();
         let dr = p1.radius + p2.radius;
@@ -7854,7 +7899,7 @@ class Body extends Pt_1.Group {
         }
         return this;
     }
-    link(index1, index2, stiff = 0.5) {
+    link(index1, index2, stiff = 0.95) {
         if (index1 < 0 || index1 >= this.length)
             throw new Error("index1 is not in the Group's indices");
         if (index2 < 0 || index2 >= this.length)
