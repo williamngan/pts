@@ -18,7 +18,7 @@ export type IntersectContext = {
   normal: Pt,
   vertex: Pt,
   edge: Group,
-  temp?: any
+  other?: any
 };
 
 
@@ -278,7 +278,7 @@ export class Line {
 
   /**
    * Quick way to check rectangle intersection. 
-   * For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersect2D()`.
+   * For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersectPolygon2D()`.
    * @param line a Group representing a line
    * @param rect a Group representing a rectangle
    * @returns a Group of intersecting Pts
@@ -578,7 +578,7 @@ export class Rectangle {
 
   /**
    * Quick way to check rectangle intersection. 
-   * For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersect2D()`.
+   * For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersectPolygon2D()`.
    * @param rect1 a Group of 2 Pts representing a rectangle
    * @param rect2 a Group of 2 Pts representing a rectangle
    */
@@ -725,7 +725,7 @@ export class Circle {
 
   /**
    * Quick way to check rectangle intersection with a circle. 
-   * For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersect2D()`.
+   * For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersectPolygon2D()`.
    * @param pts a Group of 2 Pts representing a circle
    * @param rect a Group of 2 Pts representing a rectangle
    * @returns a Group of intersection points, or an empty Group if no intersection is found
@@ -1134,22 +1134,6 @@ export class Polygon {
 
 
   /**
-   * Find intersection points of 2 polygons
-   * @param poly1 a Group representing a polygon 
-   * @param poly2 another Group representing a polygon
-   */
-  static intersect2D( poly1:GroupLike, poly2:GroupLike ):Group {
-    let lp = Polygon.lines( poly1 );
-    let g = [];
-    for (let i=0, len=lp.length; i<len; i++) {
-      let ins = Line.intersectPolygon2D( lp[i], poly2, false );
-      if (ins) g.push( ins );
-    }
-    return Util.flatten( g, true ) as Group;
-  }
-
-
-  /**
    * Given a point in the polygon as an origin, get an array of lines that connect all the remaining points to the origin point.
    * @param pts a Group representing a polygon
    * @param originIndex the origin point's index in the polygon
@@ -1183,7 +1167,41 @@ export class Polygon {
   }
 
 
-  static hasIntersectPoint( poly:GroupLike, pt:PtLike ) {
+  /**
+   * Project axis (eg, for use in Separation Axis Theorem)
+   * @param poly 
+   * @param unitAxis 
+   */
+  static projectAxis( poly:GroupLike, unitAxis:Pt ):Pt {
+    let dot = unitAxis.dot( poly[0] );
+    let d = new Pt(dot, dot);
+    for (let n=1, len=poly.length; n<len; n++) {
+      dot = unitAxis.dot( poly[n] );
+      d = new Pt(Math.min( dot, d[0] ), Math.max( dot, d[1] ));
+    }
+    return d;
+  }
+
+
+  /**
+   * Check overlap dist from projected axis
+   * @param poly1 first polygon
+   * @param poly2 second polygon
+   * @param unitAxis unit axis
+   */
+  protected static _axisOverlap( poly1, poly2, unitAxis ) {
+    let pa = Polygon.projectAxis( poly1, unitAxis );
+    let pb = Polygon.projectAxis( poly2, unitAxis );
+    return ( pa[0] < pb[0] ) ? pb[0]-pa[1] : pa[0]-pb[1];
+  }
+
+
+  /**
+   * Check if a Pt is inside a convex polygon 
+   * @param poly a Group of Pt defining a convex polygon
+   * @param pt the Pt to check
+   */
+  static hasIntersectPoint( poly:GroupLike, pt:PtLike ):boolean {
 
     let c = false;
     for (let i=0, len=poly.length; i<len; i++) {
@@ -1198,6 +1216,12 @@ export class Polygon {
   }
 
 
+  /**
+   * Check if a convex polygon and a circle has intersections using Separating Axis Theorem. 
+   * @param poly a Group representing a convex polygon
+   * @param circle a Group representing a circle
+   * @returns an `IntersectContext` object that stores the intersection info, or undefined if there's no intersection
+   */
   static hasIntersectCircle( poly:GroupLike, circle:GroupLike ):IntersectContext {
     let info = {
       which: -1, // 0 if vertex is on second polygon and edge is on first polygon. 1 if the other way round.
@@ -1205,298 +1229,55 @@ export class Polygon {
       normal: null, // perpendicular to edge
       edge: null, // the edge where the intersection occur
       vertex: null, // the vertex on a polygon that has intersected
-      temp: {}
     };
 
+    let c = circle[0];
     let r = circle[1][0];
-    let r2 = r*r;
+
     let minDist = Number.MAX_SAFE_INTEGER;
-    let poly2;
-
-    const project = ( ps, a ) => {
-      let dot = a.dot( ps[0] );
-      let d = [dot, dot];
-      for (let n=1, len=ps.length; n<len; n++) {
-        dot = a.dot( ps[n] );
-        d = [Math.min( dot, d[0] ), Math.max( dot, d[1] )];
-      }
-      return d;
-    };
-
-    let nearest = Number.MAX_SAFE_INTEGER;
-    let nearestVertex = 0;
-    for (let i=0, len=poly.length; i<len; i++) {
-      let m = Math.min( poly[i].$subtract( circle[0] ).magnitudeSq() );
-      if (m < nearest) {
-        nearestVertex = i;
-        nearest = m;
-      }
-    }
-
-    var pa, pb;
-
-    // let qaxis = circle[0].$subtract( nearestVertex ).$unit();
-    
-    // let qpoly = new Group( circle[0].$subtract( qaxis.multiply( r ) ), circle[0].$add( qaxis.multiply( r ) ) );
-
-    // console.log( qaxis );
-    // pa = project( poly, qaxis );
-    // pb = project( qpoly, qaxis );
-    // let qdist = ( pa[0] < pb[0] ) ? pb[0]-pa[1] : pa[0]-pb[1];
-
-    // if (qdist > 0) {
-    //   return null;
-    // } else if ( Math.abs(qdist) < minDist ) {
-    //   info.edge = Polygon.lineAt( poly, 0 );
-    //   info.normal = qaxis;
-    //   minDist = Math.abs(qdist);
-    //   info.which = 0;
-    //   info.temp = qpoly;
-    // }
-
+  
     for (let i=0, len=poly.length; i<len; i++) {
       let edge = Polygon.lineAt( poly, i );
       let axis = new Pt( edge[0].y - edge[1].y, edge[1].x - edge[0].x ).unit();
-      let en = new Pt( axis[1], -axis[0] ).$multiply( r );
-
-
-      // let pp = Line.perpendicularFromPt( edge, circle[0] );
-      // let p = circle[0].$subtract( pp );
-
-      poly2 = new Group( circle[0].$add( en ), circle[0].$add( axis.$multiply( r ) ), circle[0].$subtract(en), circle[0].$subtract( axis.$multiply( r ) ) );
+      let poly2 = new Group( c.$add( axis.$multiply( r ) ), c.$subtract( axis.$multiply( r ) ) );
     
-      pa = project( poly, axis );
-      pb = project( poly2, axis );
-      let dist = ( pa[0] < pb[0] ) ? pb[0]-pa[1] : pa[0]-pb[1];
+      let dist = Polygon._axisOverlap( poly, poly2, axis );
 
       if (dist > 0) {
         return null;
       } else if ( Math.abs(dist) < minDist ) {
+        // Fix edge case and make sure the circle is intersecting. To be improved.
+        let check = Rectangle.withinBound( edge, Line.perpendicularFromPt( edge, c) ) || Circle.intersectLine2D( circle, edge ).length > 0;
 
-        let check = Rectangle.withinBound( edge, Line.perpendicularFromPt( edge, circle[0]) ) || Circle.intersectLine2D( circle, edge ).length > 0;
         if (check) {
           info.edge = edge;
           info.normal = axis;
           minDist = Math.abs(dist);
           info.which = i;
-          info.temp = poly2;
         }
       }
 
     }
     
     if (!info.edge) return null;
-    
-
-    info.dist = minDist;
-
-
-    // flip if neded to make sure vertex and edge are in corresponding polygons
-    // let b1 = (info.which === 0) ? poly2 : poly;
-    // let b2 = (info.which === 0) ? poly : poly2;
-    
-    // let c1 = Polygon.centroid( b1 );
-    // let c2 = Polygon.centroid( b2 );
-
-    let b2 = circle[0];
-    let b1 = poly;
-    let c2 = Polygon.centroid( b1 );
-    let c1 = circle[0];
 
     // direction
-    let dir = c1.$subtract( c2 ).dot( info.normal );
+    let dir = c.$subtract( Polygon.centroid( poly ) ).dot( info.normal );
     if (dir<0) info.normal.multiply(-1);
 
-    info.vertex = circle[0];
+    info.dist = minDist;
+    info.vertex = c;
 
     return info;
 
   }
 
-  /*
-  static hasIntersectCircle( poly:GroupLike, circle:GroupLike ):IntersectContext {
-    let info = {
-      which: -1, // 0 if vertex is on second polygon and edge is on first polygon. 1 if the other way round.
-      dist: 0,
-      normal: null, // perpendicular to edge
-      edge: null, // the edge where the intersection occur
-      vertex: null, // the vertex on a polygon that has intersected
-      temp: {}
-    };
-
-    let r2 = circle[1][0] * circle[1][0];
-    let poly2;
-    let minDist = Number.MAX_SAFE_INTEGER;
-    let minN = Number.MAX_SAFE_INTEGER;
-
-    // project axis
-    const project = ( ps, a ) => {
-      let dot = a.dot( ps[0] );
-      let d = [dot, dot];
-      for (let n=1, len=ps.length; n<len; n++) {
-        dot = a.dot( ps[n] );
-        d = [Math.min( dot, d[0] ), Math.max( dot, d[1] )];
-      }
-      return d;
-    };
-
-    for (let i=0, len=poly.length; i<len; i++) {
-
-      let edge = Polygon.lineAt( poly, i );
-      let ips = Circle.intersectLine2D( circle, edge );
-
-      if (ips.length <= 0 && !Polygon.hasIntersectPoint( poly, circle[0] ) ) continue;
-      
-      let axis = new Pt( edge[0].y - edge[1].y, edge[1].x - edge[0].x ).unit();
-
-      let p = Line.perpendicularFromPt( edge, circle[0] );
-      let d = p.$subtract( circle[0] );
-      let dm = d.magnitudeSq();
-      
-      let dn = r2 - dm;
-
-      // if ( (dm < r2 && ips.length > 0)  ) {
-        
-      if ( dn < minN) {
-        minN = dn;
-
-        let n = d.divide( Math.sqrt( dm ) );
-        let p1 = circle[0].$add( n.$multiply( circle[1][0] ) );
-
-        let pa = project( poly, axis );
-        poly2 = new Group( circle[0], p1 );
-        let pb = project( poly2, axis );
-        let dist = ( pa[0] < pb[0] ) ? pb[0]-pa[1] : pa[0]-pb[1];
-
-        if (dist > 0) {
-          return null;
-        } else if ( Math.abs(dist) < minDist ) {
-          info.edge = edge;
-          info.normal = axis;
-          minDist = Math.abs(dist);
-          minN = dn;
-          info.which = (i < poly.length) ? 0 : 1;
-        }
-      }
-
-    }
-
-    if (!poly2) return null;
-
-    info.dist = minDist;
-
-    // flip if neded to make sure vertex and edge are in corresponding polygons
-    // let b1 = (info.which === 0) ? poly2 : poly;
-    // let b2 = (info.which === 0) ? poly : poly2;
-    
-    // let c1 = Polygon.centroid( b1 );
-    // let c2 = Polygon.centroid( b2 );
-
-    let b2 = poly2;
-    let b1 = poly;
-    let c2 = Polygon.centroid( b1 );
-    let c1 = circle[0];
-
-
-    // direction
-    let dir = c1.$subtract( c2 ).dot( info.normal );
-    if (dir<0) info.normal.multiply(-1);
-
-    // find vertex at smallest distance
-    // let smallest = Number.MAX_SAFE_INTEGER; 
-    // for (let i=0, len=b1.length; i<len; i++) {
-    //   let d = info.normal.dot( b1[i].$subtract( c2 ) );
-    //   if ( d < smallest) {
-    //     smallest = d;
-    //     info.vertex = b1[i];
-    //   }
-    // }
-
-    info.vertex = circle[0];
-
-    return info;
-
-  }
-  */
-
-  /*
-  static hasIntersectCircle( poly:GroupLike, circle:GroupLike ):IntersectContext {
-    let info = {
-      which: -1, // 0 if vertex is on second polygon and edge is on first polygon. 1 if the other way round.
-      dist: 0,
-      normal: null, // perpendicular to edge
-      edge: null, // the edge where the intersection occur
-      vertex: null, // the vertex on a polygon that has intersected
-      temp: {}
-    };
-
-    let minDist = Number.MAX_SAFE_INTEGER;
-    let side = 1;
-    let r2 = circle[1][0]*circle[1][0];
-
-    for (let i=0, len=poly.length; i<len; i++) {
-      let p = Line.perpendicularFromPt( Polygon.lineAt( poly, i ), circle[0] );
-
-      let edge = Polygon.lineAt( poly, i );
-      let d = p.$subtract( circle[0] );
-      let dm = r2 - d.magnitudeSq();
-
-      side = Line.sideOfPt2D( edge, circle[0] );
-      side = side/Math.abs(side);
-      
-      // && ( circle[0].$subtract( edge[0] ).magnitudeSq() < r2 || circle[0].$subtract( edge[1] ).magnitudeSq() < r2  )
-      let _p = Circle.intersectRay2D( circle, edge );
-      // if (!_p || _p.length === 0) continue;
-
-      if (_p.length > 0) {
-        // console.log( i, (Rectangle.withinBound( edge, _p[0] ) || Rectangle.withinBound( edge, _p[1] ) ) );
-      }
-
-      if ( _p.length !== 0 && dm < minDist && (Rectangle.withinBound( edge, _p[0] ) || Rectangle.withinBound( edge, _p[1] ) ) ) {
-
-        if (i === 2 || i === 3 || i === 4) {
-          console.log( i, ">>>", dm );
-        }
-
-        minDist = dm;
-        info.vertex = p;
-        info.edge = edge;
-        info.normal = d;
-
-        info.temp = { p: p.clone(), q: d.$multiply(-1), ri: _p };
-      }
-    }
-
-    if (!info.edge) return null;
-
-    if ( Polygon.hasIntersectPoint( poly, circle[0] ) ) {
-      
-      side = Line.sideOfPt2D( info.edge, circle[0] );
-      side = side/Math.abs(side);
-
-      let dist = Math.sqrt( (minDist-r2 ) * -1 );
-
-      info.normal.unit().multiply( side );
-      
-      info.dist = circle[1][0] - dist*-side; 
-
-      // info.normal.divide(dist);
-      // info.dist = dist; 
-      info.vertex = circle[0];
-      return info;
-    } else {
-      return null;
-    }
-    
-  }
-  */
-  
 
   /**
-   * Check if two polygons has intersections using Separating Axis Theorem. 
-   * @param poly1 a Group representing a polygon
-   * @param poly2 a Group representing a polygon
-   * @return an object that stores the intersection info, or undefined if there's no intersection
+   * Check if two convex polygons has intersections using Separating Axis Theorem. 
+   * @param poly1 a Group representing a convex polygon
+   * @param poly2 a Group representing a convex polygon
+   * @return an `IntersectContext` object that stores the intersection info, or undefined if there's no intersection
    */
   static hasIntersectPolygon( poly1:GroupLike, poly2:GroupLike ):IntersectContext {
     
@@ -1512,29 +1293,15 @@ export class Polygon {
 
     let minDist = Number.MAX_SAFE_INTEGER;
 
-    // project axis
-    const project = ( ps, a ) => {
-      let dot = a.dot( ps[0] );
-      let d = [dot, dot];
-      for (let n=1, len=ps.length; n<len; n++) {
-        dot = a.dot( ps[n] );
-        d = [Math.min( dot, d[0] ), Math.max( dot, d[1] )];
-      }
-      return d;
-    };
 
     for (let i=0, plen=(poly1.length + poly2.length); i<plen; i++) {
       
       let edge = (i < poly1.length) ? Polygon.lineAt( poly1, i ) : Polygon.lineAt( poly2, i-poly1.length );
       let axis = new Pt( edge[0].y - edge[1].y, edge[1].x - edge[0].x ).unit(); // unit of a perpendicular vector
-      
-      let pa = project( poly1, axis );
-      let pb = project( poly2, axis );
-      let dist = ( pa[0] < pb[0] ) ? pb[0]-pa[1] : pa[0]-pb[1];
+      let dist = Polygon._axisOverlap( poly1, poly2, axis );
 
       if (dist > 0) {
         return null;
-
       } else if ( Math.abs(dist) < minDist) {
         // store intersected edge and a normal vector
         info.edge = edge;
@@ -1568,6 +1335,22 @@ export class Polygon {
     }
 
     return info;
+  }
+
+
+  /**
+   * Find intersection points of 2 polygons by checking every side of both polygons
+   * @param poly1 a Group representing a polygon 
+   * @param poly2 another Group representing a polygon
+   */
+  static intersectPolygon2D( poly1:GroupLike, poly2:GroupLike ):Group {
+    let lp = Polygon.lines( poly1 );
+    let g = [];
+    for (let i=0, len=lp.length; i<len; i++) {
+      let ins = Line.intersectPolygon2D( lp[i], poly2, false );
+      if (ins) g.push( ins );
+    }
+    return Util.flatten( g, true ) as Group;
   }
 
 
