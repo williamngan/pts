@@ -305,7 +305,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
     return this.dot( ...args ) / this.magnitude();
   }
 
-  
+
   /**
    * Absolute values for all values in this pt
    */

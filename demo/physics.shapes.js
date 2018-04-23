@@ -25,26 +25,31 @@ window.demoDescription = "...";
       world.addBody( body2 );
       world.addBody( body3 );
 
+      let pk1 = new Particle( new Pt( space.center.x, space.center.y-20 ) );
+      pk1.mass = 1;
+      pk1.radius = 20;
+      world.addParticle( pk1 );
+      pk1.hit( [25, -15] );
+
       // for (let i=0, len=rect.length; i<len; i++) {
       //   let p = new Particle( rect[i] );
       //   p.mass = 5;
       //   world.push( p );
       // }
 
-      body1[0].hit( new Pt(100, -50));
-      body2[0].hit( new Pt(40, -20));
-      body3[0].hit( new Pt(60, -50));
+      // body1[0].hit( new Pt(100, -50));
+      // body2[0].hit( new Pt(40, -20));
+      // body3[0].hit( new Pt(60, -50));
 
     },
 
     animate: (time, ftime) => {
 
-
-      
-      
       // let diagonal = Math.sqrt( 20000 );
       // Physics.constraintEdge( world[1], world[3], diagonal );
       // Physics.constraintEdge( world[0], world[2], diagonal );
+
+      let pk1 = world.particle(0);
 
       for (let i=0, len=world.bodyCount; i<len; i++) {
         let b = world.body(i);  
@@ -58,6 +63,9 @@ window.demoDescription = "...";
         for (let k=i+1, klen=world.bodyCount; k<len; k++) {
           b.process( world.body(k) );
         }
+
+        b.processParticle( pk1 );
+        form.fillOnly("#f00").point( pk1, pk1.radius, "circle" );
       }
 
       // world.body(0).process( world.body(1) );

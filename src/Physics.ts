@@ -1,7 +1,7 @@
 
 import {Pt, PtLike, Group, GroupLike} from "./Pt";
 import {Bound} from "./Bound";
-import { Rectangle, Polygon } from "./Op";
+import { Rectangle, Polygon, Circle } from "./Op";
 
 
 export class Physics extends Array<Particle> {
@@ -122,6 +122,7 @@ export class World {
 
 
   integrate( p:Particle, dt:number, prevDt?:number ):Particle {
+    
 
     p.addForce( this._gravity.$multiply( p.mass ) ); // multiply mass to cancel it out later
     p.verlet( dt, this._friction, prevDt );
@@ -134,7 +135,7 @@ export class World {
     let t = (timeCorrected) ? this._lastTime : undefined;
     
     for (let i=0, len=this._particles.length; i<len; i++) {
-      this.integrate( this[i], dt, t );
+      this.integrate( this._particles[i], dt, t );
     }
 
     for (let i=0, len=this._bodies.length; i<len; i++) {
@@ -155,6 +156,10 @@ export class World {
       for (let k=0, klen=b.length; k<klen; k++) {
         Physics.constraintBound( b[k] as Particle, this._bound );
       }
+    }
+
+    for (let i=0, len=this._particles.length; i<len; i++) {
+      Physics.constraintBound( this._particles[i], this._bound );
     }
   }
 
@@ -275,6 +280,7 @@ export class Body extends Group {
   }
 
 
+
   process( b:Body ) {
 
     let b1 = this;
@@ -318,6 +324,42 @@ export class Body extends Group {
     // v.add( cv.divide(2) );
   }
 
+
+  processParticle( b:Particle ) {
+
+    let b1 = this;
+    let b2 = b;
+
+    let hit = Polygon.hasIntersectCircle( b1, Circle.fromCenter( b, b.radius ) );
+
+    if (hit) {
+      let cv = hit.normal.$multiply( hit.dist );
+    
+      let t;    
+      let eg = hit.edge;
+      if ( Math.abs( eg[0][0] - eg[1][0] ) > Math.abs( eg[0][1] - eg[1][1] ) ) {
+        t = ( hit.vertex[0] - cv[0] - eg[0][0]) / (eg[1][0] - eg[0][0]);
+      } else {
+        t = ( hit.vertex[1] - cv[1] - eg[0][1] )/( eg[1][1] - eg[0][1]);
+      }
+
+      let lambda = 1/(t*t + (1-t)*(1-t));
+
+      eg[0].subtract( cv.$multiply( (1-t)*lambda/2 ) );
+      eg[1].subtract( cv.$multiply( t*lambda/2 ) );
+
+      // hit.vertex.add( cv.$multiply(0.5) );
+
+      let c1 = b.changed;
+      c1.add( cv.$multiply(0.5) );
+
+      // console.log( cv.toString(), hit.dist, hit.normal );
+      // c2.add( df.multiply(-dm1) );
+
+      b.previous = b.$subtract( c1 );
+      // p2.previous = p2.$subtract( c2 );
+    }
   
+  }
 
 }

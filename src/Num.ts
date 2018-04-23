@@ -403,10 +403,11 @@ export class Geom {
    */
   static reflect2D( ps:Pt|GroupLike, line:GroupLike, axis?:string ):Geom {
     let pts = (!Array.isArray(ps)) ? [ps] : ps;
+    let mat = Mat.reflectAt2DMatrix(line[0], line[1]);
 
     for (let i = 0, len = pts.length; i < len; i++) {
       let p = (axis) ? pts[i].$take(axis) : pts[i];
-      p.to(Mat.transform2D(p, Mat.reflectAt2DMatrix(line[0], line[1])));
+      p.to(Mat.transform2D(p, mat));
     }
 
     return Geom;
