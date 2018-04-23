@@ -1834,6 +1834,23 @@ class Polygon {
         return Num_1.Geom.centroid(pts);
     }
     /**
+     * Create a rectangular polygon
+     * @param center center point of the rectangle
+     * @param widthOrSize width as number, or a Pt representing the size of the rectangle
+     * @param height optional height
+     */
+    static rectangle(center, widthOrSize, height) {
+        return Rectangle.corners(Rectangle.fromCenter(center, widthOrSize, height));
+    }
+    static fromCenter(center, radius, sides) {
+        let g = new Pt_1.Group();
+        for (let i = 0; i < sides; i++) {
+            let ang = Math.PI * 2 * i / sides;
+            g.push(new Pt_1.Pt(Math.cos(ang) * radius, Math.sin(ang) * radius).add(center));
+        }
+        return g;
+    }
+    /**
      * Given a Group of Pts that defines a polygon, get one edge using an index
      * @param pts a Group
      * @param idx index of a Pt in the Group
@@ -7923,10 +7940,38 @@ class Body extends Pt_1.Group {
         super(...arguments);
         this._cs = [];
     }
+    static fromGroup(list, autoLink = false, stiff = 0.95) {
+        let b = new Body().init(list);
+        if (autoLink)
+            b.linkAll(stiff);
+        return b;
+        // return Body.from( list ) as Body;
+        // let b = new Body();
+        // for (let i=0, len=list.length; i<len; i++) {
+        //   b.push( list[i] );
+        // }
+        // return b;
+    }
     static rectangle(rect, stiff = 0.95) {
         let pts = Op_1.Rectangle.corners(rect);
         let body = new Body().init(pts);
         return body.link(0, 1, stiff).link(1, 2, stiff).link(2, 3, stiff).link(3, 0, stiff).link(1, 3, stiff).link(0, 2, stiff);
+    }
+    linkAll(stiff = 0.95) {
+        let half = this.length / 2;
+        for (let i = 0, len = this.length; i < len; i++) {
+            let n = (i >= len - 1) ? 0 : i + 1;
+            this.link(i, n, stiff);
+            if (len > 4) {
+                let nd = (Math.floor(half / 2)) + 1;
+                console.log(nd);
+                let n2 = (i >= len - nd) ? i % len : i + nd;
+                this.link(i, n2, stiff);
+            }
+            if (i <= half - 1) {
+                this.link(i, Math.min(this.length - 1, i + Math.floor(half)));
+            }
+        }
     }
     init(list) {
         let c = new Pt_1.Pt();
@@ -7946,6 +7991,14 @@ class Body extends Pt_1.Group {
         let d = this[index1].$subtract(this[index2]).magnitude();
         this._cs.push([index1, index2, d, stiff]);
         return this;
+    }
+    linksToLines() {
+        let gs = [];
+        for (let i = 0, len = this._cs.length; i < len; i++) {
+            let ln = this._cs[i];
+            gs.push(new Pt_1.Group(this[ln[0]], this[ln[1]]));
+        }
+        return gs;
     }
     constrain() {
         for (let i = 0, len = this._cs.length; i < len; i++) {

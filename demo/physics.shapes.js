@@ -18,18 +18,23 @@ window.demoDescription = "...";
     start: (bound, space) => {
       world = new World().setup( space.innerBound, 0.99, new Pt(0, 1000) );
       
-      let body1 = Body.rectangle( Rectangle.fromCenter( space.center, 50 ) );
-      let body2 = Body.rectangle( Rectangle.fromCenter( space.center.subtract(100,50), 100 ) );
-      let body3 = Body.rectangle( Rectangle.fromCenter( space.center.subtract(50,-150), 80 ) );
+      // let body1 = Body.rectangle( Rectangle.fromCenter( space.center, 50 ) );
+      let body1 = Body.fromGroup( Polygon.fromCenter( space.center, 70, 6, 0.4 ), true );
+      let body2 = Body.fromGroup( Polygon.fromCenter( space.center.subtract(100,50), 30, 4 ), true );
+      let body3 = Body.fromGroup( Polygon.fromCenter( space.center.subtract(50,-150), 50, 3 ), true );
+
+      
+      // let body2 = Body.rectangle( Rectangle.fromCenter( space.center.subtract(100,50), 100 ) );
+      // let body3 = Body.rectangle( Rectangle.fromCenter( space.center.subtract(50,-150), 80 ) );
       world.addBody( body1 );
       world.addBody( body2 );
       world.addBody( body3 );
 
-      let pk1 = new Particle( new Pt( space.center.x, space.center.y-20 ) );
-      pk1.mass = 1;
-      pk1.radius = 20;
+      let pk1 = new Particle( new Pt( 0, space.center.y-20 ) );
+      pk1.mass = 2;
+      pk1.radius = 30;
       world.addParticle( pk1 );
-      pk1.hit( [25, -15] );
+      pk1.hit( [50, -10] );
 
       // for (let i=0, len=rect.length; i<len; i++) {
       //   let p = new Particle( rect[i] );
@@ -37,9 +42,9 @@ window.demoDescription = "...";
       //   world.push( p );
       // }
 
-      // body1[0].hit( new Pt(100, -50));
-      // body2[0].hit( new Pt(40, -20));
-      // body3[0].hit( new Pt(60, -50));
+      body1[0].hit( new Pt(30, -50));
+      body2[0].hit( new Pt(40, -20));
+      body3[0].hit( new Pt(-60, -70));
 
     },
 
@@ -55,8 +60,13 @@ window.demoDescription = "...";
         let b = world.body(i);  
         
         form.fillOnly("#0ab").polygon( b );
-        form.strokeOnly("#fff").line( [b[1], b[3]] );
-        form.strokeOnly("#fff").line( [b[0], b[2]] );
+        // form.strokeOnly("#fff").line( [b[1], b[3]] );
+        // form.strokeOnly("#fff").line( [b[0], b[2]] );
+
+
+        let lns = b.linksToLines();
+        form.strokeOnly("#fff");
+        lns.forEach( (l) => form.line(l) );
         
         form.fillOnly("#9ff").point( b[0], 3 );
 

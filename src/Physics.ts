@@ -240,11 +240,42 @@ export class Body extends Group {
 
   protected _cs:Array<number[]> = [];
 
+  static fromGroup( list:GroupLike, autoLink:boolean=false, stiff:number=0.95 ):Body {
+    let b = new Body().init( list );
+    if (autoLink) b.linkAll( stiff );
+    return b;
+    // return Body.from( list ) as Body;
+    // let b = new Body();
+    // for (let i=0, len=list.length; i<len; i++) {
+    //   b.push( list[i] );
+    // }
+    // return b;
+  }
+
 
   static rectangle( rect:GroupLike, stiff:number=0.95 ):Body {
     let pts = Rectangle.corners( rect );
     let body = new Body().init( pts );
     return body.link(0, 1, stiff).link(1, 2, stiff).link(2, 3, stiff).link( 3, 0, stiff ).link(1, 3, stiff).link(0, 2, stiff);
+  }
+
+  linkAll( stiff:number=0.95 ) {
+    let half = this.length/2;
+    for (let i=0, len=this.length; i<len; i++) {
+      let n = (i >= len-1) ? 0 : i+1;
+      this.link( i, n, stiff ); 
+
+      if (len > 4) {
+        let nd = (Math.floor(half/2))+1;
+        console.log( nd );
+        let n2 = (i >= len-nd) ? i%len : i+nd;
+        this.link( i, n2, stiff ); 
+      }
+
+      if (i <= half-1) {
+        this.link( i, Math.min( this.length-1, i+Math.floor( half )) );
+      }
+    }
   }
 
   
@@ -271,6 +302,16 @@ export class Body extends Group {
     return this;
   }
 
+
+  linksToLines():Group[] {
+    let gs = [];
+    for (let i=0, len=this._cs.length; i<len; i++) {
+      let ln = this._cs[i];
+      gs.push( new Group( this[ ln[0] ], this[ ln[1] ] ) );
+    }
+    return gs;
+  }
+ 
 
   constrain() {
     for (let i=0, len=this._cs.length; i<len; i++) {

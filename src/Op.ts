@@ -942,6 +942,27 @@ export class Polygon {
   }
 
 
+
+  /**
+   * Create a rectangular polygon
+   * @param center center point of the rectangle
+   * @param widthOrSize width as number, or a Pt representing the size of the rectangle
+   * @param height optional height
+   */
+  static rectangle( center: PtLike, widthOrSize:number|PtLike, height?: number):Group {
+    return Rectangle.corners( Rectangle.fromCenter( center, widthOrSize, height ) );
+  }
+
+  static fromCenter( center: PtLike, radius:number, sides:number ) {
+    let g = new Group();
+    for (let i=0; i<sides; i++) {
+      let ang = Math.PI * 2 * i/sides;
+      g.push( new Pt( Math.cos( ang )*radius, Math.sin( ang )*radius ).add( center ) );
+    }
+    return g;
+  }
+
+
   /**
    * Given a Group of Pts that defines a polygon, get one edge using an index
    * @param pts a Group
