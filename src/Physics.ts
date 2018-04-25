@@ -2,18 +2,19 @@
 import {Pt, PtLike, Group, GroupLike} from "./Pt";
 import {Bound} from "./Bound";
 import { Rectangle, Polygon, Circle } from "./Op";
+import { ParsedPath } from "path";
 
 
 export class Physics extends Array<Particle> {
 
-  static constraintEdge( p1:Particle, p2:Particle, dist:number, stiff:number=0.95 ) {
+  static constraintEdge( p1:Particle, p2:Particle, dist:number, stiff:number=1, precise:boolean=false ) {
     const m1 = 1 / (p1.mass || 1);
     const m2 = 1 / (p2.mass || 1);
     const mm = m1 + m2;
 
     let delta = p2.$subtract( p1 );
     let distSq = dist * dist;
-    let d = distSq / ( delta.dot( delta ) + distSq ) - 0.5; // approx square root
+    let d = (precise) ? (dist / delta.magnitude() - 1) : (distSq / ( delta.dot( delta ) + distSq ) - 0.5); // approx square root
     let f = delta.$multiply( d * stiff );
 
     p1.subtract( f.$multiply( m1/mm ) );
@@ -24,7 +25,7 @@ export class Physics extends Array<Particle> {
 
 
 
-  static constraintBound( p:Particle, rect:Group, damp:number=0.95, keepImpulse:boolean=true ) {
+  static constraintBound( p:Particle, rect:Group, damp:number=1, keepImpulse:boolean=true ) {
     let bound = rect.boundingBox();
     let np = p.$min( bound[1].subtract( p.radius ) ).$max( bound[0].add( p.radius ) );
 
@@ -42,7 +43,7 @@ export class Physics extends Array<Particle> {
   }
 
   // Inspired by http://codeflow.org/entries/2010/nov/29/verlet-collision-with-impulse-preservation/
-  static collideParticle( p1:Particle, p2:Particle, damp:number=0.95, keepImpulse:boolean=true ) {
+  static collideParticle( p1:Particle, p2:Particle, damp:number=1, keepImpulse:boolean=true ) {
     let dp = p1.$subtract( p2 );
     let distSq = dp.magnitudeSq();
     let dr = p1.radius + p2.radius;
@@ -83,6 +84,7 @@ export class World {
 
   protected _gravity:Pt = new Pt();
   protected _friction:number = 1;
+  protected _precise:boolean = false;
   protected _bound:Bound;
   private _lastTime:number = null;
 
@@ -90,10 +92,11 @@ export class World {
   protected _bodies:Body[] = [];
 
 
-  setup( bound:Group, friction:number=1, gravity?:Pt ):this {
+  setup( bound:Group, friction:number=1, gravity:Pt=new Pt(), precision:boolean=false ):this {
     this._bound = Bound.fromGroup( bound );
     this._friction = friction;
-    if (gravity) this._gravity = gravity;
+    this._precise = precision;
+    this._gravity = gravity;
     return this;
   }
 
@@ -103,6 +106,9 @@ export class World {
 
   get friction():number { return this._friction; }
   set friction( f:number ) { this._friction = f; }
+
+  get precision():boolean { return this._precise; }
+  set precision( f:boolean ) { this._precise = f; }
 
   get bodyCount():number { return this._bodies.length; }
   get particleCount():number { return this._particles.length; }
@@ -175,7 +181,10 @@ export class Particle extends Pt {
   protected _radius:number = 0;
   protected _force:Pt = new Pt();
   protected _prev:Pt = new Pt();
+  
   protected _body:Body;
+  protected _lock:boolean = false;
+  protected _lockPt:Pt;
 
   constructor( ...args ) {
     super( ...args );
@@ -197,6 +206,12 @@ export class Particle extends Pt {
   get body():Body { return this._body; }
   set body( b:Body ) { this._body = b; }
 
+  get lock():boolean { return this._lock; }
+  set lock( b:boolean ) { 
+    this._lock = b; 
+    this._lockPt = this.clone();
+  }
+
   get changed():Pt { return this.$subtract( this._prev ); }
 
   addForce( ...args ):Pt {
@@ -207,6 +222,11 @@ export class Particle extends Pt {
 
   verlet( dt:number, friction:number, lastDt?:number ):this {
     // Positional verlet: curr + (curr - prev) + a * dt * dt
+
+    if (this._lock) {
+      this.to( this._lockPt );
+      this._prev.to( this._lockPt );
+    }
     let a = this._force.$divide( this._mass ).multiply( dt*dt );
     let t = (lastDt) ? dt/lastDt : 1; // time corrected
     let v = this.changed.multiply( friction * t ).add( a );
@@ -239,8 +259,39 @@ export class Particle extends Pt {
 export class Body extends Group {
 
   protected _cs:Array<number[]> = [];
+  protected _stiff:number = 1;
+  protected _locks:{ [index:string]: Particle } = {};
+  protected _mass:number = 1;
 
-  static fromGroup( list:GroupLike, autoLink:boolean=false, stiff:number=0.95 ):Body {
+
+  constructor(...args:Pt[]) {
+    super(...args);
+  }
+
+  init( list:GroupLike, stiff:number=1 ):this {
+    let c = new Pt();
+    for (let i=0, len=list.length; i<len; i++) {
+      let p = new Particle( list[i] );
+      p.body = this;
+      c.add( list[i] );
+      this.push( p );
+    }
+
+    this._stiff = stiff;
+    
+    return this;
+  } 
+
+  get mass():number { return this._mass; }
+  set mass( m:number ) { this._mass = m; }
+
+  areaMass():this {
+    this.mass = Math.sqrt( Polygon.area( this ) );
+    console.log( this.mass );
+    return this;
+  }
+
+  static fromGroup( list:GroupLike, autoLink:boolean=false, stiff?:number ):Body {
     let b = new Body().init( list );
     if (autoLink) b.linkAll( stiff );
     return b;
@@ -253,21 +304,34 @@ export class Body extends Group {
   }
 
 
-  static rectangle( rect:GroupLike, stiff:number=0.95 ):Body {
+
+  static rectangle( rect:GroupLike, stiff?:number ):Body {
     let pts = Rectangle.corners( rect );
     let body = new Body().init( pts );
     return body.link(0, 1, stiff).link(1, 2, stiff).link(2, 3, stiff).link( 3, 0, stiff ).link(1, 3, stiff).link(0, 2, stiff);
   }
 
-  linkAll( stiff:number=0.95 ) {
+
+  link( index1:number, index2:number, stiff?:number ):this {
+    if (index1 < 0 || index1 >= this.length) throw new Error( "index1 is not in the Group's indices");
+    if (index2 < 0 || index2 >= this.length) throw new Error( "index1 is not in the Group's indices");
+
+    let d = this[index1].$subtract( this[index2] ).magnitude();
+    this._cs.push( [index1, index2, d, stiff || this._stiff] );
+    return this;
+  }
+
+
+
+  linkAll( stiff:number ) {
     let half = this.length/2;
+
     for (let i=0, len=this.length; i<len; i++) {
       let n = (i >= len-1) ? 0 : i+1;
       this.link( i, n, stiff ); 
 
       if (len > 4) {
         let nd = (Math.floor(half/2))+1;
-        console.log( nd );
         let n2 = (i >= len-nd) ? i%len : i+nd;
         this.link( i, n2, stiff ); 
       }
@@ -278,29 +342,6 @@ export class Body extends Group {
     }
   }
 
-  
-  init( list:GroupLike ):this {
-    let c = new Pt();
-    for (let i=0, len=list.length; i<len; i++) {
-      let p = new Particle( list[i] );
-      p.body = this;
-      c.add( list[i] );
-      this.push( p );
-    }
-    
-    return this;
-  } 
-
-
-
-  link( index1:number, index2:number, stiff:number=0.95 ):this {
-    if (index1 < 0 || index1 >= this.length) throw new Error( "index1 is not in the Group's indices");
-    if (index2 < 0 || index2 >= this.length) throw new Error( "index1 is not in the Group's indices");
-
-    let d = this[index1].$subtract( this[index2] ).magnitude();
-    this._cs.push( [index1, index2, d, stiff] );
-    return this;
-  }
 
 
   linksToLines():Group[] {
@@ -322,7 +363,7 @@ export class Body extends Group {
 
 
 
-  process( b:Body ) {
+  processBody( b:Body ) {
 
     let b1 = this;
     let b2 = b;
@@ -342,8 +383,13 @@ export class Body extends Group {
 
       let lambda = 1/(t*t + (1-t)*(1-t));
 
-      eg[0].subtract( cv.$multiply( (1-t)*lambda/2 ) );
-      eg[1].subtract( cv.$multiply( t*lambda/2 ) );
+      let m0 = (hit.vertex as Particle).body.mass || 1;
+      let m1 = (hit.edge[0] as Particle).body.mass || 1;
+      m0 = m0 / (m0+m1);
+      m1 = m1 / (m0+m1);
+
+      eg[0].subtract( cv.$multiply( m0*(1-t)*lambda/2 ) );
+      eg[1].subtract( cv.$multiply( m1*t*lambda/2 ) );
 
       hit.vertex.add( cv.$multiply(0.5) );
     }
@@ -385,9 +431,14 @@ export class Body extends Group {
       }
 
       let lambda = 1/(t*t + (1-t)*(1-t));
+      let m0 = (hit.vertex as Particle).mass || 1;
+      let m1 = (hit.edge[0] as Particle).body.mass || 1;
 
-      eg[0].subtract( cv.$multiply( (1-t)*lambda/2 ) );
-      eg[1].subtract( cv.$multiply( t*lambda/2 ) );
+      m0 = m0 / (m0+m1);
+      m1 = m1 / (m0+m1);
+
+      eg[0].subtract( cv.$multiply( m0*(1-t)*lambda/2 ) );
+      eg[1].subtract( cv.$multiply( m1*t*lambda/2 ) );
 
       // hit.vertex.add( cv.$multiply(0.5) );
 

@@ -7773,19 +7773,19 @@ const Pt_1 = __webpack_require__(0);
 const Bound_1 = __webpack_require__(4);
 const Op_1 = __webpack_require__(2);
 class Physics extends Array {
-    static constraintEdge(p1, p2, dist, stiff = 0.95) {
+    static constraintEdge(p1, p2, dist, stiff = 1, precise = false) {
         const m1 = 1 / (p1.mass || 1);
         const m2 = 1 / (p2.mass || 1);
         const mm = m1 + m2;
         let delta = p2.$subtract(p1);
         let distSq = dist * dist;
-        let d = distSq / (delta.dot(delta) + distSq) - 0.5; // approx square root
+        let d = (precise) ? (dist / delta.magnitude() - 1) : (distSq / (delta.dot(delta) + distSq) - 0.5); // approx square root
         let f = delta.$multiply(d * stiff);
         p1.subtract(f.$multiply(m1 / mm));
         p2.add(f.$multiply(m2 / mm));
         return p1;
     }
-    static constraintBound(p, rect, damp = 0.95, keepImpulse = true) {
+    static constraintBound(p, rect, damp = 1, keepImpulse = true) {
         let bound = rect.boundingBox();
         let np = p.$min(bound[1].subtract(p.radius)).$max(bound[0].add(p.radius));
         if (keepImpulse) {
@@ -7801,7 +7801,7 @@ class Physics extends Array {
         p.to(np);
     }
     // Inspired by http://codeflow.org/entries/2010/nov/29/verlet-collision-with-impulse-preservation/
-    static collideParticle(p1, p2, damp = 0.95, keepImpulse = true) {
+    static collideParticle(p1, p2, damp = 1, keepImpulse = true) {
         let dp = p1.$subtract(p2);
         let distSq = dp.magnitudeSq();
         let dr = p1.radius + p2.radius;
@@ -7831,21 +7831,24 @@ class World {
     constructor() {
         this._gravity = new Pt_1.Pt();
         this._friction = 1;
+        this._precise = false;
         this._lastTime = null;
         this._particles = [];
         this._bodies = [];
     }
-    setup(bound, friction = 1, gravity) {
+    setup(bound, friction = 1, gravity = new Pt_1.Pt(), precision = false) {
         this._bound = Bound_1.Bound.fromGroup(bound);
         this._friction = friction;
-        if (gravity)
-            this._gravity = gravity;
+        this._precise = precision;
+        this._gravity = gravity;
         return this;
     }
     get gravity() { return this._gravity; }
     set gravity(g) { this._gravity = g; }
     get friction() { return this._friction; }
     set friction(f) { this._friction = f; }
+    get precision() { return this._precise; }
+    set precision(f) { this._precise = f; }
     get bodyCount() { return this._bodies.length; }
     get particleCount() { return this._particles.length; }
     addParticle(p) {
@@ -7895,6 +7898,7 @@ class Particle extends Pt_1.Pt {
         this._radius = 0;
         this._force = new Pt_1.Pt();
         this._prev = new Pt_1.Pt();
+        this._lock = false;
         this._prev = this.clone();
     }
     get mass() { return this._mass; }
@@ -7907,6 +7911,11 @@ class Particle extends Pt_1.Pt {
     set previous(p) { this._prev = p; }
     get body() { return this._body; }
     set body(b) { this._body = b; }
+    get lock() { return this._lock; }
+    set lock(b) {
+        this._lock = b;
+        this._lockPt = this.clone();
+    }
     get changed() { return this.$subtract(this._prev); }
     addForce(...args) {
         this._force.add(...args);
@@ -7914,6 +7923,10 @@ class Particle extends Pt_1.Pt {
     }
     verlet(dt, friction, lastDt) {
         // Positional verlet: curr + (curr - prev) + a * dt * dt
+        if (this._lock) {
+            this.to(this._lockPt);
+            this._prev.to(this._lockPt);
+        }
         let a = this._force.$divide(this._mass).multiply(dt * dt);
         let t = (lastDt) ? dt / lastDt : 1; // time corrected
         let v = this.changed.multiply(friction * t).add(a);
@@ -7936,11 +7949,32 @@ class Particle extends Pt_1.Pt {
 }
 exports.Particle = Particle;
 class Body extends Pt_1.Group {
-    constructor() {
-        super(...arguments);
+    constructor(...args) {
+        super(...args);
         this._cs = [];
+        this._stiff = 1;
+        this._locks = {};
+        this._mass = 1;
     }
-    static fromGroup(list, autoLink = false, stiff = 0.95) {
+    init(list, stiff = 1) {
+        let c = new Pt_1.Pt();
+        for (let i = 0, len = list.length; i < len; i++) {
+            let p = new Particle(list[i]);
+            p.body = this;
+            c.add(list[i]);
+            this.push(p);
+        }
+        this._stiff = stiff;
+        return this;
+    }
+    get mass() { return this._mass; }
+    set mass(m) { this._mass = m; }
+    areaMass() {
+        this.mass = Math.sqrt(Op_1.Polygon.area(this));
+        console.log(this.mass);
+        return this;
+    }
+    static fromGroup(list, autoLink = false, stiff) {
         let b = new Body().init(list);
         if (autoLink)
             b.linkAll(stiff);
@@ -7952,19 +7986,27 @@ class Body extends Pt_1.Group {
         // }
         // return b;
     }
-    static rectangle(rect, stiff = 0.95) {
+    static rectangle(rect, stiff) {
         let pts = Op_1.Rectangle.corners(rect);
         let body = new Body().init(pts);
         return body.link(0, 1, stiff).link(1, 2, stiff).link(2, 3, stiff).link(3, 0, stiff).link(1, 3, stiff).link(0, 2, stiff);
     }
-    linkAll(stiff = 0.95) {
+    link(index1, index2, stiff) {
+        if (index1 < 0 || index1 >= this.length)
+            throw new Error("index1 is not in the Group's indices");
+        if (index2 < 0 || index2 >= this.length)
+            throw new Error("index1 is not in the Group's indices");
+        let d = this[index1].$subtract(this[index2]).magnitude();
+        this._cs.push([index1, index2, d, stiff || this._stiff]);
+        return this;
+    }
+    linkAll(stiff) {
         let half = this.length / 2;
         for (let i = 0, len = this.length; i < len; i++) {
             let n = (i >= len - 1) ? 0 : i + 1;
             this.link(i, n, stiff);
             if (len > 4) {
                 let nd = (Math.floor(half / 2)) + 1;
-                console.log(nd);
                 let n2 = (i >= len - nd) ? i % len : i + nd;
                 this.link(i, n2, stiff);
             }
@@ -7972,25 +8014,6 @@ class Body extends Pt_1.Group {
                 this.link(i, Math.min(this.length - 1, i + Math.floor(half)));
             }
         }
-    }
-    init(list) {
-        let c = new Pt_1.Pt();
-        for (let i = 0, len = list.length; i < len; i++) {
-            let p = new Particle(list[i]);
-            p.body = this;
-            c.add(list[i]);
-            this.push(p);
-        }
-        return this;
-    }
-    link(index1, index2, stiff = 0.95) {
-        if (index1 < 0 || index1 >= this.length)
-            throw new Error("index1 is not in the Group's indices");
-        if (index2 < 0 || index2 >= this.length)
-            throw new Error("index1 is not in the Group's indices");
-        let d = this[index1].$subtract(this[index2]).magnitude();
-        this._cs.push([index1, index2, d, stiff]);
-        return this;
     }
     linksToLines() {
         let gs = [];
@@ -8006,7 +8029,7 @@ class Body extends Pt_1.Group {
             Physics.constraintEdge(this[m], this[n], d, s);
         }
     }
-    process(b) {
+    processBody(b) {
         let b1 = this;
         let b2 = b;
         let hit = Op_1.Polygon.hasIntersectPolygon(b1, b2);
@@ -8021,8 +8044,12 @@ class Body extends Pt_1.Group {
                 t = (hit.vertex[1] - cv[1] - eg[0][1]) / (eg[1][1] - eg[0][1]);
             }
             let lambda = 1 / (t * t + (1 - t) * (1 - t));
-            eg[0].subtract(cv.$multiply((1 - t) * lambda / 2));
-            eg[1].subtract(cv.$multiply(t * lambda / 2));
+            let m0 = hit.vertex.body.mass || 1;
+            let m1 = hit.edge[0].body.mass || 1;
+            m0 = m0 / (m0 + m1);
+            m1 = m1 / (m0 + m1);
+            eg[0].subtract(cv.$multiply(m0 * (1 - t) * lambda / 2));
+            eg[1].subtract(cv.$multiply(m1 * t * lambda / 2));
             hit.vertex.add(cv.$multiply(0.5));
         }
         // let cv = axis.multiply( dist );
@@ -8052,8 +8079,12 @@ class Body extends Pt_1.Group {
                 t = (hit.vertex[1] - cv[1] - eg[0][1]) / (eg[1][1] - eg[0][1]);
             }
             let lambda = 1 / (t * t + (1 - t) * (1 - t));
-            eg[0].subtract(cv.$multiply((1 - t) * lambda / 2));
-            eg[1].subtract(cv.$multiply(t * lambda / 2));
+            let m0 = hit.vertex.mass || 1;
+            let m1 = hit.edge[0].body.mass || 1;
+            m0 = m0 / (m0 + m1);
+            m1 = m1 / (m0 + m1);
+            eg[0].subtract(cv.$multiply(m0 * (1 - t) * lambda / 2));
+            eg[1].subtract(cv.$multiply(m1 * t * lambda / 2));
             // hit.vertex.add( cv.$multiply(0.5) );
             let c1 = b.changed;
             c1.add(cv.$multiply(0.5));

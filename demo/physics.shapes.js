@@ -16,25 +16,29 @@ window.demoDescription = "...";
   space.add( {
 
     start: (bound, space) => {
-      world = new World().setup( space.innerBound, 0.99, new Pt(0, 1000) );
+      world = new World().setup( space.innerBound, 0.99, new Pt(0, 500) );
       
       // let body1 = Body.rectangle( Rectangle.fromCenter( space.center, 50 ) );
-      let body1 = Body.fromGroup( Polygon.fromCenter( space.center, 70, 6, 0.4 ), true );
-      let body2 = Body.fromGroup( Polygon.fromCenter( space.center.subtract(100,50), 30, 4 ), true );
-      let body3 = Body.fromGroup( Polygon.fromCenter( space.center.subtract(50,-150), 50, 3 ), true );
+      let body1 = Body.fromGroup( Polygon.fromCenter( space.center, 70, 6, 0.4 ), true ).areaMass();
+      let body2 = Body.fromGroup( Polygon.fromCenter( space.center.subtract(100,50), 50, 4 ), true, 0.4 ).areaMass();
+      let body3 = Body.fromGroup( Polygon.fromCenter( space.center.subtract(50,-150), 50, 3 ), true  ).areaMass();
 
-      
+      // body2.mass = 1;
+      // body2[3].lock = true;
+
       // let body2 = Body.rectangle( Rectangle.fromCenter( space.center.subtract(100,50), 100 ) );
       // let body3 = Body.rectangle( Rectangle.fromCenter( space.center.subtract(50,-150), 80 ) );
       world.addBody( body1 );
       world.addBody( body2 );
       world.addBody( body3 );
 
+      console.log( body1.mass, body2.mass, body3.mass );
+
       let pk1 = new Particle( new Pt( 0, space.center.y-20 ) );
-      pk1.mass = 2;
-      pk1.radius = 30;
+      pk1.mass = 10;
+      pk1.radius = 10;
       world.addParticle( pk1 );
-      pk1.hit( [50, -10] );
+      pk1.hit( [300, -10] );
 
       // for (let i=0, len=rect.length; i<len; i++) {
       //   let p = new Particle( rect[i] );
@@ -42,7 +46,7 @@ window.demoDescription = "...";
       //   world.push( p );
       // }
 
-      body1[0].hit( new Pt(30, -50));
+      body1[0].hit( new Pt(200, -50));
       body2[0].hit( new Pt(40, -20));
       body3[0].hit( new Pt(-60, -70));
 
@@ -71,7 +75,7 @@ window.demoDescription = "...";
         form.fillOnly("#9ff").point( b[0], 3 );
 
         for (let k=i+1, klen=world.bodyCount; k<len; k++) {
-          b.process( world.body(k) );
+          b.processBody( world.body(k) );
         }
 
         b.processParticle( pk1 );
