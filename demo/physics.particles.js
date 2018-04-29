@@ -17,38 +17,44 @@ window.demoDescription = "...";
   space.add( {
 
     start: (bound, space) => {
-      world = new World().setup( space.innerBound, 0.99, new Pt(0, 500) );
+      world = new World( space.innerBound, 0.99, new Pt(0, 500) );
 
-      let pts = Create.distributeRandom( space.innerBound, 100 );
+      let pts = Create.distributeRandom( space.innerBound, 50 );
+      
       
       for (let i=0, len=pts.length; i<len; i++) {
         let p = new Particle( pts[i] );
-        p.mass = 15 + Math.random()*10;
+        p.mass = 5 + Math.random()*20;
         p.radius = p.mass;
-        p.impulse( Num.randomRange(-400,400), Num.randomRange(-100, 100) );
-        world.addParticle( p );
+        p.hit( Num.randomRange(-120,120), Num.randomRange(-80, 0) );
+        world.add( p );
       }
 
-      world[0].impulse( new Pt(300, -50));
+
+      world.particle(0).hit( new Pt(200, -50));
 
 
     },
 
     animate: (time, ftime) => {
 
-      preserve = !preserve; 
+      // console.log( "---", space.size.toString(), world.particle(0).radius );
 
-      for (let i=0, len=world.length; i<len; i++) {
-        form.fillOnly("#f00").point( world[i], world[i].radius, "circle" );
+      // preserve = !preserve; 
 
-        for (let k=0, klen=world.length; k<len; k++) {
-          if (i!==k) {
-            Physics.collideParticle( world[i], world[k], 0.99, preserve );
-          }
-        }
+      // for (let i=0, len=world.particleCount; i<len; i++) {
+      //   form.fillOnly("#f00").point( world.particle(i), world.particle(i).radius, "circle" );
 
-        Physics.constraintBound( world[i], space.innerBound, 0.99, preserve );
-      }
+      //   for (let k=i+1, klen=world.particleCount; k<len; k++) {
+      //     if (i!==k) {
+      //       World.collideParticle( world.particle(i), world.particle(k), 1, preserve );
+      //     }
+      //   }
+
+      //   World.constraintBound( world.particle(i), space.innerBound, 1, preserve );
+      // }
+
+      world.processParticles( (p) => form.fillOnly("#f00").point( p, p.radius, "circle" ) );
 
       world.integrateAll( ftime/1000 );
 

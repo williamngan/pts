@@ -16,7 +16,7 @@ window.demoDescription = "...";
   space.add( {
 
     start: (bound, space) => {
-      world = new World().setup( space.innerBound, 0.99, new Pt(0, 500) );
+      world = new World( space.innerBound, 0.99, new Pt(0, 500) );
       
       // let body1 = Body.rectangle( Rectangle.fromCenter( space.center, 50 ) );
       let body1 = Body.fromGroup( Polygon.fromCenter( space.center, 70, 6, 0.4 ), true ).areaMass();
@@ -28,17 +28,17 @@ window.demoDescription = "...";
 
       // let body2 = Body.rectangle( Rectangle.fromCenter( space.center.subtract(100,50), 100 ) );
       // let body3 = Body.rectangle( Rectangle.fromCenter( space.center.subtract(50,-150), 80 ) );
-      world.addBody( body1 );
-      world.addBody( body2 );
-      world.addBody( body3 );
+      world.add( body1 );
+      world.add( body2 );
+      world.add( body3 );
 
       console.log( body1.mass, body2.mass, body3.mass );
 
-      let pk1 = new Particle( new Pt( 0, space.center.y-20 ) );
+      let pk1 = new Particle( new Pt( space.center.x, space.size.y-100 ) );
       pk1.mass = 10;
       pk1.radius = 10;
-      world.addParticle( pk1 );
-      pk1.hit( [300, -10] );
+      world.add( pk1 );
+      pk1.hit( [100, -50] );
 
       // for (let i=0, len=rect.length; i<len; i++) {
       //   let p = new Particle( rect[i] );

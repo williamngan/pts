@@ -7772,8 +7772,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
 const Bound_1 = __webpack_require__(4);
 const Op_1 = __webpack_require__(2);
-class Physics extends Array {
-    static constraintEdge(p1, p2, dist, stiff = 1, precise = false) {
+class World {
+    constructor(bound, friction = 1, gravity = new Pt_1.Pt(), precision = false) {
+        this._gravity = new Pt_1.Pt();
+        this._friction = 1;
+        this._precise = false;
+        this._lastTime = null;
+        this._particles = [];
+        this._bodies = [];
+        this._bound = Bound_1.Bound.fromGroup(bound);
+        this._friction = friction;
+        this._precise = precision;
+        this._gravity = gravity;
+        return this;
+    }
+    static edgeConstraint(p1, p2, dist, stiff = 1, precise = false) {
         const m1 = 1 / (p1.mass || 1);
         const m2 = 1 / (p2.mass || 1);
         const mm = m1 + m2;
@@ -7785,63 +7798,18 @@ class Physics extends Array {
         p2.add(f.$multiply(m2 / mm));
         return p1;
     }
-    static constraintBound(p, rect, damp = 1, keepImpulse = true) {
+    static boundConstraint(p, rect, friction = 0.75) {
         let bound = rect.boundingBox();
         let np = p.$min(bound[1].subtract(p.radius)).$max(bound[0].add(p.radius));
-        if (keepImpulse) {
-            if (np[0] === bound[0][0] || np[0] === bound[1][0]) {
-                let c = p.changed;
-                p.previous = np.$subtract(new Pt_1.Pt(c[0] * -1 * damp, c[1]));
-            }
-            else if (np[1] === bound[0][1] || np[1] === bound[1][1]) {
-                let c = p.changed;
-                p.previous = np.$subtract(new Pt_1.Pt(c[0], c[1] * -1 * damp));
-            }
+        if (np[0] === bound[0][0] || np[0] === bound[1][0]) {
+            let c = p.changed.$multiply(friction);
+            p.previous = np.$subtract(new Pt_1.Pt(-c[0], c[1]));
+        }
+        else if (np[1] === bound[0][1] || np[1] === bound[1][1]) {
+            let c = p.changed.$multiply(friction);
+            p.previous = np.$subtract(new Pt_1.Pt(c[0], -c[1]));
         }
         p.to(np);
-    }
-    // Inspired by http://codeflow.org/entries/2010/nov/29/verlet-collision-with-impulse-preservation/
-    static collideParticle(p1, p2, damp = 1, keepImpulse = true) {
-        let dp = p1.$subtract(p2);
-        let distSq = dp.magnitudeSq();
-        let dr = p1.radius + p2.radius;
-        if (distSq < dr * dr) {
-            let c1 = p1.changed;
-            let c2 = p2.changed;
-            let dist = Math.sqrt(distSq);
-            let d = dp.$multiply(((dist - dr) / dist) / 2);
-            p1.subtract(d);
-            p2.add(d);
-            if (keepImpulse) {
-                let df1 = dp.$multiply(damp * dp.dot(c1) / distSq);
-                let df2 = dp.$multiply(damp * dp.dot(c2) / distSq);
-                let df = df2.subtract(df1);
-                let dm1 = p1.mass / (p1.mass + p2.mass);
-                let dm2 = p2.mass / (p1.mass + p2.mass);
-                c1.add(df.$multiply(dm2));
-                c2.add(df.multiply(-dm1));
-                p1.previous = p1.$subtract(c1);
-                p2.previous = p2.$subtract(c2);
-            }
-        }
-    }
-}
-exports.Physics = Physics;
-class World {
-    constructor() {
-        this._gravity = new Pt_1.Pt();
-        this._friction = 1;
-        this._precise = false;
-        this._lastTime = null;
-        this._particles = [];
-        this._bodies = [];
-    }
-    setup(bound, friction = 1, gravity = new Pt_1.Pt(), precision = false) {
-        this._bound = Bound_1.Bound.fromGroup(bound);
-        this._friction = friction;
-        this._precise = precision;
-        this._gravity = gravity;
-        return this;
     }
     get gravity() { return this._gravity; }
     set gravity(g) { this._gravity = g; }
@@ -7851,11 +7819,13 @@ class World {
     set precision(f) { this._precise = f; }
     get bodyCount() { return this._bodies.length; }
     get particleCount() { return this._particles.length; }
-    addParticle(p) {
-        this._particles.push(p);
-    }
-    addBody(b) {
-        this._bodies.push(b);
+    add(p) {
+        if (p instanceof Body) {
+            this._bodies.push(p);
+        }
+        else {
+            this._particles.push(p);
+        }
     }
     body(index) { return this._bodies[index]; }
     particle(index) { return this._particles[index]; }
@@ -7878,15 +7848,31 @@ class World {
         this._lastTime = dt;
     }
     constrainAll() {
+        for (let i = 0, len = this._particles.length; i < len; i++) {
+            World.boundConstraint(this._particles[i], this._bound);
+        }
         for (let i = 0, len = this._bodies.length; i < len; i++) {
             let b = this._bodies[i];
             b.constrain();
             for (let k = 0, klen = b.length; k < klen; k++) {
-                Physics.constraintBound(b[k], this._bound);
+                World.boundConstraint(b[k], this._bound);
             }
         }
+    }
+    processParticles(renderFn) {
         for (let i = 0, len = this._particles.length; i < len; i++) {
-            Physics.constraintBound(this._particles[i], this._bound);
+            World.boundConstraint(this._particles[i], this._bound);
+        }
+        for (let i = 0, len = this._particles.length; i < len; i++) {
+            let p1 = this._particles[i];
+            if (renderFn)
+                renderFn(p1);
+            for (let k = i + 1, klen = this._particles.length; k < len; k++) {
+                if (i !== k) {
+                    let p2 = this._particles[k];
+                    p1.collide(p2, this._friction);
+                }
+            }
         }
     }
 }
@@ -7943,6 +7929,30 @@ class Particle extends Pt_1.Pt {
         this.previous = this.clone();
         this.to(p);
     }
+    collide(p2, friction = 1) {
+        let p1 = this;
+        let dp = p1.$subtract(p2);
+        let distSq = dp.magnitudeSq();
+        let dr = p1.radius + p2.radius;
+        if (distSq < dr * dr) {
+            let c1 = p1.changed;
+            let c2 = p2.changed;
+            let dist = Math.sqrt(distSq);
+            let d = dp.$multiply(((dist - dr) / dist) / 2);
+            p1.subtract(d);
+            p2.add(d);
+            // preserve impulse  
+            let df1 = dp.$multiply(friction * dp.dot(c1) / distSq);
+            let df2 = dp.$multiply(friction * dp.dot(c2) / distSq);
+            let df = df2.subtract(df1);
+            let dm1 = p1.mass / (p1.mass + p2.mass);
+            let dm2 = p2.mass / (p1.mass + p2.mass);
+            c1.add(df.$multiply(dm2));
+            c2.add(df.multiply(-dm1));
+            p1.previous = p1.$subtract(c1);
+            p2.previous = p2.$subtract(c2);
+        }
+    }
     toString() {
         return `Particle: ${this[0]} ${this[1]} | prev ${this._prev[0]} ${this._prev[1]} | mass ${this._mass}`;
     }
@@ -7971,7 +7981,6 @@ class Body extends Pt_1.Group {
     set mass(m) { this._mass = m; }
     areaMass() {
         this.mass = Math.sqrt(Op_1.Polygon.area(this));
-        console.log(this.mass);
         return this;
     }
     static fromGroup(list, autoLink = false, stiff) {
@@ -8026,7 +8035,7 @@ class Body extends Pt_1.Group {
     constrain() {
         for (let i = 0, len = this._cs.length; i < len; i++) {
             let [m, n, d, s] = this._cs[i];
-            Physics.constraintEdge(this[m], this[n], d, s);
+            World.edgeConstraint(this[m], this[n], d, s);
         }
     }
     processBody(b) {
