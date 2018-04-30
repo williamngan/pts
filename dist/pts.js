@@ -7786,6 +7786,12 @@ class World {
         this._gravity = gravity;
         return this;
     }
+    drawParticles(fn) {
+        this._drawParticles = fn;
+    }
+    drawBodies(fn) {
+        this._drawBodies = fn;
+    }
     static edgeConstraint(p1, p2, dist, stiff = 1, precise = false) {
         const m1 = 1 / (p1.mass || 1);
         const m2 = 1 / (p2.mass || 1);
@@ -7830,49 +7836,55 @@ class World {
     body(index) { return this._bodies[index]; }
     particle(index) { return this._particles[index]; }
     integrate(p, dt, prevDt) {
-        p.addForce(this._gravity.$multiply(p.mass)); // multiply mass to cancel it out later
+        p.addForce(this._gravity);
         p.verlet(dt, this._friction, prevDt);
         return p;
     }
-    integrateAll(dt, timeCorrected = true) {
-        let t = (timeCorrected) ? this._lastTime : undefined;
+    update(ms) {
+        let dt = ms / 1000;
+        this._updateParticles(dt);
+        this._updateBodies(dt);
+    }
+    _updateParticles(dt) {
         for (let i = 0, len = this._particles.length; i < len; i++) {
-            this.integrate(this._particles[i], dt, t);
-        }
-        for (let i = 0, len = this._bodies.length; i < len; i++) {
-            let b = this._bodies[i];
-            for (let k = 0, klen = b.length; k < klen; k++) {
-                this.integrate(b[k], dt, t);
+            let p = this._particles[i];
+            // force and integrate
+            this.integrate(p, dt, this._lastTime);
+            // constraints
+            World.boundConstraint(p, this._bound);
+            // collisions
+            for (let k = i + 1; k < len; k++) {
+                if (i !== k) {
+                    let p2 = this._particles[k];
+                    p.collide(p2, this._friction);
+                }
             }
+            // render
+            if (this._drawParticles)
+                this._drawParticles(p, i);
         }
         this._lastTime = dt;
     }
-    constrainAll() {
-        for (let i = 0, len = this._particles.length; i < len; i++) {
-            World.boundConstraint(this._particles[i], this._bound);
-        }
+    _updateBodies(dt) {
         for (let i = 0, len = this._bodies.length; i < len; i++) {
             let b = this._bodies[i];
-            b.constrain();
+            // integrate
             for (let k = 0, klen = b.length; k < klen; k++) {
-                World.boundConstraint(b[k], this._bound);
+                let bk = b[k];
+                World.boundConstraint(bk, this._bound, this._friction);
+                this.integrate(bk, dt, this._lastTime);
             }
-        }
-    }
-    processParticles(renderFn) {
-        for (let i = 0, len = this._particles.length; i < len; i++) {
-            World.boundConstraint(this._particles[i], this._bound);
-        }
-        for (let i = 0, len = this._particles.length; i < len; i++) {
-            let p1 = this._particles[i];
-            if (renderFn)
-                renderFn(p1);
-            for (let k = i + 1, klen = this._particles.length; k < len; k++) {
-                if (i !== k) {
-                    let p2 = this._particles[k];
-                    p1.collide(p2, this._friction);
-                }
+            // constraints
+            b.processEdges(this._bound, this._friction);
+            for (let k = i + 1; k < len; k++) {
+                b.processBody(this._bodies[k]);
             }
+            for (let m = 0, mlen = this._particles.length; m < mlen; m++) {
+                b.processParticle(this._particles[m]);
+            }
+            // render
+            if (this._drawBodies)
+                this._drawBodies(b, i);
         }
     }
 }
@@ -7913,9 +7925,10 @@ class Particle extends Pt_1.Pt {
             this.to(this._lockPt);
             this._prev.to(this._lockPt);
         }
-        let a = this._force.$divide(this._mass).multiply(dt * dt);
-        let t = (lastDt) ? dt / lastDt : 1; // time corrected
-        let v = this.changed.multiply(friction * t).add(a);
+        // time corrected (https://en.wikipedia.org/wiki/Verlet_integration#Non-constant_time_differences)
+        let lt = (lastDt) ? lastDt : dt;
+        let a = this._force.multiply(dt * (dt + lt) / 2);
+        let v = this.changed.multiply(friction * dt / lt).add(a);
         this._prev = this.clone();
         this.add(v);
         this._force = new Pt_1.Pt();
@@ -7941,16 +7954,16 @@ class Particle extends Pt_1.Pt {
             let d = dp.$multiply(((dist - dr) / dist) / 2);
             p1.subtract(d);
             p2.add(d);
-            // preserve impulse  
-            let df1 = dp.$multiply(friction * dp.dot(c1) / distSq);
-            let df2 = dp.$multiply(friction * dp.dot(c2) / distSq);
-            let df = df2.subtract(df1);
-            let dm1 = p1.mass / (p1.mass + p2.mass);
-            let dm2 = p2.mass / (p1.mass + p2.mass);
-            c1.add(df.$multiply(dm2));
-            c2.add(df.multiply(-dm1));
-            p1.previous = p1.$subtract(c1);
-            p2.previous = p2.$subtract(c2);
+            // preserve impulse (http://codeflow.org/entries/2010/nov/29/verlet-collision-with-impulse-preservation/)
+            // let df1 = dp.$multiply( friction * dp.dot( c1 ) / distSq );
+            // let df2 = dp.$multiply( friction * dp.dot( c2 ) / distSq );
+            // let df = df2.subtract( df1 );
+            // let dm1 = p1.mass / (p1.mass+p2.mass);
+            // let dm2 = p2.mass / (p1.mass+p2.mass);
+            // c1.add( df.$multiply( dm2 ) );
+            // c2.add( df.multiply(-dm1) );
+            // p1.previous = p1.$subtract( c1 );
+            // p2.previous = p2.$subtract( c2 );
         }
     }
     toString() {
@@ -8032,7 +8045,7 @@ class Body extends Pt_1.Group {
         }
         return gs;
     }
-    constrain() {
+    processEdges(bound, friction) {
         for (let i = 0, len = this._cs.length; i < len; i++) {
             let [m, n, d, s] = this._cs[i];
             World.edgeConstraint(this[m], this[n], d, s);
@@ -8061,17 +8074,6 @@ class Body extends Pt_1.Group {
             eg[1].subtract(cv.$multiply(m1 * t * lambda / 2));
             hit.vertex.add(cv.$multiply(0.5));
         }
-        // let cv = axis.multiply( dist );
-        // let t;
-        // if ( Math.abs( edge[0][0] - edge[1][0] ) > Math.abs( edge[0][1] - edge[1][1] ) ) {
-        //   t = (v[0] - cv[0] - edge[0][0]) / (edge[1][0] - edge[0][0]);
-        // } else {
-        //   t = (v[1] - cv[1] - edge[0][1] )/( edge[1][1] - edge[0][1]);
-        // }
-        // let lambda = 1/(t*t + (1-t)*(1-t));
-        // edge[0].subtract( cv.$multiply( (1-t)*lambda/2 ) );
-        // edge[1].subtract( cv.$multiply( t*lambda/2 ) );
-        // v.add( cv.divide(2) );
     }
     processParticle(b) {
         let b1 = this;

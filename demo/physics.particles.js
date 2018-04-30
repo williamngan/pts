@@ -17,22 +17,18 @@ window.demoDescription = "...";
   space.add( {
 
     start: (bound, space) => {
-      world = new World( space.innerBound, 0.99, new Pt(0, 500) );
+      world = new World( space.innerBound, 1, new Pt(0, 400) );
 
-      let pts = Create.distributeRandom( space.innerBound, 50 );
+      let pts = Create.distributeRandom( space.innerBound, 2 );
       
       
       for (let i=0, len=pts.length; i<len; i++) {
         let p = new Particle( pts[i] );
-        p.mass = 5 + Math.random()*20;
+        p.mass = 10 + Math.random()*10;
         p.radius = p.mass;
-        p.hit( Num.randomRange(-120,120), Num.randomRange(-80, 0) );
+        p.hit( Num.randomRange(-50,50), Num.randomRange(-80, 80) );
         world.add( p );
       }
-
-
-      world.particle(0).hit( new Pt(200, -50));
-
 
     },
 
@@ -54,9 +50,9 @@ window.demoDescription = "...";
       //   World.constraintBound( world.particle(i), space.innerBound, 1, preserve );
       // }
 
-      world.processParticles( (p) => form.fillOnly("#f00").point( p, p.radius, "circle" ) );
+      world.drawParticles( (p, i) => form.fillOnly("#f00").point( p, p.radius, "circle" ) );
 
-      world.integrateAll( ftime/1000 );
+      world.update( ftime );
 
     },
 

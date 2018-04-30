@@ -38,7 +38,7 @@ window.demoDescription = "...";
       pk1.mass = 10;
       pk1.radius = 10;
       world.add( pk1 );
-      pk1.hit( [100, -50] );
+      pk1.hit( [200, -50] );
 
       // for (let i=0, len=rect.length; i<len; i++) {
       //   let p = new Particle( rect[i] );
@@ -54,33 +54,45 @@ window.demoDescription = "...";
 
     animate: (time, ftime) => {
 
+      world.drawParticles( (p, i) => form.fillOnly("#f00").point( p, p.radius, "circle" ) );
+      world.drawBodies( (b, i) => {
+        form.fillOnly("#0ab").polygon( b );
+        let lns = b.linksToLines();
+        form.strokeOnly("#fff");
+        lns.forEach( (l) => form.line(l) );
+        form.fillOnly("#9ff").point( b[0], 3 );
+      });
+      
+      world.update( ftime );
+
+
       // let diagonal = Math.sqrt( 20000 );
       // Physics.constraintEdge( world[1], world[3], diagonal );
       // Physics.constraintEdge( world[0], world[2], diagonal );
 
-      let pk1 = world.particle(0);
+      // let pk1 = world.particle(0);
 
-      for (let i=0, len=world.bodyCount; i<len; i++) {
-        let b = world.body(i);  
+      // for (let i=0, len=world.bodyCount; i<len; i++) {
+      //   let b = world.body(i);  
         
-        form.fillOnly("#0ab").polygon( b );
-        // form.strokeOnly("#fff").line( [b[1], b[3]] );
-        // form.strokeOnly("#fff").line( [b[0], b[2]] );
+      //   form.fillOnly("#0ab").polygon( b );
+      //   // form.strokeOnly("#fff").line( [b[1], b[3]] );
+      //   // form.strokeOnly("#fff").line( [b[0], b[2]] );
 
 
-        let lns = b.linksToLines();
-        form.strokeOnly("#fff");
-        lns.forEach( (l) => form.line(l) );
+      //   let lns = b.linksToLines();
+      //   form.strokeOnly("#fff");
+      //   lns.forEach( (l) => form.line(l) );
         
-        form.fillOnly("#9ff").point( b[0], 3 );
+      //   form.fillOnly("#9ff").point( b[0], 3 );
 
-        for (let k=i+1, klen=world.bodyCount; k<len; k++) {
-          b.processBody( world.body(k) );
-        }
+      //   for (let k=i+1, klen=world.bodyCount; k<len; k++) {
+      //     b.processBody( world.body(k) );
+      //   }
 
-        b.processParticle( pk1 );
-        form.fillOnly("#f00").point( pk1, pk1.radius, "circle" );
-      }
+      //   b.processParticle( pk1 );
+      //   form.fillOnly("#f00").point( pk1, pk1.radius, "circle" );
+      // }
 
       // world.body(0).process( world.body(1) );
       // world.body(1).process( world.body(0) );
@@ -97,8 +109,8 @@ window.demoDescription = "...";
       //   form.strokeOnly("#9ab").lines( b );
       // }
 
-      world.constrainAll();
-      world.integrateAll( ftime/1000 );
+      // world.constrainAll();
+      // world.integrateAll( ftime/1000 );
 
       
     },
