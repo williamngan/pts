@@ -19,26 +19,20 @@ window.demoDescription = "...";
       world = new World( space.innerBound, 0.99, new Pt(0, 500) );
       
       // let body1 = Body.rectangle( Rectangle.fromCenter( space.center, 50 ) );
-      let body1 = Body.fromGroup( Polygon.fromCenter( space.center, 70, 6, 0.4 ), true ).areaMass();
-      let body2 = Body.fromGroup( Polygon.fromCenter( space.center.subtract(100,50), 50, 4 ), true, 0.4 ).areaMass();
-      let body3 = Body.fromGroup( Polygon.fromCenter( space.center.subtract(50,-150), 50, 3 ), true  ).areaMass();
+      let body1 = Body.fromGroup( Polygon.fromCenter( space.center, 70, 6, 0.4 ), 0.5 );
+      let body2 = Body.fromGroup( Polygon.fromCenter( space.center.subtract(100,50), 40, 4 ), 1 );
+      let body3 = Body.fromGroup( Polygon.fromCenter( space.center.subtract(50,-150), 50, 3 ) );
 
       // body2.mass = 1;
       // body2[3].lock = true;
 
       // let body2 = Body.rectangle( Rectangle.fromCenter( space.center.subtract(100,50), 100 ) );
       // let body3 = Body.rectangle( Rectangle.fromCenter( space.center.subtract(50,-150), 80 ) );
-      world.add( body1 );
-      world.add( body2 );
-      world.add( body3 );
+      world.add( body1 ).add( body2 ).add( body3 );
 
-      console.log( body1.mass, body2.mass, body3.mass );
-
-      let pk1 = new Particle( new Pt( space.center.x, space.size.y-100 ) );
-      pk1.mass = 10;
-      pk1.radius = 10;
+      let pk1 = new Particle( new Pt( space.center.x, 100 ) ).size( 30 );
       world.add( pk1 );
-      pk1.hit( [200, -50] );
+      pk1.hit( [-200, -40] );
 
       // for (let i=0, len=rect.length; i<len; i++) {
       //   let p = new Particle( rect[i] );
@@ -46,9 +40,9 @@ window.demoDescription = "...";
       //   world.push( p );
       // }
 
-      body1[0].hit( new Pt(200, -50));
-      body2[0].hit( new Pt(40, -20));
-      body3[0].hit( new Pt(-60, -70));
+      body1[0].hit( new Pt(120, -40));
+      body2[0].hit( new Pt(-200, -20));
+      body3[0].hit( new Pt(30, -30));
 
     },
 

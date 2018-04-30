@@ -12,21 +12,17 @@ window.demoDescription = "...";
 
 
   var world;
-  var preserve = false;
 
   space.add( {
 
     start: (bound, space) => {
-      world = new World( space.innerBound, 1, new Pt(0, 400) );
+      world = new World( space.innerBound, 1, 0 );
 
-      let pts = Create.distributeRandom( space.innerBound, 2 );
-      
+      let pts = Create.distributeRandom( space.innerBound, 70 );
       
       for (let i=0, len=pts.length; i<len; i++) {
-        let p = new Particle( pts[i] );
-        p.mass = 10 + Math.random()*10;
-        p.radius = p.mass;
-        p.hit( Num.randomRange(-50,50), Num.randomRange(-80, 80) );
+        let p = new Particle( pts[i] ).size( 3 + Math.random()*20 );
+        p.hit( Num.randomRange(-50,50), Num.randomRange(-20, 20) );
         world.add( p );
       }
 
@@ -34,24 +30,7 @@ window.demoDescription = "...";
 
     animate: (time, ftime) => {
 
-      // console.log( "---", space.size.toString(), world.particle(0).radius );
-
-      // preserve = !preserve; 
-
-      // for (let i=0, len=world.particleCount; i<len; i++) {
-      //   form.fillOnly("#f00").point( world.particle(i), world.particle(i).radius, "circle" );
-
-      //   for (let k=i+1, klen=world.particleCount; k<len; k++) {
-      //     if (i!==k) {
-      //       World.collideParticle( world.particle(i), world.particle(k), 1, preserve );
-      //     }
-      //   }
-
-      //   World.constraintBound( world.particle(i), space.innerBound, 1, preserve );
-      // }
-
       world.drawParticles( (p, i) => form.fillOnly("#f00").point( p, p.radius, "circle" ) );
-
       world.update( ftime );
 
     },

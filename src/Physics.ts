@@ -9,6 +9,7 @@ export class World {
 
   protected _gravity:Pt = new Pt();
   protected _friction:number = 1;
+  protected _damping:number = 0.75;
   protected _precise:boolean = false;
   protected _bound:Bound;
   private _lastTime:number = null;
@@ -19,11 +20,11 @@ export class World {
   protected _drawParticles:(p:Particle, i:number) => void;
   protected _drawBodies:(p:Body, i:number) => void;
 
-  constructor( bound:Group, friction:number=1, gravity:Pt=new Pt(), precision:boolean=false ) {
+  constructor( bound:Group, friction:number=1, gravity:Pt|number=0, precision:boolean=false ) {
     this._bound = Bound.fromGroup( bound );
     this._friction = friction;
     this._precise = precision;
-    this._gravity = gravity;
+    this._gravity = (typeof gravity === "number") ? new Pt( 0, gravity) : gravity;
     return this;
 
   }
@@ -55,15 +56,15 @@ export class World {
 
 
 
-  static boundConstraint( p:Particle, rect:Group, friction:number=0.75 ) {
+  static boundConstraint( p:Particle, rect:Group, damping:number=0.75 ) {
     let bound = rect.boundingBox();
     let np = p.$min( bound[1].subtract( p.radius ) ).$max( bound[0].add( p.radius ) );
     
     if (np[0] === bound[0][0] || np[0] === bound[1][0]) { // hit vertical walls
-      let c = p.changed.$multiply(friction);
+      let c = p.changed.$multiply(damping);
       p.previous = np.$subtract( new Pt( -c[0], c[1] ) );
     } else if (np[1] === bound[0][1] || np[1] === bound[1][1]) { // hit horizontal walls
-      let c = p.changed.$multiply(friction);
+      let c = p.changed.$multiply(damping);
       p.previous = np.$subtract( new Pt( c[0], -c[1] ) );
     }
   
@@ -79,19 +80,19 @@ export class World {
   get friction():number { return this._friction; }
   set friction( f:number ) { this._friction = f; }
 
-  get precision():boolean { return this._precise; }
-  set precision( f:boolean ) { this._precise = f; }
+  get damping():number { return this._damping; }
+  set damping( f:number ) { this._damping = f; }
 
   get bodyCount():number { return this._bodies.length; }
   get particleCount():number { return this._particles.length; }
 
-  add( p:Particle|Body ) {
+  add( p:Particle|Body ):this {
     if ( p instanceof Body) {
       this._bodies.push( <Body>p );
     } else {
       this._particles.push( <Particle>p );
     }
-    
+    return this;
   }
 
 
@@ -124,13 +125,13 @@ export class World {
       this.integrate( p, dt, this._lastTime );
 
       // constraints
-      World.boundConstraint( p, this._bound );
+      World.boundConstraint( p, this._bound, this._damping );
 
       // collisions
       for (let k=i+1; k<len; k++) {
         if (i!==k) {
           let p2 = this._particles[k];
-          p.collide( p2, this._friction );
+          p.collide( p2, this._damping );
         }
       }
       
@@ -149,13 +150,10 @@ export class World {
       // integrate
       for (let k=0, klen=b.length; k<klen; k++) {
         let bk = b[k] as Particle;
-        World.boundConstraint( bk, this._bound, this._friction );
+        World.boundConstraint( bk, this._bound, this._damping );
         this.integrate( bk, dt, this._lastTime );
       }
     
-      // constraints
-      b.processEdges( this._bound, this._friction );
-
       for (let k=i+1; k<len; k++) {
         b.processBody( this._bodies[k] );
       }
@@ -163,6 +161,9 @@ export class World {
       for (let m=0, mlen=this._particles.length; m<mlen; m++) {
         b.processParticle( this._particles[m] );
       }
+
+      // constraints
+      b.processEdges();
 
       // render
       if (this._drawBodies) this._drawBodies( b, i );
@@ -214,6 +215,12 @@ export class Particle extends Pt {
 
   get changed():Pt { return this.$subtract( this._prev ); }
 
+  size( r:number ):this {
+    this._mass = r * r;
+    this._radius = r;
+    return this;
+  }
+
   addForce( ...args ):Pt {
     this._force.add( ...args );
     return this._force;
@@ -240,7 +247,7 @@ export class Particle extends Pt {
   }
 
   hit( ...args ) {
-    this._prev.subtract( new Pt(...args).$divide( this._mass ) );
+    this._prev.subtract( new Pt(...args).$divide( Math.sqrt(this._mass) ) );
   }
 
   inertia() {
@@ -250,11 +257,14 @@ export class Particle extends Pt {
   }
 
 
-  collide( p2:Particle, friction:number=1 ) {
+  collide( p2:Particle, damp:number=1 ) {
+    // reference: http://codeflow.org/entries/2010/nov/29/verlet-collision-with-impulse-preservation
+
     let p1 = this;
     let dp = p1.$subtract( p2 );
     let distSq = dp.magnitudeSq();
     let dr = p1.radius + p2.radius;
+    
     if ( distSq < dr*dr ) {
 
       let c1 = p1.changed;
@@ -262,23 +272,24 @@ export class Particle extends Pt {
 
       let dist = Math.sqrt( distSq );
       let d =  dp.$multiply( ((dist-dr) / dist) / 2 );
+
+      let np1 = p1.$subtract( d );
+      let np2 = p2.$add( d );
+
+      p1.to( np1 );
+      p2.to( np2 );
       
-      p1.subtract( d );
-      p2.add( d );
+      let f1 = damp*dp.dot(c1)/distSq;
+      let f2 = damp*dp.dot(c2)/distSq;
 
-      // preserve impulse (http://codeflow.org/entries/2010/nov/29/verlet-collision-with-impulse-preservation/)
-      // let df1 = dp.$multiply( friction * dp.dot( c1 ) / distSq );
-      // let df2 = dp.$multiply( friction * dp.dot( c2 ) / distSq );
-      // let df = df2.subtract( df1 );
+      let dm1 = p1.mass / (p1.mass+p2.mass);
+      let dm2 = p2.mass / (p1.mass+p2.mass);
 
-      // let dm1 = p1.mass / (p1.mass+p2.mass);
-      // let dm2 = p2.mass / (p1.mass+p2.mass);
+      c1.add( new Pt( f2*dp[0] - f1*dp[0], f2*dp[1] - f1*dp[1] ).$multiply( dm2 ) );
+      c2.add( new Pt( f1*dp[0] - f2*dp[0], f1*dp[1] - f2*dp[1] ).$multiply( dm1 ) );
 
-      // c1.add( df.$multiply( dm2 ) );
-      // c2.add( df.multiply(-dm1) );
-
-      // p1.previous = p1.$subtract( c1 );
-      // p2.previous = p2.$subtract( c2 );
+      p1.previous = p1.$subtract( c1 ); 
+      p2.previous = p2.$subtract( c2 ); 
 
     }
   }
@@ -318,23 +329,23 @@ export class Body extends Group {
   } 
 
   get mass():number { return this._mass; }
-  set mass( m:number ) { this._mass = m; }
+  set mass( m:number ) { 
+    this._mass = m; 
+    for (let i=0, len=this.length; i<len; i++) {
+      (this[i] as Particle).mass = this._mass;
+    }
+  }
 
-  areaMass():this {
+  autoMass():this {
     this.mass = Math.sqrt( Polygon.area( this ) );
     return this;
   }
 
-  static fromGroup( list:GroupLike, autoLink:boolean=false, stiff?:number ):Body {
+  static fromGroup( list:GroupLike, stiff:number=1, autoLink:boolean=true, autoMass:boolean=true ):Body {
     let b = new Body().init( list );
     if (autoLink) b.linkAll( stiff );
+    if (autoMass) b.autoMass();
     return b;
-    // return Body.from( list ) as Body;
-    // let b = new Body();
-    // for (let i=0, len=list.length; i<len; i++) {
-    //   b.push( list[i] );
-    // }
-    // return b;
   }
 
 
@@ -388,7 +399,7 @@ export class Body extends Group {
   }
  
 
-  processEdges( bound:Group, friction?:number) {
+  processEdges() {
     for (let i=0, len=this._cs.length; i<len; i++) {
       let [m, n, d, s] = this._cs[i];
       World.edgeConstraint( this[m] as Particle, this[n] as Particle, d, s );
@@ -419,13 +430,13 @@ export class Body extends Group {
 
       let m0 = (hit.vertex as Particle).body.mass || 1;
       let m1 = (hit.edge[0] as Particle).body.mass || 1;
-      m0 = m0 / (m0+m1);
-      m1 = m1 / (m0+m1);
+      let mr0 = m0 / (m0+m1);
+      let mr1 = m1 / (m0+m1);
 
-      eg[0].subtract( cv.$multiply( m0*(1-t)*lambda/2 ) );
-      eg[1].subtract( cv.$multiply( m1*t*lambda/2 ) );
+      eg[0].subtract( cv.$multiply( mr0*(1-t)*lambda/2 ) );
+      eg[1].subtract( cv.$multiply( mr0*t*lambda/2 ) );
 
-      hit.vertex.add( cv.$multiply(0.5) );
+      hit.vertex.add( cv.$multiply(mr1) );
     }
 
   }
@@ -450,19 +461,19 @@ export class Body extends Group {
       }
 
       let lambda = 1/(t*t + (1-t)*(1-t));
-      let m0 = (hit.vertex as Particle).mass || 1;
+      let m0 = (hit.vertex as Particle).mass || b2.mass || 1;
       let m1 = (hit.edge[0] as Particle).body.mass || 1;
 
-      m0 = m0 / (m0+m1);
-      m1 = m1 / (m0+m1);
+      let mr0 = m0 / (m0+m1);
+      let mr1 = m1 / (m0+m1);
 
-      eg[0].subtract( cv.$multiply( m0*(1-t)*lambda/2 ) );
-      eg[1].subtract( cv.$multiply( m1*t*lambda/2 ) );
+      eg[0].subtract( cv.$multiply( mr0*(1-t)*lambda/2 ) );
+      eg[1].subtract( cv.$multiply( mr0*t*lambda/2 ) );
 
       // hit.vertex.add( cv.$multiply(0.5) );
-
+console.log( mr0, "---", mr1, ">>>>", m0, ",,,", m1 );
       let c1 = b.changed;
-      c1.add( cv.$multiply(0.5) );
+      c1.add( cv.$multiply(mr1) );
 
       // console.log( cv.toString(), hit.dist, hit.normal );
       // c2.add( df.multiply(-dm1) );
