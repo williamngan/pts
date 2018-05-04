@@ -7918,7 +7918,7 @@ class Particle extends Pt_1.Pt {
     }
     get changed() { return this.$subtract(this._prev); }
     size(r) {
-        this._mass = r * r;
+        this._mass = r;
         this._radius = r;
         return this;
     }
@@ -7951,6 +7951,7 @@ class Particle extends Pt_1.Pt {
     }
     collide(p2, damp = 1) {
         // reference: http://codeflow.org/entries/2010/nov/29/verlet-collision-with-impulse-preservation
+        // simultaneous collision not yet resolved. Possible solutions in this paper: https://www2.msm.ctw.utwente.nl/sluding/PAPERS/dem07.pdf 
         let p1 = this;
         let dp = p1.$subtract(p2);
         let distSq = dp.magnitudeSq();
@@ -8006,7 +8007,7 @@ class Body extends Pt_1.Group {
         }
     }
     autoMass() {
-        this.mass = Math.sqrt(Op_1.Polygon.area(this));
+        this.mass = Math.sqrt(Op_1.Polygon.area(this)) / 10;
         return this;
     }
     static fromGroup(list, stiff = 1, autoLink = true, autoMass = true) {
@@ -8105,14 +8106,10 @@ class Body extends Pt_1.Group {
             let mr1 = m1 / (m0 + m1);
             eg[0].subtract(cv.$multiply(mr0 * (1 - t) * lambda / 2));
             eg[1].subtract(cv.$multiply(mr0 * t * lambda / 2));
-            // hit.vertex.add( cv.$multiply(0.5) );
-            console.log(mr0, "---", mr1, ">>>>", m0, ",,,", m1);
-            let c1 = b.changed;
-            c1.add(cv.$multiply(mr1));
-            // console.log( cv.toString(), hit.dist, hit.normal );
-            // c2.add( df.multiply(-dm1) );
+            let c1 = b.changed.add(cv.$multiply(mr1));
             b.previous = b.$subtract(c1);
-            // p2.previous = p2.$subtract( c2 );
+            // let c2 = b2.changed.add( cv.$multiply(mr0) );
+            // b2.previous = b2.$subtract( c2 );
         }
     }
 }

@@ -32,7 +32,7 @@ window.demoDescription = "...";
 
       let pk1 = new Particle( new Pt( space.center.x, 100 ) ).size( 30 );
       world.add( pk1 );
-      pk1.hit( [-200, -40] );
+      pk1.hit( [-200, -50] );
 
       // for (let i=0, len=rect.length; i<len; i++) {
       //   let p = new Particle( rect[i] );
@@ -41,7 +41,7 @@ window.demoDescription = "...";
       // }
 
       body1[0].hit( new Pt(120, -40));
-      body2[0].hit( new Pt(-200, -20));
+      body2[0].hit( new Pt(-300, -20));
       body3[0].hit( new Pt(30, -30));
 
     },

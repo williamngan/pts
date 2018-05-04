@@ -216,7 +216,7 @@ export class Particle extends Pt {
   get changed():Pt { return this.$subtract( this._prev ); }
 
   size( r:number ):this {
-    this._mass = r * r;
+    this._mass = r;
     this._radius = r;
     return this;
   }
@@ -259,6 +259,7 @@ export class Particle extends Pt {
 
   collide( p2:Particle, damp:number=1 ) {
     // reference: http://codeflow.org/entries/2010/nov/29/verlet-collision-with-impulse-preservation
+    // simultaneous collision not yet resolved. Possible solutions in this paper: https://www2.msm.ctw.utwente.nl/sluding/PAPERS/dem07.pdf 
 
     let p1 = this;
     let dp = p1.$subtract( p2 );
@@ -337,7 +338,7 @@ export class Body extends Group {
   }
 
   autoMass():this {
-    this.mass = Math.sqrt( Polygon.area( this ) );
+    this.mass = Math.sqrt( Polygon.area( this ) ) / 10;
     return this;
   }
 
@@ -470,16 +471,11 @@ export class Body extends Group {
       eg[0].subtract( cv.$multiply( mr0*(1-t)*lambda/2 ) );
       eg[1].subtract( cv.$multiply( mr0*t*lambda/2 ) );
 
-      // hit.vertex.add( cv.$multiply(0.5) );
-console.log( mr0, "---", mr1, ">>>>", m0, ",,,", m1 );
-      let c1 = b.changed;
-      c1.add( cv.$multiply(mr1) );
-
-      // console.log( cv.toString(), hit.dist, hit.normal );
-      // c2.add( df.multiply(-dm1) );
-
+      let c1 = b.changed.add( cv.$multiply(mr1) );
       b.previous = b.$subtract( c1 );
-      // p2.previous = p2.$subtract( c2 );
+
+      // let c2 = b2.changed.add( cv.$multiply(mr0) );
+      // b2.previous = b2.$subtract( c2 );
     }
   
   }

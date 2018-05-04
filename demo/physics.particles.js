@@ -18,7 +18,7 @@ window.demoDescription = "...";
     start: (bound, space) => {
       world = new World( space.innerBound, 1, 0 );
 
-      let pts = Create.distributeRandom( space.innerBound, 70 );
+      let pts = Create.distributeRandom( space.innerBound, 100 );
       
       for (let i=0, len=pts.length; i<len; i++) {
         let p = new Particle( pts[i] ).size( 3 + Math.random()*20 );
@@ -30,7 +30,7 @@ window.demoDescription = "...";
 
     animate: (time, ftime) => {
 
-      world.drawParticles( (p, i) => form.fillOnly("#f00").point( p, p.radius, "circle" ) );
+      world.drawParticles( (p, i) => form.strokeOnly("#f00").point( p, p.radius, "circle" ) );
       world.update( ftime );
 
     },
