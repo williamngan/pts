@@ -28,11 +28,18 @@ window.demoDescription = "...";
 
       // let body2 = Body.rectangle( Rectangle.fromCenter( space.center.subtract(100,50), 100 ) );
       // let body3 = Body.rectangle( Rectangle.fromCenter( space.center.subtract(50,-150), 80 ) );
-      world.add( body1 ).add( body2 ).add( body3 );
+      world.add( body1 ).add( body2 ).add( body3, "triangle" );
 
       let pk1 = new Particle( new Pt( space.center.x, 100 ) ).size( 30 );
       world.add( pk1 );
       pk1.hit( [-200, -50] );
+
+      // let mk = new Particle( new Pt( space.pointer ) ).size( 30 );
+      // mk.lock = true;
+      // world.add( mk, "mouse" );
+
+      body3[0].lock = true;
+
 
       // for (let i=0, len=rect.length; i<len; i++) {
       //   let p = new Particle( rect[i] );
@@ -110,7 +117,8 @@ window.demoDescription = "...";
     },
 
     action:( type, px, py) => {
-      
+      // world.particle("mouse").position = new Pt(px, py);
+      world.body("triangle")[0].position = new Pt(px, py);
     },
     
     resize:( bound, evt) => {

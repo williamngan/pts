@@ -26,17 +26,27 @@ window.demoDescription = "...";
         world.add( p );
       }
 
+      world.particle( 0 ).lock = true;
+
     },
 
     animate: (time, ftime) => {
 
-      world.drawParticles( (p, i) => form.strokeOnly("#f00").point( p, p.radius, "circle" ) );
+      world.drawParticles( (p, i) => {
+        form.strokeOnly("#f00").point( p, p.radius, "circle" ) 
+        
+      });
+
+      
       world.update( ftime );
 
     },
 
     action:( type, px, py) => {
-      
+      if (type=="move") {
+        world.particle( 0 ).position = new Pt(px, py);
+      }
+    
     },
     
     resize:( bound, evt) => {

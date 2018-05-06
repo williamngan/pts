@@ -4,40 +4,149 @@ import {Bound} from "./Bound";
 import { Rectangle, Polygon, Circle } from "./Op";
 import { ParsedPath } from "path";
 
-
+/**
+ * A `World` stores and manages `Body` and `Particle` for 2D physics simulation
+ */
 export class World {
 
-  protected _gravity:Pt = new Pt();
-  protected _friction:number = 1;
-  protected _damping:number = 0.75;
-  protected _precise:boolean = false;
-  protected _bound:Bound;
   private _lastTime:number = null;
 
+  protected _gravity:Pt = new Pt();
+  protected _friction:number = 1; // general friction
+  protected _damping:number = 0.75; // collision damping
+  protected _bound:Bound;
+  
   protected _particles:Particle[] = [];
   protected _bodies:Body[] = [];
+
+  protected _names = {p: {}, b: {} };
 
   protected _drawParticles:(p:Particle, i:number) => void;
   protected _drawBodies:(p:Body, i:number) => void;
 
-  constructor( bound:Group, friction:number=1, gravity:Pt|number=0, precision:boolean=false ) {
+
+  /**
+   * Create a `World` for 2D physics simulation
+   * @param bound a rectangular bounding box defined by a Group
+   * @param friction a value between 0 to 1 where 1 means no friction. Default is 1
+   * @param gravity a number of a Pt to define gravitational force. Using a number is a shorthand to set `new Pt(0, n)`. Default is 0.
+   */
+  constructor( bound:Group, friction:number=1, gravity:PtLike|number=0 ) {
     this._bound = Bound.fromGroup( bound );
     this._friction = friction;
-    this._precise = precision;
-    this._gravity = (typeof gravity === "number") ? new Pt( 0, gravity) : gravity;
+    this._gravity = (typeof gravity === "number") ? new Pt( 0, gravity) : new Pt( gravity );
     return this;
-
   }
 
+
+  get gravity():Pt { return this._gravity; }
+  set gravity( g:Pt ) { this._gravity = g; }
+
+  get friction():number { return this._friction; }
+  set friction( f:number ) { this._friction = f; }
+
+  get damping():number { return this._damping; }
+  set damping( f:number ) { this._damping = f; }
+
+  /**
+   * Get the number of bodies
+   */
+  get bodyCount():number { return this._bodies.length; }
+
+  /**
+   * Get the number of particles
+   */
+  get particleCount():number { return this._particles.length; }
+
+
+
+  /**
+   * Get a body in this world by index or string id
+   * @param id numeric index of the body, or a string id that associates with it.
+   */
+  body( id:number|string ) { return this._bodies[ (typeof id === "string") ? this._names.b[id] : id ]; }
+
+
+  /**
+   * Get a particle in this world by index or string id
+   * @param id numeric index of the particle, or a string id that associates with it. 
+   */
+  particle( id:number ) { return this._particles[ (typeof id === "string") ? this._names.p[id] : id ]; }
+
+
+
+  /**
+   * Update this world one time step
+   * @param ms change in time in milliseconds
+   */
+  update( ms:number ) {
+    let dt = ms/1000;
+    this._updateParticles( dt );
+    this._updateBodies( dt );
+  }
+
+
+  /**
+   * Draw particles using the provided function
+   * @param fn a function that draws particles passed in the parameters `(particles, index)`.
+   */
   drawParticles( fn:(p:Particle, i:number) => void ):void {
     this._drawParticles = fn;
   }
 
+
+  /**
+   * Draw bodies using the provided function
+   * @param fn a function that draws bodies passed in the parameters `(bodies, index)`.
+   */
   drawBodies( fn:(p:Body, i:number) => void ):void {
     this._drawBodies = fn;
   }
 
 
+  /**
+   * Add a particle or body to this world.
+   * @param p `Particle` or `Body` instance
+   * @param name optional name, which can be referenced in `body()` or `particle()` function to retrieve this back.
+   */
+  add( p:Particle|Body, name?:string ):this {
+    if ( p instanceof Body) {
+      this._bodies.push( <Body>p );
+      if (name) this._names.b[name] = this._bodies.length-1;
+    } else {
+      this._particles.push( <Particle>p );
+      if (name) this._names.p[name] = this._particles.length-1;
+    }
+    return this;
+  }
+
+
+  /**
+   * Remove either body or particle from this world. Support removing a range and negative index.
+   * @param which Either "body" or "particle"
+   * @param index Start index, which can be negative (where -1 is at index 0, -2 at index 1, etc) 
+   * @param count Number of items to remove. Default is 1.
+   */
+  remove( which:"body"|"particle", index:number, count:number=1 ):this {
+    let param = (index<0) ? [index*-1 - 1, count] : [index, count];
+    if (which == "body") {
+      this._bodies.splice( param[0], param[1] );
+    } else {
+      this._particles.splice( param[0], param[1] );
+    }
+    return this;
+
+  }
+
+  
+  /**
+   * Static function to calculate edge constraints between 2 particles.
+   * @param p1 particle 1
+   * @param p2 particle 1
+   * @param dist distance between particles
+   * @param stiff stiffness between 0 to 1.
+   * @param precise use precise distance calculation. Default is `false`.
+   */
   static edgeConstraint( p1:Particle, p2:Particle, dist:number, stiff:number=1, precise:boolean=false ) {
     const m1 = 1 / (p1.mass || 1);
     const m2 = 1 / (p2.mass || 1);
@@ -55,7 +164,12 @@ export class World {
   }
 
 
-
+  /**
+   * Static function to calculate bounding box constraints.
+   * @param p particle
+   * @param rect bounding box defined by a Group
+   * @param damping damping between 0 to 1, where 1 means no damping. Default is 0.75.
+   */
   static boundConstraint( p:Particle, rect:Group, damping:number=0.75 ) {
     let bound = rect.boundingBox();
     let np = p.$min( bound[1].subtract( p.radius ) ).$max( bound[0].add( p.radius ) );
@@ -73,50 +187,23 @@ export class World {
   }
 
 
-
-  get gravity():Pt { return this._gravity; }
-  set gravity( g:Pt ) { this._gravity = g; }
-
-  get friction():number { return this._friction; }
-  set friction( f:number ) { this._friction = f; }
-
-  get damping():number { return this._damping; }
-  set damping( f:number ) { this._damping = f; }
-
-  get bodyCount():number { return this._bodies.length; }
-  get particleCount():number { return this._particles.length; }
-
-  add( p:Particle|Body ):this {
-    if ( p instanceof Body) {
-      this._bodies.push( <Body>p );
-    } else {
-      this._particles.push( <Particle>p );
-    }
-    return this;
-  }
-
-
-  body( index:number ) { return this._bodies[index]; }
-  particle( index:number ) { return this._particles[index]; }
-
-  
-  integrate( p:Particle, dt:number, prevDt?:number ):Particle {
-    
+  /**
+   * Internal integrate function
+   * @param p particle
+   * @param dt time changed
+   * @param prevDt previous change in time, optional
+   */
+  protected integrate( p:Particle, dt:number, prevDt?:number ):Particle {
     p.addForce( this._gravity );
     p.verlet( dt, this._friction, prevDt );
-
     return p;
   }
 
 
-
-  update( ms:number ) {
-    let dt = ms/1000;
-    this._updateParticles( dt );
-    this._updateBodies( dt );
-  }
-
-  _updateParticles( dt:number ) {
+  /**
+   * Internal function to update particles
+   */
+  protected _updateParticles( dt:number ) {
     
     for (let i=0, len=this._particles.length; i<len; i++) {
       let p = this._particles[i];
@@ -143,7 +230,10 @@ export class World {
   }
 
 
-  _updateBodies( dt:number ) {
+  /**
+   * Internal function to update bodies
+   */
+  protected _updateBodies( dt:number ) {
     for (let i=0, len=this._bodies.length; i<len; i++) {
       let b = this._bodies[i];
 
@@ -175,7 +265,9 @@ export class World {
 
 
 
-
+/**
+ * Particle is a Pt that has radius and mass. It's usually added into `World` to create physics simulations.
+ */
 export class Particle extends Pt {
 
   protected _mass:number = 1;
@@ -187,6 +279,11 @@ export class Particle extends Pt {
   protected _lock:boolean = false;
   protected _lockPt:Pt;
 
+
+  /**
+   * Create a particle
+   * @param args a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
+   */
   constructor( ...args ) {
     super( ...args );
     this._prev = this.clone();
@@ -198,65 +295,113 @@ export class Particle extends Pt {
   get radius():number { return this._radius; }
   set radius( f:number ) { this._radius = f; }
 
-  get force():Pt { return this._force; }
-  set force( g:Pt ) { this._force = g; }
-  
+  /**
+   * Get previous position
+   */
   get previous():Pt { return this._prev; }
   set previous( p:Pt ) { this._prev = p; }
 
+  /**
+   * Get current accumulated force
+   */
+  get force():Pt { return this._force; }
+  set force( g:Pt ) { this._force = g; }
+
+  /**
+   * Get the body of this particle, if any.
+   */
   get body():Body { return this._body; }
   set body( b:Body ) { this._body = b; }
 
+  /**
+   * 
+   */
   get lock():boolean { return this._lock; }
   set lock( b:boolean ) { 
     this._lock = b; 
-    this._lockPt = this.clone();
+    this._lockPt = new Pt(this);
   }
 
+  /**
+   * Get the change in position since last time step
+   */
   get changed():Pt { return this.$subtract( this._prev ); }
 
+
+  /**
+   * Set a new position, and update previous and lock states if needed.
+   */
+  set position( p:Pt ) {
+    this.previous.to( this );
+    if (this._lock) this._lockPt = p;
+    this.to( p );
+  }
+
+  
+  /**
+   * Set the size of this particle. This sets both the radius and the mass.
+   * @param r `radius` value, and also set `mass` to the same value.
+   */
   size( r:number ):this {
     this._mass = r;
     this._radius = r;
     return this;
   }
 
+
+  /**
+   * Add to the accumulated force
+   * @param args a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
+   */
   addForce( ...args ):Pt {
     this._force.add( ...args );
     return this._force;
   }
 
+
+  /**
+   * Verlet integration
+   * @param dt change in time 
+   * @param friction friction from 0 to 1, where 1 means no friction
+   * @param lastDt optional last change in time 
+   */
   verlet( dt:number, friction:number, lastDt?:number ):this {
     // Positional verlet: curr + (curr - prev) + a * dt * dt
 
     if (this._lock) {
       this.to( this._lockPt );
-      this._prev.to( this._lockPt );
+      // this._prev.to( this._lockPt );
+    } else {
+
+      // time corrected (https://en.wikipedia.org/wiki/Verlet_integration#Non-constant_time_differences)
+      let lt = (lastDt) ? lastDt : dt; 
+      let a = this._force.multiply( dt * (dt+lt)/2  );
+      let v = this.changed.multiply( friction * dt/lt ).add( a );
+
+      this._prev = this.clone();
+      this.add( v );
+      
+      this._force = new Pt();
     }
-
-    // time corrected (https://en.wikipedia.org/wiki/Verlet_integration#Non-constant_time_differences)
-    let lt = (lastDt) ? lastDt : dt; 
-    let a = this._force.multiply( dt * (dt+lt)/2  );
-    let v = this.changed.multiply( friction * dt/lt ).add( a );
-
-    this._prev = this.clone();
-    this.add( v );
-    
-    this._force = new Pt();
     return this;
   }
 
+
+  /**
+   * Hit this particle with an impulse
+   * @param args a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
+   * @example `hit(10, 20)`, `hit( new Pt(5, 9) )`
+   */
   hit( ...args ) {
     this._prev.subtract( new Pt(...args).$divide( Math.sqrt(this._mass) ) );
   }
 
-  inertia() {
-    let p = this.changed.add( this );
-    this.previous = this.clone();
-    this.to( p );
-  }
 
-
+  /**
+   * Check and respoond to collisions between two particles
+   * @param p2 another particle
+   * @param damp damping value between 0 to 1, where 1 means no damping.
+   */
   collide( p2:Particle, damp:number=1 ) {
     // reference: http://codeflow.org/entries/2010/nov/29/verlet-collision-with-impulse-preservation
     // simultaneous collision not yet resolved. Possible solutions in this paper: https://www2.msm.ctw.utwente.nl/sluding/PAPERS/dem07.pdf 
@@ -297,13 +442,15 @@ export class Particle extends Pt {
   
 
   toString() {
-    return `Particle: ${this[0]} ${this[1]} | prev ${this._prev[0]} ${this._prev[1]} | mass ${this._mass}`;
+    return `Particle: ${this[0]} ${this[1]} | previous ${this._prev[0]} ${this._prev[1]} | mass ${this._mass}`;
   }
 
 }
 
 
-
+/**
+ * Body consists of a group of `Particles` and edge constraints. It is usually added into a `World` to create physics simulations
+ */
 export class Body extends Group {
 
   protected _cs:Array<number[]> = [];
@@ -311,10 +458,34 @@ export class Body extends Group {
   protected _locks:{ [index:string]: Particle } = {};
   protected _mass:number = 1;
 
-  constructor(...args:Pt[]) {
-    super(...args);
+  /**
+   * Create an empty Body, this is usually followed by `init` to populate the Body. Alternatively, use static function `fromGroup` to create and initate a body directly.
+   */
+  constructor() {
+    super();
   }
 
+  
+  /**
+   * Create and populate a body with a group of Pts.
+   * @param list a group of Pts
+   * @param stiff stiffness value from 0 to 1, where 1 is the most stiff. Default is 1.
+   * @param autoLink Automatically create links between the Pts. This usually works for regular convex polygons. Default is true.
+   * @param autoMass Automatically calculate the mass based on the area of the polygon. Default is true.
+   */
+  static fromGroup( list:GroupLike, stiff:number=1, autoLink:boolean=true, autoMass:boolean=true ):Body {
+    let b = new Body().init( list );
+    if (autoLink) b.linkAll( stiff );
+    if (autoMass) b.autoMass();
+    return b;
+  }
+
+
+  /**
+   * Initiate a body 
+   * @param list a group of Pts
+   * @param stiff stiffness value from 0 to 1, where 1 is the most stiff. Default is 1.
+   */
   init( list:GroupLike, stiff:number=1 ):this {
     let c = new Pt();
     for (let i=0, len=list.length; i<len; i++) {
@@ -329,6 +500,10 @@ export class Body extends Group {
     return this;
   } 
 
+
+  /**
+   * Get mass of this body. 
+   */
   get mass():number { return this._mass; }
   set mass( m:number ) { 
     this._mass = m; 
@@ -337,27 +512,22 @@ export class Body extends Group {
     }
   }
 
+
+  /**
+   * Automatically calculate `mass` to body's polygon area.
+   */
   autoMass():this {
     this.mass = Math.sqrt( Polygon.area( this ) ) / 10;
     return this;
   }
 
-  static fromGroup( list:GroupLike, stiff:number=1, autoLink:boolean=true, autoMass:boolean=true ):Body {
-    let b = new Body().init( list );
-    if (autoLink) b.linkAll( stiff );
-    if (autoMass) b.autoMass();
-    return b;
-  }
 
-
-
-  static rectangle( rect:GroupLike, stiff?:number ):Body {
-    let pts = Rectangle.corners( rect );
-    let body = new Body().init( pts );
-    return body.link(0, 1, stiff).link(1, 2, stiff).link(2, 3, stiff).link( 3, 0, stiff ).link(1, 3, stiff).link(0, 2, stiff);
-  }
-
-
+  /**
+   * Create a linked edge between two points
+   * @param index1 first point by index
+   * @param index2 first point by index
+   * @param stiff optionally stiffness value between 0 to 1, where 1 is the most stiff.
+   */
   link( index1:number, index2:number, stiff?:number ):this {
     if (index1 < 0 || index1 >= this.length) throw new Error( "index1 is not in the Group's indices");
     if (index2 < 0 || index2 >= this.length) throw new Error( "index1 is not in the Group's indices");
@@ -369,7 +539,11 @@ export class Body extends Group {
 
 
 
-  linkAll( stiff:number ) {
+  /**
+   * Automatically create links for all the points to preserve the initial body shape. This usually works for regular convex polygon.
+   * @param stiff optionally stiffness value between 0 to 1, where 1 is the most stiff.
+   */
+  linkAll( stiff:number ):void {
     let half = this.length/2;
 
     for (let i=0, len=this.length; i<len; i++) {
@@ -389,7 +563,10 @@ export class Body extends Group {
   }
 
 
-
+  /**
+   * Return a list of all the linked edges as line segments.
+   * @returns an array of Groups, each of which represents an edge
+   */
   linksToLines():Group[] {
     let gs = [];
     for (let i=0, len=this._cs.length; i<len; i++) {
@@ -400,7 +577,10 @@ export class Body extends Group {
   }
  
 
-  processEdges() {
+  /**
+   * Recalculate all edge constraints
+   */
+  processEdges():void {
     for (let i=0, len=this._cs.length; i<len; i++) {
       let [m, n, d, s] = this._cs[i];
       World.edgeConstraint( this[m] as Particle, this[n] as Particle, d, s );
@@ -408,7 +588,10 @@ export class Body extends Group {
   }
 
 
-
+  /**
+   * Check and respond to collisions between two bodies
+   * @param b another body
+   */
   processBody( b:Body ) {
 
     let b1 = this;
@@ -443,6 +626,10 @@ export class Body extends Group {
   }
 
 
+  /**
+   * Check and respond to collisions between this body and a particle
+   * @param b a particle
+   */
   processParticle( b:Particle ) {
 
     let b1 = this;
