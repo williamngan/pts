@@ -1,6 +1,6 @@
 "use strict";
 // Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan)
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = require("./Util");
 const Op_1 = require("./Op");
@@ -345,9 +345,10 @@ class Geom {
      */
     static reflect2D(ps, line, axis) {
         let pts = (!Array.isArray(ps)) ? [ps] : ps;
+        let mat = LinearAlgebra_1.Mat.reflectAt2DMatrix(line[0], line[1]);
         for (let i = 0, len = pts.length; i < len; i++) {
             let p = (axis) ? pts[i].$take(axis) : pts[i];
-            p.to(LinearAlgebra_1.Mat.transform2D(p, LinearAlgebra_1.Mat.reflectAt2DMatrix(line[0], line[1])));
+            p.to(LinearAlgebra_1.Mat.transform2D(p, mat));
         }
         return Geom;
     }

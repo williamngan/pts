@@ -147,10 +147,16 @@ export declare class Pt extends PtBaseArray implements IPt, Iterable<number> {
      */
     $cross(...args: any[]): Pt;
     /**
-     * Calculate vector projection of this Pt on another Pt. Returns result as a new Pt.
+     * Calculate vector projection of this Pt on another Pt.
+     * @param p a list of numbers, an array of number, or an object with {x,y,z,w} properties
+     * @returns the projection vector as a Pt
+     */
+    $project(...args: any[]): Pt;
+    /**
+     * Calculate scalar projection
      * @param p a list of numbers, an array of number, or an object with {x,y,z,w} properties
      */
-    $project(p: Pt): Pt;
+    projectScalar(...args: any[]): number;
     /**
      * Absolute values for all values in this pt
      */

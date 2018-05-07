@@ -1,4 +1,12 @@
 import { Pt, PtLike, Group, GroupLike } from "./Pt";
+export declare type IntersectContext = {
+    which: number;
+    dist: number;
+    normal: Pt;
+    vertex: Pt;
+    edge: Group;
+    other?: any;
+};
 /**
  * Line class provides static functions to create and operate on lines. A line is usually represented as a Group of 2 Pts.
  * You can use the static function as-is, or apply the `op` method in Group or Pt to many of these functions.
@@ -97,7 +105,14 @@ export declare class Line {
      * @param poly a Group of Pts representing a polygon
      * @param sourceIsRay a boolean value to treat the line as a ray (infinite line). Default is `false`.
      */
-    static intersectPolygon2D(lineOrRay: GroupLike, poly: GroupLike[], sourceIsRay?: boolean): Group;
+    static intersectPolygon2D(lineOrRay: GroupLike, poly: GroupLike, sourceIsRay?: boolean): Group;
+    /**
+     * Find intersection points of 2 polygons. This checks all line segments in the two lists. Consider using a bounding-box check before calling this.
+     * @param lines1 an array of line segments
+     * @param lines2 an array of line segments
+     * @param isRay a boolean value to treat the line as a ray (infinite line). Default is `false`.
+     */
+    static intersectLines2D(lines1: GroupLike[], lines2: GroupLike[], isRay?: boolean): Group;
     /**
      * Get two intersection Pts of a ray with a 2D grid point
      * @param ray a ray specified by 2 Pts
@@ -114,9 +129,10 @@ export declare class Line {
     static intersectGridWithLine2D(line: GroupLike, gridPt: PtLike | number[]): Group;
     /**
      * Quick way to check rectangle intersection.
-     * For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersect2D()`.
+     * For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersectPolygon2D()`.
      * @param line a Group representing a line
      * @param rect a Group representing a rectangle
+     * @returns a Group of intersecting Pts
      */
     static intersectRect2D(line: GroupLike, rect: GroupLike): Group;
     /**
@@ -125,6 +141,24 @@ export declare class Line {
      * @param num number of points to get
      */
     static subpoints(line: GroupLike | number[][], num: number): Group;
+    /**
+     * Crop this line by a circle or rectangle at end point.
+     * @param line line to crop
+     * @param size size of circle or rectangle as Pt
+     * @param index line's end point index, ie, 0 = start and 1 = end.
+     * @param cropAsCircle a boolean to specify whether the `size` parameter should be treated as circle. Default is `true`.
+     * @return an intersecting point on the line that can be used for cropping.
+     */
+    static crop(line: GroupLike, size: PtLike, index?: number, cropAsCircle?: boolean): Pt;
+    /**
+     * Create an marker arrow or line, placed at an end point of this line
+     * @param line line to place marker
+     * @param size size of the marker as Pt
+     * @param graphic either "arrow" or "line"
+     * @param atTail a boolean, if `true`, the marker will be positioned at tail of the line (ie, index = 1). Default is `true`.
+     * @returns a Group that defines the marker's shape
+     */
+    static marker(line: GroupLike, size: PtLike, graphic?: string, atTail?: boolean): Group;
     /**
      * Convert this line to a rectangle representation
      * @param line a Group representing a line
@@ -227,11 +261,12 @@ export declare class Rectangle {
      * Check if a rectangle is within the bounds of another rectangle
      * @param rect1 a Group of 2 Pts representing a rectangle
      * @param rect2 a Group of 2 Pts representing a rectangle
+     * @param resetBoundingBox if `true`, reset the bounding box. Default is `false` which assumes the rect's first Pt at is its top-left corner.
      */
-    static hasIntersectRect2D(rect1: GroupLike, rect2: GroupLike): boolean;
+    static hasIntersectRect2D(rect1: GroupLike, rect2: GroupLike, resetBoundingBox?: boolean): boolean;
     /**
      * Quick way to check rectangle intersection.
-     * For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersect2D()`.
+     * For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersectPolygon2D()`.
      * @param rect1 a Group of 2 Pts representing a rectangle
      * @param rect2 a Group of 2 Pts representing a rectangle
      */
@@ -285,7 +320,7 @@ export declare class Circle {
     static intersectCircle2D(pts: GroupLike, circle: GroupLike): Group;
     /**
      * Quick way to check rectangle intersection with a circle.
-     * For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersect2D()`.
+     * For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersectPolygon2D()`.
      * @param pts a Group of 2 Pts representing a circle
      * @param rect a Group of 2 Pts representing a rectangle
      * @returns a Group of intersection points, or an empty Group if no intersection is found
@@ -392,6 +427,20 @@ export declare class Polygon {
      */
     static centroid(pts: GroupLike): Pt;
     /**
+     * Create a rectangular polygon
+     * @param center center point of the rectangle
+     * @param widthOrSize width as number, or a Pt representing the size of the rectangle
+     * @param height optional height
+     */
+    static rectangle(center: PtLike, widthOrSize: number | PtLike, height?: number): Group;
+    static fromCenter(center: PtLike, radius: number, sides: number): Group;
+    /**
+     * Given a Group of Pts that defines a polygon, get one edge using an index
+     * @param pts a Group
+     * @param idx index of a Pt in the Group
+     */
+    static lineAt(pts: GroupLike, idx: number): Group;
+    /**
      * Get the line segments in this polygon
      * @param pts a Group of Pts
      * @param closePath a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).
@@ -444,13 +493,6 @@ export declare class Polygon {
      */
     static convexHull(pts: GroupLike, sorted?: boolean): Group;
     /**
-     * Find intersection points of 2 polygons
-     * @param poly a Group representing a polygon
-     * @param linesOrRays an array of Groups representing lines
-     * @param sourceIsRay a boolean value to treat the line as a ray (infinite line). Default is `false`.
-     */
-    static intersect2D(poly: GroupLike[], linesOrRays: GroupLike[], sourceIsRay?: boolean): Group[];
-    /**
      * Given a point in the polygon as an origin, get an array of lines that connect all the remaining points to the origin point.
      * @param pts a Group representing a polygon
      * @param originIndex the origin point's index in the polygon
@@ -464,10 +506,49 @@ export declare class Polygon {
      */
     static nearestPt(pts: GroupLike, pt: PtLike): number;
     /**
+     * Project axis (eg, for use in Separation Axis Theorem)
+     * @param poly
+     * @param unitAxis
+     */
+    static projectAxis(poly: GroupLike, unitAxis: Pt): Pt;
+    /**
+     * Check overlap dist from projected axis
+     * @param poly1 first polygon
+     * @param poly2 second polygon
+     * @param unitAxis unit axis
+     */
+    protected static _axisOverlap(poly1: any, poly2: any, unitAxis: any): number;
+    /**
+     * Check if a Pt is inside a convex polygon
+     * @param poly a Group of Pt defining a convex polygon
+     * @param pt the Pt to check
+     */
+    static hasIntersectPoint(poly: GroupLike, pt: PtLike): boolean;
+    /**
+     * Check if a convex polygon and a circle has intersections using Separating Axis Theorem.
+     * @param poly a Group representing a convex polygon
+     * @param circle a Group representing a circle
+     * @returns an `IntersectContext` object that stores the intersection info, or undefined if there's no intersection
+     */
+    static hasIntersectCircle(poly: GroupLike, circle: GroupLike): IntersectContext;
+    /**
+     * Check if two convex polygons has intersections using Separating Axis Theorem.
+     * @param poly1 a Group representing a convex polygon
+     * @param poly2 a Group representing a convex polygon
+     * @return an `IntersectContext` object that stores the intersection info, or undefined if there's no intersection
+     */
+    static hasIntersectPolygon(poly1: GroupLike, poly2: GroupLike): IntersectContext;
+    /**
+     * Find intersection points of 2 polygons by checking every side of both polygons
+     * @param poly1 a Group representing a polygon
+     * @param poly2 another Group representing a polygon
+     */
+    static intersectPolygon2D(poly1: GroupLike, poly2: GroupLike): Group;
+    /**
      * Get a bounding box for each polygon group, as well as a union bounding-box for all groups
      * @param polys an array of Groups, or an array of Pt arrays
      */
-    static toRects(poly: GroupLike[]): GroupLike[];
+    static toRects(polys: GroupLike[]): GroupLike[];
 }
 /**
  * Curve class provides static functions to interpolate curves. A curve is usually represented as a Group of 3 control points.

@@ -1,6 +1,6 @@
 "use strict";
 // Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan)
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Space_1 = require("./Space");
 const Form_1 = require("./Form");
@@ -36,7 +36,6 @@ class CanvasSpace extends Space_1.MultiTouchSpace {
             this.id = "pts_existing_space";
         }
         else {
-            ;
             _selector = document.querySelector(elem);
             _existed = true;
             this.id = elem;
@@ -178,7 +177,6 @@ class CanvasSpace extends Space_1.MultiTouchSpace {
                     p.resize(this.bound, evt);
             }
         }
-        ;
         this.render(this._ctx);
         // if it's a valid resize event and space is not playing, repaint the canvas once
         if (evt && !this.isPlaying)
@@ -445,7 +443,7 @@ class CanvasForm extends Form_1.VisualForm {
      * @param c a string of text contents
      */
     getTextWidth(c) {
-        return (!this._estimateTextWidth) ? this._ctx.measureText(c).width : this._estimateTextWidth(c);
+        return (!this._estimateTextWidth) ? this._ctx.measureText(c + " .").width : this._estimateTextWidth(c);
     }
     /**
      * Truncate text to fit width

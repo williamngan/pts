@@ -1,6 +1,6 @@
 "use strict";
 // Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan)
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = require("./Util");
 const Num_1 = require("./Num");
@@ -179,11 +179,30 @@ class Line {
         let fn = sourceIsRay ? Line.intersectLineWithRay2D : Line.intersectLine2D;
         let pts = new Pt_1.Group();
         for (let i = 0, len = poly.length; i < len; i++) {
-            let d = fn(poly[i], lineOrRay);
+            let next = (i === len - 1) ? 0 : i + 1;
+            let d = fn([poly[i], poly[next]], lineOrRay);
             if (d)
                 pts.push(d);
         }
         return (pts.length > 0) ? pts : undefined;
+    }
+    /**
+     * Find intersection points of 2 polygons. This checks all line segments in the two lists. Consider using a bounding-box check before calling this.
+     * @param lines1 an array of line segments
+     * @param lines2 an array of line segments
+     * @param isRay a boolean value to treat the line as a ray (infinite line). Default is `false`.
+     */
+    static intersectLines2D(lines1, lines2, isRay = false) {
+        let group = new Pt_1.Group();
+        let fn = isRay ? Line.intersectLineWithRay2D : Line.intersectLine2D;
+        for (let i = 0, len = lines1.length; i < len; i++) {
+            for (let k = 0, lenk = lines2.length; k < lenk; k++) {
+                let _ip = fn(lines1[i], lines2[k]);
+                if (_ip)
+                    group.push(_ip);
+            }
+        }
+        return group;
     }
     /**
      * Get two intersection Pts of a ray with a 2D grid point
@@ -217,12 +236,16 @@ class Line {
     }
     /**
      * Quick way to check rectangle intersection.
-     * For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersect2D()`.
+     * For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersectPolygon2D()`.
      * @param line a Group representing a line
      * @param rect a Group representing a rectangle
+     * @returns a Group of intersecting Pts
      */
     static intersectRect2D(line, rect) {
-        return Rectangle.intersectRect2D(Line.toRect(line), rect);
+        let box = Num_1.Geom.boundingBox(Pt_1.Group.fromPtArray(line));
+        if (!Rectangle.hasIntersectRect2D(box, rect))
+            return new Pt_1.Group();
+        return Line.intersectLines2D([line], Rectangle.sides(rect));
     }
     /**
      * Get evenly distributed points on a line
@@ -235,6 +258,60 @@ class Line {
             pts.push(Num_1.Geom.interpolate(line[0], line[1], i / (num + 1)));
         }
         return pts;
+    }
+    /**
+     * Crop this line by a circle or rectangle at end point.
+     * @param line line to crop
+     * @param size size of circle or rectangle as Pt
+     * @param index line's end point index, ie, 0 = start and 1 = end.
+     * @param cropAsCircle a boolean to specify whether the `size` parameter should be treated as circle. Default is `true`.
+     * @return an intersecting point on the line that can be used for cropping.
+     */
+    static crop(line, size, index = 0, cropAsCircle = true) {
+        let tdx = (index === 0) ? 1 : 0;
+        let ls = line[tdx].$subtract(line[index]);
+        if (ls[0] === 0 || size[0] === 0)
+            return line[index];
+        if (cropAsCircle) {
+            let d = ls.unit().multiply(size[1]);
+            return line[index].$add(d);
+        }
+        else {
+            let rect = Rectangle.fromCenter(line[index], size);
+            let sides = Rectangle.sides(rect);
+            let sideIdx = 0;
+            if (Math.abs(ls[1] / ls[0]) > Math.abs(size[1] / size[0])) {
+                sideIdx = (ls[1] < 0) ? 0 : 2;
+            }
+            else {
+                sideIdx = (ls[0] < 0) ? 3 : 1;
+            }
+            return Line.intersectRay2D(sides[sideIdx], line);
+        }
+    }
+    /**
+     * Create an marker arrow or line, placed at an end point of this line
+     * @param line line to place marker
+     * @param size size of the marker as Pt
+     * @param graphic either "arrow" or "line"
+     * @param atTail a boolean, if `true`, the marker will be positioned at tail of the line (ie, index = 1). Default is `true`.
+     * @returns a Group that defines the marker's shape
+     */
+    static marker(line, size, graphic = ("arrow" || "line"), atTail = true) {
+        let h = atTail ? 0 : 1;
+        let t = atTail ? 1 : 0;
+        let unit = line[h].$subtract(line[t]);
+        if (unit.magnitudeSq() === 0)
+            return new Pt_1.Group();
+        unit.unit();
+        let ps = Num_1.Geom.perpendicular(unit).multiply(size[0]).add(line[t]);
+        if (graphic == "arrow") {
+            ps.add(unit.$multiply(size[1]));
+            return new Pt_1.Group(line[t], ps[0], ps[1]);
+        }
+        else {
+            return new Pt_1.Group(ps[0], ps[1]);
+        }
     }
     /**
      * Convert this line to a rectangle representation
@@ -400,23 +477,29 @@ class Rectangle {
      * Check if a rectangle is within the bounds of another rectangle
      * @param rect1 a Group of 2 Pts representing a rectangle
      * @param rect2 a Group of 2 Pts representing a rectangle
+     * @param resetBoundingBox if `true`, reset the bounding box. Default is `false` which assumes the rect's first Pt at is its top-left corner.
      */
-    static hasIntersectRect2D(rect1, rect2) {
-        let pts = Rectangle.corners(rect1);
-        for (let i = 0, len = pts.length; i < len; i++) {
-            if (Num_1.Geom.withinBound(pts[i], rect2[0], rect2[1]))
-                return true;
+    static hasIntersectRect2D(rect1, rect2, resetBoundingBox = false) {
+        if (resetBoundingBox) {
+            rect1 = Num_1.Geom.boundingBox(rect1);
+            rect2 = Num_1.Geom.boundingBox(rect2);
         }
-        return false;
+        if (rect1[0][0] > rect2[1][0] || rect2[0][0] > rect1[1][0])
+            return false;
+        if (rect1[0][1] > rect2[1][1] || rect2[0][1] > rect1[1][1])
+            return false;
+        return true;
     }
     /**
      * Quick way to check rectangle intersection.
-     * For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersect2D()`.
+     * For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersectPolygon2D()`.
      * @param rect1 a Group of 2 Pts representing a rectangle
      * @param rect2 a Group of 2 Pts representing a rectangle
      */
     static intersectRect2D(rect1, rect2) {
-        return Util_1.Util.flatten(Polygon.intersect2D(Rectangle.sides(rect1), Rectangle.sides(rect2)));
+        if (!Rectangle.hasIntersectRect2D(rect1, rect2))
+            return new Pt_1.Group();
+        return Line.intersectLines2D(Rectangle.sides(rect1), Rectangle.sides(rect2));
     }
 }
 exports.Rectangle = Rectangle;
@@ -536,7 +619,7 @@ class Circle {
     }
     /**
      * Quick way to check rectangle intersection with a circle.
-     * For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersect2D()`.
+     * For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersectPolygon2D()`.
      * @param pts a Group of 2 Pts representing a circle
      * @param rect a Group of 2 Pts representing a rectangle
      * @returns a Group of intersection points, or an empty Group if no intersection is found
@@ -733,12 +816,39 @@ class Polygon {
         return Num_1.Geom.centroid(pts);
     }
     /**
+     * Create a rectangular polygon
+     * @param center center point of the rectangle
+     * @param widthOrSize width as number, or a Pt representing the size of the rectangle
+     * @param height optional height
+     */
+    static rectangle(center, widthOrSize, height) {
+        return Rectangle.corners(Rectangle.fromCenter(center, widthOrSize, height));
+    }
+    static fromCenter(center, radius, sides) {
+        let g = new Pt_1.Group();
+        for (let i = 0; i < sides; i++) {
+            let ang = Math.PI * 2 * i / sides;
+            g.push(new Pt_1.Pt(Math.cos(ang) * radius, Math.sin(ang) * radius).add(center));
+        }
+        return g;
+    }
+    /**
+     * Given a Group of Pts that defines a polygon, get one edge using an index
+     * @param pts a Group
+     * @param idx index of a Pt in the Group
+     */
+    static lineAt(pts, idx) {
+        if (idx < 0 || idx >= pts.length)
+            throw new Error("index out of the Polygon's range");
+        return new Pt_1.Group(pts[idx], (idx === pts.length - 1) ? pts[0] : pts[idx + 1]);
+    }
+    /**
      * Get the line segments in this polygon
      * @param pts a Group of Pts
      * @param closePath a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).
      * @returns an array of Groups which has 2 Pts in each group
      */
-    static lines(pts, closePath = false) {
+    static lines(pts, closePath = true) {
         if (pts.length < 2)
             return _errorLength(new Pt_1.Group(), 2);
         let sp = Util_1.Util.split(pts, 2, 1);
@@ -903,21 +1013,6 @@ class Polygon {
         return hull;
     }
     /**
-     * Find intersection points of 2 polygons
-     * @param poly a Group representing a polygon
-     * @param linesOrRays an array of Groups representing lines
-     * @param sourceIsRay a boolean value to treat the line as a ray (infinite line). Default is `false`.
-     */
-    static intersect2D(poly, linesOrRays, sourceIsRay = false) {
-        let groups = [];
-        for (let i = 0, len = linesOrRays.length; i < len; i++) {
-            let _ip = Line.intersectPolygon2D(linesOrRays[i], poly, sourceIsRay);
-            if (_ip)
-                groups.push(_ip);
-        }
-        return groups;
-    }
-    /**
      * Given a point in the polygon as an origin, get an array of lines that connect all the remaining points to the origin point.
      * @param pts a Group representing a polygon
      * @param originIndex the origin point's index in the polygon
@@ -949,11 +1044,165 @@ class Polygon {
         return _item;
     }
     /**
+     * Project axis (eg, for use in Separation Axis Theorem)
+     * @param poly
+     * @param unitAxis
+     */
+    static projectAxis(poly, unitAxis) {
+        let dot = unitAxis.dot(poly[0]);
+        let d = new Pt_1.Pt(dot, dot);
+        for (let n = 1, len = poly.length; n < len; n++) {
+            dot = unitAxis.dot(poly[n]);
+            d = new Pt_1.Pt(Math.min(dot, d[0]), Math.max(dot, d[1]));
+        }
+        return d;
+    }
+    /**
+     * Check overlap dist from projected axis
+     * @param poly1 first polygon
+     * @param poly2 second polygon
+     * @param unitAxis unit axis
+     */
+    static _axisOverlap(poly1, poly2, unitAxis) {
+        let pa = Polygon.projectAxis(poly1, unitAxis);
+        let pb = Polygon.projectAxis(poly2, unitAxis);
+        return (pa[0] < pb[0]) ? pb[0] - pa[1] : pa[0] - pb[1];
+    }
+    /**
+     * Check if a Pt is inside a convex polygon
+     * @param poly a Group of Pt defining a convex polygon
+     * @param pt the Pt to check
+     */
+    static hasIntersectPoint(poly, pt) {
+        let c = false;
+        for (let i = 0, len = poly.length; i < len; i++) {
+            let ln = Polygon.lineAt(poly, i);
+            if (((ln[0][1] > pt[1]) != (ln[1][1] > pt[1])) &&
+                (pt[0] < (ln[1][0] - ln[0][0]) * (pt[1] - ln[0][1]) / (ln[1][1] - ln[0][1]) + ln[0][0])) {
+                c = !c;
+            }
+        }
+        return c;
+    }
+    /**
+     * Check if a convex polygon and a circle has intersections using Separating Axis Theorem.
+     * @param poly a Group representing a convex polygon
+     * @param circle a Group representing a circle
+     * @returns an `IntersectContext` object that stores the intersection info, or undefined if there's no intersection
+     */
+    static hasIntersectCircle(poly, circle) {
+        let info = {
+            which: -1,
+            dist: 0,
+            normal: null,
+            edge: null,
+            vertex: null,
+        };
+        let c = circle[0];
+        let r = circle[1][0];
+        let minDist = Number.MAX_SAFE_INTEGER;
+        for (let i = 0, len = poly.length; i < len; i++) {
+            let edge = Polygon.lineAt(poly, i);
+            let axis = new Pt_1.Pt(edge[0].y - edge[1].y, edge[1].x - edge[0].x).unit();
+            let poly2 = new Pt_1.Group(c.$add(axis.$multiply(r)), c.$subtract(axis.$multiply(r)));
+            let dist = Polygon._axisOverlap(poly, poly2, axis);
+            if (dist > 0) {
+                return null;
+            }
+            else if (Math.abs(dist) < minDist) {
+                // Fix edge case and make sure the circle is intersecting. To be improved.
+                let check = Rectangle.withinBound(edge, Line.perpendicularFromPt(edge, c)) || Circle.intersectLine2D(circle, edge).length > 0;
+                if (check) {
+                    info.edge = edge;
+                    info.normal = axis;
+                    minDist = Math.abs(dist);
+                    info.which = i;
+                }
+            }
+        }
+        if (!info.edge)
+            return null;
+        // direction
+        let dir = c.$subtract(Polygon.centroid(poly)).dot(info.normal);
+        if (dir < 0)
+            info.normal.multiply(-1);
+        info.dist = minDist;
+        info.vertex = c;
+        return info;
+    }
+    /**
+     * Check if two convex polygons has intersections using Separating Axis Theorem.
+     * @param poly1 a Group representing a convex polygon
+     * @param poly2 a Group representing a convex polygon
+     * @return an `IntersectContext` object that stores the intersection info, or undefined if there's no intersection
+     */
+    static hasIntersectPolygon(poly1, poly2) {
+        // Reference: https://www.gamedev.net/articles/programming/math-and-physics/a-verlet-based-approach-for-2d-game-physics-r2714/
+        let info = {
+            which: -1,
+            dist: 0,
+            normal: new Pt_1.Pt(),
+            edge: new Pt_1.Group(),
+            vertex: new Pt_1.Pt() // the vertex on a polygon that has intersected
+        };
+        let minDist = Number.MAX_SAFE_INTEGER;
+        for (let i = 0, plen = (poly1.length + poly2.length); i < plen; i++) {
+            let edge = (i < poly1.length) ? Polygon.lineAt(poly1, i) : Polygon.lineAt(poly2, i - poly1.length);
+            let axis = new Pt_1.Pt(edge[0].y - edge[1].y, edge[1].x - edge[0].x).unit(); // unit of a perpendicular vector
+            let dist = Polygon._axisOverlap(poly1, poly2, axis);
+            if (dist > 0) {
+                return null;
+            }
+            else if (Math.abs(dist) < minDist) {
+                // store intersected edge and a normal vector
+                info.edge = edge;
+                info.normal = axis;
+                minDist = Math.abs(dist);
+                info.which = (i < poly1.length) ? 0 : 1;
+            }
+        }
+        info.dist = minDist;
+        // flip if neded to make sure vertex and edge are in corresponding polygons
+        let b1 = (info.which === 0) ? poly2 : poly1;
+        let b2 = (info.which === 0) ? poly1 : poly2;
+        let c1 = Polygon.centroid(b1);
+        let c2 = Polygon.centroid(b2);
+        // direction
+        let dir = c1.$subtract(c2).dot(info.normal);
+        if (dir < 0)
+            info.normal.multiply(-1);
+        // find vertex at smallest distance
+        let smallest = Number.MAX_SAFE_INTEGER;
+        for (let i = 0, len = b1.length; i < len; i++) {
+            let d = info.normal.dot(b1[i].$subtract(c2));
+            if (d < smallest) {
+                smallest = d;
+                info.vertex = b1[i];
+            }
+        }
+        return info;
+    }
+    /**
+     * Find intersection points of 2 polygons by checking every side of both polygons
+     * @param poly1 a Group representing a polygon
+     * @param poly2 another Group representing a polygon
+     */
+    static intersectPolygon2D(poly1, poly2) {
+        let lp = Polygon.lines(poly1);
+        let g = [];
+        for (let i = 0, len = lp.length; i < len; i++) {
+            let ins = Line.intersectPolygon2D(lp[i], poly2, false);
+            if (ins)
+                g.push(ins);
+        }
+        return Util_1.Util.flatten(g, true);
+    }
+    /**
      * Get a bounding box for each polygon group, as well as a union bounding-box for all groups
      * @param polys an array of Groups, or an array of Pt arrays
      */
-    static toRects(poly) {
-        let boxes = poly.map((g) => Num_1.Geom.boundingBox(g));
+    static toRects(polys) {
+        let boxes = polys.map((g) => Num_1.Geom.boundingBox(g));
         let merged = Util_1.Util.flatten(boxes, false);
         boxes.unshift(Num_1.Geom.boundingBox(merged));
         return boxes;

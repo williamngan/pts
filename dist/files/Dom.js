@@ -1,4 +1,6 @@
 "use strict";
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Space_1 = require("./Space");
 const Form_1 = require("./Form");
@@ -136,7 +138,6 @@ class DOMSpace extends Space_1.MultiTouchSpace {
                     p.resize(this.bound, evt);
             }
         }
-        ;
         return this;
     }
     /**

@@ -1,6 +1,6 @@
 "use strict";
 // Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan)
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = require("./Util");
 const Num_1 = require("./Num");
@@ -221,15 +221,19 @@ class Pt extends exports.PtBaseArray {
      */
     $cross(...args) { return LinearAlgebra_1.Vec.cross(this, Util_1.Util.getArgs(args)); }
     /**
-     * Calculate vector projection of this Pt on another Pt. Returns result as a new Pt.
+     * Calculate vector projection of this Pt on another Pt.
+     * @param p a list of numbers, an array of number, or an object with {x,y,z,w} properties
+     * @returns the projection vector as a Pt
+     */
+    $project(...args) {
+        return this.$multiply(this.dot(...args) / this.magnitudeSq());
+    }
+    /**
+     * Calculate scalar projection
      * @param p a list of numbers, an array of number, or an object with {x,y,z,w} properties
      */
-    $project(p) {
-        let m = p.magnitude();
-        let a = this.$unit();
-        let b = p.$divide(m);
-        let dot = a.dot(b);
-        return a.multiply(m * dot);
+    projectScalar(...args) {
+        return this.dot(...args) / this.magnitude();
     }
     /**
      * Absolute values for all values in this pt
