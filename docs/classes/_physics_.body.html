@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Delaunay | Pts</title>
+	<title>Body | Pts</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,13 +56,13 @@
 					<a href="../index.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_create_.html">&quot;Create&quot;</a>
+					<a href="../modules/_physics_.html">&quot;Physics&quot;</a>
 				</li>
 				<li>
-					<a href="_create_.delaunay.html">Delaunay</a>
+					<a href="_physics_.body.html">Body</a>
 				</li>
 			</ul>
-			<h1>Class Delaunay</h1>
+			<h1>Class Body</h1>
 		</div>
 	</div>
 </header>
@@ -72,9 +72,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Delaunay is a Group of Pts that can generate Delaunay and Voronoi tessellations. The triangulation algorithm is ported from <a href="https://github.com/williamngan/pt">Pt</a>
-							This implementation is based on <a href="http://paulbourke.net/papers/triangulate/">Paul Bourke&#39;s algorithm</a>
-						with reference to its <a href="https://github.com/ironwallaby/delaunay">javascript implementation by ironwallaby</a></p>
+						<p>Body consists of a group of <code>Particles</code> and edge constraints. It is usually added into a <code>World</code> to create physics simulations</p>
 					</div>
 				</div>
 			</section>
@@ -85,7 +83,7 @@
 						<a href="_pt_.group.html" class="tsd-signature-type">Group</a>
 						<ul class="tsd-hierarchy">
 							<li>
-								<span class="target">Delaunay</span>
+								<span class="target">Body</span>
 							</li>
 						</ul>
 					</li>
@@ -96,9 +94,7 @@
 				<div class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">[</span>n: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">]: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></div>
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Delaunay is a Group of Pts that can generate Delaunay and Voronoi tessellations. The triangulation algorithm is ported from <a href="https://github.com/williamngan/pt">Pt</a>
-							This implementation is based on <a href="http://paulbourke.net/papers/triangulate/">Paul Bourke&#39;s algorithm</a>
-						with reference to its <a href="https://github.com/ironwallaby/delaunay">javascript implementation by ironwallaby</a></p>
+						<p>Body consists of a group of <code>Particles</code> and edge constraints. It is usually added into a <code>World</code> to create physics simulations</p>
 					</div>
 				</div>
 			</section>
@@ -106,134 +102,146 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section tsd-is-inherited">
+						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite"><a href="_physics_.body.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="_create_.delaunay.html#_id" class="tsd-kind-icon">_id</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_create_.delaunay.html#_mesh" class="tsd-kind-icon">_mesh</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_create_.delaunay.html#length" class="tsd-kind-icon">length</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_physics_.body.html#_cs" class="tsd-kind-icon">_cs</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="_physics_.body.html#_id" class="tsd-kind-icon">_id</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_physics_.body.html#_locks" class="tsd-kind-icon">_locks</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_physics_.body.html#_mass" class="tsd-kind-icon">_mass</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_physics_.body.html#_stiff" class="tsd-kind-icon">_stiff</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.body.html#length" class="tsd-kind-icon">length</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section tsd-is-inherited">
+						<section class="tsd-index-section ">
 							<h3>Accessors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#id" class="tsd-kind-icon">id</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#p1" class="tsd-kind-icon">p1</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#p2" class="tsd-kind-icon">p2</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#p3" class="tsd-kind-icon">p3</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#p4" class="tsd-kind-icon">p4</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#q1" class="tsd-kind-icon">q1</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#q2" class="tsd-kind-icon">q2</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#q3" class="tsd-kind-icon">q3</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#q4" class="tsd-kind-icon">q4</a></li>
+								<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#id" class="tsd-kind-icon">id</a></li>
+								<li class="tsd-kind-accessor tsd-parent-kind-class"><a href="_physics_.body.html#mass" class="tsd-kind-icon">mass</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#p1" class="tsd-kind-icon">p1</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#p2" class="tsd-kind-icon">p2</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#p3" class="tsd-kind-icon">p3</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#p4" class="tsd-kind-icon">p4</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#q1" class="tsd-kind-icon">q1</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#q2" class="tsd-kind-icon">q2</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#q3" class="tsd-kind-icon">q3</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#q4" class="tsd-kind-icon">q4</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#_matrixadd" class="tsd-kind-icon">$matrix<wbr>Add</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#_matrixmultiply" class="tsd-kind-icon">$matrix<wbr>Multiply</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#_zip" class="tsd-kind-icon">$zip</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="_create_.delaunay.html#_cache" class="tsd-kind-icon">_cache</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="_create_.delaunay.html#_circum" class="tsd-kind-icon">_circum</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="_create_.delaunay.html#_supertriangle" class="tsd-kind-icon">_super<wbr>Triangle</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="_create_.delaunay.html#_triangle" class="tsd-kind-icon">_triangle</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#add" class="tsd-kind-icon">add</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#anchorfrom" class="tsd-kind-icon">anchor<wbr>From</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#anchorto" class="tsd-kind-icon">anchor<wbr>To</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#boundingbox" class="tsd-kind-icon">bounding<wbr>Box</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#centroid" class="tsd-kind-icon">centroid</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#clone" class="tsd-kind-icon">clone</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_create_.delaunay.html#delaunay" class="tsd-kind-icon">delaunay</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#divide" class="tsd-kind-icon">divide</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#foreachpt" class="tsd-kind-icon">for<wbr>Each<wbr>Pt</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#insert" class="tsd-kind-icon">insert</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#interpolate" class="tsd-kind-icon">interpolate</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#lines" class="tsd-kind-icon">lines</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_create_.delaunay.html#mesh" class="tsd-kind-icon">mesh</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#moveby" class="tsd-kind-icon">move<wbr>By</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#moveto" class="tsd-kind-icon">move<wbr>To</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#multiply" class="tsd-kind-icon">multiply</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_create_.delaunay.html#neighborpts" class="tsd-kind-icon">neighbor<wbr>Pts</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_create_.delaunay.html#neighbors" class="tsd-kind-icon">neighbors</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#op" class="tsd-kind-icon">op</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#ops" class="tsd-kind-icon">ops</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#reflect2d" class="tsd-kind-icon">reflect2D</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#remove" class="tsd-kind-icon">remove</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#rotate2d" class="tsd-kind-icon">rotate2D</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#scale" class="tsd-kind-icon">scale</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#segments" class="tsd-kind-icon">segments</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#shear2d" class="tsd-kind-icon">shear2D</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#sortbydimension" class="tsd-kind-icon">sort<wbr>ByDimension</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#split" class="tsd-kind-icon">split</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#subtract" class="tsd-kind-icon">subtract</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#tostring" class="tsd-kind-icon">to<wbr>String</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_create_.delaunay.html#voronoi" class="tsd-kind-icon">voronoi</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_create_.delaunay.html#zipslice" class="tsd-kind-icon">zip<wbr>Slice</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected tsd-is-static"><a href="_create_.delaunay.html#_dedupe" class="tsd-kind-icon">_dedupe</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_create_.delaunay.html#concat" class="tsd-kind-icon">concat</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="_create_.delaunay.html#every" class="tsd-kind-icon">every</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="_create_.delaunay.html#filter" class="tsd-kind-icon">filter</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="_create_.delaunay.html#foreach" class="tsd-kind-icon">for<wbr>Each</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_create_.delaunay.html#fromarray" class="tsd-kind-icon">from<wbr>Array</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_create_.delaunay.html#fromptarray" class="tsd-kind-icon">from<wbr>PtArray</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_create_.delaunay.html#indexof" class="tsd-kind-icon">index<wbr>Of</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_create_.delaunay.html#join" class="tsd-kind-icon">join</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_create_.delaunay.html#lastindexof" class="tsd-kind-icon">last<wbr>Index<wbr>Of</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="_create_.delaunay.html#map" class="tsd-kind-icon">map</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_create_.delaunay.html#pop" class="tsd-kind-icon">pop</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_create_.delaunay.html#push" class="tsd-kind-icon">push</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="_create_.delaunay.html#reduce" class="tsd-kind-icon">reduce</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="_create_.delaunay.html#reduceright" class="tsd-kind-icon">reduce<wbr>Right</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_create_.delaunay.html#reverse" class="tsd-kind-icon">reverse</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_create_.delaunay.html#shift" class="tsd-kind-icon">shift</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_create_.delaunay.html#slice" class="tsd-kind-icon">slice</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="_create_.delaunay.html#some" class="tsd-kind-icon">some</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_create_.delaunay.html#sort" class="tsd-kind-icon">sort</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_create_.delaunay.html#splice" class="tsd-kind-icon">splice</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_create_.delaunay.html#tolocalestring" class="tsd-kind-icon">to<wbr>Locale<wbr>String</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_create_.delaunay.html#tostring-1" class="tsd-kind-icon">to<wbr>String</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_create_.delaunay.html#unshift" class="tsd-kind-icon">unshift</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#_matrixadd" class="tsd-kind-icon">$matrix<wbr>Add</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#_matrixmultiply" class="tsd-kind-icon">$matrix<wbr>Multiply</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#_zip" class="tsd-kind-icon">$zip</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#add" class="tsd-kind-icon">add</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#anchorfrom" class="tsd-kind-icon">anchor<wbr>From</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#anchorto" class="tsd-kind-icon">anchor<wbr>To</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_physics_.body.html#automass" class="tsd-kind-icon">auto<wbr>Mass</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#boundingbox" class="tsd-kind-icon">bounding<wbr>Box</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#centroid" class="tsd-kind-icon">centroid</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#clone" class="tsd-kind-icon">clone</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#divide" class="tsd-kind-icon">divide</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#foreachpt" class="tsd-kind-icon">for<wbr>Each<wbr>Pt</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_physics_.body.html#init" class="tsd-kind-icon">init</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#insert" class="tsd-kind-icon">insert</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#interpolate" class="tsd-kind-icon">interpolate</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#lines" class="tsd-kind-icon">lines</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_physics_.body.html#link" class="tsd-kind-icon">link</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_physics_.body.html#linkall" class="tsd-kind-icon">link<wbr>All</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_physics_.body.html#linkstolines" class="tsd-kind-icon">links<wbr>ToLines</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#moveby" class="tsd-kind-icon">move<wbr>By</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#moveto" class="tsd-kind-icon">move<wbr>To</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#multiply" class="tsd-kind-icon">multiply</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#op" class="tsd-kind-icon">op</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#ops" class="tsd-kind-icon">ops</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_physics_.body.html#processbody" class="tsd-kind-icon">process<wbr>Body</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_physics_.body.html#processedges" class="tsd-kind-icon">process<wbr>Edges</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_physics_.body.html#processparticle" class="tsd-kind-icon">process<wbr>Particle</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#reflect2d" class="tsd-kind-icon">reflect2D</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#remove" class="tsd-kind-icon">remove</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#rotate2d" class="tsd-kind-icon">rotate2D</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#scale" class="tsd-kind-icon">scale</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#segments" class="tsd-kind-icon">segments</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#shear2d" class="tsd-kind-icon">shear2D</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#sortbydimension" class="tsd-kind-icon">sort<wbr>ByDimension</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#split" class="tsd-kind-icon">split</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#subtract" class="tsd-kind-icon">subtract</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#tostring" class="tsd-kind-icon">to<wbr>String</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.body.html#zipslice" class="tsd-kind-icon">zip<wbr>Slice</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.body.html#concat" class="tsd-kind-icon">concat</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="_physics_.body.html#every" class="tsd-kind-icon">every</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="_physics_.body.html#filter" class="tsd-kind-icon">filter</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="_physics_.body.html#foreach" class="tsd-kind-icon">for<wbr>Each</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.body.html#fromarray" class="tsd-kind-icon">from<wbr>Array</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_physics_.body.html#fromgroup" class="tsd-kind-icon">from<wbr>Group</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.body.html#fromptarray" class="tsd-kind-icon">from<wbr>PtArray</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.body.html#indexof" class="tsd-kind-icon">index<wbr>Of</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.body.html#join" class="tsd-kind-icon">join</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.body.html#lastindexof" class="tsd-kind-icon">last<wbr>Index<wbr>Of</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="_physics_.body.html#map" class="tsd-kind-icon">map</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.body.html#pop" class="tsd-kind-icon">pop</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.body.html#push" class="tsd-kind-icon">push</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="_physics_.body.html#reduce" class="tsd-kind-icon">reduce</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="_physics_.body.html#reduceright" class="tsd-kind-icon">reduce<wbr>Right</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.body.html#reverse" class="tsd-kind-icon">reverse</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.body.html#shift" class="tsd-kind-icon">shift</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.body.html#slice" class="tsd-kind-icon">slice</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="_physics_.body.html#some" class="tsd-kind-icon">some</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.body.html#sort" class="tsd-kind-icon">sort</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.body.html#splice" class="tsd-kind-icon">splice</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.body.html#tolocalestring" class="tsd-kind-icon">to<wbr>Locale<wbr>String</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.body.html#tostring-1" class="tsd-kind-icon">to<wbr>String</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.body.html#unshift" class="tsd-kind-icon">unshift</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Constructors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
-					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Delaunay<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_create_.delaunay.html" class="tsd-signature-type">Delaunay</a></li>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Body<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_physics_.body.html" class="tsd-signature-type">Body</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#constructor">constructor</a></p>
+								<p>Overrides <a href="_pt_.group.html">Group</a>.<a href="_pt_.group.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L516">Pt.ts:516</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L463">Physics.ts:463</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a><span class="tsd-signature-symbol">[]</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_create_.delaunay.html" class="tsd-signature-type">Delaunay</a></h4>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Create an empty Body, this is usually followed by <code>init</code> to populate the Body. Alternatively, use static function <code>fromGroup</code> to create and initate a body directly.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <a href="_physics_.body.html" class="tsd-signature-type">Body</a></h4>
 						</li>
 					</ul>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+					<a name="_cs" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _cs</h3>
+					<div class="tsd-signature tsd-kind-icon">_cs<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L460">Physics.ts:460</a></li>
+						</ul>
+					</aside>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 					<a name="_id" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _id</h3>
@@ -245,13 +253,41 @@
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_mesh" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _mesh</h3>
-					<div class="tsd-signature tsd-kind-icon">_mesh<span class="tsd-signature-symbol">:</span> <a href="../modules/_create_.html#delaunaymesh" class="tsd-signature-type">DelaunayMesh</a><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+					<a name="_locks" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _locks</h3>
+					<div class="tsd-signature tsd-kind-icon">_locks<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Create.ts#L279">Create.ts:279</a></li>
+							<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L462">Physics.ts:462</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-index-signature">
+								<h5><span class="tsd-signature-symbol">[</span>index: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><a href="_physics_.particle.html" class="tsd-signature-type">Particle</a></h5>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+					<a name="_mass" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _mass</h3>
+					<div class="tsd-signature tsd-kind-icon">_mass<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;1</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L463">Physics.ts:463</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+					<a name="_stiff" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _stiff</h3>
+					<div class="tsd-signature tsd-kind-icon">_stiff<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;1</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L461">Physics.ts:461</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -272,7 +308,7 @@
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Accessors</h2>
 				<section class="tsd-panel tsd-member tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited">
 					<a name="id" class="tsd-anchor"></a>
@@ -302,6 +338,48 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5>s: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-accessor tsd-parent-kind-class">
+					<a name="mass" class="tsd-anchor"></a>
+					<h3>mass</h3>
+					<ul class="tsd-signatures tsd-kind-accessor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> mass<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">set</span> mass<span class="tsd-signature-symbol">(</span>m<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L511">Physics.ts:511</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get mass of this body.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+						</li>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L512">Physics.ts:512</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get mass of this body.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>m: <span class="tsd-signature-type">number</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -611,164 +689,6 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected">
-					<a name="_cache" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _cache</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon">_cache<span class="tsd-signature-symbol">(</span>o<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Create.ts#L421">Create.ts:421</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Record a DelaunayShape in the mesh</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>o: <span class="tsd-signature-type">any</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>DelaunayShape instance</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected">
-					<a name="_circum" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _circum</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon">_circum<span class="tsd-signature-symbol">(</span>i<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, j<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, k<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, tri<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span>, pts<span class="tsd-signature-symbol">?: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/_create_.html#delaunayshape" class="tsd-signature-type">DelaunayShape</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Create.ts#L468">Create.ts:468</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Get a circumcircle and triangle from 3 points in a list of points</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>i: <span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>index 1</p>
-									</div>
-								</li>
-								<li>
-									<h5>j: <span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>index 2</p>
-									</div>
-								</li>
-								<li>
-									<h5>k: <span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>index 3</p>
-									</div>
-								</li>
-								<li>
-									<h5>tri: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>a Group representing a triangle, or <code>false</code> to create it from indices</p>
-									</div>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol"> =&nbsp;this</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>a Group of Pts</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../modules/_create_.html#delaunayshape" class="tsd-signature-type">DelaunayShape</a></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected">
-					<a name="_supertriangle" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _super<wbr>Triangle</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon">_super<wbr>Triangle<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.group.html" class="tsd-signature-type">Group</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Create.ts#L432">Create.ts:432</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Get the initial &quot;super triangle&quot; that contains all the points in this set</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
-							<p>a Group representing a triangle</p>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected">
-					<a name="_triangle" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _triangle</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon">_triangle<span class="tsd-signature-symbol">(</span>i<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, j<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, k<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, pts<span class="tsd-signature-symbol">?: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.group.html" class="tsd-signature-type">Group</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Create.ts#L455">Create.ts:455</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Get a triangle from 3 points in a list of points</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>i: <span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>index 1</p>
-									</div>
-								</li>
-								<li>
-									<h5>j: <span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>index 2</p>
-									</div>
-								</li>
-								<li>
-									<h5>k: <span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>index 3</p>
-									</div>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> pts: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol"> =&nbsp;this</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>a Group of Pts</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
-						</li>
-					</ul>
-				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="add" class="tsd-anchor"></a>
 					<h3>add</h3>
@@ -865,6 +785,28 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="automass" class="tsd-anchor"></a>
+					<h3>auto<wbr>Mass</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">auto<wbr>Mass<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L523">Physics.ts:523</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Automatically calculate <code>mass</code> to body&#39;s polygon area.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="boundingbox" class="tsd-anchor"></a>
 					<h3>bounding<wbr>Box</h3>
@@ -935,41 +877,6 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="delaunay" class="tsd-anchor"></a>
-					<h3>delaunay</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">delaunay<span class="tsd-signature-symbol">(</span>triangleOnly<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><a href="../modules/_create_.html#delaunayshape" class="tsd-signature-type">DelaunayShape</a><span class="tsd-signature-symbol">[]</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Create.ts#L286">Create.ts:286</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Generate Delaunay triangles. This function also caches the mesh that is used to generate Voronoi tessellation in <code>voronoi()</code>.</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> triangleOnly: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;true</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>if true, returns an array of triangles in Groups, otherwise return the whole DelaunayShape</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a><span class="tsd-signature-symbol">[]</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<a href="../modules/_create_.html#delaunayshape" class="tsd-signature-type">DelaunayShape</a><span class="tsd-signature-symbol">[]</span>
-							</h4>
-							<p>an array of Groups or an array of DelaunayShapes <code>{i, j, k, triangle, circle}</code> which records the indices of the vertices, and the calculated triangles and circumcircles</p>
-						</li>
-					</ul>
-				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="divide" class="tsd-anchor"></a>
 					<h3>divide</h3>
@@ -1033,6 +940,43 @@
 									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>arguments for the function specified in ptFn</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="init" class="tsd-anchor"></a>
+					<h3>init</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">init<span class="tsd-signature-symbol">(</span>list<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a>, stiff<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L493">Physics.ts:493</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Initiate a body</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>list: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a group of Pts</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> stiff: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;1</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>stiffness value from 0 to 1, where 1 is the most stiff. Default is 1.</p>
 									</div>
 								</li>
 							</ul>
@@ -1134,25 +1078,99 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="mesh" class="tsd-anchor"></a>
-					<h3>mesh</h3>
+					<a name="link" class="tsd-anchor"></a>
+					<h3>link</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">mesh<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/_create_.html#delaunaymesh" class="tsd-signature-type">DelaunayMesh</a></li>
+						<li class="tsd-signature tsd-kind-icon">link<span class="tsd-signature-symbol">(</span>index1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, index2<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, stiff<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Create.ts#L381">Create.ts:381</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L535">Physics.ts:535</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Get the cached mesh. The mesh is an array of objects, each of which representing the enclosing triangles around a Pt in this Delaunay group</p>
+									<p>Create a linked edge between two points</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <a href="../modules/_create_.html#delaunaymesh" class="tsd-signature-type">DelaunayMesh</a></h4>
-							<p>an array of objects that store a series of DelaunayShapes</p>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>index1: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>first point by index</p>
+									</div>
+								</li>
+								<li>
+									<h5>index2: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>first point by index</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> stiff: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>optionally stiffness value between 0 to 1, where 1 is the most stiff.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="linkall" class="tsd-anchor"></a>
+					<h3>link<wbr>All</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">link<wbr>All<span class="tsd-signature-symbol">(</span>stiff<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L550">Physics.ts:550</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Automatically create links for all the points to preserve the initial body shape. This usually works for regular convex polygon.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>stiff: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>optionally stiffness value between 0 to 1, where 1 is the most stiff.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="linkstolines" class="tsd-anchor"></a>
+					<h3>links<wbr>ToLines</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">links<wbr>ToLines<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.group.html" class="tsd-signature-type">Group</a><span class="tsd-signature-symbol">[]</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L574">Physics.ts:574</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Return a list of all the linked edges as line segments.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a><span class="tsd-signature-symbol">[]</span></h4>
+							<p>an array of Groups, each of which represents an edge</p>
 						</li>
 					</ul>
 				</section>
@@ -1249,76 +1267,6 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="neighborpts" class="tsd-anchor"></a>
-					<h3>neighbor<wbr>Pts</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">neighbor<wbr>Pts<span class="tsd-signature-symbol">(</span>i<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, sort<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Create.ts#L392">Create.ts:392</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Given an index of a Pt in this Delaunay Group, returns its neighboring Pts in the network</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>i: <span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>index of a Pt</p>
-									</div>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> sort: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>if true, sort the neighbors so that their edges will form a polygon</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h4>
-							<p>an array of Pts</p>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="neighbors" class="tsd-anchor"></a>
-					<h3>neighbors</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">neighbors<span class="tsd-signature-symbol">(</span>i<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/_create_.html#delaunayshape" class="tsd-signature-type">DelaunayShape</a><span class="tsd-signature-symbol">[]</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Create.ts#L407">Create.ts:407</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Given an index of a Pt in this Delaunay Group, returns its neighboring DelaunayShapes</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>i: <span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>index of a Pt</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../modules/_create_.html#delaunayshape" class="tsd-signature-type">DelaunayShape</a><span class="tsd-signature-symbol">[]</span></h4>
-							<p>an array of DelaunayShapes <code>{i, j, k, triangle, circle}</code></p>
 						</li>
 					</ul>
 				</section>
@@ -1426,6 +1374,90 @@
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">[]</span></h4>
 							<p>an array of resulting functions</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="processbody" class="tsd-anchor"></a>
+					<h3>process<wbr>Body</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">process<wbr>Body<span class="tsd-signature-symbol">(</span>b<span class="tsd-signature-symbol">: </span><a href="_physics_.body.html" class="tsd-signature-type">Body</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L599">Physics.ts:599</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Check and respond to collisions between two bodies</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>b: <a href="_physics_.body.html" class="tsd-signature-type">Body</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>another body</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="processedges" class="tsd-anchor"></a>
+					<h3>process<wbr>Edges</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">process<wbr>Edges<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L587">Physics.ts:587</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Recalculate all edge constraints</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="processparticle" class="tsd-anchor"></a>
+					<h3>process<wbr>Particle</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">process<wbr>Particle<span class="tsd-signature-symbol">(</span>b<span class="tsd-signature-symbol">: </span><a href="_physics_.particle.html" class="tsd-signature-type">Particle</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L637">Physics.ts:637</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Check and respond to collisions between this body and a particle</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>b: <a href="_physics_.particle.html" class="tsd-signature-type">Particle</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a particle</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -1810,29 +1842,6 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="voronoi" class="tsd-anchor"></a>
-					<h3>voronoi</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">voronoi<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.group.html" class="tsd-signature-type">Group</a><span class="tsd-signature-symbol">[]</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Create.ts#L367">Create.ts:367</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Generate Voronoi cells. <code>delaunay()</code> must be called before calling this function.</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a><span class="tsd-signature-symbol">[]</span></h4>
-							<p>an array of Groups, each of which represents a Voronoi cell</p>
-						</li>
-					</ul>
-				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="zipslice" class="tsd-anchor"></a>
 					<h3>zip<wbr>Slice</h3>
@@ -1865,36 +1874,6 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected tsd-is-static">
-					<a name="_dedupe" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> <span class="tsd-flag ts-flagProtected">Protected</span> _dedupe</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">_dedupe<span class="tsd-signature-symbol">(</span>edges<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Create.ts#L484">Create.ts:484</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Dedupe the edges array</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>edges: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
-									<div class="tsd-comment tsd-typography">
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -2459,6 +2438,55 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_pt_.group.html" class="tsd-signature-type">Group</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="fromgroup" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> from<wbr>Group</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">from<wbr>Group<span class="tsd-signature-symbol">(</span>list<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a>, stiff<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, autoLink<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span>, autoMass<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_physics_.body.html" class="tsd-signature-type">Body</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L480">Physics.ts:480</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Create and populate a body with a group of Pts.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>list: <a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a group of Pts</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> stiff: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;1</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>stiffness value from 0 to 1, where 1 is the most stiff. Default is 1.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> autoLink: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;true</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Automatically create links between the Pts. This usually works for regular convex polygons. Default is true.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> autoMass: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;true</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Automatically calculate the mass based on the area of the polygon. Default is true.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="_physics_.body.html" class="tsd-signature-type">Body</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -4241,7 +4269,7 @@
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_color_.html">"<wbr>Color"</a>
 					</li>
-					<li class="current tsd-kind-external-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_create_.html">"<wbr>Create"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -4259,7 +4287,7 @@
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_op_.html">"<wbr>Op"</a>
 					</li>
-					<li class=" tsd-kind-external-module">
+					<li class="current tsd-kind-external-module">
 						<a href="../modules/_physics_.html">"<wbr>Physics"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -4290,260 +4318,257 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="_create_.create.html" class="tsd-kind-icon">Create</a>
-					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-external-module">
-						<a href="_create_.delaunay.html" class="tsd-kind-icon">Delaunay</a>
+						<a href="_physics_.body.html" class="tsd-kind-icon">Body</a>
 						<ul>
-							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#constructor" class="tsd-kind-icon">constructor</a>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
+								<a href="_physics_.body.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+								<a href="_physics_.body.html#_cs" class="tsd-kind-icon">_cs</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-								<a href="_create_.delaunay.html#_id" class="tsd-kind-icon">_id</a>
+								<a href="_physics_.body.html#_id" class="tsd-kind-icon">_id</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="_create_.delaunay.html#_mesh" class="tsd-kind-icon">_mesh</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+								<a href="_physics_.body.html#_locks" class="tsd-kind-icon">_locks</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+								<a href="_physics_.body.html#_mass" class="tsd-kind-icon">_mass</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+								<a href="_physics_.body.html#_stiff" class="tsd-kind-icon">_stiff</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_create_.delaunay.html#length" class="tsd-kind-icon">length</a>
+								<a href="_physics_.body.html#length" class="tsd-kind-icon">length</a>
 							</li>
 							<li class=" tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#id" class="tsd-kind-icon">id</a>
+								<a href="_physics_.body.html#id" class="tsd-kind-icon">id</a>
+							</li>
+							<li class=" tsd-kind-accessor tsd-parent-kind-class">
+								<a href="_physics_.body.html#mass" class="tsd-kind-icon">mass</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#p1" class="tsd-kind-icon">p1</a>
+								<a href="_physics_.body.html#p1" class="tsd-kind-icon">p1</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#p2" class="tsd-kind-icon">p2</a>
+								<a href="_physics_.body.html#p2" class="tsd-kind-icon">p2</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#p3" class="tsd-kind-icon">p3</a>
+								<a href="_physics_.body.html#p3" class="tsd-kind-icon">p3</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#p4" class="tsd-kind-icon">p4</a>
+								<a href="_physics_.body.html#p4" class="tsd-kind-icon">p4</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#q1" class="tsd-kind-icon">q1</a>
+								<a href="_physics_.body.html#q1" class="tsd-kind-icon">q1</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#q2" class="tsd-kind-icon">q2</a>
+								<a href="_physics_.body.html#q2" class="tsd-kind-icon">q2</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#q3" class="tsd-kind-icon">q3</a>
+								<a href="_physics_.body.html#q3" class="tsd-kind-icon">q3</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#q4" class="tsd-kind-icon">q4</a>
+								<a href="_physics_.body.html#q4" class="tsd-kind-icon">q4</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#_matrixadd" class="tsd-kind-icon">$matrix<wbr>Add</a>
+								<a href="_physics_.body.html#_matrixadd" class="tsd-kind-icon">$matrix<wbr>Add</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#_matrixmultiply" class="tsd-kind-icon">$matrix<wbr>Multiply</a>
+								<a href="_physics_.body.html#_matrixmultiply" class="tsd-kind-icon">$matrix<wbr>Multiply</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#_zip" class="tsd-kind-icon">$zip</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
-								<a href="_create_.delaunay.html#_cache" class="tsd-kind-icon">_cache</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
-								<a href="_create_.delaunay.html#_circum" class="tsd-kind-icon">_circum</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
-								<a href="_create_.delaunay.html#_supertriangle" class="tsd-kind-icon">_super<wbr>Triangle</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
-								<a href="_create_.delaunay.html#_triangle" class="tsd-kind-icon">_triangle</a>
+								<a href="_physics_.body.html#_zip" class="tsd-kind-icon">$zip</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#add" class="tsd-kind-icon">add</a>
+								<a href="_physics_.body.html#add" class="tsd-kind-icon">add</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#anchorfrom" class="tsd-kind-icon">anchor<wbr>From</a>
+								<a href="_physics_.body.html#anchorfrom" class="tsd-kind-icon">anchor<wbr>From</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#anchorto" class="tsd-kind-icon">anchor<wbr>To</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#boundingbox" class="tsd-kind-icon">bounding<wbr>Box</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#centroid" class="tsd-kind-icon">centroid</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#clone" class="tsd-kind-icon">clone</a>
+								<a href="_physics_.body.html#anchorto" class="tsd-kind-icon">anchor<wbr>To</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_create_.delaunay.html#delaunay" class="tsd-kind-icon">delaunay</a>
+								<a href="_physics_.body.html#automass" class="tsd-kind-icon">auto<wbr>Mass</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#divide" class="tsd-kind-icon">divide</a>
+								<a href="_physics_.body.html#boundingbox" class="tsd-kind-icon">bounding<wbr>Box</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#foreachpt" class="tsd-kind-icon">for<wbr>Each<wbr>Pt</a>
+								<a href="_physics_.body.html#centroid" class="tsd-kind-icon">centroid</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#insert" class="tsd-kind-icon">insert</a>
+								<a href="_physics_.body.html#clone" class="tsd-kind-icon">clone</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#interpolate" class="tsd-kind-icon">interpolate</a>
+								<a href="_physics_.body.html#divide" class="tsd-kind-icon">divide</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#lines" class="tsd-kind-icon">lines</a>
+								<a href="_physics_.body.html#foreachpt" class="tsd-kind-icon">for<wbr>Each<wbr>Pt</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_create_.delaunay.html#mesh" class="tsd-kind-icon">mesh</a>
+								<a href="_physics_.body.html#init" class="tsd-kind-icon">init</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#moveby" class="tsd-kind-icon">move<wbr>By</a>
+								<a href="_physics_.body.html#insert" class="tsd-kind-icon">insert</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#moveto" class="tsd-kind-icon">move<wbr>To</a>
+								<a href="_physics_.body.html#interpolate" class="tsd-kind-icon">interpolate</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#multiply" class="tsd-kind-icon">multiply</a>
+								<a href="_physics_.body.html#lines" class="tsd-kind-icon">lines</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_create_.delaunay.html#neighborpts" class="tsd-kind-icon">neighbor<wbr>Pts</a>
+								<a href="_physics_.body.html#link" class="tsd-kind-icon">link</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_create_.delaunay.html#neighbors" class="tsd-kind-icon">neighbors</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#op" class="tsd-kind-icon">op</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#ops" class="tsd-kind-icon">ops</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#reflect2d" class="tsd-kind-icon">reflect2D</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#remove" class="tsd-kind-icon">remove</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#rotate2d" class="tsd-kind-icon">rotate2D</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#scale" class="tsd-kind-icon">scale</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#segments" class="tsd-kind-icon">segments</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#shear2d" class="tsd-kind-icon">shear2D</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#sortbydimension" class="tsd-kind-icon">sort<wbr>ByDimension</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#split" class="tsd-kind-icon">split</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#subtract" class="tsd-kind-icon">subtract</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#tostring" class="tsd-kind-icon">to<wbr>String</a>
+								<a href="_physics_.body.html#linkall" class="tsd-kind-icon">link<wbr>All</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_create_.delaunay.html#voronoi" class="tsd-kind-icon">voronoi</a>
+								<a href="_physics_.body.html#linkstolines" class="tsd-kind-icon">links<wbr>ToLines</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_create_.delaunay.html#zipslice" class="tsd-kind-icon">zip<wbr>Slice</a>
+								<a href="_physics_.body.html#moveby" class="tsd-kind-icon">move<wbr>By</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected tsd-is-static">
-								<a href="_create_.delaunay.html#_dedupe" class="tsd-kind-icon">_dedupe</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.body.html#moveto" class="tsd-kind-icon">move<wbr>To</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.body.html#multiply" class="tsd-kind-icon">multiply</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.body.html#op" class="tsd-kind-icon">op</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.body.html#ops" class="tsd-kind-icon">ops</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_physics_.body.html#processbody" class="tsd-kind-icon">process<wbr>Body</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_physics_.body.html#processedges" class="tsd-kind-icon">process<wbr>Edges</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_physics_.body.html#processparticle" class="tsd-kind-icon">process<wbr>Particle</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.body.html#reflect2d" class="tsd-kind-icon">reflect2D</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.body.html#remove" class="tsd-kind-icon">remove</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.body.html#rotate2d" class="tsd-kind-icon">rotate2D</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.body.html#scale" class="tsd-kind-icon">scale</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.body.html#segments" class="tsd-kind-icon">segments</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.body.html#shear2d" class="tsd-kind-icon">shear2D</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.body.html#sortbydimension" class="tsd-kind-icon">sort<wbr>ByDimension</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.body.html#split" class="tsd-kind-icon">split</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.body.html#subtract" class="tsd-kind-icon">subtract</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.body.html#tostring" class="tsd-kind-icon">to<wbr>String</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.body.html#zipslice" class="tsd-kind-icon">zip<wbr>Slice</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_create_.delaunay.html#concat" class="tsd-kind-icon">concat</a>
+								<a href="_physics_.body.html#concat" class="tsd-kind-icon">concat</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
-								<a href="_create_.delaunay.html#every" class="tsd-kind-icon">every</a>
+								<a href="_physics_.body.html#every" class="tsd-kind-icon">every</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
-								<a href="_create_.delaunay.html#filter" class="tsd-kind-icon">filter</a>
+								<a href="_physics_.body.html#filter" class="tsd-kind-icon">filter</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
-								<a href="_create_.delaunay.html#foreach" class="tsd-kind-icon">for<wbr>Each</a>
+								<a href="_physics_.body.html#foreach" class="tsd-kind-icon">for<wbr>Each</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_create_.delaunay.html#fromarray" class="tsd-kind-icon">from<wbr>Array</a>
+								<a href="_physics_.body.html#fromarray" class="tsd-kind-icon">from<wbr>Array</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="_physics_.body.html#fromgroup" class="tsd-kind-icon">from<wbr>Group</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_create_.delaunay.html#fromptarray" class="tsd-kind-icon">from<wbr>PtArray</a>
+								<a href="_physics_.body.html#fromptarray" class="tsd-kind-icon">from<wbr>PtArray</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_create_.delaunay.html#indexof" class="tsd-kind-icon">index<wbr>Of</a>
+								<a href="_physics_.body.html#indexof" class="tsd-kind-icon">index<wbr>Of</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_create_.delaunay.html#join" class="tsd-kind-icon">join</a>
+								<a href="_physics_.body.html#join" class="tsd-kind-icon">join</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_create_.delaunay.html#lastindexof" class="tsd-kind-icon">last<wbr>Index<wbr>Of</a>
+								<a href="_physics_.body.html#lastindexof" class="tsd-kind-icon">last<wbr>Index<wbr>Of</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
-								<a href="_create_.delaunay.html#map" class="tsd-kind-icon">map</a>
+								<a href="_physics_.body.html#map" class="tsd-kind-icon">map</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_create_.delaunay.html#pop" class="tsd-kind-icon">pop</a>
+								<a href="_physics_.body.html#pop" class="tsd-kind-icon">pop</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_create_.delaunay.html#push" class="tsd-kind-icon">push</a>
+								<a href="_physics_.body.html#push" class="tsd-kind-icon">push</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
-								<a href="_create_.delaunay.html#reduce" class="tsd-kind-icon">reduce</a>
+								<a href="_physics_.body.html#reduce" class="tsd-kind-icon">reduce</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
-								<a href="_create_.delaunay.html#reduceright" class="tsd-kind-icon">reduce<wbr>Right</a>
+								<a href="_physics_.body.html#reduceright" class="tsd-kind-icon">reduce<wbr>Right</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_create_.delaunay.html#reverse" class="tsd-kind-icon">reverse</a>
+								<a href="_physics_.body.html#reverse" class="tsd-kind-icon">reverse</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_create_.delaunay.html#shift" class="tsd-kind-icon">shift</a>
+								<a href="_physics_.body.html#shift" class="tsd-kind-icon">shift</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_create_.delaunay.html#slice" class="tsd-kind-icon">slice</a>
+								<a href="_physics_.body.html#slice" class="tsd-kind-icon">slice</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
-								<a href="_create_.delaunay.html#some" class="tsd-kind-icon">some</a>
+								<a href="_physics_.body.html#some" class="tsd-kind-icon">some</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_create_.delaunay.html#sort" class="tsd-kind-icon">sort</a>
+								<a href="_physics_.body.html#sort" class="tsd-kind-icon">sort</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_create_.delaunay.html#splice" class="tsd-kind-icon">splice</a>
+								<a href="_physics_.body.html#splice" class="tsd-kind-icon">splice</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_create_.delaunay.html#tolocalestring" class="tsd-kind-icon">to<wbr>Locale<wbr>String</a>
+								<a href="_physics_.body.html#tolocalestring" class="tsd-kind-icon">to<wbr>Locale<wbr>String</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_create_.delaunay.html#tostring-1" class="tsd-kind-icon">to<wbr>String</a>
+								<a href="_physics_.body.html#tostring-1" class="tsd-kind-icon">to<wbr>String</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_create_.delaunay.html#unshift" class="tsd-kind-icon">unshift</a>
+								<a href="_physics_.body.html#unshift" class="tsd-kind-icon">unshift</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
 					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="_create_.noise.html" class="tsd-kind-icon">Noise</a>
+						<a href="_physics_.particle.html" class="tsd-kind-icon">Particle</a>
 					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
-						<a href="../modules/_create_.html#delaunaymesh" class="tsd-kind-icon">Delaunay<wbr>Mesh</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
-						<a href="../modules/_create_.html#delaunayshape" class="tsd-kind-icon">Delaunay<wbr>Shape</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="../modules/_create_.html#grad3" class="tsd-kind-icon">grad3</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="../modules/_create_.html#permtable" class="tsd-kind-icon">perm<wbr>Table</a>
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="_physics_.world.html" class="tsd-kind-icon">World</a>
 					</li>
 				</ul>
 			</nav>

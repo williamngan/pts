@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Pt | Pts</title>
+	<title>Particle | Pts</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,13 +56,13 @@
 					<a href="../index.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_pt_.html">&quot;Pt&quot;</a>
+					<a href="../modules/_physics_.html">&quot;Physics&quot;</a>
 				</li>
 				<li>
-					<a href="_pt_.pt.html">Pt</a>
+					<a href="_physics_.particle.html">Particle</a>
 				</li>
 			</ul>
-			<h1>Class Pt</h1>
+			<h1>Class Particle</h1>
 		</div>
 	</div>
 </header>
@@ -72,8 +72,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Pt is a subclass of Float32Array with additional properties and functions to support vector and geometric calculations.
-						See <a href="../../guide/Pt-0200.html">Pt guide</a> for details</p>
+						<p>Particle is a Pt that has radius and mass. It&#39;s usually added into <code>World</code> to create physics simulations.</p>
 					</div>
 				</div>
 			</section>
@@ -81,21 +80,10 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="tsd-signature-type">Float32Array</span>
+						<a href="_pt_.pt.html" class="tsd-signature-type">Pt</a>
 						<ul class="tsd-hierarchy">
 							<li>
-								<span class="target">Pt</span>
-								<ul class="tsd-hierarchy">
-									<li>
-										<a href="_create_.noise.html" class="tsd-signature-type">Noise</a>
-									</li>
-									<li>
-										<a href="_color_.color.html" class="tsd-signature-type">Color</a>
-									</li>
-									<li>
-										<a href="_physics_.particle.html" class="tsd-signature-type">Particle</a>
-									</li>
-								</ul>
+								<span class="target">Particle</span>
 							</li>
 						</ul>
 					</li>
@@ -113,8 +101,7 @@
 				<div class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">[</span>index: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">]: </span><span class="tsd-signature-type">number</span></div>
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Pt is a subclass of Float32Array with additional properties and functions to support vector and geometric calculations.
-						See <a href="../../guide/Pt-0200.html">Pt guide</a> for details</p>
+						<p>Particle is a Pt that has radius and mass. It&#39;s usually added into <code>World</code> to create physics simulations.</p>
 					</div>
 				</div>
 			</section>
@@ -125,107 +112,121 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="_pt_.pt.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite"><a href="_physics_.particle.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_pt_.pt.html#_id" class="tsd-kind-icon">_id</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#bytes_per_element" class="tsd-kind-icon">BYTES_<wbr>PER_<wbr>ELEMENT</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="_pt_.pt.html#float32array" class="tsd-kind-icon">Float32<wbr>Array</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#___tostringtag" class="tsd-kind-icon">__@to<wbr>String<wbr>Tag</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#buffer" class="tsd-kind-icon">buffer</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#bytelength" class="tsd-kind-icon">byte<wbr>Length</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#byteoffset" class="tsd-kind-icon">byte<wbr>Offset</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#length" class="tsd-kind-icon">length</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_physics_.particle.html#_body" class="tsd-kind-icon">_body</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_physics_.particle.html#_force" class="tsd-kind-icon">_force</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="_physics_.particle.html#_id" class="tsd-kind-icon">_id</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_physics_.particle.html#_lock" class="tsd-kind-icon">_lock</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_physics_.particle.html#_lockpt" class="tsd-kind-icon">_lock<wbr>Pt</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_physics_.particle.html#_mass" class="tsd-kind-icon">_mass</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_physics_.particle.html#_prev" class="tsd-kind-icon">_prev</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_physics_.particle.html#_radius" class="tsd-kind-icon">_radius</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.particle.html#bytes_per_element" class="tsd-kind-icon">BYTES_<wbr>PER_<wbr>ELEMENT</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.particle.html#buffer" class="tsd-kind-icon">buffer</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.particle.html#bytelength" class="tsd-kind-icon">byte<wbr>Length</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.particle.html#byteoffset" class="tsd-kind-icon">byte<wbr>Offset</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.particle.html#length" class="tsd-kind-icon">length</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Accessors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-accessor tsd-parent-kind-class"><a href="_pt_.pt.html#id" class="tsd-kind-icon">id</a></li>
-								<li class="tsd-kind-accessor tsd-parent-kind-class"><a href="_pt_.pt.html#w" class="tsd-kind-icon">w</a></li>
-								<li class="tsd-kind-accessor tsd-parent-kind-class"><a href="_pt_.pt.html#x" class="tsd-kind-icon">x</a></li>
-								<li class="tsd-kind-accessor tsd-parent-kind-class"><a href="_pt_.pt.html#y" class="tsd-kind-icon">y</a></li>
-								<li class="tsd-kind-accessor tsd-parent-kind-class"><a href="_pt_.pt.html#z" class="tsd-kind-icon">z</a></li>
+								<li class="tsd-kind-accessor tsd-parent-kind-class"><a href="_physics_.particle.html#body" class="tsd-kind-icon">body</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="_physics_.particle.html#changed" class="tsd-kind-icon">changed</a></li>
+								<li class="tsd-kind-accessor tsd-parent-kind-class"><a href="_physics_.particle.html#force" class="tsd-kind-icon">force</a></li>
+								<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#id" class="tsd-kind-icon">id</a></li>
+								<li class="tsd-kind-accessor tsd-parent-kind-class"><a href="_physics_.particle.html#lock" class="tsd-kind-icon">lock</a></li>
+								<li class="tsd-kind-accessor tsd-parent-kind-class"><a href="_physics_.particle.html#mass" class="tsd-kind-icon">mass</a></li>
+								<li class="tsd-kind-set-signature tsd-parent-kind-class"><a href="_physics_.particle.html#position" class="tsd-kind-icon">position</a></li>
+								<li class="tsd-kind-accessor tsd-parent-kind-class"><a href="_physics_.particle.html#previous" class="tsd-kind-icon">previous</a></li>
+								<li class="tsd-kind-accessor tsd-parent-kind-class"><a href="_physics_.particle.html#radius" class="tsd-kind-icon">radius</a></li>
+								<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#w" class="tsd-kind-icon">w</a></li>
+								<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#x" class="tsd-kind-icon">x</a></li>
+								<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#y" class="tsd-kind-icon">y</a></li>
+								<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#z" class="tsd-kind-icon">z</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#_abs" class="tsd-kind-icon">$abs</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#_add" class="tsd-kind-icon">$add</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#_ceil" class="tsd-kind-icon">$ceil</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#_concat" class="tsd-kind-icon">$concat</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#_cross" class="tsd-kind-icon">$cross</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#_divide" class="tsd-kind-icon">$divide</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#_floor" class="tsd-kind-icon">$floor</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#_max" class="tsd-kind-icon">$max</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#_min" class="tsd-kind-icon">$min</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#_multiply" class="tsd-kind-icon">$multiply</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#_project" class="tsd-kind-icon">$project</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#_round" class="tsd-kind-icon">$round</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#_subtract" class="tsd-kind-icon">$subtract</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#_take" class="tsd-kind-icon">$take</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#_to" class="tsd-kind-icon">$to</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#_unit" class="tsd-kind-icon">$unit</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#abs" class="tsd-kind-icon">abs</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#add" class="tsd-kind-icon">add</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#angle" class="tsd-kind-icon">angle</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#anglebetween" class="tsd-kind-icon">angle<wbr>Between</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#ceil" class="tsd-kind-icon">ceil</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#clone" class="tsd-kind-icon">clone</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#cross2d" class="tsd-kind-icon">cross2D</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#divide" class="tsd-kind-icon">divide</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#dot" class="tsd-kind-icon">dot</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#equals" class="tsd-kind-icon">equals</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#floor" class="tsd-kind-icon">floor</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#magnitude" class="tsd-kind-icon">magnitude</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#magnitudesq" class="tsd-kind-icon">magnitude<wbr>Sq</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#maxvalue" class="tsd-kind-icon">max<wbr>Value</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#minvalue" class="tsd-kind-icon">min<wbr>Value</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#multiply" class="tsd-kind-icon">multiply</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#op" class="tsd-kind-icon">op</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#ops" class="tsd-kind-icon">ops</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#projectscalar" class="tsd-kind-icon">project<wbr>Scalar</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#reflect2d" class="tsd-kind-icon">reflect2D</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#rotate2d" class="tsd-kind-icon">rotate2D</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#round" class="tsd-kind-icon">round</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#scale" class="tsd-kind-icon">scale</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#shear2d" class="tsd-kind-icon">shear2D</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#subtract" class="tsd-kind-icon">subtract</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#to" class="tsd-kind-icon">to</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#toangle" class="tsd-kind-icon">to<wbr>Angle</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#toarray" class="tsd-kind-icon">to<wbr>Array</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#tostring" class="tsd-kind-icon">to<wbr>String</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_pt_.pt.html#unit" class="tsd-kind-icon">unit</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#___iterator" class="tsd-kind-icon">__@iterator</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#copywithin" class="tsd-kind-icon">copy<wbr>Within</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#entries" class="tsd-kind-icon">entries</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#every" class="tsd-kind-icon">every</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#fill" class="tsd-kind-icon">fill</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#filter" class="tsd-kind-icon">filter</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#find" class="tsd-kind-icon">find</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#findindex" class="tsd-kind-icon">find<wbr>Index</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#foreach" class="tsd-kind-icon">for<wbr>Each</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#indexof" class="tsd-kind-icon">index<wbr>Of</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#join" class="tsd-kind-icon">join</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#keys" class="tsd-kind-icon">keys</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#lastindexof" class="tsd-kind-icon">last<wbr>Index<wbr>Of</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_pt_.pt.html#make" class="tsd-kind-icon">make</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#map" class="tsd-kind-icon">map</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#reduce" class="tsd-kind-icon">reduce</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#reduceright" class="tsd-kind-icon">reduce<wbr>Right</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#reverse" class="tsd-kind-icon">reverse</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#set" class="tsd-kind-icon">set</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#slice" class="tsd-kind-icon">slice</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#some" class="tsd-kind-icon">some</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#sort" class="tsd-kind-icon">sort</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#subarray" class="tsd-kind-icon">subarray</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#tolocalestring" class="tsd-kind-icon">to<wbr>Locale<wbr>String</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#tostring-1" class="tsd-kind-icon">to<wbr>String</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_pt_.pt.html#values" class="tsd-kind-icon">values</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#_abs" class="tsd-kind-icon">$abs</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#_add" class="tsd-kind-icon">$add</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#_ceil" class="tsd-kind-icon">$ceil</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#_concat" class="tsd-kind-icon">$concat</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#_cross" class="tsd-kind-icon">$cross</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#_divide" class="tsd-kind-icon">$divide</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#_floor" class="tsd-kind-icon">$floor</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#_max" class="tsd-kind-icon">$max</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#_min" class="tsd-kind-icon">$min</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#_multiply" class="tsd-kind-icon">$multiply</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#_project" class="tsd-kind-icon">$project</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#_round" class="tsd-kind-icon">$round</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#_subtract" class="tsd-kind-icon">$subtract</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#_take" class="tsd-kind-icon">$take</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#_to" class="tsd-kind-icon">$to</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#_unit" class="tsd-kind-icon">$unit</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#abs" class="tsd-kind-icon">abs</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#add" class="tsd-kind-icon">add</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_physics_.particle.html#addforce" class="tsd-kind-icon">add<wbr>Force</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#angle" class="tsd-kind-icon">angle</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#anglebetween" class="tsd-kind-icon">angle<wbr>Between</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#ceil" class="tsd-kind-icon">ceil</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#clone" class="tsd-kind-icon">clone</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_physics_.particle.html#collide" class="tsd-kind-icon">collide</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#cross2d" class="tsd-kind-icon">cross2D</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#divide" class="tsd-kind-icon">divide</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#dot" class="tsd-kind-icon">dot</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#equals" class="tsd-kind-icon">equals</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#floor" class="tsd-kind-icon">floor</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_physics_.particle.html#hit" class="tsd-kind-icon">hit</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#magnitude" class="tsd-kind-icon">magnitude</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#magnitudesq" class="tsd-kind-icon">magnitude<wbr>Sq</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#maxvalue" class="tsd-kind-icon">max<wbr>Value</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#minvalue" class="tsd-kind-icon">min<wbr>Value</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#multiply" class="tsd-kind-icon">multiply</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#op" class="tsd-kind-icon">op</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#ops" class="tsd-kind-icon">ops</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#projectscalar" class="tsd-kind-icon">project<wbr>Scalar</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#reflect2d" class="tsd-kind-icon">reflect2D</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#rotate2d" class="tsd-kind-icon">rotate2D</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#round" class="tsd-kind-icon">round</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#scale" class="tsd-kind-icon">scale</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#shear2d" class="tsd-kind-icon">shear2D</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_physics_.particle.html#size" class="tsd-kind-icon">size</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#subtract" class="tsd-kind-icon">subtract</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#to" class="tsd-kind-icon">to</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#toangle" class="tsd-kind-icon">to<wbr>Angle</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#toarray" class="tsd-kind-icon">to<wbr>Array</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="_physics_.particle.html#tostring" class="tsd-kind-icon">to<wbr>String</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_physics_.particle.html#unit" class="tsd-kind-icon">unit</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_physics_.particle.html#verlet" class="tsd-kind-icon">verlet</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.particle.html#copywithin" class="tsd-kind-icon">copy<wbr>Within</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="_physics_.particle.html#every" class="tsd-kind-icon">every</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.particle.html#fill" class="tsd-kind-icon">fill</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="_physics_.particle.html#filter" class="tsd-kind-icon">filter</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="_physics_.particle.html#find" class="tsd-kind-icon">find</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="_physics_.particle.html#findindex" class="tsd-kind-icon">find<wbr>Index</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="_physics_.particle.html#foreach" class="tsd-kind-icon">for<wbr>Each</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.particle.html#indexof" class="tsd-kind-icon">index<wbr>Of</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.particle.html#join" class="tsd-kind-icon">join</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.particle.html#lastindexof" class="tsd-kind-icon">last<wbr>Index<wbr>Of</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.particle.html#make" class="tsd-kind-icon">make</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="_physics_.particle.html#map" class="tsd-kind-icon">map</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="_physics_.particle.html#reduce" class="tsd-kind-icon">reduce</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="_physics_.particle.html#reduceright" class="tsd-kind-icon">reduce<wbr>Right</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.particle.html#reverse" class="tsd-kind-icon">reverse</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.particle.html#set" class="tsd-kind-icon">set</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.particle.html#slice" class="tsd-kind-icon">slice</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static"><a href="_physics_.particle.html#some" class="tsd-kind-icon">some</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.particle.html#sort" class="tsd-kind-icon">sort</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.particle.html#subarray" class="tsd-kind-icon">subarray</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.particle.html#tolocalestring" class="tsd-kind-icon">to<wbr>Locale<wbr>String</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_physics_.particle.html#tostring-1" class="tsd-kind-icon">to<wbr>String</a></li>
 							</ul>
 						</section>
 					</div>
@@ -233,29 +234,24 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Constructors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
-					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Pt<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Particle<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_physics_.particle.html" class="tsd-signature-type">Particle</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Overrides <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L28">Pt.ts:28</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L283">Physics.ts:283</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Create a Pt. If no parameter is provided, this will instantiate a Pt with 2 dimensions [0, 0].</p>
+									<p>Create a particle</p>
 								</div>
-								<p>Note that <code>new Pt(3)</code> will only instantiate Pt with length of 3 (ie, same as <code>new Float32Array(3)</code> ). If you need a Pt with 1 dimension of value 3, use <code>new Pt([3])</code>.</p>
-								<dl class="tsd-comment-tags">
-									<dt>example</dt>
-									<dd><p><code>new Pt()</code>, <code>new Pt(1,2,3,4,5)</code>, <code>new Pt([1,2])</code>, <code>new Pt({x:0, y:1})</code>, <code>new Pt(pt)</code></p>
-									</dd>
-								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -268,7 +264,7 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="_physics_.particle.html" class="tsd-signature-type">Particle</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -276,12 +272,83 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+					<a name="_body" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _body</h3>
+					<div class="tsd-signature tsd-kind-icon">_body<span class="tsd-signature-symbol">:</span> <a href="_physics_.body.html" class="tsd-signature-type">Body</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L281">Physics.ts:281</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+					<a name="_force" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _force</h3>
+					<div class="tsd-signature tsd-kind-icon">_force<span class="tsd-signature-symbol">:</span> <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a><span class="tsd-signature-symbol"> =&nbsp;new Pt()</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L278">Physics.ts:278</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 					<a name="_id" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _id</h3>
 					<div class="tsd-signature tsd-kind-icon">_id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#_id">_id</a></p>
 						<ul>
 							<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L28">Pt.ts:28</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+					<a name="_lock" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _lock</h3>
+					<div class="tsd-signature tsd-kind-icon">_lock<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L282">Physics.ts:282</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+					<a name="_lockpt" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _lock<wbr>Pt</h3>
+					<div class="tsd-signature tsd-kind-icon">_lock<wbr>Pt<span class="tsd-signature-symbol">:</span> <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L283">Physics.ts:283</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+					<a name="_mass" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _mass</h3>
+					<div class="tsd-signature tsd-kind-icon">_mass<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;1</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L276">Physics.ts:276</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+					<a name="_prev" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _prev</h3>
+					<div class="tsd-signature tsd-kind-icon">_prev<span class="tsd-signature-symbol">:</span> <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a><span class="tsd-signature-symbol"> =&nbsp;new Pt()</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L279">Physics.ts:279</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+					<a name="_radius" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _radius</h3>
+					<div class="tsd-signature tsd-kind-icon">_radius<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;0</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L277">Physics.ts:277</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -300,27 +367,6 @@
 							<p>The size in bytes of each element in the array.</p>
 						</div>
 					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
-					<a name="float32array" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> Float32<wbr>Array</h3>
-					<div class="tsd-signature tsd-kind-icon">Float32<wbr>Array<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Float32ArrayConstructor</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in /usr/local/lib/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts:3839</li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-					<a name="___tostringtag" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> __@to<wbr>String<wbr>Tag</h3>
-					<div class="tsd-signature tsd-kind-icon">__@to<wbr>String<wbr>Tag<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"Float32Array"</span></div>
-					<aside class="tsd-sources">
-						<p>Inherited from Float32Array.[Symbol.toStringTag]</p>
-						<ul>
-							<li>Defined in /usr/local/lib/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts:6030</li>
-						</ul>
-					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static">
 					<a name="buffer" class="tsd-anchor"></a>
@@ -390,15 +436,122 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Accessors</h2>
 				<section class="tsd-panel tsd-member tsd-kind-accessor tsd-parent-kind-class">
+					<a name="body" class="tsd-anchor"></a>
+					<h3>body</h3>
+					<ul class="tsd-signatures tsd-kind-accessor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> body<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_physics_.body.html" class="tsd-signature-type">Body</a></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">set</span> body<span class="tsd-signature-symbol">(</span>b<span class="tsd-signature-symbol">: </span><a href="_physics_.body.html" class="tsd-signature-type">Body</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L316">Physics.ts:316</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get the body of this particle, if any.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <a href="_physics_.body.html" class="tsd-signature-type">Body</a></h4>
+						</li>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L317">Physics.ts:317</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get the body of this particle, if any.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>b: <a href="_physics_.body.html" class="tsd-signature-type">Body</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+					<a name="changed" class="tsd-anchor"></a>
+					<h3>changed</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> changed<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L331">Physics.ts:331</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get the change in position since last time step</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-accessor tsd-parent-kind-class">
+					<a name="force" class="tsd-anchor"></a>
+					<h3>force</h3>
+					<ul class="tsd-signatures tsd-kind-accessor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> force<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">set</span> force<span class="tsd-signature-symbol">(</span>g<span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L310">Physics.ts:310</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get current accumulated force</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
+						</li>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L311">Physics.ts:311</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get current accumulated force</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>g: <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited">
 					<a name="id" class="tsd-anchor"></a>
 					<h3>id</h3>
-					<ul class="tsd-signatures tsd-kind-accessor tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> id<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">set</span> id<span class="tsd-signature-symbol">(</span>s<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#id">id</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L56">Pt.ts:56</a></li>
 								</ul>
@@ -407,6 +560,7 @@
 						</li>
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#id">id</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L57">Pt.ts:57</a></li>
 								</ul>
@@ -422,15 +576,182 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-accessor tsd-parent-kind-class">
+					<a name="lock" class="tsd-anchor"></a>
+					<h3>lock</h3>
+					<ul class="tsd-signatures tsd-kind-accessor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> lock<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">set</span> lock<span class="tsd-signature-symbol">(</span>b<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L322">Physics.ts:322</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L323">Physics.ts:323</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>b: <span class="tsd-signature-type">boolean</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-accessor tsd-parent-kind-class">
+					<a name="mass" class="tsd-anchor"></a>
+					<h3>mass</h3>
+					<ul class="tsd-signatures tsd-kind-accessor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> mass<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">set</span> mass<span class="tsd-signature-symbol">(</span>m<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L295">Physics.ts:295</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+						</li>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L296">Physics.ts:296</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>m: <span class="tsd-signature-type">number</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-set-signature tsd-parent-kind-class">
+					<a name="position" class="tsd-anchor"></a>
+					<h3>position</h3>
+					<ul class="tsd-signatures tsd-kind-set-signature tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">set</span> position<span class="tsd-signature-symbol">(</span>p<span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L337">Physics.ts:337</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Set a new position, and update previous and lock states if needed.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>p: <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-accessor tsd-parent-kind-class">
+					<a name="previous" class="tsd-anchor"></a>
+					<h3>previous</h3>
+					<ul class="tsd-signatures tsd-kind-accessor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> previous<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">set</span> previous<span class="tsd-signature-symbol">(</span>p<span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L304">Physics.ts:304</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get previous position</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
+						</li>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L305">Physics.ts:305</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get previous position</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>p: <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-accessor tsd-parent-kind-class">
+					<a name="radius" class="tsd-anchor"></a>
+					<h3>radius</h3>
+					<ul class="tsd-signatures tsd-kind-accessor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> radius<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">set</span> radius<span class="tsd-signature-symbol">(</span>f<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L298">Physics.ts:298</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+						</li>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L299">Physics.ts:299</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>f: <span class="tsd-signature-type">number</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited">
 					<a name="w" class="tsd-anchor"></a>
 					<h3>w</h3>
-					<ul class="tsd-signatures tsd-kind-accessor tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> w<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">set</span> w<span class="tsd-signature-symbol">(</span>n<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#w">w</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L62">Pt.ts:62</a></li>
 								</ul>
@@ -439,6 +760,7 @@
 						</li>
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#w">w</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L67">Pt.ts:67</a></li>
 								</ul>
@@ -453,16 +775,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-accessor tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited">
 					<a name="x" class="tsd-anchor"></a>
 					<h3>x</h3>
-					<ul class="tsd-signatures tsd-kind-accessor tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> x<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">set</span> x<span class="tsd-signature-symbol">(</span>n<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#x">x</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L59">Pt.ts:59</a></li>
 								</ul>
@@ -471,6 +794,7 @@
 						</li>
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#x">x</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L64">Pt.ts:64</a></li>
 								</ul>
@@ -485,16 +809,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-accessor tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited">
 					<a name="y" class="tsd-anchor"></a>
 					<h3>y</h3>
-					<ul class="tsd-signatures tsd-kind-accessor tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> y<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">set</span> y<span class="tsd-signature-symbol">(</span>n<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#y">y</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L60">Pt.ts:60</a></li>
 								</ul>
@@ -503,6 +828,7 @@
 						</li>
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#y">y</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L65">Pt.ts:65</a></li>
 								</ul>
@@ -517,16 +843,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-accessor tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited">
 					<a name="z" class="tsd-anchor"></a>
 					<h3>z</h3>
-					<ul class="tsd-signatures tsd-kind-accessor tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> z<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">set</span> z<span class="tsd-signature-symbol">(</span>n<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#z">z</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L61">Pt.ts:61</a></li>
 								</ul>
@@ -535,6 +862,7 @@
 						</li>
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#z">z</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L66">Pt.ts:66</a></li>
 								</ul>
@@ -552,15 +880,16 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="_abs" class="tsd-anchor"></a>
 					<h3>$abs</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">$abs<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#_abs">$abs</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L321">Pt.ts:321</a></li>
 								</ul>
@@ -574,15 +903,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="_add" class="tsd-anchor"></a>
 					<h3>$add</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">$add<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#_add">$add</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L190">Pt.ts:190</a></li>
 								</ul>
@@ -602,15 +932,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="_ceil" class="tsd-anchor"></a>
 					<h3>$ceil</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">$ceil<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#_ceil">$ceil</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L355">Pt.ts:355</a></li>
 								</ul>
@@ -624,15 +955,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="_concat" class="tsd-anchor"></a>
 					<h3>$concat</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">$concat<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#_concat">$concat</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L172">Pt.ts:172</a></li>
 								</ul>
@@ -655,15 +987,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="_cross" class="tsd-anchor"></a>
 					<h3>$cross</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">$cross<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#_cross">$cross</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L287">Pt.ts:287</a></li>
 								</ul>
@@ -686,15 +1019,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="_divide" class="tsd-anchor"></a>
 					<h3>$divide</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">$divide<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#_divide">$divide</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L238">Pt.ts:238</a></li>
 								</ul>
@@ -714,15 +1048,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="_floor" class="tsd-anchor"></a>
 					<h3>$floor</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">$floor<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#_floor">$floor</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L338">Pt.ts:338</a></li>
 								</ul>
@@ -736,15 +1071,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="_max" class="tsd-anchor"></a>
 					<h3>$max</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">$max<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#_max">$max</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L413">Pt.ts:413</a></li>
 								</ul>
@@ -767,15 +1103,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="_min" class="tsd-anchor"></a>
 					<h3>$min</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">$min<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#_min">$min</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L399">Pt.ts:399</a></li>
 								</ul>
@@ -798,15 +1135,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="_multiply" class="tsd-anchor"></a>
 					<h3>$multiply</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">$multiply<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#_multiply">$multiply</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L222">Pt.ts:222</a></li>
 								</ul>
@@ -826,15 +1164,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="_project" class="tsd-anchor"></a>
 					<h3>$project</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">$project<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#_project">$project</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L295">Pt.ts:295</a></li>
 								</ul>
@@ -855,15 +1194,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="_round" class="tsd-anchor"></a>
 					<h3>$round</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">$round<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#_round">$round</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L372">Pt.ts:372</a></li>
 								</ul>
@@ -877,15 +1217,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="_subtract" class="tsd-anchor"></a>
 					<h3>$subtract</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">$subtract<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#_subtract">$subtract</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L206">Pt.ts:206</a></li>
 								</ul>
@@ -905,15 +1246,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="_take" class="tsd-anchor"></a>
 					<h3>$take</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">$take<span class="tsd-signature-symbol">(</span>axis<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#_take">$take</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L159">Pt.ts:159</a></li>
 								</ul>
@@ -936,15 +1278,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="_to" class="tsd-anchor"></a>
 					<h3>$to</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">$to<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#_to">$to</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L108">Pt.ts:108</a></li>
 								</ul>
@@ -967,15 +1310,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="_unit" class="tsd-anchor"></a>
 					<h3>$unit</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">$unit<span class="tsd-signature-symbol">(</span>magnitude<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#_unit">$unit</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L266">Pt.ts:266</a></li>
 								</ul>
@@ -995,15 +1339,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="abs" class="tsd-anchor"></a>
 					<h3>abs</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">abs<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#abs">abs</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L312">Pt.ts:312</a></li>
 								</ul>
@@ -1017,15 +1362,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="add" class="tsd-anchor"></a>
 					<h3>add</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">add<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#add">add</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L181">Pt.ts:181</a></li>
 								</ul>
@@ -1049,14 +1395,46 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="addforce" class="tsd-anchor"></a>
+					<h3>add<wbr>Force</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">add<wbr>Force<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L359">Physics.ts:359</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Add to the accumulated force</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="angle" class="tsd-anchor"></a>
 					<h3>angle</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">angle<span class="tsd-signature-symbol">(</span>axis<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#angle">angle</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L427">Pt.ts:427</a></li>
 								</ul>
@@ -1079,15 +1457,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="anglebetween" class="tsd-anchor"></a>
 					<h3>angle<wbr>Between</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">angle<wbr>Between<span class="tsd-signature-symbol">(</span>p<span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a>, axis<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#anglebetween">angleBetween</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L437">Pt.ts:437</a></li>
 								</ul>
@@ -1116,15 +1495,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="ceil" class="tsd-anchor"></a>
 					<h3>ceil</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">ceil<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#ceil">ceil</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L346">Pt.ts:346</a></li>
 								</ul>
@@ -1138,15 +1518,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="clone" class="tsd-anchor"></a>
 					<h3>clone</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">clone<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#clone">clone</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L73">Pt.ts:73</a></li>
 								</ul>
@@ -1161,14 +1542,52 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="collide" class="tsd-anchor"></a>
+					<h3>collide</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">collide<span class="tsd-signature-symbol">(</span>p2<span class="tsd-signature-symbol">: </span><a href="_physics_.particle.html" class="tsd-signature-type">Particle</a>, damp<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L409">Physics.ts:409</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Check and respoond to collisions between two particles</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>p2: <a href="_physics_.particle.html" class="tsd-signature-type">Particle</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>another particle</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> damp: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;1</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>damping value between 0 to 1, where 1 means no damping.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="cross2d" class="tsd-anchor"></a>
 					<h3>cross2D</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">cross2D<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#cross2d">cross2D</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L280">Pt.ts:280</a></li>
 								</ul>
@@ -1191,15 +1610,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="divide" class="tsd-anchor"></a>
 					<h3>divide</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">divide<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#divide">divide</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L229">Pt.ts:229</a></li>
 								</ul>
@@ -1222,15 +1642,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="dot" class="tsd-anchor"></a>
 					<h3>dot</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">dot<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#dot">dot</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L273">Pt.ts:273</a></li>
 								</ul>
@@ -1253,15 +1674,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="equals" class="tsd-anchor"></a>
 					<h3>equals</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">equals<span class="tsd-signature-symbol">(</span>p<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a>, threshold<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#equals">equals</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L83">Pt.ts:83</a></li>
 								</ul>
@@ -1290,15 +1712,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="floor" class="tsd-anchor"></a>
 					<h3>floor</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">floor<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#floor">floor</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L329">Pt.ts:329</a></li>
 								</ul>
@@ -1313,14 +1736,51 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="hit" class="tsd-anchor"></a>
+					<h3>hit</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">hit<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L398">Physics.ts:398</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Hit this particle with an impulse</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>example</dt>
+									<dd><p><code>hit(10, 20)</code>, <code>hit( new Pt(5, 9) )</code></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="magnitude" class="tsd-anchor"></a>
 					<h3>magnitude</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">magnitude<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#magnitude">magnitude</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L250">Pt.ts:250</a></li>
 								</ul>
@@ -1334,15 +1794,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="magnitudesq" class="tsd-anchor"></a>
 					<h3>magnitude<wbr>Sq</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">magnitude<wbr>Sq<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#magnitudesq">magnitudeSq</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L244">Pt.ts:244</a></li>
 								</ul>
@@ -1356,15 +1817,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="maxvalue" class="tsd-anchor"></a>
 					<h3>max<wbr>Value</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">max<wbr>Value<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#maxvalue">maxValue</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L390">Pt.ts:390</a></li>
 								</ul>
@@ -1387,15 +1849,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="minvalue" class="tsd-anchor"></a>
 					<h3>min<wbr>Value</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">min<wbr>Value<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#minvalue">minValue</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L381">Pt.ts:381</a></li>
 								</ul>
@@ -1418,15 +1881,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="multiply" class="tsd-anchor"></a>
 					<h3>multiply</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">multiply<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#multiply">multiply</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L213">Pt.ts:213</a></li>
 								</ul>
@@ -1449,15 +1913,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="op" class="tsd-anchor"></a>
 					<h3>op</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">op<span class="tsd-signature-symbol">(</span>fn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#op">op</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L132">Pt.ts:132</a></li>
 								</ul>
@@ -1521,15 +1986,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="ops" class="tsd-anchor"></a>
 					<h3>ops</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">ops<span class="tsd-signature-symbol">(</span>fns<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">[]</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#ops">ops</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L146">Pt.ts:146</a></li>
 								</ul>
@@ -1554,15 +2020,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="projectscalar" class="tsd-anchor"></a>
 					<h3>project<wbr>Scalar</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">project<wbr>Scalar<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#projectscalar">projectScalar</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L304">Pt.ts:304</a></li>
 								</ul>
@@ -1582,15 +2049,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="reflect2d" class="tsd-anchor"></a>
 					<h3>reflect2D</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">reflect2D<span class="tsd-signature-symbol">(</span>line<span class="tsd-signature-symbol">: </span><a href="../modules/_pt_.html#grouplike" class="tsd-signature-type">GroupLike</a>, axis<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#reflect2d">reflect2D</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L482">Pt.ts:482</a></li>
 								</ul>
@@ -1619,15 +2087,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="rotate2d" class="tsd-anchor"></a>
 					<h3>rotate2D</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">rotate2D<span class="tsd-signature-symbol">(</span>angle<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, anchor<span class="tsd-signature-symbol">?: </span><a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a>, axis<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#rotate2d">rotate2D</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L459">Pt.ts:459</a></li>
 								</ul>
@@ -1662,15 +2131,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="round" class="tsd-anchor"></a>
 					<h3>round</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">round<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#round">round</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L363">Pt.ts:363</a></li>
 								</ul>
@@ -1684,15 +2154,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="scale" class="tsd-anchor"></a>
 					<h3>scale</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">scale<span class="tsd-signature-symbol">(</span>scale<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a>, anchor<span class="tsd-signature-symbol">?: </span><a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#scale">scale</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L447">Pt.ts:447</a></li>
 								</ul>
@@ -1721,15 +2192,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="shear2d" class="tsd-anchor"></a>
 					<h3>shear2D</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">shear2D<span class="tsd-signature-symbol">(</span>scale<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a>, anchor<span class="tsd-signature-symbol">?: </span><a href="../modules/_pt_.html#ptlike" class="tsd-signature-type">PtLike</a>, axis<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#shear2d">shear2D</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L471">Pt.ts:471</a></li>
 								</ul>
@@ -1762,14 +2234,46 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="size" class="tsd-anchor"></a>
+					<h3>size</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">size<span class="tsd-signature-symbol">(</span>r<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L348">Physics.ts:348</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Set the size of this particle. This sets both the radius and the mass.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>r: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p><code>radius</code> value, and also set <code>mass</code> to the same value.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="subtract" class="tsd-anchor"></a>
 					<h3>subtract</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">subtract<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#subtract">subtract</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L197">Pt.ts:197</a></li>
 								</ul>
@@ -1792,15 +2296,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="to" class="tsd-anchor"></a>
 					<h3>to</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">to<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#to">to</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L95">Pt.ts:95</a></li>
 								</ul>
@@ -1823,15 +2328,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="toangle" class="tsd-anchor"></a>
 					<h3>to<wbr>Angle</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">to<wbr>Angle<span class="tsd-signature-symbol">(</span>radian<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, magnitude<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, anchorFromPt<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#toangle">toAngle</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L119">Pt.ts:119</a></li>
 								</ul>
@@ -1866,15 +2372,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="toarray" class="tsd-anchor"></a>
 					<h3>to<wbr>Array</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">to<wbr>Array<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#toarray">toArray</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L499">Pt.ts:499</a></li>
 								</ul>
@@ -1888,37 +2395,34 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 					<a name="tostring" class="tsd-anchor"></a>
 					<h3>to<wbr>String</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 						<li class="tsd-signature tsd-kind-icon">to<wbr>String<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Overrides <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#tostring">toString</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L491">Pt.ts:491</a></li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L448">Physics.ts:448</a></li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>A string representation of this Pt: &quot;Pt(1, 2, 3)&quot;</p>
-								</div>
-							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="unit" class="tsd-anchor"></a>
 					<h3>unit</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">unit<span class="tsd-signature-symbol">(</span>magnitude<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#unit">unit</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L257">Pt.ts:257</a></li>
 								</ul>
@@ -1941,21 +2445,46 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-					<a name="___iterator" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> __@iterator</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">__@iterator<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></li>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="verlet" class="tsd-anchor"></a>
+					<h3>verlet</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">verlet<span class="tsd-signature-symbol">(</span>dt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, friction<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, lastDt<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from Float32Array.[Symbol.iterator]</p>
 								<ul>
-									<li>Defined in /usr/local/lib/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts:5363</li>
+									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Physics.ts#L371">Physics.ts:371</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Verlet integration</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>dt: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>change in time</p>
+									</div>
+								</li>
+								<li>
+									<h5>friction: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>friction from 0 to 1, where 1 means no friction</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> lastDt: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>optional last change in time</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -2003,29 +2532,6 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-					<a name="entries" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> entries</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">entries<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Inherited from Float32Array.entries</p>
-								<ul>
-									<li>Defined in /usr/local/lib/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts:5367</li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Returns an array of key, value pairs for every entry in the array</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -2952,29 +3458,6 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-					<a name="keys" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> keys</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">keys<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Inherited from Float32Array.keys</p>
-								<ul>
-									<li>Defined in /usr/local/lib/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts:5371</li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Returns an list of keys in the array</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
 					<a name="lastindexof" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> last<wbr>Index<wbr>Of</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
@@ -3013,15 +3496,16 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
 					<a name="make" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> make</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
 						<li class="tsd-signature tsd-kind-icon">make<span class="tsd-signature-symbol">(</span>dimensions<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, defaultValue<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, randomize<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_pt_.pt.html" class="tsd-signature-type">Pt</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from <a href="_pt_.pt.html">Pt</a>.<a href="_pt_.pt.html#make">make</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/williamngan/pts/blob/bff23b0/src/Pt.ts#L45">Pt.ts:45</a></li>
 								</ul>
@@ -3874,29 +4358,6 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-					<a name="values" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> values</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">values<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Inherited from Float32Array.values</p>
-								<ul>
-									<li>Defined in /usr/local/lib/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts:5375</li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Returns an list of values in the array</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></h4>
-						</li>
-					</ul>
-				</section>
 			</section>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -3932,10 +4393,10 @@
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_op_.html">"<wbr>Op"</a>
 					</li>
-					<li class=" tsd-kind-external-module">
+					<li class="current tsd-kind-external-module">
 						<a href="../modules/_physics_.html">"<wbr>Physics"</a>
 					</li>
-					<li class="current tsd-kind-external-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_pt_.html">"<wbr>Pt"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -3964,286 +4425,319 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="_pt_.group.html" class="tsd-kind-icon">Group</a>
+						<a href="_physics_.body.html" class="tsd-kind-icon">Body</a>
 					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-external-module">
-						<a href="_pt_.pt.html" class="tsd-kind-icon">Pt</a>
+						<a href="_physics_.particle.html" class="tsd-kind-icon">Particle</a>
 						<ul>
-							<li class=" tsd-kind-constructor tsd-parent-kind-class">
-								<a href="_pt_.pt.html#constructor" class="tsd-kind-icon">constructor</a>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
+								<a href="_physics_.particle.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-								<a href="_pt_.pt.html#_id" class="tsd-kind-icon">_id</a>
+								<a href="_physics_.particle.html#_body" class="tsd-kind-icon">_body</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+								<a href="_physics_.particle.html#_force" class="tsd-kind-icon">_force</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+								<a href="_physics_.particle.html#_id" class="tsd-kind-icon">_id</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+								<a href="_physics_.particle.html#_lock" class="tsd-kind-icon">_lock</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+								<a href="_physics_.particle.html#_lockpt" class="tsd-kind-icon">_lock<wbr>Pt</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+								<a href="_physics_.particle.html#_mass" class="tsd-kind-icon">_mass</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+								<a href="_physics_.particle.html#_prev" class="tsd-kind-icon">_prev</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+								<a href="_physics_.particle.html#_radius" class="tsd-kind-icon">_radius</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_pt_.pt.html#bytes_per_element" class="tsd-kind-icon">BYTES_<wbr>PER_<wbr>ELEMENT</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
-								<a href="_pt_.pt.html#float32array" class="tsd-kind-icon">Float32<wbr>Array</a>
+								<a href="_physics_.particle.html#bytes_per_element" class="tsd-kind-icon">BYTES_<wbr>PER_<wbr>ELEMENT</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_pt_.pt.html#___tostringtag" class="tsd-kind-icon">__@to<wbr>String<wbr>Tag</a>
+								<a href="_physics_.particle.html#buffer" class="tsd-kind-icon">buffer</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_pt_.pt.html#buffer" class="tsd-kind-icon">buffer</a>
+								<a href="_physics_.particle.html#bytelength" class="tsd-kind-icon">byte<wbr>Length</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_pt_.pt.html#bytelength" class="tsd-kind-icon">byte<wbr>Length</a>
+								<a href="_physics_.particle.html#byteoffset" class="tsd-kind-icon">byte<wbr>Offset</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_pt_.pt.html#byteoffset" class="tsd-kind-icon">byte<wbr>Offset</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_pt_.pt.html#length" class="tsd-kind-icon">length</a>
+								<a href="_physics_.particle.html#length" class="tsd-kind-icon">length</a>
 							</li>
 							<li class=" tsd-kind-accessor tsd-parent-kind-class">
-								<a href="_pt_.pt.html#id" class="tsd-kind-icon">id</a>
+								<a href="_physics_.particle.html#body" class="tsd-kind-icon">body</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+								<a href="_physics_.particle.html#changed" class="tsd-kind-icon">changed</a>
 							</li>
 							<li class=" tsd-kind-accessor tsd-parent-kind-class">
-								<a href="_pt_.pt.html#w" class="tsd-kind-icon">w</a>
+								<a href="_physics_.particle.html#force" class="tsd-kind-icon">force</a>
+							</li>
+							<li class=" tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#id" class="tsd-kind-icon">id</a>
 							</li>
 							<li class=" tsd-kind-accessor tsd-parent-kind-class">
-								<a href="_pt_.pt.html#x" class="tsd-kind-icon">x</a>
+								<a href="_physics_.particle.html#lock" class="tsd-kind-icon">lock</a>
 							</li>
 							<li class=" tsd-kind-accessor tsd-parent-kind-class">
-								<a href="_pt_.pt.html#y" class="tsd-kind-icon">y</a>
+								<a href="_physics_.particle.html#mass" class="tsd-kind-icon">mass</a>
+							</li>
+							<li class=" tsd-kind-set-signature tsd-parent-kind-class">
+								<a href="_physics_.particle.html#position" class="tsd-kind-icon">position</a>
 							</li>
 							<li class=" tsd-kind-accessor tsd-parent-kind-class">
-								<a href="_pt_.pt.html#z" class="tsd-kind-icon">z</a>
+								<a href="_physics_.particle.html#previous" class="tsd-kind-icon">previous</a>
+							</li>
+							<li class=" tsd-kind-accessor tsd-parent-kind-class">
+								<a href="_physics_.particle.html#radius" class="tsd-kind-icon">radius</a>
+							</li>
+							<li class=" tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#w" class="tsd-kind-icon">w</a>
+							</li>
+							<li class=" tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#x" class="tsd-kind-icon">x</a>
+							</li>
+							<li class=" tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#y" class="tsd-kind-icon">y</a>
+							</li>
+							<li class=" tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#z" class="tsd-kind-icon">z</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#_abs" class="tsd-kind-icon">$abs</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#_add" class="tsd-kind-icon">$add</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#_ceil" class="tsd-kind-icon">$ceil</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#_concat" class="tsd-kind-icon">$concat</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#_cross" class="tsd-kind-icon">$cross</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#_divide" class="tsd-kind-icon">$divide</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#_floor" class="tsd-kind-icon">$floor</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#_max" class="tsd-kind-icon">$max</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#_min" class="tsd-kind-icon">$min</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#_multiply" class="tsd-kind-icon">$multiply</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#_project" class="tsd-kind-icon">$project</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#_round" class="tsd-kind-icon">$round</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#_subtract" class="tsd-kind-icon">$subtract</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#_take" class="tsd-kind-icon">$take</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#_to" class="tsd-kind-icon">$to</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#_unit" class="tsd-kind-icon">$unit</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#abs" class="tsd-kind-icon">abs</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#add" class="tsd-kind-icon">add</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#_abs" class="tsd-kind-icon">$abs</a>
+								<a href="_physics_.particle.html#addforce" class="tsd-kind-icon">add<wbr>Force</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#angle" class="tsd-kind-icon">angle</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#anglebetween" class="tsd-kind-icon">angle<wbr>Between</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#ceil" class="tsd-kind-icon">ceil</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#clone" class="tsd-kind-icon">clone</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#_add" class="tsd-kind-icon">$add</a>
+								<a href="_physics_.particle.html#collide" class="tsd-kind-icon">collide</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#cross2d" class="tsd-kind-icon">cross2D</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#divide" class="tsd-kind-icon">divide</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#dot" class="tsd-kind-icon">dot</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#equals" class="tsd-kind-icon">equals</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#floor" class="tsd-kind-icon">floor</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#_ceil" class="tsd-kind-icon">$ceil</a>
+								<a href="_physics_.particle.html#hit" class="tsd-kind-icon">hit</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#magnitude" class="tsd-kind-icon">magnitude</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#magnitudesq" class="tsd-kind-icon">magnitude<wbr>Sq</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#maxvalue" class="tsd-kind-icon">max<wbr>Value</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#minvalue" class="tsd-kind-icon">min<wbr>Value</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#multiply" class="tsd-kind-icon">multiply</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#op" class="tsd-kind-icon">op</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#ops" class="tsd-kind-icon">ops</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#projectscalar" class="tsd-kind-icon">project<wbr>Scalar</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#reflect2d" class="tsd-kind-icon">reflect2D</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#rotate2d" class="tsd-kind-icon">rotate2D</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#round" class="tsd-kind-icon">round</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#scale" class="tsd-kind-icon">scale</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#shear2d" class="tsd-kind-icon">shear2D</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#_concat" class="tsd-kind-icon">$concat</a>
+								<a href="_physics_.particle.html#size" class="tsd-kind-icon">size</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#subtract" class="tsd-kind-icon">subtract</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#to" class="tsd-kind-icon">to</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#toangle" class="tsd-kind-icon">to<wbr>Angle</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#toarray" class="tsd-kind-icon">to<wbr>Array</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+								<a href="_physics_.particle.html#tostring" class="tsd-kind-icon">to<wbr>String</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_physics_.particle.html#unit" class="tsd-kind-icon">unit</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#_cross" class="tsd-kind-icon">$cross</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#_divide" class="tsd-kind-icon">$divide</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#_floor" class="tsd-kind-icon">$floor</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#_max" class="tsd-kind-icon">$max</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#_min" class="tsd-kind-icon">$min</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#_multiply" class="tsd-kind-icon">$multiply</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#_project" class="tsd-kind-icon">$project</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#_round" class="tsd-kind-icon">$round</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#_subtract" class="tsd-kind-icon">$subtract</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#_take" class="tsd-kind-icon">$take</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#_to" class="tsd-kind-icon">$to</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#_unit" class="tsd-kind-icon">$unit</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#abs" class="tsd-kind-icon">abs</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#add" class="tsd-kind-icon">add</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#angle" class="tsd-kind-icon">angle</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#anglebetween" class="tsd-kind-icon">angle<wbr>Between</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#ceil" class="tsd-kind-icon">ceil</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#clone" class="tsd-kind-icon">clone</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#cross2d" class="tsd-kind-icon">cross2D</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#divide" class="tsd-kind-icon">divide</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#dot" class="tsd-kind-icon">dot</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#equals" class="tsd-kind-icon">equals</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#floor" class="tsd-kind-icon">floor</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#magnitude" class="tsd-kind-icon">magnitude</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#magnitudesq" class="tsd-kind-icon">magnitude<wbr>Sq</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#maxvalue" class="tsd-kind-icon">max<wbr>Value</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#minvalue" class="tsd-kind-icon">min<wbr>Value</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#multiply" class="tsd-kind-icon">multiply</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#op" class="tsd-kind-icon">op</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#ops" class="tsd-kind-icon">ops</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#projectscalar" class="tsd-kind-icon">project<wbr>Scalar</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#reflect2d" class="tsd-kind-icon">reflect2D</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#rotate2d" class="tsd-kind-icon">rotate2D</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#round" class="tsd-kind-icon">round</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#scale" class="tsd-kind-icon">scale</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#shear2d" class="tsd-kind-icon">shear2D</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#subtract" class="tsd-kind-icon">subtract</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#to" class="tsd-kind-icon">to</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#toangle" class="tsd-kind-icon">to<wbr>Angle</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#toarray" class="tsd-kind-icon">to<wbr>Array</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#tostring" class="tsd-kind-icon">to<wbr>String</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_pt_.pt.html#unit" class="tsd-kind-icon">unit</a>
+								<a href="_physics_.particle.html#verlet" class="tsd-kind-icon">verlet</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_pt_.pt.html#___iterator" class="tsd-kind-icon">__@iterator</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_pt_.pt.html#copywithin" class="tsd-kind-icon">copy<wbr>Within</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_pt_.pt.html#entries" class="tsd-kind-icon">entries</a>
+								<a href="_physics_.particle.html#copywithin" class="tsd-kind-icon">copy<wbr>Within</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
-								<a href="_pt_.pt.html#every" class="tsd-kind-icon">every</a>
+								<a href="_physics_.particle.html#every" class="tsd-kind-icon">every</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_pt_.pt.html#fill" class="tsd-kind-icon">fill</a>
+								<a href="_physics_.particle.html#fill" class="tsd-kind-icon">fill</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
-								<a href="_pt_.pt.html#filter" class="tsd-kind-icon">filter</a>
+								<a href="_physics_.particle.html#filter" class="tsd-kind-icon">filter</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
-								<a href="_pt_.pt.html#find" class="tsd-kind-icon">find</a>
+								<a href="_physics_.particle.html#find" class="tsd-kind-icon">find</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
-								<a href="_pt_.pt.html#findindex" class="tsd-kind-icon">find<wbr>Index</a>
+								<a href="_physics_.particle.html#findindex" class="tsd-kind-icon">find<wbr>Index</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
-								<a href="_pt_.pt.html#foreach" class="tsd-kind-icon">for<wbr>Each</a>
+								<a href="_physics_.particle.html#foreach" class="tsd-kind-icon">for<wbr>Each</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_pt_.pt.html#indexof" class="tsd-kind-icon">index<wbr>Of</a>
+								<a href="_physics_.particle.html#indexof" class="tsd-kind-icon">index<wbr>Of</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_pt_.pt.html#join" class="tsd-kind-icon">join</a>
+								<a href="_physics_.particle.html#join" class="tsd-kind-icon">join</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_pt_.pt.html#keys" class="tsd-kind-icon">keys</a>
+								<a href="_physics_.particle.html#lastindexof" class="tsd-kind-icon">last<wbr>Index<wbr>Of</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_pt_.pt.html#lastindexof" class="tsd-kind-icon">last<wbr>Index<wbr>Of</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="_pt_.pt.html#make" class="tsd-kind-icon">make</a>
+								<a href="_physics_.particle.html#make" class="tsd-kind-icon">make</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
-								<a href="_pt_.pt.html#map" class="tsd-kind-icon">map</a>
+								<a href="_physics_.particle.html#map" class="tsd-kind-icon">map</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
-								<a href="_pt_.pt.html#reduce" class="tsd-kind-icon">reduce</a>
+								<a href="_physics_.particle.html#reduce" class="tsd-kind-icon">reduce</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
-								<a href="_pt_.pt.html#reduceright" class="tsd-kind-icon">reduce<wbr>Right</a>
+								<a href="_physics_.particle.html#reduceright" class="tsd-kind-icon">reduce<wbr>Right</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_pt_.pt.html#reverse" class="tsd-kind-icon">reverse</a>
+								<a href="_physics_.particle.html#reverse" class="tsd-kind-icon">reverse</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_pt_.pt.html#set" class="tsd-kind-icon">set</a>
+								<a href="_physics_.particle.html#set" class="tsd-kind-icon">set</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_pt_.pt.html#slice" class="tsd-kind-icon">slice</a>
+								<a href="_physics_.particle.html#slice" class="tsd-kind-icon">slice</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-static">
-								<a href="_pt_.pt.html#some" class="tsd-kind-icon">some</a>
+								<a href="_physics_.particle.html#some" class="tsd-kind-icon">some</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_pt_.pt.html#sort" class="tsd-kind-icon">sort</a>
+								<a href="_physics_.particle.html#sort" class="tsd-kind-icon">sort</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_pt_.pt.html#subarray" class="tsd-kind-icon">subarray</a>
+								<a href="_physics_.particle.html#subarray" class="tsd-kind-icon">subarray</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_pt_.pt.html#tolocalestring" class="tsd-kind-icon">to<wbr>Locale<wbr>String</a>
+								<a href="_physics_.particle.html#tolocalestring" class="tsd-kind-icon">to<wbr>Locale<wbr>String</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_pt_.pt.html#tostring-1" class="tsd-kind-icon">to<wbr>String</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="_pt_.pt.html#values" class="tsd-kind-icon">values</a>
+								<a href="_physics_.particle.html#tostring-1" class="tsd-kind-icon">to<wbr>String</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="../interfaces/_pt_.ipt.html" class="tsd-kind-icon">IPt</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
-						<a href="../modules/_pt_.html#grouplike" class="tsd-kind-icon">Group<wbr>Like</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
-						<a href="../modules/_pt_.html#ptlike" class="tsd-kind-icon">Pt<wbr>Like</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
-						<a href="../modules/_pt_.html#ptbasearray" class="tsd-kind-icon">Pt<wbr>Base<wbr>Array</a>
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="_physics_.world.html" class="tsd-kind-icon">World</a>
 					</li>
 				</ul>
 			</nav>

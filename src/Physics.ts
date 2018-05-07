@@ -74,7 +74,7 @@ export class World {
    * Get a particle in this world by index or string id
    * @param id numeric index of the particle, or a string id that associates with it. 
    */
-  particle( id:number ) { return this._particles[ (typeof id === "string") ? this._names.p[id] : id ]; }
+  particle( id:number|string ) { return this._particles[ (typeof id === "string") ? this._names.p[id] : id ]; }
 
 
 

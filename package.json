@@ -19,7 +19,7 @@
     "url": "https://github.com/williamngan/pts.git"
   },
   "author": "William Ngan",
-  "license": "Apache",
+  "license": "Apache License 2.0",
   "dependencies": {},
   "devDependencies": {
     "@types/node": "^9.4.7",
