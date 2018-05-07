@@ -1,6 +1,8 @@
 // Source code licensed under Apache License 2.0. 
 // Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 
+window.demoDescription = "Fitting four circles inside and outside of four triangles, which are connected to the pointer.";
+
 (function() {
   
   Pts.namespace( this );

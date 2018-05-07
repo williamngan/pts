@@ -1,3 +1,6 @@
+// Source code licensed under Apache License 2.0.
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
+
 
 import {Pt, PtLike, Group, GroupLike} from "./Pt";
 import {Bound} from "./Bound";
@@ -392,8 +395,9 @@ export class Particle extends Pt {
    * @param args a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
    * @example `hit(10, 20)`, `hit( new Pt(5, 9) )`
    */
-  hit( ...args ) {
+  hit( ...args ):this {
     this._prev.subtract( new Pt(...args).$divide( Math.sqrt(this._mass) ) );
+    return this;
   }
 
 
@@ -402,7 +406,7 @@ export class Particle extends Pt {
    * @param p2 another particle
    * @param damp damping value between 0 to 1, where 1 means no damping.
    */
-  collide( p2:Particle, damp:number=1 ) {
+  collide( p2:Particle, damp:number=1 ):void {
     // reference: http://codeflow.org/entries/2010/nov/29/verlet-collision-with-impulse-preservation
     // simultaneous collision not yet resolved. Possible solutions in this paper: https://www2.msm.ctw.utwente.nl/sluding/PAPERS/dem07.pdf 
 
@@ -441,7 +445,7 @@ export class Particle extends Pt {
   }
   
 
-  toString() {
+  toString():string {
     return `Particle: ${this[0]} ${this[1]} | previous ${this._prev[0]} ${this._prev[1]} | mass ${this._mass}`;
   }
 
@@ -592,7 +596,7 @@ export class Body extends Group {
    * Check and respond to collisions between two bodies
    * @param b another body
    */
-  processBody( b:Body ) {
+  processBody( b:Body ):void {
 
     let b1 = this;
     let b2 = b;
@@ -630,7 +634,7 @@ export class Body extends Group {
    * Check and respond to collisions between this body and a particle
    * @param b a particle
    */
-  processParticle( b:Particle ) {
+  processParticle( b:Particle ):void {
 
     let b1 = this;
     let b2 = b;

@@ -7768,6 +7768,8 @@ exports.SVGForm = SVGForm;
 
 "use strict";
 
+// Source code licensed under Apache License 2.0.
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
 const Bound_1 = __webpack_require__(4);
@@ -8080,6 +8082,7 @@ class Particle extends Pt_1.Pt {
      */
     hit(...args) {
         this._prev.subtract(new Pt_1.Pt(...args).$divide(Math.sqrt(this._mass)));
+        return this;
     }
     /**
      * Check and respoond to collisions between two particles
