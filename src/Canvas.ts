@@ -805,7 +805,44 @@ export class CanvasForm extends VisualForm {
       this._paint();
       return this;
     }
+
+
+    /**
+     * A static function to draw an image
+     * @param ctx canvas rendering context
+     * @param img an image source (eg the image from `<img>`, `<video>` or `<canvas>`)
+     * @param target a target area to place the image. Either a Pt specifying a position, or a Group that specifies a bounding box (top-left position, bottom-right position). Default is (0,0) at top-left.
+     * @param orig a Group (top-left position, bottom-right position) that specifies a cropping box  in the original target. 
+     */
+    static image( ctx:CanvasRenderingContext2D, img:ImageBitmap, target:PtLike|GroupLike=new Pt(), orig?:GroupLike  ) {
+      if (typeof target[0] === "number") {
+        ctx.drawImage( img, target[0] as number, target[1] as number );
+      } else {
+        let t = target as GroupLike;
+
+        if (orig) { 
+          ctx.drawImage( 
+            img, orig[0][0], orig[0][1], orig[1][0]-orig[0][0], orig[1][1]-orig[0][1],
+            t[0][0], t[0][1], t[1][0]-t[0][0], t[1][1]-t[0][1], 
+          );
+        } else {
+          ctx.drawImage( img, t[0][0], t[0][1], t[1][0]-t[0][0], t[1][1]-t[0][1] );
+        }
+      }
+    }
     
+    
+    /**
+    * Draw an image
+    * @param img an image source (eg the image from `<img>`, `<video>` or `<canvas>`)
+    * @param target a target area to place the image. Either a Pt specifying a position, or a Group that specifies a bounding box (top-left position, bottom-right position). Default is (0,0) at top-left.
+    * @param orig a Group (top-left position, bottom-right position) that specifies a cropping box  in the original target. 
+    */
+    image( img:ImageBitmap, target:PtLike|GroupLike, original?:GroupLike  ) {
+      CanvasForm.image( this._ctx, img, target, original );
+      return this;
+    }
+      
     
     /**
     * A static function to draw text

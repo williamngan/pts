@@ -3599,6 +3599,24 @@ class CanvasForm extends Form_1.VisualForm {
         this._paint();
         return this;
     }
+    static image(ctx, img, target = new Pt_1.Pt(), orig) {
+        if (typeof target[0] === "number") {
+            ctx.drawImage(img, target[0], target[1]);
+        }
+        else {
+            let t = target;
+            if (orig) {
+                ctx.drawImage(img, orig[0][0], orig[0][1], orig[1][0] - orig[0][0], orig[1][1] - orig[0][1], t[0][0], t[0][1], t[1][0] - t[0][0], t[1][1] - t[0][1]);
+            }
+            else {
+                ctx.drawImage(img, t[0][0], t[0][1], t[1][0] - t[0][0], t[1][1] - t[0][1]);
+            }
+        }
+    }
+    image(img, target, original) {
+        CanvasForm.image(this._ctx, img, target, original);
+        return this;
+    }
     static text(ctx, pt, txt, maxWidth) {
         if (!pt)
             return;
