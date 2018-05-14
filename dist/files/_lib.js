@@ -15,7 +15,6 @@ const _Dom = require("./Dom");
 const _Svg = require("./Svg");
 const _Typography = require("./Typography");
 const _Physics = require("./Physics");
-// A function to switch scope for Pts library. eg, Pts.scope( Pts, window );
 let namespace = (sc) => {
     let lib = module.exports;
     for (let k in lib) {

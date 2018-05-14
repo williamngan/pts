@@ -1,22 +1,11 @@
 "use strict";
-// Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = require("./Pt");
 const Op_1 = require("./Op");
 const Util_1 = require("./Util");
 const Num_1 = require("./Num");
 const LinearAlgebra_1 = require("./LinearAlgebra");
-/**
- * The `Create` class provides various convenient functions to create structures or shapes.
- */
 class Create {
-    /**
-     * Create a set of random points inside a bounday
-     * @param bound the rectangular boundary
-     * @param count number of random points to create
-     * @param dimensions number of dimensions in each point
-     */
     static distributeRandom(bound, count, dimensions = 2) {
         let pts = new Pt_1.Group();
         for (let i = 0; i < count; i++) {
@@ -29,25 +18,12 @@ class Create {
         }
         return pts;
     }
-    /**
-     * Create a set of points that distribute evenly on a line
-     * @param line a Group representing a line
-     * @param count number of points to create
-     */
     static distributeLinear(line, count) {
         let ln = Op_1.Line.subpoints(line, count - 2);
         ln.unshift(line[0]);
         ln.push(line[line.length - 1]);
         return ln;
     }
-    /**
-     * Create an evenly distributed set of points (like a grid of points) inside a boundary.
-     * @param bound the rectangular boundary
-     * @param columns number of columns
-     * @param rows number of rows
-     * @param orientation a Pt or number array to specify where the point should be inside a cell. Default is [0.5, 0.5] which places the point in the middle.
-     * @returns a Group of Pts
-     */
     static gridPts(bound, columns, rows, orientation = [0.5, 0.5]) {
         if (columns === 0 || rows === 0)
             throw new Error("grid columns and rows cannot be 0");
@@ -61,17 +37,10 @@ class Create {
         }
         return g;
     }
-    /**
-     * Create a grid inside a boundary
-     * @param bound the rectangular boundary
-     * @param columns number of columns
-     * @param rows number of rows
-     * @returns an array of Groups, where each group represents a rectangular cell
-     */
     static gridCells(bound, columns, rows) {
         if (columns === 0 || rows === 0)
             throw new Error("grid columns and rows cannot be 0");
-        let unit = bound.size.$subtract(1).divide(columns, rows); // subtract 1 to fill whole border of rectangles
+        let unit = bound.size.$subtract(1).divide(columns, rows);
         let g = [];
         for (let r = 0; r < rows; r++) {
             for (let c = 0; c < columns; c++) {
@@ -80,12 +49,6 @@ class Create {
         }
         return g;
     }
-    /**
-     * Create a set of Pts around a circular path
-     * @param center circle center
-     * @param radius circle radius
-     * @param count number of Pts to create
-     */
     static radialPts(center, radius, count) {
         let g = new Pt_1.Group();
         let a = Util_1.Const.two_pi / count;
@@ -94,14 +57,6 @@ class Create {
         }
         return g;
     }
-    /**
-     * Given a group of Pts, return a new group of `Noise` Pts.
-     * @param pts a Group or an array of Pts
-     * @param dx small increment value in x dimension
-     * @param dy small increment value in y dimension
-     * @param rows Optional row count to generate 2D noise
-     * @param columns Optional column count to generate 2D noise
-     */
     static noisePts(pts, dx = 0.01, dy = 0.01, rows = 0, columns = 0) {
         let seed = Math.random();
         let g = new Pt_1.Group();
@@ -115,27 +70,16 @@ class Create {
         }
         return g;
     }
-    /**
-     * Create a Delaunay Group. Use the `.delaunay()` and `.voronoi()` functions in the returned group to generate tessellations.
-     * @param pts a Group or an array of Pts
-     * @returns an instance of the Delaunay class
-     */
     static delaunay(pts) {
         return Delaunay.from(pts);
     }
 }
 exports.Create = Create;
-/**
- * Perlin noise gradient indices
- */
 const grad3 = [
     [1, 1, 0], [-1, 1, 0], [1, -1, 0], [-1, -1, 0],
     [1, 0, 1], [-1, 0, 1], [1, 0, -1], [-1, 0, -1],
     [0, 1, 1], [0, -1, 1], [0, 1, -1], [0, -1, -1]
 ];
-/**
- * Perlin noise permutation table
- */
 const permTable = [151, 160, 137, 91, 90, 15,
     131, 13, 201, 95, 96, 53, 194, 233, 7, 225, 140, 36, 103, 30, 69, 142, 8, 99, 37, 240, 21, 10, 23,
     190, 6, 148, 247, 120, 234, 75, 0, 26, 197, 62, 94, 252, 219, 203, 117, 35, 11, 32, 57, 177, 33,
@@ -150,42 +94,19 @@ const permTable = [151, 160, 137, 91, 90, 15,
     49, 192, 214, 31, 181, 199, 106, 157, 184, 84, 204, 176, 115, 121, 50, 45, 127, 4, 150, 254,
     138, 236, 205, 93, 222, 114, 67, 29, 24, 72, 243, 141, 128, 195, 78, 66, 215, 61, 156, 180
 ];
-/**
- * A class to generate Perlin noise. Currently it implements a basic 2D noise. More to follow.
- * Based on https://gist.github.com/banksean/304522
- */
 class Noise extends Pt_1.Pt {
-    /**
-     * Create a Noise Pt that's capable of generating noise
-     * @param args a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
-     */
     constructor(...args) {
         super(...args);
         this.perm = [];
         this._n = new Pt_1.Pt(0.01, 0.01);
-        // For easier index wrapping, double the permutation table length
         this.perm = permTable.concat(permTable);
     }
-    /**
-     * Set the initial noise values
-     * @param args a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
-     * @example `noise.initNoise( 0.01, 0.1 )`
-     */
     initNoise(...args) {
         this._n = new Pt_1.Pt(...args);
     }
-    /**
-     * Add a small increment to the noise values
-     * @param x step in x dimension
-     * @param y step in y dimension
-     */
     step(x = 0, y = 0) {
         this._n.add(x, y);
     }
-    /**
-     * Specify a seed for this Noise
-     * @param s seed value
-     */
     seed(s) {
         if (s > 0 && s < 1)
             s *= 65536;
@@ -197,9 +118,6 @@ class Noise extends Pt_1.Pt {
             this.perm[i] = this.perm[i + 256] = v;
         }
     }
-    /**
-     * Generate a 2D Perlin noise value
-     */
     noise2D() {
         let i = Math.floor(this._n[0]) % 255;
         let j = Math.floor(this._n[1]) % 255;
@@ -215,69 +133,49 @@ class Noise extends Pt_1.Pt {
     }
 }
 exports.Noise = Noise;
-/**
- * Delaunay is a Group of Pts that can generate Delaunay and Voronoi tessellations. The triangulation algorithm is ported from [Pt](https://github.com/williamngan/pt)
- * This implementation is based on [Paul Bourke's algorithm](http://paulbourke.net/papers/triangulate/)
- * with reference to its [javascript implementation by ironwallaby](https://github.com/ironwallaby/delaunay)
- */
 class Delaunay extends Pt_1.Group {
     constructor() {
         super(...arguments);
         this._mesh = [];
     }
-    /**
-     * Generate Delaunay triangles. This function also caches the mesh that is used to generate Voronoi tessellation in `voronoi()`.
-     * @param triangleOnly if true, returns an array of triangles in Groups, otherwise return the whole DelaunayShape
-     * @returns an array of Groups or an array of DelaunayShapes `{i, j, k, triangle, circle}` which records the indices of the vertices, and the calculated triangles and circumcircles
-     */
     delaunay(triangleOnly = true) {
         if (this.length < 3)
             return [];
         this._mesh = [];
         let n = this.length;
-        // sort the points and store the sorted index
         let indices = [];
         for (let i = 0; i < n; i++)
             indices[i] = i;
         indices.sort((i, j) => this[j][0] - this[i][0]);
-        // duplicate the points list and add super triangle's points to it
         let pts = this.slice();
         let st = this._superTriangle();
         pts = pts.concat(st);
-        // arrays to store edge buffer and opened triangles
         let opened = [this._circum(n, n + 1, n + 2, st)];
         let closed = [];
         let tris = [];
-        // Go through each point using the sorted indices
         for (let i = 0, len = indices.length; i < len; i++) {
             let c = indices[i];
             let edges = [];
             let j = opened.length;
             if (!this._mesh[c])
                 this._mesh[c] = {};
-            // Go through each opened triangles
             while (j--) {
                 let circum = opened[j];
                 let radius = circum.circle[1][0];
                 let d = pts[c].$subtract(circum.circle[0]);
-                // if point is to the right of circumcircle, add it to closed list and don't check again
                 if (d[0] > 0 && d[0] * d[0] > radius * radius) {
                     closed.push(circum);
                     tris.push(circum.triangle);
                     opened.splice(j, 1);
                     continue;
                 }
-                // if it's outside the circumcircle, skip
                 if (d[0] * d[0] + d[1] * d[1] - radius * radius > Util_1.Const.epsilon) {
                     continue;
                 }
-                // otherwise it's inside the circumcircle, so we add to edge buffer and remove it from the opened list
                 edges.push(circum.i, circum.j, circum.j, circum.k, circum.k, circum.i);
                 opened.splice(j, 1);
             }
-            // dedup edges
             Delaunay._dedupe(edges);
-            // Go through the edge buffer and create a triangle for each edge
             j = edges.length;
             while (j > 1) {
                 opened.push(this._circum(edges[--j], edges[--j], c, false, pts));
@@ -293,10 +191,6 @@ class Delaunay extends Pt_1.Group {
         }
         return (triangleOnly) ? tris : closed;
     }
-    /**
-     * Generate Voronoi cells. `delaunay()` must be called before calling this function.
-     * @returns an array of Groups, each of which represents a Voronoi cell
-     */
     voronoi() {
         let vs = [];
         let n = this._mesh;
@@ -305,19 +199,9 @@ class Delaunay extends Pt_1.Group {
         }
         return vs;
     }
-    /**
-     * Get the cached mesh. The mesh is an array of objects, each of which representing the enclosing triangles around a Pt in this Delaunay group
-     * @return an array of objects that store a series of DelaunayShapes
-     */
     mesh() {
         return this._mesh;
     }
-    /**
-     * Given an index of a Pt in this Delaunay Group, returns its neighboring Pts in the network
-     * @param i index of a Pt
-     * @param sort if true, sort the neighbors so that their edges will form a polygon
-     * @returns an array of Pts
-     */
     neighborPts(i, sort = false) {
         let cs = new Pt_1.Group();
         let n = this._mesh;
@@ -327,11 +211,6 @@ class Delaunay extends Pt_1.Group {
         }
         return (sort) ? Num_1.Geom.sortEdges(cs) : cs;
     }
-    /**
-     * Given an index of a Pt in this Delaunay Group, returns its neighboring DelaunayShapes
-     * @param i index of a Pt
-     * @returns an array of DelaunayShapes `{i, j, k, triangle, circle}`
-     */
     neighbors(i) {
         let cs = [];
         let n = this._mesh;
@@ -341,19 +220,11 @@ class Delaunay extends Pt_1.Group {
         }
         return cs;
     }
-    /**
-     * Record a DelaunayShape in the mesh
-     * @param o DelaunayShape instance
-     */
     _cache(o) {
         this._mesh[o.i][`${Math.min(o.j, o.k)}-${Math.max(o.j, o.k)}`] = o;
         this._mesh[o.j][`${Math.min(o.i, o.k)}-${Math.max(o.i, o.k)}`] = o;
         this._mesh[o.k][`${Math.min(o.i, o.j)}-${Math.max(o.i, o.j)}`] = o;
     }
-    /**
-     * Get the initial "super triangle" that contains all the points in this set
-     * @returns a Group representing a triangle
-     */
     _superTriangle() {
         let minPt = this[0];
         let maxPt = this[0];
@@ -366,24 +237,9 @@ class Delaunay extends Pt_1.Group {
         let dmax = Math.max(d[0], d[1]);
         return new Pt_1.Group(mid.$subtract(20 * dmax, dmax), mid.$add(0, 20 * dmax), mid.$add(20 * dmax, -dmax));
     }
-    /**
-     * Get a triangle from 3 points in a list of points
-     * @param i index 1
-     * @param j index 2
-     * @param k index 3
-     * @param pts a Group of Pts
-     */
     _triangle(i, j, k, pts = this) {
         return new Pt_1.Group(pts[i], pts[j], pts[k]);
     }
-    /**
-     * Get a circumcircle and triangle from 3 points in a list of points
-     * @param i index 1
-     * @param j index 2
-     * @param k index 3
-     * @param tri a Group representing a triangle, or `false` to create it from indices
-     * @param pts a Group of Pts
-     */
     _circum(i, j, k, tri, pts = this) {
         let t = tri || this._triangle(i, j, k, pts);
         return {
@@ -394,10 +250,6 @@ class Delaunay extends Pt_1.Group {
             circle: Op_1.Triangle.circumcircle(t)
         };
     }
-    /**
-     * Dedupe the edges array
-     * @param edges
-     */
     static _dedupe(edges) {
         let j = edges.length;
         while (j > 1) {

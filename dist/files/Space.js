@@ -1,14 +1,8 @@
 "use strict";
-// Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 Object.defineProperty(exports, "__esModule", { value: true });
 const Bound_1 = require("./Bound");
 const Pt_1 = require("./Pt");
 const UI_1 = require("./UI");
-/**
-* Space is an abstract class that represents a general context for expressing Pts.
-* See [Space guide](../../guide/Space-0500.html) for details.
-*/
 class Space {
     constructor() {
         this.id = "space";
@@ -23,23 +17,10 @@ class Space {
         this._isReady = false;
         this._playing = false;
     }
-    /**
-    * Set whether the rendering should be repainted on each frame
-    * @param b a boolean value to set whether to repaint each frame
-    */
     refresh(b) {
         this._refresh = b;
         return this;
     }
-    /**
-    * Add an IPlayer to this space. An IPlayer can define the following callback functions:
-    * - `animate( time, ftime, space )`
-    * - `start(bound, space)`
-    * - `resize( size, event )`
-    * - `action( type, x, y, event )`
-    * Subclasses of Space may define other callback functions.
-    * @param player an IPlayer object with animate function, or simply a function(time, ftime){}
-    */
     add(p) {
         let player = (typeof p == "function") ? { animate: p } : p;
         let k = this.playerCount++;
@@ -48,31 +29,18 @@ class Space {
         player.animateID = pid;
         if (player.resize && this.bound.inited)
             player.resize(this.bound);
-        // if _refresh is not set, set it to true
         if (this._refresh === undefined)
             this._refresh = true;
         return this;
     }
-    /**
-    * Remove a player from this Space
-    * @param player an IPlayer that has an `animateID` property
-    */
     remove(player) {
         delete this.players[player.animateID];
         return this;
     }
-    /**
-    * Remove all players from this Space
-    */
     removeAll() {
         this.players = {};
         return this;
     }
-    /**
-    * Main play loop. This implements window.requestAnimationFrame and calls it recursively.
-    * Override this `play()` function to implemenet your own animation loop.
-    * @param time current time
-    */
     play(time = 0) {
         this._animID = requestAnimationFrame(this.play.bind(this));
         if (this._pause)
@@ -89,150 +57,77 @@ class Space {
         }
         return this;
     }
-    /**
-    * Replay the animation after `stop()`. This resets the end-time counter.
-    * You may also use `pause()` and `resume()` for temporary pause.
-    */
     replay() {
         this._time.end = -1;
         this.play();
     }
-    /**
-    * Main animate function. This calls all the items to perform
-    * @param time current time
-    */
     playItems(time) {
         this._playing = true;
-        // clear before draw if refresh is true
         if (this._refresh)
             this.clear();
-        // animate all players
         if (this._isReady) {
             for (let k in this.players) {
                 if (this.players[k].animate)
                     this.players[k].animate(time, this._time.diff, this);
             }
         }
-        // stop if time ended
         if (this._time.end >= 0 && time > this._time.end) {
             cancelAnimationFrame(this._animID);
             this._playing = false;
         }
     }
-    /**
-    * Pause the animation
-    * @param toggle a boolean value to set if this function call should be a toggle (between pause and resume)
-    */
     pause(toggle = false) {
         this._pause = (toggle) ? !this._pause : true;
         return this;
     }
-    /**
-    * Resume the pause animation
-    */
     resume() {
         this._pause = false;
         return this;
     }
-    /**
-    * Specify when the animation should stop: immediately, after a time period, or never stops.
-    * @param t a value in millisecond to specify a time period to play before stopping, or `-1` to play forever, or `0` to end immediately. Default is 0 which will stop the animation immediately.
-    */
     stop(t = 0) {
         this._time.end = t;
         return this;
     }
-    /**
-    * Play animation loop, and then stop after `duration` time has passed.
-    * @param duration a value in millisecond to specify a time period to play before stopping, or `-1` to play forever
-    */
     playOnce(duration = 5000) {
         this.play();
         this.stop(duration);
         return this;
     }
-    /**
-    * Custom rendering
-    * @param context rendering context
-    */
     render(context) {
         if (this._renderFunc)
             this._renderFunc(context, this);
         return this;
     }
-    /**
-    * Set a custom rendering `function(graphics_context, canvas_space)` if needed
-    */
     set customRendering(f) { this._renderFunc = f; }
     get customRendering() { return this._renderFunc; }
-    /**
-     * Get a boolean to indicate whether the animation is playing
-     */
     get isPlaying() { return this._playing; }
-    /**
-    * Get this space's bounding box
-    */
     get outerBound() { return this.bound.clone(); }
-    /**
-    * The bounding box of the canvas
-    */
     get innerBound() { return new Bound_1.Bound(Pt_1.Pt.make(this.size.length, 0), this.size.clone()); }
-    /**
-    * Get the size of this bounding box as a Pt
-    */
     get size() { return this.bound.size.clone(); }
-    /**
-    * Get the size of this bounding box as a Pt
-    */
     get center() { return this.size.divide(2); }
-    /**
-    * Get width of canvas
-    */
     get width() { return this.bound.width; }
-    /**
-    * Get height of canvas
-    */
     get height() { return this.bound.height; }
 }
 exports.Space = Space;
 class MultiTouchSpace extends Space {
     constructor() {
         super(...arguments);
-        // track mouse dragging
         this._pressed = false;
         this._dragged = false;
         this._hasMouse = false;
         this._hasTouch = false;
     }
-    /**
-    * Get the mouse or touch pointer that stores the last action
-    */
     get pointer() {
         let p = this._pointer.clone();
         p.id = this._pointer.id;
         return p;
     }
-    /**
-    * Bind event listener in canvas element. You can also use `bindMouse` or `bindTouch` to bind mouse or touch events conveniently.
-    * @param evt an event string such as "mousedown"
-    * @param callback callback function for this event
-    */
     bindCanvas(evt, callback) {
         this._canvas.addEventListener(evt, callback);
     }
-    /**
-    * Unbind a callback from the event listener
-    * @param evt an event string such as "mousedown"
-    * @param callback callback function to unbind
-    */
     unbindCanvas(evt, callback) {
         this._canvas.removeEventListener(evt, callback);
     }
-    /**
-    * A convenient method to bind (or unbind) all mouse events in canvas element. All "players" added to this space that implements an `action` callback property will receive mouse event callbacks. The types of mouse actions are defined by UIPointerActions constants: "up", "down", "move", "drag", "drop", "over", and "out". See `Space`'s `add()` function for more details.
-    * @param _bind a boolean value to bind mouse events if set to `true`. If `false`, all mouse events will be unbound. Default is true.
-    * @see Space`'s [`add`](./_space_.space.html#add) function
-    */
     bindMouse(_bind = true) {
         if (_bind) {
             this.bindCanvas("mousedown", this._mouseDown.bind(this));
@@ -252,11 +147,6 @@ class MultiTouchSpace extends Space {
         }
         return this;
     }
-    /**
-    * A convenient method to bind (or unbind) all touch events in canvas element. All "players" added to this space that implements an `action` callback property will receive mouse event callbacks. The types of mouse actions are: "up", "down", "move", "drag", "drop", "over", and "out".
-    * @param _bind a boolean value to bind touch events if set to `true`. If `false`, all mouse events will be unbound. Default is true.
-    * @see Space`'s [`add`](./_space_.space.html#add) function
-    */
     bindTouch(_bind = true) {
         if (_bind) {
             this.bindCanvas("touchstart", this._mouseDown.bind(this));
@@ -274,12 +164,6 @@ class MultiTouchSpace extends Space {
         }
         return this;
     }
-    /**
-    * A convenient method to convert the touch points in a touch event to an array of `Pt`.
-    * @param evt a touch event which contains touches, changedTouches, and targetTouches list
-    * @param which a string to select a touches list: "touches", "changedTouches", or "targetTouches". Default is "touches"
-    * @return an array of Pt, whose origin position (0,0) is offset to the top-left of this space
-    */
     touchesToPoints(evt, which = "touches") {
         if (!evt || !evt[which])
             return [];
@@ -290,11 +174,6 @@ class MultiTouchSpace extends Space {
         }
         return ts;
     }
-    /**
-    * Go through all the `players` and call its `action` callback function
-    * @param type an UIPointerActions constant or string: "up", "down", "move", "drag", "drop", "over", and "out"
-    * @param evt mouse or touch event
-    */
     _mouseAction(type, evt) {
         let px = 0, py = 0;
         if (evt instanceof MouseEvent) {
@@ -326,19 +205,11 @@ class MultiTouchSpace extends Space {
             this._pointer.id = type;
         }
     }
-    /**
-    * MouseDown handler
-    * @param evt
-    */
     _mouseDown(evt) {
         this._mouseAction(UI_1.UIPointerActions.down, evt);
         this._pressed = true;
         return false;
     }
-    /**
-    * MouseUp handler
-    * @param evt
-    */
     _mouseUp(evt) {
         this._mouseAction(UI_1.UIPointerActions.up, evt);
         if (this._dragged)
@@ -347,10 +218,6 @@ class MultiTouchSpace extends Space {
         this._dragged = false;
         return false;
     }
-    /**
-    * MouseMove handler
-    * @param evt
-    */
     _mouseMove(evt) {
         this._mouseAction(UI_1.UIPointerActions.move, evt);
         if (this._pressed) {
@@ -359,18 +226,10 @@ class MultiTouchSpace extends Space {
         }
         return false;
     }
-    /**
-    * MouseOver handler
-    * @param evt
-    */
     _mouseOver(evt) {
         this._mouseAction(UI_1.UIPointerActions.over, evt);
         return false;
     }
-    /**
-    * MouseOut handler
-    * @param evt
-    */
     _mouseOut(evt) {
         this._mouseAction(UI_1.UIPointerActions.out, evt);
         if (this._dragged)
@@ -378,10 +237,6 @@ class MultiTouchSpace extends Space {
         this._dragged = false;
         return false;
     }
-    /**
-    * TouchMove handler
-    * @param evt
-    */
     _touchMove(evt) {
         this._mouseMove(evt);
         evt.preventDefault();
