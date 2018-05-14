@@ -3200,7 +3200,7 @@ class CanvasSpace extends Space_1.MultiTouchSpace {
         else {
             _selector = document.querySelector(elem);
             _existed = true;
-            this.id = elem;
+            this.id = (elem.indexOf("#") === 0) ? elem.substr(1) : elem;
         }
         if (!_selector) {
             this._container = this._createElement("div", this.id + "_container");

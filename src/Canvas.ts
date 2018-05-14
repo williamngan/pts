@@ -62,7 +62,7 @@ export class CanvasSpace extends MultiTouchSpace {
     } else {
       _selector = document.querySelector( <string>elem );
       _existed = true;
-      this.id = elem;
+      this.id = (elem.indexOf("#") === 0) ? elem.substr(1) : elem;
     }
     
     // if selector is not defined, create a canvas
