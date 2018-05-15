@@ -12,11 +12,11 @@ This library is currently in beta. Please give it a try, [file issues](https://g
 
 ### Usage
 
-**Option 1:** Download the [latest release](https://github.com/williamngan/pts/releases) and get `pts.js` or `pts.min.js` (under "dist" folder). 
+**Option 1:** Get the latest `pts.js` or `pts.min.js` (in [dist](https://github.com/williamngan/pts/tree/master/dist) folder). Alternatively use a CDN service like [jsdelivr](https://cdn.jsdelivr.net/gh/williamngan/pts/dist/pts.min.js) or [unpkg](https://unpkg.com/pts/dist/pts.min.js). Then add it to your html page like this:
 ```
-<script type="text/javascript" src="pts.js"></script>
+<script type="text/javascript" src="path/to/pts.js"></script>
 ```
-Pts is pretty lightweight. Currently at 80kb minified and 23kb gzipped.
+Pts is pretty lightweight. Currently at ~90kb minified and 26kb gzipped.
 
 
 **Option 2:** Install via `npm install pts`. Then you can choose to import some parts of Pts into your project as needed. 
@@ -60,5 +60,5 @@ npm run minify
 
 ### License
 Apache License 2.0. See LICENSE file for details.   
-Copyright © 2017 by William Ngan and contributors.
+Copyright © 2017-2018 by William Ngan and contributors.
 
