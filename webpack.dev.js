@@ -44,7 +44,7 @@ module.exports = {
   },
 
   plugins: [
-    new webpack.BannerPlugin("pts.js - Copyright © 2017-2018 William Ngan and contributors.\nLicensed under Apache 2.0 License.\nSee https://github.com/williamngan/pts for details.")
+    new webpack.BannerPlugin( `pts.js ${require("./package.json").version} - Copyright © 2017-2018 William Ngan and contributors.\nLicensed under Apache 2.0 License.\nSee https://github.com/williamngan/pts for details.` )
   ]
 
 };

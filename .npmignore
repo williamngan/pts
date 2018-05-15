@@ -14,8 +14,6 @@ mocha.opts
 index.html
 CNAME
 dist/files
-dist/pts.js
-dist/pts.min.js
 .vscode
 favicon.ico
 .babelrc
