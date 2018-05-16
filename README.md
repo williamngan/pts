@@ -31,7 +31,8 @@ To quickly get started, try download or clone these repos:
 - [pts-react-example](https://github.com/williamngan/pts-react-example): Try an example of using Pts with React. (Note that you'll need to custom your own production/minified builds.)
 
 **Get Started**   
-Read the [guides](https://ptsjs.org/guide/get-started-0100) and take a look at the [demos](https://ptsjs.org/demo/?name=circle.intersectCircle2D) and their source code. If you need help, please don't hesitate to [file an issue](https://github.com/williamngan/pts/issues).
+Read the [guides](https://ptsjs.org/guide/get-started-0100) and take a look at the [demos](https://ptsjs.org/demo/?name=circle.intersectCircle2D) and their source code.    
+If you need help, please don't hesitate to [file an issue](https://github.com/williamngan/pts/issues).
 
 ---    
 

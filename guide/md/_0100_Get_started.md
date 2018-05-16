@@ -29,7 +29,7 @@ For using Pts in React, take a look at [pts-react-example](https://github.com/wi
 ##### (Note that pts is an es6 library, so if you want to compile to es5, you'll need to configure babel accordingly.)
 
 ### Using pts as a script
-First go to the latest release and get `pts.js` or `pts.min.js` ([direct link](https://raw.githubusercontent.com/williamngan/pts/master/dist/pts.js) or [github](https://github.com/williamngan/pts)). Include it in your html. Then create another js file for your script and add it too.
+First get `pts.js` or `pts.min.js`. You may get a direct link from a CDN service (eg, [unpkg](https://unpkg.com/pts/dist/pts.js) or [jsdelivr](https://cdn.jsdelivr.net/gh/williamngan/pts/dist/pts.js)), or download it from [github repo](https://github.com/williamngan/pts/dist). Include it in your html, and then create another js file for your script and add it too.
 
 ```
 <script type="text/javascript" src="path/to/pts.js"></script>
