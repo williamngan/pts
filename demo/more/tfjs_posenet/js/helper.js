@@ -28,11 +28,9 @@ function scenes( timesteps ) {
 
 
 class BodyPose {
-  constructor( video, space, defaultPos=(k, i) => null ) {
-    this.video = video;
-
-    if (!video || !video.width || !video.height) throw new Error( "Video element is not ready yet.");
-    this.size = new Pt( video.width, video.height );
+  constructor( space, defaultPos=(k, i) => null ) {
+    
+    this.size = space.size;
     this.offset = Math.abs( this.size.x - this.size.y ) / 2;
     
     this.keys = ["nose", "leftEye", "rightEye", "leftEar", "rightEar", "leftShoulder", "rightShoulder", "leftElbow", "rightElbow", "leftWrist", "rightWrist", "leftHip", "rightHip", "leftKnee", "rightKnee", "leftAnkle", "rightAnkle"];
@@ -41,6 +39,20 @@ class BodyPose {
 
     this.headSize = [10];
 
+  }
+
+  squareBuffer( video ) {
+    var buffer = document.createElement( "canvas" );
+    buffer.width = this.size.x;
+    buffer.height = this.size.y;
+    var vsize = new Pt( Math.min(video.width, video.height), Math.min(video.width, video.height) );
+    var offset = new Pt( video.width, video.height ).$subtract( vsize ).divide( 2 );
+
+    return function() {
+      buffer.getContext('2d').drawImage( video, offset.x, offset.y, vsize.x, vsize.y, 0, 0, space.size.x, space.size.y );
+      return buffer;
+    }
+    
   }
 
   update( keypoints, minConfid=0.1, smooth=true ) {

@@ -9,6 +9,7 @@ posenet.load().then( (net) => pose = net );
 
 // BodyPose instance
 var body;
+var squareCrop;
 
 // input
 var video = document.getElementById('video');
@@ -63,15 +64,17 @@ space.add({
 
   start: () => {
     webcam( video );
-    body = new BodyPose( video, space, (d, i) => space.center.add(Math.random(), Math.random()) );
+    body = new BodyPose( space, (d, i) => space.center.add(Math.random(), Math.random()) );
+    squareCrop = body.squareBuffer( video );
   },
   
   animate: (time, ftime) => {
 
     form.useOffscreen( true );
+    let cropped = squareCrop();
 
     let st = scene(time);
-    if (st < 2) form.image( video, space.innerBound );
+    if (st < 2) form.image( cropped, space.innerBound );
     if (st >= 1) form.fillOnly( `rgba(70,0, 220, ${ Math.min(1, st-1) })` ).rect( space.innerBound );
     
     if (pose) {
@@ -80,7 +83,7 @@ space.add({
       const poseStride = 16;
       const poseFlip = false;
 
-      pose.estimateMultiplePoses(video, poseScale, poseFlip, poseStride, 1).then( function (people) {
+      pose.estimateMultiplePoses(cropped, poseScale, poseFlip, poseStride, 1).then( function (people) {
         if (people.length > 0) {
           body.update( people[0].keypoints );
           drawBg();

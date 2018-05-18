@@ -30,7 +30,7 @@ function drawBody() {
 space.add({
 
   start: () => {
-    body = new BodyPose( video, space, (k,i) => space.center );
+    body = new BodyPose( space, (k,i) => space.center );
   },
   
   animate: (time, ftime) => {

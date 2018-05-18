@@ -1,0 +1,29 @@
+<html>
+  <head>
+    
+    <script type="text/javascript" src="https://unpkg.com/@tensorflow/tfjs"></script>
+    <script type="text/javascript" src="https://unpkg.com/@tensorflow-models/posenet"></script>
+    <script type="text/javascript" src="https://unpkg.com/pts/dist/pts.js"></script>
+    <script type="text/javascript" src="./js/helper.js"></script>
+    
+    <style type="text/css">
+      body { margin: 0; padding: 20px; font-family: sans-serif; }
+      #pts { position: relative; width: 500px; height: 500px; }
+      #pts > canvas { position: absolute; z-index: 2; }
+      #video { position: absolute; top: 0; left: 0; display: none; }
+      small { color: #abc; font-size: 11px;}
+    </style>
+  </head>
+
+  <body>
+
+    <div id="pts">
+      <video id="video" width="640" height="480" autoplay></video>
+      <!-- <video id="video" width="640" height="480" autoplay><source src="test.mp4" type="video/mp4" codec="avc1.4D401E" /></video> -->
+      <!-- <img src="sample4.png" style="width:600px; height:600px;" id="video" /> -->
+    </div>
+    <p><small>Photo credit: pexels.com/photo/animal-canine-dog-grass-220968/</small></p>
+
+    <script type="text/javascript" src="./js/b.js"></script>
+  </body>
+</html>
