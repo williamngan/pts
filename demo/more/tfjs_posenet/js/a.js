@@ -1,9 +1,15 @@
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2018 William Ngan. (https://github.com/williamngan/pts)
+
+// This is a simple demo that runs posenet model to a static image and draw a body.
+
+
 // pts.js
 Pts.namespace(this);
 var space = new CanvasSpace("#pts").setup({ bgcolor: "transparent", retina: true });
 var form = space.getForm();
 
-// tensorflow posenet model
+// tensorflow.js posenet model
 var pose;
 posenet.load().then( (net) => pose = net );
 
@@ -13,7 +19,7 @@ var body;
 // input
 var video = document.getElementById('video');
 
-
+// a function to draw the whole body
 function drawBody() {
 
   form.strokeOnly("#0cf", 3);  
@@ -27,6 +33,7 @@ function drawBody() {
   form.lines( body.wireframe() );
 }
 
+// Add a player to CanvasSpace
 space.add({
 
   start: () => {
@@ -54,4 +61,5 @@ space.add({
 
 });
 
-space.play().bindMouse().bindTouch();
+// play
+space.play();
