@@ -1,6 +1,6 @@
 # Visualizing Pose with Pts and tensorflow.js
 
-Demos of using [Pts](https://ptsjs.org) to draw poses estimated by [tensorflow.js](https://js.tensorflow.org/)'s [PoseNet](https://medium.com/tensorflow/real-time-human-pose-estimation-in-the-browser-with-tensorflow-js-7dd0bc881cd5). It includes a `BodyPose` class which helps you manage and visualize the key points. This is still very much in a hacky prototype form, so please enjoy the ride :)
+Demos using [Pts](https://ptsjs.org) to draw poses estimated by [tensorflow.js](https://js.tensorflow.org/)'s [PoseNet](https://medium.com/tensorflow/real-time-human-pose-estimation-in-the-browser-with-tensorflow-js-7dd0bc881cd5). It includes a `BodyPose` class which helps you manage and visualize the key points. This is still very much in a hacky prototype form, so please enjoy the ride :)
 
 ### Demos
 
@@ -19,7 +19,7 @@ Demos of using [Pts](https://ptsjs.org) to draw poses estimated by [tensorflow.j
 ### Quick Start
 
 #### Preparing input
-You can use a video or an image -- square size works best. There's no need to normalize the bitmap data. In `bodypose.js`, there's a `webcam` function to connect to webcam, and a `BodyPose.squareBuffer` function which helps you take a square crop of your input.
+You can use a video or an image -- square size works best. There's no need to normalize the bitmap data, and in `bodypose.js` there are a few helper functions to make the process easier: for example, call `webcam` function to connect to webcam, and call `BodyPose.squareBuffer` function to take a square crop of your input.
 
 #### Data structure
 PoseNet returns json data in this structure: 
@@ -31,10 +31,12 @@ PoseNet returns json data in this structure:
 }
 ```
 
-You can pass the raw data into `BodyPose.update` function, and then query them by keys. The keys are:   
+You can pass the raw data into `BodyPose.update` function, and then get the key points by names directly. The keys are:   
 
 ```
-nose, leftEye, rightEye, leftEar, rightEar, leftShoulder, rightShoulder, leftElbow, rightElbow, leftWrist, rightWrist, leftHip, rightHip, leftKnee, rightKnee, leftAnkle, rightAnkle
+nose, leftEye, rightEye, leftEar, rightEar,     
+leftShoulder, rightShoulder, leftElbow, rightElbow, leftWrist, rightWrist,    
+leftHip, rightHip, leftKnee, rightKnee, leftAnkle, rightAnkle
 ```
 
 ### Drawing
@@ -57,7 +59,8 @@ Finally, you can get a wireframe of the whole body with `body.wireframe()`. This
 ### And more
 The `BodyPose` should be general enough to support drawing poses from other libraries. For example, you can probably run a PyTorch pose model in python, send the raw data through websockets (eg, with SocketIO), and visualize the pose in the browser.
 
-Note that this is a prototype demo for hacking. If you have suggestions, please file an issue or ping @williamngan on twitter.
+If you have suggestions for improvements, please file an issue or ping @williamngan on twitter. Thanks!
+
 
 ## Photo / Video credits
 - Photo used in "a" demo from CC licensed photo at pexels.com/photo/animal-canine-dog-grass-220968
