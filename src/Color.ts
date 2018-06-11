@@ -228,6 +228,16 @@ export class Color extends Pt {
    */
   get alpha():number { return (this.length > 3) ? this[3] : 1; }
 
+  /**
+   * Get whether the color values are normalized between 0 to 1
+   */
+  get normalized():boolean { return this._isNorm; }
+
+  /**
+   * Set color values as normalized or not. If conversion is needed, use `normalize()` function instead
+   */
+  set normalized( b:boolean ) { this._isNorm = b; }
+
 
   /**
    * Normalize the color values to between 0 to 1, or revert it back to the min/max values in current color mode
