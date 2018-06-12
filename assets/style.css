@@ -4,7 +4,7 @@ html{font-family:sans-serif;line-height:1.15;-ms-text-size-adjust:100%;-webkit-t
 
 body {
   background: #fff;
-  font-family: "Helvetica", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
   font-size: 12px;
   line-height: 1.35;
   margin: 0;
@@ -22,9 +22,9 @@ html * {
 /* Header & footer */
 
 #header {
-  font-size: 1.5em;
+  font-size: 1.4em;
   position: relative;
-  /* border-bottom: 3px solid #f03; */
+  border-bottom: 1px solid #f03;
   line-height: 70px;
 }
 
@@ -67,6 +67,26 @@ html * {
   padding: 0 2px; 
 }
 
+#topmenu {
+  position: absolute;
+  top: 0; right: 30px;
+  height: 100%; 
+  vertical-align: middle;
+}
+
+#topmenu > a {
+  display: inline-block;
+  vertical-align: middle;
+  font-weight: 400;
+  height: 100%;
+}
+
+
+#block_1 {
+  padding: 40px;
+  font-size: 2em;
+}
+
 
 /* ---------- */
 
@@ -94,7 +114,7 @@ html * {
 #board {
   cursor: pointer;
   width: 100%;
-  height: calc(100vh - 70px);
+  height: 60vh;
 }
 
 #pt {

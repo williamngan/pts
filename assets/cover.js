@@ -1,7 +1,7 @@
 (function() {
   
   Pts.namespace( this );
-  var space = new CanvasSpace("#pt").setup({bgcolor: "#123", resize: true, retina: true});
+  var space = new CanvasSpace("#pt").setup({bgcolor: "#fff", resize: true, retina: true});
   var form = space.getForm();
   
   
@@ -35,7 +35,7 @@
       // form.fillOnly( Color.LABtoRGB( color ).hex ).rect( space.innerBound );
       
       form.strokeOnly("#f03", 2).line( [space.center, space.pointer] );
-      form.strokeOnly("#fff", 1).lines( lines );
+      form.strokeOnly("#123", 1).lines( lines );
     },
     
     action: (type, x, y) => {
