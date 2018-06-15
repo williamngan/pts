@@ -14,18 +14,40 @@ import * as _Svg from "./Svg";
 import * as _Typography from "./Typography";
 import * as _Physics from "./Physics";
 
-// A function to switch scope for Pts library. eg, Pts.scope( Pts, window );
-let namespace = ( sc:object ) => {
+// A function to switch scope for Pts library. eg, Pts.namespace( window );
+let namespace = ( scope:any ) => {
   let lib = module.exports;
   for (let k in lib) {
     if (k!="namespace") {
-      sc[k] = lib[k];
+      scope[k] = lib[k];
     }
   }
 };
 
+let quickStart = ( id:string, bg:string="#9ab" ) => {
+  let s:any = window;
+  namespace( s );
+  
+  s.space = new _Canvas.CanvasSpace( id ).setup({bgcolor: bg, resize: true, retina: true});
+  s.form = s.space.getForm();
+
+  return function( animate=null, start=null, action=null, resize=null ) {
+    s.space.add({
+      start: start,
+      animate: animate,
+      resize: resize,
+      action: action,
+    });
+
+    s.space.bindMouse().bindTouch().play();
+  };
+
+};
+
+
 module.exports = {
   namespace,
+  quickStart,
   ..._Bound,
   ..._Canvas,
   ..._Create,

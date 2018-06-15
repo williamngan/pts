@@ -205,7 +205,7 @@ export class Util {
    * Zip arrays. eg, [[1,2],[3,4],[5,6]] => [[1,3,5],[2,4,6]]
    * @param arrays an array of arrays 
    */
-  static zip( ...arrays:Array<any>[] ) {
+  static zip( arrays:Array<any>[] ) {
     let z = [];
     for (let i=0, len=arrays[0].length; i<len; i++) {
       let p = [];
