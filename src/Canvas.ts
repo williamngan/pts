@@ -60,9 +60,11 @@ export class CanvasSpace extends MultiTouchSpace {
       _selector = elem;
       this.id = "pts_existing_space";
     } else {
-      _selector = document.querySelector( <string>elem );
+      let id = <string>elem;
+      id = (elem[0] === "#" || elem[0] === ".") ? elem : "#"+elem;
+      _selector = document.querySelector( id );
       _existed = true;
-      this.id = (elem.indexOf("#") === 0) ? elem.substr(1) : elem;
+      this.id = id.substr(1);
     }
     
     // if selector is not defined, create a canvas
