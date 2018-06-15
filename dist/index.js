@@ -541,7 +541,7 @@ class Util {
         }
         return result;
     }
-    static zip(...arrays) {
+    static zip(arrays) {
         let z = [];
         for (let i = 0, len = arrays[0].length; i < len; i++) {
             let p = [];
@@ -3190,9 +3190,11 @@ class CanvasSpace extends Space_1.MultiTouchSpace {
             this.id = "pts_existing_space";
         }
         else {
-            _selector = document.querySelector(elem);
+            let id = elem;
+            id = (elem[0] === "#" || elem[0] === ".") ? elem : "#" + elem;
+            _selector = document.querySelector(id);
             _existed = true;
-            this.id = (elem.indexOf("#") === 0) ? elem.substr(1) : elem;
+            this.id = id.substr(1);
         }
         if (!_selector) {
             this._container = this._createElement("div", this.id + "_container");
@@ -4154,6 +4156,8 @@ class Color extends Pt_1.Pt {
     get v() { return this[1]; }
     set v(n) { this[2] = n; }
     get alpha() { return (this.length > 3) ? this[3] : 1; }
+    get normalized() { return this._isNorm; }
+    set normalized(b) { this._isNorm = b; }
     normalize(toNorm = true) {
         if (this._isNorm == toNorm)
             return this;
