@@ -24,26 +24,33 @@ html * {
 #header {
   font-size: 1.4em;
   position: relative;
-  border-bottom: 1px solid #f03;
+  /* border-bottom: 1px solid #f03; */
   line-height: 70px;
+  
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 2;
 }
 
 #footer {
   font-size: 1.1em;
+  text-align: center;
   color: #aeb7c1;
-  width: 50%;
-  margin-left: 40%;
-  padding: 30px 0;
+  padding: 100px 0 30px;
+}
+
+#footer a, #footer a:hover {
+  color: #aeb7c1; text-decoration: underline;
 }
 
 #header a {
-  color: #123;
+  color: #fff;
   text-decoration: none;
   padding-left: 10px;
   padding-right: 10px;
 }
 #header a:hover {
-  color: #f03;
+  color: #75f;
   border-bottom: none;
 }
 
@@ -56,10 +63,16 @@ html * {
   padding-right: 0;
   font-weight: normal;
 }
-#pts a {
+
+#header_title  {
+  color: #fff;
   display: inline-block;
-  font-weight: bold;
   padding-right: 0px;
+  font-size: 4em;
+  font-weight: 400;
+  margin-top: 40px;
+  margin-left: 20px;
+  user-select: none;
 }
 #pts a > span {
   color: #f03;
@@ -69,7 +82,7 @@ html * {
 
 #topmenu {
   position: absolute;
-  top: 0; right: 30px;
+  top: 20px; right: 40px;
   height: 100%; 
   vertical-align: middle;
 }
@@ -82,11 +95,67 @@ html * {
 }
 
 
-#block_1 {
-  padding: 40px;
-  font-size: 2em;
+
+.block h1, .block h3 {
+  margin: 60px 0 20px; 
+  font-weight: 400;
 }
 
+.block {
+  width: 100vw;
+  max-width: 1350px;
+  margin: 0 auto;
+  text-align: center;
+  
+}
+
+.block .subcol {
+  text-align: left;
+  vertical-align: top;
+  min-width: 540px;
+  max-width: 640px;
+  padding: 0 40px 0 80px;
+  box-sizing: border-box;
+  display: inline-block;
+}
+
+.block h3 {
+  font-size: 2.1em;
+  color: #345;
+  font-weight: 500;
+}
+
+
+.block p {
+  color: #345;
+  font-size: 1.3em; 
+}
+
+.cta {
+  display: inline-block;
+  margin: 20px 0;
+  padding: 15px 20px;
+  font-size: 1.4em;
+  font-weight: 600;
+  border: 2px solid #42e;
+  color: #42e;
+  cursor: pointer;
+}
+
+.cta:hover {
+  background: #42e;
+  color: #fff
+}
+
+code {
+  display: inline-block;
+  background-color: #f3f7f9;
+  color: #678;
+  font-family: Menlo, sans-serif;
+  padding: 15px;
+  font-size: 0.8em;
+  margin: 10px 0;
+}
 
 /* ---------- */
 
@@ -114,7 +183,7 @@ html * {
 #board {
   cursor: pointer;
   width: 100%;
-  height: 60vh;
+  height: 80vh;
 }
 
 #pt {
@@ -191,14 +260,13 @@ p {
 
 
 a {
-  color: #f03;
-  font-weight: 500;
+  color: #42f;
   text-decoration: none;
   display: inline-block;
 }
 
 a:hover {
-  border-bottom: 1px solid #f03;
+  text-decoration: underline;
 }
 
 .demo, .section {
@@ -236,10 +304,20 @@ a:hover {
     padding-left: 30px;
     padding-right: 30px;
   }
+
+  #header_title {
+    margin-top: 20px;
+    margin-left: 10px;
+  }
+
+  #topmenu {
+    display: none;
+  }
   
   #footer { 
     line-height: 1.4;
-    padding: 100px 0 30px; 
+    padding: 100px 40px 40px; 
+    text-align: left;
   }
   
   
@@ -249,6 +327,29 @@ a:hover {
   
   #header a:last-child {
     padding-right: 0;
+  }
+  
+
+  .block h1, .block h3 {
+    /* margin: 60px 0 20px;  */
+    font-weight: 400;
+  }
+  
+  .block {
+    max-width: 100vw;
+    margin: auto;
+    text-align: left;
+    
+  }
+  
+  .block .subcol {
+    min-width: 50vw;
+    max-width: 100vw;
+    text-align: left;
+    
+    padding: 0 40px;
+    box-sizing: border-box;
+    display: block;
   }
   
 
@@ -273,7 +374,7 @@ a:hover {
   }
   
   #board {
-    height: calc( 100vh - 100px );
+    height: 75vh;
   }
   
   #hint {

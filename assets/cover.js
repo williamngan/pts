@@ -1,51 +1,68 @@
-(function() {
-  
-  Pts.namespace( this );
-  var space = new CanvasSpace("#pt").setup({bgcolor: "#fff", resize: true, retina: true});
-  var form = space.getForm();
-  
-  
-  //// Demo code ---
-  
-  var delay = 0;
-  var angle = 0;
-  
-  space.add( { 
-    animate: (time, ftime) => {
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 
-      delay++;
-      angle += Const.one_degree/2;
-      
-      // get a line from pointer to center, and use it for direction and magnitude calculations
-      let center = space.center.clone().toAngle( angle, 0.1, space.center );
-      let ln = space.pointer.$subtract( center );
-      let dir = ln.$unit();
-      let mag = ln.magnitude();
-      let mag2 = space.size.magnitude();
-      let sc = (space.size.x > space.size.y) ? space.size.y/12 : space.size.x/12;
-      
-      // create a grid of lines
-      let lines = Create.gridPts( space.innerBound, Math.floor( space.size.x/sc ), Math.floor( space.size.y/sc ) ).map( (p) => {
-        let dist = p.$subtract( space.center ).magnitude() / mag2;
-        return new Group(p, p.$add( dir.$multiply( dist*(20 + mag/5) ) )) 
+window.demoDescription = "In a field of points that revolves around a center, draw a perpendicular line from each point to a path.";
+
+(function() {
+
+  Pts.namespace( this );
+  var space = new CanvasSpace("#pt").setup({bgcolor: "#123", resize: true, retina: true});
+  var form = space.getForm();
+
+
+  //// Demo code ---
+
+  var pts = new Group();
+  var timeOutId = -1;
+  var header = null;
+
+
+  space.add({ 
+
+    // creatr 200 random points
+    start:( bound ) => {
+      pts = Create.distributeRandom( space.innerBound, 200 );
+      header = document.getElementById("header");
+    }, 
+
+    animate: (time, ftime) => {
+      // make a line and turn it into an "op" (see the guide on Op for more)
+      let perpend = new Group( space.center.$subtract(0.1), space.pointer ).op( Line.perpendicularFromPt );
+      pts.rotate2D( 0.0005, space.center );
+
+      pts.forEach( (p, i) => {
+        // for each point, find the perpendicular to the line
+        let lp = perpend( p );
+        var ratio = Math.min( 1, 1 - lp.$subtract(p).magnitude()/(space.size.x/2) );
+        form.stroke(`rgba(255,255,255,${ratio}`, ratio*2).line( [ p, lp ] );
+        form.fillOnly( ["#f03", "#09f", "#0c6"][i%3] ).point( p, 1 );
       });
-      
-      // let color = Color.lab( Color.maxValues("lab") );
-      // color.multiply( 0.5, (space.pointer.x-space.center.x)/space.center.x, (space.pointer.y-space.center.y)/space.center.y, 1 );
-      // form.fillOnly( Color.LABtoRGB( color ).hex ).rect( space.innerBound );
-      
-      form.strokeOnly("#f03", 2).line( [space.center, space.pointer] );
-      form.strokeOnly("#123", 1).lines( lines );
+
+      // header position
+      if (header) {
+        let top = window.pageYOffset || document.documentElement.scrollTop;
+        let dp = top - space.size.y + 150;
+        if (dp > 0) {
+          header.style.top = `${dp * -1}px`;
+        } else {
+          header.style.top = "0px";
+        }
+      }
+
     },
-    
-    action: (type, x, y) => {
-      delay = 0;
+
+    resize: () => {
+      clearTimeout( timeOutId );
+      setTimeout( () => {
+        pts = Create.distributeRandom( space.innerBound, 200 );
+      }, 500 );
     }
+
   });
   
   //// ----
   
-  
+
   space.bindMouse().bindTouch().play();
-  
+
 })();
