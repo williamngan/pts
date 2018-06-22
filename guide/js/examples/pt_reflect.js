@@ -26,7 +26,7 @@
     Geom.reflect2D( g3, reflectLine );
     
     form.strokeOnly("#fff", 20, "miter").line(g1).stroke("#123").line(g3);
-    form.stroke("#f03", 10).line( reflectLine );
+    form.stroke("#42e", 10).line( reflectLine );
     
   });
   

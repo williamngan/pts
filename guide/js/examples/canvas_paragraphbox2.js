@@ -20,11 +20,11 @@
       let rect = Rectangle.fromCenter( space.center, size.$max( space.size.$divide(6) )  );
       let boxes = Rectangle.halves( rect, 0.5 );
 
-      form.fill("#fff").stroke("#f03", 3).rect( rect );
+      form.fill("#fff").stroke("#0ca", 3).rect( rect );
       form.fillOnly("#123");
       form.paragraphBox( boxes[0], content, 1, "top", false );
       form.alignText("right").paragraphBox( boxes[1], content, 2, "bottom", false );
-      form.strokeOnly("#f03", 1).line( [new Pt(space.center.x, 0), new Pt(space.center.x, space.size.y)] );
+      form.strokeOnly("#42e", 1).line( [new Pt(space.center.x, 0), new Pt(space.center.x, space.size.y)] );
     }
     
   });

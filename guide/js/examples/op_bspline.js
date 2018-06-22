@@ -25,9 +25,9 @@
 
     // draw the B-spline curve
     let curve = Curve.bspline( pts );
-    form.fill("#f03").stroke("#fff", 5).polygon( curve );
+    form.fill("#0ca").stroke("#fff", 5).polygon( curve );
     form.stroke("rgba(0,0,0,.2", 1).lines( corners.map( (p) => [p, space.center]) );
-    form.fillOnly("#123").points( pts, 3, "circle" );
+    form.fillOnly("#f05").points( pts, 3, "circle" );
     
   });
   

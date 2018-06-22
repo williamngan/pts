@@ -20,9 +20,9 @@
     let angText = Geom.boundRadian( ang ); // bound between 0 to 2-PI
 
     
-    form.strokeOnly("#f03", 10, "round", "round").line( [c, m] );
+    form.strokeOnly("#0ca", 10, "round", "round").line( [c, m] );
     form.stroke("#fff").line( [c, new Pt(c.x + lengthP, c.y)])
-    form.stroke("#f03", 10).arc(c, lengthP, 0, ang);
+    form.stroke("#42e", 10).arc(c, lengthP, 0, ang);
     form.fill("#123").font(18, "bold").text( c.$add( p.toAngle( angText/2, lengthP/2 ) ).add(10, 5), Math.floor( Geom.toDegree(angText) )+"°" );
   });
   

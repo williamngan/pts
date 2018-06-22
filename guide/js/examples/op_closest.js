@@ -18,8 +18,8 @@
     pts.sort( (a,b) => a.$subtract(t).magnitudeSq() - b.$subtract(t).magnitudeSq() );
     
     form.fillOnly("#123").points( pts, 2, "circle" );
-    form.fill("#f03").point( pts[0], 10, "circle" );
-    form.strokeOnly("#f03", 2).line( [pts[0], space.pointer] );
+    form.fill("#f05").point( pts[0], 10, "circle" );
+    form.strokeOnly("#f05", 2).line( [pts[0], space.pointer] );
 
   });
   

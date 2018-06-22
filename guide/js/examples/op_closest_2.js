@@ -24,8 +24,8 @@
 
     let three = pts.slice(0, 3);
     let threeLines = three.map( (p) => [p, space.pointer] );
-    form.strokeOnly("#f03", 2).lines( threeLines );
-    form.fillOnly("#f03").points( three, 3, "circle" );
+    form.strokeOnly("#f05", 2).lines( threeLines );
+    form.fillOnly("#f05").points( three, 3, "circle" );
   });
   
   // start

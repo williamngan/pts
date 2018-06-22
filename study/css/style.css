@@ -24,7 +24,6 @@ html * {
 #header {
   font-size: 1.5em;
   position: relative;
-  border-bottom: 3px solid #f03;
   line-height: 70px;
 }
 

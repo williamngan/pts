@@ -25,7 +25,7 @@
     
     // drawing
     form.fillOnly("#123").polygon( poly );
-    form.fill("#f03").circles( circles );
+    form.fill("#f05").circles( circles );
     form.strokeOnly("#fff ", 3 ).polygons( tris );
     form.fill("#123").point( space.pointer, 5 );
     

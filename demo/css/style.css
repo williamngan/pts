@@ -24,7 +24,6 @@ html * {
 #header {
   font-size: 1.5em;
   position: relative;
-  border-bottom: 3px solid #fff;
   line-height: 70px;
 }
 
@@ -43,7 +42,7 @@ html * {
   padding-right: 10px;
 }
 #header a:hover {
-  color: #f03;
+  color: #42e;
   border-bottom: none;
 }
 
@@ -62,7 +61,7 @@ html * {
   padding-right: 0px;
 }
 #pts a > span {
-  color: #f03;
+  color: #42e;
   display: inline-block;
   padding: 0 2px; 
 }
@@ -161,11 +160,11 @@ html * {
   display: block;
   border: none;
   text-decoration: none;
-  color: #f03;
+  color: #42e;
 }
 
 #hint a:hover {
-  color: #c03;
+  color: #75f;
 }
 
 h1 {
@@ -183,14 +182,14 @@ p {
 
 
 a {
-  color: #f03;
+  color: #42e;
   font-weight: 500;
   text-decoration: none;
   display: inline-block;
 }
 
 a:hover {
-  border-bottom: 1px solid #f03;
+  text-decoration: underline;
 }
 
 .demo, .section {
@@ -211,7 +210,7 @@ a:hover {
 .demo > strong {
   font-weight: 400;
 }
-.demo:hover, .demo:hover > span { color: #f03;}
+.demo:hover, .demo:hover > span { color: #42e;}
 
 .section {
   font-weight: 600;

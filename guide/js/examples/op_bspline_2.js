@@ -24,10 +24,10 @@
 
     form.fillOnly("#123").points( pts, 2, "circle" );
     form.strokeOnly("#fff",3).line( curve );
-    form.stroke("#000").polygon( Curve.bspline( curve ) );
+    form.stroke("#123").polygon( Curve.bspline( curve ) );
     
     let pp = ten.map( (p) => [space.pointer, p] );
-    form.strokeOnly("#f03", 2).lines( pp );
+    form.strokeOnly("#f05", 2).lines( pp );
 
   });
   

@@ -18,7 +18,7 @@
     let perpends = pts.map( (p) => [p, Line.perpendicularFromPt( path, p )] );
 
     
-    form.strokeOnly("#f03", 5).line( path );
+    form.strokeOnly("#42e", 5).line( path );
     form.strokeOnly("#123", 1).lines( perpends );
     form.fillOnly("#123").points( pts, 2, "circle" );
 

@@ -11,7 +11,7 @@
   // animation
   space.add( (time, ftime) => {
     let radius = Num.cycle( (time%1000)/1000 ) * 20;
-    form.fill("#09f").point( space.pointer, radius, "circle" );
+    form.fill("#0ca").point( space.pointer, radius, "circle" );
   });
   
   // start

@@ -19,7 +19,7 @@
       let size = space.center.$subtract( space.pointer ).abs().multiply(2);
       let rect = Rectangle.fromCenter( space.center, size.$max( space.size.$divide(6) )  );
 
-      form.fill("#fff").stroke("#f03", 3).rect( rect );
+      form.fill("#fff").stroke("#0ca", 3).rect( rect );
       form.fillOnly("#123");
       form.alignText("center").paragraphBox( rect, content, 1.5, "middle" );
     }

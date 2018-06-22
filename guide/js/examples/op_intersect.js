@@ -24,9 +24,9 @@
     let hitPts = pairs.map( (pa) => hit( pa ) );
 
     form.strokeOnly("#123").lines( pairs );
-    form.stroke("#f03").line([space.center, space.pointer]);
+    form.stroke("#42e").line([space.center, space.pointer]);
     form.fillOnly("#123").points( pts, 2, "circle" );
-    form.fill("#f03").points( hitPts, 5, "circle" );
+    form.fill("#42e").points( hitPts, 5, "circle" );
 
   });
   

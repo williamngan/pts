@@ -38,7 +38,7 @@
         form.strokeOnly("#123", 10, "round");
         form.line( group );
         form.fill("#fff").circles( cs );
-        form.fillOnly("#f03").point( lastPt, 10, "circle" );
+        form.fillOnly("#f05").point( lastPt, 10, "circle" );
         
       }
     }
