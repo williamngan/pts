@@ -5,3 +5,4 @@ temp/
 *.js.map
 .DS_Store
 *.mp4
+docsn/**/*.json

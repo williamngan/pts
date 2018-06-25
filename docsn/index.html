@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <script type="text/javascript" src="./js/vue.js"></script>
+    <style type="text/css">
+      body {
+        font-family: "Helvetica", sans-serif;
+        font-size: 13px;
+        line-height: 1.35;
+        margin: 0;
+      }
+      #modules {
+        position: absolute;
+        top: 0; left: 0; bottom: 0; width: 25vw;
+        overflow: auto;
+        padding: 20px;
+      }
+      #contents {
+        position: absolute;
+        top: 0; left: 30vw; bottom: 0; right: 0;
+        overflow: auto;
+        padding: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    
+    <div id="docapp">
+      <div id="modules">
+          <div v-for="m in modules">
+            <h4>{{ m[0] }}</h4>
+            <div v-for="c in m[1]" v-on:click="loadClass( m[0], c )">{{ c }}</div>
+          </div>
+      </div>
+      <div id="contents">
+        <h1>{{ contents.name }}</h1>
+        <h3>Methods</h3>
+        <div v-for="m in contents.methods">
+          <h4>{{ m.name }}</h4>
+          <div>
+            <div v-for="s in m.signatures">
+              <div>{{ s.comment }}</div>
+              <div v-for="p in s.parameters">
+                {{ p.name }} ({{ p.type}}) : {{ p.comment }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript" src="./js/doc.js"></script>
+  </body>
+</html>
