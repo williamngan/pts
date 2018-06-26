@@ -1,10 +1,16 @@
 var app = new Vue({
   el: '#docapp',
+  
   data: {
     message: 'Hello Vue!',
     modules: [],
-    contents: { name: "...", methods: [{name: "test"}]}
+    contents: { 
+      name: "...", 
+      methods: [{name: "test"}], 
+      accessors: [] 
+    }
   },
+
   methods: {
     test: function( m ) {
       this.message = m;
@@ -54,5 +60,6 @@ function loadContents( id ) {
   loadJSON( `./json/${id}.json`, (data, status) => {
     app.contents.name = data.name;
     app.contents.methods = data.methods;
+    app.contents.accessors = data.accessors;
   });
 }

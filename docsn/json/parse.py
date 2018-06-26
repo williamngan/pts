@@ -110,8 +110,9 @@ def parse_class_children( c, orig_c ):
       k = ch['kindString']
       if k == "Method":
         c['methods'].append( parse_class_method( ch ) )
-      # elif k == "Accessor" or k == "Variable":
-        # c['accessors'].append( ch )
+      elif k == "Accessor":
+        c['accessors'].append( parse_class_accessor( ch ) )
+      # elif k == "Variable":
       # elif k == "Constructor":
         # c['constructor'].append( ch )
       else:
@@ -121,10 +122,43 @@ def parse_class_children( c, orig_c ):
 
 
 
-def parse_class_method( c ):
+def parse_class_accessor( c ):
+
+  if not c.get('name', False): 
+    return {}
+
+  getters = [parse_accessor_signature(s) for s in c.get('getSignature', [])]
+  setters = [parse_accessor_signature(s) for s in c.get('setSignature', [])]
+
   return {
     'name': c['name'],
-    'source': get_source( c['sources'] ), 
+    'source': get_source( c.get('sources', []) ), 
+    'id': c['id'],
+    'flags': get_flags( c ),
+    'inherits': c.get(''),
+    'comment': get_comment( c ),
+    'getter': False if not getters else getters[0],
+    'setter': False if not setters else setters[0]
+  }
+
+def parse_accessor_signature( c ):
+  if not c: 
+    return False
+
+  acc = { 'type': c.get('type',{}).get('name', "") } 
+  if c.get('parameters', False):
+    acc['parameters'] = parse_class_method_param( c['parameters'][0] ) if c['parameters'] else {}
+  return acc
+
+
+
+def parse_class_method( c ):
+  if not c.get('name', False): 
+    return {}
+
+  return {
+    'name': c['name'],
+    'source': get_source( c.get('sources', []) ), 
     'id': c['id'],
     'flags': get_flags( c ),
     'signatures': [ parse_class_method_signature( s ) for s in c.get('signatures', {}) ]
@@ -139,6 +173,8 @@ def parse_class_method_signature( c ):
 
 
 def parse_class_method_param( c ):
+  if not c.get('name', False): 
+    return {}
 
   return {
     'name': c['name'],
@@ -207,7 +243,7 @@ def get_type( c, pre="", post="" ):
             pp.append( _t )
         
         # ( [get_type( p.get("type", {} ), f'{pre}{p.get("name", "")}:', post ) for p in params if p.get("name") != "this" ] )
-        fn = f'{c.get("name", "")} ({", ".join( pp )})'
+        fn = f'{c.get("name", "")} {"Fn" if pp else ""}({", ".join( pp )})'
         return fn
         # get_type( c['declaration'].get('parameters', {}).get('type', {}), "function" )
       else:

@@ -33,6 +33,20 @@
       </div>
       <div id="contents">
         <h1>{{ contents.name }}</h1>
+        <h3>Properties</h3>
+        <div v-for="acc in contents.accessors">
+          <h4>
+            {{ acc.name }}
+            <span v-if="acc.getter">GET</span>
+            <span v-if="acc.setter">SET</span>
+          </h4>
+          
+          A {{ acc.getter.type || acc.setter.parameters.type || "" }} property. {{ acc.comment ? acc.comment+"." : ""}}
+          
+          <span v-if="acc.getter">{{ acc.getter.comment || "" }}</span>
+          <span v-if="acc.setter">{{ acc.setter.parameters.comment || "" }}</span>
+          
+        </div>
         <h3>Methods</h3>
         <div v-for="m in contents.methods">
           <h4>{{ m.name }}</h4>
