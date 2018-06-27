@@ -41,6 +41,7 @@ def props_class( c ):
     'constructor': [],
     'accessors': [],
     'methods': [],
+    'variables': [],
     'flags': get_flags( c ),
     'extends': c.get('extendedTypes', "")
   }
@@ -110,11 +111,16 @@ def parse_class_children( c, orig_c ):
       k = ch['kindString']
       if k == "Method":
         c['methods'].append( parse_class_method( ch ) )
+
       elif k == "Accessor":
         c['accessors'].append( parse_class_accessor( ch ) )
-      # elif k == "Variable":
+
+      elif k == "Variable":
+        c['variables'].append( parse_class_variable( ch ) )
+
       elif k == "Constructor":
         c['constructor'].append( parse_class_method( ch ) )
+
       else:
         skipped.append( f"{c['name']}.{ch['name']}" )
     else:
@@ -141,6 +147,7 @@ def parse_class_accessor( c ):
     'setter': False if not setters else setters[0]
   }
 
+
 def parse_accessor_signature( c ):
   if not c: 
     return False
@@ -150,6 +157,20 @@ def parse_accessor_signature( c ):
     acc['parameters'] = parse_class_method_param( c['parameters'][0] ) if c['parameters'] else {}
   return acc
 
+
+
+def parse_class_variable( c ):
+  if not c.get('name', False): 
+    return False
+
+  return {
+    'name': c['name'],
+    'source': get_source( c.get('sources', []) ), 
+    'id': c['id'],
+    'flags': get_flags( c ),
+    'inherits': c.get(''),
+    'comment': get_comment( c )
+  }
 
 
 def parse_class_method( c ):

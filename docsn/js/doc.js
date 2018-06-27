@@ -8,7 +8,8 @@ var app = new Vue({
       name: "...", 
       constructor: {},
       methods: [{name: "test"}], 
-      accessors: [] 
+      accessors: [],
+      variables: []
     }
   },
 
@@ -63,5 +64,6 @@ function loadContents( id ) {
     app.contents.constructor = data.constructor;
     app.contents.methods = data.methods;
     app.contents.accessors = data.accessors;
+    app.contents.variables = data.variables;
   });
 }

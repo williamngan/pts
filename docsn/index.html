@@ -62,6 +62,14 @@
           
           <span v-if="acc.getter">{{ acc.getter.comment || "" }}</span>
           <span v-if="acc.setter">{{ acc.setter.parameters.comment || "" }}</span>
+        </div>
+
+        <h3>Variables and Constants</h3>
+        <div v-for="acc in contents.variables">
+          <h4>
+            {{ acc.name }}
+          </h4>
+          <div>{{ acc.comment }}</div>
           
         </div>
 
