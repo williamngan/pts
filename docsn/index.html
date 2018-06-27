@@ -32,7 +32,24 @@
           </div>
       </div>
       <div id="contents">
+
         <h1>{{ contents.name }}</h1>
+
+        <h3>Constructor</h3>
+        <div v-for="m in contents.constructor">
+          <h4>{{ m.name }}</h4>
+          <div>
+            <div v-for="s in m.signatures">
+              <div>{{ s.comment }}</div>
+              <div v-for="p in s.parameters">
+                {{ p.name }} ({{ p.type}}) : {{ p.comment }}
+              </div>
+              <div>returns {{ s.returns }}</div>
+            </div>
+          </div>
+        </div>
+      
+
         <h3>Properties</h3>
         <div v-for="acc in contents.accessors">
           <h4>
@@ -47,6 +64,7 @@
           <span v-if="acc.setter">{{ acc.setter.parameters.comment || "" }}</span>
           
         </div>
+
         <h3>Methods</h3>
         <div v-for="m in contents.methods">
           <h4>{{ m.name }}</h4>
@@ -56,6 +74,7 @@
               <div v-for="p in s.parameters">
                 {{ p.name }} ({{ p.type}}) : {{ p.comment }}
               </div>
+              <div>returns {{ s.returns }}</div>
             </div>
           </div>
         </div>

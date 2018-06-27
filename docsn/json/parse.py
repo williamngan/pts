@@ -113,8 +113,8 @@ def parse_class_children( c, orig_c ):
       elif k == "Accessor":
         c['accessors'].append( parse_class_accessor( ch ) )
       # elif k == "Variable":
-      # elif k == "Constructor":
-        # c['constructor'].append( ch )
+      elif k == "Constructor":
+        c['constructor'].append( parse_class_method( ch ) )
       else:
         skipped.append( f"{c['name']}.{ch['name']}" )
     else:
@@ -168,6 +168,7 @@ def parse_class_method( c ):
 def parse_class_method_signature( c ):
   return {
     'comment': get_comment( c ) ,
+    'returns': get_type( c.get('type', {}) ),
     'parameters': [ parse_class_method_param(p) for p in c.get('parameters', []) ]
   }
 

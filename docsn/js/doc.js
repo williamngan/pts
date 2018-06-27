@@ -6,6 +6,7 @@ var app = new Vue({
     modules: [],
     contents: { 
       name: "...", 
+      constructor: {},
       methods: [{name: "test"}], 
       accessors: [] 
     }
@@ -59,6 +60,7 @@ function loadContents( id ) {
   console.log( id );
   loadJSON( `./json/${id}.json`, (data, status) => {
     app.contents.name = data.name;
+    app.contents.constructor = data.constructor;
     app.contents.methods = data.methods;
     app.contents.accessors = data.accessors;
   });
