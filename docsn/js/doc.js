@@ -61,9 +61,17 @@ function loadContents( id ) {
   console.log( id );
   loadJSON( `./json/${id}.json`, (data, status) => {
     app.contents.name = data.name;
+    app.contents.kind = data.kind;
+    app.contents.comment = data.comment;
+    app.contents.source = data.source;
+    app.contents.extends = data.extends;
+    app.contents.implements = data.implements;
+    
     app.contents.constructor = data.constructor;
     app.contents.methods = data.methods;
     app.contents.accessors = data.accessors;
     app.contents.variables = data.variables;
+    app.contents.properties = data.properties;
+    
   });
 }

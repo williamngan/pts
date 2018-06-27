@@ -42,8 +42,10 @@ def props_class( c ):
     'accessors': [],
     'methods': [],
     'variables': [],
+    'properties': [],
     'flags': get_flags( c ),
-    'extends': c.get('extendedTypes', "")
+    'extends': [ im.get('name', "") for im in c.get('extendedTypes', []) ],
+    'implements': [ im.get('name', "") for im in c.get('implementedTypes', []) ]
   }
 
 
@@ -118,6 +120,9 @@ def parse_class_children( c, orig_c ):
       elif k == "Variable":
         c['variables'].append( parse_class_variable( ch ) )
 
+      elif k == "Property":
+        c['properties'].append( parse_class_property( ch ) )
+
       elif k == "Constructor":
         c['constructor'].append( parse_class_method( ch ) )
 
@@ -141,7 +146,8 @@ def parse_class_accessor( c ):
     'source': get_source( c.get('sources', []) ), 
     'id': c['id'],
     'flags': get_flags( c ),
-    'inherits': c.get(''),
+    'overrides': c.get('overwrites', {}).get('name', False),
+    'inherits': c.get('inheritedFrom', {}).get('name', False),
     'comment': get_comment( c ),
     'getter': False if not getters else getters[0],
     'setter': False if not setters else setters[0]
@@ -168,7 +174,25 @@ def parse_class_variable( c ):
     'source': get_source( c.get('sources', []) ), 
     'id': c['id'],
     'flags': get_flags( c ),
-    'inherits': c.get(''),
+    'type': get_type( c ),
+    'overrides': c.get('overwrites', {}).get('name', False),
+    'inherits': c.get('inheritedFrom', {}).get('name', False),
+    'comment': get_comment( c )
+  }
+
+
+def parse_class_property( c ):
+  if not c.get('name', False): 
+    return False
+
+  return {
+    'name': c['name'],
+    'source': get_source( c.get('sources', []) ), 
+    'id': c['id'],
+    'flags': get_flags( c ),
+    'type': get_type( c ),
+    'overrides': c.get('overwrites', {}).get('name', False),
+    'inherits': c.get('inheritedFrom', {}).get('name', False),
     'comment': get_comment( c )
   }
 
@@ -182,6 +206,8 @@ def parse_class_method( c ):
     'source': get_source( c.get('sources', []) ), 
     'id': c['id'],
     'flags': get_flags( c ),
+    'overrides': c.get('overwrites', {}).get('name', False),
+    'inherits': c.get('inheritedFrom', {}).get('name', False),
     'signatures': [ parse_class_method_signature( s ) for s in c.get('signatures', {}) ]
   }
 
