@@ -20,6 +20,10 @@ var app = new Vue({
     },
     loadClass: function( mod, cls ) {
       loadContents( mod+"_"+cls );
+    },
+    md: function( s ) {
+      if (!s || typeof s !== "string") return "";
+      return marked( s );
     }
   }
 })

@@ -1,6 +1,7 @@
 <html>
   <head>
     <script type="text/javascript" src="./js/vue.js"></script>
+    <script type="text/javascript" src="./js/marked.min.js"></script>
     <style type="text/css">
       body {
         font-family: "Helvetica", sans-serif;
@@ -34,7 +35,7 @@
       <div id="contents">
 
         <h1><span :class="'type t_'+contents.kind">{{ contents.kind}}</span>  {{ contents.name }}</h1>
-        <p>{{ contents.comment }}</p>
+        <p v-html="md(contents.comment)" />
         <div>
           <small v-if="contents.extends && contents.extends.length > 0">extends {{ contents.extends.join(", ") }}</small>
           <small v-if="contents.implements && contents.implements.length > 0">implements {{ contents.implements.join(", ") }}</small>
@@ -50,9 +51,9 @@
             </div>
             <div>
               <div v-for="s in m.signatures">
-                <div>{{ s.comment }}</div>
+                <div v-html="md(s.comment)"></div>
                 <div v-for="p in s.parameters">
-                  {{ p.name }} ({{ p.type}}) : {{ p.comment }}
+                    <span>{{ p.name }} : {{ p.type}}</span> <span v-html="md(p.comment)"></span>
                 </div>
                 <div>returns {{ s.returns }}</div>
               </div>
@@ -61,7 +62,7 @@
         </div>
       
         <div v-if="contents.accessors && contents.accessors.length > 0">
-          <h3>Properties</h3>
+          <h3>Accessors</h3>
           <div v-for="acc in contents.accessors">
             <h4>
               {{ acc.name }}
@@ -73,21 +74,22 @@
               <small v-if="acc.inherits">Inherits {{ acc.inherits }}</small>
             </div>
             
-            A {{ acc.getter.type || acc.setter.parameters.type || "" }} property. {{ acc.comment ? acc.comment+"." : ""}}
+            A {{ acc.getter.type || acc.setter.parameters.type || "" }} property. 
+            <span v-html="md(acc.comment)"></span>
             
-            <span v-if="acc.getter">{{ acc.getter.comment || "" }}</span>
-            <span v-if="acc.setter">{{ acc.setter.parameters.comment || "" }}</span>
+            <span v-if="acc.getter"><span v-html="md(acc.getter.comment)"></span></span>
+            <span v-if="acc.setter"><span v-html="md(acc.setter.parameters.comment)"></span></span>
           </div>
         </div>
 
 
         <div v-if="contents.variables && contents.variables.length > 0">
-          <h3>Variables and Constants</h3>
+          <h3>Properties</h3>
           <div v-for="acc in contents.variables">
             <h4>
               {{ acc.name }}
             </h4>
-            <div>{{ acc.comment }}</div>
+            <div v-html="md(acc.comment)"></div>
             <div>
               <small v-if="acc.overrides">Overrides {{ acc.overrides }}</small>
               <small v-if="acc.inherits">Inherits {{ acc.inherits }}</small>
@@ -100,7 +102,7 @@
           <h4>
             {{ acc.name }}
           </h4>
-          <div>{{ acc.comment }}</div>
+          <div v-html="md(acc.comment)"></div>
           <div>
             <small v-if="acc.overrides">Overrides {{ acc.overrides }}</small>
             <small v-if="acc.inherits">Inherits {{ acc.inherits }}</small>
@@ -118,9 +120,9 @@
                 <small v-if="m.inherits">Inherits {{ m.inherits }}</small>
               </div>
               <div v-for="s in m.signatures">
-                <div>{{ s.comment }}</div>
+                <div v-html="md(s.comment)"></div>
                 <div v-for="p in s.parameters">
-                  {{ p.name }} ({{ p.type}}) : {{ p.comment }}}
+                  <span>{{ p.name }} : {{ p.type}}</span> <span v-html="md(p.comment)"></span>
                 </div>
                 <div>returns {{ s.returns }}</div>
                 <div>
