@@ -33,61 +33,69 @@
       </div>
       <div id="contents">
 
-        <h1>{{ contents.name }}</h1>
+        <h1><span :class="'type t_'+contents.kind">{{ contents.kind}}</span>  {{ contents.name }}</h1>
+        <p>{{ contents.comment }}</p>
         <div>
           <small v-if="contents.extends && contents.extends.length > 0">extends {{ contents.extends.join(", ") }}</small>
           <small v-if="contents.implements && contents.implements.length > 0">implements {{ contents.implements.join(", ") }}</small>
         </div>
 
-        <h3>Constructor</h3>
-        <div v-for="m in contents.constructor">
-          <h4>{{ m.name }}</h4>
-          <div>
-            <small v-if="m.overrides">Overrides {{ m.overrides }}</small>
-            <small v-if="m.inherits">Inherits {{ m.inherits }}</small>
-          </div>
-          <div>
-            <div v-for="s in m.signatures">
-              <div>{{ s.comment }}</div>
-              <div v-for="p in s.parameters">
-                {{ p.name }} ({{ p.type}}) : {{ p.comment }}
+        <div v-if="contents.constructor && contents.constructor.length > 0">
+          <h3>Constructor</h3>
+          <div v-for="m in contents.constructor">
+            <h4>{{ m.name }}</h4>
+            <div>
+              <small v-if="m.overrides">Overrides {{ m.overrides }}</small>
+              <small v-if="m.inherits">Inherits {{ m.inherits }}</small>
+            </div>
+            <div>
+              <div v-for="s in m.signatures">
+                <div>{{ s.comment }}</div>
+                <div v-for="p in s.parameters">
+                  {{ p.name }} ({{ p.type}}) : {{ p.comment }}
+                </div>
+                <div>returns {{ s.returns }}</div>
               </div>
-              <div>returns {{ s.returns }}</div>
             </div>
           </div>
         </div>
       
-
-        <h3>Properties</h3>
-        <div v-for="acc in contents.accessors">
-          <h4>
-            {{ acc.name }}
-            <span v-if="acc.getter">GET</span>
-            <span v-if="acc.setter">SET</span>
-          </h4>
-          <div>
-            <small v-if="acc.overrides">Overrides {{ acc.overrides }}</small>
-            <small v-if="acc.inherits">Inherits {{ acc.inherits }}</small>
+        <div v-if="contents.accessors && contents.accessors.length > 0">
+          <h3>Properties</h3>
+          <div v-for="acc in contents.accessors">
+            <h4>
+              {{ acc.name }}
+              <span v-if="acc.getter">GET</span>
+              <span v-if="acc.setter">SET</span>
+            </h4>
+            <div>
+              <small v-if="acc.overrides">Overrides {{ acc.overrides }}</small>
+              <small v-if="acc.inherits">Inherits {{ acc.inherits }}</small>
+            </div>
+            
+            A {{ acc.getter.type || acc.setter.parameters.type || "" }} property. {{ acc.comment ? acc.comment+"." : ""}}
+            
+            <span v-if="acc.getter">{{ acc.getter.comment || "" }}</span>
+            <span v-if="acc.setter">{{ acc.setter.parameters.comment || "" }}</span>
           </div>
-          
-          A {{ acc.getter.type || acc.setter.parameters.type || "" }} property. {{ acc.comment ? acc.comment+"." : ""}}
-          
-          <span v-if="acc.getter">{{ acc.getter.comment || "" }}</span>
-          <span v-if="acc.setter">{{ acc.setter.parameters.comment || "" }}</span>
         </div>
 
 
-        <h3>Variables and Constants</h3>
-        <div v-for="acc in contents.variables">
-          <h4>
-            {{ acc.name }}
-          </h4>
-          <div>{{ acc.comment }}</div>
-          <div>
-            <small v-if="acc.overrides">Overrides {{ acc.overrides }}</small>
-            <small v-if="acc.inherits">Inherits {{ acc.inherits }}</small>
-          </div>          
+        <div v-if="contents.variables && contents.variables.length > 0">
+          <h3>Variables and Constants</h3>
+          <div v-for="acc in contents.variables">
+            <h4>
+              {{ acc.name }}
+            </h4>
+            <div>{{ acc.comment }}</div>
+            <div>
+              <small v-if="acc.overrides">Overrides {{ acc.overrides }}</small>
+              <small v-if="acc.inherits">Inherits {{ acc.inherits }}</small>
+            </div>          
+          </div>
         </div>
+
+
         <div v-for="acc in contents.properties">
           <h4>
             {{ acc.name }}
@@ -98,27 +106,35 @@
             <small v-if="acc.inherits">Inherits {{ acc.inherits }}</small>
           </div>          
         </div>
+      
         
-
-        <h3>Methods</h3>
-        <div v-for="m in contents.methods">
-          <h4>{{ m.name }}</h4>
-          <div>
+        <div v-if="contents.methods && contents.methods.length > 0">
+          <h3>Methods</h3>
+          <div v-for="m in contents.methods">
+            <h4><span v-if="m.flags && m.flags.isStatic">[static] </span>{{ m.name }}</h4>
             <div>
-              <small v-if="m.overrides">Overrides {{ m.overrides }}</small>
-              <small v-if="m.inherits">Inherits {{ m.inherits }}</small>
-            </div>
-            <div v-for="s in m.signatures">
-              <div>{{ s.comment }}</div>
-              <div v-for="p in s.parameters">
-                {{ p.name }} ({{ p.type}}) : {{ p.comment }}
-              </div>
-              <div>returns {{ s.returns }}</div>
               <div>
+                <small v-if="m.overrides">Overrides {{ m.overrides }}</small>
+                <small v-if="m.inherits">Inherits {{ m.inherits }}</small>
+              </div>
+              <div v-for="s in m.signatures">
+                <div>{{ s.comment }}</div>
+                <div v-for="p in s.parameters">
+                  {{ p.name }} ({{ p.type}}) : {{ p.comment }}}
+                </div>
+                <div>returns {{ s.returns }}</div>
+                <div>
+                </div>
               </div>
             </div>
           </div>
         </div>
+
+        <div v-if="contents.type_alias">
+          <h3>Types</h3>
+          <div v-for="m in contents.type_alias">{{ m }}</div>
+        </div>
+
       </div>
     </div>
 

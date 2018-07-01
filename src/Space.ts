@@ -7,24 +7,35 @@ import {Pt, IPt} from "./Pt";
 import {Form} from "./Form";
 import {UIPointerActions as UIA}  from "./UI";
 
-export type AnimateFunction = ( time?:number, frameTime?:number, currentSpace?:any ) => void;
+
+/**
+ * AnimateCallbackFn is a type alias that represents a callback function for animation. It accepts parameters to keep track of current time, current frame-time, and current space instance.
+ */
+export type AnimateCallbackFn = ( time?:number, frameTime?:number, currentSpace?:any ) => void;
 
 
 /**
-* Interface of a "player" object that can be added into a Space
+* IPlayer is an interface that represents a "player" object that can be added into a Space
 */
 export interface IPlayer {
   animateID?: string;
-  animate?:AnimateFunction;
+  animate?:AnimateCallbackFn;
   resize?( size:IPt, evt?:Event ): undefined;
   action?( type:string, px:number, py:number, evt:Event );
   start?( bound:Bound, space:Space );
 }
 
+/**
+ * ISpacePlayers is an interface that represents a map of IPlayer instances
+ */
 export interface ISpacePlayers { 
   [key: string]: IPlayer;
 }
 
+
+/**
+ * ITimer is an interface that represents a time-recording object
+ */
 export interface ITimer {
   prev: number;
   diff: number;
@@ -77,7 +88,7 @@ export abstract class Space {
   * Subclasses of Space may define other callback functions.
   * @param player an IPlayer object with animate function, or simply a function(time, ftime){}
   */
-  add( p:IPlayer|AnimateFunction ):this {
+  add( p:IPlayer|AnimateCallbackFn ):this {
     let player:IPlayer = (typeof p == "function") ? { animate: p } : p;
     
     let k = this.playerCount++;
@@ -293,13 +304,25 @@ export abstract class Space {
   
 }
 
+
+/**
+ * TouchPointsKey is a type alias that represents a set of acceptable string keys for defining touch action.
+ */
 export type TouchPointsKey = "touches" | "changedTouches" | "targetTouches";
 
+
+/**
+ * MultiTouchElement is an interface that represents an element that can handle touch events
+ */
 export interface MultiTouchElement {
   addEventListener( evt:any, callback:Function );
   removeEventListener( evt:any, callback:Function );
 }
 
+
+/**
+ * MultiTouchSpace is a space that supports user interactions via touch events
+ */
 export abstract class MultiTouchSpace extends Space {
   
   // track mouse dragging

@@ -13,13 +13,17 @@ export enum UIShape {
   Rectangle, Circle, Polygon, Polyline, Line
 }
 
+
+/**
+ * A set of string constants to represent different UI events
+ */
 export const UIPointerActions = {
   up: "up", down: "down", move: "move", drag: "drag", drop: "drop", over: "over", out: "out"
 };
 
 
 /**
- * UIListener type
+ * UIHandler is a type alias that represents a callback function to handle UI actions
  */
 export type UIHandler = ( pt:Pt, target:UI, type:string ) => void;
 

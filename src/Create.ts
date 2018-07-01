@@ -263,9 +263,13 @@ export class Noise extends Pt {
 
 
 /**
- * A DelaunayShape is an object with 3 indices, a Triangle Group and a Circle Group.
+ * A DelaunayShape represents an object type that can store a Delaunay element. It has 3 indices (i, j, k) and two groups that represent a triangle and a circle
  */
 export type DelaunayShape = {i:number, j:number, k:number, triangle:GroupLike, circle:Group };
+
+/**
+ * A DelaunayMesh epresents an object type that has an array of {key: shape} items, where each shape represents a DelaunayShape.
+ */
 export type DelaunayMesh = {[key:string]:DelaunayShape}[];
 
 

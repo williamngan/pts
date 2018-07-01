@@ -24,7 +24,7 @@ def props_module( m ):
   return {  
     'name': clean_quoted( m['name'] ), 
     'source': get_source( m['sources'] ), 
-    'kind': 'Module',
+    'kind': 'module',
     'id': m['id'],
     'comment': get_comment( m ),
     'classes': []
@@ -35,7 +35,7 @@ def props_class( c ):
   return {  
     'name': c['name'],
     'source': get_source( c['sources'] ), 
-    'kind': c['kindString'],
+    'kind': c['kindString'].replace(' ', '' ),
     'id': c['id'],
     'comment': get_comment( c ),
     'constructor': [],
@@ -94,7 +94,12 @@ def parse_classes( mod, mod_name ):
       fullname =f"{mod_name}_{c['name']}"
       classes[ fullname ] = props_class( c )
 
-      parse_class_children( classes[ fullname ], c )
+      if c['kindString'] == "Type alias":
+        classes[ fullname ]['type_alias'] = get_type( c['type'] ).split(" | ")
+
+      else:
+        parse_class_children( classes[ fullname ], c )
+
       names.append( c['name'] )
       searchable( fullname, c['name'], c['kindString'] )
 
@@ -125,6 +130,9 @@ def parse_class_children( c, orig_c ):
 
       elif k == "Constructor":
         c['constructor'].append( parse_class_method( ch ) )
+
+      elif k == "Enumeration member":
+        c['variables'].append( parse_class_variable( ch ) )
 
       else:
         skipped.append( f"{c['name']}.{ch['name']}" )
@@ -263,12 +271,18 @@ def save_temp(data):
 def get_comment( c ):
   return c.get('comment', {}).get('shortText', False) or c.get('comment', {}).get('text', "")
 
+
+
 def get_type( c, pre="", post="" ):
   ts = ""
   try:
     if 'name' in c:
       n = c['name']
       return f"{pre}{n}{post}"
+
+    elif 'value' in c:
+      return f"{pre}{c['value']}{post}"
+
     else:
 
       # union
@@ -282,18 +296,30 @@ def get_type( c, pre="", post="" ):
         return get_type( c['elementType'], pre, f"{post}{ct}" )
       elif 'declaration' in c:
         sig = c['declaration'].get('signatures', [])
-        params = sig[0].get("parameters")
-        pp = [] 
-        for p in params:
-          _n = p.get("name", "")
-          if _n != "this" and _n != "Z":
-            _t = get_type( p.get("type", {} ), f'{pre}{_n}:' )
-            pp.append( _t )
+        dcs = c['declaration'].get('children', [])
+
+        if sig:
+          params = sig[0].get("parameters")
+          pp = [] 
+          for p in params:
+            _n = p.get("name", "")
+            if _n != "this" and _n != "Z":
+              _t = get_type( p.get("type", {} ), f'{pre}{_n}:' )
+              pp.append( _t )
+          
+          fn = f'{c.get("name", "")} {"Fn" if pp else ""}({", ".join( pp )})'
+          return fn
+          
+        elif dcs:
+          _cs = []
+          for dc in dcs:
+            _cs.append( f'{dc.get("name", "")}:`{get_type(dc.get("type", {}))}`' )
+          return "{ "+f'{", ".join(_cs)}'+" }"
+
+        else:
+          return ""
         
-        # ( [get_type( p.get("type", {} ), f'{pre}{p.get("name", "")}:', post ) for p in params if p.get("name") != "this" ] )
-        fn = f'{c.get("name", "")} {"Fn" if pp else ""}({", ".join( pp )})'
-        return fn
-        # get_type( c['declaration'].get('parameters', {}).get('type', {}), "function" )
+        
       else:
         return get_type( c.get("type", ""), pre, post )
 
@@ -322,6 +348,8 @@ def get_type( c, pre="", post="" ):
           
   
   return ts
+
+
 
 
 def not_private( n ):

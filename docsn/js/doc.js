@@ -9,7 +9,8 @@ var app = new Vue({
       constructor: {},
       methods: [{name: "test"}], 
       accessors: [],
-      variables: []
+      variables: [],
+      type_alias: []
     }
   },
 
@@ -72,6 +73,7 @@ function loadContents( id ) {
     app.contents.accessors = data.accessors;
     app.contents.variables = data.variables;
     app.contents.properties = data.properties;
+    app.contents.type_alias = data.type_alias;
     
   });
 }

@@ -12,6 +12,9 @@ import { normalize } from "path";
 let _errorLength = (obj, param:number|string="expected") => Util.warn( "Group's length is less than "+param, obj  );
 let _errorOutofBound = (obj, param:number|string="") => Util.warn( `Index ${param} is out of bound in Group`, obj  );
 
+/**
+ * IntersectContext represents a type of an object that store the intersection info
+ */
 export type IntersectContext = {
   which: number,
   dist: number,
