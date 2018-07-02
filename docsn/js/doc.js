@@ -13,7 +13,8 @@ var app = new Vue({
       type_alias: [],
       count: 0
     },
-    selected: ""
+    selected: "",
+    selHash: ""
   },
 
   methods: {
@@ -23,11 +24,26 @@ var app = new Vue({
     loadClass: function( mod, cls ) {
       loadContents( mod+"_"+cls );
     },
+    jumpTo: function( id) {
+      let elem = document.getElementById(id);
+      if (elem) {
+        elem.scrollIntoView(true);
+        selectJump( id );
+      }
+    },
     md: function( s ) {
       if (!s || typeof s !== "string") return "";
       return marked( s );
     }
+  },
+
+  updated: function() {
+    if (this.selHash) {
+      this.jumpTo( this.selHash.substr(1) );
+      this.selHash = "";
+    }
   }
+
 })
 
 
@@ -92,15 +108,29 @@ function loadContents( id ) {
     app.contents.properties = data.properties;
     app.contents.type_alias = data.type_alias;
     app.contents.count = app.contents.methods.length + app.contents.accessors.length + app.contents.variables.length + app.contents.properties.length;
-    
+
+    if (window.location.hash) {
+      app.selHash = window.location.hash
+    }
+
     selectState( id );
+
   });
 }
 
-function selectState( id ) {
+function selectState( id, hash ) {
   app.selected = id;
   if (history.pushState) {
     var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?p='+id;
     window.history.pushState({path:newurl},'',newurl);
+  }
+}
+
+function selectJump( id ) {
+  if(history.pushState) {
+    history.pushState(null, null, '#'+id);
+  }
+  else {
+    location.hash = '#'+id;
   }
 }

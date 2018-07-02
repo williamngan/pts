@@ -36,7 +36,7 @@ code {
   line-height: 1.75;
 }
 
-#modules h4 {
+#modules h4, #members h4 {
   text-transform: uppercase;
   color: #9ab;
   font-size: 0.8em;
@@ -46,6 +46,10 @@ code {
 
 #modules .item {
   cursor: pointer;
+}
+
+#modules .item:hover {
+  color: #42e;
 }
 
 #modules .selected {
@@ -58,7 +62,7 @@ code {
   top:0; left: 25vw; bottom: 0;
   padding: 20px;
   border-right: 1px solid #0c6;
-  font-size: 0.8em;
+  font-size: 0.85em;
   font-weight: 600;
   width: 20vw;
   box-sizing: border-box;
@@ -74,6 +78,13 @@ code {
   display: none;
 }
 
+#members span {
+  cursor: pointer;
+}
+
+#members span:hover {
+  color: #0c6;
+}
 
 #contents {
   position: absolute;

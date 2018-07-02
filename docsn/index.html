@@ -20,25 +20,25 @@
       <div id="members" v-bind:class="{collapsed: contents.count < 5}">
         <h4 v-if="contents.constructor && contents.constructor.length > 0">Constructor</h4>
         <div v-for="m in contents.constructor">
-          <span v-bind:class="{inherits: m.inherits}">{{ m.name }}</span>
+          <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'constructor_'+m.name )">{{ m.name }}</span>
         </div>
 
         <h4 v-if="contents.accessors && contents.accessors.length > 0">Accessors</h4>
         <div v-for="m in contents.accessors">
-          <span v-bind:class="{inherits: m.inherits}">{{ m.name }}</span>
+          <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'accessor_'+m.name )">{{ m.name }}</span>
         </div>
 
         <h4 v-if="(contents.variables && contents.variables.length > 0) || (contents.properties && contents.properties.length > 0)">Properties</h4>
         <div v-for="m in contents.variables">
-          <span v-bind:class="{inherits: m.inherits}">{{ m.name }}</span>
+          <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'property_'+m.name )">{{ m.name }}</span>
         </div>
         <div v-for="m in contents.properties">
-          <span v-bind:class="{inherits: m.inherits}">{{ m.name }}</span>
+          <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'property_'+m.name )">{{ m.name }}</span>
         </div>
 
         <h4 v-if="contents.methods && contents.methods.length > 0">Functions</h4>
         <div v-for="m in contents.methods">
-          <span v-bind:class="{inherits: m.inherits}">{{ m.name }}</span>
+          <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'function_'+m.name )">{{ m.name }}</span>
         </div>
 
         <h4 v-if="contents.type_alias && contents.type_alias.length > 0">Types</h4>
@@ -58,7 +58,7 @@
         <div v-if="contents.constructor && contents.constructor.length > 0">
           <h3>Constructor</h3>
           <div v-for="m in contents.constructor">
-            <h4>{{ m.name }}</h4>
+            <h4 v-bind:id="'constructor_'+m.name">{{ m.name }}</h4>
             <div>
               <small v-if="m.overrides">Overrides {{ m.overrides }}</small>
               <small v-if="m.inherits">Inherits {{ m.inherits }}</small>
@@ -78,7 +78,7 @@
         <div v-if="contents.accessors && contents.accessors.length > 0">
           <h3>Accessors</h3>
           <div v-for="acc in contents.accessors">
-            <h4>
+            <h4 v-bind:id="'accessor_'+acc.name">
               {{ acc.name }}
               <span class="token" v-if="acc.getter">GET</span>
               <span class="token" v-if="acc.setter">SET</span>
@@ -100,7 +100,7 @@
         <div v-if="(contents.variables && contents.variables.length > 0) || (contents.properties && contents.properties.length > 0)">
           <h3>Properties</h3>
           <div v-for="acc in contents.variables">
-            <h4>
+            <h4 v-bind:id="'property_'+acc.name">
               {{ acc.name }}
             </h4>
             <div v-html="md(acc.comment)"></div>
@@ -111,7 +111,7 @@
           </div>
 
           <div v-for="acc in contents.properties">
-            <h4>
+            <h4 v-bind:id="'property_'+acc.name">
               {{ acc.name }}
             </h4>
             <div v-html="md(acc.comment)"></div>
@@ -125,7 +125,9 @@
         <div v-if="contents.methods && contents.methods.length > 0">
           <h3>Methods</h3>
           <div v-for="m in contents.methods">
-            <h4><span v-if="m.flags && m.flags.isStatic">[static] </span>{{ m.name }}</h4>
+            <h4 v-bind:id="'function_'+m.name">
+              <span v-if="m.flags && m.flags.isStatic">[static] </span>{{ m.name }}
+            </h4>
             <div>
               <div>
                 <small v-if="m.overrides">Overrides {{ m.overrides }}</small>
