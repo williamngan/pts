@@ -1,0 +1,121 @@
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.65;
+  margin: 0;
+  color: #234;
+  box-sizing: border-box;
+}
+
+a {
+  display: inline-block;
+  color: #234;
+  text-decoration: none;
+  display: inline-block;
+  border-bottom: 1px solid #0c6;
+}
+
+a:hover {
+  /* text-decoration: underline; */
+  color: #0c6;
+}
+
+code {
+  color: #678;
+  font-family: Menlo, sans-serif;
+}
+
+#modules {
+  position: absolute;
+  top: 0; left: 0; bottom: 0; width: 25vw;
+  overflow: auto;
+  padding: 20px;
+  box-sizing: border-box;
+  /* background-color: #f7f9fc; */
+  border-right: 1px solid #42e;
+  line-height: 1.75;
+}
+
+#modules h4 {
+  text-transform: uppercase;
+  color: #9ab;
+  font-size: 0.8em;
+  font-weight: 500;
+  margin: 30px 0 0px;
+}
+
+#modules .item {
+  cursor: pointer;
+}
+
+#modules .selected {
+  color: #42e;
+}
+
+
+#members {
+  position: fixed;
+  top:0; left: 25vw; bottom: 0;
+  padding: 20px;
+  border-right: 1px solid #0c6;
+  font-size: 0.8em;
+  font-weight: 600;
+  width: 20vw;
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+#members .inherits {
+  color: #678;
+  font-weight: 400;
+}
+
+#members.collapsed {
+  display: none;
+}
+
+
+#contents {
+  position: absolute;
+  top: 0; left: 25vw; bottom: 0; right: 0;
+  overflow: auto;
+  padding: 20px;
+  padding-right: 15vw; 
+  box-sizing: border-box;
+}
+
+#contents.expanded {
+  left: 45vw;
+}
+
+#content_title {
+  position: fixed;
+  top: 0; left: 30vw;; right: 0;
+  z-index: 1;
+  background: #fff;
+}
+
+
+
+h1 {
+  font-weight: 300;
+  font-size: 3em;
+}
+
+h3 {
+  font-weight: 300;
+  font-size: 1.4em;
+  margin-top: 2em;
+}
+
+.token {
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 10px;
+  padding: 2px 5px;
+  margin: 0 2px;
+  font-weight: 400;
+  border: 1px solid #678;
+  color: #678; 
+  letter-spacing: 0.05em;
+}

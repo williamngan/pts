@@ -10,8 +10,10 @@ var app = new Vue({
       methods: [{name: "test"}], 
       accessors: [],
       variables: [],
-      type_alias: []
-    }
+      type_alias: [],
+      count: 0
+    },
+    selected: ""
   },
 
   methods: {
@@ -28,6 +30,13 @@ var app = new Vue({
   }
 })
 
+
+function qs(name) {
+  name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+  var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+      results = regex.exec(location.search);
+  return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
 
 
 function loadJSON( url, callback ) {
@@ -58,12 +67,16 @@ loadJSON( "./json/modules.json", (data, status) => {
     ms.push( m );
   }
 
-  console.log( ms );
   app.modules = ms;
+
+  let qsel = qs("p");
+  if (qsel) {
+    loadContents( qsel );
+  } 
 });
 
 function loadContents( id ) {
-  console.log( id );
+  
   loadJSON( `./json/${id}.json`, (data, status) => {
     app.contents.name = data.name;
     app.contents.kind = data.kind;
@@ -78,6 +91,16 @@ function loadContents( id ) {
     app.contents.variables = data.variables;
     app.contents.properties = data.properties;
     app.contents.type_alias = data.type_alias;
+    app.contents.count = app.contents.methods.length + app.contents.accessors.length + app.contents.variables.length + app.contents.properties.length;
     
+    selectState( id );
   });
+}
+
+function selectState( id ) {
+  app.selected = id;
+  if (history.pushState) {
+    var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?p='+id;
+    window.history.pushState({path:newurl},'',newurl);
+  }
 }

@@ -2,39 +2,53 @@
   <head>
     <script type="text/javascript" src="./js/vue.js"></script>
     <script type="text/javascript" src="./js/marked.min.js"></script>
-    <style type="text/css">
-      body {
-        font-family: "Helvetica", sans-serif;
-        font-size: 13px;
-        line-height: 1.35;
-        margin: 0;
-      }
-      #modules {
-        position: absolute;
-        top: 0; left: 0; bottom: 0; width: 25vw;
-        overflow: auto;
-        padding: 20px;
-      }
-      #contents {
-        position: absolute;
-        top: 0; left: 30vw; bottom: 0; right: 0;
-        overflow: auto;
-        padding: 20px;
-      }
-    </style>
+    <link rel="stylesheet" href="./css/style.css" />
   </head>
   <body>
     
     <div id="docapp">
+
       <div id="modules">
           <div v-for="m in modules">
             <h4>{{ m[0] }}</h4>
-            <div v-for="c in m[1]" v-on:click="loadClass( m[0], c )">{{ c }}</div>
+            <div class="item" v-for="c in m[1]" v-on:click="loadClass( m[0], c )">
+              <span v-bind:class="{selected: m[0]+'_'+c === selected }">{{ c }}</span>
+            </div>
           </div>
       </div>
-      <div id="contents">
 
-        <h1><span :class="'type t_'+contents.kind">{{ contents.kind}}</span>  {{ contents.name }}</h1>
+      <div id="members" v-bind:class="{collapsed: contents.count < 5}">
+        <h4 v-if="contents.constructor && contents.constructor.length > 0">Constructor</h4>
+        <div v-for="m in contents.constructor">
+          <span v-bind:class="{inherits: m.inherits}">{{ m.name }}</span>
+        </div>
+
+        <h4 v-if="contents.accessors && contents.accessors.length > 0">Accessors</h4>
+        <div v-for="m in contents.accessors">
+          <span v-bind:class="{inherits: m.inherits}">{{ m.name }}</span>
+        </div>
+
+        <h4 v-if="(contents.variables && contents.variables.length > 0) || (contents.properties && contents.properties.length > 0)">Properties</h4>
+        <div v-for="m in contents.variables">
+          <span v-bind:class="{inherits: m.inherits}">{{ m.name }}</span>
+        </div>
+        <div v-for="m in contents.properties">
+          <span v-bind:class="{inherits: m.inherits}">{{ m.name }}</span>
+        </div>
+
+        <h4 v-if="contents.methods && contents.methods.length > 0">Functions</h4>
+        <div v-for="m in contents.methods">
+          <span v-bind:class="{inherits: m.inherits}">{{ m.name }}</span>
+        </div>
+
+        <h4 v-if="contents.type_alias && contents.type_alias.length > 0">Types</h4>
+        
+      </div>
+      
+      <div id="contents" v-bind:class="{expanded: contents.count > 5}">
+
+        <h1>{{ contents.name }} <span :class="'token t_'+contents.kind">{{ contents.kind}}</span></h1>
+        
         <p v-html="md(contents.comment)" />
         <div>
           <small v-if="contents.extends && contents.extends.length > 0">extends {{ contents.extends.join(", ") }}</small>
@@ -66,8 +80,8 @@
           <div v-for="acc in contents.accessors">
             <h4>
               {{ acc.name }}
-              <span v-if="acc.getter">GET</span>
-              <span v-if="acc.setter">SET</span>
+              <span class="token" v-if="acc.getter">GET</span>
+              <span class="token" v-if="acc.setter">SET</span>
             </h4>
             <div>
               <small v-if="acc.overrides">Overrides {{ acc.overrides }}</small>
@@ -83,7 +97,7 @@
         </div>
 
 
-        <div v-if="contents.variables && contents.variables.length > 0">
+        <div v-if="(contents.variables && contents.variables.length > 0) || (contents.properties && contents.properties.length > 0)">
           <h3>Properties</h3>
           <div v-for="acc in contents.variables">
             <h4>
@@ -95,21 +109,19 @@
               <small v-if="acc.inherits">Inherits {{ acc.inherits }}</small>
             </div>          
           </div>
+
+          <div v-for="acc in contents.properties">
+            <h4>
+              {{ acc.name }}
+            </h4>
+            <div v-html="md(acc.comment)"></div>
+            <div>
+              <small v-if="acc.overrides">Overrides {{ acc.overrides }}</small>
+              <small v-if="acc.inherits">Inherits {{ acc.inherits }}</small>
+            </div>          
+          </div>
         </div>
 
-
-        <div v-for="acc in contents.properties">
-          <h4>
-            {{ acc.name }}
-          </h4>
-          <div v-html="md(acc.comment)"></div>
-          <div>
-            <small v-if="acc.overrides">Overrides {{ acc.overrides }}</small>
-            <small v-if="acc.inherits">Inherits {{ acc.inherits }}</small>
-          </div>          
-        </div>
-      
-        
         <div v-if="contents.methods && contents.methods.length > 0">
           <h3>Methods</h3>
           <div v-for="m in contents.methods">
@@ -132,9 +144,9 @@
           </div>
         </div>
 
-        <div v-if="contents.type_alias">
+        <div v-if="contents.type_alias && contents.type_alias.length > 0">
           <h3>Types</h3>
-          <div v-for="m in contents.type_alias">{{ m }}</div>
+          <div v-for="m in contents.type_alias"><span v-html="md(m)"></span></div>
         </div>
 
       </div>
