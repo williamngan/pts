@@ -2,12 +2,13 @@
 // Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 
 
-import {Pt, Group, PtLike, GroupLike} from "./Pt";
+import {Pt, Group} from "./Pt";
 import {Line, Triangle} from "./Op";
 import {Bound} from "./Bound";
 import {Const} from "./Util";
 import {Num, Geom} from "./Num";
 import {Vec} from "./LinearAlgebra";
+import {PtLike, GroupLike, DelaunayMesh, DelaunayShape} from "./Types";
 
 
 /**
@@ -256,21 +257,6 @@ export class Noise extends Pt {
 
 }
 
-
-
-
-
-
-
-/**
- * A DelaunayShape represents an object type that can store a Delaunay element. It has 3 indices (i, j, k) and two groups that represent a triangle and a circle
- */
-export type DelaunayShape = {i:number, j:number, k:number, triangle:GroupLike, circle:Group };
-
-/**
- * A DelaunayMesh epresents an object type that has an array of {key: shape} items, where each shape represents a DelaunayShape.
- */
-export type DelaunayMesh = {[key:string]:DelaunayShape}[];
 
 
 /**

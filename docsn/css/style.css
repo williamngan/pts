@@ -52,6 +52,10 @@ code {
   color: #42e;
 }
 
+#modules .ts {
+  color: #9ab;
+}
+
 #modules .selected {
   color: #42e;
 }

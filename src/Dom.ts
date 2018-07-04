@@ -2,23 +2,13 @@
 // Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 
 
-import {MultiTouchSpace, IPlayer} from './Space';
+import {MultiTouchSpace} from './Space';
 import {Form, VisualForm, Font} from "./Form";
 import {Bound} from './Bound';
 import {Util} from './Util';
-import {Pt, PtLike, GroupLike} from './Pt';
+import {Pt} from './Pt';
+import {PtLike, GroupLike, IPlayer, DOMFormContext} from "./Types";
 
-
-/**
- * A type that represents the current context for an DOMForm
- */
-export type DOMFormContext = {
-  group:Element, groupID:string, groupCount:number,
-  currentID:string,
-  currentClass?:string,
-  style:object,
-  font:string, fontSize:number, fontFamily:string
-};
 
 
 /**

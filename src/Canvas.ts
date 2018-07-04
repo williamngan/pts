@@ -5,19 +5,13 @@
 import {MultiTouchSpace} from './Space';
 import {VisualForm, Font} from "./Form";
 import {Bound} from './Bound';
-import {Pt, PtLike, GroupLike, Group} from "./Pt";
+import {Pt, Group} from "./Pt";
 import {Const} from "./Util";
 import {Typography as Typo} from "./Typography";
 import { Rectangle } from './Op';
+import {PtLike, GroupLike, PtsCanvasRenderingContext2D} from "./Types";
 
 
-export interface PtsCanvasRenderingContext2D extends CanvasRenderingContext2D {
-  webkitBackingStorePixelRatio?:number;
-  mozBackingStorePixelRatio?:number;
-  msBackingStorePixelRatio?:number;
-  oBackingStorePixelRatio?:number;
-  backingStorePixelRatio?:number;
-}
 
 
 /**

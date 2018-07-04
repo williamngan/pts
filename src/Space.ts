@@ -3,44 +3,10 @@
 
 
 import {Bound} from "./Bound";
-import {Pt, IPt} from "./Pt";
+import {Pt} from "./Pt";
 import {Form} from "./Form";
 import {UIPointerActions as UIA}  from "./UI";
-
-
-/**
- * AnimateCallbackFn is a type alias that represents a callback function for animation. It accepts parameters to keep track of current time, current frame-time, and current space instance.
- */
-export type AnimateCallbackFn = ( time?:number, frameTime?:number, currentSpace?:any ) => void;
-
-
-/**
-* IPlayer is an interface that represents a "player" object that can be added into a Space
-*/
-export interface IPlayer {
-  animateID?: string;
-  animate?:AnimateCallbackFn;
-  resize?( size:IPt, evt?:Event ): undefined;
-  action?( type:string, px:number, py:number, evt:Event );
-  start?( bound:Bound, space:Space );
-}
-
-/**
- * ISpacePlayers is an interface that represents a map of IPlayer instances
- */
-export interface ISpacePlayers { 
-  [key: string]: IPlayer;
-}
-
-
-/**
- * ITimer is an interface that represents a time-recording object
- */
-export interface ITimer {
-  prev: number;
-  diff: number;
-  end: number;
-}
+import {ITimer, ISpacePlayers, IPlayer, AnimateCallbackFn, IPt, TouchPointsKey} from "./Types";
 
 
 /**
@@ -305,19 +271,6 @@ export abstract class Space {
 }
 
 
-/**
- * TouchPointsKey is a type alias that represents a set of acceptable string keys for defining touch action.
- */
-export type TouchPointsKey = "touches" | "changedTouches" | "targetTouches";
-
-
-/**
- * MultiTouchElement is an interface that represents an element that can handle touch events
- */
-export interface MultiTouchElement {
-  addEventListener( evt:any, callback:Function );
-  removeEventListener( evt:any, callback:Function );
-}
 
 
 /**

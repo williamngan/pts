@@ -77,11 +77,20 @@ function loadJSON( url, callback ) {
 
 loadJSON( "./json/modules.json", (data, status) => {
   let ms = [];
+  let m_types = null;
   for (var k in data) {
     let m = [ k ];
     m.push( data[k] );
-    ms.push( m );
+
+    if (k == "Types" ) { // Types should be last in list
+      m_types = m;
+    } else {
+      ms.push( m );
+    }
   }
+
+  // push Types to last in list
+  if (m_types) ms.push( m_types );
 
   app.modules = ms;
 
@@ -107,7 +116,7 @@ function loadContents( id ) {
     app.contents.variables = data.variables;
     app.contents.properties = data.properties;
     app.contents.type_alias = data.type_alias;
-    app.contents.count = app.contents.methods.length + app.contents.accessors.length + app.contents.variables.length + app.contents.properties.length;
+    app.contents.count = (app.contents.methods.length || 0) + (app.contents.accessors.length || 0) + (app.contents.variables.length || 0) + (app.contents.properties.length || 0);
 
     if (window.location.hash) {
       app.selHash = window.location.hash

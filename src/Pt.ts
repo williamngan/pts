@@ -5,31 +5,9 @@
 import {Util, Const} from "./Util";
 import {Geom, Num} from "./Num";
 import {Vec, Mat} from "./LinearAlgebra";
-
-
-/**
- * IPt is an interface that represents an object with x, y, z, w properties.
- */
-export interface IPt {
-  x?:number;
-  y?:number;
-  z?:number;
-  w?:number;
-}
+import {IPt, GroupLike, PtLike} from "./Types";
 
 export var PtBaseArray = Float32Array;
-
-/**
- * PtLike is an alias of types that can represent a point
- */
-export type PtLike = Pt | Float32Array | number[];
-
-/**
- * PtLike is an alias of types that can represent a group of points
- */
-export type GroupLike = Group | Pt[];
-
-
 
 /**
  * Pt is a subclass of Float32Array with additional properties and functions to support vector and geometric calculations.

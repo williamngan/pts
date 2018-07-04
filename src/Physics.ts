@@ -2,10 +2,10 @@
 // Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 
 
-import {Pt, PtLike, Group, GroupLike} from "./Pt";
+import {Pt, Group} from "./Pt";
 import {Bound} from "./Bound";
-import { Rectangle, Polygon, Circle } from "./Op";
-import { ParsedPath } from "path";
+import { Polygon, Circle } from "./Op";
+import {PtLike, GroupLike} from "./Types";
 
 /**
  * A `World` stores and manages `Body` and `Particle` for 2D physics simulation

@@ -12,12 +12,12 @@
           <div v-for="m in modules">
             <h4>{{ m[0] }}</h4>
             <div class="item" v-for="c in m[1]" v-on:click="loadClass( m[0], c )">
-              <span v-bind:class="{selected: m[0]+'_'+c === selected }">{{ c }}</span>
+              <span v-bind:class="{selected: m[0]+'_'+c === selected, ts: m[0] === 'Types' }">{{ c }}</span>
             </div>
           </div>
       </div>
 
-      <div id="members" v-bind:class="{collapsed: contents.count < 5}">
+      <div id="members" v-bind:class="{collapsed: contents.count <= 5}">
         <h4 v-if="contents.constructor && contents.constructor.length > 0">Constructor</h4>
         <div v-for="m in contents.constructor">
           <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'constructor_'+m.name )">{{ m.name }}</span>

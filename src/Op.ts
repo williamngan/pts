@@ -4,25 +4,13 @@
 
 import {Util} from "./Util";
 import {Geom, Num} from "./Num";
-import {Pt, PtLike, Group, GroupLike} from "./Pt";
+import {Pt, Group} from "./Pt";
 import {Mat} from "./LinearAlgebra";
-import { normalize } from "path";
+import {PtLike, GroupLike, IntersectContext} from "./Types";
 
 
 let _errorLength = (obj, param:number|string="expected") => Util.warn( "Group's length is less than "+param, obj  );
 let _errorOutofBound = (obj, param:number|string="") => Util.warn( `Index ${param} is out of bound in Group`, obj  );
-
-/**
- * IntersectContext represents a type of an object that store the intersection info
- */
-export type IntersectContext = {
-  which: number,
-  dist: number,
-  normal: Pt,
-  vertex: Pt,
-  edge: Group,
-  other?: any
-};
 
 
 /**

@@ -4,9 +4,9 @@
 
 import { Const } from "./Util";
 import { Curve } from "./Op";
-import { Pt, PtLike, Group, GroupLike } from "./Pt";
+import { Pt, Group } from "./Pt";
 import { Vec, Mat } from "./LinearAlgebra";
-
+import {PtLike, GroupLike} from "./Types";
 /**
  * Num class provides various helper functions for basic numeric operations
  */

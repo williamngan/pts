@@ -2,7 +2,8 @@
 // Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 
 
-import {Pt, GroupLike} from "./Pt";
+import {Pt} from "./Pt";
+import {GroupLike} from "./Types";
 
 /** Various functions to support typography */
 export class Typography {

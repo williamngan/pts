@@ -2,8 +2,9 @@
 // Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 
 
-import {Pt, PtLike, GroupLike} from "./Pt";
+import {Pt} from "./Pt";
 import {Util} from "./Util";
+import {PtLike, GroupLike} from "./Types";
 
 
 /**

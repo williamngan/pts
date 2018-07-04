@@ -2,14 +2,10 @@
 // Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 
 
-import {Pt, Group, PtLike} from "./Pt";
+import {Pt, Group} from "./Pt";
 import {Util} from "./Util";
 import {Num, Geom} from "./Num";
-
-/**
- * ColorType is a type alias for a defined set of string values such as "rgb" and "lab"
- */
-export type ColorType = "rgb"|"hsl"|"hsb"|"lab"|"lch"|"luv"|"xyz";
+import {PtLike, ColorType} from "./Types";
 
 
 /**

@@ -13,6 +13,7 @@ import * as _Dom from "./Dom";
 import * as _Svg from "./Svg";
 import * as _Typography from "./Typography";
 import * as _Physics from "./Physics";
+import * as _types from "./Types";
 
 // A function to switch scope for Pts library. eg, Pts.namespace( window );
 let namespace = ( scope:any ) => {
@@ -48,6 +49,7 @@ let quickStart = ( id:string, bg:string="#9ab" ) => {
 module.exports = {
   namespace,
   quickStart,
+  ..._types,
   ..._Bound,
   ..._Canvas,
   ..._Create,

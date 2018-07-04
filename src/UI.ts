@@ -4,6 +4,7 @@
 
 import {Pt, Group} from "./Pt";
 import { Rectangle, Circle } from "./Op";
+import {UIHandler} from "./Types";
 
 
 /**
@@ -21,11 +22,6 @@ export const UIPointerActions = {
   up: "up", down: "down", move: "move", drag: "drag", drop: "drop", over: "over", out: "out"
 };
 
-
-/**
- * UIHandler is a type alias that represents a callback function to handle UI actions
- */
-export type UIHandler = ( pt:Pt, target:UI, type:string ) => void;
 
 
 export class UI {

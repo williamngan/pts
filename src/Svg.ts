@@ -2,14 +2,14 @@
 // Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 
 
-import {IPlayer} from './Space';
 import {VisualForm, Font} from "./Form";
 import {Bound} from './Bound';
 import {Geom} from './Num';
 import {Const} from './Util';
-import {Pt, PtLike, GroupLike, Group} from './Pt';
+import {Pt, Group} from './Pt';
 import {Rectangle} from "./Op";
-import {DOMSpace, DOMFormContext} from "./Dom";
+import {DOMSpace} from "./Dom";
+import {PtLike, GroupLike, IPlayer, DOMFormContext} from "./Types";
 
 
 
