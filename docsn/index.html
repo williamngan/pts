@@ -20,15 +20,10 @@
       <div id="members" v-bind:class="{collapsed: contents.count <= 5}">
         <h4 v-if="contents.constructor && contents.constructor.length > 0">Constructor</h4>
         <div v-for="m in contents.constructor">
-          <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'constructor_'+m.name )">{{ m.name }}</span>
+          <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'constructor_'+m.name )">{{ contents.name }}</span>
         </div>
 
-        <h4 v-if="contents.accessors && contents.accessors.length > 0">Accessors</h4>
-        <div v-for="m in contents.accessors">
-          <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'accessor_'+m.name )">{{ m.name }}</span>
-        </div>
-
-        <h4 v-if="(contents.variables && contents.variables.length > 0) || (contents.properties && contents.properties.length > 0)">Properties</h4>
+        <h4 v-if="(contents.variables && contents.variables.length > 0) || (contents.properties && contents.properties.length > 0)">Internal Properties</h4>
         <div v-for="m in contents.variables">
           <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'property_'+m.name )">{{ m.name }}</span>
         </div>
@@ -36,7 +31,12 @@
           <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'property_'+m.name )">{{ m.name }}</span>
         </div>
 
-        <h4 v-if="contents.methods && contents.methods.length > 0">Functions</h4>
+        <h4 v-if="contents.accessors && contents.accessors.length > 0">Accessors</h4>
+        <div v-for="m in contents.accessors">
+          <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'accessor_'+m.name )">{{ m.name }}</span>
+        </div>
+
+        <h4 v-if="contents.methods && contents.methods.length > 0">Methods</h4>
         <div v-for="m in contents.methods">
           <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'function_'+m.name )">{{ m.name }}</span>
         </div>
@@ -49,98 +49,131 @@
 
         <h1>{{ contents.name }} <span :class="'token t_'+contents.kind">{{ contents.kind}}</span></h1>
         
-        <p v-html="md(contents.comment)" />
+        <div v-html="md(contents.comment)"></div>
         <div>
-          <small v-if="contents.extends && contents.extends.length > 0">extends {{ contents.extends.join(", ") }}</small>
-          <small v-if="contents.implements && contents.implements.length > 0">implements {{ contents.implements.join(", ") }}</small>
+          <span v-if="contents.extends && contents.extends.length > 0">extends {{ contents.extends.join(", ") }}</span>
+          <span v-if="contents.implements && contents.implements.length > 0">implements {{ contents.implements.join(", ") }}</span>
         </div>
 
         <div v-if="contents.constructor && contents.constructor.length > 0">
           <h3>Constructor</h3>
           <div v-for="m in contents.constructor">
-            <h4 v-bind:id="'constructor_'+m.name">{{ m.name }}</h4>
+            <h4 v-bind:id="'constructor_'+m.name">new {{ contents.name }} <span class="param">( {{ params(m.signatures) }} )</span></h4>
+            
             <div>
-              <small v-if="m.overrides">Overrides {{ m.overrides }}</small>
-              <small v-if="m.inherits">Inherits {{ m.inherits }}</small>
-            </div>
-            <div>
-              <div v-for="s in m.signatures">
-                <div v-html="md(s.comment)"></div>
-                <div v-for="p in s.parameters">
-                    <span>{{ p.name }} : {{ p.type}}</span> <span v-html="md(p.comment)"></span>
+                <div v-for="s in first(m.signatures)">
+                  
+                  <div class="description" v-html="md(s.comment)"></div>
+                  <div class="misc">
+                    <span v-if="m.overrides">Extends&nbsp;<code>`{{ m.overrides }}`</code></span>
+                    <span v-if="m.inherits">Inherited from&nbsp;<code>`{{ m.inherits }}`</code></span>
+                    <span v-if="showSource(m.source)"> in <a class="sourceLink" v-bind:href="source(m.source)">{{m.source[0][0]}}</a></span>
+                  </div>
+                
+                  <div class="signature" v-if="s.parameters.length > 0">
+                    <div class="label">parameters</div>
+                    <div class="info">
+                      <div v-for="p in s.parameters">
+                        <span><span class="paramdef">{{ p.name }}</span>: <span class="typedef">{{ p.type}}</span></span> 
+                        <div v-html="md(p.comment)"></div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="signature">
+                    <div class="label">returns</div>
+                    <div class="info">An instance of {{ contents.name }}</div>
+                  </div>
+                
                 </div>
-                <div>returns {{ s.returns }}</div>
               </div>
-            </div>
-          </div>
-        </div>
-      
-        <div v-if="contents.accessors && contents.accessors.length > 0">
-          <h3>Accessors</h3>
-          <div v-for="acc in contents.accessors">
-            <h4 v-bind:id="'accessor_'+acc.name">
-              {{ acc.name }}
-              <span class="token" v-if="acc.getter">GET</span>
-              <span class="token" v-if="acc.setter">SET</span>
-            </h4>
-            <div>
-              <small v-if="acc.overrides">Overrides {{ acc.overrides }}</small>
-              <small v-if="acc.inherits">Inherits {{ acc.inherits }}</small>
-            </div>
-            
-            A {{ acc.getter.type || acc.setter.parameters.type || "" }} property. 
-            <span v-html="md(acc.comment)"></span>
-            
-            <span v-if="acc.getter"><span v-html="md(acc.getter.comment)"></span></span>
-            <span v-if="acc.setter"><span v-html="md(acc.setter.parameters.comment)"></span></span>
           </div>
         </div>
 
 
         <div v-if="(contents.variables && contents.variables.length > 0) || (contents.properties && contents.properties.length > 0)">
-          <h3>Properties</h3>
-          <div v-for="acc in contents.variables">
-            <h4 v-bind:id="'property_'+acc.name">
-              {{ acc.name }}
+          <h3>Internal Properties</h3>
+          <div v-for="m in contents.variables">
+            <h4 v-bind:id="'property_'+m.name">
+              {{ m.name }} 
             </h4>
-            <div v-html="md(acc.comment)"></div>
-            <div>
-              <small v-if="acc.overrides">Overrides {{ acc.overrides }}</small>
-              <small v-if="acc.inherits">Inherits {{ acc.inherits }}</small>
-            </div>          
+            <div v-html="md(m.comment)"></div>
+            <div class="misc">
+                <span v-if="m.overrides">Overrides&nbsp;<code>`{{ m.overrides }}`</code></span>
+                <span v-if="m.inherits">Inherited from&nbsp;<code>`{{ m.inherits }}`</code></span>
+                <span v-if="showSource(m.source)"> in <a class="sourceLink" v-bind:href="source(m.source)">{{m.source[0][0]}}</a></span>
+            </div>
           </div>
 
-          <div v-for="acc in contents.properties">
-            <h4 v-bind:id="'property_'+acc.name">
-              {{ acc.name }}
+          <div v-for="m in contents.properties">
+            <h4 v-bind:id="'property_'+m.name">
+              {{ m.name }}
             </h4>
-            <div v-html="md(acc.comment)"></div>
-            <div>
-              <small v-if="acc.overrides">Overrides {{ acc.overrides }}</small>
-              <small v-if="acc.inherits">Inherits {{ acc.inherits }}</small>
-            </div>          
+            <div v-html="md(m.comment)"></div>
+            <div class="misc">
+                <span v-if="m.overrides">Overrides&nbsp;<code>`{{ m.overrides }}`</code></span>
+                <span v-if="m.inherits">Inherited from&nbsp;<code>`{{ m.inherits }}`</code></span>
+                <span v-if="showSource(m.source)"> in <a class="sourceLink" v-bind:href="source(m.source)">{{m.source[0][0]}}</a></span>
+            </div>
           </div>
         </div>
+        
+      
+        <div v-if="contents.accessors && contents.accessors.length > 0">
+          <h3>Accessors</h3>
+          <div v-for="m in contents.accessors">
+            <h4 v-bind:id="'accessor_'+m.name">
+              {{ m.name }} <span class="param">: {{ m.getter.type || m.setter.parameters.type || "" }}</span>
+              <span class="token" v-if="m.getter">GET</span>
+              <span class="token" v-if="m.setter">SET</span>
+            </h4>
+            
+            <div v-html="md(m.comment)"></div>
+            <div class="misc">
+                <span v-if="m.overrides">Overrides&nbsp;<code>`{{ m.overrides }}`</code></span>
+                <span v-if="m.inherits">Inherited from&nbsp;<code>`{{ m.inherits }}`</code></span>
+                <span v-if="showSource(m.source)"> in <a class="sourceLink" v-bind:href="source(m.source)">{{m.source[0][0]}}</a></span>
+            </div>
+
+            <div v-if="m.getter" v-html="md(m.getter.comment)"></div>
+            <div v-if="m.setter" v-html="md(m.setter.parameters.comment)"></div>
+          </div>
+        </div>
+
 
         <div v-if="contents.methods && contents.methods.length > 0">
           <h3>Methods</h3>
           <div v-for="m in contents.methods">
             <h4 v-bind:id="'function_'+m.name">
-              <span v-if="m.flags && m.flags.isStatic">[static] </span>{{ m.name }}
+              <span v-if="m.flags && m.flags.isStatic">[static] </span>
+              {{ m.name }} 
+              <span class="param">( {{ params(m.signatures) }} )</span>
             </h4>
             <div>
-              <div>
-                <small v-if="m.overrides">Overrides {{ m.overrides }}</small>
-                <small v-if="m.inherits">Inherits {{ m.inherits }}</small>
-              </div>
-              <div v-for="s in m.signatures">
-                <div v-html="md(s.comment)"></div>
-                <div v-for="p in s.parameters">
-                  <span>{{ p.name }} : {{ p.type}}</span> <span v-html="md(p.comment)"></span>
+              <div v-for="s in first(m.signatures)">
+                
+                <div class="description" v-html="md(s.comment)"></div>
+                <div class="misc">
+                  <span v-if="m.overrides">Overrides&nbsp;<code>`{{ m.overrides }}`</code></span>
+                  <span v-if="m.inherits">Inherited from&nbsp;<code>`{{ m.inherits }}`</code></span>
+                  <span v-if="showSource(m.source)"> in <a class="sourceLink" v-bind:href="source(m.source)">{{m.source[0][0]}}</a></span>
                 </div>
-                <div>returns {{ s.returns }}</div>
-                <div>
+              
+                <div class="signature" v-if="s.parameters.length > 0">
+                  <div class="label">parameters</div>
+                  <div class="info">
+                    <div v-for="p in s.parameters">
+                      <span><span class="paramdef">{{ p.name }}</span>: <span class="typedef">{{ p.type}}</span></span> 
+                      <div v-html="md(p.comment)"></div>
+                    </div>
+                  </div>
                 </div>
+                
+                <div class="signature">
+                  <div class="label">returns</div>
+                  <div class="info"><span class="paramdef">{{ s.returns }}</span></div>
+                </div>
+              
               </div>
             </div>
           </div>
@@ -148,7 +181,7 @@
 
         <div v-if="contents.type_alias && contents.type_alias.length > 0">
           <h3>Types</h3>
-          <div v-for="m in contents.type_alias"><span v-html="md(m)"></span></div>
+          <div v-for="m in contents.type_alias"><div v-html="md(m)"></div></div>
         </div>
 
       </div>

@@ -1,3 +1,5 @@
+var sourceRoot = "https://github.com/williamngan/pts/blob/master/src/";
+
 var app = new Vue({
   el: '#docapp',
   
@@ -21,9 +23,11 @@ var app = new Vue({
     test: function( m ) {
       this.message = m;
     },
+
     loadClass: function( mod, cls ) {
       loadContents( mod+"_"+cls );
     },
+
     jumpTo: function( id) {
       let elem = document.getElementById(id);
       if (elem) {
@@ -31,9 +35,35 @@ var app = new Vue({
         selectJump( id );
       }
     },
+
     md: function( s ) {
       if (!s || typeof s !== "string") return "";
       return marked( s );
+    },
+
+    source: function( s ) {
+      return (s && s.length > 0) ? `${sourceRoot}${s[0][0]}#L${s[0][1]}` : "#";
+    },
+
+    showSource: function( s ) {
+      var hide = !s || !s[0][0] || s[0][0].indexOf("node_modules") >= 0;
+      return !hide;
+    },
+
+    params: function( sig ) {
+      if (sig && sig[0]) {
+        var ls = [];
+        var ps = sig[0].parameters || [];
+        for (var i=0, len=ps.length; i<len; i++) {
+          ls.push( ps[i].name ); 
+        }
+        return ls.join(", ");
+      }
+      return ""
+    },
+
+    first: function( s ) {
+      return (s && s.length > 0) ? [s[0]] : [];
     }
   },
 
@@ -100,6 +130,10 @@ loadJSON( "./json/modules.json", (data, status) => {
   } 
 });
 
+function sortInherited( a, b ) {
+  return (a.inherits ? 100000 : 0) - (b.inherits ? 100000 : 0) + a.name.localeCompare(b.name);
+} 
+
 function loadContents( id ) {
   
   loadJSON( `./json/${id}.json`, (data, status) => {
@@ -111,10 +145,10 @@ function loadContents( id ) {
     app.contents.implements = data.implements;
     
     app.contents.constructor = data.constructor;
-    app.contents.methods = data.methods;
-    app.contents.accessors = data.accessors;
-    app.contents.variables = data.variables;
-    app.contents.properties = data.properties;
+    app.contents.methods = data.methods.sort( sortInherited );
+    app.contents.accessors = data.accessors.sort( sortInherited );;
+    app.contents.variables = data.variables.sort( sortInherited );;
+    app.contents.properties = data.properties.sort( sortInherited );;
     app.contents.type_alias = data.type_alias;
     app.contents.count = (app.contents.methods.length || 0) + (app.contents.accessors.length || 0) + (app.contents.variables.length || 0) + (app.contents.properties.length || 0);
 

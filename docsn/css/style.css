@@ -15,19 +15,28 @@ a {
   border-bottom: 1px solid #0c6;
 }
 
+a.sourceLink {
+  font-size: 12px;
+  color: inherit;
+  border: none;
+  text-decoration: underline;
+}
+
 a:hover {
   /* text-decoration: underline; */
   color: #0c6;
 }
 
+
 code {
-  color: #678;
+  display: inline-block;
+  padding: 0 3px;
   font-family: Menlo, sans-serif;
 }
 
 #modules {
   position: absolute;
-  top: 0; left: 0; bottom: 0; width: 25vw;
+  top: 0; left: 0; bottom: 0; width: 20vw;
   overflow: auto;
   padding: 20px;
   box-sizing: border-box;
@@ -40,7 +49,7 @@ code {
   text-transform: uppercase;
   color: #9ab;
   font-size: 0.8em;
-  font-weight: 500;
+  font-weight: 600;
   margin: 30px 0 0px;
 }
 
@@ -63,18 +72,18 @@ code {
 
 #members {
   position: fixed;
-  top:0; left: 25vw; bottom: 0;
+  top:0; left: 20vw; bottom: 0;
   padding: 20px;
   border-right: 1px solid #0c6;
-  font-size: 0.85em;
-  font-weight: 600;
+  font-size: 1em;
+  font-weight: 400;
   width: 20vw;
   box-sizing: border-box;
   overflow: auto;
 }
 
 #members .inherits {
-  color: #678;
+  color: #9ab;
   font-weight: 400;
 }
 
@@ -90,17 +99,17 @@ code {
   color: #0c6;
 }
 
+
 #contents {
   position: absolute;
-  top: 0; left: 25vw; bottom: 0; right: 0;
+  top: 0; left: 20vw; bottom: 0; right: 0;
   overflow: auto;
-  padding: 20px;
-  padding-right: 15vw; 
+  padding: 20px 50px;
   box-sizing: border-box;
 }
 
 #contents.expanded {
-  left: 45vw;
+  left: 40vw;
 }
 
 #content_title {
@@ -108,6 +117,51 @@ code {
   top: 0; left: 30vw;; right: 0;
   z-index: 1;
   background: #fff;
+}
+
+#contents .param {
+  font-weight: normal;
+  color: #9ab;
+  /* font-size: 0.8em; */
+}
+
+
+#contents .signature {
+  display: flex;
+  flex-direction: row;
+}
+
+#contents .signature > .label {
+  padding-right: 20px;
+  min-width: 100px;
+  max-width: 100px;
+}
+
+#contents p {
+  margin-bottom: 0;
+}
+
+#contents .misc {
+  color: #9ab;
+  font-size: 12px;
+  font-weight: 400;
+  margin-bottom: 1em;
+}
+
+
+
+#contents .signature > .info {
+  flex: 10 1 auto;
+}
+
+#contents .signature p {
+  margin-bottom: 1.5em;
+  line-height: 1.4;
+}
+
+#contents h4 {
+  margin-top: 50px;
+  margin-bottom: 10px;
 }
 
 
@@ -119,8 +173,17 @@ h1 {
 
 h3 {
   font-weight: 300;
-  font-size: 1.4em;
+  font-size: 1.8em;
   margin-top: 2em;
+}
+
+h4 {
+  font-size: 1.4em;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 1em;
 }
 
 .token {
@@ -133,4 +196,13 @@ h3 {
   border: 1px solid #678;
   color: #678; 
   letter-spacing: 0.05em;
+}
+
+.typedef {
+  color: #9ab;
+  letter-spacing: 0.05em;
+}
+
+.paramdef {
+  font-weight: bold;
 }
