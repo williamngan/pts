@@ -5,7 +5,9 @@
 import {Pt} from "./Pt";
 import {GroupLike} from "./Types";
 
-/** Various functions to support typography */
+/** 
+ * Various functions to support typography.
+ */
 export class Typography {
 
   /**

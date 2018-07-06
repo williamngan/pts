@@ -8,7 +8,7 @@ import {UIHandler} from "./Types";
 
 
 /**
- * An enumeration of different UI types
+ * An enumeration of different UI types.
  */
 export enum UIShape {
   Rectangle, Circle, Polygon, Polyline, Line
@@ -16,7 +16,7 @@ export enum UIShape {
 
 
 /**
- * A set of string constants to represent different UI events
+ * A set of string constants to represent different UI events.
  */
 export const UIPointerActions = {
   up: "up", down: "down", move: "move", drag: "drag", drop: "drop", over: "over", out: "out"
@@ -24,6 +24,9 @@ export const UIPointerActions = {
 
 
 
+/**
+ * This class represents a UI element. Experimental.
+ */
 export class UI {
   group: Group;
   shape: UIShape;
@@ -131,7 +134,7 @@ export class UI {
 
 
 /**
- * A simple UI button that can track clicks and hovers
+ * A simple UI button that can track clicks and hovers.
  */
 export class UIButton extends UI {
 

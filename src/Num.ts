@@ -8,7 +8,7 @@ import { Pt, Group } from "./Pt";
 import { Vec, Mat } from "./LinearAlgebra";
 import {PtLike, GroupLike} from "./Types";
 /**
- * Num class provides various helper functions for basic numeric operations
+ * Num class provides various helper functions for basic numeric operations.
  */
 export class Num {
 
@@ -152,7 +152,7 @@ export class Num {
 
 
 /**
- * Geom class provides various helper functions for basic geometric operations
+ * Geom class provides various helper functions for basic geometric operations.
  */
 export class Geom {
 

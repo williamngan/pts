@@ -8,7 +8,7 @@ import { Polygon, Circle } from "./Op";
 import {PtLike, GroupLike} from "./Types";
 
 /**
- * A `World` stores and manages `Body` and `Particle` for 2D physics simulation
+ * A `World` stores and manages `Body` and `Particle` for 2D physics simulation.
  */
 export class World {
 
@@ -453,7 +453,7 @@ export class Particle extends Pt {
 
 
 /**
- * Body consists of a group of `Particles` and edge constraints. It is usually added into a `World` to create physics simulations
+ * Body consists of a group of `Particles` and edge constraints. It is usually added into a `World` to create physics simulations.
  */
 export class Body extends Group {
 

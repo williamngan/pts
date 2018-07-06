@@ -12,7 +12,7 @@ import {PtLike, GroupLike, IPlayer, DOMFormContext} from "./Types";
 
 
 /**
- * A Space for DOM elements
+ * A Space for DOM elements. Learn more about spaces in [this guide](../guide/space-0500).
  */
 export class DOMSpace extends MultiTouchSpace {
   

@@ -274,7 +274,7 @@ export abstract class Space {
 
 
 /**
- * MultiTouchSpace is a space that supports user interactions via touch events
+ * MultiTouchSpace is a space that supports user interactions via touch events.
  */
 export abstract class MultiTouchSpace extends Space {
   

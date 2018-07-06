@@ -7,7 +7,7 @@ import {IPt, GroupLike} from "./Types";
 
 /**
  * Bound is a subclass of Group that represents a rectangular boundary.
- * It includes some convenient properties such as `x`, `y`, bottomRight`, `center`, and `size`. 
+ * It includes some convenient properties such as `x`, `y`, `bottomRight`, `center`, and `size`. 
  */
 export class Bound extends Group implements IPt {
 

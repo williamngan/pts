@@ -47,14 +47,17 @@
       
       <div id="contents" v-bind:class="{expanded: contents.count > 5}">
 
-        <h1>{{ contents.name }} <span :class="'token t_'+contents.kind">{{ contents.kind}}</span></h1>
+        <h1>{{ contents.name }}</h1>
         
-        <div v-html="md(contents.comment)"></div>
-        <div>
+        <div class="top_info" v-html="md(contents.comment)"></div>
+        <div class="misc">
+          <span :class="'token t_'+contents.kind">{{ contents.kind }}</span>
           <span v-if="contents.extends && contents.extends.length > 0">extends {{ contents.extends.join(", ") }}</span>
           <span v-if="contents.implements && contents.implements.length > 0">implements {{ contents.implements.join(", ") }}</span>
+          <span v-if="showSource(contents.source)"> in <a class="sourceLink" v-bind:href="source(contents.source)">{{contents.source[0][0]}}</a></span>
         </div>
-
+        
+        
         <div v-if="contents.constructor && contents.constructor.length > 0">
           <h3>Constructor</h3>
           <div v-for="m in contents.constructor">
@@ -71,7 +74,7 @@
                   </div>
                 
                   <div class="signature" v-if="s.parameters.length > 0">
-                    <div class="label">parameters</div>
+                    <div class="label">Parameters</div>
                     <div class="info">
                       <div v-for="p in s.parameters">
                         <span><span class="paramdef">{{ p.name }}</span>: <span class="typedef">{{ p.type}}</span></span> 
@@ -81,7 +84,7 @@
                   </div>
                   
                   <div class="signature">
-                    <div class="label">returns</div>
+                    <div class="label">Returns</div>
                     <div class="info">An instance of {{ contents.name }}</div>
                   </div>
                 
@@ -123,9 +126,9 @@
           <h3>Accessors</h3>
           <div v-for="m in contents.accessors">
             <h4 v-bind:id="'accessor_'+m.name">
-              {{ m.name }} <span class="param">: {{ m.getter.type || m.setter.parameters.type || "" }}</span>
               <span class="token" v-if="m.getter">GET</span>
               <span class="token" v-if="m.setter">SET</span>
+              {{ m.name }} <span class="param">: {{ m.getter.type || m.setter.parameters.type || "" }}</span>
             </h4>
             
             <div v-html="md(m.comment)"></div>
@@ -145,7 +148,7 @@
           <h3>Methods</h3>
           <div v-for="m in contents.methods">
             <h4 v-bind:id="'function_'+m.name">
-              <span v-if="m.flags && m.flags.isStatic">[static] </span>
+              <span v-if="m.flags && m.flags.isStatic" class="token">STATIC</span> 
               {{ m.name }} 
               <span class="param">( {{ params(m.signatures) }} )</span>
             </h4>
@@ -160,7 +163,7 @@
                 </div>
               
                 <div class="signature" v-if="s.parameters.length > 0">
-                  <div class="label">parameters</div>
+                  <div class="label">Parameters</div>
                   <div class="info">
                     <div v-for="p in s.parameters">
                       <span><span class="paramdef">{{ p.name }}</span>: <span class="typedef">{{ p.type}}</span></span> 
@@ -170,7 +173,7 @@
                 </div>
                 
                 <div class="signature">
-                  <div class="label">returns</div>
+                  <div class="label">Returns</div>
                   <div class="info"><span class="paramdef">{{ s.returns }}</span></div>
                 </div>
               

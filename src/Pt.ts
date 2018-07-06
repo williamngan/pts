@@ -11,7 +11,7 @@ export var PtBaseArray = Float32Array;
 
 /**
  * Pt is a subclass of Float32Array with additional properties and functions to support vector and geometric calculations.
- * See [Pt guide](../../guide/Pt-0200.html) for details
+ * See [Pt guide](../../guide/Pt-0200.html) for details.
  */
 export class Pt extends PtBaseArray implements IPt, Iterable<number> {
 
@@ -499,7 +499,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
 
 /**
  * A Group is a subclass of Array. It should onnly contain Pt instances. You can think of it as an array of arrays (Float32Arrays to be specific).
- * See [Group guide](../../guide/Group-0300.html) for details
+ * See [Group guide](../../guide/Group-0300.html) for details.
  */
 export class Group extends Array<Pt> {
 

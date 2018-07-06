@@ -30,7 +30,8 @@ a:hover {
 
 code {
   display: inline-block;
-  padding: 0 3px;
+  padding: 0 1px;
+  color: #678;
   font-family: Menlo, sans-serif;
 }
 
@@ -108,15 +109,14 @@ code {
   box-sizing: border-box;
 }
 
+
 #contents.expanded {
   left: 40vw;
 }
 
-#content_title {
-  position: fixed;
-  top: 0; left: 30vw;; right: 0;
-  z-index: 1;
-  background: #fff;
+
+#contents p {
+  max-width: 700px;
 }
 
 #contents .param {
@@ -129,16 +129,23 @@ code {
 #contents .signature {
   display: flex;
   flex-direction: row;
+  max-width: 700px;
 }
 
 #contents .signature > .label {
   padding-right: 20px;
   min-width: 100px;
   max-width: 100px;
+  color: #0c6;
 }
 
 #contents p {
   margin-bottom: 0;
+}
+
+#contents .top_info {
+  margin-top: 1.5em;
+  margin-bottom: 3px;
 }
 
 #contents .misc {
@@ -155,12 +162,12 @@ code {
 }
 
 #contents .signature p {
-  margin-bottom: 1.5em;
+  margin-bottom: 1.2em;
   line-height: 1.4;
 }
 
 #contents h4 {
-  margin-top: 50px;
+  margin-top: 45px;
   margin-bottom: 10px;
 }
 
@@ -168,13 +175,16 @@ code {
 
 h1 {
   font-weight: 300;
-  font-size: 3em;
+  font-size: 4.2em;
+  margin-bottom: 0;
+  line-height: 1.2;
 }
 
 h3 {
   font-weight: 300;
-  font-size: 1.8em;
-  margin-top: 2em;
+  font-size: 2.4em;
+  margin-top: 45px;
+  margin-bottom: 0;
 }
 
 h4 {
@@ -189,13 +199,15 @@ p {
 .token {
   display: inline-block;
   vertical-align: middle;
-  font-size: 10px;
-  padding: 2px 5px;
-  margin: 0 2px;
-  font-weight: 400;
+  text-transform: uppercase;
+  font-size: 9px;
+  padding: 3px 5px;
+  margin-right: 3px;
+  line-height: 1;
+  font-weight: 500;
   border: 1px solid #678;
   color: #678; 
-  letter-spacing: 0.05em;
+  
 }
 
 .typedef {

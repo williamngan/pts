@@ -16,7 +16,7 @@ import {PtLike, GroupLike, PtsCanvasRenderingContext2D} from "./Types";
 
 /**
 * CanvasSpace is an implementation of the abstract class Space. It represents a space for HTML Canvas.
-* Learn more about the concept of Space in [this guide](..guide/Space-0500.html)
+* Learn more about the concept of Space in [this guide](..guide/Space-0500.html).
 */
 export class CanvasSpace extends MultiTouchSpace {
   

@@ -77,13 +77,18 @@ var app = new Vue({
 })
 
 
-function qs(name) {
+function qs(name, limit) {
   name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
   var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
       results = regex.exec(location.search);
-  return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+  let q = (results === null) ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+  return clean_str( q, limit );
 }
 
+function clean_str( str, limit ) {
+  if (limit) str = str.substr(0, limit);
+  return str.replace( /[^a-zA-Z0-9._]/g, "_" );
+}
 
 function loadJSON( url, callback ) {
   var request = new XMLHttpRequest();
@@ -124,7 +129,7 @@ loadJSON( "./json/modules.json", (data, status) => {
 
   app.modules = ms;
 
-  let qsel = qs("p");
+  let qsel = qs("p", 30);
   if (qsel) {
     loadContents( qsel );
   } 
@@ -153,7 +158,7 @@ function loadContents( id ) {
     app.contents.count = (app.contents.methods.length || 0) + (app.contents.accessors.length || 0) + (app.contents.variables.length || 0) + (app.contents.properties.length || 0);
 
     if (window.location.hash) {
-      app.selHash = window.location.hash
+      app.selHash = clean_str(window.location.hash, 30);
     }
 
     selectState( id );

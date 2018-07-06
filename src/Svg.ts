@@ -14,7 +14,7 @@ import {PtLike, GroupLike, IPlayer, DOMFormContext} from "./Types";
 
 
 /**
- * A Space for SVG elements
+ * A Space for SVG elements.
  */
 export class SVGSpace extends DOMSpace {
   

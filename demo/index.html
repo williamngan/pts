@@ -28,15 +28,21 @@
           return check;
         }
 
-        function qs(name) {
+        function qs(name, limit) {
             name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
             var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
                 results = regex.exec(location.search);
-            return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+            let q = (results === null) ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+            return clean_str( q, limit );
+        }
+
+        function clean_str( str, limit ) {
+            if (limit) str = str.substr(0, limit);
+            return str.replace( /[^a-zA-Z0-9._]/g, "_" );
         }
 
         var src = null;
-        var qfile = qs("name");
+        var qfile = qs("name", 50);
         if (!qfile) qfile = "template";
 
         if (qfile.indexOf("/") >= 0 || qfile.split(".").length > 2 ) qfile="";

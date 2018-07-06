@@ -179,7 +179,7 @@ const permTable = [151,160,137,91,90,15,
 
 /**
  * A class to generate Perlin noise. Currently it implements a basic 2D noise. More to follow.
- * Based on https://gist.github.com/banksean/304522
+ * This implementation is based on this [gist](https://gist.github.com/banksean/304522).
  */
 export class Noise extends Pt {
 
@@ -260,9 +260,9 @@ export class Noise extends Pt {
 
 
 /**
- * Delaunay is a Group of Pts that can generate Delaunay and Voronoi tessellations. The triangulation algorithm is ported from [Pt](https://github.com/williamngan/pt)
- * This implementation is based on [Paul Bourke's algorithm](http://paulbourke.net/papers/triangulate/)
- * with reference to its [javascript implementation by ironwallaby](https://github.com/ironwallaby/delaunay)
+ * Delaunay is a Group of Pts that can generate Delaunay and Voronoi tessellations. The triangulation algorithm is ported from [Pt](https://github.com/williamngan/pt). 
+ * Based on [Paul Bourke's algorithm](http://paulbourke.net/papers/triangulate/)
+ * with reference to its [javascript implementation](https://github.com/ironwallaby/delaunay) by ironwallaby.
  */
 export class Delaunay extends Group {
 

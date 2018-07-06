@@ -6,7 +6,7 @@ import {Group} from "./Pt";
 
 
 /**
- * Various constant values for enumerations and calculations
+ * Various constant values for enumerations and calculations.
  */
 export const Const = {
   xy: "xy",
@@ -88,7 +88,7 @@ export const Const = {
 
 
 /**
- * Util provides various helper functions
+ * Util provides various helper functions.
  */
 export class Util {
 

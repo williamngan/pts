@@ -244,7 +244,7 @@ export abstract class VisualForm extends Form {
 
 
 /**
-* Font class lets you create a specific font style with properties for its size and style
+* Font class lets you create a specific font style with properties for its size and style.
 */
 export class Font {
   public size:number;
