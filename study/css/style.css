@@ -4,7 +4,7 @@ html{font-family:sans-serif;line-height:1.15;-ms-text-size-adjust:100%;-webkit-t
 
 body {
   background: #fff;
-  font-family: "Helvetica", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
   font-size: 12px;
   line-height: 1.35;
   margin: 0;
@@ -38,11 +38,9 @@ html * {
 #header a {
   color: #123;
   text-decoration: none;
-  padding-left: 10px;
-  padding-right: 10px;
 }
 #header a:hover {
-  color: #f03;
+  color: #42e;
   border-bottom: none;
 }
 
@@ -58,10 +56,9 @@ html * {
 #pts a {
   display: inline-block;
   font-weight: bold;
-  padding-right: 0px;
 }
 #pts a > span {
-  color: #f03;
+  color: #42e;
   display: inline-block;
   padding: 0 2px; 
 }
@@ -76,6 +73,7 @@ html * {
 #topmenu > a {
   display: inline-block;
   vertical-align: middle;
+  padding-left: 15px;
   height: 100%;
 }
 
@@ -160,7 +158,7 @@ html * {
   display: block;
   border: none;
   text-decoration: none;
-  color: #f03;
+  color: #42e;
 }
 
 #hint a:hover {
@@ -181,14 +179,13 @@ p {
 
 
 a {
-  color: #f03;
-  font-weight: 500;
+  color: #42e;
   text-decoration: none;
   display: inline-block;
 }
 
 a:hover {
-  border-bottom: 1px solid #f03;
+  border-bottom: 1px solid #42e;
 }
 
 .demo, .section {
@@ -209,7 +206,7 @@ a:hover {
 .demo > strong {
   font-weight: 400;
 }
-.demo:hover, .demo:hover > span { color: #f03;}
+.demo:hover, .demo:hover > span { color: #42e;}
 
 .section {
   font-weight: 600;

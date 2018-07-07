@@ -5,8 +5,21 @@
     <link rel="stylesheet" href="./css/style.css" />
   </head>
   <body>
+
+    <div id="header">
+      <div id="pts"><a href="../">Pts<span>.</span></a>docs</div>
+      <div id="search">
+        <input type="text" placeholder="Search..." />
+      </div>
+      <div id="topmenu">
+        <a href="../guide/Get-started-0100.html"/>guides</a>
+        <a href="../demo/index.html"/>demos</a>
+        <a href="../study/index.html"/>studies</a>
+        <a href="https://github.com/williamngan/pts"/>github</a>
+      </div>
+    </div>
     
-    <div id="docapp">
+    <div id="docapp" v-cloak>
 
       <div id="modules">
           <div v-for="m in modules">
@@ -51,7 +64,7 @@
         
         <div class="top_info" v-html="md(contents.comment)"></div>
         <div class="misc">
-          <span :class="'token t_'+contents.kind">{{ contents.kind }}</span>
+          <span v-if="contents.kind" :class="'token t_'+contents.kind">{{ contents.kind }}</span>
           <span v-if="contents.extends && contents.extends.length > 0">extends {{ contents.extends.join(", ") }}</span>
           <span v-if="contents.implements && contents.implements.length > 0">implements {{ contents.implements.join(", ") }}</span>
           <span v-if="showSource(contents.source)"> in <a class="sourceLink" v-bind:href="source(contents.source)">{{contents.source[0][0]}}</a></span>

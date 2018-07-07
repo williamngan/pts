@@ -32,8 +32,6 @@ a:hover { color: #42e; }
 #header a {
   color: #123;
   text-decoration: none;
-  padding-left: 10px;
-  padding-right: 10px;
 }
 #header a:hover {
   color: #42e;
@@ -52,7 +50,6 @@ a:hover { color: #42e; }
 #pts a {
   display: inline-block;
   font-weight: bold;
-  padding-right: 0px;
 }
 #pts a > span {
   color: #42e;
@@ -70,6 +67,7 @@ a:hover { color: #42e; }
 #topmenu > a {
   display: inline-block;
   vertical-align: middle;
+  padding-left: 15px;
   height: 100%;
 }
 

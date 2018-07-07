@@ -4,12 +4,12 @@ var app = new Vue({
   el: '#docapp',
   
   data: {
-    message: 'Hello Vue!',
+    message: '',
     modules: [],
     contents: { 
-      name: "...", 
+      name: " ", 
       constructor: {},
-      methods: [{name: "test"}], 
+      methods: [], 
       accessors: [],
       variables: [],
       type_alias: [],
@@ -129,7 +129,7 @@ loadJSON( "./json/modules.json", (data, status) => {
 
   app.modules = ms;
 
-  let qsel = qs("p", 30);
+  let qsel = qs("p", 40);
   if (qsel) {
     loadContents( qsel );
   } 
