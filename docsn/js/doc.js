@@ -1,5 +1,7 @@
 var sourceRoot = "https://github.com/williamngan/pts/blob/master/src/";
 
+var _search = [];
+
 var app = new Vue({
   el: '#docapp',
   
@@ -64,6 +66,10 @@ var app = new Vue({
 
     first: function( s ) {
       return (s && s.length > 0) ? [s[0]] : [];
+    },
+
+    search: function( s ) {
+      console.log( s, "!!" );
     }
   },
 
@@ -87,7 +93,7 @@ function qs(name, limit) {
 
 function clean_str( str, limit ) {
   if (limit) str = str.substr(0, limit);
-  return str.replace( /[^a-zA-Z0-9._]/g, "_" );
+  return str.replace( /[^a-zA-Z0-9._\$]/g, "_" );
 }
 
 function loadJSON( url, callback ) {
@@ -135,13 +141,33 @@ loadJSON( "./json/modules.json", (data, status) => {
   } 
 });
 
+
+function getSearchResult( q ) {
+  let query = q.split(" ").join(".* ");
+  query = query.replace("$", "\\$");
+  let res = _search.filter( (v) =>  v[1].search( new RegExp( query, "gi") ) >= 0 );
+  return res.sort( (a, b) => b[3] - a[3] ).slice(0, 20);
+}
+
+
+loadJSON( "./json/search.json", (data, status) => {
+  _search = data;
+
+  let se = document.querySelector( "#search_input" );
+  se.addEventListener("keyup", function(evt) {
+    let res = getSearchResult( se.value );
+    console.log( res );
+  });
+
+});
+
 function sortInherited( a, b ) {
   return (a.inherits ? 100000 : 0) - (b.inherits ? 100000 : 0) + a.name.localeCompare(b.name);
 } 
 
 function loadContents( id ) {
   
-  loadJSON( `./json/${id}.json`, (data, status) => {
+  loadJSON( `./json/class/${id}.json`, (data, status) => {
     app.contents.name = data.name;
     app.contents.kind = data.kind;
     app.contents.comment = data.comment;

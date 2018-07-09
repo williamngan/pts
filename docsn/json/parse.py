@@ -12,7 +12,8 @@ skipped = []
 # inheritedFrom, implementedTypes
 
 def searchable( key, name, kind ):
-  searches.append( [key, name, kind] )
+  k = {"Constructor": 10, "Function": 8, "Accessor": 6, "Property": 4 }
+  searches.append( [key, name, kind, k.get(kind, 0)] )
 
 def clean_quoted( n ):
   return re.sub(r'\"', '', n)
@@ -64,7 +65,6 @@ def parse_modules():
       if not name[0] == "_":
         modules[name] = props_module( m )
         modules[name]['classes'] = parse_classes( m, name )
-        searchable( name, name, "Module" )
 
       else:
         skipped.append( "Module."+name )
@@ -72,6 +72,7 @@ def parse_modules():
     for c in classes:
       save_class( classes[c], c )
 
+    save_search( searches )
     # save_temp(json.dumps(searches, indent=2))
     # save_temp( json.dumps([classes['Pt.Pt']], indent=2 ))
     # save_temp(json.dumps(modules['Bound']['children'][0], indent=2, sort_keys=True))
@@ -98,7 +99,7 @@ def parse_classes( mod, mod_name ):
         classes[ fullname ]['type_alias'] = get_type( c['type'] ).split(" | ")
 
       else:
-        parse_class_children( classes[ fullname ], c )
+        parse_class_children( classes[ fullname ], c, fullname )
 
       names.append( c['name'] )
       searchable( fullname, c['name'], c['kindString'] )
@@ -106,33 +107,48 @@ def parse_classes( mod, mod_name ):
     else:
       skipped.append( f"{mod_name}_{c['name']}" )
     
+  # print("Skipped: ")
+  # print( skipped )
+
   return names
 
 
 
-def parse_class_children( c, orig_c ):
+def parse_class_children( c, orig_c, fullname ):
 
   for ch in orig_c.get('children', []):
     if not_private( ch['name'] ):
 
       k = ch['kindString']
       if k == "Method":
-        c['methods'].append( parse_class_method( ch ) )
+        m = parse_class_method( ch )
+        searchable( fullname+f"#function_{m['name']}", f"{c['name']} > {m['name']}", "Function" )
+        c['methods'].append( m )
 
       elif k == "Accessor":
-        c['accessors'].append( parse_class_accessor( ch ) )
+        m = parse_class_accessor( ch )
+        searchable( fullname+f"#accessor_{m['name']}", f"{c['name']} > {m['name']}", "Accessor" )
+        c['accessors'].append( m )
 
       elif k == "Variable":
-        c['variables'].append( parse_class_variable( ch ) )
+        m = parse_class_variable( ch )
+        searchable( fullname+f"#property_{m['name']}", f"{c['name']} > {m['name']}", "Variable" )
+        c['variables'].append( m )
 
       elif k == "Property":
-        c['properties'].append( parse_class_property( ch ) )
+        m = parse_class_property( ch )
+        searchable( fullname+f"#property_{m['name']}", f"{c['name']} > {m['name']}", "Variable" )
+        c['properties'].append( m )
 
       elif k == "Constructor":
-        c['constructor'].append( parse_class_method( ch ) )
+        m = parse_class_method( ch )
+        searchable( fullname+f"#constructor_{m['name']}", f"{c['name']} > {m['name']}", "Constructor" )
+        c['constructor'].append( m )
 
       elif k == "Enumeration member":
-        c['variables'].append( parse_class_variable( ch ) )
+        m = parse_class_variable( ch )
+        searchable( fullname+f"#property_{m['name']}", f"{c['name']} > {m['name']}", "Enumeration" )
+        c['variables'].append( m )
 
       else:
         skipped.append( f"{c['name']}.{ch['name']}" )
@@ -255,9 +271,16 @@ def save_toc():
   f.close()
 
 def save_class(data, name):
-  f = open(f'{name}.json', 'w')
+  f = open(f'class/{name}.json', 'w')
   f.write( json.dumps( data, indent=2 ) )
   f.close()
+
+
+def save_search(data):
+  f = open(f'search.json', 'w')
+  f.write( json.dumps( data, indent=2 ) )
+  f.close()
+
 
 
 def save_temp(data):
