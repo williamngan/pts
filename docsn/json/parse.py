@@ -116,38 +116,40 @@ def parse_classes( mod, mod_name ):
 
 def parse_class_children( c, orig_c, fullname ):
 
+  delimit = "."
+
   for ch in orig_c.get('children', []):
     if not_private( ch['name'] ):
 
       k = ch['kindString']
       if k == "Method":
         m = parse_class_method( ch )
-        searchable( fullname+f"#function_{m['name']}", f"{c['name']} > {m['name']}", "Function" )
+        searchable( fullname+f"#function_{m['name']}", f"{c['name']}{delimit}{m['name']}", "Function" )
         c['methods'].append( m )
 
       elif k == "Accessor":
         m = parse_class_accessor( ch )
-        searchable( fullname+f"#accessor_{m['name']}", f"{c['name']} > {m['name']}", "Accessor" )
+        searchable( fullname+f"#accessor_{m['name']}", f"{c['name']}{delimit}{m['name']}", "Accessor" )
         c['accessors'].append( m )
 
       elif k == "Variable":
         m = parse_class_variable( ch )
-        searchable( fullname+f"#property_{m['name']}", f"{c['name']} > {m['name']}", "Variable" )
+        searchable( fullname+f"#property_{m['name']}", f"{c['name']}{delimit}{m['name']}", "Variable" )
         c['variables'].append( m )
 
       elif k == "Property":
         m = parse_class_property( ch )
-        searchable( fullname+f"#property_{m['name']}", f"{c['name']} > {m['name']}", "Variable" )
+        searchable( fullname+f"#property_{m['name']}", f"{c['name']}{delimit}{m['name']}", "Variable" )
         c['properties'].append( m )
 
       elif k == "Constructor":
         m = parse_class_method( ch )
-        searchable( fullname+f"#constructor_{m['name']}", f"{c['name']} > {m['name']}", "Constructor" )
+        searchable( fullname+f"#constructor_{m['name']}", f"{c['name']}{delimit}{m['name']}", "Constructor" )
         c['constructor'].append( m )
 
       elif k == "Enumeration member":
         m = parse_class_variable( ch )
-        searchable( fullname+f"#property_{m['name']}", f"{c['name']} > {m['name']}", "Enumeration" )
+        searchable( fullname+f"#property_{m['name']}", f"{c['name']}{delimit}{m['name']}", "Enumeration" )
         c['variables'].append( m )
 
       else:

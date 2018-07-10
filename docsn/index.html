@@ -10,6 +10,7 @@
       <div id="pts"><a href="../">Pts<span>.</span></a>docs</div>
       <div id="search">
         <input type="text" id="search_input" placeholder="Search..." />
+        <div id="clearSearch">&times;</div>
       </div>
       <div id="topmenu">
         <a href="../guide/Get-started-0100.html"/>guides</a>
@@ -30,32 +31,46 @@
           </div>
       </div>
 
-      <div id="members" v-bind:class="{collapsed: contents.count <= 5}">
-        <h4 v-if="contents.constructor && contents.constructor.length > 0">Constructor</h4>
-        <div v-for="m in contents.constructor">
-          <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'constructor_'+m.name )">{{ contents.name }}</span>
+      <div id="members" v-bind:class="{collapsed: contents.count <= 5, searchResults: searchQuery.length > 0}">
+        <div v-if="searchResults.length > 0">
+          <div v-for="s in searchResults" class="item">
+            <a v-bind:href="'./?p='+s[0]">{{s[1]}}</a>
+            <span class="itemType">{{ s[2] }}</span>
+          </div>
         </div>
 
-        <h4 v-if="(contents.variables && contents.variables.length > 0) || (contents.properties && contents.properties.length > 0)">Internal Properties</h4>
-        <div v-for="m in contents.variables">
-          <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'property_'+m.name )">{{ m.name }}</span>
-        </div>
-        <div v-for="m in contents.properties">
-          <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'property_'+m.name )">{{ m.name }}</span>
+        <div v-if="searchResults.length === 0 && searchQuery.length > 0">
+          <div class="item"><em>No results</em></div>
+          <span class="itemType">Try: "Circle" or "Pt $dot"</span>
         </div>
 
-        <h4 v-if="contents.accessors && contents.accessors.length > 0">Accessors</h4>
-        <div v-for="m in contents.accessors">
-          <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'accessor_'+m.name )">{{ m.name }}</span>
-        </div>
 
-        <h4 v-if="contents.methods && contents.methods.length > 0">Methods</h4>
-        <div v-for="m in contents.methods">
-          <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'function_'+m.name )">{{ m.name }}</span>
-        </div>
+        <div v-if="searchQuery.length === 0 && searchResults.length === 0">
+          <h4 v-if="contents.constructor && contents.constructor.length > 0">Constructor</h4>
+          <div v-for="m in contents.constructor">
+            <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'constructor_'+m.name )">{{ contents.name }}</span>
+          </div>
 
-        <h4 v-if="contents.type_alias && contents.type_alias.length > 0">Types</h4>
-        
+          <h4 v-if="(contents.variables && contents.variables.length > 0) || (contents.properties && contents.properties.length > 0)">Internal Properties</h4>
+          <div v-for="m in contents.variables">
+            <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'property_'+m.name )">{{ m.name }}</span>
+          </div>
+          <div v-for="m in contents.properties">
+            <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'property_'+m.name )">{{ m.name }}</span>
+          </div>
+
+          <h4 v-if="contents.accessors && contents.accessors.length > 0">Accessors</h4>
+          <div v-for="m in contents.accessors">
+            <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'accessor_'+m.name )">{{ m.name }}</span>
+          </div>
+
+          <h4 v-if="contents.methods && contents.methods.length > 0">Methods</h4>
+          <div v-for="m in contents.methods">
+            <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'function_'+m.name )">{{ m.name }}</span>
+          </div>
+
+          <h4 v-if="contents.type_alias && contents.type_alias.length > 0">Types</h4>
+        </div>
       </div>
       
       <div id="contents" v-bind:class="{expanded: contents.count > 5}">
@@ -71,7 +86,7 @@
         </div>
         
         
-        <div v-if="contents.constructor && contents.constructor.length > 0">
+        <div class="section" v-if="contents.constructor && contents.constructor.length > 0">
           <h3>Constructor</h3>
           <div v-for="m in contents.constructor">
             <h4 v-bind:id="'constructor_'+m.name">new {{ contents.name }} <span class="param">( {{ params(m.signatures) }} )</span></h4>
@@ -107,7 +122,7 @@
         </div>
 
 
-        <div v-if="(contents.variables && contents.variables.length > 0) || (contents.properties && contents.properties.length > 0)">
+        <div class="section props" v-if="(contents.variables && contents.variables.length > 0) || (contents.properties && contents.properties.length > 0)">
           <h3>Internal Properties</h3>
           <div v-for="m in contents.variables">
             <h4 v-bind:id="'property_'+m.name">
@@ -121,7 +136,7 @@
             </div>
           </div>
 
-          <div v-for="m in contents.properties">
+          <div class="section props" v-for="m in contents.properties">
             <h4 v-bind:id="'property_'+m.name">
               {{ m.name }}
             </h4>
@@ -135,7 +150,7 @@
         </div>
         
       
-        <div v-if="contents.accessors && contents.accessors.length > 0">
+        <div class="section props" v-if="contents.accessors && contents.accessors.length > 0">
           <h3>Accessors</h3>
           <div v-for="m in contents.accessors">
             <h4 v-bind:id="'accessor_'+m.name">
@@ -157,7 +172,7 @@
         </div>
 
 
-        <div v-if="contents.methods && contents.methods.length > 0">
+        <div class="section" v-if="contents.methods && contents.methods.length > 0">
           <h3>Methods</h3>
           <div v-for="m in contents.methods">
             <h4 v-bind:id="'function_'+m.name">
@@ -195,7 +210,7 @@
           </div>
         </div>
 
-        <div v-if="contents.type_alias && contents.type_alias.length > 0">
+        <div class="section" v-if="contents.type_alias && contents.type_alias.length > 0">
           <h3>Types</h3>
           <div v-for="m in contents.type_alias"><div v-html="md(m)"></div></div>
         </div>
@@ -204,5 +219,14 @@
     </div>
 
     <script type="text/javascript" src="./js/doc.js"></script>
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-104913373-1', 'auto');
+      ga('send', 'pageview');
+    </script>
   </body>
 </html>

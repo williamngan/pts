@@ -116,6 +116,25 @@ code {
   top: 0; left: 20vw; height: 70px; width: 20vw;
 }
 
+#clearSearch {
+  position: absolute;
+  right: 0; top: 0; padding: 0 20px;
+  line-height: 68px;
+  color: #9ab;
+  font-size: 1.5em;
+  cursor: pointer;
+  display: none;
+}
+
+#clearSearch:hover {
+  color: #42e;
+}
+
+#search.searching #clearSearch {
+  display: block;
+}
+
+
 #search > input {
   border: none;
   width: 20vw;
@@ -134,9 +153,9 @@ code {
   color: #abc;
 }
 
-#search > input:focus {
+#search > input:focus, #search.searching > input {
   border-left: 1px solid #cde;
-  padding: 0 20px;
+  padding: 0 30px;
   background-color: #f1f3f7;
 }
 
@@ -199,6 +218,10 @@ code {
   font-weight: 400;
 }
 
+#members.searchResults {
+  background: #f1f3f7;
+}
+
 #members.collapsed {
   display: none;
 }
@@ -210,6 +233,30 @@ code {
 #members span:hover {
   color: #0c6;
 }
+
+#members.searchResults .item {
+  margin: 25px 0 5px;
+  word-wrap: break-word;
+  line-height: 1.5;
+}
+
+#members.searchResults a {
+  color: #123;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+#members.searchResults a:hover {
+  color: #42e;
+  text-decoration: underline;
+}
+
+#members.searchResults .itemType {
+  font-size: 0.85em;
+  display: block;
+  color: #9ab;
+}
+
 
 
 #contents {
@@ -280,10 +327,22 @@ code {
 }
 
 #contents h4 {
-  margin-top: 45px;
-  margin-bottom: 10px;
+  margin-top: 40px;
+  margin-bottom: 5px;
 }
 
+#contents h3 {
+  margin-top: 80px;
+  margin-bottom: -20px;
+}
+
+#contents .props h4 {
+  margin-top: 30px;
+}
+
+#contents .props h3 {
+  margin-bottom: -10px;
+}
 
 
 h1 {

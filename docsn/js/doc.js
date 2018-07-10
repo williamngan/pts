@@ -8,6 +8,8 @@ var app = new Vue({
   data: {
     message: '',
     modules: [],
+    searchResults: [],
+    searchQuery: "",
     contents: { 
       name: " ", 
       constructor: {},
@@ -68,8 +70,10 @@ var app = new Vue({
       return (s && s.length > 0) ? [s[0]] : [];
     },
 
-    search: function( s ) {
-      console.log( s, "!!" );
+    search: function( res, query ) {
+      app.searchResults = res;
+      app.searchQuery = query;
+      document.querySelector("#search").className = (query.length > 0) ? "searching" : "";
     }
   },
 
@@ -143,10 +147,10 @@ loadJSON( "./json/modules.json", (data, status) => {
 
 
 function getSearchResult( q ) {
-  let query = q.split(" ").join(".* ");
+  let query = q.split(" ").join(".*\.");
   query = query.replace("$", "\\$");
   let res = _search.filter( (v) =>  v[1].search( new RegExp( query, "gi") ) >= 0 );
-  return res.sort( (a, b) => b[3] - a[3] ).slice(0, 20);
+  return res.sort( (a, b) => (b[3]*100-b[0].length) - (a[3]*100-a[0].length) ).slice(0, 50);
 }
 
 
@@ -155,8 +159,16 @@ loadJSON( "./json/search.json", (data, status) => {
 
   let se = document.querySelector( "#search_input" );
   se.addEventListener("keyup", function(evt) {
-    let res = getSearchResult( se.value );
-    console.log( res );
+    if (!se.value) {
+      app.search([], "");
+    } else {
+      app.search( getSearchResult( se.value ), se.value );
+    }
+  });
+
+  document.querySelector("#clearSearch").addEventListener("click", function(evt) {
+    app.search([], "");
+    se.value = "";
   });
 
 });
