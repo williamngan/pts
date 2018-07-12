@@ -4,8 +4,8 @@ html{font-family:sans-serif;line-height:1.15;-ms-text-size-adjust:100%;-webkit-t
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
-  font-size: 13px;
-  line-height: 1.65;
+  font-size: 12px;
+  line-height: 1.5;
   margin: 0;
   color: #234;
   box-sizing: border-box;
@@ -26,7 +26,7 @@ html * {
 
 
 #header {
-  font-size: 18px;
+  font-size: 1.5em;
   letter-spacing: 0;
   position: relative;
   line-height: 70px;
@@ -73,7 +73,19 @@ html * {
   height: 100%;
 }
 
+#toc {
+  position: fixed; top: 0px; left: 0;
+  display: none;
+  width: 100px; height: 80px;
+  background: transparent;
+  color: #42e;
+  line-height: 78px;
+  text-align: center;
+  font-size: 4em;
+}
+
 /* ---------- */
+
 
 
 #docapp {
@@ -175,7 +187,7 @@ code {
 #modules h4, #members h4 {
   text-transform: uppercase;
   color: #9ab;
-  font-size: 0.8em;
+  font-size: 1em;
   font-weight: 600;
   margin: 30px 0 0px;
 }
@@ -252,11 +264,16 @@ code {
 }
 
 #members.searchResults .itemType {
-  font-size: 0.85em;
+  font-size: 1em;
   display: block;
   color: #9ab;
 }
 
+
+#modules, #members, #contents {
+  -webkit-overflow-scrolling: touch;
+  -moz-overflow-scrolling: touch;
+}
 
 
 #contents {
@@ -288,6 +305,7 @@ code {
   display: flex;
   flex-direction: row;
   max-width: 700px;
+  font-size: 1.1em;
 }
 
 #contents .signature > .label {
@@ -298,19 +316,20 @@ code {
 }
 
 #contents p {
+  font-size: 1.1em;
   margin-bottom: 0;
 }
 
 #contents .top_info {
   margin-top: 0.5em;
   margin-bottom: 7px;
-  font-size: 1.4em;
+  font-size: 1.6em;
   line-height: 1.35;
 }
 
 #contents .misc {
   color: #9ab;
-  font-size: 12px;
+  font-size: 1em;
   font-weight: 400;
   margin-bottom: 1em;
 }
@@ -363,7 +382,7 @@ h3 {
 }
 
 h4 {
-  font-size: 1.4em;
+  font-size: 1.5em;
 }
 
 p {
@@ -392,4 +411,131 @@ p {
 
 .paramdef {
   font-weight: bold;
+}
+
+#close {
+  display: none;
+  position: absolute;
+  top: 0; right: 0;
+  width: 60px; height: 60px;
+  line-height: 58px; text-align: center;
+  font-size: 3em;
+  text-decoration: none;
+  color: #678;
+}
+
+#close:hover {
+  color: #0ca;
+}
+
+
+@media only screen and (max-device-width : 768px), screen and (max-width : 768px) {
+
+  #menu {
+    position: absolute;
+    top: 0; bottom: 0; left: -100vw; width: 100vw;
+    z-index: 10;
+    background-color: #f1f3f7;
+    transition: left 0.3s;
+  }
+
+  #menu.visible {
+    left: 0;
+  }
+
+  #contents {
+    top: 0; left: 0;
+  }
+  
+  
+  #contents.expanded {
+    left: 0;
+  }
+
+  /* Header and footer */
+  
+  #header, #footer {
+    width: 70%;
+    margin: 0 auto;
+    line-height: 80px;
+    border: none;
+  }
+  
+  #footer { 
+    line-height: 1.4;
+    padding: 100px 0 30px; 
+  }
+
+
+  #header a:first-child {
+    padding-left: 0;
+  }
+
+  #header a:last-child {
+    padding-right: 0;
+  }
+
+  #topmenu > a {
+    display: inline-block;
+    box-sizing: border-box;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  #pts { padding-left: 0; }
+  #pts a { padding: 0; }
+  #topmenu { right: 0; }
+  #topmenu a { right: 0; }
+
+  /* --------- */
+
+  #search {
+    display: none;
+  }
+
+  #toc {
+    display: inline-block;
+    text-decoration: none;
+  }
+
+  #members, #modules {
+    width: 50vw;
+    line-height: 2.5;
+  }
+
+  #members { left: 50vw; }
+
+  #close { display: block; }
+
+}
+
+@media only screen and (max-device-width : 767px) {
+  /* Header and Footer */
+  
+  #header {
+    padding: 0;
+    margin-left: 15%;
+    width: 85%;
+    line-height: 70px;
+    font-size: 1.2em;
+  }  
+  
+  #topmenu { right: 20px;}
+  #topmenu > a { padding-left: 0; }
+  #topmenu > a:nth-child(3) { display: none; }
+  
+  #toc { 
+    width: 50px; height: 80px; line-height: 65px; 
+    font-size: 2em;
+  }
+
+  #search {
+    display: none;
+  }
+
+  #close {
+    font-size: 2.2em;
+  }
+
+  
 }

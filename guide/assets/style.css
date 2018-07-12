@@ -310,7 +310,7 @@ a:hover > code {
 
 
   #topmenu > a { padding-left: 0; }
-  #topmenu > a:nth-child(3) { display: none; }
+  #topmenu > a:nth-child(2) { display: none; }
   #topmenu > a:last-child { padding-right: 20px; }
 
   #toc { 

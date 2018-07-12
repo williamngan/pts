@@ -1,8 +1,23 @@
 <html>
   <head>
+    <title>Pts.js Documentations</title>
+    <meta charset="UTF-8">
     <script type="text/javascript" src="./js/vue.js"></script>
     <script type="text/javascript" src="./js/marked.min.js"></script>
     <link rel="stylesheet" href="./css/style.css" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <meta name="thumbnail"           content="https://ptsjs.org/assets/thumbnail.png" />
+    <meta property="og:type"         content="website" />
+    <meta property="og:title"        content="Pts.js" />
+    <meta property="og:description"  content="Pts is a javascript library that enables you to compose and visualize points." />
+    <meta property="og:image"        content="https://ptsjs.org/assets/card_thumbnail.png" />
+    <meta property="og:image:width"  content="1200">
+    <meta property="og:image:height" content="630">
+
+    <meta name="twitter:card"        content="summary_large_image" />
+    <meta name="twitter:creator"     content="@williamngan" />
   </head>
   <body>
 
@@ -19,58 +34,65 @@
         <a href="https://github.com/williamngan/pts"/>github</a>
       </div>
     </div>
+
+    <div id="toc">≡</div>
     
     <div id="docapp" v-cloak>
 
-      <div id="modules">
-          <div v-for="m in modules">
-            <h4>{{ m[0] }}</h4>
-            <div class="item" v-for="c in m[1]" v-on:click="loadClass( m[0], c )">
-              <span v-bind:class="{selected: m[0]+'_'+c === selected, ts: m[0] === 'Types' }">{{ c }}</span>
+      <div id="menu">
+        
+        <div id="modules">
+            <div v-for="m in modules">
+              <h4>{{ m[0] }}</h4>
+              <div class="item" v-for="c in m[1]" v-on:click="loadClass( m[0], c )">
+                <span v-bind:class="{selected: m[0]+'_'+c === selected, ts: m[0] === 'Types' }">{{ c }}</span>
+              </div>
+            </div>
+        </div>
+
+        <div id="members" v-bind:class="{collapsed: contents.count <= 5, searchResults: searchQuery.length > 0}">
+          <div v-if="searchResults.length > 0">
+            <div v-for="s in searchResults" class="item">
+              <a v-bind:href="'./?p='+s[0]">{{s[1]}}</a>
+              <span class="itemType">{{ s[2] }}</span>
             </div>
           </div>
-      </div>
 
-      <div id="members" v-bind:class="{collapsed: contents.count <= 5, searchResults: searchQuery.length > 0}">
-        <div v-if="searchResults.length > 0">
-          <div v-for="s in searchResults" class="item">
-            <a v-bind:href="'./?p='+s[0]">{{s[1]}}</a>
-            <span class="itemType">{{ s[2] }}</span>
+          <div v-if="searchResults.length === 0 && searchQuery.length > 0">
+            <div class="item"><em>No results</em></div>
+            <span class="itemType">Try: "Circle" or "Pt $dot"</span>
+          </div>
+
+
+          <div v-if="searchQuery.length === 0 && searchResults.length === 0">
+            <h4 v-if="contents.constructor && contents.constructor.length > 0">Constructor</h4>
+            <div v-for="m in contents.constructor">
+              <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'constructor_'+m.name )">{{ contents.name }}</span>
+            </div>
+
+            <h4 v-if="(contents.variables && contents.variables.length > 0) || (contents.properties && contents.properties.length > 0)">Internal Properties</h4>
+            <div v-for="m in contents.variables">
+              <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'property_'+m.name )">{{ m.name }}</span>
+            </div>
+            <div v-for="m in contents.properties">
+              <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'property_'+m.name )">{{ m.name }}</span>
+            </div>
+
+            <h4 v-if="contents.accessors && contents.accessors.length > 0">Accessors</h4>
+            <div v-for="m in contents.accessors">
+              <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'accessor_'+m.name )">{{ m.name }}</span>
+            </div>
+
+            <h4 v-if="contents.methods && contents.methods.length > 0">Methods</h4>
+            <div v-for="m in contents.methods">
+              <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'function_'+m.name )">{{ m.name }}</span>
+            </div>
+
+            <h4 v-if="contents.type_alias && contents.type_alias.length > 0">Types</h4>
           </div>
         </div>
 
-        <div v-if="searchResults.length === 0 && searchQuery.length > 0">
-          <div class="item"><em>No results</em></div>
-          <span class="itemType">Try: "Circle" or "Pt $dot"</span>
-        </div>
-
-
-        <div v-if="searchQuery.length === 0 && searchResults.length === 0">
-          <h4 v-if="contents.constructor && contents.constructor.length > 0">Constructor</h4>
-          <div v-for="m in contents.constructor">
-            <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'constructor_'+m.name )">{{ contents.name }}</span>
-          </div>
-
-          <h4 v-if="(contents.variables && contents.variables.length > 0) || (contents.properties && contents.properties.length > 0)">Internal Properties</h4>
-          <div v-for="m in contents.variables">
-            <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'property_'+m.name )">{{ m.name }}</span>
-          </div>
-          <div v-for="m in contents.properties">
-            <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'property_'+m.name )">{{ m.name }}</span>
-          </div>
-
-          <h4 v-if="contents.accessors && contents.accessors.length > 0">Accessors</h4>
-          <div v-for="m in contents.accessors">
-            <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'accessor_'+m.name )">{{ m.name }}</span>
-          </div>
-
-          <h4 v-if="contents.methods && contents.methods.length > 0">Methods</h4>
-          <div v-for="m in contents.methods">
-            <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'function_'+m.name )">{{ m.name }}</span>
-          </div>
-
-          <h4 v-if="contents.type_alias && contents.type_alias.length > 0">Types</h4>
-        </div>
+        <div id="close">&times;</div>
       </div>
       
       <div id="contents" v-bind:class="{expanded: contents.count > 5}">

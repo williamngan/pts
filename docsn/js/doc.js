@@ -209,14 +209,34 @@ function selectState( id, hash ) {
   if (history.pushState) {
     var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?p='+id;
     window.history.pushState({path:newurl},'',newurl);
+    toggleMenu( false );
+    document.querySelector("#contents").scrollTo(0,0);
   }
 }
 
 function selectJump( id ) {
   if(history.pushState) {
     history.pushState(null, null, '#'+id);
+    toggleMenu( false );
   }
   else {
     location.hash = '#'+id;
   }
 }
+
+
+
+var _menu_toggle = false;
+
+function toggleMenu( t ) {
+  _menu_toggle = (t !== undefined) ? t : !_menu_toggle;
+  document.querySelector("#menu").className = (_menu_toggle) ? "visible" : "";
+}
+
+document.querySelector("#toc").addEventListener("click", function(evt) {
+  toggleMenu();
+});
+
+document.querySelector("#close").addEventListener("click", function() {
+  toggleMenu(false);
+});
