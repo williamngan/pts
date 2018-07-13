@@ -87,10 +87,10 @@ var app = new Vue({
 })
 
 
-function qs(name, limit) {
+function qs(name, limit, path) {
   name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
   var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-      results = regex.exec(location.search);
+      results = regex.exec( path ? path : location.search);
   let q = (results === null) ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
   return clean_str( q, limit );
 }
@@ -177,7 +177,7 @@ function sortInherited( a, b ) {
   return (a.inherits ? 100000 : 0) - (b.inherits ? 100000 : 0) + a.name.localeCompare(b.name);
 } 
 
-function loadContents( id ) {
+function loadContents( id, reloading ) {
   
   loadJSON( `./json/class/${id}.json`, (data, status) => {
     app.contents.name = data.name;
@@ -199,7 +199,7 @@ function loadContents( id ) {
       app.selHash = clean_str(window.location.hash, 30);
     }
 
-    selectState( id );
+    if (!reloading) selectState( id );
 
   });
 }
@@ -239,4 +239,11 @@ document.querySelector("#toc").addEventListener("click", function(evt) {
 
 document.querySelector("#close").addEventListener("click", function() {
   toggleMenu(false);
+});
+
+
+// force reload on back button click
+window.addEventListener( "popstate", function ( event ) {
+  let qsel = qs("p", 40, event.state.path || null);
+  if (qsel) loadContents( qsel, true );
 });

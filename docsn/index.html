@@ -118,13 +118,13 @@
                   
                   <div class="description" v-html="md(s.comment)"></div>
                   <div class="misc">
-                    <span v-if="m.overrides">Extends&nbsp;<code>`{{ m.overrides }}`</code></span>
-                    <span v-if="m.inherits">Inherited from&nbsp;<code>`{{ m.inherits }}`</code></span>
+                    <span v-if="m.overrides">Extends&nbsp;<code>{{ m.overrides }}</code></span>
+                    <span v-if="m.inherits">Inherited from&nbsp;<code>{{ m.inherits }}</code></span>
                     <span v-if="showSource(m.source)"> in <a class="sourceLink" v-bind:href="source(m.source)">{{m.source[0][0]}}</a></span>
                   </div>
                 
                   <div class="signature" v-if="s.parameters.length > 0">
-                    <div class="label">Parameters</div>
+                    <div class="label">parameters</div>
                     <div class="info">
                       <div v-for="p in s.parameters">
                         <span><span class="paramdef">{{ p.name }}</span>: <span class="typedef">{{ p.type}}</span></span> 
@@ -134,8 +134,13 @@
                   </div>
                   
                   <div class="signature">
-                    <div class="label">Returns</div>
+                    <div class="label">returns</div>
                     <div class="info">An instance of {{ contents.name }}</div>
+                  </div>
+
+                  <div v-for="se in s.tags" class="signature tags">
+                      <div class="label">{{se.tag}}</div>
+                      <div class="info">{{ md(se.text) }}</div>
                   </div>
                 
                 </div>
@@ -152,8 +157,8 @@
             </h4>
             <div v-html="md(m.comment)"></div>
             <div class="misc">
-                <span v-if="m.overrides">Overrides&nbsp;<code>`{{ m.overrides }}`</code></span>
-                <span v-if="m.inherits">Inherited from&nbsp;<code>`{{ m.inherits }}`</code></span>
+                <span v-if="m.overrides">Overrides&nbsp;<code>{{ m.overrides }}</code></span>
+                <span v-if="m.inherits">Inherited from&nbsp;<code>{{ m.inherits }}</code></span>
                 <span v-if="showSource(m.source)"> in <a class="sourceLink" v-bind:href="source(m.source)">{{m.source[0][0]}}</a></span>
             </div>
           </div>
@@ -164,8 +169,8 @@
             </h4>
             <div v-html="md(m.comment)"></div>
             <div class="misc">
-                <span v-if="m.overrides">Overrides&nbsp;<code>`{{ m.overrides }}`</code></span>
-                <span v-if="m.inherits">Inherited from&nbsp;<code>`{{ m.inherits }}`</code></span>
+                <span v-if="m.overrides">Overrides&nbsp;<code>{{ m.overrides }}</code></span>
+                <span v-if="m.inherits">Inherited from&nbsp;<code>{{ m.inherits }}</code></span>
                 <span v-if="showSource(m.source)"> in <a class="sourceLink" v-bind:href="source(m.source)">{{m.source[0][0]}}</a></span>
             </div>
           </div>
@@ -183,8 +188,8 @@
             
             <div v-html="md(m.comment)"></div>
             <div class="misc">
-                <span v-if="m.overrides">Overrides&nbsp;<code>`{{ m.overrides }}`</code></span>
-                <span v-if="m.inherits">Inherited from&nbsp;<code>`{{ m.inherits }}`</code></span>
+                <span v-if="m.overrides">Overrides&nbsp;<code>{{ m.overrides }}</code></span>
+                <span v-if="m.inherits">Inherited from&nbsp;<code>{{ m.inherits }}</code></span>
                 <span v-if="showSource(m.source)"> in <a class="sourceLink" v-bind:href="source(m.source)">{{m.source[0][0]}}</a></span>
             </div>
 
@@ -206,14 +211,9 @@
               <div v-for="s in first(m.signatures)">
                 
                 <div class="description" v-html="md(s.comment)"></div>
-                <div class="misc">
-                  <span v-if="m.overrides">Overrides&nbsp;<code>`{{ m.overrides }}`</code></span>
-                  <span v-if="m.inherits">Inherited from&nbsp;<code>`{{ m.inherits }}`</code></span>
-                  <span v-if="showSource(m.source)"> in <a class="sourceLink" v-bind:href="source(m.source)">{{m.source[0][0]}}</a></span>
-                </div>
               
                 <div class="signature" v-if="s.parameters.length > 0">
-                  <div class="label">Parameters</div>
+                  <div class="label">parameters</div>
                   <div class="info">
                     <div v-for="p in s.parameters">
                       <span><span class="paramdef">{{ p.name }}</span>: <span class="typedef">{{ p.type}}</span></span> 
@@ -223,8 +223,22 @@
                 </div>
                 
                 <div class="signature">
-                  <div class="label">Returns</div>
+                  <div class="label">returns</div>
                   <div class="info"><span class="paramdef">{{ s.returns }}</span></div>
+                </div>
+
+                <div v-if="m.overrides || m.inherits" class="signature tags">
+                  <div class="label">inheritance</div>
+                  <div class="info">
+                    <span v-if="m.overrides">Overrides&nbsp;<code>{{ m.overrides }}</code></span>
+                    <span v-if="m.inherits">Inherited from&nbsp;<code>{{ m.inherits }}</code></span>
+                    <span v-if="showSource(m.source)"> in <a class="sourceLink" v-bind:href="source(m.source)">{{m.source[0][0]}}</a></span>
+                  </div>
+                </div>
+
+                <div v-for="se in s.tags" class="signature tags">
+                    <div class="label">{{se.tag}}</div>
+                    <div class="info">{{ md(se.text) }}</div>
                 </div>
               
               </div>
@@ -233,7 +247,8 @@
         </div>
 
         <div class="section" v-if="contents.type_alias && contents.type_alias.length > 0">
-          <h3>Types</h3>
+          <h3>Type Alias</h3>
+          <h4>equivalent to</h4>
           <div v-for="m in contents.type_alias"><div v-html="md(m)"></div></div>
         </div>
 

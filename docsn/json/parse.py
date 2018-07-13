@@ -242,7 +242,8 @@ def parse_class_method_signature( c ):
   return {
     'comment': get_comment( c ) ,
     'returns': get_type( c.get('type', {}) ),
-    'parameters': [ parse_class_method_param(p) for p in c.get('parameters', []) ]
+    'parameters': [ parse_class_method_param(p) for p in c.get('parameters', []) ],
+    'tags': get_comment_tags( c )
   }
 
 
@@ -291,11 +292,12 @@ def save_temp(data):
   f.close()
 
 
-
-
 def get_comment( c ):
   return c.get('comment', {}).get('shortText', False) or c.get('comment', {}).get('text', "")
 
+
+def get_comment_tags( c ):
+  return c.get('comment', {}).get('tags', [])
 
 
 def get_type( c, pre="", post="" ):

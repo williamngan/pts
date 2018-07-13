@@ -290,10 +290,6 @@ code {
 }
 
 
-#contents p {
-  max-width: 700px;
-}
-
 #contents .param {
   font-weight: normal;
   color: #9ab;
@@ -315,7 +311,22 @@ code {
   color: #0c6;
 }
 
+#contents .signature.tags {
+  margin-top: 10px;
+}
+
+#contents .signature.tags > .label {
+  color: #9ab;
+}
+
+
+#contents .description {
+  margin-bottom: 20px;
+}
+
+
 #contents p {
+  max-width: 700px;
   font-size: 1.1em;
   margin-bottom: 0;
 }
@@ -329,7 +340,7 @@ code {
 
 #contents .misc {
   color: #9ab;
-  font-size: 1em;
+  font-size: 0.9em;
   font-weight: 400;
   margin-bottom: 1em;
 }
@@ -341,12 +352,12 @@ code {
 }
 
 #contents .signature p {
-  margin-bottom: 1.2em;
+  margin-bottom: 10px;
   line-height: 1.4;
 }
 
 #contents h4 {
-  margin-top: 40px;
+  margin-top: 45px;
   margin-bottom: 5px;
 }
 
