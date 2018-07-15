@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Pts.js Documentations</title>
+    <title>Pts.js Documentation</title>
     <meta charset="UTF-8">
     <script type="text/javascript" src="./js/vue.js"></script>
     <script type="text/javascript" src="./js/marked.min.js"></script>
@@ -95,7 +95,14 @@
         <div id="close">&times;</div>
       </div>
       
-      <div id="contents" v-bind:class="{expanded: contents.count > 5}">
+      <div id="contents" v-bind:class="{expanded: contents.count > 5}" v-on:click="clickTarget">
+
+        <div v-if="contents.count == 0">
+          <h1>Documentation</h1>
+          <div class="top_info">
+            <p>This page provides detailed typescript/javascript API documentation of Pts.js. If you're getting started, you may want to start with <a href="../guide/">the guides</a> and take a look at <a href="../demo">the demos</a> first.</p>
+          </div>
+        </div>
 
         <h1>{{ contents.name }}</h1>
         
@@ -117,11 +124,6 @@
                 <div v-for="s in first(m.signatures)">
                   
                   <div class="description" v-html="md(s.comment)"></div>
-                  <div class="misc">
-                    <span v-if="m.overrides">Extends&nbsp;<code>{{ m.overrides }}</code></span>
-                    <span v-if="m.inherits">Inherited from&nbsp;<code>{{ m.inherits }}</code></span>
-                    <span v-if="showSource(m.source)"> in <a class="sourceLink" v-bind:href="source(m.source)">{{m.source[0][0]}}</a></span>
-                  </div>
                 
                   <div class="signature" v-if="s.parameters.length > 0">
                     <div class="label">parameters</div>
@@ -141,6 +143,15 @@
                   <div v-for="se in s.tags" class="signature tags">
                       <div class="label">{{se.tag}}</div>
                       <div class="info">{{ md(se.text) }}</div>
+                  </div>
+
+                  <div class="signature tags">
+                    <div class="label">source</div>
+                    <div class="info">
+                      <span v-if="m.overrides">Overrides&nbsp;<code>{{ m.overrides }}</code></span>
+                      <span v-if="m.inherits">Inherited from&nbsp;<code>{{ m.inherits }}</code></span>
+                      <span v-if="showSource(m.source)"> in <a class="sourceLink" v-bind:href="source(m.source)">{{m.source[0][0]}}</a></span>
+                    </div>
                   </div>
                 
                 </div>
@@ -227,8 +238,8 @@
                   <div class="info"><span class="paramdef">{{ s.returns }}</span></div>
                 </div>
 
-                <div v-if="m.overrides || m.inherits" class="signature tags">
-                  <div class="label">inheritance</div>
+                <div class="signature tags">
+                  <div class="label">source</div>
                   <div class="info">
                     <span v-if="m.overrides">Overrides&nbsp;<code>{{ m.overrides }}</code></span>
                     <span v-if="m.inherits">Inherited from&nbsp;<code>{{ m.inherits }}</code></span>

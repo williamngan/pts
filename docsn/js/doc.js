@@ -1,104 +1,5 @@
 var sourceRoot = "https://github.com/williamngan/pts/blob/master/src/";
-
 var _search = [];
-
-var app = new Vue({
-  el: '#docapp',
-  
-  data: {
-    message: '',
-    modules: [],
-    searchResults: [],
-    searchQuery: "",
-    contents: { 
-      name: " ", 
-      constructor: {},
-      methods: [], 
-      accessors: [],
-      variables: [],
-      type_alias: [],
-      count: 0
-    },
-    selected: "",
-    selHash: ""
-  },
-
-  methods: {
-    test: function( m ) {
-      this.message = m;
-    },
-
-    loadClass: function( mod, cls ) {
-      loadContents( mod+"_"+cls );
-    },
-
-    jumpTo: function( id) {
-      let elem = document.getElementById(id);
-      if (elem) {
-        elem.scrollIntoView(true);
-        selectJump( id );
-      }
-    },
-
-    md: function( s ) {
-      if (!s || typeof s !== "string") return "";
-      return marked( s );
-    },
-
-    source: function( s ) {
-      return (s && s.length > 0) ? `${sourceRoot}${s[0][0]}#L${s[0][1]}` : "#";
-    },
-
-    showSource: function( s ) {
-      var hide = !s || !s[0][0] || s[0][0].indexOf("node_modules") >= 0;
-      return !hide;
-    },
-
-    params: function( sig ) {
-      if (sig && sig[0]) {
-        var ls = [];
-        var ps = sig[0].parameters || [];
-        for (var i=0, len=ps.length; i<len; i++) {
-          ls.push( ps[i].name ); 
-        }
-        return ls.join(", ");
-      }
-      return ""
-    },
-
-    first: function( s ) {
-      return (s && s.length > 0) ? [s[0]] : [];
-    },
-
-    search: function( res, query ) {
-      app.searchResults = res;
-      app.searchQuery = query;
-      document.querySelector("#search").className = (query.length > 0) ? "searching" : "";
-    }
-  },
-
-  updated: function() {
-    if (this.selHash) {
-      this.jumpTo( this.selHash.substr(1) );
-      this.selHash = "";
-    }
-  }
-
-})
-
-
-function qs(name, limit, path) {
-  name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-  var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-      results = regex.exec( path ? path : location.search);
-  let q = (results === null) ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-  return clean_str( q, limit );
-}
-
-function clean_str( str, limit ) {
-  if (limit) str = str.substr(0, limit);
-  return str.replace( /[^a-zA-Z0-9._\$]/g, "_" );
-}
 
 function loadJSON( url, callback ) {
   var request = new XMLHttpRequest();
@@ -141,17 +42,9 @@ loadJSON( "./json/modules.json", (data, status) => {
 
   let qsel = qs("p", 40);
   if (qsel) {
-    loadContents( qsel );
+    loadContents( qsel, window.location.hash );
   } 
 });
-
-
-function getSearchResult( q ) {
-  let query = q.split(" ").join(".*\.");
-  query = query.replace("$", "\\$");
-  let res = _search.filter( (v) =>  v[1].search( new RegExp( query, "gi") ) >= 0 );
-  return res.sort( (a, b) => (b[3]*100-b[0].length) - (a[3]*100-a[0].length) ).slice(0, 50);
-}
 
 
 loadJSON( "./json/search.json", (data, status) => {
@@ -173,11 +66,138 @@ loadJSON( "./json/search.json", (data, status) => {
 
 });
 
-function sortInherited( a, b ) {
-  return (a.inherits ? 100000 : 0) - (b.inherits ? 100000 : 0) + a.name.localeCompare(b.name);
-} 
 
-function loadContents( id, reloading ) {
+
+
+var app = new Vue({
+  el: '#docapp',
+  
+  data: {
+    message: '',
+    modules: [],
+    searchResults: [],
+    searchQuery: "",
+    contents: { 
+      name: " ", 
+      constructor: {},
+      methods: [], 
+      accessors: [],
+      variables: [],
+      type_alias: [],
+      count: 0
+    },
+    selected: "",
+    selHash: ""
+  },
+
+  methods: {
+    test: function( m ) {
+      this.message = m;
+    },
+
+    loadClass: function( mod, cls ) {
+      loadContents( mod+"_"+cls );
+      document.querySelector("#contents").scrollTo(0,0);
+    },
+
+    jumpTo: function( id, ignoreHistory ) {
+      if (!id) {
+        document.querySelector("#contents").scrollTo(0,0);
+        return;
+      }
+      
+      let elem = document.getElementById(id);
+      if (elem) {
+        elem.scrollIntoView(true);
+        if (!ignoreHistory) setHistory( app.selected, id );
+      }
+    },
+
+    md: function( s ) {
+      if (!s || typeof s !== "string") return "";
+      return marked( s );
+    },
+
+    source: function( s ) {
+      return (s && s.length > 0) ? `${sourceRoot}${s[0][0]}#L${s[0][1]}` : "#";
+    },
+
+    showSource: function( s ) {
+      var hide = !s || !s[0][0] || s[0][0].indexOf("node_modules") >= 0;
+      return !hide;
+    },
+
+    params: function( sig ) {
+      if (sig && sig[0]) {
+        var ls = [];
+        var ps = sig[0].parameters || [];
+        for (var i=0, len=ps.length; i<len; i++) {
+          ls.push( ps[i].name ); 
+        }
+        return ls.join(", ");
+      }
+      return ""
+    },
+
+    first: function( s ) {
+      return (s && s.length > 0) ? [s[0]] : [];
+    },
+
+    search: function( res, query ) {
+      app.searchResults = res;
+      app.searchQuery = query;
+      document.querySelector("#search").className = (query.length > 0) ? "searching" : "";
+    },
+
+    clickTarget: function(evt) {
+      if (evt.target.tagName.toLowerCase() === "code" && evt.target.parentElement.getAttribute("href") === "#link") {
+        let res =  getSearchResult( evt.target.textContent );
+        evt.preventDefault();
+        evt.stopPropagation();
+        if (res && res[0]) {
+          let qsel = qs( "p", 40, "?p="+res[0][0]);
+          if (qsel) loadContents( qsel, qsHash(res[0][0]), false );
+        }
+        return false;
+      }
+    }
+  },
+
+  updated: function() {
+    if (this.selHash) {
+      this.jumpTo( this.selHash, true );
+    }
+  }
+
+})
+
+// ---
+
+function qs(name, limit, path) {
+  name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+  var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+      results = regex.exec( path ? path : location.search);
+  let q = (results === null) ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+  return clean_str( q, limit );
+}
+
+function qsHash( path ) {
+  let idx = path.lastIndexOf("#");
+  return (idx >= 0) ? path.substr( idx+1 ) : "";
+}
+
+function clean_str( str, limit ) {
+  if (limit) str = str.substr(0, limit);
+  return str.replace( /[^a-zA-Z0-9._\$]/g, "_" );
+}
+
+
+function loadContents( id, hash, reloading ) {
+
+  if (!id) return;
+  if (!hash) hash = "";
+  if (hash.indexOf("#") === 0) hash = hash.substr(1);
+  hash = clean_str(hash, 30);
   
   loadJSON( `./json/class/${id}.json`, (data, status) => {
     app.contents.name = data.name;
@@ -195,35 +215,63 @@ function loadContents( id, reloading ) {
     app.contents.type_alias = data.type_alias;
     app.contents.count = (app.contents.methods.length || 0) + (app.contents.accessors.length || 0) + (app.contents.variables.length || 0) + (app.contents.properties.length || 0);
 
-    if (window.location.hash) {
-      app.selHash = clean_str(window.location.hash, 30);
-    }
-
-    if (!reloading) selectState( id );
+    app.selected = id;
+    app.selHash = hash;
+    app.jumpTo( hash, reloading );
+  
+    if (!reloading) {
+      setHistory( id, hash );
+    } 
 
   });
 }
 
-function selectState( id, hash ) {
+
+
+function getSearchResult( q ) {
+  let query = q.split(" ").join(".*\.");
+  query = query.replace("$", "\\$");
+  let res = _search.filter( (v) =>  v[1].search( new RegExp( query, "gi") ) >= 0 );
+  return res.sort( (a, b) => (b[3]*100-b[0].length) - (a[3]*100-a[0].length) ).slice(0, 50);
+}
+
+
+
+function sortInherited( a, b ) {
+  return (a.inherits ? 100000 : 0) - (b.inherits ? 100000 : 0) + a.name.localeCompare(b.name);
+} 
+
+
+
+function getRoot() {
+  return window.location.protocol + "//" + window.location.host + window.location.pathname;
+}
+
+function setHistory( id, hash ) {
   app.selected = id;
   if (history.pushState) {
-    var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?p='+id;
-    window.history.pushState({path:newurl},'',newurl);
-    toggleMenu( false );
-    document.querySelector("#contents").scrollTo(0,0);
+    let pid = (id) ? '?p='+id : "";
+    if (pid.length > 0) {
+      var newurl = getRoot() + pid + (hash ? "#"+hash : "");
+      window.history.pushState({path:newurl},'',newurl);
+      toggleMenu( false );
+      if (!hash) document.querySelector("#contents").scrollTo(0,0);
+    }
   }
 }
 
-function selectJump( id ) {
-  if(history.pushState) {
-    history.pushState(null, null, '#'+id);
-    toggleMenu( false );
-  }
-  else {
-    location.hash = '#'+id;
+
+function resetContents() {
+  app.contents = { 
+    name: " ", 
+    constructor: {},
+    methods: [], 
+    accessors: [],
+    variables: [],
+    type_alias: [],
+    count: 0
   }
 }
-
 
 
 var _menu_toggle = false;
@@ -244,6 +292,12 @@ document.querySelector("#close").addEventListener("click", function() {
 
 // force reload on back button click
 window.addEventListener( "popstate", function ( event ) {
-  let qsel = qs("p", 40, event.state.path || null);
-  if (qsel) loadContents( qsel, true );
+  if (!event || !event.state || !event.state.path) {
+    resetContents();
+    setHistory("");
+  } else {
+    let qsel = qs("p", 40, event.state.path);
+    if (qsel) loadContents( qsel, qsHash( event.state.path ), true );
+  }
 });
+
