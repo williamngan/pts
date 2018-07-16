@@ -4,9 +4,8 @@
 
 import {MultiTouchSpace} from './Space';
 import {Form, VisualForm, Font} from "./Form";
-import {Bound} from './Bound';
 import {Util} from './Util';
-import {Pt} from './Pt';
+import {Pt, Bound} from './Pt';
 import {PtLike, GroupLike, IPlayer, DOMFormContext} from "./Types";
 
 

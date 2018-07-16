@@ -4,8 +4,7 @@
 
 import {MultiTouchSpace} from './Space';
 import {VisualForm, Font} from "./Form";
-import {Bound} from './Bound';
-import {Pt, Group} from "./Pt";
+import {Pt, Group, Bound} from "./Pt";
 import {Const} from "./Util";
 import {Typography as Typo} from "./Typography";
 import { Rectangle } from './Op';

@@ -1,5 +1,4 @@
-import {Pt, Group} from "./Pt";
-import {Bound} from "./Bound";
+import {Pt, Group, Bound} from "./Pt";
 import {Space} from "./Space";
 import {UI} from "./UI";
 

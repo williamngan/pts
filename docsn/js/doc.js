@@ -97,6 +97,7 @@ var app = new Vue({
 
     loadClass: function( mod, cls ) {
       loadContents( mod+"_"+cls );
+      document.querySelector("#members").scrollTo(0,0);
       document.querySelector("#contents").scrollTo(0,0);
     },
 

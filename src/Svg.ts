@@ -3,10 +3,9 @@
 
 
 import {VisualForm, Font} from "./Form";
-import {Bound} from './Bound';
 import {Geom} from './Num';
 import {Const} from './Util';
-import {Pt, Group} from './Pt';
+import {Pt, Group, Bound} from './Pt';
 import {Rectangle} from "./Op";
 import {DOMSpace} from "./Dom";
 import {PtLike, GroupLike, IPlayer, DOMFormContext} from "./Types";

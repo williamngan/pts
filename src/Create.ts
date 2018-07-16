@@ -2,9 +2,8 @@
 // Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 
 
-import {Pt, Group} from "./Pt";
+import {Pt, Group, Bound} from "./Pt";
 import {Line, Triangle} from "./Op";
-import {Bound} from "./Bound";
 import {Const} from "./Util";
 import {Num, Geom} from "./Num";
 import {Vec} from "./LinearAlgebra";

@@ -2,8 +2,7 @@
 // Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 
 
-import {Bound} from "./Bound";
-import {Pt} from "./Pt";
+import {Pt, Bound} from "./Pt";
 import {Form} from "./Form";
 import {UIPointerActions as UIA}  from "./UI";
 import {ITimer, ISpacePlayers, IPlayer, AnimateCallbackFn, IPt, TouchPointsKey} from "./Types";

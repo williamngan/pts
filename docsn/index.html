@@ -98,10 +98,27 @@
       <div id="contents" v-bind:class="{expanded: contents.count > 5}" v-on:click="clickTarget">
 
         <div v-if="contents.count == 0">
-          <h1>Documentation</h1>
+          <h1>Pts Docs</h1>
           <div class="top_info">
             <p>This page provides detailed typescript/javascript API documentation of Pts.js. If you're getting started, you may want to start with <a href="../guide/">the guides</a> and take a look at <a href="../demo">the demos</a> first.</p>
           </div>
+          <h4>Organization</h4>
+          <p>
+            Pts classes are organized into modules like this: Modules ⇢ Classes ⇢  Methods &amp; Accessors. <br /> 
+            For example, when using ES6 modules, you can access a Pts function this way:
+            <pre ><code><span class="keyword">import</span> <b>{Polygon}</b> <span class="keyword">from</span> "Op";
+              ...
+              <b>Polygon</b>.centroid( myPts );</code></pre>
+          </p>
+          <p>If you don't know what this means, don't worry about it. You can also link pts.js in your html and access all the classes directly. See the <a href="../guide/">getting started guide</a> for a quick example.</p>
+          <h4>Overview</h4>
+          <p>Here are some essential modules in Pts:</p>
+          <ul>
+            <li><strong>Pt module</strong> provides Pt and Group classes for manipulating points (ie, n-dimensional vectors).</li>
+            <li><strong>Op and Num modules</strong> provides various algorithms for numeric and geometric operations.</li>
+            <li><strong>Canvas module</strong> provides the corresponding Space and Form classes for html canvas. <strong>SVG module</strong> provide the same for SVG.</li>
+            <li>Check out other useful modules like <strong>Create</strong> and <strong>Color</strong></li>
+          </ul>
         </div>
 
         <h1>{{ contents.name }}</h1>

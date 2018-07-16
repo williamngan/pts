@@ -24,6 +24,14 @@ html * {
   display: none;
 }
 
+pre {
+  white-space: pre-line;
+  margin: 2em 0;
+}
+
+pre .keyword {
+  color: #0ca;
+}
 
 #header {
   font-size: 1.5em;

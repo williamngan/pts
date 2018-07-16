@@ -2,8 +2,7 @@
 // Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 
 
-import {Pt, Group} from "./Pt";
-import {Bound} from "./Bound";
+import {Pt, Group, Bound} from "./Pt";
 import { Polygon, Circle } from "./Op";
 import {PtLike, GroupLike} from "./Types";
 

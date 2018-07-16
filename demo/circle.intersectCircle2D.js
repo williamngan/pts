@@ -25,7 +25,7 @@ window.demoDescription = "A circle and a donut meets. Indicate their points of i
     form.fill( "#fe3" ).circle( c2 );
     form.fill( "rgba(70,30,240,.2)" ).circle( ct );
     form.fill( "rgba(70,30,240, .3)" ).points( ins1, 10, "circle" );
-    form.fill( "#42e" ).points( ins2, 5, "circle" );
+    form.fill( "#f06" ).points( ins2, 5, "circle" );
 
   });
   

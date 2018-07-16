@@ -1,4 +1,3 @@
-import * as _Bound from "./Bound";
 import * as _Canvas from "./Canvas";
 import * as _Create from "./Create";
 import * as _Form from "./Form";
@@ -50,7 +49,6 @@ module.exports = {
   namespace,
   quickStart,
   ..._types,
-  ..._Bound,
   ..._Canvas,
   ..._Create,
   ..._Form,
