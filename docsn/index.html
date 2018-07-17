@@ -50,7 +50,7 @@
             </div>
         </div>
 
-        <div id="members" v-bind:class="{collapsed: contents.count <= 5, searchResults: searchQuery.length > 0}">
+        <div id="members" v-bind:class="{collapsed: !expandMemberPane(), searchResults: searchQuery.length > 0}">
           <div v-if="searchResults.length > 0">
             <div v-for="s in searchResults" class="item">
               <a v-bind:href="'./?p='+s[0]">{{s[1]}}</a>
@@ -95,11 +95,12 @@
         <div id="close">&times;</div>
       </div>
       
-      <div id="contents" v-bind:class="{expanded: contents.count > 5}" v-on:click="clickTarget">
-        <div v-if="!contents.name">
+      <div id="contents" v-bind:class="{expanded: expandMemberPane()}" v-on:click="clickTarget">
+        <div v-if="contents.name.length < 2">
           <h1>Pts Docs</h1>
           <div class="top_info">
-            <p>This page provides detailed typescript/javascript API documentation of Pts.js. If you're getting started, you may want to start with <a href="../guide/">the guides</a> and take a look at <a href="../demo">the demos</a> first.</p>
+            <p>This page provides detailed typescript/javascript API documentation of Pts.js. It's intended for advanced users. </p>
+            <p>If you're getting started, read <a href="../guide/">the guides</a> and check out <a href="../demo">the demos</a> first.</p>
           </div>
           <h4>Organization</h4>
           <p>
@@ -244,7 +245,7 @@
                   <div class="info">
                     <div v-for="p in s.parameters">
                       <span><span class="paramdef">{{ p.name }}</span>: <span class="typedef">{{ p.type }}</span></span> 
-                      <div v-html="md(p.comment)"></div>
+                      <div v-html="md(p.comment) || '<p></p>'"></div>
                     </div>
                   </div>
                 </div>

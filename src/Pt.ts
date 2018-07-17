@@ -903,7 +903,7 @@ export class Bound extends Group implements IPt {
 
   
   /**
-   * Create a Bound. This is similar to the Group constructor. You can also create a Bound via the static function [`Color.from`](#link).
+   * Create a Bound. This is similar to the Group constructor. You can also create a Bound via the static function [`Bound.fromGroup`](#link).
    * @param args a list of Pt as parameters
    * @see Bound.fromGroup
    */

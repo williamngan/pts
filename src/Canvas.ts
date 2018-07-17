@@ -14,7 +14,7 @@ import {PtLike, GroupLike, PtsCanvasRenderingContext2D} from "./Types";
 
 
 /**
-* CanvasSpace is an implementation of the abstract class Space. It represents a space for HTML Canvas.
+* CanvasSpace is an implementation of the abstract class [`Space`](#link). It represents a space for HTML Canvas.
 * Learn more about the concept of Space in [this guide](..guide/Space-0500.html).
 */
 export class CanvasSpace extends MultiTouchSpace {
@@ -183,10 +183,11 @@ export class CanvasSpace extends MultiTouchSpace {
   get autoResize(): boolean { return this._autoResize; }
   
   
-    /**
-  * This overrides Space's `resize` function. It's used as a callback function for window's resize event and not usually called directly. You can keep track of resize events with `resize: (bound ,evt)` callback in your player objects (See `Space`'s `add()` function). 
+  /**
+  * This overrides Space's `resize` function. It's used as a callback function for window's resize event and not usually called directly. You can keep track of resize events with `resize: (bound ,evt)` callback in your player objects. 
   * @param b a Bound object to resize to
   * @param evt Optionally pass a resize event
+  * @see Space.add
   */
   resize( b:Bound, evt?:Event):this {
     
@@ -362,7 +363,7 @@ export class CanvasSpace extends MultiTouchSpace {
   
   
   /**
-  * Main animation function. Call `Space.playItems`.
+  * Main animation function.
   * @param time current time
   */
   protected playItems( time: number ) {
@@ -385,7 +386,7 @@ export class CanvasSpace extends MultiTouchSpace {
 
 
 /**
-* CanvasForm is an implementation of abstract class VisualForm. It provide methods to express Pts on CanvasSpace.   
+* CanvasForm is an implementation of abstract class [`VisualForm`](#link). It provide methods to express Pts on [`CanvasSpace`](#link).   
 * You may extend CanvasForm to implement your own expressions for CanvasSpace.
 */
 export class CanvasForm extends VisualForm {
@@ -404,7 +405,7 @@ export class CanvasForm extends VisualForm {
   
   
   /**
-  * Create a new CanvasForm. You may also use `space.getForm()` to get the default form.
+  * Create a new CanvasForm. You may also use [`CanvasSpace.getForm()`](#link) to get the default form.
   * @param space an instance of CanvasSpace
   */
   constructor( space:CanvasSpace ) {
@@ -453,7 +454,7 @@ export class CanvasForm extends VisualForm {
     
     
     /**
-    * Set current fill style. Provide a valid color string or `false` to specify no fill color.
+    * Set current fill style. Provide a valid color string such as `"#FFF"` or `"rgba(255,0,100,0.5)"` or `false` to specify no fill color.
     * @example `form.fill("#F90")`, `form.fill("rgba(0,0,0,.5")`, `form.fill(false)`
     * @param c fill color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle))
     */
@@ -945,8 +946,8 @@ export class CanvasForm extends VisualForm {
 
     /**
      * Set text alignment and baseline (eg, vertical-align)
-     * @param alignment Canvas' textAlign option: "left", "right", "center", "start", or "end"
-     * @param baseline Canvas' textBaseline option: "top", "hanging", "middle", "alphabetic", "ideographic", "bottom". For convenience, you can also use "center" (same as "middle"), and "baseline" (same as "alphabetic")
+     * @param alignment HTML canvas' textAlign option: "left", "right", "center", "start", or "end"
+     * @param baseline HTML canvas' textBaseline option: "top", "hanging", "middle", "alphabetic", "ideographic", "bottom". For convenience, you can also use "center" (same as "middle"), and "baseline" (same as "alphabetic")
      */
     alignText( alignment:string="left", baseline:string="alphabetic") {
       if (baseline == "center") baseline = "middle";

@@ -304,6 +304,7 @@ code {
   overflow: auto;
   padding: 10px 50px;
   box-sizing: border-box;
+  margin-bottom: 100px;
 }
 
 
@@ -351,14 +352,18 @@ code {
 #contents p {
   max-width: 700px;
   margin-bottom: 0;
-  font-size: 1em;
+  font-size: 13px;
 }
 
 #contents .top_info {
   margin-top: 0.5em;
   margin-bottom: 7px;
-  font-size: 1.6em;
   line-height: 1.35;
+}
+
+#contents .top_info p {
+  font-size: 1.6em;
+  margin-bottom: 0.5em;
 }
 
 #contents .misc {
@@ -377,6 +382,7 @@ code {
 #contents .signature p {
   margin-bottom: 10px;
   line-height: 1.4;
+  font-size: 13px;
 }
 
 #contents h4 {

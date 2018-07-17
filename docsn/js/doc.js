@@ -78,7 +78,7 @@ var app = new Vue({
     searchResults: [],
     searchQuery: "",
     contents: { 
-      name: " ", 
+      name: "", 
       constructor: {},
       methods: [], 
       accessors: [],
@@ -148,6 +148,11 @@ var app = new Vue({
       app.searchResults = res;
       app.searchQuery = query;
       document.querySelector("#search").className = (query.length > 0) ? "searching" : "";
+    },
+
+    expandMemberPane: function() {
+      if (!app || !app.contents) return false;
+      return app.contents.count > 5 || app.searchQuery.length > 0;
     },
 
     clickTarget: function(evt) {

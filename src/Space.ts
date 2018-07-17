@@ -45,7 +45,7 @@ export abstract class Space {
   
   
   /**
-  * Add an IPlayer to this space. An IPlayer can define the following callback functions:    
+  * Add an [`IPlayer`](#link) or an [`AnimateCallbackFn`](#link) to this space. An IPlayer can define the following callback functions:    
   * - `animate( time, ftime, space )`
   * - `start(bound, space)`   
   * - `resize( size, event )`
@@ -91,7 +91,7 @@ export abstract class Space {
   
   /**
   * Main play loop. This implements window.requestAnimationFrame and calls it recursively. 
-  * Override this `play()` function to implemenet your own animation loop.
+  * You may override this `play()` function to implemenet your own animation loop.
   * @param time current time
   */
   play( time=0 ):this {
@@ -319,7 +319,7 @@ export abstract class MultiTouchSpace extends Space {
   /**
   * A convenient method to bind (or unbind) all mouse events in canvas element. All "players" added to this space that implements an `action` callback property will receive mouse event callbacks. The types of mouse actions are defined by UIPointerActions constants: "up", "down", "move", "drag", "drop", "over", and "out". See `Space`'s `add()` function for more details.
   * @param _bind a boolean value to bind mouse events if set to `true`. If `false`, all mouse events will be unbound. Default is true.
-  * @see Space`'s [`add`](./_space_.space.html#add) function
+  * @see [`Space.add`](#link) 
   */
   bindMouse( _bind:boolean=true ):this {
     if ( _bind) {
@@ -344,7 +344,7 @@ export abstract class MultiTouchSpace extends Space {
   /**
   * A convenient method to bind (or unbind) all touch events in canvas element. All "players" added to this space that implements an `action` callback property will receive mouse event callbacks. The types of mouse actions are: "up", "down", "move", "drag", "drop", "over", and "out". 
   * @param _bind a boolean value to bind touch events if set to `true`. If `false`, all mouse events will be unbound. Default is true.
-  * @see Space`'s [`add`](./_space_.space.html#add) function
+  * @see [`Space.add`](#link)
   */
   bindTouch( _bind:boolean=true ):this {
     if (_bind) {
