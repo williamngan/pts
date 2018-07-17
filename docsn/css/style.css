@@ -33,6 +33,10 @@ pre .keyword {
   color: #0ca;
 }
 
+p {
+  font-size: 1.1em;
+}
+
 #header {
   font-size: 1.5em;
   letter-spacing: 0;
@@ -120,6 +124,16 @@ pre .keyword {
 #docapp a:hover {
   text-decoration: underline;
   color: #42e;
+}
+
+#docapp a > code {
+  text-decoration: underline;
+}
+
+#docapp a > code:hover {
+  
+  color: #42e;
+  cursor: pointer;
 }
 
 
@@ -310,6 +324,7 @@ code {
   flex-direction: row;
   max-width: 700px;
   font-size: 1.1em;
+  
 }
 
 #contents .signature > .label {
@@ -335,8 +350,8 @@ code {
 
 #contents p {
   max-width: 700px;
-  font-size: 1.1em;
   margin-bottom: 0;
+  font-size: 1em;
 }
 
 #contents .top_info {

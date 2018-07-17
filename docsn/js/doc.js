@@ -152,15 +152,15 @@ var app = new Vue({
 
     clickTarget: function(evt) {
       if (evt.target.tagName.toLowerCase() === "code" && evt.target.parentElement.getAttribute("href") === "#link") {
-        let res =  getSearchResult( evt.target.textContent );
         evt.preventDefault();
         evt.stopPropagation();
-        if (res && res[0]) {
-          let qsel = qs( "p", 40, "?p="+res[0][0]);
-          if (qsel) loadContents( qsel, qsHash(res[0][0]), false );
-        }
+        app.codeLink( evt.target.textContent );
         return false;
       }
+    },
+
+    codeLink: function(q) {
+      loadFirstResult( q );
     }
   },
 
@@ -209,15 +209,16 @@ function loadContents( id, hash, reloading ) {
     app.contents.implements = data.implements;
     
     app.contents.constructor = data.constructor;
-    app.contents.methods = data.methods.sort( sortInherited );
-    app.contents.accessors = data.accessors.sort( sortInherited );;
-    app.contents.variables = data.variables.sort( sortInherited );;
-    app.contents.properties = data.properties.sort( sortInherited );;
-    app.contents.type_alias = data.type_alias;
-    app.contents.count = (app.contents.methods.length || 0) + (app.contents.accessors.length || 0) + (app.contents.variables.length || 0) + (app.contents.properties.length || 0);
+    app.contents.methods = (data.methods) ? data.methods.sort( sortInherited ) : [];
+    app.contents.accessors = (data.accessors) ? data.accessors.sort( sortInherited ) : [];
+    app.contents.variables = (data.variables) ? data.variables.sort( sortInherited ) : [];
+    app.contents.properties = (data.variables) ? data.variables.sort( sortInherited ) : [];
+    app.contents.type_alias = data.type_alias || [];
+    app.contents.count = (app.contents.methods.length || 0) + (app.contents.accessors.length || 0) + (app.contents.variables.length || 0) + (app.contents.properties.length || 0) + (app.contents.type_alias.length || 0);
 
     app.selected = id;
     app.selHash = hash;
+
     app.jumpTo( hash, reloading );
   
     if (!reloading) {
@@ -231,12 +232,25 @@ function loadContents( id, hash, reloading ) {
 
 function getSearchResult( q ) {
   let query = q.split(" ").join(".*\.");
-  query = query.replace("$", "\\$");
-  let res = _search.filter( (v) =>  v[1].search( new RegExp( query, "gi") ) >= 0 );
+  query = query.replace(/[^\w\$\.]/gi, " ");
+  let res = _search.filter( (v) =>  v[1].search( new RegExp( query.trim(), "gi") ) >= 0 );
   return res.sort( (a, b) => (b[3]*100-b[0].length) - (a[3]*100-a[0].length) ).slice(0, 50);
 }
 
+function loadFirstResult( q ) {
+  let skips = ["number", "boolean", "this", "string", "object", "void", "any", "Fn"];
+  for (let i=0, len=skips.length; i<len; i++) {
+    if (q.indexOf(skips[i]) === 0) return;
+  }
 
+  if (q.indexOf(" | ")) q = q.split(" ")[0];
+
+  let res = getSearchResult( q );
+  if (res && res[0]) {
+    let qsel = qs( "p", 40, "?p="+res[0][0]);
+    if (qsel) loadContents( qsel, qsHash(res[0][0]), false );
+  }
+}
 
 function sortInherited( a, b ) {
   return (a.inherits ? 100000 : 0) - (b.inherits ? 100000 : 0) + a.name.localeCompare(b.name);
@@ -248,8 +262,18 @@ function getRoot() {
   return window.location.protocol + "//" + window.location.host + window.location.pathname;
 }
 
+var lastHistory = ""
+
 function setHistory( id, hash ) {
+  
+  if (id+hash === lastHistory) {
+    return;
+  } else {
+    lastHistory = id+hash;
+  }
+
   app.selected = id;
+
   if (history.pushState) {
     let pid = (id) ? '?p='+id : "";
     if (pid.length > 0) {

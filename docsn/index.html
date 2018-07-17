@@ -96,8 +96,7 @@
       </div>
       
       <div id="contents" v-bind:class="{expanded: contents.count > 5}" v-on:click="clickTarget">
-
-        <div v-if="contents.count == 0">
+        <div v-if="!contents.name">
           <h1>Pts Docs</h1>
           <div class="top_info">
             <p>This page provides detailed typescript/javascript API documentation of Pts.js. If you're getting started, you may want to start with <a href="../guide/">the guides</a> and take a look at <a href="../demo">the demos</a> first.</p>
@@ -112,7 +111,7 @@
           </p>
           <p>If you don't know what this means, don't worry about it. You can also link pts.js in your html and access all the classes directly. See the <a href="../guide/">getting started guide</a> for a quick example.</p>
           <h4>Overview</h4>
-          <p>Here are some essential modules in Pts:</p>
+          <p>Pts provides you with essential building blocks for creative coding and visualization.</p>
           <ul>
             <li><strong>Pt module</strong> provides Pt and Group classes for manipulating points (ie, n-dimensional vectors).</li>
             <li><strong>Op and Num modules</strong> provides various algorithms for numeric and geometric operations.</li>
@@ -244,7 +243,7 @@
                   <div class="label">parameters</div>
                   <div class="info">
                     <div v-for="p in s.parameters">
-                      <span><span class="paramdef">{{ p.name }}</span>: <span class="typedef">{{ p.type}}</span></span> 
+                      <span><span class="paramdef">{{ p.name }}</span>: <span class="typedef">{{ p.type }}</span></span> 
                       <div v-html="md(p.comment)"></div>
                     </div>
                   </div>
@@ -266,7 +265,7 @@
 
                 <div v-for="se in s.tags" class="signature tags">
                     <div class="label">{{se.tag}}</div>
-                    <div class="info">{{ md(se.text) }}</div>
+                    <div class="info" v-html="md(se.text)"></div>
                 </div>
               
               </div>
