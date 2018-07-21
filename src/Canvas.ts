@@ -505,7 +505,7 @@ export class CanvasForm extends VisualForm {
     
     
     /**
-    * Set the current font 
+    * Set the current font.
     * @param sizeOrFont either a number to specify font-size, or a `Font` object to specify all font properties
     * @param weight Optional font-weight string such as "bold"
     * @param style Optional font-style string such as "italic"
@@ -535,7 +535,7 @@ export class CanvasForm extends VisualForm {
 
 
     /**
-     * Set whether to use ctx.measureText or a faster but less accurate heuristic function.
+     * Set whether to use html canvas' [`measureText`](#link) function, or a faster but less accurate heuristic function.
      * @param estimate `true` to use heuristic function, or `false` to use ctx.measureText
      */
     fontWidthEstimate( estimate:boolean=true ):this {
@@ -545,7 +545,7 @@ export class CanvasForm extends VisualForm {
 
 
     /**
-     * Get the width of this text. It will return an actual measurement or an estimate based on `fontWidthEstimate` setting. Default is an actual measurement using canvas context's measureText.
+     * Get the width of this text. It will return an actual measurement or an estimate based on [`fontWidthEstimate`](#link) setting. Default is an actual measurement using canvas context's measureText.
      * @param c a string of text contents
      */
     getTextWidth(c:string):number {
@@ -554,7 +554,7 @@ export class CanvasForm extends VisualForm {
 
 
     /**
-     * Truncate text to fit width
+     * Truncate text to fit width.
      * @param str text to truncate
      * @param width width to fit
      * @param tail text to indicate overflow such as "...". Default is empty "".
@@ -565,7 +565,7 @@ export class CanvasForm extends VisualForm {
 
 
     /**
-     * Align text within a rectangle box
+     * Align text within a rectangle box.
      * @param box a Group that defines a rectangular box
      * @param vertical a string that specifies the vertical alignment in the box: "top", "bottom", "middle", "start", "end"
      * @param offset Optional offset from the edge (like padding)
@@ -614,7 +614,7 @@ export class CanvasForm extends VisualForm {
     
     
     /**
-    * Draws a point
+    * Draws a point.
     * @param p a Pt object
     * @param radius radius of the point. Default is 5.
     * @param shape The shape of the point. Defaults to "square", but it can be "circle" or a custom shape function in your own implementation.
@@ -632,7 +632,7 @@ export class CanvasForm extends VisualForm {
     
     
     /**
-    * A static function to draw a circle
+    * A static function to draw a circle.
     * @param ctx canvas rendering context
     * @param pt center position of the circle
     * @param radius radius of the circle
@@ -646,7 +646,7 @@ export class CanvasForm extends VisualForm {
     
     
     /**
-    * Draw a circle
+    * Draw a circle.
     * @param pts usually a Group of 2 Pts, but it can also take an array of two numeric arrays [ [position], [size] ]
     * @see [`Circle.fromCenter`](./_op_.circle.html#frompt)
     */
@@ -689,7 +689,7 @@ export class CanvasForm extends VisualForm {
     
     
     /**
-    * A static function to draw a square 
+    * A static function to draw a square.
     * @param ctx canvas rendering context
     * @param pt center position of the square
     * @param halfsize half size of the square
@@ -712,7 +712,7 @@ export class CanvasForm extends VisualForm {
     
     
     /**
-     * Draw a square, given a center and its half-size
+     * Draw a square, given a center and its half-size.
      * @param pt center Pt
      * @param halfsize half-size
      */
@@ -724,7 +724,7 @@ export class CanvasForm extends VisualForm {
 
     
     /**
-    * A static function to draw a line
+    * A static function to draw a line or polyline.
     * @param ctx canvas rendering context
     * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
     */
@@ -739,7 +739,7 @@ export class CanvasForm extends VisualForm {
     
     
     /**
-    * Draw a line or polyline
+    * Draw a line or polyline.
     * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
     */
     line( pts:GroupLike|number[][] ):this {
@@ -750,7 +750,7 @@ export class CanvasForm extends VisualForm {
     
     
     /**
-    * A static function to draw polygon
+    * A static function to draw a polygon.
     * @param ctx canvas rendering context
     * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
     */
@@ -766,7 +766,7 @@ export class CanvasForm extends VisualForm {
     
     
     /**
-    * Draw a polygon
+    * Draw a polygon.
     * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
     */
     polygon( pts:GroupLike|number[][] ):this {
@@ -777,7 +777,7 @@ export class CanvasForm extends VisualForm {
     
     
     /**
-    * A static function to draw a rectangle
+    * A static function to draw a rectangle.
     * @param ctx canvas rendering context
     * @param pts usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.
     */
@@ -793,7 +793,7 @@ export class CanvasForm extends VisualForm {
     
     
     /**
-    * Draw a rectangle
+    * Draw a rectangle.
     * @param pts usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.
     */
     rect( pts:number[][]|Pt[] ):this {
@@ -804,9 +804,9 @@ export class CanvasForm extends VisualForm {
 
 
     /**
-     * A static function to draw an image
+     * A static function to draw an image.
      * @param ctx canvas rendering context
-     * @param img an image source (eg the image from `<img>`, `<video>` or `<canvas>`)
+     * @param img an [`ImageBitmap`](https://developer.mozilla.org/en-US/docs/Web/API/ImageBitmap) instance (eg the image from `<img>`, `<video>` or `<canvas>`)
      * @param target a target area to place the image. Either a Pt specifying a position, or a Group that specifies a bounding box (top-left position, bottom-right position). Default is (0,0) at top-left.
      * @param orig a Group (top-left position, bottom-right position) that specifies a cropping box  in the original target. 
      */
@@ -829,8 +829,8 @@ export class CanvasForm extends VisualForm {
     
     
     /**
-    * Draw an image
-    * @param img an image source (eg the image from `<img>`, `<video>` or `<canvas>`)
+    * Draw an image.
+    * @param img an [`ImageBitmap`](https://developer.mozilla.org/en-US/docs/Web/API/ImageBitmap) instance (eg the image from `<img>`, `<video>` or `<canvas>`)
     * @param target a target area to place the image. Either a Pt specifying a position, or a Group that specifies a bounding box (top-left position, bottom-right position). Default is (0,0) at top-left.
     * @param orig a Group (top-left position, bottom-right position) that specifies a cropping box  in the original target. 
     */
@@ -841,7 +841,7 @@ export class CanvasForm extends VisualForm {
       
     
     /**
-    * A static function to draw text
+    * A static function to draw text.
     * @param ctx canvas rendering context
     * @param `pt` a Point object to specify the anchor point
     * @param `txt` a string of text to draw
@@ -854,7 +854,7 @@ export class CanvasForm extends VisualForm {
     
     
     /**
-    * Draw text on canvas
+    * Draw text on canvas.
     * @param `pt` a Pt or numeric array to specify the anchor point
     * @param `txt` text
     * @param `maxWidth` specify a maximum width per line
@@ -866,7 +866,7 @@ export class CanvasForm extends VisualForm {
     
 
     /**
-     * Fit a single-line text in a rectangular box
+     * Fit a single-line text in a rectangular box.
      * @param box a rectangle box defined by a Group
      * @param txt string of text
      * @param tail text to indicate overflow such as "...". Default is empty "".
@@ -945,7 +945,7 @@ export class CanvasForm extends VisualForm {
 
 
     /**
-     * Set text alignment and baseline (eg, vertical-align)
+     * Set text alignment and baseline (eg, vertical-align).
      * @param alignment HTML canvas' textAlign option: "left", "right", "center", "start", or "end"
      * @param baseline HTML canvas' textBaseline option: "top", "hanging", "middle", "alphabetic", "ideographic", "bottom". For convenience, you can also use "center" (same as "middle"), and "baseline" (same as "alphabetic")
      */

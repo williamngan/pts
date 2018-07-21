@@ -9,7 +9,7 @@ import {PtLike, ColorType} from "./Types";
 
 
 /**
- * Color is a subclass of Pt. You can think of a color as a point in a color space. The Color class provides support for many color spaces.
+ * Color is a subclass of Pt. Since a color in a color space is analogous to a point or vector in a space, you can apply all Pt operations to colors too. The Color class provides support for many color spaces like HSL and LAB.
  */
 export class Color extends Pt {
 
@@ -33,7 +33,7 @@ export class Color extends Pt {
   };
 
   /**
-   * Create a Color. Same as creating a Pt.
+   * Create a Color. Same as creating a Pt. Optionally you may use [`Color.from`](#link) to create a color.
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
    */
   constructor( ...args ) {
@@ -42,7 +42,7 @@ export class Color extends Pt {
 
 
   /**
-   * Create a Color object with defaults to 4 dimensions
+   * Create a Color object with 4 default dimensional values (1,1,1,1).
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
    */
   static from( ...args ):Color {
@@ -56,7 +56,7 @@ export class Color extends Pt {
 
 
   /**
-   * Convert a rgb hex string like #FF0000 or #F00 to a Color object
+   * Convert a rgb hex string like `"#FF0000"` or `"#F00"` to a Color object.
    * @param hex a hex string, with optional '#' prefix
    */
   static fromHex( hex:string ):Color {
@@ -80,50 +80,50 @@ export class Color extends Pt {
 
 
   /**
-   * Create RGB Color
+   * Create RGB Color. RGB color ranges are (0...255, 0...255, 0...255) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
   static rgb( ...args ):Color { return Color.from( ...args ).toMode( "rgb" ); }
   
   /**
-   * Create HSL Color
+   * Create HSL Color. HSL color ranges are (0...360, 0...1, 0...1) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
   static hsl( ...args ):Color { return Color.from( ...args ).toMode( "hsl" ); }
 
   /**
-   * Create HSB Color
+   * Create HSB Color. HSB color ranges are (0...360, 0...1, 0...1) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
   static hsb( ...args ):Color { return Color.from( ...args ).toMode( "hsb" ); }
   
   /**
-   * Create LAB Color
+   * Create LAB Color. LAB color ranges are (0...100, -128...127, -128...127) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
   static lab( ...args ):Color { return Color.from( ...args ).toMode( "lab" ); }
 
   /**
-   * Create LCH Color
+   * Create LCH Color. LCH color ranges are (0...100, 0...100, 0...360) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
   static lch( ...args ):Color { return Color.from( ...args ).toMode( "lch" ); }
 
   /**
-   * Create LUV Color
+   * Create LUV Color. LUV color ranges are (0...100, -134...220, -140...122) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
   static luv( ...args ):Color { return Color.from( ...args ).toMode( "luv" ); }
 
   /**
-   * Create XYZ Color
+   * Create XYZ Color. XYZ color ranges are (0...100, 0...100, 0...100) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.
    * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
    */
   static xyz( ...args ):Color { return Color.from( ...args ).toMode( "xyz" ); }
 
 
   /**
-   * Get a Color object whose values are the maximum of its mode
+   * Get a Color object whose values are the maximum of its mode.
    * @param mode a mode string such as "rgb" or "lab"
    * @example Color.maxValue("rgb") will return a rgb Color object with values (255,255,255)
    */
@@ -131,23 +131,23 @@ export class Color extends Pt {
 
 
   /**
-   * Get a hex string such as "#FF0000". Same as `toString("hex")`
+   * Get a hex string such as "#FF0000". Same as `toString("hex")`.
    */
   public get hex():string { return this.toString("hex"); }
   
   /**
-   * Get a rgb string such as "rgb(255,0,0)". Same as `toString("rgb")`
+   * Get a rgb string such as "rgb(255,0,0)". Same as `toString("rgb")`.
    */
   public get rgb():string { return this.toString("rgb"); }
 
   /**
-   * Get a rgba string such as "rgb(255,0,0,0.5)". Same as `toString("rgba")`
+   * Get a rgba string such as "rgb(255,0,0,0.5)". Same as `toString("rgba")`.
    */
   public get rgba():string { return this.toString("rgba"); }
   
 
   /**
-   * Clone this Color
+   * Clone this Color.
    */
   clone():Color {
     let c = new Color( this );
@@ -156,7 +156,7 @@ export class Color extends Pt {
   }
 
   /**
-   * Convert this color from current color space to another color space
+   * Convert this color from current color space to another color space.
    * @param mode a ColorType string: "rgb" "hsl" "hsb" "lab" "lch" "luv" "xyz";
    * @param convert if `true`, convert this Color to the new color space specified in `mode`. Default is `false`, which only sets the color mode without converting color values.
    */
@@ -177,31 +177,49 @@ export class Color extends Pt {
 
 
   /**
-   * Get this Color's mode
+   * Get this Color's mode.
    */
   get mode():ColorType { return this._mode; }
 
 
   // rgb
+  /**
+   * the `r` value in RGB color mode. Same as `x`.
+   */
   get r():number { return this[0]; }
   set r( n:number ) { this[0] = n; }
 
+  /**
+   * the `g` value in RGB color mode. Same as `y`.
+   */
   get g():number { return this[1]; }
   set g( n:number ) { this[1] = n; }
 
-  get b():number { return this[1]; }
+  /**
+   * the `b` value in RGB/LAB/HSB color mode. Same as `z`.
+   */
+  get b():number { return this[2]; }
   set b( n:number ) { this[2] = n; }
 
   // hsl, hsb
+  /**
+   * the `h` value in HSL/HSB or LCH color mode. Same as either `x` or `z` depending on current color mode.
+   */
   get h():number { return (this._mode == "lch") ? this[2] : this[0]; }
   set h( n:number ) { 
     let i = (this._mode == "lch") ? 2 : 0; 
     this[i] = n;
   }
 
+  /**
+   * the `s` value in HSL/HSB color mode. Same as `y`.
+   */
   get s():number { return this[1]; }
   set s( n:number ) { this[1] = n; }
 
+  /**
+   * the `l` value in HSL or LCH/LAB color mode. Same as either `x` or `z` depending on current color mode.
+   */
   get l():number { return (this._mode == "hsl") ? this[2] : this[0]; }
   set l( n:number ) { 
     let i = (this._mode == "hsl") ? 2 : 0; 
@@ -209,16 +227,28 @@ export class Color extends Pt {
   }
 
   // lab, lch, luv
+  /**
+   * the `a` value in LAB color mode. Same as `y`.
+   */
   get a():number { return this[1]; }
   set a( n:number ) { this[1] = n; }
 
+  /**
+   * the `c` value in LCH color mode. Same as `y`.
+   */
   get c():number { return this[1]; }
   set c( n:number ) { this[1] = n; }
 
+  /**
+   * the `u` value in LUV color mode. Same as `y`.
+   */
   get u():number { return this[1]; }
   set u( n:number ) { this[1] = n; }
 
-  get v():number { return this[1]; }
+  /**
+   * the `v` value in LUV color mode. Same as `z`.
+   */
+  get v():number { return this[2]; }
   set v( n:number ) { this[2] = n; }
 
 
@@ -228,18 +258,14 @@ export class Color extends Pt {
   get alpha():number { return (this.length > 3) ? this[3] : 1; }
 
   /**
-   * Get whether the color values are normalized between 0 to 1
+   * Check if color values are normalized (between 0 to 1). If conversion is needed, use [`Color.normalize`](#link) function.
    */
   get normalized():boolean { return this._isNorm; }
-
-  /**
-   * Set color values as normalized or not. If conversion is needed, use `normalize()` function instead
-   */
   set normalized( b:boolean ) { this._isNorm = b; }
 
 
   /**
-   * Normalize the color values to between 0 to 1, or revert it back to the min/max values in current color mode
+   * Normalize the color values to between 0 to 1, or revert it back to the min/max values in current color mode.
    * @param toNorm a boolean value specifying whether to normalize (`true`) or revert (`false`)
    */
   normalize( toNorm:boolean=true ):Color {
@@ -260,7 +286,7 @@ export class Color extends Pt {
 
 
   /**
-   * Like `normalize()` but returns as a new Color
+   * Like `normalize()` but returns a new Color.
    * @param toNorm a boolean value specifying whether to normalize (`true`) or revert (`false`)
    * @returns new Color
    */
@@ -268,7 +294,7 @@ export class Color extends Pt {
 
 
   /**
-   * Convert this Color to a string. It can be used to get a hex or rgb string for use in rendering
+   * Convert this Color to a string. It can be used to get a hex or rgb string for use in rendering.
    * @param format "hex", "rgb", "rgba", or "mode" which means using current color mode label. Default is "mode".
    */
   toString( format:("hex"|"rgb"|"rgba"|"mode")="mode" ):string {
@@ -292,7 +318,7 @@ export class Color extends Pt {
 
 
   /**
-   * Convert RGB to HSL
+   * A static function to convert RGB to HSL.
    * @param rgb a RGB Color
    * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
    * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
@@ -328,7 +354,7 @@ export class Color extends Pt {
   }
 
   /**
-   * Convert HSL to RGB
+   * A static function to convert HSL to RGB.
    * @param hsl a HSL Color
    * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
    * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
@@ -368,7 +394,7 @@ export class Color extends Pt {
   }
   
   /**
-   * Convert RGB to HSB
+   * A static function to convert RGB to HSB.
    * @param rgb a RGB Color
    * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
    * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
@@ -399,7 +425,7 @@ export class Color extends Pt {
 
 
   /**
-   * Convert HSB to RGB
+   * A static function to convert HSB to RGB.
    * @param hsb a HSB Color
    * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
    * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
@@ -431,8 +457,8 @@ export class Color extends Pt {
     );
   }
 
-    /**
-   * Convert RGB to LAB
+  /**
+   * A static function to convert RGB to LAB.
    * @param rgb a RGB Color
    * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
    * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
@@ -445,7 +471,7 @@ export class Color extends Pt {
 
 
   /**
-   * Convert LAB to RGB
+   * A static function to convert LAB to RGB.
    * @param lab a LAB Color
    * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
    * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
@@ -458,7 +484,7 @@ export class Color extends Pt {
 
 
   /**
-   * Convert RGB to LCH
+   * A static function to convert RGB to LCH.
    * @param rgb a RGB Color
    * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
    * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
@@ -471,7 +497,7 @@ export class Color extends Pt {
   
 
   /**
-   * Convert LCH to RGB
+   * A static function to convert LCH to RGB.
    * @param lch a LCH Color
    * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
    * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
@@ -484,7 +510,7 @@ export class Color extends Pt {
 
 
   /**
-   * Convert RGB to LUV
+   * A static function to convert RGB to LUV.
    * @param rgb a RGB Color
    * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
    * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
@@ -497,7 +523,7 @@ export class Color extends Pt {
 
 
   /**
-   * Convert LUV to RGB
+   * A static function to convert LUV to RGB.
    * @param rgb a RGB Color
    * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
    * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
@@ -510,7 +536,7 @@ export class Color extends Pt {
 
 
   /**
-   * Convert RGB to XYZ
+   * A static function to convert RGB to XYZ.
    * @param rgb a RGB Color
    * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
    * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
@@ -536,7 +562,7 @@ export class Color extends Pt {
 
 
   /**
-   * Convert XYZ to RGB
+   * A static function to convert XYZ to RGB.
    * @param xyz a XYZ Color
    * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
    * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
@@ -564,7 +590,7 @@ export class Color extends Pt {
 
 
   /**
-   * Convert XYZ to LAB
+   * A static function to convert XYZ to LAB.
    * @param xyz a XYZ Color
    * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
    * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
@@ -589,7 +615,7 @@ export class Color extends Pt {
   }
 
   /**
-   * Convert LAB to XYZ
+   * A static function to convert LAB to XYZ.
    * @param lab a LAB Color
    * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
    * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
@@ -624,7 +650,7 @@ export class Color extends Pt {
 
 
   /**
-   * Convert XYZ to LUV
+   * A static function to convert XYZ to LUV.
    * @param xyz a XYZ Color
    * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
    * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
@@ -649,7 +675,7 @@ export class Color extends Pt {
 
 
   /**
-   * Convert LUV to XYZ
+   * A static function to convert LUV to XYZ.
    * @param luv a LUV Color
    * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
    * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
@@ -676,7 +702,7 @@ export class Color extends Pt {
 
 
   /**
-   * Convert LAB to LCH
+   * A static function to convert LAB to LCH.
    * @param lab a LAB Color
    * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
    * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
@@ -692,7 +718,7 @@ export class Color extends Pt {
 
 
   /**
-   * Convert LCH to LAB
+   * A static function to convert LCH to LAB.
    * @param lch a LCH Color
    * @param normalizedInput a boolean specifying whether input color is normalized. Default is not normalized: `false`.
    * @param normalizedOutput a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
