@@ -11,13 +11,13 @@ import {PtLike, GroupLike, DelaunayMesh, DelaunayShape} from "./Types";
 
 
 /**
- * The `Create` class provides various convenient functions to create structures or shapes. 
+ * The `Create` class helps you create structures from sets of points. 
  */
 export class Create {
   
 
   /**
-   * Create a set of random points inside a bounday
+   * Create a set of random points inside a bounday.
    * @param bound the rectangular boundary
    * @param count number of random points to create
    * @param dimensions number of dimensions in each point
@@ -35,7 +35,7 @@ export class Create {
 
 
   /**
-   * Create a set of points that distribute evenly on a line
+   * Create a set of points that distribute evenly on a line.
    * @param line a Group representing a line
    * @param count number of points to create
    */
@@ -70,7 +70,7 @@ export class Create {
   }
 
   /**
-   * Create a grid inside a boundary
+   * Create a grid of cells inside a boundary, where each cell is defined by a group of 2 Pt.
    * @param bound the rectangular boundary
    * @param columns number of columns
    * @param rows number of rows
@@ -93,7 +93,7 @@ export class Create {
 
 
   /**
-   * Create a set of Pts around a circular path
+   * Create a set of Pts around a circular path.
    * @param center circle center
    * @param radius circle radius
    * @param count number of Pts to create
@@ -132,7 +132,7 @@ export class Create {
 
 
   /**
-   * Create a Delaunay Group. Use the `.delaunay()` and `.voronoi()` functions in the returned group to generate tessellations.
+   * Create a Delaunay Group. Use the [`Delaunay.delaunay()`](#link) and [`Delaunay.voronoi()`](#link) functions in the returned group to generate tessellations.
    * @param pts a Group or an array of Pts
    * @returns an instance of the Delaunay class
    */
@@ -177,7 +177,7 @@ const permTable = [151,160,137,91,90,15,
 
 
 /**
- * A class to generate Perlin noise. Currently it implements a basic 2D noise. More to follow.
+ * Noise is a subclass of Pt that generates Perlin noise. Current implementation supports basic 2D noise.
  * This implementation is based on this [gist](https://gist.github.com/banksean/304522).
  */
 export class Noise extends Pt {
@@ -186,7 +186,7 @@ export class Noise extends Pt {
   private _n:Pt = new Pt(0.01, 0.01);
 
   /**
-   * Create a Noise Pt that's capable of generating noise
+   * Create a Noise Pt that can generate noise continuously. See a [Noise demo here](../demo/index.html?name=create.noisePts).
    * @param args a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
    */
   constructor(...args) {
@@ -198,7 +198,7 @@ export class Noise extends Pt {
 
 
   /**
-   * Set the initial noise values
+   * Set the initial dimensional values of the noise.
    * @param args a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
    * @example `noise.initNoise( 0.01, 0.1 )`
    */
@@ -208,7 +208,7 @@ export class Noise extends Pt {
 
 
   /**
-   * Add a small increment to the noise values
+   * Add a small increment to the noise values.
    * @param x step in x dimension
    * @param y step in y dimension
    */
@@ -217,7 +217,7 @@ export class Noise extends Pt {
   }
 
   /**
-   * Specify a seed for this Noise
+   * Specify a seed for this Noise.
    * @param s seed value
    */
   seed( s ) {
@@ -234,7 +234,7 @@ export class Noise extends Pt {
   
   
   /**
-   * Generate a 2D Perlin noise value
+   * Generate a 2D Perlin noise value.
    */
   noise2D() {
   
@@ -259,7 +259,7 @@ export class Noise extends Pt {
 
 
 /**
- * Delaunay is a Group of Pts that can generate Delaunay and Voronoi tessellations. The triangulation algorithm is ported from [Pt](https://github.com/williamngan/pt). 
+ * Delaunay is a [`Group`](#link) of Pts that generates Delaunay and Voronoi tessellations. The triangulation algorithm is ported from [Pt](https://github.com/williamngan/pt). 
  * Based on [Paul Bourke's algorithm](http://paulbourke.net/papers/triangulate/)
  * with reference to its [javascript implementation](https://github.com/ironwallaby/delaunay) by ironwallaby.
  */
@@ -268,7 +268,7 @@ export class Delaunay extends Group {
   private _mesh:DelaunayMesh = [];
 
   /**
-   * Generate Delaunay triangles. This function also caches the mesh that is used to generate Voronoi tessellation in `voronoi()`.
+   * Generate Delaunay triangles. This function also caches the mesh that is used to generate Voronoi tessellation in `voronoi()`. See a [Delaunay demo here](../demo/index.html?name=create.delaunay).
    * @param triangleOnly if true, returns an array of triangles in Groups, otherwise return the whole DelaunayShape
    * @returns an array of Groups or an array of DelaunayShapes `{i, j, k, triangle, circle}` which records the indices of the vertices, and the calculated triangles and circumcircles
    */
@@ -350,7 +350,7 @@ export class Delaunay extends Group {
 
 
   /**
-   * Generate Voronoi cells. `delaunay()` must be called before calling this function.
+   * Generate Voronoi cells. `delaunay()` must be called before calling this function. See a [Voronoi demo here](../demo/index.html?name=create.delaunay).
    * @returns an array of Groups, each of which represents a Voronoi cell
    */
   voronoi():Group[] {
@@ -364,7 +364,7 @@ export class Delaunay extends Group {
 
 
   /**
-   * Get the cached mesh. The mesh is an array of objects, each of which representing the enclosing triangles around a Pt in this Delaunay group
+   * Get the cached mesh. The mesh is an array of objects, each of which representing the enclosing triangles around a Pt in this Delaunay group.
    * @return an array of objects that store a series of DelaunayShapes
    */
   mesh():DelaunayMesh {
@@ -373,7 +373,7 @@ export class Delaunay extends Group {
 
 
   /**
-   * Given an index of a Pt in this Delaunay Group, returns its neighboring Pts in the network
+   * Given an index of a Pt in this Delaunay Group, returns its neighboring Pts in the network.
    * @param i index of a Pt
    * @param sort if true, sort the neighbors so that their edges will form a polygon
    * @returns an array of Pts
@@ -389,7 +389,7 @@ export class Delaunay extends Group {
 
 
   /**
-   * Given an index of a Pt in this Delaunay Group, returns its neighboring DelaunayShapes
+   * Given an index of a Pt in this Delaunay Group, returns its neighboring DelaunayShapes.
    * @param i index of a Pt
    * @returns an array of DelaunayShapes `{i, j, k, triangle, circle}`
    */
@@ -404,7 +404,7 @@ export class Delaunay extends Group {
 
 
   /**
-   * Record a DelaunayShape in the mesh
+   * Record a DelaunayShape in the mesh.
    * @param o DelaunayShape instance
    */
   protected _cache( o ):void {
@@ -415,7 +415,7 @@ export class Delaunay extends Group {
 
 
   /**
-   * Get the initial "super triangle" that contains all the points in this set
+   * Get the initial "super triangle" that contains all the points in this set.
    * @returns a Group representing a triangle
    */
   protected _superTriangle():Group {

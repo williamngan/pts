@@ -304,7 +304,7 @@ code {
   overflow: auto;
   padding: 10px 50px;
   box-sizing: border-box;
-  margin-bottom: 100px;
+  padding-bottom: 100px;
 }
 
 

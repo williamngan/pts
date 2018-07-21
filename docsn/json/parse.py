@@ -240,8 +240,9 @@ def parse_class_method( c ):
 
 def parse_class_method_signature( c ):
   return {
-    'comment': get_comment( c ) ,
+    'comment': get_comment( c ),
     'returns': get_type( c.get('type', {}) ),
+    'returns_comment': get_returns_comment( c ),
     'parameters': [ parse_class_method_param(p) for p in c.get('parameters', []) ],
     'tags': get_comment_tags( c )
   }
@@ -294,6 +295,10 @@ def save_temp(data):
 
 def get_comment( c ):
   return c.get('comment', {}).get('shortText', False) or c.get('comment', {}).get('text', "")
+
+
+def get_returns_comment( c ):
+  return c.get('comment', {}).get('returns', False)
 
 
 def get_comment_tags( c ):

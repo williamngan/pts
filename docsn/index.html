@@ -252,7 +252,12 @@
                 
                 <div class="signature">
                   <div class="label">returns</div>
-                  <div class="info"><span class="paramdef">{{ s.returns }}</span></div>
+                  <div class="info"><span class="paramdef">{{ s.returns }}</span> <div v-html="md(s.returns_comment) || '<p></p>'"></div></div>
+                </div>
+
+                <div v-for="se in s.tags" class="signature tags">
+                    <div class="label">{{se.tag}}</div>
+                    <div class="info" v-html="md(se.text)"></div>
                 </div>
 
                 <div class="signature tags">
@@ -262,11 +267,6 @@
                     <span v-if="m.inherits">Inherited from&nbsp;<code>{{ m.inherits }}</code></span>
                     <span v-if="showSource(m.source)"> in <a class="sourceLink" v-bind:href="source(m.source)">{{m.source[0][0]}}</a></span>
                   </div>
-                </div>
-
-                <div v-for="se in s.tags" class="signature tags">
-                    <div class="label">{{se.tag}}</div>
-                    <div class="info" v-html="md(se.text)"></div>
                 </div>
               
               </div>
