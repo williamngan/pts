@@ -8,14 +8,14 @@ import {PtLike, GroupLike} from "./Types";
 
 
 /**
-* Form is an abstract class that represents a form that's used in a Space for expressions.
+* Form is an abstract class that represents a form that's used in a Space for expressions. Learn more about Space and Form in [this guide](../guide/Space-0500.html).
 */
 export abstract class Form {
   
   protected _ready:boolean = false;
   
   /**
-  * get whether the Form has received the Space's rendering context
+  * get whether the Form has received the Space's rendering context.
   */
   get ready():boolean { return this._ready; }
 
@@ -38,20 +38,32 @@ export abstract class Form {
 
 /**
 * VisualForm is an abstract class that represents a form that can be used to express Pts visually.
-* For example, CanvasForm is an implementation of VisualForm that draws on CanvasSpace which represents a html canvas.
+* For example, [`CanvasForm`](#link) is an implementation of VisualForm that draws on [`CanvasSpace`](#link) which represents a html canvas. Learn more about Space and Form in [this guide](../guide/Space-0500.html).
 */
 export abstract class VisualForm extends Form {
   
   
   protected _filled = true;
+
+  /**
+   * Check whether this form currently has fill style. 
+   */
   get filled():boolean { return this._filled; }
   set filled( b:boolean ) { this._filled = b; }
   
   protected _stroked = true;
+
+  /**
+   * Check whether this form currently has stroke style.
+   */
   get stroked():boolean { return this._stroked; }
   set stroked( b:boolean ) { this._stroked = b; }
   
   protected _font:Font = new Font( 14, "sans-serif");
+
+  /**
+   * Get the current font in use in this form.
+   */
   get currentFont():Font { return this._font; }
   
   
@@ -71,7 +83,7 @@ export abstract class VisualForm extends Form {
   
   
   /**
-  * Set fill color (not implemented)
+  * Set fill color (not implemented here  -- to be implemented in subclasses).
   */
   fill( c:string|boolean ):this {
     return this;
@@ -79,7 +91,7 @@ export abstract class VisualForm extends Form {
   
   
   /**
-  * Set current fill style and without stroke.
+  * Set current fill style and remove stroke style.
   * @example `form.fillOnly("#F90")`, `form.fillOnly("rgba(0,0,0,.5")`
   * @param c fill color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle))
   */
@@ -90,7 +102,7 @@ export abstract class VisualForm extends Form {
   
   
   /**
-  * Set stroke style (not implemented)
+  * Set stroke style (not implemented here  -- to be implemented in subclasses).
   */
   stroke( c:string|boolean, width?:number, linejoin?:string, linecap?:string ):this {
     return this;
@@ -98,7 +110,7 @@ export abstract class VisualForm extends Form {
   
   
   /**
-  * Set current stroke style and without fill.
+  * Set current stroke style and remove fill style.
   * @example `form.strokeOnly("#F90")`, `form.strokeOnly("#000", 0.5, 'round', 'square')`
   * @param c stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle)
   */
@@ -108,7 +120,7 @@ export abstract class VisualForm extends Form {
   }
   
   /**
-  * Abstract point drawing
+  * Draw a point (not implemented here  -- to be implemented in subclasses).
   * @param p a Pt object
   * @param radius radius of the point. Default is 5.
   * @param shape The shape of the point. Defaults to "square", but it can be "circle" or a custom shape function in your own implementation.
@@ -118,7 +130,7 @@ export abstract class VisualForm extends Form {
   
   
   /**
-  * Draw multiple points at once
+  * Draw multiple points at once.
   * @param pts an array of Pt or an array of number arrays
   * @param radius radius of the point. Default is 5.
   * @param shape The shape of the point. Defaults to "square", but it can be "circle" or a custom shape function in your own implementation.
@@ -133,7 +145,7 @@ export abstract class VisualForm extends Form {
   
   
   /**
-  * Abstract circle drawing
+  * Draw a circle (not implemented here  -- to be implemented in subclasses).
   * @param pts usually a Group of 2 Pts, but it can also take an array of two numeric arrays [ [position], [size] ]
   * @see [`Circle.fromCenter`](./_op_.circle.html#frompt)
   */
@@ -142,7 +154,7 @@ export abstract class VisualForm extends Form {
   
   
   /**
-  * Draw multiple circles at once
+  * Draw multiple circles at once.
   * @param groups an array of Groups that defines multiple circles
   */
   circles( groups:GroupLike[] ):this {
@@ -151,7 +163,7 @@ export abstract class VisualForm extends Form {
   
   
   /**
-  * Draw multiple squares at once
+  * Draw multiple squares at once.
   * @param groups an array of Groups that defines multiple circles
   */
   squares( groups:GroupLike[] ):this {
@@ -160,7 +172,7 @@ export abstract class VisualForm extends Form {
   
   
   /**
-  * Abstract arc drawing
+  * Draw an arc (not implemented here  -- to be implemented in subclasses).
   * @param pt center position
   * @param radius radius of the arc circle
   * @param startAngle start angle of the arc
@@ -171,14 +183,14 @@ export abstract class VisualForm extends Form {
   
   
   /**
-  * Abstract a line or polyline drawing
+  * Draw a line or polyline (not implemented here  -- to be implemented in subclasses).
   * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
   */
   abstract line( pts:GroupLike|number[][] ):this;
   
   
   /**
-  * Draw multiple lines at once
+  * Draw multiple lines at once.
   * @param groups An array of Groups of Pts
   */
   lines( groups:GroupLike[] ):this {
@@ -187,14 +199,14 @@ export abstract class VisualForm extends Form {
   
   
   /**
-  * Abstract polygon drawing
+  * Draw a polygon (not implemented here  -- to be implemented in subclasses).
   * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
   */
   abstract polygon( pts:GroupLike|number[][] ):this;
   
   
   /**
-  * Draw multiple polygons at once
+  * Draw multiple polygons at once.
   * @param groups An array of Groups of Pts
   */
   polygons( groups:GroupLike[] ):this {
@@ -204,14 +216,14 @@ export abstract class VisualForm extends Form {
   
   
   /**
-  * Abstract rectangle drawing
+  * Draw a rectangle (not implemented here  -- to be implemented in subclasses).
   * @param pts usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.
   */
   abstract rect( pts:number[][]|Pt[] ):this;
   
   
   /**
-  * Draw multiple rectangles at once
+  * Draw multiple rectangles at once.
   * @param groups An array of Groups of Pts
   */
   rects( groups:GroupLike[] ):this {
@@ -220,7 +232,7 @@ export abstract class VisualForm extends Form {
   
   
   /**
-  * Abstract text rendering
+  * Draw text (not implemented here  -- to be implemented in subclasses).
   * @param `pt` a Pt or numeric array to specify the anchor point
   * @param `txt` text
   * @param `maxWidth` specify a maximum width per line
@@ -229,7 +241,7 @@ export abstract class VisualForm extends Form {
   
   
   /**
-  * Abstract font setting
+  * Set font style (not implemented here  -- to be implemented in subclasses).
   * @param sizeOrFont either a number to specify font-size, or a `Font` object to specify all font properties
   * @param weight Optional font-weight string such as "bold"
   * @param style Optional font-style string such as "italic"
@@ -244,7 +256,7 @@ export abstract class VisualForm extends Form {
 
 
 /**
-* Font class lets you create a specific font style with properties for its size and style.
+* Font class lets you create a specific font style with properties for its size and style. A font instance can be passed as parameter to set a form's font. For example, see [`CanvasForm.font`](#link).
 */
 export class Font {
   public size:number;
@@ -254,7 +266,7 @@ export class Font {
   public weight:string;
   
   /**
-  * Create a font style
+  * Create a font style.
   * @param size font size. Defaults is 12px.
   * @param face Optional font-family, use css-like string such as "Helvetica" or "Helvetica, sans-serif". Default is "sans-serif".
   * @param weight Optional font weight such as "bold". Default is "" (none).
@@ -271,13 +283,13 @@ export class Font {
   }
   
   /**
-  * Get a string representing the font style, in css-like string such as "italic bold 12px/1.5 sans-serif"
+  * Get a string representing the font style, in css-like string such as "italic bold 12px/1.5 sans-serif".
   */
   get value():string { return `${this.style} ${this.weight} ${this.size}px/${this.lineHeight} ${this.face}`; }
   
   
   /**
-  * Get a string representing the font style, in css-like string such as "italic bold 12px/1.5 sans-serif"
+  * Get a string representing the font style, in css-like string such as "italic bold 12px/1.5 sans-serif".
   */
   toString():string { return this.value; }
   
