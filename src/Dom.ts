@@ -11,7 +11,7 @@ import {PtLike, GroupLike, IPlayer, DOMFormContext} from "./Types";
 
 
 /**
- * A Space for DOM elements. Learn more about spaces in [this guide](../guide/space-0500).
+ * DOMSpace is a space for DOM elements. Usually its subclasses such as [`HTMLSpace`](#link) and [`#SVGSpace`](#link) should be used instead. Learn more about spaces in [this guide](../guide/space-0500).
  */
 export class DOMSpace extends MultiTouchSpace {
   
@@ -25,9 +25,9 @@ export class DOMSpace extends MultiTouchSpace {
   
   
   /**
-  * Create a DOMSpace which represents a Space for DOM elements
+  * Create a DOMSpace for HTML DOM elements
   * @param elem Specify an element by its "id" attribute as string, or by the element object itself. Use css to customize its appearance if needed.
-  * @param callback an optional callback `function(boundingBox, spaceElement)` to be called when canvas is appended and ready. Alternatively, a "ready" event will also be fired from the element when it's appended, which can be traced with `spaceInstance.canvas.addEventListener("ready")`
+  * @param callback an optional callback `function(boundingBox, spaceElement)` to be called when element is appended and ready. Alternatively, a "ready" event will also be fired from the element when it's appended, which can be traced with `spaceInstance.element.addEventListener("ready")`
   * @example `new DOMSpace( "#myElementID" )`
   */
   constructor( elem:string|Element, callback?:Function) {
@@ -67,7 +67,7 @@ export class DOMSpace extends MultiTouchSpace {
   
   
   /**
-  * Helper function to create a DOM element
+  * Helper function to create a DOM element.
   * @param elem element tag name
   * @param id element id attribute
   * @param appendTo Optional, if specified, the created element will be appended to this element
@@ -82,7 +82,7 @@ export class DOMSpace extends MultiTouchSpace {
   
   
   /**
-  * Handle callbacks after element is mounted in DOM
+  * Handle callbacks after element is mounted in DOM.
   * @param callback 
   */
   private _ready( callback:Function ) {
@@ -110,10 +110,8 @@ export class DOMSpace extends MultiTouchSpace {
   
   
   /**
-  * Set up various options for DOMSpace. The `opt` parameter is an object with the following fields. This is usually set during instantiation, eg `new DOMSpace(...).setup( { opt } )`
-  * @param opt an object with optional settings, as follows.
-  * @param opt.bgcolor a hex or rgba string to set initial background color of the canvas, or use `false` or "transparent" to set a transparent background. You may also change it later with `clear()`    
-  * @param opt.resize a boolean to set whether `<canvas>` size should auto resize to match its container's size. You can also set it manually with `autoSize()`    
+  * Set up various options for DOMSpace. This is usually set during instantiation, eg `new DOMSpace(...).setup( {opt} )`.
+  * @param opt an object with these optional properties: **bgcolor** is a hex or rgba string to set initial background color of the canvas, or use `false` or "transparent" to set a transparent background; **resize** a boolean to set whether `<canvas>` size should auto resize to match its container's size, which can also be set using `autoSize()`.
   * @example `space.setup({ bgcolor: "#f00", resize: true })`
   */
   setup( opt:{bgcolor?:string, resize?:boolean} ):this {
@@ -128,7 +126,7 @@ export class DOMSpace extends MultiTouchSpace {
   
 
   /**
-   * Not implemented. See SVGSpace and HTMLSpace for implementation
+   * Not implemented. See SVGSpace and HTMLSpace for implementation.
    */
   getForm():Form {
     return null;
@@ -152,7 +150,7 @@ export class DOMSpace extends MultiTouchSpace {
   
   
   /**
-  * This overrides Space's `resize` function. It's used as a callback function for window's resize event and not usually called directly. You can keep track of resize events with `resize: (bound ,evt)` callback in your player objects (See `Space`'s `add()` function). 
+  * This overrides Space's `resize` function. It's used as a callback function for window's resize event and not usually called directly. You can keep track of resize events with `resize: (bound, evt)` callback in your player objects (See [`Space.add`](#link) function). 
   * @param b a Bound object to resize to
   * @param evt Optionally pass a resize event
   */
@@ -173,7 +171,7 @@ export class DOMSpace extends MultiTouchSpace {
   
   
   /**
-  * Window resize handling
+  * Window resize handling.
   * @param evt 
   */
   protected _resizeHandler( evt:Event ) {
@@ -192,7 +190,7 @@ export class DOMSpace extends MultiTouchSpace {
   
   
   /**
-  * Get this DOM element
+  * Get this DOM element.
   */
   get element():Element {
     return this._canvas;
@@ -200,7 +198,7 @@ export class DOMSpace extends MultiTouchSpace {
   
   
   /**
-  * Get the parent DOM element that contains this DOM element
+  * Get the parent DOM element that contains this DOM element.
   */
   get parent():Element {
     return this._container;
@@ -208,13 +206,13 @@ export class DOMSpace extends MultiTouchSpace {
   
   
   /**
-  * A property to indicate if the Space is ready
+  * A property to indicate if the Space is ready.
   */
   get ready():boolean { return this._isReady; }
   
   
   /**
-  * Clear the element's contents, and ptionally set a new backgrounc color. Overrides Space's `clear` function.
+  * Clear the element's contents, and optionally set a new background color. This overrides Space's `clear` function.
   * @param bg Optionally specify a custom background color in hex or rgba string, or "transparent". If not defined, it will use its `bgcolor` property as background color to clear the canvas.
   */
   clear( bg?:string ):this {
@@ -225,7 +223,7 @@ export class DOMSpace extends MultiTouchSpace {
   
   
   /**
-  * Set a background color on the container element
+  * Set a background color on the container element.
   @param bg background color as hex or rgba string
   */
   set background( bg:string ) {
@@ -236,7 +234,7 @@ export class DOMSpace extends MultiTouchSpace {
   
   
   /**
-  * Add or update a style definition, and optionally update that style in the Element
+  * Add or update a style definition, and optionally update that style in the Element.
   * @param key style name
   * @param val style value
   * @param update a boolean to update the element's style immediately if set to `true`. Default is `false`.
@@ -249,7 +247,7 @@ export class DOMSpace extends MultiTouchSpace {
   
   
   /**
-  * Add of update a list of style definitions, and optionally update those styles in the Element
+  * Add of update a list of style definitions, and optionally update those styles in the Element.
   * @param styles a key-value objects of style definitions 
   * @param update a boolean to update the element's style immediately if set to `true`. Default is `false`.
   * @return this
@@ -263,7 +261,7 @@ export class DOMSpace extends MultiTouchSpace {
   
   
   /**
-  * A static helper function to add or update Element attributes
+  * A static helper function to add or update Element attributes.
   * @param elem Element to update
   * @param data an object with key-value pairs
   * @returns this DOM element 
@@ -279,10 +277,10 @@ export class DOMSpace extends MultiTouchSpace {
   
   
   /**
-  * A static helper function to compose an inline style string from a object of styles
+  * A static helper function to compose an inline style string from a object of styles.
   * @param elem Element to update
   * @param data an object with key-value pairs
-  * @exmaple DOMSpace.getInlineStyles( {width: "100px", "font-size": "10px"} ); // returns "width: 100px; font-size: 10px"
+  * @exmaple `DOMSpace.getInlineStyles( {width: "100px", "font-size": "10px"} )`
   */
   static getInlineStyles( data:object ):string {
     let str = "";
@@ -298,12 +296,12 @@ export class DOMSpace extends MultiTouchSpace {
 
 
 /**
- * HTMLSpace. Note that this is currently experimental and may change in future.
+ * HTMLSpace is a subclass of DOMSpace that works with HTML elements. Note that this is currently experimental and may change in future.
  */
 export class HTMLSpace extends DOMSpace {
 
   /**
-  * Get a new `HTMLForm` for drawing
+  * Get a new `HTMLForm` which provides visualization functions in html elements. 
   * @see `HTMLForm`
   */
   getForm():Form {
@@ -311,7 +309,7 @@ export class HTMLSpace extends DOMSpace {
   }
 
   /**
-   * A static function to add a DOM element inside a node. Usually you don't need to use this directly. See methods in `DOMForm` instead.
+   * A static function to add a DOM element inside a node. Usually you don't need to use this directly. See methods in [`HTMLForm`](#link) instead.
    * @param parent the parent element, or `null` to use current `<svg>` as parent.
    * @param name a string of element name,  such as `rect` or `circle`
    * @param id id attribute of the new element
@@ -334,7 +332,7 @@ export class HTMLSpace extends DOMSpace {
 
 
   /**
-  * Remove an item from this Space
+  * Remove an item from this space.
   * @param item a player item with an auto-assigned `animateID` property
   */
   remove( player:IPlayer ):this {
@@ -349,7 +347,7 @@ export class HTMLSpace extends DOMSpace {
   
   
   /**
-   * Remove all items from this Space
+   * Remove all items from this space.
    */
   removeAll():this {
     this._container.innerHTML = "";
@@ -359,7 +357,7 @@ export class HTMLSpace extends DOMSpace {
 
 
 /**
- * Form for HTMLSpace. Note that this is currently experimental and may change in future.
+ * CanvasForm is an implementation of abstract class [`VisualForm`](#link). It provide methods to express Pts on [`HTMLSpace`](#link). Note that this is currently experimental and may change in future.
  */
 export class HTMLForm extends VisualForm {
 
@@ -395,6 +393,10 @@ export class HTMLForm extends VisualForm {
   protected _space:HTMLSpace;
   protected _ready:boolean = false;
   
+  /**
+   * Create a new `HTMLForm`. Alternatively, you can use [`HTMLSpace.getForm`](#link) function to get an instance of HTMLForm.
+   * @param space the space to use
+   */
   constructor( space:HTMLSpace ) {
     super();
     this._space = space;
@@ -406,11 +408,14 @@ export class HTMLForm extends VisualForm {
     }} );
   }
   
+  /**
+   * Get the corresponding space for this form
+   */
   get space():HTMLSpace { return this._space; }
 
 
   /**
-   * Update a style in _ctx context or throw an Erorr if the style doesn't exist
+   * Usually not used directly. This updates a style in `_ctx` context or throw an Error if the style doesn't exist.
    * @param k style key
    * @param v  style value
    * @param unit Optional unit like 'px' to append to value
@@ -470,7 +475,7 @@ export class HTMLForm extends VisualForm {
 
 
   /**
-   * Add custom class to the created element
+   * Add custom class to the created element.
    * @param c custom class name or `false` to reset it
    * @example `form.fill("#f00").cls("myClass").rects(r)` `form.cls(false).circles(c)`
    */
@@ -485,7 +490,7 @@ export class HTMLForm extends VisualForm {
   
 
   /**
-  * Set the current font 
+  * Set the current font.
   * @param sizeOrFont either a number to specify font-size, or a `Font` object to specify all font properties
   * @param weight Optional font-weight string such as "bold"
   * @param style Optional font-style string such as "italic"
@@ -552,7 +557,7 @@ export class HTMLForm extends VisualForm {
   
   
   /**
-   * Get next available id in the current group
+   * Get next available id in the current group.
    * @returns an id string
    */
   nextID():string {
@@ -563,7 +568,7 @@ export class HTMLForm extends VisualForm {
   
 
   /**
-   * A static function to generate an ID string based on a context object
+   * A static function to generate an ID string based on a context object.
    * @param ctx a context object for an HTMLForm
    */
   static getID( ctx ):string {
@@ -572,7 +577,7 @@ export class HTMLForm extends VisualForm {
 
 
   /**
-   * A static function to generate an ID string for a scope, based on a "player" item in the Space
+   * A static function to generate an ID string for a scope, based on a "player" item in the Space.
    * @param item a "player" item that's added to space (see `space.add(...)`) and has an `animateID` property
    */
   static scopeID( item:IPlayer ):string {
@@ -611,8 +616,8 @@ export class HTMLForm extends VisualForm {
     return HTMLSpace.setAttr( elem, {style: st.join(";")} );
   }
 
-    /**
-   * A helper function to set top, left, width, height of DOM element
+  /**
+   * A helper function to set top, left, width, height of DOM element.
    * @param x left position
    * @param y top position
    * @param w width
@@ -627,7 +632,7 @@ export class HTMLForm extends VisualForm {
   }
   
   /**
-  * Draws a point
+  * A static function to draws a point.
   * @param ctx a context object of HTMLForm
   * @param pt a Pt object or numeric array
   * @param radius radius of the point. Default is 5.
@@ -644,7 +649,7 @@ export class HTMLForm extends VisualForm {
 
 
   /**
-  * Draws a point
+  * Draws a point.
   * @param p a Pt object
   * @param radius radius of the point. Default is 5.
   * @param shape The shape of the point. Defaults to "square", but it can be "circle" or a custom shape function in your own implementation.
@@ -659,7 +664,7 @@ export class HTMLForm extends VisualForm {
 
   
   /**
-  * A static function to draw a circle
+  * A static function to draw a circle.
   * @param ctx a context object of HTMLForm
   * @param pt center position of the circle
   * @param radius radius of the circle
@@ -674,7 +679,7 @@ export class HTMLForm extends VisualForm {
 
 
   /**
-  * Draw a circle
+  * Draw a circle.
   * @param pts usually a Group of 2 Pts, but it can also take an array of two numeric arrays [ [position], [size] ]
   * @see [`Circle.fromCenter`](./_op_.circle.html#frompt)
   */
@@ -687,7 +692,7 @@ export class HTMLForm extends VisualForm {
 
 
   /**
-  * A static function to draw a square 
+  * A static function to draw a square.
   * @param ctx a context object of HTMLForm
   * @param pt center position of the square
   * @param halfsize half size of the square
@@ -702,7 +707,7 @@ export class HTMLForm extends VisualForm {
   
 
   /**
-   * Draw a square, given a center and its half-size
+   * Draw a square, given a center and its half-size.
    * @param pt center Pt
    * @param halfsize half-size
    */
@@ -714,7 +719,7 @@ export class HTMLForm extends VisualForm {
 
 
   /**
-  * A static function to draw a rectangle
+  * A static function to draw a rectangle.
   * @param ctx a context object of HTMLForm
   * @param pts usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.
   */
@@ -730,7 +735,7 @@ export class HTMLForm extends VisualForm {
 
 
   /**
-  * Draw a rectangle
+  * Draw a rectangle.
   * @param pts usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.
   */
   rect( pts:number[][]|Pt[] ):this {
@@ -742,7 +747,7 @@ export class HTMLForm extends VisualForm {
 
 
   /**
-  * A static function to draw text
+  * A static function to draw text.
   * @param ctx a context object of HTMLForm
   * @param `pt` a Point object to specify the anchor point
   * @param `txt` a string of text to draw
@@ -765,7 +770,7 @@ export class HTMLForm extends VisualForm {
   }
 
   /**
-  * Draw text on canvas
+  * Draw text on canvas.
   * @param `pt` a Pt or numeric array to specify the anchor point
   * @param `txt` text
   * @param `maxWidth` specify a maximum width per line
@@ -788,7 +793,7 @@ export class HTMLForm extends VisualForm {
   
 
   /**
-   * Arc is not implemented in HTMLForm
+   * Arc is not implemented in HTMLForm.
    */
   arc( pt:PtLike, radius:number, startAngle:number, endAngle:number, cc?:boolean ):this {
     Util.warn( "arc is not implemented in HTMLForm" );
@@ -797,7 +802,7 @@ export class HTMLForm extends VisualForm {
 
 
   /**
-   * Line is not implemented in HTMLForm
+   * Line is not implemented in HTMLForm.
    */
   line( pts:GroupLike|number[][] ):this {
     Util.warn( "line is not implemented in HTMLForm" );
@@ -806,7 +811,7 @@ export class HTMLForm extends VisualForm {
 
 
   /**
-   * Polygon is not implemented in HTMLForm
+   * Polygon is not implemented in HTMLForm.
    * @param pts 
    */
   polygon( pts:GroupLike|number[][] ):this {

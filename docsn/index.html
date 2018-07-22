@@ -159,7 +159,7 @@
 
                   <div v-for="se in s.tags" class="signature tags">
                       <div class="label">{{se.tag}}</div>
-                      <div class="info">{{ md(se.text) }}</div>
+                      <div class="info" v-html="md(se.text)"></div>
                   </div>
 
                   <div class="signature tags">
