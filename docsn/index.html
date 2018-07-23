@@ -134,8 +134,8 @@
         
         <div class="section" v-if="contents.constructor && contents.constructor.length > 0">
           <h3>Constructor</h3>
-          <div v-for="m in contents.constructor">
-            <h4 v-bind:id="'constructor_'+m.name">new {{ contents.name }} <span class="param">( {{ params(m.signatures) }} )</span></h4>
+          <div v-for="m in contents.constructor" v-bind:id="'constructor_'+m.name">
+            <h4>new {{ contents.name }} <span class="param">( {{ params(m.signatures) }} )</span></h4>
             
             <div>
                 <div v-for="s in first(m.signatures)">
@@ -179,10 +179,8 @@
 
         <div class="section props" v-if="(contents.variables && contents.variables.length > 0) || (contents.properties && contents.properties.length > 0)">
           <h3>Internal Properties</h3>
-          <div v-for="m in contents.variables">
-            <h4 v-bind:id="'property_'+m.name">
-              {{ m.name }} 
-            </h4>
+          <div v-for="m in contents.variables" v-bind:id="'property_'+m.name">
+            <h4>{{ m.name }}</h4>
             <div v-html="md(m.comment)"></div>
             <div class="misc">
                 <span v-if="m.overrides">Overrides&nbsp;<code>{{ m.overrides }}</code></span>
@@ -191,10 +189,8 @@
             </div>
           </div>
 
-          <div class="section props" v-for="m in contents.properties">
-            <h4 v-bind:id="'property_'+m.name">
-              {{ m.name }}
-            </h4>
+          <div class="section props" v-for="m in contents.properties"  v-bind:id="'property_'+m.name">
+            <h4>{{ m.name }}</h4>
             <div v-html="md(m.comment)"></div>
             <div class="misc">
                 <span v-if="m.overrides">Overrides&nbsp;<code>{{ m.overrides }}</code></span>
@@ -207,8 +203,8 @@
       
         <div class="section props" v-if="contents.accessors && contents.accessors.length > 0">
           <h3>Accessors</h3>
-          <div v-for="m in contents.accessors">
-            <h4 v-bind:id="'accessor_'+m.name">
+          <div v-for="m in contents.accessors" v-bind:id="'accessor_'+m.name">
+            <h4>
               <span class="token" v-if="m.getter">GET</span>
               <span class="token" v-if="m.setter">SET</span>
               {{ m.name }} <span class="param">: {{ m.getter.type || m.setter.parameters.type || "" }}</span>
@@ -229,8 +225,8 @@
 
         <div class="section" v-if="contents.methods && contents.methods.length > 0">
           <h3>Methods</h3>
-          <div v-for="m in contents.methods">
-            <h4 v-bind:id="'function_'+m.name">
+          <div v-for="m in contents.methods" v-bind:id="'function_'+m.name">
+            <h4>
               <span v-if="m.flags && m.flags.isStatic" class="token">STATIC</span> 
               {{ m.name }} 
               <span class="param">( {{ params(m.signatures) }} )</span>

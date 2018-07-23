@@ -646,9 +646,8 @@ export class CanvasForm extends VisualForm {
     
     
     /**
-    * Draw a circle.
+    * Draw a circle. See also [`Circle.fromCenter`](#link)
     * @param pts usually a Group of 2 Pts, but it can also take an array of two numeric arrays [ [position], [size] ]
-    * @see [`Circle.fromCenter`](./_op_.circle.html#frompt)
     */
     circle( pts:GroupLike|number[][] ):this {
       CanvasForm.circle( this._ctx, pts[0], pts[1][0] );

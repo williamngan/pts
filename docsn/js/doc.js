@@ -159,6 +159,8 @@ var app = new Vue({
       if (evt.target.tagName.toLowerCase() === "code" && evt.target.parentElement.getAttribute("href") === "#link") {
         evt.preventDefault();
         evt.stopPropagation();
+        var currId = getParentID(evt.target, 0);
+        if (currId && app.selected) setHistory( app.selected, currId );
         app.codeLink( evt.target.textContent );
         return false;
       }
@@ -195,6 +197,12 @@ function qsHash( path ) {
 function clean_str( str, limit ) {
   if (limit) str = str.substr(0, limit);
   return str.replace( /[^a-zA-Z0-9._\$]/g, "_" );
+}
+
+function getParentID( elem, depth=0 ) {
+  if (depth > 5) return "";
+  var id = elem.parentElement.getAttribute("id");
+  return (id) ? id : getParentID( elem.parentElement, depth+1 );
 }
 
 
