@@ -146,7 +146,7 @@
                     <div class="label">parameters</div>
                     <div class="info">
                       <div v-for="p in s.parameters">
-                        <span><span class="paramdef">{{ p.name }}</span>: <span class="typedef">{{ p.type}}</span></span> 
+                        <span><span class="paramdef">{{ p.name }}</span>: <span class="typedef">{{ p.type }} <span v-if="p.default">(default value: {{ p.default }})</span> </span> </span> 
                         <div v-html="md(p.comment)"></div>
                       </div>
                     </div>
@@ -244,7 +244,7 @@
                   <div class="label">parameters</div>
                   <div class="info">
                     <div v-for="p in s.parameters">
-                      <span><span class="paramdef">{{ p.name }}</span>: <span class="typedef">{{ p.type }}</span></span> 
+                      <span><span class="paramdef">{{ p.name }}</span>: <span class="typedef">{{ p.type }} <span v-if="p.default">(default value: {{ p.default }})</span> </span></span> 
                       <div v-html="md(p.comment) || '<p></p>'"></div>
                     </div>
                   </div>

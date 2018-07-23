@@ -8,15 +8,15 @@ import { Pt, Group } from "./Pt";
 import { Vec, Mat } from "./LinearAlgebra";
 import {PtLike, GroupLike} from "./Types";
 /**
- * Num class provides various helper functions for basic numeric operations.
+ * Num class provides static helper functions for basic numeric operations.
  */
 export class Num {
 
   /**
-   * Check if two numbers are equal or almost equal within a threshold
+   * Check if two numbers are equal or almost equal within a threshold.
    * @param a number a
    * @param b number b
-   * @param threshold a threshold within which the two numbers are considered equal
+   * @param threshold threshold value that specifies the minimum difference within which the two numbers are considered equal
    */
   static equals( a:number, b:number, threshold=0.00001 ):boolean {
     return Math.abs( a-b ) < threshold;
@@ -24,10 +24,10 @@ export class Num {
 
 
   /**
-   * Linear interpolation
+   * Calculate linear interpolation between 2 values.
    * @param a start value
    * @param b end value
-   * @param t usually a value between 0 to 1
+   * @param t an interpolation value, usually between 0 to 1
    */
   static lerp( a:number, b:number, t:number ):number {
     return (1 - t) * a + t * b;
@@ -35,7 +35,7 @@ export class Num {
 
 
   /**
-   * Clamp values between min and max
+   * Clamp values between min and max.
    * @param val value to clamp
    * @param min min value
    * @param max max value
@@ -46,7 +46,7 @@ export class Num {
 
 
   /**
-   * Different from Num.clamp in that the value out-of-bound will be "looped back" to the other end.
+   * Different from [`Num.clamp`](#link) in that the value out-of-bound will be "looped back" to the other end.
    * @param val value to bound
    * @param min min value
    * @param max max value
@@ -64,10 +64,10 @@ export class Num {
 
 
   /**
-   * Check if a value is within 
-   * @param p 
-   * @param a 
-   * @param b 
+   * Check if a value is within two other values
+   * @param p value to check
+   * @param a first bounding value
+   * @param b second bounding value
    */
   static within( p:number, a:number, b:number ):boolean {
     return p >= Math.min(a, b) && p <= Math.max(a, b);
@@ -75,7 +75,7 @@ export class Num {
 
 
   /**
-   * Get a random number within a range
+   * Get a random number within a range.
    * @param a range value 1
    * @param b range value 2
    */
@@ -86,7 +86,7 @@ export class Num {
 
 
   /**
-   * Normalize a value within a range
+   * Normalize a value within a range.
    * @param n the value to normalize
    * @param a range value 1
    * @param b range value 1
@@ -99,9 +99,9 @@ export class Num {
 
 
   /**
-   * Sum a group of numeric arrays
+   * Sum a group of numeric arrays.
    * @param pts an array of numeric arrays
-   * @returns a array of sums
+   * @returns a Pt of the dimensional sums
    */
   static sum(pts: GroupLike|number[][]): Pt {
     let c = new Pt( pts[0] );
@@ -113,9 +113,9 @@ export class Num {
 
 
   /**
-   * Sum a group of numeric arrays
+   * Average a group of numeric arrays
    * @param pts an array of numeric arrays
-   * @returns a array of sums
+   * @returns a Pt of averages
    */
   static average(pts: GroupLike|number[][]): Pt {
     return Num.sum(pts).divide(pts.length);
@@ -133,7 +133,7 @@ export class Num {
 
 
   /**  
-   * Map a value from one range to another
+   * Map a value from one range to another.
    * @param n a value in the first range
    * @param currMin lower bound of the first range
    * @param currMax upper bound of the first range
@@ -141,7 +141,7 @@ export class Num {
    * @param targetMax upper bound of the second range
    * @returns a remapped value in the second range
    */
-  static mapToRange(n:number, currA, currB, targetA, targetB) {
+  static mapToRange(n:number, currA:number, currB:number, targetA:number, targetB:number) {
     if (currA == currB) throw new Error("[currMin, currMax] must define a range that is not zero");
     let min = Math.min(targetA, targetB);
     let max = Math.max(targetA, targetB);
@@ -152,12 +152,13 @@ export class Num {
 
 
 /**
- * Geom class provides various helper functions for basic geometric operations.
+ * Geom class provides static helper functions for basic geometric operations.
  */
 export class Geom {
 
   /**
-   * Bound an angle between 0 to 360 degrees
+   * Bound an angle between 0 to 360 degrees.
+   * @param angle angle value
    */
   static boundAngle( angle:number ):number {
     return Num.boundValue(angle, 0, 360);
@@ -165,15 +166,17 @@ export class Geom {
 
 
   /**
-   * Bound a radian between 0 to 2-PI
+   * Bound a radian between 0 to two PI.
+   * @param radian radian value
    */
-  static boundRadian( angle:number ):number {
-    return Num.boundValue(angle, 0, Const.two_pi);
+  static boundRadian( radian:number ):number {
+    return Num.boundValue(radian, 0, Const.two_pi);
   }
 
 
   /**
-   * Convert an angle in degree to radian
+   * Convert an angle in degree to radian.
+   * @param angle angle value
    */
   static toRadian( angle:number ):number {
     return angle * Const.deg_to_rad;
@@ -181,7 +184,8 @@ export class Geom {
 
 
   /**
-   * Convert an angle in radian to degree
+   * Convert an angle in radian to degree.
+   * @param radian radian value
    */
   static toDegree( radian:number ):number {
     return radian * Const.rad_to_deg;
@@ -189,9 +193,9 @@ export class Geom {
 
 
   /**
-   * Get a bounding box for a set of Pts
+   * Get a bounding box for a set of Pts.
    * @param pts a Group or an array of Pts
-   * @return a Group of two Pts, representing the top-left and bottom-right corners.
+   * @return a Group of two Pts, representing the top-left and bottom-right corners
    */
   static boundingBox( pts:GroupLike ): Group {
     let minPt = pts.reduce((a: Pt, p: Pt) => a.$min(p));
@@ -201,7 +205,7 @@ export class Geom {
 
 
   /**
-   * Get a centroid (the average middle point) for a set of Pts
+   * Get a centroid (the average middle point) for a set of Pts.
    * @param pts a Group or an array of Pts
    * @return a centroid Pt 
    */
@@ -214,7 +218,7 @@ export class Geom {
    * Given an anchor Pt, rebase all Pts in this group either to or from this anchor base.
    * @param pts a Group or array of Pt
    * @param ptOrIndex an index for the Pt array, or an external Pt
-   * @param direction "to" (subtract all Pt with this anchor base) or "from" (add all Pt from this anchor base)
+   * @param direction a string either "to" (subtract all Pt with this anchor base), or "from" (add all Pt from this anchor base)
    */
   static anchor( pts:GroupLike, ptOrIndex:PtLike|number=0, direction:("to"|"from")="to") {
     let method = (direction == "to") ? "subtract" : "add";
@@ -229,7 +233,7 @@ export class Geom {
 
 
   /**
-   * Get an interpolated (or extrapolated) value between two Pts
+   * Get an interpolated (or extrapolated) value between two Pts. For linear interpolation between 2 scalar values, use [`Num.lerp`](#link).
    * @param a first Pt
    * @param b second Pt
    * @param t a value between 0 to 1 to interpolate, or any other value to extrapolate
@@ -246,7 +250,7 @@ export class Geom {
 
 
   /**
-   * Find two Pt that are perpendicular to this Pt (2D)
+   * Find two Pts that are perpendicular to this Pt (2D only).
    * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
    * @returns an array of two Pt that are perpendicular to this Pt
    */
@@ -267,7 +271,7 @@ export class Geom {
 
 
   /**
-   * Check if two Pts (vectors) are perpendicular to each other 
+   * Check if two Pts are perpendicular to each other (2D only).
    */
   static isPerpendicular( p1:PtLike, p2:PtLike ):boolean {
     return new Pt(p1).dot(p2) === 0;
@@ -275,7 +279,7 @@ export class Geom {
 
 
   /**
-   * Check if a Pt is within the rectangular boundary defined by two Pts
+   * Check if a Pt is within the rectangular boundary defined by two Pts.
    * @param pt the Pt to check
    * @param boundPt1 boundary Pt 1
    * @param boundPt2 boundary Pt 2
@@ -289,8 +293,7 @@ export class Geom {
 
 
   /**
-   * Sort the Pts so that their edges will form a non-overlapping polygon
-   * Ref: https://stackoverflow.com/questions/6989100/sort-points-in-clockwise-order
+   * Sort the Pts so that their edges will form a non-overlapping polygon. ([Reference](https://stackoverflow.com/questions/6989100/sort-points-in-clockwise-order))
    * @param pts an array of Pts
    */
   static sortEdges( pts:GroupLike ):GroupLike {
@@ -327,7 +330,7 @@ export class Geom {
 
 
   /**
-   * Scale a Pt or a Group of Pts
+   * Scale a Pt or a Group of Pts. You may also use [`Pt.scale`](#link) instance method.
    * @param ps a Pt or a Group of Pts
    * @param scale scale value
    * @param anchor optional anchor point to scale from
@@ -349,7 +352,7 @@ export class Geom {
 
 
   /**
-   * Rotate a Pt or a Group of Pts in 2D space
+   * Rotate a Pt or a Group of Pts in 2D space. You may also use [`Pt.rotate2D`](#link) instance method.
    * @param ps a Pt or a Group of Pts
    * @param angle rotate angle
    * @param anchor optional anchor point to rotate from
@@ -372,7 +375,7 @@ export class Geom {
 
 
   /**
-   * Shear a Pt or a Group of Pts in 2D space
+   * Shear a Pt or a Group of Pts in 2D space. You may also use [`Pt.shear2D`](#link) instance method.
    * @param ps a Pt or a Group of Pts
    * @param scale shearing value which can be a number or an array of 2 numbers
    * @param anchor optional anchor point to shear from
@@ -396,7 +399,7 @@ export class Geom {
 
 
   /**
-   * Reflect a Pt or a Group of Pts along a 2D line
+   * Reflect a Pt or a Group of Pts along a 2D line. You may also use [`Pt.reflect2D`](#link) instance method.
    * @param ps a Pt or a Group of Pts
    * @param line a Group of 2 Pts that defines a line for reflection
    * @param axis optional axis such as "yz" to define a 2D plane of reflection
@@ -415,8 +418,8 @@ export class Geom {
 
 
   /**
-   * Generate a sine and cosine lookup table
-   * @returns an object with 2 tables (array of 360 values) and 2 functions to get sin/cos given a radian parameter. { sinTable:Float64Array, cosTable:Float64Array, sin:(rad)=>number, cos:(rad)=>number }
+   * Generate a cosine lookup table.
+   * @returns an object with a cosine tables (array of 360 values) and a function to get cosine given a radian input. 
    */
   static cosTable() {
     let cos = new Float64Array(360);
@@ -428,8 +431,8 @@ export class Geom {
   }
 
   /**
-   * Generate a sine and cosine lookup table
-   * @returns an object with 2 tables (array of 360 values) and 2 functions to get sin/cos given a radian parameter. { sinTable:Float64Array, cosTable:Float64Array, sin:(rad)=>number, cos:(rad)=>number }
+   * Generate a sine lookup table.
+   * @returns an object with a sine tables (array of 360 values) and a function to get sine value given a radian input. 
    */
   static sinTable() {
     let sin = new Float64Array(360);
@@ -444,41 +447,41 @@ export class Geom {
 
 
 /**
- * Shaping provides various shaping/easing functions to interpolate a value non-linearly.
+ * Shaping provides shaping functions to interpolate a value. These are useful for easing and transitions.
  */
 export class Shaping {
 
   /**
-   * Linear mapping
-   * @parma t a value between 0 to 1
-   * @parma c the value to shape, default is 1
+   * Linear mapping.
+   * @param t a value between 0 to 1
+   * @param c the value to shape, default is 1
    */
   static linear(t:number, c:number = 1):number {
     return c * t;
   }
 
   /** 
-   * Quadratic in, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
-   * @parma t a value between 0 to 1
-   * @parma c the value to shape, default is 1
+   * Quadratic in, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
+   * @param t a value between 0 to 1
+   * @param c the value to shape, default is 1
   */
   static quadraticIn(t:number, c:number = 1):number {
     return c * t * t;
   }
 
   /** 
-   * Quadratic out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
-   * @parma t a value between 0 to 1
-   * @parma c the value to shape, default is 1
+   * Quadratic out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
+   * @param t a value between 0 to 1
+   * @param c the value to shape, default is 1
   */
   static quadraticOut(t:number, c:number = 1):number {
     return -c * t * (t - 2);
   }
 
   /** 
-   * Quadratic in-out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
-   * @parma t a value between 0 to 1
-   * @parma c the value to shape, default is 1
+   * Quadratic in-out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
+   * @param t a value between 0 to 1
+   * @param c the value to shape, default is 1
    */
   static quadraticInOut(t:number, c:number = 1):number {
     let dt = t * 2;
@@ -486,18 +489,18 @@ export class Shaping {
   }
 
   /** 
-   * Cubic in, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
-   * @parma t a value between 0 to 1
-   * @parma c the value to shape, default is 1
+   * Cubic in, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
+   * @param t a value between 0 to 1
+   * @param c the value to shape, default is 1
    */
   static cubicIn(t:number, c:number = 1):number {
     return c * t * t * t;
   }
 
   /** 
-   * Cubic out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
-   * @parma t a value between 0 to 1
-   * @parma c the value to shape, default is 1
+   * Cubic out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
+   * @param t a value between 0 to 1
+   * @param c the value to shape, default is 1
    */
   static cubicOut(t:number, c:number = 1):number {
     let dt = t - 1;
@@ -505,9 +508,9 @@ export class Shaping {
   }
 
   /** 
-   * Cubic in-out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
-   * @parma t a value between 0 to 1
-   * @parma c the value to shape, default is 1
+   * Cubic in-out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
+   * @param t a value between 0 to 1
+   * @param c the value to shape, default is 1
    */
   static cubicInOut(t:number, c:number = 1):number {
     let dt = t * 2;
@@ -515,56 +518,56 @@ export class Shaping {
   }
 
   /** 
-   * Exponential ease In, adapted from Golan Levin's [polynomial shapers](http://www.flong.com/texts/code/shapers_poly/)
-   * @parma t a value between 0 to 1
-   * @parma c the value to shape, default is 1
-   * @parma p a value between 0 to 1 to control the curve. Default is 0.25.
+   * Exponential ease in, adapted from Golan Levin's [polynomial shapers](http://www.flong.com/texts/code/shapers_poly/).
+   * @param t a value between 0 to 1
+   * @param c the value to shape, default is 1
+   * @param p a value between 0 to 1 to control the curve. Default is 0.25.
    */
   static exponentialIn(t:number, c:number = 1, p:number = 0.25):number {
     return c * Math.pow(t, 1 / p);
   }
 
   /** 
-   * Exponential ease out, adapted from Golan Levin's [polynomial shapers](http://www.flong.com/texts/code/shapers_poly/)
-   * @parma t a value between 0 to 1
-   * @parma c the value to shape, default is 1
-   * @parma p a value between 0 to 1 to control the curve. Default is 0.25.
+   * Exponential ease out, adapted from Golan Levin's [polynomial shapers](http://www.flong.com/texts/code/shapers_poly/).
+   * @param t a value between 0 to 1
+   * @param c the value to shape, default is 1
+   * @param p a value between 0 to 1 to control the curve. Default is 0.25.
    */
   static exponentialOut(t:number, c:number = 1, p:number = 0.25):number {
     return c * Math.pow(t, p);
   }
 
   /** 
-   * Sinuous in, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
-   * @parma t a value between 0 to 1
-   * @parma c the value to shape, default is 1
+   * Sinuous in, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
+   * @param t a value between 0 to 1
+   * @param c the value to shape, default is 1
    */
   static sineIn(t:number, c:number = 1):number {
     return -c * Math.cos(t * Const.half_pi) + c;
   }
 
   /** 
-   * Sinuous out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
-   * @parma t a value between 0 to 1
-   * @parma c the value to shape, default is 1
+   * Sinuous out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
+   * @param t a value between 0 to 1
+   * @param c the value to shape, default is 1
    */
   static sineOut(t:number, c:number = 1):number {
     return c * Math.sin(t * Const.half_pi);
   }
 
   /** 
-   * Sinuous in-out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
-   * @parma t a value between 0 to 1
-   * @parma c the value to shape, default is 1
+   * Sinuous in-out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
+   * @param t a value between 0 to 1
+   * @param c the value to shape, default is 1
    */
   static sineInOut(t:number, c:number = 1):number {
     return -c / 2 * (Math.cos(Math.PI * t) - 1);
   }
 
   /** 
-   * A faster way to approximate cosine ease in-out using Blinn-Wyvill Approximation. Adapated from Golan Levin's [polynomial shaping](http://www.flong.com/texts/code/shapers_poly/)
-   * @parma t a value between 0 to 1
-   * @parma c the value to shape, default is 1
+   * A faster way to approximate cosine ease in-out using Blinn-Wyvill Approximation. Adapated from Golan Levin's [polynomial shaping](http://www.flong.com/texts/code/shapers_poly/).
+   * @param t a value between 0 to 1
+   * @param c the value to shape, default is 1
    */
   static cosineApprox(t:number, c:number = 1) {
     let t2 = t * t;
@@ -574,18 +577,18 @@ export class Shaping {
   }
 
   /** 
-   * Circular in, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
-   * @parma t a value between 0 to 1
-   * @parma c the value to shape, default is 1
+   * Circular in, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
+   * @param t a value between 0 to 1
+   * @param c the value to shape, default is 1
    */
   static circularIn(t:number, c:number = 1):number {
     return -c * (Math.sqrt(1 - t * t) - 1);
   }
 
   /** 
-   * Circular out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
-   * @parma t a value between 0 to 1
-   * @parma c the value to shape, default is 1
+   * Circular out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
+   * @param t a value between 0 to 1
+   * @param c the value to shape, default is 1
    */
   static circularOut(t:number, c:number = 1):number {
     let dt = t - 1;
@@ -593,9 +596,9 @@ export class Shaping {
   }
 
   /** 
-   * Circular in-out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
-   * @parma t a value between 0 to 1
-   * @parma c the value to shape, default is 1
+   * Circular in-out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
+   * @param t a value between 0 to 1
+   * @param c the value to shape, default is 1
    */
   static circularInOut(t:number, c:number = 1):number {
     let dt = t * 2;
@@ -603,10 +606,10 @@ export class Shaping {
   }
 
   /** 
-   * Elastic in, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
-   * @parma t a value between 0 to 1
-   * @parma c the value to shape, default is 1
-   * @parma p elastic parmeter between 0 to 1. The lower the number, the more elastic it will be. Default is 0.7.
+   * Elastic in, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
+   * @param t a value between 0 to 1
+   * @param c the value to shape, default is 1
+   * @param p elastic parmeter between 0 to 1. The lower the number, the more elastic it will be. Default is 0.7.
    */
   static elasticIn(t:number, c:number = 1, p:number = 0.7):number {
     let dt = t - 1;
@@ -615,10 +618,10 @@ export class Shaping {
   }
 
   /** 
-   * Elastic out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
-   * @parma t a value between 0 to 1
-   * @parma c the value to shape, default is 1
-   * @parma p elastic parmeter between 0 to 1. The lower the number, the more elastic it will be. Default is 0.7.
+   * Elastic out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
+   * @param t a value between 0 to 1
+   * @param c the value to shape, default is 1
+   * @param p elastic parmeter between 0 to 1. The lower the number, the more elastic it will be. Default is 0.7.
    */
   static elasticOut(t:number, c:number = 1, p:number = 0.7):number {
     let s = (p / Const.two_pi) * 1.5707963267948966;
@@ -626,10 +629,10 @@ export class Shaping {
   }
 
   /** 
-   * Elastic in-out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
-   * @parma t a value between 0 to 1
-   * @parma c the value to shape, default is 1
-   * @parma p elastic parmeter between 0 to 1. The lower the number, the more elastic it will be. Default is 0.6.
+   * Elastic in-out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
+   * @param t a value between 0 to 1
+   * @param c the value to shape, default is 1
+   * @param p elastic parmeter between 0 to 1. The lower the number, the more elastic it will be. Default is 0.6.
    */
   static elasticInOut(t:number, c:number = 1, p:number = 0.6):number {
     let dt = t * 2;
@@ -644,18 +647,18 @@ export class Shaping {
   }
 
   /** 
-   * Bounce in, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
-   * @parma t a value between 0 to 1
-   * @parma c the value to shape, default is 1
+   * Bounce in, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
+   * @param t a value between 0 to 1
+   * @param c the value to shape, default is 1
    */
   static bounceIn(t:number, c:number = 1):number {
     return c - Shaping.bounceOut((1 - t), c);
   }
 
   /** 
-   * Bounce out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
-   * @parma t a value between 0 to 1
-   * @parma c the value to shape, default is 1
+   * Bounce out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
+   * @param t a value between 0 to 1
+   * @param c the value to shape, default is 1
    */
   static bounceOut(t:number, c:number = 1) {
     if (t < (1 / 2.75)) {
@@ -673,9 +676,9 @@ export class Shaping {
   }
 
   /** 
-   * Bounce in-out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/)
-   * @parma t a value between 0 to 1
-   * @parma c the value to shape, default is 1
+   * Bounce in-out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
+   * @param t a value between 0 to 1
+   * @param c the value to shape, default is 1
    */
   static bounceInOut(t:number, c:number = 1):number {
     return (t < 0.5) ? Shaping.bounceIn(t * 2, c) / 2 : Shaping.bounceOut(t * 2 - 1, c) / 2 + c / 2;
@@ -683,9 +686,9 @@ export class Shaping {
 
   /** 
    * Sigmoid curve changes its shape adapted from the input value, but always returns a value between 0 to 1.
-   * @parma t a value between 0 to 1
-   * @parma c the value to shape, default is 1
-   * @parma p the larger the value, the "steeper" the curve will be. Default is 10.
+   * @param t a value between 0 to 1
+   * @param c the value to shape, default is 1
+   * @param p the larger the value, the "steeper" the curve will be. Default is 10.
    */
   static sigmoid(t:number, c:number = 1, p:number = 10):number {
     let d = p * (t - 0.5);
@@ -693,10 +696,10 @@ export class Shaping {
   }
 
   /** 
-   * The Logistic Sigmoid is a useful curve. Adapted from Golan Levin's [shaping function](http://www.flong.com/texts/code/shapers_exp/)
-   * @parma t a value between 0 to 1
-   * @parma c the value to shape, default is 1
-   * @parma p a parameter between 0 to 1 to control the steepness of the curve. Higher is steeper. Default is 0.7.
+   * Logistic sigmoid, adapted from Golan Levin's [shaping function](http://www.flong.com/texts/code/shapers_exp/).
+   * @param t a value between 0 to 1
+   * @param c the value to shape, default is 1
+   * @param p a parameter between 0 to 1 to control the steepness of the curve. Higher is steeper. Default is 0.7.
    */
   static logSigmoid(t:number, c:number = 1, p:number = 0.7):number {
     p = Math.max(Const.epsilon, Math.min(1 - Const.epsilon, p));
@@ -710,10 +713,10 @@ export class Shaping {
 
 
   /** 
-   * An exponential seat curve. Adapted from Golan Levin's [shaping functions](http://www.flong.com/texts/code/shapers_exp/)
-   * @parma t a value between 0 to 1
-   * @parma c the value to shape, default is 1
-   * @parma p a parameter between 0 to 1 to control the steepness of the curve. Higher is steeper. Default is 0.5.
+   * Exponential seat curve, adapted from Golan Levin's [shaping functions](http://www.flong.com/texts/code/shapers_exp/).
+   * @param t a value between 0 to 1
+   * @param c the value to shape, default is 1
+   * @param p a parameter between 0 to 1 to control the steepness of the curve. Higher is steeper. Default is 0.5.
    */
   static seat(t:number, c:number = 1, p:number = 0.5):number {
     if ((t < 0.5)) {
@@ -725,10 +728,10 @@ export class Shaping {
 
 
   /** 
-   * Quadratic bezier curve. Adapted from Golan Levin's [shaping functions](http://www.flong.com/texts/code/shapers_exp/)
-   * @parma t a value between 0 to 1
-   * @parma c the value to shape, default is 1
-   * @parma p1 a Pt object specifying the first control Pt, or a value specifying the control Pt's x position (its y position will default to 0.5). Default is `Pt(0.95, 0.95)
+   * Quadratic bezier curve, adapted from Golan Levin's [shaping functions](http://www.flong.com/texts/code/shapers_exp/).
+   * @param t a value between 0 to 1
+   * @param c the value to shape, default is 1
+   * @param p1 a Pt object specifying the first control Pt, or a value specifying the control Pt's x position (its y position will default to 0.5). Default is `Pt(0.95, 0.95)
    */
   static quadraticBezier(t:number, c:number = 1, p:number|PtLike=[0.05, 0.95] ):number {
     let a:number = (typeof p != "number") ? p[0] : p;
@@ -744,10 +747,10 @@ export class Shaping {
 
   /** 
    * Cubic bezier curve. This reuses the bezier functions in Curve class.
-   * @parma t a value between 0 to 1
-   * @parma c the value to shape, default is 1
-   * @parma p1` a Pt object specifying the first control Pt. Default is `Pt(0.1, 0.7).
-   * @parma p2` a Pt object specifying the second control Pt. Default is `Pt(0.9, 0.2).
+   * @param t a value between 0 to 1
+   * @param c the value to shape, default is 1
+   * @param p1` a Pt object specifying the first control Pt. Default is `Pt(0.1, 0.7).
+   * @param p2` a Pt object specifying the second control Pt. Default is `Pt(0.9, 0.2).
    */
   static cubicBezier(t:number, c:number = 1, p1:PtLike=[0.1, 0.7], p2:PtLike=[0.9, 0.2] ):number {
     let curve = new Group( new Pt(0, 0), new Pt(p1), new Pt(p2), new Pt(1, 1) );
@@ -756,10 +759,10 @@ export class Shaping {
 
 
   /** 
-   * Give a Pt, draw a quadratic curve that will pass through that Pt as closely as possible. Adapted from Golan Levin's [shaping functions](http://www.flong.com/texts/code/shapers_poly/)
-   * @parma t a value between 0 to 1
-   * @parma c the value to shape, default is 1
-   * @parma p1` a Pt object specifying the Pt to pass through. Default is `Pt(0.2, 0.35)
+   * Give a Pt, draw a quadratic curve that will pass through that Pt as closely as possible. Adapted from Golan Levin's [shaping functions](http://www.flong.com/texts/code/shapers_poly/).
+   * @param t a value between 0 to 1
+   * @param c the value to shape, default is 1
+   * @param p1` a Pt object specifying the Pt to pass through. Default is `Pt(0.2, 0.35)
    */
   static quadraticTarget(t:number, c:number = 1, p1:PtLike = [0.2, 0.35]):number {
     let a = Math.min(1 - Const.epsilon, Math.max( Const.epsilon, p1[0] ));
@@ -772,22 +775,22 @@ export class Shaping {
 
 
   /** 
-   * Step function is a simple jump from 0 to 1 at a specific Pt in time
-   * @parma t a value between 0 to 1
-   * @parma c the value to shape, default is 1
-   * @parma p usually a value between 0 to 1, which specify the Pt to "jump". Default is 0.5 which is in the middle.
+   * Step function is a simple jump from 0 to 1 at a specific Pt in time.
+   * @param t a value between 0 to 1
+   * @param c the value to shape, default is 1
+   * @param p usually a value between 0 to 1, which specify the Pt to "jump". Default is 0.5 which is in the middle.
    */
   static cliff(t:number, c:number = 1, p:number = 0.5):number {
     return (t > p) ? c : 0;
   }
 
   /** 
-   * Convert any shaping functions into a series of steps
-   * @parma fn the original shaping function
-   * @parma steps the number of steps
-   * @parma t a value between 0 to 1
-   * @parma c the value to shape, default is 1
-   * @parma args optional paramters to pass to original function
+   * Convert any shaping functions into a series of steps.
+   * @param fn the original shaping function
+   * @param steps the number of steps
+   * @param t a value between 0 to 1
+   * @param c the value to shape, default is 1
+   * @param args optional paramters to pass to original function
    */
   static step(fn: Function, steps:number, t:number, c:number, ...args:any[]) {
     let s = 1 / steps;
@@ -800,7 +803,7 @@ export class Shaping {
 
 /**
  * Range object keeps track of a Group of n-dimensional Pts to provide its minimum, maximum, and magnitude in each dimension. 
- * It also provides convenient functions such as mapping the Group to another range.
+ * It also provides convenient functions such as mapping the Group to another range. This class may be useful for visualizing data in charts.
  */
 export class Range {
 
@@ -812,7 +815,7 @@ export class Range {
 
 
   /**
-   * Construct a Range instance for a Group of Pts, 
+   * Construct a Range instance for a Group of Pts.
    * @param g a Group or an array of Pts
    */
   constructor( g:GroupLike ) {
@@ -821,24 +824,23 @@ export class Range {
   }
 
   /**
-   * Get this Range's maximum values per dimension
+   * Get this Range's maximum values per dimension.
    */
   get max():Pt { return this._max.clone(); }
   
   /**
-   * Get this Range's minimum values per dimension
+   * Get this Range's minimum values per dimension.
    */
   get min():Pt { return this._min.clone(); }
   
   /**
-   * Get this Range's magnitude in each dimension
+   * Get this Range's magnitude in each dimension.
    */
   get magnitude():Pt { return this._mag.clone(); }
 
 
   /**
-   * Go through the group and find its min and max values.
-   * Usually you don't need to call this function directly.
+   * Go through the group and find its min and max values. Usually you don't need to call this function directly.
    */
   calc():this {
     if (!this._source) return;
@@ -869,7 +871,7 @@ export class Range {
 
 
   /**
-   * Map this Range to another range of values
+   * Map this Range to another range of values.
    * @param min target range's minimum value
    * @param max target range's maximum value
    * @param exclude Optional boolean array where `true` means excluding the conversion in that specific dimension.
@@ -889,7 +891,7 @@ export class Range {
 
 
   /**
-   * Add more Pts to this Range and recalculate its min and max values
+   * Add more Pts to this Range and recalculate its min and max values.
    * @param g a Group or an array of Pts to append to this Range
    * @param update Optional. Set the parameter to `false` if you want to append without immediately updating this Range's min and max values. Default is `true`.
    */
