@@ -35,7 +35,7 @@ export class Create {
 
 
   /**
-   * Create a set of points that distribute evenly on a line.
+   * Create a set of points that distribute evenly on a line. Similar to [`Line.subpoints`](#link) but includes the end points.
    * @param line a Group representing a line
    * @param count number of points to create
    */

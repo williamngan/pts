@@ -123,7 +123,7 @@
 
         <h1>{{ contents.name }}</h1>
         
-        <div class="top_info" v-html="md(contents.comment)"></div>
+        <div id="top_info" class="top_info" v-html="md(contents.comment)"></div>
         <div class="misc">
           <span v-if="contents.kind" :class="'token t_'+contents.kind">{{ contents.kind }}</span>
           <span v-if="contents.extends && contents.extends.length > 0">extends {{ contents.extends.join(", ") }}</span>
@@ -132,7 +132,7 @@
         </div>
         
         
-        <div class="section" v-if="contents.constructor && contents.constructor.length > 0">
+        <div id="constructor" class="section" v-if="contents.constructor && contents.constructor.length > 0">
           <h3>Constructor</h3>
           <div v-for="m in contents.constructor" v-bind:id="'constructor_'+m.name">
             <h4>new {{ contents.name }} <span class="param">( {{ params(m.signatures) }} )</span></h4>

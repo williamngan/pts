@@ -15,13 +15,13 @@ let _errorOutofBound = (obj, param:number|string="") => Util.warn( `Index ${para
 
 /**
  * Line class provides static functions to create and operate on lines. A line is usually represented as a Group of 2 Pts.
- * You can use the static function as-is, or apply the `op` method in Group or Pt to many of these functions.
- * See [Op guide](../../guide/Op-0400.html) for details.
+ * You can use the static functions as-is, or apply the [`Group.op`](#link) or [`Pt.op`](#link) to enable functional programming.
+ * See [Op guide](../guide/Op-0400.html) for details.
  */
 export class Line {
 
   /**
-   * Create a line by "drawing" from an anchor point, given an angle and a magnitude
+   * Create a line that originates from an anchor point, given an angle and a magnitude.
    * @param anchor an anchor Pt
    * @param angle an angle in radian
    * @param magnitude magnitude of the line
@@ -35,7 +35,7 @@ export class Line {
 
 
   /**
-   * Calculate the slope of a line
+   * Calculate the slope of a line.
    * @param p1 line's first end point
    * @param p2 line's second end point
    */
@@ -45,7 +45,7 @@ export class Line {
 
 
   /**
-   * Calculate the slope and xy intercepts of a line
+   * Calculate the slope and xy intercepts of a line.
    * @param p1 line's first end point
    * @param p2 line's second end point
    * @returns an object with `slope`, `xi`, `yi` properties 
@@ -62,7 +62,7 @@ export class Line {
 
 
   /**
-   * Given a 2D path and a point, find whether the point is on left or right side of the line
+   * Given a 2D path and a point, find whether the point is on left or right side of the line.
    * @param line  a Group of at least 2 Pts
    * @param pt a Pt
    * @returns a negative value if on left and a positive value if on right. If collinear, then the return value is 0.
@@ -88,7 +88,7 @@ export class Line {
 
 
   /**
-   * Get magnitude of a line segment
+   * Get magnitude of a line segment.
    * @param line a Group of at least 2 Pts
    */
   static magnitude( line:GroupLike ):number {
@@ -97,7 +97,7 @@ export class Line {
 
 
   /**
-   * Get squared magnitude of a line segment
+   * Get squared magnitude of a line segment.
    * @param line a Group of at least 2 Pts
    */
   static magnitudeSq( line:GroupLike ):number {
@@ -106,7 +106,7 @@ export class Line {
 
 
   /**
-   * Find a point on a line that is perpendicular (shortest distance) to a target point
+   * Find a point on a line that is perpendicular (shortest distance) to a target point.
    * @param pt a target Pt 
    * @param ln a group of Pts that defines a line
    * @param asProjection if true, this returns the projection vector instead. Default is false.
@@ -123,7 +123,7 @@ export class Line {
 
 
   /**
-   * Given a line and a point, find the shortest distance from the point to the line
+   * Given a line and a point, find the shortest distance from the point to the line.
    * @param line a Group of 2 Pts
    * @param pt a Pt
    * @see `Line.perpendicularFromPt`
@@ -200,7 +200,7 @@ export class Line {
 
 
   /**
-   * Given a line segemnt and a ray (infinite line), find its intersection point(s) with a polygon.
+   * Given a line segemnt or a ray (infinite line), find its intersection point(s) with a polygon.
    * @param lineOrRay a Group of 2 Pts representing a line or ray
    * @param poly a Group of Pts representing a polygon
    * @param sourceIsRay a boolean value to treat the line as a ray (infinite line). Default is `false`.
@@ -218,7 +218,7 @@ export class Line {
 
 
   /**
-   * Find intersection points of 2 polygons. This checks all line segments in the two lists. Consider using a bounding-box check before calling this.
+   * Find intersection points of 2 sets of lines. This checks all line segments in the two lists. Consider using a bounding-box check before calling this. If you are checking convex polygon intersections, using [`Polygon.intersectPolygon2D`](#link) will be more efficient.
    * @param lines1 an array of line segments
    * @param lines2 an array of line segments
    * @param isRay a boolean value to treat the line as a ray (infinite line). Default is `false`.
@@ -237,7 +237,7 @@ export class Line {
 
 
   /**
-   * Get two intersection Pts of a ray with a 2D grid point
+   * Get two points of a ray that intersects with a point on a 2D grid.
    * @param ray a ray specified by 2 Pts
    * @param gridPt a Pt on the grid
    * @returns a group of two intersecting Pts. The first one is horizontal intersection and the second one is vertical intersection.
@@ -252,7 +252,7 @@ export class Line {
 
 
   /**
-   * Get two intersection Pts of a line segment with a 2D grid point
+   * Get two intersection Pts of a line segment with a 2D grid point.
    * @param ray a ray specified by 2 Pts
    * @param gridPt a Pt on the grid
    * @returns a group of two intersecting Pts. The first one is horizontal intersection and the second one is vertical intersection.
@@ -268,8 +268,7 @@ export class Line {
 
 
   /**
-   * Quick way to check rectangle intersection. 
-   * For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersectPolygon2D()`.
+   * An easy way to get rectangle-line intersection points. For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersectPolygon2D()`.
    * @param line a Group representing a line
    * @param rect a Group representing a rectangle
    * @returns a Group of intersecting Pts
@@ -282,7 +281,7 @@ export class Line {
 
 
   /**
-   * Get evenly distributed points on a line
+   * Get evenly distributed points on a line. Similar to [`Create.distributeLinear`](#link) but excluding end points.
    * @param line a Group representing a line
    * @param num number of points to get
    */
@@ -296,7 +295,7 @@ export class Line {
 
 
   /**
-   * Crop this line by a circle or rectangle at end point.
+   * Crop this line by a circle or rectangle at end points. This can be useful for creating arrows that connect to an object's edge.
    * @param line line to crop
    * @param size size of circle or rectangle as Pt
    * @param index line's end point index, ie, 0 = start and 1 = end.
@@ -328,7 +327,7 @@ export class Line {
   }
 
   /**
-   * Create an marker arrow or line, placed at an end point of this line
+   * Create an marker arrow or line, placed at an end point of this line.
    * @param line line to place marker
    * @param size size of the marker as Pt
    * @param graphic either "arrow" or "line"
@@ -353,7 +352,7 @@ export class Line {
   }
 
   /**
-   * Convert this line to a rectangle representation
+   * Convert this line to a new rectangle representation.
    * @param line a Group representing a line
    */
   static toRect( line:GroupLike ) {
@@ -366,13 +365,17 @@ export class Line {
 
 /**
  * Rectangle class provides static functions to create and operate on rectangles. A rectangle is usually represented as a Group of 2 Pts, marking the top-left and bottom-right corners of the rectangle.
- * You can use the static function as-is, or apply the `op` method in Group or Pt to many of these functions.
- * See [Op guide](../../guide/Op-0400.html) for details.
+ * You can use the static functions as-is, or apply the [`Group.op`](#link) or [`Pt.op`](#link) to enable functional programming.
+ * See [Op guide](../guide/Op-0400.html) for details.
  */
 export class Rectangle {
 
   /**
-   * Same as `Rectangle.fromTopLeft`
+   * Create a rectangle from top-left anchor point. Same as [`Rectangle.fromTopLeft`](#link).
+   * @param topLeft top-left point
+   * @param widthOrSize width as a number, or a Pt that defines its size
+   * @param height optional height as a number
+   * @returns a Group of 2 Pts representing a rectangle
    */
   static from( topLeft:PtLike|number[], widthOrSize:number|PtLike, height?:number ):Group {
     return Rectangle.fromTopLeft( topLeft, widthOrSize, height );
@@ -380,10 +383,11 @@ export class Rectangle {
 
 
   /**
-   * Create a rectangle given a top-left position and a size
+   * Create a rectangle given a top-left position and a size.
    * @param topLeft top-left point
    * @param widthOrSize width as a number, or a Pt that defines its size
    * @param height optional height as a number
+   * @returns a Group of 2 Pts representing a rectangle
    */
   static fromTopLeft( topLeft:PtLike|number[], widthOrSize:number|PtLike, height?:number ):Group {
     let size = (typeof widthOrSize == "number") ? [widthOrSize, (height||widthOrSize) ] : widthOrSize;
@@ -392,10 +396,11 @@ export class Rectangle {
 
 
   /**
-   * Create a rectangle given a center position and a size
+   * Create a rectangle given a center position and a size.
    * @param topLeft top-left point
    * @param widthOrSize width as a number, or a Pt that defines its size
    * @param height optional height as a number
+   * @returns a Group of 2 Pts representing a rectangle
    */
   static fromCenter( center:PtLike|number[], widthOrSize:number|PtLike, height?:number ):Group {
     let half = (typeof widthOrSize == "number") ? [ widthOrSize/2, (height||widthOrSize)/2 ] : new Pt(widthOrSize).divide(2);
@@ -404,9 +409,9 @@ export class Rectangle {
 
 
   /**
-   * Convert this rectangle to a circle that fits within the rectangle
+   * Convert this rectangle to a new circle that fits within the rectangle. Same as [`Circle.fromRect`](#link).
+   * @param pts a Group of 2 Pts representing a rectangle
    * @returns a Group that represents a circle
-   * @see `Circle`
    */
   static toCircle( pts:GroupLike ):Group {
     return Circle.fromRect( pts );
@@ -414,9 +419,10 @@ export class Rectangle {
 
   
   /**
-   * Create a square that either fits within or encloses a rectangle
+   * Create a square that either fits within or encloses a rectangle.
    * @param pts a Group of 2 Pts representing a rectangle
    * @param enclose if `true`, the square will enclose the rectangle. Default is `false`, which will fit the square inside the rectangle.
+   * @returns a Group of 2 Pts representing a rectangle
    */
   static toSquare( pts:GroupLike, enclose=false ):Group {
     let s = Rectangle.size( pts );
@@ -426,7 +432,7 @@ export class Rectangle {
 
 
   /**
-   * Get the size of this rectangle as a Pt
+   * Get the size of this rectangle as a Pt.
    * @param pts a Group of 2 Pts representing a Rectangle
    */
   static size( pts:GroupLike ):Pt {
@@ -435,7 +441,7 @@ export class Rectangle {
 
 
   /**
-   * Get the center of this rectangle 
+   * Get the center of this rectangle.
    * @param pts a Group of 2 Pts representing a Rectangle
    */
   static center( pts:GroupLike ):Pt {
@@ -446,7 +452,7 @@ export class Rectangle {
 
 
   /**
-   * Get the 4 corners of this rectangle as a Group
+   * Get the 4 corners of this rectangle as a Group.
    * @param rect a Group of 2 Pts representing a Rectangle
    */
   static corners( rect:GroupLike ):Group {
@@ -457,7 +463,7 @@ export class Rectangle {
 
 
   /**
-   * Get the 4 sides of this rectangle as an array of 4 Groups
+   * Get the 4 sides of this rectangle as an array of 4 Groups.
    * @param rect a Group of 2 Pts representing a Rectangle
    * @returns an array of 4 Groups, each of which represents a line segment
    */
@@ -469,17 +475,9 @@ export class Rectangle {
     ];
   }
 
-  
-  /**
-   * Same as `Rectangle.sides`
-   */
-  static lines( rect:GroupLike ): Group[] {
-    return Rectangle.sides( rect );
-  }
- 
 
   /**
-   * Given an array of rectangles, get a rectangle that bounds all of them
+   * Given an array of rectangles, get a rectangle that bounds all of them.
    * @param rects an array of Groups that represent rectangles
    * @returns the bounding rectangle as a Group
    */
@@ -500,7 +498,7 @@ export class Rectangle {
 
 
   /**
-   * Convert this rectangle into a Group representing a polygon
+   * Convert this rectangle into a Group representing a polygon.
    * @param rect a Group of 2 Pts representing a Rectangle
    */
   static polygon( rect:GroupLike ):Group {
@@ -509,7 +507,7 @@ export class Rectangle {
 
 
   /**
-   * Subdivide a rectangle into 4 rectangles, one for each quadrant
+   * Subdivide a rectangle into 4 rectangles, one for each quadrant.
    * @param rect a Group of 2 Pts representing a Rectangle
    * @returns an array of 4 Groups of rectangles
    */
@@ -521,7 +519,7 @@ export class Rectangle {
 
 
   /**
-   * Subdivde a rectangle into 2 rectangles, by row or by column
+   * Subdivde a rectangle into 2 rectangles, by row or by column.
    * @param rect Group of 2 Pts representing a Rectangle
    * @param ratio a value between 0 to 1 to indicate the split ratio
    * @param asRows if `true`, split into 2 rows. Default is `false` which splits into 2 columns.
@@ -538,7 +536,7 @@ export class Rectangle {
 
 
   /**
-   * Check if a point is within a rectangle
+   * Check if a point is within a rectangle.
    * @param rect a Group of 2 Pts representing a Rectangle
    * @param pt the point to check
    */
@@ -548,7 +546,7 @@ export class Rectangle {
 
 
   /**
-   * Check if a rectangle is within the bounds of another rectangle
+   * Check if a rectangle is within the bounds of another rectangle.
    * @param rect1 a Group of 2 Pts representing a rectangle
    * @param rect2 a Group of 2 Pts representing a rectangle
    * @param resetBoundingBox if `true`, reset the bounding box. Default is `false` which assumes the rect's first Pt at is its top-left corner.
@@ -568,8 +566,7 @@ export class Rectangle {
 
 
   /**
-   * Quick way to check rectangle intersection. 
-   * For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersectPolygon2D()`.
+   * An easy way to get rectangle-rectangle intersection points. For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersectPolygon2D()`.
    * @param rect1 a Group of 2 Pts representing a rectangle
    * @param rect2 a Group of 2 Pts representing a rectangle
    */
