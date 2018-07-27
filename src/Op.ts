@@ -409,12 +409,13 @@ export class Rectangle {
 
 
   /**
-   * Convert this rectangle to a new circle that fits within the rectangle. Same as [`Circle.fromRect`](#link).
+   * Create a new circle that either fits within or encloses the rectangle. Same as [`Circle.fromRect`](#link).
    * @param pts a Group of 2 Pts representing a rectangle
+   * @param within if `true`, the circle will be within the rectangle. If `false`, the circle will enclose the rectangle. 
    * @returns a Group that represents a circle
    */
-  static toCircle( pts:GroupLike ):Group {
-    return Circle.fromRect( pts );
+  static toCircle( pts:GroupLike, within:boolean=true ):Group {
+    return Circle.fromRect( pts, within );
   }
 
   
@@ -498,7 +499,7 @@ export class Rectangle {
 
 
   /**
-   * Convert this rectangle into a Group representing a polygon.
+   * Convert this rectangle into a Group representing a polygon. An alias for [`Rectangle.corners`](#link)
    * @param rect a Group of 2 Pts representing a Rectangle
    */
   static polygon( rect:GroupLike ):Group {
@@ -581,16 +582,17 @@ export class Rectangle {
 
 /**
  * Circle class provides static functions to create and operate on circles. A circle is usually represented as a Group of 2 Pts, where the first Pt specifies the center, and the second Pt specifies the radius.
- * You can use the static function as-is, or apply the `op` method in Group or Pt to many of these functions.
- * See [Op guide](../../guide/Op-0400.html) for details.
+ * You can use the static functions as-is, or apply the [`Group.op`](#link) or [`Pt.op`](#link) to enable functional programming.
+ * See [Op guide](../guide/Op-0400.html) for details.
  */
 export class Circle {
   
 
   /**
-   * Create a circle that either fits within or encloses a rectangle
+   * Create a circle that either fits within, or encloses, a rectangle.
    * @param pts a Group of 2 Pts representing a rectangle
    * @param enclose if `true`, the circle will enclose the rectangle. Default is `false`, which will fit the circle inside the rectangle.
+   * @returns a Group that represents a circle
    */
   static fromRect( pts:GroupLike, enclose=false ):Group {
     let r = 0;
@@ -606,9 +608,10 @@ export class Circle {
 
 
   /**
-   * Create a circle based on a center point and a radius
+   * Create a circle based on a center point and a radius.
    * @param pt center point of circle
    * @param radius radius of circle
+   * @returns a Group that represents a circle
    */
   static fromCenter( pt:PtLike, radius:number ):Group {
     return new Group( new Pt(pt), new Pt(radius, radius) );
@@ -616,7 +619,7 @@ export class Circle {
 
 
   /**
-   * Check if a point is within a circle
+   * Check if a point is within a circle.
    * @param pts a Group of 2 Pts representing a circle
    * @param pt the point to checks
    * @param threshold an optional small number to set threshold. Default is 0.
@@ -628,7 +631,7 @@ export class Circle {
 
 
   /**
-   * Get the intersection points between a circle and a ray (infinite line)
+   * Get the intersection points between a circle and a ray (infinite line).
    * @param pts a Group of 2 Pts representing a circle
    * @param ray a Group of 2 Pts representing a ray 
    * @returns a Group of intersection points, or an empty Group if no intersection is found
@@ -661,7 +664,7 @@ export class Circle {
 
 
   /**
-   * Get the intersection points between a circle and a line segment
+   * Get the intersection points between a circle and a line segment.
    * @param pts a Group of 2 Pts representing a circle
    * @param ray a Group of 2 Pts representing a line
    * @returns a Group of intersection points, or an empty Group if no intersection is found
@@ -679,7 +682,7 @@ export class Circle {
 
 
   /**
-   * Get the intersection points between two circles
+   * Get the intersection points between two circles.
    * @param pts a Group of 2 Pts representing a circle
    * @param circle a Group of 2 Pts representing a circle
    * @returns a Group of intersection points, or an empty Group if no intersection is found
@@ -713,7 +716,7 @@ export class Circle {
 
   /**
    * Quick way to check rectangle intersection with a circle. 
-   * For more optimized implementation, store the rectangle's sides separately (eg, `Rectangle.sides()`) and use `Polygon.intersectPolygon2D()`.
+   * For more optimized implementation, store the rectangle's sides separately (eg, [`Rectangle.sides`](#link)) and use [`Polygon.intersectPolygon2D()`](#link).
    * @param pts a Group of 2 Pts representing a circle
    * @param rect a Group of 2 Pts representing a rectangle
    * @returns a Group of intersection points, or an empty Group if no intersection is found
@@ -730,39 +733,40 @@ export class Circle {
 
 
   /**
-   * Convert this cirlce to a rectangle that encloses this circle
+   * Get a rectangle that either fits within or encloses this circle. See also [`Rectangle.toCircle`](#link)
    * @param pts a Group of 2 Pts representing a circle
+   * @param within if `true`, the rectangle will be within the circle. If `false`, the rectangle will enclose the circle. 
+   * @returns a Group representing a rectangle
    */
-  static toRect( pts:GroupLike ):Group {
+  static toRect( pts:GroupLike, within:boolean=false ):Group {
     let r = pts[1][0];
-    return new Group( pts[0].$subtract( r ), pts[0].$add( r ) );
-  }
-
-
-  /**
-   * Convert this cirlce to a rectangle that fits within this circle
-   * @param pts a Group of 2 Pts representing a circle
-   */
-  static toInnerRect( pts:GroupLike ):Group {
-    let r = pts[1][0];
-    let half = Math.sqrt(r*r)/2;
-    return new Group( pts[0].$subtract(half), pts[0].$add( half ) );
-  }
-
-
-  /**
-   * Convert this cirlce to a triangle that fits within this circle
-   * @param pts a Group of 2 Pts representing a circle
-   */
-  static toInnerTriangle( pts:GroupLike ):Group {
-    let ang = -Math.PI/2;
-    let inc = Math.PI * 2/3;
-    let g = new Group();
-    for (let i=0; i<3; i++) {
-      g.push( pts[0].clone().toAngle( ang, pts[1][0], true ) );
-      ang += inc;
+    if (within) {
+      let half = Math.sqrt(r*r)/2;
+      return new Group( pts[0].$subtract(half), pts[0].$add( half ) );
+    } else {
+      return new Group( pts[0].$subtract( r ), pts[0].$add( r ) );
     }
-    return g;
+  }
+
+
+  /**
+   * Get a triangle that fits within this circle.
+   * @param pts a Group of 2 Pts representing a circle
+   * @param within if `true`, the triangle will be within the circle. If `false`, the triangle will enclose the circle. 
+   */
+  static toTriangle( pts:GroupLike, within:boolean=true ):Group {
+    if (within) {
+      let ang = -Math.PI/2;
+      let inc = Math.PI * 2/3;
+      let g = new Group();
+      for (let i=0; i<3; i++) {
+        g.push( pts[0].clone().toAngle( ang, pts[1][0], true ) );
+        ang += inc;
+      }
+      return g;
+    } else {
+      return Triangle.fromCenter( pts[0], pts[1][0] );
+    }
   }
 
 }
@@ -770,9 +774,9 @@ export class Circle {
 
 
 /**
- * Triangle class provides static functions to create and operate on trianges. A triange is usually represented as a Group of 3 Pts.
- * You can use the static function as-is, or apply the `op` method in Group or Pt to many of these functions.
- * See [Op guide](../../guide/Op-0400.html) for details.
+ * Triangle class provides static functions to create and operate on trianges. A triange is a polygon represented as a Group of 3 Pts.
+ * You can use the static functions as-is, or apply the [`Group.op`](#link) or [`Pt.op`](#link) to enable functional programming.
+ * See [Op guide](../guide/Op-0400.html) for details.
  */
 export class Triangle {
  
@@ -790,16 +794,16 @@ export class Triangle {
 
 
   /**
-   * Create a triangle that fits within a circle
+   * Create a triangle that fits within a circle.
    * @param circle a Group of 2 Pts representing a circle
    */
   static fromCircle( circle:GroupLike ):Group {
-    return Circle.toInnerTriangle( circle );
+    return Circle.toTriangle( circle, true );
   }
 
 
   /**
-   * Create an equilateral triangle based on a center point and a size
+   * Create an equilateral triangle based on a center point and a size.
    * @param pt the center point
    * @param size size is the magnitude of lines from center to the triangle's vertices, like a "radius".
    */
@@ -809,7 +813,7 @@ export class Triangle {
 
 
   /**
-   * Get the medial, which is an inner triangle formed by connecting the midpoints of this triangle's sides
+   * Get the medial, which is an inner triangle formed by connecting the midpoints of this triangle's sides.
    * @param pts a Group of Pts
    * @returns a Group representing a medial triangle
    */
@@ -876,7 +880,7 @@ export class Triangle {
   }
 
   /**
-   * Get an interior circle, which is the largest circle completed enclosed by this triangle
+   * Get an interior circle, which is the largest circle completed enclosed by this triangle.
    * @param pts a Group of Pts
    * @param center Optional parameter if the incenter is already known. Otherwise, leave it empty and the incenter will be calculated
    */
@@ -889,7 +893,7 @@ export class Triangle {
   }
 
   /**
-   * Get circumcenter, which is the intersection point of its 3 perpendicular bisectors lines ( each of which divides a side in half and is perpendicular to the side)
+   * Get circumcenter, which is the intersection point of its 3 perpendicular bisectors lines ( each of which divides a side in half and is perpendicular to the side).
    * @param pts a Group of Pts
    * @returns the circumcenter as a Pt
    */
@@ -901,7 +905,7 @@ export class Triangle {
   } 
 
   /**
-   * Get circumcenter, which is the intersection point of its 3 perpendicular bisectors lines ( each of which divides a side in half and is perpendicular to the side)
+   * Get circumcenter, which is the intersection point of its 3 perpendicular bisectors lines ( each of which divides a side in half and is perpendicular to the side).
    * @param pts a Group of Pts
    * @param center Optional parameter if the circumcenter is already known. Otherwise, leave it empty and the circumcenter will be calculated 
    */
@@ -916,8 +920,8 @@ export class Triangle {
 
 /**
  * Polygon class provides static functions to create and operate on polygons. A polygon is usually represented as a Group of 3 or more Pts.
- * You can use the static function as-is, or apply the `op` method in Group or Pt to many of these functions.
- * See [Op guide](../../guide/Op-0400.html) for details.
+ * You can use the static functions as-is, or apply the [`Group.op`](#link) or [`Pt.op`](#link) to enable functional programming.
+ * See [Op guide](../guide/Op-0400.html) for details.
  */
 export class Polygon {
 
@@ -930,9 +934,8 @@ export class Polygon {
   }
 
 
-
   /**
-   * Create a rectangular polygon
+   * Create a rectangular polygon. Same as creating a Rectangle and then getting its corners via [`Rectangle.corners`](#link).
    * @param center center point of the rectangle
    * @param widthOrSize width as number, or a Pt representing the size of the rectangle
    * @param height optional height
@@ -941,6 +944,13 @@ export class Polygon {
     return Rectangle.corners( Rectangle.fromCenter( center, widthOrSize, height ) );
   }
 
+
+  /**
+   * Create a regular polygon.
+   * @param center The center position of the polygon
+   * @param radius The radius, ie, a length from the center position to one of the polygon's corners.
+   * @param sides Number of sides
+   */
   static fromCenter( center: PtLike, radius:number, sides:number ) {
     let g = new Group();
     for (let i=0; i<sides; i++) {
@@ -952,7 +962,7 @@ export class Polygon {
 
 
   /**
-   * Given a Group of Pts that defines a polygon, get one edge using an index
+   * Given a Group of Pts that defines a polygon, get one edge using an index.
    * @param pts a Group
    * @param idx index of a Pt in the Group
    */
@@ -962,7 +972,7 @@ export class Polygon {
   }
 
   /**
-   * Get the line segments in this polygon
+   * Get the line segments in this polygon.
    * @param pts a Group of Pts
    * @param closePath a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).
    * @returns an array of Groups which has 2 Pts in each group
@@ -975,7 +985,7 @@ export class Polygon {
   }
 
   /**
-   * Get a new polygon group that is derived from midpoints in this polygon
+   * Get a new polygon group that is derived from midpoints in this polygon.
    * @param pts a Group of Pts
    * @param closePath a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).
    * @param t a value between 0 to 1 for interpolation. Default to 0.5 which will get the middle point.
@@ -1027,7 +1037,6 @@ export class Polygon {
     } else {
       return undefined;
     }
-
   }
   
 
@@ -1077,8 +1086,7 @@ export class Polygon {
   }
 
   /**
-   * Get a convex hull of the point set using Melkman's algorithm
-   * (Reference: http://geomalgorithms.com/a12-_hull-3.html)
+   * Get a convex hull of a set of points, using Melkman's algorithm. ([Reference](http://geomalgorithms.com/a12-_hull-3.html)).
    * @param pts a group of Pt
    * @param sorted a boolean value to indicate if the group is pre-sorted by x position. Default is false.
    * @returns a group of Pt that defines the convex hull polygon
@@ -1146,6 +1154,7 @@ export class Polygon {
    * Given a point in the polygon as an origin, get an array of lines that connect all the remaining points to the origin point.
    * @param pts a Group representing a polygon
    * @param originIndex the origin point's index in the polygon
+   * @returns an array of Groups of line segments
    */
   static network( pts:GroupLike, originIndex:number=0 ):Group[] {
     let g = [];
@@ -1157,7 +1166,7 @@ export class Polygon {
 
 
   /**
-   * Given a target Pt, find a Pt in a Group that's nearest to it.
+   * Given a target Pt, find a Pt in the polygon's corners that's nearest to it.
    * @param pts a Group of Pt
    * @param pt Pt to check
    * @returns an index in the pts indicating the nearest Pt, or -1 if none found
@@ -1177,9 +1186,9 @@ export class Polygon {
 
 
   /**
-   * Project axis (eg, for use in Separation Axis Theorem)
-   * @param poly 
-   * @param unitAxis 
+   * Project axis (eg, for use in Separation Axis Theorem).
+   * @param poly a Group of Pt
+   * @param unitAxis unit axis for calculating dot product
    */
   static projectAxis( poly:GroupLike, unitAxis:Pt ):Pt {
     let dot = unitAxis.dot( poly[0] );
@@ -1193,7 +1202,7 @@ export class Polygon {
 
 
   /**
-   * Check overlap dist from projected axis
+   * Check overlap distance from projected axis.
    * @param poly1 first polygon
    * @param poly2 second polygon
    * @param unitAxis unit axis
@@ -1206,7 +1215,7 @@ export class Polygon {
 
 
   /**
-   * Check if a Pt is inside a convex polygon 
+   * Check if a Pt is inside a convex polygon.
    * @param poly a Group of Pt defining a convex polygon
    * @param pt the Pt to check
    */
@@ -1283,7 +1292,7 @@ export class Polygon {
 
 
   /**
-   * Check if two convex polygons has intersections using Separating Axis Theorem. 
+   * Check if two convex polygons have intersections using Separating Axis Theorem. 
    * @param poly1 a Group representing a convex polygon
    * @param poly2 a Group representing a convex polygon
    * @return an `IntersectContext` object that stores the intersection info, or undefined if there's no intersection
@@ -1348,7 +1357,7 @@ export class Polygon {
 
 
   /**
-   * Find intersection points of 2 polygons by checking every side of both polygons
+   * Find intersection points of 2 polygons by checking every side of both polygons. Performance may be slow for complex polygons.
    * @param poly1 a Group representing a polygon 
    * @param poly2 another Group representing a polygon
    */
@@ -1364,7 +1373,7 @@ export class Polygon {
 
 
   /**
-   * Get a bounding box for each polygon group, as well as a union bounding-box for all groups
+   * Get a bounding box for each polygon group, as well as a union bounding-box for all groups.
    * @param polys an array of Groups, or an array of Pt arrays
    */
   static toRects( polys:GroupLike[] ):GroupLike[] {
@@ -1379,14 +1388,14 @@ export class Polygon {
 
 
 /**
- * Curve class provides static functions to interpolate curves. A curve is usually represented as a Group of 3 control points.
- * You can use the static function as-is, or apply the `op` method in Group or Pt to many of these functions.
- * See [Op guide](../../guide/Op-0400.html) for details.
+ * Curve class provides static functions to interpolate curves. A curve is usually represented as a Group of 3 or more control points.
+ * You can use the static functions as-is, or apply the [`Group.op`](#link) or [`Pt.op`](#link) to enable functional programming.
+ * See [Op guide](../guide/Op-0400.html) for details.
  */
 export class Curve {
 
   /**
-   * Get a precalculated coefficients per step
+   * Get a precalculated coefficients per step. 
    * @param steps number of steps
    */
   static getSteps( steps:number ):Group {
@@ -1399,7 +1408,7 @@ export class Curve {
   }
 
   /**
-   * Given an index for the starting position in a Pt group, get the control and/or end points of a curve segment
+   * Given an index for the starting position in a Pt group, get the control and/or end points of a curve segment.
    * @param pts a group of Pt
    * @param index start index in `pts` array. Default is 0.
    * @param copyStart an optional boolean value to indicate if the start index should be used twice. Default is false.
@@ -1420,7 +1429,7 @@ export class Curve {
   }
 
   /**
-   * Calulcate weighted sum to get the interpolated points
+   * Calulcate weighted sum to get the interpolated points.
    * @param ctrls anchors
    * @param params parameters
    */
@@ -1435,9 +1444,9 @@ export class Curve {
   }
 
   /**
-   * Create a Catmull-Rom curve. Catmull-Rom is a kind of Cardinal curve with smooth-looking curve.
+   * Create a Catmull-Rom curve. Catmull-Rom is a kind of smooth-looking Cardinal curve.
    * @param pts a group of anchor Pt
-   * @param steps the number of line segments per curve. Defaults to 10 steps.
+   * @param steps the number of line segments per curve. Defaults to 10 steps
    * @returns a curve as a group of interpolated Pt
    */
   static catmullRom( pts:GroupLike, steps:number=10 ):Group {
@@ -1468,7 +1477,7 @@ export class Curve {
 
 
   /**
-   * Interpolate to get a point on Catmull-Rom curve
+   * Interpolate to get a point on Catmull-Rom curve.
    * @param step the coefficients [t*t*t, t*t, t, 1]
    * @param ctrls a group of anchor Pts
    * @return an interpolated Pt on the curve
@@ -1493,7 +1502,7 @@ export class Curve {
   }
 
   /**
-   * Create a Cardinal spline curve
+   * Create a Cardinal curve.
    * @param pts a group of anchor Pt
    * @param steps the number of line segments per curve. Defaults to 10 steps.
    * @param tension optional value between 0 to 1 to specify a "tension". Default to 0.5 which is the tension for Catmull-Rom curve.
@@ -1526,7 +1535,7 @@ export class Curve {
   }
 
   /**
-   * Interpolate to get a point on Catmull-Rom curve
+   * Interpolate to get a point on Cardinal curve.
    * @param step the coefficients [t*t*t, t*t, t, 1]
    * @param ctrls a group of anchor Pts
    * @param tension optional value between 0 to 1 to specify a "tension". Default to 0.5 which is the tension for Catmull-Rom curve
@@ -1592,7 +1601,7 @@ export class Curve {
   }
 
   /**
-   * Interpolate to get a point on a cubic Bezier curve
+   * Interpolate to get a point on a cubic Bezier curve.
    * @param step the coefficients [t*t*t, t*t, t, 1]
    * @param ctrls a group of anchor Pts
    * @return an interpolated Pt on the curve
@@ -1617,7 +1626,7 @@ export class Curve {
   }
 
   /**
-   * Create a B-spline curve
+   * Create a basis spline (NURBS) curve.
    * @param pts a group of anchor Pt
    * @param steps the number of line segments per curve. Defaults to 10 steps.
    * @param tension optional value between 0 to n to specify a "tension". Default is 1 which is the usual tension.
@@ -1651,7 +1660,7 @@ export class Curve {
   }
 
   /**
-   * Interpolate to get a point on a B-spline curve
+   * Interpolate to get a point on a basis spline curve.
    * @param step the coefficients [t*t*t, t*t, t, 1]
    * @param ctrls a group of anchor Pts
    * @return an interpolated Pt on the curve
@@ -1676,7 +1685,7 @@ export class Curve {
   }
 
   /**
-   * Interpolate to get a point on a B-spline curve
+   * Interpolate to get a point on a basis spline curve with tension.
    * @param step the coefficients [t*t*t, t*t, t, 1]
    * @param ctrls a group of anchor Pts
    * @param tension optional value between 0 to n to specify a "tension". Default to 1 which is the usual tension.
