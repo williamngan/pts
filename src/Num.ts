@@ -316,7 +316,7 @@ export class Geom {
       }
 
       // compute the cross product of vectors (center -> a) x (center -> b)
-      let det = da.cross2D( db );
+      let det = da.$cross2D( db );
       if (det < 0) return 1;
       if (det > 0) return -1;
       

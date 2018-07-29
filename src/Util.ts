@@ -96,7 +96,7 @@ export class Util {
 
   /**
    * Convert different kinds of parameters (arguments, array, object) into an array of numbers
-   * @param args a list of numbers, an array of number, or an object with {x,y,z,w} properties
+   * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
   static getArgs( args:any[] ):Array<number> {
     if (args.length<1) return [];

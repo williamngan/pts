@@ -7,7 +7,8 @@ import { Polygon, Circle } from "./Op";
 import {PtLike, GroupLike} from "./Types";
 
 /**
- * A `World` stores and manages `Body` and `Particle` for 2D physics simulation.
+ * A `World` stores and manages [`Body`](#link) and [`Particle`](#link) for 2D physics simulation. 
+ * See a [Particle demo](../demo/index.html?name=physics.particles) and a [Body demo](../demo/index.html?name=physics.shapes) on the demo page.
  */
 export class World {
 
@@ -28,10 +29,10 @@ export class World {
 
 
   /**
-   * Create a `World` for 2D physics simulation
+   * Create a `World` for 2D physics simulation.
    * @param bound a rectangular bounding box defined by a Group
-   * @param friction a value between 0 to 1 where 1 means no friction. Default is 1
-   * @param gravity a number of a Pt to define gravitational force. Using a number is a shorthand to set `new Pt(0, n)`. Default is 0.
+   * @param friction a value between 0 to 1, where 1 means no friction. Default is 1
+   * @param gravity a number of a Pt to define gravitational force. A number is a shorthand to set `new Pt(0, n)`. Default is 0.
    */
   constructor( bound:Group, friction:number=1, gravity:PtLike|number=0 ) {
     this._bound = Bound.fromGroup( bound );
@@ -41,36 +42,45 @@ export class World {
   }
 
 
+  /**
+   * Current gravity in this `World`.
+   */
   get gravity():Pt { return this._gravity; }
   set gravity( g:Pt ) { this._gravity = g; }
 
+  /**
+   * Current friction in this `World`.
+   */
   get friction():number { return this._friction; }
   set friction( f:number ) { this._friction = f; }
 
+  /**
+   * Current damping in this `World`.
+   */
   get damping():number { return this._damping; }
   set damping( f:number ) { this._damping = f; }
 
   /**
-   * Get the number of bodies
+   * Get the number of bodies.
    */
   get bodyCount():number { return this._bodies.length; }
 
   /**
-   * Get the number of particles
+   * Get the number of particles.
    */
   get particleCount():number { return this._particles.length; }
 
 
 
   /**
-   * Get a body in this world by index or string id
+   * Get a body in this world by index or string id.
    * @param id numeric index of the body, or a string id that associates with it.
    */
   body( id:number|string ) { return this._bodies[ (typeof id === "string") ? this._names.b[id] : id ]; }
 
 
   /**
-   * Get a particle in this world by index or string id
+   * Get a particle in this world by index or string id.
    * @param id numeric index of the particle, or a string id that associates with it. 
    */
   particle( id:number|string ) { return this._particles[ (typeof id === "string") ? this._names.p[id] : id ]; }
@@ -78,7 +88,7 @@ export class World {
 
 
   /**
-   * Update this world one time step
+   * Update this world by one time-step.
    * @param ms change in time in milliseconds
    */
   update( ms:number ) {
@@ -89,8 +99,8 @@ export class World {
 
 
   /**
-   * Draw particles using the provided function
-   * @param fn a function that draws particles passed in the parameters `(particles, index)`.
+   * Draw particles using the provided function.
+   * @param fn a function that draws a particle passed in the parameters `(particle, index)`.
    */
   drawParticles( fn:(p:Particle, i:number) => void ):void {
     this._drawParticles = fn;
@@ -98,8 +108,8 @@ export class World {
 
 
   /**
-   * Draw bodies using the provided function
-   * @param fn a function that draws bodies passed in the parameters `(bodies, index)`.
+   * Draw bodies using the provided function.
+   * @param fn a function that draws a body passed in the parameters `(body, index)`.
    */
   drawBodies( fn:(p:Body, i:number) => void ):void {
     this._drawBodies = fn;
@@ -268,7 +278,8 @@ export class World {
 
 
 /**
- * Particle is a Pt that has radius and mass. It's usually added into `World` to create physics simulations.
+ * Particle is a subclass of [`Pt`](#link) that has radius and mass. It's usually added into [`World`](#link) to create physics simulations. 
+ * See [a demo here](../demo/index.html?name=physics.particles).
  */
 export class Particle extends Pt {
 
@@ -283,7 +294,7 @@ export class Particle extends Pt {
 
 
   /**
-   * Create a particle
+   * Create a particle. Once a particle is created, you can set its mass and radius via the corresponding accessors.
    * @param args a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
    */
   constructor( ...args ) {
@@ -291,20 +302,26 @@ export class Particle extends Pt {
     this._prev = this.clone();
   }
 
+  /**
+   * Mass of this particle.
+   */
   get mass():number { return this._mass; }
   set mass( m:number ) { this._mass = m; }
 
+  /**
+   * Radius of this particle.
+   */
   get radius():number { return this._radius; }
   set radius( f:number ) { this._radius = f; }
 
   /**
-   * Get previous position
+   * Get this particle's previous position.
    */
   get previous():Pt { return this._prev; }
   set previous( p:Pt ) { this._prev = p; }
 
   /**
-   * Get current accumulated force
+   * Get current accumulated force.
    */
   get force():Pt { return this._force; }
   set force( g:Pt ) { this._force = g; }
@@ -316,7 +333,7 @@ export class Particle extends Pt {
   set body( b:Body ) { this._body = b; }
 
   /**
-   * 
+   * Lock this particle in current position.
    */
   get lock():boolean { return this._lock; }
   set lock( b:boolean ) { 
@@ -325,7 +342,7 @@ export class Particle extends Pt {
   }
 
   /**
-   * Get the change in position since last time step
+   * Get the change in position since last time step.
    */
   get changed():Pt { return this.$subtract( this._prev ); }
 
@@ -352,7 +369,7 @@ export class Particle extends Pt {
 
 
   /**
-   * Add to the accumulated force
+   * Add to the accumulated force.
    * @param args a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
    */
   addForce( ...args ):Pt {
@@ -362,7 +379,7 @@ export class Particle extends Pt {
 
 
   /**
-   * Verlet integration
+   * Verlet integration. 
    * @param dt change in time 
    * @param friction friction from 0 to 1, where 1 means no friction
    * @param lastDt optional last change in time 
@@ -390,8 +407,8 @@ export class Particle extends Pt {
 
 
   /**
-   * Hit this particle with an impulse
-   * @param args a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
+   * Hit this particle with an impulse.
+   * @param args an impulse vector defined by either a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
    * @example `hit(10, 20)`, `hit( new Pt(5, 9) )`
    */
   hit( ...args ):this {
@@ -401,7 +418,7 @@ export class Particle extends Pt {
 
 
   /**
-   * Check and respoond to collisions between two particles
+   * Check and respoond to collisions between this and another particle.
    * @param p2 another particle
    * @param damp damping value between 0 to 1, where 1 means no damping.
    */
@@ -444,6 +461,9 @@ export class Particle extends Pt {
   }
   
 
+  /**
+   * Get a string representation of this particle
+   */
   toString():string {
     return `Particle: ${this[0]} ${this[1]} | previous ${this._prev[0]} ${this._prev[1]} | mass ${this._mass}`;
   }
@@ -452,7 +472,8 @@ export class Particle extends Pt {
 
 
 /**
- * Body consists of a group of `Particles` and edge constraints. It is usually added into a `World` to create physics simulations.
+ * Body is a subclass of [`Group`](#link) that stores a set of [`Particle`](#link)s and edge constraints. It is usually added into a [`World`](#link) to create physics simulations. 
+ * See [a demo here](../demo/index.html?name=physics.shapes).
  */
 export class Body extends Group {
 
@@ -462,7 +483,7 @@ export class Body extends Group {
   protected _mass:number = 1;
 
   /**
-   * Create an empty Body, this is usually followed by `init` to populate the Body. Alternatively, use static function `fromGroup` to create and initate a body directly.
+   * Create an empty Body, this is usually followed by [`Body.init`](#link) to populate the Body. Alternatively, use static function [`Body.fromGroup`](#link) to create and initate a body directly.
    */
   constructor() {
     super();
@@ -485,7 +506,7 @@ export class Body extends Group {
 
 
   /**
-   * Initiate a body 
+   * Initiate a body.
    * @param list a group of Pts
    * @param stiff stiffness value from 0 to 1, where 1 is the most stiff. Default is 1.
    */
@@ -517,7 +538,7 @@ export class Body extends Group {
 
 
   /**
-   * Automatically calculate `mass` to body's polygon area.
+   * Automatically calculate a body's `mass` based on the area of the polygon.
    */
   autoMass():this {
     this.mass = Math.sqrt( Polygon.area( this ) ) / 10;
@@ -526,7 +547,7 @@ export class Body extends Group {
 
 
   /**
-   * Create a linked edge between two points
+   * Create a linked edge between two points.
    * @param index1 first point by index
    * @param index2 first point by index
    * @param stiff optionally stiffness value between 0 to 1, where 1 is the most stiff.
@@ -581,7 +602,7 @@ export class Body extends Group {
  
 
   /**
-   * Recalculate all edge constraints
+   * Recalculate all edge constraints.
    */
   processEdges():void {
     for (let i=0, len=this._cs.length; i<len; i++) {
@@ -592,7 +613,7 @@ export class Body extends Group {
 
 
   /**
-   * Check and respond to collisions between two bodies
+   * Check and respond to collisions between two bodies.
    * @param b another body
    */
   processBody( b:Body ):void {
@@ -630,7 +651,7 @@ export class Body extends Group {
 
 
   /**
-   * Check and respond to collisions between this body and a particle
+   * Check and respond to collisions between this body and a particle.
    * @param b a particle
    */
   processParticle( b:Particle ):void {
