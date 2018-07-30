@@ -8,7 +8,7 @@ import {UIHandler} from "./Types";
 
 
 /**
- * An enumeration of different UI types.
+ * **[Experimental]** An enumeration of different UI types, for use in [`UI`](#link) instances.
  */
 export enum UIShape {
   Rectangle, Circle, Polygon, Polyline, Line
@@ -16,7 +16,7 @@ export enum UIShape {
 
 
 /**
- * A set of string constants to represent different UI events.
+ * **[Experimental]** A set of string constants to represent different UI events.
  */
 export const UIPointerActions = {
   up: "up", down: "down", move: "move", drag: "drag", drop: "drop", over: "over", out: "out"
@@ -25,7 +25,8 @@ export const UIPointerActions = {
 
 
 /**
- * This class represents a UI element. Experimental.
+ * **[Experimental]** An abstract class that represents an UI element. It wraps a [`Group`](#link) and supports UI event handling. 
+ * Extend this class to create custom UI elements.
  */
 export class UI {
   group: Group;
@@ -37,7 +38,11 @@ export class UI {
 
 
   /**
-   * Wrap an UI insider a group
+   * Create an UI element.
+   * @param group a Group that defines the UI's appearance
+   * @param shape specifies the shape of the Group
+   * @param states Optional default state object
+   * @param id Optional id string
    */
   constructor( group:Group, shape:UIShape, states: {}, id?:string ) {
     this.group = group;
@@ -49,14 +54,14 @@ export class UI {
 
 
   /**
-   * Get and set uique id
+   * An unique id of the UI.
    */
   get id():string { return this._id; }
   set id( d:string ) { this._id = d; } 
 
 
   /**
-   * Get a state
+   * Get a specific UI state.
    * @param key state's name
    */
   state( key:string ):any {
@@ -65,9 +70,9 @@ export class UI {
 
 
   /**
-   * Add an event handler
+   * Add an event handler.
    * @param key event key
-   * @param fn handler function
+   * @param fn a [`UIHandler`](#link) function: `fn( pt:Pt, target:UI, type:string )`
    */
   on( key:string, fn:UIHandler ) {
     this._actions[key] = fn;
@@ -76,9 +81,9 @@ export class UI {
 
 
   /**
-   * Remove an event handler
-   * @param key even key
-   * @param fn 
+   * Remove an event handler.
+   * @param key event key
+   * @param fn a [`UIHandler`](#link) function: `fn( pt:Pt, target:UI, type:string )`
    */
   off( key:string ) {
     delete this._actions[key];
@@ -87,7 +92,7 @@ export class UI {
 
 
   /**
-   * Listen for interactions and trigger action handlers
+   * Listen for UI events and trigger action handlers.
    * @param key action key
    * @param p point to check
    */
@@ -103,7 +108,7 @@ export class UI {
 
 
   /**
-   * Take a custom render function to render this UI
+   * Take a custom render function to render this UI.
    * @param fn render function
    */
   render( fn:( group:Group, states:{[key:string]: any}) => void ) {
@@ -112,7 +117,7 @@ export class UI {
 
 
   /**
-   * Check intersection using a specific function based on UIShape
+   * Check intersection using a specific function based on [`UIShape`](#link).
    * @param p a point to check
    */
   protected _trigger( p:Pt ):boolean {
@@ -134,26 +139,33 @@ export class UI {
 
 
 /**
- * A simple UI button that can track clicks and hovers.
+ * **[Experimental]** A simple button that extends [`UI`](#link) to track clicks and hovers.
  */
 export class UIButton extends UI {
 
   _clicks:number = 0;
 
+  /**
+   * Create an UI button.
+   * @param group a Group that defines the UI's appearance
+   * @param shape specifies the shape of the Group
+   * @param states Optional default state object
+   * @param id Optional id string
+   */
   constructor( group:Group, shape:UIShape, states: {}, id?:string ) {
     super( group, shape, states, id );
   }
 
   
   /**
-   * Get the total number of clicks on this UIButton
+   * Get the total number of clicks on this button.
    */
   get clicks():number { return this._clicks; }
 
 
   /**
-   * Add a click handler
-   * @param fn a function to handle clicks
+   * Add click handler.
+   * @param fn a [`UIHandler`](#link) function to handle clicks. Eg, `fn( pt:Pt, target:UI, type:string )`
    */
   onClick( fn:UIHandler ) {
     this._clicks++;
@@ -162,9 +174,9 @@ export class UIButton extends UI {
 
   
   /**
-   * Add hover handler
-   * @param over a function to handle when pointer enters hover
-   * @param out a function to handle when pointer exits hover
+   * Add hover handler.
+   * @param over a [`UIHandler`](#link) function to handle when pointer enters hover. Eg, `fn( pt:Pt, target:UI, type:string )`
+   * @param out a [`UIHandler`](#link) function to handle when pointer exits hover. Eg, `fn( pt:Pt, target:UI, type:string )`
    */
   onHover( over:UIHandler, out:UIHandler ) {
     this.on( UIPointerActions.over, over);

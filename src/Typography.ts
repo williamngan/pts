@@ -6,7 +6,7 @@ import {Pt} from "./Pt";
 import {GroupLike} from "./Types";
 
 /** 
- * Various functions to support typography.
+ * Typography provides helper functions to support typographic layouts. For a concrete example, see [a demo here](../demo/index.html?name=canvasform.textBox) that uses the [`CanvasForm.textBox`](#link) function.
  */
 export class Typography {
 
@@ -25,7 +25,7 @@ export class Typography {
 
 
   /**
-   * Truncate text to fit width
+   * Truncate text to fit width.
    * @param fn a function that can measure text width
    * @param str text to truncate
    * @param width width to fit
@@ -60,7 +60,7 @@ export class Typography {
 
 
   /**
-   * Get a function to scale font size based on a threshold value
+   * Get a function to scale font size based on a threshold value.
    * @param defaultSize default font size to base on
    * @param threshold threshold value
    * @param direction if negative, get a font size <= defaultSize; if positive, get a font size >= defaultSize; Default is 0 which will scale font without min or max limits.

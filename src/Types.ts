@@ -14,13 +14,13 @@ export interface IPt {
 
 
 /**
- * Typescript only: PtLike is an alias of types that can represent a point
+ * Typescript only: PtLike is an alias of types that can represent a point. 
  */
 export type PtLike = Pt | Float32Array | number[];
 
 
 /**
- * Typescript only: PtLike is an alias of types that can represent a group of points
+ * Typescript only: GroupLike is an alias of types that can represent a group of points.
  */
 export type GroupLike = Group | Pt[];
 
@@ -32,7 +32,7 @@ export type AnimateCallbackFn = ( time?:number, frameTime?:number, currentSpace?
 
 
 /**
-* Typescript only: IPlayer is an interface that represents a "player" object that can be added into a Space
+* Typescript only: IPlayer is an interface that represents a "player" object that can be added into a Space.
 */
 export interface IPlayer {
   animateID?: string;
@@ -44,7 +44,7 @@ export interface IPlayer {
 
 
 /**
- * Typescript only: ISpacePlayers is an interface that represents a map of IPlayer instances
+ * Typescript only: ISpacePlayers is an interface that represents a map of IPlayer instances.
  */
 export interface ISpacePlayers { 
   [key: string]: IPlayer;
@@ -52,7 +52,7 @@ export interface ISpacePlayers {
 
 
 /**
- *Typescript only: ITimer is an interface that represents a time-recording object
+ *Typescript only: ITimer is an interface that represents a time-recording object.
  */
 export interface ITimer {
   prev: number;
@@ -67,7 +67,7 @@ export type TouchPointsKey = "touches" | "changedTouches" | "targetTouches";
 
 
 /**
- * Typescript only: MultiTouchElement is an interface that represents an element that can handle touch events
+ * Typescript only: MultiTouchElement is an interface that represents an element that can handle touch events.
  */
 export interface MultiTouchElement {
   addEventListener( evt:any, callback:Function );
@@ -76,7 +76,7 @@ export interface MultiTouchElement {
 
 
 /**
- * Typescript only: extends Canvas's 2D context with backingStorePixelRatio property
+ * Typescript only: extends Canvas's 2D context with backingStorePixelRatio property.
  */
 export interface PtsCanvasRenderingContext2D extends CanvasRenderingContext2D {
   webkitBackingStorePixelRatio?:number;
@@ -88,13 +88,13 @@ export interface PtsCanvasRenderingContext2D extends CanvasRenderingContext2D {
 
 
 /**
- * Typescript only: ColorType is a type alias for a defined set of string values such as "rgb" and "lab"
+ * Typescript only: ColorType is a type alias for a defined set of string values such as "rgb" and "lab".
  */
 export type ColorType = "rgb"|"hsl"|"hsb"|"lab"|"lch"|"luv"|"xyz";
 
 
 /**
- * Typescript only: A DelaunayShape represents an object type that can store a Delaunay element. It has 3 indices (i, j, k) and two groups that represent a triangle and a circle
+ * Typescript only: A DelaunayShape represents an object type that can store a Delaunay element. It has 3 indices (i, j, k) and two groups that represent a triangle and a circle.
  */
 export type DelaunayShape = {i:number, j:number, k:number, triangle:GroupLike, circle:Group };
 
@@ -106,7 +106,7 @@ export type DelaunayMesh = {[key:string]:DelaunayShape}[];
 
 
 /**
- * Typescript only: A type that represents the current context for an DOMForm
+ * Typescript only: A type that represents the current context for an DOMForm.
  */
 export type DOMFormContext = {
   group:Element, groupID:string, groupCount:number,
@@ -118,7 +118,7 @@ export type DOMFormContext = {
 
 
 /**
- * Typescript only: IntersectContext represents a type of an object that store the intersection info
+ * Typescript only: IntersectContext represents a type of an object that store the intersection info.
  */
 export type IntersectContext = {
   which: number,
@@ -130,8 +130,13 @@ export type IntersectContext = {
 };
 
 
-
 /**
- * UIHandler is a type alias that represents a callback function to handle UI actions
+ * UIHandler is a type alias that represents a callback function to handle UI actions.
  */
 export type UIHandler = ( pt:Pt, target:UI, type:string ) => void;
+
+
+/**
+ * WarningType specifies a level of warning for [`Util.warnLevel`](#link).
+ */
+export type WarningType = "error"|"warn"|"mute";
