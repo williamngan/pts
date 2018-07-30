@@ -13,7 +13,8 @@ import {PtLike, GroupLike, IPlayer, DOMFormContext} from "./Types";
 
 
 /**
- * A Space for SVG elements.
+ * **[Experimental]** SVGSpace extends [`DOMSpace`](#link) to support SVG elements. Use it with [`SVGForm`](#link) to express Pts in svg. 
+ * You may easily switch between html canvas and svg renderings with minimal code changes. Check out the [Space guide](../guide/Space-0500.html) for details, and see [a demo here](../demo/index.html?name=svgform.scope).
  */
 export class SVGSpace extends DOMSpace {
   
@@ -22,7 +23,7 @@ export class SVGSpace extends DOMSpace {
   
 
   /**
-  * Create a SVGSpace which represents a Space for SVG elements
+  * Create a SVGSpace which represents a Space for SVG elements.
   * @param elem Specify an element by its "id" attribute as string, or by the element object itself. An element can be an existing `<svg>`, or a `<div>` container in which a new `<svg>` will be created. If left empty, a `<div id="pt_container"><svg id="pt" /></div>` will be added to DOM. Use css to customize its appearance if needed.
   * @param callback an optional callback `function(boundingBox, spaceElement)` to be called when canvas is appended and ready. Alternatively, a "ready" event will also be fired from the `<svg>` element when it's appended, which can be traced with `spaceInstance.canvas.addEventListener("ready")`
   * @example `new SVGSpace( "#myElementID" )`
@@ -39,21 +40,22 @@ export class SVGSpace extends DOMSpace {
   
 
   /**
-  * Get a new `SVGForm` for drawing
+  * Get a new [`SVGForm`](#link) for drawing.
   * @see `SVGForm`
   */
   getForm():SVGForm { return new SVGForm( this ); }
   
 
   /**
-  * Get the html element
+  * Get the DOM element.
   */
   get element():Element {
     return this._canvas;
   }
 
   /**
-  * This overrides Space's `resize` function. It's used as a callback function for window's resize event and not usually called directly. You can keep track of resize events with `resize: (bound ,evt)` callback in your player objects (See `Space`'s `add()` function). 
+  * This overrides Space's `resize` function. It's used as a callback function for window's resize event and not usually called directly. 
+  * You can keep track of resize events with `resize: (bound ,evt)` callback in your [`IPlayer`](#link) objects (See [`Space.add`](#link)). 
   * @param b a Bound object to resize to
   * @param evt Optionally pass a resize event
   */
@@ -71,7 +73,7 @@ export class SVGSpace extends DOMSpace {
   
 
   /**
-   * A static function to add a svg element inside a node. Usually you don't need to use this directly. See methods in `SVGForm` instead.
+   * A static function to add a svg element inside a node. Usually you don't need to call this directly. See methods in [`SVGForm`](#link) instead.
    * @param parent the parent element, or `null` to use current `<svg>` as parent.
    * @param name a string of element name,  such as `rect` or `circle`
    * @param id id attribute of the new element
@@ -93,7 +95,7 @@ export class SVGSpace extends DOMSpace {
   
   
   /**
-  * Remove an item from this Space
+  * Remove an item from this Space.
   * @param item a player item with an auto-assigned `animateID` property
   */
   remove( player:IPlayer ):this {
@@ -108,7 +110,7 @@ export class SVGSpace extends DOMSpace {
   
   
   /**
-   * Remove all items from this Space
+   * Remove all items from this Space.
    */
   removeAll():this {
     this._container.innerHTML = "";
@@ -119,8 +121,8 @@ export class SVGSpace extends DOMSpace {
 
 
 /**
-* SVGForm is an implementation of abstract class VisualForm. It provide methods to express Pts on SVGSpace.   
-* You may extend SVGForm to implement your own expressions for SVGSpace.
+* **[Experimental]** SVGForm is an implementation of abstract class [`VisualForm`](#link). It provide methods to express Pts in [`SVGSpace`](#link).   
+* You may extend SVGForm to implement your own expressions for SVGSpace. See out the [Space guide](../guide/Space-0500.html) for details.
 */
 export class SVGForm extends VisualForm {
   
@@ -152,7 +154,7 @@ export class SVGForm extends VisualForm {
   
 
   /**
-  * Create a new SVGForm. You may also use `space.getForm()` to get the default form.
+  * Create a new SVGForm. You may also use [`SVGSpace.getForm`](#link) to get a default form directly.
   * @param space an instance of SVGSpace
   */
   constructor( space:SVGSpace ) {
@@ -168,17 +170,17 @@ export class SVGForm extends VisualForm {
   
 
   /**
-  * get the SVGSpace instance that this form is associated with
+  * Get the [`SVGSpace`](#link) instance that this form is associated with.
   */
   get space():SVGSpace { return this._space; }
   
   
   /**
-   * Update a style in _ctx context or throw an Erorr if the style doesn't exist
+   * Update a style in current context. It will throw an Erorr if the style doesn't exist.
    * @param k style key
    * @param v  style value
    */
-  protected styleTo( k, v ) { 
+  styleTo( k, v ) { 
     if (this._ctx.style[k] === undefined) throw new Error(`${k} style property doesn't exist`);
     this._ctx.style[k] = v; 
   }
@@ -187,7 +189,7 @@ export class SVGForm extends VisualForm {
   /**
     * Set current fill style. Provide a valid color string or `false` to specify no fill color.
     * @example `form.fill("#F90")`, `form.fill("rgba(0,0,0,.5")`, `form.fill(false)`
-    * @param c fill color
+    * @param c a valid color string or `false` to specify no fill color.
     */
   fill( c:string|boolean ):this {
     if (typeof c == "boolean") {
@@ -203,7 +205,7 @@ export class SVGForm extends VisualForm {
   /**
     * Set current stroke style. Provide a valid color string or `false` to specify no stroke color.
     * @example `form.stroke("#F90")`, `form.stroke("rgba(0,0,0,.5")`, `form.stroke(false)`, `form.stroke("#000", 0.5, 'round', 'square')`
-    * @param c stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle))
+    * @param c a valid color string or `false` to specify no stroke color.
     * @param width Optional value (can be floating point) to set line width
     * @param linejoin Optional string to set line joint style. Can be "miter", "bevel", or "round".
     * @param linecap Optional string to set line cap style. Can be "butt", "round", or "square".
@@ -223,7 +225,7 @@ export class SVGForm extends VisualForm {
 
 
   /**
-   * Add custom class to the created element
+   * Add custom class to the created element.
    * @param c custom class name or `false` to reset it
    * @example `form.fill("#f00").cls("myClass").rects(r)` `form.cls(false).circles(c)`
    */
@@ -238,7 +240,7 @@ export class SVGForm extends VisualForm {
   
   
   /**
-  * Set the current font 
+  * Set the current font.
   * @param sizeOrFont either a number to specify font-size, or a `Font` object to specify all font properties
   * @param weight Optional font-weight string such as "bold"
   * @param style Optional font-style string such as "italic"
@@ -264,7 +266,7 @@ export class SVGForm extends VisualForm {
   
 
   /**
-  * Reset the context's common styles to this form's styles. This supports using multiple forms on the same canvas context.
+  * Reset the context's common styles to this form's styles. This supports using multiple forms in the same space.
   */
   reset():this {
     this._ctx.style = {
@@ -283,7 +285,7 @@ export class SVGForm extends VisualForm {
 
   
   /**
-   * Set this form's group scope by an ID, and optionally define the group's parent element. A group scope keeps track of elements by their generated IDs, and updates their properties as needed. See also `scope()`.
+   * Set this form's group scope by an ID, and optionally define the group's parent element. A group scope keeps track of elements by their generated IDs, and updates their properties as needed. See also [`SVGForm.scope`](#link).
    * @param group_id a string to use as prefix for the group's id. For example, group_id "hello" will create elements with id like "hello-1", "hello-2", etc
    * @param group Optional DOM or SVG element to define this group's parent element
    * @returns this form's context
@@ -298,8 +300,10 @@ export class SVGForm extends VisualForm {
   
 
   /**
-   * Set the current group scope to an item added into space, in order to keep track of any point, circle, etc created within it. The item must have an `animateID` property, so that elements created within the item will have generated IDs like "item-{animateID}-{count}".
-   * @param item a "player" item that's added to space (see `space.add(...)`) and has an `animateID` property
+   * Set the current group scope to an item added into space, in order to keep track of any point, circle, etc created within it in the DOM. 
+   * The item must have an `animateID` property, so that elements created within the item will have generated IDs like "item-{animateID}-{count}". 
+   * See the svg section in [`Space guide`](../guide/Space-0500.html) to learn more about scope.
+   * @param item a [`IPlayer`](#link) object that's added to space (see [`Space.add`](#link)) and has an `animateID` property
    * @returns this form's context
    */
   scope( item:IPlayer ) {
@@ -309,7 +313,7 @@ export class SVGForm extends VisualForm {
   
   
   /**
-   * Get next available id in the current group
+   * Get next available id in the current group.
    * @returns an id string
    */
   nextID():string {
@@ -320,7 +324,7 @@ export class SVGForm extends VisualForm {
   
 
   /**
-   * A static function to generate an ID string based on a context object
+   * A static function to generate an ID string based on a context object.
    * @param ctx a context object for an SVGForm
    */
   static getID( ctx ):string {
@@ -329,8 +333,8 @@ export class SVGForm extends VisualForm {
 
 
   /**
-   * A static function to generate an ID string for a scope, based on a "player" item in the Space
-   * @param item a "player" item that's added to space (see `space.add(...)`) and has an `animateID` property
+   * A static function to generate an ID string for a scope, based on an [`IPlayer`](#link) object in the Space.
+   * @param item a [`IPlayer`](#link) object that's added to space (see [`Space.add`](#link)) and has an `animateID` property
    */
   static scopeID( item:IPlayer ):string {
     return `item-${item.animateID}`;
@@ -338,7 +342,8 @@ export class SVGForm extends VisualForm {
   
 
   /**
-   * A static function to help adding style object to an element. This put all styles into `style` attribute instead of individual attributes, so that the styles can be parsed by Adobe Illustrator.
+   * A static function to help adding style object to an element. 
+   * Note that this put all styles into `style` attribute instead of individual svg attributes, so that the styles can be parsed by Adobe Illustrator.
    * @param elem A DOM element to add to
    * @param styles an object of style properties
    * @example `SVGForm.style(elem, {fill: "#f90", stroke: false})`
@@ -370,7 +375,7 @@ export class SVGForm extends VisualForm {
   
   
   /**
-    * Draws a point
+    * A static function to draw a point.
     * @param ctx a context object of SVGForm
     * @param pt a Pt object or numeric array
     * @param radius radius of the point. Default is 5.
@@ -387,7 +392,7 @@ export class SVGForm extends VisualForm {
   
   
   /**
-    * Draws a point
+    * Draws a point.
     * @param p a Pt object
     * @param radius radius of the point. Default is 5.
     * @param shape The shape of the point. Defaults to "square", but it can be "circle" or a custom shape function in your own implementation.
@@ -401,7 +406,7 @@ export class SVGForm extends VisualForm {
   
 
   /**
-    * A static function to draw a circle
+    * A static function to draw a circle.
     * @param ctx a context object of SVGForm
     * @param pt center position of the circle
     * @param radius radius of the circle
@@ -422,8 +427,8 @@ export class SVGForm extends VisualForm {
   
 
   /**
-    * Draw a circle
-    * @param pts usually a Group of 2 Pts, but it can also take an array of two numeric arrays [ [position], [size] ]
+    * Draw a circle.
+    * @param pts a Group of 2 Pts, or an array of two numeric arrays `[[position], [size]]`
     * @see [`Circle.fromCenter`](./_op_.circle.html#frompt)
     */
   circle( pts:GroupLike|number[][] ):this {
@@ -479,7 +484,7 @@ export class SVGForm extends VisualForm {
   
 
   /**
-    * A static function to draw a square 
+    * A static function to draw a square.
     * @param ctx a context object of SVGForm
     * @param pt center position of the square
     * @param halfsize half size of the square
@@ -499,7 +504,7 @@ export class SVGForm extends VisualForm {
   
 
   /**
-   * Draw a square, given a center and its half-size
+   * Draw a square, given a center and its half-size.
    * @param pt center Pt
    * @param halfsize half-size
    */
@@ -511,7 +516,7 @@ export class SVGForm extends VisualForm {
   
 
   /**
-  * A static function to draw a line
+  * A static function to draw a line or polyline.
   * @param ctx a context object of SVGForm
   * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
   */
@@ -536,7 +541,7 @@ export class SVGForm extends VisualForm {
   
 
   /**
-  * Draw a line or polyline
+  * Draw a line or polyline.
   * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
   */
   line( pts:GroupLike|number[][] ):this {
@@ -547,12 +552,12 @@ export class SVGForm extends VisualForm {
   
   
   /**
-   * A static helper function to draw polyline or polygon
+   * A static helper function to draw polyline or polygon.
    * @param ctx a context object of SVGForm
    * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
    * @param closePath a boolean to specify if the polygon path should be closed
    */
-  static _poly( ctx:DOMFormContext, pts:GroupLike|number[][], closePath:boolean=true) {
+  protected static _poly( ctx:DOMFormContext, pts:GroupLike|number[][], closePath:boolean=true) {
     if (!this._checkSize( pts)) return;
     
     let elem = SVGSpace.svgElement( ctx.group, ((closePath) ? "polygon" : "polyline"), SVGForm.getID(ctx) );
@@ -567,7 +572,7 @@ export class SVGForm extends VisualForm {
   
   
   /**
-    * A static function to draw polygon
+    * A static function to draw polygon.
     * @param ctx a context object of SVGForm
     * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
     */
@@ -577,7 +582,7 @@ export class SVGForm extends VisualForm {
   
 
   /**
-  * Draw a polygon
+  * Draw a polygon.
   * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
   */
   polygon( pts:GroupLike|number[][] ):this {
@@ -588,7 +593,7 @@ export class SVGForm extends VisualForm {
   
   
   /**
-  * A static function to draw a rectangle
+  * A static function to draw a rectangle.
   * @param ctx a context object of SVGForm
   * @param pts usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.
   */
@@ -613,7 +618,7 @@ export class SVGForm extends VisualForm {
   
   
   /**
-    * Draw a rectangle
+    * Draw a rectangle.
     * @param pts usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.
     */
   rect( pts:number[][]|Pt[] ):this {
@@ -624,7 +629,7 @@ export class SVGForm extends VisualForm {
   
   
   /**
-    * A static function to draw text
+    * A static function to draw text.
     * @param ctx a context object of SVGForm
     * @param `pt` a Point object to specify the anchor point
     * @param `txt` a string of text to draw
@@ -650,7 +655,7 @@ export class SVGForm extends VisualForm {
   
 
   /**
-    * Draw text on canvas
+    * Draw text on canvas.
     * @param `pt` a Pt or numeric array to specify the anchor point
     * @param `txt` text
     * @param `maxWidth` specify a maximum width per line

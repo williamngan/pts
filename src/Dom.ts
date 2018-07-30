@@ -11,7 +11,8 @@ import {PtLike, GroupLike, IPlayer, DOMFormContext} from "./Types";
 
 
 /**
- * DOMSpace is a space for DOM elements. Usually its subclasses such as [`HTMLSpace`](#link) and [`#SVGSpace`](#link) should be used instead. Learn more about spaces in [this guide](../guide/space-0500).
+ * DOMSpace is a space for DOM elements. Usually its subclasses such as [`HTMLSpace`](#link) and [`#SVGSpace`](#link) should be used instead. 
+ * Learn more about spaces in [this guide](../guide/space-0500).
  */
 export class DOMSpace extends MultiTouchSpace {
   
@@ -296,7 +297,7 @@ export class DOMSpace extends MultiTouchSpace {
 
 
 /**
- * HTMLSpace is a subclass of DOMSpace that works with HTML elements. Note that this is currently experimental and may change in future.
+ * **[Experimental]** HTMLSpace is a subclass of DOMSpace that works with HTML elements. Note that this is currently experimental and may change in future.  See [a demo here](../demo/index.html?name=htmlform.scope).
  */
 export class HTMLSpace extends DOMSpace {
 
@@ -357,7 +358,7 @@ export class HTMLSpace extends DOMSpace {
 
 
 /**
- * CanvasForm is an implementation of abstract class [`VisualForm`](#link). It provide methods to express Pts on [`HTMLSpace`](#link). Note that this is currently experimental and may change in future.
+ * **[Experimental]** HTMLForm is an implementation of abstract class [`VisualForm`](#link). It provide methods to express Pts on [`HTMLSpace`](#link). Note that this is currently experimental and may change in future.
  */
 export class HTMLForm extends VisualForm {
 

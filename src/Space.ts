@@ -9,8 +9,8 @@ import {ITimer, ISpacePlayers, IPlayer, AnimateCallbackFn, IPt, TouchPointsKey} 
 
 
 /**
-* Space is an abstract class that represents a general context for expressing Pts.
-* See [Space guide](../../guide/Space-0500.html) for details.
+* Space is an abstract class that represents a general context for expressing Pts. It's extended through subclasses such as [`CanvasSpace`](#link) and [`SVGSpace`](#link). You can also create your own extension of Space.
+* See [Space guide](../guide/Space-0500.html) for details.
 */
 export abstract class Space {
   
@@ -35,7 +35,7 @@ export abstract class Space {
   
   
   /**
-  * Set whether the rendering should be repainted on each frame
+  * Set whether the rendering should be repainted on each frame.
   * @param b a boolean value to set whether to repaint each frame
   */
   refresh( b:boolean ):this {
@@ -45,13 +45,13 @@ export abstract class Space {
   
   
   /**
-  * Add an [`IPlayer`](#link) or an [`AnimateCallbackFn`](#link) to this space. An IPlayer can define the following callback functions:    
-  * - `animate( time, ftime, space )`
-  * - `start(bound, space)`   
-  * - `resize( size, event )`
-  * - `action( type, x, y, event )`  
+  * Add an [`IPlayer`](#link) object or a [`AnimateCallbackFn`](#link) callback function to handle events in this Space. An IPlayer is an object with the following callback functions:    
+  * - required: `animate: fn( time, ftime, space )` 
+  * - optional: `start: fn(bound, space)`   
+  * - optional: `resize: fn( size, event )`
+  * - optional: `action: fn( type, x, y, event )`  
   * Subclasses of Space may define other callback functions.
-  * @param player an IPlayer object with animate function, or simply a function(time, ftime){}
+  * @param player an [`IPlayer`](#link) object with animate function, or a callback function `fn(time, ftime)`. 
   */
   add( p:IPlayer|AnimateCallbackFn ):this {
     let player:IPlayer = (typeof p == "function") ? { animate: p } : p;
@@ -71,7 +71,7 @@ export abstract class Space {
   
   
   /**
-  * Remove a player from this Space
+  * Remove a player from this Space.
   * @param player an IPlayer that has an `animateID` property
   */
   remove( player:IPlayer ):this {
@@ -81,7 +81,7 @@ export abstract class Space {
   
   
   /**
-  * Remove all players from this Space
+  * Remove all players from this Space.
   */
   removeAll():this {
     this.players = {};
@@ -90,7 +90,7 @@ export abstract class Space {
   
   
   /**
-  * Main play loop. This implements window.requestAnimationFrame and calls it recursively. 
+  * Main play loop. This implements `window.requestAnimationFrame` and calls it recursively. 
   * You may override this `play()` function to implemenet your own animation loop.
   * @param time current time
   */
@@ -115,8 +115,8 @@ export abstract class Space {
   
   
   /**
-  * Replay the animation after `stop()`. This resets the end-time counter.
-  * You may also use `pause()` and `resume()` for temporary pause.
+  * Replay the animation after [`Space.stop`](#link). This resets the end-time counter. 
+  * You may also use [`Space.pause`](#link) and [`resume`](#link) for temporary pause.
   */
   replay() {
     this._time.end = -1;
@@ -125,7 +125,7 @@ export abstract class Space {
   
   
   /**
-  * Main animate function. This calls all the items to perform
+  * Main animate function. This calls all the items to perform.
   * @param time current time
   */
   protected playItems( time: number ) {
@@ -151,7 +151,7 @@ export abstract class Space {
   
   
   /**
-  * Pause the animation
+  * Pause the animation.
   * @param toggle a boolean value to set if this function call should be a toggle (between pause and resume)
   */
   pause( toggle=false ):this {
@@ -161,7 +161,7 @@ export abstract class Space {
   
   
   /**
-  * Resume the pause animation
+  * Resume the pause animation.
   */
   resume():this {
     this._pause = false;
@@ -190,7 +190,7 @@ export abstract class Space {
   }
   
   /**
-  * Custom rendering
+  * Custom rendering.
   * @param context rendering context
   */
   protected render( context:any ):this {
@@ -200,56 +200,56 @@ export abstract class Space {
   
   
   /**
-  * Set a custom rendering `function(graphics_context, canvas_space)` if needed
+  * Set a custom rendering function `fn(graphics_context, canvas_space)` if needed.
   */
   set customRendering( f:(context:any, self:Space) => null ) { this._renderFunc = f; }
   get customRendering():(context:any, self:Space) => null { return this._renderFunc; }
   
 
   /**
-   * Get a boolean to indicate whether the animation is playing
+   * Indicate whether the animation is playing.
    */
   get isPlaying():boolean { return this._playing; }
 
 
   /**
-  * Get this space's bounding box
+  * The outer bounding box which includes its positions.
   */
   get outerBound():Bound { return this.bound.clone(); }
   
   
   /**
-  * The bounding box of the canvas
+  * The inner bounding box of the space, excluding its positions.
   */
   public get innerBound():Bound { return new Bound( Pt.make( this.size.length, 0 ), this.size.clone() ); }
   
   
   /**
-  * Get the size of this bounding box as a Pt
+  * The size of this space's bounding box.
   */
   get size():Pt { return this.bound.size.clone(); }
   
   
   /**
-  * Get the size of this bounding box as a Pt
+  * The center of this space's bounding box.
   */
   get center():Pt { return this.size.divide(2); }
   
   
   /**
-  * Get width of canvas
+  * The width of this space's bounding box.
   */
   get width():number { return this.bound.width; }
   
   
   /**
-  * Get height of canvas
+  * The height of this space's bounding box.
   */
   get height():number { return this.bound.height; }
   
   
   /**
-  * Resize the space
+  * Resize the space. To be implemented in subclasses.
   * @param w `width or an IPt object
   * @param h height
   */
@@ -257,13 +257,13 @@ export abstract class Space {
   
   
   /**
-  * clear all contents in the space
+  * clear all contents in the space. To be implemented in subclasses.
   */
-  abstract clear( ):this;
+  abstract clear():this;
   
   
   /**
-  * Get a default form for drawing in this space
+  * Get a default form for drawing in this space. To be implemented in subclasses.
   */
   abstract getForm():Form;
   
@@ -273,7 +273,8 @@ export abstract class Space {
 
 
 /**
- * MultiTouchSpace is a space that supports user interactions via touch events.
+ * MultiTouchSpace is an abstract class that extends [`Space`](#link) to support user interactions via touch events. 
+ * It's extended through subclasses such as [`CanvasSpace`](#link) and [`SVGSpace`](#link). 
  */
 export abstract class MultiTouchSpace extends Space {
   
@@ -288,7 +289,7 @@ export abstract class MultiTouchSpace extends Space {
   protected _canvas:EventTarget;
   
   /**
-  * Get the mouse or touch pointer that stores the last action
+  * Get the mouse or touch pointer that stores the last action.
   */
   public get pointer():Pt {
     let p = this._pointer.clone();
@@ -297,7 +298,7 @@ export abstract class MultiTouchSpace extends Space {
   }
   
   /**
-  * Bind event listener in canvas element. You can also use `bindMouse` or `bindTouch` to bind mouse or touch events conveniently.
+  * Bind event listener in canvas element. You can also use [`MultiTouchSpace.bindMouse`](#link) or [`MultiTouchSpace.bindTouch`](#link) to bind mouse or touch events conveniently.
   * @param evt an event string such as "mousedown"
   * @param callback callback function for this event
   */
@@ -307,7 +308,7 @@ export abstract class MultiTouchSpace extends Space {
   
   
   /**
-  * Unbind a callback from the event listener
+  * Unbind a callback from the event listener.
   * @param evt an event string such as "mousedown"
   * @param callback callback function to unbind
   */
@@ -317,7 +318,9 @@ export abstract class MultiTouchSpace extends Space {
   
   
   /**
-  * A convenient method to bind (or unbind) all mouse events in canvas element. All "players" added to this space that implements an `action` callback property will receive mouse event callbacks. The types of mouse actions are defined by UIPointerActions constants: "up", "down", "move", "drag", "drop", "over", and "out". See `Space`'s `add()` function for more details.
+  * A convenient method to bind (or unbind) all mouse events in canvas element. 
+  * All [`IPlayer`](#link) objects added to this space that implement an `action` callback property will receive mouse event callbacks. 
+  * The types of mouse actions are defined by [`UIPointerActions`](#link) constants: "up", "down", "move", "drag", "drop", "over", and "out". 
   * @param _bind a boolean value to bind mouse events if set to `true`. If `false`, all mouse events will be unbound. Default is true.
   * @see [`Space.add`](#link) 
   */
@@ -342,7 +345,9 @@ export abstract class MultiTouchSpace extends Space {
   
   
   /**
-  * A convenient method to bind (or unbind) all touch events in canvas element. All "players" added to this space that implements an `action` callback property will receive mouse event callbacks. The types of mouse actions are: "up", "down", "move", "drag", "drop", "over", and "out". 
+  * A convenient method to bind (or unbind) all touch events in canvas element. 
+  * All [`IPlayer`](#link) objects added to this space that implement an `action` callback property will receive touch event callbacks. 
+  * The types of mouse actions are defined by [`UIPointerActions`](#link) constants: "up", "down", "move", "drag", "drop", "over", and "out". 
   * @param _bind a boolean value to bind touch events if set to `true`. If `false`, all mouse events will be unbound. Default is true.
   * @see [`Space.add`](#link)
   */
@@ -367,7 +372,7 @@ export abstract class MultiTouchSpace extends Space {
   
   
   /**
-  * A convenient method to convert the touch points in a touch event to an array of `Pt`.
+  * A convenient method to convert the touch points in a touch event to an array of Pts.
   * @param evt a touch event which contains touches, changedTouches, and targetTouches list
   * @param which a string to select a touches list: "touches", "changedTouches", or "targetTouches". Default is "touches"
   * @return an array of Pt, whose origin position (0,0) is offset to the top-left of this space
@@ -384,9 +389,10 @@ export abstract class MultiTouchSpace extends Space {
   
   
   /**
-  * Go through all the `players` and call its `action` callback function
+  * Go through all the added [`IPlayer`](#link) objects and call its `action` callback function.
   * @param type an UIPointerActions constant or string: "up", "down", "move", "drag", "drop", "over", and "out"
   * @param evt mouse or touch event
+  * @see [`Space.add`](#link)
   */
   protected _mouseAction( type:string, evt:MouseEvent|TouchEvent ) {
     let px = 0, py = 0;
@@ -420,7 +426,7 @@ export abstract class MultiTouchSpace extends Space {
   
   
   /**
-  * MouseDown handler
+  * MouseDown handler.
   * @param evt 
   */
   protected _mouseDown( evt:MouseEvent|TouchEvent ) {
@@ -431,7 +437,7 @@ export abstract class MultiTouchSpace extends Space {
   
   
   /**
-  * MouseUp handler
+  * MouseUp handler.
   * @param evt 
   */
   protected _mouseUp( evt:MouseEvent|TouchEvent ) {
@@ -444,7 +450,7 @@ export abstract class MultiTouchSpace extends Space {
   
   
   /**
-  * MouseMove handler
+  * MouseMove handler.
   * @param evt 
   */
   protected _mouseMove( evt:MouseEvent|TouchEvent ) {
@@ -458,7 +464,7 @@ export abstract class MultiTouchSpace extends Space {
   
   
   /**
-  * MouseOver handler
+  * MouseOver handler.
   * @param evt 
   */
   protected _mouseOver( evt:MouseEvent|TouchEvent ) {
@@ -468,7 +474,7 @@ export abstract class MultiTouchSpace extends Space {
   
   
   /**
-  * MouseOut handler
+  * MouseOut handler.
   * @param evt 
   */
   protected _mouseOut( evt:MouseEvent|TouchEvent ) {
@@ -480,7 +486,7 @@ export abstract class MultiTouchSpace extends Space {
   
   
   /**
-  * TouchMove handler
+  * TouchMove handler.
   * @param evt 
   */
   protected _touchMove( evt:TouchEvent) {
