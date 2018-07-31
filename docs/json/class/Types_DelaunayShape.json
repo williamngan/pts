@@ -1,0 +1,24 @@
+{
+  "name": "DelaunayShape",
+  "source": [
+    [
+      "Types.ts",
+      99,
+      25
+    ]
+  ],
+  "kind": "Typealias",
+  "id": 1252,
+  "comment": "Typescript only: A DelaunayShape represents an object type that can store a Delaunay element. It has 3 indices (i, j, k) and two groups that represent a triangle and a circle.",
+  "constructor": [],
+  "accessors": [],
+  "methods": [],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": [],
+  "type_alias": [
+    "{ circle:`Group`, i:`number`, j:`number`, k:`number`, triangle:`GroupLike` }"
+  ]
+}

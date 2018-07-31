@@ -1,0 +1,26 @@
+{
+  "name": "PtLike",
+  "source": [
+    [
+      "Types.ts",
+      19,
+      18
+    ]
+  ],
+  "kind": "Typealias",
+  "id": 1242,
+  "comment": "Typescript only: PtLike is an alias of types that can represent a point.",
+  "constructor": [],
+  "accessors": [],
+  "methods": [],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": [],
+  "type_alias": [
+    "Pt",
+    "Float32Array",
+    "number[]"
+  ]
+}

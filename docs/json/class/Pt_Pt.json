@@ -1,0 +1,2644 @@
+{
+  "name": "Pt",
+  "source": [
+    [
+      "Pt.ts",
+      16,
+      15
+    ]
+  ],
+  "kind": "Class",
+  "id": 1379,
+  "comment": "Pt is a subclass of standard [`Float32Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array) with additional properties and functions to support vector and geometric calculations.\nSee [Pt guide](../guide/Pt-0200.html) for details.",
+  "constructor": [
+    {
+      "name": "constructor",
+      "source": [
+        [
+          "Pt.ts",
+          18,
+          23
+        ]
+      ],
+      "id": 1381,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a Pt. If no parameter is provided, this will instantiate a Pt with 2 dimensions [0, 0].\nNote that `new Pt(3)` will only instantiate Pt with length of 3 (ie, same as `new Float32Array(3)` ). If you need a Pt with 1 dimension of value 3, use `new Pt([3])`.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`new Pt()`, `new Pt(1,2,3,4,5)`, `new Pt([1,2])`, `new Pt({x:0, y:1})`, `new Pt(pt)`"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "accessors": [
+    {
+      "name": "id",
+      "source": [
+        [
+          "Pt.ts",
+          55,
+          8
+        ],
+        [
+          "Pt.ts",
+          56,
+          8
+        ]
+      ],
+      "id": 1389,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "ID string of this Pt",
+      "getter": {
+        "type": "string"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "s",
+          "comment": "",
+          "type": "string",
+          "default": false
+        }
+      }
+    },
+    {
+      "name": "w",
+      "source": [
+        [
+          "Pt.ts",
+          79,
+          7
+        ],
+        [
+          "Pt.ts",
+          80,
+          7
+        ]
+      ],
+      "id": 1405,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Value in the forth dimension of this Pt",
+      "getter": {
+        "type": "number"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "n",
+          "comment": "",
+          "type": "number",
+          "default": false
+        }
+      }
+    },
+    {
+      "name": "x",
+      "source": [
+        [
+          "Pt.ts",
+          61,
+          7
+        ],
+        [
+          "Pt.ts",
+          62,
+          7
+        ]
+      ],
+      "id": 1393,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Value in the first dimensional of this Pt",
+      "getter": {
+        "type": "number"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "n",
+          "comment": "",
+          "type": "number",
+          "default": false
+        }
+      }
+    },
+    {
+      "name": "y",
+      "source": [
+        [
+          "Pt.ts",
+          67,
+          7
+        ],
+        [
+          "Pt.ts",
+          68,
+          7
+        ]
+      ],
+      "id": 1397,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Value in the second dimension of this Pt",
+      "getter": {
+        "type": "number"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "n",
+          "comment": "",
+          "type": "number",
+          "default": false
+        }
+      }
+    },
+    {
+      "name": "z",
+      "source": [
+        [
+          "Pt.ts",
+          73,
+          7
+        ],
+        [
+          "Pt.ts",
+          74,
+          7
+        ]
+      ],
+      "id": 1401,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Value in the third dimension of this Pt",
+      "getter": {
+        "type": "number"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "n",
+          "comment": "",
+          "type": "number",
+          "default": false
+        }
+      }
+    }
+  ],
+  "methods": [
+    {
+      "name": "$abs",
+      "source": [
+        [
+          "Pt.ts",
+          338,
+          6
+        ]
+      ],
+      "id": 1503,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a new Pt with absolute values of this Pt.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "$add",
+      "source": [
+        [
+          "Pt.ts",
+          204,
+          6
+        ]
+      ],
+      "id": 1455,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Like [`Pt.add`](#link), but returns result as a new Pt.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "$ceil",
+      "source": [
+        [
+          "Pt.ts",
+          372,
+          7
+        ]
+      ],
+      "id": 1511,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a new Pt with ceiling values of this Pt.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "$concat",
+      "source": [
+        [
+          "Pt.ts",
+          185,
+          9
+        ]
+      ],
+      "id": 1449,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Concatenate this Pt with addition dimensional values and return as a new Pt.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt,  or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "$cross",
+      "source": [
+        [
+          "Pt.ts",
+          304,
+          8
+        ]
+      ],
+      "id": 1492,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "3D Cross product of this Pt and another Pt. Return results as a new Pt.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "$cross2D",
+      "source": [
+        [
+          "Pt.ts",
+          297,
+          10
+        ]
+      ],
+      "id": 1489,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "2D Cross product of this Pt and another Pt. Return results as a new Pt.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "$divide",
+      "source": [
+        [
+          "Pt.ts",
+          255,
+          9
+        ]
+      ],
+      "id": 1473,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Like [`Pt.divide`](#link), but returns result as a new Pt.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "$floor",
+      "source": [
+        [
+          "Pt.ts",
+          355,
+          8
+        ]
+      ],
+      "id": 1507,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a new Pt with floor values of this Pt.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "$max",
+      "source": [
+        [
+          "Pt.ts",
+          430,
+          6
+        ]
+      ],
+      "id": 1530,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a new Pt that has the maximum dimensional values of this Pt and another Pt.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "$min",
+      "source": [
+        [
+          "Pt.ts",
+          416,
+          6
+        ]
+      ],
+      "id": 1527,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a new Pt that has the minimum dimensional values of this Pt and another Pt.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "$multiply",
+      "source": [
+        [
+          "Pt.ts",
+          238,
+          11
+        ]
+      ],
+      "id": 1467,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Like [`Pt.multiply`](#link), but returns result as a new Pt.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "$project",
+      "source": [
+        [
+          "Pt.ts",
+          312,
+          10
+        ]
+      ],
+      "id": 1495,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Calculate vector projection of this Pt on another Pt.",
+          "returns": "Pt",
+          "returns_comment": "the projection vector as a Pt\n",
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "$round",
+      "source": [
+        [
+          "Pt.ts",
+          389,
+          8
+        ]
+      ],
+      "id": 1515,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a new Pt with rounded values of this Pt.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "$subtract",
+      "source": [
+        [
+          "Pt.ts",
+          221,
+          11
+        ]
+      ],
+      "id": 1461,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Like [`Pt.subtract`](#link), but returns result as a new Pt.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "$take",
+      "source": [
+        [
+          "Pt.ts",
+          172,
+          7
+        ]
+      ],
+      "id": 1446,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Take specific dimensional values from this Pt and create a new Pt.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "axis",
+              "comment": "a string such as \"xy\" (use Const.xy) or an array to specify indices\n",
+              "type": "string | number[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "$to",
+      "source": [
+        [
+          "Pt.ts",
+          121,
+          5
+        ]
+      ],
+      "id": 1418,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Like [`Pt.to`](#link) but returns a new Pt.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "$unit",
+      "source": [
+        [
+          "Pt.ts",
+          283,
+          7
+        ]
+      ],
+      "id": 1483,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a new unit vector from this Pt.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "magnitude",
+              "comment": "",
+              "type": "number",
+              "default": "undefined"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "abs",
+      "source": [
+        [
+          "Pt.ts",
+          329,
+          5
+        ]
+      ],
+      "id": 1501,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Absolute values for all values in this pt.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "add",
+      "source": [
+        [
+          "Pt.ts",
+          194,
+          5
+        ]
+      ],
+      "id": 1452,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Add scalar or vector values to this Pt.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "angle",
+      "source": [
+        [
+          "Pt.ts",
+          444,
+          7
+        ]
+      ],
+      "id": 1533,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get angle of this Pt from origin.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "axis",
+              "comment": "a string such as \"xy\" (use Const.xy) or an array to specify index for two dimensions\n",
+              "type": "string | number[]",
+              "default": "Const.xy"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "angleBetween",
+      "source": [
+        [
+          "Pt.ts",
+          454,
+          14
+        ]
+      ],
+      "id": 1536,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get the angle between this and another Pt.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "p",
+              "comment": "the other Pt",
+              "type": "Pt",
+              "default": false
+            },
+            {
+              "name": "axis",
+              "comment": "a string such as \"xy\" (use Const.xy) or an array to specify index for two dimensions\n",
+              "type": "string | number[]",
+              "default": "Const.xy"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "ceil",
+      "source": [
+        [
+          "Pt.ts",
+          363,
+          6
+        ]
+      ],
+      "id": 1509,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Ceiling values for all values in this Pt.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "clone",
+      "source": [
+        [
+          "Pt.ts",
+          86,
+          7
+        ]
+      ],
+      "id": 1409,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Clone this Pt and return it as a new Pt.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "divide",
+      "source": [
+        [
+          "Pt.ts",
+          245,
+          8
+        ]
+      ],
+      "id": 1470,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Divide this Pt over scalar or vector values (as element-wise).",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "dot",
+      "source": [
+        [
+          "Pt.ts",
+          290,
+          5
+        ]
+      ],
+      "id": 1486,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Dot product of this Pt and another Pt.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "equals",
+      "source": [
+        [
+          "Pt.ts",
+          96,
+          8
+        ]
+      ],
+      "id": 1411,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Check if another Pt is equal to this Pt, within a threshold.",
+          "returns": "boolean",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "p",
+              "comment": "another Pt to compare with",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "threshold",
+              "comment": "a threshold value within which the two Pts are considered equal. Default is 0.000001.\n",
+              "type": "number",
+              "default": "0.000001"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "floor",
+      "source": [
+        [
+          "Pt.ts",
+          346,
+          7
+        ]
+      ],
+      "id": 1505,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Floor values for all values in this Pt.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "magnitude",
+      "source": [
+        [
+          "Pt.ts",
+          267,
+          11
+        ]
+      ],
+      "id": 1478,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get the distance (magnitude) of this Pt from origin.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "magnitudeSq",
+      "source": [
+        [
+          "Pt.ts",
+          261,
+          13
+        ]
+      ],
+      "id": 1476,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get the sqaured distance (magnitude) of this Pt from origin.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "maxValue",
+      "source": [
+        [
+          "Pt.ts",
+          407,
+          10
+        ]
+      ],
+      "id": 1522,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Find the maximum value across all dimensions in this Pt.",
+          "returns": "{ index:`number`, value:`number` }",
+          "returns_comment": "an object with `value` and `index` which returns the maximum value and its dimensional index\n",
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "minValue",
+      "source": [
+        [
+          "Pt.ts",
+          398,
+          10
+        ]
+      ],
+      "id": 1517,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Find the minimum value across all dimensions in this Pt.",
+          "returns": "{ index:`number`, value:`number` }",
+          "returns_comment": "an object with `value` and `index` which returns the minimum value and its dimensional index\n",
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "multiply",
+      "source": [
+        [
+          "Pt.ts",
+          228,
+          10
+        ]
+      ],
+      "id": 1464,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Multiply scalar or vector values (as element-wise) with this Pt.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "op",
+      "source": [
+        [
+          "Pt.ts",
+          145,
+          4
+        ]
+      ],
+      "id": 1426,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create an operation using this Pt, passing this Pt into a custom function's first parameter. See the [Op guide](../guide/Op-0400.html) for details.",
+          "returns": " Fn(rest:any[])",
+          "returns_comment": "a resulting function that takes other parameters required in `fn`\n",
+          "parameters": [
+            {
+              "name": "fn",
+              "comment": "any function that takes a Pt as its first parameter",
+              "type": " Fn(p1:PtLike, rest:any[])",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`let myOp = pt.op( fn ); let result = myOp( [1,2,3] );`"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ops",
+      "source": [
+        [
+          "Pt.ts",
+          159,
+          5
+        ]
+      ],
+      "id": 1436,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "This combines a series of operations into an array. See the [Op guide](../guide/Op-0400.html) for details.",
+          "returns": " Fn(rest:any[])",
+          "returns_comment": "an array of resulting functions\n",
+          "parameters": [
+            {
+              "name": "fns",
+              "comment": "an array of functions for `op`",
+              "type": " Fn(p1:PtLike, rest:any[])",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`let myOps = pt.ops([fn1, fn2, fn3]); let results = myOps.map( (op) => op([1,2,3]) );`"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "projectScalar",
+      "source": [
+        [
+          "Pt.ts",
+          321,
+          15
+        ]
+      ],
+      "id": 1498,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Calculate scalar projection.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "reflect2D",
+      "source": [
+        [
+          "Pt.ts",
+          499,
+          11
+        ]
+      ],
+      "id": 1554,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Reflect this Pt along a 2D line.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "line",
+              "comment": "a Group of 2 Pts that defines a line for reflection",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "axis",
+              "comment": "optional axis such as \"yz\" to define a 2D plane of reflection\n",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "rotate2D",
+      "source": [
+        [
+          "Pt.ts",
+          476,
+          10
+        ]
+      ],
+      "id": 1544,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Rotate this Pt from origin or from an anchor point in 2D.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "angle",
+              "comment": "rotate angle",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "anchor",
+              "comment": "optional anchor point to scale from",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "axis",
+              "comment": "optional string such as \"yz\" to specify a 2D plane\n",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "round",
+      "source": [
+        [
+          "Pt.ts",
+          380,
+          7
+        ]
+      ],
+      "id": 1513,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Rounded values for all values in this Pt.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "scale",
+      "source": [
+        [
+          "Pt.ts",
+          464,
+          7
+        ]
+      ],
+      "id": 1540,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Scale this Pt from origin or from an anchor point.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "scale",
+              "comment": "scale ratio",
+              "type": "number | number[] | PtLike",
+              "default": false
+            },
+            {
+              "name": "anchor",
+              "comment": "optional anchor point to scale from\n",
+              "type": "PtLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "shear2D",
+      "source": [
+        [
+          "Pt.ts",
+          488,
+          9
+        ]
+      ],
+      "id": 1549,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Shear this Pt from origin or from an anchor point in 2D.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "scale",
+              "comment": "",
+              "type": "number | number[] | PtLike",
+              "default": false
+            },
+            {
+              "name": "anchor",
+              "comment": "optional anchor point to scale from",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "axis",
+              "comment": "optional string such as \"yz\" to specify a 2D plane\n",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "subtract",
+      "source": [
+        [
+          "Pt.ts",
+          211,
+          10
+        ]
+      ],
+      "id": 1458,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Subtract scalar or vector values from this Pt.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "to",
+      "source": [
+        [
+          "Pt.ts",
+          108,
+          4
+        ]
+      ],
+      "id": 1415,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Update the values of this Pt.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "toAngle",
+      "source": [
+        [
+          "Pt.ts",
+          132,
+          9
+        ]
+      ],
+      "id": 1421,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Update the values of this Pt to point at a specific angle.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "radian",
+              "comment": "target angle in radian",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "magnitude",
+              "comment": "Optional magnitude if known. If not provided, it'll calculate and use this Pt's magnitude.",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "anchorFromPt",
+              "comment": "If `true`, translate to new position from current position. Default is `false` which update the position from origin (0,0);\n",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "toArray",
+      "source": [
+        [
+          "Pt.ts",
+          516,
+          9
+        ]
+      ],
+      "id": 1560,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Convert this Pt to a javascript Array.",
+          "returns": "number[]",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "toString",
+      "source": [
+        [
+          "Pt.ts",
+          508,
+          10
+        ]
+      ],
+      "id": 1558,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A string representation of this Pt. Eg, \"Pt(1, 2, 3)\".",
+          "returns": "string",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "unit",
+      "source": [
+        [
+          "Pt.ts",
+          274,
+          6
+        ]
+      ],
+      "id": 1480,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Convert to a unit vector, which is a normalized vector whose magnitude equals to 1.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "magnitude",
+              "comment": "Optional: if the magnitude is known, pass it as a parameter to avoid duplicate calculation.\n",
+              "type": "number",
+              "default": "undefined"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "copyWithin",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          3464,
+          14
+        ]
+      ],
+      "id": 1566,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Float32Array.copyWithin",
+      "signatures": [
+        {
+          "comment": "Returns the this object after copying a section of the array identified by start and end\nto the same array starting at position target",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "target",
+              "comment": "If target is negative, it is treated as length+target where length is the\nlength of the array.",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "start",
+              "comment": "If start is negative, it is treated as length+start. If end is negative, it\nis treated as length+end.",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "end",
+              "comment": "If not specified, length of the this object is used as its default value.\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "entries",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          5205,
+          11
+        ]
+      ],
+      "id": 1737,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Float32Array.entries",
+      "signatures": [
+        {
+          "comment": "Returns an array of key, value pairs for every entry in the array",
+          "returns": "IterableIterator",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "every",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          3474,
+          9
+        ]
+      ],
+      "id": 1571,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Float32Array.every",
+      "signatures": [
+        {
+          "comment": "Determines whether all the members of an array satisfy the specified test.",
+          "returns": "boolean",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "callbackfn",
+              "comment": "A function that accepts up to three arguments. The every method calls\nthe callbackfn function for each element in array1 until the callbackfn returns false,\nor until the end of the array.",
+              "type": " Fn(value:number, index:number, array:Float32Array)",
+              "default": false
+            },
+            {
+              "name": "thisArg",
+              "comment": "An object to which the this keyword can refer in the callbackfn function.\nIf thisArg is omitted, undefined is used as the this value.\n",
+              "type": "any",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "fill",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          3484,
+          8
+        ]
+      ],
+      "id": 1580,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Float32Array.fill",
+      "signatures": [
+        {
+          "comment": "Returns the this object after filling the section identified by start and end with value",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "value",
+              "comment": "value to fill array section with",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "start",
+              "comment": "index to start filling the array at. If start is negative, it is treated as\nlength+start where length is the length of the array.",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "end",
+              "comment": "index to stop filling the array at. If end is negative, it is treated as\nlength+end.\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "filter",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          3493,
+          10
+        ]
+      ],
+      "id": 1585,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Float32Array.filter",
+      "signatures": [
+        {
+          "comment": "Returns the elements of an array that meet the condition specified in a callback function.",
+          "returns": "Float32Array",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "callbackfn",
+              "comment": "A function that accepts up to three arguments. The filter method calls\nthe callbackfn function one time for each element in the array.",
+              "type": " Fn(value:number, index:number, array:Float32Array)",
+              "default": false
+            },
+            {
+              "name": "thisArg",
+              "comment": "An object to which the this keyword can refer in the callbackfn function.\nIf thisArg is omitted, undefined is used as the this value.\n",
+              "type": "any",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "find",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          3504,
+          8
+        ]
+      ],
+      "id": 1594,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Float32Array.find",
+      "signatures": [
+        {
+          "comment": "Returns the value of the first element in the array where predicate is true, and undefined\notherwise.",
+          "returns": "number | undefined",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "predicate",
+              "comment": "find calls predicate once for each element of the array, in ascending\norder, until it finds one where predicate returns true. If such an element is found, find\nimmediately returns that element value. Otherwise, find returns undefined.",
+              "type": " Fn(value:number, index:number, obj:Float32Array)",
+              "default": false
+            },
+            {
+              "name": "thisArg",
+              "comment": "If provided, it will be used as the this value for each invocation of\npredicate. If it is not provided, undefined is used instead.\n",
+              "type": "any",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "findIndex",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          3515,
+          13
+        ]
+      ],
+      "id": 1603,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Float32Array.findIndex",
+      "signatures": [
+        {
+          "comment": "Returns the index of the first element in the array where predicate is true, and -1\notherwise.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "predicate",
+              "comment": "find calls predicate once for each element of the array, in ascending\norder, until it finds one where predicate returns true. If such an element is found,\nfindIndex immediately returns that element index. Otherwise, findIndex returns -1.",
+              "type": " Fn(value:number, index:number, obj:Float32Array)",
+              "default": false
+            },
+            {
+              "name": "thisArg",
+              "comment": "If provided, it will be used as the this value for each invocation of\npredicate. If it is not provided, undefined is used instead.\n",
+              "type": "any",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "forEach",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          3524,
+          11
+        ]
+      ],
+      "id": 1612,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Float32Array.forEach",
+      "signatures": [
+        {
+          "comment": "Performs the specified action for each element in an array.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "callbackfn",
+              "comment": "A function that accepts up to three arguments. forEach calls the\ncallbackfn function one time for each element in the array.",
+              "type": " Fn(value:number, index:number, array:Float32Array)",
+              "default": false
+            },
+            {
+              "name": "thisArg",
+              "comment": "An object to which the this keyword can refer in the callbackfn function.\nIf thisArg is omitted, undefined is used as the this value.\n",
+              "type": "any",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "indexOf",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          3532,
+          11
+        ]
+      ],
+      "id": 1621,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Float32Array.indexOf",
+      "signatures": [
+        {
+          "comment": "Returns the index of the first occurrence of a value in an array.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "searchElement",
+              "comment": "The value to locate in the array.",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "fromIndex",
+              "comment": "The array index at which to begin the search. If fromIndex is omitted, the\n search starts at index 0.\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "join",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          3539,
+          8
+        ]
+      ],
+      "id": 1625,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Float32Array.join",
+      "signatures": [
+        {
+          "comment": "Adds all the elements of an array separated by the specified separator string.",
+          "returns": "string",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "separator",
+              "comment": "A string used to separate one element of an array from the next in the\nresulting String. If omitted, the array elements are separated with a comma.\n",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "keys",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          5209,
+          8
+        ]
+      ],
+      "id": 1739,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Float32Array.keys",
+      "signatures": [
+        {
+          "comment": "Returns an list of keys in the array",
+          "returns": "IterableIterator",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "lastIndexOf",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          3547,
+          15
+        ]
+      ],
+      "id": 1628,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Float32Array.lastIndexOf",
+      "signatures": [
+        {
+          "comment": "Returns the index of the last occurrence of a value in an array.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "searchElement",
+              "comment": "The value to locate in the array.",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "fromIndex",
+              "comment": "The array index at which to begin the search. If fromIndex is omitted, the\nsearch starts at index 0.\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "make",
+      "source": [
+        [
+          "Pt.ts",
+          41,
+          13
+        ]
+      ],
+      "id": 1384,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create an n-dimensional Pt with either default value or random values.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "dimensions",
+              "comment": "number of dimensions",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "defaultValue",
+              "comment": "optional default value to fill the dimensions",
+              "type": "number",
+              "default": "0"
+            },
+            {
+              "name": "randomize",
+              "comment": "if `true`, randomize the value between 0 to default value\n",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "map",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          3562,
+          7
+        ]
+      ],
+      "id": 1633,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Float32Array.map",
+      "signatures": [
+        {
+          "comment": "Calls a defined callback function on each element of an array, and returns an array that\ncontains the results.",
+          "returns": "Float32Array",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "callbackfn",
+              "comment": "A function that accepts up to three arguments. The map method calls the\ncallbackfn function one time for each element in the array.",
+              "type": " Fn(value:number, index:number, array:Float32Array)",
+              "default": false
+            },
+            {
+              "name": "thisArg",
+              "comment": "An object to which the this keyword can refer in the callbackfn function.\nIf thisArg is omitted, undefined is used as the this value.\n",
+              "type": "any",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "reduce",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          3574,
+          10
+        ],
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          3575,
+          10
+        ],
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          3587,
+          10
+        ]
+      ],
+      "id": 1642,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Float32Array.reduce",
+      "signatures": [
+        {
+          "comment": "Calls the specified callback function for all the elements in an array. The return value of\nthe callback function is the accumulated result, and is provided as an argument in the next\ncall to the callback function.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "callbackfn",
+              "comment": "A function that accepts up to four arguments. The reduce method calls the\ncallbackfn function one time for each element in the array.",
+              "type": " Fn(previousValue:number, currentValue:number, currentIndex:number, array:Float32Array)",
+              "default": false
+            }
+          ],
+          "tags": []
+        },
+        {
+          "comment": "",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "callbackfn",
+              "comment": "",
+              "type": " Fn(previousValue:number, currentValue:number, currentIndex:number, array:Float32Array)",
+              "default": false
+            },
+            {
+              "name": "initialValue",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        },
+        {
+          "comment": "Calls the specified callback function for all the elements in an array. The return value of\nthe callback function is the accumulated result, and is provided as an argument in the next\ncall to the callback function.",
+          "returns": "U",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "callbackfn",
+              "comment": "A function that accepts up to four arguments. The reduce method calls the\ncallbackfn function one time for each element in the array.",
+              "type": " Fn(previousValue:U, currentValue:number, currentIndex:number, array:Float32Array)",
+              "default": false
+            },
+            {
+              "name": "initialValue",
+              "comment": "If initialValue is specified, it is used as the initial value to start\nthe accumulation. The first call to the callbackfn function provides this value as an argument\ninstead of an array value.\n",
+              "type": "U",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "reduceRight",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          3599,
+          15
+        ],
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          3600,
+          15
+        ],
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          3612,
+          15
+        ]
+      ],
+      "id": 1670,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Float32Array.reduceRight",
+      "signatures": [
+        {
+          "comment": "Calls the specified callback function for all the elements in an array, in descending order.\nThe return value of the callback function is the accumulated result, and is provided as an\nargument in the next call to the callback function.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "callbackfn",
+              "comment": "A function that accepts up to four arguments. The reduceRight method calls\nthe callbackfn function one time for each element in the array.",
+              "type": " Fn(previousValue:number, currentValue:number, currentIndex:number, array:Float32Array)",
+              "default": false
+            }
+          ],
+          "tags": []
+        },
+        {
+          "comment": "",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "callbackfn",
+              "comment": "",
+              "type": " Fn(previousValue:number, currentValue:number, currentIndex:number, array:Float32Array)",
+              "default": false
+            },
+            {
+              "name": "initialValue",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        },
+        {
+          "comment": "Calls the specified callback function for all the elements in an array, in descending order.\nThe return value of the callback function is the accumulated result, and is provided as an\nargument in the next call to the callback function.",
+          "returns": "U",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "callbackfn",
+              "comment": "A function that accepts up to four arguments. The reduceRight method calls\nthe callbackfn function one time for each element in the array.",
+              "type": " Fn(previousValue:U, currentValue:number, currentIndex:number, array:Float32Array)",
+              "default": false
+            },
+            {
+              "name": "initialValue",
+              "comment": "If initialValue is specified, it is used as the initial value to start\nthe accumulation. The first call to the callbackfn function provides this value as an argument\ninstead of an array value.\n",
+              "type": "U",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "reverse",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          3617,
+          11
+        ]
+      ],
+      "id": 1698,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Float32Array.reverse",
+      "signatures": [
+        {
+          "comment": "Reverses the elements in an Array.",
+          "returns": "Float32Array",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "set",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          3624,
+          7
+        ]
+      ],
+      "id": 1700,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Float32Array.set",
+      "signatures": [
+        {
+          "comment": "Sets a value or an array of values.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "array",
+              "comment": "A typed or untyped array of values to set.",
+              "type": "ArrayLike",
+              "default": false
+            },
+            {
+              "name": "offset",
+              "comment": "The index in the current array at which the values are to be written.\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "slice",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          3631,
+          9
+        ]
+      ],
+      "id": 1704,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Float32Array.slice",
+      "signatures": [
+        {
+          "comment": "Returns a section of an array.",
+          "returns": "Float32Array",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "start",
+              "comment": "The beginning of the specified portion of the array.",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "end",
+              "comment": "The end of the specified portion of the array.\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "some",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          3641,
+          8
+        ]
+      ],
+      "id": 1708,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Float32Array.some",
+      "signatures": [
+        {
+          "comment": "Determines whether the specified callback function returns true for any element of an array.",
+          "returns": "boolean",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "callbackfn",
+              "comment": "A function that accepts up to three arguments. The some method calls the\ncallbackfn function for each element in array1 until the callbackfn returns true, or until\nthe end of the array.",
+              "type": " Fn(value:number, index:number, array:Float32Array)",
+              "default": false
+            },
+            {
+              "name": "thisArg",
+              "comment": "An object to which the this keyword can refer in the callbackfn function.\nIf thisArg is omitted, undefined is used as the this value.\n",
+              "type": "any",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "sort",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          3648,
+          8
+        ]
+      ],
+      "id": 1717,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Float32Array.sort",
+      "signatures": [
+        {
+          "comment": "Sorts an array.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "compareFn",
+              "comment": "The name of the function used to determine the order of the elements. If\nomitted, the elements are sorted in ascending, ASCII character order.\n",
+              "type": " Fn(a:number, b:number)",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "subarray",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          3656,
+          12
+        ]
+      ],
+      "id": 1724,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Float32Array.subarray",
+      "signatures": [
+        {
+          "comment": "Gets a new Float32Array view of the ArrayBuffer store for this array, referencing the elements\nat begin, inclusive, up to end, exclusive.",
+          "returns": "Float32Array",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "begin",
+              "comment": "The index of the beginning of the array.",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "end",
+              "comment": "The index of the end of the array.\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "toLocaleString",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          3661,
+          18
+        ]
+      ],
+      "id": 1728,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Float32Array.toLocaleString",
+      "signatures": [
+        {
+          "comment": "Converts a number to a string by using the current locale.",
+          "returns": "string",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "toString",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          3666,
+          12
+        ]
+      ],
+      "id": 1730,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Float32Array.toString",
+      "signatures": [
+        {
+          "comment": "Returns a string representation of an array.",
+          "returns": "string",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "values",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          5213,
+          10
+        ]
+      ],
+      "id": 1741,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Float32Array.values",
+      "signatures": [
+        {
+          "comment": "Returns an list of values in the array",
+          "returns": "IterableIterator",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "variables": [],
+  "properties": [
+    {
+      "name": "BYTES_PER_ELEMENT",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          3438,
+          30
+        ]
+      ],
+      "id": 1562,
+      "flags": {
+        "isStatic": true
+      },
+      "type": "BYTES_PER_ELEMENT",
+      "overrides": false,
+      "inherits": "Float32Array.BYTES_PER_ELEMENT",
+      "comment": "The size in bytes of each element in the array."
+    },
+    {
+      "name": "Float32Array",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          3698,
+          26
+        ]
+      ],
+      "id": 1734,
+      "flags": {
+        "isStatic": true
+      },
+      "type": "Float32Array",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "buffer",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          3443,
+          19
+        ]
+      ],
+      "id": 1563,
+      "flags": {
+        "isStatic": true
+      },
+      "type": "buffer",
+      "overrides": false,
+      "inherits": "Float32Array.buffer",
+      "comment": "The ArrayBuffer instance referenced by the array."
+    },
+    {
+      "name": "byteLength",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          3448,
+          23
+        ]
+      ],
+      "id": 1564,
+      "flags": {
+        "isStatic": true
+      },
+      "type": "byteLength",
+      "overrides": false,
+      "inherits": "Float32Array.byteLength",
+      "comment": "The length in bytes of the array."
+    },
+    {
+      "name": "byteOffset",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          3453,
+          23
+        ]
+      ],
+      "id": 1565,
+      "flags": {
+        "isStatic": true
+      },
+      "type": "byteOffset",
+      "overrides": false,
+      "inherits": "Float32Array.byteOffset",
+      "comment": "The offset in bytes of the array."
+    },
+    {
+      "name": "length",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          3552,
+          19
+        ]
+      ],
+      "id": 1632,
+      "flags": {
+        "isStatic": true
+      },
+      "type": "length",
+      "overrides": false,
+      "inherits": "Float32Array.length",
+      "comment": "The length of the array."
+    }
+  ],
+  "flags": {},
+  "extends": [
+    "Float32Array"
+  ],
+  "implements": [
+    "IPt",
+    "Iterable"
+  ]
+}

@@ -1,0 +1,136 @@
+{
+  "name": "UIPointerActions",
+  "source": [
+    [
+      "UI.ts",
+      21,
+      29
+    ]
+  ],
+  "kind": "Objectliteral",
+  "id": 934,
+  "comment": "**[Experimental]** A set of string constants to represent different UI events.",
+  "constructor": [],
+  "accessors": [],
+  "methods": [],
+  "variables": [
+    {
+      "name": "down",
+      "source": [
+        [
+          "UI.ts",
+          22,
+          16
+        ]
+      ],
+      "id": 936,
+      "flags": {},
+      "type": "down",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "drag",
+      "source": [
+        [
+          "UI.ts",
+          22,
+          44
+        ]
+      ],
+      "id": 938,
+      "flags": {},
+      "type": "drag",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "drop",
+      "source": [
+        [
+          "UI.ts",
+          22,
+          58
+        ]
+      ],
+      "id": 939,
+      "flags": {},
+      "type": "drop",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "move",
+      "source": [
+        [
+          "UI.ts",
+          22,
+          30
+        ]
+      ],
+      "id": 937,
+      "flags": {},
+      "type": "move",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "out",
+      "source": [
+        [
+          "UI.ts",
+          22,
+          85
+        ]
+      ],
+      "id": 941,
+      "flags": {},
+      "type": "out",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "over",
+      "source": [
+        [
+          "UI.ts",
+          22,
+          72
+        ]
+      ],
+      "id": 940,
+      "flags": {},
+      "type": "over",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "up",
+      "source": [
+        [
+          "UI.ts",
+          22,
+          4
+        ]
+      ],
+      "id": 935,
+      "flags": {},
+      "type": "up",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    }
+  ],
+  "properties": [],
+  "flags": {
+    "isConst": true
+  },
+  "extends": [],
+  "implements": []
+}

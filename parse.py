@@ -9,7 +9,7 @@ classes = {}
 searches = []
 skipped = []
 
-file_path = "./docsn/json/"
+file_path = "./docs/json/"
 
 print( f'Parsing json in {file_path}' )
 

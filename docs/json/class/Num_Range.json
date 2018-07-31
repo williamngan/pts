@@ -1,0 +1,242 @@
+{
+  "name": "Range",
+  "source": [
+    [
+      "Num.ts",
+      808,
+      18
+    ]
+  ],
+  "kind": "Class",
+  "id": 405,
+  "comment": "Range object keeps track of a Group of n-dimensional Pts to provide its minimum, maximum, and magnitude in each dimension.\nIt also provides convenient functions such as mapping the Group to another range. This class may be useful for visualizing data in charts.",
+  "constructor": [
+    {
+      "name": "constructor",
+      "source": [
+        [
+          "Num.ts",
+          814,
+          29
+        ]
+      ],
+      "id": 411,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Construct a Range instance for a Group of Pts.",
+          "returns": "Range",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "g",
+              "comment": "a Group or an array of Pts\n",
+              "type": "GroupLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "accessors": [
+    {
+      "name": "magnitude",
+      "source": [
+        [
+          "Num.ts",
+          839,
+          15
+        ]
+      ],
+      "id": 418,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Get this Range's magnitude in each dimension.",
+      "getter": {
+        "type": "Pt"
+      },
+      "setter": false
+    },
+    {
+      "name": "max",
+      "source": [
+        [
+          "Num.ts",
+          829,
+          9
+        ]
+      ],
+      "id": 414,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Get this Range's maximum values per dimension.",
+      "getter": {
+        "type": "Pt"
+      },
+      "setter": false
+    },
+    {
+      "name": "min",
+      "source": [
+        [
+          "Num.ts",
+          834,
+          9
+        ]
+      ],
+      "id": 416,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Get this Range's minimum values per dimension.",
+      "getter": {
+        "type": "Pt"
+      },
+      "setter": false
+    }
+  ],
+  "methods": [
+    {
+      "name": "append",
+      "source": [
+        [
+          "Num.ts",
+          898,
+          8
+        ]
+      ],
+      "id": 427,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Add more Pts to this Range and recalculate its min and max values.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "g",
+              "comment": "a Group or an array of Pts to append to this Range",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "update",
+              "comment": "Optional. Set the parameter to `false` if you want to append without immediately updating this Range's min and max values. Default is `true`.\n",
+              "type": "boolean",
+              "default": "true"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "calc",
+      "source": [
+        [
+          "Num.ts",
+          845,
+          6
+        ]
+      ],
+      "id": 420,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Go through the group and find its min and max values. Usually you don't need to call this function directly.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "mapTo",
+      "source": [
+        [
+          "Num.ts",
+          879,
+          7
+        ]
+      ],
+      "id": 422,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Map this Range to another range of values.",
+          "returns": "Group",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "min",
+              "comment": "target range's minimum value",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "max",
+              "comment": "target range's maximum value",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "exclude",
+              "comment": "Optional boolean array where `true` means excluding the conversion in that specific dimension.\n",
+              "type": "boolean[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "ticks",
+      "source": [
+        [
+          "Num.ts",
+          910,
+          7
+        ]
+      ],
+      "id": 431,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a number of evenly spaced \"ticks\" that span this Range's min and max value.",
+          "returns": "Group",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "count",
+              "comment": "number of subdivision. For example, 10 subdivision will return 11 tick values, which include first(min) and last(max) values.\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": []
+}

@@ -1,0 +1,330 @@
+{
+  "name": "Create",
+  "source": [
+    [
+      "Create.ts",
+      16,
+      19
+    ]
+  ],
+  "kind": "Class",
+  "id": 3827,
+  "comment": "The `Create` class helps you create structures from sets of points.",
+  "constructor": [],
+  "accessors": [],
+  "methods": [
+    {
+      "name": "delaunay",
+      "source": [
+        [
+          "Create.ts",
+          139,
+          17
+        ]
+      ],
+      "id": 3860,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a Delaunay Group. Use the [`Delaunay.delaunay()`](#link) and [`Delaunay.voronoi()`](#link) functions in the returned group to generate tessellations.",
+          "returns": "Delaunay",
+          "returns_comment": "an instance of the Delaunay class\n",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group or an array of Pts",
+              "type": "GroupLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "distributeLinear",
+      "source": [
+        [
+          "Create.ts",
+          42,
+          25
+        ]
+      ],
+      "id": 3833,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a set of points that distribute evenly on a line. Similar to [`Line.subpoints`](#link) but includes the end points.",
+          "returns": "Group",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "line",
+              "comment": "a Group representing a line",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "count",
+              "comment": "number of points to create\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "distributeRandom",
+      "source": [
+        [
+          "Create.ts",
+          25,
+          25
+        ]
+      ],
+      "id": 3828,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a set of random points inside a bounday.",
+          "returns": "Group",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "bound",
+              "comment": "the rectangular boundary",
+              "type": "Bound",
+              "default": false
+            },
+            {
+              "name": "count",
+              "comment": "number of random points to create",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "dimensions",
+              "comment": "number of dimensions in each point\n",
+              "type": "number",
+              "default": "2"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "gridCells",
+      "source": [
+        [
+          "Create.ts",
+          79,
+          18
+        ]
+      ],
+      "id": 3843,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a grid of cells inside a boundary, where each cell is defined by a group of 2 Pt.",
+          "returns": "Group[]",
+          "returns_comment": "an array of Groups, where each group represents a rectangular cell\n",
+          "parameters": [
+            {
+              "name": "bound",
+              "comment": "the rectangular boundary",
+              "type": "Bound",
+              "default": false
+            },
+            {
+              "name": "columns",
+              "comment": "number of columns",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "rows",
+              "comment": "number of rows",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "gridPts",
+      "source": [
+        [
+          "Create.ts",
+          58,
+          16
+        ]
+      ],
+      "id": 3837,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create an evenly distributed set of points (like a grid of points) inside a boundary.",
+          "returns": "Group",
+          "returns_comment": "a Group of Pts\n",
+          "parameters": [
+            {
+              "name": "bound",
+              "comment": "the rectangular boundary",
+              "type": "Bound",
+              "default": false
+            },
+            {
+              "name": "columns",
+              "comment": "number of columns",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "rows",
+              "comment": "number of rows",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "orientation",
+              "comment": "a Pt or number array to specify where the point should be inside a cell. Default is [0.5, 0.5] which places the point in the middle.",
+              "type": "PtLike",
+              "default": "[0.5, 0.5]"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "noisePts",
+      "source": [
+        [
+          "Create.ts",
+          119,
+          17
+        ]
+      ],
+      "id": 3853,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Given a group of Pts, return a new group of `Noise` Pts.",
+          "returns": "Group",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group or an array of Pts",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "dx",
+              "comment": "small increment value in x dimension",
+              "type": "number",
+              "default": "0.01"
+            },
+            {
+              "name": "dy",
+              "comment": "small increment value in y dimension",
+              "type": "number",
+              "default": "0.01"
+            },
+            {
+              "name": "rows",
+              "comment": "Optional row count to generate 2D noise",
+              "type": "number",
+              "default": "0"
+            },
+            {
+              "name": "columns",
+              "comment": "Optional column count to generate 2D noise\n",
+              "type": "number",
+              "default": "0"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "radialPts",
+      "source": [
+        [
+          "Create.ts",
+          101,
+          18
+        ]
+      ],
+      "id": 3848,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a set of Pts around a circular path.",
+          "returns": "Group",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "center",
+              "comment": "circle center",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "radius",
+              "comment": "circle radius",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "count",
+              "comment": "number of Pts to create\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": []
+}

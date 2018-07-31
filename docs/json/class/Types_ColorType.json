@@ -1,0 +1,30 @@
+{
+  "name": "ColorType",
+  "source": [
+    [
+      "Types.ts",
+      93,
+      21
+    ]
+  ],
+  "kind": "Typealias",
+  "id": 1251,
+  "comment": "Typescript only: ColorType is a type alias for a defined set of string values such as \"rgb\" and \"lab\".",
+  "constructor": [],
+  "accessors": [],
+  "methods": [],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": [],
+  "type_alias": [
+    "rgb",
+    "hsl",
+    "hsb",
+    "lab",
+    "lch",
+    "luv",
+    "xyz"
+  ]
+}

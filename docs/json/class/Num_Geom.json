@@ -1,0 +1,692 @@
+{
+  "name": "Geom",
+  "source": [
+    [
+      "Num.ts",
+      157,
+      17
+    ]
+  ],
+  "kind": "Class",
+  "id": 191,
+  "comment": "Geom class provides static helper functions for basic geometric operations.",
+  "constructor": [],
+  "accessors": [],
+  "methods": [
+    {
+      "name": "anchor",
+      "source": [
+        [
+          "Num.ts",
+          223,
+          15
+        ]
+      ],
+      "id": 210,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Given an anchor Pt, rebase all Pts in this group either to or from this anchor base.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group or array of Pt",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "ptOrIndex",
+              "comment": "an index for the Pt array, or an external Pt",
+              "type": "PtLike | number",
+              "default": "0"
+            },
+            {
+              "name": "direction",
+              "comment": "a string either \"to\" (subtract all Pt with this anchor base), or \"from\" (add all Pt from this anchor base)\n",
+              "type": "to | from",
+              "default": "\"to\""
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "boundAngle",
+      "source": [
+        [
+          "Num.ts",
+          163,
+          19
+        ]
+      ],
+      "id": 192,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Bound an angle between 0 to 360 degrees.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "angle",
+              "comment": "angle value\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "boundRadian",
+      "source": [
+        [
+          "Num.ts",
+          172,
+          20
+        ]
+      ],
+      "id": 195,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Bound a radian between 0 to two PI.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "radian",
+              "comment": "radian value\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "boundingBox",
+      "source": [
+        [
+          "Num.ts",
+          200,
+          20
+        ]
+      ],
+      "id": 204,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a bounding box for a set of Pts.",
+          "returns": "Group",
+          "returns_comment": "a Group of two Pts, representing the top-left and bottom-right corners\n",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group or an array of Pts",
+              "type": "GroupLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "centroid",
+      "source": [
+        [
+          "Num.ts",
+          212,
+          17
+        ]
+      ],
+      "id": 207,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a centroid (the average middle point) for a set of Pts.",
+          "returns": "Pt",
+          "returns_comment": "a centroid Pt\n",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group or an array of Pts",
+              "type": "GroupLike | number[][]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "cosTable",
+      "source": [
+        [
+          "Num.ts",
+          424,
+          17
+        ]
+      ],
+      "id": 258,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Generate a cosine lookup table.",
+          "returns": "{ cos:`find`, table:`Float64Array` }",
+          "returns_comment": "an object with a cosine tables (array of 360 values) and a function to get cosine given a radian input.\n",
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "interpolate",
+      "source": [
+        [
+          "Num.ts",
+          242,
+          20
+        ]
+      ],
+      "id": 215,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get an interpolated (or extrapolated) value between two Pts. For linear interpolation between 2 scalar values, use [`Num.lerp`](#link).",
+          "returns": "Pt",
+          "returns_comment": "interpolated point as a new Pt\n",
+          "parameters": [
+            {
+              "name": "a",
+              "comment": "first Pt",
+              "type": "Pt | number[]",
+              "default": false
+            },
+            {
+              "name": "b",
+              "comment": "second Pt",
+              "type": "Pt | number[]",
+              "default": false
+            },
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1 to interpolate, or any other value to extrapolate",
+              "type": "number",
+              "default": "0.5"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "isPerpendicular",
+      "source": [
+        [
+          "Num.ts",
+          276,
+          24
+        ]
+      ],
+      "id": 224,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Check if two Pts are perpendicular to each other (2D only).",
+          "returns": "boolean",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "p1",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "p2",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "perpendicular",
+      "source": [
+        [
+          "Num.ts",
+          257,
+          22
+        ]
+      ],
+      "id": 220,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Find two Pts that are perpendicular to this Pt (2D only).",
+          "returns": "Group",
+          "returns_comment": "an array of two Pt that are perpendicular to this Pt\n",
+          "parameters": [
+            {
+              "name": "pt",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "axis",
+              "comment": "a string such as \"xy\" (use Const.xy) or an array to specify index for two dimensions",
+              "type": "string | number[]",
+              "default": "Const.xy"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "reflect2D",
+      "source": [
+        [
+          "Num.ts",
+          407,
+          18
+        ]
+      ],
+      "id": 253,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Reflect a Pt or a Group of Pts along a 2D line. You may also use [`Pt.reflect2D`](#link) instance method.",
+          "returns": "Geom",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ps",
+              "comment": "a Pt or a Group of Pts",
+              "type": "Pt | GroupLike",
+              "default": false
+            },
+            {
+              "name": "line",
+              "comment": "a Group of 2 Pts that defines a line for reflection",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "axis",
+              "comment": "optional axis such as \"yz\" to define a 2D plane of reflection\n",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "rotate2D",
+      "source": [
+        [
+          "Num.ts",
+          361,
+          17
+        ]
+      ],
+      "id": 241,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Rotate a Pt or a Group of Pts in 2D space. You may also use [`Pt.rotate2D`](#link) instance method.",
+          "returns": "Geom",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ps",
+              "comment": "a Pt or a Group of Pts",
+              "type": "Pt | GroupLike",
+              "default": false
+            },
+            {
+              "name": "angle",
+              "comment": "rotate angle",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "anchor",
+              "comment": "optional anchor point to rotate from",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "axis",
+              "comment": "optional axis such as \"yz\" to define a 2D plane of rotation\n",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "scale",
+      "source": [
+        [
+          "Num.ts",
+          338,
+          14
+        ]
+      ],
+      "id": 236,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Scale a Pt or a Group of Pts. You may also use [`Pt.scale`](#link) instance method.",
+          "returns": "Geom",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ps",
+              "comment": "a Pt or a Group of Pts",
+              "type": "Pt | GroupLike",
+              "default": false
+            },
+            {
+              "name": "scale",
+              "comment": "scale value",
+              "type": "number | number[] | PtLike",
+              "default": false
+            },
+            {
+              "name": "anchor",
+              "comment": "optional anchor point to scale from\n",
+              "type": "PtLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "shear2D",
+      "source": [
+        [
+          "Num.ts",
+          384,
+          16
+        ]
+      ],
+      "id": 247,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Shear a Pt or a Group of Pts in 2D space. You may also use [`Pt.shear2D`](#link) instance method.",
+          "returns": "Geom",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ps",
+              "comment": "a Pt or a Group of Pts",
+              "type": "Pt | GroupLike",
+              "default": false
+            },
+            {
+              "name": "scale",
+              "comment": "shearing value which can be a number or an array of 2 numbers",
+              "type": "number | number[] | PtLike",
+              "default": false
+            },
+            {
+              "name": "anchor",
+              "comment": "optional anchor point to shear from",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "axis",
+              "comment": "optional axis such as \"yz\" to define a 2D plane of shearing\n",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "sinTable",
+      "source": [
+        [
+          "Num.ts",
+          437,
+          17
+        ]
+      ],
+      "id": 263,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Generate a sine lookup table.",
+          "returns": "{ sin:`find`, table:`Float64Array` }",
+          "returns_comment": "an object with a sine tables (array of 360 values) and a function to get sine value given a radian input.\n",
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "sortEdges",
+      "source": [
+        [
+          "Num.ts",
+          299,
+          18
+        ]
+      ],
+      "id": 233,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Sort the Pts so that their edges will form a non-overlapping polygon. ([Reference](https://stackoverflow.com/questions/6989100/sort-points-in-clockwise-order))",
+          "returns": "GroupLike",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "an array of Pts\n",
+              "type": "GroupLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "toDegree",
+      "source": [
+        [
+          "Num.ts",
+          190,
+          17
+        ]
+      ],
+      "id": 201,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Convert an angle in radian to degree.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "radian",
+              "comment": "radian value\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "toRadian",
+      "source": [
+        [
+          "Num.ts",
+          181,
+          17
+        ]
+      ],
+      "id": 198,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Convert an angle in degree to radian.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "angle",
+              "comment": "angle value\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "withinBound",
+      "source": [
+        [
+          "Num.ts",
+          287,
+          20
+        ]
+      ],
+      "id": 228,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Check if a Pt is within the rectangular boundary defined by two Pts.",
+          "returns": "boolean",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pt",
+              "comment": "the Pt to check",
+              "type": "PtLike | number[]",
+              "default": false
+            },
+            {
+              "name": "boundPt1",
+              "comment": "boundary Pt 1",
+              "type": "PtLike | number[]",
+              "default": false
+            },
+            {
+              "name": "boundPt2",
+              "comment": "boundary Pt 2\n",
+              "type": "PtLike | number[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": []
+}

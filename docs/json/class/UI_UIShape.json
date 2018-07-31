@@ -1,0 +1,102 @@
+{
+  "name": "UIShape",
+  "source": [
+    [
+      "UI.ts",
+      13,
+      19
+    ]
+  ],
+  "kind": "Enumeration",
+  "id": 820,
+  "comment": "**[Experimental]** An enumeration of different UI types, for use in [`UI`](#link) instances.",
+  "constructor": [],
+  "accessors": [],
+  "methods": [],
+  "variables": [
+    {
+      "name": "Circle",
+      "source": [
+        [
+          "UI.ts",
+          14,
+          19
+        ]
+      ],
+      "id": 822,
+      "flags": {},
+      "type": "Circle",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "Line",
+      "source": [
+        [
+          "UI.ts",
+          14,
+          44
+        ]
+      ],
+      "id": 825,
+      "flags": {},
+      "type": "Line",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "Polygon",
+      "source": [
+        [
+          "UI.ts",
+          14,
+          28
+        ]
+      ],
+      "id": 823,
+      "flags": {},
+      "type": "Polygon",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "Polyline",
+      "source": [
+        [
+          "UI.ts",
+          14,
+          38
+        ]
+      ],
+      "id": 824,
+      "flags": {},
+      "type": "Polyline",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "Rectangle",
+      "source": [
+        [
+          "UI.ts",
+          14,
+          11
+        ]
+      ],
+      "id": 821,
+      "flags": {},
+      "type": "Rectangle",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    }
+  ],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": []
+}

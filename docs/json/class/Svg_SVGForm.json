@@ -1,0 +1,1622 @@
+{
+  "name": "SVGForm",
+  "source": [
+    [
+      "Svg.ts",
+      127,
+      20
+    ]
+  ],
+  "kind": "Class",
+  "id": 6203,
+  "comment": "**[Experimental]** SVGForm is an implementation of abstract class [`VisualForm`](#link). It provide methods to express Pts in [`SVGSpace`](#link).\nYou may extend SVGForm to implement your own expressions for SVGSpace. See out the [Space guide](../guide/Space-0500.html) for details.",
+  "constructor": [
+    {
+      "name": "constructor",
+      "source": [
+        [
+          "Svg.ts",
+          153,
+          35
+        ]
+      ],
+      "id": 6225,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a new SVGForm. You may also use [`SVGSpace.getForm`](#link) to get a default form directly.",
+          "returns": "SVGForm",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "space",
+              "comment": "an instance of SVGSpace\n",
+              "type": "SVGSpace",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "accessors": [
+    {
+      "name": "currentFont",
+      "source": [
+        [
+          "Form.ts",
+          67,
+          17
+        ]
+      ],
+      "id": 6366,
+      "flags": {},
+      "overrides": false,
+      "inherits": "VisualForm.currentFont",
+      "comment": "Get the current font in use in this form.",
+      "getter": {
+        "type": "Font"
+      },
+      "setter": false
+    },
+    {
+      "name": "filled",
+      "source": [
+        [
+          "Form.ts",
+          51,
+          12
+        ],
+        [
+          "Form.ts",
+          52,
+          12
+        ]
+      ],
+      "id": 6356,
+      "flags": {},
+      "overrides": false,
+      "inherits": "VisualForm.filled",
+      "comment": "Check whether this form currently has fill style.",
+      "getter": {
+        "type": "boolean"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "b",
+          "comment": "",
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    {
+      "name": "ready",
+      "source": [
+        [
+          "Form.ts",
+          20,
+          11
+        ]
+      ],
+      "id": 6402,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Form.ready",
+      "comment": "get whether the Form has received the Space's rendering context.",
+      "getter": {
+        "type": "boolean"
+      },
+      "setter": false
+    },
+    {
+      "name": "space",
+      "source": [
+        [
+          "Svg.ts",
+          175,
+          11
+        ]
+      ],
+      "id": 6228,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Get the [`SVGSpace`](#link) instance that this form is associated with.",
+      "getter": {
+        "type": "SVGSpace"
+      },
+      "setter": false
+    },
+    {
+      "name": "stroked",
+      "source": [
+        [
+          "Form.ts",
+          59,
+          13
+        ],
+        [
+          "Form.ts",
+          60,
+          13
+        ]
+      ],
+      "id": 6361,
+      "flags": {},
+      "overrides": false,
+      "inherits": "VisualForm.stroked",
+      "comment": "Check whether this form currently has stroke style.",
+      "getter": {
+        "type": "boolean"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "b",
+          "comment": "",
+          "type": "boolean",
+          "default": false
+        }
+      }
+    }
+  ],
+  "methods": [
+    {
+      "name": "arc",
+      "source": [
+        [
+          "Svg.ts",
+          479,
+          5
+        ]
+      ],
+      "id": 6301,
+      "flags": {},
+      "overrides": "VisualForm.arc",
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Draw an arc.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pt",
+              "comment": "center position",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "radius",
+              "comment": "radius of the arc circle",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "startAngle",
+              "comment": "start angle of the arc",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "endAngle",
+              "comment": "end angle of the arc",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "cc",
+              "comment": "an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.\n",
+              "type": "boolean",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "circle",
+      "source": [
+        [
+          "Svg.ts",
+          434,
+          8
+        ]
+      ],
+      "id": 6290,
+      "flags": {},
+      "overrides": "VisualForm.circle",
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Draw a circle.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group of 2 Pts, or an array of two numeric arrays `[[position], [size]]`",
+              "type": "GroupLike | number[][]",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "see",
+              "text": "[`Circle.fromCenter`](./_op_.circle.html#frompt)\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "circles",
+      "source": [
+        [
+          "Form.ts",
+          160,
+          9
+        ]
+      ],
+      "id": 6387,
+      "flags": {},
+      "overrides": false,
+      "inherits": "VisualForm.circles",
+      "signatures": [
+        {
+          "comment": "Draw multiple circles at once.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "groups",
+              "comment": "an array of Groups that defines multiple circles\n",
+              "type": "GroupLike[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "cls",
+      "source": [
+        [
+          "Svg.ts",
+          232,
+          5
+        ]
+      ],
+      "id": 6243,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Add custom class to the created element.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "c",
+              "comment": "custom class name or `false` to reset it",
+              "type": "string | boolean",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`form.fill(\"#f00\").cls(\"myClass\").rects(r)` `form.cls(false).circles(c)`\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "fill",
+      "source": [
+        [
+          "Svg.ts",
+          194,
+          6
+        ]
+      ],
+      "id": 6234,
+      "flags": {},
+      "overrides": "VisualForm.fill",
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Set current fill style. Provide a valid color string or `false` to specify no fill color.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "c",
+              "comment": "a valid color string or `false` to specify no fill color.\n",
+              "type": "string | boolean",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`form.fill(\"#F90\")`, `form.fill(\"rgba(0,0,0,.5\")`, `form.fill(false)`"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "fillOnly",
+      "source": [
+        [
+          "Form.ts",
+          98,
+          10
+        ]
+      ],
+      "id": 6373,
+      "flags": {},
+      "overrides": false,
+      "inherits": "VisualForm.fillOnly",
+      "signatures": [
+        {
+          "comment": "Set current fill style and remove stroke style.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "c",
+              "comment": "fill color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle))\n",
+              "type": "string | boolean",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`form.fillOnly(\"#F90\")`, `form.fillOnly(\"rgba(0,0,0,.5\")`"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "font",
+      "source": [
+        [
+          "Svg.ts",
+          251,
+          6
+        ]
+      ],
+      "id": 6246,
+      "flags": {},
+      "overrides": "VisualForm.font",
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Set the current font.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "sizeOrFont",
+              "comment": "either a number to specify font-size, or a `Font` object to specify all font properties",
+              "type": "number | Font",
+              "default": false
+            },
+            {
+              "name": "weight",
+              "comment": "Optional font-weight string such as \"bold\"",
+              "type": "string",
+              "default": false
+            },
+            {
+              "name": "style",
+              "comment": "Optional font-style string such as \"italic\"",
+              "type": "string",
+              "default": false
+            },
+            {
+              "name": "lineHeight",
+              "comment": "Optional line-height number suchas 1.5",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "family",
+              "comment": "Optional font-family such as \"Helvetica, sans-serif\"",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`form.font( myFont )`, `form.font(14, \"bold\")`\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "line",
+      "source": [
+        [
+          "Svg.ts",
+          547,
+          6
+        ]
+      ],
+      "id": 6321,
+      "flags": {},
+      "overrides": "VisualForm.line",
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Draw a line or polyline.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group of multiple Pts, or an array of multiple numeric arrays\n",
+              "type": "GroupLike | number[][]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "lines",
+      "source": [
+        [
+          "Form.ts",
+          196,
+          7
+        ]
+      ],
+      "id": 6393,
+      "flags": {},
+      "overrides": false,
+      "inherits": "VisualForm.lines",
+      "signatures": [
+        {
+          "comment": "Draw multiple lines at once.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "groups",
+              "comment": "An array of Groups of Pts\n",
+              "type": "GroupLike[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "log",
+      "source": [
+        [
+          "Svg.ts",
+          674,
+          5
+        ]
+      ],
+      "id": 6352,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A convenient way to draw some text on canvas for logging or debugging. It'll be draw on the top-left of the canvas as an overlay.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "txt",
+              "comment": "text\n",
+              "type": "any",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "nextID",
+      "source": [
+        [
+          "Svg.ts",
+          319,
+          8
+        ]
+      ],
+      "id": 6262,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get next available id in the current group.",
+          "returns": "string",
+          "returns_comment": "an id string\n",
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "point",
+      "source": [
+        [
+          "Svg.ts",
+          401,
+          7
+        ]
+      ],
+      "id": 6280,
+      "flags": {},
+      "overrides": "VisualForm.point",
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Draws a point.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pt",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "radius",
+              "comment": "radius of the point. Default is 5.",
+              "type": "number",
+              "default": "5"
+            },
+            {
+              "name": "shape",
+              "comment": "The shape of the point. Defaults to \"square\", but it can be \"circle\" or a custom shape function in your own implementation.",
+              "type": "string",
+              "default": "\"square\""
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`form.point( p )`, `form.point( p, 10, \"circle\" )`\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "points",
+      "source": [
+        [
+          "Form.ts",
+          138,
+          8
+        ]
+      ],
+      "id": 6382,
+      "flags": {},
+      "overrides": false,
+      "inherits": "VisualForm.points",
+      "signatures": [
+        {
+          "comment": "Draw multiple points at once.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "an array of Pt or an array of number arrays",
+              "type": "GroupLike | number[][]",
+              "default": false
+            },
+            {
+              "name": "radius",
+              "comment": "radius of the point. Default is 5.",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "shape",
+              "comment": "The shape of the point. Defaults to \"square\", but it can be \"circle\" or a custom shape function in your own implementation.\n",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "polygon",
+      "source": [
+        [
+          "Svg.ts",
+          588,
+          9
+        ]
+      ],
+      "id": 6333,
+      "flags": {},
+      "overrides": "VisualForm.polygon",
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Draw a polygon.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group of multiple Pts, or an array of multiple numeric arrays\n",
+              "type": "GroupLike | number[][]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "polygons",
+      "source": [
+        [
+          "Form.ts",
+          212,
+          10
+        ]
+      ],
+      "id": 6396,
+      "flags": {},
+      "overrides": false,
+      "inherits": "VisualForm.polygons",
+      "signatures": [
+        {
+          "comment": "Draw multiple polygons at once.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "groups",
+              "comment": "An array of Groups of Pts\n",
+              "type": "GroupLike[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "rect",
+      "source": [
+        [
+          "Svg.ts",
+          624,
+          6
+        ]
+      ],
+      "id": 6340,
+      "flags": {},
+      "overrides": "VisualForm.rect",
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Draw a rectangle.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.\n",
+              "type": "number[][] | Pt[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "rects",
+      "source": [
+        [
+          "Form.ts",
+          229,
+          7
+        ]
+      ],
+      "id": 6399,
+      "flags": {},
+      "overrides": false,
+      "inherits": "VisualForm.rects",
+      "signatures": [
+        {
+          "comment": "Draw multiple rectangles at once.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "groups",
+              "comment": "An array of Groups of Pts\n",
+              "type": "GroupLike[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "reset",
+      "source": [
+        [
+          "Svg.ts",
+          271,
+          7
+        ]
+      ],
+      "id": 6253,
+      "flags": {},
+      "overrides": "VisualForm.reset",
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Reset the context's common styles to this form's styles. This supports using multiple forms in the same space.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "scope",
+      "source": [
+        [
+          "Svg.ts",
+          309,
+          7
+        ]
+      ],
+      "id": 6259,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Set the current group scope to an item added into space, in order to keep track of any point, circle, etc created within it in the DOM.\nThe item must have an `animateID` property, so that elements created within the item will have generated IDs like \"item-{animateID}-{count}\".\nSee the svg section in [`Space guide`](../guide/Space-0500.html) to learn more about scope.",
+          "returns": "object",
+          "returns_comment": "this form's context\n",
+          "parameters": [
+            {
+              "name": "item",
+              "comment": "a [`IPlayer`](#link) object that's added to space (see [`Space.add`](#link)) and has an `animateID` property",
+              "type": "IPlayer",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "square",
+      "source": [
+        [
+          "Svg.ts",
+          511,
+          8
+        ]
+      ],
+      "id": 6313,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Draw a square, given a center and its half-size.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pt",
+              "comment": "center Pt",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "halfsize",
+              "comment": "half-size\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "squares",
+      "source": [
+        [
+          "Form.ts",
+          169,
+          9
+        ]
+      ],
+      "id": 6390,
+      "flags": {},
+      "overrides": false,
+      "inherits": "VisualForm.squares",
+      "signatures": [
+        {
+          "comment": "Draw multiple squares at once.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "groups",
+              "comment": "an array of Groups that defines multiple circles\n",
+              "type": "GroupLike[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "stroke",
+      "source": [
+        [
+          "Svg.ts",
+          213,
+          8
+        ]
+      ],
+      "id": 6237,
+      "flags": {},
+      "overrides": "VisualForm.stroke",
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Set current stroke style. Provide a valid color string or `false` to specify no stroke color.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "c",
+              "comment": "a valid color string or `false` to specify no stroke color.",
+              "type": "string | boolean",
+              "default": false
+            },
+            {
+              "name": "width",
+              "comment": "Optional value (can be floating point) to set line width",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "linejoin",
+              "comment": "Optional string to set line joint style. Can be \"miter\", \"bevel\", or \"round\".",
+              "type": "string",
+              "default": false
+            },
+            {
+              "name": "linecap",
+              "comment": "Optional string to set line cap style. Can be \"butt\", \"round\", or \"square\".\n",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`form.stroke(\"#F90\")`, `form.stroke(\"rgba(0,0,0,.5\")`, `form.stroke(false)`, `form.stroke(\"#000\", 0.5, 'round', 'square')`"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "strokeOnly",
+      "source": [
+        [
+          "Form.ts",
+          117,
+          12
+        ]
+      ],
+      "id": 6376,
+      "flags": {},
+      "overrides": false,
+      "inherits": "VisualForm.strokeOnly",
+      "signatures": [
+        {
+          "comment": "Set current stroke style and remove fill style.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "c",
+              "comment": "stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle)\n",
+              "type": "string | boolean",
+              "default": false
+            },
+            {
+              "name": "width",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "linejoin",
+              "comment": "",
+              "type": "string",
+              "default": false
+            },
+            {
+              "name": "linecap",
+              "comment": "",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`form.strokeOnly(\"#F90\")`, `form.strokeOnly(\"#000\", 0.5, 'round', 'square')`"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "styleTo",
+      "source": [
+        [
+          "Svg.ts",
+          183,
+          9
+        ]
+      ],
+      "id": 6230,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Update a style in current context. It will throw an Erorr if the style doesn't exist.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "k",
+              "comment": "style key",
+              "type": "any",
+              "default": false
+            },
+            {
+              "name": "v",
+              "comment": "style value\n",
+              "type": "any",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "text",
+      "source": [
+        [
+          "Svg.ts",
+          663,
+          6
+        ]
+      ],
+      "id": 6348,
+      "flags": {},
+      "overrides": "VisualForm.text",
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Draw text on canvas.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pt",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "txt",
+              "comment": "",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "updateScope",
+      "source": [
+        [
+          "Svg.ts",
+          293,
+          13
+        ]
+      ],
+      "id": 6255,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Set this form's group scope by an ID, and optionally define the group's parent element. A group scope keeps track of elements by their generated IDs, and updates their properties as needed. See also [`SVGForm.scope`](#link).",
+          "returns": "object",
+          "returns_comment": "this form's context\n",
+          "parameters": [
+            {
+              "name": "group_id",
+              "comment": "a string to use as prefix for the group's id. For example, group_id \"hello\" will create elements with id like \"hello-1\", \"hello-2\", etc",
+              "type": "string",
+              "default": false
+            },
+            {
+              "name": "group",
+              "comment": "Optional DOM or SVG element to define this group's parent element",
+              "type": "Element",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "arc",
+      "source": [
+        [
+          "Svg.ts",
+          450,
+          12
+        ]
+      ],
+      "id": 6293,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to draw an arc.",
+          "returns": "SVGElement",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ctx",
+              "comment": "a context object of SVGForm",
+              "type": "DOMFormContext",
+              "default": false
+            },
+            {
+              "name": "pt",
+              "comment": "center position",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "radius",
+              "comment": "radius of the arc circle",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "startAngle",
+              "comment": "start angle of the arc",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "endAngle",
+              "comment": "end angle of the arc",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "cc",
+              "comment": "an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.\n",
+              "type": "boolean",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "circle",
+      "source": [
+        [
+          "Svg.ts",
+          414,
+          15
+        ]
+      ],
+      "id": 6285,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to draw a circle.",
+          "returns": "SVGElement",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ctx",
+              "comment": "a context object of SVGForm",
+              "type": "DOMFormContext",
+              "default": false
+            },
+            {
+              "name": "pt",
+              "comment": "center position of the circle",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "radius",
+              "comment": "radius of the circle\n",
+              "type": "number",
+              "default": "10"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "getID",
+      "source": [
+        [
+          "Svg.ts",
+          330,
+          14
+        ]
+      ],
+      "id": 6264,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to generate an ID string based on a context object.",
+          "returns": "string",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ctx",
+              "comment": "a context object for an SVGForm\n",
+              "type": "any",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "line",
+      "source": [
+        [
+          "Svg.ts",
+          523,
+          13
+        ]
+      ],
+      "id": 6317,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to draw a line or polyline.",
+          "returns": "SVGElement",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ctx",
+              "comment": "a context object of SVGForm",
+              "type": "DOMFormContext",
+              "default": false
+            },
+            {
+              "name": "pts",
+              "comment": "a Group of multiple Pts, or an array of multiple numeric arrays\n",
+              "type": "GroupLike | number[][]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "point",
+      "source": [
+        [
+          "Svg.ts",
+          385,
+          14
+        ]
+      ],
+      "id": 6274,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to draw a point.",
+          "returns": "SVGElement",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ctx",
+              "comment": "a context object of SVGForm",
+              "type": "DOMFormContext",
+              "default": false
+            },
+            {
+              "name": "pt",
+              "comment": "a Pt object or numeric array",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "radius",
+              "comment": "radius of the point. Default is 5.",
+              "type": "number",
+              "default": "5"
+            },
+            {
+              "name": "shape",
+              "comment": "The shape of the point. Defaults to \"square\", but it can be \"circle\" or a custom shape function in your own implementation.",
+              "type": "string",
+              "default": "\"square\""
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`SVGForm.point( p )`, `SVGForm.point( p, 10, \"circle\" )`\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "polygon",
+      "source": [
+        [
+          "Svg.ts",
+          579,
+          16
+        ]
+      ],
+      "id": 6329,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to draw polygon.",
+          "returns": "SVGElement",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ctx",
+              "comment": "a context object of SVGForm",
+              "type": "DOMFormContext",
+              "default": false
+            },
+            {
+              "name": "pts",
+              "comment": "a Group of multiple Pts, or an array of multiple numeric arrays\n",
+              "type": "GroupLike | number[][]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "rect",
+      "source": [
+        [
+          "Svg.ts",
+          600,
+          13
+        ]
+      ],
+      "id": 6336,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to draw a rectangle.",
+          "returns": "SVGElement",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ctx",
+              "comment": "a context object of SVGForm",
+              "type": "DOMFormContext",
+              "default": false
+            },
+            {
+              "name": "pts",
+              "comment": "usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.\n",
+              "type": "GroupLike | number[][]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "scopeID",
+      "source": [
+        [
+          "Svg.ts",
+          339,
+          16
+        ]
+      ],
+      "id": 6267,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to generate an ID string for a scope, based on an [`IPlayer`](#link) object in the Space.",
+          "returns": "string",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "item",
+              "comment": "a [`IPlayer`](#link) object that's added to space (see [`Space.add`](#link)) and has an `animateID` property\n",
+              "type": "IPlayer",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "square",
+      "source": [
+        [
+          "Svg.ts",
+          492,
+          15
+        ]
+      ],
+      "id": 6308,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to draw a square.",
+          "returns": "SVGElement",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ctx",
+              "comment": "a context object of SVGForm",
+              "type": "DOMFormContext",
+              "default": false
+            },
+            {
+              "name": "pt",
+              "comment": "center position of the square",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "halfsize",
+              "comment": "half size of the square\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "style",
+      "source": [
+        [
+          "Svg.ts",
+          352,
+          14
+        ]
+      ],
+      "id": 6270,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to help adding style object to an element.\nNote that this put all styles into `style` attribute instead of individual svg attributes, so that the styles can be parsed by Adobe Illustrator.",
+          "returns": "Element",
+          "returns_comment": "this DOM element\n",
+          "parameters": [
+            {
+              "name": "elem",
+              "comment": "A DOM element to add to",
+              "type": "SVGElement",
+              "default": false
+            },
+            {
+              "name": "styles",
+              "comment": "an object of style properties",
+              "type": "object",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`SVGForm.style(elem, {fill: \"#f90\", stroke: false})`"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "text",
+      "source": [
+        [
+          "Svg.ts",
+          638,
+          13
+        ]
+      ],
+      "id": 6343,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to draw text.",
+          "returns": "SVGElement",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ctx",
+              "comment": "a context object of SVGForm",
+              "type": "DOMFormContext",
+              "default": false
+            },
+            {
+              "name": "pt",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "txt",
+              "comment": "",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "variables": [],
+  "properties": [
+    {
+      "name": "domID",
+      "source": [
+        [
+          "Svg.ts",
+          150,
+          14
+        ]
+      ],
+      "id": 6222,
+      "flags": {
+        "isStatic": true
+      },
+      "type": "domID",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "groupID",
+      "source": [
+        [
+          "Svg.ts",
+          149,
+          16
+        ]
+      ],
+      "id": 6221,
+      "flags": {
+        "isStatic": true
+      },
+      "type": "groupID",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    }
+  ],
+  "flags": {},
+  "extends": [
+    "VisualForm"
+  ],
+  "implements": []
+}

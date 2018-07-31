@@ -1,0 +1,370 @@
+{
+  "name": "Circle",
+  "source": [
+    [
+      "Op.ts",
+      588,
+      19
+    ]
+  ],
+  "kind": "Class",
+  "id": 595,
+  "comment": "Circle class provides static functions to create and operate on circles. A circle is usually represented as a Group of 2 Pts, where the first Pt specifies the center, and the second Pt specifies the radius.\nYou can use the static functions as-is, or apply the [`Group.op`](#link) or [`Pt.op`](#link) to enable functional programming.\nSee [Op guide](../guide/Op-0400.html) for details.",
+  "constructor": [],
+  "accessors": [],
+  "methods": [
+    {
+      "name": "fromCenter",
+      "source": [
+        [
+          "Op.ts",
+          616,
+          19
+        ]
+      ],
+      "id": 600,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a circle based on a center point and a radius.",
+          "returns": "Group",
+          "returns_comment": "a Group that represents a circle\n",
+          "parameters": [
+            {
+              "name": "pt",
+              "comment": "center point of circle",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "radius",
+              "comment": "radius of circle",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "fromRect",
+      "source": [
+        [
+          "Op.ts",
+          597,
+          17
+        ]
+      ],
+      "id": 596,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a circle that either fits within, or encloses, a rectangle.",
+          "returns": "Group",
+          "returns_comment": "a Group that represents a circle\n",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group of 2 Pts representing a rectangle",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "enclose",
+              "comment": "if `true`, the circle will enclose the rectangle. Default is `false`, which will fit the circle inside the rectangle.",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "intersectCircle2D",
+      "source": [
+        [
+          "Op.ts",
+          690,
+          26
+        ]
+      ],
+      "id": 617,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get the intersection points between two circles.",
+          "returns": "Group",
+          "returns_comment": "a Group of intersection points, or an empty Group if no intersection is found\n",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group of 2 Pts representing a circle",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "circle",
+              "comment": "a Group of 2 Pts representing a circle",
+              "type": "GroupLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "intersectLine2D",
+      "source": [
+        [
+          "Op.ts",
+          672,
+          24
+        ]
+      ],
+      "id": 613,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get the intersection points between a circle and a line segment.",
+          "returns": "Group",
+          "returns_comment": "a Group of intersection points, or an empty Group if no intersection is found\n",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group of 2 Pts representing a circle",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "line",
+              "comment": "",
+              "type": "GroupLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "intersectRay2D",
+      "source": [
+        [
+          "Op.ts",
+          639,
+          23
+        ]
+      ],
+      "id": 609,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get the intersection points between a circle and a ray (infinite line).",
+          "returns": "Group",
+          "returns_comment": "a Group of intersection points, or an empty Group if no intersection is found\n",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group of 2 Pts representing a circle",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "ray",
+              "comment": "a Group of 2 Pts representing a ray",
+              "type": "GroupLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "intersectRect2D",
+      "source": [
+        [
+          "Op.ts",
+          724,
+          24
+        ]
+      ],
+      "id": 621,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Quick way to check rectangle intersection with a circle.\nFor more optimized implementation, store the rectangle's sides separately (eg, [`Rectangle.sides`](#link)) and use [`Polygon.intersectPolygon2D()`](#link).",
+          "returns": "Group",
+          "returns_comment": "a Group of intersection points, or an empty Group if no intersection is found\n",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group of 2 Pts representing a circle",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "rect",
+              "comment": "a Group of 2 Pts representing a rectangle",
+              "type": "GroupLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "toRect",
+      "source": [
+        [
+          "Op.ts",
+          741,
+          15
+        ]
+      ],
+      "id": 625,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a rectangle that either fits within or encloses this circle. See also [`Rectangle.toCircle`](#link)",
+          "returns": "Group",
+          "returns_comment": "a Group representing a rectangle\n",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group of 2 Pts representing a circle",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "within",
+              "comment": "if `true`, the rectangle will be within the circle. If `false`, the rectangle will enclose the circle.",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "toTriangle",
+      "source": [
+        [
+          "Op.ts",
+          757,
+          19
+        ]
+      ],
+      "id": 629,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a triangle that fits within this circle.",
+          "returns": "Group",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group of 2 Pts representing a circle",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "within",
+              "comment": "if `true`, the triangle will be within the circle. If `false`, the triangle will enclose the circle.\n",
+              "type": "boolean",
+              "default": "true"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "withinBound",
+      "source": [
+        [
+          "Op.ts",
+          627,
+          20
+        ]
+      ],
+      "id": 604,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Check if a point is within a circle.",
+          "returns": "boolean",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group of 2 Pts representing a circle",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "pt",
+              "comment": "the point to checks",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "threshold",
+              "comment": "an optional small number to set threshold. Default is 0.\n",
+              "type": "number",
+              "default": "0"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": []
+}

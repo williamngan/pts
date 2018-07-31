@@ -1,0 +1,602 @@
+{
+  "name": "Mat",
+  "source": [
+    [
+      "LinearAlgebra.ts",
+      215,
+      16
+    ]
+  ],
+  "kind": "Class",
+  "id": 74,
+  "comment": "Mat provides various static functions for matrix operations. It's not fully optimized but good enough to use.",
+  "constructor": [],
+  "accessors": [],
+  "methods": [
+    {
+      "name": "add",
+      "source": [
+        [
+          "LinearAlgebra.ts",
+          223,
+          12
+        ]
+      ],
+      "id": 75,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Matrix addition. Matrices should have the same rows and columns.",
+          "returns": "Group",
+          "returns_comment": "a new group with the same rows and columns as a and b\n",
+          "parameters": [
+            {
+              "name": "a",
+              "comment": "a group of Pt",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "b",
+              "comment": "a scalar number, an array of numeric arrays, or a group of Pt",
+              "type": "GroupLike | number[][] | number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "multiply",
+      "source": [
+        [
+          "LinearAlgebra.ts",
+          247,
+          17
+        ]
+      ],
+      "id": 79,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Matrix multiplication.",
+          "returns": "Group",
+          "returns_comment": "If not elementwise, this will return a new group with M Pt, each with N dimensions (M-rows, N-columns).\n",
+          "parameters": [
+            {
+              "name": "a",
+              "comment": "a Group of M Pts, each with K dimensions (M-rows, K-columns)",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "b",
+              "comment": "a scalar number, an array of numeric arrays, or a Group of K Pts, each with N dimensions (K-rows, N-columns) -- or if transposed is true, then N Pts with K dimensions",
+              "type": "GroupLike | number[][] | number",
+              "default": false
+            },
+            {
+              "name": "transposed",
+              "comment": "(Only applicable if it's not elementwise multiplication) If true, then a and b's columns should match (ie, each Pt should have the same dimensions). Default is `false`.",
+              "type": "boolean",
+              "default": "false"
+            },
+            {
+              "name": "elementwise",
+              "comment": "if true, then the multiplication is done element-wise. Default is `false`.",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "reflectAt2DMatrix",
+      "source": [
+        [
+          "LinearAlgebra.ts",
+          424,
+          26
+        ]
+      ],
+      "id": 135,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a matrix to reflect a point along a line. For use in `transform2D`.",
+          "returns": "Pt[]",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "p1",
+              "comment": "second end point to define the reflection line\n",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "p2",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "rotate2DMatrix",
+      "source": [
+        [
+          "LinearAlgebra.ts",
+          353,
+          23
+        ]
+      ],
+      "id": 108,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a rotate matrix for use in `transform2D`.",
+          "returns": "GroupLike",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "cosA",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "sinA",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "rotateAt2DMatrix",
+      "source": [
+        [
+          "LinearAlgebra.ts",
+          400,
+          25
+        ]
+      ],
+      "id": 125,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a matrix to rotate a point from an origin point. For use in `transform2D`.",
+          "returns": "GroupLike",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "cosA",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "sinA",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "at",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "scale2DMatrix",
+      "source": [
+        [
+          "LinearAlgebra.ts",
+          341,
+          22
+        ]
+      ],
+      "id": 104,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a scale matrix for use in `transform2D`.",
+          "returns": "GroupLike",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "scaleAt2DMatrix",
+      "source": [
+        [
+          "LinearAlgebra.ts",
+          389,
+          24
+        ]
+      ],
+      "id": 120,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a matrix to scale a point from an origin point. For use in `transform2D`.",
+          "returns": "GroupLike",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "sx",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "sy",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "at",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "shear2DMatrix",
+      "source": [
+        [
+          "LinearAlgebra.ts",
+          365,
+          22
+        ]
+      ],
+      "id": 112,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a shear matrix for use in `transform2D`.",
+          "returns": "GroupLike",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "tanX",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "tanY",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "shearAt2DMatrix",
+      "source": [
+        [
+          "LinearAlgebra.ts",
+          411,
+          24
+        ]
+      ],
+      "id": 130,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a matrix to shear a point from an origin point. For use in `transform2D`.",
+          "returns": "GroupLike",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "tanX",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "tanY",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "at",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "transform2D",
+      "source": [
+        [
+          "LinearAlgebra.ts",
+          331,
+          20
+        ]
+      ],
+      "id": 100,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Transform a 2D point given a 2x3 or 3x3 matrix.",
+          "returns": "Pt",
+          "returns_comment": "a new transformed Pt\n",
+          "parameters": [
+            {
+              "name": "pt",
+              "comment": "a Pt to be transformed",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "m",
+              "comment": "2x3 or 3x3 matrix",
+              "type": "GroupLike | number[][]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "translate2DMatrix",
+      "source": [
+        [
+          "LinearAlgebra.ts",
+          377,
+          26
+        ]
+      ],
+      "id": 116,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a translate matrix for use in `transform2D`.",
+          "returns": "GroupLike",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "transpose",
+      "source": [
+        [
+          "LinearAlgebra.ts",
+          320,
+          18
+        ]
+      ],
+      "id": 95,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Same as `zip` function.",
+          "returns": "Group",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "g",
+              "comment": "",
+              "type": "GroupLike | number[][]",
+              "default": false
+            },
+            {
+              "name": "defaultValue",
+              "comment": "",
+              "type": "number | boolean",
+              "default": "false"
+            },
+            {
+              "name": "useLongest",
+              "comment": "",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "zip",
+      "source": [
+        [
+          "LinearAlgebra.ts",
+          307,
+          12
+        ]
+      ],
+      "id": 90,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Zip a group of Pt. For example, `[[1,2],[3,4],[5,6]]` will become `[[1,3,5],[2,4,6]]`.",
+          "returns": "Group",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "g",
+              "comment": "a group of Pt",
+              "type": "GroupLike | number[][]",
+              "default": false
+            },
+            {
+              "name": "defaultValue",
+              "comment": "a default value to fill if index out of bound. If not provided, it will throw an error instead.",
+              "type": "number | boolean",
+              "default": "false"
+            },
+            {
+              "name": "useLongest",
+              "comment": "If true, find the longest list of values in a Pt and use its length for zipping. Default is false, which uses the first item's length for zipping.\n",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "zipSlice",
+      "source": [
+        [
+          "LinearAlgebra.ts",
+          291,
+          17
+        ]
+      ],
+      "id": 85,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Zip one slice of an array of Pts. For example, if the input `g` are organized in rows, then this function will take the values in a specific column.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "g",
+              "comment": "a group of Pt",
+              "type": "GroupLike | number[][]",
+              "default": false
+            },
+            {
+              "name": "index",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "defaultValue",
+              "comment": "a default value to fill if index out of bound. If not provided, it will throw an error instead.\n",
+              "type": "number | boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": []
+}

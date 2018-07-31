@@ -1,0 +1,386 @@
+{
+  "name": "UIButton",
+  "source": [
+    [
+      "UI.ts",
+      144,
+      21
+    ]
+  ],
+  "kind": "Class",
+  "id": 875,
+  "comment": "**[Experimental]** A simple button that extends [`UI`](#link) to track clicks and hovers.",
+  "constructor": [
+    {
+      "name": "constructor",
+      "source": [
+        [
+          "UI.ts",
+          146,
+          21
+        ]
+      ],
+      "id": 877,
+      "flags": {},
+      "overrides": "UI.__constructor",
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create an UI button.",
+          "returns": "UIButton",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "group",
+              "comment": "a Group that defines the UI's appearance",
+              "type": "Group",
+              "default": false
+            },
+            {
+              "name": "shape",
+              "comment": "specifies the shape of the Group",
+              "type": "UIShape",
+              "default": false
+            },
+            {
+              "name": "states",
+              "comment": "Optional default state object",
+              "type": "__type",
+              "default": false
+            },
+            {
+              "name": "id",
+              "comment": "Optional id string\n",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "accessors": [
+    {
+      "name": "clicks",
+      "source": [
+        [
+          "UI.ts",
+          163,
+          12
+        ]
+      ],
+      "id": 883,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Get the total number of clicks on this button.",
+      "getter": {
+        "type": "number"
+      },
+      "setter": false
+    },
+    {
+      "name": "id",
+      "source": [
+        [
+          "UI.ts",
+          59,
+          8
+        ],
+        [
+          "UI.ts",
+          60,
+          8
+        ]
+      ],
+      "id": 903,
+      "flags": {},
+      "overrides": false,
+      "inherits": "UI.id",
+      "comment": "An unique id of the UI.",
+      "getter": {
+        "type": "string"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "d",
+          "comment": "",
+          "type": "string",
+          "default": false
+        }
+      }
+    }
+  ],
+  "methods": [
+    {
+      "name": "listen",
+      "source": [
+        [
+          "UI.ts",
+          99,
+          8
+        ]
+      ],
+      "id": 917,
+      "flags": {},
+      "overrides": false,
+      "inherits": "UI.listen",
+      "signatures": [
+        {
+          "comment": "Listen for UI events and trigger action handlers.",
+          "returns": "boolean",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "key",
+              "comment": "action key",
+              "type": "string",
+              "default": false
+            },
+            {
+              "name": "p",
+              "comment": "point to check\n",
+              "type": "Pt",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "off",
+      "source": [
+        [
+          "UI.ts",
+          88,
+          5
+        ]
+      ],
+      "id": 914,
+      "flags": {},
+      "overrides": false,
+      "inherits": "UI.off",
+      "signatures": [
+        {
+          "comment": "Remove an event handler.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "key",
+              "comment": "event key",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "on",
+      "source": [
+        [
+          "UI.ts",
+          77,
+          4
+        ]
+      ],
+      "id": 910,
+      "flags": {},
+      "overrides": false,
+      "inherits": "UI.on",
+      "signatures": [
+        {
+          "comment": "Add an event handler.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "key",
+              "comment": "event key",
+              "type": "string",
+              "default": false
+            },
+            {
+              "name": "fn",
+              "comment": "a [`UIHandler`](#link) function: `fn( pt:Pt, target:UI, type:string )`\n",
+              "type": "UIHandler",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "onClick",
+      "source": [
+        [
+          "UI.ts",
+          170,
+          9
+        ]
+      ],
+      "id": 885,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Add click handler.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "fn",
+              "comment": "a [`UIHandler`](#link) function to handle clicks. Eg, `fn( pt:Pt, target:UI, type:string )`\n",
+              "type": "UIHandler",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "onHover",
+      "source": [
+        [
+          "UI.ts",
+          181,
+          9
+        ]
+      ],
+      "id": 888,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Add hover handler.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "over",
+              "comment": "a [`UIHandler`](#link) function to handle when pointer enters hover. Eg, `fn( pt:Pt, target:UI, type:string )`",
+              "type": "UIHandler",
+              "default": false
+            },
+            {
+              "name": "out",
+              "comment": "a [`UIHandler`](#link) function to handle when pointer exits hover. Eg, `fn( pt:Pt, target:UI, type:string )`\n",
+              "type": "UIHandler",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "render",
+      "source": [
+        [
+          "UI.ts",
+          114,
+          8
+        ]
+      ],
+      "id": 921,
+      "flags": {},
+      "overrides": false,
+      "inherits": "UI.render",
+      "signatures": [
+        {
+          "comment": "Take a custom render function to render this UI.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "fn",
+              "comment": "render function\n",
+              "type": " Fn(group:Group, )",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "state",
+      "source": [
+        [
+          "UI.ts",
+          67,
+          7
+        ]
+      ],
+      "id": 907,
+      "flags": {},
+      "overrides": false,
+      "inherits": "UI.state",
+      "signatures": [
+        {
+          "comment": "Get a specific UI state.",
+          "returns": "any",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "key",
+              "comment": "state's name\n",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "variables": [],
+  "properties": [
+    {
+      "name": "group",
+      "source": [
+        [
+          "UI.ts",
+          32,
+          7
+        ]
+      ],
+      "id": 892,
+      "flags": {},
+      "type": "group",
+      "overrides": false,
+      "inherits": "UI.group",
+      "comment": ""
+    },
+    {
+      "name": "shape",
+      "source": [
+        [
+          "UI.ts",
+          33,
+          7
+        ]
+      ],
+      "id": 893,
+      "flags": {},
+      "type": "shape",
+      "overrides": false,
+      "inherits": "UI.shape",
+      "comment": ""
+    }
+  ],
+  "flags": {},
+  "extends": [
+    "UI"
+  ],
+  "implements": []
+}

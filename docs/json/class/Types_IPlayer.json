@@ -1,0 +1,185 @@
+{
+  "name": "IPlayer",
+  "source": [
+    [
+      "Types.ts",
+      37,
+      24
+    ]
+  ],
+  "kind": "Interface",
+  "id": 948,
+  "comment": "Typescript only: IPlayer is an interface that represents a \"player\" object that can be added into a Space.",
+  "constructor": [],
+  "accessors": [],
+  "methods": [
+    {
+      "name": "action",
+      "source": [
+        [
+          "Types.ts",
+          41,
+          8
+        ]
+      ],
+      "id": 955,
+      "flags": {
+        "isOptional": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "any",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "type",
+              "comment": "",
+              "type": "string",
+              "default": false
+            },
+            {
+              "name": "px",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "py",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "evt",
+              "comment": "",
+              "type": "Event",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "resize",
+      "source": [
+        [
+          "Types.ts",
+          40,
+          8
+        ]
+      ],
+      "id": 951,
+      "flags": {
+        "isOptional": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "undefined",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "size",
+              "comment": "",
+              "type": "IPt",
+              "default": false
+            },
+            {
+              "name": "evt",
+              "comment": "",
+              "type": "Event",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "start",
+      "source": [
+        [
+          "Types.ts",
+          42,
+          7
+        ]
+      ],
+      "id": 961,
+      "flags": {
+        "isOptional": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "any",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "bound",
+              "comment": "",
+              "type": "Bound",
+              "default": false
+            },
+            {
+              "name": "space",
+              "comment": "",
+              "type": "Space",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "variables": [],
+  "properties": [
+    {
+      "name": "animate",
+      "source": [
+        [
+          "Types.ts",
+          39,
+          9
+        ]
+      ],
+      "id": 950,
+      "flags": {
+        "isOptional": true
+      },
+      "type": "animate",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "animateID",
+      "source": [
+        [
+          "Types.ts",
+          38,
+          11
+        ]
+      ],
+      "id": 949,
+      "flags": {
+        "isOptional": true
+      },
+      "type": "animateID",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    }
+  ],
+  "flags": {},
+  "extends": [],
+  "implements": []
+}

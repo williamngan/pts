@@ -1,0 +1,404 @@
+{
+  "name": "Triangle",
+  "source": [
+    [
+      "Op.ts",
+      781,
+      21
+    ]
+  ],
+  "kind": "Class",
+  "id": 633,
+  "comment": "Triangle class provides static functions to create and operate on trianges. A triange is a polygon represented as a Group of 3 Pts.\nYou can use the static functions as-is, or apply the [`Group.op`](#link) or [`Pt.op`](#link) to enable functional programming.\nSee [Op guide](../guide/Op-0400.html) for details.",
+  "constructor": [],
+  "accessors": [],
+  "methods": [
+    {
+      "name": "altitude",
+      "source": [
+        [
+          "Op.ts",
+          849,
+          17
+        ]
+      ],
+      "id": 651,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a triangle's altitude, which is a line from a triangle's point to its opposite side, and perpendicular to its opposite side.",
+          "returns": "Group",
+          "returns_comment": "a Group that represents the altitude line\n",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group of Pts",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "index",
+              "comment": "a Pt on the triangle group",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "circumcenter",
+      "source": [
+        [
+          "Op.ts",
+          900,
+          21
+        ]
+      ],
+      "id": 665,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get circumcenter, which is the intersection point of its 3 perpendicular bisectors lines ( each of which divides a side in half and is perpendicular to the side).",
+          "returns": "Pt",
+          "returns_comment": "the circumcenter as a Pt\n",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group of Pts",
+              "type": "GroupLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "circumcircle",
+      "source": [
+        [
+          "Op.ts",
+          912,
+          21
+        ]
+      ],
+      "id": 668,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get circumcenter, which is the intersection point of its 3 perpendicular bisectors lines ( each of which divides a side in half and is perpendicular to the side).",
+          "returns": "Group",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group of Pts",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "center",
+              "comment": "Optional parameter if the circumcenter is already known. Otherwise, leave it empty and the circumcenter will be calculated\n",
+              "type": "Pt",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "fromCenter",
+      "source": [
+        [
+          "Op.ts",
+          810,
+          19
+        ]
+      ],
+      "id": 640,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create an equilateral triangle based on a center point and a size.",
+          "returns": "Group",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pt",
+              "comment": "the center point",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "size",
+              "comment": "size is the magnitude of lines from center to the triangle's vertices, like a \"radius\".\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "fromCircle",
+      "source": [
+        [
+          "Op.ts",
+          800,
+          19
+        ]
+      ],
+      "id": 637,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a triangle that fits within a circle.",
+          "returns": "Group",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "circle",
+              "comment": "a Group of 2 Pts representing a circle\n",
+              "type": "GroupLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "fromRect",
+      "source": [
+        [
+          "Op.ts",
+          787,
+          17
+        ]
+      ],
+      "id": 634,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a triangle from a rectangle. The triangle will be isosceles, with the bottom of the rectangle as its base.",
+          "returns": "Group",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "rect",
+              "comment": "a Group of 2 Pts representing a rectangle\n",
+              "type": "GroupLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "incenter",
+      "source": [
+        [
+          "Op.ts",
+          875,
+          17
+        ]
+      ],
+      "id": 658,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get incenter, which is the center point of its inner circle, and also the intersection point of its 3 angle bisector lines (each of which cuts one of the 3 angles in half).",
+          "returns": "Pt",
+          "returns_comment": "the incenter as a Pt\n",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group of Pts",
+              "type": "GroupLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "incircle",
+      "source": [
+        [
+          "Op.ts",
+          887,
+          17
+        ]
+      ],
+      "id": 661,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get an interior circle, which is the largest circle completed enclosed by this triangle.",
+          "returns": "Group",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group of Pts",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "center",
+              "comment": "Optional parameter if the incenter is already known. Otherwise, leave it empty and the incenter will be calculated\n",
+              "type": "Pt",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "medial",
+      "source": [
+        [
+          "Op.ts",
+          820,
+          15
+        ]
+      ],
+      "id": 644,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get the medial, which is an inner triangle formed by connecting the midpoints of this triangle's sides.",
+          "returns": "Group",
+          "returns_comment": "a Group representing a medial triangle\n",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group of Pts",
+              "type": "GroupLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "oppositeSide",
+      "source": [
+        [
+          "Op.ts",
+          832,
+          21
+        ]
+      ],
+      "id": 647,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Given a point of the triangle, the opposite side is the side which the point doesn't touch.",
+          "returns": "Group",
+          "returns_comment": "a Group that represents a line of the opposite side\n",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group of Pts",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "index",
+              "comment": "a Pt on the triangle group",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "orthocenter",
+      "source": [
+        [
+          "Op.ts",
+          863,
+          20
+        ]
+      ],
+      "id": 655,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get orthocenter, which is the intersection point of a triangle's 3 altitudes (the 3 lines that are perpendicular to its 3 opposite sides).",
+          "returns": "Pt",
+          "returns_comment": "the orthocenter as a Pt\n",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group of Pts",
+              "type": "GroupLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": []
+}

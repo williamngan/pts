@@ -1,0 +1,2404 @@
+{
+  "name": "PtsCanvasRenderingContext2D",
+  "source": [
+    [
+      "Types.ts",
+      81,
+      44
+    ]
+  ],
+  "kind": "Interface",
+  "id": 981,
+  "comment": "Typescript only: extends Canvas's 2D context with backingStorePixelRatio property.",
+  "constructor": [],
+  "accessors": [],
+  "methods": [
+    {
+      "name": "arc",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          19738,
+          7
+        ]
+      ],
+      "id": 1182,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasPathMethods.arc",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "radius",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "startAngle",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "endAngle",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "anticlockwise",
+              "comment": "",
+              "type": "boolean",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "arcTo",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          19739,
+          9
+        ]
+      ],
+      "id": 1190,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasPathMethods.arcTo",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "x1",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y1",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "x2",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y2",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "radius",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "beginPath",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7435,
+          13
+        ]
+      ],
+      "id": 1009,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.beginPath",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "bezierCurveTo",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          19740,
+          17
+        ]
+      ],
+      "id": 1197,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasPathMethods.bezierCurveTo",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "cp1x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "cp1y",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "cp2x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "cp2y",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "clearRect",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7436,
+          13
+        ]
+      ],
+      "id": 1011,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.clearRect",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "w",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "h",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "clip",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7437,
+          8
+        ],
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7438,
+          8
+        ]
+      ],
+      "id": 1017,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.clip",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "fillRule",
+              "comment": "",
+              "type": "CanvasFillRule",
+              "default": false
+            }
+          ],
+          "tags": []
+        },
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "path",
+              "comment": "",
+              "type": "Path2D",
+              "default": false
+            },
+            {
+              "name": "fillRule",
+              "comment": "",
+              "type": "CanvasFillRule",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "closePath",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          19741,
+          13
+        ]
+      ],
+      "id": 1205,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasPathMethods.closePath",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "createImageData",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7439,
+          19
+        ]
+      ],
+      "id": 1023,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.createImageData",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "ImageData",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "imageDataOrSw",
+              "comment": "",
+              "type": "number | ImageData",
+              "default": false
+            },
+            {
+              "name": "sh",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "createLinearGradient",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7440,
+          24
+        ]
+      ],
+      "id": 1027,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.createLinearGradient",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "CanvasGradient",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "x0",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y0",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "x1",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y1",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "createPattern",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7441,
+          17
+        ]
+      ],
+      "id": 1033,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.createPattern",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "CanvasPattern",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "image",
+              "comment": "",
+              "type": "HTMLImageElement | HTMLCanvasElement | HTMLVideoElement",
+              "default": false
+            },
+            {
+              "name": "repetition",
+              "comment": "",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "createRadialGradient",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7442,
+          24
+        ]
+      ],
+      "id": 1037,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.createRadialGradient",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "CanvasGradient",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "x0",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y0",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "r0",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "x1",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y1",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "r1",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "drawFocusIfNeeded",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7443,
+          21
+        ]
+      ],
+      "id": 1045,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.drawFocusIfNeeded",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "element",
+              "comment": "",
+              "type": "Element",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "drawImage",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7444,
+          13
+        ],
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7445,
+          13
+        ],
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7446,
+          13
+        ]
+      ],
+      "id": 1048,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.drawImage",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "image",
+              "comment": "",
+              "type": "HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | ImageBitmap",
+              "default": false
+            },
+            {
+              "name": "dstX",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "dstY",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        },
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "image",
+              "comment": "",
+              "type": "HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | ImageBitmap",
+              "default": false
+            },
+            {
+              "name": "dstX",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "dstY",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "dstW",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "dstH",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        },
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "image",
+              "comment": "",
+              "type": "HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | ImageBitmap",
+              "default": false
+            },
+            {
+              "name": "srcX",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "srcY",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "srcW",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "srcH",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "dstX",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "dstY",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "dstW",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "dstH",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "ellipse",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          19742,
+          11
+        ]
+      ],
+      "id": 1207,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasPathMethods.ellipse",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "radiusX",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "radiusY",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "rotation",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "startAngle",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "endAngle",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "anticlockwise",
+              "comment": "",
+              "type": "boolean",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "fill",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7447,
+          8
+        ],
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7448,
+          8
+        ]
+      ],
+      "id": 1069,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.fill",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "fillRule",
+              "comment": "",
+              "type": "CanvasFillRule",
+              "default": false
+            }
+          ],
+          "tags": []
+        },
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "path",
+              "comment": "",
+              "type": "Path2D",
+              "default": false
+            },
+            {
+              "name": "fillRule",
+              "comment": "",
+              "type": "CanvasFillRule",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "fillRect",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7449,
+          12
+        ]
+      ],
+      "id": 1075,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.fillRect",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "w",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "h",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "fillText",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7450,
+          12
+        ]
+      ],
+      "id": 1081,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.fillText",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "text",
+              "comment": "",
+              "type": "string",
+              "default": false
+            },
+            {
+              "name": "x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "maxWidth",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "getImageData",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7451,
+          16
+        ]
+      ],
+      "id": 1087,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.getImageData",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "ImageData",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "sx",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "sy",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "sw",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "sh",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "getLineDash",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7452,
+          15
+        ]
+      ],
+      "id": 1093,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.getLineDash",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "number[]",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "hasOwnProperty",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          127,
+          18
+        ]
+      ],
+      "id": 1173,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Object.hasOwnProperty",
+      "signatures": [
+        {
+          "comment": "Determines whether an object has a property with the specified name.",
+          "returns": "boolean",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "v",
+              "comment": "A property name.\n",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "isPointInPath",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7453,
+          17
+        ],
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7454,
+          17
+        ]
+      ],
+      "id": 1095,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.isPointInPath",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "boolean",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "fillRule",
+              "comment": "",
+              "type": "CanvasFillRule",
+              "default": false
+            }
+          ],
+          "tags": []
+        },
+        {
+          "comment": "",
+          "returns": "boolean",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "path",
+              "comment": "",
+              "type": "Path2D",
+              "default": false
+            },
+            {
+              "name": "x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "fillRule",
+              "comment": "",
+              "type": "CanvasFillRule",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "isPrototypeOf",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          133,
+          17
+        ]
+      ],
+      "id": 1176,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Object.isPrototypeOf",
+      "signatures": [
+        {
+          "comment": "Determines whether an object exists in another object's prototype chain.",
+          "returns": "boolean",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "v",
+              "comment": "Another object whose prototype chain is to be checked.\n",
+              "type": "Object",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "lineTo",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          19743,
+          10
+        ]
+      ],
+      "id": 1217,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasPathMethods.lineTo",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "measureText",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7455,
+          15
+        ]
+      ],
+      "id": 1105,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.measureText",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "TextMetrics",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "text",
+              "comment": "",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "moveTo",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          19744,
+          10
+        ]
+      ],
+      "id": 1221,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasPathMethods.moveTo",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "propertyIsEnumerable",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          139,
+          24
+        ]
+      ],
+      "id": 1179,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Object.propertyIsEnumerable",
+      "signatures": [
+        {
+          "comment": "Determines whether a specified property is enumerable.",
+          "returns": "boolean",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "v",
+              "comment": "A property name.\n",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "putImageData",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7456,
+          16
+        ]
+      ],
+      "id": 1108,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.putImageData",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "imagedata",
+              "comment": "",
+              "type": "ImageData",
+              "default": false
+            },
+            {
+              "name": "dx",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "dy",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "dirtyX",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "dirtyY",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "dirtyWidth",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "dirtyHeight",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "quadraticCurveTo",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          19745,
+          20
+        ]
+      ],
+      "id": 1225,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasPathMethods.quadraticCurveTo",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "cpx",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "cpy",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "rect",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          19746,
+          8
+        ]
+      ],
+      "id": 1231,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasPathMethods.rect",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "w",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "h",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "restore",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7457,
+          11
+        ]
+      ],
+      "id": 1117,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.restore",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "rotate",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7458,
+          10
+        ]
+      ],
+      "id": 1119,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.rotate",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "angle",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "save",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7459,
+          8
+        ]
+      ],
+      "id": 1122,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.save",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "scale",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7460,
+          9
+        ]
+      ],
+      "id": 1124,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.scale",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "setLineDash",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7461,
+          15
+        ]
+      ],
+      "id": 1128,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.setLineDash",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "segments",
+              "comment": "",
+              "type": "number[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "setTransform",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7462,
+          16
+        ]
+      ],
+      "id": 1131,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.setTransform",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "m11",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "m12",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "m21",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "m22",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "dx",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "dy",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "stroke",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7463,
+          10
+        ]
+      ],
+      "id": 1139,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.stroke",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "path",
+              "comment": "",
+              "type": "Path2D",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "strokeRect",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7464,
+          14
+        ]
+      ],
+      "id": 1142,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.strokeRect",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "w",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "h",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "strokeText",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7465,
+          14
+        ]
+      ],
+      "id": 1148,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.strokeText",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "text",
+              "comment": "",
+              "type": "string",
+              "default": false
+            },
+            {
+              "name": "x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "maxWidth",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "toLocaleString",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          118,
+          18
+        ]
+      ],
+      "id": 1169,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Object.toLocaleString",
+      "signatures": [
+        {
+          "comment": "Returns a date converted to a string using the current locale.",
+          "returns": "string",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "toString",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          115,
+          12
+        ]
+      ],
+      "id": 1167,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Object.toString",
+      "signatures": [
+        {
+          "comment": "Returns a string representation of an object.",
+          "returns": "string",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "transform",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7466,
+          13
+        ]
+      ],
+      "id": 1154,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.transform",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "m11",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "m12",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "m21",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "m22",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "dx",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "dy",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "translate",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7467,
+          13
+        ]
+      ],
+      "id": 1162,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.translate",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "valueOf",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          121,
+          11
+        ]
+      ],
+      "id": 1171,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Object.valueOf",
+      "signatures": [
+        {
+          "comment": "Returns the primitive value of the specified object.",
+          "returns": "Object",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "variables": [],
+  "properties": [
+    {
+      "name": "CanvasRenderingContext2D",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7470,
+          36
+        ]
+      ],
+      "id": 1237,
+      "flags": {},
+      "type": "CanvasRenderingContext2D",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "backingStorePixelRatio",
+      "source": [
+        [
+          "Types.ts",
+          86,
+          24
+        ]
+      ],
+      "id": 986,
+      "flags": {
+        "isOptional": true
+      },
+      "type": "backingStorePixelRatio",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "canvas",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7413,
+          19
+        ]
+      ],
+      "id": 987,
+      "flags": {},
+      "type": "canvas",
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.canvas",
+      "comment": ""
+    },
+    {
+      "name": "constructor",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          112,
+          15
+        ]
+      ],
+      "id": 1166,
+      "flags": {},
+      "type": "constructor",
+      "overrides": false,
+      "inherits": "Object.constructor",
+      "comment": "The initial value of Object.prototype.constructor is the standard built-in Object constructor."
+    },
+    {
+      "name": "fillStyle",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7414,
+          13
+        ]
+      ],
+      "id": 988,
+      "flags": {},
+      "type": "fillStyle",
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.fillStyle",
+      "comment": ""
+    },
+    {
+      "name": "font",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7415,
+          8
+        ]
+      ],
+      "id": 989,
+      "flags": {},
+      "type": "font",
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.font",
+      "comment": ""
+    },
+    {
+      "name": "globalAlpha",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7416,
+          15
+        ]
+      ],
+      "id": 990,
+      "flags": {},
+      "type": "globalAlpha",
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.globalAlpha",
+      "comment": ""
+    },
+    {
+      "name": "globalCompositeOperation",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7417,
+          28
+        ]
+      ],
+      "id": 991,
+      "flags": {},
+      "type": "globalCompositeOperation",
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.globalCompositeOperation",
+      "comment": ""
+    },
+    {
+      "name": "imageSmoothingEnabled",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7418,
+          25
+        ]
+      ],
+      "id": 992,
+      "flags": {},
+      "type": "imageSmoothingEnabled",
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.imageSmoothingEnabled",
+      "comment": ""
+    },
+    {
+      "name": "lineCap",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7419,
+          11
+        ]
+      ],
+      "id": 993,
+      "flags": {},
+      "type": "lineCap",
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.lineCap",
+      "comment": ""
+    },
+    {
+      "name": "lineDashOffset",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7420,
+          18
+        ]
+      ],
+      "id": 994,
+      "flags": {},
+      "type": "lineDashOffset",
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.lineDashOffset",
+      "comment": ""
+    },
+    {
+      "name": "lineJoin",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7421,
+          12
+        ]
+      ],
+      "id": 995,
+      "flags": {},
+      "type": "lineJoin",
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.lineJoin",
+      "comment": ""
+    },
+    {
+      "name": "lineWidth",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7422,
+          13
+        ]
+      ],
+      "id": 996,
+      "flags": {},
+      "type": "lineWidth",
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.lineWidth",
+      "comment": ""
+    },
+    {
+      "name": "miterLimit",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7423,
+          14
+        ]
+      ],
+      "id": 997,
+      "flags": {},
+      "type": "miterLimit",
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.miterLimit",
+      "comment": ""
+    },
+    {
+      "name": "mozBackingStorePixelRatio",
+      "source": [
+        [
+          "Types.ts",
+          83,
+          27
+        ]
+      ],
+      "id": 983,
+      "flags": {
+        "isOptional": true
+      },
+      "type": "mozBackingStorePixelRatio",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "mozImageSmoothingEnabled",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7432,
+          28
+        ]
+      ],
+      "id": 1006,
+      "flags": {},
+      "type": "mozImageSmoothingEnabled",
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.mozImageSmoothingEnabled",
+      "comment": ""
+    },
+    {
+      "name": "msBackingStorePixelRatio",
+      "source": [
+        [
+          "Types.ts",
+          84,
+          26
+        ]
+      ],
+      "id": 984,
+      "flags": {
+        "isOptional": true
+      },
+      "type": "msBackingStorePixelRatio",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "msFillRule",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7424,
+          14
+        ]
+      ],
+      "id": 998,
+      "flags": {},
+      "type": "msFillRule",
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.msFillRule",
+      "comment": ""
+    },
+    {
+      "name": "oBackingStorePixelRatio",
+      "source": [
+        [
+          "Types.ts",
+          85,
+          25
+        ]
+      ],
+      "id": 985,
+      "flags": {
+        "isOptional": true
+      },
+      "type": "oBackingStorePixelRatio",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "oImageSmoothingEnabled",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7434,
+          26
+        ]
+      ],
+      "id": 1008,
+      "flags": {},
+      "type": "oImageSmoothingEnabled",
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.oImageSmoothingEnabled",
+      "comment": ""
+    },
+    {
+      "name": "shadowBlur",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7425,
+          14
+        ]
+      ],
+      "id": 999,
+      "flags": {},
+      "type": "shadowBlur",
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.shadowBlur",
+      "comment": ""
+    },
+    {
+      "name": "shadowColor",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7426,
+          15
+        ]
+      ],
+      "id": 1000,
+      "flags": {},
+      "type": "shadowColor",
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.shadowColor",
+      "comment": ""
+    },
+    {
+      "name": "shadowOffsetX",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7427,
+          17
+        ]
+      ],
+      "id": 1001,
+      "flags": {},
+      "type": "shadowOffsetX",
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.shadowOffsetX",
+      "comment": ""
+    },
+    {
+      "name": "shadowOffsetY",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7428,
+          17
+        ]
+      ],
+      "id": 1002,
+      "flags": {},
+      "type": "shadowOffsetY",
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.shadowOffsetY",
+      "comment": ""
+    },
+    {
+      "name": "strokeStyle",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7429,
+          15
+        ]
+      ],
+      "id": 1003,
+      "flags": {},
+      "type": "strokeStyle",
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.strokeStyle",
+      "comment": ""
+    },
+    {
+      "name": "textAlign",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7430,
+          13
+        ]
+      ],
+      "id": 1004,
+      "flags": {},
+      "type": "textAlign",
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.textAlign",
+      "comment": ""
+    },
+    {
+      "name": "textBaseline",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7431,
+          16
+        ]
+      ],
+      "id": 1005,
+      "flags": {},
+      "type": "textBaseline",
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.textBaseline",
+      "comment": ""
+    },
+    {
+      "name": "webkitBackingStorePixelRatio",
+      "source": [
+        [
+          "Types.ts",
+          82,
+          30
+        ]
+      ],
+      "id": 982,
+      "flags": {
+        "isOptional": true
+      },
+      "type": "webkitBackingStorePixelRatio",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "webkitImageSmoothingEnabled",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          7433,
+          31
+        ]
+      ],
+      "id": 1007,
+      "flags": {},
+      "type": "webkitImageSmoothingEnabled",
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.webkitImageSmoothingEnabled",
+      "comment": ""
+    }
+  ],
+  "flags": {},
+  "extends": [
+    "CanvasRenderingContext2D"
+  ],
+  "implements": []
+}

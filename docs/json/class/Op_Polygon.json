@@ -1,0 +1,750 @@
+{
+  "name": "Polygon",
+  "source": [
+    [
+      "Op.ts",
+      926,
+      20
+    ]
+  ],
+  "kind": "Class",
+  "id": 672,
+  "comment": "Polygon class provides static functions to create and operate on polygons. A polygon is usually represented as a Group of 3 or more Pts.\nYou can use the static functions as-is, or apply the [`Group.op`](#link) or [`Pt.op`](#link) to enable functional programming.\nSee [Op guide](../guide/Op-0400.html) for details.",
+  "constructor": [],
+  "accessors": [],
+  "methods": [
+    {
+      "name": "adjacentSides",
+      "source": [
+        [
+          "Op.ts",
+          1006,
+          22
+        ]
+      ],
+      "id": 699,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Given a Pt in the polygon group, the adjacent sides are the two sides which the Pt touches.",
+          "returns": "Group[]",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a group of Pts",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "index",
+              "comment": "the target Pt",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "closePath",
+              "comment": "a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).\n",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "area",
+      "source": [
+        [
+          "Op.ts",
+          1072,
+          13
+        ]
+      ],
+      "id": 715,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Find the area of a *convex* polygon.",
+          "returns": "any",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a group of Pts\n",
+              "type": "GroupLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "bisector",
+      "source": [
+        [
+          "Op.ts",
+          1030,
+          17
+        ]
+      ],
+      "id": 704,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a bisector which is a line that split between two sides of a polygon equally.",
+          "returns": "Pt",
+          "returns_comment": "a bisector Pt that's a normalized unit vector\n",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a group of Pts",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "index",
+              "comment": "the Pt in the polygon to bisect from",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "centroid",
+      "source": [
+        [
+          "Op.ts",
+          932,
+          17
+        ]
+      ],
+      "id": 673,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get the centroid of a polygon, which is the average of all its points.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group of Pts representing a polygon\n",
+              "type": "GroupLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "convexHull",
+      "source": [
+        [
+          "Op.ts",
+          1094,
+          19
+        ]
+      ],
+      "id": 718,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a convex hull of a set of points, using Melkman's algorithm. ([Reference](http://geomalgorithms.com/a12-_hull-3.html)).",
+          "returns": "Group",
+          "returns_comment": "a group of Pt that defines the convex hull polygon\n",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a group of Pt",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "sorted",
+              "comment": "a boolean value to indicate if the group is pre-sorted by x position. Default is false.",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "fromCenter",
+      "source": [
+        [
+          "Op.ts",
+          954,
+          19
+        ]
+      ],
+      "id": 681,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a regular polygon.",
+          "returns": "Group",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "center",
+              "comment": "The center position of the polygon",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "radius",
+              "comment": "The radius, ie, a length from the center position to one of the polygon's corners.",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "sides",
+              "comment": "Number of sides\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "hasIntersectCircle",
+      "source": [
+        [
+          "Op.ts",
+          1243,
+          27
+        ]
+      ],
+      "id": 743,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Check if a convex polygon and a circle has intersections using Separating Axis Theorem.",
+          "returns": "IntersectContext",
+          "returns_comment": "an `IntersectContext` object that stores the intersection info, or undefined if there's no intersection\n",
+          "parameters": [
+            {
+              "name": "poly",
+              "comment": "a Group representing a convex polygon",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "circle",
+              "comment": "a Group representing a circle",
+              "type": "GroupLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "hasIntersectPoint",
+      "source": [
+        [
+          "Op.ts",
+          1222,
+          26
+        ]
+      ],
+      "id": 739,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Check if a Pt is inside a convex polygon.",
+          "returns": "boolean",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "poly",
+              "comment": "a Group of Pt defining a convex polygon",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "pt",
+              "comment": "the Pt to check\n",
+              "type": "PtLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "hasIntersectPolygon",
+      "source": [
+        [
+          "Op.ts",
+          1300,
+          28
+        ]
+      ],
+      "id": 747,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Check if two convex polygons have intersections using Separating Axis Theorem.",
+          "returns": "IntersectContext",
+          "returns_comment": "an `IntersectContext` object that stores the intersection info, or undefined if there's no intersection\n",
+          "parameters": [
+            {
+              "name": "poly1",
+              "comment": "a Group representing a convex polygon",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "poly2",
+              "comment": "a Group representing a convex polygon",
+              "type": "GroupLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "intersectPolygon2D",
+      "source": [
+        [
+          "Op.ts",
+          1364,
+          27
+        ]
+      ],
+      "id": 751,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Find intersection points of 2 polygons by checking every side of both polygons. Performance may be slow for complex polygons.",
+          "returns": "Group",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "poly1",
+              "comment": "a Group representing a polygon",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "poly2",
+              "comment": "another Group representing a polygon\n",
+              "type": "GroupLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "lineAt",
+      "source": [
+        [
+          "Op.ts",
+          969,
+          15
+        ]
+      ],
+      "id": 686,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Given a Group of Pts that defines a polygon, get one edge using an index.",
+          "returns": "Group",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "idx",
+              "comment": "index of a Pt in the Group\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "lines",
+      "source": [
+        [
+          "Op.ts",
+          980,
+          14
+        ]
+      ],
+      "id": 690,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get the line segments in this polygon.",
+          "returns": "Group[]",
+          "returns_comment": "an array of Groups which has 2 Pts in each group\n",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group of Pts",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "closePath",
+              "comment": "a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).",
+              "type": "boolean",
+              "default": "true"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "midpoints",
+      "source": [
+        [
+          "Op.ts",
+          993,
+          18
+        ]
+      ],
+      "id": 694,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a new polygon group that is derived from midpoints in this polygon.",
+          "returns": "Group",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group of Pts",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "closePath",
+              "comment": "a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).",
+              "type": "boolean",
+              "default": "false"
+            },
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1 for interpolation. Default to 0.5 which will get the middle point.\n",
+              "type": "number",
+              "default": "0.5"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "nearestPt",
+      "source": [
+        [
+          "Op.ts",
+          1174,
+          18
+        ]
+      ],
+      "id": 726,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Given a target Pt, find a Pt in the polygon's corners that's nearest to it.",
+          "returns": "number",
+          "returns_comment": "an index in the pts indicating the nearest Pt, or -1 if none found\n",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group of Pt",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "pt",
+              "comment": "Pt to check",
+              "type": "PtLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "network",
+      "source": [
+        [
+          "Op.ts",
+          1159,
+          16
+        ]
+      ],
+      "id": 722,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Given a point in the polygon as an origin, get an array of lines that connect all the remaining points to the origin point.",
+          "returns": "Group[]",
+          "returns_comment": "an array of Groups of line segments\n",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group representing a polygon",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "originIndex",
+              "comment": "the origin point's index in the polygon",
+              "type": "number",
+              "default": "0"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "perimeter",
+      "source": [
+        [
+          "Op.ts",
+          1049,
+          18
+        ]
+      ],
+      "id": 708,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Find the perimeter of this polygon, ie, the lengths of its sides.",
+          "returns": "{ segments:`Pt`, total:`number` }",
+          "returns_comment": "an object with `total` length, and `segments` which is a Pt that stores each segment's length\n",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a group of Pts",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "closePath",
+              "comment": "a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "projectAxis",
+      "source": [
+        [
+          "Op.ts",
+          1193,
+          20
+        ]
+      ],
+      "id": 730,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Project axis (eg, for use in Separation Axis Theorem).",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "poly",
+              "comment": "a Group of Pt",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "unitAxis",
+              "comment": "unit axis for calculating dot product\n",
+              "type": "Pt",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "rectangle",
+      "source": [
+        [
+          "Op.ts",
+          943,
+          18
+        ]
+      ],
+      "id": 676,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a rectangular polygon. Same as creating a Rectangle and then getting its corners via [`Rectangle.corners`](#link).",
+          "returns": "Group",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "center",
+              "comment": "center point of the rectangle",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "widthOrSize",
+              "comment": "width as number, or a Pt representing the size of the rectangle",
+              "type": "number | PtLike",
+              "default": false
+            },
+            {
+              "name": "height",
+              "comment": "optional height\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "toRects",
+      "source": [
+        [
+          "Op.ts",
+          1379,
+          16
+        ]
+      ],
+      "id": 755,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a bounding box for each polygon group, as well as a union bounding-box for all groups.",
+          "returns": "GroupLike[]",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "polys",
+              "comment": "an array of Groups, or an array of Pt arrays\n",
+              "type": "GroupLike[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": []
+}

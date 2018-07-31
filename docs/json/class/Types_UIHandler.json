@@ -1,0 +1,24 @@
+{
+  "name": "UIHandler",
+  "source": [
+    [
+      "Types.ts",
+      136,
+      21
+    ]
+  ],
+  "kind": "Typealias",
+  "id": 1282,
+  "comment": "UIHandler is a type alias that represents a callback function to handle UI actions.",
+  "constructor": [],
+  "accessors": [],
+  "methods": [],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": [],
+  "type_alias": [
+    " Fn(pt:Pt, target:UI, type:string)"
+  ]
+}

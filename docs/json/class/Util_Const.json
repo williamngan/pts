@@ -1,0 +1,472 @@
+{
+  "name": "Const",
+  "source": [
+    [
+      "Util.ts",
+      12,
+      18
+    ]
+  ],
+  "kind": "Objectliteral",
+  "id": 1349,
+  "comment": "Various constant values for enumerations and calculations.",
+  "constructor": [],
+  "accessors": [],
+  "methods": [],
+  "variables": [
+    {
+      "name": "bottom",
+      "source": [
+        [
+          "Util.ts",
+          42,
+          8
+        ]
+      ],
+      "id": 1359,
+      "flags": {},
+      "type": "bottom",
+      "overrides": false,
+      "inherits": false,
+      "comment": "Represents bottom position or direction"
+    },
+    {
+      "name": "bottom_left",
+      "source": [
+        [
+          "Util.ts",
+          45,
+          13
+        ]
+      ],
+      "id": 1360,
+      "flags": {},
+      "type": "bottom_left",
+      "overrides": false,
+      "inherits": false,
+      "comment": "Represents bottom left position or direction"
+    },
+    {
+      "name": "bottom_right",
+      "source": [
+        [
+          "Util.ts",
+          39,
+          14
+        ]
+      ],
+      "id": 1358,
+      "flags": {},
+      "type": "bottom_right",
+      "overrides": false,
+      "inherits": false,
+      "comment": "Represents bottom right position or direction"
+    },
+    {
+      "name": "deg_to_rad",
+      "source": [
+        [
+          "Util.ts",
+          87,
+          12
+        ]
+      ],
+      "id": 1374,
+      "flags": {},
+      "type": "deg_to_rad",
+      "overrides": false,
+      "inherits": false,
+      "comment": "Multiply this constant with a degree to get a radian"
+    },
+    {
+      "name": "epsilon",
+      "source": [
+        [
+          "Util.ts",
+          60,
+          9
+        ]
+      ],
+      "id": 1365,
+      "flags": {},
+      "type": "epsilon",
+      "overrides": false,
+      "inherits": false,
+      "comment": "Represents an arbitrary very small number. It is set as 0.0001 here."
+    },
+    {
+      "name": "gaussian",
+      "source": [
+        [
+          "Util.ts",
+          96,
+          10
+        ]
+      ],
+      "id": 1377,
+      "flags": {},
+      "type": "gaussian",
+      "overrides": false,
+      "inherits": false,
+      "comment": "Gaussian constant (1 / Math.sqrt(2 * Math.PI))"
+    },
+    {
+      "name": "gravity",
+      "source": [
+        [
+          "Util.ts",
+          90,
+          9
+        ]
+      ],
+      "id": 1375,
+      "flags": {},
+      "type": "gravity",
+      "overrides": false,
+      "inherits": false,
+      "comment": "Gravity acceleration (unit: m/s^2) and gravity force (unit: Newton) on 1kg of mass."
+    },
+    {
+      "name": "half_pi",
+      "source": [
+        [
+          "Util.ts",
+          75,
+          9
+        ]
+      ],
+      "id": 1370,
+      "flags": {},
+      "type": "half_pi",
+      "overrides": false,
+      "inherits": false,
+      "comment": "Half \u03c0 radian (90deg)"
+    },
+    {
+      "name": "horizontal",
+      "source": [
+        [
+          "Util.ts",
+          27,
+          12
+        ]
+      ],
+      "id": 1354,
+      "flags": {},
+      "type": "horizontal",
+      "overrides": false,
+      "inherits": false,
+      "comment": "Represents horizontal direction."
+    },
+    {
+      "name": "identical",
+      "source": [
+        [
+          "Util.ts",
+          33,
+          11
+        ]
+      ],
+      "id": 1356,
+      "flags": {},
+      "type": "identical",
+      "overrides": false,
+      "inherits": false,
+      "comment": "Represents identical point or value"
+    },
+    {
+      "name": "left",
+      "source": [
+        [
+          "Util.ts",
+          48,
+          6
+        ]
+      ],
+      "id": 1361,
+      "flags": {},
+      "type": "left",
+      "overrides": false,
+      "inherits": false,
+      "comment": "Represents left position or direction"
+    },
+    {
+      "name": "max",
+      "source": [
+        [
+          "Util.ts",
+          63,
+          5
+        ]
+      ],
+      "id": 1366,
+      "flags": {},
+      "type": "max",
+      "overrides": false,
+      "inherits": false,
+      "comment": "Represents Number.MAX_VALUE"
+    },
+    {
+      "name": "min",
+      "source": [
+        [
+          "Util.ts",
+          66,
+          5
+        ]
+      ],
+      "id": 1367,
+      "flags": {},
+      "type": "min",
+      "overrides": false,
+      "inherits": false,
+      "comment": "Represents Number.MIN_VALUE"
+    },
+    {
+      "name": "newton",
+      "source": [
+        [
+          "Util.ts",
+          93,
+          8
+        ]
+      ],
+      "id": 1376,
+      "flags": {},
+      "type": "newton",
+      "overrides": false,
+      "inherits": false,
+      "comment": "1 Newton: 0.10197 Kilogram-force"
+    },
+    {
+      "name": "one_degree",
+      "source": [
+        [
+          "Util.ts",
+          81,
+          12
+        ]
+      ],
+      "id": 1372,
+      "flags": {},
+      "type": "one_degree",
+      "overrides": false,
+      "inherits": false,
+      "comment": "\u03c0/180 or 1 degree in radian"
+    },
+    {
+      "name": "pi",
+      "source": [
+        [
+          "Util.ts",
+          69,
+          4
+        ]
+      ],
+      "id": 1368,
+      "flags": {},
+      "type": "pi",
+      "overrides": false,
+      "inherits": false,
+      "comment": "\u03c0 radian (180 deg)"
+    },
+    {
+      "name": "quarter_pi",
+      "source": [
+        [
+          "Util.ts",
+          78,
+          12
+        ]
+      ],
+      "id": 1371,
+      "flags": {},
+      "type": "quarter_pi",
+      "overrides": false,
+      "inherits": false,
+      "comment": "\u03c0/4 radian (45deg)"
+    },
+    {
+      "name": "rad_to_deg",
+      "source": [
+        [
+          "Util.ts",
+          84,
+          12
+        ]
+      ],
+      "id": 1373,
+      "flags": {},
+      "type": "rad_to_deg",
+      "overrides": false,
+      "inherits": false,
+      "comment": "Multiply this constant with a radian to get a degree"
+    },
+    {
+      "name": "right",
+      "source": [
+        [
+          "Util.ts",
+          36,
+          7
+        ]
+      ],
+      "id": 1357,
+      "flags": {},
+      "type": "right",
+      "overrides": false,
+      "inherits": false,
+      "comment": "Represents right position or direction"
+    },
+    {
+      "name": "top",
+      "source": [
+        [
+          "Util.ts",
+          54,
+          5
+        ]
+      ],
+      "id": 1363,
+      "flags": {},
+      "type": "top",
+      "overrides": false,
+      "inherits": false,
+      "comment": "Represents top position or direction"
+    },
+    {
+      "name": "top_left",
+      "source": [
+        [
+          "Util.ts",
+          51,
+          10
+        ]
+      ],
+      "id": 1362,
+      "flags": {},
+      "type": "top_left",
+      "overrides": false,
+      "inherits": false,
+      "comment": "Represents top left position or direction"
+    },
+    {
+      "name": "top_right",
+      "source": [
+        [
+          "Util.ts",
+          57,
+          11
+        ]
+      ],
+      "id": 1364,
+      "flags": {},
+      "type": "top_right",
+      "overrides": false,
+      "inherits": false,
+      "comment": "Represents top right position or direction"
+    },
+    {
+      "name": "two_pi",
+      "source": [
+        [
+          "Util.ts",
+          72,
+          8
+        ]
+      ],
+      "id": 1369,
+      "flags": {},
+      "type": "two_pi",
+      "overrides": false,
+      "inherits": false,
+      "comment": "Two \u03c0 radian (360deg)"
+    },
+    {
+      "name": "vertical",
+      "source": [
+        [
+          "Util.ts",
+          30,
+          10
+        ]
+      ],
+      "id": 1355,
+      "flags": {},
+      "type": "vertical",
+      "overrides": false,
+      "inherits": false,
+      "comment": "Represents vertical direction."
+    },
+    {
+      "name": "xy",
+      "source": [
+        [
+          "Util.ts",
+          15,
+          4
+        ]
+      ],
+      "id": 1350,
+      "flags": {},
+      "type": "xy",
+      "overrides": false,
+      "inherits": false,
+      "comment": "A string to indicate xy plane."
+    },
+    {
+      "name": "xyz",
+      "source": [
+        [
+          "Util.ts",
+          24,
+          5
+        ]
+      ],
+      "id": 1353,
+      "flags": {},
+      "type": "xyz",
+      "overrides": false,
+      "inherits": false,
+      "comment": "A string to indicate xyz space."
+    },
+    {
+      "name": "xz",
+      "source": [
+        [
+          "Util.ts",
+          21,
+          4
+        ]
+      ],
+      "id": 1352,
+      "flags": {},
+      "type": "xz",
+      "overrides": false,
+      "inherits": false,
+      "comment": "A string to indicate xz plane."
+    },
+    {
+      "name": "yz",
+      "source": [
+        [
+          "Util.ts",
+          18,
+          4
+        ]
+      ],
+      "id": 1351,
+      "flags": {},
+      "type": "yz",
+      "overrides": false,
+      "inherits": false,
+      "comment": "A string to indicate yz plane."
+    }
+  ],
+  "properties": [],
+  "flags": {
+    "isConst": true
+  },
+  "extends": [],
+  "implements": []
+}

@@ -1,0 +1,620 @@
+{
+  "name": "Vec",
+  "source": [
+    [
+      "LinearAlgebra.ts",
+      13,
+      16
+    ]
+  ],
+  "kind": "Class",
+  "id": 2,
+  "comment": "Vec provides various static functions for vector operations. It's not fully optimized but good enough to use.",
+  "constructor": [],
+  "accessors": [],
+  "methods": [
+    {
+      "name": "abs",
+      "source": [
+        [
+          "LinearAlgebra.ts",
+          126,
+          12
+        ]
+      ],
+      "id": 38,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Set `a` to its absolute value in each dimension.",
+          "returns": "PtLike",
+          "returns_comment": "vector `a`\n",
+          "parameters": [
+            {
+              "name": "a",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "add",
+      "source": [
+        [
+          "LinearAlgebra.ts",
+          19,
+          12
+        ]
+      ],
+      "id": 3,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Add `b` to vector `a`.",
+          "returns": "PtLike",
+          "returns_comment": "vector `a`\n",
+          "parameters": [
+            {
+              "name": "a",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "b",
+              "comment": "",
+              "type": "PtLike | number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "ceil",
+      "source": [
+        [
+          "LinearAlgebra.ts",
+          144,
+          13
+        ]
+      ],
+      "id": 44,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Set `a` to its ceiling value in each dimension.",
+          "returns": "PtLike",
+          "returns_comment": "vector `a`\n",
+          "parameters": [
+            {
+              "name": "a",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "cross",
+      "source": [
+        [
+          "LinearAlgebra.ts",
+          99,
+          14
+        ]
+      ],
+      "id": 27,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "3D Cross product of `a` and `b`.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "a",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "b",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "cross2D",
+      "source": [
+        [
+          "LinearAlgebra.ts",
+          92,
+          16
+        ]
+      ],
+      "id": 23,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "2D cross product of `a` and `b`.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "a",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "b",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "divide",
+      "source": [
+        [
+          "LinearAlgebra.ts",
+          62,
+          15
+        ]
+      ],
+      "id": 15,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Divide `a` over `b`.",
+          "returns": "PtLike",
+          "returns_comment": "vector `a`\n",
+          "parameters": [
+            {
+              "name": "a",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "b",
+              "comment": "",
+              "type": "PtLike | number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "dot",
+      "source": [
+        [
+          "LinearAlgebra.ts",
+          79,
+          12
+        ]
+      ],
+      "id": 19,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Dot product of `a` and `b`.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "a",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "b",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "floor",
+      "source": [
+        [
+          "LinearAlgebra.ts",
+          135,
+          14
+        ]
+      ],
+      "id": 41,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Set `a` to its floor value in each dimension.",
+          "returns": "PtLike",
+          "returns_comment": "vector `a`\n",
+          "parameters": [
+            {
+              "name": "a",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "magnitude",
+      "source": [
+        [
+          "LinearAlgebra.ts",
+          107,
+          18
+        ]
+      ],
+      "id": 31,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Magnitude of `a`.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "a",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "map",
+      "source": [
+        [
+          "LinearAlgebra.ts",
+          202,
+          12
+        ]
+      ],
+      "id": 65,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Given a mapping function, update `a`'s value in each dimension.",
+          "returns": "PtLike",
+          "returns_comment": "vector `a`\n",
+          "parameters": [
+            {
+              "name": "a",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "fn",
+              "comment": "",
+              "type": " Fn(n:number, index:number, arr:any)",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "max",
+      "source": [
+        [
+          "LinearAlgebra.ts",
+          162,
+          12
+        ]
+      ],
+      "id": 50,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Find the max value within a vector's dimensions.",
+          "returns": "{ index:`any`, value:`any` }",
+          "returns_comment": "an object with `value` and `index` that specifies the max value and its corresponding dimension.\n",
+          "parameters": [
+            {
+              "name": "a",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "min",
+      "source": [
+        [
+          "LinearAlgebra.ts",
+          177,
+          12
+        ]
+      ],
+      "id": 56,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Find the min value within a vector's dimensions.",
+          "returns": "{ index:`any`, value:`any` }",
+          "returns_comment": "an object with `value` and `index` that specifies the min value and its corresponding dimension.\n",
+          "parameters": [
+            {
+              "name": "a",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "multiply",
+      "source": [
+        [
+          "LinearAlgebra.ts",
+          45,
+          17
+        ]
+      ],
+      "id": 11,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Multiply `b` with vector `a`.",
+          "returns": "PtLike",
+          "returns_comment": "vector `a`\n",
+          "parameters": [
+            {
+              "name": "a",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "b",
+              "comment": "",
+              "type": "PtLike | number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "round",
+      "source": [
+        [
+          "LinearAlgebra.ts",
+          153,
+          14
+        ]
+      ],
+      "id": 47,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Set `a` to its rounded value in each dimension.",
+          "returns": "PtLike",
+          "returns_comment": "vector `a`\n",
+          "parameters": [
+            {
+              "name": "a",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "subtract",
+      "source": [
+        [
+          "LinearAlgebra.ts",
+          32,
+          17
+        ]
+      ],
+      "id": 7,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Subtract `b` from vector `a`.",
+          "returns": "PtLike",
+          "returns_comment": "vector `a`\n",
+          "parameters": [
+            {
+              "name": "a",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "b",
+              "comment": "",
+              "type": "PtLike | number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "sum",
+      "source": [
+        [
+          "LinearAlgebra.ts",
+          191,
+          12
+        ]
+      ],
+      "id": 62,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Add up all the dimensions' values and returns a scalar of the sum.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "a",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "unit",
+      "source": [
+        [
+          "LinearAlgebra.ts",
+          115,
+          13
+        ]
+      ],
+      "id": 34,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Unit vector of `a`. If magnitude of `a` is already known, pass it in the second paramter to optimize calculation.",
+          "returns": "PtLike",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "a",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "magnitude",
+              "comment": "",
+              "type": "number",
+              "default": "undefined"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": []
+}

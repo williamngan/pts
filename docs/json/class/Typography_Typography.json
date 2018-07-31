@@ -1,0 +1,198 @@
+{
+  "name": "Typography",
+  "source": [
+    [
+      "Typography.ts",
+      11,
+      23
+    ]
+  ],
+  "kind": "Class",
+  "id": 2834,
+  "comment": "Typography provides helper functions to support typographic layouts. For a concrete example, see [a demo here](../demo/index.html?name=canvasform.textBox) that uses the [`CanvasForm.textBox`](#link) function.",
+  "constructor": [],
+  "accessors": [],
+  "methods": [
+    {
+      "name": "fontSizeToBox",
+      "source": [
+        [
+          "Typography.ts",
+          51,
+          22
+        ]
+      ],
+      "id": 2855,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a function to scale font size proportionally to text box size changes.",
+          "returns": " Fn(GroupLike:any)",
+          "returns_comment": "a function where input parameter is a new box, and returns the new font size value\n",
+          "parameters": [
+            {
+              "name": "box",
+              "comment": "Initial box as a Group",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "ratio",
+              "comment": "font-size change ratio. Default is 1.",
+              "type": "number",
+              "default": "1"
+            },
+            {
+              "name": "byHeight",
+              "comment": "",
+              "type": "boolean",
+              "default": "true"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "fontSizeToThreshold",
+      "source": [
+        [
+          "Typography.ts",
+          69,
+          28
+        ]
+      ],
+      "id": 2863,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a function to scale font size based on a threshold value.",
+          "returns": " Fn(a:number, b:number)",
+          "returns_comment": "a function where input parameter is the default font size and a value to compare with threshold, and returns new font size value\n",
+          "parameters": [
+            {
+              "name": "threshold",
+              "comment": "threshold value",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "direction",
+              "comment": "if negative, get a font size <= defaultSize; if positive, get a font size >= defaultSize; Default is 0 which will scale font without min or max limits.",
+              "type": "number",
+              "default": "0"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "textWidthEstimator",
+      "source": [
+        [
+          "Typography.ts",
+          20,
+          27
+        ]
+      ],
+      "id": 2835,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a heuristic text width estimate function. It will be less accurate but faster.",
+          "returns": " Fn(string:any)",
+          "returns_comment": "a function that can estimate text width\n",
+          "parameters": [
+            {
+              "name": "fn",
+              "comment": "a reference function that can measure text width accurately",
+              "type": " Fn(string:any)",
+              "default": false
+            },
+            {
+              "name": "samples",
+              "comment": "a list of string samples. Default is [\"M\", \"n\", \".\"]",
+              "type": "string[]",
+              "default": " [\"M\", \"n\", \".\"]"
+            },
+            {
+              "name": "distribution",
+              "comment": "a list of the samples' probability distribution. Default is [0.06, 0.8, 0.14].",
+              "type": "number[]",
+              "default": " [0.06, 0.8, 0.14]"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "truncate",
+      "source": [
+        [
+          "Typography.ts",
+          34,
+          17
+        ]
+      ],
+      "id": 2846,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Truncate text to fit width.",
+          "returns": "string,number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "fn",
+              "comment": "a function that can measure text width",
+              "type": " Fn(string:any)",
+              "default": false
+            },
+            {
+              "name": "str",
+              "comment": "text to truncate",
+              "type": "string",
+              "default": false
+            },
+            {
+              "name": "width",
+              "comment": "width to fit",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "tail",
+              "comment": "text to indicate overflow such as \"...\". Default is empty \"\".\n",
+              "type": "string",
+              "default": "\"\""
+            }
+          ],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": []
+}

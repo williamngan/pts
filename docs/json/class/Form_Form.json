@@ -1,0 +1,43 @@
+{
+  "name": "Form",
+  "source": [
+    [
+      "Form.ts",
+      13,
+      26
+    ]
+  ],
+  "kind": "Class",
+  "id": 2490,
+  "comment": "Form is an abstract class that represents a form that's used in a Space for expressions. Learn more about Space and Form in [this guide](../guide/Space-0500.html).",
+  "constructor": [],
+  "accessors": [
+    {
+      "name": "ready",
+      "source": [
+        [
+          "Form.ts",
+          20,
+          11
+        ]
+      ],
+      "id": 2492,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "get whether the Form has received the Space's rendering context.",
+      "getter": {
+        "type": "boolean"
+      },
+      "setter": false
+    }
+  ],
+  "methods": [],
+  "variables": [],
+  "properties": [],
+  "flags": {
+    "isAbstract": true
+  },
+  "extends": [],
+  "implements": []
+}

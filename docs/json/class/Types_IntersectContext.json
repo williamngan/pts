@@ -1,0 +1,24 @@
+{
+  "name": "IntersectContext",
+  "source": [
+    [
+      "Types.ts",
+      123,
+      28
+    ]
+  ],
+  "kind": "Typealias",
+  "id": 1274,
+  "comment": "Typescript only: IntersectContext represents a type of an object that store the intersection info.",
+  "constructor": [],
+  "accessors": [],
+  "methods": [],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": [],
+  "type_alias": [
+    "{ dist:`number`, edge:`Group`, normal:`Pt`, other:`any`, vertex:`Pt`, which:`number` }"
+  ]
+}

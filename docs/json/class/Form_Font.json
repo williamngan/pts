@@ -1,0 +1,216 @@
+{
+  "name": "Font",
+  "source": [
+    [
+      "Form.ts",
+      261,
+      17
+    ]
+  ],
+  "kind": "Class",
+  "id": 2600,
+  "comment": "Font class lets you create a specific font style with properties for its size and style. A font instance can be passed as parameter to set a form's font. For example, see [`CanvasForm.font`](#link).",
+  "constructor": [
+    {
+      "name": "constructor",
+      "source": [
+        [
+          "Form.ts",
+          266,
+          23
+        ]
+      ],
+      "id": 2606,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a font style.",
+          "returns": "Font",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "size",
+              "comment": "font size. Defaults is 12px.",
+              "type": "number",
+              "default": "12"
+            },
+            {
+              "name": "face",
+              "comment": "Optional font-family, use css-like string such as \"Helvetica\" or \"Helvetica, sans-serif\". Default is \"sans-serif\".",
+              "type": "string",
+              "default": "\"sans-serif\""
+            },
+            {
+              "name": "weight",
+              "comment": "Optional font weight such as \"bold\". Default is \"\" (none).",
+              "type": "string",
+              "default": "\"\""
+            },
+            {
+              "name": "style",
+              "comment": "Optional font style such as \"italic\". Default is \"\" (none).",
+              "type": "string",
+              "default": "\"\""
+            },
+            {
+              "name": "lineHeight",
+              "comment": "Optional line height. Default is 1.5.",
+              "type": "number",
+              "default": "1.5"
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`new Font(12, \"Frutiger, sans-serif\", \"bold\", \"underline\", 1.5)`\n"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "accessors": [
+    {
+      "name": "value",
+      "source": [
+        [
+          "Form.ts",
+          288,
+          11
+        ]
+      ],
+      "id": 2613,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Get a string representing the font style, in css-like string such as \"italic bold 12px/1.5 sans-serif\".",
+      "getter": {
+        "type": "string"
+      },
+      "setter": false
+    }
+  ],
+  "methods": [
+    {
+      "name": "toString",
+      "source": [
+        [
+          "Form.ts",
+          294,
+          10
+        ]
+      ],
+      "id": 2615,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a string representing the font style, in css-like string such as \"italic bold 12px/1.5 sans-serif\".",
+          "returns": "string",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "variables": [],
+  "properties": [
+    {
+      "name": "face",
+      "source": [
+        [
+          "Form.ts",
+          264,
+          13
+        ]
+      ],
+      "id": 2603,
+      "flags": {
+        "isPublic": true
+      },
+      "type": "face",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "lineHeight",
+      "source": [
+        [
+          "Form.ts",
+          263,
+          19
+        ]
+      ],
+      "id": 2602,
+      "flags": {
+        "isPublic": true
+      },
+      "type": "lineHeight",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "size",
+      "source": [
+        [
+          "Form.ts",
+          262,
+          13
+        ]
+      ],
+      "id": 2601,
+      "flags": {
+        "isPublic": true
+      },
+      "type": "size",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "style",
+      "source": [
+        [
+          "Form.ts",
+          265,
+          14
+        ]
+      ],
+      "id": 2604,
+      "flags": {
+        "isPublic": true
+      },
+      "type": "style",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "weight",
+      "source": [
+        [
+          "Form.ts",
+          266,
+          15
+        ]
+      ],
+      "id": 2605,
+      "flags": {
+        "isPublic": true
+      },
+      "type": "weight",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    }
+  ],
+  "flags": {},
+  "extends": [],
+  "implements": []
+}

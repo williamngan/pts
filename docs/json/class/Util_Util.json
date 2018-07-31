@@ -1,0 +1,431 @@
+{
+  "name": "Util",
+  "source": [
+    [
+      "Util.ts",
+      105,
+      17
+    ]
+  ],
+  "kind": "Class",
+  "id": 1290,
+  "comment": "Util class provides static helper functions.",
+  "constructor": [],
+  "accessors": [],
+  "methods": [
+    {
+      "name": "combine",
+      "source": [
+        [
+          "Util.ts",
+          225,
+          16
+        ]
+      ],
+      "id": 1316,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Given two arrays of objects, and a function that operate on two objects, return an array. Objects must be of same type.",
+          "returns": "T[]",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "a",
+              "comment": "an array of object, eg `[Group, Group, ...]`",
+              "type": "T[]",
+              "default": false
+            },
+            {
+              "name": "b",
+              "comment": "another array of object",
+              "type": "T[]",
+              "default": false
+            },
+            {
+              "name": "op",
+              "comment": "a function that takes two parameters (a, b) and returns an object.\n",
+              "type": " Fn(a:T, b:T)",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "flatten",
+      "source": [
+        [
+          "Util.ts",
+          213,
+          16
+        ]
+      ],
+      "id": 1312,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Flatten an array of arrays such as Group[] to a flat Array or Group.",
+          "returns": "any",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "an array, usually an array of Groups",
+              "type": "any[]",
+              "default": false
+            },
+            {
+              "name": "flattenAsGroup",
+              "comment": "a boolean to specify whether the return type should be a Group or Array. Default is `true` which returns a Group.\n",
+              "type": "boolean",
+              "default": "true"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "forRange",
+      "source": [
+        [
+          "Util.ts",
+          281,
+          17
+        ]
+      ],
+      "id": 1340,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A convenient way to step through a range. Same as `for (i=0; i<range; i++)`, except this also stores the resulting return values at each step and return them as an array.",
+          "returns": "any[]",
+          "returns_comment": "an array of returned values at each step\n",
+          "parameters": [
+            {
+              "name": "fn",
+              "comment": "a callback function `fn(index)`. If this function returns a value, it will be stored at each step",
+              "type": " Fn(index:number)",
+              "default": false
+            },
+            {
+              "name": "range",
+              "comment": "a range to step through",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "start",
+              "comment": "",
+              "type": "number",
+              "default": "0"
+            },
+            {
+              "name": "step",
+              "comment": "",
+              "type": "number",
+              "default": "1"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "getArgs",
+      "source": [
+        [
+          "Util.ts",
+          126,
+          16
+        ]
+      ],
+      "id": 1295,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Convert different kinds of parameters (arguments, array, object) into an array of numbers.",
+          "returns": "Array",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "randomInt",
+      "source": [
+        [
+          "Util.ts",
+          176,
+          18
+        ]
+      ],
+      "id": 1302,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a random integer. This can be useful for selecting a random index in an array.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "range",
+              "comment": "value range",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "start",
+              "comment": "Optional starting value\n",
+              "type": "number",
+              "default": "0"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "split",
+      "source": [
+        [
+          "Util.ts",
+          188,
+          14
+        ]
+      ],
+      "id": 1306,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Split an array into chunks of sub-array.",
+          "returns": "any[][]",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "an array",
+              "type": "any[]",
+              "default": false
+            },
+            {
+              "name": "size",
+              "comment": "chunk size, ie, number of items in a chunk",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "stride",
+              "comment": "optional parameter to \"walk through\" the array in steps",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "loopBack",
+              "comment": "if `true`, always go through the array till the end and loop back to the beginning to complete the segments if needed\n",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "stepper",
+      "source": [
+        [
+          "Util.ts",
+          262,
+          16
+        ]
+      ],
+      "id": 1329,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a convenient stepper. This returns a function which you can call repeatedly to step a counter.",
+          "returns": "",
+          "returns_comment": "a function which will increment the stepper and return its value at each call.\n",
+          "parameters": [
+            {
+              "name": "max",
+              "comment": "Maximum of the stepper range. The resulting stepper will return (min to max-1) values.",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "min",
+              "comment": "Minimum of the stepper range. Default is 0.",
+              "type": "number",
+              "default": "0"
+            },
+            {
+              "name": "stride",
+              "comment": "Stride of the step. Default is 1.",
+              "type": "number",
+              "default": "1"
+            },
+            {
+              "name": "callback",
+              "comment": "An optional callback function `fn( step )`, which will be called each time when stepper function is called.",
+              "type": " Fn(n:number)",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`let counter = stepper(100); let c = counter(); c = counter(); ...`"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "warn",
+      "source": [
+        [
+          "Util.ts",
+          160,
+          13
+        ]
+      ],
+      "id": 1298,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Send a warning message based on [`Util.warnLevel`](#link) global setting. This allows you to dynamically set whether minor errors should be thrown or printed in console or muted.",
+          "returns": "any",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "message",
+              "comment": "any error or warning message",
+              "type": "string",
+              "default": "\"error\""
+            },
+            {
+              "name": "defaultReturn",
+              "comment": "optional return value\n",
+              "type": "any",
+              "default": "undefined"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "warnLevel",
+      "source": [
+        [
+          "Util.ts",
+          114,
+          18
+        ]
+      ],
+      "id": 1292,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Set a global warning level setting. If no parameter is passed, this will return the current warn-level. See [`Util.warn`](#link).",
+          "returns": "WarningType",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "lv",
+              "comment": "a [`WarningType`](#link) option, where \"error\" will throw an error, \"warn\" will log in console, and \"mute\" will ignore the error.\n",
+              "type": "WarningType",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "zip",
+      "source": [
+        [
+          "Util.ts",
+          240,
+          12
+        ]
+      ],
+      "id": 1326,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Zip arrays. eg, `[[1,2],[3,4],[5,6]] => [[1,3,5],[2,4,6]]`.",
+          "returns": "any[]",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "arrays",
+              "comment": "an array of arrays\n",
+              "type": "Array[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": []
+}

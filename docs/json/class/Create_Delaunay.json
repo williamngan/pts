@@ -1,0 +1,2319 @@
+{
+  "name": "Delaunay",
+  "source": [
+    [
+      "Create.ts",
+      266,
+      21
+    ]
+  ],
+  "kind": "Class",
+  "id": 4232,
+  "comment": "Delaunay is a [`Group`](#link) of Pts that generates Delaunay and Voronoi tessellations. The triangulation algorithm is ported from [Pt](https://github.com/williamngan/pt).\nBased on [Paul Bourke's algorithm](http://paulbourke.net/papers/triangulate/)\nwith reference to its [javascript implementation](https://github.com/ironwallaby/delaunay) by ironwallaby.",
+  "constructor": [
+    {
+      "name": "constructor",
+      "source": [
+        [
+          "Pt.ts",
+          531,
+          23
+        ]
+      ],
+      "id": 4270,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.__constructor",
+      "signatures": [
+        {
+          "comment": "Create a Group by passing an array of [`Pt`](#link). You may also create a Group using [`Group.fromArray`](#link) or [`Group.fromPtArray`](#link).",
+          "returns": "Delaunay",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "an array of Pts\n",
+              "type": "Pt[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "accessors": [
+    {
+      "name": "id",
+      "source": [
+        [
+          "Pt.ts",
+          544,
+          8
+        ],
+        [
+          "Pt.ts",
+          545,
+          8
+        ]
+      ],
+      "id": 4273,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.id",
+      "comment": "ID string of this Group",
+      "getter": {
+        "type": "string"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "s",
+          "comment": "",
+          "type": "string",
+          "default": false
+        }
+      }
+    },
+    {
+      "name": "p1",
+      "source": [
+        [
+          "Pt.ts",
+          550,
+          8
+        ]
+      ],
+      "id": 4277,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.p1",
+      "comment": "The first Pt in this Group",
+      "getter": {
+        "type": "Pt"
+      },
+      "setter": false
+    },
+    {
+      "name": "p2",
+      "source": [
+        [
+          "Pt.ts",
+          555,
+          8
+        ]
+      ],
+      "id": 4279,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.p2",
+      "comment": "The second Pt in this Group",
+      "getter": {
+        "type": "Pt"
+      },
+      "setter": false
+    },
+    {
+      "name": "p3",
+      "source": [
+        [
+          "Pt.ts",
+          560,
+          8
+        ]
+      ],
+      "id": 4281,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.p3",
+      "comment": "The third Pt in this Group",
+      "getter": {
+        "type": "Pt"
+      },
+      "setter": false
+    },
+    {
+      "name": "p4",
+      "source": [
+        [
+          "Pt.ts",
+          565,
+          8
+        ]
+      ],
+      "id": 4283,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.p4",
+      "comment": "The forth Pt in this Group",
+      "getter": {
+        "type": "Pt"
+      },
+      "setter": false
+    },
+    {
+      "name": "q1",
+      "source": [
+        [
+          "Pt.ts",
+          570,
+          8
+        ]
+      ],
+      "id": 4285,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.q1",
+      "comment": "The last Pt in this Group",
+      "getter": {
+        "type": "Pt"
+      },
+      "setter": false
+    },
+    {
+      "name": "q2",
+      "source": [
+        [
+          "Pt.ts",
+          575,
+          8
+        ]
+      ],
+      "id": 4287,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.q2",
+      "comment": "The second-last Pt in this Group",
+      "getter": {
+        "type": "Pt"
+      },
+      "setter": false
+    },
+    {
+      "name": "q3",
+      "source": [
+        [
+          "Pt.ts",
+          580,
+          8
+        ]
+      ],
+      "id": 4289,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.q3",
+      "comment": "The third-last Pt in this Group",
+      "getter": {
+        "type": "Pt"
+      },
+      "setter": false
+    },
+    {
+      "name": "q4",
+      "source": [
+        [
+          "Pt.ts",
+          585,
+          8
+        ]
+      ],
+      "id": 4291,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.q4",
+      "comment": "The forth-last Pt in this Group",
+      "getter": {
+        "type": "Pt"
+      },
+      "setter": false
+    }
+  ],
+  "methods": [
+    {
+      "name": "$matrixAdd",
+      "source": [
+        [
+          "Pt.ts",
+          892,
+          12
+        ]
+      ],
+      "id": 4398,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.$matrixAdd",
+      "signatures": [
+        {
+          "comment": "Apply this group as a matrix and calculate matrix addition.",
+          "returns": "Group",
+          "returns_comment": "a new Group\n",
+          "parameters": [
+            {
+              "name": "g",
+              "comment": "a scalar number, an array of numeric arrays, or a group of Pt",
+              "type": "GroupLike | number[][] | number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "$matrixMultiply",
+      "source": [
+        [
+          "Pt.ts",
+          904,
+          17
+        ]
+      ],
+      "id": 4401,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.$matrixMultiply",
+      "signatures": [
+        {
+          "comment": "Apply this group as a matrix and calculate matrix multiplication.",
+          "returns": "Group",
+          "returns_comment": "If not elementwise, this will return a new  Group with M Pt, each with N dimensions (M-rows, N-columns).\n",
+          "parameters": [
+            {
+              "name": "g",
+              "comment": "a scalar number, an array of numeric arrays, or a Group of K Pts, each with N dimensions (K-rows, N-columns) -- or if transposed is true, then N Pts with K dimensions",
+              "type": "GroupLike | number",
+              "default": false
+            },
+            {
+              "name": "transposed",
+              "comment": "(Only applicable if it's not elementwise multiplication) If true, then a and b's columns should match (ie, each Pt should have the same dimensions). Default is `false`.",
+              "type": "boolean",
+              "default": "false"
+            },
+            {
+              "name": "elementwise",
+              "comment": "if true, then the multiplication is done element-wise. Default is `false`.",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "$zip",
+      "source": [
+        [
+          "Pt.ts",
+          924,
+          6
+        ]
+      ],
+      "id": 4410,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.$zip",
+      "signatures": [
+        {
+          "comment": "Zip a group of Pt. eg, [[1,2],[3,4],[5,6]] => [[1,3,5],[2,4,6]].",
+          "returns": "Group",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "defaultValue",
+              "comment": "a default value to fill if index out of bound. If not provided, it will throw an error instead.",
+              "type": "number | boolean",
+              "default": " undefined"
+            },
+            {
+              "name": "useLongest",
+              "comment": "If true, find the longest list of values in a Pt and use its length for zipping. Default is false, which uses the first item's length for zipping.\n",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "add",
+      "source": [
+        [
+          "Pt.ts",
+          855,
+          5
+        ]
+      ],
+      "id": 4386,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.add",
+      "signatures": [
+        {
+          "comment": "Add scalar or vector values to this group's Pts.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "anchorFrom",
+      "source": [
+        [
+          "Pt.ts",
+          705,
+          12
+        ]
+      ],
+      "id": 4328,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.anchorFrom",
+      "signatures": [
+        {
+          "comment": "Anchor all the Pts in this Group by its absolute position from a target Pt. (ie, add all Pt with the target anchor to get an absolute position).  All the Pts' values will be updated.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ptOrIndex",
+              "comment": "a Pt, or a numeric index to target a specific Pt in this Group\n",
+              "type": "PtLike | number",
+              "default": "0"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "anchorTo",
+      "source": [
+        [
+          "Pt.ts",
+          698,
+          10
+        ]
+      ],
+      "id": 4325,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.anchorTo",
+      "signatures": [
+        {
+          "comment": "Anchor all the Pts in this Group using a target Pt as origin. (ie, subtract all Pt with the target anchor to get a relative position). All the Pts' values will be updated.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ptOrIndex",
+              "comment": "a Pt, or a numeric index to target a specific Pt in this Group\n",
+              "type": "PtLike | number",
+              "default": "0"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "boundingBox",
+      "source": [
+        [
+          "Pt.ts",
+          689,
+          13
+        ]
+      ],
+      "id": 4323,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.boundingBox",
+      "signatures": [
+        {
+          "comment": "Find the rectangular bounding box of this group's Pts.",
+          "returns": "Group",
+          "returns_comment": "a Group of 2 Pts representing the top-left and bottom-right of the rectangle\n",
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "centroid",
+      "source": [
+        [
+          "Pt.ts",
+          680,
+          10
+        ]
+      ],
+      "id": 4321,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.centroid",
+      "signatures": [
+        {
+          "comment": "Find the centroid of this group's Pts, which is the average middle point.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "clone",
+      "source": [
+        [
+          "Pt.ts",
+          592,
+          7
+        ]
+      ],
+      "id": 4293,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.clone",
+      "signatures": [
+        {
+          "comment": "Depp clone this group and its Pts.",
+          "returns": "Group",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "delaunay",
+      "source": [
+        [
+          "Create.ts",
+          275,
+          10
+        ]
+      ],
+      "id": 4234,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Generate Delaunay triangles. This function also caches the mesh that is used to generate Voronoi tessellation in `voronoi()`. See a [Delaunay demo here](../demo/index.html?name=create.delaunay).",
+          "returns": "GroupLike[] | DelaunayShape[]",
+          "returns_comment": "an array of Groups or an array of DelaunayShapes `{i, j, k, triangle, circle}` which records the indices of the vertices, and the calculated triangles and circumcircles\n",
+          "parameters": [
+            {
+              "name": "triangleOnly",
+              "comment": "if true, returns an array of triangles in Groups, otherwise return the whole DelaunayShape",
+              "type": "boolean",
+              "default": "true"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "divide",
+      "source": [
+        [
+          "Pt.ts",
+          882,
+          8
+        ]
+      ],
+      "id": 4395,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.divide",
+      "signatures": [
+        {
+          "comment": "Divide this group's Pts over scalar or vector values (as element-wise).",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "forEachPt",
+      "source": [
+        [
+          "Pt.ts",
+          839,
+          11
+        ]
+      ],
+      "id": 4382,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.forEachPt",
+      "signatures": [
+        {
+          "comment": "Update each Pt in this Group with an existing Pt function.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ptFn",
+              "comment": "string name of an existing Pt function. Note that the function must return Pt.",
+              "type": "string",
+              "default": false
+            },
+            {
+              "name": "args",
+              "comment": "arguments for the function specified in ptFn\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "insert",
+      "source": [
+        [
+          "Pt.ts",
+          642,
+          8
+        ]
+      ],
+      "id": 4306,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.insert",
+      "signatures": [
+        {
+          "comment": "Insert a Pt into this group.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "Another group of Pts",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "index",
+              "comment": "the index position to insert into\n",
+              "type": "number",
+              "default": "0"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "interpolate",
+      "source": [
+        [
+          "Pt.ts",
+          741,
+          13
+        ]
+      ],
+      "id": 4351,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.interpolate",
+      "signatures": [
+        {
+          "comment": "Get an interpolated point on the line segments defined by this Group.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1 usually\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "lines",
+      "source": [
+        [
+          "Pt.ts",
+          674,
+          7
+        ]
+      ],
+      "id": 4319,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.lines",
+      "signatures": [
+        {
+          "comment": "Get all the line segments (ie, edges in a graph) of this group.",
+          "returns": "Group[]",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "mesh",
+      "source": [
+        [
+          "Create.ts",
+          370,
+          6
+        ]
+      ],
+      "id": 4239,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get the cached mesh. The mesh is an array of objects, each of which representing the enclosing triangles around a Pt in this Delaunay group.",
+          "returns": "DelaunayMesh",
+          "returns_comment": "an array of objects that store a series of DelaunayShapes\n",
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "moveBy",
+      "source": [
+        [
+          "Pt.ts",
+          754,
+          8
+        ]
+      ],
+      "id": 4354,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.moveBy",
+      "signatures": [
+        {
+          "comment": "Move every Pt's position by a specific amount. Same as [`Group.add`](#link).",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "moveTo",
+      "source": [
+        [
+          "Pt.ts",
+          763,
+          8
+        ]
+      ],
+      "id": 4357,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.moveTo",
+      "signatures": [
+        {
+          "comment": "Move the first Pt in this group to a specific position, and move all the other Pts correspondingly.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "multiply",
+      "source": [
+        [
+          "Pt.ts",
+          873,
+          10
+        ]
+      ],
+      "id": 4392,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.multiply",
+      "signatures": [
+        {
+          "comment": "Multiply scalar or vector values (as element-wise) with this group's Pts.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "neighborPts",
+      "source": [
+        [
+          "Create.ts",
+          381,
+          13
+        ]
+      ],
+      "id": 4241,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Given an index of a Pt in this Delaunay Group, returns its neighboring Pts in the network.",
+          "returns": "GroupLike",
+          "returns_comment": "an array of Pts\n",
+          "parameters": [
+            {
+              "name": "i",
+              "comment": "index of a Pt",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "sort",
+              "comment": "if true, sort the neighbors so that their edges will form a polygon",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "neighbors",
+      "source": [
+        [
+          "Create.ts",
+          396,
+          11
+        ]
+      ],
+      "id": 4245,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Given an index of a Pt in this Delaunay Group, returns its neighboring DelaunayShapes.",
+          "returns": "DelaunayShape[]",
+          "returns_comment": "an array of DelaunayShapes `{i, j, k, triangle, circle}`\n",
+          "parameters": [
+            {
+              "name": "i",
+              "comment": "index of a Pt",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "op",
+      "source": [
+        [
+          "Pt.ts",
+          714,
+          4
+        ]
+      ],
+      "id": 4331,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.op",
+      "signatures": [
+        {
+          "comment": "Create an operation using this Group, passing this Group into a custom function's first parameter.  See the [Op guide](../guide/Op-0400.html) for details.",
+          "returns": " Fn(rest:any[])",
+          "returns_comment": "a resulting function that takes other parameters required in `fn`\n",
+          "parameters": [
+            {
+              "name": "fn",
+              "comment": "any function that takes a Group as its first parameter",
+              "type": " Fn(g1:GroupLike, rest:any[])",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`let myOp = group.op( fn ); let result = myOp( [1,2,3] );`"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ops",
+      "source": [
+        [
+          "Pt.ts",
+          728,
+          5
+        ]
+      ],
+      "id": 4341,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.ops",
+      "signatures": [
+        {
+          "comment": "This combines a series of operations into an array. See the [Op guide](../guide/Op-0400.html) for details.",
+          "returns": " Fn(rest:any[])",
+          "returns_comment": "an array of resulting functions\n",
+          "parameters": [
+            {
+              "name": "fns",
+              "comment": "an array of functions for `op`",
+              "type": " Fn(g1:GroupLike, rest:any[])",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`let myOps = pt.ops([fn1, fn2, fn3]); let results = myOps.map( (op) => op([1,2,3]) );`"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "reflect2D",
+      "source": [
+        [
+          "Pt.ts",
+          816,
+          11
+        ]
+      ],
+      "id": 4374,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.reflect2D",
+      "signatures": [
+        {
+          "comment": "Reflect this group's Pts along a 2D line. Default anchor point is the first Pt in this group.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "line",
+              "comment": "a Group of 2 Pts that defines a line for reflection",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "axis",
+              "comment": "optional axis such as \"yz\" to define a 2D plane of reflection\n",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "remove",
+      "source": [
+        [
+          "Pt.ts",
+          654,
+          8
+        ]
+      ],
+      "id": 4310,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.remove",
+      "signatures": [
+        {
+          "comment": "Like Array's splice function, with support for negative index and a friendlier name.",
+          "returns": "Group",
+          "returns_comment": "The items that are removed.\n",
+          "parameters": [
+            {
+              "name": "index",
+              "comment": "start index, which can be negative (where -1 is at index 0, -2 at index 1, etc)",
+              "type": "number",
+              "default": "0"
+            },
+            {
+              "name": "count",
+              "comment": "number of items to remove",
+              "type": "number",
+              "default": "1"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "rotate2D",
+      "source": [
+        [
+          "Pt.ts",
+          789,
+          10
+        ]
+      ],
+      "id": 4364,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.rotate2D",
+      "signatures": [
+        {
+          "comment": "Rotate this group's Pt from an anchor point in 2D. Default anchor point is the first Pt in this group.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "angle",
+              "comment": "rotate angle",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "anchor",
+              "comment": "optional anchor point to scale from",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "axis",
+              "comment": "optional string such as \"yz\" to specify a 2D plane\n",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "scale",
+      "source": [
+        [
+          "Pt.ts",
+          775,
+          7
+        ]
+      ],
+      "id": 4360,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.scale",
+      "signatures": [
+        {
+          "comment": "Scale this group's Pts from an anchor point. Default anchor point is the first Pt in this group.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "scale",
+              "comment": "scale ratio",
+              "type": "number | number[] | PtLike",
+              "default": false
+            },
+            {
+              "name": "anchor",
+              "comment": "optional anchor point to scale from\n",
+              "type": "PtLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "segments",
+      "source": [
+        [
+          "Pt.ts",
+          666,
+          10
+        ]
+      ],
+      "id": 4314,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.segments",
+      "signatures": [
+        {
+          "comment": "Split this group into an array of sub-group segments.",
+          "returns": "Group[]",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pts_per_segment",
+              "comment": "number of Pts in each segment",
+              "type": "number",
+              "default": "2"
+            },
+            {
+              "name": "stride",
+              "comment": "forward-step to take",
+              "type": "number",
+              "default": "1"
+            },
+            {
+              "name": "loopBack",
+              "comment": "if `true`, always go through the array till the end and loop back to the beginning to complete the segments if needed\n",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "shear2D",
+      "source": [
+        [
+          "Pt.ts",
+          803,
+          9
+        ]
+      ],
+      "id": 4369,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.shear2D",
+      "signatures": [
+        {
+          "comment": "Shear this group's Pt from an anchor point in 2D. Default anchor point is the first Pt in this group.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "scale",
+              "comment": "",
+              "type": "number | number[] | PtLike",
+              "default": false
+            },
+            {
+              "name": "anchor",
+              "comment": "optional anchor point to scale from",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "axis",
+              "comment": "optional string such as \"yz\" to specify a 2D plane\n",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "sortByDimension",
+      "source": [
+        [
+          "Pt.ts",
+          829,
+          17
+        ]
+      ],
+      "id": 4378,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.sortByDimension",
+      "signatures": [
+        {
+          "comment": "Sort this group's Pts by values in a specific dimension.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "dim",
+              "comment": "dimensional index",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "desc",
+              "comment": "if true, sort descending. Default is false (ascending)\n",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "split",
+      "source": [
+        [
+          "Pt.ts",
+          631,
+          7
+        ]
+      ],
+      "id": 4301,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.split",
+      "signatures": [
+        {
+          "comment": "Split this Group into an array of sub-groups.",
+          "returns": "Group[]",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "chunkSize",
+              "comment": "number of items per sub-group",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "stride",
+              "comment": "forward-steps after each sub-group",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "loopBack",
+              "comment": "if `true`, always go through the array till the end and loop back to the beginning to complete the segments if needed\n",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "subtract",
+      "source": [
+        [
+          "Pt.ts",
+          864,
+          10
+        ]
+      ],
+      "id": 4389,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.subtract",
+      "signatures": [
+        {
+          "comment": "Subtract scalar or vector values from this group's Pts.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "toString",
+      "source": [
+        [
+          "Pt.ts",
+          932,
+          10
+        ]
+      ],
+      "id": 4414,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.toString",
+      "signatures": [
+        {
+          "comment": "Get a string representation of this group.",
+          "returns": "string",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "voronoi",
+      "source": [
+        [
+          "Create.ts",
+          356,
+          9
+        ]
+      ],
+      "id": 4237,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Generate Voronoi cells. `delaunay()` must be called before calling this function. See a [Voronoi demo here](../demo/index.html?name=create.delaunay).",
+          "returns": "Group[]",
+          "returns_comment": "an array of Groups, each of which represents a Voronoi cell\n",
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "zipSlice",
+      "source": [
+        [
+          "Pt.ts",
+          914,
+          10
+        ]
+      ],
+      "id": 4406,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.zipSlice",
+      "signatures": [
+        {
+          "comment": "Zip one slice of an array of Pt. Imagine the Pts are organized in rows, then this function will take the values in a specific column.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "index",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "defaultValue",
+              "comment": "a default value to fill if index out of bound. If not provided, it will throw an error instead.\n",
+              "type": "number | boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "concat",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          1143,
+          10
+        ],
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          1148,
+          10
+        ]
+      ],
+      "id": 4426,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Array.concat",
+      "signatures": [
+        {
+          "comment": "Combines two or more arrays.",
+          "returns": "Pt[]",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "items",
+              "comment": "Additional items to add to the end of array1.\n",
+              "type": "ConcatArray[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        },
+        {
+          "comment": "Combines two or more arrays.",
+          "returns": "Pt[]",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "items",
+              "comment": "Additional items to add to the end of array1.\n",
+              "type": "T[] | ConcatArray[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "every",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          1208,
+          9
+        ]
+      ],
+      "id": 4468,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Array.every",
+      "signatures": [
+        {
+          "comment": "Determines whether all the members of an array satisfy the specified test.",
+          "returns": "boolean",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "callbackfn",
+              "comment": "A function that accepts up to three arguments. The every method calls the callbackfn function for each element in array1 until the callbackfn returns false, or until the end of the array.",
+              "type": " Fn(value:Pt, index:number, array:Pt[])",
+              "default": false
+            },
+            {
+              "name": "thisArg",
+              "comment": "An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.\n",
+              "type": "any",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "filter",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          1232,
+          10
+        ],
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          1238,
+          10
+        ]
+      ],
+      "id": 4505,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Array.filter",
+      "signatures": [
+        {
+          "comment": "Returns the elements of an array that meet the condition specified in a callback function.",
+          "returns": "S[]",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "callbackfn",
+              "comment": "A function that accepts up to three arguments. The filter method calls the callbackfn function one time for each element in the array.",
+              "type": " Fn(value:Pt, index:number, array:Pt[])",
+              "default": false
+            },
+            {
+              "name": "thisArg",
+              "comment": "An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.\n",
+              "type": "any",
+              "default": false
+            }
+          ],
+          "tags": []
+        },
+        {
+          "comment": "Returns the elements of an array that meet the condition specified in a callback function.",
+          "returns": "Pt[]",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "callbackfn",
+              "comment": "A function that accepts up to three arguments. The filter method calls the callbackfn function one time for each element in the array.",
+              "type": " Fn(value:Pt, index:number, array:Pt[])",
+              "default": false
+            },
+            {
+              "name": "thisArg",
+              "comment": "An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.\n",
+              "type": "any",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "forEach",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          1220,
+          11
+        ]
+      ],
+      "id": 4486,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Array.forEach",
+      "signatures": [
+        {
+          "comment": "Performs the specified action for each element in an array.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "callbackfn",
+              "comment": "A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the array.",
+              "type": " Fn(value:Pt, index:number, array:Pt[])",
+              "default": false
+            },
+            {
+              "name": "thisArg",
+              "comment": "An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.\n",
+              "type": "any",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "fromArray",
+      "source": [
+        [
+          "Pt.ts",
+          606,
+          18
+        ]
+      ],
+      "id": 4295,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Group.fromArray",
+      "signatures": [
+        {
+          "comment": "Convert an array of numeric arrays into a Group of Pts.",
+          "returns": "Group",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "list",
+              "comment": "an array of numeric arrays",
+              "type": "PtLike[]",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`Group.fromArray( [[1,2], [3,4], [5,6]] )`\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "fromPtArray",
+      "source": [
+        [
+          "Pt.ts",
+          620,
+          20
+        ]
+      ],
+      "id": 4298,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Group.fromPtArray",
+      "signatures": [
+        {
+          "comment": "Convert an array of Pts into a Group.",
+          "returns": "Group",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "list",
+              "comment": "an array of Pts\n",
+              "type": "GroupLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "indexOf",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          1196,
+          11
+        ]
+      ],
+      "id": 4460,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Array.indexOf",
+      "signatures": [
+        {
+          "comment": "Returns the index of the first occurrence of a value in an array.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "searchElement",
+              "comment": "The value to locate in the array.",
+              "type": "Pt",
+              "default": false
+            },
+            {
+              "name": "fromIndex",
+              "comment": "The array index at which to begin the search. If fromIndex is omitted, the search starts at index 0.\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "join",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          1153,
+          8
+        ]
+      ],
+      "id": 4431,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Array.join",
+      "signatures": [
+        {
+          "comment": "Adds all the elements of an array separated by the specified separator string.",
+          "returns": "string",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "separator",
+              "comment": "A string used to separate one element of an array from the next in the resulting String. If omitted, the array elements are separated with a comma.\n",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "lastIndexOf",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          1202,
+          15
+        ]
+      ],
+      "id": 4464,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Array.lastIndexOf",
+      "signatures": [
+        {
+          "comment": "Returns the index of the last occurrence of a specified value in an array.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "searchElement",
+              "comment": "The value to locate in the array.",
+              "type": "Pt",
+              "default": false
+            },
+            {
+              "name": "fromIndex",
+              "comment": "The array index at which to begin the search. If fromIndex is omitted, the search starts at the last index in the array.\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "map",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          1226,
+          7
+        ]
+      ],
+      "id": 4495,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Array.map",
+      "signatures": [
+        {
+          "comment": "Calls a defined callback function on each element of an array, and returns an array that contains the results.",
+          "returns": "U[]",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "callbackfn",
+              "comment": "A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.",
+              "type": " Fn(value:Pt, index:number, array:Pt[])",
+              "default": false
+            },
+            {
+              "name": "thisArg",
+              "comment": "An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.\n",
+              "type": "any",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "pop",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          1138,
+          7
+        ]
+      ],
+      "id": 4424,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Array.pop",
+      "signatures": [
+        {
+          "comment": "Removes the last element from an array and returns it.",
+          "returns": "Pt | undefined",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "push",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          1134,
+          8
+        ]
+      ],
+      "id": 4421,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Array.push",
+      "signatures": [
+        {
+          "comment": "Appends new elements to an array, and returns the new length of the array.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "items",
+              "comment": "New elements of the Array.\n",
+              "type": "Pt[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "reduce",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          1244,
+          10
+        ],
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          1245,
+          10
+        ],
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          1251,
+          10
+        ]
+      ],
+      "id": 4523,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Array.reduce",
+      "signatures": [
+        {
+          "comment": "Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "callbackfn",
+              "comment": "A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.",
+              "type": " Fn(previousValue:Pt, currentValue:Pt, currentIndex:number, array:Pt[])",
+              "default": false
+            }
+          ],
+          "tags": []
+        },
+        {
+          "comment": "",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "callbackfn",
+              "comment": "",
+              "type": " Fn(previousValue:Pt, currentValue:Pt, currentIndex:number, array:Pt[])",
+              "default": false
+            },
+            {
+              "name": "initialValue",
+              "comment": "",
+              "type": "Pt",
+              "default": false
+            }
+          ],
+          "tags": []
+        },
+        {
+          "comment": "Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.",
+          "returns": "U",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "callbackfn",
+              "comment": "A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.",
+              "type": " Fn(previousValue:U, currentValue:Pt, currentIndex:number, array:Pt[])",
+              "default": false
+            },
+            {
+              "name": "initialValue",
+              "comment": "If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.\n",
+              "type": "U",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "reduceRight",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          1257,
+          15
+        ],
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          1258,
+          15
+        ],
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          1264,
+          15
+        ]
+      ],
+      "id": 4551,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Array.reduceRight",
+      "signatures": [
+        {
+          "comment": "Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "callbackfn",
+              "comment": "A function that accepts up to four arguments. The reduceRight method calls the callbackfn function one time for each element in the array.",
+              "type": " Fn(previousValue:Pt, currentValue:Pt, currentIndex:number, array:Pt[])",
+              "default": false
+            }
+          ],
+          "tags": []
+        },
+        {
+          "comment": "",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "callbackfn",
+              "comment": "",
+              "type": " Fn(previousValue:Pt, currentValue:Pt, currentIndex:number, array:Pt[])",
+              "default": false
+            },
+            {
+              "name": "initialValue",
+              "comment": "",
+              "type": "Pt",
+              "default": false
+            }
+          ],
+          "tags": []
+        },
+        {
+          "comment": "Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.",
+          "returns": "U",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "callbackfn",
+              "comment": "A function that accepts up to four arguments. The reduceRight method calls the callbackfn function one time for each element in the array.",
+              "type": " Fn(previousValue:U, currentValue:Pt, currentIndex:number, array:Pt[])",
+              "default": false
+            },
+            {
+              "name": "initialValue",
+              "comment": "If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.\n",
+              "type": "U",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "reverse",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          1157,
+          11
+        ]
+      ],
+      "id": 4434,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Array.reverse",
+      "signatures": [
+        {
+          "comment": "Reverses the elements in an Array.",
+          "returns": "Pt[]",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "shift",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          1161,
+          9
+        ]
+      ],
+      "id": 4436,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Array.shift",
+      "signatures": [
+        {
+          "comment": "Removes the first element from an array and returns it.",
+          "returns": "Pt | undefined",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "slice",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          1167,
+          9
+        ]
+      ],
+      "id": 4438,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Array.slice",
+      "signatures": [
+        {
+          "comment": "Returns a section of an array.",
+          "returns": "Pt[]",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "start",
+              "comment": "The beginning of the specified portion of the array.",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "end",
+              "comment": "The end of the specified portion of the array.\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "some",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          1214,
+          8
+        ]
+      ],
+      "id": 4477,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Array.some",
+      "signatures": [
+        {
+          "comment": "Determines whether the specified callback function returns true for any element of an array.",
+          "returns": "boolean",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "callbackfn",
+              "comment": "A function that accepts up to three arguments. The some method calls the callbackfn function for each element in array1 until the callbackfn returns true, or until the end of the array.",
+              "type": " Fn(value:Pt, index:number, array:Pt[])",
+              "default": false
+            },
+            {
+              "name": "thisArg",
+              "comment": "An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.\n",
+              "type": "any",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "sort",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          1172,
+          8
+        ]
+      ],
+      "id": 4442,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Array.sort",
+      "signatures": [
+        {
+          "comment": "Sorts an array.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "compareFn",
+              "comment": "The name of the function used to determine the order of the elements. If omitted, the elements are sorted in ascending, ASCII character order.\n",
+              "type": " Fn(a:Pt, b:Pt)",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "splice",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          1178,
+          10
+        ],
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          1185,
+          10
+        ]
+      ],
+      "id": 4449,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Array.splice",
+      "signatures": [
+        {
+          "comment": "Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.",
+          "returns": "Pt[]",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "start",
+              "comment": "The zero-based location in the array from which to start removing elements.",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "deleteCount",
+              "comment": "The number of elements to remove.\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        },
+        {
+          "comment": "Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.",
+          "returns": "Pt[]",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "start",
+              "comment": "The zero-based location in the array from which to start removing elements.",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "deleteCount",
+              "comment": "The number of elements to remove.",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "items",
+              "comment": "Elements to insert into the array in place of the deleted elements.\n",
+              "type": "Pt[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "toLocaleString",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          1129,
+          18
+        ]
+      ],
+      "id": 4419,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Array.toLocaleString",
+      "signatures": [
+        {
+          "comment": "Returns a string representation of an array. The elements are converted to string using thier toLocalString methods.",
+          "returns": "string",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "toString",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          1125,
+          12
+        ]
+      ],
+      "id": 4417,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Array.toString",
+      "signatures": [
+        {
+          "comment": "Returns a string representation of an array.",
+          "returns": "string",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "unshift",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          1190,
+          11
+        ]
+      ],
+      "id": 4457,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Array.unshift",
+      "signatures": [
+        {
+          "comment": "Inserts new elements at the start of an array.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "items",
+              "comment": "Elements to insert at the start of the Array.\n",
+              "type": "Pt[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "variables": [],
+  "properties": [
+    {
+      "name": "length",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
+          1121,
+          10
+        ]
+      ],
+      "id": 4416,
+      "flags": {
+        "isStatic": true
+      },
+      "type": "length",
+      "overrides": false,
+      "inherits": "Array.length",
+      "comment": "Gets or sets the length of the array. This is a number one higher than the highest element defined in an array."
+    }
+  ],
+  "flags": {},
+  "extends": [
+    "Group"
+  ],
+  "implements": []
+}

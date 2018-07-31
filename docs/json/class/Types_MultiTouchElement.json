@@ -1,0 +1,94 @@
+{
+  "name": "MultiTouchElement",
+  "source": [
+    [
+      "Types.ts",
+      72,
+      34
+    ]
+  ],
+  "kind": "Interface",
+  "id": 972,
+  "comment": "Typescript only: MultiTouchElement is an interface that represents an element that can handle touch events.",
+  "constructor": [],
+  "accessors": [],
+  "methods": [
+    {
+      "name": "addEventListener",
+      "source": [
+        [
+          "Types.ts",
+          73,
+          18
+        ]
+      ],
+      "id": 973,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "any",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "evt",
+              "comment": "",
+              "type": "any",
+              "default": false
+            },
+            {
+              "name": "callback",
+              "comment": "",
+              "type": "Function",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "removeEventListener",
+      "source": [
+        [
+          "Types.ts",
+          74,
+          21
+        ]
+      ],
+      "id": 977,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "any",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "evt",
+              "comment": "",
+              "type": "any",
+              "default": false
+            },
+            {
+              "name": "callback",
+              "comment": "",
+              "type": "Function",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": []
+}

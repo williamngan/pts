@@ -1,0 +1,26 @@
+{
+  "name": "WarningType",
+  "source": [
+    [
+      "Types.ts",
+      142,
+      23
+    ]
+  ],
+  "kind": "Typealias",
+  "id": 1288,
+  "comment": "WarningType specifies a level of warning for [`Util.warnLevel`](#link).",
+  "constructor": [],
+  "accessors": [],
+  "methods": [],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": [],
+  "type_alias": [
+    "error",
+    "warn",
+    "mute"
+  ]
+}

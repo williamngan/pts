@@ -1,0 +1,895 @@
+{
+  "name": "MultiTouchSpace",
+  "source": [
+    [
+      "Space.ts",
+      279,
+      37
+    ]
+  ],
+  "kind": "Class",
+  "id": 2706,
+  "comment": "MultiTouchSpace is an abstract class that extends [`Space`](#link) to support user interactions via touch events.\nIt's extended through subclasses such as [`CanvasSpace`](#link) and [`SVGSpace`](#link).",
+  "constructor": [],
+  "accessors": [
+    {
+      "name": "center",
+      "source": [
+        [
+          "Space.ts",
+          236,
+          12
+        ]
+      ],
+      "id": 2819,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Space.center",
+      "comment": "The center of this space's bounding box.",
+      "getter": {
+        "type": "Pt"
+      },
+      "setter": false
+    },
+    {
+      "name": "customRendering",
+      "source": [
+        [
+          "Space.ts",
+          205,
+          21
+        ],
+        [
+          "Space.ts",
+          206,
+          21
+        ]
+      ],
+      "id": 2799,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Space.customRendering",
+      "comment": "Set a custom rendering function `fn(graphics_context, canvas_space)` if needed.",
+      "getter": {
+        "type": ""
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "f",
+          "comment": "",
+          "type": " Fn(context:any, self:Space)",
+          "default": false
+        }
+      }
+    },
+    {
+      "name": "height",
+      "source": [
+        [
+          "Space.ts",
+          248,
+          12
+        ]
+      ],
+      "id": 2823,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Space.height",
+      "comment": "The height of this space's bounding box.",
+      "getter": {
+        "type": "number"
+      },
+      "setter": false
+    },
+    {
+      "name": "innerBound",
+      "source": [
+        [
+          "Space.ts",
+          224,
+          23
+        ]
+      ],
+      "id": 2815,
+      "flags": {
+        "isPublic": true
+      },
+      "overrides": false,
+      "inherits": "Space.innerBound",
+      "comment": "The inner bounding box of the space, excluding its positions.",
+      "getter": {
+        "type": "Bound"
+      },
+      "setter": false
+    },
+    {
+      "name": "isPlaying",
+      "source": [
+        [
+          "Space.ts",
+          212,
+          15
+        ]
+      ],
+      "id": 2811,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Space.isPlaying",
+      "comment": "Indicate whether the animation is playing.",
+      "getter": {
+        "type": "boolean"
+      },
+      "setter": false
+    },
+    {
+      "name": "outerBound",
+      "source": [
+        [
+          "Space.ts",
+          218,
+          16
+        ]
+      ],
+      "id": 2813,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Space.outerBound",
+      "comment": "The outer bounding box which includes its positions.",
+      "getter": {
+        "type": "Bound"
+      },
+      "setter": false
+    },
+    {
+      "name": "pointer",
+      "source": [
+        [
+          "Space.ts",
+          294,
+          20
+        ]
+      ],
+      "id": 2712,
+      "flags": {
+        "isPublic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "comment": "Get the mouse or touch pointer that stores the last action.",
+      "getter": {
+        "type": "Pt"
+      },
+      "setter": false
+    },
+    {
+      "name": "size",
+      "source": [
+        [
+          "Space.ts",
+          230,
+          10
+        ]
+      ],
+      "id": 2817,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Space.size",
+      "comment": "The size of this space's bounding box.",
+      "getter": {
+        "type": "Pt"
+      },
+      "setter": false
+    },
+    {
+      "name": "width",
+      "source": [
+        [
+          "Space.ts",
+          242,
+          11
+        ]
+      ],
+      "id": 2821,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Space.width",
+      "comment": "The width of this space's bounding box.",
+      "getter": {
+        "type": "number"
+      },
+      "setter": false
+    }
+  ],
+  "methods": [
+    {
+      "name": "add",
+      "source": [
+        [
+          "Space.ts",
+          56,
+          5
+        ]
+      ],
+      "id": 2769,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Space.add",
+      "signatures": [
+        {
+          "comment": "Add an [`IPlayer`](#link) object or a [`AnimateCallbackFn`](#link) callback function to handle events in this Space. An IPlayer is an object with the following callback functions:\n- required: `animate: fn( time, ftime, space )`\n- optional: `start: fn(bound, space)`\n- optional: `resize: fn( size, event )`\n- optional: `action: fn( type, x, y, event )`\nSubclasses of Space may define other callback functions.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "p",
+              "comment": "",
+              "type": "IPlayer | AnimateCallbackFn",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "bindCanvas",
+      "source": [
+        [
+          "Space.ts",
+          305,
+          12
+        ]
+      ],
+      "id": 2714,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Bind event listener in canvas element. You can also use [`MultiTouchSpace.bindMouse`](#link) or [`MultiTouchSpace.bindTouch`](#link) to bind mouse or touch events conveniently.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "evt",
+              "comment": "an event string such as \"mousedown\"",
+              "type": "string",
+              "default": false
+            },
+            {
+              "name": "callback",
+              "comment": "callback function for this event\n",
+              "type": "EventListener",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "bindMouse",
+      "source": [
+        [
+          "Space.ts",
+          327,
+          11
+        ]
+      ],
+      "id": 2722,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A convenient method to bind (or unbind) all mouse events in canvas element.\nAll [`IPlayer`](#link) objects added to this space that implement an `action` callback property will receive mouse event callbacks.\nThe types of mouse actions are defined by [`UIPointerActions`](#link) constants: \"up\", \"down\", \"move\", \"drag\", \"drop\", \"over\", and \"out\".",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "_bind",
+              "comment": "a boolean value to bind mouse events if set to `true`. If `false`, all mouse events will be unbound. Default is true.",
+              "type": "boolean",
+              "default": "true"
+            }
+          ],
+          "tags": [
+            {
+              "tag": "see",
+              "text": "[`Space.add`](#link)\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "bindTouch",
+      "source": [
+        [
+          "Space.ts",
+          354,
+          11
+        ]
+      ],
+      "id": 2725,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A convenient method to bind (or unbind) all touch events in canvas element.\nAll [`IPlayer`](#link) objects added to this space that implement an `action` callback property will receive touch event callbacks.\nThe types of mouse actions are defined by [`UIPointerActions`](#link) constants: \"up\", \"down\", \"move\", \"drag\", \"drop\", \"over\", and \"out\".",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "_bind",
+              "comment": "a boolean value to bind touch events if set to `true`. If `false`, all mouse events will be unbound. Default is true.",
+              "type": "boolean",
+              "default": "true"
+            }
+          ],
+          "tags": [
+            {
+              "tag": "see",
+              "text": "[`Space.add`](#link)\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "clear",
+      "source": [
+        [
+          "Space.ts",
+          262,
+          16
+        ]
+      ],
+      "id": 2829,
+      "flags": {
+        "isAbstract": true
+      },
+      "overrides": false,
+      "inherits": "Space.clear",
+      "signatures": [
+        {
+          "comment": "clear all contents in the space. To be implemented in subclasses.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "getForm",
+      "source": [
+        [
+          "Space.ts",
+          268,
+          18
+        ]
+      ],
+      "id": 2831,
+      "flags": {
+        "isAbstract": true
+      },
+      "overrides": false,
+      "inherits": "Space.getForm",
+      "signatures": [
+        {
+          "comment": "Get a default form for drawing in this space. To be implemented in subclasses.",
+          "returns": "Form",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "pause",
+      "source": [
+        [
+          "Space.ts",
+          157,
+          7
+        ]
+      ],
+      "id": 2785,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Space.pause",
+      "signatures": [
+        {
+          "comment": "Pause the animation.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "toggle",
+              "comment": "a boolean value to set if this function call should be a toggle (between pause and resume)\n",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "play",
+      "source": [
+        [
+          "Space.ts",
+          97,
+          6
+        ]
+      ],
+      "id": 2777,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Space.play",
+      "signatures": [
+        {
+          "comment": "Main play loop. This implements `window.requestAnimationFrame` and calls it recursively.\nYou may override this `play()` function to implemenet your own animation loop.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "time",
+              "comment": "current time\n",
+              "type": "number",
+              "default": "0"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "playItems",
+      "source": [
+        [
+          "Space.ts",
+          131,
+          21
+        ]
+      ],
+      "id": 2782,
+      "flags": {
+        "isProtected": true
+      },
+      "overrides": false,
+      "inherits": "Space.playItems",
+      "signatures": [
+        {
+          "comment": "Main animate function. This calls all the items to perform.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "time",
+              "comment": "current time\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "playOnce",
+      "source": [
+        [
+          "Space.ts",
+          186,
+          10
+        ]
+      ],
+      "id": 2793,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Space.playOnce",
+      "signatures": [
+        {
+          "comment": "Play animation loop, and then stop after `duration` time has passed.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "duration",
+              "comment": "a value in millisecond to specify a time period to play before stopping, or `-1` to play forever\n",
+              "type": "number",
+              "default": "5000"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "refresh",
+      "source": [
+        [
+          "Space.ts",
+          41,
+          9
+        ]
+      ],
+      "id": 2766,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Space.refresh",
+      "signatures": [
+        {
+          "comment": "Set whether the rendering should be repainted on each frame.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "b",
+              "comment": "a boolean value to set whether to repaint each frame\n",
+              "type": "boolean",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "remove",
+      "source": [
+        [
+          "Space.ts",
+          77,
+          8
+        ]
+      ],
+      "id": 2772,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Space.remove",
+      "signatures": [
+        {
+          "comment": "Remove a player from this Space.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "player",
+              "comment": "an IPlayer that has an `animateID` property\n",
+              "type": "IPlayer",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "removeAll",
+      "source": [
+        [
+          "Space.ts",
+          86,
+          11
+        ]
+      ],
+      "id": 2775,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Space.removeAll",
+      "signatures": [
+        {
+          "comment": "Remove all players from this Space.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "render",
+      "source": [
+        [
+          "Space.ts",
+          196,
+          18
+        ]
+      ],
+      "id": 2796,
+      "flags": {
+        "isProtected": true
+      },
+      "overrides": false,
+      "inherits": "Space.render",
+      "signatures": [
+        {
+          "comment": "Custom rendering.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "context",
+              "comment": "rendering context\n",
+              "type": "any",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "replay",
+      "source": [
+        [
+          "Space.ts",
+          121,
+          8
+        ]
+      ],
+      "id": 2780,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Space.replay",
+      "signatures": [
+        {
+          "comment": "Replay the animation after [`Space.stop`](#link). This resets the end-time counter.\nYou may also use [`Space.pause`](#link) and [`resume`](#link) for temporary pause.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "resize",
+      "source": [
+        [
+          "Space.ts",
+          256,
+          17
+        ]
+      ],
+      "id": 2825,
+      "flags": {
+        "isAbstract": true
+      },
+      "overrides": false,
+      "inherits": "Space.resize",
+      "signatures": [
+        {
+          "comment": "Resize the space. To be implemented in subclasses.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "b",
+              "comment": "",
+              "type": "IPt",
+              "default": false
+            },
+            {
+              "name": "evt",
+              "comment": "",
+              "type": "Event",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "resume",
+      "source": [
+        [
+          "Space.ts",
+          166,
+          8
+        ]
+      ],
+      "id": 2788,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Space.resume",
+      "signatures": [
+        {
+          "comment": "Resume the pause animation.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "stop",
+      "source": [
+        [
+          "Space.ts",
+          176,
+          6
+        ]
+      ],
+      "id": 2790,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Space.stop",
+      "signatures": [
+        {
+          "comment": "Specify when the animation should stop: immediately, after a time period, or never stops.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "t",
+              "comment": "a value in millisecond to specify a time period to play before stopping, or `-1` to play forever, or `0` to end immediately. Default is 0 which will stop the animation immediately.\n",
+              "type": "number",
+              "default": "0"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "touchesToPoints",
+      "source": [
+        [
+          "Space.ts",
+          380,
+          17
+        ]
+      ],
+      "id": 2728,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A convenient method to convert the touch points in a touch event to an array of Pts.",
+          "returns": "Pt[]",
+          "returns_comment": "an array of Pt, whose origin position (0,0) is offset to the top-left of this space\n",
+          "parameters": [
+            {
+              "name": "evt",
+              "comment": "a touch event which contains touches, changedTouches, and targetTouches list",
+              "type": "TouchEvent",
+              "default": false
+            },
+            {
+              "name": "which",
+              "comment": "a string to select a touches list: \"touches\", \"changedTouches\", or \"targetTouches\". Default is \"touches\"",
+              "type": "TouchPointsKey",
+              "default": "\"touches\""
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "unbindCanvas",
+      "source": [
+        [
+          "Space.ts",
+          315,
+          14
+        ]
+      ],
+      "id": 2718,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Unbind a callback from the event listener.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "evt",
+              "comment": "an event string such as \"mousedown\"",
+              "type": "string",
+              "default": false
+            },
+            {
+              "name": "callback",
+              "comment": "callback function to unbind\n",
+              "type": "EventListener",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "variables": [],
+  "properties": [
+    {
+      "name": "bound",
+      "source": [
+        [
+          "Space.ts",
+          18,
+          17
+        ]
+      ],
+      "id": 2755,
+      "flags": {
+        "isProtected": true
+      },
+      "type": "bound",
+      "overrides": false,
+      "inherits": "Space.bound",
+      "comment": ""
+    },
+    {
+      "name": "id",
+      "source": [
+        [
+          "Space.ts",
+          17,
+          4
+        ]
+      ],
+      "id": 2754,
+      "flags": {},
+      "type": "id",
+      "overrides": false,
+      "inherits": "Space.id",
+      "comment": ""
+    },
+    {
+      "name": "playerCount",
+      "source": [
+        [
+          "Space.ts",
+          22,
+          23
+        ]
+      ],
+      "id": 2761,
+      "flags": {
+        "isProtected": true
+      },
+      "type": "playerCount",
+      "overrides": false,
+      "inherits": "Space.playerCount",
+      "comment": ""
+    },
+    {
+      "name": "players",
+      "source": [
+        [
+          "Space.ts",
+          21,
+          19
+        ]
+      ],
+      "id": 2760,
+      "flags": {
+        "isProtected": true
+      },
+      "type": "players",
+      "overrides": false,
+      "inherits": "Space.players",
+      "comment": ""
+    }
+  ],
+  "flags": {
+    "isAbstract": true
+  },
+  "extends": [
+    "Space"
+  ],
+  "implements": []
+}

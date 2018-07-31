@@ -1,0 +1,481 @@
+{
+  "name": "Num",
+  "source": [
+    [
+      "Num.ts",
+      13,
+      16
+    ]
+  ],
+  "kind": "Class",
+  "id": 140,
+  "comment": "Num class provides static helper functions for basic numeric operations.",
+  "constructor": [],
+  "accessors": [],
+  "methods": [
+    {
+      "name": "average",
+      "source": [
+        [
+          "Num.ts",
+          120,
+          16
+        ]
+      ],
+      "id": 178,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Average a group of numeric arrays",
+          "returns": "Pt",
+          "returns_comment": "a Pt of averages\n",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "an array of numeric arrays",
+              "type": "GroupLike | number[][]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "boundValue",
+      "source": [
+        [
+          "Num.ts",
+          55,
+          19
+        ]
+      ],
+      "id": 156,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Different from [`Num.clamp`](#link) in that the value out-of-bound will be \"looped back\" to the other end.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "val",
+              "comment": "value to bound",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "min",
+              "comment": "min value",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "max",
+              "comment": "max value",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`boundValue(361, 0, 360)` will return 1\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "clamp",
+      "source": [
+        [
+          "Num.ts",
+          43,
+          14
+        ]
+      ],
+      "id": 151,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Clamp values between min and max.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "val",
+              "comment": "value to clamp",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "min",
+              "comment": "min value",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "max",
+              "comment": "max value\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "cycle",
+      "source": [
+        [
+          "Num.ts",
+          130,
+          14
+        ]
+      ],
+      "id": 181,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Given a value between 0 to 1, returns a value that cycles between 0 -> 1 -> 0 using sine method.",
+          "returns": "number",
+          "returns_comment": "a value between 0 to 1\n",
+          "parameters": [
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "equals",
+      "source": [
+        [
+          "Num.ts",
+          21,
+          15
+        ]
+      ],
+      "id": 141,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Check if two numbers are equal or almost equal within a threshold.",
+          "returns": "boolean",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "a",
+              "comment": "number a",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "b",
+              "comment": "number b",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "threshold",
+              "comment": "threshold value that specifies the minimum difference within which the two numbers are considered equal\n",
+              "type": "number",
+              "default": "0.00001"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "lerp",
+      "source": [
+        [
+          "Num.ts",
+          32,
+          13
+        ]
+      ],
+      "id": 146,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Calculate linear interpolation between 2 values.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "a",
+              "comment": "start value",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "b",
+              "comment": "end value",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "t",
+              "comment": "an interpolation value, usually between 0 to 1\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "mapToRange",
+      "source": [
+        [
+          "Num.ts",
+          144,
+          19
+        ]
+      ],
+      "id": 184,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Map a value from one range to another.",
+          "returns": "number",
+          "returns_comment": "a remapped value in the second range\n",
+          "parameters": [
+            {
+              "name": "n",
+              "comment": "a value in the first range",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "currA",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "currB",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "targetA",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "targetB",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "normalizeValue",
+      "source": [
+        [
+          "Num.ts",
+          94,
+          23
+        ]
+      ],
+      "id": 170,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Normalize a value within a range.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "n",
+              "comment": "the value to normalize",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "a",
+              "comment": "range value 1",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "b",
+              "comment": "range value 1\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "randomRange",
+      "source": [
+        [
+          "Num.ts",
+          82,
+          20
+        ]
+      ],
+      "id": 166,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a random number within a range.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "a",
+              "comment": "range value 1",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "b",
+              "comment": "range value 2\n",
+              "type": "number",
+              "default": "0"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "sum",
+      "source": [
+        [
+          "Num.ts",
+          106,
+          12
+        ]
+      ],
+      "id": 175,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Sum a group of numeric arrays.",
+          "returns": "Pt",
+          "returns_comment": "a Pt of the dimensional sums\n",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "an array of numeric arrays",
+              "type": "GroupLike | number[][]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "within",
+      "source": [
+        [
+          "Num.ts",
+          72,
+          15
+        ]
+      ],
+      "id": 161,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Check if a value is within two other values",
+          "returns": "boolean",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "p",
+              "comment": "value to check",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "a",
+              "comment": "first bounding value",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "b",
+              "comment": "second bounding value\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": []
+}

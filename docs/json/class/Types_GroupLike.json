@@ -1,0 +1,25 @@
+{
+  "name": "GroupLike",
+  "source": [
+    [
+      "Types.ts",
+      25,
+      21
+    ]
+  ],
+  "kind": "Typealias",
+  "id": 1243,
+  "comment": "Typescript only: GroupLike is an alias of types that can represent a group of points.",
+  "constructor": [],
+  "accessors": [],
+  "methods": [],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": [],
+  "type_alias": [
+    "Group",
+    "Pt[]"
+  ]
+}

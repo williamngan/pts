@@ -1,0 +1,92 @@
+{
+  "Canvas": [
+    "CanvasForm",
+    "CanvasSpace"
+  ],
+  "Color": [
+    "Color"
+  ],
+  "Create": [
+    "Create",
+    "Delaunay",
+    "Noise"
+  ],
+  "Dom": [
+    "DOMSpace",
+    "HTMLForm",
+    "HTMLSpace"
+  ],
+  "Form": [
+    "Font",
+    "Form",
+    "VisualForm"
+  ],
+  "LinearAlgebra": [
+    "Mat",
+    "Vec"
+  ],
+  "Num": [
+    "Geom",
+    "Num",
+    "Range",
+    "Shaping"
+  ],
+  "Op": [
+    "Circle",
+    "Curve",
+    "Line",
+    "Polygon",
+    "Rectangle",
+    "Triangle"
+  ],
+  "Physics": [
+    "Body",
+    "Particle",
+    "World"
+  ],
+  "Pt": [
+    "Bound",
+    "Group",
+    "Pt"
+  ],
+  "Space": [
+    "MultiTouchSpace",
+    "Space"
+  ],
+  "Svg": [
+    "SVGForm",
+    "SVGSpace"
+  ],
+  "Types": [
+    "IPlayer",
+    "IPt",
+    "ISpacePlayers",
+    "ITimer",
+    "MultiTouchElement",
+    "PtsCanvasRenderingContext2D",
+    "AnimateCallbackFn",
+    "ColorType",
+    "DOMFormContext",
+    "DelaunayMesh",
+    "DelaunayShape",
+    "GroupLike",
+    "IntersectContext",
+    "PtLike",
+    "TouchPointsKey",
+    "UIHandler",
+    "WarningType"
+  ],
+  "Typography": [
+    "Typography"
+  ],
+  "UI": [
+    "UIShape",
+    "UI",
+    "UIButton",
+    "UIPointerActions"
+  ],
+  "Util": [
+    "Util",
+    "Const"
+  ]
+}

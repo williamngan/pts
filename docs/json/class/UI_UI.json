@@ -1,0 +1,299 @@
+{
+  "name": "UI",
+  "source": [
+    [
+      "UI.ts",
+      31,
+      15
+    ]
+  ],
+  "kind": "Class",
+  "id": 826,
+  "comment": "**[Experimental]** An abstract class that represents an UI element. It wraps a [`Group`](#link) and supports UI event handling.\nExtend this class to create custom UI elements.",
+  "constructor": [
+    {
+      "name": "constructor",
+      "source": [
+        [
+          "UI.ts",
+          37,
+          41
+        ]
+      ],
+      "id": 838,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create an UI element.",
+          "returns": "UI",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "group",
+              "comment": "a Group that defines the UI's appearance",
+              "type": "Group",
+              "default": false
+            },
+            {
+              "name": "shape",
+              "comment": "specifies the shape of the Group",
+              "type": "UIShape",
+              "default": false
+            },
+            {
+              "name": "states",
+              "comment": "Optional default state object",
+              "type": "__type",
+              "default": false
+            },
+            {
+              "name": "id",
+              "comment": "Optional id string\n",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "accessors": [
+    {
+      "name": "id",
+      "source": [
+        [
+          "UI.ts",
+          59,
+          8
+        ],
+        [
+          "UI.ts",
+          60,
+          8
+        ]
+      ],
+      "id": 844,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "An unique id of the UI.",
+      "getter": {
+        "type": "string"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "d",
+          "comment": "",
+          "type": "string",
+          "default": false
+        }
+      }
+    }
+  ],
+  "methods": [
+    {
+      "name": "listen",
+      "source": [
+        [
+          "UI.ts",
+          99,
+          8
+        ]
+      ],
+      "id": 858,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Listen for UI events and trigger action handlers.",
+          "returns": "boolean",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "key",
+              "comment": "action key",
+              "type": "string",
+              "default": false
+            },
+            {
+              "name": "p",
+              "comment": "point to check\n",
+              "type": "Pt",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "off",
+      "source": [
+        [
+          "UI.ts",
+          88,
+          5
+        ]
+      ],
+      "id": 855,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Remove an event handler.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "key",
+              "comment": "event key",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "on",
+      "source": [
+        [
+          "UI.ts",
+          77,
+          4
+        ]
+      ],
+      "id": 851,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Add an event handler.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "key",
+              "comment": "event key",
+              "type": "string",
+              "default": false
+            },
+            {
+              "name": "fn",
+              "comment": "a [`UIHandler`](#link) function: `fn( pt:Pt, target:UI, type:string )`\n",
+              "type": "UIHandler",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "render",
+      "source": [
+        [
+          "UI.ts",
+          114,
+          8
+        ]
+      ],
+      "id": 862,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Take a custom render function to render this UI.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "fn",
+              "comment": "render function\n",
+              "type": " Fn(group:Group, )",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "state",
+      "source": [
+        [
+          "UI.ts",
+          67,
+          7
+        ]
+      ],
+      "id": 848,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a specific UI state.",
+          "returns": "any",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "key",
+              "comment": "state's name\n",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "variables": [],
+  "properties": [
+    {
+      "name": "group",
+      "source": [
+        [
+          "UI.ts",
+          32,
+          7
+        ]
+      ],
+      "id": 827,
+      "flags": {},
+      "type": "group",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "shape",
+      "source": [
+        [
+          "UI.ts",
+          33,
+          7
+        ]
+      ],
+      "id": 828,
+      "flags": {},
+      "type": "shape",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    }
+  ],
+  "flags": {},
+  "extends": [],
+  "implements": []
+}

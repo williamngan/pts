@@ -1,0 +1,1258 @@
+{
+  "name": "Shaping",
+  "source": [
+    [
+      "Num.ts",
+      452,
+      20
+    ]
+  ],
+  "kind": "Class",
+  "id": 268,
+  "comment": "Shaping provides shaping functions to interpolate a value. These are useful for easing and transitions.",
+  "constructor": [],
+  "accessors": [],
+  "methods": [
+    {
+      "name": "bounceIn",
+      "source": [
+        [
+          "Num.ts",
+          654,
+          17
+        ]
+      ],
+      "id": 350,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Bounce in, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "c",
+              "comment": "the value to shape, default is 1\n",
+              "type": "number",
+              "default": "1"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "bounceInOut",
+      "source": [
+        [
+          "Num.ts",
+          683,
+          20
+        ]
+      ],
+      "id": 358,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Bounce in-out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "c",
+              "comment": "the value to shape, default is 1\n",
+              "type": "number",
+              "default": "1"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "bounceOut",
+      "source": [
+        [
+          "Num.ts",
+          663,
+          18
+        ]
+      ],
+      "id": 354,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Bounce out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "c",
+              "comment": "the value to shape, default is 1\n",
+              "type": "number",
+              "default": "1"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "circularIn",
+      "source": [
+        [
+          "Num.ts",
+          584,
+          19
+        ]
+      ],
+      "id": 323,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Circular in, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "c",
+              "comment": "the value to shape, default is 1\n",
+              "type": "number",
+              "default": "1"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "circularInOut",
+      "source": [
+        [
+          "Num.ts",
+          603,
+          22
+        ]
+      ],
+      "id": 331,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Circular in-out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "c",
+              "comment": "the value to shape, default is 1\n",
+              "type": "number",
+              "default": "1"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "circularOut",
+      "source": [
+        [
+          "Num.ts",
+          593,
+          20
+        ]
+      ],
+      "id": 327,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Circular out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "c",
+              "comment": "the value to shape, default is 1\n",
+              "type": "number",
+              "default": "1"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "cliff",
+      "source": [
+        [
+          "Num.ts",
+          783,
+          14
+        ]
+      ],
+      "id": 393,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Step function is a simple jump from 0 to 1 at a specific Pt in time.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "c",
+              "comment": "the value to shape, default is 1",
+              "type": "number",
+              "default": "1"
+            },
+            {
+              "name": "p",
+              "comment": "usually a value between 0 to 1, which specify the Pt to \"jump\". Default is 0.5 which is in the middle.\n",
+              "type": "number",
+              "default": "0.5"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "cosineApprox",
+      "source": [
+        [
+          "Num.ts",
+          572,
+          21
+        ]
+      ],
+      "id": 319,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A faster way to approximate cosine ease in-out using Blinn-Wyvill Approximation. Adapated from Golan Levin's [polynomial shaping](http://www.flong.com/texts/code/shapers_poly/).",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "c",
+              "comment": "the value to shape, default is 1\n",
+              "type": "number",
+              "default": "1"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "cubicBezier",
+      "source": [
+        [
+          "Num.ts",
+          755,
+          20
+        ]
+      ],
+      "id": 382,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Cubic bezier curve. This reuses the bezier functions in Curve class.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "c",
+              "comment": "the value to shape, default is 1",
+              "type": "number",
+              "default": "1"
+            },
+            {
+              "name": "p1",
+              "comment": "",
+              "type": "PtLike",
+              "default": "[0.1, 0.7]"
+            },
+            {
+              "name": "p2",
+              "comment": "",
+              "type": "PtLike",
+              "default": "[0.9, 0.2]"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "cubicIn",
+      "source": [
+        [
+          "Num.ts",
+          496,
+          16
+        ]
+      ],
+      "id": 285,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Cubic in, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "c",
+              "comment": "the value to shape, default is 1\n",
+              "type": "number",
+              "default": "1"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "cubicInOut",
+      "source": [
+        [
+          "Num.ts",
+          515,
+          19
+        ]
+      ],
+      "id": 293,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Cubic in-out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "c",
+              "comment": "the value to shape, default is 1\n",
+              "type": "number",
+              "default": "1"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "cubicOut",
+      "source": [
+        [
+          "Num.ts",
+          505,
+          17
+        ]
+      ],
+      "id": 289,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Cubic out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "c",
+              "comment": "the value to shape, default is 1\n",
+              "type": "number",
+              "default": "1"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "elasticIn",
+      "source": [
+        [
+          "Num.ts",
+          614,
+          18
+        ]
+      ],
+      "id": 335,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Elastic in, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "c",
+              "comment": "the value to shape, default is 1",
+              "type": "number",
+              "default": "1"
+            },
+            {
+              "name": "p",
+              "comment": "elastic parmeter between 0 to 1. The lower the number, the more elastic it will be. Default is 0.7.\n",
+              "type": "number",
+              "default": "0.7"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "elasticInOut",
+      "source": [
+        [
+          "Num.ts",
+          637,
+          21
+        ]
+      ],
+      "id": 345,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Elastic in-out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "c",
+              "comment": "the value to shape, default is 1",
+              "type": "number",
+              "default": "1"
+            },
+            {
+              "name": "p",
+              "comment": "elastic parmeter between 0 to 1. The lower the number, the more elastic it will be. Default is 0.6.\n",
+              "type": "number",
+              "default": "0.6"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "elasticOut",
+      "source": [
+        [
+          "Num.ts",
+          626,
+          19
+        ]
+      ],
+      "id": 340,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Elastic out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "c",
+              "comment": "the value to shape, default is 1",
+              "type": "number",
+              "default": "1"
+            },
+            {
+              "name": "p",
+              "comment": "elastic parmeter between 0 to 1. The lower the number, the more elastic it will be. Default is 0.7.\n",
+              "type": "number",
+              "default": "0.7"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "exponentialIn",
+      "source": [
+        [
+          "Num.ts",
+          526,
+          22
+        ]
+      ],
+      "id": 297,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Exponential ease in, adapted from Golan Levin's [polynomial shapers](http://www.flong.com/texts/code/shapers_poly/).",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "c",
+              "comment": "the value to shape, default is 1",
+              "type": "number",
+              "default": "1"
+            },
+            {
+              "name": "p",
+              "comment": "a value between 0 to 1 to control the curve. Default is 0.25.\n",
+              "type": "number",
+              "default": "0.25"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "exponentialOut",
+      "source": [
+        [
+          "Num.ts",
+          536,
+          23
+        ]
+      ],
+      "id": 302,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Exponential ease out, adapted from Golan Levin's [polynomial shapers](http://www.flong.com/texts/code/shapers_poly/).",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "c",
+              "comment": "the value to shape, default is 1",
+              "type": "number",
+              "default": "1"
+            },
+            {
+              "name": "p",
+              "comment": "a value between 0 to 1 to control the curve. Default is 0.25.\n",
+              "type": "number",
+              "default": "0.25"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "linear",
+      "source": [
+        [
+          "Num.ts",
+          459,
+          15
+        ]
+      ],
+      "id": 269,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Linear mapping.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "c",
+              "comment": "the value to shape, default is 1\n",
+              "type": "number",
+              "default": "1"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "logSigmoid",
+      "source": [
+        [
+          "Num.ts",
+          704,
+          19
+        ]
+      ],
+      "id": 367,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Logistic sigmoid, adapted from Golan Levin's [shaping function](http://www.flong.com/texts/code/shapers_exp/).",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "c",
+              "comment": "the value to shape, default is 1",
+              "type": "number",
+              "default": "1"
+            },
+            {
+              "name": "p",
+              "comment": "a parameter between 0 to 1 to control the steepness of the curve. Higher is steeper. Default is 0.7.\n",
+              "type": "number",
+              "default": "0.7"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "quadraticBezier",
+      "source": [
+        [
+          "Num.ts",
+          736,
+          24
+        ]
+      ],
+      "id": 377,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Quadratic bezier curve, adapted from Golan Levin's [shaping functions](http://www.flong.com/texts/code/shapers_exp/).",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "c",
+              "comment": "the value to shape, default is 1",
+              "type": "number",
+              "default": "1"
+            },
+            {
+              "name": "p",
+              "comment": "",
+              "type": "number | PtLike",
+              "default": "[0.05, 0.95]"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "quadraticIn",
+      "source": [
+        [
+          "Num.ts",
+          468,
+          20
+        ]
+      ],
+      "id": 273,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Quadratic in, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "c",
+              "comment": "the value to shape, default is 1\n",
+              "type": "number",
+              "default": "1"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "quadraticInOut",
+      "source": [
+        [
+          "Num.ts",
+          486,
+          23
+        ]
+      ],
+      "id": 281,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Quadratic in-out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "c",
+              "comment": "the value to shape, default is 1\n",
+              "type": "number",
+              "default": "1"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "quadraticOut",
+      "source": [
+        [
+          "Num.ts",
+          477,
+          21
+        ]
+      ],
+      "id": 277,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Quadratic out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "c",
+              "comment": "the value to shape, default is 1\n",
+              "type": "number",
+              "default": "1"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "quadraticTarget",
+      "source": [
+        [
+          "Num.ts",
+          767,
+          24
+        ]
+      ],
+      "id": 388,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Give a Pt, draw a quadratic curve that will pass through that Pt as closely as possible. Adapted from Golan Levin's [shaping functions](http://www.flong.com/texts/code/shapers_poly/).",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "c",
+              "comment": "the value to shape, default is 1",
+              "type": "number",
+              "default": "1"
+            },
+            {
+              "name": "p1",
+              "comment": "",
+              "type": "PtLike",
+              "default": " [0.2, 0.35]"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "seat",
+      "source": [
+        [
+          "Num.ts",
+          721,
+          13
+        ]
+      ],
+      "id": 372,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Exponential seat curve, adapted from Golan Levin's [shaping functions](http://www.flong.com/texts/code/shapers_exp/).",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "c",
+              "comment": "the value to shape, default is 1",
+              "type": "number",
+              "default": "1"
+            },
+            {
+              "name": "p",
+              "comment": "a parameter between 0 to 1 to control the steepness of the curve. Higher is steeper. Default is 0.5.\n",
+              "type": "number",
+              "default": "0.5"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "sigmoid",
+      "source": [
+        [
+          "Num.ts",
+          693,
+          16
+        ]
+      ],
+      "id": 362,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Sigmoid curve changes its shape adapted from the input value, but always returns a value between 0 to 1.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "c",
+              "comment": "the value to shape, default is 1",
+              "type": "number",
+              "default": "1"
+            },
+            {
+              "name": "p",
+              "comment": "the larger the value, the \"steeper\" the curve will be. Default is 10.\n",
+              "type": "number",
+              "default": "10"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "sineIn",
+      "source": [
+        [
+          "Num.ts",
+          545,
+          15
+        ]
+      ],
+      "id": 307,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Sinuous in, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "c",
+              "comment": "the value to shape, default is 1\n",
+              "type": "number",
+              "default": "1"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "sineInOut",
+      "source": [
+        [
+          "Num.ts",
+          563,
+          18
+        ]
+      ],
+      "id": 315,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Sinuous in-out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "c",
+              "comment": "the value to shape, default is 1\n",
+              "type": "number",
+              "default": "1"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "sineOut",
+      "source": [
+        [
+          "Num.ts",
+          554,
+          16
+        ]
+      ],
+      "id": 311,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Sinuous out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "c",
+              "comment": "the value to shape, default is 1\n",
+              "type": "number",
+              "default": "1"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "step",
+      "source": [
+        [
+          "Num.ts",
+          795,
+          13
+        ]
+      ],
+      "id": 398,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Convert any shaping functions into a series of steps.",
+          "returns": "any",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "fn",
+              "comment": "the original shaping function",
+              "type": "Function",
+              "default": false
+            },
+            {
+              "name": "steps",
+              "comment": "the number of steps",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "c",
+              "comment": "the value to shape, default is 1",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "args",
+              "comment": "optional paramters to pass to original function\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": []
+}

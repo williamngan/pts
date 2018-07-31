@@ -1,0 +1,464 @@
+{
+  "name": "Curve",
+  "source": [
+    [
+      "Op.ts",
+      1395,
+      18
+    ]
+  ],
+  "kind": "Class",
+  "id": 758,
+  "comment": "Curve class provides static functions to interpolate curves. A curve is usually represented as a Group of 3 or more control points.\nYou can use the static functions as-is, or apply the [`Group.op`](#link) or [`Pt.op`](#link) to enable functional programming.\nSee [Op guide](../guide/Op-0400.html) for details.",
+  "constructor": [],
+  "accessors": [],
+  "methods": [
+    {
+      "name": "bezier",
+      "source": [
+        [
+          "Op.ts",
+          1580,
+          15
+        ]
+      ],
+      "id": 789,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a Bezier curve. In a cubic bezier curve, the first and 4th anchors are end-points, and 2nd and 3rd anchors are control-points.",
+          "returns": "Group",
+          "returns_comment": "a curve as a group of interpolated Pt\n",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a group of anchor Pt",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "steps",
+              "comment": "the number of line segments per curve. Defaults to 10 steps.",
+              "type": "number",
+              "default": "10"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "bezierStep",
+      "source": [
+        [
+          "Op.ts",
+          1609,
+          19
+        ]
+      ],
+      "id": 793,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Interpolate to get a point on a cubic Bezier curve.",
+          "returns": "Pt",
+          "returns_comment": "an interpolated Pt on the curve\n",
+          "parameters": [
+            {
+              "name": "step",
+              "comment": "the coefficients [t*t*t, t*t, t, 1]",
+              "type": "Pt",
+              "default": false
+            },
+            {
+              "name": "ctrls",
+              "comment": "a group of anchor Pts",
+              "type": "GroupLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "bspline",
+      "source": [
+        [
+          "Op.ts",
+          1635,
+          16
+        ]
+      ],
+      "id": 797,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a basis spline (NURBS) curve.",
+          "returns": "Group",
+          "returns_comment": "a curve as a group of interpolated Pt\n",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a group of anchor Pt",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "steps",
+              "comment": "the number of line segments per curve. Defaults to 10 steps.",
+              "type": "number",
+              "default": "10"
+            },
+            {
+              "name": "tension",
+              "comment": "optional value between 0 to n to specify a \"tension\". Default is 1 which is the usual tension.",
+              "type": "number",
+              "default": "1"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "bsplineStep",
+      "source": [
+        [
+          "Op.ts",
+          1668,
+          20
+        ]
+      ],
+      "id": 802,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Interpolate to get a point on a basis spline curve.",
+          "returns": "Pt",
+          "returns_comment": "an interpolated Pt on the curve\n",
+          "parameters": [
+            {
+              "name": "step",
+              "comment": "the coefficients [t*t*t, t*t, t, 1]",
+              "type": "Pt",
+              "default": false
+            },
+            {
+              "name": "ctrls",
+              "comment": "a group of anchor Pts",
+              "type": "GroupLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "bsplineTensionStep",
+      "source": [
+        [
+          "Op.ts",
+          1694,
+          27
+        ]
+      ],
+      "id": 806,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Interpolate to get a point on a basis spline curve with tension.",
+          "returns": "Pt",
+          "returns_comment": "an interpolated Pt on the curve\n",
+          "parameters": [
+            {
+              "name": "step",
+              "comment": "the coefficients [t*t*t, t*t, t, 1]",
+              "type": "Pt",
+              "default": false
+            },
+            {
+              "name": "ctrls",
+              "comment": "a group of anchor Pts",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "tension",
+              "comment": "optional value between 0 to n to specify a \"tension\". Default to 1 which is the usual tension.",
+              "type": "number",
+              "default": "1"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "cardinal",
+      "source": [
+        [
+          "Op.ts",
+          1511,
+          17
+        ]
+      ],
+      "id": 779,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a Cardinal curve.",
+          "returns": "Group",
+          "returns_comment": "a curve as a group of interpolated Pt\n",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a group of anchor Pt",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "steps",
+              "comment": "the number of line segments per curve. Defaults to 10 steps.",
+              "type": "number",
+              "default": "10"
+            },
+            {
+              "name": "tension",
+              "comment": "optional value between 0 to 1 to specify a \"tension\". Default to 0.5 which is the tension for Catmull-Rom curve.",
+              "type": "number",
+              "default": "0.5"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "cardinalStep",
+      "source": [
+        [
+          "Op.ts",
+          1544,
+          21
+        ]
+      ],
+      "id": 784,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Interpolate to get a point on Cardinal curve.",
+          "returns": "Pt",
+          "returns_comment": "an interpolated Pt on the curve\n",
+          "parameters": [
+            {
+              "name": "step",
+              "comment": "the coefficients [t*t*t, t*t, t, 1]",
+              "type": "Pt",
+              "default": false
+            },
+            {
+              "name": "ctrls",
+              "comment": "a group of anchor Pts",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "tension",
+              "comment": "optional value between 0 to 1 to specify a \"tension\". Default to 0.5 which is the tension for Catmull-Rom curve",
+              "type": "number",
+              "default": "0.5"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "catmullRom",
+      "source": [
+        [
+          "Op.ts",
+          1452,
+          19
+        ]
+      ],
+      "id": 771,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a Catmull-Rom curve. Catmull-Rom is a kind of smooth-looking Cardinal curve.",
+          "returns": "Group",
+          "returns_comment": "a curve as a group of interpolated Pt\n",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a group of anchor Pt",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "steps",
+              "comment": "the number of line segments per curve. Defaults to 10 steps",
+              "type": "number",
+              "default": "10"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "catmullRomStep",
+      "source": [
+        [
+          "Op.ts",
+          1485,
+          23
+        ]
+      ],
+      "id": 775,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Interpolate to get a point on Catmull-Rom curve.",
+          "returns": "Pt",
+          "returns_comment": "an interpolated Pt on the curve\n",
+          "parameters": [
+            {
+              "name": "step",
+              "comment": "the coefficients [t*t*t, t*t, t, 1]",
+              "type": "Pt",
+              "default": false
+            },
+            {
+              "name": "ctrls",
+              "comment": "a group of anchor Pts",
+              "type": "GroupLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "controlPoints",
+      "source": [
+        [
+          "Op.ts",
+          1417,
+          22
+        ]
+      ],
+      "id": 762,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Given an index for the starting position in a Pt group, get the control and/or end points of a curve segment.",
+          "returns": "Group",
+          "returns_comment": "a group of 4 Pts\n",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a group of Pt",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "index",
+              "comment": "start index in `pts` array. Default is 0.",
+              "type": "number",
+              "default": "0"
+            },
+            {
+              "name": "copyStart",
+              "comment": "an optional boolean value to indicate if the start index should be used twice. Default is false.",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "getSteps",
+      "source": [
+        [
+          "Op.ts",
+          1401,
+          17
+        ]
+      ],
+      "id": 759,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a precalculated coefficients per step.",
+          "returns": "Group",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "steps",
+              "comment": "number of steps\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": []
+}

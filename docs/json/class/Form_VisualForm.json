@@ -1,0 +1,859 @@
+{
+  "name": "VisualForm",
+  "source": [
+    [
+      "Form.ts",
+      43,
+      32
+    ]
+  ],
+  "kind": "Class",
+  "id": 2498,
+  "comment": "VisualForm is an abstract class that represents a form that can be used to express Pts visually.\nFor example, [`CanvasForm`](#link) is an implementation of VisualForm that draws on [`CanvasSpace`](#link) which represents a html canvas. Learn more about Space and Form in [this guide](../guide/Space-0500.html).",
+  "constructor": [],
+  "accessors": [
+    {
+      "name": "currentFont",
+      "source": [
+        [
+          "Form.ts",
+          67,
+          17
+        ]
+      ],
+      "id": 2510,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Get the current font in use in this form.",
+      "getter": {
+        "type": "Font"
+      },
+      "setter": false
+    },
+    {
+      "name": "filled",
+      "source": [
+        [
+          "Form.ts",
+          51,
+          12
+        ],
+        [
+          "Form.ts",
+          52,
+          12
+        ]
+      ],
+      "id": 2500,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Check whether this form currently has fill style.",
+      "getter": {
+        "type": "boolean"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "b",
+          "comment": "",
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    {
+      "name": "ready",
+      "source": [
+        [
+          "Form.ts",
+          20,
+          11
+        ]
+      ],
+      "id": 2594,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Form.ready",
+      "comment": "get whether the Form has received the Space's rendering context.",
+      "getter": {
+        "type": "boolean"
+      },
+      "setter": false
+    },
+    {
+      "name": "stroked",
+      "source": [
+        [
+          "Form.ts",
+          59,
+          13
+        ],
+        [
+          "Form.ts",
+          60,
+          13
+        ]
+      ],
+      "id": 2505,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Check whether this form currently has stroke style.",
+      "getter": {
+        "type": "boolean"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "b",
+          "comment": "",
+          "type": "boolean",
+          "default": false
+        }
+      }
+    }
+  ],
+  "methods": [
+    {
+      "name": "arc",
+      "source": [
+        [
+          "Form.ts",
+          182,
+          14
+        ]
+      ],
+      "id": 2556,
+      "flags": {
+        "isAbstract": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Draw an arc (not implemented here  -- to be implemented in subclasses).",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pt",
+              "comment": "center position",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "radius",
+              "comment": "radius of the arc circle",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "startAngle",
+              "comment": "start angle of the arc",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "endAngle",
+              "comment": "end angle of the arc",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "cc",
+              "comment": "an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.\n",
+              "type": "boolean",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "circle",
+      "source": [
+        [
+          "Form.ts",
+          152,
+          17
+        ]
+      ],
+      "id": 2547,
+      "flags": {
+        "isAbstract": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Draw a circle (not implemented here  -- to be implemented in subclasses).",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "usually a Group of 2 Pts, but it can also take an array of two numeric arrays [ [position], [size] ]",
+              "type": "GroupLike | number[][]",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "see",
+              "text": "[`Circle.fromCenter`](./_op_.circle.html#frompt)\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "circles",
+      "source": [
+        [
+          "Form.ts",
+          160,
+          9
+        ]
+      ],
+      "id": 2550,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Draw multiple circles at once.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "groups",
+              "comment": "an array of Groups that defines multiple circles\n",
+              "type": "GroupLike[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "fill",
+      "source": [
+        [
+          "Form.ts",
+          88,
+          6
+        ]
+      ],
+      "id": 2519,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Set fill color (not implemented here  -- to be implemented in subclasses).",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "c",
+              "comment": "",
+              "type": "string | boolean",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "fillOnly",
+      "source": [
+        [
+          "Form.ts",
+          98,
+          10
+        ]
+      ],
+      "id": 2522,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Set current fill style and remove stroke style.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "c",
+              "comment": "fill color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle))\n",
+              "type": "string | boolean",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`form.fillOnly(\"#F90\")`, `form.fillOnly(\"rgba(0,0,0,.5\")`"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "font",
+      "source": [
+        [
+          "Form.ts",
+          253,
+          15
+        ]
+      ],
+      "id": 2586,
+      "flags": {
+        "isAbstract": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Set font style (not implemented here  -- to be implemented in subclasses).",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "sizeOrFont",
+              "comment": "either a number to specify font-size, or a `Font` object to specify all font properties",
+              "type": "number | Font",
+              "default": false
+            },
+            {
+              "name": "weight",
+              "comment": "Optional font-weight string such as \"bold\"",
+              "type": "string",
+              "default": false
+            },
+            {
+              "name": "style",
+              "comment": "Optional font-style string such as \"italic\"",
+              "type": "string",
+              "default": false
+            },
+            {
+              "name": "lineHeight",
+              "comment": "Optional line-height number suchas 1.5",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "family",
+              "comment": "Optional font-family such as \"Helvetica, sans-serif\"",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "see",
+              "text": "`Font` class"
+            },
+            {
+              "tag": "example",
+              "text": "`form.font( myFont )`, `form.font(14, \"bold\")`\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "line",
+      "source": [
+        [
+          "Form.ts",
+          189,
+          15
+        ]
+      ],
+      "id": 2563,
+      "flags": {
+        "isAbstract": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Draw a line or polyline (not implemented here  -- to be implemented in subclasses).",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group of multiple Pts, or an array of multiple numeric arrays\n",
+              "type": "GroupLike | number[][]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "lines",
+      "source": [
+        [
+          "Form.ts",
+          196,
+          7
+        ]
+      ],
+      "id": 2566,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Draw multiple lines at once.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "groups",
+              "comment": "An array of Groups of Pts\n",
+              "type": "GroupLike[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "point",
+      "source": [
+        [
+          "Form.ts",
+          129,
+          16
+        ]
+      ],
+      "id": 2537,
+      "flags": {
+        "isAbstract": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Draw a point (not implemented here  -- to be implemented in subclasses).",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "p",
+              "comment": "a Pt object",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "radius",
+              "comment": "radius of the point. Default is 5.",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "shape",
+              "comment": "The shape of the point. Defaults to \"square\", but it can be \"circle\" or a custom shape function in your own implementation.",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`form.point( p )`, `form.point( p, 10, \"circle\" )`\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "points",
+      "source": [
+        [
+          "Form.ts",
+          138,
+          8
+        ]
+      ],
+      "id": 2542,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Draw multiple points at once.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "an array of Pt or an array of number arrays",
+              "type": "GroupLike | number[][]",
+              "default": false
+            },
+            {
+              "name": "radius",
+              "comment": "radius of the point. Default is 5.",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "shape",
+              "comment": "The shape of the point. Defaults to \"square\", but it can be \"circle\" or a custom shape function in your own implementation.\n",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "polygon",
+      "source": [
+        [
+          "Form.ts",
+          205,
+          18
+        ]
+      ],
+      "id": 2569,
+      "flags": {
+        "isAbstract": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Draw a polygon (not implemented here  -- to be implemented in subclasses).",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group of multiple Pts, or an array of multiple numeric arrays\n",
+              "type": "GroupLike | number[][]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "polygons",
+      "source": [
+        [
+          "Form.ts",
+          212,
+          10
+        ]
+      ],
+      "id": 2572,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Draw multiple polygons at once.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "groups",
+              "comment": "An array of Groups of Pts\n",
+              "type": "GroupLike[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "rect",
+      "source": [
+        [
+          "Form.ts",
+          222,
+          15
+        ]
+      ],
+      "id": 2575,
+      "flags": {
+        "isAbstract": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Draw a rectangle (not implemented here  -- to be implemented in subclasses).",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.\n",
+              "type": "number[][] | Pt[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "rects",
+      "source": [
+        [
+          "Form.ts",
+          229,
+          7
+        ]
+      ],
+      "id": 2578,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Draw multiple rectangles at once.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "groups",
+              "comment": "An array of Groups of Pts\n",
+              "type": "GroupLike[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "reset",
+      "source": [
+        [
+          "Form.ts",
+          82,
+          16
+        ]
+      ],
+      "id": 2517,
+      "flags": {
+        "isAbstract": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Abstract reset style",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "squares",
+      "source": [
+        [
+          "Form.ts",
+          169,
+          9
+        ]
+      ],
+      "id": 2553,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Draw multiple squares at once.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "groups",
+              "comment": "an array of Groups that defines multiple circles\n",
+              "type": "GroupLike[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "stroke",
+      "source": [
+        [
+          "Form.ts",
+          107,
+          8
+        ]
+      ],
+      "id": 2525,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Set stroke style (not implemented here  -- to be implemented in subclasses).",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "c",
+              "comment": "",
+              "type": "string | boolean",
+              "default": false
+            },
+            {
+              "name": "width",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "linejoin",
+              "comment": "",
+              "type": "string",
+              "default": false
+            },
+            {
+              "name": "linecap",
+              "comment": "",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "strokeOnly",
+      "source": [
+        [
+          "Form.ts",
+          117,
+          12
+        ]
+      ],
+      "id": 2531,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Set current stroke style and remove fill style.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "c",
+              "comment": "stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle)\n",
+              "type": "string | boolean",
+              "default": false
+            },
+            {
+              "name": "width",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "linejoin",
+              "comment": "",
+              "type": "string",
+              "default": false
+            },
+            {
+              "name": "linecap",
+              "comment": "",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`form.strokeOnly(\"#F90\")`, `form.strokeOnly(\"#000\", 0.5, 'round', 'square')`"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "text",
+      "source": [
+        [
+          "Form.ts",
+          240,
+          15
+        ]
+      ],
+      "id": 2581,
+      "flags": {
+        "isAbstract": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Draw text (not implemented here  -- to be implemented in subclasses).",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pt",
+              "comment": "",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "txt",
+              "comment": "",
+              "type": "string",
+              "default": false
+            },
+            {
+              "name": "maxWidth",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "variables": [],
+  "properties": [],
+  "flags": {
+    "isAbstract": true
+  },
+  "extends": [
+    "Form"
+  ],
+  "implements": []
+}
