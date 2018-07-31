@@ -51,8 +51,14 @@ npm test
 ```
 
 #### Generate documentations
+Run this to generate Pts styled documentations. (Requires python 3.6)
 ```
-typedoc --readme none --out docs src --name Pts
+npm run docs 
+```
+
+If you prefer to generate default typedocs, run this:
+```
+typedoc --readme none --out typedocs src --name Pts
 ```
 
 #### Generate typescript declaration files and minify
