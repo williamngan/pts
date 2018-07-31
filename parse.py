@@ -11,6 +11,8 @@ skipped = []
 
 file_path = "./docsn/json/"
 
+print( f'Parsing json in {file_path}' )
+
 # Constructor, Accessor, Property, Method
 # inheritedFrom, implementedTypes
 
@@ -167,8 +169,14 @@ def parse_class_accessor( c ):
   if not c.get('name', False): 
     return {}
 
-  getters = [parse_accessor_signature(s) for s in c.get('getSignature', [])]
-  setters = [parse_accessor_signature(s) for s in c.get('setSignature', [])]
+  # typedoc 2.3.2
+  # getters = [parse_accessor_signature(s) for s in c.get('getSignature', [])]
+  # setters = [parse_accessor_signature(s) for s in c.get('setSignature', [])]
+
+  # typedoc 2.7.2
+  getters = parse_accessor_signature( c.get('getSignature', {}) )
+  setters = parse_accessor_signature( c.get('setSignature', {}) )
+  
 
   return {
     'name': c['name'],
@@ -178,8 +186,8 @@ def parse_class_accessor( c ):
     'overrides': c.get('overwrites', {}).get('name', False),
     'inherits': c.get('inheritedFrom', {}).get('name', False),
     'comment': get_comment( c ),
-    'getter': False if not getters else getters[0],
-    'setter': False if not setters else setters[0]
+    'getter': False if not getters else getters,
+    'setter': False if not setters else setters
   }
 
 
@@ -398,4 +406,3 @@ def get_flags( c ):
 
 parse_modules()
 save_toc()
-

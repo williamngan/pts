@@ -12,7 +12,8 @@
     "build": "webpack --config webpack.dev.js && webpack --config webpack.mod.js",
     "minify": "webpack --config webpack.prod.js",
     "test": "mocha --opts mocha.opts",
-    "test:auto": "mocha --opts mocha.opts --watch"
+    "test:auto": "mocha --opts mocha.opts --watch",
+    "docs": "typedoc --json docsn/json/docs.json && python parse.py"
   },
   "repository": {
     "type": "git",
