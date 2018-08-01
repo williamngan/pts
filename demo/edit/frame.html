@@ -1,0 +1,20 @@
+<html>
+  <head>
+      <script type="text/javascript" src="../../dist/pts.min.js"></script>
+  </head>
+  <body>
+    <h1 id="test">Hello</h1>
+    <div id="pt"></div>
+
+    <script type="text/javascript">
+      function test( txt ) {
+        var sc = document.createElement("script");
+        sc.type = "text/javascript";
+        // sc.innerHTML = "document.querySelector('#test').textContent = ('"+txt+"')";
+        sc.innerHTML = txt;
+        document.body.appendChild( sc );
+      }
+    </script>
+
+  </body>
+</html>
