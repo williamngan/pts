@@ -1,4 +1,5 @@
 var ptsdef = "";
+var currFile = "";
 
 var demos = document.querySelectorAll(".demo");
 
@@ -15,7 +16,6 @@ for (var i=0; i<demos.length; i++) {
 }
 
 document.getElementById('demo').onload = function(evt) {
-  
   if (window.frames.length > 0) {
     loadEditor();
   }
@@ -29,6 +29,9 @@ document.getElementById("load").addEventListener("click", function(evt) {
   document.getElementById("loadmenu").className = "open";
 });
 
+document.getElementById("back").addEventListener("click", function(evt) {
+  window.location.href = window.location.origin + "/demo/?name="+currFile;
+});
 
 document.getElementById("save").addEventListener("click", function(evt) {
   var html = '<html><head><script src="https://unpkg.com/pts/dist/pts.min.js"></script></head>'
@@ -62,11 +65,17 @@ function runCode() {
 
 
 function loadCode( editor ) {
+  currFile = "";
   var qfile = qs("name", 30);
   if (qfile) {
     _load( '../'+qfile+'.js', function(evt) {
-      editor.setValue( evt.target.responseText );
-      runCode();
+      if (evt.target.statusText == "OK") {
+        editor.setValue( evt.target.responseText );
+        currFile = qfile;
+        runCode();
+      } else {
+        editor.setValue( "// An error has occured while loading demo \n// File: "+qfile+" ("+ clean_str(evt.target.statusText, 20)+")" );
+      }
     })
   }
 }

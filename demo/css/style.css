@@ -145,14 +145,20 @@ html * {
 
 #hint {
   position: absolute;
-  top: 5px;
-  right: 10px;
+  top: 0px;
+  right: 0px;
+  
   
   font-size: 12px; color: #666;
   line-height: 1.35;
   word-wrap: normal;
-  max-width: 350px;
   text-align: right;
+  border-bottom: 1px solid #42e;
+  border-left: 1px solid #42e;
+}
+
+#hint:hover {
+  background: #42e;
 }
 
 #hint a {
@@ -160,10 +166,11 @@ html * {
   border: none;
   text-decoration: none;
   color: #42e;
+  padding: 5px 8px;
 }
 
-#hint a:hover {
-  color: #75f;
+#hint:hover a {
+  color: #fff;
 }
 
 h1 {

@@ -54,9 +54,9 @@
 
         var link = document.createElement("a");
         link.setAttribute("class", "source-code");
-        link.setAttribute("href", "https://github.com/williamngan/pts/blob/master/demo/" + qfile +".js");
+        link.setAttribute("href", "./edit/?name=" + qfile);
         link.setAttribute("target", "pts_github");
-        link.textContent = "source code ↗";
+        link.textContent = "► view/edit code";
 
         src.onload = function () {
             var hint = document.querySelector("#hint");
