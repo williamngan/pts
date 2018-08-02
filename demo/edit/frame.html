@@ -1,16 +1,24 @@
 <html>
   <head>
       <script type="text/javascript" src="../../dist/pts.min.js"></script>
+      <style>
+        body {
+          background-color: #f1f3f7;
+        }
+        #pt {
+          position: absolute;
+          top: 0; left: 0; right: 0; bottom: 0;
+        }
+      </style>
   </head>
   <body>
-    <h1 id="test">Hello</h1>
     <div id="pt"></div>
 
     <script type="text/javascript">
-      function test( txt ) {
+      function update( txt ) {
+        document.getElementById("pt").innerHTML = "";
         var sc = document.createElement("script");
         sc.type = "text/javascript";
-        // sc.innerHTML = "document.querySelector('#test').textContent = ('"+txt+"')";
         sc.innerHTML = txt;
         document.body.appendChild( sc );
       }

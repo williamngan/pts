@@ -1,13 +1,59 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <script type="text/javascript" src="./js/vue.js"></script>
+    <title>Pts.js Demo Editor</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="description" content="Pts live coding editor. Pts is a javascript library that enables you to compose and visualize points in spaces.">
+
+    <script type="text/javascript" src="./js/FileSaver.min.js"></script>
     <link rel="stylesheet" href="./css/style.css" type="text/css" />
   </head>
   <body>
 
     <iframe id="demo" title="demo" allow-scripts="true" src="./frame.html"></iframe>
 
+    <div id="loader">Loading Editor...</div>
     <div id="editor"></div>
+    
+    <div id="menu">
+      <div class="cta" id="load">Load</div>
+      <div class="cta" id="save">Save</div>
+      <a href="../../docs" target="ptsdocs"><div class="cta" id="docs">Docs <small>↗</small></div></a>
+      <div class="cta" id="run">Run <small>[Cmd+Alt+0]</small></div>
+    </div>
+
+    <div id="loadmenu">
+      <p class="demo" data-src="pts.quickStart"><span>Pts.</span><strong>quickStart</strong></p>
+      <p class="demo" data-src="canvasspace.action"><span>CanvasSpace.</span><strong>action</strong></p>
+      <p class="demo" data-src="canvasspace.resize"><span>CanvasSpace.</span><strong>resize</strong></p>
+      <p class="demo" data-src="canvasform.textBox"><span>CanvasForm.</span><strong>textBox</strong></p>
+      <p class="demo" data-src="pt.extends"><span>Pt.</span><strong>extends</strong></p>
+      <p class="demo" data-src="pt.unit"><span>Pt.</span><strong>unit</strong></p>
+      <p class="demo" data-src="circle.intersectCircle2D"><span>Circle.</span><strong>intersectCircle2D</strong></p>
+      <p class="demo" data-src="circle.intersectLine2D"><span>Circle.</span><strong>intersectLine2D</strong></p>
+      <p class="demo" data-src="circle.withinBound"><span>Circle.</span><strong>withinBound</strong></p>
+      <p class="demo" data-src="color.HSLtoRGB"><span>Color.</span><strong>HSLtoRGB</strong></p>
+      <p class="demo" data-src="color.LABtoRGB"><span>Color.</span><strong>LABtoRGB</strong></p>
+      <p class="demo" data-src="curve.bezier"><span>Curve.</span><strong>bezier</strong></p>
+      <p class="demo" data-src="curve.cardinal"><span>Curve.</span><strong>cardinal</strong></p>
+      <p class="demo" data-src="curve.bspline"><span>Curve.</span><strong>bspline</strong></p>
+      <p class="demo" data-src="geom.interpolate"><span>Geom.</span><strong>interpolate</strong></p>
+      <p class="demo" data-src="geom.perpendicular"><span>Geom.</span><strong>perpendicular</strong></p>
+      <p class="demo" data-src="line.collinear"><span>Line.</span><strong>collinear</strong></p>
+      <p class="demo" data-src="line.perpendicularFromPt"><span>Line.</span><strong>perpendicularFromPt</strong></p>
+      <p class="demo" data-src="line.intersectLine2D"><span>Line.</span><strong>intersectLine2D</strong></p>
+      <p class="demo" data-src="polygon.convexHull"><span>Polygon.</span><strong>convexHull</strong></p>
+      <p class="demo" data-src="triangle.incircle"><span>Triangle.</span><strong>incircle</strong></p>
+      <p class="demo" data-src="shaping.linear"><span>Shaping.</span><strong>linear</strong></p>
+      <p class="demo" data-src="create.gridcells"><span>Create.</span><strong>gridCells</strong></p>
+      <p class="demo" data-src="create.noisePts"><span>Create.</span><strong>noisePts</strong></p>
+      <p class="demo" data-src="create.delaunay"><span>Create.</span><strong>delaunay</strong></p>
+      <p class="demo" data-src="physics.particles"><span>Physics.</span><strong>particles</strong></p>
+      <p class="demo" data-src="physics.shapes"><span>Physics.</span><strong>shapes</strong></p>
+      <p class="demo" data-src="svgform.scope"><span>SVGForm.</span><strong>scope</strong></p>
+      <p class="demo" data-src="htmlform.scope"><span>HTMLForm.</span><strong>scope</strong></p>
+    </div>
     
     <script type="text/javascript" src="./js/edit.js"></script>
     <script src="./vs/loader.js"></script>
