@@ -101,6 +101,8 @@ function vscode() {
         runCode();
       });
 
+      document.getElementById("loader").style.display = "none";
+
   });
 }
 
