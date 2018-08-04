@@ -4,16 +4,11 @@
 window.demoDescription = "Draw a series of perpendicular lines along a diagonal path to visualize sine waves.";
 
 (function() {
-  
-  Pts.namespace( this );
-  var space = new CanvasSpace("#pt").setup({bgcolor: "#f1f3f7", resize: true, retina: true});
-  var form = space.getForm();
-  
-  
-  //// Demo code ---
-  
-  
-  space.add( (time, ftime) => {
+
+  // Pts quick start mode. 
+  var run = Pts.quickStart("#pt", "#f1f3f7");
+
+  run( (time, ftime) => {
 
     // create a line and get 200 interpolated points
     let offset = space.size.$multiply(0.2).y;
@@ -42,10 +37,5 @@ window.demoDescription = "Draw a series of perpendicular lines along a diagonal 
     });
 
   });
-  
-  //// ----
-  
-  
-  space.bindMouse().bindTouch().play();
-  
+
 })();

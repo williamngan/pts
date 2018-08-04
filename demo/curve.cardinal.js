@@ -7,7 +7,7 @@ window.demoDescription = "Draw three cardinal curves with different tensions. Mo
 
   Pts.namespace( this );
 
-  var space = new CanvasSpace("#pt").setup({bgcolor: "#f1f3f7", resize: true, retina: true});
+  var space = new CanvasSpace("#pt").setup({bgcolor: "#0c6", resize: true, retina: true});
   var form = space.getForm();
 
 
@@ -40,10 +40,12 @@ window.demoDescription = "Draw three cardinal curves with different tensions. Mo
         }
       }
 
-      form.strokeOnly("#f03").line( Curve.cardinal( temp, 10, 0.8 ) );
-      form.stroke("#678").line( Curve.cardinal( temp, 10, 0.2 ) );
-      form.fillOnly("rgba(0, 50, 255, 0.5)").line( Curve.catmullRom( temp, 10 ) );
-      form.fill("#123").points( temp, 3, "circle" );
+      
+      
+      form.fillOnly("rgba(255, 230, 0, 0.9)").line( Curve.catmullRom( temp, 10 ) );
+      form.stroke("#f06").line( Curve.cardinal( temp, 10, 0.2 ) );
+      form.strokeOnly("#123", 3).line( Curve.cardinal( temp, 10, 0.8 ) );
+      form.fill("#fff").points( temp, 5, "circle" );
     },
     
   });

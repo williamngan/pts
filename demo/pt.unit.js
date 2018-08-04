@@ -4,15 +4,11 @@
 window.demoDescription = "Calculate a unit vector from center to mouse position. Use its direction to control a grid of lines.";
 
 (function() {
-  
-  Pts.namespace( this );
-  var space = new CanvasSpace("#pt").setup({bgcolor: "#123", resize: true, retina: true});
-  var form = space.getForm();
-  
-  
-  //// Demo code ---
-  
-  space.add( (time, ftime) => {
+
+  // Pts quick start mode.
+  var run = Pts.quickStart( "#pt", "#123" ); 
+
+  run( (time, ftime) => {
 
     // get a line from pointer to center, and use it for direction and magnitude calculations
     let ln = space.pointer.$subtract( space.center.$add(0.1) );
@@ -29,10 +25,5 @@ window.demoDescription = "Calculate a unit vector from center to mouse position.
     form.strokeOnly("#fe3").line( [space.center, space.pointer] );
     form.strokeOnly("#fff").lines( lines );
   });
-  
-  //// ----
-  
-  
-  space.bindMouse().bindTouch().play();
-  
+
 })();

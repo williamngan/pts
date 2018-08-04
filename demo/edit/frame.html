@@ -4,6 +4,8 @@
       <style>
         body {
           background-color: #f1f3f7;
+          font-family: sans-serif;
+          margin: 0;
         }
         #pt {
           position: absolute;
@@ -17,8 +19,18 @@
     <script type="text/javascript">
       function update( txt ) {
         document.getElementById("pt").innerHTML = "";
+
+        var existing = document.getElementById("ptscode");
+        
+        if (existing) {
+          if (window.space) window.cancelAnimationFrame( window.space._animID ); // stop immediately
+          existing.parentNode.removeChild(existing);
+        }
+
         var sc = document.createElement("script");
+        sc.setAttribute("id", "ptscode")
         sc.type = "text/javascript";
+
         sc.innerHTML = txt;
         document.body.appendChild( sc );
       }

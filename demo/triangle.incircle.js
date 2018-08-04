@@ -5,15 +5,9 @@ window.demoDescription = "Fitting four circles inside and outside of four triang
 
 (function() {
   
-  Pts.namespace( this );
-  var space = new CanvasSpace("#pt").setup({bgcolor: "#fe3", resize: true, retina: true});
-  var form = space.getForm();
-  
-  
-  //// Demo code ---
-  
-  
-  space.add( (time, ftime) => {
+  var run = Pts.quickStart( "#pt", "#fe3" ); 
+
+  run( (time, ftime) => {
     // rectangle
     var rect = Rectangle.fromCenter( space.center, space.size.$divide(3) );
     var poly = Rectangle.corners( rect );
@@ -35,10 +29,5 @@ window.demoDescription = "Fitting four circles inside and outside of four triang
     form.fill("#123").point( space.pointer, 5 );
     
   });
-  
-  //// ----
-  
-  
-  space.bindMouse().bindTouch().play();
-  
+
 })();

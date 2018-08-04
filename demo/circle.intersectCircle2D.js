@@ -5,14 +5,10 @@ window.demoDescription = "A circle and a donut meets. Indicate their points of i
 
 (function() {
 
-  Pts.namespace( this );
-  var space = new CanvasSpace("#pt").setup({bgcolor: "#fe3", resize: true, retina: true});
-  var form = space.getForm();
+  // Pts quick start mode.
+  var run = Pts.quickStart( "#pt", "#fe3" ); 
 
-
-  //// Demo code ---
-
-  space.add( (time, ftime) => {
+  run( (time, ftime) => {
     
     let c1 = Circle.fromCenter( space.pointer, space.size.y/4 );
     let c2 = Circle.fromCenter( space.pointer, space.size.y/8 );
@@ -28,10 +24,5 @@ window.demoDescription = "A circle and a donut meets. Indicate their points of i
     form.fill( "#f06" ).points( ins2, 5, "circle" );
 
   });
-  
-  //// ----
-  
-
-  space.bindMouse().bindTouch().play();
 
 })();
