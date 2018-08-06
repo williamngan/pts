@@ -123,7 +123,8 @@ html * {
 .feature-block {
   height: 45vw;
   margin: 100px 0px 0px;
-  
+  overflow: hidden;
+  white-space: nowrap; 
 }
 
 .feature-block .feature {
@@ -134,7 +135,7 @@ html * {
   width: 25vw;
   
   box-sizing: border-box;
-  
+  white-space: normal;
 }
 
 .feature-block .image {
@@ -391,6 +392,7 @@ a:hover {
 
   .feature-block { 
     height: auto;
+    white-space: normal; 
   }
   
   .feature-block .feature {

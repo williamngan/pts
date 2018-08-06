@@ -335,4 +335,9 @@ a:hover {
   .demo {
     padding: 3px 0;
   }
+
+
+  #hint {
+    display: none;
+  }
 }
