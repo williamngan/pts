@@ -121,18 +121,19 @@ html * {
 
 
 .feature-block {
-  column-count: 4;
   height: 45vw;
-  column-gap: 0px;
-  margin: 150px 0px 0px;
-
+  margin: 100px 0px 0px;
+  
 }
 
 .feature-block .feature {
-  display: inline-block;
-  
   padding: 0;
   position: relative;
+  display: inline-block;
+  vertical-align: top;
+  width: 25vw;
+  
+  box-sizing: border-box;
   
 }
 
@@ -145,13 +146,13 @@ html * {
 
 .feature-block .usage{
   color: #345;
-  padding: 20px 20px 20px 20px;
+  padding: 30px;
   font-size: 1.3em;
   text-align: left;
 }
 
 .feature-block .cta-link {
-  margin-top: 15px;
+  margin-top: 10px;
 }
 
 .block h3 {
@@ -388,6 +389,24 @@ a:hover {
   }
   
 
+  .feature-block { 
+    height: auto;
+  }
+  
+  .feature-block .feature {
+    width: 50vw;
+    height: 50vw;
+  }
+  
+  .feature-block .image {
+    height: 30vw;
+  }
+
+  .feature-block .usage{
+    padding: 20px 40px;
+  }
+  
+
 
   #pts { padding-left: 0; line-height: 1.4; vertical-align: middle; }
   #pts a { padding: 0; }
@@ -449,6 +468,14 @@ a:hover {
   /* ------- */
   
 
+  .feature-block .feature {
+    width: 100vw;
+    height: 400px;
+  }
+
+  .feature-block .image {
+    height: 250px;
+  }
   
   .demo {
     padding: 3px 0;
