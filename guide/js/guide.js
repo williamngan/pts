@@ -66,6 +66,10 @@ Pts.namespace( this );
     document.body.appendChild(script);
   }
 
+  function cap(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
   function updateCodeLinks() {
     var codes = document.querySelectorAll("a > code");
     for (let i=0, len=codes.length; i<len; i++) {
@@ -74,8 +78,10 @@ Pts.namespace( this );
       if (c.parentNode.getAttribute("href").indexOf("#") === 0 && c.textContent) {
         let link = c.parentNode.getAttribute("href").replace(/#/g, "").split("-");
         let linkAnchor = c.textContent.split(".");
-        linkAnchor = linkAnchor[linkAnchor.length-1].toLowerCase().replace(/\W/g, "_");
-        c.parentNode.setAttribute( "href", `../docs/classes/_${link[0]}_.${ link[1] || link[0]}.html#${linkAnchor}` );
+        let ftype = (linkAnchor.length > 1 && linkAnchor[0] === "") ? "accessor" : "function";
+        linkAnchor = linkAnchor[linkAnchor.length-1].replace(/[^a-zA-Z0-9._\$]/g, "_");
+        c.parentNode.setAttribute( "href", `../docs/?p=${cap(link[0])}_${cap(link[1] || link[0])}#${ftype}_${linkAnchor}` );
+        c.parentNode.setAttribute( "target", "ptsdocs");
       }
       // c.parentElement.setAttribute( "target", "_blank" );
     }

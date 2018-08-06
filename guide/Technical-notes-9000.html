@@ -31,7 +31,7 @@
 pt.$subtract( 10 ); // use $fn to get a new Pt
 </code></pre>
 <h3>Typescript notes</h3>
-<p>While <a href="#pt_pt"><code>Pt</code></a> extends <code>Float32Array</code> and <a href="#pt_group"><code>Group</code></a> extends Array, typescript compiler at the moment (2.4.2) isn't smart enough to auto-cast the return type when you use an Array or Float32Array function. That means if you use typescript, you may need to recast some native Array functions such as <code>map</code> or <code>slice</code>.</p>
+<p>While <a href="#pt-pt"><code>Pt</code></a> extends <code>Float32Array</code> and <a href="#pt-group"><code>Group</code></a> extends Array, typescript compiler at the moment (2.4.2) isn't smart enough to auto-cast the return type when you use an Array or Float32Array function. That means if you use typescript, you may need to recast some native Array functions such as <code>map</code> or <code>slice</code>.</p>
 <pre><code>let p:Pt = new Pt(1,2,3);
 let p2 = p.map( (d) =&gt; d+1 ); // typescript thinks p2 is Float32Array
 let p3 = p.map( (d) =&gt; d+1 ) as Pt; // type is now cast back to Pt
@@ -39,9 +39,9 @@ let p3 = p.map( (d) =&gt; d+1 ) as Pt; // type is now cast back to Pt
 <h3>Javascript ecosystem</h3>
 <p>The javascript ecosystem is moving so fast it's difficult to keep up. Pts is intended for modern browsers supporting es6+. Therefore, if you need to target es5 or older browsers, you'll need to configure your build tools accordingly. Some pointers:</p>
 <ul>
-<li><p>If you're using babel, you may need the <a href="https://github.com/loganfsmyth/babel-plugin-transform-builtin-extend">builtin-extend plugin</a> because Pts extends built-in types like Array and Float32Array.</p></li>
-<li><p>UglifyJS doesn't seem to support minifying es6 so the code is transformed to es5 first. Alternatively, consider other minify tool such as <a href="https://github.com/babel/minify">babili</a>.</p></li>
-<li><p>Pts is a new library in beta so we don't recommend using it in production system yet. For now, just experiment and have fun!</p></li>
+<li><p>UglifyJS doesn't seem to support minifying es6 so the code is transformed to es5 first. Alternatively, consider other minify tool such as <a href="https://github.com/babel/minify">babili</a> or <a href="https://github.com/mishoo/UglifyJS2/tree/harmony">uglify-es</a>.</p></li>
+<li><p>If you're compiling to es5 with babel, you may need the <a href="https://github.com/loganfsmyth/babel-plugin-transform-builtin-extend">builtin-extend plugin</a> because Pts extends built-in types like Array and Float32Array. This may not be needed in future as build tools get better.</p></li>
+<li><p>Pts is a new library in beta so we don't recommend using it in high-priority production system yet.</p></li>
 </ul>
 <h3>Remember to file issues and feedbacks</h3>
 <p>Support this open-source project by filing bugs and pull requests on <a href="https://github.com/williamngan/pts">github</a>. If you have other feedbacks, please ping <a href="https://twitter.com/williamngan">@williamngan</a>. Show us what you have made with Pts too!</p>

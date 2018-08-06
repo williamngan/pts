@@ -44,7 +44,7 @@ p.reduce( (a,b) =&gt; Math.max(a,b), 0 );
 </code></pre>
 <p>Note that Float32Array doesn't allow some common Array functions like <code>push()</code> and <code>pop()</code> . If you need to grow or shrink the Pt's dimensions, either create a new one or use <a href="#pt-pt"><code>$concat</code></a> and <a href="#pt-pt"><code>$take</code></a>.</p>
 <h3>Updating values</h3>
-<p>You can update a Pt's values by using <a href="#pt-pt"><code>to</code></a> function, or accessing the <a href="#pt-pt"><code>x</code></a>, <a href="#pt-pt"><code>y</code></a>, <a href="#pt-pt"><code>z</code></a>, <a href="#pt-pt"><code>w</code></a> properties.</p>
+<p>You can update a Pt's values by using <a href="#pt-pt"><code>to</code></a> function, or accessing the <a href="#pt-pt"><code>.x</code></a>, <a href="#pt-pt"><code>.y</code></a>, <a href="#pt-pt"><code>.z</code></a>, <a href="#pt-pt"><code>.w</code></a> properties.</p>
 <pre><code>p.to( 1, 2, 3 )
 p.to( anotherPt )
 p.w = p.x + p.z
@@ -88,7 +88,7 @@ pt.rotate( Math.PI/3, anchorPt )
 <p><img src="./assets/bg.png" alt="js:pt_reflect"></p>
 <h5>A demo of scale and reflect transformation. The red line's length changes the scale, while its angle specifies the reflection. Take a look at the source code to see how easy this it :)</h5>
 <h3>Roll your own</h3>
-<p>You may use all of Float32Array's functions (eg, <code>slice</code>, <code>map</code>) with Pt. Some additional ones in Pt like <code>$concat</code>, <code>$take</code> make it simpler to work with TypedArray. Take a look at &quot;Op&quot; section to see how you can write your own functions to work with Pt easily.</p>
+<p>You may use all of Float32Array's functions (eg, <code>slice</code>, <code>map</code>) with Pt. Some additional ones in Pt like <a href="#pt-pt"><code>$concat</code></a>, <a href="#pt-pt"><code>$take</code></a> make it simpler to work with TypedArray. Take a look at &quot;Op&quot; section to see how you can write your own functions to work with Pt easily.</p>
 <pre><code>// Use $concat and $take to grow and shrink a TypedArray 
 let p1 = new Pt(1, 2, 3).$concat( 4, 5 ); // becomes Pt(1,2,3,4,5)
 
@@ -142,7 +142,7 @@ p.$take(&quot;xz&quot;)
 p.$concat( 10, 100 )
 p.toArray() // convert Float32Array to Array
 </code></pre>
-<p>Check out the <a href="../docs/classes/_pt_.pt.html">full documentation</a> too.</p>
+<p>Check out the <a href="../docs/">full documentation</a> too.</p>
 </div>
 
 <ol id="menu"><a id="close" href="#">&times;</a><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Space-0500.html">Space</a></li><li><a href="Typography-0600.html">Typography</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li></ol>

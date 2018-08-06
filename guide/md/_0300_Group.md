@@ -122,4 +122,4 @@ g.scale( 0.5 ).rotate2D( Const.half_pi )
 g.shear2D( 0.2 ).reflect2D( line )
 ```
 
-Check out the [full documentation](../docs/classes/_pt_.group.html) too.
+Check out the [full documentation](../docs/) too.

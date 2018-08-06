@@ -42,12 +42,14 @@ When using as a script, we usually start by adding **`Pts`** into the global sco
 Pts.namespace( window );
 ```
 
-That means we can call all Pts classes like `Group` directly, instead of `Pts.Group` which is a bit clumsy to write.
+That means we can call all Pts classes like `Group` directly, instead of `Pts.Group` which is a bit clumsy to write. 
 
-And that's it. We can now have some fun.
+Note that if you're using `Pts.quickStart`, there's no need to call `Pts.namespace` again. See below for details.
+
+Now we can get to the fun part.
 
 ### Creating Space and Form
-**`Pts`** provides a [`CanvasSpace`](#canvas-canvasspace) which enables you to use html `<canvas>` as space. You can create a `CanvasSpace` like this:
+**`Pts`** provides a [`CanvasSpace`](#canvas-canvasspace) which enables you to use html `<canvas>` as a space. You can create a `CanvasSpace` like this:
 
 ```
 var space = new CanvasSpace("#hello");
@@ -70,6 +72,15 @@ Do you know you can create your own forms by extending `CanvasForm` or `Form` cl
 // Initiate your own BeautifulForm class
 var form = new BeautifulForm( space );
 ```
+
+Alternatively, you can use the **Quick Start** mode to create CanvasSpace and CanvasForm directly. This will create two global variables called `space`, and it also returns an animate function for you to use. You can do all these in just one line of code:
+
+```
+var run = Pts.quickStart( "#hello", "#fff" );
+
+// quickStart returns a function wrapper for use in animation loop, eg:
+// run( function(time, ftime) { ... } );
+``` 
 
 Now we have paper and pencil. What should we draw?
 
@@ -149,9 +160,14 @@ And what if we also draw the inner circle of each triangle?
 
 ![js:getting_started_5](./assets/bg.png)
 
-This is what you can do with `pts` in ~10 lines of code. Add another 10 lines and make it your own!
+This is what you can do with `pts` in ~15 lines of code. 
 
 ```
+// setup
+Pts.namespace(this);
+var space = new CanvasSpace("#hello").setup({ bgcolor: "#fff" });
+var form = space.getForm();
+
 // animation
 space.add( (time, ftime) => {
 
@@ -177,6 +193,8 @@ space.add( (time, ftime) => {
 
 space.play().bindMouse();
 ```
+
+Also take a look at the alternative quick start mode example in the [`live editor`](../demo/edit/?name=triangle.incircle). Give it a try!
 
 Hope this gives you a quick and enjoyable walkthrough. But wait, there's more: Take a look at the other guides which will explain **`Pts`** features in details. 
 

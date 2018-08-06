@@ -43,9 +43,10 @@
 <pre><code>Pts.namespace( window );
 </code></pre>
 <p>That means we can call all Pts classes like <code>Group</code> directly, instead of <code>Pts.Group</code> which is a bit clumsy to write.</p>
-<p>And that's it. We can now have some fun.</p>
+<p>Note that if you're using <code>Pts.quickStart</code>, there's no need to call <code>Pts.namespace</code> again. See below for details.</p>
+<p>Now we can get to the fun part.</p>
 <h3>Creating Space and Form</h3>
-<p><strong><code>Pts</code></strong> provides a <a href="#canvas-canvasspace"><code>CanvasSpace</code></a> which enables you to use html <code>&lt;canvas&gt;</code> as space. You can create a <code>CanvasSpace</code> like this:</p>
+<p><strong><code>Pts</code></strong> provides a <a href="#canvas-canvasspace"><code>CanvasSpace</code></a> which enables you to use html <code>&lt;canvas&gt;</code> as a space. You can create a <code>CanvasSpace</code> like this:</p>
 <pre><code>var space = new CanvasSpace(&quot;#hello&quot;);
 space.setup({ bgcolor: &quot;#fff&quot; });
 </code></pre>
@@ -57,6 +58,12 @@ space.setup({ bgcolor: &quot;#fff&quot; });
 <p>Do you know you can create your own forms by extending <code>CanvasForm</code> or <code>Form</code> class? It's like making your own pencils. You can initiate your custom form like this:</p>
 <pre><code>// Initiate your own BeautifulForm class
 var form = new BeautifulForm( space );
+</code></pre>
+<p>Alternatively, you can use the <strong>Quick Start</strong> mode to create CanvasSpace and CanvasForm directly. This will create two global variables called <code>space</code>, and it also returns an animate function for you to use. You can do all these in just one line of code:</p>
+<pre><code>var run = Pts.quickStart( &quot;#hello&quot;, &quot;#fff&quot; );
+
+// quickStart returns a function wrapper for use in animation loop, eg:
+// run( function(time, ftime) { ... } );
 </code></pre>
 <p>Now we have paper and pencil. What should we draw?</p>
 <h3>Drawing a point</h3>
@@ -106,8 +113,13 @@ form.strokeOnly(&quot;#fff&quot;, 3).rect( rect );
 <p><img src="./assets/bg.png" alt="js:getting_started_4"></p>
 <p>And what if we also draw the inner circle of each triangle?</p>
 <p><img src="./assets/bg.png" alt="js:getting_started_5"></p>
-<p>This is what you can do with <code>pts</code> in ~10 lines of code. Add another 10 lines and make it your own!</p>
-<pre><code>// animation
+<p>This is what you can do with <code>pts</code> in ~15 lines of code.</p>
+<pre><code>// setup
+Pts.namespace(this);
+var space = new CanvasSpace(&quot;#hello&quot;).setup({ bgcolor: &quot;#fff&quot; });
+var form = space.getForm();
+
+// animation
 space.add( (time, ftime) =&gt; {
 
   // rectangle
@@ -132,6 +144,7 @@ space.add( (time, ftime) =&gt; {
 
 space.play().bindMouse();
 </code></pre>
+<p>Also take a look at the alternative quick start mode example in the <a href="../demo/edit/?name=triangle.incircle"><code>live editor</code></a>. Give it a try!</p>
 <p>Hope this gives you a quick and enjoyable walkthrough. But wait, there's more: Take a look at the other guides which will explain <strong><code>Pts</code></strong> features in details.</p>
 <p>We appreciate your feedbacks and bug reports. Please file an issue at <a href="https://github.com/williamngan/pts">github</a> or ping <a href="https://twitter.com/williamngan">@williamngan</a> on twitter.</p>
 <p>Enjoy and have fun!</p>

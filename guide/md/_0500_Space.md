@@ -76,7 +76,7 @@ Using [`bindMouse`](#canvas-canvasspace)  and [`bindTouch`](#canvas-canvasspace)
 space.bindMouse().bindTouch().play();
 ```
 
-CanvasSpace also provides a couple convenient properties which you may access once the space is initiated. [`pointer`](#canvas-canvasspace) gives you the current pointer position. [`size`](#canvas-canvasspace), [`center`](#canvas-canvasspace), [`width`](#canvas-canvasspace), [`height`](#canvas-canvasspace) and [`innerBound`](#canvas-canvasspace) are handy to get a space's size and center point. [`element`](#canvas-canvasspace) and [`parent`](#canvas-canvasspace) returns the html elements of this space.
+CanvasSpace also provides a couple convenient properties which you may access once the space is initiated. [`.pointer`](#canvas-canvasspace) gives you the current pointer position. [`.size`](#canvas-canvasspace), [`.center`](#canvas-canvasspace), [`.width`](#canvas-canvasspace), [`.height`](#canvas-canvasspace) and [`.innerBound`](#canvas-canvasspace) are handy to get a space's size and center point. [`.element`](#canvas-canvasspace) and [`.parent`](#canvas-canvasspace) returns the html elements of this space.
 
 CanvasSpace also supports offscreen rendering which may help with rendering complex scene. Take a look at the source code of [this study](../study/index.html?name=CanvasSpace.offscreen) for more.
 
