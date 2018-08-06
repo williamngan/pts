@@ -119,6 +119,41 @@ html * {
   display: inline-block;
 }
 
+
+.feature-block {
+  column-count: 4;
+  height: 450px;
+  column-gap: 1px;
+  margin: 100px 0px;
+
+}
+
+.feature-block .feature {
+  display: inline-block;
+  height: 450px;
+  padding: 0;
+  position: relative;
+  
+}
+
+.feature-block .image {
+  display: block;
+  width: 100%;
+  height: 300px;
+  background-size: cover; 
+}
+
+.feature-block .usage{
+  color: #345;
+  padding: 20px 20px 20px 20px;
+  font-size: 1.3em;
+  text-align: left;
+}
+
+.feature-block .cta-link {
+  margin-top: 15px;
+}
+
 .block h3 {
   font-size: 2.1em;
   color: #345;

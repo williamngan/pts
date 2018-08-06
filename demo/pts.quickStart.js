@@ -8,7 +8,7 @@ window.demoDescription = "An example of using quickStart function to create this
   // Pts.quickStart instantiates a CanvasSapce and CanvasForm and put the respective "space" and "form" variables into global scope and bind mouse and touch events.
   // It returns a function where you can init with callback functions ( animateFn, startFn, actionFn, resizeFn )
   // See guides for more details: https://ptsjs.org/guide/Get-started-0100.html
-  var run = Pts.quickStart( "pt", "#f00" ); 
+  var run = Pts.quickStart( "pt", "#f03" ); 
 
   // Pass an animate callback function to run
   run( ( time, ftime ) => { 

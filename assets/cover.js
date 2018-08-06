@@ -35,7 +35,7 @@ window.demoDescription = "In a field of points that revolves around a center, dr
         let lp = perpend( p );
         var ratio = Math.min( 1, 1 - lp.$subtract(p).magnitude()/(space.size.x/2) );
         form.stroke(`rgba(255,255,255,${ratio}`, ratio*2).line( [ p, lp ] );
-        form.fillOnly( ["#f03", "#09f", "#0c6"][i%3] ).point( p, 1 );
+        form.fillOnly( ["#f03", "#09f", "#0c6"][i%3] ).point( p, 1.5, "circle" );
       });
 
       // header position

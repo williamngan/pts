@@ -83,17 +83,17 @@ export abstract class VisualForm extends Form {
   
   
   /**
-  * Set fill color (not implemented here  -- to be implemented in subclasses).
-  */
+   * Set fill color (not implemented here  -- to be implemented in subclasses).
+   * @param c fill color as string or `false` to specify transparent.
+   */
   fill( c:string|boolean ):this {
     return this;
   }
   
   
   /**
-  * Set current fill style and remove stroke style.
-  * @example `form.fillOnly("#F90")`, `form.fillOnly("rgba(0,0,0,.5")`
-  * @param c fill color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle))
+  * Set current fill style and remove stroke style. (not implemented here  -- to be implemented in subclasses).
+  * @param c fill color as string or `false` to specify transparent.
   */
   fillOnly( c:string|boolean ):this {
     this.stroke( false );
@@ -102,18 +102,24 @@ export abstract class VisualForm extends Form {
   
   
   /**
-  * Set stroke style (not implemented here  -- to be implemented in subclasses).
-  */
+   * Set stroke style (not implemented here  -- to be implemented in subclasses). 
+   * @param c stroke color as string or `false` to specify transparent.
+   * @param width Optional value (can be floating point) to set line width
+   * @param linejoin Optional string to set line joint style. Can be "miter", "bevel", or "round".
+   * @param linecap Optional string to set line cap style. Can be "butt", "round", or "square".
+   */
   stroke( c:string|boolean, width?:number, linejoin?:string, linecap?:string ):this {
     return this;
   }
   
   
   /**
-  * Set current stroke style and remove fill style.
-  * @example `form.strokeOnly("#F90")`, `form.strokeOnly("#000", 0.5, 'round', 'square')`
-  * @param c stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle)
-  */
+   * Set stroke style and remove fill style. (not implemented here  -- to be implemented in subclasses). 
+   * @param c stroke color as string or `false` to specify transparent.
+   * @param width Optional value (can be floating point) to set line width
+   * @param linejoin Optional string to set line joint style. Can be "miter", "bevel", or "round".
+   * @param linecap Optional string to set line cap style. Can be "butt", "round", or "square".
+   */
   strokeOnly( c:string|boolean, width?:number, linejoin?:string, linecap?:string ):this {
     this.fill( false );
     return this.stroke( c, width, linejoin, linecap );

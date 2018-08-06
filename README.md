@@ -67,6 +67,16 @@ npm run typings
 npm run minify
 ```
 
+---
+
+### Contributing
+
+We appreciate your support and feedbacks!
+
+Please file issues if you find bugs and have feature requests. If you are able to send small PRs to improve Pts or fix bugs, that would be awesome too. 
+
+For larger PRs, please ping [@williamngan](https://twitter.com/williamngan) to discuss first.
+
 ---    
 
 ### License

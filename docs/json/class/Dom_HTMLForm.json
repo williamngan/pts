@@ -260,7 +260,7 @@
       "source": [
         [
           "Form.ts",
-          160,
+          166,
           9
         ]
       ],
@@ -370,23 +370,18 @@
       "inherits": "VisualForm.fillOnly",
       "signatures": [
         {
-          "comment": "Set current fill style and remove stroke style.",
+          "comment": "Set current fill style and remove stroke style. (not implemented here  -- to be implemented in subclasses).",
           "returns": "this",
           "returns_comment": false,
           "parameters": [
             {
               "name": "c",
-              "comment": "fill color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle))\n",
+              "comment": "fill color as string or `false` to specify transparent.\n",
               "type": "string | boolean",
               "default": false
             }
           ],
-          "tags": [
-            {
-              "tag": "example",
-              "text": "`form.fillOnly(\"#F90\")`, `form.fillOnly(\"rgba(0,0,0,.5\")`"
-            }
-          ]
+          "tags": []
         }
       ]
     },
@@ -519,7 +514,7 @@
       "source": [
         [
           "Form.ts",
-          196,
+          202,
           7
         ]
       ],
@@ -649,7 +644,7 @@
       "source": [
         [
           "Form.ts",
-          138,
+          144,
           8
         ]
       ],
@@ -721,7 +716,7 @@
       "source": [
         [
           "Form.ts",
-          212,
+          218,
           10
         ]
       ],
@@ -781,7 +776,7 @@
       "source": [
         [
           "Form.ts",
-          229,
+          235,
           7
         ]
       ],
@@ -900,7 +895,7 @@
       "source": [
         [
           "Form.ts",
-          169,
+          175,
           9
         ]
       ],
@@ -983,7 +978,7 @@
       "source": [
         [
           "Form.ts",
-          117,
+          123,
           12
         ]
       ],
@@ -993,41 +988,36 @@
       "inherits": "VisualForm.strokeOnly",
       "signatures": [
         {
-          "comment": "Set current stroke style and remove fill style.",
+          "comment": "Set stroke style and remove fill style. (not implemented here  -- to be implemented in subclasses).",
           "returns": "this",
           "returns_comment": false,
           "parameters": [
             {
               "name": "c",
-              "comment": "stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle)\n",
+              "comment": "stroke color as string or `false` to specify transparent.",
               "type": "string | boolean",
               "default": false
             },
             {
               "name": "width",
-              "comment": "",
+              "comment": "Optional value (can be floating point) to set line width",
               "type": "number",
               "default": false
             },
             {
               "name": "linejoin",
-              "comment": "",
+              "comment": "Optional string to set line joint style. Can be \"miter\", \"bevel\", or \"round\".",
               "type": "string",
               "default": false
             },
             {
               "name": "linecap",
-              "comment": "",
+              "comment": "Optional string to set line cap style. Can be \"butt\", \"round\", or \"square\".\n",
               "type": "string",
               "default": false
             }
           ],
-          "tags": [
-            {
-              "tag": "example",
-              "text": "`form.strokeOnly(\"#F90\")`, `form.strokeOnly(\"#000\", 0.5, 'round', 'square')`"
-            }
-          ]
+          "tags": []
         }
       ]
     },
