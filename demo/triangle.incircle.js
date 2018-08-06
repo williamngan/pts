@@ -3,6 +3,8 @@
 
 window.demoDescription = "Fitting four circles inside and outside of four triangles, which are connected to the pointer.";
 
+//// Demo code starts (anonymous function wrapper is optional) ---
+
 (function() {
   
   var run = Pts.quickStart( "#pt", "#fe3" ); 

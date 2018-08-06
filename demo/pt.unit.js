@@ -3,6 +3,8 @@
 
 window.demoDescription = "Calculate a unit vector from center to mouse position. Use its direction to control a grid of lines.";
 
+//// Demo code starts (anonymous function wrapper is optional) ---
+
 (function() {
 
   // Pts quick start mode.

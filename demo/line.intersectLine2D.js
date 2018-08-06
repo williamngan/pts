@@ -3,15 +3,11 @@
 
 window.demoDescription = "Lines rotating in a grid. Intersections between lines are marked with circles. Move the pointer to change the rotation speed.";
 
+Pts.quickStart( "#pt", "#123" );
+
+//// Demo code starts (anonymous function wrapper is optional) ---
+
 (function() {
-
-  Pts.namespace( this );
-
-  var space = new CanvasSpace("#pt").setup({bgcolor: "#123", resize: true, retina: true});
-  var form = space.getForm();
-
-
-  //// Demo code ---
 
   var pts, lines;
 

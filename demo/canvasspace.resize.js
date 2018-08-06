@@ -3,15 +3,11 @@
 
 window.demoDescription = "Draw shapes based on the size of space. Resize the window and the drawing will update.";
 
+Pts.quickStart( "#pt", "#96bfed" );
+
+//// Demo code starts (anonymous function wrapper is optional) ---
+
 (function() {
-
-  Pts.namespace( this );
-
-  var space = new CanvasSpace("#pt").setup({bgcolor: "#96bfed", resize: true, retina: true});
-  var form = space.getForm();
-
-
-  //// Demo code ---
 
   var currBound = new Bound();
 

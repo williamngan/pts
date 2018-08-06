@@ -3,14 +3,11 @@
 
 window.demoDescription = "A retro-style dazzling effect created by a grid whose cells change color and size based on their distances to the pointer.";
 
+Pts.quickStart( "#pt", "#123" );
+
+//// Demo code starts (anonymous function wrapper is optional) ---
+
 (function() {
-
-  Pts.namespace( this );
-  var space = new CanvasSpace("#pt").setup({bgcolor: "#123", resize: true, retina: true});
-  var form = space.getForm();
-
-
-  //// Demo code ---
 
   var pts = [];
   var follower = new Pt(); // follows the pointer

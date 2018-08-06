@@ -3,15 +3,14 @@
 
 window.demoDescription = "Pts also provides experimental support for rendering HTML elements. Take a look using your browser's DOM inspector.";
 
-(function() {
-  
+//// Demo code starts (anonymous function wrapper is optional) ---
+
+(function() {  
+
+  // Create HTML space and form
   Pts.namespace( this );
   var space = new HTMLSpace("#pt").setup({bgcolor: "#36f", resize: true });
   var form = space.getForm();
-  
-
-  //// Demo code ---
-  let pts = new Group();
 
   // css for testing
   var css = document.createElement("style");

@@ -3,14 +3,11 @@
 
 window.demoDescription = "Move the pointer to creates confetti. A simple example to show how to extend Pt class.";
 
+Pts.quickStart( "#pt", "#fe3" );
+
+//// Demo code starts (anonymous function wrapper is optional) ---
+
 (function() {
-
-  Pts.namespace( this );
-  var space = new CanvasSpace("#pt").setup({bgcolor: "#fe3", resize: true, retina: true});
-  var form = space.getForm();
-
-
-  //// Demo code ---
 
   let pts = new Group();
 

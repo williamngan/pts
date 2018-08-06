@@ -3,15 +3,11 @@
 
 window.demoDescription = "Canvas textbox that fit single and multiline text in boxes with truncations. Resize browser window to reflow text.";
 
+Pts.quickStart( "#pt", "#0c9" );
+
+//// Demo code starts (anonymous function wrapper is optional) ---
+
 (function() {
-
-  Pts.namespace( this );
-
-  var space = new CanvasSpace("#pt").setup({bgcolor: "#0c9", resize: true, retina: true});
-  var form = space.getForm();
-
-
-  //// Demo code ---
 
   let grid = [];
   let headerResize;

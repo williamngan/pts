@@ -3,12 +3,12 @@
 
 window.demoDescription = "Physics simulation with various polygons and circles. Move pointer to control the triangle.";
 
+Pts.quickStart( "#pt", "#30a" );
+
+//// Demo code starts (anonymous function wrapper is optional) ---
+
 (function() {
 
-  Pts.namespace( this );
-
-  var space = new CanvasSpace("#pt").setup({bgcolor: "#30a", resize: true, retina: true});
-  var form = space.getForm();
   var world;
 
   space.add( {

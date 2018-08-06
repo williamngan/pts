@@ -3,15 +3,11 @@
 
 window.demoDescription = "Create a set of points around a center point, varying each's radius slightly. Draw a b-spline curve around the points.";
 
+Pts.quickStart( "#pt", "#f03" );
+
+//// Demo code starts (anonymous function wrapper is optional) ---
+
 (function() {
-
-  Pts.namespace( this );
-
-  var space = new CanvasSpace("#pt").setup({bgcolor: "#f03", resize: true, retina: true});
-  var form = space.getForm();
-
-
-  //// Demo code ---
 
   let pts, temp, radius;
 

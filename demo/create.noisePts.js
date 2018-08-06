@@ -3,14 +3,11 @@
 
 window.demoDescription = "Using Perlin noise to animate a line and a grid. Move mouse or touch around the canvas to change speed.";
 
+Pts.quickStart( "#pt", "#f1f5f9" );
+
+//// Demo code starts (anonymous function wrapper is optional) ---
+
 (function() {
-
-  Pts.namespace( this );
-  var space = new CanvasSpace("#pt").setup({bgcolor: "#f1f5f9", resize: true, retina: true});
-  var form = space.getForm();
-
-
-  //// Demo code ---
 
   let noiseLine = [];
   let noiseGrid = [];

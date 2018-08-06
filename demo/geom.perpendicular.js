@@ -3,6 +3,8 @@
 
 window.demoDescription = "Draw a series of perpendicular lines along a diagonal path to visualize sine waves.";
 
+//// Demo code starts (anonymous function wrapper is optional) ---
+
 (function() {
 
   // Pts quick start mode. 

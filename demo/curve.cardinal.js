@@ -3,15 +3,11 @@
 
 window.demoDescription = "Draw three cardinal curves with different tensions. Move pointer near the control points to modify the curve.";
 
+Pts.quickStart( "#pt", "#0c6" );
+
+//// Demo code starts (anonymous function wrapper is optional) ---
+
 (function() {
-
-  Pts.namespace( this );
-
-  var space = new CanvasSpace("#pt").setup({bgcolor: "#0c6", resize: true, retina: true});
-  var form = space.getForm();
-
-
-  //// Demo code ---
 
   let pts, temp;
 

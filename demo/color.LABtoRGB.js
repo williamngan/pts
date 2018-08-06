@@ -3,15 +3,11 @@
 
 window.demoDescription = "Create a gradient grid using Lab color space. The pointer position updates the lightness. With subtle wave-like animation.";
 
+Pts.quickStart( "#pt", "#96bfed" );
+
+//// Demo code starts (anonymous function wrapper is optional) ---
+
 (function() {
-
-  Pts.namespace( this );
-
-  var space = new CanvasSpace("#pt").setup({bgcolor: "#96bfed", resize: true, retina: true});
-  var form = space.getForm();
-
-
-  //// Demo code ---
 
   var grid = [];
 

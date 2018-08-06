@@ -3,6 +3,8 @@
 
 window.demoDescription = "Interpolate every 2 corners of a rectangle to draw inner rectangles recursively.";
 
+//// Demo code starts (anonymous function wrapper is optional) ---
+
 (function() { 
 
   // A function to recusively draw interpolated squares up to max depth

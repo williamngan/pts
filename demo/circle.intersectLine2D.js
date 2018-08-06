@@ -3,14 +3,12 @@
 
 window.demoDescription = "A circle moves in a field of line segments. Check intersections on both line paths and line segments, and highlight the intersection points and paths.";
 
+Pts.quickStart( "#pt", "#123" );
+
+//// Demo code starts (anonymous function wrapper is optional) ---
+
 (function() {
-  
-  Pts.namespace( this );
-  var space = new CanvasSpace("#pt").setup({bgcolor: "#123", resize: true, retina: true});
-  var form = space.getForm();
-  
-  
-  //// Demo code ---
+
   var lines = [];
 
   // function to create random lines

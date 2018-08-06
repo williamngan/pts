@@ -3,6 +3,8 @@
 
 window.demoDescription = "A circle and a donut meets. Indicate their points of intersections.";
 
+//// Demo code starts (anonymous function wrapper is optional) ---
+
 (function() {
 
   // Pts quick start mode.

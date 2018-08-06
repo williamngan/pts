@@ -3,14 +3,11 @@
 
 window.demoDescription = "A visualization of various shaping functions, which are also applied to change the circles' sizes correspondingly. Based on the algorithms from Robert Penner and Golan Levin";
 
+Pts.quickStart( "#pt", "#fe3" );
+
+//// Demo code starts (anonymous function wrapper is optional) ---
+
 (function() {
-
-  Pts.namespace( this );
-  var space = new CanvasSpace("#pt").setup({bgcolor: "#fe3", resize: true, retina: true});
-  var form = space.getForm();
-
-
-  //// Demo code ---
 
   var grid;
   var fns = [

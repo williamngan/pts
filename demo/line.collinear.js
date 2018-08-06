@@ -3,15 +3,12 @@
 
 window.demoDescription = "A set of lines revolves around a center point. Each line's color depends on whether the pointer lies on its left or right side, and if it's collinear with the pointer.";
 
+Pts.quickStart( "#pt", "#123" );
+
+//// Demo code starts (anonymous function wrapper is optional) ---
+
 (function() {
-
-  Pts.namespace( this );
-  var space = new CanvasSpace("#pt").setup({bgcolor: "#123", resize: true, retina: true});
-  var form = space.getForm();
-
-
-  //// Demo code ---
-
+  
   var pairs = [];
 
   space.add({ 

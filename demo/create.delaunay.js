@@ -3,16 +3,11 @@
 
 window.demoDescription = "Generate Delaunay and Voronoi tessellations. When 100 points are added, the diagram will animate and display guidelines at pointer position.";
 
+Pts.quickStart( "#pt", "#123" );
+
+//// Demo code starts (anonymous function wrapper is optional) ---
+
 (function() {
-
-  Pts.namespace( this );
-
-  var space = new CanvasSpace("#pt").setup({bgcolor: "#123", resize: true, retina: true});
-  var form = space.getForm();
-
-
-  //// Demo code ---
-
 
   var de = new Delaunay(); // Delaunay is a Group of Pts
   var triangles = []; // store the delaunay triangles

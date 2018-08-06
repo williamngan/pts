@@ -3,14 +3,11 @@
 
 window.demoDescription = "A set of points records the mouse trail as the mouse moves. When mouse is down and dragging, the trail will extend. When released, the trail gradually shortens.";
 
+Pts.quickStart( "#pt", "#fe3" );
+
+//// Demo code starts (anonymous function wrapper is optional) ---
+
 (function() {
-
-  Pts.namespace( this );
-  var space = new CanvasSpace("#pt").setup({bgcolor: "#fe3", resize: true, retina: true});
-  var form = space.getForm();
-
-
-  //// Demo code ---
 
   var chain = new Group();
   var stretch = false;

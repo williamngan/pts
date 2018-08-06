@@ -3,14 +3,12 @@
 
 window.demoDescription = "A circle moves in a field of random points. If a point intersects with the circle, it grows bigger and moves slightly toward the circle's center.";
 
+Pts.quickStart( "#pt", "#123" );
+
+//// Demo code starts (anonymous function wrapper is optional) ---
+
 (function() {
   
-  Pts.namespace( this );
-  var space = new CanvasSpace("#pt").setup({bgcolor: "#123", resize: true, retina: true});
-  var form = space.getForm();
-  
-  
-  //// Demo code ---
   var pts = [];
   var colors = ["#ff2d5d", "#42dc8e", "#2e43eb", "#ffe359"];
 

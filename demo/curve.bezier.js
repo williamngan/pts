@@ -3,14 +3,11 @@
 
 window.demoDescription = "Add a point to a trail as the pointer moves. Use those points as controls for a continuous bezier curve.";
 
+Pts.quickStart( "#pt", "#123" );
+
+//// Demo code starts (anonymous function wrapper is optional) ---
+
 (function() {
-
-  Pts.namespace( this );
-  var space = new CanvasSpace("#pt").setup({bgcolor: "#123", resize: true, retina: true});
-  var form = space.getForm();
-
-
-  //// Demo code ---
 
   var chain = new Group();
 

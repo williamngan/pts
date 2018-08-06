@@ -3,6 +3,8 @@
 
 window.demoDescription = "An example of using quickStart function to create this in 5 lines of code";
 
+//// Demo code starts (anonymous function wrapper is optional) ---
+
 (function() {
 
   // Pts.quickStart instantiates a CanvasSapce and CanvasForm and put the respective "space" and "form" variables into global scope and bind mouse and touch events.

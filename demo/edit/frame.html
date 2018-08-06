@@ -11,29 +11,49 @@
           position: absolute;
           top: 0; left: 0; right: 0; bottom: 0;
         }
+        #error {
+          position: absolute; top: 30px; left: 30px; right: 30px;
+          color: #f03; font-size: 14px;
+        }
       </style>
   </head>
   <body>
     <div id="pt"></div>
+    <div id="error"></div>
+
+    <script type="text/javascript">
+      window.addEventListener( "error", function (e){
+        document.getElementById("error").style.display = "block";
+        document.getElementById("error").textContent = e.message + " (line: "+e.lineno+", column: "+e.colno+")";
+      });
+    </script>
 
     <script type="text/javascript">
       function update( txt ) {
         document.getElementById("pt").innerHTML = "";
+        document.getElementById("error").style.display = "none";
 
         var existing = document.getElementById("ptscode");
         
         if (existing) {
-          if (window.space) window.cancelAnimationFrame( window.space._animID ); // stop immediately
-          existing.parentNode.removeChild(existing);
+          if (window.space) {
+            window.cancelAnimationFrame( window.space._animID ); // stop immediately
+            window.space.stop();
+            window.space.removeAll();
+            window.space = null;
+          }
+          if (existing.parentNode) existing.parentNode.removeChild(existing);
         }
 
         var sc = document.createElement("script");
         sc.setAttribute("id", "ptscode")
         sc.type = "text/javascript";
 
+        
         sc.innerHTML = txt;
         document.body.appendChild( sc );
       }
+
     </script>
 
   </body>

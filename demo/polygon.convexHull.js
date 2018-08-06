@@ -3,15 +3,11 @@
 
 window.demoDescription = "Use convex hull to envelope a set of points. Move the pointer to modify the boundary.";
 
+Pts.quickStart( "#pt", "#0c3" );
+
+//// Demo code starts (anonymous function wrapper is optional) ---
+
 (function() {
-
-  Pts.namespace( this );
-
-  var space = new CanvasSpace("#pt").setup({bgcolor: "#0c3", resize: true, retina: true});
-  var form = space.getForm();
-
-
-  //// Demo code ---
 
   let pts;
 
