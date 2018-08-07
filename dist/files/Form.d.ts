@@ -1,4 +1,5 @@
-import { Pt, PtLike, GroupLike } from "./Pt";
+import { Pt } from "./Pt";
+import { PtLike, GroupLike } from "./Types";
 export declare abstract class Form {
     protected _ready: boolean;
     readonly ready: boolean;

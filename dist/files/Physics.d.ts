@@ -1,5 +1,5 @@
-import { Pt, PtLike, Group, GroupLike } from "./Pt";
-import { Bound } from "./Bound";
+import { Pt, Group, Bound } from "./Pt";
+import { PtLike, GroupLike } from "./Types";
 export declare class World {
     private _lastTime;
     protected _gravity: Pt;

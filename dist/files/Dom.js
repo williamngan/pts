@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Space_1 = require("./Space");
 const Form_1 = require("./Form");
-const Bound_1 = require("./Bound");
 const Util_1 = require("./Util");
 const Pt_1 = require("./Pt");
 class DOMSpace extends Space_1.MultiTouchSpace {
@@ -98,7 +97,7 @@ class DOMSpace extends Space_1.MultiTouchSpace {
         return this;
     }
     _resizeHandler(evt) {
-        let b = Bound_1.Bound.fromBoundingRect(this._container.getBoundingClientRect());
+        let b = Pt_1.Bound.fromBoundingRect(this._container.getBoundingClientRect());
         if (this._autoResize) {
             this.styles({ width: "100%", height: "100%" }, true);
         }

@@ -1,8 +1,7 @@
-import { IPlayer } from './Space';
 import { VisualForm, Font } from "./Form";
-import { Bound } from './Bound';
-import { Pt, PtLike, GroupLike } from './Pt';
-import { DOMSpace, DOMFormContext } from "./Dom";
+import { Pt, Bound } from './Pt';
+import { DOMSpace } from "./Dom";
+import { PtLike, GroupLike, IPlayer, DOMFormContext } from "./Types";
 export declare class SVGSpace extends DOMSpace {
     id: string;
     protected _bgcolor: string;
@@ -22,7 +21,7 @@ export declare class SVGForm extends VisualForm {
     protected _ready: boolean;
     constructor(space: SVGSpace);
     readonly space: SVGSpace;
-    protected styleTo(k: any, v: any): void;
+    styleTo(k: any, v: any): void;
     fill(c: string | boolean): this;
     stroke(c: string | boolean, width?: number, linejoin?: string, linecap?: string): this;
     cls(c: string | boolean): this;
@@ -44,7 +43,7 @@ export declare class SVGForm extends VisualForm {
     square(pt: PtLike, halfsize: number): this;
     static line(ctx: DOMFormContext, pts: GroupLike | number[][]): SVGElement;
     line(pts: GroupLike | number[][]): this;
-    static _poly(ctx: DOMFormContext, pts: GroupLike | number[][], closePath?: boolean): SVGElement;
+    protected static _poly(ctx: DOMFormContext, pts: GroupLike | number[][], closePath?: boolean): SVGElement;
     static polygon(ctx: DOMFormContext, pts: GroupLike | number[][]): SVGElement;
     polygon(pts: GroupLike | number[][]): this;
     static rect(ctx: DOMFormContext, pts: GroupLike | number[][]): SVGElement;

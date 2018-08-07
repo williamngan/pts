@@ -1,10 +1,11 @@
 import { Pt, Group } from "./Pt";
+import { UIHandler } from "./Types";
 export declare enum UIShape {
     Rectangle = 0,
     Circle = 1,
     Polygon = 2,
     Polyline = 3,
-    Line = 4,
+    Line = 4
 }
 export declare const UIPointerActions: {
     up: string;
@@ -15,7 +16,6 @@ export declare const UIPointerActions: {
     over: string;
     out: string;
 };
-export declare type UIHandler = (pt: Pt, target: UI, type: string) => void;
 export declare class UI {
     group: Group;
     shape: UIShape;

@@ -1,4 +1,5 @@
-import { Pt, PtLike, Group, GroupLike } from "./Pt";
+import { Pt, Group } from "./Pt";
+import { PtLike, GroupLike } from "./Types";
 export declare class Num {
     static equals(a: number, b: number, threshold?: number): boolean;
     static lerp(a: number, b: number, t: number): number;
@@ -10,11 +11,11 @@ export declare class Num {
     static sum(pts: GroupLike | number[][]): Pt;
     static average(pts: GroupLike | number[][]): Pt;
     static cycle(t: number): number;
-    static mapToRange(n: number, currA: any, currB: any, targetA: any, targetB: any): number;
+    static mapToRange(n: number, currA: number, currB: number, targetA: number, targetB: number): number;
 }
 export declare class Geom {
     static boundAngle(angle: number): number;
-    static boundRadian(angle: number): number;
+    static boundRadian(radian: number): number;
     static toRadian(angle: number): number;
     static toDegree(radian: number): number;
     static boundingBox(pts: GroupLike): Group;

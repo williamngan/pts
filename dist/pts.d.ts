@@ -34,13 +34,6 @@ export class Bound extends Group implements IPt {
     update(): this;
 }
 
-export interface PtsCanvasRenderingContext2D extends CanvasRenderingContext2D {
-    webkitBackingStorePixelRatio?: number;
-    mozBackingStorePixelRatio?: number;
-    msBackingStorePixelRatio?: number;
-    oBackingStorePixelRatio?: number;
-    backingStorePixelRatio?: number;
-}
 export class CanvasSpace extends MultiTouchSpace {
     protected _canvas: HTMLCanvasElement;
     protected _container: Element;
@@ -80,7 +73,7 @@ export class CanvasSpace extends MultiTouchSpace {
 export class CanvasForm extends VisualForm {
     protected _space: CanvasSpace;
     protected _ctx: CanvasRenderingContext2D;
-    protected _estimateTextWidth: (string) => number;
+    protected _estimateTextWidth: (string: any) => number;
     protected _style: {
         fillStyle: string;
         strokeStyle: string;
@@ -124,7 +117,6 @@ export class CanvasForm extends VisualForm {
     log(txt: any): this;
 }
 
-export type ColorType = "rgb" | "hsl" | "hsb" | "lab" | "lch" | "luv" | "xyz";
 export class Color extends Pt {
     protected _mode: ColorType;
     static ranges: {
@@ -158,6 +150,7 @@ export class Color extends Pt {
     u: number;
     v: number;
     readonly alpha: number;
+    normalized: boolean;
     normalize(toNorm?: boolean): Color;
     $normalize(toNorm?: boolean): Color;
     toString(format?: ("hex" | "rgb" | "rgba" | "mode")): string;
@@ -198,16 +191,6 @@ export class Noise extends Pt {
     seed(s: any): void;
     noise2D(): number;
 }
-export type DelaunayShape = {
-    i: number;
-    j: number;
-    k: number;
-    triangle: GroupLike;
-    circle: Group;
-};
-export type DelaunayMesh = {
-    [key: string]: DelaunayShape;
-}[];
 export class Delaunay extends Group {
     delaunay(triangleOnly?: boolean): GroupLike[] | DelaunayShape[];
     voronoi(): Group[];
@@ -221,17 +204,6 @@ export class Delaunay extends Group {
     protected static _dedupe(edges: number[]): number[];
 }
 
-export type DOMFormContext = {
-    group: Element;
-    groupID: string;
-    groupCount: number;
-    currentID: string;
-    currentClass?: string;
-    style: object;
-    font: string;
-    fontSize: number;
-    fontFamily: string;
-};
 export class DOMSpace extends MultiTouchSpace {
     protected _canvas: HTMLElement | SVGElement;
     protected _container: Element;
@@ -362,15 +334,15 @@ export class Vec {
     static ceil(a: PtLike): PtLike;
     static round(a: PtLike): PtLike;
     static max(a: PtLike): {
-        value;
-        index;
+        value: any;
+        index: any;
     };
     static min(a: PtLike): {
-        value;
-        index;
+        value: any;
+        index: any;
     };
     static sum(a: PtLike): number;
-    static map(a: PtLike, fn: (n: number, index: number, arr) => number): PtLike;
+    static map(a: PtLike, fn: (n: number, index: number, arr: any) => number): PtLike;
 }
 export class Mat {
     static add(a: GroupLike, b: GroupLike | number[][] | number): Group;
@@ -400,11 +372,11 @@ export class Num {
     static sum(pts: GroupLike | number[][]): Pt;
     static average(pts: GroupLike | number[][]): Pt;
     static cycle(t: number): number;
-    static mapToRange(n: number, currA: any, currB: any, targetA: any, targetB: any): number;
+    static mapToRange(n: number, currA: number, currB: number, targetA: number, targetB: number): number;
 }
 export class Geom {
     static boundAngle(angle: number): number;
-    static boundRadian(angle: number): number;
+    static boundRadian(radian: number): number;
     static toRadian(angle: number): number;
     static toDegree(radian: number): number;
     static boundingBox(pts: GroupLike): Group;
@@ -476,14 +448,6 @@ export class Range {
     ticks(count: number): Group;
 }
 
-export type IntersectContext = {
-    which: number;
-    dist: number;
-    normal: Pt;
-    vertex: Pt;
-    edge: Group;
-    other?: any;
-};
 export class Line {
     static fromAngle(anchor: PtLike, angle: number, magnitude: number): Group;
     static slope(p1: PtLike | number[], p2: PtLike | number[]): number;
@@ -515,13 +479,12 @@ export class Rectangle {
     static from(topLeft: PtLike | number[], widthOrSize: number | PtLike, height?: number): Group;
     static fromTopLeft(topLeft: PtLike | number[], widthOrSize: number | PtLike, height?: number): Group;
     static fromCenter(center: PtLike | number[], widthOrSize: number | PtLike, height?: number): Group;
-    static toCircle(pts: GroupLike): Group;
+    static toCircle(pts: GroupLike, within?: boolean): Group;
     static toSquare(pts: GroupLike, enclose?: boolean): Group;
     static size(pts: GroupLike): Pt;
     static center(pts: GroupLike): Pt;
     static corners(rect: GroupLike): Group;
     static sides(rect: GroupLike): Group[];
-    static lines(rect: GroupLike): Group[];
     static boundingBox(rects: GroupLike[]): Group;
     static polygon(rect: GroupLike): Group;
     static quadrants(rect: GroupLike, center?: PtLike): Group[];
@@ -538,9 +501,8 @@ export class Circle {
     static intersectLine2D(pts: GroupLike, line: GroupLike): Group;
     static intersectCircle2D(pts: GroupLike, circle: GroupLike): Group;
     static intersectRect2D(pts: GroupLike, rect: GroupLike): Group;
-    static toRect(pts: GroupLike): Group;
-    static toInnerRect(pts: GroupLike): Group;
-    static toInnerTriangle(pts: GroupLike): Group;
+    static toRect(pts: GroupLike, within?: boolean): Group;
+    static toTriangle(pts: GroupLike, within?: boolean): Group;
 }
 export class Triangle {
     static fromRect(rect: GroupLike): Group;
@@ -671,15 +633,7 @@ export class Body extends Group {
     processParticle(b: Particle): void;
 }
 
-export interface IPt {
-    x?: number;
-    y?: number;
-    z?: number;
-    w?: number;
-}
 export var PtBaseArray: Float32ArrayConstructor;
-export type GroupLike = Group | Pt[];
-export type PtLike = Pt | Float32Array | number[];
 export class Pt extends PtBaseArray implements IPt, Iterable<number> {
     protected _id: string;
     constructor(...args: any[]);
@@ -711,7 +665,7 @@ export class Pt extends PtBaseArray implements IPt, Iterable<number> {
     unit(magnitude?: number): Pt;
     $unit(magnitude?: number): Pt;
     dot(...args: any[]): number;
-    cross2D(...args: any[]): number;
+    $cross2D(...args: any[]): number;
     $cross(...args: any[]): Pt;
     $project(...args: any[]): Pt;
     projectScalar(...args: any[]): number;
@@ -787,23 +741,36 @@ export class Group extends Array<Pt> {
     $zip(defaultValue?: number | boolean, useLongest?: boolean): Group;
     toString(): string;
 }
+export class Bound extends Group implements IPt {
+    protected _center: Pt;
+    protected _size: Pt;
+    protected _topLeft: Pt;
+    protected _bottomRight: Pt;
+    protected _inited: boolean;
+    constructor(...args: Pt[]);
+    static fromBoundingRect(rect: ClientRect): Bound;
+    static fromGroup(g: GroupLike): Bound;
+    protected init(): void;
+    clone(): Bound;
+    protected _updateSize(): void;
+    protected _updateCenter(): void;
+    protected _updatePosFromTop(): void;
+    protected _updatePosFromBottom(): void;
+    protected _updatePosFromCenter(): void;
+    size: Pt;
+    center: Pt;
+    topLeft: Pt;
+    bottomRight: Pt;
+    width: number;
+    height: number;
+    depth: number;
+    readonly x: number;
+    readonly y: number;
+    readonly z: number;
+    readonly inited: boolean;
+    update(): this;
+}
 
-export type AnimateFunction = (time?: number, frameTime?: number, currentSpace?: any) => void;
-export interface IPlayer {
-    animateID?: string;
-    animate?: AnimateFunction;
-    resize?(size: IPt, evt?: Event): undefined;
-    action?(type: string, px: number, py: number, evt: Event): any;
-    start?(bound: Bound, space: Space): any;
-}
-export interface ISpacePlayers {
-    [key: string]: IPlayer;
-}
-export interface ITimer {
-    prev: number;
-    diff: number;
-    end: number;
-}
 export abstract class Space {
     id: string;
     protected bound: Bound;
@@ -815,7 +782,7 @@ export abstract class Space {
     protected _isReady: boolean;
     protected _playing: boolean;
     refresh(b: boolean): this;
-    add(p: IPlayer | AnimateFunction): this;
+    add(p: IPlayer | AnimateCallbackFn): this;
     remove(player: IPlayer): this;
     removeAll(): this;
     play(time?: number): this;
@@ -837,11 +804,6 @@ export abstract class Space {
     abstract resize(b: IPt, evt?: Event): this;
     abstract clear(): this;
     abstract getForm(): Form;
-}
-export type TouchPointsKey = "touches" | "changedTouches" | "targetTouches";
-export interface MultiTouchElement {
-    addEventListener(evt: any, callback: Function): any;
-    removeEventListener(evt: any, callback: Function): any;
 }
 export abstract class MultiTouchSpace extends Space {
     protected _pressed: boolean;
@@ -883,7 +845,7 @@ export class SVGForm extends VisualForm {
     protected _ready: boolean;
     constructor(space: SVGSpace);
     readonly space: SVGSpace;
-    protected styleTo(k: any, v: any): void;
+    styleTo(k: any, v: any): void;
     fill(c: string | boolean): this;
     stroke(c: string | boolean, width?: number, linejoin?: string, linecap?: string): this;
     cls(c: string | boolean): this;
@@ -905,7 +867,7 @@ export class SVGForm extends VisualForm {
     square(pt: PtLike, halfsize: number): this;
     static line(ctx: DOMFormContext, pts: GroupLike | number[][]): SVGElement;
     line(pts: GroupLike | number[][]): this;
-    static _poly(ctx: DOMFormContext, pts: GroupLike | number[][], closePath?: boolean): SVGElement;
+    protected static _poly(ctx: DOMFormContext, pts: GroupLike | number[][], closePath?: boolean): SVGElement;
     static polygon(ctx: DOMFormContext, pts: GroupLike | number[][]): SVGElement;
     polygon(pts: GroupLike | number[][]): this;
     static rect(ctx: DOMFormContext, pts: GroupLike | number[][]): SVGElement;
@@ -915,10 +877,79 @@ export class SVGForm extends VisualForm {
     log(txt: any): this;
 }
 
+export interface IPt {
+    x?: number;
+    y?: number;
+    z?: number;
+    w?: number;
+}
+export type PtLike = Pt | Float32Array | number[];
+export type GroupLike = Group | Pt[];
+export type AnimateCallbackFn = (time?: number, frameTime?: number, currentSpace?: any) => void;
+export interface IPlayer {
+    animateID?: string;
+    animate?: AnimateCallbackFn;
+    resize?(size: IPt, evt?: Event): undefined;
+    action?(type: string, px: number, py: number, evt: Event): any;
+    start?(bound: Bound, space: Space): any;
+}
+export interface ISpacePlayers {
+    [key: string]: IPlayer;
+}
+export interface ITimer {
+    prev: number;
+    diff: number;
+    end: number;
+}
+export type TouchPointsKey = "touches" | "changedTouches" | "targetTouches";
+export interface MultiTouchElement {
+    addEventListener(evt: any, callback: Function): any;
+    removeEventListener(evt: any, callback: Function): any;
+}
+export interface PtsCanvasRenderingContext2D extends CanvasRenderingContext2D {
+    webkitBackingStorePixelRatio?: number;
+    mozBackingStorePixelRatio?: number;
+    msBackingStorePixelRatio?: number;
+    oBackingStorePixelRatio?: number;
+    backingStorePixelRatio?: number;
+}
+export type ColorType = "rgb" | "hsl" | "hsb" | "lab" | "lch" | "luv" | "xyz";
+export type DelaunayShape = {
+    i: number;
+    j: number;
+    k: number;
+    triangle: GroupLike;
+    circle: Group;
+};
+export type DelaunayMesh = {
+    [key: string]: DelaunayShape;
+}[];
+export type DOMFormContext = {
+    group: Element;
+    groupID: string;
+    groupCount: number;
+    currentID: string;
+    currentClass?: string;
+    style: object;
+    font: string;
+    fontSize: number;
+    fontFamily: string;
+};
+export type IntersectContext = {
+    which: number;
+    dist: number;
+    normal: Pt;
+    vertex: Pt;
+    edge: Group;
+    other?: any;
+};
+export type UIHandler = (pt: Pt, target: UI, type: string) => void;
+export type WarningType = "error" | "warn" | "mute";
+
 export class Typography {
-    static textWidthEstimator(fn: (string) => number, samples?: string[], distribution?: number[]): (string) => number;
-    static truncate(fn: (string) => number, str: string, width: number, tail?: string): [string, number];
-    static fontSizeToBox(box: GroupLike, ratio?: number, byHeight?: boolean): (GroupLike) => number;
+    static textWidthEstimator(fn: (string: any) => number, samples?: string[], distribution?: number[]): (string: any) => number;
+    static truncate(fn: (string: any) => number, str: string, width: number, tail?: string): [string, number];
+    static fontSizeToBox(box: GroupLike, ratio?: number, byHeight?: boolean): (GroupLike: any) => number;
     static fontSizeToThreshold(threshold: number, direction?: number): (a: number, b: number) => number;
 }
 
@@ -927,7 +958,7 @@ export enum UIShape {
     Circle = 1,
     Polygon = 2,
     Polyline = 3,
-    Line = 4,
+    Line = 4
 }
 export const UIPointerActions: {
     up: string;
@@ -938,7 +969,6 @@ export const UIPointerActions: {
     over: string;
     out: string;
 };
-export type UIHandler = (pt: Pt, target: UI, type: string) => void;
 export class UI {
     group: Group;
     shape: UIShape;
@@ -999,14 +1029,15 @@ export const Const: {
     gaussian: number;
 };
 export class Util {
-    static warnLevel: "error" | "warn" | "default";
+    static _warnLevel: WarningType;
+    static warnLevel(lv?: WarningType): WarningType;
     static getArgs(args: any[]): Array<number>;
     static warn(message?: string, defaultReturn?: any): any;
     static randomInt(range: number, start?: number): number;
     static split(pts: any[], size: number, stride?: number, loopBack?: boolean): any[][];
     static flatten(pts: any[], flattenAsGroup?: boolean): any;
     static combine<T>(a: T[], b: T[], op: (a: T, b: T) => T): T[];
-    static zip(...arrays: Array<any>[]): any[];
+    static zip(arrays: Array<any>[]): any[];
     static stepper(max: number, min?: number, stride?: number, callback?: (n: number) => void): (() => number);
     static forRange(fn: (index: number) => any, range: number, start?: number, step?: number): any[];
 }

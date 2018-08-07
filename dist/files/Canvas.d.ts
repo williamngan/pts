@@ -1,14 +1,7 @@
 import { MultiTouchSpace } from './Space';
 import { VisualForm, Font } from "./Form";
-import { Bound } from './Bound';
-import { Pt, PtLike, GroupLike } from "./Pt";
-export interface PtsCanvasRenderingContext2D extends CanvasRenderingContext2D {
-    webkitBackingStorePixelRatio?: number;
-    mozBackingStorePixelRatio?: number;
-    msBackingStorePixelRatio?: number;
-    oBackingStorePixelRatio?: number;
-    backingStorePixelRatio?: number;
-}
+import { Pt, Bound } from "./Pt";
+import { PtLike, GroupLike, PtsCanvasRenderingContext2D } from "./Types";
 export declare class CanvasSpace extends MultiTouchSpace {
     protected _canvas: HTMLCanvasElement;
     protected _container: Element;
@@ -22,7 +15,7 @@ export declare class CanvasSpace extends MultiTouchSpace {
     protected _initialResize: boolean;
     constructor(elem: string | Element, callback?: Function);
     protected _createElement(elem: string, id: any): HTMLElement;
-    private _ready(callback);
+    private _ready;
     setup(opt: {
         bgcolor?: string;
         resize?: boolean;
@@ -49,7 +42,7 @@ export declare class CanvasSpace extends MultiTouchSpace {
 export declare class CanvasForm extends VisualForm {
     protected _space: CanvasSpace;
     protected _ctx: CanvasRenderingContext2D;
-    protected _estimateTextWidth: (string) => number;
+    protected _estimateTextWidth: (string: any) => number;
     protected _style: {
         fillStyle: string;
         strokeStyle: string;

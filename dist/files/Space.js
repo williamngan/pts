@@ -1,12 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Bound_1 = require("./Bound");
 const Pt_1 = require("./Pt");
 const UI_1 = require("./UI");
 class Space {
     constructor() {
         this.id = "space";
-        this.bound = new Bound_1.Bound();
+        this.bound = new Pt_1.Bound();
         this._time = { prev: 0, diff: 0, end: -1 };
         this.players = {};
         this.playerCount = 0;
@@ -102,7 +101,7 @@ class Space {
     get customRendering() { return this._renderFunc; }
     get isPlaying() { return this._playing; }
     get outerBound() { return this.bound.clone(); }
-    get innerBound() { return new Bound_1.Bound(Pt_1.Pt.make(this.size.length, 0), this.size.clone()); }
+    get innerBound() { return new Pt_1.Bound(Pt_1.Pt.make(this.size.length, 0), this.size.clone()); }
     get size() { return this.bound.size.clone(); }
     get center() { return this.size.divide(2); }
     get width() { return this.bound.width; }

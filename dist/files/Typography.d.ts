@@ -1,7 +1,7 @@
-import { GroupLike } from "./Pt";
+import { GroupLike } from "./Types";
 export declare class Typography {
-    static textWidthEstimator(fn: (string) => number, samples?: string[], distribution?: number[]): (string) => number;
-    static truncate(fn: (string) => number, str: string, width: number, tail?: string): [string, number];
-    static fontSizeToBox(box: GroupLike, ratio?: number, byHeight?: boolean): (GroupLike) => number;
+    static textWidthEstimator(fn: (string: any) => number, samples?: string[], distribution?: number[]): (string: any) => number;
+    static truncate(fn: (string: any) => number, str: string, width: number, tail?: string): [string, number];
+    static fontSizeToBox(box: GroupLike, ratio?: number, byHeight?: boolean): (GroupLike: any) => number;
     static fontSizeToThreshold(threshold: number, direction?: number): (a: number, b: number) => number;
 }

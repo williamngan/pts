@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = require("./Pt");
-const Bound_1 = require("./Bound");
 const Op_1 = require("./Op");
 class World {
     constructor(bound, friction = 1, gravity = 0) {
@@ -12,7 +11,7 @@ class World {
         this._particles = [];
         this._bodies = [];
         this._names = { p: {}, b: {} };
-        this._bound = Bound_1.Bound.fromGroup(bound);
+        this._bound = Pt_1.Bound.fromGroup(bound);
         this._friction = friction;
         this._gravity = (typeof gravity === "number") ? new Pt_1.Pt(0, gravity) : new Pt_1.Pt(gravity);
         return this;

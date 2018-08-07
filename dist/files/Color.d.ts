@@ -1,5 +1,5 @@
 import { Pt, Group } from "./Pt";
-export declare type ColorType = "rgb" | "hsl" | "hsb" | "lab" | "lch" | "luv" | "xyz";
+import { ColorType } from "./Types";
 export declare class Color extends Pt {
     private static D65;
     protected _mode: ColorType;
@@ -35,6 +35,7 @@ export declare class Color extends Pt {
     u: number;
     v: number;
     readonly alpha: number;
+    normalized: boolean;
     normalize(toNorm?: boolean): Color;
     $normalize(toNorm?: boolean): Color;
     toString(format?: ("hex" | "rgb" | "rgba" | "mode")): string;

@@ -1,4 +1,5 @@
-import { Pt, PtLike, GroupLike, Group } from "./Pt";
+import { Pt, Group } from "./Pt";
+import { PtLike, GroupLike } from "./Types";
 export declare class Vec {
     static add(a: PtLike, b: PtLike | number): PtLike;
     static subtract(a: PtLike, b: PtLike | number): PtLike;
@@ -14,15 +15,15 @@ export declare class Vec {
     static ceil(a: PtLike): PtLike;
     static round(a: PtLike): PtLike;
     static max(a: PtLike): {
-        value;
-        index;
+        value: any;
+        index: any;
     };
     static min(a: PtLike): {
-        value;
-        index;
+        value: any;
+        index: any;
     };
     static sum(a: PtLike): number;
-    static map(a: PtLike, fn: (n: number, index: number, arr) => number): PtLike;
+    static map(a: PtLike, fn: (n: number, index: number, arr: any) => number): PtLike;
 }
 export declare class Mat {
     static add(a: GroupLike, b: GroupLike | number[][] | number): Group;

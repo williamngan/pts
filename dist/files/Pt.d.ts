@@ -1,12 +1,5 @@
-export interface IPt {
-    x?: number;
-    y?: number;
-    z?: number;
-    w?: number;
-}
+import { IPt, GroupLike, PtLike } from "./Types";
 export declare var PtBaseArray: Float32ArrayConstructor;
-export declare type GroupLike = Group | Pt[];
-export declare type PtLike = Pt | Float32Array | number[];
 export declare class Pt extends PtBaseArray implements IPt, Iterable<number> {
     protected _id: string;
     constructor(...args: any[]);
@@ -38,7 +31,7 @@ export declare class Pt extends PtBaseArray implements IPt, Iterable<number> {
     unit(magnitude?: number): Pt;
     $unit(magnitude?: number): Pt;
     dot(...args: any[]): number;
-    cross2D(...args: any[]): number;
+    $cross2D(...args: any[]): number;
     $cross(...args: any[]): Pt;
     $project(...args: any[]): Pt;
     projectScalar(...args: any[]): number;
@@ -113,4 +106,33 @@ export declare class Group extends Array<Pt> {
     zipSlice(index: number, defaultValue?: number | boolean): Pt;
     $zip(defaultValue?: number | boolean, useLongest?: boolean): Group;
     toString(): string;
+}
+export declare class Bound extends Group implements IPt {
+    protected _center: Pt;
+    protected _size: Pt;
+    protected _topLeft: Pt;
+    protected _bottomRight: Pt;
+    protected _inited: boolean;
+    constructor(...args: Pt[]);
+    static fromBoundingRect(rect: ClientRect): Bound;
+    static fromGroup(g: GroupLike): Bound;
+    protected init(): void;
+    clone(): Bound;
+    protected _updateSize(): void;
+    protected _updateCenter(): void;
+    protected _updatePosFromTop(): void;
+    protected _updatePosFromBottom(): void;
+    protected _updatePosFromCenter(): void;
+    size: Pt;
+    center: Pt;
+    topLeft: Pt;
+    bottomRight: Pt;
+    width: number;
+    height: number;
+    depth: number;
+    readonly x: number;
+    readonly y: number;
+    readonly z: number;
+    readonly inited: boolean;
+    update(): this;
 }

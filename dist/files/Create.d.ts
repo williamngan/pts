@@ -1,5 +1,5 @@
-import { Pt, Group, PtLike, GroupLike } from "./Pt";
-import { Bound } from "./Bound";
+import { Pt, Group, Bound } from "./Pt";
+import { PtLike, GroupLike, DelaunayMesh, DelaunayShape } from "./Types";
 export declare class Create {
     static distributeRandom(bound: Bound, count: number, dimensions?: number): Group;
     static distributeLinear(line: GroupLike, count: number): Group;
@@ -18,16 +18,6 @@ export declare class Noise extends Pt {
     seed(s: any): void;
     noise2D(): number;
 }
-export declare type DelaunayShape = {
-    i: number;
-    j: number;
-    k: number;
-    triangle: GroupLike;
-    circle: Group;
-};
-export declare type DelaunayMesh = {
-    [key: string]: DelaunayShape;
-}[];
 export declare class Delaunay extends Group {
     private _mesh;
     delaunay(triangleOnly?: boolean): GroupLike[] | DelaunayShape[];

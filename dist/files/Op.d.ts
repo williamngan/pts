@@ -1,12 +1,5 @@
-import { Pt, PtLike, Group, GroupLike } from "./Pt";
-export declare type IntersectContext = {
-    which: number;
-    dist: number;
-    normal: Pt;
-    vertex: Pt;
-    edge: Group;
-    other?: any;
-};
+import { Pt, Group } from "./Pt";
+import { PtLike, GroupLike, IntersectContext } from "./Types";
 export declare class Line {
     static fromAngle(anchor: PtLike, angle: number, magnitude: number): Group;
     static slope(p1: PtLike | number[], p2: PtLike | number[]): number;
@@ -38,13 +31,12 @@ export declare class Rectangle {
     static from(topLeft: PtLike | number[], widthOrSize: number | PtLike, height?: number): Group;
     static fromTopLeft(topLeft: PtLike | number[], widthOrSize: number | PtLike, height?: number): Group;
     static fromCenter(center: PtLike | number[], widthOrSize: number | PtLike, height?: number): Group;
-    static toCircle(pts: GroupLike): Group;
+    static toCircle(pts: GroupLike, within?: boolean): Group;
     static toSquare(pts: GroupLike, enclose?: boolean): Group;
     static size(pts: GroupLike): Pt;
     static center(pts: GroupLike): Pt;
     static corners(rect: GroupLike): Group;
     static sides(rect: GroupLike): Group[];
-    static lines(rect: GroupLike): Group[];
     static boundingBox(rects: GroupLike[]): Group;
     static polygon(rect: GroupLike): Group;
     static quadrants(rect: GroupLike, center?: PtLike): Group[];
@@ -61,9 +53,8 @@ export declare class Circle {
     static intersectLine2D(pts: GroupLike, line: GroupLike): Group;
     static intersectCircle2D(pts: GroupLike, circle: GroupLike): Group;
     static intersectRect2D(pts: GroupLike, rect: GroupLike): Group;
-    static toRect(pts: GroupLike): Group;
-    static toInnerRect(pts: GroupLike): Group;
-    static toInnerTriangle(pts: GroupLike): Group;
+    static toRect(pts: GroupLike, within?: boolean): Group;
+    static toTriangle(pts: GroupLike, within?: boolean): Group;
 }
 export declare class Triangle {
     static fromRect(rect: GroupLike): Group;

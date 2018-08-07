@@ -1,3 +1,4 @@
+import { WarningType } from "./Types";
 export declare const Const: {
     xy: string;
     yz: string;
@@ -29,14 +30,15 @@ export declare const Const: {
     gaussian: number;
 };
 export declare class Util {
-    static warnLevel: "error" | "warn" | "default";
+    static _warnLevel: WarningType;
+    static warnLevel(lv?: WarningType): WarningType;
     static getArgs(args: any[]): Array<number>;
     static warn(message?: string, defaultReturn?: any): any;
     static randomInt(range: number, start?: number): number;
     static split(pts: any[], size: number, stride?: number, loopBack?: boolean): any[][];
     static flatten(pts: any[], flattenAsGroup?: boolean): any;
     static combine<T>(a: T[], b: T[], op: (a: T, b: T) => T): T[];
-    static zip(...arrays: Array<any>[]): any[];
+    static zip(arrays: Array<any>[]): any[];
     static stepper(max: number, min?: number, stride?: number, callback?: (n: number) => void): (() => number);
     static forRange(fn: (index: number) => any, range: number, start?: number, step?: number): any[];
 }

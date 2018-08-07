@@ -75,7 +75,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 10);
+/******/ 	return __webpack_require__(__webpack_require__.s = 9);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -87,7 +87,7 @@ return /******/ (function(modules) { // webpackBootstrap
 Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(1);
 const Num_1 = __webpack_require__(3);
-const LinearAlgebra_1 = __webpack_require__(5);
+const LinearAlgebra_1 = __webpack_require__(4);
 exports.PtBaseArray = Float32Array;
 class Pt extends exports.PtBaseArray {
     constructor(...args) {
@@ -112,12 +112,12 @@ class Pt extends exports.PtBaseArray {
     get id() { return this._id; }
     set id(s) { this._id = s; }
     get x() { return this[0]; }
-    get y() { return this[1]; }
-    get z() { return this[2]; }
-    get w() { return this[3]; }
     set x(n) { this[0] = n; }
+    get y() { return this[1]; }
     set y(n) { this[1] = n; }
+    get z() { return this[2]; }
     set z(n) { this[2] = n; }
+    get w() { return this[3]; }
     set w(n) { this[3] = n; }
     clone() {
         return new Pt(this);
@@ -195,7 +195,7 @@ class Pt extends exports.PtBaseArray {
     }
     $unit(magnitude = undefined) { return this.clone().unit(magnitude); }
     dot(...args) { return LinearAlgebra_1.Vec.dot(this, Util_1.Util.getArgs(args)); }
-    cross2D(...args) { return LinearAlgebra_1.Vec.cross2D(this, Util_1.Util.getArgs(args)); }
+    $cross2D(...args) { return LinearAlgebra_1.Vec.cross2D(this, Util_1.Util.getArgs(args)); }
     $cross(...args) { return LinearAlgebra_1.Vec.cross(this, Util_1.Util.getArgs(args)); }
     $project(...args) {
         return this.$multiply(this.dot(...args) / this.magnitudeSq());
@@ -433,6 +433,113 @@ class Group extends Array {
     }
 }
 exports.Group = Group;
+class Bound extends Group {
+    constructor(...args) {
+        super(...args);
+        this._center = new Pt();
+        this._size = new Pt();
+        this._topLeft = new Pt();
+        this._bottomRight = new Pt();
+        this._inited = false;
+        this.init();
+    }
+    static fromBoundingRect(rect) {
+        let b = new Bound(new Pt(rect.left || 0, rect.top || 0), new Pt(rect.right || 0, rect.bottom || 0));
+        if (rect.width && rect.height)
+            b.size = new Pt(rect.width, rect.height);
+        return b;
+    }
+    static fromGroup(g) {
+        if (g.length < 2)
+            throw new Error("Cannot create a Bound from a group that has less than 2 Pt");
+        return new Bound(g[0], g[g.length - 1]);
+    }
+    init() {
+        if (this.p1) {
+            this._size = this.p1.clone();
+            this._inited = true;
+        }
+        if (this.p1 && this.p2) {
+            let a = this.p1;
+            let b = this.p2;
+            this.topLeft = a.$min(b);
+            this._bottomRight = a.$max(b);
+            this._updateSize();
+            this._inited = true;
+        }
+    }
+    clone() {
+        return new Bound(this._topLeft.clone(), this._bottomRight.clone());
+    }
+    _updateSize() {
+        this._size = this._bottomRight.$subtract(this._topLeft).abs();
+        this._updateCenter();
+    }
+    _updateCenter() {
+        this._center = this._size.$multiply(0.5).add(this._topLeft);
+    }
+    _updatePosFromTop() {
+        this._bottomRight = this._topLeft.$add(this._size);
+        this._updateCenter();
+    }
+    _updatePosFromBottom() {
+        this._topLeft = this._bottomRight.$subtract(this._size);
+        this._updateCenter();
+    }
+    _updatePosFromCenter() {
+        let half = this._size.$multiply(0.5);
+        this._topLeft = this._center.$subtract(half);
+        this._bottomRight = this._center.$add(half);
+    }
+    get size() { return new Pt(this._size); }
+    set size(p) {
+        this._size = new Pt(p);
+        this._updatePosFromTop();
+    }
+    get center() { return new Pt(this._center); }
+    set center(p) {
+        this._center = new Pt(p);
+        this._updatePosFromCenter();
+    }
+    get topLeft() { return new Pt(this._topLeft); }
+    set topLeft(p) {
+        this._topLeft = new Pt(p);
+        this[0] = this._topLeft;
+        this._updateSize();
+    }
+    get bottomRight() { return new Pt(this._bottomRight); }
+    set bottomRight(p) {
+        this._bottomRight = new Pt(p);
+        this[1] = this._bottomRight;
+        this._updateSize();
+    }
+    get width() { return (this._size.length > 0) ? this._size.x : 0; }
+    set width(w) {
+        this._size.x = w;
+        this._updatePosFromTop();
+    }
+    get height() { return (this._size.length > 1) ? this._size.y : 0; }
+    set height(h) {
+        this._size.y = h;
+        this._updatePosFromTop();
+    }
+    get depth() { return (this._size.length > 2) ? this._size.z : 0; }
+    set depth(d) {
+        this._size.z = d;
+        this._updatePosFromTop();
+    }
+    get x() { return this.topLeft.x; }
+    get y() { return this.topLeft.y; }
+    get z() { return this.topLeft.z; }
+    get inited() { return this._inited; }
+    update() {
+        this._topLeft = this[0];
+        this._bottomRight = this[1];
+        this._updateSize();
+        return this;
+    }
+}
+exports.Bound = Bound;
 
 
 /***/ }),
@@ -474,6 +581,12 @@ exports.Const = {
     gaussian: 0.3989422804014327
 };
 class Util {
+    static warnLevel(lv) {
+        if (lv) {
+            Util._warnLevel = lv;
+        }
+        return Util._warnLevel;
+    }
     static getArgs(args) {
         if (args.length < 1)
             return [];
@@ -497,10 +610,10 @@ class Util {
         return pos;
     }
     static warn(message = "error", defaultReturn = undefined) {
-        if (Util.warnLevel == "error") {
+        if (Util.warnLevel() == "error") {
             throw new Error(message);
         }
-        else if (Util.warnLevel == "warn") {
+        else if (Util.warnLevel() == "warn") {
             console.warn(message);
         }
         return defaultReturn;
@@ -572,7 +685,7 @@ class Util {
         return temp;
     }
 }
-Util.warnLevel = "default";
+Util._warnLevel = "mute";
 exports.Util = Util;
 
 
@@ -586,7 +699,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(1);
 const Num_1 = __webpack_require__(3);
 const Pt_1 = __webpack_require__(0);
-const LinearAlgebra_1 = __webpack_require__(5);
+const LinearAlgebra_1 = __webpack_require__(4);
 let _errorLength = (obj, param = "expected") => Util_1.Util.warn("Group's length is less than " + param, obj);
 let _errorOutofBound = (obj, param = "") => Util_1.Util.warn(`Index ${param} is out of bound in Group`, obj);
 class Line {
@@ -781,8 +894,8 @@ class Rectangle {
         let half = (typeof widthOrSize == "number") ? [widthOrSize / 2, (height || widthOrSize) / 2] : new Pt_1.Pt(widthOrSize).divide(2);
         return new Pt_1.Group(new Pt_1.Pt(center).subtract(half), new Pt_1.Pt(center).add(half));
     }
-    static toCircle(pts) {
-        return Circle.fromRect(pts);
+    static toCircle(pts, within = true) {
+        return Circle.fromRect(pts, within);
     }
     static toSquare(pts, enclose = false) {
         let s = Rectangle.size(pts);
@@ -808,9 +921,6 @@ class Rectangle {
             new Pt_1.Group(p0, p1), new Pt_1.Group(p1, p2),
             new Pt_1.Group(p2, p3), new Pt_1.Group(p3, p0)
         ];
-    }
-    static lines(rect) {
-        return Rectangle.sides(rect);
     }
     static boundingBox(rects) {
         let merged = Util_1.Util.flatten(rects, false);
@@ -946,24 +1056,30 @@ class Circle {
         }
         return Util_1.Util.flatten(g);
     }
-    static toRect(pts) {
+    static toRect(pts, within = false) {
         let r = pts[1][0];
-        return new Pt_1.Group(pts[0].$subtract(r), pts[0].$add(r));
-    }
-    static toInnerRect(pts) {
-        let r = pts[1][0];
-        let half = Math.sqrt(r * r) / 2;
-        return new Pt_1.Group(pts[0].$subtract(half), pts[0].$add(half));
-    }
-    static toInnerTriangle(pts) {
-        let ang = -Math.PI / 2;
-        let inc = Math.PI * 2 / 3;
-        let g = new Pt_1.Group();
-        for (let i = 0; i < 3; i++) {
-            g.push(pts[0].clone().toAngle(ang, pts[1][0], true));
-            ang += inc;
+        if (within) {
+            let half = Math.sqrt(r * r) / 2;
+            return new Pt_1.Group(pts[0].$subtract(half), pts[0].$add(half));
         }
-        return g;
+        else {
+            return new Pt_1.Group(pts[0].$subtract(r), pts[0].$add(r));
+        }
+    }
+    static toTriangle(pts, within = true) {
+        if (within) {
+            let ang = -Math.PI / 2;
+            let inc = Math.PI * 2 / 3;
+            let g = new Pt_1.Group();
+            for (let i = 0; i < 3; i++) {
+                g.push(pts[0].clone().toAngle(ang, pts[1][0], true));
+                ang += inc;
+            }
+            return g;
+        }
+        else {
+            return Triangle.fromCenter(pts[0], pts[1][0]);
+        }
     }
 }
 exports.Circle = Circle;
@@ -976,7 +1092,7 @@ class Triangle {
         return new Pt_1.Group(top, rect[1].clone(), left);
     }
     static fromCircle(circle) {
-        return Circle.toInnerTriangle(circle);
+        return Circle.toTriangle(circle, true);
     }
     static fromCenter(pt, size) {
         return Triangle.fromCircle(Circle.fromCenter(pt, size));
@@ -1483,7 +1599,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(1);
 const Op_1 = __webpack_require__(2);
 const Pt_1 = __webpack_require__(0);
-const LinearAlgebra_1 = __webpack_require__(5);
+const LinearAlgebra_1 = __webpack_require__(4);
 class Num {
     static equals(a, b, threshold = 0.00001) {
         return Math.abs(a - b) < threshold;
@@ -1541,8 +1657,8 @@ class Geom {
     static boundAngle(angle) {
         return Num.boundValue(angle, 0, 360);
     }
-    static boundRadian(angle) {
-        return Num.boundValue(angle, 0, Util_1.Const.two_pi);
+    static boundRadian(radian) {
+        return Num.boundValue(radian, 0, Util_1.Const.two_pi);
     }
     static toRadian(angle) {
         return angle * Util_1.Const.deg_to_rad;
@@ -1617,7 +1733,7 @@ class Geom {
                     return (da[1] > db[1]) ? 1 : -1;
                 return (db[1] > da[1]) ? 1 : -1;
             }
-            let det = da.cross2D(db);
+            let det = da.$cross2D(db);
             if (det < 0)
                 return 1;
             if (det > 0)
@@ -1920,123 +2036,6 @@ exports.Range = Range;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
-class Bound extends Pt_1.Group {
-    constructor(...args) {
-        super(...args);
-        this._center = new Pt_1.Pt();
-        this._size = new Pt_1.Pt();
-        this._topLeft = new Pt_1.Pt();
-        this._bottomRight = new Pt_1.Pt();
-        this._inited = false;
-        this.init();
-    }
-    static fromBoundingRect(rect) {
-        let b = new Bound(new Pt_1.Pt(rect.left || 0, rect.top || 0), new Pt_1.Pt(rect.right || 0, rect.bottom || 0));
-        if (rect.width && rect.height)
-            b.size = new Pt_1.Pt(rect.width, rect.height);
-        return b;
-    }
-    static fromGroup(g) {
-        if (g.length < 2)
-            throw new Error("Cannot create a Bound from a group that has less than 2 Pt");
-        return new Bound(g[0], g[g.length - 1]);
-    }
-    init() {
-        if (this.p1) {
-            this._size = this.p1.clone();
-            this._inited = true;
-        }
-        if (this.p1 && this.p2) {
-            let a = this.p1;
-            let b = this.p2;
-            this.topLeft = a.$min(b);
-            this._bottomRight = a.$max(b);
-            this._updateSize();
-            this._inited = true;
-        }
-    }
-    clone() {
-        return new Bound(this._topLeft.clone(), this._bottomRight.clone());
-    }
-    _updateSize() {
-        this._size = this._bottomRight.$subtract(this._topLeft).abs();
-        this._updateCenter();
-    }
-    _updateCenter() {
-        this._center = this._size.$multiply(0.5).add(this._topLeft);
-    }
-    _updatePosFromTop() {
-        this._bottomRight = this._topLeft.$add(this._size);
-        this._updateCenter();
-    }
-    _updatePosFromBottom() {
-        this._topLeft = this._bottomRight.$subtract(this._size);
-        this._updateCenter();
-    }
-    _updatePosFromCenter() {
-        let half = this._size.$multiply(0.5);
-        this._topLeft = this._center.$subtract(half);
-        this._bottomRight = this._center.$add(half);
-    }
-    get size() { return new Pt_1.Pt(this._size); }
-    set size(p) {
-        this._size = new Pt_1.Pt(p);
-        this._updatePosFromTop();
-    }
-    get center() { return new Pt_1.Pt(this._center); }
-    set center(p) {
-        this._center = new Pt_1.Pt(p);
-        this._updatePosFromCenter();
-    }
-    get topLeft() { return new Pt_1.Pt(this._topLeft); }
-    set topLeft(p) {
-        this._topLeft = new Pt_1.Pt(p);
-        this[0] = this._topLeft;
-        this._updateSize();
-    }
-    get bottomRight() { return new Pt_1.Pt(this._bottomRight); }
-    set bottomRight(p) {
-        this._bottomRight = new Pt_1.Pt(p);
-        this[1] = this._bottomRight;
-        this._updateSize();
-    }
-    get width() { return (this._size.length > 0) ? this._size.x : 0; }
-    set width(w) {
-        this._size.x = w;
-        this._updatePosFromTop();
-    }
-    get height() { return (this._size.length > 1) ? this._size.y : 0; }
-    set height(h) {
-        this._size.y = h;
-        this._updatePosFromTop();
-    }
-    get depth() { return (this._size.length > 2) ? this._size.z : 0; }
-    set depth(d) {
-        this._size.z = d;
-        this._updatePosFromTop();
-    }
-    get x() { return this.topLeft.x; }
-    get y() { return this.topLeft.y; }
-    get z() { return this.topLeft.z; }
-    get inited() { return this._inited; }
-    update() {
-        this._topLeft = this[0];
-        this._bottomRight = this[1];
-        this._updateSize();
-        return this;
-    }
-}
-exports.Bound = Bound;
-
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const Pt_1 = __webpack_require__(0);
 const Op_1 = __webpack_require__(2);
 class Vec {
     static add(a, b) {
@@ -2290,7 +2289,7 @@ exports.Mat = Mat;
 
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2385,19 +2384,18 @@ exports.Font = Font;
 
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const Bound_1 = __webpack_require__(4);
 const Pt_1 = __webpack_require__(0);
-const UI_1 = __webpack_require__(12);
+const UI_1 = __webpack_require__(11);
 class Space {
     constructor() {
         this.id = "space";
-        this.bound = new Bound_1.Bound();
+        this.bound = new Pt_1.Bound();
         this._time = { prev: 0, diff: 0, end: -1 };
         this.players = {};
         this.playerCount = 0;
@@ -2493,7 +2491,7 @@ class Space {
     get customRendering() { return this._renderFunc; }
     get isPlaying() { return this._playing; }
     get outerBound() { return this.bound.clone(); }
-    get innerBound() { return new Bound_1.Bound(Pt_1.Pt.make(this.size.length, 0), this.size.clone()); }
+    get innerBound() { return new Pt_1.Bound(Pt_1.Pt.make(this.size.length, 0), this.size.clone()); }
     get size() { return this.bound.size.clone(); }
     get center() { return this.size.divide(2); }
     get width() { return this.bound.width; }
@@ -2638,7 +2636,7 @@ exports.MultiTouchSpace = MultiTouchSpace;
 
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2685,15 +2683,14 @@ exports.Typography = Typography;
 
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const Space_1 = __webpack_require__(7);
-const Form_1 = __webpack_require__(6);
-const Bound_1 = __webpack_require__(4);
+const Space_1 = __webpack_require__(6);
+const Form_1 = __webpack_require__(5);
 const Util_1 = __webpack_require__(1);
 const Pt_1 = __webpack_require__(0);
 class DOMSpace extends Space_1.MultiTouchSpace {
@@ -2789,7 +2786,7 @@ class DOMSpace extends Space_1.MultiTouchSpace {
         return this;
     }
     _resizeHandler(evt) {
-        let b = Bound_1.Bound.fromBoundingRect(this._container.getBoundingClientRect());
+        let b = Pt_1.Bound.fromBoundingRect(this._container.getBoundingClientRect());
         if (this._autoResize) {
             this.styles({ width: "100%", height: "100%" }, true);
         }
@@ -3136,27 +3133,27 @@ exports.HTMLForm = HTMLForm;
 
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const _Bound = __webpack_require__(4);
-const _Canvas = __webpack_require__(11);
-const _Create = __webpack_require__(13);
-const _Form = __webpack_require__(6);
-const _LinearAlgebra = __webpack_require__(5);
+const _Canvas = __webpack_require__(10);
+const _Create = __webpack_require__(12);
+const _Form = __webpack_require__(5);
+const _LinearAlgebra = __webpack_require__(4);
 const _Num = __webpack_require__(3);
 const _Op = __webpack_require__(2);
 const _Pt = __webpack_require__(0);
-const _Space = __webpack_require__(7);
-const _Color = __webpack_require__(14);
+const _Space = __webpack_require__(6);
+const _Color = __webpack_require__(13);
 const _Util = __webpack_require__(1);
-const _Dom = __webpack_require__(9);
-const _Svg = __webpack_require__(15);
-const _Typography = __webpack_require__(8);
-const _Physics = __webpack_require__(16);
+const _Dom = __webpack_require__(8);
+const _Svg = __webpack_require__(14);
+const _Typography = __webpack_require__(7);
+const _Physics = __webpack_require__(15);
+const _types = __webpack_require__(16);
 let namespace = (scope) => {
     let lib = module.exports;
     for (let k in lib) {
@@ -3181,22 +3178,21 @@ let quickStart = (id, bg = "#9ab") => {
     };
 };
 module.exports = Object.assign({ namespace,
-    quickStart }, _Bound, _Canvas, _Create, _Form, _LinearAlgebra, _Op, _Num, _Pt, _Space, _Util, _Color, _Dom, _Svg, _Typography, _Physics);
+    quickStart }, _types, _Canvas, _Create, _Form, _LinearAlgebra, _Op, _Num, _Pt, _Space, _Util, _Color, _Dom, _Svg, _Typography, _Physics);
 
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const Space_1 = __webpack_require__(7);
-const Form_1 = __webpack_require__(6);
-const Bound_1 = __webpack_require__(4);
+const Space_1 = __webpack_require__(6);
+const Form_1 = __webpack_require__(5);
 const Pt_1 = __webpack_require__(0);
 const Util_1 = __webpack_require__(1);
-const Typography_1 = __webpack_require__(8);
+const Typography_1 = __webpack_require__(7);
 const Op_1 = __webpack_require__(2);
 class CanvasSpace extends Space_1.MultiTouchSpace {
     constructor(elem, callback) {
@@ -3271,7 +3267,7 @@ class CanvasSpace extends Space_1.MultiTouchSpace {
         if (opt.retina !== false) {
             let r1 = window.devicePixelRatio || 1;
             let r2 = this._ctx.webkitBackingStorePixelRatio || this._ctx.mozBackingStorePixelRatio || this._ctx.msBackingStorePixelRatio || this._ctx.oBackingStorePixelRatio || this._ctx.backingStorePixelRatio || 1;
-            this._pixelScale = r1 / r2;
+            this._pixelScale = Math.max(1, r1 / r2);
         }
         if (opt.offscreen) {
             this._offscreen = true;
@@ -3326,7 +3322,7 @@ class CanvasSpace extends Space_1.MultiTouchSpace {
     _resizeHandler(evt) {
         let b = (this._autoResize || this._initialResize) ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
         if (b) {
-            let box = Bound_1.Bound.fromBoundingRect(b);
+            let box = Pt_1.Bound.fromBoundingRect(b);
             box.center = box.center.add(window.pageXOffset, window.pageYOffset);
             this.resize(box, evt);
         }
@@ -3717,7 +3713,7 @@ exports.CanvasForm = CanvasForm;
 
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3805,7 +3801,7 @@ exports.UIButton = UIButton;
 
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3815,7 +3811,7 @@ const Pt_1 = __webpack_require__(0);
 const Op_1 = __webpack_require__(2);
 const Util_1 = __webpack_require__(1);
 const Num_1 = __webpack_require__(3);
-const LinearAlgebra_1 = __webpack_require__(5);
+const LinearAlgebra_1 = __webpack_require__(4);
 class Create {
     static distributeRandom(bound, count, dimensions = 2) {
         let pts = new Pt_1.Group();
@@ -4084,7 +4080,7 @@ exports.Delaunay = Delaunay;
 
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4157,7 +4153,7 @@ class Color extends Pt_1.Pt {
     set r(n) { this[0] = n; }
     get g() { return this[1]; }
     set g(n) { this[1] = n; }
-    get b() { return this[1]; }
+    get b() { return this[2]; }
     set b(n) { this[2] = n; }
     get h() { return (this._mode == "lch") ? this[2] : this[0]; }
     set h(n) {
@@ -4177,7 +4173,7 @@ class Color extends Pt_1.Pt {
     set c(n) { this[1] = n; }
     get u() { return this[1]; }
     set u(n) { this[1] = n; }
-    get v() { return this[1]; }
+    get v() { return this[2]; }
     set v(n) { this[2] = n; }
     get alpha() { return (this.length > 3) ? this[3] : 1; }
     get normalized() { return this._isNorm; }
@@ -4425,18 +4421,18 @@ exports.Color = Color;
 
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const Form_1 = __webpack_require__(6);
+const Form_1 = __webpack_require__(5);
 const Num_1 = __webpack_require__(3);
 const Util_1 = __webpack_require__(1);
 const Pt_1 = __webpack_require__(0);
 const Op_1 = __webpack_require__(2);
-const Dom_1 = __webpack_require__(9);
+const Dom_1 = __webpack_require__(8);
 class SVGSpace extends Dom_1.DOMSpace {
     constructor(elem, callback) {
         super(elem, callback);
@@ -4794,14 +4790,13 @@ exports.SVGForm = SVGForm;
 
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
-const Bound_1 = __webpack_require__(4);
 const Op_1 = __webpack_require__(2);
 class World {
     constructor(bound, friction = 1, gravity = 0) {
@@ -4812,7 +4807,7 @@ class World {
         this._particles = [];
         this._bodies = [];
         this._names = { p: {}, b: {} };
-        this._bound = Bound_1.Bound.fromGroup(bound);
+        this._bound = Pt_1.Bound.fromGroup(bound);
         this._friction = friction;
         this._gravity = (typeof gravity === "number") ? new Pt_1.Pt(0, gravity) : new Pt_1.Pt(gravity);
         return this;
@@ -5143,6 +5138,15 @@ class Body extends Pt_1.Group {
     }
 }
 exports.Body = Body;
+
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ })

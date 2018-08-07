@@ -61,8 +61,8 @@ class Geom {
     static boundAngle(angle) {
         return Num.boundValue(angle, 0, 360);
     }
-    static boundRadian(angle) {
-        return Num.boundValue(angle, 0, Util_1.Const.two_pi);
+    static boundRadian(radian) {
+        return Num.boundValue(radian, 0, Util_1.Const.two_pi);
     }
     static toRadian(angle) {
         return angle * Util_1.Const.deg_to_rad;
@@ -137,7 +137,7 @@ class Geom {
                     return (da[1] > db[1]) ? 1 : -1;
                 return (db[1] > da[1]) ? 1 : -1;
             }
-            let det = da.cross2D(db);
+            let det = da.$cross2D(db);
             if (det < 0)
                 return 1;
             if (det > 0)

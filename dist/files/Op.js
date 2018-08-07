@@ -198,8 +198,8 @@ class Rectangle {
         let half = (typeof widthOrSize == "number") ? [widthOrSize / 2, (height || widthOrSize) / 2] : new Pt_1.Pt(widthOrSize).divide(2);
         return new Pt_1.Group(new Pt_1.Pt(center).subtract(half), new Pt_1.Pt(center).add(half));
     }
-    static toCircle(pts) {
-        return Circle.fromRect(pts);
+    static toCircle(pts, within = true) {
+        return Circle.fromRect(pts, within);
     }
     static toSquare(pts, enclose = false) {
         let s = Rectangle.size(pts);
@@ -225,9 +225,6 @@ class Rectangle {
             new Pt_1.Group(p0, p1), new Pt_1.Group(p1, p2),
             new Pt_1.Group(p2, p3), new Pt_1.Group(p3, p0)
         ];
-    }
-    static lines(rect) {
-        return Rectangle.sides(rect);
     }
     static boundingBox(rects) {
         let merged = Util_1.Util.flatten(rects, false);
@@ -363,24 +360,30 @@ class Circle {
         }
         return Util_1.Util.flatten(g);
     }
-    static toRect(pts) {
+    static toRect(pts, within = false) {
         let r = pts[1][0];
-        return new Pt_1.Group(pts[0].$subtract(r), pts[0].$add(r));
-    }
-    static toInnerRect(pts) {
-        let r = pts[1][0];
-        let half = Math.sqrt(r * r) / 2;
-        return new Pt_1.Group(pts[0].$subtract(half), pts[0].$add(half));
-    }
-    static toInnerTriangle(pts) {
-        let ang = -Math.PI / 2;
-        let inc = Math.PI * 2 / 3;
-        let g = new Pt_1.Group();
-        for (let i = 0; i < 3; i++) {
-            g.push(pts[0].clone().toAngle(ang, pts[1][0], true));
-            ang += inc;
+        if (within) {
+            let half = Math.sqrt(r * r) / 2;
+            return new Pt_1.Group(pts[0].$subtract(half), pts[0].$add(half));
         }
-        return g;
+        else {
+            return new Pt_1.Group(pts[0].$subtract(r), pts[0].$add(r));
+        }
+    }
+    static toTriangle(pts, within = true) {
+        if (within) {
+            let ang = -Math.PI / 2;
+            let inc = Math.PI * 2 / 3;
+            let g = new Pt_1.Group();
+            for (let i = 0; i < 3; i++) {
+                g.push(pts[0].clone().toAngle(ang, pts[1][0], true));
+                ang += inc;
+            }
+            return g;
+        }
+        else {
+            return Triangle.fromCenter(pts[0], pts[1][0]);
+        }
     }
 }
 exports.Circle = Circle;
@@ -393,7 +396,7 @@ class Triangle {
         return new Pt_1.Group(top, rect[1].clone(), left);
     }
     static fromCircle(circle) {
-        return Circle.toInnerTriangle(circle);
+        return Circle.toTriangle(circle, true);
     }
     static fromCenter(pt, size) {
         return Triangle.fromCircle(Circle.fromCenter(pt, size));

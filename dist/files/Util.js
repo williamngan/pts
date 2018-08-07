@@ -32,6 +32,12 @@ exports.Const = {
     gaussian: 0.3989422804014327
 };
 class Util {
+    static warnLevel(lv) {
+        if (lv) {
+            Util._warnLevel = lv;
+        }
+        return Util._warnLevel;
+    }
     static getArgs(args) {
         if (args.length < 1)
             return [];
@@ -55,10 +61,10 @@ class Util {
         return pos;
     }
     static warn(message = "error", defaultReturn = undefined) {
-        if (Util.warnLevel == "error") {
+        if (Util.warnLevel() == "error") {
             throw new Error(message);
         }
-        else if (Util.warnLevel == "warn") {
+        else if (Util.warnLevel() == "warn") {
             console.warn(message);
         }
         return defaultReturn;
@@ -99,7 +105,7 @@ class Util {
         }
         return result;
     }
-    static zip(...arrays) {
+    static zip(arrays) {
         let z = [];
         for (let i = 0, len = arrays[0].length; i < len; i++) {
             let p = [];
@@ -130,6 +136,6 @@ class Util {
         return temp;
     }
 }
-Util.warnLevel = "default";
+Util._warnLevel = "mute";
 exports.Util = Util;
 //# sourceMappingURL=Util.js.map

@@ -1,22 +1,6 @@
-import { Bound } from "./Bound";
-import { Pt, IPt } from "./Pt";
+import { Pt, Bound } from "./Pt";
 import { Form } from "./Form";
-export declare type AnimateFunction = (time?: number, frameTime?: number, currentSpace?: any) => void;
-export interface IPlayer {
-    animateID?: string;
-    animate?: AnimateFunction;
-    resize?(size: IPt, evt?: Event): undefined;
-    action?(type: string, px: number, py: number, evt: Event): any;
-    start?(bound: Bound, space: Space): any;
-}
-export interface ISpacePlayers {
-    [key: string]: IPlayer;
-}
-export interface ITimer {
-    prev: number;
-    diff: number;
-    end: number;
-}
+import { ITimer, ISpacePlayers, IPlayer, AnimateCallbackFn, IPt, TouchPointsKey } from "./Types";
 export declare abstract class Space {
     id: string;
     protected bound: Bound;
@@ -32,7 +16,7 @@ export declare abstract class Space {
     protected _isReady: boolean;
     protected _playing: boolean;
     refresh(b: boolean): this;
-    add(p: IPlayer | AnimateFunction): this;
+    add(p: IPlayer | AnimateCallbackFn): this;
     remove(player: IPlayer): this;
     removeAll(): this;
     play(time?: number): this;
@@ -54,11 +38,6 @@ export declare abstract class Space {
     abstract resize(b: IPt, evt?: Event): this;
     abstract clear(): this;
     abstract getForm(): Form;
-}
-export declare type TouchPointsKey = "touches" | "changedTouches" | "targetTouches";
-export interface MultiTouchElement {
-    addEventListener(evt: any, callback: Function): any;
-    removeEventListener(evt: any, callback: Function): any;
 }
 export declare abstract class MultiTouchSpace extends Space {
     protected _pressed: boolean;

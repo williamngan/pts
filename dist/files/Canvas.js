@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Space_1 = require("./Space");
 const Form_1 = require("./Form");
-const Bound_1 = require("./Bound");
 const Pt_1 = require("./Pt");
 const Util_1 = require("./Util");
 const Typography_1 = require("./Typography");
@@ -23,9 +22,11 @@ class CanvasSpace extends Space_1.MultiTouchSpace {
             this.id = "pts_existing_space";
         }
         else {
-            _selector = document.querySelector(elem);
+            let id = elem;
+            id = (elem[0] === "#" || elem[0] === ".") ? elem : "#" + elem;
+            _selector = document.querySelector(id);
             _existed = true;
-            this.id = (elem.indexOf("#") === 0) ? elem.substr(1) : elem;
+            this.id = id.substr(1);
         }
         if (!_selector) {
             this._container = this._createElement("div", this.id + "_container");
@@ -78,7 +79,7 @@ class CanvasSpace extends Space_1.MultiTouchSpace {
         if (opt.retina !== false) {
             let r1 = window.devicePixelRatio || 1;
             let r2 = this._ctx.webkitBackingStorePixelRatio || this._ctx.mozBackingStorePixelRatio || this._ctx.msBackingStorePixelRatio || this._ctx.oBackingStorePixelRatio || this._ctx.backingStorePixelRatio || 1;
-            this._pixelScale = r1 / r2;
+            this._pixelScale = Math.max(1, r1 / r2);
         }
         if (opt.offscreen) {
             this._offscreen = true;
@@ -133,7 +134,7 @@ class CanvasSpace extends Space_1.MultiTouchSpace {
     _resizeHandler(evt) {
         let b = (this._autoResize || this._initialResize) ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
         if (b) {
-            let box = Bound_1.Bound.fromBoundingRect(b);
+            let box = Pt_1.Bound.fromBoundingRect(b);
             box.center = box.center.add(window.pageXOffset, window.pageYOffset);
             this.resize(box, evt);
         }

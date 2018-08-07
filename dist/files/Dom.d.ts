@@ -1,18 +1,7 @@
-import { MultiTouchSpace, IPlayer } from './Space';
+import { MultiTouchSpace } from './Space';
 import { Form, VisualForm, Font } from "./Form";
-import { Bound } from './Bound';
-import { Pt, PtLike, GroupLike } from './Pt';
-export declare type DOMFormContext = {
-    group: Element;
-    groupID: string;
-    groupCount: number;
-    currentID: string;
-    currentClass?: string;
-    style: object;
-    font: string;
-    fontSize: number;
-    fontFamily: string;
-};
+import { Pt, Bound } from './Pt';
+import { PtLike, GroupLike, IPlayer, DOMFormContext } from "./Types";
 export declare class DOMSpace extends MultiTouchSpace {
     protected _canvas: HTMLElement | SVGElement;
     protected _container: Element;
@@ -22,7 +11,7 @@ export declare class DOMSpace extends MultiTouchSpace {
     protected _css: {};
     constructor(elem: string | Element, callback?: Function);
     static createElement(elem: string, id: string, appendTo?: Element): Element;
-    private _ready(callback);
+    private _ready;
     setup(opt: {
         bgcolor?: string;
         resize?: boolean;

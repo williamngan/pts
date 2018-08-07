@@ -67,7 +67,7 @@ class Color extends Pt_1.Pt {
     set r(n) { this[0] = n; }
     get g() { return this[1]; }
     set g(n) { this[1] = n; }
-    get b() { return this[1]; }
+    get b() { return this[2]; }
     set b(n) { this[2] = n; }
     get h() { return (this._mode == "lch") ? this[2] : this[0]; }
     set h(n) {
@@ -87,9 +87,11 @@ class Color extends Pt_1.Pt {
     set c(n) { this[1] = n; }
     get u() { return this[1]; }
     set u(n) { this[1] = n; }
-    get v() { return this[1]; }
+    get v() { return this[2]; }
     set v(n) { this[2] = n; }
     get alpha() { return (this.length > 3) ? this[3] : 1; }
+    get normalized() { return this._isNorm; }
+    set normalized(b) { this._isNorm = b; }
     normalize(toNorm = true) {
         if (this._isNorm == toNorm)
             return this;
