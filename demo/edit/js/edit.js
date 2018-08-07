@@ -74,7 +74,7 @@ function loadCode( editor ) {
   var qfile = qs("name", 30);
   if (qfile) {
     _load( '../'+qfile+'.js', function(evt) {
-      if (evt.target.statusText == "OK" || evt.target.statusText.length === 0) {
+      if ( (evt.target.statusText == "OK" || evt.target.statusText.length === 0) && evt.target.status < 400 ) {
         editor.setValue( evt.target.responseText );
         currFile = qfile;
         runCode();
