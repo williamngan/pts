@@ -153,7 +153,7 @@ export class CanvasSpace extends MultiTouchSpace {
     if (opt.retina !== false) {
       let r1 = window.devicePixelRatio || 1;
       let r2 = this._ctx.webkitBackingStorePixelRatio || this._ctx.mozBackingStorePixelRatio || this._ctx.msBackingStorePixelRatio || this._ctx.oBackingStorePixelRatio || this._ctx.backingStorePixelRatio || 1;      
-      this._pixelScale = r1/r2;
+      this._pixelScale = Math.max(1, r1/r2);
     }
     
     if (opt.offscreen) {

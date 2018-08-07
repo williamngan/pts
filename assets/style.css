@@ -103,39 +103,38 @@ html * {
 
 .block {
   width: 100vw;
-  max-width: 1350px;
-  margin: 0px auto 0;
-  text-align: center;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
   
 }
 
 .block .subcol {
   text-align: left;
-  vertical-align: top;
-  min-width: 540px;
+  min-width: 560px;
   max-width: 640px;
-  padding: 0 40px 0 80px;
-  box-sizing: border-box;
-  display: inline-block;
+  padding: 0 50px;
+  
+  flex: 0 1 50%;
 }
 
 
 .feature-block {
-  height: 45vw;
+  height: auto;
   margin: 100px 0px 0px;
-  overflow: hidden;
-  white-space: nowrap; 
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
 }
 
 .feature-block .feature {
   padding: 0;
-  position: relative;
-  display: inline-block;
-  vertical-align: top;
-  width: 25vw;
-  
+  flex: 0 1 25%;
   box-sizing: border-box;
-  white-space: normal;
 }
 
 .feature-block .image {
@@ -380,24 +379,16 @@ a:hover {
   }
   
   .block .subcol {
-    min-width: 50vw;
-    max-width: 100vw;
-    text-align: left;
+    min-width: auto;
+    max-width: auto;
     
-    padding: 0 40px;
-    box-sizing: border-box;
-    display: block;
-  }
-  
-
-  .feature-block { 
-    height: auto;
-    white-space: normal; 
+    flex: 0 1 100%;
+    padding: 0 50px;
+    
   }
   
   .feature-block .feature {
-    width: 50vw;
-    height: 50vw;
+    flex: 0 1 50%;
   }
   
   .feature-block .image {
@@ -405,7 +396,7 @@ a:hover {
   }
 
   .feature-block .usage{
-    padding: 20px 40px;
+    padding: 30px 30px 80px;
   }
   
 
@@ -471,12 +462,16 @@ a:hover {
   
 
   .feature-block .feature {
-    width: 100vw;
-    height: 400px;
+    flex: 0 1 100%;
+    height: auto;
   }
 
   .feature-block .image {
     height: 250px;
+  }
+
+  .feature-block .usage{
+    padding: 30px 50px 80px;
   }
   
   .demo {

@@ -97,8 +97,6 @@ var app = new Vue({
 
     loadClass: function( mod, cls ) {
       loadContents( mod+"_"+cls );
-      document.querySelector("#members").scrollTo(0,0);
-      document.querySelector("#contents").scrollTo(0,0);
     },
 
     jumpTo: function( id, ignoreHistory ) {
@@ -238,6 +236,10 @@ function loadContents( id, hash, reloading ) {
       setHistory( id, hash );
     } 
 
+    setTimeout( function() {
+      document.getElementById("members").scrollTo(0,0);
+      document.getElementById("contents").scrollTo(0,0);
+    }, 100);
   });
 }
 

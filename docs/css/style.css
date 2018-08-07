@@ -148,6 +148,7 @@ code {
 #search {
   position: absolute;
   top: 0; left: 20vw; height: 70px; width: 20vw;
+  overflow: hidden;
 }
 
 #clearSearch {
