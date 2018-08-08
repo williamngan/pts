@@ -1,18 +1,18 @@
 # Visualizing Pose with Pts and tensorflow.js
 
-Demos using [Pts](https://ptsjs.org) to draw poses estimated by [tensorflow.js](https://js.tensorflow.org/)'s [PoseNet](https://medium.com/tensorflow/real-time-human-pose-estimation-in-the-browser-with-tensorflow-js-7dd0bc881cd5). It includes a `BodyPose` class which helps you manage and visualize the key points. This is still very much in a hacky prototype form, so please enjoy the ride :)
+Demos using [Pts](https://ptsjs.org) to draw poses estimated by [tensorflow.js](https://js.tensorflow.org/)'s [PoseNet](https://medium.com/tensorflow/real-time-human-pose-estimation-in-the-browser-with-tensorflow-js-7dd0bc881cd5). It includes a [BodyPose](./js/bodypose.js) class which helps you manage and visualize the key points. This is still very much in a hacky prototype form, so please enjoy the ride :)
 
 ### Demos
 
-- `a.html` is a simple demo that visualize an estimated pose from a static image.   
+- `a.html` is a simple demo that visualize an estimated pose from a static image. ([source code](./a.html))
 
   ![image a](./img/a.png)
 
-- `b.html` demonstrates how to take a webcam input, get the pose estimation, and draw the pose in an expressive way. Inspired by Matisse's paper cut-outs.
+- [`b.html`](./b.html) demonstrates how to take a webcam input, get the pose estimation, and draw the pose in an expressive way. ([source code](./b.html)) Inspired by Matisse's paper cut-outs. You can also try a [live version here](https://ptsjs.org/demo/more/tfjs_posenet/b.html) (experimental, require webcam access).
 
   ![image b](./img/b.png)
 
-- `c.html` is similar to "b" but using a video file. Inspired by Oskar Schlemmer's Triadic Ballet.
+- [`c.html`](./c.html) is similar to "b" but using a video file. Inspired by Oskar Schlemmer's Triadic Ballet. ([source code](./c.html))
 
   ![image c](./img/c.png)
 
