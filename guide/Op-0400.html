@@ -41,7 +41,7 @@ form.strokeOnly(&quot;#f03&quot;, 2).line( [pts[0], space.pointer] );
 <p><img src="./assets/bg.png" alt="js:op_closest"></p>
 <h5>Demo: Finding the closest pt to pointer and paint it red</h5>
 <p>Notice we just used the javascript <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort"><code>sort</code></a> function to rearrange the <code>pts</code> group by comparing two points' distance to <code>space.pointer</code>. Then we draw the first point in the group (the closest) in red.</p>
-<p>The humbe <code>sort</code> function is essentially an &quot;Op&quot; by our definition. It transforms a group of points and makes it meaningful. From here on, it's easy to imagine what other structures we can derive from this simple sketch. For example, what if we visualize all points' distances to the pointer in different ways:</p>
+<p>The humble <code>sort</code> function is essentially an &quot;Op&quot; by our definition. It transforms a group of points and makes it meaningful. From here on, it's easy to imagine what other structures we can derive from this simple sketch. For example, what if we visualize all points' distances to the pointer in different ways:</p>
 <pre><code>pts.forEach( (p, i) =&gt; 
     form.point( p, 20 - 20*i/pts.length, &quot;circle&quot; ) )
 </code></pre>
@@ -50,7 +50,7 @@ form.strokeOnly(&quot;#f03&quot;, 2).line( [pts[0], space.pointer] );
 <p>The group of points becomes active. It's somewhat interesting and kind of a mess -- a starting point for further experimentation.</p>
 <p><strong><code>Pts</code></strong> includes many different Ops to help you make the points meaningful. Next we will look at them in more details.</p>
 <h3>Static Op</h3>
-<p>The <a href="../docs/modules/_op_.html">Op</a> module includes various static functions that deal with specific forms such as <a href="#op-rectangle"><code>Rectangle</code></a> and <a href="#op-curve"><code>Curve</code></a>, and the <a href="../docs/modules/_num_.html">Num</a> module includes static functions for simple numeric and geometric calculations. Most of them are straightforward and easy to use.</p>
+<p>The Op module includes various static functions that deal with specific forms such as <a href="#op-rectangle"><code>Rectangle</code></a> and <a href="#op-curve"><code>Curve</code></a>, and Num module includes utility classes like <a href="#num-num"><code>Num</code></a> and <a href="#num-geom"><code>Geom</code></a> for numeric and geometric calculations. Most of them are straightforward and easy to use.</p>
 <p>It's time to let our imaginary forces work on these functions. Keeping most of the code from above, let's try the <a href="#op-line"><code>perpendicularFromPt</code></a> function. Given a line and a point, this Op finds a perpendicular line (ie, shortest distance) between the point and the line.</p>
 <pre><code>let path = [new Pt(), space.pointer];    
 let perpends = pts.map( (p) =&gt; [p, Line.perpendicularFromPt(path, p)] );
