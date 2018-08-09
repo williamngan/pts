@@ -14,7 +14,7 @@ Please give it a try, [file issues](https://github.com/williamngan/pts/issues), 
 
 **Option 1**   
 Get the latest `pts.js` or `pts.min.js` (in [dist](https://github.com/williamngan/pts/tree/master/dist) folder). Alternatively use a CDN service like [jsdelivr](https://cdn.jsdelivr.net/gh/williamngan/pts/dist/pts.min.js) or [unpkg](https://unpkg.com/pts/dist/pts.min.js). Then add it to your html page like this:
-```
+```html
 <script type="text/javascript" src="path/to/pts.js"></script>
 ```
 Pts is pretty lightweight. Currently at ~90kb minified and 26kb gzipped.
@@ -22,7 +22,7 @@ Pts is pretty lightweight. Currently at ~90kb minified and 26kb gzipped.
 
 **Option 2:**   
 Install via `npm install pts`. Then you can choose to import some parts of Pts into your project as needed. 
-```
+```js
 import {CanvasSpace, Pt, Group, Line} from 'pts';
 ```
 
@@ -44,7 +44,7 @@ Pts is written in typescript. You can clone or fork this project and build it as
 
 Clone this repo and install dependencies via `npm install`.
 
-```
+```bash
 npm start
 npm run build
 npm test
@@ -52,17 +52,17 @@ npm test
 
 #### Generate documentations
 Run this to generate Pts styled documentations. (Requires python 3.6)
-```
+```bash
 npm run docs 
 ```
 
 If you prefer to generate default typedocs, run this:
-```
+```bash
 typedoc --readme none --out typedocs src --name Pts
 ```
 
 #### Generate typescript declaration files and minify
-```
+```bash
 npm run typings
 npm run minify
 ```
