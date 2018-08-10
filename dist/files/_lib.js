@@ -1,21 +1,24 @@
 "use strict";
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
 Object.defineProperty(exports, "__esModule", { value: true });
+__export(require("./Canvas"));
+__export(require("./Create"));
+__export(require("./Form"));
+__export(require("./LinearAlgebra"));
+__export(require("./Num"));
+__export(require("./Op"));
+__export(require("./Pt"));
+__export(require("./Space"));
+__export(require("./Color"));
+__export(require("./Util"));
+__export(require("./Dom"));
+__export(require("./Svg"));
+__export(require("./Typography"));
+__export(require("./Physics"));
 const _Canvas = require("./Canvas");
-const _Create = require("./Create");
-const _Form = require("./Form");
-const _LinearAlgebra = require("./LinearAlgebra");
-const _Num = require("./Num");
-const _Op = require("./Op");
-const _Pt = require("./Pt");
-const _Space = require("./Space");
-const _Color = require("./Color");
-const _Util = require("./Util");
-const _Dom = require("./Dom");
-const _Svg = require("./Svg");
-const _Typography = require("./Typography");
-const _Physics = require("./Physics");
-const _types = require("./Types");
-let namespace = (scope) => {
+exports.namespace = (scope) => {
     let lib = module.exports;
     for (let k in lib) {
         if (k != "namespace") {
@@ -23,9 +26,9 @@ let namespace = (scope) => {
         }
     }
 };
-let quickStart = (id, bg = "#9ab") => {
+exports.quickStart = (id, bg = "#9ab") => {
     let s = window;
-    namespace(s);
+    exports.namespace(s);
     s.space = new _Canvas.CanvasSpace(id).setup({ bgcolor: bg, resize: true, retina: true });
     s.form = s.space.getForm();
     return function (animate = null, start = null, action = null, resize = null) {
@@ -38,6 +41,4 @@ let quickStart = (id, bg = "#9ab") => {
         s.space.bindMouse().bindTouch().play();
     };
 };
-module.exports = Object.assign({ namespace,
-    quickStart }, _types, _Canvas, _Create, _Form, _LinearAlgebra, _Op, _Num, _Pt, _Space, _Util, _Color, _Dom, _Svg, _Typography, _Physics);
 //# sourceMappingURL=_lib.js.map

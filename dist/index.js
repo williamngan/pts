@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.4.3 - Copyright © 2017-2018 William Ngan and contributors.
+ * pts.js 0.5.0 - Copyright © 2017-2018 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -3138,22 +3138,24 @@ exports.HTMLForm = HTMLForm;
 
 "use strict";
 
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
 Object.defineProperty(exports, "__esModule", { value: true });
-const _Canvas = __webpack_require__(10);
-const _Create = __webpack_require__(12);
-const _Form = __webpack_require__(5);
-const _LinearAlgebra = __webpack_require__(4);
-const _Num = __webpack_require__(3);
-const _Op = __webpack_require__(2);
-const _Pt = __webpack_require__(0);
-const _Space = __webpack_require__(6);
-const _Color = __webpack_require__(13);
-const _Util = __webpack_require__(1);
-const _Dom = __webpack_require__(8);
-const _Svg = __webpack_require__(14);
-const _Typography = __webpack_require__(7);
-const _Physics = __webpack_require__(15);
-module.exports = Object.assign({}, _Canvas, _Create, _Form, _LinearAlgebra, _Op, _Num, _Pt, _Space, _Util, _Color, _Dom, _Svg, _Typography, _Physics);
+__export(__webpack_require__(10));
+__export(__webpack_require__(12));
+__export(__webpack_require__(5));
+__export(__webpack_require__(4));
+__export(__webpack_require__(3));
+__export(__webpack_require__(2));
+__export(__webpack_require__(0));
+__export(__webpack_require__(6));
+__export(__webpack_require__(13));
+__export(__webpack_require__(1));
+__export(__webpack_require__(8));
+__export(__webpack_require__(14));
+__export(__webpack_require__(7));
+__export(__webpack_require__(15));
 
 
 /***/ }),
