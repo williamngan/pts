@@ -45,6 +45,7 @@
   });
   
   // start
+  // Note that `playOnce(200)` will stop after 200ms. Use `play()` to run the animation loop continuously. 
   space.playOnce(200).bindMouse().bindTouch();
   
   // For use in demo page only
