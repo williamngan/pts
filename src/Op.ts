@@ -617,6 +617,35 @@ export class Circle {
     return new Group( new Pt(pt), new Pt(radius, radius) );
   }
 
+  /**
+   * Create a circle whose edge passes through the 3 input points
+   * @param pts a Group of 3 Pts representing a circle
+   * @returns a Group that represents a circle
+   */
+  static fromPoints(pt) {
+    const pt1 = pt[0];
+    const pt2 = pt[1];
+    const pt3 = pt[2];
+
+    const m_a = (pt2.y - pt1.y)/(pt2.x - pt1.x);
+    const m_b = (pt3.y - pt2.y)/(pt3.x - pt2.x);
+
+    const x_numerator = (m_a * m_b) * (pt1.y - pt3.y) + m_b * (pt1.x + pt2.x) - m_a * (pt2.x + pt3.x);
+    const x_denominator = 2 * (m_b - m_a);
+
+    const x = x_numerator / x_denominator;
+    let y;
+    if (m_a != 0) {
+      y = - 1/m_a * (x - (pt1.x + pt2.x)/2) + ((pt1.y + pt2.y)/2);
+    } else {
+      y = - 1/m_b * (x - (pt2.x + pt3.x)/2) + ((pt2.y + pt3.y)/2);
+    }
+
+    const center = new Pt(x, y);
+    const radius = center.$subtract(pt[0]).magnitude();
+
+    return new Group(center, new Pt(radius, radius));
+}
 
   /**
    * Check if a point is within a circle.

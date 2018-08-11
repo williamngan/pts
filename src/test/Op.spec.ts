@@ -3,9 +3,9 @@ import mocha = require('mocha');
 import {Pt, Group} from '../Pt';
 import {Util} from '../Util';
 import {Num, Geom} from '../Num';
-import {Line, Polygon} from '../Op';
+import {Circle, Line, Polygon} from '../Op';
 
-var {assert} = chai;
+var {assert, expect} = chai;
 var {describe, it} = mocha;
 
 
@@ -90,6 +90,25 @@ describe('Op: ', function() {
       assert.isTrue( Num.equals( Polygon.perimeter( g, true ).total, 20.789, 0.001 ) );
     });
 
+  describe('Circle: ', function() {
+    it('can calculate a circle correctly from three points', function() {
+      let points = [new Pt(1, 1), new Pt(2, 4), new Pt(5, 3)];
+      let result = Circle.fromPoints(points);
+
+      let center = result.p1;
+      let radius = result.p2.x;
+      assert.deepEqual( center, new Pt(3, 2));
+      expect(radius).to.be.closeTo(Math.sqrt(5), 0.0001);
+    });
+
+    it('can calculate a circle correctly from three points when first two share the same y coordinate', function() {
+      let points = [new Pt(1, 1), new Pt(2, 1), new Pt(5, 3)];
+      let result = Circle.fromPoints(points);
+
+      let center = result.p1;
+      assert.deepEqual( center, new Pt(1.5, 5));
+    });
+  })
 
   });
 });
