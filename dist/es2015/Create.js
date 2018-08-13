@@ -116,8 +116,8 @@ export class Noise extends Pt {
         }
     }
     noise2D() {
-        let i = Math.floor(this._n[0]) % 255;
-        let j = Math.floor(this._n[1]) % 255;
+        let i = Math.max(0, Math.floor(this._n[0])) % 255;
+        let j = Math.max(0, Math.floor(this._n[1])) % 255;
         let x = (this._n[0] % 255) - i;
         let y = (this._n[1] % 255) - j;
         let n00 = Vec.dot(grad3[(i + this.perm[j]) % 12], [x, y, 0]);
