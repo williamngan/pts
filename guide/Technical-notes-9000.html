@@ -39,8 +39,8 @@ let p3 = p.map( (d) =&gt; d+1 ) as Pt; // type is now cast back to Pt
 <h3>Javascript ecosystem</h3>
 <p>The javascript ecosystem is moving so fast it's difficult to keep up. Pts is intended for modern browsers supporting es6+. Therefore, if you need to target es5 or older browsers, you'll need to configure your build tools accordingly. Some pointers:</p>
 <ul>
-<li><p>UglifyJS doesn't seem to support minifying es6 so the code is transformed to es5 first. Alternatively, consider other minify tool such as <a href="https://github.com/babel/minify">babili</a> or <a href="https://github.com/mishoo/UglifyJS2/tree/harmony">uglify-es</a>.</p></li>
-<li><p>If you're compiling to es5 with babel, you may need the <a href="https://github.com/loganfsmyth/babel-plugin-transform-builtin-extend">builtin-extend plugin</a> because Pts extends built-in types like Array and Float32Array. This may not be needed in future as build tools get better.</p></li>
+<li><p>UglifyJS doesn't seem to support minifying es6 so the code is transformed to es5 first. Alternatively, consider other minify tool such as <a href="https://github.com/babel/minify">babel-minify</a> or <a href="https://github.com/mishoo/UglifyJS2/tree/harmony">uglify-es</a>.</p></li>
+<li><p>If you're compiling to es5 with babel, you may need the <a href="https://github.com/loganfsmyth/babel-plugin-transform-builtin-extend">builtin-extend</a> and/or <a href="https://babeljs.io/docs/en/next/babel-plugin-transform-classes.html">transform-classes</a> plugins, because Pts extends built-in types like Array and Float32Array. This may not be needed in future as build tools get better.</p></li>
 <li><p>Pts is a new library in beta so we don't recommend using it in high-priority production system yet.</p></li>
 </ul>
 <h3>Remember to file issues and feedbacks</h3>
