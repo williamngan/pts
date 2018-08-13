@@ -104,7 +104,6 @@ var app = new Vue({
         document.querySelector("#contents").scrollTo(0,0);
         return;
       }
-      
       let elem = document.getElementById(id);
       if (elem) {
         elem.scrollIntoView(true);
@@ -229,8 +228,6 @@ function loadContents( id, hash, reloading ) {
 
     app.selected = id;
     app.selHash = hash;
-
-    app.jumpTo( hash, reloading );
   
     if (!reloading) {
       setHistory( id, hash );
@@ -239,6 +236,7 @@ function loadContents( id, hash, reloading ) {
     setTimeout( function() {
       document.getElementById("members").scrollTo(0,0);
       document.getElementById("contents").scrollTo(0,0);
+      app.jumpTo( hash, reloading );
     }, 100);
   });
 }
