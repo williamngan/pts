@@ -5,8 +5,12 @@
 
 var run = Pts.quickStart( "#pt", "#fe3" ); 
 
-run( (time, ftime) => {
+//// Demo code starts (anonymous function wrapper is optional) ---
 
+(function() {
+  run( (time, ftime) => {
+
+  });
 });
 
 
@@ -14,29 +18,36 @@ run( (time, ftime) => {
 
 // Advanced mode
 
-Pts.namespace( window );
-var space = new CanvasSpace("#pt").setup({retina: true, resize: true});
-var form = space.getForm();
 
-space.add( {
+//// Demo code starts (anonymous function wrapper is optional) ---
 
-  start: (bound, space) => {
+(function() {
 
-  },
+  Pts.namespace( window );
+  var space = new CanvasSpace("#pt").setup({retina: true, resize: true});
+  var form = space.getForm();
 
-  animate: (time, fps) => {
+  space.add( {
 
-  },
+    start: (bound, space) => {
 
-  action:( type, px, py) => {
+    },
+
+    animate: (time, fps) => {
+
+    },
+
+    action:( type, px, py) => {
+      
+    },
     
-  },
-  
-  resize:( bound, evt) => {
+    resize:( bound, evt) => {
+      
+    }
+  });
     
-  }
-});
-  
-space.bindMouse().bindTouch().play();
+  //// ----
+  space.bindMouse().bindTouch().play();
 
+})();
 
