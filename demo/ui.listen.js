@@ -16,9 +16,12 @@ Pts.quickStart( "#pt", "#fe3" );
       btn1 = UIButton.fromRectangle( [[120,120], [50,50]] );
       dragger = UIButton.fromCircle( [[220,220], [50,50]] );
 
-      btn1.onClick( (pt, ui) => ui.group.scale( 1.1, pt ) );
-      dragger.onClick( (pt, ui) => ui.group.moveBy( [0,20], pt ) );
-      dragger.onHover();
+      btn1.onClick( (ui, pt) => ui.group.scale( 1.1, pt ) );
+      dragger.onClick( (ui, pt) => ui.group.moveBy( [0,20], pt ) );
+      dragger.onHover( 
+        (ui) => ui.group[1].scale( 1.2 ),
+        (ui) => ui.group[1].scale( 1/1.2 )
+      );
     },   
 
     animate: (time, fps) => {
@@ -28,7 +31,7 @@ Pts.quickStart( "#pt", "#fe3" );
     },
 
     action:( type, px, py) => {
-      UI.listen( [btn1, dragger], type, new Pt(px, py) );
+      UI.track( [btn1, dragger], type, new Pt(px, py) );
       
     },
     
