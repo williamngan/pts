@@ -19,7 +19,7 @@ export const UIShape = {
  * **[Experimental]** A set of string constants to represent different UI events.
  */
 export const UIPointerActions = {
-  up: "up", down: "down", move: "move", drag: "drag", drop: "drop", over: "over", out: "out", enter: "enter", leave: "leave", all: "all"
+  up: "up", down: "down", move: "move", drag: "drag", uidrag: "uidrag", drop: "drop", over: "over", out: "out", enter: "enter", leave: "leave", all: "all"
 };
 
 
@@ -37,6 +37,7 @@ export class UI {
   protected _actions: {[key:string]: UIHandler[] };
   protected _states: {[key:string]: any};
 
+  protected _holds:string[] = [];
 
   /**
    * Create an UI element. You may also create a new UI using one of the static helper like [`UI.fromRectangle`](#link) or [`UI.fromCircle`](#link).
@@ -137,7 +138,7 @@ export class UI {
   /**
    * Add an event handler.
    * @param key event key
-   * @param fn a [`UIHandler`](#link) callback function: `fn( pt:Pt, target:UI, type:string )`
+   * @param fn a [`UIHandler`](#link) callback function: `fn( target:UI, pt:Pt, type:string )`
    * @returns an id number that reference to this handler, for use in [`UI.off`](#link)
    */
   on( key:string, fn:UIHandler ):number {
@@ -150,7 +151,7 @@ export class UI {
    * Remove an event handler.
    * @param key event key
    * @param which an ID number returned by [`UI.on`](#link). If this is not defined, all handlers in this key will be removed.
-   * @param fn a [`UIHandler`](#link) function: `fn( pt:Pt, target:UI, type:string )`
+   * @param fn a [`UIHandler`](#link) function: `fn( target:UI, pt:Pt, type:string )`
    */
   off( key:string, which?:number ):boolean {
     if (!this._actions[key]) return false;
@@ -170,7 +171,8 @@ export class UI {
    */
   listen( key:string, p:PtLike ):boolean {
     if ( this._actions[key] !== undefined ) {
-      if ( this._within(p) ) {
+      
+      if ( this._within(p) || this._holds.indexOf(key) >= 0 ) {
         UI._trigger( this._actions[key], this, p, key );
         return true;
       } else if (this._actions['all']) { // listen for all regardless of trigger
@@ -179,6 +181,29 @@ export class UI {
       }
     }
     return false;
+  }
+
+
+  /**
+   * Continue to keep track of an actions even if it's not within this UI. Useful for hover-leave and drag-outside.
+   * @param key a string defined in [`UIPointerActions`](#link)
+   */
+  protected hold( key:string ):number {
+    this._holds.push( key );
+    return this._holds.length-1;
+  }
+
+
+  /**
+   * Stop keeping track of this action
+   * @param id an id returned by the [`UI.hold`](#link) function
+   */
+  protected unhold( id?:number ):void {
+    if (id !== undefined) {
+      this._holds = this._holds.splice( id, 1 );
+    } else {
+      this._holds = [];
+    }
   }
 
 
@@ -203,6 +228,13 @@ export class UI {
     fn( this._group, this._states );
   }
 
+
+  /**
+   * Returns a string representation of this UI
+   */
+  toString():string {
+    return `UI ${this.group.toString}`;
+  }
 
   /**
    * Check intersection using a specific function based on the shape of the UI.
@@ -305,11 +337,16 @@ export class UIButton extends UI {
         UI._trigger( this._actions[UA.enter], this, pt, UA.enter);
           
         // listen for hover off
-        this._hoverID = this.on( UA.all, (t:UI, p:PtLike) => {
-          this.state('hover', false);
-          // leave trigger
-          UI._trigger( this._actions[UA.leave], this, pt, UA.leave);
-          this.off('all', this._hoverID); // remove 'all' listener
+        var _capID = this.hold( UA.move ); // keep hold of second move
+        this._hoverID = this.on( UA.move, (t:UI, p:PtLike) => {
+          
+          if (!this._within( p ) && !this.state('dragging')) {
+            this.state('hover', false);
+            // leave trigger
+            UI._trigger( this._actions[UA.leave], this, pt, UA.leave);
+            this.off( UA.move, this._hoverID); // remove second move listener
+            this.unhold( _capID ); // stop keeping hold of second move
+          }
         });
       }
     });
@@ -318,7 +355,7 @@ export class UIButton extends UI {
 
   /**
    * Add a new click handler
-   * @param fn a [`UIHandler`](#link) callback function: `fn( pt:Pt, target:UI, type:string )`
+   * @param fn a [`UIHandler`](#link) callback function: `fn( target:UI, pt:Pt, type:string )`
    * @returns an id number that refers to this handler, for use in [`UIButton.offClick`](#link) or [`UI.off`](#link).
    */
   onClick( fn:UIHandler ):number {
@@ -338,8 +375,8 @@ export class UIButton extends UI {
   
   /**
    * Add handlers for hover events.
-   * @param enter an optional [`UIHandler`](#link) function to handle when pointer enters hover. Eg, `fn( pt:Pt, target:UI, type:string )`
-   * @param leave an optional [`UIHandler`](#link) function to handle when pointer exits hover. Eg, `fn( pt:Pt, target:UI, type:string )`
+   * @param enter an optional [`UIHandler`](#link) function to handle when pointer enters hover. Eg, `fn( target:UI, pt:Pt, type:string )`
+   * @param leave an optional [`UIHandler`](#link) function to handle when pointer exits hover. Eg, `fn( target:UI, pt:Pt, type:string )`
    * @returns id numbers that refer to enter/leave handlers, for use in [`UIButton.offHover`](#link) or [`UI.off`](#link).
    */
   onHover( enter?:UIHandler, leave?:UIHandler ):number[] {
@@ -365,12 +402,17 @@ export class UIButton extends UI {
 
 }
 
+
+/**
+ * [Experimental] A draggable UI that provides handler such as [`UIDragger.onDrag`](#link) and [`UIDragger.onDrop`](#link).
+ */
 export class UIDragger extends UIButton {
 
   private _draggingID:number = -1;
+  private _moveHoldID:number = -1;
 
   /**
-   * Create a dragger which has all the states in UIButton, with additional "dragging" (boolean) and "offset" (Pt) states. You may also create a new UIDragger using one of the static helper like [`UI.fromRectangle`](#link) or [`UI.fromCircle`](#link).
+   * Create a dragger which has all the states in UIButton, with additional "dragging" (boolean) and "offset" (Pt) states. (See [`UI.state`](#link)) You may also create a new UIDragger using one of the static helper like [`UI.fromRectangle`](#link) or [`UI.fromCircle`](#link).
    * @param group a Group that defines the UI's appearance
    * @param shape specifies the shape of the Group
    * @param states Optional default state object
@@ -386,12 +428,13 @@ export class UIDragger extends UIButton {
     // Handle pointer down and begin dragging
     this.on( UA.down, (target:UI, pt:PtLike, type:string) => {
       this.state( 'dragging', true );
-      this.state( 'offset', new Pt(pt) );
+      this.state( 'offset', new Pt(pt).subtract( target.group[0] ) );
 
       // begin listening for all events after dragging starts
-      this._draggingID = this.on( UA.all, (t:UI, p:PtLike) => {
+      this._moveHoldID = this.hold( UA.move ); // keep hold of move
+      this._draggingID = this.on( UA.move, (t:UI, p:PtLike) => {
         if ( this.state('dragging') ) {
-          UI._trigger( this._actions[UA.drag], target, pt, type );
+          UI._trigger( this._actions[UA.uidrag], t, p, UA.uidrag );
         }
       });
     });
@@ -399,7 +442,8 @@ export class UIDragger extends UIButton {
     // Handle pointer up and end dragging
     this.on( UA.up, (target:UI, pt:PtLike, type:string) => {
       this.state('dragging', false);
-      this.off('all', this._draggingID); // remove 'all' listener
+      this.off(UA.move, this._draggingID); // remove 'all' listener
+      this.unhold( this._moveHoldID ); // // stop keeping hold of move
       UI._trigger( this._actions[UA.drop], target, pt, type );
     });
 
@@ -407,12 +451,12 @@ export class UIDragger extends UIButton {
 
 
   /**
-   * Add a new drag handler.
-   * @param fn a [`UIHandler`](#link) callback function: `fn( pt:Pt, target:UI, type:string )`
+   * Add a new drag handler. 
+   * @param fn a [`UIHandler`](#link) callback function: `fn( target:UI, pt:Pt, type:string )`. You can access the states "dragging" and "offset" (See [`UI.state`](#link)) in the callback.
    * @returns an id number that refers to this handler, for use in [`UIDragger.offDrag`](#link) or [`UI.off`](#link).
    */
   onDrag( fn:UIHandler ):number {
-    return this.on( UIPointerActions.drag, fn) ;
+    return this.on( UIPointerActions.uidrag, fn) ;
   }
   
 
@@ -422,13 +466,13 @@ export class UIDragger extends UIButton {
    * @returns a boolean indicating whether the handler was removed successfully
    */
   offDrag( id:number ):boolean {
-    return this.off( UIPointerActions.drag, id );
+    return this.off( UIPointerActions.uidrag, id );
   }
 
 
   /**
    * Add a new drop handler.
-   * @param fn a [`UIHandler`](#link) callback function: `fn( pt:Pt, target:UI, type:string )`
+   * @param fn a [`UIHandler`](#link) callback function: `fn( target:UI, pt:Pt, type:string )`
    * @returns an id number that refers to this handler, for use in [`UIDragger.offDrop`](#link) or [`UI.off`](#link).
    */
   onDrop( fn:UIHandler ):number {
