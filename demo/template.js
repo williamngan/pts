@@ -1,13 +1,16 @@
 // Source code licensed under Apache License 2.0. 
 // Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 
-// Quick Start mode
+window.demoDescription = "Fitting four circles inside and outside of four triangles, which are connected to the pointer.";
 
-var run = Pts.quickStart( "#pt", "#fe3" ); 
+// Quick Start mode
 
 //// Demo code starts (anonymous function wrapper is optional) ---
 
 (function() {
+  
+  var run = Pts.quickStart( "#pt", "#fe3" ); 
+
   run( (time, ftime) => {
 
   });

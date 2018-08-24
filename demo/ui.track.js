@@ -1,11 +1,13 @@
 // Source code licensed under Apache License 2.0. 
 // Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 
-Pts.quickStart( "#pt", "#42e" ); 
+window.demoDescription = "Click the triangle, and drag the circles. An abstract composition inspired by Miró.";
 
 //// Demo code starts (anonymous function wrapper is optional) ---
 
 (function() {
+
+  Pts.quickStart( "#pt", "#42e" ); 
 
   var handles;
   var firstPt, lastPt;
