@@ -3966,6 +3966,12 @@
     8
   ],
   [
+    "Op_Circle#function_fromTriangle",
+    "Circle.fromTriangle",
+    "Function",
+    8
+  ],
+  [
     "Op_Circle#function_intersectCircle2D",
     "Circle.intersectCircle2D",
     "Function",
@@ -8622,64 +8628,34 @@
     0
   ],
   [
-    "UI_UIShape#property_Circle",
-    "UIShape.Circle",
-    "Enumeration",
-    0
-  ],
-  [
-    "UI_UIShape#property_Line",
-    "UIShape.Line",
-    "Enumeration",
-    0
-  ],
-  [
-    "UI_UIShape#property_Polygon",
-    "UIShape.Polygon",
-    "Enumeration",
-    0
-  ],
-  [
-    "UI_UIShape#property_Polyline",
-    "UIShape.Polyline",
-    "Enumeration",
-    0
-  ],
-  [
-    "UI_UIShape#property_Rectangle",
-    "UIShape.Rectangle",
-    "Enumeration",
-    0
-  ],
-  [
-    "UI_UIShape",
-    "UIShape",
-    "Enumeration",
-    0
-  ],
-  [
     "UI_UI#constructor_constructor",
     "UI.constructor",
     "Constructor",
     10
   ],
   [
-    "UI_UI#property_group",
+    "UI_UI#accessor_group",
     "UI.group",
-    "Variable",
-    0
-  ],
-  [
-    "UI_UI#property_shape",
-    "UI.shape",
-    "Variable",
-    0
+    "Accessor",
+    6
   ],
   [
     "UI_UI#accessor_id",
     "UI.id",
     "Accessor",
     6
+  ],
+  [
+    "UI_UI#accessor_shape",
+    "UI.shape",
+    "Accessor",
+    6
+  ],
+  [
+    "UI_UI#function_hold",
+    "UI.hold",
+    "Function",
+    8
   ],
   [
     "UI_UI#function_listen",
@@ -8712,6 +8688,48 @@
     8
   ],
   [
+    "UI_UI#function_toString",
+    "UI.toString",
+    "Function",
+    8
+  ],
+  [
+    "UI_UI#function_unhold",
+    "UI.unhold",
+    "Function",
+    8
+  ],
+  [
+    "UI_UI#function_fromCircle",
+    "UI.fromCircle",
+    "Function",
+    8
+  ],
+  [
+    "UI_UI#function_fromPolygon",
+    "UI.fromPolygon",
+    "Function",
+    8
+  ],
+  [
+    "UI_UI#function_fromRectangle",
+    "UI.fromRectangle",
+    "Function",
+    8
+  ],
+  [
+    "UI_UI#function_fromUI",
+    "UI.fromUI",
+    "Function",
+    8
+  ],
+  [
+    "UI_UI#function_track",
+    "UI.track",
+    "Function",
+    8
+  ],
+  [
     "UI_UI",
     "UI",
     "Class",
@@ -8724,20 +8742,8 @@
     10
   ],
   [
-    "UI_UIButton#property_group",
+    "UI_UIButton#accessor_group",
     "UIButton.group",
-    "Variable",
-    0
-  ],
-  [
-    "UI_UIButton#property_shape",
-    "UIButton.shape",
-    "Variable",
-    0
-  ],
-  [
-    "UI_UIButton#accessor_clicks",
-    "UIButton.clicks",
     "Accessor",
     6
   ],
@@ -8748,6 +8754,18 @@
     6
   ],
   [
+    "UI_UIButton#accessor_shape",
+    "UIButton.shape",
+    "Accessor",
+    6
+  ],
+  [
+    "UI_UIButton#function_hold",
+    "UIButton.hold",
+    "Function",
+    8
+  ],
+  [
     "UI_UIButton#function_listen",
     "UIButton.listen",
     "Function",
@@ -8756,6 +8774,18 @@
   [
     "UI_UIButton#function_off",
     "UIButton.off",
+    "Function",
+    8
+  ],
+  [
+    "UI_UIButton#function_offClick",
+    "UIButton.offClick",
+    "Function",
+    8
+  ],
+  [
+    "UI_UIButton#function_offHover",
+    "UIButton.offHover",
     "Function",
     8
   ],
@@ -8790,9 +8820,213 @@
     8
   ],
   [
+    "UI_UIButton#function_toString",
+    "UIButton.toString",
+    "Function",
+    8
+  ],
+  [
+    "UI_UIButton#function_unhold",
+    "UIButton.unhold",
+    "Function",
+    8
+  ],
+  [
+    "UI_UIButton#function_fromCircle",
+    "UIButton.fromCircle",
+    "Function",
+    8
+  ],
+  [
+    "UI_UIButton#function_fromPolygon",
+    "UIButton.fromPolygon",
+    "Function",
+    8
+  ],
+  [
+    "UI_UIButton#function_fromRectangle",
+    "UIButton.fromRectangle",
+    "Function",
+    8
+  ],
+  [
+    "UI_UIButton#function_fromUI",
+    "UIButton.fromUI",
+    "Function",
+    8
+  ],
+  [
+    "UI_UIButton#function_track",
+    "UIButton.track",
+    "Function",
+    8
+  ],
+  [
     "UI_UIButton",
     "UIButton",
     "Class",
+    0
+  ],
+  [
+    "UI_UIDragger#constructor_constructor",
+    "UIDragger.constructor",
+    "Constructor",
+    10
+  ],
+  [
+    "UI_UIDragger#accessor_group",
+    "UIDragger.group",
+    "Accessor",
+    6
+  ],
+  [
+    "UI_UIDragger#accessor_id",
+    "UIDragger.id",
+    "Accessor",
+    6
+  ],
+  [
+    "UI_UIDragger#accessor_shape",
+    "UIDragger.shape",
+    "Accessor",
+    6
+  ],
+  [
+    "UI_UIDragger#function_hold",
+    "UIDragger.hold",
+    "Function",
+    8
+  ],
+  [
+    "UI_UIDragger#function_listen",
+    "UIDragger.listen",
+    "Function",
+    8
+  ],
+  [
+    "UI_UIDragger#function_off",
+    "UIDragger.off",
+    "Function",
+    8
+  ],
+  [
+    "UI_UIDragger#function_offClick",
+    "UIDragger.offClick",
+    "Function",
+    8
+  ],
+  [
+    "UI_UIDragger#function_offDrag",
+    "UIDragger.offDrag",
+    "Function",
+    8
+  ],
+  [
+    "UI_UIDragger#function_offDrop",
+    "UIDragger.offDrop",
+    "Function",
+    8
+  ],
+  [
+    "UI_UIDragger#function_offHover",
+    "UIDragger.offHover",
+    "Function",
+    8
+  ],
+  [
+    "UI_UIDragger#function_on",
+    "UIDragger.on",
+    "Function",
+    8
+  ],
+  [
+    "UI_UIDragger#function_onClick",
+    "UIDragger.onClick",
+    "Function",
+    8
+  ],
+  [
+    "UI_UIDragger#function_onDrag",
+    "UIDragger.onDrag",
+    "Function",
+    8
+  ],
+  [
+    "UI_UIDragger#function_onDrop",
+    "UIDragger.onDrop",
+    "Function",
+    8
+  ],
+  [
+    "UI_UIDragger#function_onHover",
+    "UIDragger.onHover",
+    "Function",
+    8
+  ],
+  [
+    "UI_UIDragger#function_render",
+    "UIDragger.render",
+    "Function",
+    8
+  ],
+  [
+    "UI_UIDragger#function_state",
+    "UIDragger.state",
+    "Function",
+    8
+  ],
+  [
+    "UI_UIDragger#function_toString",
+    "UIDragger.toString",
+    "Function",
+    8
+  ],
+  [
+    "UI_UIDragger#function_unhold",
+    "UIDragger.unhold",
+    "Function",
+    8
+  ],
+  [
+    "UI_UIDragger#function_fromCircle",
+    "UIDragger.fromCircle",
+    "Function",
+    8
+  ],
+  [
+    "UI_UIDragger#function_fromPolygon",
+    "UIDragger.fromPolygon",
+    "Function",
+    8
+  ],
+  [
+    "UI_UIDragger#function_fromRectangle",
+    "UIDragger.fromRectangle",
+    "Function",
+    8
+  ],
+  [
+    "UI_UIDragger#function_fromUI",
+    "UIDragger.fromUI",
+    "Function",
+    8
+  ],
+  [
+    "UI_UIDragger#function_track",
+    "UIDragger.track",
+    "Function",
+    8
+  ],
+  [
+    "UI_UIDragger",
+    "UIDragger",
+    "Class",
+    0
+  ],
+  [
+    "UI_UIPointerActions#property_all",
+    "UIPointerActions.all",
+    "Variable",
     0
   ],
   [
@@ -8810,6 +9044,18 @@
   [
     "UI_UIPointerActions#property_drop",
     "UIPointerActions.drop",
+    "Variable",
+    0
+  ],
+  [
+    "UI_UIPointerActions#property_enter",
+    "UIPointerActions.enter",
+    "Variable",
+    0
+  ],
+  [
+    "UI_UIPointerActions#property_leave",
+    "UIPointerActions.leave",
     "Variable",
     0
   ],
@@ -8832,6 +9078,12 @@
     0
   ],
   [
+    "UI_UIPointerActions#property_uidrag",
+    "UIPointerActions.uidrag",
+    "Variable",
+    0
+  ],
+  [
     "UI_UIPointerActions#property_up",
     "UIPointerActions.up",
     "Variable",
@@ -8840,6 +9092,42 @@
   [
     "UI_UIPointerActions",
     "UIPointerActions",
+    "Object literal",
+    0
+  ],
+  [
+    "UI_UIShape#property_circle",
+    "UIShape.circle",
+    "Variable",
+    0
+  ],
+  [
+    "UI_UIShape#property_line",
+    "UIShape.line",
+    "Variable",
+    0
+  ],
+  [
+    "UI_UIShape#property_polygon",
+    "UIShape.polygon",
+    "Variable",
+    0
+  ],
+  [
+    "UI_UIShape#property_polyline",
+    "UIShape.polyline",
+    "Variable",
+    0
+  ],
+  [
+    "UI_UIShape#property_rectangle",
+    "UIShape.rectangle",
+    "Variable",
+    0
+  ],
+  [
+    "UI_UIShape",
+    "UIShape",
     "Object literal",
     0
   ],

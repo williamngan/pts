@@ -47,6 +47,7 @@ export declare class Rectangle {
 }
 export declare class Circle {
     static fromRect(pts: GroupLike, enclose?: boolean): Group;
+    static fromTriangle(pts: GroupLike, enclose?: boolean): Group;
     static fromCenter(pt: PtLike, radius: number): Group;
     static withinBound(pts: GroupLike, pt: PtLike, threshold?: number): boolean;
     static intersectRay2D(pts: GroupLike, ray: GroupLike): Group;

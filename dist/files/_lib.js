@@ -17,6 +17,7 @@ __export(require("./Dom"));
 __export(require("./Svg"));
 __export(require("./Typography"));
 __export(require("./Physics"));
+__export(require("./UI"));
 const _Canvas = require("./Canvas");
 exports.namespace = (scope) => {
     let lib = module.exports;

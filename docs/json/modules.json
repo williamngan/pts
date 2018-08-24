@@ -80,10 +80,11 @@
     "Typography"
   ],
   "UI": [
-    "UIShape",
     "UI",
     "UIButton",
-    "UIPointerActions"
+    "UIDragger",
+    "UIPointerActions",
+    "UIShape"
   ],
   "Util": [
     "Util",

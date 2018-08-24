@@ -8,12 +8,28 @@
     ]
   ],
   "kind": "Objectliteral",
-  "id": 934,
+  "id": 1206,
   "comment": "**[Experimental]** A set of string constants to represent different UI events.",
   "constructor": [],
   "accessors": [],
   "methods": [],
   "variables": [
+    {
+      "name": "all",
+      "source": [
+        [
+          "UI.ts",
+          22,
+          147
+        ]
+      ],
+      "id": 1217,
+      "flags": {},
+      "type": "all",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
     {
       "name": "down",
       "source": [
@@ -23,7 +39,7 @@
           16
         ]
       ],
-      "id": 936,
+      "id": 1208,
       "flags": {},
       "type": "down",
       "overrides": false,
@@ -39,7 +55,7 @@
           44
         ]
       ],
-      "id": 938,
+      "id": 1210,
       "flags": {},
       "type": "drag",
       "overrides": false,
@@ -52,12 +68,44 @@
         [
           "UI.ts",
           22,
-          58
+          76
         ]
       ],
-      "id": 939,
+      "id": 1212,
       "flags": {},
       "type": "drop",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "enter",
+      "source": [
+        [
+          "UI.ts",
+          22,
+          117
+        ]
+      ],
+      "id": 1215,
+      "flags": {},
+      "type": "enter",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "leave",
+      "source": [
+        [
+          "UI.ts",
+          22,
+          133
+        ]
+      ],
+      "id": 1216,
+      "flags": {},
+      "type": "leave",
       "overrides": false,
       "inherits": false,
       "comment": ""
@@ -71,7 +119,7 @@
           30
         ]
       ],
-      "id": 937,
+      "id": 1209,
       "flags": {},
       "type": "move",
       "overrides": false,
@@ -84,10 +132,10 @@
         [
           "UI.ts",
           22,
-          85
+          103
         ]
       ],
-      "id": 941,
+      "id": 1214,
       "flags": {},
       "type": "out",
       "overrides": false,
@@ -100,12 +148,28 @@
         [
           "UI.ts",
           22,
-          72
+          90
         ]
       ],
-      "id": 940,
+      "id": 1213,
       "flags": {},
       "type": "over",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "uidrag",
+      "source": [
+        [
+          "UI.ts",
+          22,
+          60
+        ]
+      ],
+      "id": 1211,
+      "flags": {},
+      "type": "uidrag",
       "overrides": false,
       "inherits": false,
       "comment": ""
@@ -119,7 +183,7 @@
           4
         ]
       ],
-      "id": 935,
+      "id": 1207,
       "flags": {},
       "type": "up",
       "overrides": false,

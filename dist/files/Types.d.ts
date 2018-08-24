@@ -67,5 +67,5 @@ export declare type IntersectContext = {
     edge: Group;
     other?: any;
 };
-export declare type UIHandler = (pt: Pt, target: UI, type: string) => void;
+export declare type UIHandler = (target: UI, pt: PtLike, type: string) => void;
 export declare type WarningType = "error" | "warn" | "mute";

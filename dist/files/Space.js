@@ -212,7 +212,7 @@ class MultiTouchSpace extends Space {
     _mouseUp(evt) {
         this._mouseAction(UI_1.UIPointerActions.up, evt);
         if (this._dragged)
-            this._mouseAction(UI_1.UIPointerActions.down, evt);
+            this._mouseAction(UI_1.UIPointerActions.drop, evt);
         this._pressed = false;
         this._dragged = false;
         return false;

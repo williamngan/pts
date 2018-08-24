@@ -3,12 +3,12 @@
   "source": [
     [
       "Op.ts",
-      926,
+      941,
       20
     ]
   ],
   "kind": "Class",
-  "id": 672,
+  "id": 676,
   "comment": "Polygon class provides static functions to create and operate on polygons. A polygon is usually represented as a Group of 3 or more Pts.\nYou can use the static functions as-is, or apply the [`Group.op`](#link) or [`Pt.op`](#link) to enable functional programming.\nSee [Op guide](../guide/Op-0400.html) for details.",
   "constructor": [],
   "accessors": [],
@@ -18,11 +18,11 @@
       "source": [
         [
           "Op.ts",
-          1006,
+          1021,
           22
         ]
       ],
-      "id": 699,
+      "id": 703,
       "flags": {
         "isStatic": true
       },
@@ -62,11 +62,11 @@
       "source": [
         [
           "Op.ts",
-          1072,
+          1087,
           13
         ]
       ],
-      "id": 715,
+      "id": 719,
       "flags": {
         "isStatic": true
       },
@@ -94,11 +94,11 @@
       "source": [
         [
           "Op.ts",
-          1030,
+          1045,
           17
         ]
       ],
-      "id": 704,
+      "id": 708,
       "flags": {
         "isStatic": true
       },
@@ -132,11 +132,11 @@
       "source": [
         [
           "Op.ts",
-          932,
+          947,
           17
         ]
       ],
-      "id": 673,
+      "id": 677,
       "flags": {
         "isStatic": true
       },
@@ -164,11 +164,11 @@
       "source": [
         [
           "Op.ts",
-          1094,
+          1109,
           19
         ]
       ],
-      "id": 718,
+      "id": 722,
       "flags": {
         "isStatic": true
       },
@@ -202,11 +202,11 @@
       "source": [
         [
           "Op.ts",
-          954,
+          969,
           19
         ]
       ],
-      "id": 681,
+      "id": 685,
       "flags": {
         "isStatic": true
       },
@@ -246,11 +246,11 @@
       "source": [
         [
           "Op.ts",
-          1243,
+          1258,
           27
         ]
       ],
-      "id": 743,
+      "id": 747,
       "flags": {
         "isStatic": true
       },
@@ -284,11 +284,11 @@
       "source": [
         [
           "Op.ts",
-          1222,
+          1237,
           26
         ]
       ],
-      "id": 739,
+      "id": 743,
       "flags": {
         "isStatic": true
       },
@@ -322,11 +322,11 @@
       "source": [
         [
           "Op.ts",
-          1300,
+          1315,
           28
         ]
       ],
-      "id": 747,
+      "id": 751,
       "flags": {
         "isStatic": true
       },
@@ -360,11 +360,11 @@
       "source": [
         [
           "Op.ts",
-          1364,
+          1379,
           27
         ]
       ],
-      "id": 751,
+      "id": 755,
       "flags": {
         "isStatic": true
       },
@@ -398,11 +398,11 @@
       "source": [
         [
           "Op.ts",
-          969,
+          984,
           15
         ]
       ],
-      "id": 686,
+      "id": 690,
       "flags": {
         "isStatic": true
       },
@@ -436,11 +436,11 @@
       "source": [
         [
           "Op.ts",
-          980,
+          995,
           14
         ]
       ],
-      "id": 690,
+      "id": 694,
       "flags": {
         "isStatic": true
       },
@@ -474,11 +474,11 @@
       "source": [
         [
           "Op.ts",
-          993,
+          1008,
           18
         ]
       ],
-      "id": 694,
+      "id": 698,
       "flags": {
         "isStatic": true
       },
@@ -518,11 +518,11 @@
       "source": [
         [
           "Op.ts",
-          1174,
+          1189,
           18
         ]
       ],
-      "id": 726,
+      "id": 730,
       "flags": {
         "isStatic": true
       },
@@ -556,11 +556,11 @@
       "source": [
         [
           "Op.ts",
-          1159,
+          1174,
           16
         ]
       ],
-      "id": 722,
+      "id": 726,
       "flags": {
         "isStatic": true
       },
@@ -594,11 +594,11 @@
       "source": [
         [
           "Op.ts",
-          1049,
+          1064,
           18
         ]
       ],
-      "id": 708,
+      "id": 712,
       "flags": {
         "isStatic": true
       },
@@ -632,11 +632,11 @@
       "source": [
         [
           "Op.ts",
-          1193,
+          1208,
           20
         ]
       ],
-      "id": 730,
+      "id": 734,
       "flags": {
         "isStatic": true
       },
@@ -670,11 +670,11 @@
       "source": [
         [
           "Op.ts",
-          943,
+          958,
           18
         ]
       ],
-      "id": 676,
+      "id": 680,
       "flags": {
         "isStatic": true
       },
@@ -714,11 +714,11 @@
       "source": [
         [
           "Op.ts",
-          1379,
+          1394,
           16
         ]
       ],
-      "id": 755,
+      "id": 759,
       "flags": {
         "isStatic": true
       },

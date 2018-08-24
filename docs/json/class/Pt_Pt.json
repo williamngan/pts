@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 1379,
+  "id": 1655,
   "comment": "Pt is a subclass of standard [`Float32Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array) with additional properties and functions to support vector and geometric calculations.\nSee [Pt guide](../guide/Pt-0200.html) for details.",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           23
         ]
       ],
-      "id": 1381,
+      "id": 1657,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -62,7 +62,7 @@
           8
         ]
       ],
-      "id": 1389,
+      "id": 1665,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -94,7 +94,7 @@
           7
         ]
       ],
-      "id": 1405,
+      "id": 1681,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -126,7 +126,7 @@
           7
         ]
       ],
-      "id": 1393,
+      "id": 1669,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -158,7 +158,7 @@
           7
         ]
       ],
-      "id": 1397,
+      "id": 1673,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -190,7 +190,7 @@
           7
         ]
       ],
-      "id": 1401,
+      "id": 1677,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -219,7 +219,7 @@
           6
         ]
       ],
-      "id": 1503,
+      "id": 1779,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -242,7 +242,7 @@
           6
         ]
       ],
-      "id": 1455,
+      "id": 1731,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -272,7 +272,7 @@
           7
         ]
       ],
-      "id": 1511,
+      "id": 1787,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -295,7 +295,7 @@
           9
         ]
       ],
-      "id": 1449,
+      "id": 1725,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -325,7 +325,7 @@
           8
         ]
       ],
-      "id": 1492,
+      "id": 1768,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -355,7 +355,7 @@
           10
         ]
       ],
-      "id": 1489,
+      "id": 1765,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -385,7 +385,7 @@
           9
         ]
       ],
-      "id": 1473,
+      "id": 1749,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -415,7 +415,7 @@
           8
         ]
       ],
-      "id": 1507,
+      "id": 1783,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -438,7 +438,7 @@
           6
         ]
       ],
-      "id": 1530,
+      "id": 1806,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -468,7 +468,7 @@
           6
         ]
       ],
-      "id": 1527,
+      "id": 1803,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -498,7 +498,7 @@
           11
         ]
       ],
-      "id": 1467,
+      "id": 1743,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -528,7 +528,7 @@
           10
         ]
       ],
-      "id": 1495,
+      "id": 1771,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -558,7 +558,7 @@
           8
         ]
       ],
-      "id": 1515,
+      "id": 1791,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -581,7 +581,7 @@
           11
         ]
       ],
-      "id": 1461,
+      "id": 1737,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -611,7 +611,7 @@
           7
         ]
       ],
-      "id": 1446,
+      "id": 1722,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -641,7 +641,7 @@
           5
         ]
       ],
-      "id": 1418,
+      "id": 1694,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -671,7 +671,7 @@
           7
         ]
       ],
-      "id": 1483,
+      "id": 1759,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -701,7 +701,7 @@
           5
         ]
       ],
-      "id": 1501,
+      "id": 1777,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -724,7 +724,7 @@
           5
         ]
       ],
-      "id": 1452,
+      "id": 1728,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -754,7 +754,7 @@
           7
         ]
       ],
-      "id": 1533,
+      "id": 1809,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -784,7 +784,7 @@
           14
         ]
       ],
-      "id": 1536,
+      "id": 1812,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -820,7 +820,7 @@
           6
         ]
       ],
-      "id": 1509,
+      "id": 1785,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -843,7 +843,7 @@
           7
         ]
       ],
-      "id": 1409,
+      "id": 1685,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -866,7 +866,7 @@
           8
         ]
       ],
-      "id": 1470,
+      "id": 1746,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -896,7 +896,7 @@
           5
         ]
       ],
-      "id": 1486,
+      "id": 1762,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -926,7 +926,7 @@
           8
         ]
       ],
-      "id": 1411,
+      "id": 1687,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -962,7 +962,7 @@
           7
         ]
       ],
-      "id": 1505,
+      "id": 1781,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -985,7 +985,7 @@
           11
         ]
       ],
-      "id": 1478,
+      "id": 1754,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1008,7 +1008,7 @@
           13
         ]
       ],
-      "id": 1476,
+      "id": 1752,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1031,7 +1031,7 @@
           10
         ]
       ],
-      "id": 1522,
+      "id": 1798,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1054,7 +1054,7 @@
           10
         ]
       ],
-      "id": 1517,
+      "id": 1793,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1077,7 +1077,7 @@
           10
         ]
       ],
-      "id": 1464,
+      "id": 1740,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1107,7 +1107,7 @@
           4
         ]
       ],
-      "id": 1426,
+      "id": 1702,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1142,7 +1142,7 @@
           5
         ]
       ],
-      "id": 1436,
+      "id": 1712,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1177,7 +1177,7 @@
           15
         ]
       ],
-      "id": 1498,
+      "id": 1774,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1207,7 +1207,7 @@
           11
         ]
       ],
-      "id": 1554,
+      "id": 1830,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1243,7 +1243,7 @@
           10
         ]
       ],
-      "id": 1544,
+      "id": 1820,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1285,7 +1285,7 @@
           7
         ]
       ],
-      "id": 1513,
+      "id": 1789,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1308,7 +1308,7 @@
           7
         ]
       ],
-      "id": 1540,
+      "id": 1816,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1344,7 +1344,7 @@
           9
         ]
       ],
-      "id": 1549,
+      "id": 1825,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1386,7 +1386,7 @@
           10
         ]
       ],
-      "id": 1458,
+      "id": 1734,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1416,7 +1416,7 @@
           4
         ]
       ],
-      "id": 1415,
+      "id": 1691,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1446,7 +1446,7 @@
           9
         ]
       ],
-      "id": 1421,
+      "id": 1697,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1488,7 +1488,7 @@
           9
         ]
       ],
-      "id": 1560,
+      "id": 1836,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1511,7 +1511,7 @@
           10
         ]
       ],
-      "id": 1558,
+      "id": 1834,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1534,7 +1534,7 @@
           6
         ]
       ],
-      "id": 1480,
+      "id": 1756,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1564,7 +1564,7 @@
           14
         ]
       ],
-      "id": 1566,
+      "id": 1842,
       "flags": {
         "isStatic": true
       },
@@ -1608,7 +1608,7 @@
           11
         ]
       ],
-      "id": 1737,
+      "id": 2013,
       "flags": {
         "isStatic": true
       },
@@ -1633,7 +1633,7 @@
           9
         ]
       ],
-      "id": 1571,
+      "id": 1847,
       "flags": {
         "isStatic": true
       },
@@ -1671,7 +1671,7 @@
           8
         ]
       ],
-      "id": 1580,
+      "id": 1856,
       "flags": {
         "isStatic": true
       },
@@ -1715,7 +1715,7 @@
           10
         ]
       ],
-      "id": 1585,
+      "id": 1861,
       "flags": {
         "isStatic": true
       },
@@ -1753,7 +1753,7 @@
           8
         ]
       ],
-      "id": 1594,
+      "id": 1870,
       "flags": {
         "isStatic": true
       },
@@ -1791,7 +1791,7 @@
           13
         ]
       ],
-      "id": 1603,
+      "id": 1879,
       "flags": {
         "isStatic": true
       },
@@ -1829,7 +1829,7 @@
           11
         ]
       ],
-      "id": 1612,
+      "id": 1888,
       "flags": {
         "isStatic": true
       },
@@ -1867,7 +1867,7 @@
           11
         ]
       ],
-      "id": 1621,
+      "id": 1897,
       "flags": {
         "isStatic": true
       },
@@ -1905,7 +1905,7 @@
           8
         ]
       ],
-      "id": 1625,
+      "id": 1901,
       "flags": {
         "isStatic": true
       },
@@ -1937,7 +1937,7 @@
           8
         ]
       ],
-      "id": 1739,
+      "id": 2015,
       "flags": {
         "isStatic": true
       },
@@ -1962,7 +1962,7 @@
           15
         ]
       ],
-      "id": 1628,
+      "id": 1904,
       "flags": {
         "isStatic": true
       },
@@ -2000,7 +2000,7 @@
           13
         ]
       ],
-      "id": 1384,
+      "id": 1660,
       "flags": {
         "isStatic": true
       },
@@ -2044,7 +2044,7 @@
           7
         ]
       ],
-      "id": 1633,
+      "id": 1909,
       "flags": {
         "isStatic": true
       },
@@ -2092,7 +2092,7 @@
           10
         ]
       ],
-      "id": 1642,
+      "id": 1918,
       "flags": {
         "isStatic": true
       },
@@ -2174,7 +2174,7 @@
           15
         ]
       ],
-      "id": 1670,
+      "id": 1946,
       "flags": {
         "isStatic": true
       },
@@ -2246,7 +2246,7 @@
           11
         ]
       ],
-      "id": 1698,
+      "id": 1974,
       "flags": {
         "isStatic": true
       },
@@ -2271,7 +2271,7 @@
           7
         ]
       ],
-      "id": 1700,
+      "id": 1976,
       "flags": {
         "isStatic": true
       },
@@ -2309,7 +2309,7 @@
           9
         ]
       ],
-      "id": 1704,
+      "id": 1980,
       "flags": {
         "isStatic": true
       },
@@ -2347,7 +2347,7 @@
           8
         ]
       ],
-      "id": 1708,
+      "id": 1984,
       "flags": {
         "isStatic": true
       },
@@ -2385,7 +2385,7 @@
           8
         ]
       ],
-      "id": 1717,
+      "id": 1993,
       "flags": {
         "isStatic": true
       },
@@ -2417,7 +2417,7 @@
           12
         ]
       ],
-      "id": 1724,
+      "id": 2000,
       "flags": {
         "isStatic": true
       },
@@ -2455,7 +2455,7 @@
           18
         ]
       ],
-      "id": 1728,
+      "id": 2004,
       "flags": {
         "isStatic": true
       },
@@ -2480,7 +2480,7 @@
           12
         ]
       ],
-      "id": 1730,
+      "id": 2006,
       "flags": {
         "isStatic": true
       },
@@ -2505,7 +2505,7 @@
           10
         ]
       ],
-      "id": 1741,
+      "id": 2017,
       "flags": {
         "isStatic": true
       },
@@ -2533,7 +2533,7 @@
           30
         ]
       ],
-      "id": 1562,
+      "id": 1838,
       "flags": {
         "isStatic": true
       },
@@ -2551,7 +2551,7 @@
           26
         ]
       ],
-      "id": 1734,
+      "id": 2010,
       "flags": {
         "isStatic": true
       },
@@ -2569,7 +2569,7 @@
           19
         ]
       ],
-      "id": 1563,
+      "id": 1839,
       "flags": {
         "isStatic": true
       },
@@ -2587,7 +2587,7 @@
           23
         ]
       ],
-      "id": 1564,
+      "id": 1840,
       "flags": {
         "isStatic": true
       },
@@ -2605,7 +2605,7 @@
           23
         ]
       ],
-      "id": 1565,
+      "id": 1841,
       "flags": {
         "isStatic": true
       },
@@ -2623,7 +2623,7 @@
           19
         ]
       ],
-      "id": 1632,
+      "id": 1908,
       "flags": {
         "isStatic": true
       },

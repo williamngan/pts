@@ -1,33 +1,33 @@
 {
-  "name": "UIButton",
+  "name": "UIDragger",
   "source": [
     [
       "UI.ts",
-      304,
-      21
+      409,
+      22
     ]
   ],
   "kind": "Class",
-  "id": 935,
-  "comment": "**[Experimental]** A simple button that extends [`UI`](#link) to track clicks and hovers.",
+  "id": 1061,
+  "comment": "[Experimental] A draggable UI that provides handler such as [`UIDragger.onDrag`](#link) and [`UIDragger.onDrop`](#link).",
   "constructor": [
     {
       "name": "constructor",
       "source": [
         [
           "UI.ts",
-          306,
-          31
+          412,
+          34
         ]
       ],
-      "id": 937,
+      "id": 1064,
       "flags": {},
-      "overrides": "UI.__constructor",
+      "overrides": "UIButton.__constructor",
       "inherits": false,
       "signatures": [
         {
-          "comment": "Create an UIButton. A button has 2 states, \"clicks\" (number) and \"hover\" (boolean), which you can access through [`UI.state`](#link) function. You may also create a new UIButton using one of the static helper like [`UI.fromRectangle`](#link) or [`UI.fromCircle`](#link).",
-          "returns": "UIButton",
+          "comment": "Create a dragger which has all the states in UIButton, with additional \"dragging\" (boolean) and \"offset\" (Pt) states. (See [`UI.state`](#link)) You may also create a new UIDragger using one of the static helper like [`UI.fromRectangle`](#link) or [`UI.fromCircle`](#link).",
+          "returns": "UIDragger",
           "returns_comment": false,
           "parameters": [
             {
@@ -75,7 +75,7 @@
           11
         ]
       ],
-      "id": 997,
+      "id": 1136,
       "flags": {},
       "overrides": false,
       "inherits": "UI.group",
@@ -107,7 +107,7 @@
           8
         ]
       ],
-      "id": 993,
+      "id": 1132,
       "flags": {},
       "overrides": false,
       "inherits": "UI.id",
@@ -139,7 +139,7 @@
           11
         ]
       ],
-      "id": 1001,
+      "id": 1140,
       "flags": {},
       "overrides": false,
       "inherits": "UI.shape",
@@ -168,7 +168,7 @@
           16
         ]
       ],
-      "id": 1021,
+      "id": 1160,
       "flags": {
         "isProtected": true
       },
@@ -200,7 +200,7 @@
           8
         ]
       ],
-      "id": 1017,
+      "id": 1156,
       "flags": {},
       "overrides": false,
       "inherits": "UI.listen",
@@ -236,7 +236,7 @@
           5
         ]
       ],
-      "id": 1013,
+      "id": 1152,
       "flags": {},
       "overrides": false,
       "inherits": "UI.off",
@@ -272,10 +272,10 @@
           10
         ]
       ],
-      "id": 949,
+      "id": 1088,
       "flags": {},
       "overrides": false,
-      "inherits": false,
+      "inherits": "UIButton.offClick",
       "signatures": [
         {
           "comment": "Remove an existing click handler",
@@ -294,6 +294,66 @@
       ]
     },
     {
+      "name": "offDrag",
+      "source": [
+        [
+          "UI.ts",
+          468,
+          9
+        ]
+      ],
+      "id": 1076,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Remove an existing drag handler",
+          "returns": "boolean",
+          "returns_comment": "a boolean indicating whether the handler was removed successfully\n",
+          "parameters": [
+            {
+              "name": "id",
+              "comment": "an ID number returned by [`UIDragger.onDrag`](#link). If this is not defined, all handlers in this key will be removed.",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "offDrop",
+      "source": [
+        [
+          "UI.ts",
+          488,
+          9
+        ]
+      ],
+      "id": 1082,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Remove an existing drop handler",
+          "returns": "boolean",
+          "returns_comment": "a boolean indicating whether the handler was removed successfully\n",
+          "parameters": [
+            {
+              "name": "id",
+              "comment": "an ID number returned by [`UIDragger.onDrag`](#link). If this is not defined, all handlers in this key will be removed.",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "offHover",
       "source": [
         [
@@ -302,10 +362,10 @@
           10
         ]
       ],
-      "id": 956,
+      "id": 1095,
       "flags": {},
       "overrides": false,
-      "inherits": false,
+      "inherits": "UIButton.offHover",
       "signatures": [
         {
           "comment": "Remove handlers for hover events.",
@@ -338,7 +398,7 @@
           4
         ]
       ],
-      "id": 1009,
+      "id": 1148,
       "flags": {},
       "overrides": false,
       "inherits": "UI.on",
@@ -374,15 +434,75 @@
           9
         ]
       ],
-      "id": 946,
+      "id": 1085,
       "flags": {},
       "overrides": false,
-      "inherits": false,
+      "inherits": "UIButton.onClick",
       "signatures": [
         {
           "comment": "Add a new click handler",
           "returns": "number",
           "returns_comment": "an id number that refers to this handler, for use in [`UIButton.offClick`](#link) or [`UI.off`](#link).\n",
+          "parameters": [
+            {
+              "name": "fn",
+              "comment": "a [`UIHandler`](#link) callback function: `fn( target:UI, pt:Pt, type:string )`",
+              "type": "UIHandler",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "onDrag",
+      "source": [
+        [
+          "UI.ts",
+          458,
+          8
+        ]
+      ],
+      "id": 1073,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Add a new drag handler.",
+          "returns": "number",
+          "returns_comment": "an id number that refers to this handler, for use in [`UIDragger.offDrag`](#link) or [`UI.off`](#link).\n",
+          "parameters": [
+            {
+              "name": "fn",
+              "comment": "a [`UIHandler`](#link) callback function: `fn( target:UI, pt:Pt, type:string )`. You can access the states \"dragging\" and \"offset\" (See [`UI.state`](#link)) in the callback.",
+              "type": "UIHandler",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "onDrop",
+      "source": [
+        [
+          "UI.ts",
+          478,
+          8
+        ]
+      ],
+      "id": 1079,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Add a new drop handler.",
+          "returns": "number",
+          "returns_comment": "an id number that refers to this handler, for use in [`UIDragger.offDrop`](#link) or [`UI.off`](#link).\n",
           "parameters": [
             {
               "name": "fn",
@@ -404,10 +524,10 @@
           9
         ]
       ],
-      "id": 952,
+      "id": 1091,
       "flags": {},
       "overrides": false,
-      "inherits": false,
+      "inherits": "UIButton.onHover",
       "signatures": [
         {
           "comment": "Add handlers for hover events.",
@@ -440,7 +560,7 @@
           8
         ]
       ],
-      "id": 1032,
+      "id": 1171,
       "flags": {},
       "overrides": false,
       "inherits": "UI.render",
@@ -470,7 +590,7 @@
           7
         ]
       ],
-      "id": 1005,
+      "id": 1144,
       "flags": {},
       "overrides": false,
       "inherits": "UI.state",
@@ -506,7 +626,7 @@
           10
         ]
       ],
-      "id": 1042,
+      "id": 1181,
       "flags": {},
       "overrides": false,
       "inherits": "UI.toString",
@@ -529,7 +649,7 @@
           18
         ]
       ],
-      "id": 1024,
+      "id": 1163,
       "flags": {
         "isProtected": true
       },
@@ -561,7 +681,7 @@
           19
         ]
       ],
-      "id": 978,
+      "id": 1117,
       "flags": {
         "isStatic": true
       },
@@ -605,7 +725,7 @@
           20
         ]
       ],
-      "id": 983,
+      "id": 1122,
       "flags": {
         "isStatic": true
       },
@@ -649,7 +769,7 @@
           22
         ]
       ],
-      "id": 973,
+      "id": 1112,
       "flags": {
         "isStatic": true
       },
@@ -693,7 +813,7 @@
           15
         ]
       ],
-      "id": 988,
+      "id": 1127,
       "flags": {
         "isStatic": true
       },
@@ -737,7 +857,7 @@
           14
         ]
       ],
-      "id": 1027,
+      "id": 1166,
       "flags": {
         "isStatic": true
       },
@@ -777,7 +897,7 @@
   "properties": [],
   "flags": {},
   "extends": [
-    "UI"
+    "UIButton"
   ],
   "implements": []
 }

@@ -494,6 +494,7 @@ export class Rectangle {
 }
 export class Circle {
     static fromRect(pts: GroupLike, enclose?: boolean): Group;
+    static fromTriangle(pts: GroupLike, enclose?: boolean): Group;
     static fromCenter(pt: PtLike, radius: number): Group;
     static withinBound(pts: GroupLike, pt: PtLike, threshold?: number): boolean;
     static intersectRay2D(pts: GroupLike, ray: GroupLike): Group;
@@ -942,7 +943,7 @@ export type IntersectContext = {
     edge: Group;
     other?: any;
 };
-export type UIHandler = (pt: Pt, target: UI, type: string) => void;
+export type UIHandler = (target: UI, pt: PtLike, type: string) => void;
 export type WarningType = "error" | "warn" | "mute";
 
 export class Typography {
@@ -952,49 +953,81 @@ export class Typography {
     static fontSizeToThreshold(threshold: number, direction?: number): (a: number, b: number) => number;
 }
 
-export enum UIShape {
-    Rectangle = 0,
-    Circle = 1,
-    Polygon = 2,
-    Polyline = 3,
-    Line = 4
-}
+export const UIShape: {
+    rectangle: string;
+    circle: string;
+    polygon: string;
+    polyline: string;
+    line: string;
+};
 export const UIPointerActions: {
     up: string;
     down: string;
     move: string;
     drag: string;
+    uidrag: string;
     drop: string;
     over: string;
     out: string;
+    enter: string;
+    leave: string;
+    all: string;
 };
 export class UI {
-    group: Group;
-    shape: UIShape;
+    _group: Group;
+    _shape: string;
+    protected static _counter: number;
     protected _id: string;
     protected _actions: {
-        [key: string]: UIHandler;
+        [key: string]: UIHandler[];
     };
     protected _states: {
         [key: string]: any;
     };
-    constructor(group: Group, shape: UIShape, states: {}, id?: string);
+    protected _holds: string[];
+    constructor(group: GroupLike, shape: string, states?: {
+        [key: string]: any;
+    }, id?: string);
+    static fromRectangle(group: GroupLike, states: {}, id?: string): UI;
+    static fromCircle(group: GroupLike, states: {}, id?: string): UI;
+    static fromPolygon(group: GroupLike, states: {}, id?: string): UI;
+    static fromUI(ui: UI, states?: object, id?: string): UI;
     id: string;
-    state(key: string): any;
-    on(key: string, fn: UIHandler): this;
-    off(key: string): this;
-    listen(key: string, p: Pt): boolean;
+    group: Group;
+    shape: string;
+    state(key: string, value?: any): any;
+    on(key: string, fn: UIHandler): number;
+    off(key: string, which?: number): boolean;
+    listen(key: string, p: PtLike): boolean;
+    protected hold(key: string): number;
+    protected unhold(id?: number): void;
+    static track(uis: UI[], key: string, p: PtLike): void;
     render(fn: (group: Group, states: {
         [key: string]: any;
     }) => void): void;
-    protected _trigger(p: Pt): boolean;
+    toString(): string;
+    protected _within(p: PtLike): boolean;
+    protected static _trigger(fns: UIHandler[], target: UI, pt: PtLike, type: string): void;
+    protected static _addHandler(fns: UIHandler[], fn: UIHandler): number;
+    protected static _removeHandler(fns: UIHandler[], index: number): boolean;
 }
 export class UIButton extends UI {
-    _clicks: number;
-    constructor(group: Group, shape: UIShape, states: {}, id?: string);
-    readonly clicks: number;
-    onClick(fn: UIHandler): void;
-    onHover(over: UIHandler, out: UIHandler): void;
+    constructor(group: GroupLike, shape: string, states?: {
+        [key: string]: any;
+    }, id?: string);
+    onClick(fn: UIHandler): number;
+    offClick(id: number): boolean;
+    onHover(enter?: UIHandler, leave?: UIHandler): number[];
+    offHover(enterID?: number, leaveID?: number): boolean[];
+}
+export class UIDragger extends UIButton {
+    constructor(group: GroupLike, shape: string, states?: {
+        [key: string]: any;
+    }, id?: string);
+    onDrag(fn: UIHandler): number;
+    offDrag(id: number): boolean;
+    onDrop(fn: UIHandler): number;
+    offDrop(id: number): boolean;
 }
 
 export const Const: {

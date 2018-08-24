@@ -4,82 +4,82 @@
     [
       "UI.ts",
       13,
-      19
+      20
     ]
   ],
-  "kind": "Enumeration",
-  "id": 820,
-  "comment": "**[Experimental]** An enumeration of different UI types, for use in [`UI`](#link) instances.",
+  "kind": "Objectliteral",
+  "id": 1200,
+  "comment": "**[Experimental]** A set of string constatns to represent different UI types, for use in [`UI`](#link) instances.",
   "constructor": [],
   "accessors": [],
   "methods": [],
   "variables": [
     {
-      "name": "Circle",
+      "name": "circle",
       "source": [
         [
           "UI.ts",
           14,
-          19
+          32
         ]
       ],
-      "id": 822,
+      "id": 1202,
       "flags": {},
-      "type": "Circle",
+      "type": "circle",
       "overrides": false,
       "inherits": false,
       "comment": ""
     },
     {
-      "name": "Line",
+      "name": "line",
       "source": [
         [
           "UI.ts",
           14,
-          44
+          90
         ]
       ],
-      "id": 825,
+      "id": 1205,
       "flags": {},
-      "type": "Line",
+      "type": "line",
       "overrides": false,
       "inherits": false,
       "comment": ""
     },
     {
-      "name": "Polygon",
+      "name": "polygon",
       "source": [
         [
           "UI.ts",
           14,
-          28
+          51
         ]
       ],
-      "id": 823,
+      "id": 1203,
       "flags": {},
-      "type": "Polygon",
+      "type": "polygon",
       "overrides": false,
       "inherits": false,
       "comment": ""
     },
     {
-      "name": "Polyline",
+      "name": "polyline",
       "source": [
         [
           "UI.ts",
           14,
-          38
+          72
         ]
       ],
-      "id": 824,
+      "id": 1204,
       "flags": {},
-      "type": "Polyline",
+      "type": "polyline",
       "overrides": false,
       "inherits": false,
       "comment": ""
     },
     {
-      "name": "Rectangle",
+      "name": "rectangle",
       "source": [
         [
           "UI.ts",
@@ -87,16 +87,18 @@
           11
         ]
       ],
-      "id": 821,
+      "id": 1201,
       "flags": {},
-      "type": "Rectangle",
+      "type": "rectangle",
       "overrides": false,
       "inherits": false,
       "comment": ""
     }
   ],
   "properties": [],
-  "flags": {},
+  "flags": {
+    "isConst": true
+  },
   "extends": [],
   "implements": []
 }

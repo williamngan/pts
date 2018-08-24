@@ -18,11 +18,11 @@
       "source": [
         [
           "Op.ts",
-          616,
+          631,
           19
         ]
       ],
-      "id": 600,
+      "id": 604,
       "flags": {
         "isStatic": true
       },
@@ -90,15 +90,53 @@
       ]
     },
     {
+      "name": "fromTriangle",
+      "source": [
+        [
+          "Op.ts",
+          616,
+          21
+        ]
+      ],
+      "id": 600,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a circle that either fits within, or encloses, a triangle. Same as [`Triangle.circumcircle`](#link) or [`Triangle.incircle`](#link).",
+          "returns": "Group",
+          "returns_comment": "a Group that represents a circle\n",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group of 3 Pts representing a rectangle",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "enclose",
+              "comment": "if `true`, the circle will enclose the triangle. Default is `false`, which will fit the circle inside the triangle.",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "intersectCircle2D",
       "source": [
         [
           "Op.ts",
-          690,
+          705,
           26
         ]
       ],
-      "id": 617,
+      "id": 621,
       "flags": {
         "isStatic": true
       },
@@ -132,11 +170,11 @@
       "source": [
         [
           "Op.ts",
-          672,
+          687,
           24
         ]
       ],
-      "id": 613,
+      "id": 617,
       "flags": {
         "isStatic": true
       },
@@ -170,11 +208,11 @@
       "source": [
         [
           "Op.ts",
-          639,
+          654,
           23
         ]
       ],
-      "id": 609,
+      "id": 613,
       "flags": {
         "isStatic": true
       },
@@ -208,11 +246,11 @@
       "source": [
         [
           "Op.ts",
-          724,
+          739,
           24
         ]
       ],
-      "id": 621,
+      "id": 625,
       "flags": {
         "isStatic": true
       },
@@ -246,11 +284,11 @@
       "source": [
         [
           "Op.ts",
-          741,
+          756,
           15
         ]
       ],
-      "id": 625,
+      "id": 629,
       "flags": {
         "isStatic": true
       },
@@ -284,11 +322,11 @@
       "source": [
         [
           "Op.ts",
-          757,
+          772,
           19
         ]
       ],
-      "id": 629,
+      "id": 633,
       "flags": {
         "isStatic": true
       },
@@ -322,11 +360,11 @@
       "source": [
         [
           "Op.ts",
-          627,
+          642,
           20
         ]
       ],
-      "id": 604,
+      "id": 608,
       "flags": {
         "isStatic": true
       },

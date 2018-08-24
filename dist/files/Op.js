@@ -288,6 +288,14 @@ class Circle {
         }
         return new Pt_1.Group(Rectangle.center(pts), new Pt_1.Pt(r, r));
     }
+    static fromTriangle(pts, enclose = false) {
+        if (enclose) {
+            return Triangle.circumcircle(pts);
+        }
+        else {
+            return Triangle.incircle(pts);
+        }
+    }
     static fromCenter(pt, radius) {
         return new Pt_1.Group(new Pt_1.Pt(pt), new Pt_1.Pt(radius, radius));
     }
