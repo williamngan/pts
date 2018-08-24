@@ -33,7 +33,7 @@ var run = Pts.quickStart( "#pt", "#fe3" );
 
     },
 
-    animate: (time, fps) => {
+    animate: (time, ftime) => {
 
     },
 

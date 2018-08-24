@@ -97,6 +97,7 @@ html * {
 #page {
   padding: 0 10px 0 40px;
   position: relative;
+  user-select: none;
 }
 
 #cover {
