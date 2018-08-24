@@ -608,6 +608,21 @@ export class Circle {
 
 
   /**
+   * Create a circle that either fits within, or encloses, a triangle. Same as [`Triangle.circumcircle`](#link) or [`Triangle.incircle`](#link).
+   * @param pts a Group of 3 Pts representing a rectangle
+   * @param enclose if `true`, the circle will enclose the triangle. Default is `false`, which will fit the circle inside the triangle.
+   * @returns a Group that represents a circle
+   */
+  static fromTriangle( pts:GroupLike, enclose:boolean=false ):Group {
+    if (enclose) {
+      return Triangle.circumcircle( pts );
+    } else {
+      return Triangle.incircle( pts );
+    }
+  }
+
+
+  /**
    * Create a circle based on a center point and a radius.
    * @param pt center point of circle
    * @param radius radius of circle
