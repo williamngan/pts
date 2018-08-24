@@ -284,6 +284,14 @@ export class Circle {
         }
         return new Group(Rectangle.center(pts), new Pt(r, r));
     }
+    static fromTriangle(pts, enclose = false) {
+        if (enclose) {
+            return Triangle.circumcircle(pts);
+        }
+        else {
+            return Triangle.incircle(pts);
+        }
+    }
     static fromCenter(pt, radius) {
         return new Group(new Pt(pt), new Pt(radius, radius));
     }

@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.5.1 - Copyright © 2017-2018 William Ngan and contributors.
+ * pts.js 0.6.0 - Copyright © 2017-2018 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -75,7 +75,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 10);
+/******/ 	return __webpack_require__(__webpack_require__.s = 11);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -983,6 +983,14 @@ class Circle {
             r = min;
         }
         return new Pt_1.Group(Rectangle.center(pts), new Pt_1.Pt(r, r));
+    }
+    static fromTriangle(pts, enclose = false) {
+        if (enclose) {
+            return Triangle.circumcircle(pts);
+        }
+        else {
+            return Triangle.incircle(pts);
+        }
     }
     static fromCenter(pt, radius) {
         return new Pt_1.Group(new Pt_1.Pt(pt), new Pt_1.Pt(radius, radius));
@@ -2391,7 +2399,7 @@ exports.Font = Font;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
-const UI_1 = __webpack_require__(11);
+const UI_1 = __webpack_require__(8);
 class Space {
     constructor() {
         this.id = "space";
@@ -2602,7 +2610,7 @@ class MultiTouchSpace extends Space {
     _mouseUp(evt) {
         this._mouseAction(UI_1.UIPointerActions.up, evt);
         if (this._dragged)
-            this._mouseAction(UI_1.UIPointerActions.down, evt);
+            this._mouseAction(UI_1.UIPointerActions.drop, evt);
         this._pressed = false;
         this._dragged = false;
         return false;
@@ -2646,7 +2654,7 @@ const Space_1 = __webpack_require__(6);
 const Form_1 = __webpack_require__(5);
 const Pt_1 = __webpack_require__(0);
 const Util_1 = __webpack_require__(1);
-const Typography_1 = __webpack_require__(8);
+const Typography_1 = __webpack_require__(9);
 const Op_1 = __webpack_require__(2);
 class CanvasSpace extends Space_1.MultiTouchSpace {
     constructor(elem, callback) {
@@ -3174,6 +3182,251 @@ exports.CanvasForm = CanvasForm;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(0);
+const Op_1 = __webpack_require__(2);
+exports.UIShape = {
+    rectangle: "rectangle", circle: "circle", polygon: "polygon", polyline: "polyline", line: "line"
+};
+exports.UIPointerActions = {
+    up: "up", down: "down", move: "move", drag: "drag", uidrag: "uidrag", drop: "drop", over: "over", out: "out", enter: "enter", leave: "leave", all: "all"
+};
+class UI {
+    constructor(group, shape, states = {}, id) {
+        this._holds = [];
+        this._group = Pt_1.Group.fromArray(group);
+        this._shape = shape;
+        this._id = id === undefined ? `ui_${(UI._counter++)}` : id;
+        this._states = states;
+        this._actions = {};
+    }
+    static fromRectangle(group, states, id) {
+        return new this(group, exports.UIShape.rectangle, states, id);
+    }
+    static fromCircle(group, states, id) {
+        return new this(group, exports.UIShape.circle, states, id);
+    }
+    static fromPolygon(group, states, id) {
+        return new this(group, exports.UIShape.polygon, states, id);
+    }
+    static fromUI(ui, states, id) {
+        return new this(ui.group, ui.shape, states || ui._states, id);
+    }
+    get id() { return this._id; }
+    set id(d) { this._id = d; }
+    get group() { return this._group; }
+    set group(d) { this._group = d; }
+    get shape() { return this._shape; }
+    set shape(d) { this._shape = d; }
+    state(key, value) {
+        if (!key)
+            return null;
+        if (value !== undefined) {
+            this._states[key] = value;
+            return this;
+        }
+        return this._states[key] || null;
+    }
+    on(key, fn) {
+        if (!this._actions[key])
+            this._actions[key] = [];
+        return UI._addHandler(this._actions[key], fn);
+    }
+    off(key, which) {
+        if (!this._actions[key])
+            return false;
+        if (which === undefined) {
+            delete this._actions[key];
+            return true;
+        }
+        else {
+            return UI._removeHandler(this._actions[key], which);
+        }
+    }
+    listen(key, p) {
+        if (this._actions[key] !== undefined) {
+            if (this._within(p) || this._holds.indexOf(key) >= 0) {
+                UI._trigger(this._actions[key], this, p, key);
+                return true;
+            }
+            else if (this._actions['all']) {
+                UI._trigger(this._actions['all'], this, p, key);
+                return true;
+            }
+        }
+        return false;
+    }
+    hold(key) {
+        this._holds.push(key);
+        return this._holds.length - 1;
+    }
+    unhold(id) {
+        if (id !== undefined) {
+            this._holds = this._holds.splice(id, 1);
+        }
+        else {
+            this._holds = [];
+        }
+    }
+    static track(uis, key, p) {
+        for (let i = 0, len = uis.length; i < len; i++) {
+            uis[i].listen(key, p);
+        }
+    }
+    render(fn) {
+        fn(this._group, this._states);
+    }
+    toString() {
+        return `UI ${this.group.toString}`;
+    }
+    _within(p) {
+        let fn = null;
+        if (this._shape === exports.UIShape.rectangle) {
+            fn = Op_1.Rectangle.withinBound;
+        }
+        else if (this._shape === exports.UIShape.circle) {
+            fn = Op_1.Circle.withinBound;
+        }
+        else if (this._shape === exports.UIShape.polygon) {
+            fn = Op_1.Polygon.hasIntersectPoint;
+        }
+        else {
+            return false;
+        }
+        return fn(this._group, p);
+    }
+    static _trigger(fns, target, pt, type) {
+        if (fns) {
+            for (let i = 0, len = fns.length; i < len; i++) {
+                if (fns[i])
+                    fns[i](target, pt, type);
+            }
+        }
+    }
+    static _addHandler(fns, fn) {
+        if (fn) {
+            fns.push(fn);
+            return fns.length - 1;
+        }
+        else {
+            return -1;
+        }
+    }
+    static _removeHandler(fns, index) {
+        if (index >= 0 && index < fns.length) {
+            let temp = fns.length;
+            fns.splice(index, 1);
+            return (temp > fns.length);
+        }
+        else {
+            return false;
+        }
+    }
+}
+UI._counter = 0;
+exports.UI = UI;
+class UIButton extends UI {
+    constructor(group, shape, states = {}, id) {
+        super(group, shape, states, id);
+        this._hoverID = -1;
+        if (!states.hover)
+            states.hover = false;
+        if (!states.clicks)
+            states.hover = 0;
+        const UA = exports.UIPointerActions;
+        this.on(UA.up, (target, pt, type) => {
+            this.state('clicks', this._states.clicks + 1);
+        });
+        this.on(UA.move, (target, pt, type) => {
+            let hover = this._within(pt);
+            if (hover && !this._states.hover) {
+                this.state('hover', true);
+                UI._trigger(this._actions[UA.enter], this, pt, UA.enter);
+                var _capID = this.hold(UA.move);
+                this._hoverID = this.on(UA.move, (t, p) => {
+                    if (!this._within(p) && !this.state('dragging')) {
+                        this.state('hover', false);
+                        UI._trigger(this._actions[UA.leave], this, pt, UA.leave);
+                        this.off(UA.move, this._hoverID);
+                        this.unhold(_capID);
+                    }
+                });
+            }
+        });
+    }
+    onClick(fn) {
+        return this.on(exports.UIPointerActions.up, fn);
+    }
+    offClick(id) {
+        return this.off(exports.UIPointerActions.up, id);
+    }
+    onHover(enter, leave) {
+        var ids = [undefined, undefined];
+        if (enter)
+            ids[0] = this.on(exports.UIPointerActions.enter, enter);
+        if (leave)
+            ids[1] = this.on(exports.UIPointerActions.leave, leave);
+        return ids;
+    }
+    offHover(enterID, leaveID) {
+        var s = [false, false];
+        if (enterID === undefined || enterID >= 0)
+            s[0] = this.off(exports.UIPointerActions.enter, enterID);
+        if (leaveID === undefined || leaveID >= 0)
+            s[1] = this.off(exports.UIPointerActions.leave, leaveID);
+        return s;
+    }
+}
+exports.UIButton = UIButton;
+class UIDragger extends UIButton {
+    constructor(group, shape, states = {}, id) {
+        super(group, shape, states, id);
+        this._draggingID = -1;
+        this._moveHoldID = -1;
+        if (!states.dragging)
+            states.dragging = false;
+        if (!states.offset)
+            states.offset = new Pt_1.Pt(group[0]);
+        const UA = exports.UIPointerActions;
+        this.on(UA.down, (target, pt, type) => {
+            this.state('dragging', true);
+            this.state('offset', new Pt_1.Pt(pt).subtract(target.group[0]));
+            this._moveHoldID = this.hold(UA.move);
+            this._draggingID = this.on(UA.move, (t, p) => {
+                if (this.state('dragging')) {
+                    UI._trigger(this._actions[UA.uidrag], t, p, UA.uidrag);
+                }
+            });
+        });
+        this.on(UA.up, (target, pt, type) => {
+            this.state('dragging', false);
+            this.off(UA.move, this._draggingID);
+            this.unhold(this._moveHoldID);
+            UI._trigger(this._actions[UA.drop], target, pt, type);
+        });
+    }
+    onDrag(fn) {
+        return this.on(exports.UIPointerActions.uidrag, fn);
+    }
+    offDrag(id) {
+        return this.off(exports.UIPointerActions.uidrag, id);
+    }
+    onDrop(fn) {
+        return this.on(exports.UIPointerActions.drop, fn);
+    }
+    offDrop(id) {
+        return this.off(exports.UIPointerActions.drop, id);
+    }
+}
+exports.UIDragger = UIDragger;
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const Pt_1 = __webpack_require__(0);
 class Typography {
     static textWidthEstimator(fn, samples = ["M", "n", "."], distribution = [0.06, 0.8, 0.14]) {
         let m = samples.map(fn);
@@ -3214,7 +3467,7 @@ exports.Typography = Typography;
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3664,7 +3917,7 @@ exports.HTMLForm = HTMLForm;
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3683,10 +3936,11 @@ __export(__webpack_require__(0));
 __export(__webpack_require__(6));
 __export(__webpack_require__(13));
 __export(__webpack_require__(1));
-__export(__webpack_require__(9));
+__export(__webpack_require__(10));
 __export(__webpack_require__(14));
-__export(__webpack_require__(8));
+__export(__webpack_require__(9));
 __export(__webpack_require__(15));
+__export(__webpack_require__(8));
 const _Canvas = __webpack_require__(7);
 exports.namespace = (scope) => {
     let lib = module.exports;
@@ -3711,94 +3965,6 @@ exports.quickStart = (id, bg = "#9ab") => {
         s.space.bindMouse().bindTouch().play();
     };
 };
-
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const Op_1 = __webpack_require__(2);
-var UIShape;
-(function (UIShape) {
-    UIShape[UIShape["Rectangle"] = 0] = "Rectangle";
-    UIShape[UIShape["Circle"] = 1] = "Circle";
-    UIShape[UIShape["Polygon"] = 2] = "Polygon";
-    UIShape[UIShape["Polyline"] = 3] = "Polyline";
-    UIShape[UIShape["Line"] = 4] = "Line";
-})(UIShape = exports.UIShape || (exports.UIShape = {}));
-exports.UIPointerActions = {
-    up: "up", down: "down", move: "move", drag: "drag", drop: "drop", over: "over", out: "out"
-};
-class UI {
-    constructor(group, shape, states, id) {
-        this.group = group;
-        this.shape = shape;
-        this._id = id;
-        this._states = states;
-        this._actions = {};
-    }
-    get id() { return this._id; }
-    set id(d) { this._id = d; }
-    state(key) {
-        return this._states[key] || false;
-    }
-    on(key, fn) {
-        this._actions[key] = fn;
-        return this;
-    }
-    off(key) {
-        delete this._actions[key];
-        return this;
-    }
-    listen(key, p) {
-        if (this._actions[key] !== undefined) {
-            if (this._trigger(p)) {
-                this._actions[key](p, this, key);
-                return true;
-            }
-        }
-        return false;
-    }
-    render(fn) {
-        fn(this.group, this._states);
-    }
-    _trigger(p) {
-        let fn = null;
-        if (this.shape === UIShape.Rectangle) {
-            fn = Op_1.Rectangle.withinBound;
-        }
-        else if (this.shape === UIShape.Circle) {
-            fn = Op_1.Circle.withinBound;
-        }
-        else if (this.shape === UIShape.Polygon) {
-            fn = Op_1.Rectangle.withinBound;
-        }
-        else {
-            return false;
-        }
-        return fn(this.group, p);
-    }
-}
-exports.UI = UI;
-class UIButton extends UI {
-    constructor(group, shape, states, id) {
-        super(group, shape, states, id);
-        this._clicks = 0;
-    }
-    get clicks() { return this._clicks; }
-    onClick(fn) {
-        this._clicks++;
-        this.on(exports.UIPointerActions.up, fn);
-    }
-    onHover(over, out) {
-        this.on(exports.UIPointerActions.over, over);
-        this.on(exports.UIPointerActions.out, out);
-    }
-}
-exports.UIButton = UIButton;
 
 
 /***/ }),
@@ -4433,7 +4599,7 @@ const Num_1 = __webpack_require__(3);
 const Util_1 = __webpack_require__(1);
 const Pt_1 = __webpack_require__(0);
 const Op_1 = __webpack_require__(2);
-const Dom_1 = __webpack_require__(9);
+const Dom_1 = __webpack_require__(10);
 class SVGSpace extends Dom_1.DOMSpace {
     constructor(elem, callback) {
         super(elem, callback);
