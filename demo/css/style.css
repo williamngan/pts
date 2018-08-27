@@ -25,6 +25,7 @@ html * {
   font-size: 1.5em;
   position: relative;
   line-height: 70px;  
+  user-select: none;
 }
 
 #footer {
