@@ -22,7 +22,7 @@ If you use npm, first [`npm install pts`](https://www.npmjs.com/package/pts) and
 import {CanvasSpace, Pt, Group} from "pts" 
 ```
 
-To get started quickly with a webpack es6 build, try [pts-starter-kit](https://github.com/williamngan/pts-starter-kit). 
+To get started quickly with a webpack es6 build, try [pts-starter-kit](https://github.com/williamngan/pts-starter-kit). If you prefer typescript, try this [pts-ts-starter-kit](https://github.com/pierpo/pts-ts-starter-kit) by pierpo. 
 
 For using Pts in React, take a look at [pts-react-example](https://github.com/williamngan/pts-react-example).
 
