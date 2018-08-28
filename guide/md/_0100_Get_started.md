@@ -22,9 +22,13 @@ If you use npm, first [`npm install pts`](https://www.npmjs.com/package/pts) and
 import {CanvasSpace, Pt, Group} from "pts" 
 ```
 
+(If you don't know how npm works, it's not a problem. Skip to next section to use Pts as a script directly.)
+
 To get started quickly with a webpack es6 build, try [pts-starter-kit](https://github.com/williamngan/pts-starter-kit). If you prefer typescript, try this [pts-ts-starter-kit](https://github.com/pierpo/pts-ts-starter-kit) by pierpo. 
 
-For using Pts in React, take a look at [pts-react-example](https://github.com/williamngan/pts-react-example).
+For using Pts in React, take a look at [pts-react-example](https://github.com/williamngan/pts-react-example). 
+
+Alternatively, use a zero-config tool such as [neutrino.js](https://neutrinojs.org/) to scaffold a custom javascript project directly.
 
 ##### (Note that pts is an es6 library, so if you want to compile to es5, you'll need to configure babel accordingly.)
 
