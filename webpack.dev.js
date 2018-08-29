@@ -9,6 +9,9 @@ var LIB_PATH = path.resolve(__dirname, 'src/_lib.ts')
 var BUILD_PATH = path.resolve(__dirname, 'dist')
 
 module.exports = {
+
+  mode: 'development',
+  devtool: 'source-map',
   
   entry: {
     pts: LIB_PATH

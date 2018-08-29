@@ -13,6 +13,9 @@ var prod = process.argv.indexOf('-p') !== -1
 
 
 module.exports = {
+
+  mode: 'production',
+  devtool: 'source-map',
   
   entry: {
     pts: path.resolve( BUILD_PATH, "pts.js" )
