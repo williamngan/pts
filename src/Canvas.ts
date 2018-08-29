@@ -1,6 +1,4 @@
-// Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
-
+/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
 import {MultiTouchSpace} from './Space';
 import {VisualForm, Font} from "./Form";
