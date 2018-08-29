@@ -3,12 +3,12 @@
   "source": [
     [
       "Color.ts",
-      14,
+      12,
       18
     ]
   ],
   "kind": "Class",
-  "id": 3551,
+  "id": 3550,
   "comment": "Color is a subclass of Pt. Since a color in a color space is analogous to a point or vector in a space, you can apply all Pt operations to colors too. The Color class provides support for many color spaces like HSL and LAB.",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "Color.ts",
-          33,
+          31,
           4
         ]
       ],
-      "id": 3563,
+      "id": 3562,
       "flags": {},
       "overrides": "Pt.__constructor",
       "inherits": false,
@@ -48,16 +48,16 @@
       "source": [
         [
           "Color.ts",
-          233,
+          231,
           7
         ],
         [
           "Color.ts",
-          234,
+          232,
           7
         ]
       ],
-      "id": 3634,
+      "id": 3633,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -80,11 +80,11 @@
       "source": [
         [
           "Color.ts",
-          258,
+          256,
           11
         ]
       ],
-      "id": 3650,
+      "id": 3649,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -99,16 +99,16 @@
       "source": [
         [
           "Color.ts",
-          201,
+          199,
           7
         ],
         [
           "Color.ts",
-          202,
+          200,
           7
         ]
       ],
-      "id": 3618,
+      "id": 3617,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -131,16 +131,16 @@
       "source": [
         [
           "Color.ts",
-          239,
+          237,
           7
         ],
         [
           "Color.ts",
-          240,
+          238,
           7
         ]
       ],
-      "id": 3638,
+      "id": 3637,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -163,16 +163,16 @@
       "source": [
         [
           "Color.ts",
-          195,
+          193,
           7
         ],
         [
           "Color.ts",
-          196,
+          194,
           7
         ]
       ],
-      "id": 3614,
+      "id": 3613,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -195,16 +195,16 @@
       "source": [
         [
           "Color.ts",
-          208,
+          206,
           7
         ],
         [
           "Color.ts",
-          209,
+          207,
           7
         ]
       ],
-      "id": 3622,
+      "id": 3621,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -227,11 +227,11 @@
       "source": [
         [
           "Color.ts",
-          136,
+          134,
           16
         ]
       ],
-      "id": 3596,
+      "id": 3595,
       "flags": {
         "isPublic": true
       },
@@ -248,16 +248,16 @@
       "source": [
         [
           "Pt.ts",
-          55,
+          51,
           8
         ],
         [
           "Pt.ts",
-          56,
+          52,
           8
         ]
       ],
-      "id": 3761,
+      "id": 3760,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.id",
@@ -280,16 +280,16 @@
       "source": [
         [
           "Color.ts",
-          223,
+          221,
           7
         ],
         [
           "Color.ts",
-          224,
+          222,
           7
         ]
       ],
-      "id": 3630,
+      "id": 3629,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -312,11 +312,11 @@
       "source": [
         [
           "Color.ts",
-          182,
+          180,
           10
         ]
       ],
-      "id": 3608,
+      "id": 3607,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -331,16 +331,16 @@
       "source": [
         [
           "Color.ts",
-          263,
+          261,
           16
         ],
         [
           "Color.ts",
-          264,
+          262,
           16
         ]
       ],
-      "id": 3652,
+      "id": 3651,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -363,16 +363,16 @@
       "source": [
         [
           "Color.ts",
-          189,
+          187,
           7
         ],
         [
           "Color.ts",
-          190,
+          188,
           7
         ]
       ],
-      "id": 3610,
+      "id": 3609,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -395,11 +395,11 @@
       "source": [
         [
           "Color.ts",
-          141,
+          139,
           16
         ]
       ],
-      "id": 3598,
+      "id": 3597,
       "flags": {
         "isPublic": true
       },
@@ -416,11 +416,11 @@
       "source": [
         [
           "Color.ts",
-          146,
+          144,
           17
         ]
       ],
-      "id": 3600,
+      "id": 3599,
       "flags": {
         "isPublic": true
       },
@@ -437,16 +437,16 @@
       "source": [
         [
           "Color.ts",
-          217,
+          215,
           7
         ],
         [
           "Color.ts",
-          218,
+          216,
           7
         ]
       ],
-      "id": 3626,
+      "id": 3625,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -469,16 +469,16 @@
       "source": [
         [
           "Color.ts",
-          245,
+          243,
           7
         ],
         [
           "Color.ts",
-          246,
+          244,
           7
         ]
       ],
-      "id": 3642,
+      "id": 3641,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -501,16 +501,16 @@
       "source": [
         [
           "Color.ts",
-          251,
+          249,
           7
         ],
         [
           "Color.ts",
-          252,
+          250,
           7
         ]
       ],
-      "id": 3646,
+      "id": 3645,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -533,16 +533,16 @@
       "source": [
         [
           "Pt.ts",
-          79,
+          75,
           7
         ],
         [
           "Pt.ts",
-          80,
+          76,
           7
         ]
       ],
-      "id": 3777,
+      "id": 3776,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.w",
@@ -565,16 +565,16 @@
       "source": [
         [
           "Pt.ts",
-          61,
+          57,
           7
         ],
         [
           "Pt.ts",
-          62,
+          58,
           7
         ]
       ],
-      "id": 3765,
+      "id": 3764,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.x",
@@ -597,16 +597,16 @@
       "source": [
         [
           "Pt.ts",
-          67,
+          63,
           7
         ],
         [
           "Pt.ts",
-          68,
+          64,
           7
         ]
       ],
-      "id": 3769,
+      "id": 3768,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.y",
@@ -629,16 +629,16 @@
       "source": [
         [
           "Pt.ts",
-          73,
+          69,
           7
         ],
         [
           "Pt.ts",
-          74,
+          70,
           7
         ]
       ],
-      "id": 3773,
+      "id": 3772,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.z",
@@ -663,11 +663,11 @@
       "source": [
         [
           "Pt.ts",
-          338,
+          334,
           6
         ]
       ],
-      "id": 3873,
+      "id": 3872,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$abs",
@@ -686,11 +686,11 @@
       "source": [
         [
           "Pt.ts",
-          204,
+          200,
           6
         ]
       ],
-      "id": 3825,
+      "id": 3824,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$add",
@@ -716,11 +716,11 @@
       "source": [
         [
           "Pt.ts",
-          372,
+          368,
           7
         ]
       ],
-      "id": 3881,
+      "id": 3880,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$ceil",
@@ -739,11 +739,11 @@
       "source": [
         [
           "Pt.ts",
-          185,
+          181,
           9
         ]
       ],
-      "id": 3819,
+      "id": 3818,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$concat",
@@ -769,11 +769,11 @@
       "source": [
         [
           "Pt.ts",
-          304,
+          300,
           8
         ]
       ],
-      "id": 3862,
+      "id": 3861,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$cross",
@@ -799,11 +799,11 @@
       "source": [
         [
           "Pt.ts",
-          297,
+          293,
           10
         ]
       ],
-      "id": 3859,
+      "id": 3858,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$cross2D",
@@ -829,11 +829,11 @@
       "source": [
         [
           "Pt.ts",
-          255,
+          251,
           9
         ]
       ],
-      "id": 3843,
+      "id": 3842,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$divide",
@@ -859,11 +859,11 @@
       "source": [
         [
           "Pt.ts",
-          355,
+          351,
           8
         ]
       ],
-      "id": 3877,
+      "id": 3876,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$floor",
@@ -882,11 +882,11 @@
       "source": [
         [
           "Pt.ts",
-          430,
+          426,
           6
         ]
       ],
-      "id": 3900,
+      "id": 3899,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$max",
@@ -912,11 +912,11 @@
       "source": [
         [
           "Pt.ts",
-          416,
+          412,
           6
         ]
       ],
-      "id": 3897,
+      "id": 3896,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$min",
@@ -942,11 +942,11 @@
       "source": [
         [
           "Pt.ts",
-          238,
+          234,
           11
         ]
       ],
-      "id": 3837,
+      "id": 3836,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$multiply",
@@ -972,11 +972,11 @@
       "source": [
         [
           "Color.ts",
-          293,
+          291,
           12
         ]
       ],
-      "id": 3659,
+      "id": 3658,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1002,11 +1002,11 @@
       "source": [
         [
           "Pt.ts",
-          312,
+          308,
           10
         ]
       ],
-      "id": 3865,
+      "id": 3864,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$project",
@@ -1032,11 +1032,11 @@
       "source": [
         [
           "Pt.ts",
-          389,
+          385,
           8
         ]
       ],
-      "id": 3885,
+      "id": 3884,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$round",
@@ -1055,11 +1055,11 @@
       "source": [
         [
           "Pt.ts",
-          221,
+          217,
           11
         ]
       ],
-      "id": 3831,
+      "id": 3830,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$subtract",
@@ -1085,11 +1085,11 @@
       "source": [
         [
           "Pt.ts",
-          172,
+          168,
           7
         ]
       ],
-      "id": 3816,
+      "id": 3815,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$take",
@@ -1115,11 +1115,11 @@
       "source": [
         [
           "Pt.ts",
-          121,
+          117,
           5
         ]
       ],
-      "id": 3788,
+      "id": 3787,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$to",
@@ -1145,11 +1145,11 @@
       "source": [
         [
           "Pt.ts",
-          283,
+          279,
           7
         ]
       ],
-      "id": 3853,
+      "id": 3852,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$unit",
@@ -1175,11 +1175,11 @@
       "source": [
         [
           "Pt.ts",
-          329,
+          325,
           5
         ]
       ],
-      "id": 3871,
+      "id": 3870,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.abs",
@@ -1198,11 +1198,11 @@
       "source": [
         [
           "Pt.ts",
-          194,
+          190,
           5
         ]
       ],
-      "id": 3822,
+      "id": 3821,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.add",
@@ -1228,11 +1228,11 @@
       "source": [
         [
           "Pt.ts",
-          444,
+          440,
           7
         ]
       ],
-      "id": 3903,
+      "id": 3902,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.angle",
@@ -1258,11 +1258,11 @@
       "source": [
         [
           "Pt.ts",
-          454,
+          450,
           14
         ]
       ],
-      "id": 3906,
+      "id": 3905,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.angleBetween",
@@ -1294,11 +1294,11 @@
       "source": [
         [
           "Pt.ts",
-          363,
+          359,
           6
         ]
       ],
-      "id": 3879,
+      "id": 3878,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.ceil",
@@ -1317,11 +1317,11 @@
       "source": [
         [
           "Color.ts",
-          152,
+          150,
           7
         ]
       ],
-      "id": 3602,
+      "id": 3601,
       "flags": {},
       "overrides": "Pt.clone",
       "inherits": false,
@@ -1340,11 +1340,11 @@
       "source": [
         [
           "Pt.ts",
-          245,
+          241,
           8
         ]
       ],
-      "id": 3840,
+      "id": 3839,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.divide",
@@ -1370,11 +1370,11 @@
       "source": [
         [
           "Pt.ts",
-          290,
+          286,
           5
         ]
       ],
-      "id": 3856,
+      "id": 3855,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.dot",
@@ -1400,11 +1400,11 @@
       "source": [
         [
           "Pt.ts",
-          96,
+          92,
           8
         ]
       ],
-      "id": 3781,
+      "id": 3780,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.equals",
@@ -1436,11 +1436,11 @@
       "source": [
         [
           "Pt.ts",
-          346,
+          342,
           7
         ]
       ],
-      "id": 3875,
+      "id": 3874,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.floor",
@@ -1459,11 +1459,11 @@
       "source": [
         [
           "Pt.ts",
-          267,
+          263,
           11
         ]
       ],
-      "id": 3848,
+      "id": 3847,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.magnitude",
@@ -1482,11 +1482,11 @@
       "source": [
         [
           "Pt.ts",
-          261,
+          257,
           13
         ]
       ],
-      "id": 3846,
+      "id": 3845,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.magnitudeSq",
@@ -1505,11 +1505,11 @@
       "source": [
         [
           "Pt.ts",
-          407,
+          403,
           10
         ]
       ],
-      "id": 3892,
+      "id": 3891,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.maxValue",
@@ -1528,11 +1528,11 @@
       "source": [
         [
           "Pt.ts",
-          398,
+          394,
           10
         ]
       ],
-      "id": 3887,
+      "id": 3886,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.minValue",
@@ -1551,11 +1551,11 @@
       "source": [
         [
           "Pt.ts",
-          228,
+          224,
           10
         ]
       ],
-      "id": 3834,
+      "id": 3833,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.multiply",
@@ -1581,11 +1581,11 @@
       "source": [
         [
           "Color.ts",
-          271,
+          269,
           11
         ]
       ],
-      "id": 3656,
+      "id": 3655,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1611,11 +1611,11 @@
       "source": [
         [
           "Pt.ts",
-          145,
+          141,
           4
         ]
       ],
-      "id": 3796,
+      "id": 3795,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.op",
@@ -1646,11 +1646,11 @@
       "source": [
         [
           "Pt.ts",
-          159,
+          155,
           5
         ]
       ],
-      "id": 3806,
+      "id": 3805,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.ops",
@@ -1681,11 +1681,11 @@
       "source": [
         [
           "Pt.ts",
-          321,
+          317,
           15
         ]
       ],
-      "id": 3868,
+      "id": 3867,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.projectScalar",
@@ -1711,11 +1711,11 @@
       "source": [
         [
           "Pt.ts",
-          499,
+          495,
           11
         ]
       ],
-      "id": 3924,
+      "id": 3923,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.reflect2D",
@@ -1747,11 +1747,11 @@
       "source": [
         [
           "Pt.ts",
-          476,
+          472,
           10
         ]
       ],
-      "id": 3914,
+      "id": 3913,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.rotate2D",
@@ -1789,11 +1789,11 @@
       "source": [
         [
           "Pt.ts",
-          380,
+          376,
           7
         ]
       ],
-      "id": 3883,
+      "id": 3882,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.round",
@@ -1812,11 +1812,11 @@
       "source": [
         [
           "Pt.ts",
-          464,
+          460,
           7
         ]
       ],
-      "id": 3910,
+      "id": 3909,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.scale",
@@ -1848,11 +1848,11 @@
       "source": [
         [
           "Pt.ts",
-          488,
+          484,
           9
         ]
       ],
-      "id": 3919,
+      "id": 3918,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.shear2D",
@@ -1890,11 +1890,11 @@
       "source": [
         [
           "Pt.ts",
-          211,
+          207,
           10
         ]
       ],
-      "id": 3828,
+      "id": 3827,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.subtract",
@@ -1920,11 +1920,11 @@
       "source": [
         [
           "Pt.ts",
-          108,
+          104,
           4
         ]
       ],
-      "id": 3785,
+      "id": 3784,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.to",
@@ -1950,11 +1950,11 @@
       "source": [
         [
           "Pt.ts",
-          132,
+          128,
           9
         ]
       ],
-      "id": 3791,
+      "id": 3790,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.toAngle",
@@ -1992,11 +1992,11 @@
       "source": [
         [
           "Pt.ts",
-          516,
+          512,
           9
         ]
       ],
-      "id": 3928,
+      "id": 3927,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.toArray",
@@ -2015,11 +2015,11 @@
       "source": [
         [
           "Color.ts",
-          163,
+          161,
           8
         ]
       ],
-      "id": 3604,
+      "id": 3603,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2051,11 +2051,11 @@
       "source": [
         [
           "Color.ts",
-          300,
+          298,
           10
         ]
       ],
-      "id": 3662,
+      "id": 3661,
       "flags": {},
       "overrides": "Pt.toString",
       "inherits": false,
@@ -2081,11 +2081,11 @@
       "source": [
         [
           "Pt.ts",
-          274,
+          270,
           6
         ]
       ],
-      "id": 3850,
+      "id": 3849,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.unit",
@@ -2111,11 +2111,11 @@
       "source": [
         [
           "Color.ts",
-          434,
+          432,
           17
         ]
       ],
-      "id": 3680,
+      "id": 3679,
       "flags": {
         "isStatic": true
       },
@@ -2155,11 +2155,11 @@
       "source": [
         [
           "Color.ts",
-          363,
+          361,
           17
         ]
       ],
-      "id": 3670,
+      "id": 3669,
       "flags": {
         "isStatic": true
       },
@@ -2199,11 +2199,11 @@
       "source": [
         [
           "Color.ts",
-          711,
+          709,
           17
         ]
       ],
-      "id": 3745,
+      "id": 3744,
       "flags": {
         "isStatic": true
       },
@@ -2243,11 +2243,11 @@
       "source": [
         [
           "Color.ts",
-          480,
+          478,
           17
         ]
       ],
-      "id": 3690,
+      "id": 3689,
       "flags": {
         "isStatic": true
       },
@@ -2287,11 +2287,11 @@
       "source": [
         [
           "Color.ts",
-          624,
+          622,
           17
         ]
       ],
-      "id": 3730,
+      "id": 3729,
       "flags": {
         "isStatic": true
       },
@@ -2331,11 +2331,11 @@
       "source": [
         [
           "Color.ts",
-          727,
+          725,
           17
         ]
       ],
-      "id": 3750,
+      "id": 3749,
       "flags": {
         "isStatic": true
       },
@@ -2375,11 +2375,11 @@
       "source": [
         [
           "Color.ts",
-          506,
+          504,
           17
         ]
       ],
-      "id": 3700,
+      "id": 3699,
       "flags": {
         "isStatic": true
       },
@@ -2419,11 +2419,11 @@
       "source": [
         [
           "Color.ts",
-          532,
+          530,
           17
         ]
       ],
-      "id": 3710,
+      "id": 3709,
       "flags": {
         "isStatic": true
       },
@@ -2463,11 +2463,11 @@
       "source": [
         [
           "Color.ts",
-          684,
+          682,
           17
         ]
       ],
-      "id": 3740,
+      "id": 3739,
       "flags": {
         "isStatic": true
       },
@@ -2507,11 +2507,11 @@
       "source": [
         [
           "Color.ts",
-          403,
+          401,
           17
         ]
       ],
-      "id": 3675,
+      "id": 3674,
       "flags": {
         "isStatic": true
       },
@@ -2551,11 +2551,11 @@
       "source": [
         [
           "Color.ts",
-          327,
+          325,
           17
         ]
       ],
-      "id": 3665,
+      "id": 3664,
       "flags": {
         "isStatic": true
       },
@@ -2595,11 +2595,11 @@
       "source": [
         [
           "Color.ts",
-          467,
+          465,
           17
         ]
       ],
-      "id": 3685,
+      "id": 3684,
       "flags": {
         "isStatic": true
       },
@@ -2639,11 +2639,11 @@
       "source": [
         [
           "Color.ts",
-          493,
+          491,
           17
         ]
       ],
-      "id": 3695,
+      "id": 3694,
       "flags": {
         "isStatic": true
       },
@@ -2683,11 +2683,11 @@
       "source": [
         [
           "Color.ts",
-          519,
+          517,
           17
         ]
       ],
-      "id": 3705,
+      "id": 3704,
       "flags": {
         "isStatic": true
       },
@@ -2727,11 +2727,11 @@
       "source": [
         [
           "Color.ts",
-          545,
+          543,
           17
         ]
       ],
-      "id": 3715,
+      "id": 3714,
       "flags": {
         "isStatic": true
       },
@@ -2771,11 +2771,11 @@
       "source": [
         [
           "Color.ts",
-          599,
+          597,
           17
         ]
       ],
-      "id": 3725,
+      "id": 3724,
       "flags": {
         "isStatic": true
       },
@@ -2815,11 +2815,11 @@
       "source": [
         [
           "Color.ts",
-          659,
+          657,
           17
         ]
       ],
-      "id": 3735,
+      "id": 3734,
       "flags": {
         "isStatic": true
       },
@@ -2859,11 +2859,11 @@
       "source": [
         [
           "Color.ts",
-          571,
+          569,
           17
         ]
       ],
-      "id": 3720,
+      "id": 3719,
       "flags": {
         "isStatic": true
       },
@@ -2907,7 +2907,7 @@
           14
         ]
       ],
-      "id": 3934,
+      "id": 3933,
       "flags": {
         "isStatic": true
       },
@@ -2951,7 +2951,7 @@
           9
         ]
       ],
-      "id": 3939,
+      "id": 3938,
       "flags": {
         "isStatic": true
       },
@@ -2989,7 +2989,7 @@
           8
         ]
       ],
-      "id": 3948,
+      "id": 3947,
       "flags": {
         "isStatic": true
       },
@@ -3033,7 +3033,7 @@
           10
         ]
       ],
-      "id": 3953,
+      "id": 3952,
       "flags": {
         "isStatic": true
       },
@@ -3071,7 +3071,7 @@
           8
         ]
       ],
-      "id": 3962,
+      "id": 3961,
       "flags": {
         "isStatic": true
       },
@@ -3109,7 +3109,7 @@
           13
         ]
       ],
-      "id": 3971,
+      "id": 3970,
       "flags": {
         "isStatic": true
       },
@@ -3147,7 +3147,7 @@
           11
         ]
       ],
-      "id": 3980,
+      "id": 3979,
       "flags": {
         "isStatic": true
       },
@@ -3181,11 +3181,11 @@
       "source": [
         [
           "Color.ts",
-          48,
+          46,
           13
         ]
       ],
-      "id": 3566,
+      "id": 3565,
       "flags": {
         "isStatic": true
       },
@@ -3213,11 +3213,11 @@
       "source": [
         [
           "Color.ts",
-          62,
+          60,
           16
         ]
       ],
-      "id": 3569,
+      "id": 3568,
       "flags": {
         "isStatic": true
       },
@@ -3245,11 +3245,11 @@
       "source": [
         [
           "Color.ts",
-          98,
+          96,
           12
         ]
       ],
-      "id": 3578,
+      "id": 3577,
       "flags": {
         "isStatic": true
       },
@@ -3277,11 +3277,11 @@
       "source": [
         [
           "Color.ts",
-          92,
+          90,
           12
         ]
       ],
-      "id": 3575,
+      "id": 3574,
       "flags": {
         "isStatic": true
       },
@@ -3313,7 +3313,7 @@
           11
         ]
       ],
-      "id": 3989,
+      "id": 3988,
       "flags": {
         "isStatic": true
       },
@@ -3351,7 +3351,7 @@
           8
         ]
       ],
-      "id": 3993,
+      "id": 3992,
       "flags": {
         "isStatic": true
       },
@@ -3379,11 +3379,11 @@
       "source": [
         [
           "Color.ts",
-          104,
+          102,
           12
         ]
       ],
-      "id": 3581,
+      "id": 3580,
       "flags": {
         "isStatic": true
       },
@@ -3415,7 +3415,7 @@
           15
         ]
       ],
-      "id": 3996,
+      "id": 3995,
       "flags": {
         "isStatic": true
       },
@@ -3449,11 +3449,11 @@
       "source": [
         [
           "Color.ts",
-          110,
+          108,
           12
         ]
       ],
-      "id": 3584,
+      "id": 3583,
       "flags": {
         "isStatic": true
       },
@@ -3481,11 +3481,11 @@
       "source": [
         [
           "Color.ts",
-          116,
+          114,
           12
         ]
       ],
-      "id": 3587,
+      "id": 3586,
       "flags": {
         "isStatic": true
       },
@@ -3513,11 +3513,11 @@
       "source": [
         [
           "Pt.ts",
-          41,
+          37,
           13
         ]
       ],
-      "id": 3756,
+      "id": 3755,
       "flags": {
         "isStatic": true
       },
@@ -3561,7 +3561,7 @@
           7
         ]
       ],
-      "id": 4001,
+      "id": 4000,
       "flags": {
         "isStatic": true
       },
@@ -3595,11 +3595,11 @@
       "source": [
         [
           "Color.ts",
-          130,
+          128,
           18
         ]
       ],
-      "id": 3593,
+      "id": 3592,
       "flags": {
         "isStatic": true
       },
@@ -3646,7 +3646,7 @@
           10
         ]
       ],
-      "id": 4010,
+      "id": 4009,
       "flags": {
         "isStatic": true
       },
@@ -3728,7 +3728,7 @@
           15
         ]
       ],
-      "id": 4038,
+      "id": 4037,
       "flags": {
         "isStatic": true
       },
@@ -3800,7 +3800,7 @@
           11
         ]
       ],
-      "id": 4066,
+      "id": 4065,
       "flags": {
         "isStatic": true
       },
@@ -3821,11 +3821,11 @@
       "source": [
         [
           "Color.ts",
-          86,
+          84,
           12
         ]
       ],
-      "id": 3572,
+      "id": 3571,
       "flags": {
         "isStatic": true
       },
@@ -3857,7 +3857,7 @@
           7
         ]
       ],
-      "id": 4068,
+      "id": 4067,
       "flags": {
         "isStatic": true
       },
@@ -3895,7 +3895,7 @@
           9
         ]
       ],
-      "id": 4072,
+      "id": 4071,
       "flags": {
         "isStatic": true
       },
@@ -3933,7 +3933,7 @@
           8
         ]
       ],
-      "id": 4076,
+      "id": 4075,
       "flags": {
         "isStatic": true
       },
@@ -3971,7 +3971,7 @@
           8
         ]
       ],
-      "id": 4085,
+      "id": 4084,
       "flags": {
         "isStatic": true
       },
@@ -4003,7 +4003,7 @@
           12
         ]
       ],
-      "id": 4092,
+      "id": 4091,
       "flags": {
         "isStatic": true
       },
@@ -4041,7 +4041,7 @@
           18
         ]
       ],
-      "id": 4096,
+      "id": 4095,
       "flags": {
         "isStatic": true
       },
@@ -4066,7 +4066,7 @@
           12
         ]
       ],
-      "id": 4098,
+      "id": 4097,
       "flags": {
         "isStatic": true
       },
@@ -4087,11 +4087,11 @@
       "source": [
         [
           "Color.ts",
-          122,
+          120,
           12
         ]
       ],
-      "id": 3590,
+      "id": 3589,
       "flags": {
         "isStatic": true
       },
@@ -4126,7 +4126,7 @@
           30
         ]
       ],
-      "id": 3930,
+      "id": 3929,
       "flags": {
         "isStatic": true
       },
@@ -4140,11 +4140,11 @@
       "source": [
         [
           "Color.ts",
-          17,
+          15,
           20
         ]
       ],
-      "id": 3552,
+      "id": 3551,
       "flags": {
         "isStatic": true,
         "isPrivate": true
@@ -4163,7 +4163,7 @@
           19
         ]
       ],
-      "id": 3931,
+      "id": 3930,
       "flags": {
         "isStatic": true
       },
@@ -4181,7 +4181,7 @@
           23
         ]
       ],
-      "id": 3932,
+      "id": 3931,
       "flags": {
         "isStatic": true
       },
@@ -4199,7 +4199,7 @@
           23
         ]
       ],
-      "id": 3933,
+      "id": 3932,
       "flags": {
         "isStatic": true
       },
@@ -4217,7 +4217,7 @@
           19
         ]
       ],
-      "id": 4000,
+      "id": 3999,
       "flags": {
         "isStatic": true
       },

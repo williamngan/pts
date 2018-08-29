@@ -3,12 +3,12 @@
   "source": [
     [
       "Create.ts",
-      16,
+      14,
       19
     ]
   ],
   "kind": "Class",
-  "id": 4103,
+  "id": 4102,
   "comment": "The `Create` class helps you create structures from sets of points.",
   "constructor": [],
   "accessors": [],
@@ -18,11 +18,11 @@
       "source": [
         [
           "Create.ts",
-          139,
+          137,
           17
         ]
       ],
-      "id": 4136,
+      "id": 4135,
       "flags": {
         "isStatic": true
       },
@@ -50,11 +50,11 @@
       "source": [
         [
           "Create.ts",
-          42,
+          40,
           25
         ]
       ],
-      "id": 4109,
+      "id": 4108,
       "flags": {
         "isStatic": true
       },
@@ -88,11 +88,11 @@
       "source": [
         [
           "Create.ts",
-          25,
+          23,
           25
         ]
       ],
-      "id": 4104,
+      "id": 4103,
       "flags": {
         "isStatic": true
       },
@@ -132,11 +132,11 @@
       "source": [
         [
           "Create.ts",
-          79,
+          77,
           18
         ]
       ],
-      "id": 4119,
+      "id": 4118,
       "flags": {
         "isStatic": true
       },
@@ -176,11 +176,11 @@
       "source": [
         [
           "Create.ts",
-          58,
+          56,
           16
         ]
       ],
-      "id": 4113,
+      "id": 4112,
       "flags": {
         "isStatic": true
       },
@@ -226,11 +226,11 @@
       "source": [
         [
           "Create.ts",
-          119,
+          117,
           17
         ]
       ],
-      "id": 4129,
+      "id": 4128,
       "flags": {
         "isStatic": true
       },
@@ -282,11 +282,11 @@
       "source": [
         [
           "Create.ts",
-          101,
+          99,
           18
         ]
       ],
-      "id": 4124,
+      "id": 4123,
       "flags": {
         "isStatic": true
       },

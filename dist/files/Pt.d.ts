@@ -1,6 +1,6 @@
+/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 import { IPt, GroupLike, PtLike } from "./Types";
-export declare var PtBaseArray: Float32ArrayConstructor;
-export declare class Pt extends PtBaseArray implements IPt, Iterable<number> {
+export declare class Pt extends Float32Array implements IPt, Iterable<number> {
     protected _id: string;
     constructor(...args: any[]);
     static make(dimensions: number, defaultValue?: number, randomize?: boolean): Pt;

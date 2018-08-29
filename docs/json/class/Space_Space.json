@@ -3,12 +3,12 @@
   "source": [
     [
       "Space.ts",
-      15,
+      13,
       27
     ]
   ],
   "kind": "Class",
-  "id": 2894,
+  "id": 2893,
   "comment": "Space is an abstract class that represents a general context for expressing Pts. It's extended through subclasses such as [`CanvasSpace`](#link) and [`SVGSpace`](#link). You can also create your own extension of Space.\nSee [Space guide](../guide/Space-0500.html) for details.",
   "constructor": [],
   "accessors": [
@@ -17,11 +17,11 @@
       "source": [
         [
           "Space.ts",
-          236,
+          234,
           12
         ]
       ],
-      "id": 2968,
+      "id": 2967,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -36,16 +36,16 @@
       "source": [
         [
           "Space.ts",
-          205,
+          203,
           21
         ],
         [
           "Space.ts",
-          206,
+          204,
           21
         ]
       ],
-      "id": 2948,
+      "id": 2947,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -68,11 +68,11 @@
       "source": [
         [
           "Space.ts",
-          248,
+          246,
           12
         ]
       ],
-      "id": 2972,
+      "id": 2971,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -87,11 +87,11 @@
       "source": [
         [
           "Space.ts",
-          224,
+          222,
           23
         ]
       ],
-      "id": 2964,
+      "id": 2963,
       "flags": {
         "isPublic": true
       },
@@ -108,11 +108,11 @@
       "source": [
         [
           "Space.ts",
-          212,
+          210,
           15
         ]
       ],
-      "id": 2960,
+      "id": 2959,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -127,11 +127,11 @@
       "source": [
         [
           "Space.ts",
-          218,
+          216,
           16
         ]
       ],
-      "id": 2962,
+      "id": 2961,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -146,11 +146,11 @@
       "source": [
         [
           "Space.ts",
-          230,
+          228,
           10
         ]
       ],
-      "id": 2966,
+      "id": 2965,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -165,11 +165,11 @@
       "source": [
         [
           "Space.ts",
-          242,
+          240,
           11
         ]
       ],
-      "id": 2970,
+      "id": 2969,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -186,11 +186,11 @@
       "source": [
         [
           "Space.ts",
-          56,
+          54,
           5
         ]
       ],
-      "id": 2918,
+      "id": 2917,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -216,11 +216,11 @@
       "source": [
         [
           "Space.ts",
-          262,
+          260,
           16
         ]
       ],
-      "id": 2978,
+      "id": 2977,
       "flags": {
         "isAbstract": true
       },
@@ -241,11 +241,11 @@
       "source": [
         [
           "Space.ts",
-          268,
+          266,
           18
         ]
       ],
-      "id": 2980,
+      "id": 2979,
       "flags": {
         "isAbstract": true
       },
@@ -266,11 +266,11 @@
       "source": [
         [
           "Space.ts",
-          157,
+          155,
           7
         ]
       ],
-      "id": 2934,
+      "id": 2933,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -296,11 +296,11 @@
       "source": [
         [
           "Space.ts",
-          97,
+          95,
           6
         ]
       ],
-      "id": 2926,
+      "id": 2925,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -326,11 +326,11 @@
       "source": [
         [
           "Space.ts",
-          131,
+          129,
           21
         ]
       ],
-      "id": 2931,
+      "id": 2930,
       "flags": {
         "isProtected": true
       },
@@ -358,11 +358,11 @@
       "source": [
         [
           "Space.ts",
-          186,
+          184,
           10
         ]
       ],
-      "id": 2942,
+      "id": 2941,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -388,11 +388,11 @@
       "source": [
         [
           "Space.ts",
-          41,
+          39,
           9
         ]
       ],
-      "id": 2915,
+      "id": 2914,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -418,11 +418,11 @@
       "source": [
         [
           "Space.ts",
-          77,
+          75,
           8
         ]
       ],
-      "id": 2921,
+      "id": 2920,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -448,11 +448,11 @@
       "source": [
         [
           "Space.ts",
-          86,
+          84,
           11
         ]
       ],
-      "id": 2924,
+      "id": 2923,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -471,11 +471,11 @@
       "source": [
         [
           "Space.ts",
-          196,
+          194,
           18
         ]
       ],
-      "id": 2945,
+      "id": 2944,
       "flags": {
         "isProtected": true
       },
@@ -503,11 +503,11 @@
       "source": [
         [
           "Space.ts",
-          121,
+          119,
           8
         ]
       ],
-      "id": 2929,
+      "id": 2928,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -526,11 +526,11 @@
       "source": [
         [
           "Space.ts",
-          256,
+          254,
           17
         ]
       ],
-      "id": 2974,
+      "id": 2973,
       "flags": {
         "isAbstract": true
       },
@@ -564,11 +564,11 @@
       "source": [
         [
           "Space.ts",
-          166,
+          164,
           8
         ]
       ],
-      "id": 2937,
+      "id": 2936,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -587,11 +587,11 @@
       "source": [
         [
           "Space.ts",
-          176,
+          174,
           6
         ]
       ],
-      "id": 2939,
+      "id": 2938,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -620,11 +620,11 @@
       "source": [
         [
           "Space.ts",
-          18,
+          16,
           17
         ]
       ],
-      "id": 2896,
+      "id": 2895,
       "flags": {
         "isProtected": true
       },
@@ -638,11 +638,11 @@
       "source": [
         [
           "Space.ts",
-          17,
+          15,
           4
         ]
       ],
-      "id": 2895,
+      "id": 2894,
       "flags": {},
       "type": "id",
       "overrides": false,
@@ -654,11 +654,11 @@
       "source": [
         [
           "Space.ts",
-          22,
+          20,
           23
         ]
       ],
-      "id": 2902,
+      "id": 2901,
       "flags": {
         "isProtected": true
       },
@@ -672,11 +672,11 @@
       "source": [
         [
           "Space.ts",
-          21,
+          19,
           19
         ]
       ],
-      "id": 2901,
+      "id": 2900,
       "flags": {
         "isProtected": true
       },

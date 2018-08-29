@@ -3,12 +3,12 @@
   "source": [
     [
       "Svg.ts",
-      127,
+      125,
       20
     ]
   ],
   "kind": "Class",
-  "id": 6479,
+  "id": 6478,
   "comment": "**[Experimental]** SVGForm is an implementation of abstract class [`VisualForm`](#link). It provide methods to express Pts in [`SVGSpace`](#link).\nYou may extend SVGForm to implement your own expressions for SVGSpace. See out the [Space guide](../guide/Space-0500.html) for details.",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "Svg.ts",
-          153,
+          151,
           35
         ]
       ],
-      "id": 6501,
+      "id": 6500,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -48,11 +48,11 @@
       "source": [
         [
           "Form.ts",
-          67,
+          65,
           17
         ]
       ],
-      "id": 6642,
+      "id": 6641,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.currentFont",
@@ -67,16 +67,16 @@
       "source": [
         [
           "Form.ts",
-          51,
+          49,
           12
         ],
         [
           "Form.ts",
-          52,
+          50,
           12
         ]
       ],
-      "id": 6632,
+      "id": 6631,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.filled",
@@ -99,11 +99,11 @@
       "source": [
         [
           "Form.ts",
-          20,
+          18,
           11
         ]
       ],
-      "id": 6678,
+      "id": 6677,
       "flags": {},
       "overrides": false,
       "inherits": "Form.ready",
@@ -118,11 +118,11 @@
       "source": [
         [
           "Svg.ts",
-          175,
+          173,
           11
         ]
       ],
-      "id": 6504,
+      "id": 6503,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -137,16 +137,16 @@
       "source": [
         [
           "Form.ts",
-          59,
+          57,
           13
         ],
         [
           "Form.ts",
-          60,
+          58,
           13
         ]
       ],
-      "id": 6637,
+      "id": 6636,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.stroked",
@@ -171,11 +171,11 @@
       "source": [
         [
           "Svg.ts",
-          479,
+          477,
           5
         ]
       ],
-      "id": 6577,
+      "id": 6576,
       "flags": {},
       "overrides": "VisualForm.arc",
       "inherits": false,
@@ -225,11 +225,11 @@
       "source": [
         [
           "Svg.ts",
-          434,
+          432,
           8
         ]
       ],
-      "id": 6566,
+      "id": 6565,
       "flags": {},
       "overrides": "VisualForm.circle",
       "inherits": false,
@@ -260,11 +260,11 @@
       "source": [
         [
           "Form.ts",
-          166,
+          164,
           9
         ]
       ],
-      "id": 6663,
+      "id": 6662,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.circles",
@@ -290,11 +290,11 @@
       "source": [
         [
           "Svg.ts",
-          232,
+          230,
           5
         ]
       ],
-      "id": 6519,
+      "id": 6518,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -325,11 +325,11 @@
       "source": [
         [
           "Svg.ts",
-          194,
+          192,
           6
         ]
       ],
-      "id": 6510,
+      "id": 6509,
       "flags": {},
       "overrides": "VisualForm.fill",
       "inherits": false,
@@ -360,11 +360,11 @@
       "source": [
         [
           "Form.ts",
-          98,
+          96,
           10
         ]
       ],
-      "id": 6649,
+      "id": 6648,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.fillOnly",
@@ -390,11 +390,11 @@
       "source": [
         [
           "Svg.ts",
-          251,
+          249,
           6
         ]
       ],
-      "id": 6522,
+      "id": 6521,
       "flags": {},
       "overrides": "VisualForm.font",
       "inherits": false,
@@ -449,11 +449,11 @@
       "source": [
         [
           "Svg.ts",
-          547,
+          545,
           6
         ]
       ],
-      "id": 6597,
+      "id": 6596,
       "flags": {},
       "overrides": "VisualForm.line",
       "inherits": false,
@@ -479,11 +479,11 @@
       "source": [
         [
           "Form.ts",
-          202,
+          200,
           7
         ]
       ],
-      "id": 6669,
+      "id": 6668,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.lines",
@@ -509,11 +509,11 @@
       "source": [
         [
           "Svg.ts",
-          674,
+          672,
           5
         ]
       ],
-      "id": 6628,
+      "id": 6627,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -539,11 +539,11 @@
       "source": [
         [
           "Svg.ts",
-          319,
+          317,
           8
         ]
       ],
-      "id": 6538,
+      "id": 6537,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -562,11 +562,11 @@
       "source": [
         [
           "Svg.ts",
-          401,
+          399,
           7
         ]
       ],
-      "id": 6556,
+      "id": 6555,
       "flags": {},
       "overrides": "VisualForm.point",
       "inherits": false,
@@ -609,11 +609,11 @@
       "source": [
         [
           "Form.ts",
-          144,
+          142,
           8
         ]
       ],
-      "id": 6658,
+      "id": 6657,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.points",
@@ -651,11 +651,11 @@
       "source": [
         [
           "Svg.ts",
-          588,
+          586,
           9
         ]
       ],
-      "id": 6609,
+      "id": 6608,
       "flags": {},
       "overrides": "VisualForm.polygon",
       "inherits": false,
@@ -681,11 +681,11 @@
       "source": [
         [
           "Form.ts",
-          218,
+          216,
           10
         ]
       ],
-      "id": 6672,
+      "id": 6671,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.polygons",
@@ -711,11 +711,11 @@
       "source": [
         [
           "Svg.ts",
-          624,
+          622,
           6
         ]
       ],
-      "id": 6616,
+      "id": 6615,
       "flags": {},
       "overrides": "VisualForm.rect",
       "inherits": false,
@@ -741,11 +741,11 @@
       "source": [
         [
           "Form.ts",
-          235,
+          233,
           7
         ]
       ],
-      "id": 6675,
+      "id": 6674,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.rects",
@@ -771,11 +771,11 @@
       "source": [
         [
           "Svg.ts",
-          271,
+          269,
           7
         ]
       ],
-      "id": 6529,
+      "id": 6528,
       "flags": {},
       "overrides": "VisualForm.reset",
       "inherits": false,
@@ -794,11 +794,11 @@
       "source": [
         [
           "Svg.ts",
-          309,
+          307,
           7
         ]
       ],
-      "id": 6535,
+      "id": 6534,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -824,11 +824,11 @@
       "source": [
         [
           "Svg.ts",
-          511,
+          509,
           8
         ]
       ],
-      "id": 6589,
+      "id": 6588,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -860,11 +860,11 @@
       "source": [
         [
           "Form.ts",
-          175,
+          173,
           9
         ]
       ],
-      "id": 6666,
+      "id": 6665,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.squares",
@@ -890,11 +890,11 @@
       "source": [
         [
           "Svg.ts",
-          213,
+          211,
           8
         ]
       ],
-      "id": 6513,
+      "id": 6512,
       "flags": {},
       "overrides": "VisualForm.stroke",
       "inherits": false,
@@ -943,11 +943,11 @@
       "source": [
         [
           "Form.ts",
-          123,
+          121,
           12
         ]
       ],
-      "id": 6652,
+      "id": 6651,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.strokeOnly",
@@ -991,11 +991,11 @@
       "source": [
         [
           "Svg.ts",
-          183,
+          181,
           9
         ]
       ],
-      "id": 6506,
+      "id": 6505,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1027,11 +1027,11 @@
       "source": [
         [
           "Svg.ts",
-          663,
+          661,
           6
         ]
       ],
-      "id": 6624,
+      "id": 6623,
       "flags": {},
       "overrides": "VisualForm.text",
       "inherits": false,
@@ -1063,11 +1063,11 @@
       "source": [
         [
           "Svg.ts",
-          293,
+          291,
           13
         ]
       ],
-      "id": 6531,
+      "id": 6530,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1099,11 +1099,11 @@
       "source": [
         [
           "Svg.ts",
-          450,
+          448,
           12
         ]
       ],
-      "id": 6569,
+      "id": 6568,
       "flags": {
         "isStatic": true
       },
@@ -1161,11 +1161,11 @@
       "source": [
         [
           "Svg.ts",
-          414,
+          412,
           15
         ]
       ],
-      "id": 6561,
+      "id": 6560,
       "flags": {
         "isStatic": true
       },
@@ -1205,11 +1205,11 @@
       "source": [
         [
           "Svg.ts",
-          330,
+          328,
           14
         ]
       ],
-      "id": 6540,
+      "id": 6539,
       "flags": {
         "isStatic": true
       },
@@ -1237,11 +1237,11 @@
       "source": [
         [
           "Svg.ts",
-          523,
+          521,
           13
         ]
       ],
-      "id": 6593,
+      "id": 6592,
       "flags": {
         "isStatic": true
       },
@@ -1275,11 +1275,11 @@
       "source": [
         [
           "Svg.ts",
-          385,
+          383,
           14
         ]
       ],
-      "id": 6550,
+      "id": 6549,
       "flags": {
         "isStatic": true
       },
@@ -1330,11 +1330,11 @@
       "source": [
         [
           "Svg.ts",
-          579,
+          577,
           16
         ]
       ],
-      "id": 6605,
+      "id": 6604,
       "flags": {
         "isStatic": true
       },
@@ -1368,11 +1368,11 @@
       "source": [
         [
           "Svg.ts",
-          600,
+          598,
           13
         ]
       ],
-      "id": 6612,
+      "id": 6611,
       "flags": {
         "isStatic": true
       },
@@ -1406,11 +1406,11 @@
       "source": [
         [
           "Svg.ts",
-          339,
+          337,
           16
         ]
       ],
-      "id": 6543,
+      "id": 6542,
       "flags": {
         "isStatic": true
       },
@@ -1438,11 +1438,11 @@
       "source": [
         [
           "Svg.ts",
-          492,
+          490,
           15
         ]
       ],
-      "id": 6584,
+      "id": 6583,
       "flags": {
         "isStatic": true
       },
@@ -1482,11 +1482,11 @@
       "source": [
         [
           "Svg.ts",
-          352,
+          350,
           14
         ]
       ],
-      "id": 6546,
+      "id": 6545,
       "flags": {
         "isStatic": true
       },
@@ -1525,11 +1525,11 @@
       "source": [
         [
           "Svg.ts",
-          638,
+          636,
           13
         ]
       ],
-      "id": 6619,
+      "id": 6618,
       "flags": {
         "isStatic": true
       },
@@ -1572,11 +1572,11 @@
       "source": [
         [
           "Svg.ts",
-          150,
+          148,
           14
         ]
       ],
-      "id": 6498,
+      "id": 6497,
       "flags": {
         "isStatic": true
       },
@@ -1590,11 +1590,11 @@
       "source": [
         [
           "Svg.ts",
-          149,
+          147,
           16
         ]
       ],
-      "id": 6497,
+      "id": 6496,
       "flags": {
         "isStatic": true
       },

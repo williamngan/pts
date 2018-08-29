@@ -3,12 +3,12 @@
   "source": [
     [
       "Create.ts",
-      266,
+      264,
       21
     ]
   ],
   "kind": "Class",
-  "id": 4508,
+  "id": 4507,
   "comment": "Delaunay is a [`Group`](#link) of Pts that generates Delaunay and Voronoi tessellations. The triangulation algorithm is ported from [Pt](https://github.com/williamngan/pt).\nBased on [Paul Bourke's algorithm](http://paulbourke.net/papers/triangulate/)\nwith reference to its [javascript implementation](https://github.com/ironwallaby/delaunay) by ironwallaby.",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "Pt.ts",
-          531,
+          527,
           23
         ]
       ],
-      "id": 4546,
+      "id": 4545,
       "flags": {},
       "overrides": false,
       "inherits": "Group.__constructor",
@@ -48,16 +48,16 @@
       "source": [
         [
           "Pt.ts",
-          544,
+          540,
           8
         ],
         [
           "Pt.ts",
-          545,
+          541,
           8
         ]
       ],
-      "id": 4549,
+      "id": 4548,
       "flags": {},
       "overrides": false,
       "inherits": "Group.id",
@@ -80,11 +80,11 @@
       "source": [
         [
           "Pt.ts",
-          550,
+          546,
           8
         ]
       ],
-      "id": 4553,
+      "id": 4552,
       "flags": {},
       "overrides": false,
       "inherits": "Group.p1",
@@ -99,11 +99,11 @@
       "source": [
         [
           "Pt.ts",
-          555,
+          551,
           8
         ]
       ],
-      "id": 4555,
+      "id": 4554,
       "flags": {},
       "overrides": false,
       "inherits": "Group.p2",
@@ -118,11 +118,11 @@
       "source": [
         [
           "Pt.ts",
-          560,
+          556,
           8
         ]
       ],
-      "id": 4557,
+      "id": 4556,
       "flags": {},
       "overrides": false,
       "inherits": "Group.p3",
@@ -137,11 +137,11 @@
       "source": [
         [
           "Pt.ts",
-          565,
+          561,
           8
         ]
       ],
-      "id": 4559,
+      "id": 4558,
       "flags": {},
       "overrides": false,
       "inherits": "Group.p4",
@@ -156,11 +156,11 @@
       "source": [
         [
           "Pt.ts",
-          570,
+          566,
           8
         ]
       ],
-      "id": 4561,
+      "id": 4560,
       "flags": {},
       "overrides": false,
       "inherits": "Group.q1",
@@ -175,11 +175,11 @@
       "source": [
         [
           "Pt.ts",
-          575,
+          571,
           8
         ]
       ],
-      "id": 4563,
+      "id": 4562,
       "flags": {},
       "overrides": false,
       "inherits": "Group.q2",
@@ -194,11 +194,11 @@
       "source": [
         [
           "Pt.ts",
-          580,
+          576,
           8
         ]
       ],
-      "id": 4565,
+      "id": 4564,
       "flags": {},
       "overrides": false,
       "inherits": "Group.q3",
@@ -213,11 +213,11 @@
       "source": [
         [
           "Pt.ts",
-          585,
+          581,
           8
         ]
       ],
-      "id": 4567,
+      "id": 4566,
       "flags": {},
       "overrides": false,
       "inherits": "Group.q4",
@@ -234,11 +234,11 @@
       "source": [
         [
           "Pt.ts",
-          892,
+          888,
           12
         ]
       ],
-      "id": 4674,
+      "id": 4673,
       "flags": {},
       "overrides": false,
       "inherits": "Group.$matrixAdd",
@@ -264,11 +264,11 @@
       "source": [
         [
           "Pt.ts",
-          904,
+          900,
           17
         ]
       ],
-      "id": 4677,
+      "id": 4676,
       "flags": {},
       "overrides": false,
       "inherits": "Group.$matrixMultiply",
@@ -306,11 +306,11 @@
       "source": [
         [
           "Pt.ts",
-          924,
+          920,
           6
         ]
       ],
-      "id": 4686,
+      "id": 4685,
       "flags": {},
       "overrides": false,
       "inherits": "Group.$zip",
@@ -342,11 +342,11 @@
       "source": [
         [
           "Pt.ts",
-          855,
+          851,
           5
         ]
       ],
-      "id": 4662,
+      "id": 4661,
       "flags": {},
       "overrides": false,
       "inherits": "Group.add",
@@ -372,11 +372,11 @@
       "source": [
         [
           "Pt.ts",
-          705,
+          701,
           12
         ]
       ],
-      "id": 4604,
+      "id": 4603,
       "flags": {},
       "overrides": false,
       "inherits": "Group.anchorFrom",
@@ -402,11 +402,11 @@
       "source": [
         [
           "Pt.ts",
-          698,
+          694,
           10
         ]
       ],
-      "id": 4601,
+      "id": 4600,
       "flags": {},
       "overrides": false,
       "inherits": "Group.anchorTo",
@@ -432,11 +432,11 @@
       "source": [
         [
           "Pt.ts",
-          689,
+          685,
           13
         ]
       ],
-      "id": 4599,
+      "id": 4598,
       "flags": {},
       "overrides": false,
       "inherits": "Group.boundingBox",
@@ -455,11 +455,11 @@
       "source": [
         [
           "Pt.ts",
-          680,
+          676,
           10
         ]
       ],
-      "id": 4597,
+      "id": 4596,
       "flags": {},
       "overrides": false,
       "inherits": "Group.centroid",
@@ -478,11 +478,11 @@
       "source": [
         [
           "Pt.ts",
-          592,
+          588,
           7
         ]
       ],
-      "id": 4569,
+      "id": 4568,
       "flags": {},
       "overrides": false,
       "inherits": "Group.clone",
@@ -501,11 +501,11 @@
       "source": [
         [
           "Create.ts",
-          275,
+          273,
           10
         ]
       ],
-      "id": 4510,
+      "id": 4509,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -531,11 +531,11 @@
       "source": [
         [
           "Pt.ts",
-          882,
+          878,
           8
         ]
       ],
-      "id": 4671,
+      "id": 4670,
       "flags": {},
       "overrides": false,
       "inherits": "Group.divide",
@@ -561,11 +561,11 @@
       "source": [
         [
           "Pt.ts",
-          839,
+          835,
           11
         ]
       ],
-      "id": 4658,
+      "id": 4657,
       "flags": {},
       "overrides": false,
       "inherits": "Group.forEachPt",
@@ -597,11 +597,11 @@
       "source": [
         [
           "Pt.ts",
-          642,
+          638,
           8
         ]
       ],
-      "id": 4582,
+      "id": 4581,
       "flags": {},
       "overrides": false,
       "inherits": "Group.insert",
@@ -633,11 +633,11 @@
       "source": [
         [
           "Pt.ts",
-          741,
+          737,
           13
         ]
       ],
-      "id": 4627,
+      "id": 4626,
       "flags": {},
       "overrides": false,
       "inherits": "Group.interpolate",
@@ -663,11 +663,11 @@
       "source": [
         [
           "Pt.ts",
-          674,
+          670,
           7
         ]
       ],
-      "id": 4595,
+      "id": 4594,
       "flags": {},
       "overrides": false,
       "inherits": "Group.lines",
@@ -686,11 +686,11 @@
       "source": [
         [
           "Create.ts",
-          370,
+          368,
           6
         ]
       ],
-      "id": 4515,
+      "id": 4514,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -709,11 +709,11 @@
       "source": [
         [
           "Pt.ts",
-          754,
+          750,
           8
         ]
       ],
-      "id": 4630,
+      "id": 4629,
       "flags": {},
       "overrides": false,
       "inherits": "Group.moveBy",
@@ -739,11 +739,11 @@
       "source": [
         [
           "Pt.ts",
-          763,
+          759,
           8
         ]
       ],
-      "id": 4633,
+      "id": 4632,
       "flags": {},
       "overrides": false,
       "inherits": "Group.moveTo",
@@ -769,11 +769,11 @@
       "source": [
         [
           "Pt.ts",
-          873,
+          869,
           10
         ]
       ],
-      "id": 4668,
+      "id": 4667,
       "flags": {},
       "overrides": false,
       "inherits": "Group.multiply",
@@ -799,11 +799,11 @@
       "source": [
         [
           "Create.ts",
-          381,
+          379,
           13
         ]
       ],
-      "id": 4517,
+      "id": 4516,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -835,11 +835,11 @@
       "source": [
         [
           "Create.ts",
-          396,
+          394,
           11
         ]
       ],
-      "id": 4521,
+      "id": 4520,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -865,11 +865,11 @@
       "source": [
         [
           "Pt.ts",
-          714,
+          710,
           4
         ]
       ],
-      "id": 4607,
+      "id": 4606,
       "flags": {},
       "overrides": false,
       "inherits": "Group.op",
@@ -900,11 +900,11 @@
       "source": [
         [
           "Pt.ts",
-          728,
+          724,
           5
         ]
       ],
-      "id": 4617,
+      "id": 4616,
       "flags": {},
       "overrides": false,
       "inherits": "Group.ops",
@@ -935,11 +935,11 @@
       "source": [
         [
           "Pt.ts",
-          816,
+          812,
           11
         ]
       ],
-      "id": 4650,
+      "id": 4649,
       "flags": {},
       "overrides": false,
       "inherits": "Group.reflect2D",
@@ -971,11 +971,11 @@
       "source": [
         [
           "Pt.ts",
-          654,
+          650,
           8
         ]
       ],
-      "id": 4586,
+      "id": 4585,
       "flags": {},
       "overrides": false,
       "inherits": "Group.remove",
@@ -1007,11 +1007,11 @@
       "source": [
         [
           "Pt.ts",
-          789,
+          785,
           10
         ]
       ],
-      "id": 4640,
+      "id": 4639,
       "flags": {},
       "overrides": false,
       "inherits": "Group.rotate2D",
@@ -1049,11 +1049,11 @@
       "source": [
         [
           "Pt.ts",
-          775,
+          771,
           7
         ]
       ],
-      "id": 4636,
+      "id": 4635,
       "flags": {},
       "overrides": false,
       "inherits": "Group.scale",
@@ -1085,11 +1085,11 @@
       "source": [
         [
           "Pt.ts",
-          666,
+          662,
           10
         ]
       ],
-      "id": 4590,
+      "id": 4589,
       "flags": {},
       "overrides": false,
       "inherits": "Group.segments",
@@ -1127,11 +1127,11 @@
       "source": [
         [
           "Pt.ts",
-          803,
+          799,
           9
         ]
       ],
-      "id": 4645,
+      "id": 4644,
       "flags": {},
       "overrides": false,
       "inherits": "Group.shear2D",
@@ -1169,11 +1169,11 @@
       "source": [
         [
           "Pt.ts",
-          829,
+          825,
           17
         ]
       ],
-      "id": 4654,
+      "id": 4653,
       "flags": {},
       "overrides": false,
       "inherits": "Group.sortByDimension",
@@ -1205,11 +1205,11 @@
       "source": [
         [
           "Pt.ts",
-          631,
+          627,
           7
         ]
       ],
-      "id": 4577,
+      "id": 4576,
       "flags": {},
       "overrides": false,
       "inherits": "Group.split",
@@ -1247,11 +1247,11 @@
       "source": [
         [
           "Pt.ts",
-          864,
+          860,
           10
         ]
       ],
-      "id": 4665,
+      "id": 4664,
       "flags": {},
       "overrides": false,
       "inherits": "Group.subtract",
@@ -1277,11 +1277,11 @@
       "source": [
         [
           "Pt.ts",
-          932,
+          928,
           10
         ]
       ],
-      "id": 4690,
+      "id": 4689,
       "flags": {},
       "overrides": false,
       "inherits": "Group.toString",
@@ -1300,11 +1300,11 @@
       "source": [
         [
           "Create.ts",
-          356,
+          354,
           9
         ]
       ],
-      "id": 4513,
+      "id": 4512,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1323,11 +1323,11 @@
       "source": [
         [
           "Pt.ts",
-          914,
+          910,
           10
         ]
       ],
-      "id": 4682,
+      "id": 4681,
       "flags": {},
       "overrides": false,
       "inherits": "Group.zipSlice",
@@ -1368,7 +1368,7 @@
           10
         ]
       ],
-      "id": 4702,
+      "id": 4701,
       "flags": {
         "isStatic": true
       },
@@ -1414,7 +1414,7 @@
           9
         ]
       ],
-      "id": 4744,
+      "id": 4743,
       "flags": {
         "isStatic": true
       },
@@ -1457,7 +1457,7 @@
           10
         ]
       ],
-      "id": 4781,
+      "id": 4780,
       "flags": {
         "isStatic": true
       },
@@ -1515,7 +1515,7 @@
           11
         ]
       ],
-      "id": 4762,
+      "id": 4761,
       "flags": {
         "isStatic": true
       },
@@ -1549,11 +1549,11 @@
       "source": [
         [
           "Pt.ts",
-          606,
+          602,
           18
         ]
       ],
-      "id": 4571,
+      "id": 4570,
       "flags": {
         "isStatic": true
       },
@@ -1586,11 +1586,11 @@
       "source": [
         [
           "Pt.ts",
-          620,
+          616,
           20
         ]
       ],
-      "id": 4574,
+      "id": 4573,
       "flags": {
         "isStatic": true
       },
@@ -1622,7 +1622,7 @@
           11
         ]
       ],
-      "id": 4736,
+      "id": 4735,
       "flags": {
         "isStatic": true
       },
@@ -1660,7 +1660,7 @@
           8
         ]
       ],
-      "id": 4707,
+      "id": 4706,
       "flags": {
         "isStatic": true
       },
@@ -1692,7 +1692,7 @@
           15
         ]
       ],
-      "id": 4740,
+      "id": 4739,
       "flags": {
         "isStatic": true
       },
@@ -1730,7 +1730,7 @@
           7
         ]
       ],
-      "id": 4771,
+      "id": 4770,
       "flags": {
         "isStatic": true
       },
@@ -1768,7 +1768,7 @@
           7
         ]
       ],
-      "id": 4700,
+      "id": 4699,
       "flags": {
         "isStatic": true
       },
@@ -1793,7 +1793,7 @@
           8
         ]
       ],
-      "id": 4697,
+      "id": 4696,
       "flags": {
         "isStatic": true
       },
@@ -1835,7 +1835,7 @@
           10
         ]
       ],
-      "id": 4799,
+      "id": 4798,
       "flags": {
         "isStatic": true
       },
@@ -1917,7 +1917,7 @@
           15
         ]
       ],
-      "id": 4827,
+      "id": 4826,
       "flags": {
         "isStatic": true
       },
@@ -1989,7 +1989,7 @@
           11
         ]
       ],
-      "id": 4710,
+      "id": 4709,
       "flags": {
         "isStatic": true
       },
@@ -2014,7 +2014,7 @@
           9
         ]
       ],
-      "id": 4712,
+      "id": 4711,
       "flags": {
         "isStatic": true
       },
@@ -2039,7 +2039,7 @@
           9
         ]
       ],
-      "id": 4714,
+      "id": 4713,
       "flags": {
         "isStatic": true
       },
@@ -2077,7 +2077,7 @@
           8
         ]
       ],
-      "id": 4753,
+      "id": 4752,
       "flags": {
         "isStatic": true
       },
@@ -2115,7 +2115,7 @@
           8
         ]
       ],
-      "id": 4718,
+      "id": 4717,
       "flags": {
         "isStatic": true
       },
@@ -2152,7 +2152,7 @@
           10
         ]
       ],
-      "id": 4725,
+      "id": 4724,
       "flags": {
         "isStatic": true
       },
@@ -2216,7 +2216,7 @@
           18
         ]
       ],
-      "id": 4695,
+      "id": 4694,
       "flags": {
         "isStatic": true
       },
@@ -2241,7 +2241,7 @@
           12
         ]
       ],
-      "id": 4693,
+      "id": 4692,
       "flags": {
         "isStatic": true
       },
@@ -2266,7 +2266,7 @@
           11
         ]
       ],
-      "id": 4733,
+      "id": 4732,
       "flags": {
         "isStatic": true
       },
@@ -2301,7 +2301,7 @@
           10
         ]
       ],
-      "id": 4692,
+      "id": 4691,
       "flags": {
         "isStatic": true
       },

@@ -633,8 +633,7 @@ export class Body extends Group {
     processParticle(b: Particle): void;
 }
 
-export var PtBaseArray: Float32ArrayConstructor;
-export class Pt extends PtBaseArray implements IPt, Iterable<number> {
+export class Pt extends Float32Array implements IPt, Iterable<number> {
     protected _id: string;
     constructor(...args: any[]);
     static make(dimensions: number, defaultValue?: number, randomize?: boolean): Pt;
