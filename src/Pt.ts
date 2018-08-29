@@ -7,8 +7,6 @@ import {Geom, Num} from "./Num";
 import {Vec, Mat} from "./LinearAlgebra";
 import {IPt, GroupLike, PtLike} from "./Types";
 
-export var PtBaseArray = Float32Array;
-
 /**
  * Pt is a subclass of standard [`Float32Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array) with additional properties and functions to support vector and geometric calculations.
  * See [Pt guide](../guide/Pt-0200.html) for details.
@@ -39,7 +37,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * @param randomize if `true`, randomize the value between 0 to default value
    */
   static make( dimensions:number, defaultValue:number=0, randomize:boolean=false ):Pt {
-    let p = new PtBaseArray(dimensions);
+    let p = new Float32Array(dimensions);
     if (defaultValue) p.fill( defaultValue );
     if (randomize) {
       for (let i=0, len=p.length; i<len; i++) {
