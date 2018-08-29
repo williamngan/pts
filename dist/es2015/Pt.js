@@ -1,7 +1,7 @@
+/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 import { Util, Const } from "./Util";
 import { Geom, Num } from "./Num";
 import { Vec, Mat } from "./LinearAlgebra";
-export var PtBaseArray = Float32Array;
 export class Pt extends Float32Array {
     constructor(...args) {
         if (args.length === 1 && typeof args[0] == "number") {
@@ -12,7 +12,7 @@ export class Pt extends Float32Array {
         }
     }
     static make(dimensions, defaultValue = 0, randomize = false) {
-        let p = new PtBaseArray(dimensions);
+        let p = new Float32Array(dimensions);
         if (defaultValue)
             p.fill(defaultValue);
         if (randomize) {

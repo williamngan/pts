@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.6.0 - Copyright © 2017-2018 William Ngan and contributors.
+ * pts.js 0.6.1 - Copyright © 2017-2018 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -110,6 +110,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 "use strict";
 
+/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
 const Space_1 = __webpack_require__(/*! ./Space */ "./src/Space.ts");
 const Form_1 = __webpack_require__(/*! ./Form */ "./src/Form.ts");
@@ -646,6 +647,7 @@ exports.CanvasForm = CanvasForm;
 
 "use strict";
 
+/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 const Util_1 = __webpack_require__(/*! ./Util */ "./src/Util.ts");
@@ -992,6 +994,7 @@ exports.Color = Color;
 
 "use strict";
 
+/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 const Op_1 = __webpack_require__(/*! ./Op */ "./src/Op.ts");
@@ -1276,6 +1279,7 @@ exports.Delaunay = Delaunay;
 
 "use strict";
 
+/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
 const Space_1 = __webpack_require__(/*! ./Space */ "./src/Space.ts");
 const Form_1 = __webpack_require__(/*! ./Form */ "./src/Form.ts");
@@ -1731,6 +1735,7 @@ exports.HTMLForm = HTMLForm;
 
 "use strict";
 
+/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(/*! ./Util */ "./src/Util.ts");
 class Form {
@@ -1831,6 +1836,7 @@ exports.Font = Font;
 
 "use strict";
 
+/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 const Op_1 = __webpack_require__(/*! ./Op */ "./src/Op.ts");
@@ -2096,6 +2102,7 @@ exports.Mat = Mat;
 
 "use strict";
 
+/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(/*! ./Util */ "./src/Util.ts");
 const Op_1 = __webpack_require__(/*! ./Op */ "./src/Op.ts");
@@ -2540,6 +2547,7 @@ exports.Range = Range;
 
 "use strict";
 
+/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(/*! ./Util */ "./src/Util.ts");
 const Num_1 = __webpack_require__(/*! ./Num */ "./src/Num.ts");
@@ -3453,6 +3461,7 @@ exports.Curve = Curve;
 
 "use strict";
 
+/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 const Op_1 = __webpack_require__(/*! ./Op */ "./src/Op.ts");
@@ -3809,11 +3818,11 @@ exports.Body = Body;
 
 "use strict";
 
+/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
 const Util_1 = __webpack_require__(/*! ./Util */ "./src/Util.ts");
 const Num_1 = __webpack_require__(/*! ./Num */ "./src/Num.ts");
 const LinearAlgebra_1 = __webpack_require__(/*! ./LinearAlgebra */ "./src/LinearAlgebra.ts");
-exports.PtBaseArray = Float32Array;
 class Pt extends Float32Array {
     constructor(...args) {
         if (args.length === 1 && typeof args[0] == "number") {
@@ -3824,7 +3833,7 @@ class Pt extends Float32Array {
         }
     }
     static make(dimensions, defaultValue = 0, randomize = false) {
-        let p = new exports.PtBaseArray(dimensions);
+        let p = new Float32Array(dimensions);
         if (defaultValue)
             p.fill(defaultValue);
         if (randomize) {
@@ -4278,6 +4287,7 @@ exports.Bound = Bound;
 
 "use strict";
 
+/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 const UI_1 = __webpack_require__(/*! ./UI */ "./src/UI.ts");
@@ -4535,6 +4545,7 @@ exports.MultiTouchSpace = MultiTouchSpace;
 
 "use strict";
 
+/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
 const Form_1 = __webpack_require__(/*! ./Form */ "./src/Form.ts");
 const Num_1 = __webpack_require__(/*! ./Num */ "./src/Num.ts");
@@ -4909,6 +4920,7 @@ exports.SVGForm = SVGForm;
 
 "use strict";
 
+/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 class Typography {
@@ -4961,6 +4973,7 @@ exports.Typography = Typography;
 
 "use strict";
 
+/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 const Op_1 = __webpack_require__(/*! ./Op */ "./src/Op.ts");
@@ -5211,6 +5224,7 @@ exports.UIDragger = UIDragger;
 
 "use strict";
 
+/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 exports.Const = {

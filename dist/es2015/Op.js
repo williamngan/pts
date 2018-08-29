@@ -1,3 +1,4 @@
+/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 import { Util } from "./Util";
 import { Geom, Num } from "./Num";
 import { Pt, Group } from "./Pt";
