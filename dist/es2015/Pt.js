@@ -2,7 +2,7 @@ import { Util, Const } from "./Util";
 import { Geom, Num } from "./Num";
 import { Vec, Mat } from "./LinearAlgebra";
 export var PtBaseArray = Float32Array;
-export class Pt extends PtBaseArray {
+export class Pt extends Float32Array {
     constructor(...args) {
         if (args.length === 1 && typeof args[0] == "number") {
             super(args[0]);

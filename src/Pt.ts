@@ -13,7 +13,7 @@ export var PtBaseArray = Float32Array;
  * Pt is a subclass of standard [`Float32Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array) with additional properties and functions to support vector and geometric calculations.
  * See [Pt guide](../guide/Pt-0200.html) for details.
  */
-export class Pt extends PtBaseArray implements IPt, Iterable<number> {
+export class Pt extends Float32Array implements IPt, Iterable<number> {
 
   protected _id:string;
 
