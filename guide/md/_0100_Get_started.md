@@ -15,7 +15,7 @@ But enough of abstractions for now. Let's see how it works in a concrete example
 
 ##### You may also be interested in [this article](https://medium.com/@williamngan/pt-93382bf5943e) which discusses the concepts of Space, Form, and Point.
 
-### Using pts with npm
+### Using Pts with npm
 
 (If you don't know how npm works, it's not a problem. Skip to next section to use Pts as a script directly.)
 
@@ -35,7 +35,7 @@ Note that Pts is an es6 library, so if you want to compile to es5, import it lik
 import {CanvasSpace, Pt, Group} from "pts/dist/es5"
 ```
 
-### Using pts as a script
+### Using Pts as a script
 First get `pts.js` or `pts.min.js`. You may get a direct link from a CDN service (eg, [unpkg](https://unpkg.com/pts/dist/pts.js) or [jsdelivr](https://cdn.jsdelivr.net/gh/williamngan/pts/dist/pts.js)), or download it from [github repo](https://github.com/williamngan/pts/tree/master/dist). Include it in your html, and then create another js file for your script and add it too.
 
 ```
@@ -53,7 +53,7 @@ That means we can call all Pts classes like `Group` directly, instead of `Pts.Gr
 
 Note that if you're using `Pts.quickStart`, there's no need to call `Pts.namespace` again. See below for details.
 
-### Using pts in online editor
+### Using Pts in online editor
 
 The online editor enables you to quickly experiment with Pts and download your code to run locally too. [Try the editor here](https://ptsjs.org/demo/edit/?name=triangle.incircle).
 
