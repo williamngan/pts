@@ -53,7 +53,11 @@ That means we can call all Pts classes like `Group` directly, instead of `Pts.Gr
 
 Note that if you're using `Pts.quickStart`, there's no need to call `Pts.namespace` again. See below for details.
 
-Now we can get to the fun part.
+### Using pts in online editor
+
+The online editor enables you to quickly experiment with Pts and download your code to run locally too. [Try the editor here](https://ptsjs.org/demo/edit/?name=triangle.incircle).
+
+Now that we've learned how to run Pts in various ways, it's time to start using it!
 
 ### Creating Space and Form
 **`Pts`** provides a [`CanvasSpace`](#canvas-canvasspace) which enables you to use html `<canvas>` as a space. You can create a `CanvasSpace` like this:
