@@ -16,21 +16,24 @@ But enough of abstractions for now. Let's see how it works in a concrete example
 ##### You may also be interested in [this article](https://medium.com/@williamngan/pt-93382bf5943e) which discusses the concepts of Space, Form, and Point.
 
 ### Using pts with npm
-If you use npm, first [`npm install pts`](https://www.npmjs.com/package/pts) and then import the classes you need:
-
-```
-import {CanvasSpace, Pt, Group} from "pts" 
-```
 
 (If you don't know how npm works, it's not a problem. Skip to next section to use Pts as a script directly.)
 
+If you use npm, first [`npm install pts`](https://www.npmjs.com/package/pts) and then import the classes you need:
+
+```
+import {CanvasSpace, Pt, Group} from "pts"
+```
+
 To get started quickly with a webpack es6 build, try [pts-starter-kit](https://github.com/williamngan/pts-starter-kit). If you prefer typescript, try this [pts-ts-starter-kit](https://github.com/pierpo/pts-ts-starter-kit) by pierpo. 
 
-For using Pts in React, take a look at [pts-react-example](https://github.com/williamngan/pts-react-example). 
+To use Pts in React, take a look at [pts-react-example](https://github.com/williamngan/pts-react-example), which provides components built with create-react-app or neutrino.js
 
-Alternatively, use a zero-config tool such as [neutrino.js](https://neutrinojs.org/) to scaffold a custom javascript project directly.
+Note that Pts is an es6 library, so if you want to compile to es5, import it like this:
 
-##### (Note that pts is an es6 library, so if you want to compile to es5, you'll need to configure babel accordingly.)
+```
+import {CanvasSpace, Pt, Group} from "pts/dist/es5"
+```
 
 ### Using pts as a script
 First get `pts.js` or `pts.min.js`. You may get a direct link from a CDN service (eg, [unpkg](https://unpkg.com/pts/dist/pts.js) or [jsdelivr](https://cdn.jsdelivr.net/gh/williamngan/pts/dist/pts.js)), or download it from [github repo](https://github.com/williamngan/pts/tree/master/dist). Include it in your html, and then create another js file for your script and add it too.

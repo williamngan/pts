@@ -23,7 +23,10 @@
 <p>When using Pts as a <a href="https://www.npmjs.com/package/pts">npm package</a>, you can choose to import only a small part of Pts in your own project. Perhaps just a couple of Line functions are all you need:</p>
 <pre><code>import {Pt, Line} from &quot;pts&quot;
 </code></pre>
-<p>Also take a look at <a href="https://github.com/williamngan/pts-react-example">this example repo</a> which uses Pts to create a charting component in React.</p>
+<p>Pts is an ES6 library by default. If you want to include it in your older ES5 projects, import it like this:</p>
+<pre><code>import {Pt, Line} from &quot;pts/dist/es5&quot;
+</code></pre>
+<p>Also take a look at <a href="https://github.com/williamngan/pts-react-example">pts-react-example</a> which includes examples of using Pts in React components.</p>
 <h3>Cloning Pt with <code>clone()</code> or <code>$...</code></h3>
 <p>Pt is a subclass of Float32Array, and Group is a subclass of Array that should only contain Pt in it.</p>
 <p>Since objects and arrays in javascript are passed by reference, remember to clone them if you are going to change their values. Functions starting with <code>$</code> such as <code>$add</code> means it will return a new Pt and keeping the original unchanged.</p>
@@ -36,15 +39,9 @@ pt.$subtract( 10 ); // use $fn to get a new Pt
 let p2 = p.map( (d) =&gt; d+1 ); // typescript thinks p2 is Float32Array
 let p3 = p.map( (d) =&gt; d+1 ) as Pt; // type is now cast back to Pt
 </code></pre>
-<h3>Javascript ecosystem</h3>
-<p>The javascript ecosystem is moving so fast it's difficult to keep up. Pts is intended for modern browsers supporting es6+. Therefore, if you need to target es5 or older browsers, you'll need to configure your build tools accordingly. Some pointers:</p>
-<ul>
-<li><p>UglifyJS doesn't seem to support minifying es6 so the code is transformed to es5 first. Alternatively, consider other minify tool such as <a href="https://github.com/babel/minify">babel-minify</a> or <a href="https://github.com/mishoo/UglifyJS2/tree/harmony">uglify-es</a>.</p></li>
-<li><p>If you're compiling to es5 with babel, you may need the <a href="https://github.com/loganfsmyth/babel-plugin-transform-builtin-extend">builtin-extend</a> and/or <a href="https://babeljs.io/docs/en/next/babel-plugin-transform-classes.html">transform-classes</a> plugins, because Pts extends built-in types like Array and Float32Array. This may not be needed in future as build tools get better.</p></li>
-<li><p>Pts is a new library in beta so we don't recommend using it in high-priority production system yet.</p></li>
-</ul>
 <h3>Remember to file issues and feedbacks</h3>
-<p>Support this open-source project by filing bugs and pull requests on <a href="https://github.com/williamngan/pts">github</a>. If you have other feedbacks, please ping <a href="https://twitter.com/williamngan">@williamngan</a>. Show us what you have made with Pts too!</p>
+<p>Support this open-source project by filing bugs and pull requests on <a href="https://github.com/williamngan/pts">github</a>. If you have other feedbacks, please ping <a href="https://twitter.com/williamngan">@williamngan</a>.</p>
+<p>Show us what you have made with Pts too!</p>
 </div>
 
 <ol id="menu"><a id="close" href="#">&times;</a><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Space-0500.html">Space</a></li><li><a href="Typography-0600.html">Typography</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li></ol>

@@ -8,7 +8,13 @@ When using Pts as a [npm package](https://www.npmjs.com/package/pts), you can ch
 import {Pt, Line} from "pts"
 ```
 
-Also take a look at [this example repo](https://github.com/williamngan/pts-react-example) which uses Pts to create a charting component in React. 
+Pts is an ES6 library by default. If you want to include it in your older ES5 projects, import it like this:
+
+```
+import {Pt, Line} from "pts/dist/es5"
+```
+
+Also take a look at [pts-react-example](https://github.com/williamngan/pts-react-example) which includes examples of using Pts in React components.
 
 
 ### Cloning Pt with `clone()` or `$...`
@@ -30,16 +36,8 @@ let p2 = p.map( (d) => d+1 ); // typescript thinks p2 is Float32Array
 let p3 = p.map( (d) => d+1 ) as Pt; // type is now cast back to Pt
 ```
 
-### Javascript ecosystem
-The javascript ecosystem is moving so fast it's difficult to keep up. Pts is intended for modern browsers supporting es6+. Therefore, if you need to target es5 or older browsers, you'll need to configure your build tools accordingly. Some pointers:
-
-- UglifyJS doesn't seem to support minifying es6 so the code is transformed to es5 first. Alternatively, consider other minify tool such as [babel-minify](https://github.com/babel/minify) or [uglify-es](https://github.com/mishoo/UglifyJS2/tree/harmony). 
-
-- If you're compiling to es5 with babel, you may need the [builtin-extend](https://github.com/loganfsmyth/babel-plugin-transform-builtin-extend) and/or [transform-classes](https://babeljs.io/docs/en/next/babel-plugin-transform-classes.html) plugins, because Pts extends built-in types like Array and Float32Array. This may not be needed in future as build tools get better.
-
-- Pts is a new library in beta so we don't recommend using it in high-priority production system yet.
-
-
 ### Remember to file issues and feedbacks
 
-Support this open-source project by filing bugs and pull requests on [github](https://github.com/williamngan/pts). If you have other feedbacks, please ping [@williamngan](https://twitter.com/williamngan). Show us what you have made with Pts too!
+Support this open-source project by filing bugs and pull requests on [github](https://github.com/williamngan/pts). If you have other feedbacks, please ping [@williamngan](https://twitter.com/williamngan). 
+
+Show us what you have made with Pts too!
