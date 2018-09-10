@@ -16,7 +16,7 @@ export interface IPt {
 
 
 /**
- * Typescript only: PtLike is an alias of types that can represent a point. 
+ * Typescript only: PtLike is an alias of types that can represent a point.
  */
 export type PtLike = Pt | Float32Array | number[];
 
@@ -48,7 +48,7 @@ export interface IPlayer {
 /**
  * Typescript only: ISpacePlayers is an interface that represents a map of IPlayer instances.
  */
-export interface ISpacePlayers { 
+export interface ISpacePlayers {
   [key: string]: IPlayer;
 }
 
@@ -101,7 +101,7 @@ export type ColorType = "rgb"|"hsl"|"hsb"|"lab"|"lch"|"luv"|"xyz";
 export type DelaunayShape = {i:number, j:number, k:number, triangle:GroupLike, circle:Group };
 
 /**
- * Typescript only: A DelaunayMesh epresents an object type that has an array of {key: shape} items, where each shape represents a DelaunayShape.
+ * Typescript only: A DelaunayMesh represents an object type that has an array of {key: shape} items, where each shape represents a DelaunayShape.
  */
 export type DelaunayMesh = {[key:string]:DelaunayShape}[];
 
