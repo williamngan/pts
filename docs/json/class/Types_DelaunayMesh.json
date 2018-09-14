@@ -9,7 +9,7 @@
   ],
   "kind": "Typealias",
   "id": 1535,
-  "comment": "Typescript only: A DelaunayMesh epresents an object type that has an array of {key: shape} items, where each shape represents a DelaunayShape.",
+  "comment": "Typescript only: A DelaunayMesh represents an object type that has an array of {key: shape} items, where each shape represents a DelaunayShape.",
   "constructor": [],
   "accessors": [],
   "methods": [],
