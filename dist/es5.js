@@ -4906,20 +4906,22 @@ var World = function () {
         key: "_updateBodies",
         value: function _updateBodies(dt) {
             for (var i = 0, len = this._bodies.length; i < len; i++) {
-                var b = this._bodies[i];
-                for (var k = 0, klen = b.length; k < klen; k++) {
-                    var bk = b[k];
-                    World.boundConstraint(bk, this._bound, this._damping);
-                    this.integrate(bk, dt, this._lastTime);
+                var bds = this._bodies[i];
+                if (bds) {
+                    for (var k = 0, klen = bds.length; k < klen; k++) {
+                        var bk = bds[k];
+                        World.boundConstraint(bk, this._bound, this._damping);
+                        this.integrate(bk, dt, this._lastTime);
+                    }
+                    for (var _k = i + 1; _k < len; _k++) {
+                        bds.processBody(this._bodies[_k]);
+                    }
+                    for (var m = 0, mlen = this._particles.length; m < mlen; m++) {
+                        bds.processParticle(this._particles[m]);
+                    }
+                    bds.processEdges();
+                    if (this._drawBodies) this._drawBodies(bds, i);
                 }
-                for (var _k = i + 1; _k < len; _k++) {
-                    b.processBody(this._bodies[_k]);
-                }
-                for (var m = 0, mlen = this._particles.length; m < mlen; m++) {
-                    b.processParticle(this._particles[m]);
-                }
-                b.processEdges();
-                if (this._drawBodies) this._drawBodies(b, i);
             }
         }
     }, {

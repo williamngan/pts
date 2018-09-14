@@ -245,28 +245,30 @@ export class World {
    */
   protected _updateBodies( dt:number ) {
     for (let i=0, len=this._bodies.length; i<len; i++) {
-      let b = this._bodies[i];
+      let bds = this._bodies[i];
 
-      // integrate
-      for (let k=0, klen=b.length; k<klen; k++) {
-        let bk = b[k] as Particle;
-        World.boundConstraint( bk, this._bound, this._damping );
-        this.integrate( bk, dt, this._lastTime );
+      if (bds) {
+        // integrate
+        for (let k=0, klen=bds.length; k<klen; k++) {
+          let bk = bds[k] as Particle;
+          World.boundConstraint( bk, this._bound, this._damping );
+          this.integrate( bk, dt, this._lastTime );
+        }
+      
+        for (let k=i+1; k<len; k++) {
+          bds.processBody( this._bodies[k] );
+        }
+
+        for (let m=0, mlen=this._particles.length; m<mlen; m++) {
+          bds.processParticle( this._particles[m] );
+        }
+
+        // constraints
+        bds.processEdges();
+      
+        // render
+        if (this._drawBodies) this._drawBodies( bds, i );
       }
-    
-      for (let k=i+1; k<len; k++) {
-        b.processBody( this._bodies[k] );
-      }
-
-      for (let m=0, mlen=this._particles.length; m<mlen; m++) {
-        b.processParticle( this._particles[m] );
-      }
-
-      // constraints
-      b.processEdges();
-
-      // render
-      if (this._drawBodies) this._drawBodies( b, i );
     }
   } 
 

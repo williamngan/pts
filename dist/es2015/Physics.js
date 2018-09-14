@@ -107,21 +107,23 @@ export class World {
     }
     _updateBodies(dt) {
         for (let i = 0, len = this._bodies.length; i < len; i++) {
-            let b = this._bodies[i];
-            for (let k = 0, klen = b.length; k < klen; k++) {
-                let bk = b[k];
-                World.boundConstraint(bk, this._bound, this._damping);
-                this.integrate(bk, dt, this._lastTime);
+            let bds = this._bodies[i];
+            if (bds) {
+                for (let k = 0, klen = bds.length; k < klen; k++) {
+                    let bk = bds[k];
+                    World.boundConstraint(bk, this._bound, this._damping);
+                    this.integrate(bk, dt, this._lastTime);
+                }
+                for (let k = i + 1; k < len; k++) {
+                    bds.processBody(this._bodies[k]);
+                }
+                for (let m = 0, mlen = this._particles.length; m < mlen; m++) {
+                    bds.processParticle(this._particles[m]);
+                }
+                bds.processEdges();
+                if (this._drawBodies)
+                    this._drawBodies(bds, i);
             }
-            for (let k = i + 1; k < len; k++) {
-                b.processBody(this._bodies[k]);
-            }
-            for (let m = 0, mlen = this._particles.length; m < mlen; m++) {
-                b.processParticle(this._particles[m]);
-            }
-            b.processEdges();
-            if (this._drawBodies)
-                this._drawBodies(b, i);
         }
     }
 }
