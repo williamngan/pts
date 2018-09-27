@@ -3,36 +3,6 @@
 export let namespace: (scope: any) => void;
 export let quickStart: (id: string, bg?: string) => (animate?: any, start?: any, action?: any, resize?: any) => void;
 
-export class Bound extends Group implements IPt {
-    protected _center: Pt;
-    protected _size: Pt;
-    protected _topLeft: Pt;
-    protected _bottomRight: Pt;
-    protected _inited: boolean;
-    constructor(...args: Pt[]);
-    static fromBoundingRect(rect: ClientRect): Bound;
-    static fromGroup(g: GroupLike): Bound;
-    protected init(): void;
-    clone(): Bound;
-    protected _updateSize(): void;
-    protected _updateCenter(): void;
-    protected _updatePosFromTop(): void;
-    protected _updatePosFromBottom(): void;
-    protected _updatePosFromCenter(): void;
-    size: Pt;
-    center: Pt;
-    topLeft: Pt;
-    bottomRight: Pt;
-    width: number;
-    height: number;
-    depth: number;
-    readonly x: number;
-    readonly y: number;
-    readonly z: number;
-    readonly inited: boolean;
-    update(): this;
-}
-
 export class CanvasSpace extends MultiTouchSpace {
     protected _canvas: HTMLCanvasElement;
     protected _container: Element;
