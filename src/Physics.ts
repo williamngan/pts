@@ -19,8 +19,8 @@ export class World {
   
   protected _particles:Particle[] = [];
   protected _bodies:Body[] = [];
-
-  protected _names = {p: {}, b: {} };
+  protected _pnames:string[] = []; // particle name index
+  protected _bnames:string[] = []; // body name index
 
   protected _drawParticles:(p:Particle, i:number) => void;
   protected _drawBodies:(p:Body, i:number) => void;
@@ -74,15 +74,48 @@ export class World {
    * Get a body in this world by index or string id.
    * @param id numeric index of the body, or a string id that associates with it.
    */
-  body( id:number|string ) { return this._bodies[ (typeof id === "string") ? this._names.b[id] : id ]; }
+  body( id:number|string ) {
+    let idx = id;
+    if (typeof id === "string" && id.length > 0) {
+      idx = this._bnames.indexOf( id );
+    }
+    if (!(idx >= 0)) throw new Error( "Cannot find body id: "+id );
+    return this._bodies[idx];
+  }
 
 
   /**
    * Get a particle in this world by index or string id.
    * @param id numeric index of the particle, or a string id that associates with it. 
    */
-  particle( id:number|string ) { return this._particles[ (typeof id === "string") ? this._names.p[id] : id ]; }
+  particle( id:number|string ) { 
+    let idx = id;
+    if (typeof id === "string" && id.length > 0) {
+      idx = this._pnames.indexOf( id );
+    }
+    if (!(idx >= 0)) throw new Error( "Cannot find particle id: "+id );
+    return this._bodies[idx];
+  }
 
+
+  /**
+   * Given a body's name, return its index in the bodies array, or -1 if not found.
+   * @param name name of the body
+   * @returns index number, or -1 if not found
+   */
+  bodyIndex( name:string ):number {
+    return this._bnames.indexOf(name);
+  }
+
+
+  /**
+   * Given a particle's name, return its index in the particles array, or -1 if not found.
+   * @param name name of the particle
+   * @returns index number, or -1 if not found
+   */
+  particleIndex( name:string ):number {
+    return this._pnames.indexOf(name);
+  }
 
 
   /**
@@ -119,33 +152,55 @@ export class World {
    * @param p `Particle` or `Body` instance
    * @param name optional name, which can be referenced in `body()` or `particle()` function to retrieve this back.
    */
-  add( p:Particle|Body, name?:string ):this {
+  add( p:Particle|Body, name:string='' ):this {
     if ( p instanceof Body) {
       this._bodies.push( <Body>p );
-      if (name) this._names.b[name] = this._bodies.length-1;
+      this._bnames.push( name );
     } else {
       this._particles.push( <Particle>p );
-      if (name) this._names.p[name] = this._particles.length-1;
+      this._pnames.push( name );
     }
     return this;
   }
 
 
+  private _index( fn:( string )=>number, id:string|number ):number {
+    let index = 0;
+    if (typeof id === "string") {
+      index = fn(id);
+      if (index < 0) throw new Error( "Cannot find index of " + id );
+    } else {
+      index = id;
+    }
+    return index;
+  }
+
+
   /**
-   * Remove either body or particle from this world. Support removing a range and negative index.
-   * @param which Either "body" or "particle"
-   * @param index Start index, which can be negative (where -1 is at index 0, -2 at index 1, etc) 
+   * Remove bodies from this world. Support removing a range and negative index.
+   * @param from Start index, which can be negative (where -1 is at index 0, -2 at index 1, etc) 
    * @param count Number of items to remove. Default is 1.
    */
-  remove( which:"body"|"particle", index:number, count:number=1 ):this {
-    let param = (index<0) ? [index*-1 - 1, count] : [index, count];
-    if (which == "body") {
-      this._bodies.splice( param[0], param[1] );
-    } else {
-      this._particles.splice( param[0], param[1] );
-    }
+  removeBody( from:number|string, count:number=1 ):this {
+    const index = this._index( this.bodyIndex.bind(this), from );
+    const param = (index<0) ? [index*-1 - 1, count] : [index, count];
+    this._bodies.splice( param[0], param[1] );
+    this._bnames.splice( param[0], param[1] );
     return this;
+  }
 
+
+  /**
+   * Remove particles from this world. Support removing a range and negative index.
+   * @param from Start index, which can be negative (where -1 is at index 0, -2 at index 1, etc) 
+   * @param count Number of items to remove. Default is 1.
+   */
+  removeParticle( from:number|string, count:number=1 ):this {
+    const index = this._index( this.particleIndex.bind(this), from );
+    const param = (index<0) ? [index*-1 - 1, count] : [index, count];
+    this._particles.splice( param[0], param[1] );
+    this._pnames.splice( param[0], param[1] );
+    return this;
   }
 
   
