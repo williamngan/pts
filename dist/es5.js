@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.6.1 - Copyright © 2017-2018 William Ngan and contributors.
+ * pts.js 0.6.3 - Copyright © 2017-2018 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -4819,7 +4819,8 @@ var World = function () {
         this._damping = 0.75;
         this._particles = [];
         this._bodies = [];
-        this._names = { p: {}, b: {} };
+        this._pnames = [];
+        this._bnames = [];
         this._bound = Pt_1.Bound.fromGroup(bound);
         this._friction = friction;
         this._gravity = typeof gravity === "number" ? new Pt_1.Pt(0, gravity) : new Pt_1.Pt(gravity);
@@ -4829,12 +4830,32 @@ var World = function () {
     _createClass(World, [{
         key: "body",
         value: function body(id) {
-            return this._bodies[typeof id === "string" ? this._names.b[id] : id];
+            var idx = id;
+            if (typeof id === "string" && id.length > 0) {
+                idx = this._bnames.indexOf(id);
+            }
+            if (!(idx >= 0)) throw new Error("Cannot find body id: " + id);
+            return this._bodies[idx];
         }
     }, {
         key: "particle",
         value: function particle(id) {
-            return this._particles[typeof id === "string" ? this._names.p[id] : id];
+            var idx = id;
+            if (typeof id === "string" && id.length > 0) {
+                idx = this._pnames.indexOf(id);
+            }
+            if (!(idx >= 0)) throw new Error("Cannot find particle id: " + id);
+            return this._particles[idx];
+        }
+    }, {
+        key: "bodyIndex",
+        value: function bodyIndex(name) {
+            return this._bnames.indexOf(name);
+        }
+    }, {
+        key: "particleIndex",
+        value: function particleIndex(name) {
+            return this._pnames.indexOf(name);
         }
     }, {
         key: "update",
@@ -4855,27 +4876,50 @@ var World = function () {
         }
     }, {
         key: "add",
-        value: function add(p, name) {
+        value: function add(p) {
+            var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+
             if (p instanceof Body) {
                 this._bodies.push(p);
-                if (name) this._names.b[name] = this._bodies.length - 1;
+                this._bnames.push(name);
             } else {
                 this._particles.push(p);
-                if (name) this._names.p[name] = this._particles.length - 1;
+                this._pnames.push(name);
             }
             return this;
         }
     }, {
-        key: "remove",
-        value: function remove(which, index) {
-            var count = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
-
-            var param = index < 0 ? [index * -1 - 1, count] : [index, count];
-            if (which == "body") {
-                this._bodies.splice(param[0], param[1]);
+        key: "_index",
+        value: function _index(fn, id) {
+            var index = 0;
+            if (typeof id === "string") {
+                index = fn(id);
+                if (index < 0) throw new Error("Cannot find index of " + id);
             } else {
-                this._particles.splice(param[0], param[1]);
+                index = id;
             }
+            return index;
+        }
+    }, {
+        key: "removeBody",
+        value: function removeBody(from) {
+            var count = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+
+            var index = this._index(this.bodyIndex.bind(this), from);
+            var param = index < 0 ? [index * -1 - 1, count] : [index, count];
+            this._bodies.splice(param[0], param[1]);
+            this._bnames.splice(param[0], param[1]);
+            return this;
+        }
+    }, {
+        key: "removeParticle",
+        value: function removeParticle(from) {
+            var count = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+
+            var index = this._index(this.particleIndex.bind(this), from);
+            var param = index < 0 ? [index * -1 - 1, count] : [index, count];
+            this._particles.splice(param[0], param[1]);
+            this._pnames.splice(param[0], param[1]);
             return this;
         }
     }, {

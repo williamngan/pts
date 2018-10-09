@@ -20,7 +20,7 @@
           51
         ]
       ],
-      "id": 5453,
+      "id": 5450,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -64,7 +64,7 @@
           15
         ]
       ],
-      "id": 5470,
+      "id": 5467,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -88,7 +88,7 @@
           13
         ]
       ],
-      "id": 5466,
+      "id": 5463,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -120,7 +120,7 @@
           14
         ]
       ],
-      "id": 5462,
+      "id": 5459,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -152,7 +152,7 @@
           13
         ]
       ],
-      "id": 5458,
+      "id": 5455,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -179,7 +179,7 @@
           19
         ]
       ],
-      "id": 5472,
+      "id": 5469,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -196,11 +196,11 @@
       "source": [
         [
           "Physics.ts",
-          122,
+          154,
           5
         ]
       ],
-      "id": 5497,
+      "id": 5500,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -220,7 +220,7 @@
               "name": "name",
               "comment": "optional name, which can be referenced in `body()` or `particle()` function to retrieve this back.\n",
               "type": "string",
-              "default": false
+              "default": "\"\""
             }
           ],
           "tags": []
@@ -232,18 +232,18 @@
       "source": [
         [
           "Physics.ts",
-          77,
+          76,
           6
         ]
       ],
-      "id": 5474,
+      "id": 5471,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
           "comment": "Get a body in this world by index or string id.",
-          "returns": "Body",
+          "returns": "any",
           "returns_comment": false,
           "parameters": [
             {
@@ -258,15 +258,45 @@
       ]
     },
     {
+      "name": "bodyIndex",
+      "source": [
+        [
+          "Physics.ts",
+          105,
+          11
+        ]
+      ],
+      "id": 5477,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Given a body's name, return its index in the bodies array, or -1 if not found.",
+          "returns": "number",
+          "returns_comment": "index number, or -1 if not found\n",
+          "parameters": [
+            {
+              "name": "name",
+              "comment": "name of the body",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "drawBodies",
       "source": [
         [
           "Physics.ts",
-          112,
+          144,
           12
         ]
       ],
-      "id": 5490,
+      "id": 5493,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -292,11 +322,11 @@
       "source": [
         [
           "Physics.ts",
-          103,
+          135,
           15
         ]
       ],
-      "id": 5483,
+      "id": 5486,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -322,11 +352,11 @@
       "source": [
         [
           "Physics.ts",
-          206,
+          260,
           21
         ]
       ],
-      "id": 5518,
+      "id": 5531,
       "flags": {
         "isProtected": true
       },
@@ -366,18 +396,18 @@
       "source": [
         [
           "Physics.ts",
-          84,
+          90,
           10
         ]
       ],
-      "id": 5477,
+      "id": 5474,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
           "comment": "Get a particle in this world by index or string id.",
-          "returns": "Particle",
+          "returns": "any",
           "returns_comment": false,
           "parameters": [
             {
@@ -392,34 +422,94 @@
       ]
     },
     {
-      "name": "remove",
+      "name": "particleIndex",
       "source": [
         [
           "Physics.ts",
-          140,
-          8
+          115,
+          15
         ]
       ],
-      "id": 5501,
+      "id": 5480,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
-          "comment": "Remove either body or particle from this world. Support removing a range and negative index.",
+          "comment": "Given a particle's name, return its index in the particles array, or -1 if not found.",
+          "returns": "number",
+          "returns_comment": "index number, or -1 if not found\n",
+          "parameters": [
+            {
+              "name": "name",
+              "comment": "name of the particle",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "removeBody",
+      "source": [
+        [
+          "Physics.ts",
+          183,
+          12
+        ]
+      ],
+      "id": 5511,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Remove bodies from this world. Support removing a range and negative index.",
           "returns": "this",
           "returns_comment": false,
           "parameters": [
             {
-              "name": "which",
-              "comment": "Either \"body\" or \"particle\"",
-              "type": "body | particle",
+              "name": "from",
+              "comment": "Start index, which can be negative (where -1 is at index 0, -2 at index 1, etc)",
+              "type": "number | string",
               "default": false
             },
             {
-              "name": "index",
-              "comment": "Start index, which can be negative (where -1 is at index 0, -2 at index 1, etc)",
+              "name": "count",
+              "comment": "Number of items to remove. Default is 1.\n",
               "type": "number",
+              "default": "1"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "removeParticle",
+      "source": [
+        [
+          "Physics.ts",
+          197,
+          16
+        ]
+      ],
+      "id": 5515,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Remove particles from this world. Support removing a range and negative index.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "from",
+              "comment": "Start index, which can be negative (where -1 is at index 0, -2 at index 1, etc)",
+              "type": "number | string",
               "default": false
             },
             {
@@ -438,11 +528,11 @@
       "source": [
         [
           "Physics.ts",
-          92,
+          124,
           8
         ]
       ],
-      "id": 5480,
+      "id": 5483,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -468,11 +558,11 @@
       "source": [
         [
           "Physics.ts",
-          183,
+          237,
           24
         ]
       ],
-      "id": 5513,
+      "id": 5526,
       "flags": {
         "isStatic": true
       },
@@ -512,11 +602,11 @@
       "source": [
         [
           "Physics.ts",
-          160,
+          214,
           23
         ]
       ],
-      "id": 5506,
+      "id": 5519,
       "flags": {
         "isStatic": true
       },

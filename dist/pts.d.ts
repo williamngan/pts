@@ -534,10 +534,8 @@ export class World {
     protected _bound: Bound;
     protected _particles: Particle[];
     protected _bodies: Body[];
-    protected _names: {
-        p: {};
-        b: {};
-    };
+    protected _pnames: string[];
+    protected _bnames: string[];
     protected _drawParticles: (p: Particle, i: number) => void;
     protected _drawBodies: (p: Body, i: number) => void;
     constructor(bound: Group, friction?: number, gravity?: PtLike | number);
@@ -546,13 +544,16 @@ export class World {
     damping: number;
     readonly bodyCount: number;
     readonly particleCount: number;
-    body(id: number | string): Body;
-    particle(id: number | string): Particle;
+    body(id: number | string): any;
+    particle(id: number | string): any;
+    bodyIndex(name: string): number;
+    particleIndex(name: string): number;
     update(ms: number): void;
     drawParticles(fn: (p: Particle, i: number) => void): void;
     drawBodies(fn: (p: Body, i: number) => void): void;
     add(p: Particle | Body, name?: string): this;
-    remove(which: "body" | "particle", index: number, count?: number): this;
+    removeBody(from: number | string, count?: number): this;
+    removeParticle(from: number | string, count?: number): this;
     static edgeConstraint(p1: Particle, p2: Particle, dist: number, stiff?: number, precise?: boolean): Particle;
     static boundConstraint(p: Particle, rect: Group, damping?: number): void;
     protected integrate(p: Particle, dt: number, prevDt?: number): Particle;

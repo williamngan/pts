@@ -11,7 +11,8 @@ class World {
         this._damping = 0.75;
         this._particles = [];
         this._bodies = [];
-        this._names = { p: {}, b: {} };
+        this._pnames = [];
+        this._bnames = [];
         this._bound = Pt_1.Bound.fromGroup(bound);
         this._friction = friction;
         this._gravity = (typeof gravity === "number") ? new Pt_1.Pt(0, gravity) : new Pt_1.Pt(gravity);
@@ -25,8 +26,30 @@ class World {
     set damping(f) { this._damping = f; }
     get bodyCount() { return this._bodies.length; }
     get particleCount() { return this._particles.length; }
-    body(id) { return this._bodies[(typeof id === "string") ? this._names.b[id] : id]; }
-    particle(id) { return this._particles[(typeof id === "string") ? this._names.p[id] : id]; }
+    body(id) {
+        let idx = id;
+        if (typeof id === "string" && id.length > 0) {
+            idx = this._bnames.indexOf(id);
+        }
+        if (!(idx >= 0))
+            throw new Error("Cannot find body id: " + id);
+        return this._bodies[idx];
+    }
+    particle(id) {
+        let idx = id;
+        if (typeof id === "string" && id.length > 0) {
+            idx = this._pnames.indexOf(id);
+        }
+        if (!(idx >= 0))
+            throw new Error("Cannot find particle id: " + id);
+        return this._particles[idx];
+    }
+    bodyIndex(name) {
+        return this._bnames.indexOf(name);
+    }
+    particleIndex(name) {
+        return this._pnames.indexOf(name);
+    }
     update(ms) {
         let dt = ms / 1000;
         this._updateParticles(dt);
@@ -38,27 +61,41 @@ class World {
     drawBodies(fn) {
         this._drawBodies = fn;
     }
-    add(p, name) {
+    add(p, name = '') {
         if (p instanceof Body) {
             this._bodies.push(p);
-            if (name)
-                this._names.b[name] = this._bodies.length - 1;
+            this._bnames.push(name);
         }
         else {
             this._particles.push(p);
-            if (name)
-                this._names.p[name] = this._particles.length - 1;
+            this._pnames.push(name);
         }
         return this;
     }
-    remove(which, index, count = 1) {
-        let param = (index < 0) ? [index * -1 - 1, count] : [index, count];
-        if (which == "body") {
-            this._bodies.splice(param[0], param[1]);
+    _index(fn, id) {
+        let index = 0;
+        if (typeof id === "string") {
+            index = fn(id);
+            if (index < 0)
+                throw new Error("Cannot find index of " + id);
         }
         else {
-            this._particles.splice(param[0], param[1]);
+            index = id;
         }
+        return index;
+    }
+    removeBody(from, count = 1) {
+        const index = this._index(this.bodyIndex.bind(this), from);
+        const param = (index < 0) ? [index * -1 - 1, count] : [index, count];
+        this._bodies.splice(param[0], param[1]);
+        this._bnames.splice(param[0], param[1]);
+        return this;
+    }
+    removeParticle(from, count = 1) {
+        const index = this._index(this.particleIndex.bind(this), from);
+        const param = (index < 0) ? [index * -1 - 1, count] : [index, count];
+        this._particles.splice(param[0], param[1]);
+        this._pnames.splice(param[0], param[1]);
         return this;
     }
     static edgeConstraint(p1, p2, dist, stiff = 1, precise = false) {

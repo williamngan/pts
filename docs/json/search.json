@@ -5574,6 +5574,12 @@
     8
   ],
   [
+    "Physics_World#function_bodyIndex",
+    "World.bodyIndex",
+    "Function",
+    8
+  ],
+  [
     "Physics_World#function_drawBodies",
     "World.drawBodies",
     "Function",
@@ -5598,8 +5604,20 @@
     8
   ],
   [
-    "Physics_World#function_remove",
-    "World.remove",
+    "Physics_World#function_particleIndex",
+    "World.particleIndex",
+    "Function",
+    8
+  ],
+  [
+    "Physics_World#function_removeBody",
+    "World.removeBody",
+    "Function",
+    8
+  ],
+  [
+    "Physics_World#function_removeParticle",
+    "World.removeParticle",
     "Function",
     8
   ],
