@@ -69,7 +69,6 @@ export class World {
   get particleCount():number { return this._particles.length; }
 
 
-
   /**
    * Get a body in this world by index or string id.
    * @param id numeric index of the body, or a string id that associates with it.
@@ -94,7 +93,7 @@ export class World {
       idx = this._pnames.indexOf( id );
     }
     if (!(idx >= 0)) throw new Error( "Cannot find particle id: "+id );
-    return this._bodies[idx];
+    return this._particles[idx];
   }
 
 
