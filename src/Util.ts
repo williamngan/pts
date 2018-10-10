@@ -283,4 +283,30 @@ export class Util {
     }
     return temp;
   }
+
+
+  /**
+   * A helper function to load data from a url via XMLHttpRequest GET. If you're loading json data, use standard `JSON.parse(data)` to parse the data. For csv, try using a javascript csv library like papaparse or vega/datalib.
+   * @param url the request url
+   * @param callback a function to capture the data. It takes two parameters: a `response` as string, and a `success` status as boolean.
+   */
+  static load( url:string, callback:(response:string, success:boolean) => void ) {
+    var request = new XMLHttpRequest();
+    request.open('GET', url, true);
+
+    request.onload = function() {
+      if (request.status >= 200 && request.status < 400) {
+        callback(request.responseText, true);
+      } else {
+        callback( `Server error (${request.status}) when loading "${url}"`, false);
+      }
+    };
+
+    request.onerror = function() {
+      callback( `Unknown network error`, false );
+    };
+
+    request.send();
+  }
+  
 }
