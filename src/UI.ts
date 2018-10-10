@@ -134,7 +134,7 @@ export class UI {
 
 
   /**
-   * Add an event handler.
+   * Add an event handler. Remember this UI will also need to be tracked for events via `UI.track`.
    * @param key event key
    * @param fn a [`UIHandler`](#link) callback function: `fn( target:UI, pt:Pt, type:string )`
    * @returns an id number that reference to this handler, for use in [`UI.off`](#link)
@@ -208,7 +208,7 @@ export class UI {
   /**
    * A static function to listen for a list of UIs. See also [`UI.listen`](#link).
    * @param uis an array of UI
-   * @param key an action key. Can be one of UIPointerActions or a custom one.
+   * @param key an action key. Can be one of `UIPointerActions` or a custom one.
    * @param p A point to check
    */
   static track( uis:UI[], key:string, p:PtLike ):void {
@@ -352,7 +352,7 @@ export class UIButton extends UI {
   
 
   /**
-   * Add a new click handler
+   * Add a new click handler. Remember this button will also need to be tracked for events via `UI.track`.
    * @param fn a [`UIHandler`](#link) callback function: `fn( target:UI, pt:Pt, type:string )`
    * @returns an id number that refers to this handler, for use in [`UIButton.offClick`](#link) or [`UI.off`](#link).
    */
@@ -372,7 +372,7 @@ export class UIButton extends UI {
 
   
   /**
-   * Add handlers for hover events.
+   * Add handlers for hover events. Remember this button will also need to be tracked for events via `UI.track`.
    * @param enter an optional [`UIHandler`](#link) function to handle when pointer enters hover. Eg, `fn( target:UI, pt:Pt, type:string )`
    * @param leave an optional [`UIHandler`](#link) function to handle when pointer exits hover. Eg, `fn( target:UI, pt:Pt, type:string )`
    * @returns id numbers that refer to enter/leave handlers, for use in [`UIButton.offHover`](#link) or [`UI.off`](#link).
@@ -449,7 +449,7 @@ export class UIDragger extends UIButton {
 
 
   /**
-   * Add a new drag handler. 
+   * Add a new drag handler. Remember this button will also need to be tracked for events via `UI.track`.
    * @param fn a [`UIHandler`](#link) callback function: `fn( target:UI, pt:Pt, type:string )`. You can access the states "dragging" and "offset" (See [`UI.state`](#link)) in the callback.
    * @returns an id number that refers to this handler, for use in [`UIDragger.offDrag`](#link) or [`UI.off`](#link).
    */
@@ -469,7 +469,7 @@ export class UIDragger extends UIButton {
 
 
   /**
-   * Add a new drop handler.
+   * Add a new drop handler. Remember this button will also need to be tracked for events via `UI.track`.
    * @param fn a [`UIHandler`](#link) callback function: `fn( target:UI, pt:Pt, type:string )`
    * @returns an id number that refers to this handler, for use in [`UIDragger.offDrop`](#link) or [`UI.off`](#link).
    */
