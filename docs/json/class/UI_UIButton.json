@@ -344,7 +344,7 @@
       "inherits": "UI.on",
       "signatures": [
         {
-          "comment": "Add an event handler.",
+          "comment": "Add an event handler. Remember this UI will also need to be tracked for events via `UI.track`.",
           "returns": "number",
           "returns_comment": "an id number that reference to this handler, for use in [`UI.off`](#link)\n",
           "parameters": [
@@ -380,7 +380,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Add a new click handler",
+          "comment": "Add a new click handler. Remember this button will also need to be tracked for events via `UI.track`.",
           "returns": "number",
           "returns_comment": "an id number that refers to this handler, for use in [`UIButton.offClick`](#link) or [`UI.off`](#link).\n",
           "parameters": [
@@ -410,7 +410,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Add handlers for hover events.",
+          "comment": "Add handlers for hover events. Remember this button will also need to be tracked for events via `UI.track`.",
           "returns": "number[]",
           "returns_comment": "id numbers that refer to enter/leave handlers, for use in [`UIButton.offHover`](#link) or [`UI.off`](#link).\n",
           "parameters": [
@@ -757,7 +757,7 @@
             },
             {
               "name": "key",
-              "comment": "an action key. Can be one of UIPointerActions or a custom one.",
+              "comment": "an action key. Can be one of `UIPointerActions` or a custom one.",
               "type": "string",
               "default": false
             },

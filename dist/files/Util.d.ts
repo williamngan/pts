@@ -42,4 +42,5 @@ export declare class Util {
     static zip(arrays: Array<any>[]): any[];
     static stepper(max: number, min?: number, stride?: number, callback?: (n: number) => void): (() => number);
     static forRange(fn: (index: number) => any, range: number, start?: number, step?: number): any[];
+    static load(url: string, callback: (response: string, success: boolean) => void): void;
 }

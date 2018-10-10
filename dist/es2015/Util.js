@@ -134,6 +134,22 @@ export class Util {
         }
         return temp;
     }
+    static load(url, callback) {
+        var request = new XMLHttpRequest();
+        request.open('GET', url, true);
+        request.onload = function () {
+            if (request.status >= 200 && request.status < 400) {
+                callback(request.responseText, true);
+            }
+            else {
+                callback(`Server error (${request.status}) when loading "${url}"`, false);
+            }
+        };
+        request.onerror = function () {
+            callback(`Unknown network error`, false);
+        };
+        request.send();
+    }
 }
 Util._warnLevel = "mute";
 //# sourceMappingURL=Util.js.map

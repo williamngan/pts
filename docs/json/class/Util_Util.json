@@ -178,6 +178,44 @@
       ]
     },
     {
+      "name": "load",
+      "source": [
+        [
+          "Util.ts",
+          293,
+          13
+        ]
+      ],
+      "id": 1625,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A helper function to load data from a url via XMLHttpRequest GET. If you're loading json data, use standard `JSON.parse(data)` to parse the data. For csv, try using a javascript csv library like papaparse or vega/datalib.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "url",
+              "comment": "the request url",
+              "type": "string",
+              "default": false
+            },
+            {
+              "name": "callback",
+              "comment": "a function to capture the data. It takes two parameters: a `response` as string, and a `success` status as boolean.\n",
+              "type": " Fn(response:string, success:boolean)",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "randomInt",
       "source": [
         [

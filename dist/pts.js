@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.6.3 - Copyright © 2017-2018 William Ngan and contributors.
+ * pts.js 0.6.4 - Copyright © 2017-2018 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -5399,6 +5399,22 @@ class Util {
             temp[i] = fn(i);
         }
         return temp;
+    }
+    static load(url, callback) {
+        var request = new XMLHttpRequest();
+        request.open('GET', url, true);
+        request.onload = function () {
+            if (request.status >= 200 && request.status < 400) {
+                callback(request.responseText, true);
+            }
+            else {
+                callback(`Server error (${request.status}) when loading "${url}"`, false);
+            }
+        };
+        request.onerror = function () {
+            callback(`Unknown network error`, false);
+        };
+        request.send();
     }
 }
 Util._warnLevel = "mute";

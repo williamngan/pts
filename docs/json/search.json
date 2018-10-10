@@ -9174,6 +9174,12 @@
     8
   ],
   [
+    "Util_Util#function_load",
+    "Util.load",
+    "Function",
+    8
+  ],
+  [
     "Util_Util#function_randomInt",
     "Util.randomInt",
     "Function",

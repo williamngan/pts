@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 2773,
+  "id": 2781,
   "comment": "VisualForm is an abstract class that represents a form that can be used to express Pts visually.\nFor example, [`CanvasForm`](#link) is an implementation of VisualForm that draws on [`CanvasSpace`](#link) which represents a html canvas. Learn more about Space and Form in [this guide](../guide/Space-0500.html).",
   "constructor": [],
   "accessors": [
@@ -21,7 +21,7 @@
           17
         ]
       ],
-      "id": 2785,
+      "id": 2793,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -45,7 +45,7 @@
           12
         ]
       ],
-      "id": 2775,
+      "id": 2783,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -72,7 +72,7 @@
           11
         ]
       ],
-      "id": 2869,
+      "id": 2877,
       "flags": {},
       "overrides": false,
       "inherits": "Form.ready",
@@ -96,7 +96,7 @@
           13
         ]
       ],
-      "id": 2780,
+      "id": 2788,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -125,7 +125,7 @@
           14
         ]
       ],
-      "id": 2831,
+      "id": 2839,
       "flags": {
         "isAbstract": true
       },
@@ -181,7 +181,7 @@
           17
         ]
       ],
-      "id": 2822,
+      "id": 2830,
       "flags": {
         "isAbstract": true
       },
@@ -218,7 +218,7 @@
           9
         ]
       ],
-      "id": 2825,
+      "id": 2833,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -248,7 +248,7 @@
           6
         ]
       ],
-      "id": 2794,
+      "id": 2802,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -278,7 +278,7 @@
           10
         ]
       ],
-      "id": 2797,
+      "id": 2805,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -308,7 +308,7 @@
           15
         ]
       ],
-      "id": 2861,
+      "id": 2869,
       "flags": {
         "isAbstract": true
       },
@@ -373,7 +373,7 @@
           15
         ]
       ],
-      "id": 2838,
+      "id": 2846,
       "flags": {
         "isAbstract": true
       },
@@ -405,7 +405,7 @@
           7
         ]
       ],
-      "id": 2841,
+      "id": 2849,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -435,7 +435,7 @@
           16
         ]
       ],
-      "id": 2812,
+      "id": 2820,
       "flags": {
         "isAbstract": true
       },
@@ -484,7 +484,7 @@
           8
         ]
       ],
-      "id": 2817,
+      "id": 2825,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -526,7 +526,7 @@
           18
         ]
       ],
-      "id": 2844,
+      "id": 2852,
       "flags": {
         "isAbstract": true
       },
@@ -558,7 +558,7 @@
           10
         ]
       ],
-      "id": 2847,
+      "id": 2855,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -588,7 +588,7 @@
           15
         ]
       ],
-      "id": 2850,
+      "id": 2858,
       "flags": {
         "isAbstract": true
       },
@@ -620,7 +620,7 @@
           7
         ]
       ],
-      "id": 2853,
+      "id": 2861,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -650,7 +650,7 @@
           16
         ]
       ],
-      "id": 2792,
+      "id": 2800,
       "flags": {
         "isAbstract": true
       },
@@ -675,7 +675,7 @@
           9
         ]
       ],
-      "id": 2828,
+      "id": 2836,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -705,7 +705,7 @@
           8
         ]
       ],
-      "id": 2800,
+      "id": 2808,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -753,7 +753,7 @@
           12
         ]
       ],
-      "id": 2806,
+      "id": 2814,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -801,7 +801,7 @@
           15
         ]
       ],
-      "id": 2856,
+      "id": 2864,
       "flags": {
         "isAbstract": true
       },

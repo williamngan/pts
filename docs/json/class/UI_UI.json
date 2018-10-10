@@ -278,7 +278,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Add an event handler.",
+          "comment": "Add an event handler. Remember this UI will also need to be tracked for events via `UI.track`.",
           "returns": "number",
           "returns_comment": "an id number that reference to this handler, for use in [`UI.off`](#link)\n",
           "parameters": [
@@ -625,7 +625,7 @@
             },
             {
               "name": "key",
-              "comment": "an action key. Can be one of UIPointerActions or a custom one.",
+              "comment": "an action key. Can be one of `UIPointerActions` or a custom one.",
               "type": "string",
               "default": false
             },
