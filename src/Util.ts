@@ -286,9 +286,9 @@ export class Util {
 
 
   /**
-   * A helper function to load data from a url via XMLHttpRequest GET. If you're loading json data, use standard `JSON.parse(data)` to parse the data. For csv, try using a javascript csv library like papaparse or vega/datalib.
+   * A helper function to load data from a url via XMLHttpRequest GET. Since the response passed into callback is a string, if you're loading json data, you may use standard `JSON.parse(response)` to get a JSON object. For csv, try using a javascript csv library like papaparse or vega/datalib.
    * @param url the request url
-   * @param callback a function to capture the data. It takes two parameters: a `response` as string, and a `success` status as boolean.
+   * @param callback a function to capture the data. It receives two parameters: a `response` as string, and a `success` status as boolean.
    */
   static load( url:string, callback:(response:string, success:boolean) => void ) {
     var request = new XMLHttpRequest();
