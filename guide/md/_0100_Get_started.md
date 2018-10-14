@@ -4,7 +4,7 @@ It's easy to get started with **`Pts`**. Here we'll review the core concepts and
 
 ![js:getting_started](./assets/bg.png)
 
-##### Here's a spolier of what we will build. Touch to play it, and take a look at the source code. The core code is only ~10 lines long.
+##### Here's a spoiler of what we will build. Touch to play it, and take a look at the source code. The core code is only ~10 lines long.
 
 ### Space, Form, and Point
 **`Pts`** is built upon the abstractions of Space, Form, and Point. If that's too abstract, you can think of it like drawing: Space provides the paper, Form provides the pencil, and Point provides the idea. 
@@ -158,7 +158,7 @@ The third line use the Group's [`shear2D`](#pt-group) function to shear the poly
 
 The 4th and 5th line just draw the rectangle and the sheared polygon.
 
-Even though it takes words to explain, the code is acutally quite simple :)
+Even though it takes words to explain, the code is actually quite simple :)
 
 ### Visibles from invisibles
 From here on, it's up to you. Squint your eyes and see what shapes and structures hide between those invisible points, or what motions and interactions could generate unique and expressive forms.
@@ -207,7 +207,7 @@ space.play().bindMouse();
 
 Also take a look at the alternative quick start mode example in the [`live editor`](../demo/edit/?name=triangle.incircle). Give it a try!
 
-Hope this gives you a quick and enjoyable walkthrough. But wait, there's more: Take a look at the other guides which will explain **`Pts`** features in details. 
+Hope this gives you a quick and enjoyable walk-through. But wait, there's more: Take a look at the other guides which will explain **`Pts`** features in details. 
 
 We appreciate your feedbacks and bug reports. Please file an issue at [github](https://github.com/williamngan/pts) or ping [@williamngan](https://twitter.com/williamngan) on twitter. 
 
