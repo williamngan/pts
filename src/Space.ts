@@ -3,7 +3,7 @@
 import {Pt, Bound} from "./Pt";
 import {Form} from "./Form";
 import {UIPointerActions as UIA}  from "./UI";
-import {ITimer, ISpacePlayers, IPlayer, AnimateCallbackFn, IPt, TouchPointsKey} from "./Types";
+import {ITimer, ISpacePlayers, IPlayer, AnimateCallbackFn, TouchPointsKey} from "./Types";
 
 
 /**
@@ -247,11 +247,11 @@ export abstract class Space {
   
   
   /**
-  * Resize the space. To be implemented in subclasses.
-  * @param w `width or an IPt object
-  * @param h height
-  */
-  abstract resize( b:IPt, evt?:Event ):this;
+   * Resize the space. To be implemented in subclasses.
+   * @param b a Bound representing the position and size of the space
+   * @param evt event
+   */
+  abstract resize( b:Bound, evt?:Event ):this;
   
   
   /**

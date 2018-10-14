@@ -771,7 +771,7 @@ export abstract class Space {
     readonly center: Pt;
     readonly width: number;
     readonly height: number;
-    abstract resize(b: IPt, evt?: Event): this;
+    abstract resize(b: Bound, evt?: Event): this;
     abstract clear(): this;
     abstract getForm(): Form;
 }
@@ -859,9 +859,9 @@ export type AnimateCallbackFn = (time?: number, frameTime?: number, currentSpace
 export interface IPlayer {
     animateID?: string;
     animate?: AnimateCallbackFn;
-    resize?(size: IPt, evt?: Event): undefined;
-    action?(type: string, px: number, py: number, evt: Event): any;
-    start?(bound: Bound, space: Space): any;
+    resize?(size: Bound, evt?: Event): void;
+    action?(type: string, px: number, py: number, evt: Event): void;
+    start?(bound: Bound, space: Space): void;
 }
 export interface ISpacePlayers {
     [key: string]: IPlayer;
