@@ -544,13 +544,13 @@
           "parameters": [
             {
               "name": "b",
-              "comment": "",
-              "type": "IPt",
+              "comment": "a Bound representing the position and size of the space",
+              "type": "Bound",
               "default": false
             },
             {
               "name": "evt",
-              "comment": "",
+              "comment": "event\n",
               "type": "Event",
               "default": false
             }
