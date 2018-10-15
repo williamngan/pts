@@ -129,7 +129,7 @@ export class UI {
       this._states[key] = value;
       return this; 
     }
-    return this._states[key] || null;
+    return this._states[key];
   }
 
 
@@ -312,8 +312,9 @@ export class UIButton extends UI {
    */
   constructor( group:GroupLike, shape:string, states:{[key:string]: any}={}, id?:string ) {
     super( group, shape, states, id );
-    if (!states.hover) states.hover = false;
-    if (!states.clicks) states.hover = 0;
+    
+    if (states.hover === undefined) this._states['hover'] = false;
+    if (states.clicks === undefined) this._states['clicks'] = 0;
 
     const UA = UIPointerActions;
 
@@ -410,7 +411,7 @@ export class UIDragger extends UIButton {
   private _moveHoldID:number = -1;
 
   /**
-   * Create a dragger which has all the states in UIButton, with additional "dragging" (boolean) and "offset" (Pt) states. (See [`UI.state`](#link)) You may also create a new UIDragger using one of the static helper like [`UI.fromRectangle`](#link) or [`UI.fromCircle`](#link).
+   * Create a dragger which has all the states in UIButton, with additional "dragging" (a boolean indicating whether it's currently being dragged) and "offset" (a Pt representing the offset between this UI's position and the pointer's position when dragged) states. (See [`UI.state`](#link)) You may also create a new UIDragger using one of the static helper like [`UI.fromRectangle`](#link) or [`UI.fromCircle`](#link).
    * @param group a Group that defines the UI's appearance
    * @param shape specifies the shape of the Group
    * @param states Optional default state object
@@ -418,8 +419,8 @@ export class UIDragger extends UIButton {
    */
   constructor( group:GroupLike, shape:string, states:{[key:string]: any}={}, id?:string ) {
     super( group, shape, states, id );
-    if (!states.dragging) states.dragging = false;
-    if (!states.offset) states.offset = new Pt( group[0] );
+    if (states.dragging === undefined) this._states['dragging'] = false;
+    if (states.offset === undefined) this._states['offset'] = new Pt();
 
     const UA = UIPointerActions;
 
