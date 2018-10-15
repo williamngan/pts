@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.6.5 - Copyright © 2017-2018 William Ngan and contributors.
+ * pts.js 0.6.6 - Copyright © 2017-2018 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -5056,7 +5056,7 @@ class UI {
             this._states[key] = value;
             return this;
         }
-        return this._states[key] || null;
+        return this._states[key];
     }
     on(key, fn) {
         if (!this._actions[key])
@@ -5160,10 +5160,10 @@ class UIButton extends UI {
     constructor(group, shape, states = {}, id) {
         super(group, shape, states, id);
         this._hoverID = -1;
-        if (!states.hover)
-            states.hover = false;
-        if (!states.clicks)
-            states.hover = 0;
+        if (states.hover === undefined)
+            this._states['hover'] = false;
+        if (states.clicks === undefined)
+            this._states['clicks'] = 0;
         const UA = exports.UIPointerActions;
         this.on(UA.up, (target, pt, type) => {
             this.state('clicks', this._states.clicks + 1);
@@ -5214,10 +5214,10 @@ class UIDragger extends UIButton {
         super(group, shape, states, id);
         this._draggingID = -1;
         this._moveHoldID = -1;
-        if (!states.dragging)
-            states.dragging = false;
-        if (!states.offset)
-            states.offset = new Pt_1.Pt(group[0]);
+        if (states.dragging === undefined)
+            this._states['dragging'] = false;
+        if (states.offset === undefined)
+            this._states['offset'] = new Pt_1.Pt();
         const UA = exports.UIPointerActions;
         this.on(UA.down, (target, pt, type) => {
             this.state('dragging', true);

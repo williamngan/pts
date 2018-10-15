@@ -3,7 +3,7 @@
   "source": [
     [
       "UI.ts",
-      407,
+      408,
       22
     ]
   ],
@@ -16,7 +16,7 @@
       "source": [
         [
           "UI.ts",
-          410,
+          411,
           34
         ]
       ],
@@ -26,7 +26,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Create a dragger which has all the states in UIButton, with additional \"dragging\" (boolean) and \"offset\" (Pt) states. (See [`UI.state`](#link)) You may also create a new UIDragger using one of the static helper like [`UI.fromRectangle`](#link) or [`UI.fromCircle`](#link).",
+          "comment": "Create a dragger which has all the states in UIButton, with additional \"dragging\" (a boolean indicating whether it's currently being dragged) and \"offset\" (a Pt representing the offset between this UI's position and the pointer's position when dragged) states. (See [`UI.state`](#link)) You may also create a new UIDragger using one of the static helper like [`UI.fromRectangle`](#link) or [`UI.fromCircle`](#link).",
           "returns": "UIDragger",
           "returns_comment": false,
           "parameters": [
@@ -268,7 +268,7 @@
       "source": [
         [
           "UI.ts",
-          369,
+          370,
           10
         ]
       ],
@@ -298,7 +298,7 @@
       "source": [
         [
           "UI.ts",
-          466,
+          467,
           9
         ]
       ],
@@ -328,7 +328,7 @@
       "source": [
         [
           "UI.ts",
-          486,
+          487,
           9
         ]
       ],
@@ -358,7 +358,7 @@
       "source": [
         [
           "UI.ts",
-          394,
+          395,
           10
         ]
       ],
@@ -430,7 +430,7 @@
       "source": [
         [
           "UI.ts",
-          359,
+          360,
           9
         ]
       ],
@@ -460,7 +460,7 @@
       "source": [
         [
           "UI.ts",
-          456,
+          457,
           8
         ]
       ],
@@ -490,7 +490,7 @@
       "source": [
         [
           "UI.ts",
-          476,
+          477,
           8
         ]
       ],
@@ -520,7 +520,7 @@
       "source": [
         [
           "UI.ts",
-          380,
+          381,
           9
         ]
       ],

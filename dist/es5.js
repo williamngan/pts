@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.6.5 - Copyright © 2017-2018 William Ngan and contributors.
+ * pts.js 0.6.6 - Copyright © 2017-2018 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -7373,7 +7373,7 @@ var UI = function () {
                 this._states[key] = value;
                 return this;
             }
-            return this._states[key] || null;
+            return this._states[key];
         }
     }, {
         key: "on",
@@ -7547,8 +7547,8 @@ var UIButton = function (_UI) {
         var _this = _possibleConstructorReturn(this, (UIButton.__proto__ || Object.getPrototypeOf(UIButton)).call(this, group, shape, states, id));
 
         _this._hoverID = -1;
-        if (!states.hover) states.hover = false;
-        if (!states.clicks) states.hover = 0;
+        if (states.hover === undefined) _this._states['hover'] = false;
+        if (states.clicks === undefined) _this._states['clicks'] = 0;
         var UA = exports.UIPointerActions;
         _this.on(UA.up, function (target, pt, type) {
             _this.state('clicks', _this._states.clicks + 1);
@@ -7618,8 +7618,8 @@ var UIDragger = function (_UIButton) {
 
         _this2._draggingID = -1;
         _this2._moveHoldID = -1;
-        if (!states.dragging) states.dragging = false;
-        if (!states.offset) states.offset = new Pt_1.Pt(group[0]);
+        if (states.dragging === undefined) _this2._states['dragging'] = false;
+        if (states.offset === undefined) _this2._states['offset'] = new Pt_1.Pt();
         var UA = exports.UIPointerActions;
         _this2.on(UA.down, function (target, pt, type) {
             _this2.state('dragging', true);
