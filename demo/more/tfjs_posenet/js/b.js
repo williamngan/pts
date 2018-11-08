@@ -15,6 +15,7 @@ posenet.load().then( (net) => pose = net );
 
 // BodyPose instance
 var body;
+var keypoints;
 var squareCrop;
 
 // input
@@ -98,13 +99,14 @@ space.add({
       const poseStride = 16;
       const poseFlip = false;
 
-      pose.estimateMultiplePoses(cropped, poseScale, poseFlip, poseStride, 1).then( function (people) {
-        if (people.length > 0) { // draw the first person in the scene
-          body.update( people[0].keypoints );
-          drawBg();
-          drawBody(); 
-        }
-      });
+      pose.estimateSinglePose(cropped, poseScale, poseFlip, poseStride, 1).then( (person) => keypoints = person.keypoints );
+
+      if (keypoints) {
+        body.update( keypoints );
+        drawBg();
+        drawBody(); 
+      }
+    
     }
 
     form.renderOffscreen(); // render offscreen canvas

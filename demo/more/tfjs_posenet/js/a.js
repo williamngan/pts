@@ -15,6 +15,7 @@ posenet.load().then( (net) => pose = net );
 
 // BodyPose instance
 var body;
+var keypoints;
 
 // input
 var video = document.getElementById('video');
@@ -50,12 +51,12 @@ space.add({
       const poseStride = 16;
       const poseFlip = false;
 
-      pose.estimateMultiplePoses(video, poseScale, poseFlip, poseStride, 1).then( function (people) {
-        if (people.length > 0) {
-          body.update( people[0].keypoints );
-          drawBody(); 
-        }
-      });
+      pose.estimateSinglePose(video, poseScale, poseFlip, poseStride, 1).then( (person) => keypoints = person.keypoints );
+      
+      if (keypoints) {
+        body.update( keypoints );
+        drawBody();
+      }
     }
   }
 

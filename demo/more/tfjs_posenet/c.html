@@ -18,15 +18,14 @@
   <body>
 
     <div id="pts">
-      <video id="video" width="640" height="480" autoplay="true"><source src="test_video.mp4" autoplay="true" type="video/mp4" codec="avc1.4D401E" /></video>
+      <video id="video" width="640" height="480" muted autoplay><source src="test_video.mp4" type="video/mp4" codec="avc1.4D401E" /></video>
     </div>
     <p><small>Add one video to the source code folder. We use this one here for testing: https://www.youtube.com/watch?v=gADY77Jy2-Q</small></p>
 
     <script type="text/javascript" src="./js/c.js"></script>
 
     <script>
-      console.log( document.getElementById('video') );
       document.getElementById('video').play();
-  </script>
+    </script>
   </body>
 </html>

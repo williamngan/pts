@@ -16,6 +16,7 @@ posenet.load().then( (net) => pose = net );
 
 // BodyPose instance
 var body;
+var keypoints;
 
 // input
 var video = document.getElementById('video');
@@ -79,12 +80,13 @@ function drawBody() {
 
   // Head
   let dir = body.at("leftEar").$subtract( body.at("rightEar") ).angle();
-  let tri = Triangle.fromCenter( body.at("nose"), 30 ).rotate2D( dir, body.at("nose") );
-  form.strokeOnly("#f06", 5).polygon( tri );
-  form.fillOnly("#f06").point( body.at("nose"), 10, "circle");
-  
+  // let tri = Triangle.fromCenter( body.at("nose"), 30 ).rotate2D( dir, body.at("nose") );
+  // form.strokeOnly("#f06", 5).polygon( tri );
+  let offset = body.at("nose").$subtract( centerTop );
+  form.fill("#123").stroke("rgba(255,225,50,.8)", 10).point( body.at("nose").$subtract( 0, Math.abs(offset.y) ), 40, "circle");
 
-  form.fill("#000").point( body.at("leftWrist"), 10, "circle" ).point( body.at("rightWrist"), 10, "circle" );
+
+  form.fillOnly("#000").point( body.at("leftWrist"), 10, "circle" ).point( body.at("rightWrist"), 10, "circle" );
   form.fill("#fff").point( body.at("leftAnkle"), 10, "circle" ).point( body.at("rightAnkle"), 10, "circle" );
   
 }
@@ -103,12 +105,12 @@ space.add({
 
     form.useOffscreen( true ); // use offscreen canvas for performance
     let cropped = squareCrop();
-    
+    form.image( cropped, space.innerBound, [new Pt(0,0), new Pt(cropped.width, cropped.height)] );
+
     // track time and draw background graphics after some time passes
     let st = scene(time);
-    if (st < 2) form.image( cropped, space.innerBound, [new Pt(0,0), new Pt(cropped.width, cropped.height)] );
     if (st >= 1) {
-      let fade = Math.min(1, st-1);
+      let fade = Math.min(0.8, st-1);
       form.fill( `rgba(255,235,30, ${ fade })` ).rect( space.innerBound );
     }
     
@@ -118,12 +120,13 @@ space.add({
       const poseStride = 16;
       const poseFlip = false;
 
-      pose.estimateMultiplePoses( cropped, poseScale, poseFlip, poseStride, 1).then( function (people) {
-        if (people.length > 0) {
-          body.update( people[0].keypoints );
-          drawBody(); 
-        }
-      });
+      pose.estimateSinglePose(cropped, poseScale, poseFlip, poseStride, 1).then( (person) => keypoints = person.keypoints );
+      
+      if (keypoints) {
+        body.update( keypoints );
+        drawBody(); 
+      }
+    
     }
     
     form.renderOffscreen(); // render offscreen canvas
