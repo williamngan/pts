@@ -477,7 +477,7 @@ export class CanvasForm extends VisualForm {
     * @param linejoin Optional string to set line joint style. Can be "miter", "bevel", or "round".
     * @param linecap Optional string to set line cap style. Can be "butt", "round", or "square".
     */
-    stroke( c:string|boolean, width?:number, linejoin?:string, linecap?:string ):this {
+    stroke( c:string|boolean, width?:number, linejoin?:CanvasLineJoin, linecap?:CanvasLineCap ):this {
       if (typeof c == "boolean") {
         this.stroked = c;
       } else {
@@ -575,6 +575,7 @@ export class CanvasForm extends VisualForm {
       var px = box[0][0];
       if (this._ctx.textAlign == "end" || this._ctx.textAlign == "right") {
         px = box[1][0];
+      // @ts-ignore
       } else if (this._ctx.textAlign == "center" || this._ctx.textAlign == "middle") {
         px = center[0];
       }
@@ -871,6 +872,7 @@ export class CanvasForm extends VisualForm {
      * @param overrideBaseline If `true`, use the corresponding baseline as verticalAlign. If `false`, use the current canvas context's textBaseline setting. Default is `true`.
      */
     textBox( box:GroupLike, txt:string, verticalAlign:string="middle", tail:string="", overrideBaseline:boolean=true): this {
+      // @ts-ignore
       if (overrideBaseline) this._ctx.textBaseline = verticalAlign;
       let size = Rectangle.size( box );
       let t = this._textTruncate( txt, size[0], tail );
@@ -946,8 +948,10 @@ export class CanvasForm extends VisualForm {
      * @param alignment HTML canvas' textAlign option: "left", "right", "center", "start", or "end"
      * @param baseline HTML canvas' textBaseline option: "top", "hanging", "middle", "alphabetic", "ideographic", "bottom". For convenience, you can also use "center" (same as "middle"), and "baseline" (same as "alphabetic")
      */
-    alignText( alignment:string="left", baseline:string="alphabetic") {
+    alignText( alignment:CanvasTextAlign="left", baseline:CanvasTextBaseline="alphabetic") {
+      // @ts-ignore
       if (baseline == "center") baseline = "middle";
+      // @ts-ignore
       if (baseline == "baseline") baseline = "alphabetic";
       this._ctx.textAlign = alignment;
       this._ctx.textBaseline = baseline;
