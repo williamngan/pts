@@ -55,6 +55,10 @@ Pts.quickStart( "#pt", "#30a" );
 
     action:( type, px, py) => {
       world.body("triangle")[0].position = new Pt(px, py);
+    },
+
+    resize: (bound, evt) => {
+      if (world) world.bound = space.innerBound;
     }
     
   });

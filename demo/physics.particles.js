@@ -48,7 +48,7 @@ Pts.quickStart( "#pt", "#123" );
     },
 
     resize: (bound, evt) => {
-      this.bound = bound;
+      if (world) world.bound = space.innerBound;
     }
   });
   
