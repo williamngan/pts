@@ -14,6 +14,7 @@ export declare class World {
     protected _drawParticles: (p: Particle, i: number) => void;
     protected _drawBodies: (p: Body, i: number) => void;
     constructor(bound: Group, friction?: number, gravity?: PtLike | number);
+    bound: Bound;
     gravity: Pt;
     friction: number;
     damping: number;

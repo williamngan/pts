@@ -14,7 +14,7 @@ export declare type AnimateCallbackFn = (time?: number, frameTime?: number, curr
 export interface IPlayer {
     animateID?: string;
     animate?: AnimateCallbackFn;
-    resize?(size: Bound, evt?: Event): void;
+    resize?(bound: Bound, evt?: Event): void;
     action?(type: string, px: number, py: number, evt: Event): void;
     start?(bound: Bound, space: Space): void;
 }

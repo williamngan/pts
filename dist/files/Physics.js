@@ -18,6 +18,8 @@ class World {
         this._gravity = (typeof gravity === "number") ? new Pt_1.Pt(0, gravity) : new Pt_1.Pt(gravity);
         return this;
     }
+    get bound() { return this._bound; }
+    set bound(bound) { this._bound = bound; }
     get gravity() { return this._gravity; }
     set gravity(g) { this._gravity = g; }
     get friction() { return this._friction; }
@@ -32,7 +34,7 @@ class World {
             idx = this._bnames.indexOf(id);
         }
         if (!(idx >= 0))
-            throw new Error("Cannot find body id: " + id);
+            return undefined;
         return this._bodies[idx];
     }
     particle(id) {
@@ -41,7 +43,7 @@ class World {
             idx = this._pnames.indexOf(id);
         }
         if (!(idx >= 0))
-            throw new Error("Cannot find particle id: " + id);
+            return undefined;
         return this._particles[idx];
     }
     bodyIndex(name) {
@@ -77,7 +79,7 @@ class World {
         if (typeof id === "string") {
             index = fn(id);
             if (index < 0)
-                throw new Error("Cannot find index of " + id);
+                throw new Error(`Cannot find index of ${id}. You can use particleIndex() or bodyIndex() function to check existence by name.`);
         }
         else {
             index = id;

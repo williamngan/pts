@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.6.6 - Copyright © 2017-2018 William Ngan and contributors.
+ * pts.js 0.6.7 - Copyright © 2017-2018 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -386,11 +386,11 @@ class CanvasForm extends Form_1.VisualForm {
                 this._font.style = style;
             if (lineHeight)
                 this._font.lineHeight = lineHeight;
-            this._ctx.font = this._font.value;
         }
         else {
             this._font = sizeOrFont;
         }
+        this._ctx.font = this._font.value;
         if (this._estimateTextWidth)
             this.fontWidthEstimate(true);
         return this;
@@ -3480,6 +3480,8 @@ class World {
         this._gravity = (typeof gravity === "number") ? new Pt_1.Pt(0, gravity) : new Pt_1.Pt(gravity);
         return this;
     }
+    get bound() { return this._bound; }
+    set bound(bound) { this._bound = bound; }
     get gravity() { return this._gravity; }
     set gravity(g) { this._gravity = g; }
     get friction() { return this._friction; }
@@ -3494,7 +3496,7 @@ class World {
             idx = this._bnames.indexOf(id);
         }
         if (!(idx >= 0))
-            throw new Error("Cannot find body id: " + id);
+            return undefined;
         return this._bodies[idx];
     }
     particle(id) {
@@ -3503,7 +3505,7 @@ class World {
             idx = this._pnames.indexOf(id);
         }
         if (!(idx >= 0))
-            throw new Error("Cannot find particle id: " + id);
+            return undefined;
         return this._particles[idx];
     }
     bodyIndex(name) {
@@ -3539,7 +3541,7 @@ class World {
         if (typeof id === "string") {
             index = fn(id);
             if (index < 0)
-                throw new Error("Cannot find index of " + id);
+                throw new Error(`Cannot find index of ${id}. You can use particleIndex() or bodyIndex() function to check existence by name.`);
         }
         else {
             index = id;

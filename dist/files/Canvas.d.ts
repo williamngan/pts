@@ -56,7 +56,7 @@ export declare class CanvasForm extends VisualForm {
     useOffscreen(off?: boolean, clear?: boolean | string): this;
     renderOffscreen(offset?: PtLike): void;
     fill(c: string | boolean): this;
-    stroke(c: string | boolean, width?: number, linejoin?: string, linecap?: string): this;
+    stroke(c: string | boolean, width?: number, linejoin?: CanvasLineJoin, linecap?: CanvasLineCap): this;
     font(sizeOrFont: number | Font, weight?: string, style?: string, lineHeight?: number, family?: string): this;
     fontWidthEstimate(estimate?: boolean): this;
     getTextWidth(c: string): number;
@@ -83,6 +83,6 @@ export declare class CanvasForm extends VisualForm {
     text(pt: PtLike, txt: string, maxWidth?: number): this;
     textBox(box: GroupLike, txt: string, verticalAlign?: string, tail?: string, overrideBaseline?: boolean): this;
     paragraphBox(box: GroupLike, txt: string, lineHeight?: number, verticalAlign?: string, crop?: boolean): this;
-    alignText(alignment?: string, baseline?: string): this;
+    alignText(alignment?: CanvasTextAlign, baseline?: CanvasTextBaseline): this;
     log(txt: any): this;
 }

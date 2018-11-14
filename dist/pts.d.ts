@@ -55,7 +55,7 @@ export class CanvasForm extends VisualForm {
     useOffscreen(off?: boolean, clear?: boolean | string): this;
     renderOffscreen(offset?: PtLike): void;
     fill(c: string | boolean): this;
-    stroke(c: string | boolean, width?: number, linejoin?: string, linecap?: string): this;
+    stroke(c: string | boolean, width?: number, linejoin?: CanvasLineJoin, linecap?: CanvasLineCap): this;
     font(sizeOrFont: number | Font, weight?: string, style?: string, lineHeight?: number, family?: string): this;
     fontWidthEstimate(estimate?: boolean): this;
     getTextWidth(c: string): number;
@@ -82,7 +82,7 @@ export class CanvasForm extends VisualForm {
     text(pt: PtLike, txt: string, maxWidth?: number): this;
     textBox(box: GroupLike, txt: string, verticalAlign?: string, tail?: string, overrideBaseline?: boolean): this;
     paragraphBox(box: GroupLike, txt: string, lineHeight?: number, verticalAlign?: string, crop?: boolean): this;
-    alignText(alignment?: string, baseline?: string): this;
+    alignText(alignment?: CanvasTextAlign, baseline?: CanvasTextBaseline): this;
     log(txt: any): this;
 }
 
@@ -539,6 +539,7 @@ export class World {
     protected _drawParticles: (p: Particle, i: number) => void;
     protected _drawBodies: (p: Body, i: number) => void;
     constructor(bound: Group, friction?: number, gravity?: PtLike | number);
+    bound: Bound;
     gravity: Pt;
     friction: number;
     damping: number;
@@ -859,7 +860,7 @@ export type AnimateCallbackFn = (time?: number, frameTime?: number, currentSpace
 export interface IPlayer {
     animateID?: string;
     animate?: AnimateCallbackFn;
-    resize?(size: Bound, evt?: Event): void;
+    resize?(bound: Bound, evt?: Event): void;
     action?(type: string, px: number, py: number, evt: Event): void;
     start?(bound: Bound, space: Space): void;
 }

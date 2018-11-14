@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.6.6 - Copyright © 2017-2018 William Ngan and contributors.
+ * pts.js 0.6.7 - Copyright © 2017-2018 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -463,10 +463,10 @@ var CanvasForm = function (_Form_1$VisualForm) {
                 if (weight) this._font.weight = weight;
                 if (style) this._font.style = style;
                 if (lineHeight) this._font.lineHeight = lineHeight;
-                this._ctx.font = this._font.value;
             } else {
                 this._font = sizeOrFont;
             }
+            this._ctx.font = this._font.value;
             if (this._estimateTextWidth) this.fontWidthEstimate(true);
             return this;
         }
@@ -4834,7 +4834,7 @@ var World = function () {
             if (typeof id === "string" && id.length > 0) {
                 idx = this._bnames.indexOf(id);
             }
-            if (!(idx >= 0)) throw new Error("Cannot find body id: " + id);
+            if (!(idx >= 0)) return undefined;
             return this._bodies[idx];
         }
     }, {
@@ -4844,7 +4844,7 @@ var World = function () {
             if (typeof id === "string" && id.length > 0) {
                 idx = this._pnames.indexOf(id);
             }
-            if (!(idx >= 0)) throw new Error("Cannot find particle id: " + id);
+            if (!(idx >= 0)) return undefined;
             return this._particles[idx];
         }
     }, {
@@ -4894,7 +4894,7 @@ var World = function () {
             var index = 0;
             if (typeof id === "string") {
                 index = fn(id);
-                if (index < 0) throw new Error("Cannot find index of " + id);
+                if (index < 0) throw new Error("Cannot find index of " + id + ". You can use particleIndex() or bodyIndex() function to check existence by name.");
             } else {
                 index = id;
             }
@@ -4967,6 +4967,14 @@ var World = function () {
                     if (this._drawBodies) this._drawBodies(bds, i);
                 }
             }
+        }
+    }, {
+        key: "bound",
+        get: function get() {
+            return this._bound;
+        },
+        set: function set(bound) {
+            this._bound = bound;
         }
     }, {
         key: "gravity",
