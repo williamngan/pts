@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 5438,
+  "id": 5567,
   "comment": "A `World` stores and manages [`Body`](#link) and [`Particle`](#link) for 2D physics simulation.\nSee a [Particle demo](../demo/index.html?name=physics.particles) and a [Body demo](../demo/index.html?name=physics.shapes) on the demo page.",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           51
         ]
       ],
-      "id": 5458,
+      "id": 5587,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -60,11 +60,11 @@
       "source": [
         [
           "Physics.ts",
-          64,
+          70,
           15
         ]
       ],
-      "id": 5475,
+      "id": 5608,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -75,20 +75,52 @@
       "setter": false
     },
     {
+      "name": "bound",
+      "source": [
+        [
+          "Physics.ts",
+          46,
+          11
+        ],
+        [
+          "Physics.ts",
+          47,
+          11
+        ]
+      ],
+      "id": 5592,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Current bound in this `World`.",
+      "getter": {
+        "type": "Bound"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "bound",
+          "comment": "",
+          "type": "Bound",
+          "default": false
+        }
+      }
+    },
+    {
       "name": "damping",
       "source": [
         [
           "Physics.ts",
-          58,
+          64,
           13
         ],
         [
           "Physics.ts",
-          59,
+          65,
           13
         ]
       ],
-      "id": 5471,
+      "id": 5604,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -111,16 +143,16 @@
       "source": [
         [
           "Physics.ts",
-          52,
+          58,
           14
         ],
         [
           "Physics.ts",
-          53,
+          59,
           14
         ]
       ],
-      "id": 5467,
+      "id": 5600,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -143,16 +175,16 @@
       "source": [
         [
           "Physics.ts",
-          46,
+          52,
           13
         ],
         [
           "Physics.ts",
-          47,
+          53,
           13
         ]
       ],
-      "id": 5463,
+      "id": 5596,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -175,11 +207,11 @@
       "source": [
         [
           "Physics.ts",
-          69,
+          75,
           19
         ]
       ],
-      "id": 5477,
+      "id": 5610,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -196,11 +228,11 @@
       "source": [
         [
           "Physics.ts",
-          154,
+          162,
           5
         ]
       ],
-      "id": 5508,
+      "id": 5641,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -232,11 +264,11 @@
       "source": [
         [
           "Physics.ts",
-          76,
+          83,
           6
         ]
       ],
-      "id": 5479,
+      "id": 5612,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -244,11 +276,11 @@
         {
           "comment": "Get a body in this world by index or string id.",
           "returns": "any",
-          "returns_comment": false,
+          "returns_comment": "a Body, or undefined if not found\n",
           "parameters": [
             {
               "name": "id",
-              "comment": "numeric index of the body, or a string id that associates with it.\n",
+              "comment": "numeric index of the body, or a string id that associates with it.",
               "type": "number | string",
               "default": false
             }
@@ -262,11 +294,11 @@
       "source": [
         [
           "Physics.ts",
-          105,
+          113,
           11
         ]
       ],
-      "id": 5485,
+      "id": 5618,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -292,11 +324,11 @@
       "source": [
         [
           "Physics.ts",
-          144,
+          152,
           12
         ]
       ],
-      "id": 5501,
+      "id": 5634,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -322,11 +354,11 @@
       "source": [
         [
           "Physics.ts",
-          135,
+          143,
           15
         ]
       ],
-      "id": 5494,
+      "id": 5627,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -352,11 +384,11 @@
       "source": [
         [
           "Physics.ts",
-          260,
+          268,
           21
         ]
       ],
-      "id": 5539,
+      "id": 5672,
       "flags": {
         "isProtected": true
       },
@@ -396,11 +428,11 @@
       "source": [
         [
           "Physics.ts",
-          90,
+          98,
           10
         ]
       ],
-      "id": 5482,
+      "id": 5615,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -408,11 +440,11 @@
         {
           "comment": "Get a particle in this world by index or string id.",
           "returns": "any",
-          "returns_comment": false,
+          "returns_comment": "a Particle, or undefined if not found\n",
           "parameters": [
             {
               "name": "id",
-              "comment": "numeric index of the particle, or a string id that associates with it.\n",
+              "comment": "numeric index of the particle, or a string id that associates with it.",
               "type": "number | string",
               "default": false
             }
@@ -426,11 +458,11 @@
       "source": [
         [
           "Physics.ts",
-          115,
+          123,
           15
         ]
       ],
-      "id": 5488,
+      "id": 5621,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -456,11 +488,11 @@
       "source": [
         [
           "Physics.ts",
-          183,
+          191,
           12
         ]
       ],
-      "id": 5519,
+      "id": 5652,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -492,11 +524,11 @@
       "source": [
         [
           "Physics.ts",
-          197,
+          205,
           16
         ]
       ],
-      "id": 5523,
+      "id": 5656,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -528,11 +560,11 @@
       "source": [
         [
           "Physics.ts",
-          124,
+          132,
           8
         ]
       ],
-      "id": 5491,
+      "id": 5624,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -558,11 +590,11 @@
       "source": [
         [
           "Physics.ts",
-          237,
+          245,
           24
         ]
       ],
-      "id": 5534,
+      "id": 5667,
       "flags": {
         "isStatic": true
       },
@@ -602,11 +634,11 @@
       "source": [
         [
           "Physics.ts",
-          214,
+          222,
           23
         ]
       ],
-      "id": 5527,
+      "id": 5660,
       "flags": {
         "isStatic": true
       },

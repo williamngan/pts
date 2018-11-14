@@ -558,12 +558,6 @@
     0
   ],
   [
-    "Color_Color#property_D65",
-    "Color.D65",
-    "Variable",
-    0
-  ],
-  [
     "Color_Color#property_buffer",
     "Color.buffer",
     "Variable",
@@ -584,6 +578,12 @@
   [
     "Color_Color#property_length",
     "Color.length",
+    "Variable",
+    0
+  ],
+  [
+    "Color_Color#property_D65",
+    "Color.D65",
     "Variable",
     0
   ],
@@ -858,6 +858,12 @@
     8
   ],
   [
+    "Color_Color#function_copyWithin",
+    "Color.copyWithin",
+    "Function",
+    8
+  ],
+  [
     "Color_Color#function_divide",
     "Color.divide",
     "Function",
@@ -870,14 +876,80 @@
     8
   ],
   [
+    "Color_Color#function_entries",
+    "Color.entries",
+    "Function",
+    8
+  ],
+  [
     "Color_Color#function_equals",
     "Color.equals",
     "Function",
     8
   ],
   [
+    "Color_Color#function_every",
+    "Color.every",
+    "Function",
+    8
+  ],
+  [
+    "Color_Color#function_fill",
+    "Color.fill",
+    "Function",
+    8
+  ],
+  [
+    "Color_Color#function_filter",
+    "Color.filter",
+    "Function",
+    8
+  ],
+  [
+    "Color_Color#function_find",
+    "Color.find",
+    "Function",
+    8
+  ],
+  [
+    "Color_Color#function_findIndex",
+    "Color.findIndex",
+    "Function",
+    8
+  ],
+  [
     "Color_Color#function_floor",
     "Color.floor",
+    "Function",
+    8
+  ],
+  [
+    "Color_Color#function_forEach",
+    "Color.forEach",
+    "Function",
+    8
+  ],
+  [
+    "Color_Color#function_indexOf",
+    "Color.indexOf",
+    "Function",
+    8
+  ],
+  [
+    "Color_Color#function_join",
+    "Color.join",
+    "Function",
+    8
+  ],
+  [
+    "Color_Color#function_keys",
+    "Color.keys",
+    "Function",
+    8
+  ],
+  [
+    "Color_Color#function_lastIndexOf",
+    "Color.lastIndexOf",
     "Function",
     8
   ],
@@ -890,6 +962,12 @@
   [
     "Color_Color#function_magnitudeSq",
     "Color.magnitudeSq",
+    "Function",
+    8
+  ],
+  [
+    "Color_Color#function_map",
+    "Color.map",
     "Function",
     8
   ],
@@ -936,8 +1014,26 @@
     8
   ],
   [
+    "Color_Color#function_reduce",
+    "Color.reduce",
+    "Function",
+    8
+  ],
+  [
+    "Color_Color#function_reduceRight",
+    "Color.reduceRight",
+    "Function",
+    8
+  ],
+  [
     "Color_Color#function_reflect2D",
     "Color.reflect2D",
+    "Function",
+    8
+  ],
+  [
+    "Color_Color#function_reverse",
+    "Color.reverse",
     "Function",
     8
   ],
@@ -960,8 +1056,38 @@
     8
   ],
   [
+    "Color_Color#function_set",
+    "Color.set",
+    "Function",
+    8
+  ],
+  [
     "Color_Color#function_shear2D",
     "Color.shear2D",
+    "Function",
+    8
+  ],
+  [
+    "Color_Color#function_slice",
+    "Color.slice",
+    "Function",
+    8
+  ],
+  [
+    "Color_Color#function_some",
+    "Color.some",
+    "Function",
+    8
+  ],
+  [
+    "Color_Color#function_sort",
+    "Color.sort",
+    "Function",
+    8
+  ],
+  [
+    "Color_Color#function_subarray",
+    "Color.subarray",
     "Function",
     8
   ],
@@ -990,6 +1116,12 @@
     8
   ],
   [
+    "Color_Color#function_toLocaleString",
+    "Color.toLocaleString",
+    "Function",
+    8
+  ],
+  [
     "Color_Color#function_toMode",
     "Color.toMode",
     "Function",
@@ -1004,6 +1136,12 @@
   [
     "Color_Color#function_unit",
     "Color.unit",
+    "Function",
+    8
+  ],
+  [
+    "Color_Color#function_values",
+    "Color.values",
     "Function",
     8
   ],
@@ -1116,48 +1254,6 @@
     8
   ],
   [
-    "Color_Color#function_copyWithin",
-    "Color.copyWithin",
-    "Function",
-    8
-  ],
-  [
-    "Color_Color#function_every",
-    "Color.every",
-    "Function",
-    8
-  ],
-  [
-    "Color_Color#function_fill",
-    "Color.fill",
-    "Function",
-    8
-  ],
-  [
-    "Color_Color#function_filter",
-    "Color.filter",
-    "Function",
-    8
-  ],
-  [
-    "Color_Color#function_find",
-    "Color.find",
-    "Function",
-    8
-  ],
-  [
-    "Color_Color#function_findIndex",
-    "Color.findIndex",
-    "Function",
-    8
-  ],
-  [
-    "Color_Color#function_forEach",
-    "Color.forEach",
-    "Function",
-    8
-  ],
-  [
     "Color_Color#function_from",
     "Color.from",
     "Function",
@@ -1182,26 +1278,8 @@
     8
   ],
   [
-    "Color_Color#function_indexOf",
-    "Color.indexOf",
-    "Function",
-    8
-  ],
-  [
-    "Color_Color#function_join",
-    "Color.join",
-    "Function",
-    8
-  ],
-  [
     "Color_Color#function_lab",
     "Color.lab",
-    "Function",
-    8
-  ],
-  [
-    "Color_Color#function_lastIndexOf",
-    "Color.lastIndexOf",
     "Function",
     8
   ],
@@ -1224,80 +1302,14 @@
     8
   ],
   [
-    "Color_Color#function_map",
-    "Color.map",
-    "Function",
-    8
-  ],
-  [
     "Color_Color#function_maxValues",
     "Color.maxValues",
     "Function",
     8
   ],
   [
-    "Color_Color#function_reduce",
-    "Color.reduce",
-    "Function",
-    8
-  ],
-  [
-    "Color_Color#function_reduceRight",
-    "Color.reduceRight",
-    "Function",
-    8
-  ],
-  [
-    "Color_Color#function_reverse",
-    "Color.reverse",
-    "Function",
-    8
-  ],
-  [
     "Color_Color#function_rgb",
     "Color.rgb",
-    "Function",
-    8
-  ],
-  [
-    "Color_Color#function_set",
-    "Color.set",
-    "Function",
-    8
-  ],
-  [
-    "Color_Color#function_slice",
-    "Color.slice",
-    "Function",
-    8
-  ],
-  [
-    "Color_Color#function_some",
-    "Color.some",
-    "Function",
-    8
-  ],
-  [
-    "Color_Color#function_sort",
-    "Color.sort",
-    "Function",
-    8
-  ],
-  [
-    "Color_Color#function_subarray",
-    "Color.subarray",
-    "Function",
-    8
-  ],
-  [
-    "Color_Color#function_toLocaleString",
-    "Color.toLocaleString",
-    "Function",
-    8
-  ],
-  [
-    "Color_Color#function_toString",
-    "Color.toString",
     "Function",
     8
   ],
@@ -1482,6 +1494,18 @@
     8
   ],
   [
+    "Create_Delaunay#function_concat",
+    "Delaunay.concat",
+    "Function",
+    8
+  ],
+  [
+    "Create_Delaunay#function_copyWithin",
+    "Delaunay.copyWithin",
+    "Function",
+    8
+  ],
+  [
     "Create_Delaunay#function_delaunay",
     "Delaunay.delaunay",
     "Function",
@@ -1494,8 +1518,56 @@
     8
   ],
   [
+    "Create_Delaunay#function_entries",
+    "Delaunay.entries",
+    "Function",
+    8
+  ],
+  [
+    "Create_Delaunay#function_every",
+    "Delaunay.every",
+    "Function",
+    8
+  ],
+  [
+    "Create_Delaunay#function_fill",
+    "Delaunay.fill",
+    "Function",
+    8
+  ],
+  [
+    "Create_Delaunay#function_filter",
+    "Delaunay.filter",
+    "Function",
+    8
+  ],
+  [
+    "Create_Delaunay#function_find",
+    "Delaunay.find",
+    "Function",
+    8
+  ],
+  [
+    "Create_Delaunay#function_findIndex",
+    "Delaunay.findIndex",
+    "Function",
+    8
+  ],
+  [
+    "Create_Delaunay#function_forEach",
+    "Delaunay.forEach",
+    "Function",
+    8
+  ],
+  [
     "Create_Delaunay#function_forEachPt",
     "Delaunay.forEachPt",
+    "Function",
+    8
+  ],
+  [
+    "Create_Delaunay#function_indexOf",
+    "Delaunay.indexOf",
     "Function",
     8
   ],
@@ -1512,8 +1584,32 @@
     8
   ],
   [
+    "Create_Delaunay#function_join",
+    "Delaunay.join",
+    "Function",
+    8
+  ],
+  [
+    "Create_Delaunay#function_keys",
+    "Delaunay.keys",
+    "Function",
+    8
+  ],
+  [
+    "Create_Delaunay#function_lastIndexOf",
+    "Delaunay.lastIndexOf",
+    "Function",
+    8
+  ],
+  [
     "Create_Delaunay#function_lines",
     "Delaunay.lines",
+    "Function",
+    8
+  ],
+  [
+    "Create_Delaunay#function_map",
+    "Delaunay.map",
     "Function",
     8
   ],
@@ -1566,6 +1662,30 @@
     8
   ],
   [
+    "Create_Delaunay#function_pop",
+    "Delaunay.pop",
+    "Function",
+    8
+  ],
+  [
+    "Create_Delaunay#function_push",
+    "Delaunay.push",
+    "Function",
+    8
+  ],
+  [
+    "Create_Delaunay#function_reduce",
+    "Delaunay.reduce",
+    "Function",
+    8
+  ],
+  [
+    "Create_Delaunay#function_reduceRight",
+    "Delaunay.reduceRight",
+    "Function",
+    8
+  ],
+  [
     "Create_Delaunay#function_reflect2D",
     "Delaunay.reflect2D",
     "Function",
@@ -1574,6 +1694,12 @@
   [
     "Create_Delaunay#function_remove",
     "Delaunay.remove",
+    "Function",
+    8
+  ],
+  [
+    "Create_Delaunay#function_reverse",
+    "Delaunay.reverse",
     "Function",
     8
   ],
@@ -1602,132 +1728,6 @@
     8
   ],
   [
-    "Create_Delaunay#function_sortByDimension",
-    "Delaunay.sortByDimension",
-    "Function",
-    8
-  ],
-  [
-    "Create_Delaunay#function_split",
-    "Delaunay.split",
-    "Function",
-    8
-  ],
-  [
-    "Create_Delaunay#function_subtract",
-    "Delaunay.subtract",
-    "Function",
-    8
-  ],
-  [
-    "Create_Delaunay#function_toString",
-    "Delaunay.toString",
-    "Function",
-    8
-  ],
-  [
-    "Create_Delaunay#function_voronoi",
-    "Delaunay.voronoi",
-    "Function",
-    8
-  ],
-  [
-    "Create_Delaunay#function_zipSlice",
-    "Delaunay.zipSlice",
-    "Function",
-    8
-  ],
-  [
-    "Create_Delaunay#function_concat",
-    "Delaunay.concat",
-    "Function",
-    8
-  ],
-  [
-    "Create_Delaunay#function_every",
-    "Delaunay.every",
-    "Function",
-    8
-  ],
-  [
-    "Create_Delaunay#function_filter",
-    "Delaunay.filter",
-    "Function",
-    8
-  ],
-  [
-    "Create_Delaunay#function_forEach",
-    "Delaunay.forEach",
-    "Function",
-    8
-  ],
-  [
-    "Create_Delaunay#function_fromArray",
-    "Delaunay.fromArray",
-    "Function",
-    8
-  ],
-  [
-    "Create_Delaunay#function_fromPtArray",
-    "Delaunay.fromPtArray",
-    "Function",
-    8
-  ],
-  [
-    "Create_Delaunay#function_indexOf",
-    "Delaunay.indexOf",
-    "Function",
-    8
-  ],
-  [
-    "Create_Delaunay#function_join",
-    "Delaunay.join",
-    "Function",
-    8
-  ],
-  [
-    "Create_Delaunay#function_lastIndexOf",
-    "Delaunay.lastIndexOf",
-    "Function",
-    8
-  ],
-  [
-    "Create_Delaunay#function_map",
-    "Delaunay.map",
-    "Function",
-    8
-  ],
-  [
-    "Create_Delaunay#function_pop",
-    "Delaunay.pop",
-    "Function",
-    8
-  ],
-  [
-    "Create_Delaunay#function_push",
-    "Delaunay.push",
-    "Function",
-    8
-  ],
-  [
-    "Create_Delaunay#function_reduce",
-    "Delaunay.reduce",
-    "Function",
-    8
-  ],
-  [
-    "Create_Delaunay#function_reduceRight",
-    "Delaunay.reduceRight",
-    "Function",
-    8
-  ],
-  [
-    "Create_Delaunay#function_reverse",
-    "Delaunay.reverse",
-    "Function",
-    8
-  ],
-  [
     "Create_Delaunay#function_shift",
     "Delaunay.shift",
     "Function",
@@ -1752,8 +1752,26 @@
     8
   ],
   [
+    "Create_Delaunay#function_sortByDimension",
+    "Delaunay.sortByDimension",
+    "Function",
+    8
+  ],
+  [
     "Create_Delaunay#function_splice",
     "Delaunay.splice",
+    "Function",
+    8
+  ],
+  [
+    "Create_Delaunay#function_split",
+    "Delaunay.split",
+    "Function",
+    8
+  ],
+  [
+    "Create_Delaunay#function_subtract",
+    "Delaunay.subtract",
     "Function",
     8
   ],
@@ -1776,6 +1794,36 @@
     8
   ],
   [
+    "Create_Delaunay#function_values",
+    "Delaunay.values",
+    "Function",
+    8
+  ],
+  [
+    "Create_Delaunay#function_voronoi",
+    "Delaunay.voronoi",
+    "Function",
+    8
+  ],
+  [
+    "Create_Delaunay#function_zipSlice",
+    "Delaunay.zipSlice",
+    "Function",
+    8
+  ],
+  [
+    "Create_Delaunay#function_fromArray",
+    "Delaunay.fromArray",
+    "Function",
+    8
+  ],
+  [
+    "Create_Delaunay#function_fromPtArray",
+    "Delaunay.fromPtArray",
+    "Function",
+    8
+  ],
+  [
     "Create_Delaunay",
     "Delaunay",
     "Class",
@@ -1786,12 +1834,6 @@
     "Noise.constructor",
     "Constructor",
     10
-  ],
-  [
-    "Create_Noise#property_perm",
-    "Noise.perm",
-    "Variable",
-    0
   ],
   [
     "Create_Noise#property_BYTES_PER_ELEMENT",
@@ -1820,6 +1862,12 @@
   [
     "Create_Noise#property_length",
     "Noise.length",
+    "Variable",
+    0
+  ],
+  [
+    "Create_Noise#property_perm",
+    "Noise.perm",
     "Variable",
     0
   ],
@@ -1992,6 +2040,12 @@
     8
   ],
   [
+    "Create_Noise#function_copyWithin",
+    "Noise.copyWithin",
+    "Function",
+    8
+  ],
+  [
     "Create_Noise#function_divide",
     "Noise.divide",
     "Function",
@@ -2004,8 +2058,44 @@
     8
   ],
   [
+    "Create_Noise#function_entries",
+    "Noise.entries",
+    "Function",
+    8
+  ],
+  [
     "Create_Noise#function_equals",
     "Noise.equals",
+    "Function",
+    8
+  ],
+  [
+    "Create_Noise#function_every",
+    "Noise.every",
+    "Function",
+    8
+  ],
+  [
+    "Create_Noise#function_fill",
+    "Noise.fill",
+    "Function",
+    8
+  ],
+  [
+    "Create_Noise#function_filter",
+    "Noise.filter",
+    "Function",
+    8
+  ],
+  [
+    "Create_Noise#function_find",
+    "Noise.find",
+    "Function",
+    8
+  ],
+  [
+    "Create_Noise#function_findIndex",
+    "Noise.findIndex",
     "Function",
     8
   ],
@@ -2016,8 +2106,38 @@
     8
   ],
   [
+    "Create_Noise#function_forEach",
+    "Noise.forEach",
+    "Function",
+    8
+  ],
+  [
+    "Create_Noise#function_indexOf",
+    "Noise.indexOf",
+    "Function",
+    8
+  ],
+  [
     "Create_Noise#function_initNoise",
     "Noise.initNoise",
+    "Function",
+    8
+  ],
+  [
+    "Create_Noise#function_join",
+    "Noise.join",
+    "Function",
+    8
+  ],
+  [
+    "Create_Noise#function_keys",
+    "Noise.keys",
+    "Function",
+    8
+  ],
+  [
+    "Create_Noise#function_lastIndexOf",
+    "Noise.lastIndexOf",
     "Function",
     8
   ],
@@ -2030,6 +2150,12 @@
   [
     "Create_Noise#function_magnitudeSq",
     "Noise.magnitudeSq",
+    "Function",
+    8
+  ],
+  [
+    "Create_Noise#function_map",
+    "Noise.map",
     "Function",
     8
   ],
@@ -2076,8 +2202,26 @@
     8
   ],
   [
+    "Create_Noise#function_reduce",
+    "Noise.reduce",
+    "Function",
+    8
+  ],
+  [
+    "Create_Noise#function_reduceRight",
+    "Noise.reduceRight",
+    "Function",
+    8
+  ],
+  [
     "Create_Noise#function_reflect2D",
     "Noise.reflect2D",
+    "Function",
+    8
+  ],
+  [
+    "Create_Noise#function_reverse",
+    "Noise.reverse",
     "Function",
     8
   ],
@@ -2106,14 +2250,44 @@
     8
   ],
   [
+    "Create_Noise#function_set",
+    "Noise.set",
+    "Function",
+    8
+  ],
+  [
     "Create_Noise#function_shear2D",
     "Noise.shear2D",
     "Function",
     8
   ],
   [
+    "Create_Noise#function_slice",
+    "Noise.slice",
+    "Function",
+    8
+  ],
+  [
+    "Create_Noise#function_some",
+    "Noise.some",
+    "Function",
+    8
+  ],
+  [
+    "Create_Noise#function_sort",
+    "Noise.sort",
+    "Function",
+    8
+  ],
+  [
     "Create_Noise#function_step",
     "Noise.step",
+    "Function",
+    8
+  ],
+  [
+    "Create_Noise#function_subarray",
+    "Noise.subarray",
     "Function",
     8
   ],
@@ -2142,6 +2316,12 @@
     8
   ],
   [
+    "Create_Noise#function_toLocaleString",
+    "Noise.toLocaleString",
+    "Function",
+    8
+  ],
+  [
     "Create_Noise#function_toString",
     "Noise.toString",
     "Function",
@@ -2154,134 +2334,14 @@
     8
   ],
   [
-    "Create_Noise#function_copyWithin",
-    "Noise.copyWithin",
-    "Function",
-    8
-  ],
-  [
-    "Create_Noise#function_every",
-    "Noise.every",
-    "Function",
-    8
-  ],
-  [
-    "Create_Noise#function_fill",
-    "Noise.fill",
-    "Function",
-    8
-  ],
-  [
-    "Create_Noise#function_filter",
-    "Noise.filter",
-    "Function",
-    8
-  ],
-  [
-    "Create_Noise#function_find",
-    "Noise.find",
-    "Function",
-    8
-  ],
-  [
-    "Create_Noise#function_findIndex",
-    "Noise.findIndex",
-    "Function",
-    8
-  ],
-  [
-    "Create_Noise#function_forEach",
-    "Noise.forEach",
-    "Function",
-    8
-  ],
-  [
-    "Create_Noise#function_indexOf",
-    "Noise.indexOf",
-    "Function",
-    8
-  ],
-  [
-    "Create_Noise#function_join",
-    "Noise.join",
-    "Function",
-    8
-  ],
-  [
-    "Create_Noise#function_lastIndexOf",
-    "Noise.lastIndexOf",
+    "Create_Noise#function_values",
+    "Noise.values",
     "Function",
     8
   ],
   [
     "Create_Noise#function_make",
     "Noise.make",
-    "Function",
-    8
-  ],
-  [
-    "Create_Noise#function_map",
-    "Noise.map",
-    "Function",
-    8
-  ],
-  [
-    "Create_Noise#function_reduce",
-    "Noise.reduce",
-    "Function",
-    8
-  ],
-  [
-    "Create_Noise#function_reduceRight",
-    "Noise.reduceRight",
-    "Function",
-    8
-  ],
-  [
-    "Create_Noise#function_reverse",
-    "Noise.reverse",
-    "Function",
-    8
-  ],
-  [
-    "Create_Noise#function_set",
-    "Noise.set",
-    "Function",
-    8
-  ],
-  [
-    "Create_Noise#function_slice",
-    "Noise.slice",
-    "Function",
-    8
-  ],
-  [
-    "Create_Noise#function_some",
-    "Noise.some",
-    "Function",
-    8
-  ],
-  [
-    "Create_Noise#function_sort",
-    "Noise.sort",
-    "Function",
-    8
-  ],
-  [
-    "Create_Noise#function_subarray",
-    "Noise.subarray",
-    "Function",
-    8
-  ],
-  [
-    "Create_Noise#function_toLocaleString",
-    "Noise.toLocaleString",
-    "Function",
-    8
-  ],
-  [
-    "Create_Noise#function_toString",
-    "Noise.toString",
     "Function",
     8
   ],
@@ -4650,14 +4710,74 @@
     8
   ],
   [
+    "Physics_Body#function_concat",
+    "Body.concat",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Body#function_copyWithin",
+    "Body.copyWithin",
+    "Function",
+    8
+  ],
+  [
     "Physics_Body#function_divide",
     "Body.divide",
     "Function",
     8
   ],
   [
+    "Physics_Body#function_entries",
+    "Body.entries",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Body#function_every",
+    "Body.every",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Body#function_fill",
+    "Body.fill",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Body#function_filter",
+    "Body.filter",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Body#function_find",
+    "Body.find",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Body#function_findIndex",
+    "Body.findIndex",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Body#function_forEach",
+    "Body.forEach",
+    "Function",
+    8
+  ],
+  [
     "Physics_Body#function_forEachPt",
     "Body.forEachPt",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Body#function_indexOf",
+    "Body.indexOf",
     "Function",
     8
   ],
@@ -4676,6 +4796,24 @@
   [
     "Physics_Body#function_interpolate",
     "Body.interpolate",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Body#function_join",
+    "Body.join",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Body#function_keys",
+    "Body.keys",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Body#function_lastIndexOf",
+    "Body.lastIndexOf",
     "Function",
     8
   ],
@@ -4700,6 +4838,12 @@
   [
     "Physics_Body#function_linksToLines",
     "Body.linksToLines",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Body#function_map",
+    "Body.map",
     "Function",
     8
   ],
@@ -4734,6 +4878,12 @@
     8
   ],
   [
+    "Physics_Body#function_pop",
+    "Body.pop",
+    "Function",
+    8
+  ],
+  [
     "Physics_Body#function_processBody",
     "Body.processBody",
     "Function",
@@ -4752,6 +4902,24 @@
     8
   ],
   [
+    "Physics_Body#function_push",
+    "Body.push",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Body#function_reduce",
+    "Body.reduce",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Body#function_reduceRight",
+    "Body.reduceRight",
+    "Function",
+    8
+  ],
+  [
     "Physics_Body#function_reflect2D",
     "Body.reflect2D",
     "Function",
@@ -4760,6 +4928,12 @@
   [
     "Physics_Body#function_remove",
     "Body.remove",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Body#function_reverse",
+    "Body.reverse",
     "Function",
     8
   ],
@@ -4788,132 +4962,6 @@
     8
   ],
   [
-    "Physics_Body#function_sortByDimension",
-    "Body.sortByDimension",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Body#function_split",
-    "Body.split",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Body#function_subtract",
-    "Body.subtract",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Body#function_toString",
-    "Body.toString",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Body#function_zipSlice",
-    "Body.zipSlice",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Body#function_concat",
-    "Body.concat",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Body#function_every",
-    "Body.every",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Body#function_filter",
-    "Body.filter",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Body#function_forEach",
-    "Body.forEach",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Body#function_fromArray",
-    "Body.fromArray",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Body#function_fromGroup",
-    "Body.fromGroup",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Body#function_fromPtArray",
-    "Body.fromPtArray",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Body#function_indexOf",
-    "Body.indexOf",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Body#function_join",
-    "Body.join",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Body#function_lastIndexOf",
-    "Body.lastIndexOf",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Body#function_map",
-    "Body.map",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Body#function_pop",
-    "Body.pop",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Body#function_push",
-    "Body.push",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Body#function_reduce",
-    "Body.reduce",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Body#function_reduceRight",
-    "Body.reduceRight",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Body#function_reverse",
-    "Body.reverse",
-    "Function",
-    8
-  ],
-  [
     "Physics_Body#function_shift",
     "Body.shift",
     "Function",
@@ -4938,8 +4986,26 @@
     8
   ],
   [
+    "Physics_Body#function_sortByDimension",
+    "Body.sortByDimension",
+    "Function",
+    8
+  ],
+  [
     "Physics_Body#function_splice",
     "Body.splice",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Body#function_split",
+    "Body.split",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Body#function_subtract",
+    "Body.subtract",
     "Function",
     8
   ],
@@ -4958,6 +5024,36 @@
   [
     "Physics_Body#function_unshift",
     "Body.unshift",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Body#function_values",
+    "Body.values",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Body#function_zipSlice",
+    "Body.zipSlice",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Body#function_fromArray",
+    "Body.fromArray",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Body#function_fromGroup",
+    "Body.fromGroup",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Body#function_fromPtArray",
+    "Body.fromPtArray",
     "Function",
     8
   ],
@@ -5232,6 +5328,12 @@
     8
   ],
   [
+    "Physics_Particle#function_copyWithin",
+    "Particle.copyWithin",
+    "Function",
+    8
+  ],
+  [
     "Physics_Particle#function_divide",
     "Particle.divide",
     "Function",
@@ -5244,8 +5346,44 @@
     8
   ],
   [
+    "Physics_Particle#function_entries",
+    "Particle.entries",
+    "Function",
+    8
+  ],
+  [
     "Physics_Particle#function_equals",
     "Particle.equals",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Particle#function_every",
+    "Particle.every",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Particle#function_fill",
+    "Particle.fill",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Particle#function_filter",
+    "Particle.filter",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Particle#function_find",
+    "Particle.find",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Particle#function_findIndex",
+    "Particle.findIndex",
     "Function",
     8
   ],
@@ -5256,8 +5394,38 @@
     8
   ],
   [
+    "Physics_Particle#function_forEach",
+    "Particle.forEach",
+    "Function",
+    8
+  ],
+  [
     "Physics_Particle#function_hit",
     "Particle.hit",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Particle#function_indexOf",
+    "Particle.indexOf",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Particle#function_join",
+    "Particle.join",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Particle#function_keys",
+    "Particle.keys",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Particle#function_lastIndexOf",
+    "Particle.lastIndexOf",
     "Function",
     8
   ],
@@ -5270,6 +5438,12 @@
   [
     "Physics_Particle#function_magnitudeSq",
     "Particle.magnitudeSq",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Particle#function_map",
+    "Particle.map",
     "Function",
     8
   ],
@@ -5310,8 +5484,26 @@
     8
   ],
   [
+    "Physics_Particle#function_reduce",
+    "Particle.reduce",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Particle#function_reduceRight",
+    "Particle.reduceRight",
+    "Function",
+    8
+  ],
+  [
     "Physics_Particle#function_reflect2D",
     "Particle.reflect2D",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Particle#function_reverse",
+    "Particle.reverse",
     "Function",
     8
   ],
@@ -5334,6 +5526,12 @@
     8
   ],
   [
+    "Physics_Particle#function_set",
+    "Particle.set",
+    "Function",
+    8
+  ],
+  [
     "Physics_Particle#function_shear2D",
     "Particle.shear2D",
     "Function",
@@ -5342,144 +5540,6 @@
   [
     "Physics_Particle#function_size",
     "Particle.size",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Particle#function_subtract",
-    "Particle.subtract",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Particle#function_to",
-    "Particle.to",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Particle#function_toAngle",
-    "Particle.toAngle",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Particle#function_toArray",
-    "Particle.toArray",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Particle#function_toString",
-    "Particle.toString",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Particle#function_unit",
-    "Particle.unit",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Particle#function_verlet",
-    "Particle.verlet",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Particle#function_copyWithin",
-    "Particle.copyWithin",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Particle#function_every",
-    "Particle.every",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Particle#function_fill",
-    "Particle.fill",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Particle#function_filter",
-    "Particle.filter",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Particle#function_find",
-    "Particle.find",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Particle#function_findIndex",
-    "Particle.findIndex",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Particle#function_forEach",
-    "Particle.forEach",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Particle#function_indexOf",
-    "Particle.indexOf",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Particle#function_join",
-    "Particle.join",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Particle#function_lastIndexOf",
-    "Particle.lastIndexOf",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Particle#function_make",
-    "Particle.make",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Particle#function_map",
-    "Particle.map",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Particle#function_reduce",
-    "Particle.reduce",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Particle#function_reduceRight",
-    "Particle.reduceRight",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Particle#function_reverse",
-    "Particle.reverse",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Particle#function_set",
-    "Particle.set",
     "Function",
     8
   ],
@@ -5508,6 +5568,30 @@
     8
   ],
   [
+    "Physics_Particle#function_subtract",
+    "Particle.subtract",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Particle#function_to",
+    "Particle.to",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Particle#function_toAngle",
+    "Particle.toAngle",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Particle#function_toArray",
+    "Particle.toArray",
+    "Function",
+    8
+  ],
+  [
     "Physics_Particle#function_toLocaleString",
     "Particle.toLocaleString",
     "Function",
@@ -5516,6 +5600,30 @@
   [
     "Physics_Particle#function_toString",
     "Particle.toString",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Particle#function_unit",
+    "Particle.unit",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Particle#function_values",
+    "Particle.values",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Particle#function_verlet",
+    "Particle.verlet",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Particle#function_make",
+    "Particle.make",
     "Function",
     8
   ],
@@ -5534,6 +5642,12 @@
   [
     "Physics_World#accessor_bodyCount",
     "World.bodyCount",
+    "Accessor",
+    6
+  ],
+  [
+    "Physics_World#accessor_bound",
+    "World.bound",
     "Accessor",
     6
   ],
@@ -5832,14 +5946,74 @@
     8
   ],
   [
+    "Pt_Bound#function_concat",
+    "Bound.concat",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Bound#function_copyWithin",
+    "Bound.copyWithin",
+    "Function",
+    8
+  ],
+  [
     "Pt_Bound#function_divide",
     "Bound.divide",
     "Function",
     8
   ],
   [
+    "Pt_Bound#function_entries",
+    "Bound.entries",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Bound#function_every",
+    "Bound.every",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Bound#function_fill",
+    "Bound.fill",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Bound#function_filter",
+    "Bound.filter",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Bound#function_find",
+    "Bound.find",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Bound#function_findIndex",
+    "Bound.findIndex",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Bound#function_forEach",
+    "Bound.forEach",
+    "Function",
+    8
+  ],
+  [
     "Pt_Bound#function_forEachPt",
     "Bound.forEachPt",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Bound#function_indexOf",
+    "Bound.indexOf",
     "Function",
     8
   ],
@@ -5862,8 +6036,32 @@
     8
   ],
   [
+    "Pt_Bound#function_join",
+    "Bound.join",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Bound#function_keys",
+    "Bound.keys",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Bound#function_lastIndexOf",
+    "Bound.lastIndexOf",
+    "Function",
+    8
+  ],
+  [
     "Pt_Bound#function_lines",
     "Bound.lines",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Bound#function_map",
+    "Bound.map",
     "Function",
     8
   ],
@@ -5898,6 +6096,30 @@
     8
   ],
   [
+    "Pt_Bound#function_pop",
+    "Bound.pop",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Bound#function_push",
+    "Bound.push",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Bound#function_reduce",
+    "Bound.reduce",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Bound#function_reduceRight",
+    "Bound.reduceRight",
+    "Function",
+    8
+  ],
+  [
     "Pt_Bound#function_reflect2D",
     "Bound.reflect2D",
     "Function",
@@ -5906,6 +6128,12 @@
   [
     "Pt_Bound#function_remove",
     "Bound.remove",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Bound#function_reverse",
+    "Bound.reverse",
     "Function",
     8
   ],
@@ -5934,8 +6162,38 @@
     8
   ],
   [
+    "Pt_Bound#function_shift",
+    "Bound.shift",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Bound#function_slice",
+    "Bound.slice",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Bound#function_some",
+    "Bound.some",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Bound#function_sort",
+    "Bound.sort",
+    "Function",
+    8
+  ],
+  [
     "Pt_Bound#function_sortByDimension",
     "Bound.sortByDimension",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Bound#function_splice",
+    "Bound.splice",
     "Function",
     8
   ],
@@ -5952,8 +6210,20 @@
     8
   ],
   [
+    "Pt_Bound#function_toLocaleString",
+    "Bound.toLocaleString",
+    "Function",
+    8
+  ],
+  [
     "Pt_Bound#function_toString",
     "Bound.toString",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Bound#function_unshift",
+    "Bound.unshift",
     "Function",
     8
   ],
@@ -5964,32 +6234,14 @@
     8
   ],
   [
+    "Pt_Bound#function_values",
+    "Bound.values",
+    "Function",
+    8
+  ],
+  [
     "Pt_Bound#function_zipSlice",
     "Bound.zipSlice",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Bound#function_concat",
-    "Bound.concat",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Bound#function_every",
-    "Bound.every",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Bound#function_filter",
-    "Bound.filter",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Bound#function_forEach",
-    "Bound.forEach",
     "Function",
     8
   ],
@@ -6018,108 +6270,6 @@
     8
   ],
   [
-    "Pt_Bound#function_indexOf",
-    "Bound.indexOf",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Bound#function_join",
-    "Bound.join",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Bound#function_lastIndexOf",
-    "Bound.lastIndexOf",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Bound#function_map",
-    "Bound.map",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Bound#function_pop",
-    "Bound.pop",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Bound#function_push",
-    "Bound.push",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Bound#function_reduce",
-    "Bound.reduce",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Bound#function_reduceRight",
-    "Bound.reduceRight",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Bound#function_reverse",
-    "Bound.reverse",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Bound#function_shift",
-    "Bound.shift",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Bound#function_slice",
-    "Bound.slice",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Bound#function_some",
-    "Bound.some",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Bound#function_sort",
-    "Bound.sort",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Bound#function_splice",
-    "Bound.splice",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Bound#function_toLocaleString",
-    "Bound.toLocaleString",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Bound#function_toString",
-    "Bound.toString",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Bound#function_unshift",
-    "Bound.unshift",
-    "Function",
-    8
-  ],
-  [
     "Pt_Bound",
     "Bound",
     "Class",
@@ -6132,14 +6282,14 @@
     10
   ],
   [
-    "Pt_Group#property_Array",
-    "Group.Array",
+    "Pt_Group#property_length",
+    "Group.length",
     "Variable",
     0
   ],
   [
-    "Pt_Group#property_length",
-    "Group.length",
+    "Pt_Group#property_Array",
+    "Group.Array",
     "Variable",
     0
   ],
@@ -6252,132 +6402,6 @@
     8
   ],
   [
-    "Pt_Group#function_divide",
-    "Group.divide",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Group#function_forEachPt",
-    "Group.forEachPt",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Group#function_insert",
-    "Group.insert",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Group#function_interpolate",
-    "Group.interpolate",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Group#function_lines",
-    "Group.lines",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Group#function_moveBy",
-    "Group.moveBy",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Group#function_moveTo",
-    "Group.moveTo",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Group#function_multiply",
-    "Group.multiply",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Group#function_op",
-    "Group.op",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Group#function_ops",
-    "Group.ops",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Group#function_reflect2D",
-    "Group.reflect2D",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Group#function_remove",
-    "Group.remove",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Group#function_rotate2D",
-    "Group.rotate2D",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Group#function_scale",
-    "Group.scale",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Group#function_segments",
-    "Group.segments",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Group#function_shear2D",
-    "Group.shear2D",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Group#function_sortByDimension",
-    "Group.sortByDimension",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Group#function_split",
-    "Group.split",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Group#function_subtract",
-    "Group.subtract",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Group#function_toString",
-    "Group.toString",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Group#function_zipSlice",
-    "Group.zipSlice",
-    "Function",
-    8
-  ],
-  [
     "Pt_Group#function_concat",
     "Group.concat",
     "Function",
@@ -6386,6 +6410,12 @@
   [
     "Pt_Group#function_copyWithin",
     "Group.copyWithin",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Group#function_divide",
+    "Group.divide",
     "Function",
     8
   ],
@@ -6432,20 +6462,26 @@
     8
   ],
   [
-    "Pt_Group#function_fromArray",
-    "Group.fromArray",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Group#function_fromPtArray",
-    "Group.fromPtArray",
+    "Pt_Group#function_forEachPt",
+    "Group.forEachPt",
     "Function",
     8
   ],
   [
     "Pt_Group#function_indexOf",
     "Group.indexOf",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Group#function_insert",
+    "Group.insert",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Group#function_interpolate",
+    "Group.interpolate",
     "Function",
     8
   ],
@@ -6468,8 +6504,44 @@
     8
   ],
   [
+    "Pt_Group#function_lines",
+    "Group.lines",
+    "Function",
+    8
+  ],
+  [
     "Pt_Group#function_map",
     "Group.map",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Group#function_moveBy",
+    "Group.moveBy",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Group#function_moveTo",
+    "Group.moveTo",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Group#function_multiply",
+    "Group.multiply",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Group#function_op",
+    "Group.op",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Group#function_ops",
+    "Group.ops",
     "Function",
     8
   ],
@@ -6498,8 +6570,44 @@
     8
   ],
   [
+    "Pt_Group#function_reflect2D",
+    "Group.reflect2D",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Group#function_remove",
+    "Group.remove",
+    "Function",
+    8
+  ],
+  [
     "Pt_Group#function_reverse",
     "Group.reverse",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Group#function_rotate2D",
+    "Group.rotate2D",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Group#function_scale",
+    "Group.scale",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Group#function_segments",
+    "Group.segments",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Group#function_shear2D",
+    "Group.shear2D",
     "Function",
     8
   ],
@@ -6528,8 +6636,26 @@
     8
   ],
   [
+    "Pt_Group#function_sortByDimension",
+    "Group.sortByDimension",
+    "Function",
+    8
+  ],
+  [
     "Pt_Group#function_splice",
     "Group.splice",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Group#function_split",
+    "Group.split",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Group#function_subtract",
+    "Group.subtract",
     "Function",
     8
   ],
@@ -6558,6 +6684,24 @@
     8
   ],
   [
+    "Pt_Group#function_zipSlice",
+    "Group.zipSlice",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Group#function_fromArray",
+    "Group.fromArray",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Group#function_fromPtArray",
+    "Group.fromPtArray",
+    "Function",
+    8
+  ],
+  [
     "Pt_Group",
     "Group",
     "Class",
@@ -6572,12 +6716,6 @@
   [
     "Pt_Pt#property_BYTES_PER_ELEMENT",
     "Pt.BYTES_PER_ELEMENT",
-    "Variable",
-    0
-  ],
-  [
-    "Pt_Pt#property_Float32Array",
-    "Pt.Float32Array",
     "Variable",
     0
   ],
@@ -6602,6 +6740,12 @@
   [
     "Pt_Pt#property_length",
     "Pt.length",
+    "Variable",
+    0
+  ],
+  [
+    "Pt_Pt#property_Float32Array",
+    "Pt.Float32Array",
     "Variable",
     0
   ],
@@ -6774,6 +6918,12 @@
     8
   ],
   [
+    "Pt_Pt#function_copyWithin",
+    "Pt.copyWithin",
+    "Function",
+    8
+  ],
+  [
     "Pt_Pt#function_divide",
     "Pt.divide",
     "Function",
@@ -6786,14 +6936,80 @@
     8
   ],
   [
+    "Pt_Pt#function_entries",
+    "Pt.entries",
+    "Function",
+    8
+  ],
+  [
     "Pt_Pt#function_equals",
     "Pt.equals",
     "Function",
     8
   ],
   [
+    "Pt_Pt#function_every",
+    "Pt.every",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Pt#function_fill",
+    "Pt.fill",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Pt#function_filter",
+    "Pt.filter",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Pt#function_find",
+    "Pt.find",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Pt#function_findIndex",
+    "Pt.findIndex",
+    "Function",
+    8
+  ],
+  [
     "Pt_Pt#function_floor",
     "Pt.floor",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Pt#function_forEach",
+    "Pt.forEach",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Pt#function_indexOf",
+    "Pt.indexOf",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Pt#function_join",
+    "Pt.join",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Pt#function_keys",
+    "Pt.keys",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Pt#function_lastIndexOf",
+    "Pt.lastIndexOf",
     "Function",
     8
   ],
@@ -6806,6 +7022,12 @@
   [
     "Pt_Pt#function_magnitudeSq",
     "Pt.magnitudeSq",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Pt#function_map",
+    "Pt.map",
     "Function",
     8
   ],
@@ -6846,8 +7068,26 @@
     8
   ],
   [
+    "Pt_Pt#function_reduce",
+    "Pt.reduce",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Pt#function_reduceRight",
+    "Pt.reduceRight",
+    "Function",
+    8
+  ],
+  [
     "Pt_Pt#function_reflect2D",
     "Pt.reflect2D",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Pt#function_reverse",
+    "Pt.reverse",
     "Function",
     8
   ],
@@ -6870,152 +7110,14 @@
     8
   ],
   [
-    "Pt_Pt#function_shear2D",
-    "Pt.shear2D",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Pt#function_subtract",
-    "Pt.subtract",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Pt#function_to",
-    "Pt.to",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Pt#function_toAngle",
-    "Pt.toAngle",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Pt#function_toArray",
-    "Pt.toArray",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Pt#function_toString",
-    "Pt.toString",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Pt#function_unit",
-    "Pt.unit",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Pt#function_copyWithin",
-    "Pt.copyWithin",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Pt#function_entries",
-    "Pt.entries",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Pt#function_every",
-    "Pt.every",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Pt#function_fill",
-    "Pt.fill",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Pt#function_filter",
-    "Pt.filter",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Pt#function_find",
-    "Pt.find",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Pt#function_findIndex",
-    "Pt.findIndex",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Pt#function_forEach",
-    "Pt.forEach",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Pt#function_indexOf",
-    "Pt.indexOf",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Pt#function_join",
-    "Pt.join",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Pt#function_keys",
-    "Pt.keys",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Pt#function_lastIndexOf",
-    "Pt.lastIndexOf",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Pt#function_make",
-    "Pt.make",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Pt#function_map",
-    "Pt.map",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Pt#function_reduce",
-    "Pt.reduce",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Pt#function_reduceRight",
-    "Pt.reduceRight",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Pt#function_reverse",
-    "Pt.reverse",
-    "Function",
-    8
-  ],
-  [
     "Pt_Pt#function_set",
     "Pt.set",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Pt#function_shear2D",
+    "Pt.shear2D",
     "Function",
     8
   ],
@@ -7044,6 +7146,30 @@
     8
   ],
   [
+    "Pt_Pt#function_subtract",
+    "Pt.subtract",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Pt#function_to",
+    "Pt.to",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Pt#function_toAngle",
+    "Pt.toAngle",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Pt#function_toArray",
+    "Pt.toArray",
+    "Function",
+    8
+  ],
+  [
     "Pt_Pt#function_toLocaleString",
     "Pt.toLocaleString",
     "Function",
@@ -7056,8 +7182,20 @@
     8
   ],
   [
+    "Pt_Pt#function_unit",
+    "Pt.unit",
+    "Function",
+    8
+  ],
+  [
     "Pt_Pt#function_values",
     "Pt.values",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Pt#function_make",
+    "Pt.make",
     "Function",
     8
   ],
@@ -8130,14 +8268,20 @@
     0
   ],
   [
-    "Types_PtsCanvasRenderingContext2D#property_constructor",
-    "PtsCanvasRenderingContext2D.constructor",
+    "Types_PtsCanvasRenderingContext2D#property_direction",
+    "PtsCanvasRenderingContext2D.direction",
     "Variable",
     0
   ],
   [
     "Types_PtsCanvasRenderingContext2D#property_fillStyle",
     "PtsCanvasRenderingContext2D.fillStyle",
+    "Variable",
+    0
+  ],
+  [
+    "Types_PtsCanvasRenderingContext2D#property_filter",
+    "PtsCanvasRenderingContext2D.filter",
     "Variable",
     0
   ],
@@ -8162,6 +8306,12 @@
   [
     "Types_PtsCanvasRenderingContext2D#property_imageSmoothingEnabled",
     "PtsCanvasRenderingContext2D.imageSmoothingEnabled",
+    "Variable",
+    0
+  ],
+  [
+    "Types_PtsCanvasRenderingContext2D#property_imageSmoothingQuality",
+    "PtsCanvasRenderingContext2D.imageSmoothingQuality",
     "Variable",
     0
   ],
@@ -8202,32 +8352,14 @@
     0
   ],
   [
-    "Types_PtsCanvasRenderingContext2D#property_mozImageSmoothingEnabled",
-    "PtsCanvasRenderingContext2D.mozImageSmoothingEnabled",
-    "Variable",
-    0
-  ],
-  [
     "Types_PtsCanvasRenderingContext2D#property_msBackingStorePixelRatio",
     "PtsCanvasRenderingContext2D.msBackingStorePixelRatio",
     "Variable",
     0
   ],
   [
-    "Types_PtsCanvasRenderingContext2D#property_msFillRule",
-    "PtsCanvasRenderingContext2D.msFillRule",
-    "Variable",
-    0
-  ],
-  [
     "Types_PtsCanvasRenderingContext2D#property_oBackingStorePixelRatio",
     "PtsCanvasRenderingContext2D.oBackingStorePixelRatio",
-    "Variable",
-    0
-  ],
-  [
-    "Types_PtsCanvasRenderingContext2D#property_oImageSmoothingEnabled",
-    "PtsCanvasRenderingContext2D.oImageSmoothingEnabled",
     "Variable",
     0
   ],
@@ -8276,12 +8408,6 @@
   [
     "Types_PtsCanvasRenderingContext2D#property_webkitBackingStorePixelRatio",
     "PtsCanvasRenderingContext2D.webkitBackingStorePixelRatio",
-    "Variable",
-    0
-  ],
-  [
-    "Types_PtsCanvasRenderingContext2D#property_webkitImageSmoothingEnabled",
-    "PtsCanvasRenderingContext2D.webkitImageSmoothingEnabled",
     "Variable",
     0
   ],
@@ -8400,8 +8526,8 @@
     8
   ],
   [
-    "Types_PtsCanvasRenderingContext2D#function_hasOwnProperty",
-    "PtsCanvasRenderingContext2D.hasOwnProperty",
+    "Types_PtsCanvasRenderingContext2D#function_getTransform",
+    "PtsCanvasRenderingContext2D.getTransform",
     "Function",
     8
   ],
@@ -8412,8 +8538,8 @@
     8
   ],
   [
-    "Types_PtsCanvasRenderingContext2D#function_isPrototypeOf",
-    "PtsCanvasRenderingContext2D.isPrototypeOf",
+    "Types_PtsCanvasRenderingContext2D#function_isPointInStroke",
+    "PtsCanvasRenderingContext2D.isPointInStroke",
     "Function",
     8
   ],
@@ -8436,12 +8562,6 @@
     8
   ],
   [
-    "Types_PtsCanvasRenderingContext2D#function_propertyIsEnumerable",
-    "PtsCanvasRenderingContext2D.propertyIsEnumerable",
-    "Function",
-    8
-  ],
-  [
     "Types_PtsCanvasRenderingContext2D#function_putImageData",
     "PtsCanvasRenderingContext2D.putImageData",
     "Function",
@@ -8456,6 +8576,12 @@
   [
     "Types_PtsCanvasRenderingContext2D#function_rect",
     "PtsCanvasRenderingContext2D.rect",
+    "Function",
+    8
+  ],
+  [
+    "Types_PtsCanvasRenderingContext2D#function_resetTransform",
+    "PtsCanvasRenderingContext2D.resetTransform",
     "Function",
     8
   ],
@@ -8480,6 +8606,12 @@
   [
     "Types_PtsCanvasRenderingContext2D#function_scale",
     "PtsCanvasRenderingContext2D.scale",
+    "Function",
+    8
+  ],
+  [
+    "Types_PtsCanvasRenderingContext2D#function_scrollPathIntoView",
+    "PtsCanvasRenderingContext2D.scrollPathIntoView",
     "Function",
     8
   ],
@@ -8514,18 +8646,6 @@
     8
   ],
   [
-    "Types_PtsCanvasRenderingContext2D#function_toLocaleString",
-    "PtsCanvasRenderingContext2D.toLocaleString",
-    "Function",
-    8
-  ],
-  [
-    "Types_PtsCanvasRenderingContext2D#function_toString",
-    "PtsCanvasRenderingContext2D.toString",
-    "Function",
-    8
-  ],
-  [
     "Types_PtsCanvasRenderingContext2D#function_transform",
     "PtsCanvasRenderingContext2D.transform",
     "Function",
@@ -8534,12 +8654,6 @@
   [
     "Types_PtsCanvasRenderingContext2D#function_translate",
     "PtsCanvasRenderingContext2D.translate",
-    "Function",
-    8
-  ],
-  [
-    "Types_PtsCanvasRenderingContext2D#function_valueOf",
-    "PtsCanvasRenderingContext2D.valueOf",
     "Function",
     8
   ],

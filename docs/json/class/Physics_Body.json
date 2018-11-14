@@ -3,12 +3,12 @@
   "source": [
     [
       "Physics.ts",
-      532,
+      540,
       17
     ]
   ],
   "kind": "Class",
-  "id": 5959,
+  "id": 6099,
   "comment": "Body is a subclass of [`Group`](#link) that stores a set of [`Particle`](#link)s and edge constraints. It is usually added into a [`World`](#link) to create physics simulations.\nSee [a demo here](../demo/index.html?name=physics.shapes).",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "Physics.ts",
-          537,
+          545,
           29
         ]
       ],
-      "id": 5967,
+      "id": 6107,
       "flags": {},
       "overrides": "Group.__constructor",
       "inherits": false,
@@ -50,7 +50,7 @@
           8
         ]
       ],
-      "id": 6004,
+      "id": 6144,
       "flags": {},
       "overrides": false,
       "inherits": "Group.id",
@@ -73,16 +73,16 @@
       "source": [
         [
           "Physics.ts",
-          585,
+          593,
           10
         ],
         [
           "Physics.ts",
-          586,
+          594,
           10
         ]
       ],
-      "id": 5979,
+      "id": 6119,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -109,7 +109,7 @@
           8
         ]
       ],
-      "id": 6008,
+      "id": 6148,
       "flags": {},
       "overrides": false,
       "inherits": "Group.p1",
@@ -128,7 +128,7 @@
           8
         ]
       ],
-      "id": 6010,
+      "id": 6150,
       "flags": {},
       "overrides": false,
       "inherits": "Group.p2",
@@ -147,7 +147,7 @@
           8
         ]
       ],
-      "id": 6012,
+      "id": 6152,
       "flags": {},
       "overrides": false,
       "inherits": "Group.p3",
@@ -166,7 +166,7 @@
           8
         ]
       ],
-      "id": 6014,
+      "id": 6154,
       "flags": {},
       "overrides": false,
       "inherits": "Group.p4",
@@ -185,7 +185,7 @@
           8
         ]
       ],
-      "id": 6016,
+      "id": 6156,
       "flags": {},
       "overrides": false,
       "inherits": "Group.q1",
@@ -204,7 +204,7 @@
           8
         ]
       ],
-      "id": 6018,
+      "id": 6158,
       "flags": {},
       "overrides": false,
       "inherits": "Group.q2",
@@ -223,7 +223,7 @@
           8
         ]
       ],
-      "id": 6020,
+      "id": 6160,
       "flags": {},
       "overrides": false,
       "inherits": "Group.q3",
@@ -242,7 +242,7 @@
           8
         ]
       ],
-      "id": 6022,
+      "id": 6162,
       "flags": {},
       "overrides": false,
       "inherits": "Group.q4",
@@ -263,7 +263,7 @@
           12
         ]
       ],
-      "id": 6129,
+      "id": 6269,
       "flags": {},
       "overrides": false,
       "inherits": "Group.$matrixAdd",
@@ -293,7 +293,7 @@
           17
         ]
       ],
-      "id": 6132,
+      "id": 6272,
       "flags": {},
       "overrides": false,
       "inherits": "Group.$matrixMultiply",
@@ -335,7 +335,7 @@
           6
         ]
       ],
-      "id": 6141,
+      "id": 6281,
       "flags": {},
       "overrides": false,
       "inherits": "Group.$zip",
@@ -371,7 +371,7 @@
           5
         ]
       ],
-      "id": 6117,
+      "id": 6257,
       "flags": {},
       "overrides": false,
       "inherits": "Group.add",
@@ -401,7 +401,7 @@
           12
         ]
       ],
-      "id": 6059,
+      "id": 6199,
       "flags": {},
       "overrides": false,
       "inherits": "Group.anchorFrom",
@@ -431,7 +431,7 @@
           10
         ]
       ],
-      "id": 6056,
+      "id": 6196,
       "flags": {},
       "overrides": false,
       "inherits": "Group.anchorTo",
@@ -457,11 +457,11 @@
       "source": [
         [
           "Physics.ts",
-          597,
+          605,
           10
         ]
       ],
-      "id": 5983,
+      "id": 6123,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -484,7 +484,7 @@
           13
         ]
       ],
-      "id": 6054,
+      "id": 6194,
       "flags": {},
       "overrides": false,
       "inherits": "Group.boundingBox",
@@ -507,7 +507,7 @@
           10
         ]
       ],
-      "id": 6052,
+      "id": 6192,
       "flags": {},
       "overrides": false,
       "inherits": "Group.centroid",
@@ -530,7 +530,7 @@
           7
         ]
       ],
-      "id": 6024,
+      "id": 6164,
       "flags": {},
       "overrides": false,
       "inherits": "Group.clone",
@@ -545,953 +545,21 @@
       ]
     },
     {
-      "name": "divide",
-      "source": [
-        [
-          "Pt.ts",
-          878,
-          8
-        ]
-      ],
-      "id": 6126,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Group.divide",
-      "signatures": [
-        {
-          "comment": "Divide this group's Pts over scalar or vector values (as element-wise).",
-          "returns": "this",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
-              "type": "any[]",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "forEachPt",
-      "source": [
-        [
-          "Pt.ts",
-          835,
-          11
-        ]
-      ],
-      "id": 6113,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Group.forEachPt",
-      "signatures": [
-        {
-          "comment": "Update each Pt in this Group with an existing Pt function.",
-          "returns": "this",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "ptFn",
-              "comment": "string name of an existing Pt function. Note that the function must return Pt.",
-              "type": "string",
-              "default": false
-            },
-            {
-              "name": "args",
-              "comment": "arguments for the function specified in ptFn\n",
-              "type": "any[]",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "init",
-      "source": [
-        [
-          "Physics.ts",
-          567,
-          6
-        ]
-      ],
-      "id": 5975,
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Initiate a body.",
-          "returns": "this",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "list",
-              "comment": "a group of Pts",
-              "type": "GroupLike",
-              "default": false
-            },
-            {
-              "name": "stiff",
-              "comment": "stiffness value from 0 to 1, where 1 is the most stiff. Default is 1.\n",
-              "type": "number",
-              "default": "1"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "insert",
-      "source": [
-        [
-          "Pt.ts",
-          638,
-          8
-        ]
-      ],
-      "id": 6037,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Group.insert",
-      "signatures": [
-        {
-          "comment": "Insert a Pt into this group.",
-          "returns": "this",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "pts",
-              "comment": "Another group of Pts",
-              "type": "GroupLike",
-              "default": false
-            },
-            {
-              "name": "index",
-              "comment": "the index position to insert into\n",
-              "type": "number",
-              "default": "0"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "interpolate",
-      "source": [
-        [
-          "Pt.ts",
-          737,
-          13
-        ]
-      ],
-      "id": 6082,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Group.interpolate",
-      "signatures": [
-        {
-          "comment": "Get an interpolated point on the line segments defined by this Group.",
-          "returns": "Pt",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "t",
-              "comment": "a value between 0 to 1 usually\n",
-              "type": "number",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "lines",
-      "source": [
-        [
-          "Pt.ts",
-          670,
-          7
-        ]
-      ],
-      "id": 6050,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Group.lines",
-      "signatures": [
-        {
-          "comment": "Get all the line segments (ie, edges in a graph) of this group.",
-          "returns": "Group[]",
-          "returns_comment": false,
-          "parameters": [],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "link",
-      "source": [
-        [
-          "Physics.ts",
-          609,
-          6
-        ]
-      ],
-      "id": 5985,
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Create a linked edge between two points.",
-          "returns": "this",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "index1",
-              "comment": "first point by index",
-              "type": "number",
-              "default": false
-            },
-            {
-              "name": "index2",
-              "comment": "first point by index",
-              "type": "number",
-              "default": false
-            },
-            {
-              "name": "stiff",
-              "comment": "optionally stiffness value between 0 to 1, where 1 is the most stiff.\n",
-              "type": "number",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "linkAll",
-      "source": [
-        [
-          "Physics.ts",
-          624,
-          9
-        ]
-      ],
-      "id": 5990,
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Automatically create links for all the points to preserve the initial body shape. This usually works for regular convex polygon.",
-          "returns": "void",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "stiff",
-              "comment": "optionally stiffness value between 0 to 1, where 1 is the most stiff.\n",
-              "type": "number",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "linksToLines",
-      "source": [
-        [
-          "Physics.ts",
-          648,
-          14
-        ]
-      ],
-      "id": 5993,
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Return a list of all the linked edges as line segments.",
-          "returns": "Group[]",
-          "returns_comment": "an array of Groups, each of which represents an edge\n",
-          "parameters": [],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "moveBy",
-      "source": [
-        [
-          "Pt.ts",
-          750,
-          8
-        ]
-      ],
-      "id": 6085,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Group.moveBy",
-      "signatures": [
-        {
-          "comment": "Move every Pt's position by a specific amount. Same as [`Group.add`](#link).",
-          "returns": "this",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
-              "type": "any[]",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "moveTo",
-      "source": [
-        [
-          "Pt.ts",
-          759,
-          8
-        ]
-      ],
-      "id": 6088,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Group.moveTo",
-      "signatures": [
-        {
-          "comment": "Move the first Pt in this group to a specific position, and move all the other Pts correspondingly.",
-          "returns": "this",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
-              "type": "any[]",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "multiply",
-      "source": [
-        [
-          "Pt.ts",
-          869,
-          10
-        ]
-      ],
-      "id": 6123,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Group.multiply",
-      "signatures": [
-        {
-          "comment": "Multiply scalar or vector values (as element-wise) with this group's Pts.",
-          "returns": "this",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
-              "type": "any[]",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "op",
-      "source": [
-        [
-          "Pt.ts",
-          710,
-          4
-        ]
-      ],
-      "id": 6062,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Group.op",
-      "signatures": [
-        {
-          "comment": "Create an operation using this Group, passing this Group into a custom function's first parameter.  See the [Op guide](../guide/Op-0400.html) for details.",
-          "returns": " Fn(rest:any[])",
-          "returns_comment": "a resulting function that takes other parameters required in `fn`\n",
-          "parameters": [
-            {
-              "name": "fn",
-              "comment": "any function that takes a Group as its first parameter",
-              "type": " Fn(g1:GroupLike, rest:any[])",
-              "default": false
-            }
-          ],
-          "tags": [
-            {
-              "tag": "example",
-              "text": "`let myOp = group.op( fn ); let result = myOp( [1,2,3] );`"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "ops",
-      "source": [
-        [
-          "Pt.ts",
-          724,
-          5
-        ]
-      ],
-      "id": 6072,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Group.ops",
-      "signatures": [
-        {
-          "comment": "This combines a series of operations into an array. See the [Op guide](../guide/Op-0400.html) for details.",
-          "returns": " Fn(rest:any[])",
-          "returns_comment": "an array of resulting functions\n",
-          "parameters": [
-            {
-              "name": "fns",
-              "comment": "an array of functions for `op`",
-              "type": " Fn(g1:GroupLike, rest:any[])",
-              "default": false
-            }
-          ],
-          "tags": [
-            {
-              "tag": "example",
-              "text": "`let myOps = pt.ops([fn1, fn2, fn3]); let results = myOps.map( (op) => op([1,2,3]) );`"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "processBody",
-      "source": [
-        [
-          "Physics.ts",
-          673,
-          13
-        ]
-      ],
-      "id": 5997,
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Check and respond to collisions between two bodies.",
-          "returns": "void",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "b",
-              "comment": "another body\n",
-              "type": "Body",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "processEdges",
-      "source": [
-        [
-          "Physics.ts",
-          661,
-          14
-        ]
-      ],
-      "id": 5995,
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Recalculate all edge constraints.",
-          "returns": "void",
-          "returns_comment": false,
-          "parameters": [],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "processParticle",
-      "source": [
-        [
-          "Physics.ts",
-          711,
-          17
-        ]
-      ],
-      "id": 6000,
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Check and respond to collisions between this body and a particle.",
-          "returns": "void",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "b",
-              "comment": "a particle\n",
-              "type": "Particle",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "reflect2D",
-      "source": [
-        [
-          "Pt.ts",
-          812,
-          11
-        ]
-      ],
-      "id": 6105,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Group.reflect2D",
-      "signatures": [
-        {
-          "comment": "Reflect this group's Pts along a 2D line. Default anchor point is the first Pt in this group.",
-          "returns": "this",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "line",
-              "comment": "a Group of 2 Pts that defines a line for reflection",
-              "type": "GroupLike",
-              "default": false
-            },
-            {
-              "name": "axis",
-              "comment": "optional axis such as \"yz\" to define a 2D plane of reflection\n",
-              "type": "string",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "remove",
-      "source": [
-        [
-          "Pt.ts",
-          650,
-          8
-        ]
-      ],
-      "id": 6041,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Group.remove",
-      "signatures": [
-        {
-          "comment": "Like Array's splice function, with support for negative index and a friendlier name.",
-          "returns": "Group",
-          "returns_comment": "The items that are removed.\n",
-          "parameters": [
-            {
-              "name": "index",
-              "comment": "start index, which can be negative (where -1 is at index 0, -2 at index 1, etc)",
-              "type": "number",
-              "default": "0"
-            },
-            {
-              "name": "count",
-              "comment": "number of items to remove",
-              "type": "number",
-              "default": "1"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "rotate2D",
-      "source": [
-        [
-          "Pt.ts",
-          785,
-          10
-        ]
-      ],
-      "id": 6095,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Group.rotate2D",
-      "signatures": [
-        {
-          "comment": "Rotate this group's Pt from an anchor point in 2D. Default anchor point is the first Pt in this group.",
-          "returns": "this",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "angle",
-              "comment": "rotate angle",
-              "type": "number",
-              "default": false
-            },
-            {
-              "name": "anchor",
-              "comment": "optional anchor point to scale from",
-              "type": "PtLike",
-              "default": false
-            },
-            {
-              "name": "axis",
-              "comment": "optional string such as \"yz\" to specify a 2D plane\n",
-              "type": "string",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "scale",
-      "source": [
-        [
-          "Pt.ts",
-          771,
-          7
-        ]
-      ],
-      "id": 6091,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Group.scale",
-      "signatures": [
-        {
-          "comment": "Scale this group's Pts from an anchor point. Default anchor point is the first Pt in this group.",
-          "returns": "this",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "scale",
-              "comment": "scale ratio",
-              "type": "number | number[] | PtLike",
-              "default": false
-            },
-            {
-              "name": "anchor",
-              "comment": "optional anchor point to scale from\n",
-              "type": "PtLike",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "segments",
-      "source": [
-        [
-          "Pt.ts",
-          662,
-          10
-        ]
-      ],
-      "id": 6045,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Group.segments",
-      "signatures": [
-        {
-          "comment": "Split this group into an array of sub-group segments.",
-          "returns": "Group[]",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "pts_per_segment",
-              "comment": "number of Pts in each segment",
-              "type": "number",
-              "default": "2"
-            },
-            {
-              "name": "stride",
-              "comment": "forward-step to take",
-              "type": "number",
-              "default": "1"
-            },
-            {
-              "name": "loopBack",
-              "comment": "if `true`, always go through the array till the end and loop back to the beginning to complete the segments if needed\n",
-              "type": "boolean",
-              "default": "false"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "shear2D",
-      "source": [
-        [
-          "Pt.ts",
-          799,
-          9
-        ]
-      ],
-      "id": 6100,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Group.shear2D",
-      "signatures": [
-        {
-          "comment": "Shear this group's Pt from an anchor point in 2D. Default anchor point is the first Pt in this group.",
-          "returns": "this",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "scale",
-              "comment": "",
-              "type": "number | number[] | PtLike",
-              "default": false
-            },
-            {
-              "name": "anchor",
-              "comment": "optional anchor point to scale from",
-              "type": "PtLike",
-              "default": false
-            },
-            {
-              "name": "axis",
-              "comment": "optional string such as \"yz\" to specify a 2D plane\n",
-              "type": "string",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "sortByDimension",
-      "source": [
-        [
-          "Pt.ts",
-          825,
-          17
-        ]
-      ],
-      "id": 6109,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Group.sortByDimension",
-      "signatures": [
-        {
-          "comment": "Sort this group's Pts by values in a specific dimension.",
-          "returns": "this",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "dim",
-              "comment": "dimensional index",
-              "type": "number",
-              "default": false
-            },
-            {
-              "name": "desc",
-              "comment": "if true, sort descending. Default is false (ascending)\n",
-              "type": "boolean",
-              "default": "false"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "split",
-      "source": [
-        [
-          "Pt.ts",
-          627,
-          7
-        ]
-      ],
-      "id": 6032,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Group.split",
-      "signatures": [
-        {
-          "comment": "Split this Group into an array of sub-groups.",
-          "returns": "Group[]",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "chunkSize",
-              "comment": "number of items per sub-group",
-              "type": "number",
-              "default": false
-            },
-            {
-              "name": "stride",
-              "comment": "forward-steps after each sub-group",
-              "type": "number",
-              "default": false
-            },
-            {
-              "name": "loopBack",
-              "comment": "if `true`, always go through the array till the end and loop back to the beginning to complete the segments if needed\n",
-              "type": "boolean",
-              "default": "false"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "subtract",
-      "source": [
-        [
-          "Pt.ts",
-          860,
-          10
-        ]
-      ],
-      "id": 6120,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Group.subtract",
-      "signatures": [
-        {
-          "comment": "Subtract scalar or vector values from this group's Pts.",
-          "returns": "this",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
-              "type": "any[]",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "toString",
-      "source": [
-        [
-          "Pt.ts",
-          928,
-          10
-        ]
-      ],
-      "id": 6145,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Group.toString",
-      "signatures": [
-        {
-          "comment": "Get a string representation of this group.",
-          "returns": "string",
-          "returns_comment": false,
-          "parameters": [],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "zipSlice",
-      "source": [
-        [
-          "Pt.ts",
-          910,
-          10
-        ]
-      ],
-      "id": 6137,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Group.zipSlice",
-      "signatures": [
-        {
-          "comment": "Zip one slice of an array of Pt. Imagine the Pts are organized in rows, then this function will take the values in a specific column.",
-          "returns": "Pt",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "index",
-              "comment": "",
-              "type": "number",
-              "default": false
-            },
-            {
-              "name": "defaultValue",
-              "comment": "a default value to fill if index out of bound. If not provided, it will throw an error instead.\n",
-              "type": "number | boolean",
-              "default": "false"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
       "name": "concat",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          1143,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          1161,
           10
         ],
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          1148,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          1166,
           10
         ]
       ],
-      "id": 6157,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 6295,
+      "flags": {},
       "overrides": false,
       "inherits": "Array.concat",
       "signatures": [
@@ -1526,18 +594,111 @@
       ]
     },
     {
+      "name": "copyWithin",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es2015.core.d.ts",
+          64,
+          14
+        ]
+      ],
+      "id": 6483,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Array.copyWithin",
+      "signatures": [
+        {
+          "comment": "Returns the this object after copying a section of the array identified by start and end\nto the same array starting at position target",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "target",
+              "comment": "If target is negative, it is treated as length+target where length is the\nlength of the array.",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "start",
+              "comment": "If start is negative, it is treated as length+start. If end is negative, it\nis treated as length+end.",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "end",
+              "comment": "If not specified, length of the this object is used as its default value.\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "divide",
+      "source": [
+        [
+          "Pt.ts",
+          878,
+          8
+        ]
+      ],
+      "id": 6266,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.divide",
+      "signatures": [
+        {
+          "comment": "Divide this group's Pts over scalar or vector values (as element-wise).",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "entries",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es2015.iterable.d.ts",
+          57,
+          11
+        ]
+      ],
+      "id": 6490,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Array.entries",
+      "signatures": [
+        {
+          "comment": "Returns an iterable of key, value pairs for every entry in the array",
+          "returns": "IterableIterator",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "every",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          1208,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          1226,
           9
         ]
       ],
-      "id": 6199,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 6337,
+      "flags": {},
       "overrides": false,
       "inherits": "Array.every",
       "signatures": [
@@ -1564,23 +725,63 @@
       ]
     },
     {
+      "name": "fill",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es2015.core.d.ts",
+          53,
+          8
+        ]
+      ],
+      "id": 6478,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Array.fill",
+      "signatures": [
+        {
+          "comment": "Returns the this object after filling the section identified by start and end with value",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "value",
+              "comment": "value to fill array section with",
+              "type": "Pt",
+              "default": false
+            },
+            {
+              "name": "start",
+              "comment": "index to start filling the array at. If start is negative, it is treated as\nlength+start where length is the length of the array.",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "end",
+              "comment": "index to stop filling the array at. If end is negative, it is treated as\nlength+end.\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "filter",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          1232,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          1250,
           10
         ],
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          1238,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          1256,
           10
         ]
       ],
-      "id": 6236,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 6374,
+      "flags": {},
       "overrides": false,
       "inherits": "Array.filter",
       "signatures": [
@@ -1627,18 +828,113 @@
       ]
     },
     {
+      "name": "find",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es2015.core.d.ts",
+          31,
+          8
+        ],
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es2015.core.d.ts",
+          32,
+          8
+        ]
+      ],
+      "id": 6450,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Array.find",
+      "signatures": [
+        {
+          "comment": "Returns the value of the first element in the array where predicate is true, and undefined\notherwise.",
+          "returns": "S | undefined",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "predicate",
+              "comment": "find calls predicate once for each element of the array, in ascending\norder, until it finds one where predicate returns true. If such an element is found, find\nimmediately returns that element value. Otherwise, find returns undefined.",
+              "type": " Fn(value:Pt, index:number, obj:Pt[])",
+              "default": false
+            },
+            {
+              "name": "thisArg",
+              "comment": "If provided, it will be used as the this value for each invocation of\npredicate. If it is not provided, undefined is used instead.\n",
+              "type": "any",
+              "default": false
+            }
+          ],
+          "tags": []
+        },
+        {
+          "comment": "",
+          "returns": "Pt | undefined",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "predicate",
+              "comment": "",
+              "type": " Fn(value:Pt, index:number, obj:Pt[])",
+              "default": false
+            },
+            {
+              "name": "thisArg",
+              "comment": "",
+              "type": "any",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "findIndex",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es2015.core.d.ts",
+          43,
+          13
+        ]
+      ],
+      "id": 6469,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Array.findIndex",
+      "signatures": [
+        {
+          "comment": "Returns the index of the first element in the array where predicate is true, and -1\notherwise.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "predicate",
+              "comment": "find calls predicate once for each element of the array, in ascending\norder, until it finds one where predicate returns true. If such an element is found,\nfindIndex immediately returns that element index. Otherwise, findIndex returns -1.",
+              "type": " Fn(value:Pt, index:number, obj:Pt[])",
+              "default": false
+            },
+            {
+              "name": "thisArg",
+              "comment": "If provided, it will be used as the this value for each invocation of\npredicate. If it is not provided, undefined is used instead.\n",
+              "type": "any",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "forEach",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          1220,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          1238,
           11
         ]
       ],
-      "id": 6217,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 6355,
+      "flags": {},
       "overrides": false,
       "inherits": "Array.forEach",
       "signatures": [
@@ -1665,117 +961,34 @@
       ]
     },
     {
-      "name": "fromArray",
+      "name": "forEachPt",
       "source": [
         [
           "Pt.ts",
-          602,
-          18
+          835,
+          11
         ]
       ],
-      "id": 6026,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 6253,
+      "flags": {},
       "overrides": false,
-      "inherits": "Group.fromArray",
+      "inherits": "Group.forEachPt",
       "signatures": [
         {
-          "comment": "Convert an array of numeric arrays into a Group of Pts.",
-          "returns": "Group",
+          "comment": "Update each Pt in this Group with an existing Pt function.",
+          "returns": "this",
           "returns_comment": false,
           "parameters": [
             {
-              "name": "list",
-              "comment": "an array of numeric arrays",
-              "type": "PtLike[]",
-              "default": false
-            }
-          ],
-          "tags": [
-            {
-              "tag": "example",
-              "text": "`Group.fromArray( [[1,2], [3,4], [5,6]] )`\n"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "fromGroup",
-      "source": [
-        [
-          "Physics.ts",
-          554,
-          18
-        ]
-      ],
-      "id": 5969,
-      "flags": {
-        "isStatic": true
-      },
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Create and populate a body with a group of Pts.",
-          "returns": "Body",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "list",
-              "comment": "a group of Pts",
-              "type": "GroupLike",
+              "name": "ptFn",
+              "comment": "string name of an existing Pt function. Note that the function must return Pt.",
+              "type": "string",
               "default": false
             },
             {
-              "name": "stiff",
-              "comment": "stiffness value from 0 to 1, where 1 is the most stiff. Default is 1.",
-              "type": "number",
-              "default": "1"
-            },
-            {
-              "name": "autoLink",
-              "comment": "Automatically create links between the Pts. This usually works for regular convex polygons. Default is true.",
-              "type": "boolean",
-              "default": "true"
-            },
-            {
-              "name": "autoMass",
-              "comment": "Automatically calculate the mass based on the area of the polygon. Default is true.\n",
-              "type": "boolean",
-              "default": "true"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "fromPtArray",
-      "source": [
-        [
-          "Pt.ts",
-          616,
-          20
-        ]
-      ],
-      "id": 6029,
-      "flags": {
-        "isStatic": true
-      },
-      "overrides": false,
-      "inherits": "Group.fromPtArray",
-      "signatures": [
-        {
-          "comment": "Convert an array of Pts into a Group.",
-          "returns": "Group",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "list",
-              "comment": "an array of Pts\n",
-              "type": "GroupLike",
+              "name": "args",
+              "comment": "arguments for the function specified in ptFn\n",
+              "type": "any[]",
               "default": false
             }
           ],
@@ -1787,15 +1000,13 @@
       "name": "indexOf",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          1196,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          1214,
           11
         ]
       ],
-      "id": 6191,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 6329,
+      "flags": {},
       "overrides": false,
       "inherits": "Array.indexOf",
       "signatures": [
@@ -1822,18 +1033,118 @@
       ]
     },
     {
-      "name": "join",
+      "name": "init",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          1153,
+          "Physics.ts",
+          575,
+          6
+        ]
+      ],
+      "id": 6115,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Initiate a body.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "list",
+              "comment": "a group of Pts",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "stiff",
+              "comment": "stiffness value from 0 to 1, where 1 is the most stiff. Default is 1.\n",
+              "type": "number",
+              "default": "1"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "insert",
+      "source": [
+        [
+          "Pt.ts",
+          638,
           8
         ]
       ],
-      "id": 6162,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 6177,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.insert",
+      "signatures": [
+        {
+          "comment": "Insert a Pt into this group.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "Another group of Pts",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "index",
+              "comment": "the index position to insert into\n",
+              "type": "number",
+              "default": "0"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "interpolate",
+      "source": [
+        [
+          "Pt.ts",
+          737,
+          13
+        ]
+      ],
+      "id": 6222,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.interpolate",
+      "signatures": [
+        {
+          "comment": "Get an interpolated point on the line segments defined by this Group.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "t",
+              "comment": "a value between 0 to 1 usually\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "join",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          1171,
+          8
+        ]
+      ],
+      "id": 6300,
+      "flags": {},
       "overrides": false,
       "inherits": "Array.join",
       "signatures": [
@@ -1854,18 +1165,39 @@
       ]
     },
     {
+      "name": "keys",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es2015.iterable.d.ts",
+          62,
+          8
+        ]
+      ],
+      "id": 6492,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Array.keys",
+      "signatures": [
+        {
+          "comment": "Returns an iterable of keys in the array",
+          "returns": "IterableIterator",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "lastIndexOf",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          1202,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          1220,
           15
         ]
       ],
-      "id": 6195,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 6333,
+      "flags": {},
       "overrides": false,
       "inherits": "Array.lastIndexOf",
       "signatures": [
@@ -1892,18 +1224,134 @@
       ]
     },
     {
-      "name": "map",
+      "name": "lines",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          1226,
+          "Pt.ts",
+          670,
           7
         ]
       ],
-      "id": 6226,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 6190,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.lines",
+      "signatures": [
+        {
+          "comment": "Get all the line segments (ie, edges in a graph) of this group.",
+          "returns": "Group[]",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "link",
+      "source": [
+        [
+          "Physics.ts",
+          617,
+          6
+        ]
+      ],
+      "id": 6125,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a linked edge between two points.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "index1",
+              "comment": "first point by index",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "index2",
+              "comment": "first point by index",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "stiff",
+              "comment": "optionally stiffness value between 0 to 1, where 1 is the most stiff.\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "linkAll",
+      "source": [
+        [
+          "Physics.ts",
+          632,
+          9
+        ]
+      ],
+      "id": 6130,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Automatically create links for all the points to preserve the initial body shape. This usually works for regular convex polygon.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "stiff",
+              "comment": "optionally stiffness value between 0 to 1, where 1 is the most stiff.\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "linksToLines",
+      "source": [
+        [
+          "Physics.ts",
+          656,
+          14
+        ]
+      ],
+      "id": 6133,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Return a list of all the linked edges as line segments.",
+          "returns": "Group[]",
+          "returns_comment": "an array of Groups, each of which represents an edge\n",
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "map",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          1244,
+          7
+        ]
+      ],
+      "id": 6364,
+      "flags": {},
       "overrides": false,
       "inherits": "Array.map",
       "signatures": [
@@ -1930,18 +1378,176 @@
       ]
     },
     {
+      "name": "moveBy",
+      "source": [
+        [
+          "Pt.ts",
+          750,
+          8
+        ]
+      ],
+      "id": 6225,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.moveBy",
+      "signatures": [
+        {
+          "comment": "Move every Pt's position by a specific amount. Same as [`Group.add`](#link).",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "moveTo",
+      "source": [
+        [
+          "Pt.ts",
+          759,
+          8
+        ]
+      ],
+      "id": 6228,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.moveTo",
+      "signatures": [
+        {
+          "comment": "Move the first Pt in this group to a specific position, and move all the other Pts correspondingly.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "multiply",
+      "source": [
+        [
+          "Pt.ts",
+          869,
+          10
+        ]
+      ],
+      "id": 6263,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.multiply",
+      "signatures": [
+        {
+          "comment": "Multiply scalar or vector values (as element-wise) with this group's Pts.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "op",
+      "source": [
+        [
+          "Pt.ts",
+          710,
+          4
+        ]
+      ],
+      "id": 6202,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.op",
+      "signatures": [
+        {
+          "comment": "Create an operation using this Group, passing this Group into a custom function's first parameter.  See the [Op guide](../guide/Op-0400.html) for details.",
+          "returns": " Fn(rest:any[])",
+          "returns_comment": "a resulting function that takes other parameters required in `fn`\n",
+          "parameters": [
+            {
+              "name": "fn",
+              "comment": "any function that takes a Group as its first parameter",
+              "type": " Fn(g1:GroupLike, rest:any[])",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`let myOp = group.op( fn ); let result = myOp( [1,2,3] );`"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ops",
+      "source": [
+        [
+          "Pt.ts",
+          724,
+          5
+        ]
+      ],
+      "id": 6212,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.ops",
+      "signatures": [
+        {
+          "comment": "This combines a series of operations into an array. See the [Op guide](../guide/Op-0400.html) for details.",
+          "returns": " Fn(rest:any[])",
+          "returns_comment": "an array of resulting functions\n",
+          "parameters": [
+            {
+              "name": "fns",
+              "comment": "an array of functions for `op`",
+              "type": " Fn(g1:GroupLike, rest:any[])",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`let myOps = pt.ops([fn1, fn2, fn3]); let results = myOps.map( (op) => op([1,2,3]) );`"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "pop",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          1138,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          1151,
           7
         ]
       ],
-      "id": 6155,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 6290,
+      "flags": {},
       "overrides": false,
       "inherits": "Array.pop",
       "signatures": [
@@ -1955,18 +1561,99 @@
       ]
     },
     {
+      "name": "processBody",
+      "source": [
+        [
+          "Physics.ts",
+          681,
+          13
+        ]
+      ],
+      "id": 6137,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Check and respond to collisions between two bodies.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "b",
+              "comment": "another body\n",
+              "type": "Body",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "processEdges",
+      "source": [
+        [
+          "Physics.ts",
+          669,
+          14
+        ]
+      ],
+      "id": 6135,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Recalculate all edge constraints.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "processParticle",
+      "source": [
+        [
+          "Physics.ts",
+          719,
+          17
+        ]
+      ],
+      "id": 6140,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Check and respond to collisions between this body and a particle.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "b",
+              "comment": "a particle\n",
+              "type": "Particle",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "push",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          1134,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          1156,
           8
         ]
       ],
-      "id": 6152,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 6292,
+      "flags": {},
       "overrides": false,
       "inherits": "Array.push",
       "signatures": [
@@ -1990,25 +1677,23 @@
       "name": "reduce",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          1244,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          1262,
           10
         ],
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          1245,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          1263,
           10
         ],
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          1251,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          1269,
           10
         ]
       ],
-      "id": 6254,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 6392,
+      "flags": {},
       "overrides": false,
       "inherits": "Array.reduce",
       "signatures": [
@@ -2072,25 +1757,23 @@
       "name": "reduceRight",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          1257,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          1275,
           15
         ],
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          1258,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          1276,
           15
         ],
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          1264,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          1282,
           15
         ]
       ],
-      "id": 6282,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 6420,
+      "flags": {},
       "overrides": false,
       "inherits": "Array.reduceRight",
       "signatures": [
@@ -2151,18 +1834,88 @@
       ]
     },
     {
-      "name": "reverse",
+      "name": "reflect2D",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          1157,
+          "Pt.ts",
+          812,
           11
         ]
       ],
-      "id": 6165,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 6245,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.reflect2D",
+      "signatures": [
+        {
+          "comment": "Reflect this group's Pts along a 2D line. Default anchor point is the first Pt in this group.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "line",
+              "comment": "a Group of 2 Pts that defines a line for reflection",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "axis",
+              "comment": "optional axis such as \"yz\" to define a 2D plane of reflection\n",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "remove",
+      "source": [
+        [
+          "Pt.ts",
+          650,
+          8
+        ]
+      ],
+      "id": 6181,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.remove",
+      "signatures": [
+        {
+          "comment": "Like Array's splice function, with support for negative index and a friendlier name.",
+          "returns": "Group",
+          "returns_comment": "The items that are removed.\n",
+          "parameters": [
+            {
+              "name": "index",
+              "comment": "start index, which can be negative (where -1 is at index 0, -2 at index 1, etc)",
+              "type": "number",
+              "default": "0"
+            },
+            {
+              "name": "count",
+              "comment": "number of items to remove",
+              "type": "number",
+              "default": "1"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "reverse",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          1175,
+          11
+        ]
+      ],
+      "id": 6303,
+      "flags": {},
       "overrides": false,
       "inherits": "Array.reverse",
       "signatures": [
@@ -2176,18 +1929,178 @@
       ]
     },
     {
-      "name": "shift",
+      "name": "rotate2D",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          1161,
+          "Pt.ts",
+          785,
+          10
+        ]
+      ],
+      "id": 6235,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.rotate2D",
+      "signatures": [
+        {
+          "comment": "Rotate this group's Pt from an anchor point in 2D. Default anchor point is the first Pt in this group.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "angle",
+              "comment": "rotate angle",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "anchor",
+              "comment": "optional anchor point to scale from",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "axis",
+              "comment": "optional string such as \"yz\" to specify a 2D plane\n",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "scale",
+      "source": [
+        [
+          "Pt.ts",
+          771,
+          7
+        ]
+      ],
+      "id": 6231,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.scale",
+      "signatures": [
+        {
+          "comment": "Scale this group's Pts from an anchor point. Default anchor point is the first Pt in this group.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "scale",
+              "comment": "scale ratio",
+              "type": "number | number[] | PtLike",
+              "default": false
+            },
+            {
+              "name": "anchor",
+              "comment": "optional anchor point to scale from\n",
+              "type": "PtLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "segments",
+      "source": [
+        [
+          "Pt.ts",
+          662,
+          10
+        ]
+      ],
+      "id": 6185,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.segments",
+      "signatures": [
+        {
+          "comment": "Split this group into an array of sub-group segments.",
+          "returns": "Group[]",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pts_per_segment",
+              "comment": "number of Pts in each segment",
+              "type": "number",
+              "default": "2"
+            },
+            {
+              "name": "stride",
+              "comment": "forward-step to take",
+              "type": "number",
+              "default": "1"
+            },
+            {
+              "name": "loopBack",
+              "comment": "if `true`, always go through the array till the end and loop back to the beginning to complete the segments if needed\n",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "shear2D",
+      "source": [
+        [
+          "Pt.ts",
+          799,
           9
         ]
       ],
-      "id": 6167,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 6240,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.shear2D",
+      "signatures": [
+        {
+          "comment": "Shear this group's Pt from an anchor point in 2D. Default anchor point is the first Pt in this group.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "scale",
+              "comment": "",
+              "type": "number | number[] | PtLike",
+              "default": false
+            },
+            {
+              "name": "anchor",
+              "comment": "optional anchor point to scale from",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "axis",
+              "comment": "optional string such as \"yz\" to specify a 2D plane\n",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "shift",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          1179,
+          9
+        ]
+      ],
+      "id": 6305,
+      "flags": {},
       "overrides": false,
       "inherits": "Array.shift",
       "signatures": [
@@ -2204,15 +2117,13 @@
       "name": "slice",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          1167,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          1185,
           9
         ]
       ],
-      "id": 6169,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 6307,
+      "flags": {},
       "overrides": false,
       "inherits": "Array.slice",
       "signatures": [
@@ -2242,15 +2153,13 @@
       "name": "some",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          1214,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          1232,
           8
         ]
       ],
-      "id": 6208,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 6346,
+      "flags": {},
       "overrides": false,
       "inherits": "Array.some",
       "signatures": [
@@ -2280,15 +2189,13 @@
       "name": "sort",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          1172,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          1190,
           8
         ]
       ],
-      "id": 6173,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 6311,
+      "flags": {},
       "overrides": false,
       "inherits": "Array.sort",
       "signatures": [
@@ -2309,23 +2216,57 @@
       ]
     },
     {
+      "name": "sortByDimension",
+      "source": [
+        [
+          "Pt.ts",
+          825,
+          17
+        ]
+      ],
+      "id": 6249,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.sortByDimension",
+      "signatures": [
+        {
+          "comment": "Sort this group's Pts by values in a specific dimension.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "dim",
+              "comment": "dimensional index",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "desc",
+              "comment": "if true, sort descending. Default is false (ascending)\n",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "splice",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          1178,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          1196,
           10
         ],
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          1185,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          1203,
           10
         ]
       ],
-      "id": 6180,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 6318,
+      "flags": {},
       "overrides": false,
       "inherits": "Array.splice",
       "signatures": [
@@ -2378,23 +2319,93 @@
       ]
     },
     {
+      "name": "split",
+      "source": [
+        [
+          "Pt.ts",
+          627,
+          7
+        ]
+      ],
+      "id": 6172,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.split",
+      "signatures": [
+        {
+          "comment": "Split this Group into an array of sub-groups.",
+          "returns": "Group[]",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "chunkSize",
+              "comment": "number of items per sub-group",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "stride",
+              "comment": "forward-steps after each sub-group",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "loopBack",
+              "comment": "if `true`, always go through the array till the end and loop back to the beginning to complete the segments if needed\n",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "subtract",
+      "source": [
+        [
+          "Pt.ts",
+          860,
+          10
+        ]
+      ],
+      "id": 6260,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.subtract",
+      "signatures": [
+        {
+          "comment": "Subtract scalar or vector values from this group's Pts.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "toLocaleString",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          1129,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          1147,
           18
         ]
       ],
-      "id": 6150,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 6288,
+      "flags": {},
       "overrides": false,
       "inherits": "Array.toLocaleString",
       "signatures": [
         {
-          "comment": "Returns a string representation of an array. The elements are converted to string using thier toLocalString methods.",
+          "comment": "Returns a string representation of an array. The elements are converted to string using their toLocalString methods.",
           "returns": "string",
           "returns_comment": false,
           "parameters": [],
@@ -2406,20 +2417,18 @@
       "name": "toString",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          1125,
-          12
+          "Pt.ts",
+          928,
+          10
         ]
       ],
-      "id": 6148,
-      "flags": {
-        "isStatic": true
-      },
-      "overrides": false,
-      "inherits": "Array.toString",
+      "id": 6285,
+      "flags": {},
+      "overrides": "Array.toString",
+      "inherits": "Group.toString",
       "signatures": [
         {
-          "comment": "Returns a string representation of an array.",
+          "comment": "Get a string representation of this group.",
           "returns": "string",
           "returns_comment": false,
           "parameters": [],
@@ -2431,15 +2440,13 @@
       "name": "unshift",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          1190,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          1208,
           11
         ]
       ],
-      "id": 6188,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 6326,
+      "flags": {},
       "overrides": false,
       "inherits": "Array.unshift",
       "signatures": [
@@ -2458,6 +2465,184 @@
           "tags": []
         }
       ]
+    },
+    {
+      "name": "values",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es2015.iterable.d.ts",
+          67,
+          10
+        ]
+      ],
+      "id": 6494,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Array.values",
+      "signatures": [
+        {
+          "comment": "Returns an iterable of values in the array",
+          "returns": "IterableIterator",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "zipSlice",
+      "source": [
+        [
+          "Pt.ts",
+          910,
+          10
+        ]
+      ],
+      "id": 6277,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Group.zipSlice",
+      "signatures": [
+        {
+          "comment": "Zip one slice of an array of Pt. Imagine the Pts are organized in rows, then this function will take the values in a specific column.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "index",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "defaultValue",
+              "comment": "a default value to fill if index out of bound. If not provided, it will throw an error instead.\n",
+              "type": "number | boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "fromArray",
+      "source": [
+        [
+          "Pt.ts",
+          602,
+          18
+        ]
+      ],
+      "id": 6166,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Group.fromArray",
+      "signatures": [
+        {
+          "comment": "Convert an array of numeric arrays into a Group of Pts.",
+          "returns": "Group",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "list",
+              "comment": "an array of numeric arrays",
+              "type": "PtLike[]",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`Group.fromArray( [[1,2], [3,4], [5,6]] )`\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "fromGroup",
+      "source": [
+        [
+          "Physics.ts",
+          562,
+          18
+        ]
+      ],
+      "id": 6109,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create and populate a body with a group of Pts.",
+          "returns": "Body",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "list",
+              "comment": "a group of Pts",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "stiff",
+              "comment": "stiffness value from 0 to 1, where 1 is the most stiff. Default is 1.",
+              "type": "number",
+              "default": "1"
+            },
+            {
+              "name": "autoLink",
+              "comment": "Automatically create links between the Pts. This usually works for regular convex polygons. Default is true.",
+              "type": "boolean",
+              "default": "true"
+            },
+            {
+              "name": "autoMass",
+              "comment": "Automatically calculate the mass based on the area of the polygon. Default is true.\n",
+              "type": "boolean",
+              "default": "true"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "fromPtArray",
+      "source": [
+        [
+          "Pt.ts",
+          616,
+          20
+        ]
+      ],
+      "id": 6169,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Group.fromPtArray",
+      "signatures": [
+        {
+          "comment": "Convert an array of Pts into a Group.",
+          "returns": "Group",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "list",
+              "comment": "an array of Pts\n",
+              "type": "GroupLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
     }
   ],
   "variables": [],
@@ -2466,15 +2651,13 @@
       "name": "length",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          1121,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          1139,
           10
         ]
       ],
-      "id": 6147,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 6287,
+      "flags": {},
       "type": "length",
       "overrides": false,
       "inherits": "Array.length",

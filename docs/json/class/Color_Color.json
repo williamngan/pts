@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 3558,
+  "id": 3619,
   "comment": "Color is a subclass of Pt. Since a color in a color space is analogous to a point or vector in a space, you can apply all Pt operations to colors too. The Color class provides support for many color spaces like HSL and LAB.",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           4
         ]
       ],
-      "id": 3570,
+      "id": 3631,
       "flags": {},
       "overrides": "Pt.__constructor",
       "inherits": false,
@@ -57,7 +57,7 @@
           7
         ]
       ],
-      "id": 3641,
+      "id": 3702,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -84,7 +84,7 @@
           11
         ]
       ],
-      "id": 3657,
+      "id": 3718,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -108,7 +108,7 @@
           7
         ]
       ],
-      "id": 3625,
+      "id": 3686,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -140,7 +140,7 @@
           7
         ]
       ],
-      "id": 3645,
+      "id": 3706,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -172,7 +172,7 @@
           7
         ]
       ],
-      "id": 3621,
+      "id": 3682,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -204,7 +204,7 @@
           7
         ]
       ],
-      "id": 3629,
+      "id": 3690,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -231,7 +231,7 @@
           16
         ]
       ],
-      "id": 3603,
+      "id": 3664,
       "flags": {
         "isPublic": true
       },
@@ -257,7 +257,7 @@
           8
         ]
       ],
-      "id": 3768,
+      "id": 3829,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.id",
@@ -289,7 +289,7 @@
           7
         ]
       ],
-      "id": 3637,
+      "id": 3698,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -316,7 +316,7 @@
           10
         ]
       ],
-      "id": 3615,
+      "id": 3676,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -340,7 +340,7 @@
           16
         ]
       ],
-      "id": 3659,
+      "id": 3720,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -372,7 +372,7 @@
           7
         ]
       ],
-      "id": 3617,
+      "id": 3678,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -399,7 +399,7 @@
           16
         ]
       ],
-      "id": 3605,
+      "id": 3666,
       "flags": {
         "isPublic": true
       },
@@ -420,7 +420,7 @@
           17
         ]
       ],
-      "id": 3607,
+      "id": 3668,
       "flags": {
         "isPublic": true
       },
@@ -446,7 +446,7 @@
           7
         ]
       ],
-      "id": 3633,
+      "id": 3694,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -478,7 +478,7 @@
           7
         ]
       ],
-      "id": 3649,
+      "id": 3710,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -510,7 +510,7 @@
           7
         ]
       ],
-      "id": 3653,
+      "id": 3714,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -542,7 +542,7 @@
           7
         ]
       ],
-      "id": 3784,
+      "id": 3845,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.w",
@@ -574,7 +574,7 @@
           7
         ]
       ],
-      "id": 3772,
+      "id": 3833,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.x",
@@ -606,7 +606,7 @@
           7
         ]
       ],
-      "id": 3776,
+      "id": 3837,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.y",
@@ -638,7 +638,7 @@
           7
         ]
       ],
-      "id": 3780,
+      "id": 3841,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.z",
@@ -667,7 +667,7 @@
           6
         ]
       ],
-      "id": 3880,
+      "id": 3941,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$abs",
@@ -690,7 +690,7 @@
           6
         ]
       ],
-      "id": 3832,
+      "id": 3893,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$add",
@@ -720,7 +720,7 @@
           7
         ]
       ],
-      "id": 3888,
+      "id": 3949,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$ceil",
@@ -743,7 +743,7 @@
           9
         ]
       ],
-      "id": 3826,
+      "id": 3887,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$concat",
@@ -773,7 +773,7 @@
           8
         ]
       ],
-      "id": 3869,
+      "id": 3930,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$cross",
@@ -803,7 +803,7 @@
           10
         ]
       ],
-      "id": 3866,
+      "id": 3927,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$cross2D",
@@ -833,7 +833,7 @@
           9
         ]
       ],
-      "id": 3850,
+      "id": 3911,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$divide",
@@ -863,7 +863,7 @@
           8
         ]
       ],
-      "id": 3884,
+      "id": 3945,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$floor",
@@ -886,7 +886,7 @@
           6
         ]
       ],
-      "id": 3907,
+      "id": 3968,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$max",
@@ -916,7 +916,7 @@
           6
         ]
       ],
-      "id": 3904,
+      "id": 3965,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$min",
@@ -946,7 +946,7 @@
           11
         ]
       ],
-      "id": 3844,
+      "id": 3905,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$multiply",
@@ -976,7 +976,7 @@
           12
         ]
       ],
-      "id": 3666,
+      "id": 3727,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1006,7 +1006,7 @@
           10
         ]
       ],
-      "id": 3872,
+      "id": 3933,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$project",
@@ -1036,7 +1036,7 @@
           8
         ]
       ],
-      "id": 3892,
+      "id": 3953,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$round",
@@ -1059,7 +1059,7 @@
           11
         ]
       ],
-      "id": 3838,
+      "id": 3899,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$subtract",
@@ -1089,7 +1089,7 @@
           7
         ]
       ],
-      "id": 3823,
+      "id": 3884,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$take",
@@ -1119,7 +1119,7 @@
           5
         ]
       ],
-      "id": 3795,
+      "id": 3856,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$to",
@@ -1149,7 +1149,7 @@
           7
         ]
       ],
-      "id": 3860,
+      "id": 3921,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$unit",
@@ -1179,7 +1179,7 @@
           5
         ]
       ],
-      "id": 3878,
+      "id": 3939,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.abs",
@@ -1202,7 +1202,7 @@
           5
         ]
       ],
-      "id": 3829,
+      "id": 3890,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.add",
@@ -1232,7 +1232,7 @@
           7
         ]
       ],
-      "id": 3910,
+      "id": 3971,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.angle",
@@ -1262,7 +1262,7 @@
           14
         ]
       ],
-      "id": 3913,
+      "id": 3974,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.angleBetween",
@@ -1298,7 +1298,7 @@
           6
         ]
       ],
-      "id": 3886,
+      "id": 3947,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.ceil",
@@ -1321,7 +1321,7 @@
           7
         ]
       ],
-      "id": 3609,
+      "id": 3670,
       "flags": {},
       "overrides": "Pt.clone",
       "inherits": false,
@@ -1336,1581 +1336,16 @@
       ]
     },
     {
-      "name": "divide",
-      "source": [
-        [
-          "Pt.ts",
-          241,
-          8
-        ]
-      ],
-      "id": 3847,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Pt.divide",
-      "signatures": [
-        {
-          "comment": "Divide this Pt over scalar or vector values (as element-wise).",
-          "returns": "this",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
-              "type": "any[]",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "dot",
-      "source": [
-        [
-          "Pt.ts",
-          286,
-          5
-        ]
-      ],
-      "id": 3863,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Pt.dot",
-      "signatures": [
-        {
-          "comment": "Dot product of this Pt and another Pt.",
-          "returns": "number",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
-              "type": "any[]",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "equals",
-      "source": [
-        [
-          "Pt.ts",
-          92,
-          8
-        ]
-      ],
-      "id": 3788,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Pt.equals",
-      "signatures": [
-        {
-          "comment": "Check if another Pt is equal to this Pt, within a threshold.",
-          "returns": "boolean",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "p",
-              "comment": "another Pt to compare with",
-              "type": "PtLike",
-              "default": false
-            },
-            {
-              "name": "threshold",
-              "comment": "a threshold value within which the two Pts are considered equal. Default is 0.000001.\n",
-              "type": "number",
-              "default": "0.000001"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "floor",
-      "source": [
-        [
-          "Pt.ts",
-          342,
-          7
-        ]
-      ],
-      "id": 3882,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Pt.floor",
-      "signatures": [
-        {
-          "comment": "Floor values for all values in this Pt.",
-          "returns": "Pt",
-          "returns_comment": false,
-          "parameters": [],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "magnitude",
-      "source": [
-        [
-          "Pt.ts",
-          263,
-          11
-        ]
-      ],
-      "id": 3855,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Pt.magnitude",
-      "signatures": [
-        {
-          "comment": "Get the distance (magnitude) of this Pt from origin.",
-          "returns": "number",
-          "returns_comment": false,
-          "parameters": [],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "magnitudeSq",
-      "source": [
-        [
-          "Pt.ts",
-          257,
-          13
-        ]
-      ],
-      "id": 3853,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Pt.magnitudeSq",
-      "signatures": [
-        {
-          "comment": "Get the sqaured distance (magnitude) of this Pt from origin.",
-          "returns": "number",
-          "returns_comment": false,
-          "parameters": [],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "maxValue",
-      "source": [
-        [
-          "Pt.ts",
-          403,
-          10
-        ]
-      ],
-      "id": 3899,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Pt.maxValue",
-      "signatures": [
-        {
-          "comment": "Find the maximum value across all dimensions in this Pt.",
-          "returns": "{ index:`number`, value:`number` }",
-          "returns_comment": "an object with `value` and `index` which returns the maximum value and its dimensional index\n",
-          "parameters": [],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "minValue",
-      "source": [
-        [
-          "Pt.ts",
-          394,
-          10
-        ]
-      ],
-      "id": 3894,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Pt.minValue",
-      "signatures": [
-        {
-          "comment": "Find the minimum value across all dimensions in this Pt.",
-          "returns": "{ index:`number`, value:`number` }",
-          "returns_comment": "an object with `value` and `index` which returns the minimum value and its dimensional index\n",
-          "parameters": [],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "multiply",
-      "source": [
-        [
-          "Pt.ts",
-          224,
-          10
-        ]
-      ],
-      "id": 3841,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Pt.multiply",
-      "signatures": [
-        {
-          "comment": "Multiply scalar or vector values (as element-wise) with this Pt.",
-          "returns": "this",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
-              "type": "any[]",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "normalize",
-      "source": [
-        [
-          "Color.ts",
-          269,
-          11
-        ]
-      ],
-      "id": 3663,
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Normalize the color values to between 0 to 1, or revert it back to the min/max values in current color mode.",
-          "returns": "Color",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "toNorm",
-              "comment": "a boolean value specifying whether to normalize (`true`) or revert (`false`)\n",
-              "type": "boolean",
-              "default": "true"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "op",
-      "source": [
-        [
-          "Pt.ts",
-          141,
-          4
-        ]
-      ],
-      "id": 3803,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Pt.op",
-      "signatures": [
-        {
-          "comment": "Create an operation using this Pt, passing this Pt into a custom function's first parameter. See the [Op guide](../guide/Op-0400.html) for details.",
-          "returns": " Fn(rest:any[])",
-          "returns_comment": "a resulting function that takes other parameters required in `fn`\n",
-          "parameters": [
-            {
-              "name": "fn",
-              "comment": "any function that takes a Pt as its first parameter",
-              "type": " Fn(p1:PtLike, rest:any[])",
-              "default": false
-            }
-          ],
-          "tags": [
-            {
-              "tag": "example",
-              "text": "`let myOp = pt.op( fn ); let result = myOp( [1,2,3] );`"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "ops",
-      "source": [
-        [
-          "Pt.ts",
-          155,
-          5
-        ]
-      ],
-      "id": 3813,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Pt.ops",
-      "signatures": [
-        {
-          "comment": "This combines a series of operations into an array. See the [Op guide](../guide/Op-0400.html) for details.",
-          "returns": " Fn(rest:any[])",
-          "returns_comment": "an array of resulting functions\n",
-          "parameters": [
-            {
-              "name": "fns",
-              "comment": "an array of functions for `op`",
-              "type": " Fn(p1:PtLike, rest:any[])",
-              "default": false
-            }
-          ],
-          "tags": [
-            {
-              "tag": "example",
-              "text": "`let myOps = pt.ops([fn1, fn2, fn3]); let results = myOps.map( (op) => op([1,2,3]) );`"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "projectScalar",
-      "source": [
-        [
-          "Pt.ts",
-          317,
-          15
-        ]
-      ],
-      "id": 3875,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Pt.projectScalar",
-      "signatures": [
-        {
-          "comment": "Calculate scalar projection.",
-          "returns": "number",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
-              "type": "any[]",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "reflect2D",
-      "source": [
-        [
-          "Pt.ts",
-          495,
-          11
-        ]
-      ],
-      "id": 3931,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Pt.reflect2D",
-      "signatures": [
-        {
-          "comment": "Reflect this Pt along a 2D line.",
-          "returns": "this",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "line",
-              "comment": "a Group of 2 Pts that defines a line for reflection",
-              "type": "GroupLike",
-              "default": false
-            },
-            {
-              "name": "axis",
-              "comment": "optional axis such as \"yz\" to define a 2D plane of reflection\n",
-              "type": "string",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "rotate2D",
-      "source": [
-        [
-          "Pt.ts",
-          472,
-          10
-        ]
-      ],
-      "id": 3921,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Pt.rotate2D",
-      "signatures": [
-        {
-          "comment": "Rotate this Pt from origin or from an anchor point in 2D.",
-          "returns": "this",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "angle",
-              "comment": "rotate angle",
-              "type": "number",
-              "default": false
-            },
-            {
-              "name": "anchor",
-              "comment": "optional anchor point to scale from",
-              "type": "PtLike",
-              "default": false
-            },
-            {
-              "name": "axis",
-              "comment": "optional string such as \"yz\" to specify a 2D plane\n",
-              "type": "string",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "round",
-      "source": [
-        [
-          "Pt.ts",
-          376,
-          7
-        ]
-      ],
-      "id": 3890,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Pt.round",
-      "signatures": [
-        {
-          "comment": "Rounded values for all values in this Pt.",
-          "returns": "Pt",
-          "returns_comment": false,
-          "parameters": [],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "scale",
-      "source": [
-        [
-          "Pt.ts",
-          460,
-          7
-        ]
-      ],
-      "id": 3917,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Pt.scale",
-      "signatures": [
-        {
-          "comment": "Scale this Pt from origin or from an anchor point.",
-          "returns": "this",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "scale",
-              "comment": "scale ratio",
-              "type": "number | number[] | PtLike",
-              "default": false
-            },
-            {
-              "name": "anchor",
-              "comment": "optional anchor point to scale from\n",
-              "type": "PtLike",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "shear2D",
-      "source": [
-        [
-          "Pt.ts",
-          484,
-          9
-        ]
-      ],
-      "id": 3926,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Pt.shear2D",
-      "signatures": [
-        {
-          "comment": "Shear this Pt from origin or from an anchor point in 2D.",
-          "returns": "this",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "scale",
-              "comment": "",
-              "type": "number | number[] | PtLike",
-              "default": false
-            },
-            {
-              "name": "anchor",
-              "comment": "optional anchor point to scale from",
-              "type": "PtLike",
-              "default": false
-            },
-            {
-              "name": "axis",
-              "comment": "optional string such as \"yz\" to specify a 2D plane\n",
-              "type": "string",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "subtract",
-      "source": [
-        [
-          "Pt.ts",
-          207,
-          10
-        ]
-      ],
-      "id": 3835,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Pt.subtract",
-      "signatures": [
-        {
-          "comment": "Subtract scalar or vector values from this Pt.",
-          "returns": "this",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
-              "type": "any[]",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "to",
-      "source": [
-        [
-          "Pt.ts",
-          104,
-          4
-        ]
-      ],
-      "id": 3792,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Pt.to",
-      "signatures": [
-        {
-          "comment": "Update the values of this Pt.",
-          "returns": "this",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
-              "type": "any[]",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "toAngle",
-      "source": [
-        [
-          "Pt.ts",
-          128,
-          9
-        ]
-      ],
-      "id": 3798,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Pt.toAngle",
-      "signatures": [
-        {
-          "comment": "Update the values of this Pt to point at a specific angle.",
-          "returns": "this",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "radian",
-              "comment": "target angle in radian",
-              "type": "number",
-              "default": false
-            },
-            {
-              "name": "magnitude",
-              "comment": "Optional magnitude if known. If not provided, it'll calculate and use this Pt's magnitude.",
-              "type": "number",
-              "default": false
-            },
-            {
-              "name": "anchorFromPt",
-              "comment": "If `true`, translate to new position from current position. Default is `false` which update the position from origin (0,0);\n",
-              "type": "boolean",
-              "default": "false"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "toArray",
-      "source": [
-        [
-          "Pt.ts",
-          512,
-          9
-        ]
-      ],
-      "id": 3935,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Pt.toArray",
-      "signatures": [
-        {
-          "comment": "Convert this Pt to a javascript Array.",
-          "returns": "number[]",
-          "returns_comment": false,
-          "parameters": [],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "toMode",
-      "source": [
-        [
-          "Color.ts",
-          161,
-          8
-        ]
-      ],
-      "id": 3611,
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Convert this color from current color space to another color space.",
-          "returns": "this",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "mode",
-              "comment": "a ColorType string: \"rgb\" \"hsl\" \"hsb\" \"lab\" \"lch\" \"luv\" \"xyz\";",
-              "type": "ColorType",
-              "default": false
-            },
-            {
-              "name": "convert",
-              "comment": "if `true`, convert this Color to the new color space specified in `mode`. Default is `false`, which only sets the color mode without converting color values.\n",
-              "type": "boolean",
-              "default": "false"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "toString",
-      "source": [
-        [
-          "Color.ts",
-          298,
-          10
-        ]
-      ],
-      "id": 3669,
-      "flags": {},
-      "overrides": "Pt.toString",
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Convert this Color to a string. It can be used to get a hex or rgb string for use in rendering.",
-          "returns": "string",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "format",
-              "comment": "\"hex\", \"rgb\", \"rgba\", or \"mode\" which means using current color mode label. Default is \"mode\".\n",
-              "type": "rgb | hex | rgba | mode",
-              "default": "\"mode\""
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "unit",
-      "source": [
-        [
-          "Pt.ts",
-          270,
-          6
-        ]
-      ],
-      "id": 3857,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Pt.unit",
-      "signatures": [
-        {
-          "comment": "Convert to a unit vector, which is a normalized vector whose magnitude equals to 1.",
-          "returns": "Pt",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "magnitude",
-              "comment": "Optional: if the magnitude is known, pass it as a parameter to avoid duplicate calculation.\n",
-              "type": "number",
-              "default": "undefined"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "HSBtoRGB",
-      "source": [
-        [
-          "Color.ts",
-          432,
-          17
-        ]
-      ],
-      "id": 3687,
-      "flags": {
-        "isStatic": true
-      },
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "A static function to convert HSB to RGB.",
-          "returns": "Color",
-          "returns_comment": "a new RGB Color\n",
-          "parameters": [
-            {
-              "name": "hsb",
-              "comment": "a HSB Color",
-              "type": "Color",
-              "default": false
-            },
-            {
-              "name": "normalizedInput",
-              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            },
-            {
-              "name": "normalizedOutput",
-              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "HSLtoRGB",
-      "source": [
-        [
-          "Color.ts",
-          361,
-          17
-        ]
-      ],
-      "id": 3677,
-      "flags": {
-        "isStatic": true
-      },
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "A static function to convert HSL to RGB.",
-          "returns": "Color",
-          "returns_comment": "a new RGB Color\n",
-          "parameters": [
-            {
-              "name": "hsl",
-              "comment": "a HSL Color",
-              "type": "Color",
-              "default": false
-            },
-            {
-              "name": "normalizedInput",
-              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            },
-            {
-              "name": "normalizedOutput",
-              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "LABtoLCH",
-      "source": [
-        [
-          "Color.ts",
-          709,
-          17
-        ]
-      ],
-      "id": 3752,
-      "flags": {
-        "isStatic": true
-      },
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "A static function to convert LAB to LCH.",
-          "returns": "Color",
-          "returns_comment": "a new LCH Color\n",
-          "parameters": [
-            {
-              "name": "lab",
-              "comment": "a LAB Color",
-              "type": "Color",
-              "default": false
-            },
-            {
-              "name": "normalizedInput",
-              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            },
-            {
-              "name": "normalizedOutput",
-              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "LABtoRGB",
-      "source": [
-        [
-          "Color.ts",
-          478,
-          17
-        ]
-      ],
-      "id": 3697,
-      "flags": {
-        "isStatic": true
-      },
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "A static function to convert LAB to RGB.",
-          "returns": "Color",
-          "returns_comment": "a new RGB Color\n",
-          "parameters": [
-            {
-              "name": "lab",
-              "comment": "a LAB Color",
-              "type": "Color",
-              "default": false
-            },
-            {
-              "name": "normalizedInput",
-              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            },
-            {
-              "name": "normalizedOutput",
-              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "LABtoXYZ",
-      "source": [
-        [
-          "Color.ts",
-          622,
-          17
-        ]
-      ],
-      "id": 3737,
-      "flags": {
-        "isStatic": true
-      },
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "A static function to convert LAB to XYZ.",
-          "returns": "Color",
-          "returns_comment": "a new XYZ Color\n",
-          "parameters": [
-            {
-              "name": "lab",
-              "comment": "a LAB Color",
-              "type": "Color",
-              "default": false
-            },
-            {
-              "name": "normalizedInput",
-              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            },
-            {
-              "name": "normalizedOutput",
-              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "LCHtoLAB",
-      "source": [
-        [
-          "Color.ts",
-          725,
-          17
-        ]
-      ],
-      "id": 3757,
-      "flags": {
-        "isStatic": true
-      },
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "A static function to convert LCH to LAB.",
-          "returns": "Color",
-          "returns_comment": "a new LAB Color\n",
-          "parameters": [
-            {
-              "name": "lch",
-              "comment": "a LCH Color",
-              "type": "Color",
-              "default": false
-            },
-            {
-              "name": "normalizedInput",
-              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            },
-            {
-              "name": "normalizedOutput",
-              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "LCHtoRGB",
-      "source": [
-        [
-          "Color.ts",
-          504,
-          17
-        ]
-      ],
-      "id": 3707,
-      "flags": {
-        "isStatic": true
-      },
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "A static function to convert LCH to RGB.",
-          "returns": "Color",
-          "returns_comment": "a new RGB Color\n",
-          "parameters": [
-            {
-              "name": "lch",
-              "comment": "a LCH Color",
-              "type": "Color",
-              "default": false
-            },
-            {
-              "name": "normalizedInput",
-              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            },
-            {
-              "name": "normalizedOutput",
-              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "LUVtoRGB",
-      "source": [
-        [
-          "Color.ts",
-          530,
-          17
-        ]
-      ],
-      "id": 3717,
-      "flags": {
-        "isStatic": true
-      },
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "A static function to convert LUV to RGB.",
-          "returns": "Color",
-          "returns_comment": "a new RGB Color\n",
-          "parameters": [
-            {
-              "name": "luv",
-              "comment": "",
-              "type": "Color",
-              "default": false
-            },
-            {
-              "name": "normalizedInput",
-              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            },
-            {
-              "name": "normalizedOutput",
-              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "LUVtoXYZ",
-      "source": [
-        [
-          "Color.ts",
-          682,
-          17
-        ]
-      ],
-      "id": 3747,
-      "flags": {
-        "isStatic": true
-      },
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "A static function to convert LUV to XYZ.",
-          "returns": "Color",
-          "returns_comment": "a new XYZ Color\n",
-          "parameters": [
-            {
-              "name": "luv",
-              "comment": "a LUV Color",
-              "type": "Color",
-              "default": false
-            },
-            {
-              "name": "normalizedInput",
-              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            },
-            {
-              "name": "normalizedOutput",
-              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "RGBtoHSB",
-      "source": [
-        [
-          "Color.ts",
-          401,
-          17
-        ]
-      ],
-      "id": 3682,
-      "flags": {
-        "isStatic": true
-      },
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "A static function to convert RGB to HSB.",
-          "returns": "Color",
-          "returns_comment": "a new HSB Color\n",
-          "parameters": [
-            {
-              "name": "rgb",
-              "comment": "a RGB Color",
-              "type": "Color",
-              "default": false
-            },
-            {
-              "name": "normalizedInput",
-              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            },
-            {
-              "name": "normalizedOutput",
-              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "RGBtoHSL",
-      "source": [
-        [
-          "Color.ts",
-          325,
-          17
-        ]
-      ],
-      "id": 3672,
-      "flags": {
-        "isStatic": true
-      },
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "A static function to convert RGB to HSL.",
-          "returns": "Color",
-          "returns_comment": "a new HSL Color\n",
-          "parameters": [
-            {
-              "name": "rgb",
-              "comment": "a RGB Color",
-              "type": "Color",
-              "default": false
-            },
-            {
-              "name": "normalizedInput",
-              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            },
-            {
-              "name": "normalizedOutput",
-              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "RGBtoLAB",
-      "source": [
-        [
-          "Color.ts",
-          465,
-          17
-        ]
-      ],
-      "id": 3692,
-      "flags": {
-        "isStatic": true
-      },
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "A static function to convert RGB to LAB.",
-          "returns": "Color",
-          "returns_comment": "a new LAB Color\n",
-          "parameters": [
-            {
-              "name": "rgb",
-              "comment": "a RGB Color",
-              "type": "Color",
-              "default": false
-            },
-            {
-              "name": "normalizedInput",
-              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            },
-            {
-              "name": "normalizedOutput",
-              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "RGBtoLCH",
-      "source": [
-        [
-          "Color.ts",
-          491,
-          17
-        ]
-      ],
-      "id": 3702,
-      "flags": {
-        "isStatic": true
-      },
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "A static function to convert RGB to LCH.",
-          "returns": "Color",
-          "returns_comment": "a new LCH Color\n",
-          "parameters": [
-            {
-              "name": "rgb",
-              "comment": "a RGB Color",
-              "type": "Color",
-              "default": false
-            },
-            {
-              "name": "normalizedInput",
-              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            },
-            {
-              "name": "normalizedOutput",
-              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "RGBtoLUV",
-      "source": [
-        [
-          "Color.ts",
-          517,
-          17
-        ]
-      ],
-      "id": 3712,
-      "flags": {
-        "isStatic": true
-      },
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "A static function to convert RGB to LUV.",
-          "returns": "Color",
-          "returns_comment": "a new LUV Color\n",
-          "parameters": [
-            {
-              "name": "rgb",
-              "comment": "a RGB Color",
-              "type": "Color",
-              "default": false
-            },
-            {
-              "name": "normalizedInput",
-              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            },
-            {
-              "name": "normalizedOutput",
-              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "RGBtoXYZ",
-      "source": [
-        [
-          "Color.ts",
-          543,
-          17
-        ]
-      ],
-      "id": 3722,
-      "flags": {
-        "isStatic": true
-      },
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "A static function to convert RGB to XYZ.",
-          "returns": "Color",
-          "returns_comment": "a new XYZ Color\n",
-          "parameters": [
-            {
-              "name": "rgb",
-              "comment": "a RGB Color",
-              "type": "Color",
-              "default": false
-            },
-            {
-              "name": "normalizedInput",
-              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            },
-            {
-              "name": "normalizedOutput",
-              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "XYZtoLAB",
-      "source": [
-        [
-          "Color.ts",
-          597,
-          17
-        ]
-      ],
-      "id": 3732,
-      "flags": {
-        "isStatic": true
-      },
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "A static function to convert XYZ to LAB.",
-          "returns": "Color",
-          "returns_comment": "a new LAB Color\n",
-          "parameters": [
-            {
-              "name": "xyz",
-              "comment": "a XYZ Color",
-              "type": "Color",
-              "default": false
-            },
-            {
-              "name": "normalizedInput",
-              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            },
-            {
-              "name": "normalizedOutput",
-              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "XYZtoLUV",
-      "source": [
-        [
-          "Color.ts",
-          657,
-          17
-        ]
-      ],
-      "id": 3742,
-      "flags": {
-        "isStatic": true
-      },
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "A static function to convert XYZ to LUV.",
-          "returns": "Color",
-          "returns_comment": "a new LUV Color\n",
-          "parameters": [
-            {
-              "name": "xyz",
-              "comment": "a XYZ Color",
-              "type": "Color",
-              "default": false
-            },
-            {
-              "name": "normalizedInput",
-              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            },
-            {
-              "name": "normalizedOutput",
-              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "XYZtoRGB",
-      "source": [
-        [
-          "Color.ts",
-          569,
-          17
-        ]
-      ],
-      "id": 3727,
-      "flags": {
-        "isStatic": true
-      },
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "A static function to convert XYZ to RGB.",
-          "returns": "Color",
-          "returns_comment": "a new RGB Color\n",
-          "parameters": [
-            {
-              "name": "xyz",
-              "comment": "a XYZ Color",
-              "type": "Color",
-              "default": false
-            },
-            {
-              "name": "normalizedInput",
-              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            },
-            {
-              "name": "normalizedOutput",
-              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
-              "type": "boolean",
-              "default": "false"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
       "name": "copyWithin",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3464,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3524,
           14
         ]
       ],
-      "id": 3941,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 4002,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.copyWithin",
       "signatures": [
@@ -2943,18 +1378,135 @@
       ]
     },
     {
+      "name": "divide",
+      "source": [
+        [
+          "Pt.ts",
+          241,
+          8
+        ]
+      ],
+      "id": 3908,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Pt.divide",
+      "signatures": [
+        {
+          "comment": "Divide this Pt over scalar or vector values (as element-wise).",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "dot",
+      "source": [
+        [
+          "Pt.ts",
+          286,
+          5
+        ]
+      ],
+      "id": 3924,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Pt.dot",
+      "signatures": [
+        {
+          "comment": "Dot product of this Pt and another Pt.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "entries",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es2015.iterable.d.ts",
+          444,
+          11
+        ]
+      ],
+      "id": 4170,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Float32Array.entries",
+      "signatures": [
+        {
+          "comment": "Returns an array of key, value pairs for every entry in the array",
+          "returns": "IterableIterator",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "equals",
+      "source": [
+        [
+          "Pt.ts",
+          92,
+          8
+        ]
+      ],
+      "id": 3849,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Pt.equals",
+      "signatures": [
+        {
+          "comment": "Check if another Pt is equal to this Pt, within a threshold.",
+          "returns": "boolean",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "p",
+              "comment": "another Pt to compare with",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "threshold",
+              "comment": "a threshold value within which the two Pts are considered equal. Default is 0.000001.\n",
+              "type": "number",
+              "default": "0.000001"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "every",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3474,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3534,
           9
         ]
       ],
-      "id": 3946,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 4007,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.every",
       "signatures": [
@@ -2984,15 +1536,13 @@
       "name": "fill",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3484,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3544,
           8
         ]
       ],
-      "id": 3955,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 4016,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.fill",
       "signatures": [
@@ -3028,15 +1578,13 @@
       "name": "filter",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3493,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3553,
           10
         ]
       ],
-      "id": 3960,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 4021,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.filter",
       "signatures": [
@@ -3066,15 +1614,13 @@
       "name": "find",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3504,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3564,
           8
         ]
       ],
-      "id": 3969,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 4030,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.find",
       "signatures": [
@@ -3104,15 +1650,13 @@
       "name": "findIndex",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3515,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3575,
           13
         ]
       ],
-      "id": 3978,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 4039,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.findIndex",
       "signatures": [
@@ -3139,18 +1683,39 @@
       ]
     },
     {
+      "name": "floor",
+      "source": [
+        [
+          "Pt.ts",
+          342,
+          7
+        ]
+      ],
+      "id": 3943,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Pt.floor",
+      "signatures": [
+        {
+          "comment": "Floor values for all values in this Pt.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "forEach",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3524,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3584,
           11
         ]
       ],
-      "id": 3987,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 4048,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.forEach",
       "signatures": [
@@ -3177,146 +1742,16 @@
       ]
     },
     {
-      "name": "from",
-      "source": [
-        [
-          "Color.ts",
-          46,
-          13
-        ]
-      ],
-      "id": 3573,
-      "flags": {
-        "isStatic": true
-      },
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Create a Color object with 4 default dimensional values (1,1,1,1).",
-          "returns": "Color",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "args",
-              "comment": "Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties\n",
-              "type": "any[]",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "fromHex",
-      "source": [
-        [
-          "Color.ts",
-          60,
-          16
-        ]
-      ],
-      "id": 3576,
-      "flags": {
-        "isStatic": true
-      },
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Convert a rgb hex string like `\"#FF0000\"` or `\"#F00\"` to a Color object.",
-          "returns": "Color",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "hex",
-              "comment": "a hex string, with optional '#' prefix\n",
-              "type": "string",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "hsb",
-      "source": [
-        [
-          "Color.ts",
-          96,
-          12
-        ]
-      ],
-      "id": 3585,
-      "flags": {
-        "isStatic": true
-      },
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Create HSB Color. HSB color ranges are (0...360, 0...1, 0...1) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.",
-          "returns": "Color",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "args",
-              "comment": "Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.\n",
-              "type": "any[]",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "hsl",
-      "source": [
-        [
-          "Color.ts",
-          90,
-          12
-        ]
-      ],
-      "id": 3582,
-      "flags": {
-        "isStatic": true
-      },
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Create HSL Color. HSL color ranges are (0...360, 0...1, 0...1) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.",
-          "returns": "Color",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "args",
-              "comment": "Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.\n",
-              "type": "any[]",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
       "name": "indexOf",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3532,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3592,
           11
         ]
       ],
-      "id": 3996,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 4057,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.indexOf",
       "signatures": [
@@ -3346,15 +1781,13 @@
       "name": "join",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3539,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3599,
           8
         ]
       ],
-      "id": 4000,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 4061,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.join",
       "signatures": [
@@ -3375,33 +1808,24 @@
       ]
     },
     {
-      "name": "lab",
+      "name": "keys",
       "source": [
         [
-          "Color.ts",
-          102,
-          12
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es2015.iterable.d.ts",
+          448,
+          8
         ]
       ],
-      "id": 3588,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 4172,
+      "flags": {},
       "overrides": false,
-      "inherits": false,
+      "inherits": "Float32Array.keys",
       "signatures": [
         {
-          "comment": "Create LAB Color. LAB color ranges are (0...100, -128...127, -128...127) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.",
-          "returns": "Color",
+          "comment": "Returns an list of keys in the array",
+          "returns": "IterableIterator",
           "returns_comment": false,
-          "parameters": [
-            {
-              "name": "args",
-              "comment": "Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.\n",
-              "type": "any[]",
-              "default": false
-            }
-          ],
+          "parameters": [],
           "tags": []
         }
       ]
@@ -3410,15 +1834,13 @@
       "name": "lastIndexOf",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3547,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3607,
           15
         ]
       ],
-      "id": 4003,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 4064,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.lastIndexOf",
       "signatures": [
@@ -3445,109 +1867,47 @@
       ]
     },
     {
-      "name": "lch",
-      "source": [
-        [
-          "Color.ts",
-          108,
-          12
-        ]
-      ],
-      "id": 3591,
-      "flags": {
-        "isStatic": true
-      },
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Create LCH Color. LCH color ranges are (0...100, 0...100, 0...360) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.",
-          "returns": "Color",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "args",
-              "comment": "Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.\n",
-              "type": "any[]",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "luv",
-      "source": [
-        [
-          "Color.ts",
-          114,
-          12
-        ]
-      ],
-      "id": 3594,
-      "flags": {
-        "isStatic": true
-      },
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Create LUV Color. LUV color ranges are (0...100, -134...220, -140...122) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.",
-          "returns": "Color",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "args",
-              "comment": "Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.\n",
-              "type": "any[]",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "make",
+      "name": "magnitude",
       "source": [
         [
           "Pt.ts",
-          37,
+          263,
+          11
+        ]
+      ],
+      "id": 3916,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Pt.magnitude",
+      "signatures": [
+        {
+          "comment": "Get the distance (magnitude) of this Pt from origin.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "magnitudeSq",
+      "source": [
+        [
+          "Pt.ts",
+          257,
           13
         ]
       ],
-      "id": 3763,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 3914,
+      "flags": {},
       "overrides": false,
-      "inherits": "Pt.make",
+      "inherits": "Pt.magnitudeSq",
       "signatures": [
         {
-          "comment": "Create an n-dimensional Pt with either default value or random values.",
-          "returns": "Pt",
+          "comment": "Get the sqaured distance (magnitude) of this Pt from origin.",
+          "returns": "number",
           "returns_comment": false,
-          "parameters": [
-            {
-              "name": "dimensions",
-              "comment": "number of dimensions",
-              "type": "number",
-              "default": false
-            },
-            {
-              "name": "defaultValue",
-              "comment": "optional default value to fill the dimensions",
-              "type": "number",
-              "default": "0"
-            },
-            {
-              "name": "randomize",
-              "comment": "if `true`, randomize the value between 0 to default value\n",
-              "type": "boolean",
-              "default": "false"
-            }
-          ],
+          "parameters": [],
           "tags": []
         }
       ]
@@ -3556,15 +1916,13 @@
       "name": "map",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3562,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3622,
           7
         ]
       ],
-      "id": 4008,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 4069,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.map",
       "signatures": [
@@ -3591,39 +1949,208 @@
       ]
     },
     {
-      "name": "maxValues",
+      "name": "maxValue",
+      "source": [
+        [
+          "Pt.ts",
+          403,
+          10
+        ]
+      ],
+      "id": 3960,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Pt.maxValue",
+      "signatures": [
+        {
+          "comment": "Find the maximum value across all dimensions in this Pt.",
+          "returns": "{ index:`number`, value:`number` }",
+          "returns_comment": "an object with `value` and `index` which returns the maximum value and its dimensional index\n",
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "minValue",
+      "source": [
+        [
+          "Pt.ts",
+          394,
+          10
+        ]
+      ],
+      "id": 3955,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Pt.minValue",
+      "signatures": [
+        {
+          "comment": "Find the minimum value across all dimensions in this Pt.",
+          "returns": "{ index:`number`, value:`number` }",
+          "returns_comment": "an object with `value` and `index` which returns the minimum value and its dimensional index\n",
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "multiply",
+      "source": [
+        [
+          "Pt.ts",
+          224,
+          10
+        ]
+      ],
+      "id": 3902,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Pt.multiply",
+      "signatures": [
+        {
+          "comment": "Multiply scalar or vector values (as element-wise) with this Pt.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "normalize",
       "source": [
         [
           "Color.ts",
-          128,
-          18
+          269,
+          11
         ]
       ],
-      "id": 3600,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 3724,
+      "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
-          "comment": "Get a Color object whose values are the maximum of its mode.",
-          "returns": "Pt",
+          "comment": "Normalize the color values to between 0 to 1, or revert it back to the min/max values in current color mode.",
+          "returns": "Color",
           "returns_comment": false,
           "parameters": [
             {
-              "name": "mode",
-              "comment": "a mode string such as \"rgb\" or \"lab\"",
-              "type": "string",
+              "name": "toNorm",
+              "comment": "a boolean value specifying whether to normalize (`true`) or revert (`false`)\n",
+              "type": "boolean",
+              "default": "true"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "op",
+      "source": [
+        [
+          "Pt.ts",
+          141,
+          4
+        ]
+      ],
+      "id": 3864,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Pt.op",
+      "signatures": [
+        {
+          "comment": "Create an operation using this Pt, passing this Pt into a custom function's first parameter. See the [Op guide](../guide/Op-0400.html) for details.",
+          "returns": " Fn(rest:any[])",
+          "returns_comment": "a resulting function that takes other parameters required in `fn`\n",
+          "parameters": [
+            {
+              "name": "fn",
+              "comment": "any function that takes a Pt as its first parameter",
+              "type": " Fn(p1:PtLike, rest:any[])",
               "default": false
             }
           ],
           "tags": [
             {
               "tag": "example",
-              "text": "Color.maxValue(\"rgb\") will return a rgb Color object with values (255,255,255)\n"
+              "text": "`let myOp = pt.op( fn ); let result = myOp( [1,2,3] );`"
             }
           ]
+        }
+      ]
+    },
+    {
+      "name": "ops",
+      "source": [
+        [
+          "Pt.ts",
+          155,
+          5
+        ]
+      ],
+      "id": 3874,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Pt.ops",
+      "signatures": [
+        {
+          "comment": "This combines a series of operations into an array. See the [Op guide](../guide/Op-0400.html) for details.",
+          "returns": " Fn(rest:any[])",
+          "returns_comment": "an array of resulting functions\n",
+          "parameters": [
+            {
+              "name": "fns",
+              "comment": "an array of functions for `op`",
+              "type": " Fn(p1:PtLike, rest:any[])",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`let myOps = pt.ops([fn1, fn2, fn3]); let results = myOps.map( (op) => op([1,2,3]) );`"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "projectScalar",
+      "source": [
+        [
+          "Pt.ts",
+          317,
+          15
+        ]
+      ],
+      "id": 3936,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Pt.projectScalar",
+      "signatures": [
+        {
+          "comment": "Calculate scalar projection.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
         }
       ]
     },
@@ -3631,25 +2158,23 @@
       "name": "reduce",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3574,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3634,
           10
         ],
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3575,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3635,
           10
         ],
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3587,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3647,
           10
         ]
       ],
-      "id": 4017,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 4078,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reduce",
       "signatures": [
@@ -3713,25 +2238,23 @@
       "name": "reduceRight",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3599,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3659,
           15
         ],
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3600,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3660,
           15
         ],
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3612,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3672,
           15
         ]
       ],
-      "id": 4045,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 4106,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reduceRight",
       "signatures": [
@@ -3792,18 +2315,52 @@
       ]
     },
     {
-      "name": "reverse",
+      "name": "reflect2D",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3617,
+          "Pt.ts",
+          495,
           11
         ]
       ],
-      "id": 4073,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 3992,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Pt.reflect2D",
+      "signatures": [
+        {
+          "comment": "Reflect this Pt along a 2D line.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "line",
+              "comment": "a Group of 2 Pts that defines a line for reflection",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "axis",
+              "comment": "optional axis such as \"yz\" to define a 2D plane of reflection\n",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "reverse",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3677,
+          11
+        ]
+      ],
+      "id": 4134,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reverse",
       "signatures": [
@@ -3817,30 +2374,99 @@
       ]
     },
     {
-      "name": "rgb",
+      "name": "rotate2D",
       "source": [
         [
-          "Color.ts",
-          84,
-          12
+          "Pt.ts",
+          472,
+          10
         ]
       ],
-      "id": 3579,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 3982,
+      "flags": {},
       "overrides": false,
-      "inherits": false,
+      "inherits": "Pt.rotate2D",
       "signatures": [
         {
-          "comment": "Create RGB Color. RGB color ranges are (0...255, 0...255, 0...255) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.",
-          "returns": "Color",
+          "comment": "Rotate this Pt from origin or from an anchor point in 2D.",
+          "returns": "this",
           "returns_comment": false,
           "parameters": [
             {
-              "name": "args",
-              "comment": "Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.\n",
-              "type": "any[]",
+              "name": "angle",
+              "comment": "rotate angle",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "anchor",
+              "comment": "optional anchor point to scale from",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "axis",
+              "comment": "optional string such as \"yz\" to specify a 2D plane\n",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "round",
+      "source": [
+        [
+          "Pt.ts",
+          376,
+          7
+        ]
+      ],
+      "id": 3951,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Pt.round",
+      "signatures": [
+        {
+          "comment": "Rounded values for all values in this Pt.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "scale",
+      "source": [
+        [
+          "Pt.ts",
+          460,
+          7
+        ]
+      ],
+      "id": 3978,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Pt.scale",
+      "signatures": [
+        {
+          "comment": "Scale this Pt from origin or from an anchor point.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "scale",
+              "comment": "scale ratio",
+              "type": "number | number[] | PtLike",
+              "default": false
+            },
+            {
+              "name": "anchor",
+              "comment": "optional anchor point to scale from\n",
+              "type": "PtLike",
               "default": false
             }
           ],
@@ -3852,15 +2478,13 @@
       "name": "set",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3624,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3684,
           7
         ]
       ],
-      "id": 4075,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 4136,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.set",
       "signatures": [
@@ -3887,18 +2511,58 @@
       ]
     },
     {
-      "name": "slice",
+      "name": "shear2D",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3631,
+          "Pt.ts",
+          484,
           9
         ]
       ],
-      "id": 4079,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 3987,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Pt.shear2D",
+      "signatures": [
+        {
+          "comment": "Shear this Pt from origin or from an anchor point in 2D.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "scale",
+              "comment": "",
+              "type": "number | number[] | PtLike",
+              "default": false
+            },
+            {
+              "name": "anchor",
+              "comment": "optional anchor point to scale from",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "axis",
+              "comment": "optional string such as \"yz\" to specify a 2D plane\n",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "slice",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3691,
+          9
+        ]
+      ],
+      "id": 4140,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.slice",
       "signatures": [
@@ -3928,15 +2592,13 @@
       "name": "some",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3641,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3701,
           8
         ]
       ],
-      "id": 4083,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 4144,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.some",
       "signatures": [
@@ -3966,15 +2628,13 @@
       "name": "sort",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3648,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3708,
           8
         ]
       ],
-      "id": 4092,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 4153,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.sort",
       "signatures": [
@@ -3998,15 +2658,13 @@
       "name": "subarray",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3656,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3716,
           12
         ]
       ],
-      "id": 4099,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 4160,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.subarray",
       "signatures": [
@@ -4033,18 +2691,141 @@
       ]
     },
     {
+      "name": "subtract",
+      "source": [
+        [
+          "Pt.ts",
+          207,
+          10
+        ]
+      ],
+      "id": 3896,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Pt.subtract",
+      "signatures": [
+        {
+          "comment": "Subtract scalar or vector values from this Pt.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "to",
+      "source": [
+        [
+          "Pt.ts",
+          104,
+          4
+        ]
+      ],
+      "id": 3853,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Pt.to",
+      "signatures": [
+        {
+          "comment": "Update the values of this Pt.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "toAngle",
+      "source": [
+        [
+          "Pt.ts",
+          128,
+          9
+        ]
+      ],
+      "id": 3859,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Pt.toAngle",
+      "signatures": [
+        {
+          "comment": "Update the values of this Pt to point at a specific angle.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "radian",
+              "comment": "target angle in radian",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "magnitude",
+              "comment": "Optional magnitude if known. If not provided, it'll calculate and use this Pt's magnitude.",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "anchorFromPt",
+              "comment": "If `true`, translate to new position from current position. Default is `false` which update the position from origin (0,0);\n",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "toArray",
+      "source": [
+        [
+          "Pt.ts",
+          512,
+          9
+        ]
+      ],
+      "id": 3996,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Pt.toArray",
+      "signatures": [
+        {
+          "comment": "Convert this Pt to a javascript Array.",
+          "returns": "number[]",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "toLocaleString",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3661,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3721,
           18
         ]
       ],
-      "id": 4103,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 4164,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.toLocaleString",
       "signatures": [
@@ -4058,26 +2839,1249 @@
       ]
     },
     {
+      "name": "toMode",
+      "source": [
+        [
+          "Color.ts",
+          161,
+          8
+        ]
+      ],
+      "id": 3672,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Convert this color from current color space to another color space.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "mode",
+              "comment": "a ColorType string: \"rgb\" \"hsl\" \"hsb\" \"lab\" \"lch\" \"luv\" \"xyz\";",
+              "type": "ColorType",
+              "default": false
+            },
+            {
+              "name": "convert",
+              "comment": "if `true`, convert this Color to the new color space specified in `mode`. Default is `false`, which only sets the color mode without converting color values.\n",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "toString",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3666,
-          12
+          "Color.ts",
+          298,
+          10
         ]
       ],
-      "id": 4105,
+      "id": 3730,
+      "flags": {},
+      "overrides": "Pt.toString",
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Convert this Color to a string. It can be used to get a hex or rgb string for use in rendering.",
+          "returns": "string",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "format",
+              "comment": "\"hex\", \"rgb\", \"rgba\", or \"mode\" which means using current color mode label. Default is \"mode\".\n",
+              "type": "rgb | hex | rgba | mode",
+              "default": "\"mode\""
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "unit",
+      "source": [
+        [
+          "Pt.ts",
+          270,
+          6
+        ]
+      ],
+      "id": 3918,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Pt.unit",
+      "signatures": [
+        {
+          "comment": "Convert to a unit vector, which is a normalized vector whose magnitude equals to 1.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "magnitude",
+              "comment": "Optional: if the magnitude is known, pass it as a parameter to avoid duplicate calculation.\n",
+              "type": "number",
+              "default": "undefined"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "values",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es2015.iterable.d.ts",
+          452,
+          10
+        ]
+      ],
+      "id": 4174,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Float32Array.values",
+      "signatures": [
+        {
+          "comment": "Returns an list of values in the array",
+          "returns": "IterableIterator",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "HSBtoRGB",
+      "source": [
+        [
+          "Color.ts",
+          432,
+          17
+        ]
+      ],
+      "id": 3748,
       "flags": {
         "isStatic": true
       },
       "overrides": false,
-      "inherits": "Float32Array.toString",
+      "inherits": false,
       "signatures": [
         {
-          "comment": "Returns a string representation of an array.",
-          "returns": "string",
+          "comment": "A static function to convert HSB to RGB.",
+          "returns": "Color",
+          "returns_comment": "a new RGB Color\n",
+          "parameters": [
+            {
+              "name": "hsb",
+              "comment": "a HSB Color",
+              "type": "Color",
+              "default": false
+            },
+            {
+              "name": "normalizedInput",
+              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            },
+            {
+              "name": "normalizedOutput",
+              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "HSLtoRGB",
+      "source": [
+        [
+          "Color.ts",
+          361,
+          17
+        ]
+      ],
+      "id": 3738,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to convert HSL to RGB.",
+          "returns": "Color",
+          "returns_comment": "a new RGB Color\n",
+          "parameters": [
+            {
+              "name": "hsl",
+              "comment": "a HSL Color",
+              "type": "Color",
+              "default": false
+            },
+            {
+              "name": "normalizedInput",
+              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            },
+            {
+              "name": "normalizedOutput",
+              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "LABtoLCH",
+      "source": [
+        [
+          "Color.ts",
+          709,
+          17
+        ]
+      ],
+      "id": 3813,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to convert LAB to LCH.",
+          "returns": "Color",
+          "returns_comment": "a new LCH Color\n",
+          "parameters": [
+            {
+              "name": "lab",
+              "comment": "a LAB Color",
+              "type": "Color",
+              "default": false
+            },
+            {
+              "name": "normalizedInput",
+              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            },
+            {
+              "name": "normalizedOutput",
+              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "LABtoRGB",
+      "source": [
+        [
+          "Color.ts",
+          478,
+          17
+        ]
+      ],
+      "id": 3758,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to convert LAB to RGB.",
+          "returns": "Color",
+          "returns_comment": "a new RGB Color\n",
+          "parameters": [
+            {
+              "name": "lab",
+              "comment": "a LAB Color",
+              "type": "Color",
+              "default": false
+            },
+            {
+              "name": "normalizedInput",
+              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            },
+            {
+              "name": "normalizedOutput",
+              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "LABtoXYZ",
+      "source": [
+        [
+          "Color.ts",
+          622,
+          17
+        ]
+      ],
+      "id": 3798,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to convert LAB to XYZ.",
+          "returns": "Color",
+          "returns_comment": "a new XYZ Color\n",
+          "parameters": [
+            {
+              "name": "lab",
+              "comment": "a LAB Color",
+              "type": "Color",
+              "default": false
+            },
+            {
+              "name": "normalizedInput",
+              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            },
+            {
+              "name": "normalizedOutput",
+              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "LCHtoLAB",
+      "source": [
+        [
+          "Color.ts",
+          725,
+          17
+        ]
+      ],
+      "id": 3818,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to convert LCH to LAB.",
+          "returns": "Color",
+          "returns_comment": "a new LAB Color\n",
+          "parameters": [
+            {
+              "name": "lch",
+              "comment": "a LCH Color",
+              "type": "Color",
+              "default": false
+            },
+            {
+              "name": "normalizedInput",
+              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            },
+            {
+              "name": "normalizedOutput",
+              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "LCHtoRGB",
+      "source": [
+        [
+          "Color.ts",
+          504,
+          17
+        ]
+      ],
+      "id": 3768,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to convert LCH to RGB.",
+          "returns": "Color",
+          "returns_comment": "a new RGB Color\n",
+          "parameters": [
+            {
+              "name": "lch",
+              "comment": "a LCH Color",
+              "type": "Color",
+              "default": false
+            },
+            {
+              "name": "normalizedInput",
+              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            },
+            {
+              "name": "normalizedOutput",
+              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "LUVtoRGB",
+      "source": [
+        [
+          "Color.ts",
+          530,
+          17
+        ]
+      ],
+      "id": 3778,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to convert LUV to RGB.",
+          "returns": "Color",
+          "returns_comment": "a new RGB Color\n",
+          "parameters": [
+            {
+              "name": "luv",
+              "comment": "",
+              "type": "Color",
+              "default": false
+            },
+            {
+              "name": "normalizedInput",
+              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            },
+            {
+              "name": "normalizedOutput",
+              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "LUVtoXYZ",
+      "source": [
+        [
+          "Color.ts",
+          682,
+          17
+        ]
+      ],
+      "id": 3808,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to convert LUV to XYZ.",
+          "returns": "Color",
+          "returns_comment": "a new XYZ Color\n",
+          "parameters": [
+            {
+              "name": "luv",
+              "comment": "a LUV Color",
+              "type": "Color",
+              "default": false
+            },
+            {
+              "name": "normalizedInput",
+              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            },
+            {
+              "name": "normalizedOutput",
+              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "RGBtoHSB",
+      "source": [
+        [
+          "Color.ts",
+          401,
+          17
+        ]
+      ],
+      "id": 3743,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to convert RGB to HSB.",
+          "returns": "Color",
+          "returns_comment": "a new HSB Color\n",
+          "parameters": [
+            {
+              "name": "rgb",
+              "comment": "a RGB Color",
+              "type": "Color",
+              "default": false
+            },
+            {
+              "name": "normalizedInput",
+              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            },
+            {
+              "name": "normalizedOutput",
+              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "RGBtoHSL",
+      "source": [
+        [
+          "Color.ts",
+          325,
+          17
+        ]
+      ],
+      "id": 3733,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to convert RGB to HSL.",
+          "returns": "Color",
+          "returns_comment": "a new HSL Color\n",
+          "parameters": [
+            {
+              "name": "rgb",
+              "comment": "a RGB Color",
+              "type": "Color",
+              "default": false
+            },
+            {
+              "name": "normalizedInput",
+              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            },
+            {
+              "name": "normalizedOutput",
+              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "RGBtoLAB",
+      "source": [
+        [
+          "Color.ts",
+          465,
+          17
+        ]
+      ],
+      "id": 3753,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to convert RGB to LAB.",
+          "returns": "Color",
+          "returns_comment": "a new LAB Color\n",
+          "parameters": [
+            {
+              "name": "rgb",
+              "comment": "a RGB Color",
+              "type": "Color",
+              "default": false
+            },
+            {
+              "name": "normalizedInput",
+              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            },
+            {
+              "name": "normalizedOutput",
+              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "RGBtoLCH",
+      "source": [
+        [
+          "Color.ts",
+          491,
+          17
+        ]
+      ],
+      "id": 3763,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to convert RGB to LCH.",
+          "returns": "Color",
+          "returns_comment": "a new LCH Color\n",
+          "parameters": [
+            {
+              "name": "rgb",
+              "comment": "a RGB Color",
+              "type": "Color",
+              "default": false
+            },
+            {
+              "name": "normalizedInput",
+              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            },
+            {
+              "name": "normalizedOutput",
+              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "RGBtoLUV",
+      "source": [
+        [
+          "Color.ts",
+          517,
+          17
+        ]
+      ],
+      "id": 3773,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to convert RGB to LUV.",
+          "returns": "Color",
+          "returns_comment": "a new LUV Color\n",
+          "parameters": [
+            {
+              "name": "rgb",
+              "comment": "a RGB Color",
+              "type": "Color",
+              "default": false
+            },
+            {
+              "name": "normalizedInput",
+              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            },
+            {
+              "name": "normalizedOutput",
+              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "RGBtoXYZ",
+      "source": [
+        [
+          "Color.ts",
+          543,
+          17
+        ]
+      ],
+      "id": 3783,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to convert RGB to XYZ.",
+          "returns": "Color",
+          "returns_comment": "a new XYZ Color\n",
+          "parameters": [
+            {
+              "name": "rgb",
+              "comment": "a RGB Color",
+              "type": "Color",
+              "default": false
+            },
+            {
+              "name": "normalizedInput",
+              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            },
+            {
+              "name": "normalizedOutput",
+              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "XYZtoLAB",
+      "source": [
+        [
+          "Color.ts",
+          597,
+          17
+        ]
+      ],
+      "id": 3793,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to convert XYZ to LAB.",
+          "returns": "Color",
+          "returns_comment": "a new LAB Color\n",
+          "parameters": [
+            {
+              "name": "xyz",
+              "comment": "a XYZ Color",
+              "type": "Color",
+              "default": false
+            },
+            {
+              "name": "normalizedInput",
+              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            },
+            {
+              "name": "normalizedOutput",
+              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "XYZtoLUV",
+      "source": [
+        [
+          "Color.ts",
+          657,
+          17
+        ]
+      ],
+      "id": 3803,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to convert XYZ to LUV.",
+          "returns": "Color",
+          "returns_comment": "a new LUV Color\n",
+          "parameters": [
+            {
+              "name": "xyz",
+              "comment": "a XYZ Color",
+              "type": "Color",
+              "default": false
+            },
+            {
+              "name": "normalizedInput",
+              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            },
+            {
+              "name": "normalizedOutput",
+              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "XYZtoRGB",
+      "source": [
+        [
+          "Color.ts",
+          569,
+          17
+        ]
+      ],
+      "id": 3788,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to convert XYZ to RGB.",
+          "returns": "Color",
+          "returns_comment": "a new RGB Color\n",
+          "parameters": [
+            {
+              "name": "xyz",
+              "comment": "a XYZ Color",
+              "type": "Color",
+              "default": false
+            },
+            {
+              "name": "normalizedInput",
+              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            },
+            {
+              "name": "normalizedOutput",
+              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "from",
+      "source": [
+        [
+          "Color.ts",
+          46,
+          13
+        ]
+      ],
+      "id": 3634,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a Color object with 4 default dimensional values (1,1,1,1).",
+          "returns": "Color",
           "returns_comment": false,
-          "parameters": [],
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "fromHex",
+      "source": [
+        [
+          "Color.ts",
+          60,
+          16
+        ]
+      ],
+      "id": 3637,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Convert a rgb hex string like `\"#FF0000\"` or `\"#F00\"` to a Color object.",
+          "returns": "Color",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "hex",
+              "comment": "a hex string, with optional '#' prefix\n",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "hsb",
+      "source": [
+        [
+          "Color.ts",
+          96,
+          12
+        ]
+      ],
+      "id": 3646,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create HSB Color. HSB color ranges are (0...360, 0...1, 0...1) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.",
+          "returns": "Color",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "hsl",
+      "source": [
+        [
+          "Color.ts",
+          90,
+          12
+        ]
+      ],
+      "id": 3643,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create HSL Color. HSL color ranges are (0...360, 0...1, 0...1) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.",
+          "returns": "Color",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "lab",
+      "source": [
+        [
+          "Color.ts",
+          102,
+          12
+        ]
+      ],
+      "id": 3649,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create LAB Color. LAB color ranges are (0...100, -128...127, -128...127) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.",
+          "returns": "Color",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "lch",
+      "source": [
+        [
+          "Color.ts",
+          108,
+          12
+        ]
+      ],
+      "id": 3652,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create LCH Color. LCH color ranges are (0...100, 0...100, 0...360) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.",
+          "returns": "Color",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "luv",
+      "source": [
+        [
+          "Color.ts",
+          114,
+          12
+        ]
+      ],
+      "id": 3655,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create LUV Color. LUV color ranges are (0...100, -134...220, -140...122) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.",
+          "returns": "Color",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "make",
+      "source": [
+        [
+          "Pt.ts",
+          37,
+          13
+        ]
+      ],
+      "id": 3824,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": "Pt.make",
+      "signatures": [
+        {
+          "comment": "Create an n-dimensional Pt with either default value or random values.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "dimensions",
+              "comment": "number of dimensions",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "defaultValue",
+              "comment": "optional default value to fill the dimensions",
+              "type": "number",
+              "default": "0"
+            },
+            {
+              "name": "randomize",
+              "comment": "if `true`, randomize the value between 0 to default value\n",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "maxValues",
+      "source": [
+        [
+          "Color.ts",
+          128,
+          18
+        ]
+      ],
+      "id": 3661,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a Color object whose values are the maximum of its mode.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "mode",
+              "comment": "a mode string such as \"rgb\" or \"lab\"",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "Color.maxValue(\"rgb\") will return a rgb Color object with values (255,255,255)\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "rgb",
+      "source": [
+        [
+          "Color.ts",
+          84,
+          12
+        ]
+      ],
+      "id": 3640,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create RGB Color. RGB color ranges are (0...255, 0...255, 0...255) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.",
+          "returns": "Color",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
           "tags": []
         }
       ]
@@ -4091,7 +4095,7 @@
           12
         ]
       ],
-      "id": 3597,
+      "id": 3658,
       "flags": {
         "isStatic": true
       },
@@ -4121,19 +4125,81 @@
       "name": "BYTES_PER_ELEMENT",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3438,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3498,
           30
         ]
       ],
-      "id": 3937,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 3998,
+      "flags": {},
       "type": "BYTES_PER_ELEMENT",
       "overrides": false,
       "inherits": "Float32Array.BYTES_PER_ELEMENT",
       "comment": "The size in bytes of each element in the array."
+    },
+    {
+      "name": "buffer",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3503,
+          19
+        ]
+      ],
+      "id": 3999,
+      "flags": {},
+      "type": "buffer",
+      "overrides": false,
+      "inherits": "Float32Array.buffer",
+      "comment": "The ArrayBuffer instance referenced by the array."
+    },
+    {
+      "name": "byteLength",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3508,
+          23
+        ]
+      ],
+      "id": 4000,
+      "flags": {},
+      "type": "byteLength",
+      "overrides": false,
+      "inherits": "Float32Array.byteLength",
+      "comment": "The length in bytes of the array."
+    },
+    {
+      "name": "byteOffset",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3513,
+          23
+        ]
+      ],
+      "id": 4001,
+      "flags": {},
+      "type": "byteOffset",
+      "overrides": false,
+      "inherits": "Float32Array.byteOffset",
+      "comment": "The offset in bytes of the array."
+    },
+    {
+      "name": "length",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3612,
+          19
+        ]
+      ],
+      "id": 4068,
+      "flags": {},
+      "type": "length",
+      "overrides": false,
+      "inherits": "Float32Array.length",
+      "comment": "The length of the array."
     },
     {
       "name": "D65",
@@ -4144,7 +4210,7 @@
           20
         ]
       ],
-      "id": 3559,
+      "id": 3620,
       "flags": {
         "isStatic": true,
         "isPrivate": true
@@ -4153,78 +4219,6 @@
       "overrides": false,
       "inherits": false,
       "comment": ""
-    },
-    {
-      "name": "buffer",
-      "source": [
-        [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3443,
-          19
-        ]
-      ],
-      "id": 3938,
-      "flags": {
-        "isStatic": true
-      },
-      "type": "buffer",
-      "overrides": false,
-      "inherits": "Float32Array.buffer",
-      "comment": "The ArrayBuffer instance referenced by the array."
-    },
-    {
-      "name": "byteLength",
-      "source": [
-        [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3448,
-          23
-        ]
-      ],
-      "id": 3939,
-      "flags": {
-        "isStatic": true
-      },
-      "type": "byteLength",
-      "overrides": false,
-      "inherits": "Float32Array.byteLength",
-      "comment": "The length in bytes of the array."
-    },
-    {
-      "name": "byteOffset",
-      "source": [
-        [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3453,
-          23
-        ]
-      ],
-      "id": 3940,
-      "flags": {
-        "isStatic": true
-      },
-      "type": "byteOffset",
-      "overrides": false,
-      "inherits": "Float32Array.byteOffset",
-      "comment": "The offset in bytes of the array."
-    },
-    {
-      "name": "length",
-      "source": [
-        [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3552,
-          19
-        ]
-      ],
-      "id": 4007,
-      "flags": {
-        "isStatic": true
-      },
-      "type": "length",
-      "overrides": false,
-      "inherits": "Float32Array.length",
-      "comment": "The length of the array."
     }
   ],
   "flags": {},

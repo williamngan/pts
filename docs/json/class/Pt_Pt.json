@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 1663,
+  "id": 1674,
   "comment": "Pt is a subclass of standard [`Float32Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array) with additional properties and functions to support vector and geometric calculations.\nSee [Pt guide](../guide/Pt-0200.html) for details.",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           23
         ]
       ],
-      "id": 1665,
+      "id": 1676,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -62,7 +62,7 @@
           8
         ]
       ],
-      "id": 1673,
+      "id": 1684,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -94,7 +94,7 @@
           7
         ]
       ],
-      "id": 1689,
+      "id": 1700,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -126,7 +126,7 @@
           7
         ]
       ],
-      "id": 1677,
+      "id": 1688,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -158,7 +158,7 @@
           7
         ]
       ],
-      "id": 1681,
+      "id": 1692,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -190,7 +190,7 @@
           7
         ]
       ],
-      "id": 1685,
+      "id": 1696,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -219,7 +219,7 @@
           6
         ]
       ],
-      "id": 1787,
+      "id": 1798,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -242,7 +242,7 @@
           6
         ]
       ],
-      "id": 1739,
+      "id": 1750,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -272,7 +272,7 @@
           7
         ]
       ],
-      "id": 1795,
+      "id": 1806,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -295,7 +295,7 @@
           9
         ]
       ],
-      "id": 1733,
+      "id": 1744,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -325,7 +325,7 @@
           8
         ]
       ],
-      "id": 1776,
+      "id": 1787,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -355,7 +355,7 @@
           10
         ]
       ],
-      "id": 1773,
+      "id": 1784,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -385,7 +385,7 @@
           9
         ]
       ],
-      "id": 1757,
+      "id": 1768,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -415,7 +415,7 @@
           8
         ]
       ],
-      "id": 1791,
+      "id": 1802,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -438,7 +438,7 @@
           6
         ]
       ],
-      "id": 1814,
+      "id": 1825,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -468,7 +468,7 @@
           6
         ]
       ],
-      "id": 1811,
+      "id": 1822,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -498,7 +498,7 @@
           11
         ]
       ],
-      "id": 1751,
+      "id": 1762,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -528,7 +528,7 @@
           10
         ]
       ],
-      "id": 1779,
+      "id": 1790,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -558,7 +558,7 @@
           8
         ]
       ],
-      "id": 1799,
+      "id": 1810,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -581,7 +581,7 @@
           11
         ]
       ],
-      "id": 1745,
+      "id": 1756,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -611,7 +611,7 @@
           7
         ]
       ],
-      "id": 1730,
+      "id": 1741,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -641,7 +641,7 @@
           5
         ]
       ],
-      "id": 1702,
+      "id": 1713,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -671,7 +671,7 @@
           7
         ]
       ],
-      "id": 1767,
+      "id": 1778,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -701,7 +701,7 @@
           5
         ]
       ],
-      "id": 1785,
+      "id": 1796,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -724,7 +724,7 @@
           5
         ]
       ],
-      "id": 1736,
+      "id": 1747,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -754,7 +754,7 @@
           7
         ]
       ],
-      "id": 1817,
+      "id": 1828,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -784,7 +784,7 @@
           14
         ]
       ],
-      "id": 1820,
+      "id": 1831,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -820,7 +820,7 @@
           6
         ]
       ],
-      "id": 1793,
+      "id": 1804,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -843,7 +843,7 @@
           7
         ]
       ],
-      "id": 1693,
+      "id": 1704,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -858,716 +858,16 @@
       ]
     },
     {
-      "name": "divide",
-      "source": [
-        [
-          "Pt.ts",
-          241,
-          8
-        ]
-      ],
-      "id": 1754,
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Divide this Pt over scalar or vector values (as element-wise).",
-          "returns": "this",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
-              "type": "any[]",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "dot",
-      "source": [
-        [
-          "Pt.ts",
-          286,
-          5
-        ]
-      ],
-      "id": 1770,
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Dot product of this Pt and another Pt.",
-          "returns": "number",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
-              "type": "any[]",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "equals",
-      "source": [
-        [
-          "Pt.ts",
-          92,
-          8
-        ]
-      ],
-      "id": 1695,
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Check if another Pt is equal to this Pt, within a threshold.",
-          "returns": "boolean",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "p",
-              "comment": "another Pt to compare with",
-              "type": "PtLike",
-              "default": false
-            },
-            {
-              "name": "threshold",
-              "comment": "a threshold value within which the two Pts are considered equal. Default is 0.000001.\n",
-              "type": "number",
-              "default": "0.000001"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "floor",
-      "source": [
-        [
-          "Pt.ts",
-          342,
-          7
-        ]
-      ],
-      "id": 1789,
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Floor values for all values in this Pt.",
-          "returns": "Pt",
-          "returns_comment": false,
-          "parameters": [],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "magnitude",
-      "source": [
-        [
-          "Pt.ts",
-          263,
-          11
-        ]
-      ],
-      "id": 1762,
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Get the distance (magnitude) of this Pt from origin.",
-          "returns": "number",
-          "returns_comment": false,
-          "parameters": [],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "magnitudeSq",
-      "source": [
-        [
-          "Pt.ts",
-          257,
-          13
-        ]
-      ],
-      "id": 1760,
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Get the sqaured distance (magnitude) of this Pt from origin.",
-          "returns": "number",
-          "returns_comment": false,
-          "parameters": [],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "maxValue",
-      "source": [
-        [
-          "Pt.ts",
-          403,
-          10
-        ]
-      ],
-      "id": 1806,
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Find the maximum value across all dimensions in this Pt.",
-          "returns": "{ index:`number`, value:`number` }",
-          "returns_comment": "an object with `value` and `index` which returns the maximum value and its dimensional index\n",
-          "parameters": [],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "minValue",
-      "source": [
-        [
-          "Pt.ts",
-          394,
-          10
-        ]
-      ],
-      "id": 1801,
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Find the minimum value across all dimensions in this Pt.",
-          "returns": "{ index:`number`, value:`number` }",
-          "returns_comment": "an object with `value` and `index` which returns the minimum value and its dimensional index\n",
-          "parameters": [],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "multiply",
-      "source": [
-        [
-          "Pt.ts",
-          224,
-          10
-        ]
-      ],
-      "id": 1748,
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Multiply scalar or vector values (as element-wise) with this Pt.",
-          "returns": "this",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
-              "type": "any[]",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "op",
-      "source": [
-        [
-          "Pt.ts",
-          141,
-          4
-        ]
-      ],
-      "id": 1710,
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Create an operation using this Pt, passing this Pt into a custom function's first parameter. See the [Op guide](../guide/Op-0400.html) for details.",
-          "returns": " Fn(rest:any[])",
-          "returns_comment": "a resulting function that takes other parameters required in `fn`\n",
-          "parameters": [
-            {
-              "name": "fn",
-              "comment": "any function that takes a Pt as its first parameter",
-              "type": " Fn(p1:PtLike, rest:any[])",
-              "default": false
-            }
-          ],
-          "tags": [
-            {
-              "tag": "example",
-              "text": "`let myOp = pt.op( fn ); let result = myOp( [1,2,3] );`"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "ops",
-      "source": [
-        [
-          "Pt.ts",
-          155,
-          5
-        ]
-      ],
-      "id": 1720,
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "This combines a series of operations into an array. See the [Op guide](../guide/Op-0400.html) for details.",
-          "returns": " Fn(rest:any[])",
-          "returns_comment": "an array of resulting functions\n",
-          "parameters": [
-            {
-              "name": "fns",
-              "comment": "an array of functions for `op`",
-              "type": " Fn(p1:PtLike, rest:any[])",
-              "default": false
-            }
-          ],
-          "tags": [
-            {
-              "tag": "example",
-              "text": "`let myOps = pt.ops([fn1, fn2, fn3]); let results = myOps.map( (op) => op([1,2,3]) );`"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "projectScalar",
-      "source": [
-        [
-          "Pt.ts",
-          317,
-          15
-        ]
-      ],
-      "id": 1782,
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Calculate scalar projection.",
-          "returns": "number",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
-              "type": "any[]",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "reflect2D",
-      "source": [
-        [
-          "Pt.ts",
-          495,
-          11
-        ]
-      ],
-      "id": 1838,
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Reflect this Pt along a 2D line.",
-          "returns": "this",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "line",
-              "comment": "a Group of 2 Pts that defines a line for reflection",
-              "type": "GroupLike",
-              "default": false
-            },
-            {
-              "name": "axis",
-              "comment": "optional axis such as \"yz\" to define a 2D plane of reflection\n",
-              "type": "string",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "rotate2D",
-      "source": [
-        [
-          "Pt.ts",
-          472,
-          10
-        ]
-      ],
-      "id": 1828,
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Rotate this Pt from origin or from an anchor point in 2D.",
-          "returns": "this",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "angle",
-              "comment": "rotate angle",
-              "type": "number",
-              "default": false
-            },
-            {
-              "name": "anchor",
-              "comment": "optional anchor point to scale from",
-              "type": "PtLike",
-              "default": false
-            },
-            {
-              "name": "axis",
-              "comment": "optional string such as \"yz\" to specify a 2D plane\n",
-              "type": "string",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "round",
-      "source": [
-        [
-          "Pt.ts",
-          376,
-          7
-        ]
-      ],
-      "id": 1797,
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Rounded values for all values in this Pt.",
-          "returns": "Pt",
-          "returns_comment": false,
-          "parameters": [],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "scale",
-      "source": [
-        [
-          "Pt.ts",
-          460,
-          7
-        ]
-      ],
-      "id": 1824,
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Scale this Pt from origin or from an anchor point.",
-          "returns": "this",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "scale",
-              "comment": "scale ratio",
-              "type": "number | number[] | PtLike",
-              "default": false
-            },
-            {
-              "name": "anchor",
-              "comment": "optional anchor point to scale from\n",
-              "type": "PtLike",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "shear2D",
-      "source": [
-        [
-          "Pt.ts",
-          484,
-          9
-        ]
-      ],
-      "id": 1833,
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Shear this Pt from origin or from an anchor point in 2D.",
-          "returns": "this",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "scale",
-              "comment": "",
-              "type": "number | number[] | PtLike",
-              "default": false
-            },
-            {
-              "name": "anchor",
-              "comment": "optional anchor point to scale from",
-              "type": "PtLike",
-              "default": false
-            },
-            {
-              "name": "axis",
-              "comment": "optional string such as \"yz\" to specify a 2D plane\n",
-              "type": "string",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "subtract",
-      "source": [
-        [
-          "Pt.ts",
-          207,
-          10
-        ]
-      ],
-      "id": 1742,
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Subtract scalar or vector values from this Pt.",
-          "returns": "this",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
-              "type": "any[]",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "to",
-      "source": [
-        [
-          "Pt.ts",
-          104,
-          4
-        ]
-      ],
-      "id": 1699,
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Update the values of this Pt.",
-          "returns": "this",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
-              "type": "any[]",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "toAngle",
-      "source": [
-        [
-          "Pt.ts",
-          128,
-          9
-        ]
-      ],
-      "id": 1705,
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Update the values of this Pt to point at a specific angle.",
-          "returns": "this",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "radian",
-              "comment": "target angle in radian",
-              "type": "number",
-              "default": false
-            },
-            {
-              "name": "magnitude",
-              "comment": "Optional magnitude if known. If not provided, it'll calculate and use this Pt's magnitude.",
-              "type": "number",
-              "default": false
-            },
-            {
-              "name": "anchorFromPt",
-              "comment": "If `true`, translate to new position from current position. Default is `false` which update the position from origin (0,0);\n",
-              "type": "boolean",
-              "default": "false"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "toArray",
-      "source": [
-        [
-          "Pt.ts",
-          512,
-          9
-        ]
-      ],
-      "id": 1844,
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Convert this Pt to a javascript Array.",
-          "returns": "number[]",
-          "returns_comment": false,
-          "parameters": [],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "toString",
-      "source": [
-        [
-          "Pt.ts",
-          504,
-          10
-        ]
-      ],
-      "id": 1842,
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "A string representation of this Pt. Eg, \"Pt(1, 2, 3)\".",
-          "returns": "string",
-          "returns_comment": false,
-          "parameters": [],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "unit",
-      "source": [
-        [
-          "Pt.ts",
-          270,
-          6
-        ]
-      ],
-      "id": 1764,
-      "flags": {},
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Convert to a unit vector, which is a normalized vector whose magnitude equals to 1.",
-          "returns": "Pt",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "magnitude",
-              "comment": "Optional: if the magnitude is known, pass it as a parameter to avoid duplicate calculation.\n",
-              "type": "number",
-              "default": "undefined"
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
       "name": "copyWithin",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3464,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3524,
           14
         ]
       ],
-      "id": 1850,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 1861,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.copyWithin",
       "signatures": [
@@ -1600,18 +900,76 @@
       ]
     },
     {
+      "name": "divide",
+      "source": [
+        [
+          "Pt.ts",
+          241,
+          8
+        ]
+      ],
+      "id": 1765,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Divide this Pt over scalar or vector values (as element-wise).",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "dot",
+      "source": [
+        [
+          "Pt.ts",
+          286,
+          5
+        ]
+      ],
+      "id": 1781,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Dot product of this Pt and another Pt.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "entries",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          5205,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es2015.iterable.d.ts",
+          444,
           11
         ]
       ],
-      "id": 2021,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 2030,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.entries",
       "signatures": [
@@ -1625,18 +983,52 @@
       ]
     },
     {
+      "name": "equals",
+      "source": [
+        [
+          "Pt.ts",
+          92,
+          8
+        ]
+      ],
+      "id": 1706,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Check if another Pt is equal to this Pt, within a threshold.",
+          "returns": "boolean",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "p",
+              "comment": "another Pt to compare with",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "threshold",
+              "comment": "a threshold value within which the two Pts are considered equal. Default is 0.000001.\n",
+              "type": "number",
+              "default": "0.000001"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "every",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3474,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3534,
           9
         ]
       ],
-      "id": 1855,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 1866,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.every",
       "signatures": [
@@ -1666,15 +1058,13 @@
       "name": "fill",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3484,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3544,
           8
         ]
       ],
-      "id": 1864,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 1875,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.fill",
       "signatures": [
@@ -1710,15 +1100,13 @@
       "name": "filter",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3493,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3553,
           10
         ]
       ],
-      "id": 1869,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 1880,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.filter",
       "signatures": [
@@ -1748,15 +1136,13 @@
       "name": "find",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3504,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3564,
           8
         ]
       ],
-      "id": 1878,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 1889,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.find",
       "signatures": [
@@ -1786,15 +1172,13 @@
       "name": "findIndex",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3515,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3575,
           13
         ]
       ],
-      "id": 1887,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 1898,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.findIndex",
       "signatures": [
@@ -1821,18 +1205,39 @@
       ]
     },
     {
+      "name": "floor",
+      "source": [
+        [
+          "Pt.ts",
+          342,
+          7
+        ]
+      ],
+      "id": 1800,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Floor values for all values in this Pt.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "forEach",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3524,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3584,
           11
         ]
       ],
-      "id": 1896,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 1907,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.forEach",
       "signatures": [
@@ -1862,15 +1267,13 @@
       "name": "indexOf",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3532,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3592,
           11
         ]
       ],
-      "id": 1905,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 1916,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.indexOf",
       "signatures": [
@@ -1900,15 +1303,13 @@
       "name": "join",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3539,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3599,
           8
         ]
       ],
-      "id": 1909,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 1920,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.join",
       "signatures": [
@@ -1932,15 +1333,13 @@
       "name": "keys",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          5209,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es2015.iterable.d.ts",
+          448,
           8
         ]
       ],
-      "id": 2023,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 2032,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.keys",
       "signatures": [
@@ -1957,15 +1356,13 @@
       "name": "lastIndexOf",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3547,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3607,
           15
         ]
       ],
-      "id": 1912,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 1923,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.lastIndexOf",
       "signatures": [
@@ -1992,45 +1389,47 @@
       ]
     },
     {
-      "name": "make",
+      "name": "magnitude",
       "source": [
         [
           "Pt.ts",
-          37,
-          13
+          263,
+          11
         ]
       ],
-      "id": 1668,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 1773,
+      "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
-          "comment": "Create an n-dimensional Pt with either default value or random values.",
-          "returns": "Pt",
+          "comment": "Get the distance (magnitude) of this Pt from origin.",
+          "returns": "number",
           "returns_comment": false,
-          "parameters": [
-            {
-              "name": "dimensions",
-              "comment": "number of dimensions",
-              "type": "number",
-              "default": false
-            },
-            {
-              "name": "defaultValue",
-              "comment": "optional default value to fill the dimensions",
-              "type": "number",
-              "default": "0"
-            },
-            {
-              "name": "randomize",
-              "comment": "if `true`, randomize the value between 0 to default value\n",
-              "type": "boolean",
-              "default": "false"
-            }
-          ],
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "magnitudeSq",
+      "source": [
+        [
+          "Pt.ts",
+          257,
+          13
+        ]
+      ],
+      "id": 1771,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get the sqaured distance (magnitude) of this Pt from origin.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [],
           "tags": []
         }
       ]
@@ -2039,15 +1438,13 @@
       "name": "map",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3562,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3622,
           7
         ]
       ],
-      "id": 1917,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 1928,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.map",
       "signatures": [
@@ -2074,28 +1471,202 @@
       ]
     },
     {
-      "name": "reduce",
+      "name": "maxValue",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3574,
-          10
-        ],
-        [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3575,
-          10
-        ],
-        [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3587,
+          "Pt.ts",
+          403,
           10
         ]
       ],
-      "id": 1926,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 1817,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Find the maximum value across all dimensions in this Pt.",
+          "returns": "{ index:`number`, value:`number` }",
+          "returns_comment": "an object with `value` and `index` which returns the maximum value and its dimensional index\n",
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "minValue",
+      "source": [
+        [
+          "Pt.ts",
+          394,
+          10
+        ]
+      ],
+      "id": 1812,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Find the minimum value across all dimensions in this Pt.",
+          "returns": "{ index:`number`, value:`number` }",
+          "returns_comment": "an object with `value` and `index` which returns the minimum value and its dimensional index\n",
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "multiply",
+      "source": [
+        [
+          "Pt.ts",
+          224,
+          10
+        ]
+      ],
+      "id": 1759,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Multiply scalar or vector values (as element-wise) with this Pt.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "op",
+      "source": [
+        [
+          "Pt.ts",
+          141,
+          4
+        ]
+      ],
+      "id": 1721,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create an operation using this Pt, passing this Pt into a custom function's first parameter. See the [Op guide](../guide/Op-0400.html) for details.",
+          "returns": " Fn(rest:any[])",
+          "returns_comment": "a resulting function that takes other parameters required in `fn`\n",
+          "parameters": [
+            {
+              "name": "fn",
+              "comment": "any function that takes a Pt as its first parameter",
+              "type": " Fn(p1:PtLike, rest:any[])",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`let myOp = pt.op( fn ); let result = myOp( [1,2,3] );`"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ops",
+      "source": [
+        [
+          "Pt.ts",
+          155,
+          5
+        ]
+      ],
+      "id": 1731,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "This combines a series of operations into an array. See the [Op guide](../guide/Op-0400.html) for details.",
+          "returns": " Fn(rest:any[])",
+          "returns_comment": "an array of resulting functions\n",
+          "parameters": [
+            {
+              "name": "fns",
+              "comment": "an array of functions for `op`",
+              "type": " Fn(p1:PtLike, rest:any[])",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`let myOps = pt.ops([fn1, fn2, fn3]); let results = myOps.map( (op) => op([1,2,3]) );`"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "projectScalar",
+      "source": [
+        [
+          "Pt.ts",
+          317,
+          15
+        ]
+      ],
+      "id": 1793,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Calculate scalar projection.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "reduce",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3634,
+          10
+        ],
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3635,
+          10
+        ],
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3647,
+          10
+        ]
+      ],
+      "id": 1937,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reduce",
       "signatures": [
@@ -2159,25 +1730,23 @@
       "name": "reduceRight",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3599,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3659,
           15
         ],
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3600,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3660,
           15
         ],
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3612,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3672,
           15
         ]
       ],
-      "id": 1954,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 1965,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reduceRight",
       "signatures": [
@@ -2238,18 +1807,52 @@
       ]
     },
     {
-      "name": "reverse",
+      "name": "reflect2D",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3617,
+          "Pt.ts",
+          495,
           11
         ]
       ],
-      "id": 1982,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 1849,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Reflect this Pt along a 2D line.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "line",
+              "comment": "a Group of 2 Pts that defines a line for reflection",
+              "type": "GroupLike",
+              "default": false
+            },
+            {
+              "name": "axis",
+              "comment": "optional axis such as \"yz\" to define a 2D plane of reflection\n",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "reverse",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3677,
+          11
+        ]
+      ],
+      "id": 1993,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reverse",
       "signatures": [
@@ -2263,18 +1866,117 @@
       ]
     },
     {
-      "name": "set",
+      "name": "rotate2D",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3624,
+          "Pt.ts",
+          472,
+          10
+        ]
+      ],
+      "id": 1839,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Rotate this Pt from origin or from an anchor point in 2D.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "angle",
+              "comment": "rotate angle",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "anchor",
+              "comment": "optional anchor point to scale from",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "axis",
+              "comment": "optional string such as \"yz\" to specify a 2D plane\n",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "round",
+      "source": [
+        [
+          "Pt.ts",
+          376,
           7
         ]
       ],
-      "id": 1984,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 1808,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Rounded values for all values in this Pt.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "scale",
+      "source": [
+        [
+          "Pt.ts",
+          460,
+          7
+        ]
+      ],
+      "id": 1835,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Scale this Pt from origin or from an anchor point.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "scale",
+              "comment": "scale ratio",
+              "type": "number | number[] | PtLike",
+              "default": false
+            },
+            {
+              "name": "anchor",
+              "comment": "optional anchor point to scale from\n",
+              "type": "PtLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "set",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3684,
+          7
+        ]
+      ],
+      "id": 1995,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.set",
       "signatures": [
@@ -2301,18 +2003,58 @@
       ]
     },
     {
-      "name": "slice",
+      "name": "shear2D",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3631,
+          "Pt.ts",
+          484,
           9
         ]
       ],
-      "id": 1988,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 1844,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Shear this Pt from origin or from an anchor point in 2D.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "scale",
+              "comment": "",
+              "type": "number | number[] | PtLike",
+              "default": false
+            },
+            {
+              "name": "anchor",
+              "comment": "optional anchor point to scale from",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "axis",
+              "comment": "optional string such as \"yz\" to specify a 2D plane\n",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "slice",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3691,
+          9
+        ]
+      ],
+      "id": 1999,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.slice",
       "signatures": [
@@ -2342,15 +2084,13 @@
       "name": "some",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3641,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3701,
           8
         ]
       ],
-      "id": 1992,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 2003,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.some",
       "signatures": [
@@ -2380,15 +2120,13 @@
       "name": "sort",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3648,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3708,
           8
         ]
       ],
-      "id": 2001,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 2012,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.sort",
       "signatures": [
@@ -2412,15 +2150,13 @@
       "name": "subarray",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3656,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3716,
           12
         ]
       ],
-      "id": 2008,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 2019,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.subarray",
       "signatures": [
@@ -2447,18 +2183,141 @@
       ]
     },
     {
+      "name": "subtract",
+      "source": [
+        [
+          "Pt.ts",
+          207,
+          10
+        ]
+      ],
+      "id": 1753,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Subtract scalar or vector values from this Pt.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "to",
+      "source": [
+        [
+          "Pt.ts",
+          104,
+          4
+        ]
+      ],
+      "id": 1710,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Update the values of this Pt.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "toAngle",
+      "source": [
+        [
+          "Pt.ts",
+          128,
+          9
+        ]
+      ],
+      "id": 1716,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Update the values of this Pt to point at a specific angle.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "radian",
+              "comment": "target angle in radian",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "magnitude",
+              "comment": "Optional magnitude if known. If not provided, it'll calculate and use this Pt's magnitude.",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "anchorFromPt",
+              "comment": "If `true`, translate to new position from current position. Default is `false` which update the position from origin (0,0);\n",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "toArray",
+      "source": [
+        [
+          "Pt.ts",
+          512,
+          9
+        ]
+      ],
+      "id": 1855,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Convert this Pt to a javascript Array.",
+          "returns": "number[]",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "toLocaleString",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3661,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3721,
           18
         ]
       ],
-      "id": 2012,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 2023,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.toLocaleString",
       "signatures": [
@@ -2475,20 +2334,18 @@
       "name": "toString",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3666,
-          12
+          "Pt.ts",
+          504,
+          10
         ]
       ],
-      "id": 2014,
-      "flags": {
-        "isStatic": true
-      },
-      "overrides": false,
-      "inherits": "Float32Array.toString",
+      "id": 1853,
+      "flags": {},
+      "overrides": "Float32Array.toString",
+      "inherits": false,
       "signatures": [
         {
-          "comment": "Returns a string representation of an array.",
+          "comment": "A string representation of this Pt. Eg, \"Pt(1, 2, 3)\".",
           "returns": "string",
           "returns_comment": false,
           "parameters": [],
@@ -2497,18 +2354,46 @@
       ]
     },
     {
+      "name": "unit",
+      "source": [
+        [
+          "Pt.ts",
+          270,
+          6
+        ]
+      ],
+      "id": 1775,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Convert to a unit vector, which is a normalized vector whose magnitude equals to 1.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "magnitude",
+              "comment": "Optional: if the magnitude is known, pass it as a parameter to avoid duplicate calculation.\n",
+              "type": "number",
+              "default": "undefined"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "values",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          5213,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es2015.iterable.d.ts",
+          452,
           10
         ]
       ],
-      "id": 2025,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 2034,
+      "flags": {},
       "overrides": false,
       "inherits": "Float32Array.values",
       "signatures": [
@@ -2520,6 +2405,50 @@
           "tags": []
         }
       ]
+    },
+    {
+      "name": "make",
+      "source": [
+        [
+          "Pt.ts",
+          37,
+          13
+        ]
+      ],
+      "id": 1679,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create an n-dimensional Pt with either default value or random values.",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "dimensions",
+              "comment": "number of dimensions",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "defaultValue",
+              "comment": "optional default value to fill the dimensions",
+              "type": "number",
+              "default": "0"
+            },
+            {
+              "name": "randomize",
+              "comment": "if `true`, randomize the value between 0 to default value\n",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
     }
   ],
   "variables": [],
@@ -2528,51 +2457,29 @@
       "name": "BYTES_PER_ELEMENT",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3438,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3498,
           30
         ]
       ],
-      "id": 1846,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 1857,
+      "flags": {},
       "type": "BYTES_PER_ELEMENT",
       "overrides": false,
       "inherits": "Float32Array.BYTES_PER_ELEMENT",
       "comment": "The size in bytes of each element in the array."
     },
     {
-      "name": "Float32Array",
-      "source": [
-        [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3698,
-          26
-        ]
-      ],
-      "id": 2018,
-      "flags": {
-        "isStatic": true
-      },
-      "type": "Float32Array",
-      "overrides": false,
-      "inherits": false,
-      "comment": ""
-    },
-    {
       "name": "buffer",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3443,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3503,
           19
         ]
       ],
-      "id": 1847,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 1858,
+      "flags": {},
       "type": "buffer",
       "overrides": false,
       "inherits": "Float32Array.buffer",
@@ -2582,15 +2489,13 @@
       "name": "byteLength",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3448,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3508,
           23
         ]
       ],
-      "id": 1848,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 1859,
+      "flags": {},
       "type": "byteLength",
       "overrides": false,
       "inherits": "Float32Array.byteLength",
@@ -2600,15 +2505,13 @@
       "name": "byteOffset",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3453,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3513,
           23
         ]
       ],
-      "id": 1849,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 1860,
+      "flags": {},
       "type": "byteOffset",
       "overrides": false,
       "inherits": "Float32Array.byteOffset",
@@ -2618,19 +2521,35 @@
       "name": "length",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          3552,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3612,
           19
         ]
       ],
-      "id": 1916,
-      "flags": {
-        "isStatic": true
-      },
+      "id": 1927,
+      "flags": {},
       "type": "length",
       "overrides": false,
       "inherits": "Float32Array.length",
       "comment": "The length of the array."
+    },
+    {
+      "name": "Float32Array",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
+          3758,
+          26
+        ]
+      ],
+      "id": 2027,
+      "flags": {
+        "isStatic": true
+      },
+      "type": "Float32Array",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
     }
   ],
   "flags": {},

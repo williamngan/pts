@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Objectliteral",
-  "id": 1633,
+  "id": 1644,
   "comment": "Various constant values for enumerations and calculations.",
   "constructor": [],
   "accessors": [],
@@ -23,7 +23,7 @@
           8
         ]
       ],
-      "id": 1643,
+      "id": 1654,
       "flags": {},
       "type": "bottom",
       "overrides": false,
@@ -39,7 +39,7 @@
           13
         ]
       ],
-      "id": 1644,
+      "id": 1655,
       "flags": {},
       "type": "bottom_left",
       "overrides": false,
@@ -55,7 +55,7 @@
           14
         ]
       ],
-      "id": 1642,
+      "id": 1653,
       "flags": {},
       "type": "bottom_right",
       "overrides": false,
@@ -71,7 +71,7 @@
           12
         ]
       ],
-      "id": 1658,
+      "id": 1669,
       "flags": {},
       "type": "deg_to_rad",
       "overrides": false,
@@ -87,7 +87,7 @@
           9
         ]
       ],
-      "id": 1649,
+      "id": 1660,
       "flags": {},
       "type": "epsilon",
       "overrides": false,
@@ -103,7 +103,7 @@
           10
         ]
       ],
-      "id": 1661,
+      "id": 1672,
       "flags": {},
       "type": "gaussian",
       "overrides": false,
@@ -119,7 +119,7 @@
           9
         ]
       ],
-      "id": 1659,
+      "id": 1670,
       "flags": {},
       "type": "gravity",
       "overrides": false,
@@ -135,7 +135,7 @@
           9
         ]
       ],
-      "id": 1654,
+      "id": 1665,
       "flags": {},
       "type": "half_pi",
       "overrides": false,
@@ -151,7 +151,7 @@
           12
         ]
       ],
-      "id": 1638,
+      "id": 1649,
       "flags": {},
       "type": "horizontal",
       "overrides": false,
@@ -167,7 +167,7 @@
           11
         ]
       ],
-      "id": 1640,
+      "id": 1651,
       "flags": {},
       "type": "identical",
       "overrides": false,
@@ -183,7 +183,7 @@
           6
         ]
       ],
-      "id": 1645,
+      "id": 1656,
       "flags": {},
       "type": "left",
       "overrides": false,
@@ -199,7 +199,7 @@
           5
         ]
       ],
-      "id": 1650,
+      "id": 1661,
       "flags": {},
       "type": "max",
       "overrides": false,
@@ -215,7 +215,7 @@
           5
         ]
       ],
-      "id": 1651,
+      "id": 1662,
       "flags": {},
       "type": "min",
       "overrides": false,
@@ -231,7 +231,7 @@
           8
         ]
       ],
-      "id": 1660,
+      "id": 1671,
       "flags": {},
       "type": "newton",
       "overrides": false,
@@ -247,7 +247,7 @@
           12
         ]
       ],
-      "id": 1656,
+      "id": 1667,
       "flags": {},
       "type": "one_degree",
       "overrides": false,
@@ -263,7 +263,7 @@
           4
         ]
       ],
-      "id": 1652,
+      "id": 1663,
       "flags": {},
       "type": "pi",
       "overrides": false,
@@ -279,7 +279,7 @@
           12
         ]
       ],
-      "id": 1655,
+      "id": 1666,
       "flags": {},
       "type": "quarter_pi",
       "overrides": false,
@@ -295,7 +295,7 @@
           12
         ]
       ],
-      "id": 1657,
+      "id": 1668,
       "flags": {},
       "type": "rad_to_deg",
       "overrides": false,
@@ -311,7 +311,7 @@
           7
         ]
       ],
-      "id": 1641,
+      "id": 1652,
       "flags": {},
       "type": "right",
       "overrides": false,
@@ -327,7 +327,7 @@
           5
         ]
       ],
-      "id": 1647,
+      "id": 1658,
       "flags": {},
       "type": "top",
       "overrides": false,
@@ -343,7 +343,7 @@
           10
         ]
       ],
-      "id": 1646,
+      "id": 1657,
       "flags": {},
       "type": "top_left",
       "overrides": false,
@@ -359,7 +359,7 @@
           11
         ]
       ],
-      "id": 1648,
+      "id": 1659,
       "flags": {},
       "type": "top_right",
       "overrides": false,
@@ -375,7 +375,7 @@
           8
         ]
       ],
-      "id": 1653,
+      "id": 1664,
       "flags": {},
       "type": "two_pi",
       "overrides": false,
@@ -391,7 +391,7 @@
           10
         ]
       ],
-      "id": 1639,
+      "id": 1650,
       "flags": {},
       "type": "vertical",
       "overrides": false,
@@ -407,7 +407,7 @@
           4
         ]
       ],
-      "id": 1634,
+      "id": 1645,
       "flags": {},
       "type": "xy",
       "overrides": false,
@@ -423,7 +423,7 @@
           5
         ]
       ],
-      "id": 1637,
+      "id": 1648,
       "flags": {},
       "type": "xyz",
       "overrides": false,
@@ -439,7 +439,7 @@
           4
         ]
       ],
-      "id": 1636,
+      "id": 1647,
       "flags": {},
       "type": "xz",
       "overrides": false,
@@ -455,7 +455,7 @@
           4
         ]
       ],
-      "id": 1635,
+      "id": 1646,
       "flags": {},
       "type": "yz",
       "overrides": false,

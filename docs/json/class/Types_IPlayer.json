@@ -85,7 +85,7 @@
           "returns_comment": false,
           "parameters": [
             {
-              "name": "size",
+              "name": "bound",
               "comment": "",
               "type": "Bound",
               "default": false

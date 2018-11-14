@@ -17,15 +17,15 @@
       "name": "arc",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          19738,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2939,
           7
         ]
       ],
-      "id": 1458,
+      "id": 1469,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasPathMethods.arc",
+      "inherits": "CanvasPath.arc",
       "signatures": [
         {
           "comment": "",
@@ -77,15 +77,15 @@
       "name": "arcTo",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          19739,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2940,
           9
         ]
       ],
-      "id": 1466,
+      "id": 1477,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasPathMethods.arcTo",
+      "inherits": "CanvasPath.arcTo",
       "signatures": [
         {
           "comment": "",
@@ -131,15 +131,15 @@
       "name": "beginPath",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7435,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2884,
           13
         ]
       ],
-      "id": 1285,
+      "id": 1348,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.beginPath",
+      "inherits": "CanvasDrawPath.beginPath",
       "signatures": [
         {
           "comment": "",
@@ -154,15 +154,15 @@
       "name": "bezierCurveTo",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          19740,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2941,
           17
         ]
       ],
-      "id": 1473,
+      "id": 1484,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasPathMethods.bezierCurveTo",
+      "inherits": "CanvasPath.bezierCurveTo",
       "signatures": [
         {
           "comment": "",
@@ -214,15 +214,15 @@
       "name": "clearRect",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7436,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2974,
           13
         ]
       ],
-      "id": 1287,
+      "id": 1330,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.clearRect",
+      "inherits": "CanvasRect.clearRect",
       "signatures": [
         {
           "comment": "",
@@ -262,20 +262,20 @@
       "name": "clip",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7437,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2885,
           8
         ],
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7438,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2886,
           8
         ]
       ],
-      "id": 1293,
+      "id": 1350,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.clip",
+      "inherits": "CanvasDrawPath.clip",
       "signatures": [
         {
           "comment": "",
@@ -317,15 +317,15 @@
       "name": "closePath",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          19741,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2942,
           13
         ]
       ],
-      "id": 1481,
+      "id": 1492,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasPathMethods.closePath",
+      "inherits": "CanvasPath.closePath",
       "signatures": [
         {
           "comment": "",
@@ -340,15 +340,20 @@
       "name": "createImageData",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7439,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2926,
+          19
+        ],
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2927,
           19
         ]
       ],
-      "id": 1299,
+      "id": 1430,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.createImageData",
+      "inherits": "CanvasImageData.createImageData",
       "signatures": [
         {
           "comment": "",
@@ -356,15 +361,29 @@
           "returns_comment": false,
           "parameters": [
             {
-              "name": "imageDataOrSw",
+              "name": "sw",
               "comment": "",
-              "type": "number | ImageData",
+              "type": "number",
               "default": false
             },
             {
               "name": "sh",
               "comment": "",
               "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        },
+        {
+          "comment": "",
+          "returns": "ImageData",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "imagedata",
+              "comment": "",
+              "type": "ImageData",
               "default": false
             }
           ],
@@ -376,15 +395,15 @@
       "name": "createLinearGradient",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7440,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2900,
           24
         ]
       ],
-      "id": 1303,
+      "id": 1307,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.createLinearGradient",
+      "inherits": "CanvasFillStrokeStyles.createLinearGradient",
       "signatures": [
         {
           "comment": "",
@@ -424,25 +443,25 @@
       "name": "createPattern",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7441,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2901,
           17
         ]
       ],
-      "id": 1309,
+      "id": 1313,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.createPattern",
+      "inherits": "CanvasFillStrokeStyles.createPattern",
       "signatures": [
         {
           "comment": "",
-          "returns": "CanvasPattern",
+          "returns": "CanvasPattern | null",
           "returns_comment": false,
           "parameters": [
             {
               "name": "image",
               "comment": "",
-              "type": "HTMLImageElement | HTMLCanvasElement | HTMLVideoElement",
+              "type": "CanvasImageSource",
               "default": false
             },
             {
@@ -460,15 +479,15 @@
       "name": "createRadialGradient",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7442,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2902,
           24
         ]
       ],
-      "id": 1313,
+      "id": 1317,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.createRadialGradient",
+      "inherits": "CanvasFillStrokeStyles.createRadialGradient",
       "signatures": [
         {
           "comment": "",
@@ -520,21 +539,46 @@
       "name": "drawFocusIfNeeded",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7443,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          3025,
+          21
+        ],
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          3026,
           21
         ]
       ],
-      "id": 1321,
+      "id": 1384,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.drawFocusIfNeeded",
+      "inherits": "CanvasUserInterface.drawFocusIfNeeded",
       "signatures": [
         {
           "comment": "",
           "returns": "void",
           "returns_comment": false,
           "parameters": [
+            {
+              "name": "element",
+              "comment": "",
+              "type": "Element",
+              "default": false
+            }
+          ],
+          "tags": []
+        },
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "path",
+              "comment": "",
+              "type": "Path2D",
+              "default": false
+            },
             {
               "name": "element",
               "comment": "",
@@ -550,25 +594,25 @@
       "name": "drawImage",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7444,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2878,
           13
         ],
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7445,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2879,
           13
         ],
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7446,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2880,
           13
         ]
       ],
-      "id": 1324,
+      "id": 1409,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.drawImage",
+      "inherits": "CanvasDrawImage.drawImage",
       "signatures": [
         {
           "comment": "",
@@ -578,55 +622,17 @@
             {
               "name": "image",
               "comment": "",
-              "type": "HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | ImageBitmap",
+              "type": "CanvasImageSource",
               "default": false
             },
             {
-              "name": "dstX",
+              "name": "dx",
               "comment": "",
               "type": "number",
               "default": false
             },
             {
-              "name": "dstY",
-              "comment": "",
-              "type": "number",
-              "default": false
-            }
-          ],
-          "tags": []
-        },
-        {
-          "comment": "",
-          "returns": "void",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "image",
-              "comment": "",
-              "type": "HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | ImageBitmap",
-              "default": false
-            },
-            {
-              "name": "dstX",
-              "comment": "",
-              "type": "number",
-              "default": false
-            },
-            {
-              "name": "dstY",
-              "comment": "",
-              "type": "number",
-              "default": false
-            },
-            {
-              "name": "dstW",
-              "comment": "",
-              "type": "number",
-              "default": false
-            },
-            {
-              "name": "dstH",
+              "name": "dy",
               "comment": "",
               "type": "number",
               "default": false
@@ -642,53 +648,91 @@
             {
               "name": "image",
               "comment": "",
-              "type": "HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | ImageBitmap",
+              "type": "CanvasImageSource",
               "default": false
             },
             {
-              "name": "srcX",
+              "name": "dx",
               "comment": "",
               "type": "number",
               "default": false
             },
             {
-              "name": "srcY",
+              "name": "dy",
               "comment": "",
               "type": "number",
               "default": false
             },
             {
-              "name": "srcW",
+              "name": "dw",
               "comment": "",
               "type": "number",
               "default": false
             },
             {
-              "name": "srcH",
+              "name": "dh",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        },
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "image",
+              "comment": "",
+              "type": "CanvasImageSource",
+              "default": false
+            },
+            {
+              "name": "sx",
               "comment": "",
               "type": "number",
               "default": false
             },
             {
-              "name": "dstX",
+              "name": "sy",
               "comment": "",
               "type": "number",
               "default": false
             },
             {
-              "name": "dstY",
+              "name": "sw",
               "comment": "",
               "type": "number",
               "default": false
             },
             {
-              "name": "dstW",
+              "name": "sh",
               "comment": "",
               "type": "number",
               "default": false
             },
             {
-              "name": "dstH",
+              "name": "dx",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "dy",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "dw",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "dh",
               "comment": "",
               "type": "number",
               "default": false
@@ -702,15 +746,15 @@
       "name": "ellipse",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          19742,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2943,
           11
         ]
       ],
-      "id": 1483,
+      "id": 1494,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasPathMethods.ellipse",
+      "inherits": "CanvasPath.ellipse",
       "signatures": [
         {
           "comment": "",
@@ -774,20 +818,20 @@
       "name": "fill",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7447,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2887,
           8
         ],
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7448,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2888,
           8
         ]
       ],
-      "id": 1345,
+      "id": 1356,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.fill",
+      "inherits": "CanvasDrawPath.fill",
       "signatures": [
         {
           "comment": "",
@@ -829,15 +873,15 @@
       "name": "fillRect",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7449,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2975,
           12
         ]
       ],
-      "id": 1351,
+      "id": 1336,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.fillRect",
+      "inherits": "CanvasRect.fillRect",
       "signatures": [
         {
           "comment": "",
@@ -877,15 +921,15 @@
       "name": "fillText",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7450,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          3001,
           12
         ]
       ],
-      "id": 1357,
+      "id": 1394,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.fillText",
+      "inherits": "CanvasText.fillText",
       "signatures": [
         {
           "comment": "",
@@ -925,15 +969,15 @@
       "name": "getImageData",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7451,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2928,
           16
         ]
       ],
-      "id": 1363,
+      "id": 1436,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.getImageData",
+      "inherits": "CanvasImageData.getImageData",
       "signatures": [
         {
           "comment": "",
@@ -973,15 +1017,15 @@
       "name": "getLineDash",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7452,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2956,
           15
         ]
       ],
-      "id": 1369,
+      "id": 1460,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.getLineDash",
+      "inherits": "CanvasPathDrawingStyles.getLineDash",
       "signatures": [
         {
           "comment": "",
@@ -993,31 +1037,24 @@
       ]
     },
     {
-      "name": "hasOwnProperty",
+      "name": "getTransform",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          127,
-          18
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          3014,
+          16
         ]
       ],
-      "id": 1449,
+      "id": 1268,
       "flags": {},
       "overrides": false,
-      "inherits": "Object.hasOwnProperty",
+      "inherits": "CanvasTransform.getTransform",
       "signatures": [
         {
-          "comment": "Determines whether an object has a property with the specified name.",
-          "returns": "boolean",
+          "comment": "",
+          "returns": "DOMMatrix",
           "returns_comment": false,
-          "parameters": [
-            {
-              "name": "v",
-              "comment": "A property name.\n",
-              "type": "string",
-              "default": false
-            }
-          ],
+          "parameters": [],
           "tags": []
         }
       ]
@@ -1026,20 +1063,20 @@
       "name": "isPointInPath",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7453,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2889,
           17
         ],
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7454,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2890,
           17
         ]
       ],
-      "id": 1371,
+      "id": 1362,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.isPointInPath",
+      "inherits": "CanvasDrawPath.isPointInPath",
       "signatures": [
         {
           "comment": "",
@@ -1102,28 +1139,65 @@
       ]
     },
     {
-      "name": "isPrototypeOf",
+      "name": "isPointInStroke",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          133,
-          17
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2891,
+          19
+        ],
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2892,
+          19
         ]
       ],
-      "id": 1452,
+      "id": 1372,
       "flags": {},
       "overrides": false,
-      "inherits": "Object.isPrototypeOf",
+      "inherits": "CanvasDrawPath.isPointInStroke",
       "signatures": [
         {
-          "comment": "Determines whether an object exists in another object's prototype chain.",
+          "comment": "",
           "returns": "boolean",
           "returns_comment": false,
           "parameters": [
             {
-              "name": "v",
-              "comment": "Another object whose prototype chain is to be checked.\n",
-              "type": "Object",
+              "name": "x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        },
+        {
+          "comment": "",
+          "returns": "boolean",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "path",
+              "comment": "",
+              "type": "Path2D",
+              "default": false
+            },
+            {
+              "name": "x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y",
+              "comment": "",
+              "type": "number",
               "default": false
             }
           ],
@@ -1135,15 +1209,15 @@
       "name": "lineTo",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          19743,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2944,
           10
         ]
       ],
-      "id": 1493,
+      "id": 1504,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasPathMethods.lineTo",
+      "inherits": "CanvasPath.lineTo",
       "signatures": [
         {
           "comment": "",
@@ -1171,15 +1245,15 @@
       "name": "measureText",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7455,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          3002,
           15
         ]
       ],
-      "id": 1381,
+      "id": 1400,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.measureText",
+      "inherits": "CanvasText.measureText",
       "signatures": [
         {
           "comment": "",
@@ -1201,15 +1275,15 @@
       "name": "moveTo",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          19744,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2945,
           10
         ]
       ],
-      "id": 1497,
+      "id": 1508,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasPathMethods.moveTo",
+      "inherits": "CanvasPath.moveTo",
       "signatures": [
         {
           "comment": "",
@@ -1234,49 +1308,50 @@
       ]
     },
     {
-      "name": "propertyIsEnumerable",
+      "name": "putImageData",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          139,
-          24
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2929,
+          16
+        ],
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2930,
+          16
         ]
       ],
-      "id": 1455,
+      "id": 1442,
       "flags": {},
       "overrides": false,
-      "inherits": "Object.propertyIsEnumerable",
+      "inherits": "CanvasImageData.putImageData",
       "signatures": [
         {
-          "comment": "Determines whether a specified property is enumerable.",
-          "returns": "boolean",
+          "comment": "",
+          "returns": "void",
           "returns_comment": false,
           "parameters": [
             {
-              "name": "v",
-              "comment": "A property name.\n",
-              "type": "string",
+              "name": "imagedata",
+              "comment": "",
+              "type": "ImageData",
+              "default": false
+            },
+            {
+              "name": "dx",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "dy",
+              "comment": "",
+              "type": "number",
               "default": false
             }
           ],
           "tags": []
-        }
-      ]
-    },
-    {
-      "name": "putImageData",
-      "source": [
-        [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7456,
-          16
-        ]
-      ],
-      "id": 1384,
-      "flags": {},
-      "overrides": false,
-      "inherits": "CanvasRenderingContext2D.putImageData",
-      "signatures": [
+        },
         {
           "comment": "",
           "returns": "void",
@@ -1333,15 +1408,15 @@
       "name": "quadraticCurveTo",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          19745,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2946,
           20
         ]
       ],
-      "id": 1501,
+      "id": 1512,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasPathMethods.quadraticCurveTo",
+      "inherits": "CanvasPath.quadraticCurveTo",
       "signatures": [
         {
           "comment": "",
@@ -1381,15 +1456,15 @@
       "name": "rect",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          19746,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2947,
           8
         ]
       ],
-      "id": 1507,
+      "id": 1518,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasPathMethods.rect",
+      "inherits": "CanvasPath.rect",
       "signatures": [
         {
           "comment": "",
@@ -1426,18 +1501,41 @@
       ]
     },
     {
+      "name": "resetTransform",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          3015,
+          18
+        ]
+      ],
+      "id": 1270,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasTransform.resetTransform",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "restore",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7457,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2996,
           11
         ]
       ],
-      "id": 1393,
+      "id": 1264,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.restore",
+      "inherits": "CanvasState.restore",
       "signatures": [
         {
           "comment": "",
@@ -1452,15 +1550,15 @@
       "name": "rotate",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7458,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          3016,
           10
         ]
       ],
-      "id": 1395,
+      "id": 1272,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.rotate",
+      "inherits": "CanvasTransform.rotate",
       "signatures": [
         {
           "comment": "",
@@ -1482,15 +1580,15 @@
       "name": "save",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7459,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2997,
           8
         ]
       ],
-      "id": 1398,
+      "id": 1266,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.save",
+      "inherits": "CanvasState.save",
       "signatures": [
         {
           "comment": "",
@@ -1505,15 +1603,15 @@
       "name": "scale",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7460,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          3017,
           9
         ]
       ],
-      "id": 1400,
+      "id": 1275,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.scale",
+      "inherits": "CanvasTransform.scale",
       "signatures": [
         {
           "comment": "",
@@ -1538,18 +1636,60 @@
       ]
     },
     {
+      "name": "scrollPathIntoView",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          3027,
+          22
+        ],
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          3028,
+          22
+        ]
+      ],
+      "id": 1390,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasUserInterface.scrollPathIntoView",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        },
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "path",
+              "comment": "",
+              "type": "Path2D",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "setLineDash",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7461,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2957,
           15
         ]
       ],
-      "id": 1404,
+      "id": 1462,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.setLineDash",
+      "inherits": "CanvasPathDrawingStyles.setLineDash",
       "signatures": [
         {
           "comment": "",
@@ -1571,15 +1711,20 @@
       "name": "setTransform",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7462,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          3018,
+          16
+        ],
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          3019,
           16
         ]
       ],
-      "id": 1407,
+      "id": 1279,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.setTransform",
+      "inherits": "CanvasTransform.setTransform",
       "signatures": [
         {
           "comment": "",
@@ -1587,39 +1732,53 @@
           "returns_comment": false,
           "parameters": [
             {
-              "name": "m11",
+              "name": "a",
               "comment": "",
               "type": "number",
               "default": false
             },
             {
-              "name": "m12",
+              "name": "b",
               "comment": "",
               "type": "number",
               "default": false
             },
             {
-              "name": "m21",
+              "name": "c",
               "comment": "",
               "type": "number",
               "default": false
             },
             {
-              "name": "m22",
+              "name": "d",
               "comment": "",
               "type": "number",
               "default": false
             },
             {
-              "name": "dx",
+              "name": "e",
               "comment": "",
               "type": "number",
               "default": false
             },
             {
-              "name": "dy",
+              "name": "f",
               "comment": "",
               "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        },
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "transform",
+              "comment": "",
+              "type": "DOMMatrix2DInit",
               "default": false
             }
           ],
@@ -1631,16 +1790,28 @@
       "name": "stroke",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7463,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2893,
+          10
+        ],
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2894,
           10
         ]
       ],
-      "id": 1415,
+      "id": 1380,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.stroke",
+      "inherits": "CanvasDrawPath.stroke",
       "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        },
         {
           "comment": "",
           "returns": "void",
@@ -1661,15 +1832,15 @@
       "name": "strokeRect",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7464,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2976,
           14
         ]
       ],
-      "id": 1418,
+      "id": 1342,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.strokeRect",
+      "inherits": "CanvasRect.strokeRect",
       "signatures": [
         {
           "comment": "",
@@ -1709,15 +1880,15 @@
       "name": "strokeText",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7465,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          3003,
           14
         ]
       ],
-      "id": 1424,
+      "id": 1403,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.strokeText",
+      "inherits": "CanvasText.strokeText",
       "signatures": [
         {
           "comment": "",
@@ -1754,64 +1925,18 @@
       ]
     },
     {
-      "name": "toLocaleString",
-      "source": [
-        [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          118,
-          18
-        ]
-      ],
-      "id": 1445,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Object.toLocaleString",
-      "signatures": [
-        {
-          "comment": "Returns a date converted to a string using the current locale.",
-          "returns": "string",
-          "returns_comment": false,
-          "parameters": [],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "toString",
-      "source": [
-        [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          115,
-          12
-        ]
-      ],
-      "id": 1443,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Object.toString",
-      "signatures": [
-        {
-          "comment": "Returns a string representation of an object.",
-          "returns": "string",
-          "returns_comment": false,
-          "parameters": [],
-          "tags": []
-        }
-      ]
-    },
-    {
       "name": "transform",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7466,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          3020,
           13
         ]
       ],
-      "id": 1430,
+      "id": 1289,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.transform",
+      "inherits": "CanvasTransform.transform",
       "signatures": [
         {
           "comment": "",
@@ -1819,37 +1944,37 @@
           "returns_comment": false,
           "parameters": [
             {
-              "name": "m11",
+              "name": "a",
               "comment": "",
               "type": "number",
               "default": false
             },
             {
-              "name": "m12",
+              "name": "b",
               "comment": "",
               "type": "number",
               "default": false
             },
             {
-              "name": "m21",
+              "name": "c",
               "comment": "",
               "type": "number",
               "default": false
             },
             {
-              "name": "m22",
+              "name": "d",
               "comment": "",
               "type": "number",
               "default": false
             },
             {
-              "name": "dx",
+              "name": "e",
               "comment": "",
               "type": "number",
               "default": false
             },
             {
-              "name": "dy",
+              "name": "f",
               "comment": "",
               "type": "number",
               "default": false
@@ -1863,15 +1988,15 @@
       "name": "translate",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7467,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          3021,
           13
         ]
       ],
-      "id": 1438,
+      "id": 1297,
       "flags": {},
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.translate",
+      "inherits": "CanvasTransform.translate",
       "signatures": [
         {
           "comment": "",
@@ -1894,29 +2019,6 @@
           "tags": []
         }
       ]
-    },
-    {
-      "name": "valueOf",
-      "source": [
-        [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          121,
-          11
-        ]
-      ],
-      "id": 1447,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Object.valueOf",
-      "signatures": [
-        {
-          "comment": "Returns the primitive value of the specified object.",
-          "returns": "Object",
-          "returns_comment": false,
-          "parameters": [],
-          "tags": []
-        }
-      ]
     }
   ],
   "variables": [],
@@ -1925,12 +2027,12 @@
       "name": "CanvasRenderingContext2D",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7470,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2983,
           36
         ]
       ],
-      "id": 1513,
+      "id": 1524,
       "flags": {},
       "type": "CanvasRenderingContext2D",
       "overrides": false,
@@ -1959,8 +2061,8 @@
       "name": "canvas",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7413,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2980,
           19
         ]
       ],
@@ -1972,179 +2074,211 @@
       "comment": ""
     },
     {
-      "name": "constructor",
+      "name": "direction",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          112,
-          15
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          3007,
+          13
         ]
       ],
-      "id": 1442,
+      "id": 1465,
       "flags": {},
-      "type": "constructor",
+      "type": "direction",
       "overrides": false,
-      "inherits": "Object.constructor",
-      "comment": "The initial value of Object.prototype.constructor is the standard built-in Object constructor."
+      "inherits": "CanvasTextDrawingStyles.direction",
+      "comment": ""
     },
     {
       "name": "fillStyle",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7414,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2898,
           13
         ]
       ],
-      "id": 1264,
+      "id": 1305,
       "flags": {},
       "type": "fillStyle",
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.fillStyle",
+      "inherits": "CanvasFillStrokeStyles.fillStyle",
+      "comment": ""
+    },
+    {
+      "name": "filter",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2906,
+          10
+        ]
+      ],
+      "id": 1329,
+      "flags": {},
+      "type": "filter",
+      "overrides": false,
+      "inherits": "CanvasFilters.filter",
       "comment": ""
     },
     {
       "name": "font",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7415,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          3008,
           8
         ]
       ],
-      "id": 1265,
+      "id": 1466,
       "flags": {},
       "type": "font",
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.font",
+      "inherits": "CanvasTextDrawingStyles.font",
       "comment": ""
     },
     {
       "name": "globalAlpha",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7416,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2873,
           15
         ]
       ],
-      "id": 1266,
+      "id": 1301,
       "flags": {},
       "type": "globalAlpha",
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.globalAlpha",
+      "inherits": "CanvasCompositing.globalAlpha",
       "comment": ""
     },
     {
       "name": "globalCompositeOperation",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7417,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2874,
           28
         ]
       ],
-      "id": 1267,
+      "id": 1302,
       "flags": {},
       "type": "globalCompositeOperation",
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.globalCompositeOperation",
+      "inherits": "CanvasCompositing.globalCompositeOperation",
       "comment": ""
     },
     {
       "name": "imageSmoothingEnabled",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7418,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2934,
           25
         ]
       ],
-      "id": 1268,
+      "id": 1303,
       "flags": {},
       "type": "imageSmoothingEnabled",
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.imageSmoothingEnabled",
+      "inherits": "CanvasImageSmoothing.imageSmoothingEnabled",
+      "comment": ""
+    },
+    {
+      "name": "imageSmoothingQuality",
+      "source": [
+        [
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2935,
+          25
+        ]
+      ],
+      "id": 1304,
+      "flags": {},
+      "type": "imageSmoothingQuality",
+      "overrides": false,
+      "inherits": "CanvasImageSmoothing.imageSmoothingQuality",
       "comment": ""
     },
     {
       "name": "lineCap",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7419,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2951,
           11
         ]
       ],
-      "id": 1269,
+      "id": 1455,
       "flags": {},
       "type": "lineCap",
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.lineCap",
+      "inherits": "CanvasPathDrawingStyles.lineCap",
       "comment": ""
     },
     {
       "name": "lineDashOffset",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7420,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2952,
           18
         ]
       ],
-      "id": 1270,
+      "id": 1456,
       "flags": {},
       "type": "lineDashOffset",
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.lineDashOffset",
+      "inherits": "CanvasPathDrawingStyles.lineDashOffset",
       "comment": ""
     },
     {
       "name": "lineJoin",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7421,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2953,
           12
         ]
       ],
-      "id": 1271,
+      "id": 1457,
       "flags": {},
       "type": "lineJoin",
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.lineJoin",
+      "inherits": "CanvasPathDrawingStyles.lineJoin",
       "comment": ""
     },
     {
       "name": "lineWidth",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7422,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2954,
           13
         ]
       ],
-      "id": 1272,
+      "id": 1458,
       "flags": {},
       "type": "lineWidth",
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.lineWidth",
+      "inherits": "CanvasPathDrawingStyles.lineWidth",
       "comment": ""
     },
     {
       "name": "miterLimit",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7423,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2955,
           14
         ]
       ],
-      "id": 1273,
+      "id": 1459,
       "flags": {},
       "type": "miterLimit",
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.miterLimit",
+      "inherits": "CanvasPathDrawingStyles.miterLimit",
       "comment": ""
     },
     {
@@ -2166,22 +2300,6 @@
       "comment": ""
     },
     {
-      "name": "mozImageSmoothingEnabled",
-      "source": [
-        [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7432,
-          28
-        ]
-      ],
-      "id": 1282,
-      "flags": {},
-      "type": "mozImageSmoothingEnabled",
-      "overrides": false,
-      "inherits": "CanvasRenderingContext2D.mozImageSmoothingEnabled",
-      "comment": ""
-    },
-    {
       "name": "msBackingStorePixelRatio",
       "source": [
         [
@@ -2197,22 +2315,6 @@
       "type": "msBackingStorePixelRatio",
       "overrides": false,
       "inherits": false,
-      "comment": ""
-    },
-    {
-      "name": "msFillRule",
-      "source": [
-        [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7424,
-          14
-        ]
-      ],
-      "id": 1274,
-      "flags": {},
-      "type": "msFillRule",
-      "overrides": false,
-      "inherits": "CanvasRenderingContext2D.msFillRule",
       "comment": ""
     },
     {
@@ -2234,131 +2336,115 @@
       "comment": ""
     },
     {
-      "name": "oImageSmoothingEnabled",
-      "source": [
-        [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7434,
-          26
-        ]
-      ],
-      "id": 1284,
-      "flags": {},
-      "type": "oImageSmoothingEnabled",
-      "overrides": false,
-      "inherits": "CanvasRenderingContext2D.oImageSmoothingEnabled",
-      "comment": ""
-    },
-    {
       "name": "shadowBlur",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7425,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2989,
           14
         ]
       ],
-      "id": 1275,
+      "id": 1325,
       "flags": {},
       "type": "shadowBlur",
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.shadowBlur",
+      "inherits": "CanvasShadowStyles.shadowBlur",
       "comment": ""
     },
     {
       "name": "shadowColor",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7426,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2990,
           15
         ]
       ],
-      "id": 1276,
+      "id": 1326,
       "flags": {},
       "type": "shadowColor",
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.shadowColor",
+      "inherits": "CanvasShadowStyles.shadowColor",
       "comment": ""
     },
     {
       "name": "shadowOffsetX",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7427,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2991,
           17
         ]
       ],
-      "id": 1277,
+      "id": 1327,
       "flags": {},
       "type": "shadowOffsetX",
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.shadowOffsetX",
+      "inherits": "CanvasShadowStyles.shadowOffsetX",
       "comment": ""
     },
     {
       "name": "shadowOffsetY",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7428,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2992,
           17
         ]
       ],
-      "id": 1278,
+      "id": 1328,
       "flags": {},
       "type": "shadowOffsetY",
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.shadowOffsetY",
+      "inherits": "CanvasShadowStyles.shadowOffsetY",
       "comment": ""
     },
     {
       "name": "strokeStyle",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7429,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          2899,
           15
         ]
       ],
-      "id": 1279,
+      "id": 1306,
       "flags": {},
       "type": "strokeStyle",
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.strokeStyle",
+      "inherits": "CanvasFillStrokeStyles.strokeStyle",
       "comment": ""
     },
     {
       "name": "textAlign",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7430,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          3009,
           13
         ]
       ],
-      "id": 1280,
+      "id": 1467,
       "flags": {},
       "type": "textAlign",
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.textAlign",
+      "inherits": "CanvasTextDrawingStyles.textAlign",
       "comment": ""
     },
     {
       "name": "textBaseline",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7431,
+          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
+          3010,
           16
         ]
       ],
-      "id": 1281,
+      "id": 1468,
       "flags": {},
       "type": "textBaseline",
       "overrides": false,
-      "inherits": "CanvasRenderingContext2D.textBaseline",
+      "inherits": "CanvasTextDrawingStyles.textBaseline",
       "comment": ""
     },
     {
@@ -2377,22 +2463,6 @@
       "type": "webkitBackingStorePixelRatio",
       "overrides": false,
       "inherits": false,
-      "comment": ""
-    },
-    {
-      "name": "webkitImageSmoothingEnabled",
-      "source": [
-        [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es6.d.ts",
-          7433,
-          31
-        ]
-      ],
-      "id": 1283,
-      "flags": {},
-      "type": "webkitImageSmoothingEnabled",
-      "overrides": false,
-      "inherits": "CanvasRenderingContext2D.webkitImageSmoothingEnabled",
       "comment": ""
     }
   ],
