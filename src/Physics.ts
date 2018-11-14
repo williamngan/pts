@@ -41,6 +41,12 @@ export class World {
 
 
   /**
+   * Current bound in this `World`.
+   */
+  get bound():Bound { return this._bound; }
+  set bound( bound:Bound ) { this._bound = bound; }
+
+  /**
    * Current gravity in this `World`.
    */
   get gravity():Pt { return this._gravity; }
@@ -72,13 +78,14 @@ export class World {
   /**
    * Get a body in this world by index or string id.
    * @param id numeric index of the body, or a string id that associates with it.
+   * @returns a Body, or undefined if not found
    */
   body( id:number|string ) {
     let idx = id;
     if (typeof id === "string" && id.length > 0) {
       idx = this._bnames.indexOf( id );
     }
-    if (!(idx >= 0)) throw new Error( "Cannot find body id: "+id );
+    if (!(idx >= 0)) return undefined;
     return this._bodies[idx];
   }
 
@@ -86,13 +93,14 @@ export class World {
   /**
    * Get a particle in this world by index or string id.
    * @param id numeric index of the particle, or a string id that associates with it. 
+   * @returns a Particle, or undefined if not found
    */
   particle( id:number|string ) { 
     let idx = id;
     if (typeof id === "string" && id.length > 0) {
       idx = this._pnames.indexOf( id );
     }
-    if (!(idx >= 0)) throw new Error( "Cannot find particle id: "+id );
+    if (!(idx >= 0)) return undefined;
     return this._particles[idx];
   }
 
@@ -167,7 +175,7 @@ export class World {
     let index = 0;
     if (typeof id === "string") {
       index = fn(id);
-      if (index < 0) throw new Error( "Cannot find index of " + id );
+      if (index < 0) throw new Error( `Cannot find index of ${id}. You can use particleIndex() or bodyIndex() function to check existence by name.`);
     } else {
       index = id;
     }

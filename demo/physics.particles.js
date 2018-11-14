@@ -45,7 +45,10 @@ Pts.quickStart( "#pt", "#123" );
       if (type == "move") {
         world.particle( 0 ).position = new Pt(px, py);
       }
-    
+    },
+
+    resize: (bound, evt) => {
+      this.bound = bound;
     }
   });
   
