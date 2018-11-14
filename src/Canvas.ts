@@ -519,11 +519,12 @@ export class CanvasForm extends VisualForm {
         if (weight) this._font.weight = weight;
         if (style) this._font.style = style;
         if (lineHeight) this._font.lineHeight = lineHeight;
-        this._ctx.font = this._font.value;
         
       } else {
         this._font = sizeOrFont;
       }
+
+      this._ctx.font = this._font.value;
 
       // If using estimate, reapply it when font changes.
       if (this._estimateTextWidth) this.fontWidthEstimate( true );
