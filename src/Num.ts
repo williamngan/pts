@@ -126,7 +126,7 @@ export class Num {
    * @return a value between 0 to 1
    */
   static cycle( t:number ):number {
-    return (Math.sin( Math.PI * 2 * t ) + 1) / 2;
+    return Math.sin( Math.PI * t );
   }
 
 
