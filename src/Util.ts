@@ -310,3 +310,129 @@ export class Util {
   }
   
 }
+
+type ITempoStartFn = (count:number) => void|boolean;
+type ITempoProgressFn = (count:number, t:number, start:boolean) => void|boolean;
+type ITempoListener = {
+  name?:string,
+  period?:number|number[],
+  count?:number,
+  offset?:number,
+  loop?:boolean,
+  fn: Function
+};
+
+export class Tempo {
+
+  protected _bpm: number;
+  protected _mspb: number;
+
+  protected _listeners:{ [key:string]:ITempoListener } = {};
+  protected _listenerInc:number = 0;
+  protected _marks = {
+    "largo": 50,
+    "adagio": 70,
+    "andante": 100,
+    "allegro": 120,
+    "vivace": 150,
+    "presto": 200
+  }
+
+  static fromBPM( bpm:number ) {
+    return new Tempo( bpm );
+  }
+
+  static fromMS( ms:number ) {
+    return new Tempo( 60000 / ms );
+  }
+
+  constructor(bpm : number) {
+    this.bpm = bpm;
+  }
+
+  get bpm():number {
+    return this._bpm;
+  }
+
+  set bpm( n:number ) {
+    this._bpm = n;
+    this._mspb = 60000 / this._bpm;
+  }
+
+  protected _createID( listener:ITempoListener|Function ):string {
+    let id:string = '';
+    if (typeof listener === 'function') {
+      id = '_b'+(this._listenerInc++);
+    } else {
+      id = listener.name || '_b'+(this._listenerInc++);
+    }
+    return id;
+  }
+
+  every( beats:number|number[] ) {
+    let self = this;
+    return {
+      start: function (fn:ITempoStartFn, offset:number=0, name?:string): string {
+        let id = name || self._createID( fn );        
+        self._listeners[id] = { name: id, period: beats, offset: offset, count: -1, loop: false, fn: fn };
+        return this;
+      },
+
+      progress: function (fn:ITempoProgressFn, offset:number=0, name?:string ): string {
+        let id = name || self._createID( fn ); 
+        self._listeners[id] = { name: id, period: beats, offset: offset, count: -1, loop: true, fn: fn };
+        return this;
+      }
+    };
+  }
+
+  // beat( every:number|number[], listener:ITempoListener|Function, offset:number=0 ):string {
+    
+  //   let id = this._createID( listener );
+  //   let fn:Function = (typeof listener === 'function') ? listener : listener.fn;
+    
+  //   if (!fn) throw new Error("listener's callback function is not defined.");
+    
+  //   this._listeners[id] = { name: id, period: every, offset: offset, count: -1, loop: false, fn: (fn as ITempoStartFn) };
+  //   return id;
+  // }
+
+  // loop( every:number, listener:ITempoListener|Function, offset:number=0 ): string {
+  //   let id = this._createID( listener );
+  //   let fn:Function = (typeof listener === 'function') ? listener : listener.fn;
+
+  //   if (!fn) throw new Error("listener's callback function is not defined.");
+
+  //   this._listeners[id] = { name: id, period: every, offset: offset, count: -1, loop: true, fn: (fn as ITempoStartFn) };
+
+  //   return id;
+  // }
+
+
+  listen( time ) {
+    for (let k in this._listeners) {
+      if (this._listeners.hasOwnProperty(k)) {
+        let li = this._listeners[k];
+
+        if (li.offset) time += li.offset; 
+        let beats = Math.floor( time / this._mspb );
+
+        let period = Array.isArray( li.period ) ? li.period[ Math.max(0,li.count) % li.period.length ] : li.period;
+        
+        let c = beats / period; // count ms instead of beat in li.count ?
+        let isStart = false;
+
+        if (Math.floor( c ) > li.count) {  
+          li.count = Math.floor( c );
+          isStart = true;
+        }
+
+        let params = (li.loop) ? [li.count, (time - li.count * period * this._mspb) / (period * this._mspb) , isStart] : [li.count]; 
+        let done = li.fn.apply( li, params );
+        if (done) delete this._listeners[ li.name ];
+      }
+    }
+  }
+
+
+}
