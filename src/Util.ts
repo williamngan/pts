@@ -315,10 +315,12 @@ type ITempoStartFn = (count:number) => void|boolean;
 type ITempoProgressFn = (count:number, t:number, start:boolean) => void|boolean;
 type ITempoListener = {
   name?:string,
-  period?:number|number[],
-  count?:number,
+  beats?:number|number[],
+  period?:number,
+  duration?:number,
   offset?:number,
   loop?:boolean,
+  index?:number,
   fn: Function
 };
 
@@ -336,13 +338,13 @@ export class Tempo {
     "allegro": 120,
     "vivace": 150,
     "presto": 200
-  }
+  };
 
   static fromBPM( bpm:number ) {
     return new Tempo( bpm );
   }
 
-  static fromMS( ms:number ) {
+  static fromBeat( ms:number ) {
     return new Tempo( 60000 / ms );
   }
 
@@ -369,18 +371,20 @@ export class Tempo {
     return id;
   }
 
+
   every( beats:number|number[] ) {
     let self = this;
+    let p = Array.isArray(beats) ? beats[0] : beats;
     return {
       start: function (fn:ITempoStartFn, offset:number=0, name?:string): string {
         let id = name || self._createID( fn );        
-        self._listeners[id] = { name: id, period: beats, offset: offset, count: -1, loop: false, fn: fn };
+        self._listeners[id] = { name: id, beats: beats, period: p, index: 0, offset: offset, duration: -1, loop: false, fn: fn };
         return this;
       },
 
       progress: function (fn:ITempoProgressFn, offset:number=0, name?:string ): string {
         let id = name || self._createID( fn ); 
-        self._listeners[id] = { name: id, period: beats, offset: offset, count: -1, loop: true, fn: fn };
+        self._listeners[id] = { name: id, beats: beats, period: p, index: 0, offset: offset, duration: -1, loop: true, fn: fn };
         return this;
       }
     };
@@ -409,30 +413,35 @@ export class Tempo {
   // }
 
 
-  listen( time ) {
+  protected track( time ) {
     for (let k in this._listeners) {
       if (this._listeners.hasOwnProperty(k)) {
+
         let li = this._listeners[k];
-
         if (li.offset) time += li.offset; 
-        let beats = Math.floor( time / this._mspb );
+        let ms = li.period * this._mspb; // time per period
+        let isStart = li.duration <= 0;
 
-        let period = Array.isArray( li.period ) ? li.period[ Math.max(0,li.count) % li.period.length ] : li.period;
-        
-        let c = beats / period; // count ms instead of beat in li.count ?
-        let isStart = false;
-
-        if (Math.floor( c ) > li.count) {  
-          li.count = Math.floor( c );
-          isStart = true;
+        if (time > li.duration + ms) {
+          li.duration = time - (time % this._mspb); // update 
+          if (Array.isArray( li.beats )) { // find next period from array
+            li.index = (li.index + 1) % li.beats.length;
+            li.period = li.beats[ li.index ];
+          }
         }
 
-        let params = (li.loop) ? [li.count, (time - li.count * period * this._mspb) / (period * this._mspb) , isStart] : [li.count]; 
+        let count = Math.floor(li.duration / this._mspb);
+        let params = (li.loop) ? [count, (time - li.duration)/ms, li.period, isStart] : [count]; 
         let done = li.fn.apply( li, params );
         if (done) delete this._listeners[ li.name ];
       }
     }
   }
+
+  protected animate( time, ftime ) {
+    this.track( time );
+  }
+
 
 
 }
