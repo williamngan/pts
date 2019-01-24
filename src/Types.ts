@@ -142,3 +142,36 @@ export type UIHandler = ( target:UI, pt:PtLike, type:string ) => void;
  * WarningType specifies a level of warning for [`Util.warnLevel`](#link).
  */
 export type WarningType = "error"|"warn"|"mute";
+
+
+/**
+ * Typescript only: a callback function type to be used in `tempo.every(...).start( fn )` 
+ */
+export type ITempoStartFn = (count:number) => void|boolean;
+
+/**
+ * Typescript only: a callback function type to be used in `tempo.every(...).progress( fn )` 
+ */
+export type ITempoProgressFn = (count:number, t:number, start:boolean) => void|boolean;
+
+/**
+ * Typescript only: a listener object created by Tempo class
+ */
+export type ITempoListener = {
+  name?:string, // reference id
+  beats?:number|number[], // rhythm in beats
+  period?:number, // current number of beats per period
+  duration?:number, // current duration in ms per period
+  offset?:number, // time offset
+  smooth?:boolean, // track progress is true, otherwise track only triggers
+  index?:number, // if beats is an array, this is the current index
+  fn: Function // callback function
+};
+
+/**
+ * Typescript only: the return type of `tempo.every(...)`
+ */
+export type ITempoResponses = {
+  start: (fn:ITempoStartFn, offset:number, name?:string) => string,
+  progress: (fn:ITempoProgressFn, offset:number, name?:string ) => string
+};

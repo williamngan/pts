@@ -1,7 +1,7 @@
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
 import {Group} from "./Pt";
-import {WarningType} from "./Types";
+import {WarningType, ITempoListener, ITempoStartFn, ITempoProgressFn, ITempoResponses} from "./Types";
 
 
 /**
@@ -311,56 +311,54 @@ export class Util {
   
 }
 
-type ITempoStartFn = (count:number) => void|boolean;
-type ITempoProgressFn = (count:number, t:number, start:boolean) => void|boolean;
-type ITempoListener = {
-  name?:string,
-  beats?:number|number[],
-  period?:number,
-  duration?:number,
-  offset?:number,
-  loop?:boolean,
-  index?:number,
-  fn: Function
-};
 
+/**
+ * Tempo is an utility class that helps you create synchronized and rhythmic animations.
+ */
 export class Tempo {
 
-  protected _bpm: number;
-  protected _mspb: number;
+  protected _bpm: number; // beat per minute
+  protected _ms: number; // millis per beat
 
   protected _listeners:{ [key:string]:ITempoListener } = {};
   protected _listenerInc:number = 0;
-  protected _marks = {
-    "largo": 50,
-    "adagio": 70,
-    "andante": 100,
-    "allegro": 120,
-    "vivace": 150,
-    "presto": 200
-  };
 
-  static fromBPM( bpm:number ) {
-    return new Tempo( bpm );
-  }
-
-  static fromBeat( ms:number ) {
-    return new Tempo( 60000 / ms );
-  }
-
-  constructor(bpm : number) {
+  /**
+   * Construct a new Tempo instance by beats-per-minute. Alternatively, you can use [`Tempo.fromBeat`](#link) to create from milliseconds.
+   * @param bpm beats per minute
+   */
+  constructor( bpm:number ) {
     this.bpm = bpm;
   }
 
-  get bpm():number {
-    return this._bpm;
+  /**
+   * Create a new Tempo instance by specifying milliseconds-per-beat.
+   * @param ms milliseconds per beat
+   */
+  static fromBeat( ms:number ):Tempo {
+    return new Tempo( 60000 / ms );
   }
 
+  /**
+   * Beats-per-minute value
+   */
+  get bpm():number { return this._bpm; }
   set bpm( n:number ) {
     this._bpm = n;
-    this._mspb = 60000 / this._bpm;
+    this._ms = 60000 / this._bpm;
   }
 
+  /**
+   * Milliseconds per beat (Note that this is derived from the bpm value).
+   */
+  get ms():number { return this._ms; }
+  set ms( n:number ) {
+    this._bpm = Math.floor( 60000/n );
+    this._ms = 60000 / this._bpm;
+  }
+
+
+  // Get a listener unique id
   protected _createID( listener:ITempoListener|Function ):string {
     let id:string = '';
     if (typeof listener === 'function') {
@@ -372,76 +370,68 @@ export class Tempo {
   }
 
 
-  every( beats:number|number[] ) {
+  /**
+   * This is a core function that let you specify a rhythm and then define responses by calling the `start` and `progress` functions from the returned object.
+   * The `start` function lets you define the response on every start. It takes a callback function (see [`ITempoStartFn`](#link)) and optionally let you set a time offset and a custom name.
+   * The `progress` function lets you define the response when in progress. It takes a callback function (see [`ITempoProgressFn`](#link)) and optionally let you set a time offset and a custom name.
+   * See [Animation guide](../guide/animation-0700.html) for more details.
+   * @param beats a rhythm in beats as a number or array of numbers
+   * @example `tempo.every(2).start( (count) => ... )`, `tempo.every([2,4,6]).progress( (count, t) => ... )`
+   * @returns a object with chainable functions 
+   */
+  every( beats:number|number[] ):ITempoResponses {
     let self = this;
     let p = Array.isArray(beats) ? beats[0] : beats;
+    
     return {
       start: function (fn:ITempoStartFn, offset:number=0, name?:string): string {
         let id = name || self._createID( fn );        
-        self._listeners[id] = { name: id, beats: beats, period: p, index: 0, offset: offset, duration: -1, loop: false, fn: fn };
+        self._listeners[id] = { name: id, beats: beats, period: p, index: 0, offset: offset, duration: -1, smooth: false, fn: fn };
         return this;
       },
 
       progress: function (fn:ITempoProgressFn, offset:number=0, name?:string ): string {
         let id = name || self._createID( fn ); 
-        self._listeners[id] = { name: id, beats: beats, period: p, index: 0, offset: offset, duration: -1, loop: true, fn: fn };
+        self._listeners[id] = { name: id, beats: beats, period: p, index: 0, offset: offset, duration: -1, smooth: true, fn: fn };
         return this;
       }
     };
   }
 
-  // beat( every:number|number[], listener:ITempoListener|Function, offset:number=0 ):string {
-    
-  //   let id = this._createID( listener );
-  //   let fn:Function = (typeof listener === 'function') ? listener : listener.fn;
-    
-  //   if (!fn) throw new Error("listener's callback function is not defined.");
-    
-  //   this._listeners[id] = { name: id, period: every, offset: offset, count: -1, loop: false, fn: (fn as ITempoStartFn) };
-  //   return id;
-  // }
 
-  // loop( every:number, listener:ITempoListener|Function, offset:number=0 ): string {
-  //   let id = this._createID( listener );
-  //   let fn:Function = (typeof listener === 'function') ? listener : listener.fn;
-
-  //   if (!fn) throw new Error("listener's callback function is not defined.");
-
-  //   this._listeners[id] = { name: id, period: every, offset: offset, count: -1, loop: true, fn: (fn as ITempoStartFn) };
-
-  //   return id;
-  // }
-
-
-  protected track( time ) {
+  /**
+   * Usually you can add a tempo instance to a space via [`Space.add`](#link) and it will track time automatically. 
+   * But if necessary, you can track time manually via this function.
+   * @param time current time in milliseconds
+   */
+  track( time ) {
     for (let k in this._listeners) {
       if (this._listeners.hasOwnProperty(k)) {
 
         let li = this._listeners[k];
         if (li.offset) time += li.offset; 
-        let ms = li.period * this._mspb; // time per period
+        let ms = li.period * this._ms; // time per period
         let isStart = li.duration <= 0;
 
         if (time > li.duration + ms) {
-          li.duration = time - (time % this._mspb); // update 
+          li.duration = time - (time % this._ms); // update 
           if (Array.isArray( li.beats )) { // find next period from array
             li.index = (li.index + 1) % li.beats.length;
             li.period = li.beats[ li.index ];
           }
         }
 
-        let count = Math.floor(li.duration / this._mspb);
-        let params = (li.loop) ? [count, (time - li.duration)/ms, li.period, isStart] : [count]; 
+        let count = Math.floor(li.duration / this._ms);
+        let params = (li.smooth) ? [count, (time - li.duration)/ms, li.period, isStart] : [count]; 
         let done = li.fn.apply( li, params );
         if (done) delete this._listeners[ li.name ];
       }
     }
   }
 
+  // Implement IPlayer's animate so that tempo instance can be added to space
   protected animate( time, ftime ) {
     this.track( time );
   }
-
-
 
 }
