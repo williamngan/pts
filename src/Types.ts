@@ -152,7 +152,7 @@ export type ITempoStartFn = (count:number) => void|boolean;
 /**
  * Typescript only: a callback function type to be used in `tempo.every(...).progress( fn )` 
  */
-export type ITempoProgressFn = (count:number, t:number, start:boolean) => void|boolean;
+export type ITempoProgressFn = (count:number, t:number, ms:number, start:boolean) => void|boolean;
 
 /**
  * Typescript only: a listener object created by Tempo class

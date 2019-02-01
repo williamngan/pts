@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Animation</title>
+	<link href="./assets/style.css" rel="stylesheet" type="text/css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+</head>
+
+<body>
+<div id="header">
+  <div id="pts"><a href="../">Pts<span>.</span></a>guides</div>
+  <div id="topmenu">
+    <a href="../demo/index.html">demos</a>
+    <a href="../study/index.html">studies</a>
+    <a href="../docs/">docs</a>
+    <a href="https://github.com/williamngan/pts">github</a>
+  </div>
+</div>
+<a href="#menu" id="toc">&#x2261;</a>
+<div id="post"><h1>Animation</h1>
+<p>There are many great javascript animation libraries, like the elegant Popmotion and the full-featured GSAP, which you may use alongside Pts. For simple use cases, Pts' Tempo class offers an intuitive and lightweight alternative.</p>
+<p>Often, an animation sequence is implemented as a curated list of tweens played in milliseconds. What if we take the idea one level higher, and think of the sequence like a dance? One-two-three, One-two-three...</p>
+<p>Let's start by setting the beats. The common measurement is beats-per-minute (BPM). You can create a Tempo instance in two ways: by setting a BPM, or specifying the duration of a beat in milliseconds.</p>
+<pre><code>// 120 beats-per-minute, or 500ms per beat
+let ta = new Tempo( 120 ); 
+
+// 500ms per beat, or 120 BPM
+let tb = Tempo.fromBeat( 500 ); 
+</code></pre>
+<p>The essential function in a Tempo instance is <code>every(...)</code>, which counts the beats for you. It's like a smart metronome.</p>
+<pre><code>let everyTwo = ta.every( 2 );
+let everyTen = ta.every( 10 );
+</code></pre>
+<p>The returned object from <code>every</code> has two chainable functions: <code>start( fn )</code> and <code>progress( fn )</code>. <code>start</code> lets you set a callback at the start of every period. For example:</p>
+<pre><code>// at the start of every 2-beats period, add a dot
+everyTwo.start( (count) =&gt; ... )
+</code></pre>
+<p><code>progress</code> lets you specify a callback during the progress of every period, so you can use it to interpolate values and tween properties.</p>
+<pre><code>// during every 10-beats period, do this...
+everyTen.progress( (count, t, time, isStart) =&gt; ... ) 
+</code></pre>
+<p>Let's look at an example. Here the tempo is set to 60 BPM (or 1 second per beat), and we design the behaviors as such:</p>
+<ul>
+<li>Every 1 beat, the square's color changes</li>
+<li>Every 2 beats, the circle's color changes and the rotation completes once</li>
+</ul>
+<p><img src="./assets/bg.png" alt="js:tempo_progress"></p>
+<p>It's pretty easy to create animations that are in sync with rhythm. Let's try a few more example.</p>
+<h2>Variations</h2>
+<p><strong>Tween</strong>: Since the <code>t</code> parameter in <code>progress</code> callback function always go from 0 to 1, we can map the value to a <a href="../docs/?p=Num_Shaping">Shaping</a> function and change the tweening style.</p>
+<pre><code>everyTwo.progress( (count, t, time, isStart) =&gt; {
+    let tt = Shaping.elasticOut( t );
+    ...
+}) 
+</code></pre>
+<p><img src="./assets/bg.png" alt="js:tempo_shaping"></p>
+<p><strong>Stagger</strong>: You can offset a beat's timing by a small difference to create a &quot;stagger&quot; effect. Specify an offset time (in milliseconds) in the optional second parameter.</p>
+<pre><code>let fn = (count, t) =&gt; ... ;
+everyTwo.progress( fn, -100 ); // activate 100ms sooner
+</code></pre>
+<p><img src="./assets/bg.png" alt="js:tempo_stagger"></p>
+<p><strong>Rhythm</strong>: Set a custom rhythm by passing a list of beats in the <code>every</code> function.</p>
+<pre><code>let ta = tempo.every( [2, 2, 1, 1] ); // Taaa, Taaa, ta-ta.
+</code></pre>
+<p><img src="./assets/bg.png" alt="js:tempo_rhythm"></p>
+</div>
+
+<ol id="menu"><a id="close" href="#">&times;</a><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Space-0500.html">Space</a></li><li><a href="Typography-0600.html">Typography</a></li><li><a href="Animation-0700.html">Animation</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li></ol>
+
+<div id="footer">Copyright &copy; 2017-current by <a href="https://twitter.com/williamngan">William Ngan</a> and contributors. Pts is an <a href="https://github.com/williamngan/pts">open source project</a> under Apache License 2.0.</div>
+
+<script type="text/javascript" src="../dist/pts.min.js"></script>
+<script type="text/javascript" src="./js/guide.js"></script>
+<script src="./js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-104913373-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>

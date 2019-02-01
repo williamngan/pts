@@ -1,6 +1,7 @@
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
 import {Group} from "./Pt";
+import {Num} from "./Num";
 import {WarningType, ITempoListener, ITempoStartFn, ITempoProgressFn, ITempoResponses} from "./Types";
 
 
@@ -382,7 +383,7 @@ export class Tempo {
   every( beats:number|number[] ):ITempoResponses {
     let self = this;
     let p = Array.isArray(beats) ? beats[0] : beats;
-    
+
     return {
       start: function (fn:ITempoStartFn, offset:number=0, name?:string): string {
         let id = name || self._createID( fn );        
@@ -409,25 +410,36 @@ export class Tempo {
       if (this._listeners.hasOwnProperty(k)) {
 
         let li = this._listeners[k];
-        if (li.offset) time += li.offset; 
+        let _t = (li.offset) ? time + li.offset : time; 
         let ms = li.period * this._ms; // time per period
-        let isStart = li.duration <= 0;
+        let isStart = false;
 
-        if (time > li.duration + ms) {
-          li.duration = time - (time % this._ms); // update 
+        if (_t > li.duration + ms) {
+          li.duration = _t - (_t % this._ms); // update 
           if (Array.isArray( li.beats )) { // find next period from array
             li.index = (li.index + 1) % li.beats.length;
             li.period = li.beats[ li.index ];
           }
+          isStart = true;
         }
 
-        let count = Math.floor(li.duration / this._ms);
-        let params = (li.smooth) ? [count, (time - li.duration)/ms, li.period, isStart] : [count]; 
+        let count = Math.max(0, Math.ceil( Math.floor(li.duration / this._ms)/li.period ) );
+        let params = (li.smooth) ? [count, Num.clamp( (_t - li.duration)/ms, 0, 1), _t, isStart] : [count]; 
         let done = li.fn.apply( li, params );
         if (done) delete this._listeners[ li.name ];
       }
     }
   }
+
+
+  /**
+   * Remove a `start` or `progress` callback function from the list of callbacks. See [`Tempo.every`](#link) for details
+   * @param name a name string specified when creating the callback function.
+   */
+  end( name:string ):void {
+    if (this._listeners[name]) delete this._listeners[name];
+  }
+
 
   // Implement IPlayer's animate so that tempo instance can be added to space
   protected animate( time, ftime ) {
