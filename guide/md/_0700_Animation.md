@@ -1,37 +1,37 @@
 # Animation
 
-There are many great javascript animation libraries, like the elegant Popmotion and the full-featured GSAP, which you may use alongside Pts. For simple use cases, Pts' Tempo class offers an intuitive and lightweight alternative.
+There are many great javascript animation libraries which you may use alongside Pts. For simple use cases, Pts' [`Tempo`](#link) utility class provides an intuitive and lightweight alternative.
 
-Often, an animation sequence is implemented as a curated list of tweens played in milliseconds. What if we take the idea one level higher, and think of the sequence like a dance? One-two-three, One-two-three...
+Animation sequences are commonly implemented as a curated list of tweens played in milliseconds. But what if we take the idea one level higher, and think of it like a dance? Like One-two-three, One-two-three...
 
-Let's start by setting the beats. The common measurement is beats-per-minute (BPM). You can create a Tempo instance in two ways: by setting a BPM, or specifying the duration of a beat in milliseconds.
+Let's start by setting the beats. Tempo is usually measured in beats-per-minute (bpm), so there are two ways to initiate a [`Tempo`](#link) instance: by setting a bpm, or specifying the duration of a beat in milliseconds.
 
 ```
 // 120 beats-per-minute, or 500ms per beat
-let ta = new Tempo( 120 ); 
+let tempo = new Tempo( 120 ); 
 
-// 500ms per beat, or 120 BPM
-let tb = Tempo.fromBeat( 500 ); 
+// 500ms per beat, or 120 bpm
+let another = Tempo.fromBeat( 500 ); 
 ```
 
-The essential function in a Tempo instance is `every(...)`, which counts the beats for you. It's like a smart metronome.
+The essential function is [`Tempo.every`](#link), which counts the beats and triggers the callback functions you specified. It's like a smart metronome.
 
 ```
-let everyTwo = ta.every( 2 );
-let everyTen = ta.every( 10 );
+let everyTwo = tempo.every( 2 ); // count every 2 beats
+let everyTen = tempo.every( 10 ); // count every 10 beats
 ```
 
-The returned object from `every` has two chainable functions: `start( fn )` and `progress( fn )`. `start` lets you set a callback at the start of every period. For example:
+The `every` function returns an object with two chainable functions: `start(...)` and `progress(...)`. The `start` function lets you set a callback to be triggered at the start of every period. For example:
 
 ```
-// at the start of every 2-beats period, add a dot
+// at the start of every 2-beats period, do something
 everyTwo.start( (count) => ... )
 ```
 
-`progress` lets you specify a callback during the progress of every period, so you can use it to interpolate values and tween properties.
+The `progress` function lets you specify a callback during the progress of every period, so you can use it to interpolate values and tween properties.
 
 ```
-// during every 10-beats period, do this...
+// during every 10-beats period, do something
 everyTen.progress( (count, t, time, isStart) => ... ) 
 ```
 
@@ -41,11 +41,11 @@ Let's look at an example. Here the tempo is set to 60 BPM (or 1 second per beat)
 
 ![js:tempo_progress](./assets/bg.png)
 
-It's pretty easy to create animations that are in sync with rhythm. Let's try a few more example.
+Pretty easy to create sychronized animation sequences, right? Let's try a few more example.
 
 ## Variations
 
-**Tween**: Since the `t` parameter in `progress` callback function always go from 0 to 1, we can map the value to a [Shaping](../docs/?p=Num_Shaping) function and change the tweening style. 
+**Tween**: Since the `t` parameter in `progress` callback function always go from 0 to 1, we can map its value to a [`Shaping`](../docs/?p=Num_Shaping) function and change the tweening style. Another neat trick is to use [`Num.cycle`](../docs/?p=Num_Num#function_cycle) to map the `t` value from [0...1] to [0...1...0].
 
 ```
 everyTwo.progress( (count, t, time, isStart) => {
@@ -69,7 +69,31 @@ everyTwo.progress( fn, -100 ); // activate 100ms sooner
 **Rhythm**: Set a custom rhythm by passing a list of beats in the `every` function.
 
 ```
-let ta = tempo.every( [2, 2, 1, 1] ); // Taaa, Taaa, ta-ta.
+let custom = tempo.every( [2, 2, 1, 1] ); // Taaa, Taaa, ta-ta.
 ```
 
 ![js:tempo_rhythm](./assets/bg.png)
+
+## Controls
+
+It's easy to control the speed of your animation by changing bpm by setting the [`Tempo.bpm`](#link) property. This makes it easier to synchronize your animations with music or in specific intervals.
+```
+tempo.bpm = 100; // set new bpm
+tempo.bpm += 20; // make it 20 beats faster per minute
+```
+
+Try moving your cursor horizontally to change the bpm in this example:
+
+![js:tempo_control](./assets/bg.png)
+
+There are two ways to stop an animation. You can either add `return true` in the callback functions, or include a `name` in the third parameter of `start` or `progress` functions. 
+
+```
+let walking = (count, t) => {
+   // ...
+   return (count > 5);  // return true will stop this animation
+}
+
+tempo.progress( walking, 0, "robot" );
+tempo.stop( "robot" ); // another way to stop this animation
+```

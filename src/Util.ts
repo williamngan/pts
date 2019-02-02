@@ -358,7 +358,7 @@ export class Tempo {
     this._ms = 60000 / this._bpm;
   }
 
-
+  
   // Get a listener unique id
   protected _createID( listener:ITempoListener|Function ):string {
     let id:string = '';
@@ -436,7 +436,7 @@ export class Tempo {
    * Remove a `start` or `progress` callback function from the list of callbacks. See [`Tempo.every`](#link) for details
    * @param name a name string specified when creating the callback function.
    */
-  end( name:string ):void {
+  stop( name:string ):void {
     if (this._listeners[name]) delete this._listeners[name];
   }
 
