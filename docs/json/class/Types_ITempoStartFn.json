@@ -1,15 +1,15 @@
 {
-  "name": "WarningType",
+  "name": "ITempoStartFn",
   "source": [
     [
       "Types.ts",
-      144,
-      23
+      150,
+      25
     ]
   ],
   "kind": "Typealias",
-  "id": 753,
-  "comment": "WarningType specifies a level of warning for [`Util.warnLevel`](#link).",
+  "id": 754,
+  "comment": "Typescript only: a callback function type to be used in `tempo.every(...).start( fn )`",
   "constructor": [],
   "accessors": [],
   "methods": [],
@@ -19,8 +19,6 @@
   "extends": [],
   "implements": [],
   "type_alias": [
-    "error",
-    "warn",
-    "mute"
+    " Fn(count:number)"
   ]
 }

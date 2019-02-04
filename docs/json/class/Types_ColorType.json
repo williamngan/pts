@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Typealias",
-  "id": 1538,
+  "id": 716,
   "comment": "Typescript only: ColorType is a type alias for a defined set of string values such as \"rgb\" and \"lab\".",
   "constructor": [],
   "accessors": [],

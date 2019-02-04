@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Typealias",
-  "id": 1537,
+  "id": 715,
   "comment": "Typescript only: TouchPointsKey is a type alias that represents a set of acceptable string keys for defining touch action.",
   "constructor": [],
   "accessors": [],

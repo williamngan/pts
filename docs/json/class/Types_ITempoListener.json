@@ -1,0 +1,25 @@
+{
+  "name": "ITempoListener",
+  "source": [
+    [
+      "Types.ts",
+      160,
+      26
+    ]
+  ],
+  "kind": "Typealias",
+  "id": 765,
+  "comment": "Typescript only: a listener object created by Tempo class",
+  "constructor": [],
+  "accessors": [],
+  "methods": [],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": [],
+  "type_alias": [
+    "{ beats:`number",
+    "number[]`, duration:`number`, fn:`Function`, index:`number`, name:`string`, offset:`number`, period:`number`, smooth:`boolean` }"
+  ]
+}

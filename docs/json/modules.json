@@ -70,6 +70,10 @@
     "DelaunayMesh",
     "DelaunayShape",
     "GroupLike",
+    "ITempoListener",
+    "ITempoProgressFn",
+    "ITempoResponses",
+    "ITempoStartFn",
     "IntersectContext",
     "PtLike",
     "TouchPointsKey",
@@ -87,6 +91,7 @@
     "UIShape"
   ],
   "Util": [
+    "Tempo",
     "Util",
     "Const"
   ]

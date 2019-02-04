@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 935,
+  "id": 113,
   "comment": "**[Experimental]** A simple button that extends [`UI`](#link) to track clicks and hovers.",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           31
         ]
       ],
-      "id": 937,
+      "id": 115,
       "flags": {},
       "overrides": "UI.__constructor",
       "inherits": false,
@@ -75,7 +75,7 @@
           11
         ]
       ],
-      "id": 997,
+      "id": 175,
       "flags": {},
       "overrides": false,
       "inherits": "UI.group",
@@ -107,7 +107,7 @@
           8
         ]
       ],
-      "id": 993,
+      "id": 171,
       "flags": {},
       "overrides": false,
       "inherits": "UI.id",
@@ -139,7 +139,7 @@
           11
         ]
       ],
-      "id": 1001,
+      "id": 179,
       "flags": {},
       "overrides": false,
       "inherits": "UI.shape",
@@ -168,7 +168,7 @@
           16
         ]
       ],
-      "id": 1021,
+      "id": 199,
       "flags": {
         "isProtected": true
       },
@@ -200,7 +200,7 @@
           8
         ]
       ],
-      "id": 1017,
+      "id": 195,
       "flags": {},
       "overrides": false,
       "inherits": "UI.listen",
@@ -236,7 +236,7 @@
           5
         ]
       ],
-      "id": 1013,
+      "id": 191,
       "flags": {},
       "overrides": false,
       "inherits": "UI.off",
@@ -272,7 +272,7 @@
           10
         ]
       ],
-      "id": 949,
+      "id": 127,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -302,7 +302,7 @@
           10
         ]
       ],
-      "id": 956,
+      "id": 134,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -338,7 +338,7 @@
           4
         ]
       ],
-      "id": 1009,
+      "id": 187,
       "flags": {},
       "overrides": false,
       "inherits": "UI.on",
@@ -374,7 +374,7 @@
           9
         ]
       ],
-      "id": 946,
+      "id": 124,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -404,7 +404,7 @@
           9
         ]
       ],
-      "id": 952,
+      "id": 130,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -440,7 +440,7 @@
           8
         ]
       ],
-      "id": 1032,
+      "id": 210,
       "flags": {},
       "overrides": false,
       "inherits": "UI.render",
@@ -470,7 +470,7 @@
           7
         ]
       ],
-      "id": 1005,
+      "id": 183,
       "flags": {},
       "overrides": false,
       "inherits": "UI.state",
@@ -506,7 +506,7 @@
           10
         ]
       ],
-      "id": 1042,
+      "id": 220,
       "flags": {},
       "overrides": false,
       "inherits": "UI.toString",
@@ -529,7 +529,7 @@
           18
         ]
       ],
-      "id": 1024,
+      "id": 202,
       "flags": {
         "isProtected": true
       },
@@ -561,7 +561,7 @@
           19
         ]
       ],
-      "id": 978,
+      "id": 156,
       "flags": {
         "isStatic": true
       },
@@ -605,7 +605,7 @@
           20
         ]
       ],
-      "id": 983,
+      "id": 161,
       "flags": {
         "isStatic": true
       },
@@ -649,7 +649,7 @@
           22
         ]
       ],
-      "id": 973,
+      "id": 151,
       "flags": {
         "isStatic": true
       },
@@ -693,7 +693,7 @@
           15
         ]
       ],
-      "id": 988,
+      "id": 166,
       "flags": {
         "isStatic": true
       },
@@ -737,7 +737,7 @@
           14
         ]
       ],
-      "id": 1027,
+      "id": 205,
       "flags": {
         "isStatic": true
       },

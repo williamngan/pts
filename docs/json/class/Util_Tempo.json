@@ -1,0 +1,283 @@
+{
+  "name": "Tempo",
+  "source": [
+    [
+      "Util.ts",
+      319,
+      18
+    ]
+  ],
+  "kind": "Class",
+  "id": 1679,
+  "comment": "Tempo is an utility class that helps you create synchronized and rhythmic animations.",
+  "constructor": [
+    {
+      "name": "constructor",
+      "source": [
+        [
+          "Util.ts",
+          325,
+          36
+        ]
+      ],
+      "id": 1687,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Construct a new Tempo instance by beats-per-minute. Alternatively, you can use [`Tempo.fromBeat`](#link) to create from milliseconds.",
+          "returns": "Tempo",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "bpm",
+              "comment": "beats per minute\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "accessors": [
+    {
+      "name": "bpm",
+      "source": [
+        [
+          "Util.ts",
+          346,
+          9
+        ],
+        [
+          "Util.ts",
+          347,
+          9
+        ]
+      ],
+      "id": 1693,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Beats-per-minute value",
+      "getter": {
+        "type": "number"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "n",
+          "comment": "",
+          "type": "number",
+          "default": false
+        }
+      }
+    },
+    {
+      "name": "ms",
+      "source": [
+        [
+          "Util.ts",
+          355,
+          8
+        ],
+        [
+          "Util.ts",
+          356,
+          8
+        ]
+      ],
+      "id": 1697,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Milliseconds per beat (Note that this is derived from the bpm value).",
+      "getter": {
+        "type": "number"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "n",
+          "comment": "",
+          "type": "number",
+          "default": false
+        }
+      }
+    }
+  ],
+  "methods": [
+    {
+      "name": "animate",
+      "source": [
+        [
+          "Util.ts",
+          447,
+          19
+        ]
+      ],
+      "id": 1713,
+      "flags": {
+        "isProtected": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Internal implementation for use when adding into Space",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "time",
+              "comment": "",
+              "type": "any",
+              "default": false
+            },
+            {
+              "name": "ftime",
+              "comment": "",
+              "type": "any",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "every",
+      "source": [
+        [
+          "Util.ts",
+          383,
+          7
+        ]
+      ],
+      "id": 1704,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "This is a core function that let you specify a rhythm and then define responses by calling the `start` and `progress` functions from the returned object. See [Animation guide](../guide/Animation-0700.html) for more details.\nThe `start` function lets you set a callback on every start. It takes a function ([`ITempoStartFn`](#link)).\nThe `progress` function lets you set a callback during progress. It takes a function ([`ITempoProgressFn`](#link)). Both functions let you optionally specify a time offset and a custom name.\nSee [Animation guide](../guide/animation-0700.html) for more details.",
+          "returns": "ITempoResponses",
+          "returns_comment": "a object with chainable functions\n",
+          "parameters": [
+            {
+              "name": "beats",
+              "comment": "a rhythm in beats as a number or array of numbers",
+              "type": "number | number[]",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`tempo.every(2).start( (count) => ... )`, `tempo.every([2,4,6]).progress( (count, t) => ... )`"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "stop",
+      "source": [
+        [
+          "Util.ts",
+          439,
+          6
+        ]
+      ],
+      "id": 1710,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Remove a `start` or `progress` callback function from the list of callbacks. See [`Tempo.every`](#link) for details",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "name",
+              "comment": "a name string specified when creating the callback function.\n",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "track",
+      "source": [
+        [
+          "Util.ts",
+          408,
+          7
+        ]
+      ],
+      "id": 1707,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Usually you can add a tempo instance to a space via [`Space.add`](#link) and it will track time automatically.\nBut if necessary, you can track time manually via this function.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "time",
+              "comment": "current time in milliseconds\n",
+              "type": "any",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "fromBeat",
+      "source": [
+        [
+          "Util.ts",
+          339,
+          17
+        ]
+      ],
+      "id": 1690,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a new Tempo instance by specifying milliseconds-per-beat.",
+          "returns": "Tempo",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ms",
+              "comment": "milliseconds per beat\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": []
+}

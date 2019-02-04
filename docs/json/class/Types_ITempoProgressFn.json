@@ -1,15 +1,15 @@
 {
-  "name": "WarningType",
+  "name": "ITempoProgressFn",
   "source": [
     [
       "Types.ts",
-      144,
-      23
+      155,
+      28
     ]
   ],
   "kind": "Typealias",
-  "id": 753,
-  "comment": "WarningType specifies a level of warning for [`Util.warnLevel`](#link).",
+  "id": 758,
+  "comment": "Typescript only: a callback function type to be used in `tempo.every(...).progress( fn )`",
   "constructor": [],
   "accessors": [],
   "methods": [],
@@ -19,8 +19,6 @@
   "extends": [],
   "implements": [],
   "type_alias": [
-    "error",
-    "warn",
-    "mute"
+    " Fn(count:number, t:number, ms:number, start:boolean)"
   ]
 }

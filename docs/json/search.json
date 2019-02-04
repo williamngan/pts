@@ -8700,6 +8700,30 @@
     0
   ],
   [
+    "Types_ITempoListener",
+    "ITempoListener",
+    "Type alias",
+    0
+  ],
+  [
+    "Types_ITempoProgressFn",
+    "ITempoProgressFn",
+    "Type alias",
+    0
+  ],
+  [
+    "Types_ITempoResponses",
+    "ITempoResponses",
+    "Type alias",
+    0
+  ],
+  [
+    "Types_ITempoStartFn",
+    "ITempoStartFn",
+    "Type alias",
+    0
+  ],
+  [
     "Types_IntersectContext",
     "IntersectContext",
     "Type alias",
@@ -9261,6 +9285,60 @@
     "UI_UIShape",
     "UIShape",
     "Object literal",
+    0
+  ],
+  [
+    "Util_Tempo#constructor_constructor",
+    "Tempo.constructor",
+    "Constructor",
+    10
+  ],
+  [
+    "Util_Tempo#accessor_bpm",
+    "Tempo.bpm",
+    "Accessor",
+    6
+  ],
+  [
+    "Util_Tempo#accessor_ms",
+    "Tempo.ms",
+    "Accessor",
+    6
+  ],
+  [
+    "Util_Tempo#function_animate",
+    "Tempo.animate",
+    "Function",
+    8
+  ],
+  [
+    "Util_Tempo#function_every",
+    "Tempo.every",
+    "Function",
+    8
+  ],
+  [
+    "Util_Tempo#function_stop",
+    "Tempo.stop",
+    "Function",
+    8
+  ],
+  [
+    "Util_Tempo#function_track",
+    "Tempo.track",
+    "Function",
+    8
+  ],
+  [
+    "Util_Tempo#function_fromBeat",
+    "Tempo.fromBeat",
+    "Function",
+    8
+  ],
+  [
+    "Util_Tempo",
+    "Tempo",
+    "Class",
     0
   ],
   [

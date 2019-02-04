@@ -372,9 +372,9 @@ export class Tempo {
 
 
   /**
-   * This is a core function that let you specify a rhythm and then define responses by calling the `start` and `progress` functions from the returned object.
-   * The `start` function lets you define the response on every start. It takes a callback function (see [`ITempoStartFn`](#link)) and optionally let you set a time offset and a custom name.
-   * The `progress` function lets you define the response when in progress. It takes a callback function (see [`ITempoProgressFn`](#link)) and optionally let you set a time offset and a custom name.
+   * This is a core function that let you specify a rhythm and then define responses by calling the `start` and `progress` functions from the returned object. See [Animation guide](../guide/Animation-0700.html) for more details.
+   * The `start` function lets you set a callback on every start. It takes a function ([`ITempoStartFn`](#link)).
+   * The `progress` function lets you set a callback during progress. It takes a function ([`ITempoProgressFn`](#link)). Both functions let you optionally specify a time offset and a custom name.
    * See [Animation guide](../guide/animation-0700.html) for more details.
    * @param beats a rhythm in beats as a number or array of numbers
    * @example `tempo.every(2).start( (count) => ... )`, `tempo.every([2,4,6]).progress( (count, t) => ... )`
@@ -441,7 +441,9 @@ export class Tempo {
   }
 
 
-  // Implement IPlayer's animate so that tempo instance can be added to space
+  /**
+   * Internal implementation for use when adding into Space
+   */
   protected animate( time, ftime ) {
     this.track( time );
   }

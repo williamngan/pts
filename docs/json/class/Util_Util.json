@@ -3,12 +3,12 @@
   "source": [
     [
       "Util.ts",
-      103,
+      104,
       17
     ]
   ],
   "kind": "Class",
-  "id": 1577,
+  "id": 1612,
   "comment": "Util class provides static helper functions.",
   "constructor": [],
   "accessors": [],
@@ -18,11 +18,11 @@
       "source": [
         [
           "Util.ts",
-          223,
+          224,
           16
         ]
       ],
-      "id": 1603,
+      "id": 1638,
       "flags": {
         "isStatic": true
       },
@@ -62,11 +62,11 @@
       "source": [
         [
           "Util.ts",
-          211,
+          212,
           16
         ]
       ],
-      "id": 1599,
+      "id": 1634,
       "flags": {
         "isStatic": true
       },
@@ -100,11 +100,11 @@
       "source": [
         [
           "Util.ts",
-          279,
+          280,
           17
         ]
       ],
-      "id": 1627,
+      "id": 1662,
       "flags": {
         "isStatic": true
       },
@@ -150,11 +150,11 @@
       "source": [
         [
           "Util.ts",
-          124,
+          125,
           16
         ]
       ],
-      "id": 1582,
+      "id": 1617,
       "flags": {
         "isStatic": true
       },
@@ -182,11 +182,11 @@
       "source": [
         [
           "Util.ts",
-          293,
+          294,
           13
         ]
       ],
-      "id": 1636,
+      "id": 1671,
       "flags": {
         "isStatic": true
       },
@@ -220,11 +220,11 @@
       "source": [
         [
           "Util.ts",
-          174,
+          175,
           18
         ]
       ],
-      "id": 1589,
+      "id": 1624,
       "flags": {
         "isStatic": true
       },
@@ -258,11 +258,11 @@
       "source": [
         [
           "Util.ts",
-          186,
+          187,
           14
         ]
       ],
-      "id": 1593,
+      "id": 1628,
       "flags": {
         "isStatic": true
       },
@@ -308,11 +308,11 @@
       "source": [
         [
           "Util.ts",
-          260,
+          261,
           16
         ]
       ],
-      "id": 1616,
+      "id": 1651,
       "flags": {
         "isStatic": true
       },
@@ -363,11 +363,11 @@
       "source": [
         [
           "Util.ts",
-          158,
+          159,
           13
         ]
       ],
-      "id": 1585,
+      "id": 1620,
       "flags": {
         "isStatic": true
       },
@@ -401,11 +401,11 @@
       "source": [
         [
           "Util.ts",
-          112,
+          113,
           18
         ]
       ],
-      "id": 1579,
+      "id": 1614,
       "flags": {
         "isStatic": true
       },
@@ -433,11 +433,11 @@
       "source": [
         [
           "Util.ts",
-          238,
+          239,
           12
         ]
       ],
-      "id": 1613,
+      "id": 1648,
       "flags": {
         "isStatic": true
       },
