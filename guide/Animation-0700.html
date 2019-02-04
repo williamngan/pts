@@ -47,7 +47,7 @@ everyTen.progress( (count, t, time, isStart) =&gt; ... )
 </ul>
 <p><img src="./assets/bg.png" alt="js:tempo_progress"></p>
 <p>Pretty easy to create sychronized animation sequences, right? Let's try a few more example.</p>
-<h2>Variations</h2>
+<h3>Variations</h3>
 <p><strong>Tween</strong>: Since the <code>t</code> parameter in <code>progress</code> callback function always go from 0 to 1, we can map its value to a <a href="../docs/?p=Num_Shaping"><code>Shaping</code></a> function and change the tweening style. Another neat trick is to use <a href="../docs/?p=Num_Num#function_cycle"><code>Num.cycle</code></a> to map the <code>t</code> value from [0...1] to [0...1...0].</p>
 <pre><code>everyTwo.progress( (count, t, time, isStart) =&gt; {
     let tt = Shaping.elasticOut( t );
@@ -64,7 +64,7 @@ everyTwo.progress( fn, -100 ); // activate 100ms sooner
 <pre><code>let custom = tempo.every( [2, 2, 1, 1] ); // Taaa, Taaa, ta-ta.
 </code></pre>
 <p><img src="./assets/bg.png" alt="js:tempo_rhythm"></p>
-<h2>Controls</h2>
+<h3>Controls</h3>
 <p>It's easy to control the speed of your animation by changing bpm by setting the <a href="#link"><code>Tempo.bpm</code></a> property. This makes it easier to synchronize your animations with music or in specific intervals.</p>
 <pre><code>tempo.bpm = 100; // set new bpm
 tempo.bpm += 20; // make it 20 beats faster per minute
@@ -79,6 +79,23 @@ tempo.bpm += 20; // make it 20 beats faster per minute
 
 tempo.progress( walking, 0, &quot;robot&quot; );
 tempo.stop( &quot;robot&quot; ); // another way to stop this animation
+</code></pre>
+<h3>Cheat Sheet</h3>
+<p>Create a <a href="#link"><code>Tempo</code></a> instance with specific bpm.</p>
+<pre><code>tempo = new Tempo(120); // 120 bpm
+tempo = Tempo.fromBeat( 100 ); // one beat every 100ms
+</code></pre>
+<p>Count beats and trigger animation callbacks</p>
+<pre><code>let fiveBeats = tempo.every( 5 );
+
+fiveBeats.start( (count) =&gt; { 
+  // do something at start of every period
+  return count &gt; 5; // optionally return true to stop animating
+});
+
+fiveBeats.progress( (count, t, time, isStart) =&gt;  { 
+  // do something during each period
+});
 </code></pre>
 </div>
 

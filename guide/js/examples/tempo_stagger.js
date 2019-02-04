@@ -24,7 +24,7 @@
   };
 
   // chain 3 callbacks together with offset
-  everyTwo.progress( dials("#FFF"), -100 ).progress( dials("#123"), 0 ).progress( dials("#62E"), 100 );
+  everyTwo.progress( dials("#0C9"), -100 ).progress( dials("#F03"), 0 ).progress( dials("#62E"), 100 );
   
   // track tempo animation
   space.add( tempo );

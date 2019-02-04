@@ -19,7 +19,7 @@
     form.strokeOnly( "#123", 10, "round", "round").lines( [left, right] );
     
     if (start) counter++;
-    let c = (counter % 4 < 2) ? "#62E" : "#F03"
+    let c = (counter % 4 < 2) ? "#62E" : "#0C9"
     form.fillOnly( c ).point( left.p2, 20, "circle" ).point( right.p2, 20, "circle" );
   });
   

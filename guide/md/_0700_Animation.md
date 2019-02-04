@@ -43,7 +43,7 @@ Let's look at an example. Here the tempo is set to 60 BPM (or 1 second per beat)
 
 Pretty easy to create sychronized animation sequences, right? Let's try a few more example.
 
-## Variations
+### Variations
 
 **Tween**: Since the `t` parameter in `progress` callback function always go from 0 to 1, we can map its value to a [`Shaping`](../docs/?p=Num_Shaping) function and change the tweening style. Another neat trick is to use [`Num.cycle`](../docs/?p=Num_Num#function_cycle) to map the `t` value from [0...1] to [0...1...0].
 
@@ -74,7 +74,7 @@ let custom = tempo.every( [2, 2, 1, 1] ); // Taaa, Taaa, ta-ta.
 
 ![js:tempo_rhythm](./assets/bg.png)
 
-## Controls
+### Controls
 
 It's easy to control the speed of your animation by changing bpm by setting the [`Tempo.bpm`](#link) property. This makes it easier to synchronize your animations with music or in specific intervals.
 ```
@@ -96,4 +96,26 @@ let walking = (count, t) => {
 
 tempo.progress( walking, 0, "robot" );
 tempo.stop( "robot" ); // another way to stop this animation
+```
+
+### Cheat Sheet
+
+Create a [`Tempo`](#link) instance with specific bpm.
+```
+tempo = new Tempo(120); // 120 bpm
+tempo = Tempo.fromBeat( 100 ); // one beat every 100ms
+```
+
+Count beats and trigger animation callbacks
+```
+let fiveBeats = tempo.every( 5 );
+
+fiveBeats.start( (count) => { 
+  // do something at start of every period
+  return count > 5; // optionally return true to stop animating
+});
+
+fiveBeats.progress( (count, t, time, isStart) =>  { 
+  // do something during each period
+});
 ```
