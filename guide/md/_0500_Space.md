@@ -45,7 +45,7 @@ space.add( {
 } );
 ```
 
-Here we add an object that conforms to the [IPlayer](../docs/interfaces/_space_.iplayer.html) interface, which defines 4 optional callback functions:
+Here we add an object that conforms to the [IPlayer](../docs/?p=Types_IPlayer) interface, which defines 4 optional callback functions:
 - `start` function is called when the space is ready. It includes 2 parameters: `bound` which returns the bounding box, and `space` which returns its space.   
 
 

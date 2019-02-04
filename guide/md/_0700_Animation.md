@@ -1,10 +1,10 @@
 # Animation
 
-There are many great javascript animation libraries which you may use alongside Pts. For simple use cases, Pts' [`Tempo`](#link) utility class provides an intuitive and lightweight alternative.
+[`Tempo`](#link) is a lightweight utility class which helps you create animation sequences intuitively. It's an alternative to many other great animation libraries (which you can use with Pts too).
 
-Animation sequences are commonly implemented as a curated list of tweens played in milliseconds. But what if we take the idea one level higher, and think of it like a dance? Like One-two-three, One-two-three...
+Typically, animation sequences are often implemented as a curated list of tweens in milliseconds. But what if we take the idea one level higher, and treat it like a dance? Like One-two-three, One-two-three...
 
-Let's start by setting the beats. Tempo is usually measured in beats-per-minute (bpm), so there are two ways to initiate a [`Tempo`](#link) instance: by setting a bpm, or specifying the duration of a beat in milliseconds.
+Let's start by counting the beats. Tempo is usually measured in beats-per-minute (bpm), so there are two ways to initiate a [`Tempo`](#link) instance: by setting a bpm, or specifying the duration of a beat in milliseconds.
 
 ```
 // 120 beats-per-minute, or 500ms per beat
@@ -21,27 +21,29 @@ let everyTwo = tempo.every( 2 ); // count every 2 beats
 let everyTen = tempo.every( 10 ); // count every 10 beats
 ```
 
-The `every` function returns an object with two chainable functions: `start(...)` and `progress(...)`. The `start` function lets you set a callback to be triggered at the start of every period. For example:
+The `every` function returns an object with two chainable functions: `start(...)` and `progress(...)`. These functions let you attach custom callback functions that respond to animation events.
+
+The `start` function lets you set a callback to be triggered at the start of every *n*-beats period. For example: 
 
 ```
 // at the start of every 2-beats period, do something
 everyTwo.start( (count) => ... )
 ```
 
-The `progress` function lets you specify a callback during the progress of every period, so you can use it to interpolate values and tween properties.
+The `progress` function lets you set a callback during the progress of every *n*-beats period. The second parameter `t` always start at 0 and ends at 1 in every period, so you can use it to interpolate values and tween properties. 
 
 ```
 // during every 10-beats period, do something
 everyTen.progress( (count, t, time, isStart) => ... ) 
 ```
 
-Let's look at an example. Here the tempo is set to 60 BPM (or 1 second per beat), and we design the behaviors as such:
+Let's look at an example. Here the tempo is set to 60 BPM (or 1 second per beat), and we design the behaviors so that:
 - Every 1 beat, the square's color changes
 - Every 2 beats, the circle's color changes and the rotation completes once
 
 ![js:tempo_progress](./assets/bg.png)
 
-Pretty easy to create sychronized animation sequences, right? Let's try a few more example.
+Pretty easy to create synchronized animation sequences, right? Let's try a few more example.
 
 ### Variations
 
@@ -76,7 +78,7 @@ let custom = tempo.every( [2, 2, 1, 1] ); // Taaa, Taaa, ta-ta.
 
 ### Controls
 
-It's easy to control the speed of your animation by changing bpm by setting the [`Tempo.bpm`](#link) property. This makes it easier to synchronize your animations with music or in specific intervals.
+By changing bpm by setting the [`Tempo.bpm`](#link) property, you can control the speed of your animation. This makes it easier to synchronize your animations with music or at specific intervals.
 ```
 tempo.bpm = 100; // set new bpm
 tempo.bpm += 20; // make it 20 beats faster per minute
@@ -86,7 +88,7 @@ Try moving your cursor horizontally to change the bpm in this example:
 
 ![js:tempo_control](./assets/bg.png)
 
-There are two ways to stop an animation. You can either add `return true` in the callback functions, or include a `name` in the third parameter of `start` or `progress` functions. 
+There are two ways to stop an animation. You can either `return true` within `start` or `progress` callback functions, or include a `name` in the third parameter of the callbacks and then call `tempo.stop( name )`. 
 
 ```
 let walking = (count, t) => {

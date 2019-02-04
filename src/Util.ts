@@ -376,9 +376,9 @@ export class Tempo {
    * The `start` function lets you set a callback on every start. It takes a function ([`ITempoStartFn`](#link)).
    * The `progress` function lets you set a callback during progress. It takes a function ([`ITempoProgressFn`](#link)). Both functions let you optionally specify a time offset and a custom name.
    * See [Animation guide](../guide/animation-0700.html) for more details.
-   * @param beats a rhythm in beats as a number or array of numbers
+   * @param beats a rhythm in beats as a number or an array of numbers
    * @example `tempo.every(2).start( (count) => ... )`, `tempo.every([2,4,6]).progress( (count, t) => ... )`
-   * @returns a object with chainable functions 
+   * @returns an object with chainable functions 
    */
   every( beats:number|number[] ):ITempoResponses {
     let self = this;

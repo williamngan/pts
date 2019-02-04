@@ -7,6 +7,8 @@
   let space = new CanvasSpace("#"+demoID).setup({ retina: true, bgcolor: "#e2e6ef", resize: true });
   let form = space.getForm();
 
+  // -------
+
   // Create tempo instance
   let tempo = new Tempo(60);
   let everyTwo = tempo.every( 2 );
@@ -18,7 +20,7 @@
       let dir = (count%2 === 0) ? 1 : -1;
       let s = (count%2 !== 0) ? Const.pi : 0;
       let ln = Line.fromAngle( space.center, s + Const.pi * tt * dir, space.size.y/3 );
-      form.strokeOnly( c, 10, "round", "round").line( ln );
+      form.strokeOnly( c, 10, "round", "round" ).line( ln );
       form.fillOnly( c ).point( ln.p2, 20, "circle" );
     }
   };
@@ -29,11 +31,11 @@
   // track tempo animation
   space.add( tempo );
   
-  // start
+
+  // For use in demo page only
   // Note that `playOnce(200)` will stop after 200ms. Use `play()` to run the animation loop continuously. 
   space.playOnce(200).bindMouse().bindTouch();
   
-  // For use in demo page only
   if (window.registerDemo) window.registerDemo(demoID, space);
   
 })();

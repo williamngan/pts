@@ -19,9 +19,9 @@
 </div>
 <a href="#menu" id="toc">&#x2261;</a>
 <div id="post"><h1>Animation</h1>
-<p>There are many great javascript animation libraries which you may use alongside Pts. For simple use cases, Pts' <a href="#link"><code>Tempo</code></a> utility class provides an intuitive and lightweight alternative.</p>
-<p>Animation sequences are commonly implemented as a curated list of tweens played in milliseconds. But what if we take the idea one level higher, and think of it like a dance? Like One-two-three, One-two-three...</p>
-<p>Let's start by setting the beats. Tempo is usually measured in beats-per-minute (bpm), so there are two ways to initiate a <a href="#link"><code>Tempo</code></a> instance: by setting a bpm, or specifying the duration of a beat in milliseconds.</p>
+<p><a href="#link"><code>Tempo</code></a> is a lightweight utility class which helps you create animation sequences intuitively. It's an alternative to many other great animation libraries (which you can use with Pts too).</p>
+<p>Typically, animation sequences are often implemented as a curated list of tweens in milliseconds. But what if we take the idea one level higher, and treat it like a dance? Like One-two-three, One-two-three...</p>
+<p>Let's start by counting the beats. Tempo is usually measured in beats-per-minute (bpm), so there are two ways to initiate a <a href="#link"><code>Tempo</code></a> instance: by setting a bpm, or specifying the duration of a beat in milliseconds.</p>
 <pre><code>// 120 beats-per-minute, or 500ms per beat
 let tempo = new Tempo( 120 ); 
 
@@ -32,21 +32,22 @@ let another = Tempo.fromBeat( 500 );
 <pre><code>let everyTwo = tempo.every( 2 ); // count every 2 beats
 let everyTen = tempo.every( 10 ); // count every 10 beats
 </code></pre>
-<p>The <code>every</code> function returns an object with two chainable functions: <code>start(...)</code> and <code>progress(...)</code>. The <code>start</code> function lets you set a callback to be triggered at the start of every period. For example:</p>
+<p>The <code>every</code> function returns an object with two chainable functions: <code>start(...)</code> and <code>progress(...)</code>. These functions let you attach custom callback functions that respond to animation events.</p>
+<p>The <code>start</code> function lets you set a callback to be triggered at the start of every <em>n</em>-beats period. For example:</p>
 <pre><code>// at the start of every 2-beats period, do something
 everyTwo.start( (count) =&gt; ... )
 </code></pre>
-<p>The <code>progress</code> function lets you specify a callback during the progress of every period, so you can use it to interpolate values and tween properties.</p>
+<p>The <code>progress</code> function lets you set a callback during the progress of every <em>n</em>-beats period. The second parameter <code>t</code> always start at 0 and ends at 1 in every period, so you can use it to interpolate values and tween properties.</p>
 <pre><code>// during every 10-beats period, do something
 everyTen.progress( (count, t, time, isStart) =&gt; ... ) 
 </code></pre>
-<p>Let's look at an example. Here the tempo is set to 60 BPM (or 1 second per beat), and we design the behaviors as such:</p>
+<p>Let's look at an example. Here the tempo is set to 60 BPM (or 1 second per beat), and we design the behaviors so that:</p>
 <ul>
 <li>Every 1 beat, the square's color changes</li>
 <li>Every 2 beats, the circle's color changes and the rotation completes once</li>
 </ul>
 <p><img src="./assets/bg.png" alt="js:tempo_progress"></p>
-<p>Pretty easy to create sychronized animation sequences, right? Let's try a few more example.</p>
+<p>Pretty easy to create synchronized animation sequences, right? Let's try a few more example.</p>
 <h3>Variations</h3>
 <p><strong>Tween</strong>: Since the <code>t</code> parameter in <code>progress</code> callback function always go from 0 to 1, we can map its value to a <a href="../docs/?p=Num_Shaping"><code>Shaping</code></a> function and change the tweening style. Another neat trick is to use <a href="../docs/?p=Num_Num#function_cycle"><code>Num.cycle</code></a> to map the <code>t</code> value from [0...1] to [0...1...0].</p>
 <pre><code>everyTwo.progress( (count, t, time, isStart) =&gt; {
@@ -65,13 +66,13 @@ everyTwo.progress( fn, -100 ); // activate 100ms sooner
 </code></pre>
 <p><img src="./assets/bg.png" alt="js:tempo_rhythm"></p>
 <h3>Controls</h3>
-<p>It's easy to control the speed of your animation by changing bpm by setting the <a href="#link"><code>Tempo.bpm</code></a> property. This makes it easier to synchronize your animations with music or in specific intervals.</p>
+<p>By changing bpm by setting the <a href="#link"><code>Tempo.bpm</code></a> property, you can control the speed of your animation. This makes it easier to synchronize your animations with music or at specific intervals.</p>
 <pre><code>tempo.bpm = 100; // set new bpm
 tempo.bpm += 20; // make it 20 beats faster per minute
 </code></pre>
 <p>Try moving your cursor horizontally to change the bpm in this example:</p>
 <p><img src="./assets/bg.png" alt="js:tempo_control"></p>
-<p>There are two ways to stop an animation. You can either add <code>return true</code> in the callback functions, or include a <code>name</code> in the third parameter of <code>start</code> or <code>progress</code> functions.</p>
+<p>There are two ways to stop an animation. You can either <code>return true</code> within <code>start</code> or <code>progress</code> callback functions, or include a <code>name</code> in the third parameter of the callbacks and then call <code>tempo.stop( name )</code>.</p>
 <pre><code>let walking = (count, t) =&gt; {
    // ...
    return (count &gt; 5);  // return true will stop this animation

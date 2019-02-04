@@ -164,11 +164,11 @@
         {
           "comment": "This is a core function that let you specify a rhythm and then define responses by calling the `start` and `progress` functions from the returned object. See [Animation guide](../guide/Animation-0700.html) for more details.\nThe `start` function lets you set a callback on every start. It takes a function ([`ITempoStartFn`](#link)).\nThe `progress` function lets you set a callback during progress. It takes a function ([`ITempoProgressFn`](#link)). Both functions let you optionally specify a time offset and a custom name.\nSee [Animation guide](../guide/animation-0700.html) for more details.",
           "returns": "ITempoResponses",
-          "returns_comment": "a object with chainable functions\n",
+          "returns_comment": "an object with chainable functions\n",
           "parameters": [
             {
               "name": "beats",
-              "comment": "a rhythm in beats as a number or array of numbers",
+              "comment": "a rhythm in beats as a number or an array of numbers",
               "type": "number | number[]",
               "default": false
             }
