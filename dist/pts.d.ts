@@ -916,6 +916,22 @@ export type IntersectContext = {
 };
 export type UIHandler = (target: UI, pt: PtLike, type: string) => void;
 export type WarningType = "error" | "warn" | "mute";
+export type ITempoStartFn = (count: number) => void | boolean;
+export type ITempoProgressFn = (count: number, t: number, ms: number, start: boolean) => void | boolean;
+export type ITempoListener = {
+    name?: string;
+    beats?: number | number[];
+    period?: number;
+    duration?: number;
+    offset?: number;
+    smooth?: boolean;
+    index?: number;
+    fn: Function;
+};
+export type ITempoResponses = {
+    start: (fn: ITempoStartFn, offset: number, name?: string) => string;
+    progress: (fn: ITempoProgressFn, offset: number, name?: string) => string;
+};
 
 export class Typography {
     static textWidthEstimator(fn: (string: any) => number, samples?: string[], distribution?: number[]): (string: any) => number;
@@ -1044,5 +1060,22 @@ export class Util {
     static stepper(max: number, min?: number, stride?: number, callback?: (n: number) => void): (() => number);
     static forRange(fn: (index: number) => any, range: number, start?: number, step?: number): any[];
     static load(url: string, callback: (response: string, success: boolean) => void): void;
+}
+export class Tempo {
+    protected _bpm: number;
+    protected _ms: number;
+    protected _listeners: {
+        [key: string]: ITempoListener;
+    };
+    protected _listenerInc: number;
+    constructor(bpm: number);
+    static fromBeat(ms: number): Tempo;
+    bpm: number;
+    ms: number;
+    protected _createID(listener: ITempoListener | Function): string;
+    every(beats: number | number[]): ITempoResponses;
+    track(time: any): void;
+    stop(name: string): void;
+    protected animate(time: any, ftime: any): void;
 }
 

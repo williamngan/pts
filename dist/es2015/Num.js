@@ -45,7 +45,7 @@ export class Num {
         return Num.sum(pts).divide(pts.length);
     }
     static cycle(t) {
-        return (Math.sin(Math.PI * 2 * t) + 1) / 2;
+        return Math.sin(Math.PI * t);
     }
     static mapToRange(n, currA, currB, targetA, targetB) {
         if (currA == currB)

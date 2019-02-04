@@ -70,3 +70,19 @@ export declare type IntersectContext = {
 };
 export declare type UIHandler = (target: UI, pt: PtLike, type: string) => void;
 export declare type WarningType = "error" | "warn" | "mute";
+export declare type ITempoStartFn = (count: number) => void | boolean;
+export declare type ITempoProgressFn = (count: number, t: number, ms: number, start: boolean) => void | boolean;
+export declare type ITempoListener = {
+    name?: string;
+    beats?: number | number[];
+    period?: number;
+    duration?: number;
+    offset?: number;
+    smooth?: boolean;
+    index?: number;
+    fn: Function;
+};
+export declare type ITempoResponses = {
+    start: (fn: ITempoStartFn, offset: number, name?: string) => string;
+    progress: (fn: ITempoProgressFn, offset: number, name?: string) => string;
+};
