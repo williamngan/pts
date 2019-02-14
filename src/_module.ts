@@ -12,6 +12,7 @@ export * from "./Dom";
 export * from "./Svg";
 export * from "./Typography";
 export * from "./Physics";
+export * from "./Media";
 export * from "./UI";
 
 

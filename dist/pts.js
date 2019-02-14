@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.6.7 - Copyright © 2017-2019 William Ngan and contributors.
+ * pts.js 0.7.0 - Copyright © 2017-2019 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -2089,6 +2089,79 @@ class Mat {
     }
 }
 exports.Mat = Mat;
+
+
+/***/ }),
+
+/***/ "./src/Media.ts":
+/*!**********************!*\
+  !*** ./src/Media.ts ***!
+  \**********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+class Sound {
+    constructor() {
+        this._playing = false;
+        this.ctx = new AudioContext();
+    }
+    get playing() {
+        return this._playing;
+    }
+    load(source) {
+        this.source = (typeof source === 'string') ? new Audio(source) : source;
+        this.track = this.ctx.createMediaElementSource(this.source);
+        this._osc = undefined;
+        return this;
+    }
+    generate(type, freq) {
+        if (!this._osc) {
+            this._osc = this.ctx.createOscillator();
+            this._osc.start();
+        }
+        this._osc.type = type;
+        this._osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+        this.track = this._osc;
+        return this;
+    }
+    to(node) {
+        this.track.connect(node);
+        return this;
+    }
+    reset() {
+        this.track.disconnect();
+        return this;
+    }
+    play() {
+        if (this.ctx.state === 'suspended')
+            this.ctx.resume();
+        this.track.connect(this.ctx.destination);
+        if (this.source)
+            this.source.play();
+        this._playing = true;
+        return this;
+    }
+    stop() {
+        this.track.disconnect(this.ctx.destination);
+        if (this.source)
+            this.source.pause();
+        this._playing = false;
+        return this;
+    }
+    toggle() {
+        if (this._playing) {
+            this.stop();
+        }
+        else {
+            this.play();
+        }
+        return this;
+    }
+}
+exports.Sound = Sound;
 
 
 /***/ }),
@@ -5531,6 +5604,7 @@ __export(__webpack_require__(/*! ./Svg */ "./src/Svg.ts"));
 __export(__webpack_require__(/*! ./Typography */ "./src/Typography.ts"));
 __export(__webpack_require__(/*! ./Physics */ "./src/Physics.ts"));
 __export(__webpack_require__(/*! ./UI */ "./src/UI.ts"));
+__export(__webpack_require__(/*! ./Media */ "./src/Media.ts"));
 const _Canvas = __webpack_require__(/*! ./Canvas */ "./src/Canvas.ts");
 exports.namespace = (scope) => {
     let lib = module.exports;
