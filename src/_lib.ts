@@ -13,7 +13,7 @@ export * from "./Svg";
 export * from "./Typography";
 export * from "./Physics";
 export * from "./UI";
-export * from "./Media";
+export * from "./Play";
 export * from "./Types";
 
 // import again for use in quickStart
