@@ -1,4 +1,5 @@
-import {ISoundAnalyzer, SoundType} from "./Types";
+import {ISoundAnalyzer, SoundType, PtLike} from "./Types";
+import {Pt, Group} from "./Pt";
 
 export class Sound {
   
@@ -89,10 +90,6 @@ export class Sound {
     return this._playing;
   }
 
-  get fft():Uint8Array {
-    if (!this.analyzer) return new Uint8Array(0);
-    return this.analyzer.data;
-  }
 
   get fftCount():number {
     return this.analyzer.size;
@@ -107,12 +104,41 @@ export class Sound {
 
 
  
-  analyze() {
+  protected _domain( time:boolean ):Uint8Array {
     if (this.analyzer) {
-      this.analyzer.node.getByteTimeDomainData( this.analyzer.data );
+      if (time) {
+        this.analyzer.node.getByteTimeDomainData( this.analyzer.data );
+      } else {
+        this.analyzer.node.getByteFrequencyData( this.analyzer.data );
+      }
       return this.analyzer.data;
     }
     return new Uint8Array(0);
+  }
+
+  protected _domainTo( time:boolean, size:PtLike, position:PtLike=[0,0] ):Group {
+    let data = (time) ? this.timeDomain() : this.freqDomain() ;
+    let g = new Group();
+    for (let i=0, len=data.length; i<len; i++) {
+      g.push( new Pt( position[0] + size[0] * i/len, position[1] + size[1] * data[i]/255 ) );
+    }
+    return g;
+  }
+
+  timeDomain():Uint8Array {
+    return this._domain( true );
+  }
+
+  timeDomainTo( size:PtLike, position:PtLike=[0,0] ):Group {
+    return this._domainTo( true, size, position );
+  }
+  
+  freqDomain():Uint8Array {
+    return this._domain( false );
+  }
+
+  freqDomainTo( size:PtLike, position:PtLike=[0,0] ):Group {
+    return this._domainTo( false, size, position );
   }
   
 
@@ -121,9 +147,20 @@ export class Sound {
     return this;
   }
 
-  connectAnalyzer( fftInitSize:number=2048  ) {
+
+  /**
+   * 
+   * @param fftSize 
+   * @param minDb Optional minimum decibels (corresponds to AnalyserNode.minDecibels)
+   * @param maxDb Optional maximum decibels (corresponds to AnalyserNode.maxDecibels)
+   * @param smooth Optional smoothing value (corresponds to smoothingTimeConstant)
+   */
+  connectAnalyzer( fftSize:number=2048, minDb:number=-100, maxDb:number=-30, smooth:number=0.8  ) {
     let a = this.ctx.createAnalyser();
-    a.fftSize = fftInitSize;
+    a.fftSize = fftSize;
+    a.minDecibels = minDb;
+    a.maxDecibels = maxDb;
+    a.smoothingTimeConstant = smooth;
     this.analyzer = {
       node: a,
       size: a.frequencyBinCount,
