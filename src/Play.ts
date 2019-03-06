@@ -67,20 +67,6 @@ export class Sound {
   }
 
 
-  // input( constraint?:MediaStreamConstraints ) {
-  //   if (navigator.mediaDevices) {
-  //     const c = constraint ? constraint : { audio: true, video: false };
-  //     return navigator.mediaDevices.getUserMedia( c ).then( (stream) => {
-  //       this.stream = stream;
-  //       this.node = this.ctx.createMediaStreamSource( stream );
-  //       return true;
-  //     });
-  //   } else {
-  //     console.error( "Cannot get audio from input device.");
-  //     return Promise.resolve( false );
-  //   }
-  // }
-
 
   get type():SoundType {
     return this._type;
@@ -116,10 +102,10 @@ export class Sound {
     return new Uint8Array(0);
   }
 
-  protected _domainTo( time:boolean, size:PtLike, position:PtLike=[0,0] ):Group {
+  protected _domainTo( time:boolean, size:PtLike, position:PtLike=[0,0], trim=[0,0] ):Group {
     let data = (time) ? this.timeDomain() : this.freqDomain() ;
     let g = new Group();
-    for (let i=0, len=data.length; i<len; i++) {
+    for (let i=trim[0], len=data.length-trim[1]; i<len; i++) {
       g.push( new Pt( position[0] + size[0] * i/len, position[1] + size[1] * data[i]/255 ) );
     }
     return g;
@@ -129,7 +115,7 @@ export class Sound {
     return this._domain( true );
   }
 
-  timeDomainTo( size:PtLike, position:PtLike=[0,0] ):Group {
+  timeDomainTo( size:PtLike, position:PtLike=[0,0], trim=[0,0] ):Group {
     return this._domainTo( true, size, position );
   }
   
@@ -137,8 +123,8 @@ export class Sound {
     return this._domain( false );
   }
 
-  freqDomainTo( size:PtLike, position:PtLike=[0,0] ):Group {
-    return this._domainTo( false, size, position );
+  freqDomainTo( size:PtLike, position:PtLike=[0,0], trim=[0,0] ):Group {
+    return this._domainTo( false, size, position, trim );
   }
   
 
@@ -150,14 +136,14 @@ export class Sound {
 
   /**
    * 
-   * @param fftSize 
+   * @param size 
    * @param minDb Optional minimum decibels (corresponds to AnalyserNode.minDecibels)
    * @param maxDb Optional maximum decibels (corresponds to AnalyserNode.maxDecibels)
    * @param smooth Optional smoothing value (corresponds to smoothingTimeConstant)
    */
-  connectAnalyzer( fftSize:number=2048, minDb:number=-100, maxDb:number=-30, smooth:number=0.8  ) {
+  analyze( size:number=256, minDb:number=-100, maxDb:number=-30, smooth:number=0.8  ) {
     let a = this.ctx.createAnalyser();
-    a.fftSize = fftSize;
+    a.fftSize = size * 2;
     a.minDecibels = minDb;
     a.maxDecibels = maxDb;
     a.smoothingTimeConstant = smooth;
@@ -176,7 +162,7 @@ export class Sound {
     return this;
   }
 
-  play():this {
+  start():this {
     if (this.ctx.state === 'suspended') this.ctx.resume();
     
     if (this._type === "file") {
@@ -211,11 +197,11 @@ export class Sound {
     return this;
   }
 
-  togglePlay():this {
+  toggle():this {
     if (this._playing) {
       this.stop();
     } else {
-      this.play();
+      this.start();
     }
     return this;
   }
