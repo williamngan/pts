@@ -61,6 +61,10 @@
   space.playOnce(200).bindMouse().bindTouch();
   
   // For use in demo page only
-  if (window.registerDemo) window.registerDemo(demoID, space);
+  if (window.registerDemo) window.registerDemo(demoID, space, null, stopFn);
+  function stopFn() {
+    if (sound && sound.playing) sound.stop();
+  }
+
   
 })();

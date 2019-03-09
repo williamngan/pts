@@ -15,8 +15,8 @@ Pts.namespace( this );
   }
 
   var demos = {};
-  window.registerDemo = function( id, space ) {
-    demos[id] = space;
+  window.registerDemo = function( id, space, startFn, stopFn ) {
+    demos[id] = {space: space, startCallback: startFn, stopCallback: stopFn};
   }
 
   function createDemoContainer( imgElem ) {
@@ -38,12 +38,16 @@ Pts.namespace( this );
 
     function startDemo(evt) {
       div.classList.add("active");
-      if (demos[divID]) demos[divID].replay();
+      let d = demos[divID];
+      if (d && d.space) d.space.replay();
+      if (d && d.startCallback) d.startCallback();
     }
 
     function stopDemo(evt) {
       div.classList.remove("active");
-      if (demos[divID]) demos[divID].stop();
+      let d = demos[divID];
+      if (d && d.space) d.space.stop();
+      if (d && d.stopCallback) d.stopCallback();
     }
 
     div.addEventListener( 'mouseenter', startDemo );
