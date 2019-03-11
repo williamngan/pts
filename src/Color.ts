@@ -253,6 +253,7 @@ export class Color extends Pt {
   /**
    * Get alpha value
    */
+  set alpha( n:number ) { if (this.length > 3) this[3] = n; }
   get alpha():number { return (this.length > 3) ? this[3] : 1; }
 
   /**
