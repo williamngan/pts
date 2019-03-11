@@ -1,10 +1,12 @@
 # Sound
 
-Sounds and visual forms complement each other. Together they enable us to create expressive and unique compositions. Pts simplifies a subset of Web Audio API to assist you with common tasks like playbacks and visualizations.
+Sounds and visual forms complement each other and enable us to create expressive and unique compositions. Pts simplifies a subset of Web Audio API to assist you with common tasks like playbacks and visualizations.
+
+Before we start, let's play a fun visualization using Pts's sound functions.
 
 ### Input
 
-Let's get some sounds! Do you want to load from a sound file, receive microphone input, or generate audio dynamically? Pts offers three handy static functions for these.
+Let's get some sounds to start! Do you want to load from a sound file, receive microphone input, or generate audio dynamically? Pts offers three handy static functions for these.
 
 1. Using [`Sound.load`](#) to load a sound file with an url or a specific `<audio>` element.
 ```
@@ -52,7 +54,7 @@ To get the time domain data at current time step, call the [`timeDomain`](#) fun
 let td = sound.timeDomain(); 
 ```
 
-Optionaly, use the [`timeDomainTo`](#) function to map the data into a rectangular area. You can then apply various Pts functions to transform and visualize the data.
+Optionaly, use the [`timeDomainTo`](#) function to map the data to another range, such as a rectangular area. You can then apply various Pts functions to transform and visualize waveforms in a few lines of code.
 
 ```
 // fit data into a 200x100 area, starting from position (50, 50)
@@ -61,6 +63,64 @@ let td = sound.timeDomainTo( [200, 100], [50, 50] );
 form.points( td ); // visualize as points
 ```
 
+In the following example, we map the data to a normalized circle and then re-map it to draw colorful lines.
+
+```
+sound.timeDomainTo( [Const.two_pi, 1] ).map( t => ... );
+```
+
 ![js:sound_time](./assets/bg.png)
 
+##### Click to play and visualize sounds of drum, tambourine, and flute from Philharmonia Orchestra.
+
+In a similar way, we can access the frequency domain data by `frequencyDomain` and `frequencyDomainTo`. The frequency bins are calculated by an algorithm called Fast Fourier Transform (FFT). The FFT size is usually 2 times the bin size and they need to be multiples of 2. (Recall that we set bin size to 128 earlier). You can quickly test it with a single line of code:
+
+```
+form.points( sound.freqDomainTo( space.size ) );
+```
+
+Or make something fun, weird, beautiful through the interplay of sounds and shapes.
+
+![js:sound_frequency](./assets/bg.png)
+
+### Advanced
+For advanced use cases, you can access the following properties in a Sound instance to make full use of the [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API).
+
+- [`.ctx`](#) - access the `AudioContext` instance
+- [`.node`](#) - access the `AudioNode` instance
+- [`.stream`](#) - access the `MediaStream` instance
+- [`.source`](#) - access the `HTMLMediaElement` if you're playing from a sound file
+
+Also note that [`sound.start()`](#) will connect the AudioNode to the destination of the AudioContext, while [`start.stop()`](#) will disconnect it.
+
+Web Audio covers a wide range of topics. Here are a few pointers for you to dive deeper:
+
+- [Web Audio API book](https://webaudioapi.com/book/) and [samples](https://webaudioapi.com/samples/) by Boris Smus 
+- [tone.js](https://tonejs.github.io/) is a framework for creating interactive music in the browser.
+- [tonal.js](https://github.com/danigb/tonal) is a functional music theory library for javascript.
+- [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) on Web Audio API
+
+### Cheatsheet
+
+Creating and playing a Sound instance
+```
+s = Sound.generate( "sine", 120 ); // sine wave at 120hz
+s = Sound.input(); // get microphone input
+s = Sound.load( "path/to/file.mp3" ); // from file
+
+s.start();
+s.stop();
+s.toggle();
+```
+
+Getting time domain and frequency domain data
+```
+s.analyzer( 1024 ); // Create analyzer with 1024 bins. Call once only.
+
+s.timeDomain();
+s.timeDomainTo( area, position ); // map to a area [w, h] from position [x, y]
+
+s.freqDomain();
+s.freqDomainTo( [10, 5] ); // map to a 10x5 area
+```
 
