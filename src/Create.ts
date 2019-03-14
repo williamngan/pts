@@ -95,12 +95,13 @@ export class Create {
    * @param center circle center
    * @param radius circle radius
    * @param count number of Pts to create
+   * @param angleOffset offset starting angle
    */
-  static radialPts( center:PtLike, radius:number, count:number ):Group {
+  static radialPts( center:PtLike, radius:number, count:number, angleOffset:number=-Const.half_pi ):Group {
     let g = new Group();
     let a = Const.two_pi/count;
     for (let i=0; i<count; i++) {
-      g.push( new Pt(center).toAngle( a*i - Const.half_pi, radius, true ) );
+      g.push( new Pt(center).toAngle( a*i + angleOffset, radius, true ) );
     }
     return g;
   }

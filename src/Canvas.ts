@@ -657,6 +657,39 @@ export class CanvasForm extends VisualForm {
     
     
     /**
+    * A static function to draw an ellipse.
+    * @param ctx canvas rendering context
+    * @param pt center position 
+    * @param radius radius [x, y] of the ellipse
+    * @param rotation rotation of the ellipse in radian. Default is 0.
+    * @param startAngle start angle of the ellipse. Default is 0.
+    * @param endAngle end angle of the ellipse. Default is 2 PI.
+    * @param cc an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.
+    */
+    static ellipse( ctx:CanvasRenderingContext2D, pt:PtLike, radius:PtLike, rotation:number=0, startAngle:number=0, endAngle:number=Const.two_pi, cc:boolean=false ) {
+      if (!pt || !radius) return;
+      ctx.beginPath();
+      ctx.ellipse( pt[0], pt[1], radius[0], radius[1], rotation, startAngle, endAngle, cc );
+    }
+
+
+    /**
+    * A static function to draw an ellipse.
+    * @param pt center position 
+    * @param radius radius [x, y] of the ellipse
+    * @param rotation rotation of the ellipse in radian. Default is 0.
+    * @param startAngle start angle of the ellipse. Default is 0.
+    * @param endAngle end angle of the ellipse. Default is 2 PI.
+    * @param cc an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.
+    */
+    ellipse( pt:PtLike, radius:PtLike, rotation:number=0, startAngle:number=0, endAngle:number=Const.two_pi, cc:boolean=false ) {
+      CanvasForm.ellipse( this._ctx, pt, radius, rotation, startAngle, endAngle, cc );
+      this._paint();
+      return this;
+    }
+
+
+    /**
     * A static function to draw an arc.
     * @param ctx canvas rendering context
     * @param pt center position 
@@ -670,8 +703,8 @@ export class CanvasForm extends VisualForm {
       ctx.beginPath();
       ctx.arc( pt[0], pt[1], radius, startAngle, endAngle, cc );
     }
-    
-    
+
+
     /**
     * Draw an arc.
     * @param pt center position
@@ -685,7 +718,7 @@ export class CanvasForm extends VisualForm {
       this._paint();
       return this;
     }
-    
+
     
     /**
     * A static function to draw a square.
