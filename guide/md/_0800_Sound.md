@@ -4,29 +4,37 @@ Sounds and visual forms complement each other and enable us to create expressive
 
 Before we start, let's play a fun visualization using Pts's sound functions.
 
+![js:sound_visual](./assets/bg.png)
+
 ### Input
 
 Let's get some sounds to start! Do you want to load from a sound file, receive microphone input, or generate audio dynamically? Pts offers three handy static functions for these.
 
-1. Using [`Sound.load`](#) to load a sound file with an url or a specific `<audio>` element.
+1. Using [`Sound.load`](#) to load a sound file with an url or a specific `<audio>` element. You can check if the audio file is ready to play by accessing [`.playable`](#) property.
 ```
 let sound = Sound.load( "/path/to/hello.mp3" );
 let sound2 = Sound.load( audioElement );
 ```
 
-2. Using [`Sound.input`](#) to get audio from default input device (usually microphone).
-```
-let sound = Sound.input(); // default input device
-let sound2 = Sound.input( constraints ); // advanced use cases
-```
-
-3. Using [`Sound.generate`](#) to create a tone.
+2. Using [`Sound.generate`](#) to create a simple tone.
 ```
 let sound = Sound.generate( "sine", 120 ); // sine oscillator at 120Hz
 ```
 
-### Play
-After creating a Sound instance, what can you do with it? You can play it, obviously.
+3. Using [`Sound.input`](#) to get audio from default input device (usually microphone). This will return a Promise object which will resolve when the input device is ready.
+```
+let sound;
+Sound.input().then( s => sound = s ); // default input device
+Sound.input( constraints ).then( s => sound = s ); // advanced use cases
+```
+
+Here's a simple demo of getting audio from microphone. 
+
+![js:sound_mic](./assets/bg.png)
+
+##### You may first need to allow this page to access microphone, and then click the record button.
+
+You can then start and stop playing the sound like this:
 
 ```
 sound.start();
@@ -36,6 +44,8 @@ sound.playing; // boolean to indicate if sound is playing
 ```
 
 ##### Note that current browsers no longer support autoplay. Users will need to express intent to play the sound (eg, with a click).
+
+### Analyze
 
 It gets more interesting when we can look into the sound data and analyze them. Let's hook up an analyzer to our Sound instance.
 

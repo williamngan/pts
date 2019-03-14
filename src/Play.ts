@@ -32,6 +32,7 @@ export class Sound {
   static load( source:HTMLMediaElement|string ):Sound {
     let s = new Sound("file");
     s.source = (typeof source === 'string') ? new Audio(source) : source;
+    s.source.addEventListener("ended", () => s._playing = false );
     s.node = s.ctx.createMediaElementSource( s.source );
     return s;
   }
@@ -76,9 +77,18 @@ export class Sound {
     return this._playing;
   }
 
+  // Can also use this.source.addEventListener( 'canplaythrough') https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/canplaythrough_event 
+  // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState
+  get playable():boolean {
+    return (this._type === "input") ? this.node !== undefined : this.source.readyState === 4;
+  }
 
-  get fftCount():number {
+  get binSize():number {
     return this.analyzer.size;
+  }
+
+  get sampleRate():number {
+    return this.ctx.sampleRate;
   }
 
   get frequency():number {
@@ -181,7 +191,7 @@ export class Sound {
 
   stop():this {
     
-    this.node.disconnect( this.ctx.destination );
+    if (this._playing) this.node.disconnect( this.ctx.destination );
     
     if (this._type === "file") {
       this.source.pause();
@@ -189,8 +199,8 @@ export class Sound {
     } else if (this._type === "gen") {
       (this.node as OscillatorNode).stop();
 
-    } else {
-      this.stream.stop();
+    } else if (this._type === "input") {
+      this.stream.getAudioTracks().forEach( track => track.stop() );
     }
     
     this._playing = false;

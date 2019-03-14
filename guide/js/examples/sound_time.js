@@ -19,6 +19,7 @@
 
   // Draw play button
   function playButton() {
+    if (!sound) return;
     if (!sound.playing) {
       form.fillOnly('rgba(0,0,0,.2)').circle( Circle.fromCenter( space.center, 30 ) );
       form.fillOnly('#fff').polygon( Triangle.fromCenter( space.center, 15 ).rotate2D( Const.half_pi, space.center ) );
