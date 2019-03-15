@@ -1,0 +1,41 @@
+<html>
+  <head>
+    <script type="text/javascript" src="../../../dist/pts.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tone/13.8.2/Tone.min.js"></script>
+  </head>
+
+  <body>
+    <div id="pts" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0"></div>
+
+    <script type="text/javascript">
+      let run = Pts.quickStart( "pts", "#62e" );
+
+      let index = new Pt(-1,-1);
+      let synth = new Tone.Synth();
+      let sound = Sound.from( synth, Tone.context ).analyze(128);
+      synth.toMaster(); // play using tone.js instead of Pts
+
+      run( (time) => { 
+          let area = space.size.$divide( 3 );
+          let idx = space.pointer.$divide( area ).floor();
+          let rect = [idx.$multiply(area), idx.$multiply(area).add(area)];
+          
+          let t1 = sound.timeDomainTo( area, rect[0].$subtract(0, area.y/2) );
+          let t2 = t1.map( t => t.$add(0, area.y) ).reverse();
+          let freqs = sound.freqDomainTo( [area.x, area.y/2], [rect[0].x, 0] ).map( f => [[f.x, rect[0].y+area.y/2-f.y], [f.x, rect[0].y+area.y/2+f.y]] );
+
+          form.fillOnly("#fe3").polygon( t1.concat(t2) );
+          form.strokeOnly("#62e", Math.ceil(area.x/128) ).lines( freqs );
+          
+          let key = ["C3", "E3", "G3", "C4", "E4", "G4", "C5", "E5", "G5"][ idx.y*3+idx.x ];
+          form.font(120, 'bold').fillOnly("#fff").text( rect[0].$add( 10, 110 ), key );
+
+          if (!index.equals(idx)) { // play if on different area
+            synth.triggerAttackRelease( key, '4n');
+            index = idx;
+          }
+      });
+    </script>
+  </body>
+
+</html>

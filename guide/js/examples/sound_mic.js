@@ -14,7 +14,7 @@
   // Draw button
   function recordButton() {
     form.fillOnly( recording ? "rgba(0,0,0,.2)" : "#f06").rect( [[0,0], [50,50]] );
-    if (!recording) {
+    if (!recording || !sound) {
       form.fillOnly('#fff').circle( Circle.fromCenter( [25,25], 8 ) );
     } else {
       form.fillOnly("#fff").rect( [[18, 18], [32,32]] );
@@ -63,7 +63,11 @@
   // For use in demo page only
   if (window.registerDemo) window.registerDemo(demoID, space, null, stopFn);
   function stopFn() {
-    
+    if (sound) {
+      sound.stop();
+      recording = false;
+      sound = undefined;
+    }
   }
 
   

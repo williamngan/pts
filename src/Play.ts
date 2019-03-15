@@ -29,6 +29,14 @@ export class Sound {
   }
 
 
+  static from( node:AudioNode, ctx:AudioContext, type:SoundType="gen", stream?:MediaStream ) {
+    let s = new Sound( type );
+    s.node = node;
+    s.ctx = ctx;
+    if (stream) s.stream = stream;
+    return s;
+  }
+
   static load( source:HTMLMediaElement|string ):Sound {
     let s = new Sound("file");
     s.source = (typeof source === 'string') ? new Audio(source) : source;
