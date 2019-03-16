@@ -129,8 +129,8 @@ Creating and playing a Sound instance
 ```
 s = Sound.load( "path/to/file.mp3" ); // from file
 s = Sound.generate( "sine", 120 ); // sine wave at 120hz
-s = Sound.input().then( s => sound = s ); // get microphone input
 s = Sound.from( node, context ); // advanced use case
+Sound.input().then( _s => s = _s ); // get microphone input
 
 s.start();
 s.stop();

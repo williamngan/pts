@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sound</title>
+	<link href="./assets/style.css" rel="stylesheet" type="text/css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+</head>
+
+<body>
+<div id="header">
+  <div id="pts"><a href="../">Pts<span>.</span></a>guides</div>
+  <div id="topmenu">
+    <a href="../demo/index.html">demos</a>
+    <a href="../study/index.html">studies</a>
+    <a href="../docs/">docs</a>
+    <a href="https://github.com/williamngan/pts">github</a>
+  </div>
+</div>
+<a href="#menu" id="toc">&#x2261;</a>
+<div id="post"><h1>Sound</h1>
+<p>Sounds and visual forms complement each other and enable us to create expressive and unique compositions. Pts simplifies a subset of Web Audio API to assist you with common tasks like playbacks and visualizations.</p>
+<p>Before we start, let's play a fun visualization using Pts's sound functions.</p>
+<p><img src="./assets/bg.png" alt="js:sound_visual"></p>
+<h3>Input</h3>
+<p>Let's get some sounds to start! Do you want to load from a sound file, receive microphone input, or generate audio dynamically? Pts offers three handy static functions for these.</p>
+<ol>
+<li>Using <a href="#"><code>Sound.load</code></a> to load a sound file with an url or a specific <code>&lt;audio&gt;</code> element. You can check if the audio file is ready to play by accessing <a href="#"><code>.playable</code></a> property.</li>
+</ol>
+<pre><code>let sound = Sound.load( &quot;/path/to/hello.mp3&quot; );
+let sound2 = Sound.load( audioElement );
+</code></pre>
+<ol start="2">
+<li>Using <a href="#"><code>Sound.generate</code></a> to create a sound.</li>
+</ol>
+<pre><code>let sound = Sound.generate( &quot;sine&quot;, 120 ); // sine oscillator at 120Hz
+</code></pre>
+<ol start="3">
+<li>Using <a href="#"><code>Sound.input</code></a> to get audio from default input device (usually microphone). This will return a Promise object which will resolve when the input device is ready.</li>
+</ol>
+<pre><code>let sound;
+Sound.input().then( s =&gt; sound = s ); // default input device
+Sound.input( constraints ).then( s =&gt; sound = s ); // advanced use cases
+</code></pre>
+<p>Here's a basic demo of getting audio from microphone:</p>
+<p><img src="./assets/bg.png" alt="js:sound_mic"></p>
+<h5>You may first need to allow this page to access microphone, and then click the record button. We also make the recording stop when the pointer leave the demo area so that your microphone is not always on.</h5>
+<p>You can then start and stop playing the sound like this:</p>
+<pre><code>sound.start();
+sound.stop();
+sound.toggle(); // toggle between start and stop
+sound.playing; // boolean to indicate if sound is playing
+</code></pre>
+<h5>Note that current browsers no longer support autoplay. Users will need to express intent to play the sound (eg, with a click).</h5>
+<h3>Analyze</h3>
+<p>It gets more interesting when we can look into the sound data and analyze them. Let's hook up an analyzer to our Sound instance.</p>
+<pre><code>sound.analyze( 128 ); // Call once to initiate the analyzer
+</code></pre>
+<p>This will create an analyzer with 128 bins (more on that later) and default decibel range and smoothing values. See <a href="#">docs</a> for description of the advanced options.</p>
+<p>There are two common ways to analyze sounds. First, we can represent sounds as snapshots of sound waves, which correspond to variations in air pressure over time. This is called the time-domain, as it measures amplitudes of the &quot;waves&quot; over time steps.</p>
+<p>To get the time domain data at current time step, call the <a href="#"><code>timeDomain</code></a> function.</p>
+<pre><code>// get an uint typed array of 128 values (corresponds to bin size above)
+let td = sound.timeDomain(); 
+</code></pre>
+<p>Optionaly, use the <a href="#"><code>timeDomainTo</code></a> function to map the data to another range, such as a rectangular area. You can then apply various Pts functions to transform and visualize waveforms in a few lines of code.</p>
+<pre><code>// fit data into a 200x100 area, starting from position (50, 50)
+let td = sound.timeDomainTo( [200, 100], [50, 50] );
+
+form.points( td ); // visualize as points
+</code></pre>
+<p>In the following example, we map the data to a normalized circle and then re-map it to draw colorful lines.</p>
+<pre><code>sound.timeDomainTo( [Const.two_pi, 1] ).map( t =&gt; ... );
+</code></pre>
+<p><img src="./assets/bg.png" alt="js:sound_time"></p>
+<h5>Click to play and visualize sounds of drum, tambourine, and flute from Philharmonia Orchestra.</h5>
+<p>In a similar way, we can access the frequency domain data by <code>frequencyDomain</code> and <code>frequencyDomainTo</code>. The frequency bins are calculated by an algorithm called Fast Fourier Transform (FFT). The FFT size is usually 2 times the bin size and they need to be multiples of 2. (Recall that we set bin size to 128 earlier). You can quickly test it with a single line of code:</p>
+<pre><code>form.points( sound.freqDomainTo( space.size ) );
+</code></pre>
+<p>Or make something fun, weird, beautiful through the interplay of sounds and shapes.</p>
+<p><img src="./assets/bg.png" alt="js:sound_frequency"></p>
+<h3>Advanced</h3>
+<p>For advanced use cases, you can create an instance using  <a href="#"><code>Sound.from</code></a> static method. For example:</p>
+<pre><code>Sound.from( audioNode, audioContext );
+</code></pre>
+<p>The following example demonstrates how you may generate audio using <a href="https://tonejs.github.io/">tone.js</a> and then visualize it with Pts:</p>
+<p><a href="./js/examples/tone.html"> <img src="./assets/tone.png" alt="screenshot"> </a></p>
+<h5>Click image to open tone.js demo. See <a href="#">source code here</a>.</h5>
+<p>If needed, you can also directly access the following properties in a Sound instance to make full use of the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API">Web Audio API</a>.</p>
+<ul>
+<li><a href="#"><code>.ctx</code></a> - access the <code>AudioContext</code> instance</li>
+<li><a href="#"><code>.node</code></a> - access the <code>AudioNode</code> instance</li>
+<li><a href="#"><code>.stream</code></a> - access the <code>MediaStream</code> instance</li>
+<li><a href="#"><code>.source</code></a> - access the <code>HTMLMediaElement</code> if you're playing from a sound file</li>
+</ul>
+<p>Also note that <a href="#"><code>sound.start()</code></a> will connect the AudioNode to the destination of the AudioContext, while <a href="#"><code>start.stop()</code></a> will disconnect it.</p>
+<p>Web Audio covers a wide range of topics. Here are a few pointers for you to dive deeper:</p>
+<ul>
+<li><a href="https://webaudioapi.com/book/">Web Audio API book</a> and <a href="https://webaudioapi.com/samples/">samples</a> by Boris Smus</li>
+<li><a href="https://tonejs.github.io/">tone.js</a> is a framework for creating interactive music in the browser</li>
+<li><a href="https://github.com/danigb/tonal">tonal.js</a> is a functional music theory library for javascript</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API">MDN documentation</a> on Web Audio API</li>
+</ul>
+<h3>Cheatsheet</h3>
+<p>Creating and playing a Sound instance</p>
+<pre><code>s = Sound.load( &quot;path/to/file.mp3&quot; ); // from file
+s = Sound.generate( &quot;sine&quot;, 120 ); // sine wave at 120hz
+s = Sound.from( node, context ); // advanced use case
+Sound.input().then( _s =&gt; s = _s ); // get microphone input
+
+s.start();
+s.stop();
+s.toggle();
+</code></pre>
+<p>Getting time domain and frequency domain data</p>
+<pre><code>s.analyzer( 1024 ); // Create analyzer with 1024 bins. Call once only.
+
+s.timeDomain();
+s.timeDomainTo( area, position ); // map to a area [w, h] from position [x, y]
+
+s.freqDomain();
+s.freqDomainTo( [10, 5] ); // map to a 10x5 area
+</code></pre>
+</div>
+
+<ol id="menu"><a id="close" href="#">&times;</a><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Space-0500.html">Space</a></li><li><a href="Typography-0600.html">Typography</a></li><li><a href="Animation-0700.html">Animation</a></li><li><a href="Sound-0800.html">Sound</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li></ol>
+
+<div id="footer">Copyright &copy; 2017-current by <a href="https://twitter.com/williamngan">William Ngan</a> and contributors. Pts is an <a href="https://github.com/williamngan/pts">open source project</a> under Apache License 2.0.</div>
+
+<script type="text/javascript" src="../dist/pts.min.js"></script>
+<script type="text/javascript" src="./js/guide.js"></script>
+<script src="./js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-104913373-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>
