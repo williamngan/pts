@@ -48,11 +48,11 @@ export class Create {
         }
         return g;
     }
-    static radialPts(center, radius, count) {
+    static radialPts(center, radius, count, angleOffset = -Const.half_pi) {
         let g = new Group();
         let a = Const.two_pi / count;
         for (let i = 0; i < count; i++) {
-            g.push(new Pt(center).toAngle(a * i - Const.half_pi, radius, true));
+            g.push(new Pt(center).toAngle(a * i + angleOffset, radius, true));
         }
         return g;
     }

@@ -17,5 +17,6 @@ __export(require("./Dom"));
 __export(require("./Svg"));
 __export(require("./Typography"));
 __export(require("./Physics"));
+__export(require("./Play"));
 __export(require("./UI"));
 //# sourceMappingURL=_module.js.map

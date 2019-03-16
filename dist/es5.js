@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.6.7 - Copyright © 2017-2019 William Ngan and contributors.
+ * pts.js 0.8.0 - Copyright © 2017-2019 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -550,6 +550,18 @@ var CanvasForm = function (_Form_1$VisualForm) {
             return this;
         }
     }, {
+        key: "ellipse",
+        value: function ellipse(pt, radius) {
+            var rotation = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+            var startAngle = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
+            var endAngle = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : Util_1.Const.two_pi;
+            var cc = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : false;
+
+            CanvasForm.ellipse(this._ctx, pt, radius, rotation, startAngle, endAngle, cc);
+            this._paint();
+            return this;
+        }
+    }, {
         key: "arc",
         value: function arc(pt, radius, startAngle, endAngle, cc) {
             CanvasForm.arc(this._ctx, pt, radius, startAngle, endAngle, cc);
@@ -693,6 +705,18 @@ var CanvasForm = function (_Form_1$VisualForm) {
             ctx.beginPath();
             ctx.arc(pt[0], pt[1], radius, 0, Util_1.Const.two_pi, false);
             ctx.closePath();
+        }
+    }, {
+        key: "ellipse",
+        value: function ellipse(ctx, pt, radius) {
+            var rotation = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
+            var startAngle = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 0;
+            var endAngle = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : Util_1.Const.two_pi;
+            var cc = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : false;
+
+            if (!pt || !radius) return;
+            ctx.beginPath();
+            ctx.ellipse(pt[0], pt[1], radius[0], radius[1], rotation, startAngle, endAngle, cc);
         }
     }, {
         key: "arc",
@@ -990,6 +1014,9 @@ var Color = function (_Pt_1$Pt) {
         }
     }, {
         key: "alpha",
+        set: function set(n) {
+            if (this.length > 3) this[3] = n;
+        },
         get: function get() {
             return this.length > 3 ? this[3] : 1;
         }
@@ -1480,10 +1507,12 @@ var Create = function () {
     }, {
         key: "radialPts",
         value: function radialPts(center, radius, count) {
+            var angleOffset = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : -Util_1.Const.half_pi;
+
             var g = new Pt_1.Group();
             var a = Util_1.Const.two_pi / count;
             for (var i = 0; i < count; i++) {
-                g.push(new Pt_1.Pt(center).toAngle(a * i - Util_1.Const.half_pi, radius, true));
+                g.push(new Pt_1.Pt(center).toAngle(a * i + angleOffset, radius, true));
             }
             return g;
         }
@@ -2684,7 +2713,7 @@ var Vec = function () {
             var magnitude = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
 
             var m = magnitude === undefined ? Vec.magnitude(a) : magnitude;
-            if (m === 0) throw new Error("Cannot calculate unit vector because magnitude is 0");
+            if (m === 0) return Pt_1.Pt.make(a.length);
             return Vec.divide(a, m);
         }
     }, {
@@ -5382,6 +5411,298 @@ exports.Body = Body;
 
 /***/ }),
 
+/***/ "./src/Play.ts":
+/*!*********************!*\
+  !*** ./src/Play.ts ***!
+  \*********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var __awaiter = undefined && undefined.__awaiter || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) {
+            try {
+                step(generator.next(value));
+            } catch (e) {
+                reject(e);
+            }
+        }
+        function rejected(value) {
+            try {
+                step(generator["throw"](value));
+            } catch (e) {
+                reject(e);
+            }
+        }
+        function step(result) {
+            result.done ? resolve(result.value) : new P(function (resolve) {
+                resolve(result.value);
+            }).then(fulfilled, rejected);
+        }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
+
+var Sound = function () {
+    function Sound(type) {
+        _classCallCheck(this, Sound);
+
+        this._playing = false;
+        this._type = type;
+        this.ctx = new AudioContext();
+    }
+
+    _createClass(Sound, [{
+        key: "_gen",
+        value: function _gen(type, freq) {
+            this.node = this.ctx.createOscillator();
+            var osc = this.node;
+            osc.type = type;
+            osc.frequency.value = freq;
+            return this;
+        }
+    }, {
+        key: "_domain",
+        value: function _domain(time) {
+            if (this.analyzer) {
+                if (time) {
+                    this.analyzer.node.getByteTimeDomainData(this.analyzer.data);
+                } else {
+                    this.analyzer.node.getByteFrequencyData(this.analyzer.data);
+                }
+                return this.analyzer.data;
+            }
+            return new Uint8Array(0);
+        }
+    }, {
+        key: "_domainTo",
+        value: function _domainTo(time, size) {
+            var position = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [0, 0];
+            var trim = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : [0, 0];
+
+            var data = time ? this.timeDomain() : this.freqDomain();
+            var g = new Pt_1.Group();
+            for (var i = trim[0], len = data.length - trim[1]; i < len; i++) {
+                g.push(new Pt_1.Pt(position[0] + size[0] * i / len, position[1] + size[1] * data[i] / 255));
+            }
+            return g;
+        }
+    }, {
+        key: "timeDomain",
+        value: function timeDomain() {
+            return this._domain(true);
+        }
+    }, {
+        key: "timeDomainTo",
+        value: function timeDomainTo(size) {
+            var position = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [0, 0];
+            var trim = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [0, 0];
+
+            return this._domainTo(true, size, position, trim);
+        }
+    }, {
+        key: "freqDomain",
+        value: function freqDomain() {
+            return this._domain(false);
+        }
+    }, {
+        key: "freqDomainTo",
+        value: function freqDomainTo(size) {
+            var position = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [0, 0];
+            var trim = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [0, 0];
+
+            return this._domainTo(false, size, position, trim);
+        }
+    }, {
+        key: "connect",
+        value: function connect(node) {
+            this.node.connect(node);
+            return this;
+        }
+    }, {
+        key: "analyze",
+        value: function analyze() {
+            var size = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 256;
+            var minDb = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : -100;
+            var maxDb = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : -30;
+            var smooth = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0.8;
+
+            var a = this.ctx.createAnalyser();
+            a.fftSize = size * 2;
+            a.minDecibels = minDb;
+            a.maxDecibels = maxDb;
+            a.smoothingTimeConstant = smooth;
+            this.analyzer = {
+                node: a,
+                size: a.frequencyBinCount,
+                data: new Uint8Array(a.frequencyBinCount)
+            };
+            this.node.connect(this.analyzer.node);
+            return this;
+        }
+    }, {
+        key: "reset",
+        value: function reset() {
+            this.stop();
+            this.node.disconnect();
+            return this;
+        }
+    }, {
+        key: "start",
+        value: function start() {
+            if (this.ctx.state === 'suspended') this.ctx.resume();
+            if (this._type === "file") {
+                this.source.play();
+            } else if (this._type === "gen") {
+                this._gen(this.node.type, this.node.frequency.value);
+                this.node.start();
+                if (this.analyzer) this.node.connect(this.analyzer.node);
+            }
+            this.node.connect(this.ctx.destination);
+            this._playing = true;
+            return this;
+        }
+    }, {
+        key: "stop",
+        value: function stop() {
+            if (this._playing) this.node.disconnect(this.ctx.destination);
+            if (this._type === "file") {
+                this.source.pause();
+            } else if (this._type === "gen") {
+                this.node.stop();
+            } else if (this._type === "input") {
+                this.stream.getAudioTracks().forEach(function (track) {
+                    return track.stop();
+                });
+            }
+            this._playing = false;
+            return this;
+        }
+    }, {
+        key: "toggle",
+        value: function toggle() {
+            if (this._playing) {
+                this.stop();
+            } else {
+                this.start();
+            }
+            return this;
+        }
+    }, {
+        key: "type",
+        get: function get() {
+            return this._type;
+        }
+    }, {
+        key: "playing",
+        get: function get() {
+            return this._playing;
+        }
+    }, {
+        key: "playable",
+        get: function get() {
+            return this._type === "input" ? this.node !== undefined : this.source.readyState === 4;
+        }
+    }, {
+        key: "binSize",
+        get: function get() {
+            return this.analyzer.size;
+        }
+    }, {
+        key: "sampleRate",
+        get: function get() {
+            return this.ctx.sampleRate;
+        }
+    }, {
+        key: "frequency",
+        get: function get() {
+            return this._type === "gen" ? this.node.frequency.value : 0;
+        },
+        set: function set(f) {
+            if (this._type === "gen") this.node.frequency.value = f;
+        }
+    }], [{
+        key: "from",
+        value: function from(node, ctx) {
+            var type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "gen";
+            var stream = arguments[3];
+
+            var s = new Sound(type);
+            s.node = node;
+            s.ctx = ctx;
+            if (stream) s.stream = stream;
+            return s;
+        }
+    }, {
+        key: "load",
+        value: function load(source) {
+            var s = new Sound("file");
+            s.source = typeof source === 'string' ? new Audio(source) : source;
+            s.source.addEventListener("ended", function () {
+                return s._playing = false;
+            });
+            s.node = s.ctx.createMediaElementSource(s.source);
+            return s;
+        }
+    }, {
+        key: "generate",
+        value: function generate(type, freq) {
+            return new Sound("gen")._gen(type, freq);
+        }
+    }, {
+        key: "input",
+        value: function input(constraint) {
+            return __awaiter(this, void 0, void 0, regeneratorRuntime.mark(function _callee() {
+                var s, c;
+                return regeneratorRuntime.wrap(function _callee$(_context) {
+                    while (1) {
+                        switch (_context.prev = _context.next) {
+                            case 0:
+                                _context.prev = 0;
+                                s = new Sound("input");
+                                c = constraint ? constraint : { audio: true, video: false };
+                                _context.next = 5;
+                                return navigator.mediaDevices.getUserMedia(c);
+
+                            case 5:
+                                s.stream = _context.sent;
+
+                                s.node = s.ctx.createMediaStreamSource(s.stream);
+                                return _context.abrupt("return", s);
+
+                            case 10:
+                                _context.prev = 10;
+                                _context.t0 = _context["catch"](0);
+
+                                console.error("Cannot get audio from input device.");
+                                return _context.abrupt("return", Promise.resolve(null));
+
+                            case 14:
+                            case "end":
+                                return _context.stop();
+                        }
+                    }
+                }, _callee, this, [[0, 10]]);
+            }));
+        }
+    }]);
+
+    return Sound;
+}();
+
+exports.Sound = Sound;
+
+/***/ }),
+
 /***/ "./src/Pt.ts":
 /*!*******************!*\
   !*** ./src/Pt.ts ***!
@@ -8029,6 +8350,7 @@ __export(__webpack_require__(/*! ./Dom */ "./src/Dom.ts"));
 __export(__webpack_require__(/*! ./Svg */ "./src/Svg.ts"));
 __export(__webpack_require__(/*! ./Typography */ "./src/Typography.ts"));
 __export(__webpack_require__(/*! ./Physics */ "./src/Physics.ts"));
+__export(__webpack_require__(/*! ./Play */ "./src/Play.ts"));
 __export(__webpack_require__(/*! ./UI */ "./src/UI.ts"));
 
 /***/ })

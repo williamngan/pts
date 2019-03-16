@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 1130,
+  "id": 1136,
   "comment": "Triangle class provides static functions to create and operate on trianges. A triange is a polygon represented as a Group of 3 Pts.\nYou can use the static functions as-is, or apply the [`Group.op`](#link) or [`Pt.op`](#link) to enable functional programming.\nSee [Op guide](../guide/Op-0400.html) for details.",
   "constructor": [],
   "accessors": [],
@@ -22,7 +22,7 @@
           17
         ]
       ],
-      "id": 1148,
+      "id": 1154,
       "flags": {
         "isStatic": true
       },
@@ -60,7 +60,7 @@
           21
         ]
       ],
-      "id": 1162,
+      "id": 1168,
       "flags": {
         "isStatic": true
       },
@@ -92,7 +92,7 @@
           21
         ]
       ],
-      "id": 1165,
+      "id": 1171,
       "flags": {
         "isStatic": true
       },
@@ -130,7 +130,7 @@
           19
         ]
       ],
-      "id": 1137,
+      "id": 1143,
       "flags": {
         "isStatic": true
       },
@@ -168,7 +168,7 @@
           19
         ]
       ],
-      "id": 1134,
+      "id": 1140,
       "flags": {
         "isStatic": true
       },
@@ -200,7 +200,7 @@
           17
         ]
       ],
-      "id": 1131,
+      "id": 1137,
       "flags": {
         "isStatic": true
       },
@@ -232,7 +232,7 @@
           17
         ]
       ],
-      "id": 1155,
+      "id": 1161,
       "flags": {
         "isStatic": true
       },
@@ -264,7 +264,7 @@
           17
         ]
       ],
-      "id": 1158,
+      "id": 1164,
       "flags": {
         "isStatic": true
       },
@@ -302,7 +302,7 @@
           15
         ]
       ],
-      "id": 1141,
+      "id": 1147,
       "flags": {
         "isStatic": true
       },
@@ -334,7 +334,7 @@
           21
         ]
       ],
-      "id": 1144,
+      "id": 1150,
       "flags": {
         "isStatic": true
       },
@@ -372,7 +372,7 @@
           20
         ]
       ],
-      "id": 1152,
+      "id": 1158,
       "flags": {
         "isStatic": true
       },

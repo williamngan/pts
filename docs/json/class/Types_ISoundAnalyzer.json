@@ -1,0 +1,24 @@
+{
+  "name": "ISoundAnalyzer",
+  "source": [
+    [
+      "Types.ts",
+      183,
+      26
+    ]
+  ],
+  "kind": "Typealias",
+  "id": 789,
+  "comment": "Typescript only: an object to store the AnalyzerNode properties",
+  "constructor": [],
+  "accessors": [],
+  "methods": [],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": [],
+  "type_alias": [
+    "{ data:`Uint8Array`, node:`AnalyserNode`, size:`number` }"
+  ]
+}

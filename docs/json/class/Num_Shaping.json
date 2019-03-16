@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 1445,
+  "id": 1451,
   "comment": "Shaping provides shaping functions to interpolate a value. These are useful for easing and transitions.",
   "constructor": [],
   "accessors": [],
@@ -22,7 +22,7 @@
           17
         ]
       ],
-      "id": 1527,
+      "id": 1533,
       "flags": {
         "isStatic": true
       },
@@ -60,7 +60,7 @@
           20
         ]
       ],
-      "id": 1535,
+      "id": 1541,
       "flags": {
         "isStatic": true
       },
@@ -98,7 +98,7 @@
           18
         ]
       ],
-      "id": 1531,
+      "id": 1537,
       "flags": {
         "isStatic": true
       },
@@ -136,7 +136,7 @@
           19
         ]
       ],
-      "id": 1500,
+      "id": 1506,
       "flags": {
         "isStatic": true
       },
@@ -174,7 +174,7 @@
           22
         ]
       ],
-      "id": 1508,
+      "id": 1514,
       "flags": {
         "isStatic": true
       },
@@ -212,7 +212,7 @@
           20
         ]
       ],
-      "id": 1504,
+      "id": 1510,
       "flags": {
         "isStatic": true
       },
@@ -250,7 +250,7 @@
           14
         ]
       ],
-      "id": 1570,
+      "id": 1576,
       "flags": {
         "isStatic": true
       },
@@ -294,7 +294,7 @@
           21
         ]
       ],
-      "id": 1496,
+      "id": 1502,
       "flags": {
         "isStatic": true
       },
@@ -332,7 +332,7 @@
           20
         ]
       ],
-      "id": 1559,
+      "id": 1565,
       "flags": {
         "isStatic": true
       },
@@ -382,7 +382,7 @@
           16
         ]
       ],
-      "id": 1462,
+      "id": 1468,
       "flags": {
         "isStatic": true
       },
@@ -420,7 +420,7 @@
           19
         ]
       ],
-      "id": 1470,
+      "id": 1476,
       "flags": {
         "isStatic": true
       },
@@ -458,7 +458,7 @@
           17
         ]
       ],
-      "id": 1466,
+      "id": 1472,
       "flags": {
         "isStatic": true
       },
@@ -496,7 +496,7 @@
           18
         ]
       ],
-      "id": 1512,
+      "id": 1518,
       "flags": {
         "isStatic": true
       },
@@ -540,7 +540,7 @@
           21
         ]
       ],
-      "id": 1522,
+      "id": 1528,
       "flags": {
         "isStatic": true
       },
@@ -584,7 +584,7 @@
           19
         ]
       ],
-      "id": 1517,
+      "id": 1523,
       "flags": {
         "isStatic": true
       },
@@ -628,7 +628,7 @@
           22
         ]
       ],
-      "id": 1474,
+      "id": 1480,
       "flags": {
         "isStatic": true
       },
@@ -672,7 +672,7 @@
           23
         ]
       ],
-      "id": 1479,
+      "id": 1485,
       "flags": {
         "isStatic": true
       },
@@ -716,7 +716,7 @@
           15
         ]
       ],
-      "id": 1446,
+      "id": 1452,
       "flags": {
         "isStatic": true
       },
@@ -754,7 +754,7 @@
           19
         ]
       ],
-      "id": 1544,
+      "id": 1550,
       "flags": {
         "isStatic": true
       },
@@ -798,7 +798,7 @@
           24
         ]
       ],
-      "id": 1554,
+      "id": 1560,
       "flags": {
         "isStatic": true
       },
@@ -842,7 +842,7 @@
           20
         ]
       ],
-      "id": 1450,
+      "id": 1456,
       "flags": {
         "isStatic": true
       },
@@ -880,7 +880,7 @@
           23
         ]
       ],
-      "id": 1458,
+      "id": 1464,
       "flags": {
         "isStatic": true
       },
@@ -918,7 +918,7 @@
           21
         ]
       ],
-      "id": 1454,
+      "id": 1460,
       "flags": {
         "isStatic": true
       },
@@ -956,7 +956,7 @@
           24
         ]
       ],
-      "id": 1565,
+      "id": 1571,
       "flags": {
         "isStatic": true
       },
@@ -1000,7 +1000,7 @@
           13
         ]
       ],
-      "id": 1549,
+      "id": 1555,
       "flags": {
         "isStatic": true
       },
@@ -1044,7 +1044,7 @@
           16
         ]
       ],
-      "id": 1539,
+      "id": 1545,
       "flags": {
         "isStatic": true
       },
@@ -1088,7 +1088,7 @@
           15
         ]
       ],
-      "id": 1484,
+      "id": 1490,
       "flags": {
         "isStatic": true
       },
@@ -1126,7 +1126,7 @@
           18
         ]
       ],
-      "id": 1492,
+      "id": 1498,
       "flags": {
         "isStatic": true
       },
@@ -1164,7 +1164,7 @@
           16
         ]
       ],
-      "id": 1488,
+      "id": 1494,
       "flags": {
         "isStatic": true
       },
@@ -1202,7 +1202,7 @@
           13
         ]
       ],
-      "id": 1575,
+      "id": 1581,
       "flags": {
         "isStatic": true
       },

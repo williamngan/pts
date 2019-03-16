@@ -90,6 +90,8 @@ class Color extends Pt_1.Pt {
     set u(n) { this[1] = n; }
     get v() { return this[2]; }
     set v(n) { this[2] = n; }
+    set alpha(n) { if (this.length > 3)
+        this[3] = n; }
     get alpha() { return (this.length > 3) ? this[3] : 1; }
     get normalized() { return this._isNorm; }
     set normalized(b) { this._isNorm = b; }

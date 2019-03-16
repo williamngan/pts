@@ -66,6 +66,8 @@ export class CanvasForm extends VisualForm {
     point(p: PtLike, radius?: number, shape?: string): this;
     static circle(ctx: CanvasRenderingContext2D, pt: PtLike, radius?: number): void;
     circle(pts: GroupLike | number[][]): this;
+    static ellipse(ctx: CanvasRenderingContext2D, pt: PtLike, radius: PtLike, rotation?: number, startAngle?: number, endAngle?: number, cc?: boolean): void;
+    ellipse(pt: PtLike, radius: PtLike, rotation?: number, startAngle?: number, endAngle?: number, cc?: boolean): this;
     static arc(ctx: CanvasRenderingContext2D, pt: PtLike, radius: number, startAngle: number, endAngle: number, cc?: boolean): void;
     arc(pt: PtLike, radius: number, startAngle: number, endAngle: number, cc?: boolean): this;
     static square(ctx: CanvasRenderingContext2D, pt: PtLike, halfsize: number): void;
@@ -118,7 +120,7 @@ export class Color extends Pt {
     c: number;
     u: number;
     v: number;
-    readonly alpha: number;
+    alpha: number;
     normalized: boolean;
     normalize(toNorm?: boolean): Color;
     $normalize(toNorm?: boolean): Color;
@@ -148,7 +150,7 @@ export class Create {
     static distributeLinear(line: GroupLike, count: number): Group;
     static gridPts(bound: Bound, columns: number, rows: number, orientation?: PtLike): Group;
     static gridCells(bound: Bound, columns: number, rows: number): Group[];
-    static radialPts(center: PtLike, radius: number, count: number): Group;
+    static radialPts(center: PtLike, radius: number, count: number, angleOffset?: number): Group;
     static noisePts(pts: GroupLike, dx?: number, dy?: number, rows?: number, columns?: number): Group;
     static delaunay(pts: GroupLike): Delaunay;
 }
@@ -605,6 +607,39 @@ export class Body extends Group {
     processParticle(b: Particle): void;
 }
 
+export class Sound {
+    ctx: AudioContext;
+    node: AudioNode;
+    stream: MediaStream;
+    source: HTMLMediaElement;
+    analyzer: ISoundAnalyzer;
+    protected _playing: boolean;
+    constructor(type: SoundType);
+    static from(node: AudioNode, ctx: AudioContext, type?: SoundType, stream?: MediaStream): Sound;
+    static load(source: HTMLMediaElement | string): Sound;
+    static generate(type: OscillatorType, freq: number): Sound;
+    protected _gen(type: OscillatorType, freq: number): Sound;
+    static input(constraint?: MediaStreamConstraints): Promise<Sound>;
+    readonly type: SoundType;
+    readonly playing: boolean;
+    readonly playable: boolean;
+    readonly binSize: number;
+    readonly sampleRate: number;
+    frequency: number;
+    protected _domain(time: boolean): Uint8Array;
+    protected _domainTo(time: boolean, size: PtLike, position?: PtLike, trim?: number[]): Group;
+    timeDomain(): Uint8Array;
+    timeDomainTo(size: PtLike, position?: PtLike, trim?: number[]): Group;
+    freqDomain(): Uint8Array;
+    freqDomainTo(size: PtLike, position?: PtLike, trim?: number[]): Group;
+    connect(node: AudioNode): this;
+    analyze(size?: number, minDb?: number, maxDb?: number, smooth?: number): this;
+    reset(): this;
+    start(): this;
+    stop(): this;
+    toggle(): this;
+}
+
 export class Pt extends Float32Array implements IPt, Iterable<number> {
     protected _id: string;
     constructor(...args: any[]);
@@ -932,6 +967,12 @@ export type ITempoResponses = {
     start: (fn: ITempoStartFn, offset: number, name?: string) => string;
     progress: (fn: ITempoProgressFn, offset: number, name?: string) => string;
 };
+export type ISoundAnalyzer = {
+    node: AnalyserNode;
+    size: number;
+    data: Uint8Array;
+};
+export type SoundType = "file" | "gen" | "input";
 
 export class Typography {
     static textWidthEstimator(fn: (string: any) => number, samples?: string[], distribution?: number[]): (string: any) => number;

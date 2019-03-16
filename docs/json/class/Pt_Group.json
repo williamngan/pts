@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 2110,
+  "id": 2116,
   "comment": "A Group is a subclass of standard javascript [`Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array). It should only contain Pt instances. You can think of it as an array of Float32Arrays.\nSee [Group guide](../guide/Group-0300.html) for details.",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           23
         ]
       ],
-      "id": 2112,
+      "id": 2118,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -57,7 +57,7 @@
           8
         ]
       ],
-      "id": 2115,
+      "id": 2121,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -84,7 +84,7 @@
           8
         ]
       ],
-      "id": 2119,
+      "id": 2125,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -103,7 +103,7 @@
           8
         ]
       ],
-      "id": 2121,
+      "id": 2127,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -122,7 +122,7 @@
           8
         ]
       ],
-      "id": 2123,
+      "id": 2129,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -141,7 +141,7 @@
           8
         ]
       ],
-      "id": 2125,
+      "id": 2131,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -160,7 +160,7 @@
           8
         ]
       ],
-      "id": 2127,
+      "id": 2133,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -179,7 +179,7 @@
           8
         ]
       ],
-      "id": 2129,
+      "id": 2135,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -198,7 +198,7 @@
           8
         ]
       ],
-      "id": 2131,
+      "id": 2137,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -217,7 +217,7 @@
           8
         ]
       ],
-      "id": 2133,
+      "id": 2139,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -238,7 +238,7 @@
           12
         ]
       ],
-      "id": 2240,
+      "id": 2246,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -268,7 +268,7 @@
           17
         ]
       ],
-      "id": 2243,
+      "id": 2249,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -310,7 +310,7 @@
           6
         ]
       ],
-      "id": 2252,
+      "id": 2258,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -346,7 +346,7 @@
           5
         ]
       ],
-      "id": 2228,
+      "id": 2234,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -376,7 +376,7 @@
           12
         ]
       ],
-      "id": 2170,
+      "id": 2176,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -406,7 +406,7 @@
           10
         ]
       ],
-      "id": 2167,
+      "id": 2173,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -436,7 +436,7 @@
           13
         ]
       ],
-      "id": 2165,
+      "id": 2171,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -459,7 +459,7 @@
           10
         ]
       ],
-      "id": 2163,
+      "id": 2169,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -482,7 +482,7 @@
           7
         ]
       ],
-      "id": 2135,
+      "id": 2141,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -510,7 +510,7 @@
           10
         ]
       ],
-      "id": 2266,
+      "id": 2272,
       "flags": {},
       "overrides": false,
       "inherits": "Array.concat",
@@ -554,7 +554,7 @@
           14
         ]
       ],
-      "id": 2455,
+      "id": 2461,
       "flags": {},
       "overrides": false,
       "inherits": "Array.copyWithin",
@@ -596,7 +596,7 @@
           8
         ]
       ],
-      "id": 2237,
+      "id": 2243,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -626,7 +626,7 @@
           11
         ]
       ],
-      "id": 2462,
+      "id": 2468,
       "flags": {},
       "overrides": false,
       "inherits": "Array.entries",
@@ -649,7 +649,7 @@
           9
         ]
       ],
-      "id": 2308,
+      "id": 2314,
       "flags": {},
       "overrides": false,
       "inherits": "Array.every",
@@ -685,7 +685,7 @@
           8
         ]
       ],
-      "id": 2450,
+      "id": 2456,
       "flags": {},
       "overrides": false,
       "inherits": "Array.fill",
@@ -732,7 +732,7 @@
           10
         ]
       ],
-      "id": 2345,
+      "id": 2351,
       "flags": {},
       "overrides": false,
       "inherits": "Array.filter",
@@ -793,7 +793,7 @@
           8
         ]
       ],
-      "id": 2422,
+      "id": 2428,
       "flags": {},
       "overrides": false,
       "inherits": "Array.find",
@@ -849,7 +849,7 @@
           13
         ]
       ],
-      "id": 2441,
+      "id": 2447,
       "flags": {},
       "overrides": false,
       "inherits": "Array.findIndex",
@@ -885,7 +885,7 @@
           11
         ]
       ],
-      "id": 2326,
+      "id": 2332,
       "flags": {},
       "overrides": false,
       "inherits": "Array.forEach",
@@ -921,7 +921,7 @@
           11
         ]
       ],
-      "id": 2224,
+      "id": 2230,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -957,7 +957,7 @@
           11
         ]
       ],
-      "id": 2300,
+      "id": 2306,
       "flags": {},
       "overrides": false,
       "inherits": "Array.indexOf",
@@ -993,7 +993,7 @@
           8
         ]
       ],
-      "id": 2148,
+      "id": 2154,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1029,7 +1029,7 @@
           13
         ]
       ],
-      "id": 2193,
+      "id": 2199,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1059,7 +1059,7 @@
           8
         ]
       ],
-      "id": 2271,
+      "id": 2277,
       "flags": {},
       "overrides": false,
       "inherits": "Array.join",
@@ -1089,7 +1089,7 @@
           8
         ]
       ],
-      "id": 2464,
+      "id": 2470,
       "flags": {},
       "overrides": false,
       "inherits": "Array.keys",
@@ -1112,7 +1112,7 @@
           15
         ]
       ],
-      "id": 2304,
+      "id": 2310,
       "flags": {},
       "overrides": false,
       "inherits": "Array.lastIndexOf",
@@ -1148,7 +1148,7 @@
           7
         ]
       ],
-      "id": 2161,
+      "id": 2167,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1171,7 +1171,7 @@
           7
         ]
       ],
-      "id": 2335,
+      "id": 2341,
       "flags": {},
       "overrides": false,
       "inherits": "Array.map",
@@ -1207,7 +1207,7 @@
           8
         ]
       ],
-      "id": 2196,
+      "id": 2202,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1237,7 +1237,7 @@
           8
         ]
       ],
-      "id": 2199,
+      "id": 2205,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1267,7 +1267,7 @@
           10
         ]
       ],
-      "id": 2234,
+      "id": 2240,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1297,7 +1297,7 @@
           4
         ]
       ],
-      "id": 2173,
+      "id": 2179,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1332,7 +1332,7 @@
           5
         ]
       ],
-      "id": 2183,
+      "id": 2189,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1367,7 +1367,7 @@
           7
         ]
       ],
-      "id": 2261,
+      "id": 2267,
       "flags": {},
       "overrides": false,
       "inherits": "Array.pop",
@@ -1390,7 +1390,7 @@
           8
         ]
       ],
-      "id": 2263,
+      "id": 2269,
       "flags": {},
       "overrides": false,
       "inherits": "Array.push",
@@ -1430,7 +1430,7 @@
           10
         ]
       ],
-      "id": 2363,
+      "id": 2369,
       "flags": {},
       "overrides": false,
       "inherits": "Array.reduce",
@@ -1510,7 +1510,7 @@
           15
         ]
       ],
-      "id": 2391,
+      "id": 2397,
       "flags": {},
       "overrides": false,
       "inherits": "Array.reduceRight",
@@ -1580,7 +1580,7 @@
           11
         ]
       ],
-      "id": 2216,
+      "id": 2222,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1616,7 +1616,7 @@
           8
         ]
       ],
-      "id": 2152,
+      "id": 2158,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1652,7 +1652,7 @@
           11
         ]
       ],
-      "id": 2274,
+      "id": 2280,
       "flags": {},
       "overrides": false,
       "inherits": "Array.reverse",
@@ -1675,7 +1675,7 @@
           10
         ]
       ],
-      "id": 2206,
+      "id": 2212,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1717,7 +1717,7 @@
           7
         ]
       ],
-      "id": 2202,
+      "id": 2208,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1753,7 +1753,7 @@
           10
         ]
       ],
-      "id": 2156,
+      "id": 2162,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1795,7 +1795,7 @@
           9
         ]
       ],
-      "id": 2211,
+      "id": 2217,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1837,7 +1837,7 @@
           9
         ]
       ],
-      "id": 2276,
+      "id": 2282,
       "flags": {},
       "overrides": false,
       "inherits": "Array.shift",
@@ -1860,7 +1860,7 @@
           9
         ]
       ],
-      "id": 2278,
+      "id": 2284,
       "flags": {},
       "overrides": false,
       "inherits": "Array.slice",
@@ -1896,7 +1896,7 @@
           8
         ]
       ],
-      "id": 2317,
+      "id": 2323,
       "flags": {},
       "overrides": false,
       "inherits": "Array.some",
@@ -1932,7 +1932,7 @@
           8
         ]
       ],
-      "id": 2282,
+      "id": 2288,
       "flags": {},
       "overrides": false,
       "inherits": "Array.sort",
@@ -1962,7 +1962,7 @@
           17
         ]
       ],
-      "id": 2220,
+      "id": 2226,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2003,7 +2003,7 @@
           10
         ]
       ],
-      "id": 2289,
+      "id": 2295,
       "flags": {},
       "overrides": false,
       "inherits": "Array.splice",
@@ -2065,7 +2065,7 @@
           7
         ]
       ],
-      "id": 2143,
+      "id": 2149,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2107,7 +2107,7 @@
           10
         ]
       ],
-      "id": 2231,
+      "id": 2237,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2137,7 +2137,7 @@
           18
         ]
       ],
-      "id": 2259,
+      "id": 2265,
       "flags": {},
       "overrides": false,
       "inherits": "Array.toLocaleString",
@@ -2160,7 +2160,7 @@
           10
         ]
       ],
-      "id": 2256,
+      "id": 2262,
       "flags": {},
       "overrides": "Array.toString",
       "inherits": false,
@@ -2183,7 +2183,7 @@
           11
         ]
       ],
-      "id": 2297,
+      "id": 2303,
       "flags": {},
       "overrides": false,
       "inherits": "Array.unshift",
@@ -2213,7 +2213,7 @@
           10
         ]
       ],
-      "id": 2466,
+      "id": 2472,
       "flags": {},
       "overrides": false,
       "inherits": "Array.values",
@@ -2236,7 +2236,7 @@
           10
         ]
       ],
-      "id": 2248,
+      "id": 2254,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2272,7 +2272,7 @@
           18
         ]
       ],
-      "id": 2137,
+      "id": 2143,
       "flags": {
         "isStatic": true
       },
@@ -2309,7 +2309,7 @@
           20
         ]
       ],
-      "id": 2140,
+      "id": 2146,
       "flags": {
         "isStatic": true
       },
@@ -2344,7 +2344,7 @@
           10
         ]
       ],
-      "id": 2258,
+      "id": 2264,
       "flags": {},
       "type": "length",
       "overrides": false,
@@ -2360,7 +2360,7 @@
           19
         ]
       ],
-      "id": 2421,
+      "id": 2427,
       "flags": {
         "isStatic": true
       },

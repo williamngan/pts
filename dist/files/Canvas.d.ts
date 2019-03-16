@@ -67,6 +67,8 @@ export declare class CanvasForm extends VisualForm {
     point(p: PtLike, radius?: number, shape?: string): this;
     static circle(ctx: CanvasRenderingContext2D, pt: PtLike, radius?: number): void;
     circle(pts: GroupLike | number[][]): this;
+    static ellipse(ctx: CanvasRenderingContext2D, pt: PtLike, radius: PtLike, rotation?: number, startAngle?: number, endAngle?: number, cc?: boolean): void;
+    ellipse(pt: PtLike, radius: PtLike, rotation?: number, startAngle?: number, endAngle?: number, cc?: boolean): this;
     static arc(ctx: CanvasRenderingContext2D, pt: PtLike, radius: number, startAngle: number, endAngle: number, cc?: boolean): void;
     arc(pt: PtLike, radius: number, startAngle: number, endAngle: number, cc?: boolean): this;
     static square(ctx: CanvasRenderingContext2D, pt: PtLike, halfsize: number): void;

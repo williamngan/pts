@@ -1,0 +1,26 @@
+{
+  "name": "SoundType",
+  "source": [
+    [
+      "Types.ts",
+      193,
+      21
+    ]
+  ],
+  "kind": "Typealias",
+  "id": 794,
+  "comment": "Typescript only: corresponds to Sound.type",
+  "constructor": [],
+  "accessors": [],
+  "methods": [],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": [],
+  "type_alias": [
+    "file",
+    "gen",
+    "input"
+  ]
+}

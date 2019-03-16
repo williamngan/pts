@@ -6,7 +6,7 @@ export declare class Create {
     static distributeLinear(line: GroupLike, count: number): Group;
     static gridPts(bound: Bound, columns: number, rows: number, orientation?: PtLike): Group;
     static gridCells(bound: Bound, columns: number, rows: number): Group[];
-    static radialPts(center: PtLike, radius: number, count: number): Group;
+    static radialPts(center: PtLike, radius: number, count: number, angleOffset?: number): Group;
     static noisePts(pts: GroupLike, dx?: number, dy?: number, rows?: number, columns?: number): Group;
     static delaunay(pts: GroupLike): Delaunay;
 }

@@ -1,0 +1,35 @@
+import { ISoundAnalyzer, SoundType, PtLike } from "./Types";
+import { Group } from "./Pt";
+export declare class Sound {
+    private _type;
+    ctx: AudioContext;
+    node: AudioNode;
+    stream: MediaStream;
+    source: HTMLMediaElement;
+    analyzer: ISoundAnalyzer;
+    protected _playing: boolean;
+    constructor(type: SoundType);
+    static from(node: AudioNode, ctx: AudioContext, type?: SoundType, stream?: MediaStream): Sound;
+    static load(source: HTMLMediaElement | string): Sound;
+    static generate(type: OscillatorType, freq: number): Sound;
+    protected _gen(type: OscillatorType, freq: number): Sound;
+    static input(constraint?: MediaStreamConstraints): Promise<Sound>;
+    readonly type: SoundType;
+    readonly playing: boolean;
+    readonly playable: boolean;
+    readonly binSize: number;
+    readonly sampleRate: number;
+    frequency: number;
+    protected _domain(time: boolean): Uint8Array;
+    protected _domainTo(time: boolean, size: PtLike, position?: PtLike, trim?: number[]): Group;
+    timeDomain(): Uint8Array;
+    timeDomainTo(size: PtLike, position?: PtLike, trim?: number[]): Group;
+    freqDomain(): Uint8Array;
+    freqDomainTo(size: PtLike, position?: PtLike, trim?: number[]): Group;
+    connect(node: AudioNode): this;
+    analyze(size?: number, minDb?: number, maxDb?: number, smooth?: number): this;
+    reset(): this;
+    start(): this;
+    stop(): this;
+    toggle(): this;
+}

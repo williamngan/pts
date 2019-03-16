@@ -50,11 +50,11 @@ class Create {
         }
         return g;
     }
-    static radialPts(center, radius, count) {
+    static radialPts(center, radius, count, angleOffset = -Util_1.Const.half_pi) {
         let g = new Pt_1.Group();
         let a = Util_1.Const.two_pi / count;
         for (let i = 0; i < count; i++) {
-            g.push(new Pt_1.Pt(center).toAngle(a * i - Util_1.Const.half_pi, radius, true));
+            g.push(new Pt_1.Pt(center).toAngle(a * i + angleOffset, radius, true));
         }
         return g;
     }

@@ -1,0 +1,739 @@
+{
+  "name": "Sound",
+  "source": [
+    [
+      "Play.ts",
+      4,
+      18
+    ]
+  ],
+  "kind": "Class",
+  "id": 6606,
+  "comment": "",
+  "constructor": [
+    {
+      "name": "constructor",
+      "source": [
+        [
+          "Play.ts",
+          23,
+          37
+        ]
+      ],
+      "id": 6614,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Construct a `Sound` instance. Usually you'll use one of the static method like `Sound.load` instead of this constructor.",
+          "returns": "Sound",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "type",
+              "comment": "\n",
+              "type": "SoundType",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "accessors": [
+    {
+      "name": "binSize",
+      "source": [
+        [
+          "Play.ts",
+          137,
+          13
+        ]
+      ],
+      "id": 6643,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Get the number of bins in analyzer",
+      "getter": {
+        "type": "number"
+      },
+      "setter": false
+    },
+    {
+      "name": "frequency",
+      "source": [
+        [
+          "Play.ts",
+          153,
+          15
+        ],
+        [
+          "Play.ts",
+          156,
+          15
+        ]
+      ],
+      "id": 6647,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "If the sound is generated, this sets and gets the frequency of the tone.",
+      "getter": {
+        "type": "number"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "f",
+          "comment": "",
+          "type": "number",
+          "default": false
+        }
+      }
+    },
+    {
+      "name": "playable",
+      "source": [
+        [
+          "Play.ts",
+          129,
+          14
+        ]
+      ],
+      "id": 6641,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Whether the sound is ready to play. For loading from a file, this corresponds to [\"canplaythrough\"](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState) event.\nYou can also use `this.source.addEventListener( 'canplaythrough', ...)` if needed. See [documentation](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/canplaythrough_event).",
+      "getter": {
+        "type": "boolean"
+      },
+      "setter": false
+    },
+    {
+      "name": "playing",
+      "source": [
+        [
+          "Play.ts",
+          120,
+          13
+        ]
+      ],
+      "id": 6639,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Whether the sound is currently playing",
+      "getter": {
+        "type": "boolean"
+      },
+      "setter": false
+    },
+    {
+      "name": "sampleRate",
+      "source": [
+        [
+          "Play.ts",
+          145,
+          16
+        ]
+      ],
+      "id": 6645,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Get the sample rate of the audio. Usually 44100 hz.",
+      "getter": {
+        "type": "number"
+      },
+      "setter": false
+    },
+    {
+      "name": "type",
+      "source": [
+        [
+          "Play.ts",
+          112,
+          10
+        ]
+      ],
+      "id": 6637,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Get the type of sound input: \"file\", \"input\", or \"gen\"",
+      "getter": {
+        "type": "SoundType"
+      },
+      "setter": false
+    }
+  ],
+  "methods": [
+    {
+      "name": "analyze",
+      "source": [
+        [
+          "Play.ts",
+          245,
+          9
+        ]
+      ],
+      "id": 6677,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Add an analyzer to this `Sound`. Call this once only.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "size",
+              "comment": "the number of frequency bins",
+              "type": "number",
+              "default": "256"
+            },
+            {
+              "name": "minDb",
+              "comment": "Optional minimum decibels (corresponds to AnalyserNode.minDecibels)",
+              "type": "number",
+              "default": "-100"
+            },
+            {
+              "name": "maxDb",
+              "comment": "Optional maximum decibels (corresponds to AnalyserNode.maxDecibels)",
+              "type": "number",
+              "default": "-30"
+            },
+            {
+              "name": "smooth",
+              "comment": "Optional smoothing value (corresponds to smoothingTimeConstant)\n",
+              "type": "number",
+              "default": "0.8"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "connect",
+      "source": [
+        [
+          "Play.ts",
+          232,
+          9
+        ]
+      ],
+      "id": 6674,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Connect another AudioNode to this `Sound` instance's AudioNode",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "node",
+              "comment": "another AudioNode\n",
+              "type": "AudioNode",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "freqDomain",
+      "source": [
+        [
+          "Play.ts",
+          210,
+          12
+        ]
+      ],
+      "id": 6667,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get the raw frequency-domain data from analyzer as unsigned 8-bit integers.",
+          "returns": "Uint8Array",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "freqDomainTo",
+      "source": [
+        [
+          "Play.ts",
+          223,
+          14
+        ]
+      ],
+      "id": 6669,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Map the frequency-domain data from analyzer to a range.",
+          "returns": "Group",
+          "returns_comment": "a Group containing the mapped values",
+          "parameters": [
+            {
+              "name": "size",
+              "comment": "map each data [index, value] to [width, height]",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "position",
+              "comment": "Optionally, set a starting [x, y] position. Default is [0, 0]",
+              "type": "PtLike",
+              "default": "[0,0]"
+            },
+            {
+              "name": "trim",
+              "comment": "Optionally, trim the start and end values by [startTrim, data.length-endTrim]",
+              "type": "number[]",
+              "default": "[0,0]"
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "form.point( s.freqDomainTo( space.size ) )\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "reset",
+      "source": [
+        [
+          "Play.ts",
+          264,
+          7
+        ]
+      ],
+      "id": 6683,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Stop playing and disconnect the AudioNode",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "start",
+      "source": [
+        [
+          "Play.ts",
+          274,
+          7
+        ]
+      ],
+      "id": 6685,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Start playing. Internally this connects the `AudioNode` to `AudioContext`'s destination.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "stop",
+      "source": [
+        [
+          "Play.ts",
+          295,
+          6
+        ]
+      ],
+      "id": 6687,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Stop playing. Internally this also disconnects the `AudioNode` from `AudioContext`'s destination.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "timeDomain",
+      "source": [
+        [
+          "Play.ts",
+          189,
+          12
+        ]
+      ],
+      "id": 6660,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get the raw time-domain data from analyzer as unsigned 8-bit integers.",
+          "returns": "Uint8Array",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "timeDomainTo",
+      "source": [
+        [
+          "Play.ts",
+          202,
+          14
+        ]
+      ],
+      "id": 6662,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Map the time-domain data from analyzer to a range.",
+          "returns": "Group",
+          "returns_comment": "a Group containing the mapped values",
+          "parameters": [
+            {
+              "name": "size",
+              "comment": "map each data [index, value] to [width, height]",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "position",
+              "comment": "Optionally, set a starting [x, y] position. Default is [0, 0]",
+              "type": "PtLike",
+              "default": "[0,0]"
+            },
+            {
+              "name": "trim",
+              "comment": "Optionally, trim the start and end values by [startTrim, data.length-endTrim]",
+              "type": "number[]",
+              "default": "[0,0]"
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "form.point( s.timeDomainTo( space.size ) )\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "toggle",
+      "source": [
+        [
+          "Play.ts",
+          317,
+          8
+        ]
+      ],
+      "id": 6689,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Toggle between `start` and `stop`",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "from",
+      "source": [
+        [
+          "Play.ts",
+          43,
+          13
+        ]
+      ],
+      "id": 6617,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a `Sound` given an AudioNode and an AudioContext. See also [this example](../guide/js/examples/tone.html) using tone.js in the [guide](../guide/Sound-0800.html).",
+          "returns": "Sound",
+          "returns_comment": "a `Sound` instance\n",
+          "parameters": [
+            {
+              "name": "node",
+              "comment": "an AudioNode instance",
+              "type": "AudioNode",
+              "default": false
+            },
+            {
+              "name": "ctx",
+              "comment": "an AudioContext instance",
+              "type": "AudioContext",
+              "default": false
+            },
+            {
+              "name": "type",
+              "comment": "a string representing a type of input source: either \"file\", \"input\", or \"gen\".",
+              "type": "SoundType",
+              "default": "\"gen\""
+            },
+            {
+              "name": "stream",
+              "comment": "Optionally include a MediaStream, if the type is \"input\"",
+              "type": "MediaStream",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "generate",
+      "source": [
+        [
+          "Play.ts",
+          74,
+          17
+        ]
+      ],
+      "id": 6626,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Generate a `Sound` by generating a wave",
+          "returns": "Sound",
+          "returns_comment": "a `Sound` instance",
+          "parameters": [
+            {
+              "name": "type",
+              "comment": "a string representing the waveform type: \"sine\", \"square\", \"sawtooth\", \"triangle\", \"custom\"",
+              "type": "OscillatorType",
+              "default": false
+            },
+            {
+              "name": "freq",
+              "comment": "the frequency in Hz to play",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`Sound.generate( 'sine', 120 )`\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "input",
+      "source": [
+        [
+          "Play.ts",
+          95,
+          20
+        ]
+      ],
+      "id": 6634,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a `Sound` by streaming from an input device like microphone. This returns a Promise which resolves to a Sound instance.",
+          "returns": "Promise",
+          "returns_comment": "a `Sound` instance",
+          "parameters": [
+            {
+              "name": "constraint",
+              "comment": "@param constraint Optional constraints which can be used to select a specific input device. For example, you may use [`enumerateDevices`](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/enumerateDevices) to find a specific deviceId;",
+              "type": "MediaStreamConstraints",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`Sound.input().then( s => sound = s );`\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "load",
+      "source": [
+        [
+          "Play.ts",
+          58,
+          13
+        ]
+      ],
+      "id": 6623,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a `Sound` by loading from a file or an <audio> element.",
+          "returns": "Sound",
+          "returns_comment": "a `Sound` instance",
+          "parameters": [
+            {
+              "name": "source",
+              "comment": "either an url string to load the file, or an <audio> element.",
+              "type": "HTMLMediaElement | string",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`Sound.load( '/path/to/file.mp3' )`\n"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variables": [],
+  "properties": [
+    {
+      "name": "analyzer",
+      "source": [
+        [
+          "Play.ts",
+          21,
+          10
+        ]
+      ],
+      "id": 6612,
+      "flags": {},
+      "type": "analyzer",
+      "overrides": false,
+      "inherits": false,
+      "comment": "Analyzer if any"
+    },
+    {
+      "name": "ctx",
+      "source": [
+        [
+          "Play.ts",
+          9,
+          5
+        ]
+      ],
+      "id": 6608,
+      "flags": {},
+      "type": "ctx",
+      "overrides": false,
+      "inherits": false,
+      "comment": "The audio context"
+    },
+    {
+      "name": "node",
+      "source": [
+        [
+          "Play.ts",
+          12,
+          6
+        ]
+      ],
+      "id": 6609,
+      "flags": {},
+      "type": "node",
+      "overrides": false,
+      "inherits": false,
+      "comment": "The audio node, which is usually a subclass liked OscillatorNode"
+    },
+    {
+      "name": "source",
+      "source": [
+        [
+          "Play.ts",
+          18,
+          8
+        ]
+      ],
+      "id": 6611,
+      "flags": {},
+      "type": "source",
+      "overrides": false,
+      "inherits": false,
+      "comment": "Audio src when loading from file"
+    },
+    {
+      "name": "stream",
+      "source": [
+        [
+          "Play.ts",
+          15,
+          8
+        ]
+      ],
+      "id": 6610,
+      "flags": {},
+      "type": "stream",
+      "overrides": false,
+      "inherits": false,
+      "comment": "The audio stream when streaming from input device"
+    }
+  ],
+  "flags": {},
+  "extends": [],
+  "implements": []
+}

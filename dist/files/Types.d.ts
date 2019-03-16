@@ -86,3 +86,9 @@ export declare type ITempoResponses = {
     start: (fn: ITempoStartFn, offset: number, name?: string) => string;
     progress: (fn: ITempoProgressFn, offset: number, name?: string) => string;
 };
+export declare type ISoundAnalyzer = {
+    node: AnalyserNode;
+    size: number;
+    data: Uint8Array;
+};
+export declare type SoundType = "file" | "gen" | "input";

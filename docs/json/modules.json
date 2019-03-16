@@ -44,6 +44,9 @@
     "Particle",
     "World"
   ],
+  "Play": [
+    "Sound"
+  ],
   "Pt": [
     "Bound",
     "Group",
@@ -70,12 +73,14 @@
     "DelaunayMesh",
     "DelaunayShape",
     "GroupLike",
+    "ISoundAnalyzer",
     "ITempoListener",
     "ITempoProgressFn",
     "ITempoResponses",
     "ITempoStartFn",
     "IntersectContext",
     "PtLike",
+    "SoundType",
     "TouchPointsKey",
     "UIHandler",
     "WarningType"

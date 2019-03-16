@@ -350,6 +350,17 @@ class CanvasForm extends Form_1.VisualForm {
         this._paint();
         return this;
     }
+    static ellipse(ctx, pt, radius, rotation = 0, startAngle = 0, endAngle = Util_1.Const.two_pi, cc = false) {
+        if (!pt || !radius)
+            return;
+        ctx.beginPath();
+        ctx.ellipse(pt[0], pt[1], radius[0], radius[1], rotation, startAngle, endAngle, cc);
+    }
+    ellipse(pt, radius, rotation = 0, startAngle = 0, endAngle = Util_1.Const.two_pi, cc = false) {
+        CanvasForm.ellipse(this._ctx, pt, radius, rotation, startAngle, endAngle, cc);
+        this._paint();
+        return this;
+    }
     static arc(ctx, pt, radius, startAngle, endAngle, cc) {
         if (!pt)
             return;

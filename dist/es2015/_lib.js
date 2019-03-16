@@ -13,6 +13,7 @@ export * from "./Svg";
 export * from "./Typography";
 export * from "./Physics";
 export * from "./UI";
+export * from "./Play";
 import * as _Canvas from './Canvas';
 export let namespace = (scope) => {
     let lib = module.exports;

@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 1317,
+  "id": 1323,
   "comment": "Num class provides static helper functions for basic numeric operations.",
   "constructor": [],
   "accessors": [],
@@ -22,7 +22,7 @@
           16
         ]
       ],
-      "id": 1355,
+      "id": 1361,
       "flags": {
         "isStatic": true
       },
@@ -54,7 +54,7 @@
           19
         ]
       ],
-      "id": 1333,
+      "id": 1339,
       "flags": {
         "isStatic": true
       },
@@ -103,7 +103,7 @@
           14
         ]
       ],
-      "id": 1328,
+      "id": 1334,
       "flags": {
         "isStatic": true
       },
@@ -147,7 +147,7 @@
           14
         ]
       ],
-      "id": 1358,
+      "id": 1364,
       "flags": {
         "isStatic": true
       },
@@ -179,7 +179,7 @@
           15
         ]
       ],
-      "id": 1318,
+      "id": 1324,
       "flags": {
         "isStatic": true
       },
@@ -223,7 +223,7 @@
           13
         ]
       ],
-      "id": 1323,
+      "id": 1329,
       "flags": {
         "isStatic": true
       },
@@ -267,7 +267,7 @@
           19
         ]
       ],
-      "id": 1361,
+      "id": 1367,
       "flags": {
         "isStatic": true
       },
@@ -323,7 +323,7 @@
           23
         ]
       ],
-      "id": 1347,
+      "id": 1353,
       "flags": {
         "isStatic": true
       },
@@ -367,7 +367,7 @@
           20
         ]
       ],
-      "id": 1343,
+      "id": 1349,
       "flags": {
         "isStatic": true
       },
@@ -405,7 +405,7 @@
           12
         ]
       ],
-      "id": 1352,
+      "id": 1358,
       "flags": {
         "isStatic": true
       },
@@ -437,7 +437,7 @@
           15
         ]
       ],
-      "id": 1338,
+      "id": 1344,
       "flags": {
         "isStatic": true
       },

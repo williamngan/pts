@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 928,
+  "id": 934,
   "comment": "Line class provides static functions to create and operate on lines. A line is usually represented as a Group of 2 Pts.\nYou can use the static functions as-is, or apply the [`Group.op`](#link) or [`Pt.op`](#link) to enable functional programming.\nSee [Op guide](../guide/Op-0400.html) for details.",
   "constructor": [],
   "accessors": [],
@@ -22,7 +22,7 @@
           18
         ]
       ],
-      "id": 950,
+      "id": 956,
       "flags": {
         "isStatic": true
       },
@@ -72,7 +72,7 @@
           13
         ]
       ],
-      "id": 1009,
+      "id": 1015,
       "flags": {
         "isStatic": true
       },
@@ -122,7 +122,7 @@
           23
         ]
       ],
-      "id": 967,
+      "id": 973,
       "flags": {
         "isStatic": true
       },
@@ -165,7 +165,7 @@
           18
         ]
       ],
-      "id": 929,
+      "id": 935,
       "flags": {
         "isStatic": true
       },
@@ -209,7 +209,7 @@
           18
         ]
       ],
-      "id": 938,
+      "id": 944,
       "flags": {
         "isStatic": true
       },
@@ -247,7 +247,7 @@
           32
         ]
       ],
-      "id": 997,
+      "id": 1003,
       "flags": {
         "isStatic": true
       },
@@ -285,7 +285,7 @@
           31
         ]
       ],
-      "id": 993,
+      "id": 999,
       "flags": {
         "isStatic": true
       },
@@ -323,7 +323,7 @@
           24
         ]
       ],
-      "id": 975,
+      "id": 981,
       "flags": {
         "isStatic": true
       },
@@ -361,7 +361,7 @@
           31
         ]
       ],
-      "id": 979,
+      "id": 985,
       "flags": {
         "isStatic": true
       },
@@ -399,7 +399,7 @@
           25
         ]
       ],
-      "id": 988,
+      "id": 994,
       "flags": {
         "isStatic": true
       },
@@ -443,7 +443,7 @@
           27
         ]
       ],
-      "id": 983,
+      "id": 989,
       "flags": {
         "isStatic": true
       },
@@ -487,7 +487,7 @@
           23
         ]
       ],
-      "id": 971,
+      "id": 977,
       "flags": {
         "isStatic": true
       },
@@ -525,7 +525,7 @@
           24
         ]
       ],
-      "id": 1001,
+      "id": 1007,
       "flags": {
         "isStatic": true
       },
@@ -563,7 +563,7 @@
           18
         ]
       ],
-      "id": 956,
+      "id": 962,
       "flags": {
         "isStatic": true
       },
@@ -595,7 +595,7 @@
           20
         ]
       ],
-      "id": 959,
+      "id": 965,
       "flags": {
         "isStatic": true
       },
@@ -627,7 +627,7 @@
           15
         ]
       ],
-      "id": 1015,
+      "id": 1021,
       "flags": {
         "isStatic": true
       },
@@ -677,7 +677,7 @@
           28
         ]
       ],
-      "id": 962,
+      "id": 968,
       "flags": {
         "isStatic": true
       },
@@ -721,7 +721,7 @@
           19
         ]
       ],
-      "id": 946,
+      "id": 952,
       "flags": {
         "isStatic": true
       },
@@ -759,7 +759,7 @@
           14
         ]
       ],
-      "id": 934,
+      "id": 940,
       "flags": {
         "isStatic": true
       },
@@ -797,7 +797,7 @@
           18
         ]
       ],
-      "id": 1005,
+      "id": 1011,
       "flags": {
         "isStatic": true
       },
@@ -835,7 +835,7 @@
           15
         ]
       ],
-      "id": 1021,
+      "id": 1027,
       "flags": {
         "isStatic": true
       },

@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 4251,
+  "id": 4276,
   "comment": "The `Create` class helps you create structures from sets of points.",
   "constructor": [],
   "accessors": [],
@@ -18,11 +18,11 @@
       "source": [
         [
           "Create.ts",
-          137,
+          138,
           17
         ]
       ],
-      "id": 4284,
+      "id": 4310,
       "flags": {
         "isStatic": true
       },
@@ -54,7 +54,7 @@
           25
         ]
       ],
-      "id": 4257,
+      "id": 4282,
       "flags": {
         "isStatic": true
       },
@@ -92,7 +92,7 @@
           25
         ]
       ],
-      "id": 4252,
+      "id": 4277,
       "flags": {
         "isStatic": true
       },
@@ -136,7 +136,7 @@
           18
         ]
       ],
-      "id": 4267,
+      "id": 4292,
       "flags": {
         "isStatic": true
       },
@@ -180,7 +180,7 @@
           16
         ]
       ],
-      "id": 4261,
+      "id": 4286,
       "flags": {
         "isStatic": true
       },
@@ -226,11 +226,11 @@
       "source": [
         [
           "Create.ts",
-          117,
+          118,
           17
         ]
       ],
-      "id": 4277,
+      "id": 4303,
       "flags": {
         "isStatic": true
       },
@@ -282,11 +282,11 @@
       "source": [
         [
           "Create.ts",
-          99,
+          100,
           18
         ]
       ],
-      "id": 4272,
+      "id": 4297,
       "flags": {
         "isStatic": true
       },
@@ -312,9 +312,15 @@
             },
             {
               "name": "count",
-              "comment": "number of Pts to create\n",
+              "comment": "number of Pts to create",
               "type": "number",
               "default": false
+            },
+            {
+              "name": "angleOffset",
+              "comment": "offset starting angle\n",
+              "type": "number",
+              "default": "-Const.half_pi"
             }
           ],
           "tags": []

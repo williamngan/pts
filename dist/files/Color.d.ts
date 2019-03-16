@@ -35,7 +35,7 @@ export declare class Color extends Pt {
     c: number;
     u: number;
     v: number;
-    readonly alpha: number;
+    alpha: number;
     normalized: boolean;
     normalize(toNorm?: boolean): Color;
     $normalize(toNorm?: boolean): Color;

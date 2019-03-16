@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.6.7 - Copyright © 2017-2019 William Ngan and contributors.
+ * pts.js 0.8.0 - Copyright © 2017-2019 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -461,6 +461,17 @@ class CanvasForm extends Form_1.VisualForm {
         this._paint();
         return this;
     }
+    static ellipse(ctx, pt, radius, rotation = 0, startAngle = 0, endAngle = Util_1.Const.two_pi, cc = false) {
+        if (!pt || !radius)
+            return;
+        ctx.beginPath();
+        ctx.ellipse(pt[0], pt[1], radius[0], radius[1], rotation, startAngle, endAngle, cc);
+    }
+    ellipse(pt, radius, rotation = 0, startAngle = 0, endAngle = Util_1.Const.two_pi, cc = false) {
+        CanvasForm.ellipse(this._ctx, pt, radius, rotation, startAngle, endAngle, cc);
+        this._paint();
+        return this;
+    }
     static arc(ctx, pt, radius, startAngle, endAngle, cc) {
         if (!pt)
             return;
@@ -738,6 +749,8 @@ class Color extends Pt_1.Pt {
     set u(n) { this[1] = n; }
     get v() { return this[2]; }
     set v(n) { this[2] = n; }
+    set alpha(n) { if (this.length > 3)
+        this[3] = n; }
     get alpha() { return (this.length > 3) ? this[3] : 1; }
     get normalized() { return this._isNorm; }
     set normalized(b) { this._isNorm = b; }
@@ -1045,11 +1058,11 @@ class Create {
         }
         return g;
     }
-    static radialPts(center, radius, count) {
+    static radialPts(center, radius, count, angleOffset = -Util_1.Const.half_pi) {
         let g = new Pt_1.Group();
         let a = Util_1.Const.two_pi / count;
         for (let i = 0; i < count; i++) {
-            g.push(new Pt_1.Pt(center).toAngle(a * i - Util_1.Const.half_pi, radius, true));
+            g.push(new Pt_1.Pt(center).toAngle(a * i + angleOffset, radius, true));
         }
         return g;
     }
@@ -1914,7 +1927,7 @@ class Vec {
     static unit(a, magnitude = undefined) {
         let m = (magnitude === undefined) ? Vec.magnitude(a) : magnitude;
         if (m === 0)
-            throw new Error("Cannot calculate unit vector because magnitude is 0");
+            return Pt_1.Pt.make(a.length);
         return Vec.divide(a, m);
     }
     static abs(a) {
@@ -3850,6 +3863,194 @@ exports.Body = Body;
 
 /***/ }),
 
+/***/ "./src/Play.ts":
+/*!*********************!*\
+  !*** ./src/Play.ts ***!
+  \*********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
+class Sound {
+    constructor(type) {
+        this._playing = false;
+        this._type = type;
+        this.ctx = new AudioContext();
+    }
+    static from(node, ctx, type = "gen", stream) {
+        let s = new Sound(type);
+        s.node = node;
+        s.ctx = ctx;
+        if (stream)
+            s.stream = stream;
+        return s;
+    }
+    static load(source) {
+        let s = new Sound("file");
+        s.source = (typeof source === 'string') ? new Audio(source) : source;
+        s.source.addEventListener("ended", () => s._playing = false);
+        s.node = s.ctx.createMediaElementSource(s.source);
+        return s;
+    }
+    static generate(type, freq) {
+        return new Sound("gen")._gen(type, freq);
+    }
+    _gen(type, freq) {
+        this.node = this.ctx.createOscillator();
+        let osc = this.node;
+        osc.type = type;
+        osc.frequency.value = freq;
+        return this;
+    }
+    static input(constraint) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                let s = new Sound("input");
+                const c = constraint ? constraint : { audio: true, video: false };
+                s.stream = yield navigator.mediaDevices.getUserMedia(c);
+                s.node = s.ctx.createMediaStreamSource(s.stream);
+                return s;
+            }
+            catch (e) {
+                console.error("Cannot get audio from input device.");
+                return Promise.resolve(null);
+            }
+        });
+    }
+    get type() {
+        return this._type;
+    }
+    get playing() {
+        return this._playing;
+    }
+    get playable() {
+        return (this._type === "input") ? this.node !== undefined : this.source.readyState === 4;
+    }
+    get binSize() {
+        return this.analyzer.size;
+    }
+    get sampleRate() {
+        return this.ctx.sampleRate;
+    }
+    get frequency() {
+        return (this._type === "gen") ? this.node.frequency.value : 0;
+    }
+    set frequency(f) {
+        if (this._type === "gen")
+            this.node.frequency.value = f;
+    }
+    _domain(time) {
+        if (this.analyzer) {
+            if (time) {
+                this.analyzer.node.getByteTimeDomainData(this.analyzer.data);
+            }
+            else {
+                this.analyzer.node.getByteFrequencyData(this.analyzer.data);
+            }
+            return this.analyzer.data;
+        }
+        return new Uint8Array(0);
+    }
+    _domainTo(time, size, position = [0, 0], trim = [0, 0]) {
+        let data = (time) ? this.timeDomain() : this.freqDomain();
+        let g = new Pt_1.Group();
+        for (let i = trim[0], len = data.length - trim[1]; i < len; i++) {
+            g.push(new Pt_1.Pt(position[0] + size[0] * i / len, position[1] + size[1] * data[i] / 255));
+        }
+        return g;
+    }
+    timeDomain() {
+        return this._domain(true);
+    }
+    timeDomainTo(size, position = [0, 0], trim = [0, 0]) {
+        return this._domainTo(true, size, position, trim);
+    }
+    freqDomain() {
+        return this._domain(false);
+    }
+    freqDomainTo(size, position = [0, 0], trim = [0, 0]) {
+        return this._domainTo(false, size, position, trim);
+    }
+    connect(node) {
+        this.node.connect(node);
+        return this;
+    }
+    analyze(size = 256, minDb = -100, maxDb = -30, smooth = 0.8) {
+        let a = this.ctx.createAnalyser();
+        a.fftSize = size * 2;
+        a.minDecibels = minDb;
+        a.maxDecibels = maxDb;
+        a.smoothingTimeConstant = smooth;
+        this.analyzer = {
+            node: a,
+            size: a.frequencyBinCount,
+            data: new Uint8Array(a.frequencyBinCount)
+        };
+        this.node.connect(this.analyzer.node);
+        return this;
+    }
+    reset() {
+        this.stop();
+        this.node.disconnect();
+        return this;
+    }
+    start() {
+        if (this.ctx.state === 'suspended')
+            this.ctx.resume();
+        if (this._type === "file") {
+            this.source.play();
+        }
+        else if (this._type === "gen") {
+            this._gen(this.node.type, this.node.frequency.value);
+            this.node.start();
+            if (this.analyzer)
+                this.node.connect(this.analyzer.node);
+        }
+        this.node.connect(this.ctx.destination);
+        this._playing = true;
+        return this;
+    }
+    stop() {
+        if (this._playing)
+            this.node.disconnect(this.ctx.destination);
+        if (this._type === "file") {
+            this.source.pause();
+        }
+        else if (this._type === "gen") {
+            this.node.stop();
+        }
+        else if (this._type === "input") {
+            this.stream.getAudioTracks().forEach(track => track.stop());
+        }
+        this._playing = false;
+        return this;
+    }
+    toggle() {
+        if (this._playing) {
+            this.stop();
+        }
+        else {
+            this.start();
+        }
+        return this;
+    }
+}
+exports.Sound = Sound;
+
+
+/***/ }),
+
 /***/ "./src/Pt.ts":
 /*!*******************!*\
   !*** ./src/Pt.ts ***!
@@ -5530,6 +5731,7 @@ __export(__webpack_require__(/*! ./Dom */ "./src/Dom.ts"));
 __export(__webpack_require__(/*! ./Svg */ "./src/Svg.ts"));
 __export(__webpack_require__(/*! ./Typography */ "./src/Typography.ts"));
 __export(__webpack_require__(/*! ./Physics */ "./src/Physics.ts"));
+__export(__webpack_require__(/*! ./Play */ "./src/Play.ts"));
 __export(__webpack_require__(/*! ./UI */ "./src/UI.ts"));
 
 
