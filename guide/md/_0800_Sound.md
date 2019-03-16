@@ -16,7 +16,7 @@ let sound = Sound.load( "/path/to/hello.mp3" );
 let sound2 = Sound.load( audioElement );
 ```
 
-2. Using [`Sound.generate`](#) to create a simple tone.
+2. Using [`Sound.generate`](#) to create a sound.
 ```
 let sound = Sound.generate( "sine", 120 ); // sine oscillator at 120Hz
 ```
@@ -28,11 +28,12 @@ Sound.input().then( s => sound = s ); // default input device
 Sound.input( constraints ).then( s => sound = s ); // advanced use cases
 ```
 
-Here's a simple demo of getting audio from microphone. 
+Here's a basic demo of getting audio from microphone:
 
 ![js:sound_mic](./assets/bg.png)
 
-##### You may first need to allow this page to access microphone, and then click the record button.
+##### You may first need to allow this page to access microphone, and then click the record button. We also make the recording stop when the pointer leave the demo area so that your microphone is not always on.
+
 
 You can then start and stop playing the sound like this:
 
@@ -43,7 +44,7 @@ sound.toggle(); // toggle between start and stop
 sound.playing; // boolean to indicate if sound is playing
 ```
 
-##### Note that current browsers no longer support autoplay. Users will need to express intent to play the sound (eg, with a click).
+##### Note that current browsers no longer support autoplay. Users will need to express intent to play the sound (eg, with a click). 
 
 ### Analyze
 
@@ -94,7 +95,19 @@ Or make something fun, weird, beautiful through the interplay of sounds and shap
 ![js:sound_frequency](./assets/bg.png)
 
 ### Advanced
-For advanced use cases, you can access the following properties in a Sound instance to make full use of the [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API).
+For advanced use cases, you can create an instance using  [`Sound.from`](#) static method. For example:
+
+```
+Sound.from( audioNode, audioContext );
+```
+
+The following example demonstrates how you may generate audio using [tone.js](https://tonejs.github.io/) and then visualize it with Pts: 
+
+[ ![screenshot](./assets/tone.png) ](./js/examples/tone.html)
+
+##### Click image to open tone.js demo. See [source code here](#).
+
+If needed, you can also directly access the following properties in a Sound instance to make full use of the [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API).
 
 - [`.ctx`](#) - access the `AudioContext` instance
 - [`.node`](#) - access the `AudioNode` instance
@@ -106,17 +119,18 @@ Also note that [`sound.start()`](#) will connect the AudioNode to the destinatio
 Web Audio covers a wide range of topics. Here are a few pointers for you to dive deeper:
 
 - [Web Audio API book](https://webaudioapi.com/book/) and [samples](https://webaudioapi.com/samples/) by Boris Smus 
-- [tone.js](https://tonejs.github.io/) is a framework for creating interactive music in the browser.
-- [tonal.js](https://github.com/danigb/tonal) is a functional music theory library for javascript.
+- [tone.js](https://tonejs.github.io/) is a framework for creating interactive music in the browser
+- [tonal.js](https://github.com/danigb/tonal) is a functional music theory library for javascript
 - [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) on Web Audio API
 
 ### Cheatsheet
 
 Creating and playing a Sound instance
 ```
-s = Sound.generate( "sine", 120 ); // sine wave at 120hz
-s = Sound.input(); // get microphone input
 s = Sound.load( "path/to/file.mp3" ); // from file
+s = Sound.generate( "sine", 120 ); // sine wave at 120hz
+s = Sound.input().then( s => sound = s ); // get microphone input
+s = Sound.from( node, context ); // advanced use case
 
 s.start();
 s.stop();
