@@ -1,6 +1,9 @@
 import {ISoundAnalyzer, SoundType, PtLike} from "./Types";
 import {Pt, Group} from "./Pt";
 
+/**
+ * Sound class simplifies common tasks like audio inputs and visualizations using a subset of Web Audio API. It can be used with other audio libraries like tone.js, and extended to support additional web audio functions. See [the guide](../guide/Sound-0800.html) to get started.
+ */
 export class Sound {
   
   private _type:SoundType;
@@ -23,8 +26,8 @@ export class Sound {
   protected _playing:boolean = false;
 
   /**
-   * Construct a `Sound` instance. Usually you'll use one of the static method like `Sound.load` instead of this constructor.
-   * @param type 
+   * Construct a `Sound` instance. Usually, it's more convenient to use one of the static methods like [`Sound.load`](#function_load) or [`Sound.from`](#function_from). 
+   * @param type a `SoundType` string: "file", "input", or "gen"
    */
   constructor( type:SoundType ) {
     this._type = type;
@@ -33,7 +36,7 @@ export class Sound {
 
 
   /**
-   * Create a `Sound` given an AudioNode and an AudioContext. See also [this example](../guide/js/examples/tone.html) using tone.js in the [guide](../guide/Sound-0800.html).
+   * Create a `Sound` given an [AudioNode](https://developer.mozilla.org/en-US/docs/Web/API/AudioNode) and an [AudioContext](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext) from Web Audio API. See also [this example](../guide/js/examples/tone.html) using tone.js in the [guide](../guide/Sound-0800.html).
    * @param node an AudioNode instance
    * @param ctx an AudioContext instance
    * @param type a string representing a type of input source: either "file", "input", or "gen".
@@ -50,8 +53,8 @@ export class Sound {
 
 
   /**
-   * Create a `Sound` by loading from a file or an <audio> element.
-   * @param source either an url string to load the file, or an <audio> element.
+   * Create a `Sound` by loading from a sound file or an audio element.
+   * @param source either an url string to load a sound file, or an audio element.
    * @returns a `Sound` instance
    * @example `Sound.load( '/path/to/file.mp3' )`
    */
@@ -65,31 +68,35 @@ export class Sound {
 
 
   /**
-   * Generate a `Sound` by generating a wave
+   * Create a `Sound` by generating a waveform using [OscillatorNode](https://developer.mozilla.org/en-US/docs/Web/API/OscillatorNode).
    * @param type a string representing the waveform type: "sine", "square", "sawtooth", "triangle", "custom"
-   * @param freq the frequency in Hz to play
+   * @param val the frequency value in Hz to play, or a PeriodicWave instance if type is "custom".
    * @returns a `Sound` instance
    * @example `Sound.generate( 'sine', 120 )`
    */
-  static generate( type:OscillatorType, freq:number ):Sound {
-    return new Sound("gen")._gen( type, freq );
+  static generate( type:OscillatorType, val:number|PeriodicWave ):Sound {
+    return new Sound("gen")._gen( type, val );
   }
 
 
   // Create the oscillator
-  protected _gen( type:OscillatorType, freq:number ):Sound {
+  protected _gen( type:OscillatorType, val:number|PeriodicWave ):Sound {
     this.node = this.ctx.createOscillator();
     let osc = (this.node as OscillatorNode);
     osc.type = type;
-    osc.frequency.value = freq;
+    if (type === 'custom') {
+      osc.setPeriodicWave( val as PeriodicWave );
+    } else {
+      osc.frequency.value = val as number;
+    }
     return this;
   }
 
 
   /**
-   * Create a `Sound` by streaming from an input device like microphone. This returns a Promise which resolves to a Sound instance. 
+   * Create a `Sound` by streaming from an input device like microphone. Note that this function returns a Promise which resolves to a Sound instance. 
    * @param constraint @param constraint Optional constraints which can be used to select a specific input device. For example, you may use [`enumerateDevices`](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/enumerateDevices) to find a specific deviceId;
-   * @returns a `Sound` instance
+   * @returns a `Promise` which resolves to `Sound` instance
    * @example `Sound.input().then( s => sound = s );`
    */
   static async input( constraint?:MediaStreamConstraints ):Promise<Sound> {
@@ -107,7 +114,7 @@ export class Sound {
 
 
   /**
-   * Get the type of sound input: "file", "input", or "gen"
+   * Get the type of input for this Sound instance. Either "file", "input", or "gen"
    */
   get type():SoundType {
     return this._type;
@@ -115,7 +122,7 @@ export class Sound {
 
 
   /**
-   * Whether the sound is currently playing
+   * Indicate whether the sound is currently playing.
    */
   get playing():boolean {
     return this._playing;
@@ -123,8 +130,8 @@ export class Sound {
 
 
   /**
-   * Whether the sound is ready to play. For loading from a file, this corresponds to ["canplaythrough"](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState) event. 
-   * You can also use `this.source.addEventListener( 'canplaythrough', ...)` if needed. See [documentation](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/canplaythrough_event).
+   * Indicate whether the sound is ready to play. When loading from a file, this corresponds to a ["canplaythrough"](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState) event. 
+   * You can also use `this.source.addEventListener( 'canplaythrough', ...)` if needed. See also [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/canplaythrough_event).
    */
   get playable():boolean {
     return (this._type === "input") ? this.node !== undefined : this.source.readyState === 4;
@@ -132,7 +139,7 @@ export class Sound {
 
 
   /**
-   * Get the number of bins in analyzer
+   * If an analyzer is added (see [`analyze`](##unction_analyze) function), get the number of frequency bins in the analyzer.
    */
   get binSize():number {
     return this.analyzer.size;
@@ -140,7 +147,7 @@ export class Sound {
 
 
   /**
-   * Get the sample rate of the audio. Usually 44100 hz.
+   * Get the sample rate of the audio, for example, at 44100 hz.
    */
   get sampleRate():number {
     return this.ctx.sampleRate;
@@ -155,6 +162,39 @@ export class Sound {
   }
   set frequency( f:number ) {
     if (this._type === "gen") (this.node as OscillatorNode).frequency.value = f;
+  }
+
+
+  /**
+   * Connect another AudioNode to this `Sound` instance's AudioNode. Using this function, you can extend the capabilities of this `Sound` instance for advanced use cases such as filtering.
+   * @param node another AudioNode
+   */
+  connect( node:AudioNode ):this {
+    this.node.connect( node );
+    return this;
+  }
+
+
+  /**
+   * Add an analyzer to this `Sound`. Call this once only.
+   * @param size the number of frequency bins
+   * @param minDb Optional minimum decibels (corresponds to `AnalyserNode.minDecibels`)
+   * @param maxDb Optional maximum decibels (corresponds to `AnalyserNode.maxDecibels`)
+   * @param smooth Optional smoothing value (corresponds to `AnalyserNode.smoothingTimeConstant`)
+   */
+  analyze( size:number=256, minDb:number=-100, maxDb:number=-30, smooth:number=0.8  ) {
+    let a = this.ctx.createAnalyser();
+    a.fftSize = size * 2;
+    a.minDecibels = minDb;
+    a.maxDecibels = maxDb;
+    a.smoothingTimeConstant = smooth;
+    this.analyzer = {
+      node: a,
+      size: a.frequencyBinCount,
+      data: new Uint8Array(a.frequencyBinCount)
+    };
+    this.node.connect( this.analyzer.node );
+    return this;
   }
 
 
@@ -184,7 +224,7 @@ export class Sound {
 
 
   /**
-   * Get the raw time-domain data from analyzer as unsigned 8-bit integers.
+   * Get the raw time-domain data from analyzer as unsigned 8-bit integers. An analyzer must be added before calling this function (See [analyze](#function_analyze) function).
    */
   timeDomain():Uint8Array {
     return this._domain( true );
@@ -192,10 +232,10 @@ export class Sound {
 
 
   /**
-   * Map the time-domain data from analyzer to a range.
-   * @param size map each data [index, value] to [width, height]
-   * @param position Optionally, set a starting [x, y] position. Default is [0, 0]
-   * @param trim Optionally, trim the start and end values by [startTrim, data.length-endTrim]
+   * Map the time-domain data from analyzer to a range. An analyzer must be added before calling this function (See [analyze](#function_analyze) function).
+   * @param size map each data point `[index, value]` to `[width, height]`
+   * @param position Optionally, set a starting `[x, y]` position. Default is `[0, 0]`
+   * @param trim Optionally, trim the start and end values by `[startTrim, data.length-endTrim]`
    * @returns a Group containing the mapped values
    * @example form.point( s.timeDomainTo( space.size ) )
    */
@@ -205,7 +245,7 @@ export class Sound {
   
 
   /**
-   * Get the raw frequency-domain data from analyzer as unsigned 8-bit integers.
+   * Get the raw frequency-domain data from analyzer as unsigned 8-bit integers. An analyzer must be added before calling this function (See [analyze](#function_analyze) function).
    */
   freqDomain():Uint8Array {
     return this._domain( false );
@@ -213,53 +253,20 @@ export class Sound {
 
 
   /**
-   * Map the frequency-domain data from analyzer to a range.
-   * @param size map each data [index, value] to [width, height]
-   * @param position Optionally, set a starting [x, y] position. Default is [0, 0]
-   * @param trim Optionally, trim the start and end values by [startTrim, data.length-endTrim]
+   * Map the frequency-domain data from analyzer to a range. An analyzer must be added before calling this function (See [analyze](#function_analyze) function).
+   * @param size map each data point `[index, value]` to `[width, height]`
+   * @param position Optionally, set a starting `[x, y]` position. Default is `[0, 0]`
+   * @param trim Optionally, trim the start and end values by `[startTrim, data.length-endTrim]`
    * @returns a Group containing the mapped values
-   * @example form.point( s.freqDomainTo( space.size ) )
+   * @example `form.point( s.freqDomainTo( space.size ) )`
    */
   freqDomainTo( size:PtLike, position:PtLike=[0,0], trim=[0,0] ):Group {
     return this._domainTo( false, size, position, trim );
   }
-  
-
-  /**
-   * Connect another AudioNode to this `Sound` instance's AudioNode
-   * @param node another AudioNode
-   */
-  connect( node:AudioNode ):this {
-    this.node.connect( node );
-    return this;
-  }
 
 
   /**
-   * Add an analyzer to this `Sound`. Call this once only.
-   * @param size the number of frequency bins
-   * @param minDb Optional minimum decibels (corresponds to AnalyserNode.minDecibels)
-   * @param maxDb Optional maximum decibels (corresponds to AnalyserNode.maxDecibels)
-   * @param smooth Optional smoothing value (corresponds to smoothingTimeConstant)
-   */
-  analyze( size:number=256, minDb:number=-100, maxDb:number=-30, smooth:number=0.8  ) {
-    let a = this.ctx.createAnalyser();
-    a.fftSize = size * 2;
-    a.minDecibels = minDb;
-    a.maxDecibels = maxDb;
-    a.smoothingTimeConstant = smooth;
-    this.analyzer = {
-      node: a,
-      size: a.frequencyBinCount,
-      data: new Uint8Array(a.frequencyBinCount)
-    };
-    this.node.connect( this.analyzer.node );
-    return this;
-  }
-
-
-  /**
-   * Stop playing and disconnect the AudioNode
+   * Stop playing and disconnect the AudioNode.
    */
   reset():this {
     this.stop();
@@ -312,7 +319,7 @@ export class Sound {
 
 
   /**
-   * Toggle between `start` and `stop`
+   * Toggle between `start` and `stop`.
    */
   toggle():this {
     if (this._playing) {
