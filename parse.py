@@ -191,10 +191,11 @@ def parse_class_accessor( c ):
   }
 
 
-def parse_accessor_signature( c ):
-  if not c: 
+def parse_accessor_signature( cs ):
+  if not cs: 
     return False
 
+  c = cs[0]
   acc = { 'type': c.get('type',{}).get('name', "") } 
   if c.get('parameters', False):
     acc['parameters'] = parse_class_method_param( c['parameters'][0] ) if c['parameters'] else {}

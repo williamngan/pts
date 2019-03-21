@@ -54,7 +54,7 @@
         <div id="members" v-bind:class="{collapsed: !expandMemberPane(), searchResults: searchQuery.length > 0}">
           <div v-if="searchResults.length > 0">
             <div v-for="s in searchResults" class="item">
-              <a v-bind:href="'./?p='+s[0]">{{s[1]}}</a>
+              <span v-on:click="searchLink(s)">{{s[1]}}</span>
               <span class="itemType">{{ s[2] }}</span>
             </div>
           </div>

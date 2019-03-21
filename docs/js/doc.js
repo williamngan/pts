@@ -91,6 +91,15 @@ var app = new Vue({
   },
 
   methods: {
+    searchLink: function( link ) {
+      let n = link[0].split('#');
+      if (this.selected && n[0] === this.selected) {
+        this.jumpTo( n[1] );
+      } else {
+        window.location = getRoot()+'?p='+link[0];
+      }
+    },
+
     test: function( m ) {
       this.message = m;
     },
