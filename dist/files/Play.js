@@ -30,14 +30,19 @@ class Sound {
         s.node = s.ctx.createMediaElementSource(s.source);
         return s;
     }
-    static generate(type, freq) {
-        return new Sound("gen")._gen(type, freq);
+    static generate(type, val) {
+        return new Sound("gen")._gen(type, val);
     }
-    _gen(type, freq) {
+    _gen(type, val) {
         this.node = this.ctx.createOscillator();
         let osc = this.node;
         osc.type = type;
-        osc.frequency.value = freq;
+        if (type === 'custom') {
+            osc.setPeriodicWave(val);
+        }
+        else {
+            osc.frequency.value = val;
+        }
         return this;
     }
     static input(constraint) {
@@ -77,6 +82,24 @@ class Sound {
         if (this._type === "gen")
             this.node.frequency.value = f;
     }
+    connect(node) {
+        this.node.connect(node);
+        return this;
+    }
+    analyze(size = 256, minDb = -100, maxDb = -30, smooth = 0.8) {
+        let a = this.ctx.createAnalyser();
+        a.fftSize = size * 2;
+        a.minDecibels = minDb;
+        a.maxDecibels = maxDb;
+        a.smoothingTimeConstant = smooth;
+        this.analyzer = {
+            node: a,
+            size: a.frequencyBinCount,
+            data: new Uint8Array(a.frequencyBinCount)
+        };
+        this.node.connect(this.analyzer.node);
+        return this;
+    }
     _domain(time) {
         if (this.analyzer) {
             if (time) {
@@ -108,24 +131,6 @@ class Sound {
     }
     freqDomainTo(size, position = [0, 0], trim = [0, 0]) {
         return this._domainTo(false, size, position, trim);
-    }
-    connect(node) {
-        this.node.connect(node);
-        return this;
-    }
-    analyze(size = 256, minDb = -100, maxDb = -30, smooth = 0.8) {
-        let a = this.ctx.createAnalyser();
-        a.fftSize = size * 2;
-        a.minDecibels = minDb;
-        a.maxDecibels = maxDb;
-        a.smoothingTimeConstant = smooth;
-        this.analyzer = {
-            node: a,
-            size: a.frequencyBinCount,
-            data: new Uint8Array(a.frequencyBinCount)
-        };
-        this.node.connect(this.analyzer.node);
-        return this;
     }
     reset() {
         this.stop();

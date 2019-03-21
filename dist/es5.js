@@ -5463,11 +5463,42 @@ var Sound = function () {
 
     _createClass(Sound, [{
         key: "_gen",
-        value: function _gen(type, freq) {
+        value: function _gen(type, val) {
             this.node = this.ctx.createOscillator();
             var osc = this.node;
             osc.type = type;
-            osc.frequency.value = freq;
+            if (type === 'custom') {
+                osc.setPeriodicWave(val);
+            } else {
+                osc.frequency.value = val;
+            }
+            return this;
+        }
+    }, {
+        key: "connect",
+        value: function connect(node) {
+            this.node.connect(node);
+            return this;
+        }
+    }, {
+        key: "analyze",
+        value: function analyze() {
+            var size = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 256;
+            var minDb = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : -100;
+            var maxDb = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : -30;
+            var smooth = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0.8;
+
+            var a = this.ctx.createAnalyser();
+            a.fftSize = size * 2;
+            a.minDecibels = minDb;
+            a.maxDecibels = maxDb;
+            a.smoothingTimeConstant = smooth;
+            this.analyzer = {
+                node: a,
+                size: a.frequencyBinCount,
+                data: new Uint8Array(a.frequencyBinCount)
+            };
+            this.node.connect(this.analyzer.node);
             return this;
         }
     }, {
@@ -5521,33 +5552,6 @@ var Sound = function () {
             var trim = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [0, 0];
 
             return this._domainTo(false, size, position, trim);
-        }
-    }, {
-        key: "connect",
-        value: function connect(node) {
-            this.node.connect(node);
-            return this;
-        }
-    }, {
-        key: "analyze",
-        value: function analyze() {
-            var size = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 256;
-            var minDb = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : -100;
-            var maxDb = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : -30;
-            var smooth = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0.8;
-
-            var a = this.ctx.createAnalyser();
-            a.fftSize = size * 2;
-            a.minDecibels = minDb;
-            a.maxDecibels = maxDb;
-            a.smoothingTimeConstant = smooth;
-            this.analyzer = {
-                node: a,
-                size: a.frequencyBinCount,
-                data: new Uint8Array(a.frequencyBinCount)
-            };
-            this.node.connect(this.analyzer.node);
-            return this;
         }
     }, {
         key: "reset",
@@ -5655,8 +5659,8 @@ var Sound = function () {
         }
     }, {
         key: "generate",
-        value: function generate(type, freq) {
-            return new Sound("gen")._gen(type, freq);
+        value: function generate(type, val) {
+            return new Sound("gen")._gen(type, val);
         }
     }, {
         key: "input",

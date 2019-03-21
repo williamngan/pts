@@ -17,8 +17,8 @@
       "name": "arc",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2939,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3056,
           7
         ]
       ],
@@ -77,8 +77,8 @@
       "name": "arcTo",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2940,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3057,
           9
         ]
       ],
@@ -131,8 +131,8 @@
       "name": "beginPath",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2884,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3001,
           13
         ]
       ],
@@ -154,8 +154,8 @@
       "name": "bezierCurveTo",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2941,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3058,
           17
         ]
       ],
@@ -214,8 +214,8 @@
       "name": "clearRect",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2974,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3091,
           13
         ]
       ],
@@ -262,13 +262,13 @@
       "name": "clip",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2885,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3002,
           8
         ],
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2886,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3003,
           8
         ]
       ],
@@ -317,8 +317,8 @@
       "name": "closePath",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2942,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3059,
           13
         ]
       ],
@@ -340,13 +340,13 @@
       "name": "createImageData",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2926,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3043,
           19
         ],
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2927,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3044,
           19
         ]
       ],
@@ -395,8 +395,8 @@
       "name": "createLinearGradient",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2900,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3017,
           24
         ]
       ],
@@ -443,8 +443,8 @@
       "name": "createPattern",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2901,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3018,
           17
         ]
       ],
@@ -479,8 +479,8 @@
       "name": "createRadialGradient",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2902,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3019,
           24
         ]
       ],
@@ -539,13 +539,13 @@
       "name": "drawFocusIfNeeded",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          3025,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3142,
           21
         ],
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          3026,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3143,
           21
         ]
       ],
@@ -594,18 +594,18 @@
       "name": "drawImage",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2878,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          2995,
           13
         ],
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2879,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          2996,
           13
         ],
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2880,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          2997,
           13
         ]
       ],
@@ -746,8 +746,8 @@
       "name": "ellipse",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2943,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3060,
           11
         ]
       ],
@@ -818,13 +818,13 @@
       "name": "fill",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2887,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3004,
           8
         ],
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2888,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3005,
           8
         ]
       ],
@@ -873,8 +873,8 @@
       "name": "fillRect",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2975,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3092,
           12
         ]
       ],
@@ -921,8 +921,8 @@
       "name": "fillText",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          3001,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3118,
           12
         ]
       ],
@@ -969,8 +969,8 @@
       "name": "getImageData",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2928,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3045,
           16
         ]
       ],
@@ -1017,8 +1017,8 @@
       "name": "getLineDash",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2956,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3073,
           15
         ]
       ],
@@ -1040,8 +1040,8 @@
       "name": "getTransform",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          3014,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3131,
           16
         ]
       ],
@@ -1063,13 +1063,13 @@
       "name": "isPointInPath",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2889,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3006,
           17
         ],
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2890,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3007,
           17
         ]
       ],
@@ -1142,13 +1142,13 @@
       "name": "isPointInStroke",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2891,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3008,
           19
         ],
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2892,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3009,
           19
         ]
       ],
@@ -1209,8 +1209,8 @@
       "name": "lineTo",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2944,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3061,
           10
         ]
       ],
@@ -1245,8 +1245,8 @@
       "name": "measureText",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          3002,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3119,
           15
         ]
       ],
@@ -1275,8 +1275,8 @@
       "name": "moveTo",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2945,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3062,
           10
         ]
       ],
@@ -1311,13 +1311,13 @@
       "name": "putImageData",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2929,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3046,
           16
         ],
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2930,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3047,
           16
         ]
       ],
@@ -1408,8 +1408,8 @@
       "name": "quadraticCurveTo",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2946,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3063,
           20
         ]
       ],
@@ -1456,8 +1456,8 @@
       "name": "rect",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2947,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3064,
           8
         ]
       ],
@@ -1504,8 +1504,8 @@
       "name": "resetTransform",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          3015,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3132,
           18
         ]
       ],
@@ -1527,8 +1527,8 @@
       "name": "restore",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2996,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3113,
           11
         ]
       ],
@@ -1550,8 +1550,8 @@
       "name": "rotate",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          3016,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3133,
           10
         ]
       ],
@@ -1580,8 +1580,8 @@
       "name": "save",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2997,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3114,
           8
         ]
       ],
@@ -1603,8 +1603,8 @@
       "name": "scale",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          3017,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3134,
           9
         ]
       ],
@@ -1639,13 +1639,13 @@
       "name": "scrollPathIntoView",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          3027,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3144,
           22
         ],
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          3028,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3145,
           22
         ]
       ],
@@ -1681,8 +1681,8 @@
       "name": "setLineDash",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2957,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3074,
           15
         ]
       ],
@@ -1711,13 +1711,13 @@
       "name": "setTransform",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          3018,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3135,
           16
         ],
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          3019,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3136,
           16
         ]
       ],
@@ -1790,13 +1790,13 @@
       "name": "stroke",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2893,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3010,
           10
         ],
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2894,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3011,
           10
         ]
       ],
@@ -1832,8 +1832,8 @@
       "name": "strokeRect",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2976,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3093,
           14
         ]
       ],
@@ -1880,8 +1880,8 @@
       "name": "strokeText",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          3003,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3120,
           14
         ]
       ],
@@ -1928,8 +1928,8 @@
       "name": "transform",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          3020,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3137,
           13
         ]
       ],
@@ -1988,8 +1988,8 @@
       "name": "translate",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          3021,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3138,
           13
         ]
       ],
@@ -2027,8 +2027,8 @@
       "name": "CanvasRenderingContext2D",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2983,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3100,
           36
         ]
       ],
@@ -2061,8 +2061,8 @@
       "name": "canvas",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2980,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3097,
           19
         ]
       ],
@@ -2077,8 +2077,8 @@
       "name": "direction",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          3007,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3124,
           13
         ]
       ],
@@ -2093,8 +2093,8 @@
       "name": "fillStyle",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2898,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3015,
           13
         ]
       ],
@@ -2109,8 +2109,8 @@
       "name": "filter",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2906,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3023,
           10
         ]
       ],
@@ -2125,8 +2125,8 @@
       "name": "font",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          3008,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3125,
           8
         ]
       ],
@@ -2141,8 +2141,8 @@
       "name": "globalAlpha",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2873,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          2990,
           15
         ]
       ],
@@ -2157,8 +2157,8 @@
       "name": "globalCompositeOperation",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2874,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          2991,
           28
         ]
       ],
@@ -2173,8 +2173,8 @@
       "name": "imageSmoothingEnabled",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2934,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3051,
           25
         ]
       ],
@@ -2189,8 +2189,8 @@
       "name": "imageSmoothingQuality",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2935,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3052,
           25
         ]
       ],
@@ -2205,8 +2205,8 @@
       "name": "lineCap",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2951,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3068,
           11
         ]
       ],
@@ -2221,8 +2221,8 @@
       "name": "lineDashOffset",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2952,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3069,
           18
         ]
       ],
@@ -2237,8 +2237,8 @@
       "name": "lineJoin",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2953,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3070,
           12
         ]
       ],
@@ -2253,8 +2253,8 @@
       "name": "lineWidth",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2954,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3071,
           13
         ]
       ],
@@ -2269,8 +2269,8 @@
       "name": "miterLimit",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2955,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3072,
           14
         ]
       ],
@@ -2339,8 +2339,8 @@
       "name": "shadowBlur",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2989,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3106,
           14
         ]
       ],
@@ -2355,8 +2355,8 @@
       "name": "shadowColor",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2990,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3107,
           15
         ]
       ],
@@ -2371,8 +2371,8 @@
       "name": "shadowOffsetX",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2991,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3108,
           17
         ]
       ],
@@ -2387,8 +2387,8 @@
       "name": "shadowOffsetY",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2992,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3109,
           17
         ]
       ],
@@ -2403,8 +2403,8 @@
       "name": "strokeStyle",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          2899,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3016,
           15
         ]
       ],
@@ -2419,8 +2419,8 @@
       "name": "textAlign",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          3009,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3126,
           13
         ]
       ],
@@ -2435,8 +2435,8 @@
       "name": "textBaseline",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.dom.d.ts",
-          3010,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          3127,
           16
         ]
       ],

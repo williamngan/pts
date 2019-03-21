@@ -1158,8 +1158,8 @@
       "name": "copyWithin",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
-          3524,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          3584,
           14
         ]
       ],
@@ -1260,7 +1260,7 @@
       "name": "entries",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es2015.iterable.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es2015.iterable.d.ts",
           444,
           11
         ]
@@ -1319,8 +1319,8 @@
       "name": "every",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
-          3534,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          3594,
           9
         ]
       ],
@@ -1355,8 +1355,8 @@
       "name": "fill",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
-          3544,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          3604,
           8
         ]
       ],
@@ -1397,8 +1397,8 @@
       "name": "filter",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
-          3553,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          3613,
           10
         ]
       ],
@@ -1433,8 +1433,8 @@
       "name": "find",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
-          3564,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          3624,
           8
         ]
       ],
@@ -1469,8 +1469,8 @@
       "name": "findIndex",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
-          3575,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          3635,
           13
         ]
       ],
@@ -1528,8 +1528,8 @@
       "name": "forEach",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
-          3584,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          3644,
           11
         ]
       ],
@@ -1599,8 +1599,8 @@
       "name": "indexOf",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
-          3592,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          3652,
           11
         ]
       ],
@@ -1635,8 +1635,8 @@
       "name": "join",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
-          3599,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          3659,
           8
         ]
       ],
@@ -1665,7 +1665,7 @@
       "name": "keys",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es2015.iterable.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es2015.iterable.d.ts",
           448,
           8
         ]
@@ -1688,8 +1688,8 @@
       "name": "lastIndexOf",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
-          3607,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          3667,
           15
         ]
       ],
@@ -1770,8 +1770,8 @@
       "name": "map",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
-          3622,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          3682,
           7
         ]
       ],
@@ -1982,18 +1982,18 @@
       "name": "reduce",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
-          3634,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          3694,
           10
         ],
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
-          3635,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          3695,
           10
         ],
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
-          3647,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          3707,
           10
         ]
       ],
@@ -2062,18 +2062,18 @@
       "name": "reduceRight",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
-          3659,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          3719,
           15
         ],
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
-          3660,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          3720,
           15
         ],
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
-          3672,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          3732,
           15
         ]
       ],
@@ -2178,8 +2178,8 @@
       "name": "reverse",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
-          3677,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          3737,
           11
         ]
       ],
@@ -2302,8 +2302,8 @@
       "name": "set",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
-          3684,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          3744,
           7
         ]
       ],
@@ -2410,8 +2410,8 @@
       "name": "slice",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
-          3691,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          3751,
           9
         ]
       ],
@@ -2446,8 +2446,8 @@
       "name": "some",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
-          3701,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          3761,
           8
         ]
       ],
@@ -2482,8 +2482,8 @@
       "name": "sort",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
-          3708,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          3768,
           8
         ]
       ],
@@ -2512,8 +2512,8 @@
       "name": "subarray",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
-          3716,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          3776,
           12
         ]
       ],
@@ -2673,8 +2673,8 @@
       "name": "toLocaleString",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
-          3721,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          3781,
           18
         ]
       ],
@@ -2749,7 +2749,7 @@
       "name": "values",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es2015.iterable.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es2015.iterable.d.ts",
           452,
           10
         ]
@@ -2861,8 +2861,8 @@
       "name": "BYTES_PER_ELEMENT",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
-          3498,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          3558,
           30
         ]
       ],
@@ -2877,8 +2877,8 @@
       "name": "buffer",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
-          3503,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          3563,
           19
         ]
       ],
@@ -2893,8 +2893,8 @@
       "name": "byteLength",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
-          3508,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          3568,
           23
         ]
       ],
@@ -2909,8 +2909,8 @@
       "name": "byteOffset",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
-          3513,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          3573,
           23
         ]
       ],
@@ -2925,8 +2925,8 @@
       "name": "length",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typescript/lib/lib.es5.d.ts",
-          3612,
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          3672,
           19
         ]
       ],

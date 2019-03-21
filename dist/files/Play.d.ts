@@ -11,8 +11,8 @@ export declare class Sound {
     constructor(type: SoundType);
     static from(node: AudioNode, ctx: AudioContext, type?: SoundType, stream?: MediaStream): Sound;
     static load(source: HTMLMediaElement | string): Sound;
-    static generate(type: OscillatorType, freq: number): Sound;
-    protected _gen(type: OscillatorType, freq: number): Sound;
+    static generate(type: OscillatorType, val: number | PeriodicWave): Sound;
+    protected _gen(type: OscillatorType, val: number | PeriodicWave): Sound;
     static input(constraint?: MediaStreamConstraints): Promise<Sound>;
     readonly type: SoundType;
     readonly playing: boolean;
@@ -20,14 +20,14 @@ export declare class Sound {
     readonly binSize: number;
     readonly sampleRate: number;
     frequency: number;
+    connect(node: AudioNode): this;
+    analyze(size?: number, minDb?: number, maxDb?: number, smooth?: number): this;
     protected _domain(time: boolean): Uint8Array;
     protected _domainTo(time: boolean, size: PtLike, position?: PtLike, trim?: number[]): Group;
     timeDomain(): Uint8Array;
     timeDomainTo(size: PtLike, position?: PtLike, trim?: number[]): Group;
     freqDomain(): Uint8Array;
     freqDomainTo(size: PtLike, position?: PtLike, trim?: number[]): Group;
-    connect(node: AudioNode): this;
-    analyze(size?: number, minDb?: number, maxDb?: number, smooth?: number): this;
     reset(): this;
     start(): this;
     stop(): this;
