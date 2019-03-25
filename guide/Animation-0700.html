@@ -19,20 +19,20 @@
 </div>
 <a href="#menu" id="toc">&#x2261;</a>
 <div id="post"><h1>Animation</h1>
-<p><a href="#link"><code>Tempo</code></a> is a lightweight utility class which helps you create animation sequences intuitively. It's an alternative to many other great animation libraries (which you can use with Pts too).</p>
+<p><a href="#play-tempo"><code>Tempo</code></a> is a lightweight utility class which helps you create animation sequences intuitively. It's an alternative to many other great animation libraries (which you can use with Pts too).</p>
 <p>Typically, animation sequences are often implemented as a curated list of tweens in milliseconds. But what if we take the idea one level higher, and treat it like a dance? Like One-two-three, One-two-three...</p>
-<p>Let's start by counting the beats. Tempo is usually measured in beats-per-minute (bpm), so there are two ways to initiate a <a href="#link"><code>Tempo</code></a> instance: by setting a bpm, or specifying the duration of a beat in milliseconds.</p>
+<p>Let's start by counting the beats. Tempo is usually measured in beats-per-minute (bpm), so there are two ways to initiate a <a href="#play-tempo"><code>Tempo</code></a> instance: by setting a bpm, or specifying the duration of a beat in milliseconds.</p>
 <pre><code>// 120 beats-per-minute, or 500ms per beat
 let tempo = new Tempo( 120 ); 
 
 // 500ms per beat, or 120 bpm
 let another = Tempo.fromBeat( 500 ); 
 </code></pre>
-<p>The essential function is <a href="#link"><code>Tempo.every</code></a>, which counts the beats and triggers the callback functions you specified. It's like a smart metronome.</p>
+<p>The essential function is <a href="#play-tempo"><code>every</code></a>, which counts the beats and triggers the callback functions you specified. It's like a smart metronome.</p>
 <pre><code>let everyTwo = tempo.every( 2 ); // count every 2 beats
 let everyTen = tempo.every( 10 ); // count every 10 beats
 </code></pre>
-<p>The <code>every</code> function returns an object with two chainable functions: <code>start(...)</code> and <code>progress(...)</code>. These functions let you attach custom callback functions that respond to animation events.</p>
+<p>The <a href="#play-tempo"><code>every</code></a> function returns an object with two chainable functions: <code>start(...)</code> and <code>progress(...)</code>. These functions let you attach custom callback functions that respond to animation events.</p>
 <p>The <code>start</code> function lets you set a callback to be triggered at the start of every <em>n</em>-beats period. For example:</p>
 <pre><code>// at the start of every 2-beats period, do something
 everyTwo.start( (count) =&gt; ... )
@@ -49,7 +49,7 @@ everyTen.progress( (count, t, time, isStart) =&gt; ... )
 <p><img src="./assets/bg.png" alt="js:tempo_progress"></p>
 <p>Pretty easy to create synchronized animation sequences, right? Let's try a few more example.</p>
 <h3>Variations</h3>
-<p><strong>Tween</strong>: Since the <code>t</code> parameter in <code>progress</code> callback function always go from 0 to 1, we can map its value to a <a href="../docs/?p=Num_Shaping"><code>Shaping</code></a> function and change the tweening style. Another neat trick is to use <a href="../docs/?p=Num_Num#function_cycle"><code>Num.cycle</code></a> to map the <code>t</code> value from [0...1] to [0...1...0].</p>
+<p><strong>Tween</strong>: Since the <code>t</code> parameter in <code>progress</code> callback function always go from 0 to 1, we can map its value to a <a href="#num-shaping"><code>Shaping</code></a> function and change the tweening style. Another neat trick is to use <a href="#num-num"><code>Num.cycle</code></a> to map the <code>t</code> value from [0...1] to [0...1...0].</p>
 <pre><code>everyTwo.progress( (count, t, time, isStart) =&gt; {
     let tt = Shaping.elasticOut( t );
     ...
@@ -66,7 +66,7 @@ everyTwo.progress( fn, -100 ); // activate 100ms sooner
 </code></pre>
 <p><img src="./assets/bg.png" alt="js:tempo_rhythm"></p>
 <h3>Controls</h3>
-<p>By changing bpm by setting the <a href="#link"><code>Tempo.bpm</code></a> property, you can control the speed of your animation. This makes it easier to synchronize your animations with music or at specific intervals.</p>
+<p>By changing bpm by setting the <a href="#play-tempo"><code>.bpm</code></a> property, you can control the speed of your animation. This makes it easier to synchronize your animations with music or at specific intervals.</p>
 <pre><code>tempo.bpm = 100; // set new bpm
 tempo.bpm += 20; // make it 20 beats faster per minute
 </code></pre>
@@ -82,7 +82,7 @@ tempo.progress( walking, 0, &quot;robot&quot; );
 tempo.stop( &quot;robot&quot; ); // another way to stop this animation
 </code></pre>
 <h3>Cheat Sheet</h3>
-<p>Create a <a href="#link"><code>Tempo</code></a> instance with specific bpm.</p>
+<p>Create a <a href="#play-tempo"><code>Tempo</code></a> instance with specific bpm.</p>
 <pre><code>tempo = new Tempo(120); // 120 bpm
 tempo = Tempo.fromBeat( 100 ); // one beat every 100ms
 </code></pre>

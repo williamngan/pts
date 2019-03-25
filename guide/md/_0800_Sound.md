@@ -2,26 +2,28 @@
 
 Sounds and visual forms complement each other and enable us to create expressive and unique compositions. Pts simplifies a subset of Web Audio API to assist you with common tasks like playbacks and visualizations.
 
-Before we start, let's play a fun visualization using Pts's sound functions.
+Before we start, let's try a silly and fun visualization using Pts's sound functions.
 
 ![js:sound_visual](./assets/bg.png)
+
+##### Click play button and move your pointer around the character. Music snippet from [*Space Travel Clichés*](https://soundcloud.com/mrgreenh/space-travel-cliches) by Mr Green H. 
 
 ### Input
 
 Let's get some sounds to start! Do you want to load from a sound file, receive microphone input, or generate audio dynamically? Pts offers three handy static functions for these.
 
-1. Using [`Sound.load`](#) to load a sound file with an url or a specific `<audio>` element. You can check if the audio file is ready to play by accessing [`.playable`](#) property.
+1. Using [`Sound.load`](#play-sound) to load a sound file with an url or a specific `<audio>` element. You can check if the audio file is ready to play by accessing [`.playable`](#play-sound) property.
 ```
 let sound = Sound.load( "/path/to/hello.mp3" );
 let sound2 = Sound.load( audioElement );
 ```
 
-2. Using [`Sound.generate`](#) to create a sound.
+2. Using [`Sound.generate`](#play-sound) to create a sound.
 ```
 let sound = Sound.generate( "sine", 120 ); // sine oscillator at 120Hz
 ```
 
-3. Using [`Sound.input`](#) to get audio from default input device (usually microphone). This will return a Promise object which will resolve when the input device is ready.
+3. Using [`Sound.input`](#play-sound) to get audio from default input device (usually microphone). This will return a Promise object which will resolve when the input device is ready.
 ```
 let sound;
 Sound.input().then( s => sound = s ); // default input device
@@ -35,7 +37,7 @@ Here's a basic demo of getting audio from microphone:
 ##### You may first need to allow this page to access microphone, and then click the record button. We also make the recording stop when the pointer leave the demo area so that your microphone is not always on.
 
 
-You can then start and stop playing the sound like this:
+You can then [`start`](#play-sound) and [`stop`](#play-sound) playing the sound like this:
 
 ```
 sound.start();
@@ -48,24 +50,24 @@ sound.playing; // boolean to indicate if sound is playing
 
 ### Analyze
 
-It gets more interesting when we can look into the sound data and analyze them. Let's hook up an analyzer to our Sound instance.
+It gets more interesting when we can look into the sound data and analyze them. Let's hook up an analyzer to our Sound instance using the [`analyze`](#play-sound) function.
 
 ```
 sound.analyze( 128 ); // Call once to initiate the analyzer
 ```
 
-This will create an analyzer with 128 bins (more on that later) and default decibel range and smoothing values. See [docs](#) for description of the advanced options.
+This will create an analyzer with 128 bins (more on that later) and default decibel range and smoothing values. See [`analyze`](#play-sound) docs for description of the advanced options.
 
 There are two common ways to analyze sounds. First, we can represent sounds as snapshots of sound waves, which correspond to variations in air pressure over time. This is called the time-domain, as it measures amplitudes of the "waves" over time steps.
 
-To get the time domain data at current time step, call the [`timeDomain`](#) function.
+To get the time domain data at current time step, call the [`timeDomain`](#play-sound) function.
 
 ```
 // get an uint typed array of 128 values (corresponds to bin size above)
 let td = sound.timeDomain(); 
 ```
 
-Optionaly, use the [`timeDomainTo`](#) function to map the data to another range, such as a rectangular area. You can then apply various Pts functions to transform and visualize waveforms in a few lines of code.
+Optionaly, use the [`timeDomainTo`](#play-sound) function to map the data to another range, such as a rectangular area. You can then apply various Pts functions to transform and visualize waveforms in a few lines of code.
 
 ```
 // fit data into a 200x100 area, starting from position (50, 50)
@@ -84,7 +86,7 @@ sound.timeDomainTo( [Const.two_pi, 1] ).map( t => ... );
 
 ##### Click to play and visualize sounds of drum, tambourine, and flute from Philharmonia Orchestra.
 
-In a similar way, we can access the frequency domain data by `frequencyDomain` and `frequencyDomainTo`. The frequency bins are calculated by an algorithm called Fast Fourier Transform (FFT). The FFT size is usually 2 times the bin size and they need to be multiples of 2. (Recall that we set bin size to 128 earlier). You can quickly test it with a single line of code:
+In a similar way, we can access the frequency domain data by [`freqDomain`](#play-sound) and [`freqDomainTo`](#play-sound). The frequency bins are calculated by an algorithm called Fast Fourier Transform (FFT). The FFT size is usually 2 times the bin size and they need to be multiples of 2. (Recall that we set bin size to 128 earlier). You can quickly test it with a single line of code:
 
 ```
 form.points( sound.freqDomainTo( space.size ) );
@@ -95,26 +97,28 @@ Or make something fun, weird, beautiful through the interplay of sounds and shap
 ![js:sound_frequency](./assets/bg.png)
 
 ### Advanced
-For advanced use cases, you can create an instance using  [`Sound.from`](#) static method. For example:
+For advanced use cases, you can create an instance using  [`Sound.from`](#play-sound) static method. Here's an example using Tone.js:
 
 ```
-Sound.from( audioNode, audioContext );
+let synth = new Tone.Synth(); 
+let sound = Sound.from( synth, Tone.context ); // create Pts Sound instance
+synth.toMaster(); // play using tone.js instead of Pts
 ```
 
-The following example demonstrates how you may generate audio using [tone.js](https://tonejs.github.io/) and then visualize it with Pts: 
+The following demo generates audio using [tone.js](https://tonejs.github.io/) and then visualizes it with Pts: 
 
 [ ![screenshot](./assets/tone.png) ](./js/examples/tone.html)
 
-##### Click image to open tone.js demo. See [source code here](#).
+##### Click image to open tone.js demo. See [source code here](https://github.com/williamngan/pts/blob/master/guide/js/examples/tone.html).
 
 If needed, you can also directly access the following properties in a Sound instance to make full use of the [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API).
 
-- [`.ctx`](#) - access the `AudioContext` instance
-- [`.node`](#) - access the `AudioNode` instance
-- [`.stream`](#) - access the `MediaStream` instance
-- [`.source`](#) - access the `HTMLMediaElement` if you're playing from a sound file
+- `.ctx` to access the `AudioContext` instance
+- `.node` to access the `AudioNode` instance
+- `.stream` to access the `MediaStream` instance
+- `.source` to access the `HTMLMediaElement` if you're playing from a sound file
 
-Also note that [`sound.start()`](#) will connect the AudioNode to the destination of the AudioContext, while [`start.stop()`](#) will disconnect it.
+Also note that calling [`start`](#play-sound) function will connect the AudioNode to the destination of the AudioContext, while [`stop`](#play-sound) will disconnect it.
 
 Web Audio covers a wide range of topics. Here are a few pointers for you to dive deeper:
 
@@ -125,7 +129,7 @@ Web Audio covers a wide range of topics. Here are a few pointers for you to dive
 
 ### Cheatsheet
 
-Creating and playing a Sound instance
+Creating and playing a [`Sound`](#play-sound) instance
 ```
 s = Sound.load( "path/to/file.mp3" ); // from file
 s = Sound.generate( "sine", 120 ); // sine wave at 120hz
