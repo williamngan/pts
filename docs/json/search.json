@@ -5934,6 +5934,60 @@
     0
   ],
   [
+    "Play_Tempo#constructor_constructor",
+    "Tempo.constructor",
+    "Constructor",
+    10
+  ],
+  [
+    "Play_Tempo#accessor_bpm",
+    "Tempo.bpm",
+    "Accessor",
+    6
+  ],
+  [
+    "Play_Tempo#accessor_ms",
+    "Tempo.ms",
+    "Accessor",
+    6
+  ],
+  [
+    "Play_Tempo#function_animate",
+    "Tempo.animate",
+    "Function",
+    8
+  ],
+  [
+    "Play_Tempo#function_every",
+    "Tempo.every",
+    "Function",
+    8
+  ],
+  [
+    "Play_Tempo#function_stop",
+    "Tempo.stop",
+    "Function",
+    8
+  ],
+  [
+    "Play_Tempo#function_track",
+    "Tempo.track",
+    "Function",
+    8
+  ],
+  [
+    "Play_Tempo#function_fromBeat",
+    "Tempo.fromBeat",
+    "Function",
+    8
+  ],
+  [
+    "Play_Tempo",
+    "Tempo",
+    "Class",
+    0
+  ],
+  [
     "Pt_Bound#constructor_constructor",
     "Bound.constructor",
     "Constructor",
@@ -9471,60 +9525,6 @@
     "UI_UIShape",
     "UIShape",
     "Object literal",
-    0
-  ],
-  [
-    "Util_Tempo#constructor_constructor",
-    "Tempo.constructor",
-    "Constructor",
-    10
-  ],
-  [
-    "Util_Tempo#accessor_bpm",
-    "Tempo.bpm",
-    "Accessor",
-    6
-  ],
-  [
-    "Util_Tempo#accessor_ms",
-    "Tempo.ms",
-    "Accessor",
-    6
-  ],
-  [
-    "Util_Tempo#function_animate",
-    "Tempo.animate",
-    "Function",
-    8
-  ],
-  [
-    "Util_Tempo#function_every",
-    "Tempo.every",
-    "Function",
-    8
-  ],
-  [
-    "Util_Tempo#function_stop",
-    "Tempo.stop",
-    "Function",
-    8
-  ],
-  [
-    "Util_Tempo#function_track",
-    "Tempo.track",
-    "Function",
-    8
-  ],
-  [
-    "Util_Tempo#function_fromBeat",
-    "Tempo.fromBeat",
-    "Function",
-    8
-  ],
-  [
-    "Util_Tempo",
-    "Tempo",
-    "Class",
     0
   ],
   [

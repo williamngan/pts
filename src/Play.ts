@@ -1,5 +1,146 @@
-import {ISoundAnalyzer, SoundType, PtLike} from "./Types";
 import {Pt, Group} from "./Pt";
+import {Num} from "./Num";
+import {ITempoListener, ITempoStartFn, ITempoProgressFn, ITempoResponses} from "./Types";
+import {ISoundAnalyzer, SoundType, PtLike} from "./Types";
+
+/**
+ * Tempo helps you create synchronized and rhythmic animations.
+ */
+export class Tempo {
+
+  protected _bpm: number; // beat per minute
+  protected _ms: number; // millis per beat
+
+  protected _listeners:{ [key:string]:ITempoListener } = {};
+  protected _listenerInc:number = 0;
+
+  /**
+   * Construct a new Tempo instance by beats-per-minute. Alternatively, you can use [`Tempo.fromBeat`](#link) to create from milliseconds.
+   * @param bpm beats per minute
+   */
+  constructor( bpm:number ) {
+    this.bpm = bpm;
+  }
+
+  /**
+   * Create a new Tempo instance by specifying milliseconds-per-beat.
+   * @param ms milliseconds per beat
+   */
+  static fromBeat( ms:number ):Tempo {
+    return new Tempo( 60000 / ms );
+  }
+
+  /**
+   * Beats-per-minute value
+   */
+  get bpm():number { return this._bpm; }
+  set bpm( n:number ) {
+    this._bpm = n;
+    this._ms = 60000 / this._bpm;
+  }
+
+  /**
+   * Milliseconds per beat (Note that this is derived from the bpm value).
+   */
+  get ms():number { return this._ms; }
+  set ms( n:number ) {
+    this._bpm = Math.floor( 60000/n );
+    this._ms = 60000 / this._bpm;
+  }
+
+  
+  // Get a listener unique id
+  protected _createID( listener:ITempoListener|Function ):string {
+    let id:string = '';
+    if (typeof listener === 'function') {
+      id = '_b'+(this._listenerInc++);
+    } else {
+      id = listener.name || '_b'+(this._listenerInc++);
+    }
+    return id;
+  }
+
+
+  /**
+   * This is a core function that let you specify a rhythm and then define responses by calling the `start` and `progress` functions from the returned object. See [Animation guide](../guide/Animation-0700.html) for more details.
+   * The `start` function lets you set a callback on every start. It takes a function ([`ITempoStartFn`](#link)).
+   * The `progress` function lets you set a callback during progress. It takes a function ([`ITempoProgressFn`](#link)). Both functions let you optionally specify a time offset and a custom name.
+   * See [Animation guide](../guide/animation-0700.html) for more details.
+   * @param beats a rhythm in beats as a number or an array of numbers
+   * @example `tempo.every(2).start( (count) => ... )`, `tempo.every([2,4,6]).progress( (count, t) => ... )`
+   * @returns an object with chainable functions 
+   */
+  every( beats:number|number[] ):ITempoResponses {
+    let self = this;
+    let p = Array.isArray(beats) ? beats[0] : beats;
+
+    return {
+      start: function (fn:ITempoStartFn, offset:number=0, name?:string): string {
+        let id = name || self._createID( fn );        
+        self._listeners[id] = { name: id, beats: beats, period: p, index: 0, offset: offset, duration: -1, smooth: false, fn: fn };
+        return this;
+      },
+
+      progress: function (fn:ITempoProgressFn, offset:number=0, name?:string ): string {
+        let id = name || self._createID( fn ); 
+        self._listeners[id] = { name: id, beats: beats, period: p, index: 0, offset: offset, duration: -1, smooth: true, fn: fn };
+        return this;
+      }
+    };
+  }
+
+
+  /**
+   * Usually you can add a tempo instance to a space via [`Space.add`](#link) and it will track time automatically. 
+   * But if necessary, you can track time manually via this function.
+   * @param time current time in milliseconds
+   */
+  track( time ) {
+    for (let k in this._listeners) {
+      if (this._listeners.hasOwnProperty(k)) {
+
+        let li = this._listeners[k];
+        let _t = (li.offset) ? time + li.offset : time; 
+        let ms = li.period * this._ms; // time per period
+        let isStart = false;
+
+        if (_t > li.duration + ms) {
+          li.duration = _t - (_t % this._ms); // update 
+          if (Array.isArray( li.beats )) { // find next period from array
+            li.index = (li.index + 1) % li.beats.length;
+            li.period = li.beats[ li.index ];
+          }
+          isStart = true;
+        }
+
+        let count = Math.max(0, Math.ceil( Math.floor(li.duration / this._ms)/li.period ) );
+        let params = (li.smooth) ? [count, Num.clamp( (_t - li.duration)/ms, 0, 1), _t, isStart] : [count]; 
+        let done = li.fn.apply( li, params );
+        if (done) delete this._listeners[ li.name ];
+      }
+    }
+  }
+
+
+  /**
+   * Remove a `start` or `progress` callback function from the list of callbacks. See [`Tempo.every`](#link) for details
+   * @param name a name string specified when creating the callback function.
+   */
+  stop( name:string ):void {
+    if (this._listeners[name]) delete this._listeners[name];
+  }
+
+
+  /**
+   * Internal implementation for use when adding into Space
+   */
+  protected animate( time, ftime ) {
+    this.track( time );
+  }
+
+}
+
+
 
 /**
  * Sound class simplifies common tasks like audio inputs and visualizations using a subset of Web Audio API. It can be used with other audio libraries like tone.js, and extended to support additional web audio functions. See [the guide](../guide/Sound-0800.html) to get started.

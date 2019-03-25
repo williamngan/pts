@@ -3,12 +3,12 @@
   "source": [
     [
       "Util.ts",
-      11,
+      10,
       18
     ]
   ],
   "kind": "Objectliteral",
-  "id": 1723,
+  "id": 1685,
   "comment": "Various constant values for enumerations and calculations.",
   "constructor": [],
   "accessors": [],
@@ -19,11 +19,11 @@
       "source": [
         [
           "Util.ts",
-          41,
+          40,
           8
         ]
       ],
-      "id": 1733,
+      "id": 1695,
       "flags": {},
       "type": "bottom",
       "overrides": false,
@@ -35,11 +35,11 @@
       "source": [
         [
           "Util.ts",
-          44,
+          43,
           13
         ]
       ],
-      "id": 1734,
+      "id": 1696,
       "flags": {},
       "type": "bottom_left",
       "overrides": false,
@@ -51,11 +51,11 @@
       "source": [
         [
           "Util.ts",
-          38,
+          37,
           14
         ]
       ],
-      "id": 1732,
+      "id": 1694,
       "flags": {},
       "type": "bottom_right",
       "overrides": false,
@@ -67,11 +67,11 @@
       "source": [
         [
           "Util.ts",
-          86,
+          85,
           12
         ]
       ],
-      "id": 1748,
+      "id": 1710,
       "flags": {},
       "type": "deg_to_rad",
       "overrides": false,
@@ -83,11 +83,11 @@
       "source": [
         [
           "Util.ts",
-          59,
+          58,
           9
         ]
       ],
-      "id": 1739,
+      "id": 1701,
       "flags": {},
       "type": "epsilon",
       "overrides": false,
@@ -99,11 +99,11 @@
       "source": [
         [
           "Util.ts",
-          95,
+          94,
           10
         ]
       ],
-      "id": 1751,
+      "id": 1713,
       "flags": {},
       "type": "gaussian",
       "overrides": false,
@@ -115,11 +115,11 @@
       "source": [
         [
           "Util.ts",
-          89,
+          88,
           9
         ]
       ],
-      "id": 1749,
+      "id": 1711,
       "flags": {},
       "type": "gravity",
       "overrides": false,
@@ -131,11 +131,11 @@
       "source": [
         [
           "Util.ts",
-          74,
+          73,
           9
         ]
       ],
-      "id": 1744,
+      "id": 1706,
       "flags": {},
       "type": "half_pi",
       "overrides": false,
@@ -147,11 +147,11 @@
       "source": [
         [
           "Util.ts",
-          26,
+          25,
           12
         ]
       ],
-      "id": 1728,
+      "id": 1690,
       "flags": {},
       "type": "horizontal",
       "overrides": false,
@@ -163,11 +163,11 @@
       "source": [
         [
           "Util.ts",
-          32,
+          31,
           11
         ]
       ],
-      "id": 1730,
+      "id": 1692,
       "flags": {},
       "type": "identical",
       "overrides": false,
@@ -179,11 +179,11 @@
       "source": [
         [
           "Util.ts",
-          47,
+          46,
           6
         ]
       ],
-      "id": 1735,
+      "id": 1697,
       "flags": {},
       "type": "left",
       "overrides": false,
@@ -195,11 +195,11 @@
       "source": [
         [
           "Util.ts",
-          62,
+          61,
           5
         ]
       ],
-      "id": 1740,
+      "id": 1702,
       "flags": {},
       "type": "max",
       "overrides": false,
@@ -211,11 +211,11 @@
       "source": [
         [
           "Util.ts",
-          65,
+          64,
           5
         ]
       ],
-      "id": 1741,
+      "id": 1703,
       "flags": {},
       "type": "min",
       "overrides": false,
@@ -227,11 +227,11 @@
       "source": [
         [
           "Util.ts",
-          92,
+          91,
           8
         ]
       ],
-      "id": 1750,
+      "id": 1712,
       "flags": {},
       "type": "newton",
       "overrides": false,
@@ -243,11 +243,11 @@
       "source": [
         [
           "Util.ts",
-          80,
+          79,
           12
         ]
       ],
-      "id": 1746,
+      "id": 1708,
       "flags": {},
       "type": "one_degree",
       "overrides": false,
@@ -259,11 +259,11 @@
       "source": [
         [
           "Util.ts",
-          68,
+          67,
           4
         ]
       ],
-      "id": 1742,
+      "id": 1704,
       "flags": {},
       "type": "pi",
       "overrides": false,
@@ -275,11 +275,11 @@
       "source": [
         [
           "Util.ts",
-          77,
+          76,
           12
         ]
       ],
-      "id": 1745,
+      "id": 1707,
       "flags": {},
       "type": "quarter_pi",
       "overrides": false,
@@ -291,11 +291,11 @@
       "source": [
         [
           "Util.ts",
-          83,
+          82,
           12
         ]
       ],
-      "id": 1747,
+      "id": 1709,
       "flags": {},
       "type": "rad_to_deg",
       "overrides": false,
@@ -307,11 +307,11 @@
       "source": [
         [
           "Util.ts",
-          35,
+          34,
           7
         ]
       ],
-      "id": 1731,
+      "id": 1693,
       "flags": {},
       "type": "right",
       "overrides": false,
@@ -323,11 +323,11 @@
       "source": [
         [
           "Util.ts",
-          53,
+          52,
           5
         ]
       ],
-      "id": 1737,
+      "id": 1699,
       "flags": {},
       "type": "top",
       "overrides": false,
@@ -339,11 +339,11 @@
       "source": [
         [
           "Util.ts",
-          50,
+          49,
           10
         ]
       ],
-      "id": 1736,
+      "id": 1698,
       "flags": {},
       "type": "top_left",
       "overrides": false,
@@ -355,11 +355,11 @@
       "source": [
         [
           "Util.ts",
-          56,
+          55,
           11
         ]
       ],
-      "id": 1738,
+      "id": 1700,
       "flags": {},
       "type": "top_right",
       "overrides": false,
@@ -371,11 +371,11 @@
       "source": [
         [
           "Util.ts",
-          71,
+          70,
           8
         ]
       ],
-      "id": 1743,
+      "id": 1705,
       "flags": {},
       "type": "two_pi",
       "overrides": false,
@@ -387,11 +387,11 @@
       "source": [
         [
           "Util.ts",
-          29,
+          28,
           10
         ]
       ],
-      "id": 1729,
+      "id": 1691,
       "flags": {},
       "type": "vertical",
       "overrides": false,
@@ -403,11 +403,11 @@
       "source": [
         [
           "Util.ts",
-          14,
+          13,
           4
         ]
       ],
-      "id": 1724,
+      "id": 1686,
       "flags": {},
       "type": "xy",
       "overrides": false,
@@ -419,11 +419,11 @@
       "source": [
         [
           "Util.ts",
-          23,
+          22,
           5
         ]
       ],
-      "id": 1727,
+      "id": 1689,
       "flags": {},
       "type": "xyz",
       "overrides": false,
@@ -435,11 +435,11 @@
       "source": [
         [
           "Util.ts",
-          20,
+          19,
           4
         ]
       ],
-      "id": 1726,
+      "id": 1688,
       "flags": {},
       "type": "xz",
       "overrides": false,
@@ -451,11 +451,11 @@
       "source": [
         [
           "Util.ts",
-          17,
+          16,
           4
         ]
       ],
-      "id": 1725,
+      "id": 1687,
       "flags": {},
       "type": "yz",
       "overrides": false,

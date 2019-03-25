@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 3257,
+  "id": 3219,
   "comment": "Typography provides helper functions to support typographic layouts. For a concrete example, see [a demo here](../demo/index.html?name=canvasform.textBox) that uses the [`CanvasForm.textBox`](#link) function.",
   "constructor": [],
   "accessors": [],
@@ -22,7 +22,7 @@
           22
         ]
       ],
-      "id": 3278,
+      "id": 3240,
       "flags": {
         "isStatic": true
       },
@@ -66,7 +66,7 @@
           28
         ]
       ],
-      "id": 3286,
+      "id": 3248,
       "flags": {
         "isStatic": true
       },
@@ -104,7 +104,7 @@
           27
         ]
       ],
-      "id": 3258,
+      "id": 3220,
       "flags": {
         "isStatic": true
       },
@@ -148,7 +148,7 @@
           17
         ]
       ],
-      "id": 3269,
+      "id": 3231,
       "flags": {
         "isStatic": true
       },

@@ -1,5 +1,23 @@
-import { ISoundAnalyzer, SoundType, PtLike } from "./Types";
 import { Group } from "./Pt";
+import { ITempoListener, ITempoResponses } from "./Types";
+import { ISoundAnalyzer, SoundType, PtLike } from "./Types";
+export declare class Tempo {
+    protected _bpm: number;
+    protected _ms: number;
+    protected _listeners: {
+        [key: string]: ITempoListener;
+    };
+    protected _listenerInc: number;
+    constructor(bpm: number);
+    static fromBeat(ms: number): Tempo;
+    bpm: number;
+    ms: number;
+    protected _createID(listener: ITempoListener | Function): string;
+    every(beats: number | number[]): ITempoResponses;
+    track(time: any): void;
+    stop(name: string): void;
+    protected animate(time: any, ftime: any): void;
+}
 export declare class Sound {
     private _type;
     ctx: AudioContext;

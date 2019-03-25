@@ -5451,6 +5451,115 @@ var __awaiter = undefined && undefined.__awaiter || function (thisArg, _argument
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
+var Num_1 = __webpack_require__(/*! ./Num */ "./src/Num.ts");
+
+var Tempo = function () {
+    function Tempo(bpm) {
+        _classCallCheck(this, Tempo);
+
+        this._listeners = {};
+        this._listenerInc = 0;
+        this.bpm = bpm;
+    }
+
+    _createClass(Tempo, [{
+        key: "_createID",
+        value: function _createID(listener) {
+            var id = '';
+            if (typeof listener === 'function') {
+                id = '_b' + this._listenerInc++;
+            } else {
+                id = listener.name || '_b' + this._listenerInc++;
+            }
+            return id;
+        }
+    }, {
+        key: "every",
+        value: function every(beats) {
+            var self = this;
+            var p = Array.isArray(beats) ? beats[0] : beats;
+            return {
+                start: function start(fn) {
+                    var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+                    var name = arguments[2];
+
+                    var id = name || self._createID(fn);
+                    self._listeners[id] = { name: id, beats: beats, period: p, index: 0, offset: offset, duration: -1, smooth: false, fn: fn };
+                    return this;
+                },
+                progress: function progress(fn) {
+                    var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+                    var name = arguments[2];
+
+                    var id = name || self._createID(fn);
+                    self._listeners[id] = { name: id, beats: beats, period: p, index: 0, offset: offset, duration: -1, smooth: true, fn: fn };
+                    return this;
+                }
+            };
+        }
+    }, {
+        key: "track",
+        value: function track(time) {
+            for (var k in this._listeners) {
+                if (this._listeners.hasOwnProperty(k)) {
+                    var li = this._listeners[k];
+                    var _t = li.offset ? time + li.offset : time;
+                    var ms = li.period * this._ms;
+                    var isStart = false;
+                    if (_t > li.duration + ms) {
+                        li.duration = _t - _t % this._ms;
+                        if (Array.isArray(li.beats)) {
+                            li.index = (li.index + 1) % li.beats.length;
+                            li.period = li.beats[li.index];
+                        }
+                        isStart = true;
+                    }
+                    var count = Math.max(0, Math.ceil(Math.floor(li.duration / this._ms) / li.period));
+                    var params = li.smooth ? [count, Num_1.Num.clamp((_t - li.duration) / ms, 0, 1), _t, isStart] : [count];
+                    var done = li.fn.apply(li, params);
+                    if (done) delete this._listeners[li.name];
+                }
+            }
+        }
+    }, {
+        key: "stop",
+        value: function stop(name) {
+            if (this._listeners[name]) delete this._listeners[name];
+        }
+    }, {
+        key: "animate",
+        value: function animate(time, ftime) {
+            this.track(time);
+        }
+    }, {
+        key: "bpm",
+        get: function get() {
+            return this._bpm;
+        },
+        set: function set(n) {
+            this._bpm = n;
+            this._ms = 60000 / this._bpm;
+        }
+    }, {
+        key: "ms",
+        get: function get() {
+            return this._ms;
+        },
+        set: function set(n) {
+            this._bpm = Math.floor(60000 / n);
+            this._ms = 60000 / this._bpm;
+        }
+    }], [{
+        key: "fromBeat",
+        value: function fromBeat(ms) {
+            return new Tempo(60000 / ms);
+        }
+    }]);
+
+    return Tempo;
+}();
+
+exports.Tempo = Tempo;
 
 var Sound = function () {
     function Sound(type) {
@@ -8021,7 +8130,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
-var Num_1 = __webpack_require__(/*! ./Num */ "./src/Num.ts");
 exports.Const = {
     xy: "xy",
     yz: "yz",
@@ -8213,114 +8321,6 @@ var Util = function () {
 
 Util._warnLevel = "mute";
 exports.Util = Util;
-
-var Tempo = function () {
-    function Tempo(bpm) {
-        _classCallCheck(this, Tempo);
-
-        this._listeners = {};
-        this._listenerInc = 0;
-        this.bpm = bpm;
-    }
-
-    _createClass(Tempo, [{
-        key: "_createID",
-        value: function _createID(listener) {
-            var id = '';
-            if (typeof listener === 'function') {
-                id = '_b' + this._listenerInc++;
-            } else {
-                id = listener.name || '_b' + this._listenerInc++;
-            }
-            return id;
-        }
-    }, {
-        key: "every",
-        value: function every(beats) {
-            var self = this;
-            var p = Array.isArray(beats) ? beats[0] : beats;
-            return {
-                start: function start(fn) {
-                    var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-                    var name = arguments[2];
-
-                    var id = name || self._createID(fn);
-                    self._listeners[id] = { name: id, beats: beats, period: p, index: 0, offset: offset, duration: -1, smooth: false, fn: fn };
-                    return this;
-                },
-                progress: function progress(fn) {
-                    var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-                    var name = arguments[2];
-
-                    var id = name || self._createID(fn);
-                    self._listeners[id] = { name: id, beats: beats, period: p, index: 0, offset: offset, duration: -1, smooth: true, fn: fn };
-                    return this;
-                }
-            };
-        }
-    }, {
-        key: "track",
-        value: function track(time) {
-            for (var k in this._listeners) {
-                if (this._listeners.hasOwnProperty(k)) {
-                    var li = this._listeners[k];
-                    var _t = li.offset ? time + li.offset : time;
-                    var ms = li.period * this._ms;
-                    var isStart = false;
-                    if (_t > li.duration + ms) {
-                        li.duration = _t - _t % this._ms;
-                        if (Array.isArray(li.beats)) {
-                            li.index = (li.index + 1) % li.beats.length;
-                            li.period = li.beats[li.index];
-                        }
-                        isStart = true;
-                    }
-                    var count = Math.max(0, Math.ceil(Math.floor(li.duration / this._ms) / li.period));
-                    var params = li.smooth ? [count, Num_1.Num.clamp((_t - li.duration) / ms, 0, 1), _t, isStart] : [count];
-                    var done = li.fn.apply(li, params);
-                    if (done) delete this._listeners[li.name];
-                }
-            }
-        }
-    }, {
-        key: "stop",
-        value: function stop(name) {
-            if (this._listeners[name]) delete this._listeners[name];
-        }
-    }, {
-        key: "animate",
-        value: function animate(time, ftime) {
-            this.track(time);
-        }
-    }, {
-        key: "bpm",
-        get: function get() {
-            return this._bpm;
-        },
-        set: function set(n) {
-            this._bpm = n;
-            this._ms = 60000 / this._bpm;
-        }
-    }, {
-        key: "ms",
-        get: function get() {
-            return this._ms;
-        },
-        set: function set(n) {
-            this._bpm = Math.floor(60000 / n);
-            this._ms = 60000 / this._bpm;
-        }
-    }], [{
-        key: "fromBeat",
-        value: function fromBeat(ms) {
-            return new Tempo(60000 / ms);
-        }
-    }]);
-
-    return Tempo;
-}();
-
-exports.Tempo = Tempo;
 
 /***/ }),
 

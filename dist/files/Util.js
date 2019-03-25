@@ -2,7 +2,6 @@
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = require("./Pt");
-const Num_1 = require("./Num");
 exports.Const = {
     xy: "xy",
     yz: "yz",
@@ -156,81 +155,4 @@ class Util {
 }
 Util._warnLevel = "mute";
 exports.Util = Util;
-class Tempo {
-    constructor(bpm) {
-        this._listeners = {};
-        this._listenerInc = 0;
-        this.bpm = bpm;
-    }
-    static fromBeat(ms) {
-        return new Tempo(60000 / ms);
-    }
-    get bpm() { return this._bpm; }
-    set bpm(n) {
-        this._bpm = n;
-        this._ms = 60000 / this._bpm;
-    }
-    get ms() { return this._ms; }
-    set ms(n) {
-        this._bpm = Math.floor(60000 / n);
-        this._ms = 60000 / this._bpm;
-    }
-    _createID(listener) {
-        let id = '';
-        if (typeof listener === 'function') {
-            id = '_b' + (this._listenerInc++);
-        }
-        else {
-            id = listener.name || '_b' + (this._listenerInc++);
-        }
-        return id;
-    }
-    every(beats) {
-        let self = this;
-        let p = Array.isArray(beats) ? beats[0] : beats;
-        return {
-            start: function (fn, offset = 0, name) {
-                let id = name || self._createID(fn);
-                self._listeners[id] = { name: id, beats: beats, period: p, index: 0, offset: offset, duration: -1, smooth: false, fn: fn };
-                return this;
-            },
-            progress: function (fn, offset = 0, name) {
-                let id = name || self._createID(fn);
-                self._listeners[id] = { name: id, beats: beats, period: p, index: 0, offset: offset, duration: -1, smooth: true, fn: fn };
-                return this;
-            }
-        };
-    }
-    track(time) {
-        for (let k in this._listeners) {
-            if (this._listeners.hasOwnProperty(k)) {
-                let li = this._listeners[k];
-                let _t = (li.offset) ? time + li.offset : time;
-                let ms = li.period * this._ms;
-                let isStart = false;
-                if (_t > li.duration + ms) {
-                    li.duration = _t - (_t % this._ms);
-                    if (Array.isArray(li.beats)) {
-                        li.index = (li.index + 1) % li.beats.length;
-                        li.period = li.beats[li.index];
-                    }
-                    isStart = true;
-                }
-                let count = Math.max(0, Math.ceil(Math.floor(li.duration / this._ms) / li.period));
-                let params = (li.smooth) ? [count, Num_1.Num.clamp((_t - li.duration) / ms, 0, 1), _t, isStart] : [count];
-                let done = li.fn.apply(li, params);
-                if (done)
-                    delete this._listeners[li.name];
-            }
-        }
-    }
-    stop(name) {
-        if (this._listeners[name])
-            delete this._listeners[name];
-    }
-    animate(time, ftime) {
-        this.track(time);
-    }
-}
-exports.Tempo = Tempo;
 //# sourceMappingURL=Util.js.map

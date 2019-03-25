@@ -607,6 +607,23 @@ export class Body extends Group {
     processParticle(b: Particle): void;
 }
 
+export class Tempo {
+    protected _bpm: number;
+    protected _ms: number;
+    protected _listeners: {
+        [key: string]: ITempoListener;
+    };
+    protected _listenerInc: number;
+    constructor(bpm: number);
+    static fromBeat(ms: number): Tempo;
+    bpm: number;
+    ms: number;
+    protected _createID(listener: ITempoListener | Function): string;
+    every(beats: number | number[]): ITempoResponses;
+    track(time: any): void;
+    stop(name: string): void;
+    protected animate(time: any, ftime: any): void;
+}
 export class Sound {
     ctx: AudioContext;
     node: AudioNode;
@@ -1101,22 +1118,5 @@ export class Util {
     static stepper(max: number, min?: number, stride?: number, callback?: (n: number) => void): (() => number);
     static forRange(fn: (index: number) => any, range: number, start?: number, step?: number): any[];
     static load(url: string, callback: (response: string, success: boolean) => void): void;
-}
-export class Tempo {
-    protected _bpm: number;
-    protected _ms: number;
-    protected _listeners: {
-        [key: string]: ITempoListener;
-    };
-    protected _listenerInc: number;
-    constructor(bpm: number);
-    static fromBeat(ms: number): Tempo;
-    bpm: number;
-    ms: number;
-    protected _createID(listener: ITempoListener | Function): string;
-    every(beats: number | number[]): ITempoResponses;
-    track(time: any): void;
-    stop(name: string): void;
-    protected animate(time: any, ftime: any): void;
 }
 

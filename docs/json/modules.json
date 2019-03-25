@@ -45,7 +45,8 @@
     "World"
   ],
   "Play": [
-    "Sound"
+    "Sound",
+    "Tempo"
   ],
   "Pt": [
     "Bound",
@@ -96,7 +97,6 @@
     "UIShape"
   ],
   "Util": [
-    "Tempo",
     "Util",
     "Const"
   ]
