@@ -1,12 +1,14 @@
-(function(){
-  // Pts.namespace( this ); // add Pts into scope if needed
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 
-  var demoID = "sound_visual";
-  
-  // create Space and Form
-  var space = new CanvasSpace("#"+demoID).setup({ retina: true, bgcolor: "#e2e6ef", resize: true });
-  var form = space.getForm();
-  
+window.demoDescription = "A silly and elaborate character that responds to sound. Music snippet taken from Space Travel Clichés composed by MrGreenH";
+
+Pts.quickStart( "#pt", "#fe3" );
+
+//// Demo code starts (anonymous function wrapper is optional) ---
+
+(function() {
+
   var sound = Sound.load( "/assets/spacetravel.mp3" ).analyze(bins);
   var bins = 256;
   var ctrls, radius;
@@ -32,7 +34,6 @@
 
       if ( d.magnitudeSq() < r*r ) { // push out if inside threshold 
         temp[i].to( space.pointer.$add( d.unit().$multiply( r ) ) );
-      
       } else if ( !ctrls[i].equals( temp[i], 0.1) ) { // pull in if outside threshold
         temp[i].to( Geom.interpolate( temp[i], ctrls[i], 0.02) );
       }
@@ -47,7 +48,7 @@
   space.add({
 
     start: (bound) => {
-      radius = space.size.minValue().value/3;
+      radius = space.size.minValue().value/3.5;
       ctrls = Create.radialPts( space.center, radius, 10, -Const.pi-Const.quarter_pi  );
     },
 
@@ -127,28 +128,18 @@
       }
 
       playButton();
+
     },
 
     action: (type, x, y) => {
-      if (type === "up" && Geom.withinBound( [x,y], [0,0], [50,50] )) {
+      if (type === "up" &&  Geom.withinBound( [x,y], [0,0], [50,50] )) {
         sound.toggle();
       }
     }
   });
   
-
-  // start
-  // Note that `playOnce(200)` will stop after 200ms. Use `play()` to run the animation loop continuously. 
-  space.playOnce(200).bindMouse().bindTouch();
+  //// ----
   
-  // For use in demo page only
-  if (window.registerDemo) window.registerDemo(demoID, space, null, stopFn);
-  function stopFn() {
-    if (sound && sound.playing) {
-      // shouldStop = true;
-      // sound.stop();
-    }
-  }
+  space.bindMouse().bindTouch().play();
 
-  
 })();
