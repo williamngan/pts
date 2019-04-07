@@ -351,13 +351,13 @@ export abstract class MultiTouchSpace extends Space {
   */
   bindTouch( _bind:boolean=true ):this {
     if (_bind) {
-      this.bindCanvas( "touchstart", this._mouseDown.bind(this) );
+      this.bindCanvas( "touchstart", this._touchStart.bind(this) );
       this.bindCanvas( "touchend", this._mouseUp.bind(this) );
       this.bindCanvas( "touchmove", this._touchMove.bind(this) );
       this.bindCanvas( "touchcancel", this._mouseOut.bind(this) );
       this._hasTouch = true;
     } else {
-      this.unbindCanvas( "touchstart", this._mouseDown.bind(this) );
+      this.unbindCanvas( "touchstart", this._touchStart.bind(this) );
       this.unbindCanvas( "touchend", this._mouseUp.bind(this) );
       this.unbindCanvas( "touchmove", this._touchMove.bind(this) );
       this.unbindCanvas( "touchcancel", this._mouseOut.bind(this) );
@@ -492,5 +492,15 @@ export abstract class MultiTouchSpace extends Space {
     evt.preventDefault();
     return false;
   }
+
+  /**
+  * TouchStart handler.
+  * @param evt 
+  */
+ protected _touchStart( evt:TouchEvent) {
+  this._mouseDown(evt);
+  evt.preventDefault();
+  return false;
+}
   
 }
