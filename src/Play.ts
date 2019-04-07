@@ -172,7 +172,10 @@ export class Sound {
    */
   constructor( type:SoundType ) {
     this._type = type;
-    this.ctx = new AudioContext();
+    // @ts-ignore
+    let _ctx = window.AudioContext || window.webkitAudioContext || false; 
+    if (!_ctx) console.error("Your browser doesn't support Web Audio. (No AudioContext)");
+    this.ctx = (_ctx) ? new _ctx() : undefined;
   }
 
 
@@ -186,6 +189,7 @@ export class Sound {
    */
   static from( node:AudioNode, ctx:AudioContext, type:SoundType="gen", stream?:MediaStream ) {
     let s = new Sound( type );
+    if (!s) return undefined;
     s.node = node;
     s.ctx = ctx;
     if (stream) s.stream = stream;
@@ -199,12 +203,22 @@ export class Sound {
    * @returns a `Sound` instance
    * @example `Sound.load( '/path/to/file.mp3' )`
    */
-  static load( source:HTMLMediaElement|string ):Sound {
-    let s = new Sound("file");
-    s.source = (typeof source === 'string') ? new Audio(source) : source;
-    s.source.addEventListener("ended", () => s._playing = false );
-    s.node = s.ctx.createMediaElementSource( s.source );
-    return s;
+  static load( source:HTMLMediaElement|string ):Promise<Sound> {
+    return new Promise( (resolve, reject) => {
+      let s = new Sound("file");
+      if (!s) {
+        reject("Error when creating Sound object.");
+        return;
+      }
+      s.source = (typeof source === 'string') ? new Audio(source) : source;
+      s.source.autoplay = false;
+      s.source.addEventListener("ended", function () { s._playing = false; } );
+      s.source.addEventListener('error', function () { reject("Error loading sound"); });
+      s.source.addEventListener('canplaythrough', function () {
+        s.node = s.ctx.createMediaElementSource( s.source );
+        resolve( s );
+      });
+    });
   }
 
 
@@ -216,7 +230,9 @@ export class Sound {
    * @example `Sound.generate( 'sine', 120 )`
    */
   static generate( type:OscillatorType, val:number|PeriodicWave ):Sound {
-    return new Sound("gen")._gen( type, val );
+    let s = new Sound("gen");
+    if (!s) return undefined;
+    return s._gen( type, val );
   }
 
 
@@ -243,6 +259,7 @@ export class Sound {
   static async input( constraint?:MediaStreamConstraints ):Promise<Sound> {
     try {
       let s = new Sound("input"); 
+      if (!s) return undefined;
       const c = constraint ? constraint : { audio: true, video: false };
       s.stream = await navigator.mediaDevices.getUserMedia( c );
       s.node = s.ctx.createMediaStreamSource( s.stream );
