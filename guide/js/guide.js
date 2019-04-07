@@ -15,8 +15,8 @@ Pts.namespace( this );
   }
 
   var demos = {};
-  window.registerDemo = function( id, space, startFn, stopFn ) {
-    demos[id] = {space: space, startCallback: startFn, stopCallback: stopFn};
+  window.registerDemo = function( id, space, startFn, stopFn, isCustom ) {
+    demos[id] = { space: space, startCallback: startFn, stopCallback: stopFn, isCustom: isCustom };
   }
 
   function createDemoContainer( imgElem ) {
@@ -39,14 +39,14 @@ Pts.namespace( this );
     function startDemo(evt) {
       div.classList.add("active");
       let d = demos[divID];
-      if (d && d.space) d.space.replay();
+      if (d && d.space && !d.isCustom ) d.space.replay();
       if (d && d.startCallback) d.startCallback();
     }
 
     function stopDemo(evt) {
       div.classList.remove("active");
       let d = demos[divID];
-      if (d && d.space) d.space.stop();
+      if (d && d.space && !d.isCustom) d.space.stop();
       if (d && d.stopCallback) d.stopCallback();
     }
 
