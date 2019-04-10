@@ -149,14 +149,14 @@ class MultiTouchSpace extends Space {
     }
     bindTouch(_bind = true) {
         if (_bind) {
-            this.bindCanvas("touchstart", this._mouseDown.bind(this));
+            this.bindCanvas("touchstart", this._touchStart.bind(this));
             this.bindCanvas("touchend", this._mouseUp.bind(this));
             this.bindCanvas("touchmove", this._touchMove.bind(this));
             this.bindCanvas("touchcancel", this._mouseOut.bind(this));
             this._hasTouch = true;
         }
         else {
-            this.unbindCanvas("touchstart", this._mouseDown.bind(this));
+            this.unbindCanvas("touchstart", this._touchStart.bind(this));
             this.unbindCanvas("touchend", this._mouseUp.bind(this));
             this.unbindCanvas("touchmove", this._touchMove.bind(this));
             this.unbindCanvas("touchcancel", this._mouseOut.bind(this));
@@ -239,6 +239,11 @@ class MultiTouchSpace extends Space {
     }
     _touchMove(evt) {
         this._mouseMove(evt);
+        evt.preventDefault();
+        return false;
+    }
+    _touchStart(evt) {
+        this._mouseDown(evt);
         evt.preventDefault();
         return false;
     }

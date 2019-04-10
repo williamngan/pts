@@ -633,7 +633,7 @@ export class Sound {
     protected _playing: boolean;
     constructor(type: SoundType);
     static from(node: AudioNode, ctx: AudioContext, type?: SoundType, stream?: MediaStream): Sound;
-    static load(source: HTMLMediaElement | string): Sound;
+    static load(source: HTMLMediaElement | string, crossOrigin?: string): Promise<Sound>;
     static generate(type: OscillatorType, val: number | PeriodicWave): Sound;
     protected _gen(type: OscillatorType, val: number | PeriodicWave): Sound;
     static input(constraint?: MediaStreamConstraints): Promise<Sound>;
@@ -847,6 +847,7 @@ export abstract class MultiTouchSpace extends Space {
     protected _mouseOver(evt: MouseEvent | TouchEvent): boolean;
     protected _mouseOut(evt: MouseEvent | TouchEvent): boolean;
     protected _touchMove(evt: TouchEvent): boolean;
+    protected _touchStart(evt: TouchEvent): boolean;
 }
 
 export class SVGSpace extends DOMSpace {

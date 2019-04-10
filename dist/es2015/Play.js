@@ -88,25 +88,44 @@ export class Sound {
     constructor(type) {
         this._playing = false;
         this._type = type;
-        this.ctx = new AudioContext();
+        let _ctx = window.AudioContext || window.webkitAudioContext || false;
+        if (!_ctx)
+            console.error("Your browser doesn't support Web Audio. (No AudioContext)");
+        this.ctx = (_ctx) ? new _ctx() : undefined;
     }
     static from(node, ctx, type = "gen", stream) {
         let s = new Sound(type);
+        if (!s)
+            return undefined;
         s.node = node;
         s.ctx = ctx;
         if (stream)
             s.stream = stream;
         return s;
     }
-    static load(source) {
-        let s = new Sound("file");
-        s.source = (typeof source === 'string') ? new Audio(source) : source;
-        s.source.addEventListener("ended", () => s._playing = false);
-        s.node = s.ctx.createMediaElementSource(s.source);
-        return s;
+    static load(source, crossOrigin = "anonymous") {
+        return new Promise((resolve, reject) => {
+            let s = new Sound("file");
+            if (!s) {
+                reject("Error when creating Sound object.");
+                return;
+            }
+            s.source = (typeof source === 'string') ? new Audio(source) : source;
+            s.source.autoplay = false;
+            s.source.crossOrigin = crossOrigin;
+            s.source.addEventListener("ended", function () { s._playing = false; });
+            s.source.addEventListener('error', function () { reject("Error loading sound"); });
+            s.source.addEventListener('canplaythrough', function () {
+                s.node = s.ctx.createMediaElementSource(s.source);
+                resolve(s);
+            });
+        });
     }
     static generate(type, val) {
-        return new Sound("gen")._gen(type, val);
+        let s = new Sound("gen");
+        if (!s)
+            return undefined;
+        return s._gen(type, val);
     }
     _gen(type, val) {
         this.node = this.ctx.createOscillator();
@@ -124,6 +143,8 @@ export class Sound {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let s = new Sound("input");
+                if (!s)
+                    return undefined;
                 const c = constraint ? constraint : { audio: true, video: false };
                 s.stream = yield navigator.mediaDevices.getUserMedia(c);
                 s.node = s.ctx.createMediaStreamSource(s.stream);

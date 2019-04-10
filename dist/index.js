@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.8.0 - Copyright © 2017-2019 William Ngan and contributors.
+ * pts.js 0.8.1 - Copyright © 2017-2019 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -3964,25 +3964,44 @@ class Sound {
     constructor(type) {
         this._playing = false;
         this._type = type;
-        this.ctx = new AudioContext();
+        let _ctx = window.AudioContext || window.webkitAudioContext || false;
+        if (!_ctx)
+            console.error("Your browser doesn't support Web Audio. (No AudioContext)");
+        this.ctx = (_ctx) ? new _ctx() : undefined;
     }
     static from(node, ctx, type = "gen", stream) {
         let s = new Sound(type);
+        if (!s)
+            return undefined;
         s.node = node;
         s.ctx = ctx;
         if (stream)
             s.stream = stream;
         return s;
     }
-    static load(source) {
-        let s = new Sound("file");
-        s.source = (typeof source === 'string') ? new Audio(source) : source;
-        s.source.addEventListener("ended", () => s._playing = false);
-        s.node = s.ctx.createMediaElementSource(s.source);
-        return s;
+    static load(source, crossOrigin = "anonymous") {
+        return new Promise((resolve, reject) => {
+            let s = new Sound("file");
+            if (!s) {
+                reject("Error when creating Sound object.");
+                return;
+            }
+            s.source = (typeof source === 'string') ? new Audio(source) : source;
+            s.source.autoplay = false;
+            s.source.crossOrigin = crossOrigin;
+            s.source.addEventListener("ended", function () { s._playing = false; });
+            s.source.addEventListener('error', function () { reject("Error loading sound"); });
+            s.source.addEventListener('canplaythrough', function () {
+                s.node = s.ctx.createMediaElementSource(s.source);
+                resolve(s);
+            });
+        });
     }
     static generate(type, val) {
-        return new Sound("gen")._gen(type, val);
+        let s = new Sound("gen");
+        if (!s)
+            return undefined;
+        return s._gen(type, val);
     }
     _gen(type, val) {
         this.node = this.ctx.createOscillator();
@@ -4000,6 +4019,8 @@ class Sound {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let s = new Sound("input");
+                if (!s)
+                    return undefined;
                 const c = constraint ? constraint : { audio: true, video: false };
                 s.stream = yield navigator.mediaDevices.getUserMedia(c);
                 s.node = s.ctx.createMediaStreamSource(s.stream);
@@ -4762,14 +4783,14 @@ class MultiTouchSpace extends Space {
     }
     bindTouch(_bind = true) {
         if (_bind) {
-            this.bindCanvas("touchstart", this._mouseDown.bind(this));
+            this.bindCanvas("touchstart", this._touchStart.bind(this));
             this.bindCanvas("touchend", this._mouseUp.bind(this));
             this.bindCanvas("touchmove", this._touchMove.bind(this));
             this.bindCanvas("touchcancel", this._mouseOut.bind(this));
             this._hasTouch = true;
         }
         else {
-            this.unbindCanvas("touchstart", this._mouseDown.bind(this));
+            this.unbindCanvas("touchstart", this._touchStart.bind(this));
             this.unbindCanvas("touchend", this._mouseUp.bind(this));
             this.unbindCanvas("touchmove", this._touchMove.bind(this));
             this.unbindCanvas("touchcancel", this._mouseOut.bind(this));
@@ -4852,6 +4873,11 @@ class MultiTouchSpace extends Space {
     }
     _touchMove(evt) {
         this._mouseMove(evt);
+        evt.preventDefault();
+        return false;
+    }
+    _touchStart(evt) {
+        this._mouseDown(evt);
         evt.preventDefault();
         return false;
     }

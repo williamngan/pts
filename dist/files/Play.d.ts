@@ -28,7 +28,7 @@ export declare class Sound {
     protected _playing: boolean;
     constructor(type: SoundType);
     static from(node: AudioNode, ctx: AudioContext, type?: SoundType, stream?: MediaStream): Sound;
-    static load(source: HTMLMediaElement | string): Sound;
+    static load(source: HTMLMediaElement | string, crossOrigin?: string): Promise<Sound>;
     static generate(type: OscillatorType, val: number | PeriodicWave): Sound;
     protected _gen(type: OscillatorType, val: number | PeriodicWave): Sound;
     static input(constraint?: MediaStreamConstraints): Promise<Sound>;

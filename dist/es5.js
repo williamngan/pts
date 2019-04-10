@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.8.0 - Copyright © 2017-2019 William Ngan and contributors.
+ * pts.js 0.8.1 - Copyright © 2017-2019 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -5567,7 +5567,9 @@ var Sound = function () {
 
         this._playing = false;
         this._type = type;
-        this.ctx = new AudioContext();
+        var _ctx = window.AudioContext || window.webkitAudioContext || false;
+        if (!_ctx) console.error("Your browser doesn't support Web Audio. (No AudioContext)");
+        this.ctx = _ctx ? new _ctx() : undefined;
     }
 
     _createClass(Sound, [{
@@ -5750,6 +5752,7 @@ var Sound = function () {
             var stream = arguments[3];
 
             var s = new Sound(type);
+            if (!s) return undefined;
             s.node = node;
             s.ctx = ctx;
             if (stream) s.stream = stream;
@@ -5758,18 +5761,35 @@ var Sound = function () {
     }, {
         key: "load",
         value: function load(source) {
-            var s = new Sound("file");
-            s.source = typeof source === 'string' ? new Audio(source) : source;
-            s.source.addEventListener("ended", function () {
-                return s._playing = false;
+            var crossOrigin = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "anonymous";
+
+            return new Promise(function (resolve, reject) {
+                var s = new Sound("file");
+                if (!s) {
+                    reject("Error when creating Sound object.");
+                    return;
+                }
+                s.source = typeof source === 'string' ? new Audio(source) : source;
+                s.source.autoplay = false;
+                s.source.crossOrigin = crossOrigin;
+                s.source.addEventListener("ended", function () {
+                    s._playing = false;
+                });
+                s.source.addEventListener('error', function () {
+                    reject("Error loading sound");
+                });
+                s.source.addEventListener('canplaythrough', function () {
+                    s.node = s.ctx.createMediaElementSource(s.source);
+                    resolve(s);
+                });
             });
-            s.node = s.ctx.createMediaElementSource(s.source);
-            return s;
         }
     }, {
         key: "generate",
         value: function generate(type, val) {
-            return new Sound("gen")._gen(type, val);
+            var s = new Sound("gen");
+            if (!s) return undefined;
+            return s._gen(type, val);
         }
     }, {
         key: "input",
@@ -5782,29 +5802,38 @@ var Sound = function () {
                             case 0:
                                 _context.prev = 0;
                                 s = new Sound("input");
+
+                                if (s) {
+                                    _context.next = 4;
+                                    break;
+                                }
+
+                                return _context.abrupt("return", undefined);
+
+                            case 4:
                                 c = constraint ? constraint : { audio: true, video: false };
-                                _context.next = 5;
+                                _context.next = 7;
                                 return navigator.mediaDevices.getUserMedia(c);
 
-                            case 5:
+                            case 7:
                                 s.stream = _context.sent;
 
                                 s.node = s.ctx.createMediaStreamSource(s.stream);
                                 return _context.abrupt("return", s);
 
-                            case 10:
-                                _context.prev = 10;
+                            case 12:
+                                _context.prev = 12;
                                 _context.t0 = _context["catch"](0);
 
                                 console.error("Cannot get audio from input device.");
                                 return _context.abrupt("return", Promise.resolve(null));
 
-                            case 14:
+                            case 16:
                             case "end":
                                 return _context.stop();
                         }
                     }
-                }, _callee, this, [[0, 10]]);
+                }, _callee, this, [[0, 12]]);
             }));
         }
     }]);
@@ -7084,13 +7113,13 @@ var MultiTouchSpace = function (_Space) {
             var _bind = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
 
             if (_bind) {
-                this.bindCanvas("touchstart", this._mouseDown.bind(this));
+                this.bindCanvas("touchstart", this._touchStart.bind(this));
                 this.bindCanvas("touchend", this._mouseUp.bind(this));
                 this.bindCanvas("touchmove", this._touchMove.bind(this));
                 this.bindCanvas("touchcancel", this._mouseOut.bind(this));
                 this._hasTouch = true;
             } else {
-                this.unbindCanvas("touchstart", this._mouseDown.bind(this));
+                this.unbindCanvas("touchstart", this._touchStart.bind(this));
                 this.unbindCanvas("touchend", this._mouseUp.bind(this));
                 this.unbindCanvas("touchmove", this._touchMove.bind(this));
                 this.unbindCanvas("touchcancel", this._mouseOut.bind(this));
@@ -7186,6 +7215,13 @@ var MultiTouchSpace = function (_Space) {
         key: "_touchMove",
         value: function _touchMove(evt) {
             this._mouseMove(evt);
+            evt.preventDefault();
+            return false;
+        }
+    }, {
+        key: "_touchStart",
+        value: function _touchStart(evt) {
+            this._mouseDown(evt);
             evt.preventDefault();
             return false;
         }
