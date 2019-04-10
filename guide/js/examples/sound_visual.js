@@ -7,17 +7,23 @@
   var space = new CanvasSpace("#"+demoID).setup({ retina: true, bgcolor: "#e2e6ef", resize: true });
   var form = space.getForm();
   
-  var sound = Sound.load( "/assets/spacetravel.mp3" ).analyze(bins);
+  var sound;
   var bins = 256;
   var ctrls, radius;
   var colors = ["#f06", "#62e", "#fff", "#fe3", "#0c9"];
 
+  Sound.load( "/assets/spacetravel.mp3" ).then( s => {
+    sound = s;
+    sound.analyze(bins);
+  }).catch( e => console.error(e) );
+
   // Draw play button
   function playButton() {
-    form.fillOnly( sound.playing ? "rgba(0,0,0,.2)" : "#f06").rect( [[0,0], [50,50]] );
-    if (!sound.playing) {
+    if (!sound || !sound.playing) {
+      form.fillOnly("#f06").rect( [[0,0], [50,50]] );
       form.fillOnly('#fff').polygon( Triangle.fromCenter( [25,25], 10 ).rotate2D( Const.half_pi, [25,25] ) );
     } else {
+      form.fillOnly("rgba(0,0,0,.2)").rect( [[0,0], [50,50]] );
       form.fillOnly("#fff").rect( [[18, 18], [32,32]] );
     }
   }
@@ -142,13 +148,7 @@
   space.playOnce(200).bindMouse().bindTouch();
   
   // For use in demo page only
-  if (window.registerDemo) window.registerDemo(demoID, space, null, stopFn);
-  function stopFn() {
-    if (sound && sound.playing) {
-      // shouldStop = true;
-      // sound.stop();
-    }
-  }
+  if (window.registerDemo) window.registerDemo(demoID, space);
 
   
 })();

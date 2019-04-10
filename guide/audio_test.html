@@ -1,0 +1,53 @@
+<html>
+
+<body>
+
+  <h3>Click on the canvas to play</h3>>
+  <canvas id="canvas" style="background:black;width:512px;height:255px;"></canvas>
+  <p>If this works in iOS, then we can assume MediaElementAudioSourceNode is now supported.</p>
+
+  <script>
+    var canvas = document.getElementById('canvas');
+
+    canvas.addEventListener("click", function () {
+
+      var canvasCtx = canvas.getContext("2d");
+      var audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioContext === 'suspended') audioContext.resume();
+      var analyser = audioContext.createAnalyser();
+      var data = new Uint8Array(analyser.frequencyBinCount);
+
+      function render() {
+        analyser.getByteTimeDomainData(data);
+        canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+        for (var i = 0, l = data.length; i < l; i++) {
+          canvasCtx.fillStyle = "#ffffff";
+          canvasCtx.fillRect(i, -(canvas.height / 255) * data[i], 1, canvas.height);
+        }
+        requestAnimationFrame(render);
+      }
+
+      requestAnimationFrame(render);
+
+      var audio = new Audio("/assets/spacetravel.mp3");
+      audio.crossOrigin = "anonymous";
+
+      audio.addEventListener('error', function (e) {
+        console.log(e);
+      });
+
+
+
+      audio.addEventListener('canplay', function () {
+        var audioSourceNode = audioContext.createMediaElementSource(audio);
+
+        audioSourceNode.connect(analyser);
+        analyser.connect(audioContext.destination);
+        if (audioContext === 'suspended') audioContext.resume();
+        audio.play();
+      });
+    });
+  </script>
+</body>
+
+</html>

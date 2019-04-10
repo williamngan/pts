@@ -200,10 +200,11 @@ export class Sound {
   /**
    * Create a `Sound` by loading from a sound file or an audio element.
    * @param source either an url string to load a sound file, or an audio element.
+   * @param crossOrigin whether to support loading cross-origin. Default is "anonymous".
    * @returns a `Sound` instance
    * @example `Sound.load( '/path/to/file.mp3' )`
    */
-  static load( source:HTMLMediaElement|string ):Promise<Sound> {
+  static load( source:HTMLMediaElement|string, crossOrigin:string="anonymous" ):Promise<Sound> {
     return new Promise( (resolve, reject) => {
       let s = new Sound("file");
       if (!s) {
@@ -212,6 +213,7 @@ export class Sound {
       }
       s.source = (typeof source === 'string') ? new Audio(source) : source;
       s.source.autoplay = false;
+      (s.source as HTMLMediaElement).crossOrigin = crossOrigin;
       s.source.addEventListener("ended", function () { s._playing = false; } );
       s.source.addEventListener('error', function () { reject("Error loading sound"); });
       s.source.addEventListener('canplaythrough', function () {
@@ -219,6 +221,30 @@ export class Sound {
         resolve( s );
       });
     });
+
+    /*
+      // Sample code of using AudioBufferSourceNode instead of MediaElementAudioSourceNode
+      // AudioBufferSourceNode can work with iOS and Safari currently. But it's very cumbersome and cannot stream playthrough.
+      // Not implementing for now.
+
+      let request = new XMLHttpRequest();
+      request.open('GET', source as string, true);
+      request.responseType = 'arraybuffer';
+
+      // Decode asynchronously
+      request.onload = function() {
+        s.ctx.decodeAudioData(request.response, function(buffer) {
+          s.node = s.ctx.createBufferSource();
+          (s.node as AudioBufferSourceNode ).buffer = buffer;
+          (s.node as AudioBufferSourceNode ).onended = function (evt) { 
+            console.log( "ended" );
+            s._playing = false; 
+          };
+          resolve( s );
+        }, (err) => reject("Error decoding audio") );
+      };
+      request.send();
+    */
   }
 
 
