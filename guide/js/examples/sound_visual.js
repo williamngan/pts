@@ -15,6 +15,7 @@
   Sound.load( "/assets/spacetravel.mp3" ).then( s => {
     sound = s;
     sound.analyze(bins);
+    space.playOnce(50);
   }).catch( e => console.error(e) );
 
   // Draw play button
