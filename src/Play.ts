@@ -161,8 +161,12 @@ export class Sound {
   /** Audio src when loading from file */
   source:HTMLMediaElement;
 
+  /* Audio buffer when using AudioBufferSourceNode */
+  buffer:AudioBuffer;
+
   /** Analyzer if any */
   analyzer:ISoundAnalyzer;
+
   
   protected _playing:boolean = false;
 
@@ -174,7 +178,7 @@ export class Sound {
     this._type = type;
     // @ts-ignore
     let _ctx = window.AudioContext || window.webkitAudioContext || false; 
-    if (!_ctx) console.error("Your browser doesn't support Web Audio. (No AudioContext)");
+    if (!_ctx) throw( new Error("Your browser doesn't support Web Audio. (No AudioContext)") );
     this.ctx = (_ctx) ? new _ctx() : undefined;
   }
 
@@ -189,7 +193,6 @@ export class Sound {
    */
   static from( node:AudioNode, ctx:AudioContext, type:SoundType="gen", stream?:MediaStream ) {
     let s = new Sound( type );
-    if (!s) return undefined;
     s.node = node;
     s.ctx = ctx;
     if (stream) s.stream = stream;
@@ -207,10 +210,6 @@ export class Sound {
   static load( source:HTMLMediaElement|string, crossOrigin:string="anonymous" ):Promise<Sound> {
     return new Promise( (resolve, reject) => {
       let s = new Sound("file");
-      if (!s) {
-        reject("Error when creating Sound object.");
-        return;
-      }
       s.source = (typeof source === 'string') ? new Audio(source) : source;
       s.source.autoplay = false;
       (s.source as HTMLMediaElement).crossOrigin = crossOrigin;
@@ -222,29 +221,48 @@ export class Sound {
       });
     });
 
-    /*
-      // Sample code of using AudioBufferSourceNode instead of MediaElementAudioSourceNode
-      // AudioBufferSourceNode can work with iOS and Safari currently. But it's very cumbersome and cannot stream playthrough.
-      // Not implementing for now.
+  }
 
+
+  /**
+   * Create a `Sound` by loading from a sound file url as `AudioBufferSourceNode`. This method is cumbersome since it can only be played once. 
+   * Use this method for now if you need to visualize sound in Safari and iOS. Once Apple has full support for FFT with streaming `HTMLMediaElement`, this method will likely be deprecated.
+   * @param url an url to the sound file
+   */
+  static loadAsBuffer( url:string ):Promise<Sound> {
+    return new Promise( (resolve, reject) => {
       let request = new XMLHttpRequest();
-      request.open('GET', source as string, true);
+      request.open('GET', url, true);
       request.responseType = 'arraybuffer';
 
-      // Decode asynchronously
+      let s = new Sound("file");
       request.onload = function() {
-        s.ctx.decodeAudioData(request.response, function(buffer) {
-          s.node = s.ctx.createBufferSource();
-          (s.node as AudioBufferSourceNode ).buffer = buffer;
+        s.ctx.decodeAudioData(request.response, function(buffer) { // Decode asynchronously
+          s.createBuffer( buffer );
           (s.node as AudioBufferSourceNode ).onended = function (evt) { 
-            console.log( "ended" );
             s._playing = false; 
           };
           resolve( s );
         }, (err) => reject("Error decoding audio") );
       };
       request.send();
-    */
+    });
+  }
+
+
+  /**
+   * Create an AudioBuffer. Only needed if you are using `Sound.loadAsBuffer`.
+   * @param buf an AudioBuffer
+   */
+  protected createBuffer( buf:AudioBuffer ):this {
+    this.node = this.ctx.createBufferSource();
+    if (buf === undefined) {
+      (this.node as AudioBufferSourceNode).buffer = this.buffer; // re-use current buffer
+    } else {
+      this.buffer = buf;
+      (this.node as AudioBufferSourceNode).buffer = buf;
+    }
+    return this;
   }
 
 
@@ -257,7 +275,6 @@ export class Sound {
    */
   static generate( type:OscillatorType, val:number|PeriodicWave ):Sound {
     let s = new Sound("gen");
-    if (!s) return undefined;
     return s._gen( type, val );
   }
 
@@ -318,7 +335,7 @@ export class Sound {
    * You can also use `this.source.addEventListener( 'canplaythrough', ...)` if needed. See also [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/canplaythrough_event).
    */
   get playable():boolean {
-    return (this._type === "input") ? this.node !== undefined : this.source.readyState === 4;
+    return (this._type === "input") ? this.node !== undefined : (!!this.buffer || this.source.readyState === 4);
   }
 
 
@@ -466,7 +483,7 @@ export class Sound {
     if (this.ctx.state === 'suspended') this.ctx.resume();
     
     if (this._type === "file") {
-      this.source.play();
+      (!!this.buffer) ? (this.node as AudioBufferSourceNode).start(0) : this.source.play();
 
     } else if (this._type === "gen") {
       this._gen( (this.node as OscillatorNode).type, (this.node as OscillatorNode).frequency.value );
@@ -488,7 +505,7 @@ export class Sound {
     if (this._playing) this.node.disconnect( this.ctx.destination );
     
     if (this._type === "file") {
-      this.source.pause();
+      (!!this.buffer) ? (this.node as AudioBufferSourceNode).stop() : this.source.pause();
 
     } else if (this._type === "gen") {
       (this.node as OscillatorNode).stop();

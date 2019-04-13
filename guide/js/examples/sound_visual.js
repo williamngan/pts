@@ -11,12 +11,21 @@
   var bins = 256;
   var ctrls, radius;
   var colors = ["#f06", "#62e", "#fff", "#fe3", "#0c9"];
+  var bufferLoaded = false;
 
-  Sound.load( "/assets/spacetravel.mp3" ).then( s => {
+  Sound.loadAsBuffer( "/assets/spacetravel.mp3" ).then( s => {
     sound = s;
     sound.analyze(bins);
     space.playOnce(50);
+    bufferLoaded = true;
   }).catch( e => console.error(e) );
+
+
+  function replay() {
+    if (bufferLoaded) sound.createBuffer().analyze(bins);
+    sound.start();
+  }
+
 
   // Draw play button
   function playButton() {
@@ -138,7 +147,7 @@
 
     action: (type, x, y) => {
       if (type === "up" && Geom.withinBound( [x,y], [0,0], [50,50] )) {
-        sound.toggle();
+        (sound.playing) ? sound.stop() : replay();
       }
     }
   });
@@ -149,7 +158,9 @@
   space.playOnce(200).bindMouse().bindTouch();
   
   // For use in demo page only
-  if (window.registerDemo) window.registerDemo(demoID, space);
-
+  if (window.registerDemo) window.registerDemo(demoID, space, startFn, null, true);
+  function startFn() {
+    if (sound && !sound.playing) space.replay();
+  }
   
 })();
