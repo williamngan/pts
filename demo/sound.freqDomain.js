@@ -9,22 +9,27 @@ Pts.quickStart( "#pt", "#fe3" );
 
 (function() {
 
-  var sound = Sound.load( "/assets/spacetravel.mp3" ).analyze(bins);
+  // load sound
+  var sound;
+  Sound.load( "/assets/spacetravel.mp3" ).then( s => {
+    sound = s.analyze(bins);
+  }).catch( e => console.error(e) );
+
   var bins = 256;
   var ctrls, radius;
   var colors = ["#f06", "#62e", "#fff", "#fe3", "#0c9"];
 
   // Draw play button
   function playButton() {
-    form.fillOnly( sound.playing ? "rgba(0,0,0,.2)" : "#f06").rect( [[0,0], [50,50]] );
-    if (!sound.playing) {
+    if (!sound || !sound.playing) {
+      form.fillOnly("#f06").rect( [[0,0], [50,50]] );
       form.fillOnly('#fff').polygon( Triangle.fromCenter( [25,25], 10 ).rotate2D( Const.half_pi, [25,25] ) );
     } else {
+      form.fillOnly("rgba(0,0,0,.2)").rect( [[0,0], [50,50]] );
       form.fillOnly("#fff").rect( [[18, 18], [32,32]] );
     }
   }
   
-
   function getCtrlPoints( t ) {
     let r = radius + radius * ( Num.cycle( t%3000/3000 ) * 0.2);
     let temp = ctrls.clone();
@@ -91,10 +96,9 @@ Pts.quickStart( "#pt", "#fe3" );
             temp.push( spikes[i] );
             tris.push( temp );
           }
-
+          
           tindex = (i+1) % 3;
         }
-
 
         // draw spikes
         let f_scale = f_acc/bins;
@@ -115,7 +119,6 @@ Pts.quickStart( "#pt", "#fe3" );
           form.strokeOnly( "#123", 2 ).line( t2 );
         }
 
-
         // draw eyes        
         let eyeRight = center.clone().toAngle( -Const.quarter_pi-0.2, radius/2, true );
         let eyeLeft = center.clone().toAngle( -Const.quarter_pi-Const.half_pi+0.2, radius/2, true );
@@ -128,7 +131,6 @@ Pts.quickStart( "#pt", "#fe3" );
       }
 
       playButton();
-
     },
 
     action: (type, x, y) => {

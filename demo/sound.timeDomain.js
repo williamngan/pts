@@ -11,32 +11,33 @@ Pts.quickStart( "#pt", "#eae6ef" );
   
   var files = ["/assets/flute.mp3", "/assets/drum.mp3", "/assets/tambourine.mp3"];
   var currFile = 0;
+  var bins = 512;
   var sound;
 
   // Load next sound file
-  function nextSound() {
-    sound = Sound.load( files[currFile] ).analyze(512); 
-    currFile = (currFile + 1) % files.length;
+  function nextSound( play=true ) {
+    Sound.load( files[currFile] ).then( s => {
+      sound = s.analyze( bins ).start();
+      currFile = (currFile + 1) % files.length;
+    }).catch( e => console.error(e) );
   }
 
   // Draw play button
   function playButton( size ) {
-    if (!sound) return;
-    if (!sound.playing) {
+    if (!sound || !sound.playing) {
       form.fillOnly('rgba(0,0,0,.2)').circle( Circle.fromCenter( space.center, size ) );
       form.fillOnly('#fff').polygon( Triangle.fromCenter( space.center, size/2 ).rotate2D( Const.half_pi, space.center ) );
     }
   }
-
-  nextSound();
 
   space.add({ 
     animate: (time, ftime) => {
       if (sound && sound.playable) {
 
         // map time domain data to lines drawing two half circles
+        let r = Math.min( space.size.x, space.size.y/0.9 );
         let tdata = sound.timeDomainTo( [Const.two_pi, 1] ).map( (t, i) => {
-          let ln = Line.fromAngle( [ (i>256 ? space.size.x : 0), space.center.y ], t.x-Const.half_pi, space.size.y/0.9 );
+          let ln = Line.fromAngle( [ (i>bins/2 ? space.size.x : 0), space.center.y ], t.x-Const.half_pi, r );
           return [ ln.p1, ln.interpolate( t.y ) ]
         });
 
@@ -51,8 +52,7 @@ Pts.quickStart( "#pt", "#eae6ef" );
 
     action: (type, x, y) => {
       if (type === "up") {
-        if (!sound.playing) nextSound();
-        sound.toggle();
+        if (!sound || !sound.playing) nextSound();
       }
     }
   });
