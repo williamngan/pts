@@ -3966,13 +3966,11 @@ class Sound {
         this._type = type;
         let _ctx = window.AudioContext || window.webkitAudioContext || false;
         if (!_ctx)
-            console.error("Your browser doesn't support Web Audio. (No AudioContext)");
+            throw (new Error("Your browser doesn't support Web Audio. (No AudioContext)"));
         this.ctx = (_ctx) ? new _ctx() : undefined;
     }
     static from(node, ctx, type = "gen", stream) {
         let s = new Sound(type);
-        if (!s)
-            return undefined;
         s.node = node;
         s.ctx = ctx;
         if (stream)
@@ -3982,10 +3980,6 @@ class Sound {
     static load(source, crossOrigin = "anonymous") {
         return new Promise((resolve, reject) => {
             let s = new Sound("file");
-            if (!s) {
-                reject("Error when creating Sound object.");
-                return;
-            }
             s.source = (typeof source === 'string') ? new Audio(source) : source;
             s.source.autoplay = false;
             s.source.crossOrigin = crossOrigin;
@@ -3997,10 +3991,37 @@ class Sound {
             });
         });
     }
+    static loadAsBuffer(url) {
+        return new Promise((resolve, reject) => {
+            let request = new XMLHttpRequest();
+            request.open('GET', url, true);
+            request.responseType = 'arraybuffer';
+            let s = new Sound("file");
+            request.onload = function () {
+                s.ctx.decodeAudioData(request.response, function (buffer) {
+                    s.createBuffer(buffer);
+                    s.node.onended = function (evt) {
+                        s._playing = false;
+                    };
+                    resolve(s);
+                }, (err) => reject("Error decoding audio"));
+            };
+            request.send();
+        });
+    }
+    createBuffer(buf) {
+        this.node = this.ctx.createBufferSource();
+        if (buf === undefined) {
+            this.node.buffer = this.buffer;
+        }
+        else {
+            this.buffer = buf;
+            this.node.buffer = buf;
+        }
+        return this;
+    }
     static generate(type, val) {
         let s = new Sound("gen");
-        if (!s)
-            return undefined;
         return s._gen(type, val);
     }
     _gen(type, val) {
@@ -4039,7 +4060,7 @@ class Sound {
         return this._playing;
     }
     get playable() {
-        return (this._type === "input") ? this.node !== undefined : this.source.readyState === 4;
+        return (this._type === "input") ? this.node !== undefined : (!!this.buffer || this.source.readyState === 4);
     }
     get binSize() {
         return this.analyzer.size;
@@ -4113,7 +4134,7 @@ class Sound {
         if (this.ctx.state === 'suspended')
             this.ctx.resume();
         if (this._type === "file") {
-            this.source.play();
+            (!!this.buffer) ? this.node.start(0) : this.source.play();
         }
         else if (this._type === "gen") {
             this._gen(this.node.type, this.node.frequency.value);
@@ -4129,7 +4150,7 @@ class Sound {
         if (this._playing)
             this.node.disconnect(this.ctx.destination);
         if (this._type === "file") {
-            this.source.pause();
+            (!!this.buffer) ? this.node.stop() : this.source.pause();
         }
         else if (this._type === "gen") {
             this.node.stop();
