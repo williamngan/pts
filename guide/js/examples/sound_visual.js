@@ -13,17 +13,34 @@
   var colors = ["#f06", "#62e", "#fff", "#fe3", "#0c9"];
   var bufferLoaded = false;
 
-  Sound.loadAsBuffer( "/assets/spacetravel.mp3" ).then( s => {
+  
+  // Method 1: Streaming play - simpler but time/freq domain doesn't work in Safari and iOS (as of 4/2019)
+  // Sound.load( "/assets/spacetravel.mp3" ).then( s => {
+  //   sound = s.analyze( bins );
+  // });
+
+  // If using Method 1: Sound.load(...)
+  // function toggle() {
+  //    sound.toggle();
+  // }
+
+
+  // Method 2 --------------------------------
+  // Buffer and play - work across all browsers but no streaming and more code
+  Sound.loadAsBuffer( "/assets/drum.mp3" ).then( s => {
     sound = s;
-    sound.analyze(bins);
-    space.playOnce(50);
+    space.playOnce(50); // render for noce
     bufferLoaded = true;
   }).catch( e => console.error(e) );
 
-
-  function replay() {
-    if (bufferLoaded) sound.createBuffer().analyze(bins);
-    sound.start();
+  // If using Method 2: Sound.loadAsBuffer(...)
+  function toggle() {
+    if (sound.playing || !bufferLoaded) {
+      sound.stop();
+    } else {
+      sound.createBuffer().analyze(bins); // recreate buffer again
+      sound.start();
+    }
   }
 
 
@@ -70,6 +87,8 @@
     animate: (time, ftime) => {
 
       if (sound && sound.playable) {
+
+        if (sound.progress >= 1) sound.stop(); // this fixes Safari onended bug
 
         // get b-spline curve and draw face shape
         let anchors = getCtrlPoints(time); 
@@ -147,7 +166,7 @@
 
     action: (type, x, y) => {
       if (type === "up" && Geom.withinBound( [x,y], [0,0], [50,50] )) {
-        (sound.playing) ? sound.stop() : replay();
+        toggle();
       }
     }
   });

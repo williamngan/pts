@@ -167,8 +167,9 @@ export class Sound {
   /** Analyzer if any */
   analyzer:ISoundAnalyzer;
 
-  
   protected _playing:boolean = false;
+
+  protected _timestamp:number; // Tracking play time against ctx.currentTime
 
   /**
    * Construct a `Sound` instance. Usually, it's more convenient to use one of the static methods like [`Sound.load`](#function_load) or [`Sound.from`](#function_from). 
@@ -239,9 +240,6 @@ export class Sound {
       request.onload = function() {
         s.ctx.decodeAudioData(request.response, function(buffer) { // Decode asynchronously
           s.createBuffer( buffer );
-          (s.node as AudioBufferSourceNode ).onended = function (evt) { 
-            s._playing = false; 
-          };
           resolve( s );
         }, (err) => reject("Error decoding audio") );
       };
@@ -258,6 +256,9 @@ export class Sound {
     this.node = this.ctx.createBufferSource();
     if (buf === undefined) {
       (this.node as AudioBufferSourceNode).buffer = this.buffer; // re-use current buffer
+      (this.node as AudioBufferSourceNode).onended = () => { 
+        this._playing = false;
+      };
     } else {
       this.buffer = buf;
       (this.node as AudioBufferSourceNode).buffer = buf;
@@ -329,6 +330,18 @@ export class Sound {
     return this._playing;
   }
 
+  get progress():number {
+    let dur = 0;
+    let curr = 0;
+    if (!!this.buffer) {
+      dur = this.buffer.duration;
+      curr = (this._timestamp) ? this.ctx.currentTime - this._timestamp : 0;
+    } else { 
+      dur = this.source.duration;
+      curr = this.source.currentTime;
+    }
+    return curr / dur;
+  }
 
   /**
    * Indicate whether the sound is ready to play. When loading from a file, this corresponds to a ["canplaythrough"](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState) event. 
@@ -478,13 +491,19 @@ export class Sound {
 
   /**
    * Start playing. Internally this connects the `AudioNode` to `AudioContext`'s destination.
+   * @param timeAt optional parameter to play from a specific time
    */
-  start():this {
+  start( timeAt:number=0 ):this {
     if (this.ctx.state === 'suspended') this.ctx.resume();
     
     if (this._type === "file") {
-      (!!this.buffer) ? (this.node as AudioBufferSourceNode).start(0) : this.source.play();
-
+      if (!!this.buffer) {
+        (this.node as AudioBufferSourceNode).start(timeAt);
+        this._timestamp = this.ctx.currentTime + timeAt;
+      } else { 
+        this.source.play();
+        if (timeAt > 0) this.source.currentTime = timeAt;
+      }
     } else if (this._type === "gen") {
       this._gen( (this.node as OscillatorNode).type, (this.node as OscillatorNode).frequency.value );
       (this.node as OscillatorNode).start();
