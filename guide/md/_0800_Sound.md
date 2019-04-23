@@ -10,20 +10,25 @@ Before we start, let's try a silly and fun visualization using Pts's sound funct
 
 ### Input
 
-Let's get some sounds to start! Do you want to load from a sound file, receive microphone input, or generate audio dynamically? Pts offers three handy static functions for these.
+Let's get some sounds to start! Do you want to load from a sound file, receive microphone input, or generate audio dynamically? Pts offers four handy static functions for these.
 
-1. Using [`Sound.load`](#play-sound) to load a sound file with an url or a specific `<audio>` element. You can check if the audio file is ready to play by accessing [`.playable`](#play-sound) property.
+1. Use [`Sound.load`](#play-sound) to load a sound file with an url or a specific `<audio>` element. The sound will play as soon as it has streamed enough data. You can check if the audio file is ready to play by accessing [`.playable`](#play-sound) property. 
 ```
-let sound = Sound.load( "/path/to/hello.mp3" );
-let sound2 = Sound.load( audioElement );
+Sound.load( "/path/to/hello.mp3" ).then( s => sound = s );
+Sound.load( audioElem ).then( s => sound = s ); // load from <audio> element
 ```
 
-2. Using [`Sound.generate`](#play-sound) to create a sound.
+2. Use [`Sound.loadAsBuffer`](#play-sound) if you need support for Safari and iOS, since they currently don't provide sound data for <audio> element reliably. See discussion in Advanced section below.
+```
+Sound.loadAsBuffer( "/path/to/hello.mp3" ).then( s => sound = s );
+```
+
+3. Use [`Sound.generate`](#play-sound) to create a sound.
 ```
 let sound = Sound.generate( "sine", 120 ); // sine oscillator at 120Hz
 ```
 
-3. Using [`Sound.input`](#play-sound) to get audio from default input device (usually microphone). This will return a Promise object which will resolve when the input device is ready.
+4. Use [`Sound.input`](#play-sound) to get audio from default input device (usually microphone). This will return a Promise object which will resolve when the input device is ready.
 ```
 let sound;
 Sound.input().then( s => sound = s ); // default input device
@@ -97,7 +102,20 @@ Or make something fun, weird, beautiful through the interplay of sounds and shap
 ![js:sound_frequency](./assets/bg.png)
 
 ### Advanced
-For advanced use cases, you can create an instance using  [`Sound.from`](#play-sound) static method. Here's an example using Tone.js:
+Currently Safari and iOS can play streaming <audio> element, but don't reliably provide time and frequency domain data for it. Hopefully Safari will fix this soon, but for now you can use `Sound.loadAsBuffer` to make it work.
+
+```
+Sound.loadAsBuffer( "/path/to/hello.mp3" ).then( s => sound = s );
+```
+
+A sound created with `AudioBuffer` can only be played once. To replay it, you need to recreate the buffer and reconnect the nodes. Use `createBuffer()` without parameter to re-use the previous buffer.
+
+```
+// replay the sound by reusing previously loaded buffer
+sound.createBuffer().analyze(bins);
+```
+
+For custom use cases with other libraries, you can create an instance using  [`Sound.from`](#play-sound) static method. Here's an example using Tone.js:
 
 ```
 let synth = new Tone.Synth(); 
