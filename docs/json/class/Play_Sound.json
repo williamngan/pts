@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 6606,
+  "id": 6618,
   "comment": "Sound class simplifies common tasks like audio inputs and visualizations using a subset of Web Audio API. It can be used with other audio libraries like tone.js, and extended to support additional web audio functions. See [the guide](../guide/Sound-0800.html) to get started.",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "Play.ts",
-          167,
-          37
+          172,
+          30
         ]
       ],
-      "id": 6614,
+      "id": 6628,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -48,11 +48,11 @@
       "source": [
         [
           "Play.ts",
-          285,
+          358,
           13
         ]
       ],
-      "id": 6643,
+      "id": 6666,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -67,16 +67,16 @@
       "source": [
         [
           "Play.ts",
-          301,
+          374,
           15
         ],
         [
           "Play.ts",
-          304,
+          377,
           15
         ]
       ],
-      "id": 6647,
+      "id": 6670,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -99,11 +99,11 @@
       "source": [
         [
           "Play.ts",
-          277,
+          350,
           14
         ]
       ],
-      "id": 6641,
+      "id": 6664,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -118,11 +118,11 @@
       "source": [
         [
           "Play.ts",
-          268,
+          324,
           13
         ]
       ],
-      "id": 6639,
+      "id": 6660,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -133,15 +133,34 @@
       "setter": false
     },
     {
+      "name": "progress",
+      "source": [
+        [
+          "Play.ts",
+          332,
+          14
+        ]
+      ],
+      "id": 6662,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "A value between 0 to 1 to indicate playback progress.",
+      "getter": {
+        "type": "number"
+      },
+      "setter": false
+    },
+    {
       "name": "sampleRate",
       "source": [
         [
           "Play.ts",
-          293,
+          366,
           16
         ]
       ],
-      "id": 6645,
+      "id": 6668,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -156,11 +175,11 @@
       "source": [
         [
           "Play.ts",
-          260,
+          316,
           10
         ]
       ],
-      "id": 6637,
+      "id": 6658,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -177,11 +196,11 @@
       "source": [
         [
           "Play.ts",
-          326,
+          399,
           9
         ]
       ],
-      "id": 6654,
+      "id": 6677,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -225,11 +244,11 @@
       "source": [
         [
           "Play.ts",
-          313,
+          386,
           9
         ]
       ],
-      "id": 6651,
+      "id": 6674,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -251,15 +270,47 @@
       ]
     },
     {
+      "name": "createBuffer",
+      "source": [
+        [
+          "Play.ts",
+          255,
+          24
+        ]
+      ],
+      "id": 6644,
+      "flags": {
+        "isProtected": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create an AudioBuffer. Only needed if you are using `Sound.loadAsBuffer`.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "buf",
+              "comment": "an AudioBuffer\n",
+              "type": "AudioBuffer",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "freqDomain",
       "source": [
         [
           "Play.ts",
-          391,
+          464,
           12
         ]
       ],
-      "id": 6676,
+      "id": 6699,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -278,11 +329,11 @@
       "source": [
         [
           "Play.ts",
-          404,
+          477,
           14
         ]
       ],
-      "id": 6678,
+      "id": 6701,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -325,11 +376,11 @@
       "source": [
         [
           "Play.ts",
-          412,
+          485,
           7
         ]
       ],
-      "id": 6683,
+      "id": 6706,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -348,11 +399,11 @@
       "source": [
         [
           "Play.ts",
-          422,
+          496,
           7
         ]
       ],
-      "id": 6685,
+      "id": 6708,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -361,7 +412,14 @@
           "comment": "Start playing. Internally this connects the `AudioNode` to `AudioContext`'s destination.",
           "returns": "this",
           "returns_comment": false,
-          "parameters": [],
+          "parameters": [
+            {
+              "name": "timeAt",
+              "comment": "optional parameter to play from a specific time\n",
+              "type": "number",
+              "default": "0"
+            }
+          ],
           "tags": []
         }
       ]
@@ -371,11 +429,11 @@
       "source": [
         [
           "Play.ts",
-          443,
+          522,
           6
         ]
       ],
-      "id": 6687,
+      "id": 6711,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -394,11 +452,11 @@
       "source": [
         [
           "Play.ts",
-          370,
+          443,
           12
         ]
       ],
-      "id": 6669,
+      "id": 6692,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -417,11 +475,11 @@
       "source": [
         [
           "Play.ts",
-          383,
+          456,
           14
         ]
       ],
-      "id": 6671,
+      "id": 6694,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -464,11 +522,11 @@
       "source": [
         [
           "Play.ts",
-          465,
+          549,
           8
         ]
       ],
-      "id": 6689,
+      "id": 6713,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -487,11 +545,11 @@
       "source": [
         [
           "Play.ts",
-          187,
+          195,
           13
         ]
       ],
-      "id": 6617,
+      "id": 6631,
       "flags": {
         "isStatic": true
       },
@@ -537,11 +595,11 @@
       "source": [
         [
           "Play.ts",
-          218,
+          272,
           17
         ]
       ],
-      "id": 6626,
+      "id": 6647,
       "flags": {
         "isStatic": true
       },
@@ -580,11 +638,11 @@
       "source": [
         [
           "Play.ts",
-          243,
+          298,
           20
         ]
       ],
-      "id": 6634,
+      "id": 6655,
       "flags": {
         "isStatic": true
       },
@@ -617,11 +675,11 @@
       "source": [
         [
           "Play.ts",
-          202,
+          211,
           13
         ]
       ],
-      "id": 6623,
+      "id": 6637,
       "flags": {
         "isStatic": true
       },
@@ -630,7 +688,7 @@
       "signatures": [
         {
           "comment": "Create a `Sound` by loading from a sound file or an audio element.",
-          "returns": "Sound",
+          "returns": "Promise",
           "returns_comment": "a `Sound` instance",
           "parameters": [
             {
@@ -638,6 +696,12 @@
               "comment": "either an url string to load a sound file, or an audio element.",
               "type": "HTMLMediaElement | string",
               "default": false
+            },
+            {
+              "name": "crossOrigin",
+              "comment": "whether to support loading cross-origin. Default is \"anonymous\".",
+              "type": "string",
+              "default": "\"anonymous\""
             }
           ],
           "tags": [
@@ -646,6 +710,38 @@
               "text": "`Sound.load( '/path/to/file.mp3' )`\n"
             }
           ]
+        }
+      ]
+    },
+    {
+      "name": "loadAsBuffer",
+      "source": [
+        [
+          "Play.ts",
+          233,
+          21
+        ]
+      ],
+      "id": 6641,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a `Sound` by loading from a sound file url as `AudioBufferSourceNode`. This method is cumbersome since it can only be played once.\nUse this method for now if you need to visualize sound in Safari and iOS. Once Apple has full support for FFT with streaming `HTMLMediaElement`, this method will likely be deprecated.",
+          "returns": "Promise",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "url",
+              "comment": "an url to the sound file\n",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
         }
       ]
     }
@@ -657,16 +753,32 @@
       "source": [
         [
           "Play.ts",
-          165,
+          168,
           10
         ]
       ],
-      "id": 6612,
+      "id": 6625,
       "flags": {},
       "type": "analyzer",
       "overrides": false,
       "inherits": false,
       "comment": "Analyzer if any"
+    },
+    {
+      "name": "buffer",
+      "source": [
+        [
+          "Play.ts",
+          165,
+          8
+        ]
+      ],
+      "id": 6624,
+      "flags": {},
+      "type": "buffer",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
     },
     {
       "name": "ctx",
@@ -677,7 +789,7 @@
           5
         ]
       ],
-      "id": 6608,
+      "id": 6620,
       "flags": {},
       "type": "ctx",
       "overrides": false,
@@ -693,7 +805,7 @@
           6
         ]
       ],
-      "id": 6609,
+      "id": 6621,
       "flags": {},
       "type": "node",
       "overrides": false,
@@ -709,7 +821,7 @@
           8
         ]
       ],
-      "id": 6611,
+      "id": 6623,
       "flags": {},
       "type": "source",
       "overrides": false,
@@ -725,7 +837,7 @@
           8
         ]
       ],
-      "id": 6610,
+      "id": 6622,
       "flags": {},
       "type": "stream",
       "overrides": false,

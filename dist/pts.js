@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.8.1 - Copyright © 2017-2019 William Ngan and contributors.
+ * pts.js 0.8.2 - Copyright © 2017-2019 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -4000,9 +4000,6 @@ class Sound {
             request.onload = function () {
                 s.ctx.decodeAudioData(request.response, function (buffer) {
                     s.createBuffer(buffer);
-                    s.node.onended = function (evt) {
-                        s._playing = false;
-                    };
                     resolve(s);
                 }, (err) => reject("Error decoding audio"));
             };
@@ -4011,13 +4008,10 @@ class Sound {
     }
     createBuffer(buf) {
         this.node = this.ctx.createBufferSource();
-        if (buf === undefined) {
-            this.node.buffer = this.buffer;
-        }
-        else {
+        if (buf !== undefined)
             this.buffer = buf;
-            this.node.buffer = buf;
-        }
+        this.node.buffer = this.buffer;
+        this.node.onended = () => { this._playing = false; };
         return this;
     }
     static generate(type, val) {
@@ -4058,6 +4052,19 @@ class Sound {
     }
     get playing() {
         return this._playing;
+    }
+    get progress() {
+        let dur = 0;
+        let curr = 0;
+        if (!!this.buffer) {
+            dur = this.buffer.duration;
+            curr = (this._timestamp) ? this.ctx.currentTime - this._timestamp : 0;
+        }
+        else {
+            dur = this.source.duration;
+            curr = this.source.currentTime;
+        }
+        return curr / dur;
     }
     get playable() {
         return (this._type === "input") ? this.node !== undefined : (!!this.buffer || this.source.readyState === 4);
@@ -4130,11 +4137,19 @@ class Sound {
         this.node.disconnect();
         return this;
     }
-    start() {
+    start(timeAt = 0) {
         if (this.ctx.state === 'suspended')
             this.ctx.resume();
         if (this._type === "file") {
-            (!!this.buffer) ? this.node.start(0) : this.source.play();
+            if (!!this.buffer) {
+                this.node.start(timeAt);
+                this._timestamp = this.ctx.currentTime + timeAt;
+            }
+            else {
+                this.source.play();
+                if (timeAt > 0)
+                    this.source.currentTime = timeAt;
+            }
         }
         else if (this._type === "gen") {
             this._gen(this.node.type, this.node.frequency.value);
@@ -4150,7 +4165,13 @@ class Sound {
         if (this._playing)
             this.node.disconnect(this.ctx.destination);
         if (this._type === "file") {
-            (!!this.buffer) ? this.node.stop() : this.source.pause();
+            if (!!this.buffer) {
+                if (this.progress < 1)
+                    this.node.stop();
+            }
+            else {
+                this.source.pause();
+            }
         }
         else if (this._type === "gen") {
             this.node.stop();

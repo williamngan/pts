@@ -5784,6 +5784,12 @@
     0
   ],
   [
+    "Play_Sound#property_buffer",
+    "Sound.buffer",
+    "Variable",
+    0
+  ],
+  [
     "Play_Sound#property_ctx",
     "Sound.ctx",
     "Variable",
@@ -5832,6 +5838,12 @@
     6
   ],
   [
+    "Play_Sound#accessor_progress",
+    "Sound.progress",
+    "Accessor",
+    6
+  ],
+  [
     "Play_Sound#accessor_sampleRate",
     "Sound.sampleRate",
     "Accessor",
@@ -5852,6 +5864,12 @@
   [
     "Play_Sound#function_connect",
     "Sound.connect",
+    "Function",
+    8
+  ],
+  [
+    "Play_Sound#function_createBuffer",
+    "Sound.createBuffer",
     "Function",
     8
   ],
@@ -5924,6 +5942,12 @@
   [
     "Play_Sound#function_load",
     "Sound.load",
+    "Function",
+    8
+  ],
+  [
+    "Play_Sound#function_loadAsBuffer",
+    "Sound.loadAsBuffer",
     "Function",
     8
   ],

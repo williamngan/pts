@@ -325,6 +325,10 @@ export class Sound {
     return this._playing;
   }
 
+
+  /**
+   * A value between 0 to 1 to indicate playback progress.
+   */
   get progress():number {
     let dur = 0;
     let curr = 0;
@@ -337,6 +341,7 @@ export class Sound {
     }
     return curr / dur;
   }
+
 
   /**
    * Indicate whether the sound is ready to play. When loading from a file, this corresponds to a ["canplaythrough"](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState) event. 

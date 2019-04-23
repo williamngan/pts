@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.8.1 - Copyright © 2017-2019 William Ngan and contributors.
+ * pts.js 0.8.2 - Copyright © 2017-2019 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -5568,11 +5568,24 @@ var Sound = function () {
         this._playing = false;
         this._type = type;
         var _ctx = window.AudioContext || window.webkitAudioContext || false;
-        if (!_ctx) console.error("Your browser doesn't support Web Audio. (No AudioContext)");
+        if (!_ctx) throw new Error("Your browser doesn't support Web Audio. (No AudioContext)");
         this.ctx = _ctx ? new _ctx() : undefined;
     }
 
     _createClass(Sound, [{
+        key: "createBuffer",
+        value: function createBuffer(buf) {
+            var _this = this;
+
+            this.node = this.ctx.createBufferSource();
+            if (buf !== undefined) this.buffer = buf;
+            this.node.buffer = this.buffer;
+            this.node.onended = function () {
+                _this._playing = false;
+            };
+            return this;
+        }
+    }, {
         key: "_gen",
         value: function _gen(type, val) {
             this.node = this.ctx.createOscillator();
@@ -5674,9 +5687,17 @@ var Sound = function () {
     }, {
         key: "start",
         value: function start() {
+            var timeAt = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+
             if (this.ctx.state === 'suspended') this.ctx.resume();
             if (this._type === "file") {
-                this.source.play();
+                if (!!this.buffer) {
+                    this.node.start(timeAt);
+                    this._timestamp = this.ctx.currentTime + timeAt;
+                } else {
+                    this.source.play();
+                    if (timeAt > 0) this.source.currentTime = timeAt;
+                }
             } else if (this._type === "gen") {
                 this._gen(this.node.type, this.node.frequency.value);
                 this.node.start();
@@ -5691,7 +5712,11 @@ var Sound = function () {
         value: function stop() {
             if (this._playing) this.node.disconnect(this.ctx.destination);
             if (this._type === "file") {
-                this.source.pause();
+                if (!!this.buffer) {
+                    if (this.progress < 1) this.node.stop();
+                } else {
+                    this.source.pause();
+                }
             } else if (this._type === "gen") {
                 this.node.stop();
             } else if (this._type === "input") {
@@ -5723,9 +5748,23 @@ var Sound = function () {
             return this._playing;
         }
     }, {
+        key: "progress",
+        get: function get() {
+            var dur = 0;
+            var curr = 0;
+            if (!!this.buffer) {
+                dur = this.buffer.duration;
+                curr = this._timestamp ? this.ctx.currentTime - this._timestamp : 0;
+            } else {
+                dur = this.source.duration;
+                curr = this.source.currentTime;
+            }
+            return curr / dur;
+        }
+    }, {
         key: "playable",
         get: function get() {
-            return this._type === "input" ? this.node !== undefined : this.source.readyState === 4;
+            return this._type === "input" ? this.node !== undefined : !!this.buffer || this.source.readyState === 4;
         }
     }, {
         key: "binSize",
@@ -5752,7 +5791,6 @@ var Sound = function () {
             var stream = arguments[3];
 
             var s = new Sound(type);
-            if (!s) return undefined;
             s.node = node;
             s.ctx = ctx;
             if (stream) s.stream = stream;
@@ -5765,10 +5803,6 @@ var Sound = function () {
 
             return new Promise(function (resolve, reject) {
                 var s = new Sound("file");
-                if (!s) {
-                    reject("Error when creating Sound object.");
-                    return;
-                }
                 s.source = typeof source === 'string' ? new Audio(source) : source;
                 s.source.autoplay = false;
                 s.source.crossOrigin = crossOrigin;
@@ -5785,10 +5819,28 @@ var Sound = function () {
             });
         }
     }, {
+        key: "loadAsBuffer",
+        value: function loadAsBuffer(url) {
+            return new Promise(function (resolve, reject) {
+                var request = new XMLHttpRequest();
+                request.open('GET', url, true);
+                request.responseType = 'arraybuffer';
+                var s = new Sound("file");
+                request.onload = function () {
+                    s.ctx.decodeAudioData(request.response, function (buffer) {
+                        s.createBuffer(buffer);
+                        resolve(s);
+                    }, function (err) {
+                        return reject("Error decoding audio");
+                    });
+                };
+                request.send();
+            });
+        }
+    }, {
         key: "generate",
         value: function generate(type, val) {
             var s = new Sound("gen");
-            if (!s) return undefined;
             return s._gen(type, val);
         }
     }, {

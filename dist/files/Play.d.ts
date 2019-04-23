@@ -24,16 +24,21 @@ export declare class Sound {
     node: AudioNode;
     stream: MediaStream;
     source: HTMLMediaElement;
+    buffer: AudioBuffer;
     analyzer: ISoundAnalyzer;
     protected _playing: boolean;
+    protected _timestamp: number;
     constructor(type: SoundType);
     static from(node: AudioNode, ctx: AudioContext, type?: SoundType, stream?: MediaStream): Sound;
     static load(source: HTMLMediaElement | string, crossOrigin?: string): Promise<Sound>;
+    static loadAsBuffer(url: string): Promise<Sound>;
+    protected createBuffer(buf: AudioBuffer): this;
     static generate(type: OscillatorType, val: number | PeriodicWave): Sound;
     protected _gen(type: OscillatorType, val: number | PeriodicWave): Sound;
     static input(constraint?: MediaStreamConstraints): Promise<Sound>;
     readonly type: SoundType;
     readonly playing: boolean;
+    readonly progress: number;
     readonly playable: boolean;
     readonly binSize: number;
     readonly sampleRate: number;
@@ -47,7 +52,7 @@ export declare class Sound {
     freqDomain(): Uint8Array;
     freqDomainTo(size: PtLike, position?: PtLike, trim?: number[]): Group;
     reset(): this;
-    start(): this;
+    start(timeAt?: number): this;
     stop(): this;
     toggle(): this;
 }
