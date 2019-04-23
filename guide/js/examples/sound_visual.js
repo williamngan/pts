@@ -27,7 +27,7 @@
 
   // Method 2 --------------------------------
   // Buffer and play - work across all browsers but no streaming and more code
-  Sound.loadAsBuffer( "/assets/drum.mp3" ).then( s => {
+  Sound.loadAsBuffer( "/assets/spacetravel.mp3" ).then( s => {
     sound = s;
     space.playOnce(50); // render for noce
     bufferLoaded = true;
@@ -40,6 +40,7 @@
     } else {
       sound.createBuffer().analyze(bins); // recreate buffer again
       sound.start();
+      space.replay();
     }
   }
 
@@ -87,8 +88,7 @@
     animate: (time, ftime) => {
 
       if (sound && sound.playable) {
-
-        if (sound.progress >= 1) sound.stop(); // this fixes Safari onended bug
+        if (!sound.playing) space.stop(); // stop animation if not playing
 
         // get b-spline curve and draw face shape
         let anchors = getCtrlPoints(time); 
@@ -160,7 +160,6 @@
         let eyeBallLeft = eyeLeft.clone().toAngle( eyeLeft.$subtract( space.pointer ).angle(), -5, true );
         form.fill("#123").points( [eyeBallLeft, eyeBallRight], 2 + 10*f_scale, "circle" );
       }
-
       playButton();
     },
 

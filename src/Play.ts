@@ -254,15 +254,10 @@ export class Sound {
    */
   protected createBuffer( buf:AudioBuffer ):this {
     this.node = this.ctx.createBufferSource();
-    if (buf === undefined) {
-      (this.node as AudioBufferSourceNode).buffer = this.buffer; // re-use current buffer
-      (this.node as AudioBufferSourceNode).onended = () => { 
-        this._playing = false;
-      };
-    } else {
-      this.buffer = buf;
-      (this.node as AudioBufferSourceNode).buffer = buf;
-    }
+    if (buf !== undefined) this.buffer = buf;
+    
+    (this.node as AudioBufferSourceNode).buffer = this.buffer; // apply or re-use buffer
+    (this.node as AudioBufferSourceNode).onended = () => { this._playing = false; };
     return this;
   }
 
@@ -524,7 +519,12 @@ export class Sound {
     if (this._playing) this.node.disconnect( this.ctx.destination );
     
     if (this._type === "file") {
-      (!!this.buffer) ? (this.node as AudioBufferSourceNode).stop() : this.source.pause();
+      if (!!this.buffer) {
+        // Safari throws InvalidState error if stop() is called after finished playing
+        if (this.progress < 1) (this.node as AudioBufferSourceNode).stop(); 
+      } else {
+        this.source.pause();
+      }
 
     } else if (this._type === "gen") {
       (this.node as OscillatorNode).stop();

@@ -8,31 +8,27 @@
   var form = space.getForm();
   
   var files = ["/assets/flute.mp3", "/assets/drum.mp3", "/assets/tambourine.mp3"];
+  var sounds = [];
   var currFile = 0;
+  var bins = 32; 
   var sound;
 
-  // Load next sound file
-  function nextSound( play=true ) {
-    Sound.load( files[currFile] ).then( (result) => {
-      sound = result;
-      sound.analyze(32);
-      currFile = (currFile + 1) % files.length;
-      if (play) {
-        sound.start();
-        space.replay();
-      } else {
-        space.playOnce(50);
-      }
+  function loadSound(i) {
+    Sound.loadAsBuffer( files[i] ).then( s => {
+      sound = s;
+      sounds.push( s );
+      if (i < files.length-1) loadSound(i+1);
     }).catch( e => console.error(e) );
   }
 
-  nextSound(false);
+  loadSound(0); // load all sounds
 
   // Draw play button
   function playButton() {
     if (!sound || !sound.playing) {
       form.fillOnly('rgba(0,0,0,.2)').circle( Circle.fromCenter( space.center, 30 ) );
       form.fillOnly('#fff').polygon( Triangle.fromCenter( space.center, 15 ).rotate2D( Const.half_pi, space.center ) );
+    
     }
   }
   
@@ -41,6 +37,8 @@
 
     animate: (time, ftime) => {
       if (sound && sound.playable) {
+        if (!sound.playing) space.stop(); // stop animation if not playing
+
         let fd = sound.freqDomainTo( [space.size.y, space.size.x/2] );
         let h = space.size.y / fd.length;
         form.font(9, "bold");
@@ -59,8 +57,11 @@
 
     action: (type, x, y) => {
       if (type === "up" && Geom.withinBound( [x,y], space.center.$subtract( 25 ), space.center.$add( 25 ) )) {
-        if (!sound || !sound.playing) {
-          nextSound();
+        if (!sound.playing && sounds.length > 0) {
+          currFile = (currFile + 1) % sounds.length;
+          sound = sounds[currFile];
+          sound.createBuffer().analyze(bins).start(); // reset buffer and analyzer 
+          space.replay();
         }
       }
     }
@@ -71,10 +72,7 @@
   space.playOnce(200).bindMouse().bindTouch();
   
   // For use in demo page only
-  if (window.registerDemo) window.registerDemo(demoID, space, startFn, null, true);
-  function startFn() {
-    if (sound && !sound.playing) space.replay();
-  }
+  if (window.registerDemo) window.registerDemo(demoID, space, null, null, true);
 
   
 })();
