@@ -153,7 +153,7 @@ code {
   font-size: 0.9em; 
 }
 
-p code, h5 code {
+p code, h5 code, li code {
   font-size: 1em;
   color: #60636F;
   font-style: normal;

@@ -249,8 +249,8 @@ export class Sound {
 
 
   /**
-   * Create an AudioBuffer. Only needed if you are using `Sound.loadAsBuffer`.
-   * @param buf an AudioBuffer
+   * Create or re-use an AudioBuffer. Only needed if you are using `Sound.loadAsBuffer`.
+   * @param buf an AudioBuffer. Optionally, you can call this without parameters to re-use existing buffer.
    */
   protected createBuffer( buf:AudioBuffer ):this {
     this._node = this._ctx.createBufferSource();
@@ -571,7 +571,7 @@ export class Sound {
 
 
   /**
-   * Toggle between `start` and `stop`.
+   * Toggle between `start` and `stop`. This won't work if using [`Sound.loadAsBuffer`](#link), since `AudioBuffer` can only be played once. (See [`Sound.createBuffer`](#link) to reset buffer for replay).
    */
   toggle():this {
     if (this._playing) {

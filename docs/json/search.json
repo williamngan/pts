@@ -5784,44 +5784,32 @@
     0
   ],
   [
-    "Play_Sound#property_buffer",
-    "Sound.buffer",
-    "Variable",
-    0
-  ],
-  [
-    "Play_Sound#property_ctx",
-    "Sound.ctx",
-    "Variable",
-    0
-  ],
-  [
-    "Play_Sound#property_node",
-    "Sound.node",
-    "Variable",
-    0
-  ],
-  [
-    "Play_Sound#property_source",
-    "Sound.source",
-    "Variable",
-    0
-  ],
-  [
-    "Play_Sound#property_stream",
-    "Sound.stream",
-    "Variable",
-    0
-  ],
-  [
     "Play_Sound#accessor_binSize",
     "Sound.binSize",
     "Accessor",
     6
   ],
   [
+    "Play_Sound#accessor_buffer",
+    "Sound.buffer",
+    "Accessor",
+    6
+  ],
+  [
+    "Play_Sound#accessor_ctx",
+    "Sound.ctx",
+    "Accessor",
+    6
+  ],
+  [
     "Play_Sound#accessor_frequency",
     "Sound.frequency",
+    "Accessor",
+    6
+  ],
+  [
+    "Play_Sound#accessor_node",
+    "Sound.node",
     "Accessor",
     6
   ],
@@ -5846,6 +5834,18 @@
   [
     "Play_Sound#accessor_sampleRate",
     "Sound.sampleRate",
+    "Accessor",
+    6
+  ],
+  [
+    "Play_Sound#accessor_source",
+    "Sound.source",
+    "Accessor",
+    6
+  ],
+  [
+    "Play_Sound#accessor_stream",
+    "Sound.stream",
     "Accessor",
     6
   ],

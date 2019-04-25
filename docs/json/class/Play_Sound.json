@@ -48,11 +48,11 @@
       "source": [
         [
           "Play.ts",
-          358,
+          385,
           13
         ]
       ],
-      "id": 6666,
+      "id": 6678,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -63,20 +63,71 @@
       "setter": false
     },
     {
+      "name": "buffer",
+      "source": [
+        [
+          "Play.ts",
+          340,
+          12
+        ],
+        [
+          "Play.ts",
+          341,
+          12
+        ]
+      ],
+      "id": 6666,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Get this Sound's AudioBuffer (if any) instance for advanced use-cases. See [`Sound.loadAsBuffer`](#link).",
+      "getter": {
+        "type": "AudioBuffer"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "b",
+          "comment": "",
+          "type": "AudioBuffer",
+          "default": false
+        }
+      }
+    },
+    {
+      "name": "ctx",
+      "source": [
+        [
+          "Play.ts",
+          316,
+          9
+        ]
+      ],
+      "id": 6658,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Get this Sound's AudioContext instance for advanced use-cases.",
+      "getter": {
+        "type": "AudioContext"
+      },
+      "setter": false
+    },
+    {
       "name": "frequency",
       "source": [
         [
           "Play.ts",
-          374,
+          401,
           15
         ],
         [
           "Play.ts",
-          377,
+          404,
           15
         ]
       ],
-      "id": 6670,
+      "id": 6682,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -95,15 +146,34 @@
       }
     },
     {
+      "name": "node",
+      "source": [
+        [
+          "Play.ts",
+          322,
+          10
+        ]
+      ],
+      "id": 6660,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Get this Sound's AudioNode subclass instance for advanced use-cases.",
+      "getter": {
+        "type": "AudioNode"
+      },
+      "setter": false
+    },
+    {
       "name": "playable",
       "source": [
         [
           "Play.ts",
-          350,
+          377,
           14
         ]
       ],
-      "id": 6664,
+      "id": 6676,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -118,11 +188,11 @@
       "source": [
         [
           "Play.ts",
-          324,
+          353,
           13
         ]
       ],
-      "id": 6660,
+      "id": 6672,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -137,11 +207,11 @@
       "source": [
         [
           "Play.ts",
-          332,
+          359,
           14
         ]
       ],
-      "id": 6662,
+      "id": 6674,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -156,11 +226,11 @@
       "source": [
         [
           "Play.ts",
-          366,
+          393,
           16
         ]
       ],
-      "id": 6668,
+      "id": 6680,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -171,15 +241,53 @@
       "setter": false
     },
     {
+      "name": "source",
+      "source": [
+        [
+          "Play.ts",
+          334,
+          12
+        ]
+      ],
+      "id": 6664,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Get this Sound's Audio element (if used) instance for advanced use-cases. See [`Sound.load`](#link).",
+      "getter": {
+        "type": "HTMLMediaElement"
+      },
+      "setter": false
+    },
+    {
+      "name": "stream",
+      "source": [
+        [
+          "Play.ts",
+          328,
+          12
+        ]
+      ],
+      "id": 6662,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Get this Sound's MediaStream (eg, from microphone, if in use) instance for advanced use-cases. See [`Sound.input`](#link)",
+      "getter": {
+        "type": "MediaStream"
+      },
+      "setter": false
+    },
+    {
       "name": "type",
       "source": [
         [
           "Play.ts",
-          316,
+          347,
           10
         ]
       ],
-      "id": 6658,
+      "id": 6670,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -196,11 +304,11 @@
       "source": [
         [
           "Play.ts",
-          399,
+          426,
           9
         ]
       ],
-      "id": 6677,
+      "id": 6689,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -244,11 +352,11 @@
       "source": [
         [
           "Play.ts",
-          386,
+          413,
           9
         ]
       ],
-      "id": 6674,
+      "id": 6686,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -286,13 +394,13 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Create an AudioBuffer. Only needed if you are using `Sound.loadAsBuffer`.",
+          "comment": "Create or re-use an AudioBuffer. Only needed if you are using `Sound.loadAsBuffer`.",
           "returns": "this",
           "returns_comment": false,
           "parameters": [
             {
               "name": "buf",
-              "comment": "an AudioBuffer\n",
+              "comment": "an AudioBuffer. Optionally, you can call this without parameters to re-use existing buffer.\n",
               "type": "AudioBuffer",
               "default": false
             }
@@ -306,11 +414,11 @@
       "source": [
         [
           "Play.ts",
-          464,
+          491,
           12
         ]
       ],
-      "id": 6699,
+      "id": 6711,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -329,11 +437,11 @@
       "source": [
         [
           "Play.ts",
-          477,
+          504,
           14
         ]
       ],
-      "id": 6701,
+      "id": 6713,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -376,11 +484,11 @@
       "source": [
         [
           "Play.ts",
-          485,
+          512,
           7
         ]
       ],
-      "id": 6706,
+      "id": 6718,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -399,11 +507,11 @@
       "source": [
         [
           "Play.ts",
-          496,
+          523,
           7
         ]
       ],
-      "id": 6708,
+      "id": 6720,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -429,11 +537,11 @@
       "source": [
         [
           "Play.ts",
-          522,
+          549,
           6
         ]
       ],
-      "id": 6711,
+      "id": 6723,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -452,11 +560,11 @@
       "source": [
         [
           "Play.ts",
-          443,
+          470,
           12
         ]
       ],
-      "id": 6692,
+      "id": 6704,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -475,11 +583,11 @@
       "source": [
         [
           "Play.ts",
-          456,
+          483,
           14
         ]
       ],
-      "id": 6694,
+      "id": 6706,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -522,17 +630,17 @@
       "source": [
         [
           "Play.ts",
-          549,
+          576,
           8
         ]
       ],
-      "id": 6713,
+      "id": 6725,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
-          "comment": "Toggle between `start` and `stop`.",
+          "comment": "Toggle between `start` and `stop`. This won't work if using [`Sound.loadAsBuffer`](#link), since `AudioBuffer` can only be played once. (See [`Sound.createBuffer`](#link) to reset buffer for replay).",
           "returns": "this",
           "returns_comment": false,
           "parameters": [],
@@ -763,86 +871,6 @@
       "overrides": false,
       "inherits": false,
       "comment": "Analyzer if any"
-    },
-    {
-      "name": "buffer",
-      "source": [
-        [
-          "Play.ts",
-          165,
-          8
-        ]
-      ],
-      "id": 6624,
-      "flags": {},
-      "type": "buffer",
-      "overrides": false,
-      "inherits": false,
-      "comment": ""
-    },
-    {
-      "name": "ctx",
-      "source": [
-        [
-          "Play.ts",
-          153,
-          5
-        ]
-      ],
-      "id": 6620,
-      "flags": {},
-      "type": "ctx",
-      "overrides": false,
-      "inherits": false,
-      "comment": "The audio context"
-    },
-    {
-      "name": "node",
-      "source": [
-        [
-          "Play.ts",
-          156,
-          6
-        ]
-      ],
-      "id": 6621,
-      "flags": {},
-      "type": "node",
-      "overrides": false,
-      "inherits": false,
-      "comment": "The audio node, which is usually a subclass liked OscillatorNode"
-    },
-    {
-      "name": "source",
-      "source": [
-        [
-          "Play.ts",
-          162,
-          8
-        ]
-      ],
-      "id": 6623,
-      "flags": {},
-      "type": "source",
-      "overrides": false,
-      "inherits": false,
-      "comment": "Audio src when loading from file"
-    },
-    {
-      "name": "stream",
-      "source": [
-        [
-          "Play.ts",
-          159,
-          8
-        ]
-      ],
-      "id": 6622,
-      "flags": {},
-      "type": "stream",
-      "overrides": false,
-      "inherits": false,
-      "comment": "The audio stream when streaming from input device"
     }
   ],
   "flags": {},

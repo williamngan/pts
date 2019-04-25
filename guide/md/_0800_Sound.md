@@ -102,13 +102,13 @@ Or make something fun, weird, beautiful through the interplay of sounds and shap
 ![js:sound_frequency](./assets/bg.png)
 
 ### Advanced
-Currently Safari and iOS can play streaming <audio> element, but don't reliably provide time and frequency domain data for it. Hopefully Safari will fix this soon, but for now you can use `Sound.loadAsBuffer` to make it work.
+Currently Safari and iOS can play streaming <audio> element, but don't reliably provide time and frequency domain data for it. Hopefully Safari will fix this soon, but for now you can use [`AudioBuffer`](https://developer.mozilla.org/en-US/docs/Web/API/AudioBuffer) approach - it's a bit more clumsy but it works (see [`loadAsBuffer`](#play-sound)).
 
 ```
 Sound.loadAsBuffer( "/path/to/hello.mp3" ).then( s => sound = s );
 ```
 
-A sound created with `AudioBuffer` can only be played once. To replay it, you need to recreate the buffer and reconnect the nodes. Use `createBuffer()` without parameter to re-use the previous buffer.
+`AudioBuffer` doesn't support streaming and can only be played once. To replay it, you need to recreate the buffer and reconnect the nodes. Use [`createBuffer`](#play-sound) without parameter to re-use the previous buffer.
 
 ```
 // replay the sound by reusing previously loaded buffer
@@ -135,6 +135,7 @@ If needed, you can also directly access the following properties in a Sound inst
 - `.node` to access the `AudioNode` instance
 - `.stream` to access the `MediaStream` instance
 - `.source` to access the `HTMLMediaElement` if you're playing from a sound file
+- `.buffer` to access or set the `AudioBuffer` if you're using [`loadAsBuffer`](#play-sound)
 
 Also note that calling [`start`](#play-sound) function will connect the AudioNode to the destination of the AudioContext, while [`stop`](#play-sound) will disconnect it.
 
@@ -149,10 +150,11 @@ Web Audio covers a wide range of topics. Here are a few pointers for you to dive
 
 Creating and playing a [`Sound`](#play-sound) instance
 ```
-s = Sound.load( "path/to/file.mp3" ); // from file
+s = Sound.load( "path/file.mp3" ).then( s => sound = s ); // from file
+s = Sound.loadAsBuffer( "path/file.mp3" ).then( s => sound = s ); // using AudioBuffer instead
+Sound.input().then( _s => s = _s ); // get microphone input
 s = Sound.generate( "sine", 120 ); // sine wave at 120hz
 s = Sound.from( node, context ); // advanced use case
-Sound.input().then( _s => s = _s ); // get microphone input
 
 s.start();
 s.stop();
@@ -161,7 +163,7 @@ s.toggle();
 
 Getting time domain and frequency domain data
 ```
-s.analyzer( 1024 ); // Create analyzer with 1024 bins. Call once only.
+s.analyzer( 256 ); // Create analyzer with 256 bins. Call once only.
 
 s.timeDomain();
 s.timeDomainTo( area, position ); // map to a area [w, h] from position [x, y]
