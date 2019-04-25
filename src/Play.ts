@@ -150,19 +150,19 @@ export class Sound {
   private _type:SoundType;
 
   /** The audio context */
-  ctx:AudioContext;
+  _ctx:AudioContext;
 
   /** The audio node, which is usually a subclass liked OscillatorNode */
-  node:AudioNode;
+  _node:AudioNode;
 
   /** The audio stream when streaming from input device */
-  stream:MediaStream;
+  _stream:MediaStream;
 
   /** Audio src when loading from file */
-  source:HTMLMediaElement;
+  _source:HTMLMediaElement;
 
   /* Audio buffer when using AudioBufferSourceNode */
-  buffer:AudioBuffer;
+  _buffer:AudioBuffer;
 
   /** Analyzer if any */
   analyzer:ISoundAnalyzer;
@@ -180,7 +180,7 @@ export class Sound {
     // @ts-ignore
     let _ctx = window.AudioContext || window.webkitAudioContext || false; 
     if (!_ctx) throw( new Error("Your browser doesn't support Web Audio. (No AudioContext)") );
-    this.ctx = (_ctx) ? new _ctx() : undefined;
+    this._ctx = (_ctx) ? new _ctx() : undefined;
   }
 
 
@@ -194,9 +194,9 @@ export class Sound {
    */
   static from( node:AudioNode, ctx:AudioContext, type:SoundType="gen", stream?:MediaStream ) {
     let s = new Sound( type );
-    s.node = node;
-    s.ctx = ctx;
-    if (stream) s.stream = stream;
+    s._node = node;
+    s._ctx = ctx;
+    if (stream) s._stream = stream;
     return s;
   }
 
@@ -211,13 +211,13 @@ export class Sound {
   static load( source:HTMLMediaElement|string, crossOrigin:string="anonymous" ):Promise<Sound> {
     return new Promise( (resolve, reject) => {
       let s = new Sound("file");
-      s.source = (typeof source === 'string') ? new Audio(source) : source;
-      s.source.autoplay = false;
-      (s.source as HTMLMediaElement).crossOrigin = crossOrigin;
-      s.source.addEventListener("ended", function () { s._playing = false; } );
-      s.source.addEventListener('error', function () { reject("Error loading sound"); });
-      s.source.addEventListener('canplaythrough', function () {
-        s.node = s.ctx.createMediaElementSource( s.source );
+      s._source = (typeof source === 'string') ? new Audio(source) : source;
+      s._source.autoplay = false;
+      (s._source as HTMLMediaElement).crossOrigin = crossOrigin;
+      s._source.addEventListener("ended", function () { s._playing = false; } );
+      s._source.addEventListener('error', function () { reject("Error loading sound"); });
+      s._source.addEventListener('canplaythrough', function () {
+        s._node = s._ctx.createMediaElementSource( s._source );
         resolve( s );
       });
     });
@@ -238,7 +238,7 @@ export class Sound {
 
       let s = new Sound("file");
       request.onload = function() {
-        s.ctx.decodeAudioData(request.response, function(buffer) { // Decode asynchronously
+        s._ctx.decodeAudioData(request.response, function(buffer) { // Decode asynchronously
           s.createBuffer( buffer );
           resolve( s );
         }, (err) => reject("Error decoding audio") );
@@ -253,11 +253,11 @@ export class Sound {
    * @param buf an AudioBuffer
    */
   protected createBuffer( buf:AudioBuffer ):this {
-    this.node = this.ctx.createBufferSource();
-    if (buf !== undefined) this.buffer = buf;
+    this._node = this._ctx.createBufferSource();
+    if (buf !== undefined) this._buffer = buf;
     
-    (this.node as AudioBufferSourceNode).buffer = this.buffer; // apply or re-use buffer
-    (this.node as AudioBufferSourceNode).onended = () => { this._playing = false; };
+    (this._node as AudioBufferSourceNode).buffer = this._buffer; // apply or re-use buffer
+    (this._node as AudioBufferSourceNode).onended = () => { this._playing = false; };
     return this;
   }
 
@@ -277,8 +277,8 @@ export class Sound {
 
   // Create the oscillator
   protected _gen( type:OscillatorType, val:number|PeriodicWave ):Sound {
-    this.node = this.ctx.createOscillator();
-    let osc = (this.node as OscillatorNode);
+    this._node = this._ctx.createOscillator();
+    let osc = (this._node as OscillatorNode);
     osc.type = type;
     if (type === 'custom') {
       osc.setPeriodicWave( val as PeriodicWave );
@@ -300,8 +300,8 @@ export class Sound {
       let s = new Sound("input"); 
       if (!s) return undefined;
       const c = constraint ? constraint : { audio: true, video: false };
-      s.stream = await navigator.mediaDevices.getUserMedia( c );
-      s.node = s.ctx.createMediaStreamSource( s.stream );
+      s._stream = await navigator.mediaDevices.getUserMedia( c );
+      s._node = s._ctx.createMediaStreamSource( s._stream );
       return s;
     } catch (e) {
       console.error( "Cannot get audio from input device.");
@@ -311,19 +311,46 @@ export class Sound {
 
 
   /**
+   * Get this Sound's AudioContext instance for advanced use-cases.
+   */
+  get ctx():AudioContext { return this._ctx; }
+
+
+  /**
+   * Get this Sound's AudioNode subclass instance for advanced use-cases.
+   */
+  get node():AudioNode { return this._node; }
+
+
+  /**
+   * Get this Sound's MediaStream (eg, from microphone, if in use) instance for advanced use-cases. See [`Sound.input`](#link)
+   */
+  get stream():MediaStream { return this._stream; }
+
+
+  /**
+   * Get this Sound's Audio element (if used) instance for advanced use-cases. See [`Sound.load`](#link).
+   */
+  get source():HTMLMediaElement { return this._source; }
+
+
+  /**
+   * Get this Sound's AudioBuffer (if any) instance for advanced use-cases. See [`Sound.loadAsBuffer`](#link).
+   */
+  get buffer():AudioBuffer { return this._buffer; }
+  set buffer( b:AudioBuffer ) { this._buffer = b; }
+
+
+  /**
    * Get the type of input for this Sound instance. Either "file", "input", or "gen"
    */
-  get type():SoundType {
-    return this._type;
-  }
+  get type():SoundType { return this._type; }
 
 
   /**
    * Indicate whether the sound is currently playing.
    */
-  get playing():boolean {
-    return this._playing;
-  }
+  get playing():boolean { return this._playing; }
 
 
   /**
@@ -332,12 +359,12 @@ export class Sound {
   get progress():number {
     let dur = 0;
     let curr = 0;
-    if (!!this.buffer) {
-      dur = this.buffer.duration;
-      curr = (this._timestamp) ? this.ctx.currentTime - this._timestamp : 0;
+    if (!!this._buffer) {
+      dur = this._buffer.duration;
+      curr = (this._timestamp) ? this._ctx.currentTime - this._timestamp : 0;
     } else { 
-      dur = this.source.duration;
-      curr = this.source.currentTime;
+      dur = this._source.duration;
+      curr = this._source.currentTime;
     }
     return curr / dur;
   }
@@ -348,7 +375,7 @@ export class Sound {
    * You can also use `this.source.addEventListener( 'canplaythrough', ...)` if needed. See also [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/canplaythrough_event).
    */
   get playable():boolean {
-    return (this._type === "input") ? this.node !== undefined : (!!this.buffer || this.source.readyState === 4);
+    return (this._type === "input") ? this._node !== undefined : (!!this._buffer || this._source.readyState === 4);
   }
 
 
@@ -364,7 +391,7 @@ export class Sound {
    * Get the sample rate of the audio, for example, at 44100 hz.
    */
   get sampleRate():number {
-    return this.ctx.sampleRate;
+    return this._ctx.sampleRate;
   }
 
 
@@ -372,10 +399,10 @@ export class Sound {
    * If the sound is generated, this sets and gets the frequency of the tone.
    */
   get frequency():number {
-    return (this._type === "gen") ? (this.node as OscillatorNode).frequency.value : 0;
+    return (this._type === "gen") ? (this._node as OscillatorNode).frequency.value : 0;
   }
   set frequency( f:number ) {
-    if (this._type === "gen") (this.node as OscillatorNode).frequency.value = f;
+    if (this._type === "gen") (this._node as OscillatorNode).frequency.value = f;
   }
 
 
@@ -384,7 +411,7 @@ export class Sound {
    * @param node another AudioNode
    */
   connect( node:AudioNode ):this {
-    this.node.connect( node );
+    this._node.connect( node );
     return this;
   }
 
@@ -397,7 +424,7 @@ export class Sound {
    * @param smooth Optional smoothing value (corresponds to `AnalyserNode.smoothingTimeConstant`)
    */
   analyze( size:number=256, minDb:number=-100, maxDb:number=-30, smooth:number=0.8  ) {
-    let a = this.ctx.createAnalyser();
+    let a = this._ctx.createAnalyser();
     a.fftSize = size * 2;
     a.minDecibels = minDb;
     a.maxDecibels = maxDb;
@@ -407,7 +434,7 @@ export class Sound {
       size: a.frequencyBinCount,
       data: new Uint8Array(a.frequencyBinCount)
     };
-    this.node.connect( this.analyzer.node );
+    this._node.connect( this.analyzer.node );
     return this;
   }
 
@@ -484,7 +511,7 @@ export class Sound {
    */
   reset():this {
     this.stop();
-    this.node.disconnect();
+    this._node.disconnect();
     return this;
   }
 
@@ -494,23 +521,23 @@ export class Sound {
    * @param timeAt optional parameter to play from a specific time
    */
   start( timeAt:number=0 ):this {
-    if (this.ctx.state === 'suspended') this.ctx.resume();
+    if (this._ctx.state === 'suspended') this._ctx.resume();
     
     if (this._type === "file") {
-      if (!!this.buffer) {
-        (this.node as AudioBufferSourceNode).start(timeAt);
-        this._timestamp = this.ctx.currentTime + timeAt;
+      if (!!this._buffer) {
+        (this._node as AudioBufferSourceNode).start(timeAt);
+        this._timestamp = this._ctx.currentTime + timeAt;
       } else { 
-        this.source.play();
-        if (timeAt > 0) this.source.currentTime = timeAt;
+        this._source.play();
+        if (timeAt > 0) this._source.currentTime = timeAt;
       }
     } else if (this._type === "gen") {
-      this._gen( (this.node as OscillatorNode).type, (this.node as OscillatorNode).frequency.value );
-      (this.node as OscillatorNode).start();
-      if (this.analyzer) this.node.connect( this.analyzer.node );
+      this._gen( (this._node as OscillatorNode).type, (this._node as OscillatorNode).frequency.value );
+      (this._node as OscillatorNode).start();
+      if (this.analyzer) this._node.connect( this.analyzer.node );
     }
 
-    this.node.connect( this.ctx.destination );
+    this._node.connect( this._ctx.destination );
     this._playing = true;
     return this;
   }
@@ -521,21 +548,21 @@ export class Sound {
    */
   stop():this {
     
-    if (this._playing) this.node.disconnect( this.ctx.destination );
+    if (this._playing) this._node.disconnect( this._ctx.destination );
     
     if (this._type === "file") {
-      if (!!this.buffer) {
+      if (!!this._buffer) {
         // Safari throws InvalidState error if stop() is called after finished playing
-        if (this.progress < 1) (this.node as AudioBufferSourceNode).stop(); 
+        if (this.progress < 1) (this._node as AudioBufferSourceNode).stop(); 
       } else {
-        this.source.pause();
+        this._source.pause();
       }
 
     } else if (this._type === "gen") {
-      (this.node as OscillatorNode).stop();
+      (this._node as OscillatorNode).stop();
 
     } else if (this._type === "input") {
-      this.stream.getAudioTracks().forEach( track => track.stop() );
+      this._stream.getAudioTracks().forEach( track => track.stop() );
     }
     
     this._playing = false;
