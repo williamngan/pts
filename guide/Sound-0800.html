@@ -85,10 +85,10 @@ form.points( td ); // visualize as points
 <p>Or make something fun, weird, beautiful through the interplay of sounds and shapes.</p>
 <p><img src="./assets/bg.png" alt="js:sound_frequency"></p>
 <h3>Advanced</h3>
-<p>Currently Safari and iOS can play streaming &lt;audio&gt; element, but don't reliably provide time and frequency domain data for it. Hopefully Safari will fix this soon, but for now you can use <code>Sound.loadAsBuffer</code> to make it work.</p>
+<p>Currently Safari and iOS can play streaming &lt;audio&gt; element, but don't reliably provide time and frequency domain data for it. Hopefully Safari will fix this soon, but for now you can use <a href="https://developer.mozilla.org/en-US/docs/Web/API/AudioBuffer"><code>AudioBuffer</code></a> approach - it's a bit more clumsy but it works (see <a href="#play-sound"><code>loadAsBuffer</code></a>).</p>
 <pre><code>Sound.loadAsBuffer( &quot;/path/to/hello.mp3&quot; ).then( s =&gt; sound = s );
 </code></pre>
-<p>A sound created with <code>AudioBuffer</code> can only be played once. To replay it, you need to recreate the buffer and reconnect the nodes. Use <code>createBuffer()</code> without parameter to re-use the previous buffer.</p>
+<p><code>AudioBuffer</code> doesn't support streaming and can only be played once. To replay it, you need to recreate the buffer and reconnect the nodes. Use <a href="#play-sound"><code>createBuffer</code></a> without parameter to re-use the previous buffer.</p>
 <pre><code>// replay the sound by reusing previously loaded buffer
 sound.createBuffer().analyze(bins);
 </code></pre>
@@ -106,6 +106,7 @@ synth.toMaster(); // play using tone.js instead of Pts
 <li><code>.node</code> to access the <code>AudioNode</code> instance</li>
 <li><code>.stream</code> to access the <code>MediaStream</code> instance</li>
 <li><code>.source</code> to access the <code>HTMLMediaElement</code> if you're playing from a sound file</li>
+<li><code>.buffer</code> to access or set the <code>AudioBuffer</code> if you're using <a href="#play-sound"><code>loadAsBuffer</code></a></li>
 </ul>
 <p>Also note that calling <a href="#play-sound"><code>start</code></a> function will connect the AudioNode to the destination of the AudioContext, while <a href="#play-sound"><code>stop</code></a> will disconnect it.</p>
 <p>Web Audio covers a wide range of topics. Here are a few pointers for you to dive deeper:</p>
@@ -117,17 +118,18 @@ synth.toMaster(); // play using tone.js instead of Pts
 </ul>
 <h3>Cheatsheet</h3>
 <p>Creating and playing a <a href="#play-sound"><code>Sound</code></a> instance</p>
-<pre><code>s = Sound.load( &quot;path/to/file.mp3&quot; ); // from file
+<pre><code>s = Sound.load( &quot;path/file.mp3&quot; ).then( s =&gt; sound = s ); // from file
+s = Sound.loadAsBuffer( &quot;path/file.mp3&quot; ).then( s =&gt; sound = s ); // using AudioBuffer instead
+Sound.input().then( _s =&gt; s = _s ); // get microphone input
 s = Sound.generate( &quot;sine&quot;, 120 ); // sine wave at 120hz
 s = Sound.from( node, context ); // advanced use case
-Sound.input().then( _s =&gt; s = _s ); // get microphone input
 
 s.start();
 s.stop();
 s.toggle();
 </code></pre>
 <p>Getting time domain and frequency domain data</p>
-<pre><code>s.analyzer( 1024 ); // Create analyzer with 1024 bins. Call once only.
+<pre><code>s.analyzer( 256 ); // Create analyzer with 256 bins. Call once only.
 
 s.timeDomain();
 s.timeDomainTo( area, position ); // map to a area [w, h] from position [x, y]

@@ -16,6 +16,10 @@ Pts.quickStart( "#pt", "#eae6ef" );
 
   // Load next sound file
   function nextSound( play=true ) {
+
+    // Note: use Sound.loadAsBuffer instead if you need support for Safari browser. (as of Apr 2019)
+    // See this example: https://github.com/williamngan/pts/blob/master/guide/js/examples/sound_time.js
+
     Sound.load( files[currFile] ).then( s => {
       sound = s.analyze( bins ).start();
       currFile = (currFile + 1) % files.length;

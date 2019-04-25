@@ -9,7 +9,9 @@ Pts.quickStart( "#pt", "#fe3" );
 
 (function() {
 
-  // load sound
+  // Note: use Sound.loadAsBuffer instead if you need support for Safari browser. (as of Apr 2019)
+  // See this example: https://github.com/williamngan/pts/blob/master/guide/js/examples/sound_visual.js
+  
   var sound;
   Sound.load( "/assets/spacetravel.mp3" ).then( s => {
     sound = s.analyze(bins);
