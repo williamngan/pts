@@ -25,7 +25,7 @@ Pts.namespace( this );
     var divID = imgElem.getAttribute("alt").replace(/js\:/gi, "");
 
     var link = document.createElement("a");
-    link.textContent = "Edit live code ↗";
+    link.textContent = "Edit live code ";
     link.classList.add("sourceCodeLink");
     link.setAttribute( "target", "pts_github");
     link.setAttribute( "href", sourceCodePath+divID);

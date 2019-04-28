@@ -203,6 +203,67 @@ a:hover > code {
   color: #0ca;
 }
 
+
+pre {
+  border-left: 2px solid #0ca;
+  padding: 5px 0 5px 20px;
+  font-size: 0.9em;
+  margin: 20px 0 40px;
+}
+
+code {
+  font-family: "Menlo", "Consolas", "Monaco", monospace;
+}
+
+code.hljs {
+  overflow: visible;
+}
+
+/* Demo elements */
+p {
+  position: relative;
+  margin-bottom: 1.5em;
+}
+
+.demoOverlay {
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  /* background: rgba(0,0,0,.2); */
+  box-sizing: border-box;
+}
+
+
+.demoOverlay::after, .demoOverlay .sourceCodeLink {
+  display: block;
+  position: absolute; bottom: 0; right: 0;
+  background: rgba(0,0,0,.7);
+  color: #fff;
+  padding: 10px;
+  font-size: 11px;
+  content: 'Touch to try demo';
+}
+
+.demoOverlay.active {
+  box-shadow: 0 0 0 2px #fff;
+}
+
+.demoOverlay.active::after {
+  display: none;
+}
+
+.demoOverlay .sourceCodeLink {
+  display: none;
+}
+
+.demoOverlay.active .sourceCodeLink {
+  display: block;
+}
+
+.demoOverlay.active .sourceCodeLink::after {
+  content: "↗";
+}
+
+
 /* Mobile and Responsive */
 @media screen and (max-device-width : 768px), screen and (max-width : 768px), print {
 
@@ -346,7 +407,9 @@ a:hover > code {
   
   code { font-size: 0.8em; }
   
-  
+  .demoOverlay.active .sourceCodeLink::after {
+    content: "(desktop)"
+  }
 }
 
 /* Print */
@@ -364,64 +427,10 @@ a:hover > code {
     page-break-after: avoid;
     page-break-inside: avoid;
   }
-}
 
-pre {
-  border-left: 2px solid #0ca;
-  padding: 5px 0 5px 20px;
-  font-size: 0.9em;
-  margin: 20px 0 40px;
-}
-
-code {
-  font-family: "Menlo", "Consolas", "Monaco", monospace;
-}
-
-code.hljs {
-  overflow: visible;
-}
-
-/* Demo elements */
-p {
-  position: relative;
-  margin-bottom: 1.5em;
-}
-
-.demoOverlay {
-  position: absolute;
-  top: 0; left: 0; bottom: 0; right: 0;
-  /* background: rgba(0,0,0,.2); */
-  box-sizing: border-box;
-}
-
-.demoOverlay > canvas{
-  /* width: 100% !important; height: 100% !important; */
-}
-
-.demoOverlay::after, .demoOverlay .sourceCodeLink {
-  display: block;
-  position: absolute; bottom: 0; right: 0;
-  background: rgba(0,0,0,.7);
-  color: #fff;
-  padding: 10px;
-  font-size: 11px;
-  content: 'Touch to try demo';
-}
-
-.demoOverlay.active {
-  box-shadow: 0 0 0 2px #fff;
-}
-
-.demoOverlay.active::after {
-  display: none;
-}
-
-.demoOverlay .sourceCodeLink {
-  display: none;
-}
-
-.demoOverlay.active .sourceCodeLink {
-  display: block;
+  h5 {
+    margin: 10px;
+  }
 }
 
 

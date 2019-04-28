@@ -50,6 +50,10 @@
 
   // Draw play button
   function playButton() {
+    if (!bufferLoaded) {
+      form.fillOnly("#9ab").text( [20,30], "Loading..." );
+      return;
+    }
     if (!sound || !sound.playing) {
       form.fillOnly("#f06").rect( [[0,0], [50,50]] );
       form.fillOnly('#fff').polygon( Triangle.fromCenter( [25,25], 10 ).rotate2D( Const.half_pi, [25,25] ) );
@@ -181,6 +185,8 @@
   // For use in demo page only
   if (window.registerDemo) window.registerDemo(demoID, space, startFn, null, true);
   function startFn() {
+    radius = space.size.minValue().value/3;
+    ctrls = Create.radialPts( space.center, radius, 10, -Const.pi-Const.quarter_pi  );
     if (sound && !sound.playing) space.replay();
   }
   
