@@ -1,3 +1,6 @@
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2019 William Ngan. (https://github.com/williamngan/pts)
+
 (function(){
   // Pts.namespace( this ); // add Pts into scope if needed
 

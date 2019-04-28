@@ -1,3 +1,6 @@
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2019 William Ngan. (https://github.com/williamngan/pts)
+
 (function(){
   // Pts.namespace( this ); // add Pts into scope if needed, you 
   
@@ -28,7 +31,7 @@
   // chain 3 callbacks together with offset
   everyTwo.progress( dials("#0C9"), -100 ).progress( dials("#F03"), 0 ).progress( dials("#62E"), 100 );
   
-  // track tempo animation
+  // Add tempo instance as a player to track animation
   space.add( tempo );
   
 

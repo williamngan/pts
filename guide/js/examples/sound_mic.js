@@ -1,3 +1,6 @@
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2019 William Ngan. (https://github.com/williamngan/pts)
+
 (function(){
   // Pts.namespace( this ); // add Pts into scope if needed
 
@@ -9,6 +12,7 @@
   
   var sound;
   var recording = false;
+  var rainbow = ["#f03", "#f90", "#fe6", "#3c0", "#0f6", "#03f", "#60f"];
 
 
   // Draw button
@@ -42,8 +46,10 @@
     animate: (time, ftime) => {
       if (sound && sound.playable) {
         let td = sound.timeDomainTo( space.size );
-        form.strokeOnly("#62e", 15).line( td ); 
-        form.strokeOnly("#0c9", 3).line( td ); 
+        let band = space.size.y/40;
+        rainbow.forEach( (r, i) => {
+          form.strokeOnly( r, band*rainbow.length - i*band ).line(td);  
+        });
       }
 
       recordButton();

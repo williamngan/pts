@@ -1,3 +1,6 @@
+// Source code licensed under Apache License 2.0. 
+// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
+
 (function(){
   // Pts.namespace( this ); // add Pts into scope if needed
   
@@ -17,8 +20,7 @@
     let triangle = Triangle.fromCenter( space.center.$add( cycle(0)/2, cycle(500) ), 30 );
     let curve = new Group( space.pointer, circle.p1, rect.p1, triangle.p1, space.pointer );
 
-    form.stroke("#fff", 3)
-    form.fill("#ff6").circle( circle );
+    form.stroke("#fff", 3).fill("#ff6").circle( circle );
     form.fill("#09f").rect( rect );
     form.fill("#f03").polygon( triangle );
     form.strokeOnly("#123", 5).polygon( Curve.cardinal( curve ) );

@@ -64,11 +64,12 @@ space.setup({ bgcolor: &quot;#fff&quot; });
 <pre><code>// Initiate your own BeautifulForm class
 var form = new BeautifulForm( space );
 </code></pre>
-<p>Alternatively, you can use the <strong>Quick Start</strong> mode to create CanvasSpace and CanvasForm directly. This will create two global variables called <code>space</code>, and it also returns an animate function for you to use. You can do all these in just one line of code:</p>
+<h3>Quick Start</h3>
+<p>For quick prototyping, you can use the <strong>quickStart</strong> function to create CanvasSpace and CanvasForm directly. This will create two global variables called <code>space</code> and <code>form</code>, and the function also returns an animate function for you to use. You can do all these in just one line of code:</p>
 <pre><code>var run = Pts.quickStart( &quot;#hello&quot;, &quot;#fff&quot; );
 
 // quickStart returns a function wrapper for use in animation loop, eg:
-// run( function(time, ftime) { ... } );
+run( function(time, ftime) { ... } );
 </code></pre>
 <p>Now we have paper and pencil. What should we draw?</p>
 <h3>Drawing a point</h3>
@@ -79,6 +80,7 @@ var form = new BeautifulForm( space );
 </code></pre>
 <p>And here's the result. Touch the demo and move around.</p>
 <p><img src="./assets/bg.png" alt="js:getting_started_1"></p>
+<h5>Try editing live code of the above demo. The source code also demonstrates different options of initiating a Pts canvas.</h5>
 <p>So first we add a &quot;player&quot; as a function to <code>space</code>, and in that function, we use <code>form</code> to draw <code>space.pointer</code> with radius of 10. By default, the point is drawn as a square with red fill-color and white stroke-color.</p>
 <p>The animate callback function actually provides 2 parameters: <code>time</code> which gives the current running time, and <code>ftime</code> which gives the time taken to render a frame.</p>
 <p>Let's modify the code above to make the circle pulsate.</p>

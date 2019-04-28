@@ -84,13 +84,15 @@ Do you know you can create your own forms by extending `CanvasForm` or `Form` cl
 var form = new BeautifulForm( space );
 ```
 
-Alternatively, you can use the **Quick Start** mode to create CanvasSpace and CanvasForm directly. This will create two global variables called `space`, and it also returns an animate function for you to use. You can do all these in just one line of code:
+### Quick Start
+
+For quick prototyping, you can use the **quickStart** function to create CanvasSpace and CanvasForm directly. This will create two global variables called `space` and `form`, and the function also returns an animate function for you to use. You can do all these in just one line of code:
 
 ```
 var run = Pts.quickStart( "#hello", "#fff" );
 
 // quickStart returns a function wrapper for use in animation loop, eg:
-// run( function(time, ftime) { ... } );
+run( function(time, ftime) { ... } );
 ``` 
 
 Now we have paper and pencil. What should we draw?
@@ -109,6 +111,8 @@ space.add( () => form.point( space.pointer, 10 ) );
 And here's the result. Touch the demo and move around.
 
 ![js:getting_started_1](./assets/bg.png)
+
+##### Try editing live code of the above demo. The source code also demonstrates different options of initiating a Pts canvas.
 
 So first we add a "player" as a function to `space`, and in that function, we use `form` to draw `space.pointer` with radius of 10. By default, the point is drawn as a square with red fill-color and white stroke-color. 
 

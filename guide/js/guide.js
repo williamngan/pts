@@ -2,7 +2,8 @@ Pts.namespace( this );
 
 (function() {
 
-  var sourceCodePath = "https://github.com/williamngan/pts/blob/master/guide/js/examples/";
+  // var sourceCodePath = "https://github.com/williamngan/pts/blob/master/guide/js/examples/";
+  var sourceCodePath = "/demo/edit/?name=guide.";
 
   var blocks = Array.from( document.querySelectorAll("img") ).filter( (f) => {
     var t = f.getAttribute("alt");
@@ -24,10 +25,10 @@ Pts.namespace( this );
     var divID = imgElem.getAttribute("alt").replace(/js\:/gi, "");
 
     var link = document.createElement("a");
-    link.textContent = "source code ↗";
+    link.textContent = "Edit live code ↗";
     link.classList.add("sourceCodeLink");
     link.setAttribute( "target", "pts_github");
-    link.setAttribute( "href", sourceCodePath+divID+".js");
+    link.setAttribute( "href", sourceCodePath+divID);
     div.appendChild( link );
 
     div.setAttribute("class", "demoOverlay");
