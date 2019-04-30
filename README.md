@@ -13,7 +13,7 @@ Please give it a try, [file issues](https://github.com/williamngan/pts/issues), 
 ### Usage
 
 **Option 1**   
-Get the latest `pts.js` or `pts.min.js` (in [dist](https://github.com/williamngan/pts/tree/master/dist) folder). Alternatively use a CDN service like [jsdelivr](https://cdn.jsdelivr.net/gh/williamngan/pts/dist/pts.min.js) or [unpkg](https://unpkg.com/pts/dist/pts.min.js). Then add it to your html page like this:
+Get the latest `pts.js` or `pts.min.js` (in [dist](https://github.com/williamngan/pts/tree/master/dist) folder). Alternatively use a CDN service like [cdnjs](https://cdnjs.com/libraries/pts) or [jsdelivr](https://cdn.jsdelivr.net/gh/williamngan/pts/dist/pts.min.js) or [unpkg](https://unpkg.com/pts/dist/pts.min.js). Then add it to your html page like this:
 ```html
 <script type="text/javascript" src="path/to/pts.js"></script>
 ```
@@ -81,5 +81,5 @@ For larger PRs, please ping [@williamngan](https://twitter.com/williamngan) to d
 
 ### License
 Apache License 2.0. See LICENSE file for details.   
-Copyright © 2017-2018 by William Ngan and contributors.
+Copyright © 2017-2019 by William Ngan and contributors.
 

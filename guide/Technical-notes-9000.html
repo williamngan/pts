@@ -20,13 +20,13 @@
 <a href="#menu" id="toc">&#x2261;</a>
 <div id="post"><h1>Technical notes</h1>
 <h3>Working with React and other libraries</h3>
-<p>When using Pts as a <a href="https://www.npmjs.com/package/pts">npm package</a>, you can choose to import only a small part of Pts in your own project. Perhaps just a couple of Line functions are all you need:</p>
+<p>When using Pts as an <a href="https://www.npmjs.com/package/pts">npm package</a>, you can choose to import only a small part of Pts into your own project. Perhaps just a couple of Line functions are all you need:</p>
 <pre><code>import {Pt, Line} from &quot;pts&quot;
 </code></pre>
 <p>Pts is an ES6 library by default. If you want to include it in your older ES5 projects, import it like this:</p>
 <pre><code>import {Pt, Line} from &quot;pts/dist/es5&quot;
 </code></pre>
-<p>Also take a look at <a href="https://github.com/williamngan/pts-react-example">pts-react-example</a> which includes examples of using Pts in React components.</p>
+<p>For using Pts with React, <a href="https://www.npmjs.com/package/react-pts-canvas">react-pts-canvas</a> is a component which you can extend to make it your own. Also take a look at <a href="https://github.com/williamngan/pts-react-example">pts-react-example</a> which includes Pts examples in React.</p>
 <h3>Cloning Pt with <code>clone()</code> or <code>$...</code></h3>
 <p>Pt is a subclass of Float32Array, and Group is a subclass of Array that should only contain Pt in it.</p>
 <p>Since objects and arrays in javascript are passed by reference, remember to clone them if you are going to change their values. Functions starting with <code>$</code> such as <code>$add</code> means it will return a new Pt and keeping the original unchanged.</p>

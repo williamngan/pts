@@ -346,8 +346,20 @@ a:hover {
     margin-left: 10px;
   }
 
-  #topmenu {
+  #header #topmenu > a {
+    margin: 0;
+    padding: 25px 0 25px 10px;
+    font-size: 0.9em;
+    height: auto;
     display: none;
+  }
+
+  #header #topmenu > a:first-child {
+    display: inline-block;
+  }
+
+  #header #topmenu > a:nth-child(2) {
+    display: inline-block;
   }
   
   #footer { 

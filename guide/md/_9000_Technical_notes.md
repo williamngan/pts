@@ -2,7 +2,7 @@
 
 ### Working with React and other libraries
 
-When using Pts as a [npm package](https://www.npmjs.com/package/pts), you can choose to import only a small part of Pts in your own project. Perhaps just a couple of Line functions are all you need:
+When using Pts as an [npm package](https://www.npmjs.com/package/pts), you can choose to import only a small part of Pts into your own project. Perhaps just a couple of Line functions are all you need:
 
 ```
 import {Pt, Line} from "pts"
@@ -14,7 +14,7 @@ Pts is an ES6 library by default. If you want to include it in your older ES5 pr
 import {Pt, Line} from "pts/dist/es5"
 ```
 
-Also take a look at [pts-react-example](https://github.com/williamngan/pts-react-example) which includes examples of using Pts in React components.
+For using Pts with React, [react-pts-canvas](https://www.npmjs.com/package/react-pts-canvas) is a component which you can extend to make it your own. Also take a look at [pts-react-example](https://github.com/williamngan/pts-react-example) which includes Pts examples in React.
 
 
 ### Cloning Pt with `clone()` or `$...`
