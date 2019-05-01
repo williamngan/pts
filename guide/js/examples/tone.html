@@ -1,21 +1,29 @@
 <html>
   <head>
+    <title>Tone.js with Pts.js example</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <script type="text/javascript" src="../../../dist/pts.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tone/13.8.2/Tone.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tone/13.8.9/Tone.js"></script>
   </head>
 
   <body>
-    <div id="pts" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0"></div>
+    <div id="pts" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; overflow: hidden;"></div>
 
     <script type="text/javascript">
-      let run = Pts.quickStart( "pts", "#62e" );
+      Pts.quickStart( "pts", "#62e" );
 
       let index = new Pt(-1,-1);
       let synth = new Tone.Synth();
-      let sound = Sound.from( synth, Tone.context ).analyze(128);
+      let sound = Sound.from( synth, synth.context ).analyze(128);
       synth.toMaster(); // play using tone.js instead of Pts
 
-      run( (time) => { 
+      space.add({ 
+        animate: (time) => { 
+          if (synth.context.state === 'suspended') { // mostly for safari
+            form.fillOnly("#fff").text( [20, 30], "Click anywhere to start" );
+          } 
+
           let area = space.size.$divide( 3 );
           let idx = space.pointer.$divide( area ).floor();
           let rect = [idx.$multiply(area), idx.$multiply(area).add(area)];
@@ -34,7 +42,18 @@
             synth.triggerAttackRelease( key, '4n');
             index = idx;
           }
+        },
+
+        action: (type, x, y) => {
+          if (type === "up") { // for safari
+            if (synth.context.state === 'suspended') {
+              synth.context.resume();
+            }
+          }
+        }
       });
+
+      space.bindMouse().bindTouch().play();
     </script>
   </body>
 
