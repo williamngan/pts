@@ -19,12 +19,28 @@
 </div>
 <a href="#menu" id="toc">&#x2261;</a>
 <div id="post"><h1>Sound</h1>
-<p>Sounds and visual forms complement each other and enable us to create expressive and unique compositions. Pts simplifies a subset of Web Audio API to assist you with common tasks like playbacks and visualizations.</p>
-<p>Before we start, let's try a silly and fun visualization using Pts's sound functions.</p>
+<p>Audio and visual forms complement each other, giving us new opportunities to create unique expressions. Pts simplifies a subset of Web Audio API to help you with common tasks like playbacks and visualizations.</p>
+<p>Before we dive in, let's review a snippet of using Pts' Sound functions. It's pretty straightforward.</p>
+<pre><code>// Load sound and attach analyzer
+Sound.load( &quot;/assets/spacetravel.mp3&quot; ).then( s =&gt; {
+  sound = s.analyze(bins);
+});
+
+// ...
+
+// Visualize frequencies (within animate loop)
+sound.freqDomainTo( space.size ).forEach( (t, i) =&gt; {
+  form.fill( colors[i%5] ).point( t, 30 );
+});
+</code></pre>
+<p>Here is the result. Click play button to start.</p>
+<p><img src="./assets/bg.png" alt="js:sound_simple"></p>
+<h5>Music snippet from <a href="https://soundcloud.com/mrgreenh/space-travel-cliches"><em>Space Travel Clichés</em></a> by Mr Green H.</h5>
+<p>How about something more elaborate? Let's try a silly and fun visualization.</p>
 <p><img src="./assets/bg.png" alt="js:sound_visual"></p>
 <h5>Click play button and move your pointer around the character. Music snippet from <a href="https://soundcloud.com/mrgreenh/space-travel-cliches"><em>Space Travel Clichés</em></a> by Mr Green H.</h5>
 <h3>Input</h3>
-<p>Let's get some sounds to start! Do you want to load from a sound file, receive microphone input, or generate audio dynamically? Pts offers four handy static functions for these.</p>
+<p>Let's get some sounds to begin! Do you want to load from a sound file, receive microphone input, or generate audio dynamically? Pts offers four handy static functions for these.</p>
 <ol>
 <li>Use <a href="#play-sound"><code>Sound.load</code></a> to load a sound file with an url or a specific <code>&lt;audio&gt;</code> element. The sound will play as soon as it has streamed enough data. You can check if the audio file is ready to play by accessing <a href="#play-sound"><code>.playable</code></a> property.</li>
 </ol>
@@ -37,7 +53,7 @@ Sound.load( audioElem ).then( s =&gt; sound = s ); // load from &lt;audio&gt; el
 <pre><code>Sound.loadAsBuffer( &quot;/path/to/hello.mp3&quot; ).then( s =&gt; sound = s );
 </code></pre>
 <ol start="3">
-<li>Use <a href="#play-sound"><code>Sound.generate</code></a> to create a sound.</li>
+<li>Use <a href="#play-sound"><code>Sound.generate</code></a> to create a sound. You may also generate sounds using other libraries like Tone.js. Read more in Advanced section below.</li>
 </ol>
 <pre><code>let sound = Sound.generate( &quot;sine&quot;, 120 ); // sine oscillator at 120Hz
 </code></pre>
@@ -59,11 +75,11 @@ sound.playing; // boolean to indicate if sound is playing
 </code></pre>
 <h5>Note that current browsers no longer support autoplay. Users will need to express intent to play the sound (eg, with a click).</h5>
 <h3>Analyze</h3>
-<p>It gets more interesting when we can look into the sound data and analyze them. Let's hook up an analyzer to our Sound instance using the <a href="#play-sound"><code>analyze</code></a> function.</p>
+<p>Using the <a href="#play-sound"><code>analyze</code></a> function, we can attach an analyzer to keep track of the data in our Sound instance.</p>
 <pre><code>sound.analyze( 128 ); // Call once to initiate the analyzer
 </code></pre>
 <p>This will create an analyzer with 128 bins (more on that later) and default decibel range and smoothing values. See <a href="#play-sound"><code>analyze</code></a> docs for description of the advanced options.</p>
-<p>There are two common ways to analyze sounds. First, we can represent sounds as snapshots of sound waves, which correspond to variations in air pressure over time. This is called the time-domain, as it measures amplitudes of the &quot;waves&quot; over time steps.</p>
+<p>There are two common ways to analyze sound data. First, we can represent sounds as snapshots of sound waves, which correspond to variations in air pressure over time. This is called the time-domain, as it measures amplitudes of the &quot;waves&quot; over time steps.</p>
 <p>To get the time domain data at current time step, call the <a href="#play-sound"><code>timeDomain</code></a> function.</p>
 <pre><code>// get an uint typed array of 128 values (corresponds to bin size above)
 let td = sound.timeDomain(); 
@@ -82,29 +98,30 @@ form.points( td ); // visualize as points
 <p>In a similar way, we can access the frequency domain data by <a href="#play-sound"><code>freqDomain</code></a> and <a href="#play-sound"><code>freqDomainTo</code></a>. The frequency bins are calculated by an algorithm called Fast Fourier Transform (FFT). The FFT size is usually 2 times the bin size and they need to be multiples of 2. (Recall that we set bin size to 128 earlier). You can quickly test it with a single line of code:</p>
 <pre><code>form.points( sound.freqDomainTo( space.size ) );
 </code></pre>
-<p>Or make something fun, weird, beautiful through the interplay of sounds and shapes.</p>
+<p>The following is a basic frequency-domain example for your reference.</p>
 <p><img src="./assets/bg.png" alt="js:sound_frequency"></p>
+<p>The interplay of sounds and shapes offer many possibilities indeed. Make good use of your imagination to create something beautiful, fun, and unexpected!</p>
 <h3>Advanced</h3>
-<p>Currently Safari and iOS can play streaming &lt;audio&gt; element, but don't reliably provide time and frequency domain data for it. Hopefully Safari will fix this soon, but for now you can use <a href="https://developer.mozilla.org/en-US/docs/Web/API/AudioBuffer"><code>AudioBuffer</code></a> approach - it's a bit more clumsy but it works (see <a href="#play-sound"><code>loadAsBuffer</code></a>).</p>
+<p>Currently Safari and iOS can play streaming &lt;audio&gt; element, but don't reliably provide time and frequency domain data for it. Hopefully Safari will have a fix soon, but for now you can use <a href="https://developer.mozilla.org/en-US/docs/Web/API/AudioBuffer"><code>AudioBuffer</code></a> approach - it's a bit more clumsy but it works (see <a href="#play-sound"><code>loadAsBuffer</code></a>).</p>
 <pre><code>Sound.loadAsBuffer( &quot;/path/to/hello.mp3&quot; ).then( s =&gt; sound = s );
 </code></pre>
-<p><code>AudioBuffer</code> doesn't support streaming and can only be played once. To replay it, you need to recreate the buffer and reconnect the nodes. Use <a href="#play-sound"><code>createBuffer</code></a> without parameter to re-use the previous buffer.</p>
+<p><code>AudioBuffer</code> doesn't support streaming and can only be played once. To replay it, you need to recreate the buffer and reconnect the nodes. Use the convenient <a href="#play-sound"><code>createBuffer</code></a> function without parameter to re-use the previous buffer.</p>
 <pre><code>// replay the sound by reusing previously loaded buffer
 sound.createBuffer().analyze(bins);
 </code></pre>
 <p>For custom use cases with other libraries, you can create an instance using  <a href="#play-sound"><code>Sound.from</code></a> static method. Here's an example using Tone.js:</p>
 <pre><code>let synth = new Tone.Synth(); 
-let sound = Sound.from( synth, Tone.context ); // create Pts Sound instance
+let sound = Sound.from( synth, synth.context ); // create Pts Sound instance
 synth.toMaster(); // play using tone.js instead of Pts
 </code></pre>
-<p>The following demo generates audio using <a href="https://tonejs.github.io/">tone.js</a> and then visualizes it with Pts:</p>
+<p>The following demo generates audio using <a href="https://tonejs.github.io/">Tone.js</a> and then visualizes it with Pts:</p>
 <p><a href="./js/examples/tone.html"> <img src="./assets/tone.png" alt="screenshot"> </a></p>
 <h5>Click image to open tone.js demo. See <a href="https://github.com/williamngan/pts/blob/master/guide/js/examples/tone.html">source code here</a>.</h5>
 <p>If needed, you can also directly access the following properties in a Sound instance to make full use of the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API">Web Audio API</a>.</p>
 <ul>
 <li><code>.ctx</code> to access the <code>AudioContext</code> instance</li>
 <li><code>.node</code> to access the <code>AudioNode</code> instance</li>
-<li><code>.stream</code> to access the <code>MediaStream</code> instance</li>
+<li><code>.stream</code> to access the <code>MediaStream</code> instance if applicable</li>
 <li><code>.source</code> to access the <code>HTMLMediaElement</code> if you're playing from a sound file</li>
 <li><code>.buffer</code> to access or set the <code>AudioBuffer</code> if you're using <a href="#play-sound"><code>loadAsBuffer</code></a></li>
 </ul>
@@ -118,9 +135,9 @@ synth.toMaster(); // play using tone.js instead of Pts
 </ul>
 <h3>Cheatsheet</h3>
 <p>Creating and playing a <a href="#play-sound"><code>Sound</code></a> instance</p>
-<pre><code>s = Sound.load( &quot;path/file.mp3&quot; ).then( s =&gt; sound = s ); // from file
-s = Sound.loadAsBuffer( &quot;path/file.mp3&quot; ).then( s =&gt; sound = s ); // using AudioBuffer instead
-Sound.input().then( _s =&gt; s = _s ); // get microphone input
+<pre><code>Sound.load( &quot;path/file.mp3&quot; ).then( d =&gt; s = d ); // from file
+Sound.loadAsBuffer( &quot;path/file.mp3&quot; ).then( d =&gt; s = d ); // using AudioBuffer instead
+Sound.input().then( d =&gt; s = d ); // get microphone input
 s = Sound.generate( &quot;sine&quot;, 120 ); // sine wave at 120hz
 s = Sound.from( node, context ); // advanced use case
 

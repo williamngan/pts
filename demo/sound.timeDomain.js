@@ -1,5 +1,5 @@
 // Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
+// Copyright © 2019 William Ngan. (https://github.com/williamngan/pts)
 
 window.demoDescription = "Play snippets of drum, tambourine, and flute. Visualize their waveforms in radial lines.";
 

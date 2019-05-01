@@ -1,7 +1,7 @@
 // Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
+// Copyright © 2019 William Ngan. (https://github.com/williamngan/pts)
 
-window.demoDescription = "A silly and elaborate character that responds to sound. Music snippet taken from Space Travel Clichés composed by MrGreenH";
+window.demoDescription = "A silly and elaborate character that responds to sound. Music from 'Space Travel Clichés' by MrGreenH.";
 
 Pts.quickStart( "#pt", "#fe3" );
 
