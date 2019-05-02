@@ -29,6 +29,7 @@ import {CanvasSpace, Pt, Group, Line} from 'pts';
 To quickly get started, try download or clone these repos:
 - [pts-starter-kit](https://github.com/williamngan/pts-starter-kit): Get started with a sample app using npm and webpack
 - [pts-react-example](https://github.com/williamngan/pts-react-example): Try an example of using Pts with React.
+- [react-pts-canvas](https://www.npmjs.com/package/react-pts-canvas): Use it in your React project by extending react-pts-canvas component
 
 **Get Started**   
 Read the [guides](https://ptsjs.org/guide/get-started-0100) and take a look at the [demos](https://ptsjs.org/demo/?name=circle.intersectCircle2D) and their source code.    

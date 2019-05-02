@@ -20,11 +20,11 @@ export declare class Tempo {
 }
 export declare class Sound {
     private _type;
-    ctx: AudioContext;
-    node: AudioNode;
-    stream: MediaStream;
-    source: HTMLMediaElement;
-    buffer: AudioBuffer;
+    _ctx: AudioContext;
+    _node: AudioNode;
+    _stream: MediaStream;
+    _source: HTMLMediaElement;
+    _buffer: AudioBuffer;
     analyzer: ISoundAnalyzer;
     protected _playing: boolean;
     protected _timestamp: number;
@@ -36,6 +36,11 @@ export declare class Sound {
     static generate(type: OscillatorType, val: number | PeriodicWave): Sound;
     protected _gen(type: OscillatorType, val: number | PeriodicWave): Sound;
     static input(constraint?: MediaStreamConstraints): Promise<Sound>;
+    readonly ctx: AudioContext;
+    readonly node: AudioNode;
+    readonly stream: MediaStream;
+    readonly source: HTMLMediaElement;
+    buffer: AudioBuffer;
     readonly type: SoundType;
     readonly playing: boolean;
     readonly progress: number;

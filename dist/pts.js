@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.8.2 - Copyright © 2017-2019 William Ngan and contributors.
+ * pts.js 0.8.3 - Copyright © 2017-2019 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -3967,26 +3967,26 @@ class Sound {
         let _ctx = window.AudioContext || window.webkitAudioContext || false;
         if (!_ctx)
             throw (new Error("Your browser doesn't support Web Audio. (No AudioContext)"));
-        this.ctx = (_ctx) ? new _ctx() : undefined;
+        this._ctx = (_ctx) ? new _ctx() : undefined;
     }
     static from(node, ctx, type = "gen", stream) {
         let s = new Sound(type);
-        s.node = node;
-        s.ctx = ctx;
+        s._node = node;
+        s._ctx = ctx;
         if (stream)
-            s.stream = stream;
+            s._stream = stream;
         return s;
     }
     static load(source, crossOrigin = "anonymous") {
         return new Promise((resolve, reject) => {
             let s = new Sound("file");
-            s.source = (typeof source === 'string') ? new Audio(source) : source;
-            s.source.autoplay = false;
-            s.source.crossOrigin = crossOrigin;
-            s.source.addEventListener("ended", function () { s._playing = false; });
-            s.source.addEventListener('error', function () { reject("Error loading sound"); });
-            s.source.addEventListener('canplaythrough', function () {
-                s.node = s.ctx.createMediaElementSource(s.source);
+            s._source = (typeof source === 'string') ? new Audio(source) : source;
+            s._source.autoplay = false;
+            s._source.crossOrigin = crossOrigin;
+            s._source.addEventListener("ended", function () { s._playing = false; });
+            s._source.addEventListener('error', function () { reject("Error loading sound"); });
+            s._source.addEventListener('canplaythrough', function () {
+                s._node = s._ctx.createMediaElementSource(s._source);
                 resolve(s);
             });
         });
@@ -3998,7 +3998,7 @@ class Sound {
             request.responseType = 'arraybuffer';
             let s = new Sound("file");
             request.onload = function () {
-                s.ctx.decodeAudioData(request.response, function (buffer) {
+                s._ctx.decodeAudioData(request.response, function (buffer) {
                     s.createBuffer(buffer);
                     resolve(s);
                 }, (err) => reject("Error decoding audio"));
@@ -4007,11 +4007,11 @@ class Sound {
         });
     }
     createBuffer(buf) {
-        this.node = this.ctx.createBufferSource();
+        this._node = this._ctx.createBufferSource();
         if (buf !== undefined)
-            this.buffer = buf;
-        this.node.buffer = this.buffer;
-        this.node.onended = () => { this._playing = false; };
+            this._buffer = buf;
+        this._node.buffer = this._buffer;
+        this._node.onended = () => { this._playing = false; };
         return this;
     }
     static generate(type, val) {
@@ -4019,8 +4019,8 @@ class Sound {
         return s._gen(type, val);
     }
     _gen(type, val) {
-        this.node = this.ctx.createOscillator();
-        let osc = this.node;
+        this._node = this._ctx.createOscillator();
+        let osc = this._node;
         osc.type = type;
         if (type === 'custom') {
             osc.setPeriodicWave(val);
@@ -4037,8 +4037,8 @@ class Sound {
                 if (!s)
                     return undefined;
                 const c = constraint ? constraint : { audio: true, video: false };
-                s.stream = yield navigator.mediaDevices.getUserMedia(c);
-                s.node = s.ctx.createMediaStreamSource(s.stream);
+                s._stream = yield navigator.mediaDevices.getUserMedia(c);
+                s._node = s._ctx.createMediaStreamSource(s._stream);
                 return s;
             }
             catch (e) {
@@ -4047,47 +4047,49 @@ class Sound {
             }
         });
     }
-    get type() {
-        return this._type;
-    }
-    get playing() {
-        return this._playing;
-    }
+    get ctx() { return this._ctx; }
+    get node() { return this._node; }
+    get stream() { return this._stream; }
+    get source() { return this._source; }
+    get buffer() { return this._buffer; }
+    set buffer(b) { this._buffer = b; }
+    get type() { return this._type; }
+    get playing() { return this._playing; }
     get progress() {
         let dur = 0;
         let curr = 0;
-        if (!!this.buffer) {
-            dur = this.buffer.duration;
-            curr = (this._timestamp) ? this.ctx.currentTime - this._timestamp : 0;
+        if (!!this._buffer) {
+            dur = this._buffer.duration;
+            curr = (this._timestamp) ? this._ctx.currentTime - this._timestamp : 0;
         }
         else {
-            dur = this.source.duration;
-            curr = this.source.currentTime;
+            dur = this._source.duration;
+            curr = this._source.currentTime;
         }
         return curr / dur;
     }
     get playable() {
-        return (this._type === "input") ? this.node !== undefined : (!!this.buffer || this.source.readyState === 4);
+        return (this._type === "input") ? this._node !== undefined : (!!this._buffer || this._source.readyState === 4);
     }
     get binSize() {
         return this.analyzer.size;
     }
     get sampleRate() {
-        return this.ctx.sampleRate;
+        return this._ctx.sampleRate;
     }
     get frequency() {
-        return (this._type === "gen") ? this.node.frequency.value : 0;
+        return (this._type === "gen") ? this._node.frequency.value : 0;
     }
     set frequency(f) {
         if (this._type === "gen")
-            this.node.frequency.value = f;
+            this._node.frequency.value = f;
     }
     connect(node) {
-        this.node.connect(node);
+        this._node.connect(node);
         return this;
     }
     analyze(size = 256, minDb = -100, maxDb = -30, smooth = 0.8) {
-        let a = this.ctx.createAnalyser();
+        let a = this._ctx.createAnalyser();
         a.fftSize = size * 2;
         a.minDecibels = minDb;
         a.maxDecibels = maxDb;
@@ -4097,7 +4099,7 @@ class Sound {
             size: a.frequencyBinCount,
             data: new Uint8Array(a.frequencyBinCount)
         };
-        this.node.connect(this.analyzer.node);
+        this._node.connect(this.analyzer.node);
         return this;
     }
     _domain(time) {
@@ -4134,50 +4136,50 @@ class Sound {
     }
     reset() {
         this.stop();
-        this.node.disconnect();
+        this._node.disconnect();
         return this;
     }
     start(timeAt = 0) {
-        if (this.ctx.state === 'suspended')
-            this.ctx.resume();
+        if (this._ctx.state === 'suspended')
+            this._ctx.resume();
         if (this._type === "file") {
-            if (!!this.buffer) {
-                this.node.start(timeAt);
-                this._timestamp = this.ctx.currentTime + timeAt;
+            if (!!this._buffer) {
+                this._node.start(timeAt);
+                this._timestamp = this._ctx.currentTime + timeAt;
             }
             else {
-                this.source.play();
+                this._source.play();
                 if (timeAt > 0)
-                    this.source.currentTime = timeAt;
+                    this._source.currentTime = timeAt;
             }
         }
         else if (this._type === "gen") {
-            this._gen(this.node.type, this.node.frequency.value);
-            this.node.start();
+            this._gen(this._node.type, this._node.frequency.value);
+            this._node.start();
             if (this.analyzer)
-                this.node.connect(this.analyzer.node);
+                this._node.connect(this.analyzer.node);
         }
-        this.node.connect(this.ctx.destination);
+        this._node.connect(this._ctx.destination);
         this._playing = true;
         return this;
     }
     stop() {
         if (this._playing)
-            this.node.disconnect(this.ctx.destination);
+            this._node.disconnect(this._ctx.destination);
         if (this._type === "file") {
-            if (!!this.buffer) {
+            if (!!this._buffer) {
                 if (this.progress < 1)
-                    this.node.stop();
+                    this._node.stop();
             }
             else {
-                this.source.pause();
+                this._source.pause();
             }
         }
         else if (this._type === "gen") {
-            this.node.stop();
+            this._node.stop();
         }
         else if (this._type === "input") {
-            this.stream.getAudioTracks().forEach(track => track.stop());
+            this._stream.getAudioTracks().forEach(track => track.stop());
         }
         this._playing = false;
         return this;

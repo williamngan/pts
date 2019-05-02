@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.8.2 - Copyright © 2017-2019 William Ngan and contributors.
+ * pts.js 0.8.3 - Copyright © 2017-2019 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -5569,7 +5569,7 @@ var Sound = function () {
         this._type = type;
         var _ctx = window.AudioContext || window.webkitAudioContext || false;
         if (!_ctx) throw new Error("Your browser doesn't support Web Audio. (No AudioContext)");
-        this.ctx = _ctx ? new _ctx() : undefined;
+        this._ctx = _ctx ? new _ctx() : undefined;
     }
 
     _createClass(Sound, [{
@@ -5577,10 +5577,10 @@ var Sound = function () {
         value: function createBuffer(buf) {
             var _this = this;
 
-            this.node = this.ctx.createBufferSource();
-            if (buf !== undefined) this.buffer = buf;
-            this.node.buffer = this.buffer;
-            this.node.onended = function () {
+            this._node = this._ctx.createBufferSource();
+            if (buf !== undefined) this._buffer = buf;
+            this._node.buffer = this._buffer;
+            this._node.onended = function () {
                 _this._playing = false;
             };
             return this;
@@ -5588,8 +5588,8 @@ var Sound = function () {
     }, {
         key: "_gen",
         value: function _gen(type, val) {
-            this.node = this.ctx.createOscillator();
-            var osc = this.node;
+            this._node = this._ctx.createOscillator();
+            var osc = this._node;
             osc.type = type;
             if (type === 'custom') {
                 osc.setPeriodicWave(val);
@@ -5601,7 +5601,7 @@ var Sound = function () {
     }, {
         key: "connect",
         value: function connect(node) {
-            this.node.connect(node);
+            this._node.connect(node);
             return this;
         }
     }, {
@@ -5612,7 +5612,7 @@ var Sound = function () {
             var maxDb = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : -30;
             var smooth = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0.8;
 
-            var a = this.ctx.createAnalyser();
+            var a = this._ctx.createAnalyser();
             a.fftSize = size * 2;
             a.minDecibels = minDb;
             a.maxDecibels = maxDb;
@@ -5622,7 +5622,7 @@ var Sound = function () {
                 size: a.frequencyBinCount,
                 data: new Uint8Array(a.frequencyBinCount)
             };
-            this.node.connect(this.analyzer.node);
+            this._node.connect(this.analyzer.node);
             return this;
         }
     }, {
@@ -5681,7 +5681,7 @@ var Sound = function () {
         key: "reset",
         value: function reset() {
             this.stop();
-            this.node.disconnect();
+            this._node.disconnect();
             return this;
         }
     }, {
@@ -5689,38 +5689,38 @@ var Sound = function () {
         value: function start() {
             var timeAt = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
 
-            if (this.ctx.state === 'suspended') this.ctx.resume();
+            if (this._ctx.state === 'suspended') this._ctx.resume();
             if (this._type === "file") {
-                if (!!this.buffer) {
-                    this.node.start(timeAt);
-                    this._timestamp = this.ctx.currentTime + timeAt;
+                if (!!this._buffer) {
+                    this._node.start(timeAt);
+                    this._timestamp = this._ctx.currentTime + timeAt;
                 } else {
-                    this.source.play();
-                    if (timeAt > 0) this.source.currentTime = timeAt;
+                    this._source.play();
+                    if (timeAt > 0) this._source.currentTime = timeAt;
                 }
             } else if (this._type === "gen") {
-                this._gen(this.node.type, this.node.frequency.value);
-                this.node.start();
-                if (this.analyzer) this.node.connect(this.analyzer.node);
+                this._gen(this._node.type, this._node.frequency.value);
+                this._node.start();
+                if (this.analyzer) this._node.connect(this.analyzer.node);
             }
-            this.node.connect(this.ctx.destination);
+            this._node.connect(this._ctx.destination);
             this._playing = true;
             return this;
         }
     }, {
         key: "stop",
         value: function stop() {
-            if (this._playing) this.node.disconnect(this.ctx.destination);
+            if (this._playing) this._node.disconnect(this._ctx.destination);
             if (this._type === "file") {
-                if (!!this.buffer) {
-                    if (this.progress < 1) this.node.stop();
+                if (!!this._buffer) {
+                    if (this.progress < 1) this._node.stop();
                 } else {
-                    this.source.pause();
+                    this._source.pause();
                 }
             } else if (this._type === "gen") {
-                this.node.stop();
+                this._node.stop();
             } else if (this._type === "input") {
-                this.stream.getAudioTracks().forEach(function (track) {
+                this._stream.getAudioTracks().forEach(function (track) {
                     return track.stop();
                 });
             }
@@ -5738,6 +5738,34 @@ var Sound = function () {
             return this;
         }
     }, {
+        key: "ctx",
+        get: function get() {
+            return this._ctx;
+        }
+    }, {
+        key: "node",
+        get: function get() {
+            return this._node;
+        }
+    }, {
+        key: "stream",
+        get: function get() {
+            return this._stream;
+        }
+    }, {
+        key: "source",
+        get: function get() {
+            return this._source;
+        }
+    }, {
+        key: "buffer",
+        get: function get() {
+            return this._buffer;
+        },
+        set: function set(b) {
+            this._buffer = b;
+        }
+    }, {
         key: "type",
         get: function get() {
             return this._type;
@@ -5752,19 +5780,19 @@ var Sound = function () {
         get: function get() {
             var dur = 0;
             var curr = 0;
-            if (!!this.buffer) {
-                dur = this.buffer.duration;
-                curr = this._timestamp ? this.ctx.currentTime - this._timestamp : 0;
+            if (!!this._buffer) {
+                dur = this._buffer.duration;
+                curr = this._timestamp ? this._ctx.currentTime - this._timestamp : 0;
             } else {
-                dur = this.source.duration;
-                curr = this.source.currentTime;
+                dur = this._source.duration;
+                curr = this._source.currentTime;
             }
             return curr / dur;
         }
     }, {
         key: "playable",
         get: function get() {
-            return this._type === "input" ? this.node !== undefined : !!this.buffer || this.source.readyState === 4;
+            return this._type === "input" ? this._node !== undefined : !!this._buffer || this._source.readyState === 4;
         }
     }, {
         key: "binSize",
@@ -5774,15 +5802,15 @@ var Sound = function () {
     }, {
         key: "sampleRate",
         get: function get() {
-            return this.ctx.sampleRate;
+            return this._ctx.sampleRate;
         }
     }, {
         key: "frequency",
         get: function get() {
-            return this._type === "gen" ? this.node.frequency.value : 0;
+            return this._type === "gen" ? this._node.frequency.value : 0;
         },
         set: function set(f) {
-            if (this._type === "gen") this.node.frequency.value = f;
+            if (this._type === "gen") this._node.frequency.value = f;
         }
     }], [{
         key: "from",
@@ -5791,9 +5819,9 @@ var Sound = function () {
             var stream = arguments[3];
 
             var s = new Sound(type);
-            s.node = node;
-            s.ctx = ctx;
-            if (stream) s.stream = stream;
+            s._node = node;
+            s._ctx = ctx;
+            if (stream) s._stream = stream;
             return s;
         }
     }, {
@@ -5803,17 +5831,17 @@ var Sound = function () {
 
             return new Promise(function (resolve, reject) {
                 var s = new Sound("file");
-                s.source = typeof source === 'string' ? new Audio(source) : source;
-                s.source.autoplay = false;
-                s.source.crossOrigin = crossOrigin;
-                s.source.addEventListener("ended", function () {
+                s._source = typeof source === 'string' ? new Audio(source) : source;
+                s._source.autoplay = false;
+                s._source.crossOrigin = crossOrigin;
+                s._source.addEventListener("ended", function () {
                     s._playing = false;
                 });
-                s.source.addEventListener('error', function () {
+                s._source.addEventListener('error', function () {
                     reject("Error loading sound");
                 });
-                s.source.addEventListener('canplaythrough', function () {
-                    s.node = s.ctx.createMediaElementSource(s.source);
+                s._source.addEventListener('canplaythrough', function () {
+                    s._node = s._ctx.createMediaElementSource(s._source);
                     resolve(s);
                 });
             });
@@ -5827,7 +5855,7 @@ var Sound = function () {
                 request.responseType = 'arraybuffer';
                 var s = new Sound("file");
                 request.onload = function () {
-                    s.ctx.decodeAudioData(request.response, function (buffer) {
+                    s._ctx.decodeAudioData(request.response, function (buffer) {
                         s.createBuffer(buffer);
                         resolve(s);
                     }, function (err) {
@@ -5868,9 +5896,9 @@ var Sound = function () {
                                 return navigator.mediaDevices.getUserMedia(c);
 
                             case 7:
-                                s.stream = _context.sent;
+                                s._stream = _context.sent;
 
-                                s.node = s.ctx.createMediaStreamSource(s.stream);
+                                s._node = s._ctx.createMediaStreamSource(s._stream);
                                 return _context.abrupt("return", s);
 
                             case 12:
