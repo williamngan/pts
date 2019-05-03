@@ -9,8 +9,8 @@ window.demoDescription = " Sound play and analyze. Music snippet taken from Spac
 
   Pts.quickStart( "#pt", "#e2e6ef" );
 
-  // Note: use Sound.loadAsBuffer instead if you need support for Safari browser. (as of Apr 2019)
-  // See this example: https://github.com/williamngan/pts/blob/master/guide/js/examples/sound_simple.js
+  // Note: use Sound.loadAsBuffer instead if you need support for Safari/iOS browser. (as of Apr 2019)
+  // See this example: http://ptsjs.org/demo/edit/?name=sound.analyze
   
   var sound;
   var bins = 256;

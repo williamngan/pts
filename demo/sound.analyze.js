@@ -9,44 +9,64 @@ window.demoDescription = "Basic example of loading sound and visualizing frequen
 
   Pts.quickStart( "#pt", "#eae6ef" );
 
-  // Note: use Sound.loadAsBuffer instead if you need support for Safari browser. (as of Apr 2019)
-  // See this example: https://github.com/williamngan/pts/blob/master/guide/js/examples/sound_simple.js
-  
-  var sound;
-  var bins = 256;
-  var colors = ["#f06", "#62e", "#fff", "#fe3", "#0c9"];
+  /*
+   * Note: If you don't need Safari/iOS compatibility right away (as of Apr 2019)
+   * A simpler method to use would be Sound.load(...) instead of Sound.loadAsBuffer(...)
+   * See this demo: http://ptsjs.org/demo/edit/?name=guide.sound_simple
+   */
 
-  // Load sound
-  Sound.load( "/assets/spacetravel.mp3" ).then( s => {
-    sound = s.analyze(bins);
+  var bins = 256; 
+  var sound;
+  var colors = ["#f06", "#62e", "#fff", "#fe3", "#0c9"];
+  var bufferLoaded = false;
+  Sound.loadAsBuffer( "/assets/spacetravel.mp3" ).then( s => {
+    sound = s;
+    space.playOnce(50); // render for noce
+    bufferLoaded = true;
   }).catch( e => console.error(e) );
 
-
-  // Draw play button
-  function playButton() {
-    form.fillOnly("#f06").rect( [[0,0], [50,50]] );
-    if (!sound || !sound.playing) {
-      form.fillOnly('#fff').polygon( Triangle.fromCenter( [25,25], 10 ).rotate2D( Const.half_pi, [25,25] ) );
+  function toggle() {
+    if (sound.playing || !bufferLoaded) {
+      sound.stop();
     } else {
-      form.fillOnly("#fff").rect( [[18, 18], [32,32]] );
+      sound.createBuffer().analyze(bins); // recreate buffer again
+      sound.start();
+      space.replay();
     }
   }
 
+  // Draw play button
+  function playButton() {
+    if (!bufferLoaded) {
+      form.fillOnly("#9ab").text( [20,30], "Loading..." );
+      return;
+    }
+    if (!sound || !sound.playing) {
+      form.fillOnly("#f06").rect( [[0,0], [50,50]] );
+      form.fillOnly('#fff').polygon( Triangle.fromCenter( [25,25], 10 ).rotate2D( Const.half_pi, [25,25] ) );
+    } else {
+      form.fillOnly("rgba(0,0,0,.2)").rect( [[0,0], [50,50]] );
+      form.fillOnly("#fff").rect( [[18, 18], [32,32]] );
+    }
+  }
+  
 
   // animation
   space.add({
+
     animate: (time, ftime) => {
       if (sound && sound.playable) {
-        sound.freqDomainTo(space.size).forEach( (t, i) => {
-          form.fillOnly( colors[i%5] ).point( t, 50+20 * t.y/space.size.y );
+        if (!sound.playing) space.stop(); // stop animation if not playing
+        sound.freqDomainTo(space.size).map( (t, i) => {
+          form.fillOnly( colors[i%5] ).point( t, 30 );
         });
       }
       playButton();
     },
 
     action: (type, x, y) => {
-      if (type === "up" &&  Geom.withinBound( [x,y], [0,0], [50,50] )) { // clicked button
-        sound.toggle();
+      if (type === "up" && Geom.withinBound( [x,y], [0,0], [50,50] )) {
+        toggle();
       }
     }
   });

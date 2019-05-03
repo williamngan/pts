@@ -9,8 +9,8 @@ window.demoDescription = "A silly and elaborate character that responds to sound
 
   Pts.quickStart( "#pt", "#e2e6ef" );
 
-  // Note: use Sound.loadAsBuffer instead if you need support for Safari browser. (as of Apr 2019)
-  // See this example: https://github.com/williamngan/pts/blob/master/guide/js/examples/sound_visual.js
+  // Note: use Sound.loadAsBuffer instead if you need support for Safari/iOS browser. (as of Apr 2019)
+  // See this example: http://ptsjs.org/demo/edit/?name=sound.freqDomain
   
   var sound;
   Sound.load( "/assets/spacetravel.mp3" ).then( s => {

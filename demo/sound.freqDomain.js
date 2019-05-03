@@ -9,20 +9,42 @@ Pts.quickStart( "#pt", "#fe3" );
 
 (function() {
 
-  // Note: use Sound.loadAsBuffer instead if you need support for Safari browser. (as of Apr 2019)
-  // See this example: https://github.com/williamngan/pts/blob/master/guide/js/examples/sound_visual.js
-  
-  var sound;
-  Sound.load( "/assets/spacetravel.mp3" ).then( s => {
-    sound = s.analyze(bins);
-  }).catch( e => console.error(e) );
+  /*
+   * Note: If you don't need Safari/iOS compatibility right away (as of Apr 2019)
+   * A simpler method to use would be Sound.load(...) instead of Sound.loadAsBuffer(...)
+   * See this demo: http://ptsjs.org/demo/edit/?name=guide.sound_visual
+   */
 
+  var sound;
   var bins = 256;
   var ctrls, radius;
   var colors = ["#f06", "#62e", "#fff", "#fe3", "#0c9"];
+  var bufferLoaded = false;
+
+  
+  // Buffer and play - work across all browsers but no streaming and more code
+  Sound.loadAsBuffer( "/assets/spacetravel.mp3" ).then( s => {
+    sound = s;
+    bufferLoaded = true;
+  }).catch( e => console.error(e) );
+
+  // Need this because AudioBuffer can only play once
+  function toggle() {
+    if (sound.playing || !bufferLoaded) {
+      sound.stop();
+    } else {
+      sound.createBuffer().analyze(bins); // recreate buffer again
+      sound.start();
+    }
+  }
+
 
   // Draw play button
   function playButton() {
+    if (!bufferLoaded) {
+      form.fillOnly("#9ab").text( [20,30], "Loading..." );
+      return;
+    }
     if (!sound || !sound.playing) {
       form.fillOnly("#f06").rect( [[0,0], [50,50]] );
       form.fillOnly('#fff').polygon( Triangle.fromCenter( [25,25], 10 ).rotate2D( Const.half_pi, [25,25] ) );
@@ -32,6 +54,7 @@ Pts.quickStart( "#pt", "#fe3" );
     }
   }
   
+
   function getCtrlPoints( t ) {
     let r = radius + radius * ( Num.cycle( t%3000/3000 ) * 0.2);
     let temp = ctrls.clone();
@@ -41,6 +64,7 @@ Pts.quickStart( "#pt", "#fe3" );
 
       if ( d.magnitudeSq() < r*r ) { // push out if inside threshold 
         temp[i].to( space.pointer.$add( d.unit().$multiply( r ) ) );
+      
       } else if ( !ctrls[i].equals( temp[i], 0.1) ) { // pull in if outside threshold
         temp[i].to( Geom.interpolate( temp[i], ctrls[i], 0.02) );
       }
@@ -55,7 +79,7 @@ Pts.quickStart( "#pt", "#fe3" );
   space.add({
 
     start: (bound) => {
-      radius = space.size.minValue().value/3.5;
+      radius = space.size.minValue().value/3;
       ctrls = Create.radialPts( space.center, radius, 10, -Const.pi-Const.quarter_pi  );
     },
 
@@ -98,9 +122,10 @@ Pts.quickStart( "#pt", "#fe3" );
             temp.push( spikes[i] );
             tris.push( temp );
           }
-          
+
           tindex = (i+1) % 3;
         }
+
 
         // draw spikes
         let f_scale = f_acc/bins;
@@ -121,6 +146,7 @@ Pts.quickStart( "#pt", "#fe3" );
           form.strokeOnly( "#123", 2 ).line( t2 );
         }
 
+
         // draw eyes        
         let eyeRight = center.clone().toAngle( -Const.quarter_pi-0.2, radius/2, true );
         let eyeLeft = center.clone().toAngle( -Const.quarter_pi-Const.half_pi+0.2, radius/2, true );
@@ -131,13 +157,12 @@ Pts.quickStart( "#pt", "#fe3" );
         let eyeBallLeft = eyeLeft.clone().toAngle( eyeLeft.$subtract( space.pointer ).angle(), -5, true );
         form.fill("#123").points( [eyeBallLeft, eyeBallRight], 2 + 10*f_scale, "circle" );
       }
-
       playButton();
     },
 
     action: (type, x, y) => {
-      if (type === "up" &&  Geom.withinBound( [x,y], [0,0], [50,50] )) {
-        sound.toggle();
+      if (type === "up" && Geom.withinBound( [x,y], [0,0], [50,50] )) {
+        toggle();
       }
     }
   });

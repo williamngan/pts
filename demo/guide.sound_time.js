@@ -14,8 +14,8 @@ window.demoDescription = "Demo in Sound guide.";
   var bins = 256; // try change this (must be a power of 2^)
   var sound;
 
-  // Note: use Sound.loadAsBuffer instead if you need support for Safari browser. (as of Apr 2019)
-  // See this example: https://github.com/williamngan/pts/blob/master/guide/js/examples/sound_frequency.js
+  // Note: use Sound.loadAsBuffer instead if you need support for Safari/iOS browser. (as of Apr 2019)
+  // See this example: http://ptsjs.org/demo/edit/?name=sound.timeDomain
   function loadSound() {
     Sound.load( files[currFile] ).then( s => {
       sound = s.analyze(bins).start();
