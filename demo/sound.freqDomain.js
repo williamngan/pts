@@ -130,8 +130,9 @@ Pts.quickStart( "#pt", "#fe3" );
         // draw spikes
         let f_scale = f_acc/bins;
         for (let i=0, len=tris.length; i<len; i++) {
-          form.fillOnly("#123").polygon( tris[i] );
-          form.fillOnly( colors[ i%colors.length ] ).point( tris[i][1], freqs[i].y * 10, "circle" )
+          let c = colors[ i%colors.length ];
+          form.fillOnly( c ).polygon( tris[i] );
+          form.fillOnly( c ).point( tris[i][1], freqs[i].y * 10, "circle" )
         }
 
         // draw "lips" based on time domain data
