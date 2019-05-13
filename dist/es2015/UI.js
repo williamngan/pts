@@ -199,6 +199,8 @@ export class UIDragger extends UIButton {
         this._moveHoldID = -1;
         if (states.dragging === undefined)
             this._states['dragging'] = false;
+        if (states.moved === undefined)
+            this._states['moved'] = false;
         if (states.offset === undefined)
             this._states['offset'] = new Pt();
         const UA = UIPointerActions;
@@ -209,6 +211,7 @@ export class UIDragger extends UIButton {
             this._draggingID = this.on(UA.move, (t, p) => {
                 if (this.state('dragging')) {
                     UI._trigger(this._actions[UA.uidrag], t, p, UA.uidrag);
+                    this.state('moved', true);
                 }
             });
         });
@@ -216,7 +219,10 @@ export class UIDragger extends UIButton {
             this.state('dragging', false);
             this.off(UA.move, this._draggingID);
             this.unhold(this._moveHoldID);
-            UI._trigger(this._actions[UA.drop], target, pt, type);
+            if (this.state('moved')) {
+                UI._trigger(this._actions[UA.drop], target, pt, type);
+                this.state('moved', false);
+            }
         });
     }
     onDrag(fn) {

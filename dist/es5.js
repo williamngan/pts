@@ -8177,6 +8177,7 @@ var UIDragger = function (_UIButton) {
         _this2._draggingID = -1;
         _this2._moveHoldID = -1;
         if (states.dragging === undefined) _this2._states['dragging'] = false;
+        if (states.moved === undefined) _this2._states['moved'] = false;
         if (states.offset === undefined) _this2._states['offset'] = new Pt_1.Pt();
         var UA = exports.UIPointerActions;
         _this2.on(UA.down, function (target, pt, type) {
@@ -8186,6 +8187,7 @@ var UIDragger = function (_UIButton) {
             _this2._draggingID = _this2.on(UA.move, function (t, p) {
                 if (_this2.state('dragging')) {
                     UI._trigger(_this2._actions[UA.uidrag], t, p, UA.uidrag);
+                    _this2.state('moved', true);
                 }
             });
         });
@@ -8193,7 +8195,10 @@ var UIDragger = function (_UIButton) {
             _this2.state('dragging', false);
             _this2.off(UA.move, _this2._draggingID);
             _this2.unhold(_this2._moveHoldID);
-            UI._trigger(_this2._actions[UA.drop], target, pt, type);
+            if (_this2.state('moved')) {
+                UI._trigger(_this2._actions[UA.drop], target, pt, type);
+                _this2.state('moved', false);
+            }
         });
         return _this2;
     }
