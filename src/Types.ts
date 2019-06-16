@@ -163,7 +163,7 @@ export type ITempoListener = {
   period?:number, // current number of beats per period
   duration?:number, // current duration in ms per period
   offset?:number, // time offset
-  smooth?:boolean, // track progress is true, otherwise track only triggers
+  continuous?:boolean, // track progress is true, otherwise track only triggers
   index?:number, // if beats is an array, this is the current index
   fn: Function // callback function
 };
