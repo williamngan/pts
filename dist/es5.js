@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.8.3 - Copyright © 2017-2019 William Ngan and contributors.
+ * pts.js 0.8.4 - Copyright © 2017-2019 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -5484,7 +5484,7 @@ var Tempo = function () {
                     var name = arguments[2];
 
                     var id = name || self._createID(fn);
-                    self._listeners[id] = { name: id, beats: beats, period: p, index: 0, offset: offset, duration: -1, smooth: false, fn: fn };
+                    self._listeners[id] = { name: id, beats: beats, period: p, index: 0, offset: offset, duration: -1, continuous: false, fn: fn };
                     return this;
                 },
                 progress: function progress(fn) {
@@ -5492,7 +5492,7 @@ var Tempo = function () {
                     var name = arguments[2];
 
                     var id = name || self._createID(fn);
-                    self._listeners[id] = { name: id, beats: beats, period: p, index: 0, offset: offset, duration: -1, smooth: true, fn: fn };
+                    self._listeners[id] = { name: id, beats: beats, period: p, index: 0, offset: offset, duration: -1, continuous: true, fn: fn };
                     return this;
                 }
             };
@@ -5515,9 +5515,11 @@ var Tempo = function () {
                         isStart = true;
                     }
                     var count = Math.max(0, Math.ceil(Math.floor(li.duration / this._ms) / li.period));
-                    var params = li.smooth ? [count, Num_1.Num.clamp((_t - li.duration) / ms, 0, 1), _t, isStart] : [count];
-                    var done = li.fn.apply(li, params);
-                    if (done) delete this._listeners[li.name];
+                    var params = li.continuous ? [count, Num_1.Num.clamp((_t - li.duration) / ms, 0, 1), _t, isStart] : [count];
+                    if (li.continuous || isStart) {
+                        var done = li.fn.apply(li, params);
+                        if (done) delete this._listeners[li.name];
+                    }
                 }
             }
         }

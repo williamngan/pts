@@ -987,7 +987,7 @@ export type ITempoListener = {
     period?: number;
     duration?: number;
     offset?: number;
-    smooth?: boolean;
+    continuous?: boolean;
     index?: number;
     fn: Function;
 };
