@@ -5,7 +5,7 @@ export const UIShape = {
     rectangle: "rectangle", circle: "circle", polygon: "polygon", polyline: "polyline", line: "line"
 };
 export const UIPointerActions = {
-    up: "up", down: "down", move: "move", drag: "drag", uidrag: "uidrag", drop: "drop", over: "over", out: "out", enter: "enter", leave: "leave", all: "all"
+    up: "up", down: "down", move: "move", drag: "drag", uidrag: "uidrag", drop: "drop", uidrop: "uidrop", over: "over", out: "out", enter: "enter", leave: "leave", all: "all"
 };
 export class UI {
     constructor(group, shape, states = {}, id) {
@@ -197,6 +197,7 @@ export class UIDragger extends UIButton {
         super(group, shape, states, id);
         this._draggingID = -1;
         this._moveHoldID = -1;
+        this._moveUpID = -1;
         if (states.dragging === undefined)
             this._states['dragging'] = false;
         if (states.moved === undefined)
@@ -208,6 +209,7 @@ export class UIDragger extends UIButton {
             this.state('dragging', true);
             this.state('offset', new Pt(pt).subtract(target.group[0]));
             this._moveHoldID = this.hold(UA.move);
+            this._moveUpID = this.hold(UA.up);
             this._draggingID = this.on(UA.move, (t, p) => {
                 if (this.state('dragging')) {
                     UI._trigger(this._actions[UA.uidrag], t, p, UA.uidrag);
@@ -219,8 +221,9 @@ export class UIDragger extends UIButton {
             this.state('dragging', false);
             this.off(UA.move, this._draggingID);
             this.unhold(this._moveHoldID);
+            this.unhold(this._moveUpID);
             if (this.state('moved')) {
-                UI._trigger(this._actions[UA.drop], target, pt, type);
+                UI._trigger(this._actions[UA.uidrop], target, pt, UA.uidrop);
                 this.state('moved', false);
             }
         });
@@ -232,10 +235,10 @@ export class UIDragger extends UIButton {
         return this.off(UIPointerActions.uidrag, id);
     }
     onDrop(fn) {
-        return this.on(UIPointerActions.drop, fn);
+        return this.on(UIPointerActions.uidrop, fn);
     }
     offDrop(id) {
-        return this.off(UIPointerActions.drop, id);
+        return this.off(UIPointerActions.uidrop, id);
     }
 }
 //# sourceMappingURL=UI.js.map
