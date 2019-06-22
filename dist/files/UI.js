@@ -7,7 +7,7 @@ exports.UIShape = {
     rectangle: "rectangle", circle: "circle", polygon: "polygon", polyline: "polyline", line: "line"
 };
 exports.UIPointerActions = {
-    up: "up", down: "down", move: "move", drag: "drag", uidrag: "uidrag", drop: "drop", over: "over", out: "out", enter: "enter", leave: "leave", all: "all"
+    up: "up", down: "down", move: "move", drag: "drag", uidrag: "uidrag", drop: "drop", uidrop: "uidrop", over: "over", out: "out", enter: "enter", leave: "leave", all: "all"
 };
 class UI {
     constructor(group, shape, states = {}, id) {
@@ -201,6 +201,7 @@ class UIDragger extends UIButton {
         super(group, shape, states, id);
         this._draggingID = -1;
         this._moveHoldID = -1;
+        this._moveUpID = -1;
         if (states.dragging === undefined)
             this._states['dragging'] = false;
         if (states.moved === undefined)
@@ -212,6 +213,7 @@ class UIDragger extends UIButton {
             this.state('dragging', true);
             this.state('offset', new Pt_1.Pt(pt).subtract(target.group[0]));
             this._moveHoldID = this.hold(UA.move);
+            this._moveUpID = this.hold(UA.up);
             this._draggingID = this.on(UA.move, (t, p) => {
                 if (this.state('dragging')) {
                     UI._trigger(this._actions[UA.uidrag], t, p, UA.uidrag);
@@ -223,8 +225,9 @@ class UIDragger extends UIButton {
             this.state('dragging', false);
             this.off(UA.move, this._draggingID);
             this.unhold(this._moveHoldID);
+            this.unhold(this._moveUpID);
             if (this.state('moved')) {
-                UI._trigger(this._actions[UA.drop], target, pt, type);
+                UI._trigger(this._actions[UA.uidrop], target, pt, UA.uidrop);
                 this.state('moved', false);
             }
         });
@@ -236,10 +239,10 @@ class UIDragger extends UIButton {
         return this.off(exports.UIPointerActions.uidrag, id);
     }
     onDrop(fn) {
-        return this.on(exports.UIPointerActions.drop, fn);
+        return this.on(exports.UIPointerActions.uidrop, fn);
     }
     offDrop(id) {
-        return this.off(exports.UIPointerActions.drop, id);
+        return this.off(exports.UIPointerActions.uidrop, id);
     }
 }
 exports.UIDragger = UIDragger;

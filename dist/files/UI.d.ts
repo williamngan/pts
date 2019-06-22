@@ -15,6 +15,7 @@ export declare const UIPointerActions: {
     drag: string;
     uidrag: string;
     drop: string;
+    uidrop: string;
     over: string;
     out: string;
     enter: string;
@@ -72,6 +73,7 @@ export declare class UIButton extends UI {
 export declare class UIDragger extends UIButton {
     private _draggingID;
     private _moveHoldID;
+    private _moveUpID;
     constructor(group: GroupLike, shape: string, states?: {
         [key: string]: any;
     }, id?: string);

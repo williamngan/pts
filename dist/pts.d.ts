@@ -1023,6 +1023,7 @@ export const UIPointerActions: {
     drag: string;
     uidrag: string;
     drop: string;
+    uidrop: string;
     over: string;
     out: string;
     enter: string;
