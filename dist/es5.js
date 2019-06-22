@@ -7907,7 +7907,7 @@ exports.UIShape = {
     rectangle: "rectangle", circle: "circle", polygon: "polygon", polyline: "polyline", line: "line"
 };
 exports.UIPointerActions = {
-    up: "up", down: "down", move: "move", drag: "drag", uidrag: "uidrag", drop: "drop", over: "over", out: "out", enter: "enter", leave: "leave", all: "all"
+    up: "up", down: "down", move: "move", drag: "drag", uidrag: "uidrag", drop: "drop", uidrop: "uidrop", over: "over", out: "out", enter: "enter", leave: "leave", all: "all"
 };
 
 var UI = function () {
@@ -8178,6 +8178,7 @@ var UIDragger = function (_UIButton) {
 
         _this2._draggingID = -1;
         _this2._moveHoldID = -1;
+        _this2._moveUpID = -1;
         if (states.dragging === undefined) _this2._states['dragging'] = false;
         if (states.moved === undefined) _this2._states['moved'] = false;
         if (states.offset === undefined) _this2._states['offset'] = new Pt_1.Pt();
@@ -8186,6 +8187,7 @@ var UIDragger = function (_UIButton) {
             _this2.state('dragging', true);
             _this2.state('offset', new Pt_1.Pt(pt).subtract(target.group[0]));
             _this2._moveHoldID = _this2.hold(UA.move);
+            _this2._moveUpID = _this2.hold(UA.up);
             _this2._draggingID = _this2.on(UA.move, function (t, p) {
                 if (_this2.state('dragging')) {
                     UI._trigger(_this2._actions[UA.uidrag], t, p, UA.uidrag);
@@ -8197,8 +8199,9 @@ var UIDragger = function (_UIButton) {
             _this2.state('dragging', false);
             _this2.off(UA.move, _this2._draggingID);
             _this2.unhold(_this2._moveHoldID);
+            _this2.unhold(_this2._moveUpID);
             if (_this2.state('moved')) {
-                UI._trigger(_this2._actions[UA.drop], target, pt, type);
+                UI._trigger(_this2._actions[UA.uidrop], target, pt, UA.uidrop);
                 _this2.state('moved', false);
             }
         });
@@ -8218,12 +8221,12 @@ var UIDragger = function (_UIButton) {
     }, {
         key: "onDrop",
         value: function onDrop(fn) {
-            return this.on(exports.UIPointerActions.drop, fn);
+            return this.on(exports.UIPointerActions.uidrop, fn);
         }
     }, {
         key: "offDrop",
         value: function offDrop(id) {
-            return this.off(exports.UIPointerActions.drop, id);
+            return this.off(exports.UIPointerActions.uidrop, id);
         }
     }]);
 
