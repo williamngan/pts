@@ -208,9 +208,12 @@ export class MultiTouchSpace extends Space {
         return false;
     }
     _mouseUp(evt) {
-        this._mouseAction(UIA.up, evt);
-        if (this._dragged)
+        if (this._dragged) {
             this._mouseAction(UIA.drop, evt);
+        }
+        else {
+            this._mouseAction(UIA.up, evt);
+        }
         this._pressed = false;
         this._dragged = false;
         return false;
