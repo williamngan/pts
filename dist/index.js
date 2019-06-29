@@ -318,6 +318,7 @@ class CanvasForm extends Form_1.VisualForm {
         this._style = {
             fillStyle: "#f03", strokeStyle: "#fff",
             lineWidth: 1, lineJoin: "bevel", lineCap: "butt",
+            globalAlpha: 1
         };
         this._space = space;
         this._space.add({ start: () => {
@@ -340,6 +341,11 @@ class CanvasForm extends Form_1.VisualForm {
         if (this._space.hasOffscreen) {
             this._space.ctx.drawImage(this._space.offscreenCanvas, offset[0], offset[1], this._space.width, this._space.height);
         }
+    }
+    alpha(a) {
+        this._ctx.globalAlpha = a;
+        this._style.globalAlpha = a;
+        return this;
     }
     fill(c) {
         if (typeof c == "boolean") {
@@ -1499,6 +1505,7 @@ class HTMLForm extends Form_1.VisualForm {
                 "border-width": "1px",
                 "border-radius": "0",
                 "border-style": "solid",
+                "opacity": 1,
                 "position": "absolute",
                 "top": 0,
                 "left": 0,
@@ -1522,6 +1529,10 @@ class HTMLForm extends Form_1.VisualForm {
         if (this._ctx.style[k] === undefined)
             throw new Error(`${k} style property doesn't exist`);
         this._ctx.style[k] = `${v}${unit}`;
+    }
+    alpha(a) {
+        this.styleTo("opacity", a);
+        return this;
     }
     fill(c) {
         if (typeof c == "boolean") {
@@ -1583,7 +1594,7 @@ class HTMLForm extends Form_1.VisualForm {
         this._ctx.style = {
             "filled": true, "stroked": true,
             "background": "#f03", "border-color": "#fff",
-            "border-width": "1px"
+            "border-width": "1px", "opacity": 1
         };
         this._font = new Form_1.Font(14, "sans-serif");
         this._ctx.font = this._font.value;
@@ -1783,6 +1794,9 @@ class VisualForm extends Form {
         for (let i = 0, len = groups.length; i < len; i++) {
             this[shape](groups[i], ...rest);
         }
+        return this;
+    }
+    alpha(a) {
         return this;
     }
     fill(c) {
@@ -5016,7 +5030,8 @@ class SVGForm extends Form_1.VisualForm {
                 "stroke": "#fff",
                 "stroke-width": 1,
                 "stroke-linejoin": "bevel",
-                "stroke-linecap": "sqaure"
+                "stroke-linecap": "sqaure",
+                "opacity": 1,
             },
             font: "11px sans-serif",
             fontSize: 11,
@@ -5035,6 +5050,10 @@ class SVGForm extends Form_1.VisualForm {
         if (this._ctx.style[k] === undefined)
             throw new Error(`${k} style property doesn't exist`);
         this._ctx.style[k] = v;
+    }
+    alpha(a) {
+        this.styleTo("opacity", a);
+        return this;
     }
     fill(c) {
         if (typeof c == "boolean") {
@@ -5095,7 +5114,8 @@ class SVGForm extends Form_1.VisualForm {
             "fill": "#f03", "stroke": "#fff",
             "stroke-width": 1,
             "stroke-linejoin": "bevel",
-            "stroke-linecap": "sqaure"
+            "stroke-linecap": "sqaure",
+            "opacity": 1,
         };
         this._font = new Form_1.Font(14, "sans-serif");
         this._ctx.font = this._font.value;
@@ -5451,7 +5471,7 @@ class UI {
     }
     unhold(id) {
         if (id !== undefined) {
-            this._holds = this._holds.splice(id, 1);
+            this._holds.splice(id, 1);
         }
         else {
             this._holds = [];

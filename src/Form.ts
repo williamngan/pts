@@ -81,6 +81,15 @@ export abstract class VisualForm extends Form {
   
   
   /**
+   * Set alpha (not implemented here  -- to be implemented in subclasses).
+   * @param a alpha value between 0 and 1
+   */
+  alpha( a:number ):this {
+    return this;
+  }
+  
+  
+  /**
    * Set fill color (not implemented here  -- to be implemented in subclasses).
    * @param c fill color as string or `false` to specify transparent.
    */
