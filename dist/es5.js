@@ -7979,7 +7979,7 @@ var UI = function () {
         key: "unhold",
         value: function unhold(id) {
             if (id !== undefined) {
-                this._holds = this._holds.splice(id, 1);
+                this._holds.splice(id, 1);
             } else {
                 this._holds = [];
             }
@@ -8186,7 +8186,7 @@ var UIDragger = function (_UIButton) {
         if (states.moved === undefined) _this2._states['moved'] = false;
         if (states.offset === undefined) _this2._states['offset'] = new Pt_1.Pt();
         var UA = exports.UIPointerActions;
-        _this2.on(UA.down, function (target, pt, type) {
+        _this2.on(UA.drag, function (target, pt, type) {
             _this2.state('dragging', true);
             _this2.state('offset', new Pt_1.Pt(pt).subtract(target.group[0]));
             _this2._moveHoldID = _this2.hold(UA.move);

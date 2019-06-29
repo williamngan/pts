@@ -5454,7 +5454,7 @@ class UI {
     }
     unhold(id) {
         if (id !== undefined) {
-            this._holds = this._holds.splice(id, 1);
+            this._holds.splice(id, 1);
         }
         else {
             this._holds = [];
@@ -5583,7 +5583,7 @@ class UIDragger extends UIButton {
         if (states.offset === undefined)
             this._states['offset'] = new Pt_1.Pt();
         const UA = exports.UIPointerActions;
-        this.on(UA.down, (target, pt, type) => {
+        this.on(UA.drag, (target, pt, type) => {
             this.state('dragging', true);
             this.state('offset', new Pt_1.Pt(pt).subtract(target.group[0]));
             this._moveHoldID = this.hold(UA.move);

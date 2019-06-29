@@ -433,8 +433,8 @@ export class UIDragger extends UIButton {
      * UI refreshes.
      */
 
-     // Handle pointer down and begin dragging
-    this.on( UA.down, (target:UI, pt:PtLike, type:string) => {
+     // Handle pointer drag and begin dragging
+    this.on( UA.drag, (target:UI, pt:PtLike, type:string) => {
       this.state( 'dragging', true );
       this.state( 'offset', new Pt(pt).subtract( target.group[0] ) );
 
