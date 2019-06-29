@@ -78,7 +78,7 @@ export class UI {
     }
     unhold(id) {
         if (id !== undefined) {
-            this._holds = this._holds.splice(id, 1);
+            this._holds.splice(id, 1);
         }
         else {
             this._holds = [];

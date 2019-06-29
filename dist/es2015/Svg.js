@@ -70,7 +70,7 @@ export class SVGForm extends VisualForm {
                 "stroke": "#fff",
                 "stroke-width": 1,
                 "stroke-linejoin": "bevel",
-                "stroke-linecap": "sqaure"
+                "stroke-linecap": "square"
             },
             font: "11px sans-serif",
             fontSize: 11,
@@ -149,7 +149,7 @@ export class SVGForm extends VisualForm {
             "fill": "#f03", "stroke": "#fff",
             "stroke-width": 1,
             "stroke-linejoin": "bevel",
-            "stroke-linecap": "sqaure"
+            "stroke-linecap": "square"
         };
         this._font = new Font(14, "sans-serif");
         this._ctx.font = this._font.value;
