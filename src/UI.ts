@@ -198,7 +198,7 @@ export class UI {
    */
   protected unhold( id?:number ):void {
     if (id !== undefined) {
-      this._holds = this._holds.splice( id, 1 );
+      this._holds.splice( id, 1 );
     } else {
       this._holds = [];
     }
