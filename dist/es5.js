@@ -7448,7 +7448,7 @@ var SVGForm = function (_Form_1$VisualForm) {
                 "stroke": "#fff",
                 "stroke-width": 1,
                 "stroke-linejoin": "bevel",
-                "stroke-linecap": "sqaure"
+                "stroke-linecap": "square"
             },
             font: "11px sans-serif",
             fontSize: 11,
@@ -7528,7 +7528,7 @@ var SVGForm = function (_Form_1$VisualForm) {
                 "fill": "#f03", "stroke": "#fff",
                 "stroke-width": 1,
                 "stroke-linejoin": "bevel",
-                "stroke-linecap": "sqaure"
+                "stroke-linecap": "square"
             };
             this._font = new Form_1.Font(14, "sans-serif");
             this._ctx.font = this._font.value;
@@ -7976,7 +7976,7 @@ var UI = function () {
         key: "unhold",
         value: function unhold(id) {
             if (id !== undefined) {
-                this._holds = this._holds.splice(id, 1);
+                this._holds.splice(id, 1);
             } else {
                 this._holds = [];
             }
