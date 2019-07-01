@@ -385,7 +385,8 @@ var CanvasForm = function (_Form_1$VisualForm) {
 
         _this2._style = {
             fillStyle: "#f03", strokeStyle: "#fff",
-            lineWidth: 1, lineJoin: "bevel", lineCap: "butt"
+            lineWidth: 1, lineJoin: "bevel", lineCap: "butt",
+            globalAlpha: 1
         };
         _this2._space = space;
         _this2._space.add({ start: function start() {
@@ -417,6 +418,13 @@ var CanvasForm = function (_Form_1$VisualForm) {
             if (this._space.hasOffscreen) {
                 this._space.ctx.drawImage(this._space.offscreenCanvas, offset[0], offset[1], this._space.width, this._space.height);
             }
+        }
+    }, {
+        key: "alpha",
+        value: function alpha(a) {
+            this._ctx.globalAlpha = a;
+            this._style.globalAlpha = a;
+            return this;
         }
     }, {
         key: "fill",
@@ -2099,6 +2107,7 @@ var HTMLForm = function (_Form_1$VisualForm) {
                 "border-width": "1px",
                 "border-radius": "0",
                 "border-style": "solid",
+                "opacity": 1,
                 "position": "absolute",
                 "top": 0,
                 "left": 0,
@@ -2126,6 +2135,12 @@ var HTMLForm = function (_Form_1$VisualForm) {
 
             if (this._ctx.style[k] === undefined) throw new Error(k + " style property doesn't exist");
             this._ctx.style[k] = "" + v + unit;
+        }
+    }, {
+        key: "alpha",
+        value: function alpha(a) {
+            this.styleTo("opacity", a);
+            return this;
         }
     }, {
         key: "fill",
@@ -2189,7 +2204,7 @@ var HTMLForm = function (_Form_1$VisualForm) {
             this._ctx.style = {
                 "filled": true, "stroked": true,
                 "background": "#f03", "border-color": "#fff",
-                "border-width": "1px"
+                "border-width": "1px", "opacity": 1
             };
             this._font = new Form_1.Font(14, "sans-serif");
             this._ctx.font = this._font.value;
@@ -2473,6 +2488,11 @@ var VisualForm = function (_Form) {
             for (var i = 0, len = groups.length; i < len; i++) {
                 this[shape].apply(this, [groups[i]].concat(rest));
             }
+            return this;
+        }
+    }, {
+        key: "alpha",
+        value: function alpha(a) {
             return this;
         }
     }, {
@@ -7451,7 +7471,10 @@ var SVGForm = function (_Form_1$VisualForm) {
                 "stroke": "#fff",
                 "stroke-width": 1,
                 "stroke-linejoin": "bevel",
-                "stroke-linecap": "square"
+              
+              
+                "stroke-linecap": "sqaure",
+                "opacity": 1
             },
             font: "11px sans-serif",
             fontSize: 11,
@@ -7472,6 +7495,12 @@ var SVGForm = function (_Form_1$VisualForm) {
         value: function styleTo(k, v) {
             if (this._ctx.style[k] === undefined) throw new Error(k + " style property doesn't exist");
             this._ctx.style[k] = v;
+        }
+    }, {
+        key: "alpha",
+        value: function alpha(a) {
+            this.styleTo("opacity", a);
+            return this;
         }
     }, {
         key: "fill",
@@ -7531,7 +7560,8 @@ var SVGForm = function (_Form_1$VisualForm) {
                 "fill": "#f03", "stroke": "#fff",
                 "stroke-width": 1,
                 "stroke-linejoin": "bevel",
-                "stroke-linecap": "square"
+                "stroke-linecap": "sqaure",
+                "opacity": 1
             };
             this._font = new Form_1.Font(14, "sans-serif");
             this._ctx.font = this._font.value;
