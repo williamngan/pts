@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 5440,
+  "id": 5449,
   "comment": "**[Experimental]** HTMLForm is an implementation of abstract class [`VisualForm`](#link). It provide methods to express Pts on [`HTMLSpace`](#link). Note that this is currently experimental and may change in future.",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "Dom.ts",
-          393,
+          394,
           35
         ]
       ],
-      "id": 5468,
+      "id": 5478,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -52,7 +52,7 @@
           17
         ]
       ],
-      "id": 5597,
+      "id": 5610,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.currentFont",
@@ -76,7 +76,7 @@
           12
         ]
       ],
-      "id": 5587,
+      "id": 5600,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.filled",
@@ -103,7 +103,7 @@
           11
         ]
       ],
-      "id": 5633,
+      "id": 5646,
       "flags": {},
       "overrides": false,
       "inherits": "Form.ready",
@@ -118,11 +118,11 @@
       "source": [
         [
           "Dom.ts",
-          413,
+          414,
           11
         ]
       ],
-      "id": 5471,
+      "id": 5481,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -146,7 +146,7 @@
           13
         ]
       ],
-      "id": 5592,
+      "id": 5605,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.stroked",
@@ -167,15 +167,50 @@
   ],
   "methods": [
     {
+      "name": "alpha",
+      "source": [
+        [
+          "Dom.ts",
+          434,
+          7
+        ]
+      ],
+      "id": 5488,
+      "flags": {},
+      "overrides": "VisualForm.alpha",
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Set current alpha value.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "a",
+              "comment": "alpha value between 0 and 1\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`form.alpha(0.6)`"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "arc",
       "source": [
         [
           "Dom.ts",
-          797,
+          809,
           5
         ]
       ],
-      "id": 5573,
+      "id": 5586,
       "flags": {},
       "overrides": "VisualForm.arc",
       "inherits": false,
@@ -225,11 +260,11 @@
       "source": [
         [
           "Dom.ts",
-          685,
+          697,
           8
         ]
       ],
-      "id": 5542,
+      "id": 5555,
       "flags": {},
       "overrides": "VisualForm.circle",
       "inherits": false,
@@ -260,11 +295,11 @@
       "source": [
         [
           "Form.ts",
-          164,
+          173,
           9
         ]
       ],
-      "id": 5618,
+      "id": 5631,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.circles",
@@ -290,11 +325,11 @@
       "source": [
         [
           "Dom.ts",
-          481,
+          493,
           5
         ]
       ],
-      "id": 5490,
+      "id": 5503,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -325,11 +360,11 @@
       "source": [
         [
           "Dom.ts",
-          433,
+          445,
           6
         ]
       ],
-      "id": 5478,
+      "id": 5491,
       "flags": {},
       "overrides": "VisualForm.fill",
       "inherits": false,
@@ -360,11 +395,11 @@
       "source": [
         [
           "Form.ts",
-          96,
+          105,
           10
         ]
       ],
-      "id": 5604,
+      "id": 5617,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.fillOnly",
@@ -390,11 +425,11 @@
       "source": [
         [
           "Dom.ts",
-          470,
+          482,
           10
         ]
       ],
-      "id": 5487,
+      "id": 5500,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -425,11 +460,11 @@
       "source": [
         [
           "Dom.ts",
-          500,
+          512,
           6
         ]
       ],
-      "id": 5493,
+      "id": 5506,
       "flags": {},
       "overrides": "VisualForm.font",
       "inherits": false,
@@ -484,11 +519,11 @@
       "source": [
         [
           "Dom.ts",
-          806,
+          818,
           6
         ]
       ],
-      "id": 5580,
+      "id": 5593,
       "flags": {},
       "overrides": "VisualForm.line",
       "inherits": false,
@@ -514,11 +549,11 @@
       "source": [
         [
           "Form.ts",
-          200,
+          209,
           7
         ]
       ],
-      "id": 5624,
+      "id": 5637,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.lines",
@@ -544,11 +579,11 @@
       "source": [
         [
           "Dom.ts",
-          788,
+          800,
           5
         ]
       ],
-      "id": 5570,
+      "id": 5583,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -574,11 +609,11 @@
       "source": [
         [
           "Dom.ts",
-          562,
+          574,
           8
         ]
       ],
-      "id": 5509,
+      "id": 5522,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -597,11 +632,11 @@
       "source": [
         [
           "Dom.ts",
-          657,
+          669,
           7
         ]
       ],
-      "id": 5532,
+      "id": 5545,
       "flags": {},
       "overrides": "VisualForm.point",
       "inherits": false,
@@ -644,11 +679,11 @@
       "source": [
         [
           "Form.ts",
-          142,
+          151,
           8
         ]
       ],
-      "id": 5613,
+      "id": 5626,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.points",
@@ -686,11 +721,11 @@
       "source": [
         [
           "Dom.ts",
-          816,
+          828,
           9
         ]
       ],
-      "id": 5583,
+      "id": 5596,
       "flags": {},
       "overrides": "VisualForm.polygon",
       "inherits": false,
@@ -716,11 +751,11 @@
       "source": [
         [
           "Form.ts",
-          216,
+          225,
           10
         ]
       ],
-      "id": 5627,
+      "id": 5640,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.polygons",
@@ -746,11 +781,11 @@
       "source": [
         [
           "Dom.ts",
-          740,
+          752,
           6
         ]
       ],
-      "id": 5558,
+      "id": 5571,
       "flags": {},
       "overrides": "VisualForm.rect",
       "inherits": false,
@@ -776,11 +811,11 @@
       "source": [
         [
           "Form.ts",
-          233,
+          242,
           7
         ]
       ],
-      "id": 5630,
+      "id": 5643,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.rects",
@@ -806,11 +841,11 @@
       "source": [
         [
           "Dom.ts",
-          519,
+          531,
           7
         ]
       ],
-      "id": 5500,
+      "id": 5513,
       "flags": {},
       "overrides": "VisualForm.reset",
       "inherits": false,
@@ -829,11 +864,11 @@
       "source": [
         [
           "Dom.ts",
-          552,
+          564,
           7
         ]
       ],
-      "id": 5506,
+      "id": 5519,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -859,11 +894,11 @@
       "source": [
         [
           "Dom.ts",
-          713,
+          725,
           8
         ]
       ],
-      "id": 5550,
+      "id": 5563,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -895,11 +930,11 @@
       "source": [
         [
           "Form.ts",
-          173,
+          182,
           9
         ]
       ],
-      "id": 5621,
+      "id": 5634,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.squares",
@@ -925,11 +960,11 @@
       "source": [
         [
           "Dom.ts",
-          452,
+          464,
           8
         ]
       ],
-      "id": 5481,
+      "id": 5494,
       "flags": {},
       "overrides": "VisualForm.stroke",
       "inherits": false,
@@ -978,11 +1013,11 @@
       "source": [
         [
           "Form.ts",
-          121,
+          130,
           12
         ]
       ],
-      "id": 5607,
+      "id": 5620,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.strokeOnly",
@@ -1026,11 +1061,11 @@
       "source": [
         [
           "Dom.ts",
-          422,
+          423,
           19
         ]
       ],
-      "id": 5473,
+      "id": 5483,
       "flags": {
         "isProtected": true
       },
@@ -1070,11 +1105,11 @@
       "source": [
         [
           "Dom.ts",
-          777,
+          789,
           6
         ]
       ],
-      "id": 5566,
+      "id": 5579,
       "flags": {},
       "overrides": "VisualForm.text",
       "inherits": false,
@@ -1106,11 +1141,11 @@
       "source": [
         [
           "Dom.ts",
-          538,
+          550,
           13
         ]
       ],
-      "id": 5502,
+      "id": 5515,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1142,11 +1177,11 @@
       "source": [
         [
           "Dom.ts",
-          671,
+          683,
           15
         ]
       ],
-      "id": 5537,
+      "id": 5550,
       "flags": {
         "isStatic": true
       },
@@ -1186,11 +1221,11 @@
       "source": [
         [
           "Dom.ts",
-          573,
+          585,
           14
         ]
       ],
-      "id": 5511,
+      "id": 5524,
       "flags": {
         "isStatic": true
       },
@@ -1218,11 +1253,11 @@
       "source": [
         [
           "Dom.ts",
-          641,
+          653,
           14
         ]
       ],
-      "id": 5526,
+      "id": 5539,
       "flags": {
         "isStatic": true
       },
@@ -1273,11 +1308,11 @@
       "source": [
         [
           "Dom.ts",
-          725,
+          737,
           13
         ]
       ],
-      "id": 5554,
+      "id": 5567,
       "flags": {
         "isStatic": true
       },
@@ -1311,11 +1346,11 @@
       "source": [
         [
           "Dom.ts",
-          625,
+          637,
           18
         ]
       ],
-      "id": 5521,
+      "id": 5534,
       "flags": {
         "isStatic": true
       },
@@ -1355,11 +1390,11 @@
       "source": [
         [
           "Dom.ts",
-          582,
+          594,
           16
         ]
       ],
-      "id": 5514,
+      "id": 5527,
       "flags": {
         "isStatic": true
       },
@@ -1387,11 +1422,11 @@
       "source": [
         [
           "Dom.ts",
-          699,
+          711,
           15
         ]
       ],
-      "id": 5545,
+      "id": 5558,
       "flags": {
         "isStatic": true
       },
@@ -1431,11 +1466,11 @@
       "source": [
         [
           "Dom.ts",
-          594,
+          606,
           14
         ]
       ],
-      "id": 5517,
+      "id": 5530,
       "flags": {
         "isStatic": true
       },
@@ -1474,11 +1509,11 @@
       "source": [
         [
           "Dom.ts",
-          755,
+          767,
           13
         ]
       ],
-      "id": 5561,
+      "id": 5574,
       "flags": {
         "isStatic": true
       },
@@ -1521,11 +1556,11 @@
       "source": [
         [
           "Dom.ts",
-          390,
+          391,
           14
         ]
       ],
-      "id": 5465,
+      "id": 5475,
       "flags": {
         "isStatic": true
       },
@@ -1539,11 +1574,11 @@
       "source": [
         [
           "Dom.ts",
-          389,
+          390,
           16
         ]
       ],
-      "id": 5464,
+      "id": 5474,
       "flags": {
         "isStatic": true
       },

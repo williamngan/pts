@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 2883,
+  "id": 2885,
   "comment": "VisualForm is an abstract class that represents a form that can be used to express Pts visually.\nFor example, [`CanvasForm`](#link) is an implementation of VisualForm that draws on [`CanvasSpace`](#link) which represents a html canvas. Learn more about Space and Form in [this guide](../guide/Space-0500.html).",
   "constructor": [],
   "accessors": [
@@ -21,7 +21,7 @@
           17
         ]
       ],
-      "id": 2895,
+      "id": 2897,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -45,7 +45,7 @@
           12
         ]
       ],
-      "id": 2885,
+      "id": 2887,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -72,7 +72,7 @@
           11
         ]
       ],
-      "id": 2979,
+      "id": 2984,
       "flags": {},
       "overrides": false,
       "inherits": "Form.ready",
@@ -96,7 +96,7 @@
           13
         ]
       ],
-      "id": 2890,
+      "id": 2892,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -117,15 +117,45 @@
   ],
   "methods": [
     {
+      "name": "alpha",
+      "source": [
+        [
+          "Form.ts",
+          87,
+          7
+        ]
+      ],
+      "id": 2906,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Set alpha (not implemented here  -- to be implemented in subclasses).",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "a",
+              "comment": "alpha value between 0 and 1\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "arc",
       "source": [
         [
           "Form.ts",
-          186,
+          195,
           14
         ]
       ],
-      "id": 2941,
+      "id": 2946,
       "flags": {
         "isAbstract": true
       },
@@ -177,11 +207,11 @@
       "source": [
         [
           "Form.ts",
-          156,
+          165,
           17
         ]
       ],
-      "id": 2932,
+      "id": 2937,
       "flags": {
         "isAbstract": true
       },
@@ -214,11 +244,11 @@
       "source": [
         [
           "Form.ts",
-          164,
+          173,
           9
         ]
       ],
-      "id": 2935,
+      "id": 2940,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -244,11 +274,11 @@
       "source": [
         [
           "Form.ts",
-          87,
+          96,
           6
         ]
       ],
-      "id": 2904,
+      "id": 2909,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -274,11 +304,11 @@
       "source": [
         [
           "Form.ts",
-          96,
+          105,
           10
         ]
       ],
-      "id": 2907,
+      "id": 2912,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -304,11 +334,11 @@
       "source": [
         [
           "Form.ts",
-          257,
+          266,
           15
         ]
       ],
-      "id": 2971,
+      "id": 2976,
       "flags": {
         "isAbstract": true
       },
@@ -369,11 +399,11 @@
       "source": [
         [
           "Form.ts",
-          193,
+          202,
           15
         ]
       ],
-      "id": 2948,
+      "id": 2953,
       "flags": {
         "isAbstract": true
       },
@@ -401,11 +431,11 @@
       "source": [
         [
           "Form.ts",
-          200,
+          209,
           7
         ]
       ],
-      "id": 2951,
+      "id": 2956,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -431,11 +461,11 @@
       "source": [
         [
           "Form.ts",
-          133,
+          142,
           16
         ]
       ],
-      "id": 2922,
+      "id": 2927,
       "flags": {
         "isAbstract": true
       },
@@ -480,11 +510,11 @@
       "source": [
         [
           "Form.ts",
-          142,
+          151,
           8
         ]
       ],
-      "id": 2927,
+      "id": 2932,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -522,11 +552,11 @@
       "source": [
         [
           "Form.ts",
-          209,
+          218,
           18
         ]
       ],
-      "id": 2954,
+      "id": 2959,
       "flags": {
         "isAbstract": true
       },
@@ -554,11 +584,11 @@
       "source": [
         [
           "Form.ts",
-          216,
+          225,
           10
         ]
       ],
-      "id": 2957,
+      "id": 2962,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -584,11 +614,11 @@
       "source": [
         [
           "Form.ts",
-          226,
+          235,
           15
         ]
       ],
-      "id": 2960,
+      "id": 2965,
       "flags": {
         "isAbstract": true
       },
@@ -616,11 +646,11 @@
       "source": [
         [
           "Form.ts",
-          233,
+          242,
           7
         ]
       ],
-      "id": 2963,
+      "id": 2968,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -650,7 +680,7 @@
           16
         ]
       ],
-      "id": 2902,
+      "id": 2904,
       "flags": {
         "isAbstract": true
       },
@@ -671,11 +701,11 @@
       "source": [
         [
           "Form.ts",
-          173,
+          182,
           9
         ]
       ],
-      "id": 2938,
+      "id": 2943,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -701,11 +731,11 @@
       "source": [
         [
           "Form.ts",
-          109,
+          118,
           8
         ]
       ],
-      "id": 2910,
+      "id": 2915,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -749,11 +779,11 @@
       "source": [
         [
           "Form.ts",
-          121,
+          130,
           12
         ]
       ],
-      "id": 2916,
+      "id": 2921,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -797,11 +827,11 @@
       "source": [
         [
           "Form.ts",
-          244,
+          253,
           15
         ]
       ],
-      "id": 2966,
+      "id": 2971,
       "flags": {
         "isAbstract": true
       },

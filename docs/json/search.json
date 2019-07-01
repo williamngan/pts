@@ -42,6 +42,12 @@
     8
   ],
   [
+    "Canvas_CanvasForm#function_alpha",
+    "CanvasForm.alpha",
+    "Function",
+    8
+  ],
+  [
     "Canvas_CanvasForm#function_arc",
     "CanvasForm.arc",
     "Function",
@@ -2688,6 +2694,12 @@
     6
   ],
   [
+    "Dom_HTMLForm#function_alpha",
+    "HTMLForm.alpha",
+    "Function",
+    8
+  ],
+  [
     "Dom_HTMLForm#function_arc",
     "HTMLForm.arc",
     "Function",
@@ -3280,6 +3292,12 @@
     "VisualForm.stroked",
     "Accessor",
     6
+  ],
+  [
+    "Form_VisualForm#function_alpha",
+    "VisualForm.alpha",
+    "Function",
+    8
   ],
   [
     "Form_VisualForm#function_arc",
@@ -7878,6 +7896,12 @@
     6
   ],
   [
+    "Svg_SVGForm#function_alpha",
+    "SVGForm.alpha",
+    "Function",
+    8
+  ],
+  [
     "Svg_SVGForm#function_arc",
     "SVGForm.arc",
     "Function",
@@ -9500,6 +9524,12 @@
   [
     "UI_UIPointerActions#property_uidrag",
     "UIPointerActions.uidrag",
+    "Variable",
+    0
+  ],
+  [
+    "UI_UIPointerActions#property_uidrop",
+    "UIPointerActions.uidrop",
     "Variable",
     0
   ],

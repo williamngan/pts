@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 3683,
+  "id": 3692,
   "comment": "Color is a subclass of Pt. Since a color in a color space is analogous to a point or vector in a space, you can apply all Pt operations to colors too. The Color class provides support for many color spaces like HSL and LAB.",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           4
         ]
       ],
-      "id": 3695,
+      "id": 3704,
       "flags": {},
       "overrides": "Pt.__constructor",
       "inherits": false,
@@ -57,7 +57,7 @@
           7
         ]
       ],
-      "id": 3766,
+      "id": 3775,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -89,7 +89,7 @@
           11
         ]
       ],
-      "id": 3782,
+      "id": 3791,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -121,7 +121,7 @@
           7
         ]
       ],
-      "id": 3750,
+      "id": 3759,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -153,7 +153,7 @@
           7
         ]
       ],
-      "id": 3770,
+      "id": 3779,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -185,7 +185,7 @@
           7
         ]
       ],
-      "id": 3746,
+      "id": 3755,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -217,7 +217,7 @@
           7
         ]
       ],
-      "id": 3754,
+      "id": 3763,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -244,7 +244,7 @@
           16
         ]
       ],
-      "id": 3728,
+      "id": 3737,
       "flags": {
         "isPublic": true
       },
@@ -270,7 +270,7 @@
           8
         ]
       ],
-      "id": 3895,
+      "id": 3904,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.id",
@@ -302,7 +302,7 @@
           7
         ]
       ],
-      "id": 3762,
+      "id": 3771,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -329,7 +329,7 @@
           10
         ]
       ],
-      "id": 3740,
+      "id": 3749,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -353,7 +353,7 @@
           16
         ]
       ],
-      "id": 3786,
+      "id": 3795,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -385,7 +385,7 @@
           7
         ]
       ],
-      "id": 3742,
+      "id": 3751,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -412,7 +412,7 @@
           16
         ]
       ],
-      "id": 3730,
+      "id": 3739,
       "flags": {
         "isPublic": true
       },
@@ -433,7 +433,7 @@
           17
         ]
       ],
-      "id": 3732,
+      "id": 3741,
       "flags": {
         "isPublic": true
       },
@@ -459,7 +459,7 @@
           7
         ]
       ],
-      "id": 3758,
+      "id": 3767,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -491,7 +491,7 @@
           7
         ]
       ],
-      "id": 3774,
+      "id": 3783,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -523,7 +523,7 @@
           7
         ]
       ],
-      "id": 3778,
+      "id": 3787,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -555,7 +555,7 @@
           7
         ]
       ],
-      "id": 3911,
+      "id": 3920,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.w",
@@ -587,7 +587,7 @@
           7
         ]
       ],
-      "id": 3899,
+      "id": 3908,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.x",
@@ -619,7 +619,7 @@
           7
         ]
       ],
-      "id": 3903,
+      "id": 3912,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.y",
@@ -651,7 +651,7 @@
           7
         ]
       ],
-      "id": 3907,
+      "id": 3916,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.z",
@@ -680,7 +680,7 @@
           6
         ]
       ],
-      "id": 4007,
+      "id": 4016,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$abs",
@@ -703,7 +703,7 @@
           6
         ]
       ],
-      "id": 3959,
+      "id": 3968,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$add",
@@ -733,7 +733,7 @@
           7
         ]
       ],
-      "id": 4015,
+      "id": 4024,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$ceil",
@@ -756,7 +756,7 @@
           9
         ]
       ],
-      "id": 3953,
+      "id": 3962,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$concat",
@@ -786,7 +786,7 @@
           8
         ]
       ],
-      "id": 3996,
+      "id": 4005,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$cross",
@@ -816,7 +816,7 @@
           10
         ]
       ],
-      "id": 3993,
+      "id": 4002,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$cross2D",
@@ -846,7 +846,7 @@
           9
         ]
       ],
-      "id": 3977,
+      "id": 3986,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$divide",
@@ -876,7 +876,7 @@
           8
         ]
       ],
-      "id": 4011,
+      "id": 4020,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$floor",
@@ -899,7 +899,7 @@
           6
         ]
       ],
-      "id": 4034,
+      "id": 4043,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$max",
@@ -929,7 +929,7 @@
           6
         ]
       ],
-      "id": 4031,
+      "id": 4040,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$min",
@@ -959,7 +959,7 @@
           11
         ]
       ],
-      "id": 3971,
+      "id": 3980,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$multiply",
@@ -989,7 +989,7 @@
           12
         ]
       ],
-      "id": 3793,
+      "id": 3802,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1019,7 +1019,7 @@
           10
         ]
       ],
-      "id": 3999,
+      "id": 4008,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$project",
@@ -1049,7 +1049,7 @@
           8
         ]
       ],
-      "id": 4019,
+      "id": 4028,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$round",
@@ -1072,7 +1072,7 @@
           11
         ]
       ],
-      "id": 3965,
+      "id": 3974,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$subtract",
@@ -1102,7 +1102,7 @@
           7
         ]
       ],
-      "id": 3950,
+      "id": 3959,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$take",
@@ -1132,7 +1132,7 @@
           5
         ]
       ],
-      "id": 3922,
+      "id": 3931,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$to",
@@ -1162,7 +1162,7 @@
           7
         ]
       ],
-      "id": 3987,
+      "id": 3996,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$unit",
@@ -1192,7 +1192,7 @@
           5
         ]
       ],
-      "id": 4005,
+      "id": 4014,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.abs",
@@ -1215,7 +1215,7 @@
           5
         ]
       ],
-      "id": 3956,
+      "id": 3965,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.add",
@@ -1245,7 +1245,7 @@
           7
         ]
       ],
-      "id": 4037,
+      "id": 4046,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.angle",
@@ -1275,7 +1275,7 @@
           14
         ]
       ],
-      "id": 4040,
+      "id": 4049,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.angleBetween",
@@ -1311,7 +1311,7 @@
           6
         ]
       ],
-      "id": 4013,
+      "id": 4022,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.ceil",
@@ -1334,7 +1334,7 @@
           7
         ]
       ],
-      "id": 3734,
+      "id": 3743,
       "flags": {},
       "overrides": "Pt.clone",
       "inherits": false,
@@ -1357,7 +1357,7 @@
           14
         ]
       ],
-      "id": 4068,
+      "id": 4077,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.copyWithin",
@@ -1399,7 +1399,7 @@
           8
         ]
       ],
-      "id": 3974,
+      "id": 3983,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.divide",
@@ -1429,7 +1429,7 @@
           5
         ]
       ],
-      "id": 3990,
+      "id": 3999,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.dot",
@@ -1459,7 +1459,7 @@
           11
         ]
       ],
-      "id": 4236,
+      "id": 4245,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.entries",
@@ -1482,7 +1482,7 @@
           8
         ]
       ],
-      "id": 3915,
+      "id": 3924,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.equals",
@@ -1518,7 +1518,7 @@
           9
         ]
       ],
-      "id": 4073,
+      "id": 4082,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.every",
@@ -1554,7 +1554,7 @@
           8
         ]
       ],
-      "id": 4082,
+      "id": 4091,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.fill",
@@ -1596,7 +1596,7 @@
           10
         ]
       ],
-      "id": 4087,
+      "id": 4096,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.filter",
@@ -1632,7 +1632,7 @@
           8
         ]
       ],
-      "id": 4096,
+      "id": 4105,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.find",
@@ -1668,7 +1668,7 @@
           13
         ]
       ],
-      "id": 4105,
+      "id": 4114,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.findIndex",
@@ -1704,7 +1704,7 @@
           7
         ]
       ],
-      "id": 4009,
+      "id": 4018,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.floor",
@@ -1727,7 +1727,7 @@
           11
         ]
       ],
-      "id": 4114,
+      "id": 4123,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.forEach",
@@ -1763,7 +1763,7 @@
           11
         ]
       ],
-      "id": 4123,
+      "id": 4132,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.indexOf",
@@ -1799,7 +1799,7 @@
           8
         ]
       ],
-      "id": 4127,
+      "id": 4136,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.join",
@@ -1829,7 +1829,7 @@
           8
         ]
       ],
-      "id": 4238,
+      "id": 4247,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.keys",
@@ -1852,7 +1852,7 @@
           15
         ]
       ],
-      "id": 4130,
+      "id": 4139,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.lastIndexOf",
@@ -1888,7 +1888,7 @@
           11
         ]
       ],
-      "id": 3982,
+      "id": 3991,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.magnitude",
@@ -1911,13 +1911,13 @@
           13
         ]
       ],
-      "id": 3980,
+      "id": 3989,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.magnitudeSq",
       "signatures": [
         {
-          "comment": "Get the sqaured distance (magnitude) of this Pt from origin.",
+          "comment": "Get the squared distance (magnitude) of this Pt from origin.",
           "returns": "number",
           "returns_comment": false,
           "parameters": [],
@@ -1934,7 +1934,7 @@
           7
         ]
       ],
-      "id": 4135,
+      "id": 4144,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.map",
@@ -1970,7 +1970,7 @@
           10
         ]
       ],
-      "id": 4026,
+      "id": 4035,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.maxValue",
@@ -1993,7 +1993,7 @@
           10
         ]
       ],
-      "id": 4021,
+      "id": 4030,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.minValue",
@@ -2016,7 +2016,7 @@
           10
         ]
       ],
-      "id": 3968,
+      "id": 3977,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.multiply",
@@ -2046,7 +2046,7 @@
           11
         ]
       ],
-      "id": 3790,
+      "id": 3799,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2076,7 +2076,7 @@
           4
         ]
       ],
-      "id": 3930,
+      "id": 3939,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.op",
@@ -2111,7 +2111,7 @@
           5
         ]
       ],
-      "id": 3940,
+      "id": 3949,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.ops",
@@ -2146,7 +2146,7 @@
           15
         ]
       ],
-      "id": 4002,
+      "id": 4011,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.projectScalar",
@@ -2186,7 +2186,7 @@
           10
         ]
       ],
-      "id": 4144,
+      "id": 4153,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reduce",
@@ -2266,7 +2266,7 @@
           15
         ]
       ],
-      "id": 4172,
+      "id": 4181,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reduceRight",
@@ -2336,7 +2336,7 @@
           11
         ]
       ],
-      "id": 4058,
+      "id": 4067,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.reflect2D",
@@ -2372,7 +2372,7 @@
           11
         ]
       ],
-      "id": 4200,
+      "id": 4209,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reverse",
@@ -2395,7 +2395,7 @@
           10
         ]
       ],
-      "id": 4048,
+      "id": 4057,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.rotate2D",
@@ -2437,7 +2437,7 @@
           7
         ]
       ],
-      "id": 4017,
+      "id": 4026,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.round",
@@ -2460,7 +2460,7 @@
           7
         ]
       ],
-      "id": 4044,
+      "id": 4053,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.scale",
@@ -2496,7 +2496,7 @@
           7
         ]
       ],
-      "id": 4202,
+      "id": 4211,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.set",
@@ -2532,7 +2532,7 @@
           9
         ]
       ],
-      "id": 4053,
+      "id": 4062,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.shear2D",
@@ -2574,7 +2574,7 @@
           9
         ]
       ],
-      "id": 4206,
+      "id": 4215,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.slice",
@@ -2610,7 +2610,7 @@
           8
         ]
       ],
-      "id": 4210,
+      "id": 4219,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.some",
@@ -2646,7 +2646,7 @@
           8
         ]
       ],
-      "id": 4219,
+      "id": 4228,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.sort",
@@ -2676,7 +2676,7 @@
           12
         ]
       ],
-      "id": 4226,
+      "id": 4235,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.subarray",
@@ -2712,7 +2712,7 @@
           10
         ]
       ],
-      "id": 3962,
+      "id": 3971,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.subtract",
@@ -2742,7 +2742,7 @@
           4
         ]
       ],
-      "id": 3919,
+      "id": 3928,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.to",
@@ -2772,7 +2772,7 @@
           9
         ]
       ],
-      "id": 3925,
+      "id": 3934,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.toAngle",
@@ -2814,7 +2814,7 @@
           9
         ]
       ],
-      "id": 4062,
+      "id": 4071,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.toArray",
@@ -2837,7 +2837,7 @@
           18
         ]
       ],
-      "id": 4230,
+      "id": 4239,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.toLocaleString",
@@ -2860,7 +2860,7 @@
           8
         ]
       ],
-      "id": 3736,
+      "id": 3745,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2896,7 +2896,7 @@
           10
         ]
       ],
-      "id": 3796,
+      "id": 3805,
       "flags": {},
       "overrides": "Pt.toString",
       "inherits": false,
@@ -2926,7 +2926,7 @@
           6
         ]
       ],
-      "id": 3984,
+      "id": 3993,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.unit",
@@ -2956,7 +2956,7 @@
           10
         ]
       ],
-      "id": 4240,
+      "id": 4249,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.values",
@@ -2979,7 +2979,7 @@
           17
         ]
       ],
-      "id": 3814,
+      "id": 3823,
       "flags": {
         "isStatic": true
       },
@@ -3023,7 +3023,7 @@
           17
         ]
       ],
-      "id": 3804,
+      "id": 3813,
       "flags": {
         "isStatic": true
       },
@@ -3067,7 +3067,7 @@
           17
         ]
       ],
-      "id": 3879,
+      "id": 3888,
       "flags": {
         "isStatic": true
       },
@@ -3111,7 +3111,7 @@
           17
         ]
       ],
-      "id": 3824,
+      "id": 3833,
       "flags": {
         "isStatic": true
       },
@@ -3155,7 +3155,7 @@
           17
         ]
       ],
-      "id": 3864,
+      "id": 3873,
       "flags": {
         "isStatic": true
       },
@@ -3199,7 +3199,7 @@
           17
         ]
       ],
-      "id": 3884,
+      "id": 3893,
       "flags": {
         "isStatic": true
       },
@@ -3243,7 +3243,7 @@
           17
         ]
       ],
-      "id": 3834,
+      "id": 3843,
       "flags": {
         "isStatic": true
       },
@@ -3287,7 +3287,7 @@
           17
         ]
       ],
-      "id": 3844,
+      "id": 3853,
       "flags": {
         "isStatic": true
       },
@@ -3331,7 +3331,7 @@
           17
         ]
       ],
-      "id": 3874,
+      "id": 3883,
       "flags": {
         "isStatic": true
       },
@@ -3375,7 +3375,7 @@
           17
         ]
       ],
-      "id": 3809,
+      "id": 3818,
       "flags": {
         "isStatic": true
       },
@@ -3419,7 +3419,7 @@
           17
         ]
       ],
-      "id": 3799,
+      "id": 3808,
       "flags": {
         "isStatic": true
       },
@@ -3463,7 +3463,7 @@
           17
         ]
       ],
-      "id": 3819,
+      "id": 3828,
       "flags": {
         "isStatic": true
       },
@@ -3507,7 +3507,7 @@
           17
         ]
       ],
-      "id": 3829,
+      "id": 3838,
       "flags": {
         "isStatic": true
       },
@@ -3551,7 +3551,7 @@
           17
         ]
       ],
-      "id": 3839,
+      "id": 3848,
       "flags": {
         "isStatic": true
       },
@@ -3595,7 +3595,7 @@
           17
         ]
       ],
-      "id": 3849,
+      "id": 3858,
       "flags": {
         "isStatic": true
       },
@@ -3639,7 +3639,7 @@
           17
         ]
       ],
-      "id": 3859,
+      "id": 3868,
       "flags": {
         "isStatic": true
       },
@@ -3683,7 +3683,7 @@
           17
         ]
       ],
-      "id": 3869,
+      "id": 3878,
       "flags": {
         "isStatic": true
       },
@@ -3727,7 +3727,7 @@
           17
         ]
       ],
-      "id": 3854,
+      "id": 3863,
       "flags": {
         "isStatic": true
       },
@@ -3771,7 +3771,7 @@
           13
         ]
       ],
-      "id": 3698,
+      "id": 3707,
       "flags": {
         "isStatic": true
       },
@@ -3803,7 +3803,7 @@
           16
         ]
       ],
-      "id": 3701,
+      "id": 3710,
       "flags": {
         "isStatic": true
       },
@@ -3835,7 +3835,7 @@
           12
         ]
       ],
-      "id": 3710,
+      "id": 3719,
       "flags": {
         "isStatic": true
       },
@@ -3867,7 +3867,7 @@
           12
         ]
       ],
-      "id": 3707,
+      "id": 3716,
       "flags": {
         "isStatic": true
       },
@@ -3899,7 +3899,7 @@
           12
         ]
       ],
-      "id": 3713,
+      "id": 3722,
       "flags": {
         "isStatic": true
       },
@@ -3931,7 +3931,7 @@
           12
         ]
       ],
-      "id": 3716,
+      "id": 3725,
       "flags": {
         "isStatic": true
       },
@@ -3963,7 +3963,7 @@
           12
         ]
       ],
-      "id": 3719,
+      "id": 3728,
       "flags": {
         "isStatic": true
       },
@@ -3995,7 +3995,7 @@
           13
         ]
       ],
-      "id": 3890,
+      "id": 3899,
       "flags": {
         "isStatic": true
       },
@@ -4039,7 +4039,7 @@
           18
         ]
       ],
-      "id": 3725,
+      "id": 3734,
       "flags": {
         "isStatic": true
       },
@@ -4076,7 +4076,7 @@
           12
         ]
       ],
-      "id": 3704,
+      "id": 3713,
       "flags": {
         "isStatic": true
       },
@@ -4108,7 +4108,7 @@
           12
         ]
       ],
-      "id": 3722,
+      "id": 3731,
       "flags": {
         "isStatic": true
       },
@@ -4143,7 +4143,7 @@
           30
         ]
       ],
-      "id": 4064,
+      "id": 4073,
       "flags": {},
       "type": "BYTES_PER_ELEMENT",
       "overrides": false,
@@ -4159,7 +4159,7 @@
           19
         ]
       ],
-      "id": 4065,
+      "id": 4074,
       "flags": {},
       "type": "buffer",
       "overrides": false,
@@ -4175,7 +4175,7 @@
           23
         ]
       ],
-      "id": 4066,
+      "id": 4075,
       "flags": {},
       "type": "byteLength",
       "overrides": false,
@@ -4191,7 +4191,7 @@
           23
         ]
       ],
-      "id": 4067,
+      "id": 4076,
       "flags": {},
       "type": "byteOffset",
       "overrides": false,
@@ -4207,7 +4207,7 @@
           19
         ]
       ],
-      "id": 4134,
+      "id": 4143,
       "flags": {},
       "type": "length",
       "overrides": false,
@@ -4223,7 +4223,7 @@
           20
         ]
       ],
-      "id": 3684,
+      "id": 3693,
       "flags": {
         "isPrivate": true,
         "isStatic": true

@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Typealias",
-  "id": 1530,
+  "id": 1532,
   "comment": "Typescript only: GroupLike is an alias of types that can represent a group of points.",
   "constructor": [],
   "accessors": [],
