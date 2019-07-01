@@ -7283,8 +7283,11 @@ var MultiTouchSpace = function (_Space) {
     }, {
         key: "_mouseUp",
         value: function _mouseUp(evt) {
-            this._mouseAction(UI_1.UIPointerActions.up, evt);
-            if (this._dragged) this._mouseAction(UI_1.UIPointerActions.drop, evt);
+            if (this._dragged) {
+                this._mouseAction(UI_1.UIPointerActions.drop, evt);
+            } else {
+                this._mouseAction(UI_1.UIPointerActions.up, evt);
+            }
             this._pressed = false;
             this._dragged = false;
             return false;
@@ -7468,6 +7471,8 @@ var SVGForm = function (_Form_1$VisualForm) {
                 "stroke": "#fff",
                 "stroke-width": 1,
                 "stroke-linejoin": "bevel",
+              
+              
                 "stroke-linecap": "sqaure",
                 "opacity": 1
             },
@@ -8206,16 +8211,16 @@ var UIDragger = function (_UIButton) {
 
         _this2._draggingID = -1;
         _this2._moveHoldID = -1;
-        _this2._moveUpID = -1;
+        _this2._moveDropID = -1;
         if (states.dragging === undefined) _this2._states['dragging'] = false;
         if (states.moved === undefined) _this2._states['moved'] = false;
         if (states.offset === undefined) _this2._states['offset'] = new Pt_1.Pt();
         var UA = exports.UIPointerActions;
-        _this2.on(UA.down, function (target, pt, type) {
+        _this2.on(UA.drag, function (target, pt, type) {
             _this2.state('dragging', true);
             _this2.state('offset', new Pt_1.Pt(pt).subtract(target.group[0]));
             _this2._moveHoldID = _this2.hold(UA.move);
-            _this2._moveUpID = _this2.hold(UA.up);
+            _this2._moveDropID = _this2.hold(UA.drop);
             _this2._draggingID = _this2.on(UA.move, function (t, p) {
                 if (_this2.state('dragging')) {
                     UI._trigger(_this2._actions[UA.uidrag], t, p, UA.uidrag);
@@ -8223,11 +8228,11 @@ var UIDragger = function (_UIButton) {
                 }
             });
         });
-        _this2.on(UA.up, function (target, pt, type) {
+        _this2.on(UA.drop, function (target, pt, type) {
             _this2.state('dragging', false);
             _this2.off(UA.move, _this2._draggingID);
             _this2.unhold(_this2._moveHoldID);
-            _this2.unhold(_this2._moveUpID);
+            _this2.unhold(_this2._moveDropID);
             if (_this2.state('moved')) {
                 UI._trigger(_this2._actions[UA.uidrop], target, pt, UA.uidrop);
                 _this2.state('moved', false);

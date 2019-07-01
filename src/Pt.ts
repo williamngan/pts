@@ -252,7 +252,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
 
 
   /**
-   * Get the sqaured distance (magnitude) of this Pt from origin.
+   * Get the squared distance (magnitude) of this Pt from origin.
    */
   magnitudeSq():number {  return Vec.dot( this, this ); }
 

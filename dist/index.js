@@ -4905,9 +4905,12 @@ class MultiTouchSpace extends Space {
         return false;
     }
     _mouseUp(evt) {
-        this._mouseAction(UI_1.UIPointerActions.up, evt);
-        if (this._dragged)
+        if (this._dragged) {
             this._mouseAction(UI_1.UIPointerActions.drop, evt);
+        }
+        else {
+            this._mouseAction(UI_1.UIPointerActions.up, evt);
+        }
         this._pressed = false;
         this._dragged = false;
         return false;
@@ -5592,7 +5595,7 @@ class UIDragger extends UIButton {
         super(group, shape, states, id);
         this._draggingID = -1;
         this._moveHoldID = -1;
-        this._moveUpID = -1;
+        this._moveDropID = -1;
         if (states.dragging === undefined)
             this._states['dragging'] = false;
         if (states.moved === undefined)
@@ -5600,11 +5603,11 @@ class UIDragger extends UIButton {
         if (states.offset === undefined)
             this._states['offset'] = new Pt_1.Pt();
         const UA = exports.UIPointerActions;
-        this.on(UA.down, (target, pt, type) => {
+        this.on(UA.drag, (target, pt, type) => {
             this.state('dragging', true);
             this.state('offset', new Pt_1.Pt(pt).subtract(target.group[0]));
             this._moveHoldID = this.hold(UA.move);
-            this._moveUpID = this.hold(UA.up);
+            this._moveDropID = this.hold(UA.drop);
             this._draggingID = this.on(UA.move, (t, p) => {
                 if (this.state('dragging')) {
                     UI._trigger(this._actions[UA.uidrag], t, p, UA.uidrag);
@@ -5612,11 +5615,11 @@ class UIDragger extends UIButton {
                 }
             });
         });
-        this.on(UA.up, (target, pt, type) => {
+        this.on(UA.drop, (target, pt, type) => {
             this.state('dragging', false);
             this.off(UA.move, this._draggingID);
             this.unhold(this._moveHoldID);
-            this.unhold(this._moveUpID);
+            this.unhold(this._moveDropID);
             if (this.state('moved')) {
                 UI._trigger(this._actions[UA.uidrop], target, pt, UA.uidrop);
                 this.state('moved', false);

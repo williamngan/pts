@@ -439,8 +439,11 @@ export abstract class MultiTouchSpace extends Space {
   * @param evt 
   */
   protected _mouseUp( evt:MouseEvent|TouchEvent ) {
-    this._mouseAction( UIA.up, evt );
-    if (this._dragged) this._mouseAction( UIA.drop, evt );
+    if (this._dragged) {
+      this._mouseAction( UIA.drop, evt );
+    } else {
+      this._mouseAction( UIA.up, evt );
+    }
     this._pressed = false;
     this._dragged = false;
     return false;
