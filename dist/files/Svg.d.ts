@@ -23,6 +23,7 @@ export declare class SVGForm extends VisualForm {
     constructor(space: SVGSpace);
     readonly space: SVGSpace;
     styleTo(k: any, v: any): void;
+    alpha(a: number): this;
     fill(c: string | boolean): this;
     stroke(c: string | boolean, width?: number, linejoin?: string, linecap?: string): this;
     cls(c: string | boolean): this;

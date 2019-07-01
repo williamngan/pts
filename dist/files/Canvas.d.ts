@@ -50,11 +50,13 @@ export declare class CanvasForm extends VisualForm {
         lineWidth: number;
         lineJoin: string;
         lineCap: string;
+        globalAlpha: number;
     };
     constructor(space: CanvasSpace);
     readonly space: CanvasSpace;
     useOffscreen(off?: boolean, clear?: boolean | string): this;
     renderOffscreen(offset?: PtLike): void;
+    alpha(a: number): this;
     fill(c: string | boolean): this;
     stroke(c: string | boolean, width?: number, linejoin?: CanvasLineJoin, linecap?: CanvasLineCap): this;
     font(sizeOrFont: number | Font, weight?: string, style?: string, lineHeight?: number, family?: string): this;

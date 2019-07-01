@@ -36,6 +36,9 @@ class VisualForm extends Form {
         }
         return this;
     }
+    alpha(a) {
+        return this;
+    }
     fill(c) {
         return this;
     }

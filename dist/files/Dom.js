@@ -206,6 +206,7 @@ class HTMLForm extends Form_1.VisualForm {
                 "border-width": "1px",
                 "border-radius": "0",
                 "border-style": "solid",
+                "opacity": 1,
                 "position": "absolute",
                 "top": 0,
                 "left": 0,
@@ -229,6 +230,10 @@ class HTMLForm extends Form_1.VisualForm {
         if (this._ctx.style[k] === undefined)
             throw new Error(`${k} style property doesn't exist`);
         this._ctx.style[k] = `${v}${unit}`;
+    }
+    alpha(a) {
+        this.styleTo("opacity", a);
+        return this;
     }
     fill(c) {
         if (typeof c == "boolean") {
@@ -290,7 +295,7 @@ class HTMLForm extends Form_1.VisualForm {
         this._ctx.style = {
             "filled": true, "stroked": true,
             "background": "#f03", "border-color": "#fff",
-            "border-width": "1px"
+            "border-width": "1px", "opacity": 1
         };
         this._font = new Form_1.Font(14, "sans-serif");
         this._ctx.font = this._font.value;

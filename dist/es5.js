@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.8.5 - Copyright © 2017-2019 William Ngan and contributors.
+ * pts.js 0.8.6 - Copyright © 2017-2019 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -7471,8 +7471,6 @@ var SVGForm = function (_Form_1$VisualForm) {
                 "stroke": "#fff",
                 "stroke-width": 1,
                 "stroke-linejoin": "bevel",
-              
-              
                 "stroke-linecap": "sqaure",
                 "opacity": 1
             },

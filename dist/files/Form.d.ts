@@ -15,6 +15,7 @@ export declare abstract class VisualForm extends Form {
     readonly currentFont: Font;
     protected _multiple(groups: GroupLike[], shape: string, ...rest: any[]): this;
     abstract reset(): this;
+    alpha(a: number): this;
     fill(c: string | boolean): this;
     fillOnly(c: string | boolean): this;
     stroke(c: string | boolean, width?: number, linejoin?: string, linecap?: string): this;

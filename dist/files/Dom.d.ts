@@ -46,6 +46,7 @@ export declare class HTMLForm extends VisualForm {
     constructor(space: HTMLSpace);
     readonly space: HTMLSpace;
     protected styleTo(k: any, v: any, unit?: string): void;
+    alpha(a: number): this;
     fill(c: string | boolean): this;
     stroke(c: string | boolean, width?: number, linejoin?: string, linecap?: string): this;
     fillText(c: string): this;

@@ -49,11 +49,13 @@ export class CanvasForm extends VisualForm {
         lineWidth: number;
         lineJoin: string;
         lineCap: string;
+        globalAlpha: number;
     };
     constructor(space: CanvasSpace);
     readonly space: CanvasSpace;
     useOffscreen(off?: boolean, clear?: boolean | string): this;
     renderOffscreen(offset?: PtLike): void;
+    alpha(a: number): this;
     fill(c: string | boolean): this;
     stroke(c: string | boolean, width?: number, linejoin?: CanvasLineJoin, linecap?: CanvasLineCap): this;
     font(sizeOrFont: number | Font, weight?: string, style?: string, lineHeight?: number, family?: string): this;
@@ -217,6 +219,7 @@ export class HTMLForm extends VisualForm {
     constructor(space: HTMLSpace);
     readonly space: HTMLSpace;
     protected styleTo(k: any, v: any, unit?: string): void;
+    alpha(a: number): this;
     fill(c: string | boolean): this;
     stroke(c: string | boolean, width?: number, linejoin?: string, linecap?: string): this;
     fillText(c: string): this;
@@ -260,6 +263,7 @@ export abstract class VisualForm extends Form {
     readonly currentFont: Font;
     protected _multiple(groups: GroupLike[], shape: string, ...rest: any[]): this;
     abstract reset(): this;
+    alpha(a: number): this;
     fill(c: string | boolean): this;
     fillOnly(c: string | boolean): this;
     stroke(c: string | boolean, width?: number, linejoin?: string, linecap?: string): this;
@@ -880,6 +884,7 @@ export class SVGForm extends VisualForm {
     constructor(space: SVGSpace);
     readonly space: SVGSpace;
     styleTo(k: any, v: any): void;
+    alpha(a: number): this;
     fill(c: string | boolean): this;
     stroke(c: string | boolean, width?: number, linejoin?: string, linecap?: string): this;
     cls(c: string | boolean): this;

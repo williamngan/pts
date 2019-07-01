@@ -207,6 +207,7 @@ class CanvasForm extends Form_1.VisualForm {
         this._style = {
             fillStyle: "#f03", strokeStyle: "#fff",
             lineWidth: 1, lineJoin: "bevel", lineCap: "butt",
+            globalAlpha: 1
         };
         this._space = space;
         this._space.add({ start: () => {
@@ -229,6 +230,11 @@ class CanvasForm extends Form_1.VisualForm {
         if (this._space.hasOffscreen) {
             this._space.ctx.drawImage(this._space.offscreenCanvas, offset[0], offset[1], this._space.width, this._space.height);
         }
+    }
+    alpha(a) {
+        this._ctx.globalAlpha = a;
+        this._style.globalAlpha = a;
+        return this;
     }
     fill(c) {
         if (typeof c == "boolean") {

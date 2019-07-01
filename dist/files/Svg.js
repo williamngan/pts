@@ -73,7 +73,8 @@ class SVGForm extends Form_1.VisualForm {
                 "stroke": "#fff",
                 "stroke-width": 1,
                 "stroke-linejoin": "bevel",
-                "stroke-linecap": "sqaure"
+                "stroke-linecap": "sqaure",
+                "opacity": 1,
             },
             font: "11px sans-serif",
             fontSize: 11,
@@ -92,6 +93,10 @@ class SVGForm extends Form_1.VisualForm {
         if (this._ctx.style[k] === undefined)
             throw new Error(`${k} style property doesn't exist`);
         this._ctx.style[k] = v;
+    }
+    alpha(a) {
+        this.styleTo("opacity", a);
+        return this;
     }
     fill(c) {
         if (typeof c == "boolean") {
@@ -152,7 +157,8 @@ class SVGForm extends Form_1.VisualForm {
             "fill": "#f03", "stroke": "#fff",
             "stroke-width": 1,
             "stroke-linejoin": "bevel",
-            "stroke-linecap": "sqaure"
+            "stroke-linecap": "sqaure",
+            "opacity": 1,
         };
         this._font = new Form_1.Font(14, "sans-serif");
         this._ctx.font = this._font.value;
