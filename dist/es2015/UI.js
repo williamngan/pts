@@ -9,7 +9,7 @@ export const UIPointerActions = {
 };
 export class UI {
     constructor(group, shape, states = {}, id) {
-        this._holds = [];
+        this._holds = new Map();
         this._group = Group.fromArray(group);
         this._shape = shape;
         this._id = id === undefined ? `ui_${(UI._counter++)}` : id;
@@ -59,29 +59,32 @@ export class UI {
             return UI._removeHandler(this._actions[key], which);
         }
     }
-    listen(key, p) {
-        if (this._actions[key] !== undefined) {
-            if (this._within(p) || this._holds.indexOf(key) >= 0) {
-                UI._trigger(this._actions[key], this, p, key);
+    listen(event, p) {
+        if (this._actions[event] !== undefined) {
+            if (this._within(p) || Array.from(this._holds.values()).indexOf(event) >= 0) {
+                UI._trigger(this._actions[event], this, p, event);
                 return true;
             }
             else if (this._actions['all']) {
-                UI._trigger(this._actions['all'], this, p, key);
+                UI._trigger(this._actions['all'], this, p, event);
                 return true;
             }
         }
         return false;
     }
-    hold(key) {
-        this._holds.push(key);
-        return this._holds.length - 1;
+    hold(event) {
+        let newKey = Math.max(0, ...Array.from(this._holds.keys())) + 1;
+        this._holds.set(newKey, event);
+        console.log('hold', newKey);
+        return newKey;
     }
-    unhold(id) {
-        if (id !== undefined) {
-            this._holds.splice(id, 1);
+    unhold(key) {
+        console.log('unhold', key);
+        if (key !== undefined) {
+            this._holds.delete(key);
         }
         else {
-            this._holds = [];
+            this._holds.clear();
         }
     }
     static track(uis, key, p) {
