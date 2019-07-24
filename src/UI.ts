@@ -412,7 +412,7 @@ export class UIDragger extends UIButton {
 
   private _draggingID:number = -1;
   private _moveHoldID:number = -1;
-  private _moveDropID:number = -1;
+  private _dropHoldID:number = -1;
 
   /**
    * Create a dragger which has all the states in UIButton, with additional "dragging" (a boolean indicating whether it's currently being dragged) and "offset" (a Pt representing the offset between this UI's position and the pointer's position when dragged) states. (See [`UI.state`](#link)) You may also create a new UIDragger using one of the static helper like [`UI.fromRectangle`](#link) or [`UI.fromCircle`](#link).
@@ -443,7 +443,7 @@ export class UIDragger extends UIButton {
 
       // begin listening for all events after dragging starts
       this._moveHoldID = this.hold( UA.move ); // keep hold of move
-      this._moveDropID = this.hold( UA.drop ); // keep hold of drop
+      this._dropHoldID = this.hold( UA.drop ); // keep hold of drop
       this._draggingID = this.on( UA.move, (t:UI, p:PtLike) => {
         if ( this.state('dragging') ) {
           UI._trigger( this._actions[UA.uidrag], t, p, UA.uidrag );
@@ -457,7 +457,7 @@ export class UIDragger extends UIButton {
       this.state('dragging', false);
       this.off(UA.move, this._draggingID); // remove 'all' listener
       this.unhold( this._moveHoldID ); // // stop keeping hold of move
-      this.unhold( this._moveDropID ); // // stop keeping hold of drop
+      this.unhold( this._dropHoldID ); // // stop keeping hold of drop
       if ( this.state('moved') ) {
         UI._trigger( this._actions[UA.uidrop], target, pt, UA.uidrop );
         this.state( 'moved', false );
