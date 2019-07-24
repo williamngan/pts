@@ -442,8 +442,12 @@ export class UIDragger extends UIButton {
       this.state( 'offset', new Pt(pt).subtract( target.group[0] ) );
 
       // begin listening for all events after dragging starts
-      this._moveHoldID = this.hold( UA.move ); // keep hold of move
-      this._dropHoldID = this.hold( UA.drop ); // keep hold of drop
+      if (this._moveHoldID === -1) {
+        this._moveHoldID = this.hold( UA.move ); // keep hold of move
+      }
+      if (this._dropHoldID === -1) {
+        this._dropHoldID = this.hold( UA.drop ); // keep hold of drop
+      }
       this._draggingID = this.on( UA.move, (t:UI, p:PtLike) => {
         if ( this.state('dragging') ) {
           UI._trigger( this._actions[UA.uidrag], t, p, UA.uidrag );
@@ -456,8 +460,13 @@ export class UIDragger extends UIButton {
     this.on( UA.drop, (target:UI, pt:PtLike, type:string) => {
       this.state('dragging', false);
       this.off(UA.move, this._draggingID); // remove 'all' listener
-      this.unhold( this._moveHoldID ); // // stop keeping hold of move
-      this.unhold( this._dropHoldID ); // // stop keeping hold of drop
+      // stop keeping hold of move
+      this.unhold( this._moveHoldID );
+      this._moveHoldID = -1;
+      // stop keeping hold of drop
+      this.unhold( this._dropHoldID );
+      this._dropHoldID = -1;
+      // trigger event
       if ( this.state('moved') ) {
         UI._trigger( this._actions[UA.uidrop], target, pt, UA.uidrop );
         this.state( 'moved', false );

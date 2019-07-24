@@ -5609,8 +5609,12 @@ class UIDragger extends UIButton {
         this.on(UA.drag, (target, pt, type) => {
             this.state('dragging', true);
             this.state('offset', new Pt_1.Pt(pt).subtract(target.group[0]));
-            this._moveHoldID = this.hold(UA.move);
-            this._dropHoldID = this.hold(UA.drop);
+            if (this._moveHoldID === -1) {
+                this._moveHoldID = this.hold(UA.move);
+            }
+            if (this._dropHoldID === -1) {
+                this._dropHoldID = this.hold(UA.drop);
+            }
             this._draggingID = this.on(UA.move, (t, p) => {
                 if (this.state('dragging')) {
                     UI._trigger(this._actions[UA.uidrag], t, p, UA.uidrag);
@@ -5622,7 +5626,9 @@ class UIDragger extends UIButton {
             this.state('dragging', false);
             this.off(UA.move, this._draggingID);
             this.unhold(this._moveHoldID);
+            this._moveHoldID = -1;
             this.unhold(this._dropHoldID);
+            this._dropHoldID = -1;
             if (this.state('moved')) {
                 UI._trigger(this._actions[UA.uidrop], target, pt, UA.uidrop);
                 this.state('moved', false);
