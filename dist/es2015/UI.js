@@ -217,16 +217,19 @@ export class UIDragger extends UIButton {
             if (this._dropHoldID === -1) {
                 this._dropHoldID = this.hold(UA.drop);
             }
-            this._draggingID = this.on(UA.move, (t, p) => {
-                if (this.state('dragging')) {
-                    UI._trigger(this._actions[UA.uidrag], t, p, UA.uidrag);
-                    this.state('moved', true);
-                }
-            });
+            if (this._draggingID === -1) {
+                this._draggingID = this.on(UA.move, (t, p) => {
+                    if (this.state('dragging')) {
+                        UI._trigger(this._actions[UA.uidrag], t, p, UA.uidrag);
+                        this.state('moved', true);
+                    }
+                });
+            }
         });
         this.on(UA.drop, (target, pt, type) => {
             this.state('dragging', false);
             this.off(UA.move, this._draggingID);
+            this._draggingID = -1;
             this.unhold(this._moveHoldID);
             this._moveHoldID = -1;
             this.unhold(this._dropHoldID);

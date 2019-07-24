@@ -8228,16 +8228,19 @@ var UIDragger = function (_UIButton) {
             if (_this2._dropHoldID === -1) {
                 _this2._dropHoldID = _this2.hold(UA.drop);
             }
-            _this2._draggingID = _this2.on(UA.move, function (t, p) {
-                if (_this2.state('dragging')) {
-                    UI._trigger(_this2._actions[UA.uidrag], t, p, UA.uidrag);
-                    _this2.state('moved', true);
-                }
-            });
+            if (_this2._draggingID === -1) {
+                _this2._draggingID = _this2.on(UA.move, function (t, p) {
+                    if (_this2.state('dragging')) {
+                        UI._trigger(_this2._actions[UA.uidrag], t, p, UA.uidrag);
+                        _this2.state('moved', true);
+                    }
+                });
+            }
         });
         _this2.on(UA.drop, function (target, pt, type) {
             _this2.state('dragging', false);
             _this2.off(UA.move, _this2._draggingID);
+            _this2._draggingID = -1;
             _this2.unhold(_this2._moveHoldID);
             _this2._moveHoldID = -1;
             _this2.unhold(_this2._dropHoldID);

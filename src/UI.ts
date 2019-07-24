@@ -448,18 +448,22 @@ export class UIDragger extends UIButton {
       if (this._dropHoldID === -1) {
         this._dropHoldID = this.hold( UA.drop ); // keep hold of drop
       }
-      this._draggingID = this.on( UA.move, (t:UI, p:PtLike) => {
-        if ( this.state('dragging') ) {
-          UI._trigger( this._actions[UA.uidrag], t, p, UA.uidrag );
-          this.state( 'moved', true );
-        }
-      });
+      if (this._draggingID === -1) {
+        this._draggingID = this.on( UA.move, (t:UI, p:PtLike) => {
+          if ( this.state('dragging') ) {
+            UI._trigger( this._actions[UA.uidrag], t, p, UA.uidrag );
+            this.state( 'moved', true );
+          }
+        });
+      }
     });
 
     // Handle pointer drop and end dragging
     this.on( UA.drop, (target:UI, pt:PtLike, type:string) => {
       this.state('dragging', false);
-      this.off(UA.move, this._draggingID); // remove 'all' listener
+      // remove move listener
+      this.off(UA.move, this._draggingID);
+      this._draggingID = -1;
       // stop keeping hold of move
       this.unhold( this._moveHoldID );
       this._moveHoldID = -1;
