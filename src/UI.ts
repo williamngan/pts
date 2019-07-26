@@ -189,7 +189,6 @@ export class UI {
   protected hold( event:string ):number {
     let newKey = Math.max(0, ...Array.from(this._holds.keys())) + 1;
     this._holds.set(newKey, event);
-    console.log('hold', newKey);
     return newKey;
   }
 
@@ -199,7 +198,6 @@ export class UI {
    * @param key an id returned by the [`UI.hold`](#link) function
    */
   protected unhold( key?:number ):void {
-    console.log('unhold', key);
     if (key !== undefined) {
       this._holds.delete(key);
     } else {

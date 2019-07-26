@@ -8004,13 +8004,11 @@ var UI = function () {
         value: function hold(event) {
             var newKey = Math.max.apply(Math, [0].concat(_toConsumableArray(Array.from(this._holds.keys())))) + 1;
             this._holds.set(newKey, event);
-            console.log('hold', newKey);
             return newKey;
         }
     }, {
         key: "unhold",
         value: function unhold(key) {
-            console.log('unhold', key);
             if (key !== undefined) {
                 this._holds.delete(key);
             } else {

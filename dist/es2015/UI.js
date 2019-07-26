@@ -75,11 +75,9 @@ export class UI {
     hold(event) {
         let newKey = Math.max(0, ...Array.from(this._holds.keys())) + 1;
         this._holds.set(newKey, event);
-        console.log('hold', newKey);
         return newKey;
     }
     unhold(key) {
-        console.log('unhold', key);
         if (key !== undefined) {
             this._holds.delete(key);
         }
