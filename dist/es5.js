@@ -7929,6 +7929,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -7948,7 +7950,7 @@ var UI = function () {
 
         _classCallCheck(this, UI);
 
-        this._holds = [];
+        this._holds = new Map();
         this._group = Pt_1.Group.fromArray(group);
         this._shape = shape;
         this._id = id === undefined ? "ui_" + UI._counter++ : id;
@@ -7985,13 +7987,13 @@ var UI = function () {
         }
     }, {
         key: "listen",
-        value: function listen(key, p) {
-            if (this._actions[key] !== undefined) {
-                if (this._within(p) || this._holds.indexOf(key) >= 0) {
-                    UI._trigger(this._actions[key], this, p, key);
+        value: function listen(event, p) {
+            if (this._actions[event] !== undefined) {
+                if (this._within(p) || Array.from(this._holds.values()).indexOf(event) >= 0) {
+                    UI._trigger(this._actions[event], this, p, event);
                     return true;
                 } else if (this._actions['all']) {
-                    UI._trigger(this._actions['all'], this, p, key);
+                    UI._trigger(this._actions['all'], this, p, event);
                     return true;
                 }
             }
@@ -7999,17 +8001,18 @@ var UI = function () {
         }
     }, {
         key: "hold",
-        value: function hold(key) {
-            this._holds.push(key);
-            return this._holds.length - 1;
+        value: function hold(event) {
+            var newKey = Math.max.apply(Math, [0].concat(_toConsumableArray(Array.from(this._holds.keys())))) + 1;
+            this._holds.set(newKey, event);
+            return newKey;
         }
     }, {
         key: "unhold",
-        value: function unhold(id) {
-            if (id !== undefined) {
-                this._holds.splice(id, 1);
+        value: function unhold(key) {
+            if (key !== undefined) {
+                this._holds.delete(key);
             } else {
-                this._holds = [];
+                this._holds.clear();
             }
         }
     }, {
@@ -8209,7 +8212,7 @@ var UIDragger = function (_UIButton) {
 
         _this2._draggingID = -1;
         _this2._moveHoldID = -1;
-        _this2._moveDropID = -1;
+        _this2._dropHoldID = -1;
         if (states.dragging === undefined) _this2._states['dragging'] = false;
         if (states.moved === undefined) _this2._states['moved'] = false;
         if (states.offset === undefined) _this2._states['offset'] = new Pt_1.Pt();
@@ -8217,20 +8220,29 @@ var UIDragger = function (_UIButton) {
         _this2.on(UA.drag, function (target, pt, type) {
             _this2.state('dragging', true);
             _this2.state('offset', new Pt_1.Pt(pt).subtract(target.group[0]));
-            _this2._moveHoldID = _this2.hold(UA.move);
-            _this2._moveDropID = _this2.hold(UA.drop);
-            _this2._draggingID = _this2.on(UA.move, function (t, p) {
-                if (_this2.state('dragging')) {
-                    UI._trigger(_this2._actions[UA.uidrag], t, p, UA.uidrag);
-                    _this2.state('moved', true);
-                }
-            });
+            if (_this2._moveHoldID === -1) {
+                _this2._moveHoldID = _this2.hold(UA.move);
+            }
+            if (_this2._dropHoldID === -1) {
+                _this2._dropHoldID = _this2.hold(UA.drop);
+            }
+            if (_this2._draggingID === -1) {
+                _this2._draggingID = _this2.on(UA.move, function (t, p) {
+                    if (_this2.state('dragging')) {
+                        UI._trigger(_this2._actions[UA.uidrag], t, p, UA.uidrag);
+                        _this2.state('moved', true);
+                    }
+                });
+            }
         });
         _this2.on(UA.drop, function (target, pt, type) {
             _this2.state('dragging', false);
             _this2.off(UA.move, _this2._draggingID);
+            _this2._draggingID = -1;
             _this2.unhold(_this2._moveHoldID);
-            _this2.unhold(_this2._moveDropID);
+            _this2._moveHoldID = -1;
+            _this2.unhold(_this2._dropHoldID);
+            _this2._dropHoldID = -1;
             if (_this2.state('moved')) {
                 UI._trigger(_this2._actions[UA.uidrop], target, pt, UA.uidrop);
                 _this2.state('moved', false);
