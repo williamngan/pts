@@ -33,7 +33,7 @@ export declare class UI {
     protected _states: {
         [key: string]: any;
     };
-    protected _holds: string[];
+    protected _holds: Map<number, string>;
     constructor(group: GroupLike, shape: string, states?: {
         [key: string]: any;
     }, id?: string);
@@ -47,9 +47,9 @@ export declare class UI {
     state(key: string, value?: any): any;
     on(key: string, fn: UIHandler): number;
     off(key: string, which?: number): boolean;
-    listen(key: string, p: PtLike): boolean;
-    protected hold(key: string): number;
-    protected unhold(id?: number): void;
+    listen(event: string, p: PtLike): boolean;
+    protected hold(event: string): number;
+    protected unhold(key?: number): void;
     static track(uis: UI[], key: string, p: PtLike): void;
     render(fn: (group: Group, states: {
         [key: string]: any;
@@ -73,7 +73,7 @@ export declare class UIButton extends UI {
 export declare class UIDragger extends UIButton {
     private _draggingID;
     private _moveHoldID;
-    private _moveDropID;
+    private _dropHoldID;
     constructor(group: GroupLike, shape: string, states?: {
         [key: string]: any;
     }, id?: string);
