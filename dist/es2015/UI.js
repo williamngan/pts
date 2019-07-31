@@ -207,9 +207,9 @@ export class UIDragger extends UIButton {
             this._states['offset'] = new Pt();
         const UA = UIPointerActions;
         this.on(UA.drag, (target, pt, type) => {
-            this.state('dragging', true);
-            this.state('offset', new Pt(pt).subtract(target.group[0]));
             if (this._moveHoldID === -1) {
+                this.state('dragging', true);
+                this.state('offset', new Pt(pt).subtract(target.group[0]));
                 this._moveHoldID = this.hold(UA.move);
             }
             if (this._dropHoldID === -1) {
