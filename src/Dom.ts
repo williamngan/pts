@@ -778,11 +778,7 @@ export class HTMLForm extends VisualForm {
   static text( ctx:DOMFormContext, pt:PtLike, txt:string ):Element {
     let elem = HTMLSpace.htmlElement( ctx.group, "div", HTMLForm.getID(ctx) );
     
-    HTMLSpace.setAttr( elem, {
-      class: `pts-form pts-text ${ctx.currentClass}`,
-      left: pt[0],
-      top: pt[1],
-    });
+    HTMLSpace.setAttr( elem, { class: `pts-form pts-text ${ctx.currentClass}` });
     
     elem.textContent = txt;
     HTMLForm.textStyle( ctx, pt );
