@@ -643,6 +643,17 @@ export class HTMLForm extends VisualForm {
   }
   
   /**
+   * A helper function to set top and left of text DOM context.
+   * @param ctx context to add style to
+   * @param a PtLike object determining the top-left position of the text
+   */
+  static textStyle( ctx:DOMFormContext, pt:PtLike ):DOMFormContext {
+    ctx.style["left"] = pt[0]+"px"; 
+    ctx.style["top"] = pt[1]+"px"; 
+    return ctx;
+  }
+
+  /**
   * A static function to draws a point.
   * @param ctx a context object of HTMLForm
   * @param pt a Pt object or numeric array
@@ -768,13 +779,13 @@ export class HTMLForm extends VisualForm {
     let elem = HTMLSpace.htmlElement( ctx.group, "div", HTMLForm.getID(ctx) );
     
     HTMLSpace.setAttr( elem, {
-      position: 'absolute',
       class: `pts-form pts-text ${ctx.currentClass}`,
       left: pt[0],
       top: pt[1],
     });
     
     elem.textContent = txt;
+    HTMLForm.textStyle( ctx, pt );
     HTMLForm.style( elem, ctx.style );
     
     return elem;
