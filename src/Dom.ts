@@ -643,9 +643,9 @@ export class HTMLForm extends VisualForm {
   }
   
   /**
-   * A helper function to set top and left of text DOM context.
+   * A helper function to set the top and left position styling of text DOM context.
    * @param ctx context to add style to
-   * @param a PtLike object determining the top-left position of the text
+   * @param pt a Pt object or numeric array determining the top-left position of the text
    */
   static textStyle( ctx:DOMFormContext, pt:PtLike ):DOMFormContext {
     ctx.style["left"] = pt[0]+"px"; 
