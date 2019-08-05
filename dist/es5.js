@@ -8218,9 +8218,9 @@ var UIDragger = function (_UIButton) {
         if (states.offset === undefined) _this2._states['offset'] = new Pt_1.Pt();
         var UA = exports.UIPointerActions;
         _this2.on(UA.drag, function (target, pt, type) {
-            _this2.state('dragging', true);
-            _this2.state('offset', new Pt_1.Pt(pt).subtract(target.group[0]));
             if (_this2._moveHoldID === -1) {
+                _this2.state('dragging', true);
+                _this2.state('offset', new Pt_1.Pt(pt).subtract(target.group[0]));
                 _this2._moveHoldID = _this2.hold(UA.move);
             }
             if (_this2._dropHoldID === -1) {

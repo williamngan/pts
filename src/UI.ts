@@ -436,11 +436,10 @@ export class UIDragger extends UIButton {
 
      // Handle pointer drag and begin dragging
     this.on( UA.drag, (target:UI, pt:PtLike, type:string) => {
-      this.state( 'dragging', true );
-      this.state( 'offset', new Pt(pt).subtract( target.group[0] ) );
-
       // begin listening for all events after dragging starts
       if (this._moveHoldID === -1) {
+        this.state( 'dragging', true );
+        this.state( 'offset', new Pt(pt).subtract( target.group[0] ) );
         this._moveHoldID = this.hold( UA.move ); // keep hold of move
       }
       if (this._dropHoldID === -1) {
