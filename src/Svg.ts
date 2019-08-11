@@ -269,11 +269,13 @@ export class SVGForm extends VisualForm {
       if (weight) this._font.weight = weight;
       if (style) this._font.style = style;
       if (lineHeight) this._font.lineHeight = lineHeight;
-      this._ctx.font = this._font.value;
       
     } else {
       this._font = sizeOrFont;
     }
+
+    this._ctx.style['font'] = this._font.value;
+
     return this;
   }
   
