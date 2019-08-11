@@ -123,6 +123,17 @@ export class SVGSpace extends DOMSpace {
 * You may extend SVGForm to implement your own expressions for SVGSpace. See out the [Space guide](../guide/Space-0500.html) for details.
 */
 export class SVGForm extends VisualForm {
+
+  protected _style = {
+    "filled": true,
+    "stroked": true,
+    "fill": "#f03",
+    "stroke": "#fff",
+    "stroke-width": 1,
+    "stroke-linejoin": "bevel",
+    "stroke-linecap": "sqaure",
+    "opacity": 1
+  };
   
   protected _ctx:DOMFormContext = {
     group: null,
@@ -130,16 +141,7 @@ export class SVGForm extends VisualForm {
     groupCount: 0,
     currentID: "pts0",
     currentClass: "",
-    style: {
-      "filled": true,
-      "stroked": true,
-      "fill": "#f03",
-      "stroke": "#fff",
-      "stroke-width": 1,
-      "stroke-linejoin": "bevel",
-      "stroke-linecap": "sqaure",
-      "opacity": 1,
-    },
+    style: {},
     font: "11px sans-serif",
     fontSize: 11,
     fontFamily: "sans-serif"
@@ -163,6 +165,7 @@ export class SVGForm extends VisualForm {
     this._space.add( { start: () => {
       this._ctx.group = this._space.element;
       this._ctx.groupID = "pts_svg_"+(SVGForm.groupID++);
+      this._ctx.style = this._style;
       this._ready = true;
     }} );
   }
@@ -279,14 +282,11 @@ export class SVGForm extends VisualForm {
   * Reset the context's common styles to this form's styles. This supports using multiple forms in the same space.
   */
   reset():this {
-    this._ctx.style = {
-      "filled": true, "stroked": true,
-      "fill": "#f03", "stroke": "#fff",
-      "stroke-width": 1,
-      "stroke-linejoin": "bevel",
-      "stroke-linecap": "sqaure",
-      "opacity": 1,
-    };
+    for (let k in this._style) {
+      if (this._style.hasOwnProperty(k)) {
+        this._ctx.style[k] = this._style[k];
+      }
+    }
 
     this._font = new Font( 14, "sans-serif");
     this._ctx.font = this._font.value;

@@ -360,28 +360,33 @@ export class HTMLSpace extends DOMSpace {
  */
 export class HTMLForm extends VisualForm {
 
+  /** 
+  * store common styles so that they can be restored to canvas context when using multiple forms. See `reset()`.
+  */
+  protected _style = {
+    "filled": true,
+    "stroked": true,
+    "background": "#f03",
+    "border-color": "#fff",
+    "color": "#000",
+    "border-width": "1px",
+    "border-radius": "0",
+    "border-style": "solid",
+    "opacity": 1,
+    "position": "absolute",
+    "top": 0,
+    "left": 0,
+    "width": 0,
+    "height": 0
+  };
+
   protected _ctx:DOMFormContext = {
     group: null,
     groupID: "pts",
     groupCount: 0,
     currentID: "pts0",
     currentClass: "",
-    style: {
-      "filled": true,
-      "stroked": true,
-      "background": "#f03",
-      "border-color": "#fff",
-      "color": "#000",
-      "border-width": "1px",
-      "border-radius": "0",
-      "border-style": "solid",
-      "opacity": 1,
-      "position": "absolute",
-      "top": 0,
-      "left": 0,
-      "width": 0,
-      "height": 0
-    },
+    style: {},
     font: "11px sans-serif",
     fontSize: 11,
     fontFamily: "sans-serif"
@@ -404,6 +409,7 @@ export class HTMLForm extends VisualForm {
     this._space.add( { start: () => {
       this._ctx.group = this._space.element;
       this._ctx.groupID = "pts_dom_"+(HTMLForm.groupID++);
+      this._ctx.style = this._style;
       this._ready = true;
     }} );
   }
@@ -529,11 +535,11 @@ export class HTMLForm extends VisualForm {
   * Reset the context's common styles to this form's styles. This supports using multiple forms on the same canvas context.
   */
   reset():this {
-    this._ctx.style = {
-      "filled": true, "stroked": true,
-      "background": "#f03", "border-color": "#fff",
-      "border-width": "1px", "opacity": 1
-    };
+    for (let k in this._style) {
+      if (this._style.hasOwnProperty(k)) {
+        this._ctx.style[k] = this._style[k];
+      }
+    }
 
     this._font = new Font( 14, "sans-serif");
     this._ctx.font = this._font.value;
