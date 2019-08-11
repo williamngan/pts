@@ -703,7 +703,7 @@ export class HTMLForm extends VisualForm {
   /**
   * Draw a circle.
   * @param pts usually a Group of 2 Pts, but it can also take an array of two numeric arrays [ [position], [size] ]
-  * @see [`Circle.fromCenter`](./_op_.circle.html#frompt)
+  * @see [`Circle.fromCenter`](./?p=Op_Circle#function_fromCenter)
   */
   circle( pts:GroupLike|number[][] ):this {
     this.nextID();
