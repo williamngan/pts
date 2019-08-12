@@ -537,11 +537,7 @@ export class HTMLForm extends VisualForm {
   * Reset the context's common styles to this form's styles. This supports using multiple forms on the same canvas context.
   */
   reset():this {
-    for (let k in this._style) {
-      if (this._style.hasOwnProperty(k)) {
-        this._ctx.style[k] = this._style[k];
-      }
-    }
+    this._ctx.style = Object.assign({}, this._style);
 
     this._font = new Font( 14, "sans-serif");
     this._ctx.font = this._font.value;
