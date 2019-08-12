@@ -89,7 +89,7 @@ export abstract class Space {
   
   /**
   * Main play loop. This implements `window.requestAnimationFrame` and calls it recursively. 
-  * You may override this `play()` function to implemenet your own animation loop.
+  * You may override this `play()` function to implement your own animation loop.
   * @param time current time
   */
   play( time=0 ):this {
