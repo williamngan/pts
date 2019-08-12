@@ -1654,6 +1654,11 @@ class HTMLForm extends Form_1.VisualForm {
         ctx.style["height"] = size[1] + "px";
         return ctx;
     }
+    static textStyle(ctx, pt) {
+        ctx.style["left"] = pt[0] + "px";
+        ctx.style["top"] = pt[1] + "px";
+        return ctx;
+    }
     static point(ctx, pt, radius = 5, shape = "square") {
         if (shape === "circle") {
             return HTMLForm.circle(ctx, pt, radius);
@@ -1711,13 +1716,9 @@ class HTMLForm extends Form_1.VisualForm {
     }
     static text(ctx, pt, txt) {
         let elem = HTMLSpace.htmlElement(ctx.group, "div", HTMLForm.getID(ctx));
-        HTMLSpace.setAttr(elem, {
-            position: 'absolute',
-            class: `pts-form pts-text ${ctx.currentClass}`,
-            left: pt[0],
-            top: pt[1],
-        });
+        HTMLSpace.setAttr(elem, { class: `pts-form pts-text ${ctx.currentClass}` });
         elem.textContent = txt;
+        HTMLForm.textStyle(ctx, pt);
         HTMLForm.style(elem, ctx.style);
         return elem;
     }
@@ -5604,7 +5605,7 @@ class UIDragger extends UIButton {
         if (states.offset === undefined)
             this._states['offset'] = new Pt_1.Pt();
         const UA = exports.UIPointerActions;
-        this.on(UA.drag, (target, pt, type) => {
+        this.on(UA.down, (target, pt, type) => {
             if (this._moveHoldID === -1) {
                 this.state('dragging', true);
                 this.state('offset', new Pt_1.Pt(pt).subtract(target.group[0]));

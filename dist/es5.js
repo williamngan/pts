@@ -2344,6 +2344,13 @@ var HTMLForm = function (_Form_1$VisualForm) {
             return ctx;
         }
     }, {
+        key: "textStyle",
+        value: function textStyle(ctx, pt) {
+            ctx.style["left"] = pt[0] + "px";
+            ctx.style["top"] = pt[1] + "px";
+            return ctx;
+        }
+    }, {
         key: "point",
         value: function point(ctx, pt) {
             var radius = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 5;
@@ -2389,13 +2396,9 @@ var HTMLForm = function (_Form_1$VisualForm) {
         key: "text",
         value: function text(ctx, pt, txt) {
             var elem = HTMLSpace.htmlElement(ctx.group, "div", HTMLForm.getID(ctx));
-            HTMLSpace.setAttr(elem, {
-                position: 'absolute',
-                class: "pts-form pts-text " + ctx.currentClass,
-                left: pt[0],
-                top: pt[1]
-            });
+            HTMLSpace.setAttr(elem, { class: "pts-form pts-text " + ctx.currentClass });
             elem.textContent = txt;
+            HTMLForm.textStyle(ctx, pt);
             HTMLForm.style(elem, ctx.style);
             return elem;
         }
@@ -8217,7 +8220,7 @@ var UIDragger = function (_UIButton) {
         if (states.moved === undefined) _this2._states['moved'] = false;
         if (states.offset === undefined) _this2._states['offset'] = new Pt_1.Pt();
         var UA = exports.UIPointerActions;
-        _this2.on(UA.drag, function (target, pt, type) {
+        _this2.on(UA.down, function (target, pt, type) {
             if (_this2._moveHoldID === -1) {
                 _this2.state('dragging', true);
                 _this2.state('offset', new Pt_1.Pt(pt).subtract(target.group[0]));

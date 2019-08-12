@@ -351,6 +351,11 @@ export class HTMLForm extends VisualForm {
         ctx.style["height"] = size[1] + "px";
         return ctx;
     }
+    static textStyle(ctx, pt) {
+        ctx.style["left"] = pt[0] + "px";
+        ctx.style["top"] = pt[1] + "px";
+        return ctx;
+    }
     static point(ctx, pt, radius = 5, shape = "square") {
         if (shape === "circle") {
             return HTMLForm.circle(ctx, pt, radius);
@@ -408,13 +413,9 @@ export class HTMLForm extends VisualForm {
     }
     static text(ctx, pt, txt) {
         let elem = HTMLSpace.htmlElement(ctx.group, "div", HTMLForm.getID(ctx));
-        HTMLSpace.setAttr(elem, {
-            position: 'absolute',
-            class: `pts-form pts-text ${ctx.currentClass}`,
-            left: pt[0],
-            top: pt[1],
-        });
+        HTMLSpace.setAttr(elem, { class: `pts-form pts-text ${ctx.currentClass}` });
         elem.textContent = txt;
+        HTMLForm.textStyle(ctx, pt);
         HTMLForm.style(elem, ctx.style);
         return elem;
     }
