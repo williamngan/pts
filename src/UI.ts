@@ -434,8 +434,8 @@ export class UIDragger extends UIButton {
      * UI refreshes.
      */
 
-     // Handle pointer drag and begin dragging
-    this.on( UA.drag, (target:UI, pt:PtLike, type:string) => {
+     // Handle pointer down and begin dragging
+    this.on( UA.down, (target:UI, pt:PtLike, type:string) => {
       // begin listening for all events after dragging starts
       if (this._moveHoldID === -1) {
         this.state( 'dragging', true );
