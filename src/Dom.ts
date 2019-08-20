@@ -387,9 +387,6 @@ export class HTMLForm extends VisualForm {
     currentID: "pts0",
     currentClass: "",
     style: {},
-    font: "11px sans-serif",
-    fontSize: 11,
-    fontFamily: "sans-serif"
   };
 
   static groupID:number = 0;
@@ -539,8 +536,8 @@ export class HTMLForm extends VisualForm {
   reset():this {
     this._ctx.style = Object.assign({}, this._style);
 
-    this._font = new Font( 14, "sans-serif");
-    this._ctx.font = this._font.value;
+    this._font = new Font( 10, "sans-serif");
+    this._ctx.style['font'] = this._font.value;
 
     return this;
   }
