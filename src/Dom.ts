@@ -406,7 +406,7 @@ export class HTMLForm extends VisualForm {
     this._space.add( { start: () => {
       this._ctx.group = this._space.element;
       this._ctx.groupID = "pts_dom_"+(HTMLForm.groupID++);
-      this._ctx.style = this._style;
+      this._ctx.style = Object.assign({}, this._style);
       this._ready = true;
     }} );
   }
