@@ -440,7 +440,7 @@ export class SVGForm extends VisualForm {
   /**
     * Draw a circle.
     * @param pts a Group of 2 Pts, or an array of two numeric arrays `[[position], [size]]`
-    * @see [`Circle.fromCenter`](./_op_.circle.html#frompt)
+    * @see [`Circle.fromCenter`](./?p=Op_Circle#function_fromCenter)
     */
   circle( pts:GroupLike|number[][] ):this {
     this.nextID();
