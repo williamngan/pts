@@ -360,31 +360,33 @@ export class HTMLSpace extends DOMSpace {
  */
 export class HTMLForm extends VisualForm {
 
+  /** 
+  * store common styles so that they can be restored to canvas context when using multiple forms. See `reset()`.
+  */
+  protected _style = {
+    "filled": true,
+    "stroked": true,
+    "background": "#f03",
+    "border-color": "#fff",
+    "color": "#000",
+    "border-width": "1px",
+    "border-radius": "0",
+    "border-style": "solid",
+    "opacity": 1,
+    "position": "absolute",
+    "top": 0,
+    "left": 0,
+    "width": 0,
+    "height": 0
+  };
+
   protected _ctx:DOMFormContext = {
     group: null,
     groupID: "pts",
     groupCount: 0,
     currentID: "pts0",
     currentClass: "",
-    style: {
-      "filled": true,
-      "stroked": true,
-      "background": "#f03",
-      "border-color": "#fff",
-      "color": "#000",
-      "border-width": "1px",
-      "border-radius": "0",
-      "border-style": "solid",
-      "opacity": 1,
-      "position": "absolute",
-      "top": 0,
-      "left": 0,
-      "width": 0,
-      "height": 0
-    },
-    font: "11px sans-serif",
-    fontSize: 11,
-    fontFamily: "sans-serif"
+    style: {},
   };
 
   static groupID:number = 0;
@@ -404,6 +406,7 @@ export class HTMLForm extends VisualForm {
     this._space.add( { start: () => {
       this._ctx.group = this._space.element;
       this._ctx.groupID = "pts_dom_"+(HTMLForm.groupID++);
+      this._ctx.style = Object.assign({}, this._style);
       this._ready = true;
     }} );
   }
@@ -517,11 +520,13 @@ export class HTMLForm extends VisualForm {
       if (weight) this._font.weight = weight;
       if (style) this._font.style = style;
       if (lineHeight) this._font.lineHeight = lineHeight;
-      this._ctx.font = this._font.value;
-      
+
     } else {
       this._font = sizeOrFont;
     }
+
+    this._ctx.style['font'] = this._font.value;
+
     return this;
   }
 
@@ -529,14 +534,10 @@ export class HTMLForm extends VisualForm {
   * Reset the context's common styles to this form's styles. This supports using multiple forms on the same canvas context.
   */
   reset():this {
-    this._ctx.style = {
-      "filled": true, "stroked": true,
-      "background": "#f03", "border-color": "#fff",
-      "border-width": "1px", "opacity": 1
-    };
+    this._ctx.style = Object.assign({}, this._style);
 
-    this._font = new Font( 14, "sans-serif");
-    this._ctx.font = this._font.value;
+    this._font = new Font( 10, "sans-serif");
+    this._ctx.style['font'] = this._font.value;
 
     return this;
   }

@@ -123,6 +123,17 @@ export class SVGSpace extends DOMSpace {
 * You may extend SVGForm to implement your own expressions for SVGSpace. See out the [Space guide](../guide/Space-0500.html) for details.
 */
 export class SVGForm extends VisualForm {
+
+  protected _style = {
+    "filled": true,
+    "stroked": true,
+    "fill": "#f03",
+    "stroke": "#fff",
+    "stroke-width": 1,
+    "stroke-linejoin": "bevel",
+    "stroke-linecap": "sqaure",
+    "opacity": 1
+  };
   
   protected _ctx:DOMFormContext = {
     group: null,
@@ -130,19 +141,7 @@ export class SVGForm extends VisualForm {
     groupCount: 0,
     currentID: "pts0",
     currentClass: "",
-    style: {
-      "filled": true,
-      "stroked": true,
-      "fill": "#f03",
-      "stroke": "#fff",
-      "stroke-width": 1,
-      "stroke-linejoin": "bevel",
-      "stroke-linecap": "sqaure",
-      "opacity": 1,
-    },
-    font: "11px sans-serif",
-    fontSize: 11,
-    fontFamily: "sans-serif"
+    style: {},
   };
   
   static groupID:number = 0;
@@ -163,6 +162,7 @@ export class SVGForm extends VisualForm {
     this._space.add( { start: () => {
       this._ctx.group = this._space.element;
       this._ctx.groupID = "pts_svg_"+(SVGForm.groupID++);
+      this._ctx.style = Object.assign({}, this._style);
       this._ready = true;
     }} );
   }
@@ -266,11 +266,13 @@ export class SVGForm extends VisualForm {
       if (weight) this._font.weight = weight;
       if (style) this._font.style = style;
       if (lineHeight) this._font.lineHeight = lineHeight;
-      this._ctx.font = this._font.value;
       
     } else {
       this._font = sizeOrFont;
     }
+
+    this._ctx.style['font'] = this._font.value;
+
     return this;
   }
   
@@ -279,17 +281,10 @@ export class SVGForm extends VisualForm {
   * Reset the context's common styles to this form's styles. This supports using multiple forms in the same space.
   */
   reset():this {
-    this._ctx.style = {
-      "filled": true, "stroked": true,
-      "fill": "#f03", "stroke": "#fff",
-      "stroke-width": 1,
-      "stroke-linejoin": "bevel",
-      "stroke-linecap": "sqaure",
-      "opacity": 1,
-    };
+    this._ctx.style = Object.assign({}, this._style);
 
-    this._font = new Font( 14, "sans-serif");
-    this._ctx.font = this._font.value;
+    this._font = new Font( 10, "sans-serif");
+    this._ctx.style['font'] = this._font.value;
 
     return this;
   }
