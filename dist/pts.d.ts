@@ -211,6 +211,22 @@ export class HTMLSpace extends DOMSpace {
     removeAll(): this;
 }
 export class HTMLForm extends VisualForm {
+    protected _style: {
+        "filled": boolean;
+        "stroked": boolean;
+        "background": string;
+        "border-color": string;
+        "color": string;
+        "border-width": string;
+        "border-radius": string;
+        "border-style": string;
+        "opacity": number;
+        "position": string;
+        "top": number;
+        "left": number;
+        "width": number;
+        "height": number;
+    };
     protected _ctx: DOMFormContext;
     static groupID: number;
     static domID: number;
@@ -233,6 +249,7 @@ export class HTMLForm extends VisualForm {
     static scopeID(item: IPlayer): string;
     static style(elem: Element, styles: object): Element;
     static rectStyle(ctx: DOMFormContext, pt: PtLike, size: PtLike): DOMFormContext;
+    static textStyle(ctx: DOMFormContext, pt: PtLike): DOMFormContext;
     static point(ctx: DOMFormContext, pt: PtLike, radius?: number, shape?: string): Element;
     point(pt: PtLike, radius?: number, shape?: string): this;
     static circle(ctx: DOMFormContext, pt: PtLike, radius?: number): Element;
@@ -876,6 +893,16 @@ export class SVGSpace extends DOMSpace {
     removeAll(): this;
 }
 export class SVGForm extends VisualForm {
+    protected _style: {
+        "filled": boolean;
+        "stroked": boolean;
+        "fill": string;
+        "stroke": string;
+        "stroke-width": number;
+        "stroke-linejoin": string;
+        "stroke-linecap": string;
+        "opacity": number;
+    };
     protected _ctx: DOMFormContext;
     static groupID: number;
     static domID: number;
@@ -970,9 +997,6 @@ export type DOMFormContext = {
     currentID: string;
     currentClass?: string;
     style: object;
-    font: string;
-    fontSize: number;
-    fontFamily: string;
 };
 export type IntersectContext = {
     which: number;

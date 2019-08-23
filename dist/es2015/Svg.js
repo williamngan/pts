@@ -57,31 +57,30 @@ export class SVGSpace extends DOMSpace {
 export class SVGForm extends VisualForm {
     constructor(space) {
         super();
+        this._style = {
+            "filled": true,
+            "stroked": true,
+            "fill": "#f03",
+            "stroke": "#fff",
+            "stroke-width": 1,
+            "stroke-linejoin": "bevel",
+            "stroke-linecap": "sqaure",
+            "opacity": 1
+        };
         this._ctx = {
             group: null,
             groupID: "pts",
             groupCount: 0,
             currentID: "pts0",
             currentClass: "",
-            style: {
-                "filled": true,
-                "stroked": true,
-                "fill": "#f03",
-                "stroke": "#fff",
-                "stroke-width": 1,
-                "stroke-linejoin": "bevel",
-                "stroke-linecap": "sqaure",
-                "opacity": 1,
-            },
-            font: "11px sans-serif",
-            fontSize: 11,
-            fontFamily: "sans-serif"
+            style: {},
         };
         this._ready = false;
         this._space = space;
         this._space.add({ start: () => {
                 this._ctx.group = this._space.element;
                 this._ctx.groupID = "pts_svg_" + (SVGForm.groupID++);
+                this._ctx.style = Object.assign({}, this._style);
                 this._ready = true;
             } });
     }
@@ -141,24 +140,17 @@ export class SVGForm extends VisualForm {
                 this._font.style = style;
             if (lineHeight)
                 this._font.lineHeight = lineHeight;
-            this._ctx.font = this._font.value;
         }
         else {
             this._font = sizeOrFont;
         }
+        this._ctx.style['font'] = this._font.value;
         return this;
     }
     reset() {
-        this._ctx.style = {
-            "filled": true, "stroked": true,
-            "fill": "#f03", "stroke": "#fff",
-            "stroke-width": 1,
-            "stroke-linejoin": "bevel",
-            "stroke-linecap": "sqaure",
-            "opacity": 1,
-        };
-        this._font = new Font(14, "sans-serif");
-        this._ctx.font = this._font.value;
+        this._ctx.style = Object.assign({}, this._style);
+        this._font = new Font(10, "sans-serif");
+        this._ctx.style['font'] = this._font.value;
         return this;
     }
     updateScope(group_id, group) {

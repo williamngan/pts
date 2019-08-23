@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.8.7 - Copyright © 2017-2019 William Ngan and contributors.
+ * pts.js 0.8.8 - Copyright © 2017-2019 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -2092,37 +2092,36 @@ var HTMLForm = function (_Form_1$VisualForm) {
 
         var _this3 = _possibleConstructorReturn(this, (HTMLForm.__proto__ || Object.getPrototypeOf(HTMLForm)).call(this));
 
+        _this3._style = {
+            "filled": true,
+            "stroked": true,
+            "background": "#f03",
+            "border-color": "#fff",
+            "color": "#000",
+            "border-width": "1px",
+            "border-radius": "0",
+            "border-style": "solid",
+            "opacity": 1,
+            "position": "absolute",
+            "top": 0,
+            "left": 0,
+            "width": 0,
+            "height": 0
+        };
         _this3._ctx = {
             group: null,
             groupID: "pts",
             groupCount: 0,
             currentID: "pts0",
             currentClass: "",
-            style: {
-                "filled": true,
-                "stroked": true,
-                "background": "#f03",
-                "border-color": "#fff",
-                "color": "#000",
-                "border-width": "1px",
-                "border-radius": "0",
-                "border-style": "solid",
-                "opacity": 1,
-                "position": "absolute",
-                "top": 0,
-                "left": 0,
-                "width": 0,
-                "height": 0
-            },
-            font: "11px sans-serif",
-            fontSize: 11,
-            fontFamily: "sans-serif"
+            style: {}
         };
         _this3._ready = false;
         _this3._space = space;
         _this3._space.add({ start: function start() {
                 _this3._ctx.group = _this3._space.element;
                 _this3._ctx.groupID = "pts_dom_" + HTMLForm.groupID++;
+                _this3._ctx.style = Object.assign({}, _this3._style);
                 _this3._ready = true;
             } });
         return _this3;
@@ -2192,22 +2191,18 @@ var HTMLForm = function (_Form_1$VisualForm) {
                 if (weight) this._font.weight = weight;
                 if (style) this._font.style = style;
                 if (lineHeight) this._font.lineHeight = lineHeight;
-                this._ctx.font = this._font.value;
             } else {
                 this._font = sizeOrFont;
             }
+            this._ctx.style['font'] = this._font.value;
             return this;
         }
     }, {
         key: "reset",
         value: function reset() {
-            this._ctx.style = {
-                "filled": true, "stroked": true,
-                "background": "#f03", "border-color": "#fff",
-                "border-width": "1px", "opacity": 1
-            };
-            this._font = new Form_1.Font(14, "sans-serif");
-            this._ctx.font = this._font.value;
+            this._ctx.style = Object.assign({}, this._style);
+            this._font = new Form_1.Font(10, "sans-serif");
+            this._ctx.style['font'] = this._font.value;
             return this;
         }
     }, {
@@ -7461,31 +7456,30 @@ var SVGForm = function (_Form_1$VisualForm) {
 
         var _this2 = _possibleConstructorReturn(this, (SVGForm.__proto__ || Object.getPrototypeOf(SVGForm)).call(this));
 
+        _this2._style = {
+            "filled": true,
+            "stroked": true,
+            "fill": "#f03",
+            "stroke": "#fff",
+            "stroke-width": 1,
+            "stroke-linejoin": "bevel",
+            "stroke-linecap": "sqaure",
+            "opacity": 1
+        };
         _this2._ctx = {
             group: null,
             groupID: "pts",
             groupCount: 0,
             currentID: "pts0",
             currentClass: "",
-            style: {
-                "filled": true,
-                "stroked": true,
-                "fill": "#f03",
-                "stroke": "#fff",
-                "stroke-width": 1,
-                "stroke-linejoin": "bevel",
-                "stroke-linecap": "sqaure",
-                "opacity": 1
-            },
-            font: "11px sans-serif",
-            fontSize: 11,
-            fontFamily: "sans-serif"
+            style: {}
         };
         _this2._ready = false;
         _this2._space = space;
         _this2._space.add({ start: function start() {
                 _this2._ctx.group = _this2._space.element;
                 _this2._ctx.groupID = "pts_svg_" + SVGForm.groupID++;
+                _this2._ctx.style = Object.assign({}, _this2._style);
                 _this2._ready = true;
             } });
         return _this2;
@@ -7547,25 +7541,18 @@ var SVGForm = function (_Form_1$VisualForm) {
                 if (weight) this._font.weight = weight;
                 if (style) this._font.style = style;
                 if (lineHeight) this._font.lineHeight = lineHeight;
-                this._ctx.font = this._font.value;
             } else {
                 this._font = sizeOrFont;
             }
+            this._ctx.style['font'] = this._font.value;
             return this;
         }
     }, {
         key: "reset",
         value: function reset() {
-            this._ctx.style = {
-                "filled": true, "stroked": true,
-                "fill": "#f03", "stroke": "#fff",
-                "stroke-width": 1,
-                "stroke-linejoin": "bevel",
-                "stroke-linecap": "sqaure",
-                "opacity": 1
-            };
-            this._font = new Form_1.Font(14, "sans-serif");
-            this._ctx.font = this._font.value;
+            this._ctx.style = Object.assign({}, this._style);
+            this._font = new Form_1.Font(10, "sans-serif");
+            this._ctx.style['font'] = this._font.value;
             return this;
         }
     }, {

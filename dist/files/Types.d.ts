@@ -56,9 +56,6 @@ export declare type DOMFormContext = {
     currentID: string;
     currentClass?: string;
     style: object;
-    font: string;
-    fontSize: number;
-    fontFamily: string;
 };
 export declare type IntersectContext = {
     which: number;

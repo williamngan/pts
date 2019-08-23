@@ -191,37 +191,36 @@ exports.HTMLSpace = HTMLSpace;
 class HTMLForm extends Form_1.VisualForm {
     constructor(space) {
         super();
+        this._style = {
+            "filled": true,
+            "stroked": true,
+            "background": "#f03",
+            "border-color": "#fff",
+            "color": "#000",
+            "border-width": "1px",
+            "border-radius": "0",
+            "border-style": "solid",
+            "opacity": 1,
+            "position": "absolute",
+            "top": 0,
+            "left": 0,
+            "width": 0,
+            "height": 0
+        };
         this._ctx = {
             group: null,
             groupID: "pts",
             groupCount: 0,
             currentID: "pts0",
             currentClass: "",
-            style: {
-                "filled": true,
-                "stroked": true,
-                "background": "#f03",
-                "border-color": "#fff",
-                "color": "#000",
-                "border-width": "1px",
-                "border-radius": "0",
-                "border-style": "solid",
-                "opacity": 1,
-                "position": "absolute",
-                "top": 0,
-                "left": 0,
-                "width": 0,
-                "height": 0
-            },
-            font: "11px sans-serif",
-            fontSize: 11,
-            fontFamily: "sans-serif"
+            style: {},
         };
         this._ready = false;
         this._space = space;
         this._space.add({ start: () => {
                 this._ctx.group = this._space.element;
                 this._ctx.groupID = "pts_dom_" + (HTMLForm.groupID++);
+                this._ctx.style = Object.assign({}, this._style);
                 this._ready = true;
             } });
     }
@@ -284,21 +283,17 @@ class HTMLForm extends Form_1.VisualForm {
                 this._font.style = style;
             if (lineHeight)
                 this._font.lineHeight = lineHeight;
-            this._ctx.font = this._font.value;
         }
         else {
             this._font = sizeOrFont;
         }
+        this._ctx.style['font'] = this._font.value;
         return this;
     }
     reset() {
-        this._ctx.style = {
-            "filled": true, "stroked": true,
-            "background": "#f03", "border-color": "#fff",
-            "border-width": "1px", "opacity": 1
-        };
-        this._font = new Form_1.Font(14, "sans-serif");
-        this._ctx.font = this._font.value;
+        this._ctx.style = Object.assign({}, this._style);
+        this._font = new Form_1.Font(10, "sans-serif");
+        this._ctx.style['font'] = this._font.value;
         return this;
     }
     updateScope(group_id, group) {
@@ -353,6 +348,11 @@ class HTMLForm extends Form_1.VisualForm {
         ctx.style["top"] = pt[1] + "px";
         ctx.style["width"] = size[0] + "px";
         ctx.style["height"] = size[1] + "px";
+        return ctx;
+    }
+    static textStyle(ctx, pt) {
+        ctx.style["left"] = pt[0] + "px";
+        ctx.style["top"] = pt[1] + "px";
         return ctx;
     }
     static point(ctx, pt, radius = 5, shape = "square") {
@@ -412,13 +412,9 @@ class HTMLForm extends Form_1.VisualForm {
     }
     static text(ctx, pt, txt) {
         let elem = HTMLSpace.htmlElement(ctx.group, "div", HTMLForm.getID(ctx));
-        HTMLSpace.setAttr(elem, {
-            position: 'absolute',
-            class: `pts-form pts-text ${ctx.currentClass}`,
-            left: pt[0],
-            top: pt[1],
-        });
+        HTMLSpace.setAttr(elem, { class: `pts-form pts-text ${ctx.currentClass}` });
         elem.textContent = txt;
+        HTMLForm.textStyle(ctx, pt);
         HTMLForm.style(elem, ctx.style);
         return elem;
     }

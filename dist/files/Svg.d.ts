@@ -15,6 +15,16 @@ export declare class SVGSpace extends DOMSpace {
     removeAll(): this;
 }
 export declare class SVGForm extends VisualForm {
+    protected _style: {
+        "filled": boolean;
+        "stroked": boolean;
+        "fill": string;
+        "stroke": string;
+        "stroke-width": number;
+        "stroke-linejoin": string;
+        "stroke-linecap": string;
+        "opacity": number;
+    };
     protected _ctx: DOMFormContext;
     static groupID: number;
     static domID: number;

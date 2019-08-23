@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.8.7 - Copyright © 2017-2019 William Ngan and contributors.
+ * pts.js 0.8.8 - Copyright © 2017-2019 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -1490,37 +1490,36 @@ exports.HTMLSpace = HTMLSpace;
 class HTMLForm extends Form_1.VisualForm {
     constructor(space) {
         super();
+        this._style = {
+            "filled": true,
+            "stroked": true,
+            "background": "#f03",
+            "border-color": "#fff",
+            "color": "#000",
+            "border-width": "1px",
+            "border-radius": "0",
+            "border-style": "solid",
+            "opacity": 1,
+            "position": "absolute",
+            "top": 0,
+            "left": 0,
+            "width": 0,
+            "height": 0
+        };
         this._ctx = {
             group: null,
             groupID: "pts",
             groupCount: 0,
             currentID: "pts0",
             currentClass: "",
-            style: {
-                "filled": true,
-                "stroked": true,
-                "background": "#f03",
-                "border-color": "#fff",
-                "color": "#000",
-                "border-width": "1px",
-                "border-radius": "0",
-                "border-style": "solid",
-                "opacity": 1,
-                "position": "absolute",
-                "top": 0,
-                "left": 0,
-                "width": 0,
-                "height": 0
-            },
-            font: "11px sans-serif",
-            fontSize: 11,
-            fontFamily: "sans-serif"
+            style: {},
         };
         this._ready = false;
         this._space = space;
         this._space.add({ start: () => {
                 this._ctx.group = this._space.element;
                 this._ctx.groupID = "pts_dom_" + (HTMLForm.groupID++);
+                this._ctx.style = Object.assign({}, this._style);
                 this._ready = true;
             } });
     }
@@ -1583,21 +1582,17 @@ class HTMLForm extends Form_1.VisualForm {
                 this._font.style = style;
             if (lineHeight)
                 this._font.lineHeight = lineHeight;
-            this._ctx.font = this._font.value;
         }
         else {
             this._font = sizeOrFont;
         }
+        this._ctx.style['font'] = this._font.value;
         return this;
     }
     reset() {
-        this._ctx.style = {
-            "filled": true, "stroked": true,
-            "background": "#f03", "border-color": "#fff",
-            "border-width": "1px", "opacity": 1
-        };
-        this._font = new Form_1.Font(14, "sans-serif");
-        this._ctx.font = this._font.value;
+        this._ctx.style = Object.assign({}, this._style);
+        this._font = new Form_1.Font(10, "sans-serif");
+        this._ctx.style['font'] = this._font.value;
         return this;
     }
     updateScope(group_id, group) {
@@ -5021,31 +5016,30 @@ exports.SVGSpace = SVGSpace;
 class SVGForm extends Form_1.VisualForm {
     constructor(space) {
         super();
+        this._style = {
+            "filled": true,
+            "stroked": true,
+            "fill": "#f03",
+            "stroke": "#fff",
+            "stroke-width": 1,
+            "stroke-linejoin": "bevel",
+            "stroke-linecap": "sqaure",
+            "opacity": 1
+        };
         this._ctx = {
             group: null,
             groupID: "pts",
             groupCount: 0,
             currentID: "pts0",
             currentClass: "",
-            style: {
-                "filled": true,
-                "stroked": true,
-                "fill": "#f03",
-                "stroke": "#fff",
-                "stroke-width": 1,
-                "stroke-linejoin": "bevel",
-                "stroke-linecap": "sqaure",
-                "opacity": 1,
-            },
-            font: "11px sans-serif",
-            fontSize: 11,
-            fontFamily: "sans-serif"
+            style: {},
         };
         this._ready = false;
         this._space = space;
         this._space.add({ start: () => {
                 this._ctx.group = this._space.element;
                 this._ctx.groupID = "pts_svg_" + (SVGForm.groupID++);
+                this._ctx.style = Object.assign({}, this._style);
                 this._ready = true;
             } });
     }
@@ -5105,24 +5099,17 @@ class SVGForm extends Form_1.VisualForm {
                 this._font.style = style;
             if (lineHeight)
                 this._font.lineHeight = lineHeight;
-            this._ctx.font = this._font.value;
         }
         else {
             this._font = sizeOrFont;
         }
+        this._ctx.style['font'] = this._font.value;
         return this;
     }
     reset() {
-        this._ctx.style = {
-            "filled": true, "stroked": true,
-            "fill": "#f03", "stroke": "#fff",
-            "stroke-width": 1,
-            "stroke-linejoin": "bevel",
-            "stroke-linecap": "sqaure",
-            "opacity": 1,
-        };
-        this._font = new Form_1.Font(14, "sans-serif");
-        this._ctx.font = this._font.value;
+        this._ctx.style = Object.assign({}, this._style);
+        this._font = new Form_1.Font(10, "sans-serif");
+        this._ctx.style['font'] = this._font.value;
         return this;
     }
     updateScope(group_id, group) {
