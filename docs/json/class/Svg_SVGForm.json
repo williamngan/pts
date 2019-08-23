@@ -16,11 +16,11 @@
       "source": [
         [
           "Svg.ts",
-          152,
+          151,
           35
         ]
       ],
-      "id": 6953,
+      "id": 6952,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -52,7 +52,7 @@
           17
         ]
       ],
-      "id": 7097,
+      "id": 7096,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.currentFont",
@@ -76,7 +76,7 @@
           12
         ]
       ],
-      "id": 7087,
+      "id": 7086,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.filled",
@@ -103,7 +103,7 @@
           11
         ]
       ],
-      "id": 7133,
+      "id": 7132,
       "flags": {},
       "overrides": false,
       "inherits": "Form.ready",
@@ -122,7 +122,7 @@
           11
         ]
       ],
-      "id": 6956,
+      "id": 6955,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -146,7 +146,7 @@
           13
         ]
       ],
-      "id": 7092,
+      "id": 7091,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.stroked",
@@ -175,7 +175,7 @@
           7
         ]
       ],
-      "id": 6962,
+      "id": 6961,
       "flags": {},
       "overrides": "VisualForm.alpha",
       "inherits": false,
@@ -206,11 +206,11 @@
       "source": [
         [
           "Svg.ts",
-          490,
+          485,
           5
         ]
       ],
-      "id": 7032,
+      "id": 7031,
       "flags": {},
       "overrides": "VisualForm.arc",
       "inherits": false,
@@ -260,11 +260,11 @@
       "source": [
         [
           "Svg.ts",
-          445,
+          440,
           8
         ]
       ],
-      "id": 7021,
+      "id": 7020,
       "flags": {},
       "overrides": "VisualForm.circle",
       "inherits": false,
@@ -284,7 +284,7 @@
           "tags": [
             {
               "tag": "see",
-              "text": "[`Circle.fromCenter`](./_op_.circle.html#frompt)\n"
+              "text": "[`Circle.fromCenter`](./?p=Op_Circle#function_fromCenter)\n"
             }
           ]
         }
@@ -299,7 +299,7 @@
           9
         ]
       ],
-      "id": 7118,
+      "id": 7117,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.circles",
@@ -329,7 +329,7 @@
           5
         ]
       ],
-      "id": 6974,
+      "id": 6973,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -364,7 +364,7 @@
           6
         ]
       ],
-      "id": 6965,
+      "id": 6964,
       "flags": {},
       "overrides": "VisualForm.fill",
       "inherits": false,
@@ -399,7 +399,7 @@
           10
         ]
       ],
-      "id": 7104,
+      "id": 7103,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.fillOnly",
@@ -429,7 +429,7 @@
           6
         ]
       ],
-      "id": 6977,
+      "id": 6976,
       "flags": {},
       "overrides": "VisualForm.font",
       "inherits": false,
@@ -484,11 +484,11 @@
       "source": [
         [
           "Svg.ts",
-          558,
+          553,
           6
         ]
       ],
-      "id": 7052,
+      "id": 7051,
       "flags": {},
       "overrides": "VisualForm.line",
       "inherits": false,
@@ -518,7 +518,7 @@
           7
         ]
       ],
-      "id": 7124,
+      "id": 7123,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.lines",
@@ -544,11 +544,11 @@
       "source": [
         [
           "Svg.ts",
-          685,
+          680,
           5
         ]
       ],
-      "id": 7083,
+      "id": 7082,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -574,11 +574,11 @@
       "source": [
         [
           "Svg.ts",
-          330,
+          325,
           8
         ]
       ],
-      "id": 6993,
+      "id": 6992,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -597,11 +597,11 @@
       "source": [
         [
           "Svg.ts",
-          412,
+          407,
           7
         ]
       ],
-      "id": 7011,
+      "id": 7010,
       "flags": {},
       "overrides": "VisualForm.point",
       "inherits": false,
@@ -648,7 +648,7 @@
           8
         ]
       ],
-      "id": 7113,
+      "id": 7112,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.points",
@@ -686,11 +686,11 @@
       "source": [
         [
           "Svg.ts",
-          599,
+          594,
           9
         ]
       ],
-      "id": 7064,
+      "id": 7063,
       "flags": {},
       "overrides": "VisualForm.polygon",
       "inherits": false,
@@ -720,7 +720,7 @@
           10
         ]
       ],
-      "id": 7127,
+      "id": 7126,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.polygons",
@@ -746,11 +746,11 @@
       "source": [
         [
           "Svg.ts",
-          635,
+          630,
           6
         ]
       ],
-      "id": 7071,
+      "id": 7070,
       "flags": {},
       "overrides": "VisualForm.rect",
       "inherits": false,
@@ -780,7 +780,7 @@
           7
         ]
       ],
-      "id": 7130,
+      "id": 7129,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.rects",
@@ -806,11 +806,11 @@
       "source": [
         [
           "Svg.ts",
-          281,
+          283,
           7
         ]
       ],
-      "id": 6984,
+      "id": 6983,
       "flags": {},
       "overrides": "VisualForm.reset",
       "inherits": false,
@@ -829,11 +829,11 @@
       "source": [
         [
           "Svg.ts",
-          320,
+          315,
           7
         ]
       ],
-      "id": 6990,
+      "id": 6989,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -859,11 +859,11 @@
       "source": [
         [
           "Svg.ts",
-          522,
+          517,
           8
         ]
       ],
-      "id": 7044,
+      "id": 7043,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -899,7 +899,7 @@
           9
         ]
       ],
-      "id": 7121,
+      "id": 7120,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.squares",
@@ -929,7 +929,7 @@
           8
         ]
       ],
-      "id": 6968,
+      "id": 6967,
       "flags": {},
       "overrides": "VisualForm.stroke",
       "inherits": false,
@@ -982,7 +982,7 @@
           12
         ]
       ],
-      "id": 7107,
+      "id": 7106,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.strokeOnly",
@@ -1030,7 +1030,7 @@
           9
         ]
       ],
-      "id": 6958,
+      "id": 6957,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1062,11 +1062,11 @@
       "source": [
         [
           "Svg.ts",
-          674,
+          669,
           6
         ]
       ],
-      "id": 7079,
+      "id": 7078,
       "flags": {},
       "overrides": "VisualForm.text",
       "inherits": false,
@@ -1098,11 +1098,11 @@
       "source": [
         [
           "Svg.ts",
-          304,
+          299,
           13
         ]
       ],
-      "id": 6986,
+      "id": 6985,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1134,11 +1134,11 @@
       "source": [
         [
           "Svg.ts",
-          461,
+          456,
           12
         ]
       ],
-      "id": 7024,
+      "id": 7023,
       "flags": {
         "isStatic": true
       },
@@ -1196,11 +1196,11 @@
       "source": [
         [
           "Svg.ts",
-          425,
+          420,
           15
         ]
       ],
-      "id": 7016,
+      "id": 7015,
       "flags": {
         "isStatic": true
       },
@@ -1240,11 +1240,11 @@
       "source": [
         [
           "Svg.ts",
-          341,
+          336,
           14
         ]
       ],
-      "id": 6995,
+      "id": 6994,
       "flags": {
         "isStatic": true
       },
@@ -1272,11 +1272,11 @@
       "source": [
         [
           "Svg.ts",
-          534,
+          529,
           13
         ]
       ],
-      "id": 7048,
+      "id": 7047,
       "flags": {
         "isStatic": true
       },
@@ -1310,11 +1310,11 @@
       "source": [
         [
           "Svg.ts",
-          396,
+          391,
           14
         ]
       ],
-      "id": 7005,
+      "id": 7004,
       "flags": {
         "isStatic": true
       },
@@ -1365,11 +1365,11 @@
       "source": [
         [
           "Svg.ts",
-          590,
+          585,
           16
         ]
       ],
-      "id": 7060,
+      "id": 7059,
       "flags": {
         "isStatic": true
       },
@@ -1403,11 +1403,11 @@
       "source": [
         [
           "Svg.ts",
-          611,
+          606,
           13
         ]
       ],
-      "id": 7067,
+      "id": 7066,
       "flags": {
         "isStatic": true
       },
@@ -1441,11 +1441,11 @@
       "source": [
         [
           "Svg.ts",
-          350,
+          345,
           16
         ]
       ],
-      "id": 6998,
+      "id": 6997,
       "flags": {
         "isStatic": true
       },
@@ -1473,11 +1473,11 @@
       "source": [
         [
           "Svg.ts",
-          503,
+          498,
           15
         ]
       ],
-      "id": 7039,
+      "id": 7038,
       "flags": {
         "isStatic": true
       },
@@ -1517,11 +1517,11 @@
       "source": [
         [
           "Svg.ts",
-          363,
+          358,
           14
         ]
       ],
-      "id": 7001,
+      "id": 7000,
       "flags": {
         "isStatic": true
       },
@@ -1560,11 +1560,11 @@
       "source": [
         [
           "Svg.ts",
-          649,
+          644,
           13
         ]
       ],
-      "id": 7074,
+      "id": 7073,
       "flags": {
         "isStatic": true
       },
@@ -1607,11 +1607,11 @@
       "source": [
         [
           "Svg.ts",
-          149,
+          148,
           14
         ]
       ],
-      "id": 6950,
+      "id": 6949,
       "flags": {
         "isStatic": true
       },
@@ -1625,11 +1625,11 @@
       "source": [
         [
           "Svg.ts",
-          148,
+          147,
           16
         ]
       ],
-      "id": 6949,
+      "id": 6948,
       "flags": {
         "isStatic": true
       },

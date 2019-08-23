@@ -19,6 +19,6 @@
   "extends": [],
   "implements": [],
   "type_alias": [
-    "{ currentClass:`string`, currentID:`string`, font:`string`, fontFamily:`string`, fontSize:`number`, group:`Element`, groupCount:`number`, groupID:`string`, style:`object` }"
+    "{ currentClass:`string`, currentID:`string`, group:`Element`, groupCount:`number`, groupID:`string`, style:`object` }"
   ]
 }

@@ -2916,6 +2916,12 @@
     8
   ],
   [
+    "Dom_HTMLForm#function_textStyle",
+    "HTMLForm.textStyle",
+    "Function",
+    8
+  ],
+  [
     "Dom_HTMLForm",
     "HTMLForm",
     "Class",

@@ -17,7 +17,7 @@
         [
           "UI.ts",
           38,
-          33
+          47
         ]
       ],
       "id": 838,
@@ -181,7 +181,7 @@
           "returns_comment": false,
           "parameters": [
             {
-              "name": "key",
+              "name": "event",
               "comment": "a string defined in [`UIPointerActions`](#link)\n",
               "type": "string",
               "default": false
@@ -211,8 +211,8 @@
           "returns_comment": false,
           "parameters": [
             {
-              "name": "key",
-              "comment": "an action key. Can be one of UIPointerActions or a custom one.",
+              "name": "event",
+              "comment": "an action event. Can be one of UIPointerActions or a custom one.",
               "type": "string",
               "default": false
             },
@@ -304,7 +304,7 @@
       "source": [
         [
           "UI.ts",
-          225,
+          226,
           8
         ]
       ],
@@ -370,7 +370,7 @@
       "source": [
         [
           "UI.ts",
-          233,
+          234,
           10
         ]
       ],
@@ -393,7 +393,7 @@
       "source": [
         [
           "UI.ts",
-          199,
+          200,
           18
         ]
       ],
@@ -410,7 +410,7 @@
           "returns_comment": false,
           "parameters": [
             {
-              "name": "id",
+              "name": "key",
               "comment": "an id returned by the [`UI.hold`](#link) function\n",
               "type": "number",
               "default": false
@@ -601,7 +601,7 @@
       "source": [
         [
           "UI.ts",
-          214,
+          215,
           14
         ]
       ],

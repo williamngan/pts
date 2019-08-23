@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 5449,
+  "id": 5446,
   "comment": "**[Experimental]** HTMLForm is an implementation of abstract class [`VisualForm`](#link). It provide methods to express Pts on [`HTMLSpace`](#link). Note that this is currently experimental and may change in future.",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "Dom.ts",
-          394,
+          396,
           35
         ]
       ],
-      "id": 5478,
+      "id": 5474,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -118,11 +118,11 @@
       "source": [
         [
           "Dom.ts",
-          414,
+          417,
           11
         ]
       ],
-      "id": 5481,
+      "id": 5477,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -171,11 +171,11 @@
       "source": [
         [
           "Dom.ts",
-          434,
+          437,
           7
         ]
       ],
-      "id": 5488,
+      "id": 5484,
       "flags": {},
       "overrides": "VisualForm.alpha",
       "inherits": false,
@@ -206,7 +206,7 @@
       "source": [
         [
           "Dom.ts",
-          809,
+          817,
           5
         ]
       ],
@@ -260,7 +260,7 @@
       "source": [
         [
           "Dom.ts",
-          697,
+          709,
           8
         ]
       ],
@@ -284,7 +284,7 @@
           "tags": [
             {
               "tag": "see",
-              "text": "[`Circle.fromCenter`](./_op_.circle.html#frompt)\n"
+              "text": "[`Circle.fromCenter`](./?p=Op_Circle#function_fromCenter)\n"
             }
           ]
         }
@@ -325,11 +325,11 @@
       "source": [
         [
           "Dom.ts",
-          493,
+          496,
           5
         ]
       ],
-      "id": 5503,
+      "id": 5499,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -360,11 +360,11 @@
       "source": [
         [
           "Dom.ts",
-          445,
+          448,
           6
         ]
       ],
-      "id": 5491,
+      "id": 5487,
       "flags": {},
       "overrides": "VisualForm.fill",
       "inherits": false,
@@ -425,11 +425,11 @@
       "source": [
         [
           "Dom.ts",
-          482,
+          485,
           10
         ]
       ],
-      "id": 5500,
+      "id": 5496,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -460,11 +460,11 @@
       "source": [
         [
           "Dom.ts",
-          512,
+          515,
           6
         ]
       ],
-      "id": 5506,
+      "id": 5502,
       "flags": {},
       "overrides": "VisualForm.font",
       "inherits": false,
@@ -519,7 +519,7 @@
       "source": [
         [
           "Dom.ts",
-          818,
+          826,
           6
         ]
       ],
@@ -579,7 +579,7 @@
       "source": [
         [
           "Dom.ts",
-          800,
+          808,
           5
         ]
       ],
@@ -609,11 +609,11 @@
       "source": [
         [
           "Dom.ts",
-          574,
+          575,
           8
         ]
       ],
-      "id": 5522,
+      "id": 5518,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -632,7 +632,7 @@
       "source": [
         [
           "Dom.ts",
-          669,
+          681,
           7
         ]
       ],
@@ -721,7 +721,7 @@
       "source": [
         [
           "Dom.ts",
-          828,
+          836,
           9
         ]
       ],
@@ -781,7 +781,7 @@
       "source": [
         [
           "Dom.ts",
-          752,
+          764,
           6
         ]
       ],
@@ -841,11 +841,11 @@
       "source": [
         [
           "Dom.ts",
-          531,
+          536,
           7
         ]
       ],
-      "id": 5513,
+      "id": 5509,
       "flags": {},
       "overrides": "VisualForm.reset",
       "inherits": false,
@@ -864,11 +864,11 @@
       "source": [
         [
           "Dom.ts",
-          564,
+          565,
           7
         ]
       ],
-      "id": 5519,
+      "id": 5515,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -894,7 +894,7 @@
       "source": [
         [
           "Dom.ts",
-          725,
+          737,
           8
         ]
       ],
@@ -960,11 +960,11 @@
       "source": [
         [
           "Dom.ts",
-          464,
+          467,
           8
         ]
       ],
-      "id": 5494,
+      "id": 5490,
       "flags": {},
       "overrides": "VisualForm.stroke",
       "inherits": false,
@@ -1061,11 +1061,11 @@
       "source": [
         [
           "Dom.ts",
-          423,
+          426,
           19
         ]
       ],
-      "id": 5483,
+      "id": 5479,
       "flags": {
         "isProtected": true
       },
@@ -1105,7 +1105,7 @@
       "source": [
         [
           "Dom.ts",
-          789,
+          797,
           6
         ]
       ],
@@ -1141,11 +1141,11 @@
       "source": [
         [
           "Dom.ts",
-          550,
+          551,
           13
         ]
       ],
-      "id": 5515,
+      "id": 5511,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1177,7 +1177,7 @@
       "source": [
         [
           "Dom.ts",
-          683,
+          695,
           15
         ]
       ],
@@ -1221,11 +1221,11 @@
       "source": [
         [
           "Dom.ts",
-          585,
+          586,
           14
         ]
       ],
-      "id": 5524,
+      "id": 5520,
       "flags": {
         "isStatic": true
       },
@@ -1253,7 +1253,7 @@
       "source": [
         [
           "Dom.ts",
-          653,
+          665,
           14
         ]
       ],
@@ -1308,7 +1308,7 @@
       "source": [
         [
           "Dom.ts",
-          737,
+          749,
           13
         ]
       ],
@@ -1346,11 +1346,11 @@
       "source": [
         [
           "Dom.ts",
-          637,
+          638,
           18
         ]
       ],
-      "id": 5534,
+      "id": 5530,
       "flags": {
         "isStatic": true
       },
@@ -1390,11 +1390,11 @@
       "source": [
         [
           "Dom.ts",
-          594,
+          595,
           16
         ]
       ],
-      "id": 5527,
+      "id": 5523,
       "flags": {
         "isStatic": true
       },
@@ -1422,7 +1422,7 @@
       "source": [
         [
           "Dom.ts",
-          711,
+          723,
           15
         ]
       ],
@@ -1466,11 +1466,11 @@
       "source": [
         [
           "Dom.ts",
-          606,
+          607,
           14
         ]
       ],
-      "id": 5530,
+      "id": 5526,
       "flags": {
         "isStatic": true
       },
@@ -1509,7 +1509,7 @@
       "source": [
         [
           "Dom.ts",
-          767,
+          779,
           13
         ]
       ],
@@ -1547,6 +1547,44 @@
           "tags": []
         }
       ]
+    },
+    {
+      "name": "textStyle",
+      "source": [
+        [
+          "Dom.ts",
+          651,
+          18
+        ]
+      ],
+      "id": 5535,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A helper function to set the top and left position styling of text DOM context.",
+          "returns": "DOMFormContext",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ctx",
+              "comment": "context to add style to",
+              "type": "DOMFormContext",
+              "default": false
+            },
+            {
+              "name": "pt",
+              "comment": "a Pt object or numeric array determining the top-left position of the text\n",
+              "type": "PtLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
     }
   ],
   "variables": [],
@@ -1556,11 +1594,11 @@
       "source": [
         [
           "Dom.ts",
-          391,
+          393,
           14
         ]
       ],
-      "id": 5475,
+      "id": 5471,
       "flags": {
         "isStatic": true
       },
@@ -1574,11 +1612,11 @@
       "source": [
         [
           "Dom.ts",
-          390,
+          392,
           16
         ]
       ],
-      "id": 5474,
+      "id": 5470,
       "flags": {
         "isStatic": true
       },

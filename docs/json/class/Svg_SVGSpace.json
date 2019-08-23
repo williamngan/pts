@@ -604,7 +604,7 @@
       "inherits": "Space.play",
       "signatures": [
         {
-          "comment": "Main play loop. This implements `window.requestAnimationFrame` and calls it recursively.\nYou may override this `play()` function to implemenet your own animation loop.",
+          "comment": "Main play loop. This implements `window.requestAnimationFrame` and calls it recursively.\nYou may override this `play()` function to implement your own animation loop.",
           "returns": "this",
           "returns_comment": false,
           "parameters": [

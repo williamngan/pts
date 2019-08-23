@@ -3,12 +3,12 @@
   "source": [
     [
       "Types.ts",
-      160,
+      159,
       26
     ]
   ],
   "kind": "Typealias",
-  "id": 1589,
+  "id": 1586,
   "comment": "Typescript only: a listener object created by Tempo class",
   "constructor": [],
   "accessors": [],

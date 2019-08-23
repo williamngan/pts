@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 3008,
+  "id": 3005,
   "comment": "Space is an abstract class that represents a general context for expressing Pts. It's extended through subclasses such as [`CanvasSpace`](#link) and [`SVGSpace`](#link). You can also create your own extension of Space.\nSee [Space guide](../guide/Space-0500.html) for details.",
   "constructor": [],
   "accessors": [
@@ -21,7 +21,7 @@
           12
         ]
       ],
-      "id": 3082,
+      "id": 3079,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -45,7 +45,7 @@
           21
         ]
       ],
-      "id": 3062,
+      "id": 3059,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -72,7 +72,7 @@
           12
         ]
       ],
-      "id": 3086,
+      "id": 3083,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -91,7 +91,7 @@
           23
         ]
       ],
-      "id": 3078,
+      "id": 3075,
       "flags": {
         "isPublic": true
       },
@@ -112,7 +112,7 @@
           15
         ]
       ],
-      "id": 3074,
+      "id": 3071,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -131,7 +131,7 @@
           16
         ]
       ],
-      "id": 3076,
+      "id": 3073,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -150,7 +150,7 @@
           10
         ]
       ],
-      "id": 3080,
+      "id": 3077,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -169,7 +169,7 @@
           11
         ]
       ],
-      "id": 3084,
+      "id": 3081,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -190,7 +190,7 @@
           5
         ]
       ],
-      "id": 3032,
+      "id": 3029,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -220,7 +220,7 @@
           16
         ]
       ],
-      "id": 3092,
+      "id": 3089,
       "flags": {
         "isAbstract": true
       },
@@ -245,7 +245,7 @@
           18
         ]
       ],
-      "id": 3094,
+      "id": 3091,
       "flags": {
         "isAbstract": true
       },
@@ -270,7 +270,7 @@
           7
         ]
       ],
-      "id": 3048,
+      "id": 3045,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -300,13 +300,13 @@
           6
         ]
       ],
-      "id": 3040,
+      "id": 3037,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
-          "comment": "Main play loop. This implements `window.requestAnimationFrame` and calls it recursively.\nYou may override this `play()` function to implemenet your own animation loop.",
+          "comment": "Main play loop. This implements `window.requestAnimationFrame` and calls it recursively.\nYou may override this `play()` function to implement your own animation loop.",
           "returns": "this",
           "returns_comment": false,
           "parameters": [
@@ -330,7 +330,7 @@
           21
         ]
       ],
-      "id": 3045,
+      "id": 3042,
       "flags": {
         "isProtected": true
       },
@@ -362,7 +362,7 @@
           10
         ]
       ],
-      "id": 3056,
+      "id": 3053,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -392,7 +392,7 @@
           9
         ]
       ],
-      "id": 3029,
+      "id": 3026,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -422,7 +422,7 @@
           8
         ]
       ],
-      "id": 3035,
+      "id": 3032,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -452,7 +452,7 @@
           11
         ]
       ],
-      "id": 3038,
+      "id": 3035,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -475,7 +475,7 @@
           18
         ]
       ],
-      "id": 3059,
+      "id": 3056,
       "flags": {
         "isProtected": true
       },
@@ -507,7 +507,7 @@
           8
         ]
       ],
-      "id": 3043,
+      "id": 3040,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -530,7 +530,7 @@
           17
         ]
       ],
-      "id": 3088,
+      "id": 3085,
       "flags": {
         "isAbstract": true
       },
@@ -568,7 +568,7 @@
           8
         ]
       ],
-      "id": 3051,
+      "id": 3048,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -591,7 +591,7 @@
           6
         ]
       ],
-      "id": 3053,
+      "id": 3050,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -624,7 +624,7 @@
           17
         ]
       ],
-      "id": 3010,
+      "id": 3007,
       "flags": {
         "isProtected": true
       },
@@ -642,7 +642,7 @@
           4
         ]
       ],
-      "id": 3009,
+      "id": 3006,
       "flags": {},
       "type": "id",
       "overrides": false,
@@ -658,7 +658,7 @@
           23
         ]
       ],
-      "id": 3016,
+      "id": 3013,
       "flags": {
         "isProtected": true
       },
@@ -676,7 +676,7 @@
           19
         ]
       ],
-      "id": 3015,
+      "id": 3012,
       "flags": {
         "isProtected": true
       },
