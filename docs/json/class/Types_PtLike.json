@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Typealias",
-  "id": 1531,
+  "id": 1532,
   "comment": "Typescript only: PtLike is an alias of types that can represent a point.",
   "constructor": [],
   "accessors": [],

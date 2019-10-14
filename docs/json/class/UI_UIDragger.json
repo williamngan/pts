@@ -16,11 +16,11 @@
       "source": [
         [
           "UI.ts",
-          413,
-          34
+          414,
+          32
         ]
       ],
-      "id": 1065,
+      "id": 1066,
       "flags": {},
       "overrides": "UIButton.__constructor",
       "inherits": false,
@@ -75,7 +75,7 @@
           11
         ]
       ],
-      "id": 1137,
+      "id": 1138,
       "flags": {},
       "overrides": false,
       "inherits": "UI.group",
@@ -107,7 +107,7 @@
           8
         ]
       ],
-      "id": 1133,
+      "id": 1134,
       "flags": {},
       "overrides": false,
       "inherits": "UI.id",
@@ -139,7 +139,7 @@
           11
         ]
       ],
-      "id": 1141,
+      "id": 1142,
       "flags": {},
       "overrides": false,
       "inherits": "UI.shape",
@@ -168,7 +168,7 @@
           16
         ]
       ],
-      "id": 1161,
+      "id": 1162,
       "flags": {
         "isProtected": true
       },
@@ -200,7 +200,7 @@
           8
         ]
       ],
-      "id": 1157,
+      "id": 1158,
       "flags": {},
       "overrides": false,
       "inherits": "UI.listen",
@@ -236,7 +236,7 @@
           5
         ]
       ],
-      "id": 1153,
+      "id": 1154,
       "flags": {},
       "overrides": false,
       "inherits": "UI.off",
@@ -272,7 +272,7 @@
           10
         ]
       ],
-      "id": 1089,
+      "id": 1090,
       "flags": {},
       "overrides": false,
       "inherits": "UIButton.offClick",
@@ -298,11 +298,11 @@
       "source": [
         [
           "UI.ts",
-          495,
+          504,
           9
         ]
       ],
-      "id": 1077,
+      "id": 1078,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -328,11 +328,11 @@
       "source": [
         [
           "UI.ts",
-          515,
+          524,
           9
         ]
       ],
-      "id": 1083,
+      "id": 1084,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -362,7 +362,7 @@
           10
         ]
       ],
-      "id": 1096,
+      "id": 1097,
       "flags": {},
       "overrides": false,
       "inherits": "UIButton.offHover",
@@ -398,7 +398,7 @@
           4
         ]
       ],
-      "id": 1149,
+      "id": 1150,
       "flags": {},
       "overrides": false,
       "inherits": "UI.on",
@@ -434,7 +434,7 @@
           9
         ]
       ],
-      "id": 1086,
+      "id": 1087,
       "flags": {},
       "overrides": false,
       "inherits": "UIButton.onClick",
@@ -460,11 +460,11 @@
       "source": [
         [
           "UI.ts",
-          485,
+          494,
           8
         ]
       ],
-      "id": 1074,
+      "id": 1075,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -490,11 +490,11 @@
       "source": [
         [
           "UI.ts",
-          505,
+          514,
           8
         ]
       ],
-      "id": 1080,
+      "id": 1081,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -524,7 +524,7 @@
           9
         ]
       ],
-      "id": 1092,
+      "id": 1093,
       "flags": {},
       "overrides": false,
       "inherits": "UIButton.onHover",
@@ -560,7 +560,7 @@
           8
         ]
       ],
-      "id": 1172,
+      "id": 1173,
       "flags": {},
       "overrides": false,
       "inherits": "UI.render",
@@ -590,7 +590,7 @@
           7
         ]
       ],
-      "id": 1145,
+      "id": 1146,
       "flags": {},
       "overrides": false,
       "inherits": "UI.state",
@@ -626,7 +626,7 @@
           10
         ]
       ],
-      "id": 1182,
+      "id": 1183,
       "flags": {},
       "overrides": false,
       "inherits": "UI.toString",
@@ -649,7 +649,7 @@
           18
         ]
       ],
-      "id": 1164,
+      "id": 1165,
       "flags": {
         "isProtected": true
       },
@@ -681,7 +681,7 @@
           19
         ]
       ],
-      "id": 1118,
+      "id": 1119,
       "flags": {
         "isStatic": true
       },
@@ -725,7 +725,7 @@
           20
         ]
       ],
-      "id": 1123,
+      "id": 1124,
       "flags": {
         "isStatic": true
       },
@@ -769,7 +769,7 @@
           22
         ]
       ],
-      "id": 1113,
+      "id": 1114,
       "flags": {
         "isStatic": true
       },
@@ -813,7 +813,7 @@
           15
         ]
       ],
-      "id": 1128,
+      "id": 1129,
       "flags": {
         "isStatic": true
       },
@@ -857,7 +857,7 @@
           14
         ]
       ],
-      "id": 1167,
+      "id": 1168,
       "flags": {
         "isStatic": true
       },
