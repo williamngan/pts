@@ -42,6 +42,9 @@ class Space {
         return this;
     }
     play(time = 0) {
+        if (time === 0 && this._animID !== -1) {
+            return;
+        }
         this._animID = requestAnimationFrame(this.play.bind(this));
         if (this._pause)
             return this;
@@ -52,6 +55,7 @@ class Space {
         }
         catch (err) {
             cancelAnimationFrame(this._animID);
+            this._animID = -1;
             this._playing = false;
             throw err;
         }
@@ -73,6 +77,7 @@ class Space {
         }
         if (this._time.end >= 0 && time > this._time.end) {
             cancelAnimationFrame(this._animID);
+            this._animID = -1;
             this._playing = false;
         }
     }

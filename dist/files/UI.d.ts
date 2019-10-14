@@ -74,6 +74,7 @@ export declare class UIDragger extends UIButton {
     private _draggingID;
     private _moveHoldID;
     private _dropHoldID;
+    private _upHoldID;
     constructor(group: GroupLike, shape: string, states?: {
         [key: string]: any;
     }, id?: string);
