@@ -7039,6 +7039,9 @@ var Space = function () {
         value: function play() {
             var time = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
 
+            if (time === 0 && this._animID !== -1) {
+                return;
+            }
             this._animID = requestAnimationFrame(this.play.bind(this));
             if (this._pause) return this;
             this._time.diff = time - this._time.prev;
@@ -7047,6 +7050,7 @@ var Space = function () {
                 this.playItems(time);
             } catch (err) {
                 cancelAnimationFrame(this._animID);
+                this._animID = -1;
                 this._playing = false;
                 throw err;
             }
@@ -7070,6 +7074,7 @@ var Space = function () {
             }
             if (this._time.end >= 0 && time > this._time.end) {
                 cancelAnimationFrame(this._animID);
+                this._animID = -1;
                 this._playing = false;
             }
         }

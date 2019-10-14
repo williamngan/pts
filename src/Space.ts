@@ -93,7 +93,10 @@ export abstract class Space {
   * @param time current time
   */
   play( time=0 ):this {
-    
+    // make sure only one play loop is active 
+    if (time === 0 && this._animID !== -1) {
+      return;
+    }
     this._animID = requestAnimationFrame( this.play.bind(this) );
     if (this._pause) return this;
     
@@ -104,6 +107,7 @@ export abstract class Space {
       this.playItems( time );
     } catch (err) {
       cancelAnimationFrame( this._animID );
+      this._animID = -1;
       this._playing = false;
       throw err;
     }
@@ -143,6 +147,7 @@ export abstract class Space {
     // stop if time ended
     if (this._time.end >= 0 && time > this._time.end) {
       cancelAnimationFrame( this._animID );
+      this._animID = -1;
       this._playing = false;
     }
   }
