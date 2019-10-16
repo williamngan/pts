@@ -58,6 +58,8 @@ export class CanvasForm extends VisualForm {
     alpha(a: number): this;
     fill(c: string | boolean): this;
     stroke(c: string | boolean, width?: number, linejoin?: CanvasLineJoin, linecap?: CanvasLineCap): this;
+    dash(segments?: number[], offset?: number): this;
+    noDash(): this;
     font(sizeOrFont: number | Font, weight?: string, style?: string, lineHeight?: number, family?: string): this;
     fontWidthEstimate(estimate?: boolean): this;
     getTextWidth(c: string): number;
