@@ -516,6 +516,31 @@ export class CanvasForm extends VisualForm {
     
     
     /**
+    * Activate dashed stroke and set dash style. You can customize the segments and offset.
+    * @example `form.dash()`, `form.dash([5, 10])`, `form.dash([5, 5], 5)`
+    * @param segments Dash segments. Defaults to `[5, 5]`. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setLineDash))
+    * @param offset Dash offset. Defaults to 0. (See [canvas documentation]()https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineDashOffset)
+    */
+    dash( segments:number[]=[5, 5], offset:number=0 ):this {
+      this._ctx.setLineDash(segments);
+      this._ctx.lineDashOffset = offset;
+      return this;
+    }
+    
+    
+    
+    /**
+    * Deactivate dashed stroke.
+    */
+    noDash():this {
+      this._ctx.setLineDash([]);
+      this._ctx.lineDashOffset = 0;
+      return this;
+    }
+    
+    
+    
+    /**
     * Set the current font.
     * @param sizeOrFont either a number to specify font-size, or a `Font` object to specify all font properties
     * @param weight Optional font-weight string such as "bold"
