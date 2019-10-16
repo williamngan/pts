@@ -267,6 +267,16 @@ export class CanvasForm extends VisualForm {
         }
         return this;
     }
+    dash(segments = [5, 5], offset = 0) {
+        this._ctx.setLineDash(segments);
+        this._ctx.lineDashOffset = offset;
+        return this;
+    }
+    noDash() {
+        this._ctx.setLineDash([]);
+        this._ctx.lineDashOffset = 0;
+        return this;
+    }
     font(sizeOrFont, weight, style, lineHeight, family) {
         if (typeof sizeOrFont == "number") {
             this._font.size = sizeOrFont;
