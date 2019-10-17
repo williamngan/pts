@@ -43,38 +43,38 @@ export class UI {
         }
         return this._states[key];
     }
-    on(key, fn) {
-        if (!this._actions[key])
-            this._actions[key] = [];
-        return UI._addHandler(this._actions[key], fn);
+    on(type, fn) {
+        if (!this._actions[type])
+            this._actions[type] = [];
+        return UI._addHandler(this._actions[type], fn);
     }
-    off(key, which) {
-        if (!this._actions[key])
+    off(type, which) {
+        if (!this._actions[type])
             return false;
         if (which === undefined) {
-            delete this._actions[key];
+            delete this._actions[type];
             return true;
         }
         else {
-            return UI._removeHandler(this._actions[key], which);
+            return UI._removeHandler(this._actions[type], which);
         }
     }
-    listen(event, p) {
-        if (this._actions[event] !== undefined) {
-            if (this._within(p) || Array.from(this._holds.values()).indexOf(event) >= 0) {
-                UI._trigger(this._actions[event], this, p, event);
+    listen(type, evt, p) {
+        if (this._actions[type] !== undefined) {
+            if (this._within(p) || Array.from(this._holds.values()).indexOf(type) >= 0) {
+                UI._trigger(this._actions[type], this, p, type, evt);
                 return true;
             }
             else if (this._actions['all']) {
-                UI._trigger(this._actions['all'], this, p, event);
+                UI._trigger(this._actions['all'], this, p, type, evt);
                 return true;
             }
         }
         return false;
     }
-    hold(event) {
+    hold(type) {
         let newKey = Math.max(0, ...Array.from(this._holds.keys())) + 1;
-        this._holds.set(newKey, event);
+        this._holds.set(newKey, type);
         return newKey;
     }
     unhold(key) {
@@ -85,9 +85,9 @@ export class UI {
             this._holds.clear();
         }
     }
-    static track(uis, key, p) {
+    static track(uis, type, evt, p) {
         for (let i = 0, len = uis.length; i < len; i++) {
-            uis[i].listen(key, p);
+            uis[i].listen(type, evt, p);
         }
     }
     render(fn) {
@@ -112,11 +112,11 @@ export class UI {
         }
         return fn(this._group, p);
     }
-    static _trigger(fns, target, pt, type) {
+    static _trigger(fns, target, pt, type, evt) {
         if (fns) {
             for (let i = 0, len = fns.length; i < len; i++) {
                 if (fns[i])
-                    fns[i](target, pt, type);
+                    fns[i](target, pt, type, evt);
             }
         }
     }
@@ -150,19 +150,19 @@ export class UIButton extends UI {
         if (states.clicks === undefined)
             this._states['clicks'] = 0;
         const UA = UIPointerActions;
-        this.on(UA.up, (target, pt, type) => {
+        this.on(UA.up, (target, pt, type, evt) => {
             this.state('clicks', this._states.clicks + 1);
         });
-        this.on(UA.move, (target, pt, type) => {
+        this.on(UA.move, (target, pt, type, evt) => {
             let hover = this._within(pt);
             if (hover && !this._states.hover) {
                 this.state('hover', true);
-                UI._trigger(this._actions[UA.enter], this, pt, UA.enter);
+                UI._trigger(this._actions[UA.enter], this, pt, UA.enter, evt);
                 var _capID = this.hold(UA.move);
                 this._hoverID = this.on(UA.move, (t, p) => {
                     if (!this._within(p) && !this.state('dragging')) {
                         this.state('hover', false);
-                        UI._trigger(this._actions[UA.leave], this, pt, UA.leave);
+                        UI._trigger(this._actions[UA.leave], this, pt, UA.leave, evt);
                         this.off(UA.move, this._hoverID);
                         this.unhold(_capID);
                     }
@@ -207,7 +207,7 @@ export class UIDragger extends UIButton {
         if (states.offset === undefined)
             this._states['offset'] = new Pt();
         const UA = UIPointerActions;
-        this.on(UA.down, (target, pt, type) => {
+        this.on(UA.down, (target, pt, type, evt) => {
             if (this._moveHoldID === -1) {
                 this.state('dragging', true);
                 this.state('offset', new Pt(pt).subtract(target.group[0]));
@@ -222,13 +222,13 @@ export class UIDragger extends UIButton {
             if (this._draggingID === -1) {
                 this._draggingID = this.on(UA.move, (t, p) => {
                     if (this.state('dragging')) {
-                        UI._trigger(this._actions[UA.uidrag], t, p, UA.uidrag);
+                        UI._trigger(this._actions[UA.uidrag], t, p, UA.uidrag, evt);
                         this.state('moved', true);
                     }
                 });
             }
         });
-        const endDrag = (target, pt, type) => {
+        const endDrag = (target, pt, type, evt) => {
             this.state('dragging', false);
             this.off(UA.move, this._draggingID);
             this._draggingID = -1;
@@ -239,7 +239,7 @@ export class UIDragger extends UIButton {
             this.unhold(this._upHoldID);
             this._upHoldID = -1;
             if (this.state('moved')) {
-                UI._trigger(this._actions[UA.uidrop], target, pt, UA.uidrop);
+                UI._trigger(this._actions[UA.uidrop], target, pt, UA.uidrop, evt);
                 this.state('moved', false);
             }
         };

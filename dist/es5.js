@@ -7965,30 +7965,30 @@ var UI = function () {
         }
     }, {
         key: "on",
-        value: function on(key, fn) {
-            if (!this._actions[key]) this._actions[key] = [];
-            return UI._addHandler(this._actions[key], fn);
+        value: function on(type, fn) {
+            if (!this._actions[type]) this._actions[type] = [];
+            return UI._addHandler(this._actions[type], fn);
         }
     }, {
         key: "off",
-        value: function off(key, which) {
-            if (!this._actions[key]) return false;
+        value: function off(type, which) {
+            if (!this._actions[type]) return false;
             if (which === undefined) {
-                delete this._actions[key];
+                delete this._actions[type];
                 return true;
             } else {
-                return UI._removeHandler(this._actions[key], which);
+                return UI._removeHandler(this._actions[type], which);
             }
         }
     }, {
         key: "listen",
-        value: function listen(event, p) {
-            if (this._actions[event] !== undefined) {
-                if (this._within(p) || Array.from(this._holds.values()).indexOf(event) >= 0) {
-                    UI._trigger(this._actions[event], this, p, event);
+        value: function listen(type, evt, p) {
+            if (this._actions[type] !== undefined) {
+                if (this._within(p) || Array.from(this._holds.values()).indexOf(type) >= 0) {
+                    UI._trigger(this._actions[type], this, p, type, evt);
                     return true;
                 } else if (this._actions['all']) {
-                    UI._trigger(this._actions['all'], this, p, event);
+                    UI._trigger(this._actions['all'], this, p, type, evt);
                     return true;
                 }
             }
@@ -7996,9 +7996,9 @@ var UI = function () {
         }
     }, {
         key: "hold",
-        value: function hold(event) {
+        value: function hold(type) {
             var newKey = Math.max.apply(Math, [0].concat(_toConsumableArray(Array.from(this._holds.keys())))) + 1;
-            this._holds.set(newKey, event);
+            this._holds.set(newKey, type);
             return newKey;
         }
     }, {
@@ -8081,17 +8081,17 @@ var UI = function () {
         }
     }, {
         key: "track",
-        value: function track(uis, key, p) {
+        value: function track(uis, type, evt, p) {
             for (var i = 0, len = uis.length; i < len; i++) {
-                uis[i].listen(key, p);
+                uis[i].listen(type, evt, p);
             }
         }
     }, {
         key: "_trigger",
-        value: function _trigger(fns, target, pt, type) {
+        value: function _trigger(fns, target, pt, type, evt) {
             if (fns) {
                 for (var i = 0, len = fns.length; i < len; i++) {
-                    if (fns[i]) fns[i](target, pt, type);
+                    if (fns[i]) fns[i](target, pt, type, evt);
                 }
             }
         }
@@ -8139,19 +8139,19 @@ var UIButton = function (_UI) {
         if (states.hover === undefined) _this._states['hover'] = false;
         if (states.clicks === undefined) _this._states['clicks'] = 0;
         var UA = exports.UIPointerActions;
-        _this.on(UA.up, function (target, pt, type) {
+        _this.on(UA.up, function (target, pt, type, evt) {
             _this.state('clicks', _this._states.clicks + 1);
         });
-        _this.on(UA.move, function (target, pt, type) {
+        _this.on(UA.move, function (target, pt, type, evt) {
             var hover = _this._within(pt);
             if (hover && !_this._states.hover) {
                 _this.state('hover', true);
-                UI._trigger(_this._actions[UA.enter], _this, pt, UA.enter);
+                UI._trigger(_this._actions[UA.enter], _this, pt, UA.enter, evt);
                 var _capID = _this.hold(UA.move);
                 _this._hoverID = _this.on(UA.move, function (t, p) {
                     if (!_this._within(p) && !_this.state('dragging')) {
                         _this.state('hover', false);
-                        UI._trigger(_this._actions[UA.leave], _this, pt, UA.leave);
+                        UI._trigger(_this._actions[UA.leave], _this, pt, UA.leave, evt);
                         _this.off(UA.move, _this._hoverID);
                         _this.unhold(_capID);
                     }
@@ -8213,7 +8213,7 @@ var UIDragger = function (_UIButton) {
         if (states.moved === undefined) _this2._states['moved'] = false;
         if (states.offset === undefined) _this2._states['offset'] = new Pt_1.Pt();
         var UA = exports.UIPointerActions;
-        _this2.on(UA.down, function (target, pt, type) {
+        _this2.on(UA.down, function (target, pt, type, evt) {
             if (_this2._moveHoldID === -1) {
                 _this2.state('dragging', true);
                 _this2.state('offset', new Pt_1.Pt(pt).subtract(target.group[0]));
@@ -8228,13 +8228,13 @@ var UIDragger = function (_UIButton) {
             if (_this2._draggingID === -1) {
                 _this2._draggingID = _this2.on(UA.move, function (t, p) {
                     if (_this2.state('dragging')) {
-                        UI._trigger(_this2._actions[UA.uidrag], t, p, UA.uidrag);
+                        UI._trigger(_this2._actions[UA.uidrag], t, p, UA.uidrag, evt);
                         _this2.state('moved', true);
                     }
                 });
             }
         });
-        var endDrag = function endDrag(target, pt, type) {
+        var endDrag = function endDrag(target, pt, type, evt) {
             _this2.state('dragging', false);
             _this2.off(UA.move, _this2._draggingID);
             _this2._draggingID = -1;
@@ -8245,7 +8245,7 @@ var UIDragger = function (_UIButton) {
             _this2.unhold(_this2._upHoldID);
             _this2._upHoldID = -1;
             if (_this2.state('moved')) {
-                UI._trigger(_this2._actions[UA.uidrop], target, pt, UA.uidrop);
+                UI._trigger(_this2._actions[UA.uidrop], target, pt, UA.uidrop, evt);
                 _this2.state('moved', false);
             }
         };
