@@ -165,10 +165,10 @@ export class UI {
   /**
    * Listen for UI events and trigger action handlers.
    * @param type an action type. Can be one of UIPointerActions or a custom one.
-   * @param evt a MouseEvent emitted by the browser (See [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent))
    * @param p a point to check
+   * @param evt a MouseEvent emitted by the browser (See [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent))
    */
-  listen( type:string, evt:MouseEvent, p:PtLike ):boolean {
+  listen( type:string, p:PtLike, evt:MouseEvent ):boolean {
     if ( this._actions[type] !== undefined ) {
       
       if ( this._within(p) || Array.from(this._holds.values()).indexOf(type) >= 0 ) {
@@ -211,12 +211,12 @@ export class UI {
    * A static function to listen for a list of UIs. See also [`UI.listen`](#link).
    * @param uis an array of UI
    * @param type an action type. Can be one of `UIPointerActions` or a custom one.
-   * @param evt a MouseEvent emitted by the browser (See [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent))
    * @param p a point to check
+   * @param evt a MouseEvent emitted by the browser (See [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent))
    */
-  static track( uis:UI[], type:string, evt:MouseEvent, p:PtLike ):void {
+  static track( uis:UI[], type:string, p:PtLike, evt:MouseEvent ):void {
     for (let i=0, len=uis.length; i<len; i++) {
-      uis[i].listen( type, evt, p );
+      uis[i].listen( type, p, evt );
     }
   }
 
