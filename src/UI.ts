@@ -32,7 +32,7 @@ export class UI {
 
   protected static _counter:number = 0;
   protected _id:string;
-  protected _actions: {[key:string]: UIHandler[] };
+  protected _actions: {[type:string]: UIHandler[] };
   protected _states: {[key:string]: any};
 
   protected _holds = new Map<number, string>();
@@ -135,29 +135,29 @@ export class UI {
 
   /**
    * Add an event handler. Remember this UI will also need to be tracked for events via `UI.track`.
-   * @param key event key
+   * @param type event type
    * @param fn a [`UIHandler`](#link) callback function: `fn( target:UI, pt:Pt, type:string )`
    * @returns an id number that reference to this handler, for use in [`UI.off`](#link)
    */
-  on( key:string, fn:UIHandler ):number {
-    if (!this._actions[key]) this._actions[key] = [];
-    return UI._addHandler( this._actions[key], fn );
+  on( type:string, fn:UIHandler ):number {
+    if (!this._actions[type]) this._actions[type] = [];
+    return UI._addHandler( this._actions[type], fn );
   }
 
 
   /**
    * Remove an event handler.
-   * @param key event key
-   * @param which an ID number returned by [`UI.on`](#link). If this is not defined, all handlers in this key will be removed.
+   * @param type event type
+   * @param which an ID number returned by [`UI.on`](#link). If this is not defined, all handlers in this type will be removed.
    * @param fn a [`UIHandler`](#link) function: `fn( target:UI, pt:Pt, type:string )`
    */
-  off( key:string, which?:number ):boolean {
-    if (!this._actions[key]) return false;
+  off( type:string, which?:number ):boolean {
+    if (!this._actions[type]) return false;
     if (which === undefined) {
-      delete this._actions[key];
+      delete this._actions[type];
       return true;
     } else {
-      return UI._removeHandler( this._actions[key], which );
+      return UI._removeHandler( this._actions[type], which );
     }
   }
 
@@ -185,11 +185,11 @@ export class UI {
 
   /**
    * Continue to keep track of an actions even if it's not within this UI. Useful for hover-leave and drag-outside.
-   * @param event a string defined in [`UIPointerActions`](#link)
+   * @param type a string defined in [`UIPointerActions`](#link)
    */
-  protected hold( event:string ):number {
+  protected hold( type:string ):number {
     let newKey = Math.max(0, ...Array.from(this._holds.keys())) + 1;
-    this._holds.set(newKey, event);
+    this._holds.set(newKey, type);
     return newKey;
   }
 
@@ -367,7 +367,7 @@ export class UIButton extends UI {
 
   /**
    * Remove an existing click handler
-   * @param id an ID number returned by [`UIButton.onClick`](#link). If this is not defined, all handlers in this key will be removed.
+   * @param id an ID number returned by [`UIButton.onClick`](#link). If this is not defined, all handlers in this type will be removed.
    * @returns a boolean indicating whether the handler was removed successfully
    */
   offClick( id:number ):boolean {
@@ -391,8 +391,8 @@ export class UIButton extends UI {
 
   /**
    * Remove handlers for hover events.
-   * @param enterID an ID number returned by [`UI.onClick`](#link), or -1 to skip. If this is not defined, all handlers in this key will be removed. 
-   * @param leaveID an ID number returned by [`UI.onClick`](#link), or -1 to skip. If this is not defined, all handlers in this key will be removed. 
+   * @param enterID an ID number returned by [`UI.onClick`](#link), or -1 to skip. If this is not defined, all handlers in this type will be removed. 
+   * @param leaveID an ID number returned by [`UI.onClick`](#link), or -1 to skip. If this is not defined, all handlers in this type will be removed. 
    * @returns an array of booleans indicating whether the handlers were removed successfully
    */
   offHover( enterID?:number, leaveID?:number ):boolean[] {
@@ -500,7 +500,7 @@ export class UIDragger extends UIButton {
 
   /**
    * Remove an existing drag handler
-   * @param id an ID number returned by [`UIDragger.onDrag`](#link). If this is not defined, all handlers in this key will be removed.
+   * @param id an ID number returned by [`UIDragger.onDrag`](#link). If this is not defined, all handlers in this type will be removed.
    * @returns a boolean indicating whether the handler was removed successfully
    */
   offDrag( id:number ):boolean {
@@ -520,7 +520,7 @@ export class UIDragger extends UIButton {
 
   /**
    * Remove an existing drop handler
-   * @param id an ID number returned by [`UIDragger.onDrag`](#link). If this is not defined, all handlers in this key will be removed.
+   * @param id an ID number returned by [`UIDragger.onDrag`](#link). If this is not defined, all handlers in this type will be removed.
    * @returns a boolean indicating whether the handler was removed successfully
    */
   offDrop( id:number ):boolean {
