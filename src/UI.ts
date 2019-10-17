@@ -14,7 +14,7 @@ export const UIShape = {
 
 
 /**
- * **[Experimental]** A set of string constants to represent different UI events.
+ * **[Experimental]** A set of string constants to represent different UI event types.
  */
 export const UIPointerActions = {
   up: "up", down: "down", move: "move", drag: "drag", uidrag: "uidrag", drop: "drop", uidrop: "uidrop", over: "over", out: "out", enter: "enter", leave: "leave", all: "all"
@@ -164,17 +164,18 @@ export class UI {
 
   /**
    * Listen for UI events and trigger action handlers.
-   * @param event an action event. Can be one of UIPointerActions or a custom one.
+   * @param type an action type. Can be one of UIPointerActions or a custom one.
+   * @param evt a MouseEvent emitted by the browser (See [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent))
    * @param p a point to check
    */
-  listen( event:string, p:PtLike ):boolean {
-    if ( this._actions[event] !== undefined ) {
+  listen( type:string, evt:MouseEvent, p:PtLike ):boolean {
+    if ( this._actions[type] !== undefined ) {
       
-      if ( this._within(p) || Array.from(this._holds.values()).indexOf(event) >= 0 ) {
-        UI._trigger( this._actions[event], this, p, event );
+      if ( this._within(p) || Array.from(this._holds.values()).indexOf(type) >= 0 ) {
+        UI._trigger( this._actions[type], this, p, type, evt );
         return true;
       } else if (this._actions['all']) { // listen for all regardless of trigger
-        UI._trigger( this._actions['all'], this, p, event );
+        UI._trigger( this._actions['all'], this, p, type, evt );
         return true;
       }
     }
@@ -209,12 +210,13 @@ export class UI {
   /**
    * A static function to listen for a list of UIs. See also [`UI.listen`](#link).
    * @param uis an array of UI
-   * @param key an action key. Can be one of `UIPointerActions` or a custom one.
-   * @param p A point to check
+   * @param type an action type. Can be one of `UIPointerActions` or a custom one.
+   * @param evt a MouseEvent emitted by the browser (See [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent))
+   * @param p a point to check
    */
-  static track( uis:UI[], key:string, p:PtLike ):void {
+  static track( uis:UI[], type:string, evt:MouseEvent, p:PtLike ):void {
     for (let i=0, len=uis.length; i<len; i++) {
-      uis[i].listen( key, p );
+      uis[i].listen( type, evt, p );
     }
   }
 
@@ -259,10 +261,10 @@ export class UI {
   /**
    * Static function to trigger an array of UIHandlers
    */
-  protected static _trigger( fns:UIHandler[], target:UI, pt:PtLike, type:string ) {
+  protected static _trigger( fns:UIHandler[], target:UI, pt:PtLike, type:string, evt:MouseEvent ) {
     if (fns) {
       for (let i=0, len=fns.length; i<len; i++) {
-        if (fns[i]) fns[i]( target, pt, type );
+        if (fns[i]) fns[i]( target, pt, type, evt );
       }
     }
   }
@@ -320,13 +322,13 @@ export class UIButton extends UI {
     const UA = UIPointerActions;
 
     // listen for clicks when mouse up and increment clicks 
-    this.on( UA.up, (target:UI, pt:PtLike, type:string) => {
+    this.on( UA.up, (target:UI, pt:PtLike, type:string, evt:MouseEvent) => {
       this.state( 'clicks', this._states.clicks+1 );
     });
 
 
     // listen for move events and fire enter and leave events accordingly
-    this.on( UA.move, (target:UI, pt:PtLike, type:string) => {
+    this.on( UA.move, (target:UI, pt:PtLike, type:string, evt:MouseEvent) => {
       let hover = this._within( pt );
 
       // hover on
@@ -334,7 +336,7 @@ export class UIButton extends UI {
         this.state('hover', true);
 
         // enter trigger
-        UI._trigger( this._actions[UA.enter], this, pt, UA.enter);
+        UI._trigger( this._actions[UA.enter], this, pt, UA.enter, evt);
           
         // listen for hover off
         var _capID = this.hold( UA.move ); // keep hold of second move
@@ -343,7 +345,7 @@ export class UIButton extends UI {
           if (!this._within( p ) && !this.state('dragging')) {
             this.state('hover', false);
             // leave trigger
-            UI._trigger( this._actions[UA.leave], this, pt, UA.leave);
+            UI._trigger( this._actions[UA.leave], this, pt, UA.leave, evt);
             this.off( UA.move, this._hoverID); // remove second move listener
             this.unhold( _capID ); // stop keeping hold of second move
           }
@@ -436,7 +438,7 @@ export class UIDragger extends UIButton {
      */
 
      // Handle pointer down and begin dragging
-    this.on( UA.down, (target:UI, pt:PtLike, type:string) => {
+    this.on( UA.down, (target:UI, pt:PtLike, type:string, evt: MouseEvent) => {
       // begin listening for all events after dragging starts
       if (this._moveHoldID === -1) {
         this.state( 'dragging', true );
@@ -452,7 +454,7 @@ export class UIDragger extends UIButton {
       if (this._draggingID === -1) {
         this._draggingID = this.on( UA.move, (t:UI, p:PtLike) => {
           if ( this.state('dragging') ) {
-            UI._trigger( this._actions[UA.uidrag], t, p, UA.uidrag );
+            UI._trigger( this._actions[UA.uidrag], t, p, UA.uidrag, evt );
             this.state( 'moved', true );
           }
         });
@@ -460,7 +462,7 @@ export class UIDragger extends UIButton {
     });
 
     // Handle pointer drop or up and end dragging
-    const endDrag = (target:UI, pt:PtLike, type:string) => {
+    const endDrag = (target:UI, pt:PtLike, type:string, evt:MouseEvent) => {
       this.state('dragging', false);
       // remove move listener
       this.off(UA.move, this._draggingID);
@@ -476,7 +478,7 @@ export class UIDragger extends UIButton {
       this._upHoldID = -1;
       // trigger event
       if ( this.state('moved') ) {
-        UI._trigger( this._actions[UA.uidrop], target, pt, UA.uidrop );
+        UI._trigger( this._actions[UA.uidrop], target, pt, UA.uidrop, evt );
         this.state( 'moved', false );
       }
     };
