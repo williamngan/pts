@@ -1006,7 +1006,7 @@ export type IntersectContext = {
     edge: Group;
     other?: any;
 };
-export type UIHandler = (target: UI, pt: PtLike, type: string) => void;
+export type UIHandler = (target: UI, pt: PtLike, type: string, evt: MouseEvent) => void;
 export type WarningType = "error" | "warn" | "mute";
 export type ITempoStartFn = (count: number) => void | boolean;
 export type ITempoProgressFn = (count: number, t: number, ms: number, start: boolean) => void | boolean;
@@ -1065,7 +1065,7 @@ export class UI {
     protected static _counter: number;
     protected _id: string;
     protected _actions: {
-        [key: string]: UIHandler[];
+        [type: string]: UIHandler[];
     };
     protected _states: {
         [key: string]: any;
@@ -1082,18 +1082,18 @@ export class UI {
     group: Group;
     shape: string;
     state(key: string, value?: any): any;
-    on(key: string, fn: UIHandler): number;
-    off(key: string, which?: number): boolean;
-    listen(event: string, p: PtLike): boolean;
-    protected hold(event: string): number;
+    on(type: string, fn: UIHandler): number;
+    off(type: string, which?: number): boolean;
+    listen(type: string, evt: MouseEvent, p: PtLike): boolean;
+    protected hold(type: string): number;
     protected unhold(key?: number): void;
-    static track(uis: UI[], key: string, p: PtLike): void;
+    static track(uis: UI[], type: string, evt: MouseEvent, p: PtLike): void;
     render(fn: (group: Group, states: {
         [key: string]: any;
     }) => void): void;
     toString(): string;
     protected _within(p: PtLike): boolean;
-    protected static _trigger(fns: UIHandler[], target: UI, pt: PtLike, type: string): void;
+    protected static _trigger(fns: UIHandler[], target: UI, pt: PtLike, type: string, evt: MouseEvent): void;
     protected static _addHandler(fns: UIHandler[], fn: UIHandler): number;
     protected static _removeHandler(fns: UIHandler[], index: number): boolean;
 }
