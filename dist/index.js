@@ -5448,7 +5448,7 @@ class UI {
             return UI._removeHandler(this._actions[type], which);
         }
     }
-    listen(type, evt, p) {
+    listen(type, p, evt) {
         if (this._actions[type] !== undefined) {
             if (this._within(p) || Array.from(this._holds.values()).indexOf(type) >= 0) {
                 UI._trigger(this._actions[type], this, p, type, evt);
@@ -5474,9 +5474,9 @@ class UI {
             this._holds.clear();
         }
     }
-    static track(uis, type, evt, p) {
+    static track(uis, type, p, evt) {
         for (let i = 0, len = uis.length; i < len; i++) {
-            uis[i].listen(type, evt, p);
+            uis[i].listen(type, p, evt);
         }
     }
     render(fn) {

@@ -7982,7 +7982,7 @@ var UI = function () {
         }
     }, {
         key: "listen",
-        value: function listen(type, evt, p) {
+        value: function listen(type, p, evt) {
             if (this._actions[type] !== undefined) {
                 if (this._within(p) || Array.from(this._holds.values()).indexOf(type) >= 0) {
                     UI._trigger(this._actions[type], this, p, type, evt);
@@ -8081,9 +8081,9 @@ var UI = function () {
         }
     }, {
         key: "track",
-        value: function track(uis, type, evt, p) {
+        value: function track(uis, type, p, evt) {
             for (var i = 0, len = uis.length; i < len; i++) {
-                uis[i].listen(type, evt, p);
+                uis[i].listen(type, p, evt);
             }
         }
     }, {
