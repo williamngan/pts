@@ -164,11 +164,11 @@
       "source": [
         [
           "UI.ts",
-          189,
+          190,
           16
         ]
       ],
-      "id": 895,
+      "id": 896,
       "flags": {
         "isProtected": true
       },
@@ -181,7 +181,7 @@
           "returns_comment": false,
           "parameters": [
             {
-              "name": "event",
+              "name": "type",
               "comment": "a string defined in [`UIPointerActions`](#link)\n",
               "type": "string",
               "default": false
@@ -196,7 +196,7 @@
       "source": [
         [
           "UI.ts",
-          170,
+          171,
           8
         ]
       ],
@@ -211,9 +211,15 @@
           "returns_comment": false,
           "parameters": [
             {
-              "name": "event",
-              "comment": "an action event. Can be one of UIPointerActions or a custom one.",
+              "name": "type",
+              "comment": "an action type. Can be one of UIPointerActions or a custom one.",
               "type": "string",
+              "default": false
+            },
+            {
+              "name": "evt",
+              "comment": "a MouseEvent emitted by the browser (See [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent))",
+              "type": "MouseEvent",
               "default": false
             },
             {
@@ -247,14 +253,14 @@
           "returns_comment": false,
           "parameters": [
             {
-              "name": "key",
-              "comment": "event key",
+              "name": "type",
+              "comment": "event type",
               "type": "string",
               "default": false
             },
             {
               "name": "which",
-              "comment": "an ID number returned by [`UI.on`](#link). If this is not defined, all handlers in this key will be removed.",
+              "comment": "an ID number returned by [`UI.on`](#link). If this is not defined, all handlers in this type will be removed.",
               "type": "number",
               "default": false
             }
@@ -283,8 +289,8 @@
           "returns_comment": "an id number that reference to this handler, for use in [`UI.off`](#link)\n",
           "parameters": [
             {
-              "name": "key",
-              "comment": "event key",
+              "name": "type",
+              "comment": "event type",
               "type": "string",
               "default": false
             },
@@ -304,11 +310,11 @@
       "source": [
         [
           "UI.ts",
-          226,
+          228,
           8
         ]
       ],
-      "id": 906,
+      "id": 908,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -370,11 +376,11 @@
       "source": [
         [
           "UI.ts",
-          234,
+          236,
           10
         ]
       ],
-      "id": 916,
+      "id": 918,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -393,11 +399,11 @@
       "source": [
         [
           "UI.ts",
-          200,
+          201,
           18
         ]
       ],
-      "id": 898,
+      "id": 899,
       "flags": {
         "isProtected": true
       },
@@ -601,11 +607,11 @@
       "source": [
         [
           "UI.ts",
-          215,
+          217,
           14
         ]
       ],
-      "id": 901,
+      "id": 902,
       "flags": {
         "isStatic": true
       },
@@ -624,14 +630,20 @@
               "default": false
             },
             {
-              "name": "key",
-              "comment": "an action key. Can be one of `UIPointerActions` or a custom one.",
+              "name": "type",
+              "comment": "an action type. Can be one of `UIPointerActions` or a custom one.",
               "type": "string",
               "default": false
             },
             {
+              "name": "evt",
+              "comment": "a MouseEvent emitted by the browser (See [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent))",
+              "type": "MouseEvent",
+              "default": false
+            },
+            {
               "name": "p",
-              "comment": "A point to check\n",
+              "comment": "a point to check\n",
               "type": "PtLike",
               "default": false
             }

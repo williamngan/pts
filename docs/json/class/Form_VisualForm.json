@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 2883,
+  "id": 2893,
   "comment": "VisualForm is an abstract class that represents a form that can be used to express Pts visually.\nFor example, [`CanvasForm`](#link) is an implementation of VisualForm that draws on [`CanvasSpace`](#link) which represents a html canvas. Learn more about Space and Form in [this guide](../guide/Space-0500.html).",
   "constructor": [],
   "accessors": [
@@ -21,7 +21,7 @@
           17
         ]
       ],
-      "id": 2895,
+      "id": 2905,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -45,7 +45,7 @@
           12
         ]
       ],
-      "id": 2885,
+      "id": 2895,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -72,7 +72,7 @@
           11
         ]
       ],
-      "id": 2982,
+      "id": 2992,
       "flags": {},
       "overrides": false,
       "inherits": "Form.ready",
@@ -96,7 +96,7 @@
           13
         ]
       ],
-      "id": 2890,
+      "id": 2900,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -125,7 +125,7 @@
           7
         ]
       ],
-      "id": 2904,
+      "id": 2914,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -155,7 +155,7 @@
           14
         ]
       ],
-      "id": 2944,
+      "id": 2954,
       "flags": {
         "isAbstract": true
       },
@@ -211,7 +211,7 @@
           17
         ]
       ],
-      "id": 2935,
+      "id": 2945,
       "flags": {
         "isAbstract": true
       },
@@ -248,7 +248,7 @@
           9
         ]
       ],
-      "id": 2938,
+      "id": 2948,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -278,7 +278,7 @@
           6
         ]
       ],
-      "id": 2907,
+      "id": 2917,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -308,7 +308,7 @@
           10
         ]
       ],
-      "id": 2910,
+      "id": 2920,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -338,7 +338,7 @@
           15
         ]
       ],
-      "id": 2974,
+      "id": 2984,
       "flags": {
         "isAbstract": true
       },
@@ -403,7 +403,7 @@
           15
         ]
       ],
-      "id": 2951,
+      "id": 2961,
       "flags": {
         "isAbstract": true
       },
@@ -435,7 +435,7 @@
           7
         ]
       ],
-      "id": 2954,
+      "id": 2964,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -465,7 +465,7 @@
           16
         ]
       ],
-      "id": 2925,
+      "id": 2935,
       "flags": {
         "isAbstract": true
       },
@@ -514,7 +514,7 @@
           8
         ]
       ],
-      "id": 2930,
+      "id": 2940,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -556,7 +556,7 @@
           18
         ]
       ],
-      "id": 2957,
+      "id": 2967,
       "flags": {
         "isAbstract": true
       },
@@ -588,7 +588,7 @@
           10
         ]
       ],
-      "id": 2960,
+      "id": 2970,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -618,7 +618,7 @@
           15
         ]
       ],
-      "id": 2963,
+      "id": 2973,
       "flags": {
         "isAbstract": true
       },
@@ -650,7 +650,7 @@
           7
         ]
       ],
-      "id": 2966,
+      "id": 2976,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -680,7 +680,7 @@
           16
         ]
       ],
-      "id": 2902,
+      "id": 2912,
       "flags": {
         "isAbstract": true
       },
@@ -705,7 +705,7 @@
           9
         ]
       ],
-      "id": 2941,
+      "id": 2951,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -735,7 +735,7 @@
           8
         ]
       ],
-      "id": 2913,
+      "id": 2923,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -783,7 +783,7 @@
           12
         ]
       ],
-      "id": 2919,
+      "id": 2929,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -831,7 +831,7 @@
           15
         ]
       ],
-      "id": 2969,
+      "id": 2979,
       "flags": {
         "isAbstract": true
       },

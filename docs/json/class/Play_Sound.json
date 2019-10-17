@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 6632,
+  "id": 6642,
   "comment": "Sound class simplifies common tasks like audio inputs and visualizations using a subset of Web Audio API. It can be used with other audio libraries like tone.js, and extended to support additional web audio functions. See [the guide](../guide/Sound-0800.html) to get started.",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           30
         ]
       ],
-      "id": 6642,
+      "id": 6652,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -52,7 +52,7 @@
           13
         ]
       ],
-      "id": 6692,
+      "id": 6702,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -76,7 +76,7 @@
           12
         ]
       ],
-      "id": 6680,
+      "id": 6690,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -103,7 +103,7 @@
           9
         ]
       ],
-      "id": 6672,
+      "id": 6682,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -127,7 +127,7 @@
           15
         ]
       ],
-      "id": 6696,
+      "id": 6706,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -154,7 +154,7 @@
           10
         ]
       ],
-      "id": 6674,
+      "id": 6684,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -173,7 +173,7 @@
           14
         ]
       ],
-      "id": 6690,
+      "id": 6700,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -192,7 +192,7 @@
           13
         ]
       ],
-      "id": 6686,
+      "id": 6696,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -211,7 +211,7 @@
           14
         ]
       ],
-      "id": 6688,
+      "id": 6698,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -230,7 +230,7 @@
           16
         ]
       ],
-      "id": 6694,
+      "id": 6704,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -249,7 +249,7 @@
           12
         ]
       ],
-      "id": 6678,
+      "id": 6688,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -268,7 +268,7 @@
           12
         ]
       ],
-      "id": 6676,
+      "id": 6686,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -287,7 +287,7 @@
           10
         ]
       ],
-      "id": 6684,
+      "id": 6694,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -308,7 +308,7 @@
           9
         ]
       ],
-      "id": 6703,
+      "id": 6713,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -356,7 +356,7 @@
           9
         ]
       ],
-      "id": 6700,
+      "id": 6710,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -386,7 +386,7 @@
           24
         ]
       ],
-      "id": 6658,
+      "id": 6668,
       "flags": {
         "isProtected": true
       },
@@ -418,7 +418,7 @@
           12
         ]
       ],
-      "id": 6725,
+      "id": 6735,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -441,7 +441,7 @@
           14
         ]
       ],
-      "id": 6727,
+      "id": 6737,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -488,7 +488,7 @@
           7
         ]
       ],
-      "id": 6732,
+      "id": 6742,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -511,7 +511,7 @@
           7
         ]
       ],
-      "id": 6734,
+      "id": 6744,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -541,7 +541,7 @@
           6
         ]
       ],
-      "id": 6737,
+      "id": 6747,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -564,7 +564,7 @@
           12
         ]
       ],
-      "id": 6718,
+      "id": 6728,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -587,7 +587,7 @@
           14
         ]
       ],
-      "id": 6720,
+      "id": 6730,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -634,7 +634,7 @@
           8
         ]
       ],
-      "id": 6739,
+      "id": 6749,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -657,7 +657,7 @@
           13
         ]
       ],
-      "id": 6645,
+      "id": 6655,
       "flags": {
         "isStatic": true
       },
@@ -707,7 +707,7 @@
           17
         ]
       ],
-      "id": 6661,
+      "id": 6671,
       "flags": {
         "isStatic": true
       },
@@ -750,7 +750,7 @@
           20
         ]
       ],
-      "id": 6669,
+      "id": 6679,
       "flags": {
         "isStatic": true
       },
@@ -787,7 +787,7 @@
           13
         ]
       ],
-      "id": 6651,
+      "id": 6661,
       "flags": {
         "isStatic": true
       },
@@ -830,7 +830,7 @@
           21
         ]
       ],
-      "id": 6655,
+      "id": 6665,
       "flags": {
         "isStatic": true
       },
@@ -865,7 +865,7 @@
           10
         ]
       ],
-      "id": 6639,
+      "id": 6649,
       "flags": {},
       "type": "analyzer",
       "overrides": false,

@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Interface",
-  "id": 1260,
+  "id": 1269,
   "comment": "Typescript only: extends Canvas's 2D context with backingStorePixelRatio property.",
   "constructor": [],
   "accessors": [],
@@ -17,12 +17,12 @@
       "name": "arc",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3056,
           7
         ]
       ],
-      "id": 1472,
+      "id": 1481,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasPath.arc",
@@ -77,12 +77,12 @@
       "name": "arcTo",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3057,
           9
         ]
       ],
-      "id": 1480,
+      "id": 1489,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasPath.arcTo",
@@ -131,12 +131,12 @@
       "name": "beginPath",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3001,
           13
         ]
       ],
-      "id": 1351,
+      "id": 1360,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasDrawPath.beginPath",
@@ -154,12 +154,12 @@
       "name": "bezierCurveTo",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3058,
           17
         ]
       ],
-      "id": 1487,
+      "id": 1496,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasPath.bezierCurveTo",
@@ -214,12 +214,12 @@
       "name": "clearRect",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3091,
           13
         ]
       ],
-      "id": 1333,
+      "id": 1342,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasRect.clearRect",
@@ -262,17 +262,17 @@
       "name": "clip",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3002,
           8
         ],
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3003,
           8
         ]
       ],
-      "id": 1353,
+      "id": 1362,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasDrawPath.clip",
@@ -317,12 +317,12 @@
       "name": "closePath",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3059,
           13
         ]
       ],
-      "id": 1495,
+      "id": 1504,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasPath.closePath",
@@ -340,17 +340,17 @@
       "name": "createImageData",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3043,
           19
         ],
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3044,
           19
         ]
       ],
-      "id": 1433,
+      "id": 1442,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasImageData.createImageData",
@@ -395,12 +395,12 @@
       "name": "createLinearGradient",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3017,
           24
         ]
       ],
-      "id": 1310,
+      "id": 1319,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasFillStrokeStyles.createLinearGradient",
@@ -443,12 +443,12 @@
       "name": "createPattern",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3018,
           17
         ]
       ],
-      "id": 1316,
+      "id": 1325,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasFillStrokeStyles.createPattern",
@@ -479,12 +479,12 @@
       "name": "createRadialGradient",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3019,
           24
         ]
       ],
-      "id": 1320,
+      "id": 1329,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasFillStrokeStyles.createRadialGradient",
@@ -539,17 +539,17 @@
       "name": "drawFocusIfNeeded",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3142,
           21
         ],
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3143,
           21
         ]
       ],
-      "id": 1387,
+      "id": 1396,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasUserInterface.drawFocusIfNeeded",
@@ -594,22 +594,22 @@
       "name": "drawImage",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           2995,
           13
         ],
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           2996,
           13
         ],
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           2997,
           13
         ]
       ],
-      "id": 1412,
+      "id": 1421,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasDrawImage.drawImage",
@@ -746,12 +746,12 @@
       "name": "ellipse",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3060,
           11
         ]
       ],
-      "id": 1497,
+      "id": 1506,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasPath.ellipse",
@@ -818,17 +818,17 @@
       "name": "fill",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3004,
           8
         ],
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3005,
           8
         ]
       ],
-      "id": 1359,
+      "id": 1368,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasDrawPath.fill",
@@ -873,12 +873,12 @@
       "name": "fillRect",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3092,
           12
         ]
       ],
-      "id": 1339,
+      "id": 1348,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasRect.fillRect",
@@ -921,12 +921,12 @@
       "name": "fillText",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3118,
           12
         ]
       ],
-      "id": 1397,
+      "id": 1406,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasText.fillText",
@@ -969,12 +969,12 @@
       "name": "getImageData",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3045,
           16
         ]
       ],
-      "id": 1439,
+      "id": 1448,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasImageData.getImageData",
@@ -1017,12 +1017,12 @@
       "name": "getLineDash",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3073,
           15
         ]
       ],
-      "id": 1463,
+      "id": 1472,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasPathDrawingStyles.getLineDash",
@@ -1040,12 +1040,12 @@
       "name": "getTransform",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3131,
           16
         ]
       ],
-      "id": 1271,
+      "id": 1280,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasTransform.getTransform",
@@ -1063,17 +1063,17 @@
       "name": "isPointInPath",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3006,
           17
         ],
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3007,
           17
         ]
       ],
-      "id": 1365,
+      "id": 1374,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasDrawPath.isPointInPath",
@@ -1142,17 +1142,17 @@
       "name": "isPointInStroke",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3008,
           19
         ],
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3009,
           19
         ]
       ],
-      "id": 1375,
+      "id": 1384,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasDrawPath.isPointInStroke",
@@ -1209,12 +1209,12 @@
       "name": "lineTo",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3061,
           10
         ]
       ],
-      "id": 1507,
+      "id": 1516,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasPath.lineTo",
@@ -1245,12 +1245,12 @@
       "name": "measureText",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3119,
           15
         ]
       ],
-      "id": 1403,
+      "id": 1412,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasText.measureText",
@@ -1275,12 +1275,12 @@
       "name": "moveTo",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3062,
           10
         ]
       ],
-      "id": 1511,
+      "id": 1520,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasPath.moveTo",
@@ -1311,17 +1311,17 @@
       "name": "putImageData",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3046,
           16
         ],
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3047,
           16
         ]
       ],
-      "id": 1445,
+      "id": 1454,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasImageData.putImageData",
@@ -1408,12 +1408,12 @@
       "name": "quadraticCurveTo",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3063,
           20
         ]
       ],
-      "id": 1515,
+      "id": 1524,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasPath.quadraticCurveTo",
@@ -1456,12 +1456,12 @@
       "name": "rect",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3064,
           8
         ]
       ],
-      "id": 1521,
+      "id": 1530,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasPath.rect",
@@ -1504,12 +1504,12 @@
       "name": "resetTransform",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3132,
           18
         ]
       ],
-      "id": 1273,
+      "id": 1282,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasTransform.resetTransform",
@@ -1527,12 +1527,12 @@
       "name": "restore",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3113,
           11
         ]
       ],
-      "id": 1267,
+      "id": 1276,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasState.restore",
@@ -1550,12 +1550,12 @@
       "name": "rotate",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3133,
           10
         ]
       ],
-      "id": 1275,
+      "id": 1284,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasTransform.rotate",
@@ -1580,12 +1580,12 @@
       "name": "save",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3114,
           8
         ]
       ],
-      "id": 1269,
+      "id": 1278,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasState.save",
@@ -1603,12 +1603,12 @@
       "name": "scale",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3134,
           9
         ]
       ],
-      "id": 1278,
+      "id": 1287,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasTransform.scale",
@@ -1639,17 +1639,17 @@
       "name": "scrollPathIntoView",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3144,
           22
         ],
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3145,
           22
         ]
       ],
-      "id": 1393,
+      "id": 1402,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasUserInterface.scrollPathIntoView",
@@ -1681,12 +1681,12 @@
       "name": "setLineDash",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3074,
           15
         ]
       ],
-      "id": 1465,
+      "id": 1474,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasPathDrawingStyles.setLineDash",
@@ -1711,17 +1711,17 @@
       "name": "setTransform",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3135,
           16
         ],
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3136,
           16
         ]
       ],
-      "id": 1282,
+      "id": 1291,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasTransform.setTransform",
@@ -1790,17 +1790,17 @@
       "name": "stroke",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3010,
           10
         ],
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3011,
           10
         ]
       ],
-      "id": 1383,
+      "id": 1392,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasDrawPath.stroke",
@@ -1832,12 +1832,12 @@
       "name": "strokeRect",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3093,
           14
         ]
       ],
-      "id": 1345,
+      "id": 1354,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasRect.strokeRect",
@@ -1880,12 +1880,12 @@
       "name": "strokeText",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3120,
           14
         ]
       ],
-      "id": 1406,
+      "id": 1415,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasText.strokeText",
@@ -1928,12 +1928,12 @@
       "name": "transform",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3137,
           13
         ]
       ],
-      "id": 1292,
+      "id": 1301,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasTransform.transform",
@@ -1988,12 +1988,12 @@
       "name": "translate",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3138,
           13
         ]
       ],
-      "id": 1300,
+      "id": 1309,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasTransform.translate",
@@ -2027,12 +2027,12 @@
       "name": "CanvasRenderingContext2D",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3100,
           36
         ]
       ],
-      "id": 1527,
+      "id": 1536,
       "flags": {},
       "type": "CanvasRenderingContext2D",
       "overrides": false,
@@ -2048,7 +2048,7 @@
           24
         ]
       ],
-      "id": 1265,
+      "id": 1274,
       "flags": {
         "isOptional": true
       },
@@ -2061,12 +2061,12 @@
       "name": "canvas",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3097,
           19
         ]
       ],
-      "id": 1266,
+      "id": 1275,
       "flags": {},
       "type": "canvas",
       "overrides": false,
@@ -2077,12 +2077,12 @@
       "name": "direction",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3124,
           13
         ]
       ],
-      "id": 1468,
+      "id": 1477,
       "flags": {},
       "type": "direction",
       "overrides": false,
@@ -2093,12 +2093,12 @@
       "name": "fillStyle",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3015,
           13
         ]
       ],
-      "id": 1308,
+      "id": 1317,
       "flags": {},
       "type": "fillStyle",
       "overrides": false,
@@ -2109,12 +2109,12 @@
       "name": "filter",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3023,
           10
         ]
       ],
-      "id": 1332,
+      "id": 1341,
       "flags": {},
       "type": "filter",
       "overrides": false,
@@ -2125,12 +2125,12 @@
       "name": "font",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3125,
           8
         ]
       ],
-      "id": 1469,
+      "id": 1478,
       "flags": {},
       "type": "font",
       "overrides": false,
@@ -2141,12 +2141,12 @@
       "name": "globalAlpha",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           2990,
           15
         ]
       ],
-      "id": 1304,
+      "id": 1313,
       "flags": {},
       "type": "globalAlpha",
       "overrides": false,
@@ -2157,12 +2157,12 @@
       "name": "globalCompositeOperation",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           2991,
           28
         ]
       ],
-      "id": 1305,
+      "id": 1314,
       "flags": {},
       "type": "globalCompositeOperation",
       "overrides": false,
@@ -2173,12 +2173,12 @@
       "name": "imageSmoothingEnabled",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3051,
           25
         ]
       ],
-      "id": 1306,
+      "id": 1315,
       "flags": {},
       "type": "imageSmoothingEnabled",
       "overrides": false,
@@ -2189,12 +2189,12 @@
       "name": "imageSmoothingQuality",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3052,
           25
         ]
       ],
-      "id": 1307,
+      "id": 1316,
       "flags": {},
       "type": "imageSmoothingQuality",
       "overrides": false,
@@ -2205,12 +2205,12 @@
       "name": "lineCap",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3068,
           11
         ]
       ],
-      "id": 1458,
+      "id": 1467,
       "flags": {},
       "type": "lineCap",
       "overrides": false,
@@ -2221,12 +2221,12 @@
       "name": "lineDashOffset",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3069,
           18
         ]
       ],
-      "id": 1459,
+      "id": 1468,
       "flags": {},
       "type": "lineDashOffset",
       "overrides": false,
@@ -2237,12 +2237,12 @@
       "name": "lineJoin",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3070,
           12
         ]
       ],
-      "id": 1460,
+      "id": 1469,
       "flags": {},
       "type": "lineJoin",
       "overrides": false,
@@ -2253,12 +2253,12 @@
       "name": "lineWidth",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3071,
           13
         ]
       ],
-      "id": 1461,
+      "id": 1470,
       "flags": {},
       "type": "lineWidth",
       "overrides": false,
@@ -2269,12 +2269,12 @@
       "name": "miterLimit",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3072,
           14
         ]
       ],
-      "id": 1462,
+      "id": 1471,
       "flags": {},
       "type": "miterLimit",
       "overrides": false,
@@ -2290,7 +2290,7 @@
           27
         ]
       ],
-      "id": 1262,
+      "id": 1271,
       "flags": {
         "isOptional": true
       },
@@ -2308,7 +2308,7 @@
           26
         ]
       ],
-      "id": 1263,
+      "id": 1272,
       "flags": {
         "isOptional": true
       },
@@ -2326,7 +2326,7 @@
           25
         ]
       ],
-      "id": 1264,
+      "id": 1273,
       "flags": {
         "isOptional": true
       },
@@ -2339,12 +2339,12 @@
       "name": "shadowBlur",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3106,
           14
         ]
       ],
-      "id": 1328,
+      "id": 1337,
       "flags": {},
       "type": "shadowBlur",
       "overrides": false,
@@ -2355,12 +2355,12 @@
       "name": "shadowColor",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3107,
           15
         ]
       ],
-      "id": 1329,
+      "id": 1338,
       "flags": {},
       "type": "shadowColor",
       "overrides": false,
@@ -2371,12 +2371,12 @@
       "name": "shadowOffsetX",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3108,
           17
         ]
       ],
-      "id": 1330,
+      "id": 1339,
       "flags": {},
       "type": "shadowOffsetX",
       "overrides": false,
@@ -2387,12 +2387,12 @@
       "name": "shadowOffsetY",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3109,
           17
         ]
       ],
-      "id": 1331,
+      "id": 1340,
       "flags": {},
       "type": "shadowOffsetY",
       "overrides": false,
@@ -2403,12 +2403,12 @@
       "name": "strokeStyle",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3016,
           15
         ]
       ],
-      "id": 1309,
+      "id": 1318,
       "flags": {},
       "type": "strokeStyle",
       "overrides": false,
@@ -2419,12 +2419,12 @@
       "name": "textAlign",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3126,
           13
         ]
       ],
-      "id": 1470,
+      "id": 1479,
       "flags": {},
       "type": "textAlign",
       "overrides": false,
@@ -2435,12 +2435,12 @@
       "name": "textBaseline",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
+          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.dom.d.ts",
           3127,
           16
         ]
       ],
-      "id": 1471,
+      "id": 1480,
       "flags": {},
       "type": "textBaseline",
       "overrides": false,
@@ -2456,7 +2456,7 @@
           30
         ]
       ],
-      "id": 1261,
+      "id": 1270,
       "flags": {
         "isOptional": true
       },
