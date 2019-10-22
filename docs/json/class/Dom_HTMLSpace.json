@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 5267,
+  "id": 5257,
   "comment": "**[Experimental]** HTMLSpace is a subclass of DOMSpace that works with HTML elements. Note that this is currently experimental and may change in future.  See [a demo here](../demo/index.html?name=htmlform.scope).",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           22
         ]
       ],
-      "id": 5288,
+      "id": 5278,
       "flags": {},
       "overrides": false,
       "inherits": "DOMSpace.__constructor",
@@ -68,7 +68,7 @@
           16
         ]
       ],
-      "id": 5303,
+      "id": 5293,
       "flags": {},
       "overrides": false,
       "inherits": "DOMSpace.autoResize",
@@ -100,7 +100,7 @@
           16
         ]
       ],
-      "id": 5323,
+      "id": 5313,
       "flags": {},
       "overrides": false,
       "inherits": "DOMSpace.background",
@@ -127,7 +127,7 @@
           12
         ]
       ],
-      "id": 5451,
+      "id": 5441,
       "flags": {},
       "overrides": false,
       "inherits": "Space.center",
@@ -151,7 +151,7 @@
           21
         ]
       ],
-      "id": 5431,
+      "id": 5421,
       "flags": {},
       "overrides": false,
       "inherits": "Space.customRendering",
@@ -178,7 +178,7 @@
           13
         ]
       ],
-      "id": 5314,
+      "id": 5304,
       "flags": {},
       "overrides": false,
       "inherits": "DOMSpace.element",
@@ -197,7 +197,7 @@
           12
         ]
       ],
-      "id": 5455,
+      "id": 5445,
       "flags": {},
       "overrides": false,
       "inherits": "Space.height",
@@ -216,7 +216,7 @@
           23
         ]
       ],
-      "id": 5447,
+      "id": 5437,
       "flags": {
         "isPublic": true
       },
@@ -237,7 +237,7 @@
           15
         ]
       ],
-      "id": 5443,
+      "id": 5433,
       "flags": {},
       "overrides": false,
       "inherits": "Space.isPlaying",
@@ -256,7 +256,7 @@
           16
         ]
       ],
-      "id": 5445,
+      "id": 5435,
       "flags": {},
       "overrides": false,
       "inherits": "Space.outerBound",
@@ -275,7 +275,7 @@
           12
         ]
       ],
-      "id": 5316,
+      "id": 5306,
       "flags": {},
       "overrides": false,
       "inherits": "DOMSpace.parent",
@@ -294,7 +294,7 @@
           20
         ]
       ],
-      "id": 5347,
+      "id": 5337,
       "flags": {
         "isPublic": true
       },
@@ -315,7 +315,7 @@
           11
         ]
       ],
-      "id": 5318,
+      "id": 5308,
       "flags": {},
       "overrides": false,
       "inherits": "DOMSpace.ready",
@@ -334,7 +334,7 @@
           10
         ]
       ],
-      "id": 5449,
+      "id": 5439,
       "flags": {},
       "overrides": false,
       "inherits": "Space.size",
@@ -353,7 +353,7 @@
           11
         ]
       ],
-      "id": 5453,
+      "id": 5443,
       "flags": {},
       "overrides": false,
       "inherits": "Space.width",
@@ -374,7 +374,7 @@
           5
         ]
       ],
-      "id": 5406,
+      "id": 5396,
       "flags": {},
       "overrides": false,
       "inherits": "Space.add",
@@ -404,7 +404,7 @@
           12
         ]
       ],
-      "id": 5349,
+      "id": 5339,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.bindCanvas",
@@ -440,7 +440,7 @@
           11
         ]
       ],
-      "id": 5357,
+      "id": 5347,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.bindMouse",
@@ -475,7 +475,7 @@
           11
         ]
       ],
-      "id": 5360,
+      "id": 5350,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.bindTouch",
@@ -510,7 +510,7 @@
           7
         ]
       ],
-      "id": 5320,
+      "id": 5310,
       "flags": {},
       "overrides": "Space.clear",
       "inherits": "DOMSpace.clear",
@@ -540,7 +540,7 @@
           9
         ]
       ],
-      "id": 5268,
+      "id": 5258,
       "flags": {},
       "overrides": "DOMSpace.getForm",
       "inherits": false,
@@ -568,7 +568,7 @@
           7
         ]
       ],
-      "id": 5417,
+      "id": 5407,
       "flags": {},
       "overrides": false,
       "inherits": "Space.pause",
@@ -598,7 +598,7 @@
           6
         ]
       ],
-      "id": 5409,
+      "id": 5399,
       "flags": {},
       "overrides": false,
       "inherits": "Space.play",
@@ -628,7 +628,7 @@
           21
         ]
       ],
-      "id": 5414,
+      "id": 5404,
       "flags": {
         "isProtected": true
       },
@@ -660,7 +660,7 @@
           10
         ]
       ],
-      "id": 5425,
+      "id": 5415,
       "flags": {},
       "overrides": false,
       "inherits": "Space.playOnce",
@@ -690,7 +690,7 @@
           9
         ]
       ],
-      "id": 5403,
+      "id": 5393,
       "flags": {},
       "overrides": false,
       "inherits": "Space.refresh",
@@ -720,7 +720,7 @@
           8
         ]
       ],
-      "id": 5276,
+      "id": 5266,
       "flags": {},
       "overrides": "Space.remove",
       "inherits": false,
@@ -750,7 +750,7 @@
           11
         ]
       ],
-      "id": 5279,
+      "id": 5269,
       "flags": {},
       "overrides": "Space.removeAll",
       "inherits": false,
@@ -773,7 +773,7 @@
           18
         ]
       ],
-      "id": 5428,
+      "id": 5418,
       "flags": {
         "isProtected": true
       },
@@ -805,7 +805,7 @@
           8
         ]
       ],
-      "id": 5412,
+      "id": 5402,
       "flags": {},
       "overrides": false,
       "inherits": "Space.replay",
@@ -828,7 +828,7 @@
           8
         ]
       ],
-      "id": 5307,
+      "id": 5297,
       "flags": {},
       "overrides": "Space.resize",
       "inherits": "DOMSpace.resize",
@@ -864,7 +864,7 @@
           8
         ]
       ],
-      "id": 5420,
+      "id": 5410,
       "flags": {},
       "overrides": false,
       "inherits": "Space.resume",
@@ -887,7 +887,7 @@
           7
         ]
       ],
-      "id": 5297,
+      "id": 5287,
       "flags": {},
       "overrides": false,
       "inherits": "DOMSpace.setup",
@@ -922,7 +922,7 @@
           6
         ]
       ],
-      "id": 5422,
+      "id": 5412,
       "flags": {},
       "overrides": false,
       "inherits": "Space.stop",
@@ -952,7 +952,7 @@
           7
         ]
       ],
-      "id": 5327,
+      "id": 5317,
       "flags": {},
       "overrides": false,
       "inherits": "DOMSpace.style",
@@ -994,7 +994,7 @@
           8
         ]
       ],
-      "id": 5332,
+      "id": 5322,
       "flags": {},
       "overrides": false,
       "inherits": "DOMSpace.styles",
@@ -1030,7 +1030,7 @@
           17
         ]
       ],
-      "id": 5363,
+      "id": 5353,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.touchesToPoints",
@@ -1066,7 +1066,7 @@
           14
         ]
       ],
-      "id": 5353,
+      "id": 5343,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.unbindCanvas",
@@ -1102,7 +1102,7 @@
           22
         ]
       ],
-      "id": 5292,
+      "id": 5282,
       "flags": {
         "isStatic": true
       },
@@ -1146,7 +1146,7 @@
           24
         ]
       ],
-      "id": 5340,
+      "id": 5330,
       "flags": {
         "isStatic": true
       },
@@ -1183,7 +1183,7 @@
           20
         ]
       ],
-      "id": 5270,
+      "id": 5260,
       "flags": {
         "isStatic": true
       },
@@ -1233,7 +1233,7 @@
           16
         ]
       ],
-      "id": 5336,
+      "id": 5326,
       "flags": {
         "isStatic": true
       },
@@ -1274,7 +1274,7 @@
           17
         ]
       ],
-      "id": 5392,
+      "id": 5382,
       "flags": {
         "isProtected": true
       },
@@ -1292,7 +1292,7 @@
           4
         ]
       ],
-      "id": 5283,
+      "id": 5273,
       "flags": {},
       "type": "id",
       "overrides": "Space.id",
@@ -1308,7 +1308,7 @@
           23
         ]
       ],
-      "id": 5398,
+      "id": 5388,
       "flags": {
         "isProtected": true
       },
@@ -1326,7 +1326,7 @@
           19
         ]
       ],
-      "id": 5397,
+      "id": 5387,
       "flags": {
         "isProtected": true
       },

@@ -3,12 +3,12 @@
   "source": [
     [
       "UI.ts",
-      411,
+      409,
       22
     ]
   ],
   "kind": "Class",
-  "id": 1067,
+  "id": 1061,
   "comment": "[Experimental] A draggable UI that provides handler such as [`UIDragger.onDrag`](#link) and [`UIDragger.onDrop`](#link).",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "UI.ts",
-          416,
+          414,
           32
         ]
       ],
-      "id": 1072,
+      "id": 1066,
       "flags": {},
       "overrides": "UIButton.__constructor",
       "inherits": false,
@@ -75,7 +75,7 @@
           11
         ]
       ],
-      "id": 1144,
+      "id": 1138,
       "flags": {},
       "overrides": false,
       "inherits": "UI.group",
@@ -107,7 +107,7 @@
           8
         ]
       ],
-      "id": 1140,
+      "id": 1134,
       "flags": {},
       "overrides": false,
       "inherits": "UI.id",
@@ -139,7 +139,7 @@
           11
         ]
       ],
-      "id": 1148,
+      "id": 1142,
       "flags": {},
       "overrides": false,
       "inherits": "UI.shape",
@@ -164,11 +164,11 @@
       "source": [
         [
           "UI.ts",
-          190,
+          189,
           16
         ]
       ],
-      "id": 1169,
+      "id": 1162,
       "flags": {
         "isProtected": true
       },
@@ -181,7 +181,7 @@
           "returns_comment": false,
           "parameters": [
             {
-              "name": "type",
+              "name": "event",
               "comment": "a string defined in [`UIPointerActions`](#link)\n",
               "type": "string",
               "default": false
@@ -196,11 +196,11 @@
       "source": [
         [
           "UI.ts",
-          171,
+          170,
           8
         ]
       ],
-      "id": 1164,
+      "id": 1158,
       "flags": {},
       "overrides": false,
       "inherits": "UI.listen",
@@ -211,15 +211,9 @@
           "returns_comment": false,
           "parameters": [
             {
-              "name": "type",
-              "comment": "an action type. Can be one of UIPointerActions or a custom one.",
+              "name": "event",
+              "comment": "an action event. Can be one of UIPointerActions or a custom one.",
               "type": "string",
-              "default": false
-            },
-            {
-              "name": "evt",
-              "comment": "a MouseEvent emitted by the browser (See [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent))",
-              "type": "MouseEvent",
               "default": false
             },
             {
@@ -242,7 +236,7 @@
           5
         ]
       ],
-      "id": 1160,
+      "id": 1154,
       "flags": {},
       "overrides": false,
       "inherits": "UI.off",
@@ -253,14 +247,14 @@
           "returns_comment": false,
           "parameters": [
             {
-              "name": "type",
-              "comment": "event type",
+              "name": "key",
+              "comment": "event key",
               "type": "string",
               "default": false
             },
             {
               "name": "which",
-              "comment": "an ID number returned by [`UI.on`](#link). If this is not defined, all handlers in this type will be removed.",
+              "comment": "an ID number returned by [`UI.on`](#link). If this is not defined, all handlers in this key will be removed.",
               "type": "number",
               "default": false
             }
@@ -274,11 +268,11 @@
       "source": [
         [
           "UI.ts",
-          373,
+          371,
           10
         ]
       ],
-      "id": 1096,
+      "id": 1090,
       "flags": {},
       "overrides": false,
       "inherits": "UIButton.offClick",
@@ -290,7 +284,7 @@
           "parameters": [
             {
               "name": "id",
-              "comment": "an ID number returned by [`UIButton.onClick`](#link). If this is not defined, all handlers in this type will be removed.",
+              "comment": "an ID number returned by [`UIButton.onClick`](#link). If this is not defined, all handlers in this key will be removed.",
               "type": "number",
               "default": false
             }
@@ -304,11 +298,11 @@
       "source": [
         [
           "UI.ts",
-          506,
+          504,
           9
         ]
       ],
-      "id": 1084,
+      "id": 1078,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -320,7 +314,7 @@
           "parameters": [
             {
               "name": "id",
-              "comment": "an ID number returned by [`UIDragger.onDrag`](#link). If this is not defined, all handlers in this type will be removed.",
+              "comment": "an ID number returned by [`UIDragger.onDrag`](#link). If this is not defined, all handlers in this key will be removed.",
               "type": "number",
               "default": false
             }
@@ -334,11 +328,11 @@
       "source": [
         [
           "UI.ts",
-          526,
+          524,
           9
         ]
       ],
-      "id": 1090,
+      "id": 1084,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -350,7 +344,7 @@
           "parameters": [
             {
               "name": "id",
-              "comment": "an ID number returned by [`UIDragger.onDrag`](#link). If this is not defined, all handlers in this type will be removed.",
+              "comment": "an ID number returned by [`UIDragger.onDrag`](#link). If this is not defined, all handlers in this key will be removed.",
               "type": "number",
               "default": false
             }
@@ -364,11 +358,11 @@
       "source": [
         [
           "UI.ts",
-          398,
+          396,
           10
         ]
       ],
-      "id": 1103,
+      "id": 1097,
       "flags": {},
       "overrides": false,
       "inherits": "UIButton.offHover",
@@ -380,13 +374,13 @@
           "parameters": [
             {
               "name": "enterID",
-              "comment": "an ID number returned by [`UI.onClick`](#link), or -1 to skip. If this is not defined, all handlers in this type will be removed.",
+              "comment": "an ID number returned by [`UI.onClick`](#link), or -1 to skip. If this is not defined, all handlers in this key will be removed.",
               "type": "number",
               "default": false
             },
             {
               "name": "leaveID",
-              "comment": "an ID number returned by [`UI.onClick`](#link), or -1 to skip. If this is not defined, all handlers in this type will be removed.",
+              "comment": "an ID number returned by [`UI.onClick`](#link), or -1 to skip. If this is not defined, all handlers in this key will be removed.",
               "type": "number",
               "default": false
             }
@@ -404,7 +398,7 @@
           4
         ]
       ],
-      "id": 1156,
+      "id": 1150,
       "flags": {},
       "overrides": false,
       "inherits": "UI.on",
@@ -415,8 +409,8 @@
           "returns_comment": "an id number that reference to this handler, for use in [`UI.off`](#link)\n",
           "parameters": [
             {
-              "name": "type",
-              "comment": "event type",
+              "name": "key",
+              "comment": "event key",
               "type": "string",
               "default": false
             },
@@ -436,11 +430,11 @@
       "source": [
         [
           "UI.ts",
-          363,
+          361,
           9
         ]
       ],
-      "id": 1093,
+      "id": 1087,
       "flags": {},
       "overrides": false,
       "inherits": "UIButton.onClick",
@@ -466,11 +460,11 @@
       "source": [
         [
           "UI.ts",
-          496,
+          494,
           8
         ]
       ],
-      "id": 1081,
+      "id": 1075,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -496,11 +490,11 @@
       "source": [
         [
           "UI.ts",
-          516,
+          514,
           8
         ]
       ],
-      "id": 1087,
+      "id": 1081,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -526,11 +520,11 @@
       "source": [
         [
           "UI.ts",
-          384,
+          382,
           9
         ]
       ],
-      "id": 1099,
+      "id": 1093,
       "flags": {},
       "overrides": false,
       "inherits": "UIButton.onHover",
@@ -562,11 +556,11 @@
       "source": [
         [
           "UI.ts",
-          228,
+          226,
           8
         ]
       ],
-      "id": 1181,
+      "id": 1173,
       "flags": {},
       "overrides": false,
       "inherits": "UI.render",
@@ -596,7 +590,7 @@
           7
         ]
       ],
-      "id": 1152,
+      "id": 1146,
       "flags": {},
       "overrides": false,
       "inherits": "UI.state",
@@ -628,11 +622,11 @@
       "source": [
         [
           "UI.ts",
-          236,
+          234,
           10
         ]
       ],
-      "id": 1191,
+      "id": 1183,
       "flags": {},
       "overrides": false,
       "inherits": "UI.toString",
@@ -651,11 +645,11 @@
       "source": [
         [
           "UI.ts",
-          201,
+          200,
           18
         ]
       ],
-      "id": 1172,
+      "id": 1165,
       "flags": {
         "isProtected": true
       },
@@ -687,7 +681,7 @@
           19
         ]
       ],
-      "id": 1125,
+      "id": 1119,
       "flags": {
         "isStatic": true
       },
@@ -731,7 +725,7 @@
           20
         ]
       ],
-      "id": 1130,
+      "id": 1124,
       "flags": {
         "isStatic": true
       },
@@ -775,7 +769,7 @@
           22
         ]
       ],
-      "id": 1120,
+      "id": 1114,
       "flags": {
         "isStatic": true
       },
@@ -819,7 +813,7 @@
           15
         ]
       ],
-      "id": 1135,
+      "id": 1129,
       "flags": {
         "isStatic": true
       },
@@ -859,11 +853,11 @@
       "source": [
         [
           "UI.ts",
-          217,
+          215,
           14
         ]
       ],
-      "id": 1175,
+      "id": 1168,
       "flags": {
         "isStatic": true
       },
@@ -882,20 +876,14 @@
               "default": false
             },
             {
-              "name": "type",
-              "comment": "an action type. Can be one of `UIPointerActions` or a custom one.",
+              "name": "key",
+              "comment": "an action key. Can be one of `UIPointerActions` or a custom one.",
               "type": "string",
               "default": false
             },
             {
-              "name": "evt",
-              "comment": "a MouseEvent emitted by the browser (See [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent))",
-              "type": "MouseEvent",
-              "default": false
-            },
-            {
               "name": "p",
-              "comment": "a point to check\n",
+              "comment": "A point to check\n",
               "type": "PtLike",
               "default": false
             }
