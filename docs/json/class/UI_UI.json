@@ -217,15 +217,15 @@
               "default": false
             },
             {
-              "name": "p",
-              "comment": "a point to check",
-              "type": "PtLike",
+              "name": "evt",
+              "comment": "a MouseEvent emitted by the browser (See [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent))",
+              "type": "MouseEvent",
               "default": false
             },
             {
-              "name": "evt",
-              "comment": "a MouseEvent emitted by the browser (See [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent))\n",
-              "type": "MouseEvent",
+              "name": "p",
+              "comment": "a point to check\n",
+              "type": "PtLike",
               "default": false
             }
           ],
@@ -636,15 +636,15 @@
               "default": false
             },
             {
-              "name": "p",
-              "comment": "a point to check",
-              "type": "PtLike",
+              "name": "evt",
+              "comment": "a MouseEvent emitted by the browser (See [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent))",
+              "type": "MouseEvent",
               "default": false
             },
             {
-              "name": "evt",
-              "comment": "a MouseEvent emitted by the browser (See [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent))\n",
-              "type": "MouseEvent",
+              "name": "p",
+              "comment": "a point to check\n",
+              "type": "PtLike",
               "default": false
             }
           ],
