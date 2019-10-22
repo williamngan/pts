@@ -517,24 +517,22 @@ export class CanvasForm extends VisualForm {
     
     /**
     * Activate dashed stroke and set dash style. You can customize the segments and offset.
-    * @example `form.dash()`, `form.dash([5, 10])`, `form.dash([5, 5], 5)`
-    * @param segments Dash segments. Defaults to `[5, 5]`. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setLineDash))
+    * @example `form.dash()`, `form.dash([5, 10])`, `form.dash([5, 5], 5)`, `form.dash(false)`
+    * @param segments Dash segments. Defaults to `true` which corresponds to `[5, 5]`. Pass `false` to deactivate dashes. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setLineDash))
     * @param offset Dash offset. Defaults to 0. (See [canvas documentation]()https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineDashOffset)
     */
-    dash( segments:PtLike=[5, 5], offset:number=0 ):this {
-      this._ctx.setLineDash([segments[0], segments[1]]);
-      this._ctx.lineDashOffset = offset;
-      return this;
-    }
-    
-    
-    
-    /**
-    * Deactivate dashed stroke.
-    */
-    noDash():this {
-      this._ctx.setLineDash([]);
-      this._ctx.lineDashOffset = 0;
+    dash( segments:PtLike|boolean=true, offset:number=0 ):this {
+      if (!segments) {
+        // false or [], deactivate dashed strokes
+        this._ctx.setLineDash([]);
+        this._ctx.lineDashOffset = 0;
+      } else {
+        if (segments === true) {
+          segments = [5, 5];
+        }
+        this._ctx.setLineDash([segments[0], segments[1]]);
+        this._ctx.lineDashOffset = offset;
+      }
       return this;
     }
     
