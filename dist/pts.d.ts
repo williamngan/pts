@@ -1084,10 +1084,10 @@ export class UI {
     state(key: string, value?: any): any;
     on(type: string, fn: UIHandler): number;
     off(type: string, which?: number): boolean;
-    listen(type: string, p: PtLike, evt: MouseEvent): boolean;
+    listen(type: string, evt: MouseEvent, p: PtLike): boolean;
     protected hold(type: string): number;
     protected unhold(key?: number): void;
-    static track(uis: UI[], type: string, p: PtLike, evt: MouseEvent): void;
+    static track(uis: UI[], type: string, evt: MouseEvent, p: PtLike): void;
     render(fn: (group: Group, states: {
         [key: string]: any;
     }) => void): void;
