@@ -126,7 +126,7 @@ export class Num {
    * @return a value between 0 to 1
    */
   static cycle( t:number ):number {
-    return Math.sin( Math.PI * t );
+    return Math.pow(Math.sin( Math.PI * t ), 2);
   }
 
 
