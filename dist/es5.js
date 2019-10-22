@@ -3047,7 +3047,9 @@ var Num = function () {
     }, {
         key: "cycle",
         value: function cycle(t) {
-            return Math.pow(Math.sin(Math.PI * t), 2);
+            var method = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : Shaping.sineInOut;
+
+            return method(t > 0.5 ? 2 - t * 2 : t * 2);
         }
     }, {
         key: "mapToRange",
