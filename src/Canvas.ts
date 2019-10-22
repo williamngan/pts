@@ -521,8 +521,8 @@ export class CanvasForm extends VisualForm {
     * @param segments Dash segments. Defaults to `[5, 5]`. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setLineDash))
     * @param offset Dash offset. Defaults to 0. (See [canvas documentation]()https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineDashOffset)
     */
-    dash( segments:number[]=[5, 5], offset:number=0 ):this {
-      this._ctx.setLineDash(segments);
+    dash( segments:PtLike=[5, 5], offset:number=0 ):this {
+      this._ctx.setLineDash([segments[0], segments[1]]);
       this._ctx.lineDashOffset = offset;
       return this;
     }
