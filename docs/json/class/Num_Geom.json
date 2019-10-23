@@ -3,12 +3,12 @@
   "source": [
     [
       "Num.ts",
-      155,
+      156,
       17
     ]
   ],
   "kind": "Class",
-  "id": 191,
+  "id": 195,
   "comment": "Geom class provides static helper functions for basic geometric operations.",
   "constructor": [],
   "accessors": [],
@@ -18,11 +18,11 @@
       "source": [
         [
           "Num.ts",
-          221,
+          222,
           15
         ]
       ],
-      "id": 210,
+      "id": 214,
       "flags": {
         "isStatic": true
       },
@@ -62,11 +62,11 @@
       "source": [
         [
           "Num.ts",
-          161,
+          162,
           19
         ]
       ],
-      "id": 192,
+      "id": 196,
       "flags": {
         "isStatic": true
       },
@@ -94,11 +94,11 @@
       "source": [
         [
           "Num.ts",
-          170,
+          171,
           20
         ]
       ],
-      "id": 195,
+      "id": 199,
       "flags": {
         "isStatic": true
       },
@@ -126,11 +126,11 @@
       "source": [
         [
           "Num.ts",
-          198,
+          199,
           20
         ]
       ],
-      "id": 204,
+      "id": 208,
       "flags": {
         "isStatic": true
       },
@@ -158,11 +158,11 @@
       "source": [
         [
           "Num.ts",
-          210,
+          211,
           17
         ]
       ],
-      "id": 207,
+      "id": 211,
       "flags": {
         "isStatic": true
       },
@@ -190,11 +190,11 @@
       "source": [
         [
           "Num.ts",
-          422,
+          423,
           17
         ]
       ],
-      "id": 258,
+      "id": 262,
       "flags": {
         "isStatic": true
       },
@@ -215,11 +215,11 @@
       "source": [
         [
           "Num.ts",
-          240,
+          241,
           20
         ]
       ],
-      "id": 215,
+      "id": 219,
       "flags": {
         "isStatic": true
       },
@@ -259,11 +259,11 @@
       "source": [
         [
           "Num.ts",
-          274,
+          275,
           24
         ]
       ],
-      "id": 224,
+      "id": 228,
       "flags": {
         "isStatic": true
       },
@@ -297,11 +297,11 @@
       "source": [
         [
           "Num.ts",
-          255,
+          256,
           22
         ]
       ],
-      "id": 220,
+      "id": 224,
       "flags": {
         "isStatic": true
       },
@@ -335,11 +335,11 @@
       "source": [
         [
           "Num.ts",
-          405,
+          406,
           18
         ]
       ],
-      "id": 253,
+      "id": 257,
       "flags": {
         "isStatic": true
       },
@@ -379,11 +379,11 @@
       "source": [
         [
           "Num.ts",
-          359,
+          360,
           17
         ]
       ],
-      "id": 241,
+      "id": 245,
       "flags": {
         "isStatic": true
       },
@@ -429,11 +429,11 @@
       "source": [
         [
           "Num.ts",
-          336,
+          337,
           14
         ]
       ],
-      "id": 236,
+      "id": 240,
       "flags": {
         "isStatic": true
       },
@@ -473,11 +473,11 @@
       "source": [
         [
           "Num.ts",
-          382,
+          383,
           16
         ]
       ],
-      "id": 247,
+      "id": 251,
       "flags": {
         "isStatic": true
       },
@@ -523,11 +523,11 @@
       "source": [
         [
           "Num.ts",
-          435,
+          436,
           17
         ]
       ],
-      "id": 263,
+      "id": 267,
       "flags": {
         "isStatic": true
       },
@@ -548,11 +548,11 @@
       "source": [
         [
           "Num.ts",
-          297,
+          298,
           18
         ]
       ],
-      "id": 233,
+      "id": 237,
       "flags": {
         "isStatic": true
       },
@@ -580,11 +580,11 @@
       "source": [
         [
           "Num.ts",
-          188,
+          189,
           17
         ]
       ],
-      "id": 201,
+      "id": 205,
       "flags": {
         "isStatic": true
       },
@@ -612,11 +612,11 @@
       "source": [
         [
           "Num.ts",
-          179,
+          180,
           17
         ]
       ],
-      "id": 198,
+      "id": 202,
       "flags": {
         "isStatic": true
       },
@@ -644,11 +644,11 @@
       "source": [
         [
           "Num.ts",
-          285,
+          286,
           20
         ]
       ],
-      "id": 228,
+      "id": 232,
       "flags": {
         "isStatic": true
       },

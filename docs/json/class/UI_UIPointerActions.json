@@ -8,8 +8,8 @@
     ]
   ],
   "kind": "Objectliteral",
-  "id": 1208,
-  "comment": "**[Experimental]** A set of string constants to represent different UI events.",
+  "id": 1221,
+  "comment": "**[Experimental]** A set of string constants to represent different UI event types.",
   "constructor": [],
   "accessors": [],
   "methods": [],
@@ -23,7 +23,7 @@
           165
         ]
       ],
-      "id": 1220,
+      "id": 1233,
       "flags": {},
       "type": "all",
       "overrides": false,
@@ -39,7 +39,7 @@
           16
         ]
       ],
-      "id": 1210,
+      "id": 1223,
       "flags": {},
       "type": "down",
       "overrides": false,
@@ -55,7 +55,7 @@
           44
         ]
       ],
-      "id": 1212,
+      "id": 1225,
       "flags": {},
       "type": "drag",
       "overrides": false,
@@ -71,7 +71,7 @@
           76
         ]
       ],
-      "id": 1214,
+      "id": 1227,
       "flags": {},
       "type": "drop",
       "overrides": false,
@@ -87,7 +87,7 @@
           135
         ]
       ],
-      "id": 1218,
+      "id": 1231,
       "flags": {},
       "type": "enter",
       "overrides": false,
@@ -103,7 +103,7 @@
           151
         ]
       ],
-      "id": 1219,
+      "id": 1232,
       "flags": {},
       "type": "leave",
       "overrides": false,
@@ -119,7 +119,7 @@
           30
         ]
       ],
-      "id": 1211,
+      "id": 1224,
       "flags": {},
       "type": "move",
       "overrides": false,
@@ -135,7 +135,7 @@
           121
         ]
       ],
-      "id": 1217,
+      "id": 1230,
       "flags": {},
       "type": "out",
       "overrides": false,
@@ -151,7 +151,7 @@
           108
         ]
       ],
-      "id": 1216,
+      "id": 1229,
       "flags": {},
       "type": "over",
       "overrides": false,
@@ -167,7 +167,7 @@
           60
         ]
       ],
-      "id": 1213,
+      "id": 1226,
       "flags": {},
       "type": "uidrag",
       "overrides": false,
@@ -183,7 +183,7 @@
           92
         ]
       ],
-      "id": 1215,
+      "id": 1228,
       "flags": {},
       "type": "uidrop",
       "overrides": false,
@@ -199,7 +199,7 @@
           4
         ]
       ],
-      "id": 1209,
+      "id": 1222,
       "flags": {},
       "type": "up",
       "overrides": false,

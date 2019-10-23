@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 4670,
+  "id": 4682,
   "comment": "Delaunay is a [`Group`](#link) of Pts that generates Delaunay and Voronoi tessellations. The triangulation algorithm is ported from [Pt](https://github.com/williamngan/pt).\nBased on [Paul Bourke's algorithm](http://paulbourke.net/papers/triangulate/)\nwith reference to its [javascript implementation](https://github.com/ironwallaby/delaunay) by ironwallaby.",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           23
         ]
       ],
-      "id": 4708,
+      "id": 4720,
       "flags": {},
       "overrides": false,
       "inherits": "Group.__constructor",
@@ -57,7 +57,7 @@
           8
         ]
       ],
-      "id": 4711,
+      "id": 4723,
       "flags": {},
       "overrides": false,
       "inherits": "Group.id",
@@ -84,7 +84,7 @@
           8
         ]
       ],
-      "id": 4715,
+      "id": 4727,
       "flags": {},
       "overrides": false,
       "inherits": "Group.p1",
@@ -103,7 +103,7 @@
           8
         ]
       ],
-      "id": 4717,
+      "id": 4729,
       "flags": {},
       "overrides": false,
       "inherits": "Group.p2",
@@ -122,7 +122,7 @@
           8
         ]
       ],
-      "id": 4719,
+      "id": 4731,
       "flags": {},
       "overrides": false,
       "inherits": "Group.p3",
@@ -141,7 +141,7 @@
           8
         ]
       ],
-      "id": 4721,
+      "id": 4733,
       "flags": {},
       "overrides": false,
       "inherits": "Group.p4",
@@ -160,7 +160,7 @@
           8
         ]
       ],
-      "id": 4723,
+      "id": 4735,
       "flags": {},
       "overrides": false,
       "inherits": "Group.q1",
@@ -179,7 +179,7 @@
           8
         ]
       ],
-      "id": 4725,
+      "id": 4737,
       "flags": {},
       "overrides": false,
       "inherits": "Group.q2",
@@ -198,7 +198,7 @@
           8
         ]
       ],
-      "id": 4727,
+      "id": 4739,
       "flags": {},
       "overrides": false,
       "inherits": "Group.q3",
@@ -217,7 +217,7 @@
           8
         ]
       ],
-      "id": 4729,
+      "id": 4741,
       "flags": {},
       "overrides": false,
       "inherits": "Group.q4",
@@ -238,7 +238,7 @@
           12
         ]
       ],
-      "id": 4836,
+      "id": 4848,
       "flags": {},
       "overrides": false,
       "inherits": "Group.$matrixAdd",
@@ -268,7 +268,7 @@
           17
         ]
       ],
-      "id": 4839,
+      "id": 4851,
       "flags": {},
       "overrides": false,
       "inherits": "Group.$matrixMultiply",
@@ -310,7 +310,7 @@
           6
         ]
       ],
-      "id": 4848,
+      "id": 4860,
       "flags": {},
       "overrides": false,
       "inherits": "Group.$zip",
@@ -346,7 +346,7 @@
           5
         ]
       ],
-      "id": 4824,
+      "id": 4836,
       "flags": {},
       "overrides": false,
       "inherits": "Group.add",
@@ -376,7 +376,7 @@
           12
         ]
       ],
-      "id": 4766,
+      "id": 4778,
       "flags": {},
       "overrides": false,
       "inherits": "Group.anchorFrom",
@@ -406,7 +406,7 @@
           10
         ]
       ],
-      "id": 4763,
+      "id": 4775,
       "flags": {},
       "overrides": false,
       "inherits": "Group.anchorTo",
@@ -436,7 +436,7 @@
           13
         ]
       ],
-      "id": 4761,
+      "id": 4773,
       "flags": {},
       "overrides": false,
       "inherits": "Group.boundingBox",
@@ -459,7 +459,7 @@
           10
         ]
       ],
-      "id": 4759,
+      "id": 4771,
       "flags": {},
       "overrides": false,
       "inherits": "Group.centroid",
@@ -482,7 +482,7 @@
           7
         ]
       ],
-      "id": 4731,
+      "id": 4743,
       "flags": {},
       "overrides": false,
       "inherits": "Group.clone",
@@ -500,17 +500,17 @@
       "name": "concat",
       "source": [
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
           1221,
           10
         ],
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
           1226,
           10
         ]
       ],
-      "id": 4862,
+      "id": 4874,
       "flags": {},
       "overrides": false,
       "inherits": "Array.concat",
@@ -549,12 +549,12 @@
       "name": "copyWithin",
       "source": [
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es2015.core.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es2015.core.d.ts",
           64,
           14
         ]
       ],
-      "id": 5050,
+      "id": 5062,
       "flags": {},
       "overrides": false,
       "inherits": "Array.copyWithin",
@@ -596,7 +596,7 @@
           10
         ]
       ],
-      "id": 4672,
+      "id": 4684,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -626,7 +626,7 @@
           8
         ]
       ],
-      "id": 4833,
+      "id": 4845,
       "flags": {},
       "overrides": false,
       "inherits": "Group.divide",
@@ -651,12 +651,12 @@
       "name": "entries",
       "source": [
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es2015.iterable.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es2015.iterable.d.ts",
           57,
           11
         ]
       ],
-      "id": 5057,
+      "id": 5069,
       "flags": {},
       "overrides": false,
       "inherits": "Array.entries",
@@ -674,12 +674,12 @@
       "name": "every",
       "source": [
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
           1286,
           9
         ]
       ],
-      "id": 4904,
+      "id": 4916,
       "flags": {},
       "overrides": false,
       "inherits": "Array.every",
@@ -710,12 +710,12 @@
       "name": "fill",
       "source": [
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es2015.core.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es2015.core.d.ts",
           53,
           8
         ]
       ],
-      "id": 5045,
+      "id": 5057,
       "flags": {},
       "overrides": false,
       "inherits": "Array.fill",
@@ -752,17 +752,17 @@
       "name": "filter",
       "source": [
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
           1310,
           10
         ],
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
           1316,
           10
         ]
       ],
-      "id": 4941,
+      "id": 4953,
       "flags": {},
       "overrides": false,
       "inherits": "Array.filter",
@@ -813,17 +813,17 @@
       "name": "find",
       "source": [
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es2015.core.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es2015.core.d.ts",
           31,
           8
         ],
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es2015.core.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es2015.core.d.ts",
           32,
           8
         ]
       ],
-      "id": 5017,
+      "id": 5029,
       "flags": {},
       "overrides": false,
       "inherits": "Array.find",
@@ -874,12 +874,12 @@
       "name": "findIndex",
       "source": [
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es2015.core.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es2015.core.d.ts",
           43,
           13
         ]
       ],
-      "id": 5036,
+      "id": 5048,
       "flags": {},
       "overrides": false,
       "inherits": "Array.findIndex",
@@ -910,12 +910,12 @@
       "name": "forEach",
       "source": [
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
           1298,
           11
         ]
       ],
-      "id": 4922,
+      "id": 4934,
       "flags": {},
       "overrides": false,
       "inherits": "Array.forEach",
@@ -951,7 +951,7 @@
           11
         ]
       ],
-      "id": 4820,
+      "id": 4832,
       "flags": {},
       "overrides": false,
       "inherits": "Group.forEachPt",
@@ -982,12 +982,12 @@
       "name": "indexOf",
       "source": [
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
           1274,
           11
         ]
       ],
-      "id": 4896,
+      "id": 4908,
       "flags": {},
       "overrides": false,
       "inherits": "Array.indexOf",
@@ -1023,7 +1023,7 @@
           8
         ]
       ],
-      "id": 4744,
+      "id": 4756,
       "flags": {},
       "overrides": false,
       "inherits": "Group.insert",
@@ -1059,7 +1059,7 @@
           13
         ]
       ],
-      "id": 4789,
+      "id": 4801,
       "flags": {},
       "overrides": false,
       "inherits": "Group.interpolate",
@@ -1084,12 +1084,12 @@
       "name": "join",
       "source": [
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
           1231,
           8
         ]
       ],
-      "id": 4867,
+      "id": 4879,
       "flags": {},
       "overrides": false,
       "inherits": "Array.join",
@@ -1114,12 +1114,12 @@
       "name": "keys",
       "source": [
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es2015.iterable.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es2015.iterable.d.ts",
           62,
           8
         ]
       ],
-      "id": 5059,
+      "id": 5071,
       "flags": {},
       "overrides": false,
       "inherits": "Array.keys",
@@ -1137,12 +1137,12 @@
       "name": "lastIndexOf",
       "source": [
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
           1280,
           15
         ]
       ],
-      "id": 4900,
+      "id": 4912,
       "flags": {},
       "overrides": false,
       "inherits": "Array.lastIndexOf",
@@ -1178,7 +1178,7 @@
           7
         ]
       ],
-      "id": 4757,
+      "id": 4769,
       "flags": {},
       "overrides": false,
       "inherits": "Group.lines",
@@ -1196,12 +1196,12 @@
       "name": "map",
       "source": [
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
           1304,
           7
         ]
       ],
-      "id": 4931,
+      "id": 4943,
       "flags": {},
       "overrides": false,
       "inherits": "Array.map",
@@ -1237,7 +1237,7 @@
           6
         ]
       ],
-      "id": 4677,
+      "id": 4689,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1260,7 +1260,7 @@
           8
         ]
       ],
-      "id": 4792,
+      "id": 4804,
       "flags": {},
       "overrides": false,
       "inherits": "Group.moveBy",
@@ -1290,7 +1290,7 @@
           8
         ]
       ],
-      "id": 4795,
+      "id": 4807,
       "flags": {},
       "overrides": false,
       "inherits": "Group.moveTo",
@@ -1320,7 +1320,7 @@
           10
         ]
       ],
-      "id": 4830,
+      "id": 4842,
       "flags": {},
       "overrides": false,
       "inherits": "Group.multiply",
@@ -1350,7 +1350,7 @@
           13
         ]
       ],
-      "id": 4679,
+      "id": 4691,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1386,7 +1386,7 @@
           11
         ]
       ],
-      "id": 4683,
+      "id": 4695,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1416,7 +1416,7 @@
           4
         ]
       ],
-      "id": 4769,
+      "id": 4781,
       "flags": {},
       "overrides": false,
       "inherits": "Group.op",
@@ -1451,7 +1451,7 @@
           5
         ]
       ],
-      "id": 4779,
+      "id": 4791,
       "flags": {},
       "overrides": false,
       "inherits": "Group.ops",
@@ -1481,12 +1481,12 @@
       "name": "pop",
       "source": [
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
           1211,
           7
         ]
       ],
-      "id": 4857,
+      "id": 4869,
       "flags": {},
       "overrides": false,
       "inherits": "Array.pop",
@@ -1504,12 +1504,12 @@
       "name": "push",
       "source": [
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
           1216,
           8
         ]
       ],
-      "id": 4859,
+      "id": 4871,
       "flags": {},
       "overrides": false,
       "inherits": "Array.push",
@@ -1534,22 +1534,22 @@
       "name": "reduce",
       "source": [
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
           1322,
           10
         ],
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
           1323,
           10
         ],
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
           1329,
           10
         ]
       ],
-      "id": 4959,
+      "id": 4971,
       "flags": {},
       "overrides": false,
       "inherits": "Array.reduce",
@@ -1614,22 +1614,22 @@
       "name": "reduceRight",
       "source": [
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
           1335,
           15
         ],
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
           1336,
           15
         ],
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
           1342,
           15
         ]
       ],
-      "id": 4987,
+      "id": 4999,
       "flags": {},
       "overrides": false,
       "inherits": "Array.reduceRight",
@@ -1699,7 +1699,7 @@
           11
         ]
       ],
-      "id": 4812,
+      "id": 4824,
       "flags": {},
       "overrides": false,
       "inherits": "Group.reflect2D",
@@ -1735,7 +1735,7 @@
           8
         ]
       ],
-      "id": 4748,
+      "id": 4760,
       "flags": {},
       "overrides": false,
       "inherits": "Group.remove",
@@ -1766,12 +1766,12 @@
       "name": "reverse",
       "source": [
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
           1235,
           11
         ]
       ],
-      "id": 4870,
+      "id": 4882,
       "flags": {},
       "overrides": false,
       "inherits": "Array.reverse",
@@ -1794,7 +1794,7 @@
           10
         ]
       ],
-      "id": 4802,
+      "id": 4814,
       "flags": {},
       "overrides": false,
       "inherits": "Group.rotate2D",
@@ -1836,7 +1836,7 @@
           7
         ]
       ],
-      "id": 4798,
+      "id": 4810,
       "flags": {},
       "overrides": false,
       "inherits": "Group.scale",
@@ -1872,7 +1872,7 @@
           10
         ]
       ],
-      "id": 4752,
+      "id": 4764,
       "flags": {},
       "overrides": false,
       "inherits": "Group.segments",
@@ -1914,7 +1914,7 @@
           9
         ]
       ],
-      "id": 4807,
+      "id": 4819,
       "flags": {},
       "overrides": false,
       "inherits": "Group.shear2D",
@@ -1951,12 +1951,12 @@
       "name": "shift",
       "source": [
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
           1239,
           9
         ]
       ],
-      "id": 4872,
+      "id": 4884,
       "flags": {},
       "overrides": false,
       "inherits": "Array.shift",
@@ -1974,12 +1974,12 @@
       "name": "slice",
       "source": [
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
           1245,
           9
         ]
       ],
-      "id": 4874,
+      "id": 4886,
       "flags": {},
       "overrides": false,
       "inherits": "Array.slice",
@@ -2010,12 +2010,12 @@
       "name": "some",
       "source": [
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
           1292,
           8
         ]
       ],
-      "id": 4913,
+      "id": 4925,
       "flags": {},
       "overrides": false,
       "inherits": "Array.some",
@@ -2046,12 +2046,12 @@
       "name": "sort",
       "source": [
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
           1250,
           8
         ]
       ],
-      "id": 4878,
+      "id": 4890,
       "flags": {},
       "overrides": false,
       "inherits": "Array.sort",
@@ -2081,7 +2081,7 @@
           17
         ]
       ],
-      "id": 4816,
+      "id": 4828,
       "flags": {},
       "overrides": false,
       "inherits": "Group.sortByDimension",
@@ -2112,17 +2112,17 @@
       "name": "splice",
       "source": [
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
           1256,
           10
         ],
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
           1263,
           10
         ]
       ],
-      "id": 4885,
+      "id": 4897,
       "flags": {},
       "overrides": false,
       "inherits": "Array.splice",
@@ -2184,7 +2184,7 @@
           7
         ]
       ],
-      "id": 4739,
+      "id": 4751,
       "flags": {},
       "overrides": false,
       "inherits": "Group.split",
@@ -2226,7 +2226,7 @@
           10
         ]
       ],
-      "id": 4827,
+      "id": 4839,
       "flags": {},
       "overrides": false,
       "inherits": "Group.subtract",
@@ -2251,12 +2251,12 @@
       "name": "toLocaleString",
       "source": [
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
           1207,
           18
         ]
       ],
-      "id": 4855,
+      "id": 4867,
       "flags": {},
       "overrides": false,
       "inherits": "Array.toLocaleString",
@@ -2279,7 +2279,7 @@
           10
         ]
       ],
-      "id": 4852,
+      "id": 4864,
       "flags": {},
       "overrides": "Array.toString",
       "inherits": "Group.toString",
@@ -2297,12 +2297,12 @@
       "name": "unshift",
       "source": [
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
           1268,
           11
         ]
       ],
-      "id": 4893,
+      "id": 4905,
       "flags": {},
       "overrides": false,
       "inherits": "Array.unshift",
@@ -2327,12 +2327,12 @@
       "name": "values",
       "source": [
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es2015.iterable.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es2015.iterable.d.ts",
           67,
           10
         ]
       ],
-      "id": 5061,
+      "id": 5073,
       "flags": {},
       "overrides": false,
       "inherits": "Array.values",
@@ -2355,7 +2355,7 @@
           9
         ]
       ],
-      "id": 4675,
+      "id": 4687,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2378,7 +2378,7 @@
           10
         ]
       ],
-      "id": 4844,
+      "id": 4856,
       "flags": {},
       "overrides": false,
       "inherits": "Group.zipSlice",
@@ -2414,7 +2414,7 @@
           18
         ]
       ],
-      "id": 4733,
+      "id": 4745,
       "flags": {
         "isStatic": true
       },
@@ -2451,7 +2451,7 @@
           20
         ]
       ],
-      "id": 4736,
+      "id": 4748,
       "flags": {
         "isStatic": true
       },
@@ -2481,12 +2481,12 @@
       "name": "length",
       "source": [
         [
-          "/Users/tibo/Smplrspace/oss/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
+          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
           1199,
           10
         ]
       ],
-      "id": 4854,
+      "id": 4866,
       "flags": {},
       "type": "length",
       "overrides": false,

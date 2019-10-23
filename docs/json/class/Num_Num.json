@@ -143,7 +143,7 @@
       "source": [
         [
           "Num.ts",
-          128,
+          129,
           14
         ]
       ],
@@ -155,7 +155,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Given a value between 0 to 1, returns a value that cycles between 0 -> 1 -> 0 using sine method.",
+          "comment": "Given a value between 0 to 1, returns a value that cycles between 0 -> 1 -> 0 using the provided shaping method.",
           "returns": "number",
           "returns_comment": "a value between 0 to 1\n",
           "parameters": [
@@ -164,6 +164,12 @@
               "comment": "a value between 0 to 1",
               "type": "number",
               "default": false
+            },
+            {
+              "name": "method",
+              "comment": "a shaping method. Default to [`Shaping.sineInOut`](#link).",
+              "type": " Fn(t:number)",
+              "default": "Shaping.sineInOut"
             }
           ],
           "tags": []
@@ -263,11 +269,11 @@
       "source": [
         [
           "Num.ts",
-          142,
+          143,
           19
         ]
       ],
-      "id": 184,
+      "id": 188,
       "flags": {
         "isStatic": true
       },

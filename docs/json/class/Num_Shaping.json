@@ -3,12 +3,12 @@
   "source": [
     [
       "Num.ts",
-      450,
+      451,
       20
     ]
   ],
   "kind": "Class",
-  "id": 268,
+  "id": 272,
   "comment": "Shaping provides shaping functions to interpolate a value. These are useful for easing and transitions.",
   "constructor": [],
   "accessors": [],
@@ -18,11 +18,11 @@
       "source": [
         [
           "Num.ts",
-          652,
+          653,
           17
         ]
       ],
-      "id": 350,
+      "id": 354,
       "flags": {
         "isStatic": true
       },
@@ -56,11 +56,11 @@
       "source": [
         [
           "Num.ts",
-          681,
+          682,
           20
         ]
       ],
-      "id": 358,
+      "id": 362,
       "flags": {
         "isStatic": true
       },
@@ -94,11 +94,11 @@
       "source": [
         [
           "Num.ts",
-          661,
+          662,
           18
         ]
       ],
-      "id": 354,
+      "id": 358,
       "flags": {
         "isStatic": true
       },
@@ -132,11 +132,11 @@
       "source": [
         [
           "Num.ts",
-          582,
+          583,
           19
         ]
       ],
-      "id": 323,
+      "id": 327,
       "flags": {
         "isStatic": true
       },
@@ -170,11 +170,11 @@
       "source": [
         [
           "Num.ts",
-          601,
+          602,
           22
         ]
       ],
-      "id": 331,
+      "id": 335,
       "flags": {
         "isStatic": true
       },
@@ -208,11 +208,11 @@
       "source": [
         [
           "Num.ts",
-          591,
+          592,
           20
         ]
       ],
-      "id": 327,
+      "id": 331,
       "flags": {
         "isStatic": true
       },
@@ -246,11 +246,11 @@
       "source": [
         [
           "Num.ts",
-          781,
+          782,
           14
         ]
       ],
-      "id": 393,
+      "id": 397,
       "flags": {
         "isStatic": true
       },
@@ -290,11 +290,11 @@
       "source": [
         [
           "Num.ts",
-          570,
+          571,
           21
         ]
       ],
-      "id": 319,
+      "id": 323,
       "flags": {
         "isStatic": true
       },
@@ -328,11 +328,11 @@
       "source": [
         [
           "Num.ts",
-          753,
+          754,
           20
         ]
       ],
-      "id": 382,
+      "id": 386,
       "flags": {
         "isStatic": true
       },
@@ -378,11 +378,11 @@
       "source": [
         [
           "Num.ts",
-          494,
+          495,
           16
         ]
       ],
-      "id": 285,
+      "id": 289,
       "flags": {
         "isStatic": true
       },
@@ -416,11 +416,11 @@
       "source": [
         [
           "Num.ts",
-          513,
+          514,
           19
         ]
       ],
-      "id": 293,
+      "id": 297,
       "flags": {
         "isStatic": true
       },
@@ -454,11 +454,11 @@
       "source": [
         [
           "Num.ts",
-          503,
+          504,
           17
         ]
       ],
-      "id": 289,
+      "id": 293,
       "flags": {
         "isStatic": true
       },
@@ -492,11 +492,11 @@
       "source": [
         [
           "Num.ts",
-          612,
+          613,
           18
         ]
       ],
-      "id": 335,
+      "id": 339,
       "flags": {
         "isStatic": true
       },
@@ -536,11 +536,11 @@
       "source": [
         [
           "Num.ts",
-          635,
+          636,
           21
         ]
       ],
-      "id": 345,
+      "id": 349,
       "flags": {
         "isStatic": true
       },
@@ -580,11 +580,11 @@
       "source": [
         [
           "Num.ts",
-          624,
+          625,
           19
         ]
       ],
-      "id": 340,
+      "id": 344,
       "flags": {
         "isStatic": true
       },
@@ -624,11 +624,11 @@
       "source": [
         [
           "Num.ts",
-          524,
+          525,
           22
         ]
       ],
-      "id": 297,
+      "id": 301,
       "flags": {
         "isStatic": true
       },
@@ -668,11 +668,11 @@
       "source": [
         [
           "Num.ts",
-          534,
+          535,
           23
         ]
       ],
-      "id": 302,
+      "id": 306,
       "flags": {
         "isStatic": true
       },
@@ -712,11 +712,11 @@
       "source": [
         [
           "Num.ts",
-          457,
+          458,
           15
         ]
       ],
-      "id": 269,
+      "id": 273,
       "flags": {
         "isStatic": true
       },
@@ -750,11 +750,11 @@
       "source": [
         [
           "Num.ts",
-          702,
+          703,
           19
         ]
       ],
-      "id": 367,
+      "id": 371,
       "flags": {
         "isStatic": true
       },
@@ -794,11 +794,11 @@
       "source": [
         [
           "Num.ts",
-          734,
+          735,
           24
         ]
       ],
-      "id": 377,
+      "id": 381,
       "flags": {
         "isStatic": true
       },
@@ -838,11 +838,11 @@
       "source": [
         [
           "Num.ts",
-          466,
+          467,
           20
         ]
       ],
-      "id": 273,
+      "id": 277,
       "flags": {
         "isStatic": true
       },
@@ -876,11 +876,11 @@
       "source": [
         [
           "Num.ts",
-          484,
+          485,
           23
         ]
       ],
-      "id": 281,
+      "id": 285,
       "flags": {
         "isStatic": true
       },
@@ -914,11 +914,11 @@
       "source": [
         [
           "Num.ts",
-          475,
+          476,
           21
         ]
       ],
-      "id": 277,
+      "id": 281,
       "flags": {
         "isStatic": true
       },
@@ -952,11 +952,11 @@
       "source": [
         [
           "Num.ts",
-          765,
+          766,
           24
         ]
       ],
-      "id": 388,
+      "id": 392,
       "flags": {
         "isStatic": true
       },
@@ -996,11 +996,11 @@
       "source": [
         [
           "Num.ts",
-          719,
+          720,
           13
         ]
       ],
-      "id": 372,
+      "id": 376,
       "flags": {
         "isStatic": true
       },
@@ -1040,11 +1040,11 @@
       "source": [
         [
           "Num.ts",
-          691,
+          692,
           16
         ]
       ],
-      "id": 362,
+      "id": 366,
       "flags": {
         "isStatic": true
       },
@@ -1084,11 +1084,11 @@
       "source": [
         [
           "Num.ts",
-          543,
+          544,
           15
         ]
       ],
-      "id": 307,
+      "id": 311,
       "flags": {
         "isStatic": true
       },
@@ -1122,11 +1122,11 @@
       "source": [
         [
           "Num.ts",
-          561,
+          562,
           18
         ]
       ],
-      "id": 315,
+      "id": 319,
       "flags": {
         "isStatic": true
       },
@@ -1160,11 +1160,11 @@
       "source": [
         [
           "Num.ts",
-          552,
+          553,
           16
         ]
       ],
-      "id": 311,
+      "id": 315,
       "flags": {
         "isStatic": true
       },
@@ -1198,11 +1198,11 @@
       "source": [
         [
           "Num.ts",
-          793,
+          794,
           13
         ]
       ],
-      "id": 398,
+      "id": 402,
       "flags": {
         "isStatic": true
       },
