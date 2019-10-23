@@ -58,8 +58,7 @@ export class CanvasForm extends VisualForm {
     alpha(a: number): this;
     fill(c: string | boolean): this;
     stroke(c: string | boolean, width?: number, linejoin?: CanvasLineJoin, linecap?: CanvasLineCap): this;
-    dash(segments?: number[], offset?: number): this;
-    noDash(): this;
+    dash(segments?: PtLike | boolean, offset?: number): this;
     font(sizeOrFont: number | Font, weight?: string, style?: string, lineHeight?: number, family?: string): this;
     fontWidthEstimate(estimate?: boolean): this;
     getTextWidth(c: string): number;
@@ -365,7 +364,7 @@ export class Num {
     static normalizeValue(n: number, a: number, b: number): number;
     static sum(pts: GroupLike | number[][]): Pt;
     static average(pts: GroupLike | number[][]): Pt;
-    static cycle(t: number): number;
+    static cycle(t: number, method?: (t: number) => number): number;
     static mapToRange(n: number, currA: number, currB: number, targetA: number, targetB: number): number;
 }
 export class Geom {
@@ -1008,7 +1007,7 @@ export type IntersectContext = {
     edge: Group;
     other?: any;
 };
-export type UIHandler = (target: UI, pt: PtLike, type: string) => void;
+export type UIHandler = (target: UI, pt: PtLike, type: string, evt: MouseEvent) => void;
 export type WarningType = "error" | "warn" | "mute";
 export type ITempoStartFn = (count: number) => void | boolean;
 export type ITempoProgressFn = (count: number, t: number, ms: number, start: boolean) => void | boolean;
@@ -1067,7 +1066,7 @@ export class UI {
     protected static _counter: number;
     protected _id: string;
     protected _actions: {
-        [key: string]: UIHandler[];
+        [type: string]: UIHandler[];
     };
     protected _states: {
         [key: string]: any;
@@ -1084,18 +1083,18 @@ export class UI {
     group: Group;
     shape: string;
     state(key: string, value?: any): any;
-    on(key: string, fn: UIHandler): number;
-    off(key: string, which?: number): boolean;
-    listen(event: string, p: PtLike): boolean;
-    protected hold(event: string): number;
+    on(type: string, fn: UIHandler): number;
+    off(type: string, which?: number): boolean;
+    listen(type: string, p: PtLike, evt: MouseEvent): boolean;
+    protected hold(type: string): number;
     protected unhold(key?: number): void;
-    static track(uis: UI[], key: string, p: PtLike): void;
+    static track(uis: UI[], type: string, p: PtLike, evt: MouseEvent): void;
     render(fn: (group: Group, states: {
         [key: string]: any;
     }) => void): void;
     toString(): string;
     protected _within(p: PtLike): boolean;
-    protected static _trigger(fns: UIHandler[], target: UI, pt: PtLike, type: string): void;
+    protected static _trigger(fns: UIHandler[], target: UI, pt: PtLike, type: string, evt: MouseEvent): void;
     protected static _addHandler(fns: UIHandler[], fn: UIHandler): number;
     protected static _removeHandler(fns: UIHandler[], index: number): boolean;
 }

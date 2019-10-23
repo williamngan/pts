@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.8.9 - Copyright © 2017-2019 William Ngan and contributors.
+ * pts.js 0.8.10 - Copyright © 2017-2019 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -381,14 +381,18 @@ class CanvasForm extends Form_1.VisualForm {
         }
         return this;
     }
-    dash(segments = [5, 5], offset = 0) {
-        this._ctx.setLineDash(segments);
-        this._ctx.lineDashOffset = offset;
-        return this;
-    }
-    noDash() {
-        this._ctx.setLineDash([]);
-        this._ctx.lineDashOffset = 0;
+    dash(segments = true, offset = 0) {
+        if (!segments) {
+            this._ctx.setLineDash([]);
+            this._ctx.lineDashOffset = 0;
+        }
+        else {
+            if (segments === true) {
+                segments = [5, 5];
+            }
+            this._ctx.setLineDash([segments[0], segments[1]]);
+            this._ctx.lineDashOffset = offset;
+        }
         return this;
     }
     font(sizeOrFont, weight, style, lineHeight, family) {

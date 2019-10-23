@@ -270,14 +270,18 @@ class CanvasForm extends Form_1.VisualForm {
         }
         return this;
     }
-    dash(segments = [5, 5], offset = 0) {
-        this._ctx.setLineDash(segments);
-        this._ctx.lineDashOffset = offset;
-        return this;
-    }
-    noDash() {
-        this._ctx.setLineDash([]);
-        this._ctx.lineDashOffset = 0;
+    dash(segments = true, offset = 0) {
+        if (!segments) {
+            this._ctx.setLineDash([]);
+            this._ctx.lineDashOffset = 0;
+        }
+        else {
+            if (segments === true) {
+                segments = [5, 5];
+            }
+            this._ctx.setLineDash([segments[0], segments[1]]);
+            this._ctx.lineDashOffset = offset;
+        }
         return this;
     }
     font(sizeOrFont, weight, style, lineHeight, family) {

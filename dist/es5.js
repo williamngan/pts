@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.8.9 - Copyright © 2017-2019 William Ngan and contributors.
+ * pts.js 0.8.10 - Copyright © 2017-2019 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -465,18 +465,19 @@ var CanvasForm = function (_Form_1$VisualForm) {
     }, {
         key: "dash",
         value: function dash() {
-            var segments = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [5, 5];
+            var segments = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
             var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
 
-            this._ctx.setLineDash(segments);
-            this._ctx.lineDashOffset = offset;
-            return this;
-        }
-    }, {
-        key: "noDash",
-        value: function noDash() {
-            this._ctx.setLineDash([]);
-            this._ctx.lineDashOffset = 0;
+            if (!segments) {
+                this._ctx.setLineDash([]);
+                this._ctx.lineDashOffset = 0;
+            } else {
+                if (segments === true) {
+                    segments = [5, 5];
+                }
+                this._ctx.setLineDash([segments[0], segments[1]]);
+                this._ctx.lineDashOffset = offset;
+            }
             return this;
         }
     }, {

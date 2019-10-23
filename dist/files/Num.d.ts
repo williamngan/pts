@@ -11,7 +11,7 @@ export declare class Num {
     static normalizeValue(n: number, a: number, b: number): number;
     static sum(pts: GroupLike | number[][]): Pt;
     static average(pts: GroupLike | number[][]): Pt;
-    static cycle(t: number): number;
+    static cycle(t: number, method?: (t: number) => number): number;
     static mapToRange(n: number, currA: number, currB: number, targetA: number, targetB: number): number;
 }
 export declare class Geom {
