@@ -66,6 +66,12 @@
     8
   ],
   [
+    "Canvas_CanvasForm#function_dash",
+    "CanvasForm.dash",
+    "Function",
+    8
+  ],
+  [
     "Canvas_CanvasForm#function_ellipse",
     "CanvasForm.ellipse",
     "Function",
@@ -122,6 +128,12 @@
   [
     "Canvas_CanvasForm#function_log",
     "CanvasForm.log",
+    "Function",
+    8
+  ],
+  [
+    "Canvas_CanvasForm#function_noDash",
+    "CanvasForm.noDash",
     "Function",
     8
   ],

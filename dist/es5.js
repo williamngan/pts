@@ -463,6 +463,23 @@ var CanvasForm = function (_Form_1$VisualForm) {
             return this;
         }
     }, {
+        key: "dash",
+        value: function dash() {
+            var segments = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [5, 5];
+            var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+
+            this._ctx.setLineDash(segments);
+            this._ctx.lineDashOffset = offset;
+            return this;
+        }
+    }, {
+        key: "noDash",
+        value: function noDash() {
+            this._ctx.setLineDash([]);
+            this._ctx.lineDashOffset = 0;
+            return this;
+        }
+    }, {
         key: "font",
         value: function font(sizeOrFont, weight, style, lineHeight, family) {
             if (typeof sizeOrFont == "number") {
