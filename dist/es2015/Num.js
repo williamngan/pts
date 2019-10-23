@@ -44,8 +44,8 @@ export class Num {
     static average(pts) {
         return Num.sum(pts).divide(pts.length);
     }
-    static cycle(t) {
-        return Math.sin(Math.PI * t);
+    static cycle(t, method = Shaping.sineInOut) {
+        return method(t > 0.5 ? 2 - t * 2 : t * 2);
     }
     static mapToRange(n, currA, currB, targetA, targetB) {
         if (currA == currB)

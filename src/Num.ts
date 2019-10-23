@@ -121,12 +121,13 @@ export class Num {
 
 
   /**
-   * Given a value between 0 to 1, returns a value that cycles between 0 -> 1 -> 0 using sine method.
+   * Given a value between 0 to 1, returns a value that cycles between 0 -> 1 -> 0 using the provided shaping method.
    * @param t a value between 0 to 1
+   * @param method a shaping method. Default to [`Shaping.sineInOut`](#link).
    * @return a value between 0 to 1
    */
-  static cycle( t:number ):number {
-    return Math.sin( Math.PI * t );
+  static cycle( t:number, method:(t:number) => number=Shaping.sineInOut ):number {
+    return method( t > 0.5 ? 2-t*2 : t*2 );
   }
 
 
