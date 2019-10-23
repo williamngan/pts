@@ -134,7 +134,7 @@ export type IntersectContext = {
 /**
  * UIHandler is a type alias that represents a callback function to handle UI actions.
  */
-export type UIHandler = ( target:UI, pt:PtLike, type:string ) => void;
+export type UIHandler = ( target:UI, pt:PtLike, type:string, evt:MouseEvent ) => void;
 
 
 /**
