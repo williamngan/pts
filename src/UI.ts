@@ -136,7 +136,7 @@ export class UI {
   /**
    * Add an event handler. Remember this UI will also need to be tracked for events via `UI.track`.
    * @param type event type
-   * @param fn a [`UIHandler`](#link) callback function: `fn( target:UI, pt:Pt, type:string )`
+   * @param fn a [`UIHandler`](#link) callback function: `fn( target:UI, pt:Pt, type:string, evt:MouseEvent )`
    * @returns an id number that reference to this handler, for use in [`UI.off`](#link)
    */
   on( type:string, fn:UIHandler ):number {
@@ -149,7 +149,7 @@ export class UI {
    * Remove an event handler.
    * @param type event type
    * @param which an ID number returned by [`UI.on`](#link). If this is not defined, all handlers in this type will be removed.
-   * @param fn a [`UIHandler`](#link) function: `fn( target:UI, pt:Pt, type:string )`
+   * @param fn a [`UIHandler`](#link) function: `fn( target:UI, pt:Pt, type:string, evt:MouseEvent )`
    */
   off( type:string, which?:number ):boolean {
     if (!this._actions[type]) return false;
@@ -357,7 +357,7 @@ export class UIButton extends UI {
 
   /**
    * Add a new click handler. Remember this button will also need to be tracked for events via `UI.track`.
-   * @param fn a [`UIHandler`](#link) callback function: `fn( target:UI, pt:Pt, type:string )`
+   * @param fn a [`UIHandler`](#link) callback function: `fn( target:UI, pt:Pt, type:string, evt:MouseEvent )`
    * @returns an id number that refers to this handler, for use in [`UIButton.offClick`](#link) or [`UI.off`](#link).
    */
   onClick( fn:UIHandler ):number {
@@ -377,8 +377,8 @@ export class UIButton extends UI {
   
   /**
    * Add handlers for hover events. Remember this button will also need to be tracked for events via `UI.track`.
-   * @param enter an optional [`UIHandler`](#link) function to handle when pointer enters hover. Eg, `fn( target:UI, pt:Pt, type:string )`
-   * @param leave an optional [`UIHandler`](#link) function to handle when pointer exits hover. Eg, `fn( target:UI, pt:Pt, type:string )`
+   * @param enter an optional [`UIHandler`](#link) function to handle when pointer enters hover. Eg, `fn( target:UI, pt:Pt, type:string, evt:MouseEvent )`
+   * @param leave an optional [`UIHandler`](#link) function to handle when pointer exits hover. Eg, `fn( target:UI, pt:Pt, type:string, evt:MouseEvent )`
    * @returns id numbers that refer to enter/leave handlers, for use in [`UIButton.offHover`](#link) or [`UI.off`](#link).
    */
   onHover( enter?:UIHandler, leave?:UIHandler ):number[] {
@@ -490,7 +490,7 @@ export class UIDragger extends UIButton {
 
   /**
    * Add a new drag handler. Remember this button will also need to be tracked for events via `UI.track`.
-   * @param fn a [`UIHandler`](#link) callback function: `fn( target:UI, pt:Pt, type:string )`. You can access the states "dragging" and "offset" (See [`UI.state`](#link)) in the callback.
+   * @param fn a [`UIHandler`](#link) callback function: `fn( target:UI, pt:Pt, type:string, evt:MouseEvent )`. You can access the states "dragging" and "offset" (See [`UI.state`](#link)) in the callback.
    * @returns an id number that refers to this handler, for use in [`UIDragger.offDrag`](#link) or [`UI.off`](#link).
    */
   onDrag( fn:UIHandler ):number {
@@ -510,7 +510,7 @@ export class UIDragger extends UIButton {
 
   /**
    * Add a new drop handler. Remember this button will also need to be tracked for events via `UI.track`.
-   * @param fn a [`UIHandler`](#link) callback function: `fn( target:UI, pt:Pt, type:string )`
+   * @param fn a [`UIHandler`](#link) callback function: `fn( target:UI, pt:Pt, type:string, evt:MouseEvent )`
    * @returns an id number that refers to this handler, for use in [`UIDragger.offDrop`](#link) or [`UI.off`](#link).
    */
   onDrop( fn:UIHandler ):number {
