@@ -7221,6 +7221,7 @@ var MultiTouchSpace = function (_Space) {
                 this.bindCanvas("mouseover", this._mouseOver.bind(this));
                 this.bindCanvas("mouseout", this._mouseOut.bind(this));
                 this.bindCanvas("mousemove", this._mouseMove.bind(this));
+                this.bindCanvas("contextmenu", this._contextMenu.bind(this));
                 this._hasMouse = true;
             } else {
                 this.unbindCanvas("mousedown", this._mouseDown.bind(this));
@@ -7228,6 +7229,7 @@ var MultiTouchSpace = function (_Space) {
                 this.unbindCanvas("mouseover", this._mouseOver.bind(this));
                 this.unbindCanvas("mouseout", this._mouseOut.bind(this));
                 this.unbindCanvas("mousemove", this._mouseMove.bind(this));
+                this.unbindCanvas("contextmenu", this._contextMenu.bind(this));
                 this._hasMouse = false;
             }
             return this;
@@ -7337,6 +7339,12 @@ var MultiTouchSpace = function (_Space) {
             this._mouseAction(UI_1.UIPointerActions.out, evt);
             if (this._dragged) this._mouseAction(UI_1.UIPointerActions.drop, evt);
             this._dragged = false;
+            return false;
+        }
+    }, {
+        key: "_contextMenu",
+        value: function _contextMenu(evt) {
+            this._mouseAction(UI_1.UIPointerActions.contextmenu, evt);
             return false;
         }
     }, {
@@ -7955,7 +7963,7 @@ exports.UIShape = {
     rectangle: "rectangle", circle: "circle", polygon: "polygon", polyline: "polyline", line: "line"
 };
 exports.UIPointerActions = {
-    up: "up", down: "down", move: "move", drag: "drag", uidrag: "uidrag", drop: "drop", uidrop: "uidrop", over: "over", out: "out", enter: "enter", leave: "leave", all: "all"
+    up: "up", down: "down", move: "move", drag: "drag", uidrag: "uidrag", drop: "drop", uidrop: "uidrop", over: "over", out: "out", enter: "enter", leave: "leave", contextmenu: "contextmenu", all: "all"
 };
 
 var UI = function () {
@@ -8190,6 +8198,16 @@ var UIButton = function (_UI) {
         key: "offClick",
         value: function offClick(id) {
             return this.off(exports.UIPointerActions.up, id);
+        }
+    }, {
+        key: "onContextMenu",
+        value: function onContextMenu(fn) {
+            return this.on(exports.UIPointerActions.contextmenu, fn);
+        }
+    }, {
+        key: "offContextMenu",
+        value: function offContextMenu(id) {
+            return this.off(exports.UIPointerActions.contextmenu, id);
         }
     }, {
         key: "onHover",

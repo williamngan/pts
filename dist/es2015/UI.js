@@ -5,7 +5,7 @@ export const UIShape = {
     rectangle: "rectangle", circle: "circle", polygon: "polygon", polyline: "polyline", line: "line"
 };
 export const UIPointerActions = {
-    up: "up", down: "down", move: "move", drag: "drag", uidrag: "uidrag", drop: "drop", uidrop: "uidrop", over: "over", out: "out", enter: "enter", leave: "leave", all: "all"
+    up: "up", down: "down", move: "move", drag: "drag", uidrag: "uidrag", drop: "drop", uidrop: "uidrop", over: "over", out: "out", enter: "enter", leave: "leave", contextmenu: "contextmenu", all: "all"
 };
 export class UI {
     constructor(group, shape, states = {}, id) {
@@ -175,6 +175,12 @@ export class UIButton extends UI {
     }
     offClick(id) {
         return this.off(UIPointerActions.up, id);
+    }
+    onContextMenu(fn) {
+        return this.on(UIPointerActions.contextmenu, fn);
+    }
+    offContextMenu(id) {
+        return this.off(UIPointerActions.contextmenu, id);
     }
     onHover(enter, leave) {
         var ids = [undefined, undefined];

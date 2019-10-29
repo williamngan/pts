@@ -17,7 +17,7 @@ export const UIShape = {
  * **[Experimental]** A set of string constants to represent different UI event types.
  */
 export const UIPointerActions = {
-  up: "up", down: "down", move: "move", drag: "drag", uidrag: "uidrag", drop: "drop", uidrop: "uidrop", over: "over", out: "out", enter: "enter", leave: "leave", all: "all"
+  up: "up", down: "down", move: "move", drag: "drag", uidrag: "uidrag", drop: "drop", uidrop: "uidrop", over: "over", out: "out", enter: "enter", leave: "leave", contextmenu: "contextmenu", all: "all"
 };
 
 
@@ -356,7 +356,7 @@ export class UIButton extends UI {
   
 
   /**
-   * Add a new click handler. Remember this button will also need to be tracked for events via `UI.track`.
+   * Add a new click handler. Remember this button will also need to be tracked for events via `UI.track`. If you want to track right clicks, you may also consider [`UIButton.onContextMenu`](#link).
    * @param fn a [`UIHandler`](#link) callback function: `fn( target:UI, pt:Pt, type:string, evt:MouseEvent )`
    * @returns an id number that refers to this handler, for use in [`UIButton.offClick`](#link) or [`UI.off`](#link).
    */
@@ -372,6 +372,26 @@ export class UIButton extends UI {
    */
   offClick( id:number ):boolean {
     return this.off( UIPointerActions.up, id );
+  }
+
+  
+  /**
+   * Add a new contextmenu handler. `contextmenu` is similar to right click, see the [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/Element/contextmenu_event). Remember this button will also need to be tracked for events via `UI.track`.
+   * @param fn a [`UIHandler`](#link) callback function: `fn( target:UI, pt:Pt, type:string, evt:MouseEvent )`
+   * @returns an id number that refers to this handler, for use in [`UIButton.offContextMenu`](#link) or [`UI.off`](#link).
+   */
+  onContextMenu( fn:UIHandler ):number {
+    return this.on( UIPointerActions.contextmenu, fn) ;
+  }
+
+
+  /**
+   * Remove an existing contextmenu handler
+   * @param id an ID number returned by [`UIButton.onContextMenu`](#link). If this is not defined, all handlers in this type will be removed.
+   * @returns a boolean indicating whether the handler was removed successfully
+   */
+  offContextMenu( id:number ):boolean {
+    return this.off( UIPointerActions.contextmenu, id );
   }
 
   
