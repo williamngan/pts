@@ -504,6 +504,7 @@ export class UIDragger extends UIButton {
     };
     this.on( UA.drop, endDrag);
     this.on( UA.up, endDrag);
+    this.on( UA.out, endDrag);
 
   }
 

@@ -5662,6 +5662,7 @@ class UIDragger extends UIButton {
         };
         this.on(UA.drop, endDrag);
         this.on(UA.up, endDrag);
+        this.on(UA.out, endDrag);
     }
     onDrag(fn) {
         return this.on(exports.UIPointerActions.uidrag, fn);

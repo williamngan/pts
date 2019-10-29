@@ -8289,6 +8289,7 @@ var UIDragger = function (_UIButton) {
         };
         _this2.on(UA.drop, endDrag);
         _this2.on(UA.up, endDrag);
+        _this2.on(UA.out, endDrag);
         return _this2;
     }
 
