@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Typealias",
-  "id": 1589,
+  "id": 1602,
   "comment": "WarningType specifies a level of warning for [`Util.warnLevel`](#link).",
   "constructor": [],
   "accessors": [],

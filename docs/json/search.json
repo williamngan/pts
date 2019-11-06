@@ -9240,6 +9240,12 @@
     8
   ],
   [
+    "UI_UIButton#function_offContextMenu",
+    "UIButton.offContextMenu",
+    "Function",
+    8
+  ],
+  [
     "UI_UIButton#function_offHover",
     "UIButton.offHover",
     "Function",
@@ -9254,6 +9260,12 @@
   [
     "UI_UIButton#function_onClick",
     "UIButton.onClick",
+    "Function",
+    8
+  ],
+  [
+    "UI_UIButton#function_onContextMenu",
+    "UIButton.onContextMenu",
     "Function",
     8
   ],
@@ -9372,6 +9384,12 @@
     8
   ],
   [
+    "UI_UIDragger#function_offContextMenu",
+    "UIDragger.offContextMenu",
+    "Function",
+    8
+  ],
+  [
     "UI_UIDragger#function_offDrag",
     "UIDragger.offDrag",
     "Function",
@@ -9398,6 +9416,12 @@
   [
     "UI_UIDragger#function_onClick",
     "UIDragger.onClick",
+    "Function",
+    8
+  ],
+  [
+    "UI_UIDragger#function_onContextMenu",
+    "UIDragger.onContextMenu",
     "Function",
     8
   ],
@@ -9482,6 +9506,12 @@
   [
     "UI_UIPointerActions#property_all",
     "UIPointerActions.all",
+    "Variable",
+    0
+  ],
+  [
+    "UI_UIPointerActions#property_contextmenu",
+    "UIPointerActions.contextmenu",
     "Variable",
     0
   ],

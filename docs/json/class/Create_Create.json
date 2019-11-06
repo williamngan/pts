@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 4269,
+  "id": 4288,
   "comment": "The `Create` class helps you create structures from sets of points.",
   "constructor": [],
   "accessors": [],
@@ -22,7 +22,7 @@
           17
         ]
       ],
-      "id": 4303,
+      "id": 4322,
       "flags": {
         "isStatic": true
       },
@@ -54,7 +54,7 @@
           25
         ]
       ],
-      "id": 4275,
+      "id": 4294,
       "flags": {
         "isStatic": true
       },
@@ -92,7 +92,7 @@
           25
         ]
       ],
-      "id": 4270,
+      "id": 4289,
       "flags": {
         "isStatic": true
       },
@@ -136,7 +136,7 @@
           18
         ]
       ],
-      "id": 4285,
+      "id": 4304,
       "flags": {
         "isStatic": true
       },
@@ -180,7 +180,7 @@
           16
         ]
       ],
-      "id": 4279,
+      "id": 4298,
       "flags": {
         "isStatic": true
       },
@@ -230,7 +230,7 @@
           17
         ]
       ],
-      "id": 4296,
+      "id": 4315,
       "flags": {
         "isStatic": true
       },
@@ -286,7 +286,7 @@
           18
         ]
       ],
-      "id": 4290,
+      "id": 4309,
       "flags": {
         "isStatic": true
       },

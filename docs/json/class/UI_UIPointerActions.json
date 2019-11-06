@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Objectliteral",
-  "id": 1221,
+  "id": 1233,
   "comment": "**[Experimental]** A set of string constants to represent different UI event types.",
   "constructor": [],
   "accessors": [],
@@ -20,12 +20,28 @@
         [
           "UI.ts",
           20,
-          165
+          193
         ]
       ],
-      "id": 1233,
+      "id": 1246,
       "flags": {},
       "type": "all",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "contextmenu",
+      "source": [
+        [
+          "UI.ts",
+          20,
+          173
+        ]
+      ],
+      "id": 1245,
+      "flags": {},
+      "type": "contextmenu",
       "overrides": false,
       "inherits": false,
       "comment": ""
@@ -39,7 +55,7 @@
           16
         ]
       ],
-      "id": 1223,
+      "id": 1235,
       "flags": {},
       "type": "down",
       "overrides": false,
@@ -55,7 +71,7 @@
           44
         ]
       ],
-      "id": 1225,
+      "id": 1237,
       "flags": {},
       "type": "drag",
       "overrides": false,
@@ -71,7 +87,7 @@
           76
         ]
       ],
-      "id": 1227,
+      "id": 1239,
       "flags": {},
       "type": "drop",
       "overrides": false,
@@ -87,7 +103,7 @@
           135
         ]
       ],
-      "id": 1231,
+      "id": 1243,
       "flags": {},
       "type": "enter",
       "overrides": false,
@@ -103,7 +119,7 @@
           151
         ]
       ],
-      "id": 1232,
+      "id": 1244,
       "flags": {},
       "type": "leave",
       "overrides": false,
@@ -119,7 +135,7 @@
           30
         ]
       ],
-      "id": 1224,
+      "id": 1236,
       "flags": {},
       "type": "move",
       "overrides": false,
@@ -135,7 +151,7 @@
           121
         ]
       ],
-      "id": 1230,
+      "id": 1242,
       "flags": {},
       "type": "out",
       "overrides": false,
@@ -151,7 +167,7 @@
           108
         ]
       ],
-      "id": 1229,
+      "id": 1241,
       "flags": {},
       "type": "over",
       "overrides": false,
@@ -167,7 +183,7 @@
           60
         ]
       ],
-      "id": 1226,
+      "id": 1238,
       "flags": {},
       "type": "uidrag",
       "overrides": false,
@@ -183,7 +199,7 @@
           92
         ]
       ],
-      "id": 1228,
+      "id": 1240,
       "flags": {},
       "type": "uidrop",
       "overrides": false,
@@ -199,7 +215,7 @@
           4
         ]
       ],
-      "id": 1222,
+      "id": 1234,
       "flags": {},
       "type": "up",
       "overrides": false,

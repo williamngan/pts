@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 3002,
+  "id": 3015,
   "comment": "Font class lets you create a specific font style with properties for its size and style. A font instance can be passed as parameter to set a form's font. For example, see [`CanvasForm.font`](#link).",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           23
         ]
       ],
-      "id": 3008,
+      "id": 3021,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -81,7 +81,7 @@
           11
         ]
       ],
-      "id": 3015,
+      "id": 3028,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -102,7 +102,7 @@
           10
         ]
       ],
-      "id": 3017,
+      "id": 3030,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -128,7 +128,7 @@
           13
         ]
       ],
-      "id": 3005,
+      "id": 3018,
       "flags": {
         "isPublic": true
       },
@@ -146,7 +146,7 @@
           19
         ]
       ],
-      "id": 3004,
+      "id": 3017,
       "flags": {
         "isPublic": true
       },
@@ -164,7 +164,7 @@
           13
         ]
       ],
-      "id": 3003,
+      "id": 3016,
       "flags": {
         "isPublic": true
       },
@@ -182,7 +182,7 @@
           14
         ]
       ],
-      "id": 3006,
+      "id": 3019,
       "flags": {
         "isPublic": true
       },
@@ -200,7 +200,7 @@
           15
         ]
       ],
-      "id": 3007,
+      "id": 3020,
       "flags": {
         "isPublic": true
       },

@@ -296,7 +296,7 @@
             },
             {
               "name": "fn",
-              "comment": "a [`UIHandler`](#link) callback function: `fn( target:UI, pt:Pt, type:string )`",
+              "comment": "a [`UIHandler`](#link) callback function: `fn( target:UI, pt:Pt, type:string, evt:MouseEvent )`",
               "type": "UIHandler",
               "default": false
             }

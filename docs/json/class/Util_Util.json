@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 1632,
+  "id": 1645,
   "comment": "Util class provides static helper functions.",
   "constructor": [],
   "accessors": [],
@@ -22,7 +22,7 @@
           16
         ]
       ],
-      "id": 1658,
+      "id": 1671,
       "flags": {
         "isStatic": true
       },
@@ -66,7 +66,7 @@
           16
         ]
       ],
-      "id": 1654,
+      "id": 1667,
       "flags": {
         "isStatic": true
       },
@@ -104,7 +104,7 @@
           17
         ]
       ],
-      "id": 1682,
+      "id": 1695,
       "flags": {
         "isStatic": true
       },
@@ -154,7 +154,7 @@
           16
         ]
       ],
-      "id": 1637,
+      "id": 1650,
       "flags": {
         "isStatic": true
       },
@@ -186,7 +186,7 @@
           13
         ]
       ],
-      "id": 1691,
+      "id": 1704,
       "flags": {
         "isStatic": true
       },
@@ -224,7 +224,7 @@
           18
         ]
       ],
-      "id": 1644,
+      "id": 1657,
       "flags": {
         "isStatic": true
       },
@@ -262,7 +262,7 @@
           14
         ]
       ],
-      "id": 1648,
+      "id": 1661,
       "flags": {
         "isStatic": true
       },
@@ -312,7 +312,7 @@
           16
         ]
       ],
-      "id": 1671,
+      "id": 1684,
       "flags": {
         "isStatic": true
       },
@@ -367,7 +367,7 @@
           13
         ]
       ],
-      "id": 1640,
+      "id": 1653,
       "flags": {
         "isStatic": true
       },
@@ -405,7 +405,7 @@
           18
         ]
       ],
-      "id": 1634,
+      "id": 1647,
       "flags": {
         "isStatic": true
       },
@@ -437,7 +437,7 @@
           12
         ]
       ],
-      "id": 1668,
+      "id": 1681,
       "flags": {
         "isStatic": true
       },

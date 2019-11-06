@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 6612,
+  "id": 6637,
   "comment": "Tempo helps you create synchronized and rhythmic animations.",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           36
         ]
       ],
-      "id": 6620,
+      "id": 6645,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -57,7 +57,7 @@
           9
         ]
       ],
-      "id": 6626,
+      "id": 6651,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -89,7 +89,7 @@
           8
         ]
       ],
-      "id": 6630,
+      "id": 6655,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -118,7 +118,7 @@
           19
         ]
       ],
-      "id": 6646,
+      "id": 6671,
       "flags": {
         "isProtected": true
       },
@@ -156,7 +156,7 @@
           7
         ]
       ],
-      "id": 6637,
+      "id": 6662,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -191,7 +191,7 @@
           6
         ]
       ],
-      "id": 6643,
+      "id": 6668,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -221,7 +221,7 @@
           7
         ]
       ],
-      "id": 6640,
+      "id": 6665,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -251,7 +251,7 @@
           17
         ]
       ],
-      "id": 6623,
+      "id": 6648,
       "flags": {
         "isStatic": true
       },
