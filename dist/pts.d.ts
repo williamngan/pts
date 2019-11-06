@@ -878,6 +878,7 @@ export abstract class MultiTouchSpace extends Space {
     protected _mouseMove(evt: MouseEvent | TouchEvent): boolean;
     protected _mouseOver(evt: MouseEvent | TouchEvent): boolean;
     protected _mouseOut(evt: MouseEvent | TouchEvent): boolean;
+    protected _contextMenu(evt: MouseEvent): boolean;
     protected _touchMove(evt: TouchEvent): boolean;
     protected _touchStart(evt: TouchEvent): boolean;
 }
@@ -1058,6 +1059,7 @@ export const UIPointerActions: {
     out: string;
     enter: string;
     leave: string;
+    contextmenu: string;
     all: string;
 };
 export class UI {
@@ -1104,6 +1106,8 @@ export class UIButton extends UI {
     }, id?: string);
     onClick(fn: UIHandler): number;
     offClick(id: number): boolean;
+    onContextMenu(fn: UIHandler): number;
+    offContextMenu(id: number): boolean;
     onHover(enter?: UIHandler, leave?: UIHandler): number[];
     offHover(enterID?: number, leaveID?: number): boolean[];
 }

@@ -7,7 +7,7 @@ exports.UIShape = {
     rectangle: "rectangle", circle: "circle", polygon: "polygon", polyline: "polyline", line: "line"
 };
 exports.UIPointerActions = {
-    up: "up", down: "down", move: "move", drag: "drag", uidrag: "uidrag", drop: "drop", uidrop: "uidrop", over: "over", out: "out", enter: "enter", leave: "leave", all: "all"
+    up: "up", down: "down", move: "move", drag: "drag", uidrag: "uidrag", drop: "drop", uidrop: "uidrop", over: "over", out: "out", enter: "enter", leave: "leave", contextmenu: "contextmenu", all: "all"
 };
 class UI {
     constructor(group, shape, states = {}, id) {
@@ -179,6 +179,12 @@ class UIButton extends UI {
     offClick(id) {
         return this.off(exports.UIPointerActions.up, id);
     }
+    onContextMenu(fn) {
+        return this.on(exports.UIPointerActions.contextmenu, fn);
+    }
+    offContextMenu(id) {
+        return this.off(exports.UIPointerActions.contextmenu, id);
+    }
     onHover(enter, leave) {
         var ids = [undefined, undefined];
         if (enter)
@@ -249,6 +255,7 @@ class UIDragger extends UIButton {
         };
         this.on(UA.drop, endDrag);
         this.on(UA.up, endDrag);
+        this.on(UA.out, endDrag);
     }
     onDrag(fn) {
         return this.on(exports.UIPointerActions.uidrag, fn);

@@ -140,6 +140,7 @@ class MultiTouchSpace extends Space {
             this.bindCanvas("mouseover", this._mouseOver.bind(this));
             this.bindCanvas("mouseout", this._mouseOut.bind(this));
             this.bindCanvas("mousemove", this._mouseMove.bind(this));
+            this.bindCanvas("contextmenu", this._contextMenu.bind(this));
             this._hasMouse = true;
         }
         else {
@@ -148,6 +149,7 @@ class MultiTouchSpace extends Space {
             this.unbindCanvas("mouseover", this._mouseOver.bind(this));
             this.unbindCanvas("mouseout", this._mouseOut.bind(this));
             this.unbindCanvas("mousemove", this._mouseMove.bind(this));
+            this.unbindCanvas("contextmenu", this._contextMenu.bind(this));
             this._hasMouse = false;
         }
         return this;
@@ -243,6 +245,10 @@ class MultiTouchSpace extends Space {
         if (this._dragged)
             this._mouseAction(UI_1.UIPointerActions.drop, evt);
         this._dragged = false;
+        return false;
+    }
+    _contextMenu(evt) {
+        this._mouseAction(UI_1.UIPointerActions.contextmenu, evt);
         return false;
     }
     _touchMove(evt) {

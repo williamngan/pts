@@ -58,6 +58,7 @@ export declare abstract class MultiTouchSpace extends Space {
     protected _mouseMove(evt: MouseEvent | TouchEvent): boolean;
     protected _mouseOver(evt: MouseEvent | TouchEvent): boolean;
     protected _mouseOut(evt: MouseEvent | TouchEvent): boolean;
+    protected _contextMenu(evt: MouseEvent): boolean;
     protected _touchMove(evt: TouchEvent): boolean;
     protected _touchStart(evt: TouchEvent): boolean;
 }

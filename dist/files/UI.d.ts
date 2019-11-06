@@ -20,6 +20,7 @@ export declare const UIPointerActions: {
     out: string;
     enter: string;
     leave: string;
+    contextmenu: string;
     all: string;
 };
 export declare class UI {
@@ -67,6 +68,8 @@ export declare class UIButton extends UI {
     }, id?: string);
     onClick(fn: UIHandler): number;
     offClick(id: number): boolean;
+    onContextMenu(fn: UIHandler): number;
+    offContextMenu(id: number): boolean;
     onHover(enter?: UIHandler, leave?: UIHandler): number[];
     offHover(enterID?: number, leaveID?: number): boolean[];
 }
