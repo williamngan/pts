@@ -13,7 +13,7 @@
   var sound;
   var bins = 256;
   var ctrls, radius;
-  var colors = ["#f06", "#62e", "#fff", "#fe3", "#0c9"];
+  var colors = ["#f06", "#30f", "#fff", "#fe3", "#0c9"];
   var bufferLoaded = false;
 
   
@@ -101,7 +101,7 @@
         let anchors = getCtrlPoints(time); 
         let curve = Curve.bspline( anchors, 4 );
         let center = anchors.centroid();
-        form.fillOnly("#123").polygon( curve );
+        form.fillOnly("#30f").polygon( curve );
         
         // initiate spikes array, evenly distributed spikes aroundthe face
         let spikes = [];
@@ -140,7 +140,7 @@
         // draw spikes
         let f_scale = f_acc/bins;
         for (let i=0, len=tris.length; i<len; i++) {
-          form.fillOnly("#123").polygon( tris[i] );
+          form.fillOnly("#30f").polygon( tris[i] );
           form.fillOnly( colors[ i%colors.length ] ).point( tris[i][1], freqs[i].y * 10, "circle" )
         }
 
@@ -153,7 +153,7 @@
         for (let i=0, len=tdata.length; i<len; i++) {
           let t2 = [tdata[i].interpolate( 0.25 + 0.2*f_scale ), tdata[i].interpolate( 0.5 + 0.3*f_scale )];
           form.strokeOnly( "#f06" ).line( tdata[i] );
-          form.strokeOnly( "#123", 2 ).line( t2 );
+          form.strokeOnly( "#30f", 2 ).line( t2 );
         }
 
 

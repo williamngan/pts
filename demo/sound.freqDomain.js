@@ -18,7 +18,7 @@ Pts.quickStart( "#pt", "#fe3" );
   var sound;
   var bins = 256;
   var ctrls, radius;
-  var colors = ["#f06", "#62e", "#fff", "#fe3", "#0c9"];
+  var colors = ["#f06", "#30f", "#fff", "#fe3", "#0c9"];
   var bufferLoaded = false;
 
   
@@ -91,7 +91,7 @@ Pts.quickStart( "#pt", "#fe3" );
         let anchors = getCtrlPoints(time); 
         let curve = Curve.bspline( anchors, 4 );
         let center = anchors.centroid();
-        form.fillOnly("#123").polygon( curve );
+        form.fillOnly("#30f").polygon( curve );
         
         // initiate spikes array, evenly distributed spikes aroundthe face
         let spikes = [];
@@ -144,9 +144,8 @@ Pts.quickStart( "#pt", "#fe3" );
         for (let i=0, len=tdata.length; i<len; i++) {
           let t2 = [tdata[i].interpolate( 0.25 + 0.2*f_scale ), tdata[i].interpolate( 0.5 + 0.3*f_scale )];
           form.strokeOnly( "#f06" ).line( tdata[i] );
-          form.strokeOnly( "#123", 2 ).line( t2 );
+          form.strokeOnly( "#30f", 2 ).line( t2 );
         }
-
 
         // draw eyes        
         let eyeRight = center.clone().toAngle( -Const.quarter_pi-0.2, radius/2, true );
