@@ -181,27 +181,33 @@ export class Util {
    * @param pts an array 
    * @param size chunk size, ie, number of items in a chunk
    * @param stride optional parameter to "walk through" the array in steps
-   * @param loopBack if `true`, always go through the array till the end and loop back to the beginning to complete the segments if needed
+   * @param loopBack if `true`, always go through the array till the end and loop back to the beginning to complete the segments if needed.
+   * @param matchSize if `true`, all chunks's length must match `size`.
    */
-  static split( pts:any[], size:number, stride?:number, loopBack:boolean=false ):any[][] {
-    let st = stride || size;
-    let chunks = [];
-    for (let i=0; i<pts.length; i++) {
-      if (i*st+size > pts.length) {
-        if (loopBack) {
-          let g = pts.slice(i*st);
-          g = g.concat( pts.slice( 0, (i*st+size)%size ) );
-          chunks.push( g );
+  static split( pts: any[], size: number, stride?: number, loopBack: boolean = false, matchSize = true ): any[][] {
+    let chunks: any[] = [];
+    let part: any[] = [];
+    let st: number = stride || size;
+    let index: number = 0;
+    if ( pts.length <= 0 || st <= 0 ) return [];
+  
+    while ( index < pts.length ) {
+      part = [];
+      for ( let k = 0; k < size; k++ ) {
+        if ( loopBack ) {
+          part.push( pts[( index + k ) % pts.length] );
         } else {
-          break;
+          if ( index + k >= pts.length ) break;
+          part.push( pts[index + k] );
         }
-      } else {
-        chunks.push( pts.slice(i*st, i*st+size ) );
       }
+      index += st;
+      if ( !matchSize || ( matchSize && part.length === size ) ) chunks.push( part );
     }
+
     return chunks;
   }
-
+  
 
   /**
    * Flatten an array of arrays such as Group[] to a flat Array or Group.

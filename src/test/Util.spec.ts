@@ -42,17 +42,27 @@ describe('Util: ', function() {
     
     it('can split an array with size only', function() {
       let g = Util.split( group, 2);
-      assert.equal( g[2][0], 5 );
+      assert.isTrue( g.length === 3 && g[2][0] === 5 );
     });
 
     it('can split an array with size and stride 1', function() {
-      let g = Util.split( group, 2, 1);
-      assert.equal( g[5][1], 7 );
+      let g = Util.split( group, 3, 1);
+      assert.isTrue( g.length === 5 && g[4][0] === 5 );
     });
 
-    it('can split an array with size and stride 4', function() {
-      let g = Util.split( group, 3, 4);
-      assert.equal( g[1][2], 7 );
+    it('can split an array with size and stride 3', function() {
+      let g = Util.split( group, 2, 3);
+      assert.isTrue( g.length === 2 && g[1][1] === 5 );
+    });
+
+    it('can split an array with size and stride 3 and loop back', function() {
+      let g = Util.split( group, 2, 3, true);
+      assert.isTrue( g.length === 3 && g[2][1] === 1 );
+    });
+
+    it("can split an array with size and stride 3 and don't match size", function() {
+      let g = Util.split( group, 2, 3, false, false);
+      assert.isTrue( g.length === 3 && g[2].length === 1 && g[2][0] === 7 );
     });
 
     it('can create and run a stepper', function() {
