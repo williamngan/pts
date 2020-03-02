@@ -81,7 +81,7 @@ Pts.quickStart("#pt", "#207");
       for (let i=0, len=tris.length; i<len; i++) {
         kochs.push( tris[i].map( (t, idx) => {
           let ko = new Koch( tris[i][idx-1 < 0 ? 2 : idx-1], t ); // connect prev and current
-          return ko.subdivide( 4 );
+          return ko.subdivide( i+3 );
         }));
       }
       

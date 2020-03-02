@@ -3984,6 +3984,12 @@ class Tempo {
     animate(time, ftime) {
         this.track(time);
     }
+    resize(bound, evt) {
+        return;
+    }
+    action(type, px, py, evt) {
+        return;
+    }
 }
 exports.Tempo = Tempo;
 class Sound {

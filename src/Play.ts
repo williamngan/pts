@@ -1,18 +1,19 @@
-import {Pt, Group} from "./Pt";
+import {Pt, Group, Bound} from "./Pt";
 import {Num} from "./Num";
 import {ITempoListener, ITempoStartFn, ITempoProgressFn, ITempoResponses} from "./Types";
-import {ISoundAnalyzer, SoundType, PtLike} from "./Types";
+import {ISoundAnalyzer, SoundType, PtLike, IPlayer} from "./Types";
 
 /**
  * Tempo helps you create synchronized and rhythmic animations.
  */
-export class Tempo {
+export class Tempo implements IPlayer {
 
   protected _bpm: number; // beat per minute
   protected _ms: number; // millis per beat
 
   protected _listeners:{ [key:string]:ITempoListener } = {};
   protected _listenerInc:number = 0;
+  public animateID:string;
 
   /**
    * Construct a new Tempo instance by beats-per-minute. Alternatively, you can use [`Tempo.fromBeat`](#link) to create from milliseconds.
@@ -134,10 +135,24 @@ export class Tempo {
 
 
   /**
-   * Internal implementation for use when adding into Space
+   * IPlayer interface. Internal implementation that calls `track( time )`.
    */
-  protected animate( time, ftime ) {
+  animate( time, ftime ) {
     this.track( time );
+  }
+
+  /**
+   * IPlayer interface. Not implementated.
+   */
+  resize( bound:Bound, evt?:Event ) {
+    return; // not implemented in IPlayer
+  }
+
+  /**
+   * IPlayer interface. Not implementated.
+   */
+  action( type:string, px:number, py:number, evt:Event ) {
+    return;
   }
 
 }
