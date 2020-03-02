@@ -13,12 +13,6 @@ window.demoDescription = "Progress demo in Tempo guide.";
   let tempo = new Tempo(60);
   let colors = ["#62E", "#FFF", "#123"];
   let counter = 0;
-
-  // for every 1 beat, change the center's count
-  tempo.every(1).start( (count) => {
-    counter = count;
-    // console.log( count );
-  })
   
   // for every 2 beat, rotate the line around once and change the color of the other circle
   tempo.every( 2 ).progress( (count, t) => {
@@ -28,11 +22,16 @@ window.demoDescription = "Progress demo in Tempo guide.";
     // hand
     form.strokeOnly( c, 10, "round", "round" ).line( ln );
     form.fillOnly( c ).point( ln.p2, 20, "circle" );
-
-    // square
-    form.fillOnly( c ).point( space.center, 20 );
-    form.fillOnly( "#e2e6ef" ).font(20, "bold").text( space.center.$subtract(11, -8), (counter < 10 ? "0"+counter : counter) );
   });
+
+  // for every 1 beat, change the center's count and background color
+  tempo.every(1).start( (count) => {
+    counter = count;
+  }).progress( (count, t) => {
+    // square
+    form.fillOnly( colors[ count%colors.length ] ).point( space.center, 20 );
+    form.fillOnly( "#e2e6ef" ).font(20, "bold").text( space.center.$subtract(11, -8), (counter < 10 ? "0"+counter : counter) );
+  })
   
   // Add tempo instance as a player to track animation
   space.add( tempo );
