@@ -190,3 +190,16 @@ export type ISoundAnalyzer = {
  * Typescript only: corresponds to Sound.type
  */
 export type SoundType = "file"|"gen"|"input";
+
+
+/**
+ * Typescript only: default style object
+ */
+export type DefaultFormStyle = {
+  fillStyle?: string|CanvasGradient|CanvasPattern, 
+  strokeStyle?: string|CanvasGradient|CanvasPattern, 
+  lineWidth?: number, 
+  lineJoin?: string, 
+  lineCap?: string,
+  globalAlpha?: number
+}

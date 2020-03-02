@@ -6,7 +6,7 @@ import {Pt, Group, Bound} from "./Pt";
 import {Const} from "./Util";
 import {Typography as Typo} from "./Typography";
 import { Rectangle } from './Op';
-import {PtLike, GroupLike, PtsCanvasRenderingContext2D} from "./Types";
+import {PtLike, GroupLike, PtsCanvasRenderingContext2D, DefaultFormStyle} from "./Types";
 
 
 
@@ -397,7 +397,7 @@ export class CanvasForm extends VisualForm {
   /** 
   * store common styles so that they can be restored to canvas context when using multiple forms. See `reset()`.
   */
-  protected _style = {
+  protected _style:DefaultFormStyle = {
     fillStyle: "#f03", strokeStyle:"#fff", 
     lineWidth: 1, lineJoin: "bevel", lineCap: "butt",
     globalAlpha: 1
@@ -435,7 +435,7 @@ export class CanvasForm extends VisualForm {
   */
   get ctx():PtsCanvasRenderingContext2D { return this._space.ctx; }
 
-  
+
   /**
   * Toggle whether to draw on offscreen canvas (if offscreen is set in CanvasSpace)
   * @param off if `true`, draw on offscreen canvas instead of the visible canvas. Default is `true`
@@ -477,7 +477,7 @@ export class CanvasForm extends VisualForm {
     * @example `form.fill("#F90")`, `form.fill("rgba(0,0,0,.5")`, `form.fill(false)`
     * @param c fill color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle))
     */
-    fill( c:string|boolean ):this {
+    fill( c:string|boolean|CanvasGradient|CanvasPattern ):this {
       if (typeof c == "boolean") {
         this.filled = c;
       } else {
@@ -498,7 +498,7 @@ export class CanvasForm extends VisualForm {
     * @param linejoin Optional string to set line joint style. Can be "miter", "bevel", or "round".
     * @param linecap Optional string to set line cap style. Can be "butt", "round", or "square".
     */
-    stroke( c:string|boolean, width?:number, linejoin?:CanvasLineJoin, linecap?:CanvasLineCap ):this {
+    stroke( c:string|boolean|CanvasGradient|CanvasPattern, width?:number, linejoin?:CanvasLineJoin, linecap?:CanvasLineCap ):this {
       if (typeof c == "boolean") {
         this.stroked = c;
       } else {
@@ -521,6 +521,38 @@ export class CanvasForm extends VisualForm {
       return this;
     }
     
+
+    /**
+     * This function takes an array of gradient colors, and returns a function to define the areas of the gradient fill. See demo code in [CanvasForm.gradient](https://ptsjs.org/demo/?name=canvasform.textBox).
+     * @param stops an array of gradient stops. This can be an array of colors `["#f00", "#0f0", ...]` for evenly distributed gradient, or an array of [stop, color] like `[[0.1, "#f00"], [0.7, "#0f0"]]`
+     * @returns a function that takes 1 or 2 `Group` as parameters. Use a single `Group` to specify a rectangular area for linear gradient, or use 2 `Groups` to specify 2 `Circles` for radial gradient.
+     * @example `c1 = Circle.fromCenter(...); grad = form.gradient(["#f00", "#00f"]); form.fill( grad( c1, c2 ) ).circle( c1 )`
+     */
+    gradient( stops:[number, string][]|string[] ):((area1:GroupLike, area2?:GroupLike) => CanvasGradient) {
+      let vals:[number, string][] = [];
+      if (stops.length < 2) (stops as [number, string][]).push( [0.99, "#000"], [1,"#000"] );
+
+      for (let i=0, len=stops.length; i<len; i++) {
+        let t:number = typeof stops[i] === 'string' ? i * ( 1/(stops.length-1) ) : stops[i][0] as number;
+        let v: string = typeof stops[i] === 'string' ? stops[i] as string : stops[i][1] as string;
+        vals.push( [t, v] );
+      }
+
+      return ( area1:GroupLike, area2?:GroupLike ) => {
+        area1 = area1.map( a => a.abs() );
+        if (area2) area2.map( a => a.abs() );
+
+        let grad = area2 
+          ? this.ctx.createRadialGradient( area1[0][0], area1[0][1], area1[1][0], area2[0][0], area2[0][1], area2[1][0] )
+          : this.ctx.createLinearGradient( area1[0][0], area1[0][1], area1[1][0], area1[1][1] );
+
+        for (let i=0, len=vals.length; i<len; i++) {
+          grad.addColorStop( vals[i][0], vals[i][1] );
+        }
+
+        return grad;
+      };
+    }
     
     
     /**
