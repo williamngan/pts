@@ -331,6 +331,7 @@ class CanvasForm extends Form_1.VisualForm {
             } });
     }
     get space() { return this._space; }
+    get ctx() { return this._space.ctx; }
     useOffscreen(off = true, clear = false) {
         if (clear)
             this._space.clearOffscreen((typeof clear == "string") ? clear : null);

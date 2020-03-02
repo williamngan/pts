@@ -90,17 +90,17 @@ let space = new CanvasSpace("#paper");
 let form = space.getForm(); // get default CanvasForm
 ```
 
-[`CanvasForm`](#canvas-canvasform) includes many convenient functions to draw shapes on `<canvas>`. It's easier to use than the API provided by html canvas. Usually, you'll use form to draw a scene in a player's callback function as discussed above.
+[`CanvasForm`](#canvas-canvasform) includes many convenient functions to draw shapes on `<canvas>` element. Usually, you'll use these drawing functions in a player's `animate` function like this:
 
 ```
 // Draw points inside the animate callback function
-space.add({
-  animate: (time, ftime) => {
+space.add( (time, ftime) => {
     form.stroke("#fff").fill("#f03").circle( c );
-    form.point( p, 10 );    
-  }
-});
+    form.point( p, 10 );   
+} );
 ```
+
+If you need more advanced canvas functions, you can get canvas' rendering context by accessing `ctx` property. For example: `form.ctx.clip()`.
 
 ![js:space_form](./assets/bg.png)
 
@@ -136,18 +136,27 @@ Take a look at the source code of the [svg demo](https://ptsjs.org/demo/index.ht
 
 There's also experimental support for rendering HTML elements using [`HTMLSpace`](#dom-htmlspace), which you can use by making similar changes in your code as described in SVG section above.
 
-Take a look at the [html demo](https://ptsjs.org/pts/demo/index.html?name=htmlform.scope) and its source code. Because of the limitations of HTML, you cannot draw polygon, arc, and some other shapes with it.
+Take a look at the [html demo](https://ptsjs.org/demo/index.html?name=htmlform.scope) and its source code. Because of the limitations of HTML, you cannot draw polygon, arc, and some other shapes with it.
 
 If you use Pts with React or other web rendering frameworks, it will be better to use the props and states of their virtual DOM implementations instead.
 
 ### Cheat sheet
 
-The following snippet is a typical template for making a quick **`Pts`** sketch. Pretty easy.
+The quickest way to start is to use the `quickStart` function, which initiates a [`CanvasSpace`](#canvas-canvasspace) and adds `space` and `form` instances into current scope. You can create an interactive piece in 2 lines of code:
 
 ```
 Pts.namespace( this ); // not needed if using npm package
 
-var space = new CanvasSpace("#hello").setup({ retina: true });
+let run = Pts.quickStart( "elemID", "#f03" )
+run( (time, ftime) => form.fill("#f03").point( space.pointer, 10, "circle" ) );
+```
+
+The following snippet is a typical template for creating a Pts space and form. Use this if you need more than an animation loop. You can add either an animation function or an `IPlayer` object to a space. (See above for details)
+
+```
+Pts.namespace( this ); // not needed if using npm package
+
+var space = new CanvasSpace("elemID").setup({ retina: true });
 var form = space.getForm();
 
 space.add( (time, ftime) => {
@@ -157,21 +166,4 @@ space.add( (time, ftime) => {
 space.bindMouse().bindTouch().play();
 ```
 
-And if you need additional tracking in a player, you can add it as an object with these callback functions:
-
-```
-space.add( {
-
-  start: (bound, space) => {},
-
-  animate: (time, ftime) => {
-    form.fill("#f03").point( space.pointer, 10, "circle" );
-  },
-
-  action: (type, x, y, evt) => {},
-
-  resize: (size, evt) => {}
-  
-} );
-```
 

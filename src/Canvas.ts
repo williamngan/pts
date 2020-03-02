@@ -317,6 +317,7 @@ export class CanvasSpace extends MultiTouchSpace {
   
   /**
   * Get the rendering context of canvas
+  * @example `form.ctx.clip()`
   */
   public get ctx():PtsCanvasRenderingContext2D { return this._ctx; }
   
@@ -428,6 +429,13 @@ export class CanvasForm extends VisualForm {
   get space():CanvasSpace { return this._space; }
   
 
+  /**
+  * Get the rendering context of canvas to perform other canvas functions.
+  * @example `form.ctx.clip()`
+  */
+  get ctx():PtsCanvasRenderingContext2D { return this._space.ctx; }
+
+  
   /**
   * Toggle whether to draw on offscreen canvas (if offscreen is set in CanvasSpace)
   * @param off if `true`, draw on offscreen canvas instead of the visible canvas. Default is `true`
