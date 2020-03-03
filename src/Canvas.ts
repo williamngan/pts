@@ -553,6 +553,16 @@ export class CanvasForm extends VisualForm {
         return grad;
       };
     }
+
+
+    /**
+     * Set composite operation (also known as blend mode). See [Mozilla documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation) for the full list of operations you can use.
+     * @param mode a composite operation such as 'lighten', 'multiply', 'overlay', and 'color-burn'
+     */
+    composite(  mode:string ):this {
+      this.ctx.globalCompositeOperation = mode;
+      return this;
+    }
     
     
     /**

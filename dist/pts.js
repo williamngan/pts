@@ -404,6 +404,10 @@ class CanvasForm extends Form_1.VisualForm {
             return grad;
         };
     }
+    composite(mode) {
+        this.ctx.globalCompositeOperation = mode;
+        return this;
+    }
     dash(segments = true, offset = 0) {
         if (!segments) {
             this._ctx.setLineDash([]);
