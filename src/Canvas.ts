@@ -556,11 +556,20 @@ export class CanvasForm extends VisualForm {
 
 
     /**
-     * Set composite operation (also known as blend mode). See [Mozilla documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation) for the full list of operations you can use.
+     * Set composite operation (also known as blend mode). See [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation) for the full list of operations you can use.
      * @param mode a composite operation such as 'lighten', 'multiply', 'overlay', and 'color-burn'
      */
-    composite(  mode:string ):this {
+    composite( mode:string ):this {
       this.ctx.globalCompositeOperation = mode;
+      return this;
+    }
+
+
+    /**
+     * Create a clipping mask from the current path. See [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/clip) for details.
+     */
+    clip():this {
+      this.ctx.clip();
       return this;
     }
     
