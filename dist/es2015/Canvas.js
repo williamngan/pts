@@ -217,6 +217,7 @@ export class CanvasForm extends VisualForm {
             } });
     }
     get space() { return this._space; }
+    get ctx() { return this._space.ctx; }
     useOffscreen(off = true, clear = false) {
         if (clear)
             this._space.clearOffscreen((typeof clear == "string") ? clear : null);
@@ -265,6 +266,36 @@ export class CanvasForm extends VisualForm {
                 this._style.lineCap = linecap;
             }
         }
+        return this;
+    }
+    gradient(stops) {
+        let vals = [];
+        if (stops.length < 2)
+            stops.push([0.99, "#000"], [1, "#000"]);
+        for (let i = 0, len = stops.length; i < len; i++) {
+            let t = typeof stops[i] === 'string' ? i * (1 / (stops.length - 1)) : stops[i][0];
+            let v = typeof stops[i] === 'string' ? stops[i] : stops[i][1];
+            vals.push([t, v]);
+        }
+        return (area1, area2) => {
+            area1 = area1.map(a => a.abs());
+            if (area2)
+                area2.map(a => a.abs());
+            let grad = area2
+                ? this.ctx.createRadialGradient(area1[0][0], area1[0][1], area1[1][0], area2[0][0], area2[0][1], area2[1][0])
+                : this.ctx.createLinearGradient(area1[0][0], area1[0][1], area1[1][0], area1[1][1]);
+            for (let i = 0, len = vals.length; i < len; i++) {
+                grad.addColorStop(vals[i][0], vals[i][1]);
+            }
+            return grad;
+        };
+    }
+    composite(mode) {
+        this.ctx.globalCompositeOperation = mode;
+        return this;
+    }
+    clip() {
+        this.ctx.clip();
         return this;
     }
     dash(segments = true, offset = 0) {

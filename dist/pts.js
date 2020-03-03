@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.8.11 - Copyright © 2017-2020 William Ngan and contributors.
+ * pts.js 0.9.0 - Copyright © 2017-2020 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */

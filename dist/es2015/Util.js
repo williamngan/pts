@@ -71,23 +71,28 @@ export class Util {
     static randomInt(range, start = 0) {
         return Math.floor(Math.random() * range) + start;
     }
-    static split(pts, size, stride, loopBack = false) {
-        let st = stride || size;
+    static split(pts, size, stride, loopBack = false, matchSize = true) {
         let chunks = [];
-        for (let i = 0; i < pts.length; i++) {
-            if (i * st + size > pts.length) {
+        let part = [];
+        let st = stride || size;
+        let index = 0;
+        if (pts.length <= 0 || st <= 0)
+            return [];
+        while (index < pts.length) {
+            part = [];
+            for (let k = 0; k < size; k++) {
                 if (loopBack) {
-                    let g = pts.slice(i * st);
-                    g = g.concat(pts.slice(0, (i * st + size) % size));
-                    chunks.push(g);
+                    part.push(pts[(index + k) % pts.length]);
                 }
                 else {
-                    break;
+                    if (index + k >= pts.length)
+                        break;
+                    part.push(pts[index + k]);
                 }
             }
-            else {
-                chunks.push(pts.slice(i * st, i * st + size));
-            }
+            index += st;
+            if (!matchSize || (matchSize && part.length === size))
+                chunks.push(part);
         }
         return chunks;
     }

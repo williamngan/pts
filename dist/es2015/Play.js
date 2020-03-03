@@ -85,6 +85,12 @@ export class Tempo {
     animate(time, ftime) {
         this.track(time);
     }
+    resize(bound, evt) {
+        return;
+    }
+    action(type, px, py, evt) {
+        return;
+    }
 }
 export class Sound {
     constructor(type) {

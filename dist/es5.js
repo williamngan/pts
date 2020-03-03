@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.8.11 - Copyright © 2017-2019 William Ngan and contributors.
+ * pts.js 0.9.0 - Copyright © 2017-2020 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -463,6 +463,44 @@ var CanvasForm = function (_Form_1$VisualForm) {
             return this;
         }
     }, {
+        key: "gradient",
+        value: function gradient(stops) {
+            var _this3 = this;
+
+            var vals = [];
+            if (stops.length < 2) stops.push([0.99, "#000"], [1, "#000"]);
+            for (var i = 0, len = stops.length; i < len; i++) {
+                var t = typeof stops[i] === 'string' ? i * (1 / (stops.length - 1)) : stops[i][0];
+                var v = typeof stops[i] === 'string' ? stops[i] : stops[i][1];
+                vals.push([t, v]);
+            }
+            return function (area1, area2) {
+                area1 = area1.map(function (a) {
+                    return a.abs();
+                });
+                if (area2) area2.map(function (a) {
+                    return a.abs();
+                });
+                var grad = area2 ? _this3.ctx.createRadialGradient(area1[0][0], area1[0][1], area1[1][0], area2[0][0], area2[0][1], area2[1][0]) : _this3.ctx.createLinearGradient(area1[0][0], area1[0][1], area1[1][0], area1[1][1]);
+                for (var _i = 0, _len = vals.length; _i < _len; _i++) {
+                    grad.addColorStop(vals[_i][0], vals[_i][1]);
+                }
+                return grad;
+            };
+        }
+    }, {
+        key: "composite",
+        value: function composite(mode) {
+            this.ctx.globalCompositeOperation = mode;
+            return this;
+        }
+    }, {
+        key: "clip",
+        value: function clip() {
+            this.ctx.clip();
+            return this;
+        }
+    }, {
         key: "dash",
         value: function dash() {
             var segments = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
@@ -499,12 +537,12 @@ var CanvasForm = function (_Form_1$VisualForm) {
     }, {
         key: "fontWidthEstimate",
         value: function fontWidthEstimate() {
-            var _this3 = this;
+            var _this4 = this;
 
             var estimate = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
 
             this._estimateTextWidth = estimate ? Typography_1.Typography.textWidthEstimator(function (c) {
-                return _this3._ctx.measureText(c).width;
+                return _this4._ctx.measureText(c).width;
             }) : undefined;
             return this;
         }
@@ -652,7 +690,7 @@ var CanvasForm = function (_Form_1$VisualForm) {
         value: function paragraphBox(box, txt) {
             var lineHeight = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1.2;
 
-            var _this4 = this;
+            var _this5 = this;
 
             var verticalAlign = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : "top";
             var crop = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : true;
@@ -667,7 +705,7 @@ var CanvasForm = function (_Form_1$VisualForm) {
                 if (!sub) return buffer;
                 if (crop && cc * lstep > size[1] - lstep * 2) return buffer;
                 if (cc > 10000) throw new Error("max recursion reached (10000)");
-                var t = _this4._textTruncate(sub, size[0], "");
+                var t = _this5._textTruncate(sub, size[0], "");
                 var newln = t[0].indexOf("\n");
                 if (newln >= 0) {
                     buffer.push(t[0].substr(0, newln));
@@ -721,6 +759,11 @@ var CanvasForm = function (_Form_1$VisualForm) {
         key: "space",
         get: function get() {
             return this._space;
+        }
+    }, {
+        key: "ctx",
+        get: function get() {
+            return this._space.ctx;
         }
     }], [{
         key: "circle",
@@ -5572,6 +5615,16 @@ var Tempo = function () {
             this.track(time);
         }
     }, {
+        key: "resize",
+        value: function resize(bound, evt) {
+            return;
+        }
+    }, {
+        key: "action",
+        value: function action(type, px, py, evt) {
+            return;
+        }
+    }, {
         key: "bpm",
         get: function get() {
             return this._bpm;
@@ -8429,21 +8482,25 @@ var Util = function () {
         key: "split",
         value: function split(pts, size, stride) {
             var loopBack = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+            var matchSize = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : true;
 
-            var st = stride || size;
             var chunks = [];
-            for (var i = 0; i < pts.length; i++) {
-                if (i * st + size > pts.length) {
+            var part = [];
+            var st = stride || size;
+            var index = 0;
+            if (pts.length <= 0 || st <= 0) return [];
+            while (index < pts.length) {
+                part = [];
+                for (var k = 0; k < size; k++) {
                     if (loopBack) {
-                        var g = pts.slice(i * st);
-                        g = g.concat(pts.slice(0, (i * st + size) % size));
-                        chunks.push(g);
+                        part.push(pts[(index + k) % pts.length]);
                     } else {
-                        break;
+                        if (index + k >= pts.length) break;
+                        part.push(pts[index + k]);
                     }
-                } else {
-                    chunks.push(pts.slice(i * st, i * st + size));
                 }
+                index += st;
+                if (!matchSize || matchSize && part.length === size) chunks.push(part);
             }
             return chunks;
         }
