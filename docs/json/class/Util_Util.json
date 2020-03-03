@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 1645,
+  "id": 1653,
   "comment": "Util class provides static helper functions.",
   "constructor": [],
   "accessors": [],
@@ -18,11 +18,11 @@
       "source": [
         [
           "Util.ts",
-          223,
+          229,
           16
         ]
       ],
-      "id": 1671,
+      "id": 1680,
       "flags": {
         "isStatic": true
       },
@@ -62,11 +62,11 @@
       "source": [
         [
           "Util.ts",
-          211,
+          217,
           16
         ]
       ],
-      "id": 1667,
+      "id": 1676,
       "flags": {
         "isStatic": true
       },
@@ -100,11 +100,11 @@
       "source": [
         [
           "Util.ts",
-          279,
+          285,
           17
         ]
       ],
-      "id": 1695,
+      "id": 1704,
       "flags": {
         "isStatic": true
       },
@@ -154,7 +154,7 @@
           16
         ]
       ],
-      "id": 1650,
+      "id": 1658,
       "flags": {
         "isStatic": true
       },
@@ -182,11 +182,11 @@
       "source": [
         [
           "Util.ts",
-          293,
+          299,
           13
         ]
       ],
-      "id": 1704,
+      "id": 1713,
       "flags": {
         "isStatic": true
       },
@@ -224,7 +224,7 @@
           18
         ]
       ],
-      "id": 1657,
+      "id": 1665,
       "flags": {
         "isStatic": true
       },
@@ -258,11 +258,11 @@
       "source": [
         [
           "Util.ts",
-          186,
+          187,
           14
         ]
       ],
-      "id": 1661,
+      "id": 1669,
       "flags": {
         "isStatic": true
       },
@@ -294,9 +294,15 @@
             },
             {
               "name": "loopBack",
-              "comment": "if `true`, always go through the array till the end and loop back to the beginning to complete the segments if needed\n",
+              "comment": "if `true`, always go through the array till the end and loop back to the beginning to complete the segments if needed.",
               "type": "boolean",
               "default": "false"
+            },
+            {
+              "name": "matchSize",
+              "comment": "if `true`, all chunks's length must match `size`.\n",
+              "type": "boolean",
+              "default": "true"
             }
           ],
           "tags": []
@@ -308,11 +314,11 @@
       "source": [
         [
           "Util.ts",
-          260,
+          266,
           16
         ]
       ],
-      "id": 1684,
+      "id": 1693,
       "flags": {
         "isStatic": true
       },
@@ -367,7 +373,7 @@
           13
         ]
       ],
-      "id": 1653,
+      "id": 1661,
       "flags": {
         "isStatic": true
       },
@@ -405,7 +411,7 @@
           18
         ]
       ],
-      "id": 1647,
+      "id": 1655,
       "flags": {
         "isStatic": true
       },
@@ -433,11 +439,11 @@
       "source": [
         [
           "Util.ts",
-          238,
+          244,
           12
         ]
       ],
-      "id": 1681,
+      "id": 1690,
       "flags": {
         "isStatic": true
       },

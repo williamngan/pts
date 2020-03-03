@@ -1,13 +1,14 @@
-import { Group } from "./Pt";
+import { Group, Bound } from "./Pt";
 import { ITempoListener, ITempoResponses } from "./Types";
-import { ISoundAnalyzer, SoundType, PtLike } from "./Types";
-export declare class Tempo {
+import { ISoundAnalyzer, SoundType, PtLike, IPlayer } from "./Types";
+export declare class Tempo implements IPlayer {
     protected _bpm: number;
     protected _ms: number;
     protected _listeners: {
         [key: string]: ITempoListener;
     };
     protected _listenerInc: number;
+    animateID: string;
     constructor(bpm: number);
     static fromBeat(ms: number): Tempo;
     bpm: number;
@@ -16,7 +17,9 @@ export declare class Tempo {
     every(beats: number | number[]): ITempoResponses;
     track(time: any): void;
     stop(name: string): void;
-    protected animate(time: any, ftime: any): void;
+    animate(time: any, ftime: any): void;
+    resize(bound: Bound, evt?: Event): void;
+    action(type: string, px: number, py: number, evt: Event): void;
 }
 export declare class Sound {
     private _type;

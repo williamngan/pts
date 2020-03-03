@@ -3,12 +3,12 @@
   "source": [
     [
       "Play.ts",
-      150,
+      165,
       18
     ]
   ],
   "kind": "Class",
-  "id": 6675,
+  "id": 6709,
   "comment": "Sound class simplifies common tasks like audio inputs and visualizations using a subset of Web Audio API. It can be used with other audio libraries like tone.js, and extended to support additional web audio functions. See [the guide](../guide/Sound-0800.html) to get started.",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "Play.ts",
-          174,
+          189,
           30
         ]
       ],
-      "id": 6685,
+      "id": 6719,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -48,11 +48,11 @@
       "source": [
         [
           "Play.ts",
-          387,
+          402,
           13
         ]
       ],
-      "id": 6735,
+      "id": 6769,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -67,16 +67,16 @@
       "source": [
         [
           "Play.ts",
-          342,
+          357,
           12
         ],
         [
           "Play.ts",
-          343,
+          358,
           12
         ]
       ],
-      "id": 6723,
+      "id": 6757,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -99,11 +99,11 @@
       "source": [
         [
           "Play.ts",
-          318,
+          333,
           9
         ]
       ],
-      "id": 6715,
+      "id": 6749,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -118,16 +118,16 @@
       "source": [
         [
           "Play.ts",
-          403,
+          418,
           15
         ],
         [
           "Play.ts",
-          406,
+          421,
           15
         ]
       ],
-      "id": 6739,
+      "id": 6773,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -150,11 +150,11 @@
       "source": [
         [
           "Play.ts",
-          324,
+          339,
           10
         ]
       ],
-      "id": 6717,
+      "id": 6751,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -169,11 +169,11 @@
       "source": [
         [
           "Play.ts",
-          379,
+          394,
           14
         ]
       ],
-      "id": 6733,
+      "id": 6767,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -188,11 +188,11 @@
       "source": [
         [
           "Play.ts",
-          355,
+          370,
           13
         ]
       ],
-      "id": 6729,
+      "id": 6763,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -207,11 +207,11 @@
       "source": [
         [
           "Play.ts",
-          361,
+          376,
           14
         ]
       ],
-      "id": 6731,
+      "id": 6765,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -226,11 +226,11 @@
       "source": [
         [
           "Play.ts",
-          395,
+          410,
           16
         ]
       ],
-      "id": 6737,
+      "id": 6771,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -245,11 +245,11 @@
       "source": [
         [
           "Play.ts",
-          336,
+          351,
           12
         ]
       ],
-      "id": 6721,
+      "id": 6755,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -264,11 +264,11 @@
       "source": [
         [
           "Play.ts",
-          330,
+          345,
           12
         ]
       ],
-      "id": 6719,
+      "id": 6753,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -283,11 +283,11 @@
       "source": [
         [
           "Play.ts",
-          349,
+          364,
           10
         ]
       ],
-      "id": 6727,
+      "id": 6761,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -304,11 +304,11 @@
       "source": [
         [
           "Play.ts",
-          428,
+          443,
           9
         ]
       ],
-      "id": 6746,
+      "id": 6780,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -352,11 +352,11 @@
       "source": [
         [
           "Play.ts",
-          415,
+          430,
           9
         ]
       ],
-      "id": 6743,
+      "id": 6777,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -382,11 +382,11 @@
       "source": [
         [
           "Play.ts",
-          257,
+          272,
           24
         ]
       ],
-      "id": 6701,
+      "id": 6735,
       "flags": {
         "isProtected": true
       },
@@ -414,11 +414,11 @@
       "source": [
         [
           "Play.ts",
-          493,
+          508,
           12
         ]
       ],
-      "id": 6768,
+      "id": 6802,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -437,11 +437,11 @@
       "source": [
         [
           "Play.ts",
-          506,
+          521,
           14
         ]
       ],
-      "id": 6770,
+      "id": 6804,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -484,11 +484,11 @@
       "source": [
         [
           "Play.ts",
-          514,
+          529,
           7
         ]
       ],
-      "id": 6775,
+      "id": 6809,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -507,11 +507,11 @@
       "source": [
         [
           "Play.ts",
-          525,
+          540,
           7
         ]
       ],
-      "id": 6777,
+      "id": 6811,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -537,11 +537,11 @@
       "source": [
         [
           "Play.ts",
-          551,
+          566,
           6
         ]
       ],
-      "id": 6780,
+      "id": 6814,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -560,11 +560,11 @@
       "source": [
         [
           "Play.ts",
-          472,
+          487,
           12
         ]
       ],
-      "id": 6761,
+      "id": 6795,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -583,11 +583,11 @@
       "source": [
         [
           "Play.ts",
-          485,
+          500,
           14
         ]
       ],
-      "id": 6763,
+      "id": 6797,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -630,11 +630,11 @@
       "source": [
         [
           "Play.ts",
-          578,
+          593,
           8
         ]
       ],
-      "id": 6782,
+      "id": 6816,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -653,11 +653,11 @@
       "source": [
         [
           "Play.ts",
-          197,
+          212,
           13
         ]
       ],
-      "id": 6688,
+      "id": 6722,
       "flags": {
         "isStatic": true
       },
@@ -703,11 +703,11 @@
       "source": [
         [
           "Play.ts",
-          274,
+          289,
           17
         ]
       ],
-      "id": 6704,
+      "id": 6738,
       "flags": {
         "isStatic": true
       },
@@ -746,11 +746,11 @@
       "source": [
         [
           "Play.ts",
-          300,
+          315,
           20
         ]
       ],
-      "id": 6712,
+      "id": 6746,
       "flags": {
         "isStatic": true
       },
@@ -783,11 +783,11 @@
       "source": [
         [
           "Play.ts",
-          213,
+          228,
           13
         ]
       ],
-      "id": 6694,
+      "id": 6728,
       "flags": {
         "isStatic": true
       },
@@ -826,11 +826,11 @@
       "source": [
         [
           "Play.ts",
-          235,
+          250,
           21
         ]
       ],
-      "id": 6698,
+      "id": 6732,
       "flags": {
         "isStatic": true
       },
@@ -861,11 +861,11 @@
       "source": [
         [
           "Play.ts",
-          170,
+          185,
           10
         ]
       ],
-      "id": 6682,
+      "id": 6716,
       "flags": {},
       "type": "analyzer",
       "overrides": false,

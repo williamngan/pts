@@ -71,6 +71,7 @@
     "AnimateCallbackFn",
     "ColorType",
     "DOMFormContext",
+    "DefaultFormStyle",
     "DelaunayMesh",
     "DelaunayShape",
     "GroupLike",

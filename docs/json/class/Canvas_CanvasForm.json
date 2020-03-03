@@ -3,12 +3,12 @@
   "source": [
     [
       "Canvas.ts",
-      390,
+      391,
       23
     ]
   ],
   "kind": "Class",
-  "id": 3484,
+  "id": 3493,
   "comment": "CanvasForm is an implementation of abstract class [`VisualForm`](#link). It provide methods to express Pts on [`CanvasSpace`](#link).\nYou may extend CanvasForm to implement your own expressions for CanvasSpace.",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "Canvas.ts",
-          403,
+          404,
           4
         ]
       ],
-      "id": 3498,
+      "id": 3507,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -44,6 +44,25 @@
   ],
   "accessors": [
     {
+      "name": "ctx",
+      "source": [
+        [
+          "Canvas.ts",
+          436,
+          9
+        ]
+      ],
+      "id": 3512,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Get the rendering context of canvas to perform other canvas functions.",
+      "getter": {
+        "type": "PtsCanvasRenderingContext2D"
+      },
+      "setter": false
+    },
+    {
       "name": "currentFont",
       "source": [
         [
@@ -52,7 +71,7 @@
           17
         ]
       ],
-      "id": 3683,
+      "id": 3706,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.currentFont",
@@ -76,7 +95,7 @@
           12
         ]
       ],
-      "id": 3673,
+      "id": 3696,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.filled",
@@ -103,7 +122,7 @@
           11
         ]
       ],
-      "id": 3720,
+      "id": 3743,
       "flags": {},
       "overrides": false,
       "inherits": "Form.ready",
@@ -118,11 +137,11 @@
       "source": [
         [
           "Canvas.ts",
-          428,
+          429,
           11
         ]
       ],
-      "id": 3501,
+      "id": 3510,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -146,7 +165,7 @@
           13
         ]
       ],
-      "id": 3678,
+      "id": 3701,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.stroked",
@@ -171,11 +190,11 @@
       "source": [
         [
           "Canvas.ts",
-          1021,
+          1080,
           13
         ]
       ],
-      "id": 3665,
+      "id": 3688,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -207,11 +226,11 @@
       "source": [
         [
           "Canvas.ts",
-          460,
+          468,
           9
         ]
       ],
-      "id": 3510,
+      "id": 3521,
       "flags": {},
       "overrides": "VisualForm.alpha",
       "inherits": false,
@@ -242,11 +261,11 @@
       "source": [
         [
           "Canvas.ts",
-          752,
+          811,
           7
         ]
       ],
-      "id": 3592,
+      "id": 3615,
       "flags": {},
       "overrides": "VisualForm.arc",
       "inherits": false,
@@ -296,11 +315,11 @@
       "source": [
         [
           "Canvas.ts",
-          688,
+          747,
           10
         ]
       ],
-      "id": 3564,
+      "id": 3587,
       "flags": {},
       "overrides": "VisualForm.circle",
       "inherits": false,
@@ -330,7 +349,7 @@
           9
         ]
       ],
-      "id": 3704,
+      "id": 3727,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.circles",
@@ -352,15 +371,68 @@
       ]
     },
     {
+      "name": "clip",
+      "source": [
+        [
+          "Canvas.ts",
+          571,
+          8
+        ]
+      ],
+      "id": 3543,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a clipping mask from the current path. See [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/clip) for details.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "composite",
+      "source": [
+        [
+          "Canvas.ts",
+          562,
+          13
+        ]
+      ],
+      "id": 3540,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Set composite operation (also known as blend mode). See [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation) for the full list of operations you can use.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "mode",
+              "comment": "a composite operation such as 'lighten', 'multiply', 'overlay', and 'color-burn'\n",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "dash",
       "source": [
         [
           "Canvas.ts",
-          524,
+          583,
           8
         ]
       ],
-      "id": 3522,
+      "id": 3545,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -397,11 +469,11 @@
       "source": [
         [
           "Canvas.ts",
-          721,
+          780,
           11
         ]
       ],
-      "id": 3576,
+      "id": 3599,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -457,11 +529,11 @@
       "source": [
         [
           "Canvas.ts",
-          472,
+          480,
           8
         ]
       ],
-      "id": 3513,
+      "id": 3524,
       "flags": {},
       "overrides": "VisualForm.fill",
       "inherits": false,
@@ -474,7 +546,7 @@
             {
               "name": "c",
               "comment": "fill color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle))\n",
-              "type": "string | boolean",
+              "type": "string | boolean | CanvasGradient | CanvasPattern",
               "default": false
             }
           ],
@@ -496,7 +568,7 @@
           10
         ]
       ],
-      "id": 3690,
+      "id": 3713,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.fillOnly",
@@ -522,11 +594,11 @@
       "source": [
         [
           "Canvas.ts",
-          550,
+          609,
           8
         ]
       ],
-      "id": 3526,
+      "id": 3549,
       "flags": {},
       "overrides": "VisualForm.font",
       "inherits": false,
@@ -581,11 +653,11 @@
       "source": [
         [
           "Canvas.ts",
-          576,
+          635,
           21
         ]
       ],
-      "id": 3533,
+      "id": 3556,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -611,11 +683,11 @@
       "source": [
         [
           "Canvas.ts",
-          586,
+          645,
           16
         ]
       ],
-      "id": 3536,
+      "id": 3559,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -637,15 +709,50 @@
       ]
     },
     {
+      "name": "gradient",
+      "source": [
+        [
+          "Canvas.ts",
+          531,
+          12
+        ]
+      ],
+      "id": 3533,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "This function takes an array of gradient colors, and returns a function to define the areas of the gradient fill. See demo code in [CanvasForm.gradient](https://ptsjs.org/demo/?name=canvasform.textBox).",
+          "returns": " Fn(area1:GroupLike, area2:GroupLike)",
+          "returns_comment": "a function that takes 1 or 2 `Group` as parameters. Use a single `Group` to specify a rectangular area for linear gradient, or use 2 `Groups` to specify 2 `Circles` for radial gradient.",
+          "parameters": [
+            {
+              "name": "stops",
+              "comment": "an array of gradient stops. This can be an array of colors `[\"#f00\", \"#0f0\", ...]` for evenly distributed gradient, or an array of [stop, color] like `[[0.1, \"#f00\"], [0.7, \"#0f0\"]]`",
+              "type": "number[],string[] | string[]",
+              "default": false
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`c1 = Circle.fromCenter(...); grad = form.gradient([\"#f00\", \"#00f\"]); form.fill( grad( c1, c2 ) ).circle( c1 )`\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "image",
       "source": [
         [
           "Canvas.ts",
-          905,
+          964,
           9
         ]
       ],
-      "id": 3635,
+      "id": 3658,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -683,11 +790,11 @@
       "source": [
         [
           "Canvas.ts",
-          813,
+          872,
           8
         ]
       ],
-      "id": 3612,
+      "id": 3635,
       "flags": {},
       "overrides": "VisualForm.line",
       "inherits": false,
@@ -717,7 +824,7 @@
           7
         ]
       ],
-      "id": 3710,
+      "id": 3733,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.lines",
@@ -743,11 +850,11 @@
       "source": [
         [
           "Canvas.ts",
-          1036,
+          1095,
           7
         ]
       ],
-      "id": 3669,
+      "id": 3692,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -773,11 +880,11 @@
       "source": [
         [
           "Canvas.ts",
-          962,
+          1021,
           16
         ]
       ],
-      "id": 3658,
+      "id": 3681,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -827,11 +934,11 @@
       "source": [
         [
           "Canvas.ts",
-          659,
+          718,
           9
         ]
       ],
-      "id": 3554,
+      "id": 3577,
       "flags": {},
       "overrides": "VisualForm.point",
       "inherits": false,
@@ -878,7 +985,7 @@
           8
         ]
       ],
-      "id": 3699,
+      "id": 3722,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.points",
@@ -916,11 +1023,11 @@
       "source": [
         [
           "Canvas.ts",
-          840,
+          899,
           11
         ]
       ],
-      "id": 3619,
+      "id": 3642,
       "flags": {},
       "overrides": "VisualForm.polygon",
       "inherits": false,
@@ -950,7 +1057,7 @@
           10
         ]
       ],
-      "id": 3713,
+      "id": 3736,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.polygons",
@@ -976,11 +1083,11 @@
       "source": [
         [
           "Canvas.ts",
-          867,
+          926,
           8
         ]
       ],
-      "id": 3626,
+      "id": 3649,
       "flags": {},
       "overrides": "VisualForm.rect",
       "inherits": false,
@@ -1010,7 +1117,7 @@
           7
         ]
       ],
-      "id": 3716,
+      "id": 3739,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.rects",
@@ -1036,11 +1143,11 @@
       "source": [
         [
           "Canvas.ts",
-          447,
+          455,
           17
         ]
       ],
-      "id": 3507,
+      "id": 3518,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1066,11 +1173,11 @@
       "source": [
         [
           "Canvas.ts",
-          634,
+          693,
           9
         ]
       ],
-      "id": 3550,
+      "id": 3573,
       "flags": {},
       "overrides": "VisualForm.reset",
       "inherits": false,
@@ -1089,11 +1196,11 @@
       "source": [
         [
           "Canvas.ts",
-          787,
+          846,
           10
         ]
       ],
-      "id": 3604,
+      "id": 3627,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1129,7 +1236,7 @@
           9
         ]
       ],
-      "id": 3707,
+      "id": 3730,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.squares",
@@ -1155,11 +1262,11 @@
       "source": [
         [
           "Canvas.ts",
-          493,
+          501,
           10
         ]
       ],
-      "id": 3516,
+      "id": 3527,
       "flags": {},
       "overrides": "VisualForm.stroke",
       "inherits": false,
@@ -1172,7 +1279,7 @@
             {
               "name": "c",
               "comment": "stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle))",
-              "type": "string | boolean",
+              "type": "string | boolean | CanvasGradient | CanvasPattern",
               "default": false
             },
             {
@@ -1212,7 +1319,7 @@
           12
         ]
       ],
-      "id": 3693,
+      "id": 3716,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.strokeOnly",
@@ -1256,11 +1363,11 @@
       "source": [
         [
           "Canvas.ts",
-          930,
+          989,
           8
         ]
       ],
-      "id": 3646,
+      "id": 3669,
       "flags": {},
       "overrides": "VisualForm.text",
       "inherits": false,
@@ -1298,11 +1405,11 @@
       "source": [
         [
           "Canvas.ts",
-          944,
+          1003,
           11
         ]
       ],
-      "id": 3651,
+      "id": 3674,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1352,11 +1459,11 @@
       "source": [
         [
           "Canvas.ts",
-          436,
+          444,
           14
         ]
       ],
-      "id": 3503,
+      "id": 3514,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1388,11 +1495,11 @@
       "source": [
         [
           "Canvas.ts",
-          737,
+          796,
           14
         ]
       ],
-      "id": 3584,
+      "id": 3607,
       "flags": {
         "isStatic": true
       },
@@ -1450,11 +1557,11 @@
       "source": [
         [
           "Canvas.ts",
-          676,
+          735,
           17
         ]
       ],
-      "id": 3559,
+      "id": 3582,
       "flags": {
         "isStatic": true
       },
@@ -1494,11 +1601,11 @@
       "source": [
         [
           "Canvas.ts",
-          705,
+          764,
           18
         ]
       ],
-      "id": 3567,
+      "id": 3590,
       "flags": {
         "isStatic": true
       },
@@ -1562,11 +1669,11 @@
       "source": [
         [
           "Canvas.ts",
-          881,
+          940,
           16
         ]
       ],
-      "id": 3629,
+      "id": 3652,
       "flags": {
         "isStatic": true
       },
@@ -1612,11 +1719,11 @@
       "source": [
         [
           "Canvas.ts",
-          799,
+          858,
           15
         ]
       ],
-      "id": 3608,
+      "id": 3631,
       "flags": {
         "isStatic": true
       },
@@ -1650,11 +1757,11 @@
       "source": [
         [
           "Canvas.ts",
-          825,
+          884,
           18
         ]
       ],
-      "id": 3615,
+      "id": 3638,
       "flags": {
         "isStatic": true
       },
@@ -1688,11 +1795,11 @@
       "source": [
         [
           "Canvas.ts",
-          852,
+          911,
           15
         ]
       ],
-      "id": 3622,
+      "id": 3645,
       "flags": {
         "isStatic": true
       },
@@ -1726,11 +1833,11 @@
       "source": [
         [
           "Canvas.ts",
-          765,
+          824,
           17
         ]
       ],
-      "id": 3599,
+      "id": 3622,
       "flags": {
         "isStatic": true
       },
@@ -1770,11 +1877,11 @@
       "source": [
         [
           "Canvas.ts",
-          918,
+          977,
           15
         ]
       ],
-      "id": 3640,
+      "id": 3663,
       "flags": {
         "isStatic": true
       },

@@ -6,6 +6,12 @@
     10
   ],
   [
+    "Canvas_CanvasForm#accessor_ctx",
+    "CanvasForm.ctx",
+    "Accessor",
+    6
+  ],
+  [
     "Canvas_CanvasForm#accessor_currentFont",
     "CanvasForm.currentFont",
     "Accessor",
@@ -66,6 +72,18 @@
     8
   ],
   [
+    "Canvas_CanvasForm#function_clip",
+    "CanvasForm.clip",
+    "Function",
+    8
+  ],
+  [
+    "Canvas_CanvasForm#function_composite",
+    "CanvasForm.composite",
+    "Function",
+    8
+  ],
+  [
     "Canvas_CanvasForm#function_dash",
     "CanvasForm.dash",
     "Function",
@@ -104,6 +122,12 @@
   [
     "Canvas_CanvasForm#function_getTextWidth",
     "CanvasForm.getTextWidth",
+    "Function",
+    8
+  ],
+  [
+    "Canvas_CanvasForm#function_gradient",
+    "CanvasForm.gradient",
     "Function",
     8
   ],
@@ -5994,6 +6018,12 @@
     10
   ],
   [
+    "Play_Tempo#property_animateID",
+    "Tempo.animateID",
+    "Variable",
+    0
+  ],
+  [
     "Play_Tempo#accessor_bpm",
     "Tempo.bpm",
     "Accessor",
@@ -6006,6 +6036,12 @@
     6
   ],
   [
+    "Play_Tempo#function_action",
+    "Tempo.action",
+    "Function",
+    8
+  ],
+  [
     "Play_Tempo#function_animate",
     "Tempo.animate",
     "Function",
@@ -6014,6 +6050,12 @@
   [
     "Play_Tempo#function_every",
     "Tempo.every",
+    "Function",
+    8
+  ],
+  [
+    "Play_Tempo#function_resize",
+    "Tempo.resize",
     "Function",
     8
   ],
@@ -8966,6 +9008,12 @@
   [
     "Types_DOMFormContext",
     "DOMFormContext",
+    "Type alias",
+    0
+  ],
+  [
+    "Types_DefaultFormStyle",
+    "DefaultFormStyle",
     "Type alias",
     0
   ],

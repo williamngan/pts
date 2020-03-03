@@ -36,7 +36,7 @@ export declare class Util {
     static getArgs(args: any[]): Array<number>;
     static warn(message?: string, defaultReturn?: any): any;
     static randomInt(range: number, start?: number): number;
-    static split(pts: any[], size: number, stride?: number, loopBack?: boolean): any[][];
+    static split(pts: any[], size: number, stride?: number, loopBack?: boolean, matchSize?: boolean): any[][];
     static flatten(pts: any[], flattenAsGroup?: boolean): any;
     static combine<T>(a: T[], b: T[], op: (a: T, b: T) => T): T[];
     static zip(arrays: Array<any>[]): any[];

@@ -89,3 +89,11 @@ export declare type ISoundAnalyzer = {
     data: Uint8Array;
 };
 export declare type SoundType = "file" | "gen" | "input";
+export declare type DefaultFormStyle = {
+    fillStyle?: string | CanvasGradient | CanvasPattern;
+    strokeStyle?: string | CanvasGradient | CanvasPattern;
+    lineWidth?: number;
+    lineJoin?: string;
+    lineCap?: string;
+    globalAlpha?: number;
+};

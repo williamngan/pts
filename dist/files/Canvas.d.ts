@@ -2,7 +2,7 @@
 import { MultiTouchSpace } from './Space';
 import { VisualForm, Font } from "./Form";
 import { Pt, Bound } from "./Pt";
-import { PtLike, GroupLike, PtsCanvasRenderingContext2D } from "./Types";
+import { PtLike, GroupLike, PtsCanvasRenderingContext2D, DefaultFormStyle } from "./Types";
 export declare class CanvasSpace extends MultiTouchSpace {
     protected _canvas: HTMLCanvasElement;
     protected _container: Element;
@@ -44,21 +44,18 @@ export declare class CanvasForm extends VisualForm {
     protected _space: CanvasSpace;
     protected _ctx: CanvasRenderingContext2D;
     protected _estimateTextWidth: (string: any) => number;
-    protected _style: {
-        fillStyle: string;
-        strokeStyle: string;
-        lineWidth: number;
-        lineJoin: string;
-        lineCap: string;
-        globalAlpha: number;
-    };
+    protected _style: DefaultFormStyle;
     constructor(space: CanvasSpace);
     readonly space: CanvasSpace;
+    readonly ctx: PtsCanvasRenderingContext2D;
     useOffscreen(off?: boolean, clear?: boolean | string): this;
     renderOffscreen(offset?: PtLike): void;
     alpha(a: number): this;
-    fill(c: string | boolean): this;
-    stroke(c: string | boolean, width?: number, linejoin?: CanvasLineJoin, linecap?: CanvasLineCap): this;
+    fill(c: string | boolean | CanvasGradient | CanvasPattern): this;
+    stroke(c: string | boolean | CanvasGradient | CanvasPattern, width?: number, linejoin?: CanvasLineJoin, linecap?: CanvasLineCap): this;
+    gradient(stops: [number, string][] | string[]): ((area1: GroupLike, area2?: GroupLike) => CanvasGradient);
+    composite(mode: string): this;
+    clip(): this;
     dash(segments?: PtLike | boolean, offset?: number): this;
     font(sizeOrFont: number | Font, weight?: string, style?: string, lineHeight?: number, family?: string): this;
     fontWidthEstimate(estimate?: boolean): this;

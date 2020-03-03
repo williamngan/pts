@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 6637,
+  "id": 6660,
   "comment": "Tempo helps you create synchronized and rhythmic animations.",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "Play.ts",
-          15,
-          36
+          16,
+          26
         ]
       ],
-      "id": 6645,
+      "id": 6669,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -48,16 +48,16 @@
       "source": [
         [
           "Play.ts",
-          36,
+          37,
           9
         ],
         [
           "Play.ts",
-          37,
+          38,
           9
         ]
       ],
-      "id": 6651,
+      "id": 6675,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -80,16 +80,16 @@
       "source": [
         [
           "Play.ts",
-          45,
+          46,
           8
         ],
         [
           "Play.ts",
-          46,
+          47,
           8
         ]
       ],
-      "id": 6655,
+      "id": 6679,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -110,23 +110,69 @@
   ],
   "methods": [
     {
-      "name": "animate",
+      "name": "action",
       "source": [
         [
           "Play.ts",
-          139,
-          19
+          154,
+          8
         ]
       ],
-      "id": 6671,
-      "flags": {
-        "isProtected": true
-      },
+      "id": 6703,
+      "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
-          "comment": "Internal implementation for use when adding into Space",
+          "comment": "IPlayer interface. Not implementated.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "type",
+              "comment": "",
+              "type": "string",
+              "default": false
+            },
+            {
+              "name": "px",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "py",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "evt",
+              "comment": "",
+              "type": "Event",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "animate",
+      "source": [
+        [
+          "Play.ts",
+          140,
+          9
+        ]
+      ],
+      "id": 6695,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "IPlayer interface. Internal implementation that calls `track( time )`.",
           "returns": "void",
           "returns_comment": false,
           "parameters": [
@@ -152,11 +198,11 @@
       "source": [
         [
           "Play.ts",
-          73,
+          74,
           7
         ]
       ],
-      "id": 6662,
+      "id": 6686,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -183,15 +229,51 @@
       ]
     },
     {
+      "name": "resize",
+      "source": [
+        [
+          "Play.ts",
+          147,
+          8
+        ]
+      ],
+      "id": 6699,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "IPlayer interface. Not implementated.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "bound",
+              "comment": "",
+              "type": "Bound",
+              "default": false
+            },
+            {
+              "name": "evt",
+              "comment": "",
+              "type": "Event",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "stop",
       "source": [
         [
           "Play.ts",
-          131,
+          132,
           6
         ]
       ],
-      "id": 6668,
+      "id": 6692,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -217,11 +299,11 @@
       "source": [
         [
           "Play.ts",
-          98,
+          99,
           7
         ]
       ],
-      "id": 6665,
+      "id": 6689,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -247,11 +329,11 @@
       "source": [
         [
           "Play.ts",
-          29,
+          30,
           17
         ]
       ],
-      "id": 6648,
+      "id": 6672,
       "flags": {
         "isStatic": true
       },
@@ -276,8 +358,29 @@
     }
   ],
   "variables": [],
-  "properties": [],
+  "properties": [
+    {
+      "name": "animateID",
+      "source": [
+        [
+          "Play.ts",
+          16,
+          18
+        ]
+      ],
+      "id": 6668,
+      "flags": {
+        "isPublic": true
+      },
+      "type": "animateID",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    }
+  ],
   "flags": {},
   "extends": [],
-  "implements": []
+  "implements": [
+    "IPlayer"
+  ]
 }

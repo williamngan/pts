@@ -43,21 +43,18 @@ export class CanvasForm extends VisualForm {
     protected _space: CanvasSpace;
     protected _ctx: CanvasRenderingContext2D;
     protected _estimateTextWidth: (string: any) => number;
-    protected _style: {
-        fillStyle: string;
-        strokeStyle: string;
-        lineWidth: number;
-        lineJoin: string;
-        lineCap: string;
-        globalAlpha: number;
-    };
+    protected _style: DefaultFormStyle;
     constructor(space: CanvasSpace);
     readonly space: CanvasSpace;
+    readonly ctx: PtsCanvasRenderingContext2D;
     useOffscreen(off?: boolean, clear?: boolean | string): this;
     renderOffscreen(offset?: PtLike): void;
     alpha(a: number): this;
-    fill(c: string | boolean): this;
-    stroke(c: string | boolean, width?: number, linejoin?: CanvasLineJoin, linecap?: CanvasLineCap): this;
+    fill(c: string | boolean | CanvasGradient | CanvasPattern): this;
+    stroke(c: string | boolean | CanvasGradient | CanvasPattern, width?: number, linejoin?: CanvasLineJoin, linecap?: CanvasLineCap): this;
+    gradient(stops: [number, string][] | string[]): ((area1: GroupLike, area2?: GroupLike) => CanvasGradient);
+    composite(mode: string): this;
+    clip(): this;
     dash(segments?: PtLike | boolean, offset?: number): this;
     font(sizeOrFont: number | Font, weight?: string, style?: string, lineHeight?: number, family?: string): this;
     fontWidthEstimate(estimate?: boolean): this;
@@ -629,13 +626,14 @@ export class Body extends Group {
     processParticle(b: Particle): void;
 }
 
-export class Tempo {
+export class Tempo implements IPlayer {
     protected _bpm: number;
     protected _ms: number;
     protected _listeners: {
         [key: string]: ITempoListener;
     };
     protected _listenerInc: number;
+    animateID: string;
     constructor(bpm: number);
     static fromBeat(ms: number): Tempo;
     bpm: number;
@@ -644,7 +642,9 @@ export class Tempo {
     every(beats: number | number[]): ITempoResponses;
     track(time: any): void;
     stop(name: string): void;
-    protected animate(time: any, ftime: any): void;
+    animate(time: any, ftime: any): void;
+    resize(bound: Bound, evt?: Event): void;
+    action(type: string, px: number, py: number, evt: Event): void;
 }
 export class Sound {
     _ctx: AudioContext;
@@ -1032,6 +1032,14 @@ export type ISoundAnalyzer = {
     data: Uint8Array;
 };
 export type SoundType = "file" | "gen" | "input";
+export type DefaultFormStyle = {
+    fillStyle?: string | CanvasGradient | CanvasPattern;
+    strokeStyle?: string | CanvasGradient | CanvasPattern;
+    lineWidth?: number;
+    lineJoin?: string;
+    lineCap?: string;
+    globalAlpha?: number;
+};
 
 export class Typography {
     static textWidthEstimator(fn: (string: any) => number, samples?: string[], distribution?: number[]): (string: any) => number;
@@ -1157,7 +1165,7 @@ export class Util {
     static getArgs(args: any[]): Array<number>;
     static warn(message?: string, defaultReturn?: any): any;
     static randomInt(range: number, start?: number): number;
-    static split(pts: any[], size: number, stride?: number, loopBack?: boolean): any[][];
+    static split(pts: any[], size: number, stride?: number, loopBack?: boolean, matchSize?: boolean): any[][];
     static flatten(pts: any[], flattenAsGroup?: boolean): any;
     static combine<T>(a: T[], b: T[], op: (a: T, b: T) => T): T[];
     static zip(arrays: Array<any>[]): any[];

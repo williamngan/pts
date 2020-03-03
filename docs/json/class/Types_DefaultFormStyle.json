@@ -1,0 +1,28 @@
+{
+  "name": "DefaultFormStyle",
+  "source": [
+    [
+      "Types.ts",
+      198,
+      28
+    ]
+  ],
+  "kind": "Typealias",
+  "id": 1644,
+  "comment": "Typescript only: default style object",
+  "constructor": [],
+  "accessors": [],
+  "methods": [],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": [],
+  "type_alias": [
+    "{ fillStyle:`string",
+    "CanvasGradient",
+    "CanvasPattern`, globalAlpha:`number`, lineCap:`string`, lineJoin:`string`, lineWidth:`number`, strokeStyle:`string",
+    "CanvasGradient",
+    "CanvasPattern` }"
+  ]
+}
