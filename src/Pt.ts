@@ -513,6 +513,22 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
     return [].slice.call( this );
   }
 
+
+  /**
+   * Convert this Pt to a Group as new Group([0,...], pt)
+   */
+  toGroup():Group {
+    return new Group( Pt.make(this.length), this.clone() );
+  }
+
+
+  /**
+   * Convert this Pt to a Bound as new Group([0,...], pt)
+   */
+  toBound():Bound {
+    return new Bound( Pt.make(this.length), this.clone() );
+  }
+
 }
 
 
