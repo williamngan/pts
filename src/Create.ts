@@ -149,7 +149,7 @@ export class Create {
 /**
  * Perlin noise gradient indices
  */
-const grad3 = [
+const __noise_grad3 = [
   [1,1, 0], [-1,1, 0], [1,-1,0], [-1,-1,0],
   [1,0, 1], [-1, 0, 1], [1,0,-1], [-1,0,-1],
   [0, 1,1], [ 0,-1,1], [0,1,-1], [ 0,-1,-1]
@@ -159,7 +159,7 @@ const grad3 = [
 /**
  * Perlin noise permutation table
  */ 
-const permTable = [151,160,137,91,90,15,
+const __noise_permTable = [151,160,137,91,90,15,
   131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23,
   190,6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,35,11,32,57,177,33,
   88,237,149,56,87,174,20,125,136,171,168,68,175,74,165,71,134,139,48,27,166,
@@ -192,7 +192,7 @@ export class Noise extends Pt {
     super( ...args );
 
     // For easier index wrapping, double the permutation table length
-    this.perm = permTable.concat( permTable );
+    this.perm = __noise_permTable.concat( __noise_permTable );
   }
 
 
@@ -203,6 +203,7 @@ export class Noise extends Pt {
    */
   initNoise( ...args ) {
     this._n = new Pt( ...args );
+    return this;
   }
 
 
@@ -213,6 +214,7 @@ export class Noise extends Pt {
    */
   step( x=0, y=0 ) {
     this._n.add( x, y );
+    return this;
   }
 
   /**
@@ -226,9 +228,11 @@ export class Noise extends Pt {
     if (s < 256)s |= s << 8;
 
     for (let i=0; i<255; i++) {
-      let v = (i & 1) ? permTable[i] ^ (s & 255) : permTable[i] ^ ((s>>8) & 255);
+      let v = (i & 1) ? __noise_permTable[i] ^ (s & 255) : __noise_permTable[i] ^ ((s>>8) & 255);
       this.perm[i] = this.perm[i + 256] = v;
     }
+
+    return this;
   }
   
   
@@ -242,10 +246,10 @@ export class Noise extends Pt {
     let x = (this._n[0] % 255) - i;
     let y = (this._n[1] % 255) - j;
 
-    let n00 = Vec.dot(grad3[ (i+this.perm[j]) % 12 ], [x, y, 0] );
-    let n01 = Vec.dot(grad3[ (i+this.perm[j+1]) % 12 ], [x, y-1, 0] );
-    let n10 = Vec.dot(grad3[ (i+1+this.perm[j]) % 12 ], [x-1, y, 0] );
-    let n11 = Vec.dot(grad3[ (i+1+this.perm[j+1]) % 12 ], [x-1, y-1, 0] );
+    let n00 = Vec.dot(__noise_grad3[ (i+this.perm[j]) % 12 ], [x, y, 0] );
+    let n01 = Vec.dot(__noise_grad3[ (i+this.perm[j+1]) % 12 ], [x, y-1, 0] );
+    let n10 = Vec.dot(__noise_grad3[ (i+1+this.perm[j]) % 12 ], [x-1, y, 0] );
+    let n11 = Vec.dot(__noise_grad3[ (i+1+this.perm[j+1]) % 12 ], [x-1, y-1, 0] );
 
     let _fade = (f) => f*f*f*(f*(f*6-15)+10);
     let tx = _fade(x);
