@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.9.0 - Copyright © 2017-2020 William Ngan and contributors.
+ * pts.js 0.9.1 - Copyright © 2017-2020 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -404,7 +404,7 @@ class CanvasForm extends Form_1.VisualForm {
             return grad;
         };
     }
-    composite(mode) {
+    composite(mode = 'source-over') {
         this.ctx.globalCompositeOperation = mode;
         return this;
     }
@@ -1135,12 +1135,12 @@ class Create {
     }
 }
 exports.Create = Create;
-const grad3 = [
+const __noise_grad3 = [
     [1, 1, 0], [-1, 1, 0], [1, -1, 0], [-1, -1, 0],
     [1, 0, 1], [-1, 0, 1], [1, 0, -1], [-1, 0, -1],
     [0, 1, 1], [0, -1, 1], [0, 1, -1], [0, -1, -1]
 ];
-const permTable = [151, 160, 137, 91, 90, 15,
+const __noise_permTable = [151, 160, 137, 91, 90, 15,
     131, 13, 201, 95, 96, 53, 194, 233, 7, 225, 140, 36, 103, 30, 69, 142, 8, 99, 37, 240, 21, 10, 23,
     190, 6, 148, 247, 120, 234, 75, 0, 26, 197, 62, 94, 252, 219, 203, 117, 35, 11, 32, 57, 177, 33,
     88, 237, 149, 56, 87, 174, 20, 125, 136, 171, 168, 68, 175, 74, 165, 71, 134, 139, 48, 27, 166,
@@ -1159,13 +1159,15 @@ class Noise extends Pt_1.Pt {
         super(...args);
         this.perm = [];
         this._n = new Pt_1.Pt(0.01, 0.01);
-        this.perm = permTable.concat(permTable);
+        this.perm = __noise_permTable.concat(__noise_permTable);
     }
     initNoise(...args) {
         this._n = new Pt_1.Pt(...args);
+        return this;
     }
     step(x = 0, y = 0) {
         this._n.add(x, y);
+        return this;
     }
     seed(s) {
         if (s > 0 && s < 1)
@@ -1174,19 +1176,20 @@ class Noise extends Pt_1.Pt {
         if (s < 256)
             s |= s << 8;
         for (let i = 0; i < 255; i++) {
-            let v = (i & 1) ? permTable[i] ^ (s & 255) : permTable[i] ^ ((s >> 8) & 255);
+            let v = (i & 1) ? __noise_permTable[i] ^ (s & 255) : __noise_permTable[i] ^ ((s >> 8) & 255);
             this.perm[i] = this.perm[i + 256] = v;
         }
+        return this;
     }
     noise2D() {
         let i = Math.max(0, Math.floor(this._n[0])) % 255;
         let j = Math.max(0, Math.floor(this._n[1])) % 255;
         let x = (this._n[0] % 255) - i;
         let y = (this._n[1] % 255) - j;
-        let n00 = LinearAlgebra_1.Vec.dot(grad3[(i + this.perm[j]) % 12], [x, y, 0]);
-        let n01 = LinearAlgebra_1.Vec.dot(grad3[(i + this.perm[j + 1]) % 12], [x, y - 1, 0]);
-        let n10 = LinearAlgebra_1.Vec.dot(grad3[(i + 1 + this.perm[j]) % 12], [x - 1, y, 0]);
-        let n11 = LinearAlgebra_1.Vec.dot(grad3[(i + 1 + this.perm[j + 1]) % 12], [x - 1, y - 1, 0]);
+        let n00 = LinearAlgebra_1.Vec.dot(__noise_grad3[(i + this.perm[j]) % 12], [x, y, 0]);
+        let n01 = LinearAlgebra_1.Vec.dot(__noise_grad3[(i + this.perm[j + 1]) % 12], [x, y - 1, 0]);
+        let n10 = LinearAlgebra_1.Vec.dot(__noise_grad3[(i + 1 + this.perm[j]) % 12], [x - 1, y, 0]);
+        let n11 = LinearAlgebra_1.Vec.dot(__noise_grad3[(i + 1 + this.perm[j + 1]) % 12], [x - 1, y - 1, 0]);
         let _fade = (f) => f * f * f * (f * (f * 6 - 15) + 10);
         let tx = _fade(x);
         return Num_1.Num.lerp(Num_1.Num.lerp(n00, n10, tx), Num_1.Num.lerp(n01, n11, tx), _fade(y));
@@ -4467,6 +4470,12 @@ class Pt extends Float32Array {
     }
     toArray() {
         return [].slice.call(this);
+    }
+    toGroup() {
+        return new Group(Pt.make(this.length), this.clone());
+    }
+    toBound() {
+        return new Bound(Pt.make(this.length), this.clone());
     }
 }
 exports.Pt = Pt;

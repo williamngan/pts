@@ -53,7 +53,7 @@ export class CanvasForm extends VisualForm {
     fill(c: string | boolean | CanvasGradient | CanvasPattern): this;
     stroke(c: string | boolean | CanvasGradient | CanvasPattern, width?: number, linejoin?: CanvasLineJoin, linecap?: CanvasLineCap): this;
     gradient(stops: [number, string][] | string[]): ((area1: GroupLike, area2?: GroupLike) => CanvasGradient);
-    composite(mode: string): this;
+    composite(mode?: string): this;
     clip(): this;
     dash(segments?: PtLike | boolean, offset?: number): this;
     font(sizeOrFont: number | Font, weight?: string, style?: string, lineHeight?: number, family?: string): this;
@@ -157,9 +157,9 @@ export class Create {
 export class Noise extends Pt {
     protected perm: number[];
     constructor(...args: any[]);
-    initNoise(...args: any[]): void;
-    step(x?: number, y?: number): void;
-    seed(s: any): void;
+    initNoise(...args: any[]): this;
+    step(x?: number, y?: number): this;
+    seed(s: any): this;
     noise2D(): number;
 }
 export class Delaunay extends Group {
@@ -750,6 +750,8 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
     reflect2D(line: GroupLike, axis?: string): this;
     toString(): string;
     toArray(): number[];
+    toGroup(): Group;
+    toBound(): Bound;
 }
 export class Group extends Array<Pt> {
     protected _id: string;

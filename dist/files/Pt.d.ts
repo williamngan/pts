@@ -61,6 +61,8 @@ export declare class Pt extends Float32Array implements IPt, Iterable<number> {
     reflect2D(line: GroupLike, axis?: string): this;
     toString(): string;
     toArray(): number[];
+    toGroup(): Group;
+    toBound(): Bound;
 }
 export declare class Group extends Array<Pt> {
     protected _id: string;

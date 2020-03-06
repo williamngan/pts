@@ -14,9 +14,9 @@ export declare class Noise extends Pt {
     protected perm: number[];
     private _n;
     constructor(...args: any[]);
-    initNoise(...args: any[]): void;
-    step(x?: number, y?: number): void;
-    seed(s: any): void;
+    initNoise(...args: any[]): this;
+    step(x?: number, y?: number): this;
+    seed(s: any): this;
     noise2D(): number;
 }
 export declare class Delaunay extends Group {

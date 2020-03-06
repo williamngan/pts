@@ -194,6 +194,12 @@ export class Pt extends Float32Array {
     toArray() {
         return [].slice.call(this);
     }
+    toGroup() {
+        return new Group(Pt.make(this.length), this.clone());
+    }
+    toBound() {
+        return new Bound(Pt.make(this.length), this.clone());
+    }
 }
 export class Group extends Array {
     constructor(...args) {

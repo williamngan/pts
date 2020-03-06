@@ -293,7 +293,7 @@ class CanvasForm extends Form_1.VisualForm {
             return grad;
         };
     }
-    composite(mode) {
+    composite(mode = 'source-over') {
         this.ctx.globalCompositeOperation = mode;
         return this;
     }
