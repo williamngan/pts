@@ -866,7 +866,7 @@
           14
         ]
       ],
-      "id": 1938,
+      "id": 1942,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.copyWithin",
@@ -968,7 +968,7 @@
           11
         ]
       ],
-      "id": 2107,
+      "id": 2111,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.entries",
@@ -1027,7 +1027,7 @@
           9
         ]
       ],
-      "id": 1943,
+      "id": 1947,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.every",
@@ -1063,7 +1063,7 @@
           8
         ]
       ],
-      "id": 1952,
+      "id": 1956,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.fill",
@@ -1105,7 +1105,7 @@
           10
         ]
       ],
-      "id": 1957,
+      "id": 1961,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.filter",
@@ -1141,7 +1141,7 @@
           8
         ]
       ],
-      "id": 1966,
+      "id": 1970,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.find",
@@ -1177,7 +1177,7 @@
           13
         ]
       ],
-      "id": 1975,
+      "id": 1979,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.findIndex",
@@ -1236,7 +1236,7 @@
           11
         ]
       ],
-      "id": 1984,
+      "id": 1988,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.forEach",
@@ -1272,7 +1272,7 @@
           11
         ]
       ],
-      "id": 1993,
+      "id": 1997,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.indexOf",
@@ -1308,7 +1308,7 @@
           8
         ]
       ],
-      "id": 1997,
+      "id": 2001,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.join",
@@ -1338,7 +1338,7 @@
           8
         ]
       ],
-      "id": 2109,
+      "id": 2113,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.keys",
@@ -1361,7 +1361,7 @@
           15
         ]
       ],
-      "id": 2000,
+      "id": 2004,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.lastIndexOf",
@@ -1443,7 +1443,7 @@
           7
         ]
       ],
-      "id": 2005,
+      "id": 2009,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.map",
@@ -1665,7 +1665,7 @@
           10
         ]
       ],
-      "id": 2014,
+      "id": 2018,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reduce",
@@ -1745,7 +1745,7 @@
           15
         ]
       ],
-      "id": 2042,
+      "id": 2046,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reduceRight",
@@ -1851,7 +1851,7 @@
           11
         ]
       ],
-      "id": 2070,
+      "id": 2074,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reverse",
@@ -1975,7 +1975,7 @@
           7
         ]
       ],
-      "id": 2072,
+      "id": 2076,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.set",
@@ -2053,7 +2053,7 @@
           9
         ]
       ],
-      "id": 2076,
+      "id": 2080,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.slice",
@@ -2089,7 +2089,7 @@
           8
         ]
       ],
-      "id": 2080,
+      "id": 2084,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.some",
@@ -2125,7 +2125,7 @@
           8
         ]
       ],
-      "id": 2089,
+      "id": 2093,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.sort",
@@ -2155,7 +2155,7 @@
           12
         ]
       ],
-      "id": 2096,
+      "id": 2100,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.subarray",
@@ -2308,6 +2308,52 @@
       ]
     },
     {
+      "name": "toBound",
+      "source": [
+        [
+          "Pt.ts",
+          528,
+          9
+        ]
+      ],
+      "id": 1936,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Convert this Pt to a Bound as new Group([0,...], pt)",
+          "returns": "Bound",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "toGroup",
+      "source": [
+        [
+          "Pt.ts",
+          520,
+          9
+        ]
+      ],
+      "id": 1934,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Convert this Pt to a Group as new Group([0,...], pt)",
+          "returns": "Group",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "toLocaleString",
       "source": [
         [
@@ -2316,7 +2362,7 @@
           18
         ]
       ],
-      "id": 2100,
+      "id": 2104,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.toLocaleString",
@@ -2392,7 +2438,7 @@
           10
         ]
       ],
-      "id": 2111,
+      "id": 2115,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.values",
@@ -2462,7 +2508,7 @@
           30
         ]
       ],
-      "id": 1934,
+      "id": 1938,
       "flags": {},
       "type": "BYTES_PER_ELEMENT",
       "overrides": false,
@@ -2478,7 +2524,7 @@
           19
         ]
       ],
-      "id": 1935,
+      "id": 1939,
       "flags": {},
       "type": "buffer",
       "overrides": false,
@@ -2494,7 +2540,7 @@
           23
         ]
       ],
-      "id": 1936,
+      "id": 1940,
       "flags": {},
       "type": "byteLength",
       "overrides": false,
@@ -2510,7 +2556,7 @@
           23
         ]
       ],
-      "id": 1937,
+      "id": 1941,
       "flags": {},
       "type": "byteOffset",
       "overrides": false,
@@ -2526,7 +2572,7 @@
           19
         ]
       ],
-      "id": 2004,
+      "id": 2008,
       "flags": {},
       "type": "length",
       "overrides": false,
@@ -2542,7 +2588,7 @@
           26
         ]
       ],
-      "id": 2104,
+      "id": 2108,
       "flags": {
         "isStatic": true
       },

@@ -1164,6 +1164,18 @@
     8
   ],
   [
+    "Color_Color#function_toBound",
+    "Color.toBound",
+    "Function",
+    8
+  ],
+  [
+    "Color_Color#function_toGroup",
+    "Color.toGroup",
+    "Function",
+    8
+  ],
+  [
     "Color_Color#function_toLocaleString",
     "Color.toLocaleString",
     "Function",
@@ -2360,6 +2372,18 @@
   [
     "Create_Noise#function_toArray",
     "Noise.toArray",
+    "Function",
+    8
+  ],
+  [
+    "Create_Noise#function_toBound",
+    "Noise.toBound",
+    "Function",
+    8
+  ],
+  [
+    "Create_Noise#function_toGroup",
+    "Noise.toGroup",
     "Function",
     8
   ],
@@ -5658,6 +5682,18 @@
     8
   ],
   [
+    "Physics_Particle#function_toBound",
+    "Particle.toBound",
+    "Function",
+    8
+  ],
+  [
+    "Physics_Particle#function_toGroup",
+    "Particle.toGroup",
+    "Function",
+    8
+  ],
+  [
     "Physics_Particle#function_toLocaleString",
     "Particle.toLocaleString",
     "Function",
@@ -7490,6 +7526,18 @@
   [
     "Pt_Pt#function_toArray",
     "Pt.toArray",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Pt#function_toBound",
+    "Pt.toBound",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Pt#function_toGroup",
+    "Pt.toGroup",
     "Function",
     8
   ],

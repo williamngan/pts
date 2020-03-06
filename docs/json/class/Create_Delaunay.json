@@ -3,12 +3,12 @@
   "source": [
     [
       "Create.ts",
-      265,
+      269,
       21
     ]
   ],
   "kind": "Class",
-  "id": 4724,
+  "id": 4736,
   "comment": "Delaunay is a [`Group`](#link) of Pts that generates Delaunay and Voronoi tessellations. The triangulation algorithm is ported from [Pt](https://github.com/williamngan/pt).\nBased on [Paul Bourke's algorithm](http://paulbourke.net/papers/triangulate/)\nwith reference to its [javascript implementation](https://github.com/ironwallaby/delaunay) by ironwallaby.",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "Pt.ts",
-          527,
+          543,
           23
         ]
       ],
-      "id": 4762,
+      "id": 4774,
       "flags": {},
       "overrides": false,
       "inherits": "Group.__constructor",
@@ -48,16 +48,16 @@
       "source": [
         [
           "Pt.ts",
-          540,
+          556,
           8
         ],
         [
           "Pt.ts",
-          541,
+          557,
           8
         ]
       ],
-      "id": 4765,
+      "id": 4777,
       "flags": {},
       "overrides": false,
       "inherits": "Group.id",
@@ -80,11 +80,11 @@
       "source": [
         [
           "Pt.ts",
-          546,
+          562,
           8
         ]
       ],
-      "id": 4769,
+      "id": 4781,
       "flags": {},
       "overrides": false,
       "inherits": "Group.p1",
@@ -99,11 +99,11 @@
       "source": [
         [
           "Pt.ts",
-          551,
+          567,
           8
         ]
       ],
-      "id": 4771,
+      "id": 4783,
       "flags": {},
       "overrides": false,
       "inherits": "Group.p2",
@@ -118,11 +118,11 @@
       "source": [
         [
           "Pt.ts",
-          556,
+          572,
           8
         ]
       ],
-      "id": 4773,
+      "id": 4785,
       "flags": {},
       "overrides": false,
       "inherits": "Group.p3",
@@ -137,11 +137,11 @@
       "source": [
         [
           "Pt.ts",
-          561,
+          577,
           8
         ]
       ],
-      "id": 4775,
+      "id": 4787,
       "flags": {},
       "overrides": false,
       "inherits": "Group.p4",
@@ -156,11 +156,11 @@
       "source": [
         [
           "Pt.ts",
-          566,
+          582,
           8
         ]
       ],
-      "id": 4777,
+      "id": 4789,
       "flags": {},
       "overrides": false,
       "inherits": "Group.q1",
@@ -175,11 +175,11 @@
       "source": [
         [
           "Pt.ts",
-          571,
+          587,
           8
         ]
       ],
-      "id": 4779,
+      "id": 4791,
       "flags": {},
       "overrides": false,
       "inherits": "Group.q2",
@@ -194,11 +194,11 @@
       "source": [
         [
           "Pt.ts",
-          576,
+          592,
           8
         ]
       ],
-      "id": 4781,
+      "id": 4793,
       "flags": {},
       "overrides": false,
       "inherits": "Group.q3",
@@ -213,11 +213,11 @@
       "source": [
         [
           "Pt.ts",
-          581,
+          597,
           8
         ]
       ],
-      "id": 4783,
+      "id": 4795,
       "flags": {},
       "overrides": false,
       "inherits": "Group.q4",
@@ -234,11 +234,11 @@
       "source": [
         [
           "Pt.ts",
-          888,
+          904,
           12
         ]
       ],
-      "id": 4890,
+      "id": 4902,
       "flags": {},
       "overrides": false,
       "inherits": "Group.$matrixAdd",
@@ -264,11 +264,11 @@
       "source": [
         [
           "Pt.ts",
-          900,
+          916,
           17
         ]
       ],
-      "id": 4893,
+      "id": 4905,
       "flags": {},
       "overrides": false,
       "inherits": "Group.$matrixMultiply",
@@ -306,11 +306,11 @@
       "source": [
         [
           "Pt.ts",
-          920,
+          936,
           6
         ]
       ],
-      "id": 4902,
+      "id": 4914,
       "flags": {},
       "overrides": false,
       "inherits": "Group.$zip",
@@ -342,11 +342,11 @@
       "source": [
         [
           "Pt.ts",
-          851,
+          867,
           5
         ]
       ],
-      "id": 4878,
+      "id": 4890,
       "flags": {},
       "overrides": false,
       "inherits": "Group.add",
@@ -372,11 +372,11 @@
       "source": [
         [
           "Pt.ts",
-          701,
+          717,
           12
         ]
       ],
-      "id": 4820,
+      "id": 4832,
       "flags": {},
       "overrides": false,
       "inherits": "Group.anchorFrom",
@@ -402,11 +402,11 @@
       "source": [
         [
           "Pt.ts",
-          694,
+          710,
           10
         ]
       ],
-      "id": 4817,
+      "id": 4829,
       "flags": {},
       "overrides": false,
       "inherits": "Group.anchorTo",
@@ -432,11 +432,11 @@
       "source": [
         [
           "Pt.ts",
-          685,
+          701,
           13
         ]
       ],
-      "id": 4815,
+      "id": 4827,
       "flags": {},
       "overrides": false,
       "inherits": "Group.boundingBox",
@@ -455,11 +455,11 @@
       "source": [
         [
           "Pt.ts",
-          676,
+          692,
           10
         ]
       ],
-      "id": 4813,
+      "id": 4825,
       "flags": {},
       "overrides": false,
       "inherits": "Group.centroid",
@@ -478,11 +478,11 @@
       "source": [
         [
           "Pt.ts",
-          588,
+          604,
           7
         ]
       ],
-      "id": 4785,
+      "id": 4797,
       "flags": {},
       "overrides": false,
       "inherits": "Group.clone",
@@ -510,7 +510,7 @@
           10
         ]
       ],
-      "id": 4916,
+      "id": 4928,
       "flags": {},
       "overrides": false,
       "inherits": "Array.concat",
@@ -554,7 +554,7 @@
           14
         ]
       ],
-      "id": 5104,
+      "id": 5116,
       "flags": {},
       "overrides": false,
       "inherits": "Array.copyWithin",
@@ -592,11 +592,11 @@
       "source": [
         [
           "Create.ts",
-          274,
+          278,
           10
         ]
       ],
-      "id": 4726,
+      "id": 4738,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -622,11 +622,11 @@
       "source": [
         [
           "Pt.ts",
-          878,
+          894,
           8
         ]
       ],
-      "id": 4887,
+      "id": 4899,
       "flags": {},
       "overrides": false,
       "inherits": "Group.divide",
@@ -656,7 +656,7 @@
           11
         ]
       ],
-      "id": 5111,
+      "id": 5123,
       "flags": {},
       "overrides": false,
       "inherits": "Array.entries",
@@ -679,7 +679,7 @@
           9
         ]
       ],
-      "id": 4958,
+      "id": 4970,
       "flags": {},
       "overrides": false,
       "inherits": "Array.every",
@@ -715,7 +715,7 @@
           8
         ]
       ],
-      "id": 5099,
+      "id": 5111,
       "flags": {},
       "overrides": false,
       "inherits": "Array.fill",
@@ -762,7 +762,7 @@
           10
         ]
       ],
-      "id": 4995,
+      "id": 5007,
       "flags": {},
       "overrides": false,
       "inherits": "Array.filter",
@@ -823,7 +823,7 @@
           8
         ]
       ],
-      "id": 5071,
+      "id": 5083,
       "flags": {},
       "overrides": false,
       "inherits": "Array.find",
@@ -879,7 +879,7 @@
           13
         ]
       ],
-      "id": 5090,
+      "id": 5102,
       "flags": {},
       "overrides": false,
       "inherits": "Array.findIndex",
@@ -915,7 +915,7 @@
           11
         ]
       ],
-      "id": 4976,
+      "id": 4988,
       "flags": {},
       "overrides": false,
       "inherits": "Array.forEach",
@@ -947,11 +947,11 @@
       "source": [
         [
           "Pt.ts",
-          835,
+          851,
           11
         ]
       ],
-      "id": 4874,
+      "id": 4886,
       "flags": {},
       "overrides": false,
       "inherits": "Group.forEachPt",
@@ -987,7 +987,7 @@
           11
         ]
       ],
-      "id": 4950,
+      "id": 4962,
       "flags": {},
       "overrides": false,
       "inherits": "Array.indexOf",
@@ -1019,11 +1019,11 @@
       "source": [
         [
           "Pt.ts",
-          638,
+          654,
           8
         ]
       ],
-      "id": 4798,
+      "id": 4810,
       "flags": {},
       "overrides": false,
       "inherits": "Group.insert",
@@ -1055,11 +1055,11 @@
       "source": [
         [
           "Pt.ts",
-          737,
+          753,
           13
         ]
       ],
-      "id": 4843,
+      "id": 4855,
       "flags": {},
       "overrides": false,
       "inherits": "Group.interpolate",
@@ -1089,7 +1089,7 @@
           8
         ]
       ],
-      "id": 4921,
+      "id": 4933,
       "flags": {},
       "overrides": false,
       "inherits": "Array.join",
@@ -1119,7 +1119,7 @@
           8
         ]
       ],
-      "id": 5113,
+      "id": 5125,
       "flags": {},
       "overrides": false,
       "inherits": "Array.keys",
@@ -1142,7 +1142,7 @@
           15
         ]
       ],
-      "id": 4954,
+      "id": 4966,
       "flags": {},
       "overrides": false,
       "inherits": "Array.lastIndexOf",
@@ -1174,11 +1174,11 @@
       "source": [
         [
           "Pt.ts",
-          670,
+          686,
           7
         ]
       ],
-      "id": 4811,
+      "id": 4823,
       "flags": {},
       "overrides": false,
       "inherits": "Group.lines",
@@ -1201,7 +1201,7 @@
           7
         ]
       ],
-      "id": 4985,
+      "id": 4997,
       "flags": {},
       "overrides": false,
       "inherits": "Array.map",
@@ -1233,11 +1233,11 @@
       "source": [
         [
           "Create.ts",
-          369,
+          373,
           6
         ]
       ],
-      "id": 4731,
+      "id": 4743,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1256,11 +1256,11 @@
       "source": [
         [
           "Pt.ts",
-          750,
+          766,
           8
         ]
       ],
-      "id": 4846,
+      "id": 4858,
       "flags": {},
       "overrides": false,
       "inherits": "Group.moveBy",
@@ -1286,11 +1286,11 @@
       "source": [
         [
           "Pt.ts",
-          759,
+          775,
           8
         ]
       ],
-      "id": 4849,
+      "id": 4861,
       "flags": {},
       "overrides": false,
       "inherits": "Group.moveTo",
@@ -1316,11 +1316,11 @@
       "source": [
         [
           "Pt.ts",
-          869,
+          885,
           10
         ]
       ],
-      "id": 4884,
+      "id": 4896,
       "flags": {},
       "overrides": false,
       "inherits": "Group.multiply",
@@ -1346,11 +1346,11 @@
       "source": [
         [
           "Create.ts",
-          380,
+          384,
           13
         ]
       ],
-      "id": 4733,
+      "id": 4745,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1382,11 +1382,11 @@
       "source": [
         [
           "Create.ts",
-          395,
+          399,
           11
         ]
       ],
-      "id": 4737,
+      "id": 4749,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1412,11 +1412,11 @@
       "source": [
         [
           "Pt.ts",
-          710,
+          726,
           4
         ]
       ],
-      "id": 4823,
+      "id": 4835,
       "flags": {},
       "overrides": false,
       "inherits": "Group.op",
@@ -1447,11 +1447,11 @@
       "source": [
         [
           "Pt.ts",
-          724,
+          740,
           5
         ]
       ],
-      "id": 4833,
+      "id": 4845,
       "flags": {},
       "overrides": false,
       "inherits": "Group.ops",
@@ -1486,7 +1486,7 @@
           7
         ]
       ],
-      "id": 4911,
+      "id": 4923,
       "flags": {},
       "overrides": false,
       "inherits": "Array.pop",
@@ -1509,7 +1509,7 @@
           8
         ]
       ],
-      "id": 4913,
+      "id": 4925,
       "flags": {},
       "overrides": false,
       "inherits": "Array.push",
@@ -1549,7 +1549,7 @@
           10
         ]
       ],
-      "id": 5013,
+      "id": 5025,
       "flags": {},
       "overrides": false,
       "inherits": "Array.reduce",
@@ -1629,7 +1629,7 @@
           15
         ]
       ],
-      "id": 5041,
+      "id": 5053,
       "flags": {},
       "overrides": false,
       "inherits": "Array.reduceRight",
@@ -1695,11 +1695,11 @@
       "source": [
         [
           "Pt.ts",
-          812,
+          828,
           11
         ]
       ],
-      "id": 4866,
+      "id": 4878,
       "flags": {},
       "overrides": false,
       "inherits": "Group.reflect2D",
@@ -1731,11 +1731,11 @@
       "source": [
         [
           "Pt.ts",
-          650,
+          666,
           8
         ]
       ],
-      "id": 4802,
+      "id": 4814,
       "flags": {},
       "overrides": false,
       "inherits": "Group.remove",
@@ -1771,7 +1771,7 @@
           11
         ]
       ],
-      "id": 4924,
+      "id": 4936,
       "flags": {},
       "overrides": false,
       "inherits": "Array.reverse",
@@ -1790,11 +1790,11 @@
       "source": [
         [
           "Pt.ts",
-          785,
+          801,
           10
         ]
       ],
-      "id": 4856,
+      "id": 4868,
       "flags": {},
       "overrides": false,
       "inherits": "Group.rotate2D",
@@ -1832,11 +1832,11 @@
       "source": [
         [
           "Pt.ts",
-          771,
+          787,
           7
         ]
       ],
-      "id": 4852,
+      "id": 4864,
       "flags": {},
       "overrides": false,
       "inherits": "Group.scale",
@@ -1868,11 +1868,11 @@
       "source": [
         [
           "Pt.ts",
-          662,
+          678,
           10
         ]
       ],
-      "id": 4806,
+      "id": 4818,
       "flags": {},
       "overrides": false,
       "inherits": "Group.segments",
@@ -1910,11 +1910,11 @@
       "source": [
         [
           "Pt.ts",
-          799,
+          815,
           9
         ]
       ],
-      "id": 4861,
+      "id": 4873,
       "flags": {},
       "overrides": false,
       "inherits": "Group.shear2D",
@@ -1956,7 +1956,7 @@
           9
         ]
       ],
-      "id": 4926,
+      "id": 4938,
       "flags": {},
       "overrides": false,
       "inherits": "Array.shift",
@@ -1979,7 +1979,7 @@
           9
         ]
       ],
-      "id": 4928,
+      "id": 4940,
       "flags": {},
       "overrides": false,
       "inherits": "Array.slice",
@@ -2015,7 +2015,7 @@
           8
         ]
       ],
-      "id": 4967,
+      "id": 4979,
       "flags": {},
       "overrides": false,
       "inherits": "Array.some",
@@ -2051,7 +2051,7 @@
           8
         ]
       ],
-      "id": 4932,
+      "id": 4944,
       "flags": {},
       "overrides": false,
       "inherits": "Array.sort",
@@ -2077,11 +2077,11 @@
       "source": [
         [
           "Pt.ts",
-          825,
+          841,
           17
         ]
       ],
-      "id": 4870,
+      "id": 4882,
       "flags": {},
       "overrides": false,
       "inherits": "Group.sortByDimension",
@@ -2122,7 +2122,7 @@
           10
         ]
       ],
-      "id": 4939,
+      "id": 4951,
       "flags": {},
       "overrides": false,
       "inherits": "Array.splice",
@@ -2180,11 +2180,11 @@
       "source": [
         [
           "Pt.ts",
-          627,
+          643,
           7
         ]
       ],
-      "id": 4793,
+      "id": 4805,
       "flags": {},
       "overrides": false,
       "inherits": "Group.split",
@@ -2222,11 +2222,11 @@
       "source": [
         [
           "Pt.ts",
-          860,
+          876,
           10
         ]
       ],
-      "id": 4881,
+      "id": 4893,
       "flags": {},
       "overrides": false,
       "inherits": "Group.subtract",
@@ -2256,7 +2256,7 @@
           18
         ]
       ],
-      "id": 4909,
+      "id": 4921,
       "flags": {},
       "overrides": false,
       "inherits": "Array.toLocaleString",
@@ -2275,11 +2275,11 @@
       "source": [
         [
           "Pt.ts",
-          928,
+          944,
           10
         ]
       ],
-      "id": 4906,
+      "id": 4918,
       "flags": {},
       "overrides": "Array.toString",
       "inherits": "Group.toString",
@@ -2302,7 +2302,7 @@
           11
         ]
       ],
-      "id": 4947,
+      "id": 4959,
       "flags": {},
       "overrides": false,
       "inherits": "Array.unshift",
@@ -2332,7 +2332,7 @@
           10
         ]
       ],
-      "id": 5115,
+      "id": 5127,
       "flags": {},
       "overrides": false,
       "inherits": "Array.values",
@@ -2351,11 +2351,11 @@
       "source": [
         [
           "Create.ts",
-          355,
+          359,
           9
         ]
       ],
-      "id": 4729,
+      "id": 4741,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2374,11 +2374,11 @@
       "source": [
         [
           "Pt.ts",
-          910,
+          926,
           10
         ]
       ],
-      "id": 4898,
+      "id": 4910,
       "flags": {},
       "overrides": false,
       "inherits": "Group.zipSlice",
@@ -2410,11 +2410,11 @@
       "source": [
         [
           "Pt.ts",
-          602,
+          618,
           18
         ]
       ],
-      "id": 4787,
+      "id": 4799,
       "flags": {
         "isStatic": true
       },
@@ -2447,11 +2447,11 @@
       "source": [
         [
           "Pt.ts",
-          616,
+          632,
           20
         ]
       ],
-      "id": 4790,
+      "id": 4802,
       "flags": {
         "isStatic": true
       },
@@ -2486,7 +2486,7 @@
           10
         ]
       ],
-      "id": 4908,
+      "id": 4920,
       "flags": {},
       "type": "length",
       "overrides": false,
