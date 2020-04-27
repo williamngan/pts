@@ -291,6 +291,21 @@ export class DOMSpace extends MultiTouchSpace {
     return str;
   }
   
+  
+  /**
+  * Dispose of browser resources held by this space and remove all players. Call this before unmounting the DOM.
+  */
+  dispose():this {
+    // remove event listeners
+    window.removeEventListener( 'resize', this._resizeHandler.bind(this) );
+    // stop animation loop
+    this.stop();
+    // remove players from space
+    this.removeAll();
+
+    return this;
+  }
+  
 }
 
 
