@@ -355,9 +355,9 @@ export class Geom {
    * @param ps a Pt or a Group of Pts
    * @param angle rotate angle
    * @param anchor optional anchor point to rotate from
-   * @param axis optional axis such as "yz" to define a 2D plane of rotation
+   * @param axis optional axis such as "xy" (use Const.xy) to define a 2D plane, or a number array to specify indices
    */
-  static rotate2D( ps:Pt|GroupLike, angle:number, anchor?:PtLike, axis?:string ):Geom {
+  static rotate2D( ps:Pt|GroupLike, angle:number, anchor?:PtLike, axis?:string|number[] ):Geom {
     let pts = (!Array.isArray(ps)) ? [ps] : ps;
     let fn = (anchor) ? Mat.rotateAt2DMatrix : Mat.rotate2DMatrix;
     if (!anchor) anchor = Pt.make(pts[0].length, 0);
@@ -367,6 +367,11 @@ export class Geom {
     for (let i = 0, len = pts.length; i < len; i++) {
       let p = (axis) ? pts[i].$take(axis) : pts[i];
       p.to(Mat.transform2D(p, fn(cos, sin, anchor)));
+      if (axis) {
+        for (let k = 0; k < axis.length; k++) {
+          pts[i][k] = p[k];
+        }
+      }
     }
 
     return Geom;
@@ -378,9 +383,9 @@ export class Geom {
    * @param ps a Pt or a Group of Pts
    * @param scale shearing value which can be a number or an array of 2 numbers
    * @param anchor optional anchor point to shear from
-   * @param axis optional axis such as "yz" to define a 2D plane of shearing
+   * @param axis optional axis such as "xy" (use Const.xy) to define a 2D plane, or a number array to specify indices
    */
-  static shear2D( ps:Pt|GroupLike, scale:number|number[]|PtLike, anchor?:PtLike, axis?:string):Geom {
+  static shear2D( ps:Pt|GroupLike, scale:number|number[]|PtLike, anchor?:PtLike, axis?:string|number[] ):Geom {
     let pts = (!Array.isArray(ps)) ? [ps] : ps;
     let s = (typeof scale == "number") ? [scale, scale] : scale;
     if (!anchor) anchor = Pt.make(pts[0].length, 0);
@@ -391,6 +396,11 @@ export class Geom {
     for (let i = 0, len = pts.length; i < len; i++) {
       let p = (axis) ? pts[i].$take(axis) : pts[i];
       p.to(Mat.transform2D(p, fn(tanx, tany, anchor)));
+      if (axis) {
+        for (let k = 0; k < axis.length; k++) {
+          pts[i][k] = p[k];
+        }
+      }
     }
 
     return Geom;
@@ -401,15 +411,20 @@ export class Geom {
    * Reflect a Pt or a Group of Pts along a 2D line. You may also use [`Pt.reflect2D`](#link) instance method.
    * @param ps a Pt or a Group of Pts
    * @param line a Group of 2 Pts that defines a line for reflection
-   * @param axis optional axis such as "yz" to define a 2D plane of reflection
+   * @param axis optional axis such as "xy" (use Const.xy) to define a 2D plane, or a number array to specify indices
    */
-  static reflect2D( ps:Pt|GroupLike, line:GroupLike, axis?:string ):Geom {
+  static reflect2D( ps:Pt|GroupLike, line:GroupLike, axis?:string|number[] ):Geom {
     let pts = (!Array.isArray(ps)) ? [ps] : ps;
     let mat = Mat.reflectAt2DMatrix(line[0], line[1]);
 
     for (let i = 0, len = pts.length; i < len; i++) {
       let p = (axis) ? pts[i].$take(axis) : pts[i];
       p.to(Mat.transform2D(p, mat));
+      if (axis) {
+        for (let k = 0; k < axis.length; k++) {
+          pts[i][k] = p[k];
+        }
+      }
     }
 
     return Geom;
