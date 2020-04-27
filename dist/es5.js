@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.9.1 - Copyright © 2017-2020 William Ngan and contributors.
+ * pts.js 0.9.2 - Copyright © 2017-2020 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -3276,6 +3276,11 @@ var Geom = function () {
             for (var i = 0, len = pts.length; i < len; i++) {
                 var p = axis ? pts[i].$take(axis) : pts[i];
                 p.to(LinearAlgebra_1.Mat.transform2D(p, fn(cos, sin, anchor)));
+                if (axis) {
+                    for (var k = 0; k < axis.length; k++) {
+                        pts[i][k] = p[k];
+                    }
+                }
             }
             return Geom;
         }
@@ -3291,6 +3296,11 @@ var Geom = function () {
             for (var i = 0, len = pts.length; i < len; i++) {
                 var p = axis ? pts[i].$take(axis) : pts[i];
                 p.to(LinearAlgebra_1.Mat.transform2D(p, fn(tanx, tany, anchor)));
+                if (axis) {
+                    for (var k = 0; k < axis.length; k++) {
+                        pts[i][k] = p[k];
+                    }
+                }
             }
             return Geom;
         }
@@ -3302,6 +3312,11 @@ var Geom = function () {
             for (var i = 0, len = pts.length; i < len; i++) {
                 var p = axis ? pts[i].$take(axis) : pts[i];
                 p.to(LinearAlgebra_1.Mat.transform2D(p, mat));
+                if (axis) {
+                    for (var k = 0; k < axis.length; k++) {
+                        pts[i][k] = p[k];
+                    }
+                }
             }
             return Geom;
         }

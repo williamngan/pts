@@ -167,6 +167,11 @@ export class Geom {
         for (let i = 0, len = pts.length; i < len; i++) {
             let p = (axis) ? pts[i].$take(axis) : pts[i];
             p.to(Mat.transform2D(p, fn(cos, sin, anchor)));
+            if (axis) {
+                for (let k = 0; k < axis.length; k++) {
+                    pts[i][k] = p[k];
+                }
+            }
         }
         return Geom;
     }
@@ -181,6 +186,11 @@ export class Geom {
         for (let i = 0, len = pts.length; i < len; i++) {
             let p = (axis) ? pts[i].$take(axis) : pts[i];
             p.to(Mat.transform2D(p, fn(tanx, tany, anchor)));
+            if (axis) {
+                for (let k = 0; k < axis.length; k++) {
+                    pts[i][k] = p[k];
+                }
+            }
         }
         return Geom;
     }
@@ -190,6 +200,11 @@ export class Geom {
         for (let i = 0, len = pts.length; i < len; i++) {
             let p = (axis) ? pts[i].$take(axis) : pts[i];
             p.to(Mat.transform2D(p, mat));
+            if (axis) {
+                for (let k = 0; k < axis.length; k++) {
+                    pts[i][k] = p[k];
+                }
+            }
         }
         return Geom;
     }

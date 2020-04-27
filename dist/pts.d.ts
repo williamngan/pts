@@ -378,9 +378,9 @@ export class Geom {
     static withinBound(pt: PtLike | number[], boundPt1: PtLike | number[], boundPt2: PtLike | number[]): boolean;
     static sortEdges(pts: GroupLike): GroupLike;
     static scale(ps: Pt | GroupLike, scale: number | number[] | PtLike, anchor?: PtLike): Geom;
-    static rotate2D(ps: Pt | GroupLike, angle: number, anchor?: PtLike, axis?: string): Geom;
-    static shear2D(ps: Pt | GroupLike, scale: number | number[] | PtLike, anchor?: PtLike, axis?: string): Geom;
-    static reflect2D(ps: Pt | GroupLike, line: GroupLike, axis?: string): Geom;
+    static rotate2D(ps: Pt | GroupLike, angle: number, anchor?: PtLike, axis?: string | number[]): Geom;
+    static shear2D(ps: Pt | GroupLike, scale: number | number[] | PtLike, anchor?: PtLike, axis?: string | number[]): Geom;
+    static reflect2D(ps: Pt | GroupLike, line: GroupLike, axis?: string | number[]): Geom;
     static cosTable(): {
         table: Float64Array;
         cos: (rad: number) => number;

@@ -190,7 +190,7 @@
       "source": [
         [
           "Num.ts",
-          423,
+          438,
           17
         ]
       ],
@@ -335,7 +335,7 @@
       "source": [
         [
           "Num.ts",
-          406,
+          416,
           18
         ]
       ],
@@ -365,8 +365,8 @@
             },
             {
               "name": "axis",
-              "comment": "optional axis such as \"yz\" to define a 2D plane of reflection\n",
-              "type": "string",
+              "comment": "optional axis such as \"xy\" (use Const.xy) to define a 2D plane, or a number array to specify indices\n",
+              "type": "string | number[]",
               "default": false
             }
           ],
@@ -415,8 +415,8 @@
             },
             {
               "name": "axis",
-              "comment": "optional axis such as \"yz\" to define a 2D plane of rotation\n",
-              "type": "string",
+              "comment": "optional axis such as \"xy\" (use Const.xy) to define a 2D plane, or a number array to specify indices\n",
+              "type": "string | number[]",
               "default": false
             }
           ],
@@ -473,7 +473,7 @@
       "source": [
         [
           "Num.ts",
-          383,
+          388,
           16
         ]
       ],
@@ -509,8 +509,8 @@
             },
             {
               "name": "axis",
-              "comment": "optional axis such as \"yz\" to define a 2D plane of shearing\n",
-              "type": "string",
+              "comment": "optional axis such as \"xy\" (use Const.xy) to define a 2D plane, or a number array to specify indices\n",
+              "type": "string | number[]",
               "default": false
             }
           ],
@@ -523,7 +523,7 @@
       "source": [
         [
           "Num.ts",
-          436,
+          451,
           17
         ]
       ],
