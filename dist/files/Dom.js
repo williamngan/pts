@@ -156,6 +156,12 @@ class DOMSpace extends Space_1.MultiTouchSpace {
         }
         return str;
     }
+    dispose() {
+        window.removeEventListener('resize', this._resizeHandler.bind(this));
+        this.stop();
+        this.removeAll();
+        return this;
+    }
 }
 exports.DOMSpace = DOMSpace;
 class HTMLSpace extends DOMSpace {

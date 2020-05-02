@@ -492,6 +492,12 @@
     8
   ],
   [
+    "Canvas_CanvasSpace#function_dispose",
+    "CanvasSpace.dispose",
+    "Function",
+    8
+  ],
+  [
     "Canvas_CanvasSpace#function_getForm",
     "CanvasSpace.getForm",
     "Function",
@@ -2568,6 +2574,12 @@
     8
   ],
   [
+    "Dom_DOMSpace#function_dispose",
+    "DOMSpace.dispose",
+    "Function",
+    8
+  ],
+  [
     "Dom_DOMSpace#function_getForm",
     "DOMSpace.getForm",
     "Function",
@@ -3122,6 +3134,12 @@
   [
     "Dom_HTMLSpace#function_clear",
     "HTMLSpace.clear",
+    "Function",
+    8
+  ],
+  [
+    "Dom_HTMLSpace#function_dispose",
+    "HTMLSpace.dispose",
     "Function",
     8
   ],
@@ -8372,6 +8390,12 @@
   [
     "Svg_SVGSpace#function_clear",
     "SVGSpace.clear",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGSpace#function_dispose",
+    "SVGSpace.dispose",
     "Function",
     8
   ],

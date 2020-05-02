@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 5732,
+  "id": 5738,
   "comment": "A `World` stores and manages [`Body`](#link) and [`Particle`](#link) for 2D physics simulation.\nSee a [Particle demo](../demo/index.html?name=physics.particles) and a [Body demo](../demo/index.html?name=physics.shapes) on the demo page.",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           51
         ]
       ],
-      "id": 5752,
+      "id": 5758,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -64,7 +64,7 @@
           15
         ]
       ],
-      "id": 5773,
+      "id": 5779,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -88,7 +88,7 @@
           11
         ]
       ],
-      "id": 5757,
+      "id": 5763,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -120,7 +120,7 @@
           13
         ]
       ],
-      "id": 5769,
+      "id": 5775,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -152,7 +152,7 @@
           14
         ]
       ],
-      "id": 5765,
+      "id": 5771,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -184,7 +184,7 @@
           13
         ]
       ],
-      "id": 5761,
+      "id": 5767,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -211,7 +211,7 @@
           19
         ]
       ],
-      "id": 5775,
+      "id": 5781,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -232,7 +232,7 @@
           5
         ]
       ],
-      "id": 5806,
+      "id": 5812,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -268,7 +268,7 @@
           6
         ]
       ],
-      "id": 5777,
+      "id": 5783,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -298,7 +298,7 @@
           11
         ]
       ],
-      "id": 5783,
+      "id": 5789,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -328,7 +328,7 @@
           12
         ]
       ],
-      "id": 5799,
+      "id": 5805,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -358,7 +358,7 @@
           15
         ]
       ],
-      "id": 5792,
+      "id": 5798,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -388,7 +388,7 @@
           21
         ]
       ],
-      "id": 5837,
+      "id": 5843,
       "flags": {
         "isProtected": true
       },
@@ -432,7 +432,7 @@
           10
         ]
       ],
-      "id": 5780,
+      "id": 5786,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -462,7 +462,7 @@
           15
         ]
       ],
-      "id": 5786,
+      "id": 5792,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -492,7 +492,7 @@
           12
         ]
       ],
-      "id": 5817,
+      "id": 5823,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -528,7 +528,7 @@
           16
         ]
       ],
-      "id": 5821,
+      "id": 5827,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -564,7 +564,7 @@
           8
         ]
       ],
-      "id": 5789,
+      "id": 5795,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -594,7 +594,7 @@
           24
         ]
       ],
-      "id": 5832,
+      "id": 5838,
       "flags": {
         "isStatic": true
       },
@@ -638,7 +638,7 @@
           23
         ]
       ],
-      "id": 5825,
+      "id": 5831,
       "flags": {
         "isStatic": true
       },

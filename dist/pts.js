@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.9.2 - Copyright © 2017-2020 William Ngan and contributors.
+ * pts.js 0.9.3 - Copyright © 2017-2020 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -309,6 +309,12 @@ class CanvasSpace extends Space_1.MultiTouchSpace {
                 this._offCtx.restore();
             this.render(this._ctx);
         }
+    }
+    dispose() {
+        window.removeEventListener('resize', this._resizeHandler.bind(this));
+        this.stop();
+        this.removeAll();
+        return this;
     }
 }
 exports.CanvasSpace = CanvasSpace;
@@ -1502,6 +1508,12 @@ class DOMSpace extends Space_1.MultiTouchSpace {
             }
         }
         return str;
+    }
+    dispose() {
+        window.removeEventListener('resize', this._resizeHandler.bind(this));
+        this.stop();
+        this.removeAll();
+        return this;
     }
 }
 exports.DOMSpace = DOMSpace;

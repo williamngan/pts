@@ -199,6 +199,12 @@ class CanvasSpace extends Space_1.MultiTouchSpace {
             this.render(this._ctx);
         }
     }
+    dispose() {
+        window.removeEventListener('resize', this._resizeHandler.bind(this));
+        this.stop();
+        this.removeAll();
+        return this;
+    }
 }
 exports.CanvasSpace = CanvasSpace;
 class CanvasForm extends Form_1.VisualForm {

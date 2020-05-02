@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.9.2 - Copyright © 2017-2020 William Ngan and contributors.
+ * pts.js 0.9.3 - Copyright © 2017-2020 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -306,6 +306,14 @@ var CanvasSpace = function (_Space_1$MultiTouchSp) {
                 if (this._offscreen) this._offCtx.restore();
                 this.render(this._ctx);
             }
+        }
+    }, {
+        key: "dispose",
+        value: function dispose() {
+            window.removeEventListener('resize', this._resizeHandler.bind(this));
+            this.stop();
+            this.removeAll();
+            return this;
         }
     }, {
         key: "autoResize",
@@ -2018,6 +2026,14 @@ var DOMSpace = function (_Space_1$MultiTouchSp) {
             for (var k in _styles) {
                 if (_styles.hasOwnProperty(k)) this.style(k, _styles[k], update);
             }
+            return this;
+        }
+    }, {
+        key: "dispose",
+        value: function dispose() {
+            window.removeEventListener('resize', this._resizeHandler.bind(this));
+            this.stop();
+            this.removeAll();
             return this;
         }
     }, {

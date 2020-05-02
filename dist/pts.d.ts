@@ -38,6 +38,7 @@ export class CanvasSpace extends MultiTouchSpace {
     clear(bg?: string): this;
     clearOffscreen(bg?: string): this;
     protected playItems(time: number): void;
+    dispose(): this;
 }
 export class CanvasForm extends VisualForm {
     protected _space: CanvasSpace;
@@ -201,6 +202,7 @@ export class DOMSpace extends MultiTouchSpace {
     styles(styles: object, update?: boolean): this;
     static setAttr(elem: Element, data: object): Element;
     static getInlineStyles(data: object): string;
+    dispose(): this;
 }
 export class HTMLSpace extends DOMSpace {
     getForm(): Form;

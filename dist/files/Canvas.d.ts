@@ -39,6 +39,7 @@ export declare class CanvasSpace extends MultiTouchSpace {
     clear(bg?: string): this;
     clearOffscreen(bg?: string): this;
     protected playItems(time: number): void;
+    dispose(): this;
 }
 export declare class CanvasForm extends VisualForm {
     protected _space: CanvasSpace;

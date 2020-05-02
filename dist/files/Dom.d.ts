@@ -30,6 +30,7 @@ export declare class DOMSpace extends MultiTouchSpace {
     styles(styles: object, update?: boolean): this;
     static setAttr(elem: Element, data: object): Element;
     static getInlineStyles(data: object): string;
+    dispose(): this;
 }
 export declare class HTMLSpace extends DOMSpace {
     getForm(): Form;

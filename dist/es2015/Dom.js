@@ -154,6 +154,12 @@ export class DOMSpace extends MultiTouchSpace {
         }
         return str;
     }
+    dispose() {
+        window.removeEventListener('resize', this._resizeHandler.bind(this));
+        this.stop();
+        this.removeAll();
+        return this;
+    }
 }
 export class HTMLSpace extends DOMSpace {
     getForm() {
