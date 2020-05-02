@@ -377,6 +377,21 @@ export class CanvasSpace extends MultiTouchSpace {
   }
   
   
+  /**
+  * Dispose of browser resources held by this space and remove all players. Call this before unmounting the canvas.
+  */
+  dispose():this {
+    // remove event listeners
+    window.removeEventListener( 'resize', this._resizeHandler.bind(this) );
+    // stop animation loop
+    this.stop();
+    // remove players from space
+    this.removeAll();
+
+    return this;
+  }
+  
+  
 
 }
 
