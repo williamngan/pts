@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.9.3 - Copyright © 2017-2020 William Ngan and contributors.
+ * pts.js 0.9.4 - Copyright © 2017-2020 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -2358,7 +2358,7 @@ class Geom {
             p.to(LinearAlgebra_1.Mat.transform2D(p, fn(cos, sin, anchor)));
             if (axis) {
                 for (let k = 0; k < axis.length; k++) {
-                    pts[i][k] = p[k];
+                    pts[i][axis[k]] = p[k];
                 }
             }
         }
@@ -2377,7 +2377,7 @@ class Geom {
             p.to(LinearAlgebra_1.Mat.transform2D(p, fn(tanx, tany, anchor)));
             if (axis) {
                 for (let k = 0; k < axis.length; k++) {
-                    pts[i][k] = p[k];
+                    pts[i][axis[k]] = p[k];
                 }
             }
         }
@@ -2391,7 +2391,7 @@ class Geom {
             p.to(LinearAlgebra_1.Mat.transform2D(p, mat));
             if (axis) {
                 for (let k = 0; k < axis.length; k++) {
-                    pts[i][k] = p[k];
+                    pts[i][axis[k]] = p[k];
                 }
             }
         }

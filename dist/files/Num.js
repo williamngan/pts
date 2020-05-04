@@ -172,7 +172,7 @@ class Geom {
             p.to(LinearAlgebra_1.Mat.transform2D(p, fn(cos, sin, anchor)));
             if (axis) {
                 for (let k = 0; k < axis.length; k++) {
-                    pts[i][k] = p[k];
+                    pts[i][axis[k]] = p[k];
                 }
             }
         }
@@ -191,7 +191,7 @@ class Geom {
             p.to(LinearAlgebra_1.Mat.transform2D(p, fn(tanx, tany, anchor)));
             if (axis) {
                 for (let k = 0; k < axis.length; k++) {
-                    pts[i][k] = p[k];
+                    pts[i][axis[k]] = p[k];
                 }
             }
         }
@@ -205,7 +205,7 @@ class Geom {
             p.to(LinearAlgebra_1.Mat.transform2D(p, mat));
             if (axis) {
                 for (let k = 0; k < axis.length; k++) {
-                    pts[i][k] = p[k];
+                    pts[i][axis[k]] = p[k];
                 }
             }
         }
