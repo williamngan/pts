@@ -1,8 +1,8 @@
 import chai = require('chai');
 import mocha = require('mocha');
 import {Pt, Group} from '../Pt';
-import {Util} from '../Util';
-import {Num, Geom, Range} from '../Num';
+import {Util, Const} from '../Util';
+import {Num, Geom, Range,} from '../Num';
 
 var {assert} = chai;
 var {describe, it} = mocha;
@@ -110,6 +110,24 @@ describe('Num: ', function() {
       assert.isTrue( s1 && s2 );
     });
 
+    it('can rotate a group in 2D on YZ plane', function() {
+      let ps = [new Pt(0,1,2), new Pt(0,3,6) ];
+      let ang = Math.PI/4;
+      Geom.rotate2D( ps, ang, [1,1,1], Const.yz );
+      let s1 = Num.equals( ps[0].y, Math.cos(2.35619449)+1);
+      let s2 = Num.equals( ps[1].z, Math.sin(1.97568811)*5.38516480+1 );
+      assert.isTrue( s1 && s2 );
+    });
+
+    it('can rotate a group in 2D on XZ plane', function() {
+      let ps = [new Pt(1,0,2), new Pt(3,0,6) ];
+      let ang = Math.PI/4;
+      Geom.rotate2D( ps, ang, [1,1,1], Const.xz );
+      let s1 = Num.equals( ps[0].x, Math.cos(2.35619449)+1);
+      let s2 = Num.equals( ps[1].z, Math.sin(1.97568811)*5.38516480+1 );
+      assert.isTrue( s1 && s2 );
+    });
+
     it('can shear a group in 2D', function() {
       let ps = [new Pt(218, 454), new Pt( 218, 404) ];
       let scale = [-0.5154185022026432, 0];
@@ -117,18 +135,39 @@ describe('Num: ', function() {
       assert.isTrue( Num.equals( ps[0].x, 218) && Num.equals(ps[0].y, 482.324, 0.001) &&  Num.equals(ps[1].y, 432.324, 0.001) );
     });
 
+    it('can shear a group in 2D on YZ plane', function() {
+      let ps = [new Pt(0, 218, 454), new Pt(0, 218, 404) ];
+      let scale = [-0.5154185022026432, 0];
+      Geom.shear2D( ps, scale, [268, 454], Const.yz );
+      assert.isTrue( Num.equals( ps[0].y, 218) && Num.equals(ps[0].z, 482.324, 0.001) &&  Num.equals(ps[1].z, 432.324, 0.001) );
+    });
+
+    it('can shear a group in 2D on XZ plane', function() {
+      let ps = [new Pt(218, 0, 454), new Pt(218, 0, 404) ];
+      let scale = [-0.5154185022026432, 0];
+      Geom.shear2D( ps, scale, [268, 454], Const.xz );
+      assert.isTrue( Num.equals( ps[0].x, 218) && Num.equals(ps[0].z, 482.324, 0.001) &&  Num.equals(ps[1].z, 432.324, 0.001) );
+    });
+
     it('can reflect a group in 2D', function() {
-      let ps = [new Pt(218, 454), new Pt( 218, 404) ];
+      let ps = [new Pt(218, 454), new Pt(218, 404) ];
       let reflect = Group.fromArray( [[230, 497], [268, 454]] )
       Geom.reflect2D( ps, reflect );
       assert.isTrue( Num.equals(ps[0].x, 274.14938) &&  Num.equals(ps[1].y, 497.4710) );
     });
 
-    it('can reflect a group in 2D', function() {
-      let ps = [new Pt(218, 454), new Pt( 218, 404) ];
+    it('can reflect a group in 2D on YZ plane', function() {
+      let ps = [new Pt(0, 218, 454), new Pt(0, 218, 404) ];
       let reflect = Group.fromArray( [[230, 497], [268, 454]] )
-      Geom.reflect2D( ps, reflect );
-      assert.isTrue( Num.equals(ps[0].x, 274.14938) &&  Num.equals(ps[1].y, 497.4710) );
+      Geom.reflect2D( ps, reflect, Const.yz );
+      assert.isTrue( Num.equals(ps[0].y, 274.14938) &&  Num.equals(ps[1].z, 497.4710) );
+    });
+
+    it('can reflect a group in 2D on XZ plane', function() {
+      let ps = [new Pt(218, 0, 454), new Pt(218, 0, 404) ];
+      let reflect = Group.fromArray( [[230, 497], [268, 454]] )
+      Geom.reflect2D( ps, reflect, Const.xz );
+      assert.isTrue( Num.equals(ps[0].x, 274.14938) &&  Num.equals(ps[1].z, 497.4710) );
     });
 
     it('can get a sin table', function() {
