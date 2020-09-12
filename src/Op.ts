@@ -127,7 +127,13 @@ export class Line {
    * @see `Line.perpendicularFromPt`
    */
   static distanceFromPt( line:GroupLike, pt:PtLike|number[] ):number {
-    return Line.perpendicularFromPt( line, pt, true ).magnitude();
+    let projectionVector = Line.perpendicularFromPt( line, pt, true );
+    if (projectionVector) {
+      return projectionVector.magnitude();
+    } else {
+      // line is made of 2 identical points, return distance between this point and pt
+      return line[0].$subtract( pt ).magnitude();
+    }
   }
 
 
