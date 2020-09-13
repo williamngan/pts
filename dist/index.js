@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.9.4 - Copyright © 2017-2020 William Ngan and contributors.
+ * pts.js 0.9.5 - Copyright © 2017-2020 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -225,10 +225,8 @@ class CanvasSpace extends Space_1.MultiTouchSpace {
         }
         if (this._pixelScale != 1) {
             this._ctx.scale(this._pixelScale, this._pixelScale);
-            this._ctx.translate(0.5, 0.5);
             if (this._offscreen) {
                 this._offCtx.scale(this._pixelScale, this._pixelScale);
-                this._offCtx.translate(0.5, 0.5);
             }
         }
         for (let k in this.players) {
@@ -2695,7 +2693,13 @@ class Line {
         return (asProjection) ? proj : proj.$add(pt);
     }
     static distanceFromPt(line, pt) {
-        return Line.perpendicularFromPt(line, pt, true).magnitude();
+        let projectionVector = Line.perpendicularFromPt(line, pt, true);
+        if (projectionVector) {
+            return projectionVector.magnitude();
+        }
+        else {
+            return line[0].$subtract(pt).magnitude();
+        }
     }
     static intersectRay2D(la, lb) {
         let a = Line.intercept(la[0], la[1]);

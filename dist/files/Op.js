@@ -49,7 +49,13 @@ class Line {
         return (asProjection) ? proj : proj.$add(pt);
     }
     static distanceFromPt(line, pt) {
-        return Line.perpendicularFromPt(line, pt, true).magnitude();
+        let projectionVector = Line.perpendicularFromPt(line, pt, true);
+        if (projectionVector) {
+            return projectionVector.magnitude();
+        }
+        else {
+            return line[0].$subtract(pt).magnitude();
+        }
     }
     static intersectRay2D(la, lb) {
         let a = Line.intercept(la[0], la[1]);
