@@ -5215,6 +5215,7 @@ var Particle = function (_Pt_1$Pt) {
 
         _this._mass = 1;
         _this._radius = 0;
+        _this._age = 0;
         _this._force = new Pt_1.Pt();
         _this._prev = new Pt_1.Pt();
         _this._lock = false;
@@ -5250,6 +5251,7 @@ var Particle = function (_Pt_1$Pt) {
                 this.add(v);
                 this._force = new Pt_1.Pt();
             }
+            this.age = this.age + dt;
             return this;
         }
     }, {
@@ -5310,6 +5312,14 @@ var Particle = function (_Pt_1$Pt) {
         },
         set: function set(f) {
             this._radius = f;
+        }
+    }, {
+        key: "age",
+        get: function get() {
+            return this.age;
+        },
+        set: function set(f) {
+            this._age = f;
         }
     }, {
         key: "previous",

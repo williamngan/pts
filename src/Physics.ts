@@ -347,6 +347,7 @@ export class Particle extends Pt {
 
   protected _mass:number = 1;
   protected _radius:number = 0;
+  protected _age:number = 0;
   protected _force:Pt = new Pt();
   protected _prev:Pt = new Pt();
   
@@ -375,6 +376,12 @@ export class Particle extends Pt {
    */
   get radius():number { return this._radius; }
   set radius( f:number ) { this._radius = f; }
+
+  /**
+   * Age of this particle.
+   */
+  get age():number { return this.age; }
+  set age( f:number ) { this._age = f; }
 
   /**
    * Get this particle's previous position.
@@ -464,6 +471,10 @@ export class Particle extends Pt {
       
       this._force = new Pt();
     }
+
+    // Add delta time to age
+    this.age = this.age + dt;
+
     return this;
   }
 

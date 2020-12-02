@@ -174,6 +174,7 @@ class Particle extends Pt_1.Pt {
         super(...args);
         this._mass = 1;
         this._radius = 0;
+        this._age = 0;
         this._force = new Pt_1.Pt();
         this._prev = new Pt_1.Pt();
         this._lock = false;
@@ -183,6 +184,8 @@ class Particle extends Pt_1.Pt {
     set mass(m) { this._mass = m; }
     get radius() { return this._radius; }
     set radius(f) { this._radius = f; }
+    get age() { return this.age; }
+    set age(f) { this._age = f; }
     get previous() { return this._prev; }
     set previous(p) { this._prev = p; }
     get force() { return this._force; }
@@ -222,6 +225,7 @@ class Particle extends Pt_1.Pt {
             this.add(v);
             this._force = new Pt_1.Pt();
         }
+        this.age = this.age + dt;
         return this;
     }
     hit(...args) {

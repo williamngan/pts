@@ -171,6 +171,7 @@ export class Particle extends Pt {
         super(...args);
         this._mass = 1;
         this._radius = 0;
+        this._age = 0;
         this._force = new Pt();
         this._prev = new Pt();
         this._lock = false;
@@ -180,6 +181,8 @@ export class Particle extends Pt {
     set mass(m) { this._mass = m; }
     get radius() { return this._radius; }
     set radius(f) { this._radius = f; }
+    get age() { return this.age; }
+    set age(f) { this._age = f; }
     get previous() { return this._prev; }
     set previous(p) { this._prev = p; }
     get force() { return this._force; }
@@ -219,6 +222,7 @@ export class Particle extends Pt {
             this.add(v);
             this._force = new Pt();
         }
+        this.age = this.age + dt;
         return this;
     }
     hit(...args) {

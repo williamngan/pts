@@ -5208,6 +5208,12 @@
     0
   ],
   [
+    "Physics_Particle#accessor_age",
+    "Particle.age",
+    "Accessor",
+    6
+  ],
+  [
     "Physics_Particle#accessor_body",
     "Particle.body",
     "Accessor",

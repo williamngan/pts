@@ -587,6 +587,7 @@ export class World {
 export class Particle extends Pt {
     protected _mass: number;
     protected _radius: number;
+    protected _age: number;
     protected _force: Pt;
     protected _prev: Pt;
     protected _body: Body;
@@ -595,6 +596,7 @@ export class Particle extends Pt {
     constructor(...args: any[]);
     mass: number;
     radius: number;
+    age: number;
     previous: Pt;
     force: Pt;
     body: Body;
