@@ -1,0 +1,31 @@
+<html>
+  <head>
+    <script src="../dist/pts.js"></script>
+    
+  </head>
+  <body>
+    <div id="here" style="width: 800px; height: 600px; background: #ccc">
+    </div>
+    <p>This is a static page for you to test a Pts script locally</p>
+    <p><small>Run a local server either with npm or with python (Eg, <code>python -m http.server 8000</code>)</small></p>
+
+    <script>
+      (function() {
+
+      // Pts.quickStart instantiates a CanvasSapce and CanvasForm and put the respective "space" and "form" variables into global scope and bind mouse and touch events.
+      // It returns a function where you can init with callback functions ( animateFn, startFn, actionFn, resizeFn )
+      // See guides for more details: https://ptsjs.org/guide/Get-started-0100.html
+      var run = Pts.quickStart( "here", "#f03" ); 
+
+      // Pass an animate callback function to run
+      run( ( time, ftime ) => { 
+        let subs = space.innerBound.map( (p) => Line.subpoints( [p, space.pointer], 30 ) );
+        let rects = Util.zip( subs ).map( (r,i) => Rectangle.corners( r ).rotate2D( i*Math.PI/60, space.pointer ) );
+        form.strokeOnly("#FDC", 2).polygons( rects );
+      });
+
+      })();    
+    </script>
+
+  </body>
+</html>
