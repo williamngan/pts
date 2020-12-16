@@ -16,10 +16,9 @@ import {PtLike, GroupLike, IPlayer, DOMFormContext} from "./Types";
  */
 export class SVGSpace extends DOMSpace {
   
-  id: string = "svgspace";
   protected _bgcolor:string = "#999";
-  
 
+  
   /**
   * Create a SVGSpace which represents a Space for SVG elements.
   * @param elem Specify an element by its "id" attribute as string, or by the element object itself. An element can be an existing `<svg>`, or a `<div>` container in which a new `<svg>` will be created. If left empty, a `<div id="pt_container"><svg id="pt" /></div>` will be added to DOM. Use css to customize its appearance if needed.

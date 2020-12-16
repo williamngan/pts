@@ -5068,7 +5068,6 @@ const Dom_1 = __webpack_require__(/*! ./Dom */ "./src/Dom.ts");
 class SVGSpace extends Dom_1.DOMSpace {
     constructor(elem, callback) {
         super(elem, callback);
-        this.id = "svgspace";
         this._bgcolor = "#999";
         if (this._canvas.nodeName.toLowerCase() != "svg") {
             let s = SVGSpace.svgElement(this._canvas, "svg", `${this.id}_svg`);
