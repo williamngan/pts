@@ -888,7 +888,6 @@ export abstract class MultiTouchSpace extends Space {
 }
 
 export class SVGSpace extends DOMSpace {
-    id: string;
     protected _bgcolor: string;
     constructor(elem: string | Element, callback?: Function);
     getForm(): SVGForm;
@@ -1176,5 +1175,8 @@ export class Util {
     static stepper(max: number, min?: number, stride?: number, callback?: (n: number) => void): (() => number);
     static forRange(fn: (index: number) => any, range: number, start?: number, step?: number): any[];
     static load(url: string, callback: (response: string, success: boolean) => void): void;
+    static performance(avgFrames?: number): () => number;
+    static iterFromPtLike(list: PtLike[] | Iterable<PtLike>): Iterable<PtLike>;
+    static iterFromPt(list: GroupLike | Iterable<Pt>): Iterable<Pt>;
 }
 

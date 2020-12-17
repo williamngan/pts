@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.9.5 - Copyright © 2017-2020 William Ngan and contributors.
+ * pts.js 0.9.6 - Copyright © 2017-2020 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -7516,7 +7516,6 @@ var SVGSpace = function (_Dom_1$DOMSpace) {
 
         var _this = _possibleConstructorReturn(this, (SVGSpace.__proto__ || Object.getPrototypeOf(SVGSpace)).call(this, elem, callback));
 
-        _this.id = "svgspace";
         _this._bgcolor = "#999";
         if (_this._canvas.nodeName.toLowerCase() != "svg") {
             var s = SVGSpace.svgElement(_this._canvas, "svg", _this.id + "_svg");
@@ -8630,6 +8629,33 @@ var Util = function () {
                 callback("Unknown network error", false);
             };
             request.send();
+        }
+    }, {
+        key: "performance",
+        value: function performance() {
+            var avgFrames = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 10;
+
+            var last = Date.now();
+            var avg = [];
+            return function () {
+                var now = Date.now();
+                avg.push(now - last);
+                if (avg.length >= avgFrames) avg.shift();
+                last = now;
+                return Math.floor(avg.reduce(function (a, b) {
+                    return a + b;
+                }, 0) / avg.length);
+            };
+        }
+    }, {
+        key: "iterFromPtLike",
+        value: function iterFromPtLike(list) {
+            return Array.isArray(list) ? list[Symbol.iterator]() : list;
+        }
+    }, {
+        key: "iterFromPt",
+        value: function iterFromPt(list) {
+            return Array.isArray(list) ? list[Symbol.iterator]() : list;
         }
     }]);
 

@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.9.5 - Copyright © 2017-2020 William Ngan and contributors.
+ * pts.js 0.9.6 - Copyright © 2017-2020 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -5068,7 +5068,6 @@ const Dom_1 = __webpack_require__(/*! ./Dom */ "./src/Dom.ts");
 class SVGSpace extends Dom_1.DOMSpace {
     constructor(elem, callback) {
         super(elem, callback);
-        this.id = "svgspace";
         this._bgcolor = "#999";
         if (this._canvas.nodeName.toLowerCase() != "svg") {
             let s = SVGSpace.svgElement(this._canvas, "svg", `${this.id}_svg`);
@@ -5925,6 +5924,24 @@ class Util {
             callback(`Unknown network error`, false);
         };
         request.send();
+    }
+    static performance(avgFrames = 10) {
+        let last = Date.now();
+        let avg = [];
+        return function () {
+            const now = Date.now();
+            avg.push(now - last);
+            if (avg.length >= avgFrames)
+                avg.shift();
+            last = now;
+            return Math.floor(avg.reduce((a, b) => a + b, 0) / avg.length);
+        };
+    }
+    static iterFromPtLike(list) {
+        return Array.isArray(list) ? list[Symbol.iterator]() : list;
+    }
+    static iterFromPt(list) {
+        return Array.isArray(list) ? list[Symbol.iterator]() : list;
     }
 }
 Util._warnLevel = "mute";

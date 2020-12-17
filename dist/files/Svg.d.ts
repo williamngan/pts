@@ -4,7 +4,6 @@ import { Pt, Bound } from './Pt';
 import { DOMSpace } from "./Dom";
 import { PtLike, GroupLike, IPlayer, DOMFormContext } from "./Types";
 export declare class SVGSpace extends DOMSpace {
-    id: string;
     protected _bgcolor: string;
     constructor(elem: string | Element, callback?: Function);
     getForm(): SVGForm;

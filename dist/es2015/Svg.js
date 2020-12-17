@@ -8,7 +8,6 @@ import { DOMSpace } from "./Dom";
 export class SVGSpace extends DOMSpace {
     constructor(elem, callback) {
         super(elem, callback);
-        this.id = "svgspace";
         this._bgcolor = "#999";
         if (this._canvas.nodeName.toLowerCase() != "svg") {
             let s = SVGSpace.svgElement(this._canvas, "svg", `${this.id}_svg`);

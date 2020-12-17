@@ -155,6 +155,24 @@ export class Util {
         };
         request.send();
     }
+    static performance(avgFrames = 10) {
+        let last = Date.now();
+        let avg = [];
+        return function () {
+            const now = Date.now();
+            avg.push(now - last);
+            if (avg.length >= avgFrames)
+                avg.shift();
+            last = now;
+            return Math.floor(avg.reduce((a, b) => a + b, 0) / avg.length);
+        };
+    }
+    static iterFromPtLike(list) {
+        return Array.isArray(list) ? list[Symbol.iterator]() : list;
+    }
+    static iterFromPt(list) {
+        return Array.isArray(list) ? list[Symbol.iterator]() : list;
+    }
 }
 Util._warnLevel = "mute";
 //# sourceMappingURL=Util.js.map
