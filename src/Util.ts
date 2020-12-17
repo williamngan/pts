@@ -1,7 +1,7 @@
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
-import {Group} from "./Pt";
-import {WarningType} from "./Types";
+import {Group, Pt} from "./Pt";
+import {WarningType, PtLike, GroupLike} from "./Types";
 
 
 /**
@@ -314,6 +314,44 @@ export class Util {
 
     request.send();
   }
+
+
+  /**
+   * Estimate performance by checking how long it takes to render a frame
+   * @param avgFrames The number of frames used calculate to average
+   * @example `let perf = Util.performance(); perf();` 
+   * @returns milliseconds per frame
+   */
+  static performance( avgFrames:number = 10 ): () => number {
+    let last = Date.now();
+    let avg = [];
+    return function() {
+      const now = Date.now();
+      avg.push( now-last );
+      if (avg.length >= avgFrames) avg.shift();
+      last = now;
+      return Math.floor( avg.reduce( (a,b) => a+b, 0 ) / avg.length );
+    };
+  }
   
+  
+  /**
+   * Get a PtLike iterator from an Array or an existing iterable/generator
+   * @param list PtLike array or iterable
+   */
+  static iterFromPtLike( list:PtLike[] | Iterable<PtLike> ):Iterable<PtLike> {
+    return Array.isArray( list ) ? list[Symbol.iterator]() : list;
+  }
+
+
+  /**
+   * Get a Pt iterator from an Array or an existing iterable/generator
+   * @param list PtLike array or iterable
+   */
+  static iterFromPt( list:GroupLike | Iterable<Pt> ):Iterable<Pt> {
+    return Array.isArray( list ) ? list[Symbol.iterator]() : list;
+  }
+
 }
+
 
