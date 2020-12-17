@@ -178,6 +178,70 @@
       ]
     },
     {
+      "name": "iterFromPt",
+      "source": [
+        [
+          "Util.ts",
+          351,
+          19
+        ]
+      ],
+      "id": 1729,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a Pt iterator from an Array or an existing iterable/generator",
+          "returns": "Iterable",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "list",
+              "comment": "PtLike array or iterable\n",
+              "type": "GroupLike | Iterable",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "iterFromPtLike",
+      "source": [
+        [
+          "Util.ts",
+          342,
+          23
+        ]
+      ],
+      "id": 1726,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a PtLike iterator from an Array or an existing iterable/generator",
+          "returns": "Iterable",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "list",
+              "comment": "PtLike array or iterable\n",
+              "type": "PtLike[] | Iterable",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "load",
       "source": [
         [
@@ -212,6 +276,43 @@
             }
           ],
           "tags": []
+        }
+      ]
+    },
+    {
+      "name": "performance",
+      "source": [
+        [
+          "Util.ts",
+          325,
+          20
+        ]
+      ],
+      "id": 1721,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Estimate performance by checking how long it takes to render a frame",
+          "returns": "",
+          "returns_comment": "milliseconds per frame\n",
+          "parameters": [
+            {
+              "name": "avgFrames",
+              "comment": "The number of frames used calculate to average",
+              "type": "number",
+              "default": "10"
+            }
+          ],
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`let perf = Util.performance(); perf();`"
+            }
+          ]
         }
       ]
     },

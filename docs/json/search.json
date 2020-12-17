@@ -9768,8 +9768,26 @@
     8
   ],
   [
+    "Util_Util#function_iterFromPt",
+    "Util.iterFromPt",
+    "Function",
+    8
+  ],
+  [
+    "Util_Util#function_iterFromPtLike",
+    "Util.iterFromPtLike",
+    "Function",
+    8
+  ],
+  [
     "Util_Util#function_load",
     "Util.load",
+    "Function",
+    8
+  ],
+  [
+    "Util_Util#function_performance",
+    "Util.performance",
     "Function",
     8
   ],
