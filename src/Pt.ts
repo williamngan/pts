@@ -3,7 +3,7 @@
 import {Util, Const} from "./Util";
 import {Geom, Num} from "./Num";
 import {Vec, Mat} from "./LinearAlgebra";
-import {IPt, GroupLike, PtLike} from "./Types";
+import {IPt, GroupLike, PtLike, PtIterable, PtLikeIterable} from "./Types";
 
 /**
  * Pt is a subclass of standard [`Float32Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array) with additional properties and functions to support vector and geometric calculations.
@@ -612,13 +612,13 @@ export class Group extends Array<Pt> {
 
   /**
    * Convert an array of numeric arrays into a Group of Pts.
-   * @param list an array of numeric arrays
+   * @param list an array or iterable of numeric arrays
    * @example `Group.fromArray( [[1,2], [3,4], [5,6]] )`
    */
-  static fromArray( list:PtLike[] ):Group {
+  static fromArray( list:PtLikeIterable ):Group {
     let g = new Group();
-    for (let i=0, len=list.length; i<len; i++) {
-      let p = (list[i] instanceof Pt) ? list[i] as Pt : new Pt(list[i]);
+    for (let li of list) {
+      let p = (li instanceof Pt) ? li as Pt : new Pt(li);
       g.push( p );
     }
     return g;
@@ -629,7 +629,7 @@ export class Group extends Array<Pt> {
    * Convert an array of Pts into a Group.
    * @param list an array of Pts
    */
-  static fromPtArray( list:GroupLike ):Group {
+  static fromPtArray( list:PtIterable ):Group {
     return Group.from( list ) as Group;
   }
 

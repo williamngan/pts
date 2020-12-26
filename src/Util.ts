@@ -333,25 +333,11 @@ export class Util {
       return Math.floor( avg.reduce( (a,b) => a+b, 0 ) / avg.length );
     };
   }
-  
-  
-  /**
-   * Get a PtLike iterator from an Array or an existing iterable/generator
-   * @param list PtLike array or iterable
-   */
-  static iterFromPtLike( list:PtLike[] | Iterable<PtLike> ):Iterable<PtLike> {
-    return Array.isArray( list ) ? list[Symbol.iterator]() : list;
+
+  static iterToArray( it:Iterable<any> ): any[] {
+    return (!Array.isArray(it)) ? [...it] : it;
   }
-
-
-  /**
-   * Get a Pt iterator from an Array or an existing iterable/generator
-   * @param list PtLike array or iterable
-   */
-  static iterFromPt( list:GroupLike | Iterable<Pt> ):Iterable<Pt> {
-    return Array.isArray( list ) ? list[Symbol.iterator]() : list;
-  }
-
+  
 }
 
 

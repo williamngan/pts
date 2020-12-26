@@ -4,7 +4,7 @@ import {Util} from "./Util";
 import {Geom, Num} from "./Num";
 import {Pt, Group} from "./Pt";
 import {Mat} from "./LinearAlgebra";
-import {PtLike, GroupLike, IntersectContext} from "./Types";
+import {PtLike, GroupLike, PtLikeIterable, IntersectContext} from "./Types";
 
 
 let _errorLength = (obj, param:number|string="expected") => Util.warn( "Group's length is less than "+param, obj  );
@@ -438,20 +438,22 @@ export class Rectangle {
 
   /**
    * Get the size of this rectangle as a Pt.
-   * @param pts a Group of 2 Pts representing a Rectangle
+   * @param p a Group of 2 Pts representing a Rectangle
    */
-  static size( pts:GroupLike ):Pt {
-    return pts[0].$max( pts[1] ).subtract( pts[0].$min( pts[1] ) );
+  static size( pts:PtLikeIterable ):Pt {
+    let p = Util.iterToArray(pts);
+    return p[0].$max( p[1] ).subtract( p[0].$min( p[1] ) );
   }
 
 
   /**
    * Get the center of this rectangle.
-   * @param pts a Group of 2 Pts representing a Rectangle
+   * @param p a Group of 2 Pts representing a Rectangle
    */
-  static center( pts:GroupLike ):Pt {
-    let min = pts[0].$min( pts[1] );
-    let max = pts[0].$max( pts[1] );
+  static center( pts:PtLikeIterable ):Pt {
+    let p = Util.iterToArray(pts);
+    let min = p[0].$min( p[1] );
+    let max = p[0].$max( p[1] );
     return min.add( max.$subtract( min ).divide( 2 ) );
   }
 

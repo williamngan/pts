@@ -28,6 +28,18 @@ export type GroupLike = Group | Pt[];
 
 
 /**
+ * Typescript only: PtLikeIterable is an alias of GroupLike | Iterable<PtLike> | number[][]
+ */
+export type PtLikeIterable = GroupLike|PtLike[]|Iterable<PtLike>
+
+
+/**
+ * Typescript only: PtIterable is an alias of GroupLike | Iterable<Pt>
+ */
+export type PtIterable = GroupLike|Pt[]|Iterable<Pt>
+
+
+/**
  * Typescript only: AnimateCallbackFn is a type alias that represents a callback function for animation. It accepts parameters to keep track of current time, current frame-time, and current space instance.
  */
 export type AnimateCallbackFn = ( time?:number, frameTime?:number, currentSpace?:any ) => void;

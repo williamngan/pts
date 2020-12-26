@@ -4,7 +4,7 @@
     
   </head>
   <body>
-    <div id="here" style="width: 800px; height: 600px; background: #ccc">
+    <div id="here" style="width: 80vw; height: 80vh; background: #ccc">
     </div>
     <p>This is a static page for you to test a Pts script locally</p>
     <p><small>Run a local server either with npm or with python (Eg, <code>python -m http.server 8000</code>)</small></p>
@@ -15,13 +15,46 @@
       // Pts.quickStart instantiates a CanvasSapce and CanvasForm and put the respective "space" and "form" variables into global scope and bind mouse and touch events.
       // It returns a function where you can init with callback functions ( animateFn, startFn, actionFn, resizeFn )
       // See guides for more details: https://ptsjs.org/guide/Get-started-0100.html
-      var run = Pts.quickStart( "here", "#f03" ); 
+      var run = Pts.quickStart( "here", "#999" ); 
+
+      let total = 4000;
+
+      function* gen0(count, bound) {
+        let i = 0;
+        while (i<count) {
+          i++;
+          yield new Pt(Math.random()*bound.width, Math.random()*bound.height);
+        }
+      }
+
+      function gen1(count, bound) {
+        let arr = new Group();
+        for (let i=0, len=total; i<len; i++) {
+          arr.push( 
+            new Pt(Math.random()*bound.width, Math.random()*bound.height)
+          );
+        }
+        return arr;
+      }
+
+      function gen2() {
+        return Group.fromArray([[20,20], [40,100],[100,100],[90,10]]);
+      }
+
+
+      let perf = Util.performance();
+      let testFn = [gen0, gen1, gen2];
+      let color = ["#f00", "#0f0", "#00f"];
+      let testId = 2;
 
       // Pass an animate callback function to run
       run( ( time, ftime ) => { 
-        let subs = space.innerBound.map( (p) => Line.subpoints( [p, space.pointer], 30 ) );
-        let rects = Util.zip( subs ).map( (r,i) => Rectangle.corners( r ).rotate2D( i*Math.PI/60, space.pointer ) );
-        form.strokeOnly("#FDC", 2).polygons( rects );
+
+        form.fillOnly("#000").rect( [space.center, [space.width/4, space.height/4]])
+        
+        let iter = testFn[testId](total, space.innerBound);
+        form.strokeOnly(color[testId], 2).rect( iter );
+        form.fillOnly("#000").text( new Pt(20,20), perf() );
       });
 
       })();    

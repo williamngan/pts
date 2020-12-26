@@ -3,10 +3,10 @@
 import {MultiTouchSpace} from './Space';
 import {VisualForm, Font} from "./Form";
 import {Pt, Group, Bound} from "./Pt";
-import {Const} from "./Util";
+import {Const, Util} from "./Util";
 import {Typography as Typo} from "./Typography";
 import { Rectangle } from './Op';
-import {PtLike, GroupLike, PtsCanvasRenderingContext2D, DefaultFormStyle} from "./Types";
+import {PtLike, GroupLike, PtsCanvasRenderingContext2D, DefaultFormStyle, PtLikeIterable} from "./Types";
 
 
 
@@ -655,7 +655,7 @@ export class CanvasForm extends VisualForm {
      * Get the width of this text. It will return an actual measurement or an estimate based on [`fontWidthEstimate`](#link) setting. Default is an actual measurement using canvas context's measureText.
      * @param c a string of text contents
      */
-    getTextWidth(c:string):number {
+    getTextWidth( c:string ):number {
       return (!this._estimateTextWidth) ? this._ctx.measureText(c+" .").width : this._estimateTextWidth( c );
     }
 
@@ -673,17 +673,18 @@ export class CanvasForm extends VisualForm {
 
     /**
      * Align text within a rectangle box.
-     * @param box a Group that defines a rectangular box
+     * @param _box a Group that defines a rectangular box
      * @param vertical a string that specifies the vertical alignment in the box: "top", "bottom", "middle", "start", "end"
      * @param offset Optional offset from the edge (like padding)
      * @param center Optional center position 
      */
-    protected _textAlign( box:GroupLike, vertical:string, offset?:PtLike, center?:Pt ):Pt {
-      if (!center) center = Rectangle.center( box );
+    protected _textAlign( box:PtLikeIterable, vertical:string, offset?:PtLike, center?:Pt ):Pt {
+      let _box = Util.iterToArray( box );
+      if (!center) center = Rectangle.center( _box );
 
-      var px = box[0][0];
+      var px = _box[0][0];
       if (this._ctx.textAlign == "end" || this._ctx.textAlign == "right") {
-        px = box[1][0];
+        px = _box[1][0];
       // @ts-ignore
       } else if (this._ctx.textAlign == "center" || this._ctx.textAlign == "middle") {
         px = center[0];
@@ -691,9 +692,9 @@ export class CanvasForm extends VisualForm {
 
       var py = center[1];
       if (vertical == "top" || vertical == "start") {
-        py = box[0][1];
+        py = _box[0][1];
       } else if (vertical == "end" || vertical == "bottom") {
-        py = box[1][1];
+        py = _box[1][1];
       }
 
       return (offset) ? new Pt( px+offset[0], py+offset[1] ) : new Pt(px, py);
@@ -757,8 +758,9 @@ export class CanvasForm extends VisualForm {
     * Draw a circle. See also [`Circle.fromCenter`](#link)
     * @param pts usually a Group of 2 Pts, but it can also take an array of two numeric arrays [ [position], [size] ]
     */
-    circle( pts:GroupLike|number[][] ):this {
-      CanvasForm.circle( this._ctx, pts[0], pts[1][0] );
+    circle( pts:PtLikeIterable ):this {
+      let p = Util.iterToArray( pts );
+      CanvasForm.circle( this._ctx, p[0], p[1][0] );
       this._paint();
       return this;
     }
@@ -782,7 +784,7 @@ export class CanvasForm extends VisualForm {
 
 
     /**
-    * A static function to draw an ellipse.
+    * Draw an ellipse.
     * @param pt center position 
     * @param radius radius [x, y] of the ellipse
     * @param rotation rotation of the ellipse in radian. Default is 0.
@@ -868,12 +870,18 @@ export class CanvasForm extends VisualForm {
     * @param ctx canvas rendering context
     * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
     */
-    static line( ctx:CanvasRenderingContext2D, pts:GroupLike|number[][] ) {
-      if (pts.length<2) return;
+    static line( ctx:CanvasRenderingContext2D, pts:PtLikeIterable ) {
+      if (Array.isArray(pts) && pts.length<2) return;
+      let i = 0;
       ctx.beginPath();
-      ctx.moveTo( pts[0][0], pts[0][1] );
-      for (let i=1, len=pts.length; i<len; i++) {
-        if (pts[i]) ctx.lineTo( pts[i][0], pts[i][1] );
+      for (let it of pts) {
+        if (it) {
+          if (i++ > 0) {
+            ctx.lineTo(it[0], it[1]);
+          } else {
+            ctx.moveTo(it[0], it[1]);
+          }
+        }
       }
     }
     
@@ -882,7 +890,7 @@ export class CanvasForm extends VisualForm {
     * Draw a line or polyline.
     * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
     */
-    line( pts:GroupLike|number[][] ):this {
+    line( pts:PtLikeIterable ):this {
       CanvasForm.line( this._ctx, pts );
       this._paint();
       return this;
@@ -894,13 +902,9 @@ export class CanvasForm extends VisualForm {
     * @param ctx canvas rendering context
     * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
     */
-    static polygon( ctx:CanvasRenderingContext2D, pts:GroupLike|number[][] ) {
-      if (pts.length<2) return;
-      ctx.beginPath();
-      ctx.moveTo( pts[0][0], pts[0][1] );
-      for (let i=1, len=pts.length; i<len; i++) {
-        if (pts[i]) ctx.lineTo( pts[i][0], pts[i][1] );
-      }
+    static polygon( ctx:CanvasRenderingContext2D, pts:PtLikeIterable ) {
+      if (Array.isArray(pts) && pts.length<2) return;
+      CanvasForm.line( ctx, pts );
       ctx.closePath();
     }
     
@@ -909,7 +913,7 @@ export class CanvasForm extends VisualForm {
     * Draw a polygon.
     * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
     */
-    polygon( pts:GroupLike|number[][] ):this {
+    polygon( pts:PtLikeIterable ):this {
       CanvasForm.polygon( this._ctx, pts );
       this._paint();
       return this;
@@ -921,14 +925,16 @@ export class CanvasForm extends VisualForm {
     * @param ctx canvas rendering context
     * @param pts usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.
     */
-    static rect( ctx:CanvasRenderingContext2D, pts:GroupLike|number[][] ) {
-      if (pts.length<2) return;
+    static rect( ctx:CanvasRenderingContext2D, pts:PtLikeIterable ) {
+      let p = Util.iterToArray(pts);
+      if (p.length < 2) return;
       ctx.beginPath();
-      ctx.moveTo( pts[0][0], pts[0][1] );
-      ctx.lineTo( pts[0][0], pts[1][1] );
-      ctx.lineTo( pts[1][0], pts[1][1] );
-      ctx.lineTo( pts[1][0], pts[0][1] );
+      ctx.moveTo( p[0][0], p[0][1] );
+      ctx.lineTo( p[0][0], p[1][1] );
+      ctx.lineTo( p[1][0], p[1][1] );
+      ctx.lineTo( p[1][0], p[0][1] );
       ctx.closePath();
+    
     }
     
     
@@ -936,7 +942,7 @@ export class CanvasForm extends VisualForm {
     * Draw a rectangle.
     * @param pts usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.
     */
-    rect( pts:number[][]|Pt[] ):this {
+    rect( pts:PtLikeIterable ):this {
       CanvasForm.rect( this._ctx, pts );
       this._paint();
       return this;
@@ -950,15 +956,15 @@ export class CanvasForm extends VisualForm {
      * @param target a target area to place the image. Either a Pt specifying a position, or a Group that specifies a bounding box (top-left position, bottom-right position). Default is (0,0) at top-left.
      * @param orig a Group (top-left position, bottom-right position) that specifies a cropping box  in the original target. 
      */
-    static image( ctx:CanvasRenderingContext2D, img:ImageBitmap, target:PtLike|GroupLike=new Pt(), orig?:GroupLike  ) {
-      if (typeof target[0] === "number") {
-        ctx.drawImage( img, target[0] as number, target[1] as number );
+    static image( ctx:CanvasRenderingContext2D, img:ImageBitmap, target:PtLike|PtLikeIterable=new Pt(), orig?:PtLikeIterable  ) {
+      let t = Util.iterToArray(target);
+      if (typeof t[0] === "number") {
+        ctx.drawImage( img, t[0] as number, t[1] as number );
       } else {
-        let t = target as GroupLike;
-
         if (orig) { 
+          let o = Util.iterToArray( orig );
           ctx.drawImage( 
-            img, orig[0][0], orig[0][1], orig[1][0]-orig[0][0], orig[1][1]-orig[0][1],
+            img, o[0][0], o[0][1], o[1][0]-o[0][0], o[1][1]-o[0][1],
             t[0][0], t[0][1], t[1][0]-t[0][0], t[1][1]-t[0][1], 
           );
         } else {
@@ -974,8 +980,8 @@ export class CanvasForm extends VisualForm {
     * @param target a target area to place the image. Either a Pt specifying a position, or a Group that specifies a bounding box (top-left position, bottom-right position). Default is (0,0) at top-left.
     * @param orig a Group (top-left position, bottom-right position) that specifies a cropping box  in the original target. 
     */
-    image( img:ImageBitmap, target:PtLike|GroupLike, original?:GroupLike  ) {
-      CanvasForm.image( this._ctx, img, target, original );
+    image( img:ImageBitmap, target:PtLike|PtLikeIterable=new Pt(), orig?:PtLikeIterable  ) {
+      CanvasForm.image( this._ctx, img, target, orig );
       return this;
     }
       
@@ -1013,7 +1019,7 @@ export class CanvasForm extends VisualForm {
      * @param verticalAlign "top", "middle", or "bottom" to specify vertical alignment inside the box
      * @param overrideBaseline If `true`, use the corresponding baseline as verticalAlign. If `false`, use the current canvas context's textBaseline setting. Default is `true`.
      */
-    textBox( box:GroupLike, txt:string, verticalAlign:string="middle", tail:string="", overrideBaseline:boolean=true): this {
+    textBox( box:PtLikeIterable, txt:string, verticalAlign:string="middle", tail:string="", overrideBaseline:boolean=true): this {
       // @ts-ignore
       if (overrideBaseline) this._ctx.textBaseline = verticalAlign;
       let size = Rectangle.size( box );
@@ -1031,8 +1037,9 @@ export class CanvasForm extends VisualForm {
      * @param verticalAlign "top", "middle", or "bottom" to specify vertical alignment inside the box
      * @param crop a boolean to specify whether to crop text when overflowing
      */
-    paragraphBox( box:GroupLike, txt:string, lineHeight:number=1.2, verticalAlign:string="top", crop:boolean=true ):this {
-      let size = Rectangle.size( box );
+    paragraphBox( box:PtLikeIterable, txt:string, lineHeight:number=1.2, verticalAlign:string="top", crop:boolean=true ):this {
+      let b = Util.iterToArray( box );
+      let size = Rectangle.size( b );
       this._ctx.textBaseline = "top"; // override textBaseline
       
       let lstep = this._font.size * lineHeight;
@@ -1063,17 +1070,17 @@ export class CanvasForm extends VisualForm {
 
       let lines = nextLine( txt ); // go through all lines
       let lsize = lines.length * lstep; // total height
-      let lbox = box;
+      let lbox = b;
       
 
       if (verticalAlign == "middle" || verticalAlign == "center") {
         let lpad = (size[1] - lsize) / 2; 
         if (crop) lpad = Math.max( 0, lpad );  
-        lbox = new Group( box[0].$add(0, lpad), box[1].$subtract(0, lpad) );
+        lbox = new Group( b[0].$add(0, lpad), b[1].$subtract(0, lpad) );
       } else if (verticalAlign == "bottom") {
-        lbox = new Group( box[0].$add( 0, size[1]-lsize ), box[1] );
+        lbox = new Group( b[0].$add( 0, size[1]-lsize ), b[1] );
       } else {
-        lbox = new Group( box[0], box[0].$add(size[0], lsize) );
+        lbox = new Group( b[0], b[0].$add(size[0], lsize) );
       }
 
       let center = Rectangle.center( lbox );
