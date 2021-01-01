@@ -4,7 +4,7 @@ import {MultiTouchSpace} from './Space';
 import {Form, VisualForm, Font} from "./Form";
 import {Util} from './Util';
 import {Pt, Bound} from './Pt';
-import {PtLike, GroupLike, IPlayer, DOMFormContext} from "./Types";
+import {PtLike, GroupLike, PtIterable, IPlayer, DOMFormContext, PtLikeIterable} from "./Types";
 
 
 
@@ -761,12 +761,13 @@ export class HTMLForm extends VisualForm {
   * @param ctx a context object of HTMLForm
   * @param pts usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.
   */
-  static rect( ctx:DOMFormContext, pts:GroupLike|number[][] ):Element {
-    if (!this._checkSize( pts)) return;
+  static rect( ctx:DOMFormContext, pts:PtLikeIterable ):Element {
+    let p = Util.iterToArray( pts );
+    if ( !Util.arrayCheck(p) ) return;
 
     let elem = HTMLSpace.htmlElement( ctx.group, "div", HTMLForm.getID(ctx) );    
     HTMLSpace.setAttr( elem, { class: `pts-form pts-rect ${ctx.currentClass}` });
-    HTMLForm.rectStyle( ctx, pts[0], pts[1] );
+    HTMLForm.rectStyle( ctx, p[0], p[1] );
     HTMLForm.style( elem, ctx.style );
     return elem;
   }
@@ -776,7 +777,7 @@ export class HTMLForm extends VisualForm {
   * Draw a rectangle.
   * @param pts usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.
   */
-  rect( pts:number[][]|Pt[] ):this {
+  rect( pts:PtLikeIterable ):this {
     this.nextID();
     this.styleTo( "border-radius", "0" );
     HTMLForm.rect( this._ctx, pts );

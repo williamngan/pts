@@ -2,10 +2,10 @@
 
 import {Pt, Group, Bound} from "./Pt";
 import {Line, Triangle} from "./Op";
-import {Const} from "./Util";
+import {Const, Util} from "./Util";
 import {Num, Geom} from "./Num";
 import {Vec} from "./LinearAlgebra";
-import {PtLike, GroupLike, DelaunayMesh, DelaunayShape} from "./Types";
+import {PtLike, GroupLike, PtIterable, DelaunayMesh, DelaunayShape} from "./Types";
 
 
 /**
@@ -37,10 +37,11 @@ export class Create {
    * @param line a Group representing a line
    * @param count number of points to create
    */
-  static distributeLinear( line:GroupLike, count:number ):Group {
-    let ln = Line.subpoints( line, count-2 );
-    ln.unshift( line[0] );
-    ln.push( line[line.length-1] );
+  static distributeLinear( line:PtIterable, count:number ):Group {
+    let _line = Util.iterToArray( line );
+    let ln = Line.subpoints( _line, count-2 );
+    ln.unshift( _line[0] );
+    ln.push( _line[_line.length-1] );
     return ln;
   }
   
@@ -115,16 +116,18 @@ export class Create {
    * @param rows Optional row count to generate 2D noise
    * @param columns Optional column count to generate 2D noise
    */
-  static noisePts( pts:GroupLike, dx=0.01, dy=0.01, rows=0, columns=0 ):Group {
+  static noisePts( pts:PtIterable, dx=0.01, dy=0.01, rows=0, columns=0 ):Group {
     let seed = Math.random();
     let g = new Group();
-    for (let i=0, len=pts.length; i<len; i++) {
-      let np = new Noise( pts[i] );
+    let i = 0;
+    for (let p of pts) {
+      let np = new Noise( p );
       let r = (rows && rows > 0) ? Math.floor(i/rows) : i;
       let c = (columns && columns > 0) ? i%columns : i;
       np.initNoise( dx*c, dy*r );
       np.seed( seed );
       g.push( np );
+      i++;
     }
     return g;
   }

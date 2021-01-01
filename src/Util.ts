@@ -1,7 +1,7 @@
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
 import {Group, Pt} from "./Pt";
-import {WarningType, PtLike, GroupLike} from "./Types";
+import {WarningType, PtLikeIterable} from "./Types";
 
 
 /**
@@ -332,6 +332,18 @@ export class Util {
       last = now;
       return Math.floor( avg.reduce( (a,b) => a+b, 0 ) / avg.length );
     };
+  }
+
+  /**
+   * Check number of items in a Group against a required number
+   * @param pts 
+   */
+  static arrayCheck( pts:PtLikeIterable, required:number=2 ):boolean {
+    if (Array.isArray(pts) && pts.length < required) {
+      Util.warn( "Requires 2 or more Pts in this Group." );
+      return false;
+    } 
+    return true;
   }
 
   static iterToArray( it:Iterable<any> ): any[] {

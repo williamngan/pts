@@ -1,10 +1,10 @@
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
-import { Const } from "./Util";
+import { Const, Util } from "./Util";
 import { Curve } from "./Op";
 import { Pt, Group } from "./Pt";
 import { Vec, Mat } from "./LinearAlgebra";
-import {PtLike, GroupLike} from "./Types";
+import {PtLike, GroupLike, PtLikeIterable, PtIterable} from "./Types";
 /**
  * Num class provides static helper functions for basic numeric operations.
  */
@@ -101,10 +101,10 @@ export class Num {
    * @param pts an array of numeric arrays
    * @returns a Pt of the dimensional sums
    */
-  static sum(pts: GroupLike|number[][]): Pt {
+  static sum(pts: PtLikeIterable): Pt {
     let c = new Pt( pts[0] );
-    for (let i = 1, len = pts.length; i < len; i++) {
-      Vec.add(c, pts[i]);
+    for (let p of pts) {
+      Vec.add(c, p);
     }
     return c;
   }
@@ -113,10 +113,16 @@ export class Num {
   /**
    * Average a group of numeric arrays
    * @param pts an array of numeric arrays
+   * @param count optional parameter to define number-of-items for averaging. Useful if pts is not an array and has no `length` property.
    * @returns a Pt of averages
    */
-  static average(pts: GroupLike|number[][]): Pt {
-    return Num.sum(pts).divide(pts.length);
+  static average(pts: PtLikeIterable, count?:number): Pt {
+    if (count !== undefined) {
+      return Num.sum(pts).divide(count);
+    } else {
+      let _pts = Util.iterToArray( pts );
+      return Num.sum(_pts).divide(_pts.length);
+    }
   }
 
 
@@ -196,9 +202,17 @@ export class Geom {
    * @param pts a Group or an array of Pts
    * @return a Group of two Pts, representing the top-left and bottom-right corners
    */
-  static boundingBox( pts:GroupLike ): Group {
-    let minPt = pts.reduce((a: Pt, p: Pt) => a.$min(p));
-    let maxPt = pts.reduce((a: Pt, p: Pt) => a.$max(p));
+  static boundingBox( pts:PtIterable ): Group {
+    let minPt: Pt, maxPt: Pt;
+    for (let p of pts) {
+      if (minPt == undefined) {
+        minPt = p.clone();
+        maxPt = p.clone();
+      } else {
+        minPt = minPt.$min(p);
+        maxPt = maxPt.$max(p);
+      }
+    }
     return new Group(minPt, maxPt);
   }
 
@@ -206,10 +220,11 @@ export class Geom {
   /**
    * Get a centroid (the average middle point) for a set of Pts.
    * @param pts a Group or an array of Pts
+   * @param count optional parameter to define number-of-items for averaging. Useful if pts is not an array and has no `length` property.
    * @return a centroid Pt 
    */
-  static centroid( pts:GroupLike|number[][] ):Pt {
-    return Num.average(pts);
+  static centroid( pts:PtLikeIterable, count?:number ):Pt {
+    return Num.average(pts, count);
   }
 
 
@@ -219,14 +234,16 @@ export class Geom {
    * @param ptOrIndex an index for the Pt array, or an external Pt
    * @param direction a string either "to" (subtract all Pt with this anchor base), or "from" (add all Pt from this anchor base)
    */
-  static anchor( pts:GroupLike, ptOrIndex:PtLike|number=0, direction:("to"|"from")="to") {
+  static anchor( pts:PtLikeIterable, ptOrIndex:PtLike|number=0, direction:("to"|"from")="to") {
     let method = (direction == "to") ? "subtract" : "add";
-    for (let i = 0, len = pts.length; i < len; i++) {
+    let i = 0;
+    for (let p of pts) {
       if (typeof ptOrIndex == "number") {
-        if (ptOrIndex !== i) pts[i][method](pts[ptOrIndex]);
+        if (ptOrIndex !== i) p[method](pts[ptOrIndex]);
       } else {
-        pts[i][method](ptOrIndex);
+        p[method](ptOrIndex);
       }
+      i++;
     }
   }
 
@@ -238,7 +255,7 @@ export class Geom {
    * @param t a value between 0 to 1 to interpolate, or any other value to extrapolate
    * @returns interpolated point as a new Pt
    */
-  static interpolate( a:Pt|number[], b:Pt|number[], t:number=0.5 ):Pt {
+  static interpolate( a:PtLike, b:PtLike, t:number=0.5 ):Pt {
     let len = Math.min(a.length, b.length);
     let d = Pt.make(len);
     for (let i = 0; i < len; i++) {
@@ -253,7 +270,7 @@ export class Geom {
    * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
    * @returns an array of two Pt that are perpendicular to this Pt
    */
-  static perpendicular( pt:PtLike, axis:string|number[]=Const.xy ):Group {
+  static perpendicular( pt:PtLike, axis:string|PtLike=Const.xy ):Group {
     let y = axis[1];
     let x = axis[0];
 
@@ -283,7 +300,7 @@ export class Geom {
    * @param boundPt1 boundary Pt 1
    * @param boundPt2 boundary Pt 2
    */
-  static withinBound( pt:PtLike|number[], boundPt1:PtLike|number[], boundPt2:PtLike|number[] ):boolean {
+  static withinBound( pt:PtLike, boundPt1:PtLike, boundPt2:PtLike ):boolean {
     for (let i = 0, len = Math.min(pt.length, boundPt1.length, boundPt2.length); i < len; i++) {
       if (!Num.within(pt[i], boundPt1[i], boundPt2[i])) return false;
     }
@@ -295,9 +312,10 @@ export class Geom {
    * Sort the Pts so that their edges will form a non-overlapping polygon. ([Reference](https://stackoverflow.com/questions/6989100/sort-points-in-clockwise-order))
    * @param pts an array of Pts
    */
-  static sortEdges( pts:GroupLike ):GroupLike {
+  static sortEdges( pts:PtIterable ):GroupLike {
 
-    let bounds = Geom.boundingBox( pts );
+    let _pts = Util.iterToArray( pts );
+    let bounds = Geom.boundingBox( _pts );
     let center = bounds[1].add(bounds[0]).divide(2);
     
     let fn = ( a:Pt, b:Pt ):number => {
@@ -324,7 +342,7 @@ export class Geom {
       return (da[0]*da[0] + da[1]*da[1] > db[0]*db[0] + db[1]*db[1]) ? 1 : -1;
     };
 
-    return pts.sort( fn );
+    return _pts.sort( fn );
   }
 
 
@@ -334,8 +352,8 @@ export class Geom {
    * @param scale scale value
    * @param anchor optional anchor point to scale from
    */
-  static scale( ps:Pt|GroupLike, scale:number|number[]|PtLike, anchor?:PtLike ):Geom {
-    let pts = (!Array.isArray(ps)) ? [ps] : ps;
+  static scale( ps:Pt|PtIterable, scale:number|PtLike, anchor?:PtLike ):Geom {
+    let pts = Util.iterToArray( (ps[0] !== undefined && typeof ps[0] == 'number') ? [ps] : ps );
     let scs = (typeof scale == "number") ? Pt.make(pts[0].length, scale) : scale;
     if (!anchor) anchor = Pt.make(pts[0].length, 0);
 
@@ -357,8 +375,8 @@ export class Geom {
    * @param anchor optional anchor point to rotate from
    * @param axis optional axis such as "xy" (use Const.xy) to define a 2D plane, or a number array to specify indices
    */
-  static rotate2D( ps:Pt|GroupLike, angle:number, anchor?:PtLike, axis?:string|number[] ):Geom {
-    let pts = (!Array.isArray(ps)) ? [ps] : ps;
+  static rotate2D( ps:Pt|PtIterable, angle:number, anchor?:PtLike, axis?:string|PtLike ):Geom {
+    let pts = Util.iterToArray( (ps[0] !== undefined && typeof ps[0] == 'number') ? [ps] : ps );
     let fn = (anchor) ? Mat.rotateAt2DMatrix : Mat.rotate2DMatrix;
     if (!anchor) anchor = Pt.make(pts[0].length, 0);
     let cos = Math.cos(angle);
@@ -385,8 +403,8 @@ export class Geom {
    * @param anchor optional anchor point to shear from
    * @param axis optional axis such as "xy" (use Const.xy) to define a 2D plane, or a number array to specify indices
    */
-  static shear2D( ps:Pt|GroupLike, scale:number|number[]|PtLike, anchor?:PtLike, axis?:string|number[] ):Geom {
-    let pts = (!Array.isArray(ps)) ? [ps] : ps;
+  static shear2D( ps:Pt|PtIterable, scale:number|PtLike, anchor?:PtLike, axis?:string|PtLike ):Geom {
+    let pts = Util.iterToArray( (ps[0] !== undefined && typeof ps[0] == 'number') ? [ps] : ps );
     let s = (typeof scale == "number") ? [scale, scale] : scale;
     if (!anchor) anchor = Pt.make(pts[0].length, 0);
     let fn = (anchor) ? Mat.shearAt2DMatrix : Mat.shear2DMatrix;
@@ -413,8 +431,8 @@ export class Geom {
    * @param line a Group of 2 Pts that defines a line for reflection
    * @param axis optional axis such as "xy" (use Const.xy) to define a 2D plane, or a number array to specify indices
    */
-  static reflect2D( ps:Pt|GroupLike, line:GroupLike, axis?:string|number[] ):Geom {
-    let pts = (!Array.isArray(ps)) ? [ps] : ps;
+  static reflect2D( ps:Pt|PtIterable, line:GroupLike, axis?:string|PtLike ):Geom {
+    let pts = Util.iterToArray( (ps[0] !== undefined && typeof ps[0] == 'number') ? [ps] : ps );
     let mat = Mat.reflectAt2DMatrix(line[0], line[1]);
 
     for (let i = 0, len = pts.length; i < len; i++) {
@@ -832,7 +850,7 @@ export class Range {
    * Construct a Range instance for a Group of Pts.
    * @param g a Group or an array of Pts
    */
-  constructor( g:GroupLike ) {
+  constructor( g:PtIterable ) {
     this._source = Group.fromPtArray( g );
     this.calc();
   }
@@ -906,12 +924,13 @@ export class Range {
 
   /**
    * Add more Pts to this Range and recalculate its min and max values.
-   * @param g a Group or an array of Pts to append to this Range
+   * @param _g a Group or an array of Pts to append to this Range
    * @param update Optional. Set the parameter to `false` if you want to append without immediately updating this Range's min and max values. Default is `true`.
    */
   append( g:GroupLike, update:boolean=true ):this {
-    if (g[0].length !== this._dims) throw new Error(`Dimensions don't match. ${this._dims} dimensions in Range and ${g[0].length} provided in parameter. `);
-    this._source = this._source.concat( g ) as Group;
+    let _g = Util.iterToArray( g );
+    if (_g[0].length !== this._dims) throw new Error(`Dimensions don't match. ${this._dims} dimensions in Range and ${_g[0].length} provided in parameter. `);
+    this._source = this._source.concat( _g ) as Group;
     if (update) this.calc();
     return this;
   }

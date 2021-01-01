@@ -2,7 +2,7 @@
 
 import {Pt} from "./Pt";
 import {Util} from "./Util";
-import {PtLike, GroupLike} from "./Types";
+import {PtLike, GroupLike, PtIterable} from "./Types";
 
 
 /**
@@ -17,18 +17,6 @@ export abstract class Form {
   */
   get ready():boolean { return this._ready; }
 
-
-  /**
-   * Check number of items in a Group against a required number
-   * @param pts 
-   */
-  static _checkSize( pts:GroupLike|number[][], required:number=2 ):boolean {
-    if (pts.length < required) {
-      Util.warn( "Requires 2 or more Pts in this Group." );
-      return false;
-    } 
-    return true;
-  }
 }
 
 

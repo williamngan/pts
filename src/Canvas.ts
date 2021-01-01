@@ -680,6 +680,8 @@ export class CanvasForm extends VisualForm {
      */
     protected _textAlign( box:PtLikeIterable, vertical:string, offset?:PtLike, center?:Pt ):Pt {
       let _box = Util.iterToArray( box );
+      if ( !Util.arrayCheck(_box) ) return;
+
       if (!center) center = Rectangle.center( _box );
 
       var px = _box[0][0];
@@ -871,7 +873,7 @@ export class CanvasForm extends VisualForm {
     * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
     */
     static line( ctx:CanvasRenderingContext2D, pts:PtLikeIterable ) {
-      if (Array.isArray(pts) && pts.length<2) return;
+      if ( !Util.arrayCheck(pts) ) return;
       let i = 0;
       ctx.beginPath();
       for (let it of pts) {
@@ -903,7 +905,7 @@ export class CanvasForm extends VisualForm {
     * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
     */
     static polygon( ctx:CanvasRenderingContext2D, pts:PtLikeIterable ) {
-      if (Array.isArray(pts) && pts.length<2) return;
+      if ( !Util.arrayCheck(pts) ) return;
       CanvasForm.line( ctx, pts );
       ctx.closePath();
     }
@@ -926,8 +928,8 @@ export class CanvasForm extends VisualForm {
     * @param pts usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.
     */
     static rect( ctx:CanvasRenderingContext2D, pts:PtLikeIterable ) {
-      let p = Util.iterToArray(pts);
-      if (p.length < 2) return;
+      let p = Util.iterToArray( pts );
+      if ( !Util.arrayCheck(p) ) return;
       ctx.beginPath();
       ctx.moveTo( p[0][0], p[0][1] );
       ctx.lineTo( p[0][0], p[1][1] );
@@ -957,7 +959,7 @@ export class CanvasForm extends VisualForm {
      * @param orig a Group (top-left position, bottom-right position) that specifies a cropping box  in the original target. 
      */
     static image( ctx:CanvasRenderingContext2D, img:ImageBitmap, target:PtLike|PtLikeIterable=new Pt(), orig?:PtLikeIterable  ) {
-      let t = Util.iterToArray(target);
+      let t = Util.iterToArray( target );
       if (typeof t[0] === "number") {
         ctx.drawImage( img, t[0] as number, t[1] as number );
       } else {
