@@ -4,7 +4,7 @@ import {Util} from "./Util";
 import {Geom, Num} from "./Num";
 import {Pt, Group} from "./Pt";
 import {Mat} from "./LinearAlgebra";
-import {PtLike, GroupLike, PtLikeIterable, IntersectContext} from "./Types";
+import {PtLike, GroupLike, PtLikeIterable, IntersectContext, PtIterable} from "./Types";
 
 
 let _errorLength = (obj, param:number|string="expected") => Util.warn( "Group's length is less than "+param, obj  );
@@ -37,7 +37,7 @@ export class Line {
    * @param p1 line's first end point
    * @param p2 line's second end point
    */
-  static slope( p1:PtLike|number[], p2:PtLike|number[] ):number {
+  static slope( p1:PtLike, p2:PtLike ):number {
     return (p2[0] - p1[0] === 0) ? undefined : (p2[1] - p1[1]) / (p2[0] - p1[0]);
   }
 
@@ -48,7 +48,7 @@ export class Line {
    * @param p2 line's second end point
    * @returns an object with `slope`, `xi`, `yi` properties 
    */
-  static intercept( p1:PtLike|number[], p2:PtLike|number[] ):{ slope:number, xi:number, yi:number } {
+  static intercept( p1:PtLike, p2:PtLike ):{ slope:number, xi:number, yi:number } {
     if (p2[0] - p1[0] === 0) {
       return undefined;
     } else {
@@ -65,8 +65,9 @@ export class Line {
    * @param pt a Pt
    * @returns a negative value if on left and a positive value if on right. If collinear, then the return value is 0.
    */
-  static sideOfPt2D( line:GroupLike, pt:PtLike ):number {
-    return (line[1][0] - line[0][0]) * (pt[1] - line[0][1]) - (pt[0] - line[0][0]) * (line[1][1] - line[0][1]);
+  static sideOfPt2D( line:PtLikeIterable, pt:PtLike ):number {
+    let _line = Util.iterToArray( line );
+    return (_line[1][0] - _line[0][0]) * (pt[1] - _line[0][1]) - (pt[0] - _line[0][0]) * (_line[1][1] - _line[0][1]);
   }
 
 
@@ -77,7 +78,7 @@ export class Line {
    * @param p3 third Pt
    * @param threshold a threshold where a smaller value means higher precision threshold for the straight line. Default is 0.01.
    */
-  static collinear( p1:PtLike|number[], p2:PtLike|number[], p3:PtLike|number[], threshold:number=0.01 ):boolean {
+  static collinear( p1:PtLike, p2:PtLike, p3:PtLike, threshold:number=0.01 ):boolean {
     // Use cross product method
     let a = new Pt(0,0,0).to(p1).$subtract( p2 );
     let b = new Pt(0,0,0).to(p1).$subtract( p3 );    
@@ -89,31 +90,34 @@ export class Line {
    * Get magnitude of a line segment.
    * @param line a Group of at least 2 Pts
    */
-  static magnitude( line:GroupLike ):number {
-    return (line.length >= 2) ? line[1].$subtract( line[0] ).magnitude() : 0;
+  static magnitude( line:PtIterable ):number {
+    let _line = Util.iterToArray( line );
+    return (_line.length >= 2) ? _line[1].$subtract( _line[0] ).magnitude() : 0;
   }
 
 
   /**
    * Get squared magnitude of a line segment.
-   * @param line a Group of at least 2 Pts
+   * @param _line a Group of at least 2 Pts
    */
-  static magnitudeSq( line:GroupLike ):number {
-    return (line.length >= 2) ? line[1].$subtract( line[0] ).magnitudeSq() : 0;
+  static magnitudeSq( line:PtIterable ):number {
+    let _line = Util.iterToArray( line );
+    return (_line.length >= 2) ? _line[1].$subtract( _line[0] ).magnitudeSq() : 0;
   }
 
 
   /**
    * Find a point on a line that is perpendicular (shortest distance) to a target point.
+   * @param line a group of Pts that defines a line
    * @param pt a target Pt 
-   * @param ln a group of Pts that defines a line
    * @param asProjection if true, this returns the projection vector instead. Default is false.
    * @returns a Pt on the line that is perpendicular to the target Pt, or a projection vector if `asProjection` is true.
    */
-  static perpendicularFromPt( line:GroupLike, pt:PtLike|number[], asProjection:boolean=false ):Pt {
-    if (line[0].equals(line[1])) return undefined;
-    let a = line[0].$subtract( line[1] );
-    let b = line[1].$subtract( pt );
+  static perpendicularFromPt( line:PtIterable, pt:PtLike, asProjection:boolean=false ):Pt {
+    let _line = Util.iterToArray( line );
+    if (_line[0].equals(_line[1])) return undefined;
+    let a = _line[0].$subtract( _line[1] );
+    let b = _line[1].$subtract( pt );
     let proj = b.$subtract( a.$project( b ) );
 
     return (asProjection) ? proj : proj.$add( pt );
@@ -127,12 +131,13 @@ export class Line {
    * @see `Line.perpendicularFromPt`
    */
   static distanceFromPt( line:GroupLike, pt:PtLike|number[] ):number {
-    let projectionVector = Line.perpendicularFromPt( line, pt, true );
+    let _line = Util.iterToArray( line );
+    let projectionVector = Line.perpendicularFromPt( _line, pt, true );
     if (projectionVector) {
       return projectionVector.magnitude();
     } else {
       // line is made of 2 identical points, return distance between this point and pt
-      return line[0].$subtract( pt ).magnitude();
+      return _line[0].$subtract( pt ).magnitude();
     }
   }
 
@@ -143,13 +148,15 @@ export class Line {
    * @param lb a Group of 2 Pts representing a ray
    * @returns an intersection Pt or undefined if no intersection
    */
-  static intersectRay2D( la:GroupLike, lb:GroupLike ):Pt {
+  static intersectRay2D( la:PtIterable, lb:PtIterable ):Pt {
+    let _la = Util.iterToArray( la );
+    let _lb = Util.iterToArray( lb );
 
-    let a = Line.intercept( la[0], la[1] );
-    let b = Line.intercept( lb[0], lb[1] );
+    let a = Line.intercept( _la[0], _la[1] );
+    let b = Line.intercept( _lb[0], _lb[1] );
 
-    let pa = la[0];
-    let pb = lb[0];
+    let pa = _la[0];
+    let pb = _lb[0];
 
     if (a == undefined) {
       if (b == undefined) return undefined;
@@ -185,9 +192,12 @@ export class Line {
    * @param lb a Group of 2 Pts representing a line segment
    * @returns an intersection Pt or undefined if no intersection
    */
-  static intersectLine2D( la:GroupLike, lb:GroupLike ):Pt {
-    let pt = Line.intersectRay2D( la, lb );
-    return ( pt && Geom.withinBound( pt, la[0], la[1] ) && Geom.withinBound(pt, lb[0], lb[1]) ) ? pt : undefined;
+  static intersectLine2D( la:PtIterable, lb:PtIterable ):Pt {
+    let _la = Util.iterToArray( la );
+    let _lb = Util.iterToArray( lb );
+
+    let pt = Line.intersectRay2D( _la, _lb );
+    return ( pt && Geom.withinBound( pt, _la[0], _la[1] ) && Geom.withinBound(pt, _lb[0], _lb[1]) ) ? pt : undefined;
   }
 
 
@@ -197,9 +207,11 @@ export class Line {
    * @param ray a Group of 2 Pts representing a ray
    * @returns an intersection Pt or undefined if no intersection
    */
-  static intersectLineWithRay2D( line:GroupLike, ray:GroupLike ):Pt {
-    let pt = Line.intersectRay2D( line, ray );
-    return ( pt && Geom.withinBound( pt, line[0], line[1] )) ? pt : undefined;
+  static intersectLineWithRay2D( line:PtIterable, ray:PtIterable ):Pt {
+    let _line = Util.iterToArray( line );
+    let _ray = Util.iterToArray( ray );
+    let pt = Line.intersectRay2D( _line, _ray );
+    return ( pt && Geom.withinBound( pt, _line[0], _line[1] )) ? pt : undefined;
   }
 
 
@@ -209,12 +221,15 @@ export class Line {
    * @param poly a Group of Pts representing a polygon
    * @param sourceIsRay a boolean value to treat the line as a ray (infinite line). Default is `false`.
    */
-  static intersectPolygon2D( lineOrRay:GroupLike, poly:GroupLike, sourceIsRay:boolean=false ):Group {
+  static intersectPolygon2D( lineOrRay:PtIterable, poly:PtIterable, sourceIsRay:boolean=false ):Group {
+    let _lineOrRay = Util.iterToArray( lineOrRay );
+    let _poly = Util.iterToArray( poly );
+
     let fn = sourceIsRay ? Line.intersectLineWithRay2D : Line.intersectLine2D; 
     let pts = new Group();
-    for (let i=0, len=poly.length; i<len; i++) {
+    for (let i=0, len=_poly.length; i<len; i++) {
       let next = (i === len-1) ? 0 : i+1;
-      let d = fn( [poly[i], poly[next]], lineOrRay );
+      let d = fn( [_poly[i], _poly[next]], _lineOrRay );
       if (d) pts.push( d ); 
     }
     return (pts.length > 0) ? pts : undefined;
@@ -227,12 +242,12 @@ export class Line {
    * @param lines2 an array of line segments
    * @param isRay a boolean value to treat the line as a ray (infinite line). Default is `false`.
    */
-  static intersectLines2D( lines1:GroupLike[], lines2:GroupLike[], isRay:boolean=false):Group {
+  static intersectLines2D( lines1:Iterable<PtIterable>, lines2:Iterable<PtIterable>, isRay:boolean=false):Group {
     let group = new Group();
     let fn = isRay ? Line.intersectLineWithRay2D : Line.intersectLine2D; 
-    for (let i=0, len=lines1.length; i<len; i++) {
-      for (let k=0, lenk=lines2.length; k<lenk; k++) {
-        let _ip = fn( lines1[i], lines2[k] );
+    for (let l1 of lines1) {
+      for (let l2 of lines2) {
+        let _ip = fn( l1, l2 );
         if (_ip) group.push( _ip );
       }
     }
@@ -246,8 +261,9 @@ export class Line {
    * @param gridPt a Pt on the grid
    * @returns a group of two intersecting Pts. The first one is horizontal intersection and the second one is vertical intersection.
    */
-  static intersectGridWithRay2D( ray:GroupLike, gridPt:PtLike|number[] ):Group {
-    let t = Line.intercept( new Pt( ray[0] ).subtract( gridPt ), new Pt( ray[1] ).subtract( gridPt ) );
+  static intersectGridWithRay2D( ray:PtIterable, gridPt:PtLike ):Group {
+    let _ray = Util.iterToArray( ray );
+    let t = Line.intercept( new Pt( _ray[0] ).subtract( gridPt ), new Pt( _ray[1] ).subtract( gridPt ) );
     let g = new Group();
     if (t && t.xi) g.push( new Pt( gridPt[0] + t.xi, gridPt[1] ) );
     if (t && t.yi) g.push( new Pt( gridPt[0], gridPt[1] + t.yi ) );
@@ -257,15 +273,16 @@ export class Line {
 
   /**
    * Get two intersection Pts of a line segment with a 2D grid point.
-   * @param ray a ray specified by 2 Pts
+   * @param line a ray specified by 2 Pts
    * @param gridPt a Pt on the grid
    * @returns a group of two intersecting Pts. The first one is horizontal intersection and the second one is vertical intersection.
    */
   static intersectGridWithLine2D( line:GroupLike, gridPt:PtLike|number[] ):Group {
-    let g = Line.intersectGridWithRay2D( line, gridPt );
+    let _line = Util.iterToArray( line );
+    let g = Line.intersectGridWithRay2D( _line, gridPt );
     let gg = new Group();
     for (let i=0, len=g.length; i<len; i++) {
-      if ( Geom.withinBound( g[i], line[0], line[1] ) ) gg.push( g[i] );
+      if ( Geom.withinBound( g[i], _line[0], _line[1] ) ) gg.push( g[i] );
     }
     return gg;
   }
@@ -278,9 +295,11 @@ export class Line {
    * @returns a Group of intersecting Pts
    */
   static intersectRect2D( line:GroupLike, rect:GroupLike ):Group {
-    let box = Geom.boundingBox( Group.fromPtArray( line ) );
-    if ( !Rectangle.hasIntersectRect2D( box, rect) ) return new Group();
-    return Line.intersectLines2D( [line], Rectangle.sides(rect) );
+    let _line = Util.iterToArray( line );
+    let _rect = Util.iterToArray( rect );
+    let box = Geom.boundingBox( Group.fromPtArray( _line ) );
+    if ( !Rectangle.hasIntersectRect2D( box, _rect) ) return new Group();
+    return Line.intersectLines2D( [_line], Rectangle.sides(_rect) );
   }
 
 
@@ -289,10 +308,11 @@ export class Line {
    * @param line a Group representing a line
    * @param num number of points to get
    */
-  static subpoints( line:GroupLike|number[][], num:number ) {
+  static subpoints( line:PtIterable, num:number ) {
+    let _line = Util.iterToArray( line );
     let pts = new Group();
     for (let i=1; i<=num; i++) {
-      pts.push( Geom.interpolate( line[0], line[1], i/(num+1) ) );
+      pts.push( Geom.interpolate( _line[0], _line[1], i/(num+1) ) );
     }
     return pts;
   }
@@ -306,17 +326,19 @@ export class Line {
    * @param cropAsCircle a boolean to specify whether the `size` parameter should be treated as circle. Default is `true`.
    * @return an intersecting point on the line that can be used for cropping.
    */
-  static crop( line:GroupLike, size:PtLike, index:number=0, cropAsCircle:boolean=true ):Pt {
+  static crop( line:PtIterable, size:PtLike, index:number=0, cropAsCircle:boolean=true ):Pt {
+    let _line = Util.iterToArray( line );
     let tdx = (index === 0) ? 1 : 0;
-    let ls = line[tdx].$subtract( line[index] );
-    if (ls[0] === 0 || size[0] === 0) return line[index];
+    let ls = _line[tdx].$subtract( _line[index] );
+
+    if (ls[0] === 0 || size[0] === 0) return _line[index];
 
     if (cropAsCircle) {
       let d = ls.unit().multiply( size[1] );
-      return line[index].$add( d );
+      return _line[index].$add( d );
 
     } else {
-      let rect = Rectangle.fromCenter( line[index], size );
+      let rect = Rectangle.fromCenter( _line[index], size );
       let sides = Rectangle.sides( rect );
       let sideIdx = 0;
 
@@ -325,7 +347,7 @@ export class Line {
       } else {
         sideIdx = (ls[0] < 0) ? 3 : 1;
       }
-      return Line.intersectRay2D( sides[sideIdx], line );
+      return Line.intersectRay2D( sides[sideIdx], _line );
 
     }
   }
@@ -338,17 +360,19 @@ export class Line {
    * @param atTail a boolean, if `true`, the marker will be positioned at tail of the line (ie, index = 1). Default is `true`.
    * @returns a Group that defines the marker's shape
    */
-  static marker( line:GroupLike, size:PtLike, graphic:string=("arrow"||"line"), atTail:boolean=true ):Group {
+  static marker( line:PtIterable, size:PtLike, graphic:string=("arrow"||"line"), atTail:boolean=true ):Group {
+    let _line = Util.iterToArray( line );
     let h = atTail ? 0 : 1;
     let t = atTail ? 1 : 0;
-    let unit = line[h].$subtract( line[t] );
+    let unit = _line[h].$subtract( _line[t] );
+
     if (unit.magnitudeSq() === 0) return new Group();
     unit.unit();
     
-    let ps = Geom.perpendicular( unit ).multiply( size[0] ).add( line[t] );
+    let ps = Geom.perpendicular( unit ).multiply( size[0] ).add( _line[t] );
     if (graphic == "arrow") {
       ps.add( unit.$multiply( size[1]) );
-      return new Group( line[t], ps[0], ps[1] );
+      return new Group( _line[t], ps[0], ps[1] );
     } else {
       return new Group( ps[0], ps[1] );
     }
@@ -360,7 +384,8 @@ export class Line {
    * @param line a Group representing a line
    */
   static toRect( line:GroupLike ) {
-    return new Group( line[0].$min( line[1] ), line[0].$max( line[1] ) );
+    let _line = Util.iterToArray( line );
+    return new Group( _line[0].$min( _line[1] ), _line[0].$max( _line[1] ) );
   }
 
 }

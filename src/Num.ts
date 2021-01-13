@@ -101,10 +101,11 @@ export class Num {
    * @param pts an array of numeric arrays
    * @returns a Pt of the dimensional sums
    */
-  static sum(pts: PtLikeIterable): Pt {
-    let c = new Pt( pts[0] );
-    for (let p of pts) {
-      Vec.add(c, p);
+  static sum( pts: PtLikeIterable ): Pt {
+    let _pts = Util.iterToArray( pts );
+    let c = new Pt( _pts[0] );
+    for (let i = 1, len = _pts.length; i < len; i++) {
+      Vec.add(c, _pts[i]);
     }
     return c;
   }
@@ -113,16 +114,11 @@ export class Num {
   /**
    * Average a group of numeric arrays
    * @param pts an array of numeric arrays
-   * @param count optional parameter to define number-of-items for averaging. Useful if pts is not an array and has no `length` property.
    * @returns a Pt of averages
    */
-  static average(pts: PtLikeIterable, count?:number): Pt {
-    if (count !== undefined) {
-      return Num.sum(pts).divide(count);
-    } else {
-      let _pts = Util.iterToArray( pts );
-      return Num.sum(_pts).divide(_pts.length);
-    }
+  static average( pts: PtLikeIterable ): Pt {
+    let _pts = Util.iterToArray( pts );
+    return Num.sum(_pts).divide(_pts.length);
   }
 
 
@@ -220,11 +216,10 @@ export class Geom {
   /**
    * Get a centroid (the average middle point) for a set of Pts.
    * @param pts a Group or an array of Pts
-   * @param count optional parameter to define number-of-items for averaging. Useful if pts is not an array and has no `length` property.
    * @return a centroid Pt 
    */
-  static centroid( pts:PtLikeIterable, count?:number ):Pt {
-    return Num.average(pts, count);
+  static centroid( pts:PtLikeIterable ):Pt {
+    return Num.average(pts);
   }
 
 
@@ -927,7 +922,7 @@ export class Range {
    * @param _g a Group or an array of Pts to append to this Range
    * @param update Optional. Set the parameter to `false` if you want to append without immediately updating this Range's min and max values. Default is `true`.
    */
-  append( g:GroupLike, update:boolean=true ):this {
+  append( g:PtLikeIterable, update:boolean=true ):this {
     let _g = Util.iterToArray( g );
     if (_g[0].length !== this._dims) throw new Error(`Dimensions don't match. ${this._dims} dimensions in Range and ${_g[0].length} provided in parameter. `);
     this._source = this._source.concat( _g ) as Group;
