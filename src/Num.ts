@@ -426,9 +426,10 @@ export class Geom {
    * @param line a Group of 2 Pts that defines a line for reflection
    * @param axis optional axis such as "xy" (use Const.xy) to define a 2D plane, or a number array to specify indices
    */
-  static reflect2D( ps:Pt|PtIterable, line:GroupLike, axis?:string|PtLike ):Geom {
+  static reflect2D( ps:Pt|PtIterable, line:PtLikeIterable, axis?:string|PtLike ):Geom {
     let pts = Util.iterToArray( (ps[0] !== undefined && typeof ps[0] == 'number') ? [ps] : ps );
-    let mat = Mat.reflectAt2DMatrix(line[0], line[1]);
+    let _line = Util.iterToArray( line );
+    let mat = Mat.reflectAt2DMatrix(_line[0], _line[1]);
 
     for (let i = 0, len = pts.length; i < len; i++) {
       let p = (axis) ? pts[i].$take(axis) : pts[i];

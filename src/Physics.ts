@@ -2,7 +2,8 @@
 
 import {Pt, Group, Bound} from "./Pt";
 import { Polygon, Circle } from "./Op";
-import {PtLike, GroupLike} from "./Types";
+import { Geom } from "./Num";
+import {PtLike, GroupLike, PtIterable} from "./Types";
 
 /**
  * A `World` stores and manages [`Body`](#link) and [`Particle`](#link) for 2D physics simulation. 
@@ -32,7 +33,7 @@ export class World {
    * @param friction a value between 0 to 1, where 1 means no friction. Default is 1
    * @param gravity a number of a Pt to define gravitational force. A number is a shorthand to set `new Pt(0, n)`. Default is 0.
    */
-  constructor( bound:Group, friction:number=1, gravity:PtLike|number=0 ) {
+  constructor( bound:PtIterable, friction:number=1, gravity:PtLike|number=0 ) {
     this._bound = Bound.fromGroup( bound );
     this._friction = friction;
     this._gravity = (typeof gravity === "number") ? new Pt( 0, gravity) : new Pt( gravity );
@@ -242,8 +243,8 @@ export class World {
    * @param rect bounding box defined by a Group
    * @param damping damping between 0 to 1, where 1 means no damping. Default is 0.75.
    */
-  static boundConstraint( p:Particle, rect:Group, damping:number=0.75 ) {
-    let bound = rect.boundingBox();
+  static boundConstraint( p:Particle, rect:PtIterable, damping:number=0.75 ) {
+    let bound = Geom.boundingBox( rect );
     let np = p.$min( bound[1].subtract( p.radius ) ).$max( bound[0].add( p.radius ) );
     
     if (np[0] === bound[0][0] || np[0] === bound[1][0]) { // hit vertical walls
@@ -559,7 +560,7 @@ export class Body extends Group {
    * @param autoLink Automatically create links between the Pts. This usually works for regular convex polygons. Default is true.
    * @param autoMass Automatically calculate the mass based on the area of the polygon. Default is true.
    */
-  static fromGroup( list:GroupLike, stiff:number=1, autoLink:boolean=true, autoMass:boolean=true ):Body {
+  static fromGroup( list:PtIterable, stiff:number=1, autoLink:boolean=true, autoMass:boolean=true ):Body {
     let b = new Body().init( list );
     if (autoLink) b.linkAll( stiff );
     if (autoMass) b.autoMass();
@@ -572,12 +573,12 @@ export class Body extends Group {
    * @param list a group of Pts
    * @param stiff stiffness value from 0 to 1, where 1 is the most stiff. Default is 1.
    */
-  init( list:GroupLike, stiff:number=1 ):this {
+  init( list:PtIterable, stiff:number=1 ):this {
     let c = new Pt();
-    for (let i=0, len=list.length; i<len; i++) {
-      let p = new Particle( list[i] );
+    for (let li of list) {
+      let p = new Particle( li );
       p.body = this;
-      c.add( list[i] );
+      c.add( li );
       this.push( p );
     }
 

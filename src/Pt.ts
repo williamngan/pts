@@ -651,7 +651,7 @@ export class Group extends Array<Pt> {
    * @param pts Another group of Pts
    * @param index the index position to insert into
    */
-  insert( pts:GroupLike, index=0 ):this {
+  insert( pts:PtIterable, index=0 ):this {
     Group.prototype.splice.apply( this, [index, 0, ...pts] );
     return this;
   }
@@ -723,7 +723,7 @@ export class Group extends Array<Pt> {
    * @example `let myOp = group.op( fn ); let result = myOp( [1,2,3] );`
    * @returns a resulting function that takes other parameters required in `fn`
    */
-  op( fn:(g1:GroupLike, ...rest:any[]) => any ): ( ...rest:any[] ) => any {
+  op( fn:(g1:PtIterable, ...rest:any[]) => any ): ( ...rest:any[] ) => any {
     let self = this;
     return ( ...params:any[] ) => {
       return fn( self, ...params );
@@ -737,7 +737,7 @@ export class Group extends Array<Pt> {
    * @example `let myOps = pt.ops([fn1, fn2, fn3]); let results = myOps.map( (op) => op([1,2,3]) );`
    * @returns an array of resulting functions
    */
-  ops( fns:((g1:GroupLike, ...rest:any[]) => any)[] ): (( ...rest:any[] ) => any)[] {
+  ops( fns:((g1:PtIterable, ...rest:any[]) => any)[] ): (( ...rest:any[] ) => any)[] {
     let _ops = [];
     for (let i=0, len=fns.length; i<len; i++) {
       _ops.push( this.op( fns[i] ) );
@@ -825,7 +825,7 @@ export class Group extends Array<Pt> {
    * @param line a Group of 2 Pts that defines a line for reflection
    * @param axis optional axis such as "yz" to define a 2D plane of reflection
    */
-  reflect2D( line:GroupLike, axis?:string):this {
+  reflect2D( line:PtLikeIterable, axis?:string):this {
     for (let i=0, len=this.length; i<len; i++) {
       Geom.reflect2D( this[i], line, axis );
     }
@@ -990,9 +990,10 @@ export class Bound extends Group implements IPt {
    * Create a Bound from a Group or an array of Pts
    * @param g a Group instance or an array of Pts
    */
-  static fromGroup( g:GroupLike ):Bound {
-    if (g.length < 2) throw new Error( "Cannot create a Bound from a group that has less than 2 Pt" );
-    return new Bound( g[0], g[g.length-1] );
+  static fromGroup( g:PtIterable ):Bound {
+    let _g = Util.iterToArray( g );
+    if (_g.length < 2) throw new Error( "Cannot create a Bound from a group that has less than 2 Pt" );
+    return new Bound( _g[0], _g[_g.length-1] );
   }
 
 
