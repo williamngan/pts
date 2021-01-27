@@ -308,7 +308,7 @@ export class Line {
    * @param line a Group representing a line
    * @param num number of points to get
    */
-  static subpoints( line:PtIterable, num:number ) {
+  static subpoints( line:PtLikeIterable, num:number ) {
     let _line = Util.iterToArray( line );
     let pts = new Group();
     for (let i=1; i<=num; i++) {
@@ -406,7 +406,7 @@ export class Rectangle {
    * @param height optional height as a number
    * @returns a Group of 2 Pts representing a rectangle
    */
-  static from( topLeft:PtLike|number[], widthOrSize:number|PtLike, height?:number ):Group {
+  static from( topLeft:PtLike, widthOrSize:number|PtLike, height?:number ):Group {
     return Rectangle.fromTopLeft( topLeft, widthOrSize, height );
   }
 
@@ -418,7 +418,7 @@ export class Rectangle {
    * @param height optional height as a number
    * @returns a Group of 2 Pts representing a rectangle
    */
-  static fromTopLeft( topLeft:PtLike|number[], widthOrSize:number|PtLike, height?:number ):Group {
+  static fromTopLeft( topLeft:PtLike, widthOrSize:number|PtLike, height?:number ):Group {
     let size = (typeof widthOrSize == "number") ? [widthOrSize, (height||widthOrSize) ] : widthOrSize;
     return new Group(new Pt(topLeft), new Pt(topLeft).add( size ) );
   }
@@ -431,7 +431,7 @@ export class Rectangle {
    * @param height optional height as a number
    * @returns a Group of 2 Pts representing a rectangle
    */
-  static fromCenter( center:PtLike|number[], widthOrSize:number|PtLike, height?:number ):Group {
+  static fromCenter( center:PtLike, widthOrSize:number|PtLike, height?:number ):Group {
     let half = (typeof widthOrSize == "number") ? [ widthOrSize/2, (height||widthOrSize)/2 ] : new Pt(widthOrSize).divide(2);
     return new Group(new Pt(center).subtract(half), new Pt(center).add(half));
   }
@@ -443,7 +443,7 @@ export class Rectangle {
    * @param within if `true`, the circle will be within the rectangle. If `false`, the circle will enclose the rectangle. 
    * @returns a Group that represents a circle
    */
-  static toCircle( pts:GroupLike, within:boolean=true ):Group {
+  static toCircle( pts:PtIterable, within:boolean=true ):Group {
     return Circle.fromRect( pts, within );
   }
 
@@ -454,10 +454,11 @@ export class Rectangle {
    * @param enclose if `true`, the square will enclose the rectangle. Default is `false`, which will fit the square inside the rectangle.
    * @returns a Group of 2 Pts representing a rectangle
    */
-  static toSquare( pts:GroupLike, enclose=false ):Group {
-    let s = Rectangle.size( pts );
+  static toSquare( pts:PtIterable, enclose=false ):Group {
+    let _pts = Util.iterToArray(pts);
+    let s = Rectangle.size( _pts );
     let m = (enclose) ? s.maxValue().value : s.minValue().value;
-    return Rectangle.fromCenter( Rectangle.center(pts), m, m );
+    return Rectangle.fromCenter( Rectangle.center(_pts), m, m );
   }
 
 
@@ -465,7 +466,7 @@ export class Rectangle {
    * Get the size of this rectangle as a Pt.
    * @param p a Group of 2 Pts representing a Rectangle
    */
-  static size( pts:PtLikeIterable ):Pt {
+  static size( pts:PtIterable ):Pt {
     let p = Util.iterToArray(pts);
     return p[0].$max( p[1] ).subtract( p[0].$min( p[1] ) );
   }
@@ -475,7 +476,7 @@ export class Rectangle {
    * Get the center of this rectangle.
    * @param p a Group of 2 Pts representing a Rectangle
    */
-  static center( pts:PtLikeIterable ):Pt {
+  static center( pts:PtIterable ):Pt {
     let p = Util.iterToArray(pts);
     let min = p[0].$min( p[1] );
     let max = p[0].$max( p[1] );
@@ -487,9 +488,10 @@ export class Rectangle {
    * Get the 4 corners of this rectangle as a Group.
    * @param rect a Group of 2 Pts representing a Rectangle
    */
-  static corners( rect:GroupLike ):Group {
-    let p0 = rect[0].$min(rect[1]);
-    let p2 = rect[0].$max(rect[1]);
+  static corners( rect:PtIterable ):Group {
+    let _rect = Util.iterToArray( rect );
+    let p0 = _rect[0].$min(_rect[1]);
+    let p2 = _rect[0].$max(_rect[1]);
     return new Group(p0,  new Pt(p2.x, p0.y), p2, new Pt(p0.x, p2.y));
   }
 
@@ -499,7 +501,7 @@ export class Rectangle {
    * @param rect a Group of 2 Pts representing a Rectangle
    * @returns an array of 4 Groups, each of which represents a line segment
    */
-  static sides( rect:GroupLike ):Group[] {
+  static sides( rect:PtIterable ):Group[] {
     let [p0, p1, p2, p3] = Rectangle.corners( rect );
     return [
       new Group( p0, p1 ), new Group( p1, p2 ),
@@ -513,16 +515,19 @@ export class Rectangle {
    * @param rects an array of Groups that represent rectangles
    * @returns the bounding rectangle as a Group
    */
-  static boundingBox( rects:GroupLike[] ):Group {
-    let merged = Util.flatten( rects, false );
+  static boundingBox( rects:Iterable<PtLikeIterable> ):Group {
+    let _rects = Util.iterToArray( rects );
+    let merged = Util.flatten( _rects, false );
     let min = Pt.make( 2, Number.MAX_VALUE );
     let max = Pt.make( 2, Number.MIN_VALUE );
 
     // calculate min max in a single pass
     for (let i=0, len=merged.length; i<len; i++) {
-      for (let k=0; k<2; k++) {
-        min[k] = Math.min( min[k], merged[i][k] );
-        max[k] = Math.max( max[k], merged[i][k] );
+      let k = 0;
+      for (let m of merged[i]) {
+        min[k] = Math.min( min[k], m[k] );
+        max[k] = Math.max( max[k], m[k] );
+        if (++k >= 2) break;
       }
     }
     return new Group( min, max );
@@ -533,7 +538,7 @@ export class Rectangle {
    * Convert this rectangle into a Group representing a polygon. An alias for [`Rectangle.corners`](#link)
    * @param rect a Group of 2 Pts representing a Rectangle
    */
-  static polygon( rect:GroupLike ):Group {
+  static polygon( rect:PtIterable ):Group {
     return Rectangle.corners( rect );
   }
 
@@ -543,9 +548,10 @@ export class Rectangle {
    * @param rect a Group of 2 Pts representing a Rectangle
    * @returns an array of 4 Groups of rectangles
    */
-  static quadrants( rect:GroupLike, center?:PtLike ):Group[] {
-    let corners = Rectangle.corners( rect );
-    let _center = (center!=undefined) ? new Pt(center) : Rectangle.center( rect );
+  static quadrants( rect:PtIterable, center?:PtLike ):Group[] {
+    let _rect = Util.iterToArray( rect );
+    let corners = Rectangle.corners( _rect );
+    let _center = (center!=undefined) ? new Pt(center) : Rectangle.center( _rect );
     return corners.map( (c) => new Group(c, _center).boundingBox() );
   }
 
@@ -557,9 +563,10 @@ export class Rectangle {
    * @param asRows if `true`, split into 2 rows. Default is `false` which splits into 2 columns.
    * @returns an array of 2 Groups of rectangles
    */
-  static halves( rect:GroupLike, ratio:number=0.5, asRows:boolean=false ):Group[] {
-    let min = rect[0].$min( rect[1] );
-    let max = rect[0].$max( rect[1] );
+  static halves( rect:PtIterable, ratio:number=0.5, asRows:boolean=false ):Group[] {
+    let _rect = Util.iterToArray( rect );
+    let min = _rect[0].$min( _rect[1] );
+    let max = _rect[0].$max( _rect[1] );
     let mid = (asRows) ? Num.lerp( min[1], max[1], ratio ) : Num.lerp( min[0], max[0], ratio );
     return (asRows) 
             ? [new Group( min, new Pt(max[0],mid) ), new Group( new Pt(min[0],mid), max )]
@@ -573,7 +580,8 @@ export class Rectangle {
    * @param pt the point to check
    */
   static withinBound( rect:GroupLike, pt:PtLike ):boolean {
-    return Geom.withinBound( pt, rect[0], rect[1] );
+    let _rect = Util.iterToArray( rect );
+    return Geom.withinBound( pt, _rect[0], _rect[1] );
   }
 
 
@@ -584,14 +592,16 @@ export class Rectangle {
    * @param resetBoundingBox if `true`, reset the bounding box. Default is `false` which assumes the rect's first Pt at is its top-left corner.
    */
   static hasIntersectRect2D( rect1:GroupLike, rect2:GroupLike, resetBoundingBox:boolean=false ):boolean {
+    let _rect1 = Util.iterToArray( rect1 );
+    let _rect2 = Util.iterToArray( rect2 );
 
     if (resetBoundingBox) {
-      rect1 = Geom.boundingBox( rect1 );
-      rect2 = Geom.boundingBox( rect2 );
+      _rect1 = Geom.boundingBox( _rect1 );
+      _rect2 = Geom.boundingBox( _rect2 );
     }
 
-    if (rect1[0][0] > rect2[1][0] || rect2[0][0] > rect1[1][0]) return false;
-    if (rect1[0][1] > rect2[1][1] || rect2[0][1] > rect1[1][1]) return false; 
+    if (_rect1[0][0] > _rect2[1][0] || _rect2[0][0] > _rect1[1][0]) return false;
+    if (_rect1[0][1] > _rect2[1][1] || _rect2[0][1] > _rect1[1][1]) return false; 
     return true;
     
   }
@@ -603,8 +613,10 @@ export class Rectangle {
    * @param rect2 a Group of 2 Pts representing a rectangle
    */
   static intersectRect2D( rect1:GroupLike, rect2:GroupLike ):Group {
-    if ( !Rectangle.hasIntersectRect2D( rect1, rect2) ) return new Group();
-    return Line.intersectLines2D( Rectangle.sides( rect1 ), Rectangle.sides( rect2 ) );
+    let _rect1 = Util.iterToArray( rect1 );
+    let _rect2 = Util.iterToArray( rect2 );
+    if ( !Rectangle.hasIntersectRect2D( _rect1, _rect2) ) return new Group();
+    return Line.intersectLines2D( Rectangle.sides( _rect1 ), Rectangle.sides( _rect2 ) );
   }
 
 }
@@ -625,16 +637,17 @@ export class Circle {
    * @param enclose if `true`, the circle will enclose the rectangle. Default is `false`, which will fit the circle inside the rectangle.
    * @returns a Group that represents a circle
    */
-  static fromRect( pts:GroupLike, enclose=false ):Group {
+  static fromRect( pts:PtLikeIterable, enclose=false ):Group {
+    let _pts = Util.iterToArray(pts);
     let r = 0;
-    let min = r = Rectangle.size( pts ).minValue().value / 2;
+    let min = r = Rectangle.size( _pts ).minValue().value / 2;
     if (enclose) {
-      let max = Rectangle.size( pts ).maxValue().value / 2;
+      let max = Rectangle.size( _pts ).maxValue().value / 2;
       r = Math.sqrt( min*min + max*max );
     } else {
       r = min;
     }
-    return new Group( Rectangle.center( pts ), new Pt(r, r) );
+    return new Group( Rectangle.center( _pts ), new Pt(r, r) );
   }
 
 
@@ -644,7 +657,7 @@ export class Circle {
    * @param enclose if `true`, the circle will enclose the triangle. Default is `false`, which will fit the circle inside the triangle.
    * @returns a Group that represents a circle
    */
-  static fromTriangle( pts:GroupLike, enclose:boolean=false ):Group {
+  static fromTriangle( pts:PtIterable, enclose:boolean=false ):Group {
     if (enclose) {
       return Triangle.circumcircle( pts );
     } else {
@@ -670,9 +683,10 @@ export class Circle {
    * @param pt the point to checks
    * @param threshold an optional small number to set threshold. Default is 0.
    */
-  static withinBound( pts:GroupLike, pt:PtLike, threshold:number=0 ):boolean  {
-    let d = pts[0].$subtract( pt );
-    return d.dot(d) + threshold < pts[1].x * pts[1].x;
+  static withinBound( pts:PtIterable, pt:PtLike, threshold:number=0 ):boolean  {
+    let _pts = Util.iterToArray( pts );
+    let d = _pts[0].$subtract( pt );
+    return d.dot(d) + threshold < _pts[1].x * _pts[1].x;
   }
 
 
@@ -682,13 +696,16 @@ export class Circle {
    * @param ray a Group of 2 Pts representing a ray 
    * @returns a Group of intersection points, or an empty Group if no intersection is found
    */
-  static intersectRay2D( pts:GroupLike, ray:GroupLike ):Group {
-    let d = ray[0].$subtract( ray[1] );
-    let f = pts[0].$subtract( ray[0] );
+  static intersectRay2D( pts:PtIterable, ray:PtIterable ):Group {
+    let _pts = Util.iterToArray( pts );
+    let _ray = Util.iterToArray( ray );
+
+    let d = _ray[0].$subtract( _ray[1] );
+    let f = _pts[0].$subtract( _ray[0] );
 
     let a = d.dot( d );
     let b = f.dot( d );
-    let c = f.dot( f ) - pts[1].x * pts[1].x;
+    let c = f.dot( f ) - _pts[1].x * _pts[1].x;
     let p = b/a;
     let q = c/a;
     let disc = p * p - q; // discriminant
@@ -699,11 +716,11 @@ export class Circle {
       let discSqrt = Math.sqrt( disc );
 
       let t1 = -p + discSqrt;
-      let p1 = ray[0].$subtract( d.$multiply( t1 ) );
+      let p1 = _ray[0].$subtract( d.$multiply( t1 ) );
       if (disc === 0) return new Group( p1 );
 
       let t2 = -p - discSqrt;
-      let p2 = ray[0].$subtract( d.$multiply( t2 ) );
+      let p2 = _ray[0].$subtract( d.$multiply( t2 ) );
       return new Group( p1, p2 );
     }
   }
@@ -712,15 +729,18 @@ export class Circle {
   /**
    * Get the intersection points between a circle and a line segment.
    * @param pts a Group of 2 Pts representing a circle
-   * @param ray a Group of 2 Pts representing a line
+   * @param line a Group of 2 Pts representing a line
    * @returns a Group of intersection points, or an empty Group if no intersection is found
    */
-  static intersectLine2D( pts:GroupLike, line:GroupLike ):Group {
-    let ps = Circle.intersectRay2D( pts, line );
+  static intersectLine2D( pts:PtIterable, line:PtIterable ):Group {
+    let _pts = Util.iterToArray( pts );
+    let _line = Util.iterToArray( line );
+
+    let ps = Circle.intersectRay2D( _pts, _line );
     let g = new Group();
     if (ps.length > 0) {
       for (let i=0, len=ps.length; i<len; i++) {
-        if (Rectangle.withinBound( line, ps[i] )) g.push( ps[i] );
+        if (Rectangle.withinBound( _line, ps[i] )) g.push( ps[i] );
       }
     }
     return g;
@@ -733,13 +753,16 @@ export class Circle {
    * @param circle a Group of 2 Pts representing a circle
    * @returns a Group of intersection points, or an empty Group if no intersection is found
    */
-  static intersectCircle2D( pts:GroupLike, circle:GroupLike ):Group {
-    let dv = circle[0].$subtract( pts[0] );
+  static intersectCircle2D( pts:PtIterable, circle:PtIterable ):Group {
+    let _pts = Util.iterToArray( pts );
+    let _circle = Util.iterToArray( circle );
+    
+    let dv = _circle[0].$subtract( _pts[0] );
     let dr2 = dv.magnitudeSq();
     let dr = Math.sqrt( dr2 );
 
-    let ar = pts[1].x;
-    let br = circle[1].x;
+    let ar = _pts[1].x;
+    let br = _circle[1].x;
     let ar2 = ar * ar;
     let br2 = br * br;
 
@@ -747,11 +770,11 @@ export class Circle {
     if ( dr > ar + br ) { // not intersected
       return new Group();
     } else if ( dr < Math.abs( ar - br ) ) { // completely enclosed
-      return new Group( pts[0].clone() );
+      return new Group( _pts[0].clone() );
     } else {
       let a = (ar2 - br2 + dr2) / (2 * dr);
       let h = Math.sqrt( ar2 - a*a );
-      let p = dv.$multiply( a/dr ).add( pts[0] );
+      let p = dv.$multiply( a/dr ).add( _pts[0] );
       return new Group(  
         new Pt( p.x + h*dv.y/dr, p.y - h*dv.x/dr ),
         new Pt( p.x - h*dv.y/dr, p.y + h*dv.x/dr )
@@ -767,11 +790,14 @@ export class Circle {
    * @param rect a Group of 2 Pts representing a rectangle
    * @returns a Group of intersection points, or an empty Group if no intersection is found
    */
-  static intersectRect2D( pts:GroupLike, rect:GroupLike ):Group {
-    let sides = Rectangle.sides( rect );
+  static intersectRect2D( pts:PtIterable, rect:PtIterable ):Group {
+    let _pts = Util.iterToArray( pts );
+    let _rect = Util.iterToArray( rect );
+
+    let sides = Rectangle.sides( _rect );
     let g = [];
     for (let i=0, len=sides.length; i<len; i++) {
-      let ps = Circle.intersectLine2D( pts, sides[i] );
+      let ps = Circle.intersectLine2D( _pts, sides[i] );
       if (ps.length > 0) g.push( ps );
     }
     return Util.flatten( g );
@@ -784,13 +810,14 @@ export class Circle {
    * @param within if `true`, the rectangle will be within the circle. If `false`, the rectangle will enclose the circle. 
    * @returns a Group representing a rectangle
    */
-  static toRect( pts:GroupLike, within:boolean=false ):Group {
-    let r = pts[1][0];
+  static toRect( pts:PtIterable, within:boolean=false ):Group {
+    let _pts = Util.iterToArray( pts );
+    let r = _pts[1][0];
     if (within) {
       let half = Math.sqrt(r*r)/2;
-      return new Group( pts[0].$subtract(half), pts[0].$add( half ) );
+      return new Group( _pts[0].$subtract(half), _pts[0].$add( half ) );
     } else {
-      return new Group( pts[0].$subtract( r ), pts[0].$add( r ) );
+      return new Group( _pts[0].$subtract( r ), _pts[0].$add( r ) );
     }
   }
 
@@ -800,18 +827,19 @@ export class Circle {
    * @param pts a Group of 2 Pts representing a circle
    * @param within if `true`, the triangle will be within the circle. If `false`, the triangle will enclose the circle. 
    */
-  static toTriangle( pts:GroupLike, within:boolean=true ):Group {
+  static toTriangle( pts:PtIterable, within:boolean=true ):Group {
+    let _pts = Util.iterToArray( pts );
     if (within) {
       let ang = -Math.PI/2;
       let inc = Math.PI * 2/3;
       let g = new Group();
       for (let i=0; i<3; i++) {
-        g.push( pts[0].clone().toAngle( ang, pts[1][0], true ) );
+        g.push( _pts[0].clone().toAngle( ang, _pts[1][0], true ) );
         ang += inc;
       }
       return g;
     } else {
-      return Triangle.fromCenter( pts[0], pts[1][0] );
+      return Triangle.fromCenter( _pts[0], _pts[1][0] );
     }
   }
 
@@ -830,12 +858,13 @@ export class Triangle {
    * Create a triangle from a rectangle. The triangle will be isosceles, with the bottom of the rectangle as its base.
    * @param rect a Group of 2 Pts representing a rectangle
    */
-  static fromRect( rect:GroupLike ):Group {
-    let top = rect[0].$add( rect[1] ).divide(2);
-    top.y = rect[0][1];
-    let left = rect[1].clone();
-    left.x = rect[0][0];
-    return new Group( top, rect[1].clone(), left );
+  static fromRect( rect:PtIterable ):Group {
+    let _rect = Util.iterToArray( rect );
+    let top = _rect[0].$add( _rect[1] ).divide(2);
+    top.y = _rect[0][1];
+    let left = _rect[1].clone();
+    left.x = _rect[0][0];
+    return new Group( top, _rect[1].clone(), left );
   }
 
 
@@ -843,7 +872,7 @@ export class Triangle {
    * Create a triangle that fits within a circle.
    * @param circle a Group of 2 Pts representing a circle
    */
-  static fromCircle( circle:GroupLike ):Group {
+  static fromCircle( circle:PtIterable ):Group {
     return Circle.toTriangle( circle, true );
   }
 
@@ -863,9 +892,10 @@ export class Triangle {
    * @param pts a Group of Pts
    * @returns a Group representing a medial triangle
    */
-  static medial( pts:GroupLike ):Group {
-    if (pts.length < 3) return _errorLength( new Group(), 3 );
-    return Polygon.midpoints( pts, true );
+  static medial( pts:PtIterable ):Group {
+    let _pts = Util.iterToArray( pts );
+    if (_pts.length < 3) return _errorLength( new Group(), 3 );
+    return Polygon.midpoints( _pts, true );
   }
 
 
@@ -875,14 +905,15 @@ export class Triangle {
    * @param index a Pt on the triangle group
    * @returns a Group that represents a line of the opposite side
    */
-  static oppositeSide( pts:GroupLike, index:number ):Group {
-    if (pts.length < 3) return _errorLength( new Group(), 3 );
+  static oppositeSide( pts:PtIterable, index:number ):Group {
+    let _pts = Util.iterToArray( pts );
+    if (_pts.length < 3) return _errorLength( new Group(), 3 );
     if (index === 0) {
-      return Group.fromPtArray( [pts[1], pts[2]] );
+      return Group.fromPtArray( [_pts[1], _pts[2]] );
     } else if (index === 1) {
-      return Group.fromPtArray( [pts[0], pts[2]] );
+      return Group.fromPtArray( [_pts[0], _pts[2]] );
     } else {
-      return Group.fromPtArray( [pts[0], pts[1]] );
+      return Group.fromPtArray( [_pts[0], _pts[1]] );
     }
   }
 
@@ -892,10 +923,11 @@ export class Triangle {
    * @param index a Pt on the triangle group
    * @returns a Group that represents the altitude line
    */
-  static altitude( pts:GroupLike, index:number ):Group {
-    let opp = Triangle.oppositeSide( pts, index );
+  static altitude( pts:PtIterable, index:number ):Group {
+    let _pts = Util.iterToArray( pts );
+    let opp = Triangle.oppositeSide( _pts, index );
     if (opp.length > 1) {
-      return new Group( pts[index], Line.perpendicularFromPt( opp, pts[index] ) ); 
+      return new Group( _pts[index], Line.perpendicularFromPt( opp, _pts[index] ) ); 
     } else {
       return new Group();
     }
@@ -906,10 +938,11 @@ export class Triangle {
    * @param pts a Group of Pts
    * @returns the orthocenter as a Pt
    */
-  static orthocenter( pts:GroupLike ):Pt {
-    if (pts.length < 3) return _errorLength( undefined, 3 );
-    let a = Triangle.altitude( pts, 0 );
-    let b = Triangle.altitude( pts, 1 );
+  static orthocenter( pts:PtIterable ):Pt {
+    let _pts = Util.iterToArray( pts );
+    if (_pts.length < 3) return _errorLength( undefined, 3 );
+    let a = Triangle.altitude( _pts, 0 );
+    let b = Triangle.altitude( _pts, 1 );
     return Line.intersectRay2D( a, b );
   }
 
@@ -918,11 +951,12 @@ export class Triangle {
    * @param pts a Group of Pts
    * @returns the incenter as a Pt
    */
-  static incenter( pts:GroupLike ):Pt {
-    if (pts.length < 3) return _errorLength( undefined, 3 );
-    let a = Polygon.bisector( pts, 0 ).add( pts[0] );
-    let b = Polygon.bisector( pts, 1 ).add( pts[1] );
-    return Line.intersectRay2D( new Group(pts[0], a), new Group(pts[1], b) );
+  static incenter( pts:PtIterable ):Pt {
+    let _pts = Util.iterToArray( pts );
+    if (_pts.length < 3) return _errorLength( undefined, 3 );
+    let a = Polygon.bisector( _pts, 0 ).add( _pts[0] );
+    let b = Polygon.bisector( _pts, 1 ).add( _pts[1] );
+    return Line.intersectRay2D( new Group(_pts[0], a), new Group(_pts[1], b) );
   }
 
   /**
@@ -930,10 +964,11 @@ export class Triangle {
    * @param pts a Group of Pts
    * @param center Optional parameter if the incenter is already known. Otherwise, leave it empty and the incenter will be calculated
    */
-  static incircle( pts:GroupLike, center?:Pt ):Group {
-    let c = (center) ? center : Triangle.incenter( pts );
-    let area = Polygon.area( pts );
-    let perim = Polygon.perimeter( pts, true );
+  static incircle( pts:PtIterable, center?:Pt ):Group {
+    let _pts = Util.iterToArray( pts );
+    let c = (center) ? center : Triangle.incenter( _pts );
+    let area = Polygon.area( _pts );
+    let perim = Polygon.perimeter( _pts, true );
     let r = 2 * area / perim.total;
     return Circle.fromCenter( c, r );
   }
@@ -943,10 +978,11 @@ export class Triangle {
    * @param pts a Group of Pts
    * @returns the circumcenter as a Pt
    */
-  static circumcenter( pts:GroupLike ):Pt {
-    let md = Triangle.medial( pts );
-    let a = [ md[0], Geom.perpendicular( pts[0].$subtract( md[0] )).p1.$add( md[0] ) ];
-    let b = [ md[1], Geom.perpendicular( pts[1].$subtract( md[1] )).p1.$add( md[1] ) ];
+  static circumcenter( pts:PtIterable ):Pt {
+    let _pts = Util.iterToArray( pts );
+    let md = Triangle.medial( _pts );
+    let a = [ md[0], Geom.perpendicular( _pts[0].$subtract( md[0] )).p1.$add( md[0] ) ];
+    let b = [ md[1], Geom.perpendicular( _pts[1].$subtract( md[1] )).p1.$add( md[1] ) ];
     return Line.intersectRay2D( a, b );
   } 
 
@@ -955,9 +991,10 @@ export class Triangle {
    * @param pts a Group of Pts
    * @param center Optional parameter if the circumcenter is already known. Otherwise, leave it empty and the circumcenter will be calculated 
    */
-  static circumcircle( pts:GroupLike, center?:Pt ):Group {
-    let c = (center) ? center : Triangle.circumcenter( pts );
-    let r = pts[0].$subtract( c ).magnitude();
+  static circumcircle( pts:PtIterable, center?:Pt ):Group {
+    let _pts = Util.iterToArray( pts );
+    let c = (center) ? center : Triangle.circumcenter( _pts );
+    let r = _pts[0].$subtract( c ).magnitude();
     return Circle.fromCenter( c, r );
   }
 }
@@ -975,7 +1012,7 @@ export class Polygon {
    * Get the centroid of a polygon, which is the average of all its points.
    * @param pts a Group of Pts representing a polygon
    */
-  static centroid( pts:GroupLike ):Pt {
+  static centroid( pts:PtLikeIterable ):Pt {
     return Geom.centroid( pts );
   }
 
@@ -986,7 +1023,7 @@ export class Polygon {
    * @param widthOrSize width as number, or a Pt representing the size of the rectangle
    * @param height optional height
    */
-  static rectangle( center: PtLike, widthOrSize:number|PtLike, height?: number):Group {
+  static rectangle( center:PtLike, widthOrSize:number|PtLike, height?: number):Group {
     return Rectangle.corners( Rectangle.fromCenter( center, widthOrSize, height ) );
   }
 
@@ -997,7 +1034,7 @@ export class Polygon {
    * @param radius The radius, ie, a length from the center position to one of the polygon's corners.
    * @param sides Number of sides
    */
-  static fromCenter( center: PtLike, radius:number, sides:number ) {
+  static fromCenter( center:PtLike, radius:number, sides:number ) {
     let g = new Group();
     for (let i=0; i<sides; i++) {
       let ang = Math.PI * 2 * i/sides;
@@ -1010,11 +1047,12 @@ export class Polygon {
   /**
    * Given a Group of Pts that defines a polygon, get one edge using an index.
    * @param pts a Group
-   * @param idx index of a Pt in the Group
+   * @param index index of a Pt in the Group
    */
-  static lineAt( pts:GroupLike, idx:number ) {
-    if (idx < 0 || idx >= pts.length) throw new Error( "index out of the Polygon's range" );
-    return new Group( pts[idx], (idx === pts.length-1) ? pts[0] : pts[idx+1] );
+  static lineAt( pts:PtLikeIterable, index:number ) {
+    let _pts = Util.iterToArray( pts );
+    if (index < 0 || index >= _pts.length) throw new Error( "index out of the Polygon's range" );
+    return new Group( _pts[index], (index === _pts.length-1) ? _pts[0] : _pts[index+1] );
   }
 
   /**
@@ -1023,10 +1061,11 @@ export class Polygon {
    * @param closePath a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).
    * @returns an array of Groups which has 2 Pts in each group
    */
-  static lines( pts:GroupLike, closePath:boolean=true ):Group[] {
-    if (pts.length < 2) return _errorLength( new Group(), 2 );
-    let sp = Util.split( pts, 2, 1 );
-    if (closePath) sp.push( new Group( pts[pts.length-1], pts[0]) );
+  static lines( pts:PtIterable, closePath:boolean=true ):Group[] {
+    let _pts = Util.iterToArray( pts );
+    if (_pts.length < 2) return _errorLength( new Group(), 2 );
+    let sp = Util.split( _pts, 2, 1 );
+    if (closePath) sp.push( new Group( _pts[_pts.length-1], _pts[0]) );
     return sp.map( (g) => g as Group );
   }
 
@@ -1036,8 +1075,7 @@ export class Polygon {
    * @param closePath a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).
    * @param t a value between 0 to 1 for interpolation. Default to 0.5 which will get the middle point.
    */
-  static midpoints( pts:GroupLike, closePath:boolean=false, t:number=0.5 ):Group {
-    if (pts.length < 2) return _errorLength( new Group(), 2 );
+  static midpoints( pts:PtIterable, closePath:boolean=false, t:number=0.5 ):Group {
     let sides = Polygon.lines( pts, closePath );
     let mids = sides.map( (s) => Geom.interpolate( s[0], s[1], t) );
     return mids as Group;
@@ -1049,18 +1087,19 @@ export class Polygon {
    * @param index the target Pt
    * @param closePath a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).
    */
-  static adjacentSides( pts:GroupLike, index:number, closePath:boolean=false ):Group[] {
-    if (pts.length < 2) return _errorLength( new Group(), 2 );
-    if (index < 0 || index >= pts.length) return _errorOutofBound( new Group(), index );
+  static adjacentSides( pts:PtIterable, index:number, closePath:boolean=false ):Group[] {
+    let _pts = Util.iterToArray( pts );
+    if (_pts.length < 2) return _errorLength( new Group(), 2 );
+    if (index < 0 || index >= _pts.length) return _errorOutofBound( new Group(), index );
 
     let gs = [];
     let left = index-1;
-    if (closePath && left < 0) left = pts.length-1;
-    if (left >= 0) gs.push( new Group( pts[index], pts[left]) );
+    if (closePath && left < 0) left = _pts.length-1;
+    if (left >= 0) gs.push( new Group( _pts[index], _pts[left]) );
 
     let right = index+1;
-    if (closePath && right > pts.length-1) right = 0;
-    if (right <= pts.length-1) gs.push( new Group( pts[index], pts[right]) );
+    if (closePath && right > _pts.length-1) right = 0;
+    if (right <= _pts.length-1) gs.push( new Group( _pts[index], _pts[right]) );
 
     return gs;
   }
@@ -1073,8 +1112,7 @@ export class Polygon {
    * @param closePath a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).
    * @returns a bisector Pt that's a normalized unit vector
    */
-  static bisector( pts:GroupLike, index:number ):Pt {
-    
+  static bisector( pts:PtIterable, index:number ):Pt {
     let sides = Polygon.adjacentSides( pts, index, true );
     if (sides.length >= 2) {
       let a = sides[0][1].$subtract( sides[0][0] ).unit();
@@ -1092,8 +1130,7 @@ export class Polygon {
    * @param closePath a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).
    * @returns an object with `total` length, and `segments` which is a Pt that stores each segment's length
    */
-  static perimeter( pts:GroupLike, closePath:boolean=false ):{total:number, segments:Pt} {
-    if (pts.length < 2) return _errorLength( new Group(), 2 );
+  static perimeter( pts:PtIterable, closePath:boolean=false ):{total:number, segments:Pt} {
     let lines = Polygon.lines( pts, closePath );
     let mag = 0;
     let p = Pt.make( lines.length, 0 );
@@ -1115,17 +1152,18 @@ export class Polygon {
    * Find the area of a *convex* polygon.
    * @param pts a group of Pts
    */
-  static area( pts:GroupLike ) {
-    if (pts.length < 3) return _errorLength( new Group(), 3 );
+  static area( pts:PtLikeIterable ) {
+    let _pts = Util.iterToArray( pts );
+    if (_pts.length < 3) return _errorLength( new Group(), 3 );
     // determinant
     let det = (a, b) => a[0] * b[1] - a[1] * b[0];
 
     let area = 0;
-    for (let i=0, len=pts.length; i<len; i++) {
-      if (i < pts.length-1) {
-        area += det( pts[i], pts[i+1]);
+    for (let i=0, len=_pts.length; i<len; i++) {
+      if (i < _pts.length-1) {
+        area += det( _pts[i], _pts[i+1]);
       } else {  
-        area += det( pts[i], pts[0] );
+        area += det( _pts[i], _pts[0] );
       }
     }
     return Math.abs( area/2 );
@@ -1137,12 +1175,13 @@ export class Polygon {
    * @param sorted a boolean value to indicate if the group is pre-sorted by x position. Default is false.
    * @returns a group of Pt that defines the convex hull polygon
    */
-  static convexHull( pts:GroupLike, sorted:boolean=false ): Group {
-    if (pts.length < 3) return _errorLength( new Group(), 3 );
+  static convexHull( pts:PtLikeIterable, sorted:boolean=false ): Group {
+    let _pts = Util.iterToArray( pts );
+    if (_pts.length < 3) return _errorLength( new Group(), 3 );
 
     if (!sorted) {
-      pts = pts.slice();
-      pts.sort( (a,b) => a[0]-b[0] );
+      _pts = _pts.slice();
+      _pts.sort( (a,b) => a[0]-b[0] );
     } 
 
     // check if is on left of ray a-b
@@ -1152,23 +1191,23 @@ export class Polygon {
     
     // double end queue
     let dq = [];
-    let bot = pts.length - 2;
+    let bot = _pts.length - 2;
     let top = bot + 3;
-    dq[bot] = pts[2];
-    dq[top] = pts[2];
+    dq[bot] = _pts[2];
+    dq[top] = _pts[2];
 
     // first 3 pt as counter-clockwise triangle
-    if ( left( pts[0], pts[1], pts[2]) ) {
-      dq[bot+1] = pts[0];
-      dq[bot+2] = pts[1];
+    if ( left( _pts[0], _pts[1], _pts[2]) ) {
+      dq[bot+1] = _pts[0];
+      dq[bot+2] = _pts[1];
     } else {
-      dq[bot+1] = pts[1];
-      dq[bot+2] = pts[0];
+      dq[bot+1] = _pts[1];
+      dq[bot+2] = _pts[0];
     }
 
     // remaining pts
-    for (let i=3, len=pts.length; i<len; i++) {
-      let pt = pts[i];
+    for (let i=3, len=_pts.length; i<len; i++) {
+      let pt = _pts[i];
       
       // if inside the hull
       if ( left( dq[bot], dq[bot+1], pt ) && left(dq[top-1], dq[top], pt)) {
@@ -1202,10 +1241,11 @@ export class Polygon {
    * @param originIndex the origin point's index in the polygon
    * @returns an array of Groups of line segments
    */
-  static network( pts:GroupLike, originIndex:number=0 ):Group[] {
+  static network( pts:PtIterable, originIndex:number=0 ):Group[] {
+    let _pts = Util.iterToArray( pts );
     let g = [];
-    for (let i=0, len=pts.length; i<len; i++) {
-      if (i != originIndex) g.push( new Group( pts[originIndex], pts[i] ) );
+    for (let i=0, len=_pts.length; i<len; i++) {
+      if (i != originIndex) g.push( new Group( _pts[originIndex], _pts[i] ) );
     }
     return g;
   }
@@ -1217,15 +1257,17 @@ export class Polygon {
    * @param pt Pt to check
    * @returns an index in the pts indicating the nearest Pt, or -1 if none found
    */
-  static nearestPt( pts:GroupLike, pt:PtLike ):number {
+  static nearestPt( pts:PtIterable, pt:PtLike ):number {
     let _near = Number.MAX_VALUE;
     let _item = -1;
-    for (let i=0, len=pts.length; i<len; i++) {
-      let d = pts[i].$subtract( pt ).magnitudeSq();
+    let i = 0;
+    for (let p of pts) {
+      let d = p.$subtract( pt ).magnitudeSq();
       if (d < _near) {
         _near = d;
         _item = i;
       }
+      i++;
     }
     return _item;
   }
@@ -1236,11 +1278,12 @@ export class Polygon {
    * @param poly a Group of Pt
    * @param unitAxis unit axis for calculating dot product
    */
-  static projectAxis( poly:GroupLike, unitAxis:Pt ):Pt {
-    let dot = unitAxis.dot( poly[0] );
+  static projectAxis( poly:PtIterable, unitAxis:Pt ):Pt {
+    let _poly = Util.iterToArray( poly );
+    let dot = unitAxis.dot( _poly[0] );
     let d = new Pt(dot, dot);
-    for (let n=1, len=poly.length; n<len; n++) {
-      dot = unitAxis.dot( poly[n] );
+    for (let n=1, len=_poly.length; n<len; n++) {
+      dot = unitAxis.dot( _poly[n] );
       d = new Pt(Math.min( dot, d[0] ), Math.max( dot, d[1] ));
     }
     return d;
@@ -1253,7 +1296,7 @@ export class Polygon {
    * @param poly2 second polygon
    * @param unitAxis unit axis
    */
-  protected static _axisOverlap( poly1, poly2, unitAxis ) {
+  protected static _axisOverlap( poly1:PtIterable, poly2:PtIterable, unitAxis:Pt ) {
     let pa = Polygon.projectAxis( poly1, unitAxis );
     let pb = Polygon.projectAxis( poly2, unitAxis );
     return ( pa[0] < pb[0] ) ? pb[0]-pa[1] : pa[0]-pb[1];
@@ -1265,11 +1308,11 @@ export class Polygon {
    * @param poly a Group of Pt defining a convex polygon
    * @param pt the Pt to check
    */
-  static hasIntersectPoint( poly:GroupLike, pt:PtLike ):boolean {
-
+  static hasIntersectPoint( poly:PtLikeIterable, pt:PtLike ):boolean {
+    let _poly = Util.iterToArray( poly );
     let c = false;
-    for (let i=0, len=poly.length; i<len; i++) {
-      let ln = Polygon.lineAt( poly, i );
+    for (let i=0, len=_poly.length; i<len; i++) {
+      let ln = Polygon.lineAt( _poly, i );
       if ( ((ln[0][1]>pt[1]) != (ln[1][1]>pt[1])) &&
           (pt[0] < (ln[1][0]-ln[0][0]) * (pt[1]-ln[0][1]) / (ln[1][1]-ln[0][1]) + ln[0][0]) ) {
         c = !c;
@@ -1286,7 +1329,10 @@ export class Polygon {
    * @param circle a Group representing a circle
    * @returns an `IntersectContext` object that stores the intersection info, or undefined if there's no intersection
    */
-  static hasIntersectCircle( poly:GroupLike, circle:GroupLike ):IntersectContext {
+  static hasIntersectCircle( poly:PtIterable, circle:PtIterable ):IntersectContext {
+    let _poly = Util.iterToArray( poly );
+    let _circle = Util.iterToArray( circle );
+
     let info = {
       which: -1, // 0 if vertex is on second polygon and edge is on first polygon. 1 if the other way round.
       dist: 0,
@@ -1295,17 +1341,17 @@ export class Polygon {
       vertex: null, // the vertex on a polygon that has intersected
     };
 
-    let c = circle[0];
-    let r = circle[1][0];
+    let c = _circle[0];
+    let r = _circle[1][0];
 
     let minDist = Number.MAX_SAFE_INTEGER;
   
-    for (let i=0, len=poly.length; i<len; i++) {
-      let edge = Polygon.lineAt( poly, i );
+    for (let i=0, len=_poly.length; i<len; i++) {
+      let edge = Polygon.lineAt( _poly, i );
       let axis = new Pt( edge[0].y - edge[1].y, edge[1].x - edge[0].x ).unit();
       let poly2 = new Group( c.$add( axis.$multiply( r ) ), c.$subtract( axis.$multiply( r ) ) );
     
-      let dist = Polygon._axisOverlap( poly, poly2, axis );
+      let dist = Polygon._axisOverlap( _poly, poly2, axis );
 
       if (dist > 0) {
         return null;
@@ -1326,7 +1372,7 @@ export class Polygon {
     if (!info.edge) return null;
 
     // direction
-    let dir = c.$subtract( Polygon.centroid( poly ) ).dot( info.normal );
+    let dir = c.$subtract( Polygon.centroid( _poly ) ).dot( info.normal );
     if (dir<0) info.normal.multiply(-1);
 
     info.dist = minDist;
@@ -1343,9 +1389,10 @@ export class Polygon {
    * @param poly2 a Group representing a convex polygon
    * @return an `IntersectContext` object that stores the intersection info, or undefined if there's no intersection
    */
-  static hasIntersectPolygon( poly1:GroupLike, poly2:GroupLike ):IntersectContext {
-    
+  static hasIntersectPolygon( poly1:PtIterable, poly2:PtIterable ):IntersectContext {    
     // Reference: https://www.gamedev.net/articles/programming/math-and-physics/a-verlet-based-approach-for-2d-game-physics-r2714/
+    let _poly1 = Util.iterToArray( poly1 );
+    let _poly2 = Util.iterToArray( poly2 );
 
     let info = {
       which: -1, // 0 if vertex is on second polygon and edge is on first polygon. 1 if the other way round.
@@ -1358,11 +1405,11 @@ export class Polygon {
     let minDist = Number.MAX_SAFE_INTEGER;
 
 
-    for (let i=0, plen=(poly1.length + poly2.length); i<plen; i++) {
+    for (let i=0, plen=(_poly1.length + _poly2.length); i<plen; i++) {
       
-      let edge = (i < poly1.length) ? Polygon.lineAt( poly1, i ) : Polygon.lineAt( poly2, i-poly1.length );
+      let edge = (i < _poly1.length) ? Polygon.lineAt( _poly1, i ) : Polygon.lineAt( _poly2, i-_poly1.length );
       let axis = new Pt( edge[0].y - edge[1].y, edge[1].x - edge[0].x ).unit(); // unit of a perpendicular vector
-      let dist = Polygon._axisOverlap( poly1, poly2, axis );
+      let dist = Polygon._axisOverlap( _poly1, _poly2, axis );
 
       if (dist > 0) {
         return null;
@@ -1371,15 +1418,15 @@ export class Polygon {
         info.edge = edge;
         info.normal = axis;
         minDist = Math.abs(dist);
-        info.which = (i < poly1.length) ? 0 : 1;
+        info.which = (i < _poly1.length) ? 0 : 1;
       }
     } 
 
     info.dist = minDist;
 
     // flip if neded to make sure vertex and edge are in corresponding polygons
-    let b1 = (info.which === 0) ? poly2 : poly1;
-    let b2 = (info.which === 0) ? poly1 : poly2;
+    let b1 = (info.which === 0) ? _poly2 : _poly1;
+    let b2 = (info.which === 0) ? _poly1 : _poly2;
     
     let c1 = Polygon.centroid( b1 );
     let c2 = Polygon.centroid( b2 );
@@ -1407,11 +1454,14 @@ export class Polygon {
    * @param poly1 a Group representing a polygon 
    * @param poly2 another Group representing a polygon
    */
-  static intersectPolygon2D( poly1:GroupLike, poly2:GroupLike ):Group {
-    let lp = Polygon.lines( poly1 );
+  static intersectPolygon2D( poly1:PtIterable, poly2:PtIterable ):Group {
+    let _poly1 = Util.iterToArray( poly1 );
+    let _poly2 = Util.iterToArray( poly2 );
+
+    let lp = Polygon.lines( _poly1 );
     let g = [];
     for (let i=0, len=lp.length; i<len; i++) {
-      let ins = Line.intersectPolygon2D( lp[i], poly2, false );
+      let ins = Line.intersectPolygon2D( lp[i], _poly2, false );
       if (ins) g.push( ins );
     }
     return Util.flatten( g, true ) as Group;
@@ -1422,8 +1472,12 @@ export class Polygon {
    * Get a bounding box for each polygon group, as well as a union bounding-box for all groups.
    * @param polys an array of Groups, or an array of Pt arrays
    */
-  static toRects( polys:GroupLike[] ):GroupLike[] {
-    let boxes = polys.map( (g) => Geom.boundingBox(g) );
+  static toRects( polys:Iterable<PtIterable> ):Group[] {
+    let boxes = [];
+    for (let g of polys) {
+      boxes.push( Geom.boundingBox(g) );
+    }
+
     let merged = Util.flatten( boxes, false );
     boxes.unshift( Geom.boundingBox( merged ) );
     return boxes;
@@ -1460,17 +1514,19 @@ export class Curve {
    * @param copyStart an optional boolean value to indicate if the start index should be used twice. Default is false.
    * @returns a group of 4 Pts
    */
-  static controlPoints( pts:GroupLike, index:number=0, copyStart:boolean=false):Group {
-    if (index > pts.length-1) return new Group();
-    let _index = (i) => (i < pts.length-1) ? i : pts.length-1;
+  static controlPoints( pts:PtLikeIterable, index:number=0, copyStart:boolean=false):Group {
+    let _pts = Util.iterToArray( pts );
 
-    let p0 = pts[index];
+    if (index > _pts.length-1) return new Group();
+    let _index = (i) => (i < _pts.length-1) ? i : _pts.length-1;
+
+    let p0 = _pts[index];
     index = (copyStart) ? index : index+1;
 
     // get points based on index
     return new Group(
-      p0, pts[ _index(index++) ],
-      pts[ _index(index++) ], pts[ _index(index++) ]
+      p0, _pts[ _index(index++) ],
+      _pts[ _index(index++) ], _pts[ _index(index++) ]
     );
   }
 
@@ -1495,21 +1551,22 @@ export class Curve {
    * @param steps the number of line segments per curve. Defaults to 10 steps
    * @returns a curve as a group of interpolated Pt
    */
-  static catmullRom( pts:GroupLike, steps:number=10 ):Group {
-    if (pts.length < 2) return new Group();
+  static catmullRom( pts:PtLikeIterable, steps:number=10 ):Group {
+    let _pts = Util.iterToArray( pts );
+    if (_pts.length < 2) return new Group();
 
     let ps = new Group();
     let ts = Curve.getSteps( steps );
 
     // use first point twice
-    let c = Curve.controlPoints( pts, 0, true );
+    let c = Curve.controlPoints( _pts, 0, true );
     for (let i=0; i<=steps; i++) {
       ps.push( Curve.catmullRomStep( ts[i], c ) );
     }
 
     let k = 0;
-    while ( k < pts.length-2 ) {
-      let cp = Curve.controlPoints( pts, k );
+    while ( k < _pts.length-2 ) {
+      let cp = Curve.controlPoints( _pts, k );
       if (cp.length > 0) {
         for (let i=0; i<=steps; i++) {
           ps.push( Curve.catmullRomStep( ts[i], cp ) );
@@ -1554,21 +1611,22 @@ export class Curve {
    * @param tension optional value between 0 to 1 to specify a "tension". Default to 0.5 which is the tension for Catmull-Rom curve.
    * @returns a curve as a group of interpolated Pt
    */
-  static cardinal( pts:GroupLike, steps:number=10, tension=0.5 ):Group {
-    if (pts.length < 2) return new Group();
+  static cardinal( pts:PtLikeIterable, steps:number=10, tension=0.5 ):Group {
+    let _pts = Util.iterToArray( pts );
+    if (_pts.length < 2) return new Group();
 
     let ps = new Group();
     let ts = Curve.getSteps( steps );
 
     // use first point twice
-    let c = Curve.controlPoints( pts, 0, true );
+    let c = Curve.controlPoints( _pts, 0, true );
     for (let i=0; i<=steps; i++) {
       ps.push( Curve.cardinalStep( ts[i], c, tension ) );
     }
 
     let k = 0;
-    while ( k < pts.length-2 ) {
-      let cp = Curve.controlPoints( pts, k );
+    while ( k < _pts.length-2 ) {
+      let cp = Curve.controlPoints( _pts, k );
       if (cp.length > 0) {
         for (let i=0; i<=steps; i++) {
           ps.push( Curve.cardinalStep( ts[i], cp, tension ) );
@@ -1624,15 +1682,15 @@ export class Curve {
    * @returns a curve as a group of interpolated Pt
    */
   static bezier( pts:GroupLike, steps:number=10 ) {
-
-    if (pts.length < 4) return new Group();
+    let _pts = Util.iterToArray( pts );
+    if (_pts.length < 4) return new Group();
 
     let ps = new Group();
     let ts = Curve.getSteps( steps );
 
     let k = 0;
-    while ( k < pts.length-3 ) {
-      let c = Curve.controlPoints( pts, k );
+    while ( k < _pts.length-3 ) {
+      let c = Curve.controlPoints( _pts, k );
       if (c.length > 0) {
         for (let i=0; i<=steps; i++) {
           ps.push( Curve.bezierStep( ts[i], c ) );
@@ -1679,15 +1737,16 @@ export class Curve {
    * @returns a curve as a group of interpolated Pt
    */
   static bspline( pts:GroupLike, steps:number=10, tension:number=1 ):Group {
-    if (pts.length < 2) return new Group();
+    let _pts = Util.iterToArray( pts );
+    if (_pts.length < 2) return new Group();
 
     let ps = new Group();
     let ts = Curve.getSteps( steps );
 
 
     let k = 0;
-    while ( k < pts.length-3 ) {
-      let c = Curve.controlPoints( pts, k );
+    while ( k < _pts.length-3 ) {
+      let c = Curve.controlPoints( _pts, k );
       if (c.length > 0) {
         if (tension !== 1) {
           for (let i=0; i<=steps; i++) {

@@ -6,7 +6,7 @@ import {Pt, Group, Bound} from "./Pt";
 import {Const, Util} from "./Util";
 import {Typography as Typo} from "./Typography";
 import { Rectangle } from './Op';
-import {PtLike, GroupLike, PtsCanvasRenderingContext2D, DefaultFormStyle, PtLikeIterable} from "./Types";
+import {PtLike, GroupLike, PtsCanvasRenderingContext2D, DefaultFormStyle, PtLikeIterable, PtIterable} from "./Types";
 
 
 
@@ -1021,7 +1021,7 @@ export class CanvasForm extends VisualForm {
      * @param verticalAlign "top", "middle", or "bottom" to specify vertical alignment inside the box
      * @param overrideBaseline If `true`, use the corresponding baseline as verticalAlign. If `false`, use the current canvas context's textBaseline setting. Default is `true`.
      */
-    textBox( box:PtLikeIterable, txt:string, verticalAlign:string="middle", tail:string="", overrideBaseline:boolean=true): this {
+    textBox( box:PtIterable, txt:string, verticalAlign:string="middle", tail:string="", overrideBaseline:boolean=true): this {
       // @ts-ignore
       if (overrideBaseline) this._ctx.textBaseline = verticalAlign;
       let size = Rectangle.size( box );
