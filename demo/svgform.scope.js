@@ -32,7 +32,7 @@ var form = space.getForm();
       form.fillOnly("#f03").polygon( l );
 
       // "O" is for the only one I see
-      let o = Rectangle.toCircle( pts[1] );
+      let o = Rectangle.toCircle( pts[1], false );
       let ang1 = (time%6000 / 6000) * Const.two_pi;
       let ang2 = Geom.boundRadian( space.pointer.subtract( o[0] ).angle() );
       form.fillOnly("#0c9").arc( o[0].subtract(20, 0), o[1][0], Math.min(ang1, ang2), Math.max(ang1, ang2) );
