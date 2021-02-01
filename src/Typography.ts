@@ -1,7 +1,8 @@
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
-import {Pt} from "./Pt";
-import {GroupLike} from "./Types";
+import {Pt, Bound} from "./Pt";
+import {Util} from "./Util";
+import {GroupLike, PtLikeIterable} from "./Types";
 
 /** 
  * Typography provides helper functions to support typographic layouts. For a concrete example, see [a demo here](../demo/index.html?name=canvasform.textBox) that uses the [`CanvasForm.textBox`](#link) function.
@@ -46,12 +47,13 @@ export class Typography {
    * @param ratio font-size change ratio. Default is 1.
    * @returns a function where input parameter is a new box, and returns the new font size value
    */
-  static fontSizeToBox( box:GroupLike, ratio:number=1, byHeight:boolean=true ): (GroupLike) => number {
-    let i = byHeight ? 1 : 0;
-    let h = (box[1][i] - box[0][i]);
+  static fontSizeToBox( box:PtLikeIterable, ratio:number=1, byHeight:boolean=true ): (GroupLike) => number {
+    let bound = Bound.fromGroup( box );
+    let h = byHeight ? bound.height : bound.width;
     let f = ratio * h;
-    return function( b:GroupLike ) {
-      let nh = (b[1][i] - b[0][i]) / h;
+    return function( box2:GroupLike ) {
+      let bound2 = Bound.fromGroup( box2 );
+      let nh = (byHeight ? bound2.height : bound2.width) / h;
       return f * nh;
     };
   }

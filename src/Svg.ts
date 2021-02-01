@@ -6,7 +6,7 @@ import {Const, Util} from './Util';
 import {Pt, Group, Bound} from './Pt';
 import {Rectangle} from "./Op";
 import {DOMSpace} from "./Dom";
-import {PtLike, GroupLike, PtLikeIterable, IPlayer, DOMFormContext} from "./Types";
+import {PtLike, GroupLike, PtIterable, PtLikeIterable, IPlayer, DOMFormContext} from "./Types";
 
 
 
@@ -436,9 +436,10 @@ export class SVGForm extends VisualForm {
     * @param pts a Group of 2 Pts, or an array of two numeric arrays `[[position], [size]]`
     * @see [`Circle.fromCenter`](./?p=Op_Circle#function_fromCenter)
     */
-  circle( pts:GroupLike|number[][] ):this {
+  circle( pts:PtLikeIterable ):this {
     this.nextID();
-    SVGForm.circle( this._ctx, pts[0], pts[1][0] );
+    let p = Util.iterToArray( pts );
+    SVGForm.circle( this._ctx, p[0], p[1][0] );
     return this;
   }
   
@@ -646,7 +647,7 @@ export class SVGForm extends VisualForm {
     * Draw a rectangle.
     * @param pts usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.
     */
-  rect( pts:number[][]|Pt[] ):this {
+  rect( pts:PtLikeIterable ):this {
     this.nextID();
     SVGForm.rect( this._ctx, pts );
     return this;

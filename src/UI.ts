@@ -2,7 +2,7 @@
 
 import {Pt, Group} from "./Pt";
 import { Rectangle, Circle, Polygon } from "./Op";
-import {UIHandler, GroupLike, PtLike} from "./Types";
+import {UIHandler, GroupLike, PtLike, PtLikeIterable} from "./Types";
 
 
 /**
@@ -44,7 +44,7 @@ export class UI {
    * @param states optional a state object keep track of custom states for this UI
    * @param id optional id string
    */
-  constructor( group:GroupLike, shape:string, states:{[key:string]: any}={}, id?:string ) {
+  constructor( group:PtLikeIterable, shape:string, states:{[key:string]: any}={}, id?:string ) {
     this._group = Group.fromArray( group );
     this._shape = shape;
     this._id = id === undefined ? `ui_${(UI._counter++)}` : id;
@@ -59,7 +59,7 @@ export class UI {
    * @param states optional a state object keep track of custom states for this UI
    * @param id optional id string
    */
-  static fromRectangle( group:GroupLike, states: {}, id?:string ):UI {
+  static fromRectangle( group:PtLikeIterable, states: {}, id?:string ):UI {
     return new this( group, UIShape.rectangle, states, id );
   }
 
@@ -70,7 +70,7 @@ export class UI {
    * @param states optional a state object keep track of custom states for this UI
    * @param id optional id string
    */
-  static fromCircle( group:GroupLike, states: {}, id?:string ):UI {
+  static fromCircle( group:PtLikeIterable, states: {}, id?:string ):UI {
     return new this( group, UIShape.circle, states, id );
   }
 
@@ -81,7 +81,7 @@ export class UI {
    * @param states optional a state object keep track of custom states for this UI
    * @param id optional id string
    */
-  static fromPolygon( group:GroupLike, states: {}, id?:string ):UI {
+  static fromPolygon( group:PtLikeIterable, states: {}, id?:string ):UI {
     return new this( group, UIShape.polygon, states, id );
   }
 
@@ -313,7 +313,7 @@ export class UIButton extends UI {
    * @param states Optional default state object
    * @param id Optional id string
    */
-  constructor( group:GroupLike, shape:string, states:{[key:string]: any}={}, id?:string ) {
+  constructor( group:PtLikeIterable, shape:string, states:{[key:string]: any}={}, id?:string ) {
     super( group, shape, states, id );
     
     if (states.hover === undefined) this._states['hover'] = false;
@@ -442,7 +442,7 @@ export class UIDragger extends UIButton {
    * @param states Optional default state object
    * @param id Optional id string
    */
-  constructor( group:GroupLike, shape:string, states:{[key:string]: any}={}, id?:string ) {
+  constructor( group:PtLikeIterable, shape:string, states:{[key:string]: any}={}, id?:string ) {
     super( group, shape, states, id );
     if (states.dragging === undefined) this._states['dragging'] = false;
     if (states.moved === undefined) this._states['moved'] = false;

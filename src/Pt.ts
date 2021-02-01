@@ -990,7 +990,7 @@ export class Bound extends Group implements IPt {
    * Create a Bound from a Group or an array of Pts
    * @param g a Group instance or an array of Pts
    */
-  static fromGroup( g:PtIterable ):Bound {
+  static fromGroup( g:PtLikeIterable ):Bound {
     let _g = Util.iterToArray( g );
     if (_g.length < 2) throw new Error( "Cannot create a Bound from a group that has less than 2 Pt" );
     return new Bound( _g[0], _g[_g.length-1] );

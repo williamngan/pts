@@ -172,6 +172,7 @@ export class Util {
    * @param start Optional starting value
    */
   static randomInt( range:number, start:number=0 ) {
+    Util.warn("Util.randomInt is deprecated. Please use `Num.randomRange`");
     return Math.floor( Math.random()*range ) + start;
   }
 
