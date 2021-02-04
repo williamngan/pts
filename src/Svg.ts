@@ -6,7 +6,7 @@ import {Const, Util} from './Util';
 import {Pt, Group, Bound} from './Pt';
 import {Rectangle} from "./Op";
 import {DOMSpace} from "./Dom";
-import {PtLike, GroupLike, PtIterable, PtLikeIterable, IPlayer, DOMFormContext} from "./Types";
+import {PtLike, PtLikeIterable, IPlayer, DOMFormContext} from "./Types";
 
 
 
@@ -433,7 +433,7 @@ export class SVGForm extends VisualForm {
 
   /**
     * Draw a circle.
-    * @param pts a Group of 2 Pts, or an array of two numeric arrays `[[position], [size]]`
+    * @param pts a Group or an Iterable<PtLike> representing a circle with `[[position], [size]]`
     * @see [`Circle.fromCenter`](./?p=Op_Circle#function_fromCenter)
     */
   circle( pts:PtLikeIterable ):this {
@@ -524,7 +524,7 @@ export class SVGForm extends VisualForm {
   /**
   * A static function to draw a line or polyline.
   * @param ctx a context object of SVGForm
-  * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
+  * @param pts a Group or an Iterable<PtLike>
   */
   static line( ctx:DOMFormContext, pts:PtLikeIterable ):SVGElement {
     let points = SVGForm.pointsString( pts );
@@ -552,7 +552,7 @@ export class SVGForm extends VisualForm {
 
   /**
   * Draw a line or polyline.
-  * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
+  * @param pts a Group or an Iterable<PtLike> 
   */
   line( pts:PtLikeIterable ):this {
     this.nextID();
@@ -582,7 +582,7 @@ export class SVGForm extends VisualForm {
 
   /**
    * Given a list of points, return a space-separated string
-   * @param pts a Group of Pt, or an Iterable of number arrays
+   * @param pts a Group or an Iterable<PtLike> 
    * @returns an object of {string, count}
    */
   protected static pointsString( pts: PtLikeIterable ):{string:string, count:number} {
@@ -599,7 +599,7 @@ export class SVGForm extends VisualForm {
   /**
     * A static function to draw polygon.
     * @param ctx a context object of SVGForm
-    * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
+    * @param pts a Group or an Iterable<PtLike> representing a polygon
     */
   static polygon( ctx:DOMFormContext, pts:PtLikeIterable ):SVGElement {
     let points = SVGForm.pointsString( pts );
@@ -609,7 +609,7 @@ export class SVGForm extends VisualForm {
 
   /**
   * Draw a polygon.
-  * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
+  * @param pts a Group or an Iterable<PtLike> representing a polygon
   */
   polygon( pts:PtLikeIterable ):this {
     this.nextID();
@@ -621,7 +621,7 @@ export class SVGForm extends VisualForm {
   /**
   * A static function to draw a rectangle.
   * @param ctx a context object of SVGForm
-  * @param pts usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.
+  * @param pts a Group or an Iterable<PtLike> with 2 Pt specifying the top-left and bottom-right positions. 
   */
   static rect( ctx:DOMFormContext, pts:PtLikeIterable ):SVGElement {
     if ( !Util.arrayCheck(pts) ) return;
@@ -645,7 +645,7 @@ export class SVGForm extends VisualForm {
   
   /**
     * Draw a rectangle.
-    * @param pts usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.
+    * @param pts a Group or an Iterable<PtLike> with 2 Pt specifying the top-left and bottom-right positions. 
     */
   rect( pts:PtLikeIterable ):this {
     this.nextID();

@@ -34,7 +34,7 @@ export class Create {
 
   /**
    * Create a set of points that distribute evenly on a line. Similar to [`Line.subpoints`](#link) but includes the end points.
-   * @param line a Group representing a line
+   * @param line a Group or an Iterable<Pt> representing a line
    * @param count number of points to create
    */
   static distributeLinear( line:PtIterable, count:number ):Group {
@@ -110,7 +110,7 @@ export class Create {
 
   /**
    * Given a group of Pts, return a new group of `Noise` Pts.
-   * @param pts a Group or an array of Pts
+   * @param pts a Group or an Iterable<Pt>
    * @param dx small increment value in x dimension
    * @param dy small increment value in y dimension
    * @param rows Optional row count to generate 2D noise

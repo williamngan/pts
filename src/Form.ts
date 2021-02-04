@@ -2,7 +2,7 @@
 
 import {Pt} from "./Pt";
 import {Util} from "./Util";
-import {PtLike, GroupLike, PtIterable} from "./Types";
+import {PtLike, GroupLike} from "./Types";
 
 
 /**

@@ -39,7 +39,7 @@ export class UI {
 
   /**
    * Create an UI element. You may also create a new UI using one of the static helper like [`UI.fromRectangle`](#link) or [`UI.fromCircle`](#link).
-   * @param group a Group that defines the UI's appearance
+   * @param group a Group or an Iterable<PtLike> that defines the UI's appearance
    * @param shape specifies the shape of the Group
    * @param states optional a state object keep track of custom states for this UI
    * @param id optional id string
@@ -55,7 +55,7 @@ export class UI {
 
   /**
    * A static helper function to create a Rectangle UI.
-   * @param group a group that defines a rectangle
+   * @param group a Group or an Iterable<PtLike> with 2 Pt representing a rectangle
    * @param states optional a state object keep track of custom states for this UI
    * @param id optional id string
    */
@@ -66,7 +66,7 @@ export class UI {
 
   /**
    * A static helper function to create a Circle UI.
-   * @param group a group that defines a rectangle
+   * @param group a Group or an Iterable<PtLike> with 2 Pt representing a circle
    * @param states optional a state object keep track of custom states for this UI
    * @param id optional id string
    */
@@ -77,7 +77,7 @@ export class UI {
 
   /**
    * A static helper function to create a Polygon UI.
-   * @param group a group that defines a rectangle
+   * @param group a Group or an Iterable<PtLike> representing a polygon
    * @param states optional a state object keep track of custom states for this UI
    * @param id optional id string
    */
@@ -308,7 +308,7 @@ export class UIButton extends UI {
 
   /**
    * Create an UIButton. A button has 2 states, "clicks" (number) and "hover" (boolean), which you can access through [`UI.state`](#link) function. You may also create a new UIButton using one of the static helper like [`UI.fromRectangle`](#link) or [`UI.fromCircle`](#link).
-   * @param group a Group that defines the UI's appearance
+   * @param group a Group or an Iterable<PtLike> that defines the UI's appearance
    * @param shape specifies the shape of the Group
    * @param states Optional default state object
    * @param id Optional id string
@@ -437,7 +437,7 @@ export class UIDragger extends UIButton {
 
   /**
    * Create a dragger which has all the states in UIButton, with additional "dragging" (a boolean indicating whether it's currently being dragged) and "offset" (a Pt representing the offset between this UI's position and the pointer's position when dragged) states. (See [`UI.state`](#link)) You may also create a new UIDragger using one of the static helper like [`UI.fromRectangle`](#link) or [`UI.fromCircle`](#link).
-   * @param group a Group that defines the UI's appearance
+   * @param group a Group or an Iterable<PtLike> that defines the UI's appearance
    * @param shape specifies the shape of the Group
    * @param states Optional default state object
    * @param id Optional id string

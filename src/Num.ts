@@ -98,7 +98,7 @@ export class Num {
 
   /**
    * Sum a group of numeric arrays.
-   * @param pts an array of numeric arrays
+   * @param pts a Group or an Iterable<PtLike>
    * @returns a Pt of the dimensional sums
    */
   static sum( pts: PtLikeIterable ): Pt {
@@ -113,7 +113,7 @@ export class Num {
 
   /**
    * Average a group of numeric arrays
-   * @param pts an array of numeric arrays
+   * @param pts a Group or an Iterable<PtLike>
    * @returns a Pt of averages
    */
   static average( pts: PtLikeIterable ): Pt {
@@ -195,7 +195,7 @@ export class Geom {
 
   /**
    * Get a bounding box for a set of Pts.
-   * @param pts a Group or an array of Pts
+   * @param pts a Group or an Iterable<Pt>
    * @return a Group of two Pts, representing the top-left and bottom-right corners
    */
   static boundingBox( pts:PtIterable ): Group {
@@ -215,7 +215,7 @@ export class Geom {
 
   /**
    * Get a centroid (the average middle point) for a set of Pts.
-   * @param pts a Group or an array of Pts
+   * @param pts a Group or an Iterable<PtLike> 
    * @return a centroid Pt 
    */
   static centroid( pts:PtLikeIterable ):Pt {
@@ -225,7 +225,7 @@ export class Geom {
 
   /**
    * Given an anchor Pt, rebase all Pts in this group either to or from this anchor base.
-   * @param pts a Group or array of Pt
+   * @param pts a Group or an Iterable<PtLike> 
    * @param ptOrIndex an index for the Pt array, or an external Pt
    * @param direction a string either "to" (subtract all Pt with this anchor base), or "from" (add all Pt from this anchor base)
    */
@@ -305,7 +305,7 @@ export class Geom {
 
   /**
    * Sort the Pts so that their edges will form a non-overlapping polygon. ([Reference](https://stackoverflow.com/questions/6989100/sort-points-in-clockwise-order))
-   * @param pts an array of Pts
+   * @param pts a Group or an Iterable<Pt>
    */
   static sortEdges( pts:PtIterable ):GroupLike {
 
@@ -343,7 +343,7 @@ export class Geom {
 
   /**
    * Scale a Pt or a Group of Pts. You may also use [`Pt.scale`](#link) instance method.
-   * @param ps a Pt or a Group of Pts
+   * @param ps either a single Pt, or a Group or an Iterable<Pt>
    * @param scale scale value
    * @param anchor optional anchor point to scale from
    */
@@ -365,7 +365,7 @@ export class Geom {
 
   /**
    * Rotate a Pt or a Group of Pts in 2D space. You may also use [`Pt.rotate2D`](#link) instance method.
-   * @param ps a Pt or a Group of Pts
+   * @param ps either a single Pt, or a Group or an Iterable<Pt>
    * @param angle rotate angle
    * @param anchor optional anchor point to rotate from
    * @param axis optional axis such as "xy" (use Const.xy) to define a 2D plane, or a number array to specify indices
@@ -393,7 +393,7 @@ export class Geom {
 
   /**
    * Shear a Pt or a Group of Pts in 2D space. You may also use [`Pt.shear2D`](#link) instance method.
-   * @param ps a Pt or a Group of Pts
+   * @param ps either a single Pt, or a Group or an Iterable<Pt>
    * @param scale shearing value which can be a number or an array of 2 numbers
    * @param anchor optional anchor point to shear from
    * @param axis optional axis such as "xy" (use Const.xy) to define a 2D plane, or a number array to specify indices
@@ -422,8 +422,8 @@ export class Geom {
 
   /**
    * Reflect a Pt or a Group of Pts along a 2D line. You may also use [`Pt.reflect2D`](#link) instance method.
-   * @param ps a Pt or a Group of Pts
-   * @param line a Group of 2 Pts that defines a line for reflection
+   * @param ps either a single Pt, or a Group or an Iterable<Pt>
+   * @param line a Group or an Iterable<PtLike> that defines a line for reflection
    * @param axis optional axis such as "xy" (use Const.xy) to define a 2D plane, or a number array to specify indices
    */
   static reflect2D( ps:Pt|PtIterable, line:PtLikeIterable, axis?:string|PtLike ):Geom {
@@ -844,7 +844,7 @@ export class Range {
 
   /**
    * Construct a Range instance for a Group of Pts.
-   * @param g a Group or an array of Pts
+   * @param g a Group or an Iterable<Pt>
    */
   constructor( g:PtIterable ) {
     this._source = Group.fromPtArray( g );
@@ -920,13 +920,13 @@ export class Range {
 
   /**
    * Add more Pts to this Range and recalculate its min and max values.
-   * @param _g a Group or an array of Pts to append to this Range
+   * @param pts a Group or an Iterable<PtLike> to append to this Range
    * @param update Optional. Set the parameter to `false` if you want to append without immediately updating this Range's min and max values. Default is `true`.
    */
-  append( g:PtLikeIterable, update:boolean=true ):this {
-    let _g = Util.iterToArray( g );
-    if (_g[0].length !== this._dims) throw new Error(`Dimensions don't match. ${this._dims} dimensions in Range and ${_g[0].length} provided in parameter. `);
-    this._source = this._source.concat( _g ) as Group;
+  append( pts:PtLikeIterable, update:boolean=true ):this {
+    let _pts = Util.iterToArray( pts );
+    if (_pts[0].length !== this._dims) throw new Error(`Dimensions don't match. ${this._dims} dimensions in Range and ${_pts[0].length} provided in parameter. `);
+    this._source = this._source.concat( _pts ) as Group;
     if (update) this.calc();
     return this;
   }

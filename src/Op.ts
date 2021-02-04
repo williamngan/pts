@@ -61,8 +61,8 @@ export class Line {
 
   /**
    * Given a 2D path and a point, find whether the point is on left or right side of the line.
-   * @param line  a Group of at least 2 Pts
-   * @param pt a Pt
+   * @param line  a Group or an Iterable<PtLike> representing a line
+   * @param pt a Pt or numeric array
    * @returns a negative value if on left and a positive value if on right. If collinear, then the return value is 0.
    */
   static sideOfPt2D( line:PtLikeIterable, pt:PtLike ):number {
@@ -88,7 +88,7 @@ export class Line {
 
   /**
    * Get magnitude of a line segment.
-   * @param line a Group of at least 2 Pts
+   * @param line a Group or an Iterable<Pt> with at least 2 Pt
    */
   static magnitude( line:PtIterable ):number {
     let _line = Util.iterToArray( line );
@@ -98,7 +98,7 @@ export class Line {
 
   /**
    * Get squared magnitude of a line segment.
-   * @param _line a Group of at least 2 Pts
+   * @param _line a Group or an Iterable<Pt> with at least 2 Pt
    */
   static magnitudeSq( line:PtIterable ):number {
     let _line = Util.iterToArray( line );
@@ -108,7 +108,7 @@ export class Line {
 
   /**
    * Find a point on a line that is perpendicular (shortest distance) to a target point.
-   * @param line a group of Pts that defines a line
+   * @param line a Group or an Iterable<Pt> that defines a line
    * @param pt a target Pt 
    * @param asProjection if true, this returns the projection vector instead. Default is false.
    * @returns a Pt on the line that is perpendicular to the target Pt, or a projection vector if `asProjection` is true.
@@ -144,8 +144,8 @@ export class Line {
 
   /**
    * Given two lines as rays (infinite lines), find their intersection point if any.
-   * @param la a Group of 2 Pts representing a ray
-   * @param lb a Group of 2 Pts representing a ray
+   * @param la a Group or an Iterable<Pt> with 2 Pt representing a ray
+   * @param lb a Group or an Iterable<Pt> with 2 Pts representing another ray
    * @returns an intersection Pt or undefined if no intersection
    */
   static intersectRay2D( la:PtIterable, lb:PtIterable ):Pt {
@@ -188,8 +188,8 @@ export class Line {
 
   /**
    * Given two line segemnts, find their intersection point if any.
-   * @param la a Group of 2 Pts representing a line segment
-   * @param lb a Group of 2 Pts representing a line segment
+   * @param la a Group or an Iterable<Pt> with 2 Pt representing a line segment
+   * @param lb a Group or an Iterable<Pt> with 2 Pt representing a line segment
    * @returns an intersection Pt or undefined if no intersection
    */
   static intersectLine2D( la:PtIterable, lb:PtIterable ):Pt {
@@ -217,8 +217,8 @@ export class Line {
 
   /**
    * Given a line segemnt or a ray (infinite line), find its intersection point(s) with a polygon.
-   * @param lineOrRay a Group of 2 Pts representing a line or ray
-   * @param poly a Group of Pts representing a polygon
+   * @param lineOrRay a Group or an Iterable<Pt> with 2 Pt representing a line or ray
+   * @param poly a Group or an Iterable<Pt> representing a polygon
    * @param sourceIsRay a boolean value to treat the line as a ray (infinite line). Default is `false`.
    */
   static intersectPolygon2D( lineOrRay:PtIterable, poly:PtIterable, sourceIsRay:boolean=false ):Group {
@@ -238,8 +238,8 @@ export class Line {
 
   /**
    * Find intersection points of 2 sets of lines. This checks all line segments in the two lists. Consider using a bounding-box check before calling this. If you are checking convex polygon intersections, using [`Polygon.intersectPolygon2D`](#link) will be more efficient.
-   * @param lines1 an array of line segments
-   * @param lines2 an array of line segments
+   * @param lines1 an Array/Iterable of (Groups or Iterables<Pt>)
+   * @param lines2 an Array/Iterable of (Groups or Iterables<Pt>)
    * @param isRay a boolean value to treat the line as a ray (infinite line). Default is `false`.
    */
   static intersectLines2D( lines1:Iterable<PtIterable>, lines2:Iterable<PtIterable>, isRay:boolean=false):Group {
@@ -257,7 +257,7 @@ export class Line {
 
   /**
    * Get two points of a ray that intersects with a point on a 2D grid.
-   * @param ray a ray specified by 2 Pts
+   * @param ray a Group or an Iterable<Pt> representing a ray
    * @param gridPt a Pt on the grid
    * @returns a group of two intersecting Pts. The first one is horizontal intersection and the second one is vertical intersection.
    */
@@ -305,7 +305,7 @@ export class Line {
 
   /**
    * Get evenly distributed points on a line. Similar to [`Create.distributeLinear`](#link) but excluding end points.
-   * @param line a Group representing a line
+   * @param line a Group or an Iterable<PtLike> representing a line
    * @param num number of points to get
    */
   static subpoints( line:PtLikeIterable, num:number ) {
@@ -320,7 +320,7 @@ export class Line {
 
   /**
    * Crop this line by a circle or rectangle at end points. This can be useful for creating arrows that connect to an object's edge.
-   * @param line line to crop
+   * @param line a Group or an Iterable<Pt> representing a line to crop
    * @param size size of circle or rectangle as Pt
    * @param index line's end point index, ie, 0 = start and 1 = end.
    * @param cropAsCircle a boolean to specify whether the `size` parameter should be treated as circle. Default is `true`.
@@ -354,7 +354,7 @@ export class Line {
 
   /**
    * Create an marker arrow or line, placed at an end point of this line.
-   * @param line line to place marker
+   * @param line a Group or an Iterable<Pt> representing a line to place marker
    * @param size size of the marker as Pt
    * @param graphic either "arrow" or "line"
    * @param atTail a boolean, if `true`, the marker will be positioned at tail of the line (ie, index = 1). Default is `true`.
@@ -439,7 +439,7 @@ export class Rectangle {
 
   /**
    * Create a new circle that either fits within or encloses the rectangle. Same as [`Circle.fromRect`](#link).
-   * @param pts a Group of 2 Pts representing a rectangle
+   * @param pts a Group or an Iterable<Pt> with 2 Pt representing a rectangle
    * @param within if `true`, the circle will be within the rectangle. If `false`, the circle will enclose the rectangle. 
    * @returns a Group that represents a circle
    */
@@ -450,7 +450,7 @@ export class Rectangle {
   
   /**
    * Create a square that either fits within or encloses a rectangle.
-   * @param pts a Group of 2 Pts representing a rectangle
+   * @param pts a Group or an Iterable<Pt> with 2 Pt representing a rectangle
    * @param enclose if `true`, the square will enclose the rectangle. Default is `false`, which will fit the square inside the rectangle.
    * @returns a Group of 2 Pts representing a rectangle
    */
@@ -464,7 +464,7 @@ export class Rectangle {
 
   /**
    * Get the size of this rectangle as a Pt.
-   * @param p a Group of 2 Pts representing a Rectangle
+   * @param p a Group or an Iterable<Pt> with 2 Pt representing a Rectangle
    */
   static size( pts:PtIterable ):Pt {
     let p = Util.iterToArray(pts);
@@ -474,7 +474,7 @@ export class Rectangle {
 
   /**
    * Get the center of this rectangle.
-   * @param p a Group of 2 Pts representing a Rectangle
+   * @param p a Group or an Iterable<Pt> with 2 Pt representing a Rectangle
    */
   static center( pts:PtIterable ):Pt {
     let p = Util.iterToArray(pts);
@@ -486,7 +486,7 @@ export class Rectangle {
 
   /**
    * Get the 4 corners of this rectangle as a Group.
-   * @param rect a Group of 2 Pts representing a Rectangle
+   * @param rect a Group or an Iterable<Pt> with 2 Pt representing a Rectangle
    */
   static corners( rect:PtIterable ):Group {
     let _rect = Util.iterToArray( rect );
@@ -498,7 +498,7 @@ export class Rectangle {
 
   /**
    * Get the 4 sides of this rectangle as an array of 4 Groups.
-   * @param rect a Group of 2 Pts representing a Rectangle
+   * @param rect a Group or an Iterable<Pt> with 2 Pt representing a Rectangle
    * @returns an array of 4 Groups, each of which represents a line segment
    */
   static sides( rect:PtIterable ):Group[] {
@@ -512,7 +512,7 @@ export class Rectangle {
 
   /**
    * Given an array of rectangles, get a rectangle that bounds all of them.
-   * @param rects an array of Groups that represent rectangles
+   * @param rects an array of (Groups or Iterables<PtLike>) that represents a set of rectangles
    * @returns the bounding rectangle as a Group
    */
   static boundingBox( rects:Iterable<PtLikeIterable> ):Group {
@@ -536,7 +536,7 @@ export class Rectangle {
 
   /**
    * Convert this rectangle into a Group representing a polygon. An alias for [`Rectangle.corners`](#link)
-   * @param rect a Group of 2 Pts representing a Rectangle
+   * @param rect a Group or an Iterable<Pt> with 2 Pt representing a Rectangle
    */
   static polygon( rect:PtIterable ):Group {
     return Rectangle.corners( rect );
@@ -545,7 +545,7 @@ export class Rectangle {
 
   /**
    * Subdivide a rectangle into 4 rectangles, one for each quadrant.
-   * @param rect a Group of 2 Pts representing a Rectangle
+   * @param rect a Group or an Iterable<Pt> with 2 Pt representing a Rectangle
    * @returns an array of 4 Groups of rectangles
    */
   static quadrants( rect:PtIterable, center?:PtLike ):Group[] {
@@ -558,7 +558,7 @@ export class Rectangle {
 
   /**
    * Subdivde a rectangle into 2 rectangles, by row or by column.
-   * @param rect Group of 2 Pts representing a Rectangle
+   * @param rect a Group or an Iterable<Pt> with 2 Pt representing a Rectangle
    * @param ratio a value between 0 to 1 to indicate the split ratio
    * @param asRows if `true`, split into 2 rows. Default is `false` which splits into 2 columns.
    * @returns an array of 2 Groups of rectangles
@@ -633,7 +633,7 @@ export class Circle {
 
   /**
    * Create a circle that either fits within, or encloses, a rectangle.
-   * @param pts a Group of 2 Pts representing a rectangle
+   * @param pts a Group or an Iterable<PtLike> with 2 Pt representing a rectangle
    * @param enclose if `true`, the circle will enclose the rectangle. Default is `false`, which will fit the circle inside the rectangle.
    * @returns a Group that represents a circle
    */
@@ -653,7 +653,7 @@ export class Circle {
 
   /**
    * Create a circle that either fits within, or encloses, a triangle. Same as [`Triangle.circumcircle`](#link) or [`Triangle.incircle`](#link).
-   * @param pts a Group of 3 Pts representing a rectangle
+   * @param pts a Group or an Iterable<Pt> with 3 Pt representing a rectangle
    * @param enclose if `true`, the circle will enclose the triangle. Default is `false`, which will fit the circle inside the triangle.
    * @returns a Group that represents a circle
    */
@@ -679,7 +679,7 @@ export class Circle {
 
   /**
    * Check if a point is within a circle.
-   * @param pts a Group of 2 Pts representing a circle
+   * @param pts a Group or an Iterable<Pt> with 2 Pt representing a circle
    * @param pt the point to checks
    * @param threshold an optional small number to set threshold. Default is 0.
    */
@@ -692,12 +692,12 @@ export class Circle {
 
   /**
    * Get the intersection points between a circle and a ray (infinite line).
-   * @param pts a Group of 2 Pts representing a circle
-   * @param ray a Group of 2 Pts representing a ray 
+   * @param circle a Group or an Iterable<Pt> with 2 Pt representing a circle
+   * @param ray a Group or an Iterable<Pt> with 2 Pt representing a ray 
    * @returns a Group of intersection points, or an empty Group if no intersection is found
    */
-  static intersectRay2D( pts:PtIterable, ray:PtIterable ):Group {
-    let _pts = Util.iterToArray( pts );
+  static intersectRay2D( circle:PtIterable, ray:PtIterable ):Group {
+    let _pts = Util.iterToArray( circle );
     let _ray = Util.iterToArray( ray );
 
     let d = _ray[0].$subtract( _ray[1] );
@@ -728,12 +728,12 @@ export class Circle {
 
   /**
    * Get the intersection points between a circle and a line segment.
-   * @param pts a Group of 2 Pts representing a circle
-   * @param line a Group of 2 Pts representing a line
+   * @param circle a Group or an Iterable<Pt> with Pt representing a circle
+   * @param line a Group or an Iterable<Pt> with 2 Pt representing a line
    * @returns a Group of intersection points, or an empty Group if no intersection is found
    */
-  static intersectLine2D( pts:PtIterable, line:PtIterable ):Group {
-    let _pts = Util.iterToArray( pts );
+  static intersectLine2D( circle:PtIterable, line:PtIterable ):Group {
+    let _pts = Util.iterToArray( circle );
     let _line = Util.iterToArray( line );
 
     let ps = Circle.intersectRay2D( _pts, _line );
@@ -749,13 +749,13 @@ export class Circle {
 
   /**
    * Get the intersection points between two circles.
-   * @param pts a Group of 2 Pts representing a circle
-   * @param circle a Group of 2 Pts representing a circle
+   * @param circle1 a Group or an Iterable<Pt> with 2 Pt representing a circle
+   * @param circle2 a Group or an Iterable<Pt> with 2 Pt representing a circle
    * @returns a Group of intersection points, or an empty Group if no intersection is found
    */
-  static intersectCircle2D( pts:PtIterable, circle:PtIterable ):Group {
-    let _pts = Util.iterToArray( pts );
-    let _circle = Util.iterToArray( circle );
+  static intersectCircle2D( circle1:PtIterable, circle2:PtIterable ):Group {
+    let _pts = Util.iterToArray( circle1 );
+    let _circle = Util.iterToArray( circle2 );
     
     let dv = _circle[0].$subtract( _pts[0] );
     let dr2 = dv.magnitudeSq();
@@ -786,12 +786,12 @@ export class Circle {
   /**
    * Quick way to check rectangle intersection with a circle. 
    * For more optimized implementation, store the rectangle's sides separately (eg, [`Rectangle.sides`](#link)) and use [`Polygon.intersectPolygon2D()`](#link).
-   * @param pts a Group of 2 Pts representing a circle
-   * @param rect a Group of 2 Pts representing a rectangle
+   * @param circle a Group or an Iterable<Pt> with 2 Pt representing a circle
+   * @param rect a Group or an Iterable<Pt> with 2 Pt representing a rectangle
    * @returns a Group of intersection points, or an empty Group if no intersection is found
    */
-  static intersectRect2D( pts:PtIterable, rect:PtIterable ):Group {
-    let _pts = Util.iterToArray( pts );
+  static intersectRect2D( circle:PtIterable, rect:PtIterable ):Group {
+    let _pts = Util.iterToArray( circle );
     let _rect = Util.iterToArray( rect );
 
     let sides = Rectangle.sides( _rect );
@@ -806,12 +806,12 @@ export class Circle {
 
   /**
    * Get a rectangle that either fits within or encloses this circle. See also [`Rectangle.toCircle`](#link)
-   * @param pts a Group of 2 Pts representing a circle
+   * @param circle a Group or an Iterable<Pt> with 2 Pt representing a circle
    * @param within if `true`, the rectangle will be within the circle. If `false`, the rectangle will enclose the circle. 
    * @returns a Group representing a rectangle
    */
-  static toRect( pts:PtIterable, within:boolean=false ):Group {
-    let _pts = Util.iterToArray( pts );
+  static toRect( circle:PtIterable, within:boolean=false ):Group {
+    let _pts = Util.iterToArray( circle );
     let r = _pts[1][0];
     if (within) {
       let half = Math.sqrt(r*r)/2;
@@ -824,11 +824,11 @@ export class Circle {
 
   /**
    * Get a triangle that fits within this circle.
-   * @param pts a Group of 2 Pts representing a circle
+   * @param circle a Group or an Iterable<Pt> with 2 Pt representing a circle
    * @param within if `true`, the triangle will be within the circle. If `false`, the triangle will enclose the circle. 
    */
-  static toTriangle( pts:PtIterable, within:boolean=true ):Group {
-    let _pts = Util.iterToArray( pts );
+  static toTriangle( circle:PtIterable, within:boolean=true ):Group {
+    let _pts = Util.iterToArray( circle );
     if (within) {
       let ang = -Math.PI/2;
       let inc = Math.PI * 2/3;
@@ -856,7 +856,7 @@ export class Triangle {
  
   /**
    * Create a triangle from a rectangle. The triangle will be isosceles, with the bottom of the rectangle as its base.
-   * @param rect a Group of 2 Pts representing a rectangle
+   * @param rect a Group or an Iterable<Pt> with 2 Pt representing a rectangle
    */
   static fromRect( rect:PtIterable ):Group {
     let _rect = Util.iterToArray( rect );
@@ -870,7 +870,7 @@ export class Triangle {
 
   /**
    * Create a triangle that fits within a circle.
-   * @param circle a Group of 2 Pts representing a circle
+   * @param circle a Group or an Iterable<Pt> with 2 Pt representing a circle
    */
   static fromCircle( circle:PtIterable ):Group {
     return Circle.toTriangle( circle, true );
@@ -889,11 +889,11 @@ export class Triangle {
 
   /**
    * Get the medial, which is an inner triangle formed by connecting the midpoints of this triangle's sides.
-   * @param pts a Group of Pts
+   * @param tri a Group or an Iterable<Pt> representing a triangle
    * @returns a Group representing a medial triangle
    */
-  static medial( pts:PtIterable ):Group {
-    let _pts = Util.iterToArray( pts );
+  static medial( tri:PtIterable ):Group {
+    let _pts = Util.iterToArray( tri );
     if (_pts.length < 3) return _errorLength( new Group(), 3 );
     return Polygon.midpoints( _pts, true );
   }
@@ -901,12 +901,12 @@ export class Triangle {
 
   /**
    * Given a point of the triangle, the opposite side is the side which the point doesn't touch.
-   * @param pts a Group of Pts
+   * @param tri a Group or an Iterable<Pt> representing a triangle
    * @param index a Pt on the triangle group
    * @returns a Group that represents a line of the opposite side
    */
-  static oppositeSide( pts:PtIterable, index:number ):Group {
-    let _pts = Util.iterToArray( pts );
+  static oppositeSide( tri:PtIterable, index:number ):Group {
+    let _pts = Util.iterToArray( tri );
     if (_pts.length < 3) return _errorLength( new Group(), 3 );
     if (index === 0) {
       return Group.fromPtArray( [_pts[1], _pts[2]] );
@@ -919,12 +919,12 @@ export class Triangle {
 
   /**
    * Get a triangle's altitude, which is a line from a triangle's point to its opposite side, and perpendicular to its opposite side.
-   * @param pts a Group of Pts
+   * @param tri a Group or an Iterable<Pt> representing a triangle
    * @param index a Pt on the triangle group
    * @returns a Group that represents the altitude line
    */
-  static altitude( pts:PtIterable, index:number ):Group {
-    let _pts = Util.iterToArray( pts );
+  static altitude( tri:PtIterable, index:number ):Group {
+    let _pts = Util.iterToArray( tri );
     let opp = Triangle.oppositeSide( _pts, index );
     if (opp.length > 1) {
       return new Group( _pts[index], Line.perpendicularFromPt( opp, _pts[index] ) ); 
@@ -935,11 +935,11 @@ export class Triangle {
 
   /**
    * Get orthocenter, which is the intersection point of a triangle's 3 altitudes (the 3 lines that are perpendicular to its 3 opposite sides).
-   * @param pts a Group of Pts
+   * @param tri a Group or an Iterable<Pt> representing a triangle
    * @returns the orthocenter as a Pt
    */
-  static orthocenter( pts:PtIterable ):Pt {
-    let _pts = Util.iterToArray( pts );
+  static orthocenter( tri:PtIterable ):Pt {
+    let _pts = Util.iterToArray( tri );
     if (_pts.length < 3) return _errorLength( undefined, 3 );
     let a = Triangle.altitude( _pts, 0 );
     let b = Triangle.altitude( _pts, 1 );
@@ -948,11 +948,11 @@ export class Triangle {
 
   /**
    * Get incenter, which is the center point of its inner circle, and also the intersection point of its 3 angle bisector lines (each of which cuts one of the 3 angles in half).
-   * @param pts a Group of Pts
+   * @param tri a Group or an Iterable<Pt> representing a triangle
    * @returns the incenter as a Pt
    */
-  static incenter( pts:PtIterable ):Pt {
-    let _pts = Util.iterToArray( pts );
+  static incenter( tri:PtIterable ):Pt {
+    let _pts = Util.iterToArray( tri );
     if (_pts.length < 3) return _errorLength( undefined, 3 );
     let a = Polygon.bisector( _pts, 0 ).add( _pts[0] );
     let b = Polygon.bisector( _pts, 1 ).add( _pts[1] );
@@ -961,11 +961,11 @@ export class Triangle {
 
   /**
    * Get an interior circle, which is the largest circle completed enclosed by this triangle.
-   * @param pts a Group of Pts
+   * @param tri a Group or an Iterable<Pt> representing a triangle
    * @param center Optional parameter if the incenter is already known. Otherwise, leave it empty and the incenter will be calculated
    */
-  static incircle( pts:PtIterable, center?:Pt ):Group {
-    let _pts = Util.iterToArray( pts );
+  static incircle( tri:PtIterable, center?:Pt ):Group {
+    let _pts = Util.iterToArray( tri );
     let c = (center) ? center : Triangle.incenter( _pts );
     let area = Polygon.area( _pts );
     let perim = Polygon.perimeter( _pts, true );
@@ -975,11 +975,11 @@ export class Triangle {
 
   /**
    * Get circumcenter, which is the intersection point of its 3 perpendicular bisectors lines ( each of which divides a side in half and is perpendicular to the side).
-   * @param pts a Group of Pts
+   * @param tri a Group or an Iterable<Pt> representing a triangle
    * @returns the circumcenter as a Pt
    */
-  static circumcenter( pts:PtIterable ):Pt {
-    let _pts = Util.iterToArray( pts );
+  static circumcenter( tri:PtIterable ):Pt {
+    let _pts = Util.iterToArray( tri );
     let md = Triangle.medial( _pts );
     let a = [ md[0], Geom.perpendicular( _pts[0].$subtract( md[0] )).p1.$add( md[0] ) ];
     let b = [ md[1], Geom.perpendicular( _pts[1].$subtract( md[1] )).p1.$add( md[1] ) ];
@@ -988,11 +988,11 @@ export class Triangle {
 
   /**
    * Get circumcenter, which is the intersection point of its 3 perpendicular bisectors lines ( each of which divides a side in half and is perpendicular to the side).
-   * @param pts a Group of Pts
+   * @param tri a Group or an Iterable<Pt> representing a triangle
    * @param center Optional parameter if the circumcenter is already known. Otherwise, leave it empty and the circumcenter will be calculated 
    */
-  static circumcircle( pts:PtIterable, center?:Pt ):Group {
-    let _pts = Util.iterToArray( pts );
+  static circumcircle( tri:PtIterable, center?:Pt ):Group {
+    let _pts = Util.iterToArray( tri );
     let c = (center) ? center : Triangle.circumcenter( _pts );
     let r = _pts[0].$subtract( c ).magnitude();
     return Circle.fromCenter( c, r );
@@ -1010,7 +1010,7 @@ export class Polygon {
 
   /**
    * Get the centroid of a polygon, which is the average of all its points.
-   * @param pts a Group of Pts representing a polygon
+   * @param pts a Group or an Iterable<PtLike> representing a polygon
    */
   static centroid( pts:PtLikeIterable ):Pt {
     return Geom.centroid( pts );
@@ -1045,8 +1045,8 @@ export class Polygon {
 
 
   /**
-   * Given a Group of Pts that defines a polygon, get one edge using an index.
-   * @param pts a Group
+   * Given a polygon, get one edge using an index.
+   * @param pts a Group or an Iterable<PtLike> representing a polygon
    * @param index index of a Pt in the Group
    */
   static lineAt( pts:PtLikeIterable, index:number ) {
@@ -1057,12 +1057,12 @@ export class Polygon {
 
   /**
    * Get the line segments in this polygon.
-   * @param pts a Group of Pts
+   * @param poly a Group or an Iterable<Pt>
    * @param closePath a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).
    * @returns an array of Groups which has 2 Pts in each group
    */
-  static lines( pts:PtIterable, closePath:boolean=true ):Group[] {
-    let _pts = Util.iterToArray( pts );
+  static lines( poly:PtIterable, closePath:boolean=true ):Group[] {
+    let _pts = Util.iterToArray( poly );
     if (_pts.length < 2) return _errorLength( new Group(), 2 );
     let sp = Util.split( _pts, 2, 1 );
     if (closePath) sp.push( new Group( _pts[_pts.length-1], _pts[0]) );
@@ -1071,24 +1071,24 @@ export class Polygon {
 
   /**
    * Get a new polygon group that is derived from midpoints in this polygon.
-   * @param pts a Group of Pts
+   * @param poly a Group or an Iterable<Pt>
    * @param closePath a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).
    * @param t a value between 0 to 1 for interpolation. Default to 0.5 which will get the middle point.
    */
-  static midpoints( pts:PtIterable, closePath:boolean=false, t:number=0.5 ):Group {
-    let sides = Polygon.lines( pts, closePath );
+  static midpoints( poly:PtIterable, closePath:boolean=false, t:number=0.5 ):Group {
+    let sides = Polygon.lines( poly, closePath );
     let mids = sides.map( (s) => Geom.interpolate( s[0], s[1], t) );
     return mids as Group;
   }
 
   /**
    * Given a Pt in the polygon group, the adjacent sides are the two sides which the Pt touches.
-   * @param pts a group of Pts
+   * @param poly a Group or an Iterable<Pt>
    * @param index the target Pt
    * @param closePath a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).
    */
-  static adjacentSides( pts:PtIterable, index:number, closePath:boolean=false ):Group[] {
-    let _pts = Util.iterToArray( pts );
+  static adjacentSides( poly:PtIterable, index:number, closePath:boolean=false ):Group[] {
+    let _pts = Util.iterToArray( poly );
     if (_pts.length < 2) return _errorLength( new Group(), 2 );
     if (index < 0 || index >= _pts.length) return _errorOutofBound( new Group(), index );
 
@@ -1107,13 +1107,13 @@ export class Polygon {
 
   /**
    * Get a bisector which is a line that split between two sides of a polygon equally. 
-   * @param pts a group of Pts
+   * @param poly a Group or an Iterable<Pt>
    * @param index the Pt in the polygon to bisect from
    * @param closePath a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).
    * @returns a bisector Pt that's a normalized unit vector
    */
-  static bisector( pts:PtIterable, index:number ):Pt {
-    let sides = Polygon.adjacentSides( pts, index, true );
+  static bisector( poly:PtIterable, index:number ):Pt {
+    let sides = Polygon.adjacentSides( poly, index, true );
     if (sides.length >= 2) {
       let a = sides[0][1].$subtract( sides[0][0] ).unit();
       let b = sides[1][1].$subtract( sides[1][0] ).unit();
@@ -1126,12 +1126,12 @@ export class Polygon {
 
   /**
    * Find the perimeter of this polygon, ie, the lengths of its sides.
-   * @param pts a group of Pts
+   * @param poly a Group or an Iterable<Pt>
    * @param closePath a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).
    * @returns an object with `total` length, and `segments` which is a Pt that stores each segment's length
    */
-  static perimeter( pts:PtIterable, closePath:boolean=false ):{total:number, segments:Pt} {
-    let lines = Polygon.lines( pts, closePath );
+  static perimeter( poly:PtIterable, closePath:boolean=false ):{total:number, segments:Pt} {
+    let lines = Polygon.lines( poly, closePath );
     let mag = 0;
     let p = Pt.make( lines.length, 0 );
 
@@ -1150,7 +1150,7 @@ export class Polygon {
   
   /**
    * Find the area of a *convex* polygon.
-   * @param pts a group of Pts
+   * @param pts a Group or an Iterable<PtLike> representing a polygon
    */
   static area( pts:PtLikeIterable ) {
     let _pts = Util.iterToArray( pts );
@@ -1171,7 +1171,7 @@ export class Polygon {
 
   /**
    * Get a convex hull of a set of points, using Melkman's algorithm. ([Reference](http://geomalgorithms.com/a12-_hull-3.html)).
-   * @param pts a group of Pt
+   * @param pts a Group or an Iterable<PtLike>
    * @param sorted a boolean value to indicate if the group is pre-sorted by x position. Default is false.
    * @returns a group of Pt that defines the convex hull polygon
    */
@@ -1237,12 +1237,12 @@ export class Polygon {
 
   /**
    * Given a point in the polygon as an origin, get an array of lines that connect all the remaining points to the origin point.
-   * @param pts a Group representing a polygon
+   * @param poly a Group or an Iterable<Pt> representing a polygon
    * @param originIndex the origin point's index in the polygon
    * @returns an array of Groups of line segments
    */
-  static network( pts:PtIterable, originIndex:number=0 ):Group[] {
-    let _pts = Util.iterToArray( pts );
+  static network( poly:PtIterable, originIndex:number=0 ):Group[] {
+    let _pts = Util.iterToArray( poly );
     let g = [];
     for (let i=0, len=_pts.length; i<len; i++) {
       if (i != originIndex) g.push( new Group( _pts[originIndex], _pts[i] ) );
@@ -1253,15 +1253,15 @@ export class Polygon {
 
   /**
    * Given a target Pt, find a Pt in the polygon's corners that's nearest to it.
-   * @param pts a Group of Pt
+   * @param poly a Group or an Iterable<Pt>
    * @param pt Pt to check
    * @returns an index in the pts indicating the nearest Pt, or -1 if none found
    */
-  static nearestPt( pts:PtIterable, pt:PtLike ):number {
+  static nearestPt( poly:PtIterable, pt:PtLike ):number {
     let _near = Number.MAX_VALUE;
     let _item = -1;
     let i = 0;
-    for (let p of pts) {
+    for (let p of poly) {
       let d = p.$subtract( pt ).magnitudeSq();
       if (d < _near) {
         _near = d;
@@ -1275,7 +1275,7 @@ export class Polygon {
 
   /**
    * Project axis (eg, for use in Separation Axis Theorem).
-   * @param poly a Group of Pt
+   * @param poly a Group or an Iterable<Pt>
    * @param unitAxis unit axis for calculating dot product
    */
   static projectAxis( poly:PtIterable, unitAxis:Pt ):Pt {
@@ -1292,8 +1292,8 @@ export class Polygon {
 
   /**
    * Check overlap distance from projected axis.
-   * @param poly1 first polygon
-   * @param poly2 second polygon
+   * @param poly1 a Group or an Iterable<Pt> representing the first polygon
+   * @param poly2 a Group or an Iterable<Pt> representing the second polygon
    * @param unitAxis unit axis
    */
   protected static _axisOverlap( poly1:PtIterable, poly2:PtIterable, unitAxis:Pt ) {
@@ -1305,7 +1305,7 @@ export class Polygon {
 
   /**
    * Check if a Pt is inside a convex polygon.
-   * @param poly a Group of Pt defining a convex polygon
+   * @param poly a Group or an Iterable<PtLike> representing a convex polygon
    * @param pt the Pt to check
    */
   static hasIntersectPoint( poly:PtLikeIterable, pt:PtLike ):boolean {
@@ -1325,8 +1325,8 @@ export class Polygon {
 
   /**
    * Check if a convex polygon and a circle has intersections using Separating Axis Theorem. 
-   * @param poly a Group representing a convex polygon
-   * @param circle a Group representing a circle
+   * @param poly a Group or an Iterable<Pt> representing a convex polygon
+   * @param circle a Group or an Iterable<Pt> representing a circle
    * @returns an `IntersectContext` object that stores the intersection info, or undefined if there's no intersection
    */
   static hasIntersectCircle( poly:PtIterable, circle:PtIterable ):IntersectContext {
@@ -1385,8 +1385,8 @@ export class Polygon {
 
   /**
    * Check if two convex polygons have intersections using Separating Axis Theorem. 
-   * @param poly1 a Group representing a convex polygon
-   * @param poly2 a Group representing a convex polygon
+   * @param poly1 a Group or an Iterable<Pt> representing a convex polygon
+   * @param poly2 a Group or an Iterable<Pt> representing another convex polygon
    * @return an `IntersectContext` object that stores the intersection info, or undefined if there's no intersection
    */
   static hasIntersectPolygon( poly1:PtIterable, poly2:PtIterable ):IntersectContext {    
@@ -1451,8 +1451,8 @@ export class Polygon {
 
   /**
    * Find intersection points of 2 polygons by checking every side of both polygons. Performance may be slow for complex polygons.
-   * @param poly1 a Group representing a polygon 
-   * @param poly2 another Group representing a polygon
+   * @param poly1 a Group or an Iterable<Pt> representing a polygon 
+   * @param poly2 a Group or an Iterable<Pt> representing another polygon
    */
   static intersectPolygon2D( poly1:PtIterable, poly2:PtIterable ):Group {
     let _poly1 = Util.iterToArray( poly1 );
@@ -1470,7 +1470,7 @@ export class Polygon {
 
   /**
    * Get a bounding box for each polygon group, as well as a union bounding-box for all groups.
-   * @param polys an array of Groups, or an array of Pt arrays
+   * @param polys an Array/Iterable of (Groups or Iterables<Pt>)
    */
   static toRects( polys:Iterable<PtIterable> ):Group[] {
     let boxes = [];
@@ -1509,7 +1509,7 @@ export class Curve {
 
   /**
    * Given an index for the starting position in a Pt group, get the control and/or end points of a curve segment.
-   * @param pts a group of Pt
+   * @param pts a Group or an Iterable<PtLike>
    * @param index start index in `pts` array. Default is 0.
    * @param copyStart an optional boolean value to indicate if the start index should be used twice. Default is false.
    * @returns a group of 4 Pts
@@ -1547,7 +1547,7 @@ export class Curve {
 
   /**
    * Create a Catmull-Rom curve. Catmull-Rom is a kind of smooth-looking Cardinal curve.
-   * @param pts a group of anchor Pt
+   * @param pts a Group or an Iterable<PtLike>
    * @param steps the number of line segments per curve. Defaults to 10 steps
    * @returns a curve as a group of interpolated Pt
    */
@@ -1606,7 +1606,7 @@ export class Curve {
 
   /**
    * Create a Cardinal curve.
-   * @param pts a group of anchor Pt
+   * @param pts a Group or an Iterable<PtLike>
    * @param steps the number of line segments per curve. Defaults to 10 steps.
    * @param tension optional value between 0 to 1 to specify a "tension". Default to 0.5 which is the tension for Catmull-Rom curve.
    * @returns a curve as a group of interpolated Pt

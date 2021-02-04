@@ -29,7 +29,7 @@ export class World {
 
   /**
    * Create a `World` for 2D physics simulation.
-   * @param bound a rectangular bounding box defined by a Group
+   * @param bound a Group or an Iterable<Pt> representing a rectangular bounding box
    * @param friction a value between 0 to 1, where 1 means no friction. Default is 1
    * @param gravity a number of a Pt to define gravitational force. A number is a shorthand to set `new Pt(0, n)`. Default is 0.
    */
@@ -240,7 +240,7 @@ export class World {
   /**
    * Static function to calculate bounding box constraints.
    * @param p particle
-   * @param rect bounding box defined by a Group
+   * @param rect a Group or an Iterable<Pt> representing a bounding box
    * @param damping damping between 0 to 1, where 1 means no damping. Default is 0.75.
    */
   static boundConstraint( p:Particle, rect:PtIterable, damping:number=0.75 ) {
@@ -554,14 +554,14 @@ export class Body extends Group {
 
   
   /**
-   * Create and populate a body with a group of Pts.
-   * @param list a group of Pts
+   * Create and populate a body.
+   * @param body a Group or an Iterable<Pt> to define the body
    * @param stiff stiffness value from 0 to 1, where 1 is the most stiff. Default is 1.
    * @param autoLink Automatically create links between the Pts. This usually works for regular convex polygons. Default is true.
    * @param autoMass Automatically calculate the mass based on the area of the polygon. Default is true.
    */
-  static fromGroup( list:PtIterable, stiff:number=1, autoLink:boolean=true, autoMass:boolean=true ):Body {
-    let b = new Body().init( list );
+  static fromGroup( body:PtIterable, stiff:number=1, autoLink:boolean=true, autoMass:boolean=true ):Body {
+    let b = new Body().init( body );
     if (autoLink) b.linkAll( stiff );
     if (autoMass) b.autoMass();
     return b;
@@ -570,12 +570,12 @@ export class Body extends Group {
 
   /**
    * Initiate a body.
-   * @param list a group of Pts
+   * @param body a Group or an Iterable<Pt> to define a body
    * @param stiff stiffness value from 0 to 1, where 1 is the most stiff. Default is 1.
    */
-  init( list:PtIterable, stiff:number=1 ):this {
+  init( body:PtIterable, stiff:number=1 ):this {
     let c = new Pt();
-    for (let li of list) {
+    for (let li of body) {
       let p = new Particle( li );
       p.body = this;
       c.add( li );

@@ -673,7 +673,7 @@ export class CanvasForm extends VisualForm {
 
     /**
      * Align text within a rectangle box.
-     * @param _box a Group that defines a rectangular box
+     * @param box a Group or an Iterable<PtLike> that defines a rectangular box
      * @param vertical a string that specifies the vertical alignment in the box: "top", "bottom", "middle", "start", "end"
      * @param offset Optional offset from the edge (like padding)
      * @param center Optional center position 
@@ -758,7 +758,7 @@ export class CanvasForm extends VisualForm {
     
     /**
     * Draw a circle. See also [`Circle.fromCenter`](#link)
-    * @param pts usually a Group of 2 Pts, but it can also take an array of two numeric arrays [ [position], [size] ]
+    * @param pts usually a Group or an Iterable<PtLike> with 2 Pt, but it can also take an array of two numeric arrays [ [position], [size] ]
     */
     circle( pts:PtLikeIterable ):this {
       let p = Util.iterToArray( pts );
@@ -870,7 +870,7 @@ export class CanvasForm extends VisualForm {
     /**
     * A static function to draw a line or polyline.
     * @param ctx canvas rendering context
-    * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
+    * @param pts a Group or an Iterable<PtLike> representing a line
     */
     static line( ctx:CanvasRenderingContext2D, pts:PtLikeIterable ) {
       if ( !Util.arrayCheck(pts) ) return;
@@ -890,7 +890,7 @@ export class CanvasForm extends VisualForm {
     
     /**
     * Draw a line or polyline.
-    * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
+    * @param pts a Group or an Iterable<PtLike> representing a line
     */
     line( pts:PtLikeIterable ):this {
       CanvasForm.line( this._ctx, pts );
@@ -902,7 +902,7 @@ export class CanvasForm extends VisualForm {
     /**
     * A static function to draw a polygon.
     * @param ctx canvas rendering context
-    * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
+    * @param pts a Group or an Iterable<PtLike> representing a polygon
     */
     static polygon( ctx:CanvasRenderingContext2D, pts:PtLikeIterable ) {
       if ( !Util.arrayCheck(pts) ) return;
@@ -913,7 +913,7 @@ export class CanvasForm extends VisualForm {
     
     /**
     * Draw a polygon.
-    * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
+    * @param pts a Group or an Iterable<PtLike> representingg a polygon
     */
     polygon( pts:PtLikeIterable ):this {
       CanvasForm.polygon( this._ctx, pts );
@@ -925,7 +925,7 @@ export class CanvasForm extends VisualForm {
     /**
     * A static function to draw a rectangle.
     * @param ctx canvas rendering context
-    * @param pts usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.
+    * @param pts a Group or an Iterable<PtLike> with 2 Pt specifying the top-left and bottom-right positions.
     */
     static rect( ctx:CanvasRenderingContext2D, pts:PtLikeIterable ) {
       let p = Util.iterToArray( pts );
@@ -942,7 +942,7 @@ export class CanvasForm extends VisualForm {
     
     /**
     * Draw a rectangle.
-    * @param pts usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.
+    * @param pts a Group or an Iterable<PtLike> with 2 Pt specifying the top-left and bottom-right positions.
     */
     rect( pts:PtLikeIterable ):this {
       CanvasForm.rect( this._ctx, pts );
@@ -955,8 +955,8 @@ export class CanvasForm extends VisualForm {
      * A static function to draw an image.
      * @param ctx canvas rendering context
      * @param img an [`ImageBitmap`](https://developer.mozilla.org/en-US/docs/Web/API/ImageBitmap) instance (eg the image from `<img>`, `<video>` or `<canvas>`)
-     * @param target a target area to place the image. Either a Pt specifying a position, or a Group that specifies a bounding box (top-left position, bottom-right position). Default is (0,0) at top-left.
-     * @param orig a Group (top-left position, bottom-right position) that specifies a cropping box  in the original target. 
+     * @param target a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left position, bottom-right position) that specifies a bounding box. Default is (0,0) at top-left.
+     * @param orig optionally a Group or an Iterable<PtLike> with 2 Pt (top-left position, bottom-right position) that specifies a cropping box in the original target. 
      */
     static image( ctx:CanvasRenderingContext2D, img:ImageBitmap, target:PtLike|PtLikeIterable=new Pt(), orig?:PtLikeIterable  ) {
       let t = Util.iterToArray( target );
@@ -979,8 +979,8 @@ export class CanvasForm extends VisualForm {
     /**
     * Draw an image.
     * @param img an [`ImageBitmap`](https://developer.mozilla.org/en-US/docs/Web/API/ImageBitmap) instance (eg the image from `<img>`, `<video>` or `<canvas>`)
-    * @param target a target area to place the image. Either a Pt specifying a position, or a Group that specifies a bounding box (top-left position, bottom-right position). Default is (0,0) at top-left.
-    * @param orig a Group (top-left position, bottom-right position) that specifies a cropping box  in the original target. 
+    * @param target a target area to place the image. Either a PtLike specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left position, bottom-right position) that specifies a bounding box. Default is (0,0) at top-left.
+    * @param orig optionally a Group or an Iterable<PtLike> with 2 Pt (top-left position, bottom-right position) that specifies a cropping box  in the original target. 
     */
     image( img:ImageBitmap, target:PtLike|PtLikeIterable=new Pt(), orig?:PtLikeIterable  ) {
       CanvasForm.image( this._ctx, img, target, orig );
@@ -1015,7 +1015,7 @@ export class CanvasForm extends VisualForm {
 
     /**
      * Fit a single-line text in a rectangular box.
-     * @param box a rectangle box defined by a Group
+     * @param box a rectangle box defined by a Group or an Iterable<Pt>
      * @param txt string of text
      * @param tail text to indicate overflow such as "...". Default is empty "".
      * @param verticalAlign "top", "middle", or "bottom" to specify vertical alignment inside the box
@@ -1033,7 +1033,7 @@ export class CanvasForm extends VisualForm {
 
     /**
      * Fit multi-line text in a rectangular box. Note that this will also set canvas context's textBaseline to "top".
-     * @param box a rectangle box defined by a Group
+     * @param box a Group or an Iterable<PtLike> with 2 Pt that represents a bounding box
      * @param txt string of text
      * @param lineHeight line height as a ratio of font size. Default is 1.2.
      * @param verticalAlign "top", "middle", or "bottom" to specify vertical alignment inside the box

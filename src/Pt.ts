@@ -611,8 +611,8 @@ export class Group extends Array<Pt> {
 
 
   /**
-   * Convert an array of numeric arrays into a Group of Pts.
-   * @param list an array or iterable of numeric arrays
+   * Convert an array of numeric arrays into a Group.
+   * @param list an Iterable<PtLike> such as an array or a generator (of PtLike numeric arrays)
    * @example `Group.fromArray( [[1,2], [3,4], [5,6]] )`
    */
   static fromArray( list:PtLikeIterable ):Group {
@@ -626,8 +626,8 @@ export class Group extends Array<Pt> {
 
 
   /**
-   * Convert an array of Pts into a Group.
-   * @param list an array of Pts
+   * Convert an Array/Iterable of Pt into a Group.
+   * @param list an Iterable<Pt>
    */
   static fromPtArray( list:PtIterable ):Group {
     return Group.from( list ) as Group;
@@ -647,8 +647,8 @@ export class Group extends Array<Pt> {
 
 
   /**
-   * Insert a Pt into this group.
-   * @param pts Another group of Pts
+   * Insert more Pt into this group.
+   * @param pts a Group or an Iterable<Pt>
    * @param index the index position to insert into
    */
   insert( pts:PtIterable, index=0 ):this {
@@ -822,7 +822,7 @@ export class Group extends Array<Pt> {
 
   /**
    * Reflect this group's Pts along a 2D line. Default anchor point is the first Pt in this group.
-   * @param line a Group of 2 Pts that defines a line for reflection
+   * @param line a Group or an Iterable<PtLike> with 2 Pt that defines a line for reflection
    * @param axis optional axis such as "yz" to define a 2D plane of reflection
    */
   reflect2D( line:PtLikeIterable, axis?:string):this {
@@ -988,7 +988,7 @@ export class Bound extends Group implements IPt {
 
   /**
    * Create a Bound from a Group or an array of Pts
-   * @param g a Group instance or an array of Pts
+   * @param g a Group or an Iterable<PtLike>
    */
   static fromGroup( g:PtLikeIterable ):Bound {
     let _g = Util.iterToArray( g );

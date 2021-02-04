@@ -4,7 +4,7 @@ import {MultiTouchSpace} from './Space';
 import {Form, VisualForm, Font} from "./Form";
 import {Util} from './Util';
 import {Pt, Bound} from './Pt';
-import {PtLike, GroupLike, PtIterable, IPlayer, DOMFormContext, PtLikeIterable} from "./Types";
+import {PtLike, GroupLike, IPlayer, DOMFormContext, PtLikeIterable} from "./Types";
 
 
 
@@ -759,7 +759,7 @@ export class HTMLForm extends VisualForm {
   /**
   * A static function to draw a rectangle.
   * @param ctx a context object of HTMLForm
-  * @param pts usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.
+  * @param pts a Group or an Iterable<PtLike> with 2 Pt specifying the top-left and bottom-right positions.
   */
   static rect( ctx:DOMFormContext, pts:PtLikeIterable ):Element {
     let p = Util.iterToArray( pts );
@@ -775,7 +775,7 @@ export class HTMLForm extends VisualForm {
 
   /**
   * Draw a rectangle.
-  * @param pts usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.
+  * @param pts a Group or an Iterable<PtLike> with 2 Pt specifying the top-left and bottom-right positions.
   */
   rect( pts:PtLikeIterable ):this {
     this.nextID();

@@ -43,7 +43,7 @@ export class Typography {
 
   /**
    * Get a function to scale font size proportionally to text box size changes.
-   * @param box Initial box as a Group
+   * @param box a Group or an Iterable<PtLike> representing the initial box
    * @param ratio font-size change ratio. Default is 1.
    * @returns a function where input parameter is a new box, and returns the new font size value
    */

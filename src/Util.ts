@@ -337,11 +337,12 @@ export class Util {
 
   /**
    * Check number of items in a Group against a required number
-   * @param pts 
+   * @param pts a Group or an Iterable<PtLike> 
+   * @param minRequired minimum number of items required
    */
-  static arrayCheck( pts:PtLikeIterable, required:number=2 ):boolean {
-    if (Array.isArray(pts) && pts.length < required) {
-      Util.warn( "Requires 2 or more Pts in this Group." );
+  static arrayCheck( pts:PtLikeIterable, minRequired:number=2 ):boolean {
+    if (Array.isArray(pts) && pts.length < minRequired) {
+      Util.warn( `Requires ${minRequired} or more Pts in this Group.` );
       return false;
     } 
     return true;
