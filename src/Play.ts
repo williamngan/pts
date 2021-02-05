@@ -345,6 +345,10 @@ export class Sound {
    */
   get node():AudioNode { return this._node; }
 
+  /**
+   * Get this Sound's Output node AudioNode instance for advanced use-cases.
+   */
+  get outputNode():AudioNode { return this._outputNode; }
 
   /**
    * Get this Sound's MediaStream (eg, from microphone, if in use) instance for advanced use-cases. See [`Sound.input`](#link)
@@ -442,11 +446,10 @@ export class Sound {
   /**
    * Sets the 'output' node for this Sound
    * This would typically be used after Sound.connect, if you are adding nodes
-   * in your chain for filtering purposes
+   * in your chain for filtering purposes.
    * @param  outputNode The AudioNode that should connect to the AudioContext
    */
-  setOuputNode(outputNode: AudioNode):this {
-    this.reset();
+  setOutputNode(outputNode: AudioNode):this {
     this._outputNode = outputNode;
     return this;
   }
@@ -457,7 +460,6 @@ export class Sound {
    * Note: if you start the Sound after calling this, it will play via the default node
    */
   removeOutputNode():this {
-    this.reset();
     this._outputNode = null;
     return this;
   }
@@ -584,7 +586,7 @@ export class Sound {
       if (this.analyzer) this._node.connect( this.analyzer.node );
     }
 
-    this._node.connect( this._ctx.destination );
+    (this._outputNode || this._node).connect( this._ctx.destination );
     this._playing = true;
     return this;
   }
@@ -595,7 +597,7 @@ export class Sound {
    */
   stop():this {
 
-    if (this._playing) this._node.disconnect( this._ctx.destination );
+    if (this._playing) (this._outputNode || this._node).disconnect( this._ctx.destination );
 
     if (this._type === "file") {
       if (!!this._buffer) {
