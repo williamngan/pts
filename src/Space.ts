@@ -305,8 +305,8 @@ export abstract class MultiTouchSpace extends Space {
   * @param evt an event string such as "mousedown"
   * @param callback callback function for this event
   */
-  bindCanvas(evt:string, callback:EventListener) {
-    this._canvas.addEventListener( evt, callback );
+  bindCanvas(evt:string, callback:EventListener, options:any={} ) {
+    this._canvas.addEventListener( evt, callback, options );
   }
   
   
@@ -358,9 +358,9 @@ export abstract class MultiTouchSpace extends Space {
   */
   bindTouch( _bind:boolean=true ):this {
     if (_bind) {
-      this.bindCanvas( "touchstart", this._touchStart.bind(this) );
+      this.bindCanvas( "touchstart", this._touchStart.bind(this), {passive: true} );
       this.bindCanvas( "touchend", this._mouseUp.bind(this) );
-      this.bindCanvas( "touchmove", this._touchMove.bind(this) );
+      this.bindCanvas( "touchmove", this._touchMove.bind(this), {passive: true}  );
       this.bindCanvas( "touchcancel", this._mouseOut.bind(this) );
       this._hasTouch = true;
     } else {
