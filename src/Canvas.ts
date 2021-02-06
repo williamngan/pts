@@ -6,6 +6,7 @@ import {Pt, Group, Bound} from "./Pt";
 import {Const, Util} from "./Util";
 import {Typography as Typo} from "./Typography";
 import { Rectangle } from './Op';
+import {Img} from './Image';
 import {PtLike, GroupLike, PtsCanvasRenderingContext2D, DefaultFormStyle, PtLikeIterable, PtIterable} from "./Types";
 
 
@@ -955,23 +956,35 @@ export class CanvasForm extends VisualForm {
      * A static function to draw an image.
      * @param ctx canvas rendering context
      * @param img an [`ImageBitmap`](https://developer.mozilla.org/en-US/docs/Web/API/ImageBitmap) instance (eg the image from `<img>`, `<video>` or `<canvas>`)
-     * @param target a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left position, bottom-right position) that specifies a bounding box. Default is (0,0) at top-left.
-     * @param orig optionally a Group or an Iterable<PtLike> with 2 Pt (top-left position, bottom-right position) that specifies a cropping box in the original target. 
+     * @param target a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a bounding box for resizing. Default is (0,0) at top-left.
+     * @param orig optionally a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a cropping box in the original target. 
      */
-    static image( ctx:CanvasRenderingContext2D, img:ImageBitmap, target:PtLike|PtLikeIterable=new Pt(), orig?:PtLikeIterable  ) {
+    static image( ctx:CanvasRenderingContext2D, img:CanvasImageSource|Img, target:PtLike|PtLikeIterable=new Pt(), orig?:PtLikeIterable  ) {
       let t = Util.iterToArray( target );
-      if (typeof t[0] === "number") {
-        ctx.drawImage( img, t[0] as number, t[1] as number );
+      let pos:number[];
+
+      if (typeof t[0] === "number") { // no crop
+        pos = t as number[];
+
       } else {
-        if (orig) { 
+        if (orig) { // crop
           let o = Util.iterToArray( orig );
-          ctx.drawImage( 
-            img, o[0][0], o[0][1], o[1][0]-o[0][0], o[1][1]-o[0][1],
-            t[0][0], t[0][1], t[1][0]-t[0][0], t[1][1]-t[0][1], 
-          );
-        } else {
-          ctx.drawImage( img, t[0][0], t[0][1], t[1][0]-t[0][0], t[1][1]-t[0][1] );
+          pos = [o[0][0], o[0][1], o[1][0]-o[0][0], o[1][1]-o[0][1], 
+                 t[0][0], t[0][1], t[1][0]-t[0][0], t[1][1]-t[0][1]];
+
+        } else { // bounding box resize
+          pos = [t[0][0], t[0][1], t[1][0]-t[0][0], t[1][1]-t[0][1]];
+        } 
+      }
+
+      if (img instanceof Img) {
+        if (img.loaded) {
+          // @ts-ignore
+          ctx.drawImage( img.image, ...pos);
         }
+      } else {
+        // @ts-ignore
+        ctx.drawImage( img, ...pos );
       }
     }
     
@@ -982,8 +995,14 @@ export class CanvasForm extends VisualForm {
     * @param target a target area to place the image. Either a PtLike specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left position, bottom-right position) that specifies a bounding box. Default is (0,0) at top-left.
     * @param orig optionally a Group or an Iterable<PtLike> with 2 Pt (top-left position, bottom-right position) that specifies a cropping box  in the original target. 
     */
-    image( img:ImageBitmap, target:PtLike|PtLikeIterable=new Pt(), orig?:PtLikeIterable  ) {
-      CanvasForm.image( this._ctx, img, target, orig );
+    image( img:CanvasImageSource|Img, target:PtLike|PtLikeIterable=new Pt(), orig?:PtLikeIterable  ) {
+      if (img instanceof Img) {
+        if (img.loaded) {
+          CanvasForm.image( this._ctx, img.image, target, orig );
+        }
+      } else {
+        CanvasForm.image( this._ctx, img, target, orig );
+      }
       return this;
     }
       
