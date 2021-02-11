@@ -723,8 +723,41 @@ export class CanvasForm extends VisualForm {
       if (this._filled) this._ctx.fill();
       if (this._stroked) this._ctx.stroke();
     }
+
+
+    /**
+     * A convenient static function to wrap canvas drawing functions. Use this in combination with other static CanvasForm functions such as `CanvasForm.rect`.
+     * @param ctx canvas rendering context
+     * @param fn the drawing function. You can use other static CanvasForm functions (rect, circle, etc) within this function.
+     * @param fill optional fill value
+     * @param stroke optional stroke value
+     * @param strokeWidth optional stroke width
+     */
+    static paint( ctx:CanvasRenderingContext2D, fn:(ctx) => {}, fill?:string, stroke?:string, strokeWidth?:number ) {
+      if (fill) ctx.fillStyle = fill;
+      if (stroke) ctx.strokeStyle = stroke;
+      if (strokeWidth) ctx.lineWidth = strokeWidth;
+      fn(ctx);
+      ctx.fill();
+      ctx.stroke();
+    }
     
+
+    /**
+    * A static function to draw a point.
+    * @param ctx canvas rendering context
+    * @param p a Pt object
+    * @param radius radius of the point. Default is 5.
+    * @param shape The shape of the point. Defaults to "square", but it can be "circle" or a custom shape function in your own implementation.
+    * @example `form.point( p )`, `form.point( p, 10, "circle" )`
+    */
+    static point( ctx:CanvasRenderingContext2D, p:PtLike, radius:number=5, shape:string="square" ) {
+      if (!p) return;
+      if (!CanvasForm[shape]) throw new Error(`${shape} is not a static function of CanvasForm`);
+      CanvasForm[shape]( ctx, p, radius );
+    }
     
+
     /**
     * Draws a point.
     * @param p a Pt object
@@ -733,12 +766,8 @@ export class CanvasForm extends VisualForm {
     * @example `form.point( p )`, `form.point( p, 10, "circle" )`
     */
     point( p:PtLike, radius:number=5, shape:string="square" ):this {
-      if (!p) return;
-      if (!CanvasForm[shape]) throw new Error(`${shape} is not a static function of CanvasForm`);
-      
-      CanvasForm[shape]( this._ctx, p, radius );
+      CanvasForm.point( this._ctx, p, radius, shape );
       this._paint();
-      
       return this;
     }
     
@@ -956,11 +985,11 @@ export class CanvasForm extends VisualForm {
      * A static function to draw an image.
      * @param ctx canvas rendering context
      * @param img an [`ImageBitmap`](https://developer.mozilla.org/en-US/docs/Web/API/ImageBitmap) instance (eg the image from `<img>`, `<video>` or `<canvas>`)
-     * @param target a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a bounding box for resizing. Default is (0,0) at top-left.
+     * @param ptOrRect a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a bounding box for resizing. Default is (0,0) at top-left.
      * @param orig optionally a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a cropping box in the original target. 
      */
-    static image( ctx:CanvasRenderingContext2D, img:CanvasImageSource|Img, target:PtLike|PtLikeIterable=new Pt(), orig?:PtLikeIterable  ) {
-      let t = Util.iterToArray( target );
+    static image( ctx:CanvasRenderingContext2D, ptOrRect:PtLike|PtLikeIterable, img:CanvasImageSource|Img, orig?:PtLikeIterable  ) {
+      let t = Util.iterToArray( ptOrRect );
       let pos:number[];
 
       if (typeof t[0] === "number") { // no crop
@@ -992,17 +1021,44 @@ export class CanvasForm extends VisualForm {
     /**
     * Draw an image.
     * @param img an [`ImageBitmap`](https://developer.mozilla.org/en-US/docs/Web/API/ImageBitmap) instance (eg the image from `<img>`, `<video>` or `<canvas>`)
-    * @param target a target area to place the image. Either a PtLike specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left position, bottom-right position) that specifies a bounding box. Default is (0,0) at top-left.
+    * @param ptOrRect a target area to place the image. Either a PtLike specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left position, bottom-right position) that specifies a bounding box. Default is (0,0) at top-left.
     * @param orig optionally a Group or an Iterable<PtLike> with 2 Pt (top-left position, bottom-right position) that specifies a cropping box  in the original target. 
     */
-    image( img:CanvasImageSource|Img, target:PtLike|PtLikeIterable=new Pt(), orig?:PtLikeIterable  ) {
+    image( ptOrRect:PtLike|PtLikeIterable, img:CanvasImageSource|Img, orig?:PtLikeIterable  ) {
       if (img instanceof Img) {
         if (img.loaded) {
-          CanvasForm.image( this._ctx, img.image, target, orig );
+          CanvasForm.image( this._ctx, ptOrRect, img.image, orig );
         }
       } else {
-        CanvasForm.image( this._ctx, img, target, orig );
+        CanvasForm.image( this._ctx, ptOrRect, img, orig );
       }
+      return this;
+    }
+
+
+    /**
+     * A static function to draw ImageData on canvas
+     * @param ctx canvas rendering context
+     * @param ptOrRect a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a bounding box for resizing. Default is (0,0) at top-left.
+     * @param img an ImageData object
+     */
+    static imageData( ctx:CanvasRenderingContext2D, ptOrRect:PtLike|PtLikeIterable, img:ImageData) {
+      let t = Util.iterToArray( ptOrRect );
+      if (typeof t[0] === "number") { // Pt
+        ctx.putImageData( img, t[0], t[1]);
+      } else { // rect
+        ctx.putImageData( img, t[0][0], t[0][1], t[0][0], t[0][1], t[1][0], t[1][1]);
+      }
+    }
+
+
+    /**
+     * Draw ImageData on canvas using ImageData
+     * @param ptOrRect a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a bounding box for resizing. Default is (0,0) at top-left.
+     * @param img an ImageData object
+     */
+    imageData( ptOrRect:PtLike|PtLikeIterable, img:ImageData ) {
+      CanvasForm.imageData( this._ctx, ptOrRect, img);
       return this;
     }
       
