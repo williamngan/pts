@@ -3,12 +3,12 @@
   "source": [
     [
       "Types.ts",
-      173,
+      185,
       27
     ]
   ],
   "kind": "Typealias",
-  "id": 1624,
+  "id": 1626,
   "comment": "Typescript only: the return type of `tempo.every(...)`",
   "constructor": [],
   "accessors": [],

@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 5542,
+  "id": 5616,
   "comment": "**[Experimental]** HTMLForm is an implementation of abstract class [`VisualForm`](#link). It provide methods to express Pts on [`HTMLSpace`](#link). Note that this is currently experimental and may change in future.",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           35
         ]
       ],
-      "id": 5570,
+      "id": 5644,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -48,11 +48,11 @@
       "source": [
         [
           "Form.ts",
-          65,
+          53,
           17
         ]
       ],
-      "id": 5706,
+      "id": 5780,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.currentFont",
@@ -67,16 +67,16 @@
       "source": [
         [
           "Form.ts",
-          49,
+          37,
           12
         ],
         [
           "Form.ts",
-          50,
+          38,
           12
         ]
       ],
-      "id": 5696,
+      "id": 5770,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.filled",
@@ -103,7 +103,7 @@
           11
         ]
       ],
-      "id": 5742,
+      "id": 5816,
       "flags": {},
       "overrides": false,
       "inherits": "Form.ready",
@@ -122,7 +122,7 @@
           11
         ]
       ],
-      "id": 5573,
+      "id": 5647,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -137,16 +137,16 @@
       "source": [
         [
           "Form.ts",
-          57,
+          45,
           13
         ],
         [
           "Form.ts",
-          58,
+          46,
           13
         ]
       ],
-      "id": 5701,
+      "id": 5775,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.stroked",
@@ -175,7 +175,7 @@
           7
         ]
       ],
-      "id": 5580,
+      "id": 5654,
       "flags": {},
       "overrides": "VisualForm.alpha",
       "inherits": false,
@@ -206,11 +206,11 @@
       "source": [
         [
           "Dom.ts",
-          832,
+          833,
           5
         ]
       ],
-      "id": 5682,
+      "id": 5756,
       "flags": {},
       "overrides": "VisualForm.arc",
       "inherits": false,
@@ -264,7 +264,7 @@
           8
         ]
       ],
-      "id": 5651,
+      "id": 5725,
       "flags": {},
       "overrides": "VisualForm.circle",
       "inherits": false,
@@ -295,11 +295,11 @@
       "source": [
         [
           "Form.ts",
-          173,
+          161,
           9
         ]
       ],
-      "id": 5727,
+      "id": 5801,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.circles",
@@ -329,7 +329,7 @@
           5
         ]
       ],
-      "id": 5595,
+      "id": 5669,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -364,7 +364,7 @@
           6
         ]
       ],
-      "id": 5583,
+      "id": 5657,
       "flags": {},
       "overrides": "VisualForm.fill",
       "inherits": false,
@@ -395,11 +395,11 @@
       "source": [
         [
           "Form.ts",
-          105,
+          93,
           10
         ]
       ],
-      "id": 5713,
+      "id": 5787,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.fillOnly",
@@ -429,7 +429,7 @@
           10
         ]
       ],
-      "id": 5592,
+      "id": 5666,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -464,7 +464,7 @@
           6
         ]
       ],
-      "id": 5598,
+      "id": 5672,
       "flags": {},
       "overrides": "VisualForm.font",
       "inherits": false,
@@ -519,11 +519,11 @@
       "source": [
         [
           "Dom.ts",
-          841,
+          842,
           6
         ]
       ],
-      "id": 5689,
+      "id": 5763,
       "flags": {},
       "overrides": "VisualForm.line",
       "inherits": false,
@@ -549,11 +549,11 @@
       "source": [
         [
           "Form.ts",
-          209,
+          197,
           7
         ]
       ],
-      "id": 5733,
+      "id": 5807,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.lines",
@@ -579,11 +579,11 @@
       "source": [
         [
           "Dom.ts",
-          823,
+          824,
           5
         ]
       ],
-      "id": 5679,
+      "id": 5753,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -613,7 +613,7 @@
           8
         ]
       ],
-      "id": 5614,
+      "id": 5688,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -636,7 +636,7 @@
           7
         ]
       ],
-      "id": 5641,
+      "id": 5715,
       "flags": {},
       "overrides": "VisualForm.point",
       "inherits": false,
@@ -679,11 +679,11 @@
       "source": [
         [
           "Form.ts",
-          151,
+          139,
           8
         ]
       ],
-      "id": 5722,
+      "id": 5796,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.points",
@@ -721,11 +721,11 @@
       "source": [
         [
           "Dom.ts",
-          851,
+          852,
           9
         ]
       ],
-      "id": 5692,
+      "id": 5766,
       "flags": {},
       "overrides": "VisualForm.polygon",
       "inherits": false,
@@ -751,11 +751,11 @@
       "source": [
         [
           "Form.ts",
-          225,
+          213,
           10
         ]
       ],
-      "id": 5736,
+      "id": 5810,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.polygons",
@@ -781,11 +781,11 @@
       "source": [
         [
           "Dom.ts",
-          779,
+          780,
           6
         ]
       ],
-      "id": 5667,
+      "id": 5741,
       "flags": {},
       "overrides": "VisualForm.rect",
       "inherits": false,
@@ -797,8 +797,8 @@
           "parameters": [
             {
               "name": "pts",
-              "comment": "usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.\n",
-              "type": "number[][] | Pt[]",
+              "comment": "a Group or an Iterable<PtLike> with 2 Pt specifying the top-left and bottom-right positions.\n",
+              "type": "PtLikeIterable",
               "default": false
             }
           ],
@@ -811,11 +811,11 @@
       "source": [
         [
           "Form.ts",
-          242,
+          230,
           7
         ]
       ],
-      "id": 5739,
+      "id": 5813,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.rects",
@@ -845,7 +845,7 @@
           7
         ]
       ],
-      "id": 5605,
+      "id": 5679,
       "flags": {},
       "overrides": "VisualForm.reset",
       "inherits": false,
@@ -868,7 +868,7 @@
           7
         ]
       ],
-      "id": 5611,
+      "id": 5685,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -898,7 +898,7 @@
           8
         ]
       ],
-      "id": 5659,
+      "id": 5733,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -930,11 +930,11 @@
       "source": [
         [
           "Form.ts",
-          182,
+          170,
           9
         ]
       ],
-      "id": 5730,
+      "id": 5804,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.squares",
@@ -964,7 +964,7 @@
           8
         ]
       ],
-      "id": 5586,
+      "id": 5660,
       "flags": {},
       "overrides": "VisualForm.stroke",
       "inherits": false,
@@ -1013,11 +1013,11 @@
       "source": [
         [
           "Form.ts",
-          130,
+          118,
           12
         ]
       ],
-      "id": 5716,
+      "id": 5790,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.strokeOnly",
@@ -1065,7 +1065,7 @@
           19
         ]
       ],
-      "id": 5575,
+      "id": 5649,
       "flags": {
         "isProtected": true
       },
@@ -1105,11 +1105,11 @@
       "source": [
         [
           "Dom.ts",
-          812,
+          813,
           6
         ]
       ],
-      "id": 5675,
+      "id": 5749,
       "flags": {},
       "overrides": "VisualForm.text",
       "inherits": false,
@@ -1145,7 +1145,7 @@
           13
         ]
       ],
-      "id": 5607,
+      "id": 5681,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1181,7 +1181,7 @@
           15
         ]
       ],
-      "id": 5646,
+      "id": 5720,
       "flags": {
         "isStatic": true
       },
@@ -1225,7 +1225,7 @@
           14
         ]
       ],
-      "id": 5616,
+      "id": 5690,
       "flags": {
         "isStatic": true
       },
@@ -1257,7 +1257,7 @@
           14
         ]
       ],
-      "id": 5635,
+      "id": 5709,
       "flags": {
         "isStatic": true
       },
@@ -1312,7 +1312,7 @@
           13
         ]
       ],
-      "id": 5663,
+      "id": 5737,
       "flags": {
         "isStatic": true
       },
@@ -1332,8 +1332,8 @@
             },
             {
               "name": "pts",
-              "comment": "usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.\n",
-              "type": "GroupLike | number[][]",
+              "comment": "a Group or an Iterable<PtLike> with 2 Pt specifying the top-left and bottom-right positions.\n",
+              "type": "PtLikeIterable",
               "default": false
             }
           ],
@@ -1350,7 +1350,7 @@
           18
         ]
       ],
-      "id": 5626,
+      "id": 5700,
       "flags": {
         "isStatic": true
       },
@@ -1394,7 +1394,7 @@
           16
         ]
       ],
-      "id": 5619,
+      "id": 5693,
       "flags": {
         "isStatic": true
       },
@@ -1426,7 +1426,7 @@
           15
         ]
       ],
-      "id": 5654,
+      "id": 5728,
       "flags": {
         "isStatic": true
       },
@@ -1470,7 +1470,7 @@
           14
         ]
       ],
-      "id": 5622,
+      "id": 5696,
       "flags": {
         "isStatic": true
       },
@@ -1509,11 +1509,11 @@
       "source": [
         [
           "Dom.ts",
-          794,
+          795,
           13
         ]
       ],
-      "id": 5670,
+      "id": 5744,
       "flags": {
         "isStatic": true
       },
@@ -1557,7 +1557,7 @@
           18
         ]
       ],
-      "id": 5631,
+      "id": 5705,
       "flags": {
         "isStatic": true
       },
@@ -1598,7 +1598,7 @@
           14
         ]
       ],
-      "id": 5567,
+      "id": 5641,
       "flags": {
         "isStatic": true
       },
@@ -1616,7 +1616,7 @@
           16
         ]
       ],
-      "id": 5566,
+      "id": 5640,
       "flags": {
         "isStatic": true
       },

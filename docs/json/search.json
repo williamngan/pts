@@ -138,6 +138,12 @@
     8
   ],
   [
+    "Canvas_CanvasForm#function_imageData",
+    "CanvasForm.imageData",
+    "Function",
+    8
+  ],
+  [
     "Canvas_CanvasForm#function_line",
     "CanvasForm.line",
     "Function",
@@ -276,8 +282,26 @@
     8
   ],
   [
+    "Canvas_CanvasForm#function_imageData",
+    "CanvasForm.imageData",
+    "Function",
+    8
+  ],
+  [
     "Canvas_CanvasForm#function_line",
     "CanvasForm.line",
+    "Function",
+    8
+  ],
+  [
+    "Canvas_CanvasForm#function_paint",
+    "CanvasForm.paint",
+    "Function",
+    8
+  ],
+  [
+    "Canvas_CanvasForm#function_point",
+    "CanvasForm.point",
     "Function",
     8
   ],
@@ -3498,6 +3522,102 @@
     0
   ],
   [
+    "Image_Img#constructor_constructor",
+    "Img.constructor",
+    "Constructor",
+    10
+  ],
+  [
+    "Image_Img#accessor_canvas",
+    "Img.canvas",
+    "Accessor",
+    6
+  ],
+  [
+    "Image_Img#accessor_ctx",
+    "Img.ctx",
+    "Accessor",
+    6
+  ],
+  [
+    "Image_Img#accessor_data",
+    "Img.data",
+    "Accessor",
+    6
+  ],
+  [
+    "Image_Img#accessor_image",
+    "Img.image",
+    "Accessor",
+    6
+  ],
+  [
+    "Image_Img#accessor_loaded",
+    "Img.loaded",
+    "Accessor",
+    6
+  ],
+  [
+    "Image_Img#accessor_pixelScale",
+    "Img.pixelScale",
+    "Accessor",
+    6
+  ],
+  [
+    "Image_Img#function_bitmap",
+    "Img.bitmap",
+    "Function",
+    8
+  ],
+  [
+    "Image_Img#function_crop",
+    "Img.crop",
+    "Function",
+    8
+  ],
+  [
+    "Image_Img#function_load",
+    "Img.load",
+    "Function",
+    8
+  ],
+  [
+    "Image_Img#function_pixel",
+    "Img.pixel",
+    "Function",
+    8
+  ],
+  [
+    "Image_Img#function_sync",
+    "Img.sync",
+    "Function",
+    8
+  ],
+  [
+    "Image_Img#function_toBase64",
+    "Img.toBase64",
+    "Function",
+    8
+  ],
+  [
+    "Image_Img#function_fromBlob",
+    "Img.fromBlob",
+    "Function",
+    8
+  ],
+  [
+    "Image_Img#function_getPixel",
+    "Img.getPixel",
+    "Function",
+    8
+  ],
+  [
+    "Image_Img",
+    "Img",
+    "Class",
+    0
+  ],
+  [
     "LinearAlgebra_Mat#function_add",
     "Mat.add",
     "Function",
@@ -5922,6 +6042,12 @@
     6
   ],
   [
+    "Play_Sound#accessor_outputNode",
+    "Sound.outputNode",
+    "Accessor",
+    6
+  ],
+  [
     "Play_Sound#accessor_playable",
     "Sound.playable",
     "Accessor",
@@ -5994,8 +6120,20 @@
     8
   ],
   [
+    "Play_Sound#function_removeOutputNode",
+    "Sound.removeOutputNode",
+    "Function",
+    8
+  ],
+  [
     "Play_Sound#function_reset",
     "Sound.reset",
+    "Function",
+    8
+  ],
+  [
+    "Play_Sound#function_setOutputNode",
+    "Sound.setOutputNode",
     "Function",
     8
   ],
@@ -8208,6 +8346,12 @@
     8
   ],
   [
+    "Svg_SVGForm#function_pointsString",
+    "SVGForm.pointsString",
+    "Function",
+    8
+  ],
+  [
     "Svg_SVGForm#function_polygon",
     "SVGForm.polygon",
     "Function",
@@ -9144,8 +9288,20 @@
     0
   ],
   [
+    "Types_PtIterable",
+    "PtIterable",
+    "Type alias",
+    0
+  ],
+  [
     "Types_PtLike",
     "PtLike",
+    "Type alias",
+    0
+  ],
+  [
+    "Types_PtLikeIterable",
+    "PtLikeIterable",
     "Type alias",
     0
   ],
@@ -9744,6 +9900,12 @@
     0
   ],
   [
+    "Util_Util#function_arrayCheck",
+    "Util.arrayCheck",
+    "Function",
+    8
+  ],
+  [
     "Util_Util#function_combine",
     "Util.combine",
     "Function",
@@ -9768,14 +9930,8 @@
     8
   ],
   [
-    "Util_Util#function_iterFromPt",
-    "Util.iterFromPt",
-    "Function",
-    8
-  ],
-  [
-    "Util_Util#function_iterFromPtLike",
-    "Util.iterFromPtLike",
+    "Util_Util#function_iterToArray",
+    "Util.iterToArray",
     "Function",
     8
   ],

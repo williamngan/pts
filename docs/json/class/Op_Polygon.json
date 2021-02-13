@@ -3,7 +3,7 @@
   "source": [
     [
       "Op.ts",
-      945,
+      1009,
       20
     ]
   ],
@@ -18,7 +18,7 @@
       "source": [
         [
           "Op.ts",
-          1025,
+          1090,
           22
         ]
       ],
@@ -35,9 +35,9 @@
           "returns_comment": false,
           "parameters": [
             {
-              "name": "pts",
-              "comment": "a group of Pts",
-              "type": "GroupLike",
+              "name": "poly",
+              "comment": "a Group or an Iterable<Pt>",
+              "type": "PtIterable",
               "default": false
             },
             {
@@ -62,7 +62,7 @@
       "source": [
         [
           "Op.ts",
-          1091,
+          1155,
           13
         ]
       ],
@@ -80,8 +80,8 @@
           "parameters": [
             {
               "name": "pts",
-              "comment": "a group of Pts\n",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<PtLike> representing a polygon\n",
+              "type": "PtLikeIterable",
               "default": false
             }
           ],
@@ -94,7 +94,7 @@
       "source": [
         [
           "Op.ts",
-          1049,
+          1115,
           17
         ]
       ],
@@ -111,9 +111,9 @@
           "returns_comment": "a bisector Pt that's a normalized unit vector\n",
           "parameters": [
             {
-              "name": "pts",
-              "comment": "a group of Pts",
-              "type": "GroupLike",
+              "name": "poly",
+              "comment": "a Group or an Iterable<Pt>",
+              "type": "PtIterable",
               "default": false
             },
             {
@@ -132,7 +132,7 @@
       "source": [
         [
           "Op.ts",
-          951,
+          1015,
           17
         ]
       ],
@@ -150,8 +150,8 @@
           "parameters": [
             {
               "name": "pts",
-              "comment": "a Group of Pts representing a polygon\n",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<PtLike> representing a polygon\n",
+              "type": "PtLikeIterable",
               "default": false
             }
           ],
@@ -164,7 +164,7 @@
       "source": [
         [
           "Op.ts",
-          1113,
+          1178,
           19
         ]
       ],
@@ -182,8 +182,8 @@
           "parameters": [
             {
               "name": "pts",
-              "comment": "a group of Pt",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<PtLike>",
+              "type": "PtLikeIterable",
               "default": false
             },
             {
@@ -202,7 +202,7 @@
       "source": [
         [
           "Op.ts",
-          973,
+          1037,
           19
         ]
       ],
@@ -246,7 +246,7 @@
       "source": [
         [
           "Op.ts",
-          1262,
+          1332,
           27
         ]
       ],
@@ -264,14 +264,14 @@
           "parameters": [
             {
               "name": "poly",
-              "comment": "a Group representing a convex polygon",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<Pt> representing a convex polygon",
+              "type": "PtIterable",
               "default": false
             },
             {
               "name": "circle",
-              "comment": "a Group representing a circle",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<Pt> representing a circle",
+              "type": "PtIterable",
               "default": false
             }
           ],
@@ -284,7 +284,7 @@
       "source": [
         [
           "Op.ts",
-          1241,
+          1311,
           26
         ]
       ],
@@ -302,8 +302,8 @@
           "parameters": [
             {
               "name": "poly",
-              "comment": "a Group of Pt defining a convex polygon",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<PtLike> representing a convex polygon",
+              "type": "PtLikeIterable",
               "default": false
             },
             {
@@ -322,7 +322,7 @@
       "source": [
         [
           "Op.ts",
-          1319,
+          1392,
           28
         ]
       ],
@@ -340,14 +340,14 @@
           "parameters": [
             {
               "name": "poly1",
-              "comment": "a Group representing a convex polygon",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<Pt> representing a convex polygon",
+              "type": "PtIterable",
               "default": false
             },
             {
               "name": "poly2",
-              "comment": "a Group representing a convex polygon",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<Pt> representing another convex polygon",
+              "type": "PtIterable",
               "default": false
             }
           ],
@@ -360,7 +360,7 @@
       "source": [
         [
           "Op.ts",
-          1383,
+          1457,
           27
         ]
       ],
@@ -378,14 +378,14 @@
           "parameters": [
             {
               "name": "poly1",
-              "comment": "a Group representing a polygon",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<Pt> representing a polygon",
+              "type": "PtIterable",
               "default": false
             },
             {
               "name": "poly2",
-              "comment": "another Group representing a polygon\n",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<Pt> representing another polygon\n",
+              "type": "PtIterable",
               "default": false
             }
           ],
@@ -398,7 +398,7 @@
       "source": [
         [
           "Op.ts",
-          988,
+          1052,
           15
         ]
       ],
@@ -410,18 +410,18 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Given a Group of Pts that defines a polygon, get one edge using an index.",
+          "comment": "Given a polygon, get one edge using an index.",
           "returns": "Group",
           "returns_comment": false,
           "parameters": [
             {
               "name": "pts",
-              "comment": "a Group",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<PtLike> representing a polygon",
+              "type": "PtLikeIterable",
               "default": false
             },
             {
-              "name": "idx",
+              "name": "index",
               "comment": "index of a Pt in the Group\n",
               "type": "number",
               "default": false
@@ -436,7 +436,7 @@
       "source": [
         [
           "Op.ts",
-          999,
+          1064,
           14
         ]
       ],
@@ -453,9 +453,9 @@
           "returns_comment": "an array of Groups which has 2 Pts in each group\n",
           "parameters": [
             {
-              "name": "pts",
-              "comment": "a Group of Pts",
-              "type": "GroupLike",
+              "name": "poly",
+              "comment": "a Group or an Iterable<Pt>",
+              "type": "PtIterable",
               "default": false
             },
             {
@@ -474,7 +474,7 @@
       "source": [
         [
           "Op.ts",
-          1012,
+          1078,
           18
         ]
       ],
@@ -491,9 +491,9 @@
           "returns_comment": false,
           "parameters": [
             {
-              "name": "pts",
-              "comment": "a Group of Pts",
-              "type": "GroupLike",
+              "name": "poly",
+              "comment": "a Group or an Iterable<Pt>",
+              "type": "PtIterable",
               "default": false
             },
             {
@@ -518,7 +518,7 @@
       "source": [
         [
           "Op.ts",
-          1193,
+          1260,
           18
         ]
       ],
@@ -535,9 +535,9 @@
           "returns_comment": "an index in the pts indicating the nearest Pt, or -1 if none found\n",
           "parameters": [
             {
-              "name": "pts",
-              "comment": "a Group of Pt",
-              "type": "GroupLike",
+              "name": "poly",
+              "comment": "a Group or an Iterable<Pt>",
+              "type": "PtIterable",
               "default": false
             },
             {
@@ -556,7 +556,7 @@
       "source": [
         [
           "Op.ts",
-          1178,
+          1244,
           16
         ]
       ],
@@ -573,9 +573,9 @@
           "returns_comment": "an array of Groups of line segments\n",
           "parameters": [
             {
-              "name": "pts",
-              "comment": "a Group representing a polygon",
-              "type": "GroupLike",
+              "name": "poly",
+              "comment": "a Group or an Iterable<Pt> representing a polygon",
+              "type": "PtIterable",
               "default": false
             },
             {
@@ -594,7 +594,7 @@
       "source": [
         [
           "Op.ts",
-          1068,
+          1133,
           18
         ]
       ],
@@ -611,9 +611,9 @@
           "returns_comment": "an object with `total` length, and `segments` which is a Pt that stores each segment's length\n",
           "parameters": [
             {
-              "name": "pts",
-              "comment": "a group of Pts",
-              "type": "GroupLike",
+              "name": "poly",
+              "comment": "a Group or an Iterable<Pt>",
+              "type": "PtIterable",
               "default": false
             },
             {
@@ -632,7 +632,7 @@
       "source": [
         [
           "Op.ts",
-          1212,
+          1281,
           20
         ]
       ],
@@ -650,8 +650,8 @@
           "parameters": [
             {
               "name": "poly",
-              "comment": "a Group of Pt",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<Pt>",
+              "type": "PtIterable",
               "default": false
             },
             {
@@ -670,7 +670,7 @@
       "source": [
         [
           "Op.ts",
-          962,
+          1026,
           18
         ]
       ],
@@ -714,7 +714,7 @@
       "source": [
         [
           "Op.ts",
-          1398,
+          1475,
           16
         ]
       ],
@@ -727,13 +727,13 @@
       "signatures": [
         {
           "comment": "Get a bounding box for each polygon group, as well as a union bounding-box for all groups.",
-          "returns": "GroupLike[]",
+          "returns": "Group[]",
           "returns_comment": false,
           "parameters": [
             {
               "name": "polys",
-              "comment": "an array of Groups, or an array of Pt arrays\n",
-              "type": "GroupLike[]",
+              "comment": "an Array/Iterable of (Groups or Iterables<Pt>)\n",
+              "type": "Iterable",
               "default": false
             }
           ],

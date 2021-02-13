@@ -32,8 +32,8 @@
           "parameters": [
             {
               "name": "group",
-              "comment": "a Group that defines the UI's appearance",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<PtLike> that defines the UI's appearance",
+              "type": "PtLikeIterable",
               "default": false
             },
             {
@@ -449,8 +449,8 @@
           "parameters": [
             {
               "name": "group",
-              "comment": "a group that defines a rectangle",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<PtLike> with 2 Pt representing a circle",
+              "type": "PtLikeIterable",
               "default": false
             },
             {
@@ -493,8 +493,8 @@
           "parameters": [
             {
               "name": "group",
-              "comment": "a group that defines a rectangle",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<PtLike> representing a polygon",
+              "type": "PtLikeIterable",
               "default": false
             },
             {
@@ -537,8 +537,8 @@
           "parameters": [
             {
               "name": "group",
-              "comment": "a group that defines a rectangle",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<PtLike> with 2 Pt representing a rectangle",
+              "type": "PtLikeIterable",
               "default": false
             },
             {

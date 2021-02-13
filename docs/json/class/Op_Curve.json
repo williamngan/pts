@@ -3,7 +3,7 @@
   "source": [
     [
       "Op.ts",
-      1414,
+      1495,
       18
     ]
   ],
@@ -18,7 +18,7 @@
       "source": [
         [
           "Op.ts",
-          1599,
+          1684,
           15
         ]
       ],
@@ -56,7 +56,7 @@
       "source": [
         [
           "Op.ts",
-          1628,
+          1713,
           19
         ]
       ],
@@ -94,7 +94,7 @@
       "source": [
         [
           "Op.ts",
-          1654,
+          1739,
           16
         ]
       ],
@@ -138,7 +138,7 @@
       "source": [
         [
           "Op.ts",
-          1687,
+          1773,
           20
         ]
       ],
@@ -176,7 +176,7 @@
       "source": [
         [
           "Op.ts",
-          1713,
+          1799,
           27
         ]
       ],
@@ -220,7 +220,7 @@
       "source": [
         [
           "Op.ts",
-          1530,
+          1614,
           17
         ]
       ],
@@ -238,8 +238,8 @@
           "parameters": [
             {
               "name": "pts",
-              "comment": "a group of anchor Pt",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<PtLike>",
+              "type": "PtLikeIterable",
               "default": false
             },
             {
@@ -264,7 +264,7 @@
       "source": [
         [
           "Op.ts",
-          1563,
+          1648,
           21
         ]
       ],
@@ -308,7 +308,7 @@
       "source": [
         [
           "Op.ts",
-          1471,
+          1554,
           19
         ]
       ],
@@ -326,8 +326,8 @@
           "parameters": [
             {
               "name": "pts",
-              "comment": "a group of anchor Pt",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<PtLike>",
+              "type": "PtLikeIterable",
               "default": false
             },
             {
@@ -346,7 +346,7 @@
       "source": [
         [
           "Op.ts",
-          1504,
+          1588,
           23
         ]
       ],
@@ -384,7 +384,7 @@
       "source": [
         [
           "Op.ts",
-          1436,
+          1517,
           22
         ]
       ],
@@ -402,8 +402,8 @@
           "parameters": [
             {
               "name": "pts",
-              "comment": "a group of Pt",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<PtLike>",
+              "type": "PtLikeIterable",
               "default": false
             },
             {
@@ -428,7 +428,7 @@
       "source": [
         [
           "Op.ts",
-          1420,
+          1501,
           17
         ]
       ],

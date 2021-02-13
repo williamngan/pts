@@ -1,0 +1,416 @@
+{
+  "name": "Img",
+  "source": [
+    [
+      "Image.ts",
+      4,
+      16
+    ]
+  ],
+  "kind": "Class",
+  "id": 3313,
+  "comment": "",
+  "constructor": [
+    {
+      "name": "constructor",
+      "source": [
+        [
+          "Image.ts",
+          13,
+          30
+        ]
+      ],
+      "id": 3321,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create an Img",
+          "returns": "Img",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "editable",
+              "comment": "Specify if you want to manipulate pixels of this image. Default is `false`.",
+              "type": "boolean",
+              "default": "false"
+            },
+            {
+              "name": "pixelScale",
+              "comment": "Set internal canvas' scale in relation to original image size. Useful for retina screens. Use `CanvasSpace.pixelScale` to pass current scale.\n",
+              "type": "number",
+              "default": "1"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "accessors": [
+    {
+      "name": "canvas",
+      "source": [
+        [
+          "Image.ts",
+          166,
+          12
+        ]
+      ],
+      "id": 3356,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "",
+      "getter": {
+        "type": "HTMLCanvasElement"
+      },
+      "setter": false
+    },
+    {
+      "name": "ctx",
+      "source": [
+        [
+          "Image.ts",
+          176,
+          9
+        ]
+      ],
+      "id": 3360,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "",
+      "getter": {
+        "type": "CanvasRenderingContext2D"
+      },
+      "setter": false
+    },
+    {
+      "name": "data",
+      "source": [
+        [
+          "Image.ts",
+          171,
+          10
+        ]
+      ],
+      "id": 3358,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "",
+      "getter": {
+        "type": "ImageData"
+      },
+      "setter": false
+    },
+    {
+      "name": "image",
+      "source": [
+        [
+          "Image.ts",
+          161,
+          11
+        ]
+      ],
+      "id": 3354,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "",
+      "getter": {
+        "type": "HTMLImageElement"
+      },
+      "setter": false
+    },
+    {
+      "name": "loaded",
+      "source": [
+        [
+          "Image.ts",
+          181,
+          12
+        ]
+      ],
+      "id": 3362,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "",
+      "getter": {
+        "type": "boolean"
+      },
+      "setter": false
+    },
+    {
+      "name": "pixelScale",
+      "source": [
+        [
+          "Image.ts",
+          186,
+          16
+        ]
+      ],
+      "id": 3364,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "",
+      "getter": {
+        "type": "number"
+      },
+      "setter": false
+    }
+  ],
+  "methods": [
+    {
+      "name": "bitmap",
+      "source": [
+        [
+          "Image.ts",
+          77,
+          8
+        ]
+      ],
+      "id": 3333,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get an efficient, readonly bitmap of the current canvas.",
+          "returns": "Promise",
+          "returns_comment": "a Promise that resolves to an ImageBitmap\n",
+          "parameters": [
+            {
+              "name": "size",
+              "comment": "Optional size to crop",
+              "type": "PtLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "crop",
+      "source": [
+        [
+          "Image.ts",
+          135,
+          6
+        ]
+      ],
+      "id": 3345,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Crop an area of the image.",
+          "returns": "ImageData",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "box",
+              "comment": "bounding box\n",
+              "type": "Bound",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "load",
+      "source": [
+        [
+          "Image.ts",
+          32,
+          6
+        ]
+      ],
+      "id": 3325,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Load an image.",
+          "returns": "Promise",
+          "returns_comment": "a Promise that resolves to an Img\n",
+          "parameters": [
+            {
+              "name": "src",
+              "comment": "an url of the image in same domain. Alternatively you can use a base64 string. To load from Blob, use `Img.fromBlob`.",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "pixel",
+      "source": [
+        [
+          "Image.ts",
+          108,
+          7
+        ]
+      ],
+      "id": 3338,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get the RGBA values of a pixel in the image",
+          "returns": "Pt",
+          "returns_comment": "values of the pixel at the specific position\n",
+          "parameters": [
+            {
+              "name": "p",
+              "comment": "position of the pixel",
+              "type": "PtLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "sync",
+      "source": [
+        [
+          "Image.ts",
+          87,
+          6
+        ]
+      ],
+      "id": 3336,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Replace the image with the current canvas data. For example, you can use CanvasForm's static functions to draw on `this.ctx` and then update the current image.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "toBase64",
+      "source": [
+        [
+          "Image.ts",
+          156,
+          10
+        ]
+      ],
+      "id": 3352,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Export a base64 string of the current canvas imageg",
+          "returns": "string",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "fromBlob",
+      "source": [
+        [
+          "Image.ts",
+          147,
+          17
+        ]
+      ],
+      "id": 3348,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a blob url that can be passed to `Img.load`",
+          "returns": "Promise",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "blob",
+              "comment": "an image blob such as `new Blob([my_Uint8Array], {type: 'image/png'})`",
+              "type": "Blob",
+              "default": false
+            },
+            {
+              "name": "editable",
+              "comment": "\n",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "getPixel",
+      "source": [
+        [
+          "Image.ts",
+          119,
+          17
+        ]
+      ],
+      "id": 3341,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Given an ImaegData object and a position, return the RGBA pixel value at that position.",
+          "returns": "Pt",
+          "returns_comment": "values of the pixel at the specific position\n",
+          "parameters": [
+            {
+              "name": "imgData",
+              "comment": "an ImageData object",
+              "type": "ImageData",
+              "default": false
+            },
+            {
+              "name": "p",
+              "comment": "a position on the image",
+              "type": "PtLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": []
+}

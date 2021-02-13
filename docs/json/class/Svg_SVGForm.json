@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 7046,
+  "id": 7125,
   "comment": "**[Experimental]** SVGForm is an implementation of abstract class [`VisualForm`](#link). It provide methods to express Pts in [`SVGSpace`](#link).\nYou may extend SVGForm to implement your own expressions for SVGSpace. See out the [Space guide](../guide/Space-0500.html) for details.",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           35
         ]
       ],
-      "id": 7068,
+      "id": 7147,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -48,11 +48,11 @@
       "source": [
         [
           "Form.ts",
-          65,
+          53,
           17
         ]
       ],
-      "id": 7212,
+      "id": 7297,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.currentFont",
@@ -67,16 +67,16 @@
       "source": [
         [
           "Form.ts",
-          49,
+          37,
           12
         ],
         [
           "Form.ts",
-          50,
+          38,
           12
         ]
       ],
-      "id": 7202,
+      "id": 7287,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.filled",
@@ -103,7 +103,7 @@
           11
         ]
       ],
-      "id": 7248,
+      "id": 7333,
       "flags": {},
       "overrides": false,
       "inherits": "Form.ready",
@@ -122,7 +122,7 @@
           11
         ]
       ],
-      "id": 7071,
+      "id": 7150,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -137,16 +137,16 @@
       "source": [
         [
           "Form.ts",
-          57,
+          45,
           13
         ],
         [
           "Form.ts",
-          58,
+          46,
           13
         ]
       ],
-      "id": 7207,
+      "id": 7292,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.stroked",
@@ -175,7 +175,7 @@
           7
         ]
       ],
-      "id": 7077,
+      "id": 7156,
       "flags": {},
       "overrides": "VisualForm.alpha",
       "inherits": false,
@@ -206,11 +206,11 @@
       "source": [
         [
           "Svg.ts",
-          484,
+          485,
           5
         ]
       ],
-      "id": 7147,
+      "id": 7226,
       "flags": {},
       "overrides": "VisualForm.arc",
       "inherits": false,
@@ -264,7 +264,7 @@
           8
         ]
       ],
-      "id": 7136,
+      "id": 7215,
       "flags": {},
       "overrides": "VisualForm.circle",
       "inherits": false,
@@ -276,8 +276,8 @@
           "parameters": [
             {
               "name": "pts",
-              "comment": "a Group of 2 Pts, or an array of two numeric arrays `[[position], [size]]`",
-              "type": "GroupLike | number[][]",
+              "comment": "a Group or an Iterable<PtLike> representing a circle with `[[position], [size]]`",
+              "type": "PtLikeIterable",
               "default": false
             }
           ],
@@ -295,11 +295,11 @@
       "source": [
         [
           "Form.ts",
-          173,
+          161,
           9
         ]
       ],
-      "id": 7233,
+      "id": 7318,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.circles",
@@ -329,7 +329,7 @@
           5
         ]
       ],
-      "id": 7089,
+      "id": 7168,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -364,7 +364,7 @@
           6
         ]
       ],
-      "id": 7080,
+      "id": 7159,
       "flags": {},
       "overrides": "VisualForm.fill",
       "inherits": false,
@@ -395,11 +395,11 @@
       "source": [
         [
           "Form.ts",
-          105,
+          93,
           10
         ]
       ],
-      "id": 7219,
+      "id": 7304,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.fillOnly",
@@ -429,7 +429,7 @@
           6
         ]
       ],
-      "id": 7092,
+      "id": 7171,
       "flags": {},
       "overrides": "VisualForm.font",
       "inherits": false,
@@ -484,11 +484,11 @@
       "source": [
         [
           "Svg.ts",
-          552,
+          557,
           6
         ]
       ],
-      "id": 7167,
+      "id": 7246,
       "flags": {},
       "overrides": "VisualForm.line",
       "inherits": false,
@@ -500,8 +500,8 @@
           "parameters": [
             {
               "name": "pts",
-              "comment": "a Group of multiple Pts, or an array of multiple numeric arrays\n",
-              "type": "GroupLike | number[][]",
+              "comment": "a Group or an Iterable<PtLike>\n",
+              "type": "PtLikeIterable",
               "default": false
             }
           ],
@@ -514,11 +514,11 @@
       "source": [
         [
           "Form.ts",
-          209,
+          197,
           7
         ]
       ],
-      "id": 7239,
+      "id": 7324,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.lines",
@@ -544,11 +544,11 @@
       "source": [
         [
           "Svg.ts",
-          679,
+          700,
           5
         ]
       ],
-      "id": 7198,
+      "id": 7283,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -578,7 +578,7 @@
           8
         ]
       ],
-      "id": 7108,
+      "id": 7187,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -601,7 +601,7 @@
           7
         ]
       ],
-      "id": 7126,
+      "id": 7205,
       "flags": {},
       "overrides": "VisualForm.point",
       "inherits": false,
@@ -644,11 +644,11 @@
       "source": [
         [
           "Form.ts",
-          151,
+          139,
           8
         ]
       ],
-      "id": 7228,
+      "id": 7313,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.points",
@@ -686,11 +686,11 @@
       "source": [
         [
           "Svg.ts",
-          593,
+          614,
           9
         ]
       ],
-      "id": 7179,
+      "id": 7264,
       "flags": {},
       "overrides": "VisualForm.polygon",
       "inherits": false,
@@ -702,8 +702,8 @@
           "parameters": [
             {
               "name": "pts",
-              "comment": "a Group of multiple Pts, or an array of multiple numeric arrays\n",
-              "type": "GroupLike | number[][]",
+              "comment": "a Group or an Iterable<PtLike> representing a polygon\n",
+              "type": "PtLikeIterable",
               "default": false
             }
           ],
@@ -716,11 +716,11 @@
       "source": [
         [
           "Form.ts",
-          225,
+          213,
           10
         ]
       ],
-      "id": 7242,
+      "id": 7327,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.polygons",
@@ -746,11 +746,11 @@
       "source": [
         [
           "Svg.ts",
-          629,
+          650,
           6
         ]
       ],
-      "id": 7186,
+      "id": 7271,
       "flags": {},
       "overrides": "VisualForm.rect",
       "inherits": false,
@@ -762,8 +762,8 @@
           "parameters": [
             {
               "name": "pts",
-              "comment": "usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.\n",
-              "type": "number[][] | Pt[]",
+              "comment": "a Group or an Iterable<PtLike> with 2 Pt specifying the top-left and bottom-right positions.\n",
+              "type": "PtLikeIterable",
               "default": false
             }
           ],
@@ -776,11 +776,11 @@
       "source": [
         [
           "Form.ts",
-          242,
+          230,
           7
         ]
       ],
-      "id": 7245,
+      "id": 7330,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.rects",
@@ -810,7 +810,7 @@
           7
         ]
       ],
-      "id": 7099,
+      "id": 7178,
       "flags": {},
       "overrides": "VisualForm.reset",
       "inherits": false,
@@ -833,7 +833,7 @@
           7
         ]
       ],
-      "id": 7105,
+      "id": 7184,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -859,11 +859,11 @@
       "source": [
         [
           "Svg.ts",
-          516,
+          517,
           8
         ]
       ],
-      "id": 7159,
+      "id": 7238,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -895,11 +895,11 @@
       "source": [
         [
           "Form.ts",
-          182,
+          170,
           9
         ]
       ],
-      "id": 7236,
+      "id": 7321,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.squares",
@@ -929,7 +929,7 @@
           8
         ]
       ],
-      "id": 7083,
+      "id": 7162,
       "flags": {},
       "overrides": "VisualForm.stroke",
       "inherits": false,
@@ -978,11 +978,11 @@
       "source": [
         [
           "Form.ts",
-          130,
+          118,
           12
         ]
       ],
-      "id": 7222,
+      "id": 7307,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.strokeOnly",
@@ -1030,7 +1030,7 @@
           9
         ]
       ],
-      "id": 7073,
+      "id": 7152,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1062,11 +1062,11 @@
       "source": [
         [
           "Svg.ts",
-          668,
+          689,
           6
         ]
       ],
-      "id": 7194,
+      "id": 7279,
       "flags": {},
       "overrides": "VisualForm.text",
       "inherits": false,
@@ -1102,7 +1102,7 @@
           13
         ]
       ],
-      "id": 7101,
+      "id": 7180,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1134,11 +1134,11 @@
       "source": [
         [
           "Svg.ts",
-          455,
+          456,
           12
         ]
       ],
-      "id": 7139,
+      "id": 7218,
       "flags": {
         "isStatic": true
       },
@@ -1200,7 +1200,7 @@
           15
         ]
       ],
-      "id": 7131,
+      "id": 7210,
       "flags": {
         "isStatic": true
       },
@@ -1244,7 +1244,7 @@
           14
         ]
       ],
-      "id": 7110,
+      "id": 7189,
       "flags": {
         "isStatic": true
       },
@@ -1272,11 +1272,11 @@
       "source": [
         [
           "Svg.ts",
-          528,
+          529,
           13
         ]
       ],
-      "id": 7163,
+      "id": 7242,
       "flags": {
         "isStatic": true
       },
@@ -1296,8 +1296,8 @@
             },
             {
               "name": "pts",
-              "comment": "a Group of multiple Pts, or an array of multiple numeric arrays\n",
-              "type": "GroupLike | number[][]",
+              "comment": "a Group or an Iterable<PtLike>\n",
+              "type": "PtLikeIterable",
               "default": false
             }
           ],
@@ -1314,7 +1314,7 @@
           14
         ]
       ],
-      "id": 7120,
+      "id": 7199,
       "flags": {
         "isStatic": true
       },
@@ -1361,15 +1361,48 @@
       ]
     },
     {
+      "name": "pointsString",
+      "source": [
+        [
+          "Svg.ts",
+          588,
+          31
+        ]
+      ],
+      "id": 7254,
+      "flags": {
+        "isProtected": true,
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Given a list of points, return a space-separated string",
+          "returns": "{ count:`number`, string:`string` }",
+          "returns_comment": "an object of {string, count}\n",
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group or an Iterable<PtLike>",
+              "type": "PtLikeIterable",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "polygon",
       "source": [
         [
           "Svg.ts",
-          584,
+          604,
           16
         ]
       ],
-      "id": 7175,
+      "id": 7260,
       "flags": {
         "isStatic": true
       },
@@ -1389,8 +1422,8 @@
             },
             {
               "name": "pts",
-              "comment": "a Group of multiple Pts, or an array of multiple numeric arrays\n",
-              "type": "GroupLike | number[][]",
+              "comment": "a Group or an Iterable<PtLike> representing a polygon\n",
+              "type": "PtLikeIterable",
               "default": false
             }
           ],
@@ -1403,11 +1436,11 @@
       "source": [
         [
           "Svg.ts",
-          605,
+          626,
           13
         ]
       ],
-      "id": 7182,
+      "id": 7267,
       "flags": {
         "isStatic": true
       },
@@ -1427,8 +1460,8 @@
             },
             {
               "name": "pts",
-              "comment": "usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.\n",
-              "type": "GroupLike | number[][]",
+              "comment": "a Group or an Iterable<PtLike> with 2 Pt specifying the top-left and bottom-right positions.\n",
+              "type": "PtLikeIterable",
               "default": false
             }
           ],
@@ -1445,7 +1478,7 @@
           16
         ]
       ],
-      "id": 7113,
+      "id": 7192,
       "flags": {
         "isStatic": true
       },
@@ -1473,11 +1506,11 @@
       "source": [
         [
           "Svg.ts",
-          497,
+          498,
           15
         ]
       ],
-      "id": 7154,
+      "id": 7233,
       "flags": {
         "isStatic": true
       },
@@ -1521,7 +1554,7 @@
           14
         ]
       ],
-      "id": 7116,
+      "id": 7195,
       "flags": {
         "isStatic": true
       },
@@ -1560,11 +1593,11 @@
       "source": [
         [
           "Svg.ts",
-          643,
+          664,
           13
         ]
       ],
-      "id": 7189,
+      "id": 7274,
       "flags": {
         "isStatic": true
       },
@@ -1611,7 +1644,7 @@
           14
         ]
       ],
-      "id": 7065,
+      "id": 7144,
       "flags": {
         "isStatic": true
       },
@@ -1629,7 +1662,7 @@
           16
         ]
       ],
-      "id": 7064,
+      "id": 7143,
       "flags": {
         "isStatic": true
       },

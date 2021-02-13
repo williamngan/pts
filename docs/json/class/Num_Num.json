@@ -18,7 +18,7 @@
       "source": [
         [
           "Num.ts",
-          118,
+          119,
           16
         ]
       ],
@@ -36,8 +36,8 @@
           "parameters": [
             {
               "name": "pts",
-              "comment": "an array of numeric arrays",
-              "type": "GroupLike | number[][]",
+              "comment": "a Group or an Iterable<PtLike>",
+              "type": "PtLikeIterable",
               "default": false
             }
           ],
@@ -143,7 +143,7 @@
       "source": [
         [
           "Num.ts",
-          129,
+          131,
           14
         ]
       ],
@@ -269,7 +269,7 @@
       "source": [
         [
           "Num.ts",
-          143,
+          145,
           19
         ]
       ],
@@ -425,8 +425,8 @@
           "parameters": [
             {
               "name": "pts",
-              "comment": "an array of numeric arrays",
-              "type": "GroupLike | number[][]",
+              "comment": "a Group or an Iterable<PtLike>",
+              "type": "PtLikeIterable",
               "default": false
             }
           ],

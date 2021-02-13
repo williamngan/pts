@@ -21,6 +21,9 @@
     "Form",
     "VisualForm"
   ],
+  "Image": [
+    "Img"
+  ],
   "LinearAlgebra": [
     "Mat",
     "Vec"
@@ -81,7 +84,9 @@
     "ITempoResponses",
     "ITempoStartFn",
     "IntersectContext",
+    "PtIterable",
     "PtLike",
+    "PtLikeIterable",
     "SoundType",
     "TouchPointsKey",
     "UIHandler",

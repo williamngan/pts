@@ -3,12 +3,12 @@
   "source": [
     [
       "Create.ts",
-      269,
+      272,
       21
     ]
   ],
   "kind": "Class",
-  "id": 4749,
+  "id": 4821,
   "comment": "Delaunay is a [`Group`](#link) of Pts that generates Delaunay and Voronoi tessellations. The triangulation algorithm is ported from [Pt](https://github.com/williamngan/pt).\nBased on [Paul Bourke's algorithm](http://paulbourke.net/papers/triangulate/)\nwith reference to its [javascript implementation](https://github.com/ironwallaby/delaunay) by ironwallaby.",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           23
         ]
       ],
-      "id": 4787,
+      "id": 4859,
       "flags": {},
       "overrides": false,
       "inherits": "Group.__constructor",
@@ -57,7 +57,7 @@
           8
         ]
       ],
-      "id": 4790,
+      "id": 4862,
       "flags": {},
       "overrides": false,
       "inherits": "Group.id",
@@ -84,7 +84,7 @@
           8
         ]
       ],
-      "id": 4794,
+      "id": 4866,
       "flags": {},
       "overrides": false,
       "inherits": "Group.p1",
@@ -103,7 +103,7 @@
           8
         ]
       ],
-      "id": 4796,
+      "id": 4868,
       "flags": {},
       "overrides": false,
       "inherits": "Group.p2",
@@ -122,7 +122,7 @@
           8
         ]
       ],
-      "id": 4798,
+      "id": 4870,
       "flags": {},
       "overrides": false,
       "inherits": "Group.p3",
@@ -141,7 +141,7 @@
           8
         ]
       ],
-      "id": 4800,
+      "id": 4872,
       "flags": {},
       "overrides": false,
       "inherits": "Group.p4",
@@ -160,7 +160,7 @@
           8
         ]
       ],
-      "id": 4802,
+      "id": 4874,
       "flags": {},
       "overrides": false,
       "inherits": "Group.q1",
@@ -179,7 +179,7 @@
           8
         ]
       ],
-      "id": 4804,
+      "id": 4876,
       "flags": {},
       "overrides": false,
       "inherits": "Group.q2",
@@ -198,7 +198,7 @@
           8
         ]
       ],
-      "id": 4806,
+      "id": 4878,
       "flags": {},
       "overrides": false,
       "inherits": "Group.q3",
@@ -217,7 +217,7 @@
           8
         ]
       ],
-      "id": 4808,
+      "id": 4880,
       "flags": {},
       "overrides": false,
       "inherits": "Group.q4",
@@ -238,7 +238,7 @@
           12
         ]
       ],
-      "id": 4915,
+      "id": 4987,
       "flags": {},
       "overrides": false,
       "inherits": "Group.$matrixAdd",
@@ -268,7 +268,7 @@
           17
         ]
       ],
-      "id": 4918,
+      "id": 4990,
       "flags": {},
       "overrides": false,
       "inherits": "Group.$matrixMultiply",
@@ -310,7 +310,7 @@
           6
         ]
       ],
-      "id": 4927,
+      "id": 4999,
       "flags": {},
       "overrides": false,
       "inherits": "Group.$zip",
@@ -346,7 +346,7 @@
           5
         ]
       ],
-      "id": 4903,
+      "id": 4975,
       "flags": {},
       "overrides": false,
       "inherits": "Group.add",
@@ -376,7 +376,7 @@
           12
         ]
       ],
-      "id": 4845,
+      "id": 4917,
       "flags": {},
       "overrides": false,
       "inherits": "Group.anchorFrom",
@@ -406,7 +406,7 @@
           10
         ]
       ],
-      "id": 4842,
+      "id": 4914,
       "flags": {},
       "overrides": false,
       "inherits": "Group.anchorTo",
@@ -436,7 +436,7 @@
           13
         ]
       ],
-      "id": 4840,
+      "id": 4912,
       "flags": {},
       "overrides": false,
       "inherits": "Group.boundingBox",
@@ -459,7 +459,7 @@
           10
         ]
       ],
-      "id": 4838,
+      "id": 4910,
       "flags": {},
       "overrides": false,
       "inherits": "Group.centroid",
@@ -482,7 +482,7 @@
           7
         ]
       ],
-      "id": 4810,
+      "id": 4882,
       "flags": {},
       "overrides": false,
       "inherits": "Group.clone",
@@ -510,7 +510,7 @@
           10
         ]
       ],
-      "id": 4941,
+      "id": 5013,
       "flags": {},
       "overrides": false,
       "inherits": "Array.concat",
@@ -554,7 +554,7 @@
           14
         ]
       ],
-      "id": 5129,
+      "id": 5201,
       "flags": {},
       "overrides": false,
       "inherits": "Array.copyWithin",
@@ -592,11 +592,11 @@
       "source": [
         [
           "Create.ts",
-          278,
+          281,
           10
         ]
       ],
-      "id": 4751,
+      "id": 4823,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -626,7 +626,7 @@
           8
         ]
       ],
-      "id": 4912,
+      "id": 4984,
       "flags": {},
       "overrides": false,
       "inherits": "Group.divide",
@@ -656,7 +656,7 @@
           11
         ]
       ],
-      "id": 5136,
+      "id": 5208,
       "flags": {},
       "overrides": false,
       "inherits": "Array.entries",
@@ -679,7 +679,7 @@
           9
         ]
       ],
-      "id": 4983,
+      "id": 5055,
       "flags": {},
       "overrides": false,
       "inherits": "Array.every",
@@ -715,7 +715,7 @@
           8
         ]
       ],
-      "id": 5124,
+      "id": 5196,
       "flags": {},
       "overrides": false,
       "inherits": "Array.fill",
@@ -762,7 +762,7 @@
           10
         ]
       ],
-      "id": 5020,
+      "id": 5092,
       "flags": {},
       "overrides": false,
       "inherits": "Array.filter",
@@ -823,7 +823,7 @@
           8
         ]
       ],
-      "id": 5096,
+      "id": 5168,
       "flags": {},
       "overrides": false,
       "inherits": "Array.find",
@@ -879,7 +879,7 @@
           13
         ]
       ],
-      "id": 5115,
+      "id": 5187,
       "flags": {},
       "overrides": false,
       "inherits": "Array.findIndex",
@@ -915,7 +915,7 @@
           11
         ]
       ],
-      "id": 5001,
+      "id": 5073,
       "flags": {},
       "overrides": false,
       "inherits": "Array.forEach",
@@ -951,7 +951,7 @@
           11
         ]
       ],
-      "id": 4899,
+      "id": 4971,
       "flags": {},
       "overrides": false,
       "inherits": "Group.forEachPt",
@@ -987,7 +987,7 @@
           11
         ]
       ],
-      "id": 4975,
+      "id": 5047,
       "flags": {},
       "overrides": false,
       "inherits": "Array.indexOf",
@@ -1023,20 +1023,20 @@
           8
         ]
       ],
-      "id": 4823,
+      "id": 4895,
       "flags": {},
       "overrides": false,
       "inherits": "Group.insert",
       "signatures": [
         {
-          "comment": "Insert a Pt into this group.",
+          "comment": "Insert more Pt into this group.",
           "returns": "this",
           "returns_comment": false,
           "parameters": [
             {
               "name": "pts",
-              "comment": "Another group of Pts",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<Pt>",
+              "type": "PtIterable",
               "default": false
             },
             {
@@ -1059,7 +1059,7 @@
           13
         ]
       ],
-      "id": 4868,
+      "id": 4940,
       "flags": {},
       "overrides": false,
       "inherits": "Group.interpolate",
@@ -1089,7 +1089,7 @@
           8
         ]
       ],
-      "id": 4946,
+      "id": 5018,
       "flags": {},
       "overrides": false,
       "inherits": "Array.join",
@@ -1119,7 +1119,7 @@
           8
         ]
       ],
-      "id": 5138,
+      "id": 5210,
       "flags": {},
       "overrides": false,
       "inherits": "Array.keys",
@@ -1142,7 +1142,7 @@
           15
         ]
       ],
-      "id": 4979,
+      "id": 5051,
       "flags": {},
       "overrides": false,
       "inherits": "Array.lastIndexOf",
@@ -1178,7 +1178,7 @@
           7
         ]
       ],
-      "id": 4836,
+      "id": 4908,
       "flags": {},
       "overrides": false,
       "inherits": "Group.lines",
@@ -1201,7 +1201,7 @@
           7
         ]
       ],
-      "id": 5010,
+      "id": 5082,
       "flags": {},
       "overrides": false,
       "inherits": "Array.map",
@@ -1233,11 +1233,11 @@
       "source": [
         [
           "Create.ts",
-          373,
+          376,
           6
         ]
       ],
-      "id": 4756,
+      "id": 4828,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1260,7 +1260,7 @@
           8
         ]
       ],
-      "id": 4871,
+      "id": 4943,
       "flags": {},
       "overrides": false,
       "inherits": "Group.moveBy",
@@ -1290,7 +1290,7 @@
           8
         ]
       ],
-      "id": 4874,
+      "id": 4946,
       "flags": {},
       "overrides": false,
       "inherits": "Group.moveTo",
@@ -1320,7 +1320,7 @@
           10
         ]
       ],
-      "id": 4909,
+      "id": 4981,
       "flags": {},
       "overrides": false,
       "inherits": "Group.multiply",
@@ -1346,11 +1346,11 @@
       "source": [
         [
           "Create.ts",
-          384,
+          387,
           13
         ]
       ],
-      "id": 4758,
+      "id": 4830,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1382,11 +1382,11 @@
       "source": [
         [
           "Create.ts",
-          399,
+          402,
           11
         ]
       ],
-      "id": 4762,
+      "id": 4834,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1416,7 +1416,7 @@
           4
         ]
       ],
-      "id": 4848,
+      "id": 4920,
       "flags": {},
       "overrides": false,
       "inherits": "Group.op",
@@ -1429,7 +1429,7 @@
             {
               "name": "fn",
               "comment": "any function that takes a Group as its first parameter",
-              "type": " Fn(g1:GroupLike, rest:any[])",
+              "type": " Fn(g1:PtIterable, rest:any[])",
               "default": false
             }
           ],
@@ -1451,7 +1451,7 @@
           5
         ]
       ],
-      "id": 4858,
+      "id": 4930,
       "flags": {},
       "overrides": false,
       "inherits": "Group.ops",
@@ -1464,7 +1464,7 @@
             {
               "name": "fns",
               "comment": "an array of functions for `op`",
-              "type": " Fn(g1:GroupLike, rest:any[])",
+              "type": " Fn(g1:PtIterable, rest:any[])",
               "default": false
             }
           ],
@@ -1486,7 +1486,7 @@
           7
         ]
       ],
-      "id": 4936,
+      "id": 5008,
       "flags": {},
       "overrides": false,
       "inherits": "Array.pop",
@@ -1509,7 +1509,7 @@
           8
         ]
       ],
-      "id": 4938,
+      "id": 5010,
       "flags": {},
       "overrides": false,
       "inherits": "Array.push",
@@ -1549,7 +1549,7 @@
           10
         ]
       ],
-      "id": 5038,
+      "id": 5110,
       "flags": {},
       "overrides": false,
       "inherits": "Array.reduce",
@@ -1629,7 +1629,7 @@
           15
         ]
       ],
-      "id": 5066,
+      "id": 5138,
       "flags": {},
       "overrides": false,
       "inherits": "Array.reduceRight",
@@ -1699,7 +1699,7 @@
           11
         ]
       ],
-      "id": 4891,
+      "id": 4963,
       "flags": {},
       "overrides": false,
       "inherits": "Group.reflect2D",
@@ -1711,8 +1711,8 @@
           "parameters": [
             {
               "name": "line",
-              "comment": "a Group of 2 Pts that defines a line for reflection",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<PtLike> with 2 Pt that defines a line for reflection",
+              "type": "PtLikeIterable",
               "default": false
             },
             {
@@ -1735,7 +1735,7 @@
           8
         ]
       ],
-      "id": 4827,
+      "id": 4899,
       "flags": {},
       "overrides": false,
       "inherits": "Group.remove",
@@ -1771,7 +1771,7 @@
           11
         ]
       ],
-      "id": 4949,
+      "id": 5021,
       "flags": {},
       "overrides": false,
       "inherits": "Array.reverse",
@@ -1794,7 +1794,7 @@
           10
         ]
       ],
-      "id": 4881,
+      "id": 4953,
       "flags": {},
       "overrides": false,
       "inherits": "Group.rotate2D",
@@ -1836,7 +1836,7 @@
           7
         ]
       ],
-      "id": 4877,
+      "id": 4949,
       "flags": {},
       "overrides": false,
       "inherits": "Group.scale",
@@ -1872,7 +1872,7 @@
           10
         ]
       ],
-      "id": 4831,
+      "id": 4903,
       "flags": {},
       "overrides": false,
       "inherits": "Group.segments",
@@ -1914,7 +1914,7 @@
           9
         ]
       ],
-      "id": 4886,
+      "id": 4958,
       "flags": {},
       "overrides": false,
       "inherits": "Group.shear2D",
@@ -1956,7 +1956,7 @@
           9
         ]
       ],
-      "id": 4951,
+      "id": 5023,
       "flags": {},
       "overrides": false,
       "inherits": "Array.shift",
@@ -1979,7 +1979,7 @@
           9
         ]
       ],
-      "id": 4953,
+      "id": 5025,
       "flags": {},
       "overrides": false,
       "inherits": "Array.slice",
@@ -2015,7 +2015,7 @@
           8
         ]
       ],
-      "id": 4992,
+      "id": 5064,
       "flags": {},
       "overrides": false,
       "inherits": "Array.some",
@@ -2051,7 +2051,7 @@
           8
         ]
       ],
-      "id": 4957,
+      "id": 5029,
       "flags": {},
       "overrides": false,
       "inherits": "Array.sort",
@@ -2081,7 +2081,7 @@
           17
         ]
       ],
-      "id": 4895,
+      "id": 4967,
       "flags": {},
       "overrides": false,
       "inherits": "Group.sortByDimension",
@@ -2122,7 +2122,7 @@
           10
         ]
       ],
-      "id": 4964,
+      "id": 5036,
       "flags": {},
       "overrides": false,
       "inherits": "Array.splice",
@@ -2184,7 +2184,7 @@
           7
         ]
       ],
-      "id": 4818,
+      "id": 4890,
       "flags": {},
       "overrides": false,
       "inherits": "Group.split",
@@ -2226,7 +2226,7 @@
           10
         ]
       ],
-      "id": 4906,
+      "id": 4978,
       "flags": {},
       "overrides": false,
       "inherits": "Group.subtract",
@@ -2256,7 +2256,7 @@
           18
         ]
       ],
-      "id": 4934,
+      "id": 5006,
       "flags": {},
       "overrides": false,
       "inherits": "Array.toLocaleString",
@@ -2279,7 +2279,7 @@
           10
         ]
       ],
-      "id": 4931,
+      "id": 5003,
       "flags": {},
       "overrides": "Array.toString",
       "inherits": "Group.toString",
@@ -2302,7 +2302,7 @@
           11
         ]
       ],
-      "id": 4972,
+      "id": 5044,
       "flags": {},
       "overrides": false,
       "inherits": "Array.unshift",
@@ -2332,7 +2332,7 @@
           10
         ]
       ],
-      "id": 5140,
+      "id": 5212,
       "flags": {},
       "overrides": false,
       "inherits": "Array.values",
@@ -2351,11 +2351,11 @@
       "source": [
         [
           "Create.ts",
-          359,
+          362,
           9
         ]
       ],
-      "id": 4754,
+      "id": 4826,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2378,7 +2378,7 @@
           10
         ]
       ],
-      "id": 4923,
+      "id": 4995,
       "flags": {},
       "overrides": false,
       "inherits": "Group.zipSlice",
@@ -2414,7 +2414,7 @@
           18
         ]
       ],
-      "id": 4812,
+      "id": 4884,
       "flags": {
         "isStatic": true
       },
@@ -2422,14 +2422,14 @@
       "inherits": "Group.fromArray",
       "signatures": [
         {
-          "comment": "Convert an array of numeric arrays into a Group of Pts.",
+          "comment": "Convert an array of numeric arrays into a Group.",
           "returns": "Group",
           "returns_comment": false,
           "parameters": [
             {
               "name": "list",
-              "comment": "an array of numeric arrays",
-              "type": "PtLike[]",
+              "comment": "an Iterable<PtLike> such as an array or a generator (of PtLike numeric arrays)",
+              "type": "PtLikeIterable",
               "default": false
             }
           ],
@@ -2451,7 +2451,7 @@
           20
         ]
       ],
-      "id": 4815,
+      "id": 4887,
       "flags": {
         "isStatic": true
       },
@@ -2459,14 +2459,14 @@
       "inherits": "Group.fromPtArray",
       "signatures": [
         {
-          "comment": "Convert an array of Pts into a Group.",
+          "comment": "Convert an Array/Iterable of Pt into a Group.",
           "returns": "Group",
           "returns_comment": false,
           "parameters": [
             {
               "name": "list",
-              "comment": "an array of Pts\n",
-              "type": "GroupLike",
+              "comment": "an Iterable<Pt>\n",
+              "type": "PtIterable",
               "default": false
             }
           ],
@@ -2486,7 +2486,7 @@
           10
         ]
       ],
-      "id": 4933,
+      "id": 5005,
       "flags": {},
       "type": "length",
       "overrides": false,

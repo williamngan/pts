@@ -3,12 +3,12 @@
   "source": [
     [
       "Types.ts",
-      182,
+      194,
       26
     ]
   ],
   "kind": "Typealias",
-  "id": 1638,
+  "id": 1640,
   "comment": "Typescript only: an object to store the AnalyzerNode properties",
   "constructor": [],
   "accessors": [],

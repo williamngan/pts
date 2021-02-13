@@ -3,7 +3,7 @@
   "source": [
     [
       "Num.ts",
-      822,
+      836,
       18
     ]
   ],
@@ -16,7 +16,7 @@
       "source": [
         [
           "Num.ts",
-          828,
+          842,
           29
         ]
       ],
@@ -32,8 +32,8 @@
           "parameters": [
             {
               "name": "g",
-              "comment": "a Group or an array of Pts\n",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<Pt>\n",
+              "type": "PtIterable",
               "default": false
             }
           ],
@@ -48,7 +48,7 @@
       "source": [
         [
           "Num.ts",
-          853,
+          867,
           15
         ]
       ],
@@ -67,7 +67,7 @@
       "source": [
         [
           "Num.ts",
-          843,
+          857,
           9
         ]
       ],
@@ -86,7 +86,7 @@
       "source": [
         [
           "Num.ts",
-          848,
+          862,
           9
         ]
       ],
@@ -107,7 +107,7 @@
       "source": [
         [
           "Num.ts",
-          912,
+          926,
           8
         ]
       ],
@@ -122,9 +122,9 @@
           "returns_comment": false,
           "parameters": [
             {
-              "name": "g",
-              "comment": "a Group or an array of Pts to append to this Range",
-              "type": "GroupLike",
+              "name": "pts",
+              "comment": "a Group or an Iterable<PtLike> to append to this Range",
+              "type": "PtLikeIterable",
               "default": false
             },
             {
@@ -143,7 +143,7 @@
       "source": [
         [
           "Num.ts",
-          859,
+          873,
           6
         ]
       ],
@@ -166,7 +166,7 @@
       "source": [
         [
           "Num.ts",
-          893,
+          907,
           7
         ]
       ],
@@ -208,7 +208,7 @@
       "source": [
         [
           "Num.ts",
-          924,
+          939,
           7
         ]
       ],

@@ -8,21 +8,59 @@
     ]
   ],
   "kind": "Class",
-  "id": 1653,
+  "id": 1655,
   "comment": "Util class provides static helper functions.",
   "constructor": [],
   "accessors": [],
   "methods": [
     {
+      "name": "arrayCheck",
+      "source": [
+        [
+          "Util.ts",
+          343,
+          19
+        ]
+      ],
+      "id": 1728,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Check number of items in a Group against a required number",
+          "returns": "boolean",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "pts",
+              "comment": "a Group or an Iterable<PtLike>",
+              "type": "PtLikeIterable",
+              "default": false
+            },
+            {
+              "name": "minRequired",
+              "comment": "minimum number of items required\n",
+              "type": "number",
+              "default": "2"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "combine",
       "source": [
         [
           "Util.ts",
-          229,
+          230,
           16
         ]
       ],
-      "id": 1680,
+      "id": 1682,
       "flags": {
         "isStatic": true
       },
@@ -62,11 +100,11 @@
       "source": [
         [
           "Util.ts",
-          217,
+          218,
           16
         ]
       ],
-      "id": 1676,
+      "id": 1678,
       "flags": {
         "isStatic": true
       },
@@ -100,11 +138,11 @@
       "source": [
         [
           "Util.ts",
-          285,
+          286,
           17
         ]
       ],
-      "id": 1704,
+      "id": 1706,
       "flags": {
         "isStatic": true
       },
@@ -154,7 +192,7 @@
           16
         ]
       ],
-      "id": 1658,
+      "id": 1660,
       "flags": {
         "isStatic": true
       },
@@ -178,15 +216,15 @@
       ]
     },
     {
-      "name": "iterFromPt",
+      "name": "iterToArray",
       "source": [
         [
           "Util.ts",
           351,
-          19
+          20
         ]
       ],
-      "id": 1729,
+      "id": 1732,
       "flags": {
         "isStatic": true
       },
@@ -194,46 +232,14 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Get a Pt iterator from an Array or an existing iterable/generator",
-          "returns": "Iterable",
+          "comment": "",
+          "returns": "any[]",
           "returns_comment": false,
           "parameters": [
             {
-              "name": "list",
-              "comment": "PtLike array or iterable\n",
-              "type": "GroupLike | Iterable",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "iterFromPtLike",
-      "source": [
-        [
-          "Util.ts",
-          342,
-          23
-        ]
-      ],
-      "id": 1726,
-      "flags": {
-        "isStatic": true
-      },
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Get a PtLike iterator from an Array or an existing iterable/generator",
-          "returns": "Iterable",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "list",
-              "comment": "PtLike array or iterable\n",
-              "type": "PtLike[] | Iterable",
+              "name": "it",
+              "comment": "",
+              "type": "Iterable",
               "default": false
             }
           ],
@@ -246,11 +252,11 @@
       "source": [
         [
           "Util.ts",
-          299,
+          300,
           13
         ]
       ],
-      "id": 1713,
+      "id": 1715,
       "flags": {
         "isStatic": true
       },
@@ -284,11 +290,11 @@
       "source": [
         [
           "Util.ts",
-          325,
+          326,
           20
         ]
       ],
-      "id": 1721,
+      "id": 1723,
       "flags": {
         "isStatic": true
       },
@@ -325,7 +331,7 @@
           18
         ]
       ],
-      "id": 1665,
+      "id": 1667,
       "flags": {
         "isStatic": true
       },
@@ -359,11 +365,11 @@
       "source": [
         [
           "Util.ts",
-          187,
+          188,
           14
         ]
       ],
-      "id": 1669,
+      "id": 1671,
       "flags": {
         "isStatic": true
       },
@@ -415,11 +421,11 @@
       "source": [
         [
           "Util.ts",
-          266,
+          267,
           16
         ]
       ],
-      "id": 1693,
+      "id": 1695,
       "flags": {
         "isStatic": true
       },
@@ -474,7 +480,7 @@
           13
         ]
       ],
-      "id": 1661,
+      "id": 1663,
       "flags": {
         "isStatic": true
       },
@@ -512,7 +518,7 @@
           18
         ]
       ],
-      "id": 1655,
+      "id": 1657,
       "flags": {
         "isStatic": true
       },
@@ -540,11 +546,11 @@
       "source": [
         [
           "Util.ts",
-          244,
+          245,
           12
         ]
       ],
-      "id": 1690,
+      "id": 1692,
       "flags": {
         "isStatic": true
       },

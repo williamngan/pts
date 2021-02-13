@@ -3,7 +3,7 @@
   "source": [
     [
       "Op.ts",
-      800,
+      855,
       21
     ]
   ],
@@ -18,7 +18,7 @@
       "source": [
         [
           "Op.ts",
-          868,
+          926,
           17
         ]
       ],
@@ -35,9 +35,9 @@
           "returns_comment": "a Group that represents the altitude line\n",
           "parameters": [
             {
-              "name": "pts",
-              "comment": "a Group of Pts",
-              "type": "GroupLike",
+              "name": "tri",
+              "comment": "a Group or an Iterable<Pt> representing a triangle",
+              "type": "PtIterable",
               "default": false
             },
             {
@@ -56,7 +56,7 @@
       "source": [
         [
           "Op.ts",
-          919,
+          981,
           21
         ]
       ],
@@ -73,9 +73,9 @@
           "returns_comment": "the circumcenter as a Pt\n",
           "parameters": [
             {
-              "name": "pts",
-              "comment": "a Group of Pts",
-              "type": "GroupLike",
+              "name": "tri",
+              "comment": "a Group or an Iterable<Pt> representing a triangle",
+              "type": "PtIterable",
               "default": false
             }
           ],
@@ -88,7 +88,7 @@
       "source": [
         [
           "Op.ts",
-          931,
+          994,
           21
         ]
       ],
@@ -105,9 +105,9 @@
           "returns_comment": false,
           "parameters": [
             {
-              "name": "pts",
-              "comment": "a Group of Pts",
-              "type": "GroupLike",
+              "name": "tri",
+              "comment": "a Group or an Iterable<Pt> representing a triangle",
+              "type": "PtIterable",
               "default": false
             },
             {
@@ -126,7 +126,7 @@
       "source": [
         [
           "Op.ts",
-          829,
+          885,
           19
         ]
       ],
@@ -164,7 +164,7 @@
       "source": [
         [
           "Op.ts",
-          819,
+          875,
           19
         ]
       ],
@@ -182,8 +182,8 @@
           "parameters": [
             {
               "name": "circle",
-              "comment": "a Group of 2 Pts representing a circle\n",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<Pt> with 2 Pt representing a circle\n",
+              "type": "PtIterable",
               "default": false
             }
           ],
@@ -196,7 +196,7 @@
       "source": [
         [
           "Op.ts",
-          806,
+          861,
           17
         ]
       ],
@@ -214,8 +214,8 @@
           "parameters": [
             {
               "name": "rect",
-              "comment": "a Group of 2 Pts representing a rectangle\n",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<Pt> with 2 Pt representing a rectangle\n",
+              "type": "PtIterable",
               "default": false
             }
           ],
@@ -228,7 +228,7 @@
       "source": [
         [
           "Op.ts",
-          894,
+          954,
           17
         ]
       ],
@@ -245,9 +245,9 @@
           "returns_comment": "the incenter as a Pt\n",
           "parameters": [
             {
-              "name": "pts",
-              "comment": "a Group of Pts",
-              "type": "GroupLike",
+              "name": "tri",
+              "comment": "a Group or an Iterable<Pt> representing a triangle",
+              "type": "PtIterable",
               "default": false
             }
           ],
@@ -260,7 +260,7 @@
       "source": [
         [
           "Op.ts",
-          906,
+          967,
           17
         ]
       ],
@@ -277,9 +277,9 @@
           "returns_comment": false,
           "parameters": [
             {
-              "name": "pts",
-              "comment": "a Group of Pts",
-              "type": "GroupLike",
+              "name": "tri",
+              "comment": "a Group or an Iterable<Pt> representing a triangle",
+              "type": "PtIterable",
               "default": false
             },
             {
@@ -298,7 +298,7 @@
       "source": [
         [
           "Op.ts",
-          839,
+          895,
           15
         ]
       ],
@@ -315,9 +315,9 @@
           "returns_comment": "a Group representing a medial triangle\n",
           "parameters": [
             {
-              "name": "pts",
-              "comment": "a Group of Pts",
-              "type": "GroupLike",
+              "name": "tri",
+              "comment": "a Group or an Iterable<Pt> representing a triangle",
+              "type": "PtIterable",
               "default": false
             }
           ],
@@ -330,7 +330,7 @@
       "source": [
         [
           "Op.ts",
-          851,
+          908,
           21
         ]
       ],
@@ -347,9 +347,9 @@
           "returns_comment": "a Group that represents a line of the opposite side\n",
           "parameters": [
             {
-              "name": "pts",
-              "comment": "a Group of Pts",
-              "type": "GroupLike",
+              "name": "tri",
+              "comment": "a Group or an Iterable<Pt> representing a triangle",
+              "type": "PtIterable",
               "default": false
             },
             {
@@ -368,7 +368,7 @@
       "source": [
         [
           "Op.ts",
-          882,
+          941,
           20
         ]
       ],
@@ -385,9 +385,9 @@
           "returns_comment": "the orthocenter as a Pt\n",
           "parameters": [
             {
-              "name": "pts",
-              "comment": "a Group of Pts",
-              "type": "GroupLike",
+              "name": "tri",
+              "comment": "a Group or an Iterable<Pt> representing a triangle",
+              "type": "PtIterable",
               "default": false
             }
           ],

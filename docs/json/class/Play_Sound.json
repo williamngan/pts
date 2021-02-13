@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 6742,
+  "id": 6812,
   "comment": "Sound class simplifies common tasks like audio inputs and visualizations using a subset of Web Audio API. It can be used with other audio libraries like tone.js, and extended to support additional web audio functions. See [the guide](../guide/Sound-0800.html) to get started.",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "Play.ts",
-          189,
+          196,
           30
         ]
       ],
-      "id": 6752,
+      "id": 6823,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -48,11 +48,11 @@
       "source": [
         [
           "Play.ts",
-          402,
+          413,
           13
         ]
       ],
-      "id": 6802,
+      "id": 6875,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -67,16 +67,16 @@
       "source": [
         [
           "Play.ts",
-          357,
+          368,
           12
         ],
         [
           "Play.ts",
-          358,
+          369,
           12
         ]
       ],
-      "id": 6790,
+      "id": 6863,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -99,11 +99,11 @@
       "source": [
         [
           "Play.ts",
-          333,
+          340,
           9
         ]
       ],
-      "id": 6782,
+      "id": 6853,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -118,16 +118,16 @@
       "source": [
         [
           "Play.ts",
-          418,
+          429,
           15
         ],
         [
           "Play.ts",
-          421,
+          432,
           15
         ]
       ],
-      "id": 6806,
+      "id": 6879,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -150,11 +150,11 @@
       "source": [
         [
           "Play.ts",
-          339,
+          346,
           10
         ]
       ],
-      "id": 6784,
+      "id": 6855,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -165,15 +165,34 @@
       "setter": false
     },
     {
+      "name": "outputNode",
+      "source": [
+        [
+          "Play.ts",
+          351,
+          16
+        ]
+      ],
+      "id": 6857,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Get this Sound's Output node AudioNode instance for advanced use-cases.",
+      "getter": {
+        "type": "AudioNode"
+      },
+      "setter": false
+    },
+    {
       "name": "playable",
       "source": [
         [
           "Play.ts",
-          394,
+          405,
           14
         ]
       ],
-      "id": 6800,
+      "id": 6873,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -188,11 +207,11 @@
       "source": [
         [
           "Play.ts",
-          370,
+          381,
           13
         ]
       ],
-      "id": 6796,
+      "id": 6869,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -207,11 +226,11 @@
       "source": [
         [
           "Play.ts",
-          376,
+          387,
           14
         ]
       ],
-      "id": 6798,
+      "id": 6871,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -226,11 +245,11 @@
       "source": [
         [
           "Play.ts",
-          410,
+          421,
           16
         ]
       ],
-      "id": 6804,
+      "id": 6877,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -245,11 +264,11 @@
       "source": [
         [
           "Play.ts",
-          351,
+          362,
           12
         ]
       ],
-      "id": 6788,
+      "id": 6861,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -264,11 +283,11 @@
       "source": [
         [
           "Play.ts",
-          345,
+          356,
           12
         ]
       ],
-      "id": 6786,
+      "id": 6859,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -283,11 +302,11 @@
       "source": [
         [
           "Play.ts",
-          364,
+          375,
           10
         ]
       ],
-      "id": 6794,
+      "id": 6867,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -304,11 +323,11 @@
       "source": [
         [
           "Play.ts",
-          443,
+          475,
           9
         ]
       ],
-      "id": 6813,
+      "id": 6891,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -352,11 +371,11 @@
       "source": [
         [
           "Play.ts",
-          430,
+          441,
           9
         ]
       ],
-      "id": 6810,
+      "id": 6883,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -382,11 +401,11 @@
       "source": [
         [
           "Play.ts",
-          272,
+          279,
           24
         ]
       ],
-      "id": 6768,
+      "id": 6839,
       "flags": {
         "isProtected": true
       },
@@ -414,11 +433,11 @@
       "source": [
         [
           "Play.ts",
-          508,
+          540,
           12
         ]
       ],
-      "id": 6835,
+      "id": 6913,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -437,11 +456,11 @@
       "source": [
         [
           "Play.ts",
-          521,
+          553,
           14
         ]
       ],
-      "id": 6837,
+      "id": 6915,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -480,15 +499,38 @@
       ]
     },
     {
+      "name": "removeOutputNode",
+      "source": [
+        [
+          "Play.ts",
+          462,
+          18
+        ]
+      ],
+      "id": 6889,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Removes the 'output' node added from setOuputNode\nNote: if you start the Sound after calling this, it will play via the default node",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "reset",
       "source": [
         [
           "Play.ts",
-          529,
+          561,
           7
         ]
       ],
-      "id": 6842,
+      "id": 6920,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -503,15 +545,45 @@
       ]
     },
     {
+      "name": "setOutputNode",
+      "source": [
+        [
+          "Play.ts",
+          452,
+          15
+        ]
+      ],
+      "id": 6886,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Sets the 'output' node for this Sound\nThis would typically be used after Sound.connect, if you are adding nodes\nin your chain for filtering purposes.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "outputNode",
+              "comment": "The AudioNode that should connect to the AudioContext\n",
+              "type": "AudioNode",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "start",
       "source": [
         [
           "Play.ts",
-          540,
+          572,
           7
         ]
       ],
-      "id": 6844,
+      "id": 6922,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -537,11 +609,11 @@
       "source": [
         [
           "Play.ts",
-          566,
+          598,
           6
         ]
       ],
-      "id": 6847,
+      "id": 6925,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -560,11 +632,11 @@
       "source": [
         [
           "Play.ts",
-          487,
+          519,
           12
         ]
       ],
-      "id": 6828,
+      "id": 6906,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -583,11 +655,11 @@
       "source": [
         [
           "Play.ts",
-          500,
+          532,
           14
         ]
       ],
-      "id": 6830,
+      "id": 6908,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -630,11 +702,11 @@
       "source": [
         [
           "Play.ts",
-          593,
+          625,
           8
         ]
       ],
-      "id": 6849,
+      "id": 6927,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -653,11 +725,11 @@
       "source": [
         [
           "Play.ts",
-          212,
+          219,
           13
         ]
       ],
-      "id": 6755,
+      "id": 6826,
       "flags": {
         "isStatic": true
       },
@@ -703,11 +775,11 @@
       "source": [
         [
           "Play.ts",
-          289,
+          296,
           17
         ]
       ],
-      "id": 6771,
+      "id": 6842,
       "flags": {
         "isStatic": true
       },
@@ -746,11 +818,11 @@
       "source": [
         [
           "Play.ts",
-          315,
+          322,
           20
         ]
       ],
-      "id": 6779,
+      "id": 6850,
       "flags": {
         "isStatic": true
       },
@@ -783,11 +855,11 @@
       "source": [
         [
           "Play.ts",
-          228,
+          235,
           13
         ]
       ],
-      "id": 6761,
+      "id": 6832,
       "flags": {
         "isStatic": true
       },
@@ -826,11 +898,11 @@
       "source": [
         [
           "Play.ts",
-          250,
+          257,
           21
         ]
       ],
-      "id": 6765,
+      "id": 6836,
       "flags": {
         "isStatic": true
       },
@@ -861,11 +933,11 @@
       "source": [
         [
           "Play.ts",
-          185,
+          192,
           10
         ]
       ],
-      "id": 6749,
+      "id": 6820,
       "flags": {},
       "type": "analyzer",
       "overrides": false,

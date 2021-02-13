@@ -3,7 +3,7 @@
   "source": [
     [
       "Op.ts",
-      592,
+      631,
       19
     ]
   ],
@@ -18,7 +18,7 @@
       "source": [
         [
           "Op.ts",
-          635,
+          675,
           19
         ]
       ],
@@ -56,7 +56,7 @@
       "source": [
         [
           "Op.ts",
-          601,
+          640,
           17
         ]
       ],
@@ -74,8 +74,8 @@
           "parameters": [
             {
               "name": "pts",
-              "comment": "a Group of 2 Pts representing a rectangle",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<PtLike> with 2 Pt representing a rectangle",
+              "type": "PtLikeIterable",
               "default": false
             },
             {
@@ -94,7 +94,7 @@
       "source": [
         [
           "Op.ts",
-          620,
+          660,
           21
         ]
       ],
@@ -112,8 +112,8 @@
           "parameters": [
             {
               "name": "pts",
-              "comment": "a Group of 3 Pts representing a rectangle",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<Pt> with 3 Pt representing a rectangle",
+              "type": "PtIterable",
               "default": false
             },
             {
@@ -132,7 +132,7 @@
       "source": [
         [
           "Op.ts",
-          709,
+          756,
           26
         ]
       ],
@@ -149,15 +149,15 @@
           "returns_comment": "a Group of intersection points, or an empty Group if no intersection is found\n",
           "parameters": [
             {
-              "name": "pts",
-              "comment": "a Group of 2 Pts representing a circle",
-              "type": "GroupLike",
+              "name": "circle1",
+              "comment": "a Group or an Iterable<Pt> with 2 Pt representing a circle",
+              "type": "PtIterable",
               "default": false
             },
             {
-              "name": "circle",
-              "comment": "a Group of 2 Pts representing a circle",
-              "type": "GroupLike",
+              "name": "circle2",
+              "comment": "a Group or an Iterable<Pt> with 2 Pt representing a circle",
+              "type": "PtIterable",
               "default": false
             }
           ],
@@ -170,7 +170,7 @@
       "source": [
         [
           "Op.ts",
-          691,
+          735,
           24
         ]
       ],
@@ -187,15 +187,15 @@
           "returns_comment": "a Group of intersection points, or an empty Group if no intersection is found\n",
           "parameters": [
             {
-              "name": "pts",
-              "comment": "a Group of 2 Pts representing a circle",
-              "type": "GroupLike",
+              "name": "circle",
+              "comment": "a Group or an Iterable<Pt> with Pt representing a circle",
+              "type": "PtIterable",
               "default": false
             },
             {
               "name": "line",
-              "comment": "",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<Pt> with 2 Pt representing a line",
+              "type": "PtIterable",
               "default": false
             }
           ],
@@ -208,7 +208,7 @@
       "source": [
         [
           "Op.ts",
-          658,
+          699,
           23
         ]
       ],
@@ -225,15 +225,15 @@
           "returns_comment": "a Group of intersection points, or an empty Group if no intersection is found\n",
           "parameters": [
             {
-              "name": "pts",
-              "comment": "a Group of 2 Pts representing a circle",
-              "type": "GroupLike",
+              "name": "circle",
+              "comment": "a Group or an Iterable<Pt> with 2 Pt representing a circle",
+              "type": "PtIterable",
               "default": false
             },
             {
               "name": "ray",
-              "comment": "a Group of 2 Pts representing a ray",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<Pt> with 2 Pt representing a ray",
+              "type": "PtIterable",
               "default": false
             }
           ],
@@ -246,7 +246,7 @@
       "source": [
         [
           "Op.ts",
-          743,
+          793,
           24
         ]
       ],
@@ -263,15 +263,15 @@
           "returns_comment": "a Group of intersection points, or an empty Group if no intersection is found\n",
           "parameters": [
             {
-              "name": "pts",
-              "comment": "a Group of 2 Pts representing a circle",
-              "type": "GroupLike",
+              "name": "circle",
+              "comment": "a Group or an Iterable<Pt> with 2 Pt representing a circle",
+              "type": "PtIterable",
               "default": false
             },
             {
               "name": "rect",
-              "comment": "a Group of 2 Pts representing a rectangle",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<Pt> with 2 Pt representing a rectangle",
+              "type": "PtIterable",
               "default": false
             }
           ],
@@ -284,7 +284,7 @@
       "source": [
         [
           "Op.ts",
-          760,
+          813,
           15
         ]
       ],
@@ -301,9 +301,9 @@
           "returns_comment": "a Group representing a rectangle\n",
           "parameters": [
             {
-              "name": "pts",
-              "comment": "a Group of 2 Pts representing a circle",
-              "type": "GroupLike",
+              "name": "circle",
+              "comment": "a Group or an Iterable<Pt> with 2 Pt representing a circle",
+              "type": "PtIterable",
               "default": false
             },
             {
@@ -322,7 +322,7 @@
       "source": [
         [
           "Op.ts",
-          776,
+          830,
           19
         ]
       ],
@@ -339,9 +339,9 @@
           "returns_comment": false,
           "parameters": [
             {
-              "name": "pts",
-              "comment": "a Group of 2 Pts representing a circle",
-              "type": "GroupLike",
+              "name": "circle",
+              "comment": "a Group or an Iterable<Pt> with 2 Pt representing a circle",
+              "type": "PtIterable",
               "default": false
             },
             {
@@ -360,7 +360,7 @@
       "source": [
         [
           "Op.ts",
-          646,
+          686,
           20
         ]
       ],
@@ -378,8 +378,8 @@
           "parameters": [
             {
               "name": "pts",
-              "comment": "a Group of 2 Pts representing a circle",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<Pt> with 2 Pt representing a circle",
+              "type": "PtIterable",
               "default": false
             },
             {

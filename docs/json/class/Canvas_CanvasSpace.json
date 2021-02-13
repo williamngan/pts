@@ -3,12 +3,12 @@
   "source": [
     [
       "Canvas.ts",
-      18,
+      19,
       24
     ]
   ],
   "kind": "Class",
-  "id": 3317,
+  "id": 3367,
   "comment": "CanvasSpace is an implementation of the abstract class [`Space`](#link). It represents a space for HTML Canvas.\nLearn more about the concept of Space in [this guide](../guide/Space-0500.html).",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "Canvas.ts",
-          32,
+          33,
           35
         ]
       ],
-      "id": 3328,
+      "id": 3378,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -59,16 +59,16 @@
       "source": [
         [
           "Canvas.ts",
-          173,
+          178,
           16
         ],
         [
           "Canvas.ts",
-          181,
+          187,
           16
         ]
       ],
-      "id": 3347,
+      "id": 3397,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -91,16 +91,16 @@
       "source": [
         [
           "Canvas.ts",
-          251,
+          258,
           16
         ],
         [
           "Canvas.ts",
-          252,
+          259,
           16
         ]
       ],
-      "id": 3358,
+      "id": 3408,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -127,7 +127,7 @@
           12
         ]
       ],
-      "id": 3504,
+      "id": 3555,
       "flags": {},
       "overrides": false,
       "inherits": "Space.center",
@@ -142,11 +142,11 @@
       "source": [
         [
           "Canvas.ts",
-          320,
+          327,
           16
         ]
       ],
-      "id": 3378,
+      "id": 3428,
       "flags": {
         "isPublic": true
       },
@@ -172,7 +172,7 @@
           21
         ]
       ],
-      "id": 3484,
+      "id": 3535,
       "flags": {},
       "overrides": false,
       "inherits": "Space.customRendering",
@@ -195,11 +195,11 @@
       "source": [
         [
           "Canvas.ts",
-          295,
+          302,
           13
         ]
       ],
-      "id": 3372,
+      "id": 3422,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -214,11 +214,11 @@
       "source": [
         [
           "Canvas.ts",
-          266,
+          273,
           25
         ]
       ],
-      "id": 3364,
+      "id": 3414,
       "flags": {
         "isPublic": true
       },
@@ -239,7 +239,7 @@
           12
         ]
       ],
-      "id": 3508,
+      "id": 3559,
       "flags": {},
       "overrides": false,
       "inherits": "Space.height",
@@ -258,7 +258,7 @@
           23
         ]
       ],
-      "id": 3500,
+      "id": 3551,
       "flags": {
         "isPublic": true
       },
@@ -279,7 +279,7 @@
           15
         ]
       ],
-      "id": 3496,
+      "id": 3547,
       "flags": {},
       "overrides": false,
       "inherits": "Space.isPlaying",
@@ -294,11 +294,11 @@
       "source": [
         [
           "Canvas.ts",
-          280,
+          287,
           28
         ]
       ],
-      "id": 3368,
+      "id": 3418,
       "flags": {
         "isPublic": true
       },
@@ -315,11 +315,11 @@
       "source": [
         [
           "Canvas.ts",
-          274,
+          281,
           25
         ]
       ],
-      "id": 3366,
+      "id": 3416,
       "flags": {
         "isPublic": true
       },
@@ -340,7 +340,7 @@
           16
         ]
       ],
-      "id": 3498,
+      "id": 3549,
       "flags": {},
       "overrides": false,
       "inherits": "Space.outerBound",
@@ -355,11 +355,11 @@
       "source": [
         [
           "Canvas.ts",
-          303,
+          310,
           12
         ]
       ],
-      "id": 3374,
+      "id": 3424,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -374,11 +374,11 @@
       "source": [
         [
           "Canvas.ts",
-          258,
+          265,
           23
         ]
       ],
-      "id": 3362,
+      "id": 3412,
       "flags": {
         "isPublic": true
       },
@@ -399,7 +399,7 @@
           20
         ]
       ],
-      "id": 3395,
+      "id": 3445,
       "flags": {
         "isPublic": true
       },
@@ -416,11 +416,11 @@
       "source": [
         [
           "Canvas.ts",
-          311,
+          318,
           11
         ]
       ],
-      "id": 3376,
+      "id": 3426,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -439,7 +439,7 @@
           10
         ]
       ],
-      "id": 3502,
+      "id": 3553,
       "flags": {},
       "overrides": false,
       "inherits": "Space.size",
@@ -458,7 +458,7 @@
           11
         ]
       ],
-      "id": 3506,
+      "id": 3557,
       "flags": {},
       "overrides": false,
       "inherits": "Space.width",
@@ -479,7 +479,7 @@
           5
         ]
       ],
-      "id": 3457,
+      "id": 3508,
       "flags": {},
       "overrides": false,
       "inherits": "Space.add",
@@ -509,7 +509,7 @@
           12
         ]
       ],
-      "id": 3397,
+      "id": 3447,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.bindCanvas",
@@ -530,6 +530,12 @@
               "comment": "callback function for this event\n",
               "type": "EventListener",
               "default": false
+            },
+            {
+              "name": "options",
+              "comment": "",
+              "type": "any",
+              "default": "{}"
             }
           ],
           "tags": []
@@ -545,7 +551,7 @@
           11
         ]
       ],
-      "id": 3405,
+      "id": 3456,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.bindMouse",
@@ -580,7 +586,7 @@
           11
         ]
       ],
-      "id": 3408,
+      "id": 3459,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.bindTouch",
@@ -611,11 +617,11 @@
       "source": [
         [
           "Canvas.ts",
-          328,
+          335,
           7
         ]
       ],
-      "id": 3380,
+      "id": 3430,
       "flags": {},
       "overrides": "Space.clear",
       "inherits": false,
@@ -641,11 +647,11 @@
       "source": [
         [
           "Canvas.ts",
-          349,
+          362,
           16
         ]
       ],
-      "id": 3383,
+      "id": 3433,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -671,11 +677,11 @@
       "source": [
         [
           "Canvas.ts",
-          381,
+          394,
           9
         ]
       ],
-      "id": 3389,
+      "id": 3439,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -694,11 +700,11 @@
       "source": [
         [
           "Canvas.ts",
-          289,
+          296,
           16
         ]
       ],
-      "id": 3370,
+      "id": 3420,
       "flags": {
         "isPublic": true
       },
@@ -728,7 +734,7 @@
           7
         ]
       ],
-      "id": 3470,
+      "id": 3521,
       "flags": {},
       "overrides": false,
       "inherits": "Space.pause",
@@ -758,7 +764,7 @@
           6
         ]
       ],
-      "id": 3465,
+      "id": 3516,
       "flags": {},
       "overrides": false,
       "inherits": "Space.play",
@@ -784,11 +790,11 @@
       "source": [
         [
           "Canvas.ts",
-          366,
+          379,
           21
         ]
       ],
-      "id": 3386,
+      "id": 3436,
       "flags": {
         "isProtected": true
       },
@@ -820,7 +826,7 @@
           10
         ]
       ],
-      "id": 3478,
+      "id": 3529,
       "flags": {},
       "overrides": false,
       "inherits": "Space.playOnce",
@@ -850,7 +856,7 @@
           9
         ]
       ],
-      "id": 3454,
+      "id": 3505,
       "flags": {},
       "overrides": false,
       "inherits": "Space.refresh",
@@ -880,7 +886,7 @@
           8
         ]
       ],
-      "id": 3460,
+      "id": 3511,
       "flags": {},
       "overrides": false,
       "inherits": "Space.remove",
@@ -910,7 +916,7 @@
           11
         ]
       ],
-      "id": 3463,
+      "id": 3514,
       "flags": {},
       "overrides": false,
       "inherits": "Space.removeAll",
@@ -933,7 +939,7 @@
           18
         ]
       ],
-      "id": 3481,
+      "id": 3532,
       "flags": {
         "isProtected": true
       },
@@ -965,7 +971,7 @@
           8
         ]
       ],
-      "id": 3468,
+      "id": 3519,
       "flags": {},
       "overrides": false,
       "inherits": "Space.replay",
@@ -984,11 +990,11 @@
       "source": [
         [
           "Canvas.ts",
-          190,
+          196,
           8
         ]
       ],
-      "id": 3351,
+      "id": 3401,
       "flags": {},
       "overrides": "Space.resize",
       "inherits": false,
@@ -1029,7 +1035,7 @@
           8
         ]
       ],
-      "id": 3473,
+      "id": 3524,
       "flags": {},
       "overrides": false,
       "inherits": "Space.resume",
@@ -1048,11 +1054,11 @@
       "source": [
         [
           "Canvas.ts",
-          146,
+          151,
           7
         ]
       ],
-      "id": 3339,
+      "id": 3389,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1064,7 +1070,7 @@
           "parameters": [
             {
               "name": "opt",
-              "comment": "an object with optional settings, as follows.",
+              "comment": "an object with optional settings, as follows.\n\n**{bgcolor}:** a hex or rgba string to set initial background color of the canvas, or use `false` or \"transparent\" to set a transparent background. You may also change it later with `clear()`\n\n**{resize}:** a boolean to set whether `<canvas>` size should auto resize to match its container's size. You can also set it manually with `autoSize()`\n\n**{retina}:** a boolean to set if device pixel scaling should be used. This may make drawings on retina displays look sharper but may reduce performance slightly. Default is `true`.\n\n**{offscreen}:** a boolean to set if a duplicate canvas should be created for offscreen rendering. Default is `false`.",
               "type": "{ bgcolor:`string`, offscreen:`boolean`, resize:`boolean`, retina:`boolean` }",
               "default": false
             }
@@ -1087,7 +1093,7 @@
           6
         ]
       ],
-      "id": 3475,
+      "id": 3526,
       "flags": {},
       "overrides": false,
       "inherits": "Space.stop",
@@ -1117,7 +1123,7 @@
           17
         ]
       ],
-      "id": 3411,
+      "id": 3462,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.touchesToPoints",
@@ -1153,7 +1159,7 @@
           14
         ]
       ],
-      "id": 3401,
+      "id": 3452,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.unbindCanvas",
@@ -1192,7 +1198,7 @@
           17
         ]
       ],
-      "id": 3444,
+      "id": 3495,
       "flags": {
         "isProtected": true
       },
@@ -1210,7 +1216,7 @@
           4
         ]
       ],
-      "id": 3443,
+      "id": 3494,
       "flags": {},
       "type": "id",
       "overrides": false,
@@ -1226,7 +1232,7 @@
           23
         ]
       ],
-      "id": 3450,
+      "id": 3501,
       "flags": {
         "isProtected": true
       },
@@ -1244,7 +1250,7 @@
           19
         ]
       ],
-      "id": 3449,
+      "id": 3500,
       "flags": {
         "isProtected": true
       },

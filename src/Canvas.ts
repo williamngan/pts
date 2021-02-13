@@ -137,11 +137,15 @@ export class CanvasSpace extends MultiTouchSpace {
   
   /**
   * Set up various options for CanvasSpace. The `opt` parameter is an object with the following fields. This is usually set during instantiation, eg `new CanvasSpace(...).setup( { opt } )`
-  * @param opt an object with optional settings, as follows.
-  * @param opt.bgcolor a hex or rgba string to set initial background color of the canvas, or use `false` or "transparent" to set a transparent background. You may also change it later with `clear()`    
-  * @param opt.resize a boolean to set whether `<canvas>` size should auto resize to match its container's size. You can also set it manually with `autoSize()`    
-  * @param opt.retina a boolean to set if device pixel scaling should be used. This may make drawings on retina displays look sharper but may reduce performance slightly. Default is `true`.    
-  * @param opt.offscreen a boolean to set if a duplicate canvas should be created for offscreen rendering. Default is `false`.    
+  * @param opt an object with optional settings, as follows.   
+  * 
+  * **{bgcolor}:** a hex or rgba string to set initial background color of the canvas, or use `false` or "transparent" to set a transparent background. You may also change it later with `clear()`    
+  * 
+  * **{resize}:** a boolean to set whether `<canvas>` size should auto resize to match its container's size. You can also set it manually with `autoSize()`    
+  * 
+  * **{retina}:** a boolean to set if device pixel scaling should be used. This may make drawings on retina displays look sharper but may reduce performance slightly. Default is `true`.   
+  * 
+  * **{offscreen}:** a boolean to set if a duplicate canvas should be created for offscreen rendering. Default is `false`.    
   * @example `space.setup({ bgcolor: "#f00", retina: true, resize: true })`
   */
   setup( opt:{bgcolor?:string, resize?:boolean, retina?:boolean, offscreen?:boolean} ):this {

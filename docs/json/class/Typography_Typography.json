@@ -3,12 +3,12 @@
   "source": [
     [
       "Typography.ts",
-      9,
+      10,
       23
     ]
   ],
   "kind": "Class",
-  "id": 3279,
+  "id": 3275,
   "comment": "Typography provides helper functions to support typographic layouts. For a concrete example, see [a demo here](../demo/index.html?name=canvasform.textBox) that uses the [`CanvasForm.textBox`](#link) function.",
   "constructor": [],
   "accessors": [],
@@ -18,11 +18,11 @@
       "source": [
         [
           "Typography.ts",
-          49,
+          50,
           22
         ]
       ],
-      "id": 3300,
+      "id": 3296,
       "flags": {
         "isStatic": true
       },
@@ -36,8 +36,8 @@
           "parameters": [
             {
               "name": "box",
-              "comment": "Initial box as a Group",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<PtLike> representing the initial box",
+              "type": "PtLikeIterable",
               "default": false
             },
             {
@@ -62,11 +62,11 @@
       "source": [
         [
           "Typography.ts",
-          67,
+          69,
           28
         ]
       ],
-      "id": 3308,
+      "id": 3304,
       "flags": {
         "isStatic": true
       },
@@ -100,11 +100,11 @@
       "source": [
         [
           "Typography.ts",
-          18,
+          19,
           27
         ]
       ],
-      "id": 3280,
+      "id": 3276,
       "flags": {
         "isStatic": true
       },
@@ -144,11 +144,11 @@
       "source": [
         [
           "Typography.ts",
-          32,
+          33,
           17
         ]
       ],
-      "id": 3291,
+      "id": 3287,
       "flags": {
         "isStatic": true
       },

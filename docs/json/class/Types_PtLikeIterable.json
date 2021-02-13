@@ -1,15 +1,15 @@
 {
-  "name": "WarningType",
+  "name": "PtLikeIterable",
   "source": [
     [
       "Types.ts",
-      155,
-      23
+      33,
+      26
     ]
   ],
   "kind": "Typealias",
-  "id": 1604,
-  "comment": "WarningType specifies a level of warning for [`Util.warnLevel`](#link).",
+  "id": 1560,
+  "comment": "Typescript only: PtLikeIterable is an alias of GroupLike | Iterable<PtLike> | number[][]",
   "constructor": [],
   "accessors": [],
   "methods": [],
@@ -19,8 +19,8 @@
   "extends": [],
   "implements": [],
   "type_alias": [
-    "error",
-    "warn",
-    "mute"
+    "GroupLike",
+    "PtLike[]",
+    "Iterable"
   ]
 }

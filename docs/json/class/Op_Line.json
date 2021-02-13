@@ -18,7 +18,7 @@
       "source": [
         [
           "Op.ts",
-          80,
+          81,
           18
         ]
       ],
@@ -37,19 +37,19 @@
             {
               "name": "p1",
               "comment": "first Pt",
-              "type": "PtLike | number[]",
+              "type": "PtLike",
               "default": false
             },
             {
               "name": "p2",
               "comment": "second Pt",
-              "type": "PtLike | number[]",
+              "type": "PtLike",
               "default": false
             },
             {
               "name": "p3",
               "comment": "third Pt",
-              "type": "PtLike | number[]",
+              "type": "PtLike",
               "default": false
             },
             {
@@ -68,7 +68,7 @@
       "source": [
         [
           "Op.ts",
-          309,
+          329,
           13
         ]
       ],
@@ -86,8 +86,8 @@
           "parameters": [
             {
               "name": "line",
-              "comment": "line to crop",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<Pt> representing a line to crop",
+              "type": "PtIterable",
               "default": false
             },
             {
@@ -118,7 +118,7 @@
       "source": [
         [
           "Op.ts",
-          129,
+          133,
           23
         ]
       ],
@@ -224,13 +224,13 @@
             {
               "name": "p1",
               "comment": "line's first end point",
-              "type": "PtLike | number[]",
+              "type": "PtLike",
               "default": false
             },
             {
               "name": "p2",
               "comment": "line's second end point",
-              "type": "PtLike | number[]",
+              "type": "PtLike",
               "default": false
             }
           ],
@@ -243,7 +243,7 @@
       "source": [
         [
           "Op.ts",
-          264,
+          280,
           32
         ]
       ],
@@ -261,7 +261,7 @@
           "parameters": [
             {
               "name": "line",
-              "comment": "",
+              "comment": "a ray specified by 2 Pts",
               "type": "GroupLike",
               "default": false
             },
@@ -281,7 +281,7 @@
       "source": [
         [
           "Op.ts",
-          249,
+          264,
           31
         ]
       ],
@@ -299,14 +299,14 @@
           "parameters": [
             {
               "name": "ray",
-              "comment": "a ray specified by 2 Pts",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<Pt> representing a ray",
+              "type": "PtIterable",
               "default": false
             },
             {
               "name": "gridPt",
               "comment": "a Pt on the grid",
-              "type": "PtLike | number[]",
+              "type": "PtLike",
               "default": false
             }
           ],
@@ -319,7 +319,7 @@
       "source": [
         [
           "Op.ts",
-          188,
+          195,
           24
         ]
       ],
@@ -337,14 +337,14 @@
           "parameters": [
             {
               "name": "la",
-              "comment": "a Group of 2 Pts representing a line segment",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<Pt> with 2 Pt representing a line segment",
+              "type": "PtIterable",
               "default": false
             },
             {
               "name": "lb",
-              "comment": "a Group of 2 Pts representing a line segment",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<Pt> with 2 Pt representing a line segment",
+              "type": "PtIterable",
               "default": false
             }
           ],
@@ -357,7 +357,7 @@
       "source": [
         [
           "Op.ts",
-          200,
+          210,
           31
         ]
       ],
@@ -376,13 +376,13 @@
             {
               "name": "line",
               "comment": "a Group of 2 Pts representing a line segment",
-              "type": "GroupLike",
+              "type": "PtIterable",
               "default": false
             },
             {
               "name": "ray",
               "comment": "a Group of 2 Pts representing a ray",
-              "type": "GroupLike",
+              "type": "PtIterable",
               "default": false
             }
           ],
@@ -395,7 +395,7 @@
       "source": [
         [
           "Op.ts",
-          230,
+          245,
           25
         ]
       ],
@@ -413,14 +413,14 @@
           "parameters": [
             {
               "name": "lines1",
-              "comment": "an array of line segments",
-              "type": "GroupLike[]",
+              "comment": "an Array/Iterable of (Groups or Iterables<Pt>)",
+              "type": "Iterable",
               "default": false
             },
             {
               "name": "lines2",
-              "comment": "an array of line segments",
-              "type": "GroupLike[]",
+              "comment": "an Array/Iterable of (Groups or Iterables<Pt>)",
+              "type": "Iterable",
               "default": false
             },
             {
@@ -439,7 +439,7 @@
       "source": [
         [
           "Op.ts",
-          212,
+          224,
           27
         ]
       ],
@@ -457,14 +457,14 @@
           "parameters": [
             {
               "name": "lineOrRay",
-              "comment": "a Group of 2 Pts representing a line or ray",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<Pt> with 2 Pt representing a line or ray",
+              "type": "PtIterable",
               "default": false
             },
             {
               "name": "poly",
-              "comment": "a Group of Pts representing a polygon",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<Pt> representing a polygon",
+              "type": "PtIterable",
               "default": false
             },
             {
@@ -483,7 +483,7 @@
       "source": [
         [
           "Op.ts",
-          146,
+          151,
           23
         ]
       ],
@@ -501,14 +501,14 @@
           "parameters": [
             {
               "name": "la",
-              "comment": "a Group of 2 Pts representing a ray",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<Pt> with 2 Pt representing a ray",
+              "type": "PtIterable",
               "default": false
             },
             {
               "name": "lb",
-              "comment": "a Group of 2 Pts representing a ray",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<Pt> with 2 Pts representing another ray",
+              "type": "PtIterable",
               "default": false
             }
           ],
@@ -521,7 +521,7 @@
       "source": [
         [
           "Op.ts",
-          280,
+          297,
           24
         ]
       ],
@@ -559,7 +559,7 @@
       "source": [
         [
           "Op.ts",
-          92,
+          93,
           18
         ]
       ],
@@ -577,8 +577,8 @@
           "parameters": [
             {
               "name": "line",
-              "comment": "a Group of at least 2 Pts\n",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<Pt> with at least 2 Pt\n",
+              "type": "PtIterable",
               "default": false
             }
           ],
@@ -591,7 +591,7 @@
       "source": [
         [
           "Op.ts",
-          101,
+          103,
           20
         ]
       ],
@@ -609,8 +609,8 @@
           "parameters": [
             {
               "name": "line",
-              "comment": "a Group of at least 2 Pts\n",
-              "type": "GroupLike",
+              "comment": "",
+              "type": "PtIterable",
               "default": false
             }
           ],
@@ -623,7 +623,7 @@
       "source": [
         [
           "Op.ts",
-          341,
+          363,
           15
         ]
       ],
@@ -641,8 +641,8 @@
           "parameters": [
             {
               "name": "line",
-              "comment": "line to place marker",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<Pt> representing a line to place marker",
+              "type": "PtIterable",
               "default": false
             },
             {
@@ -673,7 +673,7 @@
       "source": [
         [
           "Op.ts",
-          113,
+          116,
           28
         ]
       ],
@@ -691,14 +691,14 @@
           "parameters": [
             {
               "name": "line",
-              "comment": "",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<Pt> that defines a line",
+              "type": "PtIterable",
               "default": false
             },
             {
               "name": "pt",
               "comment": "a target Pt",
-              "type": "PtLike | number[]",
+              "type": "PtLike",
               "default": false
             },
             {
@@ -735,13 +735,13 @@
           "parameters": [
             {
               "name": "line",
-              "comment": "a Group of at least 2 Pts",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<PtLike> representing a line",
+              "type": "PtLikeIterable",
               "default": false
             },
             {
               "name": "pt",
-              "comment": "a Pt",
+              "comment": "a Pt or numeric array",
               "type": "PtLike",
               "default": false
             }
@@ -774,13 +774,13 @@
             {
               "name": "p1",
               "comment": "line's first end point",
-              "type": "PtLike | number[]",
+              "type": "PtLike",
               "default": false
             },
             {
               "name": "p2",
               "comment": "line's second end point\n",
-              "type": "PtLike | number[]",
+              "type": "PtLike",
               "default": false
             }
           ],
@@ -793,7 +793,7 @@
       "source": [
         [
           "Op.ts",
-          292,
+          311,
           18
         ]
       ],
@@ -811,8 +811,8 @@
           "parameters": [
             {
               "name": "line",
-              "comment": "a Group representing a line",
-              "type": "GroupLike | number[][]",
+              "comment": "a Group or an Iterable<PtLike> representing a line",
+              "type": "PtLikeIterable",
               "default": false
             },
             {
@@ -831,7 +831,7 @@
       "source": [
         [
           "Op.ts",
-          362,
+          386,
           15
         ]
       ],

@@ -3,12 +3,12 @@
   "source": [
     [
       "Types.ts",
-      192,
+      204,
       21
     ]
   ],
   "kind": "Typealias",
-  "id": 1643,
+  "id": 1645,
   "comment": "Typescript only: corresponds to Sound.type",
   "constructor": [],
   "accessors": [],

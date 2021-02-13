@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 4332,
+  "id": 4404,
   "comment": "The `Create` class helps you create structures from sets of points.",
   "constructor": [],
   "accessors": [],
@@ -18,11 +18,11 @@
       "source": [
         [
           "Create.ts",
-          138,
+          141,
           17
         ]
       ],
-      "id": 4366,
+      "id": 4438,
       "flags": {
         "isStatic": true
       },
@@ -54,7 +54,7 @@
           25
         ]
       ],
-      "id": 4338,
+      "id": 4410,
       "flags": {
         "isStatic": true
       },
@@ -68,8 +68,8 @@
           "parameters": [
             {
               "name": "line",
-              "comment": "a Group representing a line",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<Pt> representing a line",
+              "type": "PtIterable",
               "default": false
             },
             {
@@ -92,7 +92,7 @@
           25
         ]
       ],
-      "id": 4333,
+      "id": 4405,
       "flags": {
         "isStatic": true
       },
@@ -132,11 +132,11 @@
       "source": [
         [
           "Create.ts",
-          77,
+          78,
           18
         ]
       ],
-      "id": 4348,
+      "id": 4420,
       "flags": {
         "isStatic": true
       },
@@ -176,11 +176,11 @@
       "source": [
         [
           "Create.ts",
-          56,
+          57,
           16
         ]
       ],
-      "id": 4342,
+      "id": 4414,
       "flags": {
         "isStatic": true
       },
@@ -226,11 +226,11 @@
       "source": [
         [
           "Create.ts",
-          118,
+          119,
           17
         ]
       ],
-      "id": 4359,
+      "id": 4431,
       "flags": {
         "isStatic": true
       },
@@ -244,8 +244,8 @@
           "parameters": [
             {
               "name": "pts",
-              "comment": "a Group or an array of Pts",
-              "type": "GroupLike",
+              "comment": "a Group or an Iterable<Pt>",
+              "type": "PtIterable",
               "default": false
             },
             {
@@ -282,11 +282,11 @@
       "source": [
         [
           "Create.ts",
-          100,
+          101,
           18
         ]
       ],
-      "id": 4353,
+      "id": 4425,
       "flags": {
         "isStatic": true
       },
