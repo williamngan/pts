@@ -329,13 +329,19 @@ export class CanvasSpace extends MultiTouchSpace {
   clear( bg?:string ):this {
     
     if (bg) this._bgcolor = bg;
-    let lastColor = this._ctx.fillStyle;
+    const lastColor = this._ctx.fillStyle;
     
-    if (this._bgcolor && this._bgcolor != "transparent") {
-      this._ctx.fillStyle = this._bgcolor;
-      this._ctx.fillRect( -1, -1, this._canvas.width+1, this._canvas.height+1 );
-    } else {
-      this._ctx.clearRect( -1, -1, this._canvas.width+1, this._canvas.height+1 );
+    if (this._bgcolor) {
+      if (this._bgcolor === "transparent") {
+        this._ctx.clearRect( -1, -1, this._canvas.width+1, this._canvas.height+1 );
+      } else { 
+        // semi-transparent bg needs to be cleared first
+        if (this._bgcolor.indexOf("rgba") === 0 || (this._bgcolor.length === 9 && this._bgcolor.indexOf("#") === 0) )  { 
+          this._ctx.clearRect( -1, -1, this._canvas.width+1, this._canvas.height+1 );
+        }
+        this._ctx.fillStyle = this._bgcolor;
+        this._ctx.fillRect( -1, -1, this._canvas.width+1, this._canvas.height+1 );
+      }
     }
     
     this._ctx.fillStyle = lastColor;
