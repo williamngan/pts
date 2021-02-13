@@ -14,6 +14,7 @@ export * from "./Typography";
 export * from "./Physics";
 export * from "./UI";
 export * from "./Play";
+export * from "./Image";
 export * from "./Types";
 
 // import again for use in quickStart
@@ -30,6 +31,8 @@ export let namespace = ( scope:any ) => {
 };
 
 export let quickStart = ( id:string, bg:string="#9ab" ) => {
+  if (!window) return;
+  
   let s:any = window;
   namespace( s );
   

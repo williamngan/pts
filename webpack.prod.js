@@ -25,7 +25,8 @@ module.exports = {
     library: 'Pts',
     libraryTarget: 'umd',    
     path: BUILD_PATH,
-    filename: 'pts.min.js'
+    filename: 'pts.min.js',
+    globalObject: 'this'
   },
 
   devtool: 'source-map',

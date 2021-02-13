@@ -17,7 +17,8 @@ module.exports = {
     libraryTarget: 'umd',
     umdNamedDefine: true,
     path: BUILD_PATH,
-    filename: 'index.js'
+    filename: 'index.js',
+    globalObject: 'this'
   },
 
   // devtool: 'source-map',

@@ -22,7 +22,8 @@ module.exports = {
     library: 'Pts',
     libraryTarget: 'umd',
     path: BUILD_PATH,
-    filename: 'pts.js'
+    filename: 'pts.js',
+    globalObject: 'this'
   },
 
   devtool: 'source-map',

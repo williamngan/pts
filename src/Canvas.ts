@@ -150,7 +150,7 @@ export class CanvasSpace extends MultiTouchSpace {
     this.autoResize = (opt.resize != undefined) ? opt.resize : false;
     
     if (opt.retina !== false) {
-      let r1 = window.devicePixelRatio || 1;
+      let r1 = window ? window.devicePixelRatio || 1 : 1;
       let r2 = this._ctx.webkitBackingStorePixelRatio || this._ctx.mozBackingStorePixelRatio || this._ctx.msBackingStorePixelRatio || this._ctx.oBackingStorePixelRatio || this._ctx.backingStorePixelRatio || 1;      
       this._pixelScale = Math.max(1, r1/r2);
     }
@@ -172,6 +172,7 @@ export class CanvasSpace extends MultiTouchSpace {
   * @param auto a boolean value indicating if auto size is set
   */
   set autoResize( auto ) {
+    if (!window) return;
     this._autoResize = auto;
     if (auto) {
       window.addEventListener( 'resize', this._resizeHandler.bind(this) );
@@ -233,6 +234,7 @@ export class CanvasSpace extends MultiTouchSpace {
   * @param evt 
   */
   protected _resizeHandler( evt:Event ) {
+    if (!window) return;
     let b = (this._autoResize || this._initialResize) ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
 
     if (b) {
@@ -386,6 +388,7 @@ export class CanvasSpace extends MultiTouchSpace {
   * Dispose of browser resources held by this space and remove all players. Call this before unmounting the canvas.
   */
   dispose():this {
+    if (!window) return;
     // remove event listeners
     window.removeEventListener( 'resize', this._resizeHandler.bind(this) );
     // stop animation loop

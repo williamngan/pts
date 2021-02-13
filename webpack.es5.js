@@ -21,7 +21,8 @@ module.exports = {
     libraryTarget: 'umd',
     umdNamedDefine: true,
     path: BUILD_PATH,
-    filename: 'es5.js'
+    filename: 'es5.js',
+    globalObject: 'this'
   },
 
   // watchOptions: { poll: true }, // seems to need this for Windows Linux subsystem to watch
