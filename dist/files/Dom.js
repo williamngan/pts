@@ -402,11 +402,12 @@ class HTMLForm extends Form_1.VisualForm {
         return this;
     }
     static rect(ctx, pts) {
-        if (!this._checkSize(pts))
+        let p = Util_1.Util.iterToArray(pts);
+        if (!Util_1.Util.arrayCheck(p))
             return;
         let elem = HTMLSpace.htmlElement(ctx.group, "div", HTMLForm.getID(ctx));
         HTMLSpace.setAttr(elem, { class: `pts-form pts-rect ${ctx.currentClass}` });
-        HTMLForm.rectStyle(ctx, pts[0], pts[1]);
+        HTMLForm.rectStyle(ctx, p[0], p[1]);
         HTMLForm.style(elem, ctx.style);
         return elem;
     }

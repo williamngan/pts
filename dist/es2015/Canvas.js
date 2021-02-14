@@ -2,9 +2,10 @@
 import { MultiTouchSpace } from './Space';
 import { VisualForm, Font } from "./Form";
 import { Pt, Group, Bound } from "./Pt";
-import { Const } from "./Util";
+import { Const, Util } from "./Util";
 import { Typography as Typo } from "./Typography";
 import { Rectangle } from './Op';
+import { Img } from './Image';
 export class CanvasSpace extends MultiTouchSpace {
     constructor(elem, callback) {
         super();
@@ -76,7 +77,7 @@ export class CanvasSpace extends MultiTouchSpace {
             this._bgcolor = opt.bgcolor;
         this.autoResize = (opt.resize != undefined) ? opt.resize : false;
         if (opt.retina !== false) {
-            let r1 = window.devicePixelRatio || 1;
+            let r1 = window ? window.devicePixelRatio || 1 : 1;
             let r2 = this._ctx.webkitBackingStorePixelRatio || this._ctx.mozBackingStorePixelRatio || this._ctx.msBackingStorePixelRatio || this._ctx.oBackingStorePixelRatio || this._ctx.backingStorePixelRatio || 1;
             this._pixelScale = Math.max(1, r1 / r2);
         }
@@ -91,6 +92,8 @@ export class CanvasSpace extends MultiTouchSpace {
         return this;
     }
     set autoResize(auto) {
+        if (!window)
+            return;
         this._autoResize = auto;
         if (auto) {
             window.addEventListener('resize', this._resizeHandler.bind(this));
@@ -129,6 +132,8 @@ export class CanvasSpace extends MultiTouchSpace {
         return this;
     }
     _resizeHandler(evt) {
+        if (!window)
+            return;
         let b = (this._autoResize || this._initialResize) ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
         if (b) {
             let box = Bound.fromBoundingRect(b);
@@ -160,13 +165,18 @@ export class CanvasSpace extends MultiTouchSpace {
     clear(bg) {
         if (bg)
             this._bgcolor = bg;
-        let lastColor = this._ctx.fillStyle;
-        if (this._bgcolor && this._bgcolor != "transparent") {
-            this._ctx.fillStyle = this._bgcolor;
-            this._ctx.fillRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
-        }
-        else {
-            this._ctx.clearRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
+        const lastColor = this._ctx.fillStyle;
+        if (this._bgcolor) {
+            if (this._bgcolor === "transparent") {
+                this._ctx.clearRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
+            }
+            else {
+                if (this._bgcolor.indexOf("rgba") === 0 || (this._bgcolor.length === 9 && this._bgcolor.indexOf("#") === 0)) {
+                    this._ctx.clearRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
+                }
+                this._ctx.fillStyle = this._bgcolor;
+                this._ctx.fillRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
+            }
         }
         this._ctx.fillStyle = lastColor;
         return this;
@@ -196,6 +206,8 @@ export class CanvasSpace extends MultiTouchSpace {
         }
     }
     dispose() {
+        if (!window)
+            return;
         window.removeEventListener('resize', this._resizeHandler.bind(this));
         this.stop();
         this.removeAll();
@@ -347,21 +359,24 @@ export class CanvasForm extends VisualForm {
         return Typo.truncate(this.getTextWidth.bind(this), str, width, tail);
     }
     _textAlign(box, vertical, offset, center) {
+        let _box = Util.iterToArray(box);
+        if (!Util.arrayCheck(_box))
+            return;
         if (!center)
-            center = Rectangle.center(box);
-        var px = box[0][0];
+            center = Rectangle.center(_box);
+        var px = _box[0][0];
         if (this._ctx.textAlign == "end" || this._ctx.textAlign == "right") {
-            px = box[1][0];
+            px = _box[1][0];
         }
         else if (this._ctx.textAlign == "center" || this._ctx.textAlign == "middle") {
             px = center[0];
         }
         var py = center[1];
         if (vertical == "top" || vertical == "start") {
-            py = box[0][1];
+            py = _box[0][1];
         }
         else if (vertical == "end" || vertical == "bottom") {
-            py = box[1][1];
+            py = _box[1][1];
         }
         return (offset) ? new Pt(px + offset[0], py + offset[1]) : new Pt(px, py);
     }
@@ -381,12 +396,26 @@ export class CanvasForm extends VisualForm {
         if (this._stroked)
             this._ctx.stroke();
     }
-    point(p, radius = 5, shape = "square") {
+    static paint(ctx, fn, fill, stroke, strokeWidth) {
+        if (fill)
+            ctx.fillStyle = fill;
+        if (stroke)
+            ctx.strokeStyle = stroke;
+        if (strokeWidth)
+            ctx.lineWidth = strokeWidth;
+        fn(ctx);
+        ctx.fill();
+        ctx.stroke();
+    }
+    static point(ctx, p, radius = 5, shape = "square") {
         if (!p)
             return;
         if (!CanvasForm[shape])
             throw new Error(`${shape} is not a static function of CanvasForm`);
-        CanvasForm[shape](this._ctx, p, radius);
+        CanvasForm[shape](ctx, p, radius);
+    }
+    point(p, radius = 5, shape = "square") {
+        CanvasForm.point(this._ctx, p, radius, shape);
         this._paint();
         return this;
     }
@@ -398,7 +427,8 @@ export class CanvasForm extends VisualForm {
         ctx.closePath();
     }
     circle(pts) {
-        CanvasForm.circle(this._ctx, pts[0], pts[1][0]);
+        let p = Util.iterToArray(pts);
+        CanvasForm.circle(this._ctx, p[0], p[1][0]);
         this._paint();
         return this;
     }
@@ -444,13 +474,19 @@ export class CanvasForm extends VisualForm {
         return this;
     }
     static line(ctx, pts) {
-        if (pts.length < 2)
+        if (!Util.arrayCheck(pts))
             return;
+        let i = 0;
         ctx.beginPath();
-        ctx.moveTo(pts[0][0], pts[0][1]);
-        for (let i = 1, len = pts.length; i < len; i++) {
-            if (pts[i])
-                ctx.lineTo(pts[i][0], pts[i][1]);
+        for (let it of pts) {
+            if (it) {
+                if (i++ > 0) {
+                    ctx.lineTo(it[0], it[1]);
+                }
+                else {
+                    ctx.moveTo(it[0], it[1]);
+                }
+            }
         }
     }
     line(pts) {
@@ -459,14 +495,9 @@ export class CanvasForm extends VisualForm {
         return this;
     }
     static polygon(ctx, pts) {
-        if (pts.length < 2)
+        if (!Util.arrayCheck(pts))
             return;
-        ctx.beginPath();
-        ctx.moveTo(pts[0][0], pts[0][1]);
-        for (let i = 1, len = pts.length; i < len; i++) {
-            if (pts[i])
-                ctx.lineTo(pts[i][0], pts[i][1]);
-        }
+        CanvasForm.line(ctx, pts);
         ctx.closePath();
     }
     polygon(pts) {
@@ -475,13 +506,14 @@ export class CanvasForm extends VisualForm {
         return this;
     }
     static rect(ctx, pts) {
-        if (pts.length < 2)
+        let p = Util.iterToArray(pts);
+        if (!Util.arrayCheck(p))
             return;
         ctx.beginPath();
-        ctx.moveTo(pts[0][0], pts[0][1]);
-        ctx.lineTo(pts[0][0], pts[1][1]);
-        ctx.lineTo(pts[1][0], pts[1][1]);
-        ctx.lineTo(pts[1][0], pts[0][1]);
+        ctx.moveTo(p[0][0], p[0][1]);
+        ctx.lineTo(p[0][0], p[1][1]);
+        ctx.lineTo(p[1][0], p[1][1]);
+        ctx.lineTo(p[1][0], p[0][1]);
         ctx.closePath();
     }
     rect(pts) {
@@ -489,22 +521,53 @@ export class CanvasForm extends VisualForm {
         this._paint();
         return this;
     }
-    static image(ctx, img, target = new Pt(), orig) {
-        if (typeof target[0] === "number") {
-            ctx.drawImage(img, target[0], target[1]);
+    static image(ctx, ptOrRect, img, orig) {
+        let t = Util.iterToArray(ptOrRect);
+        let pos;
+        if (typeof t[0] === "number") {
+            pos = t;
         }
         else {
-            let t = target;
             if (orig) {
-                ctx.drawImage(img, orig[0][0], orig[0][1], orig[1][0] - orig[0][0], orig[1][1] - orig[0][1], t[0][0], t[0][1], t[1][0] - t[0][0], t[1][1] - t[0][1]);
+                let o = Util.iterToArray(orig);
+                pos = [o[0][0], o[0][1], o[1][0] - o[0][0], o[1][1] - o[0][1],
+                    t[0][0], t[0][1], t[1][0] - t[0][0], t[1][1] - t[0][1]];
             }
             else {
-                ctx.drawImage(img, t[0][0], t[0][1], t[1][0] - t[0][0], t[1][1] - t[0][1]);
+                pos = [t[0][0], t[0][1], t[1][0] - t[0][0], t[1][1] - t[0][1]];
             }
         }
+        if (img instanceof Img) {
+            if (img.loaded) {
+                ctx.drawImage(img.image, ...pos);
+            }
+        }
+        else {
+            ctx.drawImage(img, ...pos);
+        }
     }
-    image(img, target, original) {
-        CanvasForm.image(this._ctx, img, target, original);
+    image(ptOrRect, img, orig) {
+        if (img instanceof Img) {
+            if (img.loaded) {
+                CanvasForm.image(this._ctx, ptOrRect, img.image, orig);
+            }
+        }
+        else {
+            CanvasForm.image(this._ctx, ptOrRect, img, orig);
+        }
+        return this;
+    }
+    static imageData(ctx, ptOrRect, img) {
+        let t = Util.iterToArray(ptOrRect);
+        if (typeof t[0] === "number") {
+            ctx.putImageData(img, t[0], t[1]);
+        }
+        else {
+            ctx.putImageData(img, t[0][0], t[0][1], t[0][0], t[0][1], t[1][0], t[1][1]);
+        }
+    }
+    imageData(ptOrRect, img) {
+        CanvasForm.imageData(this._ctx, ptOrRect, img);
         return this;
     }
     static text(ctx, pt, txt, maxWidth) {
@@ -525,7 +588,8 @@ export class CanvasForm extends VisualForm {
         return this;
     }
     paragraphBox(box, txt, lineHeight = 1.2, verticalAlign = "top", crop = true) {
-        let size = Rectangle.size(box);
+        let b = Util.iterToArray(box);
+        let size = Rectangle.size(b);
         this._ctx.textBaseline = "top";
         let lstep = this._font.size * lineHeight;
         let nextLine = (sub, buffer = [], cc = 0) => {
@@ -550,18 +614,18 @@ export class CanvasForm extends VisualForm {
         };
         let lines = nextLine(txt);
         let lsize = lines.length * lstep;
-        let lbox = box;
+        let lbox = b;
         if (verticalAlign == "middle" || verticalAlign == "center") {
             let lpad = (size[1] - lsize) / 2;
             if (crop)
                 lpad = Math.max(0, lpad);
-            lbox = new Group(box[0].$add(0, lpad), box[1].$subtract(0, lpad));
+            lbox = new Group(b[0].$add(0, lpad), b[1].$subtract(0, lpad));
         }
         else if (verticalAlign == "bottom") {
-            lbox = new Group(box[0].$add(0, size[1] - lsize), box[1]);
+            lbox = new Group(b[0].$add(0, size[1] - lsize), b[1]);
         }
         else {
-            lbox = new Group(box[0], box[0].$add(size[0], lsize));
+            lbox = new Group(b[0], b[0].$add(size[0], lsize));
         }
         let center = Rectangle.center(lbox);
         for (let i = 0, len = lines.length; i < len; i++) {

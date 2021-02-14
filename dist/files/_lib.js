@@ -19,6 +19,7 @@ __export(require("./Typography"));
 __export(require("./Physics"));
 __export(require("./UI"));
 __export(require("./Play"));
+__export(require("./Image"));
 const _Canvas = require("./Canvas");
 exports.namespace = (scope) => {
     let lib = module.exports;
@@ -29,6 +30,8 @@ exports.namespace = (scope) => {
     }
 };
 exports.quickStart = (id, bg = "#9ab") => {
+    if (!window)
+        return;
     let s = window;
     exports.namespace(s);
     s.space = new _Canvas.CanvasSpace(id).setup({ bgcolor: bg, resize: true, retina: true });

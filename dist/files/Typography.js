@@ -19,11 +19,12 @@ class Typography {
         }
     }
     static fontSizeToBox(box, ratio = 1, byHeight = true) {
-        let i = byHeight ? 1 : 0;
-        let h = (box[1][i] - box[0][i]);
+        let bound = Pt_1.Bound.fromGroup(box);
+        let h = byHeight ? bound.height : bound.width;
         let f = ratio * h;
-        return function (b) {
-            let nh = (b[1][i] - b[0][i]) / h;
+        return function (box2) {
+            let bound2 = Pt_1.Bound.fromGroup(box2);
+            let nh = (byHeight ? bound2.height : bound2.width) / h;
             return f * nh;
         };
     }

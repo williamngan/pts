@@ -184,6 +184,7 @@ class Sound {
     }
     get ctx() { return this._ctx; }
     get node() { return this._node; }
+    get outputNode() { return this._outputNode; }
     get stream() { return this._stream; }
     get source() { return this._source; }
     get buffer() { return this._buffer; }
@@ -221,6 +222,14 @@ class Sound {
     }
     connect(node) {
         this._node.connect(node);
+        return this;
+    }
+    setOutputNode(outputNode) {
+        this._outputNode = outputNode;
+        return this;
+    }
+    removeOutputNode() {
+        this._outputNode = null;
         return this;
     }
     analyze(size = 256, minDb = -100, maxDb = -30, smooth = 0.8) {
@@ -294,13 +303,13 @@ class Sound {
             if (this.analyzer)
                 this._node.connect(this.analyzer.node);
         }
-        this._node.connect(this._ctx.destination);
+        (this._outputNode || this._node).connect(this._ctx.destination);
         this._playing = true;
         return this;
     }
     stop() {
         if (this._playing)
-            this._node.disconnect(this._ctx.destination);
+            (this._outputNode || this._node).disconnect(this._ctx.destination);
         if (this._type === "file") {
             if (!!this._buffer) {
                 if (this.progress < 1)

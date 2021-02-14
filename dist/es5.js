@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.9.6 - Copyright © 2017-2020 William Ngan and contributors.
+ * pts.js 0.10.0 - Copyright © 2017-2021 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -12,7 +12,7 @@
 		var a = factory();
 		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
 	}
-})(window, function() {
+})(this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -116,6 +116,8 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -129,6 +131,7 @@ var Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 var Util_1 = __webpack_require__(/*! ./Util */ "./src/Util.ts");
 var Typography_1 = __webpack_require__(/*! ./Typography */ "./src/Typography.ts");
 var Op_1 = __webpack_require__(/*! ./Op */ "./src/Op.ts");
+var Image_1 = __webpack_require__(/*! ./Image */ "./src/Image.ts");
 
 var CanvasSpace = function (_Space_1$MultiTouchSp) {
     _inherits(CanvasSpace, _Space_1$MultiTouchSp);
@@ -210,7 +213,7 @@ var CanvasSpace = function (_Space_1$MultiTouchSp) {
             if (opt.bgcolor) this._bgcolor = opt.bgcolor;
             this.autoResize = opt.resize != undefined ? opt.resize : false;
             if (opt.retina !== false) {
-                var r1 = window.devicePixelRatio || 1;
+                var r1 = window ? window.devicePixelRatio || 1 : 1;
                 var r2 = this._ctx.webkitBackingStorePixelRatio || this._ctx.mozBackingStorePixelRatio || this._ctx.msBackingStorePixelRatio || this._ctx.oBackingStorePixelRatio || this._ctx.backingStorePixelRatio || 1;
                 this._pixelScale = Math.max(1, r1 / r2);
             }
@@ -254,6 +257,7 @@ var CanvasSpace = function (_Space_1$MultiTouchSp) {
     }, {
         key: "_resizeHandler",
         value: function _resizeHandler(evt) {
+            if (!window) return;
             var b = this._autoResize || this._initialResize ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
             if (b) {
                 var box = Pt_1.Bound.fromBoundingRect(b);
@@ -271,11 +275,16 @@ var CanvasSpace = function (_Space_1$MultiTouchSp) {
         value: function clear(bg) {
             if (bg) this._bgcolor = bg;
             var lastColor = this._ctx.fillStyle;
-            if (this._bgcolor && this._bgcolor != "transparent") {
-                this._ctx.fillStyle = this._bgcolor;
-                this._ctx.fillRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
-            } else {
-                this._ctx.clearRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
+            if (this._bgcolor) {
+                if (this._bgcolor === "transparent") {
+                    this._ctx.clearRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
+                } else {
+                    if (this._bgcolor.indexOf("rgba") === 0 || this._bgcolor.length === 9 && this._bgcolor.indexOf("#") === 0) {
+                        this._ctx.clearRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
+                    }
+                    this._ctx.fillStyle = this._bgcolor;
+                    this._ctx.fillRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
+                }
             }
             this._ctx.fillStyle = lastColor;
             return this;
@@ -308,6 +317,7 @@ var CanvasSpace = function (_Space_1$MultiTouchSp) {
     }, {
         key: "dispose",
         value: function dispose() {
+            if (!window) return;
             window.removeEventListener('resize', this._resizeHandler.bind(this));
             this.stop();
             this.removeAll();
@@ -316,6 +326,7 @@ var CanvasSpace = function (_Space_1$MultiTouchSp) {
     }, {
         key: "autoResize",
         set: function set(auto) {
+            if (!window) return;
             this._autoResize = auto;
             if (auto) {
                 window.addEventListener('resize', this._resizeHandler.bind(this));
@@ -569,18 +580,20 @@ var CanvasForm = function (_Form_1$VisualForm) {
     }, {
         key: "_textAlign",
         value: function _textAlign(box, vertical, offset, center) {
-            if (!center) center = Op_1.Rectangle.center(box);
-            var px = box[0][0];
+            var _box = Util_1.Util.iterToArray(box);
+            if (!Util_1.Util.arrayCheck(_box)) return;
+            if (!center) center = Op_1.Rectangle.center(_box);
+            var px = _box[0][0];
             if (this._ctx.textAlign == "end" || this._ctx.textAlign == "right") {
-                px = box[1][0];
+                px = _box[1][0];
             } else if (this._ctx.textAlign == "center" || this._ctx.textAlign == "middle") {
                 px = center[0];
             }
             var py = center[1];
             if (vertical == "top" || vertical == "start") {
-                py = box[0][1];
+                py = _box[0][1];
             } else if (vertical == "end" || vertical == "bottom") {
-                py = box[1][1];
+                py = _box[1][1];
             }
             return offset ? new Pt_1.Pt(px + offset[0], py + offset[1]) : new Pt_1.Pt(px, py);
         }
@@ -608,16 +621,15 @@ var CanvasForm = function (_Form_1$VisualForm) {
             var radius = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 5;
             var shape = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "square";
 
-            if (!p) return;
-            if (!CanvasForm[shape]) throw new Error(shape + " is not a static function of CanvasForm");
-            CanvasForm[shape](this._ctx, p, radius);
+            CanvasForm.point(this._ctx, p, radius, shape);
             this._paint();
             return this;
         }
     }, {
         key: "circle",
         value: function circle(pts) {
-            CanvasForm.circle(this._ctx, pts[0], pts[1][0]);
+            var p = Util_1.Util.iterToArray(pts);
+            CanvasForm.circle(this._ctx, p[0], p[1][0]);
             this._paint();
             return this;
         }
@@ -670,8 +682,20 @@ var CanvasForm = function (_Form_1$VisualForm) {
         }
     }, {
         key: "image",
-        value: function image(img, target, original) {
-            CanvasForm.image(this._ctx, img, target, original);
+        value: function image(ptOrRect, img, orig) {
+            if (img instanceof Image_1.Img) {
+                if (img.loaded) {
+                    CanvasForm.image(this._ctx, ptOrRect, img.image, orig);
+                }
+            } else {
+                CanvasForm.image(this._ctx, ptOrRect, img, orig);
+            }
+            return this;
+        }
+    }, {
+        key: "imageData",
+        value: function imageData(ptOrRect, img) {
+            CanvasForm.imageData(this._ctx, ptOrRect, img);
             return this;
         }
     }, {
@@ -703,7 +727,8 @@ var CanvasForm = function (_Form_1$VisualForm) {
             var verticalAlign = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : "top";
             var crop = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : true;
 
-            var size = Op_1.Rectangle.size(box);
+            var b = Util_1.Util.iterToArray(box);
+            var size = Op_1.Rectangle.size(b);
             this._ctx.textBaseline = "top";
             var lstep = this._font.size * lineHeight;
             var nextLine = function nextLine(sub) {
@@ -727,15 +752,15 @@ var CanvasForm = function (_Form_1$VisualForm) {
             };
             var lines = nextLine(txt);
             var lsize = lines.length * lstep;
-            var lbox = box;
+            var lbox = b;
             if (verticalAlign == "middle" || verticalAlign == "center") {
                 var lpad = (size[1] - lsize) / 2;
                 if (crop) lpad = Math.max(0, lpad);
-                lbox = new Pt_1.Group(box[0].$add(0, lpad), box[1].$subtract(0, lpad));
+                lbox = new Pt_1.Group(b[0].$add(0, lpad), b[1].$subtract(0, lpad));
             } else if (verticalAlign == "bottom") {
-                lbox = new Pt_1.Group(box[0].$add(0, size[1] - lsize), box[1]);
+                lbox = new Pt_1.Group(b[0].$add(0, size[1] - lsize), b[1]);
             } else {
-                lbox = new Pt_1.Group(box[0], box[0].$add(size[0], lsize));
+                lbox = new Pt_1.Group(b[0], b[0].$add(size[0], lsize));
             }
             var center = Op_1.Rectangle.center(lbox);
             for (var i = 0, len = lines.length; i < len; i++) {
@@ -774,6 +799,26 @@ var CanvasForm = function (_Form_1$VisualForm) {
             return this._space.ctx;
         }
     }], [{
+        key: "paint",
+        value: function paint(ctx, fn, fill, stroke, strokeWidth) {
+            if (fill) ctx.fillStyle = fill;
+            if (stroke) ctx.strokeStyle = stroke;
+            if (strokeWidth) ctx.lineWidth = strokeWidth;
+            fn(ctx);
+            ctx.fill();
+            ctx.stroke();
+        }
+    }, {
+        key: "point",
+        value: function point(ctx, p) {
+            var radius = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 5;
+            var shape = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : "square";
+
+            if (!p) return;
+            if (!CanvasForm[shape]) throw new Error(shape + " is not a static function of CanvasForm");
+            CanvasForm[shape](ctx, p, radius);
+        }
+    }, {
         key: "circle",
         value: function circle(ctx, pt) {
             var radius = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 10;
@@ -820,50 +865,90 @@ var CanvasForm = function (_Form_1$VisualForm) {
     }, {
         key: "line",
         value: function line(ctx, pts) {
-            if (pts.length < 2) return;
+            if (!Util_1.Util.arrayCheck(pts)) return;
+            var i = 0;
             ctx.beginPath();
-            ctx.moveTo(pts[0][0], pts[0][1]);
-            for (var i = 1, len = pts.length; i < len; i++) {
-                if (pts[i]) ctx.lineTo(pts[i][0], pts[i][1]);
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                for (var _iterator = pts[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var it = _step.value;
+
+                    if (it) {
+                        if (i++ > 0) {
+                            ctx.lineTo(it[0], it[1]);
+                        } else {
+                            ctx.moveTo(it[0], it[1]);
+                        }
+                    }
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
             }
         }
     }, {
         key: "polygon",
         value: function polygon(ctx, pts) {
-            if (pts.length < 2) return;
-            ctx.beginPath();
-            ctx.moveTo(pts[0][0], pts[0][1]);
-            for (var i = 1, len = pts.length; i < len; i++) {
-                if (pts[i]) ctx.lineTo(pts[i][0], pts[i][1]);
-            }
+            if (!Util_1.Util.arrayCheck(pts)) return;
+            CanvasForm.line(ctx, pts);
             ctx.closePath();
         }
     }, {
         key: "rect",
         value: function rect(ctx, pts) {
-            if (pts.length < 2) return;
+            var p = Util_1.Util.iterToArray(pts);
+            if (!Util_1.Util.arrayCheck(p)) return;
             ctx.beginPath();
-            ctx.moveTo(pts[0][0], pts[0][1]);
-            ctx.lineTo(pts[0][0], pts[1][1]);
-            ctx.lineTo(pts[1][0], pts[1][1]);
-            ctx.lineTo(pts[1][0], pts[0][1]);
+            ctx.moveTo(p[0][0], p[0][1]);
+            ctx.lineTo(p[0][0], p[1][1]);
+            ctx.lineTo(p[1][0], p[1][1]);
+            ctx.lineTo(p[1][0], p[0][1]);
             ctx.closePath();
         }
     }, {
         key: "image",
-        value: function image(ctx, img) {
-            var target = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : new Pt_1.Pt();
-            var orig = arguments[3];
-
-            if (typeof target[0] === "number") {
-                ctx.drawImage(img, target[0], target[1]);
+        value: function image(ctx, ptOrRect, img, orig) {
+            var t = Util_1.Util.iterToArray(ptOrRect);
+            var pos = void 0;
+            if (typeof t[0] === "number") {
+                pos = t;
             } else {
-                var t = target;
                 if (orig) {
-                    ctx.drawImage(img, orig[0][0], orig[0][1], orig[1][0] - orig[0][0], orig[1][1] - orig[0][1], t[0][0], t[0][1], t[1][0] - t[0][0], t[1][1] - t[0][1]);
+                    var o = Util_1.Util.iterToArray(orig);
+                    pos = [o[0][0], o[0][1], o[1][0] - o[0][0], o[1][1] - o[0][1], t[0][0], t[0][1], t[1][0] - t[0][0], t[1][1] - t[0][1]];
                 } else {
-                    ctx.drawImage(img, t[0][0], t[0][1], t[1][0] - t[0][0], t[1][1] - t[0][1]);
+                    pos = [t[0][0], t[0][1], t[1][0] - t[0][0], t[1][1] - t[0][1]];
                 }
+            }
+            if (img instanceof Image_1.Img) {
+                if (img.loaded) {
+                    ctx.drawImage.apply(ctx, [img.image].concat(_toConsumableArray(pos)));
+                }
+            } else {
+                ctx.drawImage.apply(ctx, [img].concat(_toConsumableArray(pos)));
+            }
+        }
+    }, {
+        key: "imageData",
+        value: function imageData(ctx, ptOrRect, img) {
+            var t = Util_1.Util.iterToArray(ptOrRect);
+            if (typeof t[0] === "number") {
+                ctx.putImageData(img, t[0], t[1]);
+            } else {
+                ctx.putImageData(img, t[0][0], t[0][1], t[0][0], t[0][1], t[1][0], t[1][1]);
             }
         }
     }, {
@@ -1547,9 +1632,10 @@ var Create = function () {
     }, {
         key: "distributeLinear",
         value: function distributeLinear(line, count) {
-            var ln = Op_1.Line.subpoints(line, count - 2);
-            ln.unshift(line[0]);
-            ln.push(line[line.length - 1]);
+            var _line = Util_1.Util.iterToArray(line);
+            var ln = Op_1.Line.subpoints(_line, count - 2);
+            ln.unshift(_line[0]);
+            ln.push(_line[_line.length - 1]);
             return ln;
         }
     }, {
@@ -1603,14 +1689,38 @@ var Create = function () {
 
             var seed = Math.random();
             var g = new Pt_1.Group();
-            for (var i = 0, len = pts.length; i < len; i++) {
-                var np = new Noise(pts[i]);
-                var r = rows && rows > 0 ? Math.floor(i / rows) : i;
-                var c = columns && columns > 0 ? i % columns : i;
-                np.initNoise(dx * c, dy * r);
-                np.seed(seed);
-                g.push(np);
+            var i = 0;
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                for (var _iterator = pts[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var p = _step.value;
+
+                    var np = new Noise(p);
+                    var r = rows && rows > 0 ? Math.floor(i / rows) : i;
+                    var c = columns && columns > 0 ? i % columns : i;
+                    np.initNoise(dx * c, dy * r);
+                    np.seed(seed);
+                    g.push(np);
+                    i++;
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
             }
+
             return g;
         }
     }, {
@@ -2460,10 +2570,11 @@ var HTMLForm = function (_Form_1$VisualForm) {
     }, {
         key: "rect",
         value: function rect(ctx, pts) {
-            if (!this._checkSize(pts)) return;
+            var p = Util_1.Util.iterToArray(pts);
+            if (!Util_1.Util.arrayCheck(p)) return;
             var elem = HTMLSpace.htmlElement(ctx.group, "div", HTMLForm.getID(ctx));
             HTMLSpace.setAttr(elem, { class: "pts-form pts-rect " + ctx.currentClass });
-            HTMLForm.rectStyle(ctx, pts[0], pts[1]);
+            HTMLForm.rectStyle(ctx, p[0], p[1]);
             HTMLForm.style(elem, ctx.style);
             return elem;
         }
@@ -2508,7 +2619,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var Util_1 = __webpack_require__(/*! ./Util */ "./src/Util.ts");
 
 var Form = function () {
     function Form() {
@@ -2521,17 +2631,6 @@ var Form = function () {
         key: "ready",
         get: function get() {
             return this._ready;
-        }
-    }], [{
-        key: "_checkSize",
-        value: function _checkSize(pts) {
-            var required = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
-
-            if (pts.length < required) {
-                Util_1.Util.warn("Requires 2 or more Pts in this Group.");
-                return false;
-            }
-            return true;
         }
     }]);
 
@@ -2690,6 +2789,165 @@ var Font = function () {
 }();
 
 exports.Font = Font;
+
+/***/ }),
+
+/***/ "./src/Image.ts":
+/*!**********************!*\
+  !*** ./src/Image.ts ***!
+  \**********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
+
+var Img = function () {
+    function Img() {
+        var editable = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+        var pixelScale = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+
+        _classCallCheck(this, Img);
+
+        this._scale = 1;
+        this._loaded = false;
+        this._editable = editable;
+        this._scale = pixelScale;
+        this._img = new Image();
+    }
+
+    _createClass(Img, [{
+        key: "load",
+        value: function load(src) {
+            var _this = this;
+
+            return new Promise(function (resolve, reject) {
+                _this._img.src = src;
+                _this._img.onload = function () {
+                    if (_this._editable) {
+                        _this._cv = document.createElement("canvas");
+                        _this._drawToScale(_this._scale, _this._scale, _this._img);
+                        _this._data = _this._ctx.getImageData(0, 0, _this._cv.width, _this._cv.height);
+                    }
+                    _this._loaded = true;
+                    resolve(_this);
+                };
+                _this._img.onerror = function (evt) {
+                    reject(evt);
+                };
+            });
+        }
+    }, {
+        key: "_drawToScale",
+        value: function _drawToScale(imgScale, canvasScale, img) {
+            this._cv.width = this._img.naturalWidth * imgScale;
+            this._cv.height = this._img.naturalHeight * imgScale;
+            this._ctx = this._cv.getContext('2d');
+            this._ctx.save();
+            this._ctx.scale(canvasScale, canvasScale);
+            if (img) this._ctx.drawImage(img, 0, 0);
+            this._ctx.restore();
+        }
+    }, {
+        key: "bitmap",
+        value: function bitmap(size) {
+            var w = size ? size[0] : this._cv.width;
+            var h = size ? size[1] : this._cv.height;
+            return createImageBitmap(this._cv, 0, 0, w, h);
+        }
+    }, {
+        key: "sync",
+        value: function sync() {
+            var _this2 = this;
+
+            if (this._scale !== 1) {
+                this.bitmap().then(function (b) {
+                    _this2._drawToScale(1, 1 / _this2._scale, b);
+                    _this2._img.src = _this2.toBase64();
+                    _this2._drawToScale(_this2._scale, _this2._scale, _this2._img);
+                });
+            } else {
+                this._img.src = this.toBase64();
+            }
+        }
+    }, {
+        key: "pixel",
+        value: function pixel(p) {
+            return Img.getPixel(this._data, [p[0] * this._scale, p[1] * this._scale]);
+        }
+    }, {
+        key: "crop",
+        value: function crop(box) {
+            var p = box.topLeft.scale(this._scale);
+            var s = box.size.scale(this._scale);
+            return this._ctx.getImageData(p.x, p.y, s.x, s.y);
+        }
+    }, {
+        key: "toBase64",
+        value: function toBase64() {
+            return this._cv.toDataURL();
+        }
+    }, {
+        key: "image",
+        get: function get() {
+            return this._img;
+        }
+    }, {
+        key: "canvas",
+        get: function get() {
+            return this._cv;
+        }
+    }, {
+        key: "data",
+        get: function get() {
+            return this._data;
+        }
+    }, {
+        key: "ctx",
+        get: function get() {
+            return this._ctx;
+        }
+    }, {
+        key: "loaded",
+        get: function get() {
+            return this._loaded;
+        }
+    }, {
+        key: "pixelScale",
+        get: function get() {
+            return this._scale;
+        }
+    }], [{
+        key: "getPixel",
+        value: function getPixel(imgData, p) {
+            var no = new Pt_1.Pt(0, 0, 0, 0);
+            if (p[0] >= imgData.width || p[1] >= imgData.height) return no;
+            var i = Math.floor(p[1]) * (imgData.width * 4) + Math.floor(p[0]) * 4;
+            var d = imgData.data;
+            if (i >= d.length - 4) return no;
+            return new Pt_1.Pt(d[i], d[i + 1], d[i + 2], d[i + 3]);
+        }
+    }, {
+        key: "fromBlob",
+        value: function fromBlob(blob) {
+            var editable = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+            var url = URL.createObjectURL(blob);
+            return new Img(editable).load(url);
+        }
+    }]);
+
+    return Img;
+}();
+
+exports.Img = Img;
 
 /***/ }),
 
@@ -3113,16 +3371,18 @@ var Num = function () {
     }, {
         key: "sum",
         value: function sum(pts) {
-            var c = new Pt_1.Pt(pts[0]);
-            for (var i = 1, len = pts.length; i < len; i++) {
-                LinearAlgebra_1.Vec.add(c, pts[i]);
+            var _pts = Util_1.Util.iterToArray(pts);
+            var c = new Pt_1.Pt(_pts[0]);
+            for (var i = 1, len = _pts.length; i < len; i++) {
+                LinearAlgebra_1.Vec.add(c, _pts[i]);
             }
             return c;
         }
     }, {
         key: "average",
         value: function average(pts) {
-            return Num.sum(pts).divide(pts.length);
+            var _pts = Util_1.Util.iterToArray(pts);
+            return Num.sum(_pts).divide(_pts.length);
         }
     }, {
         key: "cycle",
@@ -3174,12 +3434,39 @@ var Geom = function () {
     }, {
         key: "boundingBox",
         value: function boundingBox(pts) {
-            var minPt = pts.reduce(function (a, p) {
-                return a.$min(p);
-            });
-            var maxPt = pts.reduce(function (a, p) {
-                return a.$max(p);
-            });
+            var minPt = void 0,
+                maxPt = void 0;
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                for (var _iterator = pts[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var p = _step.value;
+
+                    if (minPt == undefined) {
+                        minPt = p.clone();
+                        maxPt = p.clone();
+                    } else {
+                        minPt = minPt.$min(p);
+                        maxPt = maxPt.$max(p);
+                    }
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
+            }
+
             return new Pt_1.Group(minPt, maxPt);
         }
     }, {
@@ -3194,11 +3481,34 @@ var Geom = function () {
             var direction = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "to";
 
             var method = direction == "to" ? "subtract" : "add";
-            for (var i = 0, len = pts.length; i < len; i++) {
-                if (typeof ptOrIndex == "number") {
-                    if (ptOrIndex !== i) pts[i][method](pts[ptOrIndex]);
-                } else {
-                    pts[i][method](ptOrIndex);
+            var i = 0;
+            var _iteratorNormalCompletion2 = true;
+            var _didIteratorError2 = false;
+            var _iteratorError2 = undefined;
+
+            try {
+                for (var _iterator2 = pts[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                    var p = _step2.value;
+
+                    if (typeof ptOrIndex == "number") {
+                        if (ptOrIndex !== i) p[method](pts[ptOrIndex]);
+                    } else {
+                        p[method](ptOrIndex);
+                    }
+                    i++;
+                }
+            } catch (err) {
+                _didIteratorError2 = true;
+                _iteratorError2 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                        _iterator2.return();
+                    }
+                } finally {
+                    if (_didIteratorError2) {
+                        throw _iteratorError2;
+                    }
                 }
             }
         }
@@ -3246,7 +3556,8 @@ var Geom = function () {
     }, {
         key: "sortEdges",
         value: function sortEdges(pts) {
-            var bounds = Geom.boundingBox(pts);
+            var _pts = Util_1.Util.iterToArray(pts);
+            var bounds = Geom.boundingBox(_pts);
             var center = bounds[1].add(bounds[0]).divide(2);
             var fn = function fn(a, b) {
                 if (a.length < 2 || b.length < 2) throw new Error("Pt dimension cannot be less than 2");
@@ -3263,12 +3574,12 @@ var Geom = function () {
                 if (det > 0) return -1;
                 return da[0] * da[0] + da[1] * da[1] > db[0] * db[0] + db[1] * db[1] ? 1 : -1;
             };
-            return pts.sort(fn);
+            return _pts.sort(fn);
         }
     }, {
         key: "scale",
         value: function scale(ps, _scale, anchor) {
-            var pts = !Array.isArray(ps) ? [ps] : ps;
+            var pts = Util_1.Util.iterToArray(ps[0] !== undefined && typeof ps[0] == 'number' ? [ps] : ps);
             var scs = typeof _scale == "number" ? Pt_1.Pt.make(pts[0].length, _scale) : _scale;
             if (!anchor) anchor = Pt_1.Pt.make(pts[0].length, 0);
             for (var i = 0, len = pts.length; i < len; i++) {
@@ -3282,7 +3593,7 @@ var Geom = function () {
     }, {
         key: "rotate2D",
         value: function rotate2D(ps, angle, anchor, axis) {
-            var pts = !Array.isArray(ps) ? [ps] : ps;
+            var pts = Util_1.Util.iterToArray(ps[0] !== undefined && typeof ps[0] == 'number' ? [ps] : ps);
             var fn = anchor ? LinearAlgebra_1.Mat.rotateAt2DMatrix : LinearAlgebra_1.Mat.rotate2DMatrix;
             if (!anchor) anchor = Pt_1.Pt.make(pts[0].length, 0);
             var cos = Math.cos(angle);
@@ -3301,7 +3612,7 @@ var Geom = function () {
     }, {
         key: "shear2D",
         value: function shear2D(ps, scale, anchor, axis) {
-            var pts = !Array.isArray(ps) ? [ps] : ps;
+            var pts = Util_1.Util.iterToArray(ps[0] !== undefined && typeof ps[0] == 'number' ? [ps] : ps);
             var s = typeof scale == "number" ? [scale, scale] : scale;
             if (!anchor) anchor = Pt_1.Pt.make(pts[0].length, 0);
             var fn = anchor ? LinearAlgebra_1.Mat.shearAt2DMatrix : LinearAlgebra_1.Mat.shear2DMatrix;
@@ -3321,8 +3632,9 @@ var Geom = function () {
     }, {
         key: "reflect2D",
         value: function reflect2D(ps, line, axis) {
-            var pts = !Array.isArray(ps) ? [ps] : ps;
-            var mat = LinearAlgebra_1.Mat.reflectAt2DMatrix(line[0], line[1]);
+            var pts = Util_1.Util.iterToArray(ps[0] !== undefined && typeof ps[0] == 'number' ? [ps] : ps);
+            var _line = Util_1.Util.iterToArray(line);
+            var mat = LinearAlgebra_1.Mat.reflectAt2DMatrix(_line[0], _line[1]);
             for (var i = 0, len = pts.length; i < len; i++) {
                 var p = axis ? pts[i].$take(axis) : pts[i];
                 p.to(LinearAlgebra_1.Mat.transform2D(p, mat));
@@ -3706,11 +4018,12 @@ var Range = function () {
         }
     }, {
         key: "append",
-        value: function append(g) {
+        value: function append(pts) {
             var update = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 
-            if (g[0].length !== this._dims) throw new Error("Dimensions don't match. " + this._dims + " dimensions in Range and " + g[0].length + " provided in parameter. ");
-            this._source = this._source.concat(g);
+            var _pts = Util_1.Util.iterToArray(pts);
+            if (_pts[0].length !== this._dims) throw new Error("Dimensions don't match. " + this._dims + " dimensions in Range and " + _pts[0].length + " provided in parameter. ");
+            this._source = this._source.concat(_pts);
             if (update) this.calc();
             return this;
         }
@@ -3813,7 +4126,8 @@ var Line = function () {
     }, {
         key: "sideOfPt2D",
         value: function sideOfPt2D(line, pt) {
-            return (line[1][0] - line[0][0]) * (pt[1] - line[0][1]) - (pt[0] - line[0][0]) * (line[1][1] - line[0][1]);
+            var _line = Util_1.Util.iterToArray(line);
+            return (_line[1][0] - _line[0][0]) * (pt[1] - _line[0][1]) - (pt[0] - _line[0][0]) * (_line[1][1] - _line[0][1]);
         }
     }, {
         key: "collinear",
@@ -3827,41 +4141,47 @@ var Line = function () {
     }, {
         key: "magnitude",
         value: function magnitude(line) {
-            return line.length >= 2 ? line[1].$subtract(line[0]).magnitude() : 0;
+            var _line = Util_1.Util.iterToArray(line);
+            return _line.length >= 2 ? _line[1].$subtract(_line[0]).magnitude() : 0;
         }
     }, {
         key: "magnitudeSq",
         value: function magnitudeSq(line) {
-            return line.length >= 2 ? line[1].$subtract(line[0]).magnitudeSq() : 0;
+            var _line = Util_1.Util.iterToArray(line);
+            return _line.length >= 2 ? _line[1].$subtract(_line[0]).magnitudeSq() : 0;
         }
     }, {
         key: "perpendicularFromPt",
         value: function perpendicularFromPt(line, pt) {
             var asProjection = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
-            if (line[0].equals(line[1])) return undefined;
-            var a = line[0].$subtract(line[1]);
-            var b = line[1].$subtract(pt);
+            var _line = Util_1.Util.iterToArray(line);
+            if (_line[0].equals(_line[1])) return undefined;
+            var a = _line[0].$subtract(_line[1]);
+            var b = _line[1].$subtract(pt);
             var proj = b.$subtract(a.$project(b));
             return asProjection ? proj : proj.$add(pt);
         }
     }, {
         key: "distanceFromPt",
         value: function distanceFromPt(line, pt) {
-            var projectionVector = Line.perpendicularFromPt(line, pt, true);
+            var _line = Util_1.Util.iterToArray(line);
+            var projectionVector = Line.perpendicularFromPt(_line, pt, true);
             if (projectionVector) {
                 return projectionVector.magnitude();
             } else {
-                return line[0].$subtract(pt).magnitude();
+                return _line[0].$subtract(pt).magnitude();
             }
         }
     }, {
         key: "intersectRay2D",
         value: function intersectRay2D(la, lb) {
-            var a = Line.intercept(la[0], la[1]);
-            var b = Line.intercept(lb[0], lb[1]);
-            var pa = la[0];
-            var pb = lb[0];
+            var _la = Util_1.Util.iterToArray(la);
+            var _lb = Util_1.Util.iterToArray(lb);
+            var a = Line.intercept(_la[0], _la[1]);
+            var b = Line.intercept(_lb[0], _lb[1]);
+            var pa = _la[0];
+            var pb = _lb[0];
             if (a == undefined) {
                 if (b == undefined) return undefined;
                 var y1 = -b.slope * (pb[0] - pa[0]) + pb[1];
@@ -3886,25 +4206,31 @@ var Line = function () {
     }, {
         key: "intersectLine2D",
         value: function intersectLine2D(la, lb) {
-            var pt = Line.intersectRay2D(la, lb);
-            return pt && Num_1.Geom.withinBound(pt, la[0], la[1]) && Num_1.Geom.withinBound(pt, lb[0], lb[1]) ? pt : undefined;
+            var _la = Util_1.Util.iterToArray(la);
+            var _lb = Util_1.Util.iterToArray(lb);
+            var pt = Line.intersectRay2D(_la, _lb);
+            return pt && Num_1.Geom.withinBound(pt, _la[0], _la[1]) && Num_1.Geom.withinBound(pt, _lb[0], _lb[1]) ? pt : undefined;
         }
     }, {
         key: "intersectLineWithRay2D",
         value: function intersectLineWithRay2D(line, ray) {
-            var pt = Line.intersectRay2D(line, ray);
-            return pt && Num_1.Geom.withinBound(pt, line[0], line[1]) ? pt : undefined;
+            var _line = Util_1.Util.iterToArray(line);
+            var _ray = Util_1.Util.iterToArray(ray);
+            var pt = Line.intersectRay2D(_line, _ray);
+            return pt && Num_1.Geom.withinBound(pt, _line[0], _line[1]) ? pt : undefined;
         }
     }, {
         key: "intersectPolygon2D",
         value: function intersectPolygon2D(lineOrRay, poly) {
             var sourceIsRay = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
+            var _lineOrRay = Util_1.Util.iterToArray(lineOrRay);
+            var _poly = Util_1.Util.iterToArray(poly);
             var fn = sourceIsRay ? Line.intersectLineWithRay2D : Line.intersectLine2D;
             var pts = new Pt_1.Group();
-            for (var i = 0, len = poly.length; i < len; i++) {
+            for (var i = 0, len = _poly.length; i < len; i++) {
                 var next = i === len - 1 ? 0 : i + 1;
-                var d = fn([poly[i], poly[next]], lineOrRay);
+                var d = fn([_poly[i], _poly[next]], _lineOrRay);
                 if (d) pts.push(d);
             }
             return pts.length > 0 ? pts : undefined;
@@ -3916,18 +4242,61 @@ var Line = function () {
 
             var group = new Pt_1.Group();
             var fn = isRay ? Line.intersectLineWithRay2D : Line.intersectLine2D;
-            for (var i = 0, len = lines1.length; i < len; i++) {
-                for (var k = 0, lenk = lines2.length; k < lenk; k++) {
-                    var _ip = fn(lines1[i], lines2[k]);
-                    if (_ip) group.push(_ip);
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                for (var _iterator = lines1[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var l1 = _step.value;
+                    var _iteratorNormalCompletion2 = true;
+                    var _didIteratorError2 = false;
+                    var _iteratorError2 = undefined;
+
+                    try {
+                        for (var _iterator2 = lines2[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                            var l2 = _step2.value;
+
+                            var _ip = fn(l1, l2);
+                            if (_ip) group.push(_ip);
+                        }
+                    } catch (err) {
+                        _didIteratorError2 = true;
+                        _iteratorError2 = err;
+                    } finally {
+                        try {
+                            if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                                _iterator2.return();
+                            }
+                        } finally {
+                            if (_didIteratorError2) {
+                                throw _iteratorError2;
+                            }
+                        }
+                    }
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
                 }
             }
+
             return group;
         }
     }, {
         key: "intersectGridWithRay2D",
         value: function intersectGridWithRay2D(ray, gridPt) {
-            var t = Line.intercept(new Pt_1.Pt(ray[0]).subtract(gridPt), new Pt_1.Pt(ray[1]).subtract(gridPt));
+            var _ray = Util_1.Util.iterToArray(ray);
+            var t = Line.intercept(new Pt_1.Pt(_ray[0]).subtract(gridPt), new Pt_1.Pt(_ray[1]).subtract(gridPt));
             var g = new Pt_1.Group();
             if (t && t.xi) g.push(new Pt_1.Pt(gridPt[0] + t.xi, gridPt[1]));
             if (t && t.yi) g.push(new Pt_1.Pt(gridPt[0], gridPt[1] + t.yi));
@@ -3936,26 +4305,30 @@ var Line = function () {
     }, {
         key: "intersectGridWithLine2D",
         value: function intersectGridWithLine2D(line, gridPt) {
-            var g = Line.intersectGridWithRay2D(line, gridPt);
+            var _line = Util_1.Util.iterToArray(line);
+            var g = Line.intersectGridWithRay2D(_line, gridPt);
             var gg = new Pt_1.Group();
             for (var i = 0, len = g.length; i < len; i++) {
-                if (Num_1.Geom.withinBound(g[i], line[0], line[1])) gg.push(g[i]);
+                if (Num_1.Geom.withinBound(g[i], _line[0], _line[1])) gg.push(g[i]);
             }
             return gg;
         }
     }, {
         key: "intersectRect2D",
         value: function intersectRect2D(line, rect) {
-            var box = Num_1.Geom.boundingBox(Pt_1.Group.fromPtArray(line));
-            if (!Rectangle.hasIntersectRect2D(box, rect)) return new Pt_1.Group();
-            return Line.intersectLines2D([line], Rectangle.sides(rect));
+            var _line = Util_1.Util.iterToArray(line);
+            var _rect = Util_1.Util.iterToArray(rect);
+            var box = Num_1.Geom.boundingBox(Pt_1.Group.fromPtArray(_line));
+            if (!Rectangle.hasIntersectRect2D(box, _rect)) return new Pt_1.Group();
+            return Line.intersectLines2D([_line], Rectangle.sides(_rect));
         }
     }, {
         key: "subpoints",
         value: function subpoints(line, num) {
+            var _line = Util_1.Util.iterToArray(line);
             var pts = new Pt_1.Group();
             for (var i = 1; i <= num; i++) {
-                pts.push(Num_1.Geom.interpolate(line[0], line[1], i / (num + 1)));
+                pts.push(Num_1.Geom.interpolate(_line[0], _line[1], i / (num + 1)));
             }
             return pts;
         }
@@ -3965,14 +4338,15 @@ var Line = function () {
             var index = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
             var cropAsCircle = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
 
+            var _line = Util_1.Util.iterToArray(line);
             var tdx = index === 0 ? 1 : 0;
-            var ls = line[tdx].$subtract(line[index]);
-            if (ls[0] === 0 || size[0] === 0) return line[index];
+            var ls = _line[tdx].$subtract(_line[index]);
+            if (ls[0] === 0 || size[0] === 0) return _line[index];
             if (cropAsCircle) {
                 var d = ls.unit().multiply(size[1]);
-                return line[index].$add(d);
+                return _line[index].$add(d);
             } else {
-                var rect = Rectangle.fromCenter(line[index], size);
+                var rect = Rectangle.fromCenter(_line[index], size);
                 var sides = Rectangle.sides(rect);
                 var sideIdx = 0;
                 if (Math.abs(ls[1] / ls[0]) > Math.abs(size[1] / size[0])) {
@@ -3980,7 +4354,7 @@ var Line = function () {
                 } else {
                     sideIdx = ls[0] < 0 ? 3 : 1;
                 }
-                return Line.intersectRay2D(sides[sideIdx], line);
+                return Line.intersectRay2D(sides[sideIdx], _line);
             }
         }
     }, {
@@ -3989,15 +4363,16 @@ var Line = function () {
             var graphic = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "arrow" || "line";
             var atTail = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
 
+            var _line = Util_1.Util.iterToArray(line);
             var h = atTail ? 0 : 1;
             var t = atTail ? 1 : 0;
-            var unit = line[h].$subtract(line[t]);
+            var unit = _line[h].$subtract(_line[t]);
             if (unit.magnitudeSq() === 0) return new Pt_1.Group();
             unit.unit();
-            var ps = Num_1.Geom.perpendicular(unit).multiply(size[0]).add(line[t]);
+            var ps = Num_1.Geom.perpendicular(unit).multiply(size[0]).add(_line[t]);
             if (graphic == "arrow") {
                 ps.add(unit.$multiply(size[1]));
-                return new Pt_1.Group(line[t], ps[0], ps[1]);
+                return new Pt_1.Group(_line[t], ps[0], ps[1]);
             } else {
                 return new Pt_1.Group(ps[0], ps[1]);
             }
@@ -4005,7 +4380,8 @@ var Line = function () {
     }, {
         key: "toRect",
         value: function toRect(line) {
-            return new Pt_1.Group(line[0].$min(line[1]), line[0].$max(line[1]));
+            var _line = Util_1.Util.iterToArray(line);
+            return new Pt_1.Group(_line[0].$min(_line[1]), _line[0].$max(_line[1]));
         }
     }]);
 
@@ -4048,27 +4424,31 @@ var Rectangle = function () {
         value: function toSquare(pts) {
             var enclose = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
-            var s = Rectangle.size(pts);
+            var _pts = Util_1.Util.iterToArray(pts);
+            var s = Rectangle.size(_pts);
             var m = enclose ? s.maxValue().value : s.minValue().value;
-            return Rectangle.fromCenter(Rectangle.center(pts), m, m);
+            return Rectangle.fromCenter(Rectangle.center(_pts), m, m);
         }
     }, {
         key: "size",
         value: function size(pts) {
-            return pts[0].$max(pts[1]).subtract(pts[0].$min(pts[1]));
+            var p = Util_1.Util.iterToArray(pts);
+            return p[0].$max(p[1]).subtract(p[0].$min(p[1]));
         }
     }, {
         key: "center",
         value: function center(pts) {
-            var min = pts[0].$min(pts[1]);
-            var max = pts[0].$max(pts[1]);
+            var p = Util_1.Util.iterToArray(pts);
+            var min = p[0].$min(p[1]);
+            var max = p[0].$max(p[1]);
             return min.add(max.$subtract(min).divide(2));
         }
     }, {
         key: "corners",
         value: function corners(rect) {
-            var p0 = rect[0].$min(rect[1]);
-            var p2 = rect[0].$max(rect[1]);
+            var _rect = Util_1.Util.iterToArray(rect);
+            var p0 = _rect[0].$min(_rect[1]);
+            var p2 = _rect[0].$max(_rect[1]);
             return new Pt_1.Group(p0, new Pt_1.Pt(p2.x, p0.y), p2, new Pt_1.Pt(p0.x, p2.y));
         }
     }, {
@@ -4086,13 +4466,37 @@ var Rectangle = function () {
     }, {
         key: "boundingBox",
         value: function boundingBox(rects) {
-            var merged = Util_1.Util.flatten(rects, false);
+            var _rects = Util_1.Util.iterToArray(rects);
+            var merged = Util_1.Util.flatten(_rects, false);
             var min = Pt_1.Pt.make(2, Number.MAX_VALUE);
             var max = Pt_1.Pt.make(2, Number.MIN_VALUE);
             for (var i = 0, len = merged.length; i < len; i++) {
-                for (var k = 0; k < 2; k++) {
-                    min[k] = Math.min(min[k], merged[i][k]);
-                    max[k] = Math.max(max[k], merged[i][k]);
+                var k = 0;
+                var _iteratorNormalCompletion3 = true;
+                var _didIteratorError3 = false;
+                var _iteratorError3 = undefined;
+
+                try {
+                    for (var _iterator3 = merged[i][Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                        var m = _step3.value;
+
+                        min[k] = Math.min(min[k], m[k]);
+                        max[k] = Math.max(max[k], m[k]);
+                        if (++k >= 2) break;
+                    }
+                } catch (err) {
+                    _didIteratorError3 = true;
+                    _iteratorError3 = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion3 && _iterator3.return) {
+                            _iterator3.return();
+                        }
+                    } finally {
+                        if (_didIteratorError3) {
+                            throw _iteratorError3;
+                        }
+                    }
                 }
             }
             return new Pt_1.Group(min, max);
@@ -4105,8 +4509,9 @@ var Rectangle = function () {
     }, {
         key: "quadrants",
         value: function quadrants(rect, center) {
-            var corners = Rectangle.corners(rect);
-            var _center = center != undefined ? new Pt_1.Pt(center) : Rectangle.center(rect);
+            var _rect = Util_1.Util.iterToArray(rect);
+            var corners = Rectangle.corners(_rect);
+            var _center = center != undefined ? new Pt_1.Pt(center) : Rectangle.center(_rect);
             return corners.map(function (c) {
                 return new Pt_1.Group(c, _center).boundingBox();
             });
@@ -4117,34 +4522,40 @@ var Rectangle = function () {
             var ratio = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0.5;
             var asRows = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
-            var min = rect[0].$min(rect[1]);
-            var max = rect[0].$max(rect[1]);
+            var _rect = Util_1.Util.iterToArray(rect);
+            var min = _rect[0].$min(_rect[1]);
+            var max = _rect[0].$max(_rect[1]);
             var mid = asRows ? Num_1.Num.lerp(min[1], max[1], ratio) : Num_1.Num.lerp(min[0], max[0], ratio);
             return asRows ? [new Pt_1.Group(min, new Pt_1.Pt(max[0], mid)), new Pt_1.Group(new Pt_1.Pt(min[0], mid), max)] : [new Pt_1.Group(min, new Pt_1.Pt(mid, max[1])), new Pt_1.Group(new Pt_1.Pt(mid, min[1]), max)];
         }
     }, {
         key: "withinBound",
         value: function withinBound(rect, pt) {
-            return Num_1.Geom.withinBound(pt, rect[0], rect[1]);
+            var _rect = Util_1.Util.iterToArray(rect);
+            return Num_1.Geom.withinBound(pt, _rect[0], _rect[1]);
         }
     }, {
         key: "hasIntersectRect2D",
         value: function hasIntersectRect2D(rect1, rect2) {
             var resetBoundingBox = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
+            var _rect1 = Util_1.Util.iterToArray(rect1);
+            var _rect2 = Util_1.Util.iterToArray(rect2);
             if (resetBoundingBox) {
-                rect1 = Num_1.Geom.boundingBox(rect1);
-                rect2 = Num_1.Geom.boundingBox(rect2);
+                _rect1 = Num_1.Geom.boundingBox(_rect1);
+                _rect2 = Num_1.Geom.boundingBox(_rect2);
             }
-            if (rect1[0][0] > rect2[1][0] || rect2[0][0] > rect1[1][0]) return false;
-            if (rect1[0][1] > rect2[1][1] || rect2[0][1] > rect1[1][1]) return false;
+            if (_rect1[0][0] > _rect2[1][0] || _rect2[0][0] > _rect1[1][0]) return false;
+            if (_rect1[0][1] > _rect2[1][1] || _rect2[0][1] > _rect1[1][1]) return false;
             return true;
         }
     }, {
         key: "intersectRect2D",
         value: function intersectRect2D(rect1, rect2) {
-            if (!Rectangle.hasIntersectRect2D(rect1, rect2)) return new Pt_1.Group();
-            return Line.intersectLines2D(Rectangle.sides(rect1), Rectangle.sides(rect2));
+            var _rect1 = Util_1.Util.iterToArray(rect1);
+            var _rect2 = Util_1.Util.iterToArray(rect2);
+            if (!Rectangle.hasIntersectRect2D(_rect1, _rect2)) return new Pt_1.Group();
+            return Line.intersectLines2D(Rectangle.sides(_rect1), Rectangle.sides(_rect2));
         }
     }]);
 
@@ -4163,15 +4574,16 @@ var Circle = function () {
         value: function fromRect(pts) {
             var enclose = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
+            var _pts = Util_1.Util.iterToArray(pts);
             var r = 0;
-            var min = r = Rectangle.size(pts).minValue().value / 2;
+            var min = r = Rectangle.size(_pts).minValue().value / 2;
             if (enclose) {
-                var max = Rectangle.size(pts).maxValue().value / 2;
+                var max = Rectangle.size(_pts).maxValue().value / 2;
                 r = Math.sqrt(min * min + max * max);
             } else {
                 r = min;
             }
-            return new Pt_1.Group(Rectangle.center(pts), new Pt_1.Pt(r, r));
+            return new Pt_1.Group(Rectangle.center(_pts), new Pt_1.Pt(r, r));
         }
     }, {
         key: "fromTriangle",
@@ -4194,17 +4606,20 @@ var Circle = function () {
         value: function withinBound(pts, pt) {
             var threshold = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
 
-            var d = pts[0].$subtract(pt);
-            return d.dot(d) + threshold < pts[1].x * pts[1].x;
+            var _pts = Util_1.Util.iterToArray(pts);
+            var d = _pts[0].$subtract(pt);
+            return d.dot(d) + threshold < _pts[1].x * _pts[1].x;
         }
     }, {
         key: "intersectRay2D",
-        value: function intersectRay2D(pts, ray) {
-            var d = ray[0].$subtract(ray[1]);
-            var f = pts[0].$subtract(ray[0]);
+        value: function intersectRay2D(circle, ray) {
+            var _pts = Util_1.Util.iterToArray(circle);
+            var _ray = Util_1.Util.iterToArray(ray);
+            var d = _ray[0].$subtract(_ray[1]);
+            var f = _pts[0].$subtract(_ray[0]);
             var a = d.dot(d);
             var b = f.dot(d);
-            var c = f.dot(f) - pts[1].x * pts[1].x;
+            var c = f.dot(f) - _pts[1].x * _pts[1].x;
             var p = b / a;
             var q = c / a;
             var disc = p * p - q;
@@ -4213,86 +4628,94 @@ var Circle = function () {
             } else {
                 var discSqrt = Math.sqrt(disc);
                 var t1 = -p + discSqrt;
-                var p1 = ray[0].$subtract(d.$multiply(t1));
+                var p1 = _ray[0].$subtract(d.$multiply(t1));
                 if (disc === 0) return new Pt_1.Group(p1);
                 var t2 = -p - discSqrt;
-                var p2 = ray[0].$subtract(d.$multiply(t2));
+                var p2 = _ray[0].$subtract(d.$multiply(t2));
                 return new Pt_1.Group(p1, p2);
             }
         }
     }, {
         key: "intersectLine2D",
-        value: function intersectLine2D(pts, line) {
-            var ps = Circle.intersectRay2D(pts, line);
+        value: function intersectLine2D(circle, line) {
+            var _pts = Util_1.Util.iterToArray(circle);
+            var _line = Util_1.Util.iterToArray(line);
+            var ps = Circle.intersectRay2D(_pts, _line);
             var g = new Pt_1.Group();
             if (ps.length > 0) {
                 for (var i = 0, len = ps.length; i < len; i++) {
-                    if (Rectangle.withinBound(line, ps[i])) g.push(ps[i]);
+                    if (Rectangle.withinBound(_line, ps[i])) g.push(ps[i]);
                 }
             }
             return g;
         }
     }, {
         key: "intersectCircle2D",
-        value: function intersectCircle2D(pts, circle) {
-            var dv = circle[0].$subtract(pts[0]);
+        value: function intersectCircle2D(circle1, circle2) {
+            var _pts = Util_1.Util.iterToArray(circle1);
+            var _circle = Util_1.Util.iterToArray(circle2);
+            var dv = _circle[0].$subtract(_pts[0]);
             var dr2 = dv.magnitudeSq();
             var dr = Math.sqrt(dr2);
-            var ar = pts[1].x;
-            var br = circle[1].x;
+            var ar = _pts[1].x;
+            var br = _circle[1].x;
             var ar2 = ar * ar;
             var br2 = br * br;
             if (dr > ar + br) {
                 return new Pt_1.Group();
             } else if (dr < Math.abs(ar - br)) {
-                return new Pt_1.Group(pts[0].clone());
+                return new Pt_1.Group(_pts[0].clone());
             } else {
                 var a = (ar2 - br2 + dr2) / (2 * dr);
                 var h = Math.sqrt(ar2 - a * a);
-                var p = dv.$multiply(a / dr).add(pts[0]);
+                var p = dv.$multiply(a / dr).add(_pts[0]);
                 return new Pt_1.Group(new Pt_1.Pt(p.x + h * dv.y / dr, p.y - h * dv.x / dr), new Pt_1.Pt(p.x - h * dv.y / dr, p.y + h * dv.x / dr));
             }
         }
     }, {
         key: "intersectRect2D",
-        value: function intersectRect2D(pts, rect) {
-            var sides = Rectangle.sides(rect);
+        value: function intersectRect2D(circle, rect) {
+            var _pts = Util_1.Util.iterToArray(circle);
+            var _rect = Util_1.Util.iterToArray(rect);
+            var sides = Rectangle.sides(_rect);
             var g = [];
             for (var i = 0, len = sides.length; i < len; i++) {
-                var ps = Circle.intersectLine2D(pts, sides[i]);
+                var ps = Circle.intersectLine2D(_pts, sides[i]);
                 if (ps.length > 0) g.push(ps);
             }
             return Util_1.Util.flatten(g);
         }
     }, {
         key: "toRect",
-        value: function toRect(pts) {
+        value: function toRect(circle) {
             var within = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
-            var r = pts[1][0];
+            var _pts = Util_1.Util.iterToArray(circle);
+            var r = _pts[1][0];
             if (within) {
                 var half = Math.sqrt(r * r) / 2;
-                return new Pt_1.Group(pts[0].$subtract(half), pts[0].$add(half));
+                return new Pt_1.Group(_pts[0].$subtract(half), _pts[0].$add(half));
             } else {
-                return new Pt_1.Group(pts[0].$subtract(r), pts[0].$add(r));
+                return new Pt_1.Group(_pts[0].$subtract(r), _pts[0].$add(r));
             }
         }
     }, {
         key: "toTriangle",
-        value: function toTriangle(pts) {
+        value: function toTriangle(circle) {
             var within = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 
+            var _pts = Util_1.Util.iterToArray(circle);
             if (within) {
                 var ang = -Math.PI / 2;
                 var inc = Math.PI * 2 / 3;
                 var g = new Pt_1.Group();
                 for (var i = 0; i < 3; i++) {
-                    g.push(pts[0].clone().toAngle(ang, pts[1][0], true));
+                    g.push(_pts[0].clone().toAngle(ang, _pts[1][0], true));
                     ang += inc;
                 }
                 return g;
             } else {
-                return Triangle.fromCenter(pts[0], pts[1][0]);
+                return Triangle.fromCenter(_pts[0], _pts[1][0]);
             }
         }
     }]);
@@ -4310,11 +4733,12 @@ var Triangle = function () {
     _createClass(Triangle, null, [{
         key: "fromRect",
         value: function fromRect(rect) {
-            var top = rect[0].$add(rect[1]).divide(2);
-            top.y = rect[0][1];
-            var left = rect[1].clone();
-            left.x = rect[0][0];
-            return new Pt_1.Group(top, rect[1].clone(), left);
+            var _rect = Util_1.Util.iterToArray(rect);
+            var top = _rect[0].$add(_rect[1]).divide(2);
+            top.y = _rect[0][1];
+            var left = _rect[1].clone();
+            left.x = _rect[0][0];
+            return new Pt_1.Group(top, _rect[1].clone(), left);
         }
     }, {
         key: "fromCircle",
@@ -4328,70 +4752,78 @@ var Triangle = function () {
         }
     }, {
         key: "medial",
-        value: function medial(pts) {
-            if (pts.length < 3) return _errorLength(new Pt_1.Group(), 3);
-            return Polygon.midpoints(pts, true);
+        value: function medial(tri) {
+            var _pts = Util_1.Util.iterToArray(tri);
+            if (_pts.length < 3) return _errorLength(new Pt_1.Group(), 3);
+            return Polygon.midpoints(_pts, true);
         }
     }, {
         key: "oppositeSide",
-        value: function oppositeSide(pts, index) {
-            if (pts.length < 3) return _errorLength(new Pt_1.Group(), 3);
+        value: function oppositeSide(tri, index) {
+            var _pts = Util_1.Util.iterToArray(tri);
+            if (_pts.length < 3) return _errorLength(new Pt_1.Group(), 3);
             if (index === 0) {
-                return Pt_1.Group.fromPtArray([pts[1], pts[2]]);
+                return Pt_1.Group.fromPtArray([_pts[1], _pts[2]]);
             } else if (index === 1) {
-                return Pt_1.Group.fromPtArray([pts[0], pts[2]]);
+                return Pt_1.Group.fromPtArray([_pts[0], _pts[2]]);
             } else {
-                return Pt_1.Group.fromPtArray([pts[0], pts[1]]);
+                return Pt_1.Group.fromPtArray([_pts[0], _pts[1]]);
             }
         }
     }, {
         key: "altitude",
-        value: function altitude(pts, index) {
-            var opp = Triangle.oppositeSide(pts, index);
+        value: function altitude(tri, index) {
+            var _pts = Util_1.Util.iterToArray(tri);
+            var opp = Triangle.oppositeSide(_pts, index);
             if (opp.length > 1) {
-                return new Pt_1.Group(pts[index], Line.perpendicularFromPt(opp, pts[index]));
+                return new Pt_1.Group(_pts[index], Line.perpendicularFromPt(opp, _pts[index]));
             } else {
                 return new Pt_1.Group();
             }
         }
     }, {
         key: "orthocenter",
-        value: function orthocenter(pts) {
-            if (pts.length < 3) return _errorLength(undefined, 3);
-            var a = Triangle.altitude(pts, 0);
-            var b = Triangle.altitude(pts, 1);
+        value: function orthocenter(tri) {
+            var _pts = Util_1.Util.iterToArray(tri);
+            if (_pts.length < 3) return _errorLength(undefined, 3);
+            var a = Triangle.altitude(_pts, 0);
+            var b = Triangle.altitude(_pts, 1);
             return Line.intersectRay2D(a, b);
         }
     }, {
         key: "incenter",
-        value: function incenter(pts) {
-            if (pts.length < 3) return _errorLength(undefined, 3);
-            var a = Polygon.bisector(pts, 0).add(pts[0]);
-            var b = Polygon.bisector(pts, 1).add(pts[1]);
-            return Line.intersectRay2D(new Pt_1.Group(pts[0], a), new Pt_1.Group(pts[1], b));
+        value: function incenter(tri) {
+            var _pts = Util_1.Util.iterToArray(tri);
+            if (_pts.length < 3) return _errorLength(undefined, 3);
+            var a = Polygon.bisector(_pts, 0).add(_pts[0]);
+            var b = Polygon.bisector(_pts, 1).add(_pts[1]);
+            return Line.intersectRay2D(new Pt_1.Group(_pts[0], a), new Pt_1.Group(_pts[1], b));
         }
     }, {
         key: "incircle",
-        value: function incircle(pts, center) {
-            var c = center ? center : Triangle.incenter(pts);
-            var area = Polygon.area(pts);
-            var perim = Polygon.perimeter(pts, true);
+        value: function incircle(tri, center) {
+            var _pts = Util_1.Util.iterToArray(tri);
+            var c = center ? center : Triangle.incenter(_pts);
+            var area = Polygon.area(_pts);
+            var perim = Polygon.perimeter(_pts, true);
             var r = 2 * area / perim.total;
             return Circle.fromCenter(c, r);
         }
     }, {
         key: "circumcenter",
-        value: function circumcenter(pts) {
-            var md = Triangle.medial(pts);
-            var a = [md[0], Num_1.Geom.perpendicular(pts[0].$subtract(md[0])).p1.$add(md[0])];
-            var b = [md[1], Num_1.Geom.perpendicular(pts[1].$subtract(md[1])).p1.$add(md[1])];
+        value: function circumcenter(tri) {
+            var _pts = Util_1.Util.iterToArray(tri);
+            var md = Triangle.medial(_pts);
+            var a = [md[0], Num_1.Geom.perpendicular(_pts[0].$subtract(md[0])).p1.$add(md[0])];
+            var b = [md[1], Num_1.Geom.perpendicular(_pts[1].$subtract(md[1])).p1.$add(md[1])];
             return Line.intersectRay2D(a, b);
         }
     }, {
         key: "circumcircle",
-        value: function circumcircle(pts, center) {
-            var c = center ? center : Triangle.circumcenter(pts);
-            var r = pts[0].$subtract(c).magnitude();
+        value: function circumcircle(tri, center) {
+            var _pts = Util_1.Util.iterToArray(tri);
+            var c = center ? center : Triangle.circumcenter(_pts);
+            var r = _pts[0].$subtract(c).magnitude();
             return Circle.fromCenter(c, r);
         }
     }]);
@@ -4428,30 +4860,31 @@ var Polygon = function () {
         }
     }, {
         key: "lineAt",
-        value: function lineAt(pts, idx) {
-            if (idx < 0 || idx >= pts.length) throw new Error("index out of the Polygon's range");
-            return new Pt_1.Group(pts[idx], idx === pts.length - 1 ? pts[0] : pts[idx + 1]);
+        value: function lineAt(pts, index) {
+            var _pts = Util_1.Util.iterToArray(pts);
+            if (index < 0 || index >= _pts.length) throw new Error("index out of the Polygon's range");
+            return new Pt_1.Group(_pts[index], index === _pts.length - 1 ? _pts[0] : _pts[index + 1]);
         }
     }, {
         key: "lines",
-        value: function lines(pts) {
+        value: function lines(poly) {
             var closePath = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 
-            if (pts.length < 2) return _errorLength(new Pt_1.Group(), 2);
-            var sp = Util_1.Util.split(pts, 2, 1);
-            if (closePath) sp.push(new Pt_1.Group(pts[pts.length - 1], pts[0]));
+            var _pts = Util_1.Util.iterToArray(poly);
+            if (_pts.length < 2) return _errorLength(new Pt_1.Group(), 2);
+            var sp = Util_1.Util.split(_pts, 2, 1);
+            if (closePath) sp.push(new Pt_1.Group(_pts[_pts.length - 1], _pts[0]));
             return sp.map(function (g) {
                 return g;
             });
         }
     }, {
         key: "midpoints",
-        value: function midpoints(pts) {
+        value: function midpoints(poly) {
             var closePath = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
             var t = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0.5;
 
-            if (pts.length < 2) return _errorLength(new Pt_1.Group(), 2);
-            var sides = Polygon.lines(pts, closePath);
+            var sides = Polygon.lines(poly, closePath);
             var mids = sides.map(function (s) {
                 return Num_1.Geom.interpolate(s[0], s[1], t);
             });
@@ -4459,24 +4892,25 @@ var Polygon = function () {
         }
     }, {
         key: "adjacentSides",
-        value: function adjacentSides(pts, index) {
+        value: function adjacentSides(poly, index) {
             var closePath = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
-            if (pts.length < 2) return _errorLength(new Pt_1.Group(), 2);
-            if (index < 0 || index >= pts.length) return _errorOutofBound(new Pt_1.Group(), index);
+            var _pts = Util_1.Util.iterToArray(poly);
+            if (_pts.length < 2) return _errorLength(new Pt_1.Group(), 2);
+            if (index < 0 || index >= _pts.length) return _errorOutofBound(new Pt_1.Group(), index);
             var gs = [];
             var left = index - 1;
-            if (closePath && left < 0) left = pts.length - 1;
-            if (left >= 0) gs.push(new Pt_1.Group(pts[index], pts[left]));
+            if (closePath && left < 0) left = _pts.length - 1;
+            if (left >= 0) gs.push(new Pt_1.Group(_pts[index], _pts[left]));
             var right = index + 1;
-            if (closePath && right > pts.length - 1) right = 0;
-            if (right <= pts.length - 1) gs.push(new Pt_1.Group(pts[index], pts[right]));
+            if (closePath && right > _pts.length - 1) right = 0;
+            if (right <= _pts.length - 1) gs.push(new Pt_1.Group(_pts[index], _pts[right]));
             return gs;
         }
     }, {
         key: "bisector",
-        value: function bisector(pts, index) {
-            var sides = Polygon.adjacentSides(pts, index, true);
+        value: function bisector(poly, index) {
+            var sides = Polygon.adjacentSides(poly, index, true);
             if (sides.length >= 2) {
                 var a = sides[0][1].$subtract(sides[0][0]).unit();
                 var b = sides[1][1].$subtract(sides[1][0]).unit();
@@ -4487,11 +4921,10 @@ var Polygon = function () {
         }
     }, {
         key: "perimeter",
-        value: function perimeter(pts) {
+        value: function perimeter(poly) {
             var closePath = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
-            if (pts.length < 2) return _errorLength(new Pt_1.Group(), 2);
-            var lines = Polygon.lines(pts, closePath);
+            var lines = Polygon.lines(poly, closePath);
             var mag = 0;
             var p = Pt_1.Pt.make(lines.length, 0);
             for (var i = 0, len = lines.length; i < len; i++) {
@@ -4507,16 +4940,17 @@ var Polygon = function () {
     }, {
         key: "area",
         value: function area(pts) {
-            if (pts.length < 3) return _errorLength(new Pt_1.Group(), 3);
+            var _pts = Util_1.Util.iterToArray(pts);
+            if (_pts.length < 3) return _errorLength(new Pt_1.Group(), 3);
             var det = function det(a, b) {
                 return a[0] * b[1] - a[1] * b[0];
             };
             var area = 0;
-            for (var i = 0, len = pts.length; i < len; i++) {
-                if (i < pts.length - 1) {
-                    area += det(pts[i], pts[i + 1]);
+            for (var i = 0, len = _pts.length; i < len; i++) {
+                if (i < _pts.length - 1) {
+                    area += det(_pts[i], _pts[i + 1]);
                 } else {
-                    area += det(pts[i], pts[0]);
+                    area += det(_pts[i], _pts[0]);
                 }
             }
             return Math.abs(area / 2);
@@ -4526,10 +4960,11 @@ var Polygon = function () {
         value: function convexHull(pts) {
             var sorted = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
-            if (pts.length < 3) return _errorLength(new Pt_1.Group(), 3);
+            var _pts = Util_1.Util.iterToArray(pts);
+            if (_pts.length < 3) return _errorLength(new Pt_1.Group(), 3);
             if (!sorted) {
-                pts = pts.slice();
-                pts.sort(function (a, b) {
+                _pts = _pts.slice();
+                _pts.sort(function (a, b) {
                     return a[0] - b[0];
                 });
             }
@@ -4537,19 +4972,19 @@ var Polygon = function () {
                 return (b[0] - a[0]) * (c[1] - a[1]) - (c[0] - a[0]) * (b[1] - a[1]) > 0;
             };
             var dq = [];
-            var bot = pts.length - 2;
+            var bot = _pts.length - 2;
             var top = bot + 3;
-            dq[bot] = pts[2];
-            dq[top] = pts[2];
-            if (left(pts[0], pts[1], pts[2])) {
-                dq[bot + 1] = pts[0];
-                dq[bot + 2] = pts[1];
+            dq[bot] = _pts[2];
+            dq[top] = _pts[2];
+            if (left(_pts[0], _pts[1], _pts[2])) {
+                dq[bot + 1] = _pts[0];
+                dq[bot + 2] = _pts[1];
             } else {
-                dq[bot + 1] = pts[1];
-                dq[bot + 2] = pts[0];
+                dq[bot + 1] = _pts[1];
+                dq[bot + 2] = _pts[0];
             }
-            for (var i = 3, len = pts.length; i < len; i++) {
-                var pt = pts[i];
+            for (var i = 3, len = _pts.length; i < len; i++) {
+                var pt = _pts[i];
                 if (left(dq[bot], dq[bot + 1], pt) && left(dq[top - 1], dq[top], pt)) {
                     continue;
                 }
@@ -4572,36 +5007,62 @@ var Polygon = function () {
         }
     }, {
         key: "network",
-        value: function network(pts) {
+        value: function network(poly) {
             var originIndex = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
 
+            var _pts = Util_1.Util.iterToArray(poly);
             var g = [];
-            for (var i = 0, len = pts.length; i < len; i++) {
-                if (i != originIndex) g.push(new Pt_1.Group(pts[originIndex], pts[i]));
+            for (var i = 0, len = _pts.length; i < len; i++) {
+                if (i != originIndex) g.push(new Pt_1.Group(_pts[originIndex], _pts[i]));
             }
             return g;
         }
     }, {
         key: "nearestPt",
-        value: function nearestPt(pts, pt) {
+        value: function nearestPt(poly, pt) {
             var _near = Number.MAX_VALUE;
             var _item = -1;
-            for (var i = 0, len = pts.length; i < len; i++) {
-                var d = pts[i].$subtract(pt).magnitudeSq();
-                if (d < _near) {
-                    _near = d;
-                    _item = i;
+            var i = 0;
+            var _iteratorNormalCompletion4 = true;
+            var _didIteratorError4 = false;
+            var _iteratorError4 = undefined;
+
+            try {
+                for (var _iterator4 = poly[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+                    var p = _step4.value;
+
+                    var d = p.$subtract(pt).magnitudeSq();
+                    if (d < _near) {
+                        _near = d;
+                        _item = i;
+                    }
+                    i++;
+                }
+            } catch (err) {
+                _didIteratorError4 = true;
+                _iteratorError4 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion4 && _iterator4.return) {
+                        _iterator4.return();
+                    }
+                } finally {
+                    if (_didIteratorError4) {
+                        throw _iteratorError4;
+                    }
                 }
             }
+
             return _item;
         }
     }, {
         key: "projectAxis",
         value: function projectAxis(poly, unitAxis) {
-            var dot = unitAxis.dot(poly[0]);
+            var _poly = Util_1.Util.iterToArray(poly);
+            var dot = unitAxis.dot(_poly[0]);
             var d = new Pt_1.Pt(dot, dot);
-            for (var n = 1, len = poly.length; n < len; n++) {
-                dot = unitAxis.dot(poly[n]);
+            for (var n = 1, len = _poly.length; n < len; n++) {
+                dot = unitAxis.dot(_poly[n]);
                 d = new Pt_1.Pt(Math.min(dot, d[0]), Math.max(dot, d[1]));
             }
             return d;
@@ -4616,9 +5077,10 @@ var Polygon = function () {
     }, {
         key: "hasIntersectPoint",
         value: function hasIntersectPoint(poly, pt) {
+            var _poly = Util_1.Util.iterToArray(poly);
             var c = false;
-            for (var i = 0, len = poly.length; i < len; i++) {
-                var ln = Polygon.lineAt(poly, i);
+            for (var i = 0, len = _poly.length; i < len; i++) {
+                var ln = Polygon.lineAt(_poly, i);
                 if (ln[0][1] > pt[1] != ln[1][1] > pt[1] && pt[0] < (ln[1][0] - ln[0][0]) * (pt[1] - ln[0][1]) / (ln[1][1] - ln[0][1]) + ln[0][0]) {
                     c = !c;
                 }
@@ -4628,6 +5090,8 @@ var Polygon = function () {
     }, {
         key: "hasIntersectCircle",
         value: function hasIntersectCircle(poly, circle) {
+            var _poly = Util_1.Util.iterToArray(poly);
+            var _circle = Util_1.Util.iterToArray(circle);
             var info = {
                 which: -1,
                 dist: 0,
@@ -4635,14 +5099,14 @@ var Polygon = function () {
                 edge: null,
                 vertex: null
             };
-            var c = circle[0];
-            var r = circle[1][0];
+            var c = _circle[0];
+            var r = _circle[1][0];
             var minDist = Number.MAX_SAFE_INTEGER;
-            for (var i = 0, len = poly.length; i < len; i++) {
-                var edge = Polygon.lineAt(poly, i);
+            for (var i = 0, len = _poly.length; i < len; i++) {
+                var edge = Polygon.lineAt(_poly, i);
                 var axis = new Pt_1.Pt(edge[0].y - edge[1].y, edge[1].x - edge[0].x).unit();
                 var poly2 = new Pt_1.Group(c.$add(axis.$multiply(r)), c.$subtract(axis.$multiply(r)));
-                var dist = Polygon._axisOverlap(poly, poly2, axis);
+                var dist = Polygon._axisOverlap(_poly, poly2, axis);
                 if (dist > 0) {
                     return null;
                 } else if (Math.abs(dist) < minDist) {
@@ -4656,7 +5120,7 @@ var Polygon = function () {
                 }
             }
             if (!info.edge) return null;
-            var dir = c.$subtract(Polygon.centroid(poly)).dot(info.normal);
+            var dir = c.$subtract(Polygon.centroid(_poly)).dot(info.normal);
             if (dir < 0) info.normal.multiply(-1);
             info.dist = minDist;
             info.vertex = c;
@@ -4665,6 +5129,8 @@ var Polygon = function () {
     }, {
         key: "hasIntersectPolygon",
         value: function hasIntersectPolygon(poly1, poly2) {
+            var _poly1 = Util_1.Util.iterToArray(poly1);
+            var _poly2 = Util_1.Util.iterToArray(poly2);
             var info = {
                 which: -1,
                 dist: 0,
@@ -4673,22 +5139,22 @@ var Polygon = function () {
                 vertex: new Pt_1.Pt()
             };
             var minDist = Number.MAX_SAFE_INTEGER;
-            for (var i = 0, plen = poly1.length + poly2.length; i < plen; i++) {
-                var edge = i < poly1.length ? Polygon.lineAt(poly1, i) : Polygon.lineAt(poly2, i - poly1.length);
+            for (var i = 0, plen = _poly1.length + _poly2.length; i < plen; i++) {
+                var edge = i < _poly1.length ? Polygon.lineAt(_poly1, i) : Polygon.lineAt(_poly2, i - _poly1.length);
                 var axis = new Pt_1.Pt(edge[0].y - edge[1].y, edge[1].x - edge[0].x).unit();
-                var dist = Polygon._axisOverlap(poly1, poly2, axis);
+                var dist = Polygon._axisOverlap(_poly1, _poly2, axis);
                 if (dist > 0) {
                     return null;
                 } else if (Math.abs(dist) < minDist) {
                     info.edge = edge;
                     info.normal = axis;
                     minDist = Math.abs(dist);
-                    info.which = i < poly1.length ? 0 : 1;
+                    info.which = i < _poly1.length ? 0 : 1;
                 }
             }
             info.dist = minDist;
-            var b1 = info.which === 0 ? poly2 : poly1;
-            var b2 = info.which === 0 ? poly1 : poly2;
+            var b1 = info.which === 0 ? _poly2 : _poly1;
+            var b2 = info.which === 0 ? _poly1 : _poly2;
             var c1 = Polygon.centroid(b1);
             var c2 = Polygon.centroid(b2);
             var dir = c1.$subtract(c2).dot(info.normal);
@@ -4706,10 +5172,12 @@ var Polygon = function () {
     }, {
         key: "intersectPolygon2D",
         value: function intersectPolygon2D(poly1, poly2) {
-            var lp = Polygon.lines(poly1);
+            var _poly1 = Util_1.Util.iterToArray(poly1);
+            var _poly2 = Util_1.Util.iterToArray(poly2);
+            var lp = Polygon.lines(_poly1);
             var g = [];
             for (var i = 0, len = lp.length; i < len; i++) {
-                var ins = Line.intersectPolygon2D(lp[i], poly2, false);
+                var ins = Line.intersectPolygon2D(lp[i], _poly2, false);
                 if (ins) g.push(ins);
             }
             return Util_1.Util.flatten(g, true);
@@ -4717,9 +5185,32 @@ var Polygon = function () {
     }, {
         key: "toRects",
         value: function toRects(polys) {
-            var boxes = polys.map(function (g) {
-                return Num_1.Geom.boundingBox(g);
-            });
+            var boxes = [];
+            var _iteratorNormalCompletion5 = true;
+            var _didIteratorError5 = false;
+            var _iteratorError5 = undefined;
+
+            try {
+                for (var _iterator5 = polys[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+                    var g = _step5.value;
+
+                    boxes.push(Num_1.Geom.boundingBox(g));
+                }
+            } catch (err) {
+                _didIteratorError5 = true;
+                _iteratorError5 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion5 && _iterator5.return) {
+                        _iterator5.return();
+                    }
+                } finally {
+                    if (_didIteratorError5) {
+                        throw _iteratorError5;
+                    }
+                }
+            }
+
             var merged = Util_1.Util.flatten(boxes, false);
             boxes.unshift(Num_1.Geom.boundingBox(merged));
             return boxes;
@@ -4752,13 +5243,14 @@ var Curve = function () {
             var index = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
             var copyStart = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
-            if (index > pts.length - 1) return new Pt_1.Group();
+            var _pts = Util_1.Util.iterToArray(pts);
+            if (index > _pts.length - 1) return new Pt_1.Group();
             var _index = function _index(i) {
-                return i < pts.length - 1 ? i : pts.length - 1;
+                return i < _pts.length - 1 ? i : _pts.length - 1;
             };
-            var p0 = pts[index];
+            var p0 = _pts[index];
             index = copyStart ? index : index + 1;
-            return new Pt_1.Group(p0, pts[_index(index++)], pts[_index(index++)], pts[_index(index++)]);
+            return new Pt_1.Group(p0, _pts[_index(index++)], _pts[_index(index++)], _pts[_index(index++)]);
         }
     }, {
         key: "_calcPt",
@@ -4782,16 +5274,17 @@ var Curve = function () {
         value: function catmullRom(pts) {
             var steps = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 10;
 
-            if (pts.length < 2) return new Pt_1.Group();
+            var _pts = Util_1.Util.iterToArray(pts);
+            if (_pts.length < 2) return new Pt_1.Group();
             var ps = new Pt_1.Group();
             var ts = Curve.getSteps(steps);
-            var c = Curve.controlPoints(pts, 0, true);
+            var c = Curve.controlPoints(_pts, 0, true);
             for (var i = 0; i <= steps; i++) {
                 ps.push(Curve.catmullRomStep(ts[i], c));
             }
             var k = 0;
-            while (k < pts.length - 2) {
-                var cp = Curve.controlPoints(pts, k);
+            while (k < _pts.length - 2) {
+                var cp = Curve.controlPoints(_pts, k);
                 if (cp.length > 0) {
                     for (var _i2 = 0; _i2 <= steps; _i2++) {
                         ps.push(Curve.catmullRomStep(ts[_i2], cp));
@@ -4813,16 +5306,17 @@ var Curve = function () {
             var steps = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 10;
             var tension = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0.5;
 
-            if (pts.length < 2) return new Pt_1.Group();
+            var _pts = Util_1.Util.iterToArray(pts);
+            if (_pts.length < 2) return new Pt_1.Group();
             var ps = new Pt_1.Group();
             var ts = Curve.getSteps(steps);
-            var c = Curve.controlPoints(pts, 0, true);
+            var c = Curve.controlPoints(_pts, 0, true);
             for (var i = 0; i <= steps; i++) {
                 ps.push(Curve.cardinalStep(ts[i], c, tension));
             }
             var k = 0;
-            while (k < pts.length - 2) {
-                var cp = Curve.controlPoints(pts, k);
+            while (k < _pts.length - 2) {
+                var cp = Curve.controlPoints(_pts, k);
                 if (cp.length > 0) {
                     for (var _i3 = 0; _i3 <= steps; _i3++) {
                         ps.push(Curve.cardinalStep(ts[_i3], cp, tension));
@@ -4852,12 +5346,13 @@ var Curve = function () {
         value: function bezier(pts) {
             var steps = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 10;
 
-            if (pts.length < 4) return new Pt_1.Group();
+            var _pts = Util_1.Util.iterToArray(pts);
+            if (_pts.length < 4) return new Pt_1.Group();
             var ps = new Pt_1.Group();
             var ts = Curve.getSteps(steps);
             var k = 0;
-            while (k < pts.length - 3) {
-                var c = Curve.controlPoints(pts, k);
+            while (k < _pts.length - 3) {
+                var c = Curve.controlPoints(_pts, k);
                 if (c.length > 0) {
                     for (var i = 0; i <= steps; i++) {
                         ps.push(Curve.bezierStep(ts[i], c));
@@ -4879,12 +5374,13 @@ var Curve = function () {
             var steps = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 10;
             var tension = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
 
-            if (pts.length < 2) return new Pt_1.Group();
+            var _pts = Util_1.Util.iterToArray(pts);
+            if (_pts.length < 2) return new Pt_1.Group();
             var ps = new Pt_1.Group();
             var ts = Curve.getSteps(steps);
             var k = 0;
-            while (k < pts.length - 3) {
-                var c = Curve.controlPoints(pts, k);
+            while (k < _pts.length - 3) {
+                var c = Curve.controlPoints(_pts, k);
                 if (c.length > 0) {
                     if (tension !== 1) {
                         for (var i = 0; i <= steps; i++) {
@@ -4954,6 +5450,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 Object.defineProperty(exports, "__esModule", { value: true });
 var Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 var Op_1 = __webpack_require__(/*! ./Op */ "./src/Op.ts");
+var Num_1 = __webpack_require__(/*! ./Num */ "./src/Num.ts");
 
 var World = function () {
     function World(bound) {
@@ -5181,7 +5678,7 @@ var World = function () {
         value: function boundConstraint(p, rect) {
             var damping = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0.75;
 
-            var bound = rect.boundingBox();
+            var bound = Num_1.Geom.boundingBox(rect);
             var np = p.$min(bound[1].subtract(p.radius)).$max(bound[0].add(p.radius));
             if (np[0] === bound[0][0] || np[0] === bound[1][0]) {
                 var c = p.changed.$multiply(damping);
@@ -5380,16 +5877,38 @@ var Body = function (_Pt_1$Group) {
 
     _createClass(Body, [{
         key: "init",
-        value: function init(list) {
+        value: function init(body) {
             var stiff = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
 
             var c = new Pt_1.Pt();
-            for (var i = 0, len = list.length; i < len; i++) {
-                var p = new Particle(list[i]);
-                p.body = this;
-                c.add(list[i]);
-                this.push(p);
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                for (var _iterator = body[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var li = _step.value;
+
+                    var p = new Particle(li);
+                    p.body = this;
+                    c.add(li);
+                    this.push(p);
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
             }
+
             this._stiff = stiff;
             return this;
         }
@@ -5512,12 +6031,12 @@ var Body = function (_Pt_1$Group) {
         }
     }], [{
         key: "fromGroup",
-        value: function fromGroup(list) {
+        value: function fromGroup(body) {
             var stiff = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
             var autoLink = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
             var autoMass = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
 
-            var b = new Body().init(list);
+            var b = new Body().init(body);
             if (autoLink) b.linkAll(stiff);
             if (autoMass) b.autoMass();
             return b;
@@ -5737,6 +6256,18 @@ var Sound = function () {
             return this;
         }
     }, {
+        key: "setOutputNode",
+        value: function setOutputNode(outputNode) {
+            this._outputNode = outputNode;
+            return this;
+        }
+    }, {
+        key: "removeOutputNode",
+        value: function removeOutputNode() {
+            this._outputNode = null;
+            return this;
+        }
+    }, {
         key: "analyze",
         value: function analyze() {
             var size = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 256;
@@ -5835,14 +6366,14 @@ var Sound = function () {
                 this._node.start();
                 if (this.analyzer) this._node.connect(this.analyzer.node);
             }
-            this._node.connect(this._ctx.destination);
+            (this._outputNode || this._node).connect(this._ctx.destination);
             this._playing = true;
             return this;
         }
     }, {
         key: "stop",
         value: function stop() {
-            if (this._playing) this._node.disconnect(this._ctx.destination);
+            if (this._playing) (this._outputNode || this._node).disconnect(this._ctx.destination);
             if (this._type === "file") {
                 if (!!this._buffer) {
                     if (this.progress < 1) this._node.stop();
@@ -5878,6 +6409,11 @@ var Sound = function () {
         key: "node",
         get: function get() {
             return this._node;
+        }
+    }, {
+        key: "outputNode",
+        get: function get() {
+            return this._outputNode;
         }
     }, {
         key: "stream",
@@ -6879,10 +7415,32 @@ var Group = function (_extendableBuiltin4) {
         key: "fromArray",
         value: function fromArray(list) {
             var g = new Group();
-            for (var i = 0, len = list.length; i < len; i++) {
-                var p = list[i] instanceof Pt ? list[i] : new Pt(list[i]);
-                g.push(p);
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                for (var _iterator = list[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var li = _step.value;
+
+                    var p = li instanceof Pt ? li : new Pt(li);
+                    g.push(p);
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
             }
+
             return g;
         }
     }, {
@@ -7074,8 +7632,9 @@ var Bound = function (_Group) {
     }, {
         key: "fromGroup",
         value: function fromGroup(g) {
-            if (g.length < 2) throw new Error("Cannot create a Bound from a group that has less than 2 Pt");
-            return new Bound(g[0], g[g.length - 1]);
+            var _g = Util_1.Util.iterToArray(g);
+            if (_g.length < 2) throw new Error("Cannot create a Bound from a group that has less than 2 Pt");
+            return new Bound(_g[0], _g[_g.length - 1]);
         }
     }]);
 
@@ -7305,7 +7864,9 @@ var MultiTouchSpace = function (_Space) {
     _createClass(MultiTouchSpace, [{
         key: "bindCanvas",
         value: function bindCanvas(evt, callback) {
-            this._canvas.addEventListener(evt, callback);
+            var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
+            this._canvas.addEventListener(evt, callback, options);
         }
     }, {
         key: "unbindCanvas",
@@ -7342,9 +7903,9 @@ var MultiTouchSpace = function (_Space) {
             var _bind = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
 
             if (_bind) {
-                this.bindCanvas("touchstart", this._touchStart.bind(this));
+                this.bindCanvas("touchstart", this._touchStart.bind(this), { passive: true });
                 this.bindCanvas("touchend", this._mouseUp.bind(this));
-                this.bindCanvas("touchmove", this._touchMove.bind(this));
+                this.bindCanvas("touchmove", this._touchMove.bind(this), { passive: true });
                 this.bindCanvas("touchcancel", this._mouseOut.bind(this));
                 this._hasTouch = true;
             } else {
@@ -7725,7 +8286,8 @@ var SVGForm = function (_Form_1$VisualForm) {
         key: "circle",
         value: function circle(pts) {
             this.nextID();
-            SVGForm.circle(this._ctx, pts[0], pts[1][0]);
+            var p = Util_1.Util.iterToArray(pts);
+            SVGForm.circle(this._ctx, p[0], p[1][0]);
             return this;
         }
     }, {
@@ -7875,14 +8437,16 @@ var SVGForm = function (_Form_1$VisualForm) {
     }, {
         key: "line",
         value: function line(ctx, pts) {
-            if (!this._checkSize(pts)) return;
-            if (pts.length > 2) return SVGForm._poly(ctx, pts, false);
+            var points = SVGForm.pointsString(pts);
+            if (points.count < 2) return;
+            if (points.count > 2) return SVGForm._poly(ctx, points.string, false);
             var elem = SVGSpace.svgElement(ctx.group, "line", SVGForm.getID(ctx));
+            var p = Util_1.Util.iterToArray(pts);
             Dom_1.DOMSpace.setAttr(elem, {
-                x1: pts[0][0],
-                y1: pts[0][1],
-                x2: pts[1][0],
-                y2: pts[1][1],
+                x1: p[0][0],
+                y1: p[0][1],
+                x2: p[1][0],
+                y2: p[1][1],
                 'class': "pts-svgform pts-line " + ctx.currentClass
             });
             SVGForm.style(elem, ctx.style);
@@ -7890,14 +8454,10 @@ var SVGForm = function (_Form_1$VisualForm) {
         }
     }, {
         key: "_poly",
-        value: function _poly(ctx, pts) {
+        value: function _poly(ctx, points) {
             var closePath = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
 
-            if (!this._checkSize(pts)) return;
             var elem = SVGSpace.svgElement(ctx.group, closePath ? "polygon" : "polyline", SVGForm.getID(ctx));
-            var points = pts.reduce(function (a, p) {
-                return a + (p[0] + "," + p[1] + " ");
-            }, "");
             Dom_1.DOMSpace.setAttr(elem, {
                 points: points,
                 'class': "pts-svgform pts-polygon " + ctx.currentClass
@@ -7906,14 +8466,48 @@ var SVGForm = function (_Form_1$VisualForm) {
             return elem;
         }
     }, {
+        key: "pointsString",
+        value: function pointsString(pts) {
+            var points = "";
+            var count = 0;
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                for (var _iterator = pts[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var p = _step.value;
+
+                    points += p[0] + "," + p[1] + " ";
+                    count++;
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
+            }
+
+            return { string: points, count: count };
+        }
+    }, {
         key: "polygon",
         value: function polygon(ctx, pts) {
-            return SVGForm._poly(ctx, pts, true);
+            var points = SVGForm.pointsString(pts);
+            return SVGForm._poly(ctx, points.string, true);
         }
     }, {
         key: "rect",
         value: function rect(ctx, pts) {
-            if (!this._checkSize(pts)) return;
+            if (!Util_1.Util.arrayCheck(pts)) return;
             var elem = SVGSpace.svgElement(ctx.group, "rect", SVGForm.getID(ctx));
             var bound = Pt_1.Group.fromArray(pts).boundingBox();
             var size = Op_1.Rectangle.size(bound);
@@ -8007,11 +8601,12 @@ var Typography = function () {
             var ratio = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
             var byHeight = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
 
-            var i = byHeight ? 1 : 0;
-            var h = box[1][i] - box[0][i];
+            var bound = Pt_1.Bound.fromGroup(box);
+            var h = byHeight ? bound.height : bound.width;
             var f = ratio * h;
-            return function (b) {
-                var nh = (b[1][i] - b[0][i]) / h;
+            return function (box2) {
+                var bound2 = Pt_1.Bound.fromGroup(box2);
+                var nh = (byHeight ? bound2.height : bound2.width) / h;
                 return f * nh;
             };
         }
@@ -8438,6 +9033,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -8524,6 +9121,7 @@ var Util = function () {
         value: function randomInt(range) {
             var start = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
 
+            Util.warn("Util.randomInt is deprecated. Please use `Num.randomRange`");
             return Math.floor(Math.random() * range) + start;
         }
     }, {
@@ -8648,14 +9246,20 @@ var Util = function () {
             };
         }
     }, {
-        key: "iterFromPtLike",
-        value: function iterFromPtLike(list) {
-            return Array.isArray(list) ? list[Symbol.iterator]() : list;
+        key: "arrayCheck",
+        value: function arrayCheck(pts) {
+            var minRequired = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
+
+            if (Array.isArray(pts) && pts.length < minRequired) {
+                Util.warn("Requires " + minRequired + " or more Pts in this Group.");
+                return false;
+            }
+            return true;
         }
     }, {
-        key: "iterFromPt",
-        value: function iterFromPt(list) {
-            return Array.isArray(list) ? list[Symbol.iterator]() : list;
+        key: "iterToArray",
+        value: function iterToArray(it) {
+            return !Array.isArray(it) ? [].concat(_toConsumableArray(it)) : it;
         }
     }]);
 

@@ -4,7 +4,6 @@ import { PtLike, GroupLike } from "./Types";
 export declare abstract class Form {
     protected _ready: boolean;
     readonly ready: boolean;
-    static _checkSize(pts: GroupLike | number[][], required?: number): boolean;
 }
 export declare abstract class VisualForm extends Form {
     protected _filled: boolean;

@@ -1,6 +1,6 @@
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 import { Pt, Group, Bound } from "./Pt";
-import { PtLike, GroupLike } from "./Types";
+import { PtLike, PtIterable } from "./Types";
 export declare class World {
     private _lastTime;
     protected _gravity: Pt;
@@ -13,7 +13,7 @@ export declare class World {
     protected _bnames: string[];
     protected _drawParticles: (p: Particle, i: number) => void;
     protected _drawBodies: (p: Body, i: number) => void;
-    constructor(bound: Group, friction?: number, gravity?: PtLike | number);
+    constructor(bound: PtIterable, friction?: number, gravity?: PtLike | number);
     bound: Bound;
     gravity: Pt;
     friction: number;
@@ -32,7 +32,7 @@ export declare class World {
     removeBody(from: number | string, count?: number): this;
     removeParticle(from: number | string, count?: number): this;
     static edgeConstraint(p1: Particle, p2: Particle, dist: number, stiff?: number, precise?: boolean): Particle;
-    static boundConstraint(p: Particle, rect: Group, damping?: number): void;
+    static boundConstraint(p: Particle, rect: PtIterable, damping?: number): void;
     protected integrate(p: Particle, dt: number, prevDt?: number): Particle;
     protected _updateParticles(dt: number): void;
     protected _updateBodies(dt: number): void;
@@ -69,8 +69,8 @@ export declare class Body extends Group {
     };
     protected _mass: number;
     constructor();
-    static fromGroup(list: GroupLike, stiff?: number, autoLink?: boolean, autoMass?: boolean): Body;
-    init(list: GroupLike, stiff?: number): this;
+    static fromGroup(body: PtIterable, stiff?: number, autoLink?: boolean, autoMass?: boolean): Body;
+    init(body: PtIterable, stiff?: number): this;
     mass: number;
     autoMass(): this;
     link(index1: number, index2: number, stiff?: number): this;

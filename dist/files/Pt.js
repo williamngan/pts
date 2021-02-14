@@ -227,8 +227,8 @@ class Group extends Array {
     }
     static fromArray(list) {
         let g = new Group();
-        for (let i = 0, len = list.length; i < len; i++) {
-            let p = (list[i] instanceof Pt) ? list[i] : new Pt(list[i]);
+        for (let li of list) {
+            let p = (li instanceof Pt) ? li : new Pt(li);
             g.push(p);
         }
         return g;
@@ -371,9 +371,10 @@ class Bound extends Group {
         return b;
     }
     static fromGroup(g) {
-        if (g.length < 2)
+        let _g = Util_1.Util.iterToArray(g);
+        if (_g.length < 2)
             throw new Error("Cannot create a Bound from a group that has less than 2 Pt");
-        return new Bound(g[0], g[g.length - 1]);
+        return new Bound(_g[0], _g[_g.length - 1]);
     }
     init() {
         if (this.p1) {

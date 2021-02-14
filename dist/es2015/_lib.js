@@ -14,6 +14,7 @@ export * from "./Typography";
 export * from "./Physics";
 export * from "./UI";
 export * from "./Play";
+export * from "./Image";
 import * as _Canvas from './Canvas';
 export let namespace = (scope) => {
     let lib = module.exports;
@@ -24,6 +25,8 @@ export let namespace = (scope) => {
     }
 };
 export let quickStart = (id, bg = "#9ab") => {
+    if (!window)
+        return;
     let s = window;
     namespace(s);
     s.space = new _Canvas.CanvasSpace(id).setup({ bgcolor: bg, resize: true, retina: true });

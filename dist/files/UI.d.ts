@@ -1,6 +1,6 @@
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 import { Group } from "./Pt";
-import { UIHandler, GroupLike, PtLike } from "./Types";
+import { UIHandler, PtLike, PtLikeIterable } from "./Types";
 export declare const UIShape: {
     rectangle: string;
     circle: string;
@@ -35,12 +35,12 @@ export declare class UI {
         [key: string]: any;
     };
     protected _holds: Map<number, string>;
-    constructor(group: GroupLike, shape: string, states?: {
+    constructor(group: PtLikeIterable, shape: string, states?: {
         [key: string]: any;
     }, id?: string);
-    static fromRectangle(group: GroupLike, states: {}, id?: string): UI;
-    static fromCircle(group: GroupLike, states: {}, id?: string): UI;
-    static fromPolygon(group: GroupLike, states: {}, id?: string): UI;
+    static fromRectangle(group: PtLikeIterable, states: {}, id?: string): UI;
+    static fromCircle(group: PtLikeIterable, states: {}, id?: string): UI;
+    static fromPolygon(group: PtLikeIterable, states: {}, id?: string): UI;
     static fromUI(ui: UI, states?: object, id?: string): UI;
     id: string;
     group: Group;
@@ -63,7 +63,7 @@ export declare class UI {
 }
 export declare class UIButton extends UI {
     private _hoverID;
-    constructor(group: GroupLike, shape: string, states?: {
+    constructor(group: PtLikeIterable, shape: string, states?: {
         [key: string]: any;
     }, id?: string);
     onClick(fn: UIHandler): number;
@@ -78,7 +78,7 @@ export declare class UIDragger extends UIButton {
     private _moveHoldID;
     private _dropHoldID;
     private _upHoldID;
-    constructor(group: GroupLike, shape: string, states?: {
+    constructor(group: PtLikeIterable, shape: string, states?: {
         [key: string]: any;
     }, id?: string);
     onDrag(fn: UIHandler): number;

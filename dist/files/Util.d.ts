@@ -1,6 +1,5 @@
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
-import { Pt } from "./Pt";
-import { WarningType, PtLike, GroupLike } from "./Types";
+import { WarningType, PtLikeIterable } from "./Types";
 export declare const Const: {
     xy: string;
     yz: string;
@@ -45,6 +44,6 @@ export declare class Util {
     static forRange(fn: (index: number) => any, range: number, start?: number, step?: number): any[];
     static load(url: string, callback: (response: string, success: boolean) => void): void;
     static performance(avgFrames?: number): () => number;
-    static iterFromPtLike(list: PtLike[] | Iterable<PtLike>): Iterable<PtLike>;
-    static iterFromPt(list: GroupLike | Iterable<Pt>): Iterable<Pt>;
+    static arrayCheck(pts: PtLikeIterable, minRequired?: number): boolean;
+    static iterToArray(it: Iterable<any>): any[];
 }

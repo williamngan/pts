@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = require("./Pt");
 const Op_1 = require("./Op");
+const Num_1 = require("./Num");
 class World {
     constructor(bound, friction = 1, gravity = 0) {
         this._lastTime = null;
@@ -113,7 +114,7 @@ class World {
         return p1;
     }
     static boundConstraint(p, rect, damping = 0.75) {
-        let bound = rect.boundingBox();
+        let bound = Num_1.Geom.boundingBox(rect);
         let np = p.$min(bound[1].subtract(p.radius)).$max(bound[0].add(p.radius));
         if (np[0] === bound[0][0] || np[0] === bound[1][0]) {
             let c = p.changed.$multiply(damping);
@@ -265,20 +266,20 @@ class Body extends Pt_1.Group {
         this._locks = {};
         this._mass = 1;
     }
-    static fromGroup(list, stiff = 1, autoLink = true, autoMass = true) {
-        let b = new Body().init(list);
+    static fromGroup(body, stiff = 1, autoLink = true, autoMass = true) {
+        let b = new Body().init(body);
         if (autoLink)
             b.linkAll(stiff);
         if (autoMass)
             b.autoMass();
         return b;
     }
-    init(list, stiff = 1) {
+    init(body, stiff = 1) {
         let c = new Pt_1.Pt();
-        for (let i = 0, len = list.length; i < len; i++) {
-            let p = new Particle(list[i]);
+        for (let li of body) {
+            let p = new Particle(li);
             p.body = this;
-            c.add(list[i]);
+            c.add(li);
             this.push(p);
         }
         this._stiff = stiff;

@@ -71,6 +71,7 @@ class Util {
         return defaultReturn;
     }
     static randomInt(range, start = 0) {
+        Util.warn("Util.randomInt is deprecated. Please use `Num.randomRange`");
         return Math.floor(Math.random() * range) + start;
     }
     static split(pts, size, stride, loopBack = false, matchSize = true) {
@@ -169,11 +170,15 @@ class Util {
             return Math.floor(avg.reduce((a, b) => a + b, 0) / avg.length);
         };
     }
-    static iterFromPtLike(list) {
-        return Array.isArray(list) ? list[Symbol.iterator]() : list;
+    static arrayCheck(pts, minRequired = 2) {
+        if (Array.isArray(pts) && pts.length < minRequired) {
+            Util.warn(`Requires ${minRequired} or more Pts in this Group.`);
+            return false;
+        }
+        return true;
     }
-    static iterFromPt(list) {
-        return Array.isArray(list) ? list[Symbol.iterator]() : list;
+    static iterToArray(it) {
+        return (!Array.isArray(it)) ? [...it] : it;
     }
 }
 Util._warnLevel = "mute";

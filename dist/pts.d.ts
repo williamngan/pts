@@ -61,30 +61,34 @@ export class CanvasForm extends VisualForm {
     fontWidthEstimate(estimate?: boolean): this;
     getTextWidth(c: string): number;
     protected _textTruncate(str: string, width: number, tail?: string): [string, number];
-    protected _textAlign(box: GroupLike, vertical: string, offset?: PtLike, center?: Pt): Pt;
+    protected _textAlign(box: PtLikeIterable, vertical: string, offset?: PtLike, center?: Pt): Pt;
     reset(): this;
     protected _paint(): void;
+    static paint(ctx: CanvasRenderingContext2D, fn: (ctx: any) => {}, fill?: string, stroke?: string, strokeWidth?: number): void;
+    static point(ctx: CanvasRenderingContext2D, p: PtLike, radius?: number, shape?: string): void;
     point(p: PtLike, radius?: number, shape?: string): this;
     static circle(ctx: CanvasRenderingContext2D, pt: PtLike, radius?: number): void;
-    circle(pts: GroupLike | number[][]): this;
+    circle(pts: PtLikeIterable): this;
     static ellipse(ctx: CanvasRenderingContext2D, pt: PtLike, radius: PtLike, rotation?: number, startAngle?: number, endAngle?: number, cc?: boolean): void;
     ellipse(pt: PtLike, radius: PtLike, rotation?: number, startAngle?: number, endAngle?: number, cc?: boolean): this;
     static arc(ctx: CanvasRenderingContext2D, pt: PtLike, radius: number, startAngle: number, endAngle: number, cc?: boolean): void;
     arc(pt: PtLike, radius: number, startAngle: number, endAngle: number, cc?: boolean): this;
     static square(ctx: CanvasRenderingContext2D, pt: PtLike, halfsize: number): void;
     square(pt: PtLike, halfsize: number): this;
-    static line(ctx: CanvasRenderingContext2D, pts: GroupLike | number[][]): void;
-    line(pts: GroupLike | number[][]): this;
-    static polygon(ctx: CanvasRenderingContext2D, pts: GroupLike | number[][]): void;
-    polygon(pts: GroupLike | number[][]): this;
-    static rect(ctx: CanvasRenderingContext2D, pts: GroupLike | number[][]): void;
-    rect(pts: number[][] | Pt[]): this;
-    static image(ctx: CanvasRenderingContext2D, img: ImageBitmap, target?: PtLike | GroupLike, orig?: GroupLike): void;
-    image(img: ImageBitmap, target: PtLike | GroupLike, original?: GroupLike): this;
+    static line(ctx: CanvasRenderingContext2D, pts: PtLikeIterable): void;
+    line(pts: PtLikeIterable): this;
+    static polygon(ctx: CanvasRenderingContext2D, pts: PtLikeIterable): void;
+    polygon(pts: PtLikeIterable): this;
+    static rect(ctx: CanvasRenderingContext2D, pts: PtLikeIterable): void;
+    rect(pts: PtLikeIterable): this;
+    static image(ctx: CanvasRenderingContext2D, ptOrRect: PtLike | PtLikeIterable, img: CanvasImageSource | Img, orig?: PtLikeIterable): void;
+    image(ptOrRect: PtLike | PtLikeIterable, img: CanvasImageSource | Img, orig?: PtLikeIterable): this;
+    static imageData(ctx: CanvasRenderingContext2D, ptOrRect: PtLike | PtLikeIterable, img: ImageData): void;
+    imageData(ptOrRect: PtLike | PtLikeIterable, img: ImageData): this;
     static text(ctx: CanvasRenderingContext2D, pt: PtLike, txt: string, maxWidth?: number): void;
     text(pt: PtLike, txt: string, maxWidth?: number): this;
-    textBox(box: GroupLike, txt: string, verticalAlign?: string, tail?: string, overrideBaseline?: boolean): this;
-    paragraphBox(box: GroupLike, txt: string, lineHeight?: number, verticalAlign?: string, crop?: boolean): this;
+    textBox(box: PtIterable, txt: string, verticalAlign?: string, tail?: string, overrideBaseline?: boolean): this;
+    paragraphBox(box: PtLikeIterable, txt: string, lineHeight?: number, verticalAlign?: string, crop?: boolean): this;
     alignText(alignment?: CanvasTextAlign, baseline?: CanvasTextBaseline): this;
     log(txt: any): this;
 }
@@ -148,11 +152,11 @@ export class Color extends Pt {
 
 export class Create {
     static distributeRandom(bound: Bound, count: number, dimensions?: number): Group;
-    static distributeLinear(line: GroupLike, count: number): Group;
+    static distributeLinear(line: PtIterable, count: number): Group;
     static gridPts(bound: Bound, columns: number, rows: number, orientation?: PtLike): Group;
     static gridCells(bound: Bound, columns: number, rows: number): Group[];
     static radialPts(center: PtLike, radius: number, count: number, angleOffset?: number): Group;
-    static noisePts(pts: GroupLike, dx?: number, dy?: number, rows?: number, columns?: number): Group;
+    static noisePts(pts: PtIterable, dx?: number, dy?: number, rows?: number, columns?: number): Group;
     static delaunay(pts: GroupLike): Delaunay;
 }
 export class Noise extends Pt {
@@ -256,8 +260,8 @@ export class HTMLForm extends VisualForm {
     circle(pts: GroupLike | number[][]): this;
     static square(ctx: DOMFormContext, pt: PtLike, halfsize: number): HTMLElement;
     square(pt: PtLike, halfsize: number): this;
-    static rect(ctx: DOMFormContext, pts: GroupLike | number[][]): Element;
-    rect(pts: number[][] | Pt[]): this;
+    static rect(ctx: DOMFormContext, pts: PtLikeIterable): Element;
+    rect(pts: PtLikeIterable): this;
     static text(ctx: DOMFormContext, pt: PtLike, txt: string): Element;
     text(pt: PtLike, txt: string): this;
     log(txt: any): this;
@@ -269,7 +273,6 @@ export class HTMLForm extends VisualForm {
 export abstract class Form {
     protected _ready: boolean;
     readonly ready: boolean;
-    static _checkSize(pts: GroupLike | number[][], required?: number): boolean;
 }
 export abstract class VisualForm extends Form {
     protected _filled: boolean;
@@ -309,6 +312,32 @@ export class Font {
     constructor(size?: number, face?: string, weight?: string, style?: string, lineHeight?: number);
     readonly value: string;
     toString(): string;
+}
+
+export class Img {
+    protected _img: HTMLImageElement;
+    protected _data: ImageData;
+    protected _cv: HTMLCanvasElement;
+    protected _ctx: CanvasRenderingContext2D;
+    protected _scale: number;
+    protected _loaded: boolean;
+    protected _editable: boolean;
+    constructor(editable?: boolean, pixelScale?: number);
+    load(src: string): Promise<Img>;
+    protected _drawToScale(imgScale: number, canvasScale: number, img: CanvasImageSource): void;
+    bitmap(size?: PtLike): Promise<ImageBitmap>;
+    sync(): void;
+    pixel(p: PtLike): Pt;
+    static getPixel(imgData: ImageData, p: PtLike): Pt;
+    crop(box: Bound): ImageData;
+    static fromBlob(blob: Blob, editable?: boolean): Promise<Img>;
+    toBase64(): string;
+    readonly image: HTMLImageElement;
+    readonly canvas: HTMLCanvasElement;
+    readonly data: ImageData;
+    readonly ctx: CanvasRenderingContext2D;
+    readonly loaded: boolean;
+    readonly pixelScale: number;
 }
 
 export class Vec {
@@ -361,8 +390,8 @@ export class Num {
     static within(p: number, a: number, b: number): boolean;
     static randomRange(a: number, b?: number): number;
     static normalizeValue(n: number, a: number, b: number): number;
-    static sum(pts: GroupLike | number[][]): Pt;
-    static average(pts: GroupLike | number[][]): Pt;
+    static sum(pts: PtLikeIterable): Pt;
+    static average(pts: PtLikeIterable): Pt;
     static cycle(t: number, method?: (t: number) => number): number;
     static mapToRange(n: number, currA: number, currB: number, targetA: number, targetB: number): number;
 }
@@ -371,18 +400,18 @@ export class Geom {
     static boundRadian(radian: number): number;
     static toRadian(angle: number): number;
     static toDegree(radian: number): number;
-    static boundingBox(pts: GroupLike): Group;
-    static centroid(pts: GroupLike | number[][]): Pt;
-    static anchor(pts: GroupLike, ptOrIndex?: PtLike | number, direction?: ("to" | "from")): void;
-    static interpolate(a: Pt | number[], b: Pt | number[], t?: number): Pt;
-    static perpendicular(pt: PtLike, axis?: string | number[]): Group;
+    static boundingBox(pts: PtIterable): Group;
+    static centroid(pts: PtLikeIterable): Pt;
+    static anchor(pts: PtLikeIterable, ptOrIndex?: PtLike | number, direction?: ("to" | "from")): void;
+    static interpolate(a: PtLike, b: PtLike, t?: number): Pt;
+    static perpendicular(pt: PtLike, axis?: string | PtLike): Group;
     static isPerpendicular(p1: PtLike, p2: PtLike): boolean;
-    static withinBound(pt: PtLike | number[], boundPt1: PtLike | number[], boundPt2: PtLike | number[]): boolean;
-    static sortEdges(pts: GroupLike): GroupLike;
-    static scale(ps: Pt | GroupLike, scale: number | number[] | PtLike, anchor?: PtLike): Geom;
-    static rotate2D(ps: Pt | GroupLike, angle: number, anchor?: PtLike, axis?: string | number[]): Geom;
-    static shear2D(ps: Pt | GroupLike, scale: number | number[] | PtLike, anchor?: PtLike, axis?: string | number[]): Geom;
-    static reflect2D(ps: Pt | GroupLike, line: GroupLike, axis?: string | number[]): Geom;
+    static withinBound(pt: PtLike, boundPt1: PtLike, boundPt2: PtLike): boolean;
+    static sortEdges(pts: PtIterable): GroupLike;
+    static scale(ps: Pt | PtIterable, scale: number | PtLike, anchor?: PtLike): Geom;
+    static rotate2D(ps: Pt | PtIterable, angle: number, anchor?: PtLike, axis?: string | PtLike): Geom;
+    static shear2D(ps: Pt | PtIterable, scale: number | PtLike, anchor?: PtLike, axis?: string | PtLike): Geom;
+    static reflect2D(ps: Pt | PtIterable, line: PtLikeIterable, axis?: string | PtLike): Geom;
     static cosTable(): {
         table: Float64Array;
         cos: (rad: number) => number;
@@ -430,118 +459,118 @@ export class Range {
     protected _min: Pt;
     protected _mag: Pt;
     protected _dims: number;
-    constructor(g: GroupLike);
+    constructor(g: PtIterable);
     readonly max: Pt;
     readonly min: Pt;
     readonly magnitude: Pt;
     calc(): this;
     mapTo(min: number, max: number, exclude?: boolean[]): Group;
-    append(g: GroupLike, update?: boolean): this;
+    append(pts: PtLikeIterable, update?: boolean): this;
     ticks(count: number): Group;
 }
 
 export class Line {
     static fromAngle(anchor: PtLike, angle: number, magnitude: number): Group;
-    static slope(p1: PtLike | number[], p2: PtLike | number[]): number;
-    static intercept(p1: PtLike | number[], p2: PtLike | number[]): {
+    static slope(p1: PtLike, p2: PtLike): number;
+    static intercept(p1: PtLike, p2: PtLike): {
         slope: number;
         xi: number;
         yi: number;
     };
-    static sideOfPt2D(line: GroupLike, pt: PtLike): number;
-    static collinear(p1: PtLike | number[], p2: PtLike | number[], p3: PtLike | number[], threshold?: number): boolean;
-    static magnitude(line: GroupLike): number;
-    static magnitudeSq(line: GroupLike): number;
-    static perpendicularFromPt(line: GroupLike, pt: PtLike | number[], asProjection?: boolean): Pt;
+    static sideOfPt2D(line: PtLikeIterable, pt: PtLike): number;
+    static collinear(p1: PtLike, p2: PtLike, p3: PtLike, threshold?: number): boolean;
+    static magnitude(line: PtIterable): number;
+    static magnitudeSq(line: PtIterable): number;
+    static perpendicularFromPt(line: PtIterable, pt: PtLike, asProjection?: boolean): Pt;
     static distanceFromPt(line: GroupLike, pt: PtLike | number[]): number;
-    static intersectRay2D(la: GroupLike, lb: GroupLike): Pt;
-    static intersectLine2D(la: GroupLike, lb: GroupLike): Pt;
-    static intersectLineWithRay2D(line: GroupLike, ray: GroupLike): Pt;
-    static intersectPolygon2D(lineOrRay: GroupLike, poly: GroupLike, sourceIsRay?: boolean): Group;
-    static intersectLines2D(lines1: GroupLike[], lines2: GroupLike[], isRay?: boolean): Group;
-    static intersectGridWithRay2D(ray: GroupLike, gridPt: PtLike | number[]): Group;
+    static intersectRay2D(la: PtIterable, lb: PtIterable): Pt;
+    static intersectLine2D(la: PtIterable, lb: PtIterable): Pt;
+    static intersectLineWithRay2D(line: PtIterable, ray: PtIterable): Pt;
+    static intersectPolygon2D(lineOrRay: PtIterable, poly: PtIterable, sourceIsRay?: boolean): Group;
+    static intersectLines2D(lines1: Iterable<PtIterable>, lines2: Iterable<PtIterable>, isRay?: boolean): Group;
+    static intersectGridWithRay2D(ray: PtIterable, gridPt: PtLike): Group;
     static intersectGridWithLine2D(line: GroupLike, gridPt: PtLike | number[]): Group;
     static intersectRect2D(line: GroupLike, rect: GroupLike): Group;
-    static subpoints(line: GroupLike | number[][], num: number): Group;
-    static crop(line: GroupLike, size: PtLike, index?: number, cropAsCircle?: boolean): Pt;
-    static marker(line: GroupLike, size: PtLike, graphic?: string, atTail?: boolean): Group;
+    static subpoints(line: PtLikeIterable, num: number): Group;
+    static crop(line: PtIterable, size: PtLike, index?: number, cropAsCircle?: boolean): Pt;
+    static marker(line: PtIterable, size: PtLike, graphic?: string, atTail?: boolean): Group;
     static toRect(line: GroupLike): Group;
 }
 export class Rectangle {
-    static from(topLeft: PtLike | number[], widthOrSize: number | PtLike, height?: number): Group;
-    static fromTopLeft(topLeft: PtLike | number[], widthOrSize: number | PtLike, height?: number): Group;
-    static fromCenter(center: PtLike | number[], widthOrSize: number | PtLike, height?: number): Group;
-    static toCircle(pts: GroupLike, within?: boolean): Group;
-    static toSquare(pts: GroupLike, enclose?: boolean): Group;
-    static size(pts: GroupLike): Pt;
-    static center(pts: GroupLike): Pt;
-    static corners(rect: GroupLike): Group;
-    static sides(rect: GroupLike): Group[];
-    static boundingBox(rects: GroupLike[]): Group;
-    static polygon(rect: GroupLike): Group;
-    static quadrants(rect: GroupLike, center?: PtLike): Group[];
-    static halves(rect: GroupLike, ratio?: number, asRows?: boolean): Group[];
+    static from(topLeft: PtLike, widthOrSize: number | PtLike, height?: number): Group;
+    static fromTopLeft(topLeft: PtLike, widthOrSize: number | PtLike, height?: number): Group;
+    static fromCenter(center: PtLike, widthOrSize: number | PtLike, height?: number): Group;
+    static toCircle(pts: PtIterable, within?: boolean): Group;
+    static toSquare(pts: PtIterable, enclose?: boolean): Group;
+    static size(pts: PtIterable): Pt;
+    static center(pts: PtIterable): Pt;
+    static corners(rect: PtIterable): Group;
+    static sides(rect: PtIterable): Group[];
+    static boundingBox(rects: Iterable<PtLikeIterable>): Group;
+    static polygon(rect: PtIterable): Group;
+    static quadrants(rect: PtIterable, center?: PtLike): Group[];
+    static halves(rect: PtIterable, ratio?: number, asRows?: boolean): Group[];
     static withinBound(rect: GroupLike, pt: PtLike): boolean;
     static hasIntersectRect2D(rect1: GroupLike, rect2: GroupLike, resetBoundingBox?: boolean): boolean;
     static intersectRect2D(rect1: GroupLike, rect2: GroupLike): Group;
 }
 export class Circle {
-    static fromRect(pts: GroupLike, enclose?: boolean): Group;
-    static fromTriangle(pts: GroupLike, enclose?: boolean): Group;
+    static fromRect(pts: PtLikeIterable, enclose?: boolean): Group;
+    static fromTriangle(pts: PtIterable, enclose?: boolean): Group;
     static fromCenter(pt: PtLike, radius: number): Group;
-    static withinBound(pts: GroupLike, pt: PtLike, threshold?: number): boolean;
-    static intersectRay2D(pts: GroupLike, ray: GroupLike): Group;
-    static intersectLine2D(pts: GroupLike, line: GroupLike): Group;
-    static intersectCircle2D(pts: GroupLike, circle: GroupLike): Group;
-    static intersectRect2D(pts: GroupLike, rect: GroupLike): Group;
-    static toRect(pts: GroupLike, within?: boolean): Group;
-    static toTriangle(pts: GroupLike, within?: boolean): Group;
+    static withinBound(pts: PtIterable, pt: PtLike, threshold?: number): boolean;
+    static intersectRay2D(circle: PtIterable, ray: PtIterable): Group;
+    static intersectLine2D(circle: PtIterable, line: PtIterable): Group;
+    static intersectCircle2D(circle1: PtIterable, circle2: PtIterable): Group;
+    static intersectRect2D(circle: PtIterable, rect: PtIterable): Group;
+    static toRect(circle: PtIterable, within?: boolean): Group;
+    static toTriangle(circle: PtIterable, within?: boolean): Group;
 }
 export class Triangle {
-    static fromRect(rect: GroupLike): Group;
-    static fromCircle(circle: GroupLike): Group;
+    static fromRect(rect: PtIterable): Group;
+    static fromCircle(circle: PtIterable): Group;
     static fromCenter(pt: PtLike, size: number): Group;
-    static medial(pts: GroupLike): Group;
-    static oppositeSide(pts: GroupLike, index: number): Group;
-    static altitude(pts: GroupLike, index: number): Group;
-    static orthocenter(pts: GroupLike): Pt;
-    static incenter(pts: GroupLike): Pt;
-    static incircle(pts: GroupLike, center?: Pt): Group;
-    static circumcenter(pts: GroupLike): Pt;
-    static circumcircle(pts: GroupLike, center?: Pt): Group;
+    static medial(tri: PtIterable): Group;
+    static oppositeSide(tri: PtIterable, index: number): Group;
+    static altitude(tri: PtIterable, index: number): Group;
+    static orthocenter(tri: PtIterable): Pt;
+    static incenter(tri: PtIterable): Pt;
+    static incircle(tri: PtIterable, center?: Pt): Group;
+    static circumcenter(tri: PtIterable): Pt;
+    static circumcircle(tri: PtIterable, center?: Pt): Group;
 }
 export class Polygon {
-    static centroid(pts: GroupLike): Pt;
+    static centroid(pts: PtLikeIterable): Pt;
     static rectangle(center: PtLike, widthOrSize: number | PtLike, height?: number): Group;
     static fromCenter(center: PtLike, radius: number, sides: number): Group;
-    static lineAt(pts: GroupLike, idx: number): Group;
-    static lines(pts: GroupLike, closePath?: boolean): Group[];
-    static midpoints(pts: GroupLike, closePath?: boolean, t?: number): Group;
-    static adjacentSides(pts: GroupLike, index: number, closePath?: boolean): Group[];
-    static bisector(pts: GroupLike, index: number): Pt;
-    static perimeter(pts: GroupLike, closePath?: boolean): {
+    static lineAt(pts: PtLikeIterable, index: number): Group;
+    static lines(poly: PtIterable, closePath?: boolean): Group[];
+    static midpoints(poly: PtIterable, closePath?: boolean, t?: number): Group;
+    static adjacentSides(poly: PtIterable, index: number, closePath?: boolean): Group[];
+    static bisector(poly: PtIterable, index: number): Pt;
+    static perimeter(poly: PtIterable, closePath?: boolean): {
         total: number;
         segments: Pt;
     };
-    static area(pts: GroupLike): any;
-    static convexHull(pts: GroupLike, sorted?: boolean): Group;
-    static network(pts: GroupLike, originIndex?: number): Group[];
-    static nearestPt(pts: GroupLike, pt: PtLike): number;
-    static projectAxis(poly: GroupLike, unitAxis: Pt): Pt;
-    protected static _axisOverlap(poly1: any, poly2: any, unitAxis: any): number;
-    static hasIntersectPoint(poly: GroupLike, pt: PtLike): boolean;
-    static hasIntersectCircle(poly: GroupLike, circle: GroupLike): IntersectContext;
-    static hasIntersectPolygon(poly1: GroupLike, poly2: GroupLike): IntersectContext;
-    static intersectPolygon2D(poly1: GroupLike, poly2: GroupLike): Group;
-    static toRects(polys: GroupLike[]): GroupLike[];
+    static area(pts: PtLikeIterable): any;
+    static convexHull(pts: PtLikeIterable, sorted?: boolean): Group;
+    static network(poly: PtIterable, originIndex?: number): Group[];
+    static nearestPt(poly: PtIterable, pt: PtLike): number;
+    static projectAxis(poly: PtIterable, unitAxis: Pt): Pt;
+    protected static _axisOverlap(poly1: PtIterable, poly2: PtIterable, unitAxis: Pt): number;
+    static hasIntersectPoint(poly: PtLikeIterable, pt: PtLike): boolean;
+    static hasIntersectCircle(poly: PtIterable, circle: PtIterable): IntersectContext;
+    static hasIntersectPolygon(poly1: PtIterable, poly2: PtIterable): IntersectContext;
+    static intersectPolygon2D(poly1: PtIterable, poly2: PtIterable): Group;
+    static toRects(polys: Iterable<PtIterable>): Group[];
 }
 export class Curve {
     static getSteps(steps: number): Group;
-    static controlPoints(pts: GroupLike, index?: number, copyStart?: boolean): Group;
+    static controlPoints(pts: PtLikeIterable, index?: number, copyStart?: boolean): Group;
     static _calcPt(ctrls: GroupLike, params: PtLike): Pt;
-    static catmullRom(pts: GroupLike, steps?: number): Group;
+    static catmullRom(pts: PtLikeIterable, steps?: number): Group;
     static catmullRomStep(step: Pt, ctrls: GroupLike): Pt;
-    static cardinal(pts: GroupLike, steps?: number, tension?: number): Group;
+    static cardinal(pts: PtLikeIterable, steps?: number, tension?: number): Group;
     static cardinalStep(step: Pt, ctrls: GroupLike, tension?: number): Pt;
     static bezier(pts: GroupLike, steps?: number): Group;
     static bezierStep(step: Pt, ctrls: GroupLike): Pt;
@@ -561,7 +590,7 @@ export class World {
     protected _bnames: string[];
     protected _drawParticles: (p: Particle, i: number) => void;
     protected _drawBodies: (p: Body, i: number) => void;
-    constructor(bound: Group, friction?: number, gravity?: PtLike | number);
+    constructor(bound: PtIterable, friction?: number, gravity?: PtLike | number);
     bound: Bound;
     gravity: Pt;
     friction: number;
@@ -579,7 +608,7 @@ export class World {
     removeBody(from: number | string, count?: number): this;
     removeParticle(from: number | string, count?: number): this;
     static edgeConstraint(p1: Particle, p2: Particle, dist: number, stiff?: number, precise?: boolean): Particle;
-    static boundConstraint(p: Particle, rect: Group, damping?: number): void;
+    static boundConstraint(p: Particle, rect: PtIterable, damping?: number): void;
     protected integrate(p: Particle, dt: number, prevDt?: number): Particle;
     protected _updateParticles(dt: number): void;
     protected _updateBodies(dt: number): void;
@@ -616,8 +645,8 @@ export class Body extends Group {
     };
     protected _mass: number;
     constructor();
-    static fromGroup(list: GroupLike, stiff?: number, autoLink?: boolean, autoMass?: boolean): Body;
-    init(list: GroupLike, stiff?: number): this;
+    static fromGroup(body: PtIterable, stiff?: number, autoLink?: boolean, autoMass?: boolean): Body;
+    init(body: PtIterable, stiff?: number): this;
     mass: number;
     autoMass(): this;
     link(index1: number, index2: number, stiff?: number): this;
@@ -651,6 +680,7 @@ export class Tempo implements IPlayer {
 export class Sound {
     _ctx: AudioContext;
     _node: AudioNode;
+    _outputNode: AudioNode;
     _stream: MediaStream;
     _source: HTMLMediaElement;
     _buffer: AudioBuffer;
@@ -667,6 +697,7 @@ export class Sound {
     static input(constraint?: MediaStreamConstraints): Promise<Sound>;
     readonly ctx: AudioContext;
     readonly node: AudioNode;
+    readonly outputNode: AudioNode;
     readonly stream: MediaStream;
     readonly source: HTMLMediaElement;
     buffer: AudioBuffer;
@@ -678,6 +709,8 @@ export class Sound {
     readonly sampleRate: number;
     frequency: number;
     connect(node: AudioNode): this;
+    setOutputNode(outputNode: AudioNode): this;
+    removeOutputNode(): this;
     analyze(size?: number, minDb?: number, maxDb?: number, smooth?: number): this;
     protected _domain(time: boolean): Uint8Array;
     protected _domainTo(time: boolean, size: PtLike, position?: PtLike, trim?: number[]): Group;
@@ -768,10 +801,10 @@ export class Group extends Array<Pt> {
     readonly q3: Pt;
     readonly q4: Pt;
     clone(): Group;
-    static fromArray(list: PtLike[]): Group;
-    static fromPtArray(list: GroupLike): Group;
+    static fromArray(list: PtLikeIterable): Group;
+    static fromPtArray(list: PtIterable): Group;
     split(chunkSize: number, stride?: number, loopBack?: boolean): Group[];
-    insert(pts: GroupLike, index?: number): this;
+    insert(pts: PtIterable, index?: number): this;
     remove(index?: number, count?: number): Group;
     segments(pts_per_segment?: number, stride?: number, loopBack?: boolean): Group[];
     lines(): Group[];
@@ -779,15 +812,15 @@ export class Group extends Array<Pt> {
     boundingBox(): Group;
     anchorTo(ptOrIndex?: PtLike | number): void;
     anchorFrom(ptOrIndex?: PtLike | number): void;
-    op(fn: (g1: GroupLike, ...rest: any[]) => any): (...rest: any[]) => any;
-    ops(fns: ((g1: GroupLike, ...rest: any[]) => any)[]): ((...rest: any[]) => any)[];
+    op(fn: (g1: PtIterable, ...rest: any[]) => any): (...rest: any[]) => any;
+    ops(fns: ((g1: PtIterable, ...rest: any[]) => any)[]): ((...rest: any[]) => any)[];
     interpolate(t: number): Pt;
     moveBy(...args: any[]): this;
     moveTo(...args: any[]): this;
     scale(scale: number | number[] | PtLike, anchor?: PtLike): this;
     rotate2D(angle: number, anchor?: PtLike, axis?: string): this;
     shear2D(scale: number | number[] | PtLike, anchor?: PtLike, axis?: string): this;
-    reflect2D(line: GroupLike, axis?: string): this;
+    reflect2D(line: PtLikeIterable, axis?: string): this;
     sortByDimension(dim: number, desc?: boolean): this;
     forEachPt(ptFn: string, ...args: any[]): this;
     add(...args: any[]): this;
@@ -808,7 +841,7 @@ export class Bound extends Group implements IPt {
     protected _inited: boolean;
     constructor(...args: Pt[]);
     static fromBoundingRect(rect: ClientRect): Bound;
-    static fromGroup(g: GroupLike): Bound;
+    static fromGroup(g: PtLikeIterable): Bound;
     protected init(): void;
     clone(): Bound;
     protected _updateSize(): void;
@@ -871,7 +904,7 @@ export abstract class MultiTouchSpace extends Space {
     protected _hasTouch: boolean;
     protected _canvas: EventTarget;
     readonly pointer: Pt;
-    bindCanvas(evt: string, callback: EventListener): void;
+    bindCanvas(evt: string, callback: EventListener, options?: any): void;
     unbindCanvas(evt: string, callback: EventListener): void;
     bindMouse(_bind?: boolean): this;
     bindTouch(_bind?: boolean): this;
@@ -931,18 +964,22 @@ export class SVGForm extends VisualForm {
     static point(ctx: DOMFormContext, pt: PtLike, radius?: number, shape?: string): SVGElement;
     point(pt: PtLike, radius?: number, shape?: string): this;
     static circle(ctx: DOMFormContext, pt: PtLike, radius?: number): SVGElement;
-    circle(pts: GroupLike | number[][]): this;
+    circle(pts: PtLikeIterable): this;
     static arc(ctx: DOMFormContext, pt: PtLike, radius: number, startAngle: number, endAngle: number, cc?: boolean): SVGElement;
     arc(pt: PtLike, radius: number, startAngle: number, endAngle: number, cc?: boolean): this;
     static square(ctx: DOMFormContext, pt: PtLike, halfsize: number): SVGElement;
     square(pt: PtLike, halfsize: number): this;
-    static line(ctx: DOMFormContext, pts: GroupLike | number[][]): SVGElement;
-    line(pts: GroupLike | number[][]): this;
-    protected static _poly(ctx: DOMFormContext, pts: GroupLike | number[][], closePath?: boolean): SVGElement;
-    static polygon(ctx: DOMFormContext, pts: GroupLike | number[][]): SVGElement;
-    polygon(pts: GroupLike | number[][]): this;
-    static rect(ctx: DOMFormContext, pts: GroupLike | number[][]): SVGElement;
-    rect(pts: number[][] | Pt[]): this;
+    static line(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement;
+    line(pts: PtLikeIterable): this;
+    protected static _poly(ctx: DOMFormContext, points: string, closePath?: boolean): SVGElement;
+    protected static pointsString(pts: PtLikeIterable): {
+        string: string;
+        count: number;
+    };
+    static polygon(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement;
+    polygon(pts: PtLikeIterable): this;
+    static rect(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement;
+    rect(pts: PtLikeIterable): this;
     static text(ctx: DOMFormContext, pt: PtLike, txt: string): SVGElement;
     text(pt: PtLike, txt: string): this;
     log(txt: any): this;
@@ -956,6 +993,8 @@ export interface IPt {
 }
 export type PtLike = Pt | Float32Array | number[];
 export type GroupLike = Group | Pt[];
+export type PtLikeIterable = GroupLike | PtLike[] | Iterable<PtLike>;
+export type PtIterable = GroupLike | Pt[] | Iterable<Pt>;
 export type AnimateCallbackFn = (time?: number, frameTime?: number, currentSpace?: any) => void;
 export interface IPlayer {
     animateID?: string;
@@ -1047,7 +1086,7 @@ export type DefaultFormStyle = {
 export class Typography {
     static textWidthEstimator(fn: (string: any) => number, samples?: string[], distribution?: number[]): (string: any) => number;
     static truncate(fn: (string: any) => number, str: string, width: number, tail?: string): [string, number];
-    static fontSizeToBox(box: GroupLike, ratio?: number, byHeight?: boolean): (GroupLike: any) => number;
+    static fontSizeToBox(box: PtLikeIterable, ratio?: number, byHeight?: boolean): (GroupLike: any) => number;
     static fontSizeToThreshold(threshold: number, direction?: number): (a: number, b: number) => number;
 }
 
@@ -1085,12 +1124,12 @@ export class UI {
         [key: string]: any;
     };
     protected _holds: Map<number, string>;
-    constructor(group: GroupLike, shape: string, states?: {
+    constructor(group: PtLikeIterable, shape: string, states?: {
         [key: string]: any;
     }, id?: string);
-    static fromRectangle(group: GroupLike, states: {}, id?: string): UI;
-    static fromCircle(group: GroupLike, states: {}, id?: string): UI;
-    static fromPolygon(group: GroupLike, states: {}, id?: string): UI;
+    static fromRectangle(group: PtLikeIterable, states: {}, id?: string): UI;
+    static fromCircle(group: PtLikeIterable, states: {}, id?: string): UI;
+    static fromPolygon(group: PtLikeIterable, states: {}, id?: string): UI;
     static fromUI(ui: UI, states?: object, id?: string): UI;
     id: string;
     group: Group;
@@ -1112,7 +1151,7 @@ export class UI {
     protected static _removeHandler(fns: UIHandler[], index: number): boolean;
 }
 export class UIButton extends UI {
-    constructor(group: GroupLike, shape: string, states?: {
+    constructor(group: PtLikeIterable, shape: string, states?: {
         [key: string]: any;
     }, id?: string);
     onClick(fn: UIHandler): number;
@@ -1123,7 +1162,7 @@ export class UIButton extends UI {
     offHover(enterID?: number, leaveID?: number): boolean[];
 }
 export class UIDragger extends UIButton {
-    constructor(group: GroupLike, shape: string, states?: {
+    constructor(group: PtLikeIterable, shape: string, states?: {
         [key: string]: any;
     }, id?: string);
     onDrag(fn: UIHandler): number;
@@ -1176,7 +1215,7 @@ export class Util {
     static forRange(fn: (index: number) => any, range: number, start?: number, step?: number): any[];
     static load(url: string, callback: (response: string, success: boolean) => void): void;
     static performance(avgFrames?: number): () => number;
-    static iterFromPtLike(list: PtLike[] | Iterable<PtLike>): Iterable<PtLike>;
-    static iterFromPt(list: GroupLike | Iterable<Pt>): Iterable<Pt>;
+    static arrayCheck(pts: PtLikeIterable, minRequired?: number): boolean;
+    static iterToArray(it: Iterable<any>): any[];
 }
 

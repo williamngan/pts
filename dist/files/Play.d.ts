@@ -25,6 +25,7 @@ export declare class Sound {
     private _type;
     _ctx: AudioContext;
     _node: AudioNode;
+    _outputNode: AudioNode;
     _stream: MediaStream;
     _source: HTMLMediaElement;
     _buffer: AudioBuffer;
@@ -41,6 +42,7 @@ export declare class Sound {
     static input(constraint?: MediaStreamConstraints): Promise<Sound>;
     readonly ctx: AudioContext;
     readonly node: AudioNode;
+    readonly outputNode: AudioNode;
     readonly stream: MediaStream;
     readonly source: HTMLMediaElement;
     buffer: AudioBuffer;
@@ -52,6 +54,8 @@ export declare class Sound {
     readonly sampleRate: number;
     frequency: number;
     connect(node: AudioNode): this;
+    setOutputNode(outputNode: AudioNode): this;
+    removeOutputNode(): this;
     analyze(size?: number, minDb?: number, maxDb?: number, smooth?: number): this;
     protected _domain(time: boolean): Uint8Array;
     protected _domainTo(time: boolean, size: PtLike, position?: PtLike, trim?: number[]): Group;

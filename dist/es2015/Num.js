@@ -1,5 +1,5 @@
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
-import { Const } from "./Util";
+import { Const, Util } from "./Util";
 import { Curve } from "./Op";
 import { Pt, Group } from "./Pt";
 import { Vec, Mat } from "./LinearAlgebra";
@@ -35,14 +35,16 @@ export class Num {
         return (n - min) / (max - min);
     }
     static sum(pts) {
-        let c = new Pt(pts[0]);
-        for (let i = 1, len = pts.length; i < len; i++) {
-            Vec.add(c, pts[i]);
+        let _pts = Util.iterToArray(pts);
+        let c = new Pt(_pts[0]);
+        for (let i = 1, len = _pts.length; i < len; i++) {
+            Vec.add(c, _pts[i]);
         }
         return c;
     }
     static average(pts) {
-        return Num.sum(pts).divide(pts.length);
+        let _pts = Util.iterToArray(pts);
+        return Num.sum(_pts).divide(_pts.length);
     }
     static cycle(t, method = Shaping.sineInOut) {
         return method(t > 0.5 ? 2 - t * 2 : t * 2);
@@ -69,8 +71,17 @@ export class Geom {
         return radian * Const.rad_to_deg;
     }
     static boundingBox(pts) {
-        let minPt = pts.reduce((a, p) => a.$min(p));
-        let maxPt = pts.reduce((a, p) => a.$max(p));
+        let minPt, maxPt;
+        for (let p of pts) {
+            if (minPt == undefined) {
+                minPt = p.clone();
+                maxPt = p.clone();
+            }
+            else {
+                minPt = minPt.$min(p);
+                maxPt = maxPt.$max(p);
+            }
+        }
         return new Group(minPt, maxPt);
     }
     static centroid(pts) {
@@ -78,14 +89,16 @@ export class Geom {
     }
     static anchor(pts, ptOrIndex = 0, direction = "to") {
         let method = (direction == "to") ? "subtract" : "add";
-        for (let i = 0, len = pts.length; i < len; i++) {
+        let i = 0;
+        for (let p of pts) {
             if (typeof ptOrIndex == "number") {
                 if (ptOrIndex !== i)
-                    pts[i][method](pts[ptOrIndex]);
+                    p[method](pts[ptOrIndex]);
             }
             else {
-                pts[i][method](ptOrIndex);
+                p[method](ptOrIndex);
             }
+            i++;
         }
     }
     static interpolate(a, b, t = 0.5) {
@@ -119,7 +132,8 @@ export class Geom {
         return true;
     }
     static sortEdges(pts) {
-        let bounds = Geom.boundingBox(pts);
+        let _pts = Util.iterToArray(pts);
+        let bounds = Geom.boundingBox(_pts);
         let center = bounds[1].add(bounds[0]).divide(2);
         let fn = (a, b) => {
             if (a.length < 2 || b.length < 2)
@@ -142,10 +156,10 @@ export class Geom {
                 return -1;
             return (da[0] * da[0] + da[1] * da[1] > db[0] * db[0] + db[1] * db[1]) ? 1 : -1;
         };
-        return pts.sort(fn);
+        return _pts.sort(fn);
     }
     static scale(ps, scale, anchor) {
-        let pts = (!Array.isArray(ps)) ? [ps] : ps;
+        let pts = Util.iterToArray((ps[0] !== undefined && typeof ps[0] == 'number') ? [ps] : ps);
         let scs = (typeof scale == "number") ? Pt.make(pts[0].length, scale) : scale;
         if (!anchor)
             anchor = Pt.make(pts[0].length, 0);
@@ -158,7 +172,7 @@ export class Geom {
         return Geom;
     }
     static rotate2D(ps, angle, anchor, axis) {
-        let pts = (!Array.isArray(ps)) ? [ps] : ps;
+        let pts = Util.iterToArray((ps[0] !== undefined && typeof ps[0] == 'number') ? [ps] : ps);
         let fn = (anchor) ? Mat.rotateAt2DMatrix : Mat.rotate2DMatrix;
         if (!anchor)
             anchor = Pt.make(pts[0].length, 0);
@@ -176,7 +190,7 @@ export class Geom {
         return Geom;
     }
     static shear2D(ps, scale, anchor, axis) {
-        let pts = (!Array.isArray(ps)) ? [ps] : ps;
+        let pts = Util.iterToArray((ps[0] !== undefined && typeof ps[0] == 'number') ? [ps] : ps);
         let s = (typeof scale == "number") ? [scale, scale] : scale;
         if (!anchor)
             anchor = Pt.make(pts[0].length, 0);
@@ -195,8 +209,9 @@ export class Geom {
         return Geom;
     }
     static reflect2D(ps, line, axis) {
-        let pts = (!Array.isArray(ps)) ? [ps] : ps;
-        let mat = Mat.reflectAt2DMatrix(line[0], line[1]);
+        let pts = Util.iterToArray((ps[0] !== undefined && typeof ps[0] == 'number') ? [ps] : ps);
+        let _line = Util.iterToArray(line);
+        let mat = Mat.reflectAt2DMatrix(_line[0], _line[1]);
         for (let i = 0, len = pts.length; i < len; i++) {
             let p = (axis) ? pts[i].$take(axis) : pts[i];
             p.to(Mat.transform2D(p, mat));
@@ -420,10 +435,11 @@ export class Range {
         }
         return target;
     }
-    append(g, update = true) {
-        if (g[0].length !== this._dims)
-            throw new Error(`Dimensions don't match. ${this._dims} dimensions in Range and ${g[0].length} provided in parameter. `);
-        this._source = this._source.concat(g);
+    append(pts, update = true) {
+        let _pts = Util.iterToArray(pts);
+        if (_pts[0].length !== this._dims)
+            throw new Error(`Dimensions don't match. ${this._dims} dimensions in Range and ${_pts[0].length} provided in parameter. `);
+        this._source = this._source.concat(_pts);
         if (update)
             this.calc();
         return this;

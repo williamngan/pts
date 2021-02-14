@@ -1,6 +1,6 @@
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 import { Pt, Group } from "./Pt";
-import { PtLike, GroupLike } from "./Types";
+import { PtLike, GroupLike, PtLikeIterable, PtIterable } from "./Types";
 export declare class Num {
     static equals(a: number, b: number, threshold?: number): boolean;
     static lerp(a: number, b: number, t: number): number;
@@ -9,8 +9,8 @@ export declare class Num {
     static within(p: number, a: number, b: number): boolean;
     static randomRange(a: number, b?: number): number;
     static normalizeValue(n: number, a: number, b: number): number;
-    static sum(pts: GroupLike | number[][]): Pt;
-    static average(pts: GroupLike | number[][]): Pt;
+    static sum(pts: PtLikeIterable): Pt;
+    static average(pts: PtLikeIterable): Pt;
     static cycle(t: number, method?: (t: number) => number): number;
     static mapToRange(n: number, currA: number, currB: number, targetA: number, targetB: number): number;
 }
@@ -19,18 +19,18 @@ export declare class Geom {
     static boundRadian(radian: number): number;
     static toRadian(angle: number): number;
     static toDegree(radian: number): number;
-    static boundingBox(pts: GroupLike): Group;
-    static centroid(pts: GroupLike | number[][]): Pt;
-    static anchor(pts: GroupLike, ptOrIndex?: PtLike | number, direction?: ("to" | "from")): void;
-    static interpolate(a: Pt | number[], b: Pt | number[], t?: number): Pt;
-    static perpendicular(pt: PtLike, axis?: string | number[]): Group;
+    static boundingBox(pts: PtIterable): Group;
+    static centroid(pts: PtLikeIterable): Pt;
+    static anchor(pts: PtLikeIterable, ptOrIndex?: PtLike | number, direction?: ("to" | "from")): void;
+    static interpolate(a: PtLike, b: PtLike, t?: number): Pt;
+    static perpendicular(pt: PtLike, axis?: string | PtLike): Group;
     static isPerpendicular(p1: PtLike, p2: PtLike): boolean;
-    static withinBound(pt: PtLike | number[], boundPt1: PtLike | number[], boundPt2: PtLike | number[]): boolean;
-    static sortEdges(pts: GroupLike): GroupLike;
-    static scale(ps: Pt | GroupLike, scale: number | number[] | PtLike, anchor?: PtLike): Geom;
-    static rotate2D(ps: Pt | GroupLike, angle: number, anchor?: PtLike, axis?: string | number[]): Geom;
-    static shear2D(ps: Pt | GroupLike, scale: number | number[] | PtLike, anchor?: PtLike, axis?: string | number[]): Geom;
-    static reflect2D(ps: Pt | GroupLike, line: GroupLike, axis?: string | number[]): Geom;
+    static withinBound(pt: PtLike, boundPt1: PtLike, boundPt2: PtLike): boolean;
+    static sortEdges(pts: PtIterable): GroupLike;
+    static scale(ps: Pt | PtIterable, scale: number | PtLike, anchor?: PtLike): Geom;
+    static rotate2D(ps: Pt | PtIterable, angle: number, anchor?: PtLike, axis?: string | PtLike): Geom;
+    static shear2D(ps: Pt | PtIterable, scale: number | PtLike, anchor?: PtLike, axis?: string | PtLike): Geom;
+    static reflect2D(ps: Pt | PtIterable, line: PtLikeIterable, axis?: string | PtLike): Geom;
     static cosTable(): {
         table: Float64Array;
         cos: (rad: number) => number;
@@ -78,12 +78,12 @@ export declare class Range {
     protected _min: Pt;
     protected _mag: Pt;
     protected _dims: number;
-    constructor(g: GroupLike);
+    constructor(g: PtIterable);
     readonly max: Pt;
     readonly min: Pt;
     readonly magnitude: Pt;
     calc(): this;
     mapTo(min: number, max: number, exclude?: boolean[]): Group;
-    append(g: GroupLike, update?: boolean): this;
+    append(pts: PtLikeIterable, update?: boolean): this;
     ticks(count: number): Group;
 }

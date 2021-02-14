@@ -10,6 +10,8 @@ export interface IPt {
 }
 export declare type PtLike = Pt | Float32Array | number[];
 export declare type GroupLike = Group | Pt[];
+export declare type PtLikeIterable = GroupLike | PtLike[] | Iterable<PtLike>;
+export declare type PtIterable = GroupLike | Pt[] | Iterable<Pt>;
 export declare type AnimateCallbackFn = (time?: number, frameTime?: number, currentSpace?: any) => void;
 export interface IPlayer {
     animateID?: string;

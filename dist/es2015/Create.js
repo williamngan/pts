@@ -1,7 +1,7 @@
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 import { Pt, Group } from "./Pt";
 import { Line, Triangle } from "./Op";
-import { Const } from "./Util";
+import { Const, Util } from "./Util";
 import { Num, Geom } from "./Num";
 import { Vec } from "./LinearAlgebra";
 export class Create {
@@ -18,9 +18,10 @@ export class Create {
         return pts;
     }
     static distributeLinear(line, count) {
-        let ln = Line.subpoints(line, count - 2);
-        ln.unshift(line[0]);
-        ln.push(line[line.length - 1]);
+        let _line = Util.iterToArray(line);
+        let ln = Line.subpoints(_line, count - 2);
+        ln.unshift(_line[0]);
+        ln.push(_line[_line.length - 1]);
         return ln;
     }
     static gridPts(bound, columns, rows, orientation = [0.5, 0.5]) {
@@ -59,13 +60,15 @@ export class Create {
     static noisePts(pts, dx = 0.01, dy = 0.01, rows = 0, columns = 0) {
         let seed = Math.random();
         let g = new Group();
-        for (let i = 0, len = pts.length; i < len; i++) {
-            let np = new Noise(pts[i]);
+        let i = 0;
+        for (let p of pts) {
+            let np = new Noise(p);
             let r = (rows && rows > 0) ? Math.floor(i / rows) : i;
             let c = (columns && columns > 0) ? i % columns : i;
             np.initNoise(dx * c, dy * r);
             np.seed(seed);
             g.push(np);
+            i++;
         }
         return g;
     }

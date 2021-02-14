@@ -1,7 +1,7 @@
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 import { VisualForm, Font } from "./Form";
 import { Geom } from './Num';
-import { Const } from './Util';
+import { Const, Util } from './Util';
 import { Pt, Group } from './Pt';
 import { Rectangle } from "./Op";
 import { DOMSpace } from "./Dom";
@@ -225,7 +225,8 @@ export class SVGForm extends VisualForm {
     }
     circle(pts) {
         this.nextID();
-        SVGForm.circle(this._ctx, pts[0], pts[1][0]);
+        let p = Util.iterToArray(pts);
+        SVGForm.circle(this._ctx, p[0], p[1][0]);
         return this;
     }
     static arc(ctx, pt, radius, startAngle, endAngle, cc) {
@@ -268,16 +269,18 @@ export class SVGForm extends VisualForm {
         return this;
     }
     static line(ctx, pts) {
-        if (!this._checkSize(pts))
+        let points = SVGForm.pointsString(pts);
+        if (points.count < 2)
             return;
-        if (pts.length > 2)
-            return SVGForm._poly(ctx, pts, false);
+        if (points.count > 2)
+            return SVGForm._poly(ctx, points.string, false);
         let elem = SVGSpace.svgElement(ctx.group, "line", SVGForm.getID(ctx));
+        let p = Util.iterToArray(pts);
         DOMSpace.setAttr(elem, {
-            x1: pts[0][0],
-            y1: pts[0][1],
-            x2: pts[1][0],
-            y2: pts[1][1],
+            x1: p[0][0],
+            y1: p[0][1],
+            x2: p[1][0],
+            y2: p[1][1],
             'class': `pts-svgform pts-line ${ctx.currentClass}`,
         });
         SVGForm.style(elem, ctx.style);
@@ -288,11 +291,8 @@ export class SVGForm extends VisualForm {
         SVGForm.line(this._ctx, pts);
         return this;
     }
-    static _poly(ctx, pts, closePath = true) {
-        if (!this._checkSize(pts))
-            return;
+    static _poly(ctx, points, closePath = true) {
         let elem = SVGSpace.svgElement(ctx.group, ((closePath) ? "polygon" : "polyline"), SVGForm.getID(ctx));
-        let points = pts.reduce((a, p) => a + `${p[0]},${p[1]} `, "");
         DOMSpace.setAttr(elem, {
             points: points,
             'class': `pts-svgform pts-polygon ${ctx.currentClass}`,
@@ -300,8 +300,18 @@ export class SVGForm extends VisualForm {
         SVGForm.style(elem, ctx.style);
         return elem;
     }
+    static pointsString(pts) {
+        let points = "";
+        let count = 0;
+        for (let p of pts) {
+            points += `${p[0]},${p[1]} `;
+            count++;
+        }
+        return { string: points, count: count };
+    }
     static polygon(ctx, pts) {
-        return SVGForm._poly(ctx, pts, true);
+        let points = SVGForm.pointsString(pts);
+        return SVGForm._poly(ctx, points.string, true);
     }
     polygon(pts) {
         this.nextID();
@@ -309,7 +319,7 @@ export class SVGForm extends VisualForm {
         return this;
     }
     static rect(ctx, pts) {
-        if (!this._checkSize(pts))
+        if (!Util.arrayCheck(pts))
             return;
         let elem = SVGSpace.svgElement(ctx.group, "rect", SVGForm.getID(ctx));
         let bound = Group.fromArray(pts).boundingBox();

@@ -1,5 +1,5 @@
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
-import { Pt } from "./Pt";
+import { Pt, Bound } from "./Pt";
 export class Typography {
     static textWidthEstimator(fn, samples = ["M", "n", "."], distribution = [0.06, 0.8, 0.14]) {
         let m = samples.map(fn);
@@ -17,11 +17,12 @@ export class Typography {
         }
     }
     static fontSizeToBox(box, ratio = 1, byHeight = true) {
-        let i = byHeight ? 1 : 0;
-        let h = (box[1][i] - box[0][i]);
+        let bound = Bound.fromGroup(box);
+        let h = byHeight ? bound.height : bound.width;
         let f = ratio * h;
-        return function (b) {
-            let nh = (b[1][i] - b[0][i]) / h;
+        return function (box2) {
+            let bound2 = Bound.fromGroup(box2);
+            let nh = (byHeight ? bound2.height : bound2.width) / h;
             return f * nh;
         };
     }

@@ -1,8 +1,8 @@
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 import { MultiTouchSpace } from './Space';
 import { Form, VisualForm, Font } from "./Form";
-import { Pt, Bound } from './Pt';
-import { PtLike, GroupLike, IPlayer, DOMFormContext } from "./Types";
+import { Bound } from './Pt';
+import { PtLike, GroupLike, IPlayer, DOMFormContext, PtLikeIterable } from "./Types";
 export declare class DOMSpace extends MultiTouchSpace {
     protected _canvas: HTMLElement | SVGElement;
     protected _container: Element;
@@ -84,8 +84,8 @@ export declare class HTMLForm extends VisualForm {
     circle(pts: GroupLike | number[][]): this;
     static square(ctx: DOMFormContext, pt: PtLike, halfsize: number): HTMLElement;
     square(pt: PtLike, halfsize: number): this;
-    static rect(ctx: DOMFormContext, pts: GroupLike | number[][]): Element;
-    rect(pts: number[][] | Pt[]): this;
+    static rect(ctx: DOMFormContext, pts: PtLikeIterable): Element;
+    rect(pts: PtLikeIterable): this;
     static text(ctx: DOMFormContext, pt: PtLike, txt: string): Element;
     text(pt: PtLike, txt: string): this;
     log(txt: any): this;

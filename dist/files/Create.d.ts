@@ -1,13 +1,13 @@
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 import { Pt, Group, Bound } from "./Pt";
-import { PtLike, GroupLike, DelaunayMesh, DelaunayShape } from "./Types";
+import { PtLike, GroupLike, PtIterable, DelaunayMesh, DelaunayShape } from "./Types";
 export declare class Create {
     static distributeRandom(bound: Bound, count: number, dimensions?: number): Group;
-    static distributeLinear(line: GroupLike, count: number): Group;
+    static distributeLinear(line: PtIterable, count: number): Group;
     static gridPts(bound: Bound, columns: number, rows: number, orientation?: PtLike): Group;
     static gridCells(bound: Bound, columns: number, rows: number): Group[];
     static radialPts(center: PtLike, radius: number, count: number, angleOffset?: number): Group;
-    static noisePts(pts: GroupLike, dx?: number, dy?: number, rows?: number, columns?: number): Group;
+    static noisePts(pts: PtIterable, dx?: number, dy?: number, rows?: number, columns?: number): Group;
     static delaunay(pts: GroupLike): Delaunay;
 }
 export declare class Noise extends Pt {

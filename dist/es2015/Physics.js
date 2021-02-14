@@ -1,6 +1,7 @@
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 import { Pt, Group, Bound } from "./Pt";
 import { Polygon, Circle } from "./Op";
+import { Geom } from "./Num";
 export class World {
     constructor(bound, friction = 1, gravity = 0) {
         this._lastTime = null;
@@ -111,7 +112,7 @@ export class World {
         return p1;
     }
     static boundConstraint(p, rect, damping = 0.75) {
-        let bound = rect.boundingBox();
+        let bound = Geom.boundingBox(rect);
         let np = p.$min(bound[1].subtract(p.radius)).$max(bound[0].add(p.radius));
         if (np[0] === bound[0][0] || np[0] === bound[1][0]) {
             let c = p.changed.$multiply(damping);
@@ -261,20 +262,20 @@ export class Body extends Group {
         this._locks = {};
         this._mass = 1;
     }
-    static fromGroup(list, stiff = 1, autoLink = true, autoMass = true) {
-        let b = new Body().init(list);
+    static fromGroup(body, stiff = 1, autoLink = true, autoMass = true) {
+        let b = new Body().init(body);
         if (autoLink)
             b.linkAll(stiff);
         if (autoMass)
             b.autoMass();
         return b;
     }
-    init(list, stiff = 1) {
+    init(body, stiff = 1) {
         let c = new Pt();
-        for (let i = 0, len = list.length; i < len; i++) {
-            let p = new Particle(list[i]);
+        for (let li of body) {
+            let p = new Particle(li);
             p.body = this;
-            c.add(list[i]);
+            c.add(li);
             this.push(p);
         }
         this._stiff = stiff;

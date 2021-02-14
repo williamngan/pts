@@ -1,5 +1,5 @@
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
-import { IPt, GroupLike, PtLike } from "./Types";
+import { IPt, GroupLike, PtLike, PtIterable, PtLikeIterable } from "./Types";
 export declare class Pt extends Float32Array implements IPt, Iterable<number> {
     protected _id: string;
     constructor(...args: any[]);
@@ -77,10 +77,10 @@ export declare class Group extends Array<Pt> {
     readonly q3: Pt;
     readonly q4: Pt;
     clone(): Group;
-    static fromArray(list: PtLike[]): Group;
-    static fromPtArray(list: GroupLike): Group;
+    static fromArray(list: PtLikeIterable): Group;
+    static fromPtArray(list: PtIterable): Group;
     split(chunkSize: number, stride?: number, loopBack?: boolean): Group[];
-    insert(pts: GroupLike, index?: number): this;
+    insert(pts: PtIterable, index?: number): this;
     remove(index?: number, count?: number): Group;
     segments(pts_per_segment?: number, stride?: number, loopBack?: boolean): Group[];
     lines(): Group[];
@@ -88,15 +88,15 @@ export declare class Group extends Array<Pt> {
     boundingBox(): Group;
     anchorTo(ptOrIndex?: PtLike | number): void;
     anchorFrom(ptOrIndex?: PtLike | number): void;
-    op(fn: (g1: GroupLike, ...rest: any[]) => any): (...rest: any[]) => any;
-    ops(fns: ((g1: GroupLike, ...rest: any[]) => any)[]): ((...rest: any[]) => any)[];
+    op(fn: (g1: PtIterable, ...rest: any[]) => any): (...rest: any[]) => any;
+    ops(fns: ((g1: PtIterable, ...rest: any[]) => any)[]): ((...rest: any[]) => any)[];
     interpolate(t: number): Pt;
     moveBy(...args: any[]): this;
     moveTo(...args: any[]): this;
     scale(scale: number | number[] | PtLike, anchor?: PtLike): this;
     rotate2D(angle: number, anchor?: PtLike, axis?: string): this;
     shear2D(scale: number | number[] | PtLike, anchor?: PtLike, axis?: string): this;
-    reflect2D(line: GroupLike, axis?: string): this;
+    reflect2D(line: PtLikeIterable, axis?: string): this;
     sortByDimension(dim: number, desc?: boolean): this;
     forEachPt(ptFn: string, ...args: any[]): this;
     add(...args: any[]): this;
@@ -117,7 +117,7 @@ export declare class Bound extends Group implements IPt {
     protected _inited: boolean;
     constructor(...args: Pt[]);
     static fromBoundingRect(rect: ClientRect): Bound;
-    static fromGroup(g: GroupLike): Bound;
+    static fromGroup(g: PtLikeIterable): Bound;
     protected init(): void;
     clone(): Bound;
     protected _updateSize(): void;

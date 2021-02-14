@@ -124,8 +124,8 @@ export class MultiTouchSpace extends Space {
         p.id = this._pointer.id;
         return p;
     }
-    bindCanvas(evt, callback) {
-        this._canvas.addEventListener(evt, callback);
+    bindCanvas(evt, callback, options = {}) {
+        this._canvas.addEventListener(evt, callback, options);
     }
     unbindCanvas(evt, callback) {
         this._canvas.removeEventListener(evt, callback);
@@ -153,9 +153,9 @@ export class MultiTouchSpace extends Space {
     }
     bindTouch(_bind = true) {
         if (_bind) {
-            this.bindCanvas("touchstart", this._touchStart.bind(this));
+            this.bindCanvas("touchstart", this._touchStart.bind(this), { passive: true });
             this.bindCanvas("touchend", this._mouseUp.bind(this));
-            this.bindCanvas("touchmove", this._touchMove.bind(this));
+            this.bindCanvas("touchmove", this._touchMove.bind(this), { passive: true });
             this.bindCanvas("touchcancel", this._mouseOut.bind(this));
             this._hasTouch = true;
         }

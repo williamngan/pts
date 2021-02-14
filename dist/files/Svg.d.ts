@@ -1,8 +1,8 @@
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 import { VisualForm, Font } from "./Form";
-import { Pt, Bound } from './Pt';
+import { Bound } from './Pt';
 import { DOMSpace } from "./Dom";
-import { PtLike, GroupLike, IPlayer, DOMFormContext } from "./Types";
+import { PtLike, PtLikeIterable, IPlayer, DOMFormContext } from "./Types";
 export declare class SVGSpace extends DOMSpace {
     protected _bgcolor: string;
     constructor(elem: string | Element, callback?: Function);
@@ -47,18 +47,22 @@ export declare class SVGForm extends VisualForm {
     static point(ctx: DOMFormContext, pt: PtLike, radius?: number, shape?: string): SVGElement;
     point(pt: PtLike, radius?: number, shape?: string): this;
     static circle(ctx: DOMFormContext, pt: PtLike, radius?: number): SVGElement;
-    circle(pts: GroupLike | number[][]): this;
+    circle(pts: PtLikeIterable): this;
     static arc(ctx: DOMFormContext, pt: PtLike, radius: number, startAngle: number, endAngle: number, cc?: boolean): SVGElement;
     arc(pt: PtLike, radius: number, startAngle: number, endAngle: number, cc?: boolean): this;
     static square(ctx: DOMFormContext, pt: PtLike, halfsize: number): SVGElement;
     square(pt: PtLike, halfsize: number): this;
-    static line(ctx: DOMFormContext, pts: GroupLike | number[][]): SVGElement;
-    line(pts: GroupLike | number[][]): this;
-    protected static _poly(ctx: DOMFormContext, pts: GroupLike | number[][], closePath?: boolean): SVGElement;
-    static polygon(ctx: DOMFormContext, pts: GroupLike | number[][]): SVGElement;
-    polygon(pts: GroupLike | number[][]): this;
-    static rect(ctx: DOMFormContext, pts: GroupLike | number[][]): SVGElement;
-    rect(pts: number[][] | Pt[]): this;
+    static line(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement;
+    line(pts: PtLikeIterable): this;
+    protected static _poly(ctx: DOMFormContext, points: string, closePath?: boolean): SVGElement;
+    protected static pointsString(pts: PtLikeIterable): {
+        string: string;
+        count: number;
+    };
+    static polygon(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement;
+    polygon(pts: PtLikeIterable): this;
+    static rect(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement;
+    rect(pts: PtLikeIterable): this;
     static text(ctx: DOMFormContext, pt: PtLike, txt: string): SVGElement;
     text(pt: PtLike, txt: string): this;
     log(txt: any): this;

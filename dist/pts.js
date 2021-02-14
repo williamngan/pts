@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.9.6 - Copyright © 2017-2020 William Ngan and contributors.
+ * pts.js 0.10.0 - Copyright © 2017-2021 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -12,7 +12,7 @@
 		exports["Pts"] = factory();
 	else
 		root["Pts"] = factory();
-})(window, function() {
+})(this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -118,6 +118,7 @@ const Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 const Util_1 = __webpack_require__(/*! ./Util */ "./src/Util.ts");
 const Typography_1 = __webpack_require__(/*! ./Typography */ "./src/Typography.ts");
 const Op_1 = __webpack_require__(/*! ./Op */ "./src/Op.ts");
+const Image_1 = __webpack_require__(/*! ./Image */ "./src/Image.ts");
 class CanvasSpace extends Space_1.MultiTouchSpace {
     constructor(elem, callback) {
         super();
@@ -189,7 +190,7 @@ class CanvasSpace extends Space_1.MultiTouchSpace {
             this._bgcolor = opt.bgcolor;
         this.autoResize = (opt.resize != undefined) ? opt.resize : false;
         if (opt.retina !== false) {
-            let r1 = window.devicePixelRatio || 1;
+            let r1 = window ? window.devicePixelRatio || 1 : 1;
             let r2 = this._ctx.webkitBackingStorePixelRatio || this._ctx.mozBackingStorePixelRatio || this._ctx.msBackingStorePixelRatio || this._ctx.oBackingStorePixelRatio || this._ctx.backingStorePixelRatio || 1;
             this._pixelScale = Math.max(1, r1 / r2);
         }
@@ -204,6 +205,8 @@ class CanvasSpace extends Space_1.MultiTouchSpace {
         return this;
     }
     set autoResize(auto) {
+        if (!window)
+            return;
         this._autoResize = auto;
         if (auto) {
             window.addEventListener('resize', this._resizeHandler.bind(this));
@@ -242,6 +245,8 @@ class CanvasSpace extends Space_1.MultiTouchSpace {
         return this;
     }
     _resizeHandler(evt) {
+        if (!window)
+            return;
         let b = (this._autoResize || this._initialResize) ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
         if (b) {
             let box = Pt_1.Bound.fromBoundingRect(b);
@@ -273,13 +278,18 @@ class CanvasSpace extends Space_1.MultiTouchSpace {
     clear(bg) {
         if (bg)
             this._bgcolor = bg;
-        let lastColor = this._ctx.fillStyle;
-        if (this._bgcolor && this._bgcolor != "transparent") {
-            this._ctx.fillStyle = this._bgcolor;
-            this._ctx.fillRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
-        }
-        else {
-            this._ctx.clearRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
+        const lastColor = this._ctx.fillStyle;
+        if (this._bgcolor) {
+            if (this._bgcolor === "transparent") {
+                this._ctx.clearRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
+            }
+            else {
+                if (this._bgcolor.indexOf("rgba") === 0 || (this._bgcolor.length === 9 && this._bgcolor.indexOf("#") === 0)) {
+                    this._ctx.clearRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
+                }
+                this._ctx.fillStyle = this._bgcolor;
+                this._ctx.fillRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
+            }
         }
         this._ctx.fillStyle = lastColor;
         return this;
@@ -309,6 +319,8 @@ class CanvasSpace extends Space_1.MultiTouchSpace {
         }
     }
     dispose() {
+        if (!window)
+            return;
         window.removeEventListener('resize', this._resizeHandler.bind(this));
         this.stop();
         this.removeAll();
@@ -461,21 +473,24 @@ class CanvasForm extends Form_1.VisualForm {
         return Typography_1.Typography.truncate(this.getTextWidth.bind(this), str, width, tail);
     }
     _textAlign(box, vertical, offset, center) {
+        let _box = Util_1.Util.iterToArray(box);
+        if (!Util_1.Util.arrayCheck(_box))
+            return;
         if (!center)
-            center = Op_1.Rectangle.center(box);
-        var px = box[0][0];
+            center = Op_1.Rectangle.center(_box);
+        var px = _box[0][0];
         if (this._ctx.textAlign == "end" || this._ctx.textAlign == "right") {
-            px = box[1][0];
+            px = _box[1][0];
         }
         else if (this._ctx.textAlign == "center" || this._ctx.textAlign == "middle") {
             px = center[0];
         }
         var py = center[1];
         if (vertical == "top" || vertical == "start") {
-            py = box[0][1];
+            py = _box[0][1];
         }
         else if (vertical == "end" || vertical == "bottom") {
-            py = box[1][1];
+            py = _box[1][1];
         }
         return (offset) ? new Pt_1.Pt(px + offset[0], py + offset[1]) : new Pt_1.Pt(px, py);
     }
@@ -495,12 +510,26 @@ class CanvasForm extends Form_1.VisualForm {
         if (this._stroked)
             this._ctx.stroke();
     }
-    point(p, radius = 5, shape = "square") {
+    static paint(ctx, fn, fill, stroke, strokeWidth) {
+        if (fill)
+            ctx.fillStyle = fill;
+        if (stroke)
+            ctx.strokeStyle = stroke;
+        if (strokeWidth)
+            ctx.lineWidth = strokeWidth;
+        fn(ctx);
+        ctx.fill();
+        ctx.stroke();
+    }
+    static point(ctx, p, radius = 5, shape = "square") {
         if (!p)
             return;
         if (!CanvasForm[shape])
             throw new Error(`${shape} is not a static function of CanvasForm`);
-        CanvasForm[shape](this._ctx, p, radius);
+        CanvasForm[shape](ctx, p, radius);
+    }
+    point(p, radius = 5, shape = "square") {
+        CanvasForm.point(this._ctx, p, radius, shape);
         this._paint();
         return this;
     }
@@ -512,7 +541,8 @@ class CanvasForm extends Form_1.VisualForm {
         ctx.closePath();
     }
     circle(pts) {
-        CanvasForm.circle(this._ctx, pts[0], pts[1][0]);
+        let p = Util_1.Util.iterToArray(pts);
+        CanvasForm.circle(this._ctx, p[0], p[1][0]);
         this._paint();
         return this;
     }
@@ -558,13 +588,19 @@ class CanvasForm extends Form_1.VisualForm {
         return this;
     }
     static line(ctx, pts) {
-        if (pts.length < 2)
+        if (!Util_1.Util.arrayCheck(pts))
             return;
+        let i = 0;
         ctx.beginPath();
-        ctx.moveTo(pts[0][0], pts[0][1]);
-        for (let i = 1, len = pts.length; i < len; i++) {
-            if (pts[i])
-                ctx.lineTo(pts[i][0], pts[i][1]);
+        for (let it of pts) {
+            if (it) {
+                if (i++ > 0) {
+                    ctx.lineTo(it[0], it[1]);
+                }
+                else {
+                    ctx.moveTo(it[0], it[1]);
+                }
+            }
         }
     }
     line(pts) {
@@ -573,14 +609,9 @@ class CanvasForm extends Form_1.VisualForm {
         return this;
     }
     static polygon(ctx, pts) {
-        if (pts.length < 2)
+        if (!Util_1.Util.arrayCheck(pts))
             return;
-        ctx.beginPath();
-        ctx.moveTo(pts[0][0], pts[0][1]);
-        for (let i = 1, len = pts.length; i < len; i++) {
-            if (pts[i])
-                ctx.lineTo(pts[i][0], pts[i][1]);
-        }
+        CanvasForm.line(ctx, pts);
         ctx.closePath();
     }
     polygon(pts) {
@@ -589,13 +620,14 @@ class CanvasForm extends Form_1.VisualForm {
         return this;
     }
     static rect(ctx, pts) {
-        if (pts.length < 2)
+        let p = Util_1.Util.iterToArray(pts);
+        if (!Util_1.Util.arrayCheck(p))
             return;
         ctx.beginPath();
-        ctx.moveTo(pts[0][0], pts[0][1]);
-        ctx.lineTo(pts[0][0], pts[1][1]);
-        ctx.lineTo(pts[1][0], pts[1][1]);
-        ctx.lineTo(pts[1][0], pts[0][1]);
+        ctx.moveTo(p[0][0], p[0][1]);
+        ctx.lineTo(p[0][0], p[1][1]);
+        ctx.lineTo(p[1][0], p[1][1]);
+        ctx.lineTo(p[1][0], p[0][1]);
         ctx.closePath();
     }
     rect(pts) {
@@ -603,22 +635,53 @@ class CanvasForm extends Form_1.VisualForm {
         this._paint();
         return this;
     }
-    static image(ctx, img, target = new Pt_1.Pt(), orig) {
-        if (typeof target[0] === "number") {
-            ctx.drawImage(img, target[0], target[1]);
+    static image(ctx, ptOrRect, img, orig) {
+        let t = Util_1.Util.iterToArray(ptOrRect);
+        let pos;
+        if (typeof t[0] === "number") {
+            pos = t;
         }
         else {
-            let t = target;
             if (orig) {
-                ctx.drawImage(img, orig[0][0], orig[0][1], orig[1][0] - orig[0][0], orig[1][1] - orig[0][1], t[0][0], t[0][1], t[1][0] - t[0][0], t[1][1] - t[0][1]);
+                let o = Util_1.Util.iterToArray(orig);
+                pos = [o[0][0], o[0][1], o[1][0] - o[0][0], o[1][1] - o[0][1],
+                    t[0][0], t[0][1], t[1][0] - t[0][0], t[1][1] - t[0][1]];
             }
             else {
-                ctx.drawImage(img, t[0][0], t[0][1], t[1][0] - t[0][0], t[1][1] - t[0][1]);
+                pos = [t[0][0], t[0][1], t[1][0] - t[0][0], t[1][1] - t[0][1]];
             }
         }
+        if (img instanceof Image_1.Img) {
+            if (img.loaded) {
+                ctx.drawImage(img.image, ...pos);
+            }
+        }
+        else {
+            ctx.drawImage(img, ...pos);
+        }
     }
-    image(img, target, original) {
-        CanvasForm.image(this._ctx, img, target, original);
+    image(ptOrRect, img, orig) {
+        if (img instanceof Image_1.Img) {
+            if (img.loaded) {
+                CanvasForm.image(this._ctx, ptOrRect, img.image, orig);
+            }
+        }
+        else {
+            CanvasForm.image(this._ctx, ptOrRect, img, orig);
+        }
+        return this;
+    }
+    static imageData(ctx, ptOrRect, img) {
+        let t = Util_1.Util.iterToArray(ptOrRect);
+        if (typeof t[0] === "number") {
+            ctx.putImageData(img, t[0], t[1]);
+        }
+        else {
+            ctx.putImageData(img, t[0][0], t[0][1], t[0][0], t[0][1], t[1][0], t[1][1]);
+        }
+    }
+    imageData(ptOrRect, img) {
+        CanvasForm.imageData(this._ctx, ptOrRect, img);
         return this;
     }
     static text(ctx, pt, txt, maxWidth) {
@@ -639,7 +702,8 @@ class CanvasForm extends Form_1.VisualForm {
         return this;
     }
     paragraphBox(box, txt, lineHeight = 1.2, verticalAlign = "top", crop = true) {
-        let size = Op_1.Rectangle.size(box);
+        let b = Util_1.Util.iterToArray(box);
+        let size = Op_1.Rectangle.size(b);
         this._ctx.textBaseline = "top";
         let lstep = this._font.size * lineHeight;
         let nextLine = (sub, buffer = [], cc = 0) => {
@@ -664,18 +728,18 @@ class CanvasForm extends Form_1.VisualForm {
         };
         let lines = nextLine(txt);
         let lsize = lines.length * lstep;
-        let lbox = box;
+        let lbox = b;
         if (verticalAlign == "middle" || verticalAlign == "center") {
             let lpad = (size[1] - lsize) / 2;
             if (crop)
                 lpad = Math.max(0, lpad);
-            lbox = new Pt_1.Group(box[0].$add(0, lpad), box[1].$subtract(0, lpad));
+            lbox = new Pt_1.Group(b[0].$add(0, lpad), b[1].$subtract(0, lpad));
         }
         else if (verticalAlign == "bottom") {
-            lbox = new Pt_1.Group(box[0].$add(0, size[1] - lsize), box[1]);
+            lbox = new Pt_1.Group(b[0].$add(0, size[1] - lsize), b[1]);
         }
         else {
-            lbox = new Pt_1.Group(box[0], box[0].$add(size[0], lsize));
+            lbox = new Pt_1.Group(b[0], b[0].$add(size[0], lsize));
         }
         let center = Op_1.Rectangle.center(lbox);
         for (let i = 0, len = lines.length; i < len; i++) {
@@ -1083,9 +1147,10 @@ class Create {
         return pts;
     }
     static distributeLinear(line, count) {
-        let ln = Op_1.Line.subpoints(line, count - 2);
-        ln.unshift(line[0]);
-        ln.push(line[line.length - 1]);
+        let _line = Util_1.Util.iterToArray(line);
+        let ln = Op_1.Line.subpoints(_line, count - 2);
+        ln.unshift(_line[0]);
+        ln.push(_line[_line.length - 1]);
         return ln;
     }
     static gridPts(bound, columns, rows, orientation = [0.5, 0.5]) {
@@ -1124,13 +1189,15 @@ class Create {
     static noisePts(pts, dx = 0.01, dy = 0.01, rows = 0, columns = 0) {
         let seed = Math.random();
         let g = new Pt_1.Group();
-        for (let i = 0, len = pts.length; i < len; i++) {
-            let np = new Noise(pts[i]);
+        let i = 0;
+        for (let p of pts) {
+            let np = new Noise(p);
             let r = (rows && rows > 0) ? Math.floor(i / rows) : i;
             let c = (columns && columns > 0) ? i % columns : i;
             np.initNoise(dx * c, dy * r);
             np.seed(seed);
             g.push(np);
+            i++;
         }
         return g;
     }
@@ -1753,11 +1820,12 @@ class HTMLForm extends Form_1.VisualForm {
         return this;
     }
     static rect(ctx, pts) {
-        if (!this._checkSize(pts))
+        let p = Util_1.Util.iterToArray(pts);
+        if (!Util_1.Util.arrayCheck(p))
             return;
         let elem = HTMLSpace.htmlElement(ctx.group, "div", HTMLForm.getID(ctx));
         HTMLSpace.setAttr(elem, { class: `pts-form pts-rect ${ctx.currentClass}` });
-        HTMLForm.rectStyle(ctx, pts[0], pts[1]);
+        HTMLForm.rectStyle(ctx, p[0], p[1]);
         HTMLForm.style(elem, ctx.style);
         return elem;
     }
@@ -1815,19 +1883,11 @@ exports.HTMLForm = HTMLForm;
 
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
-const Util_1 = __webpack_require__(/*! ./Util */ "./src/Util.ts");
 class Form {
     constructor() {
         this._ready = false;
     }
     get ready() { return this._ready; }
-    static _checkSize(pts, required = 2) {
-        if (pts.length < required) {
-            Util_1.Util.warn("Requires 2 or more Pts in this Group.");
-            return false;
-        }
-        return true;
-    }
 }
 exports.Form = Form;
 class VisualForm extends Form {
@@ -1904,6 +1964,118 @@ class Font {
     toString() { return this.value; }
 }
 exports.Font = Font;
+
+
+/***/ }),
+
+/***/ "./src/Image.ts":
+/*!**********************!*\
+  !*** ./src/Image.ts ***!
+  \**********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
+class Img {
+    constructor(editable = false, pixelScale = 1) {
+        this._scale = 1;
+        this._loaded = false;
+        this._editable = editable;
+        this._scale = pixelScale;
+        this._img = new Image();
+    }
+    load(src) {
+        return new Promise((resolve, reject) => {
+            this._img.src = src;
+            this._img.onload = () => {
+                if (this._editable) {
+                    this._cv = document.createElement("canvas");
+                    this._drawToScale(this._scale, this._scale, this._img);
+                    this._data = this._ctx.getImageData(0, 0, this._cv.width, this._cv.height);
+                }
+                this._loaded = true;
+                resolve(this);
+            };
+            this._img.onerror = (evt) => {
+                reject(evt);
+            };
+        });
+    }
+    _drawToScale(imgScale, canvasScale, img) {
+        this._cv.width = this._img.naturalWidth * imgScale;
+        this._cv.height = this._img.naturalHeight * imgScale;
+        this._ctx = this._cv.getContext('2d');
+        this._ctx.save();
+        this._ctx.scale(canvasScale, canvasScale);
+        if (img)
+            this._ctx.drawImage(img, 0, 0);
+        this._ctx.restore();
+    }
+    bitmap(size) {
+        const w = (size) ? size[0] : this._cv.width;
+        const h = (size) ? size[1] : this._cv.height;
+        return createImageBitmap(this._cv, 0, 0, w, h);
+    }
+    sync() {
+        if (this._scale !== 1) {
+            this.bitmap().then(b => {
+                this._drawToScale(1, 1 / this._scale, b);
+                this._img.src = this.toBase64();
+                this._drawToScale(this._scale, this._scale, this._img);
+            });
+        }
+        else {
+            this._img.src = this.toBase64();
+        }
+    }
+    pixel(p) {
+        return Img.getPixel(this._data, [p[0] * this._scale, p[1] * this._scale]);
+    }
+    static getPixel(imgData, p) {
+        const no = new Pt_1.Pt(0, 0, 0, 0);
+        if (p[0] >= imgData.width || p[1] >= imgData.height)
+            return no;
+        const i = Math.floor(p[1]) * (imgData.width * 4) + (Math.floor(p[0]) * 4);
+        const d = imgData.data;
+        if (i >= d.length - 4)
+            return no;
+        return new Pt_1.Pt(d[i], d[i + 1], d[i + 2], d[i + 3]);
+    }
+    crop(box) {
+        let p = box.topLeft.scale(this._scale);
+        let s = box.size.scale(this._scale);
+        return this._ctx.getImageData(p.x, p.y, s.x, s.y);
+    }
+    static fromBlob(blob, editable = false) {
+        let url = URL.createObjectURL(blob);
+        return new Img(editable).load(url);
+    }
+    toBase64() {
+        return this._cv.toDataURL();
+    }
+    get image() {
+        return this._img;
+    }
+    get canvas() {
+        return this._cv;
+    }
+    get data() {
+        return this._data;
+    }
+    get ctx() {
+        return this._ctx;
+    }
+    get loaded() {
+        return this._loaded;
+    }
+    get pixelScale() {
+        return this._scale;
+    }
+}
+exports.Img = Img;
 
 
 /***/ }),
@@ -2221,14 +2393,16 @@ class Num {
         return (n - min) / (max - min);
     }
     static sum(pts) {
-        let c = new Pt_1.Pt(pts[0]);
-        for (let i = 1, len = pts.length; i < len; i++) {
-            LinearAlgebra_1.Vec.add(c, pts[i]);
+        let _pts = Util_1.Util.iterToArray(pts);
+        let c = new Pt_1.Pt(_pts[0]);
+        for (let i = 1, len = _pts.length; i < len; i++) {
+            LinearAlgebra_1.Vec.add(c, _pts[i]);
         }
         return c;
     }
     static average(pts) {
-        return Num.sum(pts).divide(pts.length);
+        let _pts = Util_1.Util.iterToArray(pts);
+        return Num.sum(_pts).divide(_pts.length);
     }
     static cycle(t, method = Shaping.sineInOut) {
         return method(t > 0.5 ? 2 - t * 2 : t * 2);
@@ -2256,8 +2430,17 @@ class Geom {
         return radian * Util_1.Const.rad_to_deg;
     }
     static boundingBox(pts) {
-        let minPt = pts.reduce((a, p) => a.$min(p));
-        let maxPt = pts.reduce((a, p) => a.$max(p));
+        let minPt, maxPt;
+        for (let p of pts) {
+            if (minPt == undefined) {
+                minPt = p.clone();
+                maxPt = p.clone();
+            }
+            else {
+                minPt = minPt.$min(p);
+                maxPt = maxPt.$max(p);
+            }
+        }
         return new Pt_1.Group(minPt, maxPt);
     }
     static centroid(pts) {
@@ -2265,14 +2448,16 @@ class Geom {
     }
     static anchor(pts, ptOrIndex = 0, direction = "to") {
         let method = (direction == "to") ? "subtract" : "add";
-        for (let i = 0, len = pts.length; i < len; i++) {
+        let i = 0;
+        for (let p of pts) {
             if (typeof ptOrIndex == "number") {
                 if (ptOrIndex !== i)
-                    pts[i][method](pts[ptOrIndex]);
+                    p[method](pts[ptOrIndex]);
             }
             else {
-                pts[i][method](ptOrIndex);
+                p[method](ptOrIndex);
             }
+            i++;
         }
     }
     static interpolate(a, b, t = 0.5) {
@@ -2306,7 +2491,8 @@ class Geom {
         return true;
     }
     static sortEdges(pts) {
-        let bounds = Geom.boundingBox(pts);
+        let _pts = Util_1.Util.iterToArray(pts);
+        let bounds = Geom.boundingBox(_pts);
         let center = bounds[1].add(bounds[0]).divide(2);
         let fn = (a, b) => {
             if (a.length < 2 || b.length < 2)
@@ -2329,10 +2515,10 @@ class Geom {
                 return -1;
             return (da[0] * da[0] + da[1] * da[1] > db[0] * db[0] + db[1] * db[1]) ? 1 : -1;
         };
-        return pts.sort(fn);
+        return _pts.sort(fn);
     }
     static scale(ps, scale, anchor) {
-        let pts = (!Array.isArray(ps)) ? [ps] : ps;
+        let pts = Util_1.Util.iterToArray((ps[0] !== undefined && typeof ps[0] == 'number') ? [ps] : ps);
         let scs = (typeof scale == "number") ? Pt_1.Pt.make(pts[0].length, scale) : scale;
         if (!anchor)
             anchor = Pt_1.Pt.make(pts[0].length, 0);
@@ -2345,7 +2531,7 @@ class Geom {
         return Geom;
     }
     static rotate2D(ps, angle, anchor, axis) {
-        let pts = (!Array.isArray(ps)) ? [ps] : ps;
+        let pts = Util_1.Util.iterToArray((ps[0] !== undefined && typeof ps[0] == 'number') ? [ps] : ps);
         let fn = (anchor) ? LinearAlgebra_1.Mat.rotateAt2DMatrix : LinearAlgebra_1.Mat.rotate2DMatrix;
         if (!anchor)
             anchor = Pt_1.Pt.make(pts[0].length, 0);
@@ -2363,7 +2549,7 @@ class Geom {
         return Geom;
     }
     static shear2D(ps, scale, anchor, axis) {
-        let pts = (!Array.isArray(ps)) ? [ps] : ps;
+        let pts = Util_1.Util.iterToArray((ps[0] !== undefined && typeof ps[0] == 'number') ? [ps] : ps);
         let s = (typeof scale == "number") ? [scale, scale] : scale;
         if (!anchor)
             anchor = Pt_1.Pt.make(pts[0].length, 0);
@@ -2382,8 +2568,9 @@ class Geom {
         return Geom;
     }
     static reflect2D(ps, line, axis) {
-        let pts = (!Array.isArray(ps)) ? [ps] : ps;
-        let mat = LinearAlgebra_1.Mat.reflectAt2DMatrix(line[0], line[1]);
+        let pts = Util_1.Util.iterToArray((ps[0] !== undefined && typeof ps[0] == 'number') ? [ps] : ps);
+        let _line = Util_1.Util.iterToArray(line);
+        let mat = LinearAlgebra_1.Mat.reflectAt2DMatrix(_line[0], _line[1]);
         for (let i = 0, len = pts.length; i < len; i++) {
             let p = (axis) ? pts[i].$take(axis) : pts[i];
             p.to(LinearAlgebra_1.Mat.transform2D(p, mat));
@@ -2609,10 +2796,11 @@ class Range {
         }
         return target;
     }
-    append(g, update = true) {
-        if (g[0].length !== this._dims)
-            throw new Error(`Dimensions don't match. ${this._dims} dimensions in Range and ${g[0].length} provided in parameter. `);
-        this._source = this._source.concat(g);
+    append(pts, update = true) {
+        let _pts = Util_1.Util.iterToArray(pts);
+        if (_pts[0].length !== this._dims)
+            throw new Error(`Dimensions don't match. ${this._dims} dimensions in Range and ${_pts[0].length} provided in parameter. `);
+        this._source = this._source.concat(_pts);
         if (update)
             this.calc();
         return this;
@@ -2671,7 +2859,8 @@ class Line {
         }
     }
     static sideOfPt2D(line, pt) {
-        return (line[1][0] - line[0][0]) * (pt[1] - line[0][1]) - (pt[0] - line[0][0]) * (line[1][1] - line[0][1]);
+        let _line = Util_1.Util.iterToArray(line);
+        return (_line[1][0] - _line[0][0]) * (pt[1] - _line[0][1]) - (pt[0] - _line[0][0]) * (_line[1][1] - _line[0][1]);
     }
     static collinear(p1, p2, p3, threshold = 0.01) {
         let a = new Pt_1.Pt(0, 0, 0).to(p1).$subtract(p2);
@@ -2679,33 +2868,39 @@ class Line {
         return a.$cross(b).divide(1000).equals(new Pt_1.Pt(0, 0, 0), threshold);
     }
     static magnitude(line) {
-        return (line.length >= 2) ? line[1].$subtract(line[0]).magnitude() : 0;
+        let _line = Util_1.Util.iterToArray(line);
+        return (_line.length >= 2) ? _line[1].$subtract(_line[0]).magnitude() : 0;
     }
     static magnitudeSq(line) {
-        return (line.length >= 2) ? line[1].$subtract(line[0]).magnitudeSq() : 0;
+        let _line = Util_1.Util.iterToArray(line);
+        return (_line.length >= 2) ? _line[1].$subtract(_line[0]).magnitudeSq() : 0;
     }
     static perpendicularFromPt(line, pt, asProjection = false) {
-        if (line[0].equals(line[1]))
+        let _line = Util_1.Util.iterToArray(line);
+        if (_line[0].equals(_line[1]))
             return undefined;
-        let a = line[0].$subtract(line[1]);
-        let b = line[1].$subtract(pt);
+        let a = _line[0].$subtract(_line[1]);
+        let b = _line[1].$subtract(pt);
         let proj = b.$subtract(a.$project(b));
         return (asProjection) ? proj : proj.$add(pt);
     }
     static distanceFromPt(line, pt) {
-        let projectionVector = Line.perpendicularFromPt(line, pt, true);
+        let _line = Util_1.Util.iterToArray(line);
+        let projectionVector = Line.perpendicularFromPt(_line, pt, true);
         if (projectionVector) {
             return projectionVector.magnitude();
         }
         else {
-            return line[0].$subtract(pt).magnitude();
+            return _line[0].$subtract(pt).magnitude();
         }
     }
     static intersectRay2D(la, lb) {
-        let a = Line.intercept(la[0], la[1]);
-        let b = Line.intercept(lb[0], lb[1]);
-        let pa = la[0];
-        let pb = lb[0];
+        let _la = Util_1.Util.iterToArray(la);
+        let _lb = Util_1.Util.iterToArray(lb);
+        let a = Line.intercept(_la[0], _la[1]);
+        let b = Line.intercept(_lb[0], _lb[1]);
+        let pa = _la[0];
+        let pb = _lb[0];
         if (a == undefined) {
             if (b == undefined)
                 return undefined;
@@ -2733,19 +2928,25 @@ class Line {
         }
     }
     static intersectLine2D(la, lb) {
-        let pt = Line.intersectRay2D(la, lb);
-        return (pt && Num_1.Geom.withinBound(pt, la[0], la[1]) && Num_1.Geom.withinBound(pt, lb[0], lb[1])) ? pt : undefined;
+        let _la = Util_1.Util.iterToArray(la);
+        let _lb = Util_1.Util.iterToArray(lb);
+        let pt = Line.intersectRay2D(_la, _lb);
+        return (pt && Num_1.Geom.withinBound(pt, _la[0], _la[1]) && Num_1.Geom.withinBound(pt, _lb[0], _lb[1])) ? pt : undefined;
     }
     static intersectLineWithRay2D(line, ray) {
-        let pt = Line.intersectRay2D(line, ray);
-        return (pt && Num_1.Geom.withinBound(pt, line[0], line[1])) ? pt : undefined;
+        let _line = Util_1.Util.iterToArray(line);
+        let _ray = Util_1.Util.iterToArray(ray);
+        let pt = Line.intersectRay2D(_line, _ray);
+        return (pt && Num_1.Geom.withinBound(pt, _line[0], _line[1])) ? pt : undefined;
     }
     static intersectPolygon2D(lineOrRay, poly, sourceIsRay = false) {
+        let _lineOrRay = Util_1.Util.iterToArray(lineOrRay);
+        let _poly = Util_1.Util.iterToArray(poly);
         let fn = sourceIsRay ? Line.intersectLineWithRay2D : Line.intersectLine2D;
         let pts = new Pt_1.Group();
-        for (let i = 0, len = poly.length; i < len; i++) {
+        for (let i = 0, len = _poly.length; i < len; i++) {
             let next = (i === len - 1) ? 0 : i + 1;
-            let d = fn([poly[i], poly[next]], lineOrRay);
+            let d = fn([_poly[i], _poly[next]], _lineOrRay);
             if (d)
                 pts.push(d);
         }
@@ -2754,9 +2955,9 @@ class Line {
     static intersectLines2D(lines1, lines2, isRay = false) {
         let group = new Pt_1.Group();
         let fn = isRay ? Line.intersectLineWithRay2D : Line.intersectLine2D;
-        for (let i = 0, len = lines1.length; i < len; i++) {
-            for (let k = 0, lenk = lines2.length; k < lenk; k++) {
-                let _ip = fn(lines1[i], lines2[k]);
+        for (let l1 of lines1) {
+            for (let l2 of lines2) {
+                let _ip = fn(l1, l2);
                 if (_ip)
                     group.push(_ip);
             }
@@ -2764,7 +2965,8 @@ class Line {
         return group;
     }
     static intersectGridWithRay2D(ray, gridPt) {
-        let t = Line.intercept(new Pt_1.Pt(ray[0]).subtract(gridPt), new Pt_1.Pt(ray[1]).subtract(gridPt));
+        let _ray = Util_1.Util.iterToArray(ray);
+        let t = Line.intercept(new Pt_1.Pt(_ray[0]).subtract(gridPt), new Pt_1.Pt(_ray[1]).subtract(gridPt));
         let g = new Pt_1.Group();
         if (t && t.xi)
             g.push(new Pt_1.Pt(gridPt[0] + t.xi, gridPt[1]));
@@ -2773,38 +2975,43 @@ class Line {
         return g;
     }
     static intersectGridWithLine2D(line, gridPt) {
-        let g = Line.intersectGridWithRay2D(line, gridPt);
+        let _line = Util_1.Util.iterToArray(line);
+        let g = Line.intersectGridWithRay2D(_line, gridPt);
         let gg = new Pt_1.Group();
         for (let i = 0, len = g.length; i < len; i++) {
-            if (Num_1.Geom.withinBound(g[i], line[0], line[1]))
+            if (Num_1.Geom.withinBound(g[i], _line[0], _line[1]))
                 gg.push(g[i]);
         }
         return gg;
     }
     static intersectRect2D(line, rect) {
-        let box = Num_1.Geom.boundingBox(Pt_1.Group.fromPtArray(line));
-        if (!Rectangle.hasIntersectRect2D(box, rect))
+        let _line = Util_1.Util.iterToArray(line);
+        let _rect = Util_1.Util.iterToArray(rect);
+        let box = Num_1.Geom.boundingBox(Pt_1.Group.fromPtArray(_line));
+        if (!Rectangle.hasIntersectRect2D(box, _rect))
             return new Pt_1.Group();
-        return Line.intersectLines2D([line], Rectangle.sides(rect));
+        return Line.intersectLines2D([_line], Rectangle.sides(_rect));
     }
     static subpoints(line, num) {
+        let _line = Util_1.Util.iterToArray(line);
         let pts = new Pt_1.Group();
         for (let i = 1; i <= num; i++) {
-            pts.push(Num_1.Geom.interpolate(line[0], line[1], i / (num + 1)));
+            pts.push(Num_1.Geom.interpolate(_line[0], _line[1], i / (num + 1)));
         }
         return pts;
     }
     static crop(line, size, index = 0, cropAsCircle = true) {
+        let _line = Util_1.Util.iterToArray(line);
         let tdx = (index === 0) ? 1 : 0;
-        let ls = line[tdx].$subtract(line[index]);
+        let ls = _line[tdx].$subtract(_line[index]);
         if (ls[0] === 0 || size[0] === 0)
-            return line[index];
+            return _line[index];
         if (cropAsCircle) {
             let d = ls.unit().multiply(size[1]);
-            return line[index].$add(d);
+            return _line[index].$add(d);
         }
         else {
-            let rect = Rectangle.fromCenter(line[index], size);
+            let rect = Rectangle.fromCenter(_line[index], size);
             let sides = Rectangle.sides(rect);
             let sideIdx = 0;
             if (Math.abs(ls[1] / ls[0]) > Math.abs(size[1] / size[0])) {
@@ -2813,27 +3020,29 @@ class Line {
             else {
                 sideIdx = (ls[0] < 0) ? 3 : 1;
             }
-            return Line.intersectRay2D(sides[sideIdx], line);
+            return Line.intersectRay2D(sides[sideIdx], _line);
         }
     }
     static marker(line, size, graphic = ("arrow" || "line"), atTail = true) {
+        let _line = Util_1.Util.iterToArray(line);
         let h = atTail ? 0 : 1;
         let t = atTail ? 1 : 0;
-        let unit = line[h].$subtract(line[t]);
+        let unit = _line[h].$subtract(_line[t]);
         if (unit.magnitudeSq() === 0)
             return new Pt_1.Group();
         unit.unit();
-        let ps = Num_1.Geom.perpendicular(unit).multiply(size[0]).add(line[t]);
+        let ps = Num_1.Geom.perpendicular(unit).multiply(size[0]).add(_line[t]);
         if (graphic == "arrow") {
             ps.add(unit.$multiply(size[1]));
-            return new Pt_1.Group(line[t], ps[0], ps[1]);
+            return new Pt_1.Group(_line[t], ps[0], ps[1]);
         }
         else {
             return new Pt_1.Group(ps[0], ps[1]);
         }
     }
     static toRect(line) {
-        return new Pt_1.Group(line[0].$min(line[1]), line[0].$max(line[1]));
+        let _line = Util_1.Util.iterToArray(line);
+        return new Pt_1.Group(_line[0].$min(_line[1]), _line[0].$max(_line[1]));
     }
 }
 exports.Line = Line;
@@ -2853,21 +3062,25 @@ class Rectangle {
         return Circle.fromRect(pts, within);
     }
     static toSquare(pts, enclose = false) {
-        let s = Rectangle.size(pts);
+        let _pts = Util_1.Util.iterToArray(pts);
+        let s = Rectangle.size(_pts);
         let m = (enclose) ? s.maxValue().value : s.minValue().value;
-        return Rectangle.fromCenter(Rectangle.center(pts), m, m);
+        return Rectangle.fromCenter(Rectangle.center(_pts), m, m);
     }
     static size(pts) {
-        return pts[0].$max(pts[1]).subtract(pts[0].$min(pts[1]));
+        let p = Util_1.Util.iterToArray(pts);
+        return p[0].$max(p[1]).subtract(p[0].$min(p[1]));
     }
     static center(pts) {
-        let min = pts[0].$min(pts[1]);
-        let max = pts[0].$max(pts[1]);
+        let p = Util_1.Util.iterToArray(pts);
+        let min = p[0].$min(p[1]);
+        let max = p[0].$max(p[1]);
         return min.add(max.$subtract(min).divide(2));
     }
     static corners(rect) {
-        let p0 = rect[0].$min(rect[1]);
-        let p2 = rect[0].$max(rect[1]);
+        let _rect = Util_1.Util.iterToArray(rect);
+        let p0 = _rect[0].$min(_rect[1]);
+        let p2 = _rect[0].$max(_rect[1]);
         return new Pt_1.Group(p0, new Pt_1.Pt(p2.x, p0.y), p2, new Pt_1.Pt(p0.x, p2.y));
     }
     static sides(rect) {
@@ -2878,13 +3091,17 @@ class Rectangle {
         ];
     }
     static boundingBox(rects) {
-        let merged = Util_1.Util.flatten(rects, false);
+        let _rects = Util_1.Util.iterToArray(rects);
+        let merged = Util_1.Util.flatten(_rects, false);
         let min = Pt_1.Pt.make(2, Number.MAX_VALUE);
         let max = Pt_1.Pt.make(2, Number.MIN_VALUE);
         for (let i = 0, len = merged.length; i < len; i++) {
-            for (let k = 0; k < 2; k++) {
-                min[k] = Math.min(min[k], merged[i][k]);
-                max[k] = Math.max(max[k], merged[i][k]);
+            let k = 0;
+            for (let m of merged[i]) {
+                min[k] = Math.min(min[k], m[k]);
+                max[k] = Math.max(max[k], m[k]);
+                if (++k >= 2)
+                    break;
             }
         }
         return new Pt_1.Group(min, max);
@@ -2893,51 +3110,59 @@ class Rectangle {
         return Rectangle.corners(rect);
     }
     static quadrants(rect, center) {
-        let corners = Rectangle.corners(rect);
-        let _center = (center != undefined) ? new Pt_1.Pt(center) : Rectangle.center(rect);
+        let _rect = Util_1.Util.iterToArray(rect);
+        let corners = Rectangle.corners(_rect);
+        let _center = (center != undefined) ? new Pt_1.Pt(center) : Rectangle.center(_rect);
         return corners.map((c) => new Pt_1.Group(c, _center).boundingBox());
     }
     static halves(rect, ratio = 0.5, asRows = false) {
-        let min = rect[0].$min(rect[1]);
-        let max = rect[0].$max(rect[1]);
+        let _rect = Util_1.Util.iterToArray(rect);
+        let min = _rect[0].$min(_rect[1]);
+        let max = _rect[0].$max(_rect[1]);
         let mid = (asRows) ? Num_1.Num.lerp(min[1], max[1], ratio) : Num_1.Num.lerp(min[0], max[0], ratio);
         return (asRows)
             ? [new Pt_1.Group(min, new Pt_1.Pt(max[0], mid)), new Pt_1.Group(new Pt_1.Pt(min[0], mid), max)]
             : [new Pt_1.Group(min, new Pt_1.Pt(mid, max[1])), new Pt_1.Group(new Pt_1.Pt(mid, min[1]), max)];
     }
     static withinBound(rect, pt) {
-        return Num_1.Geom.withinBound(pt, rect[0], rect[1]);
+        let _rect = Util_1.Util.iterToArray(rect);
+        return Num_1.Geom.withinBound(pt, _rect[0], _rect[1]);
     }
     static hasIntersectRect2D(rect1, rect2, resetBoundingBox = false) {
+        let _rect1 = Util_1.Util.iterToArray(rect1);
+        let _rect2 = Util_1.Util.iterToArray(rect2);
         if (resetBoundingBox) {
-            rect1 = Num_1.Geom.boundingBox(rect1);
-            rect2 = Num_1.Geom.boundingBox(rect2);
+            _rect1 = Num_1.Geom.boundingBox(_rect1);
+            _rect2 = Num_1.Geom.boundingBox(_rect2);
         }
-        if (rect1[0][0] > rect2[1][0] || rect2[0][0] > rect1[1][0])
+        if (_rect1[0][0] > _rect2[1][0] || _rect2[0][0] > _rect1[1][0])
             return false;
-        if (rect1[0][1] > rect2[1][1] || rect2[0][1] > rect1[1][1])
+        if (_rect1[0][1] > _rect2[1][1] || _rect2[0][1] > _rect1[1][1])
             return false;
         return true;
     }
     static intersectRect2D(rect1, rect2) {
-        if (!Rectangle.hasIntersectRect2D(rect1, rect2))
+        let _rect1 = Util_1.Util.iterToArray(rect1);
+        let _rect2 = Util_1.Util.iterToArray(rect2);
+        if (!Rectangle.hasIntersectRect2D(_rect1, _rect2))
             return new Pt_1.Group();
-        return Line.intersectLines2D(Rectangle.sides(rect1), Rectangle.sides(rect2));
+        return Line.intersectLines2D(Rectangle.sides(_rect1), Rectangle.sides(_rect2));
     }
 }
 exports.Rectangle = Rectangle;
 class Circle {
     static fromRect(pts, enclose = false) {
+        let _pts = Util_1.Util.iterToArray(pts);
         let r = 0;
-        let min = r = Rectangle.size(pts).minValue().value / 2;
+        let min = r = Rectangle.size(_pts).minValue().value / 2;
         if (enclose) {
-            let max = Rectangle.size(pts).maxValue().value / 2;
+            let max = Rectangle.size(_pts).maxValue().value / 2;
             r = Math.sqrt(min * min + max * max);
         }
         else {
             r = min;
         }
-        return new Pt_1.Group(Rectangle.center(pts), new Pt_1.Pt(r, r));
+        return new Pt_1.Group(Rectangle.center(_pts), new Pt_1.Pt(r, r));
     }
     static fromTriangle(pts, enclose = false) {
         if (enclose) {
@@ -2951,15 +3176,18 @@ class Circle {
         return new Pt_1.Group(new Pt_1.Pt(pt), new Pt_1.Pt(radius, radius));
     }
     static withinBound(pts, pt, threshold = 0) {
-        let d = pts[0].$subtract(pt);
-        return d.dot(d) + threshold < pts[1].x * pts[1].x;
+        let _pts = Util_1.Util.iterToArray(pts);
+        let d = _pts[0].$subtract(pt);
+        return d.dot(d) + threshold < _pts[1].x * _pts[1].x;
     }
-    static intersectRay2D(pts, ray) {
-        let d = ray[0].$subtract(ray[1]);
-        let f = pts[0].$subtract(ray[0]);
+    static intersectRay2D(circle, ray) {
+        let _pts = Util_1.Util.iterToArray(circle);
+        let _ray = Util_1.Util.iterToArray(ray);
+        let d = _ray[0].$subtract(_ray[1]);
+        let f = _pts[0].$subtract(_ray[0]);
         let a = d.dot(d);
         let b = f.dot(d);
-        let c = f.dot(f) - pts[1].x * pts[1].x;
+        let c = f.dot(f) - _pts[1].x * _pts[1].x;
         let p = b / a;
         let q = c / a;
         let disc = p * p - q;
@@ -2969,90 +3197,99 @@ class Circle {
         else {
             let discSqrt = Math.sqrt(disc);
             let t1 = -p + discSqrt;
-            let p1 = ray[0].$subtract(d.$multiply(t1));
+            let p1 = _ray[0].$subtract(d.$multiply(t1));
             if (disc === 0)
                 return new Pt_1.Group(p1);
             let t2 = -p - discSqrt;
-            let p2 = ray[0].$subtract(d.$multiply(t2));
+            let p2 = _ray[0].$subtract(d.$multiply(t2));
             return new Pt_1.Group(p1, p2);
         }
     }
-    static intersectLine2D(pts, line) {
-        let ps = Circle.intersectRay2D(pts, line);
+    static intersectLine2D(circle, line) {
+        let _pts = Util_1.Util.iterToArray(circle);
+        let _line = Util_1.Util.iterToArray(line);
+        let ps = Circle.intersectRay2D(_pts, _line);
         let g = new Pt_1.Group();
         if (ps.length > 0) {
             for (let i = 0, len = ps.length; i < len; i++) {
-                if (Rectangle.withinBound(line, ps[i]))
+                if (Rectangle.withinBound(_line, ps[i]))
                     g.push(ps[i]);
             }
         }
         return g;
     }
-    static intersectCircle2D(pts, circle) {
-        let dv = circle[0].$subtract(pts[0]);
+    static intersectCircle2D(circle1, circle2) {
+        let _pts = Util_1.Util.iterToArray(circle1);
+        let _circle = Util_1.Util.iterToArray(circle2);
+        let dv = _circle[0].$subtract(_pts[0]);
         let dr2 = dv.magnitudeSq();
         let dr = Math.sqrt(dr2);
-        let ar = pts[1].x;
-        let br = circle[1].x;
+        let ar = _pts[1].x;
+        let br = _circle[1].x;
         let ar2 = ar * ar;
         let br2 = br * br;
         if (dr > ar + br) {
             return new Pt_1.Group();
         }
         else if (dr < Math.abs(ar - br)) {
-            return new Pt_1.Group(pts[0].clone());
+            return new Pt_1.Group(_pts[0].clone());
         }
         else {
             let a = (ar2 - br2 + dr2) / (2 * dr);
             let h = Math.sqrt(ar2 - a * a);
-            let p = dv.$multiply(a / dr).add(pts[0]);
+            let p = dv.$multiply(a / dr).add(_pts[0]);
             return new Pt_1.Group(new Pt_1.Pt(p.x + h * dv.y / dr, p.y - h * dv.x / dr), new Pt_1.Pt(p.x - h * dv.y / dr, p.y + h * dv.x / dr));
         }
     }
-    static intersectRect2D(pts, rect) {
-        let sides = Rectangle.sides(rect);
+    static intersectRect2D(circle, rect) {
+        let _pts = Util_1.Util.iterToArray(circle);
+        let _rect = Util_1.Util.iterToArray(rect);
+        let sides = Rectangle.sides(_rect);
         let g = [];
         for (let i = 0, len = sides.length; i < len; i++) {
-            let ps = Circle.intersectLine2D(pts, sides[i]);
+            let ps = Circle.intersectLine2D(_pts, sides[i]);
             if (ps.length > 0)
                 g.push(ps);
         }
         return Util_1.Util.flatten(g);
     }
-    static toRect(pts, within = false) {
-        let r = pts[1][0];
+    static toRect(circle, within = false) {
+        let _pts = Util_1.Util.iterToArray(circle);
+        let r = _pts[1][0];
         if (within) {
             let half = Math.sqrt(r * r) / 2;
-            return new Pt_1.Group(pts[0].$subtract(half), pts[0].$add(half));
+            return new Pt_1.Group(_pts[0].$subtract(half), _pts[0].$add(half));
         }
         else {
-            return new Pt_1.Group(pts[0].$subtract(r), pts[0].$add(r));
+            return new Pt_1.Group(_pts[0].$subtract(r), _pts[0].$add(r));
         }
     }
-    static toTriangle(pts, within = true) {
+    static toTriangle(circle, within = true) {
+        let _pts = Util_1.Util.iterToArray(circle);
         if (within) {
             let ang = -Math.PI / 2;
             let inc = Math.PI * 2 / 3;
             let g = new Pt_1.Group();
             for (let i = 0; i < 3; i++) {
-                g.push(pts[0].clone().toAngle(ang, pts[1][0], true));
+                g.push(_pts[0].clone().toAngle(ang, _pts[1][0], true));
                 ang += inc;
             }
             return g;
         }
         else {
-            return Triangle.fromCenter(pts[0], pts[1][0]);
+            return Triangle.fromCenter(_pts[0], _pts[1][0]);
         }
     }
 }
 exports.Circle = Circle;
 class Triangle {
     static fromRect(rect) {
-        let top = rect[0].$add(rect[1]).divide(2);
-        top.y = rect[0][1];
-        let left = rect[1].clone();
-        left.x = rect[0][0];
-        return new Pt_1.Group(top, rect[1].clone(), left);
+        let _rect = Util_1.Util.iterToArray(rect);
+        let top = _rect[0].$add(_rect[1]).divide(2);
+        top.y = _rect[0][1];
+        let left = _rect[1].clone();
+        left.x = _rect[0][0];
+        return new Pt_1.Group(top, _rect[1].clone(), left);
     }
     static fromCircle(circle) {
         return Circle.toTriangle(circle, true);
@@ -3060,63 +3297,71 @@ class Triangle {
     static fromCenter(pt, size) {
         return Triangle.fromCircle(Circle.fromCenter(pt, size));
     }
-    static medial(pts) {
-        if (pts.length < 3)
+    static medial(tri) {
+        let _pts = Util_1.Util.iterToArray(tri);
+        if (_pts.length < 3)
             return _errorLength(new Pt_1.Group(), 3);
-        return Polygon.midpoints(pts, true);
+        return Polygon.midpoints(_pts, true);
     }
-    static oppositeSide(pts, index) {
-        if (pts.length < 3)
+    static oppositeSide(tri, index) {
+        let _pts = Util_1.Util.iterToArray(tri);
+        if (_pts.length < 3)
             return _errorLength(new Pt_1.Group(), 3);
         if (index === 0) {
-            return Pt_1.Group.fromPtArray([pts[1], pts[2]]);
+            return Pt_1.Group.fromPtArray([_pts[1], _pts[2]]);
         }
         else if (index === 1) {
-            return Pt_1.Group.fromPtArray([pts[0], pts[2]]);
+            return Pt_1.Group.fromPtArray([_pts[0], _pts[2]]);
         }
         else {
-            return Pt_1.Group.fromPtArray([pts[0], pts[1]]);
+            return Pt_1.Group.fromPtArray([_pts[0], _pts[1]]);
         }
     }
-    static altitude(pts, index) {
-        let opp = Triangle.oppositeSide(pts, index);
+    static altitude(tri, index) {
+        let _pts = Util_1.Util.iterToArray(tri);
+        let opp = Triangle.oppositeSide(_pts, index);
         if (opp.length > 1) {
-            return new Pt_1.Group(pts[index], Line.perpendicularFromPt(opp, pts[index]));
+            return new Pt_1.Group(_pts[index], Line.perpendicularFromPt(opp, _pts[index]));
         }
         else {
             return new Pt_1.Group();
         }
     }
-    static orthocenter(pts) {
-        if (pts.length < 3)
+    static orthocenter(tri) {
+        let _pts = Util_1.Util.iterToArray(tri);
+        if (_pts.length < 3)
             return _errorLength(undefined, 3);
-        let a = Triangle.altitude(pts, 0);
-        let b = Triangle.altitude(pts, 1);
+        let a = Triangle.altitude(_pts, 0);
+        let b = Triangle.altitude(_pts, 1);
         return Line.intersectRay2D(a, b);
     }
-    static incenter(pts) {
-        if (pts.length < 3)
+    static incenter(tri) {
+        let _pts = Util_1.Util.iterToArray(tri);
+        if (_pts.length < 3)
             return _errorLength(undefined, 3);
-        let a = Polygon.bisector(pts, 0).add(pts[0]);
-        let b = Polygon.bisector(pts, 1).add(pts[1]);
-        return Line.intersectRay2D(new Pt_1.Group(pts[0], a), new Pt_1.Group(pts[1], b));
+        let a = Polygon.bisector(_pts, 0).add(_pts[0]);
+        let b = Polygon.bisector(_pts, 1).add(_pts[1]);
+        return Line.intersectRay2D(new Pt_1.Group(_pts[0], a), new Pt_1.Group(_pts[1], b));
     }
-    static incircle(pts, center) {
-        let c = (center) ? center : Triangle.incenter(pts);
-        let area = Polygon.area(pts);
-        let perim = Polygon.perimeter(pts, true);
+    static incircle(tri, center) {
+        let _pts = Util_1.Util.iterToArray(tri);
+        let c = (center) ? center : Triangle.incenter(_pts);
+        let area = Polygon.area(_pts);
+        let perim = Polygon.perimeter(_pts, true);
         let r = 2 * area / perim.total;
         return Circle.fromCenter(c, r);
     }
-    static circumcenter(pts) {
-        let md = Triangle.medial(pts);
-        let a = [md[0], Num_1.Geom.perpendicular(pts[0].$subtract(md[0])).p1.$add(md[0])];
-        let b = [md[1], Num_1.Geom.perpendicular(pts[1].$subtract(md[1])).p1.$add(md[1])];
+    static circumcenter(tri) {
+        let _pts = Util_1.Util.iterToArray(tri);
+        let md = Triangle.medial(_pts);
+        let a = [md[0], Num_1.Geom.perpendicular(_pts[0].$subtract(md[0])).p1.$add(md[0])];
+        let b = [md[1], Num_1.Geom.perpendicular(_pts[1].$subtract(md[1])).p1.$add(md[1])];
         return Line.intersectRay2D(a, b);
     }
-    static circumcircle(pts, center) {
-        let c = (center) ? center : Triangle.circumcenter(pts);
-        let r = pts[0].$subtract(c).magnitude();
+    static circumcircle(tri, center) {
+        let _pts = Util_1.Util.iterToArray(tri);
+        let c = (center) ? center : Triangle.circumcenter(_pts);
+        let r = _pts[0].$subtract(c).magnitude();
         return Circle.fromCenter(c, r);
     }
 }
@@ -3136,46 +3381,47 @@ class Polygon {
         }
         return g;
     }
-    static lineAt(pts, idx) {
-        if (idx < 0 || idx >= pts.length)
+    static lineAt(pts, index) {
+        let _pts = Util_1.Util.iterToArray(pts);
+        if (index < 0 || index >= _pts.length)
             throw new Error("index out of the Polygon's range");
-        return new Pt_1.Group(pts[idx], (idx === pts.length - 1) ? pts[0] : pts[idx + 1]);
+        return new Pt_1.Group(_pts[index], (index === _pts.length - 1) ? _pts[0] : _pts[index + 1]);
     }
-    static lines(pts, closePath = true) {
-        if (pts.length < 2)
+    static lines(poly, closePath = true) {
+        let _pts = Util_1.Util.iterToArray(poly);
+        if (_pts.length < 2)
             return _errorLength(new Pt_1.Group(), 2);
-        let sp = Util_1.Util.split(pts, 2, 1);
+        let sp = Util_1.Util.split(_pts, 2, 1);
         if (closePath)
-            sp.push(new Pt_1.Group(pts[pts.length - 1], pts[0]));
+            sp.push(new Pt_1.Group(_pts[_pts.length - 1], _pts[0]));
         return sp.map((g) => g);
     }
-    static midpoints(pts, closePath = false, t = 0.5) {
-        if (pts.length < 2)
-            return _errorLength(new Pt_1.Group(), 2);
-        let sides = Polygon.lines(pts, closePath);
+    static midpoints(poly, closePath = false, t = 0.5) {
+        let sides = Polygon.lines(poly, closePath);
         let mids = sides.map((s) => Num_1.Geom.interpolate(s[0], s[1], t));
         return mids;
     }
-    static adjacentSides(pts, index, closePath = false) {
-        if (pts.length < 2)
+    static adjacentSides(poly, index, closePath = false) {
+        let _pts = Util_1.Util.iterToArray(poly);
+        if (_pts.length < 2)
             return _errorLength(new Pt_1.Group(), 2);
-        if (index < 0 || index >= pts.length)
+        if (index < 0 || index >= _pts.length)
             return _errorOutofBound(new Pt_1.Group(), index);
         let gs = [];
         let left = index - 1;
         if (closePath && left < 0)
-            left = pts.length - 1;
+            left = _pts.length - 1;
         if (left >= 0)
-            gs.push(new Pt_1.Group(pts[index], pts[left]));
+            gs.push(new Pt_1.Group(_pts[index], _pts[left]));
         let right = index + 1;
-        if (closePath && right > pts.length - 1)
+        if (closePath && right > _pts.length - 1)
             right = 0;
-        if (right <= pts.length - 1)
-            gs.push(new Pt_1.Group(pts[index], pts[right]));
+        if (right <= _pts.length - 1)
+            gs.push(new Pt_1.Group(_pts[index], _pts[right]));
         return gs;
     }
-    static bisector(pts, index) {
-        let sides = Polygon.adjacentSides(pts, index, true);
+    static bisector(poly, index) {
+        let sides = Polygon.adjacentSides(poly, index, true);
         if (sides.length >= 2) {
             let a = sides[0][1].$subtract(sides[0][0]).unit();
             let b = sides[1][1].$subtract(sides[1][0]).unit();
@@ -3185,10 +3431,8 @@ class Polygon {
             return undefined;
         }
     }
-    static perimeter(pts, closePath = false) {
-        if (pts.length < 2)
-            return _errorLength(new Pt_1.Group(), 2);
-        let lines = Polygon.lines(pts, closePath);
+    static perimeter(poly, closePath = false) {
+        let lines = Polygon.lines(poly, closePath);
         let mag = 0;
         let p = Pt_1.Pt.make(lines.length, 0);
         for (let i = 0, len = lines.length; i < len; i++) {
@@ -3202,45 +3446,47 @@ class Polygon {
         };
     }
     static area(pts) {
-        if (pts.length < 3)
+        let _pts = Util_1.Util.iterToArray(pts);
+        if (_pts.length < 3)
             return _errorLength(new Pt_1.Group(), 3);
         let det = (a, b) => a[0] * b[1] - a[1] * b[0];
         let area = 0;
-        for (let i = 0, len = pts.length; i < len; i++) {
-            if (i < pts.length - 1) {
-                area += det(pts[i], pts[i + 1]);
+        for (let i = 0, len = _pts.length; i < len; i++) {
+            if (i < _pts.length - 1) {
+                area += det(_pts[i], _pts[i + 1]);
             }
             else {
-                area += det(pts[i], pts[0]);
+                area += det(_pts[i], _pts[0]);
             }
         }
         return Math.abs(area / 2);
     }
     static convexHull(pts, sorted = false) {
-        if (pts.length < 3)
+        let _pts = Util_1.Util.iterToArray(pts);
+        if (_pts.length < 3)
             return _errorLength(new Pt_1.Group(), 3);
         if (!sorted) {
-            pts = pts.slice();
-            pts.sort((a, b) => a[0] - b[0]);
+            _pts = _pts.slice();
+            _pts.sort((a, b) => a[0] - b[0]);
         }
         let left = (a, b, c) => {
             return (b[0] - a[0]) * (c[1] - a[1]) - (c[0] - a[0]) * (b[1] - a[1]) > 0;
         };
         let dq = [];
-        let bot = pts.length - 2;
+        let bot = _pts.length - 2;
         let top = bot + 3;
-        dq[bot] = pts[2];
-        dq[top] = pts[2];
-        if (left(pts[0], pts[1], pts[2])) {
-            dq[bot + 1] = pts[0];
-            dq[bot + 2] = pts[1];
+        dq[bot] = _pts[2];
+        dq[top] = _pts[2];
+        if (left(_pts[0], _pts[1], _pts[2])) {
+            dq[bot + 1] = _pts[0];
+            dq[bot + 2] = _pts[1];
         }
         else {
-            dq[bot + 1] = pts[1];
-            dq[bot + 2] = pts[0];
+            dq[bot + 1] = _pts[1];
+            dq[bot + 2] = _pts[0];
         }
-        for (let i = 3, len = pts.length; i < len; i++) {
-            let pt = pts[i];
+        for (let i = 3, len = _pts.length; i < len; i++) {
+            let pt = _pts[i];
             if (left(dq[bot], dq[bot + 1], pt) && left(dq[top - 1], dq[top], pt)) {
                 continue;
             }
@@ -3261,31 +3507,35 @@ class Polygon {
         }
         return hull;
     }
-    static network(pts, originIndex = 0) {
+    static network(poly, originIndex = 0) {
+        let _pts = Util_1.Util.iterToArray(poly);
         let g = [];
-        for (let i = 0, len = pts.length; i < len; i++) {
+        for (let i = 0, len = _pts.length; i < len; i++) {
             if (i != originIndex)
-                g.push(new Pt_1.Group(pts[originIndex], pts[i]));
+                g.push(new Pt_1.Group(_pts[originIndex], _pts[i]));
         }
         return g;
     }
-    static nearestPt(pts, pt) {
+    static nearestPt(poly, pt) {
         let _near = Number.MAX_VALUE;
         let _item = -1;
-        for (let i = 0, len = pts.length; i < len; i++) {
-            let d = pts[i].$subtract(pt).magnitudeSq();
+        let i = 0;
+        for (let p of poly) {
+            let d = p.$subtract(pt).magnitudeSq();
             if (d < _near) {
                 _near = d;
                 _item = i;
             }
+            i++;
         }
         return _item;
     }
     static projectAxis(poly, unitAxis) {
-        let dot = unitAxis.dot(poly[0]);
+        let _poly = Util_1.Util.iterToArray(poly);
+        let dot = unitAxis.dot(_poly[0]);
         let d = new Pt_1.Pt(dot, dot);
-        for (let n = 1, len = poly.length; n < len; n++) {
-            dot = unitAxis.dot(poly[n]);
+        for (let n = 1, len = _poly.length; n < len; n++) {
+            dot = unitAxis.dot(_poly[n]);
             d = new Pt_1.Pt(Math.min(dot, d[0]), Math.max(dot, d[1]));
         }
         return d;
@@ -3296,9 +3546,10 @@ class Polygon {
         return (pa[0] < pb[0]) ? pb[0] - pa[1] : pa[0] - pb[1];
     }
     static hasIntersectPoint(poly, pt) {
+        let _poly = Util_1.Util.iterToArray(poly);
         let c = false;
-        for (let i = 0, len = poly.length; i < len; i++) {
-            let ln = Polygon.lineAt(poly, i);
+        for (let i = 0, len = _poly.length; i < len; i++) {
+            let ln = Polygon.lineAt(_poly, i);
             if (((ln[0][1] > pt[1]) != (ln[1][1] > pt[1])) &&
                 (pt[0] < (ln[1][0] - ln[0][0]) * (pt[1] - ln[0][1]) / (ln[1][1] - ln[0][1]) + ln[0][0])) {
                 c = !c;
@@ -3307,6 +3558,8 @@ class Polygon {
         return c;
     }
     static hasIntersectCircle(poly, circle) {
+        let _poly = Util_1.Util.iterToArray(poly);
+        let _circle = Util_1.Util.iterToArray(circle);
         let info = {
             which: -1,
             dist: 0,
@@ -3314,14 +3567,14 @@ class Polygon {
             edge: null,
             vertex: null,
         };
-        let c = circle[0];
-        let r = circle[1][0];
+        let c = _circle[0];
+        let r = _circle[1][0];
         let minDist = Number.MAX_SAFE_INTEGER;
-        for (let i = 0, len = poly.length; i < len; i++) {
-            let edge = Polygon.lineAt(poly, i);
+        for (let i = 0, len = _poly.length; i < len; i++) {
+            let edge = Polygon.lineAt(_poly, i);
             let axis = new Pt_1.Pt(edge[0].y - edge[1].y, edge[1].x - edge[0].x).unit();
             let poly2 = new Pt_1.Group(c.$add(axis.$multiply(r)), c.$subtract(axis.$multiply(r)));
-            let dist = Polygon._axisOverlap(poly, poly2, axis);
+            let dist = Polygon._axisOverlap(_poly, poly2, axis);
             if (dist > 0) {
                 return null;
             }
@@ -3337,7 +3590,7 @@ class Polygon {
         }
         if (!info.edge)
             return null;
-        let dir = c.$subtract(Polygon.centroid(poly)).dot(info.normal);
+        let dir = c.$subtract(Polygon.centroid(_poly)).dot(info.normal);
         if (dir < 0)
             info.normal.multiply(-1);
         info.dist = minDist;
@@ -3345,6 +3598,8 @@ class Polygon {
         return info;
     }
     static hasIntersectPolygon(poly1, poly2) {
+        let _poly1 = Util_1.Util.iterToArray(poly1);
+        let _poly2 = Util_1.Util.iterToArray(poly2);
         let info = {
             which: -1,
             dist: 0,
@@ -3353,10 +3608,10 @@ class Polygon {
             vertex: new Pt_1.Pt()
         };
         let minDist = Number.MAX_SAFE_INTEGER;
-        for (let i = 0, plen = (poly1.length + poly2.length); i < plen; i++) {
-            let edge = (i < poly1.length) ? Polygon.lineAt(poly1, i) : Polygon.lineAt(poly2, i - poly1.length);
+        for (let i = 0, plen = (_poly1.length + _poly2.length); i < plen; i++) {
+            let edge = (i < _poly1.length) ? Polygon.lineAt(_poly1, i) : Polygon.lineAt(_poly2, i - _poly1.length);
             let axis = new Pt_1.Pt(edge[0].y - edge[1].y, edge[1].x - edge[0].x).unit();
-            let dist = Polygon._axisOverlap(poly1, poly2, axis);
+            let dist = Polygon._axisOverlap(_poly1, _poly2, axis);
             if (dist > 0) {
                 return null;
             }
@@ -3364,12 +3619,12 @@ class Polygon {
                 info.edge = edge;
                 info.normal = axis;
                 minDist = Math.abs(dist);
-                info.which = (i < poly1.length) ? 0 : 1;
+                info.which = (i < _poly1.length) ? 0 : 1;
             }
         }
         info.dist = minDist;
-        let b1 = (info.which === 0) ? poly2 : poly1;
-        let b2 = (info.which === 0) ? poly1 : poly2;
+        let b1 = (info.which === 0) ? _poly2 : _poly1;
+        let b2 = (info.which === 0) ? _poly1 : _poly2;
         let c1 = Polygon.centroid(b1);
         let c2 = Polygon.centroid(b2);
         let dir = c1.$subtract(c2).dot(info.normal);
@@ -3386,17 +3641,22 @@ class Polygon {
         return info;
     }
     static intersectPolygon2D(poly1, poly2) {
-        let lp = Polygon.lines(poly1);
+        let _poly1 = Util_1.Util.iterToArray(poly1);
+        let _poly2 = Util_1.Util.iterToArray(poly2);
+        let lp = Polygon.lines(_poly1);
         let g = [];
         for (let i = 0, len = lp.length; i < len; i++) {
-            let ins = Line.intersectPolygon2D(lp[i], poly2, false);
+            let ins = Line.intersectPolygon2D(lp[i], _poly2, false);
             if (ins)
                 g.push(ins);
         }
         return Util_1.Util.flatten(g, true);
     }
     static toRects(polys) {
-        let boxes = polys.map((g) => Num_1.Geom.boundingBox(g));
+        let boxes = [];
+        for (let g of polys) {
+            boxes.push(Num_1.Geom.boundingBox(g));
+        }
         let merged = Util_1.Util.flatten(boxes, false);
         boxes.unshift(Num_1.Geom.boundingBox(merged));
         return boxes;
@@ -3413,12 +3673,13 @@ class Curve {
         return ts;
     }
     static controlPoints(pts, index = 0, copyStart = false) {
-        if (index > pts.length - 1)
+        let _pts = Util_1.Util.iterToArray(pts);
+        if (index > _pts.length - 1)
             return new Pt_1.Group();
-        let _index = (i) => (i < pts.length - 1) ? i : pts.length - 1;
-        let p0 = pts[index];
+        let _index = (i) => (i < _pts.length - 1) ? i : _pts.length - 1;
+        let p0 = _pts[index];
         index = (copyStart) ? index : index + 1;
-        return new Pt_1.Group(p0, pts[_index(index++)], pts[_index(index++)], pts[_index(index++)]);
+        return new Pt_1.Group(p0, _pts[_index(index++)], _pts[_index(index++)], _pts[_index(index++)]);
     }
     static _calcPt(ctrls, params) {
         let x = ctrls.reduce((a, c, i) => a + c.x * params[i], 0);
@@ -3430,17 +3691,18 @@ class Curve {
         return new Pt_1.Pt(x, y);
     }
     static catmullRom(pts, steps = 10) {
-        if (pts.length < 2)
+        let _pts = Util_1.Util.iterToArray(pts);
+        if (_pts.length < 2)
             return new Pt_1.Group();
         let ps = new Pt_1.Group();
         let ts = Curve.getSteps(steps);
-        let c = Curve.controlPoints(pts, 0, true);
+        let c = Curve.controlPoints(_pts, 0, true);
         for (let i = 0; i <= steps; i++) {
             ps.push(Curve.catmullRomStep(ts[i], c));
         }
         let k = 0;
-        while (k < pts.length - 2) {
-            let cp = Curve.controlPoints(pts, k);
+        while (k < _pts.length - 2) {
+            let cp = Curve.controlPoints(_pts, k);
             if (cp.length > 0) {
                 for (let i = 0; i <= steps; i++) {
                     ps.push(Curve.catmullRomStep(ts[i], cp));
@@ -3455,17 +3717,18 @@ class Curve {
         return Curve._calcPt(ctrls, LinearAlgebra_1.Mat.multiply([step], m, true)[0]);
     }
     static cardinal(pts, steps = 10, tension = 0.5) {
-        if (pts.length < 2)
+        let _pts = Util_1.Util.iterToArray(pts);
+        if (_pts.length < 2)
             return new Pt_1.Group();
         let ps = new Pt_1.Group();
         let ts = Curve.getSteps(steps);
-        let c = Curve.controlPoints(pts, 0, true);
+        let c = Curve.controlPoints(_pts, 0, true);
         for (let i = 0; i <= steps; i++) {
             ps.push(Curve.cardinalStep(ts[i], c, tension));
         }
         let k = 0;
-        while (k < pts.length - 2) {
-            let cp = Curve.controlPoints(pts, k);
+        while (k < _pts.length - 2) {
+            let cp = Curve.controlPoints(_pts, k);
             if (cp.length > 0) {
                 for (let i = 0; i <= steps; i++) {
                     ps.push(Curve.cardinalStep(ts[i], cp, tension));
@@ -3488,13 +3751,14 @@ class Curve {
         return pt;
     }
     static bezier(pts, steps = 10) {
-        if (pts.length < 4)
+        let _pts = Util_1.Util.iterToArray(pts);
+        if (_pts.length < 4)
             return new Pt_1.Group();
         let ps = new Pt_1.Group();
         let ts = Curve.getSteps(steps);
         let k = 0;
-        while (k < pts.length - 3) {
-            let c = Curve.controlPoints(pts, k);
+        while (k < _pts.length - 3) {
+            let c = Curve.controlPoints(_pts, k);
             if (c.length > 0) {
                 for (let i = 0; i <= steps; i++) {
                     ps.push(Curve.bezierStep(ts[i], c));
@@ -3509,13 +3773,14 @@ class Curve {
         return Curve._calcPt(ctrls, LinearAlgebra_1.Mat.multiply([step], m, true)[0]);
     }
     static bspline(pts, steps = 10, tension = 1) {
-        if (pts.length < 2)
+        let _pts = Util_1.Util.iterToArray(pts);
+        if (_pts.length < 2)
             return new Pt_1.Group();
         let ps = new Pt_1.Group();
         let ts = Curve.getSteps(steps);
         let k = 0;
-        while (k < pts.length - 3) {
-            let c = Curve.controlPoints(pts, k);
+        while (k < _pts.length - 3) {
+            let c = Curve.controlPoints(_pts, k);
             if (c.length > 0) {
                 if (tension !== 1) {
                     for (let i = 0; i <= steps; i++) {
@@ -3567,6 +3832,7 @@ exports.Curve = Curve;
 Object.defineProperty(exports, "__esModule", { value: true });
 const Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 const Op_1 = __webpack_require__(/*! ./Op */ "./src/Op.ts");
+const Num_1 = __webpack_require__(/*! ./Num */ "./src/Num.ts");
 class World {
     constructor(bound, friction = 1, gravity = 0) {
         this._lastTime = null;
@@ -3677,7 +3943,7 @@ class World {
         return p1;
     }
     static boundConstraint(p, rect, damping = 0.75) {
-        let bound = rect.boundingBox();
+        let bound = Num_1.Geom.boundingBox(rect);
         let np = p.$min(bound[1].subtract(p.radius)).$max(bound[0].add(p.radius));
         if (np[0] === bound[0][0] || np[0] === bound[1][0]) {
             let c = p.changed.$multiply(damping);
@@ -3829,20 +4095,20 @@ class Body extends Pt_1.Group {
         this._locks = {};
         this._mass = 1;
     }
-    static fromGroup(list, stiff = 1, autoLink = true, autoMass = true) {
-        let b = new Body().init(list);
+    static fromGroup(body, stiff = 1, autoLink = true, autoMass = true) {
+        let b = new Body().init(body);
         if (autoLink)
             b.linkAll(stiff);
         if (autoMass)
             b.autoMass();
         return b;
     }
-    init(list, stiff = 1) {
+    init(body, stiff = 1) {
         let c = new Pt_1.Pt();
-        for (let i = 0, len = list.length; i < len; i++) {
-            let p = new Particle(list[i]);
+        for (let li of body) {
+            let p = new Particle(li);
             p.body = this;
-            c.add(list[i]);
+            c.add(li);
             this.push(p);
         }
         this._stiff = stiff;
@@ -4146,6 +4412,7 @@ class Sound {
     }
     get ctx() { return this._ctx; }
     get node() { return this._node; }
+    get outputNode() { return this._outputNode; }
     get stream() { return this._stream; }
     get source() { return this._source; }
     get buffer() { return this._buffer; }
@@ -4183,6 +4450,14 @@ class Sound {
     }
     connect(node) {
         this._node.connect(node);
+        return this;
+    }
+    setOutputNode(outputNode) {
+        this._outputNode = outputNode;
+        return this;
+    }
+    removeOutputNode() {
+        this._outputNode = null;
         return this;
     }
     analyze(size = 256, minDb = -100, maxDb = -30, smooth = 0.8) {
@@ -4256,13 +4531,13 @@ class Sound {
             if (this.analyzer)
                 this._node.connect(this.analyzer.node);
         }
-        this._node.connect(this._ctx.destination);
+        (this._outputNode || this._node).connect(this._ctx.destination);
         this._playing = true;
         return this;
     }
     stop() {
         if (this._playing)
-            this._node.disconnect(this._ctx.destination);
+            (this._outputNode || this._node).disconnect(this._ctx.destination);
         if (this._type === "file") {
             if (!!this._buffer) {
                 if (this.progress < 1)
@@ -4533,8 +4808,8 @@ class Group extends Array {
     }
     static fromArray(list) {
         let g = new Group();
-        for (let i = 0, len = list.length; i < len; i++) {
-            let p = (list[i] instanceof Pt) ? list[i] : new Pt(list[i]);
+        for (let li of list) {
+            let p = (li instanceof Pt) ? li : new Pt(li);
             g.push(p);
         }
         return g;
@@ -4677,9 +4952,10 @@ class Bound extends Group {
         return b;
     }
     static fromGroup(g) {
-        if (g.length < 2)
+        let _g = Util_1.Util.iterToArray(g);
+        if (_g.length < 2)
             throw new Error("Cannot create a Bound from a group that has less than 2 Pt");
-        return new Bound(g[0], g[g.length - 1]);
+        return new Bound(_g[0], _g[_g.length - 1]);
     }
     init() {
         if (this.p1) {
@@ -4908,8 +5184,8 @@ class MultiTouchSpace extends Space {
         p.id = this._pointer.id;
         return p;
     }
-    bindCanvas(evt, callback) {
-        this._canvas.addEventListener(evt, callback);
+    bindCanvas(evt, callback, options = {}) {
+        this._canvas.addEventListener(evt, callback, options);
     }
     unbindCanvas(evt, callback) {
         this._canvas.removeEventListener(evt, callback);
@@ -4937,9 +5213,9 @@ class MultiTouchSpace extends Space {
     }
     bindTouch(_bind = true) {
         if (_bind) {
-            this.bindCanvas("touchstart", this._touchStart.bind(this));
+            this.bindCanvas("touchstart", this._touchStart.bind(this), { passive: true });
             this.bindCanvas("touchend", this._mouseUp.bind(this));
-            this.bindCanvas("touchmove", this._touchMove.bind(this));
+            this.bindCanvas("touchmove", this._touchMove.bind(this), { passive: true });
             this.bindCanvas("touchcancel", this._mouseOut.bind(this));
             this._hasTouch = true;
         }
@@ -5286,7 +5562,8 @@ class SVGForm extends Form_1.VisualForm {
     }
     circle(pts) {
         this.nextID();
-        SVGForm.circle(this._ctx, pts[0], pts[1][0]);
+        let p = Util_1.Util.iterToArray(pts);
+        SVGForm.circle(this._ctx, p[0], p[1][0]);
         return this;
     }
     static arc(ctx, pt, radius, startAngle, endAngle, cc) {
@@ -5329,16 +5606,18 @@ class SVGForm extends Form_1.VisualForm {
         return this;
     }
     static line(ctx, pts) {
-        if (!this._checkSize(pts))
+        let points = SVGForm.pointsString(pts);
+        if (points.count < 2)
             return;
-        if (pts.length > 2)
-            return SVGForm._poly(ctx, pts, false);
+        if (points.count > 2)
+            return SVGForm._poly(ctx, points.string, false);
         let elem = SVGSpace.svgElement(ctx.group, "line", SVGForm.getID(ctx));
+        let p = Util_1.Util.iterToArray(pts);
         Dom_1.DOMSpace.setAttr(elem, {
-            x1: pts[0][0],
-            y1: pts[0][1],
-            x2: pts[1][0],
-            y2: pts[1][1],
+            x1: p[0][0],
+            y1: p[0][1],
+            x2: p[1][0],
+            y2: p[1][1],
             'class': `pts-svgform pts-line ${ctx.currentClass}`,
         });
         SVGForm.style(elem, ctx.style);
@@ -5349,11 +5628,8 @@ class SVGForm extends Form_1.VisualForm {
         SVGForm.line(this._ctx, pts);
         return this;
     }
-    static _poly(ctx, pts, closePath = true) {
-        if (!this._checkSize(pts))
-            return;
+    static _poly(ctx, points, closePath = true) {
         let elem = SVGSpace.svgElement(ctx.group, ((closePath) ? "polygon" : "polyline"), SVGForm.getID(ctx));
-        let points = pts.reduce((a, p) => a + `${p[0]},${p[1]} `, "");
         Dom_1.DOMSpace.setAttr(elem, {
             points: points,
             'class': `pts-svgform pts-polygon ${ctx.currentClass}`,
@@ -5361,8 +5637,18 @@ class SVGForm extends Form_1.VisualForm {
         SVGForm.style(elem, ctx.style);
         return elem;
     }
+    static pointsString(pts) {
+        let points = "";
+        let count = 0;
+        for (let p of pts) {
+            points += `${p[0]},${p[1]} `;
+            count++;
+        }
+        return { string: points, count: count };
+    }
     static polygon(ctx, pts) {
-        return SVGForm._poly(ctx, pts, true);
+        let points = SVGForm.pointsString(pts);
+        return SVGForm._poly(ctx, points.string, true);
     }
     polygon(pts) {
         this.nextID();
@@ -5370,7 +5656,7 @@ class SVGForm extends Form_1.VisualForm {
         return this;
     }
     static rect(ctx, pts) {
-        if (!this._checkSize(pts))
+        if (!Util_1.Util.arrayCheck(pts))
             return;
         let elem = SVGSpace.svgElement(ctx.group, "rect", SVGForm.getID(ctx));
         let bound = Pt_1.Group.fromArray(pts).boundingBox();
@@ -5449,11 +5735,12 @@ class Typography {
         }
     }
     static fontSizeToBox(box, ratio = 1, byHeight = true) {
-        let i = byHeight ? 1 : 0;
-        let h = (box[1][i] - box[0][i]);
+        let bound = Pt_1.Bound.fromGroup(box);
+        let h = byHeight ? bound.height : bound.width;
         let f = ratio * h;
-        return function (b) {
-            let nh = (b[1][i] - b[0][i]) / h;
+        return function (box2) {
+            let bound2 = Pt_1.Bound.fromGroup(box2);
+            let nh = (byHeight ? bound2.height : bound2.width) / h;
             return f * nh;
         };
     }
@@ -5839,6 +6126,7 @@ class Util {
         return defaultReturn;
     }
     static randomInt(range, start = 0) {
+        Util.warn("Util.randomInt is deprecated. Please use `Num.randomRange`");
         return Math.floor(Math.random() * range) + start;
     }
     static split(pts, size, stride, loopBack = false, matchSize = true) {
@@ -5937,11 +6225,15 @@ class Util {
             return Math.floor(avg.reduce((a, b) => a + b, 0) / avg.length);
         };
     }
-    static iterFromPtLike(list) {
-        return Array.isArray(list) ? list[Symbol.iterator]() : list;
+    static arrayCheck(pts, minRequired = 2) {
+        if (Array.isArray(pts) && pts.length < minRequired) {
+            Util.warn(`Requires ${minRequired} or more Pts in this Group.`);
+            return false;
+        }
+        return true;
     }
-    static iterFromPt(list) {
-        return Array.isArray(list) ? list[Symbol.iterator]() : list;
+    static iterToArray(it) {
+        return (!Array.isArray(it)) ? [...it] : it;
     }
 }
 Util._warnLevel = "mute";
@@ -5979,6 +6271,7 @@ __export(__webpack_require__(/*! ./Typography */ "./src/Typography.ts"));
 __export(__webpack_require__(/*! ./Physics */ "./src/Physics.ts"));
 __export(__webpack_require__(/*! ./UI */ "./src/UI.ts"));
 __export(__webpack_require__(/*! ./Play */ "./src/Play.ts"));
+__export(__webpack_require__(/*! ./Image */ "./src/Image.ts"));
 const _Canvas = __webpack_require__(/*! ./Canvas */ "./src/Canvas.ts");
 exports.namespace = (scope) => {
     let lib = module.exports;
@@ -5989,6 +6282,8 @@ exports.namespace = (scope) => {
     }
 };
 exports.quickStart = (id, bg = "#9ab") => {
+    if (!window)
+        return;
     let s = window;
     exports.namespace(s);
     s.space = new _Canvas.CanvasSpace(id).setup({ bgcolor: bg, resize: true, retina: true });

@@ -47,7 +47,7 @@ export declare abstract class MultiTouchSpace extends Space {
     protected _hasTouch: boolean;
     protected _canvas: EventTarget;
     readonly pointer: Pt;
-    bindCanvas(evt: string, callback: EventListener): void;
+    bindCanvas(evt: string, callback: EventListener, options?: any): void;
     unbindCanvas(evt: string, callback: EventListener): void;
     bindMouse(_bind?: boolean): this;
     bindTouch(_bind?: boolean): this;

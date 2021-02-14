@@ -1,17 +1,9 @@
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
-import { Util } from "./Util";
 export class Form {
     constructor() {
         this._ready = false;
     }
     get ready() { return this._ready; }
-    static _checkSize(pts, required = 2) {
-        if (pts.length < required) {
-            Util.warn("Requires 2 or more Pts in this Group.");
-            return false;
-        }
-        return true;
-    }
 }
 export class VisualForm extends Form {
     constructor() {
