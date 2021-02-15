@@ -2,7 +2,7 @@
   "name": "Polygon",
   "source": [
     [
-      "Op.ts",
+      "src/Op.ts",
       1009,
       20
     ]
@@ -17,7 +17,7 @@
       "name": "adjacentSides",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           1090,
           22
         ]
@@ -61,7 +61,7 @@
       "name": "area",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           1155,
           13
         ]
@@ -93,7 +93,7 @@
       "name": "bisector",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           1115,
           17
         ]
@@ -131,7 +131,7 @@
       "name": "centroid",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           1015,
           17
         ]
@@ -163,7 +163,7 @@
       "name": "convexHull",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           1178,
           19
         ]
@@ -201,7 +201,7 @@
       "name": "fromCenter",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           1037,
           19
         ]
@@ -245,7 +245,7 @@
       "name": "hasIntersectCircle",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           1332,
           27
         ]
@@ -283,7 +283,7 @@
       "name": "hasIntersectPoint",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           1311,
           26
         ]
@@ -321,7 +321,7 @@
       "name": "hasIntersectPolygon",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           1392,
           28
         ]
@@ -359,7 +359,7 @@
       "name": "intersectPolygon2D",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           1457,
           27
         ]
@@ -397,7 +397,7 @@
       "name": "lineAt",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           1052,
           15
         ]
@@ -435,7 +435,7 @@
       "name": "lines",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           1064,
           14
         ]
@@ -473,7 +473,7 @@
       "name": "midpoints",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           1078,
           18
         ]
@@ -517,7 +517,7 @@
       "name": "nearestPt",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           1260,
           18
         ]
@@ -555,7 +555,7 @@
       "name": "network",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           1244,
           16
         ]
@@ -593,7 +593,7 @@
       "name": "perimeter",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           1133,
           18
         ]
@@ -631,7 +631,7 @@
       "name": "projectAxis",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           1281,
           20
         ]
@@ -669,7 +669,7 @@
       "name": "rectangle",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           1026,
           18
         ]
@@ -713,7 +713,7 @@
       "name": "toRects",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           1475,
           16
         ]

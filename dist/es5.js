@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.10.0 - Copyright © 2017-2021 William Ngan and contributors.
+ * pts.js 0.10.1 - Copyright © 2017-2021 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -125,6 +125,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.CanvasForm = exports.CanvasSpace = void 0;
 var Space_1 = __webpack_require__(/*! ./Space */ "./src/Space.ts");
 var Form_1 = __webpack_require__(/*! ./Form */ "./src/Form.ts");
 var Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
@@ -988,6 +989,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Color = void 0;
 var Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 var Util_1 = __webpack_require__(/*! ./Util */ "./src/Util.ts");
 var Num_1 = __webpack_require__(/*! ./Num */ "./src/Num.ts");
@@ -1570,6 +1572,7 @@ var Color = function (_Pt_1$Pt) {
     return Color;
 }(Pt_1.Pt);
 
+exports.Color = Color;
 Color.D65 = new Pt_1.Pt(95.047, 100, 108.883, 1);
 Color.ranges = {
     rgb: new Pt_1.Group(new Pt_1.Pt(0, 255), new Pt_1.Pt(0, 255), new Pt_1.Pt(0, 255)),
@@ -1580,7 +1583,6 @@ Color.ranges = {
     luv: new Pt_1.Group(new Pt_1.Pt(0, 100), new Pt_1.Pt(-134, 220), new Pt_1.Pt(-140, 122)),
     xyz: new Pt_1.Group(new Pt_1.Pt(0, 100), new Pt_1.Pt(0, 100), new Pt_1.Pt(0, 100))
 };
-exports.Color = Color;
 
 /***/ }),
 
@@ -1604,6 +1606,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Delaunay = exports.Noise = exports.Create = void 0;
 var Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 var Op_1 = __webpack_require__(/*! ./Op */ "./src/Op.ts");
 var Util_1 = __webpack_require__(/*! ./Util */ "./src/Util.ts");
@@ -2013,6 +2016,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.HTMLForm = exports.HTMLSpace = exports.DOMSpace = void 0;
 var Space_1 = __webpack_require__(/*! ./Space */ "./src/Space.ts");
 var Form_1 = __webpack_require__(/*! ./Form */ "./src/Form.ts");
 var Util_1 = __webpack_require__(/*! ./Util */ "./src/Util.ts");
@@ -2593,9 +2597,9 @@ var HTMLForm = function (_Form_1$VisualForm) {
     return HTMLForm;
 }(Form_1.VisualForm);
 
+exports.HTMLForm = HTMLForm;
 HTMLForm.groupID = 0;
 HTMLForm.domID = 0;
-exports.HTMLForm = HTMLForm;
 
 /***/ }),
 
@@ -2619,6 +2623,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Font = exports.VisualForm = exports.Form = void 0;
 
 var Form = function () {
     function Form() {
@@ -2807,6 +2812,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Img = void 0;
 var Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 
 var Img = function () {
@@ -2967,6 +2973,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Mat = exports.Vec = void 0;
 var Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 var Op_1 = __webpack_require__(/*! ./Op */ "./src/Op.ts");
 
@@ -3313,6 +3320,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Range = exports.Shaping = exports.Geom = exports.Num = void 0;
 var Util_1 = __webpack_require__(/*! ./Util */ "./src/Util.ts");
 var Op_1 = __webpack_require__(/*! ./Op */ "./src/Op.ts");
 var Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
@@ -4082,6 +4090,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Curve = exports.Polygon = exports.Triangle = exports.Circle = exports.Rectangle = exports.Line = void 0;
 var Util_1 = __webpack_require__(/*! ./Util */ "./src/Util.ts");
 var Num_1 = __webpack_require__(/*! ./Num */ "./src/Num.ts");
 var Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
@@ -4360,7 +4369,7 @@ var Line = function () {
     }, {
         key: "marker",
         value: function marker(line, size) {
-            var graphic = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "arrow" || "line";
+            var graphic = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "arrow" || false;
             var atTail = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
 
             var _line = Util_1.Util.iterToArray(line);
@@ -5448,6 +5457,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Body = exports.Particle = exports.World = void 0;
 var Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 var Op_1 = __webpack_require__(/*! ./Op */ "./src/Op.ts");
 var Num_1 = __webpack_require__(/*! ./Num */ "./src/Num.ts");
@@ -6065,6 +6075,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var __awaiter = undefined && undefined.__awaiter || function (thisArg, _arguments, P, generator) {
+    function adopt(value) {
+        return value instanceof P ? value : new P(function (resolve) {
+            resolve(value);
+        });
+    }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) {
             try {
@@ -6081,14 +6096,13 @@ var __awaiter = undefined && undefined.__awaiter || function (thisArg, _argument
             }
         }
         function step(result) {
-            result.done ? resolve(result.value) : new P(function (resolve) {
-                resolve(result.value);
-            }).then(fulfilled, rejected);
+            result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
         }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Sound = exports.Tempo = void 0;
 var Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 var Num_1 = __webpack_require__(/*! ./Num */ "./src/Num.ts");
 
@@ -6665,6 +6679,7 @@ function _extendableBuiltin(cls) {
 }
 
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Bound = exports.Group = exports.Pt = void 0;
 var Util_1 = __webpack_require__(/*! ./Util */ "./src/Util.ts");
 var Num_1 = __webpack_require__(/*! ./Num */ "./src/Num.ts");
 var LinearAlgebra_1 = __webpack_require__(/*! ./LinearAlgebra */ "./src/LinearAlgebra.ts");
@@ -7665,6 +7680,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.MultiTouchSpace = exports.Space = void 0;
 var Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 var UI_1 = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 
@@ -8062,6 +8078,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.SVGForm = exports.SVGSpace = void 0;
 var Form_1 = __webpack_require__(/*! ./Form */ "./src/Form.ts");
 var Num_1 = __webpack_require__(/*! ./Num */ "./src/Num.ts");
 var Util_1 = __webpack_require__(/*! ./Util */ "./src/Util.ts");
@@ -8541,9 +8558,9 @@ var SVGForm = function (_Form_1$VisualForm) {
     return SVGForm;
 }(Form_1.VisualForm);
 
+exports.SVGForm = SVGForm;
 SVGForm.groupID = 0;
 SVGForm.domID = 0;
-exports.SVGForm = SVGForm;
 
 /***/ }),
 
@@ -8563,6 +8580,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Typography = void 0;
 var Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 
 var Typography = function () {
@@ -8653,6 +8671,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.UIDragger = exports.UIButton = exports.UI = exports.UIPointerActions = exports.UIShape = void 0;
 var Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 var Op_1 = __webpack_require__(/*! ./Op */ "./src/Op.ts");
 exports.UIShape = {
@@ -8845,8 +8864,8 @@ var UI = function () {
     return UI;
 }();
 
-UI._counter = 0;
 exports.UI = UI;
+UI._counter = 0;
 
 var UIButton = function (_UI) {
     _inherits(UIButton, _UI);
@@ -9038,6 +9057,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Util = exports.Const = void 0;
 var Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 exports.Const = {
     xy: "xy",
@@ -9266,8 +9286,8 @@ var Util = function () {
     return Util;
 }();
 
-Util._warnLevel = "mute";
 exports.Util = Util;
+Util._warnLevel = "mute";
 
 /***/ }),
 
@@ -9281,28 +9301,37 @@ exports.Util = Util;
 "use strict";
 
 
-function __export(m) {
+var __createBinding = undefined && undefined.__createBinding || (Object.create ? function (o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function get() {
+            return m[k];
+        } });
+} : function (o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+});
+var __exportStar = undefined && undefined.__exportStar || function (m, exports) {
     for (var p in m) {
-        if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+        if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
     }
-}
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-__export(__webpack_require__(/*! ./Canvas */ "./src/Canvas.ts"));
-__export(__webpack_require__(/*! ./Create */ "./src/Create.ts"));
-__export(__webpack_require__(/*! ./Form */ "./src/Form.ts"));
-__export(__webpack_require__(/*! ./LinearAlgebra */ "./src/LinearAlgebra.ts"));
-__export(__webpack_require__(/*! ./Num */ "./src/Num.ts"));
-__export(__webpack_require__(/*! ./Op */ "./src/Op.ts"));
-__export(__webpack_require__(/*! ./Pt */ "./src/Pt.ts"));
-__export(__webpack_require__(/*! ./Space */ "./src/Space.ts"));
-__export(__webpack_require__(/*! ./Color */ "./src/Color.ts"));
-__export(__webpack_require__(/*! ./Util */ "./src/Util.ts"));
-__export(__webpack_require__(/*! ./Dom */ "./src/Dom.ts"));
-__export(__webpack_require__(/*! ./Svg */ "./src/Svg.ts"));
-__export(__webpack_require__(/*! ./Typography */ "./src/Typography.ts"));
-__export(__webpack_require__(/*! ./Physics */ "./src/Physics.ts"));
-__export(__webpack_require__(/*! ./Play */ "./src/Play.ts"));
-__export(__webpack_require__(/*! ./UI */ "./src/UI.ts"));
+__exportStar(__webpack_require__(/*! ./Canvas */ "./src/Canvas.ts"), exports);
+__exportStar(__webpack_require__(/*! ./Create */ "./src/Create.ts"), exports);
+__exportStar(__webpack_require__(/*! ./Form */ "./src/Form.ts"), exports);
+__exportStar(__webpack_require__(/*! ./LinearAlgebra */ "./src/LinearAlgebra.ts"), exports);
+__exportStar(__webpack_require__(/*! ./Num */ "./src/Num.ts"), exports);
+__exportStar(__webpack_require__(/*! ./Op */ "./src/Op.ts"), exports);
+__exportStar(__webpack_require__(/*! ./Pt */ "./src/Pt.ts"), exports);
+__exportStar(__webpack_require__(/*! ./Space */ "./src/Space.ts"), exports);
+__exportStar(__webpack_require__(/*! ./Color */ "./src/Color.ts"), exports);
+__exportStar(__webpack_require__(/*! ./Util */ "./src/Util.ts"), exports);
+__exportStar(__webpack_require__(/*! ./Dom */ "./src/Dom.ts"), exports);
+__exportStar(__webpack_require__(/*! ./Svg */ "./src/Svg.ts"), exports);
+__exportStar(__webpack_require__(/*! ./Typography */ "./src/Typography.ts"), exports);
+__exportStar(__webpack_require__(/*! ./Physics */ "./src/Physics.ts"), exports);
+__exportStar(__webpack_require__(/*! ./Play */ "./src/Play.ts"), exports);
+__exportStar(__webpack_require__(/*! ./UI */ "./src/UI.ts"), exports);
 
 /***/ })
 

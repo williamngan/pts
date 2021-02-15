@@ -1,3 +1,0 @@
---require ts-node/register
---reporter dot
-src/test/*.spec.ts

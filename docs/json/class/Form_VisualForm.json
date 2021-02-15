@@ -2,13 +2,13 @@
   "name": "VisualForm",
   "source": [
     [
-      "Form.ts",
+      "src/Form.ts",
       29,
       32
     ]
   ],
   "kind": "Class",
-  "id": 2933,
+  "id": 2914,
   "comment": "VisualForm is an abstract class that represents a form that can be used to express Pts visually.\nFor example, [`CanvasForm`](#link) is an implementation of VisualForm that draws on [`CanvasSpace`](#link) which represents a html canvas. Learn more about Space and Form in [this guide](../guide/Space-0500.html).",
   "constructor": [],
   "accessors": [
@@ -16,12 +16,12 @@
       "name": "currentFont",
       "source": [
         [
-          "Form.ts",
-          53,
+          "src/Form.ts",
+          52,
           17
         ]
       ],
-      "id": 2945,
+      "id": 2926,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -35,17 +35,17 @@
       "name": "filled",
       "source": [
         [
-          "Form.ts",
-          37,
+          "src/Form.ts",
+          38,
           12
         ],
         [
-          "Form.ts",
-          38,
+          "src/Form.ts",
+          39,
           12
         ]
       ],
-      "id": 2935,
+      "id": 2918,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -67,12 +67,12 @@
       "name": "ready",
       "source": [
         [
-          "Form.ts",
+          "src/Form.ts",
           18,
           11
         ]
       ],
-      "id": 3032,
+      "id": 3013,
       "flags": {},
       "overrides": false,
       "inherits": "Form.ready",
@@ -86,17 +86,17 @@
       "name": "stroked",
       "source": [
         [
-          "Form.ts",
+          "src/Form.ts",
           45,
           13
         ],
         [
-          "Form.ts",
+          "src/Form.ts",
           46,
           13
         ]
       ],
-      "id": 2940,
+      "id": 2922,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -120,12 +120,12 @@
       "name": "alpha",
       "source": [
         [
-          "Form.ts",
-          75,
+          "src/Form.ts",
+          74,
           7
         ]
       ],
-      "id": 2954,
+      "id": 2935,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -150,12 +150,12 @@
       "name": "arc",
       "source": [
         [
-          "Form.ts",
-          183,
+          "src/Form.ts",
+          182,
           14
         ]
       ],
-      "id": 2994,
+      "id": 2975,
       "flags": {
         "isAbstract": true
       },
@@ -206,12 +206,12 @@
       "name": "circle",
       "source": [
         [
-          "Form.ts",
-          153,
+          "src/Form.ts",
+          152,
           17
         ]
       ],
-      "id": 2985,
+      "id": 2966,
       "flags": {
         "isAbstract": true
       },
@@ -243,12 +243,12 @@
       "name": "circles",
       "source": [
         [
-          "Form.ts",
-          161,
+          "src/Form.ts",
+          160,
           9
         ]
       ],
-      "id": 2988,
+      "id": 2969,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -273,12 +273,12 @@
       "name": "fill",
       "source": [
         [
-          "Form.ts",
-          84,
+          "src/Form.ts",
+          83,
           6
         ]
       ],
-      "id": 2957,
+      "id": 2938,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -303,12 +303,12 @@
       "name": "fillOnly",
       "source": [
         [
-          "Form.ts",
-          93,
+          "src/Form.ts",
+          92,
           10
         ]
       ],
-      "id": 2960,
+      "id": 2941,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -333,12 +333,12 @@
       "name": "font",
       "source": [
         [
-          "Form.ts",
-          254,
+          "src/Form.ts",
+          253,
           15
         ]
       ],
-      "id": 3024,
+      "id": 3005,
       "flags": {
         "isAbstract": true
       },
@@ -398,12 +398,12 @@
       "name": "line",
       "source": [
         [
-          "Form.ts",
-          190,
+          "src/Form.ts",
+          189,
           15
         ]
       ],
-      "id": 3001,
+      "id": 2982,
       "flags": {
         "isAbstract": true
       },
@@ -430,12 +430,12 @@
       "name": "lines",
       "source": [
         [
-          "Form.ts",
-          197,
+          "src/Form.ts",
+          196,
           7
         ]
       ],
-      "id": 3004,
+      "id": 2985,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -460,12 +460,12 @@
       "name": "point",
       "source": [
         [
-          "Form.ts",
-          130,
+          "src/Form.ts",
+          129,
           16
         ]
       ],
-      "id": 2975,
+      "id": 2956,
       "flags": {
         "isAbstract": true
       },
@@ -509,12 +509,12 @@
       "name": "points",
       "source": [
         [
-          "Form.ts",
-          139,
+          "src/Form.ts",
+          138,
           8
         ]
       ],
-      "id": 2980,
+      "id": 2961,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -551,12 +551,12 @@
       "name": "polygon",
       "source": [
         [
-          "Form.ts",
-          206,
+          "src/Form.ts",
+          205,
           18
         ]
       ],
-      "id": 3007,
+      "id": 2988,
       "flags": {
         "isAbstract": true
       },
@@ -583,12 +583,12 @@
       "name": "polygons",
       "source": [
         [
-          "Form.ts",
-          213,
+          "src/Form.ts",
+          212,
           10
         ]
       ],
-      "id": 3010,
+      "id": 2991,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -613,12 +613,12 @@
       "name": "rect",
       "source": [
         [
-          "Form.ts",
-          223,
+          "src/Form.ts",
+          222,
           15
         ]
       ],
-      "id": 3013,
+      "id": 2994,
       "flags": {
         "isAbstract": true
       },
@@ -645,12 +645,12 @@
       "name": "rects",
       "source": [
         [
-          "Form.ts",
-          230,
+          "src/Form.ts",
+          229,
           7
         ]
       ],
-      "id": 3016,
+      "id": 2997,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -675,12 +675,12 @@
       "name": "reset",
       "source": [
         [
-          "Form.ts",
-          68,
+          "src/Form.ts",
+          67,
           16
         ]
       ],
-      "id": 2952,
+      "id": 2933,
       "flags": {
         "isAbstract": true
       },
@@ -700,12 +700,12 @@
       "name": "squares",
       "source": [
         [
-          "Form.ts",
-          170,
+          "src/Form.ts",
+          169,
           9
         ]
       ],
-      "id": 2991,
+      "id": 2972,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -730,12 +730,12 @@
       "name": "stroke",
       "source": [
         [
-          "Form.ts",
-          106,
+          "src/Form.ts",
+          105,
           8
         ]
       ],
-      "id": 2963,
+      "id": 2944,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -778,12 +778,12 @@
       "name": "strokeOnly",
       "source": [
         [
-          "Form.ts",
-          118,
+          "src/Form.ts",
+          117,
           12
         ]
       ],
-      "id": 2969,
+      "id": 2950,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -826,12 +826,12 @@
       "name": "text",
       "source": [
         [
-          "Form.ts",
-          241,
+          "src/Form.ts",
+          240,
           15
         ]
       ],
-      "id": 3019,
+      "id": 3000,
       "flags": {
         "isAbstract": true
       },

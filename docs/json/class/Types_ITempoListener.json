@@ -2,13 +2,13 @@
   "name": "ITempoListener",
   "source": [
     [
-      "Types.ts",
+      "src/Types.ts",
       171,
       26
     ]
   ],
   "kind": "Typealias",
-  "id": 1616,
+  "id": 1625,
   "comment": "Typescript only: a listener object created by Tempo class",
   "constructor": [],
   "accessors": [],

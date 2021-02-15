@@ -1,6 +1,7 @@
 "use strict";
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Body = exports.Particle = exports.World = void 0;
 const Pt_1 = require("./Pt");
 const Op_1 = require("./Op");
 const Num_1 = require("./Num");

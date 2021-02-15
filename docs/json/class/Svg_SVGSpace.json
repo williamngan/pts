@@ -2,25 +2,25 @@
   "name": "SVGSpace",
   "source": [
     [
-      "Svg.ts",
+      "src/Svg.ts",
       17,
       21
     ]
   ],
   "kind": "Class",
-  "id": 6930,
+  "id": 6797,
   "comment": "**[Experimental]** SVGSpace extends [`DOMSpace`](#link) to support SVG elements. Use it with [`SVGForm`](#link) to express Pts in svg.\nYou may easily switch between html canvas and svg renderings with minimal code changes. Check out the [Space guide](../guide/Space-0500.html) for details, and see [a demo here](../demo/index.html?name=svgform.scope).",
   "constructor": [
     {
       "name": "constructor",
       "source": [
         [
-          "Svg.ts",
+          "src/Svg.ts",
           19,
           37
         ]
       ],
-      "id": 6932,
+      "id": 6799,
       "flags": {},
       "overrides": "DOMSpace.__constructor",
       "inherits": false,
@@ -58,17 +58,17 @@
       "name": "autoResize",
       "source": [
         [
-          "Dom.ts",
+          "src/Dom.ts",
           138,
           16
         ],
         [
-          "Dom.ts",
+          "src/Dom.ts",
           148,
           16
         ]
       ],
-      "id": 6971,
+      "id": 6838,
       "flags": {},
       "overrides": false,
       "inherits": "DOMSpace.autoResize",
@@ -90,17 +90,17 @@
       "name": "background",
       "source": [
         [
-          "Dom.ts",
+          "src/Dom.ts",
           228,
           16
         ],
         [
-          "Dom.ts",
+          "src/Dom.ts",
           232,
           16
         ]
       ],
-      "id": 6985,
+      "id": 6852,
       "flags": {},
       "overrides": false,
       "inherits": "DOMSpace.background",
@@ -122,12 +122,12 @@
       "name": "center",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           239,
           12
         ]
       ],
-      "id": 7119,
+      "id": 6986,
       "flags": {},
       "overrides": false,
       "inherits": "Space.center",
@@ -141,17 +141,17 @@
       "name": "customRendering",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           208,
           21
         ],
         [
-          "Space.ts",
+          "src/Space.ts",
           209,
           21
         ]
       ],
-      "id": 7099,
+      "id": 6966,
       "flags": {},
       "overrides": false,
       "inherits": "Space.customRendering",
@@ -173,12 +173,12 @@
       "name": "element",
       "source": [
         [
-          "Svg.ts",
+          "src/Svg.ts",
           49,
           13
         ]
       ],
-      "id": 6938,
+      "id": 6805,
       "flags": {},
       "overrides": "DOMSpace.element",
       "inherits": false,
@@ -192,12 +192,12 @@
       "name": "height",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           251,
           12
         ]
       ],
-      "id": 7123,
+      "id": 6990,
       "flags": {},
       "overrides": false,
       "inherits": "Space.height",
@@ -211,12 +211,12 @@
       "name": "innerBound",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           227,
           23
         ]
       ],
-      "id": 7115,
+      "id": 6982,
       "flags": {
         "isPublic": true
       },
@@ -232,12 +232,12 @@
       "name": "isPlaying",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           215,
           15
         ]
       ],
-      "id": 7111,
+      "id": 6978,
       "flags": {},
       "overrides": false,
       "inherits": "Space.isPlaying",
@@ -251,12 +251,12 @@
       "name": "outerBound",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           221,
           16
         ]
       ],
-      "id": 7113,
+      "id": 6980,
       "flags": {},
       "overrides": false,
       "inherits": "Space.outerBound",
@@ -270,12 +270,12 @@
       "name": "parent",
       "source": [
         [
-          "Dom.ts",
+          "src/Dom.ts",
           202,
           12
         ]
       ],
-      "id": 6978,
+      "id": 6845,
       "flags": {},
       "overrides": false,
       "inherits": "DOMSpace.parent",
@@ -289,12 +289,12 @@
       "name": "pointer",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           297,
           20
         ]
       ],
-      "id": 7011,
+      "id": 6878,
       "flags": {
         "isPublic": true
       },
@@ -310,12 +310,12 @@
       "name": "ready",
       "source": [
         [
-          "Dom.ts",
+          "src/Dom.ts",
           210,
           11
         ]
       ],
-      "id": 6980,
+      "id": 6847,
       "flags": {},
       "overrides": false,
       "inherits": "DOMSpace.ready",
@@ -329,12 +329,12 @@
       "name": "size",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           233,
           10
         ]
       ],
-      "id": 7117,
+      "id": 6984,
       "flags": {},
       "overrides": false,
       "inherits": "Space.size",
@@ -348,12 +348,12 @@
       "name": "width",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           245,
           11
         ]
       ],
-      "id": 7121,
+      "id": 6988,
       "flags": {},
       "overrides": false,
       "inherits": "Space.width",
@@ -369,12 +369,12 @@
       "name": "add",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           54,
           5
         ]
       ],
-      "id": 7074,
+      "id": 6941,
       "flags": {},
       "overrides": false,
       "inherits": "Space.add",
@@ -399,12 +399,12 @@
       "name": "bindCanvas",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           308,
           12
         ]
       ],
-      "id": 7013,
+      "id": 6880,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.bindCanvas",
@@ -441,12 +441,12 @@
       "name": "bindMouse",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           330,
           11
         ]
       ],
-      "id": 7022,
+      "id": 6889,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.bindMouse",
@@ -476,12 +476,12 @@
       "name": "bindTouch",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           359,
           11
         ]
       ],
-      "id": 7025,
+      "id": 6892,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.bindTouch",
@@ -511,12 +511,12 @@
       "name": "clear",
       "source": [
         [
-          "Dom.ts",
+          "src/Dom.ts",
           217,
           7
         ]
       ],
-      "id": 6982,
+      "id": 6849,
       "flags": {},
       "overrides": "Space.clear",
       "inherits": "DOMSpace.clear",
@@ -541,12 +541,12 @@
       "name": "dispose",
       "source": [
         [
-          "Dom.ts",
+          "src/Dom.ts",
           298,
           9
         ]
       ],
-      "id": 7005,
+      "id": 6872,
       "flags": {},
       "overrides": false,
       "inherits": "DOMSpace.dispose",
@@ -564,12 +564,12 @@
       "name": "getForm",
       "source": [
         [
-          "Svg.ts",
+          "src/Svg.ts",
           43,
           9
         ]
       ],
-      "id": 6936,
+      "id": 6803,
       "flags": {},
       "overrides": "DOMSpace.getForm",
       "inherits": false,
@@ -592,12 +592,12 @@
       "name": "pause",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           160,
           7
         ]
       ],
-      "id": 7085,
+      "id": 6952,
       "flags": {},
       "overrides": false,
       "inherits": "Space.pause",
@@ -622,12 +622,12 @@
       "name": "play",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           95,
           6
         ]
       ],
-      "id": 7077,
+      "id": 6944,
       "flags": {},
       "overrides": false,
       "inherits": "Space.play",
@@ -652,12 +652,12 @@
       "name": "playItems",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           133,
           21
         ]
       ],
-      "id": 7082,
+      "id": 6949,
       "flags": {
         "isProtected": true
       },
@@ -684,12 +684,12 @@
       "name": "playOnce",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           189,
           10
         ]
       ],
-      "id": 7093,
+      "id": 6960,
       "flags": {},
       "overrides": false,
       "inherits": "Space.playOnce",
@@ -714,12 +714,12 @@
       "name": "refresh",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           39,
           9
         ]
       ],
-      "id": 7071,
+      "id": 6938,
       "flags": {},
       "overrides": false,
       "inherits": "Space.refresh",
@@ -744,12 +744,12 @@
       "name": "remove",
       "source": [
         [
-          "Svg.ts",
+          "src/Svg.ts",
           98,
           8
         ]
       ],
-      "id": 6949,
+      "id": 6816,
       "flags": {},
       "overrides": "Space.remove",
       "inherits": false,
@@ -774,12 +774,12 @@
       "name": "removeAll",
       "source": [
         [
-          "Svg.ts",
+          "src/Svg.ts",
           112,
           11
         ]
       ],
-      "id": 6952,
+      "id": 6819,
       "flags": {},
       "overrides": "Space.removeAll",
       "inherits": false,
@@ -797,12 +797,12 @@
       "name": "render",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           199,
           18
         ]
       ],
-      "id": 7096,
+      "id": 6963,
       "flags": {
         "isProtected": true
       },
@@ -829,12 +829,12 @@
       "name": "replay",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           123,
           8
         ]
       ],
-      "id": 7080,
+      "id": 6947,
       "flags": {},
       "overrides": false,
       "inherits": "Space.replay",
@@ -852,12 +852,12 @@
       "name": "resize",
       "source": [
         [
-          "Svg.ts",
+          "src/Svg.ts",
           59,
           8
         ]
       ],
-      "id": 6940,
+      "id": 6807,
       "flags": {},
       "overrides": "DOMSpace.resize",
       "inherits": false,
@@ -888,12 +888,12 @@
       "name": "resume",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           169,
           8
         ]
       ],
-      "id": 7088,
+      "id": 6955,
       "flags": {},
       "overrides": false,
       "inherits": "Space.resume",
@@ -911,12 +911,12 @@
       "name": "setup",
       "source": [
         [
-          "Dom.ts",
+          "src/Dom.ts",
           116,
           7
         ]
       ],
-      "id": 6965,
+      "id": 6832,
       "flags": {},
       "overrides": false,
       "inherits": "DOMSpace.setup",
@@ -946,12 +946,12 @@
       "name": "stop",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           179,
           6
         ]
       ],
-      "id": 7090,
+      "id": 6957,
       "flags": {},
       "overrides": false,
       "inherits": "Space.stop",
@@ -976,12 +976,12 @@
       "name": "style",
       "source": [
         [
-          "Dom.ts",
+          "src/Dom.ts",
           241,
           7
         ]
       ],
-      "id": 6989,
+      "id": 6856,
       "flags": {},
       "overrides": false,
       "inherits": "DOMSpace.style",
@@ -1018,12 +1018,12 @@
       "name": "styles",
       "source": [
         [
-          "Dom.ts",
+          "src/Dom.ts",
           254,
           8
         ]
       ],
-      "id": 6994,
+      "id": 6861,
       "flags": {},
       "overrides": false,
       "inherits": "DOMSpace.styles",
@@ -1054,12 +1054,12 @@
       "name": "touchesToPoints",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           385,
           17
         ]
       ],
-      "id": 7028,
+      "id": 6895,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.touchesToPoints",
@@ -1090,12 +1090,12 @@
       "name": "unbindCanvas",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           318,
           14
         ]
       ],
-      "id": 7018,
+      "id": 6885,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.unbindCanvas",
@@ -1126,12 +1126,12 @@
       "name": "createElement",
       "source": [
         [
-          "Dom.ts",
+          "src/Dom.ts",
           74,
           22
         ]
       ],
-      "id": 6960,
+      "id": 6827,
       "flags": {
         "isStatic": true
       },
@@ -1170,12 +1170,12 @@
       "name": "getInlineStyles",
       "source": [
         [
-          "Dom.ts",
+          "src/Dom.ts",
           284,
           24
         ]
       ],
-      "id": 7002,
+      "id": 6869,
       "flags": {
         "isStatic": true
       },
@@ -1207,12 +1207,12 @@
       "name": "setAttr",
       "source": [
         [
-          "Dom.ts",
+          "src/Dom.ts",
           268,
           16
         ]
       ],
-      "id": 6998,
+      "id": 6865,
       "flags": {
         "isStatic": true
       },
@@ -1245,12 +1245,12 @@
       "name": "svgElement",
       "source": [
         [
-          "Svg.ts",
+          "src/Svg.ts",
           78,
           19
         ]
       ],
-      "id": 6944,
+      "id": 6811,
       "flags": {
         "isStatic": true
       },
@@ -1292,12 +1292,12 @@
       "name": "bound",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           16,
           17
         ]
       ],
-      "id": 7060,
+      "id": 6927,
       "flags": {
         "isProtected": true
       },
@@ -1310,12 +1310,12 @@
       "name": "id",
       "source": [
         [
-          "Dom.ts",
+          "src/Dom.ts",
           20,
           4
         ]
       ],
-      "id": 6956,
+      "id": 6823,
       "flags": {},
       "type": "id",
       "overrides": "Space.id",
@@ -1326,12 +1326,12 @@
       "name": "playerCount",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           20,
           23
         ]
       ],
-      "id": 7066,
+      "id": 6933,
       "flags": {
         "isProtected": true
       },
@@ -1344,12 +1344,12 @@
       "name": "players",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           19,
           19
         ]
       ],
-      "id": 7065,
+      "id": 6932,
       "flags": {
         "isProtected": true
       },

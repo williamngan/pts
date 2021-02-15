@@ -2,13 +2,13 @@
   "name": "AnimateCallbackFn",
   "source": [
     [
-      "Types.ts",
+      "src/Types.ts",
       45,
       29
     ]
   ],
   "kind": "Typealias",
-  "id": 1562,
+  "id": 1571,
   "comment": "Typescript only: AnimateCallbackFn is a type alias that represents a callback function for animation. It accepts parameters to keep track of current time, current frame-time, and current space instance.",
   "constructor": [],
   "accessors": [],

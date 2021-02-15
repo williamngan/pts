@@ -1,4 +1,4 @@
-var sourceRoot = "https://github.com/williamngan/pts/blob/master/src/";
+var sourceRoot = "https://github.com/williamngan/pts/blob/master/";
 var _search = [];
 
 function loadJSON( url, callback ) {

@@ -2,25 +2,25 @@
   "name": "Particle",
   "source": [
     [
-      "Physics.ts",
+      "src/Physics.ts",
       347,
       21
     ]
   ],
   "kind": "Class",
-  "id": 5935,
+  "id": 5856,
   "comment": "Particle is a subclass of [`Pt`](#link) that has radius and mass. It's usually added into [`World`](#link) to create physics simulations.\nSee [a demo here](../demo/index.html?name=physics.particles).",
   "constructor": [
     {
       "name": "constructor",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           356,
           23
         ]
       ],
-      "id": 5943,
+      "id": 5864,
       "flags": {},
       "overrides": "Pt.__constructor",
       "inherits": false,
@@ -47,17 +47,17 @@
       "name": "body",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           395,
           10
         ],
         [
-          "Physics.ts",
+          "src/Physics.ts",
           396,
           10
         ]
       ],
-      "id": 5962,
+      "id": 5883,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -79,12 +79,12 @@
       "name": "changed",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           410,
           13
         ]
       ],
-      "id": 5970,
+      "id": 5891,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -98,17 +98,17 @@
       "name": "force",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           389,
           11
         ],
         [
-          "Physics.ts",
+          "src/Physics.ts",
           390,
           11
         ]
       ],
-      "id": 5958,
+      "id": 5879,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -130,17 +130,17 @@
       "name": "id",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           51,
           8
         ],
         [
-          "Pt.ts",
+          "src/Pt.ts",
           52,
           8
         ]
       ],
-      "id": 6001,
+      "id": 5922,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.id",
@@ -162,17 +162,17 @@
       "name": "lock",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           401,
           10
         ],
         [
-          "Physics.ts",
+          "src/Physics.ts",
           402,
           10
         ]
       ],
-      "id": 5966,
+      "id": 5887,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -194,17 +194,17 @@
       "name": "mass",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           371,
           10
         ],
         [
-          "Physics.ts",
+          "src/Physics.ts",
           372,
           10
         ]
       ],
-      "id": 5946,
+      "id": 5867,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -226,12 +226,12 @@
       "name": "position",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           416,
           14
         ]
       ],
-      "id": 5972,
+      "id": 5893,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -251,17 +251,17 @@
       "name": "previous",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           383,
           14
         ],
         [
-          "Physics.ts",
+          "src/Physics.ts",
           384,
           14
         ]
       ],
-      "id": 5954,
+      "id": 5875,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -283,17 +283,17 @@
       "name": "radius",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           377,
           12
         ],
         [
-          "Physics.ts",
+          "src/Physics.ts",
           378,
           12
         ]
       ],
-      "id": 5950,
+      "id": 5871,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -315,17 +315,17 @@
       "name": "w",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           75,
           7
         ],
         [
-          "Pt.ts",
+          "src/Pt.ts",
           76,
           7
         ]
       ],
-      "id": 6017,
+      "id": 5938,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.w",
@@ -347,17 +347,17 @@
       "name": "x",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           57,
           7
         ],
         [
-          "Pt.ts",
+          "src/Pt.ts",
           58,
           7
         ]
       ],
-      "id": 6005,
+      "id": 5926,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.x",
@@ -379,17 +379,17 @@
       "name": "y",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           63,
           7
         ],
         [
-          "Pt.ts",
+          "src/Pt.ts",
           64,
           7
         ]
       ],
-      "id": 6009,
+      "id": 5930,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.y",
@@ -411,17 +411,17 @@
       "name": "z",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           69,
           7
         ],
         [
-          "Pt.ts",
+          "src/Pt.ts",
           70,
           7
         ]
       ],
-      "id": 6013,
+      "id": 5934,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.z",
@@ -445,12 +445,12 @@
       "name": "$abs",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           334,
           6
         ]
       ],
-      "id": 6115,
+      "id": 6036,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$abs",
@@ -468,12 +468,12 @@
       "name": "$add",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           200,
           6
         ]
       ],
-      "id": 6067,
+      "id": 5988,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$add",
@@ -498,12 +498,12 @@
       "name": "$ceil",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           368,
           7
         ]
       ],
-      "id": 6123,
+      "id": 6044,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$ceil",
@@ -521,12 +521,12 @@
       "name": "$concat",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           181,
           9
         ]
       ],
-      "id": 6061,
+      "id": 5982,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$concat",
@@ -551,12 +551,12 @@
       "name": "$cross",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           300,
           8
         ]
       ],
-      "id": 6104,
+      "id": 6025,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$cross",
@@ -581,12 +581,12 @@
       "name": "$cross2D",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           293,
           10
         ]
       ],
-      "id": 6101,
+      "id": 6022,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$cross2D",
@@ -611,12 +611,12 @@
       "name": "$divide",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           251,
           9
         ]
       ],
-      "id": 6085,
+      "id": 6006,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$divide",
@@ -641,12 +641,12 @@
       "name": "$floor",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           351,
           8
         ]
       ],
-      "id": 6119,
+      "id": 6040,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$floor",
@@ -664,12 +664,12 @@
       "name": "$max",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           426,
           6
         ]
       ],
-      "id": 6142,
+      "id": 6063,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$max",
@@ -694,12 +694,12 @@
       "name": "$min",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           412,
           6
         ]
       ],
-      "id": 6139,
+      "id": 6060,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$min",
@@ -724,12 +724,12 @@
       "name": "$multiply",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           234,
           11
         ]
       ],
-      "id": 6079,
+      "id": 6000,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$multiply",
@@ -754,12 +754,12 @@
       "name": "$project",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           308,
           10
         ]
       ],
-      "id": 6107,
+      "id": 6028,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$project",
@@ -784,12 +784,12 @@
       "name": "$round",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           385,
           8
         ]
       ],
-      "id": 6127,
+      "id": 6048,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$round",
@@ -807,12 +807,12 @@
       "name": "$subtract",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           217,
           11
         ]
       ],
-      "id": 6073,
+      "id": 5994,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$subtract",
@@ -837,12 +837,12 @@
       "name": "$take",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           168,
           7
         ]
       ],
-      "id": 6058,
+      "id": 5979,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$take",
@@ -867,12 +867,12 @@
       "name": "$to",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           117,
           5
         ]
       ],
-      "id": 6030,
+      "id": 5951,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$to",
@@ -897,12 +897,12 @@
       "name": "$unit",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           279,
           7
         ]
       ],
-      "id": 6095,
+      "id": 6016,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$unit",
@@ -927,12 +927,12 @@
       "name": "abs",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           325,
           5
         ]
       ],
-      "id": 6113,
+      "id": 6034,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.abs",
@@ -950,12 +950,12 @@
       "name": "add",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           190,
           5
         ]
       ],
-      "id": 6064,
+      "id": 5985,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.add",
@@ -980,12 +980,12 @@
       "name": "addForce",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           438,
           10
         ]
       ],
-      "id": 5978,
+      "id": 5899,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1010,12 +1010,12 @@
       "name": "angle",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           440,
           7
         ]
       ],
-      "id": 6145,
+      "id": 6066,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.angle",
@@ -1040,12 +1040,12 @@
       "name": "angleBetween",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           450,
           14
         ]
       ],
-      "id": 6148,
+      "id": 6069,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.angleBetween",
@@ -1076,12 +1076,12 @@
       "name": "ceil",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           359,
           6
         ]
       ],
-      "id": 6121,
+      "id": 6042,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.ceil",
@@ -1099,12 +1099,12 @@
       "name": "clone",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           82,
           7
         ]
       ],
-      "id": 6021,
+      "id": 5942,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.clone",
@@ -1122,12 +1122,12 @@
       "name": "collide",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           488,
           9
         ]
       ],
-      "id": 5989,
+      "id": 5910,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1158,12 +1158,12 @@
       "name": "copyWithin",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
-          3584,
+          "node_modules/typescript/lib/lib.es5.d.ts",
+          3746,
           14
         ]
       ],
-      "id": 6180,
+      "id": 6101,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.copyWithin",
@@ -1200,12 +1200,12 @@
       "name": "divide",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           241,
           8
         ]
       ],
-      "id": 6082,
+      "id": 6003,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.divide",
@@ -1230,12 +1230,12 @@
       "name": "dot",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           286,
           5
         ]
       ],
-      "id": 6098,
+      "id": 6019,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.dot",
@@ -1257,38 +1257,15 @@
       ]
     },
     {
-      "name": "entries",
-      "source": [
-        [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es2015.iterable.d.ts",
-          444,
-          11
-        ]
-      ],
-      "id": 6348,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Float32Array.entries",
-      "signatures": [
-        {
-          "comment": "Returns an array of key, value pairs for every entry in the array",
-          "returns": "IterableIterator",
-          "returns_comment": false,
-          "parameters": [],
-          "tags": []
-        }
-      ]
-    },
-    {
       "name": "equals",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           92,
           8
         ]
       ],
-      "id": 6023,
+      "id": 5944,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.equals",
@@ -1319,12 +1296,12 @@
       "name": "every",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
-          3594,
+          "node_modules/typescript/lib/lib.es5.d.ts",
+          3756,
           9
         ]
       ],
-      "id": 6185,
+      "id": 6106,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.every",
@@ -1335,14 +1312,14 @@
           "returns_comment": false,
           "parameters": [
             {
-              "name": "callbackfn",
-              "comment": "A function that accepts up to three arguments. The every method calls\nthe callbackfn function for each element in array1 until the callbackfn returns false,\nor until the end of the array.",
+              "name": "predicate",
+              "comment": "A function that accepts up to three arguments. The every method calls\nthe predicate function for each element in the array until the predicate returns a value\nwhich is coercible to the Boolean value false, or until the end of the array.",
               "type": " Fn(value:number, index:number, array:Float32Array)",
               "default": false
             },
             {
               "name": "thisArg",
-              "comment": "An object to which the this keyword can refer in the callbackfn function.\nIf thisArg is omitted, undefined is used as the this value.\n",
+              "comment": "An object to which the this keyword can refer in the predicate function.\nIf thisArg is omitted, undefined is used as the this value.\n",
               "type": "any",
               "default": false
             }
@@ -1355,12 +1332,12 @@
       "name": "fill",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
-          3604,
+          "node_modules/typescript/lib/lib.es5.d.ts",
+          3766,
           8
         ]
       ],
-      "id": 6194,
+      "id": 6115,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.fill",
@@ -1397,12 +1374,12 @@
       "name": "filter",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
-          3613,
+          "node_modules/typescript/lib/lib.es5.d.ts",
+          3775,
           10
         ]
       ],
-      "id": 6199,
+      "id": 6120,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.filter",
@@ -1413,14 +1390,14 @@
           "returns_comment": false,
           "parameters": [
             {
-              "name": "callbackfn",
-              "comment": "A function that accepts up to three arguments. The filter method calls\nthe callbackfn function one time for each element in the array.",
+              "name": "predicate",
+              "comment": "A function that accepts up to three arguments. The filter method calls\nthe predicate function one time for each element in the array.",
               "type": " Fn(value:number, index:number, array:Float32Array)",
               "default": false
             },
             {
               "name": "thisArg",
-              "comment": "An object to which the this keyword can refer in the callbackfn function.\nIf thisArg is omitted, undefined is used as the this value.\n",
+              "comment": "An object to which the this keyword can refer in the predicate function.\nIf thisArg is omitted, undefined is used as the this value.\n",
               "type": "any",
               "default": false
             }
@@ -1433,12 +1410,12 @@
       "name": "find",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
-          3624,
+          "node_modules/typescript/lib/lib.es5.d.ts",
+          3786,
           8
         ]
       ],
-      "id": 6208,
+      "id": 6129,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.find",
@@ -1469,12 +1446,12 @@
       "name": "findIndex",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
-          3635,
+          "node_modules/typescript/lib/lib.es5.d.ts",
+          3797,
           13
         ]
       ],
-      "id": 6217,
+      "id": 6138,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.findIndex",
@@ -1505,12 +1482,12 @@
       "name": "floor",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           342,
           7
         ]
       ],
-      "id": 6117,
+      "id": 6038,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.floor",
@@ -1528,12 +1505,12 @@
       "name": "forEach",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
-          3644,
+          "node_modules/typescript/lib/lib.es5.d.ts",
+          3806,
           11
         ]
       ],
-      "id": 6226,
+      "id": 6147,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.forEach",
@@ -1564,12 +1541,12 @@
       "name": "hit",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           477,
           5
         ]
       ],
-      "id": 5986,
+      "id": 5907,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1599,12 +1576,12 @@
       "name": "indexOf",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
-          3652,
+          "node_modules/typescript/lib/lib.es5.d.ts",
+          3814,
           11
         ]
       ],
-      "id": 6235,
+      "id": 6156,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.indexOf",
@@ -1635,12 +1612,12 @@
       "name": "join",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
-          3659,
+          "node_modules/typescript/lib/lib.es5.d.ts",
+          3821,
           8
         ]
       ],
-      "id": 6239,
+      "id": 6160,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.join",
@@ -1662,38 +1639,15 @@
       ]
     },
     {
-      "name": "keys",
-      "source": [
-        [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es2015.iterable.d.ts",
-          448,
-          8
-        ]
-      ],
-      "id": 6350,
-      "flags": {},
-      "overrides": false,
-      "inherits": "Float32Array.keys",
-      "signatures": [
-        {
-          "comment": "Returns an list of keys in the array",
-          "returns": "IterableIterator",
-          "returns_comment": false,
-          "parameters": [],
-          "tags": []
-        }
-      ]
-    },
-    {
       "name": "lastIndexOf",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
-          3667,
+          "node_modules/typescript/lib/lib.es5.d.ts",
+          3829,
           15
         ]
       ],
-      "id": 6242,
+      "id": 6163,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.lastIndexOf",
@@ -1724,12 +1678,12 @@
       "name": "magnitude",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           263,
           11
         ]
       ],
-      "id": 6090,
+      "id": 6011,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.magnitude",
@@ -1747,12 +1701,12 @@
       "name": "magnitudeSq",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           257,
           13
         ]
       ],
-      "id": 6088,
+      "id": 6009,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.magnitudeSq",
@@ -1770,12 +1724,12 @@
       "name": "map",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
-          3682,
+          "node_modules/typescript/lib/lib.es5.d.ts",
+          3844,
           7
         ]
       ],
-      "id": 6247,
+      "id": 6168,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.map",
@@ -1806,12 +1760,12 @@
       "name": "maxValue",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           403,
           10
         ]
       ],
-      "id": 6134,
+      "id": 6055,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.maxValue",
@@ -1829,12 +1783,12 @@
       "name": "minValue",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           394,
           10
         ]
       ],
-      "id": 6129,
+      "id": 6050,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.minValue",
@@ -1852,12 +1806,12 @@
       "name": "multiply",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           224,
           10
         ]
       ],
-      "id": 6076,
+      "id": 5997,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.multiply",
@@ -1882,12 +1836,12 @@
       "name": "op",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           141,
           4
         ]
       ],
-      "id": 6038,
+      "id": 5959,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.op",
@@ -1917,12 +1871,12 @@
       "name": "ops",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           155,
           5
         ]
       ],
-      "id": 6048,
+      "id": 5969,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.ops",
@@ -1952,12 +1906,12 @@
       "name": "projectScalar",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           317,
           15
         ]
       ],
-      "id": 6110,
+      "id": 6031,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.projectScalar",
@@ -1982,22 +1936,22 @@
       "name": "reduce",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
-          3694,
+          "node_modules/typescript/lib/lib.es5.d.ts",
+          3856,
           10
         ],
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
-          3695,
+          "node_modules/typescript/lib/lib.es5.d.ts",
+          3857,
           10
         ],
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
-          3707,
+          "node_modules/typescript/lib/lib.es5.d.ts",
+          3869,
           10
         ]
       ],
-      "id": 6256,
+      "id": 6177,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reduce",
@@ -2062,22 +2016,22 @@
       "name": "reduceRight",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
-          3719,
+          "node_modules/typescript/lib/lib.es5.d.ts",
+          3881,
           15
         ],
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
-          3720,
+          "node_modules/typescript/lib/lib.es5.d.ts",
+          3882,
           15
         ],
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
-          3732,
+          "node_modules/typescript/lib/lib.es5.d.ts",
+          3894,
           15
         ]
       ],
-      "id": 6284,
+      "id": 6205,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reduceRight",
@@ -2142,12 +2096,12 @@
       "name": "reflect2D",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           495,
           11
         ]
       ],
-      "id": 6166,
+      "id": 6087,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.reflect2D",
@@ -2178,12 +2132,12 @@
       "name": "reverse",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
-          3737,
+          "node_modules/typescript/lib/lib.es5.d.ts",
+          3899,
           11
         ]
       ],
-      "id": 6312,
+      "id": 6233,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reverse",
@@ -2201,12 +2155,12 @@
       "name": "rotate2D",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           472,
           10
         ]
       ],
-      "id": 6156,
+      "id": 6077,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.rotate2D",
@@ -2243,12 +2197,12 @@
       "name": "round",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           376,
           7
         ]
       ],
-      "id": 6125,
+      "id": 6046,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.round",
@@ -2266,12 +2220,12 @@
       "name": "scale",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           460,
           7
         ]
       ],
-      "id": 6152,
+      "id": 6073,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.scale",
@@ -2302,12 +2256,12 @@
       "name": "set",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
-          3744,
+          "node_modules/typescript/lib/lib.es5.d.ts",
+          3906,
           7
         ]
       ],
-      "id": 6314,
+      "id": 6235,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.set",
@@ -2338,12 +2292,12 @@
       "name": "shear2D",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           484,
           9
         ]
       ],
-      "id": 6161,
+      "id": 6082,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.shear2D",
@@ -2380,12 +2334,12 @@
       "name": "size",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           427,
           6
         ]
       ],
-      "id": 5975,
+      "id": 5896,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2410,12 +2364,12 @@
       "name": "slice",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
-          3751,
+          "node_modules/typescript/lib/lib.es5.d.ts",
+          3913,
           9
         ]
       ],
-      "id": 6318,
+      "id": 6239,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.slice",
@@ -2433,7 +2387,7 @@
             },
             {
               "name": "end",
-              "comment": "The end of the specified portion of the array.\n",
+              "comment": "The end of the specified portion of the array. This is exclusive of the element at the index 'end'.\n",
               "type": "number",
               "default": false
             }
@@ -2446,12 +2400,12 @@
       "name": "some",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
-          3761,
+          "node_modules/typescript/lib/lib.es5.d.ts",
+          3923,
           8
         ]
       ],
-      "id": 6322,
+      "id": 6243,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.some",
@@ -2462,14 +2416,14 @@
           "returns_comment": false,
           "parameters": [
             {
-              "name": "callbackfn",
-              "comment": "A function that accepts up to three arguments. The some method calls the\ncallbackfn function for each element in array1 until the callbackfn returns true, or until\nthe end of the array.",
+              "name": "predicate",
+              "comment": "A function that accepts up to three arguments. The some method calls\nthe predicate function for each element in the array until the predicate returns a value\nwhich is coercible to the Boolean value true, or until the end of the array.",
               "type": " Fn(value:number, index:number, array:Float32Array)",
               "default": false
             },
             {
               "name": "thisArg",
-              "comment": "An object to which the this keyword can refer in the callbackfn function.\nIf thisArg is omitted, undefined is used as the this value.\n",
+              "comment": "An object to which the this keyword can refer in the predicate function.\nIf thisArg is omitted, undefined is used as the this value.\n",
               "type": "any",
               "default": false
             }
@@ -2482,12 +2436,12 @@
       "name": "sort",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
-          3768,
+          "node_modules/typescript/lib/lib.es5.d.ts",
+          3934,
           8
         ]
       ],
-      "id": 6331,
+      "id": 6252,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.sort",
@@ -2499,7 +2453,7 @@
           "parameters": [
             {
               "name": "compareFn",
-              "comment": "The name of the function used to determine the order of the elements. If\nomitted, the elements are sorted in ascending, ASCII character order.\n",
+              "comment": "Function used to determine the order of the elements. It is expected to return\na negative value if first argument is less than second argument, zero if they're equal and a positive\nvalue otherwise. If omitted, the elements are sorted in ascending, ASCII character order.\n```ts\n[11,2,22,1].sort((a, b) => a - b)\n```\n",
               "type": " Fn(a:number, b:number)",
               "default": false
             }
@@ -2512,12 +2466,12 @@
       "name": "subarray",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
-          3776,
+          "node_modules/typescript/lib/lib.es5.d.ts",
+          3942,
           12
         ]
       ],
-      "id": 6338,
+      "id": 6259,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.subarray",
@@ -2548,12 +2502,12 @@
       "name": "subtract",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           207,
           10
         ]
       ],
-      "id": 6070,
+      "id": 5991,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.subtract",
@@ -2578,12 +2532,12 @@
       "name": "to",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           104,
           4
         ]
       ],
-      "id": 6027,
+      "id": 5948,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.to",
@@ -2608,12 +2562,12 @@
       "name": "toAngle",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           128,
           9
         ]
       ],
-      "id": 6033,
+      "id": 5954,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.toAngle",
@@ -2650,12 +2604,12 @@
       "name": "toArray",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           512,
           9
         ]
       ],
-      "id": 6170,
+      "id": 6091,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.toArray",
@@ -2673,12 +2627,12 @@
       "name": "toBound",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           528,
           9
         ]
       ],
-      "id": 6174,
+      "id": 6095,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.toBound",
@@ -2696,12 +2650,12 @@
       "name": "toGroup",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           520,
           9
         ]
       ],
-      "id": 6172,
+      "id": 6093,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.toGroup",
@@ -2719,12 +2673,12 @@
       "name": "toLocaleString",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
-          3781,
+          "node_modules/typescript/lib/lib.es5.d.ts",
+          3947,
           18
         ]
       ],
-      "id": 6342,
+      "id": 6263,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.toLocaleString",
@@ -2742,12 +2696,12 @@
       "name": "toString",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           530,
           10
         ]
       ],
-      "id": 5993,
+      "id": 5914,
       "flags": {},
       "overrides": "Pt.toString",
       "inherits": false,
@@ -2765,12 +2719,12 @@
       "name": "unit",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           270,
           6
         ]
       ],
-      "id": 6092,
+      "id": 6013,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.unit",
@@ -2792,22 +2746,22 @@
       ]
     },
     {
-      "name": "values",
+      "name": "valueOf",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es2015.iterable.d.ts",
-          452,
-          10
+          "node_modules/typescript/lib/lib.es5.d.ts",
+          3955,
+          11
         ]
       ],
-      "id": 6352,
+      "id": 6265,
       "flags": {},
       "overrides": false,
-      "inherits": "Float32Array.values",
+      "inherits": "Float32Array.valueOf",
       "signatures": [
         {
-          "comment": "Returns an list of values in the array",
-          "returns": "IterableIterator",
+          "comment": "Returns the primitive value of the specified object.",
+          "returns": "Float32Array",
           "returns_comment": false,
           "parameters": [],
           "tags": []
@@ -2818,12 +2772,12 @@
       "name": "verlet",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           450,
           8
         ]
       ],
-      "id": 5981,
+      "id": 5902,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2860,12 +2814,12 @@
       "name": "make",
       "source": [
         [
-          "Pt.ts",
+          "src/Pt.ts",
           37,
           13
         ]
       ],
-      "id": 5996,
+      "id": 5917,
       "flags": {
         "isStatic": true
       },
@@ -2907,13 +2861,15 @@
       "name": "BYTES_PER_ELEMENT",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
-          3558,
+          "node_modules/typescript/lib/lib.es5.d.ts",
+          3720,
           30
         ]
       ],
-      "id": 6176,
-      "flags": {},
+      "id": 6097,
+      "flags": {
+        "isReadonly": true
+      },
       "type": "BYTES_PER_ELEMENT",
       "overrides": false,
       "inherits": "Float32Array.BYTES_PER_ELEMENT",
@@ -2923,13 +2879,15 @@
       "name": "buffer",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
-          3563,
+          "node_modules/typescript/lib/lib.es5.d.ts",
+          3725,
           19
         ]
       ],
-      "id": 6177,
-      "flags": {},
+      "id": 6098,
+      "flags": {
+        "isReadonly": true
+      },
       "type": "buffer",
       "overrides": false,
       "inherits": "Float32Array.buffer",
@@ -2939,13 +2897,15 @@
       "name": "byteLength",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
-          3568,
+          "node_modules/typescript/lib/lib.es5.d.ts",
+          3730,
           23
         ]
       ],
-      "id": 6178,
-      "flags": {},
+      "id": 6099,
+      "flags": {
+        "isReadonly": true
+      },
       "type": "byteLength",
       "overrides": false,
       "inherits": "Float32Array.byteLength",
@@ -2955,13 +2915,15 @@
       "name": "byteOffset",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
-          3573,
+          "node_modules/typescript/lib/lib.es5.d.ts",
+          3735,
           23
         ]
       ],
-      "id": 6179,
-      "flags": {},
+      "id": 6100,
+      "flags": {
+        "isReadonly": true
+      },
       "type": "byteOffset",
       "overrides": false,
       "inherits": "Float32Array.byteOffset",
@@ -2971,13 +2933,15 @@
       "name": "length",
       "source": [
         [
-          "/Users/william/Art/pts/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts",
-          3672,
+          "node_modules/typescript/lib/lib.es5.d.ts",
+          3834,
           19
         ]
       ],
-      "id": 6246,
-      "flags": {},
+      "id": 6167,
+      "flags": {
+        "isReadonly": true
+      },
       "type": "length",
       "overrides": false,
       "inherits": "Float32Array.length",

@@ -2,13 +2,13 @@
   "name": "DefaultFormStyle",
   "source": [
     [
-      "Types.ts",
+      "src/Types.ts",
       210,
       28
     ]
   ],
   "kind": "Typealias",
-  "id": 1646,
+  "id": 1655,
   "comment": "Typescript only: default style object",
   "constructor": [],
   "accessors": [],

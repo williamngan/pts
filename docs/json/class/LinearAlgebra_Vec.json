@@ -2,7 +2,7 @@
   "name": "Vec",
   "source": [
     [
-      "LinearAlgebra.ts",
+      "src/LinearAlgebra.ts",
       11,
       16
     ]
@@ -17,7 +17,7 @@
       "name": "abs",
       "source": [
         [
-          "LinearAlgebra.ts",
+          "src/LinearAlgebra.ts",
           124,
           12
         ]
@@ -49,7 +49,7 @@
       "name": "add",
       "source": [
         [
-          "LinearAlgebra.ts",
+          "src/LinearAlgebra.ts",
           17,
           12
         ]
@@ -87,7 +87,7 @@
       "name": "ceil",
       "source": [
         [
-          "LinearAlgebra.ts",
+          "src/LinearAlgebra.ts",
           142,
           13
         ]
@@ -119,7 +119,7 @@
       "name": "cross",
       "source": [
         [
-          "LinearAlgebra.ts",
+          "src/LinearAlgebra.ts",
           97,
           14
         ]
@@ -157,7 +157,7 @@
       "name": "cross2D",
       "source": [
         [
-          "LinearAlgebra.ts",
+          "src/LinearAlgebra.ts",
           90,
           16
         ]
@@ -195,7 +195,7 @@
       "name": "divide",
       "source": [
         [
-          "LinearAlgebra.ts",
+          "src/LinearAlgebra.ts",
           60,
           15
         ]
@@ -233,7 +233,7 @@
       "name": "dot",
       "source": [
         [
-          "LinearAlgebra.ts",
+          "src/LinearAlgebra.ts",
           77,
           12
         ]
@@ -271,7 +271,7 @@
       "name": "floor",
       "source": [
         [
-          "LinearAlgebra.ts",
+          "src/LinearAlgebra.ts",
           133,
           14
         ]
@@ -303,7 +303,7 @@
       "name": "magnitude",
       "source": [
         [
-          "LinearAlgebra.ts",
+          "src/LinearAlgebra.ts",
           105,
           18
         ]
@@ -335,7 +335,7 @@
       "name": "map",
       "source": [
         [
-          "LinearAlgebra.ts",
+          "src/LinearAlgebra.ts",
           200,
           12
         ]
@@ -373,7 +373,7 @@
       "name": "max",
       "source": [
         [
-          "LinearAlgebra.ts",
+          "src/LinearAlgebra.ts",
           160,
           12
         ]
@@ -405,7 +405,7 @@
       "name": "min",
       "source": [
         [
-          "LinearAlgebra.ts",
+          "src/LinearAlgebra.ts",
           175,
           12
         ]
@@ -437,7 +437,7 @@
       "name": "multiply",
       "source": [
         [
-          "LinearAlgebra.ts",
+          "src/LinearAlgebra.ts",
           43,
           17
         ]
@@ -475,7 +475,7 @@
       "name": "round",
       "source": [
         [
-          "LinearAlgebra.ts",
+          "src/LinearAlgebra.ts",
           151,
           14
         ]
@@ -507,7 +507,7 @@
       "name": "subtract",
       "source": [
         [
-          "LinearAlgebra.ts",
+          "src/LinearAlgebra.ts",
           30,
           17
         ]
@@ -545,7 +545,7 @@
       "name": "sum",
       "source": [
         [
-          "LinearAlgebra.ts",
+          "src/LinearAlgebra.ts",
           189,
           12
         ]
@@ -577,7 +577,7 @@
       "name": "unit",
       "source": [
         [
-          "LinearAlgebra.ts",
+          "src/LinearAlgebra.ts",
           113,
           13
         ]

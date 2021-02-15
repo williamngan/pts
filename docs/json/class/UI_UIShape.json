@@ -2,13 +2,13 @@
   "name": "UIShape",
   "source": [
     [
-      "UI.ts",
+      "src/UI.ts",
       11,
       20
     ]
   ],
   "kind": "Objectliteral",
-  "id": 1227,
+  "id": 1236,
   "comment": "**[Experimental]** A set of string constatns to represent different UI types, for use in [`UI`](#link) instances.",
   "constructor": [],
   "accessors": [],
@@ -18,12 +18,12 @@
       "name": "circle",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           12,
           32
         ]
       ],
-      "id": 1229,
+      "id": 1238,
       "flags": {},
       "type": "circle",
       "overrides": false,
@@ -34,12 +34,12 @@
       "name": "line",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           12,
           90
         ]
       ],
-      "id": 1232,
+      "id": 1241,
       "flags": {},
       "type": "line",
       "overrides": false,
@@ -50,12 +50,12 @@
       "name": "polygon",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           12,
           51
         ]
       ],
-      "id": 1230,
+      "id": 1239,
       "flags": {},
       "type": "polygon",
       "overrides": false,
@@ -66,12 +66,12 @@
       "name": "polyline",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           12,
           72
         ]
       ],
-      "id": 1231,
+      "id": 1240,
       "flags": {},
       "type": "polyline",
       "overrides": false,
@@ -82,12 +82,12 @@
       "name": "rectangle",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           12,
           11
         ]
       ],
-      "id": 1228,
+      "id": 1237,
       "flags": {},
       "type": "rectangle",
       "overrides": false,

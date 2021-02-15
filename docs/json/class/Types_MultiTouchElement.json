@@ -2,13 +2,13 @@
   "name": "MultiTouchElement",
   "source": [
     [
-      "Types.ts",
+      "src/Types.ts",
       86,
       34
     ]
   ],
   "kind": "Interface",
-  "id": 1277,
+  "id": 1286,
   "comment": "Typescript only: MultiTouchElement is an interface that represents an element that can handle touch events.",
   "constructor": [],
   "accessors": [],
@@ -17,12 +17,12 @@
       "name": "addEventListener",
       "source": [
         [
-          "Types.ts",
+          "src/Types.ts",
           87,
           18
         ]
       ],
-      "id": 1278,
+      "id": 1287,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -53,12 +53,12 @@
       "name": "removeEventListener",
       "source": [
         [
-          "Types.ts",
+          "src/Types.ts",
           88,
           21
         ]
       ],
-      "id": 1282,
+      "id": 1291,
       "flags": {},
       "overrides": false,
       "inherits": false,

@@ -1,6 +1,7 @@
 "use strict";
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Util = exports.Const = void 0;
 const Pt_1 = require("./Pt");
 exports.Const = {
     xy: "xy",
@@ -181,6 +182,6 @@ class Util {
         return (!Array.isArray(it)) ? [...it] : it;
     }
 }
-Util._warnLevel = "mute";
 exports.Util = Util;
+Util._warnLevel = "mute";
 //# sourceMappingURL=Util.js.map

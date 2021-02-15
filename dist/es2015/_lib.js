@@ -15,6 +15,7 @@ export * from "./Physics";
 export * from "./UI";
 export * from "./Play";
 export * from "./Image";
+export * from "./Types";
 import * as _Canvas from './Canvas';
 export let namespace = (scope) => {
     let lib = module.exports;

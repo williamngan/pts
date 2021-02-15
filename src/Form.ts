@@ -28,8 +28,9 @@ export abstract class Form {
 */
 export abstract class VisualForm extends Form {
   
-  
   protected _filled = true;
+  protected _stroked = true;
+  protected _font:Font = new Font( 14, "sans-serif");
 
   /**
    * Check whether this form currently has fill style. 
@@ -37,15 +38,13 @@ export abstract class VisualForm extends Form {
   get filled():boolean { return this._filled; }
   set filled( b:boolean ) { this._filled = b; }
   
-  protected _stroked = true;
 
   /**
    * Check whether this form currently has stroke style.
    */
   get stroked():boolean { return this._stroked; }
   set stroked( b:boolean ) { this._stroked = b; }
-  
-  protected _font:Font = new Font( 14, "sans-serif");
+
 
   /**
    * Get the current font in use in this form.

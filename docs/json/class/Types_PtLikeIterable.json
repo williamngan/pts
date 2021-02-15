@@ -2,13 +2,13 @@
   "name": "PtLikeIterable",
   "source": [
     [
-      "Types.ts",
+      "src/Types.ts",
       33,
       26
     ]
   ],
   "kind": "Typealias",
-  "id": 1560,
+  "id": 1569,
   "comment": "Typescript only: PtLikeIterable is an alias of GroupLike | Iterable<PtLike> | number[][]",
   "constructor": [],
   "accessors": [],

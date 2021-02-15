@@ -1,6 +1,7 @@
 "use strict";
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Typography = void 0;
 const Pt_1 = require("./Pt");
 class Typography {
     static textWidthEstimator(fn, samples = ["M", "n", "."], distribution = [0.06, 0.8, 0.14]) {

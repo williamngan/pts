@@ -2,13 +2,13 @@
   "name": "ITempoResponses",
   "source": [
     [
-      "Types.ts",
+      "src/Types.ts",
       185,
       27
     ]
   ],
   "kind": "Typealias",
-  "id": 1626,
+  "id": 1635,
   "comment": "Typescript only: the return type of `tempo.every(...)`",
   "constructor": [],
   "accessors": [],

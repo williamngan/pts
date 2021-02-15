@@ -3,15 +3,17 @@ import { Pt } from "./Pt";
 import { PtLike, GroupLike } from "./Types";
 export declare abstract class Form {
     protected _ready: boolean;
-    readonly ready: boolean;
+    get ready(): boolean;
 }
 export declare abstract class VisualForm extends Form {
     protected _filled: boolean;
-    filled: boolean;
     protected _stroked: boolean;
-    stroked: boolean;
     protected _font: Font;
-    readonly currentFont: Font;
+    get filled(): boolean;
+    set filled(b: boolean);
+    get stroked(): boolean;
+    set stroked(b: boolean);
+    get currentFont(): Font;
     protected _multiple(groups: GroupLike[], shape: string, ...rest: any[]): this;
     abstract reset(): this;
     alpha(a: number): this;
@@ -41,6 +43,6 @@ export declare class Font {
     style: string;
     weight: string;
     constructor(size?: number, face?: string, weight?: string, style?: string, lineHeight?: number);
-    readonly value: string;
+    get value(): string;
     toString(): string;
 }

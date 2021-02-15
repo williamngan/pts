@@ -2,7 +2,7 @@
   "name": "Curve",
   "source": [
     [
-      "Op.ts",
+      "src/Op.ts",
       1495,
       18
     ]
@@ -17,7 +17,7 @@
       "name": "bezier",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           1684,
           15
         ]
@@ -55,7 +55,7 @@
       "name": "bezierStep",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           1713,
           19
         ]
@@ -93,7 +93,7 @@
       "name": "bspline",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           1739,
           16
         ]
@@ -137,7 +137,7 @@
       "name": "bsplineStep",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           1773,
           20
         ]
@@ -175,7 +175,7 @@
       "name": "bsplineTensionStep",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           1799,
           27
         ]
@@ -219,7 +219,7 @@
       "name": "cardinal",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           1614,
           17
         ]
@@ -263,7 +263,7 @@
       "name": "cardinalStep",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           1648,
           21
         ]
@@ -307,7 +307,7 @@
       "name": "catmullRom",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           1554,
           19
         ]
@@ -345,7 +345,7 @@
       "name": "catmullRomStep",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           1588,
           23
         ]
@@ -383,7 +383,7 @@
       "name": "controlPoints",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           1517,
           22
         ]
@@ -427,7 +427,7 @@
       "name": "getSteps",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           1501,
           17
         ]

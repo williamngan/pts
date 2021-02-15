@@ -1,6 +1,7 @@
 "use strict";
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.SVGForm = exports.SVGSpace = void 0;
 const Form_1 = require("./Form");
 const Num_1 = require("./Num");
 const Util_1 = require("./Util");
@@ -365,7 +366,7 @@ class SVGForm extends Form_1.VisualForm {
         return this;
     }
 }
+exports.SVGForm = SVGForm;
 SVGForm.groupID = 0;
 SVGForm.domID = 0;
-exports.SVGForm = SVGForm;
 //# sourceMappingURL=Svg.js.map

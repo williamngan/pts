@@ -1,6 +1,7 @@
 "use strict";
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Mat = exports.Vec = void 0;
 const Pt_1 = require("./Pt");
 const Op_1 = require("./Op");
 class Vec {

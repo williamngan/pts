@@ -2,7 +2,7 @@
   "name": "Rectangle",
   "source": [
     [
-      "Op.ts",
+      "src/Op.ts",
       400,
       22
     ]
@@ -17,7 +17,7 @@
       "name": "boundingBox",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           518,
           20
         ]
@@ -49,7 +49,7 @@
       "name": "center",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           479,
           15
         ]
@@ -81,7 +81,7 @@
       "name": "corners",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           491,
           16
         ]
@@ -113,7 +113,7 @@
       "name": "from",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           409,
           13
         ]
@@ -157,7 +157,7 @@
       "name": "fromCenter",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           434,
           19
         ]
@@ -201,7 +201,7 @@
       "name": "fromTopLeft",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           421,
           20
         ]
@@ -245,7 +245,7 @@
       "name": "halves",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           566,
           15
         ]
@@ -289,7 +289,7 @@
       "name": "hasIntersectRect2D",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           594,
           27
         ]
@@ -333,7 +333,7 @@
       "name": "intersectRect2D",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           615,
           24
         ]
@@ -371,7 +371,7 @@
       "name": "polygon",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           541,
           16
         ]
@@ -403,7 +403,7 @@
       "name": "quadrants",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           551,
           18
         ]
@@ -441,7 +441,7 @@
       "name": "sides",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           504,
           14
         ]
@@ -473,7 +473,7 @@
       "name": "size",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           469,
           13
         ]
@@ -505,7 +505,7 @@
       "name": "toCircle",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           446,
           17
         ]
@@ -543,7 +543,7 @@
       "name": "toSquare",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           457,
           17
         ]
@@ -581,7 +581,7 @@
       "name": "withinBound",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           582,
           20
         ]

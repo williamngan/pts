@@ -2,13 +2,13 @@
   "name": "IPt",
   "source": [
     [
-      "Types.ts",
+      "src/Types.ts",
       10,
       20
     ]
   ],
   "kind": "Interface",
-  "id": 1248,
+  "id": 1257,
   "comment": "Typescript only: IPt is an interface that represents an object with x, y, z, w properties.",
   "constructor": [],
   "accessors": [],
@@ -19,12 +19,12 @@
       "name": "w",
       "source": [
         [
-          "Types.ts",
+          "src/Types.ts",
           14,
           3
         ]
       ],
-      "id": 1252,
+      "id": 1261,
       "flags": {
         "isOptional": true
       },
@@ -37,12 +37,12 @@
       "name": "x",
       "source": [
         [
-          "Types.ts",
+          "src/Types.ts",
           11,
           3
         ]
       ],
-      "id": 1249,
+      "id": 1258,
       "flags": {
         "isOptional": true
       },
@@ -55,12 +55,12 @@
       "name": "y",
       "source": [
         [
-          "Types.ts",
+          "src/Types.ts",
           12,
           3
         ]
       ],
-      "id": 1250,
+      "id": 1259,
       "flags": {
         "isOptional": true
       },
@@ -73,12 +73,12 @@
       "name": "z",
       "source": [
         [
-          "Types.ts",
+          "src/Types.ts",
           13,
           3
         ]
       ],
-      "id": 1251,
+      "id": 1260,
       "flags": {
         "isOptional": true
       },

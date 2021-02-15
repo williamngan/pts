@@ -954,12 +954,6 @@
     8
   ],
   [
-    "Color_Color#function_entries",
-    "Color.entries",
-    "Function",
-    8
-  ],
-  [
     "Color_Color#function_equals",
     "Color.equals",
     "Function",
@@ -1016,12 +1010,6 @@
   [
     "Color_Color#function_join",
     "Color.join",
-    "Function",
-    8
-  ],
-  [
-    "Color_Color#function_keys",
-    "Color.keys",
     "Function",
     8
   ],
@@ -1230,8 +1218,8 @@
     8
   ],
   [
-    "Color_Color#function_values",
-    "Color.values",
+    "Color_Color#function_valueOf",
+    "Color.valueOf",
     "Function",
     8
   ],
@@ -1590,12 +1578,6 @@
     8
   ],
   [
-    "Create_Delaunay#function_copyWithin",
-    "Delaunay.copyWithin",
-    "Function",
-    8
-  ],
-  [
     "Create_Delaunay#function_delaunay",
     "Delaunay.delaunay",
     "Function",
@@ -1608,38 +1590,14 @@
     8
   ],
   [
-    "Create_Delaunay#function_entries",
-    "Delaunay.entries",
-    "Function",
-    8
-  ],
-  [
     "Create_Delaunay#function_every",
     "Delaunay.every",
     "Function",
     8
   ],
   [
-    "Create_Delaunay#function_fill",
-    "Delaunay.fill",
-    "Function",
-    8
-  ],
-  [
     "Create_Delaunay#function_filter",
     "Delaunay.filter",
-    "Function",
-    8
-  ],
-  [
-    "Create_Delaunay#function_find",
-    "Delaunay.find",
-    "Function",
-    8
-  ],
-  [
-    "Create_Delaunay#function_findIndex",
-    "Delaunay.findIndex",
     "Function",
     8
   ],
@@ -1676,12 +1634,6 @@
   [
     "Create_Delaunay#function_join",
     "Delaunay.join",
-    "Function",
-    8
-  ],
-  [
-    "Create_Delaunay#function_keys",
-    "Delaunay.keys",
     "Function",
     8
   ],
@@ -1880,12 +1832,6 @@
   [
     "Create_Delaunay#function_unshift",
     "Delaunay.unshift",
-    "Function",
-    8
-  ],
-  [
-    "Create_Delaunay#function_values",
-    "Delaunay.values",
     "Function",
     8
   ],
@@ -2148,12 +2094,6 @@
     8
   ],
   [
-    "Create_Noise#function_entries",
-    "Noise.entries",
-    "Function",
-    8
-  ],
-  [
     "Create_Noise#function_equals",
     "Noise.equals",
     "Function",
@@ -2216,12 +2156,6 @@
   [
     "Create_Noise#function_join",
     "Noise.join",
-    "Function",
-    8
-  ],
-  [
-    "Create_Noise#function_keys",
-    "Noise.keys",
     "Function",
     8
   ],
@@ -2436,8 +2370,8 @@
     8
   ],
   [
-    "Create_Noise#function_values",
-    "Noise.values",
+    "Create_Noise#function_valueOf",
+    "Noise.valueOf",
     "Function",
     8
   ],
@@ -4944,20 +4878,8 @@
     8
   ],
   [
-    "Physics_Body#function_copyWithin",
-    "Body.copyWithin",
-    "Function",
-    8
-  ],
-  [
     "Physics_Body#function_divide",
     "Body.divide",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Body#function_entries",
-    "Body.entries",
     "Function",
     8
   ],
@@ -4968,26 +4890,8 @@
     8
   ],
   [
-    "Physics_Body#function_fill",
-    "Body.fill",
-    "Function",
-    8
-  ],
-  [
     "Physics_Body#function_filter",
     "Body.filter",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Body#function_find",
-    "Body.find",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Body#function_findIndex",
-    "Body.findIndex",
     "Function",
     8
   ],
@@ -5030,12 +4934,6 @@
   [
     "Physics_Body#function_join",
     "Body.join",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Body#function_keys",
-    "Body.keys",
     "Function",
     8
   ],
@@ -5252,12 +5150,6 @@
   [
     "Physics_Body#function_unshift",
     "Body.unshift",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Body#function_values",
-    "Body.values",
     "Function",
     8
   ],
@@ -5574,12 +5466,6 @@
     8
   ],
   [
-    "Physics_Particle#function_entries",
-    "Particle.entries",
-    "Function",
-    8
-  ],
-  [
     "Physics_Particle#function_equals",
     "Particle.equals",
     "Function",
@@ -5642,12 +5528,6 @@
   [
     "Physics_Particle#function_join",
     "Particle.join",
-    "Function",
-    8
-  ],
-  [
-    "Physics_Particle#function_keys",
-    "Particle.keys",
     "Function",
     8
   ],
@@ -5850,8 +5730,8 @@
     8
   ],
   [
-    "Physics_Particle#function_values",
-    "Particle.values",
+    "Physics_Particle#function_valueOf",
+    "Particle.valueOf",
     "Function",
     8
   ],
@@ -6468,20 +6348,8 @@
     8
   ],
   [
-    "Pt_Bound#function_copyWithin",
-    "Bound.copyWithin",
-    "Function",
-    8
-  ],
-  [
     "Pt_Bound#function_divide",
     "Bound.divide",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Bound#function_entries",
-    "Bound.entries",
     "Function",
     8
   ],
@@ -6492,26 +6360,8 @@
     8
   ],
   [
-    "Pt_Bound#function_fill",
-    "Bound.fill",
-    "Function",
-    8
-  ],
-  [
     "Pt_Bound#function_filter",
     "Bound.filter",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Bound#function_find",
-    "Bound.find",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Bound#function_findIndex",
-    "Bound.findIndex",
     "Function",
     8
   ],
@@ -6554,12 +6404,6 @@
   [
     "Pt_Bound#function_join",
     "Bound.join",
-    "Function",
-    8
-  ],
-  [
-    "Pt_Bound#function_keys",
-    "Bound.keys",
     "Function",
     8
   ],
@@ -6750,12 +6594,6 @@
     8
   ],
   [
-    "Pt_Bound#function_values",
-    "Bound.values",
-    "Function",
-    8
-  ],
-  [
     "Pt_Bound#function_zipSlice",
     "Bound.zipSlice",
     "Function",
@@ -6882,6 +6720,18 @@
     8
   ],
   [
+    "Pt_Group#function_[Symbol.iterator]",
+    "Group.[Symbol.iterator]",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Group#function_[Symbol.unscopables]",
+    "Group.[Symbol.unscopables]",
+    "Function",
+    8
+  ],
+  [
     "Pt_Group#function_add",
     "Group.add",
     "Function",
@@ -6980,6 +6830,12 @@
   [
     "Pt_Group#function_forEachPt",
     "Group.forEachPt",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Group#function_includes",
+    "Group.includes",
     "Function",
     8
   ],
@@ -7236,6 +7092,12 @@
     0
   ],
   [
+    "Pt_Pt#property_[Symbol.toStringTag]",
+    "Pt.[Symbol.toStringTag]",
+    "Variable",
+    0
+  ],
+  [
     "Pt_Pt#property_buffer",
     "Pt.buffer",
     "Variable",
@@ -7398,6 +7260,12 @@
     8
   ],
   [
+    "Pt_Pt#function_[Symbol.iterator]",
+    "Pt.[Symbol.iterator]",
+    "Function",
+    8
+  ],
+  [
     "Pt_Pt#function_abs",
     "Pt.abs",
     "Function",
@@ -7502,6 +7370,12 @@
   [
     "Pt_Pt#function_forEach",
     "Pt.forEach",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Pt#function_includes",
+    "Pt.includes",
     "Function",
     8
   ],
@@ -7712,6 +7586,12 @@
   [
     "Pt_Pt#function_unit",
     "Pt.unit",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Pt#function_valueOf",
+    "Pt.valueOf",
     "Function",
     8
   ],

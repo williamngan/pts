@@ -2,7 +2,7 @@
   "name": "Mat",
   "source": [
     [
-      "LinearAlgebra.ts",
+      "src/LinearAlgebra.ts",
       213,
       16
     ]
@@ -17,7 +17,7 @@
       "name": "add",
       "source": [
         [
-          "LinearAlgebra.ts",
+          "src/LinearAlgebra.ts",
           221,
           12
         ]
@@ -55,7 +55,7 @@
       "name": "multiply",
       "source": [
         [
-          "LinearAlgebra.ts",
+          "src/LinearAlgebra.ts",
           245,
           17
         ]
@@ -105,7 +105,7 @@
       "name": "reflectAt2DMatrix",
       "source": [
         [
-          "LinearAlgebra.ts",
+          "src/LinearAlgebra.ts",
           422,
           26
         ]
@@ -143,7 +143,7 @@
       "name": "rotate2DMatrix",
       "source": [
         [
-          "LinearAlgebra.ts",
+          "src/LinearAlgebra.ts",
           351,
           23
         ]
@@ -181,7 +181,7 @@
       "name": "rotateAt2DMatrix",
       "source": [
         [
-          "LinearAlgebra.ts",
+          "src/LinearAlgebra.ts",
           398,
           25
         ]
@@ -225,7 +225,7 @@
       "name": "scale2DMatrix",
       "source": [
         [
-          "LinearAlgebra.ts",
+          "src/LinearAlgebra.ts",
           339,
           22
         ]
@@ -263,7 +263,7 @@
       "name": "scaleAt2DMatrix",
       "source": [
         [
-          "LinearAlgebra.ts",
+          "src/LinearAlgebra.ts",
           387,
           24
         ]
@@ -307,7 +307,7 @@
       "name": "shear2DMatrix",
       "source": [
         [
-          "LinearAlgebra.ts",
+          "src/LinearAlgebra.ts",
           363,
           22
         ]
@@ -345,7 +345,7 @@
       "name": "shearAt2DMatrix",
       "source": [
         [
-          "LinearAlgebra.ts",
+          "src/LinearAlgebra.ts",
           409,
           24
         ]
@@ -389,7 +389,7 @@
       "name": "transform2D",
       "source": [
         [
-          "LinearAlgebra.ts",
+          "src/LinearAlgebra.ts",
           329,
           20
         ]
@@ -427,7 +427,7 @@
       "name": "translate2DMatrix",
       "source": [
         [
-          "LinearAlgebra.ts",
+          "src/LinearAlgebra.ts",
           375,
           26
         ]
@@ -465,7 +465,7 @@
       "name": "transpose",
       "source": [
         [
-          "LinearAlgebra.ts",
+          "src/LinearAlgebra.ts",
           318,
           18
         ]
@@ -509,7 +509,7 @@
       "name": "zip",
       "source": [
         [
-          "LinearAlgebra.ts",
+          "src/LinearAlgebra.ts",
           305,
           12
         ]
@@ -553,7 +553,7 @@
       "name": "zipSlice",
       "source": [
         [
-          "LinearAlgebra.ts",
+          "src/LinearAlgebra.ts",
           289,
           17
         ]

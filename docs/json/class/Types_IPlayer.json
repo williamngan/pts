@@ -2,13 +2,13 @@
   "name": "IPlayer",
   "source": [
     [
-      "Types.ts",
+      "src/Types.ts",
       51,
       24
     ]
   ],
   "kind": "Interface",
-  "id": 1253,
+  "id": 1262,
   "comment": "Typescript only: IPlayer is an interface that represents a \"player\" object that can be added into a Space.",
   "constructor": [],
   "accessors": [],
@@ -17,12 +17,12 @@
       "name": "action",
       "source": [
         [
-          "Types.ts",
+          "src/Types.ts",
           55,
           8
         ]
       ],
-      "id": 1260,
+      "id": 1269,
       "flags": {
         "isOptional": true
       },
@@ -67,12 +67,12 @@
       "name": "resize",
       "source": [
         [
-          "Types.ts",
+          "src/Types.ts",
           54,
           8
         ]
       ],
-      "id": 1256,
+      "id": 1265,
       "flags": {
         "isOptional": true
       },
@@ -105,12 +105,12 @@
       "name": "start",
       "source": [
         [
-          "Types.ts",
+          "src/Types.ts",
           56,
           7
         ]
       ],
-      "id": 1266,
+      "id": 1275,
       "flags": {
         "isOptional": true
       },
@@ -146,12 +146,12 @@
       "name": "animate",
       "source": [
         [
-          "Types.ts",
+          "src/Types.ts",
           53,
           9
         ]
       ],
-      "id": 1255,
+      "id": 1264,
       "flags": {
         "isOptional": true
       },
@@ -164,12 +164,12 @@
       "name": "animateID",
       "source": [
         [
-          "Types.ts",
+          "src/Types.ts",
           52,
           11
         ]
       ],
-      "id": 1254,
+      "id": 1263,
       "flags": {
         "isOptional": true
       },

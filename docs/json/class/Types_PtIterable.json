@@ -2,13 +2,13 @@
   "name": "PtIterable",
   "source": [
     [
-      "Types.ts",
+      "src/Types.ts",
       39,
       22
     ]
   ],
   "kind": "Typealias",
-  "id": 1561,
+  "id": 1570,
   "comment": "Typescript only: PtIterable is an alias of GroupLike | Iterable<Pt>",
   "constructor": [],
   "accessors": [],

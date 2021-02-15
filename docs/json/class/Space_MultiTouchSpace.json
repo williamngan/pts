@@ -2,13 +2,13 @@
   "name": "MultiTouchSpace",
   "source": [
     [
-      "Space.ts",
+      "src/Space.ts",
       282,
       37
     ]
   ],
   "kind": "Class",
-  "id": 3140,
+  "id": 3121,
   "comment": "MultiTouchSpace is an abstract class that extends [`Space`](#link) to support user interactions via touch events.\nIt's extended through subclasses such as [`CanvasSpace`](#link) and [`SVGSpace`](#link).",
   "constructor": [],
   "accessors": [
@@ -16,12 +16,12 @@
       "name": "center",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           239,
           12
         ]
       ],
-      "id": 3260,
+      "id": 3241,
       "flags": {},
       "overrides": false,
       "inherits": "Space.center",
@@ -35,17 +35,17 @@
       "name": "customRendering",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           208,
           21
         ],
         [
-          "Space.ts",
+          "src/Space.ts",
           209,
           21
         ]
       ],
-      "id": 3240,
+      "id": 3221,
       "flags": {},
       "overrides": false,
       "inherits": "Space.customRendering",
@@ -67,12 +67,12 @@
       "name": "height",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           251,
           12
         ]
       ],
-      "id": 3264,
+      "id": 3245,
       "flags": {},
       "overrides": false,
       "inherits": "Space.height",
@@ -86,12 +86,12 @@
       "name": "innerBound",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           227,
           23
         ]
       ],
-      "id": 3256,
+      "id": 3237,
       "flags": {
         "isPublic": true
       },
@@ -107,12 +107,12 @@
       "name": "isPlaying",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           215,
           15
         ]
       ],
-      "id": 3252,
+      "id": 3233,
       "flags": {},
       "overrides": false,
       "inherits": "Space.isPlaying",
@@ -126,12 +126,12 @@
       "name": "outerBound",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           221,
           16
         ]
       ],
-      "id": 3254,
+      "id": 3235,
       "flags": {},
       "overrides": false,
       "inherits": "Space.outerBound",
@@ -145,12 +145,12 @@
       "name": "pointer",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           297,
           20
         ]
       ],
-      "id": 3146,
+      "id": 3127,
       "flags": {
         "isPublic": true
       },
@@ -166,12 +166,12 @@
       "name": "size",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           233,
           10
         ]
       ],
-      "id": 3258,
+      "id": 3239,
       "flags": {},
       "overrides": false,
       "inherits": "Space.size",
@@ -185,12 +185,12 @@
       "name": "width",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           245,
           11
         ]
       ],
-      "id": 3262,
+      "id": 3243,
       "flags": {},
       "overrides": false,
       "inherits": "Space.width",
@@ -206,12 +206,12 @@
       "name": "add",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           54,
           5
         ]
       ],
-      "id": 3210,
+      "id": 3191,
       "flags": {},
       "overrides": false,
       "inherits": "Space.add",
@@ -236,12 +236,12 @@
       "name": "bindCanvas",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           308,
           12
         ]
       ],
-      "id": 3148,
+      "id": 3129,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -278,12 +278,12 @@
       "name": "bindMouse",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           330,
           11
         ]
       ],
-      "id": 3157,
+      "id": 3138,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -313,12 +313,12 @@
       "name": "bindTouch",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           359,
           11
         ]
       ],
-      "id": 3160,
+      "id": 3141,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -348,12 +348,12 @@
       "name": "clear",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           265,
           16
         ]
       ],
-      "id": 3270,
+      "id": 3251,
       "flags": {
         "isAbstract": true
       },
@@ -373,12 +373,12 @@
       "name": "getForm",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           271,
           18
         ]
       ],
-      "id": 3272,
+      "id": 3253,
       "flags": {
         "isAbstract": true
       },
@@ -398,12 +398,12 @@
       "name": "pause",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           160,
           7
         ]
       ],
-      "id": 3226,
+      "id": 3207,
       "flags": {},
       "overrides": false,
       "inherits": "Space.pause",
@@ -428,12 +428,12 @@
       "name": "play",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           95,
           6
         ]
       ],
-      "id": 3218,
+      "id": 3199,
       "flags": {},
       "overrides": false,
       "inherits": "Space.play",
@@ -458,12 +458,12 @@
       "name": "playItems",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           133,
           21
         ]
       ],
-      "id": 3223,
+      "id": 3204,
       "flags": {
         "isProtected": true
       },
@@ -490,12 +490,12 @@
       "name": "playOnce",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           189,
           10
         ]
       ],
-      "id": 3234,
+      "id": 3215,
       "flags": {},
       "overrides": false,
       "inherits": "Space.playOnce",
@@ -520,12 +520,12 @@
       "name": "refresh",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           39,
           9
         ]
       ],
-      "id": 3207,
+      "id": 3188,
       "flags": {},
       "overrides": false,
       "inherits": "Space.refresh",
@@ -550,12 +550,12 @@
       "name": "remove",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           75,
           8
         ]
       ],
-      "id": 3213,
+      "id": 3194,
       "flags": {},
       "overrides": false,
       "inherits": "Space.remove",
@@ -580,12 +580,12 @@
       "name": "removeAll",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           84,
           11
         ]
       ],
-      "id": 3216,
+      "id": 3197,
       "flags": {},
       "overrides": false,
       "inherits": "Space.removeAll",
@@ -603,12 +603,12 @@
       "name": "render",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           199,
           18
         ]
       ],
-      "id": 3237,
+      "id": 3218,
       "flags": {
         "isProtected": true
       },
@@ -635,12 +635,12 @@
       "name": "replay",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           123,
           8
         ]
       ],
-      "id": 3221,
+      "id": 3202,
       "flags": {},
       "overrides": false,
       "inherits": "Space.replay",
@@ -658,12 +658,12 @@
       "name": "resize",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           259,
           17
         ]
       ],
-      "id": 3266,
+      "id": 3247,
       "flags": {
         "isAbstract": true
       },
@@ -696,12 +696,12 @@
       "name": "resume",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           169,
           8
         ]
       ],
-      "id": 3229,
+      "id": 3210,
       "flags": {},
       "overrides": false,
       "inherits": "Space.resume",
@@ -719,12 +719,12 @@
       "name": "stop",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           179,
           6
         ]
       ],
-      "id": 3231,
+      "id": 3212,
       "flags": {},
       "overrides": false,
       "inherits": "Space.stop",
@@ -749,12 +749,12 @@
       "name": "touchesToPoints",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           385,
           17
         ]
       ],
-      "id": 3163,
+      "id": 3144,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -785,12 +785,12 @@
       "name": "unbindCanvas",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           318,
           14
         ]
       ],
-      "id": 3153,
+      "id": 3134,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -824,12 +824,12 @@
       "name": "bound",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           16,
           17
         ]
       ],
-      "id": 3196,
+      "id": 3177,
       "flags": {
         "isProtected": true
       },
@@ -842,12 +842,12 @@
       "name": "id",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           15,
           4
         ]
       ],
-      "id": 3195,
+      "id": 3176,
       "flags": {},
       "type": "id",
       "overrides": false,
@@ -858,12 +858,12 @@
       "name": "playerCount",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           20,
           23
         ]
       ],
-      "id": 3202,
+      "id": 3183,
       "flags": {
         "isProtected": true
       },
@@ -876,12 +876,12 @@
       "name": "players",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           19,
           19
         ]
       ],
-      "id": 3201,
+      "id": 3182,
       "flags": {
         "isProtected": true
       },

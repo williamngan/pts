@@ -1,6 +1,7 @@
 "use strict";
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.HTMLForm = exports.HTMLSpace = exports.DOMSpace = void 0;
 const Space_1 = require("./Space");
 const Form_1 = require("./Form");
 const Util_1 = require("./Util");
@@ -447,7 +448,7 @@ class HTMLForm extends Form_1.VisualForm {
         return this;
     }
 }
+exports.HTMLForm = HTMLForm;
 HTMLForm.groupID = 0;
 HTMLForm.domID = 0;
-exports.HTMLForm = HTMLForm;
 //# sourceMappingURL=Dom.js.map

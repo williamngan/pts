@@ -2,7 +2,7 @@
   "name": "Shaping",
   "source": [
     [
-      "Num.ts",
+      "src/Num.ts",
       480,
       20
     ]
@@ -17,7 +17,7 @@
       "name": "bounceIn",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           682,
           17
         ]
@@ -55,7 +55,7 @@
       "name": "bounceInOut",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           711,
           20
         ]
@@ -93,7 +93,7 @@
       "name": "bounceOut",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           691,
           18
         ]
@@ -131,7 +131,7 @@
       "name": "circularIn",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           612,
           19
         ]
@@ -169,7 +169,7 @@
       "name": "circularInOut",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           631,
           22
         ]
@@ -207,7 +207,7 @@
       "name": "circularOut",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           621,
           20
         ]
@@ -245,7 +245,7 @@
       "name": "cliff",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           811,
           14
         ]
@@ -289,7 +289,7 @@
       "name": "cosineApprox",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           600,
           21
         ]
@@ -327,7 +327,7 @@
       "name": "cubicBezier",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           783,
           20
         ]
@@ -377,7 +377,7 @@
       "name": "cubicIn",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           524,
           16
         ]
@@ -415,7 +415,7 @@
       "name": "cubicInOut",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           543,
           19
         ]
@@ -453,7 +453,7 @@
       "name": "cubicOut",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           533,
           17
         ]
@@ -491,7 +491,7 @@
       "name": "elasticIn",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           642,
           18
         ]
@@ -535,7 +535,7 @@
       "name": "elasticInOut",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           665,
           21
         ]
@@ -579,7 +579,7 @@
       "name": "elasticOut",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           654,
           19
         ]
@@ -623,7 +623,7 @@
       "name": "exponentialIn",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           554,
           22
         ]
@@ -667,7 +667,7 @@
       "name": "exponentialOut",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           564,
           23
         ]
@@ -711,7 +711,7 @@
       "name": "linear",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           487,
           15
         ]
@@ -749,7 +749,7 @@
       "name": "logSigmoid",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           732,
           19
         ]
@@ -793,7 +793,7 @@
       "name": "quadraticBezier",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           764,
           24
         ]
@@ -837,7 +837,7 @@
       "name": "quadraticIn",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           496,
           20
         ]
@@ -875,7 +875,7 @@
       "name": "quadraticInOut",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           514,
           23
         ]
@@ -913,7 +913,7 @@
       "name": "quadraticOut",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           505,
           21
         ]
@@ -951,7 +951,7 @@
       "name": "quadraticTarget",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           795,
           24
         ]
@@ -984,7 +984,7 @@
               "name": "p1",
               "comment": "",
               "type": "PtLike",
-              "default": " [0.2, 0.35]"
+              "default": "[0.2, 0.35]"
             }
           ],
           "tags": []
@@ -995,7 +995,7 @@
       "name": "seat",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           749,
           13
         ]
@@ -1039,7 +1039,7 @@
       "name": "sigmoid",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           721,
           16
         ]
@@ -1083,7 +1083,7 @@
       "name": "sineIn",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           573,
           15
         ]
@@ -1121,7 +1121,7 @@
       "name": "sineInOut",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           591,
           18
         ]
@@ -1159,7 +1159,7 @@
       "name": "sineOut",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           582,
           16
         ]
@@ -1197,7 +1197,7 @@
       "name": "step",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           823,
           13
         ]

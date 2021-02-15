@@ -2,13 +2,13 @@
   "name": "UIPointerActions",
   "source": [
     [
-      "UI.ts",
+      "src/UI.ts",
       19,
       29
     ]
   ],
   "kind": "Objectliteral",
-  "id": 1233,
+  "id": 1242,
   "comment": "**[Experimental]** A set of string constants to represent different UI event types.",
   "constructor": [],
   "accessors": [],
@@ -18,12 +18,12 @@
       "name": "all",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           20,
           193
         ]
       ],
-      "id": 1246,
+      "id": 1255,
       "flags": {},
       "type": "all",
       "overrides": false,
@@ -34,12 +34,12 @@
       "name": "contextmenu",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           20,
           173
         ]
       ],
-      "id": 1245,
+      "id": 1254,
       "flags": {},
       "type": "contextmenu",
       "overrides": false,
@@ -50,12 +50,12 @@
       "name": "down",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           20,
           16
         ]
       ],
-      "id": 1235,
+      "id": 1244,
       "flags": {},
       "type": "down",
       "overrides": false,
@@ -66,12 +66,12 @@
       "name": "drag",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           20,
           44
         ]
       ],
-      "id": 1237,
+      "id": 1246,
       "flags": {},
       "type": "drag",
       "overrides": false,
@@ -82,12 +82,12 @@
       "name": "drop",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           20,
           76
         ]
       ],
-      "id": 1239,
+      "id": 1248,
       "flags": {},
       "type": "drop",
       "overrides": false,
@@ -98,12 +98,12 @@
       "name": "enter",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           20,
           135
         ]
       ],
-      "id": 1243,
+      "id": 1252,
       "flags": {},
       "type": "enter",
       "overrides": false,
@@ -114,12 +114,12 @@
       "name": "leave",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           20,
           151
         ]
       ],
-      "id": 1244,
+      "id": 1253,
       "flags": {},
       "type": "leave",
       "overrides": false,
@@ -130,12 +130,12 @@
       "name": "move",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           20,
           30
         ]
       ],
-      "id": 1236,
+      "id": 1245,
       "flags": {},
       "type": "move",
       "overrides": false,
@@ -146,12 +146,12 @@
       "name": "out",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           20,
           121
         ]
       ],
-      "id": 1242,
+      "id": 1251,
       "flags": {},
       "type": "out",
       "overrides": false,
@@ -162,12 +162,12 @@
       "name": "over",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           20,
           108
         ]
       ],
-      "id": 1241,
+      "id": 1250,
       "flags": {},
       "type": "over",
       "overrides": false,
@@ -178,12 +178,12 @@
       "name": "uidrag",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           20,
           60
         ]
       ],
-      "id": 1238,
+      "id": 1247,
       "flags": {},
       "type": "uidrag",
       "overrides": false,
@@ -194,12 +194,12 @@
       "name": "uidrop",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           20,
           92
         ]
       ],
-      "id": 1240,
+      "id": 1249,
       "flags": {},
       "type": "uidrop",
       "overrides": false,
@@ -210,12 +210,12 @@
       "name": "up",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           20,
           4
         ]
       ],
-      "id": 1234,
+      "id": 1243,
       "flags": {},
       "type": "up",
       "overrides": false,

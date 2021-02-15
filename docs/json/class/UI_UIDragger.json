@@ -2,25 +2,25 @@
   "name": "UIDragger",
   "source": [
     [
-      "UI.ts",
+      "src/UI.ts",
       431,
       22
     ]
   ],
   "kind": "Class",
-  "id": 1077,
+  "id": 1083,
   "comment": "[Experimental] A draggable UI that provides handler such as [`UIDragger.onDrag`](#link) and [`UIDragger.onDrop`](#link).",
   "constructor": [
     {
       "name": "constructor",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           436,
           32
         ]
       ],
-      "id": 1082,
+      "id": 1088,
       "flags": {},
       "overrides": "UIButton.__constructor",
       "inherits": false,
@@ -65,17 +65,17 @@
       "name": "group",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           109,
           11
         ],
         [
-          "UI.ts",
+          "src/UI.ts",
           110,
           11
         ]
       ],
-      "id": 1160,
+      "id": 1169,
       "flags": {},
       "overrides": false,
       "inherits": "UI.group",
@@ -97,17 +97,17 @@
       "name": "id",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           102,
           8
         ],
         [
-          "UI.ts",
+          "src/UI.ts",
           103,
           8
         ]
       ],
-      "id": 1156,
+      "id": 1165,
       "flags": {},
       "overrides": false,
       "inherits": "UI.id",
@@ -129,17 +129,17 @@
       "name": "shape",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           116,
           11
         ],
         [
-          "UI.ts",
+          "src/UI.ts",
           117,
           11
         ]
       ],
-      "id": 1164,
+      "id": 1173,
       "flags": {},
       "overrides": false,
       "inherits": "UI.shape",
@@ -163,12 +163,12 @@
       "name": "hold",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           190,
           16
         ]
       ],
-      "id": 1185,
+      "id": 1194,
       "flags": {
         "isProtected": true
       },
@@ -195,12 +195,12 @@
       "name": "listen",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           171,
           8
         ]
       ],
-      "id": 1180,
+      "id": 1189,
       "flags": {},
       "overrides": false,
       "inherits": "UI.listen",
@@ -237,12 +237,12 @@
       "name": "off",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           154,
           5
         ]
       ],
-      "id": 1176,
+      "id": 1185,
       "flags": {},
       "overrides": false,
       "inherits": "UI.off",
@@ -273,12 +273,12 @@
       "name": "offClick",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           373,
           10
         ]
       ],
-      "id": 1106,
+      "id": 1112,
       "flags": {},
       "overrides": false,
       "inherits": "UIButton.offClick",
@@ -303,12 +303,12 @@
       "name": "offContextMenu",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           393,
           16
         ]
       ],
-      "id": 1112,
+      "id": 1118,
       "flags": {},
       "overrides": false,
       "inherits": "UIButton.offContextMenu",
@@ -333,12 +333,12 @@
       "name": "offDrag",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           527,
           9
         ]
       ],
-      "id": 1094,
+      "id": 1100,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -363,12 +363,12 @@
       "name": "offDrop",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           547,
           9
         ]
       ],
-      "id": 1100,
+      "id": 1106,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -393,12 +393,12 @@
       "name": "offHover",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           418,
           10
         ]
       ],
-      "id": 1119,
+      "id": 1125,
       "flags": {},
       "overrides": false,
       "inherits": "UIButton.offHover",
@@ -429,12 +429,12 @@
       "name": "on",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           142,
           4
         ]
       ],
-      "id": 1172,
+      "id": 1181,
       "flags": {},
       "overrides": false,
       "inherits": "UI.on",
@@ -465,12 +465,12 @@
       "name": "onClick",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           363,
           9
         ]
       ],
-      "id": 1103,
+      "id": 1109,
       "flags": {},
       "overrides": false,
       "inherits": "UIButton.onClick",
@@ -495,12 +495,12 @@
       "name": "onContextMenu",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           383,
           15
         ]
       ],
-      "id": 1109,
+      "id": 1115,
       "flags": {},
       "overrides": false,
       "inherits": "UIButton.onContextMenu",
@@ -525,12 +525,12 @@
       "name": "onDrag",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           517,
           8
         ]
       ],
-      "id": 1091,
+      "id": 1097,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -555,12 +555,12 @@
       "name": "onDrop",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           537,
           8
         ]
       ],
-      "id": 1097,
+      "id": 1103,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -585,12 +585,12 @@
       "name": "onHover",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           404,
           9
         ]
       ],
-      "id": 1115,
+      "id": 1121,
       "flags": {},
       "overrides": false,
       "inherits": "UIButton.onHover",
@@ -621,12 +621,12 @@
       "name": "render",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           228,
           8
         ]
       ],
-      "id": 1197,
+      "id": 1206,
       "flags": {},
       "overrides": false,
       "inherits": "UI.render",
@@ -651,12 +651,12 @@
       "name": "state",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           126,
           7
         ]
       ],
-      "id": 1168,
+      "id": 1177,
       "flags": {},
       "overrides": false,
       "inherits": "UI.state",
@@ -687,12 +687,12 @@
       "name": "toString",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           236,
           10
         ]
       ],
-      "id": 1207,
+      "id": 1216,
       "flags": {},
       "overrides": false,
       "inherits": "UI.toString",
@@ -710,12 +710,12 @@
       "name": "unhold",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           201,
           18
         ]
       ],
-      "id": 1188,
+      "id": 1197,
       "flags": {
         "isProtected": true
       },
@@ -742,12 +742,12 @@
       "name": "fromCircle",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           73,
           19
         ]
       ],
-      "id": 1141,
+      "id": 1148,
       "flags": {
         "isStatic": true
       },
@@ -768,7 +768,7 @@
             {
               "name": "states",
               "comment": "optional a state object keep track of custom states for this UI",
-              "type": "__type",
+              "type": "",
               "default": false
             },
             {
@@ -786,12 +786,12 @@
       "name": "fromPolygon",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           84,
           20
         ]
       ],
-      "id": 1146,
+      "id": 1154,
       "flags": {
         "isStatic": true
       },
@@ -812,7 +812,7 @@
             {
               "name": "states",
               "comment": "optional a state object keep track of custom states for this UI",
-              "type": "__type",
+              "type": "",
               "default": false
             },
             {
@@ -830,12 +830,12 @@
       "name": "fromRectangle",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           62,
           22
         ]
       ],
-      "id": 1136,
+      "id": 1142,
       "flags": {
         "isStatic": true
       },
@@ -856,7 +856,7 @@
             {
               "name": "states",
               "comment": "optional a state object keep track of custom states for this UI",
-              "type": "__type",
+              "type": "",
               "default": false
             },
             {
@@ -874,12 +874,12 @@
       "name": "fromUI",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           94,
           15
         ]
       ],
-      "id": 1151,
+      "id": 1160,
       "flags": {
         "isStatic": true
       },
@@ -918,12 +918,12 @@
       "name": "track",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           217,
           14
         ]
       ],
-      "id": 1191,
+      "id": 1200,
       "flags": {
         "isStatic": true
       },

@@ -2,13 +2,13 @@
   "name": "IntersectContext",
   "source": [
     [
-      "Types.ts",
+      "src/Types.ts",
       136,
       28
     ]
   ],
   "kind": "Typealias",
-  "id": 1589,
+  "id": 1598,
   "comment": "Typescript only: IntersectContext represents a type of an object that store the intersection info.",
   "constructor": [],
   "accessors": [],

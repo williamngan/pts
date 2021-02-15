@@ -30,13 +30,13 @@ export type GroupLike = Group | Pt[];
 /**
  * Typescript only: PtLikeIterable is an alias of GroupLike | Iterable<PtLike> | number[][]
  */
-export type PtLikeIterable = GroupLike|PtLike[]|Iterable<PtLike>
+export type PtLikeIterable = GroupLike|PtLike[]|Iterable<PtLike>;
 
 
 /**
  * Typescript only: PtIterable is an alias of GroupLike | Iterable<Pt>
  */
-export type PtIterable = GroupLike|Pt[]|Iterable<Pt>
+export type PtIterable = GroupLike|Pt[]|Iterable<Pt>;
 
 
 /**
@@ -195,7 +195,7 @@ export type ISoundAnalyzer = {
   node:AnalyserNode,
   size:number,
   data:Uint8Array
-}
+};
 
 
 /**
@@ -214,4 +214,4 @@ export type DefaultFormStyle = {
   lineJoin?: string, 
   lineCap?: string,
   globalAlpha?: number
-}
+};

@@ -7,7 +7,7 @@ export declare class SVGSpace extends DOMSpace {
     protected _bgcolor: string;
     constructor(elem: string | Element, callback?: Function);
     getForm(): SVGForm;
-    readonly element: Element;
+    get element(): Element;
     resize(b: Bound, evt?: Event): this;
     static svgElement(parent: Element, name: string, id?: string): SVGElement;
     remove(player: IPlayer): this;
@@ -15,14 +15,14 @@ export declare class SVGSpace extends DOMSpace {
 }
 export declare class SVGForm extends VisualForm {
     protected _style: {
-        "filled": boolean;
-        "stroked": boolean;
-        "fill": string;
-        "stroke": string;
+        filled: boolean;
+        stroked: boolean;
+        fill: string;
+        stroke: string;
         "stroke-width": number;
         "stroke-linejoin": string;
         "stroke-linecap": string;
-        "opacity": number;
+        opacity: number;
     };
     protected _ctx: DOMFormContext;
     static groupID: number;
@@ -30,7 +30,7 @@ export declare class SVGForm extends VisualForm {
     protected _space: SVGSpace;
     protected _ready: boolean;
     constructor(space: SVGSpace);
-    readonly space: SVGSpace;
+    get space(): SVGSpace;
     styleTo(k: any, v: any): void;
     alpha(a: number): this;
     fill(c: string | boolean): this;

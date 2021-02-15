@@ -2,13 +2,13 @@
   "name": "Typography",
   "source": [
     [
-      "Typography.ts",
+      "src/Typography.ts",
       10,
       23
     ]
   ],
   "kind": "Class",
-  "id": 3275,
+  "id": 3256,
   "comment": "Typography provides helper functions to support typographic layouts. For a concrete example, see [a demo here](../demo/index.html?name=canvasform.textBox) that uses the [`CanvasForm.textBox`](#link) function.",
   "constructor": [],
   "accessors": [],
@@ -17,12 +17,12 @@
       "name": "fontSizeToBox",
       "source": [
         [
-          "Typography.ts",
+          "src/Typography.ts",
           50,
           22
         ]
       ],
-      "id": 3296,
+      "id": 3277,
       "flags": {
         "isStatic": true
       },
@@ -61,12 +61,12 @@
       "name": "fontSizeToThreshold",
       "source": [
         [
-          "Typography.ts",
+          "src/Typography.ts",
           69,
           28
         ]
       ],
-      "id": 3304,
+      "id": 3285,
       "flags": {
         "isStatic": true
       },
@@ -99,12 +99,12 @@
       "name": "textWidthEstimator",
       "source": [
         [
-          "Typography.ts",
+          "src/Typography.ts",
           19,
           27
         ]
       ],
-      "id": 3276,
+      "id": 3257,
       "flags": {
         "isStatic": true
       },
@@ -126,13 +126,13 @@
               "name": "samples",
               "comment": "a list of string samples. Default is [\"M\", \"n\", \".\"]",
               "type": "string[]",
-              "default": " [\"M\", \"n\", \".\"]"
+              "default": "[\"M\", \"n\", \".\"]"
             },
             {
               "name": "distribution",
               "comment": "a list of the samples' probability distribution. Default is [0.06, 0.8, 0.14].",
               "type": "number[]",
-              "default": " [0.06, 0.8, 0.14]"
+              "default": "[0.06, 0.8, 0.14]"
             }
           ],
           "tags": []
@@ -143,12 +143,12 @@
       "name": "truncate",
       "source": [
         [
-          "Typography.ts",
+          "src/Typography.ts",
           33,
           17
         ]
       ],
-      "id": 3287,
+      "id": 3268,
       "flags": {
         "isStatic": true
       },
@@ -157,7 +157,7 @@
       "signatures": [
         {
           "comment": "Truncate text to fit width.",
-          "returns": "string,number",
+          "returns": "",
           "returns_comment": false,
           "parameters": [
             {

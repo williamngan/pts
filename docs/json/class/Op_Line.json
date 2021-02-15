@@ -2,7 +2,7 @@
   "name": "Line",
   "source": [
     [
-      "Op.ts",
+      "src/Op.ts",
       19,
       17
     ]
@@ -17,7 +17,7 @@
       "name": "collinear",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           81,
           18
         ]
@@ -67,7 +67,7 @@
       "name": "crop",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           329,
           13
         ]
@@ -117,7 +117,7 @@
       "name": "distanceFromPt",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           133,
           23
         ]
@@ -160,7 +160,7 @@
       "name": "fromAngle",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           28,
           18
         ]
@@ -204,7 +204,7 @@
       "name": "intercept",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           51,
           18
         ]
@@ -242,7 +242,7 @@
       "name": "intersectGridWithLine2D",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           280,
           32
         ]
@@ -280,7 +280,7 @@
       "name": "intersectGridWithRay2D",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           264,
           31
         ]
@@ -318,7 +318,7 @@
       "name": "intersectLine2D",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           195,
           24
         ]
@@ -356,7 +356,7 @@
       "name": "intersectLineWithRay2D",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           210,
           31
         ]
@@ -394,7 +394,7 @@
       "name": "intersectLines2D",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           245,
           25
         ]
@@ -438,7 +438,7 @@
       "name": "intersectPolygon2D",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           224,
           27
         ]
@@ -482,7 +482,7 @@
       "name": "intersectRay2D",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           151,
           23
         ]
@@ -520,7 +520,7 @@
       "name": "intersectRect2D",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           297,
           24
         ]
@@ -558,7 +558,7 @@
       "name": "magnitude",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           93,
           18
         ]
@@ -590,7 +590,7 @@
       "name": "magnitudeSq",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           103,
           20
         ]
@@ -622,7 +622,7 @@
       "name": "marker",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           363,
           15
         ]
@@ -672,7 +672,7 @@
       "name": "perpendicularFromPt",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           116,
           28
         ]
@@ -716,7 +716,7 @@
       "name": "sideOfPt2D",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           68,
           19
         ]
@@ -754,7 +754,7 @@
       "name": "slope",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           40,
           14
         ]
@@ -792,7 +792,7 @@
       "name": "subpoints",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           311,
           18
         ]
@@ -830,7 +830,7 @@
       "name": "toRect",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           386,
           15
         ]

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Img = void 0;
 const Pt_1 = require("./Pt");
 class Img {
     constructor(editable = false, pixelScale = 1) {

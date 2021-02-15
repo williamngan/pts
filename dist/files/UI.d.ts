@@ -42,9 +42,12 @@ export declare class UI {
     static fromCircle(group: PtLikeIterable, states: {}, id?: string): UI;
     static fromPolygon(group: PtLikeIterable, states: {}, id?: string): UI;
     static fromUI(ui: UI, states?: object, id?: string): UI;
-    id: string;
-    group: Group;
-    shape: string;
+    get id(): string;
+    set id(d: string);
+    get group(): Group;
+    set group(d: Group);
+    get shape(): string;
+    set shape(d: string);
     state(key: string, value?: any): any;
     on(type: string, fn: UIHandler): number;
     off(type: string, which?: number): boolean;

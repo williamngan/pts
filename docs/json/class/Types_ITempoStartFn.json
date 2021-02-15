@@ -2,13 +2,13 @@
   "name": "ITempoStartFn",
   "source": [
     [
-      "Types.ts",
+      "src/Types.ts",
       161,
       25
     ]
   ],
   "kind": "Typealias",
-  "id": 1605,
+  "id": 1614,
   "comment": "Typescript only: a callback function type to be used in `tempo.every(...).start( fn )`",
   "constructor": [],
   "accessors": [],

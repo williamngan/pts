@@ -1,6 +1,7 @@
 "use strict";
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Color = void 0;
 const Pt_1 = require("./Pt");
 const Util_1 = require("./Util");
 const Num_1 = require("./Num");
@@ -324,6 +325,7 @@ class Color extends Pt_1.Pt {
         return Color.lab(c[0], Math.cos(rad) * c[1], Math.sin(rad) * c[1], lch.alpha);
     }
 }
+exports.Color = Color;
 Color.D65 = new Pt_1.Pt(95.047, 100, 108.883, 1);
 Color.ranges = {
     rgb: new Pt_1.Group(new Pt_1.Pt(0, 255), new Pt_1.Pt(0, 255), new Pt_1.Pt(0, 255)),
@@ -334,5 +336,4 @@ Color.ranges = {
     luv: new Pt_1.Group(new Pt_1.Pt(0, 100), new Pt_1.Pt(-134, 220), new Pt_1.Pt(-140, 122)),
     xyz: new Pt_1.Group(new Pt_1.Pt(0, 100), new Pt_1.Pt(0, 100), new Pt_1.Pt(0, 100))
 };
-exports.Color = Color;
 //# sourceMappingURL=Color.js.map

@@ -2,13 +2,13 @@
   "name": "ISoundAnalyzer",
   "source": [
     [
-      "Types.ts",
+      "src/Types.ts",
       194,
       26
     ]
   ],
   "kind": "Typealias",
-  "id": 1640,
+  "id": 1649,
   "comment": "Typescript only: an object to store the AnalyzerNode properties",
   "constructor": [],
   "accessors": [],

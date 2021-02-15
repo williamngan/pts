@@ -2,13 +2,13 @@
   "name": "ITempoProgressFn",
   "source": [
     [
-      "Types.ts",
+      "src/Types.ts",
       166,
       28
     ]
   ],
   "kind": "Typealias",
-  "id": 1609,
+  "id": 1618,
   "comment": "Typescript only: a callback function type to be used in `tempo.every(...).progress( fn )`",
   "constructor": [],
   "accessors": [],

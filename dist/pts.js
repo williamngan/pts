@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.10.0 - Copyright © 2017-2021 William Ngan and contributors.
+ * pts.js 0.10.1 - Copyright © 2017-2021 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -112,6 +112,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.CanvasForm = exports.CanvasSpace = void 0;
 const Space_1 = __webpack_require__(/*! ./Space */ "./src/Space.ts");
 const Form_1 = __webpack_require__(/*! ./Form */ "./src/Form.ts");
 const Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
@@ -779,6 +780,7 @@ exports.CanvasForm = CanvasForm;
 
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Color = void 0;
 const Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 const Util_1 = __webpack_require__(/*! ./Util */ "./src/Util.ts");
 const Num_1 = __webpack_require__(/*! ./Num */ "./src/Num.ts");
@@ -1102,6 +1104,7 @@ class Color extends Pt_1.Pt {
         return Color.lab(c[0], Math.cos(rad) * c[1], Math.sin(rad) * c[1], lch.alpha);
     }
 }
+exports.Color = Color;
 Color.D65 = new Pt_1.Pt(95.047, 100, 108.883, 1);
 Color.ranges = {
     rgb: new Pt_1.Group(new Pt_1.Pt(0, 255), new Pt_1.Pt(0, 255), new Pt_1.Pt(0, 255)),
@@ -1112,7 +1115,6 @@ Color.ranges = {
     luv: new Pt_1.Group(new Pt_1.Pt(0, 100), new Pt_1.Pt(-134, 220), new Pt_1.Pt(-140, 122)),
     xyz: new Pt_1.Group(new Pt_1.Pt(0, 100), new Pt_1.Pt(0, 100), new Pt_1.Pt(0, 100))
 };
-exports.Color = Color;
 
 
 /***/ }),
@@ -1128,6 +1130,7 @@ exports.Color = Color;
 
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Delaunay = exports.Noise = exports.Create = void 0;
 const Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 const Op_1 = __webpack_require__(/*! ./Op */ "./src/Op.ts");
 const Util_1 = __webpack_require__(/*! ./Util */ "./src/Util.ts");
@@ -1419,6 +1422,7 @@ exports.Delaunay = Delaunay;
 
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.HTMLForm = exports.HTMLSpace = exports.DOMSpace = void 0;
 const Space_1 = __webpack_require__(/*! ./Space */ "./src/Space.ts");
 const Form_1 = __webpack_require__(/*! ./Form */ "./src/Form.ts");
 const Util_1 = __webpack_require__(/*! ./Util */ "./src/Util.ts");
@@ -1865,9 +1869,9 @@ class HTMLForm extends Form_1.VisualForm {
         return this;
     }
 }
+exports.HTMLForm = HTMLForm;
 HTMLForm.groupID = 0;
 HTMLForm.domID = 0;
-exports.HTMLForm = HTMLForm;
 
 
 /***/ }),
@@ -1883,6 +1887,7 @@ exports.HTMLForm = HTMLForm;
 
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Font = exports.VisualForm = exports.Form = void 0;
 class Form {
     constructor() {
         this._ready = false;
@@ -1978,6 +1983,7 @@ exports.Font = Font;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Img = void 0;
 const Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 class Img {
     constructor(editable = false, pixelScale = 1) {
@@ -2091,6 +2097,7 @@ exports.Img = Img;
 
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Mat = exports.Vec = void 0;
 const Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 const Op_1 = __webpack_require__(/*! ./Op */ "./src/Op.ts");
 class Vec {
@@ -2357,6 +2364,7 @@ exports.Mat = Mat;
 
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Range = exports.Shaping = exports.Geom = exports.Num = void 0;
 const Util_1 = __webpack_require__(/*! ./Util */ "./src/Util.ts");
 const Op_1 = __webpack_require__(/*! ./Op */ "./src/Op.ts");
 const Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
@@ -2833,6 +2841,7 @@ exports.Range = Range;
 
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Curve = exports.Polygon = exports.Triangle = exports.Circle = exports.Rectangle = exports.Line = void 0;
 const Util_1 = __webpack_require__(/*! ./Util */ "./src/Util.ts");
 const Num_1 = __webpack_require__(/*! ./Num */ "./src/Num.ts");
 const Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
@@ -3023,7 +3032,7 @@ class Line {
             return Line.intersectRay2D(sides[sideIdx], _line);
         }
     }
-    static marker(line, size, graphic = ("arrow" || "line"), atTail = true) {
+    static marker(line, size, graphic = ("arrow" || false), atTail = true) {
         let _line = Util_1.Util.iterToArray(line);
         let h = atTail ? 0 : 1;
         let t = atTail ? 1 : 0;
@@ -3830,6 +3839,7 @@ exports.Curve = Curve;
 
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Body = exports.Particle = exports.World = void 0;
 const Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 const Op_1 = __webpack_require__(/*! ./Op */ "./src/Op.ts");
 const Num_1 = __webpack_require__(/*! ./Num */ "./src/Num.ts");
@@ -4228,14 +4238,16 @@ exports.Body = Body;
 "use strict";
 
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Sound = exports.Tempo = void 0;
 const Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 const Num_1 = __webpack_require__(/*! ./Num */ "./src/Num.ts");
 class Tempo {
@@ -4582,6 +4594,7 @@ exports.Sound = Sound;
 
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Bound = exports.Group = exports.Pt = void 0;
 const Util_1 = __webpack_require__(/*! ./Util */ "./src/Util.ts");
 const Num_1 = __webpack_require__(/*! ./Num */ "./src/Num.ts");
 const LinearAlgebra_1 = __webpack_require__(/*! ./LinearAlgebra */ "./src/LinearAlgebra.ts");
@@ -5058,6 +5071,7 @@ exports.Bound = Bound;
 
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.MultiTouchSpace = exports.Space = void 0;
 const Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 const UI_1 = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 class Space {
@@ -5335,6 +5349,7 @@ exports.MultiTouchSpace = MultiTouchSpace;
 
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.SVGForm = exports.SVGSpace = void 0;
 const Form_1 = __webpack_require__(/*! ./Form */ "./src/Form.ts");
 const Num_1 = __webpack_require__(/*! ./Num */ "./src/Num.ts");
 const Util_1 = __webpack_require__(/*! ./Util */ "./src/Util.ts");
@@ -5699,9 +5714,24 @@ class SVGForm extends Form_1.VisualForm {
         return this;
     }
 }
+exports.SVGForm = SVGForm;
 SVGForm.groupID = 0;
 SVGForm.domID = 0;
-exports.SVGForm = SVGForm;
+
+
+/***/ }),
+
+/***/ "./src/Types.ts":
+/*!**********************!*\
+  !*** ./src/Types.ts ***!
+  \**********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
@@ -5717,6 +5747,7 @@ exports.SVGForm = SVGForm;
 
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Typography = void 0;
 const Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 class Typography {
     static textWidthEstimator(fn, samples = ["M", "n", "."], distribution = [0.06, 0.8, 0.14]) {
@@ -5771,6 +5802,7 @@ exports.Typography = Typography;
 
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.UIDragger = exports.UIButton = exports.UI = exports.UIPointerActions = exports.UIShape = void 0;
 const Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 const Op_1 = __webpack_require__(/*! ./Op */ "./src/Op.ts");
 exports.UIShape = {
@@ -5912,8 +5944,8 @@ class UI {
         }
     }
 }
-UI._counter = 0;
 exports.UI = UI;
+UI._counter = 0;
 class UIButton extends UI {
     constructor(group, shape, states = {}, id) {
         super(group, shape, states, id);
@@ -6056,6 +6088,7 @@ exports.UIDragger = UIDragger;
 
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Util = exports.Const = void 0;
 const Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 exports.Const = {
     xy: "xy",
@@ -6236,8 +6269,8 @@ class Util {
         return (!Array.isArray(it)) ? [...it] : it;
     }
 }
-Util._warnLevel = "mute";
 exports.Util = Util;
+Util._warnLevel = "mute";
 
 
 /***/ }),
@@ -6251,29 +6284,38 @@ exports.Util = Util;
 
 "use strict";
 
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-}
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-__export(__webpack_require__(/*! ./Canvas */ "./src/Canvas.ts"));
-__export(__webpack_require__(/*! ./Create */ "./src/Create.ts"));
-__export(__webpack_require__(/*! ./Form */ "./src/Form.ts"));
-__export(__webpack_require__(/*! ./LinearAlgebra */ "./src/LinearAlgebra.ts"));
-__export(__webpack_require__(/*! ./Num */ "./src/Num.ts"));
-__export(__webpack_require__(/*! ./Op */ "./src/Op.ts"));
-__export(__webpack_require__(/*! ./Pt */ "./src/Pt.ts"));
-__export(__webpack_require__(/*! ./Space */ "./src/Space.ts"));
-__export(__webpack_require__(/*! ./Color */ "./src/Color.ts"));
-__export(__webpack_require__(/*! ./Util */ "./src/Util.ts"));
-__export(__webpack_require__(/*! ./Dom */ "./src/Dom.ts"));
-__export(__webpack_require__(/*! ./Svg */ "./src/Svg.ts"));
-__export(__webpack_require__(/*! ./Typography */ "./src/Typography.ts"));
-__export(__webpack_require__(/*! ./Physics */ "./src/Physics.ts"));
-__export(__webpack_require__(/*! ./UI */ "./src/UI.ts"));
-__export(__webpack_require__(/*! ./Play */ "./src/Play.ts"));
-__export(__webpack_require__(/*! ./Image */ "./src/Image.ts"));
+exports.quickStart = exports.namespace = void 0;
+__exportStar(__webpack_require__(/*! ./Canvas */ "./src/Canvas.ts"), exports);
+__exportStar(__webpack_require__(/*! ./Create */ "./src/Create.ts"), exports);
+__exportStar(__webpack_require__(/*! ./Form */ "./src/Form.ts"), exports);
+__exportStar(__webpack_require__(/*! ./LinearAlgebra */ "./src/LinearAlgebra.ts"), exports);
+__exportStar(__webpack_require__(/*! ./Num */ "./src/Num.ts"), exports);
+__exportStar(__webpack_require__(/*! ./Op */ "./src/Op.ts"), exports);
+__exportStar(__webpack_require__(/*! ./Pt */ "./src/Pt.ts"), exports);
+__exportStar(__webpack_require__(/*! ./Space */ "./src/Space.ts"), exports);
+__exportStar(__webpack_require__(/*! ./Color */ "./src/Color.ts"), exports);
+__exportStar(__webpack_require__(/*! ./Util */ "./src/Util.ts"), exports);
+__exportStar(__webpack_require__(/*! ./Dom */ "./src/Dom.ts"), exports);
+__exportStar(__webpack_require__(/*! ./Svg */ "./src/Svg.ts"), exports);
+__exportStar(__webpack_require__(/*! ./Typography */ "./src/Typography.ts"), exports);
+__exportStar(__webpack_require__(/*! ./Physics */ "./src/Physics.ts"), exports);
+__exportStar(__webpack_require__(/*! ./UI */ "./src/UI.ts"), exports);
+__exportStar(__webpack_require__(/*! ./Play */ "./src/Play.ts"), exports);
+__exportStar(__webpack_require__(/*! ./Image */ "./src/Image.ts"), exports);
+__exportStar(__webpack_require__(/*! ./Types */ "./src/Types.ts"), exports);
 const _Canvas = __webpack_require__(/*! ./Canvas */ "./src/Canvas.ts");
-exports.namespace = (scope) => {
+let namespace = (scope) => {
     let lib = module.exports;
     for (let k in lib) {
         if (k != "namespace") {
@@ -6281,7 +6323,8 @@ exports.namespace = (scope) => {
         }
     }
 };
-exports.quickStart = (id, bg = "#9ab") => {
+exports.namespace = namespace;
+let quickStart = (id, bg = "#9ab") => {
     if (!window)
         return;
     let s = window;
@@ -6298,6 +6341,7 @@ exports.quickStart = (id, bg = "#9ab") => {
         s.space.bindMouse().bindTouch().play();
     };
 };
+exports.quickStart = quickStart;
 
 
 /***/ })

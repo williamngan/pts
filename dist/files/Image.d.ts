@@ -18,10 +18,10 @@ export declare class Img {
     crop(box: Bound): ImageData;
     static fromBlob(blob: Blob, editable?: boolean): Promise<Img>;
     toBase64(): string;
-    readonly image: HTMLImageElement;
-    readonly canvas: HTMLCanvasElement;
-    readonly data: ImageData;
-    readonly ctx: CanvasRenderingContext2D;
-    readonly loaded: boolean;
-    readonly pixelScale: number;
+    get image(): HTMLImageElement;
+    get canvas(): HTMLCanvasElement;
+    get data(): ImageData;
+    get ctx(): CanvasRenderingContext2D;
+    get loaded(): boolean;
+    get pixelScale(): number;
 }

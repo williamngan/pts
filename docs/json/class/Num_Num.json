@@ -2,7 +2,7 @@
   "name": "Num",
   "source": [
     [
-      "Num.ts",
+      "src/Num.ts",
       11,
       16
     ]
@@ -17,7 +17,7 @@
       "name": "average",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           119,
           16
         ]
@@ -49,7 +49,7 @@
       "name": "boundValue",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           53,
           19
         ]
@@ -98,7 +98,7 @@
       "name": "clamp",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           41,
           14
         ]
@@ -142,7 +142,7 @@
       "name": "cycle",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           131,
           14
         ]
@@ -180,7 +180,7 @@
       "name": "equals",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           19,
           15
         ]
@@ -224,7 +224,7 @@
       "name": "lerp",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           30,
           13
         ]
@@ -268,7 +268,7 @@
       "name": "mapToRange",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           145,
           19
         ]
@@ -324,7 +324,7 @@
       "name": "normalizeValue",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           92,
           23
         ]
@@ -368,7 +368,7 @@
       "name": "randomRange",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           80,
           20
         ]
@@ -406,7 +406,7 @@
       "name": "sum",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           104,
           12
         ]
@@ -438,7 +438,7 @@
       "name": "within",
       "source": [
         [
-          "Num.ts",
+          "src/Num.ts",
           70,
           15
         ]

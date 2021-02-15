@@ -2,25 +2,25 @@
   "name": "Tempo",
   "source": [
     [
-      "Play.ts",
+      "src/Play.ts",
       9,
       18
     ]
   ],
   "kind": "Class",
-  "id": 6763,
+  "id": 6630,
   "comment": "Tempo helps you create synchronized and rhythmic animations.",
   "constructor": [
     {
       "name": "constructor",
       "source": [
         [
-          "Play.ts",
+          "src/Play.ts",
           16,
           26
         ]
       ],
-      "id": 6772,
+      "id": 6639,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -47,17 +47,17 @@
       "name": "bpm",
       "source": [
         [
-          "Play.ts",
+          "src/Play.ts",
           37,
           9
         ],
         [
-          "Play.ts",
+          "src/Play.ts",
           38,
           9
         ]
       ],
-      "id": 6778,
+      "id": 6645,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -79,17 +79,17 @@
       "name": "ms",
       "source": [
         [
-          "Play.ts",
+          "src/Play.ts",
           46,
           8
         ],
         [
-          "Play.ts",
+          "src/Play.ts",
           47,
           8
         ]
       ],
-      "id": 6782,
+      "id": 6649,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -113,12 +113,12 @@
       "name": "action",
       "source": [
         [
-          "Play.ts",
+          "src/Play.ts",
           154,
           8
         ]
       ],
-      "id": 6806,
+      "id": 6673,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -161,12 +161,12 @@
       "name": "animate",
       "source": [
         [
-          "Play.ts",
+          "src/Play.ts",
           140,
           9
         ]
       ],
-      "id": 6798,
+      "id": 6665,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -197,12 +197,12 @@
       "name": "every",
       "source": [
         [
-          "Play.ts",
+          "src/Play.ts",
           74,
           7
         ]
       ],
-      "id": 6789,
+      "id": 6656,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -232,12 +232,12 @@
       "name": "resize",
       "source": [
         [
-          "Play.ts",
+          "src/Play.ts",
           147,
           8
         ]
       ],
-      "id": 6802,
+      "id": 6669,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -268,12 +268,12 @@
       "name": "stop",
       "source": [
         [
-          "Play.ts",
+          "src/Play.ts",
           132,
           6
         ]
       ],
-      "id": 6795,
+      "id": 6662,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -298,12 +298,12 @@
       "name": "track",
       "source": [
         [
-          "Play.ts",
+          "src/Play.ts",
           99,
           7
         ]
       ],
-      "id": 6792,
+      "id": 6659,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -328,12 +328,12 @@
       "name": "fromBeat",
       "source": [
         [
-          "Play.ts",
+          "src/Play.ts",
           30,
           17
         ]
       ],
-      "id": 6775,
+      "id": 6642,
       "flags": {
         "isStatic": true
       },
@@ -363,12 +363,12 @@
       "name": "animateID",
       "source": [
         [
-          "Play.ts",
+          "src/Play.ts",
           16,
           18
         ]
       ],
-      "id": 6771,
+      "id": 6638,
       "flags": {
         "isPublic": true
       },

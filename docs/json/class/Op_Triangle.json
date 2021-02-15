@@ -2,7 +2,7 @@
   "name": "Triangle",
   "source": [
     [
-      "Op.ts",
+      "src/Op.ts",
       855,
       21
     ]
@@ -17,7 +17,7 @@
       "name": "altitude",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           926,
           17
         ]
@@ -55,7 +55,7 @@
       "name": "circumcenter",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           981,
           21
         ]
@@ -87,7 +87,7 @@
       "name": "circumcircle",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           994,
           21
         ]
@@ -125,7 +125,7 @@
       "name": "fromCenter",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           885,
           19
         ]
@@ -163,7 +163,7 @@
       "name": "fromCircle",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           875,
           19
         ]
@@ -195,7 +195,7 @@
       "name": "fromRect",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           861,
           17
         ]
@@ -227,7 +227,7 @@
       "name": "incenter",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           954,
           17
         ]
@@ -259,7 +259,7 @@
       "name": "incircle",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           967,
           17
         ]
@@ -297,7 +297,7 @@
       "name": "medial",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           895,
           15
         ]
@@ -329,7 +329,7 @@
       "name": "oppositeSide",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           908,
           21
         ]
@@ -367,7 +367,7 @@
       "name": "orthocenter",
       "source": [
         [
-          "Op.ts",
+          "src/Op.ts",
           941,
           20
         ]

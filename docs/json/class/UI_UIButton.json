@@ -2,25 +2,25 @@
   "name": "UIButton",
   "source": [
     [
-      "UI.ts",
+      "src/UI.ts",
       305,
       21
     ]
   ],
   "kind": "Class",
-  "id": 942,
+  "id": 945,
   "comment": "**[Experimental]** A simple button that extends [`UI`](#link) to track clicks and hovers.",
   "constructor": [
     {
       "name": "constructor",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           307,
           31
         ]
       ],
-      "id": 944,
+      "id": 947,
       "flags": {},
       "overrides": "UI.__constructor",
       "inherits": false,
@@ -65,17 +65,17 @@
       "name": "group",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           109,
           11
         ],
         [
-          "UI.ts",
+          "src/UI.ts",
           110,
           11
         ]
       ],
-      "id": 1010,
+      "id": 1016,
       "flags": {},
       "overrides": false,
       "inherits": "UI.group",
@@ -97,17 +97,17 @@
       "name": "id",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           102,
           8
         ],
         [
-          "UI.ts",
+          "src/UI.ts",
           103,
           8
         ]
       ],
-      "id": 1006,
+      "id": 1012,
       "flags": {},
       "overrides": false,
       "inherits": "UI.id",
@@ -129,17 +129,17 @@
       "name": "shape",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           116,
           11
         ],
         [
-          "UI.ts",
+          "src/UI.ts",
           117,
           11
         ]
       ],
-      "id": 1014,
+      "id": 1020,
       "flags": {},
       "overrides": false,
       "inherits": "UI.shape",
@@ -163,12 +163,12 @@
       "name": "hold",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           190,
           16
         ]
       ],
-      "id": 1035,
+      "id": 1041,
       "flags": {
         "isProtected": true
       },
@@ -195,12 +195,12 @@
       "name": "listen",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           171,
           8
         ]
       ],
-      "id": 1030,
+      "id": 1036,
       "flags": {},
       "overrides": false,
       "inherits": "UI.listen",
@@ -237,12 +237,12 @@
       "name": "off",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           154,
           5
         ]
       ],
-      "id": 1026,
+      "id": 1032,
       "flags": {},
       "overrides": false,
       "inherits": "UI.off",
@@ -273,12 +273,12 @@
       "name": "offClick",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           373,
           10
         ]
       ],
-      "id": 956,
+      "id": 959,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -303,12 +303,12 @@
       "name": "offContextMenu",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           393,
           16
         ]
       ],
-      "id": 962,
+      "id": 965,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -333,12 +333,12 @@
       "name": "offHover",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           418,
           10
         ]
       ],
-      "id": 969,
+      "id": 972,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -369,12 +369,12 @@
       "name": "on",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           142,
           4
         ]
       ],
-      "id": 1022,
+      "id": 1028,
       "flags": {},
       "overrides": false,
       "inherits": "UI.on",
@@ -405,12 +405,12 @@
       "name": "onClick",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           363,
           9
         ]
       ],
-      "id": 953,
+      "id": 956,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -435,12 +435,12 @@
       "name": "onContextMenu",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           383,
           15
         ]
       ],
-      "id": 959,
+      "id": 962,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -465,12 +465,12 @@
       "name": "onHover",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           404,
           9
         ]
       ],
-      "id": 965,
+      "id": 968,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -501,12 +501,12 @@
       "name": "render",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           228,
           8
         ]
       ],
-      "id": 1047,
+      "id": 1053,
       "flags": {},
       "overrides": false,
       "inherits": "UI.render",
@@ -531,12 +531,12 @@
       "name": "state",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           126,
           7
         ]
       ],
-      "id": 1018,
+      "id": 1024,
       "flags": {},
       "overrides": false,
       "inherits": "UI.state",
@@ -567,12 +567,12 @@
       "name": "toString",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           236,
           10
         ]
       ],
-      "id": 1057,
+      "id": 1063,
       "flags": {},
       "overrides": false,
       "inherits": "UI.toString",
@@ -590,12 +590,12 @@
       "name": "unhold",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           201,
           18
         ]
       ],
-      "id": 1038,
+      "id": 1044,
       "flags": {
         "isProtected": true
       },
@@ -622,12 +622,12 @@
       "name": "fromCircle",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           73,
           19
         ]
       ],
-      "id": 991,
+      "id": 995,
       "flags": {
         "isStatic": true
       },
@@ -648,7 +648,7 @@
             {
               "name": "states",
               "comment": "optional a state object keep track of custom states for this UI",
-              "type": "__type",
+              "type": "",
               "default": false
             },
             {
@@ -666,12 +666,12 @@
       "name": "fromPolygon",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           84,
           20
         ]
       ],
-      "id": 996,
+      "id": 1001,
       "flags": {
         "isStatic": true
       },
@@ -692,7 +692,7 @@
             {
               "name": "states",
               "comment": "optional a state object keep track of custom states for this UI",
-              "type": "__type",
+              "type": "",
               "default": false
             },
             {
@@ -710,12 +710,12 @@
       "name": "fromRectangle",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           62,
           22
         ]
       ],
-      "id": 986,
+      "id": 989,
       "flags": {
         "isStatic": true
       },
@@ -736,7 +736,7 @@
             {
               "name": "states",
               "comment": "optional a state object keep track of custom states for this UI",
-              "type": "__type",
+              "type": "",
               "default": false
             },
             {
@@ -754,12 +754,12 @@
       "name": "fromUI",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           94,
           15
         ]
       ],
-      "id": 1001,
+      "id": 1007,
       "flags": {
         "isStatic": true
       },
@@ -798,12 +798,12 @@
       "name": "track",
       "source": [
         [
-          "UI.ts",
+          "src/UI.ts",
           217,
           14
         ]
       ],
-      "id": 1041,
+      "id": 1047,
       "flags": {
         "isStatic": true
       },

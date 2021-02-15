@@ -2,13 +2,13 @@
   "name": "DOMFormContext",
   "source": [
     [
-      "Types.ts",
+      "src/Types.ts",
       125,
       26
     ]
   ],
   "kind": "Typealias",
-  "id": 1581,
+  "id": 1590,
   "comment": "Typescript only: A type that represents the current context for an DOMForm.",
   "constructor": [],
   "accessors": [],

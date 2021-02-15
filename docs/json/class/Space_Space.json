@@ -2,13 +2,13 @@
   "name": "Space",
   "source": [
     [
-      "Space.ts",
+      "src/Space.ts",
       13,
       27
     ]
   ],
   "kind": "Class",
-  "id": 3052,
+  "id": 3033,
   "comment": "Space is an abstract class that represents a general context for expressing Pts. It's extended through subclasses such as [`CanvasSpace`](#link) and [`SVGSpace`](#link). You can also create your own extension of Space.\nSee [Space guide](../guide/Space-0500.html) for details.",
   "constructor": [],
   "accessors": [
@@ -16,12 +16,12 @@
       "name": "center",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           239,
           12
         ]
       ],
-      "id": 3126,
+      "id": 3107,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -35,17 +35,17 @@
       "name": "customRendering",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           208,
           21
         ],
         [
-          "Space.ts",
+          "src/Space.ts",
           209,
           21
         ]
       ],
-      "id": 3106,
+      "id": 3087,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -67,12 +67,12 @@
       "name": "height",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           251,
           12
         ]
       ],
-      "id": 3130,
+      "id": 3111,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -86,12 +86,12 @@
       "name": "innerBound",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           227,
           23
         ]
       ],
-      "id": 3122,
+      "id": 3103,
       "flags": {
         "isPublic": true
       },
@@ -107,12 +107,12 @@
       "name": "isPlaying",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           215,
           15
         ]
       ],
-      "id": 3118,
+      "id": 3099,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -126,12 +126,12 @@
       "name": "outerBound",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           221,
           16
         ]
       ],
-      "id": 3120,
+      "id": 3101,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -145,12 +145,12 @@
       "name": "size",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           233,
           10
         ]
       ],
-      "id": 3124,
+      "id": 3105,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -164,12 +164,12 @@
       "name": "width",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           245,
           11
         ]
       ],
-      "id": 3128,
+      "id": 3109,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -185,12 +185,12 @@
       "name": "add",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           54,
           5
         ]
       ],
-      "id": 3076,
+      "id": 3057,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -215,12 +215,12 @@
       "name": "clear",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           265,
           16
         ]
       ],
-      "id": 3136,
+      "id": 3117,
       "flags": {
         "isAbstract": true
       },
@@ -240,12 +240,12 @@
       "name": "getForm",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           271,
           18
         ]
       ],
-      "id": 3138,
+      "id": 3119,
       "flags": {
         "isAbstract": true
       },
@@ -265,12 +265,12 @@
       "name": "pause",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           160,
           7
         ]
       ],
-      "id": 3092,
+      "id": 3073,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -295,12 +295,12 @@
       "name": "play",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           95,
           6
         ]
       ],
-      "id": 3084,
+      "id": 3065,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -325,12 +325,12 @@
       "name": "playItems",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           133,
           21
         ]
       ],
-      "id": 3089,
+      "id": 3070,
       "flags": {
         "isProtected": true
       },
@@ -357,12 +357,12 @@
       "name": "playOnce",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           189,
           10
         ]
       ],
-      "id": 3100,
+      "id": 3081,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -387,12 +387,12 @@
       "name": "refresh",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           39,
           9
         ]
       ],
-      "id": 3073,
+      "id": 3054,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -417,12 +417,12 @@
       "name": "remove",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           75,
           8
         ]
       ],
-      "id": 3079,
+      "id": 3060,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -447,12 +447,12 @@
       "name": "removeAll",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           84,
           11
         ]
       ],
-      "id": 3082,
+      "id": 3063,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -470,12 +470,12 @@
       "name": "render",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           199,
           18
         ]
       ],
-      "id": 3103,
+      "id": 3084,
       "flags": {
         "isProtected": true
       },
@@ -502,12 +502,12 @@
       "name": "replay",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           123,
           8
         ]
       ],
-      "id": 3087,
+      "id": 3068,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -525,12 +525,12 @@
       "name": "resize",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           259,
           17
         ]
       ],
-      "id": 3132,
+      "id": 3113,
       "flags": {
         "isAbstract": true
       },
@@ -563,12 +563,12 @@
       "name": "resume",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           169,
           8
         ]
       ],
-      "id": 3095,
+      "id": 3076,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -586,12 +586,12 @@
       "name": "stop",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           179,
           6
         ]
       ],
-      "id": 3097,
+      "id": 3078,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -619,12 +619,12 @@
       "name": "bound",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           16,
           17
         ]
       ],
-      "id": 3054,
+      "id": 3035,
       "flags": {
         "isProtected": true
       },
@@ -637,12 +637,12 @@
       "name": "id",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           15,
           4
         ]
       ],
-      "id": 3053,
+      "id": 3034,
       "flags": {},
       "type": "id",
       "overrides": false,
@@ -653,12 +653,12 @@
       "name": "playerCount",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           20,
           23
         ]
       ],
-      "id": 3060,
+      "id": 3041,
       "flags": {
         "isProtected": true
       },
@@ -671,12 +671,12 @@
       "name": "players",
       "source": [
         [
-          "Space.ts",
+          "src/Space.ts",
           19,
           19
         ]
       ],
-      "id": 3059,
+      "id": 3040,
       "flags": {
         "isProtected": true
       },

@@ -2,25 +2,25 @@
   "name": "Font",
   "source": [
     [
-      "Form.ts",
-      262,
+      "src/Form.ts",
+      261,
       17
     ]
   ],
   "kind": "Class",
-  "id": 3034,
+  "id": 3015,
   "comment": "Font class lets you create a specific font style with properties for its size and style. A font instance can be passed as parameter to set a form's font. For example, see [`CanvasForm.font`](#link).",
   "constructor": [
     {
       "name": "constructor",
       "source": [
         [
-          "Form.ts",
-          267,
+          "src/Form.ts",
+          266,
           23
         ]
       ],
-      "id": 3040,
+      "id": 3021,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -76,12 +76,12 @@
       "name": "value",
       "source": [
         [
-          "Form.ts",
-          289,
+          "src/Form.ts",
+          288,
           11
         ]
       ],
-      "id": 3047,
+      "id": 3028,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -97,12 +97,12 @@
       "name": "toString",
       "source": [
         [
-          "Form.ts",
-          295,
+          "src/Form.ts",
+          294,
           10
         ]
       ],
-      "id": 3049,
+      "id": 3030,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -123,12 +123,12 @@
       "name": "face",
       "source": [
         [
-          "Form.ts",
-          265,
+          "src/Form.ts",
+          264,
           13
         ]
       ],
-      "id": 3037,
+      "id": 3018,
       "flags": {
         "isPublic": true
       },
@@ -141,12 +141,12 @@
       "name": "lineHeight",
       "source": [
         [
-          "Form.ts",
-          264,
+          "src/Form.ts",
+          263,
           19
         ]
       ],
-      "id": 3036,
+      "id": 3017,
       "flags": {
         "isPublic": true
       },
@@ -159,12 +159,12 @@
       "name": "size",
       "source": [
         [
-          "Form.ts",
-          263,
+          "src/Form.ts",
+          262,
           13
         ]
       ],
-      "id": 3035,
+      "id": 3016,
       "flags": {
         "isPublic": true
       },
@@ -177,12 +177,12 @@
       "name": "style",
       "source": [
         [
-          "Form.ts",
-          266,
+          "src/Form.ts",
+          265,
           14
         ]
       ],
-      "id": 3038,
+      "id": 3019,
       "flags": {
         "isPublic": true
       },
@@ -195,12 +195,12 @@
       "name": "weight",
       "source": [
         [
-          "Form.ts",
-          267,
+          "src/Form.ts",
+          266,
           15
         ]
       ],
-      "id": 3039,
+      "id": 3020,
       "flags": {
         "isPublic": true
       },

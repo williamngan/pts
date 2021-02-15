@@ -18,14 +18,16 @@ export declare class DOMSpace extends MultiTouchSpace {
         resize?: boolean;
     }): this;
     getForm(): Form;
-    autoResize: boolean;
+    set autoResize(auto: boolean);
+    get autoResize(): boolean;
     resize(b: Bound, evt?: Event): this;
     protected _resizeHandler(evt: Event): void;
-    readonly element: Element;
-    readonly parent: Element;
-    readonly ready: boolean;
+    get element(): Element;
+    get parent(): Element;
+    get ready(): boolean;
     clear(bg?: string): this;
-    background: string;
+    set background(bg: string);
+    get background(): string;
     style(key: string, val: string, update?: boolean): this;
     styles(styles: object, update?: boolean): this;
     static setAttr(elem: Element, data: object): Element;
@@ -40,20 +42,20 @@ export declare class HTMLSpace extends DOMSpace {
 }
 export declare class HTMLForm extends VisualForm {
     protected _style: {
-        "filled": boolean;
-        "stroked": boolean;
-        "background": string;
+        filled: boolean;
+        stroked: boolean;
+        background: string;
         "border-color": string;
-        "color": string;
+        color: string;
         "border-width": string;
         "border-radius": string;
         "border-style": string;
-        "opacity": number;
-        "position": string;
-        "top": number;
-        "left": number;
-        "width": number;
-        "height": number;
+        opacity: number;
+        position: string;
+        top: number;
+        left: number;
+        width: number;
+        height: number;
     };
     protected _ctx: DOMFormContext;
     static groupID: number;
@@ -61,7 +63,7 @@ export declare class HTMLForm extends VisualForm {
     protected _space: HTMLSpace;
     protected _ready: boolean;
     constructor(space: HTMLSpace);
-    readonly space: HTMLSpace;
+    get space(): HTMLSpace;
     protected styleTo(k: any, v: any, unit?: string): void;
     alpha(a: number): this;
     fill(c: string | boolean): this;

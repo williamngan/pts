@@ -2,25 +2,25 @@
   "name": "World",
   "source": [
     [
-      "Physics.ts",
+      "src/Physics.ts",
       12,
       18
     ]
   ],
   "kind": "Class",
-  "id": 5819,
+  "id": 5740,
   "comment": "A `World` stores and manages [`Body`](#link) and [`Particle`](#link) for 2D physics simulation.\nSee a [Particle demo](../demo/index.html?name=physics.particles) and a [Body demo](../demo/index.html?name=physics.shapes) on the demo page.",
   "constructor": [
     {
       "name": "constructor",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           27,
           51
         ]
       ],
-      "id": 5839,
+      "id": 5760,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -59,12 +59,12 @@
       "name": "bodyCount",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           71,
           15
         ]
       ],
-      "id": 5860,
+      "id": 5781,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -78,17 +78,17 @@
       "name": "bound",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           47,
           11
         ],
         [
-          "Physics.ts",
+          "src/Physics.ts",
           48,
           11
         ]
       ],
-      "id": 5844,
+      "id": 5765,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -110,17 +110,17 @@
       "name": "damping",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           65,
           13
         ],
         [
-          "Physics.ts",
+          "src/Physics.ts",
           66,
           13
         ]
       ],
-      "id": 5856,
+      "id": 5777,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -142,17 +142,17 @@
       "name": "friction",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           59,
           14
         ],
         [
-          "Physics.ts",
+          "src/Physics.ts",
           60,
           14
         ]
       ],
-      "id": 5852,
+      "id": 5773,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -174,17 +174,17 @@
       "name": "gravity",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           53,
           13
         ],
         [
-          "Physics.ts",
+          "src/Physics.ts",
           54,
           13
         ]
       ],
-      "id": 5848,
+      "id": 5769,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -206,12 +206,12 @@
       "name": "particleCount",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           76,
           19
         ]
       ],
-      "id": 5862,
+      "id": 5783,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -227,12 +227,12 @@
       "name": "add",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           163,
           5
         ]
       ],
-      "id": 5893,
+      "id": 5814,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -263,12 +263,12 @@
       "name": "body",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           84,
           6
         ]
       ],
-      "id": 5864,
+      "id": 5785,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -293,12 +293,12 @@
       "name": "bodyIndex",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           114,
           11
         ]
       ],
-      "id": 5870,
+      "id": 5791,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -323,12 +323,12 @@
       "name": "drawBodies",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           153,
           12
         ]
       ],
-      "id": 5886,
+      "id": 5807,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -353,12 +353,12 @@
       "name": "drawParticles",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           144,
           15
         ]
       ],
-      "id": 5879,
+      "id": 5800,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -383,12 +383,12 @@
       "name": "integrate",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           269,
           21
         ]
       ],
-      "id": 5924,
+      "id": 5845,
       "flags": {
         "isProtected": true
       },
@@ -427,12 +427,12 @@
       "name": "particle",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           99,
           10
         ]
       ],
-      "id": 5867,
+      "id": 5788,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -457,12 +457,12 @@
       "name": "particleIndex",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           124,
           15
         ]
       ],
-      "id": 5873,
+      "id": 5794,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -487,12 +487,12 @@
       "name": "removeBody",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           192,
           12
         ]
       ],
-      "id": 5904,
+      "id": 5825,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -523,12 +523,12 @@
       "name": "removeParticle",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           206,
           16
         ]
       ],
-      "id": 5908,
+      "id": 5829,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -559,12 +559,12 @@
       "name": "update",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           133,
           8
         ]
       ],
-      "id": 5876,
+      "id": 5797,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -589,12 +589,12 @@
       "name": "boundConstraint",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           246,
           24
         ]
       ],
-      "id": 5919,
+      "id": 5840,
       "flags": {
         "isStatic": true
       },
@@ -633,12 +633,12 @@
       "name": "edgeConstraint",
       "source": [
         [
-          "Physics.ts",
+          "src/Physics.ts",
           223,
           23
         ]
       ],
-      "id": 5912,
+      "id": 5833,
       "flags": {
         "isStatic": true
       },

@@ -79,9 +79,9 @@ export declare class Range {
     protected _mag: Pt;
     protected _dims: number;
     constructor(g: PtIterable);
-    readonly max: Pt;
-    readonly min: Pt;
-    readonly magnitude: Pt;
+    get max(): Pt;
+    get min(): Pt;
+    get magnitude(): Pt;
     calc(): this;
     mapTo(min: number, max: number, exclude?: boolean[]): Group;
     append(pts: PtLikeIterable, update?: boolean): this;
