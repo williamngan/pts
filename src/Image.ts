@@ -35,8 +35,8 @@ export class Img {
 
       this._img.onload = () => {
         if (this._editable) {
-          this._cv = document.createElement( "canvas" ) as HTMLCanvasElement;
-          this._drawToScale( this._scale, this._scale, this._img );
+          if (!this._cv) this._cv = document.createElement( "canvas" ) as HTMLCanvasElement;
+          this._drawToScale( this._scale, this._img );
           this._data = this._ctx.getImageData(0, 0, this._cv.width, this._cv.height );
         }
   
@@ -57,15 +57,15 @@ export class Img {
    * @param canvasScale rescale factor for the canvas
    * @param img an image source like Image, Canvas, or ImageBitmap.
    */
-  protected _drawToScale( imgScale:number, canvasScale:number, img:CanvasImageSource ) {
-    this._cv.width = this._img.naturalWidth * imgScale;
-    this._cv.height = this._img.naturalHeight * imgScale;
+  protected _drawToScale( canvasScale:number|PtLike, img:CanvasImageSource ) {
+    const cms = (typeof canvasScale === 'number') ? [canvasScale, canvasScale] : canvasScale;
+    const nw = img.width as number;
+    const nh = img.height as number;
+    this._cv.width = nw * cms[0];
+    this._cv.height = nh * cms[1];
 
     this._ctx = this._cv.getContext( '2d' );
-    this._ctx.save();
-    this._ctx.scale( canvasScale, canvasScale );
-    if (img) this._ctx.drawImage( img, 0, 0 );
-    this._ctx.restore();
+    if (img) this._ctx.drawImage( img, 0, 0, nw, nh, 0, 0, this._cv.width, this._cv.height );
   }
 
 
@@ -88,9 +88,8 @@ export class Img {
     // retina: resize canvas to fit image original size
     if (this._scale !== 1) {
       this.bitmap().then( b => {
-        this._drawToScale(1, 1/this._scale, b); // rescale canvas to match original and draw saved bitmap
-        this._img.src = this.toBase64(); // update image
-        this._drawToScale( this._scale, this._scale, this._img ); // reset canvas scale and draw new image
+        this._drawToScale( 1/this._scale, b ); // rescale canvas to match original and draw saved bitmap        
+        this.load( this.toBase64() ); // load current canvas into image
       });
 
     // no retina so no need to rescale
@@ -128,6 +127,13 @@ export class Img {
   }
 
 
+  resize( box:PtLike ):this {
+    let s = [ box[0]/this._img.naturalWidth, box[1]/this._img.naturalHeight ];
+    this._drawToScale( s, this._img );
+    return this;
+  }
+
+
   /**
    * Crop an area of the image.
    * @param box bounding box
@@ -155,6 +161,11 @@ export class Img {
    */
   toBase64():string {
     return this._cv.toDataURL();
+  }
+
+
+  get current():CanvasImageSource {
+    return this._editable ? this._cv : this._img;
   }
 
 
