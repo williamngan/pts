@@ -22,6 +22,22 @@ export class Img {
     this._scale = pixelScale;
     this._img = new Image();
   }
+
+
+  /**
+   * A static function to create an Img with an optional ready callback. The Img instance will returned immediately before the image is loaded.
+   * @param src an url of the image in same domain. Alternatively you can use a base64 string. To load from Blob, use `Img.fromBlob`.
+   * @param editable Specify if you want to manipulate pixels of this image. Default is `false`.
+   * @param pixelScale Set internal canvas' scale in relation to original image size. Useful for retina screens. Use `CanvasSpace.pixelScale` to pass current scale.
+   * @param ready An optional ready callback function 
+   */
+  static load( src:string, editable:boolean=false, pixelScale:number=1, ready?:(img) => {} ):Img {
+    let img = new Img( editable, pixelScale );
+    img.load( src ).then( res => {
+      if (ready) ready(res);
+    });
+    return img;
+  }
   
 
   /**
@@ -102,10 +118,12 @@ export class Img {
   /**
    * Get the RGBA values of a pixel in the image
    * @param p position of the pixel
+   * @param rescale Specify if the pixel position should be scaled. Usually use rescale when tracking image and don't rescale when tracking canvas. You may also set a custom scale value.
    * @returns [R,G,B,A] values of the pixel at the specific position
    */
-  pixel( p:PtLike ):Pt {
-    return Img.getPixel( this._data, [p[0]*this._scale, p[1]*this._scale] );
+  pixel( p:PtLike, rescale:boolean|number=true ):Pt {
+    const s = ( typeof rescale == 'number' ) ? rescale : (rescale ? this._scale : 1);
+    return Img.getPixel( this._data, [ p[0]*s, p[1]*s ] );
   }
   
 
@@ -127,9 +145,15 @@ export class Img {
   }
 
 
-  resize( box:PtLike ):this {
-    let s = [ box[0]/this._img.naturalWidth, box[1]/this._img.naturalHeight ];
+  /**
+   * Resize the canvas image. The original image is unchanged until `sync()`.
+   * @param sizeOrScale A PtLike array specifying either [x, y] scales or [x, y] sizes.
+   * @param asScale If true, treat the first parameter as scales. Otherwise, treat it as specific sizes.
+   */
+  resize( sizeOrScale:PtLike, asScale:boolean = false ):this {
+    let s = asScale ? sizeOrScale : [ sizeOrScale[0]/this._img.naturalWidth, sizeOrScale[1]/this._img.naturalHeight ];
     this._drawToScale( s, this._img );
+    this._data = this._ctx.getImageData(0, 0, this._cv.width, this._cv.height );
     return this;
   }
 
@@ -142,6 +166,16 @@ export class Img {
     let p = box.topLeft.scale( this._scale );
     let s = box.size.scale( this._scale );
     return this._ctx.getImageData( p.x, p.y, s.x, s.y );
+  }
+
+
+  /**
+   * Apply filters such as blur and grayscale to the canvas image. The original image is unchanged until `sync()`.
+   * @param css a css filter string such as "blur(10px) | contrast(200%)". See [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter#browser_compatibility) for a list of filter functions.
+   */
+  filter( css:string ):this {
+    this._ctx.filter = css;
+    return this;
   }
 
 
@@ -196,5 +230,15 @@ export class Img {
   
   get pixelScale():number {
     return this._scale;
+  }
+
+
+  get imageSize():Pt {
+    return new Pt(this._img.width, this._img.height);
+  }
+
+
+  get canvasSize():Pt {
+    return new Pt(this._cv.width, this._cv.height);
   }
 }
