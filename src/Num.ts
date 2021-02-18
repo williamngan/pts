@@ -84,6 +84,22 @@ export class Num {
 
 
   /**
+   * Get a random Pt within the range defined by either 1 or 2 Pt
+   * @param a the range if only one Pt is used, or the start of the range if two Pt were used
+   * @param b optional Pt to define the end of the range
+   */
+  static randomPt( a:PtLike, b?:PtLike ):Pt {
+    let p = new Pt( a.length );
+    let range = b ? Vec.subtract(b, a) : a;
+    let start = b ? a : new Pt(a.length).fill(0);
+    for (let i=0, len=p.length; i<len; i++) {
+      p[i] = Math.random() * range[i] + start[i];
+    }
+    return p;
+  }
+
+
+  /**
    * Normalize a value within a range.
    * @param n the value to normalize
    * @param a range value 1

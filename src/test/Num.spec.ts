@@ -174,7 +174,16 @@ describe('Num: ', function() {
       let sin = Geom.sinTable();
       assert.isTrue( Num.equals( sin.sin( Math.PI/17 ), Math.sin( Math.PI/17 ), Math.PI/180) );
     });
+
+    it('can generate a random Pt', function() {
+      let a = Num.randomPt( new Pt(0.01, 0.01, 0.01) );
+      assert.isTrue( a[0] < 0.01 && a[1] < 0.01 && a[2] < 0.01 );
+    });
     
+    it('can generate a random Pt from 2 Pt', function() {
+      let a = Num.randomPt( new Pt(0.01, 0.01, 0.01), new Pt(0.015, 0.015, 0.015) );
+      assert.isTrue( a[0] >= 0.01 && a[0] <0.015 && a[1] >= 0.01 && a[1] < 0.015 && a[2] > 0.01 && a[2] < 0.015 );
+    });
   });
 
 
