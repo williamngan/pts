@@ -3468,8 +3468,20 @@
     6
   ],
   [
+    "Image_Img#accessor_canvasSize",
+    "Img.canvasSize",
+    "Accessor",
+    6
+  ],
+  [
     "Image_Img#accessor_ctx",
     "Img.ctx",
+    "Accessor",
+    6
+  ],
+  [
+    "Image_Img#accessor_current",
+    "Img.current",
     "Accessor",
     6
   ],
@@ -3482,6 +3494,12 @@
   [
     "Image_Img#accessor_image",
     "Img.image",
+    "Accessor",
+    6
+  ],
+  [
+    "Image_Img#accessor_imageSize",
+    "Img.imageSize",
     "Accessor",
     6
   ],
@@ -3510,6 +3528,12 @@
     8
   ],
   [
+    "Image_Img#function_filter",
+    "Img.filter",
+    "Function",
+    8
+  ],
+  [
     "Image_Img#function_load",
     "Img.load",
     "Function",
@@ -3518,6 +3542,12 @@
   [
     "Image_Img#function_pixel",
     "Img.pixel",
+    "Function",
+    8
+  ],
+  [
+    "Image_Img#function_resize",
+    "Img.resize",
     "Function",
     8
   ],
@@ -3542,6 +3572,12 @@
   [
     "Image_Img#function_getPixel",
     "Img.getPixel",
+    "Function",
+    8
+  ],
+  [
+    "Image_Img#function_load",
+    "Img.load",
     "Function",
     8
   ],
@@ -3908,6 +3944,12 @@
   [
     "Num_Num#function_normalizeValue",
     "Num.normalizeValue",
+    "Function",
+    8
+  ],
+  [
+    "Num_Num#function_randomPt",
+    "Num.randomPt",
     "Function",
     8
   ],

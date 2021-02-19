@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 828,
+  "id": 832,
   "comment": "**[Experimental]** An abstract class that represents an UI element. It wraps a [`Group`](#link) and supports UI event handling.\nExtend this class to create custom UI elements.",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           47
         ]
       ],
-      "id": 842,
+      "id": 846,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -75,7 +75,7 @@
           11
         ]
       ],
-      "id": 878,
+      "id": 882,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -107,7 +107,7 @@
           8
         ]
       ],
-      "id": 874,
+      "id": 878,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -139,7 +139,7 @@
           11
         ]
       ],
-      "id": 882,
+      "id": 886,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -168,7 +168,7 @@
           16
         ]
       ],
-      "id": 903,
+      "id": 907,
       "flags": {
         "isProtected": true
       },
@@ -200,7 +200,7 @@
           8
         ]
       ],
-      "id": 898,
+      "id": 902,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -242,7 +242,7 @@
           5
         ]
       ],
-      "id": 894,
+      "id": 898,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -278,7 +278,7 @@
           4
         ]
       ],
-      "id": 890,
+      "id": 894,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -314,7 +314,7 @@
           8
         ]
       ],
-      "id": 915,
+      "id": 919,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -344,7 +344,7 @@
           7
         ]
       ],
-      "id": 886,
+      "id": 890,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -380,7 +380,7 @@
           10
         ]
       ],
-      "id": 925,
+      "id": 929,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -403,7 +403,7 @@
           18
         ]
       ],
-      "id": 906,
+      "id": 910,
       "flags": {
         "isProtected": true
       },
@@ -435,7 +435,7 @@
           19
         ]
       ],
-      "id": 857,
+      "id": 861,
       "flags": {
         "isStatic": true
       },
@@ -479,7 +479,7 @@
           20
         ]
       ],
-      "id": 863,
+      "id": 867,
       "flags": {
         "isStatic": true
       },
@@ -523,7 +523,7 @@
           22
         ]
       ],
-      "id": 851,
+      "id": 855,
       "flags": {
         "isStatic": true
       },
@@ -567,7 +567,7 @@
           15
         ]
       ],
-      "id": 869,
+      "id": 873,
       "flags": {
         "isStatic": true
       },
@@ -611,7 +611,7 @@
           14
         ]
       ],
-      "id": 909,
+      "id": 913,
       "flags": {
         "isStatic": true
       },

@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.10.1 - Copyright © 2017-2021 William Ngan and contributors.
+ * pts.js 0.10.2 - Copyright © 2017-2021 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -2838,8 +2838,8 @@ var Img = function () {
                 _this._img.src = src;
                 _this._img.onload = function () {
                     if (_this._editable) {
-                        _this._cv = document.createElement("canvas");
-                        _this._drawToScale(_this._scale, _this._scale, _this._img);
+                        if (!_this._cv) _this._cv = document.createElement("canvas");
+                        _this._drawToScale(_this._scale, _this._img);
                         _this._data = _this._ctx.getImageData(0, 0, _this._cv.width, _this._cv.height);
                     }
                     _this._loaded = true;
@@ -2852,14 +2852,14 @@ var Img = function () {
         }
     }, {
         key: "_drawToScale",
-        value: function _drawToScale(imgScale, canvasScale, img) {
-            this._cv.width = this._img.naturalWidth * imgScale;
-            this._cv.height = this._img.naturalHeight * imgScale;
+        value: function _drawToScale(canvasScale, img) {
+            var cms = typeof canvasScale === 'number' ? [canvasScale, canvasScale] : canvasScale;
+            var nw = img.width;
+            var nh = img.height;
+            this._cv.width = nw * cms[0];
+            this._cv.height = nh * cms[1];
             this._ctx = this._cv.getContext('2d');
-            this._ctx.save();
-            this._ctx.scale(canvasScale, canvasScale);
-            if (img) this._ctx.drawImage(img, 0, 0);
-            this._ctx.restore();
+            if (img) this._ctx.drawImage(img, 0, 0, nw, nh, 0, 0, this._cv.width, this._cv.height);
         }
     }, {
         key: "bitmap",
@@ -2875,9 +2875,8 @@ var Img = function () {
 
             if (this._scale !== 1) {
                 this.bitmap().then(function (b) {
-                    _this2._drawToScale(1, 1 / _this2._scale, b);
-                    _this2._img.src = _this2.toBase64();
-                    _this2._drawToScale(_this2._scale, _this2._scale, _this2._img);
+                    _this2._drawToScale(1 / _this2._scale, b);
+                    _this2.load(_this2.toBase64());
                 });
             } else {
                 this._img.src = this.toBase64();
@@ -2886,7 +2885,20 @@ var Img = function () {
     }, {
         key: "pixel",
         value: function pixel(p) {
-            return Img.getPixel(this._data, [p[0] * this._scale, p[1] * this._scale]);
+            var rescale = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+            var s = typeof rescale == 'number' ? rescale : rescale ? this._scale : 1;
+            return Img.getPixel(this._data, [p[0] * s, p[1] * s]);
+        }
+    }, {
+        key: "resize",
+        value: function resize(sizeOrScale) {
+            var asScale = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+            var s = asScale ? sizeOrScale : [sizeOrScale[0] / this._img.naturalWidth, sizeOrScale[1] / this._img.naturalHeight];
+            this._drawToScale(s, this._img);
+            this._data = this._ctx.getImageData(0, 0, this._cv.width, this._cv.height);
+            return this;
         }
     }, {
         key: "crop",
@@ -2896,9 +2908,20 @@ var Img = function () {
             return this._ctx.getImageData(p.x, p.y, s.x, s.y);
         }
     }, {
+        key: "filter",
+        value: function filter(css) {
+            this._ctx.filter = css;
+            return this;
+        }
+    }, {
         key: "toBase64",
         value: function toBase64() {
             return this._cv.toDataURL();
+        }
+    }, {
+        key: "current",
+        get: function get() {
+            return this._editable ? this._cv : this._img;
         }
     }, {
         key: "image",
@@ -2930,7 +2953,30 @@ var Img = function () {
         get: function get() {
             return this._scale;
         }
+    }, {
+        key: "imageSize",
+        get: function get() {
+            return new Pt_1.Pt(this._img.width, this._img.height);
+        }
+    }, {
+        key: "canvasSize",
+        get: function get() {
+            return new Pt_1.Pt(this._cv.width, this._cv.height);
+        }
     }], [{
+        key: "load",
+        value: function load(src) {
+            var editable = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+            var pixelScale = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
+            var ready = arguments[3];
+
+            var img = new Img(editable, pixelScale);
+            img.load(src).then(function (res) {
+                if (ready) ready(res);
+            });
+            return img;
+        }
+    }, {
         key: "getPixel",
         value: function getPixel(imgData, p) {
             var no = new Pt_1.Pt(0, 0, 0, 0);
@@ -3368,6 +3414,17 @@ var Num = function () {
 
             var r = a > b ? a - b : b - a;
             return a + Math.random() * r;
+        }
+    }, {
+        key: "randomPt",
+        value: function randomPt(a, b) {
+            var p = new Pt_1.Pt(a.length);
+            var range = b ? LinearAlgebra_1.Vec.subtract(b, a) : a;
+            var start = b ? a : new Pt_1.Pt(a.length).fill(0);
+            for (var i = 0, len = p.length; i < len; i++) {
+                p[i] = Math.random() * range[i] + start[i];
+            }
+            return p;
         }
     }, {
         key: "normalizeValue",

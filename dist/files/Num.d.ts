@@ -8,6 +8,7 @@ export declare class Num {
     static boundValue(val: number, min: number, max: number): number;
     static within(p: number, a: number, b: number): boolean;
     static randomRange(a: number, b?: number): number;
+    static randomPt(a: PtLike, b?: PtLike): Pt;
     static normalizeValue(n: number, a: number, b: number): number;
     static sum(pts: PtLikeIterable): Pt;
     static average(pts: PtLikeIterable): Pt;

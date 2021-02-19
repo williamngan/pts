@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 641,
+  "id": 645,
   "comment": "Triangle class provides static functions to create and operate on trianges. A triange is a polygon represented as a Group of 3 Pts.\nYou can use the static functions as-is, or apply the [`Group.op`](#link) or [`Pt.op`](#link) to enable functional programming.\nSee [Op guide](../guide/Op-0400.html) for details.",
   "constructor": [],
   "accessors": [],
@@ -22,7 +22,7 @@
           17
         ]
       ],
-      "id": 659,
+      "id": 663,
       "flags": {
         "isStatic": true
       },
@@ -60,7 +60,7 @@
           21
         ]
       ],
-      "id": 673,
+      "id": 677,
       "flags": {
         "isStatic": true
       },
@@ -92,7 +92,7 @@
           21
         ]
       ],
-      "id": 676,
+      "id": 680,
       "flags": {
         "isStatic": true
       },
@@ -130,7 +130,7 @@
           19
         ]
       ],
-      "id": 648,
+      "id": 652,
       "flags": {
         "isStatic": true
       },
@@ -168,7 +168,7 @@
           19
         ]
       ],
-      "id": 645,
+      "id": 649,
       "flags": {
         "isStatic": true
       },
@@ -200,7 +200,7 @@
           17
         ]
       ],
-      "id": 642,
+      "id": 646,
       "flags": {
         "isStatic": true
       },
@@ -232,7 +232,7 @@
           17
         ]
       ],
-      "id": 666,
+      "id": 670,
       "flags": {
         "isStatic": true
       },
@@ -264,7 +264,7 @@
           17
         ]
       ],
-      "id": 669,
+      "id": 673,
       "flags": {
         "isStatic": true
       },
@@ -302,7 +302,7 @@
           15
         ]
       ],
-      "id": 652,
+      "id": 656,
       "flags": {
         "isStatic": true
       },
@@ -334,7 +334,7 @@
           21
         ]
       ],
-      "id": 655,
+      "id": 659,
       "flags": {
         "isStatic": true
       },
@@ -372,7 +372,7 @@
           20
         ]
       ],
-      "id": 663,
+      "id": 667,
       "flags": {
         "isStatic": true
       },

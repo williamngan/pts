@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Typealias",
-  "id": 1625,
+  "id": 1629,
   "comment": "Typescript only: a listener object created by Tempo class",
   "constructor": [],
   "accessors": [],

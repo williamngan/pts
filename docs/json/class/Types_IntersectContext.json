@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Typealias",
-  "id": 1598,
+  "id": 1602,
   "comment": "Typescript only: IntersectContext represents a type of an object that store the intersection info.",
   "constructor": [],
   "accessors": [],

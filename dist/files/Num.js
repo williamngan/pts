@@ -32,6 +32,15 @@ class Num {
         let r = (a > b) ? (a - b) : (b - a);
         return a + Math.random() * r;
     }
+    static randomPt(a, b) {
+        let p = new Pt_1.Pt(a.length);
+        let range = b ? LinearAlgebra_1.Vec.subtract(b, a) : a;
+        let start = b ? a : new Pt_1.Pt(a.length).fill(0);
+        for (let i = 0, len = p.length; i < len; i++) {
+            p[i] = Math.random() * range[i] + start[i];
+        }
+        return p;
+    }
     static normalizeValue(n, a, b) {
         let min = Math.min(a, b);
         let max = Math.max(a, b);

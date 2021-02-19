@@ -18,11 +18,11 @@
       "source": [
         [
           "src/Num.ts",
-          119,
+          135,
           16
         ]
       ],
-      "id": 178,
+      "id": 182,
       "flags": {
         "isStatic": true
       },
@@ -143,11 +143,11 @@
       "source": [
         [
           "src/Num.ts",
-          131,
+          147,
           14
         ]
       ],
-      "id": 181,
+      "id": 185,
       "flags": {
         "isStatic": true
       },
@@ -269,11 +269,11 @@
       "source": [
         [
           "src/Num.ts",
-          145,
+          161,
           19
         ]
       ],
-      "id": 188,
+      "id": 192,
       "flags": {
         "isStatic": true
       },
@@ -325,11 +325,11 @@
       "source": [
         [
           "src/Num.ts",
-          92,
+          108,
           23
         ]
       ],
-      "id": 170,
+      "id": 174,
       "flags": {
         "isStatic": true
       },
@@ -357,6 +357,44 @@
               "name": "b",
               "comment": "range value 1\n",
               "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "randomPt",
+      "source": [
+        [
+          "src/Num.ts",
+          91,
+          17
+        ]
+      ],
+      "id": 170,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a random Pt within the range defined by either 1 or 2 Pt",
+          "returns": "Pt",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "a",
+              "comment": "the range if only one Pt is used, or the start of the range if two Pt were used",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "b",
+              "comment": "optional Pt to define the end of the range\n",
+              "type": "PtLike",
               "default": false
             }
           ],
@@ -407,11 +445,11 @@
       "source": [
         [
           "src/Num.ts",
-          104,
+          120,
           12
         ]
       ],
-      "id": 175,
+      "id": 179,
       "flags": {
         "isStatic": true
       },

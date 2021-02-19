@@ -341,21 +341,27 @@ export class Img {
     protected _loaded: boolean;
     protected _editable: boolean;
     constructor(editable?: boolean, pixelScale?: number);
+    static load(src: string, editable?: boolean, pixelScale?: number, ready?: (img: any) => {}): Img;
     load(src: string): Promise<Img>;
-    protected _drawToScale(imgScale: number, canvasScale: number, img: CanvasImageSource): void;
+    protected _drawToScale(canvasScale: number | PtLike, img: CanvasImageSource): void;
     bitmap(size?: PtLike): Promise<ImageBitmap>;
     sync(): void;
-    pixel(p: PtLike): Pt;
+    pixel(p: PtLike, rescale?: boolean | number): Pt;
     static getPixel(imgData: ImageData, p: PtLike): Pt;
+    resize(sizeOrScale: PtLike, asScale?: boolean): this;
     crop(box: Bound): ImageData;
+    filter(css: string): this;
     static fromBlob(blob: Blob, editable?: boolean): Promise<Img>;
     toBase64(): string;
+    get current(): CanvasImageSource;
     get image(): HTMLImageElement;
     get canvas(): HTMLCanvasElement;
     get data(): ImageData;
     get ctx(): CanvasRenderingContext2D;
     get loaded(): boolean;
     get pixelScale(): number;
+    get imageSize(): Pt;
+    get canvasSize(): Pt;
 }
 
 export class Vec {
@@ -407,6 +413,7 @@ export class Num {
     static boundValue(val: number, min: number, max: number): number;
     static within(p: number, a: number, b: number): boolean;
     static randomRange(a: number, b?: number): number;
+    static randomPt(a: PtLike, b?: PtLike): Pt;
     static normalizeValue(n: number, a: number, b: number): number;
     static sum(pts: PtLikeIterable): Pt;
     static average(pts: PtLikeIterable): Pt;
