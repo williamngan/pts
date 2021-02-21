@@ -20,6 +20,7 @@ export declare const UIPointerActions: {
     out: string;
     enter: string;
     leave: string;
+    click: string;
     contextmenu: string;
     all: string;
 };

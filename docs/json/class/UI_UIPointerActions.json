@@ -20,12 +20,28 @@
         [
           "src/UI.ts",
           20,
-          193
+          209
         ]
       ],
-      "id": 1259,
+      "id": 1260,
       "flags": {},
       "type": "all",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "click",
+      "source": [
+        [
+          "src/UI.ts",
+          20,
+          167
+        ]
+      ],
+      "id": 1258,
+      "flags": {},
+      "type": "click",
       "overrides": false,
       "inherits": false,
       "comment": ""
@@ -36,10 +52,10 @@
         [
           "src/UI.ts",
           20,
-          173
+          189
         ]
       ],
-      "id": 1258,
+      "id": 1259,
       "flags": {},
       "type": "contextmenu",
       "overrides": false,

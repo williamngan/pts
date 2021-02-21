@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 1668,
+  "id": 1669,
   "comment": "Util class provides static helper functions.",
   "constructor": [],
   "accessors": [],
@@ -22,7 +22,7 @@
           19
         ]
       ],
-      "id": 1741,
+      "id": 1742,
       "flags": {
         "isStatic": true
       },
@@ -60,7 +60,7 @@
           16
         ]
       ],
-      "id": 1695,
+      "id": 1696,
       "flags": {
         "isStatic": true
       },
@@ -104,7 +104,7 @@
           16
         ]
       ],
-      "id": 1691,
+      "id": 1692,
       "flags": {
         "isStatic": true
       },
@@ -142,7 +142,7 @@
           17
         ]
       ],
-      "id": 1719,
+      "id": 1720,
       "flags": {
         "isStatic": true
       },
@@ -192,7 +192,7 @@
           16
         ]
       ],
-      "id": 1673,
+      "id": 1674,
       "flags": {
         "isStatic": true
       },
@@ -216,15 +216,15 @@
       ]
     },
     {
-      "name": "iterToArray",
+      "name": "isMobile",
       "source": [
         [
           "src/Util.ts",
-          351,
-          20
+          364,
+          17
         ]
       ],
-      "id": 1745,
+      "id": 1749,
       "flags": {
         "isStatic": true
       },
@@ -232,13 +232,38 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "",
+          "comment": "Check if accessing from a mobile device. Can be useful since some experimental features may not be availble in mobile browsers.",
+          "returns": "boolean",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "iterToArray",
+      "source": [
+        [
+          "src/Util.ts",
+          356,
+          20
+        ]
+      ],
+      "id": 1746,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Convert an iterable into an array",
           "returns": "any[]",
           "returns_comment": false,
           "parameters": [
             {
               "name": "it",
-              "comment": "",
+              "comment": "an iterable\n",
               "type": "Iterable",
               "default": false
             }
@@ -256,7 +281,7 @@
           13
         ]
       ],
-      "id": 1728,
+      "id": 1729,
       "flags": {
         "isStatic": true
       },
@@ -294,7 +319,7 @@
           20
         ]
       ],
-      "id": 1736,
+      "id": 1737,
       "flags": {
         "isStatic": true
       },
@@ -331,7 +356,7 @@
           18
         ]
       ],
-      "id": 1680,
+      "id": 1681,
       "flags": {
         "isStatic": true
       },
@@ -369,7 +394,7 @@
           14
         ]
       ],
-      "id": 1684,
+      "id": 1685,
       "flags": {
         "isStatic": true
       },
@@ -425,7 +450,7 @@
           16
         ]
       ],
-      "id": 1708,
+      "id": 1709,
       "flags": {
         "isStatic": true
       },
@@ -480,7 +505,7 @@
           13
         ]
       ],
-      "id": 1676,
+      "id": 1677,
       "flags": {
         "isStatic": true
       },
@@ -518,7 +543,7 @@
           18
         ]
       ],
-      "id": 1670,
+      "id": 1671,
       "flags": {
         "isStatic": true
       },
@@ -550,7 +575,7 @@
           12
         ]
       ],
-      "id": 1705,
+      "id": 1706,
       "flags": {
         "isStatic": true
       },

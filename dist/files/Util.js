@@ -181,6 +181,9 @@ class Util {
     static iterToArray(it) {
         return (!Array.isArray(it)) ? [...it] : it;
     }
+    static isMobile() {
+        return /iPhone|iPad|Android/i.test(navigator.userAgent);
+    }
 }
 exports.Util = Util;
 Util._warnLevel = "mute";

@@ -969,6 +969,7 @@ export abstract class MultiTouchSpace extends Space {
     protected _mouseMove(evt: MouseEvent | TouchEvent): boolean;
     protected _mouseOver(evt: MouseEvent | TouchEvent): boolean;
     protected _mouseOut(evt: MouseEvent | TouchEvent): boolean;
+    protected _mouseClick(evt: MouseEvent | TouchEvent): boolean;
     protected _contextMenu(evt: MouseEvent): boolean;
     protected _touchMove(evt: TouchEvent): boolean;
     protected _touchStart(evt: TouchEvent): boolean;
@@ -1163,6 +1164,7 @@ export const UIPointerActions: {
     out: string;
     enter: string;
     leave: string;
+    click: string;
     contextmenu: string;
     all: string;
 };
@@ -1274,5 +1276,6 @@ export class Util {
     static performance(avgFrames?: number): () => number;
     static arrayCheck(pts: PtLikeIterable, minRequired?: number): boolean;
     static iterToArray(it: Iterable<any>): any[];
+    static isMobile(): boolean;
 }
 

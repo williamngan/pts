@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Typealias",
-  "id": 1610,
+  "id": 1611,
   "comment": "UIHandler is a type alias that represents a callback function to handle UI actions.",
   "constructor": [],
   "accessors": [],

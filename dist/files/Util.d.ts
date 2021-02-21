@@ -46,4 +46,5 @@ export declare class Util {
     static performance(avgFrames?: number): () => number;
     static arrayCheck(pts: PtLikeIterable, minRequired?: number): boolean;
     static iterToArray(it: Iterable<any>): any[];
+    static isMobile(): boolean;
 }

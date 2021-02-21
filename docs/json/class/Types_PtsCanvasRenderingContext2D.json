@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Interface",
-  "id": 1299,
+  "id": 1300,
   "comment": "Typescript only: extends Canvas's 2D context with backingStorePixelRatio property.",
   "constructor": [],
   "accessors": [],
@@ -22,7 +22,7 @@
           7
         ]
       ],
-      "id": 1413,
+      "id": 1414,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasPath.arc",
@@ -82,7 +82,7 @@
           9
         ]
       ],
-      "id": 1421,
+      "id": 1422,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasPath.arcTo",
@@ -136,7 +136,7 @@
           13
         ]
       ],
-      "id": 1329,
+      "id": 1330,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasDrawPath.beginPath",
@@ -159,7 +159,7 @@
           17
         ]
       ],
-      "id": 1428,
+      "id": 1429,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasPath.bezierCurveTo",
@@ -219,7 +219,7 @@
           13
         ]
       ],
-      "id": 1478,
+      "id": 1479,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasRect.clearRect",
@@ -272,7 +272,7 @@
           8
         ]
       ],
-      "id": 1331,
+      "id": 1332,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasDrawPath.clip",
@@ -322,7 +322,7 @@
           13
         ]
       ],
-      "id": 1436,
+      "id": 1437,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasPath.closePath",
@@ -350,7 +350,7 @@
           19
         ]
       ],
-      "id": 1386,
+      "id": 1387,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasImageData.createImageData",
@@ -400,7 +400,7 @@
           24
         ]
       ],
-      "id": 1367,
+      "id": 1368,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasFillStrokeStyles.createLinearGradient",
@@ -448,7 +448,7 @@
           17
         ]
       ],
-      "id": 1373,
+      "id": 1374,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasFillStrokeStyles.createPattern",
@@ -484,7 +484,7 @@
           24
         ]
       ],
-      "id": 1377,
+      "id": 1378,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasFillStrokeStyles.createRadialGradient",
@@ -549,7 +549,7 @@
           21
         ]
       ],
-      "id": 1556,
+      "id": 1557,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasUserInterface.drawFocusIfNeeded",
@@ -609,7 +609,7 @@
           13
         ]
       ],
-      "id": 1308,
+      "id": 1309,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasDrawImage.drawImage",
@@ -751,7 +751,7 @@
           11
         ]
       ],
-      "id": 1438,
+      "id": 1439,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasPath.ellipse",
@@ -828,7 +828,7 @@
           8
         ]
       ],
-      "id": 1337,
+      "id": 1338,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasDrawPath.fill",
@@ -878,7 +878,7 @@
           12
         ]
       ],
-      "id": 1484,
+      "id": 1485,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasRect.fillRect",
@@ -926,7 +926,7 @@
           12
         ]
       ],
-      "id": 1504,
+      "id": 1505,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasText.fillText",
@@ -974,7 +974,7 @@
           16
         ]
       ],
-      "id": 1392,
+      "id": 1393,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasImageData.getImageData",
@@ -1022,7 +1022,7 @@
           15
         ]
       ],
-      "id": 1473,
+      "id": 1474,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasPathDrawingStyles.getLineDash",
@@ -1045,7 +1045,7 @@
           16
         ]
       ],
-      "id": 1523,
+      "id": 1524,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasTransform.getTransform",
@@ -1073,7 +1073,7 @@
           17
         ]
       ],
-      "id": 1343,
+      "id": 1344,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasDrawPath.isPointInPath",
@@ -1152,7 +1152,7 @@
           19
         ]
       ],
-      "id": 1353,
+      "id": 1354,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasDrawPath.isPointInStroke",
@@ -1214,7 +1214,7 @@
           10
         ]
       ],
-      "id": 1448,
+      "id": 1449,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasPath.lineTo",
@@ -1250,7 +1250,7 @@
           15
         ]
       ],
-      "id": 1510,
+      "id": 1511,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasText.measureText",
@@ -1280,7 +1280,7 @@
           10
         ]
       ],
-      "id": 1452,
+      "id": 1453,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasPath.moveTo",
@@ -1321,7 +1321,7 @@
           16
         ]
       ],
-      "id": 1398,
+      "id": 1399,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasImageData.putImageData",
@@ -1413,7 +1413,7 @@
           20
         ]
       ],
-      "id": 1456,
+      "id": 1457,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasPath.quadraticCurveTo",
@@ -1461,7 +1461,7 @@
           8
         ]
       ],
-      "id": 1462,
+      "id": 1463,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasPath.rect",
@@ -1509,7 +1509,7 @@
           18
         ]
       ],
-      "id": 1525,
+      "id": 1526,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasTransform.resetTransform",
@@ -1532,7 +1532,7 @@
           11
         ]
       ],
-      "id": 1500,
+      "id": 1501,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasState.restore",
@@ -1555,7 +1555,7 @@
           10
         ]
       ],
-      "id": 1527,
+      "id": 1528,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasTransform.rotate",
@@ -1585,7 +1585,7 @@
           8
         ]
       ],
-      "id": 1502,
+      "id": 1503,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasState.save",
@@ -1608,7 +1608,7 @@
           9
         ]
       ],
-      "id": 1530,
+      "id": 1531,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasTransform.scale",
@@ -1649,7 +1649,7 @@
           22
         ]
       ],
-      "id": 1562,
+      "id": 1563,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasUserInterface.scrollPathIntoView",
@@ -1686,7 +1686,7 @@
           15
         ]
       ],
-      "id": 1475,
+      "id": 1476,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasPathDrawingStyles.setLineDash",
@@ -1721,7 +1721,7 @@
           16
         ]
       ],
-      "id": 1534,
+      "id": 1535,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasTransform.setTransform",
@@ -1800,7 +1800,7 @@
           10
         ]
       ],
-      "id": 1361,
+      "id": 1362,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasDrawPath.stroke",
@@ -1837,7 +1837,7 @@
           14
         ]
       ],
-      "id": 1490,
+      "id": 1491,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasRect.strokeRect",
@@ -1885,7 +1885,7 @@
           14
         ]
       ],
-      "id": 1513,
+      "id": 1514,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasText.strokeText",
@@ -1933,7 +1933,7 @@
           13
         ]
       ],
-      "id": 1544,
+      "id": 1545,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasTransform.transform",
@@ -1993,7 +1993,7 @@
           13
         ]
       ],
-      "id": 1552,
+      "id": 1553,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasTransform.translate",
@@ -2032,7 +2032,7 @@
           36
         ]
       ],
-      "id": 1566,
+      "id": 1567,
       "flags": {},
       "type": "CanvasRenderingContext2D",
       "overrides": false,
@@ -2048,7 +2048,7 @@
           24
         ]
       ],
-      "id": 1304,
+      "id": 1305,
       "flags": {
         "isOptional": true
       },
@@ -2066,7 +2066,7 @@
           19
         ]
       ],
-      "id": 1305,
+      "id": 1306,
       "flags": {
         "isReadonly": true
       },
@@ -2084,7 +2084,7 @@
           13
         ]
       ],
-      "id": 1519,
+      "id": 1520,
       "flags": {},
       "type": "direction",
       "overrides": false,
@@ -2100,7 +2100,7 @@
           13
         ]
       ],
-      "id": 1365,
+      "id": 1366,
       "flags": {},
       "type": "fillStyle",
       "overrides": false,
@@ -2116,7 +2116,7 @@
           10
         ]
       ],
-      "id": 1385,
+      "id": 1386,
       "flags": {},
       "type": "filter",
       "overrides": false,
@@ -2132,7 +2132,7 @@
           8
         ]
       ],
-      "id": 1520,
+      "id": 1521,
       "flags": {},
       "type": "font",
       "overrides": false,
@@ -2148,7 +2148,7 @@
           15
         ]
       ],
-      "id": 1306,
+      "id": 1307,
       "flags": {},
       "type": "globalAlpha",
       "overrides": false,
@@ -2164,7 +2164,7 @@
           28
         ]
       ],
-      "id": 1307,
+      "id": 1308,
       "flags": {},
       "type": "globalCompositeOperation",
       "overrides": false,
@@ -2180,7 +2180,7 @@
           25
         ]
       ],
-      "id": 1411,
+      "id": 1412,
       "flags": {},
       "type": "imageSmoothingEnabled",
       "overrides": false,
@@ -2196,7 +2196,7 @@
           25
         ]
       ],
-      "id": 1412,
+      "id": 1413,
       "flags": {},
       "type": "imageSmoothingQuality",
       "overrides": false,
@@ -2212,7 +2212,7 @@
           11
         ]
       ],
-      "id": 1468,
+      "id": 1469,
       "flags": {},
       "type": "lineCap",
       "overrides": false,
@@ -2228,7 +2228,7 @@
           18
         ]
       ],
-      "id": 1469,
+      "id": 1470,
       "flags": {},
       "type": "lineDashOffset",
       "overrides": false,
@@ -2244,7 +2244,7 @@
           12
         ]
       ],
-      "id": 1470,
+      "id": 1471,
       "flags": {},
       "type": "lineJoin",
       "overrides": false,
@@ -2260,7 +2260,7 @@
           13
         ]
       ],
-      "id": 1471,
+      "id": 1472,
       "flags": {},
       "type": "lineWidth",
       "overrides": false,
@@ -2276,7 +2276,7 @@
           14
         ]
       ],
-      "id": 1472,
+      "id": 1473,
       "flags": {},
       "type": "miterLimit",
       "overrides": false,
@@ -2292,7 +2292,7 @@
           27
         ]
       ],
-      "id": 1301,
+      "id": 1302,
       "flags": {
         "isOptional": true
       },
@@ -2310,7 +2310,7 @@
           26
         ]
       ],
-      "id": 1302,
+      "id": 1303,
       "flags": {
         "isOptional": true
       },
@@ -2328,7 +2328,7 @@
           25
         ]
       ],
-      "id": 1303,
+      "id": 1304,
       "flags": {
         "isOptional": true
       },
@@ -2346,7 +2346,7 @@
           14
         ]
       ],
-      "id": 1496,
+      "id": 1497,
       "flags": {},
       "type": "shadowBlur",
       "overrides": false,
@@ -2362,7 +2362,7 @@
           15
         ]
       ],
-      "id": 1497,
+      "id": 1498,
       "flags": {},
       "type": "shadowColor",
       "overrides": false,
@@ -2378,7 +2378,7 @@
           17
         ]
       ],
-      "id": 1498,
+      "id": 1499,
       "flags": {},
       "type": "shadowOffsetX",
       "overrides": false,
@@ -2394,7 +2394,7 @@
           17
         ]
       ],
-      "id": 1499,
+      "id": 1500,
       "flags": {},
       "type": "shadowOffsetY",
       "overrides": false,
@@ -2410,7 +2410,7 @@
           15
         ]
       ],
-      "id": 1366,
+      "id": 1367,
       "flags": {},
       "type": "strokeStyle",
       "overrides": false,
@@ -2426,7 +2426,7 @@
           13
         ]
       ],
-      "id": 1521,
+      "id": 1522,
       "flags": {},
       "type": "textAlign",
       "overrides": false,
@@ -2442,7 +2442,7 @@
           16
         ]
       ],
-      "id": 1522,
+      "id": 1523,
       "flags": {},
       "type": "textBaseline",
       "overrides": false,
@@ -2458,7 +2458,7 @@
           30
         ]
       ],
-      "id": 1300,
+      "id": 1301,
       "flags": {
         "isOptional": true
       },

@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.10.2 - Copyright © 2017-2021 William Ngan and contributors.
+ * pts.js 0.10.3 - Copyright © 2017-2021 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -9347,6 +9347,12 @@ var Util = function () {
         key: "iterToArray",
         value: function iterToArray(it) {
             return !Array.isArray(it) ? [].concat(_toConsumableArray(it)) : it;
+        }
+    }, {
+        key: "isMobile",
+        value: function isMobile() {
+            return (/iPhone|iPad|Android/i.test(navigator.userAgent)
+            );
         }
     }]);
 

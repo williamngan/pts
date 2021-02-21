@@ -178,6 +178,9 @@ export class Util {
     static iterToArray(it) {
         return (!Array.isArray(it)) ? [...it] : it;
     }
+    static isMobile() {
+        return /iPhone|iPad|Android/i.test(navigator.userAgent);
+    }
 }
 Util._warnLevel = "mute";
 //# sourceMappingURL=Util.js.map

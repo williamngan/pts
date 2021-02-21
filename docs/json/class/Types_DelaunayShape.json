@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Typealias",
-  "id": 1583,
+  "id": 1584,
   "comment": "Typescript only: A DelaunayShape represents an object type that can store a Delaunay element. It has 3 indices (i, j, k) and two groups that represent a triangle and a circle.",
   "constructor": [],
   "accessors": [],
