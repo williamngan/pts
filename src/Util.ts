@@ -348,10 +348,23 @@ export class Util {
     return true;
   }
 
+
+  /**
+   * Convert an iterable into an array
+   * @param it an iterable
+   */
   static iterToArray( it:Iterable<any> ): any[] {
     return (!Array.isArray(it)) ? [...it] : it;
   }
   
+
+  /**
+   * Check if accessing from a mobile device. Can be useful since some experimental features may not be availble in mobile browsers.
+   */
+  static isMobile() {
+    return /iPhone|iPad|Android/i.test(navigator.userAgent);
+  }
+
 }
 
 
