@@ -1,5 +1,5 @@
 // Source code licensed under Apache License 2.0. 
-// Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
+// Copyright © 2021 William Ngan. (https://github.com/williamngan/pts)
 
 window.demoDescription = "The laser pointers are drawing some words in Chinese. Click to make it disappear.";
 
@@ -88,7 +88,8 @@ window.demoDescription = "The laser pointers are drawing some words in Chinese. 
     },
 
     action: (type, x, y) => {
-      if (type==='down') etch = !etch;
+      console.log( type );
+      if (type==='click') etch = !etch;
     }
   });
 

@@ -7957,6 +7957,7 @@ var MultiTouchSpace = function (_Space) {
                 this.bindCanvas("mouseover", this._mouseOver.bind(this));
                 this.bindCanvas("mouseout", this._mouseOut.bind(this));
                 this.bindCanvas("mousemove", this._mouseMove.bind(this));
+                this.bindCanvas("click", this._mouseClick.bind(this));
                 this.bindCanvas("contextmenu", this._contextMenu.bind(this));
                 this._hasMouse = true;
             } else {
@@ -7965,6 +7966,7 @@ var MultiTouchSpace = function (_Space) {
                 this.unbindCanvas("mouseover", this._mouseOver.bind(this));
                 this.unbindCanvas("mouseout", this._mouseOut.bind(this));
                 this.unbindCanvas("mousemove", this._mouseMove.bind(this));
+                this.unbindCanvas("click", this._mouseClick.bind(this));
                 this.unbindCanvas("contextmenu", this._contextMenu.bind(this));
                 this._hasMouse = false;
             }
@@ -8074,6 +8076,14 @@ var MultiTouchSpace = function (_Space) {
         value: function _mouseOut(evt) {
             this._mouseAction(UI_1.UIPointerActions.out, evt);
             if (this._dragged) this._mouseAction(UI_1.UIPointerActions.drop, evt);
+            this._dragged = false;
+            return false;
+        }
+    }, {
+        key: "_mouseClick",
+        value: function _mouseClick(evt) {
+            this._mouseAction(UI_1.UIPointerActions.click, evt);
+            this._pressed = false;
             this._dragged = false;
             return false;
         }
@@ -8735,7 +8745,7 @@ exports.UIShape = {
     rectangle: "rectangle", circle: "circle", polygon: "polygon", polyline: "polyline", line: "line"
 };
 exports.UIPointerActions = {
-    up: "up", down: "down", move: "move", drag: "drag", uidrag: "uidrag", drop: "drop", uidrop: "uidrop", over: "over", out: "out", enter: "enter", leave: "leave", contextmenu: "contextmenu", all: "all"
+    up: "up", down: "down", move: "move", drag: "drag", uidrag: "uidrag", drop: "drop", uidrop: "uidrop", over: "over", out: "out", enter: "enter", leave: "leave", click: "click", contextmenu: "contextmenu", all: "all"
 };
 
 var UI = function () {

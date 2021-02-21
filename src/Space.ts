@@ -334,6 +334,7 @@ export abstract class MultiTouchSpace extends Space {
       this.bindCanvas( "mouseover", this._mouseOver.bind(this) );
       this.bindCanvas( "mouseout", this._mouseOut.bind(this) );
       this.bindCanvas( "mousemove", this._mouseMove.bind(this) );
+      this.bindCanvas( "click", this._mouseClick.bind(this) );
       this.bindCanvas( "contextmenu", this._contextMenu.bind(this) );
       this._hasMouse = true;
     } else {
@@ -342,6 +343,7 @@ export abstract class MultiTouchSpace extends Space {
       this.unbindCanvas( "mouseover", this._mouseOver.bind(this) );
       this.unbindCanvas( "mouseout", this._mouseOut.bind(this) );
       this.unbindCanvas( "mousemove", this._mouseMove.bind(this) );
+      this.unbindCanvas( "click", this._mouseClick.bind(this) );
       this.unbindCanvas( "contextmenu", this._contextMenu.bind(this) );
       this._hasMouse = false;
     }
@@ -491,7 +493,19 @@ export abstract class MultiTouchSpace extends Space {
     this._dragged = false;
     return false;
   }
-  
+
+
+  /**
+  * MouseClick handler.
+  * @param evt 
+  */
+  protected _mouseClick( evt:MouseEvent|TouchEvent ) {
+    this._mouseAction( UIA.click, evt );
+    this._pressed = false;
+    this._dragged = false;
+    return false;
+  }
+    
   
   /**
   * ContextMenu handler.

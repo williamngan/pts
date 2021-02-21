@@ -137,6 +137,7 @@ export class MultiTouchSpace extends Space {
             this.bindCanvas("mouseover", this._mouseOver.bind(this));
             this.bindCanvas("mouseout", this._mouseOut.bind(this));
             this.bindCanvas("mousemove", this._mouseMove.bind(this));
+            this.bindCanvas("click", this._mouseClick.bind(this));
             this.bindCanvas("contextmenu", this._contextMenu.bind(this));
             this._hasMouse = true;
         }
@@ -146,6 +147,7 @@ export class MultiTouchSpace extends Space {
             this.unbindCanvas("mouseover", this._mouseOver.bind(this));
             this.unbindCanvas("mouseout", this._mouseOut.bind(this));
             this.unbindCanvas("mousemove", this._mouseMove.bind(this));
+            this.unbindCanvas("click", this._mouseClick.bind(this));
             this.unbindCanvas("contextmenu", this._contextMenu.bind(this));
             this._hasMouse = false;
         }
@@ -241,6 +243,12 @@ export class MultiTouchSpace extends Space {
         this._mouseAction(UIA.out, evt);
         if (this._dragged)
             this._mouseAction(UIA.drop, evt);
+        this._dragged = false;
+        return false;
+    }
+    _mouseClick(evt) {
+        this._mouseAction(UIA.click, evt);
+        this._pressed = false;
         this._dragged = false;
         return false;
     }
