@@ -435,18 +435,26 @@ export class CanvasForm extends VisualForm {
   * Create a new CanvasForm. You may also use [`CanvasSpace.getForm()`](#link) to get the default form.
   * @param space an instance of CanvasSpace
   */
-  constructor( space:CanvasSpace ) {
+  constructor( space:CanvasSpace|CanvasRenderingContext2D ) {
     super();
-    this._space = space;
     
-    this._space.add( { start: () => {
-      this._ctx = this._space.ctx;
+    const _setup = (ctx) => {
+      this._ctx = ctx;
       this._ctx.fillStyle = this._style.fillStyle;
       this._ctx.strokeStyle = this._style.strokeStyle;    
       this._ctx.lineJoin = "bevel";
       this._ctx.font = this._font.value;
       this._ready = true;
-    }} );
+    };
+
+    if (space instanceof CanvasRenderingContext2D) {
+      _setup( space );
+    } else {
+      this._space = space;
+      this._space.add( { start: () => {
+        _setup( this._space.ctx );
+      }} );
+    }
   }
   
   
@@ -735,24 +743,6 @@ export class CanvasForm extends VisualForm {
     protected _paint() {
       if (this._filled) this._ctx.fill();
       if (this._stroked) this._ctx.stroke();
-    }
-
-
-    /**
-     * A convenient static function to wrap canvas drawing functions. Use this in combination with other static CanvasForm functions such as `CanvasForm.rect`.
-     * @param ctx canvas rendering context
-     * @param fn the drawing function. You can use other static CanvasForm functions (rect, circle, etc) within this function.
-     * @param fill optional fill value
-     * @param stroke optional stroke value
-     * @param strokeWidth optional stroke width
-     */
-    static paint( ctx:CanvasRenderingContext2D, fn:(ctx) => {}, fill?:string, stroke?:string, strokeWidth?:number ) {
-      if (fill) ctx.fillStyle = fill;
-      if (stroke) ctx.strokeStyle = stroke;
-      if (strokeWidth) ctx.lineWidth = strokeWidth;
-      fn(ctx);
-      ctx.fill();
-      ctx.stroke();
     }
     
 
