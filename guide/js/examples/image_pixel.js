@@ -6,14 +6,12 @@
 (function(){
   // Pts.namespace( this ); // add Pts into scope if needed
   
-  var demoID = "img_pixel";
+  var demoID = "image_pixel";
   
   // create Space and Form
   var space = new CanvasSpace("#"+demoID).setup({ retina: true, bgcolor: "#e2e6ef", resize: true });
   var form = space.getForm();
   let img;
-  let pts = new Group();
-  let de, triangles;
   
   // animation
   space.add( 
@@ -38,17 +36,17 @@
            * let cc = img.pixel( space.pointer, space.pixelScale / scaling );
            * form.fillOnly( `rgba(${cc.join(",")})` ).point([0,0], 100);
            */
-        }
 
-        if (de.length > 10) {
-          triangles = de.delaunay();
+          if (de.length > 10) {
+            triangles = de.delaunay();
+          }
+  
+          for (let i=0, len=triangles.length; i<len; i++) {
+            const center = Triangle.incenter( triangles[i] );
+            const c = img.pixel( center, space.pixelScale / scaling );
+            form.fillOnly( `rgba(${c[0]}, ${c[1]}, ${c[2]}, .85)` ).polygon( triangles[i] );
+          }
         }
-
-        for (let i=0, len=triangles.length; i<len; i++) {
-          const c = img.pixel( center, space.pixelScale / scaling );
-          form.fillOnly( `rgba(${c[0]}, ${c[1]}, ${c[2]}, .85)` ).polygon( triangles[i] );
-        }
-        
       },
 
       action: (type, x, y) => {
