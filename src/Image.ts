@@ -16,11 +16,13 @@ export class Img {
    * Create an Img
    * @param editable Specify if you want to manipulate pixels of this image. Default is `false`.
    * @param pixelScale Set internal canvas' scale in relation to original image size. Useful for retina screens. Use `CanvasSpace.pixelScale` to pass current scale.
+   * @param crossOrigin an optional parameter to enable loading cross-domain images if set to true. The image server's configuration must also be set correctly. For more, see [this documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image).
    */
-  constructor( editable:boolean=false, pixelScale:number=1 ) {
+  constructor( editable:boolean=false, pixelScale:number=1, crossOrigin?:boolean ) {
     this._editable = editable;
     this._scale = pixelScale;
     this._img = new Image();
+    if (crossOrigin) this._img.crossOrigin = "Anonymous";
   }
 
 

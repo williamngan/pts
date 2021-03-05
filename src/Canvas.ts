@@ -987,7 +987,7 @@ export class CanvasForm extends VisualForm {
     /**
      * A static function to draw an image.
      * @param ctx canvas rendering context
-     * @param img an [`ImageBitmap`](https://developer.mozilla.org/en-US/docs/Web/API/ImageBitmap) instance (eg the image from `<img>`, `<video>` or `<canvas>`)
+     * @param img either an [Img](#link) instance or an [`CanvasImageSource`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource) instance (eg the image from `<img>`, `<video>` or `<canvas>`)
      * @param ptOrRect a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a bounding box for resizing. Default is (0,0) at top-left.
      * @param orig optionally a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a cropping box in the original target. 
      */
@@ -1023,7 +1023,7 @@ export class CanvasForm extends VisualForm {
     
     /**
     * Draw an image.
-    * @param img an [`ImageBitmap`](https://developer.mozilla.org/en-US/docs/Web/API/ImageBitmap) instance (eg the image from `<img>`, `<video>` or `<canvas>`)
+    * @param img either an [Img](#link) instance or an [`CanvasImageSource`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource) instance (eg the image from `<img>`, `<video>` or `<canvas>`)
     * @param ptOrRect a target area to place the image. Either a PtLike specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left position, bottom-right position) that specifies a bounding box. Default is (0,0) at top-left.
     * @param orig optionally a Group or an Iterable<PtLike> with 2 Pt (top-left position, bottom-right position) that specifies a cropping box  in the original target. 
     */
