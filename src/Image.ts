@@ -1,6 +1,9 @@
 import { Bound, Pt } from "./Pt";
 import { PtLike } from "./Types";
 
+/**
+ * Img provides convenient functions to support image operations on HTML Canvas and [`CanvasSpace`](#link). Combine this with other Pts functions to experiment with visual forms that integrate bitmaps and vector graphics.
+ */
 export class Img {
 
   protected _img:HTMLImageElement;
@@ -182,13 +185,41 @@ export class Img {
 
 
   /**
+   * Remove the elements and data associated with this Img.
+   */
+  cleanup() {
+    if (this._cv) this._cv.remove();
+    if (this._img) this._img.remove();
+    this._data = null;
+  }
+
+
+  /**
    * Create a blob url that can be passed to `Img.load`
    * @param blob an image blob such as `new Blob([my_Uint8Array], {type: 'image/png'})`
-   * @param editable 
+   * @param editable Specify if you want to manipulate pixels of this image. Default is `false`.
    */
-  static fromBlob( blob:Blob, editable:boolean=false ):Promise<Img> {
+  static fromBlob( blob:Blob, editable:boolean=false, pixelScale:number=1  ):Promise<Img> {
     let url = URL.createObjectURL(blob);
-    return new Img( editable ).load( url );
+    return new Img( editable, pixelScale ).load( url );
+  }
+
+
+  /**
+   * Convert ImageData object to a Blob, which you can then create an Img instance via [`Img.fromBlob`](#link). Note that the resulting image's dimensions will not account for pixel density.
+   * @param data 
+   */
+  static imageDataToBlob( data:ImageData ):Promise<Blob> {
+    return new Promise( function (resolve)  { 
+      let cv = document.createElement( "canvas" ) as HTMLCanvasElement;
+      cv.width = data.width;
+      cv.height = data.height;
+      cv.getContext("2d").putImageData( data, 0, 0);
+      cv.toBlob( blob => {
+        resolve( blob );
+        cv.remove();
+      });
+    });
   }
 
 

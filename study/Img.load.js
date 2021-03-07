@@ -10,17 +10,28 @@ window.demoDescription = "Load an image and get its pixel";
   // Pts quick start mode.
   var run = Pts.quickStart( "#pt", "#123" ); 
   var img = new Img(true, space.pixelScale);
+  var imgform;
+  var preview;
   img.load("../assets/feature1.jpg");
-
 
 
   run( (time, ftime) => {
 
     let bound = Bound.fromGroup( Rectangle.fromCenter( space.pointer, 100 ) );
     let cropped = img.crop( bound );
+
     
     form.image( [0,0], img );
     form.imageData( [0,0], cropped );
+    if (!preview) {
+      preview = Img.imageDataToBlob( cropped ).then( b => {
+        Img.fromBlob(b, true, img.pixelScale).then( i => {
+          preview = i;
+        });
+      });
+    } else if (preview.loaded) {
+      form.image([[space.size.x-100,0],[space.size.x,100]], preview );
+    }
     // form.image( img, Group.fromArray([[20,20], [200, 200]]), Group.fromArray([[50,50], [400,400]]) );
 
     let p = img.pixel( space.pointer );
@@ -28,11 +39,12 @@ window.demoDescription = "Load an image and get its pixel";
     form.fillOnly( `rgba(${p.join(",")})` ).point( space.center, 50 ); 
     form.strokeOnly("#ff0").rect( bound );
 
-    CanvasForm.paint( img.ctx, 
-      (ctx) => {
-        CanvasForm.point( ctx, space.pointer.$multiply( space.pixelScale ), 10, "circle" );
-      }, "#90f", "#fff", 3
-    );
+    if (!imgform) {
+      imgform = new CanvasForm( img.ctx );
+    }
+
+    imgform.fill("#90f").stroke("#fff").point( space.pointer.$multiply( space.pixelScale ), 10, "circle" );
+
     // form.strokeOnly("#fe3").line( [space.center, space.pointer] );
 
   },
@@ -45,6 +57,8 @@ window.demoDescription = "Load an image and get its pixel";
     if (action === 'up') {
       console.log( "!!" );
       img.sync(1);
+    } else if (action === "move") {
+      preview = false;
     }
   });
 
