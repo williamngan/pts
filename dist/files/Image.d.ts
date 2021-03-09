@@ -8,7 +8,7 @@ export declare class Img {
     protected _scale: number;
     protected _loaded: boolean;
     protected _editable: boolean;
-    constructor(editable?: boolean, pixelScale?: number);
+    constructor(editable?: boolean, pixelScale?: number, crossOrigin?: boolean);
     static load(src: string, editable?: boolean, pixelScale?: number, ready?: (img: any) => {}): Img;
     load(src: string): Promise<Img>;
     protected _drawToScale(canvasScale: number | PtLike, img: CanvasImageSource): void;
@@ -19,8 +19,11 @@ export declare class Img {
     resize(sizeOrScale: PtLike, asScale?: boolean): this;
     crop(box: Bound): ImageData;
     filter(css: string): this;
-    static fromBlob(blob: Blob, editable?: boolean): Promise<Img>;
+    cleanup(): void;
+    static fromBlob(blob: Blob, editable?: boolean, pixelScale?: number): Promise<Img>;
+    static imageDataToBlob(data: ImageData): Promise<Blob>;
     toBase64(): string;
+    toBlob(): Promise<Blob>;
     get current(): CanvasImageSource;
     get image(): HTMLImageElement;
     get canvas(): HTMLCanvasElement;

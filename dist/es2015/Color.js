@@ -115,10 +115,10 @@ export class Color extends Pt {
             return `#${_hex(this[0])}${_hex(this[1])}${_hex(this[2])}`;
         }
         else if (format == "rgba") {
-            return `rgba(${Math.floor(this[0])},${Math.floor(this[1])},${Math.floor(this[2])},${this.alpha}`;
+            return `rgba(${Math.floor(this[0])},${Math.floor(this[1])},${Math.floor(this[2])},${this.alpha})`;
         }
         else if (format == "rgb") {
-            return `rgb(${Math.floor(this[0])},${Math.floor(this[1])},${Math.floor(this[2])}`;
+            return `rgb(${Math.floor(this[0])},${Math.floor(this[1])},${Math.floor(this[2])})`;
         }
         else {
             return `${this._mode}(${this[0]},${this[1]},${this[2]},${this.alpha})`;

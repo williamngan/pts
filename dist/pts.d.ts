@@ -47,7 +47,7 @@ export class CanvasForm extends VisualForm {
     protected _ctx: CanvasRenderingContext2D;
     protected _estimateTextWidth: (string: any) => number;
     protected _style: DefaultFormStyle;
-    constructor(space: CanvasSpace);
+    constructor(space: CanvasSpace | CanvasRenderingContext2D);
     get space(): CanvasSpace;
     get ctx(): PtsCanvasRenderingContext2D;
     useOffscreen(off?: boolean, clear?: boolean | string): this;
@@ -66,7 +66,6 @@ export class CanvasForm extends VisualForm {
     protected _textAlign(box: PtLikeIterable, vertical: string, offset?: PtLike, center?: Pt): Pt;
     reset(): this;
     protected _paint(): void;
-    static paint(ctx: CanvasRenderingContext2D, fn: (ctx: any) => {}, fill?: string, stroke?: string, strokeWidth?: number): void;
     static point(ctx: CanvasRenderingContext2D, p: PtLike, radius?: number, shape?: string): void;
     point(p: PtLike, radius?: number, shape?: string): this;
     static circle(ctx: CanvasRenderingContext2D, pt: PtLike, radius?: number): void;
@@ -340,7 +339,7 @@ export class Img {
     protected _scale: number;
     protected _loaded: boolean;
     protected _editable: boolean;
-    constructor(editable?: boolean, pixelScale?: number);
+    constructor(editable?: boolean, pixelScale?: number, crossOrigin?: boolean);
     static load(src: string, editable?: boolean, pixelScale?: number, ready?: (img: any) => {}): Img;
     load(src: string): Promise<Img>;
     protected _drawToScale(canvasScale: number | PtLike, img: CanvasImageSource): void;
@@ -351,8 +350,11 @@ export class Img {
     resize(sizeOrScale: PtLike, asScale?: boolean): this;
     crop(box: Bound): ImageData;
     filter(css: string): this;
-    static fromBlob(blob: Blob, editable?: boolean): Promise<Img>;
+    cleanup(): void;
+    static fromBlob(blob: Blob, editable?: boolean, pixelScale?: number): Promise<Img>;
+    static imageDataToBlob(data: ImageData): Promise<Blob>;
     toBase64(): string;
+    toBlob(): Promise<Blob>;
     get current(): CanvasImageSource;
     get image(): HTMLImageElement;
     get canvas(): HTMLCanvasElement;

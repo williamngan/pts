@@ -49,7 +49,7 @@ export declare class CanvasForm extends VisualForm {
     protected _ctx: CanvasRenderingContext2D;
     protected _estimateTextWidth: (string: any) => number;
     protected _style: DefaultFormStyle;
-    constructor(space: CanvasSpace);
+    constructor(space: CanvasSpace | CanvasRenderingContext2D);
     get space(): CanvasSpace;
     get ctx(): PtsCanvasRenderingContext2D;
     useOffscreen(off?: boolean, clear?: boolean | string): this;
@@ -68,7 +68,6 @@ export declare class CanvasForm extends VisualForm {
     protected _textAlign(box: PtLikeIterable, vertical: string, offset?: PtLike, center?: Pt): Pt;
     reset(): this;
     protected _paint(): void;
-    static paint(ctx: CanvasRenderingContext2D, fn: (ctx: any) => {}, fill?: string, stroke?: string, strokeWidth?: number): void;
     static point(ctx: CanvasRenderingContext2D, p: PtLike, radius?: number, shape?: string): void;
     point(p: PtLike, radius?: number, shape?: string): this;
     static circle(ctx: CanvasRenderingContext2D, pt: PtLike, radius?: number): void;

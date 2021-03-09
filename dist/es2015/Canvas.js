@@ -222,15 +222,23 @@ export class CanvasForm extends VisualForm {
             lineWidth: 1, lineJoin: "bevel", lineCap: "butt",
             globalAlpha: 1
         };
-        this._space = space;
-        this._space.add({ start: () => {
-                this._ctx = this._space.ctx;
-                this._ctx.fillStyle = this._style.fillStyle;
-                this._ctx.strokeStyle = this._style.strokeStyle;
-                this._ctx.lineJoin = "bevel";
-                this._ctx.font = this._font.value;
-                this._ready = true;
-            } });
+        const _setup = (ctx) => {
+            this._ctx = ctx;
+            this._ctx.fillStyle = this._style.fillStyle;
+            this._ctx.strokeStyle = this._style.strokeStyle;
+            this._ctx.lineJoin = "bevel";
+            this._ctx.font = this._font.value;
+            this._ready = true;
+        };
+        if (space instanceof CanvasRenderingContext2D) {
+            _setup(space);
+        }
+        else {
+            this._space = space;
+            this._space.add({ start: () => {
+                    _setup(this._space.ctx);
+                } });
+        }
     }
     get space() { return this._space; }
     get ctx() { return this._space.ctx; }
@@ -395,17 +403,6 @@ export class CanvasForm extends VisualForm {
             this._ctx.fill();
         if (this._stroked)
             this._ctx.stroke();
-    }
-    static paint(ctx, fn, fill, stroke, strokeWidth) {
-        if (fill)
-            ctx.fillStyle = fill;
-        if (stroke)
-            ctx.strokeStyle = stroke;
-        if (strokeWidth)
-            ctx.lineWidth = strokeWidth;
-        fn(ctx);
-        ctx.fill();
-        ctx.stroke();
     }
     static point(ctx, p, radius = 5, shape = "square") {
         if (!p)

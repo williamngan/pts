@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.10.3 - Copyright © 2017-2021 William Ngan and contributors.
+ * pts.js 0.10.4 - Copyright © 2017-2021 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -406,15 +406,22 @@ var CanvasForm = function (_Form_1$VisualForm) {
             lineWidth: 1, lineJoin: "bevel", lineCap: "butt",
             globalAlpha: 1
         };
-        _this2._space = space;
-        _this2._space.add({ start: function start() {
-                _this2._ctx = _this2._space.ctx;
-                _this2._ctx.fillStyle = _this2._style.fillStyle;
-                _this2._ctx.strokeStyle = _this2._style.strokeStyle;
-                _this2._ctx.lineJoin = "bevel";
-                _this2._ctx.font = _this2._font.value;
-                _this2._ready = true;
-            } });
+        var _setup = function _setup(ctx) {
+            _this2._ctx = ctx;
+            _this2._ctx.fillStyle = _this2._style.fillStyle;
+            _this2._ctx.strokeStyle = _this2._style.strokeStyle;
+            _this2._ctx.lineJoin = "bevel";
+            _this2._ctx.font = _this2._font.value;
+            _this2._ready = true;
+        };
+        if (space instanceof CanvasRenderingContext2D) {
+            _setup(space);
+        } else {
+            _this2._space = space;
+            _this2._space.add({ start: function start() {
+                    _setup(_this2._space.ctx);
+                } });
+        }
         return _this2;
     }
 
@@ -800,16 +807,6 @@ var CanvasForm = function (_Form_1$VisualForm) {
             return this._space.ctx;
         }
     }], [{
-        key: "paint",
-        value: function paint(ctx, fn, fill, stroke, strokeWidth) {
-            if (fill) ctx.fillStyle = fill;
-            if (stroke) ctx.strokeStyle = stroke;
-            if (strokeWidth) ctx.lineWidth = strokeWidth;
-            fn(ctx);
-            ctx.fill();
-            ctx.stroke();
-        }
-    }, {
         key: "point",
         value: function point(ctx, p) {
             var radius = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 5;
@@ -1067,9 +1064,9 @@ var Color = function (_Pt_1$Pt) {
                 };
                 return "#" + _hex(this[0]) + _hex(this[1]) + _hex(this[2]);
             } else if (format == "rgba") {
-                return "rgba(" + Math.floor(this[0]) + "," + Math.floor(this[1]) + "," + Math.floor(this[2]) + "," + this.alpha;
+                return "rgba(" + Math.floor(this[0]) + "," + Math.floor(this[1]) + "," + Math.floor(this[2]) + "," + this.alpha + ")";
             } else if (format == "rgb") {
-                return "rgb(" + Math.floor(this[0]) + "," + Math.floor(this[1]) + "," + Math.floor(this[2]);
+                return "rgb(" + Math.floor(this[0]) + "," + Math.floor(this[1]) + "," + Math.floor(this[2]) + ")";
             } else {
                 return this._mode + "(" + this[0] + "," + this[1] + "," + this[2] + "," + this.alpha + ")";
             }
@@ -2819,6 +2816,7 @@ var Img = function () {
     function Img() {
         var editable = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
         var pixelScale = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+        var crossOrigin = arguments[2];
 
         _classCallCheck(this, Img);
 
@@ -2827,6 +2825,7 @@ var Img = function () {
         this._editable = editable;
         this._scale = pixelScale;
         this._img = new Image();
+        if (crossOrigin) this._img.crossOrigin = "Anonymous";
     }
 
     _createClass(Img, [{
@@ -2914,9 +2913,27 @@ var Img = function () {
             return this;
         }
     }, {
+        key: "cleanup",
+        value: function cleanup() {
+            if (this._cv) this._cv.remove();
+            if (this._img) this._img.remove();
+            this._data = null;
+        }
+    }, {
         key: "toBase64",
         value: function toBase64() {
             return this._cv.toDataURL();
+        }
+    }, {
+        key: "toBlob",
+        value: function toBlob() {
+            var _this3 = this;
+
+            return new Promise(function (resolve) {
+                _this3._cv.toBlob(function (blob) {
+                    return resolve(blob);
+                });
+            });
         }
     }, {
         key: "current",
@@ -2990,9 +3007,24 @@ var Img = function () {
         key: "fromBlob",
         value: function fromBlob(blob) {
             var editable = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+            var pixelScale = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
 
             var url = URL.createObjectURL(blob);
-            return new Img(editable).load(url);
+            return new Img(editable, pixelScale).load(url);
+        }
+    }, {
+        key: "imageDataToBlob",
+        value: function imageDataToBlob(data) {
+            return new Promise(function (resolve) {
+                var cv = document.createElement("canvas");
+                cv.width = data.width;
+                cv.height = data.height;
+                cv.getContext("2d").putImageData(data, 0, 0);
+                cv.toBlob(function (blob) {
+                    resolve(blob);
+                    cv.remove();
+                });
+            });
         }
     }]);
 

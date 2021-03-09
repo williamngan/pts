@@ -3,12 +3,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Img = void 0;
 const Pt_1 = require("./Pt");
 class Img {
-    constructor(editable = false, pixelScale = 1) {
+    constructor(editable = false, pixelScale = 1, crossOrigin) {
         this._scale = 1;
         this._loaded = false;
         this._editable = editable;
         this._scale = pixelScale;
         this._img = new Image();
+        if (crossOrigin)
+            this._img.crossOrigin = "Anonymous";
     }
     static load(src, editable = false, pixelScale = 1, ready) {
         let img = new Img(editable, pixelScale);
@@ -91,12 +93,36 @@ class Img {
         this._ctx.filter = css;
         return this;
     }
-    static fromBlob(blob, editable = false) {
+    cleanup() {
+        if (this._cv)
+            this._cv.remove();
+        if (this._img)
+            this._img.remove();
+        this._data = null;
+    }
+    static fromBlob(blob, editable = false, pixelScale = 1) {
         let url = URL.createObjectURL(blob);
-        return new Img(editable).load(url);
+        return new Img(editable, pixelScale).load(url);
+    }
+    static imageDataToBlob(data) {
+        return new Promise(function (resolve) {
+            let cv = document.createElement("canvas");
+            cv.width = data.width;
+            cv.height = data.height;
+            cv.getContext("2d").putImageData(data, 0, 0);
+            cv.toBlob(blob => {
+                resolve(blob);
+                cv.remove();
+            });
+        });
     }
     toBase64() {
         return this._cv.toDataURL();
+    }
+    toBlob() {
+        return new Promise((resolve) => {
+            this._cv.toBlob(blob => resolve(blob));
+        });
     }
     get current() {
         return this._editable ? this._cv : this._img;
