@@ -7,8 +7,8 @@
   var demoID = "image_load";
   
   // create Space and Form
-  var space = new CanvasSpace("#"+demoID).setup({ retina: true, bgcolor: "#e2e6ef", resize: true });
-  var form = space.getForm();
+  let space = new CanvasSpace("#"+demoID).setup({ retina: true, bgcolor: "#e2e6ef", resize: true });
+  let form = space.getForm();
   let img = Img.load( "/assets/img_demo.jpg");
   
   // animation

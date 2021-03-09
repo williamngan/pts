@@ -9,8 +9,8 @@
   var demoID = "image_edit";
   
   // create Space and Form
-  var space = new CanvasSpace("#"+demoID).setup({ retina: true, bgcolor: "#e2e6ef", resize: true });
-  var form = space.getForm();
+  let space = new CanvasSpace("#"+demoID).setup({ retina: true, bgcolor: "#e2e6ef", resize: true });
+  let form = space.getForm();
   let imgform;
   let img = new Img(true, space.pixelScale);
   img.load( "/assets/img_demo.jpg" ).then( res => imgform = new CanvasForm( res.ctx ) );
@@ -31,12 +31,11 @@
           const ang = diff.angle() + Math.random()*0.1 + Math.PI/2;
           
           const c = img.pixel( p, false );
-          const d = c.clone();
           c[3] = Math.random()*0.5 + 0.2;
-          d[3] = Math.random()*0.1;
           const r = Num.randomRange(0, diff.magnitude());
 
-          imgform.fill(`rgba(${c.join(",")})`).stroke(`rgba(${d.join(",")})`).ellipse( jitter, [5, Math.min( space.size.x/4, 20+r )], ang );
+          imgform.fill(`rgba(${c.join(",")})`).stroke( Math.random() < 0.3 ? "#ffffff99" : "#ffffff00");
+          imgform.ellipse( jitter, [5, Math.min( space.size.x/4, 20+r )], ang );
 
         }
       }

@@ -1,23 +1,21 @@
+
+
 // Source code licensed under Apache License 2.0. 
 // Copyright © 2021 William Ngan. (https://github.com/williamngan/pts)
 
+window.demoDescription = "Demo in getting image pixels";
 
+//// Demo code starts (anonymous function wrapper is optional) ---
 
-(function(){
-  // Pts.namespace( this ); // add Pts into scope if needed
+(function() {
   
-  var demoID = "image_pixel";
-  
-  // create Space and Form
-  let space = new CanvasSpace("#"+demoID).setup({ retina: true, bgcolor: "#e2e6ef", resize: true });
-  let form = space.getForm();
+  Pts.quickStart( "#pt", "#e2e6ef" );
   let img, de, triangles;
-  
+
   // animation
   space.add( 
     {
       start: (bound) => {
-
         img = Img.load( "/assets/img_demo.jpg", true, space.pixelScale);
 
         // Create 20 random points and generate initial tessellations
@@ -58,12 +56,9 @@
         }
       }
   });
-  
-  // start
-  // Note that `playOnce(200)` will stop after 200ms. Use `play()` to run the animation loop continuously. 
-  space.playOnce(200).bindMouse().bindTouch();
-  
-  // For use in demo page only
-  if (window.registerDemo) window.registerDemo(demoID, space);
-  
+
+  //// ----  
+
+  space.bindMouse().bindTouch().play();
+
 })();

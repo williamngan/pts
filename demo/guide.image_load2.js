@@ -1,22 +1,22 @@
 // Source code licensed under Apache License 2.0. 
 // Copyright © 2021 William Ngan. (https://github.com/williamngan/pts)
 
-(function(){
-  // Pts.namespace( this ); // add Pts into scope if needed
+window.demoDescription = "Demo in loading images";
+
+//// Demo code starts (anonymous function wrapper is optional) ---
+
+(function() {
   
-  var demoID = "image_load2";
-  
-  // create Space and Form
-  let space = new CanvasSpace("#"+demoID).setup({ retina: true, bgcolor: "#e2e6ef", resize: true });
-  let form = space.getForm();
-  let img = new Img();
+  let run = Pts.quickStart( "#pt", "#e2e6ef" );
+
   let duration = [Date.now(), 0];
+  let img = new Img();
   img.load( "/assets/img_demo.jpg").then( res => {
     duration[1] = Date.now();
   });
-  
-  // animation
-  space.add( (time, ftime) => {
+
+
+  run( t  => {
     if (img.loaded) {
       form.fillOnly("#00000099").text( [20,30], img.loaded ? `Loaded in ${duration[1] - duration[0]} ms` : `Loading: ${Date.now() - duration[0]} ms` );
 
@@ -33,12 +33,9 @@
       form.image( [[space.pointer.x, 0], [space.center.x, space.size.y]] , img );
     }
   });
-  
-  // start
-  // Note that `playOnce(200)` will stop after 200ms. Use `play()` to run the animation loop continuously. 
-  space.playOnce(200).bindMouse().bindTouch();
-  
-  // For use in demo page only
-  if (window.registerDemo) window.registerDemo(demoID, space);
-  
+
+  //// ----  
+
+  space.bindMouse().bindTouch().play();
+
 })();

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Image</title>
+	<link href="./assets/style.css" rel="stylesheet" type="text/css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+</head>
+
+<body>
+<div id="header">
+  <div id="pts"><a href="../">Pts<span>.</span></a>guides</div>
+  <div id="topmenu">
+    <a href="../demo/index.html">demos</a>
+    <a href="../study/index.html">studies</a>
+    <a href="../docs/">docs</a>
+    <a href="https://github.com/williamngan/pts">github</a>
+  </div>
+</div>
+<a href="#menu" id="toc">&#x2261;</a>
+<div id="post"><h1>Image</h1>
+<p>Why don't we see more interactive and experimental plays with images, even as photos, videos and gifs fill the web? Perhaps working with images on html canvas is way harder than it should be — even a common use case, like loading an image and getting the color values of its pixels, proves to be practically tortuous.</p>
+<p>Fret not! Pts' <a href="#image-img"><code>Img</code></a> provides some convenient and straightforward functions to help you experiment with images. Let's take a look.</p>
+<h3>Loading and Displaying Images</h3>
+<p>Let's start a minimalistic example: Load an image and display it on canvas. This can be done in 3 lines of code:</p>
+<pre><code>const run = Pts.quickStart( &quot;#elemID&quot; );
+const img = Img.load( &quot;/assets/demo.jpg&quot; );
+run( t =&gt; form.image( space.pointer, img ) );
+</code></pre>
+<p><img src="./assets/bg.png" alt="js:image_load"></p>
+<h5>Image credit: &quot;C 50 Last Birds And Flowers&quot; by Kurt Schwitters</h5>
+<p>The above example uses the static function <a href="#image-img"><code>load</code></a> to load an image, and then uses CanvasForm's <a href="#canvas-canvasform"><code>image</code></a> function to display it automatically when it's loaded.</p>
+<p>If you need to manually track when the image is loaded, you can either:</p>
+<ul>
+<li>access the <code>img.loaded</code> property</li>
+<li>add a callback function to the <a href="#image-img"><code>Img.load</code></a> function</li>
+<li>create an Img instance, call its <a href="#image-img"><code>load</code></a> function and use <code>async/await</code>.</li>
+</ul>
+<pre><code>const img = new Img();
+await img.load( &quot;/assets/demo.jpg&quot; )
+</code></pre>
+<p>Once the image is loaded, you can access its properties like width and height and manipulate its data. We will be discussing these advanced use cases next.</p>
+<p><img src="./assets/bg.png" alt="js:image_load2"></p>
+<h5>Once the image is loaded, we can access its original width and height, and rescale it to fit the canvas size.</h5>
+<h3>Editing Images</h3>
+<p>When you create an Img instance with its <code>editable</code> parameter set to <code>true</code>, it will hold an internal canvas to support image manipulations. It also supports higher pixel-density displays via the <code>pixelScale</code> parameter. An example:</p>
+<pre><code>// Create an editable img with the current space's pixelScale
+let img = new Img( true, space.pixelScale );
+img.load( &quot;/assets/demo.jpg&quot; );
+
+// Alternatively, use the Img.load static function
+let img2 = Img.load( &quot;/assets/demo.jpg&quot;, true, space.pixelScale );
+</code></pre>
+<p>With an editable image, you can now inspect and manipulate it creatively.</p>
+<h3>Get Pixels and Crop Regions</h3>
+<p>The <a href="#image-img"><code>pixel</code></a> function supports a very common use case: specify a pixel position on the image, get its RGBA color values, and do something with it. A wide range of visual possibilities may open up if you use this simple function creatively.</p>
+<p><img src="./assets/bg.png" alt="js:image_pixel"></p>
+<h5>Try scribbling in different regions of the image to change it. This demo combines <code>Create.delaunay</code> with <code>Img.pixel</code>.</h5>
+<p>Another common use case is to crop a region of the image. The <a href="#image-img"><code>crop</code></a> function takes a bounding box and returns an <a href="https://developer.mozilla.org/en-US/docs/Web/API/ImageData"><code>ImageData</code></a>. You can then use CanvasForm's<a href="#canvas-canvasform"><code>imageData</code></a> to draw the region.</p>
+<pre><code>form.imageData( img.crop( bound ) );
+</code></pre>
+<p>Let's try this in a demo:</p>
+<p><img src="./assets/bg.png" alt="js:image_crop"></p>
+<h5>Click to cut out a region in the image.</h5>
+<p>It's more efficient to draw <code>ImageData</code> directly on canvas. If needed, you can also export it to a blob using <a href="#image-img"><code>Img.imageDataToBlob</code></a> and then load it into an image again.</p>
+<h3>Edit and Sync</h3>
+<p>Since an editable <a href="#image-img"><code>Img</code></a> stores an internal canvas, you can leverage <a href="#canvas-canvasform"><code>CanvasForm</code></a>'s many drawing functions to draw directly on it. It's that easy!</p>
+<p>After the image is loaded, you can access the canvas' rendering context through the property <code>img.ctx</code> and then create a new <a href="#canvas-canvasform"><code>CanvasForm</code></a> instance with it. For example:</p>
+<pre><code>let form;
+img.load( &quot;demo.jpg&quot; ).then( a =&gt; form = new CanvasForm(a.ctx) )  
+</code></pre>
+<p><img src="./assets/bg.png" alt="js:image_edit"></p>
+<p>Additionally, the <a href="https://ptsjs.org/docs/?p=Image_Img#function_filter"><code>filter</code></a> function supports image filter effects like desaturation and blur (See the <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter">full list</a> supported by canvas). Note that some effects may not work in mobile browsers.</p>
+<pre><code>img.filter( &quot;blur(10px) contrast(20%) saturate(0%)&quot; )
+</code></pre>
+<p>To display the edited image, use CanvasForm's <a href="https://ptsjs.org/docs/?p=Canvas_CanvasForm#function_image"><code>image</code></a> function but pass <code>img.canvas</code> (instead of <code>img</code> itself) in the parameter. As we are only editing an internal canvas, the original image is unchanged until it's explicitly updated. Use <a href="#image-img"><code>sync</code></a> to update the original image when needed.</p>
+<h3>Tips and Tricks</h3>
+<ul>
+<li><p>Anticipate screens with different pixel density. You can pass a CanvasSpace's <a href="https://ptsjs.org/docs/?p=Canvas_CanvasSpace#accessor_pixelScale"><code>pixelScale</code></a> when creating an Img instance. (See example in Cheatsheet below)</p></li>
+<li><p>You can <a href="#image-img"><code>load</code></a> an image from a base64 string or an url, or from a blob via the <a href="#image-img"><code>fromBlob</code></a> function. To export the current image, use <a href="#image-img"><code>toBase64</code></a> or <a href="#image-img"><code>toBlob</code></a> functions.</p></li>
+<li><p>CanvasForm's <a href="#canvas-canvasform"><code>image</code></a> drawing function can take either an Img instance or a <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource"><code>CanvasImageSource</code></a> which includes various kinds of image objects like HTML Image or Canvas.</p></li>
+<li><p>Typically, you can't load an image from another domain due to security concerns. But if the image server allows for it and you want to do it, you can set the <a href="#image-img"><code>crossOrigin</code></a> parameter to <code>true</code> when creating an  <code>Img</code> instance. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image">More details here</a>.</p></li>
+</ul>
+<h3>Cheatsheet</h3>
+<p>Creating, loading, displaying</p>
+<pre><code>// Simplest way
+let img = Img.load( &quot;demo.jpg&quot;);
+
+// Load an editable image that matches the screen's resolution
+// with an optional callback function when the image is loaded.
+let img = Img.load(&quot;demo.png&quot;, true, space.pixelScale, onLoad );
+
+// Equivalent but using async/await
+let img = new Img( true, space.pixelScale );
+await img.load(&quot;demo.png&quot;)
+
+// Display an image automatically when it's loaded 
+form.image( [0,0], img );
+
+// Check if image is loaded, then display its canvas in a rect
+if (img.loaded) form.image( rect, img.canvas ); 
+
+</code></pre>
+<p>Useful properties</p>
+<pre><code>img.loaded; // true if the image is loaded
+img.image; // the original image
+img.canvas; // the internal canvas of an editable Img
+img.ctx; // the context which can be used to create a CanvasForm
+</code></pre>
+<p>Editing an image</p>
+<pre><code>img.crop( rect )
+img.resize( 0.5, true );
+img.filter( &quot;blur(10px) | contrast(200%)&quot; );
+img.pixel( space.pointer );
+
+// Draw on image
+let imgForm = new CanvasForm( img.ctx );
+imgForm.fill( &quot;#f00&quot; ).point( space.pointer, 20 );
+
+// Export as base64 string
+img.toBase64(); 
+</code></pre>
+</div>
+
+<ol id="menu"><a id="close" href="#">&times;</a><li><a href="Get-started-0100.html">Get started</a></li><li><a href="Pt-0200.html">Pt</a></li><li><a href="Group-0300.html">Group</a></li><li><a href="Op-0400.html">Op</a></li><li><a href="Space-0500.html">Space</a></li><li><a href="Typography-0600.html">Typography</a></li><li><a href="Animation-0700.html">Animation</a></li><li><a href="Sound-0800.html">Sound</a></li><li><a href="Image-0900.html">Image</a></li><li><a href="Technical-notes-9000.html">Technical notes</a></li></ol>
+
+<div id="footer">Copyright &copy; 2017-current by <a href="https://twitter.com/williamngan">William Ngan</a> and contributors. Pts is an <a href="https://github.com/williamngan/pts">open source project</a> under Apache License 2.0.</div>
+
+<script type="text/javascript" src="../dist/pts.min.js"></script>
+<script type="text/javascript" src="./js/guide.js"></script>
+<script src="./js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-104913373-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>
