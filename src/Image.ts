@@ -224,53 +224,90 @@ export class Img {
 
 
   /**
-   * Export a base64 string of the current canvas imageg
+   * Export current canvas image as base64 string
    */
   toBase64():string {
     return this._cv.toDataURL();
   }
 
 
+  /**
+   * Export current canvas image as a blob
+   */
+  toBlob():Promise<Blob> {
+    return new Promise( (resolve) => { 
+      this._cv.toBlob( blob => resolve(blob) );
+    });
+  }
+
+
+  /**
+   * Get current image source. If editable, this will return the canvas, otherwise it will return the original image.
+   */
   get current():CanvasImageSource {
     return this._editable ? this._cv : this._img;
   }
 
 
+  /**
+   * Get the original image
+   */
   get image():HTMLImageElement {
     return this._img;
   }
 
 
+  /**
+   * Get the internal canvas
+   */
   get canvas():HTMLCanvasElement {
     return this._cv;
   }
 
 
+  /**
+   * Get the internal canvas' ImageData
+   */
   get data():ImageData {
     return this._data;
   }
 
 
+  /**
+   * Get the internal canvas' context. You can use this to draw directly on canvas, or create a new [CanvasForm](#link) instance with it.
+   */
   get ctx():CanvasRenderingContext2D {
     return this._ctx;
   }
 
 
+  /**
+   * Get whether the image is loaded
+   */
   get loaded():boolean {
     return this._loaded;
   }
 
   
+  /**
+   * Get pixel density scale
+   */
   get pixelScale():number {
     return this._scale;
   }
 
 
+  /**
+   * Get size of the original image
+   */
   get imageSize():Pt {
     return new Pt(this._img.width, this._img.height);
   }
 
 
+  /**
+   * Get size of the canvas
+   */
   get canvasSize():Pt {
     return new Pt(this._cv.width, this._cv.height);
   }
