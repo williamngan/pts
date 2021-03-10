@@ -149,7 +149,7 @@ export class CanvasSpace extends MultiTouchSpace {
   * @example `space.setup({ bgcolor: "#f00", retina: true, resize: true })`
   */
   setup( opt:{bgcolor?:string, resize?:boolean, retina?:boolean, offscreen?:boolean} ):this {
-    if (opt.bgcolor) this._bgcolor = opt.bgcolor;
+    this._bgcolor = opt.bgcolor ? opt.bgcolor : "transparent";
     
     this.autoResize = (opt.resize != undefined) ? opt.resize : false;
     
@@ -337,17 +337,15 @@ export class CanvasSpace extends MultiTouchSpace {
     if (bg) this._bgcolor = bg;
     const lastColor = this._ctx.fillStyle;
     
-    if (this._bgcolor) {
-      if (this._bgcolor === "transparent") {
+    if (!this._bgcolor || this._bgcolor === "transparent") {
+      this._ctx.clearRect( -1, -1, this._canvas.width+1, this._canvas.height+1 );
+    } else { 
+      // semi-transparent bg needs to be cleared first
+      if (this._bgcolor.indexOf("rgba") === 0 || (this._bgcolor.length === 9 && this._bgcolor.indexOf("#") === 0) )  { 
         this._ctx.clearRect( -1, -1, this._canvas.width+1, this._canvas.height+1 );
-      } else { 
-        // semi-transparent bg needs to be cleared first
-        if (this._bgcolor.indexOf("rgba") === 0 || (this._bgcolor.length === 9 && this._bgcolor.indexOf("#") === 0) )  { 
-          this._ctx.clearRect( -1, -1, this._canvas.width+1, this._canvas.height+1 );
-        }
-        this._ctx.fillStyle = this._bgcolor;
-        this._ctx.fillRect( -1, -1, this._canvas.width+1, this._canvas.height+1 );
       }
+      this._ctx.fillStyle = this._bgcolor;
+      this._ctx.fillRect( -1, -1, this._canvas.width+1, this._canvas.height+1 );
     }
     
     this._ctx.fillStyle = lastColor;
