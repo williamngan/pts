@@ -3,20 +3,20 @@
   "source": [
     [
       "src/Image.ts",
-      4,
+      7,
       16
     ]
   ],
   "kind": "Class",
   "id": 3304,
-  "comment": "",
+  "comment": "Img provides convenient functions to support image operations on HTML Canvas and [`CanvasSpace`](#link). Combine this with other Pts functions to experiment with visual forms that integrate bitmaps and vector graphics.",
   "constructor": [
     {
       "name": "constructor",
       "source": [
         [
           "src/Image.ts",
-          13,
+          16,
           30
         ]
       ],
@@ -38,9 +38,15 @@
             },
             {
               "name": "pixelScale",
-              "comment": "Set internal canvas' scale in relation to original image size. Useful for retina screens. Use `CanvasSpace.pixelScale` to pass current scale.\n",
+              "comment": "Set internal canvas' scale in relation to original image size. Useful for retina screens. Use `CanvasSpace.pixelScale` to pass current scale.",
               "type": "number",
               "default": "1"
+            },
+            {
+              "name": "crossOrigin",
+              "comment": "an optional parameter to enable loading cross-domain images if set to true. The image server's configuration must also be set correctly. For more, see [this documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image).\n",
+              "type": "boolean",
+              "default": false
             }
           ],
           "tags": []
@@ -54,15 +60,15 @@
       "source": [
         [
           "src/Image.ts",
-          211,
+          263,
           12
         ]
       ],
-      "id": 3366,
+      "id": 3375,
       "flags": {},
       "overrides": false,
       "inherits": false,
-      "comment": "",
+      "comment": "Get the internal canvas",
       "getter": {
         "type": "HTMLCanvasElement"
       },
@@ -73,15 +79,15 @@
       "source": [
         [
           "src/Image.ts",
-          241,
+          311,
           16
         ]
       ],
-      "id": 3378,
+      "id": 3387,
       "flags": {},
       "overrides": false,
       "inherits": false,
-      "comment": "",
+      "comment": "Get size of the canvas",
       "getter": {
         "type": "Pt"
       },
@@ -92,15 +98,15 @@
       "source": [
         [
           "src/Image.ts",
-          221,
+          279,
           9
         ]
       ],
-      "id": 3370,
+      "id": 3379,
       "flags": {},
       "overrides": false,
       "inherits": false,
-      "comment": "",
+      "comment": "Get the internal canvas' context. You can use this to draw directly on canvas, or create a new [CanvasForm](#link) instance with it.",
       "getter": {
         "type": "CanvasRenderingContext2D"
       },
@@ -111,15 +117,15 @@
       "source": [
         [
           "src/Image.ts",
-          201,
+          247,
           13
         ]
       ],
-      "id": 3362,
+      "id": 3371,
       "flags": {},
       "overrides": false,
       "inherits": false,
-      "comment": "",
+      "comment": "Get current image source. If editable, this will return the canvas, otherwise it will return the original image.",
       "getter": {
         "type": "CanvasImageSource"
       },
@@ -130,15 +136,15 @@
       "source": [
         [
           "src/Image.ts",
-          216,
+          271,
           10
         ]
       ],
-      "id": 3368,
+      "id": 3377,
       "flags": {},
       "overrides": false,
       "inherits": false,
-      "comment": "",
+      "comment": "Get the internal canvas' ImageData",
       "getter": {
         "type": "ImageData"
       },
@@ -149,15 +155,15 @@
       "source": [
         [
           "src/Image.ts",
-          206,
+          255,
           11
         ]
       ],
-      "id": 3364,
+      "id": 3373,
       "flags": {},
       "overrides": false,
       "inherits": false,
-      "comment": "",
+      "comment": "Get the original image",
       "getter": {
         "type": "HTMLImageElement"
       },
@@ -168,15 +174,15 @@
       "source": [
         [
           "src/Image.ts",
-          236,
+          303,
           15
         ]
       ],
-      "id": 3376,
+      "id": 3385,
       "flags": {},
       "overrides": false,
       "inherits": false,
-      "comment": "",
+      "comment": "Get size of the original image",
       "getter": {
         "type": "Pt"
       },
@@ -187,15 +193,15 @@
       "source": [
         [
           "src/Image.ts",
-          226,
+          287,
           12
         ]
       ],
-      "id": 3372,
+      "id": 3381,
       "flags": {},
       "overrides": false,
       "inherits": false,
-      "comment": "",
+      "comment": "Get whether the image is loaded",
       "getter": {
         "type": "boolean"
       },
@@ -206,15 +212,15 @@
       "source": [
         [
           "src/Image.ts",
-          231,
+          295,
           16
         ]
       ],
-      "id": 3374,
+      "id": 3383,
       "flags": {},
       "overrides": false,
       "inherits": false,
-      "comment": "",
+      "comment": "Get pixel density scale",
       "getter": {
         "type": "number"
       },
@@ -227,11 +233,11 @@
       "source": [
         [
           "src/Image.ts",
-          93,
+          98,
           8
         ]
       ],
-      "id": 3333,
+      "id": 3334,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -253,15 +259,38 @@
       ]
     },
     {
+      "name": "cleanup",
+      "source": [
+        [
+          "src/Image.ts",
+          190,
+          9
+        ]
+      ],
+      "id": 3357,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Remove the elements and data associated with this Img.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "crop",
       "source": [
         [
           "src/Image.ts",
-          165,
+          170,
           6
         ]
       ],
-      "id": 3350,
+      "id": 3351,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -287,11 +316,11 @@
       "source": [
         [
           "src/Image.ts",
-          176,
+          181,
           8
         ]
       ],
-      "id": 3353,
+      "id": 3354,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -317,11 +346,11 @@
       "source": [
         [
           "src/Image.ts",
-          48,
+          53,
           6
         ]
       ],
-      "id": 3326,
+      "id": 3327,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -347,11 +376,11 @@
       "source": [
         [
           "src/Image.ts",
-          124,
+          129,
           7
         ]
       ],
-      "id": 3338,
+      "id": 3339,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -383,11 +412,11 @@
       "source": [
         [
           "src/Image.ts",
-          153,
+          158,
           8
         ]
       ],
-      "id": 3346,
+      "id": 3347,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -419,11 +448,11 @@
       "source": [
         [
           "src/Image.ts",
-          103,
+          108,
           6
         ]
       ],
-      "id": 3336,
+      "id": 3337,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -442,18 +471,41 @@
       "source": [
         [
           "src/Image.ts",
-          196,
+          229,
           10
         ]
       ],
-      "id": 3360,
+      "id": 3367,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
-          "comment": "Export a base64 string of the current canvas imageg",
+          "comment": "Export current canvas image as base64 string",
           "returns": "string",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "toBlob",
+      "source": [
+        [
+          "src/Image.ts",
+          237,
+          8
+        ]
+      ],
+      "id": 3369,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Export current canvas image as a blob",
+          "returns": "Promise",
           "returns_comment": false,
           "parameters": [],
           "tags": []
@@ -465,11 +517,11 @@
       "source": [
         [
           "src/Image.ts",
-          187,
+          202,
           17
         ]
       ],
-      "id": 3356,
+      "id": 3359,
       "flags": {
         "isStatic": true
       },
@@ -489,9 +541,15 @@
             },
             {
               "name": "editable",
-              "comment": "\n",
+              "comment": "Specify if you want to manipulate pixels of this image. Default is `false`.\n",
               "type": "boolean",
               "default": "false"
+            },
+            {
+              "name": "pixelScale",
+              "comment": "",
+              "type": "number",
+              "default": "1"
             }
           ],
           "tags": []
@@ -503,11 +561,11 @@
       "source": [
         [
           "src/Image.ts",
-          136,
+          141,
           17
         ]
       ],
-      "id": 3342,
+      "id": 3343,
       "flags": {
         "isStatic": true
       },
@@ -537,15 +595,47 @@
       ]
     },
     {
+      "name": "imageDataToBlob",
+      "source": [
+        [
+          "src/Image.ts",
+          212,
+          24
+        ]
+      ],
+      "id": 3364,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Convert ImageData object to a Blob, which you can then create an Img instance via [`Img.fromBlob`](#link). Note that the resulting image's dimensions will not account for pixel density.",
+          "returns": "Promise",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "data",
+              "comment": "\n",
+              "type": "ImageData",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "load",
       "source": [
         [
           "src/Image.ts",
-          34,
+          39,
           13
         ]
       ],
-      "id": 3316,
+      "id": 3317,
       "flags": {
         "isStatic": true
       },

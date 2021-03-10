@@ -73,8 +73,7 @@ export class CanvasSpace extends MultiTouchSpace {
             callback(this.bound, this._canvas);
     }
     setup(opt) {
-        if (opt.bgcolor)
-            this._bgcolor = opt.bgcolor;
+        this._bgcolor = opt.bgcolor ? opt.bgcolor : "transparent";
         this.autoResize = (opt.resize != undefined) ? opt.resize : false;
         if (opt.retina !== false) {
             let r1 = window ? window.devicePixelRatio || 1 : 1;
@@ -166,17 +165,15 @@ export class CanvasSpace extends MultiTouchSpace {
         if (bg)
             this._bgcolor = bg;
         const lastColor = this._ctx.fillStyle;
-        if (this._bgcolor) {
-            if (this._bgcolor === "transparent") {
+        if (!this._bgcolor || this._bgcolor === "transparent") {
+            this._ctx.clearRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
+        }
+        else {
+            if (this._bgcolor.indexOf("rgba") === 0 || (this._bgcolor.length === 9 && this._bgcolor.indexOf("#") === 0)) {
                 this._ctx.clearRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
             }
-            else {
-                if (this._bgcolor.indexOf("rgba") === 0 || (this._bgcolor.length === 9 && this._bgcolor.indexOf("#") === 0)) {
-                    this._ctx.clearRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
-                }
-                this._ctx.fillStyle = this._bgcolor;
-                this._ctx.fillRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
-            }
+            this._ctx.fillStyle = this._bgcolor;
+            this._ctx.fillRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
         }
         this._ctx.fillStyle = lastColor;
         return this;
@@ -212,6 +209,24 @@ export class CanvasSpace extends MultiTouchSpace {
         this.stop();
         this.removeAll();
         return this;
+    }
+    recorder(downloadOrCallback, filetype = "webm") {
+        let stream = this._canvas.captureStream();
+        const recorder = new MediaRecorder(stream, { mimeType: `video/${filetype}` });
+        recorder.ondataavailable = function (d) {
+            let url = URL.createObjectURL(new Blob([d.data], { type: `video/${filetype}` }));
+            if (typeof downloadOrCallback === "function") {
+                downloadOrCallback(url);
+            }
+            else if (downloadOrCallback) {
+                let a = document.createElement("a");
+                a.href = url;
+                a.download = `canvas_video.${filetype}`;
+                a.click();
+                a.remove();
+            }
+        };
+        return recorder;
     }
 }
 export class CanvasForm extends VisualForm {

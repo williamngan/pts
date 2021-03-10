@@ -211,7 +211,7 @@ var CanvasSpace = function (_Space_1$MultiTouchSp) {
     }, {
         key: "setup",
         value: function setup(opt) {
-            if (opt.bgcolor) this._bgcolor = opt.bgcolor;
+            this._bgcolor = opt.bgcolor ? opt.bgcolor : "transparent";
             this.autoResize = opt.resize != undefined ? opt.resize : false;
             if (opt.retina !== false) {
                 var r1 = window ? window.devicePixelRatio || 1 : 1;
@@ -276,16 +276,14 @@ var CanvasSpace = function (_Space_1$MultiTouchSp) {
         value: function clear(bg) {
             if (bg) this._bgcolor = bg;
             var lastColor = this._ctx.fillStyle;
-            if (this._bgcolor) {
-                if (this._bgcolor === "transparent") {
+            if (!this._bgcolor || this._bgcolor === "transparent") {
+                this._ctx.clearRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
+            } else {
+                if (this._bgcolor.indexOf("rgba") === 0 || this._bgcolor.length === 9 && this._bgcolor.indexOf("#") === 0) {
                     this._ctx.clearRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
-                } else {
-                    if (this._bgcolor.indexOf("rgba") === 0 || this._bgcolor.length === 9 && this._bgcolor.indexOf("#") === 0) {
-                        this._ctx.clearRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
-                    }
-                    this._ctx.fillStyle = this._bgcolor;
-                    this._ctx.fillRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
                 }
+                this._ctx.fillStyle = this._bgcolor;
+                this._ctx.fillRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
             }
             this._ctx.fillStyle = lastColor;
             return this;
@@ -323,6 +321,27 @@ var CanvasSpace = function (_Space_1$MultiTouchSp) {
             this.stop();
             this.removeAll();
             return this;
+        }
+    }, {
+        key: "recorder",
+        value: function recorder(downloadOrCallback) {
+            var filetype = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "webm";
+
+            var stream = this._canvas.captureStream();
+            var recorder = new MediaRecorder(stream, { mimeType: "video/" + filetype });
+            recorder.ondataavailable = function (d) {
+                var url = URL.createObjectURL(new Blob([d.data], { type: "video/" + filetype }));
+                if (typeof downloadOrCallback === "function") {
+                    downloadOrCallback(url);
+                } else if (downloadOrCallback) {
+                    var a = document.createElement("a");
+                    a.href = url;
+                    a.download = "canvas_video." + filetype;
+                    a.click();
+                    a.remove();
+                }
+            };
+            return recorder;
         }
     }, {
         key: "autoResize",

@@ -1,4 +1,5 @@
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/// <reference types="dom-mediacapture-record" />
 import { MultiTouchSpace } from './Space';
 import { VisualForm, Font } from "./Form";
 import { Pt, Bound } from "./Pt";
@@ -43,6 +44,7 @@ export declare class CanvasSpace extends MultiTouchSpace {
     clearOffscreen(bg?: string): this;
     protected playItems(time: number): void;
     dispose(): this;
+    recorder(downloadOrCallback: boolean | ((blobURL: string) => {}), filetype?: string): MediaRecorder;
 }
 export declare class CanvasForm extends VisualForm {
     protected _space: CanvasSpace;

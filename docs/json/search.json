@@ -294,12 +294,6 @@
     8
   ],
   [
-    "Canvas_CanvasForm#function_paint",
-    "CanvasForm.paint",
-    "Function",
-    8
-  ],
-  [
     "Canvas_CanvasForm#function_point",
     "CanvasForm.point",
     "Function",
@@ -548,6 +542,12 @@
   [
     "Canvas_CanvasSpace#function_playOnce",
     "CanvasSpace.playOnce",
+    "Function",
+    8
+  ],
+  [
+    "Canvas_CanvasSpace#function_recorder",
+    "CanvasSpace.recorder",
     "Function",
     8
   ],
@@ -3522,6 +3522,12 @@
     8
   ],
   [
+    "Image_Img#function_cleanup",
+    "Img.cleanup",
+    "Function",
+    8
+  ],
+  [
     "Image_Img#function_crop",
     "Img.crop",
     "Function",
@@ -3564,6 +3570,12 @@
     8
   ],
   [
+    "Image_Img#function_toBlob",
+    "Img.toBlob",
+    "Function",
+    8
+  ],
+  [
     "Image_Img#function_fromBlob",
     "Img.fromBlob",
     "Function",
@@ -3572,6 +3584,12 @@
   [
     "Image_Img#function_getPixel",
     "Img.getPixel",
+    "Function",
+    8
+  ],
+  [
+    "Image_Img#function_imageDataToBlob",
+    "Img.imageDataToBlob",
     "Function",
     8
   ],

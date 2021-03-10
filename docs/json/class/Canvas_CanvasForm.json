@@ -3,12 +3,12 @@
   "source": [
     [
       "src/Canvas.ts",
-      418,
+      444,
       23
     ]
   ],
   "kind": "Class",
-  "id": 3578,
+  "id": 3595,
   "comment": "CanvasForm is an implementation of abstract class [`VisualForm`](#link). It provide methods to express Pts on [`CanvasSpace`](#link).\nYou may extend CanvasForm to implement your own expressions for CanvasSpace.",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          431,
+          457,
           4
         ]
       ],
-      "id": 3592,
+      "id": 3609,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -33,7 +33,7 @@
             {
               "name": "space",
               "comment": "an instance of CanvasSpace\n",
-              "type": "CanvasSpace",
+              "type": "CanvasSpace | CanvasRenderingContext2D",
               "default": false
             }
           ],
@@ -48,11 +48,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          463,
+          497,
           9
         ]
       ],
-      "id": 3597,
+      "id": 3614,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -71,7 +71,7 @@
           17
         ]
       ],
-      "id": 3817,
+      "id": 3823,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.currentFont",
@@ -95,7 +95,7 @@
           12
         ]
       ],
-      "id": 3809,
+      "id": 3815,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.filled",
@@ -122,7 +122,7 @@
           11
         ]
       ],
-      "id": 3854,
+      "id": 3860,
       "flags": {},
       "overrides": false,
       "inherits": "Form.ready",
@@ -137,11 +137,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          456,
+          490,
           11
         ]
       ],
-      "id": 3595,
+      "id": 3612,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -165,7 +165,7 @@
           13
         ]
       ],
-      "id": 3813,
+      "id": 3819,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.stroked",
@@ -190,11 +190,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          1190,
+          1206,
           13
         ]
       ],
-      "id": 3799,
+      "id": 3805,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -226,11 +226,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          495,
+          529,
           9
         ]
       ],
-      "id": 3606,
+      "id": 3623,
       "flags": {},
       "overrides": "VisualForm.alpha",
       "inherits": false,
@@ -261,11 +261,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          871,
+          887,
           7
         ]
       ],
-      "id": 3717,
+      "id": 3723,
       "flags": {},
       "overrides": "VisualForm.arc",
       "inherits": false,
@@ -315,11 +315,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          806,
+          822,
           10
         ]
       ],
-      "id": 3689,
+      "id": 3695,
       "flags": {},
       "overrides": "VisualForm.circle",
       "inherits": false,
@@ -349,7 +349,7 @@
           9
         ]
       ],
-      "id": 3838,
+      "id": 3844,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.circles",
@@ -375,11 +375,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          598,
+          632,
           8
         ]
       ],
-      "id": 3628,
+      "id": 3645,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -398,11 +398,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          589,
+          623,
           13
         ]
       ],
-      "id": 3625,
+      "id": 3642,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -428,11 +428,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          610,
+          644,
           8
         ]
       ],
-      "id": 3630,
+      "id": 3647,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -469,11 +469,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          840,
+          856,
           11
         ]
       ],
-      "id": 3701,
+      "id": 3707,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -529,11 +529,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          507,
+          541,
           8
         ]
       ],
-      "id": 3609,
+      "id": 3626,
       "flags": {},
       "overrides": "VisualForm.fill",
       "inherits": false,
@@ -568,7 +568,7 @@
           10
         ]
       ],
-      "id": 3824,
+      "id": 3830,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.fillOnly",
@@ -594,11 +594,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          636,
+          670,
           8
         ]
       ],
-      "id": 3634,
+      "id": 3651,
       "flags": {},
       "overrides": "VisualForm.font",
       "inherits": false,
@@ -653,11 +653,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          662,
+          696,
           21
         ]
       ],
-      "id": 3641,
+      "id": 3658,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -683,11 +683,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          672,
+          706,
           16
         ]
       ],
-      "id": 3644,
+      "id": 3661,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -713,11 +713,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          558,
+          592,
           12
         ]
       ],
-      "id": 3618,
+      "id": 3635,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -748,11 +748,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          1040,
+          1056,
           9
         ]
       ],
-      "id": 3760,
+      "id": 3766,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -770,7 +770,7 @@
             },
             {
               "name": "img",
-              "comment": "an [`ImageBitmap`](https://developer.mozilla.org/en-US/docs/Web/API/ImageBitmap) instance (eg the image from `<img>`, `<video>` or `<canvas>`)",
+              "comment": "either an [Img](#link) instance or an [`CanvasImageSource`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource) instance (eg the image from `<img>`, `<video>` or `<canvas>`)",
               "type": "CanvasImageSource | Img",
               "default": false
             },
@@ -790,11 +790,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          1073,
+          1089,
           13
         ]
       ],
-      "id": 3770,
+      "id": 3776,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -826,11 +826,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          938,
+          954,
           8
         ]
       ],
-      "id": 3737,
+      "id": 3743,
       "flags": {},
       "overrides": "VisualForm.line",
       "inherits": false,
@@ -860,7 +860,7 @@
           7
         ]
       ],
-      "id": 3844,
+      "id": 3850,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.lines",
@@ -886,11 +886,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          1205,
+          1221,
           7
         ]
       ],
-      "id": 3803,
+      "id": 3809,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -916,11 +916,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          1130,
+          1146,
           16
         ]
       ],
-      "id": 3792,
+      "id": 3798,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -970,11 +970,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          781,
+          797,
           9
         ]
       ],
-      "id": 3679,
+      "id": 3685,
       "flags": {},
       "overrides": "VisualForm.point",
       "inherits": false,
@@ -1021,7 +1021,7 @@
           8
         ]
       ],
-      "id": 3833,
+      "id": 3839,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.points",
@@ -1059,11 +1059,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          961,
+          977,
           11
         ]
       ],
-      "id": 3744,
+      "id": 3750,
       "flags": {},
       "overrides": "VisualForm.polygon",
       "inherits": false,
@@ -1093,7 +1093,7 @@
           10
         ]
       ],
-      "id": 3847,
+      "id": 3853,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.polygons",
@@ -1119,11 +1119,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          990,
+          1006,
           8
         ]
       ],
-      "id": 3751,
+      "id": 3757,
       "flags": {},
       "overrides": "VisualForm.rect",
       "inherits": false,
@@ -1153,7 +1153,7 @@
           7
         ]
       ],
-      "id": 3850,
+      "id": 3856,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.rects",
@@ -1179,11 +1179,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          482,
+          516,
           17
         ]
       ],
-      "id": 3603,
+      "id": 3620,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1209,11 +1209,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          723,
+          757,
           9
         ]
       ],
-      "id": 3658,
+      "id": 3675,
       "flags": {},
       "overrides": "VisualForm.reset",
       "inherits": false,
@@ -1232,11 +1232,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          906,
+          922,
           10
         ]
       ],
-      "id": 3729,
+      "id": 3735,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1272,7 +1272,7 @@
           9
         ]
       ],
-      "id": 3841,
+      "id": 3847,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.squares",
@@ -1298,11 +1298,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          528,
+          562,
           10
         ]
       ],
-      "id": 3612,
+      "id": 3629,
       "flags": {},
       "overrides": "VisualForm.stroke",
       "inherits": false,
@@ -1355,7 +1355,7 @@
           12
         ]
       ],
-      "id": 3827,
+      "id": 3833,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.strokeOnly",
@@ -1399,11 +1399,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          1098,
+          1114,
           8
         ]
       ],
-      "id": 3780,
+      "id": 3786,
       "flags": {},
       "overrides": "VisualForm.text",
       "inherits": false,
@@ -1441,11 +1441,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          1112,
+          1128,
           11
         ]
       ],
-      "id": 3785,
+      "id": 3791,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1495,11 +1495,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          471,
+          505,
           14
         ]
       ],
-      "id": 3599,
+      "id": 3616,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1531,11 +1531,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          856,
+          872,
           14
         ]
       ],
-      "id": 3709,
+      "id": 3715,
       "flags": {
         "isStatic": true
       },
@@ -1593,11 +1593,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          794,
+          810,
           17
         ]
       ],
-      "id": 3684,
+      "id": 3690,
       "flags": {
         "isStatic": true
       },
@@ -1637,11 +1637,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          824,
+          840,
           18
         ]
       ],
-      "id": 3692,
+      "id": 3698,
       "flags": {
         "isStatic": true
       },
@@ -1705,11 +1705,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          1004,
+          1020,
           16
         ]
       ],
-      "id": 3754,
+      "id": 3760,
       "flags": {
         "isStatic": true
       },
@@ -1735,7 +1735,7 @@
             },
             {
               "name": "img",
-              "comment": "an [`ImageBitmap`](https://developer.mozilla.org/en-US/docs/Web/API/ImageBitmap) instance (eg the image from `<img>`, `<video>` or `<canvas>`)",
+              "comment": "either an [Img](#link) instance or an [`CanvasImageSource`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource) instance (eg the image from `<img>`, `<video>` or `<canvas>`)",
               "type": "CanvasImageSource | Img",
               "default": false
             },
@@ -1755,11 +1755,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          1058,
+          1074,
           20
         ]
       ],
-      "id": 3765,
+      "id": 3771,
       "flags": {
         "isStatic": true
       },
@@ -1799,11 +1799,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          918,
+          934,
           15
         ]
       ],
-      "id": 3733,
+      "id": 3739,
       "flags": {
         "isStatic": true
       },
@@ -1833,71 +1833,15 @@
       ]
     },
     {
-      "name": "paint",
-      "source": [
-        [
-          "src/Canvas.ts",
-          749,
-          16
-        ]
-      ],
-      "id": 3662,
-      "flags": {
-        "isStatic": true
-      },
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "A convenient static function to wrap canvas drawing functions. Use this in combination with other static CanvasForm functions such as `CanvasForm.rect`.",
-          "returns": "void",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "ctx",
-              "comment": "canvas rendering context",
-              "type": "CanvasRenderingContext2D",
-              "default": false
-            },
-            {
-              "name": "fn",
-              "comment": "the drawing function. You can use other static CanvasForm functions (rect, circle, etc) within this function.",
-              "type": " Fn(ctx:any)",
-              "default": false
-            },
-            {
-              "name": "fill",
-              "comment": "optional fill value",
-              "type": "string",
-              "default": false
-            },
-            {
-              "name": "stroke",
-              "comment": "optional stroke value",
-              "type": "string",
-              "default": false
-            },
-            {
-              "name": "strokeWidth",
-              "comment": "optional stroke width\n",
-              "type": "number",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
       "name": "point",
       "source": [
         [
           "src/Canvas.ts",
-          767,
+          783,
           16
         ]
       ],
-      "id": 3673,
+      "id": 3679,
       "flags": {
         "isStatic": true
       },
@@ -1948,11 +1892,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          950,
+          966,
           18
         ]
       ],
-      "id": 3740,
+      "id": 3746,
       "flags": {
         "isStatic": true
       },
@@ -1986,11 +1930,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          973,
+          989,
           15
         ]
       ],
-      "id": 3747,
+      "id": 3753,
       "flags": {
         "isStatic": true
       },
@@ -2024,11 +1968,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          884,
+          900,
           17
         ]
       ],
-      "id": 3724,
+      "id": 3730,
       "flags": {
         "isStatic": true
       },
@@ -2068,11 +2012,11 @@
       "source": [
         [
           "src/Canvas.ts",
-          1086,
+          1102,
           15
         ]
       ],
-      "id": 3774,
+      "id": 3780,
       "flags": {
         "isStatic": true
       },
