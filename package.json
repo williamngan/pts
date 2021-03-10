@@ -27,6 +27,7 @@
   "devDependencies": {
     "@babel/cli": "^7.12.16",
     "@babel/core": "^7.12.16",
+    "@types/dom-mediacapture-record": "^1.0.7",
     "@types/node": "^14.14.28",
     "babel-loader": "^7.1.5",
     "babel-minify": "^0.3.0",
