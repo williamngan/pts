@@ -210,9 +210,9 @@ export class CanvasSpace extends MultiTouchSpace {
         this.removeAll();
         return this;
     }
-    recorder(downloadOrCallback, filetype = "webm") {
+    recorder(downloadOrCallback, filetype = "webm", bitrate = 25000000) {
         let stream = this._canvas.captureStream();
-        const recorder = new MediaRecorder(stream, { mimeType: `video/${filetype}` });
+        const recorder = new MediaRecorder(stream, { mimeType: `video/${filetype}`, bitsPerSecond: bitrate });
         recorder.ondataavailable = function (d) {
             let url = URL.createObjectURL(new Blob([d.data], { type: `video/${filetype}` }));
             if (typeof downloadOrCallback === "function") {

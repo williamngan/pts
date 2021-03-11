@@ -406,12 +406,13 @@ export class CanvasSpace extends MultiTouchSpace {
    * Get a [`MediaRecorder`](https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder) to record the current CanvasSpace. You can then call its `start()` function to start recording, and `stop()` to either download the video file or handle the blob data in the callback function you provided.
    * @param downloadOrCallback Either `true` to download the video, or provide a callback function to handle the Blob data, when recording is completed.
    * @param filetype video format. Default is "webm".
+   * @param bitrate bitrate per second
    * @example `let rec = space.recorder(true); rec.start(); setTimeout( () => rec.stop(), 5000); // record 5s of video and download the file`
    */
-  recorder( downloadOrCallback: boolean | ((blobURL:string) => {}), filetype:string = "webm" ): MediaRecorder {
+  recorder( downloadOrCallback: boolean | ((blobURL:string) => {}), filetype:string = "webm", bitrate:number = 25000000 ): MediaRecorder {
     // @ts-ignore
     let stream = this._canvas.captureStream();
-    const recorder = new MediaRecorder(stream, { mimeType: `video/${filetype}` } );
+    const recorder = new MediaRecorder(stream, { mimeType: `video/${filetype}`, bitsPerSecond: bitrate } );
     
     recorder.ondataavailable = function(d) {
       let url = URL.createObjectURL( new Blob( [d.data], { type: `video/${filetype}` } ) );

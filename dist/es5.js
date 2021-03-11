@@ -326,9 +326,10 @@ var CanvasSpace = function (_Space_1$MultiTouchSp) {
         key: "recorder",
         value: function recorder(downloadOrCallback) {
             var filetype = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "webm";
+            var bitrate = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 25000000;
 
             var stream = this._canvas.captureStream();
-            var recorder = new MediaRecorder(stream, { mimeType: "video/" + filetype });
+            var recorder = new MediaRecorder(stream, { mimeType: "video/" + filetype, bitsPerSecond: bitrate });
             recorder.ondataavailable = function (d) {
                 var url = URL.createObjectURL(new Blob([d.data], { type: "video/" + filetype }));
                 if (typeof downloadOrCallback === "function") {
