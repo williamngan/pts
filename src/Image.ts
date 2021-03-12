@@ -180,6 +180,8 @@ export class Img {
    */
   filter( css:string ):this {
     this._ctx.filter = css;
+    this._ctx.drawImage( this._cv, 0, 0);
+    this._ctx.filter = "none";
     return this;
   }
 

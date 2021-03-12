@@ -42,6 +42,7 @@
         crops.push( curr[0] );
         if (crops.length > 7) crops.shift();
       }
+          rec = true;
     }
   });
   
