@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.10.4 - Copyright © 2017-2021 William Ngan and contributors.
+ * pts.js 0.10.5 - Copyright © 2017-2021 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -324,7 +324,7 @@ class CanvasSpace extends Space_1.MultiTouchSpace {
         this.removeAll();
         return this;
     }
-    recorder(downloadOrCallback, filetype = "webm", bitrate = 25000000) {
+    recorder(downloadOrCallback, filetype = "webm", bitrate = 15000000) {
         let stream = this._canvas.captureStream();
         const recorder = new MediaRecorder(stream, { mimeType: `video/${filetype}`, bitsPerSecond: bitrate });
         recorder.ondataavailable = function (d) {
@@ -2086,6 +2086,8 @@ class Img {
     }
     filter(css) {
         this._ctx.filter = css;
+        this._ctx.drawImage(this._cv, 0, 0);
+        this._ctx.filter = "none";
         return this;
     }
     cleanup() {

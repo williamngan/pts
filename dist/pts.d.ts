@@ -41,7 +41,7 @@ export class CanvasSpace extends MultiTouchSpace {
     clearOffscreen(bg?: string): this;
     protected playItems(time: number): void;
     dispose(): this;
-    recorder(downloadOrCallback: boolean | ((blobURL: string) => {}), filetype?: string): MediaRecorder;
+    recorder(downloadOrCallback: boolean | ((blobURL: string) => {}), filetype?: string, bitrate?: number): MediaRecorder;
 }
 export class CanvasForm extends VisualForm {
     protected _space: CanvasSpace;

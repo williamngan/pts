@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.10.4 - Copyright © 2017-2021 William Ngan and contributors.
+ * pts.js 0.10.5 - Copyright © 2017-2021 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -326,7 +326,7 @@ var CanvasSpace = function (_Space_1$MultiTouchSp) {
         key: "recorder",
         value: function recorder(downloadOrCallback) {
             var filetype = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "webm";
-            var bitrate = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 25000000;
+            var bitrate = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 15000000;
 
             var stream = this._canvas.captureStream();
             var recorder = new MediaRecorder(stream, { mimeType: "video/" + filetype, bitsPerSecond: bitrate });
@@ -2930,6 +2930,8 @@ var Img = function () {
         key: "filter",
         value: function filter(css) {
             this._ctx.filter = css;
+            this._ctx.drawImage(this._cv, 0, 0);
+            this._ctx.filter = "none";
             return this;
         }
     }, {
