@@ -61,7 +61,7 @@ let img2 = Img.load( &quot;/assets/demo.jpg&quot;, true, space.pixelScale );
 </code></pre>
 <p>Let's try this in a demo:</p>
 <p><img src="./assets/bg.png" alt="js:image_crop"></p>
-<h5>Click to cut out a region in the image.</h5>
+<h5>Click to cut out a region in the image. Move pointer to shift its position.</h5>
 <p>It's more efficient to draw <code>ImageData</code> directly on canvas. If needed, you can also export it to a blob using <a href="#image-img"><code>Img.imageDataToBlob</code></a> and then load it into an image again.</p>
 <h3>Edit and Sync</h3>
 <p>Since an editable <a href="#image-img"><code>Img</code></a> stores an internal canvas, you can leverage <a href="#canvas-canvasform"><code>CanvasForm</code></a>'s many drawing functions to draw directly on it. It's that easy!</p>
@@ -70,6 +70,7 @@ let img2 = Img.load( &quot;/assets/demo.jpg&quot;, true, space.pixelScale );
 img.load( &quot;demo.jpg&quot; ).then( a =&gt; form = new CanvasForm(a.ctx) )  
 </code></pre>
 <p><img src="./assets/bg.png" alt="js:image_edit"></p>
+<h5>Move pointer to draw patches on the image.</h5>
 <p>Additionally, the <a href="https://ptsjs.org/docs/?p=Image_Img#function_filter"><code>filter</code></a> function supports image filter effects like desaturation and blur (See the <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter">full list</a> supported by canvas). Note that some effects may not work in mobile browsers.</p>
 <pre><code>img.filter( &quot;blur(10px) contrast(20%) saturate(0%)&quot; )
 </code></pre>

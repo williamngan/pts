@@ -69,7 +69,7 @@ Let's try this in a demo:
 
 ![js:image_crop](./assets/bg.png)
 
-##### Click to cut out a region in the image.
+##### Click to cut out a region in the image. Move pointer to shift its position.
 
 It's more efficient to draw `ImageData` directly on canvas. If needed, you can also export it to a blob using [`Img.imageDataToBlob`](#image-img) and then load it into an image again.
 
@@ -85,6 +85,8 @@ img.load( "demo.jpg" ).then( a => form = new CanvasForm(a.ctx) )
 ```
 
 ![js:image_edit](./assets/bg.png)
+
+##### Move pointer to draw patches on the image.
 
 Additionally, the [`filter`](https://ptsjs.org/docs/?p=Image_Img#function_filter) function supports image filter effects like desaturation and blur (See the [full list](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter) supported by canvas). Note that some effects may not work in mobile browsers.
 
