@@ -11,20 +11,13 @@
   // create Space and Form
   let space = new CanvasSpace("#"+demoID).setup({ retina: true, bgcolor: "#e2e6ef", resize: true });
   let form = space.getForm();
-  let img, de, triangles;
+  let img = Img.load( "/assets/img_demo.jpg", true, space.pixelScale);
+  let de = Create.delaunay( new Group() );
+  let triangles = de.delaunay();
   
   // animation
   space.add( 
     {
-      start: (bound) => {
-
-        img = Img.load( "/assets/img_demo.jpg", true, space.pixelScale);
-
-        // Create 20 random points and generate initial tessellations
-        de = Create.delaunay( new Group() );
-        triangles = de.delaunay();
-      },
-
       animate: (time, ftime) => {
         const scaling = space.size.x / img.image.width;
 

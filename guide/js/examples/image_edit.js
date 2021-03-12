@@ -11,6 +11,7 @@
   // create Space and Form
   let space = new CanvasSpace("#"+demoID).setup({ retina: true, bgcolor: "#e2e6ef", resize: true });
   let form = space.getForm();
+  let lastP = new Pt();
   let imgform;
   let img = new Img(true, space.pixelScale);
   img.load( "/assets/img_demo.jpg" ).then( res => imgform = new CanvasForm( res.ctx ) );
@@ -18,7 +19,6 @@
   // animation
   space.add( 
     {
-
       animate: (time, ftime) => {
         const scaling = space.size.x / img.canvas.width;
 
@@ -27,18 +27,23 @@
 
           const p = space.pointer.divide( scaling );
           const jitter = p.$add( Num.randomPt( [-2, -2], [2, 2] )).floor();
-          const diff = space.pointer.$subtract( space.center );
-          const ang = diff.angle() + Math.random()*0.1 + Math.PI/2;
-          
+          const ang = lastP.$subtract( space.pointer ).angle();
+          lastP = space.pointer.clone();
+
+          const r = Num.randomRange(0, space.pointer.$subtract( space.center ).magnitude() * 2);
           const c = img.pixel( p, false );
           c[3] = Math.random()*0.5 + 0.2;
-          const r = Num.randomRange(0, diff.magnitude());
 
-          imgform.fill(`rgba(${c.join(",")})`).stroke( Math.random() < 0.3 ? "#ffffff99" : "#ffffff00");
-          imgform.ellipse( jitter, [5, Math.min( space.size.x/4, 20+r )], ang );
+          imgform.fill(`rgba(${c.join(",")})`).stroke(  Math.random() < 0.1 ? "#fff" : "#ffffff00");
 
+          let size = new Pt( 10+Math.random()*50, Math.min( space.size.x/2, 30+r ) );
+          let rect = Rectangle.corners( Rectangle.fromCenter( jitter, size ) );
+          rect.rotate2D( ang, jitter );
+          imgform.polygon( rect );
+
+          form.strokeOnly("#fff", 3).point( space.pointer, 8, "circle");
         }
-      }
+      },
   });
   
   // start

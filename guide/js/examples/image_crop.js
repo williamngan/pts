@@ -11,14 +11,12 @@
   let form = space.getForm();
   let grid;
   let crops = [];
-  let img;
-  
+  let img = new Img(true, space.pixelScale);
+  img.load( "/assets/img_demo.jpg" );
   
   // animation
   space.add( {
-    start: () => {
-      img = new Img(true, space.pixelScale);
-      img.load( "/assets/img_demo.jpg" );
+    start: () => {      
       grid = Create.gridCells( space.innerBound, 5, 5 );
     },
     animate: (time, ftime) => {
@@ -42,7 +40,6 @@
         crops.push( curr[0] );
         if (crops.length > 7) crops.shift();
       }
-          rec = true;
     }
   });
   
