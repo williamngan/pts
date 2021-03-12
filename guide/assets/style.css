@@ -410,6 +410,10 @@ p {
   .demoOverlay.active .sourceCodeLink::after {
     content: "(desktop)"
   }
+
+  .demoOverlay {
+    touch-action: none;
+  }
 }
 
 /* Print */
