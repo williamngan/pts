@@ -7,7 +7,7 @@
   var demoID = "getting_started_1"; 
   
   // create Space and Form
-  var space = new CanvasSpace("#"+demoID).setup({ retina: true, resize: true });
+  var space = new CanvasSpace("#"+demoID).setup({ bgcolor: "#e2e6ef", retina: true, resize: true });
   var form = space.getForm();
 
 

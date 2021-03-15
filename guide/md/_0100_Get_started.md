@@ -7,7 +7,7 @@ It's easy to get started with **`Pts`**. Here we'll review the core concepts and
 ##### Here's a spoiler of what we will build. Touch to play it, and take a look at the source code. The core code is only ~10 lines long.
 
 ### Space, Form, and Point
-**`Pts`** is built upon the abstractions of Space, Form, and Point. If that's too abstract, you can think of it like drawing: Space provides the paper, Form provides the pencil, and Point provides the idea. 
+**`Pts`** is built upon the abstractions of Space, Form, and Point. If that's too abstract, you can think of it like drawing: Space represents a piece of paper, Form represents a pencil, and Points represent an idea — and you connect the dots.
 
 Given an idea, you may express it in different forms in different spaces. Would it be expressed in pixels or LEDs? Is it visible or audible? Does it look like abstract art or ASCII art? As **`Pts`** develops, it will offer more Spaces and Forms that enable you to experiment with different ideas and their different expressions. 
 
