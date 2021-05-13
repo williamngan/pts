@@ -5,10 +5,14 @@ import { Curve } from "./Op";
 import { Pt, Group } from "./Pt";
 import { Vec, Mat } from "./LinearAlgebra";
 import {PtLike, GroupLike, PtLikeIterable, PtIterable} from "./Types";
+
+import generator from './uheprng'
+
 /**
  * Num class provides static helper functions for basic numeric operations.
  */
 export class Num {
+  static generator: any;
 
   /**
    * Check if two numbers are equal or almost equal within a threshold.
@@ -163,6 +167,25 @@ export class Num {
     let min = Math.min(targetA, targetB);
     let max = Math.max(targetA, targetB);
     return Num.normalizeValue(n, currA, currB) * (max - min) + min;
+  }
+
+  /**
+   * Seed the pseudorandom generator.
+   * @param seed seed string
+   */
+  static seed(seed: string): void {
+    this.generator = generator(seed);
+  }
+
+  /**
+   * Return a random number between 0 and 1 from a seed,
+   * if the seed is not defined it uses Math.random
+   * @returns a number between 0 and 1
+   */
+  static random(): number {
+      return this.generator 
+          ? this.generator.random()
+          : Math.random();
   }
 }
 

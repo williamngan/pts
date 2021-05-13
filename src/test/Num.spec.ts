@@ -44,6 +44,34 @@ describe('Num: ', function() {
       let p = Num.average( [new Pt(1,3,5,7), new Pt(2,3,8,8), new Pt(5,10,14,21), new Pt(0, 0, 1, 0)] );
       assert.isTrue( p.equals( new Pt(2, 4, 7, 9) ) );
     });
+
+    it('can seed the random function', function () {
+      const a = Num.random()
+      const b = Num.random()
+
+      assert.notEqual(a, b, "Not seeded uses Math.random")
+
+      Num.seed('42')
+      const c = Num.random()
+
+      Num.seed('foo')
+      const f = Num.random()
+      assert.notEqual(c, f, "different seed")
+
+      Num.seed('42')
+      const d = Num.random()
+
+      assert.equal(c, d, "same seed")
+
+      const e = Num.random()
+      assert.notEqual(d, e, "same seed, a second request")
+
+      assert.isTrue(a >= 0 && a < 1)
+      assert.isTrue(b >= 0 && b < 1)
+      assert.isTrue(c >= 0 && c < 1)
+      assert.isTrue(d >= 0 && d < 1)
+      assert.isTrue(e >= 0 && e < 1)
+    })
   });
 
 
