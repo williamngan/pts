@@ -1,5 +1,6 @@
 /*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
+import { Num } from "./Num";
 import {Group, Pt} from "./Pt";
 import {WarningType, PtLikeIterable} from "./Types";
 
@@ -173,7 +174,7 @@ export class Util {
    */
   static randomInt( range:number, start:number=0 ) {
     Util.warn("Util.randomInt is deprecated. Please use `Num.randomRange`");
-    return Math.floor( Math.random()*range ) + start;
+    return Math.floor( Num.random()*range ) + start;
   }
 
 

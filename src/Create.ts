@@ -23,9 +23,9 @@ export class Create {
   static distributeRandom( bound:Bound, count:number, dimensions:number=2 ):Group {
     let pts = new Group();
     for (let i=0; i<count; i++) {
-      let p = [ bound.x + Math.random()*bound.width ];
-      if (dimensions>1) p.push( bound.y + Math.random()*bound.height, );
-      if (dimensions>2) p.push( bound.z + Math.random()*bound.depth );
+      let p = [ bound.x + Num.random()*bound.width ];
+      if (dimensions>1) p.push( bound.y + Num.random()*bound.height, );
+      if (dimensions>2) p.push( bound.z + Num.random()*bound.depth );
       pts.push( new Pt( p ) );
     }
     return pts;
@@ -117,7 +117,7 @@ export class Create {
    * @param columns Optional column count to generate 2D noise
    */
   static noisePts( pts:PtIterable, dx=0.01, dy=0.01, rows=0, columns=0 ):Group {
-    let seed = Math.random();
+    let seed = Num.random();
     let g = new Group();
     let i = 0;
     for (let p of pts) {
