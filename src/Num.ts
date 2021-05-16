@@ -6,7 +6,7 @@ import { Pt, Group } from "./Pt";
 import { Vec, Mat } from "./LinearAlgebra";
 import {PtLike, GroupLike, PtLikeIterable, PtIterable} from "./Types";
 
-import generator from './uheprng'
+import generator from './uheprng';
 
 /**
  * Num class provides static helper functions for basic numeric operations.
