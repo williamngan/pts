@@ -83,7 +83,7 @@ export class Num {
    */
   static randomRange( a:number, b:number = 0 ):number {
     let r = (a > b) ? (a - b) : (b - a);
-    return a + Math.random() * r;
+    return a + Num.random() * r;
   }
 
 
@@ -97,7 +97,7 @@ export class Num {
     let range = b ? Vec.subtract(b, a) : a;
     let start = b ? a : new Pt(a.length).fill(0);
     for (let i=0, len=p.length; i<len; i++) {
-      p[i] = Math.random() * range[i] + start[i];
+      p[i] = Num.random() * range[i] + start[i];
     }
     return p;
   }
