@@ -3,12 +3,12 @@
   "source": [
     [
       "src/Num.ts",
-      496,
+      519,
       20
     ]
   ],
   "kind": "Class",
-  "id": 276,
+  "id": 1517,
   "comment": "Shaping provides shaping functions to interpolate a value. These are useful for easing and transitions.",
   "constructor": [],
   "accessors": [],
@@ -18,11 +18,11 @@
       "source": [
         [
           "src/Num.ts",
-          698,
+          721,
           17
         ]
       ],
-      "id": 358,
+      "id": 1599,
       "flags": {
         "isStatic": true
       },
@@ -56,11 +56,11 @@
       "source": [
         [
           "src/Num.ts",
-          727,
+          750,
           20
         ]
       ],
-      "id": 366,
+      "id": 1607,
       "flags": {
         "isStatic": true
       },
@@ -94,11 +94,11 @@
       "source": [
         [
           "src/Num.ts",
-          707,
+          730,
           18
         ]
       ],
-      "id": 362,
+      "id": 1603,
       "flags": {
         "isStatic": true
       },
@@ -132,11 +132,11 @@
       "source": [
         [
           "src/Num.ts",
-          628,
+          651,
           19
         ]
       ],
-      "id": 331,
+      "id": 1572,
       "flags": {
         "isStatic": true
       },
@@ -170,11 +170,11 @@
       "source": [
         [
           "src/Num.ts",
-          647,
+          670,
           22
         ]
       ],
-      "id": 339,
+      "id": 1580,
       "flags": {
         "isStatic": true
       },
@@ -208,11 +208,11 @@
       "source": [
         [
           "src/Num.ts",
-          637,
+          660,
           20
         ]
       ],
-      "id": 335,
+      "id": 1576,
       "flags": {
         "isStatic": true
       },
@@ -246,11 +246,11 @@
       "source": [
         [
           "src/Num.ts",
-          827,
+          850,
           14
         ]
       ],
-      "id": 401,
+      "id": 1642,
       "flags": {
         "isStatic": true
       },
@@ -290,11 +290,11 @@
       "source": [
         [
           "src/Num.ts",
-          616,
+          639,
           21
         ]
       ],
-      "id": 327,
+      "id": 1568,
       "flags": {
         "isStatic": true
       },
@@ -328,11 +328,11 @@
       "source": [
         [
           "src/Num.ts",
-          799,
+          822,
           20
         ]
       ],
-      "id": 390,
+      "id": 1631,
       "flags": {
         "isStatic": true
       },
@@ -378,11 +378,11 @@
       "source": [
         [
           "src/Num.ts",
-          540,
+          563,
           16
         ]
       ],
-      "id": 293,
+      "id": 1534,
       "flags": {
         "isStatic": true
       },
@@ -416,11 +416,11 @@
       "source": [
         [
           "src/Num.ts",
-          559,
+          582,
           19
         ]
       ],
-      "id": 301,
+      "id": 1542,
       "flags": {
         "isStatic": true
       },
@@ -454,11 +454,11 @@
       "source": [
         [
           "src/Num.ts",
-          549,
+          572,
           17
         ]
       ],
-      "id": 297,
+      "id": 1538,
       "flags": {
         "isStatic": true
       },
@@ -492,11 +492,11 @@
       "source": [
         [
           "src/Num.ts",
-          658,
+          681,
           18
         ]
       ],
-      "id": 343,
+      "id": 1584,
       "flags": {
         "isStatic": true
       },
@@ -536,11 +536,11 @@
       "source": [
         [
           "src/Num.ts",
-          681,
+          704,
           21
         ]
       ],
-      "id": 353,
+      "id": 1594,
       "flags": {
         "isStatic": true
       },
@@ -580,11 +580,11 @@
       "source": [
         [
           "src/Num.ts",
-          670,
+          693,
           19
         ]
       ],
-      "id": 348,
+      "id": 1589,
       "flags": {
         "isStatic": true
       },
@@ -624,11 +624,11 @@
       "source": [
         [
           "src/Num.ts",
-          570,
+          593,
           22
         ]
       ],
-      "id": 305,
+      "id": 1546,
       "flags": {
         "isStatic": true
       },
@@ -668,11 +668,11 @@
       "source": [
         [
           "src/Num.ts",
-          580,
+          603,
           23
         ]
       ],
-      "id": 310,
+      "id": 1551,
       "flags": {
         "isStatic": true
       },
@@ -712,11 +712,11 @@
       "source": [
         [
           "src/Num.ts",
-          503,
+          526,
           15
         ]
       ],
-      "id": 277,
+      "id": 1518,
       "flags": {
         "isStatic": true
       },
@@ -750,11 +750,11 @@
       "source": [
         [
           "src/Num.ts",
-          748,
+          771,
           19
         ]
       ],
-      "id": 375,
+      "id": 1616,
       "flags": {
         "isStatic": true
       },
@@ -794,11 +794,11 @@
       "source": [
         [
           "src/Num.ts",
-          780,
+          803,
           24
         ]
       ],
-      "id": 385,
+      "id": 1626,
       "flags": {
         "isStatic": true
       },
@@ -838,11 +838,11 @@
       "source": [
         [
           "src/Num.ts",
-          512,
+          535,
           20
         ]
       ],
-      "id": 281,
+      "id": 1522,
       "flags": {
         "isStatic": true
       },
@@ -876,11 +876,11 @@
       "source": [
         [
           "src/Num.ts",
-          530,
+          553,
           23
         ]
       ],
-      "id": 289,
+      "id": 1530,
       "flags": {
         "isStatic": true
       },
@@ -914,11 +914,11 @@
       "source": [
         [
           "src/Num.ts",
-          521,
+          544,
           21
         ]
       ],
-      "id": 285,
+      "id": 1526,
       "flags": {
         "isStatic": true
       },
@@ -952,11 +952,11 @@
       "source": [
         [
           "src/Num.ts",
-          811,
+          834,
           24
         ]
       ],
-      "id": 396,
+      "id": 1637,
       "flags": {
         "isStatic": true
       },
@@ -996,11 +996,11 @@
       "source": [
         [
           "src/Num.ts",
-          765,
+          788,
           13
         ]
       ],
-      "id": 380,
+      "id": 1621,
       "flags": {
         "isStatic": true
       },
@@ -1040,11 +1040,11 @@
       "source": [
         [
           "src/Num.ts",
-          737,
+          760,
           16
         ]
       ],
-      "id": 370,
+      "id": 1611,
       "flags": {
         "isStatic": true
       },
@@ -1084,11 +1084,11 @@
       "source": [
         [
           "src/Num.ts",
-          589,
+          612,
           15
         ]
       ],
-      "id": 315,
+      "id": 1556,
       "flags": {
         "isStatic": true
       },
@@ -1122,11 +1122,11 @@
       "source": [
         [
           "src/Num.ts",
-          607,
+          630,
           18
         ]
       ],
-      "id": 323,
+      "id": 1564,
       "flags": {
         "isStatic": true
       },
@@ -1160,11 +1160,11 @@
       "source": [
         [
           "src/Num.ts",
-          598,
+          621,
           16
         ]
       ],
-      "id": 319,
+      "id": 1560,
       "flags": {
         "isStatic": true
       },
@@ -1198,11 +1198,11 @@
       "source": [
         [
           "src/Num.ts",
-          839,
+          862,
           13
         ]
       ],
-      "id": 406,
+      "id": 1647,
       "flags": {
         "isStatic": true
       },

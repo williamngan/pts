@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Typealias",
-  "id": 1654,
+  "id": 824,
   "comment": "Typescript only: an object to store the AnalyzerNode properties",
   "constructor": [],
   "accessors": [],

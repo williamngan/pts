@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Objectliteral",
-  "id": 1240,
+  "id": 410,
   "comment": "**[Experimental]** A set of string constatns to represent different UI types, for use in [`UI`](#link) instances.",
   "constructor": [],
   "accessors": [],
@@ -23,7 +23,7 @@
           32
         ]
       ],
-      "id": 1242,
+      "id": 412,
       "flags": {},
       "type": "circle",
       "overrides": false,
@@ -39,7 +39,7 @@
           90
         ]
       ],
-      "id": 1245,
+      "id": 415,
       "flags": {},
       "type": "line",
       "overrides": false,
@@ -55,7 +55,7 @@
           51
         ]
       ],
-      "id": 1243,
+      "id": 413,
       "flags": {},
       "type": "polygon",
       "overrides": false,
@@ -71,7 +71,7 @@
           72
         ]
       ],
-      "id": 1244,
+      "id": 414,
       "flags": {},
       "type": "polyline",
       "overrides": false,
@@ -87,7 +87,7 @@
           11
         ]
       ],
-      "id": 1241,
+      "id": 411,
       "flags": {},
       "type": "rectangle",
       "overrides": false,

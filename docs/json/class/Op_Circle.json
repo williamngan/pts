@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 603,
+  "id": 1137,
   "comment": "Circle class provides static functions to create and operate on circles. A circle is usually represented as a Group of 2 Pts, where the first Pt specifies the center, and the second Pt specifies the radius.\nYou can use the static functions as-is, or apply the [`Group.op`](#link) or [`Pt.op`](#link) to enable functional programming.\nSee [Op guide](../guide/Op-0400.html) for details.",
   "constructor": [],
   "accessors": [],
@@ -22,7 +22,7 @@
           19
         ]
       ],
-      "id": 612,
+      "id": 1146,
       "flags": {
         "isStatic": true
       },
@@ -60,7 +60,7 @@
           17
         ]
       ],
-      "id": 604,
+      "id": 1138,
       "flags": {
         "isStatic": true
       },
@@ -98,7 +98,7 @@
           21
         ]
       ],
-      "id": 608,
+      "id": 1142,
       "flags": {
         "isStatic": true
       },
@@ -136,7 +136,7 @@
           26
         ]
       ],
-      "id": 629,
+      "id": 1163,
       "flags": {
         "isStatic": true
       },
@@ -174,7 +174,7 @@
           24
         ]
       ],
-      "id": 625,
+      "id": 1159,
       "flags": {
         "isStatic": true
       },
@@ -212,7 +212,7 @@
           23
         ]
       ],
-      "id": 621,
+      "id": 1155,
       "flags": {
         "isStatic": true
       },
@@ -250,7 +250,7 @@
           24
         ]
       ],
-      "id": 633,
+      "id": 1167,
       "flags": {
         "isStatic": true
       },
@@ -288,7 +288,7 @@
           15
         ]
       ],
-      "id": 637,
+      "id": 1171,
       "flags": {
         "isStatic": true
       },
@@ -326,7 +326,7 @@
           19
         ]
       ],
-      "id": 641,
+      "id": 1175,
       "flags": {
         "isStatic": true
       },
@@ -364,7 +364,7 @@
           20
         ]
       ],
-      "id": 616,
+      "id": 1150,
       "flags": {
         "isStatic": true
       },

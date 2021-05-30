@@ -3918,6 +3918,12 @@
     0
   ],
   [
+    "Num_Num#property_generator",
+    "Num.generator",
+    "Variable",
+    0
+  ],
+  [
     "Num_Num#function_average",
     "Num.average",
     "Function",
@@ -3966,6 +3972,12 @@
     8
   ],
   [
+    "Num_Num#function_random",
+    "Num.random",
+    "Function",
+    8
+  ],
+  [
     "Num_Num#function_randomPt",
     "Num.randomPt",
     "Function",
@@ -3974,6 +3986,12 @@
   [
     "Num_Num#function_randomRange",
     "Num.randomRange",
+    "Function",
+    8
+  ],
+  [
+    "Num_Num#function_seed",
+    "Num.seed",
     "Function",
     8
   ],
@@ -10114,5 +10132,17 @@
     "Const",
     "Object literal",
     0
+  ],
+  [
+    "uheprng_Mash",
+    "Mash",
+    "Function",
+    8
+  ],
+  [
+    "uheprng_default",
+    "default",
+    "Function",
+    8
   ]
 ]

@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Typealias",
-  "id": 1619,
+  "id": 789,
   "comment": "Typescript only: a callback function type to be used in `tempo.every(...).start( fn )`",
   "constructor": [],
   "accessors": [],

@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Typealias",
-  "id": 1574,
+  "id": 744,
   "comment": "Typescript only: PtLikeIterable is an alias of GroupLike | Iterable<PtLike> | number[][]",
   "constructor": [],
   "accessors": [],

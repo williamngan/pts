@@ -3,12 +3,12 @@
   "source": [
     [
       "src/Num.ts",
-      11,
+      14,
       16
     ]
   ],
   "kind": "Class",
-  "id": 140,
+  "id": 1375,
   "comment": "Num class provides static helper functions for basic numeric operations.",
   "constructor": [],
   "accessors": [],
@@ -18,11 +18,11 @@
       "source": [
         [
           "src/Num.ts",
-          135,
+          139,
           16
         ]
       ],
-      "id": 182,
+      "id": 1418,
       "flags": {
         "isStatic": true
       },
@@ -50,11 +50,11 @@
       "source": [
         [
           "src/Num.ts",
-          53,
+          57,
           19
         ]
       ],
-      "id": 156,
+      "id": 1392,
       "flags": {
         "isStatic": true
       },
@@ -99,11 +99,11 @@
       "source": [
         [
           "src/Num.ts",
-          41,
+          45,
           14
         ]
       ],
-      "id": 151,
+      "id": 1387,
       "flags": {
         "isStatic": true
       },
@@ -143,11 +143,11 @@
       "source": [
         [
           "src/Num.ts",
-          147,
+          151,
           14
         ]
       ],
-      "id": 185,
+      "id": 1421,
       "flags": {
         "isStatic": true
       },
@@ -181,11 +181,11 @@
       "source": [
         [
           "src/Num.ts",
-          19,
+          23,
           15
         ]
       ],
-      "id": 141,
+      "id": 1377,
       "flags": {
         "isStatic": true
       },
@@ -225,11 +225,11 @@
       "source": [
         [
           "src/Num.ts",
-          30,
+          34,
           13
         ]
       ],
-      "id": 146,
+      "id": 1382,
       "flags": {
         "isStatic": true
       },
@@ -269,11 +269,11 @@
       "source": [
         [
           "src/Num.ts",
-          161,
+          165,
           19
         ]
       ],
-      "id": 192,
+      "id": 1428,
       "flags": {
         "isStatic": true
       },
@@ -325,11 +325,11 @@
       "source": [
         [
           "src/Num.ts",
-          108,
+          112,
           23
         ]
       ],
-      "id": 174,
+      "id": 1410,
       "flags": {
         "isStatic": true
       },
@@ -365,15 +365,40 @@
       ]
     },
     {
+      "name": "random",
+      "source": [
+        [
+          "src/Num.ts",
+          185,
+          15
+        ]
+      ],
+      "id": 1438,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Return a random number between 0 and 1 from a seed,\nif the seed is not defined it uses Math.random",
+          "returns": "number",
+          "returns_comment": "a number between 0 and 1\n",
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "randomPt",
       "source": [
         [
           "src/Num.ts",
-          91,
+          95,
           17
         ]
       ],
-      "id": 170,
+      "id": 1406,
       "flags": {
         "isStatic": true
       },
@@ -407,11 +432,11 @@
       "source": [
         [
           "src/Num.ts",
-          80,
+          84,
           20
         ]
       ],
-      "id": 166,
+      "id": 1402,
       "flags": {
         "isStatic": true
       },
@@ -441,15 +466,47 @@
       ]
     },
     {
+      "name": "seed",
+      "source": [
+        [
+          "src/Num.ts",
+          176,
+          13
+        ]
+      ],
+      "id": 1435,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Seed the pseudorandom generator.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "seed",
+              "comment": "seed string\n",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "sum",
       "source": [
         [
           "src/Num.ts",
-          120,
+          124,
           12
         ]
       ],
-      "id": 179,
+      "id": 1415,
       "flags": {
         "isStatic": true
       },
@@ -477,11 +534,11 @@
       "source": [
         [
           "src/Num.ts",
-          70,
+          74,
           15
         ]
       ],
-      "id": 161,
+      "id": 1397,
       "flags": {
         "isStatic": true
       },
@@ -518,7 +575,26 @@
     }
   ],
   "variables": [],
-  "properties": [],
+  "properties": [
+    {
+      "name": "generator",
+      "source": [
+        [
+          "src/Num.ts",
+          15,
+          18
+        ]
+      ],
+      "id": 1376,
+      "flags": {
+        "isStatic": true
+      },
+      "type": "generator",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    }
+  ],
   "flags": {},
   "extends": [],
   "implements": []

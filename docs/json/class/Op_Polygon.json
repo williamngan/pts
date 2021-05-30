@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 684,
+  "id": 1218,
   "comment": "Polygon class provides static functions to create and operate on polygons. A polygon is usually represented as a Group of 3 or more Pts.\nYou can use the static functions as-is, or apply the [`Group.op`](#link) or [`Pt.op`](#link) to enable functional programming.\nSee [Op guide](../guide/Op-0400.html) for details.",
   "constructor": [],
   "accessors": [],
@@ -22,7 +22,7 @@
           22
         ]
       ],
-      "id": 711,
+      "id": 1245,
       "flags": {
         "isStatic": true
       },
@@ -66,7 +66,7 @@
           13
         ]
       ],
-      "id": 727,
+      "id": 1261,
       "flags": {
         "isStatic": true
       },
@@ -98,7 +98,7 @@
           17
         ]
       ],
-      "id": 716,
+      "id": 1250,
       "flags": {
         "isStatic": true
       },
@@ -136,7 +136,7 @@
           17
         ]
       ],
-      "id": 685,
+      "id": 1219,
       "flags": {
         "isStatic": true
       },
@@ -168,7 +168,7 @@
           19
         ]
       ],
-      "id": 730,
+      "id": 1264,
       "flags": {
         "isStatic": true
       },
@@ -206,7 +206,7 @@
           19
         ]
       ],
-      "id": 693,
+      "id": 1227,
       "flags": {
         "isStatic": true
       },
@@ -250,7 +250,7 @@
           27
         ]
       ],
-      "id": 755,
+      "id": 1289,
       "flags": {
         "isStatic": true
       },
@@ -288,7 +288,7 @@
           26
         ]
       ],
-      "id": 751,
+      "id": 1285,
       "flags": {
         "isStatic": true
       },
@@ -326,7 +326,7 @@
           28
         ]
       ],
-      "id": 759,
+      "id": 1293,
       "flags": {
         "isStatic": true
       },
@@ -364,7 +364,7 @@
           27
         ]
       ],
-      "id": 763,
+      "id": 1297,
       "flags": {
         "isStatic": true
       },
@@ -402,7 +402,7 @@
           15
         ]
       ],
-      "id": 698,
+      "id": 1232,
       "flags": {
         "isStatic": true
       },
@@ -440,7 +440,7 @@
           14
         ]
       ],
-      "id": 702,
+      "id": 1236,
       "flags": {
         "isStatic": true
       },
@@ -478,7 +478,7 @@
           18
         ]
       ],
-      "id": 706,
+      "id": 1240,
       "flags": {
         "isStatic": true
       },
@@ -522,7 +522,7 @@
           18
         ]
       ],
-      "id": 738,
+      "id": 1272,
       "flags": {
         "isStatic": true
       },
@@ -560,7 +560,7 @@
           16
         ]
       ],
-      "id": 734,
+      "id": 1268,
       "flags": {
         "isStatic": true
       },
@@ -598,7 +598,7 @@
           18
         ]
       ],
-      "id": 720,
+      "id": 1254,
       "flags": {
         "isStatic": true
       },
@@ -636,7 +636,7 @@
           20
         ]
       ],
-      "id": 742,
+      "id": 1276,
       "flags": {
         "isStatic": true
       },
@@ -674,7 +674,7 @@
           18
         ]
       ],
-      "id": 688,
+      "id": 1222,
       "flags": {
         "isStatic": true
       },
@@ -718,7 +718,7 @@
           16
         ]
       ],
-      "id": 767,
+      "id": 1301,
       "flags": {
         "isStatic": true
       },

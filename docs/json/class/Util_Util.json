@@ -3,12 +3,12 @@
   "source": [
     [
       "src/Util.ts",
-      103,
+      104,
       17
     ]
   ],
   "kind": "Class",
-  "id": 1669,
+  "id": 1684,
   "comment": "Util class provides static helper functions.",
   "constructor": [],
   "accessors": [],
@@ -18,11 +18,11 @@
       "source": [
         [
           "src/Util.ts",
-          343,
+          344,
           19
         ]
       ],
-      "id": 1742,
+      "id": 1757,
       "flags": {
         "isStatic": true
       },
@@ -56,11 +56,11 @@
       "source": [
         [
           "src/Util.ts",
-          230,
+          231,
           16
         ]
       ],
-      "id": 1696,
+      "id": 1711,
       "flags": {
         "isStatic": true
       },
@@ -100,11 +100,11 @@
       "source": [
         [
           "src/Util.ts",
-          218,
+          219,
           16
         ]
       ],
-      "id": 1692,
+      "id": 1707,
       "flags": {
         "isStatic": true
       },
@@ -138,11 +138,11 @@
       "source": [
         [
           "src/Util.ts",
-          286,
+          287,
           17
         ]
       ],
-      "id": 1720,
+      "id": 1735,
       "flags": {
         "isStatic": true
       },
@@ -188,11 +188,11 @@
       "source": [
         [
           "src/Util.ts",
-          124,
+          125,
           16
         ]
       ],
-      "id": 1674,
+      "id": 1689,
       "flags": {
         "isStatic": true
       },
@@ -220,11 +220,11 @@
       "source": [
         [
           "src/Util.ts",
-          364,
+          365,
           17
         ]
       ],
-      "id": 1749,
+      "id": 1764,
       "flags": {
         "isStatic": true
       },
@@ -245,11 +245,11 @@
       "source": [
         [
           "src/Util.ts",
-          356,
+          357,
           20
         ]
       ],
-      "id": 1746,
+      "id": 1761,
       "flags": {
         "isStatic": true
       },
@@ -277,11 +277,11 @@
       "source": [
         [
           "src/Util.ts",
-          300,
+          301,
           13
         ]
       ],
-      "id": 1729,
+      "id": 1744,
       "flags": {
         "isStatic": true
       },
@@ -315,11 +315,11 @@
       "source": [
         [
           "src/Util.ts",
-          326,
+          327,
           20
         ]
       ],
-      "id": 1737,
+      "id": 1752,
       "flags": {
         "isStatic": true
       },
@@ -352,11 +352,11 @@
       "source": [
         [
           "src/Util.ts",
-          174,
+          175,
           18
         ]
       ],
-      "id": 1681,
+      "id": 1696,
       "flags": {
         "isStatic": true
       },
@@ -390,11 +390,11 @@
       "source": [
         [
           "src/Util.ts",
-          188,
+          189,
           14
         ]
       ],
-      "id": 1685,
+      "id": 1700,
       "flags": {
         "isStatic": true
       },
@@ -446,11 +446,11 @@
       "source": [
         [
           "src/Util.ts",
-          267,
+          268,
           16
         ]
       ],
-      "id": 1709,
+      "id": 1724,
       "flags": {
         "isStatic": true
       },
@@ -501,11 +501,11 @@
       "source": [
         [
           "src/Util.ts",
-          158,
+          159,
           13
         ]
       ],
-      "id": 1677,
+      "id": 1692,
       "flags": {
         "isStatic": true
       },
@@ -539,11 +539,11 @@
       "source": [
         [
           "src/Util.ts",
-          112,
+          113,
           18
         ]
       ],
-      "id": 1671,
+      "id": 1686,
       "flags": {
         "isStatic": true
       },
@@ -571,11 +571,11 @@
       "source": [
         [
           "src/Util.ts",
-          245,
+          246,
           12
         ]
       ],
-      "id": 1706,
+      "id": 1721,
       "flags": {
         "isStatic": true
       },

@@ -1,0 +1,21 @@
+{
+  "name": "default",
+  "source": [
+    [
+      "src/uheprng.ts",
+      76,
+      1
+    ]
+  ],
+  "kind": "Function",
+  "id": 1368,
+  "comment": "",
+  "constructor": [],
+  "accessors": [],
+  "methods": [],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": []
+}
