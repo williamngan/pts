@@ -410,6 +410,7 @@ export class Mat {
 }
 
 export class Num {
+    static generator: any;
     static equals(a: number, b: number, threshold?: number): boolean;
     static lerp(a: number, b: number, t: number): number;
     static clamp(val: number, min: number, max: number): number;
@@ -422,6 +423,8 @@ export class Num {
     static average(pts: PtLikeIterable): Pt;
     static cycle(t: number, method?: (t: number) => number): number;
     static mapToRange(n: number, currA: number, currB: number, targetA: number, targetB: number): number;
+    static seed(seed: string): void;
+    static random(): number;
 }
 export class Geom {
     static boundAngle(angle: number): number;
@@ -1147,6 +1150,10 @@ export class Typography {
     static fontSizeToBox(box: PtLikeIterable, ratio?: number, byHeight?: boolean): (GroupLike: any) => number;
     static fontSizeToThreshold(threshold: number, direction?: number): (a: number, b: number) => number;
 }
+
+export default function (seed: string): {
+    random(): number;
+};
 
 export const UIShape: {
     rectangle: string;

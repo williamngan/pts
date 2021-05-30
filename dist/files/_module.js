@@ -26,4 +26,5 @@ __exportStar(require("./Typography"), exports);
 __exportStar(require("./Physics"), exports);
 __exportStar(require("./Play"), exports);
 __exportStar(require("./UI"), exports);
+__exportStar(require("./Image"), exports);
 //# sourceMappingURL=_module.js.map

@@ -2,6 +2,7 @@
 import { Pt, Group } from "./Pt";
 import { PtLike, GroupLike, PtLikeIterable, PtIterable } from "./Types";
 export declare class Num {
+    static generator: any;
     static equals(a: number, b: number, threshold?: number): boolean;
     static lerp(a: number, b: number, t: number): number;
     static clamp(val: number, min: number, max: number): number;
@@ -14,6 +15,8 @@ export declare class Num {
     static average(pts: PtLikeIterable): Pt;
     static cycle(t: number, method?: (t: number) => number): number;
     static mapToRange(n: number, currA: number, currB: number, targetA: number, targetB: number): number;
+    static seed(seed: string): void;
+    static random(): number;
 }
 export declare class Geom {
     static boundAngle(angle: number): number;

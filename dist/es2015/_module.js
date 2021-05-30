@@ -14,4 +14,5 @@ export * from "./Typography";
 export * from "./Physics";
 export * from "./Play";
 export * from "./UI";
+export * from "./Image";
 //# sourceMappingURL=_module.js.map

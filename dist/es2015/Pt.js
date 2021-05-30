@@ -17,7 +17,7 @@ export class Pt extends Float32Array {
             p.fill(defaultValue);
         if (randomize) {
             for (let i = 0, len = p.length; i < len; i++) {
-                p[i] = p[i] * Math.random();
+                p[i] = p[i] * Num.random();
             }
         }
         return new Pt(p);

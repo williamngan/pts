@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.10.5 - Copyright © 2017-2021 William Ngan and contributors.
+ * pts.js 0.10.6 - Copyright © 2017-2021 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -1477,9 +1477,9 @@ var Color = function (_Pt_1$Pt) {
                 y = _ref7[1],
                 z = _ref7[2];
 
-            var rgb = [x * 3.2404542 + y * -1.5371385 + z * -0.4985314, x * -0.9692660 + y * 1.8760108 + z * 0.0415560, x * 0.0556434 + y * -0.2040259 + z * 1.0572252];
+            var rgb = [x * 3.2406254773200533 + y * -1.5372079722103187 + z * -0.4986285986982479, x * -0.9689307147293197 + y * 1.8757560608852415 + z * 0.041517523842953964, x * 0.055710120445510616 + y * -0.2040210505984867 + z * 1.0569959422543882];
             for (var i = 0; i < 3; i++) {
-                rgb[i] = rgb[i] < 0 ? 0 : rgb[i] > 0.0031308 ? 1.055 * Math.pow(rgb[i], 1 / 2.4) - 0.055 : 12.92 * rgb[i];
+                rgb[i] = rgb[i] > 0.0031308 ? 1.055 * Math.pow(rgb[i], 1 / 2.4) - 0.055 : 12.92 * rgb[i];
                 rgb[i] = Math.max(0, Math.min(1, rgb[i]));
                 if (!normalizedOutput) rgb[i] = Math.round(rgb[i] * 255);
             }
@@ -1493,9 +1493,11 @@ var Color = function (_Pt_1$Pt) {
             var normalizedOutput = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
             var c = normalizedInput ? xyz.$normalize(false) : xyz.clone();
+            var eps = 0.00885645167;
+            var kap = 903.296296296;
             c.divide(Color.D65);
             var fn = function fn(n) {
-                return n > 0.008856 ? Math.pow(n, 1 / 3) : 7.787 * n + 16 / 116;
+                return n > eps ? Math.pow(n, 1 / 3) : (kap * n + 16) / 116;
             };
             var cy = fn(c[1]);
             var cc = Color.lab(116 * cy - 16, 500 * (fn(c[0]) - cy), 200 * (cy - fn(c[2])), xyz.alpha);
@@ -1511,12 +1513,12 @@ var Color = function (_Pt_1$Pt) {
             var y = (c[0] + 16) / 116;
             var x = c[1] / 500 + y;
             var z = y - c[2] / 200;
-            var fn = function fn(n) {
-                var nnn = n * n * n;
-                return nnn > 0.008856 ? nnn : (n - 16 / 116) / 7.787;
-            };
+            var eps = 0.00885645167;
+            var kap = 903.296296296;
             var d = Color.D65;
-            var cc = Color.xyz(Math.max(0, d[0] * fn(x)), Math.max(0, d[1] * fn(y)), Math.max(0, d[2] * fn(z)), lab.alpha);
+            var xxx = Math.pow(x, 3);
+            var zzz = Math.pow(z, 3);
+            var cc = Color.xyz(d[0] * (xxx > eps ? xxx : (116 * x - 16) / kap), d[1] * (c[0] > kap * eps ? Math.pow((c[0] + 16) / 116, 3) : c[0] / kap), d[2] * (zzz > eps ? zzz : (116 * z - 16) / kap), lab.alpha);
             return normalizedOutput ? cc.normalize() : cc;
         }
     }, {
@@ -1642,9 +1644,9 @@ var Create = function () {
 
             var pts = new Pt_1.Group();
             for (var i = 0; i < count; i++) {
-                var p = [bound.x + Math.random() * bound.width];
-                if (dimensions > 1) p.push(bound.y + Math.random() * bound.height);
-                if (dimensions > 2) p.push(bound.z + Math.random() * bound.depth);
+                var p = [bound.x + Num_1.Num.random() * bound.width];
+                if (dimensions > 1) p.push(bound.y + Num_1.Num.random() * bound.height);
+                if (dimensions > 2) p.push(bound.z + Num_1.Num.random() * bound.depth);
                 pts.push(new Pt_1.Pt(p));
             }
             return pts;
@@ -1707,7 +1709,7 @@ var Create = function () {
             var rows = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
             var columns = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 0;
 
-            var seed = Math.random();
+            var seed = Num_1.Num.random();
             var g = new Pt_1.Group();
             var i = 0;
             var _iteratorNormalCompletion = true;
@@ -3425,6 +3427,7 @@ var Util_1 = __webpack_require__(/*! ./Util */ "./src/Util.ts");
 var Op_1 = __webpack_require__(/*! ./Op */ "./src/Op.ts");
 var Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 var LinearAlgebra_1 = __webpack_require__(/*! ./LinearAlgebra */ "./src/LinearAlgebra.ts");
+var uheprng_1 = __webpack_require__(/*! ./uheprng */ "./src/uheprng.ts");
 
 var Num = function () {
     function Num() {
@@ -3467,7 +3470,7 @@ var Num = function () {
             var b = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
 
             var r = a > b ? a - b : b - a;
-            return a + Math.random() * r;
+            return a + Num.random() * r;
         }
     }, {
         key: "randomPt",
@@ -3476,7 +3479,7 @@ var Num = function () {
             var range = b ? LinearAlgebra_1.Vec.subtract(b, a) : a;
             var start = b ? a : new Pt_1.Pt(a.length).fill(0);
             for (var i = 0, len = p.length; i < len; i++) {
-                p[i] = Math.random() * range[i] + start[i];
+                p[i] = Num.random() * range[i] + start[i];
             }
             return p;
         }
@@ -3517,6 +3520,16 @@ var Num = function () {
             var min = Math.min(targetA, targetB);
             var max = Math.max(targetA, targetB);
             return Num.normalizeValue(n, currA, currB) * (max - min) + min;
+        }
+    }, {
+        key: "seed",
+        value: function seed(_seed) {
+            this.generator = uheprng_1.default(_seed);
+        }
+    }, {
+        key: "random",
+        value: function random() {
+            return this.generator ? this.generator.random() : Math.random();
         }
     }]);
 
@@ -7215,7 +7228,7 @@ var Pt = function (_extendableBuiltin2) {
             if (defaultValue) p.fill(defaultValue);
             if (randomize) {
                 for (var i = 0, len = p.length; i < len; i++) {
-                    p[i] = p[i] * Math.random();
+                    p[i] = p[i] * Num_1.Num.random();
                 }
             }
             return new Pt(p);
@@ -9179,6 +9192,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Util = exports.Const = void 0;
+var Num_1 = __webpack_require__(/*! ./Num */ "./src/Num.ts");
 var Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 exports.Const = {
     xy: "xy",
@@ -9263,7 +9277,7 @@ var Util = function () {
             var start = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
 
             Util.warn("Util.randomInt is deprecated. Please use `Num.randomRange`");
-            return Math.floor(Math.random() * range) + start;
+            return Math.floor(Num_1.Num.random() * range) + start;
         }
     }, {
         key: "split",
@@ -9459,6 +9473,87 @@ __exportStar(__webpack_require__(/*! ./Typography */ "./src/Typography.ts"), exp
 __exportStar(__webpack_require__(/*! ./Physics */ "./src/Physics.ts"), exports);
 __exportStar(__webpack_require__(/*! ./Play */ "./src/Play.ts"), exports);
 __exportStar(__webpack_require__(/*! ./UI */ "./src/UI.ts"), exports);
+__exportStar(__webpack_require__(/*! ./Image */ "./src/Image.ts"), exports);
+
+/***/ }),
+
+/***/ "./src/uheprng.ts":
+/*!************************!*\
+  !*** ./src/uheprng.ts ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", { value: true });
+function Mash() {
+    var n = 0xefc8249d;
+    var mash = function mash(data) {
+        if (data) {
+            data = data.toString();
+            for (var i = 0; i < data.length; i++) {
+                n += data.charCodeAt(i);
+                var h = 0.02519603282416938 * n;
+                n = h >>> 0;
+                h -= n;
+                h *= n;
+                n = h >>> 0;
+                h -= n;
+                n += h * 0x100000000;
+            }
+            return (n >>> 0) * 2.3283064365386963e-10;
+        } else n = 0xefc8249d;
+    };
+    return mash;
+}
+function default_1(seed) {
+    var o = 48;
+    var c = 1;
+    var p = o;
+    var s = new Array(o);
+    var i,
+        j,
+        k = 0;
+    var mash = Mash();
+    for (i = 0; i < o; i++) {
+        s[i] = mash(Math.random().toString());
+    }function initState() {
+        mash();
+        for (i = 0; i < o; i++) {
+            s[i] = mash(' ');
+        }c = 1;
+        p = o;
+    }
+    function cleanString(inStr) {
+        inStr = inStr.replace(/(^\s*)|(\s*$)/gi, '');
+        inStr = inStr.replace(/[\x00-\x1F]/gi, '');
+        inStr = inStr.replace(/\n /, '\n');
+        return inStr;
+    }
+    function hashString(inStr) {
+        inStr = cleanString(inStr);
+        mash(inStr);
+        for (i = 0; i < inStr.length; i++) {
+            k = inStr.charCodeAt(i);
+            for (j = 0; j < o; j++) {
+                s[j] -= mash(k.toString());
+                if (s[j] < 0) s[j] += 1;
+            }
+        }
+    }
+    initState();
+    hashString(seed);
+    return {
+        random: function random() {
+            if (++p >= o) p = 0;
+            var t = 1768863 * s[p] + c * 2.3283064365386963e-10;
+            return s[p] = t - (c = t | 0);
+        }
+    };
+}
+exports.default = default_1;
 
 /***/ })
 

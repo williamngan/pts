@@ -255,12 +255,12 @@ class Color extends Pt_1.Pt {
     static XYZtoRGB(xyz, normalizedInput = false, normalizedOutput = false) {
         let [x, y, z] = (!normalizedInput) ? xyz.$normalize() : xyz;
         let rgb = [
-            x * 3.2404542 + y * -1.5371385 + z * -0.4985314,
-            x * -0.9692660 + y * 1.8760108 + z * 0.0415560,
-            x * 0.0556434 + y * -0.2040259 + z * 1.0572252
+            x * 3.2406254773200533 + y * -1.5372079722103187 + z * -0.4986285986982479,
+            x * -0.9689307147293197 + y * 1.8757560608852415 + z * 0.041517523842953964,
+            x * 0.055710120445510616 + y * -0.2040210505984867 + z * 1.0569959422543882
         ];
         for (let i = 0; i < 3; i++) {
-            rgb[i] = (rgb[i] < 0) ? 0 : (rgb[i] > 0.0031308) ? (1.055 * Math.pow(rgb[i], 1 / 2.4) - 0.055) : (12.92 * rgb[i]);
+            rgb[i] = (rgb[i] > 0.0031308) ? (1.055 * Math.pow(rgb[i], 1 / 2.4) - 0.055) : (12.92 * rgb[i]);
             rgb[i] = Math.max(0, Math.min(1, rgb[i]));
             if (!normalizedOutput)
                 rgb[i] = Math.round(rgb[i] * 255);
@@ -270,8 +270,10 @@ class Color extends Pt_1.Pt {
     }
     static XYZtoLAB(xyz, normalizedInput = false, normalizedOutput = false) {
         let c = (normalizedInput) ? xyz.$normalize(false) : xyz.clone();
+        const eps = 0.00885645167;
+        const kap = 903.296296296;
         c.divide(Color.D65);
-        let fn = (n) => (n > 0.008856) ? Math.pow(n, 1 / 3) : (7.787 * n) + 16 / 116;
+        let fn = (n) => (n > eps) ? Math.pow(n, 1 / 3) : (kap * n + 16) / 116;
         let cy = fn(c[1]);
         let cc = Color.lab((116 * cy) - 16, 500 * (fn(c[0]) - cy), 200 * (cy - fn(c[2])), xyz.alpha);
         return (normalizedOutput) ? cc.normalize() : cc;
@@ -281,12 +283,12 @@ class Color extends Pt_1.Pt {
         let y = (c[0] + 16) / 116;
         let x = (c[1] / 500) + y;
         let z = y - c[2] / 200;
-        let fn = (n) => {
-            let nnn = n * n * n;
-            return (nnn > 0.008856) ? nnn : (n - 16 / 116) / 7.787;
-        };
+        const eps = 0.00885645167;
+        const kap = 903.296296296;
         let d = Color.D65;
-        let cc = Color.xyz(Math.max(0, d[0] * fn(x)), Math.max(0, d[1] * fn(y)), Math.max(0, d[2] * fn(z)), lab.alpha);
+        const xxx = Math.pow(x, 3);
+        const zzz = Math.pow(z, 3);
+        let cc = Color.xyz(d[0] * ((xxx > eps) ? xxx : (116 * x - 16) / kap), d[1] * ((c[0] > kap * eps) ? Math.pow((c[0] + 16) / 116, 3) : c[0] / kap), d[2] * ((zzz > eps) ? zzz : (116 * z - 16) / kap), lab.alpha);
         return (normalizedOutput) ? cc.normalize() : cc;
     }
     static XYZtoLUV(xyz, normalizedInput = false, normalizedOutput = false) {

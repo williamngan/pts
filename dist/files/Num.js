@@ -6,6 +6,7 @@ const Util_1 = require("./Util");
 const Op_1 = require("./Op");
 const Pt_1 = require("./Pt");
 const LinearAlgebra_1 = require("./LinearAlgebra");
+const uheprng_1 = require("./uheprng");
 class Num {
     static equals(a, b, threshold = 0.00001) {
         return Math.abs(a - b) < threshold;
@@ -30,14 +31,14 @@ class Num {
     }
     static randomRange(a, b = 0) {
         let r = (a > b) ? (a - b) : (b - a);
-        return a + Math.random() * r;
+        return a + Num.random() * r;
     }
     static randomPt(a, b) {
         let p = new Pt_1.Pt(a.length);
         let range = b ? LinearAlgebra_1.Vec.subtract(b, a) : a;
         let start = b ? a : new Pt_1.Pt(a.length).fill(0);
         for (let i = 0, len = p.length; i < len; i++) {
-            p[i] = Math.random() * range[i] + start[i];
+            p[i] = Num.random() * range[i] + start[i];
         }
         return p;
     }
@@ -67,6 +68,14 @@ class Num {
         let min = Math.min(targetA, targetB);
         let max = Math.max(targetA, targetB);
         return Num.normalizeValue(n, currA, currB) * (max - min) + min;
+    }
+    static seed(seed) {
+        this.generator = uheprng_1.default(seed);
+    }
+    static random() {
+        return this.generator
+            ? this.generator.random()
+            : Math.random();
     }
 }
 exports.Num = Num;

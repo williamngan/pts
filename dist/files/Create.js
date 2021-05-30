@@ -11,11 +11,11 @@ class Create {
     static distributeRandom(bound, count, dimensions = 2) {
         let pts = new Pt_1.Group();
         for (let i = 0; i < count; i++) {
-            let p = [bound.x + Math.random() * bound.width];
+            let p = [bound.x + Num_1.Num.random() * bound.width];
             if (dimensions > 1)
-                p.push(bound.y + Math.random() * bound.height);
+                p.push(bound.y + Num_1.Num.random() * bound.height);
             if (dimensions > 2)
-                p.push(bound.z + Math.random() * bound.depth);
+                p.push(bound.z + Num_1.Num.random() * bound.depth);
             pts.push(new Pt_1.Pt(p));
         }
         return pts;
@@ -61,7 +61,7 @@ class Create {
         return g;
     }
     static noisePts(pts, dx = 0.01, dy = 0.01, rows = 0, columns = 0) {
-        let seed = Math.random();
+        let seed = Num_1.Num.random();
         let g = new Pt_1.Group();
         let i = 0;
         for (let p of pts) {

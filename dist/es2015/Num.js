@@ -3,6 +3,7 @@ import { Const, Util } from "./Util";
 import { Curve } from "./Op";
 import { Pt, Group } from "./Pt";
 import { Vec, Mat } from "./LinearAlgebra";
+import generator from './uheprng';
 export class Num {
     static equals(a, b, threshold = 0.00001) {
         return Math.abs(a - b) < threshold;
@@ -27,14 +28,14 @@ export class Num {
     }
     static randomRange(a, b = 0) {
         let r = (a > b) ? (a - b) : (b - a);
-        return a + Math.random() * r;
+        return a + Num.random() * r;
     }
     static randomPt(a, b) {
         let p = new Pt(a.length);
         let range = b ? Vec.subtract(b, a) : a;
         let start = b ? a : new Pt(a.length).fill(0);
         for (let i = 0, len = p.length; i < len; i++) {
-            p[i] = Math.random() * range[i] + start[i];
+            p[i] = Num.random() * range[i] + start[i];
         }
         return p;
     }
@@ -64,6 +65,14 @@ export class Num {
         let min = Math.min(targetA, targetB);
         let max = Math.max(targetA, targetB);
         return Num.normalizeValue(n, currA, currB) * (max - min) + min;
+    }
+    static seed(seed) {
+        this.generator = generator(seed);
+    }
+    static random() {
+        return this.generator
+            ? this.generator.random()
+            : Math.random();
     }
 }
 export class Geom {
