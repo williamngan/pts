@@ -304,6 +304,7 @@ export abstract class MultiTouchSpace extends Space {
   * Bind event listener in canvas element. You can also use [`MultiTouchSpace.bindMouse`](#link) or [`MultiTouchSpace.bindTouch`](#link) to bind mouse or touch events conveniently.
   * @param evt an event string such as "mousedown"
   * @param callback callback function for this event
+  * @param options options for [addEventListener](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener).
   */
   bindCanvas(evt:string, callback:EventListener, options:any={} ) {
     this._canvas.addEventListener( evt, callback, options );
@@ -314,9 +315,10 @@ export abstract class MultiTouchSpace extends Space {
   * Unbind a callback from the event listener.
   * @param evt an event string such as "mousedown"
   * @param callback callback function to unbind
+  * @param options options for [removeEventListener](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener). This should match the options set in bindCanvas.
   */
-  unbindCanvas(evt:string, callback:EventListener) {
-    this._canvas.removeEventListener( evt, callback );
+  unbindCanvas(evt:string, callback:EventListener, options:any={} ) {
+    this._canvas.removeEventListener( evt, callback, options );
   }
   
   
@@ -355,20 +357,21 @@ export abstract class MultiTouchSpace extends Space {
   * A convenient method to bind (or unbind) all touch events in canvas element. 
   * All [`IPlayer`](#link) objects added to this space that implement an `action` callback property will receive touch event callbacks. 
   * The types of mouse actions are defined by [`UIPointerActions`](#link) constants: "up", "down", "move", "drag", "drop", "over", and "out". 
-  * @param _bind a boolean value to bind touch events if set to `true`. If `false`, all mouse events will be unbound. Default is true.
+  * @param bind a boolean value to bind touch events if set to `true`. If `false`, all mouse events will be unbound. Default is true.
+  * @param passive a boolean value to set passive mode, ie, it won't block scrolling. Default is false.
   * @see [`Space.add`](#link)
   */
-  bindTouch( _bind:boolean=true ):this {
-    if (_bind) {
-      this.bindCanvas( "touchstart", this._touchStart.bind(this), {passive: true} );
+  bindTouch( bind:boolean=true, passive:boolean=false ):this {
+    if (bind) {
+      this.bindCanvas( "touchstart", this._touchStart.bind(this), {passive: passive} );
       this.bindCanvas( "touchend", this._mouseUp.bind(this) );
-      this.bindCanvas( "touchmove", this._touchMove.bind(this), {passive: true}  );
+      this.bindCanvas( "touchmove", this._touchMove.bind(this), {passive: passive}  );
       this.bindCanvas( "touchcancel", this._mouseOut.bind(this) );
       this._hasTouch = true;
     } else {
-      this.unbindCanvas( "touchstart", this._touchStart.bind(this) );
+      this.unbindCanvas( "touchstart", this._touchStart.bind(this), {passive: passive} );
       this.unbindCanvas( "touchend", this._mouseUp.bind(this) );
-      this.unbindCanvas( "touchmove", this._touchMove.bind(this) );
+      this.unbindCanvas( "touchmove", this._touchMove.bind(this), {passive: passive} );
       this.unbindCanvas( "touchcancel", this._mouseOut.bind(this) );
       this._hasTouch = false;
     }
