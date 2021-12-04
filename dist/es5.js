@@ -8011,7 +8011,9 @@ var MultiTouchSpace = function (_Space) {
     }, {
         key: "unbindCanvas",
         value: function unbindCanvas(evt, callback) {
-            this._canvas.removeEventListener(evt, callback);
+            var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
+            this._canvas.removeEventListener(evt, callback, options);
         }
     }, {
         key: "bindMouse",
@@ -8042,18 +8044,19 @@ var MultiTouchSpace = function (_Space) {
     }, {
         key: "bindTouch",
         value: function bindTouch() {
-            var _bind = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+            var bind = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+            var passive = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
-            if (_bind) {
-                this.bindCanvas("touchstart", this._touchStart.bind(this), { passive: true });
+            if (bind) {
+                this.bindCanvas("touchstart", this._touchStart.bind(this), { passive: passive });
                 this.bindCanvas("touchend", this._mouseUp.bind(this));
-                this.bindCanvas("touchmove", this._touchMove.bind(this), { passive: true });
+                this.bindCanvas("touchmove", this._touchMove.bind(this), { passive: passive });
                 this.bindCanvas("touchcancel", this._mouseOut.bind(this));
                 this._hasTouch = true;
             } else {
-                this.unbindCanvas("touchstart", this._touchStart.bind(this));
+                this.unbindCanvas("touchstart", this._touchStart.bind(this), { passive: passive });
                 this.unbindCanvas("touchend", this._mouseUp.bind(this));
-                this.unbindCanvas("touchmove", this._touchMove.bind(this));
+                this.unbindCanvas("touchmove", this._touchMove.bind(this), { passive: passive });
                 this.unbindCanvas("touchcancel", this._mouseOut.bind(this));
                 this._hasTouch = false;
             }
