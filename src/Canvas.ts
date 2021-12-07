@@ -464,6 +464,9 @@ export class CanvasForm extends VisualForm {
   */
   constructor( space:CanvasSpace|CanvasRenderingContext2D ) {
     super();
+
+    // allow for undefined context to support custom contexts via subclassing. 
+    if (!space) return this; 
     
     const _setup = (ctx) => {
       this._ctx = ctx;
