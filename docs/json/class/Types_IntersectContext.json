@@ -3,12 +3,12 @@
   "source": [
     [
       "src/Types.ts",
-      136,
+      143,
       28
     ]
   ],
   "kind": "Typealias",
-  "id": 773,
+  "id": 780,
   "comment": "Typescript only: IntersectContext represents a type of an object that store the intersection info.",
   "constructor": [],
   "accessors": [],

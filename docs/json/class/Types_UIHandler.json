@@ -3,12 +3,12 @@
   "source": [
     [
       "src/Types.ts",
-      149,
+      156,
       21
     ]
   ],
   "kind": "Typealias",
-  "id": 781,
+  "id": 788,
   "comment": "UIHandler is a type alias that represents a callback function to handle UI actions.",
   "constructor": [],
   "accessors": [],

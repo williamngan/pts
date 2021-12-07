@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 911,
+  "id": 918,
   "comment": "Mat provides various static functions for matrix operations. It's not fully optimized but good enough to use.",
   "constructor": [],
   "accessors": [],
@@ -22,7 +22,7 @@
           12
         ]
       ],
-      "id": 912,
+      "id": 919,
       "flags": {
         "isStatic": true
       },
@@ -60,7 +60,7 @@
           17
         ]
       ],
-      "id": 916,
+      "id": 923,
       "flags": {
         "isStatic": true
       },
@@ -110,7 +110,7 @@
           26
         ]
       ],
-      "id": 972,
+      "id": 979,
       "flags": {
         "isStatic": true
       },
@@ -148,7 +148,7 @@
           23
         ]
       ],
-      "id": 945,
+      "id": 952,
       "flags": {
         "isStatic": true
       },
@@ -186,7 +186,7 @@
           25
         ]
       ],
-      "id": 962,
+      "id": 969,
       "flags": {
         "isStatic": true
       },
@@ -230,7 +230,7 @@
           22
         ]
       ],
-      "id": 941,
+      "id": 948,
       "flags": {
         "isStatic": true
       },
@@ -268,7 +268,7 @@
           24
         ]
       ],
-      "id": 957,
+      "id": 964,
       "flags": {
         "isStatic": true
       },
@@ -312,7 +312,7 @@
           22
         ]
       ],
-      "id": 949,
+      "id": 956,
       "flags": {
         "isStatic": true
       },
@@ -350,7 +350,7 @@
           24
         ]
       ],
-      "id": 967,
+      "id": 974,
       "flags": {
         "isStatic": true
       },
@@ -394,7 +394,7 @@
           20
         ]
       ],
-      "id": 937,
+      "id": 944,
       "flags": {
         "isStatic": true
       },
@@ -432,7 +432,7 @@
           26
         ]
       ],
-      "id": 953,
+      "id": 960,
       "flags": {
         "isStatic": true
       },
@@ -470,7 +470,7 @@
           18
         ]
       ],
-      "id": 932,
+      "id": 939,
       "flags": {
         "isStatic": true
       },
@@ -514,7 +514,7 @@
           12
         ]
       ],
-      "id": 927,
+      "id": 934,
       "flags": {
         "isStatic": true
       },
@@ -558,7 +558,7 @@
           17
         ]
       ],
-      "id": 922,
+      "id": 929,
       "flags": {
         "isStatic": true
       },

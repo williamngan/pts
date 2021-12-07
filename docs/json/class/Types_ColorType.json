@@ -3,12 +3,12 @@
   "source": [
     [
       "src/Types.ts",
-      107,
+      114,
       21
     ]
   ],
   "kind": "Typealias",
-  "id": 753,
+  "id": 760,
   "comment": "Typescript only: ColorType is a type alias for a defined set of string values such as \"rgb\" and \"lab\".",
   "constructor": [],
   "accessors": [],

@@ -137,7 +137,7 @@ export class CanvasSpace extends MultiTouchSpace {
   
   /**
   * Set up various options for CanvasSpace. The `opt` parameter is an object with the following fields. This is usually set during instantiation, eg `new CanvasSpace(...).setup( { opt } )`
-  * @param opt a [`CanvasSpaceOptions`](#link) object with optional settings, ie `{ bgcolor, resize, retina, offscreen, pixelDensity }`.   
+  * @param opt a [`CanvasSpaceOptions`](#link) object with optional settings, ie `{ bgcolor:string, resize:boolean, retina:boolean, offscreen:boolean, pixelDensity:number }`.   
   * @example `space.setup({ bgcolor: "#f00", retina: true, resize: true })`
   */
   setup( opt:CanvasSpaceOptions ):this {

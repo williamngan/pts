@@ -9174,6 +9174,12 @@
     0
   ],
   [
+    "Types_CanvasSpaceOptions",
+    "CanvasSpaceOptions",
+    "Type alias",
+    0
+  ],
+  [
     "Types_ColorType",
     "ColorType",
     "Type alias",

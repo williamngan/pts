@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 3319,
+  "id": 3328,
   "comment": "Img provides convenient functions to support image operations on HTML Canvas and [`CanvasSpace`](#link). Combine this with other Pts functions to experiment with visual forms that integrate bitmaps and vector graphics.",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           30
         ]
       ],
-      "id": 3327,
+      "id": 3336,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -64,7 +64,7 @@
           12
         ]
       ],
-      "id": 3390,
+      "id": 3399,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -83,7 +83,7 @@
           16
         ]
       ],
-      "id": 3402,
+      "id": 3411,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -102,7 +102,7 @@
           9
         ]
       ],
-      "id": 3394,
+      "id": 3403,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -121,7 +121,7 @@
           13
         ]
       ],
-      "id": 3386,
+      "id": 3395,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -140,7 +140,7 @@
           10
         ]
       ],
-      "id": 3392,
+      "id": 3401,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -159,7 +159,7 @@
           11
         ]
       ],
-      "id": 3388,
+      "id": 3397,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -178,7 +178,7 @@
           15
         ]
       ],
-      "id": 3400,
+      "id": 3409,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -197,7 +197,7 @@
           12
         ]
       ],
-      "id": 3396,
+      "id": 3405,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -216,7 +216,7 @@
           16
         ]
       ],
-      "id": 3398,
+      "id": 3407,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -237,7 +237,7 @@
           8
         ]
       ],
-      "id": 3349,
+      "id": 3358,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -267,7 +267,7 @@
           9
         ]
       ],
-      "id": 3372,
+      "id": 3381,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -290,7 +290,7 @@
           6
         ]
       ],
-      "id": 3366,
+      "id": 3375,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -320,7 +320,7 @@
           8
         ]
       ],
-      "id": 3369,
+      "id": 3378,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -350,7 +350,7 @@
           6
         ]
       ],
-      "id": 3342,
+      "id": 3351,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -380,7 +380,7 @@
           7
         ]
       ],
-      "id": 3354,
+      "id": 3363,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -416,7 +416,7 @@
           8
         ]
       ],
-      "id": 3362,
+      "id": 3371,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -452,7 +452,7 @@
           6
         ]
       ],
-      "id": 3352,
+      "id": 3361,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -475,7 +475,7 @@
           10
         ]
       ],
-      "id": 3382,
+      "id": 3391,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -498,7 +498,7 @@
           8
         ]
       ],
-      "id": 3384,
+      "id": 3393,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -521,7 +521,7 @@
           17
         ]
       ],
-      "id": 3374,
+      "id": 3383,
       "flags": {
         "isStatic": true
       },
@@ -565,7 +565,7 @@
           17
         ]
       ],
-      "id": 3358,
+      "id": 3367,
       "flags": {
         "isStatic": true
       },
@@ -603,7 +603,7 @@
           24
         ]
       ],
-      "id": 3379,
+      "id": 3388,
       "flags": {
         "isStatic": true
       },
@@ -635,7 +635,7 @@
           13
         ]
       ],
-      "id": 3332,
+      "id": 3341,
       "flags": {
         "isStatic": true
       },
