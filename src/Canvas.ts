@@ -145,10 +145,13 @@ export class CanvasSpace extends MultiTouchSpace {
   * 
   * **{retina}:** a boolean to set if device pixel scaling should be used. This may make drawings on retina displays look sharper but may reduce performance slightly. Default is `true`.   
   * 
-  * **{offscreen}:** a boolean to set if a duplicate canvas should be created for offscreen rendering. Default is `false`.    
+  * **{offscreen}:** a boolean to set if a duplicate canvas should be created for offscreen rendering. Default is `false`. 
+  * 
+  * **{pixelDensity}:** optionally set a custom value for pixel density. If set, this will override `retina` setting. This can be a quick shortcut if you need to render high-resolution images for download.
+  * 
   * @example `space.setup({ bgcolor: "#f00", retina: true, resize: true })`
   */
-  setup( opt:{bgcolor?:string, resize?:boolean, retina?:boolean, offscreen?:boolean} ):this {
+  setup( opt:{bgcolor?:string, resize?:boolean, retina?:boolean, offscreen?:boolean, pixelDensity?:number} ):this {
     this._bgcolor = opt.bgcolor ? opt.bgcolor : "transparent";
     
     this.autoResize = (opt.resize != undefined) ? opt.resize : false;
@@ -165,6 +168,10 @@ export class CanvasSpace extends MultiTouchSpace {
       this._offCtx = this._offCanvas.getContext('2d');
     } else {
       this._offscreen = false;
+    }
+
+    if (opt.pixelDensity) {
+      this._pixelScale = opt.pixelDensity;
     }
     
     return this;
