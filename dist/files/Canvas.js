@@ -91,6 +91,9 @@ class CanvasSpace extends Space_1.MultiTouchSpace {
         else {
             this._offscreen = false;
         }
+        if (opt.pixelDensity) {
+            this._pixelScale = opt.pixelDensity;
+        }
         return this;
     }
     set autoResize(auto) {
@@ -241,6 +244,8 @@ class CanvasForm extends Form_1.VisualForm {
             lineWidth: 1, lineJoin: "bevel", lineCap: "butt",
             globalAlpha: 1
         };
+        if (!space)
+            return this;
         const _setup = (ctx) => {
             this._ctx = ctx;
             this._ctx.fillStyle = this._style.fillStyle;

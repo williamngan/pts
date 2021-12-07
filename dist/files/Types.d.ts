@@ -40,6 +40,13 @@ export interface PtsCanvasRenderingContext2D extends CanvasRenderingContext2D {
     oBackingStorePixelRatio?: number;
     backingStorePixelRatio?: number;
 }
+export declare type CanvasSpaceOptions = {
+    bgcolor?: string;
+    resize?: boolean;
+    retina?: boolean;
+    offscreen?: boolean;
+    pixelDensity?: number;
+};
 export declare type ColorType = "rgb" | "hsl" | "hsb" | "lab" | "lch" | "luv" | "xyz";
 export declare type DelaunayShape = {
     i: number;

@@ -16,12 +16,7 @@ export class CanvasSpace extends MultiTouchSpace {
     protected _initialResize: boolean;
     constructor(elem: string | Element, callback?: Function);
     protected _createElement(elem: string, id: any): HTMLElement;
-    setup(opt: {
-        bgcolor?: string;
-        resize?: boolean;
-        retina?: boolean;
-        offscreen?: boolean;
-    }): this;
+    setup(opt: CanvasSpaceOptions): this;
     set autoResize(auto: boolean);
     get autoResize(): boolean;
     resize(b: Bound, evt?: Event): this;
@@ -1084,6 +1079,13 @@ export interface PtsCanvasRenderingContext2D extends CanvasRenderingContext2D {
     oBackingStorePixelRatio?: number;
     backingStorePixelRatio?: number;
 }
+export type CanvasSpaceOptions = {
+    bgcolor?: string;
+    resize?: boolean;
+    retina?: boolean;
+    offscreen?: boolean;
+    pixelDensity?: number;
+};
 export type ColorType = "rgb" | "hsl" | "hsb" | "lab" | "lch" | "luv" | "xyz";
 export type DelaunayShape = {
     i: number;

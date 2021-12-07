@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.10.6 - Copyright © 2017-2021 William Ngan and contributors.
+ * pts.js 0.10.7 - Copyright © 2017-2021 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -202,6 +202,9 @@ class CanvasSpace extends Space_1.MultiTouchSpace {
         else {
             this._offscreen = false;
         }
+        if (opt.pixelDensity) {
+            this._pixelScale = opt.pixelDensity;
+        }
         return this;
     }
     set autoResize(auto) {
@@ -352,6 +355,8 @@ class CanvasForm extends Form_1.VisualForm {
             lineWidth: 1, lineJoin: "bevel", lineCap: "butt",
             globalAlpha: 1
         };
+        if (!space)
+            return this;
         const _setup = (ctx) => {
             this._ctx = ctx;
             this._ctx.fillStyle = this._style.fillStyle;

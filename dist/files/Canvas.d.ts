@@ -4,7 +4,7 @@ import { MultiTouchSpace } from './Space';
 import { VisualForm, Font } from "./Form";
 import { Pt, Bound } from "./Pt";
 import { Img } from './Image';
-import { PtLike, GroupLike, PtsCanvasRenderingContext2D, DefaultFormStyle, PtLikeIterable, PtIterable } from "./Types";
+import { PtLike, GroupLike, PtsCanvasRenderingContext2D, DefaultFormStyle, PtLikeIterable, PtIterable, CanvasSpaceOptions } from "./Types";
 export declare class CanvasSpace extends MultiTouchSpace {
     protected _canvas: HTMLCanvasElement;
     protected _container: Element;
@@ -19,12 +19,7 @@ export declare class CanvasSpace extends MultiTouchSpace {
     constructor(elem: string | Element, callback?: Function);
     protected _createElement(elem: string, id: any): HTMLElement;
     private _ready;
-    setup(opt: {
-        bgcolor?: string;
-        resize?: boolean;
-        retina?: boolean;
-        offscreen?: boolean;
-    }): this;
+    setup(opt: CanvasSpaceOptions): this;
     set autoResize(auto: boolean);
     get autoResize(): boolean;
     resize(b: Bound, evt?: Event): this;
