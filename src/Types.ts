@@ -102,6 +102,13 @@ export interface PtsCanvasRenderingContext2D extends CanvasRenderingContext2D {
 
 
 /**
+ * Typescript only: Setup options for CanvasSpace. See [`CanvasSpace.setup()`](#link) function.
+ */
+export type CanvasSpaceOptions = {
+  bgcolor?:string, resize?:boolean, retina?:boolean, offscreen?:boolean, pixelDensity?:number
+};
+
+/**
  * Typescript only: ColorType is a type alias for a defined set of string values such as "rgb" and "lab".
  */
 export type ColorType = "rgb"|"hsl"|"hsb"|"lab"|"lch"|"luv"|"xyz";

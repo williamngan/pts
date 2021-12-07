@@ -7,7 +7,7 @@ import {Const, Util} from "./Util";
 import {Typography as Typo} from "./Typography";
 import { Rectangle } from './Op';
 import {Img} from './Image';
-import {PtLike, GroupLike, PtsCanvasRenderingContext2D, DefaultFormStyle, PtLikeIterable, PtIterable} from "./Types";
+import {PtLike, GroupLike, PtsCanvasRenderingContext2D, DefaultFormStyle, PtLikeIterable, PtIterable, CanvasSpaceOptions} from "./Types";
 
 
 
@@ -137,21 +137,10 @@ export class CanvasSpace extends MultiTouchSpace {
   
   /**
   * Set up various options for CanvasSpace. The `opt` parameter is an object with the following fields. This is usually set during instantiation, eg `new CanvasSpace(...).setup( { opt } )`
-  * @param opt an object with optional settings, as follows.   
-  * 
-  * **{bgcolor}:** a hex or rgba string to set initial background color of the canvas, or use `false` or "transparent" to set a transparent background. You may also change it later with `clear()`    
-  * 
-  * **{resize}:** a boolean to set whether `<canvas>` size should auto resize to match its container's size. You can also set it manually with `autoSize()`    
-  * 
-  * **{retina}:** a boolean to set if device pixel scaling should be used. This may make drawings on retina displays look sharper but may reduce performance slightly. Default is `true`.   
-  * 
-  * **{offscreen}:** a boolean to set if a duplicate canvas should be created for offscreen rendering. Default is `false`. 
-  * 
-  * **{pixelDensity}:** optionally set a custom value for pixel density. If set, this will override `retina` setting. This can be a quick shortcut if you need to render high-resolution images for download.
-  * 
+  * @param opt a [`CanvasSpaceOptions`](#link) object with optional settings, ie `{ bgcolor, resize, retina, offscreen, pixelDensity }`.   
   * @example `space.setup({ bgcolor: "#f00", retina: true, resize: true })`
   */
-  setup( opt:{bgcolor?:string, resize?:boolean, retina?:boolean, offscreen?:boolean, pixelDensity?:number} ):this {
+  setup( opt:CanvasSpaceOptions ):this {
     this._bgcolor = opt.bgcolor ? opt.bgcolor : "transparent";
     
     this.autoResize = (opt.resize != undefined) ? opt.resize : false;
