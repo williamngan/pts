@@ -581,6 +581,29 @@ export class CanvasForm extends VisualForm {
       }
       return this;
     }
+
+
+    /**
+     * A convenient function to apply fill and/or stroke after custom drawings using canvas context (eg, `form.ctx.ellipse(...)`). 
+     * You don't need to call this function if you're using Pts' drawing functions like `form.point` or `form.rect`
+     * @param filled apply fill when set to `true`
+     * @param stroked apply stroke when set to `true`
+     * @param strokeWidth optionally set a stroke width
+     * @example `form.ctx.beginPath(); form.ctx.ellipse(...); form.applyFillStroke();`
+     */
+    applyFillStroke( filled:boolean|string = true, stroked:boolean|string = true, strokeWidth:number = 1 ) {
+      if (filled) {
+        if (typeof filled === 'string') this.fill( filled );
+        this._ctx.fill();
+      }
+
+      if (stroked) {
+        if (typeof stroked === 'string') this.stroke( stroked, strokeWidth );
+        this._ctx.stroke();
+      }
+      
+      return this;
+    }
     
 
     /**
