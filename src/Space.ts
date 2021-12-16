@@ -331,22 +331,29 @@ export abstract class MultiTouchSpace extends Space {
   */
   bindMouse( _bind:boolean=true ):this {
     if ( _bind) {
-      this.bindCanvas( "mousedown", this._mouseDown.bind(this) );
-      this.bindCanvas( "mouseup", this._mouseUp.bind(this) );
-      this.bindCanvas( "mouseover", this._mouseOver.bind(this) );
-      this.bindCanvas( "mouseout", this._mouseOut.bind(this) );
-      this.bindCanvas( "mousemove", this._mouseMove.bind(this) );
-      this.bindCanvas( "click", this._mouseClick.bind(this) );
-      this.bindCanvas( "contextmenu", this._contextMenu.bind(this) );
+      this._mouseDown = this._mouseDown.bind(this);
+      this._mouseUp = this._mouseUp.bind(this);
+      this._mouseOver = this._mouseOver.bind(this);
+      this._mouseMove = this._mouseMove.bind(this);
+      this._mouseClick = this._mouseClick.bind(this);
+      this._contextMenu = this._contextMenu.bind(this);
+
+      this.bindCanvas( "mousedown", this._mouseDown );
+      this.bindCanvas( "mouseup", this._mouseUp );
+      this.bindCanvas( "mouseover", this._mouseOver );
+      this.bindCanvas( "mouseout", this._mouseOut );
+      this.bindCanvas( "mousemove", this._mouseMove );
+      this.bindCanvas( "click", this._mouseClick );
+      this.bindCanvas( "contextmenu", this._contextMenu );
       this._hasMouse = true;
     } else {
-      this.unbindCanvas( "mousedown", this._mouseDown.bind(this) );
-      this.unbindCanvas( "mouseup", this._mouseUp.bind(this) );
-      this.unbindCanvas( "mouseover", this._mouseOver.bind(this) );
-      this.unbindCanvas( "mouseout", this._mouseOut.bind(this) );
-      this.unbindCanvas( "mousemove", this._mouseMove.bind(this) );
-      this.unbindCanvas( "click", this._mouseClick.bind(this) );
-      this.unbindCanvas( "contextmenu", this._contextMenu.bind(this) );
+      this.unbindCanvas( "mousedown", this._mouseDown );
+      this.unbindCanvas( "mouseup", this._mouseUp );
+      this.unbindCanvas( "mouseover", this._mouseOver );
+      this.unbindCanvas( "mouseout", this._mouseOut );
+      this.unbindCanvas( "mousemove", this._mouseMove );
+      this.unbindCanvas( "click", this._mouseClick );
+      this.unbindCanvas( "contextmenu", this._contextMenu );
       this._hasMouse = false;
     }
     return this;
