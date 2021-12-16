@@ -183,10 +183,10 @@ export abstract class Space {
   
   
   /**
-  * Play animation loop, and then stop after `duration` time has passed.
+  * Play animation loop once. Optionally set a `duration` time to play for that specific duration.
   * @param duration a value in millisecond to specify a time period to play before stopping, or `-1` to play forever
   */
-  playOnce( duration=5000 ):this {
+  playOnce( duration=0 ):this {
     this.play();
     this.stop( duration );
     return this;
