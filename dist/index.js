@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.10.7 - Copyright © 2017-2021 William Ngan and contributors.
+ * pts.js 0.10.8 - Copyright © 2017-2021 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -110,7 +110,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 "use strict";
 
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CanvasForm = exports.CanvasSpace = void 0;
 const Space_1 = __webpack_require__(/*! ./Space */ "./src/Space.ts");
@@ -221,13 +221,13 @@ class CanvasSpace extends Space_1.MultiTouchSpace {
     get autoResize() { return this._autoResize; }
     resize(b, evt) {
         this.bound = b;
-        this._canvas.width = this.bound.size.x * this._pixelScale;
-        this._canvas.height = this.bound.size.y * this._pixelScale;
-        this._canvas.style.width = Math.floor(this.bound.size.x) + "px";
-        this._canvas.style.height = Math.floor(this.bound.size.y) + "px";
+        this._canvas.width = Math.ceil(this.bound.size.x) * this._pixelScale;
+        this._canvas.height = Math.ceil(this.bound.size.y) * this._pixelScale;
+        this._canvas.style.width = Math.ceil(this.bound.size.x) + "px";
+        this._canvas.style.height = Math.ceil(this.bound.size.y) + "px";
         if (this._offscreen) {
-            this._offCanvas.width = this.bound.size.x * this._pixelScale;
-            this._offCanvas.height = this.bound.size.y * this._pixelScale;
+            this._offCanvas.width = Math.ceil(this.bound.size.x) * this._pixelScale;
+            this._offCanvas.height = Math.ceil(this.bound.size.y) * this._pixelScale;
         }
         if (this._pixelScale != 1) {
             this._ctx.scale(this._pixelScale, this._pixelScale);
@@ -282,27 +282,29 @@ class CanvasSpace extends Space_1.MultiTouchSpace {
         if (bg)
             this._bgcolor = bg;
         const lastColor = this._ctx.fillStyle;
+        const px = Math.ceil(this.pixelScale);
         if (!this._bgcolor || this._bgcolor === "transparent") {
-            this._ctx.clearRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
+            this._ctx.clearRect(-px, -px, this._canvas.width + px, this._canvas.height + px);
         }
         else {
             if (this._bgcolor.indexOf("rgba") === 0 || (this._bgcolor.length === 9 && this._bgcolor.indexOf("#") === 0)) {
-                this._ctx.clearRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
+                this._ctx.clearRect(-px, -px, this._canvas.width + px, this._canvas.height + px);
             }
             this._ctx.fillStyle = this._bgcolor;
-            this._ctx.fillRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
+            this._ctx.fillRect(-px, -px, this._canvas.width + px, this._canvas.height + px);
         }
         this._ctx.fillStyle = lastColor;
         return this;
     }
     clearOffscreen(bg) {
         if (this._offscreen) {
+            const px = Math.ceil(this.pixelScale);
             if (bg) {
                 this._offCtx.fillStyle = bg;
-                this._offCtx.fillRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
+                this._offCtx.fillRect(-px, -px, this._canvas.width + px, this._canvas.height + px);
             }
             else {
-                this._offCtx.clearRect(-1, -1, this._offCanvas.width + 1, this._offCanvas.height + 1);
+                this._offCtx.clearRect(-px, -px, this._offCanvas.width + px, this._offCanvas.height + px);
             }
         }
         return this;
@@ -424,6 +426,19 @@ class CanvasForm extends Form_1.VisualForm {
                 this._ctx.lineCap = linecap;
                 this._style.lineCap = linecap;
             }
+        }
+        return this;
+    }
+    applyFillStroke(filled = true, stroked = true, strokeWidth = 1) {
+        if (filled) {
+            if (typeof filled === 'string')
+                this.fill(filled);
+            this._ctx.fill();
+        }
+        if (stroked) {
+            if (typeof stroked === 'string')
+                this.stroke(stroked, strokeWidth);
+            this._ctx.stroke();
         }
         return this;
     }
@@ -795,7 +810,7 @@ exports.CanvasForm = CanvasForm;
 
 "use strict";
 
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Color = void 0;
 const Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
@@ -1147,7 +1162,7 @@ Color.ranges = {
 
 "use strict";
 
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Delaunay = exports.Noise = exports.Create = void 0;
 const Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
@@ -1439,7 +1454,7 @@ exports.Delaunay = Delaunay;
 
 "use strict";
 
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HTMLForm = exports.HTMLSpace = exports.DOMSpace = void 0;
 const Space_1 = __webpack_require__(/*! ./Space */ "./src/Space.ts");
@@ -1904,7 +1919,7 @@ HTMLForm.domID = 0;
 
 "use strict";
 
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Font = exports.VisualForm = exports.Form = void 0;
 class Form {
@@ -2170,7 +2185,7 @@ exports.Img = Img;
 
 "use strict";
 
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Mat = exports.Vec = void 0;
 const Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
@@ -2437,7 +2452,7 @@ exports.Mat = Mat;
 
 "use strict";
 
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Range = exports.Shaping = exports.Geom = exports.Num = void 0;
 const Util_1 = __webpack_require__(/*! ./Util */ "./src/Util.ts");
@@ -2932,7 +2947,7 @@ exports.Range = Range;
 
 "use strict";
 
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Curve = exports.Polygon = exports.Triangle = exports.Circle = exports.Rectangle = exports.Line = void 0;
 const Util_1 = __webpack_require__(/*! ./Util */ "./src/Util.ts");
@@ -3930,7 +3945,7 @@ exports.Curve = Curve;
 
 "use strict";
 
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Body = exports.Particle = exports.World = void 0;
 const Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
@@ -4685,7 +4700,7 @@ exports.Sound = Sound;
 
 "use strict";
 
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Bound = exports.Group = exports.Pt = void 0;
 const Util_1 = __webpack_require__(/*! ./Util */ "./src/Util.ts");
@@ -5162,7 +5177,7 @@ exports.Bound = Bound;
 
 "use strict";
 
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MultiTouchSpace = exports.Space = void 0;
 const Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
@@ -5257,7 +5272,7 @@ class Space {
         this._time.end = t;
         return this;
     }
-    playOnce(duration = 5000) {
+    playOnce(duration = 0) {
         this.play();
         this.stop(duration);
         return this;
@@ -5299,23 +5314,29 @@ class MultiTouchSpace extends Space {
     }
     bindMouse(_bind = true) {
         if (_bind) {
-            this.bindCanvas("mousedown", this._mouseDown.bind(this));
-            this.bindCanvas("mouseup", this._mouseUp.bind(this));
-            this.bindCanvas("mouseover", this._mouseOver.bind(this));
-            this.bindCanvas("mouseout", this._mouseOut.bind(this));
-            this.bindCanvas("mousemove", this._mouseMove.bind(this));
-            this.bindCanvas("click", this._mouseClick.bind(this));
-            this.bindCanvas("contextmenu", this._contextMenu.bind(this));
+            this._mouseDown = this._mouseDown.bind(this);
+            this._mouseUp = this._mouseUp.bind(this);
+            this._mouseOver = this._mouseOver.bind(this);
+            this._mouseMove = this._mouseMove.bind(this);
+            this._mouseClick = this._mouseClick.bind(this);
+            this._contextMenu = this._contextMenu.bind(this);
+            this.bindCanvas("mousedown", this._mouseDown);
+            this.bindCanvas("mouseup", this._mouseUp);
+            this.bindCanvas("mouseover", this._mouseOver);
+            this.bindCanvas("mouseout", this._mouseOut);
+            this.bindCanvas("mousemove", this._mouseMove);
+            this.bindCanvas("click", this._mouseClick);
+            this.bindCanvas("contextmenu", this._contextMenu);
             this._hasMouse = true;
         }
         else {
-            this.unbindCanvas("mousedown", this._mouseDown.bind(this));
-            this.unbindCanvas("mouseup", this._mouseUp.bind(this));
-            this.unbindCanvas("mouseover", this._mouseOver.bind(this));
-            this.unbindCanvas("mouseout", this._mouseOut.bind(this));
-            this.unbindCanvas("mousemove", this._mouseMove.bind(this));
-            this.unbindCanvas("click", this._mouseClick.bind(this));
-            this.unbindCanvas("contextmenu", this._contextMenu.bind(this));
+            this.unbindCanvas("mousedown", this._mouseDown);
+            this.unbindCanvas("mouseup", this._mouseUp);
+            this.unbindCanvas("mouseover", this._mouseOver);
+            this.unbindCanvas("mouseout", this._mouseOut);
+            this.unbindCanvas("mousemove", this._mouseMove);
+            this.unbindCanvas("click", this._mouseClick);
+            this.unbindCanvas("contextmenu", this._contextMenu);
             this._hasMouse = false;
         }
         return this;
@@ -5448,7 +5469,7 @@ exports.MultiTouchSpace = MultiTouchSpace;
 
 "use strict";
 
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SVGForm = exports.SVGSpace = void 0;
 const Form_1 = __webpack_require__(/*! ./Form */ "./src/Form.ts");
@@ -5831,7 +5852,7 @@ SVGForm.domID = 0;
 
 "use strict";
 
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Typography = void 0;
 const Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
@@ -5886,7 +5907,7 @@ exports.Typography = Typography;
 
 "use strict";
 
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UIDragger = exports.UIButton = exports.UI = exports.UIPointerActions = exports.UIShape = void 0;
 const Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
@@ -6172,7 +6193,7 @@ exports.UIDragger = UIDragger;
 
 "use strict";
 
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Util = exports.Const = void 0;
 const Num_1 = __webpack_require__(/*! ./Num */ "./src/Num.ts");

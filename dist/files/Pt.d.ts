@@ -1,4 +1,4 @@
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 import { IPt, GroupLike, PtLike, PtIterable, PtLikeIterable } from "./Types";
 export declare class Pt extends Float32Array implements IPt, Iterable<number> {
     protected _id: string;

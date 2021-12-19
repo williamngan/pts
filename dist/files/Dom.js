@@ -1,5 +1,5 @@
 "use strict";
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HTMLForm = exports.HTMLSpace = exports.DOMSpace = void 0;
 const Space_1 = require("./Space");

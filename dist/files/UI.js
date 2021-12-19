@@ -1,5 +1,5 @@
 "use strict";
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UIDragger = exports.UIButton = exports.UI = exports.UIPointerActions = exports.UIShape = void 0;
 const Pt_1 = require("./Pt");

@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.10.7 - Copyright © 2017-2021 William Ngan and contributors.
+ * pts.js 0.10.8 - Copyright © 2017-2021 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -110,7 +110,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 "use strict";
 
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -234,13 +234,13 @@ var CanvasSpace = function (_Space_1$MultiTouchSp) {
         key: "resize",
         value: function resize(b, evt) {
             this.bound = b;
-            this._canvas.width = this.bound.size.x * this._pixelScale;
-            this._canvas.height = this.bound.size.y * this._pixelScale;
-            this._canvas.style.width = Math.floor(this.bound.size.x) + "px";
-            this._canvas.style.height = Math.floor(this.bound.size.y) + "px";
+            this._canvas.width = Math.ceil(this.bound.size.x) * this._pixelScale;
+            this._canvas.height = Math.ceil(this.bound.size.y) * this._pixelScale;
+            this._canvas.style.width = Math.ceil(this.bound.size.x) + "px";
+            this._canvas.style.height = Math.ceil(this.bound.size.y) + "px";
             if (this._offscreen) {
-                this._offCanvas.width = this.bound.size.x * this._pixelScale;
-                this._offCanvas.height = this.bound.size.y * this._pixelScale;
+                this._offCanvas.width = Math.ceil(this.bound.size.x) * this._pixelScale;
+                this._offCanvas.height = Math.ceil(this.bound.size.y) * this._pixelScale;
             }
             if (this._pixelScale != 1) {
                 this._ctx.scale(this._pixelScale, this._pixelScale);
@@ -279,14 +279,15 @@ var CanvasSpace = function (_Space_1$MultiTouchSp) {
         value: function clear(bg) {
             if (bg) this._bgcolor = bg;
             var lastColor = this._ctx.fillStyle;
+            var px = Math.ceil(this.pixelScale);
             if (!this._bgcolor || this._bgcolor === "transparent") {
-                this._ctx.clearRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
+                this._ctx.clearRect(-px, -px, this._canvas.width + px, this._canvas.height + px);
             } else {
                 if (this._bgcolor.indexOf("rgba") === 0 || this._bgcolor.length === 9 && this._bgcolor.indexOf("#") === 0) {
-                    this._ctx.clearRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
+                    this._ctx.clearRect(-px, -px, this._canvas.width + px, this._canvas.height + px);
                 }
                 this._ctx.fillStyle = this._bgcolor;
-                this._ctx.fillRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
+                this._ctx.fillRect(-px, -px, this._canvas.width + px, this._canvas.height + px);
             }
             this._ctx.fillStyle = lastColor;
             return this;
@@ -295,11 +296,12 @@ var CanvasSpace = function (_Space_1$MultiTouchSp) {
         key: "clearOffscreen",
         value: function clearOffscreen(bg) {
             if (this._offscreen) {
+                var px = Math.ceil(this.pixelScale);
                 if (bg) {
                     this._offCtx.fillStyle = bg;
-                    this._offCtx.fillRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
+                    this._offCtx.fillRect(-px, -px, this._canvas.width + px, this._canvas.height + px);
                 } else {
-                    this._offCtx.clearRect(-1, -1, this._offCanvas.width + 1, this._offCanvas.height + 1);
+                    this._offCtx.clearRect(-px, -px, this._offCanvas.width + px, this._offCanvas.height + px);
                 }
             }
             return this;
@@ -510,6 +512,23 @@ var CanvasForm = function (_Form_1$VisualForm) {
                     this._ctx.lineCap = linecap;
                     this._style.lineCap = linecap;
                 }
+            }
+            return this;
+        }
+    }, {
+        key: "applyFillStroke",
+        value: function applyFillStroke() {
+            var filled = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+            var stroked = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+            var strokeWidth = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
+
+            if (filled) {
+                if (typeof filled === 'string') this.fill(filled);
+                this._ctx.fill();
+            }
+            if (stroked) {
+                if (typeof stroked === 'string') this.stroke(stroked, strokeWidth);
+                this._ctx.stroke();
             }
             return this;
         }
@@ -999,7 +1018,7 @@ exports.CanvasForm = CanvasForm;
 
 "use strict";
 
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
@@ -1620,7 +1639,7 @@ Color.ranges = {
 
 "use strict";
 
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -2028,7 +2047,7 @@ exports.Delaunay = Delaunay;
 
 "use strict";
 
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
@@ -2637,7 +2656,7 @@ HTMLForm.domID = 0;
 
 "use strict";
 
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -3074,7 +3093,7 @@ exports.Img = Img;
 
 "use strict";
 
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -3421,7 +3440,7 @@ exports.Mat = Mat;
 
 "use strict";
 
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -4211,7 +4230,7 @@ exports.Range = Range;
 
 "use strict";
 
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
@@ -5574,7 +5593,7 @@ exports.Curve = Curve;
 
 "use strict";
 
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
@@ -6746,7 +6765,7 @@ exports.Sound = Sound;
 
 "use strict";
 
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -7799,7 +7818,7 @@ exports.Bound = Bound;
 
 "use strict";
 
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -7930,7 +7949,7 @@ var Space = function () {
     }, {
         key: "playOnce",
         value: function playOnce() {
-            var duration = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 5000;
+            var duration = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
 
             this.play();
             this.stop(duration);
@@ -8027,22 +8046,28 @@ var MultiTouchSpace = function (_Space) {
             var _bind = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
 
             if (_bind) {
-                this.bindCanvas("mousedown", this._mouseDown.bind(this));
-                this.bindCanvas("mouseup", this._mouseUp.bind(this));
-                this.bindCanvas("mouseover", this._mouseOver.bind(this));
-                this.bindCanvas("mouseout", this._mouseOut.bind(this));
-                this.bindCanvas("mousemove", this._mouseMove.bind(this));
-                this.bindCanvas("click", this._mouseClick.bind(this));
-                this.bindCanvas("contextmenu", this._contextMenu.bind(this));
+                this._mouseDown = this._mouseDown.bind(this);
+                this._mouseUp = this._mouseUp.bind(this);
+                this._mouseOver = this._mouseOver.bind(this);
+                this._mouseMove = this._mouseMove.bind(this);
+                this._mouseClick = this._mouseClick.bind(this);
+                this._contextMenu = this._contextMenu.bind(this);
+                this.bindCanvas("mousedown", this._mouseDown);
+                this.bindCanvas("mouseup", this._mouseUp);
+                this.bindCanvas("mouseover", this._mouseOver);
+                this.bindCanvas("mouseout", this._mouseOut);
+                this.bindCanvas("mousemove", this._mouseMove);
+                this.bindCanvas("click", this._mouseClick);
+                this.bindCanvas("contextmenu", this._contextMenu);
                 this._hasMouse = true;
             } else {
-                this.unbindCanvas("mousedown", this._mouseDown.bind(this));
-                this.unbindCanvas("mouseup", this._mouseUp.bind(this));
-                this.unbindCanvas("mouseover", this._mouseOver.bind(this));
-                this.unbindCanvas("mouseout", this._mouseOut.bind(this));
-                this.unbindCanvas("mousemove", this._mouseMove.bind(this));
-                this.unbindCanvas("click", this._mouseClick.bind(this));
-                this.unbindCanvas("contextmenu", this._contextMenu.bind(this));
+                this.unbindCanvas("mousedown", this._mouseDown);
+                this.unbindCanvas("mouseup", this._mouseUp);
+                this.unbindCanvas("mouseover", this._mouseOver);
+                this.unbindCanvas("mouseout", this._mouseOut);
+                this.unbindCanvas("mousemove", this._mouseMove);
+                this.unbindCanvas("click", this._mouseClick);
+                this.unbindCanvas("contextmenu", this._contextMenu);
                 this._hasMouse = false;
             }
             return this;
@@ -8208,7 +8233,7 @@ exports.MultiTouchSpace = MultiTouchSpace;
 
 "use strict";
 
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -8716,7 +8741,7 @@ SVGForm.domID = 0;
 
 "use strict";
 
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -8801,7 +8826,7 @@ exports.Typography = Typography;
 
 "use strict";
 
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -9189,7 +9214,7 @@ exports.UIDragger = UIDragger;
 
 "use strict";
 
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 

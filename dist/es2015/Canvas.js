@@ -1,4 +1,4 @@
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 import { MultiTouchSpace } from './Space';
 import { VisualForm, Font } from "./Form";
 import { Pt, Group, Bound } from "./Pt";
@@ -107,13 +107,13 @@ export class CanvasSpace extends MultiTouchSpace {
     get autoResize() { return this._autoResize; }
     resize(b, evt) {
         this.bound = b;
-        this._canvas.width = this.bound.size.x * this._pixelScale;
-        this._canvas.height = this.bound.size.y * this._pixelScale;
-        this._canvas.style.width = Math.floor(this.bound.size.x) + "px";
-        this._canvas.style.height = Math.floor(this.bound.size.y) + "px";
+        this._canvas.width = Math.ceil(this.bound.size.x) * this._pixelScale;
+        this._canvas.height = Math.ceil(this.bound.size.y) * this._pixelScale;
+        this._canvas.style.width = Math.ceil(this.bound.size.x) + "px";
+        this._canvas.style.height = Math.ceil(this.bound.size.y) + "px";
         if (this._offscreen) {
-            this._offCanvas.width = this.bound.size.x * this._pixelScale;
-            this._offCanvas.height = this.bound.size.y * this._pixelScale;
+            this._offCanvas.width = Math.ceil(this.bound.size.x) * this._pixelScale;
+            this._offCanvas.height = Math.ceil(this.bound.size.y) * this._pixelScale;
         }
         if (this._pixelScale != 1) {
             this._ctx.scale(this._pixelScale, this._pixelScale);
@@ -168,27 +168,29 @@ export class CanvasSpace extends MultiTouchSpace {
         if (bg)
             this._bgcolor = bg;
         const lastColor = this._ctx.fillStyle;
+        const px = Math.ceil(this.pixelScale);
         if (!this._bgcolor || this._bgcolor === "transparent") {
-            this._ctx.clearRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
+            this._ctx.clearRect(-px, -px, this._canvas.width + px, this._canvas.height + px);
         }
         else {
             if (this._bgcolor.indexOf("rgba") === 0 || (this._bgcolor.length === 9 && this._bgcolor.indexOf("#") === 0)) {
-                this._ctx.clearRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
+                this._ctx.clearRect(-px, -px, this._canvas.width + px, this._canvas.height + px);
             }
             this._ctx.fillStyle = this._bgcolor;
-            this._ctx.fillRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
+            this._ctx.fillRect(-px, -px, this._canvas.width + px, this._canvas.height + px);
         }
         this._ctx.fillStyle = lastColor;
         return this;
     }
     clearOffscreen(bg) {
         if (this._offscreen) {
+            const px = Math.ceil(this.pixelScale);
             if (bg) {
                 this._offCtx.fillStyle = bg;
-                this._offCtx.fillRect(-1, -1, this._canvas.width + 1, this._canvas.height + 1);
+                this._offCtx.fillRect(-px, -px, this._canvas.width + px, this._canvas.height + px);
             }
             else {
-                this._offCtx.clearRect(-1, -1, this._offCanvas.width + 1, this._offCanvas.height + 1);
+                this._offCtx.clearRect(-px, -px, this._offCanvas.width + px, this._offCanvas.height + px);
             }
         }
         return this;
@@ -309,6 +311,19 @@ export class CanvasForm extends VisualForm {
                 this._ctx.lineCap = linecap;
                 this._style.lineCap = linecap;
             }
+        }
+        return this;
+    }
+    applyFillStroke(filled = true, stroked = true, strokeWidth = 1) {
+        if (filled) {
+            if (typeof filled === 'string')
+                this.fill(filled);
+            this._ctx.fill();
+        }
+        if (stroked) {
+            if (typeof stroked === 'string')
+                this.stroke(stroked, strokeWidth);
+            this._ctx.stroke();
         }
         return this;
     }

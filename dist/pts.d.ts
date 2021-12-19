@@ -51,6 +51,7 @@ export class CanvasForm extends VisualForm {
     alpha(a: number): this;
     fill(c: string | boolean | CanvasGradient | CanvasPattern): this;
     stroke(c: string | boolean | CanvasGradient | CanvasPattern, width?: number, linejoin?: CanvasLineJoin, linecap?: CanvasLineCap): this;
+    applyFillStroke(filled?: boolean | string, stroked?: boolean | string, strokeWidth?: number): this;
     gradient(stops: [number, string][] | string[]): ((area1: GroupLike, area2?: GroupLike) => CanvasGradient);
     composite(mode?: string): this;
     clip(): this;

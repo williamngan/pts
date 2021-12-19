@@ -1,4 +1,4 @@
-/*! Source code licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+/*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 /// <reference types="dom-mediacapture-record" />
 import { MultiTouchSpace } from './Space';
 import { VisualForm, Font } from "./Form";
@@ -54,6 +54,7 @@ export declare class CanvasForm extends VisualForm {
     alpha(a: number): this;
     fill(c: string | boolean | CanvasGradient | CanvasPattern): this;
     stroke(c: string | boolean | CanvasGradient | CanvasPattern, width?: number, linejoin?: CanvasLineJoin, linecap?: CanvasLineCap): this;
+    applyFillStroke(filled?: boolean | string, stroked?: boolean | string, strokeWidth?: number): this;
     gradient(stops: [number, string][] | string[]): ((area1: GroupLike, area2?: GroupLike) => CanvasGradient);
     composite(mode?: string): this;
     clip(): this;
