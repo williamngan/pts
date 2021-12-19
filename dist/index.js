@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.10.8 - Copyright © 2017-2021 William Ngan and contributors.
+ * pts.js 0.10.9 - Copyright © 2017-2021 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -5317,6 +5317,7 @@ class MultiTouchSpace extends Space {
             this._mouseDown = this._mouseDown.bind(this);
             this._mouseUp = this._mouseUp.bind(this);
             this._mouseOver = this._mouseOver.bind(this);
+            this._mouseOut = this._mouseOut.bind(this);
             this._mouseMove = this._mouseMove.bind(this);
             this._mouseClick = this._mouseClick.bind(this);
             this._contextMenu = this._contextMenu.bind(this);
