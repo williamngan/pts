@@ -368,7 +368,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Play animation loop, and then stop after `duration` time has passed.",
+          "comment": "Play animation loop once. Optionally set a `duration` time to play for that specific duration.",
           "returns": "this",
           "returns_comment": false,
           "parameters": [
@@ -376,7 +376,7 @@
               "name": "duration",
               "comment": "a value in millisecond to specify a time period to play before stopping, or `-1` to play forever\n",
               "type": "number",
-              "default": "5000"
+              "default": "0"
             }
           ],
           "tags": []

@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 6871,
+  "id": 6876,
   "comment": "**[Experimental]** SVGSpace extends [`DOMSpace`](#link) to support SVG elements. Use it with [`SVGForm`](#link) to express Pts in svg.\nYou may easily switch between html canvas and svg renderings with minimal code changes. Check out the [Space guide](../guide/Space-0500.html) for details, and see [a demo here](../demo/index.html?name=svgform.scope).",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           37
         ]
       ],
-      "id": 6873,
+      "id": 6878,
       "flags": {},
       "overrides": "DOMSpace.__constructor",
       "inherits": false,
@@ -68,7 +68,7 @@
           16
         ]
       ],
-      "id": 6912,
+      "id": 6917,
       "flags": {},
       "overrides": false,
       "inherits": "DOMSpace.autoResize",
@@ -100,7 +100,7 @@
           16
         ]
       ],
-      "id": 6926,
+      "id": 6931,
       "flags": {},
       "overrides": false,
       "inherits": "DOMSpace.background",
@@ -127,7 +127,7 @@
           12
         ]
       ],
-      "id": 7065,
+      "id": 7070,
       "flags": {},
       "overrides": false,
       "inherits": "Space.center",
@@ -151,7 +151,7 @@
           21
         ]
       ],
-      "id": 7045,
+      "id": 7050,
       "flags": {},
       "overrides": false,
       "inherits": "Space.customRendering",
@@ -178,7 +178,7 @@
           13
         ]
       ],
-      "id": 6879,
+      "id": 6884,
       "flags": {},
       "overrides": "DOMSpace.element",
       "inherits": false,
@@ -197,7 +197,7 @@
           12
         ]
       ],
-      "id": 7069,
+      "id": 7074,
       "flags": {},
       "overrides": false,
       "inherits": "Space.height",
@@ -216,7 +216,7 @@
           23
         ]
       ],
-      "id": 7061,
+      "id": 7066,
       "flags": {
         "isPublic": true
       },
@@ -237,7 +237,7 @@
           15
         ]
       ],
-      "id": 7057,
+      "id": 7062,
       "flags": {},
       "overrides": false,
       "inherits": "Space.isPlaying",
@@ -256,7 +256,7 @@
           16
         ]
       ],
-      "id": 7059,
+      "id": 7064,
       "flags": {},
       "overrides": false,
       "inherits": "Space.outerBound",
@@ -275,7 +275,7 @@
           12
         ]
       ],
-      "id": 6919,
+      "id": 6924,
       "flags": {},
       "overrides": false,
       "inherits": "DOMSpace.parent",
@@ -294,7 +294,7 @@
           20
         ]
       ],
-      "id": 6952,
+      "id": 6957,
       "flags": {
         "isPublic": true
       },
@@ -315,7 +315,7 @@
           11
         ]
       ],
-      "id": 6921,
+      "id": 6926,
       "flags": {},
       "overrides": false,
       "inherits": "DOMSpace.ready",
@@ -334,7 +334,7 @@
           10
         ]
       ],
-      "id": 7063,
+      "id": 7068,
       "flags": {},
       "overrides": false,
       "inherits": "Space.size",
@@ -353,7 +353,7 @@
           11
         ]
       ],
-      "id": 7067,
+      "id": 7072,
       "flags": {},
       "overrides": false,
       "inherits": "Space.width",
@@ -374,7 +374,7 @@
           5
         ]
       ],
-      "id": 7020,
+      "id": 7025,
       "flags": {},
       "overrides": false,
       "inherits": "Space.add",
@@ -404,7 +404,7 @@
           12
         ]
       ],
-      "id": 6954,
+      "id": 6959,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.bindCanvas",
@@ -446,7 +446,7 @@
           11
         ]
       ],
-      "id": 6964,
+      "id": 6969,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.bindMouse",
@@ -477,11 +477,11 @@
       "source": [
         [
           "src/Space.ts",
-          364,
+          371,
           11
         ]
       ],
-      "id": 6967,
+      "id": 6972,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.bindTouch",
@@ -522,7 +522,7 @@
           7
         ]
       ],
-      "id": 6923,
+      "id": 6928,
       "flags": {},
       "overrides": "Space.clear",
       "inherits": "DOMSpace.clear",
@@ -552,7 +552,7 @@
           9
         ]
       ],
-      "id": 6946,
+      "id": 6951,
       "flags": {},
       "overrides": false,
       "inherits": "DOMSpace.dispose",
@@ -575,7 +575,7 @@
           9
         ]
       ],
-      "id": 6877,
+      "id": 6882,
       "flags": {},
       "overrides": "DOMSpace.getForm",
       "inherits": false,
@@ -603,7 +603,7 @@
           7
         ]
       ],
-      "id": 7031,
+      "id": 7036,
       "flags": {},
       "overrides": false,
       "inherits": "Space.pause",
@@ -633,7 +633,7 @@
           6
         ]
       ],
-      "id": 7023,
+      "id": 7028,
       "flags": {},
       "overrides": false,
       "inherits": "Space.play",
@@ -663,7 +663,7 @@
           21
         ]
       ],
-      "id": 7028,
+      "id": 7033,
       "flags": {
         "isProtected": true
       },
@@ -695,13 +695,13 @@
           10
         ]
       ],
-      "id": 7039,
+      "id": 7044,
       "flags": {},
       "overrides": false,
       "inherits": "Space.playOnce",
       "signatures": [
         {
-          "comment": "Play animation loop, and then stop after `duration` time has passed.",
+          "comment": "Play animation loop once. Optionally set a `duration` time to play for that specific duration.",
           "returns": "this",
           "returns_comment": false,
           "parameters": [
@@ -709,7 +709,7 @@
               "name": "duration",
               "comment": "a value in millisecond to specify a time period to play before stopping, or `-1` to play forever\n",
               "type": "number",
-              "default": "5000"
+              "default": "0"
             }
           ],
           "tags": []
@@ -725,7 +725,7 @@
           9
         ]
       ],
-      "id": 7017,
+      "id": 7022,
       "flags": {},
       "overrides": false,
       "inherits": "Space.refresh",
@@ -755,7 +755,7 @@
           8
         ]
       ],
-      "id": 6890,
+      "id": 6895,
       "flags": {},
       "overrides": "Space.remove",
       "inherits": false,
@@ -785,7 +785,7 @@
           11
         ]
       ],
-      "id": 6893,
+      "id": 6898,
       "flags": {},
       "overrides": "Space.removeAll",
       "inherits": false,
@@ -808,7 +808,7 @@
           18
         ]
       ],
-      "id": 7042,
+      "id": 7047,
       "flags": {
         "isProtected": true
       },
@@ -840,7 +840,7 @@
           8
         ]
       ],
-      "id": 7026,
+      "id": 7031,
       "flags": {},
       "overrides": false,
       "inherits": "Space.replay",
@@ -863,7 +863,7 @@
           8
         ]
       ],
-      "id": 6881,
+      "id": 6886,
       "flags": {},
       "overrides": "DOMSpace.resize",
       "inherits": false,
@@ -899,7 +899,7 @@
           8
         ]
       ],
-      "id": 7034,
+      "id": 7039,
       "flags": {},
       "overrides": false,
       "inherits": "Space.resume",
@@ -922,7 +922,7 @@
           7
         ]
       ],
-      "id": 6906,
+      "id": 6911,
       "flags": {},
       "overrides": false,
       "inherits": "DOMSpace.setup",
@@ -957,7 +957,7 @@
           6
         ]
       ],
-      "id": 7036,
+      "id": 7041,
       "flags": {},
       "overrides": false,
       "inherits": "Space.stop",
@@ -987,7 +987,7 @@
           7
         ]
       ],
-      "id": 6930,
+      "id": 6935,
       "flags": {},
       "overrides": false,
       "inherits": "DOMSpace.style",
@@ -1029,7 +1029,7 @@
           8
         ]
       ],
-      "id": 6935,
+      "id": 6940,
       "flags": {},
       "overrides": false,
       "inherits": "DOMSpace.styles",
@@ -1061,11 +1061,11 @@
       "source": [
         [
           "src/Space.ts",
-          390,
+          397,
           17
         ]
       ],
-      "id": 6971,
+      "id": 6976,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.touchesToPoints",
@@ -1101,7 +1101,7 @@
           14
         ]
       ],
-      "id": 6959,
+      "id": 6964,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.unbindCanvas",
@@ -1143,7 +1143,7 @@
           22
         ]
       ],
-      "id": 6901,
+      "id": 6906,
       "flags": {
         "isStatic": true
       },
@@ -1187,7 +1187,7 @@
           24
         ]
       ],
-      "id": 6943,
+      "id": 6948,
       "flags": {
         "isStatic": true
       },
@@ -1224,7 +1224,7 @@
           16
         ]
       ],
-      "id": 6939,
+      "id": 6944,
       "flags": {
         "isStatic": true
       },
@@ -1262,7 +1262,7 @@
           19
         ]
       ],
-      "id": 6885,
+      "id": 6890,
       "flags": {
         "isStatic": true
       },
@@ -1309,7 +1309,7 @@
           17
         ]
       ],
-      "id": 7006,
+      "id": 7011,
       "flags": {
         "isProtected": true
       },
@@ -1327,7 +1327,7 @@
           4
         ]
       ],
-      "id": 6897,
+      "id": 6902,
       "flags": {},
       "type": "id",
       "overrides": "Space.id",
@@ -1343,7 +1343,7 @@
           23
         ]
       ],
-      "id": 7012,
+      "id": 7017,
       "flags": {
         "isProtected": true
       },
@@ -1361,7 +1361,7 @@
           19
         ]
       ],
-      "id": 7011,
+      "id": 7016,
       "flags": {
         "isProtected": true
       },
