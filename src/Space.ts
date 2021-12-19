@@ -334,6 +334,7 @@ export abstract class MultiTouchSpace extends Space {
       this._mouseDown = this._mouseDown.bind(this);
       this._mouseUp = this._mouseUp.bind(this);
       this._mouseOver = this._mouseOver.bind(this);
+      this._mouseOut = this._mouseOut.bind(this);
       this._mouseMove = this._mouseMove.bind(this);
       this._mouseClick = this._mouseClick.bind(this);
       this._contextMenu = this._contextMenu.bind(this);
