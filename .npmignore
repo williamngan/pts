@@ -18,7 +18,6 @@ dist/files
 favicon.ico
 .babelrc
 .nojekyll
-*.map
 .pylintrc
 parse.py
 site.webmanifest
