@@ -1,5 +1,6 @@
 /*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
+import { CanvasSpace } from "./Canvas";
 import { Num } from "./Num";
 import {Group, Pt} from "./Pt";
 import {WarningType, PtLikeIterable} from "./Types";
@@ -315,6 +316,28 @@ export class Util {
     };
 
     request.send();
+  }
+
+
+  /**
+   * Download the current `CanvasSpace` as an image (jpg/png/webp). Calling this function will automatically trigger a download.
+   * @param space an instance of `CanvasSpace`
+   * @param filename the name of the file, without the extension name. 
+   * @param filetype the image type (jpg/png/webp)
+   * @param quality a value between 0 to 1, if filetype is either "jpg" or "png"
+   */
+  static download( space: CanvasSpace, filename:string='pts_canvas_image', filetype:("jpeg"|"jpg"|"png"|"webp")="png", quality:number=1 ) {
+    const ftype = filetype === 'jpg' ? 'jpeg' : filetype;
+    space.element.toBlob( function( blob ) {
+      const link = document.createElement( 'a' );
+      const url = URL.createObjectURL( blob );
+      link.href = url;
+      link.download = `${filename}.${filetype}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    },`image/${ftype}`, quality );
   }
 
 
