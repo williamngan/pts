@@ -18,7 +18,7 @@ The goal of `pts.js` is to help you see and express these structures in creative
 let g1 = new Group( p1, p2, p3 );
 
 // wrap an array of Pt into a group
-let g2 = Group.fromGroup( [ p1, p2, p3 ] ); 
+let g2 = Group.fromArray( [ p1, p2, p3 ] ); 
 
 // Use it just like array too
 g1[2] = new Pt(1,2,3);
