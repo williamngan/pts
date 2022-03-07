@@ -30,6 +30,9 @@ export abstract class Space {
 
   protected _isReady = false;
   protected _playing = false;
+
+  protected _keyDownBind: (evt:KeyboardEvent) => boolean;
+  protected _keyUpBind: (evt:KeyboardEvent) => boolean;
   
   
   /**
@@ -297,6 +300,7 @@ export abstract class MultiTouchSpace extends Space {
   
   protected _hasMouse = false;
   protected _hasTouch = false;
+  protected _hasKeyboard = false;
   
   // accept subclasses that implements addEventListener, removeEventListener, dispatchEvent
   protected _canvas:EventTarget;
@@ -316,7 +320,7 @@ export abstract class MultiTouchSpace extends Space {
   * @param callback callback function for this event
   * @param options options for [addEventListener](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener).
   */
-  bindCanvas(evt:string, callback:EventListener, options:any={} ) {
+  bindCanvas( evt:string, callback:EventListener, options:any={} ) {
     this._canvas.addEventListener( evt, callback, options );
   }
   
@@ -327,20 +331,33 @@ export abstract class MultiTouchSpace extends Space {
   * @param callback callback function to unbind
   * @param options options for [removeEventListener](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener). This should match the options set in bindCanvas.
   */
-  unbindCanvas(evt:string, callback:EventListener, options:any={} ) {
+  unbindCanvas( evt:string, callback:EventListener, options:any={} ) {
     this._canvas.removeEventListener( evt, callback, options );
   }
   
+
+  bindDoc( evt:string, callback:EventListener, options:any={} ) {
+    if (document) {
+      document.addEventListener( evt, callback, options );
+    }
+  }
+
+  unbindDoc( evt:string, callback:EventListener, options:any={} ) {
+    if (document) {
+      document.removeEventListener( evt, callback, options );
+    }
+  }
   
+
   /**
   * A convenient method to bind (or unbind) all mouse events in canvas element. 
   * All [`IPlayer`](#link) objects added to this space that implement an `action` callback property will receive mouse event callbacks. 
   * The types of mouse actions are defined by [`UIPointerActions`](#link) constants: "up", "down", "move", "drag", "drop", "over", and "out". 
-  * @param _bind a boolean value to bind mouse events if set to `true`. If `false`, all mouse events will be unbound. Default is true.
+  * @param bind a boolean value to bind mouse events if set to `true`. If `false`, all mouse events will be unbound. Default is true.
   * @see [`Space.add`](#link) 
   */
-  bindMouse( _bind:boolean=true ):this {
-    if ( _bind) {
+  bindMouse( bind:boolean=true ):this {
+    if ( bind) {
       this._mouseDown = this._mouseDown.bind(this);
       this._mouseUp = this._mouseUp.bind(this);
       this._mouseOver = this._mouseOver.bind(this);
@@ -396,6 +413,21 @@ export abstract class MultiTouchSpace extends Space {
     return this;
   }
   
+
+  bindKeyboard( bind:boolean=true ):this {
+    if (bind) {
+      this._keyDownBind = this._keyDown.bind(this);
+      this._keyUpBind = this._keyUp.bind(this);
+      this.bindDoc( "keydown", this._keyDownBind, {} );
+      this.bindDoc( "keyup", this._keyUpBind, {} );
+      this._hasKeyboard = true;
+    } else {
+      this.unbindDoc( "keydown", this._keyDownBind, {} );
+      this.unbindDoc( "keyup", this._keyUpBind, {} );
+      this._hasKeyboard = false;
+    }
+    return this;
+  }
   
   
   
@@ -552,10 +584,30 @@ export abstract class MultiTouchSpace extends Space {
   * TouchStart handler.
   * @param evt 
   */
- protected _touchStart( evt:TouchEvent) {
-  this._mouseDown(evt);
-  evt.preventDefault();
-  return false;
-}
+  protected _touchStart( evt:TouchEvent) {
+    this._mouseDown(evt);
+    evt.preventDefault();
+    return false;
+  }
+
+
+  protected _keyDown( evt:KeyboardEvent ) {
+    this._keyboardAction( UIA.keydown, evt );
+    return false;
+  }
+
+  protected _keyUp( evt:KeyboardEvent ) {
+    this._keyboardAction( UIA.keyup, evt );
+    return false;
+  }
+
+  protected _keyboardAction( type:string, evt:KeyboardEvent ) {
+    for (let k in this.players) {
+      if (this.players.hasOwnProperty(k)) {
+        let v = this.players[k];
+        if (v.action) v.action( type, evt.shiftKey ? 1 : 0, evt.altKey ? 1 : 0, evt );
+      }
+    }
+  }
   
 }
