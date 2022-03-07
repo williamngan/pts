@@ -15,7 +15,7 @@ export abstract class Space {
   id: string = "space";
   protected bound: Bound = new Bound();
   
-  protected _time: ITimer = { prev: 0, diff: 0, end: -1 };
+  protected _time: ITimer = { prev: 0, diff: 0, end: -1, min: 0 };
   protected players:ISpacePlayers = {};
   protected playerCount = 0;
   protected _ctx:any;
@@ -39,6 +39,15 @@ export abstract class Space {
   refresh( b:boolean ):this {
     this._refresh = b;
     return this;
+  }
+
+
+  /**
+   * Set a minimum frame time
+   * @param ms at least this amount of miniseconds must have elapsed before frame advances
+   */
+  minFrameTime( ms:number=0 ) {
+    this._time.min = ms;
   }
   
   
@@ -101,6 +110,7 @@ export abstract class Space {
     if (this._pause) return this;
     
     this._time.diff = time - this._time.prev;
+    if (this._time.diff < this._time.min) return this;
     this._time.prev = time;
     
     try {

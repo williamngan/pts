@@ -72,6 +72,7 @@ export interface ITimer {
   prev: number;
   diff: number;
   end: number;
+  min: number;
 }
 
 /**
