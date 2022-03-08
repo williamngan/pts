@@ -57,7 +57,7 @@ space.setup({ bgcolor: &quot;#123&quot;, retina: true });
 <ul>
 <li><p><code>animate</code> function is called continuously when the space plays. It includes 2 parameters: <code>time</code> which gives the current running time, and <code>ftime</code> which gives the time taken to draw the previous frame.</p></li>
 <li><p><code>action</code> function is called when an user event is detected. It includes 4 parameters: <code>type</code> is a string that returns the action's name. (&quot;up&quot;, &quot;down&quot;, &quot;move&quot;, &quot;drag&quot;, &quot;drop&quot;, &quot;over&quot;, and &quot;out&quot;). <code>x</code> and <code>y</code> returns the position at which the action happened, and <code>event</code> returns the actual event object. See also: <a href="#canvas-canvasspace"><code>bindMouse</code></a></p></li>
-<li><p><code>resize</code> function is called when the space is resized. It includes 2 parameter: <code>size</code> which returns the new size, and event which returns the event object</p></li>
+<li><p><code>resize</code> function is called when the space is resized. It includes 2 parameter: <code>size</code> which returns the new size, and event which returns the event object. You'll also need to add <code>{resize: true}</code> in <a href="#canvas-canvasspace"><code>setup</code></a> to enable tracking.</p></li>
 </ul>
 <p>You may add multiple players into a space, each taking care of specific parts of a scene. Use <a href="#canvas-canvasspace"><code>add</code></a> and <a href="#canvas-canvasspace"><code>remove</code></a> to manage a space's players.</p>
 <h3>Animation and interaction</h3>

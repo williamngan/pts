@@ -53,7 +53,7 @@ Here we add an object that conforms to the [IPlayer](../docs/?p=Types_IPlayer) i
 
 - `action` function is called when an user event is detected. It includes 4 parameters: `type` is a string that returns the action's name. ("up", "down", "move", "drag", "drop", "over", and "out"). `x` and `y` returns the position at which the action happened, and `event` returns the actual event object. See also: [`bindMouse`](#canvas-canvasspace)   
 
-- `resize` function is called when the space is resized. It includes 2 parameter: `size` which returns the new size, and event which returns the event object   
+- `resize` function is called when the space is resized. It includes 2 parameter: `size` which returns the new size, and event which returns the event object. You'll also need to add `{resize: true}` in [`setup`](#canvas-canvasspace) to enable tracking.
 
 You may add multiple players into a space, each taking care of specific parts of a scene. Use [`add`](#canvas-canvasspace) and [`remove`](#canvas-canvasspace) to manage a space's players.
 
