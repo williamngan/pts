@@ -455,6 +455,8 @@ export abstract class MultiTouchSpace extends Space {
   * @see [`Space.add`](#link)
   */
   protected _mouseAction( type:string, evt:MouseEvent|TouchEvent ) {
+    if (!this.isPlaying) return;
+
     let px = 0, py = 0;
     
     if (evt instanceof MouseEvent) {
@@ -602,6 +604,7 @@ export abstract class MultiTouchSpace extends Space {
   }
 
   protected _keyboardAction( type:string, evt:KeyboardEvent ) {
+    if (!this.isPlaying) return;
     for (let k in this.players) {
       if (this.players.hasOwnProperty(k)) {
         let v = this.players[k];
