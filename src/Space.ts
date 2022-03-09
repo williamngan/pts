@@ -319,9 +319,11 @@ export abstract class MultiTouchSpace extends Space {
   * @param evt an event string such as "mousedown"
   * @param callback callback function for this event
   * @param options options for [addEventListener](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener).
+  * @param customTarget If needed, this is an optional parameter to set another event target that's not the canvas element itself. See [Technical Notes guide](/guide/Technical-notes-9000.html) for use cases.
   */
-  bindCanvas( evt:string, callback:EventListener, options:any={} ) {
-    this._canvas.addEventListener( evt, callback, options );
+  bindCanvas( evt:string, callback:EventListener, options:any={}, customTarget?:Element ) {
+    const target = customTarget ? customTarget : this._canvas;
+    target.addEventListener( evt, callback, options );
   }
   
   
@@ -330,9 +332,11 @@ export abstract class MultiTouchSpace extends Space {
   * @param evt an event string such as "mousedown"
   * @param callback callback function to unbind
   * @param options options for [removeEventListener](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener). This should match the options set in bindCanvas.
+  * @param customTarget If customTarget is set in bindCanvas, you'll need to pass the same instance here to unbind
   */
-  unbindCanvas( evt:string, callback:EventListener, options:any={} ) {
-    this._canvas.removeEventListener( evt, callback, options );
+  unbindCanvas( evt:string, callback:EventListener, options:any={}, customTarget?:Element ) {
+    const target = customTarget ? customTarget : this._canvas;
+    target.removeEventListener( evt, callback, options );
   }
   
 
@@ -354,9 +358,10 @@ export abstract class MultiTouchSpace extends Space {
   * All [`IPlayer`](#link) objects added to this space that implement an `action` callback property will receive mouse event callbacks. 
   * The types of mouse actions are defined by [`UIPointerActions`](#link) constants: "up", "down", "move", "drag", "drop", "over", and "out". 
   * @param bind a boolean value to bind mouse events if set to `true`. If `false`, all mouse events will be unbound. Default is true.
+  * @param customTarget If needed, this is an optional parameter to set another event target that's not the canvas element itself. See [Technical Notes guide](/guide/Technical-notes-9000.html) for use cases.
   * @see [`Space.add`](#link) 
   */
-  bindMouse( bind:boolean=true ):this {
+  bindMouse( bind:boolean=true, customTarget?:Element ):this {
     if ( bind) {
       this._mouseDown = this._mouseDown.bind(this);
       this._mouseUp = this._mouseUp.bind(this);
@@ -366,22 +371,22 @@ export abstract class MultiTouchSpace extends Space {
       this._mouseClick = this._mouseClick.bind(this);
       this._contextMenu = this._contextMenu.bind(this);
 
-      this.bindCanvas( "mousedown", this._mouseDown );
-      this.bindCanvas( "mouseup", this._mouseUp );
-      this.bindCanvas( "mouseover", this._mouseOver );
-      this.bindCanvas( "mouseout", this._mouseOut );
-      this.bindCanvas( "mousemove", this._mouseMove );
-      this.bindCanvas( "click", this._mouseClick );
-      this.bindCanvas( "contextmenu", this._contextMenu );
+      this.bindCanvas( "mousedown", this._mouseDown, {}, customTarget );
+      this.bindCanvas( "mouseup", this._mouseUp, {}, customTarget );
+      this.bindCanvas( "mouseover", this._mouseOver, {}, customTarget);
+      this.bindCanvas( "mouseout", this._mouseOut, {}, customTarget );
+      this.bindCanvas( "mousemove", this._mouseMove, {}, customTarget );
+      this.bindCanvas( "click", this._mouseClick, {}, customTarget );
+      this.bindCanvas( "contextmenu", this._contextMenu, {}, customTarget );
       this._hasMouse = true;
     } else {
-      this.unbindCanvas( "mousedown", this._mouseDown );
-      this.unbindCanvas( "mouseup", this._mouseUp );
-      this.unbindCanvas( "mouseover", this._mouseOver );
-      this.unbindCanvas( "mouseout", this._mouseOut );
-      this.unbindCanvas( "mousemove", this._mouseMove );
-      this.unbindCanvas( "click", this._mouseClick );
-      this.unbindCanvas( "contextmenu", this._contextMenu );
+      this.unbindCanvas( "mousedown", this._mouseDown, {}, customTarget );
+      this.unbindCanvas( "mouseup", this._mouseUp, {}, customTarget );
+      this.unbindCanvas( "mouseover", this._mouseOver, {}, customTarget );
+      this.unbindCanvas( "mouseout", this._mouseOut, {}, customTarget );
+      this.unbindCanvas( "mousemove", this._mouseMove, {}, customTarget );
+      this.unbindCanvas( "click", this._mouseClick, {}, customTarget );
+      this.unbindCanvas( "contextmenu", this._contextMenu, {}, customTarget );
       this._hasMouse = false;
     }
     return this;
@@ -394,20 +399,21 @@ export abstract class MultiTouchSpace extends Space {
   * The types of mouse actions are defined by [`UIPointerActions`](#link) constants: "up", "down", "move", "drag", "drop", "over", and "out". 
   * @param bind a boolean value to bind touch events if set to `true`. If `false`, all mouse events will be unbound. Default is true.
   * @param passive a boolean value to set passive mode, ie, it won't block scrolling. Default is false.
+  * @param customTarget If needed, this is an optional parameter to set another event target that's not the canvas element itself. See [Technical Notes guide](/guide/Technical-notes-9000.html) for use cases.
   * @see [`Space.add`](#link)
   */
-  bindTouch( bind:boolean=true, passive:boolean=false ):this {
+  bindTouch( bind:boolean=true, passive:boolean=false, customTarget?:Element ):this {
     if (bind) {
-      this.bindCanvas( "touchstart", this._touchStart.bind(this), {passive: passive} );
-      this.bindCanvas( "touchend", this._mouseUp.bind(this) );
-      this.bindCanvas( "touchmove", this._touchMove.bind(this), {passive: passive}  );
-      this.bindCanvas( "touchcancel", this._mouseOut.bind(this) );
+      this.bindCanvas( "touchstart", this._touchStart.bind(this), {passive: passive}, customTarget );
+      this.bindCanvas( "touchend", this._mouseUp.bind(this), {}, customTarget );
+      this.bindCanvas( "touchmove", this._touchMove.bind(this), {passive: passive}, customTarget  );
+      this.bindCanvas( "touchcancel", this._mouseOut.bind(this), {}, customTarget );
       this._hasTouch = true;
     } else {
-      this.unbindCanvas( "touchstart", this._touchStart.bind(this), {passive: passive} );
-      this.unbindCanvas( "touchend", this._mouseUp.bind(this) );
-      this.unbindCanvas( "touchmove", this._touchMove.bind(this), {passive: passive} );
-      this.unbindCanvas( "touchcancel", this._mouseOut.bind(this) );
+      this.unbindCanvas( "touchstart", this._touchStart.bind(this), {passive: passive}, customTarget );
+      this.unbindCanvas( "touchend", this._mouseUp.bind(this), {}, customTarget );
+      this.unbindCanvas( "touchmove", this._touchMove.bind(this), {passive: passive}, customTarget );
+      this.unbindCanvas( "touchcancel", this._mouseOut.bind(this), {}, customTarget );
       this._hasTouch = false;
     }
     return this;
