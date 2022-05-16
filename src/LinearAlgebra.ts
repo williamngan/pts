@@ -208,9 +208,87 @@ export class Vec {
 
 
 /**
- * Mat provides various static functions for matrix operations. It's not fully optimized but good enough to use.
+ * Mat provides various static functions for matrix operations as well as a convenient way to chain a 3x3 transformation matrix. It's not fully optimized but good enough to use.
  */
 export class Mat {
+
+  protected _33: GroupLike;
+
+  constructor() {
+    this.reset();
+  }
+
+
+  /**
+   * Get the current value of its stored 3x3 matrix
+   */
+  get value(): GroupLike {
+    return this._33;
+  }
+
+
+  /**
+   * Convert the value of its stored 3x3 matrix to a 2D [`DOMMatrix`](https://developer.mozilla.org/en-US/docs/Web/API/DOMMatrix) instance
+   */
+  get domMatrix(): DOMMatrix {
+    return new DOMMatrix( Mat.toDOMMatrix( this._33 ) ) ;
+  }
+
+
+  /**
+   * Reset the internal 3x3 matrix to its identity
+   */
+  reset() {
+    this._33 = Mat.scale2DMatrix(1,1);
+  }
+
+
+  /**
+   * Scale the internal 3x3 matrix. You can chain this function with other related functions.
+   * @param val [x, y] scale factors
+   * @param at Optional origin location to scale from. 
+   */
+  scale2D( val:PtLike, at:PtLike = [0,0] ): this {
+    const m = Mat.scaleAt2DMatrix( val[0] || 1, val[1] || 1, at );
+    this._33 = Mat.multiply( this._33, m );
+    return this;
+  }
+
+
+  /**
+   * Scale the internal 3x3 matrix. You can chain this function with other related functions.
+   * @param ang Angle of rotation
+   * @param at Optional origin location to rotate from. 
+   */
+  rotate2D( ang:number, at:PtLike = [0,0] ): this {
+    const m = Mat.rotateAt2DMatrix( Math.cos(ang), Math.sin(ang), at );
+    this._33 = Mat.multiply( this._33, m );
+    return this;
+  }
+
+
+  /**
+   * Translate the internal 3x3 matrix. You can chain this function with other related functions.
+   * @param val [x, y] offset values
+   */
+  translate2D( val:PtLike ): this {
+    const m = Mat.translate2DMatrix( val[0] || 0, val[1] || 0 );
+    this._33 = Mat.multiply( this._33, m );
+    return this;
+  }
+
+
+  /**
+   * Shear the internal 3x3 matrix. You can chain this function with other related functions.
+   * @param val [x, y] shear factors (before tan() operation)
+   * @param at Optional origin location to scale from. 
+   */
+  shear2D( val:PtLike, at:PtLike = [0,0] ): this {
+    const m = Mat.shearAt2DMatrix( Math.tan( val[0] || 0 ), Math.tan( val[1] || 1 ), at );
+    this._33 = Mat.multiply( this._33, m );
+    return this;
+  }
+
 
   /**
    * Matrix addition. Matrices should have the same rows and columns.
@@ -317,6 +395,11 @@ export class Mat {
    */
   static transpose( g:GroupLike|number[][], defaultValue:number|boolean = false, useLongest=false ):Group {
     return Mat.zip( g, defaultValue, useLongest );
+  }
+
+
+  static toDOMMatrix( m:GroupLike|number[][]) {    
+    return [m[0][0], m[0][1], m[1][0], m[1][1], m[2][0], m[2][1]];
   }
 
 
