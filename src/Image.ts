@@ -1,5 +1,6 @@
+import { CanvasForm, CanvasSpace } from "./Canvas";
 import { Bound, Pt } from "./Pt";
-import { PtLike } from "./Types";
+import { PtLike, CanvasPatternRepetition } from "./Types";
 
 /**
  * Img provides convenient functions to support image operations on HTML Canvas and [`CanvasSpace`](#link). Combine this with other Pts functions to experiment with visual forms that integrate bitmaps and vector graphics.
@@ -15,32 +16,76 @@ export class Img {
   protected _loaded:boolean = false;
   protected _editable:boolean;
 
+  protected _space:CanvasSpace;
+
   /**
    * Create an Img
    * @param editable Specify if you want to manipulate pixels of this image. Default is `false`.
-   * @param pixelScale Set internal canvas' scale in relation to original image size. Useful for retina screens. Use `CanvasSpace.pixelScale` to pass current scale.
+   * @param space Set the `CanvasSpace` reference. This is optional but will make sure the image's pixelScale match the canvas and set the context for creating pattern.
    * @param crossOrigin an optional parameter to enable loading cross-domain images if set to true. The image server's configuration must also be set correctly. For more, see [this documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image).
    */
-  constructor( editable:boolean=false, pixelScale:number=1, crossOrigin?:boolean ) {
+  constructor( editable:boolean=false, space?:CanvasSpace, crossOrigin?:boolean ) {
     this._editable = editable;
-    this._scale = pixelScale;
+    this._space = space;
+    this._scale = this._space ? this._space.pixelScale : 1;
     this._img = new Image();
     if (crossOrigin) this._img.crossOrigin = "Anonymous";
   }
 
 
   /**
-   * A static function to create an Img with an optional ready callback. The Img instance will returned immediately before the image is loaded.
+   * A static function to load an image with an optional ready callback. The Img instance will returned immediately before the image is loaded. To use async/await, use the `loadAsync` function or `new Img(...).load(...)`.
    * @param src an url of the image in same domain. Alternatively you can use a base64 string. To load from Blob, use `Img.fromBlob`.
    * @param editable Specify if you want to manipulate pixels of this image. Default is `false`.
-   * @param pixelScale Set internal canvas' scale in relation to original image size. Useful for retina screens. Use `CanvasSpace.pixelScale` to pass current scale.
+   * @param space Set the `CanvasSpace` reference. This is optional but will make sure the image's pixelScale match the canvas and set the context for creating pattern.
    * @param ready An optional ready callback function 
    */
-  static load( src:string, editable:boolean=false, pixelScale:number=1, ready?:(img) => {} ):Img {
-    let img = new Img( editable, pixelScale );
+  static load( src:string, editable:boolean=false, space?:CanvasSpace, ready?:(img) => {} ):Img {
+    const img = new Img( editable, space );
     img.load( src ).then( res => {
       if (ready) ready(res);
     });
+    return img;
+  }
+
+
+  /**
+   * A static method to load an image using async/await.
+   * @param src an url of the image in same domain. Alternatively you can use a base64 string. To load from Blob, use `Img.fromBlob`.
+   * @param editable Specify if you want to manipulate pixels of this image. Default is `false`.
+   * @param space Set the `CanvasSpace` reference. This is optional but will make sure the image's pixelScale match the canvas and set the context for creating pattern.
+   * @returns 
+   */
+  static async loadAsync( src:string, editable:boolean=false, space?:CanvasSpace ) {
+    const img = await new Img(editable, space).load( src );
+    return img;
+  }
+
+
+  /**
+   * A static method to load an image pattern using async/await.
+   * @param src an url of the image in same domain. Alternatively you can use a base64 string. To load from Blob, use `Img.fromBlob`.
+   * @param editable Specify if you want to manipulate pixels of this image. Default is `false`.
+   * @param space Set the `CanvasSpace` reference. This is optional but will make sure the image's pixelScale match the canvas and set the context for creating pattern.
+   * @param repeat set how the pattern will repeat fills
+   * @returns a `CanvasPattern` instance for use in `fill()`
+   */
+  static async loadPattern( src:string, editable:boolean=false, space?:CanvasSpace, repeat:CanvasPatternRepetition='repeat' ) {
+    const img = await Img.loadAsync( src, editable, space );
+    return img.pattern( repeat );
+  }
+
+
+  /**
+   * Create an editable blank image
+   * @param width width of image
+   * @param height height of image
+   * @param space Set the `CanvasSpace` reference. This is optional but will make sure the image's pixelScale match the canvas and set the context for creating pattern.
+   * @returns 
+   */
+  static blank( width:number, height:number, space?:CanvasSpace ):Img {
+    let img = new Img( true, space );
+    img.initCanvas( width, height, space ? space.pixelScale : 1 );
     return img;
   }
   
@@ -52,6 +97,10 @@ export class Img {
    */
   load( src:string ): Promise<Img> {
     return new Promise( (resolve,reject) => {
+      if (this._editable && !document) {
+        reject( "Cannot create html canvas element. document not found." );
+      }
+
       this._img.src = src;
 
       this._img.onload = () => {
@@ -71,6 +120,7 @@ export class Img {
 
     });
   }
+  
 
   /**
    * Rescale the canvas and draw an image-source on it.
@@ -79,14 +129,32 @@ export class Img {
    * @param img an image source like Image, Canvas, or ImageBitmap.
    */
   protected _drawToScale( canvasScale:number|PtLike, img:CanvasImageSource ) {
-    const cms = (typeof canvasScale === 'number') ? [canvasScale, canvasScale] : canvasScale;
     const nw = img.width as number;
     const nh = img.height as number;
-    this._cv.width = nw * cms[0];
-    this._cv.height = nh * cms[1];
-
-    this._ctx = this._cv.getContext( '2d' );
+    this.initCanvas( nw, nh, canvasScale );
     if (img) this._ctx.drawImage( img, 0, 0, nw, nh, 0, 0, this._cv.width, this._cv.height );
+  }
+
+
+  /**
+   * Initiate an editable canvas
+   * @param width width of canvas
+   * @param height height of canvas
+   * @param canvasScale pixel scale
+   */
+  initCanvas( width:number, height:number, canvasScale:number|PtLike = 1) {
+    if (!this._editable) {
+      console.error( 'Cannot initiate canvas because this Img is not set to be editable' );
+      return;
+    }
+    
+    if (!this._cv) this._cv = document.createElement( "canvas" ) as HTMLCanvasElement;
+    
+    const cms = (typeof canvasScale === 'number') ? [canvasScale, canvasScale] : canvasScale;   
+    this._cv.width = width * cms[0];
+    this._cv.height = height * cms[1];
+    this._ctx = this._cv.getContext( '2d' );
+    this._loaded = true;
   }
 
 
@@ -99,6 +167,18 @@ export class Img {
     const w = (size) ? size[0] : this._cv.width;
     const h = (size) ? size[1] : this._cv.height;
     return createImageBitmap( this._cv, 0, 0, w, h );
+  }
+
+
+  /**
+   * Create a canvas pattern for `fill()`
+   * @param reptition set how the pattern should repeat-fill
+   * @param dynamic If true, use this Img's internal canvas content as pattern fill. This enables the pattern to update dynamically.
+   * @returns a `CanvasPattern` instance for use in `fill()`
+   */
+  pattern( reptition:CanvasPatternRepetition = 'repeat', dynamic:boolean = false  ):CanvasPattern {
+    if (!this._space) throw "Cannot find CanvasSpace ctx to create image pattern";
+    return this._space.ctx.createPattern( dynamic ? this._cv : this._img, reptition );
   }
 
 
@@ -201,9 +281,9 @@ export class Img {
    * @param blob an image blob such as `new Blob([my_Uint8Array], {type: 'image/png'})`
    * @param editable Specify if you want to manipulate pixels of this image. Default is `false`.
    */
-  static fromBlob( blob:Blob, editable:boolean=false, pixelScale:number=1  ):Promise<Img> {
+  static fromBlob( blob:Blob, editable:boolean=false, space?:CanvasSpace  ):Promise<Img> {
     let url = URL.createObjectURL(blob);
-    return new Img( editable, pixelScale ).load( url );
+    return new Img( editable, space ).load( url );
   }
 
 
@@ -212,7 +292,10 @@ export class Img {
    * @param data 
    */
   static imageDataToBlob( data:ImageData ):Promise<Blob> {
-    return new Promise( function (resolve)  { 
+    return new Promise( function (resolve, reject) { 
+      if (!document) {
+        reject( "Cannot create html canvas element. document not found." );
+      }
       let cv = document.createElement( "canvas" ) as HTMLCanvasElement;
       cv.width = data.width;
       cv.height = data.height;
@@ -276,6 +359,14 @@ export class Img {
 
 
   /**
+   * Get the CanvasSpace instance if this Img is editable.
+   */
+  get space():CanvasSpace {
+    return this._editable ? this._space : undefined;
+  }
+
+
+  /**
    * Get the internal canvas' context. You can use this to draw directly on canvas, or create a new [CanvasForm](#link) instance with it.
    */
   get ctx():CanvasRenderingContext2D {
@@ -312,5 +403,14 @@ export class Img {
    */
   get canvasSize():Pt {
     return new Pt(this._cv.width, this._cv.height);
+  }
+
+
+  get bound():Bound {
+    if (this._editable) {
+      return new Bound( new Pt(0,0), this.canvasSize );
+    } else {
+      return new Bound( new Pt(0,0), this.imageSize );
+    }
   }
 }

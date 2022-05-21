@@ -223,3 +223,6 @@ export type DefaultFormStyle = {
   lineCap?: string,
   globalAlpha?: number
 };
+
+
+export type CanvasPatternRepetition = "repeat" | "repeat-x" | "repeat-y" | "no-repeat";
