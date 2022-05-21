@@ -939,6 +939,14 @@ export class Group extends Array<Pt> {
 
 
   /**
+   * Get a Bound instance of this group
+   */
+  toBound():Group {
+    return Bound.fromGroup( this );
+  }
+
+
+  /**
    * Get a string representation of this group.
    */
   toString():string {
@@ -964,7 +972,7 @@ export class Bound extends Group implements IPt {
 
   
   /**
-   * Create a Bound. This is similar to the Group constructor. You can also create a Bound via the static function [`Bound.fromGroup`](#link).
+   * Create a Bound. This is similar to the Group constructor. You can also create a Bound via the static function [`Bound.fromGroup`](#link), or alternatively via the [Group.toBound](#link) function.
    * @param args a list of Pt as parameters
    * @see Bound.fromGroup
    */
