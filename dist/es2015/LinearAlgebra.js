@@ -124,6 +124,38 @@ export class Vec {
     }
 }
 export class Mat {
+    constructor() {
+        this.reset();
+    }
+    get value() {
+        return this._33;
+    }
+    get domMatrix() {
+        return new DOMMatrix(Mat.toDOMMatrix(this._33));
+    }
+    reset() {
+        this._33 = Mat.scale2DMatrix(1, 1);
+    }
+    scale2D(val, at = [0, 0]) {
+        const m = Mat.scaleAt2DMatrix(val[0] || 1, val[1] || 1, at);
+        this._33 = Mat.multiply(this._33, m);
+        return this;
+    }
+    rotate2D(ang, at = [0, 0]) {
+        const m = Mat.rotateAt2DMatrix(Math.cos(ang), Math.sin(ang), at);
+        this._33 = Mat.multiply(this._33, m);
+        return this;
+    }
+    translate2D(val) {
+        const m = Mat.translate2DMatrix(val[0] || 0, val[1] || 0);
+        this._33 = Mat.multiply(this._33, m);
+        return this;
+    }
+    shear2D(val, at = [0, 0]) {
+        const m = Mat.shearAt2DMatrix(Math.tan(val[0] || 0), Math.tan(val[1] || 1), at);
+        this._33 = Mat.multiply(this._33, m);
+        return this;
+    }
     static add(a, b) {
         if (typeof b != "number") {
             if (a[0].length != b[0].length)
@@ -190,6 +222,9 @@ export class Mat {
     }
     static transpose(g, defaultValue = false, useLongest = false) {
         return Mat.zip(g, defaultValue, useLongest);
+    }
+    static toDOMMatrix(m) {
+        return [m[0][0], m[0][1], m[1][0], m[1][1], m[2][0], m[2][1]];
     }
     static transform2D(pt, m) {
         let x = pt[0] * m[0][0] + pt[1] * m[1][0] + m[2][0];

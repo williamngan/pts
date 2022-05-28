@@ -157,6 +157,19 @@ export class Util {
         };
         request.send();
     }
+    static download(space, filename = 'pts_canvas_image', filetype = "png", quality = 1) {
+        const ftype = filetype === 'jpg' ? 'jpeg' : filetype;
+        space.element.toBlob(function (blob) {
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.href = url;
+            link.download = `${filename}.${filetype}`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }, `image/${ftype}`, quality);
+    }
     static performance(avgFrames = 10) {
         let last = Date.now();
         let avg = [];

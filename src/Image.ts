@@ -407,12 +407,4 @@ export class Img {
     return new Pt(this._cv.width, this._cv.height);
   }
 
-
-  get bound():Bound {
-    if (this._editable) {
-      return new Bound( new Pt(0,0), this.canvasSize );
-    } else {
-      return new Bound( new Pt(0,0), this.imageSize );
-    }
-  }
 }

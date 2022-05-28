@@ -346,6 +346,9 @@ export class Group extends Array {
     $zip(defaultValue = undefined, useLongest = false) {
         return Mat.zip(this, defaultValue, useLongest);
     }
+    toBound() {
+        return Bound.fromGroup(this);
+    }
     toString() {
         return "Group[ " + this.reduce((p, c) => p + c.toString() + " ", "") + " ]";
     }

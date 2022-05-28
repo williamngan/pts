@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.10.9 - Copyright © 2017-2021 William Ngan and contributors.
+ * pts.js 0.10.9 - Copyright © 2017-2022 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -2016,29 +2016,60 @@ exports.Font = Font;
 
 "use strict";
 
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Img = void 0;
+const Canvas_1 = __webpack_require__(/*! ./Canvas */ "./src/Canvas.ts");
 const Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
 class Img {
-    constructor(editable = false, pixelScale = 1, crossOrigin) {
+    constructor(editable = false, space, crossOrigin) {
         this._scale = 1;
         this._loaded = false;
         this._editable = editable;
-        this._scale = pixelScale;
+        this._space = space;
+        this._scale = this._space ? this._space.pixelScale : 1;
         this._img = new Image();
         if (crossOrigin)
             this._img.crossOrigin = "Anonymous";
     }
-    static load(src, editable = false, pixelScale = 1, ready) {
-        let img = new Img(editable, pixelScale);
+    static load(src, editable = false, space, ready) {
+        const img = new Img(editable, space);
         img.load(src).then(res => {
             if (ready)
                 ready(res);
         });
         return img;
     }
+    static loadAsync(src, editable = false, space) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const img = yield new Img(editable, space).load(src);
+            return img;
+        });
+    }
+    static loadPattern(src, editable = false, space, repeat = 'repeat') {
+        return __awaiter(this, void 0, void 0, function* () {
+            const img = yield Img.loadAsync(src, editable, space);
+            return img.pattern(repeat);
+        });
+    }
+    static blank(size, space) {
+        let img = new Img(true, space);
+        img.initCanvas(size[0], size[1], space ? space.pixelScale : 1);
+        return img;
+    }
     load(src) {
         return new Promise((resolve, reject) => {
+            if (this._editable && !document) {
+                reject("Cannot create html canvas element. document not found.");
+            }
             this._img.src = src;
             this._img.onload = () => {
                 if (this._editable) {
@@ -2056,19 +2087,34 @@ class Img {
         });
     }
     _drawToScale(canvasScale, img) {
-        const cms = (typeof canvasScale === 'number') ? [canvasScale, canvasScale] : canvasScale;
         const nw = img.width;
         const nh = img.height;
-        this._cv.width = nw * cms[0];
-        this._cv.height = nh * cms[1];
-        this._ctx = this._cv.getContext('2d');
+        this.initCanvas(nw, nh, canvasScale);
         if (img)
             this._ctx.drawImage(img, 0, 0, nw, nh, 0, 0, this._cv.width, this._cv.height);
+    }
+    initCanvas(width, height, canvasScale = 1) {
+        if (!this._editable) {
+            console.error('Cannot initiate canvas because this Img is not set to be editable');
+            return;
+        }
+        if (!this._cv)
+            this._cv = document.createElement("canvas");
+        const cms = (typeof canvasScale === 'number') ? [canvasScale, canvasScale] : canvasScale;
+        this._cv.width = width * cms[0];
+        this._cv.height = height * cms[1];
+        this._ctx = this._cv.getContext('2d');
+        this._loaded = true;
     }
     bitmap(size) {
         const w = (size) ? size[0] : this._cv.width;
         const h = (size) ? size[1] : this._cv.height;
         return createImageBitmap(this._cv, 0, 0, w, h);
+    }
+    pattern(reptition = 'repeat', dynamic = false) {
+        if (!this._space)
+            throw "Cannot find CanvasSpace ctx to create image pattern";
+        return this._space.ctx.createPattern(dynamic ? this._cv : this._img, reptition);
     }
     sync() {
         if (this._scale !== 1) {
@@ -2119,12 +2165,15 @@ class Img {
             this._img.remove();
         this._data = null;
     }
-    static fromBlob(blob, editable = false, pixelScale = 1) {
+    static fromBlob(blob, editable = false, space) {
         let url = URL.createObjectURL(blob);
-        return new Img(editable, pixelScale).load(url);
+        return new Img(editable, space).load(url);
     }
     static imageDataToBlob(data) {
-        return new Promise(function (resolve) {
+        return new Promise(function (resolve, reject) {
+            if (!document) {
+                reject("Cannot create html canvas element. document not found.");
+            }
             let cv = document.createElement("canvas");
             cv.width = data.width;
             cv.height = data.height;
@@ -2142,6 +2191,12 @@ class Img {
         return new Promise((resolve) => {
             this._cv.toBlob(blob => resolve(blob));
         });
+    }
+    getForm() {
+        if (!this._editable) {
+            console.error("Cannot get a CanvasForm because this Img is not editable");
+        }
+        return this._ctx ? new Canvas_1.CanvasForm(this._ctx) : undefined;
     }
     get current() {
         return this._editable ? this._cv : this._img;
@@ -2314,6 +2369,38 @@ class Vec {
 }
 exports.Vec = Vec;
 class Mat {
+    constructor() {
+        this.reset();
+    }
+    get value() {
+        return this._33;
+    }
+    get domMatrix() {
+        return new DOMMatrix(Mat.toDOMMatrix(this._33));
+    }
+    reset() {
+        this._33 = Mat.scale2DMatrix(1, 1);
+    }
+    scale2D(val, at = [0, 0]) {
+        const m = Mat.scaleAt2DMatrix(val[0] || 1, val[1] || 1, at);
+        this._33 = Mat.multiply(this._33, m);
+        return this;
+    }
+    rotate2D(ang, at = [0, 0]) {
+        const m = Mat.rotateAt2DMatrix(Math.cos(ang), Math.sin(ang), at);
+        this._33 = Mat.multiply(this._33, m);
+        return this;
+    }
+    translate2D(val) {
+        const m = Mat.translate2DMatrix(val[0] || 0, val[1] || 0);
+        this._33 = Mat.multiply(this._33, m);
+        return this;
+    }
+    shear2D(val, at = [0, 0]) {
+        const m = Mat.shearAt2DMatrix(Math.tan(val[0] || 0), Math.tan(val[1] || 1), at);
+        this._33 = Mat.multiply(this._33, m);
+        return this;
+    }
     static add(a, b) {
         if (typeof b != "number") {
             if (a[0].length != b[0].length)
@@ -2380,6 +2467,9 @@ class Mat {
     }
     static transpose(g, defaultValue = false, useLongest = false) {
         return Mat.zip(g, defaultValue, useLongest);
+    }
+    static toDOMMatrix(m) {
+        return [m[0][0], m[0][1], m[1][0], m[1][1], m[2][0], m[2][1]];
     }
     static transform2D(pt, m) {
         let x = pt[0] * m[0][0] + pt[1] * m[1][0] + m[2][0];
@@ -5051,6 +5141,9 @@ class Group extends Array {
     $zip(defaultValue = undefined, useLongest = false) {
         return LinearAlgebra_1.Mat.zip(this, defaultValue, useLongest);
     }
+    toBound() {
+        return Bound.fromGroup(this);
+    }
     toString() {
         return "Group[ " + this.reduce((p, c) => p + c.toString() + " ", "") + " ]";
     }
@@ -5186,7 +5279,7 @@ class Space {
     constructor() {
         this.id = "space";
         this.bound = new Pt_1.Bound();
-        this._time = { prev: 0, diff: 0, end: -1 };
+        this._time = { prev: 0, diff: 0, end: -1, min: 0 };
         this.players = {};
         this.playerCount = 0;
         this._animID = -1;
@@ -5199,6 +5292,9 @@ class Space {
     refresh(b) {
         this._refresh = b;
         return this;
+    }
+    minFrameTime(ms = 0) {
+        this._time.min = ms;
     }
     add(p) {
         let player = (typeof p == "function") ? { animate: p } : p;
@@ -5228,6 +5324,8 @@ class Space {
         if (this._pause)
             return this;
         this._time.diff = time - this._time.prev;
+        if (this._time.diff < this._time.min)
+            return this;
         this._time.prev = time;
         try {
             this.playItems(time);
@@ -5300,20 +5398,33 @@ class MultiTouchSpace extends Space {
         this._dragged = false;
         this._hasMouse = false;
         this._hasTouch = false;
+        this._hasKeyboard = false;
     }
     get pointer() {
         let p = this._pointer.clone();
         p.id = this._pointer.id;
         return p;
     }
-    bindCanvas(evt, callback, options = {}) {
-        this._canvas.addEventListener(evt, callback, options);
+    bindCanvas(evt, callback, options = {}, customTarget) {
+        const target = customTarget ? customTarget : this._canvas;
+        target.addEventListener(evt, callback, options);
     }
-    unbindCanvas(evt, callback, options = {}) {
-        this._canvas.removeEventListener(evt, callback, options);
+    unbindCanvas(evt, callback, options = {}, customTarget) {
+        const target = customTarget ? customTarget : this._canvas;
+        target.removeEventListener(evt, callback, options);
     }
-    bindMouse(_bind = true) {
-        if (_bind) {
+    bindDoc(evt, callback, options = {}) {
+        if (document) {
+            document.addEventListener(evt, callback, options);
+        }
+    }
+    unbindDoc(evt, callback, options = {}) {
+        if (document) {
+            document.removeEventListener(evt, callback, options);
+        }
+    }
+    bindMouse(bind = true, customTarget) {
+        if (bind) {
             this._mouseDown = this._mouseDown.bind(this);
             this._mouseUp = this._mouseUp.bind(this);
             this._mouseOver = this._mouseOver.bind(this);
@@ -5321,41 +5432,56 @@ class MultiTouchSpace extends Space {
             this._mouseMove = this._mouseMove.bind(this);
             this._mouseClick = this._mouseClick.bind(this);
             this._contextMenu = this._contextMenu.bind(this);
-            this.bindCanvas("mousedown", this._mouseDown);
-            this.bindCanvas("mouseup", this._mouseUp);
-            this.bindCanvas("mouseover", this._mouseOver);
-            this.bindCanvas("mouseout", this._mouseOut);
-            this.bindCanvas("mousemove", this._mouseMove);
-            this.bindCanvas("click", this._mouseClick);
-            this.bindCanvas("contextmenu", this._contextMenu);
+            this.bindCanvas("mousedown", this._mouseDown, {}, customTarget);
+            this.bindCanvas("mouseup", this._mouseUp, {}, customTarget);
+            this.bindCanvas("mouseover", this._mouseOver, {}, customTarget);
+            this.bindCanvas("mouseout", this._mouseOut, {}, customTarget);
+            this.bindCanvas("mousemove", this._mouseMove, {}, customTarget);
+            this.bindCanvas("click", this._mouseClick, {}, customTarget);
+            this.bindCanvas("contextmenu", this._contextMenu, {}, customTarget);
             this._hasMouse = true;
         }
         else {
-            this.unbindCanvas("mousedown", this._mouseDown);
-            this.unbindCanvas("mouseup", this._mouseUp);
-            this.unbindCanvas("mouseover", this._mouseOver);
-            this.unbindCanvas("mouseout", this._mouseOut);
-            this.unbindCanvas("mousemove", this._mouseMove);
-            this.unbindCanvas("click", this._mouseClick);
-            this.unbindCanvas("contextmenu", this._contextMenu);
+            this.unbindCanvas("mousedown", this._mouseDown, {}, customTarget);
+            this.unbindCanvas("mouseup", this._mouseUp, {}, customTarget);
+            this.unbindCanvas("mouseover", this._mouseOver, {}, customTarget);
+            this.unbindCanvas("mouseout", this._mouseOut, {}, customTarget);
+            this.unbindCanvas("mousemove", this._mouseMove, {}, customTarget);
+            this.unbindCanvas("click", this._mouseClick, {}, customTarget);
+            this.unbindCanvas("contextmenu", this._contextMenu, {}, customTarget);
             this._hasMouse = false;
         }
         return this;
     }
-    bindTouch(bind = true, passive = false) {
+    bindTouch(bind = true, passive = false, customTarget) {
         if (bind) {
-            this.bindCanvas("touchstart", this._touchStart.bind(this), { passive: passive });
-            this.bindCanvas("touchend", this._mouseUp.bind(this));
-            this.bindCanvas("touchmove", this._touchMove.bind(this), { passive: passive });
-            this.bindCanvas("touchcancel", this._mouseOut.bind(this));
+            this.bindCanvas("touchstart", this._touchStart.bind(this), { passive: passive }, customTarget);
+            this.bindCanvas("touchend", this._mouseUp.bind(this), {}, customTarget);
+            this.bindCanvas("touchmove", this._touchMove.bind(this), { passive: passive }, customTarget);
+            this.bindCanvas("touchcancel", this._mouseOut.bind(this), {}, customTarget);
             this._hasTouch = true;
         }
         else {
-            this.unbindCanvas("touchstart", this._touchStart.bind(this), { passive: passive });
-            this.unbindCanvas("touchend", this._mouseUp.bind(this));
-            this.unbindCanvas("touchmove", this._touchMove.bind(this), { passive: passive });
-            this.unbindCanvas("touchcancel", this._mouseOut.bind(this));
+            this.unbindCanvas("touchstart", this._touchStart.bind(this), { passive: passive }, customTarget);
+            this.unbindCanvas("touchend", this._mouseUp.bind(this), {}, customTarget);
+            this.unbindCanvas("touchmove", this._touchMove.bind(this), { passive: passive }, customTarget);
+            this.unbindCanvas("touchcancel", this._mouseOut.bind(this), {}, customTarget);
             this._hasTouch = false;
+        }
+        return this;
+    }
+    bindKeyboard(bind = true) {
+        if (bind) {
+            this._keyDownBind = this._keyDown.bind(this);
+            this._keyUpBind = this._keyUp.bind(this);
+            this.bindDoc("keydown", this._keyDownBind, {});
+            this.bindDoc("keyup", this._keyUpBind, {});
+            this._hasKeyboard = true;
+        }
+        else {
+            this.unbindDoc("keydown", this._keyDownBind, {});
+            this.unbindDoc("keyup", this._keyUpBind, {});
+            this._hasKeyboard = false;
         }
         return this;
     }
@@ -5370,6 +5496,8 @@ class MultiTouchSpace extends Space {
         return ts;
     }
     _mouseAction(type, evt) {
+        if (!this.isPlaying)
+            return;
         let px = 0, py = 0;
         if (evt instanceof MouseEvent) {
             for (let k in this.players) {
@@ -5454,6 +5582,25 @@ class MultiTouchSpace extends Space {
         this._mouseDown(evt);
         evt.preventDefault();
         return false;
+    }
+    _keyDown(evt) {
+        this._keyboardAction(UI_1.UIPointerActions.keydown, evt);
+        return false;
+    }
+    _keyUp(evt) {
+        this._keyboardAction(UI_1.UIPointerActions.keyup, evt);
+        return false;
+    }
+    _keyboardAction(type, evt) {
+        if (!this.isPlaying)
+            return;
+        for (let k in this.players) {
+            if (this.players.hasOwnProperty(k)) {
+                let v = this.players[k];
+                if (v.action)
+                    v.action(type, evt.shiftKey ? 1 : 0, evt.altKey ? 1 : 0, evt);
+            }
+        }
     }
 }
 exports.MultiTouchSpace = MultiTouchSpace;
@@ -5917,7 +6064,11 @@ exports.UIShape = {
     rectangle: "rectangle", circle: "circle", polygon: "polygon", polyline: "polyline", line: "line"
 };
 exports.UIPointerActions = {
-    up: "up", down: "down", move: "move", drag: "drag", uidrag: "uidrag", drop: "drop", uidrop: "uidrop", over: "over", out: "out", enter: "enter", leave: "leave", click: "click", contextmenu: "contextmenu", all: "all"
+    up: "up", down: "down", move: "move",
+    drag: "drag", uidrag: "uidrag", drop: "drop", uidrop: "uidrop",
+    over: "over", out: "out", enter: "enter", leave: "leave", click: "click",
+    keydown: 'keydown', keyup: 'keyup',
+    contextmenu: "contextmenu", all: "all"
 };
 class UI {
     constructor(group, shape, states = {}, id) {
@@ -6354,6 +6505,19 @@ class Util {
             callback(`Unknown network error`, false);
         };
         request.send();
+    }
+    static download(space, filename = 'pts_canvas_image', filetype = "png", quality = 1) {
+        const ftype = filetype === 'jpg' ? 'jpeg' : filetype;
+        space.element.toBlob(function (blob) {
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.href = url;
+            link.download = `${filename}.${filetype}`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }, `image/${ftype}`, quality);
     }
     static performance(avgFrames = 10) {
         let last = Date.now();
