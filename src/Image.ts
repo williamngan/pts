@@ -78,14 +78,13 @@ export class Img {
 
   /**
    * Create an editable blank image
-   * @param width width of image
-   * @param height height of image
+   * @param size of image
    * @param space Set the `CanvasSpace` reference. This is optional but will make sure the image's pixelScale match the canvas and set the context for creating pattern.
    * @returns 
    */
-  static blank( width:number, height:number, space?:CanvasSpace ):Img {
+  static blank( size:PtLike, space?:CanvasSpace ):Img {
     let img = new Img( true, space );
-    img.initCanvas( width, height, space ? space.pixelScale : 1 );
+    img.initCanvas( size[0], size[1], space ? space.pixelScale : 1 );
     return img;
   }
   
@@ -184,6 +183,7 @@ export class Img {
 
   /**
    * Replace the image with the current canvas data. For example, you can use CanvasForm's static functions to draw on `this.ctx` and then update the current image.
+   * To display the internal canvas, you can also use `form.image( img.canvas )` directly.
    */
   sync() {
     // retina: resize canvas to fit image original size
@@ -327,6 +327,16 @@ export class Img {
 
 
   /**
+   * Get a CanvasForm for drawing on the internal canvas if this Img is editable
+   */
+  getForm():CanvasForm {
+    if (!this._editable) {
+      console.error( "Cannot get a CanvasForm because this Img is not editable" );
+    }
+    return this._ctx ? new CanvasForm( this._ctx ) : undefined;
+  }
+
+  /**
    * Get current image source. If editable, this will return the canvas, otherwise it will return the original image.
    */
   get current():CanvasImageSource {
@@ -355,14 +365,6 @@ export class Img {
    */
   get data():ImageData {
     return this._data;
-  }
-
-
-  /**
-   * Get the CanvasSpace instance if this Img is editable.
-   */
-  get space():CanvasSpace {
-    return this._editable ? this._space : undefined;
   }
 
 
