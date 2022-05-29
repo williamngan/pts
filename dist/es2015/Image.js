@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { CanvasForm } from "./Canvas";
 import { Pt } from "./Pt";
+import { Mat } from "./LinearAlgebra";
 export class Img {
     constructor(editable = false, space, crossOrigin) {
         this._scale = 1;
@@ -34,15 +35,16 @@ export class Img {
             return img;
         });
     }
-    static loadPattern(src, editable = false, space, repeat = 'repeat') {
+    static loadPattern(src, space, repeat = 'repeat', editable = false) {
         return __awaiter(this, void 0, void 0, function* () {
             const img = yield Img.loadAsync(src, editable, space);
             return img.pattern(repeat);
         });
     }
-    static blank(size, space) {
+    static blank(size, space, scale) {
         let img = new Img(true, space);
-        img.initCanvas(size[0], size[1], space ? space.pixelScale : 1);
+        const s = scale ? scale : space.pixelScale;
+        img.initCanvas(size[0], size[1], s);
         return img;
     }
     load(src) {
@@ -200,10 +202,19 @@ export class Img {
         return this._scale;
     }
     get imageSize() {
-        return new Pt(this._img.width, this._img.height);
+        if (!this._img.width || !this._img.height) {
+            return this.canvasSize.$divide(this._scale);
+        }
+        else {
+            return new Pt(this._img.width, this._img.height);
+        }
     }
     get canvasSize() {
         return new Pt(this._cv.width, this._cv.height);
+    }
+    get scaledMatrix() {
+        const s = 1 / this._scale;
+        return new Mat().scale2D([s, s]);
     }
 }
 //# sourceMappingURL=Image.js.map

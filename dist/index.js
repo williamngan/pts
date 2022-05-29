@@ -2029,6 +2029,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Img = void 0;
 const Canvas_1 = __webpack_require__(/*! ./Canvas */ "./src/Canvas.ts");
 const Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
+const LinearAlgebra_1 = __webpack_require__(/*! ./LinearAlgebra */ "./src/LinearAlgebra.ts");
 class Img {
     constructor(editable = false, space, crossOrigin) {
         this._scale = 1;
@@ -2054,15 +2055,16 @@ class Img {
             return img;
         });
     }
-    static loadPattern(src, editable = false, space, repeat = 'repeat') {
+    static loadPattern(src, space, repeat = 'repeat', editable = false) {
         return __awaiter(this, void 0, void 0, function* () {
             const img = yield Img.loadAsync(src, editable, space);
             return img.pattern(repeat);
         });
     }
-    static blank(size, space) {
+    static blank(size, space, scale) {
         let img = new Img(true, space);
-        img.initCanvas(size[0], size[1], space ? space.pixelScale : 1);
+        const s = scale ? scale : space.pixelScale;
+        img.initCanvas(size[0], size[1], s);
         return img;
     }
     load(src) {
@@ -2220,10 +2222,19 @@ class Img {
         return this._scale;
     }
     get imageSize() {
-        return new Pt_1.Pt(this._img.width, this._img.height);
+        if (!this._img.width || !this._img.height) {
+            return this.canvasSize.$divide(this._scale);
+        }
+        else {
+            return new Pt_1.Pt(this._img.width, this._img.height);
+        }
     }
     get canvasSize() {
         return new Pt_1.Pt(this._cv.width, this._cv.height);
+    }
+    get scaledMatrix() {
+        const s = 1 / this._scale;
+        return new LinearAlgebra_1.Mat().scale2D([s, s]);
     }
 }
 exports.Img = Img;

@@ -2886,6 +2886,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Img = void 0;
 var Canvas_1 = __webpack_require__(/*! ./Canvas */ "./src/Canvas.ts");
 var Pt_1 = __webpack_require__(/*! ./Pt */ "./src/Pt.ts");
+var LinearAlgebra_1 = __webpack_require__(/*! ./LinearAlgebra */ "./src/LinearAlgebra.ts");
 
 var Img = function () {
     function Img() {
@@ -3084,12 +3085,22 @@ var Img = function () {
     }, {
         key: "imageSize",
         get: function get() {
-            return new Pt_1.Pt(this._img.width, this._img.height);
+            if (!this._img.width || !this._img.height) {
+                return this.canvasSize.$divide(this._scale);
+            } else {
+                return new Pt_1.Pt(this._img.width, this._img.height);
+            }
         }
     }, {
         key: "canvasSize",
         get: function get() {
             return new Pt_1.Pt(this._cv.width, this._cv.height);
+        }
+    }, {
+        key: "scaledMatrix",
+        get: function get() {
+            var s = 1 / this._scale;
+            return new LinearAlgebra_1.Mat().scale2D([s, s]);
         }
     }], [{
         key: "load",
@@ -3133,10 +3144,9 @@ var Img = function () {
         }
     }, {
         key: "loadPattern",
-        value: function loadPattern(src) {
-            var editable = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-            var space = arguments[2];
-            var repeat = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'repeat';
+        value: function loadPattern(src, space) {
+            var repeat = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'repeat';
+            var editable = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
 
             return __awaiter(this, void 0, void 0, regeneratorRuntime.mark(function _callee2() {
                 var img;
@@ -3161,9 +3171,10 @@ var Img = function () {
         }
     }, {
         key: "blank",
-        value: function blank(size, space) {
+        value: function blank(size, space, scale) {
             var img = new Img(true, space);
-            img.initCanvas(size[0], size[1], space ? space.pixelScale : 1);
+            var s = scale ? scale : space.pixelScale;
+            img.initCanvas(size[0], size[1], s);
             return img;
         }
     }, {
