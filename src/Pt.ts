@@ -123,7 +123,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * Update the values of this Pt to point at a specific angle.
    * @param radian target angle in radian
    * @param magnitude Optional magnitude if known. If not provided, it'll calculate and use this Pt's magnitude.
-   * @param anchorFromPt If `true`, translate to new position from current position. Default is `false` which update the position from origin (0,0);
+   * @param anchorFromPt If `true`, add it from this Pt's current position. Default is `false` which update the position from origin (0,0). See also [`Geom.rotate2D`](#link) for rotating a point from another anchor point.
    */
   toAngle( radian:number, magnitude?:number, anchorFromPt:boolean=false ):this {
     let m = (magnitude!=undefined) ? magnitude : this.magnitude();
