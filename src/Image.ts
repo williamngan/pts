@@ -1,5 +1,6 @@
 import { CanvasForm, CanvasSpace } from "./Canvas";
 import { Bound, Pt } from "./Pt";
+import { Mat } from "./LinearAlgebra";
 import { PtLike, CanvasPatternRepetition } from "./Types";
 
 /**
@@ -65,12 +66,12 @@ export class Img {
   /**
    * A static method to load an image pattern using async/await.
    * @param src an url of the image in same domain. Alternatively you can use a base64 string. To load from Blob, use `Img.fromBlob`.
-   * @param editable Specify if you want to manipulate pixels of this image. Default is `false`.
    * @param space Set the `CanvasSpace` reference. This is optional but will make sure the image's pixelScale match the canvas and set the context for creating pattern.
    * @param repeat set how the pattern will repeat fills
+   * @param editable Specify if you want to manipulate pixels of this image. Default is `false`.
    * @returns a `CanvasPattern` instance for use in `fill()`
    */
-  static async loadPattern( src:string, editable:boolean=false, space?:CanvasSpace, repeat:CanvasPatternRepetition='repeat' ) {
+  static async loadPattern( src:string, space:CanvasSpace, repeat:CanvasPatternRepetition='repeat', editable:boolean=false ) {
     const img = await Img.loadAsync( src, editable, space );
     return img.pattern( repeat );
   }
@@ -80,11 +81,12 @@ export class Img {
    * Create an editable blank image
    * @param size of image
    * @param space Set the `CanvasSpace` reference. This is optional but will make sure the image's pixelScale match the canvas and set the context for creating pattern.
-   * @returns 
+   * @param scale Optionally set a specific pixel scale (density) of the image canvas. 
    */
-  static blank( size:PtLike, space?:CanvasSpace ):Img {
+  static blank( size:PtLike, space:CanvasSpace, scale?:number ):Img {
     let img = new Img( true, space );
-    img.initCanvas( size[0], size[1], space ? space.pixelScale : 1 );
+    const s = scale ? scale : space.pixelScale;
+    img.initCanvas( size[0], size[1], s );
     return img;
   }
   
@@ -396,7 +398,11 @@ export class Img {
    * Get size of the original image
    */
   get imageSize():Pt {
-    return new Pt(this._img.width, this._img.height);
+    if ( !this._img.width || !this._img.height ) {
+      return this.canvasSize.$divide( this._scale );
+    } else {
+      return new Pt( this._img.width, this._img.height );
+    }
   }
 
 
@@ -404,7 +410,17 @@ export class Img {
    * Get size of the canvas
    */
   get canvasSize():Pt {
-    return new Pt(this._cv.width, this._cv.height);
+    return new Pt( this._cv.width, this._cv.height );
   }
 
+
+  /**
+   * Get a Mat instance with a scale transform based on current `pixelScale`. 
+   * This can be useful for generating a domMatrix for transforming patterns consistently across different pixel-density screens.
+   * @example `img.scaledMatrix.translate2d(...).rotate2D(...).domMatrix`
+   */
+  get scaledMatrix():Mat {
+    const s = 1 / this._scale;
+    return new Mat().scale2D( [s, s] );
+  }
 }
