@@ -23,7 +23,7 @@ Pts.quickStart( "#pt", "#fe3" );
       img = Img.blank( new Pt( w, w ), space );
       imgForm = img.getForm();
 
-      grid = Create.gridPts( new Pt( w, w ).toBound(), cells, cells );
+      grid = Create.gridPts( img.canvasSize.toBound(), cells, cells );
       cellSize = w / cells;
     },
     
@@ -32,23 +32,28 @@ Pts.quickStart( "#pt", "#fe3" );
       const p = space.center.$subtract( space.pointer );
       const unit = cellSize/2 + (p.magnitude() / cellSize);
 
-      // pattern background
+      // Pattern background
       imgForm.fillOnly("#000").rect( [[0,0], img.canvasSize]);
 
-      // pattern dots
+      // Pattern dots
       grid.forEach( (c, i) => {
         const t = Num.cycle( Shaping.sigmoid( ( (i * time/10000)  % unit ) / unit ) );
         imgForm.fillOnly( ["#fe3","#f03","#63c", "#fff"][i%4] );
-        imgForm.circle( Circle.fromCenter( c, unit * t ) );
+
+        // draw circles scaled by pixelScale since we're drawing on the internal canvas for pattern fill
+        imgForm.circle( Circle.fromCenter( c, unit * t * img.pixelScale ) ); 
       });
 
-      // transform and fill pattern
+      // Transform and fill pattern
       pattern = img.pattern('repeat', true);
       pattern.setTransform( 
-        new Mat().translate2D( [time/50, 0] ).rotate2D( p.angle(), space.center ).domMatrix 
+        // We get the `scaledMatrix` instance first which pre-calculate the scaling factor (ie, `img.pixelScale`) based on screen pixel density.
+        // Alternatively, if we don't want to support retina, we can set the pixelScale to be always `1` in `Img.blank(..., 1)` above
+        img.scaledMatrix.translate2D( [time/50, 0] ).rotate2D( p.angle(), space.center ).domMatrix 
       );
 
       form.fill( pattern ).rect( space.innerBound );
+
     },
 
   });
