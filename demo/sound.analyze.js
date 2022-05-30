@@ -21,7 +21,6 @@ window.demoDescription = "Basic example of loading sound and visualizing frequen
   var bufferLoaded = false;
   Sound.loadAsBuffer( "/assets/spacetravel.mp3" ).then( s => {
     sound = s;
-    space.playOnce(50); // render for noce
     bufferLoaded = true;
   }).catch( e => console.error(e) );
 
@@ -31,7 +30,6 @@ window.demoDescription = "Basic example of loading sound and visualizing frequen
     } else {
       sound.createBuffer().analyze(bins); // recreate buffer again
       sound.start();
-      space.replay();
     }
   }
 
@@ -55,8 +53,7 @@ window.demoDescription = "Basic example of loading sound and visualizing frequen
   space.add({
 
     animate: (time, ftime) => {
-      if (sound && sound.playable) {
-        if (!sound.playing) space.stop(); // stop animation if not playing
+      if (sound && sound.playing) {
         sound.freqDomainTo(space.size).map( (t, i) => {
           form.fillOnly( colors[i%5] ).point( t, 30 );
         });

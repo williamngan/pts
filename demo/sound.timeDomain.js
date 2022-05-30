@@ -44,8 +44,7 @@ Pts.quickStart( "#pt", "#eae6ef" );
   space.add({
 
     animate: (time, ftime) => {
-      if (sound && sound.playable) {
-        if (!sound.playing) space.stop(); // stop animation if not playing
+      if (sound && sound.playing) {
 
         // map time domain data to lines drawing two half circles
         let tdata = sound.timeDomainTo( [Const.two_pi, 1] ).map( (t, i) => {
@@ -67,7 +66,6 @@ Pts.quickStart( "#pt", "#eae6ef" );
           currFile = (currFile + 1) % sounds.length;
           sound = sounds[currFile];
           sound.createBuffer().analyze(bins).start(); // reset buffer and analyzer 
-          space.replay();
         }
       }
     }
