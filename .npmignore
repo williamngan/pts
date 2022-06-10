@@ -19,8 +19,8 @@ dist/pts.js.map
 dist/pts.min.js
 dist/pts.min.js.map
 dist/es5.js
-dist/es5.js
-dist/pts.moudle.js.map
+dist/es5.js.map
+dist/pts.module.js.map
 .vscode
 favicon.ico
 .babelrc
