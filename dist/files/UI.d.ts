@@ -21,6 +21,8 @@ export declare const UIPointerActions: {
     enter: string;
     leave: string;
     click: string;
+    keydown: string;
+    keyup: string;
     contextmenu: string;
     all: string;
 };

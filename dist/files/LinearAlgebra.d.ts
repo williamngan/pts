@@ -27,11 +27,21 @@ export declare class Vec {
     static map(a: PtLike, fn: (n: number, index: number, arr: any) => number): PtLike;
 }
 export declare class Mat {
+    protected _33: GroupLike;
+    constructor();
+    get value(): GroupLike;
+    get domMatrix(): DOMMatrix;
+    reset(): void;
+    scale2D(val: PtLike, at?: PtLike): this;
+    rotate2D(ang: number, at?: PtLike): this;
+    translate2D(val: PtLike): this;
+    shear2D(val: PtLike, at?: PtLike): this;
     static add(a: GroupLike, b: GroupLike | number[][] | number): Group;
     static multiply(a: GroupLike, b: GroupLike | number[][] | number, transposed?: boolean, elementwise?: boolean): Group;
     static zipSlice(g: GroupLike | number[][], index: number, defaultValue?: number | boolean): Pt;
     static zip(g: GroupLike | number[][], defaultValue?: number | boolean, useLongest?: boolean): Group;
     static transpose(g: GroupLike | number[][], defaultValue?: number | boolean, useLongest?: boolean): Group;
+    static toDOMMatrix(m: GroupLike | number[][]): number[];
     static transform2D(pt: PtLike, m: GroupLike | number[][]): Pt;
     static scale2DMatrix(x: number, y: number): GroupLike;
     static rotate2DMatrix(cosA: number, sinA: number): GroupLike;

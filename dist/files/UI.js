@@ -8,7 +8,11 @@ exports.UIShape = {
     rectangle: "rectangle", circle: "circle", polygon: "polygon", polyline: "polyline", line: "line"
 };
 exports.UIPointerActions = {
-    up: "up", down: "down", move: "move", drag: "drag", uidrag: "uidrag", drop: "drop", uidrop: "uidrop", over: "over", out: "out", enter: "enter", leave: "leave", click: "click", contextmenu: "contextmenu", all: "all"
+    up: "up", down: "down", move: "move",
+    drag: "drag", uidrag: "uidrag", drop: "drop", uidrop: "uidrop",
+    over: "over", out: "out", enter: "enter", leave: "leave", click: "click",
+    keydown: 'keydown', keyup: 'keyup',
+    contextmenu: "contextmenu", all: "all"
 };
 class UI {
     constructor(group, shape, states = {}, id) {

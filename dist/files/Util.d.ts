@@ -1,4 +1,5 @@
 /*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
+import { CanvasSpace } from "./Canvas";
 import { WarningType, PtLikeIterable } from "./Types";
 export declare const Const: {
     xy: string;
@@ -43,6 +44,7 @@ export declare class Util {
     static stepper(max: number, min?: number, stride?: number, callback?: (n: number) => void): (() => number);
     static forRange(fn: (index: number) => any, range: number, start?: number, step?: number): any[];
     static load(url: string, callback: (response: string, success: boolean) => void): void;
+    static download(space: CanvasSpace, filename?: string, filetype?: ("jpeg" | "jpg" | "png" | "webp"), quality?: number): void;
     static performance(avgFrames?: number): () => number;
     static arrayCheck(pts: PtLikeIterable, minRequired?: number): boolean;
     static iterToArray(it: Iterable<any>): any[];

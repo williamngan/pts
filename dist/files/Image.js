@@ -1,27 +1,60 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Img = void 0;
+const Canvas_1 = require("./Canvas");
 const Pt_1 = require("./Pt");
+const LinearAlgebra_1 = require("./LinearAlgebra");
 class Img {
-    constructor(editable = false, pixelScale = 1, crossOrigin) {
+    constructor(editable = false, space, crossOrigin) {
         this._scale = 1;
         this._loaded = false;
         this._editable = editable;
-        this._scale = pixelScale;
+        this._space = space;
+        this._scale = this._space ? this._space.pixelScale : 1;
         this._img = new Image();
         if (crossOrigin)
             this._img.crossOrigin = "Anonymous";
     }
-    static load(src, editable = false, pixelScale = 1, ready) {
-        let img = new Img(editable, pixelScale);
+    static load(src, editable = false, space, ready) {
+        const img = new Img(editable, space);
         img.load(src).then(res => {
             if (ready)
                 ready(res);
         });
         return img;
     }
+    static loadAsync(src, editable = false, space) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const img = yield new Img(editable, space).load(src);
+            return img;
+        });
+    }
+    static loadPattern(src, space, repeat = 'repeat', editable = false) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const img = yield Img.loadAsync(src, editable, space);
+            return img.pattern(repeat);
+        });
+    }
+    static blank(size, space, scale) {
+        let img = new Img(true, space);
+        const s = scale ? scale : space.pixelScale;
+        img.initCanvas(size[0], size[1], s);
+        return img;
+    }
     load(src) {
         return new Promise((resolve, reject) => {
+            if (this._editable && !document) {
+                reject("Cannot create html canvas element. document not found.");
+            }
             this._img.src = src;
             this._img.onload = () => {
                 if (this._editable) {
@@ -39,19 +72,34 @@ class Img {
         });
     }
     _drawToScale(canvasScale, img) {
-        const cms = (typeof canvasScale === 'number') ? [canvasScale, canvasScale] : canvasScale;
         const nw = img.width;
         const nh = img.height;
-        this._cv.width = nw * cms[0];
-        this._cv.height = nh * cms[1];
-        this._ctx = this._cv.getContext('2d');
+        this.initCanvas(nw, nh, canvasScale);
         if (img)
             this._ctx.drawImage(img, 0, 0, nw, nh, 0, 0, this._cv.width, this._cv.height);
+    }
+    initCanvas(width, height, canvasScale = 1) {
+        if (!this._editable) {
+            console.error('Cannot initiate canvas because this Img is not set to be editable');
+            return;
+        }
+        if (!this._cv)
+            this._cv = document.createElement("canvas");
+        const cms = (typeof canvasScale === 'number') ? [canvasScale, canvasScale] : canvasScale;
+        this._cv.width = width * cms[0];
+        this._cv.height = height * cms[1];
+        this._ctx = this._cv.getContext('2d');
+        this._loaded = true;
     }
     bitmap(size) {
         const w = (size) ? size[0] : this._cv.width;
         const h = (size) ? size[1] : this._cv.height;
         return createImageBitmap(this._cv, 0, 0, w, h);
+    }
+    pattern(reptition = 'repeat', dynamic = false) {
+        if (!this._space)
+            throw "Cannot find CanvasSpace ctx to create image pattern";
+        return this._space.ctx.createPattern(dynamic ? this._cv : this._img, reptition);
     }
     sync() {
         if (this._scale !== 1) {
@@ -102,12 +150,15 @@ class Img {
             this._img.remove();
         this._data = null;
     }
-    static fromBlob(blob, editable = false, pixelScale = 1) {
+    static fromBlob(blob, editable = false, space) {
         let url = URL.createObjectURL(blob);
-        return new Img(editable, pixelScale).load(url);
+        return new Img(editable, space).load(url);
     }
     static imageDataToBlob(data) {
-        return new Promise(function (resolve) {
+        return new Promise(function (resolve, reject) {
+            if (!document) {
+                reject("Cannot create html canvas element. document not found.");
+            }
             let cv = document.createElement("canvas");
             cv.width = data.width;
             cv.height = data.height;
@@ -125,6 +176,12 @@ class Img {
         return new Promise((resolve) => {
             this._cv.toBlob(blob => resolve(blob));
         });
+    }
+    getForm() {
+        if (!this._editable) {
+            console.error("Cannot get a CanvasForm because this Img is not editable");
+        }
+        return this._ctx ? new Canvas_1.CanvasForm(this._ctx) : undefined;
     }
     get current() {
         return this._editable ? this._cv : this._img;
@@ -148,10 +205,19 @@ class Img {
         return this._scale;
     }
     get imageSize() {
-        return new Pt_1.Pt(this._img.width, this._img.height);
+        if (!this._img.width || !this._img.height) {
+            return this.canvasSize.$divide(this._scale);
+        }
+        else {
+            return new Pt_1.Pt(this._img.width, this._img.height);
+        }
     }
     get canvasSize() {
         return new Pt_1.Pt(this._cv.width, this._cv.height);
+    }
+    get scaledMatrix() {
+        const s = 1 / this._scale;
+        return new LinearAlgebra_1.Mat().scale2D([s, s]);
     }
 }
 exports.Img = Img;

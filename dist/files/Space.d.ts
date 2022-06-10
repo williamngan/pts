@@ -16,7 +16,10 @@ export declare abstract class Space {
     protected _pointer: Pt;
     protected _isReady: boolean;
     protected _playing: boolean;
+    protected _keyDownBind: (evt: KeyboardEvent) => boolean;
+    protected _keyUpBind: (evt: KeyboardEvent) => boolean;
     refresh(b: boolean): this;
+    minFrameTime(ms?: number): void;
     add(p: IPlayer | AnimateCallbackFn): this;
     remove(player: IPlayer): this;
     removeAll(): this;
@@ -46,12 +49,16 @@ export declare abstract class MultiTouchSpace extends Space {
     protected _dragged: boolean;
     protected _hasMouse: boolean;
     protected _hasTouch: boolean;
+    protected _hasKeyboard: boolean;
     protected _canvas: EventTarget;
     get pointer(): Pt;
-    bindCanvas(evt: string, callback: EventListener, options?: any): void;
-    unbindCanvas(evt: string, callback: EventListener, options?: any): void;
-    bindMouse(_bind?: boolean): this;
-    bindTouch(bind?: boolean, passive?: boolean): this;
+    bindCanvas(evt: string, callback: EventListener, options?: any, customTarget?: Element): void;
+    unbindCanvas(evt: string, callback: EventListener, options?: any, customTarget?: Element): void;
+    bindDoc(evt: string, callback: EventListener, options?: any): void;
+    unbindDoc(evt: string, callback: EventListener, options?: any): void;
+    bindMouse(bind?: boolean, customTarget?: Element): this;
+    bindTouch(bind?: boolean, passive?: boolean, customTarget?: Element): this;
+    bindKeyboard(bind?: boolean): this;
     touchesToPoints(evt: TouchEvent, which?: TouchPointsKey): Pt[];
     protected _mouseAction(type: string, evt: MouseEvent | TouchEvent): void;
     protected _mouseDown(evt: MouseEvent | TouchEvent): boolean;
@@ -63,4 +70,7 @@ export declare abstract class MultiTouchSpace extends Space {
     protected _contextMenu(evt: MouseEvent): boolean;
     protected _touchMove(evt: TouchEvent): boolean;
     protected _touchStart(evt: TouchEvent): boolean;
+    protected _keyDown(evt: KeyboardEvent): boolean;
+    protected _keyUp(evt: KeyboardEvent): boolean;
+    protected _keyboardAction(type: string, evt: KeyboardEvent): void;
 }

@@ -1,5 +1,7 @@
+import { CanvasForm, CanvasSpace } from "./Canvas";
 import { Bound, Pt } from "./Pt";
-import { PtLike } from "./Types";
+import { Mat } from "./LinearAlgebra";
+import { PtLike, CanvasPatternRepetition } from "./Types";
 export declare class Img {
     protected _img: HTMLImageElement;
     protected _data: ImageData;
@@ -8,11 +10,17 @@ export declare class Img {
     protected _scale: number;
     protected _loaded: boolean;
     protected _editable: boolean;
-    constructor(editable?: boolean, pixelScale?: number, crossOrigin?: boolean);
-    static load(src: string, editable?: boolean, pixelScale?: number, ready?: (img: any) => {}): Img;
+    protected _space: CanvasSpace;
+    constructor(editable?: boolean, space?: CanvasSpace, crossOrigin?: boolean);
+    static load(src: string, editable?: boolean, space?: CanvasSpace, ready?: (img: any) => {}): Img;
+    static loadAsync(src: string, editable?: boolean, space?: CanvasSpace): Promise<Img>;
+    static loadPattern(src: string, space: CanvasSpace, repeat?: CanvasPatternRepetition, editable?: boolean): Promise<CanvasPattern>;
+    static blank(size: PtLike, space: CanvasSpace, scale?: number): Img;
     load(src: string): Promise<Img>;
     protected _drawToScale(canvasScale: number | PtLike, img: CanvasImageSource): void;
+    initCanvas(width: number, height: number, canvasScale?: number | PtLike): void;
     bitmap(size?: PtLike): Promise<ImageBitmap>;
+    pattern(reptition?: CanvasPatternRepetition, dynamic?: boolean): CanvasPattern;
     sync(): void;
     pixel(p: PtLike, rescale?: boolean | number): Pt;
     static getPixel(imgData: ImageData, p: PtLike): Pt;
@@ -20,10 +28,11 @@ export declare class Img {
     crop(box: Bound): ImageData;
     filter(css: string): this;
     cleanup(): void;
-    static fromBlob(blob: Blob, editable?: boolean, pixelScale?: number): Promise<Img>;
+    static fromBlob(blob: Blob, editable?: boolean, space?: CanvasSpace): Promise<Img>;
     static imageDataToBlob(data: ImageData): Promise<Blob>;
     toBase64(): string;
     toBlob(): Promise<Blob>;
+    getForm(): CanvasForm;
     get current(): CanvasImageSource;
     get image(): HTMLImageElement;
     get canvas(): HTMLCanvasElement;
@@ -33,4 +42,5 @@ export declare class Img {
     get pixelScale(): number;
     get imageSize(): Pt;
     get canvasSize(): Pt;
+    get scaledMatrix(): Mat;
 }

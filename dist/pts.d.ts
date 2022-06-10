@@ -336,11 +336,17 @@ export class Img {
     protected _scale: number;
     protected _loaded: boolean;
     protected _editable: boolean;
-    constructor(editable?: boolean, pixelScale?: number, crossOrigin?: boolean);
-    static load(src: string, editable?: boolean, pixelScale?: number, ready?: (img: any) => {}): Img;
+    protected _space: CanvasSpace;
+    constructor(editable?: boolean, space?: CanvasSpace, crossOrigin?: boolean);
+    static load(src: string, editable?: boolean, space?: CanvasSpace, ready?: (img: any) => {}): Img;
+    static loadAsync(src: string, editable?: boolean, space?: CanvasSpace): Promise<Img>;
+    static loadPattern(src: string, space: CanvasSpace, repeat?: CanvasPatternRepetition, editable?: boolean): Promise<CanvasPattern>;
+    static blank(size: PtLike, space: CanvasSpace, scale?: number): Img;
     load(src: string): Promise<Img>;
     protected _drawToScale(canvasScale: number | PtLike, img: CanvasImageSource): void;
+    initCanvas(width: number, height: number, canvasScale?: number | PtLike): void;
     bitmap(size?: PtLike): Promise<ImageBitmap>;
+    pattern(reptition?: CanvasPatternRepetition, dynamic?: boolean): CanvasPattern;
     sync(): void;
     pixel(p: PtLike, rescale?: boolean | number): Pt;
     static getPixel(imgData: ImageData, p: PtLike): Pt;
@@ -348,10 +354,11 @@ export class Img {
     crop(box: Bound): ImageData;
     filter(css: string): this;
     cleanup(): void;
-    static fromBlob(blob: Blob, editable?: boolean, pixelScale?: number): Promise<Img>;
+    static fromBlob(blob: Blob, editable?: boolean, space?: CanvasSpace): Promise<Img>;
     static imageDataToBlob(data: ImageData): Promise<Blob>;
     toBase64(): string;
     toBlob(): Promise<Blob>;
+    getForm(): CanvasForm;
     get current(): CanvasImageSource;
     get image(): HTMLImageElement;
     get canvas(): HTMLCanvasElement;
@@ -361,6 +368,7 @@ export class Img {
     get pixelScale(): number;
     get imageSize(): Pt;
     get canvasSize(): Pt;
+    get scaledMatrix(): Mat;
 }
 
 export class Vec {
@@ -389,11 +397,21 @@ export class Vec {
     static map(a: PtLike, fn: (n: number, index: number, arr: any) => number): PtLike;
 }
 export class Mat {
+    protected _33: GroupLike;
+    constructor();
+    get value(): GroupLike;
+    get domMatrix(): DOMMatrix;
+    reset(): void;
+    scale2D(val: PtLike, at?: PtLike): this;
+    rotate2D(ang: number, at?: PtLike): this;
+    translate2D(val: PtLike): this;
+    shear2D(val: PtLike, at?: PtLike): this;
     static add(a: GroupLike, b: GroupLike | number[][] | number): Group;
     static multiply(a: GroupLike, b: GroupLike | number[][] | number, transposed?: boolean, elementwise?: boolean): Group;
     static zipSlice(g: GroupLike | number[][], index: number, defaultValue?: number | boolean): Pt;
     static zip(g: GroupLike | number[][], defaultValue?: number | boolean, useLongest?: boolean): Group;
     static transpose(g: GroupLike | number[][], defaultValue?: number | boolean, useLongest?: boolean): Group;
+    static toDOMMatrix(m: GroupLike | number[][]): number[];
     static transform2D(pt: PtLike, m: GroupLike | number[][]): Pt;
     static scale2DMatrix(x: number, y: number): GroupLike;
     static rotate2DMatrix(cosA: number, sinA: number): GroupLike;
@@ -879,6 +897,7 @@ export class Group extends Array<Pt> {
     $matrixMultiply(g: GroupLike | number, transposed?: boolean, elementwise?: boolean): Group;
     zipSlice(index: number, defaultValue?: number | boolean): Pt;
     $zip(defaultValue?: number | boolean, useLongest?: boolean): Group;
+    toBound(): Group;
     toString(): string;
 }
 export class Bound extends Group implements IPt {
@@ -928,7 +947,10 @@ export abstract class Space {
     protected _pointer: Pt;
     protected _isReady: boolean;
     protected _playing: boolean;
+    protected _keyDownBind: (evt: KeyboardEvent) => boolean;
+    protected _keyUpBind: (evt: KeyboardEvent) => boolean;
     refresh(b: boolean): this;
+    minFrameTime(ms?: number): void;
     add(p: IPlayer | AnimateCallbackFn): this;
     remove(player: IPlayer): this;
     removeAll(): this;
@@ -958,12 +980,16 @@ export abstract class MultiTouchSpace extends Space {
     protected _dragged: boolean;
     protected _hasMouse: boolean;
     protected _hasTouch: boolean;
+    protected _hasKeyboard: boolean;
     protected _canvas: EventTarget;
     get pointer(): Pt;
-    bindCanvas(evt: string, callback: EventListener, options?: any): void;
-    unbindCanvas(evt: string, callback: EventListener, options?: any): void;
-    bindMouse(_bind?: boolean): this;
-    bindTouch(bind?: boolean, passive?: boolean): this;
+    bindCanvas(evt: string, callback: EventListener, options?: any, customTarget?: Element): void;
+    unbindCanvas(evt: string, callback: EventListener, options?: any, customTarget?: Element): void;
+    bindDoc(evt: string, callback: EventListener, options?: any): void;
+    unbindDoc(evt: string, callback: EventListener, options?: any): void;
+    bindMouse(bind?: boolean, customTarget?: Element): this;
+    bindTouch(bind?: boolean, passive?: boolean, customTarget?: Element): this;
+    bindKeyboard(bind?: boolean): this;
     touchesToPoints(evt: TouchEvent, which?: TouchPointsKey): Pt[];
     protected _mouseAction(type: string, evt: MouseEvent | TouchEvent): void;
     protected _mouseDown(evt: MouseEvent | TouchEvent): boolean;
@@ -975,6 +1001,9 @@ export abstract class MultiTouchSpace extends Space {
     protected _contextMenu(evt: MouseEvent): boolean;
     protected _touchMove(evt: TouchEvent): boolean;
     protected _touchStart(evt: TouchEvent): boolean;
+    protected _keyDown(evt: KeyboardEvent): boolean;
+    protected _keyUp(evt: KeyboardEvent): boolean;
+    protected _keyboardAction(type: string, evt: KeyboardEvent): void;
 }
 
 export class SVGSpace extends DOMSpace {
@@ -1067,6 +1096,7 @@ export interface ITimer {
     prev: number;
     diff: number;
     end: number;
+    min: number;
 }
 export type TouchPointsKey = "touches" | "changedTouches" | "targetTouches";
 export interface MultiTouchElement {
@@ -1146,6 +1176,7 @@ export type DefaultFormStyle = {
     lineCap?: string;
     globalAlpha?: number;
 };
+export type CanvasPatternRepetition = "repeat" | "repeat-x" | "repeat-y" | "no-repeat";
 
 export class Typography {
     static textWidthEstimator(fn: (string: any) => number, samples?: string[], distribution?: number[]): (string: any) => number;
@@ -1178,6 +1209,8 @@ export const UIPointerActions: {
     enter: string;
     leave: string;
     click: string;
+    keydown: string;
+    keyup: string;
     contextmenu: string;
     all: string;
 };
@@ -1286,6 +1319,7 @@ export class Util {
     static stepper(max: number, min?: number, stride?: number, callback?: (n: number) => void): (() => number);
     static forRange(fn: (index: number) => any, range: number, start?: number, step?: number): any[];
     static load(url: string, callback: (response: string, success: boolean) => void): void;
+    static download(space: CanvasSpace, filename?: string, filetype?: ("jpeg" | "jpg" | "png" | "webp"), quality?: number): void;
     static performance(avgFrames?: number): () => number;
     static arrayCheck(pts: PtLikeIterable, minRequired?: number): boolean;
     static iterToArray(it: Iterable<any>): any[];

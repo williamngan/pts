@@ -350,6 +350,9 @@ class Group extends Array {
     $zip(defaultValue = undefined, useLongest = false) {
         return LinearAlgebra_1.Mat.zip(this, defaultValue, useLongest);
     }
+    toBound() {
+        return Bound.fromGroup(this);
+    }
     toString() {
         return "Group[ " + this.reduce((p, c) => p + c.toString() + " ", "") + " ]";
     }

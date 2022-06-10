@@ -27,6 +27,7 @@ export interface ITimer {
     prev: number;
     diff: number;
     end: number;
+    min: number;
 }
 export declare type TouchPointsKey = "touches" | "changedTouches" | "targetTouches";
 export interface MultiTouchElement {
@@ -106,3 +107,4 @@ export declare type DefaultFormStyle = {
     lineCap?: string;
     globalAlpha?: number;
 };
+export declare type CanvasPatternRepetition = "repeat" | "repeat-x" | "repeat-y" | "no-repeat";

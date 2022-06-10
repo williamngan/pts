@@ -113,6 +113,7 @@ export declare class Group extends Array<Pt> {
     $matrixMultiply(g: GroupLike | number, transposed?: boolean, elementwise?: boolean): Group;
     zipSlice(index: number, defaultValue?: number | boolean): Pt;
     $zip(defaultValue?: number | boolean, useLongest?: boolean): Group;
+    toBound(): Group;
     toString(): string;
 }
 export declare class Bound extends Group implements IPt {
