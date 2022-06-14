@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.10.10 - Copyright © 2017-2022 William Ngan and contributors.
+ * pts.js 0.10.12 - Copyright © 2017-2022 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -378,7 +378,7 @@ class CanvasForm extends Form_1.VisualForm {
         }
     }
     get space() { return this._space; }
-    get ctx() { return this._space.ctx; }
+    get ctx() { return this._ctx; }
     useOffscreen(off = true, clear = false) {
         if (clear)
             this._space.clearOffscreen((typeof clear == "string") ? clear : null);
@@ -456,8 +456,8 @@ class CanvasForm extends Form_1.VisualForm {
             if (area2)
                 area2.map(a => a.abs());
             let grad = area2
-                ? this.ctx.createRadialGradient(area1[0][0], area1[0][1], area1[1][0], area2[0][0], area2[0][1], area2[1][0])
-                : this.ctx.createLinearGradient(area1[0][0], area1[0][1], area1[1][0], area1[1][1]);
+                ? this._ctx.createRadialGradient(area1[0][0], area1[0][1], area1[1][0], area2[0][0], area2[0][1], area2[1][0])
+                : this._ctx.createLinearGradient(area1[0][0], area1[0][1], area1[1][0], area1[1][1]);
             for (let i = 0, len = vals.length; i < len; i++) {
                 grad.addColorStop(vals[i][0], vals[i][1]);
             }
@@ -465,11 +465,11 @@ class CanvasForm extends Form_1.VisualForm {
         };
     }
     composite(mode = 'source-over') {
-        this.ctx.globalCompositeOperation = mode;
+        this._ctx.globalCompositeOperation = mode;
         return this;
     }
     clip() {
-        this.ctx.clip();
+        this._ctx.clip();
         return this;
     }
     dash(segments = true, offset = 0) {

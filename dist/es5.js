@@ -1,5 +1,5 @@
 /*!
- * pts.js 0.10.10 - Copyright © 2017-2022 William Ngan and contributors.
+ * pts.js 0.10.12 - Copyright © 2017-2022 William Ngan and contributors.
  * Licensed under Apache 2.0 License.
  * See https://github.com/williamngan/pts for details.
  */
@@ -551,7 +551,7 @@ var CanvasForm = function (_Form_1$VisualForm) {
                 if (area2) area2.map(function (a) {
                     return a.abs();
                 });
-                var grad = area2 ? _this3.ctx.createRadialGradient(area1[0][0], area1[0][1], area1[1][0], area2[0][0], area2[0][1], area2[1][0]) : _this3.ctx.createLinearGradient(area1[0][0], area1[0][1], area1[1][0], area1[1][1]);
+                var grad = area2 ? _this3._ctx.createRadialGradient(area1[0][0], area1[0][1], area1[1][0], area2[0][0], area2[0][1], area2[1][0]) : _this3._ctx.createLinearGradient(area1[0][0], area1[0][1], area1[1][0], area1[1][1]);
                 for (var _i = 0, _len = vals.length; _i < _len; _i++) {
                     grad.addColorStop(vals[_i][0], vals[_i][1]);
                 }
@@ -563,13 +563,13 @@ var CanvasForm = function (_Form_1$VisualForm) {
         value: function composite() {
             var mode = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'source-over';
 
-            this.ctx.globalCompositeOperation = mode;
+            this._ctx.globalCompositeOperation = mode;
             return this;
         }
     }, {
         key: "clip",
         value: function clip() {
-            this.ctx.clip();
+            this._ctx.clip();
             return this;
         }
     }, {
@@ -849,7 +849,7 @@ var CanvasForm = function (_Form_1$VisualForm) {
     }, {
         key: "ctx",
         get: function get() {
-            return this._space.ctx;
+            return this._ctx;
         }
     }], [{
         key: "point",
