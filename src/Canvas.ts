@@ -496,7 +496,7 @@ export class CanvasForm extends VisualForm {
   * Get the rendering context of canvas to perform other canvas functions.
   * @example `form.ctx.clip()`
   */
-  get ctx():PtsCanvasRenderingContext2D { return this._space.ctx; }
+  get ctx():PtsCanvasRenderingContext2D { return this._ctx; }
 
 
   /**
@@ -629,8 +629,8 @@ export class CanvasForm extends VisualForm {
         if (area2) area2.map( a => a.abs() );
 
         let grad = area2 
-          ? this.ctx.createRadialGradient( area1[0][0], area1[0][1], area1[1][0], area2[0][0], area2[0][1], area2[1][0] )
-          : this.ctx.createLinearGradient( area1[0][0], area1[0][1], area1[1][0], area1[1][1] );
+          ? this._ctx.createRadialGradient( area1[0][0], area1[0][1], area1[1][0], area2[0][0], area2[0][1], area2[1][0] )
+          : this._ctx.createLinearGradient( area1[0][0], area1[0][1], area1[1][0], area1[1][1] );
 
         for (let i=0, len=vals.length; i<len; i++) {
           grad.addColorStop( vals[i][0], vals[i][1] );
@@ -646,7 +646,7 @@ export class CanvasForm extends VisualForm {
      * @param mode a composite operation such as 'lighten', 'multiply', 'overlay', and 'color-burn'.
      */
     composite( mode:string='source-over' ):this {
-      this.ctx.globalCompositeOperation = mode;
+      this._ctx.globalCompositeOperation = mode;
       return this;
     }
 
@@ -655,7 +655,7 @@ export class CanvasForm extends VisualForm {
      * Create a clipping mask from the current path. See [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/clip) for details.
      */
     clip():this {
-      this.ctx.clip();
+      this._ctx.clip();
       return this;
     }
     
