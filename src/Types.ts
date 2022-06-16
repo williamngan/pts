@@ -5,7 +5,7 @@ import {Space} from "./Space";
 import {UI} from "./UI";
 
 /**
- * Typescript only: IPt is an interface that represents an object with x, y, z, w properties.
+ * Typescript interface: IPt is an interface that represents an object with x, y, z, w properties.
  */
 export interface IPt {
   x?:number;
@@ -16,37 +16,39 @@ export interface IPt {
 
 
 /**
- * Typescript only: PtLike is an alias of types that can represent a point.
+ * Typescript type: PtLike represents the data of a point. It can be either a Pt instance or an array of numbers.
  */
 export type PtLike = Pt | Float32Array | number[];
 
 
 /**
- * Typescript only: GroupLike is an alias of types that can represent a group of points.
+ * Typescript type: GroupLike represents an array of Pt instances. It be a Group instance or an array of Pt. Unlike `PtIterable`, this type only allows arrays but not iterables.
  */
 export type GroupLike = Group | Pt[];
 
 
 /**
- * Typescript only: PtLikeIterable is an alias of GroupLike | Iterable<PtLike> | number[][]
+ * Typescript type: PtIterable represents an iterable list of Pt instances. Unlike `PtLikeIterable`, this type only allows Pt instances but not numbers' arrays.
+ * If you aren't sure what this type means, treat this as a [`Group`](#link) instance.
  */
-export type PtLikeIterable = GroupLike|PtLike[]|Iterable<PtLike>;
+ export type PtIterable = GroupLike | Pt[] | Iterable<Pt>;
 
 
 /**
- * Typescript only: PtIterable is an alias of GroupLike | Iterable<Pt>
+ * Typescript type: PtLikeIterable is the most flexible way to represent an iterable list of point data. For example, it can be a Group, an iterable of Pt instances, or an array of numbers' arrays. 
+ * If you aren't sure what this type means, treat this as a [`Group`](#link) instance.
  */
-export type PtIterable = GroupLike|Pt[]|Iterable<Pt>;
+export type PtLikeIterable = GroupLike | PtLike[] | Iterable<PtLike>;
 
 
 /**
- * Typescript only: AnimateCallbackFn is a type alias that represents a callback function for animation. It accepts parameters to keep track of current time, current frame-time, and current space instance.
+ * Typescript type: AnimateCallbackFn represents a callback function for animation. It accepts parameters to keep track of current time, current frame-time, and current space instance.
  */
 export type AnimateCallbackFn = ( time?:number, frameTime?:number, currentSpace?:any ) => void;
 
 
 /**
-* Typescript only: IPlayer is an interface that represents a "player" object that can be added into a Space.
+* Typescript interface: IPlayer is an interface that represents a "player" object that can be added into a Space.
 */
 export interface IPlayer {
   animateID?: string;
@@ -58,7 +60,7 @@ export interface IPlayer {
 
 
 /**
- * Typescript only: ISpacePlayers is an interface that represents a map of IPlayer instances.
+ * Typescript interface: ISpacePlayers represents a map of IPlayer instances.
  */
 export interface ISpacePlayers {
   [key: string]: IPlayer;
@@ -66,7 +68,7 @@ export interface ISpacePlayers {
 
 
 /**
- *Typescript only: ITimer is an interface that represents a time-recording object.
+ *Typescript interface: ITimer represents a time-recording object.
  */
 export interface ITimer {
   prev: number;
@@ -76,13 +78,13 @@ export interface ITimer {
 }
 
 /**
- * Typescript only: TouchPointsKey is a type alias that represents a set of acceptable string keys for defining touch action.
+ * Typescript type: TouchPointsKey represents a set of acceptable string keys for defining touch action.
  */
 export type TouchPointsKey = "touches" | "changedTouches" | "targetTouches";
 
 
 /**
- * Typescript only: MultiTouchElement is an interface that represents an element that can handle touch events.
+ * Typescript interface: MultiTouchElement represents an element that can handle touch events.
  */
 export interface MultiTouchElement {
   addEventListener( evt:any, callback:Function );
@@ -91,7 +93,7 @@ export interface MultiTouchElement {
 
 
 /**
- * Typescript only: extends Canvas's 2D context with backingStorePixelRatio property.
+ * Typescript interface: this extends Canvas's 2D context with backingStorePixelRatio property.
  */
 export interface PtsCanvasRenderingContext2D extends CanvasRenderingContext2D {
   webkitBackingStorePixelRatio?:number;
@@ -103,32 +105,32 @@ export interface PtsCanvasRenderingContext2D extends CanvasRenderingContext2D {
 
 
 /**
- * Typescript only: Setup options for CanvasSpace. See [`CanvasSpace.setup()`](#link) function.
+ * Typescript type: Setup options for CanvasSpace. See [`CanvasSpace.setup()`](#link) function.
  */
 export type CanvasSpaceOptions = {
   bgcolor?:string, resize?:boolean, retina?:boolean, offscreen?:boolean, pixelDensity?:number
 };
 
 /**
- * Typescript only: ColorType is a type alias for a defined set of string values such as "rgb" and "lab".
+ * Typescript type: ColorType represents a defined set of string values such as "rgb" and "lab".
  */
 export type ColorType = "rgb"|"hsl"|"hsb"|"lab"|"lch"|"luv"|"xyz";
 
 
 /**
- * Typescript only: A DelaunayShape represents an object type that can store a Delaunay element. It has 3 indices (i, j, k) and two groups that represent a triangle and a circle.
+ * Typescript type: DelaunayShape represents an object type that can store a Delaunay element. It has 3 indices (i, j, k) and two groups that represent a triangle and a circle.
  */
 export type DelaunayShape = {i:number, j:number, k:number, triangle:GroupLike, circle:Group };
 
 /**
- * Typescript only: A DelaunayMesh represents an object type that has an array of {key: shape} items, where each shape represents a DelaunayShape.
+ * Typescript type: DelaunayMesh represents an object type that has an array of {key: shape} items, where each shape represents a DelaunayShape.
  */
 export type DelaunayMesh = {[key:string]:DelaunayShape}[];
 
 
 
 /**
- * Typescript only: A type that represents the current context for an DOMForm.
+ * Typescript type: DOMFormContext represents the current context for an DOMForm.
  */
 export type DOMFormContext = {
   group:Element, groupID:string, groupCount:number,
@@ -139,7 +141,7 @@ export type DOMFormContext = {
 
 
 /**
- * Typescript only: IntersectContext represents a type of an object that store the intersection info.
+ * Typescript type: IntersectContext represents a type of an object that store the intersection info.
  */
 export type IntersectContext = {
   which: number,
@@ -152,29 +154,29 @@ export type IntersectContext = {
 
 
 /**
- * UIHandler is a type alias that represents a callback function to handle UI actions.
+ * Typescript type: UIHandler represents a callback function to handle UI actions.
  */
 export type UIHandler = ( target:UI, pt:PtLike, type:string, evt:MouseEvent ) => void;
 
 
 /**
- * WarningType specifies a level of warning for [`Util.warnLevel`](#link).
+ * Typescript type: WarningType specifies a level of warning for [`Util.warnLevel`](#link).
  */
 export type WarningType = "error"|"warn"|"mute";
 
 
 /**
- * Typescript only: a callback function type to be used in `tempo.every(...).start( fn )` 
+ * Typescript type: a callback function type used in `tempo.every(...).start( fn )` 
  */
 export type ITempoStartFn = (count:number) => void|boolean;
 
 /**
- * Typescript only: a callback function type to be used in `tempo.every(...).progress( fn )` 
+ * Typescript type: a callback function type used in `tempo.every(...).progress( fn )` 
  */
 export type ITempoProgressFn = (count:number, t:number, ms:number, start:boolean) => void|boolean;
 
 /**
- * Typescript only: a listener object created by Tempo class
+ * Typescript type: ITempoListener represents a listener created by Tempo class
  */
 export type ITempoListener = {
   name?:string, // reference id
@@ -188,7 +190,7 @@ export type ITempoListener = {
 };
 
 /**
- * Typescript only: the return type of `tempo.every(...)`
+ * Typescript type: the return type of `tempo.every(...)`
  */
 export type ITempoResponses = {
   start: (fn:ITempoStartFn, offset:number, name?:string) => string,
@@ -197,7 +199,7 @@ export type ITempoResponses = {
 
 
 /**
- * Typescript only: an object to store the AnalyzerNode properties
+ * Typescript type: ISoundAnalyzer represents an object that stores the AnalyzerNode properties
  */
 export type ISoundAnalyzer = {
   node:AnalyserNode,
@@ -207,13 +209,13 @@ export type ISoundAnalyzer = {
 
 
 /**
- * Typescript only: corresponds to Sound.type
+ * Typescript type: SoundType represents a type of sound input. It corresponds to Sound.type property.
  */
 export type SoundType = "file"|"gen"|"input";
 
 
 /**
- * Typescript only: default style object
+ * Typescript type: DefaultFormStyle represents a default object for visual styles such as fill, stroke, line width, and others.
  */
 export type DefaultFormStyle = {
   fillStyle?: string|CanvasGradient|CanvasPattern, 
@@ -225,4 +227,7 @@ export type DefaultFormStyle = {
 };
 
 
+/**
+ * Typescript type: CanvasPatternRepetition represents the string options to specify pattern repetition
+ */
 export type CanvasPatternRepetition = "repeat" | "repeat-x" | "repeat-y" | "no-repeat";
