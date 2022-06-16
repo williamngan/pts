@@ -3,13 +3,13 @@
   "source": [
     [
       "src/Types.ts",
-      33,
+      41,
       26
     ]
   ],
   "kind": "Typealias",
-  "id": 744,
-  "comment": "Typescript only: PtLikeIterable is an alias of GroupLike | Iterable<PtLike> | number[][]",
+  "id": 748,
+  "comment": "Typescript type: PtLikeIterable is the most flexible way to represent an iterable list of point data. For example, it can be a Group, an iterable of Pt instances, or an array of numbers' arrays.\nIf you aren't sure what this type means, treat this as a [`Group`](#link) instance.",
   "constructor": [],
   "accessors": [],
   "methods": [],

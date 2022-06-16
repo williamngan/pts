@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 1447,
+  "id": 1478,
   "comment": "Geom class provides static helper functions for basic geometric operations.",
   "constructor": [],
   "accessors": [],
@@ -22,7 +22,7 @@
           15
         ]
       ],
-      "id": 1466,
+      "id": 1497,
       "flags": {
         "isStatic": true
       },
@@ -66,7 +66,7 @@
           19
         ]
       ],
-      "id": 1448,
+      "id": 1479,
       "flags": {
         "isStatic": true
       },
@@ -98,7 +98,7 @@
           20
         ]
       ],
-      "id": 1451,
+      "id": 1482,
       "flags": {
         "isStatic": true
       },
@@ -130,7 +130,7 @@
           20
         ]
       ],
-      "id": 1460,
+      "id": 1491,
       "flags": {
         "isStatic": true
       },
@@ -162,7 +162,7 @@
           17
         ]
       ],
-      "id": 1463,
+      "id": 1494,
       "flags": {
         "isStatic": true
       },
@@ -194,7 +194,7 @@
           17
         ]
       ],
-      "id": 1514,
+      "id": 1545,
       "flags": {
         "isStatic": true
       },
@@ -219,7 +219,7 @@
           20
         ]
       ],
-      "id": 1471,
+      "id": 1502,
       "flags": {
         "isStatic": true
       },
@@ -263,7 +263,7 @@
           24
         ]
       ],
-      "id": 1480,
+      "id": 1511,
       "flags": {
         "isStatic": true
       },
@@ -301,7 +301,7 @@
           22
         ]
       ],
-      "id": 1476,
+      "id": 1507,
       "flags": {
         "isStatic": true
       },
@@ -339,7 +339,7 @@
           18
         ]
       ],
-      "id": 1509,
+      "id": 1540,
       "flags": {
         "isStatic": true
       },
@@ -383,7 +383,7 @@
           17
         ]
       ],
-      "id": 1497,
+      "id": 1528,
       "flags": {
         "isStatic": true
       },
@@ -433,7 +433,7 @@
           14
         ]
       ],
-      "id": 1492,
+      "id": 1523,
       "flags": {
         "isStatic": true
       },
@@ -477,7 +477,7 @@
           16
         ]
       ],
-      "id": 1503,
+      "id": 1534,
       "flags": {
         "isStatic": true
       },
@@ -527,7 +527,7 @@
           17
         ]
       ],
-      "id": 1519,
+      "id": 1550,
       "flags": {
         "isStatic": true
       },
@@ -552,7 +552,7 @@
           18
         ]
       ],
-      "id": 1489,
+      "id": 1520,
       "flags": {
         "isStatic": true
       },
@@ -584,7 +584,7 @@
           17
         ]
       ],
-      "id": 1457,
+      "id": 1488,
       "flags": {
         "isStatic": true
       },
@@ -616,7 +616,7 @@
           17
         ]
       ],
-      "id": 1454,
+      "id": 1485,
       "flags": {
         "isStatic": true
       },
@@ -648,7 +648,7 @@
           20
         ]
       ],
-      "id": 1484,
+      "id": 1515,
       "flags": {
         "isStatic": true
       },

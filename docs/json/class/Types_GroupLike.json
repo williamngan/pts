@@ -8,8 +8,8 @@
     ]
   ],
   "kind": "Typealias",
-  "id": 743,
-  "comment": "Typescript only: GroupLike is an alias of types that can represent a group of points.",
+  "id": 746,
+  "comment": "Typescript type: GroupLike represents an array of Pt instances. It be a Group instance or an array of Pt. Unlike `PtIterable`, this type only allows arrays but not iterables.",
   "constructor": [],
   "accessors": [],
   "methods": [],

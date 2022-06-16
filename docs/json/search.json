@@ -492,6 +492,18 @@
     8
   ],
   [
+    "Canvas_CanvasSpace#function_bindDoc",
+    "CanvasSpace.bindDoc",
+    "Function",
+    8
+  ],
+  [
+    "Canvas_CanvasSpace#function_bindKeyboard",
+    "CanvasSpace.bindKeyboard",
+    "Function",
+    8
+  ],
+  [
     "Canvas_CanvasSpace#function_bindMouse",
     "CanvasSpace.bindMouse",
     "Function",
@@ -524,6 +536,12 @@
   [
     "Canvas_CanvasSpace#function_getForm",
     "CanvasSpace.getForm",
+    "Function",
+    8
+  ],
+  [
+    "Canvas_CanvasSpace#function_minFrameTime",
+    "CanvasSpace.minFrameTime",
     "Function",
     8
   ],
@@ -620,6 +638,12 @@
   [
     "Canvas_CanvasSpace#function_unbindCanvas",
     "CanvasSpace.unbindCanvas",
+    "Function",
+    8
+  ],
+  [
+    "Canvas_CanvasSpace#function_unbindDoc",
+    "CanvasSpace.unbindDoc",
     "Function",
     8
   ],
@@ -1824,6 +1848,12 @@
     8
   ],
   [
+    "Create_Delaunay#function_toBound",
+    "Delaunay.toBound",
+    "Function",
+    8
+  ],
+  [
     "Create_Delaunay#function_toLocaleString",
     "Delaunay.toLocaleString",
     "Function",
@@ -2520,6 +2550,18 @@
     8
   ],
   [
+    "Dom_DOMSpace#function_bindDoc",
+    "DOMSpace.bindDoc",
+    "Function",
+    8
+  ],
+  [
+    "Dom_DOMSpace#function_bindKeyboard",
+    "DOMSpace.bindKeyboard",
+    "Function",
+    8
+  ],
+  [
     "Dom_DOMSpace#function_bindMouse",
     "DOMSpace.bindMouse",
     "Function",
@@ -2546,6 +2588,12 @@
   [
     "Dom_DOMSpace#function_getForm",
     "DOMSpace.getForm",
+    "Function",
+    8
+  ],
+  [
+    "Dom_DOMSpace#function_minFrameTime",
+    "DOMSpace.minFrameTime",
     "Function",
     8
   ],
@@ -2648,6 +2696,12 @@
   [
     "Dom_DOMSpace#function_unbindCanvas",
     "DOMSpace.unbindCanvas",
+    "Function",
+    8
+  ],
+  [
+    "Dom_DOMSpace#function_unbindDoc",
+    "DOMSpace.unbindDoc",
     "Function",
     8
   ],
@@ -3084,6 +3138,18 @@
     8
   ],
   [
+    "Dom_HTMLSpace#function_bindDoc",
+    "HTMLSpace.bindDoc",
+    "Function",
+    8
+  ],
+  [
+    "Dom_HTMLSpace#function_bindKeyboard",
+    "HTMLSpace.bindKeyboard",
+    "Function",
+    8
+  ],
+  [
     "Dom_HTMLSpace#function_bindMouse",
     "HTMLSpace.bindMouse",
     "Function",
@@ -3110,6 +3176,12 @@
   [
     "Dom_HTMLSpace#function_getForm",
     "HTMLSpace.getForm",
+    "Function",
+    8
+  ],
+  [
+    "Dom_HTMLSpace#function_minFrameTime",
+    "HTMLSpace.minFrameTime",
     "Function",
     8
   ],
@@ -3212,6 +3284,12 @@
   [
     "Dom_HTMLSpace#function_unbindCanvas",
     "HTMLSpace.unbindCanvas",
+    "Function",
+    8
+  ],
+  [
+    "Dom_HTMLSpace#function_unbindDoc",
+    "HTMLSpace.unbindDoc",
     "Function",
     8
   ],
@@ -3522,6 +3600,12 @@
     6
   ],
   [
+    "Image_Img#accessor_scaledMatrix",
+    "Img.scaledMatrix",
+    "Accessor",
+    6
+  ],
+  [
     "Image_Img#function_bitmap",
     "Img.bitmap",
     "Function",
@@ -3546,8 +3630,26 @@
     8
   ],
   [
+    "Image_Img#function_getForm",
+    "Img.getForm",
+    "Function",
+    8
+  ],
+  [
+    "Image_Img#function_initCanvas",
+    "Img.initCanvas",
+    "Function",
+    8
+  ],
+  [
     "Image_Img#function_load",
     "Img.load",
+    "Function",
+    8
+  ],
+  [
+    "Image_Img#function_pattern",
+    "Img.pattern",
     "Function",
     8
   ],
@@ -3582,6 +3684,12 @@
     8
   ],
   [
+    "Image_Img#function_blank",
+    "Img.blank",
+    "Function",
+    8
+  ],
+  [
     "Image_Img#function_fromBlob",
     "Img.fromBlob",
     "Function",
@@ -3606,10 +3714,70 @@
     8
   ],
   [
+    "Image_Img#function_loadAsync",
+    "Img.loadAsync",
+    "Function",
+    8
+  ],
+  [
+    "Image_Img#function_loadPattern",
+    "Img.loadPattern",
+    "Function",
+    8
+  ],
+  [
     "Image_Img",
     "Img",
     "Class",
     0
+  ],
+  [
+    "LinearAlgebra_Mat#constructor_constructor",
+    "Mat.constructor",
+    "Constructor",
+    10
+  ],
+  [
+    "LinearAlgebra_Mat#accessor_domMatrix",
+    "Mat.domMatrix",
+    "Accessor",
+    6
+  ],
+  [
+    "LinearAlgebra_Mat#accessor_value",
+    "Mat.value",
+    "Accessor",
+    6
+  ],
+  [
+    "LinearAlgebra_Mat#function_reset",
+    "Mat.reset",
+    "Function",
+    8
+  ],
+  [
+    "LinearAlgebra_Mat#function_rotate2D",
+    "Mat.rotate2D",
+    "Function",
+    8
+  ],
+  [
+    "LinearAlgebra_Mat#function_scale2D",
+    "Mat.scale2D",
+    "Function",
+    8
+  ],
+  [
+    "LinearAlgebra_Mat#function_shear2D",
+    "Mat.shear2D",
+    "Function",
+    8
+  ],
+  [
+    "LinearAlgebra_Mat#function_translate2D",
+    "Mat.translate2D",
+    "Function",
+    8
   ],
   [
     "LinearAlgebra_Mat#function_add",
@@ -3662,6 +3830,12 @@
   [
     "LinearAlgebra_Mat#function_shearAt2DMatrix",
     "Mat.shearAt2DMatrix",
+    "Function",
+    8
+  ],
+  [
+    "LinearAlgebra_Mat#function_toDOMMatrix",
+    "Mat.toDOMMatrix",
     "Function",
     8
   ],
@@ -5220,6 +5394,12 @@
     8
   ],
   [
+    "Physics_Body#function_toBound",
+    "Body.toBound",
+    "Function",
+    8
+  ],
+  [
     "Physics_Body#function_toLocaleString",
     "Body.toLocaleString",
     "Function",
@@ -6654,6 +6834,12 @@
     8
   ],
   [
+    "Pt_Bound#function_toBound",
+    "Bound.toBound",
+    "Function",
+    8
+  ],
+  [
     "Pt_Bound#function_toLocaleString",
     "Bound.toLocaleString",
     "Function",
@@ -7112,6 +7298,12 @@
   [
     "Pt_Group#function_subtract",
     "Group.subtract",
+    "Function",
+    8
+  ],
+  [
+    "Pt_Group#function_toBound",
+    "Group.toBound",
     "Function",
     8
   ],
@@ -7788,6 +7980,18 @@
     8
   ],
   [
+    "Space_MultiTouchSpace#function_bindDoc",
+    "MultiTouchSpace.bindDoc",
+    "Function",
+    8
+  ],
+  [
+    "Space_MultiTouchSpace#function_bindKeyboard",
+    "MultiTouchSpace.bindKeyboard",
+    "Function",
+    8
+  ],
+  [
     "Space_MultiTouchSpace#function_bindMouse",
     "MultiTouchSpace.bindMouse",
     "Function",
@@ -7808,6 +8012,12 @@
   [
     "Space_MultiTouchSpace#function_getForm",
     "MultiTouchSpace.getForm",
+    "Function",
+    8
+  ],
+  [
+    "Space_MultiTouchSpace#function_minFrameTime",
+    "MultiTouchSpace.minFrameTime",
     "Function",
     8
   ],
@@ -7892,6 +8102,12 @@
   [
     "Space_MultiTouchSpace#function_unbindCanvas",
     "MultiTouchSpace.unbindCanvas",
+    "Function",
+    8
+  ],
+  [
+    "Space_MultiTouchSpace#function_unbindDoc",
+    "MultiTouchSpace.unbindDoc",
     "Function",
     8
   ],
@@ -7988,6 +8204,12 @@
   [
     "Space_Space#function_getForm",
     "Space.getForm",
+    "Function",
+    8
+  ],
+  [
+    "Space_Space#function_minFrameTime",
+    "Space.minFrameTime",
     "Function",
     8
   ],
@@ -8484,6 +8706,18 @@
     8
   ],
   [
+    "Svg_SVGSpace#function_bindDoc",
+    "SVGSpace.bindDoc",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGSpace#function_bindKeyboard",
+    "SVGSpace.bindKeyboard",
+    "Function",
+    8
+  ],
+  [
     "Svg_SVGSpace#function_bindMouse",
     "SVGSpace.bindMouse",
     "Function",
@@ -8510,6 +8744,12 @@
   [
     "Svg_SVGSpace#function_getForm",
     "SVGSpace.getForm",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGSpace#function_minFrameTime",
+    "SVGSpace.minFrameTime",
     "Function",
     8
   ],
@@ -8612,6 +8852,12 @@
   [
     "Svg_SVGSpace#function_unbindCanvas",
     "SVGSpace.unbindCanvas",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGSpace#function_unbindDoc",
+    "SVGSpace.unbindDoc",
     "Function",
     8
   ],
@@ -8726,6 +8972,12 @@
   [
     "Types_ITimer#property_end",
     "ITimer.end",
+    "Variable",
+    0
+  ],
+  [
+    "Types_ITimer#property_min",
+    "ITimer.min",
     "Variable",
     0
   ],
@@ -9176,6 +9428,12 @@
   [
     "Types_AnimateCallbackFn",
     "AnimateCallbackFn",
+    "Type alias",
+    0
+  ],
+  [
+    "Types_CanvasPatternRepetition",
+    "CanvasPatternRepetition",
     "Type alias",
     0
   ],
@@ -9792,6 +10050,18 @@
     0
   ],
   [
+    "UI_UIPointerActions#property_keydown",
+    "UIPointerActions.keydown",
+    "Variable",
+    0
+  ],
+  [
+    "UI_UIPointerActions#property_keyup",
+    "UIPointerActions.keyup",
+    "Variable",
+    0
+  ],
+  [
     "UI_UIPointerActions#property_leave",
     "UIPointerActions.leave",
     "Variable",
@@ -9884,6 +10154,12 @@
   [
     "Util_Util#function_combine",
     "Util.combine",
+    "Function",
+    8
+  ],
+  [
+    "Util_Util#function_download",
+    "Util.download",
     "Function",
     8
   ],

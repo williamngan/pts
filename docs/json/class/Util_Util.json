@@ -3,12 +3,12 @@
   "source": [
     [
       "src/Util.ts",
-      104,
+      105,
       17
     ]
   ],
   "kind": "Class",
-  "id": 1691,
+  "id": 1722,
   "comment": "Util class provides static helper functions.",
   "constructor": [],
   "accessors": [],
@@ -18,11 +18,11 @@
       "source": [
         [
           "src/Util.ts",
-          344,
+          367,
           19
         ]
       ],
-      "id": 1764,
+      "id": 1801,
       "flags": {
         "isStatic": true
       },
@@ -56,11 +56,11 @@
       "source": [
         [
           "src/Util.ts",
-          231,
+          232,
           16
         ]
       ],
-      "id": 1718,
+      "id": 1749,
       "flags": {
         "isStatic": true
       },
@@ -96,15 +96,65 @@
       ]
     },
     {
+      "name": "download",
+      "source": [
+        [
+          "src/Util.ts",
+          329,
+          17
+        ]
+      ],
+      "id": 1790,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Download the current `CanvasSpace` as an image (jpg/png/webp). Calling this function will automatically trigger a download.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "space",
+              "comment": "an instance of `CanvasSpace`",
+              "type": "CanvasSpace",
+              "default": false
+            },
+            {
+              "name": "filename",
+              "comment": "the name of the file, without the extension name.",
+              "type": "string",
+              "default": "\"pts_canvas_image\""
+            },
+            {
+              "name": "filetype",
+              "comment": "the image type (jpg/png/webp)",
+              "type": "jpeg | jpg | png | webp",
+              "default": "\"png\""
+            },
+            {
+              "name": "quality",
+              "comment": "a value between 0 to 1, if filetype is either \"jpg\" or \"png\"\n",
+              "type": "number",
+              "default": "1"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "flatten",
       "source": [
         [
           "src/Util.ts",
-          219,
+          220,
           16
         ]
       ],
-      "id": 1714,
+      "id": 1745,
       "flags": {
         "isStatic": true
       },
@@ -138,11 +188,11 @@
       "source": [
         [
           "src/Util.ts",
-          287,
+          288,
           17
         ]
       ],
-      "id": 1742,
+      "id": 1773,
       "flags": {
         "isStatic": true
       },
@@ -188,11 +238,11 @@
       "source": [
         [
           "src/Util.ts",
-          125,
+          126,
           16
         ]
       ],
-      "id": 1696,
+      "id": 1727,
       "flags": {
         "isStatic": true
       },
@@ -220,11 +270,11 @@
       "source": [
         [
           "src/Util.ts",
-          365,
+          388,
           17
         ]
       ],
-      "id": 1771,
+      "id": 1808,
       "flags": {
         "isStatic": true
       },
@@ -245,11 +295,11 @@
       "source": [
         [
           "src/Util.ts",
-          357,
+          380,
           20
         ]
       ],
-      "id": 1768,
+      "id": 1805,
       "flags": {
         "isStatic": true
       },
@@ -277,11 +327,11 @@
       "source": [
         [
           "src/Util.ts",
-          301,
+          302,
           13
         ]
       ],
-      "id": 1751,
+      "id": 1782,
       "flags": {
         "isStatic": true
       },
@@ -315,11 +365,11 @@
       "source": [
         [
           "src/Util.ts",
-          327,
+          350,
           20
         ]
       ],
-      "id": 1759,
+      "id": 1796,
       "flags": {
         "isStatic": true
       },
@@ -352,11 +402,11 @@
       "source": [
         [
           "src/Util.ts",
-          175,
+          176,
           18
         ]
       ],
-      "id": 1703,
+      "id": 1734,
       "flags": {
         "isStatic": true
       },
@@ -390,11 +440,11 @@
       "source": [
         [
           "src/Util.ts",
-          189,
+          190,
           14
         ]
       ],
-      "id": 1707,
+      "id": 1738,
       "flags": {
         "isStatic": true
       },
@@ -446,11 +496,11 @@
       "source": [
         [
           "src/Util.ts",
-          268,
+          269,
           16
         ]
       ],
-      "id": 1731,
+      "id": 1762,
       "flags": {
         "isStatic": true
       },
@@ -501,11 +551,11 @@
       "source": [
         [
           "src/Util.ts",
-          159,
+          160,
           13
         ]
       ],
-      "id": 1699,
+      "id": 1730,
       "flags": {
         "isStatic": true
       },
@@ -539,11 +589,11 @@
       "source": [
         [
           "src/Util.ts",
-          113,
+          114,
           18
         ]
       ],
-      "id": 1693,
+      "id": 1724,
       "flags": {
         "isStatic": true
       },
@@ -571,11 +621,11 @@
       "source": [
         [
           "src/Util.ts",
-          246,
+          247,
           12
         ]
       ],
-      "id": 1728,
+      "id": 1759,
       "flags": {
         "isStatic": true
       },

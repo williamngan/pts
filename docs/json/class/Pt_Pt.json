@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 1803,
+  "id": 1840,
   "comment": "Pt is a subclass of standard [`Float32Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array) with additional properties and functions to support vector and geometric calculations.\nSee [Pt guide](../guide/Pt-0200.html) for details.",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           23
         ]
       ],
-      "id": 1805,
+      "id": 1842,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -62,7 +62,7 @@
           8
         ]
       ],
-      "id": 1813,
+      "id": 1850,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -94,7 +94,7 @@
           7
         ]
       ],
-      "id": 1829,
+      "id": 1866,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -126,7 +126,7 @@
           7
         ]
       ],
-      "id": 1817,
+      "id": 1854,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -158,7 +158,7 @@
           7
         ]
       ],
-      "id": 1821,
+      "id": 1858,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -190,7 +190,7 @@
           7
         ]
       ],
-      "id": 1825,
+      "id": 1862,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -219,7 +219,7 @@
           6
         ]
       ],
-      "id": 1927,
+      "id": 1964,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -242,7 +242,7 @@
           6
         ]
       ],
-      "id": 1879,
+      "id": 1916,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -272,7 +272,7 @@
           7
         ]
       ],
-      "id": 1935,
+      "id": 1972,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -295,7 +295,7 @@
           9
         ]
       ],
-      "id": 1873,
+      "id": 1910,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -325,7 +325,7 @@
           8
         ]
       ],
-      "id": 1916,
+      "id": 1953,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -355,7 +355,7 @@
           10
         ]
       ],
-      "id": 1913,
+      "id": 1950,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -385,7 +385,7 @@
           9
         ]
       ],
-      "id": 1897,
+      "id": 1934,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -415,7 +415,7 @@
           8
         ]
       ],
-      "id": 1931,
+      "id": 1968,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -438,7 +438,7 @@
           6
         ]
       ],
-      "id": 1954,
+      "id": 1991,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -468,7 +468,7 @@
           6
         ]
       ],
-      "id": 1951,
+      "id": 1988,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -498,7 +498,7 @@
           11
         ]
       ],
-      "id": 1891,
+      "id": 1928,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -528,7 +528,7 @@
           10
         ]
       ],
-      "id": 1919,
+      "id": 1956,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -558,7 +558,7 @@
           8
         ]
       ],
-      "id": 1939,
+      "id": 1976,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -581,7 +581,7 @@
           11
         ]
       ],
-      "id": 1885,
+      "id": 1922,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -611,7 +611,7 @@
           7
         ]
       ],
-      "id": 1870,
+      "id": 1907,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -641,7 +641,7 @@
           5
         ]
       ],
-      "id": 1842,
+      "id": 1879,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -671,7 +671,7 @@
           7
         ]
       ],
-      "id": 1907,
+      "id": 1944,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -701,7 +701,7 @@
           21
         ]
       ],
-      "id": 2163,
+      "id": 2200,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.[Symbol.iterator]",
@@ -724,7 +724,7 @@
           5
         ]
       ],
-      "id": 1925,
+      "id": 1962,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -747,7 +747,7 @@
           5
         ]
       ],
-      "id": 1876,
+      "id": 1913,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -777,7 +777,7 @@
           7
         ]
       ],
-      "id": 1957,
+      "id": 1994,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -807,7 +807,7 @@
           14
         ]
       ],
-      "id": 1960,
+      "id": 1997,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -843,7 +843,7 @@
           6
         ]
       ],
-      "id": 1933,
+      "id": 1970,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -866,7 +866,7 @@
           7
         ]
       ],
-      "id": 1833,
+      "id": 1870,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -889,7 +889,7 @@
           14
         ]
       ],
-      "id": 1994,
+      "id": 2031,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.copyWithin",
@@ -931,7 +931,7 @@
           8
         ]
       ],
-      "id": 1894,
+      "id": 1931,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -961,7 +961,7 @@
           5
         ]
       ],
-      "id": 1910,
+      "id": 1947,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -991,7 +991,7 @@
           11
         ]
       ],
-      "id": 2165,
+      "id": 2202,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.entries",
@@ -1014,7 +1014,7 @@
           8
         ]
       ],
-      "id": 1835,
+      "id": 1872,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1050,7 +1050,7 @@
           9
         ]
       ],
-      "id": 1999,
+      "id": 2036,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.every",
@@ -1086,7 +1086,7 @@
           8
         ]
       ],
-      "id": 2008,
+      "id": 2045,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.fill",
@@ -1128,7 +1128,7 @@
           10
         ]
       ],
-      "id": 2013,
+      "id": 2050,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.filter",
@@ -1164,7 +1164,7 @@
           8
         ]
       ],
-      "id": 2022,
+      "id": 2059,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.find",
@@ -1200,7 +1200,7 @@
           13
         ]
       ],
-      "id": 2031,
+      "id": 2068,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.findIndex",
@@ -1236,7 +1236,7 @@
           7
         ]
       ],
-      "id": 1929,
+      "id": 1966,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1259,7 +1259,7 @@
           11
         ]
       ],
-      "id": 2040,
+      "id": 2077,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.forEach",
@@ -1295,7 +1295,7 @@
           12
         ]
       ],
-      "id": 2172,
+      "id": 2209,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.includes",
@@ -1331,7 +1331,7 @@
           11
         ]
       ],
-      "id": 2049,
+      "id": 2086,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.indexOf",
@@ -1367,7 +1367,7 @@
           8
         ]
       ],
-      "id": 2053,
+      "id": 2090,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.join",
@@ -1397,7 +1397,7 @@
           8
         ]
       ],
-      "id": 2167,
+      "id": 2204,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.keys",
@@ -1420,7 +1420,7 @@
           15
         ]
       ],
-      "id": 2056,
+      "id": 2093,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.lastIndexOf",
@@ -1456,7 +1456,7 @@
           11
         ]
       ],
-      "id": 1902,
+      "id": 1939,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1479,7 +1479,7 @@
           13
         ]
       ],
-      "id": 1900,
+      "id": 1937,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1502,7 +1502,7 @@
           7
         ]
       ],
-      "id": 2061,
+      "id": 2098,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.map",
@@ -1538,7 +1538,7 @@
           10
         ]
       ],
-      "id": 1946,
+      "id": 1983,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1561,7 +1561,7 @@
           10
         ]
       ],
-      "id": 1941,
+      "id": 1978,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1584,7 +1584,7 @@
           10
         ]
       ],
-      "id": 1888,
+      "id": 1925,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1614,7 +1614,7 @@
           4
         ]
       ],
-      "id": 1850,
+      "id": 1887,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1649,7 +1649,7 @@
           5
         ]
       ],
-      "id": 1860,
+      "id": 1897,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1684,7 +1684,7 @@
           15
         ]
       ],
-      "id": 1922,
+      "id": 1959,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1724,7 +1724,7 @@
           10
         ]
       ],
-      "id": 2070,
+      "id": 2107,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reduce",
@@ -1804,7 +1804,7 @@
           15
         ]
       ],
-      "id": 2098,
+      "id": 2135,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reduceRight",
@@ -1874,7 +1874,7 @@
           11
         ]
       ],
-      "id": 1978,
+      "id": 2015,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1910,7 +1910,7 @@
           11
         ]
       ],
-      "id": 2126,
+      "id": 2163,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reverse",
@@ -1933,7 +1933,7 @@
           10
         ]
       ],
-      "id": 1968,
+      "id": 2005,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1975,7 +1975,7 @@
           7
         ]
       ],
-      "id": 1937,
+      "id": 1974,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1998,7 +1998,7 @@
           7
         ]
       ],
-      "id": 1964,
+      "id": 2001,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2034,7 +2034,7 @@
           7
         ]
       ],
-      "id": 2128,
+      "id": 2165,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.set",
@@ -2070,7 +2070,7 @@
           9
         ]
       ],
-      "id": 1973,
+      "id": 2010,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2112,7 +2112,7 @@
           9
         ]
       ],
-      "id": 2132,
+      "id": 2169,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.slice",
@@ -2148,7 +2148,7 @@
           8
         ]
       ],
-      "id": 2136,
+      "id": 2173,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.some",
@@ -2184,7 +2184,7 @@
           8
         ]
       ],
-      "id": 2145,
+      "id": 2182,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.sort",
@@ -2214,7 +2214,7 @@
           12
         ]
       ],
-      "id": 2152,
+      "id": 2189,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.subarray",
@@ -2250,7 +2250,7 @@
           10
         ]
       ],
-      "id": 1882,
+      "id": 1919,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2280,7 +2280,7 @@
           4
         ]
       ],
-      "id": 1839,
+      "id": 1876,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2310,7 +2310,7 @@
           9
         ]
       ],
-      "id": 1845,
+      "id": 1882,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2334,7 +2334,7 @@
             },
             {
               "name": "anchorFromPt",
-              "comment": "If `true`, translate to new position from current position. Default is `false` which update the position from origin (0,0);\n",
+              "comment": "If `true`, add it from this Pt's current position. Default is `false` which update the position from origin (0,0). See also [`Geom.rotate2D`](#link) for rotating a point from another anchor point.\n",
               "type": "boolean",
               "default": "false"
             }
@@ -2352,7 +2352,7 @@
           9
         ]
       ],
-      "id": 1984,
+      "id": 2021,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2375,7 +2375,7 @@
           9
         ]
       ],
-      "id": 1988,
+      "id": 2025,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2398,7 +2398,7 @@
           9
         ]
       ],
-      "id": 1986,
+      "id": 2023,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2421,7 +2421,7 @@
           18
         ]
       ],
-      "id": 2156,
+      "id": 2193,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.toLocaleString",
@@ -2444,7 +2444,7 @@
           10
         ]
       ],
-      "id": 1982,
+      "id": 2019,
       "flags": {},
       "overrides": "Float32Array.toString",
       "inherits": false,
@@ -2467,7 +2467,7 @@
           6
         ]
       ],
-      "id": 1904,
+      "id": 1941,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2497,7 +2497,7 @@
           11
         ]
       ],
-      "id": 2158,
+      "id": 2195,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.valueOf",
@@ -2520,7 +2520,7 @@
           10
         ]
       ],
-      "id": 2169,
+      "id": 2206,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.values",
@@ -2543,7 +2543,7 @@
           13
         ]
       ],
-      "id": 1808,
+      "id": 1845,
       "flags": {
         "isStatic": true
       },
@@ -2590,7 +2590,7 @@
           30
         ]
       ],
-      "id": 1990,
+      "id": 2027,
       "flags": {
         "isReadonly": true
       },
@@ -2608,7 +2608,7 @@
           33
         ]
       ],
-      "id": 2171,
+      "id": 2208,
       "flags": {
         "isReadonly": true
       },
@@ -2626,7 +2626,7 @@
           19
         ]
       ],
-      "id": 1991,
+      "id": 2028,
       "flags": {
         "isReadonly": true
       },
@@ -2644,7 +2644,7 @@
           23
         ]
       ],
-      "id": 1992,
+      "id": 2029,
       "flags": {
         "isReadonly": true
       },
@@ -2662,7 +2662,7 @@
           23
         ]
       ],
-      "id": 1993,
+      "id": 2030,
       "flags": {
         "isReadonly": true
       },
@@ -2680,7 +2680,7 @@
           19
         ]
       ],
-      "id": 2060,
+      "id": 2097,
       "flags": {
         "isReadonly": true
       },
@@ -2698,7 +2698,7 @@
           24
         ]
       ],
-      "id": 2162,
+      "id": 2199,
       "flags": {
         "isStatic": true
       },

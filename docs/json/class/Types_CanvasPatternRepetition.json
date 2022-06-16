@@ -1,15 +1,15 @@
 {
-  "name": "UIHandler",
+  "name": "CanvasPatternRepetition",
   "source": [
     [
       "src/Types.ts",
-      159,
-      21
+      233,
+      35
     ]
   ],
   "kind": "Typealias",
-  "id": 791,
-  "comment": "Typescript type: UIHandler represents a callback function to handle UI actions.",
+  "id": 848,
+  "comment": "Typescript type: CanvasPatternRepetition represents the string options to specify pattern repetition",
   "constructor": [],
   "accessors": [],
   "methods": [],
@@ -19,6 +19,9 @@
   "extends": [],
   "implements": [],
   "type_alias": [
-    " Fn(target:UI, pt:PtLike, type:string, evt:MouseEvent)"
+    "repeat",
+    "repeat-x",
+    "repeat-y",
+    "no-repeat"
   ]
 }

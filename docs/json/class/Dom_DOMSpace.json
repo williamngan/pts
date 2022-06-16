@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 5217,
+  "id": 5382,
   "comment": "DOMSpace is a space for DOM elements. Usually its subclasses such as [`HTMLSpace`](#link) and [`#SVGSpace`](#link) should be used instead.\nLearn more about spaces in [this guide](../guide/space-0500).",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           22
         ]
       ],
-      "id": 5225,
+      "id": 5390,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -68,7 +68,7 @@
           16
         ]
       ],
-      "id": 5245,
+      "id": 5410,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -100,7 +100,7 @@
           16
         ]
       ],
-      "id": 5265,
+      "id": 5430,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -123,11 +123,11 @@
       "source": [
         [
           "src/Space.ts",
-          239,
+          252,
           12
         ]
       ],
-      "id": 5409,
+      "id": 5614,
       "flags": {},
       "overrides": false,
       "inherits": "Space.center",
@@ -142,16 +142,16 @@
       "source": [
         [
           "src/Space.ts",
-          208,
+          221,
           21
         ],
         [
           "src/Space.ts",
-          209,
+          222,
           21
         ]
       ],
-      "id": 5389,
+      "id": 5594,
       "flags": {},
       "overrides": false,
       "inherits": "Space.customRendering",
@@ -178,7 +178,7 @@
           13
         ]
       ],
-      "id": 5256,
+      "id": 5421,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -193,11 +193,11 @@
       "source": [
         [
           "src/Space.ts",
-          251,
+          264,
           12
         ]
       ],
-      "id": 5413,
+      "id": 5618,
       "flags": {},
       "overrides": false,
       "inherits": "Space.height",
@@ -212,11 +212,11 @@
       "source": [
         [
           "src/Space.ts",
-          227,
+          240,
           23
         ]
       ],
-      "id": 5405,
+      "id": 5610,
       "flags": {
         "isPublic": true
       },
@@ -233,11 +233,11 @@
       "source": [
         [
           "src/Space.ts",
-          215,
+          228,
           15
         ]
       ],
-      "id": 5401,
+      "id": 5606,
       "flags": {},
       "overrides": false,
       "inherits": "Space.isPlaying",
@@ -252,11 +252,11 @@
       "source": [
         [
           "src/Space.ts",
-          221,
+          234,
           16
         ]
       ],
-      "id": 5403,
+      "id": 5608,
       "flags": {},
       "overrides": false,
       "inherits": "Space.outerBound",
@@ -275,7 +275,7 @@
           12
         ]
       ],
-      "id": 5258,
+      "id": 5423,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -290,11 +290,11 @@
       "source": [
         [
           "src/Space.ts",
-          297,
+          311,
           20
         ]
       ],
-      "id": 5291,
+      "id": 5457,
       "flags": {
         "isPublic": true
       },
@@ -315,7 +315,7 @@
           11
         ]
       ],
-      "id": 5260,
+      "id": 5425,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -330,11 +330,11 @@
       "source": [
         [
           "src/Space.ts",
-          233,
+          246,
           10
         ]
       ],
-      "id": 5407,
+      "id": 5612,
       "flags": {},
       "overrides": false,
       "inherits": "Space.size",
@@ -349,11 +349,11 @@
       "source": [
         [
           "src/Space.ts",
-          245,
+          258,
           11
         ]
       ],
-      "id": 5411,
+      "id": 5616,
       "flags": {},
       "overrides": false,
       "inherits": "Space.width",
@@ -370,11 +370,11 @@
       "source": [
         [
           "src/Space.ts",
-          54,
+          66,
           5
         ]
       ],
-      "id": 5359,
+      "id": 5564,
       "flags": {},
       "overrides": false,
       "inherits": "Space.add",
@@ -400,11 +400,11 @@
       "source": [
         [
           "src/Space.ts",
-          309,
+          324,
           12
         ]
       ],
-      "id": 5293,
+      "id": 5459,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.bindCanvas",
@@ -428,9 +428,87 @@
             },
             {
               "name": "options",
-              "comment": "options for [addEventListener](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener).\n",
+              "comment": "options for [addEventListener](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener).",
               "type": "any",
               "default": "{}"
+            },
+            {
+              "name": "customTarget",
+              "comment": "If needed, this is an optional parameter to set another event target that's not the canvas element itself. See [Technical Notes guide](/guide/Technical-notes-9000.html) for use cases.\n",
+              "type": "Element",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "bindDoc",
+      "source": [
+        [
+          "src/Space.ts",
+          343,
+          9
+        ]
+      ],
+      "id": 5471,
+      "flags": {},
+      "overrides": false,
+      "inherits": "MultiTouchSpace.bindDoc",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "evt",
+              "comment": "",
+              "type": "string",
+              "default": false
+            },
+            {
+              "name": "callback",
+              "comment": "",
+              "type": "EventListener",
+              "default": false
+            },
+            {
+              "name": "options",
+              "comment": "",
+              "type": "any",
+              "default": "{}"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "bindKeyboard",
+      "source": [
+        [
+          "src/Space.ts",
+          423,
+          14
+        ]
+      ],
+      "id": 5490,
+      "flags": {},
+      "overrides": false,
+      "inherits": "MultiTouchSpace.bindKeyboard",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "bind",
+              "comment": "",
+              "type": "boolean",
+              "default": "true"
             }
           ],
           "tags": []
@@ -442,11 +520,11 @@
       "source": [
         [
           "src/Space.ts",
-          332,
+          364,
           11
         ]
       ],
-      "id": 5303,
+      "id": 5481,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.bindMouse",
@@ -457,10 +535,16 @@
           "returns_comment": false,
           "parameters": [
             {
-              "name": "_bind",
+              "name": "bind",
               "comment": "a boolean value to bind mouse events if set to `true`. If `false`, all mouse events will be unbound. Default is true.",
               "type": "boolean",
               "default": "true"
+            },
+            {
+              "name": "customTarget",
+              "comment": "If needed, this is an optional parameter to set another event target that's not the canvas element itself. See [Technical Notes guide](/guide/Technical-notes-9000.html) for use cases.",
+              "type": "Element",
+              "default": false
             }
           ],
           "tags": [
@@ -477,11 +561,11 @@
       "source": [
         [
           "src/Space.ts",
-          371,
+          405,
           11
         ]
       ],
-      "id": 5306,
+      "id": 5485,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.bindTouch",
@@ -502,6 +586,12 @@
               "comment": "a boolean value to set passive mode, ie, it won't block scrolling. Default is false.",
               "type": "boolean",
               "default": "false"
+            },
+            {
+              "name": "customTarget",
+              "comment": "If needed, this is an optional parameter to set another event target that's not the canvas element itself. See [Technical Notes guide](/guide/Technical-notes-9000.html) for use cases.",
+              "type": "Element",
+              "default": false
             }
           ],
           "tags": [
@@ -522,7 +612,7 @@
           7
         ]
       ],
-      "id": 5262,
+      "id": 5427,
       "flags": {},
       "overrides": "Space.clear",
       "inherits": false,
@@ -552,7 +642,7 @@
           9
         ]
       ],
-      "id": 5285,
+      "id": 5450,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -575,7 +665,7 @@
           9
         ]
       ],
-      "id": 5243,
+      "id": 5408,
       "flags": {},
       "overrides": "Space.getForm",
       "inherits": false,
@@ -590,15 +680,45 @@
       ]
     },
     {
+      "name": "minFrameTime",
+      "source": [
+        [
+          "src/Space.ts",
+          52,
+          14
+        ]
+      ],
+      "id": 5561,
+      "flags": {},
+      "overrides": false,
+      "inherits": "Space.minFrameTime",
+      "signatures": [
+        {
+          "comment": "Set a minimum frame time",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ms",
+              "comment": "at least this amount of miniseconds must have elapsed before frame advances\n",
+              "type": "number",
+              "default": "0"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "pause",
       "source": [
         [
           "src/Space.ts",
-          160,
+          173,
           7
         ]
       ],
-      "id": 5375,
+      "id": 5580,
       "flags": {},
       "overrides": false,
       "inherits": "Space.pause",
@@ -624,11 +744,11 @@
       "source": [
         [
           "src/Space.ts",
-          95,
+          107,
           6
         ]
       ],
-      "id": 5367,
+      "id": 5572,
       "flags": {},
       "overrides": false,
       "inherits": "Space.play",
@@ -654,11 +774,11 @@
       "source": [
         [
           "src/Space.ts",
-          133,
+          146,
           21
         ]
       ],
-      "id": 5372,
+      "id": 5577,
       "flags": {
         "isProtected": true
       },
@@ -686,11 +806,11 @@
       "source": [
         [
           "src/Space.ts",
-          189,
+          202,
           10
         ]
       ],
-      "id": 5383,
+      "id": 5588,
       "flags": {},
       "overrides": false,
       "inherits": "Space.playOnce",
@@ -716,11 +836,11 @@
       "source": [
         [
           "src/Space.ts",
-          39,
+          42,
           9
         ]
       ],
-      "id": 5356,
+      "id": 5558,
       "flags": {},
       "overrides": false,
       "inherits": "Space.refresh",
@@ -746,11 +866,11 @@
       "source": [
         [
           "src/Space.ts",
-          75,
+          87,
           8
         ]
       ],
-      "id": 5362,
+      "id": 5567,
       "flags": {},
       "overrides": false,
       "inherits": "Space.remove",
@@ -776,11 +896,11 @@
       "source": [
         [
           "src/Space.ts",
-          84,
+          96,
           11
         ]
       ],
-      "id": 5365,
+      "id": 5570,
       "flags": {},
       "overrides": false,
       "inherits": "Space.removeAll",
@@ -799,11 +919,11 @@
       "source": [
         [
           "src/Space.ts",
-          199,
+          212,
           18
         ]
       ],
-      "id": 5386,
+      "id": 5591,
       "flags": {
         "isProtected": true
       },
@@ -831,11 +951,11 @@
       "source": [
         [
           "src/Space.ts",
-          123,
+          136,
           8
         ]
       ],
-      "id": 5370,
+      "id": 5575,
       "flags": {},
       "overrides": false,
       "inherits": "Space.replay",
@@ -858,7 +978,7 @@
           8
         ]
       ],
-      "id": 5249,
+      "id": 5414,
       "flags": {},
       "overrides": "Space.resize",
       "inherits": false,
@@ -890,11 +1010,11 @@
       "source": [
         [
           "src/Space.ts",
-          169,
+          182,
           8
         ]
       ],
-      "id": 5378,
+      "id": 5583,
       "flags": {},
       "overrides": false,
       "inherits": "Space.resume",
@@ -917,7 +1037,7 @@
           7
         ]
       ],
-      "id": 5237,
+      "id": 5402,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -948,11 +1068,11 @@
       "source": [
         [
           "src/Space.ts",
-          179,
+          192,
           6
         ]
       ],
-      "id": 5380,
+      "id": 5585,
       "flags": {},
       "overrides": false,
       "inherits": "Space.stop",
@@ -982,7 +1102,7 @@
           7
         ]
       ],
-      "id": 5269,
+      "id": 5434,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1024,7 +1144,7 @@
           8
         ]
       ],
-      "id": 5274,
+      "id": 5439,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1056,11 +1176,11 @@
       "source": [
         [
           "src/Space.ts",
-          397,
+          446,
           17
         ]
       ],
-      "id": 5310,
+      "id": 5493,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.touchesToPoints",
@@ -1092,11 +1212,11 @@
       "source": [
         [
           "src/Space.ts",
-          320,
+          337,
           14
         ]
       ],
-      "id": 5298,
+      "id": 5465,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.unbindCanvas",
@@ -1120,7 +1240,55 @@
             },
             {
               "name": "options",
-              "comment": "options for [removeEventListener](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener). This should match the options set in bindCanvas.\n",
+              "comment": "options for [removeEventListener](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener). This should match the options set in bindCanvas.",
+              "type": "any",
+              "default": "{}"
+            },
+            {
+              "name": "customTarget",
+              "comment": "If customTarget is set in bindCanvas, you'll need to pass the same instance here to unbind\n",
+              "type": "Element",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "unbindDoc",
+      "source": [
+        [
+          "src/Space.ts",
+          349,
+          11
+        ]
+      ],
+      "id": 5476,
+      "flags": {},
+      "overrides": false,
+      "inherits": "MultiTouchSpace.unbindDoc",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "evt",
+              "comment": "",
+              "type": "string",
+              "default": false
+            },
+            {
+              "name": "callback",
+              "comment": "",
+              "type": "EventListener",
+              "default": false
+            },
+            {
+              "name": "options",
+              "comment": "",
               "type": "any",
               "default": "{}"
             }
@@ -1138,7 +1306,7 @@
           22
         ]
       ],
-      "id": 5229,
+      "id": 5394,
       "flags": {
         "isStatic": true
       },
@@ -1182,7 +1350,7 @@
           24
         ]
       ],
-      "id": 5282,
+      "id": 5447,
       "flags": {
         "isStatic": true
       },
@@ -1219,7 +1387,7 @@
           16
         ]
       ],
-      "id": 5278,
+      "id": 5443,
       "flags": {
         "isStatic": true
       },
@@ -1260,7 +1428,7 @@
           17
         ]
       ],
-      "id": 5345,
+      "id": 5538,
       "flags": {
         "isProtected": true
       },
@@ -1278,7 +1446,7 @@
           4
         ]
       ],
-      "id": 5220,
+      "id": 5385,
       "flags": {},
       "type": "id",
       "overrides": "Space.id",
@@ -1294,7 +1462,7 @@
           23
         ]
       ],
-      "id": 5351,
+      "id": 5545,
       "flags": {
         "isProtected": true
       },
@@ -1312,7 +1480,7 @@
           19
         ]
       ],
-      "id": 5350,
+      "id": 5544,
       "flags": {
         "isProtected": true
       },

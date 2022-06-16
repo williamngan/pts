@@ -3,13 +3,13 @@
   "source": [
     [
       "src/Types.ts",
-      80,
+      83,
       26
     ]
   ],
   "kind": "Typealias",
-  "id": 752,
-  "comment": "Typescript only: TouchPointsKey is a type alias that represents a set of acceptable string keys for defining touch action.",
+  "id": 755,
+  "comment": "Typescript type: TouchPointsKey represents a set of acceptable string keys for defining touch action.",
   "constructor": [],
   "accessors": [],
   "methods": [],

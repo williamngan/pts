@@ -3,12 +3,12 @@
   "source": [
     [
       "src/Image.ts",
-      7,
+      9,
       16
     ]
   ],
   "kind": "Class",
-  "id": 3328,
+  "id": 3421,
   "comment": "Img provides convenient functions to support image operations on HTML Canvas and [`CanvasSpace`](#link). Combine this with other Pts functions to experiment with visual forms that integrate bitmaps and vector graphics.",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "src/Image.ts",
-          16,
-          30
+          20,
+          31
         ]
       ],
-      "id": 3336,
+      "id": 3430,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -37,10 +37,10 @@
               "default": "false"
             },
             {
-              "name": "pixelScale",
-              "comment": "Set internal canvas' scale in relation to original image size. Useful for retina screens. Use `CanvasSpace.pixelScale` to pass current scale.",
-              "type": "number",
-              "default": "1"
+              "name": "space",
+              "comment": "Set the `CanvasSpace` reference. This is optional but will make sure the image's pixelScale match the canvas and set the context for creating pattern.",
+              "type": "CanvasSpace",
+              "default": false
             },
             {
               "name": "crossOrigin",
@@ -60,11 +60,11 @@
       "source": [
         [
           "src/Image.ts",
-          265,
+          360,
           12
         ]
       ],
-      "id": 3399,
+      "id": 3520,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -79,11 +79,11 @@
       "source": [
         [
           "src/Image.ts",
-          313,
+          412,
           16
         ]
       ],
-      "id": 3411,
+      "id": 3532,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -98,11 +98,11 @@
       "source": [
         [
           "src/Image.ts",
-          281,
+          376,
           9
         ]
       ],
-      "id": 3403,
+      "id": 3524,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -117,11 +117,11 @@
       "source": [
         [
           "src/Image.ts",
-          249,
+          344,
           13
         ]
       ],
-      "id": 3395,
+      "id": 3516,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -136,11 +136,11 @@
       "source": [
         [
           "src/Image.ts",
-          273,
+          368,
           10
         ]
       ],
-      "id": 3401,
+      "id": 3522,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -155,11 +155,11 @@
       "source": [
         [
           "src/Image.ts",
-          257,
+          352,
           11
         ]
       ],
-      "id": 3397,
+      "id": 3518,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -174,11 +174,11 @@
       "source": [
         [
           "src/Image.ts",
-          305,
+          400,
           15
         ]
       ],
-      "id": 3409,
+      "id": 3530,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -193,11 +193,11 @@
       "source": [
         [
           "src/Image.ts",
-          289,
+          384,
           12
         ]
       ],
-      "id": 3405,
+      "id": 3526,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -212,17 +212,36 @@
       "source": [
         [
           "src/Image.ts",
-          297,
+          392,
           16
         ]
       ],
-      "id": 3407,
+      "id": 3528,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "comment": "Get pixel density scale",
       "getter": {
         "type": "number"
+      },
+      "setter": false
+    },
+    {
+      "name": "scaledMatrix",
+      "source": [
+        [
+          "src/Image.ts",
+          422,
+          18
+        ]
+      ],
+      "id": 3534,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Get a Mat instance with a scale transform based on current `pixelScale`.\nThis can be useful for generating a domMatrix for transforming patterns consistently across different pixel-density screens.",
+      "getter": {
+        "type": "Mat"
       },
       "setter": false
     }
@@ -233,11 +252,11 @@
       "source": [
         [
           "src/Image.ts",
-          98,
+          167,
           8
         ]
       ],
-      "id": 3358,
+      "id": 3473,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -263,11 +282,11 @@
       "source": [
         [
           "src/Image.ts",
-          192,
+          274,
           9
         ]
       ],
-      "id": 3381,
+      "id": 3500,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -286,11 +305,11 @@
       "source": [
         [
           "src/Image.ts",
-          170,
+          252,
           6
         ]
       ],
-      "id": 3375,
+      "id": 3494,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -316,11 +335,11 @@
       "source": [
         [
           "src/Image.ts",
-          181,
+          263,
           8
         ]
       ],
-      "id": 3378,
+      "id": 3497,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -342,15 +361,80 @@
       ]
     },
     {
+      "name": "getForm",
+      "source": [
+        [
+          "src/Image.ts",
+          334,
+          9
+        ]
+      ],
+      "id": 3514,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a CanvasForm for drawing on the internal canvas if this Img is editable",
+          "returns": "CanvasForm",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "initCanvas",
+      "source": [
+        [
+          "src/Image.ts",
+          146,
+          12
+        ]
+      ],
+      "id": 3468,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Initiate an editable canvas",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "width",
+              "comment": "width of canvas",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "height",
+              "comment": "height of canvas",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "canvasScale",
+              "comment": "pixel scale\n",
+              "type": "number | PtLike",
+              "default": "1"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "load",
       "source": [
         [
           "src/Image.ts",
-          53,
+          99,
           6
         ]
       ],
-      "id": 3351,
+      "id": 3461,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -372,15 +456,51 @@
       ]
     },
     {
+      "name": "pattern",
+      "source": [
+        [
+          "src/Image.ts",
+          180,
+          9
+        ]
+      ],
+      "id": 3476,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create a canvas pattern for `fill()`",
+          "returns": "CanvasPattern",
+          "returns_comment": "a `CanvasPattern` instance for use in `fill()`\n",
+          "parameters": [
+            {
+              "name": "reptition",
+              "comment": "set how the pattern should repeat-fill",
+              "type": "CanvasPatternRepetition",
+              "default": "\"repeat\""
+            },
+            {
+              "name": "dynamic",
+              "comment": "If true, use this Img's internal canvas content as pattern fill. This enables the pattern to update dynamically.",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "pixel",
       "source": [
         [
           "src/Image.ts",
-          129,
+          211,
           7
         ]
       ],
-      "id": 3363,
+      "id": 3482,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -412,11 +532,11 @@
       "source": [
         [
           "src/Image.ts",
-          158,
+          240,
           8
         ]
       ],
-      "id": 3371,
+      "id": 3490,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -448,17 +568,17 @@
       "source": [
         [
           "src/Image.ts",
-          108,
+          190,
           6
         ]
       ],
-      "id": 3361,
+      "id": 3480,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
-          "comment": "Replace the image with the current canvas data. For example, you can use CanvasForm's static functions to draw on `this.ctx` and then update the current image.",
+          "comment": "Replace the image with the current canvas data. For example, you can use CanvasForm's static functions to draw on `this.ctx` and then update the current image.\nTo display the internal canvas, you can also use `form.image( img.canvas )` directly.",
           "returns": "void",
           "returns_comment": false,
           "parameters": [],
@@ -471,11 +591,11 @@
       "source": [
         [
           "src/Image.ts",
-          231,
+          316,
           10
         ]
       ],
-      "id": 3391,
+      "id": 3510,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -494,11 +614,11 @@
       "source": [
         [
           "src/Image.ts",
-          239,
+          324,
           8
         ]
       ],
-      "id": 3393,
+      "id": 3512,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -513,15 +633,59 @@
       ]
     },
     {
+      "name": "blank",
+      "source": [
+        [
+          "src/Image.ts",
+          86,
+          14
+        ]
+      ],
+      "id": 3456,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create an editable blank image",
+          "returns": "Img",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "size",
+              "comment": "of image",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "space",
+              "comment": "Set the `CanvasSpace` reference. This is optional but will make sure the image's pixelScale match the canvas and set the context for creating pattern.",
+              "type": "CanvasSpace",
+              "default": false
+            },
+            {
+              "name": "scale",
+              "comment": "Optionally set a specific pixel scale (density) of the image canvas.\n",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "fromBlob",
       "source": [
         [
           "src/Image.ts",
-          204,
+          286,
           17
         ]
       ],
-      "id": 3383,
+      "id": 3502,
       "flags": {
         "isStatic": true
       },
@@ -546,10 +710,10 @@
               "default": "false"
             },
             {
-              "name": "pixelScale",
+              "name": "space",
               "comment": "",
-              "type": "number",
-              "default": "1"
+              "type": "CanvasSpace",
+              "default": false
             }
           ],
           "tags": []
@@ -561,11 +725,11 @@
       "source": [
         [
           "src/Image.ts",
-          141,
+          223,
           17
         ]
       ],
-      "id": 3367,
+      "id": 3486,
       "flags": {
         "isStatic": true
       },
@@ -599,11 +763,11 @@
       "source": [
         [
           "src/Image.ts",
-          214,
+          296,
           24
         ]
       ],
-      "id": 3388,
+      "id": 3507,
       "flags": {
         "isStatic": true
       },
@@ -631,11 +795,11 @@
       "source": [
         [
           "src/Image.ts",
-          39,
+          44,
           13
         ]
       ],
-      "id": 3341,
+      "id": 3435,
       "flags": {
         "isStatic": true
       },
@@ -643,7 +807,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "A static function to create an Img with an optional ready callback. The Img instance will returned immediately before the image is loaded.",
+          "comment": "A static function to load an image with an optional ready callback. The Img instance will returned immediately before the image is loaded. To use async/await, use the `loadAsync` function or `new Img(...).load(...)`.",
           "returns": "Img",
           "returns_comment": false,
           "parameters": [
@@ -660,16 +824,110 @@
               "default": "false"
             },
             {
-              "name": "pixelScale",
-              "comment": "Set internal canvas' scale in relation to original image size. Useful for retina screens. Use `CanvasSpace.pixelScale` to pass current scale.",
-              "type": "number",
-              "default": "1"
+              "name": "space",
+              "comment": "Set the `CanvasSpace` reference. This is optional but will make sure the image's pixelScale match the canvas and set the context for creating pattern.",
+              "type": "CanvasSpace",
+              "default": false
             },
             {
               "name": "ready",
               "comment": "An optional ready callback function\n",
               "type": " Fn(img:any)",
               "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "loadAsync",
+      "source": [
+        [
+          "src/Image.ts",
+          60,
+          24
+        ]
+      ],
+      "id": 3445,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static method to load an image using async/await.",
+          "returns": "Promise",
+          "returns_comment": "\n",
+          "parameters": [
+            {
+              "name": "src",
+              "comment": "an url of the image in same domain. Alternatively you can use a base64 string. To load from Blob, use `Img.fromBlob`.",
+              "type": "string",
+              "default": false
+            },
+            {
+              "name": "editable",
+              "comment": "Specify if you want to manipulate pixels of this image. Default is `false`.",
+              "type": "boolean",
+              "default": "false"
+            },
+            {
+              "name": "space",
+              "comment": "Set the `CanvasSpace` reference. This is optional but will make sure the image's pixelScale match the canvas and set the context for creating pattern.",
+              "type": "CanvasSpace",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "loadPattern",
+      "source": [
+        [
+          "src/Image.ts",
+          74,
+          26
+        ]
+      ],
+      "id": 3450,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static method to load an image pattern using async/await.",
+          "returns": "Promise",
+          "returns_comment": "a `CanvasPattern` instance for use in `fill()`\n",
+          "parameters": [
+            {
+              "name": "src",
+              "comment": "an url of the image in same domain. Alternatively you can use a base64 string. To load from Blob, use `Img.fromBlob`.",
+              "type": "string",
+              "default": false
+            },
+            {
+              "name": "space",
+              "comment": "Set the `CanvasSpace` reference. This is optional but will make sure the image's pixelScale match the canvas and set the context for creating pattern.",
+              "type": "CanvasSpace",
+              "default": false
+            },
+            {
+              "name": "repeat",
+              "comment": "set how the pattern will repeat fills",
+              "type": "CanvasPatternRepetition",
+              "default": "\"repeat\""
+            },
+            {
+              "name": "editable",
+              "comment": "Specify if you want to manipulate pixels of this image. Default is `false`.",
+              "type": "boolean",
+              "default": "false"
             }
           ],
           "tags": []

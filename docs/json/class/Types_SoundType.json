@@ -3,13 +3,13 @@
   "source": [
     [
       "src/Types.ts",
-      211,
+      214,
       21
     ]
   ],
   "kind": "Typealias",
-  "id": 836,
-  "comment": "Typescript only: corresponds to Sound.type",
+  "id": 839,
+  "comment": "Typescript type: SoundType represents a type of sound input. It corresponds to Sound.type property.",
   "constructor": [],
   "accessors": [],
   "methods": [],

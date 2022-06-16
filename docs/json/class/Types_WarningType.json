@@ -3,13 +3,13 @@
   "source": [
     [
       "src/Types.ts",
-      162,
+      165,
       23
     ]
   ],
   "kind": "Typealias",
-  "id": 795,
-  "comment": "WarningType specifies a level of warning for [`Util.warnLevel`](#link).",
+  "id": 798,
+  "comment": "Typescript type: WarningType specifies a level of warning for [`Util.warnLevel`](#link).",
   "constructor": [],
   "accessors": [],
   "methods": [],

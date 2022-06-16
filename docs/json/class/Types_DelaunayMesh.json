@@ -3,13 +3,13 @@
   "source": [
     [
       "src/Types.ts",
-      125,
+      128,
       24
     ]
   ],
   "kind": "Typealias",
-  "id": 768,
-  "comment": "Typescript only: A DelaunayMesh represents an object type that has an array of {key: shape} items, where each shape represents a DelaunayShape.",
+  "id": 771,
+  "comment": "Typescript type: DelaunayMesh represents an object type that has an array of {key: shape} items, where each shape represents a DelaunayShape.",
   "constructor": [],
   "accessors": [],
   "methods": [],

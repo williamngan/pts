@@ -8,21 +8,245 @@
     ]
   ],
   "kind": "Class",
-  "id": 918,
-  "comment": "Mat provides various static functions for matrix operations. It's not fully optimized but good enough to use.",
-  "constructor": [],
-  "accessors": [],
+  "id": 922,
+  "comment": "Mat provides various static functions for matrix operations as well as a convenient way to chain a 3x3 transformation matrix. It's not fully optimized but good enough to use.",
+  "constructor": [
+    {
+      "name": "constructor",
+      "source": [
+        [
+          "src/LinearAlgebra.ts",
+          215,
+          27
+        ]
+      ],
+      "id": 924,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "Mat",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "accessors": [
+    {
+      "name": "domMatrix",
+      "source": [
+        [
+          "src/LinearAlgebra.ts",
+          233,
+          15
+        ]
+      ],
+      "id": 928,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Convert the value of its stored 3x3 matrix to a 2D [`DOMMatrix`](https://developer.mozilla.org/en-US/docs/Web/API/DOMMatrix) instance",
+      "getter": {
+        "type": "DOMMatrix"
+      },
+      "setter": false
+    },
+    {
+      "name": "value",
+      "source": [
+        [
+          "src/LinearAlgebra.ts",
+          225,
+          11
+        ]
+      ],
+      "id": 926,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Get the current value of its stored 3x3 matrix",
+      "getter": {
+        "type": "GroupLike"
+      },
+      "setter": false
+    }
+  ],
   "methods": [
+    {
+      "name": "reset",
+      "source": [
+        [
+          "src/LinearAlgebra.ts",
+          241,
+          7
+        ]
+      ],
+      "id": 930,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Reset the internal 3x3 matrix to its identity",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "rotate2D",
+      "source": [
+        [
+          "src/LinearAlgebra.ts",
+          263,
+          10
+        ]
+      ],
+      "id": 936,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Scale the internal 3x3 matrix. You can chain this function with other related functions.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "ang",
+              "comment": "Angle of rotation",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "at",
+              "comment": "Optional origin location to rotate from.\n",
+              "type": "PtLike",
+              "default": "[0,0]"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "scale2D",
+      "source": [
+        [
+          "src/LinearAlgebra.ts",
+          251,
+          9
+        ]
+      ],
+      "id": 932,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Scale the internal 3x3 matrix. You can chain this function with other related functions.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "val",
+              "comment": "scale factors",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "at",
+              "comment": "Optional origin location to scale from.\n",
+              "type": "PtLike",
+              "default": "[0,0]"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "shear2D",
+      "source": [
+        [
+          "src/LinearAlgebra.ts",
+          286,
+          9
+        ]
+      ],
+      "id": 943,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Shear the internal 3x3 matrix. You can chain this function with other related functions.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "val",
+              "comment": "shear factors (before tan() operation)",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "at",
+              "comment": "Optional origin location to scale from.\n",
+              "type": "PtLike",
+              "default": "[0,0]"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "translate2D",
+      "source": [
+        [
+          "src/LinearAlgebra.ts",
+          274,
+          13
+        ]
+      ],
+      "id": 940,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Translate the internal 3x3 matrix. You can chain this function with other related functions.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "val",
+              "comment": "offset values\n",
+              "type": "PtLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
     {
       "name": "add",
       "source": [
         [
           "src/LinearAlgebra.ts",
-          221,
+          299,
           12
         ]
       ],
-      "id": 919,
+      "id": 947,
       "flags": {
         "isStatic": true
       },
@@ -56,11 +280,11 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          245,
+          323,
           17
         ]
       ],
-      "id": 923,
+      "id": 951,
       "flags": {
         "isStatic": true
       },
@@ -106,11 +330,11 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          422,
+          505,
           26
         ]
       ],
-      "id": 979,
+      "id": 1010,
       "flags": {
         "isStatic": true
       },
@@ -144,11 +368,11 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          351,
+          434,
           23
         ]
       ],
-      "id": 952,
+      "id": 983,
       "flags": {
         "isStatic": true
       },
@@ -182,11 +406,11 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          398,
+          481,
           25
         ]
       ],
-      "id": 969,
+      "id": 1000,
       "flags": {
         "isStatic": true
       },
@@ -226,11 +450,11 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          339,
+          422,
           22
         ]
       ],
-      "id": 948,
+      "id": 979,
       "flags": {
         "isStatic": true
       },
@@ -264,11 +488,11 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          387,
+          470,
           24
         ]
       ],
-      "id": 964,
+      "id": 995,
       "flags": {
         "isStatic": true
       },
@@ -308,11 +532,11 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          363,
+          446,
           22
         ]
       ],
-      "id": 956,
+      "id": 987,
       "flags": {
         "isStatic": true
       },
@@ -346,11 +570,11 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          409,
+          492,
           24
         ]
       ],
-      "id": 974,
+      "id": 1005,
       "flags": {
         "isStatic": true
       },
@@ -386,15 +610,47 @@
       ]
     },
     {
+      "name": "toDOMMatrix",
+      "source": [
+        [
+          "src/LinearAlgebra.ts",
+          401,
+          20
+        ]
+      ],
+      "id": 972,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "number[]",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "m",
+              "comment": "",
+              "type": "GroupLike | number[][]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "transform2D",
       "source": [
         [
           "src/LinearAlgebra.ts",
-          329,
+          412,
           20
         ]
       ],
-      "id": 944,
+      "id": 975,
       "flags": {
         "isStatic": true
       },
@@ -428,11 +684,11 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          375,
+          458,
           26
         ]
       ],
-      "id": 960,
+      "id": 991,
       "flags": {
         "isStatic": true
       },
@@ -466,11 +722,11 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          318,
+          396,
           18
         ]
       ],
-      "id": 939,
+      "id": 967,
       "flags": {
         "isStatic": true
       },
@@ -510,11 +766,11 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          305,
+          383,
           12
         ]
       ],
-      "id": 934,
+      "id": 962,
       "flags": {
         "isStatic": true
       },
@@ -554,11 +810,11 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          289,
+          367,
           17
         ]
       ],
-      "id": 929,
+      "id": 957,
       "flags": {
         "isStatic": true
       },

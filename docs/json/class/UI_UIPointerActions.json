@@ -19,11 +19,11 @@
       "source": [
         [
           "src/UI.ts",
-          20,
-          209
+          24,
+          33
         ]
       ],
-      "id": 430,
+      "id": 432,
       "flags": {},
       "type": "all",
       "overrides": false,
@@ -35,8 +35,8 @@
       "source": [
         [
           "src/UI.ts",
-          20,
-          167
+          22,
+          65
         ]
       ],
       "id": 428,
@@ -51,11 +51,11 @@
       "source": [
         [
           "src/UI.ts",
-          20,
-          189
+          24,
+          13
         ]
       ],
-      "id": 429,
+      "id": 431,
       "flags": {},
       "type": "contextmenu",
       "overrides": false,
@@ -83,8 +83,8 @@
       "source": [
         [
           "src/UI.ts",
-          20,
-          44
+          21,
+          6
         ]
       ],
       "id": 420,
@@ -99,8 +99,8 @@
       "source": [
         [
           "src/UI.ts",
-          20,
-          76
+          21,
+          38
         ]
       ],
       "id": 422,
@@ -115,8 +115,8 @@
       "source": [
         [
           "src/UI.ts",
-          20,
-          135
+          22,
+          33
         ]
       ],
       "id": 426,
@@ -127,12 +127,44 @@
       "comment": ""
     },
     {
+      "name": "keydown",
+      "source": [
+        [
+          "src/UI.ts",
+          23,
+          9
+        ]
+      ],
+      "id": 429,
+      "flags": {},
+      "type": "keydown",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "keyup",
+      "source": [
+        [
+          "src/UI.ts",
+          23,
+          27
+        ]
+      ],
+      "id": 430,
+      "flags": {},
+      "type": "keyup",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
       "name": "leave",
       "source": [
         [
           "src/UI.ts",
-          20,
-          151
+          22,
+          49
         ]
       ],
       "id": 427,
@@ -163,8 +195,8 @@
       "source": [
         [
           "src/UI.ts",
-          20,
-          121
+          22,
+          19
         ]
       ],
       "id": 425,
@@ -179,8 +211,8 @@
       "source": [
         [
           "src/UI.ts",
-          20,
-          108
+          22,
+          6
         ]
       ],
       "id": 424,
@@ -195,8 +227,8 @@
       "source": [
         [
           "src/UI.ts",
-          20,
-          60
+          21,
+          22
         ]
       ],
       "id": 421,
@@ -211,8 +243,8 @@
       "source": [
         [
           "src/UI.ts",
-          20,
-          92
+          21,
+          54
         ]
       ],
       "id": 423,

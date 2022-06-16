@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 3617,
+  "id": 3780,
   "comment": "CanvasForm is an implementation of abstract class [`VisualForm`](#link). It provide methods to express Pts on [`CanvasSpace`](#link).\nYou may extend CanvasForm to implement your own expressions for CanvasSpace.",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           4
         ]
       ],
-      "id": 3631,
+      "id": 3794,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -52,7 +52,7 @@
           9
         ]
       ],
-      "id": 3636,
+      "id": 3799,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -71,7 +71,7 @@
           17
         ]
       ],
-      "id": 3850,
+      "id": 4013,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.currentFont",
@@ -95,7 +95,7 @@
           12
         ]
       ],
-      "id": 3842,
+      "id": 4005,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.filled",
@@ -122,7 +122,7 @@
           11
         ]
       ],
-      "id": 3887,
+      "id": 4050,
       "flags": {},
       "overrides": false,
       "inherits": "Form.ready",
@@ -141,7 +141,7 @@
           11
         ]
       ],
-      "id": 3634,
+      "id": 3797,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -165,7 +165,7 @@
           13
         ]
       ],
-      "id": 3846,
+      "id": 4009,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.stroked",
@@ -194,7 +194,7 @@
           13
         ]
       ],
-      "id": 3832,
+      "id": 3995,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -230,7 +230,7 @@
           9
         ]
       ],
-      "id": 3645,
+      "id": 3808,
       "flags": {},
       "overrides": "VisualForm.alpha",
       "inherits": false,
@@ -265,7 +265,7 @@
           19
         ]
       ],
-      "id": 3657,
+      "id": 3820,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -312,7 +312,7 @@
           7
         ]
       ],
-      "id": 3750,
+      "id": 3913,
       "flags": {},
       "overrides": "VisualForm.arc",
       "inherits": false,
@@ -366,7 +366,7 @@
           10
         ]
       ],
-      "id": 3722,
+      "id": 3885,
       "flags": {},
       "overrides": "VisualForm.circle",
       "inherits": false,
@@ -396,7 +396,7 @@
           9
         ]
       ],
-      "id": 3871,
+      "id": 4034,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.circles",
@@ -426,7 +426,7 @@
           8
         ]
       ],
-      "id": 3672,
+      "id": 3835,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -449,7 +449,7 @@
           13
         ]
       ],
-      "id": 3669,
+      "id": 3832,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -479,7 +479,7 @@
           8
         ]
       ],
-      "id": 3674,
+      "id": 3837,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -520,7 +520,7 @@
           11
         ]
       ],
-      "id": 3734,
+      "id": 3897,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -580,7 +580,7 @@
           8
         ]
       ],
-      "id": 3648,
+      "id": 3811,
       "flags": {},
       "overrides": "VisualForm.fill",
       "inherits": false,
@@ -615,7 +615,7 @@
           10
         ]
       ],
-      "id": 3857,
+      "id": 4020,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.fillOnly",
@@ -645,7 +645,7 @@
           8
         ]
       ],
-      "id": 3678,
+      "id": 3841,
       "flags": {},
       "overrides": "VisualForm.font",
       "inherits": false,
@@ -704,7 +704,7 @@
           21
         ]
       ],
-      "id": 3685,
+      "id": 3848,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -734,7 +734,7 @@
           16
         ]
       ],
-      "id": 3688,
+      "id": 3851,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -764,7 +764,7 @@
           12
         ]
       ],
-      "id": 3662,
+      "id": 3825,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -799,7 +799,7 @@
           9
         ]
       ],
-      "id": 3793,
+      "id": 3956,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -841,7 +841,7 @@
           13
         ]
       ],
-      "id": 3803,
+      "id": 3966,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -877,7 +877,7 @@
           8
         ]
       ],
-      "id": 3770,
+      "id": 3933,
       "flags": {},
       "overrides": "VisualForm.line",
       "inherits": false,
@@ -907,7 +907,7 @@
           7
         ]
       ],
-      "id": 3877,
+      "id": 4040,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.lines",
@@ -937,7 +937,7 @@
           7
         ]
       ],
-      "id": 3836,
+      "id": 3999,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -967,7 +967,7 @@
           16
         ]
       ],
-      "id": 3825,
+      "id": 3988,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1021,7 +1021,7 @@
           9
         ]
       ],
-      "id": 3712,
+      "id": 3875,
       "flags": {},
       "overrides": "VisualForm.point",
       "inherits": false,
@@ -1068,7 +1068,7 @@
           8
         ]
       ],
-      "id": 3866,
+      "id": 4029,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.points",
@@ -1110,7 +1110,7 @@
           11
         ]
       ],
-      "id": 3777,
+      "id": 3940,
       "flags": {},
       "overrides": "VisualForm.polygon",
       "inherits": false,
@@ -1140,7 +1140,7 @@
           10
         ]
       ],
-      "id": 3880,
+      "id": 4043,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.polygons",
@@ -1170,7 +1170,7 @@
           8
         ]
       ],
-      "id": 3784,
+      "id": 3947,
       "flags": {},
       "overrides": "VisualForm.rect",
       "inherits": false,
@@ -1200,7 +1200,7 @@
           7
         ]
       ],
-      "id": 3883,
+      "id": 4046,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.rects",
@@ -1230,7 +1230,7 @@
           17
         ]
       ],
-      "id": 3642,
+      "id": 3805,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1260,7 +1260,7 @@
           9
         ]
       ],
-      "id": 3702,
+      "id": 3865,
       "flags": {},
       "overrides": "VisualForm.reset",
       "inherits": false,
@@ -1283,7 +1283,7 @@
           10
         ]
       ],
-      "id": 3762,
+      "id": 3925,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1319,7 +1319,7 @@
           9
         ]
       ],
-      "id": 3874,
+      "id": 4037,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.squares",
@@ -1349,7 +1349,7 @@
           10
         ]
       ],
-      "id": 3651,
+      "id": 3814,
       "flags": {},
       "overrides": "VisualForm.stroke",
       "inherits": false,
@@ -1402,7 +1402,7 @@
           12
         ]
       ],
-      "id": 3860,
+      "id": 4023,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.strokeOnly",
@@ -1450,7 +1450,7 @@
           8
         ]
       ],
-      "id": 3813,
+      "id": 3976,
       "flags": {},
       "overrides": "VisualForm.text",
       "inherits": false,
@@ -1492,7 +1492,7 @@
           11
         ]
       ],
-      "id": 3818,
+      "id": 3981,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1546,7 +1546,7 @@
           14
         ]
       ],
-      "id": 3638,
+      "id": 3801,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1582,7 +1582,7 @@
           14
         ]
       ],
-      "id": 3742,
+      "id": 3905,
       "flags": {
         "isStatic": true
       },
@@ -1644,7 +1644,7 @@
           17
         ]
       ],
-      "id": 3717,
+      "id": 3880,
       "flags": {
         "isStatic": true
       },
@@ -1688,7 +1688,7 @@
           18
         ]
       ],
-      "id": 3725,
+      "id": 3888,
       "flags": {
         "isStatic": true
       },
@@ -1756,7 +1756,7 @@
           16
         ]
       ],
-      "id": 3787,
+      "id": 3950,
       "flags": {
         "isStatic": true
       },
@@ -1806,7 +1806,7 @@
           20
         ]
       ],
-      "id": 3798,
+      "id": 3961,
       "flags": {
         "isStatic": true
       },
@@ -1850,7 +1850,7 @@
           15
         ]
       ],
-      "id": 3766,
+      "id": 3929,
       "flags": {
         "isStatic": true
       },
@@ -1888,7 +1888,7 @@
           16
         ]
       ],
-      "id": 3706,
+      "id": 3869,
       "flags": {
         "isStatic": true
       },
@@ -1943,7 +1943,7 @@
           18
         ]
       ],
-      "id": 3773,
+      "id": 3936,
       "flags": {
         "isStatic": true
       },
@@ -1981,7 +1981,7 @@
           15
         ]
       ],
-      "id": 3780,
+      "id": 3943,
       "flags": {
         "isStatic": true
       },
@@ -2019,7 +2019,7 @@
           17
         ]
       ],
-      "id": 3757,
+      "id": 3920,
       "flags": {
         "isStatic": true
       },
@@ -2063,7 +2063,7 @@
           15
         ]
       ],
-      "id": 3807,
+      "id": 3970,
       "flags": {
         "isStatic": true
       },
