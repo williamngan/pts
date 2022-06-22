@@ -35,7 +35,7 @@ window.demoDescription = "Demo in editing images";
       rect.rotate2D( ang, jitter );
       imgform.polygon( rect );
 
-      form.strokeOnly("#fff", 3).point( space.pointer, 8, "circle");
+      form.strokeOnly("#f03", 3).point( space.pointer, 8, "circle");
     }
   });
 

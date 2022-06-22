@@ -17,13 +17,17 @@ window.demoDescription = "Demo in cropping images";
   // animation
   space.add( {
     start: () => {
-      img = new Img(true, space.pixelScale);
+      img = new Img(true, space);
       img.load( "/assets/img_demo.jpg" );
       grid = Create.gridCells( space.innerBound, 5, 5 );
     },
 
     animate: (time, ftime) => {
-      if (img.loaded) {
+
+      // As an example, this shows how we load the image and then check img.loaded here. 
+      // This is an alternative to Img.loadAsync() as shown in other examples in this guide
+      if (img.loaded) { 
+        
         // draw original image
         form.image( [0,0], img ); 
 

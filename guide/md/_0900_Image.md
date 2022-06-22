@@ -1,40 +1,36 @@
 # Image
 
-Why don't we see more interactive and experimental plays with images, even as photos, videos and gifs fill the web? Perhaps working with images on html canvas is way harder than it should be — even a common use case, like loading an image and getting the color values of its pixels, proves to be practically tortuous.
-
-Fret not! Pts' [`Img`](#image-img) provides some convenient and straightforward functions to help you experiment with images. Let's take a look.
+Working with images in creative coding tends to be challenging and tedious. The Img class simplifies the common use cases, from loading and displaying static images to generating dynamic textures. Let's take a look.
 
 ### Loading and Displaying Images
 
-Let's start a minimalistic example: Load an image and display it on canvas. This can be done in 3 lines of code:
+We will start a minimalistic example: Load an image and display it on canvas. This can be done in 2 lines of code:
 
 ```
-const run = Pts.quickStart( "#elemID" );
 const img = Img.load( "/assets/demo.jpg" );
-run( t => form.image( space.pointer, img ) );
+space.add( time => form.image( space.pointer, img ) );
 ```
 
 ![js:image_load](./assets/bg.png)
 
 ##### Image credit: "C 50 Last Birds And Flowers" by Kurt Schwitters
 
-The above example uses the static function [`load`](#image-img) to load an image, and then uses CanvasForm's [`image`](#canvas-canvasform) function to display it automatically when it's loaded.
+The above example uses the *static* function [`Img.load`](#image-img) to load an image, and then uses CanvasForm's [`image`](#canvas-canvasform) function to display it. The image will be displayed as soon as it's loaded.
 
-If you need to manually track when the image is loaded, you can either:
-- access the `img.loaded` property 
-- add a callback function to the [`Img.load`](#image-img) function
-- create an Img instance, call its [`load`](#image-img) function and use `async/await`.
+To wait for the image to be ready first, either use the static [`Img.loadAsync`](#image-img) function, or create a blank Img instance and then call the *instance* function [`load`](#image-img). An example:
 
 ```
-const img = new Img();
-await img.load( "/assets/demo.jpg" )
+(async function() {
+  let img = await Img.loadAsync( "/assets/img_demo.jpg" );
+  space.add( time => form.image( space.pointer, img ) );
+})();
 ```
 
 Once the image is loaded, you can access its properties like width and height and manipulate its data. We will be discussing these advanced use cases next.
 
 ![js:image_load2](./assets/bg.png)
 
-##### Once the image is loaded, we can access its original width and height, and rescale it to fit the canvas size.
+##### In this example, we access the image's original width and height after it's loaded, and then rescale it to fit the canvas size.
 
 
 ### Editing Images
@@ -43,13 +39,13 @@ When you create an Img instance with its `editable` parameter set to `true`, it 
 ```
 // Create an editable img with the current space's pixelScale
 let img = new Img( true, space.pixelScale );
-img.load( "/assets/demo.jpg" );
+img.load( "/assets/demo.jpg" ).then( ... );
 
-// Alternatively, use the Img.load static function
-let img2 = Img.load( "/assets/demo.jpg", true, space.pixelScale );
+// Alternatively, Img.loadAsync static function
+let img2 = await Img.loadAsync( "/assets/demo.jpg", true, space.pixelScale );
 ```
 
-With an editable image, you can now inspect and manipulate it creatively. 
+You can do a lot with an editable image. Let's try a couple common use cases.
 
 ### Get Pixels and Crop Regions
 
@@ -80,13 +76,17 @@ Since an editable [`Img`](#image-img) stores an internal canvas, you can leverag
 After the image is loaded, you can access the canvas' rendering context through the property `img.ctx` and then create a new [`CanvasForm`](#canvas-canvasform) instance with it. For example:
 
 ```
-let form;
-img.load( "demo.jpg" ).then( a => form = new CanvasForm(a.ctx) )  
+const img = await Img.loadAsync( "demo.jpg" );
+const imgForm = new CanvasForm( img.ctx );
+...
+imgForm.fill("#f00").rect( rect );
 ```
+
+The following is a demo of drawing random rectangles directly on the image canvas.
 
 ![js:image_edit](./assets/bg.png)
 
-##### Move pointer to draw patches on the image.
+##### Move pointer to draw patches on the image canvas.
 
 Additionally, the [`filter`](https://ptsjs.org/docs/?p=Image_Img#function_filter) function supports image filter effects like desaturation and blur (See the [full list](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter) supported by canvas). Note that some effects may not work in mobile browsers.
 
@@ -94,7 +94,43 @@ Additionally, the [`filter`](https://ptsjs.org/docs/?p=Image_Img#function_filter
 img.filter( "blur(10px) contrast(20%) saturate(0%)" )
 ```
 
-To display the edited image, use CanvasForm's [`image`](https://ptsjs.org/docs/?p=Canvas_CanvasForm#function_image) function but pass `img.canvas` (instead of `img` itself) in the parameter. As we are only editing an internal canvas, the original image is unchanged until it's explicitly updated. Use [`sync`](#image-img) to update the original image when needed.
+To display the edited image, use CanvasForm's [`image`](https://ptsjs.org/docs/?p=Canvas_CanvasForm#function_image) function but pass `img.canvas` (instead of `img` itself) in the parameter. 
+
+```
+// draw internal image canvas
+form.image( img.canvas ); 
+```
+
+As we are only editing an internal canvas, the original image is unchanged until it's explicitly updated. Use [`sync`](#image-img) to update the original image when needed.
+
+### Patterns
+
+In a similar way, you can treat an image (or an image canvas) as a pattern to fill an area. One difference is that we'll use a [`CanvasPattern`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasPattern) instance for `form.fill(...)`, instead of an image for `form.image(...)`.
+
+```
+const pattern = await Img.loadPattern( "tile.jpg", space );
+...
+form.fill( pattern ).rect( rect );
+```
+
+![js:image_pattern](./assets/bg.png)
+
+##### Loading an image and filling it as a pattern
+
+A pattern can be transformed via the standard canvas api [`pattern.setTransform`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasPattern/setTransform). However, the documentation is confusing and incomplete. Pts provides an easy way to create a [`DOMMatrix`](https://developer.mozilla.org/en-US/docs/Web/API/DOMMatrix) for this use case.
+
+```
+const m = new Mat().translate2D( ... ).rotate2D( ... ).domMatrix;
+pattern.setTransform( m );
+```
+
+![js:image_pattern2](./assets/bg.png)
+
+##### Applying transforms to the pattern
+
+All together, the Img class offers a wide range of potential creative expressions. For example, you can create a dynamic image and use it as a pattern fill (As shown in this [demo](https://ptsjs.org/demo/?name=img.pattern)).
+
+It's now your turn to experiment!
 
 ### Tips and Tricks
 
@@ -123,11 +159,19 @@ let img = Img.load("demo.png", true, space.pixelScale, onLoad );
 let img = new Img( true, space.pixelScale );
 await img.load("demo.png")
 
+// Or using the loadAsync static function
+let img = await Img.loadAsync( "demo.png" )
+
 // Display an image automatically when it's loaded 
 form.image( [0,0], img );
 
-// Check if image is loaded, then display its canvas in a rect
-if (img.loaded) form.image( rect, img.canvas ); 
+// Load a pattern and use it as fill
+let pattern = Img.loadPattern( "tile.jpg" );
+form.fill( pattern ).rect( rect );
+
+// Get a pattern from an Img instance
+const pattern = img.pattern();
+form.fill( pattern ).rect( rect );
 
 ```
 
@@ -137,6 +181,7 @@ img.loaded; // true if the image is loaded
 img.image; // the original image
 img.canvas; // the internal canvas of an editable Img
 img.ctx; // the context which can be used to create a CanvasForm
+img.pixelScale; // pixel density which usually matches the space's
 ```
 
 Editing an image
@@ -152,6 +197,12 @@ imgForm.fill( "#f00" ).point( space.pointer, 20 );
 
 // Export as base64 string
 img.toBase64(); 
+
+// Getting a DOMMatrix instance for pattern transforms
+const m = img.scaledMatrix.rotate2D(...).domMatrix;
+pattern.setTransform( m );
+form.fill( pattern ).rect( rect );
+
 ```
 
 
