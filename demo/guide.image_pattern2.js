@@ -12,7 +12,8 @@ window.demoDescription = "Demo in loading images";
   
 
   run( time  => {
-    const transform = new Mat().translate2D( [time/50, 0] ).rotate2D( Math.PI/10, space.center ).domMatrix;
+    const ang = space.pointer.$subtract( space.center ).angle();
+    const transform = new Mat().translate2D( [time/50, 0] ).rotate2D( ang, space.center ).domMatrix;
     pattern.setTransform( transform );
     form.fill( pattern ).rect( space.innerBound )
   });

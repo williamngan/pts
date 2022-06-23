@@ -1,6 +1,6 @@
 # Image
 
-Working with images in creative coding tends to be challenging and tedious. The Img class simplifies the common use cases, from loading and displaying static images to generating dynamic textures. Let's take a look.
+The standard API for working with images on canvas is rather laborious, and often takes the fun out of creative coding. In Pts, the [`Img`](#image-img) class simplifies the common use cases, from loading and displaying static images to generating dynamic textures, so that you can get started quickly. Let's take a look.
 
 ### Loading and Displaying Images
 
@@ -34,7 +34,7 @@ Once the image is loaded, you can access its properties like width and height an
 
 
 ### Editing Images
-When you create an Img instance with its `editable` parameter set to `true`, it will hold an internal canvas to support image manipulations. It also supports higher pixel-density displays via the `pixelScale` parameter. An example:
+When you create an Img instance with its `editable` parameter set to `true`, it will hold an internal canvas to support image manipulations. It will also match the pixel-density of your display. An example:
 
 ```
 // Create an editable img with the current space's pixelScale
@@ -45,7 +45,7 @@ img.load( "/assets/demo.jpg" ).then( ... );
 let img2 = await Img.loadAsync( "/assets/demo.jpg", true, space.pixelScale );
 ```
 
-You can do a lot with an editable image. Let's try a couple common use cases.
+You can do a lot with an editable image. Let's cover a couple common use cases.
 
 ### Get Pixels and Crop Regions
 
@@ -82,7 +82,7 @@ const imgForm = new CanvasForm( img.ctx );
 imgForm.fill("#f00").rect( rect );
 ```
 
-The following is a demo of drawing random rectangles directly on the image canvas.
+The following is a demo of drawing rectangles with matching pixel colors on the image canvas.
 
 ![js:image_edit](./assets/bg.png)
 
@@ -105,7 +105,7 @@ As we are only editing an internal canvas, the original image is unchanged until
 
 ### Patterns
 
-In a similar way, you can treat an image (or an image canvas) as a pattern to fill an area. One difference is that we'll use a [`CanvasPattern`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasPattern) instance for `form.fill(...)`, instead of an image for `form.image(...)`.
+In a similar way, you can treat an image (or an image canvas) as a pattern to fill an area. One difference is that we'll get a [CanvasPattern](https://developer.mozilla.org/en-US/docs/Web/API/CanvasPattern) instance for use in  `form.fill(...)`, instead of an image for `form.image(...)`.
 
 ```
 const pattern = await Img.loadPattern( "tile.jpg", space );
@@ -115,9 +115,9 @@ form.fill( pattern ).rect( rect );
 
 ![js:image_pattern](./assets/bg.png)
 
-##### Loading an image and filling it as a pattern
+##### Loading an image and filling it as a pattern.
 
-A pattern can be transformed via the standard canvas api [`pattern.setTransform`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasPattern/setTransform). However, the documentation is confusing and incomplete. Pts provides an easy way to create a [`DOMMatrix`](https://developer.mozilla.org/en-US/docs/Web/API/DOMMatrix) for this use case.
+A pattern can be transformed via the standard canvas API [pattern.setTransform](https://developer.mozilla.org/en-US/docs/Web/API/CanvasPattern/setTransform). However, its documentation is confusing and incomplete. Pts provides an easy way to create a [`DOMMatrix`](https://developer.mozilla.org/en-US/docs/Web/API/DOMMatrix) for this use case.
 
 ```
 const m = new Mat().translate2D( ... ).rotate2D( ... ).domMatrix;
@@ -126,7 +126,7 @@ pattern.setTransform( m );
 
 ![js:image_pattern2](./assets/bg.png)
 
-##### Applying transforms to the pattern
+##### Applying transforms to the pattern. Hover to rotate the pattern.
 
 All together, the Img class offers a wide range of potential creative expressions. For example, you can create a dynamic image and use it as a pattern fill (As shown in this [demo](https://ptsjs.org/demo/?name=img.pattern)).
 
@@ -138,9 +138,9 @@ It's now your turn to experiment!
 
 - You can [`load`](#image-img) an image from a base64 string or an url, or from a blob via the [`fromBlob`](#image-img) function. To export the current image, use [`toBase64`](#image-img) or [`toBlob`](#image-img) functions.
 
-- CanvasForm's [`image`](#canvas-canvasform) drawing function can take either an Img instance or a [`CanvasImageSource`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource) which includes various kinds of image objects like HTML Image or Canvas.
+- CanvasForm's [`image`](#canvas-canvasform) drawing function can take either an Img instance or a [CanvasImageSource](https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource) which includes various kinds of image objects like HTML Image or Canvas.
 
-- Typically, you can't load an image from another domain due to security concerns. But if the image server allows for it and you want to do it, you can set the [`crossOrigin`](#image-img) parameter to `true` when creating an  `Img` instance. [More details here](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image).
+- Typically, you can't load an image from another domain due to security concerns. But if the image server allows for it and you want to do it, you can set the `crossOrigin` parameter to `true` when creating an  `Img` instance. [More details here](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image).
 
 
 ### Cheatsheet

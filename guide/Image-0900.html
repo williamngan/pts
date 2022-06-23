@@ -19,7 +19,7 @@
 </div>
 <a href="#menu" id="toc">&#x2261;</a>
 <div id="post"><h1>Image</h1>
-<p>Working with images in creative coding tends to be challenging and tedious. The Img class simplifies the common use cases, from loading and displaying static images to generating dynamic textures. Let's take a look.</p>
+<p>The standard API for working with images on canvas is rather laborious, and often takes the fun out of creative coding. In Pts, the <a href="#image-img"><code>Img</code></a> class simplifies the common use cases, from loading and displaying static images to generating dynamic textures, so that you can get started quickly. Let's take a look.</p>
 <h3>Loading and Displaying Images</h3>
 <p>We will start a minimalistic example: Load an image and display it on canvas. This can be done in 2 lines of code:</p>
 <pre><code>const img = Img.load( &quot;/assets/demo.jpg&quot; );
@@ -38,7 +38,7 @@ space.add( time =&gt; form.image( space.pointer, img ) );
 <p><img src="./assets/bg.png" alt="js:image_load2"></p>
 <h5>In this example, we access the image's original width and height after it's loaded, and then rescale it to fit the canvas size.</h5>
 <h3>Editing Images</h3>
-<p>When you create an Img instance with its <code>editable</code> parameter set to <code>true</code>, it will hold an internal canvas to support image manipulations. It also supports higher pixel-density displays via the <code>pixelScale</code> parameter. An example:</p>
+<p>When you create an Img instance with its <code>editable</code> parameter set to <code>true</code>, it will hold an internal canvas to support image manipulations. It will also match the pixel-density of your display. An example:</p>
 <pre><code>// Create an editable img with the current space's pixelScale
 let img = new Img( true, space.pixelScale );
 img.load( &quot;/assets/demo.jpg&quot; ).then( ... );
@@ -46,7 +46,7 @@ img.load( &quot;/assets/demo.jpg&quot; ).then( ... );
 // Alternatively, Img.loadAsync static function
 let img2 = await Img.loadAsync( &quot;/assets/demo.jpg&quot;, true, space.pixelScale );
 </code></pre>
-<p>You can do a lot with an editable image. Let's try a couple common use cases.</p>
+<p>You can do a lot with an editable image. Let's cover a couple common use cases.</p>
 <h3>Get Pixels and Crop Regions</h3>
 <p>The <a href="#image-img"><code>pixel</code></a> function supports a very common use case: specify a pixel position on the image, get its RGBA color values, and do something with it. A wide range of visual possibilities may open up if you use this simple function creatively.</p>
 <p><img src="./assets/bg.png" alt="js:image_pixel"></p>
@@ -66,7 +66,7 @@ const imgForm = new CanvasForm( img.ctx );
 ...
 imgForm.fill(&quot;#f00&quot;).rect( rect );
 </code></pre>
-<p>The following is a demo of drawing random rectangles directly on the image canvas.</p>
+<p>The following is a demo of drawing rectangles with matching pixel colors on the image canvas.</p>
 <p><img src="./assets/bg.png" alt="js:image_edit"></p>
 <h5>Move pointer to draw patches on the image canvas.</h5>
 <p>Additionally, the <a href="https://ptsjs.org/docs/?p=Image_Img#function_filter"><code>filter</code></a> function supports image filter effects like desaturation and blur (See the <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter">full list</a> supported by canvas). Note that some effects may not work in mobile browsers.</p>
@@ -78,27 +78,27 @@ form.image( img.canvas );
 </code></pre>
 <p>As we are only editing an internal canvas, the original image is unchanged until it's explicitly updated. Use <a href="#image-img"><code>sync</code></a> to update the original image when needed.</p>
 <h3>Patterns</h3>
-<p>In a similar way, you can treat an image (or an image canvas) as a pattern to fill an area. One difference is that we'll use a <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasPattern"><code>CanvasPattern</code></a> instance for <code>form.fill(...)</code>, instead of an image for <code>form.image(...)</code>.</p>
+<p>In a similar way, you can treat an image (or an image canvas) as a pattern to fill an area. One difference is that we'll get a <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasPattern">CanvasPattern</a> instance for use in  <code>form.fill(...)</code>, instead of an image for <code>form.image(...)</code>.</p>
 <pre><code>const pattern = await Img.loadPattern( &quot;tile.jpg&quot;, space );
 ...
 form.fill( pattern ).rect( rect );
 </code></pre>
 <p><img src="./assets/bg.png" alt="js:image_pattern"></p>
-<h5>Loading an image and filling it as a pattern</h5>
-<p>A pattern can be transformed via the standard canvas api <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasPattern/setTransform"><code>pattern.setTransform</code></a>. However, the documentation is confusing and incomplete. Pts provides an easy way to create a <a href="https://developer.mozilla.org/en-US/docs/Web/API/DOMMatrix"><code>DOMMatrix</code></a> for this use case.</p>
+<h5>Loading an image and filling it as a pattern.</h5>
+<p>A pattern can be transformed via the standard canvas API <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasPattern/setTransform">pattern.setTransform</a>. However, its documentation is confusing and incomplete. Pts provides an easy way to create a <a href="https://developer.mozilla.org/en-US/docs/Web/API/DOMMatrix"><code>DOMMatrix</code></a> for this use case.</p>
 <pre><code>const m = new Mat().translate2D( ... ).rotate2D( ... ).domMatrix;
 pattern.setTransform( m );
 </code></pre>
 <p><img src="./assets/bg.png" alt="js:image_pattern2"></p>
-<h5>Applying transforms to the pattern</h5>
+<h5>Applying transforms to the pattern. Hover to rotate the pattern.</h5>
 <p>All together, the Img class offers a wide range of potential creative expressions. For example, you can create a dynamic image and use it as a pattern fill (As shown in this <a href="https://ptsjs.org/demo/?name=img.pattern">demo</a>).</p>
 <p>It's now your turn to experiment!</p>
 <h3>Tips and Tricks</h3>
 <ul>
 <li><p>Anticipate screens with different pixel density. You can pass a CanvasSpace's <a href="https://ptsjs.org/docs/?p=Canvas_CanvasSpace#accessor_pixelScale"><code>pixelScale</code></a> when creating an Img instance. (See example in Cheatsheet below)</p></li>
 <li><p>You can <a href="#image-img"><code>load</code></a> an image from a base64 string or an url, or from a blob via the <a href="#image-img"><code>fromBlob</code></a> function. To export the current image, use <a href="#image-img"><code>toBase64</code></a> or <a href="#image-img"><code>toBlob</code></a> functions.</p></li>
-<li><p>CanvasForm's <a href="#canvas-canvasform"><code>image</code></a> drawing function can take either an Img instance or a <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource"><code>CanvasImageSource</code></a> which includes various kinds of image objects like HTML Image or Canvas.</p></li>
-<li><p>Typically, you can't load an image from another domain due to security concerns. But if the image server allows for it and you want to do it, you can set the <a href="#image-img"><code>crossOrigin</code></a> parameter to <code>true</code> when creating an  <code>Img</code> instance. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image">More details here</a>.</p></li>
+<li><p>CanvasForm's <a href="#canvas-canvasform"><code>image</code></a> drawing function can take either an Img instance or a <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource">CanvasImageSource</a> which includes various kinds of image objects like HTML Image or Canvas.</p></li>
+<li><p>Typically, you can't load an image from another domain due to security concerns. But if the image server allows for it and you want to do it, you can set the <code>crossOrigin</code> parameter to <code>true</code> when creating an  <code>Img</code> instance. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image">More details here</a>.</p></li>
 </ul>
 <h3>Cheatsheet</h3>
 <p>Creating, loading, displaying</p>

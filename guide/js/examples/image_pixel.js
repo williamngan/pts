@@ -3,7 +3,7 @@
 
 
 
-(function(){
+(async function(){
   // Pts.namespace( this ); // add Pts into scope if needed
   
   var demoID = "image_pixel";
@@ -11,13 +11,18 @@
   // create Space and Form
   let space = new CanvasSpace("#"+demoID).setup({ retina: true, bgcolor: "#e2e6ef", resize: true });
   let form = space.getForm();
-  let img = Img.load( "/assets/img_demo.jpg", true, space.pixelScale);
-  let de = Create.delaunay( new Group() );
-  let triangles = de.delaunay();
+  let img = await Img.loadAsync( "/assets/img_demo.jpg", true, space.pixelScale);
+  let de, triangles;
   
   // animation
   space.add( 
     {
+      start: (bound) => {
+        // Create 20 random points and generate initial tessellations
+        de = Create.delaunay( new Group() );
+        triangles = de.delaunay();
+      },
+
       animate: (time, ftime) => {
         const scaling = space.size.x / img.image.width;
 
@@ -39,15 +44,17 @@
             const c = img.pixel( center, space.pixelScale / scaling );
             form.fillOnly( `rgba(${c[0]}, ${c[1]}, ${c[2]}, .85)` ).polygon( triangles[i] );
           }
+
+          form.strokeOnly("#00000055").line( de );
         }
       },
 
       action: (type, x, y) => {
         if (type === 'move') {
-          if (de.length === 0 || de[de.length-1].$subtract(x,y).magnitudeSq() > 400) {
+          if (de.length === 0 || de[de.length-1].$subtract(x,y).magnitudeSq() > 100) {
             de.push( new Pt(x, y) )
           }
-          if (de.length > 30) de.shift();
+          if (de.length > 200) de.shift();
         }
       }
   });
