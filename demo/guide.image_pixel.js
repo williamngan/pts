@@ -39,7 +39,7 @@ window.demoDescription = "Demo in getting image pixels";
 
         for (let i=0, len=triangles.length; i<len; i++) {
           const center = Triangle.incenter( triangles[i] );
-          const c = img.pixel( center, space.pixelScale / scaling );
+          const c = img.pixel( center, scaling );
           form.fillOnly( `rgba(${c[0]}, ${c[1]}, ${c[2]}, .85)` ).polygon( triangles[i] );
         }
 
