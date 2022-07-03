@@ -43,7 +43,7 @@ window.demoDescription = "Demo in cropping images";
     },
     
     action: (type, x, y) => {
-      if (type === "click") {
+      if (type === "up") {
         let curr = grid.filter( g => Rectangle.withinBound( g, space.pointer ) );
         crops.push( curr[0] );
         if (crops.length > 7) crops.shift();
