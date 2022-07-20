@@ -29,7 +29,7 @@ window.demoDescription = "Demo in getting image pixels";
 
         // Uncomment to see the pixel color at pointer position
         /*
-          * let cc = img.pixel( space.pointer, space.pixelScale / scaling );
+          * let cc = img.pixel( space.pointer, 1/scaling );
           * form.fillOnly( `rgba(${cc.join(",")})` ).point([0,0], 100);
           */
 
@@ -39,8 +39,10 @@ window.demoDescription = "Demo in getting image pixels";
 
         for (let i=0, len=triangles.length; i<len; i++) {
           const center = Triangle.incenter( triangles[i] );
-          const c = img.pixel( center, scaling );
-          form.fillOnly( `rgba(${c[0]}, ${c[1]}, ${c[2]}, .85)` ).polygon( triangles[i] );
+          if (center) {
+            const c = img.pixel( center, 1/scaling );
+            form.fillOnly( `rgba(${c[0]}, ${c[1]}, ${c[2]}, .85)` ).polygon( triangles[i] );
+          }
         }
 
         form.strokeOnly("#00000055").line( de );
