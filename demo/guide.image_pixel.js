@@ -42,9 +42,9 @@ window.demoDescription = "Demo in getting image pixels";
               form.fillOnly( `rgba(${c[0]}, ${c[1]}, ${c[2]}, .85)` ).polygon( triangles[i] );
             }
           }
-        }
 
-        form.strokeOnly("#00000055").line( de );
+          form.strokeOnly("#00000055").line( de );
+        }
       },
 
       action: (type, x, y) => {
