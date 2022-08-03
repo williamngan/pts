@@ -36,13 +36,13 @@
 
           if (de && de.length > 10) {
             triangles = de.delaunay();
-          }
-  
-          for (let i=0, len=triangles.length; i<len; i++) {
-            const center = Triangle.incenter( triangles[i] );
-            if (center) {
-              const c = img.pixel( center, 1/scaling );
-              form.fillOnly( `rgba(${c[0]}, ${c[1]}, ${c[2]}, .85)` ).polygon( triangles[i] );
+          
+            for (let i=0, len=triangles.length; i<len; i++) {
+              const center = Triangle.incenter( triangles[i] );
+              if (center) {
+                const c = img.pixel( center, 1/scaling );
+                form.fillOnly( `rgba(${c[0]}, ${c[1]}, ${c[2]}, .85)` ).polygon( triangles[i] );
+              }
             }
           }
 
