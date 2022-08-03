@@ -49,10 +49,12 @@ window.demoDescription = "Demo in getting image pixels";
 
       action: (type, x, y) => {
         if (type === 'move') {
-          if (de.length === 0 || de[de.length-1].$subtract(x,y).magnitudeSq() > 100) {
-            de.push( new Pt(x, y) )
+          if (de) {
+            if (de.length === 0 || de[de.length-1].$subtract(x,y).magnitudeSq() > 100) {
+              de.push( new Pt(x, y) )
+            }
+            if (de.length > 200) de.shift();
           }
-          if (de.length > 200) de.shift();
         }
       }
   });
