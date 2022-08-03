@@ -14,9 +14,8 @@ window.demoDescription = "Demo in editing images";
   img.load( "/assets/img_demo.jpg" ).then( res => imgform = new CanvasForm( res.ctx ) );
 
   run( t  => {
-    const scaling = space.size.x / img.canvas.width;
-
     if (img.loaded) {
+      const scaling = space.size.x / img.canvas.width;
       form.image( [[0,0], [space.size.x, img.canvas.height * scaling]], img.canvas );
 
       const p = space.pointer.divide( scaling );

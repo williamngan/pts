@@ -18,7 +18,6 @@
   space.add( 
     {
       start: (bound) => {
-        // Create 20 random points and generate initial tessellations
         de = Create.delaunay( new Group() );
         triangles = de.delaunay();
       },
@@ -35,7 +34,7 @@
            * form.fillOnly( `rgba(${cc.join(",")})` ).point([0,0], 100);
            */
 
-          if (de.length > 10) {
+          if (de && de.length > 10) {
             triangles = de.delaunay();
           }
   
