@@ -1,18 +1,14 @@
 {
   "compilerOptions": {
-    "target": "ES6",
-    "module": "commonjs",
     "noImplicitAny": false,
-    "sourceMap": true,
-    "outDir": "./dist/files",
-    "declaration": false,
     "rootDir": "src",
     "downlevelIteration": true,
     "removeComments": true
   },
 
   "include": [
-    "./src/*"
+    "./src/*", 
+    "tsup.script.js"  
   ],
 
   "exclude": [

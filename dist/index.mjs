@@ -1,72 +1,3 @@
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-
-// src/_module.ts
-var module_exports = {};
-__export(module_exports, {
-  Body: () => Body,
-  Bound: () => Bound,
-  CanvasForm: () => CanvasForm,
-  CanvasSpace: () => CanvasSpace2,
-  Circle: () => Circle,
-  Color: () => Color,
-  Const: () => Const,
-  Create: () => Create,
-  Curve: () => Curve,
-  DOMSpace: () => DOMSpace,
-  Delaunay: () => Delaunay,
-  Font: () => Font,
-  Form: () => Form,
-  Geom: () => Geom,
-  Group: () => Group,
-  HTMLForm: () => HTMLForm,
-  HTMLSpace: () => HTMLSpace,
-  Img: () => Img,
-  Line: () => Line,
-  Mat: () => Mat,
-  MultiTouchSpace: () => MultiTouchSpace,
-  Noise: () => Noise,
-  Num: () => Num,
-  Particle: () => Particle,
-  Polygon: () => Polygon,
-  Pt: () => Pt,
-  Range: () => Range,
-  Rectangle: () => Rectangle,
-  SVGForm: () => SVGForm,
-  SVGSpace: () => SVGSpace,
-  Shaping: () => Shaping,
-  Sound: () => Sound,
-  Space: () => Space,
-  Tempo: () => Tempo,
-  Triangle: () => Triangle,
-  Typography: () => Typography,
-  UI: () => UI,
-  UIButton: () => UIButton,
-  UIDragger: () => UIDragger,
-  UIPointerActions: () => UIPointerActions,
-  UIShape: () => UIShape,
-  Util: () => Util,
-  Vec: () => Vec,
-  VisualForm: () => VisualForm,
-  World: () => World
-});
-module.exports = __toCommonJS(module_exports);
-
 // src/LinearAlgebra.ts
 var Vec = class {
   static add(a, b) {
@@ -6804,12 +6735,11 @@ var Sound = class {
     return this;
   }
 };
-// Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
+export {
   Body,
   Bound,
   CanvasForm,
-  CanvasSpace,
+  CanvasSpace2 as CanvasSpace,
   Circle,
   Color,
   Const,
@@ -6851,5 +6781,5 @@ var Sound = class {
   Vec,
   VisualForm,
   World
-});
+};
 /*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
