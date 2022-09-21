@@ -1,9 +1,11 @@
 {
   "compilerOptions": {
+    "target": "ES6",
     "noImplicitAny": false,
     "rootDir": "src",
     "downlevelIteration": true,
-    "removeComments": true
+    "removeComments": true,
+    "useDefineForClassFields": false
   },
 
   "include": [

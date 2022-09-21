@@ -645,7 +645,7 @@ export class CanvasForm extends VisualForm {
      * Set composite operation (also known as blend mode). You can also call this function without parameters to get back to default 'source-over' mode. See [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation) for the full list of operations you can use.
      * @param mode a composite operation such as 'lighten', 'multiply', 'overlay', and 'color-burn'.
      */
-    composite( mode:string='source-over' ):this {
+    composite( mode:GlobalCompositeOperation='source-over' ):this {
       this._ctx.globalCompositeOperation = mode;
       return this;
     }
