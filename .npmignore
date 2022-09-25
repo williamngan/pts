@@ -6,10 +6,9 @@ src
 study
 tslint.json
 tsconfig.json
-webpack.config.js
-webpack.dev.js
-webpack.prod.js
-webpack.mod.js
+tsup.browser.js
+tsup.min.js
+tsup.module.js
 mocha.opts
 index.html
 CNAME

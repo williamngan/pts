@@ -122,6 +122,10 @@ interface ITimer {
     min: number;
 }
 declare type TouchPointsKey = "touches" | "changedTouches" | "targetTouches";
+interface MultiTouchElement {
+    addEventListener(evt: any, callback: Function): any;
+    removeEventListener(evt: any, callback: Function): any;
+}
 interface PtsCanvasRenderingContext2D extends CanvasRenderingContext2D {
     webkitBackingStorePixelRatio?: number;
     mozBackingStorePixelRatio?: number;
@@ -1363,4 +1367,4 @@ declare class Sound {
     toggle(): this;
 }
 
-export { Body, Bound, CanvasForm, CanvasSpace, Circle, Color, Const, Create, Curve, DOMSpace, Delaunay, Font, Form, Geom, Group, HTMLForm, HTMLSpace, Img, Line, Mat, MultiTouchSpace, Noise, Num, Particle, Polygon, Pt, Range, Rectangle, SVGForm, SVGSpace, Shaping, Sound, Space, Tempo, Triangle, Typography, UI, UIButton, UIDragger, UIPointerActions, UIShape, Util, Vec, VisualForm, World };
+export { AnimateCallbackFn, Body, Bound, CanvasForm, CanvasPatternRepetition, CanvasSpace, CanvasSpaceOptions, Circle, Color, ColorType, Const, Create, Curve, DOMFormContext, DOMSpace, DefaultFormStyle, Delaunay, DelaunayMesh, DelaunayShape, Font, Form, Geom, Group, GroupLike, HTMLForm, HTMLSpace, IPlayer, IPt, ISoundAnalyzer, ISpacePlayers, ITempoListener, ITempoProgressFn, ITempoResponses, ITempoStartFn, ITimer, Img, IntersectContext, Line, Mat, MultiTouchElement, MultiTouchSpace, Noise, Num, Particle, Polygon, Pt, PtIterable, PtLike, PtLikeIterable, PtsCanvasRenderingContext2D, Range, Rectangle, SVGForm, SVGSpace, Shaping, Sound, SoundType, Space, Tempo, TouchPointsKey, Triangle, Typography, UI, UIButton, UIDragger, UIHandler, UIPointerActions, UIShape, Util, Vec, VisualForm, WarningType, World };
