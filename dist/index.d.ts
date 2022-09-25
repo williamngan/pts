@@ -625,7 +625,7 @@ declare class CanvasForm extends VisualForm {
     stroke(c: string | boolean | CanvasGradient | CanvasPattern, width?: number, linejoin?: CanvasLineJoin, linecap?: CanvasLineCap): this;
     applyFillStroke(filled?: boolean | string, stroked?: boolean | string, strokeWidth?: number): this;
     gradient(stops: [number, string][] | string[]): ((area1: GroupLike, area2?: GroupLike) => CanvasGradient);
-    composite(mode?: string): this;
+    composite(mode?: GlobalCompositeOperation): this;
     clip(): this;
     dash(segments?: PtLike | boolean, offset?: number): this;
     font(sizeOrFont: number | Font, weight?: string, style?: string, lineHeight?: number, family?: string): this;
