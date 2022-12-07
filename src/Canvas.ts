@@ -625,11 +625,8 @@ export class CanvasForm extends VisualForm {
       }
 
       return ( area1:GroupLike, area2?:GroupLike ) => {
-        area1 = area1.map( a => a.abs() );
-        if (area2) area2.map( a => a.abs() );
-
         let grad = area2 
-          ? this._ctx.createRadialGradient( area1[0][0], area1[0][1], area1[1][0], area2[0][0], area2[0][1], area2[1][0] )
+          ? this._ctx.createRadialGradient( area1[0][0], area1[0][1], Math.abs(area1[1][0]), area2[0][0], area2[0][1], Math.abs(area2[1][0]) )
           : this._ctx.createLinearGradient( area1[0][0], area1[0][1], area1[1][0], area1[1][1] );
 
         for (let i=0, len=vals.length; i<len; i++) {
