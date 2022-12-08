@@ -17,7 +17,7 @@ Get the latest `pts.js` or `pts.min.js` (in [dist](https://github.com/williamnga
 ```html
 <script type="text/javascript" src="path/to/pts.js"></script>
 ```
-Pts is pretty lightweight. Currently at ~90kb minified and 26kb gzipped.
+Pts is pretty lightweight. Currently at ~100kb minified and 30kb gzipped.
 
 
 **Option 2:**   
@@ -60,12 +60,6 @@ npm run docs
 If you prefer to generate default typedocs, run this:
 ```bash
 typedoc --readme none --out typedocs src --name Pts
-```
-
-#### Generate typescript declaration files and minify
-```bash
-npm run typings
-npm run minify
 ```
 
 ---

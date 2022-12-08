@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Typealias",
-  "id": 756,
+  "id": 761,
   "comment": "Typescript type: Setup options for CanvasSpace. See [`CanvasSpace.setup()`](#link) function.",
   "constructor": [],
   "accessors": [],

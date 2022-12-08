@@ -18,11 +18,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3353,
+          3451,
           7
         ]
       ],
-      "id": 587,
+      "id": 596,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasPath.arc",
@@ -63,7 +63,7 @@
               "default": false
             },
             {
-              "name": "anticlockwise",
+              "name": "counterclockwise",
               "comment": "",
               "type": "boolean",
               "default": false
@@ -78,11 +78,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3354,
+          3452,
           9
         ]
       ],
-      "id": 595,
+      "id": 604,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasPath.arcTo",
@@ -132,11 +132,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3299,
+          3396,
           13
         ]
       ],
-      "id": 503,
+      "id": 505,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasDrawPath.beginPath",
@@ -155,11 +155,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3355,
+          3453,
           17
         ]
       ],
-      "id": 602,
+      "id": 611,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasPath.bezierCurveTo",
@@ -215,11 +215,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3388,
+          3484,
           13
         ]
       ],
-      "id": 652,
+      "id": 661,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasRect.clearRect",
@@ -263,16 +263,16 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3300,
+          3397,
           8
         ],
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3301,
+          3398,
           8
         ]
       ],
-      "id": 505,
+      "id": 507,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasDrawPath.clip",
@@ -318,11 +318,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3356,
+          3454,
           13
         ]
       ],
-      "id": 610,
+      "id": 619,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasPath.closePath",
@@ -337,20 +337,62 @@
       ]
     },
     {
+      "name": "createConicGradient",
+      "source": [
+        [
+          "node_modules/typescript/lib/lib.dom.d.ts",
+          3412,
+          23
+        ]
+      ],
+      "id": 543,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasFillStrokeStyles.createConicGradient",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "CanvasGradient",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "startAngle",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "createImageData",
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3340,
+          3438,
           19
         ],
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3341,
+          3439,
           19
         ]
       ],
-      "id": 560,
+      "id": 567,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasImageData.createImageData",
@@ -370,6 +412,12 @@
               "name": "sh",
               "comment": "",
               "type": "number",
+              "default": false
+            },
+            {
+              "name": "settings",
+              "comment": "",
+              "type": "ImageDataSettings",
               "default": false
             }
           ],
@@ -396,11 +444,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3315,
+          3413,
           24
         ]
       ],
-      "id": 541,
+      "id": 548,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasFillStrokeStyles.createLinearGradient",
@@ -444,11 +492,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3316,
+          3414,
           17
         ]
       ],
-      "id": 547,
+      "id": 554,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasFillStrokeStyles.createPattern",
@@ -480,11 +528,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3317,
+          3415,
           24
         ]
       ],
-      "id": 551,
+      "id": 558,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasFillStrokeStyles.createRadialGradient",
@@ -540,16 +588,16 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3440,
+          3537,
           21
         ],
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3441,
+          3538,
           21
         ]
       ],
-      "id": 730,
+      "id": 739,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasUserInterface.drawFocusIfNeeded",
@@ -595,21 +643,21 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3293,
+          3390,
           13
         ],
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3294,
+          3391,
           13
         ],
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3295,
+          3392,
           13
         ]
       ],
-      "id": 482,
+      "id": 484,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasDrawImage.drawImage",
@@ -747,11 +795,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3357,
+          3455,
           11
         ]
       ],
-      "id": 612,
+      "id": 621,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasPath.ellipse",
@@ -804,7 +852,7 @@
               "default": false
             },
             {
-              "name": "anticlockwise",
+              "name": "counterclockwise",
               "comment": "",
               "type": "boolean",
               "default": false
@@ -819,16 +867,16 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3302,
+          3399,
           8
         ],
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3303,
+          3400,
           8
         ]
       ],
-      "id": 511,
+      "id": 513,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasDrawPath.fill",
@@ -874,11 +922,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3389,
+          3485,
           12
         ]
       ],
-      "id": 658,
+      "id": 667,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasRect.fillRect",
@@ -922,11 +970,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3416,
+          3513,
           12
         ]
       ],
-      "id": 678,
+      "id": 687,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasText.fillText",
@@ -966,15 +1014,38 @@
       ]
     },
     {
+      "name": "getContextAttributes",
+      "source": [
+        [
+          "node_modules/typescript/lib/lib.dom.d.ts",
+          3492,
+          24
+        ]
+      ],
+      "id": 480,
+      "flags": {},
+      "overrides": false,
+      "inherits": "CanvasRenderingContext2D.getContextAttributes",
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "CanvasRenderingContext2DSettings",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "getImageData",
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3342,
+          3440,
           16
         ]
       ],
-      "id": 566,
+      "id": 574,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasImageData.getImageData",
@@ -1007,6 +1078,12 @@
               "comment": "",
               "type": "number",
               "default": false
+            },
+            {
+              "name": "settings",
+              "comment": "",
+              "type": "ImageDataSettings",
+              "default": false
             }
           ],
           "tags": []
@@ -1018,11 +1095,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3370,
+          3468,
           15
         ]
       ],
-      "id": 647,
+      "id": 656,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasPathDrawingStyles.getLineDash",
@@ -1041,11 +1118,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3429,
+          3526,
           16
         ]
       ],
-      "id": 697,
+      "id": 706,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasTransform.getTransform",
@@ -1064,16 +1141,16 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3304,
+          3401,
           17
         ],
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3305,
+          3402,
           17
         ]
       ],
-      "id": 517,
+      "id": 519,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasDrawPath.isPointInPath",
@@ -1143,16 +1220,16 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3306,
+          3403,
           19
         ],
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3307,
+          3404,
           19
         ]
       ],
-      "id": 527,
+      "id": 529,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasDrawPath.isPointInStroke",
@@ -1210,11 +1287,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3358,
+          3456,
           10
         ]
       ],
-      "id": 622,
+      "id": 631,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasPath.lineTo",
@@ -1246,11 +1323,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3417,
+          3514,
           15
         ]
       ],
-      "id": 684,
+      "id": 693,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasText.measureText",
@@ -1276,11 +1353,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3359,
+          3457,
           10
         ]
       ],
-      "id": 626,
+      "id": 635,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasPath.moveTo",
@@ -1312,16 +1389,16 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3343,
+          3441,
           16
         ],
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3344,
+          3442,
           16
         ]
       ],
-      "id": 572,
+      "id": 581,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasImageData.putImageData",
@@ -1409,11 +1486,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3360,
+          3458,
           20
         ]
       ],
-      "id": 630,
+      "id": 639,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasPath.quadraticCurveTo",
@@ -1457,11 +1534,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3361,
+          3459,
           8
         ]
       ],
-      "id": 636,
+      "id": 645,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasPath.rect",
@@ -1505,11 +1582,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3430,
+          3527,
           18
         ]
       ],
-      "id": 699,
+      "id": 708,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasTransform.resetTransform",
@@ -1528,11 +1605,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3411,
+          3508,
           11
         ]
       ],
-      "id": 674,
+      "id": 683,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasState.restore",
@@ -1551,11 +1628,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3431,
+          3528,
           10
         ]
       ],
-      "id": 701,
+      "id": 710,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasTransform.rotate",
@@ -1581,11 +1658,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3412,
+          3509,
           8
         ]
       ],
-      "id": 676,
+      "id": 685,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasState.save",
@@ -1604,11 +1681,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3432,
+          3529,
           9
         ]
       ],
-      "id": 704,
+      "id": 713,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasTransform.scale",
@@ -1636,57 +1713,15 @@
       ]
     },
     {
-      "name": "scrollPathIntoView",
-      "source": [
-        [
-          "node_modules/typescript/lib/lib.dom.d.ts",
-          3442,
-          22
-        ],
-        [
-          "node_modules/typescript/lib/lib.dom.d.ts",
-          3443,
-          22
-        ]
-      ],
-      "id": 736,
-      "flags": {},
-      "overrides": false,
-      "inherits": "CanvasUserInterface.scrollPathIntoView",
-      "signatures": [
-        {
-          "comment": "",
-          "returns": "void",
-          "returns_comment": false,
-          "parameters": [],
-          "tags": []
-        },
-        {
-          "comment": "",
-          "returns": "void",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "path",
-              "comment": "",
-              "type": "Path2D",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
       "name": "setLineDash",
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3371,
+          3469,
           15
         ]
       ],
-      "id": 649,
+      "id": 658,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasPathDrawingStyles.setLineDash",
@@ -1712,16 +1747,16 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3433,
+          3530,
           16
         ],
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3434,
+          3531,
           16
         ]
       ],
-      "id": 708,
+      "id": 717,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasTransform.setTransform",
@@ -1791,16 +1826,16 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3308,
+          3405,
           10
         ],
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3309,
+          3406,
           10
         ]
       ],
-      "id": 535,
+      "id": 537,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasDrawPath.stroke",
@@ -1833,11 +1868,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3390,
+          3486,
           14
         ]
       ],
-      "id": 664,
+      "id": 673,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasRect.strokeRect",
@@ -1881,11 +1916,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3418,
+          3515,
           14
         ]
       ],
-      "id": 687,
+      "id": 696,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasText.strokeText",
@@ -1929,11 +1964,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3435,
+          3532,
           13
         ]
       ],
-      "id": 718,
+      "id": 727,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasTransform.transform",
@@ -1989,11 +2024,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3436,
+          3533,
           13
         ]
       ],
-      "id": 726,
+      "id": 735,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasTransform.translate",
@@ -2028,11 +2063,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3398,
+          3495,
           36
         ]
       ],
-      "id": 740,
+      "id": 745,
       "flags": {},
       "type": "CanvasRenderingContext2D",
       "overrides": false,
@@ -2062,7 +2097,7 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3395,
+          3491,
           19
         ]
       ],
@@ -2080,11 +2115,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3422,
+          3519,
           13
         ]
       ],
-      "id": 693,
+      "id": 702,
       "flags": {},
       "type": "direction",
       "overrides": false,
@@ -2096,11 +2131,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3313,
+          3410,
           13
         ]
       ],
-      "id": 539,
+      "id": 541,
       "flags": {},
       "type": "fillStyle",
       "overrides": false,
@@ -2112,11 +2147,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3321,
+          3419,
           10
         ]
       ],
-      "id": 559,
+      "id": 566,
       "flags": {},
       "type": "filter",
       "overrides": false,
@@ -2128,11 +2163,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3423,
+          3520,
           8
         ]
       ],
-      "id": 694,
+      "id": 703,
       "flags": {},
       "type": "font",
       "overrides": false,
@@ -2144,11 +2179,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3288,
+          3385,
           15
         ]
       ],
-      "id": 480,
+      "id": 482,
       "flags": {},
       "type": "globalAlpha",
       "overrides": false,
@@ -2160,11 +2195,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3289,
+          3386,
           28
         ]
       ],
-      "id": 481,
+      "id": 483,
       "flags": {},
       "type": "globalCompositeOperation",
       "overrides": false,
@@ -2176,11 +2211,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3348,
+          3446,
           25
         ]
       ],
-      "id": 585,
+      "id": 594,
       "flags": {},
       "type": "imageSmoothingEnabled",
       "overrides": false,
@@ -2192,11 +2227,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3349,
+          3447,
           25
         ]
       ],
-      "id": 586,
+      "id": 595,
       "flags": {},
       "type": "imageSmoothingQuality",
       "overrides": false,
@@ -2208,11 +2243,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3365,
+          3463,
           11
         ]
       ],
-      "id": 642,
+      "id": 651,
       "flags": {},
       "type": "lineCap",
       "overrides": false,
@@ -2224,11 +2259,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3366,
+          3464,
           18
         ]
       ],
-      "id": 643,
+      "id": 652,
       "flags": {},
       "type": "lineDashOffset",
       "overrides": false,
@@ -2240,11 +2275,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3367,
+          3465,
           12
         ]
       ],
-      "id": 644,
+      "id": 653,
       "flags": {},
       "type": "lineJoin",
       "overrides": false,
@@ -2256,11 +2291,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3368,
+          3466,
           13
         ]
       ],
-      "id": 645,
+      "id": 654,
       "flags": {},
       "type": "lineWidth",
       "overrides": false,
@@ -2272,11 +2307,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3369,
+          3467,
           14
         ]
       ],
-      "id": 646,
+      "id": 655,
       "flags": {},
       "type": "miterLimit",
       "overrides": false,
@@ -2342,11 +2377,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3404,
+          3501,
           14
         ]
       ],
-      "id": 670,
+      "id": 679,
       "flags": {},
       "type": "shadowBlur",
       "overrides": false,
@@ -2358,11 +2393,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3405,
+          3502,
           15
         ]
       ],
-      "id": 671,
+      "id": 680,
       "flags": {},
       "type": "shadowColor",
       "overrides": false,
@@ -2374,11 +2409,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3406,
+          3503,
           17
         ]
       ],
-      "id": 672,
+      "id": 681,
       "flags": {},
       "type": "shadowOffsetX",
       "overrides": false,
@@ -2390,11 +2425,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3407,
+          3504,
           17
         ]
       ],
-      "id": 673,
+      "id": 682,
       "flags": {},
       "type": "shadowOffsetY",
       "overrides": false,
@@ -2406,11 +2441,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3314,
+          3411,
           15
         ]
       ],
-      "id": 540,
+      "id": 542,
       "flags": {},
       "type": "strokeStyle",
       "overrides": false,
@@ -2422,11 +2457,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3424,
+          3521,
           13
         ]
       ],
-      "id": 695,
+      "id": 704,
       "flags": {},
       "type": "textAlign",
       "overrides": false,
@@ -2438,11 +2473,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.dom.d.ts",
-          3425,
+          3522,
           16
         ]
       ],
-      "id": 696,
+      "id": 705,
       "flags": {},
       "type": "textBaseline",
       "overrides": false,

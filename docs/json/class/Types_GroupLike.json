@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Typealias",
-  "id": 746,
+  "id": 751,
   "comment": "Typescript type: GroupLike represents an array of Pt instances. It be a Group instance or an array of Pt. Unlike `PtIterable`, this type only allows arrays but not iterables.",
   "constructor": [],
   "accessors": [],

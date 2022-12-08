@@ -9216,6 +9216,12 @@
     8
   ],
   [
+    "Types_PtsCanvasRenderingContext2D#function_createConicGradient",
+    "PtsCanvasRenderingContext2D.createConicGradient",
+    "Function",
+    8
+  ],
+  [
     "Types_PtsCanvasRenderingContext2D#function_createImageData",
     "PtsCanvasRenderingContext2D.createImageData",
     "Function",
@@ -9272,6 +9278,12 @@
   [
     "Types_PtsCanvasRenderingContext2D#function_fillText",
     "PtsCanvasRenderingContext2D.fillText",
+    "Function",
+    8
+  ],
+  [
+    "Types_PtsCanvasRenderingContext2D#function_getContextAttributes",
+    "PtsCanvasRenderingContext2D.getContextAttributes",
     "Function",
     8
   ],
@@ -9368,12 +9380,6 @@
   [
     "Types_PtsCanvasRenderingContext2D#function_scale",
     "PtsCanvasRenderingContext2D.scale",
-    "Function",
-    8
-  ],
-  [
-    "Types_PtsCanvasRenderingContext2D#function_scrollPathIntoView",
-    "PtsCanvasRenderingContext2D.scrollPathIntoView",
     "Function",
     8
   ],

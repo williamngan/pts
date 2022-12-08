@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 4053,
+  "id": 4055,
   "comment": "Color is a subclass of Pt. Since a color in a color space is analogous to a point or vector in a space, you can apply all Pt operations to colors too. The Color class provides support for many color spaces like HSL and LAB.",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           4
         ]
       ],
-      "id": 4065,
+      "id": 4067,
       "flags": {},
       "overrides": "Pt.__constructor",
       "inherits": false,
@@ -57,7 +57,7 @@
           7
         ]
       ],
-      "id": 4136,
+      "id": 4138,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -89,7 +89,7 @@
           11
         ]
       ],
-      "id": 4152,
+      "id": 4154,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -121,7 +121,7 @@
           7
         ]
       ],
-      "id": 4120,
+      "id": 4122,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -153,7 +153,7 @@
           7
         ]
       ],
-      "id": 4140,
+      "id": 4142,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -185,7 +185,7 @@
           7
         ]
       ],
-      "id": 4116,
+      "id": 4118,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -217,7 +217,7 @@
           7
         ]
       ],
-      "id": 4124,
+      "id": 4126,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -244,7 +244,7 @@
           16
         ]
       ],
-      "id": 4098,
+      "id": 4100,
       "flags": {
         "isPublic": true
       },
@@ -270,7 +270,7 @@
           8
         ]
       ],
-      "id": 4265,
+      "id": 4267,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.id",
@@ -302,7 +302,7 @@
           7
         ]
       ],
-      "id": 4132,
+      "id": 4134,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -329,7 +329,7 @@
           10
         ]
       ],
-      "id": 4110,
+      "id": 4112,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -353,7 +353,7 @@
           16
         ]
       ],
-      "id": 4156,
+      "id": 4158,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -385,7 +385,7 @@
           7
         ]
       ],
-      "id": 4112,
+      "id": 4114,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -412,7 +412,7 @@
           16
         ]
       ],
-      "id": 4100,
+      "id": 4102,
       "flags": {
         "isPublic": true
       },
@@ -433,7 +433,7 @@
           17
         ]
       ],
-      "id": 4102,
+      "id": 4104,
       "flags": {
         "isPublic": true
       },
@@ -459,7 +459,7 @@
           7
         ]
       ],
-      "id": 4128,
+      "id": 4130,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -491,7 +491,7 @@
           7
         ]
       ],
-      "id": 4144,
+      "id": 4146,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -523,7 +523,7 @@
           7
         ]
       ],
-      "id": 4148,
+      "id": 4150,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -555,7 +555,7 @@
           7
         ]
       ],
-      "id": 4281,
+      "id": 4283,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.w",
@@ -587,7 +587,7 @@
           7
         ]
       ],
-      "id": 4269,
+      "id": 4271,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.x",
@@ -619,7 +619,7 @@
           7
         ]
       ],
-      "id": 4273,
+      "id": 4275,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.y",
@@ -651,7 +651,7 @@
           7
         ]
       ],
-      "id": 4277,
+      "id": 4279,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.z",
@@ -680,7 +680,7 @@
           6
         ]
       ],
-      "id": 4377,
+      "id": 4379,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$abs",
@@ -703,7 +703,7 @@
           6
         ]
       ],
-      "id": 4329,
+      "id": 4331,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$add",
@@ -733,7 +733,7 @@
           7
         ]
       ],
-      "id": 4385,
+      "id": 4387,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$ceil",
@@ -756,7 +756,7 @@
           9
         ]
       ],
-      "id": 4323,
+      "id": 4325,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$concat",
@@ -786,7 +786,7 @@
           8
         ]
       ],
-      "id": 4366,
+      "id": 4368,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$cross",
@@ -816,7 +816,7 @@
           10
         ]
       ],
-      "id": 4363,
+      "id": 4365,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$cross2D",
@@ -846,7 +846,7 @@
           9
         ]
       ],
-      "id": 4347,
+      "id": 4349,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$divide",
@@ -876,7 +876,7 @@
           8
         ]
       ],
-      "id": 4381,
+      "id": 4383,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$floor",
@@ -899,7 +899,7 @@
           6
         ]
       ],
-      "id": 4404,
+      "id": 4406,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$max",
@@ -929,7 +929,7 @@
           6
         ]
       ],
-      "id": 4401,
+      "id": 4403,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$min",
@@ -959,7 +959,7 @@
           11
         ]
       ],
-      "id": 4341,
+      "id": 4343,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$multiply",
@@ -989,7 +989,7 @@
           12
         ]
       ],
-      "id": 4163,
+      "id": 4165,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1019,7 +1019,7 @@
           10
         ]
       ],
-      "id": 4369,
+      "id": 4371,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$project",
@@ -1049,7 +1049,7 @@
           8
         ]
       ],
-      "id": 4389,
+      "id": 4391,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$round",
@@ -1072,7 +1072,7 @@
           11
         ]
       ],
-      "id": 4335,
+      "id": 4337,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$subtract",
@@ -1102,7 +1102,7 @@
           7
         ]
       ],
-      "id": 4320,
+      "id": 4322,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$take",
@@ -1132,7 +1132,7 @@
           5
         ]
       ],
-      "id": 4292,
+      "id": 4294,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$to",
@@ -1162,7 +1162,7 @@
           7
         ]
       ],
-      "id": 4357,
+      "id": 4359,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$unit",
@@ -1192,7 +1192,7 @@
           5
         ]
       ],
-      "id": 4375,
+      "id": 4377,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.abs",
@@ -1215,7 +1215,7 @@
           5
         ]
       ],
-      "id": 4326,
+      "id": 4328,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.add",
@@ -1245,7 +1245,7 @@
           7
         ]
       ],
-      "id": 4407,
+      "id": 4409,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.angle",
@@ -1275,7 +1275,7 @@
           14
         ]
       ],
-      "id": 4410,
+      "id": 4412,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.angleBetween",
@@ -1311,7 +1311,7 @@
           6
         ]
       ],
-      "id": 4383,
+      "id": 4385,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.ceil",
@@ -1334,7 +1334,7 @@
           7
         ]
       ],
-      "id": 4104,
+      "id": 4106,
       "flags": {},
       "overrides": "Pt.clone",
       "inherits": false,
@@ -1353,11 +1353,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3746,
+          3836,
           14
         ]
       ],
-      "id": 4442,
+      "id": 4444,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.copyWithin",
@@ -1399,7 +1399,7 @@
           8
         ]
       ],
-      "id": 4344,
+      "id": 4346,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.divide",
@@ -1429,7 +1429,7 @@
           5
         ]
       ],
-      "id": 4360,
+      "id": 4362,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.dot",
@@ -1459,7 +1459,7 @@
           8
         ]
       ],
-      "id": 4285,
+      "id": 4287,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.equals",
@@ -1491,11 +1491,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3756,
+          3846,
           9
         ]
       ],
-      "id": 4447,
+      "id": 4449,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.every",
@@ -1527,17 +1527,17 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3766,
+          3856,
           8
         ]
       ],
-      "id": 4456,
+      "id": 4458,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.fill",
       "signatures": [
         {
-          "comment": "Returns the this object after filling the section identified by start and end with value",
+          "comment": "Changes all array elements from `start` to `end` index to a static `value` and returns the modified array",
           "returns": "this",
           "returns_comment": false,
           "parameters": [
@@ -1569,11 +1569,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3775,
+          3865,
           10
         ]
       ],
-      "id": 4461,
+      "id": 4463,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.filter",
@@ -1605,11 +1605,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3786,
+          3876,
           8
         ]
       ],
-      "id": 4470,
+      "id": 4472,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.find",
@@ -1641,11 +1641,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3797,
+          3887,
           13
         ]
       ],
-      "id": 4479,
+      "id": 4481,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.findIndex",
@@ -1681,7 +1681,7 @@
           7
         ]
       ],
-      "id": 4379,
+      "id": 4381,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.floor",
@@ -1700,11 +1700,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3806,
+          3896,
           11
         ]
       ],
-      "id": 4488,
+      "id": 4490,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.forEach",
@@ -1736,11 +1736,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3814,
+          3904,
           11
         ]
       ],
-      "id": 4497,
+      "id": 4499,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.indexOf",
@@ -1772,11 +1772,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3821,
+          3911,
           8
         ]
       ],
-      "id": 4501,
+      "id": 4503,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.join",
@@ -1802,11 +1802,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3829,
+          3919,
           15
         ]
       ],
-      "id": 4504,
+      "id": 4506,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.lastIndexOf",
@@ -1842,7 +1842,7 @@
           11
         ]
       ],
-      "id": 4352,
+      "id": 4354,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.magnitude",
@@ -1865,7 +1865,7 @@
           13
         ]
       ],
-      "id": 4350,
+      "id": 4352,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.magnitudeSq",
@@ -1884,11 +1884,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3844,
+          3934,
           7
         ]
       ],
-      "id": 4509,
+      "id": 4511,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.map",
@@ -1924,7 +1924,7 @@
           10
         ]
       ],
-      "id": 4396,
+      "id": 4398,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.maxValue",
@@ -1947,7 +1947,7 @@
           10
         ]
       ],
-      "id": 4391,
+      "id": 4393,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.minValue",
@@ -1970,7 +1970,7 @@
           10
         ]
       ],
-      "id": 4338,
+      "id": 4340,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.multiply",
@@ -2000,7 +2000,7 @@
           11
         ]
       ],
-      "id": 4160,
+      "id": 4162,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2030,7 +2030,7 @@
           4
         ]
       ],
-      "id": 4300,
+      "id": 4302,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.op",
@@ -2065,7 +2065,7 @@
           5
         ]
       ],
-      "id": 4310,
+      "id": 4312,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.ops",
@@ -2100,7 +2100,7 @@
           15
         ]
       ],
-      "id": 4372,
+      "id": 4374,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.projectScalar",
@@ -2126,21 +2126,21 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3856,
+          3946,
           10
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3857,
+          3947,
           10
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3869,
+          3959,
           10
         ]
       ],
-      "id": 4518,
+      "id": 4520,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reduce",
@@ -2206,21 +2206,21 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3881,
+          3971,
           15
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3882,
+          3972,
           15
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3894,
+          3984,
           15
         ]
       ],
-      "id": 4546,
+      "id": 4548,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reduceRight",
@@ -2290,7 +2290,7 @@
           11
         ]
       ],
-      "id": 4428,
+      "id": 4430,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.reflect2D",
@@ -2322,11 +2322,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3899,
+          3989,
           11
         ]
       ],
-      "id": 4574,
+      "id": 4576,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reverse",
@@ -2349,7 +2349,7 @@
           10
         ]
       ],
-      "id": 4418,
+      "id": 4420,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.rotate2D",
@@ -2391,7 +2391,7 @@
           7
         ]
       ],
-      "id": 4387,
+      "id": 4389,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.round",
@@ -2414,7 +2414,7 @@
           7
         ]
       ],
-      "id": 4414,
+      "id": 4416,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.scale",
@@ -2446,11 +2446,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3906,
+          3996,
           7
         ]
       ],
-      "id": 4576,
+      "id": 4578,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.set",
@@ -2486,7 +2486,7 @@
           9
         ]
       ],
-      "id": 4423,
+      "id": 4425,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.shear2D",
@@ -2524,11 +2524,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3913,
+          4003,
           9
         ]
       ],
-      "id": 4580,
+      "id": 4582,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.slice",
@@ -2560,11 +2560,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3923,
+          4013,
           8
         ]
       ],
-      "id": 4584,
+      "id": 4586,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.some",
@@ -2596,11 +2596,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3934,
+          4024,
           8
         ]
       ],
-      "id": 4593,
+      "id": 4595,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.sort",
@@ -2612,7 +2612,7 @@
           "parameters": [
             {
               "name": "compareFn",
-              "comment": "Function used to determine the order of the elements. It is expected to return\na negative value if first argument is less than second argument, zero if they're equal and a positive\nvalue otherwise. If omitted, the elements are sorted in ascending, ASCII character order.\n```ts\n[11,2,22,1].sort((a, b) => a - b)\n```\n",
+              "comment": "Function used to determine the order of the elements. It is expected to return\na negative value if first argument is less than second argument, zero if they're equal and a positive\nvalue otherwise. If omitted, the elements are sorted in ascending order.\n```ts\n[11,2,22,1].sort((a, b) => a - b)\n```\n",
               "type": " Fn(a:number, b:number)",
               "default": false
             }
@@ -2626,11 +2626,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3942,
+          4032,
           12
         ]
       ],
-      "id": 4600,
+      "id": 4602,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.subarray",
@@ -2666,7 +2666,7 @@
           10
         ]
       ],
-      "id": 4332,
+      "id": 4334,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.subtract",
@@ -2696,7 +2696,7 @@
           4
         ]
       ],
-      "id": 4289,
+      "id": 4291,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.to",
@@ -2726,7 +2726,7 @@
           9
         ]
       ],
-      "id": 4295,
+      "id": 4297,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.toAngle",
@@ -2768,7 +2768,7 @@
           9
         ]
       ],
-      "id": 4432,
+      "id": 4434,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.toArray",
@@ -2791,7 +2791,7 @@
           9
         ]
       ],
-      "id": 4436,
+      "id": 4438,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.toBound",
@@ -2814,7 +2814,7 @@
           9
         ]
       ],
-      "id": 4434,
+      "id": 4436,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.toGroup",
@@ -2833,11 +2833,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3947,
+          4037,
           18
         ]
       ],
-      "id": 4604,
+      "id": 4606,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.toLocaleString",
@@ -2860,7 +2860,7 @@
           8
         ]
       ],
-      "id": 4106,
+      "id": 4108,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2896,7 +2896,7 @@
           10
         ]
       ],
-      "id": 4166,
+      "id": 4168,
       "flags": {},
       "overrides": "Pt.toString",
       "inherits": false,
@@ -2909,7 +2909,7 @@
             {
               "name": "format",
               "comment": "\"hex\", \"rgb\", \"rgba\", or \"mode\" which means using current color mode label. Default is \"mode\".\n",
-              "type": "rgb | hex | rgba | mode",
+              "type": "rgb | rgba | hex | mode",
               "default": "\"mode\""
             }
           ],
@@ -2926,7 +2926,7 @@
           6
         ]
       ],
-      "id": 4354,
+      "id": 4356,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.unit",
@@ -2952,11 +2952,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3955,
+          4045,
           11
         ]
       ],
-      "id": 4606,
+      "id": 4608,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.valueOf",
@@ -2979,7 +2979,7 @@
           17
         ]
       ],
-      "id": 4184,
+      "id": 4186,
       "flags": {
         "isStatic": true
       },
@@ -3023,7 +3023,7 @@
           17
         ]
       ],
-      "id": 4174,
+      "id": 4176,
       "flags": {
         "isStatic": true
       },
@@ -3067,7 +3067,7 @@
           17
         ]
       ],
-      "id": 4249,
+      "id": 4251,
       "flags": {
         "isStatic": true
       },
@@ -3111,7 +3111,7 @@
           17
         ]
       ],
-      "id": 4194,
+      "id": 4196,
       "flags": {
         "isStatic": true
       },
@@ -3155,7 +3155,7 @@
           17
         ]
       ],
-      "id": 4234,
+      "id": 4236,
       "flags": {
         "isStatic": true
       },
@@ -3199,7 +3199,7 @@
           17
         ]
       ],
-      "id": 4254,
+      "id": 4256,
       "flags": {
         "isStatic": true
       },
@@ -3243,7 +3243,7 @@
           17
         ]
       ],
-      "id": 4204,
+      "id": 4206,
       "flags": {
         "isStatic": true
       },
@@ -3287,7 +3287,7 @@
           17
         ]
       ],
-      "id": 4214,
+      "id": 4216,
       "flags": {
         "isStatic": true
       },
@@ -3331,7 +3331,7 @@
           17
         ]
       ],
-      "id": 4244,
+      "id": 4246,
       "flags": {
         "isStatic": true
       },
@@ -3375,7 +3375,7 @@
           17
         ]
       ],
-      "id": 4179,
+      "id": 4181,
       "flags": {
         "isStatic": true
       },
@@ -3419,7 +3419,7 @@
           17
         ]
       ],
-      "id": 4169,
+      "id": 4171,
       "flags": {
         "isStatic": true
       },
@@ -3463,7 +3463,7 @@
           17
         ]
       ],
-      "id": 4189,
+      "id": 4191,
       "flags": {
         "isStatic": true
       },
@@ -3507,7 +3507,7 @@
           17
         ]
       ],
-      "id": 4199,
+      "id": 4201,
       "flags": {
         "isStatic": true
       },
@@ -3551,7 +3551,7 @@
           17
         ]
       ],
-      "id": 4209,
+      "id": 4211,
       "flags": {
         "isStatic": true
       },
@@ -3595,7 +3595,7 @@
           17
         ]
       ],
-      "id": 4219,
+      "id": 4221,
       "flags": {
         "isStatic": true
       },
@@ -3639,7 +3639,7 @@
           17
         ]
       ],
-      "id": 4229,
+      "id": 4231,
       "flags": {
         "isStatic": true
       },
@@ -3683,7 +3683,7 @@
           17
         ]
       ],
-      "id": 4239,
+      "id": 4241,
       "flags": {
         "isStatic": true
       },
@@ -3727,7 +3727,7 @@
           17
         ]
       ],
-      "id": 4224,
+      "id": 4226,
       "flags": {
         "isStatic": true
       },
@@ -3771,7 +3771,7 @@
           13
         ]
       ],
-      "id": 4068,
+      "id": 4070,
       "flags": {
         "isStatic": true
       },
@@ -3803,7 +3803,7 @@
           16
         ]
       ],
-      "id": 4071,
+      "id": 4073,
       "flags": {
         "isStatic": true
       },
@@ -3835,7 +3835,7 @@
           12
         ]
       ],
-      "id": 4080,
+      "id": 4082,
       "flags": {
         "isStatic": true
       },
@@ -3867,7 +3867,7 @@
           12
         ]
       ],
-      "id": 4077,
+      "id": 4079,
       "flags": {
         "isStatic": true
       },
@@ -3899,7 +3899,7 @@
           12
         ]
       ],
-      "id": 4083,
+      "id": 4085,
       "flags": {
         "isStatic": true
       },
@@ -3931,7 +3931,7 @@
           12
         ]
       ],
-      "id": 4086,
+      "id": 4088,
       "flags": {
         "isStatic": true
       },
@@ -3963,7 +3963,7 @@
           12
         ]
       ],
-      "id": 4089,
+      "id": 4091,
       "flags": {
         "isStatic": true
       },
@@ -3995,7 +3995,7 @@
           13
         ]
       ],
-      "id": 4260,
+      "id": 4262,
       "flags": {
         "isStatic": true
       },
@@ -4039,7 +4039,7 @@
           18
         ]
       ],
-      "id": 4095,
+      "id": 4097,
       "flags": {
         "isStatic": true
       },
@@ -4076,7 +4076,7 @@
           12
         ]
       ],
-      "id": 4074,
+      "id": 4076,
       "flags": {
         "isStatic": true
       },
@@ -4108,7 +4108,7 @@
           12
         ]
       ],
-      "id": 4092,
+      "id": 4094,
       "flags": {
         "isStatic": true
       },
@@ -4139,11 +4139,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3720,
+          3810,
           30
         ]
       ],
-      "id": 4438,
+      "id": 4440,
       "flags": {
         "isReadonly": true
       },
@@ -4157,11 +4157,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3725,
+          3815,
           19
         ]
       ],
-      "id": 4439,
+      "id": 4441,
       "flags": {
         "isReadonly": true
       },
@@ -4175,11 +4175,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3730,
+          3820,
           23
         ]
       ],
-      "id": 4440,
+      "id": 4442,
       "flags": {
         "isReadonly": true
       },
@@ -4193,11 +4193,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3735,
+          3825,
           23
         ]
       ],
-      "id": 4441,
+      "id": 4443,
       "flags": {
         "isReadonly": true
       },
@@ -4211,11 +4211,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3834,
+          3924,
           19
         ]
       ],
-      "id": 4508,
+      "id": 4510,
       "flags": {
         "isReadonly": true
       },
@@ -4233,7 +4233,7 @@
           20
         ]
       ],
-      "id": 4054,
+      "id": 4056,
       "flags": {
         "isPrivate": true,
         "isStatic": true

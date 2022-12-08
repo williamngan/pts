@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Typealias",
-  "id": 745,
+  "id": 750,
   "comment": "Typescript type: PtLike represents the data of a point. It can be either a Pt instance or an array of numbers.",
   "constructor": [],
   "accessors": [],

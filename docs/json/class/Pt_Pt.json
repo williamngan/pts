@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 1840,
+  "id": 1842,
   "comment": "Pt is a subclass of standard [`Float32Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array) with additional properties and functions to support vector and geometric calculations.\nSee [Pt guide](../guide/Pt-0200.html) for details.",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           23
         ]
       ],
-      "id": 1842,
+      "id": 1844,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -62,7 +62,7 @@
           8
         ]
       ],
-      "id": 1850,
+      "id": 1852,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -94,7 +94,7 @@
           7
         ]
       ],
-      "id": 1866,
+      "id": 1868,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -126,7 +126,7 @@
           7
         ]
       ],
-      "id": 1854,
+      "id": 1856,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -158,7 +158,7 @@
           7
         ]
       ],
-      "id": 1858,
+      "id": 1860,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -190,7 +190,7 @@
           7
         ]
       ],
-      "id": 1862,
+      "id": 1864,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -219,7 +219,7 @@
           6
         ]
       ],
-      "id": 1964,
+      "id": 1966,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -242,7 +242,7 @@
           6
         ]
       ],
-      "id": 1916,
+      "id": 1918,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -272,7 +272,7 @@
           7
         ]
       ],
-      "id": 1972,
+      "id": 1974,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -295,7 +295,7 @@
           9
         ]
       ],
-      "id": 1910,
+      "id": 1912,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -325,7 +325,7 @@
           8
         ]
       ],
-      "id": 1953,
+      "id": 1955,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -355,7 +355,7 @@
           10
         ]
       ],
-      "id": 1950,
+      "id": 1952,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -385,7 +385,7 @@
           9
         ]
       ],
-      "id": 1934,
+      "id": 1936,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -415,7 +415,7 @@
           8
         ]
       ],
-      "id": 1968,
+      "id": 1970,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -438,7 +438,7 @@
           6
         ]
       ],
-      "id": 1991,
+      "id": 1993,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -468,7 +468,7 @@
           6
         ]
       ],
-      "id": 1988,
+      "id": 1990,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -498,7 +498,7 @@
           11
         ]
       ],
-      "id": 1928,
+      "id": 1930,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -528,7 +528,7 @@
           10
         ]
       ],
-      "id": 1956,
+      "id": 1958,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -558,7 +558,7 @@
           8
         ]
       ],
-      "id": 1976,
+      "id": 1978,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -581,7 +581,7 @@
           11
         ]
       ],
-      "id": 1922,
+      "id": 1924,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -611,7 +611,7 @@
           7
         ]
       ],
-      "id": 1907,
+      "id": 1909,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -641,7 +641,7 @@
           5
         ]
       ],
-      "id": 1879,
+      "id": 1881,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -671,7 +671,7 @@
           7
         ]
       ],
-      "id": 1944,
+      "id": 1946,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -697,11 +697,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es2015.iterable.d.ts",
-          452,
+          445,
           21
         ]
       ],
-      "id": 2200,
+      "id": 2202,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.[Symbol.iterator]",
@@ -724,7 +724,7 @@
           5
         ]
       ],
-      "id": 1962,
+      "id": 1964,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -747,7 +747,7 @@
           5
         ]
       ],
-      "id": 1913,
+      "id": 1915,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -777,7 +777,7 @@
           7
         ]
       ],
-      "id": 1994,
+      "id": 1996,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -807,7 +807,7 @@
           14
         ]
       ],
-      "id": 1997,
+      "id": 1999,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -843,7 +843,7 @@
           6
         ]
       ],
-      "id": 1970,
+      "id": 1972,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -866,7 +866,7 @@
           7
         ]
       ],
-      "id": 1870,
+      "id": 1872,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -885,11 +885,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3746,
+          3836,
           14
         ]
       ],
-      "id": 2031,
+      "id": 2033,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.copyWithin",
@@ -931,7 +931,7 @@
           8
         ]
       ],
-      "id": 1931,
+      "id": 1933,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -961,7 +961,7 @@
           5
         ]
       ],
-      "id": 1947,
+      "id": 1949,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -987,11 +987,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es2015.iterable.d.ts",
-          456,
+          449,
           11
         ]
       ],
-      "id": 2202,
+      "id": 2204,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.entries",
@@ -1014,7 +1014,7 @@
           8
         ]
       ],
-      "id": 1872,
+      "id": 1874,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1046,11 +1046,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3756,
+          3846,
           9
         ]
       ],
-      "id": 2036,
+      "id": 2038,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.every",
@@ -1082,17 +1082,17 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3766,
+          3856,
           8
         ]
       ],
-      "id": 2045,
+      "id": 2047,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.fill",
       "signatures": [
         {
-          "comment": "Returns the this object after filling the section identified by start and end with value",
+          "comment": "Changes all array elements from `start` to `end` index to a static `value` and returns the modified array",
           "returns": "this",
           "returns_comment": false,
           "parameters": [
@@ -1124,11 +1124,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3775,
+          3865,
           10
         ]
       ],
-      "id": 2050,
+      "id": 2052,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.filter",
@@ -1160,11 +1160,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3786,
+          3876,
           8
         ]
       ],
-      "id": 2059,
+      "id": 2061,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.find",
@@ -1196,11 +1196,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3797,
+          3887,
           13
         ]
       ],
-      "id": 2068,
+      "id": 2070,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.findIndex",
@@ -1236,7 +1236,7 @@
           7
         ]
       ],
-      "id": 1966,
+      "id": 1968,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1255,11 +1255,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3806,
+          3896,
           11
         ]
       ],
-      "id": 2077,
+      "id": 2079,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.forEach",
@@ -1295,7 +1295,7 @@
           12
         ]
       ],
-      "id": 2209,
+      "id": 2211,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.includes",
@@ -1327,11 +1327,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3814,
+          3904,
           11
         ]
       ],
-      "id": 2086,
+      "id": 2088,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.indexOf",
@@ -1363,11 +1363,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3821,
+          3911,
           8
         ]
       ],
-      "id": 2090,
+      "id": 2092,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.join",
@@ -1393,11 +1393,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es2015.iterable.d.ts",
-          460,
+          453,
           8
         ]
       ],
-      "id": 2204,
+      "id": 2206,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.keys",
@@ -1416,11 +1416,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3829,
+          3919,
           15
         ]
       ],
-      "id": 2093,
+      "id": 2095,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.lastIndexOf",
@@ -1456,7 +1456,7 @@
           11
         ]
       ],
-      "id": 1939,
+      "id": 1941,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1479,7 +1479,7 @@
           13
         ]
       ],
-      "id": 1937,
+      "id": 1939,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1498,11 +1498,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3844,
+          3934,
           7
         ]
       ],
-      "id": 2098,
+      "id": 2100,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.map",
@@ -1538,7 +1538,7 @@
           10
         ]
       ],
-      "id": 1983,
+      "id": 1985,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1561,7 +1561,7 @@
           10
         ]
       ],
-      "id": 1978,
+      "id": 1980,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1584,7 +1584,7 @@
           10
         ]
       ],
-      "id": 1925,
+      "id": 1927,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1614,7 +1614,7 @@
           4
         ]
       ],
-      "id": 1887,
+      "id": 1889,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1649,7 +1649,7 @@
           5
         ]
       ],
-      "id": 1897,
+      "id": 1899,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1684,7 +1684,7 @@
           15
         ]
       ],
-      "id": 1959,
+      "id": 1961,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1710,21 +1710,21 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3856,
+          3946,
           10
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3857,
+          3947,
           10
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3869,
+          3959,
           10
         ]
       ],
-      "id": 2107,
+      "id": 2109,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reduce",
@@ -1790,21 +1790,21 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3881,
+          3971,
           15
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3882,
+          3972,
           15
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3894,
+          3984,
           15
         ]
       ],
-      "id": 2135,
+      "id": 2137,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reduceRight",
@@ -1874,7 +1874,7 @@
           11
         ]
       ],
-      "id": 2015,
+      "id": 2017,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1906,11 +1906,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3899,
+          3989,
           11
         ]
       ],
-      "id": 2163,
+      "id": 2165,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reverse",
@@ -1933,7 +1933,7 @@
           10
         ]
       ],
-      "id": 2005,
+      "id": 2007,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1975,7 +1975,7 @@
           7
         ]
       ],
-      "id": 1974,
+      "id": 1976,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1998,7 +1998,7 @@
           7
         ]
       ],
-      "id": 2001,
+      "id": 2003,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2030,11 +2030,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3906,
+          3996,
           7
         ]
       ],
-      "id": 2165,
+      "id": 2167,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.set",
@@ -2070,7 +2070,7 @@
           9
         ]
       ],
-      "id": 2010,
+      "id": 2012,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2108,11 +2108,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3913,
+          4003,
           9
         ]
       ],
-      "id": 2169,
+      "id": 2171,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.slice",
@@ -2144,11 +2144,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3923,
+          4013,
           8
         ]
       ],
-      "id": 2173,
+      "id": 2175,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.some",
@@ -2180,11 +2180,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3934,
+          4024,
           8
         ]
       ],
-      "id": 2182,
+      "id": 2184,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.sort",
@@ -2196,7 +2196,7 @@
           "parameters": [
             {
               "name": "compareFn",
-              "comment": "Function used to determine the order of the elements. It is expected to return\na negative value if first argument is less than second argument, zero if they're equal and a positive\nvalue otherwise. If omitted, the elements are sorted in ascending, ASCII character order.\n```ts\n[11,2,22,1].sort((a, b) => a - b)\n```\n",
+              "comment": "Function used to determine the order of the elements. It is expected to return\na negative value if first argument is less than second argument, zero if they're equal and a positive\nvalue otherwise. If omitted, the elements are sorted in ascending order.\n```ts\n[11,2,22,1].sort((a, b) => a - b)\n```\n",
               "type": " Fn(a:number, b:number)",
               "default": false
             }
@@ -2210,11 +2210,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3942,
+          4032,
           12
         ]
       ],
-      "id": 2189,
+      "id": 2191,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.subarray",
@@ -2250,7 +2250,7 @@
           10
         ]
       ],
-      "id": 1919,
+      "id": 1921,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2280,7 +2280,7 @@
           4
         ]
       ],
-      "id": 1876,
+      "id": 1878,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2310,7 +2310,7 @@
           9
         ]
       ],
-      "id": 1882,
+      "id": 1884,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2352,7 +2352,7 @@
           9
         ]
       ],
-      "id": 2021,
+      "id": 2023,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2375,7 +2375,7 @@
           9
         ]
       ],
-      "id": 2025,
+      "id": 2027,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2398,7 +2398,7 @@
           9
         ]
       ],
-      "id": 2023,
+      "id": 2025,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2417,11 +2417,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3947,
+          4037,
           18
         ]
       ],
-      "id": 2193,
+      "id": 2195,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.toLocaleString",
@@ -2444,7 +2444,7 @@
           10
         ]
       ],
-      "id": 2019,
+      "id": 2021,
       "flags": {},
       "overrides": "Float32Array.toString",
       "inherits": false,
@@ -2467,7 +2467,7 @@
           6
         ]
       ],
-      "id": 1941,
+      "id": 1943,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2493,11 +2493,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3955,
+          4045,
           11
         ]
       ],
-      "id": 2195,
+      "id": 2197,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.valueOf",
@@ -2516,11 +2516,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es2015.iterable.d.ts",
-          464,
+          457,
           10
         ]
       ],
-      "id": 2206,
+      "id": 2208,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.values",
@@ -2543,7 +2543,7 @@
           13
         ]
       ],
-      "id": 1845,
+      "id": 1847,
       "flags": {
         "isStatic": true
       },
@@ -2586,11 +2586,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3720,
+          3810,
           30
         ]
       ],
-      "id": 2027,
+      "id": 2029,
       "flags": {
         "isReadonly": true
       },
@@ -2608,7 +2608,7 @@
           33
         ]
       ],
-      "id": 2208,
+      "id": 2210,
       "flags": {
         "isReadonly": true
       },
@@ -2622,11 +2622,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3725,
+          3815,
           19
         ]
       ],
-      "id": 2028,
+      "id": 2030,
       "flags": {
         "isReadonly": true
       },
@@ -2640,11 +2640,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3730,
+          3820,
           23
         ]
       ],
-      "id": 2029,
+      "id": 2031,
       "flags": {
         "isReadonly": true
       },
@@ -2658,11 +2658,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3735,
+          3825,
           23
         ]
       ],
-      "id": 2030,
+      "id": 2032,
       "flags": {
         "isReadonly": true
       },
@@ -2676,11 +2676,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3834,
+          3924,
           19
         ]
       ],
-      "id": 2097,
+      "id": 2099,
       "flags": {
         "isReadonly": true
       },
@@ -2694,11 +2694,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          3993,
+          4083,
           24
         ]
       ],
-      "id": 2199,
+      "id": 2201,
       "flags": {
         "isStatic": true
       },

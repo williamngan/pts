@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 6593,
+  "id": 6595,
   "comment": "Body is a subclass of [`Group`](#link) that stores a set of [`Particle`](#link)s and edge constraints. It is usually added into a [`World`](#link) to create physics simulations.\nSee [a demo here](../demo/index.html?name=physics.shapes).",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           29
         ]
       ],
-      "id": 6601,
+      "id": 6603,
       "flags": {},
       "overrides": "Group.__constructor",
       "inherits": false,
@@ -50,7 +50,7 @@
           8
         ]
       ],
-      "id": 6638,
+      "id": 6640,
       "flags": {},
       "overrides": false,
       "inherits": "Group.id",
@@ -82,7 +82,7 @@
           10
         ]
       ],
-      "id": 6613,
+      "id": 6615,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -109,7 +109,7 @@
           8
         ]
       ],
-      "id": 6642,
+      "id": 6644,
       "flags": {},
       "overrides": false,
       "inherits": "Group.p1",
@@ -128,7 +128,7 @@
           8
         ]
       ],
-      "id": 6644,
+      "id": 6646,
       "flags": {},
       "overrides": false,
       "inherits": "Group.p2",
@@ -147,7 +147,7 @@
           8
         ]
       ],
-      "id": 6646,
+      "id": 6648,
       "flags": {},
       "overrides": false,
       "inherits": "Group.p3",
@@ -166,7 +166,7 @@
           8
         ]
       ],
-      "id": 6648,
+      "id": 6650,
       "flags": {},
       "overrides": false,
       "inherits": "Group.p4",
@@ -185,7 +185,7 @@
           8
         ]
       ],
-      "id": 6650,
+      "id": 6652,
       "flags": {},
       "overrides": false,
       "inherits": "Group.q1",
@@ -204,7 +204,7 @@
           8
         ]
       ],
-      "id": 6652,
+      "id": 6654,
       "flags": {},
       "overrides": false,
       "inherits": "Group.q2",
@@ -223,7 +223,7 @@
           8
         ]
       ],
-      "id": 6654,
+      "id": 6656,
       "flags": {},
       "overrides": false,
       "inherits": "Group.q3",
@@ -242,7 +242,7 @@
           8
         ]
       ],
-      "id": 6656,
+      "id": 6658,
       "flags": {},
       "overrides": false,
       "inherits": "Group.q4",
@@ -263,7 +263,7 @@
           12
         ]
       ],
-      "id": 6763,
+      "id": 6765,
       "flags": {},
       "overrides": false,
       "inherits": "Group.$matrixAdd",
@@ -293,7 +293,7 @@
           17
         ]
       ],
-      "id": 6766,
+      "id": 6768,
       "flags": {},
       "overrides": false,
       "inherits": "Group.$matrixMultiply",
@@ -335,7 +335,7 @@
           6
         ]
       ],
-      "id": 6775,
+      "id": 6777,
       "flags": {},
       "overrides": false,
       "inherits": "Group.$zip",
@@ -371,7 +371,7 @@
           5
         ]
       ],
-      "id": 6751,
+      "id": 6753,
       "flags": {},
       "overrides": false,
       "inherits": "Group.add",
@@ -401,7 +401,7 @@
           12
         ]
       ],
-      "id": 6693,
+      "id": 6695,
       "flags": {},
       "overrides": false,
       "inherits": "Group.anchorFrom",
@@ -431,7 +431,7 @@
           10
         ]
       ],
-      "id": 6690,
+      "id": 6692,
       "flags": {},
       "overrides": false,
       "inherits": "Group.anchorTo",
@@ -461,7 +461,7 @@
           10
         ]
       ],
-      "id": 6617,
+      "id": 6619,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -484,7 +484,7 @@
           13
         ]
       ],
-      "id": 6688,
+      "id": 6690,
       "flags": {},
       "overrides": false,
       "inherits": "Group.boundingBox",
@@ -507,7 +507,7 @@
           10
         ]
       ],
-      "id": 6686,
+      "id": 6688,
       "flags": {},
       "overrides": false,
       "inherits": "Group.centroid",
@@ -530,7 +530,7 @@
           7
         ]
       ],
-      "id": 6658,
+      "id": 6660,
       "flags": {},
       "overrides": false,
       "inherits": "Group.clone",
@@ -549,28 +549,28 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1246,
+          1315,
           10
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1251,
+          1321,
           10
         ]
       ],
-      "id": 6791,
+      "id": 6793,
       "flags": {},
       "overrides": false,
       "inherits": "Array.concat",
       "signatures": [
         {
-          "comment": "Combines two or more arrays.",
+          "comment": "Combines two or more arrays.\nThis method returns a new array without modifying any existing arrays.",
           "returns": "Pt[]",
           "returns_comment": false,
           "parameters": [
             {
               "name": "items",
-              "comment": "Additional items to add to the end of array1.\n",
+              "comment": "Additional arrays and/or items to add to the end of the array.\n",
               "type": "ConcatArray[]",
               "default": false
             }
@@ -578,13 +578,13 @@
           "tags": []
         },
         {
-          "comment": "Combines two or more arrays.",
+          "comment": "Combines two or more arrays.\nThis method returns a new array without modifying any existing arrays.",
           "returns": "Pt[]",
           "returns_comment": false,
           "parameters": [
             {
               "name": "items",
-              "comment": "Additional items to add to the end of array1.\n",
+              "comment": "Additional arrays and/or items to add to the end of the array.\n",
               "type": "T[] | ConcatArray[]",
               "default": false
             }
@@ -602,7 +602,7 @@
           8
         ]
       ],
-      "id": 6760,
+      "id": 6762,
       "flags": {},
       "overrides": false,
       "inherits": "Group.divide",
@@ -628,16 +628,16 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1319,
+          1398,
           9
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1328,
+          1407,
           9
         ]
       ],
-      "id": 6833,
+      "id": 6835,
       "flags": {},
       "overrides": false,
       "inherits": "Array.every",
@@ -689,16 +689,16 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1355,
+          1434,
           10
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1361,
+          1440,
           10
         ]
       ],
-      "id": 6879,
+      "id": 6881,
       "flags": {},
       "overrides": false,
       "inherits": "Array.filter",
@@ -750,11 +750,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1343,
+          1422,
           11
         ]
       ],
-      "id": 6860,
+      "id": 6862,
       "flags": {},
       "overrides": false,
       "inherits": "Array.forEach",
@@ -790,7 +790,7 @@
           11
         ]
       ],
-      "id": 6747,
+      "id": 6749,
       "flags": {},
       "overrides": false,
       "inherits": "Group.forEachPt",
@@ -822,17 +822,17 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1304,
+          1383,
           11
         ]
       ],
-      "id": 6825,
+      "id": 6827,
       "flags": {},
       "overrides": false,
       "inherits": "Array.indexOf",
       "signatures": [
         {
-          "comment": "Returns the index of the first occurrence of a value in an array.",
+          "comment": "Returns the index of the first occurrence of a value in an array, or -1 if it is not present.",
           "returns": "number",
           "returns_comment": false,
           "parameters": [
@@ -862,7 +862,7 @@
           6
         ]
       ],
-      "id": 6609,
+      "id": 6611,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -898,7 +898,7 @@
           8
         ]
       ],
-      "id": 6671,
+      "id": 6673,
       "flags": {},
       "overrides": false,
       "inherits": "Group.insert",
@@ -934,7 +934,7 @@
           13
         ]
       ],
-      "id": 6716,
+      "id": 6718,
       "flags": {},
       "overrides": false,
       "inherits": "Group.interpolate",
@@ -960,23 +960,23 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1256,
+          1326,
           8
         ]
       ],
-      "id": 6796,
+      "id": 6798,
       "flags": {},
       "overrides": false,
       "inherits": "Array.join",
       "signatures": [
         {
-          "comment": "Adds all the elements of an array separated by the specified separator string.",
+          "comment": "Adds all the elements of an array into a string, separated by the specified separator string.",
           "returns": "string",
           "returns_comment": false,
           "parameters": [
             {
               "name": "separator",
-              "comment": "A string used to separate one element of an array from the next in the resulting String. If omitted, the array elements are separated with a comma.\n",
+              "comment": "A string used to separate one element of the array from the next in the resulting string. If omitted, the array elements are separated with a comma.\n",
               "type": "string",
               "default": false
             }
@@ -990,17 +990,17 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1310,
+          1389,
           15
         ]
       ],
-      "id": 6829,
+      "id": 6831,
       "flags": {},
       "overrides": false,
       "inherits": "Array.lastIndexOf",
       "signatures": [
         {
-          "comment": "Returns the index of the last occurrence of a specified value in an array.",
+          "comment": "Returns the index of the last occurrence of a specified value in an array, or -1 if it is not present.",
           "returns": "number",
           "returns_comment": false,
           "parameters": [
@@ -1012,7 +1012,7 @@
             },
             {
               "name": "fromIndex",
-              "comment": "The array index at which to begin the search. If fromIndex is omitted, the search starts at the last index in the array.\n",
+              "comment": "The array index at which to begin searching backward. If fromIndex is omitted, the search starts at the last index in the array.\n",
               "type": "number",
               "default": false
             }
@@ -1030,7 +1030,7 @@
           7
         ]
       ],
-      "id": 6684,
+      "id": 6686,
       "flags": {},
       "overrides": false,
       "inherits": "Group.lines",
@@ -1053,7 +1053,7 @@
           6
         ]
       ],
-      "id": 6619,
+      "id": 6621,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1095,7 +1095,7 @@
           9
         ]
       ],
-      "id": 6624,
+      "id": 6626,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1125,7 +1125,7 @@
           14
         ]
       ],
-      "id": 6627,
+      "id": 6629,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1144,11 +1144,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1349,
+          1428,
           7
         ]
       ],
-      "id": 6869,
+      "id": 6871,
       "flags": {},
       "overrides": false,
       "inherits": "Array.map",
@@ -1184,7 +1184,7 @@
           8
         ]
       ],
-      "id": 6719,
+      "id": 6721,
       "flags": {},
       "overrides": false,
       "inherits": "Group.moveBy",
@@ -1214,7 +1214,7 @@
           8
         ]
       ],
-      "id": 6722,
+      "id": 6724,
       "flags": {},
       "overrides": false,
       "inherits": "Group.moveTo",
@@ -1244,7 +1244,7 @@
           10
         ]
       ],
-      "id": 6757,
+      "id": 6759,
       "flags": {},
       "overrides": false,
       "inherits": "Group.multiply",
@@ -1274,7 +1274,7 @@
           4
         ]
       ],
-      "id": 6696,
+      "id": 6698,
       "flags": {},
       "overrides": false,
       "inherits": "Group.op",
@@ -1309,7 +1309,7 @@
           5
         ]
       ],
-      "id": 6706,
+      "id": 6708,
       "flags": {},
       "overrides": false,
       "inherits": "Group.ops",
@@ -1340,17 +1340,17 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1236,
+          1304,
           7
         ]
       ],
-      "id": 6786,
+      "id": 6788,
       "flags": {},
       "overrides": false,
       "inherits": "Array.pop",
       "signatures": [
         {
-          "comment": "Removes the last element from an array and returns it.",
+          "comment": "Removes the last element from an array and returns it.\nIf the array is empty, undefined is returned and the array is not modified.",
           "returns": "Pt | undefined",
           "returns_comment": false,
           "parameters": [],
@@ -1367,7 +1367,7 @@
           13
         ]
       ],
-      "id": 6631,
+      "id": 6633,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1397,7 +1397,7 @@
           14
         ]
       ],
-      "id": 6629,
+      "id": 6631,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1420,7 +1420,7 @@
           17
         ]
       ],
-      "id": 6634,
+      "id": 6636,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1446,23 +1446,23 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1241,
+          1309,
           8
         ]
       ],
-      "id": 6788,
+      "id": 6790,
       "flags": {},
       "overrides": false,
       "inherits": "Array.push",
       "signatures": [
         {
-          "comment": "Appends new elements to an array, and returns the new length of the array.",
+          "comment": "Appends new elements to the end of an array, and returns the new length of the array.",
           "returns": "number",
           "returns_comment": false,
           "parameters": [
             {
               "name": "items",
-              "comment": "New elements of the Array.\n",
+              "comment": "New elements to add to the array.\n",
               "type": "Pt[]",
               "default": false
             }
@@ -1476,21 +1476,21 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1367,
+          1446,
           10
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1368,
+          1447,
           10
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1374,
+          1453,
           10
         ]
       ],
-      "id": 6897,
+      "id": 6899,
       "flags": {},
       "overrides": false,
       "inherits": "Array.reduce",
@@ -1556,21 +1556,21 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1380,
+          1459,
           15
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1381,
+          1460,
           15
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1387,
+          1466,
           15
         ]
       ],
-      "id": 6925,
+      "id": 6927,
       "flags": {},
       "overrides": false,
       "inherits": "Array.reduceRight",
@@ -1640,7 +1640,7 @@
           11
         ]
       ],
-      "id": 6739,
+      "id": 6741,
       "flags": {},
       "overrides": false,
       "inherits": "Group.reflect2D",
@@ -1676,7 +1676,7 @@
           8
         ]
       ],
-      "id": 6675,
+      "id": 6677,
       "flags": {},
       "overrides": false,
       "inherits": "Group.remove",
@@ -1708,17 +1708,17 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1260,
+          1331,
           11
         ]
       ],
-      "id": 6799,
+      "id": 6801,
       "flags": {},
       "overrides": false,
       "inherits": "Array.reverse",
       "signatures": [
         {
-          "comment": "Reverses the elements in an Array.",
+          "comment": "Reverses the elements in an array in place.\nThis method mutates the array and returns a reference to the same array.",
           "returns": "Pt[]",
           "returns_comment": false,
           "parameters": [],
@@ -1735,7 +1735,7 @@
           10
         ]
       ],
-      "id": 6729,
+      "id": 6731,
       "flags": {},
       "overrides": false,
       "inherits": "Group.rotate2D",
@@ -1777,7 +1777,7 @@
           7
         ]
       ],
-      "id": 6725,
+      "id": 6727,
       "flags": {},
       "overrides": false,
       "inherits": "Group.scale",
@@ -1813,7 +1813,7 @@
           10
         ]
       ],
-      "id": 6679,
+      "id": 6681,
       "flags": {},
       "overrides": false,
       "inherits": "Group.segments",
@@ -1855,7 +1855,7 @@
           9
         ]
       ],
-      "id": 6734,
+      "id": 6736,
       "flags": {},
       "overrides": false,
       "inherits": "Group.shear2D",
@@ -1893,17 +1893,17 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1264,
+          1336,
           9
         ]
       ],
-      "id": 6801,
+      "id": 6803,
       "flags": {},
       "overrides": false,
       "inherits": "Array.shift",
       "signatures": [
         {
-          "comment": "Removes the first element from an array and returns it.",
+          "comment": "Removes the first element from an array and returns it.\nIf the array is empty, undefined is returned and the array is not modified.",
           "returns": "Pt | undefined",
           "returns_comment": false,
           "parameters": [],
@@ -1916,29 +1916,29 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1270,
+          1346,
           9
         ]
       ],
-      "id": 6803,
+      "id": 6805,
       "flags": {},
       "overrides": false,
       "inherits": "Array.slice",
       "signatures": [
         {
-          "comment": "Returns a section of an array.",
+          "comment": "Returns a copy of a section of an array.\nFor both start and end, a negative index can be used to indicate an offset from the end of the array.\nFor example, -2 refers to the second to last element of the array.",
           "returns": "Pt[]",
           "returns_comment": false,
           "parameters": [
             {
               "name": "start",
-              "comment": "The beginning of the specified portion of the array.",
+              "comment": "The beginning index of the specified portion of the array.\nIf start is undefined, then the slice begins at index 0.",
               "type": "number",
               "default": false
             },
             {
               "name": "end",
-              "comment": "The end of the specified portion of the array. This is exclusive of the element at the index 'end'.\n",
+              "comment": "The end index of the specified portion of the array. This is exclusive of the element at the index 'end'.\nIf end is undefined, then the slice extends to the end of the array.\n",
               "type": "number",
               "default": false
             }
@@ -1952,11 +1952,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1337,
+          1416,
           8
         ]
       ],
-      "id": 6851,
+      "id": 6853,
       "flags": {},
       "overrides": false,
       "inherits": "Array.some",
@@ -1988,23 +1988,23 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1280,
+          1357,
           8
         ]
       ],
-      "id": 6807,
+      "id": 6809,
       "flags": {},
       "overrides": false,
       "inherits": "Array.sort",
       "signatures": [
         {
-          "comment": "Sorts an array.",
+          "comment": "Sorts an array in place.\nThis method mutates the array and returns a reference to the same array.",
           "returns": "this",
           "returns_comment": false,
           "parameters": [
             {
               "name": "compareFn",
-              "comment": "Function used to determine the order of the elements. It is expected to return\na negative value if first argument is less than second argument, zero if they're equal and a positive\nvalue otherwise. If omitted, the elements are sorted in ascending, ASCII character order.\n```ts\n[11,2,22,1].sort((a, b) => a - b)\n```\n",
+              "comment": "Function used to determine the order of the elements. It is expected to return\na negative value if the first argument is less than the second argument, zero if they're equal, and a positive\nvalue otherwise. If omitted, the elements are sorted in ascending, ASCII character order.\n```ts\n[11,2,22,1].sort((a, b) => a - b)\n```\n",
               "type": " Fn(a:Pt, b:Pt)",
               "default": false
             }
@@ -2022,7 +2022,7 @@
           17
         ]
       ],
-      "id": 6743,
+      "id": 6745,
       "flags": {},
       "overrides": false,
       "inherits": "Group.sortByDimension",
@@ -2054,16 +2054,16 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1286,
+          1364,
           10
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1293,
+          1372,
           10
         ]
       ],
-      "id": 6814,
+      "id": 6816,
       "flags": {},
       "overrides": false,
       "inherits": "Array.splice",
@@ -2071,7 +2071,7 @@
         {
           "comment": "Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.",
           "returns": "Pt[]",
-          "returns_comment": false,
+          "returns_comment": "An array containing the elements that were deleted.\n",
           "parameters": [
             {
               "name": "start",
@@ -2081,7 +2081,7 @@
             },
             {
               "name": "deleteCount",
-              "comment": "The number of elements to remove.\n",
+              "comment": "The number of elements to remove.",
               "type": "number",
               "default": false
             }
@@ -2091,7 +2091,7 @@
         {
           "comment": "Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.",
           "returns": "Pt[]",
-          "returns_comment": false,
+          "returns_comment": "An array containing the elements that were deleted.\n",
           "parameters": [
             {
               "name": "start",
@@ -2107,7 +2107,7 @@
             },
             {
               "name": "items",
-              "comment": "Elements to insert into the array in place of the deleted elements.\n",
+              "comment": "Elements to insert into the array in place of the deleted elements.",
               "type": "Pt[]",
               "default": false
             }
@@ -2125,7 +2125,7 @@
           7
         ]
       ],
-      "id": 6666,
+      "id": 6668,
       "flags": {},
       "overrides": false,
       "inherits": "Group.split",
@@ -2167,7 +2167,7 @@
           10
         ]
       ],
-      "id": 6754,
+      "id": 6756,
       "flags": {},
       "overrides": false,
       "inherits": "Group.subtract",
@@ -2197,7 +2197,7 @@
           9
         ]
       ],
-      "id": 6779,
+      "id": 6781,
       "flags": {},
       "overrides": false,
       "inherits": "Group.toBound",
@@ -2216,17 +2216,17 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1232,
+          1299,
           18
         ]
       ],
-      "id": 6784,
+      "id": 6786,
       "flags": {},
       "overrides": false,
       "inherits": "Array.toLocaleString",
       "signatures": [
         {
-          "comment": "Returns a string representation of an array. The elements are converted to string using their toLocalString methods.",
+          "comment": "Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.",
           "returns": "string",
           "returns_comment": false,
           "parameters": [],
@@ -2243,7 +2243,7 @@
           10
         ]
       ],
-      "id": 6781,
+      "id": 6783,
       "flags": {},
       "overrides": "Array.toString",
       "inherits": "Group.toString",
@@ -2262,23 +2262,23 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1298,
+          1377,
           11
         ]
       ],
-      "id": 6822,
+      "id": 6824,
       "flags": {},
       "overrides": false,
       "inherits": "Array.unshift",
       "signatures": [
         {
-          "comment": "Inserts new elements at the start of an array.",
+          "comment": "Inserts new elements at the start of an array, and returns the new length of the array.",
           "returns": "number",
           "returns_comment": false,
           "parameters": [
             {
               "name": "items",
-              "comment": "Elements to insert at the start of the Array.\n",
+              "comment": "Elements to insert at the start of the array.\n",
               "type": "Pt[]",
               "default": false
             }
@@ -2296,7 +2296,7 @@
           10
         ]
       ],
-      "id": 6771,
+      "id": 6773,
       "flags": {},
       "overrides": false,
       "inherits": "Group.zipSlice",
@@ -2332,7 +2332,7 @@
           18
         ]
       ],
-      "id": 6660,
+      "id": 6662,
       "flags": {
         "isStatic": true
       },
@@ -2369,7 +2369,7 @@
           18
         ]
       ],
-      "id": 6603,
+      "id": 6605,
       "flags": {
         "isStatic": true
       },
@@ -2419,7 +2419,7 @@
           20
         ]
       ],
-      "id": 6663,
+      "id": 6665,
       "flags": {
         "isStatic": true
       },
@@ -2450,16 +2450,16 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1224,
+          1291,
           10
         ]
       ],
-      "id": 6783,
+      "id": 6785,
       "flags": {},
       "type": "length",
       "overrides": false,
       "inherits": "Array.length",
-      "comment": "Gets or sets the length of the array. This is a number one higher than the highest element defined in an array."
+      "comment": "Gets or sets the length of the array. This is a number one higher than the highest index in the array."
     }
   ],
   "flags": {},

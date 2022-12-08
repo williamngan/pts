@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 3203,
+  "id": 3205,
   "comment": "MultiTouchSpace is an abstract class that extends [`Space`](#link) to support user interactions via touch events.\nIt's extended through subclasses such as [`CanvasSpace`](#link) and [`SVGSpace`](#link).",
   "constructor": [],
   "accessors": [
@@ -21,7 +21,7 @@
           12
         ]
       ],
-      "id": 3368,
+      "id": 3370,
       "flags": {},
       "overrides": false,
       "inherits": "Space.center",
@@ -45,7 +45,7 @@
           21
         ]
       ],
-      "id": 3348,
+      "id": 3350,
       "flags": {},
       "overrides": false,
       "inherits": "Space.customRendering",
@@ -72,7 +72,7 @@
           12
         ]
       ],
-      "id": 3372,
+      "id": 3374,
       "flags": {},
       "overrides": false,
       "inherits": "Space.height",
@@ -91,7 +91,7 @@
           23
         ]
       ],
-      "id": 3364,
+      "id": 3366,
       "flags": {
         "isPublic": true
       },
@@ -112,7 +112,7 @@
           15
         ]
       ],
-      "id": 3360,
+      "id": 3362,
       "flags": {},
       "overrides": false,
       "inherits": "Space.isPlaying",
@@ -131,7 +131,7 @@
           16
         ]
       ],
-      "id": 3362,
+      "id": 3364,
       "flags": {},
       "overrides": false,
       "inherits": "Space.outerBound",
@@ -150,7 +150,7 @@
           20
         ]
       ],
-      "id": 3210,
+      "id": 3212,
       "flags": {
         "isPublic": true
       },
@@ -171,7 +171,7 @@
           10
         ]
       ],
-      "id": 3366,
+      "id": 3368,
       "flags": {},
       "overrides": false,
       "inherits": "Space.size",
@@ -190,7 +190,7 @@
           11
         ]
       ],
-      "id": 3370,
+      "id": 3372,
       "flags": {},
       "overrides": false,
       "inherits": "Space.width",
@@ -211,7 +211,7 @@
           5
         ]
       ],
-      "id": 3318,
+      "id": 3320,
       "flags": {},
       "overrides": false,
       "inherits": "Space.add",
@@ -241,7 +241,7 @@
           12
         ]
       ],
-      "id": 3212,
+      "id": 3214,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -289,7 +289,7 @@
           9
         ]
       ],
-      "id": 3224,
+      "id": 3226,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -331,7 +331,7 @@
           14
         ]
       ],
-      "id": 3243,
+      "id": 3245,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -361,7 +361,7 @@
           11
         ]
       ],
-      "id": 3234,
+      "id": 3236,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -402,7 +402,7 @@
           11
         ]
       ],
-      "id": 3238,
+      "id": 3240,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -449,7 +449,7 @@
           16
         ]
       ],
-      "id": 3378,
+      "id": 3380,
       "flags": {
         "isAbstract": true
       },
@@ -474,7 +474,7 @@
           18
         ]
       ],
-      "id": 3380,
+      "id": 3382,
       "flags": {
         "isAbstract": true
       },
@@ -499,7 +499,7 @@
           14
         ]
       ],
-      "id": 3315,
+      "id": 3317,
       "flags": {},
       "overrides": false,
       "inherits": "Space.minFrameTime",
@@ -529,7 +529,7 @@
           7
         ]
       ],
-      "id": 3334,
+      "id": 3336,
       "flags": {},
       "overrides": false,
       "inherits": "Space.pause",
@@ -559,7 +559,7 @@
           6
         ]
       ],
-      "id": 3326,
+      "id": 3328,
       "flags": {},
       "overrides": false,
       "inherits": "Space.play",
@@ -589,7 +589,7 @@
           21
         ]
       ],
-      "id": 3331,
+      "id": 3333,
       "flags": {
         "isProtected": true
       },
@@ -621,7 +621,7 @@
           10
         ]
       ],
-      "id": 3342,
+      "id": 3344,
       "flags": {},
       "overrides": false,
       "inherits": "Space.playOnce",
@@ -651,7 +651,7 @@
           9
         ]
       ],
-      "id": 3312,
+      "id": 3314,
       "flags": {},
       "overrides": false,
       "inherits": "Space.refresh",
@@ -681,7 +681,7 @@
           8
         ]
       ],
-      "id": 3321,
+      "id": 3323,
       "flags": {},
       "overrides": false,
       "inherits": "Space.remove",
@@ -711,7 +711,7 @@
           11
         ]
       ],
-      "id": 3324,
+      "id": 3326,
       "flags": {},
       "overrides": false,
       "inherits": "Space.removeAll",
@@ -734,7 +734,7 @@
           18
         ]
       ],
-      "id": 3345,
+      "id": 3347,
       "flags": {
         "isProtected": true
       },
@@ -766,7 +766,7 @@
           8
         ]
       ],
-      "id": 3329,
+      "id": 3331,
       "flags": {},
       "overrides": false,
       "inherits": "Space.replay",
@@ -789,7 +789,7 @@
           17
         ]
       ],
-      "id": 3374,
+      "id": 3376,
       "flags": {
         "isAbstract": true
       },
@@ -827,7 +827,7 @@
           8
         ]
       ],
-      "id": 3337,
+      "id": 3339,
       "flags": {},
       "overrides": false,
       "inherits": "Space.resume",
@@ -850,7 +850,7 @@
           6
         ]
       ],
-      "id": 3339,
+      "id": 3341,
       "flags": {},
       "overrides": false,
       "inherits": "Space.stop",
@@ -880,7 +880,7 @@
           17
         ]
       ],
-      "id": 3246,
+      "id": 3248,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -916,7 +916,7 @@
           14
         ]
       ],
-      "id": 3218,
+      "id": 3220,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -964,7 +964,7 @@
           11
         ]
       ],
-      "id": 3229,
+      "id": 3231,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1009,7 +1009,7 @@
           17
         ]
       ],
-      "id": 3292,
+      "id": 3294,
       "flags": {
         "isProtected": true
       },
@@ -1027,7 +1027,7 @@
           4
         ]
       ],
-      "id": 3291,
+      "id": 3293,
       "flags": {},
       "type": "id",
       "overrides": false,
@@ -1043,7 +1043,7 @@
           23
         ]
       ],
-      "id": 3299,
+      "id": 3301,
       "flags": {
         "isProtected": true
       },
@@ -1061,7 +1061,7 @@
           19
         ]
       ],
-      "id": 3298,
+      "id": 3300,
       "flags": {
         "isProtected": true
       },
