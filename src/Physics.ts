@@ -16,6 +16,7 @@ export class World {
   protected _gravity:Pt = new Pt();
   protected _friction:number = 1; // general friction
   protected _damping:number = 0.75; // collision damping
+  protected _iterations:number = 1; // number of iterations to solve edge constraint 
   protected _bound:Bound;
   
   protected _particles:Particle[] = [];
@@ -64,6 +65,12 @@ export class World {
    */
   get damping():number { return this._damping; }
   set damping( f:number ) { this._damping = f; }
+
+  /**
+   * constraint solver iterations.
+   */
+    get iterations():number { return this._iterations; }
+    set iterations( f:number ) { this._iterations = f; }
 
   /**
    * Get the number of bodies.
@@ -327,8 +334,10 @@ export class World {
         }
 
         // constraints
-        bds.processEdges();
-      
+        for (let i=0; i<this._iterations; i++) {
+          bds.processEdges()
+        }
+        
         // render
         if (this._drawBodies) this._drawBodies( bds, i );
       }
