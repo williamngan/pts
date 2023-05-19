@@ -76,5 +76,5 @@ For larger PRs, please ping [@williamngan](https://twitter.com/williamngan) to d
 
 ### License
 Apache License 2.0. See LICENSE file for details.   
-Copyright © 2017-2019 by William Ngan and contributors.
+Copyright © 2017-today by William Ngan and contributors.
 
