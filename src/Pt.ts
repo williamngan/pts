@@ -19,12 +19,14 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * @example `new Pt()`, `new Pt(1,2,3,4,5)`, `new Pt([1,2])`, `new Pt({x:0, y:1})`, `new Pt(pt)`
    * @param args a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
    */
-  constructor(...args) {
+  constructor(...args: Array<number|number[]|IPt|Float32Array>) {
+    let params;
     if (args.length === 1 && typeof args[0] == "number") {
-      super( args[0] ); // init with the TypedArray's length. Needed this in order to make ".map", ".slice" etc work.
+      params = args[0]; // init with the TypedArray's length. Needed this in order to make ".map", ".slice" etc work.
     } else {
-      super( (args.length>0) ? Util.getArgs(args) : [0,0] );
+      params = (args.length>0) ? Util.getArgs(args) : [0,0];
     }    
+    super( params );
   }
 
 
