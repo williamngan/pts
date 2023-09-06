@@ -95,7 +95,7 @@
     animate: (time, ftime) => {
 
       if (sound && sound.playable) {
-        if (!sound.playing) space.stop(); // stop animation if not playing
+        // if (!sound.playing) space.stop(); // stop animation if not playing
 
         // get b-spline curve and draw face shape
         let anchors = getCtrlPoints(time); 
@@ -183,7 +183,12 @@
   space.playOnce(200).bindMouse().bindTouch();
   
   // For use in demo page only
-  if (window.registerDemo) window.registerDemo(demoID, space, startFn, null, true);
+  if (window.registerDemo) window.registerDemo(demoID, space, null, stopSound);
+  
+  function stopSound() {
+    if (sound && sound.playing) sound.stop();
+  }
+
   function startFn() {
     radius = space.size.minValue().value/3;
     ctrls = Create.radialPts( space.center, radius, 10, -Const.pi-Const.quarter_pi  );

@@ -40,7 +40,7 @@
 
     animate: (time, ftime) => {
       if (sound && sound.playable) {
-        if (!sound.playing) space.stop(); // stop animation if not playing
+        // if (!sound.playing) space.stop(); // stop animation if not playing
 
         // map time domain data to lines drawing two half circles
         let tdata = sound.timeDomainTo( [Const.two_pi, 1] ).map( (t, i) => {
@@ -73,7 +73,10 @@
   space.playOnce(200).bindMouse().bindTouch();
   
   // For use in demo page only
-  if (window.registerDemo) window.registerDemo(demoID, space, null, null, true);
+  if (window.registerDemo) window.registerDemo(demoID, space, null, stopSound);
   
+  function stopSound() {
+    if (sound && sound.playing) sound.stop();
+  }
   
 })();

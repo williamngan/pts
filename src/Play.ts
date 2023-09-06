@@ -201,12 +201,17 @@ export class Sound {
    */
   constructor( type:SoundType ) {
     this._type = type;
-    // @ts-ignore
-    let _ctx = window.AudioContext || window.webkitAudioContext || false;
+    this._createAudioContext();
+  }
+
+  /**
+   * Create an AudioContext instance. This is called internally only.
+   */
+  protected _createAudioContext() {
+    let _ctx = window.AudioContext;
     if (!_ctx) throw( new Error("Your browser doesn't support Web Audio. (No AudioContext)") );
     this._ctx = (_ctx) ? new _ctx() : undefined;
   }
-
 
   /**
    * Create a `Sound` given an [AudioNode](https://developer.mozilla.org/en-US/docs/Web/API/AudioNode) and an [AudioContext](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext) from Web Audio API. See also [this example](../guide/js/examples/tone.html) using tone.js in the [guide](../guide/Sound-0800.html).
@@ -570,7 +575,11 @@ export class Sound {
    * @param timeAt optional parameter to play from a specific time
    */
   start( timeAt:number=0 ):this {
-    if (this._ctx.state === 'suspended') this._ctx.resume();
+    if (!this._ctx) {
+      this._createAudioContext();
+    } else if (this._ctx.state === 'suspended') {
+      this._ctx.resume();
+    }
 
     if (this._type === "file") {
       if (!!this._buffer) {

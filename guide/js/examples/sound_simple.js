@@ -65,7 +65,7 @@
 
     animate: (time, ftime) => {
       if (sound && sound.playable) {
-        if (!sound.playing) space.stop(); // stop animation if not playing
+        // if (!sound.playing) space.stop(); // stop animation if not playing
         sound.freqDomainTo(space.size).map( (t, i) => {
           form.fillOnly( colors[i%5] ).point( t, 30 );
         });
@@ -85,7 +85,10 @@
   space.playOnce(200).bindMouse().bindTouch();
   
   // For use in demo page only
-  if (window.registerDemo) window.registerDemo(demoID, space, null, null, true);
+  if (window.registerDemo) window.registerDemo(demoID, space, null, stopSound);
   
+  function stopSound() {
+    if (sound && sound.playing) sound.stop();
+  }
   
 })();

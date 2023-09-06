@@ -40,7 +40,7 @@
 
     animate: (time, ftime) => {
       if (sound && sound.playable) {
-        if (!sound.playing) space.stop(); // stop animation if not playing
+        // if (!sound.playing) space.stop(); // stop animation if not playing
 
         let fd = sound.freqDomainTo( [space.size.y, space.size.x/2] );
         let h = space.size.y / fd.length;
@@ -73,9 +73,12 @@
   // start
   // Note that `playOnce(200)` will stop after 200ms. Use `play()` to run the animation loop continuously. 
   space.playOnce(200).bindMouse().bindTouch();
-  
+    
   // For use in demo page only
-  if (window.registerDemo) window.registerDemo(demoID, space, null, null, true);
-
+  if (window.registerDemo) window.registerDemo(demoID, space, null, stopSound);
+  
+  function stopSound() {
+    if (sound && sound.playing) sound.stop();
+  }
   
 })();
