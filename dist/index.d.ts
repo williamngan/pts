@@ -205,7 +205,7 @@ declare type CanvasPatternRepetition = "repeat" | "repeat-x" | "repeat-y" | "no-
 
 declare class Pt extends Float32Array implements IPt, Iterable<number> {
     protected _id: string;
-    constructor(...args: any[]);
+    constructor(...args: Array<number | number[] | IPt | Float32Array>);
     static make(dimensions: number, defaultValue?: number, randomize?: boolean): Pt;
     get id(): string;
     set id(s: string);
@@ -1209,6 +1209,7 @@ declare class World {
     protected _gravity: Pt;
     protected _friction: number;
     protected _damping: number;
+    protected _iterations: number;
     protected _bound: Bound;
     protected _particles: Particle[];
     protected _bodies: Body[];
@@ -1225,6 +1226,8 @@ declare class World {
     set friction(f: number);
     get damping(): number;
     set damping(f: number);
+    get iterations(): number;
+    set iterations(f: number);
     get bodyCount(): number;
     get particleCount(): number;
     body(id: number | string): any;
@@ -1329,6 +1332,7 @@ declare class Sound {
     protected _playing: boolean;
     protected _timestamp: number;
     constructor(type: SoundType);
+    protected _createAudioContext(): void;
     static from(node: AudioNode, ctx: AudioContext, type?: SoundType, stream?: MediaStream): Sound;
     static load(source: HTMLMediaElement | string, crossOrigin?: string): Promise<Sound>;
     static loadAsBuffer(url: string): Promise<Sound>;
