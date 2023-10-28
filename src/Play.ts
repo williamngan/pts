@@ -246,7 +246,9 @@ export class Sound {
       s._source.addEventListener("ended", function () { s._playing = false; } );
       s._source.addEventListener('error', function () { reject("Error loading sound"); });
       s._source.addEventListener('canplaythrough', function () {
-        s._node = s._ctx.createMediaElementSource( s._source );
+        if (!s._node) {
+          s._node = s._ctx.createMediaElementSource( s._source );
+        }
         resolve( s );
       });
     });
