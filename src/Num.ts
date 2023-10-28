@@ -94,7 +94,7 @@ export class Num {
    */
   static randomPt( a:PtLike, b?:PtLike ):Pt {
     let p = new Pt( a.length );
-    let range = b ? Vec.subtract(b, a) : a;
+    let range = b ? Vec.subtract(b.slice(), a) : a;
     let start = b ? a : new Pt(a.length).fill(0);
     for (let i=0, len=p.length; i<len; i++) {
       p[i] = Num.random() * range[i] + start[i];
