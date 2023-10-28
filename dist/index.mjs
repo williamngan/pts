@@ -2110,7 +2110,7 @@ var Num = class {
    */
   static randomPt(a, b) {
     let p = new Pt(a.length);
-    let range = b ? Vec.subtract(b, a) : a;
+    let range = b ? Vec.subtract(b.slice(), a) : a;
     let start = b ? a : new Pt(a.length).fill(0);
     for (let i = 0, len = p.length; i < len; i++) {
       p[i] = Num.random() * range[i] + start[i];
@@ -6186,6 +6186,14 @@ var CanvasForm = class extends VisualForm {
     return this;
   }
   /**
+  * Set current fill style and remove stroke style.
+  * @param c fill color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle))
+  */
+  fillOnly(c) {
+    this.stroke(false);
+    return this.fill(c);
+  }
+  /**
   * Set current stroke style. Provide a valid color string or `false` to specify no stroke color.
   * @example `form.stroke("#F90")`, `form.stroke("rgba(0,0,0,.5")`, `form.stroke(false)`, `form.stroke("#000", 0.5, 'round', 'square')`
   * @param c stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle))
@@ -6214,6 +6222,17 @@ var CanvasForm = class extends VisualForm {
       }
     }
     return this;
+  }
+  /**
+  * Set stroke style and remove fill style.
+  * @param c stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle))
+  * @param width Optional value (can be floating point) to set line width
+  * @param linejoin Optional string to set line joint style. Can be "miter", "bevel", or "round".
+  * @param linecap Optional string to set line cap style. Can be "butt", "round", or "square".
+  */
+  strokeOnly(c, width, linejoin, linecap) {
+    this.fill(false);
+    return this.stroke(c, width, linejoin, linecap);
   }
   /**
    * A convenient function to apply fill and/or stroke after custom drawings using canvas context (eg, `form.ctx.ellipse(...)`). 
@@ -10234,7 +10253,9 @@ var Sound = class {
         reject("Error loading sound");
       });
       s._source.addEventListener("canplaythrough", function() {
-        s._node = s._ctx.createMediaElementSource(s._source);
+        if (!s._node) {
+          s._node = s._ctx.createMediaElementSource(s._source);
+        }
         resolve(s);
       });
     });

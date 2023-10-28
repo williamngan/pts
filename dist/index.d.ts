@@ -619,14 +619,16 @@ declare class CanvasForm extends VisualForm {
     protected _ctx: CanvasRenderingContext2D;
     protected _estimateTextWidth: (string: any) => number;
     protected _style: DefaultFormStyle;
-    constructor(space: CanvasSpace | CanvasRenderingContext2D);
+    constructor(space?: CanvasSpace | CanvasRenderingContext2D);
     get space(): CanvasSpace;
     get ctx(): PtsCanvasRenderingContext2D;
     useOffscreen(off?: boolean, clear?: boolean | string): this;
     renderOffscreen(offset?: PtLike): void;
     alpha(a: number): this;
     fill(c: string | boolean | CanvasGradient | CanvasPattern): this;
+    fillOnly(c: string | boolean | CanvasGradient | CanvasPattern): this;
     stroke(c: string | boolean | CanvasGradient | CanvasPattern, width?: number, linejoin?: CanvasLineJoin, linecap?: CanvasLineCap): this;
+    strokeOnly(c: string | boolean | CanvasGradient | CanvasPattern, width?: number, linejoin?: CanvasLineJoin, linecap?: CanvasLineCap): this;
     applyFillStroke(filled?: boolean | string, stroked?: boolean | string, strokeWidth?: number): this;
     gradient(stops: [number, string][] | string[]): ((area1: GroupLike, area2?: GroupLike) => CanvasGradient);
     composite(mode?: GlobalCompositeOperation): this;
