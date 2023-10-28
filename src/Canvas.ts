@@ -460,7 +460,7 @@ export class CanvasForm extends VisualForm {
   * Create a new CanvasForm. You may also use [`CanvasSpace.getForm()`](#link) to get the default form.
   * @param space an instance of CanvasSpace
   */
-  constructor( space:CanvasSpace|CanvasRenderingContext2D ) {
+  constructor( space?:CanvasSpace|CanvasRenderingContext2D ) {
     super();
 
     // allow for undefined context to support custom contexts via subclassing. 
@@ -551,6 +551,14 @@ export class CanvasForm extends VisualForm {
       return this;
     }
     
+    /**
+    * Set current fill style and remove stroke style.
+    * @param c fill color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle))
+    */
+    fillOnly( c:string|boolean|CanvasGradient|CanvasPattern ):this {
+      this.stroke( false );
+      return this.fill( c );
+    }
     
     
     /**
@@ -584,6 +592,17 @@ export class CanvasForm extends VisualForm {
       return this;
     }
 
+    /**
+    * Set stroke style and remove fill style.
+    * @param c stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle))
+    * @param width Optional value (can be floating point) to set line width
+    * @param linejoin Optional string to set line joint style. Can be "miter", "bevel", or "round".
+    * @param linecap Optional string to set line cap style. Can be "butt", "round", or "square".
+    */
+    strokeOnly( c:string|boolean|CanvasGradient|CanvasPattern, width?:number, linejoin?:CanvasLineJoin, linecap?:CanvasLineCap ):this {
+      this.fill( false );
+      return this.stroke( c, width, linejoin, linecap );
+    }
 
     /**
      * A convenient function to apply fill and/or stroke after custom drawings using canvas context (eg, `form.ctx.ellipse(...)`). 
