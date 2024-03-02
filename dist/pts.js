@@ -1,4 +1,4 @@
-/* Copyright © 2017-2023 William Ngan and contributors.
+/* Copyright © 2017-2024 William Ngan and contributors.
 Licensed under Apache 2.0 License.
 See https://github.com/williamngan/pts for details. */
 (() => {
@@ -4318,6 +4318,8 @@ See https://github.com/williamngan/pts for details. */
     click: "click",
     keydown: "keydown",
     keyup: "keyup",
+    pointerdown: "pointerdown",
+    pointerup: "pointerup",
     contextmenu: "contextmenu",
     all: "all"
   };
@@ -4793,7 +4795,7 @@ See https://github.com/williamngan/pts for details. */
     add(p) {
       let player = typeof p == "function" ? { animate: p } : p;
       let k = this.playerCount++;
-      let pid = this.id + k;
+      let pid = player.animateID || this.id + k;
       this.players[pid] = player;
       player.animateID = pid;
       if (player.resize && this.bound.inited)
@@ -5030,9 +5032,13 @@ See https://github.com/williamngan/pts for details. */
         this._mouseOut = this._mouseOut.bind(this);
         this._mouseMove = this._mouseMove.bind(this);
         this._mouseClick = this._mouseClick.bind(this);
+        this._pointerDown = this._pointerDown.bind(this);
+        this._pointerUp = this._pointerUp.bind(this);
         this._contextMenu = this._contextMenu.bind(this);
         this.bindCanvas("mousedown", this._mouseDown, {}, customTarget);
+        this.bindCanvas("pointerdown", this._pointerDown, {}, customTarget);
         this.bindCanvas("mouseup", this._mouseUp, {}, customTarget);
+        this.bindCanvas("pointerup", this._pointerUp, {}, customTarget);
         this.bindCanvas("mouseover", this._mouseOver, {}, customTarget);
         this.bindCanvas("mouseout", this._mouseOut, {}, customTarget);
         this.bindCanvas("mousemove", this._mouseMove, {}, customTarget);
@@ -5041,7 +5047,9 @@ See https://github.com/williamngan/pts for details. */
         this._hasMouse = true;
       } else {
         this.unbindCanvas("mousedown", this._mouseDown, {}, customTarget);
+        this.unbindCanvas("pointerdown", this._pointerDown, {}, customTarget);
         this.unbindCanvas("mouseup", this._mouseUp, {}, customTarget);
+        this.unbindCanvas("pointerup", this._pointerUp, {}, customTarget);
         this.unbindCanvas("mouseover", this._mouseOver, {}, customTarget);
         this.unbindCanvas("mouseout", this._mouseOut, {}, customTarget);
         this.unbindCanvas("mousemove", this._mouseMove, {}, customTarget);
@@ -5153,6 +5161,13 @@ See https://github.com/williamngan/pts for details. */
       this._pressed = true;
       return false;
     }
+    _pointerDown(evt) {
+      this._mouseAction(UIPointerActions.pointerdown, evt);
+      if (evt.target instanceof Element) {
+        evt.target.setPointerCapture(evt.pointerId);
+      }
+      return false;
+    }
     /**
     * MouseUp handler.
     * @param evt 
@@ -5165,6 +5180,16 @@ See https://github.com/williamngan/pts for details. */
       }
       this._pressed = false;
       this._dragged = false;
+      return false;
+    }
+    _pointerUp(evt) {
+      this._mouseAction(UIPointerActions.pointerup, evt);
+      if (evt.target instanceof Element) {
+        evt.target.releasePointerCapture(evt.pointerId);
+        if (this._dragged)
+          this._mouseAction(UIPointerActions.drop, evt);
+        this._dragged = false;
+      }
       return false;
     }
     /**

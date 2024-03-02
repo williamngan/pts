@@ -22,6 +22,8 @@ declare const UIPointerActions: {
     click: string;
     keydown: string;
     keyup: string;
+    pointerdown: string;
+    pointerup: string;
     contextmenu: string;
     all: string;
 };
@@ -464,9 +466,11 @@ declare abstract class MultiTouchSpace extends Space {
     bindTouch(bind?: boolean, passive?: boolean, customTarget?: Element): this;
     bindKeyboard(bind?: boolean): this;
     touchesToPoints(evt: TouchEvent, which?: TouchPointsKey): Pt[];
-    protected _mouseAction(type: string, evt: MouseEvent | TouchEvent): void;
+    protected _mouseAction(type: string, evt: MouseEvent | TouchEvent | PointerEvent): void;
     protected _mouseDown(evt: MouseEvent | TouchEvent): boolean;
+    protected _pointerDown(evt: PointerEvent): boolean;
     protected _mouseUp(evt: MouseEvent | TouchEvent): boolean;
+    protected _pointerUp(evt: PointerEvent): boolean;
     protected _mouseMove(evt: MouseEvent | TouchEvent): boolean;
     protected _mouseOver(evt: MouseEvent | TouchEvent): boolean;
     protected _mouseOut(evt: MouseEvent | TouchEvent): boolean;
