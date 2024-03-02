@@ -21,6 +21,7 @@ export const UIPointerActions = {
   drag: "drag", uidrag: "uidrag", drop: "drop", uidrop: "uidrop", 
   over: "over", out: "out", enter: "enter", leave: "leave", click: "click", 
   keydown: 'keydown', keyup: 'keyup',
+  pointerdown: "pointerdown", pointerup: "pointerup",
   contextmenu: "contextmenu", all: "all"
 };
 

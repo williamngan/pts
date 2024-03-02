@@ -369,10 +369,14 @@ export abstract class MultiTouchSpace extends Space {
       this._mouseOut = this._mouseOut.bind(this);
       this._mouseMove = this._mouseMove.bind(this);
       this._mouseClick = this._mouseClick.bind(this);
+      this._pointerDown = this._pointerDown.bind(this);
+      this._pointerUp = this._pointerUp.bind(this);
       this._contextMenu = this._contextMenu.bind(this);
 
       this.bindCanvas( "mousedown", this._mouseDown, {}, customTarget );
+      this.bindCanvas( "pointerdown", this._pointerDown, {}, customTarget );
       this.bindCanvas( "mouseup", this._mouseUp, {}, customTarget );
+      this.bindCanvas( "pointerup", this._pointerUp, {}, customTarget );
       this.bindCanvas( "mouseover", this._mouseOver, {}, customTarget);
       this.bindCanvas( "mouseout", this._mouseOut, {}, customTarget );
       this.bindCanvas( "mousemove", this._mouseMove, {}, customTarget );
@@ -381,7 +385,9 @@ export abstract class MultiTouchSpace extends Space {
       this._hasMouse = true;
     } else {
       this.unbindCanvas( "mousedown", this._mouseDown, {}, customTarget );
+      this.unbindCanvas( "pointerdown", this._pointerDown, {}, customTarget );
       this.unbindCanvas( "mouseup", this._mouseUp, {}, customTarget );
+      this.unbindCanvas( "pointerup", this._pointerUp, {}, customTarget );
       this.unbindCanvas( "mouseover", this._mouseOver, {}, customTarget );
       this.unbindCanvas( "mouseout", this._mouseOut, {}, customTarget );
       this.unbindCanvas( "mousemove", this._mouseMove, {}, customTarget );
@@ -460,7 +466,7 @@ export abstract class MultiTouchSpace extends Space {
   * @param evt mouse or touch event
   * @see [`Space.add`](#link)
   */
-  protected _mouseAction( type:string, evt:MouseEvent|TouchEvent ) {
+  protected _mouseAction( type:string, evt:MouseEvent|TouchEvent|PointerEvent ) {
     if (!this.isPlaying) return;
 
     let px = 0, py = 0;
@@ -503,6 +509,13 @@ export abstract class MultiTouchSpace extends Space {
     return false;
   }
   
+  protected _pointerDown( evt:PointerEvent) {
+    this._mouseAction( UIA.pointerdown, evt );
+    if ( evt.target instanceof Element ) {
+      evt.target.setPointerCapture( evt.pointerId );
+    }
+    return false;
+  }
   
   /**
   * MouseUp handler.
@@ -516,6 +529,16 @@ export abstract class MultiTouchSpace extends Space {
     }
     this._pressed = false;
     this._dragged = false;
+    return false;
+  }
+
+  protected _pointerUp( evt:PointerEvent) {
+    this._mouseAction( UIA.pointerup, evt );
+    if ( evt.target instanceof Element ) {
+      evt.target.releasePointerCapture( evt.pointerId );
+      if (this._dragged) this._mouseAction( UIA.drop, evt );
+      this._dragged = false;
+    }
     return false;
   }
   
