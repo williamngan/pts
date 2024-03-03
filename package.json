@@ -11,7 +11,8 @@
     "build-browser": "tsup --config tsup.browser.js && tsup --config tsup.min.js",
     "test": "mocha --require ts-node/register --reporter dot --file src/test/*.spec.ts",
     "test:auto": "mocha --opts mocha.opts --watch",
-    "docs": "typedoc --json docs/json/docs.json && python3 parse.py"
+    "docs": "typedoc --json docs/json/docs.json && python3 parse.py",
+    "lint": "eslint --ignore-path .eslintignore --ext .js,.ts"
   },
   "repository": {
     "type": "git",
@@ -20,11 +21,15 @@
   "author": "William Ngan",
   "license": "Apache-2.0",
   "devDependencies": {
+    "@stylistic/eslint-plugin": "^1.6.3",
     "@testdeck/mocha": "^0.2.1",
     "@types/dom-mediacapture-record": "^1.0.7",
     "@types/mocha": "^9.1.1",
     "@types/node": "^14.14.28",
+    "@typescript-eslint/eslint-plugin": "^7.1.0",
+    "@typescript-eslint/parser": "^7.1.0",
     "chai": "^4.3.0",
+    "eslint": "^8.57.0",
     "mocha": "^8.4.0",
     "source-map": "^0.7.2",
     "ts-node": "^9.1.1",
