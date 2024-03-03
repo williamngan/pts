@@ -25,10 +25,10 @@ export class SVGSpace extends DOMSpace {
   * @param callback an optional callback `function(boundingBox, spaceElement)` to be called when canvas is appended and ready. Alternatively, a "ready" event will also be fired from the `<svg>` element when it's appended, which can be traced with `spaceInstance.canvas.addEventListener("ready")`
   * @example `new SVGSpace( "#myElementID" )`
   */
-  constructor( elem:string|Element, callback?:Function ) {
+  constructor( elem:string | Element, callback?:Function ) {
     super( elem, callback );
     
-    if (this._canvas.nodeName.toLowerCase() != "svg") {
+    if ( this._canvas.nodeName.toLowerCase() != "svg" ) {
       let s = SVGSpace.svgElement( this._canvas, "svg", `${this.id}_svg` );
       this._container = this._canvas;
       this._canvas = s as SVGElement;
@@ -56,7 +56,7 @@ export class SVGSpace extends DOMSpace {
   * @param b a Bound object to resize to
   * @param evt Optionally pass a resize event
   */
-  resize( b:Bound, evt?:Event):this {
+  resize( b:Bound, evt?:Event ):this {
     super.resize( b, evt );
     SVGSpace.setAttr( this.element, {
       "viewBox": `0 0 ${this.bound.width} ${this.bound.height}`,
@@ -64,7 +64,7 @@ export class SVGSpace extends DOMSpace {
       "height": `${this.bound.height}`,
       "xmlns": "http://www.w3.org/2000/svg",
       "version": "1.1"
-    });
+    } );
     return this;
   }
   
@@ -76,11 +76,11 @@ export class SVGSpace extends DOMSpace {
    * @param id id attribute of the new element
    */
   static svgElement( parent:Element, name:string, id?:string ):SVGElement {
-    if (!parent || !parent.appendChild ) throw new Error( "parent is not a valid DOM element" );
+    if ( !parent || !parent.appendChild ) throw new Error( "parent is not a valid DOM element" );
     
-    let elem = document.querySelector(`#${id}`);
+    let elem = document.querySelector( `#${id}` );
 
-    if (!elem) {
+    if ( !elem ) {
       elem = document.createElementNS( "http://www.w3.org/2000/svg", name );
       elem.setAttribute( "id", id );
       
@@ -96,11 +96,11 @@ export class SVGSpace extends DOMSpace {
   * @param item a player item with an auto-assigned `animateID` property
   */
   remove( player:IPlayer ):this {
-    let temp = this._container.querySelectorAll( "."+SVGForm.scopeID( player ) );
+    let temp = this._container.querySelectorAll( "." + SVGForm.scopeID( player ) );
     
-    temp.forEach( (el:Element) => { 
+    temp.forEach( ( el:Element ) => { 
       el.parentNode.removeChild( el );
-    });
+    } );
     
     return super.remove( player );
   }
@@ -160,8 +160,8 @@ export class SVGForm extends VisualForm {
     
     this._space.add( { start: () => {
       this._ctx.group = this._space.element;
-      this._ctx.groupID = "pts_svg_"+(SVGForm.groupID++);
-      this._ctx.style = Object.assign({}, this._style);
+      this._ctx.groupID = "pts_svg_" + ( SVGForm.groupID++ );
+      this._ctx.style = Object.assign( {}, this._style );
       this._ready = true;
     }} );
   }
@@ -179,7 +179,7 @@ export class SVGForm extends VisualForm {
    * @param v  style value
    */
   styleTo( k, v ) { 
-    if (this._ctx.style[k] === undefined) throw new Error(`${k} style property doesn't exist`);
+    if ( this._ctx.style[k] === undefined ) throw new Error( `${k} style property doesn't exist` );
     this._ctx.style[k] = v; 
   }
   
@@ -200,8 +200,8 @@ export class SVGForm extends VisualForm {
     * @example `form.fill("#F90")`, `form.fill("rgba(0,0,0,.5")`, `form.fill(false)`
     * @param c a valid color string or `false` to specify no fill color.
     */
-  fill( c:string|boolean ):this {
-    if (typeof c == "boolean") {
+  fill( c:string | boolean ):this {
+    if ( typeof c == "boolean" ) {
       this.styleTo( "filled", c );
     } else {
       this.styleTo( "filled", true );
@@ -219,15 +219,15 @@ export class SVGForm extends VisualForm {
     * @param linejoin Optional string to set line joint style. Can be "miter", "bevel", or "round".
     * @param linecap Optional string to set line cap style. Can be "butt", "round", or "square".
     */
-  stroke( c:string|boolean, width?:number, linejoin?:string, linecap?:string ):this {
-    if (typeof c == "boolean") {
+  stroke( c:string | boolean, width?:number, linejoin?:string, linecap?:string ):this {
+    if ( typeof c == "boolean" ) {
       this.styleTo( "stroked", c );
     } else {
       this.styleTo( "stroked", true );
       this.styleTo( "stroke", c );
-      if (width) this.styleTo( "stroke-width", width );
-      if (linejoin) this.styleTo( "stroke-linejoin", linejoin );
-      if (linecap) this.styleTo( "stroke-linecap", linecap );
+      if ( width ) this.styleTo( "stroke-width", width );
+      if ( linejoin ) this.styleTo( "stroke-linejoin", linejoin );
+      if ( linecap ) this.styleTo( "stroke-linecap", linecap );
     }
     return this;
   }
@@ -238,8 +238,8 @@ export class SVGForm extends VisualForm {
    * @param c custom class name or `false` to reset it
    * @example `form.fill("#f00").cls("myClass").rects(r)` `form.cls(false).circles(c)`
    */
-  cls( c:string|boolean ) {
-    if (typeof c == "boolean") {
+  cls( c:string | boolean ) {
+    if ( typeof c == "boolean" ) {
       this._ctx.currentClass = "";
     } else {
       this._ctx.currentClass = c;
@@ -257,14 +257,14 @@ export class SVGForm extends VisualForm {
   * @param family Optional font-family such as "Helvetica, sans-serif"
   * @example `form.font( myFont )`, `form.font(14, "bold")`
   */
-  font( sizeOrFont:number|Font, weight?:string, style?:string, lineHeight?:number, family?:string ):this {
-    if (typeof sizeOrFont == "number") {
+  font( sizeOrFont:number | Font, weight?:string, style?:string, lineHeight?:number, family?:string ):this {
+    if ( typeof sizeOrFont == "number" ) {
       
       this._font.size = sizeOrFont;
-      if (family) this._font.face = family;
-      if (weight) this._font.weight = weight;
-      if (style) this._font.style = style;
-      if (lineHeight) this._font.lineHeight = lineHeight;
+      if ( family ) this._font.face = family;
+      if ( weight ) this._font.weight = weight;
+      if ( style ) this._font.style = style;
+      if ( lineHeight ) this._font.lineHeight = lineHeight;
       
     } else {
       this._font = sizeOrFont;
@@ -280,9 +280,9 @@ export class SVGForm extends VisualForm {
   * Reset the context's common styles to this form's styles. This supports using multiple forms in the same space.
   */
   reset():this {
-    this._ctx.style = Object.assign({}, this._style);
+    this._ctx.style = Object.assign( {}, this._style );
 
-    this._font = new Font( 10, "sans-serif");
+    this._font = new Font( 10, "sans-serif" );
     this._ctx.style['font'] = this._font.value;
 
     return this;
@@ -312,7 +312,7 @@ export class SVGForm extends VisualForm {
    * @returns this form's context
    */
   scope( item:IPlayer ) {
-    if (!item || item.animateID == null ) throw new Error("item not defined or not yet added to Space");
+    if ( !item || item.animateID == null ) throw new Error( "item not defined or not yet added to Space" );
     return this.updateScope( SVGForm.scopeID( item ), this.space.element );
   }
   
@@ -354,19 +354,19 @@ export class SVGForm extends VisualForm {
    * @example `SVGForm.style(elem, {fill: "#f90", stroke: false})`
    * @returns this DOM element 
    */
-  static style( elem:SVGElement, styles:object) {
+  static style( elem:SVGElement, styles:object ) {
     let st = [];
 
-    if ( !styles["filled"] ) st.push( "fill: none");
-    if ( !styles["stroked"] ) st.push( "stroke: none");
+    if ( !styles["filled"] ) st.push( "fill: none" );
+    if ( !styles["stroked"] ) st.push( "stroke: none" );
         
-    for (let k in styles) {
-      if ( styles.hasOwnProperty(k) && k != "filled" && k != "stroked" ) {
+    for ( let k in styles ) {
+      if ( styles.hasOwnProperty( k ) && k != "filled" && k != "stroked" ) {
         let v = styles[k];
-        if (v) {
-          if ( !styles["filled"] && k.indexOf('fill') === 0 ) {
+        if ( v ) {
+          if ( !styles["filled"] && k.indexOf( 'fill' ) === 0 ) {
             continue;
-          } else if ( !styles["stroked"] && k.indexOf('stroke') === 0 ) {
+          } else if ( !styles["stroked"] && k.indexOf( 'stroke' ) === 0 ) {
             continue;
           } else {
             st.push( `${k}: ${v}` );
@@ -375,7 +375,7 @@ export class SVGForm extends VisualForm {
       }
     }
     
-    return DOMSpace.setAttr( elem, {style: st.join(";")} );
+    return DOMSpace.setAttr( elem, {style: st.join( ";" )} );
   }
   
   
@@ -387,8 +387,8 @@ export class SVGForm extends VisualForm {
     * @param shape The shape of the point. Defaults to "square", but it can be "circle" or a custom shape function in your own implementation.
     * @example `SVGForm.point( p )`, `SVGForm.point( p, 10, "circle" )`
     */
-  static point( ctx:DOMFormContext, pt:PtLike, radius:number=5, shape:string="square" ):SVGElement {
-    if (shape === "circle") {
+  static point( ctx:DOMFormContext, pt:PtLike, radius:number = 5, shape:string = "square" ):SVGElement {
+    if ( shape === "circle" ) {
       return SVGForm.circle( ctx, pt, radius );
     } else {
       return SVGForm.square( ctx, pt, radius );
@@ -403,7 +403,7 @@ export class SVGForm extends VisualForm {
     * @param shape The shape of the point. Defaults to "square", but it can be "circle" or a custom shape function in your own implementation.
     * @example `form.point( p )`, `form.point( p, 10, "circle" )`
     */
-  point( pt:PtLike, radius:number=5, shape:string="square" ):this {
+  point( pt:PtLike, radius:number = 5, shape:string = "square" ):this {
     this.nextID();
     SVGForm.point( this._ctx, pt, radius, shape );
     return this;
@@ -416,15 +416,15 @@ export class SVGForm extends VisualForm {
     * @param pt center position of the circle
     * @param radius radius of the circle
     */
-  static circle( ctx:DOMFormContext, pt:PtLike, radius:number=10 ):SVGElement {
-    let elem = SVGSpace.svgElement( ctx.group, "circle", SVGForm.getID(ctx) );
+  static circle( ctx:DOMFormContext, pt:PtLike, radius:number = 10 ):SVGElement {
+    let elem = SVGSpace.svgElement( ctx.group, "circle", SVGForm.getID( ctx ) );
     
     DOMSpace.setAttr( elem, {
       cx: pt[0],
       cy: pt[1],
       r: radius,
       'class': `pts-svgform pts-circle ${ctx.currentClass}`,
-    });
+    } );
     
     SVGForm.style( elem, ctx.style );
     return elem;
@@ -456,12 +456,12 @@ export class SVGForm extends VisualForm {
   static arc( ctx:DOMFormContext, pt:PtLike, radius:number, startAngle:number, endAngle:number, cc?:boolean ):SVGElement {
     let elem = SVGSpace.svgElement( ctx.group, "path", SVGForm.getID( ctx ) );
     
-    const start = new Pt(pt).toAngle( startAngle, radius, true );
-    const end = new Pt(pt).toAngle( endAngle, radius, true );
-    const diff = Geom.boundAngle(endAngle) - Geom.boundAngle(startAngle);
+    const start = new Pt( pt ).toAngle( startAngle, radius, true );
+    const end = new Pt( pt ).toAngle( endAngle, radius, true );
+    const diff = Geom.boundAngle( endAngle ) - Geom.boundAngle( startAngle );
     let largeArc = ( diff > Const.pi ) ? true : false;
-    if (cc) largeArc = !largeArc;
-    const sweep = (cc) ? "0" : "1";
+    if ( cc ) largeArc = !largeArc;
+    const sweep = ( cc ) ? "0" : "1";
     
     const d = `M ${start[0]} ${start[1]} A ${radius} ${radius} 0 ${largeArc ? "1" : "0"} ${sweep} ${end[0]} ${end[1]}`;
     
@@ -498,12 +498,12 @@ export class SVGForm extends VisualForm {
   static square( ctx:DOMFormContext, pt:PtLike, halfsize:number ) {
     let elem = SVGSpace.svgElement( ctx.group, "rect", SVGForm.getID( ctx ) );
     DOMSpace.setAttr( elem, {
-      x: pt[0]-halfsize, 
-      y:pt[1]-halfsize, 
-      width: halfsize*2, 
-      height: halfsize*2,
+      x: pt[0] - halfsize, 
+      y:pt[1] - halfsize, 
+      width: halfsize * 2, 
+      height: halfsize * 2,
       'class': `pts-svgform pts-square ${ctx.currentClass}`,
-    });
+    } );
     SVGForm.style( elem, ctx.style );
     return elem;
   }
@@ -528,10 +528,10 @@ export class SVGForm extends VisualForm {
   */
   static line( ctx:DOMFormContext, pts:PtLikeIterable ):SVGElement {
     let points = SVGForm.pointsString( pts );
-    if (points.count < 2) return;
+    if ( points.count < 2 ) return;
     
     // if count > 2, treat it as poly-line
-    if (points.count > 2) return SVGForm._poly( ctx, points.string, false );
+    if ( points.count > 2 ) return SVGForm._poly( ctx, points.string, false );
     
     // if count == 2, treat it as line
     let elem = SVGSpace.svgElement( ctx.group, "line", SVGForm.getID( ctx ) );
@@ -543,7 +543,7 @@ export class SVGForm extends VisualForm {
       x2: p[1][0],
       y2: p[1][1],
       'class': `pts-svgform pts-line ${ctx.currentClass}`,
-    });
+    } );
     
     SVGForm.style( elem, ctx.style );
     return elem;
@@ -567,14 +567,14 @@ export class SVGForm extends VisualForm {
    * @param points a string of points' positions. See `SVGForm.pointsString` for conversion.
    * @param closePath a boolean to specify if the polygon path should be closed
    */
-  protected static _poly( ctx:DOMFormContext, points:string, closePath:boolean=true) {
+  protected static _poly( ctx:DOMFormContext, points:string, closePath:boolean = true ) {
     
-    let elem = SVGSpace.svgElement( ctx.group, ((closePath) ? "polygon" : "polyline"), SVGForm.getID(ctx) );
+    let elem = SVGSpace.svgElement( ctx.group, ( ( closePath ) ? "polygon" : "polyline" ), SVGForm.getID( ctx ) );
     
     DOMSpace.setAttr( elem, {
       points: points,
       'class': `pts-svgform pts-polygon ${ctx.currentClass}`,
-    });    
+    } );    
     SVGForm.style( elem, ctx.style );
     return elem;
   }
@@ -588,7 +588,7 @@ export class SVGForm extends VisualForm {
   protected static pointsString( pts: PtLikeIterable ):{string:string, count:number} {
     let points:string = "";
     let count = 0;
-    for (let p of pts) {
+    for ( let p of pts ) {
       points += `${p[0]},${p[1]} `;
       count++;
     }
@@ -624,9 +624,9 @@ export class SVGForm extends VisualForm {
   * @param pts a Group or an Iterable<PtLike> with 2 Pt specifying the top-left and bottom-right positions. 
   */
   static rect( ctx:DOMFormContext, pts:PtLikeIterable ):SVGElement {
-    if ( !Util.arrayCheck(pts) ) return;
+    if ( !Util.arrayCheck( pts ) ) return;
     
-    let elem = SVGSpace.svgElement( ctx.group, "rect", SVGForm.getID(ctx) );
+    let elem = SVGSpace.svgElement( ctx.group, "rect", SVGForm.getID( ctx ) );
     let bound = Group.fromArray( pts ).boundingBox();
     let size = Rectangle.size( bound );
     
@@ -636,7 +636,7 @@ export class SVGForm extends VisualForm {
       width: size[0],
       height: size[1],
       'class': `pts-svgform pts-rect ${ctx.currentClass}`,
-    });
+    } );
     
     SVGForm.style( elem, ctx.style );
     return elem;
@@ -662,7 +662,7 @@ export class SVGForm extends VisualForm {
     * @param `maxWidth` specify a maximum width per line
     */
   static text( ctx:DOMFormContext, pt:PtLike, txt:string ):SVGElement {
-    let elem = SVGSpace.svgElement( ctx.group, "text", SVGForm.getID(ctx) );
+    let elem = SVGSpace.svgElement( ctx.group, "text", SVGForm.getID( ctx ) );
     
     DOMSpace.setAttr( elem, {
       "pointer-events": "none",
@@ -670,7 +670,7 @@ export class SVGForm extends VisualForm {
       y: pt[1],
       dx: 0, dy: 0,
       'class': `pts-svgform pts-text ${ctx.currentClass}`,
-    });
+    } );
     
     elem.textContent = txt;
     
@@ -698,7 +698,7 @@ export class SVGForm extends VisualForm {
     * @param txt text
     */
   log( txt ):this {
-    this.fill("#000").stroke("#fff", 0.5).text( [10,14], txt );   
+    this.fill( "#000" ).stroke( "#fff", 0.5 ).text( [10,14], txt );   
     return this;
   }
   

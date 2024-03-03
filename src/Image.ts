@@ -25,12 +25,12 @@ export class Img {
    * @param space Set the `CanvasSpace` reference. This is optional but will make sure the image's pixelScale match the canvas and set the context for creating pattern.
    * @param crossOrigin an optional parameter to enable loading cross-domain images if set to true. The image server's configuration must also be set correctly. For more, see [this documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image).
    */
-  constructor( editable:boolean=false, space?:CanvasSpace, crossOrigin?:boolean ) {
+  constructor( editable:boolean = false, space?:CanvasSpace, crossOrigin?:boolean ) {
     this._editable = editable;
     this._space = space;
     this._scale = this._space ? this._space.pixelScale : 1;
     this._img = new Image();
-    if (crossOrigin) this._img.crossOrigin = "Anonymous";
+    if ( crossOrigin ) this._img.crossOrigin = "Anonymous";
   }
 
 
@@ -41,11 +41,11 @@ export class Img {
    * @param space Set the `CanvasSpace` reference. This is optional but will make sure the image's pixelScale match the canvas and set the context for creating pattern.
    * @param ready An optional ready callback function 
    */
-  static load( src:string, editable:boolean=false, space?:CanvasSpace, ready?:(img) => {} ):Img {
+  static load( src:string, editable:boolean = false, space?:CanvasSpace, ready?:( img ) => {} ):Img {
     const img = new Img( editable, space );
     img.load( src ).then( res => {
-      if (ready) ready(res);
-    });
+      if ( ready ) ready( res );
+    } );
     return img;
   }
 
@@ -57,8 +57,8 @@ export class Img {
    * @param space Set the `CanvasSpace` reference. This is optional but will make sure the image's pixelScale match the canvas and set the context for creating pattern.
    * @returns 
    */
-  static async loadAsync( src:string, editable:boolean=false, space?:CanvasSpace ) {
-    const img = await new Img(editable, space).load( src );
+  static async loadAsync( src:string, editable:boolean = false, space?:CanvasSpace ) {
+    const img = await new Img( editable, space ).load( src );
     return img;
   }
 
@@ -71,7 +71,7 @@ export class Img {
    * @param editable Specify if you want to manipulate pixels of this image. Default is `false`.
    * @returns a `CanvasPattern` instance for use in `fill()`
    */
-  static async loadPattern( src:string, space:CanvasSpace, repeat:CanvasPatternRepetition='repeat', editable:boolean=false ) {
+  static async loadPattern( src:string, space:CanvasSpace, repeat:CanvasPatternRepetition = 'repeat', editable:boolean = false ) {
     const img = await Img.loadAsync( src, editable, space );
     return img.pattern( repeat );
   }
@@ -97,29 +97,29 @@ export class Img {
    * @returns a Promise that resolves to an Img
    */
   load( src:string ): Promise<Img> {
-    return new Promise( (resolve,reject) => {
-      if (this._editable && !document) {
+    return new Promise( ( resolve,reject ) => {
+      if ( this._editable && !document ) {
         reject( "Cannot create html canvas element. document not found." );
       }
 
       this._img.src = src;
 
       this._img.onload = () => {
-        if (this._editable) {
-          if (!this._cv) this._cv = document.createElement( "canvas" ) as HTMLCanvasElement;
+        if ( this._editable ) {
+          if ( !this._cv ) this._cv = document.createElement( "canvas" ) as HTMLCanvasElement;
           this._drawToScale( this._scale, this._img );
-          this._data = this._ctx.getImageData(0, 0, this._cv.width, this._cv.height );
+          this._data = this._ctx.getImageData( 0, 0, this._cv.width, this._cv.height );
         }
   
         this._loaded = true;
         resolve( this );
       };
       
-      this._img.onerror = (evt:Event) => {
+      this._img.onerror = ( evt:Event ) => {
         reject( evt );
       };
 
-    });
+    } );
   }
   
 
@@ -129,11 +129,11 @@ export class Img {
    * @param canvasScale rescale factor for the canvas
    * @param img an image source like Image, Canvas, or ImageBitmap.
    */
-  protected _drawToScale( canvasScale:number|PtLike, img:CanvasImageSource ) {
+  protected _drawToScale( canvasScale:number | PtLike, img:CanvasImageSource ) {
     const nw = img.width as number;
     const nh = img.height as number;
     this.initCanvas( nw, nh, canvasScale );
-    if (img) this._ctx.drawImage( img, 0, 0, nw, nh, 0, 0, this._cv.width, this._cv.height );
+    if ( img ) this._ctx.drawImage( img, 0, 0, nw, nh, 0, 0, this._cv.width, this._cv.height );
   }
 
 
@@ -143,15 +143,15 @@ export class Img {
    * @param height height of canvas
    * @param canvasScale pixel scale
    */
-  initCanvas( width:number, height:number, canvasScale:number|PtLike = 1) {
-    if (!this._editable) {
+  initCanvas( width:number, height:number, canvasScale:number | PtLike = 1 ) {
+    if ( !this._editable ) {
       console.error( 'Cannot initiate canvas because this Img is not set to be editable' );
       return;
     }
     
-    if (!this._cv) this._cv = document.createElement( "canvas" ) as HTMLCanvasElement;
+    if ( !this._cv ) this._cv = document.createElement( "canvas" ) as HTMLCanvasElement;
     
-    const cms = (typeof canvasScale === 'number') ? [canvasScale, canvasScale] : canvasScale;   
+    const cms = ( typeof canvasScale === 'number' ) ? [canvasScale, canvasScale] : canvasScale;   
     this._cv.width = width * cms[0];
     this._cv.height = height * cms[1];
     this._ctx = this._cv.getContext( '2d' );
@@ -165,8 +165,8 @@ export class Img {
    * @returns a Promise that resolves to an ImageBitmap
    */
   bitmap( size?:PtLike ):Promise<ImageBitmap> {
-    const w = (size) ? size[0] : this._cv.width;
-    const h = (size) ? size[1] : this._cv.height;
+    const w = ( size ) ? size[0] : this._cv.width;
+    const h = ( size ) ? size[1] : this._cv.height;
     return createImageBitmap( this._cv, 0, 0, w, h );
   }
 
@@ -178,7 +178,7 @@ export class Img {
    * @returns a `CanvasPattern` instance for use in `fill()`
    */
   pattern( reptition:CanvasPatternRepetition = 'repeat', dynamic:boolean = false  ):CanvasPattern {
-    if (!this._space) throw "Cannot find CanvasSpace ctx to create image pattern";
+    if ( !this._space ) throw "Cannot find CanvasSpace ctx to create image pattern";
     return this._space.ctx.createPattern( dynamic ? this._cv : this._img, reptition );
   }
 
@@ -189,11 +189,11 @@ export class Img {
    */
   sync() {
     // retina: resize canvas to fit image original size
-    if (this._scale !== 1) {
+    if ( this._scale !== 1 ) {
       this.bitmap().then( b => {
-        this._drawToScale( 1/this._scale, b ); // rescale canvas to match original and draw saved bitmap        
+        this._drawToScale( 1 / this._scale, b ); // rescale canvas to match original and draw saved bitmap        
         this.load( this.toBase64() ); // load current canvas into image
-      });
+      } );
 
     // no retina so no need to rescale
     } else {
@@ -208,9 +208,9 @@ export class Img {
    * @param rescale Specify if the pixel position should be scaled. Usually use rescale when tracking image and don't rescale when tracking canvas. You may also set a custom scale value.
    * @returns [R,G,B,A] values of the pixel at the specific position
    */
-  pixel( p:PtLike, rescale:boolean|number=true ):Pt {
-    const s = ( typeof rescale == 'number' ) ? rescale : (rescale ? this._scale : 1);
-    return Img.getPixel( this._data, [ p[0]*s, p[1]*s ] );
+  pixel( p:PtLike, rescale:boolean | number = true ):Pt {
+    const s = ( typeof rescale == 'number' ) ? rescale : ( rescale ? this._scale : 1 );
+    return Img.getPixel( this._data, [p[0] * s, p[1] * s] );
   }
   
 
@@ -220,15 +220,15 @@ export class Img {
    * @param p a position on the image
    * @returns [R,G,B,A] values of the pixel at the specific position
    */
-  static getPixel( imgData:ImageData, p:PtLike):Pt {
-    const no = new Pt(0,0,0,0);
+  static getPixel( imgData:ImageData, p:PtLike ):Pt {
+    const no = new Pt( 0,0,0,0 );
     if ( p[0] >= imgData.width || p[1] >= imgData.height ) return no;
 
-    const i = Math.floor(p[1]) * ( imgData.width * 4 ) + ( Math.floor(p[0]) * 4 );
+    const i = Math.floor( p[1] ) * ( imgData.width * 4 ) + ( Math.floor( p[0] ) * 4 );
     const d = imgData.data;
-    if ( i >= d.length-4 ) return no;
+    if ( i >= d.length - 4 ) return no;
 
-    return new Pt( d[i], d[i+1], d[i+2], d[i+3] );
+    return new Pt( d[i], d[i + 1], d[i + 2], d[i + 3] );
   }
 
 
@@ -238,9 +238,9 @@ export class Img {
    * @param asScale If true, treat the first parameter as scales. Otherwise, treat it as specific sizes.
    */
   resize( sizeOrScale:PtLike, asScale:boolean = false ):this {
-    let s = asScale ? sizeOrScale : [ sizeOrScale[0]/this._img.naturalWidth, sizeOrScale[1]/this._img.naturalHeight ];
+    let s = asScale ? sizeOrScale : [sizeOrScale[0] / this._img.naturalWidth, sizeOrScale[1] / this._img.naturalHeight];
     this._drawToScale( s, this._img );
-    this._data = this._ctx.getImageData(0, 0, this._cv.width, this._cv.height );
+    this._data = this._ctx.getImageData( 0, 0, this._cv.width, this._cv.height );
     return this;
   }
 
@@ -262,7 +262,7 @@ export class Img {
    */
   filter( css:string ):this {
     this._ctx.filter = css;
-    this._ctx.drawImage( this._cv, 0, 0);
+    this._ctx.drawImage( this._cv, 0, 0 );
     this._ctx.filter = "none";
     return this;
   }
@@ -272,8 +272,8 @@ export class Img {
    * Remove the elements and data associated with this Img.
    */
   cleanup() {
-    if (this._cv) this._cv.remove();
-    if (this._img) this._img.remove();
+    if ( this._cv ) this._cv.remove();
+    if ( this._img ) this._img.remove();
     this._data = null;
   }
 
@@ -283,8 +283,8 @@ export class Img {
    * @param blob an image blob such as `new Blob([my_Uint8Array], {type: 'image/png'})`
    * @param editable Specify if you want to manipulate pixels of this image. Default is `false`.
    */
-  static fromBlob( blob:Blob, editable:boolean=false, space?:CanvasSpace  ):Promise<Img> {
-    let url = URL.createObjectURL(blob);
+  static fromBlob( blob:Blob, editable:boolean = false, space?:CanvasSpace  ):Promise<Img> {
+    let url = URL.createObjectURL( blob );
     return new Img( editable, space ).load( url );
   }
 
@@ -294,19 +294,19 @@ export class Img {
    * @param data 
    */
   static imageDataToBlob( data:ImageData ):Promise<Blob> {
-    return new Promise( function (resolve, reject) { 
-      if (!document) {
+    return new Promise( function ( resolve, reject ) { 
+      if ( !document ) {
         reject( "Cannot create html canvas element. document not found." );
       }
       let cv = document.createElement( "canvas" ) as HTMLCanvasElement;
       cv.width = data.width;
       cv.height = data.height;
-      cv.getContext("2d").putImageData( data, 0, 0);
+      cv.getContext( "2d" ).putImageData( data, 0, 0 );
       cv.toBlob( blob => {
         resolve( blob );
         cv.remove();
-      });
-    });
+      } );
+    } );
   }
 
 
@@ -322,9 +322,9 @@ export class Img {
    * Export current canvas image as a blob
    */
   toBlob():Promise<Blob> {
-    return new Promise( (resolve) => { 
-      this._cv.toBlob( blob => resolve(blob) );
-    });
+    return new Promise( ( resolve ) => { 
+      this._cv.toBlob( blob => resolve( blob ) );
+    } );
   }
 
 
@@ -332,7 +332,7 @@ export class Img {
    * Get a CanvasForm for drawing on the internal canvas if this Img is editable
    */
   getForm():CanvasForm {
-    if (!this._editable) {
+    if ( !this._editable ) {
       console.error( "Cannot get a CanvasForm because this Img is not editable" );
     }
     return this._ctx ? new CanvasForm( this._ctx ) : undefined;

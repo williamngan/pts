@@ -14,11 +14,11 @@ export class Vec {
    * Add `b` to vector `a`.
    * @returns vector `a`
    */
-  static add( a:PtLike, b:PtLike|number ):PtLike {
-    if (typeof b == "number") {
-      for (let i=0, len=a.length; i<len; i++) a[i] += b;
+  static add( a:PtLike, b:PtLike | number ):PtLike {
+    if ( typeof b == "number" ) {
+      for ( let i = 0, len = a.length; i < len; i++ ) a[i] += b;
     } else {
-      for (let i=0, len=a.length; i<len; i++) a[i] += b[i] || 0;
+      for ( let i = 0, len = a.length; i < len; i++ ) a[i] += b[i] || 0;
     }
     return a;
   }
@@ -27,11 +27,11 @@ export class Vec {
    * Subtract `b` from vector `a`.
    * @returns vector `a`
    */
-  static subtract( a:PtLike, b:PtLike|number ):PtLike {
-    if (typeof b == "number") {
-      for (let i=0, len=a.length; i<len; i++) a[i] -= b;
+  static subtract( a:PtLike, b:PtLike | number ):PtLike {
+    if ( typeof b == "number" ) {
+      for ( let i = 0, len = a.length; i < len; i++ ) a[i] -= b;
     } else {
-      for (let i=0, len=a.length; i<len; i++) a[i] -= b[i] || 0;
+      for ( let i = 0, len = a.length; i < len; i++ ) a[i] -= b[i] || 0;
     }
     return a;
   }
@@ -40,14 +40,14 @@ export class Vec {
    * Multiply `b` with vector `a`.
    * @returns vector `a`
    */
-  static multiply( a:PtLike, b:PtLike|number ):PtLike {
-    if (typeof b == "number") {
-      for (let i=0, len=a.length; i<len; i++) a[i] *= b;
+  static multiply( a:PtLike, b:PtLike | number ):PtLike {
+    if ( typeof b == "number" ) {
+      for ( let i = 0, len = a.length; i < len; i++ ) a[i] *= b;
     } else {
-      if (a.length != b.length) {
-        throw new Error(`Cannot do element-wise multiply since the array lengths don't match: ${a.toString()} multiply-with ${b.toString()}`);
+      if ( a.length != b.length ) {
+        throw new Error( `Cannot do element-wise multiply since the array lengths don't match: ${a.toString()} multiply-with ${b.toString()}` );
       }
-      for (let i=0, len=a.length; i<len; i++) a[i] *= b[i];
+      for ( let i = 0, len = a.length; i < len; i++ ) a[i] *= b[i];
     }
     return a;
   }
@@ -57,15 +57,15 @@ export class Vec {
    * Divide `a` over `b`.
    * @returns vector `a`
    */
-  static divide( a:PtLike, b:PtLike|number ):PtLike {
-    if (typeof b == "number") {
-      if (b === 0) throw new Error("Cannot divide by zero");
-      for (let i=0, len=a.length; i<len; i++) a[i] /= b;
+  static divide( a:PtLike, b:PtLike | number ):PtLike {
+    if ( typeof b == "number" ) {
+      if ( b === 0 ) throw new Error( "Cannot divide by zero" );
+      for ( let i = 0, len = a.length; i < len; i++ ) a[i] /= b;
     } else {
-      if (a.length != b.length) {
-        throw new Error(`Cannot do element-wise divide since the array lengths don't match. ${a.toString()} divide-by ${b.toString()}`);
+      if ( a.length != b.length ) {
+        throw new Error( `Cannot do element-wise divide since the array lengths don't match. ${a.toString()} divide-by ${b.toString()}` );
       }
-      for (let i=0, len=a.length; i<len; i++) a[i] /= b[i];
+      for ( let i = 0, len = a.length; i < len; i++ ) a[i] /= b[i];
     }
     return a;
   }
@@ -75,10 +75,10 @@ export class Vec {
    * Dot product of `a` and `b`.
    */
   static dot( a:PtLike, b:PtLike ):number {
-    if (a.length != b.length) throw new Error("Array lengths don't match");
+    if ( a.length != b.length ) throw new Error( "Array lengths don't match" );
     let d = 0;
-    for (let i=0, len=a.length; i<len; i++) {
-      d += a[i]*b[i];
+    for ( let i = 0, len = a.length; i < len; i++ ) {
+      d += a[i] * b[i];
     }
     return d;
   } 
@@ -88,14 +88,14 @@ export class Vec {
    * 2D cross product of `a` and `b`.
    */
   static cross2D( a:PtLike, b:PtLike ):number {
-    return a[0]*b[1] - a[1]*b[0];
+    return a[0] * b[1] - a[1] * b[0];
   }
 
   /**
    * 3D Cross product of `a` and `b`.
    */
   static cross( a:PtLike, b:PtLike ):Pt {
-    return new Pt( (a[1]*b[2] - a[2]*b[1]), (a[2]*b[0] - a[0]*b[2]), (a[0]*b[1] - a[1]*b[0]) );
+    return new Pt( ( a[1] * b[2] - a[2] * b[1] ), ( a[2] * b[0] - a[0] * b[2] ), ( a[0] * b[1] - a[1] * b[0] ) );
   }
 
 
@@ -110,9 +110,9 @@ export class Vec {
   /**
    * Unit vector of `a`. If magnitude of `a` is already known, pass it in the second paramter to optimize calculation.
    */
-  static unit( a:PtLike, magnitude:number=undefined ):PtLike {
-    let m = (magnitude===undefined) ? Vec.magnitude(a) : magnitude;
-    if (m===0) return Pt.make( a.length );
+  static unit( a:PtLike, magnitude:number = undefined ):PtLike {
+    const m = ( magnitude === undefined ) ? Vec.magnitude( a ) : magnitude;
+    if ( m === 0 ) return Pt.make( a.length );
     return Vec.divide( a, m );
   }
 
@@ -160,9 +160,9 @@ export class Vec {
   static max( a:PtLike ):{value, index} {
     let m = Number.MIN_VALUE;
     let index = 0;
-    for (let i=0, len=a.length; i<len; i++) {
+    for ( let i = 0, len = a.length; i < len; i++ ) {
       m = Math.max( m, a[i] );
-      if (m === a[i]) index = i;
+      if ( m === a[i] ) index = i;
     }
     return {value: m, index: index};
   }
@@ -175,9 +175,9 @@ export class Vec {
   static min( a:PtLike ):{value, index} {
     let m = Number.MAX_VALUE;
     let index = 0;
-    for (let i=0, len=a.length; i<len; i++) {
+    for ( let i = 0, len = a.length; i < len; i++ ) {
       m = Math.min( m, a[i] );
-      if (m === a[i]) index = i;
+      if ( m === a[i] ) index = i;
     }
     return {value: m, index: index};
   }
@@ -188,7 +188,7 @@ export class Vec {
    */
   static sum( a:PtLike ):number {
     let s = 0;
-    for (let i=0, len=a.length; i<len; i++) s += a[i];
+    for ( let i = 0, len = a.length; i < len; i++ ) s += a[i];
     return s;
   }
 
@@ -197,8 +197,8 @@ export class Vec {
    * Given a mapping function, update `a`'s value in each dimension.
    * @returns vector `a`
    */
-  static map( a:PtLike, fn:(n:number, index:number, arr) => number ):PtLike {
-    for (let i=0, len=a.length; i<len; i++) {
+  static map( a:PtLike, fn:( n:number, index:number, arr ) => number ):PtLike {
+    for ( let i = 0, len = a.length; i < len; i++ ) {
       a[i] = fn( a[i], i, a );
     }
     return a;
@@ -239,7 +239,7 @@ export class Mat {
    * Reset the internal 3x3 matrix to its identity
    */
   reset() {
-    this._33 = Mat.scale2DMatrix(1,1);
+    this._33 = Mat.scale2DMatrix( 1,1 );
   }
 
 
@@ -261,7 +261,7 @@ export class Mat {
    * @param at Optional origin location to rotate from. 
    */
   rotate2D( ang:number, at:PtLike = [0,0] ): this {
-    const m = Mat.rotateAt2DMatrix( Math.cos(ang), Math.sin(ang), at );
+    const m = Mat.rotateAt2DMatrix( Math.cos( ang ), Math.sin( ang ), at );
     this._33 = Mat.multiply( this._33, m );
     return this;
   }
@@ -296,16 +296,16 @@ export class Mat {
    * @param b a scalar number, an array of numeric arrays, or a group of Pt
    * @returns a new group with the same rows and columns as a and b
    */
-  static add( a:GroupLike, b:GroupLike|number[][]|number ):Group {
+  static add( a:GroupLike, b:GroupLike | number[][] | number ):Group {
     if ( typeof b != "number" ) {
-      if (a[0].length != b[0].length) throw new Error("Cannot add matrix if rows' and columns' size don't match.");
-      if (a.length != b.length) throw new Error("Cannot add matrix if rows' and columns' size don't match.");
+      if ( a[0].length != b[0].length ) throw new Error( "Cannot add matrix if rows' and columns' size don't match." );
+      if ( a.length != b.length ) throw new Error( "Cannot add matrix if rows' and columns' size don't match." );
     }
 
-    let g = new Group();
-    let isNum = typeof b == "number"; 
-    for (let i=0, len=a.length; i<len; i++) {
-      g.push( a[i].$add( (isNum) ? b : b[i] ) );
+    const g = new Group();
+    const isNum = typeof b == "number"; 
+    for ( let i = 0, len = a.length; i < len; i++ ) {
+      g.push( a[i].$add( ( isNum ) ? b : b[i] ) );
     }
 
     return g;
@@ -320,37 +320,37 @@ export class Mat {
    * @param elementwise if true, then the multiplication is done element-wise. Default is `false`.
    * @returns If not elementwise, this will return a new group with M Pt, each with N dimensions (M-rows, N-columns).
    */
-  static multiply( a:GroupLike, b:GroupLike|number[][]|number, transposed:boolean=false, elementwise:boolean=false ):Group {
+  static multiply( a:GroupLike, b:GroupLike | number[][] | number, transposed:boolean = false, elementwise:boolean = false ):Group {
     
-    let g = new Group();
+    const g = new Group();
 
-    if (typeof b != "number") {
+    if ( typeof b != "number" ) {
 
-      if (elementwise) {
-        if (a.length != b.length) throw new Error("Cannot multiply matrix element-wise because the matrices' sizes don't match.");
-        for (let ai = 0, alen = a.length; ai < alen; ai++) {
+      if ( elementwise ) {
+        if ( a.length != b.length ) throw new Error( "Cannot multiply matrix element-wise because the matrices' sizes don't match." );
+        for ( let ai = 0, alen = a.length; ai < alen; ai++ ) {
           g.push( a[ai].$multiply( b[ai] ) );
         }
 
       } else {
         
-        if (!transposed && a[0].length != b.length) throw new Error("Cannot multiply matrix if rows in matrix-a don't match columns in matrix-b.");
-        if (transposed && a[0].length != b[0].length) throw new Error("Cannot multiply matrix if transposed and the columns in both matrices don't match.");
+        if ( !transposed && a[0].length != b.length ) throw new Error( "Cannot multiply matrix if rows in matrix-a don't match columns in matrix-b." );
+        if ( transposed && a[0].length != b[0].length ) throw new Error( "Cannot multiply matrix if transposed and the columns in both matrices don't match." );
 
-        if (!transposed) b = Mat.transpose( b );
+        if ( !transposed ) b = Mat.transpose( b );
 
-        for (let ai = 0, alen = a.length; ai < alen; ai++) {
-          let p = Pt.make( b.length, 0 );
-          for (let bi = 0, blen = b.length; bi < blen; bi++) {
+        for ( let ai = 0, alen = a.length; ai < alen; ai++ ) {
+          const p = Pt.make( b.length, 0 );
+          for ( let bi = 0, blen = b.length; bi < blen; bi++ ) {
             p[bi] = Vec.dot( a[ai], b[bi] );
           }
-          g.push(p);
+          g.push( p );
         }
       }
 
     } else {
-      for (let ai = 0, alen = a.length; ai < alen; ai++) {
-        g.push( a[ai].$multiply(b) );
+      for ( let ai = 0, alen = a.length; ai < alen; ai++ ) {
+        g.push( a[ai].$multiply( b ) );
       }
     }
 
@@ -364,13 +364,13 @@ export class Mat {
    * @param idx index to zip at
    * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
    */
-  static zipSlice( g:GroupLike|number[][], index:number, defaultValue:number|boolean = false ):Pt {
-    let z = [];
-    for (let i=0, len=g.length; i<len; i++) {
-      if (g[i].length-1 < index && defaultValue === false) throw `Index ${index} is out of bounds`;
+  static zipSlice( g:GroupLike | number[][], index:number, defaultValue:number | boolean = false ):Pt {
+    const z = [];
+    for ( let i = 0, len = g.length; i < len; i++ ) {
+      if ( g[i].length - 1 < index && defaultValue === false ) throw `Index ${index} is out of bounds`;
       z.push( g[i][index] || defaultValue );
     }
-    return new Pt(z);
+    return new Pt( z );
   }
 
 
@@ -380,10 +380,10 @@ export class Mat {
    * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
    * @param useLongest If true, find the longest list of values in a Pt and use its length for zipping. Default is false, which uses the first item's length for zipping.
    */
-  static zip( g:GroupLike|number[][], defaultValue:number|boolean = false, useLongest=false ):Group {
-    let ps = new Group();
-    let len:number = (useLongest) ? (g as Array<number[]|Pt>).reduce( (a,b) => Math.max(a, b.length), 0 ) : g[0].length;
-    for (let i=0; i<len; i++) {
+  static zip( g:GroupLike | number[][], defaultValue:number | boolean = false, useLongest = false ):Group {
+    const ps = new Group();
+    const len:number = ( useLongest ) ? ( g as Array<number[] | Pt> ).reduce( ( a,b ) => Math.max( a, b.length ), 0 ) : g[0].length;
+    for ( let i = 0; i < len; i++ ) {
       ps.push( Mat.zipSlice( g, i, defaultValue ) );
     }
     return ps;
@@ -393,12 +393,12 @@ export class Mat {
   /**
    * Same as `zip` function.
    */
-  static transpose( g:GroupLike|number[][], defaultValue:number|boolean = false, useLongest=false ):Group {
+  static transpose( g:GroupLike | number[][], defaultValue:number | boolean = false, useLongest = false ):Group {
     return Mat.zip( g, defaultValue, useLongest );
   }
 
 
-  static toDOMMatrix( m:GroupLike|number[][]) {    
+  static toDOMMatrix( m:GroupLike | number[][] ) {    
     return [m[0][0], m[0][1], m[1][0], m[1][1], m[2][0], m[2][1]];
   }
 
@@ -409,10 +409,10 @@ export class Mat {
    * @param m 2x3 or 3x3 matrix
    * @returns a new transformed Pt
    */
-  static transform2D( pt:PtLike, m:GroupLike|number[][] ):Pt {
-    let x = pt[0] * m[0][0] + pt[1] * m[1][0] + m[2][0];
-    let y = pt[0] * m[0][1] + pt[1] * m[1][1] + m[2][1];
-    return new Pt(x, y);
+  static transform2D( pt:PtLike, m:GroupLike | number[][] ):Pt {
+    const x = pt[0] * m[0][0] + pt[1] * m[1][0] + m[2][0];
+    const y = pt[0] * m[0][1] + pt[1] * m[1][1] + m[2][1];
+    return new Pt( x, y );
   }
 
 
@@ -468,9 +468,9 @@ export class Mat {
    * Get a matrix to scale a point from an origin point. For use in `transform2D`.
    */
   static scaleAt2DMatrix( sx:number, sy:number, at:PtLike ):GroupLike {
-    let m = Mat.scale2DMatrix(sx, sy);
-    m[2][0] = -at[0]*sx + at[0];
-    m[2][1] = -at[1]*sy + at[1];
+    const m = Mat.scale2DMatrix( sx, sy );
+    m[2][0] = -at[0] * sx + at[0];
+    m[2][1] = -at[1] * sy + at[1];
     return m;
   }
 
@@ -479,9 +479,9 @@ export class Mat {
    * Get a matrix to rotate a point from an origin point. For use in `transform2D`.
    */
   static rotateAt2DMatrix( cosA:number, sinA:number, at:PtLike ):GroupLike {
-    let m = Mat.rotate2DMatrix(cosA, sinA);
-    m[2][0] = at[0]*(1-cosA) + at[1]*sinA;
-    m[2][1] = at[1]*(1-cosA) - at[0]*sinA;
+    const m = Mat.rotate2DMatrix( cosA, sinA );
+    m[2][0] = at[0] * ( 1 - cosA ) + at[1] * sinA;
+    m[2][1] = at[1] * ( 1 - cosA ) - at[0] * sinA;
     return m;
   }
 
@@ -490,9 +490,9 @@ export class Mat {
    * Get a matrix to shear a point from an origin point. For use in `transform2D`.
    */
   static shearAt2DMatrix( tanX:number, tanY:number, at:PtLike ):GroupLike {
-    let m = Mat.shear2DMatrix(tanX, tanY);
-    m[2][0] = -at[1]*tanY;
-    m[2][1] = -at[0]*tanX;
+    const m = Mat.shear2DMatrix( tanX, tanY );
+    m[2][0] = -at[1] * tanY;
+    m[2][1] = -at[0] * tanX;
     return m;
   }
 
@@ -503,25 +503,25 @@ export class Mat {
    * @param p1 second end point to define the reflection line
    */
   static reflectAt2DMatrix( p1:PtLike, p2:PtLike ) {
-    let intercept = Line.intercept( p1, p2 );
+    const intercept = Line.intercept( p1, p2 );
     
-    if (intercept == undefined) {
+    if ( intercept == undefined ) {
       return [
         new Pt( [-1, 0, 0] ),
         new Pt( [0, 1, 0] ),
-        new Pt( [p1[0]+p2[0], 0, 1] )  
+        new Pt( [p1[0] + p2[0], 0, 1] )  
       ];
     } else {
 
-      let yi = intercept.yi;
-      let ang2 = Math.atan( intercept.slope ) * 2;
-      let cosA = Math.cos( ang2 );
-      let sinA = Math.sin( ang2 );
+      const yi = intercept.yi;
+      const ang2 = Math.atan( intercept.slope ) * 2;
+      const cosA = Math.cos( ang2 );
+      const sinA = Math.sin( ang2 );
       
       return [
         new Pt( [cosA, sinA, 0] ),
         new Pt( [sinA, -cosA, 0] ),
-        new Pt( [-yi*sinA, yi + yi*cosA, 1] )
+        new Pt( [-yi * sinA, yi + yi * cosA, 1] )
       ];
     }
   }

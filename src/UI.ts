@@ -49,10 +49,10 @@ export class UI {
    * @param states optional a state object keep track of custom states for this UI
    * @param id optional id string
    */
-  constructor( group:PtLikeIterable, shape:string, states:{[key:string]: any}={}, id?:string ) {
+  constructor( group:PtLikeIterable, shape:string, states:{[key:string]: any} = {}, id?:string ) {
     this._group = Group.fromArray( group );
     this._shape = shape;
-    this._id = id === undefined ? `ui_${(UI._counter++)}` : id;
+    this._id = id === undefined ? `ui_${( UI._counter++ )}` : id;
     this._states = states;
     this._actions = {};
   }
@@ -129,8 +129,8 @@ export class UI {
    * @param if `value` is changed, return this instance. Otherwise, return the value of the specific key.
    */
   state( key:string, value?:any ):any {
-    if (!key) return null;
-    if (value !== undefined) {
+    if ( !key ) return null;
+    if ( value !== undefined ) {
       this._states[key] = value;
       return this; 
     }
@@ -145,7 +145,7 @@ export class UI {
    * @returns an id number that reference to this handler, for use in [`UI.off`](#link)
    */
   on( type:string, fn:UIHandler ):number {
-    if (!this._actions[type]) this._actions[type] = [];
+    if ( !this._actions[type] ) this._actions[type] = [];
     return UI._addHandler( this._actions[type], fn );
   }
 
@@ -157,8 +157,8 @@ export class UI {
    * @param fn a [`UIHandler`](#link) function: `fn( target:UI, pt:Pt, type:string, evt:MouseEvent )`
    */
   off( type:string, which?:number ):boolean {
-    if (!this._actions[type]) return false;
-    if (which === undefined) {
+    if ( !this._actions[type] ) return false;
+    if ( which === undefined ) {
       delete this._actions[type];
       return true;
     } else {
@@ -176,10 +176,10 @@ export class UI {
   listen( type:string, p:PtLike, evt:MouseEvent ):boolean {
     if ( this._actions[type] !== undefined ) {
       
-      if ( this._within(p) || Array.from(this._holds.values()).indexOf(type) >= 0 ) {
+      if ( this._within( p ) || Array.from( this._holds.values() ).indexOf( type ) >= 0 ) {
         UI._trigger( this._actions[type], this, p, type, evt );
         return true;
-      } else if (this._actions['all']) { // listen for all regardless of trigger
+      } else if ( this._actions['all'] ) { // listen for all regardless of trigger
         UI._trigger( this._actions['all'], this, p, type, evt );
         return true;
       }
@@ -193,8 +193,8 @@ export class UI {
    * @param type a string defined in [`UIPointerActions`](#link)
    */
   protected hold( type:string ):number {
-    let newKey = Math.max(0, ...Array.from(this._holds.keys())) + 1;
-    this._holds.set(newKey, type);
+    let newKey = Math.max( 0, ...Array.from( this._holds.keys() ) ) + 1;
+    this._holds.set( newKey, type );
     return newKey;
   }
 
@@ -204,8 +204,8 @@ export class UI {
    * @param key an id returned by the [`UI.hold`](#link) function
    */
   protected unhold( key?:number ):void {
-    if (key !== undefined) {
-      this._holds.delete(key);
+    if ( key !== undefined ) {
+      this._holds.delete( key );
     } else {
       this._holds.clear();
     }
@@ -220,7 +220,7 @@ export class UI {
    * @param evt a MouseEvent emitted by the browser (See [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent))
    */
   static track( uis:UI[], type:string, p:PtLike, evt:MouseEvent ):void {
-    for (let i=0, len=uis.length; i<len; i++) {
+    for ( let i = 0, len = uis.length; i < len; i++ ) {
       uis[i].listen( type, p, evt );
     }
   }
@@ -230,7 +230,7 @@ export class UI {
    * Take a custom render function to render this UI.
    * @param fn a render function
    */
-  render( fn:( group:Group, states:{[key:string]: any}) => void ):void {
+  render( fn:( group:Group, states:{[key:string]: any} ) => void ):void {
     fn( this._group, this._states );
   }
 
@@ -249,11 +249,11 @@ export class UI {
    */
   protected _within( p:PtLike ):boolean {
     let fn = null;
-    if (this._shape === UIShape.rectangle) {
+    if ( this._shape === UIShape.rectangle ) {
       fn = Rectangle.withinBound;
-    } else if (this._shape === UIShape.circle) {
+    } else if ( this._shape === UIShape.circle ) {
       fn = Circle.withinBound;
-    } else if (this._shape === UIShape.polygon) {
+    } else if ( this._shape === UIShape.polygon ) {
       fn = Polygon.hasIntersectPoint;
     } else {
       return false;
@@ -267,9 +267,9 @@ export class UI {
    * Static function to trigger an array of UIHandlers
    */
   protected static _trigger( fns:UIHandler[], target:UI, pt:PtLike, type:string, evt:MouseEvent ) {
-    if (fns) {
-      for (let i=0, len=fns.length; i<len; i++) {
-        if (fns[i]) fns[i]( target, pt, type, evt );
+    if ( fns ) {
+      for ( let i = 0, len = fns.length; i < len; i++ ) {
+        if ( fns[i] ) fns[i]( target, pt, type, evt );
       }
     }
   }
@@ -279,9 +279,9 @@ export class UI {
    * Static function to add a new handler to an array store of UIHandlers.
    */
   protected static _addHandler( fns:UIHandler[], fn:UIHandler ):number {
-    if (fn) {
+    if ( fn ) {
       fns.push( fn );
-      return fns.length-1;
+      return fns.length - 1;
     } else {
       return -1;
     }
@@ -292,10 +292,10 @@ export class UI {
    * Static function to remove an existing handler from an array store of UIHandlers.
    */
   protected static _removeHandler( fns:UIHandler[], index:number ):boolean {
-    if (index >=0 && index<fns.length) {
+    if ( index >= 0 && index < fns.length ) {
       let temp = fns.length;
       fns.splice( index, 1 );
-      return (temp > fns.length);
+      return ( temp > fns.length );
     } else {
       return false;
     }
@@ -318,45 +318,45 @@ export class UIButton extends UI {
    * @param states Optional default state object
    * @param id Optional id string
    */
-  constructor( group:PtLikeIterable, shape:string, states:{[key:string]: any}={}, id?:string ) {
+  constructor( group:PtLikeIterable, shape:string, states:{[key:string]: any} = {}, id?:string ) {
     super( group, shape, states, id );
     
-    if (states.hover === undefined) this._states['hover'] = false;
-    if (states.clicks === undefined) this._states['clicks'] = 0;
+    if ( states.hover === undefined ) this._states['hover'] = false;
+    if ( states.clicks === undefined ) this._states['clicks'] = 0;
 
     const UA = UIPointerActions;
 
     // listen for clicks when mouse up and increment clicks 
-    this.on( UA.up, (target:UI, pt:PtLike, type:string, evt:MouseEvent) => {
-      this.state( 'clicks', this._states.clicks+1 );
-    });
+    this.on( UA.up, ( target:UI, pt:PtLike, type:string, evt:MouseEvent ) => {
+      this.state( 'clicks', this._states.clicks + 1 );
+    } );
 
 
     // listen for move events and fire enter and leave events accordingly
-    this.on( UA.move, (target:UI, pt:PtLike, type:string, evt:MouseEvent) => {
+    this.on( UA.move, ( target:UI, pt:PtLike, type:string, evt:MouseEvent ) => {
       let hover = this._within( pt );
 
       // hover on
-      if (hover && !this._states.hover) {
-        this.state('hover', true);
+      if ( hover && !this._states.hover ) {
+        this.state( 'hover', true );
 
         // enter trigger
-        UI._trigger( this._actions[UA.enter], this, pt, UA.enter, evt);
+        UI._trigger( this._actions[UA.enter], this, pt, UA.enter, evt );
           
         // listen for hover off
-        var _capID = this.hold( UA.move ); // keep hold of second move
-        this._hoverID = this.on( UA.move, (t:UI, p:PtLike) => {
+        let _capID = this.hold( UA.move ); // keep hold of second move
+        this._hoverID = this.on( UA.move, ( t:UI, p:PtLike ) => {
           
-          if (!this._within( p ) && !this.state('dragging')) {
-            this.state('hover', false);
+          if ( !this._within( p ) && !this.state( 'dragging' ) ) {
+            this.state( 'hover', false );
             // leave trigger
-            UI._trigger( this._actions[UA.leave], this, pt, UA.leave, evt);
-            this.off( UA.move, this._hoverID); // remove second move listener
+            UI._trigger( this._actions[UA.leave], this, pt, UA.leave, evt );
+            this.off( UA.move, this._hoverID ); // remove second move listener
             this.unhold( _capID ); // stop keeping hold of second move
           }
-        });
+        } );
       }
-    });
+    } );
   }
   
 
@@ -366,7 +366,7 @@ export class UIButton extends UI {
    * @returns an id number that refers to this handler, for use in [`UIButton.offClick`](#link) or [`UI.off`](#link).
    */
   onClick( fn:UIHandler ):number {
-    return this.on( UIPointerActions.up, fn) ;
+    return this.on( UIPointerActions.up, fn ) ;
   }
 
 
@@ -386,7 +386,7 @@ export class UIButton extends UI {
    * @returns an id number that refers to this handler, for use in [`UIButton.offContextMenu`](#link) or [`UI.off`](#link).
    */
   onContextMenu( fn:UIHandler ):number {
-    return this.on( UIPointerActions.contextmenu, fn) ;
+    return this.on( UIPointerActions.contextmenu, fn ) ;
   }
 
 
@@ -407,9 +407,9 @@ export class UIButton extends UI {
    * @returns id numbers that refer to enter/leave handlers, for use in [`UIButton.offHover`](#link) or [`UI.off`](#link).
    */
   onHover( enter?:UIHandler, leave?:UIHandler ):number[] {
-    var ids = [undefined, undefined];
-    if (enter) ids[0] = this.on( UIPointerActions.enter, enter);
-    if (leave) ids[1] = this.on( UIPointerActions.leave, leave);
+    let ids = [undefined, undefined];
+    if ( enter ) ids[0] = this.on( UIPointerActions.enter, enter );
+    if ( leave ) ids[1] = this.on( UIPointerActions.leave, leave );
     return ids;
   }
 
@@ -421,9 +421,9 @@ export class UIButton extends UI {
    * @returns an array of booleans indicating whether the handlers were removed successfully
    */
   offHover( enterID?:number, leaveID?:number ):boolean[] {
-    var s = [false, false];
-    if (enterID === undefined || enterID >= 0) s[0] = this.off( UIPointerActions.enter, enterID );
-    if (leaveID === undefined || leaveID >= 0) s[1] = this.off( UIPointerActions.leave, leaveID );
+    let s = [false, false];
+    if ( enterID === undefined || enterID >= 0 ) s[0] = this.off( UIPointerActions.enter, enterID );
+    if ( leaveID === undefined || leaveID >= 0 ) s[1] = this.off( UIPointerActions.leave, leaveID );
     return s;
   }
 
@@ -447,11 +447,11 @@ export class UIDragger extends UIButton {
    * @param states Optional default state object
    * @param id Optional id string
    */
-  constructor( group:PtLikeIterable, shape:string, states:{[key:string]: any}={}, id?:string ) {
+  constructor( group:PtLikeIterable, shape:string, states:{[key:string]: any} = {}, id?:string ) {
     super( group, shape, states, id );
-    if (states.dragging === undefined) this._states['dragging'] = false;
-    if (states.moved === undefined) this._states['moved'] = false;
-    if (states.offset === undefined) this._states['offset'] = new Pt();
+    if ( states.dragging === undefined ) this._states['dragging'] = false;
+    if ( states.moved === undefined ) this._states['moved'] = false;
+    if ( states.offset === undefined ) this._states['offset'] = new Pt();
 
     const UA = UIPointerActions;
 
@@ -462,35 +462,35 @@ export class UIDragger extends UIButton {
      * UI refreshes.
      */
 
-     // Handle pointer down and begin dragging
-    this.on( UA.down, (target:UI, pt:PtLike, type:string, evt: MouseEvent) => {
+    // Handle pointer down and begin dragging
+    this.on( UA.down, ( target:UI, pt:PtLike, type:string, evt: MouseEvent ) => {
       // begin listening for all events after dragging starts
-      if (this._moveHoldID === -1) {
+      if ( this._moveHoldID === -1 ) {
         this.state( 'dragging', true );
-        this.state( 'offset', new Pt(pt).subtract( target.group[0] ) );
+        this.state( 'offset', new Pt( pt ).subtract( target.group[0] ) );
         this._moveHoldID = this.hold( UA.move ); // keep hold of move
       }
-      if (this._dropHoldID === -1) {
+      if ( this._dropHoldID === -1 ) {
         this._dropHoldID = this.hold( UA.drop ); // keep hold of drop (normal drag and drop)
       }
-      if (this._upHoldID === -1) {
+      if ( this._upHoldID === -1 ) {
         this._upHoldID = this.hold( UA.up ); // keep hold of up (cancel dragging if simple click)
       }
-      if (this._draggingID === -1) {
-        this._draggingID = this.on( UA.move, (t:UI, p:PtLike) => {
-          if ( this.state('dragging') ) {
+      if ( this._draggingID === -1 ) {
+        this._draggingID = this.on( UA.move, ( t:UI, p:PtLike ) => {
+          if ( this.state( 'dragging' ) ) {
             UI._trigger( this._actions[UA.uidrag], t, p, UA.uidrag, evt );
             this.state( 'moved', true );
           }
-        });
+        } );
       }
-    });
+    } );
 
     // Handle pointer drop or up and end dragging
-    const endDrag = (target:UI, pt:PtLike, type:string, evt:MouseEvent) => {
-      this.state('dragging', false);
+    const endDrag = ( target:UI, pt:PtLike, type:string, evt:MouseEvent ) => {
+      this.state( 'dragging', false );
       // remove move listener
-      this.off(UA.move, this._draggingID);
+      this.off( UA.move, this._draggingID );
       this._draggingID = -1;
       // stop keeping hold of move
       this.unhold( this._moveHoldID );
@@ -502,14 +502,14 @@ export class UIDragger extends UIButton {
       this.unhold( this._upHoldID );
       this._upHoldID = -1;
       // trigger event
-      if ( this.state('moved') ) {
+      if ( this.state( 'moved' ) ) {
         UI._trigger( this._actions[UA.uidrop], target, pt, UA.uidrop, evt );
         this.state( 'moved', false );
       }
     };
-    this.on( UA.drop, endDrag);
-    this.on( UA.up, endDrag);
-    this.on( UA.out, endDrag);
+    this.on( UA.drop, endDrag );
+    this.on( UA.up, endDrag );
+    this.on( UA.out, endDrag );
 
   }
 
@@ -520,7 +520,7 @@ export class UIDragger extends UIButton {
    * @returns an id number that refers to this handler, for use in [`UIDragger.offDrag`](#link) or [`UI.off`](#link).
    */
   onDrag( fn:UIHandler ):number {
-    return this.on( UIPointerActions.uidrag, fn) ;
+    return this.on( UIPointerActions.uidrag, fn ) ;
   }
   
 
@@ -540,7 +540,7 @@ export class UIDragger extends UIButton {
    * @returns an id number that refers to this handler, for use in [`UIDragger.offDrop`](#link) or [`UI.off`](#link).
    */
   onDrop( fn:UIHandler ):number {
-    return this.on( UIPointerActions.uidrop, fn) ;
+    return this.on( UIPointerActions.uidrop, fn ) ;
   }
 
 

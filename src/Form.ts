@@ -30,7 +30,7 @@ export abstract class VisualForm extends Form {
   
   protected _filled = true;
   protected _stroked = true;
-  protected _font:Font = new Font( 14, "sans-serif");
+  protected _font:Font = new Font( 14, "sans-serif" );
 
   /**
    * Check whether this form currently has fill style. 
@@ -53,8 +53,8 @@ export abstract class VisualForm extends Form {
   
   
   protected _multiple( groups:GroupLike[], shape:string, ...rest ):this {
-    if (!groups) return this;
-    for (let i=0, len=groups.length; i<len; i++) {
+    if ( !groups ) return this;
+    for ( let i = 0, len = groups.length; i < len; i++ ) {
       this[shape]( groups[i], ...rest );
     }
     return this;
@@ -80,7 +80,7 @@ export abstract class VisualForm extends Form {
    * Set fill color (not implemented here  -- to be implemented in subclasses).
    * @param c fill color as string or `false` to specify transparent.
    */
-  fill( c:string|boolean ):this {
+  fill( c:string | boolean ):this {
     return this;
   }
   
@@ -89,7 +89,7 @@ export abstract class VisualForm extends Form {
   * Set current fill style and remove stroke style. (not implemented here  -- to be implemented in subclasses).
   * @param c fill color as string or `false` to specify transparent.
   */
-  fillOnly( c:string|boolean ):this {
+  fillOnly( c:string | boolean ):this {
     this.stroke( false );
     return this.fill( c );
   }
@@ -102,7 +102,7 @@ export abstract class VisualForm extends Form {
    * @param linejoin Optional string to set line joint style. Can be "miter", "bevel", or "round".
    * @param linecap Optional string to set line cap style. Can be "butt", "round", or "square".
    */
-  stroke( c:string|boolean, width?:number, linejoin?:string, linecap?:string ):this {
+  stroke( c:string | boolean, width?:number, linejoin?:string, linecap?:string ):this {
     return this;
   }
   
@@ -114,7 +114,7 @@ export abstract class VisualForm extends Form {
    * @param linejoin Optional string to set line joint style. Can be "miter", "bevel", or "round".
    * @param linecap Optional string to set line cap style. Can be "butt", "round", or "square".
    */
-  strokeOnly( c:string|boolean, width?:number, linejoin?:string, linecap?:string ):this {
+  strokeOnly( c:string | boolean, width?:number, linejoin?:string, linecap?:string ):this {
     this.fill( false );
     return this.stroke( c, width, linejoin, linecap );
   }
@@ -135,9 +135,9 @@ export abstract class VisualForm extends Form {
   * @param radius radius of the point. Default is 5.
   * @param shape The shape of the point. Defaults to "square", but it can be "circle" or a custom shape function in your own implementation.
   */
-  points( pts:GroupLike|number[][], radius:number, shape:string ): this {
-    if (!pts) return;
-    for (let i=0, len=pts.length; i<len; i++) {
+  points( pts:GroupLike | number[][], radius:number, shape:string ): this {
+    if ( !pts ) return;
+    for ( let i = 0, len = pts.length; i < len; i++ ) {
       this.point( pts[i], radius, shape );
     }
     return this;
@@ -149,7 +149,7 @@ export abstract class VisualForm extends Form {
   * @param pts usually a Group of 2 Pts, but it can also take an array of two numeric arrays [ [position], [size] ]
   * @see [`Circle.fromCenter`](./?p=Op_Circle#function_fromCenter)
   */
-  abstract circle( pts:GroupLike|number[][] ):this;
+  abstract circle( pts:GroupLike | number[][] ):this;
   
   
   
@@ -186,7 +186,7 @@ export abstract class VisualForm extends Form {
   * Draw a line or polyline (not implemented here  -- to be implemented in subclasses).
   * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
   */
-  abstract line( pts:GroupLike|number[][] ):this;
+  abstract line( pts:GroupLike | number[][] ):this;
   
   
   /**
@@ -202,7 +202,7 @@ export abstract class VisualForm extends Form {
   * Draw a polygon (not implemented here  -- to be implemented in subclasses).
   * @param pts a Group of multiple Pts, or an array of multiple numeric arrays
   */
-  abstract polygon( pts:GroupLike|number[][] ):this;
+  abstract polygon( pts:GroupLike | number[][] ):this;
   
   
   /**
@@ -219,7 +219,7 @@ export abstract class VisualForm extends Form {
   * Draw a rectangle (not implemented here  -- to be implemented in subclasses).
   * @param pts usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.
   */
-  abstract rect( pts:number[][]|Pt[] ):this;
+  abstract rect( pts:number[][] | Pt[] ):this;
   
   
   /**
@@ -237,7 +237,7 @@ export abstract class VisualForm extends Form {
   * @param `txt` text
   * @param `maxWidth` specify a maximum width per line
   */
-  abstract text( pt:PtLike, txt:string, maxWidth?:number): this;
+  abstract text( pt:PtLike, txt:string, maxWidth?:number ): this;
   
   
   /**
@@ -250,7 +250,7 @@ export abstract class VisualForm extends Form {
   * @see `Font` class
   * @example `form.font( myFont )`, `form.font(14, "bold")`
   */
-  abstract font( sizeOrFont:number|Font, weight?:string, style?:string, lineHeight?:number, family?:string ):this;
+  abstract font( sizeOrFont:number | Font, weight?:string, style?:string, lineHeight?:number, family?:string ):this;
 }
 
 
@@ -274,7 +274,7 @@ export class Font {
   * @param lineHeight Optional line height. Default is 1.5.
   * @example `new Font(12, "Frutiger, sans-serif", "bold", "underline", 1.5)`
   */
-  constructor( size:number=12, face:string="sans-serif", weight:string="", style:string="", lineHeight:number=1.5 ) {
+  constructor( size:number = 12, face:string = "sans-serif", weight:string = "", style:string = "", lineHeight:number = 1.5 ) {
     this.size = size;
     this.face = face;
     this.style = style;

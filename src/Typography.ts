@@ -16,10 +16,10 @@ export class Typography {
    * @param distribution a list of the samples' probability distribution. Default is [0.06, 0.8, 0.14].
    * @return a function that can estimate text width
    */
-  static textWidthEstimator(  fn:(string) => number, samples:string[] = ["M", "n", "."], distribution:number[] = [0.06, 0.8, 0.14] ):(string) => number {
+  static textWidthEstimator(  fn:( string ) => number, samples:string[] = ["M", "n", "."], distribution:number[] = [0.06, 0.8, 0.14] ):( string ) => number {
     let m = samples.map( fn );
-    let avg = new Pt(distribution).dot( m );
-    return (str:string) => str.length * avg;
+    let avg = new Pt( distribution ).dot( m );
+    return ( str:string ) => str.length * avg;
   }
 
 
@@ -30,11 +30,11 @@ export class Typography {
    * @param width width to fit
    * @param tail text to indicate overflow such as "...". Default is empty "".
    */
-  static truncate( fn:(string) => number, str:string, width:number, tail:string="" ):[string, number] {
-    let trim = Math.floor( str.length * Math.min( 1, width / fn(str)) );
-    if (trim < str.length) {
+  static truncate( fn:( string ) => number, str:string, width:number, tail:string = "" ):[string, number] {
+    let trim = Math.floor( str.length * Math.min( 1, width / fn( str ) ) );
+    if ( trim < str.length ) {
       trim = Math.max( 0, trim - tail.length );
-      return [str.substr(0, trim) + tail, trim];
+      return [str.substr( 0, trim ) + tail, trim];
     } else {
       return [str, str.length];
     }
@@ -47,13 +47,13 @@ export class Typography {
    * @param ratio font-size change ratio. Default is 1.
    * @returns a function where input parameter is a new box, and returns the new font size value
    */
-  static fontSizeToBox( box:PtLikeIterable, ratio:number=1, byHeight:boolean=true ): (GroupLike) => number {
+  static fontSizeToBox( box:PtLikeIterable, ratio:number = 1, byHeight:boolean = true ): ( GroupLike ) => number {
     let bound = Bound.fromGroup( box );
     let h = byHeight ? bound.height : bound.width;
     let f = ratio * h;
     return function( box2:GroupLike ) {
       let bound2 = Bound.fromGroup( box2 );
-      let nh = (byHeight ? bound2.height : bound2.width) / h;
+      let nh = ( byHeight ? bound2.height : bound2.width ) / h;
       return f * nh;
     };
   }
@@ -66,11 +66,11 @@ export class Typography {
    * @param direction if negative, get a font size <= defaultSize; if positive, get a font size >= defaultSize; Default is 0 which will scale font without min or max limits.
    * @returns a function where input parameter is the default font size and a value to compare with threshold, and returns new font size value
    */
-  static fontSizeToThreshold( threshold:number, direction:number=0 ): (a:number, b:number) => number {
+  static fontSizeToThreshold( threshold:number, direction:number = 0 ): ( a:number, b:number ) => number {
     return function( defaultSize:number, val:number ) {
       let d = defaultSize * val / threshold; 
-      if (direction < 0) return Math.min( d, defaultSize );
-      if (direction > 0) return Math.max( d, defaultSize );
+      if ( direction < 0 ) return Math.min( d, defaultSize );
+      if ( direction > 0 ) return Math.max( d, defaultSize );
       return d;
     };
   }

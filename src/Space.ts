@@ -24,15 +24,15 @@ export abstract class Space {
   
   private _pause:boolean = false;
   private _refresh:boolean = undefined;
-  private _renderFunc: (context:any, self:Space) => null;
+  private _renderFunc: ( context:any, self:Space ) => null;
   
   protected _pointer:Pt = new Pt();
 
   protected _isReady = false;
   protected _playing = false;
 
-  protected _keyDownBind: (evt:KeyboardEvent) => boolean;
-  protected _keyUpBind: (evt:KeyboardEvent) => boolean;
+  protected _keyDownBind: ( evt:KeyboardEvent ) => boolean;
+  protected _keyUpBind: ( evt:KeyboardEvent ) => boolean;
   
   
   /**
@@ -49,7 +49,7 @@ export abstract class Space {
    * Set a minimum frame time
    * @param ms at least this amount of miniseconds must have elapsed before frame advances
    */
-  minFrameTime( ms:number=0 ) {
+  minFrameTime( ms:number = 0 ) {
     this._time.min = ms;
   }
   
@@ -63,18 +63,18 @@ export abstract class Space {
   * Subclasses of Space may define other callback functions.
   * @param player an [`IPlayer`](#link) object with animate function, or a callback function `fn(time, ftime)`. 
   */
-  add( p:IPlayer|AnimateCallbackFn ):this {
-    let player:IPlayer = (typeof p == "function") ? { animate: p } : p;
+  add( p:IPlayer | AnimateCallbackFn ):this {
+    const player:IPlayer = ( typeof p == "function" ) ? { animate: p } : p;
     
-    let k = this.playerCount++;
-    let pid = player.animateID || (this.id + k);
+    const k = this.playerCount++;
+    const pid = player.animateID || ( this.id + k );
     
     this.players[pid] = player;
     player.animateID = pid;
-    if (player.resize && this.bound.inited) player.resize( this.bound ); 
+    if ( player.resize && this.bound.inited ) player.resize( this.bound ); 
     
     // if _refresh is not set, set it to true
-    if (this._refresh === undefined) this._refresh = true;
+    if ( this._refresh === undefined ) this._refresh = true;
     
     return this;
   }
@@ -104,21 +104,21 @@ export abstract class Space {
   * You may override this `play()` function to implement your own animation loop.
   * @param time current time
   */
-  play( time=0 ):this {
+  play( time = 0 ):this {
     // make sure only one play loop is active 
-    if (time === 0 && this._animID !== -1) {
+    if ( time === 0 && this._animID !== -1 ) {
       return;
     }
-    this._animID = requestAnimationFrame( this.play.bind(this) );
-    if (this._pause) return this;
+    this._animID = requestAnimationFrame( this.play.bind( this ) );
+    if ( this._pause ) return this;
     
     this._time.diff = time - this._time.prev;
-    if (this._time.diff < this._time.min) return this;
+    if ( this._time.diff < this._time.min ) return this;
     this._time.prev = time;
     
     try {
       this.playItems( time );
-    } catch (err) {
+    } catch ( err ) {
       cancelAnimationFrame( this._animID );
       this._animID = -1;
       this._playing = false;
@@ -148,17 +148,17 @@ export abstract class Space {
     this._playing = true;
     
     // clear before draw if refresh is true
-    if (this._refresh) this.clear();
+    if ( this._refresh ) this.clear();
     
     // animate all players
-    if (this._isReady) {
-      for (let k in this.players) {
-        if (this.players[k].animate) this.players[k].animate( time, this._time.diff, this );
+    if ( this._isReady ) {
+      for ( const k in this.players ) {
+        if ( this.players[k].animate ) this.players[k].animate( time, this._time.diff, this );
       }
     }
     
     // stop if time ended
-    if (this._time.end >= 0 && time > this._time.end) {
+    if ( this._time.end >= 0 && time > this._time.end ) {
       cancelAnimationFrame( this._animID );
       this._animID = -1;
       this._playing = false;
@@ -170,8 +170,8 @@ export abstract class Space {
   * Pause the animation.
   * @param toggle a boolean value to set if this function call should be a toggle (between pause and resume)
   */
-  pause( toggle=false ):this {
-    this._pause = (toggle) ? !this._pause : true;
+  pause( toggle = false ):this {
+    this._pause = ( toggle ) ? !this._pause : true;
     return this;
   }
   
@@ -189,7 +189,7 @@ export abstract class Space {
   * Specify when the animation should stop: immediately, after a time period, or never stops.
   * @param t a value in millisecond to specify a time period to play before stopping, or `-1` to play forever, or `0` to end immediately. Default is 0 which will stop the animation immediately.
   */
-  stop( t=0 ):this {
+  stop( t = 0 ):this {
     this._time.end = t;
     return this;
   }
@@ -199,7 +199,7 @@ export abstract class Space {
   * Play animation loop once. Optionally set a `duration` time to play for that specific duration.
   * @param duration a value in millisecond to specify a time period to play before stopping, or `-1` to play forever
   */
-  playOnce( duration=0 ):this {
+  playOnce( duration = 0 ):this {
     this.play();
     this.stop( duration );
     return this;
@@ -210,7 +210,7 @@ export abstract class Space {
   * @param context rendering context
   */
   protected render( context:any ):this {
-    if (this._renderFunc) this._renderFunc( context, this );
+    if ( this._renderFunc ) this._renderFunc( context, this );
     return this;
   }
   
@@ -218,8 +218,8 @@ export abstract class Space {
   /**
   * Set a custom rendering function `fn(graphics_context, canvas_space)` if needed.
   */
-  set customRendering( f:(context:any, self:Space) => null ) { this._renderFunc = f; }
-  get customRendering():(context:any, self:Space) => null { return this._renderFunc; }
+  set customRendering( f:( context:any, self:Space ) => null ) { this._renderFunc = f; }
+  get customRendering():( context:any, self:Space ) => null { return this._renderFunc; }
   
 
   /**
@@ -249,7 +249,7 @@ export abstract class Space {
   /**
   * The center of this space's bounding box.
   */
-  get center():Pt { return this.size.divide(2); }
+  get center():Pt { return this.size.divide( 2 ); }
   
   
   /**
@@ -309,7 +309,7 @@ export abstract class MultiTouchSpace extends Space {
   * Get the mouse or touch pointer that stores the last action.
   */
   public get pointer():Pt {
-    let p = this._pointer.clone();
+    const p = this._pointer.clone();
     p.id = this._pointer.id;
     return p;
   }
@@ -321,7 +321,7 @@ export abstract class MultiTouchSpace extends Space {
   * @param options options for [addEventListener](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener).
   * @param customTarget If needed, this is an optional parameter to set another event target that's not the canvas element itself. See [Technical Notes guide](/guide/Technical-notes-9000.html) for use cases.
   */
-  bindCanvas( evt:string, callback:EventListener, options:any={}, customTarget?:Element ) {
+  bindCanvas( evt:string, callback:EventListener, options:any = {}, customTarget?:Element ) {
     const target = customTarget ? customTarget : this._canvas;
     target.addEventListener( evt, callback, options );
   }
@@ -334,20 +334,20 @@ export abstract class MultiTouchSpace extends Space {
   * @param options options for [removeEventListener](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener). This should match the options set in bindCanvas.
   * @param customTarget If customTarget is set in bindCanvas, you'll need to pass the same instance here to unbind
   */
-  unbindCanvas( evt:string, callback:EventListener, options:any={}, customTarget?:Element ) {
+  unbindCanvas( evt:string, callback:EventListener, options:any = {}, customTarget?:Element ) {
     const target = customTarget ? customTarget : this._canvas;
     target.removeEventListener( evt, callback, options );
   }
   
 
-  bindDoc( evt:string, callback:EventListener, options:any={} ) {
-    if (document) {
+  bindDoc( evt:string, callback:EventListener, options:any = {} ) {
+    if ( document ) {
       document.addEventListener( evt, callback, options );
     }
   }
 
-  unbindDoc( evt:string, callback:EventListener, options:any={} ) {
-    if (document) {
+  unbindDoc( evt:string, callback:EventListener, options:any = {} ) {
+    if ( document ) {
       document.removeEventListener( evt, callback, options );
     }
   }
@@ -361,23 +361,23 @@ export abstract class MultiTouchSpace extends Space {
   * @param customTarget If needed, this is an optional parameter to set another event target that's not the canvas element itself. See [Technical Notes guide](/guide/Technical-notes-9000.html) for use cases.
   * @see [`Space.add`](#link) 
   */
-  bindMouse( bind:boolean=true, customTarget?:Element ):this {
-    if ( bind) {
-      this._mouseDown = this._mouseDown.bind(this);
-      this._mouseUp = this._mouseUp.bind(this);
-      this._mouseOver = this._mouseOver.bind(this);
-      this._mouseOut = this._mouseOut.bind(this);
-      this._mouseMove = this._mouseMove.bind(this);
-      this._mouseClick = this._mouseClick.bind(this);
-      this._pointerDown = this._pointerDown.bind(this);
-      this._pointerUp = this._pointerUp.bind(this);
-      this._contextMenu = this._contextMenu.bind(this);
+  bindMouse( bind:boolean = true, customTarget?:Element ):this {
+    if ( bind ) {
+      this._mouseDown = this._mouseDown.bind( this );
+      this._mouseUp = this._mouseUp.bind( this );
+      this._mouseOver = this._mouseOver.bind( this );
+      this._mouseOut = this._mouseOut.bind( this );
+      this._mouseMove = this._mouseMove.bind( this );
+      this._mouseClick = this._mouseClick.bind( this );
+      this._pointerDown = this._pointerDown.bind( this );
+      this._pointerUp = this._pointerUp.bind( this );
+      this._contextMenu = this._contextMenu.bind( this );
 
       this.bindCanvas( "mousedown", this._mouseDown, {}, customTarget );
       this.bindCanvas( "pointerdown", this._pointerDown, {}, customTarget );
       this.bindCanvas( "mouseup", this._mouseUp, {}, customTarget );
       this.bindCanvas( "pointerup", this._pointerUp, {}, customTarget );
-      this.bindCanvas( "mouseover", this._mouseOver, {}, customTarget);
+      this.bindCanvas( "mouseover", this._mouseOver, {}, customTarget );
       this.bindCanvas( "mouseout", this._mouseOut, {}, customTarget );
       this.bindCanvas( "mousemove", this._mouseMove, {}, customTarget );
       this.bindCanvas( "click", this._mouseClick, {}, customTarget );
@@ -408,28 +408,28 @@ export abstract class MultiTouchSpace extends Space {
   * @param customTarget If needed, this is an optional parameter to set another event target that's not the canvas element itself. See [Technical Notes guide](/guide/Technical-notes-9000.html) for use cases.
   * @see [`Space.add`](#link)
   */
-  bindTouch( bind:boolean=true, passive:boolean=false, customTarget?:Element ):this {
-    if (bind) {
-      this.bindCanvas( "touchstart", this._touchStart.bind(this), {passive: passive}, customTarget );
-      this.bindCanvas( "touchend", this._mouseUp.bind(this), {}, customTarget );
-      this.bindCanvas( "touchmove", this._touchMove.bind(this), {passive: passive}, customTarget  );
-      this.bindCanvas( "touchcancel", this._mouseOut.bind(this), {}, customTarget );
+  bindTouch( bind:boolean = true, passive:boolean = false, customTarget?:Element ):this {
+    if ( bind ) {
+      this.bindCanvas( "touchstart", this._touchStart.bind( this ), {passive: passive}, customTarget );
+      this.bindCanvas( "touchend", this._mouseUp.bind( this ), {}, customTarget );
+      this.bindCanvas( "touchmove", this._touchMove.bind( this ), {passive: passive}, customTarget  );
+      this.bindCanvas( "touchcancel", this._mouseOut.bind( this ), {}, customTarget );
       this._hasTouch = true;
     } else {
-      this.unbindCanvas( "touchstart", this._touchStart.bind(this), {passive: passive}, customTarget );
-      this.unbindCanvas( "touchend", this._mouseUp.bind(this), {}, customTarget );
-      this.unbindCanvas( "touchmove", this._touchMove.bind(this), {passive: passive}, customTarget );
-      this.unbindCanvas( "touchcancel", this._mouseOut.bind(this), {}, customTarget );
+      this.unbindCanvas( "touchstart", this._touchStart.bind( this ), {passive: passive}, customTarget );
+      this.unbindCanvas( "touchend", this._mouseUp.bind( this ), {}, customTarget );
+      this.unbindCanvas( "touchmove", this._touchMove.bind( this ), {passive: passive}, customTarget );
+      this.unbindCanvas( "touchcancel", this._mouseOut.bind( this ), {}, customTarget );
       this._hasTouch = false;
     }
     return this;
   }
   
 
-  bindKeyboard( bind:boolean=true ):this {
-    if (bind) {
-      this._keyDownBind = this._keyDown.bind(this);
-      this._keyUpBind = this._keyUp.bind(this);
+  bindKeyboard( bind:boolean = true ):this {
+    if ( bind ) {
+      this._keyDownBind = this._keyDown.bind( this );
+      this._keyUpBind = this._keyUp.bind( this );
       this.bindDoc( "keydown", this._keyDownBind, {} );
       this.bindDoc( "keyup", this._keyUpBind, {} );
       this._hasKeyboard = true;
@@ -449,11 +449,11 @@ export abstract class MultiTouchSpace extends Space {
   * @param which a string to select a touches list: "touches", "changedTouches", or "targetTouches". Default is "touches"
   * @return an array of Pt, whose origin position (0,0) is offset to the top-left of this space
   */
-  touchesToPoints( evt:TouchEvent, which:TouchPointsKey="touches" ): Pt[] {
-    if (!evt || !evt[which]) return [];
-    let ts = [];
-    for (var i=0; i<evt[which].length; i++) {
-      let t = evt[which].item(i);
+  touchesToPoints( evt:TouchEvent, which:TouchPointsKey = "touches" ): Pt[] {
+    if ( !evt || !evt[which] ) return [];
+    const ts = [];
+    for ( let i = 0; i < evt[which].length; i++ ) {
+      const t = evt[which].item( i );
       ts.push( new Pt( t.pageX - this.bound.topLeft.x, t.pageY - this.bound.topLeft.y ) );
     }
     return ts;
@@ -466,33 +466,33 @@ export abstract class MultiTouchSpace extends Space {
   * @param evt mouse or touch event
   * @see [`Space.add`](#link)
   */
-  protected _mouseAction( type:string, evt:MouseEvent|TouchEvent|PointerEvent ) {
-    if (!this.isPlaying) return;
+  protected _mouseAction( type:string, evt:MouseEvent | TouchEvent | PointerEvent ) {
+    if ( !this.isPlaying ) return;
 
     let px = 0, py = 0;
-    
-    if (evt instanceof MouseEvent) {
-      for (let k in this.players) {
-        if (this.players.hasOwnProperty(k)) {
-          let v = this.players[k];
+     
+    if ( evt instanceof MouseEvent ) {
+      for ( const k in this.players ) {
+        if ( this.players.hasOwnProperty( k ) ) {
+          const v = this.players[k];
           px = evt.pageX - this.outerBound.x;
           py = evt.pageY - this.outerBound.y;
-          if (v.action) v.action( type, px, py, evt );
+          if ( v.action ) v.action( type, px, py, evt );
         }
       }
     } else {
-      for (let k in this.players) {
-        if (this.players.hasOwnProperty(k)) {
-          let v = this.players[k];
-          let c = evt.changedTouches && evt.changedTouches.length > 0;
-          let touch = evt.changedTouches.item(0);
-          px = (c) ? touch.pageX - this.outerBound.x : 0;
-          py = (c) ? touch.pageY - this.outerBound.y : 0;
-          if (v.action) v.action( type, px, py, evt );
+      for ( const k in this.players ) {
+        if ( this.players.hasOwnProperty( k ) ) {
+          const v = this.players[k];
+          const c = evt.changedTouches && evt.changedTouches.length > 0;
+          const touch = evt.changedTouches.item( 0 );
+          px = ( c ) ? touch.pageX - this.outerBound.x : 0;
+          py = ( c ) ? touch.pageY - this.outerBound.y : 0;
+          if ( v.action ) v.action( type, px, py, evt );
         }
       }
     }
-    if (type) {
+    if ( type ) {
       this._pointer.to( px, py );
       this._pointer.id = type;
     }
@@ -503,13 +503,13 @@ export abstract class MultiTouchSpace extends Space {
   * MouseDown handler.
   * @param evt 
   */
-  protected _mouseDown( evt:MouseEvent|TouchEvent ) {
+  protected _mouseDown( evt:MouseEvent | TouchEvent ) {
     this._mouseAction( UIA.down, evt );
     this._pressed = true;
     return false;
   }
   
-  protected _pointerDown( evt:PointerEvent) {
+  protected _pointerDown( evt:PointerEvent ) {
     this._mouseAction( UIA.pointerdown, evt );
     if ( evt.target instanceof Element ) {
       evt.target.setPointerCapture( evt.pointerId );
@@ -521,8 +521,8 @@ export abstract class MultiTouchSpace extends Space {
   * MouseUp handler.
   * @param evt 
   */
-  protected _mouseUp( evt:MouseEvent|TouchEvent ) {
-    if (this._dragged) {
+  protected _mouseUp( evt:MouseEvent | TouchEvent ) {
+    if ( this._dragged ) {
       this._mouseAction( UIA.drop, evt );
     } else {
       this._mouseAction( UIA.up, evt );
@@ -532,11 +532,11 @@ export abstract class MultiTouchSpace extends Space {
     return false;
   }
 
-  protected _pointerUp( evt:PointerEvent) {
+  protected _pointerUp( evt:PointerEvent ) {
     this._mouseAction( UIA.pointerup, evt );
     if ( evt.target instanceof Element ) {
       evt.target.releasePointerCapture( evt.pointerId );
-      if (this._dragged) this._mouseAction( UIA.drop, evt );
+      if ( this._dragged ) this._mouseAction( UIA.drop, evt );
       this._dragged = false;
     }
     return false;
@@ -547,9 +547,9 @@ export abstract class MultiTouchSpace extends Space {
   * MouseMove handler.
   * @param evt 
   */
-  protected _mouseMove( evt:MouseEvent|TouchEvent ) {
+  protected _mouseMove( evt:MouseEvent | TouchEvent ) {
     this._mouseAction( UIA.move, evt );
-    if (this._pressed) {
+    if ( this._pressed ) {
       this._dragged = true;
       this._mouseAction( UIA.drag, evt );
     }
@@ -561,7 +561,7 @@ export abstract class MultiTouchSpace extends Space {
   * MouseOver handler.
   * @param evt 
   */
-  protected _mouseOver( evt:MouseEvent|TouchEvent ) {
+  protected _mouseOver( evt:MouseEvent | TouchEvent ) {
     this._mouseAction( UIA.over, evt );
     return false;
   }
@@ -571,9 +571,9 @@ export abstract class MultiTouchSpace extends Space {
   * MouseOut handler.
   * @param evt 
   */
-  protected _mouseOut( evt:MouseEvent|TouchEvent ) {
+  protected _mouseOut( evt:MouseEvent | TouchEvent ) {
     this._mouseAction( UIA.out, evt );
-    if (this._dragged) this._mouseAction( UIA.drop, evt );
+    if ( this._dragged ) this._mouseAction( UIA.drop, evt );
     this._dragged = false;
     return false;
   }
@@ -583,7 +583,7 @@ export abstract class MultiTouchSpace extends Space {
   * MouseClick handler.
   * @param evt 
   */
-  protected _mouseClick( evt:MouseEvent|TouchEvent ) {
+  protected _mouseClick( evt:MouseEvent | TouchEvent ) {
     this._mouseAction( UIA.click, evt );
     this._pressed = false;
     this._dragged = false;
@@ -605,8 +605,8 @@ export abstract class MultiTouchSpace extends Space {
   * TouchMove handler.
   * @param evt 
   */
-  protected _touchMove( evt:TouchEvent) {
-    this._mouseMove(evt);
+  protected _touchMove( evt:TouchEvent ) {
+    this._mouseMove( evt );
     evt.preventDefault();
     return false;
   }
@@ -615,8 +615,8 @@ export abstract class MultiTouchSpace extends Space {
   * TouchStart handler.
   * @param evt 
   */
-  protected _touchStart( evt:TouchEvent) {
-    this._mouseDown(evt);
+  protected _touchStart( evt:TouchEvent ) {
+    this._mouseDown( evt );
     evt.preventDefault();
     return false;
   }
@@ -633,11 +633,11 @@ export abstract class MultiTouchSpace extends Space {
   }
 
   protected _keyboardAction( type:string, evt:KeyboardEvent ) {
-    if (!this.isPlaying) return;
-    for (let k in this.players) {
-      if (this.players.hasOwnProperty(k)) {
-        let v = this.players[k];
-        if (v.action) v.action( type, evt.shiftKey ? 1 : 0, evt.altKey ? 1 : 0, evt );
+    if ( !this.isPlaying ) return;
+    for ( const k in this.players ) {
+      if ( this.players.hasOwnProperty( k ) ) {
+        const v = this.players[k];
+        if ( v.action ) v.action( type, evt.shiftKey ? 1 : 0, evt.altKey ? 1 : 0, evt );
       }
     }
   }

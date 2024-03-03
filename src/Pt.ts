@@ -12,19 +12,19 @@ import {IPt, GroupLike, PtLike, PtIterable, PtLikeIterable} from "./Types";
 export class Pt extends Float32Array implements IPt, Iterable<number> {
 
   protected _id:string;
-
+ 
   /**
    * Create a Pt. If no parameter is provided, this will instantiate a Pt with 2 dimensions [0, 0]. 
    * Note that `new Pt(3)` will only instantiate Pt with length of 3 (ie, same as `new Float32Array(3)` ). If you need a Pt with 1 dimension of value 3, use `new Pt([3])`.
    * @example `new Pt()`, `new Pt(1,2,3,4,5)`, `new Pt([1,2])`, `new Pt({x:0, y:1})`, `new Pt(pt)`
    * @param args a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
    */
-  constructor(...args: Array<number|number[]|IPt|Float32Array>) {
+  constructor( ...args: Array<number | number[] | IPt | Float32Array> ) {
     let params;
-    if (args.length === 1 && typeof args[0] == "number") {
+    if ( args.length === 1 && typeof args[0] == "number" ) {
       params = args[0]; // init with the TypedArray's length. Needed this in order to make ".map", ".slice" etc work.
     } else {
-      params = (args.length>0) ? Util.getArgs(args) : [0,0];
+      params = ( args.length > 0 ) ? Util.getArgs( args ) : [0,0];
     }    
     super( params );
   }
@@ -36,12 +36,12 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * @param defaultValue optional default value to fill the dimensions
    * @param randomize if `true`, randomize the value between 0 to default value
    */
-  static make( dimensions:number, defaultValue:number=0, randomize:boolean=false ):Pt {
-    let p = new Float32Array(dimensions);
-    if (defaultValue) p.fill( defaultValue );
-    if (randomize) {
-      for (let i=0, len=p.length; i<len; i++) {
-        p[i] = p[i]*Num.random();
+  static make( dimensions:number, defaultValue:number = 0, randomize:boolean = false ):Pt {
+    const p = new Float32Array( dimensions );
+    if ( defaultValue ) p.fill( defaultValue );
+    if ( randomize ) {
+      for ( let i = 0, len = p.length; i < len; i++ ) {
+        p[i] = p[i] * Num.random();
       }
     }
     return new Pt( p );
@@ -91,9 +91,9 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * @param p another Pt to compare with
    * @param threshold a threshold value within which the two Pts are considered equal. Default is 0.000001.
    */
-  equals( p:PtLike, threshold=0.000001 ):boolean {
-    for (let i=0, len=this.length; i<len; i++) {
-      if ( Math.abs(this[i]-p[i]) > threshold ) return false;
+  equals( p:PtLike, threshold = 0.000001 ):boolean {
+    for ( let i = 0, len = this.length; i < len; i++ ) {
+      if ( Math.abs( this[i] - p[i] ) > threshold ) return false;
     }
     return true;
   }
@@ -104,8 +104,8 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
   to( ...args ):this {
-    let p = Util.getArgs( args );
-    for (let i=0, len=Math.min(this.length, p.length); i<len; i++) {
+    const p = Util.getArgs( args );
+    for ( let i = 0, len = Math.min( this.length, p.length ); i < len; i++ ) {
       this[i] = p[i];
     }
     return this;
@@ -127,10 +127,10 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * @param magnitude Optional magnitude if known. If not provided, it'll calculate and use this Pt's magnitude.
    * @param anchorFromPt If `true`, add it from this Pt's current position. Default is `false` which update the position from origin (0,0). See also [`Geom.rotate2D`](#link) for rotating a point from another anchor point.
    */
-  toAngle( radian:number, magnitude?:number, anchorFromPt:boolean=false ):this {
-    let m = (magnitude!=undefined) ? magnitude : this.magnitude();
-    let change = [Math.cos(radian)*m, Math.sin(radian)*m];
-    return (anchorFromPt) ? this.add( change ) : this.to( change );
+  toAngle( radian:number, magnitude?:number, anchorFromPt:boolean = false ):this {
+    const m = ( magnitude != undefined ) ? magnitude : this.magnitude();
+    const change = [Math.cos( radian ) * m, Math.sin( radian ) * m];
+    return ( anchorFromPt ) ? this.add( change ) : this.to( change );
   }
 
 
@@ -140,8 +140,8 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * @example `let myOp = pt.op( fn ); let result = myOp( [1,2,3] );`
    * @returns a resulting function that takes other parameters required in `fn`
    */
-  op( fn:(p1:PtLike, ...rest:any[]) => any ): ( ...rest:any[] ) => any {
-    let self = this;
+  op( fn:( p1:PtLike, ...rest:any[] ) => any ): ( ...rest:any[] ) => any {
+    const self = this;
     return ( ...params:any[] ) => {
       return fn( self, ...params );
     };
@@ -154,9 +154,9 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * @example `let myOps = pt.ops([fn1, fn2, fn3]); let results = myOps.map( (op) => op([1,2,3]) );`
    * @returns an array of resulting functions
    */
-  ops( fns:((p1:PtLike, ...rest:any[]) => any)[] ): (( ...rest:any[] ) => any)[] {
-    let _ops = [];
-    for (let i=0, len=fns.length; i<len; i++) {
+  ops( fns:( ( p1:PtLike, ...rest:any[] ) => any )[] ): ( ( ...rest:any[] ) => any )[] {
+    const _ops = [];
+    for ( let i = 0, len = fns.length; i < len; i++ ) {
       _ops.push( this.op( fns[i] ) );
     }
     return _ops;
@@ -167,12 +167,12 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * Take specific dimensional values from this Pt and create a new Pt.
    * @param axis a string such as "xy" (use Const.xy) or an array to specify indices
    */
-  $take( axis:string|number[] ):Pt {
-    let p = [];
-    for (let i=0, len=axis.length; i<len; i++) {
+  $take( axis:string | number[] ):Pt {
+    const p = [];
+    for ( let i = 0, len = axis.length; i < len; i++ ) {
       p.push( this[axis[i]] || 0 );
     }
-    return new Pt(p);
+    return new Pt( p );
   }
 
 
@@ -189,8 +189,8 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * Add scalar or vector values to this Pt.
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
-  add(...args): this { 
-    (args.length === 1 && typeof args[0] == "number") ? Vec.add( this, args[0] ) : Vec.add( this, Util.getArgs(args) );
+  add( ...args ): this { 
+    ( args.length === 1 && typeof args[0] == "number" ) ? Vec.add( this, args[0] ) : Vec.add( this, Util.getArgs( args ) );
     return this; 
   }
 
@@ -199,15 +199,15 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * Like [`Pt.add`](#link), but returns result as a new Pt.
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
-  $add(...args): Pt { return this.clone().add(...args); }
+  $add( ...args ): Pt { return this.clone().add( ...args ); }
 
 
   /**
    * Subtract scalar or vector values from this Pt.
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
-  subtract(...args): this { 
-    (args.length === 1 && typeof args[0] == "number") ? Vec.subtract( this, args[0] ) : Vec.subtract( this, Util.getArgs(args) );
+  subtract( ...args ): this { 
+    ( args.length === 1 && typeof args[0] == "number" ) ? Vec.subtract( this, args[0] ) : Vec.subtract( this, Util.getArgs( args ) );
     return this; 
   }
 
@@ -216,15 +216,15 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * Like [`Pt.subtract`](#link), but returns result as a new Pt.
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
-  $subtract(...args): Pt { return this.clone().subtract(...args); }
+  $subtract( ...args ): Pt { return this.clone().subtract( ...args ); }
 
 
   /**
    * Multiply scalar or vector values (as element-wise) with this Pt.
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
-  multiply(...args): this { 
-    (args.length === 1 && typeof args[0] == "number") ? Vec.multiply( this, args[0] ) : Vec.multiply( this, Util.getArgs(args) );
+  multiply( ...args ): this { 
+    ( args.length === 1 && typeof args[0] == "number" ) ? Vec.multiply( this, args[0] ) : Vec.multiply( this, Util.getArgs( args ) );
     return this;
   }
 
@@ -233,15 +233,15 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * Like [`Pt.multiply`](#link), but returns result as a new Pt.
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
-  $multiply(...args): Pt { return this.clone().multiply(...args); }
+  $multiply( ...args ): Pt { return this.clone().multiply( ...args ); }
 
 
   /**
    * Divide this Pt over scalar or vector values (as element-wise).
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
-  divide(...args): this { 
-    (args.length === 1 && typeof args[0] == "number") ? Vec.divide( this, args[0] ) : Vec.divide( this, Util.getArgs(args) );
+  divide( ...args ): this { 
+    ( args.length === 1 && typeof args[0] == "number" ) ? Vec.divide( this, args[0] ) : Vec.divide( this, Util.getArgs( args ) );
     return this; 
   }
 
@@ -250,7 +250,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * Like [`Pt.divide`](#link), but returns result as a new Pt.
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
-  $divide(...args): Pt { return this.clone().divide(...args); }
+  $divide( ...args ): Pt { return this.clone().divide( ...args ); }
 
 
   /**
@@ -269,7 +269,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * Convert to a unit vector, which is a normalized vector whose magnitude equals to 1.
    * @param magnitude Optional: if the magnitude is known, pass it as a parameter to avoid duplicate calculation.
    */
-  unit( magnitude:number=undefined ):Pt {
+  unit( magnitude:number = undefined ):Pt {
     Vec.unit( this, magnitude );
     return this;
   }
@@ -278,21 +278,21 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
   /**
    * Get a new unit vector from this Pt.
    */
-  $unit( magnitude:number=undefined ):Pt { return this.clone().unit( magnitude ); }
+  $unit( magnitude:number = undefined ):Pt { return this.clone().unit( magnitude ); }
 
 
   /**
    * Dot product of this Pt and another Pt.
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
-  dot( ...args ):number { return Vec.dot( this, Util.getArgs(args) ); }
+  dot( ...args ):number { return Vec.dot( this, Util.getArgs( args ) ); }
 
 
   /**
    * 2D Cross product of this Pt and another Pt. Return results as a new Pt.
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
-  $cross2D( ...args ):number { return Vec.cross2D( this, Util.getArgs(args) ); }
+  $cross2D( ...args ):number { return Vec.cross2D( this, Util.getArgs( args ) ); }
 
   
   /**
@@ -412,9 +412,9 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
   $min( ...args ):Pt {
-    let p = Util.getArgs( args );
-    let m = this.clone();
-    for (let i=0, len=Math.min( this.length, p.length ); i<len; i++) {
+    const p = Util.getArgs( args );
+    const m = this.clone();
+    for ( let i = 0, len = Math.min( this.length, p.length ); i < len; i++ ) {
       m[i] = Math.min( this[i], p[i] );
     }
     return m;
@@ -426,9 +426,9 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
   $max( ...args ):Pt {
-    let p = Util.getArgs( args );
-    let m = this.clone();
-    for (let i=0, len=Math.min( this.length, p.length ); i<len; i++) {
+    const p = Util.getArgs( args );
+    const m = this.clone();
+    for ( let i = 0, len = Math.min( this.length, p.length ); i < len; i++ ) {
       m[i] = Math.max( this[i], p[i] );
     }
     return m;
@@ -439,7 +439,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * Get angle of this Pt from origin.
    * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
    */
-  angle( axis:string|number[]=Const.xy ):number {
+  angle( axis:string | number[] = Const.xy ):number {
     return Math.atan2( this[axis[1]], this[axis[0]] );
   }
 
@@ -449,8 +449,8 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * @param p the other Pt
    * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
    */
-  angleBetween( p:Pt, axis:string|number[]=Const.xy ):number {
-    return Geom.boundRadian( this.angle(axis) ) - Geom.boundRadian( p.angle(axis) );
+  angleBetween( p:Pt, axis:string | number[] = Const.xy ):number {
+    return Geom.boundRadian( this.angle( axis ) ) - Geom.boundRadian( p.angle( axis ) );
   }
 
 
@@ -459,8 +459,8 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * @param scale scale ratio
    * @param anchor optional anchor point to scale from
    */
-  scale( scale:number|number[]|PtLike, anchor?:PtLike ) {    
-    Geom.scale( this, scale, anchor || Pt.make( this.length, 0) );
+  scale( scale:number | number[] | PtLike, anchor?:PtLike ) {    
+    Geom.scale( this, scale, anchor || Pt.make( this.length, 0 ) );
     return this;
   }
 
@@ -472,7 +472,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * @param axis optional string such as "yz" to specify a 2D plane
    */
   rotate2D( angle:number, anchor?:PtLike, axis?:string ) {    
-    Geom.rotate2D( this, angle, anchor || Pt.make( this.length, 0), axis );
+    Geom.rotate2D( this, angle, anchor || Pt.make( this.length, 0 ), axis );
     return this;
   }
 
@@ -483,8 +483,8 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * @param anchor optional anchor point to scale from
    * @param axis optional string such as "yz" to specify a 2D plane
    */
-  shear2D( scale:number|number[]|PtLike, anchor?:PtLike, axis?:string) {
-    Geom.shear2D( this, scale, anchor || Pt.make( this.length, 0), axis );
+  shear2D( scale:number | number[] | PtLike, anchor?:PtLike, axis?:string ) {
+    Geom.shear2D( this, scale, anchor || Pt.make( this.length, 0 ), axis );
     return this;
   }
 
@@ -494,7 +494,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * @param line a Group of 2 Pts that defines a line for reflection
    * @param axis optional axis such as "yz" to define a 2D plane of reflection
    */
-  reflect2D( line:GroupLike, axis?:string):this {
+  reflect2D( line:GroupLike, axis?:string ):this {
     Geom.reflect2D( this, line, axis );
     return this;
   }
@@ -504,7 +504,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * A string representation of this Pt. Eg, "Pt(1, 2, 3)".
    */
   toString():string {
-    return `Pt(${ this.join(", ")})`;
+    return `Pt(${ this.join( ", " )})`;
   }
 
 
@@ -520,7 +520,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * Convert this Pt to a Group as new Group([0,...], pt)
    */
   toGroup():Group {
-    return new Group( Pt.make(this.length), this.clone() );
+    return new Group( Pt.make( this.length ), this.clone() );
   }
 
 
@@ -528,7 +528,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * Convert this Pt to a Bound as new Group([0,...], pt)
    */
   toBound():Bound {
-    return new Bound( Pt.make(this.length), this.clone() );
+    return new Bound( Pt.make( this.length ), this.clone() );
   }
 
 }
@@ -548,8 +548,8 @@ export class Group extends Array<Pt> {
    * Create a Group by passing an array of [`Pt`](#link). You may also create a Group using [`Group.fromArray`](#link) or [`Group.fromPtArray`](#link).
    * @param args an array of Pts
    */
-  constructor(...args:Pt[]) {
-    super(...args);
+  constructor( ...args:Pt[] ) {
+    super( ...args );
   }
 
   /**
@@ -581,22 +581,22 @@ export class Group extends Array<Pt> {
   /** 
    * The last Pt in this Group 
    */
-  get q1():Pt { return this[this.length-1]; }
+  get q1():Pt { return this[this.length - 1]; }
 
   /** 
    * The second-last Pt in this Group 
    */
-  get q2():Pt { return this[this.length-2]; }
+  get q2():Pt { return this[this.length - 2]; }
 
   /** 
    * The third-last Pt in this Group 
    */
-  get q3():Pt { return this[this.length-3]; }
+  get q3():Pt { return this[this.length - 3]; }
 
   /** 
    * The forth-last Pt in this Group 
    */
-  get q4():Pt { return this[this.length-4]; }
+  get q4():Pt { return this[this.length - 4]; }
 
   
 
@@ -604,8 +604,8 @@ export class Group extends Array<Pt> {
    * Depp clone this group and its Pts.
    */
   clone():Group {
-    let group = new Group();   
-    for (let i=0, len=this.length; i<len; i++) {
+    const group = new Group();   
+    for ( let i = 0, len = this.length; i < len; i++ ) {
       group.push( this[i].clone() );
     }
     return group;
@@ -618,9 +618,9 @@ export class Group extends Array<Pt> {
    * @example `Group.fromArray( [[1,2], [3,4], [5,6]] )`
    */
   static fromArray( list:PtLikeIterable ):Group {
-    let g = new Group();
-    for (let li of list) {
-      let p = (li instanceof Pt) ? li as Pt : new Pt(li);
+    const g = new Group();
+    for ( const li of list ) {
+      const p = ( li instanceof Pt ) ? li as Pt : new Pt( li );
       g.push( p );
     }
     return g;
@@ -642,8 +642,8 @@ export class Group extends Array<Pt> {
    * @param stride forward-steps after each sub-group
    * @param loopBack if `true`, always go through the array till the end and loop back to the beginning to complete the segments if needed
    */
-  split( chunkSize:number, stride?:number, loopBack:boolean=false ):Group[] {
-    let sp = Util.split( this, chunkSize, stride, loopBack );
+  split( chunkSize:number, stride?:number, loopBack:boolean = false ):Group[] {
+    const sp = Util.split( this, chunkSize, stride, loopBack );
     return sp as Group[];
   }
 
@@ -653,7 +653,7 @@ export class Group extends Array<Pt> {
    * @param pts a Group or an Iterable<Pt>
    * @param index the index position to insert into
    */
-  insert( pts:PtIterable, index=0 ):this {
+  insert( pts:PtIterable, index = 0 ):this {
     Group.prototype.splice.apply( this, [index, 0, ...pts] );
     return this;
   }
@@ -665,8 +665,8 @@ export class Group extends Array<Pt> {
    * @param count number of items to remove
    * @returns The items that are removed. 
    */
-  remove( index=0, count:number=1 ):Group {
-    let param = (index<0) ? [index*-1 - 1, count] : [index, count];
+  remove( index = 0, count:number = 1 ):Group {
+    const param = ( index < 0 ) ? [index * -1 - 1, count] : [index, count];
     return Group.prototype.splice.apply( this, param );
   }
 
@@ -677,15 +677,15 @@ export class Group extends Array<Pt> {
    * @param stride forward-step to take
    * @param loopBack if `true`, always go through the array till the end and loop back to the beginning to complete the segments if needed
    */
-  segments( pts_per_segment:number=2, stride:number=1, loopBack:boolean=false ):Group[] { 
-    return this.split(pts_per_segment, stride, loopBack); 
+  segments( pts_per_segment:number = 2, stride:number = 1, loopBack:boolean = false ):Group[] { 
+    return this.split( pts_per_segment, stride, loopBack ); 
   }
 
 
   /**
    * Get all the line segments (ie, edges in a graph) of this group.
    */
-  lines():Group[] { return this.segments(2, 1); }
+  lines():Group[] { return this.segments( 2, 1 ); }
 
 
   /**
@@ -709,14 +709,14 @@ export class Group extends Array<Pt> {
    * Anchor all the Pts in this Group using a target Pt as origin. (ie, subtract all Pt with the target anchor to get a relative position). All the Pts' values will be updated.
    * @param ptOrIndex a Pt, or a numeric index to target a specific Pt in this Group
    */
-  anchorTo( ptOrIndex:PtLike|number=0 ) { Geom.anchor( this, ptOrIndex, "to" ); }
+  anchorTo( ptOrIndex:PtLike | number = 0 ) { Geom.anchor( this, ptOrIndex, "to" ); }
 
 
   /**
    * Anchor all the Pts in this Group by its absolute position from a target Pt. (ie, add all Pt with the target anchor to get an absolute position).  All the Pts' values will be updated.
    * @param ptOrIndex a Pt, or a numeric index to target a specific Pt in this Group
    */
-  anchorFrom( ptOrIndex:PtLike|number=0 ) { Geom.anchor( this, ptOrIndex, "from" ); }
+  anchorFrom( ptOrIndex:PtLike | number = 0 ) { Geom.anchor( this, ptOrIndex, "from" ); }
 
 
   /**
@@ -725,8 +725,8 @@ export class Group extends Array<Pt> {
    * @example `let myOp = group.op( fn ); let result = myOp( [1,2,3] );`
    * @returns a resulting function that takes other parameters required in `fn`
    */
-  op( fn:(g1:PtIterable, ...rest:any[]) => any ): ( ...rest:any[] ) => any {
-    let self = this;
+  op( fn:( g1:PtIterable, ...rest:any[] ) => any ): ( ...rest:any[] ) => any {
+    const self = this;
     return ( ...params:any[] ) => {
       return fn( self, ...params );
     };
@@ -739,9 +739,9 @@ export class Group extends Array<Pt> {
    * @example `let myOps = pt.ops([fn1, fn2, fn3]); let results = myOps.map( (op) => op([1,2,3]) );`
    * @returns an array of resulting functions
    */
-  ops( fns:((g1:PtIterable, ...rest:any[]) => any)[] ): (( ...rest:any[] ) => any)[] {
-    let _ops = [];
-    for (let i=0, len=fns.length; i<len; i++) {
+  ops( fns:( ( g1:PtIterable, ...rest:any[] ) => any )[] ): ( ( ...rest:any[] ) => any )[] {
+    const _ops = [];
+    for ( let i = 0, len = fns.length; i < len; i++ ) {
       _ops.push( this.op( fns[i] ) );
     }
     return _ops;
@@ -754,10 +754,10 @@ export class Group extends Array<Pt> {
    */
   interpolate( t:number ):Pt {
     t = Num.clamp( t, 0, 1 );
-    let chunk = this.length-1;
-    let tc = 1/(this.length-1);
-    let idx = Math.floor( t / tc );
-    return Geom.interpolate( this[idx], this[ Math.min( this.length-1, idx+1)], (t - idx*tc) * chunk );
+    const chunk = this.length - 1;
+    const tc = 1 / ( this.length - 1 );
+    const idx = Math.floor( t / tc );
+    return Geom.interpolate( this[idx], this[ Math.min( this.length - 1, idx + 1 )], ( t - idx * tc ) * chunk );
   }
 
 
@@ -775,7 +775,7 @@ export class Group extends Array<Pt> {
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
   moveTo( ...args ):this {
-    let d = new Pt( Util.getArgs(args) ).subtract( this[0] );
+    const d = new Pt( Util.getArgs( args ) ).subtract( this[0] );
     this.moveBy( d );
     return this; 
   }
@@ -786,8 +786,8 @@ export class Group extends Array<Pt> {
    * @param scale scale ratio
    * @param anchor optional anchor point to scale from
    */
-  scale( scale:number|number[]|PtLike, anchor?:PtLike ):this {    
-    for (let i=0, len=this.length; i<len; i++) {
+  scale( scale:number | number[] | PtLike, anchor?:PtLike ):this {    
+    for ( let i = 0, len = this.length; i < len; i++ ) {
       Geom.scale( this[i], scale, anchor || this[0] );
     }
     return this;
@@ -801,7 +801,7 @@ export class Group extends Array<Pt> {
    * @param axis optional string such as "yz" to specify a 2D plane
    */
   rotate2D( angle:number, anchor?:PtLike, axis?:string ):this {   
-    for (let i=0, len=this.length; i<len; i++) {
+    for ( let i = 0, len = this.length; i < len; i++ ) {
       Geom.rotate2D( this[i], angle, anchor || this[0], axis );
     } 
     return this;
@@ -814,8 +814,8 @@ export class Group extends Array<Pt> {
    * @param anchor optional anchor point to scale from
    * @param axis optional string such as "yz" to specify a 2D plane
    */
-  shear2D( scale:number|number[]|PtLike, anchor?:PtLike, axis?:string):this {
-    for (let i=0, len=this.length; i<len; i++) {
+  shear2D( scale:number | number[] | PtLike, anchor?:PtLike, axis?:string ):this {
+    for ( let i = 0, len = this.length; i < len; i++ ) {
       Geom.shear2D( this[i], scale, anchor || this[0], axis );
     }
     return this;
@@ -827,8 +827,8 @@ export class Group extends Array<Pt> {
    * @param line a Group or an Iterable<PtLike> with 2 Pt that defines a line for reflection
    * @param axis optional axis such as "yz" to define a 2D plane of reflection
    */
-  reflect2D( line:PtLikeIterable, axis?:string):this {
-    for (let i=0, len=this.length; i<len; i++) {
+  reflect2D( line:PtLikeIterable, axis?:string ):this {
+    for ( let i = 0, len = this.length; i < len; i++ ) {
       Geom.reflect2D( this[i], line, axis );
     }
     return this;
@@ -840,8 +840,8 @@ export class Group extends Array<Pt> {
    * @param dim dimensional index
    * @param desc if true, sort descending. Default is false (ascending)
    */
-  sortByDimension( dim:number, desc:boolean=false ):this {
-    return this.sort( (a, b) => (desc) ? b[dim] - a[dim] : a[dim] - b[dim] );
+  sortByDimension( dim:number, desc:boolean = false ):this {
+    return this.sort( ( a, b ) => ( desc ) ? b[dim] - a[dim] : a[dim] - b[dim] );
   }
 
 
@@ -851,11 +851,11 @@ export class Group extends Array<Pt> {
    * @param args arguments for the function specified in ptFn
    */
   forEachPt( ptFn:string, ...args ):this {
-    if (!this[0][ptFn]) {
+    if ( !this[0][ptFn] ) {
       Util.warn( `${ptFn} is not a function of Pt` );
       return this;
     }
-    for (let i=0, len=this.length; i<len; i++) {
+    for ( let i = 0, len = this.length; i < len; i++ ) {
       this[i] = this[i][ptFn]( ...args );
     }
     return this;
@@ -903,7 +903,7 @@ export class Group extends Array<Pt> {
    * @param g a scalar number, an array of numeric arrays, or a group of Pt
    * @returns a new Group
    */
-  $matrixAdd( g:GroupLike|number[][]|number ):Group {
+  $matrixAdd( g:GroupLike | number[][] | number ):Group {
     return Mat.add( this, g );
   }
 
@@ -915,8 +915,8 @@ export class Group extends Array<Pt> {
    * @param elementwise if true, then the multiplication is done element-wise. Default is `false`.
    * @returns If not elementwise, this will return a new  Group with M Pt, each with N dimensions (M-rows, N-columns).
    */
-  $matrixMultiply( g:GroupLike|number, transposed:boolean=false, elementwise:boolean=false ):Group {
-    return Mat.multiply( this, g, transposed , elementwise);
+  $matrixMultiply( g:GroupLike | number, transposed:boolean = false, elementwise:boolean = false ):Group {
+    return Mat.multiply( this, g, transposed , elementwise );
   }
 
 
@@ -925,7 +925,7 @@ export class Group extends Array<Pt> {
    * @param idx index to zip at
    * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
    */
-  zipSlice( index:number, defaultValue:number|boolean = false ):Pt {
+  zipSlice( index:number, defaultValue:number | boolean = false ):Pt {
     return Mat.zipSlice( this, index, defaultValue );
   }
 
@@ -935,7 +935,7 @@ export class Group extends Array<Pt> {
    * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
    * @param useLongest If true, find the longest list of values in a Pt and use its length for zipping. Default is false, which uses the first item's length for zipping.
    */
-  $zip( defaultValue:number|boolean = undefined, useLongest=false ):Group {
+  $zip( defaultValue:number | boolean = undefined, useLongest = false ):Group {
     return Mat.zip( this, defaultValue, useLongest );
   }
 
@@ -952,7 +952,7 @@ export class Group extends Array<Pt> {
    * Get a string representation of this group.
    */
   toString():string {
-    return "Group[ "+ this.reduce( (p, c) => p+c.toString()+" ", "" )+" ]";
+    return "Group[ " + this.reduce( ( p, c ) => p + c.toString() + " ", "" ) + " ]";
   }
 
 
@@ -979,7 +979,7 @@ export class Bound extends Group implements IPt {
    * @see Bound.fromGroup
    */
   constructor( ...args:Pt[] ) {
-    super(...args);
+    super( ...args );
     this.init();
   }
 
@@ -990,8 +990,8 @@ export class Bound extends Group implements IPt {
    * @returns a Bound object
    */
   static fromBoundingRect( rect:ClientRect ):Bound {
-    let b = new Bound( new Pt( rect.left||0, rect.top||0 ), new Pt( rect.right||0, rect.bottom||0 ) );
-    if (rect.width && rect.height) b.size = new Pt(rect.width, rect.height);
+    const b = new Bound( new Pt( rect.left||0, rect.top||0 ), new Pt( rect.right||0, rect.bottom||0 ) );
+    if ( rect.width && rect.height ) b.size = new Pt( rect.width, rect.height );
     return b;
   }
 
@@ -1001,9 +1001,9 @@ export class Bound extends Group implements IPt {
    * @param g a Group or an Iterable<PtLike>
    */
   static fromGroup( g:PtLikeIterable ):Bound {
-    let _g = Util.iterToArray( g );
-    if (_g.length < 2) throw new Error( "Cannot create a Bound from a group that has less than 2 Pt" );
-    return new Bound( _g[0], _g[_g.length-1] );
+    const _g = Util.iterToArray( g );
+    if ( _g.length < 2 ) throw new Error( "Cannot create a Bound from a group that has less than 2 Pt" );
+    return new Bound( _g[0], _g[_g.length - 1] );
   }
 
 
@@ -1011,15 +1011,15 @@ export class Bound extends Group implements IPt {
    * Initiate the bound's properties.
    */
   protected init() {
-    if (this.p1) {
+    if ( this.p1 ) {
       this._size = this.p1.clone();
       this._inited = true;
     } 
-    if (this.p1 && this.p2) {
-      let a = this.p1;
-      let b = this.p2;
-      this.topLeft = a.$min(b);
-      this._bottomRight = a.$max(b);
+    if ( this.p1 && this.p2 ) {
+      const a = this.p1;
+      const b = this.p2;
+      this.topLeft = a.$min( b );
+      this._bottomRight = a.$max( b );
       this._updateSize();
       this._inited = true;
     }
@@ -1047,7 +1047,7 @@ export class Bound extends Group implements IPt {
    * Recalculate center.
    */
   protected _updateCenter() {
-    this._center = this._size.$multiply(0.5).add( this._topLeft );
+    this._center = this._size.$multiply( 0.5 ).add( this._topLeft );
   }
 
 
@@ -1073,7 +1073,7 @@ export class Bound extends Group implements IPt {
    * Recalculate based on center position and size.
    */
   protected _updatePosFromCenter() {
-    let half = this._size.$multiply(0.5);
+    const half = this._size.$multiply( 0.5 );
     this._topLeft = this._center.$subtract( half );
     this._bottomRight = this._center.$add( half );
   }
@@ -1082,9 +1082,9 @@ export class Bound extends Group implements IPt {
   /**
    * Size of this Bound
    */
-  get size():Pt { return new Pt(this._size); }
-  set size(p: Pt) { 
-    this._size = new Pt(p); 
+  get size():Pt { return new Pt( this._size ); }
+  set size( p: Pt ) { 
+    this._size = new Pt( p ); 
     this._updatePosFromTop();
   }
   
@@ -1092,9 +1092,9 @@ export class Bound extends Group implements IPt {
   /**
    * Center position of this Bound
    */
-  get center():Pt { return new Pt(this._center); }
+  get center():Pt { return new Pt( this._center ); }
   set center( p:Pt ) {
-    this._center = new Pt(p);
+    this._center = new Pt( p );
     this._updatePosFromCenter();
   }
 
@@ -1102,9 +1102,9 @@ export class Bound extends Group implements IPt {
   /**
    * Top-left position of this Bound
    */
-  get topLeft():Pt { return new Pt(this._topLeft); }
+  get topLeft():Pt { return new Pt( this._topLeft ); }
   set topLeft( p:Pt ) {
-    this._topLeft = new Pt(p);
+    this._topLeft = new Pt( p );
     this[0] = this._topLeft;
     this._updateSize();
   }
@@ -1113,9 +1113,9 @@ export class Bound extends Group implements IPt {
   /**
    * Bottom-right position of this Bound
    */
-  get bottomRight():Pt { return new Pt(this._bottomRight); }
+  get bottomRight():Pt { return new Pt( this._bottomRight ); }
   set bottomRight( p:Pt ) {
-    this._bottomRight = new Pt(p);
+    this._bottomRight = new Pt( p );
     this[1] = this._bottomRight;
     this._updateSize();
   }
@@ -1124,7 +1124,7 @@ export class Bound extends Group implements IPt {
   /**
    * Width of this Bound
    */
-  get width():number { return (this._size.length > 0) ? this._size.x : 0; }
+  get width():number { return ( this._size.length > 0 ) ? this._size.x : 0; }
   set width( w:number ) {
     this._size.x = w;
     this._updatePosFromTop();
@@ -1134,7 +1134,7 @@ export class Bound extends Group implements IPt {
   /**
    * Height of this Bound
    */
-  get height():number { return (this._size.length > 1) ? this._size.y : 0; }
+  get height():number { return ( this._size.length > 1 ) ? this._size.y : 0; }
   set height( h:number ) {
     this._size.y = h;
     this._updatePosFromTop();
@@ -1144,7 +1144,7 @@ export class Bound extends Group implements IPt {
   /**
    * Depth of this Bound
    */
-  get depth():number { return (this._size.length > 2) ? this._size.z : 0; }
+  get depth():number { return ( this._size.length > 2 ) ? this._size.z : 0; }
   set depth( d:number ) {
     this._size.z = d;
     this._updatePosFromTop();

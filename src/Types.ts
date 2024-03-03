@@ -31,7 +31,7 @@ export type GroupLike = Group | Pt[];
  * Typescript type: PtIterable represents an iterable list of Pt instances. Unlike `PtLikeIterable`, this type only allows Pt instances but not numbers' arrays.
  * If you aren't sure what this type means, treat this as a [`Group`](#link) instance.
  */
- export type PtIterable = GroupLike | Pt[] | Iterable<Pt>;
+export type PtIterable = GroupLike | Pt[] | Iterable<Pt>;
 
 
 /**
@@ -114,7 +114,7 @@ export type CanvasSpaceOptions = {
 /**
  * Typescript type: ColorType represents a defined set of string values such as "rgb" and "lab".
  */
-export type ColorType = "rgb"|"hsl"|"hsb"|"lab"|"lch"|"luv"|"xyz";
+export type ColorType = "rgb" | "hsl" | "hsb" | "lab" | "lch" | "luv" | "xyz";
 
 
 /**
@@ -162,25 +162,25 @@ export type UIHandler = ( target:UI, pt:PtLike, type:string, evt:MouseEvent ) =>
 /**
  * Typescript type: WarningType specifies a level of warning for [`Util.warnLevel`](#link).
  */
-export type WarningType = "error"|"warn"|"mute";
+export type WarningType = "error" | "warn" | "mute";
 
 
 /**
  * Typescript type: a callback function type used in `tempo.every(...).start( fn )` 
  */
-export type ITempoStartFn = (count:number) => void|boolean;
+export type ITempoStartFn = ( count:number ) => void | boolean;
 
 /**
  * Typescript type: a callback function type used in `tempo.every(...).progress( fn )` 
  */
-export type ITempoProgressFn = (count:number, t:number, ms:number, start:boolean) => void|boolean;
+export type ITempoProgressFn = ( count:number, t:number, ms:number, start:boolean ) => void | boolean;
 
 /**
  * Typescript type: ITempoListener represents a listener created by Tempo class
  */
 export type ITempoListener = {
   name?:string, // reference id
-  beats?:number|number[], // rhythm in beats
+  beats?:number | number[], // rhythm in beats
   period?:number, // current number of beats per period
   duration?:number, // current duration in ms per period
   offset?:number, // time offset
@@ -193,8 +193,8 @@ export type ITempoListener = {
  * Typescript type: the return type of `tempo.every(...)`
  */
 export type ITempoResponses = {
-  start: (fn:ITempoStartFn, offset:number, name?:string) => string,
-  progress: (fn:ITempoProgressFn, offset:number, name?:string ) => string
+  start: ( fn:ITempoStartFn, offset:number, name?:string ) => string,
+  progress: ( fn:ITempoProgressFn, offset:number, name?:string ) => string
 };
 
 
@@ -211,15 +211,15 @@ export type ISoundAnalyzer = {
 /**
  * Typescript type: SoundType represents a type of sound input. It corresponds to Sound.type property.
  */
-export type SoundType = "file"|"gen"|"input";
+export type SoundType = "file" | "gen" | "input";
 
 
 /**
  * Typescript type: DefaultFormStyle represents a default object for visual styles such as fill, stroke, line width, and others.
  */
 export type DefaultFormStyle = {
-  fillStyle?: string|CanvasGradient|CanvasPattern, 
-  strokeStyle?: string|CanvasGradient|CanvasPattern, 
+  fillStyle?: string | CanvasGradient | CanvasPattern, 
+  strokeStyle?: string | CanvasGradient | CanvasPattern, 
   lineWidth?: number, 
   lineJoin?: string, 
   lineCap?: string,

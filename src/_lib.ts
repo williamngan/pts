@@ -23,29 +23,29 @@ import * as _Canvas from './Canvas';
 // A function to switch scope for Pts library. eg, Pts.namespace( window );
 export let namespace = ( scope:any ) => {
   let lib = module.exports;
-  for (let k in lib) {
-    if (k!="namespace") {
+  for ( let k in lib ) {
+    if ( k != "namespace" ) {
       scope[k] = lib[k];
     }
   }
 };
 
-export let quickStart = ( id:string, bg:string="#9ab" ) => {
-  if (!window) return;
+export let quickStart = ( id:string, bg:string = "#9ab" ) => {
+  if ( !window ) return;
   
   let s:any = window;
   namespace( s );
   
-  s.space = new _Canvas.CanvasSpace( id ).setup({bgcolor: bg, resize: true, retina: true});
+  s.space = new _Canvas.CanvasSpace( id ).setup( {bgcolor: bg, resize: true, retina: true} );
   s.form = s.space.getForm();
 
-  return function( animate=null, start=null, action=null, resize=null ) {
-    s.space.add({
+  return function( animate = null, start = null, action = null, resize = null ) {
+    s.space.add( {
       start: start,
       animate: animate,
       resize: resize,
       action: action,
-    });
+    } );
 
     s.space.bindMouse().bindTouch().play();
   };
