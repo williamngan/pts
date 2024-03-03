@@ -129,7 +129,7 @@ export class Img {
    * @param canvasScale rescale factor for the canvas
    * @param img an image source like Image, Canvas, or ImageBitmap.
    */
-  protected _drawToScale( canvasScale:number | PtLike, img:CanvasImageSource ) {
+  protected _drawToScale( canvasScale:number | PtLike, img:HTMLImageElement | HTMLCanvasElement | ImageBitmap | OffscreenCanvas | HTMLVideoElement ) {
     const nw = img.width as number;
     const nh = img.height as number;
     this.initCanvas( nw, nh, canvasScale );

@@ -89,12 +89,10 @@ export class World {
    * @returns a Body, or undefined if not found
    */
   body( id:number | string ) {
-    let idx = id;
     if ( typeof id === "string" && id.length > 0 ) {
-      idx = this._bnames.indexOf( id );
+      return this._bodies[this._bnames.indexOf( id )];
     }
-    if ( !( idx >= 0 ) ) return undefined;
-    return this._bodies[idx];
+    return ( typeof id === "number" && id >= 0 ) ? this._bodies[id] : undefined;
   }
 
 
@@ -104,12 +102,10 @@ export class World {
    * @returns a Particle, or undefined if not found
    */
   particle( id:number | string ) { 
-    let idx = id;
     if ( typeof id === "string" && id.length > 0 ) {
-      idx = this._pnames.indexOf( id );
+      return this._particles[this._pnames.indexOf( id )];
     }
-    if ( !( idx >= 0 ) ) return undefined;
-    return this._particles[idx];
+    return ( typeof id === "number" && id >= 0 ) ? this._particles[id] : undefined;
   }
 
 
