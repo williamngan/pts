@@ -98,7 +98,7 @@ See https://github.com/williamngan/pts for details. */
     Mat: () => Mat,
     Vec: () => Vec
   });
-  var Vec = class {
+  var Vec = class _Vec {
     /**
      * Add `b` to vector `a`.
      * @returns vector `a`
@@ -191,44 +191,44 @@ See https://github.com/williamngan/pts for details. */
      * Magnitude of `a`.
      */
     static magnitude(a) {
-      return Math.sqrt(Vec.dot(a, a));
+      return Math.sqrt(_Vec.dot(a, a));
     }
     /**
      * Unit vector of `a`. If magnitude of `a` is already known, pass it in the second paramter to optimize calculation.
      */
     static unit(a, magnitude = void 0) {
-      let m = magnitude === void 0 ? Vec.magnitude(a) : magnitude;
+      const m = magnitude === void 0 ? _Vec.magnitude(a) : magnitude;
       if (m === 0)
         return Pt.make(a.length);
-      return Vec.divide(a, m);
+      return _Vec.divide(a, m);
     }
     /**
      * Set `a` to its absolute value in each dimension.
      * @returns vector `a`
      */
     static abs(a) {
-      return Vec.map(a, Math.abs);
+      return _Vec.map(a, Math.abs);
     }
     /**
      * Set `a` to its floor value in each dimension.
      * @returns vector `a`
      */
     static floor(a) {
-      return Vec.map(a, Math.floor);
+      return _Vec.map(a, Math.floor);
     }
     /**
      * Set `a` to its ceiling value in each dimension.
      * @returns vector `a`
      */
     static ceil(a) {
-      return Vec.map(a, Math.ceil);
+      return _Vec.map(a, Math.ceil);
     }
     /**
      * Set `a` to its rounded value in each dimension.
      * @returns vector `a`
      */
     static round(a) {
-      return Vec.map(a, Math.round);
+      return _Vec.map(a, Math.round);
     }
     /**
      * Find the max value within a vector's dimensions.
@@ -278,7 +278,7 @@ See https://github.com/williamngan/pts for details. */
       return a;
     }
   };
-  var Mat = class {
+  var Mat = class _Mat {
     constructor() {
       this.reset();
     }
@@ -292,13 +292,13 @@ See https://github.com/williamngan/pts for details. */
      * Convert the value of its stored 3x3 matrix to a 2D [`DOMMatrix`](https://developer.mozilla.org/en-US/docs/Web/API/DOMMatrix) instance
      */
     get domMatrix() {
-      return new DOMMatrix(Mat.toDOMMatrix(this._33));
+      return new DOMMatrix(_Mat.toDOMMatrix(this._33));
     }
     /**
      * Reset the internal 3x3 matrix to its identity
      */
     reset() {
-      this._33 = Mat.scale2DMatrix(1, 1);
+      this._33 = _Mat.scale2DMatrix(1, 1);
     }
     /**
      * Scale the internal 3x3 matrix. You can chain this function with other related functions.
@@ -306,8 +306,8 @@ See https://github.com/williamngan/pts for details. */
      * @param at Optional origin location to scale from. 
      */
     scale2D(val, at = [0, 0]) {
-      const m = Mat.scaleAt2DMatrix(val[0] || 1, val[1] || 1, at);
-      this._33 = Mat.multiply(this._33, m);
+      const m = _Mat.scaleAt2DMatrix(val[0] || 1, val[1] || 1, at);
+      this._33 = _Mat.multiply(this._33, m);
       return this;
     }
     /**
@@ -316,8 +316,8 @@ See https://github.com/williamngan/pts for details. */
      * @param at Optional origin location to rotate from. 
      */
     rotate2D(ang, at = [0, 0]) {
-      const m = Mat.rotateAt2DMatrix(Math.cos(ang), Math.sin(ang), at);
-      this._33 = Mat.multiply(this._33, m);
+      const m = _Mat.rotateAt2DMatrix(Math.cos(ang), Math.sin(ang), at);
+      this._33 = _Mat.multiply(this._33, m);
       return this;
     }
     /**
@@ -325,8 +325,8 @@ See https://github.com/williamngan/pts for details. */
      * @param val [x, y] offset values
      */
     translate2D(val) {
-      const m = Mat.translate2DMatrix(val[0] || 0, val[1] || 0);
-      this._33 = Mat.multiply(this._33, m);
+      const m = _Mat.translate2DMatrix(val[0] || 0, val[1] || 0);
+      this._33 = _Mat.multiply(this._33, m);
       return this;
     }
     /**
@@ -335,8 +335,8 @@ See https://github.com/williamngan/pts for details. */
      * @param at Optional origin location to scale from. 
      */
     shear2D(val, at = [0, 0]) {
-      const m = Mat.shearAt2DMatrix(Math.tan(val[0] || 0), Math.tan(val[1] || 1), at);
-      this._33 = Mat.multiply(this._33, m);
+      const m = _Mat.shearAt2DMatrix(Math.tan(val[0] || 0), Math.tan(val[1] || 1), at);
+      this._33 = _Mat.multiply(this._33, m);
       return this;
     }
     /**
@@ -352,8 +352,8 @@ See https://github.com/williamngan/pts for details. */
         if (a.length != b.length)
           throw new Error("Cannot add matrix if rows' and columns' size don't match.");
       }
-      let g = new Group();
-      let isNum = typeof b == "number";
+      const g = new Group();
+      const isNum = typeof b == "number";
       for (let i = 0, len = a.length; i < len; i++) {
         g.push(a[i].$add(isNum ? b : b[i]));
       }
@@ -368,7 +368,7 @@ See https://github.com/williamngan/pts for details. */
      * @returns If not elementwise, this will return a new group with M Pt, each with N dimensions (M-rows, N-columns).
      */
     static multiply(a, b, transposed = false, elementwise = false) {
-      let g = new Group();
+      const g = new Group();
       if (typeof b != "number") {
         if (elementwise) {
           if (a.length != b.length)
@@ -382,9 +382,9 @@ See https://github.com/williamngan/pts for details. */
           if (transposed && a[0].length != b[0].length)
             throw new Error("Cannot multiply matrix if transposed and the columns in both matrices don't match.");
           if (!transposed)
-            b = Mat.transpose(b);
+            b = _Mat.transpose(b);
           for (let ai = 0, alen = a.length; ai < alen; ai++) {
-            let p = Pt.make(b.length, 0);
+            const p = Pt.make(b.length, 0);
             for (let bi = 0, blen = b.length; bi < blen; bi++) {
               p[bi] = Vec.dot(a[ai], b[bi]);
             }
@@ -405,7 +405,7 @@ See https://github.com/williamngan/pts for details. */
      * @param defaultValue a default value to fill if index out of bound. If not provided, it will throw an error instead.
      */
     static zipSlice(g, index, defaultValue = false) {
-      let z = [];
+      const z = [];
       for (let i = 0, len = g.length; i < len; i++) {
         if (g[i].length - 1 < index && defaultValue === false)
           throw `Index ${index} is out of bounds`;
@@ -420,10 +420,10 @@ See https://github.com/williamngan/pts for details. */
      * @param useLongest If true, find the longest list of values in a Pt and use its length for zipping. Default is false, which uses the first item's length for zipping.
      */
     static zip(g, defaultValue = false, useLongest = false) {
-      let ps = new Group();
-      let len = useLongest ? g.reduce((a, b) => Math.max(a, b.length), 0) : g[0].length;
+      const ps = new Group();
+      const len = useLongest ? g.reduce((a, b) => Math.max(a, b.length), 0) : g[0].length;
       for (let i = 0; i < len; i++) {
-        ps.push(Mat.zipSlice(g, i, defaultValue));
+        ps.push(_Mat.zipSlice(g, i, defaultValue));
       }
       return ps;
     }
@@ -431,7 +431,7 @@ See https://github.com/williamngan/pts for details. */
      * Same as `zip` function.
      */
     static transpose(g, defaultValue = false, useLongest = false) {
-      return Mat.zip(g, defaultValue, useLongest);
+      return _Mat.zip(g, defaultValue, useLongest);
     }
     static toDOMMatrix(m) {
       return [m[0][0], m[0][1], m[1][0], m[1][1], m[2][0], m[2][1]];
@@ -443,8 +443,8 @@ See https://github.com/williamngan/pts for details. */
      * @returns a new transformed Pt
      */
     static transform2D(pt, m) {
-      let x = pt[0] * m[0][0] + pt[1] * m[1][0] + m[2][0];
-      let y = pt[0] * m[0][1] + pt[1] * m[1][1] + m[2][1];
+      const x = pt[0] * m[0][0] + pt[1] * m[1][0] + m[2][0];
+      const y = pt[0] * m[0][1] + pt[1] * m[1][1] + m[2][1];
       return new Pt(x, y);
     }
     /**
@@ -491,7 +491,7 @@ See https://github.com/williamngan/pts for details. */
      * Get a matrix to scale a point from an origin point. For use in `transform2D`.
      */
     static scaleAt2DMatrix(sx, sy, at) {
-      let m = Mat.scale2DMatrix(sx, sy);
+      const m = _Mat.scale2DMatrix(sx, sy);
       m[2][0] = -at[0] * sx + at[0];
       m[2][1] = -at[1] * sy + at[1];
       return m;
@@ -500,7 +500,7 @@ See https://github.com/williamngan/pts for details. */
      * Get a matrix to rotate a point from an origin point. For use in `transform2D`.
      */
     static rotateAt2DMatrix(cosA, sinA, at) {
-      let m = Mat.rotate2DMatrix(cosA, sinA);
+      const m = _Mat.rotate2DMatrix(cosA, sinA);
       m[2][0] = at[0] * (1 - cosA) + at[1] * sinA;
       m[2][1] = at[1] * (1 - cosA) - at[0] * sinA;
       return m;
@@ -509,7 +509,7 @@ See https://github.com/williamngan/pts for details. */
      * Get a matrix to shear a point from an origin point. For use in `transform2D`.
      */
     static shearAt2DMatrix(tanX, tanY, at) {
-      let m = Mat.shear2DMatrix(tanX, tanY);
+      const m = _Mat.shear2DMatrix(tanX, tanY);
       m[2][0] = -at[1] * tanY;
       m[2][1] = -at[0] * tanX;
       return m;
@@ -520,7 +520,7 @@ See https://github.com/williamngan/pts for details. */
      * @param p1 second end point to define the reflection line
      */
     static reflectAt2DMatrix(p1, p2) {
-      let intercept = Line.intercept(p1, p2);
+      const intercept = Line.intercept(p1, p2);
       if (intercept == void 0) {
         return [
           new Pt([-1, 0, 0]),
@@ -528,10 +528,10 @@ See https://github.com/williamngan/pts for details. */
           new Pt([p1[0] + p2[0], 0, 1])
         ];
       } else {
-        let yi = intercept.yi;
-        let ang2 = Math.atan(intercept.slope) * 2;
-        let cosA = Math.cos(ang2);
-        let sinA = Math.sin(ang2);
+        const yi = intercept.yi;
+        const ang2 = Math.atan(intercept.slope) * 2;
+        const cosA = Math.cos(ang2);
+        const sinA = Math.sin(ang2);
         return [
           new Pt([cosA, sinA, 0]),
           new Pt([sinA, -cosA, 0]),
@@ -544,7 +544,7 @@ See https://github.com/williamngan/pts for details. */
   // src/Op.ts
   var _errorLength = (obj, param = "expected") => Util.warn("Group's length is less than " + param, obj);
   var _errorOutofBound = (obj, param = "") => Util.warn(`Index ${param} is out of bound in Group`, obj);
-  var Line = class {
+  var Line = class _Line {
     /**
      * Create a line that originates from an anchor point, given an angle and a magnitude.
      * @param anchor an anchor Pt
@@ -642,7 +642,7 @@ See https://github.com/williamngan/pts for details. */
      */
     static distanceFromPt(line, pt) {
       let _line = Util.iterToArray(line);
-      let projectionVector = Line.perpendicularFromPt(_line, pt, true);
+      let projectionVector = _Line.perpendicularFromPt(_line, pt, true);
       if (projectionVector) {
         return projectionVector.magnitude();
       } else {
@@ -658,8 +658,8 @@ See https://github.com/williamngan/pts for details. */
     static intersectRay2D(la, lb) {
       let _la = Util.iterToArray(la);
       let _lb = Util.iterToArray(lb);
-      let a = Line.intercept(_la[0], _la[1]);
-      let b = Line.intercept(_lb[0], _lb[1]);
+      let a = _Line.intercept(_la[0], _la[1]);
+      let b = _Line.intercept(_lb[0], _lb[1]);
       let pa = _la[0];
       let pb = _lb[0];
       if (a == void 0) {
@@ -693,7 +693,7 @@ See https://github.com/williamngan/pts for details. */
     static intersectLine2D(la, lb) {
       let _la = Util.iterToArray(la);
       let _lb = Util.iterToArray(lb);
-      let pt = Line.intersectRay2D(_la, _lb);
+      let pt = _Line.intersectRay2D(_la, _lb);
       return pt && Geom.withinBound(pt, _la[0], _la[1]) && Geom.withinBound(pt, _lb[0], _lb[1]) ? pt : void 0;
     }
     /**
@@ -705,7 +705,7 @@ See https://github.com/williamngan/pts for details. */
     static intersectLineWithRay2D(line, ray) {
       let _line = Util.iterToArray(line);
       let _ray = Util.iterToArray(ray);
-      let pt = Line.intersectRay2D(_line, _ray);
+      let pt = _Line.intersectRay2D(_line, _ray);
       return pt && Geom.withinBound(pt, _line[0], _line[1]) ? pt : void 0;
     }
     /**
@@ -717,7 +717,7 @@ See https://github.com/williamngan/pts for details. */
     static intersectPolygon2D(lineOrRay, poly, sourceIsRay = false) {
       let _lineOrRay = Util.iterToArray(lineOrRay);
       let _poly = Util.iterToArray(poly);
-      let fn = sourceIsRay ? Line.intersectLineWithRay2D : Line.intersectLine2D;
+      let fn = sourceIsRay ? _Line.intersectLineWithRay2D : _Line.intersectLine2D;
       let pts = new Group();
       for (let i = 0, len = _poly.length; i < len; i++) {
         let next = i === len - 1 ? 0 : i + 1;
@@ -735,7 +735,7 @@ See https://github.com/williamngan/pts for details. */
      */
     static intersectLines2D(lines1, lines2, isRay = false) {
       let group = new Group();
-      let fn = isRay ? Line.intersectLineWithRay2D : Line.intersectLine2D;
+      let fn = isRay ? _Line.intersectLineWithRay2D : _Line.intersectLine2D;
       for (let l1 of lines1) {
         for (let l2 of lines2) {
           let _ip = fn(l1, l2);
@@ -753,7 +753,7 @@ See https://github.com/williamngan/pts for details. */
      */
     static intersectGridWithRay2D(ray, gridPt) {
       let _ray = Util.iterToArray(ray);
-      let t = Line.intercept(new Pt(_ray[0]).subtract(gridPt), new Pt(_ray[1]).subtract(gridPt));
+      let t = _Line.intercept(new Pt(_ray[0]).subtract(gridPt), new Pt(_ray[1]).subtract(gridPt));
       let g = new Group();
       if (t && t.xi)
         g.push(new Pt(gridPt[0] + t.xi, gridPt[1]));
@@ -769,7 +769,7 @@ See https://github.com/williamngan/pts for details. */
      */
     static intersectGridWithLine2D(line, gridPt) {
       let _line = Util.iterToArray(line);
-      let g = Line.intersectGridWithRay2D(_line, gridPt);
+      let g = _Line.intersectGridWithRay2D(_line, gridPt);
       let gg = new Group();
       for (let i = 0, len = g.length; i < len; i++) {
         if (Geom.withinBound(g[i], _line[0], _line[1]))
@@ -789,7 +789,7 @@ See https://github.com/williamngan/pts for details. */
       let box = Geom.boundingBox(Group.fromPtArray(_line));
       if (!Rectangle.hasIntersectRect2D(box, _rect))
         return new Group();
-      return Line.intersectLines2D([_line], Rectangle.sides(_rect));
+      return _Line.intersectLines2D([_line], Rectangle.sides(_rect));
     }
     /**
      * Get evenly distributed points on a line. Similar to [`Create.distributeLinear`](#link) but excluding end points.
@@ -830,7 +830,7 @@ See https://github.com/williamngan/pts for details. */
         } else {
           sideIdx = ls[0] < 0 ? 3 : 1;
         }
-        return Line.intersectRay2D(sides[sideIdx], _line);
+        return _Line.intersectRay2D(sides[sideIdx], _line);
       }
     }
     /**
@@ -866,7 +866,7 @@ See https://github.com/williamngan/pts for details. */
       return new Group(_line[0].$min(_line[1]), _line[0].$max(_line[1]));
     }
   };
-  var Rectangle = class {
+  var Rectangle = class _Rectangle {
     /**
      * Create a rectangle from top-left anchor point. Same as [`Rectangle.fromTopLeft`](#link).
      * @param topLeft top-left point
@@ -875,7 +875,7 @@ See https://github.com/williamngan/pts for details. */
      * @returns a Group of 2 Pts representing a rectangle
      */
     static from(topLeft, widthOrSize, height) {
-      return Rectangle.fromTopLeft(topLeft, widthOrSize, height);
+      return _Rectangle.fromTopLeft(topLeft, widthOrSize, height);
     }
     /**
      * Create a rectangle given a top-left position and a size.
@@ -916,9 +916,9 @@ See https://github.com/williamngan/pts for details. */
      */
     static toSquare(pts, enclose = false) {
       let _pts = Util.iterToArray(pts);
-      let s = Rectangle.size(_pts);
+      let s = _Rectangle.size(_pts);
       let m = enclose ? s.maxValue().value : s.minValue().value;
-      return Rectangle.fromCenter(Rectangle.center(_pts), m, m);
+      return _Rectangle.fromCenter(_Rectangle.center(_pts), m, m);
     }
     /**
      * Get the size of this rectangle as a Pt.
@@ -954,7 +954,7 @@ See https://github.com/williamngan/pts for details. */
      * @returns an array of 4 Groups, each of which represents a line segment
      */
     static sides(rect) {
-      let [p0, p1, p2, p3] = Rectangle.corners(rect);
+      let [p0, p1, p2, p3] = _Rectangle.corners(rect);
       return [
         new Group(p0, p1),
         new Group(p1, p2),
@@ -988,7 +988,7 @@ See https://github.com/williamngan/pts for details. */
      * @param rect a Group or an Iterable<Pt> with 2 Pt representing a Rectangle
      */
     static polygon(rect) {
-      return Rectangle.corners(rect);
+      return _Rectangle.corners(rect);
     }
     /**
      * Subdivide a rectangle into 4 rectangles, one for each quadrant.
@@ -997,8 +997,8 @@ See https://github.com/williamngan/pts for details. */
      */
     static quadrants(rect, center) {
       let _rect = Util.iterToArray(rect);
-      let corners = Rectangle.corners(_rect);
-      let _center = center != void 0 ? new Pt(center) : Rectangle.center(_rect);
+      let corners = _Rectangle.corners(_rect);
+      let _center = center != void 0 ? new Pt(center) : _Rectangle.center(_rect);
       return corners.map((c) => new Group(c, _center).boundingBox());
     }
     /**
@@ -1051,12 +1051,12 @@ See https://github.com/williamngan/pts for details. */
     static intersectRect2D(rect1, rect2) {
       let _rect1 = Util.iterToArray(rect1);
       let _rect2 = Util.iterToArray(rect2);
-      if (!Rectangle.hasIntersectRect2D(_rect1, _rect2))
+      if (!_Rectangle.hasIntersectRect2D(_rect1, _rect2))
         return new Group();
-      return Line.intersectLines2D(Rectangle.sides(_rect1), Rectangle.sides(_rect2));
+      return Line.intersectLines2D(_Rectangle.sides(_rect1), _Rectangle.sides(_rect2));
     }
   };
-  var Circle = class {
+  var Circle = class _Circle {
     /**
      * Create a circle that either fits within, or encloses, a rectangle.
      * @param pts a Group or an Iterable<PtLike> with 2 Pt representing a rectangle
@@ -1147,7 +1147,7 @@ See https://github.com/williamngan/pts for details. */
     static intersectLine2D(circle, line) {
       let _pts = Util.iterToArray(circle);
       let _line = Util.iterToArray(line);
-      let ps = Circle.intersectRay2D(_pts, _line);
+      let ps = _Circle.intersectRay2D(_pts, _line);
       let g = new Group();
       if (ps.length > 0) {
         for (let i = 0, len = ps.length; i < len; i++) {
@@ -1200,7 +1200,7 @@ See https://github.com/williamngan/pts for details. */
       let sides = Rectangle.sides(_rect);
       let g = [];
       for (let i = 0, len = sides.length; i < len; i++) {
-        let ps = Circle.intersectLine2D(_pts, sides[i]);
+        let ps = _Circle.intersectLine2D(_pts, sides[i]);
         if (ps.length > 0)
           g.push(ps);
       }
@@ -1243,7 +1243,7 @@ See https://github.com/williamngan/pts for details. */
       }
     }
   };
-  var Triangle = class {
+  var Triangle = class _Triangle {
     /**
      * Create a triangle from a rectangle. The triangle will be isosceles, with the bottom of the rectangle as its base.
      * @param rect a Group or an Iterable<Pt> with 2 Pt representing a rectangle
@@ -1269,7 +1269,7 @@ See https://github.com/williamngan/pts for details. */
      * @param size size is the magnitude of lines from center to the triangle's vertices, like a "radius".
      */
     static fromCenter(pt, size) {
-      return Triangle.fromCircle(Circle.fromCenter(pt, size));
+      return _Triangle.fromCircle(Circle.fromCenter(pt, size));
     }
     /**
      * Get the medial, which is an inner triangle formed by connecting the midpoints of this triangle's sides.
@@ -1308,7 +1308,7 @@ See https://github.com/williamngan/pts for details. */
      */
     static altitude(tri, index) {
       let _pts = Util.iterToArray(tri);
-      let opp = Triangle.oppositeSide(_pts, index);
+      let opp = _Triangle.oppositeSide(_pts, index);
       if (opp.length > 1) {
         return new Group(_pts[index], Line.perpendicularFromPt(opp, _pts[index]));
       } else {
@@ -1324,8 +1324,8 @@ See https://github.com/williamngan/pts for details. */
       let _pts = Util.iterToArray(tri);
       if (_pts.length < 3)
         return _errorLength(void 0, 3);
-      let a = Triangle.altitude(_pts, 0);
-      let b = Triangle.altitude(_pts, 1);
+      let a = _Triangle.altitude(_pts, 0);
+      let b = _Triangle.altitude(_pts, 1);
       return Line.intersectRay2D(a, b);
     }
     /**
@@ -1348,7 +1348,7 @@ See https://github.com/williamngan/pts for details. */
      */
     static incircle(tri, center) {
       let _pts = Util.iterToArray(tri);
-      let c = center ? center : Triangle.incenter(_pts);
+      let c = center ? center : _Triangle.incenter(_pts);
       let area = Polygon.area(_pts);
       let perim = Polygon.perimeter(_pts, true);
       let r = 2 * area / perim.total;
@@ -1361,7 +1361,7 @@ See https://github.com/williamngan/pts for details. */
      */
     static circumcenter(tri) {
       let _pts = Util.iterToArray(tri);
-      let md = Triangle.medial(_pts);
+      let md = _Triangle.medial(_pts);
       let a = [md[0], Geom.perpendicular(_pts[0].$subtract(md[0])).p1.$add(md[0])];
       let b = [md[1], Geom.perpendicular(_pts[1].$subtract(md[1])).p1.$add(md[1])];
       return Line.intersectRay2D(a, b);
@@ -1373,12 +1373,12 @@ See https://github.com/williamngan/pts for details. */
      */
     static circumcircle(tri, center) {
       let _pts = Util.iterToArray(tri);
-      let c = center ? center : Triangle.circumcenter(_pts);
+      let c = center ? center : _Triangle.circumcenter(_pts);
       let r = _pts[0].$subtract(c).magnitude();
       return Circle.fromCenter(c, r);
     }
   };
-  var Polygon = class {
+  var Polygon = class _Polygon {
     /**
      * Get the centroid of a polygon, which is the average of all its points.
      * @param pts a Group or an Iterable<PtLike> representing a polygon
@@ -1442,7 +1442,7 @@ See https://github.com/williamngan/pts for details. */
      * @param t a value between 0 to 1 for interpolation. Default to 0.5 which will get the middle point.
      */
     static midpoints(poly, closePath = false, t = 0.5) {
-      let sides = Polygon.lines(poly, closePath);
+      let sides = _Polygon.lines(poly, closePath);
       let mids = sides.map((s) => Geom.interpolate(s[0], s[1], t));
       return mids;
     }
@@ -1479,7 +1479,7 @@ See https://github.com/williamngan/pts for details. */
      * @returns a bisector Pt that's a normalized unit vector
      */
     static bisector(poly, index) {
-      let sides = Polygon.adjacentSides(poly, index, true);
+      let sides = _Polygon.adjacentSides(poly, index, true);
       if (sides.length >= 2) {
         let a = sides[0][1].$subtract(sides[0][0]).unit();
         let b = sides[1][1].$subtract(sides[1][0]).unit();
@@ -1495,7 +1495,7 @@ See https://github.com/williamngan/pts for details. */
      * @returns an object with `total` length, and `segments` which is a Pt that stores each segment's length
      */
     static perimeter(poly, closePath = false) {
-      let lines = Polygon.lines(poly, closePath);
+      let lines = _Polygon.lines(poly, closePath);
       let mag = 0;
       let p = Pt.make(lines.length, 0);
       for (let i = 0, len = lines.length; i < len; i++) {
@@ -1635,8 +1635,8 @@ See https://github.com/williamngan/pts for details. */
      * @param unitAxis unit axis
      */
     static _axisOverlap(poly1, poly2, unitAxis) {
-      let pa = Polygon.projectAxis(poly1, unitAxis);
-      let pb = Polygon.projectAxis(poly2, unitAxis);
+      let pa = _Polygon.projectAxis(poly1, unitAxis);
+      let pb = _Polygon.projectAxis(poly2, unitAxis);
       return pa[0] < pb[0] ? pb[0] - pa[1] : pa[0] - pb[1];
     }
     /**
@@ -1648,7 +1648,7 @@ See https://github.com/williamngan/pts for details. */
       let _poly = Util.iterToArray(poly);
       let c = false;
       for (let i = 0, len = _poly.length; i < len; i++) {
-        let ln = Polygon.lineAt(_poly, i);
+        let ln = _Polygon.lineAt(_poly, i);
         if (ln[0][1] > pt[1] != ln[1][1] > pt[1] && pt[0] < (ln[1][0] - ln[0][0]) * (pt[1] - ln[0][1]) / (ln[1][1] - ln[0][1]) + ln[0][0]) {
           c = !c;
         }
@@ -1679,10 +1679,10 @@ See https://github.com/williamngan/pts for details. */
       let r = _circle[1][0];
       let minDist = Number.MAX_SAFE_INTEGER;
       for (let i = 0, len = _poly.length; i < len; i++) {
-        let edge = Polygon.lineAt(_poly, i);
+        let edge = _Polygon.lineAt(_poly, i);
         let axis = new Pt(edge[0].y - edge[1].y, edge[1].x - edge[0].x).unit();
         let poly2 = new Group(c.$add(axis.$multiply(r)), c.$subtract(axis.$multiply(r)));
-        let dist = Polygon._axisOverlap(_poly, poly2, axis);
+        let dist = _Polygon._axisOverlap(_poly, poly2, axis);
         if (dist > 0) {
           return null;
         } else if (Math.abs(dist) < minDist) {
@@ -1697,7 +1697,7 @@ See https://github.com/williamngan/pts for details. */
       }
       if (!info.edge)
         return null;
-      let dir = c.$subtract(Polygon.centroid(_poly)).dot(info.normal);
+      let dir = c.$subtract(_Polygon.centroid(_poly)).dot(info.normal);
       if (dir < 0)
         info.normal.multiply(-1);
       info.dist = minDist;
@@ -1726,9 +1726,9 @@ See https://github.com/williamngan/pts for details. */
       };
       let minDist = Number.MAX_SAFE_INTEGER;
       for (let i = 0, plen = _poly1.length + _poly2.length; i < plen; i++) {
-        let edge = i < _poly1.length ? Polygon.lineAt(_poly1, i) : Polygon.lineAt(_poly2, i - _poly1.length);
+        let edge = i < _poly1.length ? _Polygon.lineAt(_poly1, i) : _Polygon.lineAt(_poly2, i - _poly1.length);
         let axis = new Pt(edge[0].y - edge[1].y, edge[1].x - edge[0].x).unit();
-        let dist = Polygon._axisOverlap(_poly1, _poly2, axis);
+        let dist = _Polygon._axisOverlap(_poly1, _poly2, axis);
         if (dist > 0) {
           return null;
         } else if (Math.abs(dist) < minDist) {
@@ -1741,8 +1741,8 @@ See https://github.com/williamngan/pts for details. */
       info.dist = minDist;
       let b1 = info.which === 0 ? _poly2 : _poly1;
       let b2 = info.which === 0 ? _poly1 : _poly2;
-      let c1 = Polygon.centroid(b1);
-      let c2 = Polygon.centroid(b2);
+      let c1 = _Polygon.centroid(b1);
+      let c2 = _Polygon.centroid(b2);
       let dir = c1.$subtract(c2).dot(info.normal);
       if (dir < 0)
         info.normal.multiply(-1);
@@ -1764,7 +1764,7 @@ See https://github.com/williamngan/pts for details. */
     static intersectPolygon2D(poly1, poly2) {
       let _poly1 = Util.iterToArray(poly1);
       let _poly2 = Util.iterToArray(poly2);
-      let lp = Polygon.lines(_poly1);
+      let lp = _Polygon.lines(_poly1);
       let g = [];
       for (let i = 0, len = lp.length; i < len; i++) {
         let ins = Line.intersectPolygon2D(lp[i], _poly2, false);
@@ -1787,7 +1787,7 @@ See https://github.com/williamngan/pts for details. */
       return boxes;
     }
   };
-  var Curve = class {
+  var Curve = class _Curve {
     /**
      * Get a precalculated coefficients per step. 
      * @param steps number of steps
@@ -1846,17 +1846,17 @@ See https://github.com/williamngan/pts for details. */
       if (_pts.length < 2)
         return new Group();
       let ps = new Group();
-      let ts = Curve.getSteps(steps);
-      let c = Curve.controlPoints(_pts, 0, true);
+      let ts = _Curve.getSteps(steps);
+      let c = _Curve.controlPoints(_pts, 0, true);
       for (let i = 0; i <= steps; i++) {
-        ps.push(Curve.catmullRomStep(ts[i], c));
+        ps.push(_Curve.catmullRomStep(ts[i], c));
       }
       let k = 0;
       while (k < _pts.length - 2) {
-        let cp = Curve.controlPoints(_pts, k);
+        let cp = _Curve.controlPoints(_pts, k);
         if (cp.length > 0) {
           for (let i = 0; i <= steps; i++) {
-            ps.push(Curve.catmullRomStep(ts[i], cp));
+            ps.push(_Curve.catmullRomStep(ts[i], cp));
           }
           k++;
         }
@@ -1876,7 +1876,7 @@ See https://github.com/williamngan/pts for details. */
         new Pt(-1.5, 2, 0.5, 0),
         new Pt(0.5, -0.5, 0, 0)
       );
-      return Curve._calcPt(ctrls, Mat.multiply([step], m, true)[0]);
+      return _Curve._calcPt(ctrls, Mat.multiply([step], m, true)[0]);
     }
     /**
      * Create a Cardinal curve.
@@ -1890,17 +1890,17 @@ See https://github.com/williamngan/pts for details. */
       if (_pts.length < 2)
         return new Group();
       let ps = new Group();
-      let ts = Curve.getSteps(steps);
-      let c = Curve.controlPoints(_pts, 0, true);
+      let ts = _Curve.getSteps(steps);
+      let c = _Curve.controlPoints(_pts, 0, true);
       for (let i = 0; i <= steps; i++) {
-        ps.push(Curve.cardinalStep(ts[i], c, tension));
+        ps.push(_Curve.cardinalStep(ts[i], c, tension));
       }
       let k = 0;
       while (k < _pts.length - 2) {
-        let cp = Curve.controlPoints(_pts, k);
+        let cp = _Curve.controlPoints(_pts, k);
         if (cp.length > 0) {
           for (let i = 0; i <= steps; i++) {
-            ps.push(Curve.cardinalStep(ts[i], cp, tension));
+            ps.push(_Curve.cardinalStep(ts[i], cp, tension));
           }
           k++;
         }
@@ -1924,7 +1924,7 @@ See https://github.com/williamngan/pts for details. */
       let h = Mat.multiply([step], m, true)[0].multiply(tension);
       let h2 = 2 * step[0] - 3 * step[1] + 1;
       let h3 = -2 * step[0] + 3 * step[1];
-      let pt = Curve._calcPt(ctrls, h);
+      let pt = _Curve._calcPt(ctrls, h);
       pt.x += h2 * ctrls[1].x + h3 * ctrls[2].x;
       pt.y += h2 * ctrls[1].y + h3 * ctrls[2].y;
       if (pt.length > 2)
@@ -1942,13 +1942,13 @@ See https://github.com/williamngan/pts for details. */
       if (_pts.length < 4)
         return new Group();
       let ps = new Group();
-      let ts = Curve.getSteps(steps);
+      let ts = _Curve.getSteps(steps);
       let k = 0;
       while (k < _pts.length - 3) {
-        let c = Curve.controlPoints(_pts, k);
+        let c = _Curve.controlPoints(_pts, k);
         if (c.length > 0) {
           for (let i = 0; i <= steps; i++) {
-            ps.push(Curve.bezierStep(ts[i], c));
+            ps.push(_Curve.bezierStep(ts[i], c));
           }
           k += 3;
         }
@@ -1968,7 +1968,7 @@ See https://github.com/williamngan/pts for details. */
         new Pt(-3, 3, 0, 0),
         new Pt(1, 0, 0, 0)
       );
-      return Curve._calcPt(ctrls, Mat.multiply([step], m, true)[0]);
+      return _Curve._calcPt(ctrls, Mat.multiply([step], m, true)[0]);
     }
     /**
      * Create a basis spline (NURBS) curve.
@@ -1982,18 +1982,18 @@ See https://github.com/williamngan/pts for details. */
       if (_pts.length < 2)
         return new Group();
       let ps = new Group();
-      let ts = Curve.getSteps(steps);
+      let ts = _Curve.getSteps(steps);
       let k = 0;
       while (k < _pts.length - 3) {
-        let c = Curve.controlPoints(_pts, k);
+        let c = _Curve.controlPoints(_pts, k);
         if (c.length > 0) {
           if (tension !== 1) {
             for (let i = 0; i <= steps; i++) {
-              ps.push(Curve.bsplineTensionStep(ts[i], c, tension));
+              ps.push(_Curve.bsplineTensionStep(ts[i], c, tension));
             }
           } else {
             for (let i = 0; i <= steps; i++) {
-              ps.push(Curve.bsplineStep(ts[i], c));
+              ps.push(_Curve.bsplineStep(ts[i], c));
             }
           }
           k++;
@@ -2014,7 +2014,7 @@ See https://github.com/williamngan/pts for details. */
         new Pt(-0.5, 0.5, 0.5, 0.16666666666666666),
         new Pt(0.16666666666666666, 0, 0, 0)
       );
-      return Curve._calcPt(ctrls, Mat.multiply([step], m, true)[0]);
+      return _Curve._calcPt(ctrls, Mat.multiply([step], m, true)[0]);
     }
     /**
      * Interpolate to get a point on a basis spline curve with tension.
@@ -2033,7 +2033,7 @@ See https://github.com/williamngan/pts for details. */
       let h = Mat.multiply([step], m, true)[0].multiply(tension);
       let h2 = 2 * step[0] - 3 * step[1] + 1;
       let h3 = -2 * step[0] + 3 * step[1];
-      let pt = Curve._calcPt(ctrls, h);
+      let pt = _Curve._calcPt(ctrls, h);
       pt.x += h2 * ctrls[1].x + h3 * ctrls[2].x;
       pt.y += h2 * ctrls[1].y + h3 * ctrls[2].y;
       if (pt.length > 2)
@@ -2044,13 +2044,13 @@ See https://github.com/williamngan/pts for details. */
 
   // src/uheprng.ts
   function Mash() {
-    var n = 4022871197;
-    var mash = function(data) {
+    let n = 4022871197;
+    let mash = function(data) {
       if (data) {
         data = data.toString();
-        for (var i = 0; i < data.length; i++) {
+        for (let i = 0; i < data.length; i++) {
           n += data.charCodeAt(i);
-          var h = 0.02519603282416938 * n;
+          let h = 0.02519603282416938 * n;
           n = h >>> 0;
           h -= n;
           h *= n;
@@ -2065,12 +2065,12 @@ See https://github.com/williamngan/pts for details. */
     return mash;
   }
   function uheprng_default(seed) {
-    var o = 48;
-    var c = 1;
-    var p = o;
-    var s = new Array(o);
-    var i, j, k = 0;
-    var mash = Mash();
+    let o = 48;
+    let c = 1;
+    let p = o;
+    let s = new Array(o);
+    let i, j, k = 0;
+    let mash = Mash();
     for (i = 0; i < o; i++)
       s[i] = mash(Math.random().toString());
     function initState() {
@@ -2102,24 +2102,24 @@ See https://github.com/williamngan/pts for details. */
     hashString(seed);
     return {
       /**
-       * this (not anymore) PRIVATE (internal access only) function is the heart of the multiply-with-carry
-       * (MWC) PRNG algorithm. When called it returns a pseudo-random number in the form of a
-       * 32-bit JavaScript fraction (0.0 to <1.0) it is a PRIVATE function used by the default
-       * [0-1] return function, and by the random 'string(n)' function which returns 'n'
-       * characters from 33 to 126.
-       * @returns a number between 0.0 and 1.0
-       */
+           * this (not anymore) PRIVATE (internal access only) function is the heart of the multiply-with-carry
+           * (MWC) PRNG algorithm. When called it returns a pseudo-random number in the form of a
+           * 32-bit JavaScript fraction (0.0 to <1.0) it is a PRIVATE function used by the default
+           * [0-1] return function, and by the random 'string(n)' function which returns 'n'
+           * characters from 33 to 126.
+           * @returns a number between 0.0 and 1.0
+           */
       random() {
         if (++p >= o)
           p = 0;
-        var t = 1768863 * s[p] + c * 23283064365386963e-26;
+        let t = 1768863 * s[p] + c * 23283064365386963e-26;
         return s[p] = t - (c = t | 0);
       }
     };
   }
 
   // src/Num.ts
-  var Num = class {
+  var Num = class _Num {
     /**
      * Check if two numbers are equal or almost equal within a threshold.
      * @param a number a
@@ -2155,7 +2155,7 @@ See https://github.com/williamngan/pts for details. */
      * @example `boundValue(361, 0, 360)` will return 1
      */
     static boundValue(val, min, max) {
-      let len = Math.abs(max - min);
+      const len = Math.abs(max - min);
       let a = val % len;
       if (a > max)
         a -= len;
@@ -2178,8 +2178,8 @@ See https://github.com/williamngan/pts for details. */
      * @param b range value 2
      */
     static randomRange(a, b = 0) {
-      let r = a > b ? a - b : b - a;
-      return a + Num.random() * r;
+      const r = a > b ? a - b : b - a;
+      return a + _Num.random() * r;
     }
     /**
      * Get a random Pt within the range defined by either 1 or 2 Pt
@@ -2187,11 +2187,11 @@ See https://github.com/williamngan/pts for details. */
      * @param b optional Pt to define the end of the range
      */
     static randomPt(a, b) {
-      let p = new Pt(a.length);
-      let range = b ? Vec.subtract(b.slice(), a) : a;
-      let start = b ? a : new Pt(a.length).fill(0);
+      const p = new Pt(a.length);
+      const range = b ? Vec.subtract(b.slice(), a) : a;
+      const start = b ? a : new Pt(a.length).fill(0);
       for (let i = 0, len = p.length; i < len; i++) {
-        p[i] = Num.random() * range[i] + start[i];
+        p[i] = _Num.random() * range[i] + start[i];
       }
       return p;
     }
@@ -2202,8 +2202,8 @@ See https://github.com/williamngan/pts for details. */
      * @param b range value 1
      */
     static normalizeValue(n, a, b) {
-      let min = Math.min(a, b);
-      let max = Math.max(a, b);
+      const min = Math.min(a, b);
+      const max = Math.max(a, b);
       return (n - min) / (max - min);
     }
     /**
@@ -2212,8 +2212,8 @@ See https://github.com/williamngan/pts for details. */
      * @returns a Pt of the dimensional sums
      */
     static sum(pts) {
-      let _pts = Util.iterToArray(pts);
-      let c = new Pt(_pts[0]);
+      const _pts = Util.iterToArray(pts);
+      const c = new Pt(_pts[0]);
       for (let i = 1, len = _pts.length; i < len; i++) {
         Vec.add(c, _pts[i]);
       }
@@ -2225,8 +2225,8 @@ See https://github.com/williamngan/pts for details. */
      * @returns a Pt of averages
      */
     static average(pts) {
-      let _pts = Util.iterToArray(pts);
-      return Num.sum(_pts).divide(_pts.length);
+      const _pts = Util.iterToArray(pts);
+      return _Num.sum(_pts).divide(_pts.length);
     }
     /**
      * Given a value between 0 to 1, returns a value that cycles between 0 -> 1 -> 0 using the provided shaping method.
@@ -2249,9 +2249,9 @@ See https://github.com/williamngan/pts for details. */
     static mapToRange(n, currA, currB, targetA, targetB) {
       if (currA == currB)
         throw new Error("[currMin, currMax] must define a range that is not zero");
-      let min = Math.min(targetA, targetB);
-      let max = Math.max(targetA, targetB);
-      return Num.normalizeValue(n, currA, currB) * (max - min) + min;
+      const min = Math.min(targetA, targetB);
+      const max = Math.max(targetA, targetB);
+      return _Num.normalizeValue(n, currA, currB) * (max - min) + min;
     }
     /**
      * Seed the pseudorandom generator.
@@ -2269,7 +2269,7 @@ See https://github.com/williamngan/pts for details. */
       return this.generator ? this.generator.random() : Math.random();
     }
   };
-  var Geom = class {
+  var Geom = class _Geom {
     /**
      * Bound an angle between 0 to 360 degrees.
      * @param angle angle value
@@ -2305,7 +2305,7 @@ See https://github.com/williamngan/pts for details. */
      */
     static boundingBox(pts) {
       let minPt, maxPt;
-      for (let p of pts) {
+      for (const p of pts) {
         if (minPt == void 0) {
           minPt = p.clone();
           maxPt = p.clone();
@@ -2331,9 +2331,9 @@ See https://github.com/williamngan/pts for details. */
      * @param direction a string either "to" (subtract all Pt with this anchor base), or "from" (add all Pt from this anchor base)
      */
     static anchor(pts, ptOrIndex = 0, direction = "to") {
-      let method = direction == "to" ? "subtract" : "add";
+      const method = direction == "to" ? "subtract" : "add";
       let i = 0;
-      for (let p of pts) {
+      for (const p of pts) {
         if (typeof ptOrIndex == "number") {
           if (ptOrIndex !== i)
             p[method](pts[ptOrIndex]);
@@ -2351,8 +2351,8 @@ See https://github.com/williamngan/pts for details. */
      * @returns interpolated point as a new Pt
      */
     static interpolate(a, b, t = 0.5) {
-      let len = Math.min(a.length, b.length);
-      let d = Pt.make(len);
+      const len = Math.min(a.length, b.length);
+      const d = Pt.make(len);
       for (let i = 0; i < len; i++) {
         d[i] = a[i] * (1 - t) + b[i] * t;
       }
@@ -2364,13 +2364,13 @@ See https://github.com/williamngan/pts for details. */
      * @returns an array of two Pt that are perpendicular to this Pt
      */
     static perpendicular(pt, axis = Const.xy) {
-      let y = axis[1];
-      let x = axis[0];
-      let p = new Pt(pt);
-      let pa = new Pt(p);
+      const y = axis[1];
+      const x = axis[0];
+      const p = new Pt(pt);
+      const pa = new Pt(p);
       pa[x] = -p[y];
       pa[y] = p[x];
-      let pb = new Pt(p);
+      const pb = new Pt(p);
       pb[x] = p[y];
       pb[y] = -p[x];
       return new Group(pa, pb);
@@ -2399,14 +2399,14 @@ See https://github.com/williamngan/pts for details. */
      * @param pts a Group or an Iterable<Pt>
      */
     static sortEdges(pts) {
-      let _pts = Util.iterToArray(pts);
-      let bounds = Geom.boundingBox(_pts);
-      let center = bounds[1].add(bounds[0]).divide(2);
-      let fn = (a, b) => {
+      const _pts = Util.iterToArray(pts);
+      const bounds = _Geom.boundingBox(_pts);
+      const center = bounds[1].add(bounds[0]).divide(2);
+      const fn = (a, b) => {
         if (a.length < 2 || b.length < 2)
           throw new Error("Pt dimension cannot be less than 2");
-        let da = a.$subtract(center);
-        let db = b.$subtract(center);
+        const da = a.$subtract(center);
+        const db = b.$subtract(center);
         if (da[0] >= 0 && db[0] < 0)
           return 1;
         if (da[0] < 0 && db[0] >= 0)
@@ -2416,7 +2416,7 @@ See https://github.com/williamngan/pts for details. */
             return da[1] > db[1] ? 1 : -1;
           return db[1] > da[1] ? 1 : -1;
         }
-        let det = da.$cross2D(db);
+        const det = da.$cross2D(db);
         if (det < 0)
           return 1;
         if (det > 0)
@@ -2432,17 +2432,17 @@ See https://github.com/williamngan/pts for details. */
      * @param anchor optional anchor point to scale from
      */
     static scale(ps, scale, anchor) {
-      let pts = Util.iterToArray(ps[0] !== void 0 && typeof ps[0] == "number" ? [ps] : ps);
-      let scs = typeof scale == "number" ? Pt.make(pts[0].length, scale) : scale;
+      const pts = Util.iterToArray(ps[0] !== void 0 && typeof ps[0] == "number" ? [ps] : ps);
+      const scs = typeof scale == "number" ? Pt.make(pts[0].length, scale) : scale;
       if (!anchor)
         anchor = Pt.make(pts[0].length, 0);
       for (let i = 0, len = pts.length; i < len; i++) {
-        let p = pts[i];
+        const p = pts[i];
         for (let k = 0, lenP = p.length; k < lenP; k++) {
           p[k] = anchor && anchor[k] ? anchor[k] + (p[k] - anchor[k]) * scs[k] : p[k] * scs[k];
         }
       }
-      return Geom;
+      return _Geom;
     }
     /**
      * Rotate a Pt or a Group of Pts in 2D space. You may also use [`Pt.rotate2D`](#link) instance method.
@@ -2452,14 +2452,14 @@ See https://github.com/williamngan/pts for details. */
      * @param axis optional axis such as "xy" (use Const.xy) to define a 2D plane, or a number array to specify indices
      */
     static rotate2D(ps, angle, anchor, axis) {
-      let pts = Util.iterToArray(ps[0] !== void 0 && typeof ps[0] == "number" ? [ps] : ps);
-      let fn = anchor ? Mat.rotateAt2DMatrix : Mat.rotate2DMatrix;
+      const pts = Util.iterToArray(ps[0] !== void 0 && typeof ps[0] == "number" ? [ps] : ps);
+      const fn = anchor ? Mat.rotateAt2DMatrix : Mat.rotate2DMatrix;
       if (!anchor)
         anchor = Pt.make(pts[0].length, 0);
-      let cos = Math.cos(angle);
-      let sin = Math.sin(angle);
+      const cos = Math.cos(angle);
+      const sin = Math.sin(angle);
       for (let i = 0, len = pts.length; i < len; i++) {
-        let p = axis ? pts[i].$take(axis) : pts[i];
+        const p = axis ? pts[i].$take(axis) : pts[i];
         p.to(Mat.transform2D(p, fn(cos, sin, anchor)));
         if (axis) {
           for (let k = 0; k < axis.length; k++) {
@@ -2467,7 +2467,7 @@ See https://github.com/williamngan/pts for details. */
           }
         }
       }
-      return Geom;
+      return _Geom;
     }
     /**
      * Shear a Pt or a Group of Pts in 2D space. You may also use [`Pt.shear2D`](#link) instance method.
@@ -2477,15 +2477,15 @@ See https://github.com/williamngan/pts for details. */
      * @param axis optional axis such as "xy" (use Const.xy) to define a 2D plane, or a number array to specify indices
      */
     static shear2D(ps, scale, anchor, axis) {
-      let pts = Util.iterToArray(ps[0] !== void 0 && typeof ps[0] == "number" ? [ps] : ps);
-      let s = typeof scale == "number" ? [scale, scale] : scale;
+      const pts = Util.iterToArray(ps[0] !== void 0 && typeof ps[0] == "number" ? [ps] : ps);
+      const s = typeof scale == "number" ? [scale, scale] : scale;
       if (!anchor)
         anchor = Pt.make(pts[0].length, 0);
-      let fn = anchor ? Mat.shearAt2DMatrix : Mat.shear2DMatrix;
-      let tanx = Math.tan(s[0]);
-      let tany = Math.tan(s[1]);
+      const fn = anchor ? Mat.shearAt2DMatrix : Mat.shear2DMatrix;
+      const tanx = Math.tan(s[0]);
+      const tany = Math.tan(s[1]);
       for (let i = 0, len = pts.length; i < len; i++) {
-        let p = axis ? pts[i].$take(axis) : pts[i];
+        const p = axis ? pts[i].$take(axis) : pts[i];
         p.to(Mat.transform2D(p, fn(tanx, tany, anchor)));
         if (axis) {
           for (let k = 0; k < axis.length; k++) {
@@ -2493,7 +2493,7 @@ See https://github.com/williamngan/pts for details. */
           }
         }
       }
-      return Geom;
+      return _Geom;
     }
     /**
      * Reflect a Pt or a Group of Pts along a 2D line. You may also use [`Pt.reflect2D`](#link) instance method.
@@ -2502,11 +2502,11 @@ See https://github.com/williamngan/pts for details. */
      * @param axis optional axis such as "xy" (use Const.xy) to define a 2D plane, or a number array to specify indices
      */
     static reflect2D(ps, line, axis) {
-      let pts = Util.iterToArray(ps[0] !== void 0 && typeof ps[0] == "number" ? [ps] : ps);
-      let _line = Util.iterToArray(line);
-      let mat = Mat.reflectAt2DMatrix(_line[0], _line[1]);
+      const pts = Util.iterToArray(ps[0] !== void 0 && typeof ps[0] == "number" ? [ps] : ps);
+      const _line = Util.iterToArray(line);
+      const mat = Mat.reflectAt2DMatrix(_line[0], _line[1]);
       for (let i = 0, len = pts.length; i < len; i++) {
-        let p = axis ? pts[i].$take(axis) : pts[i];
+        const p = axis ? pts[i].$take(axis) : pts[i];
         p.to(Mat.transform2D(p, mat));
         if (axis) {
           for (let k = 0; k < axis.length; k++) {
@@ -2514,17 +2514,17 @@ See https://github.com/williamngan/pts for details. */
           }
         }
       }
-      return Geom;
+      return _Geom;
     }
     /**
      * Generate a cosine lookup table.
      * @returns an object with a cosine tables (array of 360 values) and a function to get cosine given a radian input. 
      */
     static cosTable() {
-      let cos = new Float64Array(360);
+      const cos = new Float64Array(360);
       for (let i = 0; i < 360; i++)
         cos[i] = Math.cos(i * Math.PI / 180);
-      let find = (rad) => cos[Math.floor(Geom.boundAngle(Geom.toDegree(rad)))];
+      const find = (rad) => cos[Math.floor(_Geom.boundAngle(_Geom.toDegree(rad)))];
       return { table: cos, cos: find };
     }
     /**
@@ -2532,14 +2532,14 @@ See https://github.com/williamngan/pts for details. */
      * @returns an object with a sine tables (array of 360 values) and a function to get sine value given a radian input. 
      */
     static sinTable() {
-      let sin = new Float64Array(360);
+      const sin = new Float64Array(360);
       for (let i = 0; i < 360; i++)
         sin[i] = Math.sin(i * Math.PI / 180);
-      let find = (rad) => sin[Math.floor(Geom.boundAngle(Geom.toDegree(rad)))];
+      const find = (rad) => sin[Math.floor(_Geom.boundAngle(_Geom.toDegree(rad)))];
       return { table: sin, sin: find };
     }
   };
-  var Shaping = class {
+  var Shaping = class _Shaping {
     /**
      * Linear mapping.
      * @param t a value between 0 to 1
@@ -2570,7 +2570,7 @@ See https://github.com/williamngan/pts for details. */
      * @param c the value to shape, default is 1
      */
     static quadraticInOut(t, c = 1) {
-      let dt = t * 2;
+      const dt = t * 2;
       return t < 0.5 ? c / 2 * t * t * 4 : -c / 2 * ((dt - 1) * (dt - 3) - 1);
     }
     /** 
@@ -2587,7 +2587,7 @@ See https://github.com/williamngan/pts for details. */
      * @param c the value to shape, default is 1
      */
     static cubicOut(t, c = 1) {
-      let dt = t - 1;
+      const dt = t - 1;
       return c * (dt * dt * dt + 1);
     }
     /** 
@@ -2596,7 +2596,7 @@ See https://github.com/williamngan/pts for details. */
      * @param c the value to shape, default is 1
      */
     static cubicInOut(t, c = 1) {
-      let dt = t * 2;
+      const dt = t * 2;
       return t < 0.5 ? c / 2 * dt * dt * dt : c / 2 * ((dt - 2) * (dt - 2) * (dt - 2) + 2);
     }
     /** 
@@ -2647,9 +2647,9 @@ See https://github.com/williamngan/pts for details. */
      * @param c the value to shape, default is 1
      */
     static cosineApprox(t, c = 1) {
-      let t2 = t * t;
-      let t4 = t2 * t2;
-      let t6 = t4 * t2;
+      const t2 = t * t;
+      const t4 = t2 * t2;
+      const t6 = t4 * t2;
       return c * (4 * t6 / 9 - 17 * t4 / 9 + 22 * t2 / 9);
     }
     /** 
@@ -2666,7 +2666,7 @@ See https://github.com/williamngan/pts for details. */
      * @param c the value to shape, default is 1
      */
     static circularOut(t, c = 1) {
-      let dt = t - 1;
+      const dt = t - 1;
       return c * Math.sqrt(1 - dt * dt);
     }
     /** 
@@ -2675,7 +2675,7 @@ See https://github.com/williamngan/pts for details. */
      * @param c the value to shape, default is 1
      */
     static circularInOut(t, c = 1) {
-      let dt = t * 2;
+      const dt = t * 2;
       return t < 0.5 ? -c / 2 * (Math.sqrt(1 - dt * dt) - 1) : c / 2 * (Math.sqrt(1 - (dt - 2) * (dt - 2)) + 1);
     }
     /** 
@@ -2685,8 +2685,8 @@ See https://github.com/williamngan/pts for details. */
      * @param p elastic parmeter between 0 to 1. The lower the number, the more elastic it will be. Default is 0.7.
      */
     static elasticIn(t, c = 1, p = 0.7) {
-      let dt = t - 1;
-      let s = p / Const.two_pi * 1.5707963267948966;
+      const dt = t - 1;
+      const s = p / Const.two_pi * 1.5707963267948966;
       return c * (-Math.pow(2, 10 * dt) * Math.sin((dt - s) * Const.two_pi / p));
     }
     /** 
@@ -2696,7 +2696,7 @@ See https://github.com/williamngan/pts for details. */
      * @param p elastic parmeter between 0 to 1. The lower the number, the more elastic it will be. Default is 0.7.
      */
     static elasticOut(t, c = 1, p = 0.7) {
-      let s = p / Const.two_pi * 1.5707963267948966;
+      const s = p / Const.two_pi * 1.5707963267948966;
       return c * (Math.pow(2, -10 * t) * Math.sin((t - s) * Const.two_pi / p)) + c;
     }
     /** 
@@ -2707,7 +2707,7 @@ See https://github.com/williamngan/pts for details. */
      */
     static elasticInOut(t, c = 1, p = 0.6) {
       let dt = t * 2;
-      let s = p / Const.two_pi * 1.5707963267948966;
+      const s = p / Const.two_pi * 1.5707963267948966;
       if (t < 0.5) {
         dt -= 1;
         return c * (-0.5 * (Math.pow(2, 10 * dt) * Math.sin((dt - s) * Const.two_pi / p)));
@@ -2722,7 +2722,7 @@ See https://github.com/williamngan/pts for details. */
      * @param c the value to shape, default is 1
      */
     static bounceIn(t, c = 1) {
-      return c - Shaping.bounceOut(1 - t, c);
+      return c - _Shaping.bounceOut(1 - t, c);
     }
     /** 
      * Bounce out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
@@ -2749,7 +2749,7 @@ See https://github.com/williamngan/pts for details. */
      * @param c the value to shape, default is 1
      */
     static bounceInOut(t, c = 1) {
-      return t < 0.5 ? Shaping.bounceIn(t * 2, c) / 2 : Shaping.bounceOut(t * 2 - 1, c) / 2 + c / 2;
+      return t < 0.5 ? _Shaping.bounceIn(t * 2, c) / 2 : _Shaping.bounceOut(t * 2 - 1, c) / 2 + c / 2;
     }
     /** 
      * Sigmoid curve changes its shape adapted from the input value, but always returns a value between 0 to 1.
@@ -2758,7 +2758,7 @@ See https://github.com/williamngan/pts for details. */
      * @param p the larger the value, the "steeper" the curve will be. Default is 10.
      */
     static sigmoid(t, c = 1, p = 10) {
-      let d = p * (t - 0.5);
+      const d = p * (t - 0.5);
       return c / (1 + Math.exp(-d));
     }
     /** 
@@ -2770,9 +2770,9 @@ See https://github.com/williamngan/pts for details. */
     static logSigmoid(t, c = 1, p = 0.7) {
       p = Math.max(Const.epsilon, Math.min(1 - Const.epsilon, p));
       p = 1 / (1 - p);
-      let A = 1 / (1 + Math.exp((t - 0.5) * p * -2));
-      let B = 1 / (1 + Math.exp(p));
-      let C = 1 / (1 + Math.exp(-p));
+      const A = 1 / (1 + Math.exp((t - 0.5) * p * -2));
+      const B = 1 / (1 + Math.exp(p));
+      const C = 1 / (1 + Math.exp(-p));
       return c * (A - B) / (C - B);
     }
     /** 
@@ -2795,13 +2795,13 @@ See https://github.com/williamngan/pts for details. */
      * @param p1 a Pt object specifying the first control Pt, or a value specifying the control Pt's x position (its y position will default to 0.5). Default is `Pt(0.95, 0.95)
      */
     static quadraticBezier(t, c = 1, p = [0.05, 0.95]) {
-      let a = typeof p != "number" ? p[0] : p;
-      let b = typeof p != "number" ? p[1] : 0.5;
+      const a = typeof p != "number" ? p[0] : p;
+      const b = typeof p != "number" ? p[1] : 0.5;
       let om2a = 1 - 2 * a;
       if (om2a === 0) {
         om2a = Const.epsilon;
       }
-      let d = (Math.sqrt(a * a + om2a * t) - a) / om2a;
+      const d = (Math.sqrt(a * a + om2a * t) - a) / om2a;
       return c * ((1 - 2 * b) * (d * d) + 2 * b * d);
     }
     /** 
@@ -2812,7 +2812,7 @@ See https://github.com/williamngan/pts for details. */
      * @param p2` a Pt object specifying the second control Pt. Default is `Pt(0.9, 0.2).
      */
     static cubicBezier(t, c = 1, p1 = [0.1, 0.7], p2 = [0.9, 0.2]) {
-      let curve = new Group(new Pt(0, 0), new Pt(p1), new Pt(p2), new Pt(1, 1));
+      const curve = new Group(new Pt(0, 0), new Pt(p1), new Pt(p2), new Pt(1, 1));
       return c * Curve.bezierStep(new Pt(t * t * t, t * t, t, 1), Curve.controlPoints(curve)).y;
     }
     /** 
@@ -2822,11 +2822,11 @@ See https://github.com/williamngan/pts for details. */
      * @param p1` a Pt object specifying the Pt to pass through. Default is `Pt(0.2, 0.35)
      */
     static quadraticTarget(t, c = 1, p1 = [0.2, 0.35]) {
-      let a = Math.min(1 - Const.epsilon, Math.max(Const.epsilon, p1[0]));
-      let b = Math.min(1, Math.max(0, p1[1]));
-      let A = (1 - b) / (1 - a) - b / a;
-      let B = (A * (a * a) - b) / a;
-      let y = A * (t * t) - B * t;
+      const a = Math.min(1 - Const.epsilon, Math.max(Const.epsilon, p1[0]));
+      const b = Math.min(1, Math.max(0, p1[1]));
+      const A = (1 - b) / (1 - a) - b / a;
+      const B = (A * (a * a) - b) / a;
+      const y = A * (t * t) - B * t;
       return c * Math.min(1, Math.max(0, y));
     }
     /** 
@@ -2847,8 +2847,8 @@ See https://github.com/williamngan/pts for details. */
      * @param args optional paramters to pass to original function
      */
     static step(fn, steps, t, c, ...args) {
-      let s = 1 / steps;
-      let tt = Math.floor(t / s) * s;
+      const s = 1 / steps;
+      const tt = Math.floor(t / s) * s;
       return fn(tt, c, ...args);
     }
   };
@@ -2886,16 +2886,16 @@ See https://github.com/williamngan/pts for details. */
     calc() {
       if (!this._source)
         return;
-      let dims = this._source[0].length;
+      const dims = this._source[0].length;
       this._dims = dims;
-      let max = new Pt(dims);
-      let min = new Pt(dims);
-      let mag = new Pt(dims);
+      const max = new Pt(dims);
+      const min = new Pt(dims);
+      const mag = new Pt(dims);
       for (let i = 0; i < dims; i++) {
         max[i] = Const.min;
         min[i] = Const.max;
         mag[i] = 0;
-        let s = this._source.zipSlice(i);
+        const s = this._source.zipSlice(i);
         for (let k = 0, len = s.length; k < len; k++) {
           max[i] = Math.max(max[i], s[k]);
           min[i] = Math.min(min[i], s[k]);
@@ -2914,10 +2914,10 @@ See https://github.com/williamngan/pts for details. */
      * @param exclude Optional boolean array where `true` means excluding the conversion in that specific dimension.
      */
     mapTo(min, max, exclude) {
-      let target = new Group();
+      const target = new Group();
       for (let i = 0, len = this._source.length; i < len; i++) {
-        let g = this._source[i];
-        let n = new Pt(this._dims);
+        const g = this._source[i];
+        const n = new Pt(this._dims);
         for (let k = 0; k < this._dims; k++) {
           n[k] = exclude && exclude[k] ? g[k] : Num.mapToRange(g[k], this._min[k], this._max[k], min, max);
         }
@@ -2931,7 +2931,7 @@ See https://github.com/williamngan/pts for details. */
      * @param update Optional. Set the parameter to `false` if you want to append without immediately updating this Range's min and max values. Default is `true`.
      */
     append(pts, update = true) {
-      let _pts = Util.iterToArray(pts);
+      const _pts = Util.iterToArray(pts);
       if (_pts[0].length !== this._dims)
         throw new Error(`Dimensions don't match. ${this._dims} dimensions in Range and ${_pts[0].length} provided in parameter. `);
       this._source = this._source.concat(_pts);
@@ -2944,9 +2944,9 @@ See https://github.com/williamngan/pts for details. */
      * @param count number of subdivision. For example, 10 subdivision will return 11 tick values, which include first(min) and last(max) values.
      */
     ticks(count) {
-      let g = new Group();
+      const g = new Group();
       for (let i = 0; i <= count; i++) {
-        let p = new Pt(this._dims);
+        const p = new Pt(this._dims);
         for (let k = 0, len = this._max.length; k < len; k++) {
           p[k] = Num.lerp(this._min[k], this._max[k], i / count);
         }
@@ -3015,7 +3015,7 @@ See https://github.com/williamngan/pts for details. */
     /** Gaussian constant (1 / Math.sqrt(2 * Math.PI)) */
     gaussian: 0.3989422804014327
   };
-  var _Util = class {
+  var _Util = class _Util {
     /**
      * Set a global warning level setting. If no parameter is passed, this will return the current warn-level. See [`Util.warn`](#link).
      * @param lv a [`WarningType`](#link) option, where "error" will throw an error, "warn" will log in console, and "mute" will ignore the error. 
@@ -3110,7 +3110,7 @@ See https://github.com/williamngan/pts for details. */
      * @param flattenAsGroup a boolean to specify whether the return type should be a Group or Array. Default is `true` which returns a Group.
      */
     static flatten(pts, flattenAsGroup = true) {
-      let arr = flattenAsGroup ? new Group() : new Array();
+      let arr = flattenAsGroup ? new Group() : [];
       return arr.concat.apply(arr, pts);
     }
     /**
@@ -3183,7 +3183,7 @@ See https://github.com/williamngan/pts for details. */
      * @param callback a function to capture the data. It receives two parameters: a `response` as string, and a `success` status as boolean.
      */
     static load(url, callback) {
-      var request = new XMLHttpRequest();
+      let request = new XMLHttpRequest();
       request.open("GET", url, true);
       request.onload = function() {
         if (request.status >= 200 && request.status < 400) {
@@ -3261,11 +3261,11 @@ See https://github.com/williamngan/pts for details. */
       return /iPhone|iPad|Android/i.test(navigator.userAgent);
     }
   };
+  _Util._warnLevel = "mute";
   var Util = _Util;
-  Util._warnLevel = "mute";
 
   // src/Pt.ts
-  var Pt = class extends Float32Array {
+  var Pt = class _Pt extends Float32Array {
     /**
      * Create a Pt. If no parameter is provided, this will instantiate a Pt with 2 dimensions [0, 0]. 
      * Note that `new Pt(3)` will only instantiate Pt with length of 3 (ie, same as `new Float32Array(3)` ). If you need a Pt with 1 dimension of value 3, use `new Pt([3])`.
@@ -3288,7 +3288,7 @@ See https://github.com/williamngan/pts for details. */
      * @param randomize if `true`, randomize the value between 0 to default value
      */
     static make(dimensions, defaultValue = 0, randomize = false) {
-      let p = new Float32Array(dimensions);
+      const p = new Float32Array(dimensions);
       if (defaultValue)
         p.fill(defaultValue);
       if (randomize) {
@@ -3296,7 +3296,7 @@ See https://github.com/williamngan/pts for details. */
           p[i] = p[i] * Num.random();
         }
       }
-      return new Pt(p);
+      return new _Pt(p);
     }
     /**
      * ID string of this Pt
@@ -3347,7 +3347,7 @@ See https://github.com/williamngan/pts for details. */
      * Clone this Pt and return it as a new Pt.
      */
     clone() {
-      return new Pt(this);
+      return new _Pt(this);
     }
     /**
      * Check if another Pt is equal to this Pt, within a threshold.
@@ -3366,7 +3366,7 @@ See https://github.com/williamngan/pts for details. */
      * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
      */
     to(...args) {
-      let p = Util.getArgs(args);
+      const p = Util.getArgs(args);
       for (let i = 0, len = Math.min(this.length, p.length); i < len; i++) {
         this[i] = p[i];
       }
@@ -3386,8 +3386,8 @@ See https://github.com/williamngan/pts for details. */
      * @param anchorFromPt If `true`, add it from this Pt's current position. Default is `false` which update the position from origin (0,0). See also [`Geom.rotate2D`](#link) for rotating a point from another anchor point.
      */
     toAngle(radian, magnitude, anchorFromPt = false) {
-      let m = magnitude != void 0 ? magnitude : this.magnitude();
-      let change = [Math.cos(radian) * m, Math.sin(radian) * m];
+      const m = magnitude != void 0 ? magnitude : this.magnitude();
+      const change = [Math.cos(radian) * m, Math.sin(radian) * m];
       return anchorFromPt ? this.add(change) : this.to(change);
     }
     /**
@@ -3397,7 +3397,7 @@ See https://github.com/williamngan/pts for details. */
      * @returns a resulting function that takes other parameters required in `fn`
      */
     op(fn) {
-      let self = this;
+      const self = this;
       return (...params) => {
         return fn(self, ...params);
       };
@@ -3409,7 +3409,7 @@ See https://github.com/williamngan/pts for details. */
      * @returns an array of resulting functions
      */
     ops(fns) {
-      let _ops = [];
+      const _ops = [];
       for (let i = 0, len = fns.length; i < len; i++) {
         _ops.push(this.op(fns[i]));
       }
@@ -3420,18 +3420,18 @@ See https://github.com/williamngan/pts for details. */
      * @param axis a string such as "xy" (use Const.xy) or an array to specify indices
      */
     $take(axis) {
-      let p = [];
+      const p = [];
       for (let i = 0, len = axis.length; i < len; i++) {
         p.push(this[axis[i]] || 0);
       }
-      return new Pt(p);
+      return new _Pt(p);
     }
     /**
      * Concatenate this Pt with addition dimensional values and return as a new Pt.
      * @param args can be either a list of numbers, an array, a Pt,  or an object with {x,y,z,w} properties
      */
     $concat(...args) {
-      return new Pt(this.toArray().concat(Util.getArgs(args)));
+      return new _Pt(this.toArray().concat(Util.getArgs(args)));
     }
     /**
      * Add scalar or vector values to this Pt.
@@ -3626,8 +3626,8 @@ See https://github.com/williamngan/pts for details. */
      * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
      */
     $min(...args) {
-      let p = Util.getArgs(args);
-      let m = this.clone();
+      const p = Util.getArgs(args);
+      const m = this.clone();
       for (let i = 0, len = Math.min(this.length, p.length); i < len; i++) {
         m[i] = Math.min(this[i], p[i]);
       }
@@ -3638,8 +3638,8 @@ See https://github.com/williamngan/pts for details. */
      * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
      */
     $max(...args) {
-      let p = Util.getArgs(args);
-      let m = this.clone();
+      const p = Util.getArgs(args);
+      const m = this.clone();
       for (let i = 0, len = Math.min(this.length, p.length); i < len; i++) {
         m[i] = Math.max(this[i], p[i]);
       }
@@ -3666,7 +3666,7 @@ See https://github.com/williamngan/pts for details. */
      * @param anchor optional anchor point to scale from
      */
     scale(scale, anchor) {
-      Geom.scale(this, scale, anchor || Pt.make(this.length, 0));
+      Geom.scale(this, scale, anchor || _Pt.make(this.length, 0));
       return this;
     }
     /**
@@ -3676,7 +3676,7 @@ See https://github.com/williamngan/pts for details. */
      * @param axis optional string such as "yz" to specify a 2D plane
      */
     rotate2D(angle, anchor, axis) {
-      Geom.rotate2D(this, angle, anchor || Pt.make(this.length, 0), axis);
+      Geom.rotate2D(this, angle, anchor || _Pt.make(this.length, 0), axis);
       return this;
     }
     /**
@@ -3686,7 +3686,7 @@ See https://github.com/williamngan/pts for details. */
      * @param axis optional string such as "yz" to specify a 2D plane
      */
     shear2D(scale, anchor, axis) {
-      Geom.shear2D(this, scale, anchor || Pt.make(this.length, 0), axis);
+      Geom.shear2D(this, scale, anchor || _Pt.make(this.length, 0), axis);
       return this;
     }
     /**
@@ -3714,16 +3714,16 @@ See https://github.com/williamngan/pts for details. */
      * Convert this Pt to a Group as new Group([0,...], pt)
      */
     toGroup() {
-      return new Group(Pt.make(this.length), this.clone());
+      return new Group(_Pt.make(this.length), this.clone());
     }
     /**
      * Convert this Pt to a Bound as new Group([0,...], pt)
      */
     toBound() {
-      return new Bound(Pt.make(this.length), this.clone());
+      return new Bound(_Pt.make(this.length), this.clone());
     }
   };
-  var Group = class extends Array {
+  var Group = class _Group extends Array {
     /**
      * Create a Group by passing an array of [`Pt`](#link). You may also create a Group using [`Group.fromArray`](#link) or [`Group.fromPtArray`](#link).
      * @param args an array of Pts
@@ -3792,7 +3792,7 @@ See https://github.com/williamngan/pts for details. */
      * Depp clone this group and its Pts.
      */
     clone() {
-      let group = new Group();
+      const group = new _Group();
       for (let i = 0, len = this.length; i < len; i++) {
         group.push(this[i].clone());
       }
@@ -3804,9 +3804,9 @@ See https://github.com/williamngan/pts for details. */
      * @example `Group.fromArray( [[1,2], [3,4], [5,6]] )`
      */
     static fromArray(list) {
-      let g = new Group();
-      for (let li of list) {
-        let p = li instanceof Pt ? li : new Pt(li);
+      const g = new _Group();
+      for (const li of list) {
+        const p = li instanceof Pt ? li : new Pt(li);
         g.push(p);
       }
       return g;
@@ -3816,7 +3816,7 @@ See https://github.com/williamngan/pts for details. */
      * @param list an Iterable<Pt>
      */
     static fromPtArray(list) {
-      return Group.from(list);
+      return _Group.from(list);
     }
     /**
      * Split this Group into an array of sub-groups.
@@ -3825,7 +3825,7 @@ See https://github.com/williamngan/pts for details. */
      * @param loopBack if `true`, always go through the array till the end and loop back to the beginning to complete the segments if needed
      */
     split(chunkSize, stride, loopBack = false) {
-      let sp = Util.split(this, chunkSize, stride, loopBack);
+      const sp = Util.split(this, chunkSize, stride, loopBack);
       return sp;
     }
     /**
@@ -3834,7 +3834,7 @@ See https://github.com/williamngan/pts for details. */
      * @param index the index position to insert into
      */
     insert(pts, index = 0) {
-      Group.prototype.splice.apply(this, [index, 0, ...pts]);
+      _Group.prototype.splice.apply(this, [index, 0, ...pts]);
       return this;
     }
     /**
@@ -3844,8 +3844,8 @@ See https://github.com/williamngan/pts for details. */
      * @returns The items that are removed. 
      */
     remove(index = 0, count = 1) {
-      let param = index < 0 ? [index * -1 - 1, count] : [index, count];
-      return Group.prototype.splice.apply(this, param);
+      const param = index < 0 ? [index * -1 - 1, count] : [index, count];
+      return _Group.prototype.splice.apply(this, param);
     }
     /**
      * Split this group into an array of sub-group segments.
@@ -3896,7 +3896,7 @@ See https://github.com/williamngan/pts for details. */
      * @returns a resulting function that takes other parameters required in `fn`
      */
     op(fn) {
-      let self = this;
+      const self = this;
       return (...params) => {
         return fn(self, ...params);
       };
@@ -3908,7 +3908,7 @@ See https://github.com/williamngan/pts for details. */
      * @returns an array of resulting functions
      */
     ops(fns) {
-      let _ops = [];
+      const _ops = [];
       for (let i = 0, len = fns.length; i < len; i++) {
         _ops.push(this.op(fns[i]));
       }
@@ -3920,9 +3920,9 @@ See https://github.com/williamngan/pts for details. */
      */
     interpolate(t) {
       t = Num.clamp(t, 0, 1);
-      let chunk = this.length - 1;
-      let tc = 1 / (this.length - 1);
-      let idx = Math.floor(t / tc);
+      const chunk = this.length - 1;
+      const tc = 1 / (this.length - 1);
+      const idx = Math.floor(t / tc);
       return Geom.interpolate(this[idx], this[Math.min(this.length - 1, idx + 1)], (t - idx * tc) * chunk);
     }
     /**
@@ -3937,7 +3937,7 @@ See https://github.com/williamngan/pts for details. */
      * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
      */
     moveTo(...args) {
-      let d = new Pt(Util.getArgs(args)).subtract(this[0]);
+      const d = new Pt(Util.getArgs(args)).subtract(this[0]);
       this.moveBy(d);
       return this;
     }
@@ -4085,7 +4085,7 @@ See https://github.com/williamngan/pts for details. */
       return "Group[ " + this.reduce((p, c) => p + c.toString() + " ", "") + " ]";
     }
   };
-  var Bound = class extends Group {
+  var Bound = class _Bound extends Group {
     /**
      * Create a Bound. This is similar to the Group constructor. You can also create a Bound via the static function [`Bound.fromGroup`](#link), or alternatively via the [Group.toBound](#link) function.
      * @param args a list of Pt as parameters
@@ -4106,7 +4106,7 @@ See https://github.com/williamngan/pts for details. */
      * @returns a Bound object
      */
     static fromBoundingRect(rect) {
-      let b = new Bound(new Pt(rect.left || 0, rect.top || 0), new Pt(rect.right || 0, rect.bottom || 0));
+      const b = new _Bound(new Pt(rect.left || 0, rect.top || 0), new Pt(rect.right || 0, rect.bottom || 0));
       if (rect.width && rect.height)
         b.size = new Pt(rect.width, rect.height);
       return b;
@@ -4116,10 +4116,10 @@ See https://github.com/williamngan/pts for details. */
      * @param g a Group or an Iterable<PtLike>
      */
     static fromGroup(g) {
-      let _g = Util.iterToArray(g);
+      const _g = Util.iterToArray(g);
       if (_g.length < 2)
         throw new Error("Cannot create a Bound from a group that has less than 2 Pt");
-      return new Bound(_g[0], _g[_g.length - 1]);
+      return new _Bound(_g[0], _g[_g.length - 1]);
     }
     /**
      * Initiate the bound's properties.
@@ -4130,8 +4130,8 @@ See https://github.com/williamngan/pts for details. */
         this._inited = true;
       }
       if (this.p1 && this.p2) {
-        let a = this.p1;
-        let b = this.p2;
+        const a = this.p1;
+        const b = this.p2;
         this.topLeft = a.$min(b);
         this._bottomRight = a.$max(b);
         this._updateSize();
@@ -4142,7 +4142,7 @@ See https://github.com/williamngan/pts for details. */
      * Clone this bound and return a new one.
      */
     clone() {
-      return new Bound(this._topLeft.clone(), this._bottomRight.clone());
+      return new _Bound(this._topLeft.clone(), this._bottomRight.clone());
     }
     /**
      * Recalculte size and center.
@@ -4175,7 +4175,7 @@ See https://github.com/williamngan/pts for details. */
      * Recalculate based on center position and size.
      */
     _updatePosFromCenter() {
-      let half = this._size.$multiply(0.5);
+      const half = this._size.$multiply(0.5);
       this._topLeft = this._center.$subtract(half);
       this._bottomRight = this._center.$add(half);
     }
@@ -4323,7 +4323,7 @@ See https://github.com/williamngan/pts for details. */
     contextmenu: "contextmenu",
     all: "all"
   };
-  var _UI = class {
+  var _UI = class _UI {
     /**
      * Create an UI element. You may also create a new UI using one of the static helper like [`UI.fromRectangle`](#link) or [`UI.fromCircle`](#link).
      * @param group a Group or an Iterable<PtLike> that defines the UI's appearance
@@ -4559,8 +4559,8 @@ See https://github.com/williamngan/pts for details. */
       }
     }
   };
+  _UI._counter = 0;
   var UI = _UI;
-  UI._counter = 0;
   var UIButton = class extends UI {
     /**
      * Create an UIButton. A button has 2 states, "clicks" (number) and "hover" (boolean), which you can access through [`UI.state`](#link) function. You may also create a new UIButton using one of the static helper like [`UI.fromRectangle`](#link) or [`UI.fromCircle`](#link).
@@ -4585,7 +4585,7 @@ See https://github.com/williamngan/pts for details. */
         if (hover && !this._states.hover) {
           this.state("hover", true);
           UI._trigger(this._actions[UA.enter], this, pt, UA.enter, evt);
-          var _capID = this.hold(UA.move);
+          let _capID = this.hold(UA.move);
           this._hoverID = this.on(UA.move, (t, p) => {
             if (!this._within(p) && !this.state("dragging")) {
               this.state("hover", false);
@@ -4636,7 +4636,7 @@ See https://github.com/williamngan/pts for details. */
      * @returns id numbers that refer to enter/leave handlers, for use in [`UIButton.offHover`](#link) or [`UI.off`](#link).
      */
     onHover(enter, leave) {
-      var ids = [void 0, void 0];
+      let ids = [void 0, void 0];
       if (enter)
         ids[0] = this.on(UIPointerActions.enter, enter);
       if (leave)
@@ -4650,7 +4650,7 @@ See https://github.com/williamngan/pts for details. */
      * @returns an array of booleans indicating whether the handlers were removed successfully
      */
     offHover(enterID, leaveID) {
-      var s = [false, false];
+      let s = [false, false];
       if (enterID === void 0 || enterID >= 0)
         s[0] = this.off(UIPointerActions.enter, enterID);
       if (leaveID === void 0 || leaveID >= 0)
@@ -4793,9 +4793,9 @@ See https://github.com/williamngan/pts for details. */
     * @param player an [`IPlayer`](#link) object with animate function, or a callback function `fn(time, ftime)`. 
     */
     add(p) {
-      let player = typeof p == "function" ? { animate: p } : p;
-      let k = this.playerCount++;
-      let pid = player.animateID || this.id + k;
+      const player = typeof p == "function" ? { animate: p } : p;
+      const k = this.playerCount++;
+      const pid = player.animateID || this.id + k;
       this.players[pid] = player;
       player.animateID = pid;
       if (player.resize && this.bound.inited)
@@ -4862,7 +4862,7 @@ See https://github.com/williamngan/pts for details. */
       if (this._refresh)
         this.clear();
       if (this._isReady) {
-        for (let k in this.players) {
+        for (const k in this.players) {
           if (this.players[k].animate)
             this.players[k].animate(time, this._time.diff, this);
         }
@@ -4980,7 +4980,7 @@ See https://github.com/williamngan/pts for details. */
     * Get the mouse or touch pointer that stores the last action.
     */
     get pointer() {
-      let p = this._pointer.clone();
+      const p = this._pointer.clone();
       p.id = this._pointer.id;
       return p;
     }
@@ -5032,27 +5032,21 @@ See https://github.com/williamngan/pts for details. */
         this._mouseOut = this._mouseOut.bind(this);
         this._mouseMove = this._mouseMove.bind(this);
         this._mouseClick = this._mouseClick.bind(this);
-        this._pointerDown = this._pointerDown.bind(this);
-        this._pointerUp = this._pointerUp.bind(this);
         this._contextMenu = this._contextMenu.bind(this);
-        this.bindCanvas("mousedown", this._mouseDown, {}, customTarget);
-        this.bindCanvas("pointerdown", this._pointerDown, {}, customTarget);
-        this.bindCanvas("mouseup", this._mouseUp, {}, customTarget);
-        this.bindCanvas("pointerup", this._pointerUp, {}, customTarget);
-        this.bindCanvas("mouseover", this._mouseOver, {}, customTarget);
-        this.bindCanvas("mouseout", this._mouseOut, {}, customTarget);
-        this.bindCanvas("mousemove", this._mouseMove, {}, customTarget);
+        this.bindCanvas("pointerdown", this._mouseDown, {}, customTarget);
+        this.bindCanvas("pointerup", this._mouseUp, {}, customTarget);
+        this.bindCanvas("pointerover", this._mouseOver, {}, customTarget);
+        this.bindCanvas("pointerout", this._mouseOut, {}, customTarget);
+        this.bindCanvas("pointermove", this._mouseMove, {}, customTarget);
         this.bindCanvas("click", this._mouseClick, {}, customTarget);
         this.bindCanvas("contextmenu", this._contextMenu, {}, customTarget);
         this._hasMouse = true;
       } else {
-        this.unbindCanvas("mousedown", this._mouseDown, {}, customTarget);
-        this.unbindCanvas("pointerdown", this._pointerDown, {}, customTarget);
-        this.unbindCanvas("mouseup", this._mouseUp, {}, customTarget);
-        this.unbindCanvas("pointerup", this._pointerUp, {}, customTarget);
-        this.unbindCanvas("mouseover", this._mouseOver, {}, customTarget);
-        this.unbindCanvas("mouseout", this._mouseOut, {}, customTarget);
-        this.unbindCanvas("mousemove", this._mouseMove, {}, customTarget);
+        this.unbindCanvas("pointerdown", this._mouseDown, {}, customTarget);
+        this.unbindCanvas("pointerup", this._mouseUp, {}, customTarget);
+        this.unbindCanvas("pointerover", this._mouseOver, {}, customTarget);
+        this.unbindCanvas("pointerout", this._mouseOut, {}, customTarget);
+        this.unbindCanvas("pointermove", this._mouseMove, {}, customTarget);
         this.unbindCanvas("click", this._mouseClick, {}, customTarget);
         this.unbindCanvas("contextmenu", this._contextMenu, {}, customTarget);
         this._hasMouse = false;
@@ -5107,9 +5101,9 @@ See https://github.com/williamngan/pts for details. */
     touchesToPoints(evt, which = "touches") {
       if (!evt || !evt[which])
         return [];
-      let ts = [];
-      for (var i = 0; i < evt[which].length; i++) {
-        let t = evt[which].item(i);
+      const ts = [];
+      for (let i = 0; i < evt[which].length; i++) {
+        const t = evt[which].item(i);
         ts.push(new Pt(t.pageX - this.bound.topLeft.x, t.pageY - this.bound.topLeft.y));
       }
       return ts;
@@ -5125,9 +5119,9 @@ See https://github.com/williamngan/pts for details. */
         return;
       let px = 0, py = 0;
       if (evt instanceof MouseEvent) {
-        for (let k in this.players) {
+        for (const k in this.players) {
           if (this.players.hasOwnProperty(k)) {
-            let v = this.players[k];
+            const v = this.players[k];
             px = evt.pageX - this.outerBound.x;
             py = evt.pageY - this.outerBound.y;
             if (v.action)
@@ -5135,11 +5129,11 @@ See https://github.com/williamngan/pts for details. */
           }
         }
       } else {
-        for (let k in this.players) {
+        for (const k in this.players) {
           if (this.players.hasOwnProperty(k)) {
-            let v = this.players[k];
-            let c = evt.changedTouches && evt.changedTouches.length > 0;
-            let touch = evt.changedTouches.item(0);
+            const v = this.players[k];
+            const c = evt.changedTouches && evt.changedTouches.length > 0;
+            const touch = evt.changedTouches.item(0);
             px = c ? touch.pageX - this.outerBound.x : 0;
             py = c ? touch.pageY - this.outerBound.y : 0;
             if (v.action)
@@ -5158,11 +5152,8 @@ See https://github.com/williamngan/pts for details. */
     */
     _mouseDown(evt) {
       this._mouseAction(UIPointerActions.down, evt);
-      this._pressed = true;
-      return false;
-    }
-    _pointerDown(evt) {
       this._mouseAction(UIPointerActions.pointerdown, evt);
+      this._pressed = true;
       if (evt.target instanceof Element) {
         evt.target.setPointerCapture(evt.pointerId);
       }
@@ -5173,6 +5164,7 @@ See https://github.com/williamngan/pts for details. */
     * @param evt 
     */
     _mouseUp(evt) {
+      this._mouseAction(UIPointerActions.pointerup, evt);
       if (this._dragged) {
         this._mouseAction(UIPointerActions.drop, evt);
       } else {
@@ -5180,15 +5172,8 @@ See https://github.com/williamngan/pts for details. */
       }
       this._pressed = false;
       this._dragged = false;
-      return false;
-    }
-    _pointerUp(evt) {
-      this._mouseAction(UIPointerActions.pointerup, evt);
       if (evt.target instanceof Element) {
         evt.target.releasePointerCapture(evt.pointerId);
-        if (this._dragged)
-          this._mouseAction(UIPointerActions.drop, evt);
-        this._dragged = false;
       }
       return false;
     }
@@ -5197,10 +5182,11 @@ See https://github.com/williamngan/pts for details. */
     * @param evt 
     */
     _mouseMove(evt) {
-      this._mouseAction(UIPointerActions.move, evt);
       if (this._pressed) {
         this._dragged = true;
         this._mouseAction(UIPointerActions.drag, evt);
+      } else {
+        this._mouseAction(UIPointerActions.move, evt);
       }
       return false;
     }
@@ -5246,7 +5232,11 @@ See https://github.com/williamngan/pts for details. */
     * @param evt 
     */
     _touchMove(evt) {
-      this._mouseMove(evt);
+      this._mouseAction(UIPointerActions.move, evt);
+      if (this._pressed) {
+        this._dragged = true;
+        this._mouseAction(UIPointerActions.drag, evt);
+      }
       evt.preventDefault();
       return false;
     }
@@ -5255,7 +5245,9 @@ See https://github.com/williamngan/pts for details. */
     * @param evt 
     */
     _touchStart(evt) {
-      this._mouseDown(evt);
+      this._mouseAction(UIPointerActions.down, evt);
+      this._pressed = true;
+      return false;
       evt.preventDefault();
       return false;
     }
@@ -5270,9 +5262,9 @@ See https://github.com/williamngan/pts for details. */
     _keyboardAction(type, evt) {
       if (!this.isPlaying)
         return;
-      for (let k in this.players) {
+      for (const k in this.players) {
         if (this.players.hasOwnProperty(k)) {
-          let v = this.players[k];
+          const v = this.players[k];
           if (v.action)
             v.action(type, evt.shiftKey ? 1 : 0, evt.altKey ? 1 : 0, evt);
         }
@@ -5535,7 +5527,7 @@ See https://github.com/williamngan/pts for details. */
   __export(Image_exports, {
     Img: () => Img
   });
-  var Img = class {
+  var Img = class _Img {
     /**
      * Create an Img
      * @param editable Specify if you want to manipulate pixels of this image. Default is `false`.
@@ -5560,7 +5552,7 @@ See https://github.com/williamngan/pts for details. */
      * @param ready An optional ready callback function 
      */
     static load(src, editable = false, space, ready) {
-      const img = new Img(editable, space);
+      const img = new _Img(editable, space);
       img.load(src).then((res) => {
         if (ready)
           ready(res);
@@ -5576,7 +5568,7 @@ See https://github.com/williamngan/pts for details. */
      */
     static loadAsync(src, editable = false, space) {
       return __async(this, null, function* () {
-        const img = yield new Img(editable, space).load(src);
+        const img = yield new _Img(editable, space).load(src);
         return img;
       });
     }
@@ -5590,7 +5582,7 @@ See https://github.com/williamngan/pts for details. */
      */
     static loadPattern(src, space, repeat = "repeat", editable = false) {
       return __async(this, null, function* () {
-        const img = yield Img.loadAsync(src, editable, space);
+        const img = yield _Img.loadAsync(src, editable, space);
         return img.pattern(repeat);
       });
     }
@@ -5601,7 +5593,7 @@ See https://github.com/williamngan/pts for details. */
      * @param scale Optionally set a specific pixel scale (density) of the image canvas. 
      */
     static blank(size, space, scale) {
-      let img = new Img(true, space);
+      let img = new _Img(true, space);
       const s = scale ? scale : space.pixelScale;
       img.initCanvas(size[0], size[1], s);
       return img;
@@ -5707,7 +5699,7 @@ See https://github.com/williamngan/pts for details. */
      */
     pixel(p, rescale = true) {
       const s = typeof rescale == "number" ? rescale : rescale ? this._scale : 1;
-      return Img.getPixel(this._data, [p[0] * s, p[1] * s]);
+      return _Img.getPixel(this._data, [p[0] * s, p[1] * s]);
     }
     /**
      * Given an ImaegData object and a position, return the RGBA pixel value at that position.
@@ -5772,7 +5764,7 @@ See https://github.com/williamngan/pts for details. */
      */
     static fromBlob(blob, editable = false, space) {
       let url = URL.createObjectURL(blob);
-      return new Img(editable, space).load(url);
+      return new _Img(editable, space).load(url);
     }
     /**
      * Convert ImageData object to a Blob, which you can then create an Img instance via [`Img.fromBlob`](#link). Note that the resulting image's dimensions will not account for pixel density.
@@ -5900,8 +5892,8 @@ See https://github.com/williamngan/pts for details. */
       this._bgcolor = "#e1e9f0";
       this._offscreen = false;
       this._initialResize = false;
-      var _selector = null;
-      var _existed = false;
+      let _selector = null;
+      let _existed = false;
       this.id = "pt";
       if (elem instanceof Element) {
         _selector = elem;
@@ -5938,7 +5930,7 @@ See https://github.com/williamngan/pts for details. */
     * @param id element id attribute
     */
     _createElement(elem = "div", id) {
-      let d = document.createElement(elem);
+      const d = document.createElement(elem);
       d.setAttribute("id", id);
       return d;
     }
@@ -5953,7 +5945,7 @@ See https://github.com/williamngan/pts for details. */
       this._resizeHandler(null);
       this.clear(this._bgcolor);
       this._canvas.dispatchEvent(new Event("ready"));
-      for (let k in this.players) {
+      for (const k in this.players) {
         if (this.players.hasOwnProperty(k)) {
           if (this.players[k].start)
             this.players[k].start(this.bound.clone(), this);
@@ -5973,8 +5965,8 @@ See https://github.com/williamngan/pts for details. */
       this._bgcolor = opt.bgcolor ? opt.bgcolor : "transparent";
       this.autoResize = opt.resize != void 0 ? opt.resize : false;
       if (opt.retina !== false) {
-        let r1 = window ? window.devicePixelRatio || 1 : 1;
-        let r2 = this._ctx.webkitBackingStorePixelRatio || this._ctx.mozBackingStorePixelRatio || this._ctx.msBackingStorePixelRatio || this._ctx.oBackingStorePixelRatio || this._ctx.backingStorePixelRatio || 1;
+        const r1 = window ? window.devicePixelRatio || 1 : 1;
+        const r2 = this._ctx.webkitBackingStorePixelRatio || this._ctx.mozBackingStorePixelRatio || this._ctx.msBackingStorePixelRatio || this._ctx.oBackingStorePixelRatio || this._ctx.backingStorePixelRatio || 1;
         this._pixelScale = Math.max(1, r1 / r2);
       }
       if (opt.offscreen) {
@@ -6028,9 +6020,9 @@ See https://github.com/williamngan/pts for details. */
           this._offCtx.scale(this._pixelScale, this._pixelScale);
         }
       }
-      for (let k in this.players) {
+      for (const k in this.players) {
         if (this.players.hasOwnProperty(k)) {
-          let p = this.players[k];
+          const p = this.players[k];
           if (p.resize)
             p.resize(this.bound, evt);
         }
@@ -6047,9 +6039,9 @@ See https://github.com/williamngan/pts for details. */
     _resizeHandler(evt) {
       if (!window)
         return;
-      let b = this._autoResize || this._initialResize ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
+      const b = this._autoResize || this._initialResize ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
       if (b) {
-        let box = Bound.fromBoundingRect(b);
+        const box = Bound.fromBoundingRect(b);
         box.center = box.center.add(window.pageXOffset, window.pageYOffset);
         this.resize(box, evt);
       }
@@ -6192,14 +6184,14 @@ See https://github.com/williamngan/pts for details. */
      * @example `let rec = space.recorder(true); rec.start(); setTimeout( () => rec.stop(), 5000); // record 5s of video and download the file`
      */
     recorder(downloadOrCallback, filetype = "webm", bitrate = 15e6) {
-      let stream = this._canvas.captureStream();
+      const stream = this._canvas.captureStream();
       const recorder = new MediaRecorder(stream, { mimeType: `video/${filetype}`, bitsPerSecond: bitrate });
       recorder.ondataavailable = function(d) {
-        let url = URL.createObjectURL(new Blob([d.data], { type: `video/${filetype}` }));
+        const url = URL.createObjectURL(new Blob([d.data], { type: `video/${filetype}` }));
         if (typeof downloadOrCallback === "function") {
           downloadOrCallback(url);
         } else if (downloadOrCallback) {
-          let a = document.createElement("a");
+          const a = document.createElement("a");
           a.href = url;
           a.download = `canvas_video.${filetype}`;
           a.click();
@@ -6209,7 +6201,7 @@ See https://github.com/williamngan/pts for details. */
       return recorder;
     }
   };
-  var CanvasForm = class extends VisualForm {
+  var CanvasForm = class _CanvasForm extends VisualForm {
     /**
     * Create a new CanvasForm. You may also use [`CanvasSpace.getForm()`](#link) to get the default form.
     * @param space an instance of CanvasSpace
@@ -6286,20 +6278,20 @@ See https://github.com/williamngan/pts for details. */
       }
     }
     /**
-     * Set current alpha value.
-     * @example `form.alpha(0.6)`
-     * @param a alpha value between 0 and 1
-     */
+       * Set current alpha value.
+       * @example `form.alpha(0.6)`
+       * @param a alpha value between 0 and 1
+       */
     alpha(a) {
       this._ctx.globalAlpha = a;
       this._style.globalAlpha = a;
       return this;
     }
     /**
-    * Set current fill style. Provide a valid color string such as `"#FFF"` or `"rgba(255,0,100,0.5)"` or `false` to specify no fill color.
-    * @example `form.fill("#F90")`, `form.fill("rgba(0,0,0,.5")`, `form.fill(false)`
-    * @param c fill color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle))
-    */
+      * Set current fill style. Provide a valid color string such as `"#FFF"` or `"rgba(255,0,100,0.5)"` or `false` to specify no fill color.
+      * @example `form.fill("#F90")`, `form.fill("rgba(0,0,0,.5")`, `form.fill(false)`
+      * @param c fill color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle))
+      */
     fill(c) {
       if (typeof c == "boolean") {
         this.filled = c;
@@ -6311,21 +6303,21 @@ See https://github.com/williamngan/pts for details. */
       return this;
     }
     /**
-    * Set current fill style and remove stroke style.
-    * @param c fill color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle))
-    */
+      * Set current fill style and remove stroke style.
+      * @param c fill color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle))
+      */
     fillOnly(c) {
       this.stroke(false);
       return this.fill(c);
     }
     /**
-    * Set current stroke style. Provide a valid color string or `false` to specify no stroke color.
-    * @example `form.stroke("#F90")`, `form.stroke("rgba(0,0,0,.5")`, `form.stroke(false)`, `form.stroke("#000", 0.5, 'round', 'square')`
-    * @param c stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle))
-    * @param width Optional value (can be floating point) to set line width
-    * @param linejoin Optional string to set line joint style. Can be "miter", "bevel", or "round".
-    * @param linecap Optional string to set line cap style. Can be "butt", "round", or "square".
-    */
+      * Set current stroke style. Provide a valid color string or `false` to specify no stroke color.
+      * @example `form.stroke("#F90")`, `form.stroke("rgba(0,0,0,.5")`, `form.stroke(false)`, `form.stroke("#000", 0.5, 'round', 'square')`
+      * @param c stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle))
+      * @param width Optional value (can be floating point) to set line width
+      * @param linejoin Optional string to set line joint style. Can be "miter", "bevel", or "round".
+      * @param linecap Optional string to set line cap style. Can be "butt", "round", or "square".
+      */
     stroke(c, width, linejoin, linecap) {
       if (typeof c == "boolean") {
         this.stroked = c;
@@ -6349,24 +6341,24 @@ See https://github.com/williamngan/pts for details. */
       return this;
     }
     /**
-    * Set stroke style and remove fill style.
-    * @param c stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle))
-    * @param width Optional value (can be floating point) to set line width
-    * @param linejoin Optional string to set line joint style. Can be "miter", "bevel", or "round".
-    * @param linecap Optional string to set line cap style. Can be "butt", "round", or "square".
-    */
+      * Set stroke style and remove fill style.
+      * @param c stroke color which can be as color, gradient, or pattern. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/strokeStyle))
+      * @param width Optional value (can be floating point) to set line width
+      * @param linejoin Optional string to set line joint style. Can be "miter", "bevel", or "round".
+      * @param linecap Optional string to set line cap style. Can be "butt", "round", or "square".
+      */
     strokeOnly(c, width, linejoin, linecap) {
       this.fill(false);
       return this.stroke(c, width, linejoin, linecap);
     }
     /**
-     * A convenient function to apply fill and/or stroke after custom drawings using canvas context (eg, `form.ctx.ellipse(...)`). 
-     * You don't need to call this function if you're using Pts' drawing functions like `form.point` or `form.rect`
-     * @param filled apply fill when set to `true`
-     * @param stroked apply stroke when set to `true`
-     * @param strokeWidth optionally set a stroke width
-     * @example `form.ctx.beginPath(); form.ctx.ellipse(...); form.applyFillStroke();`
-     */
+       * A convenient function to apply fill and/or stroke after custom drawings using canvas context (eg, `form.ctx.ellipse(...)`). 
+       * You don't need to call this function if you're using Pts' drawing functions like `form.point` or `form.rect`
+       * @param filled apply fill when set to `true`
+       * @param stroked apply stroke when set to `true`
+       * @param strokeWidth optionally set a stroke width
+       * @example `form.ctx.beginPath(); form.ctx.ellipse(...); form.applyFillStroke();`
+       */
     applyFillStroke(filled = true, stroked = true, strokeWidth = 1) {
       if (filled) {
         if (typeof filled === "string")
@@ -6381,22 +6373,22 @@ See https://github.com/williamngan/pts for details. */
       return this;
     }
     /**
-     * This function takes an array of gradient colors, and returns a function to define the areas of the gradient fill. See demo code in [CanvasForm.gradient](https://ptsjs.org/demo/?name=canvasform.textBox).
-     * @param stops an array of gradient stops. This can be an array of colors `["#f00", "#0f0", ...]` for evenly distributed gradient, or an array of [stop, color] like `[[0.1, "#f00"], [0.7, "#0f0"]]`
-     * @returns a function that takes 1 or 2 `Group` as parameters. Use a single `Group` to specify a rectangular area for linear gradient, or use 2 `Groups` to specify 2 `Circles` for radial gradient.
-     * @example `c1 = Circle.fromCenter(...); grad = form.gradient(["#f00", "#00f"]); form.fill( grad( c1, c2 ) ).circle( c1 )`
-     */
+       * This function takes an array of gradient colors, and returns a function to define the areas of the gradient fill. See demo code in [CanvasForm.gradient](https://ptsjs.org/demo/?name=canvasform.textBox).
+       * @param stops an array of gradient stops. This can be an array of colors `["#f00", "#0f0", ...]` for evenly distributed gradient, or an array of [stop, color] like `[[0.1, "#f00"], [0.7, "#0f0"]]`
+       * @returns a function that takes 1 or 2 `Group` as parameters. Use a single `Group` to specify a rectangular area for linear gradient, or use 2 `Groups` to specify 2 `Circles` for radial gradient.
+       * @example `c1 = Circle.fromCenter(...); grad = form.gradient(["#f00", "#00f"]); form.fill( grad( c1, c2 ) ).circle( c1 )`
+       */
     gradient(stops) {
-      let vals = [];
+      const vals = [];
       if (stops.length < 2)
         stops.push([0.99, "#000"], [1, "#000"]);
       for (let i = 0, len = stops.length; i < len; i++) {
-        let t = typeof stops[i] === "string" ? i * (1 / (stops.length - 1)) : stops[i][0];
-        let v = typeof stops[i] === "string" ? stops[i] : stops[i][1];
+        const t = typeof stops[i] === "string" ? i * (1 / (stops.length - 1)) : stops[i][0];
+        const v = typeof stops[i] === "string" ? stops[i] : stops[i][1];
         vals.push([t, v]);
       }
       return (area1, area2) => {
-        let grad = area2 ? this._ctx.createRadialGradient(area1[0][0], area1[0][1], Math.abs(area1[1][0]), area2[0][0], area2[0][1], Math.abs(area2[1][0])) : this._ctx.createLinearGradient(area1[0][0], area1[0][1], area1[1][0], area1[1][1]);
+        const grad = area2 ? this._ctx.createRadialGradient(area1[0][0], area1[0][1], Math.abs(area1[1][0]), area2[0][0], area2[0][1], Math.abs(area2[1][0])) : this._ctx.createLinearGradient(area1[0][0], area1[0][1], area1[1][0], area1[1][1]);
         for (let i = 0, len = vals.length; i < len; i++) {
           grad.addColorStop(vals[i][0], vals[i][1]);
         }
@@ -6404,26 +6396,26 @@ See https://github.com/williamngan/pts for details. */
       };
     }
     /**
-     * Set composite operation (also known as blend mode). You can also call this function without parameters to get back to default 'source-over' mode. See [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation) for the full list of operations you can use.
-     * @param mode a composite operation such as 'lighten', 'multiply', 'overlay', and 'color-burn'.
-     */
+       * Set composite operation (also known as blend mode). You can also call this function without parameters to get back to default 'source-over' mode. See [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation) for the full list of operations you can use.
+       * @param mode a composite operation such as 'lighten', 'multiply', 'overlay', and 'color-burn'.
+       */
     composite(mode = "source-over") {
       this._ctx.globalCompositeOperation = mode;
       return this;
     }
     /**
-     * Create a clipping mask from the current path. See [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/clip) for details.
-     */
+       * Create a clipping mask from the current path. See [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/clip) for details.
+       */
     clip() {
       this._ctx.clip();
       return this;
     }
     /**
-    * Activate dashed stroke and set dash style. You can customize the segments and offset.
-    * @example `form.dash()`, `form.dash([5, 10])`, `form.dash([5, 5], 5)`, `form.dash(false)`
-    * @param segments Dash segments. Defaults to `true` which corresponds to `[5, 5]`. Pass `false` to deactivate dashes. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setLineDash))
-    * @param offset Dash offset. Defaults to 0. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineDashOffset)
-    */
+      * Activate dashed stroke and set dash style. You can customize the segments and offset.
+      * @example `form.dash()`, `form.dash([5, 10])`, `form.dash([5, 5], 5)`, `form.dash(false)`
+      * @param segments Dash segments. Defaults to `true` which corresponds to `[5, 5]`. Pass `false` to deactivate dashes. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setLineDash))
+      * @param offset Dash offset. Defaults to 0. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineDashOffset)
+      */
     dash(segments = true, offset = 0) {
       if (!segments) {
         this._ctx.setLineDash([]);
@@ -6438,14 +6430,14 @@ See https://github.com/williamngan/pts for details. */
       return this;
     }
     /**
-    * Set the current font.
-    * @param sizeOrFont either a number to specify font-size, or a `Font` object to specify all font properties
-    * @param weight Optional font-weight string such as "bold"
-    * @param style Optional font-style string such as "italic"
-    * @param lineHeight Optional line-height number suchas 1.5
-    * @param family Optional font-family such as "Helvetica, sans-serif"
-    * @example `form.font( myFont )`, `form.font(14, "bold")`
-    */
+      * Set the current font.
+      * @param sizeOrFont either a number to specify font-size, or a `Font` object to specify all font properties
+      * @param weight Optional font-weight string such as "bold"
+      * @param style Optional font-style string such as "italic"
+      * @param lineHeight Optional line-height number suchas 1.5
+      * @param family Optional font-family such as "Helvetica, sans-serif"
+      * @example `form.font( myFont )`, `form.font(14, "bold")`
+      */
     font(sizeOrFont, weight, style, lineHeight, family) {
       if (typeof sizeOrFont == "number") {
         this._font.size = sizeOrFont;
@@ -6466,49 +6458,49 @@ See https://github.com/williamngan/pts for details. */
       return this;
     }
     /**
-     * Set whether to use html canvas' [`measureText`](#link) function, or a faster but less accurate heuristic function.
-     * @param estimate `true` to use heuristic function, or `false` to use ctx.measureText
-     */
+       * Set whether to use html canvas' [`measureText`](#link) function, or a faster but less accurate heuristic function.
+       * @param estimate `true` to use heuristic function, or `false` to use ctx.measureText
+       */
     fontWidthEstimate(estimate = true) {
       this._estimateTextWidth = estimate ? Typography.textWidthEstimator((c) => this._ctx.measureText(c).width) : void 0;
       return this;
     }
     /**
-     * Get the width of this text. It will return an actual measurement or an estimate based on [`fontWidthEstimate`](#link) setting. Default is an actual measurement using canvas context's measureText.
-     * @param c a string of text contents
-     */
+       * Get the width of this text. It will return an actual measurement or an estimate based on [`fontWidthEstimate`](#link) setting. Default is an actual measurement using canvas context's measureText.
+       * @param c a string of text contents
+       */
     getTextWidth(c) {
       return !this._estimateTextWidth ? this._ctx.measureText(c + " .").width : this._estimateTextWidth(c);
     }
     /**
-     * Truncate text to fit width.
-     * @param str text to truncate
-     * @param width width to fit
-     * @param tail text to indicate overflow such as "...". Default is empty "".
-     */
+       * Truncate text to fit width.
+       * @param str text to truncate
+       * @param width width to fit
+       * @param tail text to indicate overflow such as "...". Default is empty "".
+       */
     _textTruncate(str, width, tail = "") {
       return Typography.truncate(this.getTextWidth.bind(this), str, width, tail);
     }
     /**
-     * Align text within a rectangle box.
-     * @param box a Group or an Iterable<PtLike> that defines a rectangular box
-     * @param vertical a string that specifies the vertical alignment in the box: "top", "bottom", "middle", "start", "end"
-     * @param offset Optional offset from the edge (like padding)
-     * @param center Optional center position 
-     */
+       * Align text within a rectangle box.
+       * @param box a Group or an Iterable<PtLike> that defines a rectangular box
+       * @param vertical a string that specifies the vertical alignment in the box: "top", "bottom", "middle", "start", "end"
+       * @param offset Optional offset from the edge (like padding)
+       * @param center Optional center position 
+       */
     _textAlign(box, vertical, offset, center) {
-      let _box = Util.iterToArray(box);
+      const _box = Util.iterToArray(box);
       if (!Util.arrayCheck(_box))
         return;
       if (!center)
         center = Rectangle.center(_box);
-      var px = _box[0][0];
+      let px = _box[0][0];
       if (this._ctx.textAlign == "end" || this._ctx.textAlign == "right") {
         px = _box[1][0];
       } else if (this._ctx.textAlign == "center" || this._ctx.textAlign == "middle") {
         px = center[0];
       }
-      var py = center[1];
+      let py = center[1];
       if (vertical == "top" || vertical == "start") {
         py = _box[0][1];
       } else if (vertical == "end" || vertical == "bottom") {
@@ -6517,10 +6509,10 @@ See https://github.com/williamngan/pts for details. */
       return offset ? new Pt(px + offset[0], py + offset[1]) : new Pt(px, py);
     }
     /**
-    * Reset the rendering context's common styles to this form's styles. This supports using multiple forms on the same canvas context.
-    */
+      * Reset the rendering context's common styles to this form's styles. This supports using multiple forms on the same canvas context.
+      */
     reset() {
-      for (let k in this._style) {
+      for (const k in this._style) {
         if (this._style.hasOwnProperty(k)) {
           this._ctx[k] = this._style[k];
         }
@@ -6536,38 +6528,38 @@ See https://github.com/williamngan/pts for details. */
         this._ctx.stroke();
     }
     /**
-    * A static function to draw a point.
-    * @param ctx canvas rendering context
-    * @param p a Pt object
-    * @param radius radius of the point. Default is 5.
-    * @param shape The shape of the point. Defaults to "square", but it can be "circle" or a custom shape function in your own implementation.
-    * @example `form.point( p )`, `form.point( p, 10, "circle" )`
-    */
+      * A static function to draw a point.
+      * @param ctx canvas rendering context
+      * @param p a Pt object
+      * @param radius radius of the point. Default is 5.
+      * @param shape The shape of the point. Defaults to "square", but it can be "circle" or a custom shape function in your own implementation.
+      * @example `form.point( p )`, `form.point( p, 10, "circle" )`
+      */
     static point(ctx, p, radius = 5, shape = "square") {
       if (!p)
         return;
-      if (!CanvasForm[shape])
+      if (!_CanvasForm[shape])
         throw new Error(`${shape} is not a static function of CanvasForm`);
-      CanvasForm[shape](ctx, p, radius);
+      _CanvasForm[shape](ctx, p, radius);
     }
     /**
-    * Draws a point.
-    * @param p a Pt object
-    * @param radius radius of the point. Default is 5.
-    * @param shape The shape of the point. Defaults to "square", but it can be "circle" or a custom shape function in your own implementation.
-    * @example `form.point( p )`, `form.point( p, 10, "circle" )`
-    */
+      * Draws a point.
+      * @param p a Pt object
+      * @param radius radius of the point. Default is 5.
+      * @param shape The shape of the point. Defaults to "square", but it can be "circle" or a custom shape function in your own implementation.
+      * @example `form.point( p )`, `form.point( p, 10, "circle" )`
+      */
     point(p, radius = 5, shape = "square") {
-      CanvasForm.point(this._ctx, p, radius, shape);
+      _CanvasForm.point(this._ctx, p, radius, shape);
       this._paint();
       return this;
     }
     /**
-    * A static function to draw a circle.
-    * @param ctx canvas rendering context
-    * @param pt center position of the circle
-    * @param radius radius of the circle
-    */
+      * A static function to draw a circle.
+      * @param ctx canvas rendering context
+      * @param pt center position of the circle
+      * @param radius radius of the circle
+      */
     static circle(ctx, pt, radius = 10) {
       if (!pt)
         return;
@@ -6576,25 +6568,25 @@ See https://github.com/williamngan/pts for details. */
       ctx.closePath();
     }
     /**
-    * Draw a circle. See also [`Circle.fromCenter`](#link)
-    * @param pts usually a Group or an Iterable<PtLike> with 2 Pt, but it can also take an array of two numeric arrays [ [position], [size] ]
-    */
+      * Draw a circle. See also [`Circle.fromCenter`](#link)
+      * @param pts usually a Group or an Iterable<PtLike> with 2 Pt, but it can also take an array of two numeric arrays [ [position], [size] ]
+      */
     circle(pts) {
-      let p = Util.iterToArray(pts);
-      CanvasForm.circle(this._ctx, p[0], p[1][0]);
+      const p = Util.iterToArray(pts);
+      _CanvasForm.circle(this._ctx, p[0], p[1][0]);
       this._paint();
       return this;
     }
     /**
-    * A static function to draw an ellipse.
-    * @param ctx canvas rendering context
-    * @param pt center position 
-    * @param radius radius [x, y] of the ellipse
-    * @param rotation rotation of the ellipse in radian. Default is 0.
-    * @param startAngle start angle of the ellipse. Default is 0.
-    * @param endAngle end angle of the ellipse. Default is 2 PI.
-    * @param cc an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.
-    */
+      * A static function to draw an ellipse.
+      * @param ctx canvas rendering context
+      * @param pt center position 
+      * @param radius radius [x, y] of the ellipse
+      * @param rotation rotation of the ellipse in radian. Default is 0.
+      * @param startAngle start angle of the ellipse. Default is 0.
+      * @param endAngle end angle of the ellipse. Default is 2 PI.
+      * @param cc an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.
+      */
     static ellipse(ctx, pt, radius, rotation = 0, startAngle = 0, endAngle = Const.two_pi, cc = false) {
       if (!pt || !radius)
         return;
@@ -6602,28 +6594,28 @@ See https://github.com/williamngan/pts for details. */
       ctx.ellipse(pt[0], pt[1], radius[0], radius[1], rotation, startAngle, endAngle, cc);
     }
     /**
-    * Draw an ellipse.
-    * @param pt center position 
-    * @param radius radius [x, y] of the ellipse
-    * @param rotation rotation of the ellipse in radian. Default is 0.
-    * @param startAngle start angle of the ellipse. Default is 0.
-    * @param endAngle end angle of the ellipse. Default is 2 PI.
-    * @param cc an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.
-    */
+      * Draw an ellipse.
+      * @param pt center position 
+      * @param radius radius [x, y] of the ellipse
+      * @param rotation rotation of the ellipse in radian. Default is 0.
+      * @param startAngle start angle of the ellipse. Default is 0.
+      * @param endAngle end angle of the ellipse. Default is 2 PI.
+      * @param cc an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.
+      */
     ellipse(pt, radius, rotation = 0, startAngle = 0, endAngle = Const.two_pi, cc = false) {
-      CanvasForm.ellipse(this._ctx, pt, radius, rotation, startAngle, endAngle, cc);
+      _CanvasForm.ellipse(this._ctx, pt, radius, rotation, startAngle, endAngle, cc);
       this._paint();
       return this;
     }
     /**
-    * A static function to draw an arc.
-    * @param ctx canvas rendering context
-    * @param pt center position 
-    * @param radius radius of the arc circle
-    * @param startAngle start angle of the arc
-    * @param endAngle end angle of the arc
-    * @param cc an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.
-    */
+      * A static function to draw an arc.
+      * @param ctx canvas rendering context
+      * @param pt center position 
+      * @param radius radius of the arc circle
+      * @param startAngle start angle of the arc
+      * @param endAngle end angle of the arc
+      * @param cc an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.
+      */
     static arc(ctx, pt, radius, startAngle, endAngle, cc) {
       if (!pt)
         return;
@@ -6631,31 +6623,31 @@ See https://github.com/williamngan/pts for details. */
       ctx.arc(pt[0], pt[1], radius, startAngle, endAngle, cc);
     }
     /**
-    * Draw an arc.
-    * @param pt center position
-    * @param radius radius of the arc circle
-    * @param startAngle start angle of the arc
-    * @param endAngle end angle of the arc
-    * @param cc an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.
-    */
+      * Draw an arc.
+      * @param pt center position
+      * @param radius radius of the arc circle
+      * @param startAngle start angle of the arc
+      * @param endAngle end angle of the arc
+      * @param cc an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.
+      */
     arc(pt, radius, startAngle, endAngle, cc) {
-      CanvasForm.arc(this._ctx, pt, radius, startAngle, endAngle, cc);
+      _CanvasForm.arc(this._ctx, pt, radius, startAngle, endAngle, cc);
       this._paint();
       return this;
     }
     /**
-    * A static function to draw a square.
-    * @param ctx canvas rendering context
-    * @param pt center position of the square
-    * @param halfsize half size of the square
-    */
+      * A static function to draw a square.
+      * @param ctx canvas rendering context
+      * @param pt center position of the square
+      * @param halfsize half size of the square
+      */
     static square(ctx, pt, halfsize) {
       if (!pt)
         return;
-      let x1 = pt[0] - halfsize;
-      let y1 = pt[1] - halfsize;
-      let x2 = pt[0] + halfsize;
-      let y2 = pt[1] + halfsize;
+      const x1 = pt[0] - halfsize;
+      const y1 = pt[1] - halfsize;
+      const x2 = pt[0] + halfsize;
+      const y2 = pt[1] + halfsize;
       ctx.beginPath();
       ctx.moveTo(x1, y1);
       ctx.lineTo(x1, y2);
@@ -6664,26 +6656,26 @@ See https://github.com/williamngan/pts for details. */
       ctx.closePath();
     }
     /**
-     * Draw a square, given a center and its half-size.
-     * @param pt center Pt
-     * @param halfsize half-size
-     */
+       * Draw a square, given a center and its half-size.
+       * @param pt center Pt
+       * @param halfsize half-size
+       */
     square(pt, halfsize) {
-      CanvasForm.square(this._ctx, pt, halfsize);
+      _CanvasForm.square(this._ctx, pt, halfsize);
       this._paint();
       return this;
     }
     /**
-    * A static function to draw a line or polyline.
-    * @param ctx canvas rendering context
-    * @param pts a Group or an Iterable<PtLike> representing a line
-    */
+      * A static function to draw a line or polyline.
+      * @param ctx canvas rendering context
+      * @param pts a Group or an Iterable<PtLike> representing a line
+      */
     static line(ctx, pts) {
       if (!Util.arrayCheck(pts))
         return;
       let i = 0;
       ctx.beginPath();
-      for (let it of pts) {
+      for (const it of pts) {
         if (it) {
           if (i++ > 0) {
             ctx.lineTo(it[0], it[1]);
@@ -6694,41 +6686,41 @@ See https://github.com/williamngan/pts for details. */
       }
     }
     /**
-    * Draw a line or polyline.
-    * @param pts a Group or an Iterable<PtLike> representing a line
-    */
+      * Draw a line or polyline.
+      * @param pts a Group or an Iterable<PtLike> representing a line
+      */
     line(pts) {
-      CanvasForm.line(this._ctx, pts);
+      _CanvasForm.line(this._ctx, pts);
       this._paint();
       return this;
     }
     /**
-    * A static function to draw a polygon.
-    * @param ctx canvas rendering context
-    * @param pts a Group or an Iterable<PtLike> representing a polygon
-    */
+      * A static function to draw a polygon.
+      * @param ctx canvas rendering context
+      * @param pts a Group or an Iterable<PtLike> representing a polygon
+      */
     static polygon(ctx, pts) {
       if (!Util.arrayCheck(pts))
         return;
-      CanvasForm.line(ctx, pts);
+      _CanvasForm.line(ctx, pts);
       ctx.closePath();
     }
     /**
-    * Draw a polygon.
-    * @param pts a Group or an Iterable<PtLike> representingg a polygon
-    */
+      * Draw a polygon.
+      * @param pts a Group or an Iterable<PtLike> representingg a polygon
+      */
     polygon(pts) {
-      CanvasForm.polygon(this._ctx, pts);
+      _CanvasForm.polygon(this._ctx, pts);
       this._paint();
       return this;
     }
     /**
-    * A static function to draw a rectangle.
-    * @param ctx canvas rendering context
-    * @param pts a Group or an Iterable<PtLike> with 2 Pt specifying the top-left and bottom-right positions.
-    */
+      * A static function to draw a rectangle.
+      * @param ctx canvas rendering context
+      * @param pts a Group or an Iterable<PtLike> with 2 Pt specifying the top-left and bottom-right positions.
+      */
     static rect(ctx, pts) {
-      let p = Util.iterToArray(pts);
+      const p = Util.iterToArray(pts);
       if (!Util.arrayCheck(p))
         return;
       ctx.beginPath();
@@ -6739,29 +6731,29 @@ See https://github.com/williamngan/pts for details. */
       ctx.closePath();
     }
     /**
-    * Draw a rectangle.
-    * @param pts a Group or an Iterable<PtLike> with 2 Pt specifying the top-left and bottom-right positions.
-    */
+      * Draw a rectangle.
+      * @param pts a Group or an Iterable<PtLike> with 2 Pt specifying the top-left and bottom-right positions.
+      */
     rect(pts) {
-      CanvasForm.rect(this._ctx, pts);
+      _CanvasForm.rect(this._ctx, pts);
       this._paint();
       return this;
     }
     /**
-     * A static function to draw an image.
-     * @param ctx canvas rendering context
-     * @param img either an [Img](#link) instance or an [`CanvasImageSource`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource) instance (eg the image from `<img>`, `<video>` or `<canvas>`)
-     * @param ptOrRect a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a bounding box for resizing. Default is (0,0) at top-left.
-     * @param orig optionally a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a cropping box in the original target. 
-     */
+       * A static function to draw an image.
+       * @param ctx canvas rendering context
+       * @param img either an [Img](#link) instance or an [`CanvasImageSource`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource) instance (eg the image from `<img>`, `<video>` or `<canvas>`)
+       * @param ptOrRect a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a bounding box for resizing. Default is (0,0) at top-left.
+       * @param orig optionally a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a cropping box in the original target. 
+       */
     static image(ctx, ptOrRect, img, orig) {
-      let t = Util.iterToArray(ptOrRect);
+      const t = Util.iterToArray(ptOrRect);
       let pos;
       if (typeof t[0] === "number") {
         pos = t;
       } else {
         if (orig) {
-          let o = Util.iterToArray(orig);
+          const o = Util.iterToArray(orig);
           pos = [
             o[0][0],
             o[0][1],
@@ -6785,29 +6777,29 @@ See https://github.com/williamngan/pts for details. */
       }
     }
     /**
-    * Draw an image.
-    * @param img either an [Img](#link) instance or an [`CanvasImageSource`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource) instance (eg the image from `<img>`, `<video>` or `<canvas>`)
-    * @param ptOrRect a target area to place the image. Either a PtLike specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left position, bottom-right position) that specifies a bounding box. Default is (0,0) at top-left.
-    * @param orig optionally a Group or an Iterable<PtLike> with 2 Pt (top-left position, bottom-right position) that specifies a cropping box  in the original target. 
-    */
+      * Draw an image.
+      * @param img either an [Img](#link) instance or an [`CanvasImageSource`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource) instance (eg the image from `<img>`, `<video>` or `<canvas>`)
+      * @param ptOrRect a target area to place the image. Either a PtLike specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left position, bottom-right position) that specifies a bounding box. Default is (0,0) at top-left.
+      * @param orig optionally a Group or an Iterable<PtLike> with 2 Pt (top-left position, bottom-right position) that specifies a cropping box  in the original target. 
+      */
     image(ptOrRect, img, orig) {
       if (img instanceof Img) {
         if (img.loaded) {
-          CanvasForm.image(this._ctx, ptOrRect, img.image, orig);
+          _CanvasForm.image(this._ctx, ptOrRect, img.image, orig);
         }
       } else {
-        CanvasForm.image(this._ctx, ptOrRect, img, orig);
+        _CanvasForm.image(this._ctx, ptOrRect, img, orig);
       }
       return this;
     }
     /**
-     * A static function to draw ImageData on canvas
-     * @param ctx canvas rendering context
-     * @param ptOrRect a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a bounding box for resizing. Default is (0,0) at top-left.
-     * @param img an ImageData object
-     */
+       * A static function to draw ImageData on canvas
+       * @param ctx canvas rendering context
+       * @param ptOrRect a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a bounding box for resizing. Default is (0,0) at top-left.
+       * @param img an ImageData object
+       */
     static imageData(ctx, ptOrRect, img) {
-      let t = Util.iterToArray(ptOrRect);
+      const t = Util.iterToArray(ptOrRect);
       if (typeof t[0] === "number") {
         ctx.putImageData(img, t[0], t[1]);
       } else {
@@ -6815,74 +6807,74 @@ See https://github.com/williamngan/pts for details. */
       }
     }
     /**
-     * Draw ImageData on canvas using ImageData
-     * @param ptOrRect a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a bounding box for resizing. Default is (0,0) at top-left.
-     * @param img an ImageData object
-     */
+       * Draw ImageData on canvas using ImageData
+       * @param ptOrRect a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a bounding box for resizing. Default is (0,0) at top-left.
+       * @param img an ImageData object
+       */
     imageData(ptOrRect, img) {
-      CanvasForm.imageData(this._ctx, ptOrRect, img);
+      _CanvasForm.imageData(this._ctx, ptOrRect, img);
       return this;
     }
     /**
-    * A static function to draw text.
-    * @param ctx canvas rendering context
-    * @param `pt` a Point object to specify the anchor point
-    * @param `txt` a string of text to draw
-    * @param `maxWidth` specify a maximum width per line
-    */
+      * A static function to draw text.
+      * @param ctx canvas rendering context
+      * @param `pt` a Point object to specify the anchor point
+      * @param `txt` a string of text to draw
+      * @param `maxWidth` specify a maximum width per line
+      */
     static text(ctx, pt, txt, maxWidth) {
       if (!pt)
         return;
       ctx.fillText(txt, pt[0], pt[1], maxWidth);
     }
     /**
-    * Draw text on canvas.
-    * @param `pt` a Pt or numeric array to specify the anchor point
-    * @param `txt` text
-    * @param `maxWidth` specify a maximum width per line
-    */
+      * Draw text on canvas.
+      * @param `pt` a Pt or numeric array to specify the anchor point
+      * @param `txt` text
+      * @param `maxWidth` specify a maximum width per line
+      */
     text(pt, txt, maxWidth) {
-      CanvasForm.text(this._ctx, pt, txt, maxWidth);
+      _CanvasForm.text(this._ctx, pt, txt, maxWidth);
       return this;
     }
     /**
-     * Fit a single-line text in a rectangular box.
-     * @param box a rectangle box defined by a Group or an Iterable<Pt>
-     * @param txt string of text
-     * @param tail text to indicate overflow such as "...". Default is empty "".
-     * @param verticalAlign "top", "middle", or "bottom" to specify vertical alignment inside the box
-     * @param overrideBaseline If `true`, use the corresponding baseline as verticalAlign. If `false`, use the current canvas context's textBaseline setting. Default is `true`.
-     */
+       * Fit a single-line text in a rectangular box.
+       * @param box a rectangle box defined by a Group or an Iterable<Pt>
+       * @param txt string of text
+       * @param tail text to indicate overflow such as "...". Default is empty "".
+       * @param verticalAlign "top", "middle", or "bottom" to specify vertical alignment inside the box
+       * @param overrideBaseline If `true`, use the corresponding baseline as verticalAlign. If `false`, use the current canvas context's textBaseline setting. Default is `true`.
+       */
     textBox(box, txt, verticalAlign = "middle", tail = "", overrideBaseline = true) {
       if (overrideBaseline)
         this._ctx.textBaseline = verticalAlign;
-      let size = Rectangle.size(box);
-      let t = this._textTruncate(txt, size[0], tail);
+      const size = Rectangle.size(box);
+      const t = this._textTruncate(txt, size[0], tail);
       this.text(this._textAlign(box, verticalAlign), t[0]);
       return this;
     }
     /**
-     * Fit multi-line text in a rectangular box. Note that this will also set canvas context's textBaseline to "top".
-     * @param box a Group or an Iterable<PtLike> with 2 Pt that represents a bounding box
-     * @param txt string of text
-     * @param lineHeight line height as a ratio of font size. Default is 1.2.
-     * @param verticalAlign "top", "middle", or "bottom" to specify vertical alignment inside the box
-     * @param crop a boolean to specify whether to crop text when overflowing
-     */
+       * Fit multi-line text in a rectangular box. Note that this will also set canvas context's textBaseline to "top".
+       * @param box a Group or an Iterable<PtLike> with 2 Pt that represents a bounding box
+       * @param txt string of text
+       * @param lineHeight line height as a ratio of font size. Default is 1.2.
+       * @param verticalAlign "top", "middle", or "bottom" to specify vertical alignment inside the box
+       * @param crop a boolean to specify whether to crop text when overflowing
+       */
     paragraphBox(box, txt, lineHeight = 1.2, verticalAlign = "top", crop = true) {
-      let b = Util.iterToArray(box);
-      let size = Rectangle.size(b);
+      const b = Util.iterToArray(box);
+      const size = Rectangle.size(b);
       this._ctx.textBaseline = "top";
-      let lstep = this._font.size * lineHeight;
-      let nextLine = (sub, buffer = [], cc = 0) => {
+      const lstep = this._font.size * lineHeight;
+      const nextLine = (sub, buffer = [], cc = 0) => {
         if (!sub)
           return buffer;
         if (crop && cc * lstep > size[1] - lstep * 2)
           return buffer;
         if (cc > 1e4)
           throw new Error("max recursion reached (10000)");
-        let t = this._textTruncate(sub, size[0], "");
-        let newln = t[0].indexOf("\n");
+        const t = this._textTruncate(sub, size[0], "");
+        const newln = t[0].indexOf("\n");
         if (newln >= 0) {
           buffer.push(t[0].substr(0, newln));
           return nextLine(sub.substr(newln + 1), buffer, cc + 1);
@@ -6890,12 +6882,12 @@ See https://github.com/williamngan/pts for details. */
         let dt = t[0].lastIndexOf(" ") + 1;
         if (dt <= 0 || t[1] === sub.length)
           dt = void 0;
-        let line = t[0].substr(0, dt);
+        const line = t[0].substr(0, dt);
         buffer.push(line);
         return t[1] <= 0 || t[1] === sub.length ? buffer : nextLine(sub.substr(dt || t[1]), buffer, cc + 1);
       };
-      let lines = nextLine(txt);
-      let lsize = lines.length * lstep;
+      const lines = nextLine(txt);
+      const lsize = lines.length * lstep;
       let lbox = b;
       if (verticalAlign == "middle" || verticalAlign == "center") {
         let lpad = (size[1] - lsize) / 2;
@@ -6907,17 +6899,17 @@ See https://github.com/williamngan/pts for details. */
       } else {
         lbox = new Group(b[0], b[0].$add(size[0], lsize));
       }
-      let center = Rectangle.center(lbox);
+      const center = Rectangle.center(lbox);
       for (let i = 0, len = lines.length; i < len; i++) {
         this.text(this._textAlign(lbox, "top", [0, i * lstep], center), lines[i]);
       }
       return this;
     }
     /**
-     * Set text alignment and baseline (eg, vertical-align).
-     * @param alignment HTML canvas' textAlign option: "left", "right", "center", "start", or "end"
-     * @param baseline HTML canvas' textBaseline option: "top", "hanging", "middle", "alphabetic", "ideographic", "bottom". For convenience, you can also use "center" (same as "middle"), and "baseline" (same as "alphabetic")
-     */
+       * Set text alignment and baseline (eg, vertical-align).
+       * @param alignment HTML canvas' textAlign option: "left", "right", "center", "start", or "end"
+       * @param baseline HTML canvas' textBaseline option: "top", "hanging", "middle", "alphabetic", "ideographic", "bottom". For convenience, you can also use "center" (same as "middle"), and "baseline" (same as "alphabetic")
+       */
     alignText(alignment = "left", baseline = "alphabetic") {
       if (baseline == "center")
         baseline = "middle";
@@ -6928,11 +6920,11 @@ See https://github.com/williamngan/pts for details. */
       return this;
     }
     /**
-    * A convenient way to draw some text on canvas for logging or debugging. It'll be draw on the top-left of the canvas as an overlay.
-    * @param txt text
-    */
+      * A convenient way to draw some text on canvas for logging or debugging. It'll be draw on the top-left of the canvas as an overlay.
+      * @param txt text
+      */
     log(txt) {
-      let w = this._ctx.measureText(txt).width + 20;
+      const w = this._ctx.measureText(txt).width + 20;
       this.stroke(false).fill("rgba(0,0,0,.4)").rect([[0, 0], [w, 20]]);
       this.fill("#fff").text([10, 14], txt);
       return this;
@@ -7401,7 +7393,7 @@ See https://github.com/williamngan/pts for details. */
       return Num.lerp(Num.lerp(n00, n10, tx), Num.lerp(n01, n11, tx), _fade(y));
     }
   };
-  var Delaunay = class extends Group {
+  var Delaunay = class _Delaunay extends Group {
     constructor() {
       super(...arguments);
       this._mesh = [];
@@ -7448,7 +7440,7 @@ See https://github.com/williamngan/pts for details. */
           edges.push(circum.i, circum.j, circum.j, circum.k, circum.k, circum.i);
           opened.splice(j, 1);
         }
-        Delaunay._dedupe(edges);
+        _Delaunay._dedupe(edges);
         j = edges.length;
         while (j > 1) {
           opened.push(this._circum(edges[--j], edges[--j], c, false, pts));
@@ -7594,7 +7586,7 @@ See https://github.com/williamngan/pts for details. */
   __export(Color_exports, {
     Color: () => Color
   });
-  var _Color = class extends Pt {
+  var _Color = class _Color extends Pt {
     /**
      * Create a Color. Same as creating a Pt. Optionally you may use [`Color.from`](#link) to create a color.
      * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
@@ -7609,8 +7601,8 @@ See https://github.com/williamngan/pts for details. */
      * @param args Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
      */
     static from(...args) {
-      let p = [1, 1, 1, 1];
-      let c = Util.getArgs(args);
+      const p = [1, 1, 1, 1];
+      const c = Util.getArgs(args);
       for (let i = 0, len = p.length; i < len; i++) {
         if (i < c.length)
           p[i] = c[i];
@@ -7625,7 +7617,7 @@ See https://github.com/williamngan/pts for details. */
       if (hex[0] == "#")
         hex = hex.substr(1);
       if (hex.length <= 3) {
-        let fn = (i) => hex[i] || "F";
+        const fn = (i) => hex[i] || "F";
         hex = `${fn(0)}${fn(0)}${fn(1)}${fn(1)}${fn(2)}${fn(2)}`;
       }
       let alpha = 1;
@@ -7633,7 +7625,7 @@ See https://github.com/williamngan/pts for details. */
         alpha = hex.substr(6) && 255 / 255;
         hex = hex.substring(0, 6);
       }
-      let hexVal = parseInt(hex, 16);
+      const hexVal = parseInt(hex, 16);
       return new _Color(hexVal >> 16, hexVal >> 8 & 255, hexVal & 255, alpha);
     }
     /**
@@ -7715,7 +7707,7 @@ See https://github.com/williamngan/pts for details. */
      * Clone this Color.
      */
     clone() {
-      let c = new _Color(this);
+      const c = new _Color(this);
       c.toMode(this._mode);
       return c;
     }
@@ -7726,7 +7718,7 @@ See https://github.com/williamngan/pts for details. */
      */
     toMode(mode, convert = false) {
       if (convert) {
-        let fname = this._mode.toUpperCase() + "to" + mode.toUpperCase();
+        const fname = this._mode.toUpperCase() + "to" + mode.toUpperCase();
         if (_Color[fname]) {
           this.to(_Color[fname](this, this._isNorm, this._isNorm));
         } else {
@@ -7778,7 +7770,7 @@ See https://github.com/williamngan/pts for details. */
       return this._mode == "lch" ? this[2] : this[0];
     }
     set h(n) {
-      let i = this._mode == "lch" ? 2 : 0;
+      const i = this._mode == "lch" ? 2 : 0;
       this[i] = n;
     }
     /**
@@ -7797,7 +7789,7 @@ See https://github.com/williamngan/pts for details. */
       return this._mode == "hsl" ? this[2] : this[0];
     }
     set l(n) {
-      let i = this._mode == "hsl" ? 2 : 0;
+      const i = this._mode == "hsl" ? 2 : 0;
       this[i] = n;
     }
     // lab, lch, luv
@@ -7863,7 +7855,7 @@ See https://github.com/williamngan/pts for details. */
     normalize(toNorm = true) {
       if (this._isNorm == toNorm)
         return this;
-      let ranges = _Color.ranges[this._mode];
+      const ranges = _Color.ranges[this._mode];
       for (let i = 0; i < 3; i++) {
         this[i] = !toNorm ? Num.mapToRange(this[i], 0, 1, ranges[i][0], ranges[i][1]) : Num.mapToRange(this[i], ranges[i][0], ranges[i][1], 0, 1);
       }
@@ -7884,8 +7876,8 @@ See https://github.com/williamngan/pts for details. */
      */
     toString(format = "mode") {
       if (format == "hex") {
-        let _hex = (n) => {
-          let s = Math.floor(n).toString(16);
+        const _hex = (n) => {
+          const s = Math.floor(n).toString(16);
           return s.length < 2 ? "0" + s : s;
         };
         return `#${_hex(this[0])}${_hex(this[1])}${_hex(this[2])}`;
@@ -7905,17 +7897,17 @@ See https://github.com/williamngan/pts for details. */
      * @returns a new HSL Color
      */
     static RGBtoHSL(rgb, normalizedInput = false, normalizedOutput = false) {
-      let [r, g, b] = !normalizedInput ? rgb.$normalize() : rgb;
-      let max = Math.max(r, g, b);
-      let min = Math.min(r, g, b);
+      const [r, g, b] = !normalizedInput ? rgb.$normalize() : rgb;
+      const max = Math.max(r, g, b);
+      const min = Math.min(r, g, b);
       let h = (max + min) / 2;
       let s = h;
-      let l = h;
+      const l = h;
       if (max == min) {
         h = 0;
         s = 0;
       } else {
-        let d = max - min;
+        const d = max - min;
         s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
         h = 0;
         if (max === r) {
@@ -7941,9 +7933,9 @@ See https://github.com/williamngan/pts for details. */
         h = h / 360;
       if (s == 0)
         return _Color.rgb(l * 255, l * 255, l * 255, hsl.alpha);
-      let q = l <= 0.5 ? l * (1 + s) : l + s - l * s;
-      let p = 2 * l - q;
-      let convert = (t) => {
+      const q = l <= 0.5 ? l * (1 + s) : l + s - l * s;
+      const p = 2 * l - q;
+      const convert = (t) => {
         t = t < 0 ? t + 1 : t > 1 ? t - 1 : t;
         if (t * 6 < 1) {
           return p + (q - p) * t * 6;
@@ -7955,7 +7947,7 @@ See https://github.com/williamngan/pts for details. */
           return p;
         }
       };
-      let sc = normalizedOutput ? 1 : 255;
+      const sc = normalizedOutput ? 1 : 255;
       return _Color.rgb(
         sc * convert(h + 1 / 3),
         sc * convert(h),
@@ -7971,13 +7963,13 @@ See https://github.com/williamngan/pts for details. */
      * @returns a new HSB Color
      */
     static RGBtoHSB(rgb, normalizedInput = false, normalizedOutput = false) {
-      let [r, g, b] = !normalizedInput ? rgb.$normalize() : rgb;
-      let max = Math.max(r, g, b);
-      let min = Math.min(r, g, b);
-      let d = max - min;
+      const [r, g, b] = !normalizedInput ? rgb.$normalize() : rgb;
+      const max = Math.max(r, g, b);
+      const min = Math.min(r, g, b);
+      const d = max - min;
       let h = 0;
-      let s = max === 0 ? 0 : d / max;
-      let v = max;
+      const s = max === 0 ? 0 : d / max;
+      const v = max;
       if (max != min) {
         if (max === r) {
           h = (g - b) / d + (g < b ? 6 : 0);
@@ -8000,12 +7992,12 @@ See https://github.com/williamngan/pts for details. */
       let [h, s, v] = hsb;
       if (!normalizedInput)
         h = h / 360;
-      let i = Math.floor(h * 6);
-      let f = h * 6 - i;
-      let p = v * (1 - s);
-      let q = v * (1 - f * s);
-      let t = v * (1 - (1 - f) * s);
-      let pick = [
+      const i = Math.floor(h * 6);
+      const f = h * 6 - i;
+      const p = v * (1 - s);
+      const q = v * (1 - f * s);
+      const t = v * (1 - (1 - f) * s);
+      const pick = [
         [v, t, p],
         [q, v, p],
         [p, v, t],
@@ -8013,8 +8005,8 @@ See https://github.com/williamngan/pts for details. */
         [t, p, v],
         [v, p, q]
       ];
-      let c = pick[i % 6];
-      let sc = normalizedOutput ? 1 : 255;
+      const c = pick[i % 6];
+      const sc = normalizedOutput ? 1 : 255;
       return _Color.rgb(
         sc * c[0],
         sc * c[1],
@@ -8030,7 +8022,7 @@ See https://github.com/williamngan/pts for details. */
      * @returns a new LAB Color
      */
     static RGBtoLAB(rgb, normalizedInput = false, normalizedOutput = false) {
-      let c = normalizedInput ? rgb.$normalize(false) : rgb;
+      const c = normalizedInput ? rgb.$normalize(false) : rgb;
       return _Color.XYZtoLAB(_Color.RGBtoXYZ(c), false, normalizedOutput);
     }
     /**
@@ -8041,7 +8033,7 @@ See https://github.com/williamngan/pts for details. */
      * @returns a new RGB Color
      */
     static LABtoRGB(lab, normalizedInput = false, normalizedOutput = false) {
-      let c = normalizedInput ? lab.$normalize(false) : lab;
+      const c = normalizedInput ? lab.$normalize(false) : lab;
       return _Color.XYZtoRGB(_Color.LABtoXYZ(c), false, normalizedOutput);
     }
     /**
@@ -8052,7 +8044,7 @@ See https://github.com/williamngan/pts for details. */
      * @returns a new LCH Color
      */
     static RGBtoLCH(rgb, normalizedInput = false, normalizedOutput = false) {
-      let c = normalizedInput ? rgb.$normalize(false) : rgb;
+      const c = normalizedInput ? rgb.$normalize(false) : rgb;
       return _Color.LABtoLCH(_Color.RGBtoLAB(c), false, normalizedOutput);
     }
     /**
@@ -8063,7 +8055,7 @@ See https://github.com/williamngan/pts for details. */
      * @returns a new RGB Color
      */
     static LCHtoRGB(lch, normalizedInput = false, normalizedOutput = false) {
-      let c = normalizedInput ? lch.$normalize(false) : lch;
+      const c = normalizedInput ? lch.$normalize(false) : lch;
       return _Color.LABtoRGB(_Color.LCHtoLAB(c), false, normalizedOutput);
     }
     /**
@@ -8074,7 +8066,7 @@ See https://github.com/williamngan/pts for details. */
      * @returns a new LUV Color
      */
     static RGBtoLUV(rgb, normalizedInput = false, normalizedOutput = false) {
-      let c = normalizedInput ? rgb.$normalize(false) : rgb;
+      const c = normalizedInput ? rgb.$normalize(false) : rgb;
       return _Color.XYZtoLUV(_Color.RGBtoXYZ(c), false, normalizedOutput);
     }
     /**
@@ -8085,7 +8077,7 @@ See https://github.com/williamngan/pts for details. */
      * @returns a new RGB Color
      */
     static LUVtoRGB(luv, normalizedInput = false, normalizedOutput = false) {
-      let c = normalizedInput ? luv.$normalize(false) : luv;
+      const c = normalizedInput ? luv.$normalize(false) : luv;
       return _Color.XYZtoRGB(_Color.LUVtoXYZ(c), false, normalizedOutput);
     }
     /**
@@ -8096,13 +8088,13 @@ See https://github.com/williamngan/pts for details. */
      * @returns a new XYZ Color
      */
     static RGBtoXYZ(rgb, normalizedInput = false, normalizedOutput = false) {
-      let c = !normalizedInput ? rgb.$normalize() : rgb.clone();
+      const c = !normalizedInput ? rgb.$normalize() : rgb.clone();
       for (let i = 0; i < 3; i++) {
         c[i] = c[i] > 0.04045 ? Math.pow((c[i] + 0.055) / 1.055, 2.4) : c[i] / 12.92;
         if (!normalizedOutput)
           c[i] = c[i] * 100;
       }
-      let cc = _Color.xyz(
+      const cc = _Color.xyz(
         c[0] * 0.4124564 + c[1] * 0.3575761 + c[2] * 0.1804375,
         c[0] * 0.2126729 + c[1] * 0.7151522 + c[2] * 0.072175,
         c[0] * 0.0193339 + c[1] * 0.119192 + c[2] * 0.9503041,
@@ -8118,8 +8110,8 @@ See https://github.com/williamngan/pts for details. */
      * @returns a new RGB Color
      */
     static XYZtoRGB(xyz, normalizedInput = false, normalizedOutput = false) {
-      let [x, y, z] = !normalizedInput ? xyz.$normalize() : xyz;
-      let rgb = [
+      const [x, y, z] = !normalizedInput ? xyz.$normalize() : xyz;
+      const rgb = [
         x * 3.2406254773200533 + y * -1.5372079722103187 + z * -0.4986285986982479,
         x * -0.9689307147293197 + y * 1.8757560608852415 + z * 0.041517523842953964,
         x * 0.055710120445510616 + y * -0.2040210505984867 + z * 1.0569959422543882
@@ -8130,7 +8122,7 @@ See https://github.com/williamngan/pts for details. */
         if (!normalizedOutput)
           rgb[i] = Math.round(rgb[i] * 255);
       }
-      let cc = _Color.rgb(rgb[0], rgb[1], rgb[2], xyz.alpha);
+      const cc = _Color.rgb(rgb[0], rgb[1], rgb[2], xyz.alpha);
       return normalizedOutput ? cc.normalize() : cc;
     }
     /**
@@ -8141,13 +8133,13 @@ See https://github.com/williamngan/pts for details. */
      * @returns a new LAB Color
      */
     static XYZtoLAB(xyz, normalizedInput = false, normalizedOutput = false) {
-      let c = normalizedInput ? xyz.$normalize(false) : xyz.clone();
+      const c = normalizedInput ? xyz.$normalize(false) : xyz.clone();
       const eps = 0.00885645167;
       const kap = 903.296296296;
       c.divide(_Color.D65);
-      let fn = (n) => n > eps ? Math.pow(n, 1 / 3) : (kap * n + 16) / 116;
-      let cy = fn(c[1]);
-      let cc = _Color.lab(
+      const fn = (n) => n > eps ? Math.pow(n, 1 / 3) : (kap * n + 16) / 116;
+      const cy = fn(c[1]);
+      const cc = _Color.lab(
         116 * cy - 16,
         500 * (fn(c[0]) - cy),
         200 * (cy - fn(c[2])),
@@ -8163,16 +8155,16 @@ See https://github.com/williamngan/pts for details. */
      * @returns a new XYZ Color
      */
     static LABtoXYZ(lab, normalizedInput = false, normalizedOutput = false) {
-      let c = normalizedInput ? lab.$normalize(false) : lab;
-      let y = (c[0] + 16) / 116;
-      let x = c[1] / 500 + y;
-      let z = y - c[2] / 200;
+      const c = normalizedInput ? lab.$normalize(false) : lab;
+      const y = (c[0] + 16) / 116;
+      const x = c[1] / 500 + y;
+      const z = y - c[2] / 200;
       const eps = 0.00885645167;
       const kap = 903.296296296;
-      let d = _Color.D65;
+      const d = _Color.D65;
       const xxx = Math.pow(x, 3);
       const zzz = Math.pow(z, 3);
-      let cc = _Color.xyz(
+      const cc = _Color.xyz(
         d[0] * (xxx > eps ? xxx : (116 * x - 16) / kap),
         d[1] * (c[0] > kap * eps ? Math.pow((c[0] + 16) / 116, 3) : c[0] / kap),
         d[2] * (zzz > eps ? zzz : (116 * z - 16) / kap),
@@ -8189,13 +8181,13 @@ See https://github.com/williamngan/pts for details. */
      */
     static XYZtoLUV(xyz, normalizedInput = false, normalizedOutput = false) {
       let [x, y, z] = normalizedInput ? xyz.$normalize(false) : xyz;
-      let u = 4 * x / (x + 15 * y + 3 * z);
-      let v = 9 * y / (x + 15 * y + 3 * z);
+      const u = 4 * x / (x + 15 * y + 3 * z);
+      const v = 9 * y / (x + 15 * y + 3 * z);
       y = y / 100;
       y = y > 8856e-6 ? Math.pow(y, 1 / 3) : 7.787 * y + 16 / 116;
-      let refU = 4 * _Color.D65[0] / (_Color.D65[0] + 15 * _Color.D65[1] + 3 * _Color.D65[2]);
-      let refV = 9 * _Color.D65[1] / (_Color.D65[0] + 15 * _Color.D65[1] + 3 * _Color.D65[2]);
-      let L = 116 * y - 16;
+      const refU = 4 * _Color.D65[0] / (_Color.D65[0] + 15 * _Color.D65[1] + 3 * _Color.D65[2]);
+      const refV = 9 * _Color.D65[1] / (_Color.D65[0] + 15 * _Color.D65[1] + 3 * _Color.D65[2]);
+      const L = 116 * y - 16;
       return _Color.luv(
         L,
         13 * L * (u - refU),
@@ -8213,15 +8205,15 @@ See https://github.com/williamngan/pts for details. */
     static LUVtoXYZ(luv, normalizedInput = false, normalizedOutput = false) {
       let [l, u, v] = normalizedInput ? luv.$normalize(false) : luv;
       let y = (l + 16) / 116;
-      let cubeY = y * y * y;
+      const cubeY = y * y * y;
       y = cubeY > 8856e-6 ? cubeY : (y - 16 / 116) / 7.787;
-      let refU = 4 * _Color.D65[0] / (_Color.D65[0] + 15 * _Color.D65[1] + 3 * _Color.D65[2]);
-      let refV = 9 * _Color.D65[1] / (_Color.D65[0] + 15 * _Color.D65[1] + 3 * _Color.D65[2]);
+      const refU = 4 * _Color.D65[0] / (_Color.D65[0] + 15 * _Color.D65[1] + 3 * _Color.D65[2]);
+      const refV = 9 * _Color.D65[1] / (_Color.D65[0] + 15 * _Color.D65[1] + 3 * _Color.D65[2]);
       u = u / (13 * l) + refU;
       v = v / (13 * l) + refV;
       y = y * 100;
-      let x = -1 * (9 * y * u) / ((u - 4) * v - u * v);
-      let z = (9 * y - 15 * v * y - v * x) / (3 * v);
+      const x = -1 * (9 * y * u) / ((u - 4) * v - u * v);
+      const z = (9 * y - 15 * v * y - v * x) / (3 * v);
       return _Color.xyz(x, y, z, luv.alpha);
     }
     /**
@@ -8232,8 +8224,8 @@ See https://github.com/williamngan/pts for details. */
      * @returns a new LCH Color
      */
     static LABtoLCH(lab, normalizedInput = false, normalizedOutput = false) {
-      let c = normalizedInput ? lab.$normalize(false) : lab;
-      let h = Geom.toDegree(Geom.boundRadian(Math.atan2(c[2], c[1])));
+      const c = normalizedInput ? lab.$normalize(false) : lab;
+      const h = Geom.toDegree(Geom.boundRadian(Math.atan2(c[2], c[1])));
       return _Color.lch(
         c[0],
         Math.sqrt(c[1] * c[1] + c[2] * c[2]),
@@ -8249,8 +8241,8 @@ See https://github.com/williamngan/pts for details. */
      * @returns a new LAB Color
      */
     static LCHtoLAB(lch, normalizedInput = false, normalizedOutput = false) {
-      let c = normalizedInput ? lch.$normalize(false) : lch;
-      let rad = Geom.toRadian(c[2]);
+      const c = normalizedInput ? lch.$normalize(false) : lch;
+      const rad = Geom.toRadian(c[2]);
       return _Color.lab(
         c[0],
         Math.cos(rad) * c[1],
@@ -8259,13 +8251,12 @@ See https://github.com/williamngan/pts for details. */
       );
     }
   };
-  var Color = _Color;
   // XYZ property for Standard Observer 2deg, Daylight/sRGB illuminant D65
-  Color.D65 = new Pt(95.047, 100, 108.883, 1);
+  _Color.D65 = new Pt(95.047, 100, 108.883, 1);
   /**
    * Value range for each color space
    */
-  Color.ranges = {
+  _Color.ranges = {
     rgb: new Group(new Pt(0, 255), new Pt(0, 255), new Pt(0, 255)),
     hsl: new Group(new Pt(0, 360), new Pt(0, 1), new Pt(0, 1)),
     hsb: new Group(new Pt(0, 360), new Pt(0, 1), new Pt(0, 1)),
@@ -8274,6 +8265,7 @@ See https://github.com/williamngan/pts for details. */
     luv: new Group(new Pt(0, 100), new Pt(-134, 220), new Pt(-140, 122)),
     xyz: new Group(new Pt(0, 100), new Pt(0, 100), new Pt(0, 100))
   };
+  var Color = _Color;
 
   // src/Dom.ts
   var Dom_exports = {};
@@ -8282,7 +8274,7 @@ See https://github.com/williamngan/pts for details. */
     HTMLForm: () => HTMLForm,
     HTMLSpace: () => HTMLSpace
   });
-  var DOMSpace = class extends MultiTouchSpace {
+  var DOMSpace = class _DOMSpace extends MultiTouchSpace {
     /**
     * Create a DOMSpace for HTML DOM elements
     * @param elem Specify an element by its "id" attribute as string, or by the element object itself. Use css to customize its appearance if needed.
@@ -8295,8 +8287,8 @@ See https://github.com/williamngan/pts for details. */
       this._autoResize = true;
       this._bgcolor = "#e1e9f0";
       this._css = {};
-      var _selector = null;
-      var _existed = false;
+      let _selector = null;
+      let _existed = false;
       this.id = "pts";
       if (elem instanceof Element) {
         _selector = elem;
@@ -8307,8 +8299,8 @@ See https://github.com/williamngan/pts for details. */
         this.id = elem.substr(1);
       }
       if (!_selector) {
-        this._container = DOMSpace.createElement("div", "pts_container");
-        this._canvas = DOMSpace.createElement("div", "pts_element");
+        this._container = _DOMSpace.createElement("div", "pts_container");
+        this._canvas = _DOMSpace.createElement("div", "pts_element");
         this._container.appendChild(this._canvas);
         document.body.appendChild(this._container);
         _existed = false;
@@ -8570,7 +8562,7 @@ See https://github.com/williamngan/pts for details. */
       return super.removeAll();
     }
   };
-  var _HTMLForm = class extends VisualForm {
+  var _HTMLForm = class _HTMLForm extends VisualForm {
     /**
      * Create a new `HTMLForm`. Alternatively, you can use [`HTMLSpace.getForm`](#link) function to get an instance of HTMLForm.
      * @param space the space to use
@@ -8989,9 +8981,9 @@ See https://github.com/williamngan/pts for details. */
       return this;
     }
   };
+  _HTMLForm.groupID = 0;
+  _HTMLForm.domID = 0;
   var HTMLForm = _HTMLForm;
-  HTMLForm.groupID = 0;
-  HTMLForm.domID = 0;
 
   // src/Svg.ts
   var Svg_exports = {};
@@ -8999,7 +8991,7 @@ See https://github.com/williamngan/pts for details. */
     SVGForm: () => SVGForm,
     SVGSpace: () => SVGSpace
   });
-  var SVGSpace = class extends DOMSpace {
+  var SVGSpace = class _SVGSpace extends DOMSpace {
     /**
     * Create a SVGSpace which represents a Space for SVG elements.
     * @param elem Specify an element by its "id" attribute as string, or by the element object itself. An element can be an existing `<svg>`, or a `<div>` container in which a new `<svg>` will be created. If left empty, a `<div id="pt_container"><svg id="pt" /></div>` will be added to DOM. Use css to customize its appearance if needed.
@@ -9010,7 +9002,7 @@ See https://github.com/williamngan/pts for details. */
       super(elem, callback);
       this._bgcolor = "#999";
       if (this._canvas.nodeName.toLowerCase() != "svg") {
-        let s = SVGSpace.svgElement(this._canvas, "svg", `${this.id}_svg`);
+        let s = _SVGSpace.svgElement(this._canvas, "svg", `${this.id}_svg`);
         this._container = this._canvas;
         this._canvas = s;
       }
@@ -9036,7 +9028,7 @@ See https://github.com/williamngan/pts for details. */
     */
     resize(b, evt) {
       super.resize(b, evt);
-      SVGSpace.setAttr(this.element, {
+      _SVGSpace.setAttr(this.element, {
         "viewBox": `0 0 ${this.bound.width} ${this.bound.height}`,
         "width": `${this.bound.width}`,
         "height": `${this.bound.height}`,
@@ -9081,7 +9073,7 @@ See https://github.com/williamngan/pts for details. */
       return super.removeAll();
     }
   };
-  var _SVGForm = class extends VisualForm {
+  var _SVGForm = class _SVGForm extends VisualForm {
     /**
     * Create a new SVGForm. You may also use [`SVGSpace.getForm`](#link) to get a default form directly.
     * @param space an instance of SVGSpace
@@ -9575,9 +9567,9 @@ See https://github.com/williamngan/pts for details. */
       return this;
     }
   };
+  _SVGForm.groupID = 0;
+  _SVGForm.domID = 0;
   var SVGForm = _SVGForm;
-  SVGForm.groupID = 0;
-  SVGForm.domID = 0;
 
   // src/Physics.ts
   var Physics_exports = {};
@@ -9586,7 +9578,7 @@ See https://github.com/williamngan/pts for details. */
     Particle: () => Particle,
     World: () => World
   });
-  var World = class {
+  var World = class _World {
     /**
      * Create a `World` for 2D physics simulation.
      * @param bound a Group or an Iterable<Pt> representing a rectangular bounding box
@@ -9674,13 +9666,10 @@ See https://github.com/williamngan/pts for details. */
      * @returns a Body, or undefined if not found
      */
     body(id) {
-      let idx = id;
       if (typeof id === "string" && id.length > 0) {
-        idx = this._bnames.indexOf(id);
+        return this._bodies[this._bnames.indexOf(id)];
       }
-      if (!(idx >= 0))
-        return void 0;
-      return this._bodies[idx];
+      return typeof id === "number" && id >= 0 ? this._bodies[id] : void 0;
     }
     /**
      * Get a particle in this world by index or string id.
@@ -9688,13 +9677,10 @@ See https://github.com/williamngan/pts for details. */
      * @returns a Particle, or undefined if not found
      */
     particle(id) {
-      let idx = id;
       if (typeof id === "string" && id.length > 0) {
-        idx = this._pnames.indexOf(id);
+        return this._particles[this._pnames.indexOf(id)];
       }
-      if (!(idx >= 0))
-        return void 0;
-      return this._particles[idx];
+      return typeof id === "number" && id >= 0 ? this._particles[id] : void 0;
     }
     /**
      * Given a body's name, return its index in the bodies array, or -1 if not found.
@@ -9841,7 +9827,7 @@ See https://github.com/williamngan/pts for details. */
       for (let i = 0, len = this._particles.length; i < len; i++) {
         let p = this._particles[i];
         this.integrate(p, dt, this._lastTime);
-        World.boundConstraint(p, this._bound, this._damping);
+        _World.boundConstraint(p, this._bound, this._damping);
         for (let k = i + 1; k < len; k++) {
           if (i !== k) {
             let p2 = this._particles[k];
@@ -9862,7 +9848,7 @@ See https://github.com/williamngan/pts for details. */
         if (bds) {
           for (let k = 0, klen = bds.length; k < klen; k++) {
             let bk = bds[k];
-            World.boundConstraint(bk, this._bound, this._damping);
+            _World.boundConstraint(bk, this._bound, this._damping);
             this.integrate(bk, dt, this._lastTime);
           }
           for (let k = i + 1; k < len; k++) {
@@ -10045,7 +10031,7 @@ See https://github.com/williamngan/pts for details. */
       return `Particle: ${this[0]} ${this[1]} | previous ${this._prev[0]} ${this._prev[1]} | mass ${this._mass}`;
     }
   };
-  var Body = class extends Group {
+  var Body = class _Body extends Group {
     /**
      * Create an empty Body, this is usually followed by [`Body.init`](#link) to populate the Body. Alternatively, use static function [`Body.fromGroup`](#link) to create and initate a body directly.
      */
@@ -10064,7 +10050,7 @@ See https://github.com/williamngan/pts for details. */
      * @param autoMass Automatically calculate the mass based on the area of the polygon. Default is true.
      */
     static fromGroup(body, stiff = 1, autoLink = true, autoMass = true) {
-      let b = new Body().init(body);
+      let b = new _Body().init(body);
       if (autoLink)
         b.linkAll(stiff);
       if (autoMass)
@@ -10224,7 +10210,7 @@ See https://github.com/williamngan/pts for details. */
     Sound: () => Sound,
     Tempo: () => Tempo
   });
-  var Tempo = class {
+  var Tempo = class _Tempo {
     /**
      * Construct a new Tempo instance by beats-per-minute. Alternatively, you can use [`Tempo.fromBeat`](#link) to create from milliseconds.
      * @param bpm beats per minute
@@ -10240,7 +10226,7 @@ See https://github.com/williamngan/pts for details. */
      * @param ms milliseconds per beat
      */
     static fromBeat(ms) {
-      return new Tempo(6e4 / ms);
+      return new _Tempo(6e4 / ms);
     }
     /**
      * Beats-per-minute value
@@ -10282,16 +10268,16 @@ See https://github.com/williamngan/pts for details. */
      * @returns an object with chainable functions
      */
     every(beats) {
-      let self = this;
-      let p = Array.isArray(beats) ? beats[0] : beats;
+      const self = this;
+      const p = Array.isArray(beats) ? beats[0] : beats;
       return {
         start: function(fn, offset = 0, name) {
-          let id = name || self._createID(fn);
+          const id = name || self._createID(fn);
           self._listeners[id] = { name: id, beats, period: p, index: 0, offset, duration: -1, continuous: false, fn };
           return this;
         },
         progress: function(fn, offset = 0, name) {
-          let id = name || self._createID(fn);
+          const id = name || self._createID(fn);
           self._listeners[id] = { name: id, beats, period: p, index: 0, offset, duration: -1, continuous: true, fn };
           return this;
         }
@@ -10303,11 +10289,11 @@ See https://github.com/williamngan/pts for details. */
      * @param time current time in milliseconds
      */
     track(time) {
-      for (let k in this._listeners) {
+      for (const k in this._listeners) {
         if (this._listeners.hasOwnProperty(k)) {
-          let li = this._listeners[k];
-          let _t = li.offset ? time + li.offset : time;
-          let ms = li.period * this._ms;
+          const li = this._listeners[k];
+          const _t = li.offset ? time + li.offset : time;
+          const ms = li.period * this._ms;
           let isStart = false;
           if (_t > li.duration + ms) {
             li.duration = _t - _t % this._ms;
@@ -10317,10 +10303,10 @@ See https://github.com/williamngan/pts for details. */
             }
             isStart = true;
           }
-          let count = Math.max(0, Math.ceil(Math.floor(li.duration / this._ms) / li.period));
-          let params = li.continuous ? [count, Num.clamp((_t - li.duration) / ms, 0, 1), _t, isStart] : [count];
+          const count = Math.max(0, Math.ceil(Math.floor(li.duration / this._ms) / li.period));
+          const params = li.continuous ? [count, Num.clamp((_t - li.duration) / ms, 0, 1), _t, isStart] : [count];
           if (li.continuous || isStart) {
-            let done = li.fn.apply(li, params);
+            const done = li.fn.apply(li, params);
             if (done)
               delete this._listeners[li.name];
           }
@@ -10354,7 +10340,7 @@ See https://github.com/williamngan/pts for details. */
       return;
     }
   };
-  var Sound = class {
+  var Sound = class _Sound {
     // Tracking play time against ctx.currentTime
     /**
      * Construct a `Sound` instance. Usually, it's more convenient to use one of the static methods like [`Sound.load`](#function_load) or [`Sound.from`](#function_from).
@@ -10369,7 +10355,7 @@ See https://github.com/williamngan/pts for details. */
      * Create an AudioContext instance. This is called internally only.
      */
     _createAudioContext() {
-      let _ctx = window.AudioContext;
+      const _ctx = window.AudioContext;
       if (!_ctx)
         throw new Error("Your browser doesn't support Web Audio. (No AudioContext)");
       this._ctx = _ctx ? new _ctx() : void 0;
@@ -10383,7 +10369,7 @@ See https://github.com/williamngan/pts for details. */
      * @returns a `Sound` instance
      */
     static from(node, ctx, type = "gen", stream) {
-      let s = new Sound(type);
+      const s = new _Sound(type);
       s._node = node;
       s._ctx = ctx;
       if (stream)
@@ -10399,7 +10385,7 @@ See https://github.com/williamngan/pts for details. */
      */
     static load(source, crossOrigin = "anonymous") {
       return new Promise((resolve, reject) => {
-        let s = new Sound("file");
+        const s = new _Sound("file");
         s._source = typeof source === "string" ? new Audio(source) : source;
         s._source.autoplay = false;
         s._source.crossOrigin = crossOrigin;
@@ -10424,10 +10410,10 @@ See https://github.com/williamngan/pts for details. */
      */
     static loadAsBuffer(url) {
       return new Promise((resolve, reject) => {
-        let request = new XMLHttpRequest();
+        const request = new XMLHttpRequest();
         request.open("GET", url, true);
         request.responseType = "arraybuffer";
-        let s = new Sound("file");
+        const s = new _Sound("file");
         request.onload = function() {
           s._ctx.decodeAudioData(request.response, function(buffer) {
             s.createBuffer(buffer);
@@ -10459,13 +10445,13 @@ See https://github.com/williamngan/pts for details. */
      * @example `Sound.generate( 'sine', 120 )`
      */
     static generate(type, val) {
-      let s = new Sound("gen");
+      const s = new _Sound("gen");
       return s._gen(type, val);
     }
     // Create the oscillator
     _gen(type, val) {
       this._node = this._ctx.createOscillator();
-      let osc = this._node;
+      const osc = this._node;
       osc.type = type;
       if (type === "custom") {
         osc.setPeriodicWave(val);
@@ -10483,7 +10469,7 @@ See https://github.com/williamngan/pts for details. */
     static input(constraint) {
       return __async(this, null, function* () {
         try {
-          let s = new Sound("input");
+          const s = new _Sound("input");
           if (!s)
             return void 0;
           const c = constraint ? constraint : { audio: true, video: false };
@@ -10553,7 +10539,7 @@ See https://github.com/williamngan/pts for details. */
     get progress() {
       let dur = 0;
       let curr = 0;
-      if (!!this._buffer) {
+      if (this._buffer) {
         dur = this._buffer.duration;
         curr = this._timestamp ? this._ctx.currentTime - this._timestamp : 0;
       } else {
@@ -10625,7 +10611,7 @@ See https://github.com/williamngan/pts for details. */
      * @param smooth Optional smoothing value (corresponds to `AnalyserNode.smoothingTimeConstant`)
      */
     analyze(size = 256, minDb = -100, maxDb = -30, smooth = 0.8) {
-      let a = this._ctx.createAnalyser();
+      const a = this._ctx.createAnalyser();
       a.fftSize = size * 2;
       a.minDecibels = minDb;
       a.maxDecibels = maxDb;
@@ -10652,8 +10638,8 @@ See https://github.com/williamngan/pts for details. */
     }
     // Map domain data to another range
     _domainTo(time, size, position = [0, 0], trim = [0, 0]) {
-      let data = time ? this.timeDomain() : this.freqDomain();
-      let g = new Group();
+      const data = time ? this.timeDomain() : this.freqDomain();
+      const g = new Group();
       for (let i = trim[0], len = data.length - trim[1]; i < len; i++) {
         g.push(new Pt(position[0] + size[0] * i / len, position[1] + size[1] * data[i] / 255));
       }
@@ -10712,7 +10698,7 @@ See https://github.com/williamngan/pts for details. */
         this._ctx.resume();
       }
       if (this._type === "file") {
-        if (!!this._buffer) {
+        if (this._buffer) {
           this._node.start(timeAt);
           this._timestamp = this._ctx.currentTime + timeAt;
         } else {
@@ -10737,7 +10723,7 @@ See https://github.com/williamngan/pts for details. */
       if (this._playing)
         (this._outputNode || this._node).disconnect(this._ctx.destination);
       if (this._type === "file") {
-        if (!!this._buffer) {
+        if (this._buffer) {
           if (this.progress < 1)
             this._node.stop();
         } else {
