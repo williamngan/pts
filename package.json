@@ -1,6 +1,6 @@
 {
   "name": "pts",
-  "version": "0.12.0",
+  "version": "0.12.1",
   "description": "pts",
   "main": "./dist/index",
   "types": "./dist/index.d.ts",
