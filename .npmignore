@@ -19,3 +19,7 @@ favicon.ico
 .pylintrc
 parse.py
 site.webmanifest
+node_modules
+.eslintignore
+.eslintrc.js
+*.js.map
