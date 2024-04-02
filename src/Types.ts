@@ -44,7 +44,7 @@ export type PtLikeIterable = GroupLike | PtLike[] | Iterable<PtLike>;
 /**
  * Typescript type: AnimateCallbackFn represents a callback function for animation. It accepts parameters to keep track of current time, current frame-time, and current space instance.
  */
-export type AnimateCallbackFn = ( time?:number, frameTime?:number, currentSpace?:any ) => void;
+export type AnimateCallbackFn = ( time:number, frameTime:number, currentSpace:any ) => void;
 
 
 /**
