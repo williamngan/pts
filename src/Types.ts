@@ -193,8 +193,8 @@ export type ITempoListener = {
  * Typescript type: the return type of `tempo.every(...)`
  */
 export type ITempoResponses = {
-  start: ( fn:ITempoStartFn, offset:number, name?:string ) => ITempoResponses,
-  progress: ( fn:ITempoProgressFn, offset:number, name?:string ) => ITempoResponses
+  start: ( fn:ITempoStartFn, offset?:number, name?:string ) => ITempoResponses,
+  progress: ( fn:ITempoProgressFn, offset?:number, name?:string ) => ITempoResponses
 };
 
 
