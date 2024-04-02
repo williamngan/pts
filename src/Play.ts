@@ -76,13 +76,13 @@ export class Tempo implements IPlayer {
     const p = Array.isArray( beats ) ? beats[0] : beats;
 
     return {
-      start: function ( fn:ITempoStartFn, offset:number = 0, name?:string ): string {
+      start: function ( fn:ITempoStartFn, offset:number = 0, name?:string ): ITempoResponses {
         const id = name || self._createID( fn );
         self._listeners[id] = { name: id, beats: beats, period: p, index: 0, offset: offset, duration: -1, continuous: false, fn: fn };
         return this;
       },
 
-      progress: function ( fn:ITempoProgressFn, offset:number = 0, name?:string ): string {
+      progress: function ( fn:ITempoProgressFn, offset:number = 0, name?:string ): ITempoResponses {
         const id = name || self._createID( fn );
         self._listeners[id] = { name: id, beats: beats, period: p, index: 0, offset: offset, duration: -1, continuous: true, fn: fn };
         return this;
