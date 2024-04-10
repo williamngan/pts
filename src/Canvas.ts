@@ -459,7 +459,7 @@ export class CanvasForm extends VisualForm {
   * Create a new CanvasForm. You may also use [`CanvasSpace.getForm()`](#link) to get the default form.
   * @param space an instance of CanvasSpace
   */
-  constructor( space?:CanvasSpace | CanvasRenderingContext2D ) {
+  constructor( space?:CanvasSpace | CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D ) {
     super();
 
     // allow for undefined context to support custom contexts via subclassing. 
@@ -474,13 +474,13 @@ export class CanvasForm extends VisualForm {
       this._ready = true;
     };
 
-    if ( space instanceof CanvasRenderingContext2D ) {
-      _setup( space );
-    } else {
+    if ( space instanceof CanvasSpace ) {    
       this._space = space;
       this._space.add( { start: () => {
         _setup( this._space.ctx );
       }} );
+    } else {
+      _setup( space );
     }
   }
   
