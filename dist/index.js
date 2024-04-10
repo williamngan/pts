@@ -6197,13 +6197,13 @@ var CanvasForm = class _CanvasForm extends VisualForm {
       this._ctx.font = this._font.value;
       this._ready = true;
     };
-    if (space instanceof CanvasRenderingContext2D) {
-      _setup(space);
-    } else {
+    if (space instanceof CanvasSpace2) {
       this._space = space;
       this._space.add({ start: () => {
         _setup(this._space.ctx);
       } });
+    } else {
+      _setup(space);
     }
   }
   /**

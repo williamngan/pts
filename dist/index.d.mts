@@ -621,7 +621,7 @@ declare class CanvasForm extends VisualForm {
     protected _ctx: CanvasRenderingContext2D;
     protected _estimateTextWidth: (string: any) => number;
     protected _style: DefaultFormStyle;
-    constructor(space?: CanvasSpace | CanvasRenderingContext2D);
+    constructor(space?: CanvasSpace | CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D);
     get space(): CanvasSpace;
     get ctx(): PtsCanvasRenderingContext2D;
     useOffscreen(off?: boolean, clear?: boolean | string): this;
