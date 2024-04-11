@@ -44,7 +44,7 @@ export type PtLikeIterable = GroupLike | PtLike[] | Iterable<PtLike>;
 /**
  * Typescript type: AnimateCallbackFn represents a callback function for animation. It accepts parameters to keep track of current time, current frame-time, and current space instance.
  */
-export type AnimateCallbackFn = ( time?:number, frameTime?:number, currentSpace?:any ) => void;
+export type AnimateCallbackFn = ( time:number, frameTime:number, currentSpace:any ) => void;
 
 
 /**
@@ -193,8 +193,8 @@ export type ITempoListener = {
  * Typescript type: the return type of `tempo.every(...)`
  */
 export type ITempoResponses = {
-  start: ( fn:ITempoStartFn, offset:number, name?:string ) => string,
-  progress: ( fn:ITempoProgressFn, offset:number, name?:string ) => string
+  start: ( fn:ITempoStartFn, offset?:number, name?:string ) => ITempoResponses,
+  progress: ( fn:ITempoProgressFn, offset?:number, name?:string ) => ITempoResponses
 };
 
 
