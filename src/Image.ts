@@ -80,12 +80,12 @@ export class Img {
   /**
    * Create an editable blank image
    * @param size of image
-   * @param space Set the `CanvasSpace` reference. This is optional but will make sure the image's pixelScale match the canvas and set the context for creating pattern.
+   * @param space Optionally set the `CanvasSpace` reference. This is optional but will make sure the image's pixelScale match the canvas and set the context for creating pattern.
    * @param scale Optionally set a specific pixel scale (density) of the image canvas. 
    */
-  static blank( size:PtLike, space:CanvasSpace, scale?:number ):Img {
+  static blank( size:PtLike, space?:CanvasSpace, scale?:number ):Img {
     let img = new Img( true, space );
-    const s = scale ? scale : space.pixelScale;
+    const s = scale ? scale : ( space ? space.pixelScale : 1 );
     img.initCanvas( size[0], size[1], s );
     return img;
   }
