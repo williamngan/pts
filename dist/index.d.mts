@@ -106,7 +106,7 @@ type PtLike = Pt | Float32Array | number[];
 type GroupLike = Group | Pt[];
 type PtIterable = GroupLike | Pt[] | Iterable<Pt>;
 type PtLikeIterable = GroupLike | PtLike[] | Iterable<PtLike>;
-type AnimateCallbackFn = (time?: number, frameTime?: number, currentSpace?: any) => void;
+type AnimateCallbackFn = (time: number, frameTime: number, currentSpace: any) => void;
 interface IPlayer {
     animateID?: string;
     animate?: AnimateCallbackFn;
@@ -184,8 +184,8 @@ type ITempoListener = {
     fn: Function;
 };
 type ITempoResponses = {
-    start: (fn: ITempoStartFn, offset: number, name?: string) => string;
-    progress: (fn: ITempoProgressFn, offset: number, name?: string) => string;
+    start: (fn: ITempoStartFn, offset?: number, name?: string) => ITempoResponses;
+    progress: (fn: ITempoProgressFn, offset?: number, name?: string) => ITempoResponses;
 };
 type ISoundAnalyzer = {
     node: AnalyserNode;
@@ -548,7 +548,7 @@ declare class Img {
     static load(src: string, editable?: boolean, space?: CanvasSpace, ready?: (img: any) => {}): Img;
     static loadAsync(src: string, editable?: boolean, space?: CanvasSpace): Promise<Img>;
     static loadPattern(src: string, space: CanvasSpace, repeat?: CanvasPatternRepetition, editable?: boolean): Promise<CanvasPattern>;
-    static blank(size: PtLike, space: CanvasSpace, scale?: number): Img;
+    static blank(size: PtLike, space?: CanvasSpace, scale?: number): Img;
     load(src: string): Promise<Img>;
     protected _drawToScale(canvasScale: number | PtLike, img: HTMLImageElement | HTMLCanvasElement | ImageBitmap | OffscreenCanvas | HTMLVideoElement): void;
     initCanvas(width: number, height: number, canvasScale?: number | PtLike): void;

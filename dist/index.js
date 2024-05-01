@@ -5557,12 +5557,12 @@ var Img = class _Img {
   /**
    * Create an editable blank image
    * @param size of image
-   * @param space Set the `CanvasSpace` reference. This is optional but will make sure the image's pixelScale match the canvas and set the context for creating pattern.
+   * @param space Optionally set the `CanvasSpace` reference. This is optional but will make sure the image's pixelScale match the canvas and set the context for creating pattern.
    * @param scale Optionally set a specific pixel scale (density) of the image canvas. 
    */
   static blank(size, space, scale) {
     let img = new _Img(true, space);
-    const s = scale ? scale : space.pixelScale;
+    const s = scale ? scale : space ? space.pixelScale : 1;
     img.initCanvas(size[0], size[1], s);
     return img;
   }
@@ -6199,9 +6199,13 @@ var CanvasForm = class _CanvasForm extends VisualForm {
     };
     if (space instanceof CanvasSpace2) {
       this._space = space;
-      this._space.add({ start: () => {
+      if (this._space.ready && this._space.ctx) {
         _setup(this._space.ctx);
-      } });
+      } else {
+        this._space.add({ start: () => {
+          _setup(this._space.ctx);
+        } });
+      }
     } else {
       _setup(space);
     }
