@@ -476,9 +476,13 @@ export class CanvasForm extends VisualForm {
 
     if ( space instanceof CanvasSpace ) {    
       this._space = space;
-      this._space.add( { start: () => {
+      if ( this._space.ready && this._space.ctx ) {
         _setup( this._space.ctx );
-      }} );
+      } else {
+        this._space.add( { start: () => {
+          _setup( this._space.ctx );
+        }} );
+      }
     } else {
       _setup( space );
     }
