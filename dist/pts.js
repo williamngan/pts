@@ -5943,7 +5943,7 @@ See https://github.com/williamngan/pts for details. */
         observer.observe(this._container, { childList: true });
         this._container.appendChild(this._canvas);
       } else {
-        this._ready(callback);
+        setTimeout(this._ready.bind(this, callback), 100);
       }
     }
     /**
