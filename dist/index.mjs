@@ -5825,6 +5825,7 @@ var CanvasSpace2 = class extends MultiTouchSpace {
       this._autoResize = false;
       _existed = true;
     }
+    this._ctx = this._canvas.getContext("2d");
     if (!_existed) {
       const observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
@@ -5844,7 +5845,6 @@ var CanvasSpace2 = class extends MultiTouchSpace {
     } else {
       this._ready(callback);
     }
-    this._ctx = this._canvas.getContext("2d");
   }
   /**
   * Helper function to create a DOM element

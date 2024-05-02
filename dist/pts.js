@@ -5925,6 +5925,7 @@ See https://github.com/williamngan/pts for details. */
         this._autoResize = false;
         _existed = true;
       }
+      this._ctx = this._canvas.getContext("2d");
       if (!_existed) {
         const observer = new MutationObserver((mutations) => {
           mutations.forEach((mutation) => {
@@ -5944,7 +5945,6 @@ See https://github.com/williamngan/pts for details. */
       } else {
         this._ready(callback);
       }
-      this._ctx = this._canvas.getContext("2d");
     }
     /**
     * Helper function to create a DOM element
