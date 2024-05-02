@@ -3250,6 +3250,13 @@ var _Util = class _Util {
   static isMobile() {
     return /iPhone|iPad|Android/i.test(navigator.userAgent);
   }
+  /**
+   * Generate a time-based unique ID or a crypto-based ID.
+   * @returns 
+   */
+  static uniqueId(useCrypto = false) {
+    return useCrypto && crypto ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).substring(2);
+  }
 };
 _Util._warnLevel = "mute";
 var Util = _Util;
@@ -5862,34 +5869,49 @@ var CanvasSpace2 = class extends MultiTouchSpace {
     this._initialResize = false;
     let _selector = null;
     let _existed = false;
-    this.id = "pt";
+    this.id = Util.uniqueId();
     if (elem instanceof Element) {
       _selector = elem;
-      this.id = "pts_existing_space";
+      this.id = _selector.id || this.id;
     } else {
       let id = elem;
       id = elem[0] === "#" || elem[0] === "." ? elem : "#" + elem;
       _selector = document.querySelector(id);
-      _existed = true;
       this.id = id.substr(1);
     }
     if (!_selector) {
       this._container = this._createElement("div", this.id + "_container");
       this._canvas = this._createElement("canvas", this.id);
-      this._container.appendChild(this._canvas);
       document.body.appendChild(this._container);
-      _existed = false;
     } else if (_selector.nodeName.toLowerCase() != "canvas") {
       this._container = _selector;
       this._canvas = this._createElement("canvas", this.id + "_canvas");
-      this._container.appendChild(this._canvas);
       this._initialResize = true;
     } else {
       this._canvas = _selector;
       this._container = _selector.parentElement;
       this._autoResize = false;
+      _existed = true;
     }
-    setTimeout(this._ready.bind(this, callback), 100);
+    if (!_existed) {
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.type === "childList" && mutation.addedNodes.length) {
+            for (let node of mutation.addedNodes) {
+              if (node === this._canvas) {
+                this._ready(callback);
+                observer.disconnect();
+                return;
+              }
+            }
+          }
+        });
+      });
+      observer.observe(this._container, { childList: true });
+      this._container.appendChild(this._canvas);
+    } else {
+      this._ready(callback);
+    }
     this._ctx = this._canvas.getContext("2d");
   }
   /**

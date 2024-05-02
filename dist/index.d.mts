@@ -1033,6 +1033,7 @@ declare class Util {
     static arrayCheck(pts: PtLikeIterable, minRequired?: number): boolean;
     static iterToArray(it: Iterable<any>): any[];
     static isMobile(): boolean;
+    static uniqueId(useCrypto?: boolean): string;
 }
 
 /*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
