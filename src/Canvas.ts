@@ -78,6 +78,10 @@ export class CanvasSpace extends MultiTouchSpace {
       _existed = true;
     }
 
+    
+    // store canvas 2d rendering context
+    this._ctx = this._canvas.getContext( '2d' );
+
     // if we created the canvas, add it to the container and observe mutation for readiness
     if ( !_existed ) {
       const observer = new MutationObserver( ( mutations ) => {
@@ -100,10 +104,6 @@ export class CanvasSpace extends MultiTouchSpace {
     } else {
       this._ready( callback );
     }
-    
-    // store canvas 2d rendering context
-    this._ctx = this._canvas.getContext( '2d' );
-    
   }
   
   
