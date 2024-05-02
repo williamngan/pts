@@ -45,33 +45,29 @@ export class CanvasSpace extends MultiTouchSpace {
     
     let _selector:Element = null;
     let _existed = false;
-    this.id = "pt";
+    this.id = Util.uniqueId();
     
-    // check element or element id string
+    // get selector element depending on whether `elem` is an element id string or an element object
     if ( elem instanceof Element ) {
       _selector = elem;
-      this.id = "pts_existing_space";
+      this.id = _selector.id || this.id;
     } else {
       let id = <string>elem;
       id = ( elem[0] === "#" || elem[0] === "." ) ? elem : "#" + elem;
       _selector = document.querySelector( id );
-      _existed = true;
       this.id = id.substr( 1 );
     }
     
-    // if selector is not defined, create a canvas
+    // if selector is not defined, create a default canvas
     if ( !_selector ) {      
       this._container = this._createElement( "div", this.id + "_container" );
       this._canvas = this._createElement( "canvas", this.id ) as HTMLCanvasElement;
-      this._container.appendChild( this._canvas );
       document.body.appendChild( this._container );
-      _existed = false;
       
       // if selector is element but not canvas, create a canvas inside it
     } else if ( _selector.nodeName.toLowerCase() != "canvas" ) {      
       this._container = _selector;
       this._canvas = this._createElement( "canvas", this.id + "_canvas" ) as HTMLCanvasElement;
-      this._container.appendChild( this._canvas );
       this._initialResize = true;
       
       // if selector is an existing canvas
@@ -79,16 +75,31 @@ export class CanvasSpace extends MultiTouchSpace {
       this._canvas = _selector as HTMLCanvasElement;
       this._container = _selector.parentElement;
       this._autoResize = false;
+      _existed = true;
     }
-    
-    // if size is known then set it immediately
-    // if (_existed) {
-    // let b = this._container.getBoundingClientRect();
-    // this.resize( Bound.fromBoundingRect(b) );
-    // }
-    
-    // no mutation observer, so we set a timeout for ready event
-    setTimeout( this._ready.bind( this, callback ), 100 );
+
+    // if we created the canvas, add it to the container and observe mutation for readiness
+    if ( !_existed ) {
+      const observer = new MutationObserver( ( mutations ) => {
+        mutations.forEach( ( mutation ) => {
+          if ( mutation.type === 'childList' && mutation.addedNodes.length ) {
+            for ( let node of mutation.addedNodes ) {
+              if ( node === this._canvas ) {
+                this._ready( callback );
+                observer.disconnect();
+                return;
+              }
+            }
+          }
+        } );
+      } );
+
+      observer.observe( this._container, { childList: true } );
+      this._container.appendChild( this._canvas );
+
+    } else {
+      this._ready( callback );
+    }
     
     // store canvas 2d rendering context
     this._ctx = this._canvas.getContext( '2d' );

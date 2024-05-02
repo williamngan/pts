@@ -389,6 +389,15 @@ export class Util {
     return /iPhone|iPad|Android/i.test( navigator.userAgent );
   }
 
+
+  /**
+   * Generate a time-based unique ID or a crypto-based ID.
+   * @returns 
+   */
+  static uniqueId( useCrypto = false ) {
+    return useCrypto && crypto ? crypto.randomUUID() : Date.now().toString( 36 ) + Math.random().toString( 36 ).substring( 2 );
+  }
+
 }
 
 
