@@ -102,7 +102,8 @@ export class CanvasSpace extends MultiTouchSpace {
       this._container.appendChild( this._canvas );
 
     } else {
-      this._ready( callback );
+      // Wait one turn for .setup() to be called before firing ready event
+      setTimeout( this._ready.bind( this, callback ), 100 );
     }
   }
   
