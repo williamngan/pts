@@ -22,7 +22,6 @@ export class CanvasSpace extends MultiTouchSpace {
   protected _container:Element;
 
   protected _pixelScale = 1;
-  protected _autoResize = true;
   protected _bgcolor = "#e1e9f0";
   protected _ctx:PtsCanvasRenderingContext2D;
   
@@ -30,6 +29,8 @@ export class CanvasSpace extends MultiTouchSpace {
   protected _offCanvas:HTMLCanvasElement;
   protected _offCtx:PtsCanvasRenderingContext2D;
 
+  protected _resizeObserver:ResizeObserver;
+  protected _autoResize = true;
   protected _initialResize = false;
   
 
@@ -184,12 +185,16 @@ export class CanvasSpace extends MultiTouchSpace {
   * @param auto a boolean value indicating if auto size is set
   */
   set autoResize( auto ) {
-    if ( !window ) return;
+    
     this._autoResize = auto;
+
     if ( auto ) {
-      window.addEventListener( 'resize', this._resizeHandler.bind( this ) );
+      this._resizeObserver = new ResizeObserver( entries => {
+        this._resizeHandler( null );
+      } );
+      this._resizeObserver.observe( this._container );
     } else {
-      window.removeEventListener( 'resize', this._resizeHandler.bind( this ) );
+      if ( this._resizeObserver ) this._resizeObserver.disconnect();
     }
   }
   get autoResize(): boolean { return this._autoResize; }
@@ -246,14 +251,14 @@ export class CanvasSpace extends MultiTouchSpace {
   * @param evt 
   */
   protected _resizeHandler( evt:Event ) {
-    if ( !window ) return;
+    
     const b = ( this._autoResize || this._initialResize ) ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
 
     if ( b ) {
       const box = Bound.fromBoundingRect( b );
       
       // Need to compute offset from window scroll. See outerBound calculation in Space's _mouseAction 
-      box.center = box.center.add( window.pageXOffset, window.pageYOffset ); 
+      box.center = box.center.add( window?.scrollX || 0, window?.scrollY || 0 ); 
       this.resize( box, evt );
     }
   }
@@ -400,9 +405,10 @@ export class CanvasSpace extends MultiTouchSpace {
   * Dispose of browser resources held by this space and remove all players. Call this before unmounting the canvas.
   */
   dispose():this {
-    if ( !window ) return;
+   
     // remove event listeners
-    window.removeEventListener( 'resize', this._resizeHandler.bind( this ) );
+    this._resizeObserver.disconnect();
+
     // stop animation loop
     this.stop();
     // remove players from space
