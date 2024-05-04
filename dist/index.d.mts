@@ -584,12 +584,13 @@ declare class CanvasSpace extends MultiTouchSpace {
     protected _canvas: HTMLCanvasElement;
     protected _container: Element;
     protected _pixelScale: number;
-    protected _autoResize: boolean;
     protected _bgcolor: string;
     protected _ctx: PtsCanvasRenderingContext2D;
     protected _offscreen: boolean;
     protected _offCanvas: HTMLCanvasElement;
     protected _offCtx: PtsCanvasRenderingContext2D;
+    protected _resizeObserver: ResizeObserver;
+    protected _autoResize: boolean;
     protected _initialResize: boolean;
     constructor(elem: string | Element, callback?: Function);
     protected _createElement(elem: string, id: any): HTMLElement;

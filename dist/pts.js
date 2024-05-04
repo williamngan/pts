@@ -5895,9 +5895,9 @@ See https://github.com/williamngan/pts for details. */
     constructor(elem, callback) {
       super();
       this._pixelScale = 1;
-      this._autoResize = true;
       this._bgcolor = "#e1e9f0";
       this._offscreen = false;
+      this._autoResize = true;
       this._initialResize = false;
       let _selector = null;
       let _existed = false;
@@ -6008,13 +6008,15 @@ See https://github.com/williamngan/pts for details. */
     * @param auto a boolean value indicating if auto size is set
     */
     set autoResize(auto) {
-      if (!window)
-        return;
       this._autoResize = auto;
       if (auto) {
-        window.addEventListener("resize", this._resizeHandler.bind(this));
+        this._resizeObserver = new ResizeObserver((entries) => {
+          this._resizeHandler(null);
+        });
+        this._resizeObserver.observe(this._container);
       } else {
-        window.removeEventListener("resize", this._resizeHandler.bind(this));
+        if (this._resizeObserver)
+          this._resizeObserver.disconnect();
       }
     }
     get autoResize() {
@@ -6059,12 +6061,10 @@ See https://github.com/williamngan/pts for details. */
     * @param evt 
     */
     _resizeHandler(evt) {
-      if (!window)
-        return;
       const b = this._autoResize || this._initialResize ? this._container.getBoundingClientRect() : this._canvas.getBoundingClientRect();
       if (b) {
         const box = Bound.fromBoundingRect(b);
-        box.center = box.center.add(window.pageXOffset, window.pageYOffset);
+        box.center = box.center.add((window == null ? void 0 : window.scrollX) || 0, (window == null ? void 0 : window.scrollY) || 0);
         this.resize(box, evt);
       }
     }
@@ -6191,9 +6191,7 @@ See https://github.com/williamngan/pts for details. */
     * Dispose of browser resources held by this space and remove all players. Call this before unmounting the canvas.
     */
     dispose() {
-      if (!window)
-        return;
-      window.removeEventListener("resize", this._resizeHandler.bind(this));
+      this._resizeObserver.disconnect();
       this.stop();
       this.removeAll();
       return this;
