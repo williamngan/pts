@@ -943,7 +943,7 @@ export class Group extends Array<Pt> {
   /**
    * Get a Bound instance of this group
    */
-  toBound():Group {
+  toBound():Bound {
     return Bound.fromGroup( this );
   }
 
@@ -968,8 +968,6 @@ export class Bound extends Group implements IPt {
 
   protected _center:Pt = new Pt();
   protected _size:Pt = new Pt();
-  protected _topLeft:Pt = new Pt();
-  protected _bottomRight:Pt = new Pt();
   protected _inited = false;
 
   
@@ -1016,10 +1014,6 @@ export class Bound extends Group implements IPt {
       this._inited = true;
     } 
     if ( this.p1 && this.p2 ) {
-      const a = this.p1;
-      const b = this.p2;
-      this.topLeft = a.$min( b );
-      this._bottomRight = a.$max( b );
       this._updateSize();
       this._inited = true;
     }
@@ -1030,7 +1024,7 @@ export class Bound extends Group implements IPt {
    * Clone this bound and return a new one.
    */
   clone():Bound {
-    return new Bound( this._topLeft.clone(), this._bottomRight.clone() );
+    return new Bound( this.topLeft.clone(), this.bottomRight.clone() );
   }
 
   
@@ -1038,7 +1032,7 @@ export class Bound extends Group implements IPt {
    * Recalculte size and center.
    */
   protected _updateSize() {
-    this._size = this._bottomRight.$subtract( this._topLeft ).abs();
+    this._size = this.bottomRight.$subtract( this.topLeft ).abs();
     this._updateCenter();
   }
 
@@ -1047,7 +1041,7 @@ export class Bound extends Group implements IPt {
    * Recalculate center.
    */
   protected _updateCenter() {
-    this._center = this._size.$multiply( 0.5 ).add( this._topLeft );
+    this._center = this._size.$multiply( 0.5 ).add( this.topLeft );
   }
 
 
@@ -1055,7 +1049,7 @@ export class Bound extends Group implements IPt {
    * Recalculate based on top-left position and size.
    */
   protected _updatePosFromTop() {
-    this._bottomRight = this._topLeft.$add( this._size );
+    this.bottomRight = this.topLeft.$add( this._size );
     this._updateCenter();
   }
 
@@ -1064,7 +1058,7 @@ export class Bound extends Group implements IPt {
    * Recalculate based on bottom-right position and size.
    */
   protected _updatePosFromBottom() {
-    this._topLeft = this._bottomRight.$subtract( this._size );
+    this.topLeft = this.bottomRight.$subtract( this._size );
     this._updateCenter();
   }
 
@@ -1074,8 +1068,8 @@ export class Bound extends Group implements IPt {
    */
   protected _updatePosFromCenter() {
     const half = this._size.$multiply( 0.5 );
-    this._topLeft = this._center.$subtract( half );
-    this._bottomRight = this._center.$add( half );
+    this.topLeft = this._center.$subtract( half );
+    this.bottomRight = this._center.$add( half );
   }
 
 
@@ -1102,10 +1096,9 @@ export class Bound extends Group implements IPt {
   /**
    * Top-left position of this Bound
    */
-  get topLeft():Pt { return new Pt( this._topLeft ); }
+  get topLeft():Pt { return new Pt( this[0] ); }
   set topLeft( p:Pt ) {
-    this._topLeft = new Pt( p );
-    this[0] = this._topLeft;
+    this[0] = new Pt( p );
     this._updateSize();
   }
 
@@ -1113,10 +1106,9 @@ export class Bound extends Group implements IPt {
   /**
    * Bottom-right position of this Bound
    */
-  get bottomRight():Pt { return new Pt( this._bottomRight ); }
+  get bottomRight():Pt { return new Pt( this[1] ); }
   set bottomRight( p:Pt ) {
-    this._bottomRight = new Pt( p );
-    this[1] = this._bottomRight;
+    this[1] = new Pt( p );
     this._updateSize();
   }
 
@@ -1181,8 +1173,8 @@ export class Bound extends Group implements IPt {
    * It's simpler and preferable to change the Bound's properties (eg, topLeft, bottomRight) instead of updating the Bound's Pts.
    */
   update() {
-    this._topLeft = this[0];
-    this._bottomRight = this[1];
+    this.topLeft = this[0];
+    this.bottomRight = this[1];
     this._updateSize();
     return this;
   }

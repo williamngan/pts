@@ -318,14 +318,12 @@ declare class Group extends Array<Pt> {
     $matrixMultiply(g: GroupLike | number, transposed?: boolean, elementwise?: boolean): Group;
     zipSlice(index: number, defaultValue?: number | boolean): Pt;
     $zip(defaultValue?: number | boolean, useLongest?: boolean): Group;
-    toBound(): Group;
+    toBound(): Bound;
     toString(): string;
 }
 declare class Bound extends Group implements IPt {
     protected _center: Pt;
     protected _size: Pt;
-    protected _topLeft: Pt;
-    protected _bottomRight: Pt;
     protected _inited: boolean;
     constructor(...args: Pt[]);
     static fromBoundingRect(rect: ClientRect): Bound;
