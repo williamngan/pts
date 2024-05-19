@@ -34,7 +34,7 @@
     "source-map": "^0.7.2",
     "ts-node": "^10.9.2",
     "tsup": "^8.0.2",
-    "typedoc": "^0.17.8",
+    "typedoc": "^0.25.13",
     "typescript": "^5.3.3"
   },
   "optionalDependencies": {
