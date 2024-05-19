@@ -30,7 +30,7 @@
     "@typescript-eslint/parser": "^7.1.0",
     "chai": "^4.3.0",
     "eslint": "^8.57.0",
-    "mocha": "^8.4.0",
+    "mocha": "^10.4.0",
     "source-map": "^0.7.2",
     "ts-node": "^10.9.2",
     "tsup": "^8.0.2",
