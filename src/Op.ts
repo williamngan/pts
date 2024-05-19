@@ -440,11 +440,11 @@ export class Rectangle {
   /**
    * Create a new circle that either fits within or encloses the rectangle. Same as [`Circle.fromRect`](#link).
    * @param pts a Group or an Iterable<Pt> with 2 Pt representing a rectangle
-   * @param within if `true`, the circle will be within the rectangle. If `false`, the circle will enclose the rectangle. 
+   * @param enclose if `true`, the circle will enclose the rectangle. If `false`, the circle will fit inside the rectangle. 
    * @returns a Group that represents a circle
    */
-  static toCircle( pts:PtIterable, within:boolean = true ):Group {
-    return Circle.fromRect( pts, within );
+  static toCircle( pts:PtIterable, enclose:boolean = true ):Group {
+    return Circle.fromRect( pts, enclose );
   }
 
   
