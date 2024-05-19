@@ -902,11 +902,11 @@ See https://github.com/williamngan/pts for details. */
     /**
      * Create a new circle that either fits within or encloses the rectangle. Same as [`Circle.fromRect`](#link).
      * @param pts a Group or an Iterable<Pt> with 2 Pt representing a rectangle
-     * @param within if `true`, the circle will be within the rectangle. If `false`, the circle will enclose the rectangle. 
+     * @param enclose if `true`, the circle will enclose the rectangle. If `false`, the circle will fit inside the rectangle. 
      * @returns a Group that represents a circle
      */
-    static toCircle(pts, within = true) {
-      return Circle.fromRect(pts, within);
+    static toCircle(pts, enclose = true) {
+      return Circle.fromRect(pts, enclose);
     }
     /**
      * Create a square that either fits within or encloses a rectangle.
@@ -5980,8 +5980,7 @@ See https://github.com/williamngan/pts for details. */
       this.autoResize = opt.resize != void 0 ? opt.resize : false;
       if (opt.retina !== false) {
         const r1 = window ? window.devicePixelRatio || 1 : 1;
-        const r2 = this._ctx.webkitBackingStorePixelRatio || this._ctx.mozBackingStorePixelRatio || this._ctx.msBackingStorePixelRatio || this._ctx.oBackingStorePixelRatio || this._ctx.backingStorePixelRatio || 1;
-        this._pixelScale = Math.max(1, r1 / r2);
+        this._pixelScale = Math.max(1, r1);
       }
       if (opt.offscreen) {
         this._offscreen = true;

@@ -128,13 +128,6 @@ interface MultiTouchElement {
     addEventListener(evt: any, callback: Function): any;
     removeEventListener(evt: any, callback: Function): any;
 }
-interface PtsCanvasRenderingContext2D extends CanvasRenderingContext2D {
-    webkitBackingStorePixelRatio?: number;
-    mozBackingStorePixelRatio?: number;
-    msBackingStorePixelRatio?: number;
-    oBackingStorePixelRatio?: number;
-    backingStorePixelRatio?: number;
-}
 type CanvasSpaceOptions = {
     bgcolor?: string;
     resize?: boolean;
@@ -202,6 +195,7 @@ type DefaultFormStyle = {
     globalAlpha?: number;
 };
 type CanvasPatternRepetition = "repeat" | "repeat-x" | "repeat-y" | "no-repeat";
+type RenderingContext2D = CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
 
 /*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
@@ -537,7 +531,7 @@ declare class Img {
     protected _img: HTMLImageElement;
     protected _data: ImageData;
     protected _cv: HTMLCanvasElement;
-    protected _ctx: CanvasRenderingContext2D;
+    protected _ctx: RenderingContext2D;
     protected _scale: number;
     protected _loaded: boolean;
     protected _editable: boolean;
@@ -568,7 +562,7 @@ declare class Img {
     get image(): HTMLImageElement;
     get canvas(): HTMLCanvasElement;
     get data(): ImageData;
-    get ctx(): CanvasRenderingContext2D;
+    get ctx(): RenderingContext2D;
     get loaded(): boolean;
     get pixelScale(): number;
     get imageSize(): Pt;
@@ -583,10 +577,10 @@ declare class CanvasSpace extends MultiTouchSpace {
     protected _container: Element;
     protected _pixelScale: number;
     protected _bgcolor: string;
-    protected _ctx: PtsCanvasRenderingContext2D;
+    protected _ctx: CanvasRenderingContext2D;
     protected _offscreen: boolean;
     protected _offCanvas: HTMLCanvasElement;
-    protected _offCtx: PtsCanvasRenderingContext2D;
+    protected _offCtx: RenderingContext2D;
     protected _resizeObserver: ResizeObserver;
     protected _autoResize: boolean;
     protected _initialResize: boolean;
@@ -602,13 +596,13 @@ declare class CanvasSpace extends MultiTouchSpace {
     get background(): string;
     get pixelScale(): number;
     get hasOffscreen(): boolean;
-    get offscreenCtx(): PtsCanvasRenderingContext2D;
+    get offscreenCtx(): RenderingContext2D;
     get offscreenCanvas(): HTMLCanvasElement;
     getForm(): CanvasForm;
     get element(): HTMLCanvasElement;
     get parent(): Element;
     get ready(): boolean;
-    get ctx(): PtsCanvasRenderingContext2D;
+    get ctx(): CanvasRenderingContext2D;
     clear(bg?: string): this;
     clearOffscreen(bg?: string): this;
     protected playItems(time: number): void;
@@ -617,12 +611,12 @@ declare class CanvasSpace extends MultiTouchSpace {
 }
 declare class CanvasForm extends VisualForm {
     protected _space: CanvasSpace;
-    protected _ctx: CanvasRenderingContext2D;
+    protected _ctx: RenderingContext2D;
     protected _estimateTextWidth: (string: any) => number;
     protected _style: DefaultFormStyle;
-    constructor(space?: CanvasSpace | CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D);
+    constructor(space?: CanvasSpace | RenderingContext2D);
     get space(): CanvasSpace;
-    get ctx(): PtsCanvasRenderingContext2D;
+    get ctx(): RenderingContext2D;
     useOffscreen(off?: boolean, clear?: boolean | string): this;
     renderOffscreen(offset?: PtLike): void;
     alpha(a: number): this;
@@ -642,27 +636,27 @@ declare class CanvasForm extends VisualForm {
     protected _textAlign(box: PtLikeIterable, vertical: string, offset?: PtLike, center?: Pt): Pt;
     reset(): this;
     protected _paint(): void;
-    static point(ctx: CanvasRenderingContext2D, p: PtLike, radius?: number, shape?: string): void;
+    static point(ctx: RenderingContext2D, p: PtLike, radius?: number, shape?: string): void;
     point(p: PtLike, radius?: number, shape?: string): this;
-    static circle(ctx: CanvasRenderingContext2D, pt: PtLike, radius?: number): void;
+    static circle(ctx: RenderingContext2D, pt: PtLike, radius?: number): void;
     circle(pts: PtLikeIterable): this;
-    static ellipse(ctx: CanvasRenderingContext2D, pt: PtLike, radius: PtLike, rotation?: number, startAngle?: number, endAngle?: number, cc?: boolean): void;
+    static ellipse(ctx: RenderingContext2D, pt: PtLike, radius: PtLike, rotation?: number, startAngle?: number, endAngle?: number, cc?: boolean): void;
     ellipse(pt: PtLike, radius: PtLike, rotation?: number, startAngle?: number, endAngle?: number, cc?: boolean): this;
-    static arc(ctx: CanvasRenderingContext2D, pt: PtLike, radius: number, startAngle: number, endAngle: number, cc?: boolean): void;
+    static arc(ctx: RenderingContext2D, pt: PtLike, radius: number, startAngle: number, endAngle: number, cc?: boolean): void;
     arc(pt: PtLike, radius: number, startAngle: number, endAngle: number, cc?: boolean): this;
-    static square(ctx: CanvasRenderingContext2D, pt: PtLike, halfsize: number): void;
+    static square(ctx: RenderingContext2D, pt: PtLike, halfsize: number): void;
     square(pt: PtLike, halfsize: number): this;
-    static line(ctx: CanvasRenderingContext2D, pts: PtLikeIterable): void;
+    static line(ctx: RenderingContext2D, pts: PtLikeIterable): void;
     line(pts: PtLikeIterable): this;
-    static polygon(ctx: CanvasRenderingContext2D, pts: PtLikeIterable): void;
+    static polygon(ctx: RenderingContext2D, pts: PtLikeIterable): void;
     polygon(pts: PtLikeIterable): this;
-    static rect(ctx: CanvasRenderingContext2D, pts: PtLikeIterable): void;
+    static rect(ctx: RenderingContext2D, pts: PtLikeIterable): void;
     rect(pts: PtLikeIterable): this;
-    static image(ctx: CanvasRenderingContext2D, ptOrRect: PtLike | PtLikeIterable, img: CanvasImageSource | Img, orig?: PtLikeIterable): void;
+    static image(ctx: RenderingContext2D, ptOrRect: PtLike | PtLikeIterable, img: CanvasImageSource | Img, orig?: PtLikeIterable): void;
     image(ptOrRect: PtLike | PtLikeIterable, img: CanvasImageSource | Img, orig?: PtLikeIterable): this;
-    static imageData(ctx: CanvasRenderingContext2D, ptOrRect: PtLike | PtLikeIterable, img: ImageData): void;
+    static imageData(ctx: RenderingContext2D, ptOrRect: PtLike | PtLikeIterable, img: ImageData): void;
     imageData(ptOrRect: PtLike | PtLikeIterable, img: ImageData): this;
-    static text(ctx: CanvasRenderingContext2D, pt: PtLike, txt: string, maxWidth?: number): void;
+    static text(ctx: RenderingContext2D, pt: PtLike, txt: string, maxWidth?: number): void;
     text(pt: PtLike, txt: string, maxWidth?: number): this;
     textBox(box: PtIterable, txt: string, verticalAlign?: string, tail?: string, overrideBaseline?: boolean): this;
     paragraphBox(box: PtLikeIterable, txt: string, lineHeight?: number, verticalAlign?: string, crop?: boolean): this;
@@ -830,7 +824,7 @@ declare class Rectangle {
     static from(topLeft: PtLike, widthOrSize: number | PtLike, height?: number): Group;
     static fromTopLeft(topLeft: PtLike, widthOrSize: number | PtLike, height?: number): Group;
     static fromCenter(center: PtLike, widthOrSize: number | PtLike, height?: number): Group;
-    static toCircle(pts: PtIterable, within?: boolean): Group;
+    static toCircle(pts: PtIterable, enclose?: boolean): Group;
     static toSquare(pts: PtIterable, enclose?: boolean): Group;
     static size(pts: PtIterable): Pt;
     static center(pts: PtIterable): Pt;
@@ -1375,4 +1369,4 @@ declare class Sound {
     toggle(): this;
 }
 
-export { type AnimateCallbackFn, Body, Bound, CanvasForm, type CanvasPatternRepetition, CanvasSpace, type CanvasSpaceOptions, Circle, Color, type ColorType, Const, Create, Curve, type DOMFormContext, DOMSpace, type DefaultFormStyle, Delaunay, type DelaunayMesh, type DelaunayShape, Font, Form, Geom, Group, type GroupLike, HTMLForm, HTMLSpace, type IPlayer, type IPt, type ISoundAnalyzer, type ISpacePlayers, type ITempoListener, type ITempoProgressFn, type ITempoResponses, type ITempoStartFn, type ITimer, Img, type IntersectContext, Line, Mat, type MultiTouchElement, MultiTouchSpace, Noise, Num, Particle, Polygon, Pt, type PtIterable, type PtLike, type PtLikeIterable, type PtsCanvasRenderingContext2D, Range, Rectangle, SVGForm, SVGSpace, Shaping, Sound, type SoundType, Space, Tempo, type TouchPointsKey, Triangle, Typography, UI, UIButton, UIDragger, type UIHandler, UIPointerActions, UIShape, Util, Vec, VisualForm, type WarningType, World };
+export { type AnimateCallbackFn, Body, Bound, CanvasForm, type CanvasPatternRepetition, CanvasSpace, type CanvasSpaceOptions, Circle, Color, type ColorType, Const, Create, Curve, type DOMFormContext, DOMSpace, type DefaultFormStyle, Delaunay, type DelaunayMesh, type DelaunayShape, Font, Form, Geom, Group, type GroupLike, HTMLForm, HTMLSpace, type IPlayer, type IPt, type ISoundAnalyzer, type ISpacePlayers, type ITempoListener, type ITempoProgressFn, type ITempoResponses, type ITempoStartFn, type ITimer, Img, type IntersectContext, Line, Mat, type MultiTouchElement, MultiTouchSpace, Noise, Num, Particle, Polygon, Pt, type PtIterable, type PtLike, type PtLikeIterable, Range, Rectangle, type RenderingContext2D, SVGForm, SVGSpace, Shaping, Sound, type SoundType, Space, Tempo, type TouchPointsKey, Triangle, Typography, UI, UIButton, UIDragger, type UIHandler, UIPointerActions, UIShape, Util, Vec, VisualForm, type WarningType, World };
