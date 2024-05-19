@@ -2,6 +2,7 @@ import { CanvasForm, CanvasSpace } from "./Canvas";
 import { Bound, Pt } from "./Pt";
 import { Mat } from "./LinearAlgebra";
 import { PtLike, CanvasPatternRepetition } from "./Types";
+import { RenderingContext2D } from "./Types";
 
 /**
  * Img provides convenient functions to support image operations on HTML Canvas and [`CanvasSpace`](#link). Combine this with other Pts functions to experiment with visual forms that integrate bitmaps and vector graphics.
@@ -11,7 +12,7 @@ export class Img {
   protected _img:HTMLImageElement;
   protected _data:ImageData;
   protected _cv:HTMLCanvasElement;
-  protected _ctx:CanvasRenderingContext2D;
+  protected _ctx:RenderingContext2D;
   protected _scale:number = 1;
 
   protected _loaded:boolean = false;
@@ -373,7 +374,7 @@ export class Img {
   /**
    * Get the internal canvas' context. You can use this to draw directly on canvas, or create a new [CanvasForm](#link) instance with it.
    */
-  get ctx():CanvasRenderingContext2D {
+  get ctx():RenderingContext2D {
     return this._ctx;
   }
 

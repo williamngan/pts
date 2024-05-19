@@ -93,18 +93,6 @@ export interface MultiTouchElement {
 
 
 /**
- * Typescript interface: this extends Canvas's 2D context with backingStorePixelRatio property.
- */
-export interface PtsCanvasRenderingContext2D extends CanvasRenderingContext2D {
-  webkitBackingStorePixelRatio?:number;
-  mozBackingStorePixelRatio?:number;
-  msBackingStorePixelRatio?:number;
-  oBackingStorePixelRatio?:number;
-  backingStorePixelRatio?:number;
-}
-
-
-/**
  * Typescript type: Setup options for CanvasSpace. See [`CanvasSpace.setup()`](#link) function.
  */
 export type CanvasSpaceOptions = {
@@ -231,3 +219,5 @@ export type DefaultFormStyle = {
  * Typescript type: CanvasPatternRepetition represents the string options to specify pattern repetition
  */
 export type CanvasPatternRepetition = "repeat" | "repeat-x" | "repeat-y" | "no-repeat";
+
+export type RenderingContext2D = CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;

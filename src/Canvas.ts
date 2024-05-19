@@ -7,7 +7,7 @@ import {Const, Util} from "./Util";
 import {Typography as Typo} from "./Typography";
 import { Rectangle } from './Op';
 import {Img} from './Image';
-import {PtLike, GroupLike, PtsCanvasRenderingContext2D, DefaultFormStyle, PtLikeIterable, PtIterable, CanvasSpaceOptions} from "./Types";
+import {PtLike, GroupLike, RenderingContext2D, DefaultFormStyle, PtLikeIterable, PtIterable, CanvasSpaceOptions} from "./Types";
 
 
 
@@ -23,11 +23,11 @@ export class CanvasSpace extends MultiTouchSpace {
 
   protected _pixelScale = 1;
   protected _bgcolor = "#e1e9f0";
-  protected _ctx:PtsCanvasRenderingContext2D;
+  protected _ctx:CanvasRenderingContext2D;
   
   protected _offscreen = false;
   protected _offCanvas:HTMLCanvasElement;
-  protected _offCtx:PtsCanvasRenderingContext2D;
+  protected _offCtx:RenderingContext2D;
 
   protected _resizeObserver:ResizeObserver;
   protected _autoResize = true;
@@ -160,8 +160,7 @@ export class CanvasSpace extends MultiTouchSpace {
     
     if ( opt.retina !== false ) {
       const r1 = window ? window.devicePixelRatio || 1 : 1;
-      const r2 = this._ctx.webkitBackingStorePixelRatio || this._ctx.mozBackingStorePixelRatio || this._ctx.msBackingStorePixelRatio || this._ctx.oBackingStorePixelRatio || this._ctx.backingStorePixelRatio || 1;      
-      this._pixelScale = Math.max( 1, r1 / r2 );
+      this._pixelScale = Math.max( 1, r1 );
     }
     
     if ( opt.offscreen ) {
@@ -291,7 +290,7 @@ export class CanvasSpace extends MultiTouchSpace {
   /**
   * Get the rendering context of offscreen canvas (if created via `setup()`)
   */
-  public get offscreenCtx():PtsCanvasRenderingContext2D { return this._offCtx; }
+  public get offscreenCtx():RenderingContext2D { return this._offCtx; }
   
   
   /**
@@ -337,7 +336,7 @@ export class CanvasSpace extends MultiTouchSpace {
   * Get the rendering context of canvas
   * @example `form.ctx.clip()`
   */
-  public get ctx():PtsCanvasRenderingContext2D { return this._ctx; }
+  public get ctx():CanvasRenderingContext2D { return this._ctx; }
   
   
   
@@ -460,7 +459,7 @@ export class CanvasSpace extends MultiTouchSpace {
 export class CanvasForm extends VisualForm {
   
   protected _space:CanvasSpace;
-  protected _ctx:CanvasRenderingContext2D;  
+  protected _ctx:RenderingContext2D;  
   protected _estimateTextWidth:( string ) => number;
 
   /** 
@@ -477,7 +476,7 @@ export class CanvasForm extends VisualForm {
   * Create a new CanvasForm. You may also use [`CanvasSpace.getForm()`](#link) to get the default form.
   * @param space an instance of CanvasSpace
   */
-  constructor( space?:CanvasSpace | CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D ) {
+  constructor( space?:CanvasSpace | RenderingContext2D ) {
     super();
 
     // allow for undefined context to support custom contexts via subclassing. 
@@ -517,7 +516,7 @@ export class CanvasForm extends VisualForm {
   * Get the rendering context of canvas to perform other canvas functions.
   * @example `form.ctx.clip()`
   */
-  get ctx():PtsCanvasRenderingContext2D { return this._ctx; }
+  get ctx():RenderingContext2D { return this._ctx; }
 
 
   /**
@@ -842,7 +841,7 @@ export class CanvasForm extends VisualForm {
     * @param shape The shape of the point. Defaults to "square", but it can be "circle" or a custom shape function in your own implementation.
     * @example `form.point( p )`, `form.point( p, 10, "circle" )`
     */
-  static point( ctx:CanvasRenderingContext2D, p:PtLike, radius:number = 5, shape:string = "square" ) {
+  static point( ctx:RenderingContext2D, p:PtLike, radius:number = 5, shape:string = "square" ) {
     if ( !p ) return;
     if ( !CanvasForm[shape] ) throw new Error( `${shape} is not a static function of CanvasForm` );
     CanvasForm[shape]( ctx, p, radius );
@@ -869,7 +868,7 @@ export class CanvasForm extends VisualForm {
     * @param pt center position of the circle
     * @param radius radius of the circle
     */
-  static circle( ctx:CanvasRenderingContext2D, pt:PtLike, radius:number = 10 ) {
+  static circle( ctx:RenderingContext2D, pt:PtLike, radius:number = 10 ) {
     if ( !pt ) return;
     ctx.beginPath();
     ctx.arc( pt[0], pt[1], radius, 0, Const.two_pi, false );
@@ -899,7 +898,7 @@ export class CanvasForm extends VisualForm {
     * @param endAngle end angle of the ellipse. Default is 2 PI.
     * @param cc an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.
     */
-  static ellipse( ctx:CanvasRenderingContext2D, pt:PtLike, radius:PtLike, rotation:number = 0, startAngle:number = 0, endAngle:number = Const.two_pi, cc:boolean = false ) {
+  static ellipse( ctx:RenderingContext2D, pt:PtLike, radius:PtLike, rotation:number = 0, startAngle:number = 0, endAngle:number = Const.two_pi, cc:boolean = false ) {
     if ( !pt || !radius ) return;
     ctx.beginPath();
     ctx.ellipse( pt[0], pt[1], radius[0], radius[1], rotation, startAngle, endAngle, cc );
@@ -931,7 +930,7 @@ export class CanvasForm extends VisualForm {
     * @param endAngle end angle of the arc
     * @param cc an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.
     */
-  static arc( ctx:CanvasRenderingContext2D, pt:PtLike, radius:number, startAngle:number, endAngle:number, cc?:boolean ) {
+  static arc( ctx:RenderingContext2D, pt:PtLike, radius:number, startAngle:number, endAngle:number, cc?:boolean ) {
     if ( !pt ) return;
     ctx.beginPath();
     ctx.arc( pt[0], pt[1], radius, startAngle, endAngle, cc );
@@ -959,7 +958,7 @@ export class CanvasForm extends VisualForm {
     * @param pt center position of the square
     * @param halfsize half size of the square
     */
-  static square( ctx:CanvasRenderingContext2D, pt:PtLike, halfsize:number ) {
+  static square( ctx:RenderingContext2D, pt:PtLike, halfsize:number ) {
     if ( !pt ) return;
     const x1 = pt[0] - halfsize;
     const y1 = pt[1] - halfsize;
@@ -993,7 +992,7 @@ export class CanvasForm extends VisualForm {
     * @param ctx canvas rendering context
     * @param pts a Group or an Iterable<PtLike> representing a line
     */
-  static line( ctx:CanvasRenderingContext2D, pts:PtLikeIterable ) {
+  static line( ctx:RenderingContext2D, pts:PtLikeIterable ) {
     if ( !Util.arrayCheck( pts ) ) return;
     let i = 0;
     ctx.beginPath();
@@ -1025,7 +1024,7 @@ export class CanvasForm extends VisualForm {
     * @param ctx canvas rendering context
     * @param pts a Group or an Iterable<PtLike> representing a polygon
     */
-  static polygon( ctx:CanvasRenderingContext2D, pts:PtLikeIterable ) {
+  static polygon( ctx:RenderingContext2D, pts:PtLikeIterable ) {
     if ( !Util.arrayCheck( pts ) ) return;
     CanvasForm.line( ctx, pts );
     ctx.closePath();
@@ -1048,7 +1047,7 @@ export class CanvasForm extends VisualForm {
     * @param ctx canvas rendering context
     * @param pts a Group or an Iterable<PtLike> with 2 Pt specifying the top-left and bottom-right positions.
     */
-  static rect( ctx:CanvasRenderingContext2D, pts:PtLikeIterable ) {
+  static rect( ctx:RenderingContext2D, pts:PtLikeIterable ) {
     const p = Util.iterToArray( pts );
     if ( !Util.arrayCheck( p ) ) return;
     ctx.beginPath();
@@ -1079,7 +1078,7 @@ export class CanvasForm extends VisualForm {
      * @param ptOrRect a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a bounding box for resizing. Default is (0,0) at top-left.
      * @param orig optionally a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a cropping box in the original target. 
      */
-  static image( ctx:CanvasRenderingContext2D, ptOrRect:PtLike | PtLikeIterable, img:CanvasImageSource | Img, orig?:PtLikeIterable  ) {
+  static image( ctx:RenderingContext2D, ptOrRect:PtLike | PtLikeIterable, img:CanvasImageSource | Img, orig?:PtLikeIterable  ) {
     const t = Util.iterToArray( ptOrRect );
     let pos:number[];
 
@@ -1133,7 +1132,7 @@ export class CanvasForm extends VisualForm {
      * @param ptOrRect a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a bounding box for resizing. Default is (0,0) at top-left.
      * @param img an ImageData object
      */
-  static imageData( ctx:CanvasRenderingContext2D, ptOrRect:PtLike | PtLikeIterable, img:ImageData ) {
+  static imageData( ctx:RenderingContext2D, ptOrRect:PtLike | PtLikeIterable, img:ImageData ) {
     const t = Util.iterToArray( ptOrRect );
     if ( typeof t[0] === "number" ) { // Pt
       ctx.putImageData( img, t[0], t[1] );
@@ -1161,7 +1160,7 @@ export class CanvasForm extends VisualForm {
     * @param `txt` a string of text to draw
     * @param `maxWidth` specify a maximum width per line
     */
-  static text( ctx:CanvasRenderingContext2D, pt:PtLike, txt:string, maxWidth?:number ) {
+  static text( ctx:RenderingContext2D, pt:PtLike, txt:string, maxWidth?:number ) {
     if ( !pt ) return;
     ctx.fillText( txt, pt[0], pt[1], maxWidth );
   }
