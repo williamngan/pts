@@ -360,7 +360,7 @@ export class Line {
    * @param atTail a boolean, if `true`, the marker will be positioned at tail of the line (ie, index = 1). Default is `true`.
    * @returns a Group that defines the marker's shape
    */
-  static marker( line:PtIterable, size:PtLike, graphic:string = ( "arrow" || "line" ), atTail:boolean = true ):Group {
+  static marker( line:PtIterable, size:PtLike, graphic:string = "arrow", atTail:boolean = true ):Group {
     let _line = Util.iterToArray( line );
     let h = atTail ? 0 : 1;
     let t = atTail ? 1 : 0;

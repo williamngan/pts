@@ -1,6 +1,7 @@
 .vscode
 .idea
 node_modules/
+coverage/
 temp/
 .DS_Store
 *.mp4

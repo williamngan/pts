@@ -1,14 +1,9 @@
-import chai = require('chai');
-import mocha = require('mocha');
+import { assert, describe, it } from "vitest";
 import {World, Particle, Body} from '../Physics';
 import {Polygon} from '../Op';
 import {Pt, Group, Bound} from '../Pt';
 import {Geom, Num} from '../Num';
 import {Util} from '../Util';
-
-
-var {assert} = chai;
-var {describe, it} = mocha;
 
 
 describe('World: ', () => {

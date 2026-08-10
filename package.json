@@ -1,47 +1,85 @@
 {
   "name": "pts",
   "version": "0.12.9",
-  "description": "pts",
-  "main": "./dist/index",
+  "description": "A library for visualization and creative coding.",
+  "type": "commonjs",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "scripts": {
-    "start": "tsup --config tsup.browser.js --watch",
-    "build": "npm run build-module && npm run build-browser",
-    "build-module": "tsup --config tsup.module.js",
-    "build-browser": "tsup --config tsup.browser.js && tsup --config tsup.min.js",
-    "test": "mocha --require ts-node/register --reporter dot --file src/test/*.spec.ts",
-    "test:auto": "mocha --opts mocha.opts --watch",
-    "docs": "typedoc --json docs/json/docs.json && python3 parse.py",
-    "lint": "eslint --ignore-path .eslintignore --ext .js,.ts"
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
   },
+  "files": [
+    "dist",
+    "src/*.ts"
+  ],
+  "sideEffects": [
+    "./dist/pts.js",
+    "./dist/pts.min.js"
+  ],
+  "unpkg": "./dist/pts.min.js",
+  "jsdelivr": "./dist/pts.min.js",
+  "scripts": {
+    "start": "tsdown --watch",
+    "build": "tsdown",
+    "typecheck": "tsc --project tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:browser": "node scripts/browser-smoke.mjs",
+    "check:artifacts": "node scripts/check-artifacts.mjs",
+    "check:package": "node scripts/check-package.mjs",
+    "check:publishing": "publint && attw --pack .",
+    "lint": "eslint src scripts *.config.*",
+    "format": "prettier --write README.md 'plans/**/*.md' package.json tsconfig.json '*.config.*' 'scripts/**/*.mjs' '.github/**/*.yml'",
+    "format:check": "prettier --check README.md 'plans/**/*.md' package.json tsconfig.json '*.config.*' 'scripts/**/*.mjs' '.github/**/*.yml'",
+    "check": "npm run format:check && npm run lint && npm run typecheck && npm test && npm run build && npm run check:artifacts && npm run test:browser && npm run check:package && npm run check:publishing",
+    "prepack": "npm run build",
+    "docs": "typedoc --json docs/json/docs.json && python3 parse.py"
+  },
+  "keywords": [
+    "canvas",
+    "creative-coding",
+    "graphics",
+    "svg",
+    "visualization"
+  ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/williamngan/pts.git"
+    "url": "git+https://github.com/williamngan/pts.git"
   },
   "author": "William Ngan",
   "license": "Apache-2.0",
+  "packageManager": "npm@11.16.0",
   "devDependencies": {
-    "@stylistic/eslint-plugin": "^1.6.3",
-    "@testdeck/mocha": "^0.2.1",
-    "@types/dom-mediacapture-record": "^1.0.7",
-    "@types/mocha": "^9.1.1",
-    "@types/node": "^14.14.28",
-    "@typescript-eslint/eslint-plugin": "^7.1.0",
-    "@typescript-eslint/parser": "^7.1.0",
-    "chai": "^4.3.0",
-    "eslint": "^8.57.0",
-    "mocha": "^10.4.0",
-    "source-map": "^0.7.2",
-    "ts-node": "^10.9.2",
-    "tsup": "^8.0.2",
-    "typedoc": "^0.25.13",
-    "typescript": "^5.3.3"
-  },
-  "optionalDependencies": {
-    "@nrwl/cli": "13.7.1"
+    "@arethetypeswrong/cli": "0.18.5",
+    "@eslint/js": "10.0.1",
+    "@vitest/coverage-v8": "4.1.10",
+    "eslint": "10.8.1",
+    "globals": "17.9.0",
+    "playwright": "1.62.1",
+    "prettier": "3.9.6",
+    "publint": "0.3.23",
+    "tsdown": "0.22.14",
+    "typedoc": "0.28.20",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.66.0",
+    "vite": "8.2.1",
+    "vitest": "4.1.10"
   },
   "bugs": {
     "url": "https://github.com/williamngan/pts/issues"
   },
-  "homepage": "https://github.com/williamngan/pts"
+  "homepage": "https://ptsjs.org"
 }

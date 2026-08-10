@@ -499,9 +499,9 @@ export class Sound {
   protected _domain( time:boolean ):Uint8Array {
     if ( this.analyzer ) {
       if ( time ) {
-        this.analyzer.node.getByteTimeDomainData( this.analyzer.data );
+        this.analyzer.node.getByteTimeDomainData( this.analyzer.data as Parameters<AnalyserNode["getByteTimeDomainData"]>[0] );
       } else {
-        this.analyzer.node.getByteFrequencyData( this.analyzer.data );
+        this.analyzer.node.getByteFrequencyData( this.analyzer.data as Parameters<AnalyserNode["getByteFrequencyData"]>[0] );
       }
       return this.analyzer.data;
     }

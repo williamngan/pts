@@ -1,13 +1,8 @@
-import chai = require('chai');
-import mocha = require('mocha');
+import { assert, describe, it } from "vitest";
 import {Pt, Group} from '../Pt';
 import {Util} from '../Util';
 import {Vec, Mat} from '../LinearAlgebra';
 import {Num, Geom} from '../Num';
-
-var {assert} = chai;
-var {describe, it} = mocha;
-
 
 describe('Linear Algebra: ', function() {
 
@@ -126,12 +121,12 @@ describe('Linear Algebra: ', function() {
 
     it(`can multiply matrix with a scalar`, function() {
       let m = Mat.multiply( [ new Pt(1,2,3), new Pt(20,2,1) ], 10 );
-      assert.isTrue( m[0].equals( [10, 20, 30] ), m[1].equals( [200, 20, 10] ) );
+      assert.isTrue( m[0].equals( [10, 20, 30] ) && m[1].equals( [200, 20, 10] ) );
     }); 
 
     it(`can multiply matrices element-wise`, function() {
       let m = Mat.multiply( [ new Pt(1,2,3), new Pt(20,2,1) ], [ new Pt(3,2,10), new Pt(1,2,2) ], false, true );
-      assert.isTrue( m[0].equals( [3, 4, 30] ), m[1].equals( [ 20, 4, 2] ) );
+      assert.isTrue( m[0].equals( [3, 4, 30] ) && m[1].equals( [ 20, 4, 2] ) );
     }); 
 
     it('can calculate a 2D transform', function() {
