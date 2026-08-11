@@ -1,0 +1,22 @@
+{
+  "name": "@pts-integrations/workspace",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "npm@11.16.0",
+  "allowScripts": {
+    "fsevents@2.3.3": true,
+    "skia-canvas@3.0.8": true
+  },
+  "workspaces": [
+    "react-vite",
+    "vue-vite",
+    "skia-canvas"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "test:node": "npm test --workspace @pts-integrations/skia-canvas"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3"
+  }
+}

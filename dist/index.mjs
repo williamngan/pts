@@ -3361,7 +3361,7 @@ var CanvasSpace = class extends MultiTouchSpace {
 		}
 	}
 	dispose() {
-		this._resizeObserver.disconnect();
+		if (this._resizeObserver) this._resizeObserver.disconnect();
 		this.stop();
 		this.removeAll();
 		return this;

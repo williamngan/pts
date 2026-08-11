@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:," />
+    <title>Pts vanilla integration</title>
+    <style>
+      :root {
+        color: #e2e8f0;
+        background: #020617;
+        font-family: system-ui, sans-serif;
+      }
+      body {
+        margin: 0;
+      }
+      main {
+        display: grid;
+        gap: 1rem;
+        justify-content: start;
+        padding: 1rem;
+      }
+      .stage,
+      canvas {
+        width: 320px;
+        height: 180px;
+      }
+      button {
+        width: max-content;
+      }
+    </style>
+    <script src="/pts/pts.min.js"></script>
+  </head>
+  <body>
+    <main
+      id="status"
+      data-environment="vanilla"
+      data-point=""
+      data-disposed="false"
+    >
+      <h1>Pts + vanilla JavaScript</h1>
+      <div class="stage">
+        <canvas
+          id="stage"
+          data-pts-canvas
+          data-frames="0"
+          width="320"
+          height="180"
+        ></canvas>
+      </div>
+      <button id="toggle" type="button">Dispose canvas</button>
+    </main>
+    <script>
+      const status = document.querySelector("#status");
+      const canvas = document.querySelector("#stage");
+      status.dataset.point = new Pts.Pt(1, 2).add(3).toString();
+
+      let frames = 0;
+      const space = new Pts.CanvasSpace(canvas, () => {
+        const form = space.getForm();
+        space.add({
+          animate: () => {
+            frames += 1;
+            canvas.dataset.frames = String(frames);
+            form.fillOnly("#f97316").point([160, 90], 14, "circle");
+          },
+        });
+        space.play();
+      }).setup({ bgcolor: "#0f172a", resize: false, retina: false });
+
+      document.querySelector("#toggle").addEventListener("click", () => {
+        space.stop();
+        space.dispose();
+        setTimeout(() => {
+          status.dataset.disposed = String(
+            !space.isPlaying && Object.keys(space.players).length === 0,
+          );
+        }, 50);
+      });
+    </script>
+  </body>
+</html>

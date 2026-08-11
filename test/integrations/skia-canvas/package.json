@@ -1,0 +1,13 @@
+{
+  "name": "@pts-integrations/skia-canvas",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node render.mjs"
+  },
+  "dependencies": {
+    "pts": "file:../../..",
+    "skia-canvas": "3.0.8"
+  }
+}

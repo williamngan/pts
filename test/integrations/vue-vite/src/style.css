@@ -1,0 +1,26 @@
+:root {
+  color: #e2e8f0;
+  background: #020617;
+  font-family: system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+}
+
+main {
+  display: grid;
+  gap: 1rem;
+  justify-content: start;
+  padding: 1rem;
+}
+
+.stage,
+canvas {
+  width: 320px;
+  height: 180px;
+}
+
+button {
+  width: max-content;
+}

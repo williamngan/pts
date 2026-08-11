@@ -45,7 +45,7 @@ There is therefore no build-system reason to make this release ESM-only. The nor
 
 ## Quality gates
 
-`npm run check` now runs, in order:
+`pnpm check` now runs, in order:
 
 1. Prettier verification.
 2. ESLint flat-config verification.
@@ -66,15 +66,15 @@ Executable output stayed within the 5% growth policy; most files became smaller:
 
 | Artifact          |    Before |     After | Change |
 | ----------------- | --------: | --------: | -----: |
-| `index.js`        | 364,245 B | 171,880 B | -52.8% |
-| `index.mjs`       | 362,155 B | 171,034 B | -52.8% |
-| `pts.js`          | 387,460 B | 182,497 B | -52.9% |
-| `pts.min.js`      | 110,735 B | 110,854 B |  +0.1% |
+| `index.js`        | 364,245 B | 171,906 B | -52.8% |
+| `index.mjs`       | 362,155 B | 171,060 B | -52.8% |
+| `pts.js`          | 387,460 B | 182,523 B | -52.9% |
+| `pts.min.js`      | 110,735 B | 110,876 B |  +0.1% |
 | Root declarations |  59,260 B |  55,163 B |  -6.9% |
 
 The readable runtime files are substantially smaller because build-only JSDoc comments are omitted while tree-shaking annotations and the license banner are preserved.
 
-The audited tarball is 808,879 bytes. It is larger than the old approximately 298 KB tarball because all JavaScript maps, declaration maps, and declaration-map source files are now intentionally published. This affects download/install size, not executable bundle size.
+The audited tarball is 809,092 bytes. It is larger than the old approximately 298 KB tarball because all JavaScript maps, declaration maps, and declaration-map source files are now intentionally published. This affects download/install size, not executable bundle size.
 
 The Vite fixture produced these application chunks:
 
@@ -86,10 +86,10 @@ The small-import fixture is 62.7% of the full namespace fixture, satisfying the 
 
 ## Verification performed
 
-- `npm ci --ignore-scripts` from the new lockfile: passed.
-- `npm run check`: passed.
+- `pnpm install --frozen-lockfile` from the root lockfile: passed.
+- `pnpm check`: passed.
 - Unit tests: 167 passed across seven suites.
-- `npm run test:coverage`: passed; baseline recorded without imposing an arbitrary threshold.
+- `pnpm test:coverage`: passed; baseline recorded without imposing an arbitrary threshold.
 - `npm audit --omit=dev`: zero vulnerabilities and no runtime dependency tree.
 - Packed ESM and CJS runtime checks: passed on Node 20, 22, and 24.
 - Clean `react-pts-canvas` checkout installed from the local Pts tarball and built: passed.

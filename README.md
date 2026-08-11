@@ -49,29 +49,30 @@ Read the [guides](https://ptsjs.org/guide/get-started-0100) and explore the [dem
 The maintained build environment is Node 24.18 or newer in the Node 24 line. The published library is also exercised on current Node 20 and 22 releases.
 
 ```bash
-npm ci
-npx playwright install chromium
-npm run check
+pnpm install --frozen-lockfile
+pnpm exec playwright install chromium
+pnpm check
 ```
 
 Useful individual commands include:
 
 ```bash
-npm run build
-npm run typecheck
-npm test
-npm run test:browser
-npm run check:package
+pnpm build
+pnpm typecheck
+pnpm test
+pnpm test:browser
+pnpm test:integrations
+pnpm check:package
 ```
 
-`npm run check` validates formatting, linting, types, unit tests, reproducible artifacts, real-browser behavior, the packed package, ESM and CommonJS resolution, declarations, and tree-shaking.
+`pnpm check` validates formatting, linting, types, unit tests, reproducible artifacts, real-browser behavior, the packed package, ESM and CommonJS resolution, declarations, and tree-shaking. Its packed-package integration suite also builds and runs the maintained React, Vue, `skia-canvas`, and single-file vanilla fixtures in [`test/integrations`](./test/integrations).
 
 ### Generate documentation
 
 The legacy documentation pipeline still requires Python 3. Its Python transformer needs separate compatibility work with the current TypeDoc JSON format, so documentation regeneration is intentionally not part of the build-system checks yet:
 
 ```bash
-npm run docs
+pnpm docs
 ```
 
 ## Contributing

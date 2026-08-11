@@ -2,6 +2,7 @@
 .idea
 node_modules/
 coverage/
+test/integrations/*/dist/
 temp/
 .DS_Store
 *.mp4

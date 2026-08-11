@@ -406,7 +406,7 @@ export class CanvasSpace extends MultiTouchSpace {
   dispose():this {
    
     // remove event listeners
-    this._resizeObserver.disconnect();
+    if ( this._resizeObserver ) this._resizeObserver.disconnect();
 
     // stop animation loop
     this.stop();

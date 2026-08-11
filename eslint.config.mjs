@@ -12,12 +12,13 @@ export default tseslint.config(
       "guide/**",
       "node_modules/**",
       "study/**",
+      "test/integrations/*/dist/**",
     ],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    files: ["src/**/*.ts", "*.config.ts"],
+    files: ["src/**/*.ts", "test/integrations/**/*.{ts,tsx}", "*.config.ts"],
     languageOptions: {
       globals: globals.browser,
     },
@@ -40,7 +41,13 @@ export default tseslint.config(
     },
   },
   {
-    files: ["scripts/**/*.mjs", "eslint.config.mjs"],
-    languageOptions: { globals: globals.node },
+    files: [
+      "scripts/**/*.mjs",
+      "test/integrations/**/*.mjs",
+      "eslint.config.mjs",
+    ],
+    languageOptions: {
+      globals: { ...globals.browser, ...globals.node },
+    },
   },
 );
