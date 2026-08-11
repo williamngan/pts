@@ -4,11 +4,11 @@
     [
       "src/Dom.ts",
       15,
-      21
+      13
     ]
   ],
   "kind": "Class",
-  "id": 5384,
+  "id": 2020,
   "comment": "DOMSpace is a space for DOM elements. Usually its subclasses such as [`HTMLSpace`](#link) and [`#SVGSpace`](#link) should be used instead.\nLearn more about spaces in [this guide](../guide/space-0500).",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "src/Dom.ts",
-          23,
-          22
+          32,
+          2
         ]
       ],
-      "id": 5392,
+      "id": 2033,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -46,7 +46,7 @@
           "tags": [
             {
               "tag": "example",
-              "text": "`new DOMSpace( \"#myElementID\" )`\n"
+              "text": "`new DOMSpace( \"#myElementID\" )`"
             }
           ]
         }
@@ -60,15 +60,15 @@
         [
           "src/Dom.ts",
           138,
-          16
+          6
         ],
         [
           "src/Dom.ts",
           148,
-          16
+          6
         ]
       ],
-      "id": 5412,
+      "id": 2055,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -80,7 +80,7 @@
         "type": "void",
         "parameters": {
           "name": "auto",
-          "comment": "a boolean value indicating if auto size is set\n",
+          "comment": "a boolean value indicating if auto size is set",
           "type": "boolean",
           "default": false
         }
@@ -92,15 +92,15 @@
         [
           "src/Dom.ts",
           228,
-          16
+          6
         ],
         [
           "src/Dom.ts",
           232,
-          16
+          6
         ]
       ],
-      "id": 5432,
+      "id": 2075,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -112,7 +112,7 @@
         "type": "void",
         "parameters": {
           "name": "bg",
-          "comment": "background color as hex or rgba string\n",
+          "comment": "background color as hex or rgba string",
           "type": "string",
           "default": false
         }
@@ -124,10 +124,10 @@
         [
           "src/Space.ts",
           252,
-          12
+          6
         ]
       ],
-      "id": 5616,
+      "id": 2248,
       "flags": {},
       "overrides": false,
       "inherits": "Space.center",
@@ -143,21 +143,21 @@
         [
           "src/Space.ts",
           221,
-          21
+          6
         ],
         [
           "src/Space.ts",
           222,
-          21
+          6
         ]
       ],
-      "id": 5596,
+      "id": 2228,
       "flags": {},
       "overrides": false,
       "inherits": "Space.customRendering",
       "comment": "Set a custom rendering function `fn(graphics_context, canvas_space)` if needed.",
       "getter": {
-        "type": ""
+        "type": " Fn(context:any, self:Space)"
       },
       "setter": {
         "type": "void",
@@ -175,10 +175,10 @@
         [
           "src/Dom.ts",
           194,
-          13
+          6
         ]
       ],
-      "id": 5423,
+      "id": 2066,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -194,10 +194,10 @@
         [
           "src/Space.ts",
           264,
-          12
+          6
         ]
       ],
-      "id": 5620,
+      "id": 2252,
       "flags": {},
       "overrides": false,
       "inherits": "Space.height",
@@ -213,10 +213,10 @@
         [
           "src/Space.ts",
           240,
-          23
+          13
         ]
       ],
-      "id": 5612,
+      "id": 2244,
       "flags": {
         "isPublic": true
       },
@@ -234,10 +234,10 @@
         [
           "src/Space.ts",
           228,
-          15
+          6
         ]
       ],
-      "id": 5608,
+      "id": 2240,
       "flags": {},
       "overrides": false,
       "inherits": "Space.isPlaying",
@@ -253,10 +253,10 @@
         [
           "src/Space.ts",
           234,
-          16
+          6
         ]
       ],
-      "id": 5610,
+      "id": 2242,
       "flags": {},
       "overrides": false,
       "inherits": "Space.outerBound",
@@ -272,10 +272,10 @@
         [
           "src/Dom.ts",
           202,
-          12
+          6
         ]
       ],
-      "id": 5425,
+      "id": 2068,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -291,10 +291,10 @@
         [
           "src/Space.ts",
           311,
-          20
+          13
         ]
       ],
-      "id": 5459,
+      "id": 2095,
       "flags": {
         "isPublic": true
       },
@@ -312,10 +312,10 @@
         [
           "src/Dom.ts",
           210,
-          11
+          6
         ]
       ],
-      "id": 5427,
+      "id": 2070,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -331,10 +331,10 @@
         [
           "src/Space.ts",
           246,
-          10
+          6
         ]
       ],
-      "id": 5614,
+      "id": 2246,
       "flags": {},
       "overrides": false,
       "inherits": "Space.size",
@@ -350,10 +350,10 @@
         [
           "src/Space.ts",
           258,
-          11
+          6
         ]
       ],
-      "id": 5618,
+      "id": 2250,
       "flags": {},
       "overrides": false,
       "inherits": "Space.width",
@@ -371,10 +371,10 @@
         [
           "src/Space.ts",
           66,
-          5
+          2
         ]
       ],
-      "id": 5566,
+      "id": 2198,
       "flags": {},
       "overrides": false,
       "inherits": "Space.add",
@@ -401,10 +401,10 @@
         [
           "src/Space.ts",
           324,
-          12
+          2
         ]
       ],
-      "id": 5461,
+      "id": 2097,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.bindCanvas",
@@ -434,7 +434,7 @@
             },
             {
               "name": "customTarget",
-              "comment": "If needed, this is an optional parameter to set another event target that's not the canvas element itself. See [Technical Notes guide](/guide/Technical-notes-9000.html) for use cases.\n",
+              "comment": "If needed, this is an optional parameter to set another event target that's not the canvas element itself. See [Technical Notes guide](/guide/Technical-notes-9000.html) for use cases.",
               "type": "Element",
               "default": false
             }
@@ -449,10 +449,10 @@
         [
           "src/Space.ts",
           343,
-          9
+          2
         ]
       ],
-      "id": 5473,
+      "id": 2109,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.bindDoc",
@@ -491,10 +491,10 @@
         [
           "src/Space.ts",
           423,
-          14
+          2
         ]
       ],
-      "id": 5492,
+      "id": 2128,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.bindKeyboard",
@@ -521,10 +521,10 @@
         [
           "src/Space.ts",
           364,
-          11
+          2
         ]
       ],
-      "id": 5483,
+      "id": 2119,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.bindMouse",
@@ -550,7 +550,7 @@
           "tags": [
             {
               "tag": "see",
-              "text": "[`Space.add`](#link)\n"
+              "text": "[`Space.add`](#link)"
             }
           ]
         }
@@ -562,10 +562,10 @@
         [
           "src/Space.ts",
           405,
-          11
+          2
         ]
       ],
-      "id": 5487,
+      "id": 2123,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.bindTouch",
@@ -597,7 +597,7 @@
           "tags": [
             {
               "tag": "see",
-              "text": "[`Space.add`](#link)\n"
+              "text": "[`Space.add`](#link)"
             }
           ]
         }
@@ -609,12 +609,12 @@
         [
           "src/Dom.ts",
           217,
-          7
+          2
         ]
       ],
-      "id": 5429,
+      "id": 2072,
       "flags": {},
-      "overrides": "Space.clear",
+      "overrides": "MultiTouchSpace.clear",
       "inherits": false,
       "signatures": [
         {
@@ -624,7 +624,7 @@
           "parameters": [
             {
               "name": "bg",
-              "comment": "Optionally specify a custom background color in hex or rgba string, or \"transparent\". If not defined, it will use its `bgcolor` property as background color to clear the canvas.\n",
+              "comment": "Optionally specify a custom background color in hex or rgba string, or \"transparent\". If not defined, it will use its `bgcolor` property as background color to clear the canvas.",
               "type": "string",
               "default": false
             }
@@ -639,10 +639,10 @@
         [
           "src/Dom.ts",
           298,
-          9
+          2
         ]
       ],
-      "id": 5452,
+      "id": 2088,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -662,12 +662,12 @@
         [
           "src/Dom.ts",
           130,
-          9
+          2
         ]
       ],
-      "id": 5410,
+      "id": 2053,
       "flags": {},
-      "overrides": "Space.getForm",
+      "overrides": "MultiTouchSpace.getForm",
       "inherits": false,
       "signatures": [
         {
@@ -685,10 +685,10 @@
         [
           "src/Space.ts",
           52,
-          14
+          2
         ]
       ],
-      "id": 5563,
+      "id": 2195,
       "flags": {},
       "overrides": false,
       "inherits": "Space.minFrameTime",
@@ -700,7 +700,7 @@
           "parameters": [
             {
               "name": "ms",
-              "comment": "at least this amount of miniseconds must have elapsed before frame advances\n",
+              "comment": "at least this amount of miniseconds must have elapsed before frame advances",
               "type": "number",
               "default": "0"
             }
@@ -715,10 +715,10 @@
         [
           "src/Space.ts",
           173,
-          7
+          2
         ]
       ],
-      "id": 5582,
+      "id": 2214,
       "flags": {},
       "overrides": false,
       "inherits": "Space.pause",
@@ -730,7 +730,7 @@
           "parameters": [
             {
               "name": "toggle",
-              "comment": "a boolean value to set if this function call should be a toggle (between pause and resume)\n",
+              "comment": "a boolean value to set if this function call should be a toggle (between pause and resume)",
               "type": "boolean",
               "default": "false"
             }
@@ -745,10 +745,10 @@
         [
           "src/Space.ts",
           107,
-          6
+          2
         ]
       ],
-      "id": 5574,
+      "id": 2206,
       "flags": {},
       "overrides": false,
       "inherits": "Space.play",
@@ -760,7 +760,7 @@
           "parameters": [
             {
               "name": "time",
-              "comment": "current time\n",
+              "comment": "current time",
               "type": "number",
               "default": "0"
             }
@@ -775,10 +775,10 @@
         [
           "src/Space.ts",
           146,
-          21
+          12
         ]
       ],
-      "id": 5579,
+      "id": 2211,
       "flags": {
         "isProtected": true
       },
@@ -792,7 +792,7 @@
           "parameters": [
             {
               "name": "time",
-              "comment": "current time\n",
+              "comment": "current time",
               "type": "number",
               "default": false
             }
@@ -807,10 +807,10 @@
         [
           "src/Space.ts",
           202,
-          10
+          2
         ]
       ],
-      "id": 5590,
+      "id": 2222,
       "flags": {},
       "overrides": false,
       "inherits": "Space.playOnce",
@@ -822,7 +822,7 @@
           "parameters": [
             {
               "name": "duration",
-              "comment": "a value in millisecond to specify a time period to play before stopping, or `-1` to play forever\n",
+              "comment": "a value in millisecond to specify a time period to play before stopping, or `-1` to play forever",
               "type": "number",
               "default": "0"
             }
@@ -837,10 +837,10 @@
         [
           "src/Space.ts",
           42,
-          9
+          2
         ]
       ],
-      "id": 5560,
+      "id": 2192,
       "flags": {},
       "overrides": false,
       "inherits": "Space.refresh",
@@ -852,7 +852,7 @@
           "parameters": [
             {
               "name": "b",
-              "comment": "a boolean value to set whether to repaint each frame\n",
+              "comment": "a boolean value to set whether to repaint each frame",
               "type": "boolean",
               "default": false
             }
@@ -867,10 +867,10 @@
         [
           "src/Space.ts",
           87,
-          8
+          2
         ]
       ],
-      "id": 5569,
+      "id": 2201,
       "flags": {},
       "overrides": false,
       "inherits": "Space.remove",
@@ -882,7 +882,7 @@
           "parameters": [
             {
               "name": "player",
-              "comment": "an IPlayer that has an `animateID` property\n",
+              "comment": "an IPlayer that has an `animateID` property",
               "type": "IPlayer",
               "default": false
             }
@@ -897,10 +897,10 @@
         [
           "src/Space.ts",
           96,
-          11
+          2
         ]
       ],
-      "id": 5572,
+      "id": 2204,
       "flags": {},
       "overrides": false,
       "inherits": "Space.removeAll",
@@ -920,10 +920,10 @@
         [
           "src/Space.ts",
           212,
-          18
+          12
         ]
       ],
-      "id": 5593,
+      "id": 2225,
       "flags": {
         "isProtected": true
       },
@@ -937,7 +937,7 @@
           "parameters": [
             {
               "name": "context",
-              "comment": "rendering context\n",
+              "comment": "rendering context",
               "type": "any",
               "default": false
             }
@@ -952,10 +952,10 @@
         [
           "src/Space.ts",
           136,
-          8
+          2
         ]
       ],
-      "id": 5577,
+      "id": 2209,
       "flags": {},
       "overrides": false,
       "inherits": "Space.replay",
@@ -975,12 +975,12 @@
         [
           "src/Dom.ts",
           156,
-          8
+          2
         ]
       ],
-      "id": 5416,
+      "id": 2059,
       "flags": {},
-      "overrides": "Space.resize",
+      "overrides": "MultiTouchSpace.resize",
       "inherits": false,
       "signatures": [
         {
@@ -996,7 +996,7 @@
             },
             {
               "name": "evt",
-              "comment": "Optionally pass a resize event\n",
+              "comment": "Optionally pass a resize event",
               "type": "Event",
               "default": false
             }
@@ -1011,10 +1011,10 @@
         [
           "src/Space.ts",
           182,
-          8
+          2
         ]
       ],
-      "id": 5585,
+      "id": 2217,
       "flags": {},
       "overrides": false,
       "inherits": "Space.resume",
@@ -1034,10 +1034,10 @@
         [
           "src/Dom.ts",
           116,
-          7
+          2
         ]
       ],
-      "id": 5404,
+      "id": 2047,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1057,7 +1057,7 @@
           "tags": [
             {
               "tag": "example",
-              "text": "`space.setup({ bgcolor: \"#f00\", resize: true })`\n"
+              "text": "`space.setup({ bgcolor: \"#f00\", resize: true })`"
             }
           ]
         }
@@ -1069,10 +1069,10 @@
         [
           "src/Space.ts",
           192,
-          6
+          2
         ]
       ],
-      "id": 5587,
+      "id": 2219,
       "flags": {},
       "overrides": false,
       "inherits": "Space.stop",
@@ -1084,7 +1084,7 @@
           "parameters": [
             {
               "name": "t",
-              "comment": "a value in millisecond to specify a time period to play before stopping, or `-1` to play forever, or `0` to end immediately. Default is 0 which will stop the animation immediately.\n",
+              "comment": "a value in millisecond to specify a time period to play before stopping, or `-1` to play forever, or `0` to end immediately. Default is 0 which will stop the animation immediately.",
               "type": "number",
               "default": "0"
             }
@@ -1099,10 +1099,10 @@
         [
           "src/Dom.ts",
           241,
-          7
+          2
         ]
       ],
-      "id": 5436,
+      "id": 2079,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1126,7 +1126,7 @@
             },
             {
               "name": "update",
-              "comment": "a boolean to update the element's style immediately if set to `true`. Default is `false`.\n",
+              "comment": "a boolean to update the element's style immediately if set to `true`. Default is `false`.",
               "type": "boolean",
               "default": "false"
             }
@@ -1141,10 +1141,10 @@
         [
           "src/Dom.ts",
           254,
-          8
+          2
         ]
       ],
-      "id": 5441,
+      "id": 2084,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1152,7 +1152,7 @@
         {
           "comment": "Add of update a list of style definitions, and optionally update those styles in the Element.",
           "returns": "this",
-          "returns_comment": "this\n",
+          "returns_comment": "this",
           "parameters": [
             {
               "name": "styles",
@@ -1177,10 +1177,10 @@
         [
           "src/Space.ts",
           446,
-          17
+          2
         ]
       ],
-      "id": 5495,
+      "id": 2131,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.touchesToPoints",
@@ -1188,7 +1188,7 @@
         {
           "comment": "A convenient method to convert the touch points in a touch event to an array of Pts.",
           "returns": "Pt[]",
-          "returns_comment": "an array of Pt, whose origin position (0,0) is offset to the top-left of this space\n",
+          "returns_comment": "an array of Pt, whose origin position (0,0) is offset to the top-left of this space",
           "parameters": [
             {
               "name": "evt",
@@ -1213,10 +1213,10 @@
         [
           "src/Space.ts",
           337,
-          14
+          2
         ]
       ],
-      "id": 5467,
+      "id": 2103,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.unbindCanvas",
@@ -1246,7 +1246,7 @@
             },
             {
               "name": "customTarget",
-              "comment": "If customTarget is set in bindCanvas, you'll need to pass the same instance here to unbind\n",
+              "comment": "If customTarget is set in bindCanvas, you'll need to pass the same instance here to unbind",
               "type": "Element",
               "default": false
             }
@@ -1261,10 +1261,10 @@
         [
           "src/Space.ts",
           349,
-          11
+          2
         ]
       ],
-      "id": 5478,
+      "id": 2114,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.unbindDoc",
@@ -1303,10 +1303,10 @@
         [
           "src/Dom.ts",
           74,
-          22
+          9
         ]
       ],
-      "id": 5396,
+      "id": 2021,
       "flags": {
         "isStatic": true
       },
@@ -1332,7 +1332,7 @@
             },
             {
               "name": "appendTo",
-              "comment": "Optional, if specified, the created element will be appended to this element\n",
+              "comment": "Optional, if specified, the created element will be appended to this element",
               "type": "Element",
               "default": false
             }
@@ -1347,10 +1347,10 @@
         [
           "src/Dom.ts",
           284,
-          24
+          9
         ]
       ],
-      "id": 5449,
+      "id": 2030,
       "flags": {
         "isStatic": true
       },
@@ -1372,7 +1372,7 @@
           "tags": [
             {
               "tag": "exmaple",
-              "text": "`DOMSpace.getInlineStyles( {width: \"100px\", \"font-size\": \"10px\"} )`\n"
+              "text": "`DOMSpace.getInlineStyles( {width: \"100px\", \"font-size\": \"10px\"} )`"
             }
           ]
         }
@@ -1384,10 +1384,10 @@
         [
           "src/Dom.ts",
           268,
-          16
+          9
         ]
       ],
-      "id": 5445,
+      "id": 2026,
       "flags": {
         "isStatic": true
       },
@@ -1397,7 +1397,7 @@
         {
           "comment": "A static helper function to add or update Element attributes.",
           "returns": "Element",
-          "returns_comment": "this DOM element\n",
+          "returns_comment": "this DOM element",
           "parameters": [
             {
               "name": "elem",
@@ -1425,14 +1425,14 @@
         [
           "src/Space.ts",
           16,
-          17
+          12
         ]
       ],
-      "id": 5540,
+      "id": 2176,
       "flags": {
         "isProtected": true
       },
-      "type": "bound",
+      "type": "Bound",
       "overrides": false,
       "inherits": "Space.bound",
       "comment": ""
@@ -1443,13 +1443,13 @@
         [
           "src/Dom.ts",
           20,
-          4
+          2
         ]
       ],
-      "id": 5387,
+      "id": 2039,
       "flags": {},
-      "type": "id",
-      "overrides": "Space.id",
+      "type": "string",
+      "overrides": "MultiTouchSpace.id",
       "inherits": false,
       "comment": ""
     },
@@ -1459,14 +1459,14 @@
         [
           "src/Space.ts",
           20,
-          23
+          12
         ]
       ],
-      "id": 5547,
+      "id": 2179,
       "flags": {
         "isProtected": true
       },
-      "type": "playerCount",
+      "type": "number",
       "overrides": false,
       "inherits": "Space.playerCount",
       "comment": ""
@@ -1477,14 +1477,14 @@
         [
           "src/Space.ts",
           19,
-          19
+          12
         ]
       ],
-      "id": 5546,
+      "id": 2178,
       "flags": {
         "isProtected": true
       },
-      "type": "players",
+      "type": "ISpacePlayers",
       "overrides": false,
       "inherits": "Space.players",
       "comment": ""

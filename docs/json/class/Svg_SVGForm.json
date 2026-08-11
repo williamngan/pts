@@ -4,11 +4,11 @@
     [
       "src/Svg.ts",
       124,
-      20
+      13
     ]
   ],
   "kind": "Class",
-  "id": 7365,
+  "id": 6908,
   "comment": "**[Experimental]** SVGForm is an implementation of abstract class [`VisualForm`](#link). It provide methods to express Pts in [`SVGSpace`](#link).\nYou may extend SVGForm to implement your own expressions for SVGSpace. See out the [Space guide](../guide/Space-0500.html) for details.",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "src/Svg.ts",
-          150,
-          35
+          157,
+          2
         ]
       ],
-      "id": 7387,
+      "id": 6973,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -32,7 +32,7 @@
           "parameters": [
             {
               "name": "space",
-              "comment": "an instance of SVGSpace\n",
+              "comment": "an instance of SVGSpace",
               "type": "SVGSpace",
               "default": false
             }
@@ -49,10 +49,10 @@
         [
           "src/Form.ts",
           52,
-          17
+          6
         ]
       ],
-      "id": 7537,
+      "id": 7074,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.currentFont",
@@ -68,15 +68,15 @@
         [
           "src/Form.ts",
           38,
-          12
+          6
         ],
         [
           "src/Form.ts",
           39,
-          12
+          6
         ]
       ],
-      "id": 7529,
+      "id": 7066,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.filled",
@@ -100,10 +100,10 @@
         [
           "src/Form.ts",
           18,
-          11
+          6
         ]
       ],
-      "id": 7573,
+      "id": 7110,
       "flags": {},
       "overrides": false,
       "inherits": "Form.ready",
@@ -119,10 +119,10 @@
         [
           "src/Svg.ts",
           173,
-          11
+          6
         ]
       ],
-      "id": 7390,
+      "id": 6989,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -138,15 +138,15 @@
         [
           "src/Form.ts",
           45,
-          13
+          6
         ],
         [
           "src/Form.ts",
           46,
-          13
+          6
         ]
       ],
-      "id": 7533,
+      "id": 7070,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.stroked",
@@ -172,10 +172,10 @@
         [
           "src/Svg.ts",
           192,
-          7
+          2
         ]
       ],
-      "id": 7396,
+      "id": 6995,
       "flags": {},
       "overrides": "VisualForm.alpha",
       "inherits": false,
@@ -187,7 +187,7 @@
           "parameters": [
             {
               "name": "a",
-              "comment": "alpha value between 0 and 1\n",
+              "comment": "alpha value between 0 and 1",
               "type": "number",
               "default": false
             }
@@ -207,10 +207,10 @@
         [
           "src/Svg.ts",
           485,
-          5
+          2
         ]
       ],
-      "id": 7466,
+      "id": 7036,
       "flags": {},
       "overrides": "VisualForm.arc",
       "inherits": false,
@@ -246,7 +246,7 @@
             },
             {
               "name": "cc",
-              "comment": "an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.\n",
+              "comment": "an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.",
               "type": "boolean",
               "default": false
             }
@@ -261,10 +261,10 @@
         [
           "src/Svg.ts",
           439,
-          8
+          2
         ]
       ],
-      "id": 7455,
+      "id": 7033,
       "flags": {},
       "overrides": "VisualForm.circle",
       "inherits": false,
@@ -284,7 +284,7 @@
           "tags": [
             {
               "tag": "see",
-              "text": "[`Circle.fromCenter`](./?p=Op_Circle#function_fromCenter)\n"
+              "text": "[`Circle.fromCenter`](./?p=Op_Circle#function_fromCenter)"
             }
           ]
         }
@@ -296,10 +296,10 @@
         [
           "src/Form.ts",
           160,
-          9
+          2
         ]
       ],
-      "id": 7558,
+      "id": 7095,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.circles",
@@ -311,7 +311,7 @@
           "parameters": [
             {
               "name": "groups",
-              "comment": "an array of Groups that defines multiple circles\n",
+              "comment": "an array of Groups that defines multiple circles",
               "type": "GroupLike[]",
               "default": false
             }
@@ -326,17 +326,17 @@
         [
           "src/Svg.ts",
           241,
-          5
+          2
         ]
       ],
-      "id": 7408,
+      "id": 7007,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
           "comment": "Add custom class to the created element.",
-          "returns": "this",
+          "returns": "SVGForm",
           "returns_comment": false,
           "parameters": [
             {
@@ -349,7 +349,7 @@
           "tags": [
             {
               "tag": "example",
-              "text": "`form.fill(\"#f00\").cls(\"myClass\").rects(r)` `form.cls(false).circles(c)`\n"
+              "text": "`form.fill(\"#f00\").cls(\"myClass\").rects(r)` `form.cls(false).circles(c)`"
             }
           ]
         }
@@ -361,10 +361,10 @@
         [
           "src/Svg.ts",
           203,
-          6
+          2
         ]
       ],
-      "id": 7399,
+      "id": 6998,
       "flags": {},
       "overrides": "VisualForm.fill",
       "inherits": false,
@@ -376,7 +376,7 @@
           "parameters": [
             {
               "name": "c",
-              "comment": "a valid color string or `false` to specify no fill color.\n",
+              "comment": "a valid color string or `false` to specify no fill color.",
               "type": "string | boolean",
               "default": false
             }
@@ -396,10 +396,10 @@
         [
           "src/Form.ts",
           92,
-          10
+          2
         ]
       ],
-      "id": 7544,
+      "id": 7081,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.fillOnly",
@@ -411,7 +411,7 @@
           "parameters": [
             {
               "name": "c",
-              "comment": "fill color as string or `false` to specify transparent.\n",
+              "comment": "fill color as string or `false` to specify transparent.",
               "type": "string | boolean",
               "default": false
             }
@@ -426,10 +426,10 @@
         [
           "src/Svg.ts",
           260,
-          6
+          2
         ]
       ],
-      "id": 7411,
+      "id": 7010,
       "flags": {},
       "overrides": "VisualForm.font",
       "inherits": false,
@@ -473,7 +473,7 @@
           "tags": [
             {
               "tag": "example",
-              "text": "`form.font( myFont )`, `form.font(14, \"bold\")`\n"
+              "text": "`form.font( myFont )`, `form.font(14, \"bold\")`"
             }
           ]
         }
@@ -485,10 +485,10 @@
         [
           "src/Svg.ts",
           557,
-          6
+          2
         ]
       ],
-      "id": 7486,
+      "id": 7047,
       "flags": {},
       "overrides": "VisualForm.line",
       "inherits": false,
@@ -500,7 +500,7 @@
           "parameters": [
             {
               "name": "pts",
-              "comment": "a Group or an Iterable<PtLike>\n",
+              "comment": "a Group or an Iterable<PtLike>",
               "type": "PtLikeIterable",
               "default": false
             }
@@ -515,10 +515,10 @@
         [
           "src/Form.ts",
           196,
-          7
+          2
         ]
       ],
-      "id": 7564,
+      "id": 7101,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.lines",
@@ -530,7 +530,7 @@
           "parameters": [
             {
               "name": "groups",
-              "comment": "An array of Groups of Pts\n",
+              "comment": "An array of Groups of Pts",
               "type": "GroupLike[]",
               "default": false
             }
@@ -545,10 +545,10 @@
         [
           "src/Svg.ts",
           700,
-          5
+          2
         ]
       ],
-      "id": 7523,
+      "id": 7060,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -560,7 +560,7 @@
           "parameters": [
             {
               "name": "txt",
-              "comment": "text\n",
+              "comment": "text",
               "type": "any",
               "default": false
             }
@@ -575,10 +575,10 @@
         [
           "src/Svg.ts",
           324,
-          8
+          2
         ]
       ],
-      "id": 7427,
+      "id": 7026,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -586,7 +586,7 @@
         {
           "comment": "Get next available id in the current group.",
           "returns": "string",
-          "returns_comment": "an id string\n",
+          "returns_comment": "an id string",
           "parameters": [],
           "tags": []
         }
@@ -598,10 +598,10 @@
         [
           "src/Svg.ts",
           406,
-          7
+          2
         ]
       ],
-      "id": 7445,
+      "id": 7028,
       "flags": {},
       "overrides": "VisualForm.point",
       "inherits": false,
@@ -633,7 +633,7 @@
           "tags": [
             {
               "tag": "example",
-              "text": "`form.point( p )`, `form.point( p, 10, \"circle\" )`\n"
+              "text": "`form.point( p )`, `form.point( p, 10, \"circle\" )`"
             }
           ]
         }
@@ -645,10 +645,10 @@
         [
           "src/Form.ts",
           138,
-          8
+          2
         ]
       ],
-      "id": 7553,
+      "id": 7090,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.points",
@@ -672,7 +672,7 @@
             },
             {
               "name": "shape",
-              "comment": "The shape of the point. Defaults to \"square\", but it can be \"circle\" or a custom shape function in your own implementation.\n",
+              "comment": "The shape of the point. Defaults to \"square\", but it can be \"circle\" or a custom shape function in your own implementation.",
               "type": "string",
               "default": false
             }
@@ -687,10 +687,10 @@
         [
           "src/Svg.ts",
           614,
-          9
+          2
         ]
       ],
-      "id": 7504,
+      "id": 7050,
       "flags": {},
       "overrides": "VisualForm.polygon",
       "inherits": false,
@@ -702,7 +702,7 @@
           "parameters": [
             {
               "name": "pts",
-              "comment": "a Group or an Iterable<PtLike> representing a polygon\n",
+              "comment": "a Group or an Iterable<PtLike> representing a polygon",
               "type": "PtLikeIterable",
               "default": false
             }
@@ -717,10 +717,10 @@
         [
           "src/Form.ts",
           212,
-          10
+          2
         ]
       ],
-      "id": 7567,
+      "id": 7104,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.polygons",
@@ -732,7 +732,7 @@
           "parameters": [
             {
               "name": "groups",
-              "comment": "An array of Groups of Pts\n",
+              "comment": "An array of Groups of Pts",
               "type": "GroupLike[]",
               "default": false
             }
@@ -747,10 +747,10 @@
         [
           "src/Svg.ts",
           650,
-          6
+          2
         ]
       ],
-      "id": 7511,
+      "id": 7053,
       "flags": {},
       "overrides": "VisualForm.rect",
       "inherits": false,
@@ -762,7 +762,7 @@
           "parameters": [
             {
               "name": "pts",
-              "comment": "a Group or an Iterable<PtLike> with 2 Pt specifying the top-left and bottom-right positions.\n",
+              "comment": "a Group or an Iterable<PtLike> with 2 Pt specifying the top-left and bottom-right positions.",
               "type": "PtLikeIterable",
               "default": false
             }
@@ -777,10 +777,10 @@
         [
           "src/Form.ts",
           229,
-          7
+          2
         ]
       ],
-      "id": 7570,
+      "id": 7107,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.rects",
@@ -792,7 +792,7 @@
           "parameters": [
             {
               "name": "groups",
-              "comment": "An array of Groups of Pts\n",
+              "comment": "An array of Groups of Pts",
               "type": "GroupLike[]",
               "default": false
             }
@@ -807,10 +807,10 @@
         [
           "src/Svg.ts",
           282,
-          7
+          2
         ]
       ],
-      "id": 7418,
+      "id": 7017,
       "flags": {},
       "overrides": "VisualForm.reset",
       "inherits": false,
@@ -830,10 +830,10 @@
         [
           "src/Svg.ts",
           314,
-          7
+          2
         ]
       ],
-      "id": 7424,
+      "id": 7023,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -841,7 +841,7 @@
         {
           "comment": "Set the current group scope to an item added into space, in order to keep track of any point, circle, etc created within it in the DOM.\nThe item must have an `animateID` property, so that elements created within the item will have generated IDs like \"item-{animateID}-{count}\".\nSee the svg section in [`Space guide`](../guide/Space-0500.html) to learn more about scope.",
           "returns": "object",
-          "returns_comment": "this form's context\n",
+          "returns_comment": "this form's context",
           "parameters": [
             {
               "name": "item",
@@ -860,10 +860,10 @@
         [
           "src/Svg.ts",
           517,
-          8
+          2
         ]
       ],
-      "id": 7478,
+      "id": 7043,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -881,7 +881,7 @@
             },
             {
               "name": "halfsize",
-              "comment": "half-size\n",
+              "comment": "half-size",
               "type": "number",
               "default": false
             }
@@ -896,10 +896,10 @@
         [
           "src/Form.ts",
           169,
-          9
+          2
         ]
       ],
-      "id": 7561,
+      "id": 7098,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.squares",
@@ -911,7 +911,7 @@
           "parameters": [
             {
               "name": "groups",
-              "comment": "an array of Groups that defines multiple circles\n",
+              "comment": "an array of Groups that defines multiple circles",
               "type": "GroupLike[]",
               "default": false
             }
@@ -926,10 +926,10 @@
         [
           "src/Svg.ts",
           222,
-          8
+          2
         ]
       ],
-      "id": 7402,
+      "id": 7001,
       "flags": {},
       "overrides": "VisualForm.stroke",
       "inherits": false,
@@ -959,7 +959,7 @@
             },
             {
               "name": "linecap",
-              "comment": "Optional string to set line cap style. Can be \"butt\", \"round\", or \"square\".\n",
+              "comment": "Optional string to set line cap style. Can be \"butt\", \"round\", or \"square\".",
               "type": "string",
               "default": false
             }
@@ -979,10 +979,10 @@
         [
           "src/Form.ts",
           117,
-          12
+          2
         ]
       ],
-      "id": 7547,
+      "id": 7084,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.strokeOnly",
@@ -1012,7 +1012,7 @@
             },
             {
               "name": "linecap",
-              "comment": "Optional string to set line cap style. Can be \"butt\", \"round\", or \"square\".\n",
+              "comment": "Optional string to set line cap style. Can be \"butt\", \"round\", or \"square\".",
               "type": "string",
               "default": false
             }
@@ -1027,10 +1027,10 @@
         [
           "src/Svg.ts",
           181,
-          9
+          2
         ]
       ],
-      "id": 7392,
+      "id": 6991,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1048,7 +1048,7 @@
             },
             {
               "name": "v",
-              "comment": "style value\n",
+              "comment": "style value",
               "type": "any",
               "default": false
             }
@@ -1063,10 +1063,10 @@
         [
           "src/Svg.ts",
           689,
-          6
+          2
         ]
       ],
-      "id": 7519,
+      "id": 7056,
       "flags": {},
       "overrides": "VisualForm.text",
       "inherits": false,
@@ -1099,10 +1099,10 @@
         [
           "src/Svg.ts",
           298,
-          13
+          2
         ]
       ],
-      "id": 7420,
+      "id": 7019,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1110,7 +1110,7 @@
         {
           "comment": "Set this form's group scope by an ID, and optionally define the group's parent element. A group scope keeps track of elements by their generated IDs, and updates their properties as needed. See also [`SVGForm.scope`](#link).",
           "returns": "object",
-          "returns_comment": "this form's context\n",
+          "returns_comment": "this form's context",
           "parameters": [
             {
               "name": "group_id",
@@ -1135,10 +1135,10 @@
         [
           "src/Svg.ts",
           456,
-          12
+          9
         ]
       ],
-      "id": 7458,
+      "id": 6932,
       "flags": {
         "isStatic": true
       },
@@ -1182,7 +1182,7 @@
             },
             {
               "name": "cc",
-              "comment": "an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.\n",
+              "comment": "an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.",
               "type": "boolean",
               "default": false
             }
@@ -1197,10 +1197,10 @@
         [
           "src/Svg.ts",
           419,
-          15
+          9
         ]
       ],
-      "id": 7450,
+      "id": 6927,
       "flags": {
         "isStatic": true
       },
@@ -1226,7 +1226,7 @@
             },
             {
               "name": "radius",
-              "comment": "radius of the circle\n",
+              "comment": "radius of the circle",
               "type": "number",
               "default": "10"
             }
@@ -1241,10 +1241,10 @@
         [
           "src/Svg.ts",
           335,
-          14
+          9
         ]
       ],
-      "id": 7429,
+      "id": 6911,
       "flags": {
         "isStatic": true
       },
@@ -1258,7 +1258,7 @@
           "parameters": [
             {
               "name": "ctx",
-              "comment": "a context object for an SVGForm\n",
+              "comment": "a context object for an SVGForm",
               "type": "any",
               "default": false
             }
@@ -1273,10 +1273,10 @@
         [
           "src/Svg.ts",
           529,
-          13
+          9
         ]
       ],
-      "id": 7482,
+      "id": 6945,
       "flags": {
         "isStatic": true
       },
@@ -1296,7 +1296,7 @@
             },
             {
               "name": "pts",
-              "comment": "a Group or an Iterable<PtLike>\n",
+              "comment": "a Group or an Iterable<PtLike>",
               "type": "PtLikeIterable",
               "default": false
             }
@@ -1311,10 +1311,10 @@
         [
           "src/Svg.ts",
           390,
-          14
+          9
         ]
       ],
-      "id": 7439,
+      "id": 6921,
       "flags": {
         "isStatic": true
       },
@@ -1354,7 +1354,7 @@
           "tags": [
             {
               "tag": "example",
-              "text": "`SVGForm.point( p )`, `SVGForm.point( p, 10, \"circle\" )`\n"
+              "text": "`SVGForm.point( p )`, `SVGForm.point( p, 10, \"circle\" )`"
             }
           ]
         }
@@ -1366,10 +1366,10 @@
         [
           "src/Svg.ts",
           588,
-          31
+          19
         ]
       ],
-      "id": 7494,
+      "id": 6954,
       "flags": {
         "isProtected": true,
         "isStatic": true
@@ -1380,7 +1380,7 @@
         {
           "comment": "Given a list of points, return a space-separated string",
           "returns": "{ count:`number`, string:`string` }",
-          "returns_comment": "an object of {string, count}\n",
+          "returns_comment": "an object of {string, count}",
           "parameters": [
             {
               "name": "pts",
@@ -1399,10 +1399,10 @@
         [
           "src/Svg.ts",
           604,
-          16
+          9
         ]
       ],
-      "id": 7500,
+      "id": 6960,
       "flags": {
         "isStatic": true
       },
@@ -1422,7 +1422,7 @@
             },
             {
               "name": "pts",
-              "comment": "a Group or an Iterable<PtLike> representing a polygon\n",
+              "comment": "a Group or an Iterable<PtLike> representing a polygon",
               "type": "PtLikeIterable",
               "default": false
             }
@@ -1437,10 +1437,10 @@
         [
           "src/Svg.ts",
           626,
-          13
+          9
         ]
       ],
-      "id": 7507,
+      "id": 6964,
       "flags": {
         "isStatic": true
       },
@@ -1460,7 +1460,7 @@
             },
             {
               "name": "pts",
-              "comment": "a Group or an Iterable<PtLike> with 2 Pt specifying the top-left and bottom-right positions.\n",
+              "comment": "a Group or an Iterable<PtLike> with 2 Pt specifying the top-left and bottom-right positions.",
               "type": "PtLikeIterable",
               "default": false
             }
@@ -1475,10 +1475,10 @@
         [
           "src/Svg.ts",
           344,
-          16
+          9
         ]
       ],
-      "id": 7432,
+      "id": 6914,
       "flags": {
         "isStatic": true
       },
@@ -1492,7 +1492,7 @@
           "parameters": [
             {
               "name": "item",
-              "comment": "a [`IPlayer`](#link) object that's added to space (see [`Space.add`](#link)) and has an `animateID` property\n",
+              "comment": "a [`IPlayer`](#link) object that's added to space (see [`Space.add`](#link)) and has an `animateID` property",
               "type": "IPlayer",
               "default": false
             }
@@ -1507,10 +1507,10 @@
         [
           "src/Svg.ts",
           498,
-          15
+          9
         ]
       ],
-      "id": 7473,
+      "id": 6940,
       "flags": {
         "isStatic": true
       },
@@ -1536,7 +1536,7 @@
             },
             {
               "name": "halfsize",
-              "comment": "half size of the square\n",
+              "comment": "half size of the square",
               "type": "number",
               "default": false
             }
@@ -1551,10 +1551,10 @@
         [
           "src/Svg.ts",
           357,
-          14
+          9
         ]
       ],
-      "id": 7435,
+      "id": 6917,
       "flags": {
         "isStatic": true
       },
@@ -1564,7 +1564,7 @@
         {
           "comment": "A static function to help adding style object to an element.\nNote that this put all styles into `style` attribute instead of individual svg attributes, so that the styles can be parsed by Adobe Illustrator.",
           "returns": "Element",
-          "returns_comment": "this DOM element\n",
+          "returns_comment": "this DOM element",
           "parameters": [
             {
               "name": "elem",
@@ -1594,10 +1594,10 @@
         [
           "src/Svg.ts",
           664,
-          13
+          9
         ]
       ],
-      "id": 7514,
+      "id": 6968,
       "flags": {
         "isStatic": true
       },
@@ -1641,14 +1641,14 @@
         [
           "src/Svg.ts",
           147,
-          14
+          9
         ]
       ],
-      "id": 7384,
+      "id": 6910,
       "flags": {
         "isStatic": true
       },
-      "type": "domID",
+      "type": "number",
       "overrides": false,
       "inherits": false,
       "comment": ""
@@ -1659,14 +1659,14 @@
         [
           "src/Svg.ts",
           146,
-          16
+          9
         ]
       ],
-      "id": 7383,
+      "id": 6909,
       "flags": {
         "isStatic": true
       },
-      "type": "groupID",
+      "type": "number",
       "overrides": false,
       "inherits": false,
       "comment": ""

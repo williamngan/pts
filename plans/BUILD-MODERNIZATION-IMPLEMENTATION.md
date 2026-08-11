@@ -105,9 +105,9 @@ The public `Line.marker` parameter remains typed as `string`; only its always-tr
 
 No consumer `engines.node` field was added. Node 24 is the pinned maintainer build environment, while the published ES2015 artifacts have a broader runtime contract that is tested separately. Conflating those policies would unnecessarily reject consumers.
 
-## Intentionally deferred
+## Follow-up work
 
-- The custom Python documentation transformer is not part of the build gate. Current TypeDoc JSON no longer matches its legacy schema, so documentation regeneration needs a focused compatibility change rather than being mixed into this build migration.
+- The obsolete Python documentation transformer was subsequently replaced by a focused TypeDoc Node API generator. Documentation freshness and browser behavior are now part of the main build gate; see [`DOCUMENTATION-MODERNIZATION-PLAN.md`](./DOCUMENTATION-MODERNIZATION-PLAN.md).
 - Full TypeScript strict mode, class-field semantic changes, and a newer JavaScript output target remain separate source-quality projects.
 - `react-pts-canvas` still needs its own modernization, most importantly externalizing Pts and adding its lifecycle/package tests.
 - Registry publishing, provenance, version selection, and promotion from prerelease are maintainer release actions.

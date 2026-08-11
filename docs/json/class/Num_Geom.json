@@ -4,11 +4,11 @@
     [
       "src/Num.ts",
       197,
-      17
+      13
     ]
   ],
   "kind": "Class",
-  "id": 1480,
+  "id": 3165,
   "comment": "Geom class provides static helper functions for basic geometric operations.",
   "constructor": [],
   "accessors": [],
@@ -19,10 +19,10 @@
         [
           "src/Num.ts",
           271,
-          15
+          9
         ]
       ],
-      "id": 1499,
+      "id": 3184,
       "flags": {
         "isStatic": true
       },
@@ -43,12 +43,12 @@
             {
               "name": "ptOrIndex",
               "comment": "an index for the Pt array, or an external Pt",
-              "type": "PtLike | number",
+              "type": "number | PtLike",
               "default": "0"
             },
             {
               "name": "direction",
-              "comment": "a string either \"to\" (subtract all Pt with this anchor base), or \"from\" (add all Pt from this anchor base)\n",
+              "comment": "a string either \"to\" (subtract all Pt with this anchor base), or \"from\" (add all Pt from this anchor base)",
               "type": "to | from",
               "default": "\"to\""
             }
@@ -63,10 +63,10 @@
         [
           "src/Num.ts",
           203,
-          19
+          9
         ]
       ],
-      "id": 1481,
+      "id": 3166,
       "flags": {
         "isStatic": true
       },
@@ -80,39 +80,7 @@
           "parameters": [
             {
               "name": "angle",
-              "comment": "angle value\n",
-              "type": "number",
-              "default": false
-            }
-          ],
-          "tags": []
-        }
-      ]
-    },
-    {
-      "name": "boundRadian",
-      "source": [
-        [
-          "src/Num.ts",
-          212,
-          20
-        ]
-      ],
-      "id": 1484,
-      "flags": {
-        "isStatic": true
-      },
-      "overrides": false,
-      "inherits": false,
-      "signatures": [
-        {
-          "comment": "Bound a radian between 0 to two PI.",
-          "returns": "number",
-          "returns_comment": false,
-          "parameters": [
-            {
-              "name": "radian",
-              "comment": "radian value\n",
+              "comment": "angle value",
               "type": "number",
               "default": false
             }
@@ -127,10 +95,10 @@
         [
           "src/Num.ts",
           240,
-          20
+          9
         ]
       ],
-      "id": 1493,
+      "id": 3178,
       "flags": {
         "isStatic": true
       },
@@ -140,7 +108,7 @@
         {
           "comment": "Get a bounding box for a set of Pts.",
           "returns": "Group",
-          "returns_comment": "a Group of two Pts, representing the top-left and bottom-right corners\n",
+          "returns_comment": "a Group of two Pts, representing the top-left and bottom-right corners",
           "parameters": [
             {
               "name": "pts",
@@ -154,15 +122,47 @@
       ]
     },
     {
+      "name": "boundRadian",
+      "source": [
+        [
+          "src/Num.ts",
+          212,
+          9
+        ]
+      ],
+      "id": 3169,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Bound a radian between 0 to two PI.",
+          "returns": "number",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "radian",
+              "comment": "radian value",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "centroid",
       "source": [
         [
           "src/Num.ts",
           260,
-          17
+          9
         ]
       ],
-      "id": 1496,
+      "id": 3181,
       "flags": {
         "isStatic": true
       },
@@ -172,7 +172,7 @@
         {
           "comment": "Get a centroid (the average middle point) for a set of Pts.",
           "returns": "Pt",
-          "returns_comment": "a centroid Pt\n",
+          "returns_comment": "a centroid Pt",
           "parameters": [
             {
               "name": "pts",
@@ -191,10 +191,10 @@
         [
           "src/Num.ts",
           491,
-          17
+          9
         ]
       ],
-      "id": 1547,
+      "id": 3232,
       "flags": {
         "isStatic": true
       },
@@ -203,8 +203,8 @@
       "signatures": [
         {
           "comment": "Generate a cosine lookup table.",
-          "returns": "{ cos:`find`, table:`Float64Array` }",
-          "returns_comment": "an object with a cosine tables (array of 360 values) and a function to get cosine given a radian input.\n",
+          "returns": "{ cos:` Fn(rad:number)`, table:`Float64Array` }",
+          "returns_comment": "an object with a cosine tables (array of 360 values) and a function to get cosine given a radian input.",
           "parameters": [],
           "tags": []
         }
@@ -216,10 +216,10 @@
         [
           "src/Num.ts",
           292,
-          20
+          9
         ]
       ],
-      "id": 1504,
+      "id": 3189,
       "flags": {
         "isStatic": true
       },
@@ -229,7 +229,7 @@
         {
           "comment": "Get an interpolated (or extrapolated) value between two Pts. For linear interpolation between 2 scalar values, use [`Num.lerp`](#link).",
           "returns": "Pt",
-          "returns_comment": "interpolated point as a new Pt\n",
+          "returns_comment": "interpolated point as a new Pt",
           "parameters": [
             {
               "name": "a",
@@ -260,10 +260,10 @@
         [
           "src/Num.ts",
           326,
-          24
+          9
         ]
       ],
-      "id": 1513,
+      "id": 3198,
       "flags": {
         "isStatic": true
       },
@@ -298,10 +298,10 @@
         [
           "src/Num.ts",
           307,
-          22
+          9
         ]
       ],
-      "id": 1509,
+      "id": 3194,
       "flags": {
         "isStatic": true
       },
@@ -311,7 +311,7 @@
         {
           "comment": "Find two Pts that are perpendicular to this Pt (2D only).",
           "returns": "Group",
-          "returns_comment": "an array of two Pt that are perpendicular to this Pt\n",
+          "returns_comment": "an array of two Pt that are perpendicular to this Pt",
           "parameters": [
             {
               "name": "pt",
@@ -336,10 +336,10 @@
         [
           "src/Num.ts",
           468,
-          18
+          9
         ]
       ],
-      "id": 1542,
+      "id": 3227,
       "flags": {
         "isStatic": true
       },
@@ -365,7 +365,7 @@
             },
             {
               "name": "axis",
-              "comment": "optional axis such as \"xy\" (use Const.xy) to define a 2D plane, or a number array to specify indices\n",
+              "comment": "optional axis such as \"xy\" (use Const.xy) to define a 2D plane, or a number array to specify indices",
               "type": "string | PtLike",
               "default": false
             }
@@ -380,10 +380,10 @@
         [
           "src/Num.ts",
           412,
-          17
+          9
         ]
       ],
-      "id": 1530,
+      "id": 3215,
       "flags": {
         "isStatic": true
       },
@@ -415,7 +415,7 @@
             },
             {
               "name": "axis",
-              "comment": "optional axis such as \"xy\" (use Const.xy) to define a 2D plane, or a number array to specify indices\n",
+              "comment": "optional axis such as \"xy\" (use Const.xy) to define a 2D plane, or a number array to specify indices",
               "type": "string | PtLike",
               "default": false
             }
@@ -430,10 +430,10 @@
         [
           "src/Num.ts",
           389,
-          14
+          9
         ]
       ],
-      "id": 1525,
+      "id": 3210,
       "flags": {
         "isStatic": true
       },
@@ -459,7 +459,7 @@
             },
             {
               "name": "anchor",
-              "comment": "optional anchor point to scale from\n",
+              "comment": "optional anchor point to scale from",
               "type": "PtLike",
               "default": false
             }
@@ -474,10 +474,10 @@
         [
           "src/Num.ts",
           440,
-          16
+          9
         ]
       ],
-      "id": 1536,
+      "id": 3221,
       "flags": {
         "isStatic": true
       },
@@ -509,7 +509,7 @@
             },
             {
               "name": "axis",
-              "comment": "optional axis such as \"xy\" (use Const.xy) to define a 2D plane, or a number array to specify indices\n",
+              "comment": "optional axis such as \"xy\" (use Const.xy) to define a 2D plane, or a number array to specify indices",
               "type": "string | PtLike",
               "default": false
             }
@@ -524,10 +524,10 @@
         [
           "src/Num.ts",
           504,
-          17
+          9
         ]
       ],
-      "id": 1552,
+      "id": 3240,
       "flags": {
         "isStatic": true
       },
@@ -536,8 +536,8 @@
       "signatures": [
         {
           "comment": "Generate a sine lookup table.",
-          "returns": "{ sin:`find`, table:`Float64Array` }",
-          "returns_comment": "an object with a sine tables (array of 360 values) and a function to get sine value given a radian input.\n",
+          "returns": "{ sin:` Fn(rad:number)`, table:`Float64Array` }",
+          "returns_comment": "an object with a sine tables (array of 360 values) and a function to get sine value given a radian input.",
           "parameters": [],
           "tags": []
         }
@@ -549,10 +549,10 @@
         [
           "src/Num.ts",
           349,
-          18
+          9
         ]
       ],
-      "id": 1522,
+      "id": 3207,
       "flags": {
         "isStatic": true
       },
@@ -566,7 +566,7 @@
           "parameters": [
             {
               "name": "pts",
-              "comment": "a Group or an Iterable<Pt>\n",
+              "comment": "a Group or an Iterable<Pt>",
               "type": "PtIterable",
               "default": false
             }
@@ -581,10 +581,10 @@
         [
           "src/Num.ts",
           230,
-          17
+          9
         ]
       ],
-      "id": 1490,
+      "id": 3175,
       "flags": {
         "isStatic": true
       },
@@ -598,7 +598,7 @@
           "parameters": [
             {
               "name": "radian",
-              "comment": "radian value\n",
+              "comment": "radian value",
               "type": "number",
               "default": false
             }
@@ -613,10 +613,10 @@
         [
           "src/Num.ts",
           221,
-          17
+          9
         ]
       ],
-      "id": 1487,
+      "id": 3172,
       "flags": {
         "isStatic": true
       },
@@ -630,7 +630,7 @@
           "parameters": [
             {
               "name": "angle",
-              "comment": "angle value\n",
+              "comment": "angle value",
               "type": "number",
               "default": false
             }
@@ -645,10 +645,10 @@
         [
           "src/Num.ts",
           337,
-          20
+          9
         ]
       ],
-      "id": 1517,
+      "id": 3202,
       "flags": {
         "isStatic": true
       },
@@ -674,7 +674,7 @@
             },
             {
               "name": "boundPt2",
-              "comment": "boundary Pt 2\n",
+              "comment": "boundary Pt 2",
               "type": "PtLike",
               "default": false
             }

@@ -4,11 +4,11 @@
     [
       "src/Types.ts",
       89,
-      34
+      17
     ]
   ],
   "kind": "Interface",
-  "id": 464,
+  "id": 7154,
   "comment": "Typescript interface: MultiTouchElement represents an element that can handle touch events.",
   "constructor": [],
   "accessors": [],
@@ -19,10 +19,10 @@
         [
           "src/Types.ts",
           90,
-          18
+          2
         ]
       ],
-      "id": 465,
+      "id": 7155,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -55,10 +55,10 @@
         [
           "src/Types.ts",
           91,
-          21
+          2
         ]
       ],
-      "id": 469,
+      "id": 7159,
       "flags": {},
       "overrides": false,
       "inherits": false,

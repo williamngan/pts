@@ -30,7 +30,7 @@ pre {
 }
 
 pre .keyword {
-  color: #0ca;
+  color: #007a3d;
 }
 
 p {
@@ -89,11 +89,15 @@ p {
   position: fixed; top: 0px; left: 0;
   display: none;
   width: 100px; height: 80px;
+  padding: 0;
+  border: 0;
   background: transparent;
   color: #42e;
   line-height: 78px;
   text-align: center;
   font-size: 4em;
+  cursor: pointer;
+  z-index: 20;
 }
 
 /* ---------- */
@@ -155,10 +159,12 @@ code {
   position: absolute;
   right: 0; top: 0; padding: 0 20px;
   line-height: 68px;
-  color: #9ab;
+  color: #678;
   font-size: 1.5em;
   cursor: pointer;
   display: none;
+  border: 0;
+  background: transparent;
 }
 
 #clearSearch:hover {
@@ -182,10 +188,10 @@ code {
 }
 
 ::placeholder {
-  color: #abc;
+  color: #678;
 }
 :-ms-input-placeholder {
-  color: #abc;
+  color: #678;
 }
 
 #search > input:focus, #search.searching > input {
@@ -227,7 +233,7 @@ code {
 }
 
 #modules .ts {
-  color: #9ab;
+  color: #678;
 }
 
 #modules .selected {
@@ -249,7 +255,7 @@ code {
 }
 
 #members .inherits {
-  color: #9ab;
+  color: #678;
   font-weight: 400;
 }
 
@@ -266,7 +272,7 @@ code {
 }
 
 #members span:hover {
-  color: #0c6;
+  color: #007a3d;
 }
 
 #members.searchResults .item {
@@ -289,7 +295,7 @@ code {
 #members.searchResults .itemType {
   font-size: 1em;
   display: block;
-  color: #9ab;
+  color: #678;
 }
 
 
@@ -316,7 +322,7 @@ code {
 
 #contents .param {
   font-weight: normal;
-  color: #9ab;
+  color: #678;
   /* font-size: 0.8em; */
 }
 
@@ -333,7 +339,7 @@ code {
   padding-right: 20px;
   min-width: 100px;
   max-width: 100px;
-  color: #0c6;
+  color: #007a3d;
 }
 
 #contents .signature.tags {
@@ -341,12 +347,21 @@ code {
 }
 
 #contents .signature.tags > .label {
-  color: #9ab;
+  color: #678;
 }
 
 
 #contents .description {
   margin-bottom: 20px;
+}
+
+#contents .overload + .overload {
+  border-top: 1px solid #cde;
+  margin-top: 40px;
+}
+
+#contents .overload + .overload .member-title {
+  margin-top: 20px;
 }
 
 
@@ -368,7 +383,7 @@ code {
 }
 
 #contents .misc {
-  color: #9ab;
+  color: #678;
   font-size: 0.9em;
   font-weight: 400;
   margin-bottom: 1em;
@@ -386,22 +401,30 @@ code {
   font-size: 13px;
 }
 
-#contents h4 {
+#contents .member-title {
   margin-top: 45px;
   margin-bottom: 5px;
+  font-size: 1.5em;
+  font-weight: bold;
 }
 
-#contents h3 {
+#contents .section-title {
   margin-top: 80px;
   margin-bottom: -20px;
+  font-weight: 300;
+  font-size: 2.4em;
 }
 
-#contents .props h4 {
+#contents .props .member-title {
   margin-top: 30px;
 }
 
-#contents .props h3 {
+#contents .props .section-title {
   margin-bottom: -10px;
+}
+
+#contents .overview-title {
+  font-size: 1.5em;
 }
 
 
@@ -446,7 +469,7 @@ p {
 }
 
 .typedef {
-  color: #9ab;
+  color: #678;
   letter-spacing: 0.05em;
 }
 
@@ -463,10 +486,14 @@ p {
   font-size: 3em;
   text-decoration: none;
   color: #678;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
 }
 
 #close:hover {
-  color: #0ca;
+  color: #007a3d;
 }
 
 
@@ -495,7 +522,18 @@ p {
 
   /* Header and footer */
   
-  #header, #footer {
+  #header {
+    width: 100%;
+    height: 71px;
+    margin: 0;
+    padding-left: 50px;
+    display: flex;
+    align-items: center;
+    line-height: 70px;
+    border: none;
+  }
+
+  #footer {
     width: 70%;
     margin: 0 auto;
     line-height: 80px;
@@ -523,10 +561,20 @@ p {
     padding-right: 10px;
   }
 
-  #pts { padding-left: 0; }
+  #pts {
+    flex: 0 0 auto;
+    padding: 0 10px;
+  }
   #pts a { padding: 0; }
-  #topmenu { right: 0; }
-  #topmenu a { right: 0; }
+  #topmenu {
+    position: static;
+    display: flex;
+    align-items: center;
+    height: 70px;
+    margin-left: auto;
+    padding-right: 10px;
+    white-space: nowrap;
+  }
 
   /* --------- */
 
@@ -550,19 +598,21 @@ p {
 
 }
 
-@media only screen and (max-device-width : 767px) {
+@media only screen and (max-device-width : 767px), screen and (max-width : 767px) {
   /* Header and Footer */
   
   #header {
     padding: 0;
-    margin-left: 15%;
-    width: 85%;
+    padding-left: 50px;
+    margin: 0;
+    width: 100%;
     line-height: 70px;
     font-size: 1.2em;
   }  
   
-  #topmenu { right: 20px;}
-  #topmenu > a { padding-left: 0; }
+  #pts { padding: 0 8px; }
+  #topmenu { padding-right: 6px; }
+  #topmenu > a { padding: 0 6px; }
   #topmenu > a:nth-child(3) { display: none; }
   
   #toc { 

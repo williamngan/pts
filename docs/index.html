@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title>Pts.js Documentation</title>
     <meta charset="UTF-8">
@@ -7,7 +7,7 @@
     <script type="text/javascript" src="./js/marked.min.js"></script>
     <link rel="stylesheet" href="./css/style.css" />
 
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <meta name="thumbnail"           content="https://ptsjs.org/assets/thumbnail.png" />
     <meta property="og:type"         content="website" />
@@ -22,36 +22,36 @@
   </head>
   <body>
 
-    <div id="header">
+    <header id="header">
       <div id="pts"><a href="../">Pts<span>.</span></a>docs</div>
       <div id="search">
-        <input type="text" id="search_input" placeholder="Search..." />
-        <div id="clearSearch">&times;</div>
+        <input type="search" id="search_input" placeholder="Search..." aria-label="Search documentation" autocomplete="off" />
+        <button type="button" id="clearSearch" aria-label="Clear search">&times;</button>
       </div>
-      <div id="topmenu">
+      <nav id="topmenu" aria-label="Documentation links">
         <a href="../guide/Get-started-0100.html">guides</a>
         <a href="../demo/index.html">demos</a>
         <a href="../study/index.html">studies</a>
         <a href="https://github.com/williamngan/pts">github</a>
-      </div>
-    </div>
+      </nav>
+    </header>
 
-    <div id="toc">≡</div>
+    <button type="button" id="toc" aria-label="Open documentation menu" aria-controls="menu" aria-expanded="false">≡</button>
     
     <div id="docapp" v-cloak>
 
       <div id="menu">
         
-        <div id="modules">
+        <nav id="modules" tabindex="0" aria-label="Modules">
             <div v-for="m in modules">
               <h4>{{ m[0] }}</h4>
               <div class="item" v-for="c in m[1]" v-on:click="loadClass( m[0], c )">
                 <span v-bind:class="{selected: m[0]+'_'+c === selected, ts: m[0] === 'Types' }">{{ c }}</span>
               </div>
             </div>
-        </div>
+        </nav>
 
-        <div id="members" v-bind:class="{collapsed: !expandMemberPane(), searchResults: searchQuery.length > 0}">
+        <nav id="members" tabindex="0" aria-label="Class members" v-bind:class="{collapsed: !expandMemberPane(), searchResults: searchQuery.length > 0}">
           <div v-if="searchResults.length > 0">
             <div v-for="s in searchResults" class="item">
               <span v-on:click="searchLink(s)">{{s[1]}}</span>
@@ -71,7 +71,7 @@
               <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'constructor_'+m.name )">{{ contents.name }}</span>
             </div>
 
-            <h4 v-if="(contents.variables && contents.variables.length > 0) || (contents.properties && contents.properties.length > 0)">Internal Properties</h4>
+            <h4 v-if="(contents.variables && contents.variables.length > 0) || (contents.properties && contents.properties.length > 0)">Properties</h4>
             <div v-for="m in contents.variables">
               <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'property_'+m.name )">{{ m.name }}</span>
             </div>
@@ -86,24 +86,24 @@
 
             <h4 v-if="contents.methods && contents.methods.length > 0">Methods</h4>
             <div v-for="m in contents.methods">
-              <span v-bind:class="{inherits: m.inherits}" v-on:click="jumpTo( 'function_'+m.name )">{{ m.name }}</span>
+              <span v-bind:class="{inherits: m.inherits}" v-bind:data-target="anchor('function', m)" v-on:click="jumpTo( anchor('function', m) )">{{ m.name }}</span>
             </div>
 
             <h4 v-if="contents.type_alias && contents.type_alias.length > 0">Types</h4>
           </div>
-        </div>
+        </nav>
 
-        <div id="close">&times;</div>
+        <button type="button" id="close" aria-label="Close documentation menu">&times;</button>
       </div>
       
-      <div id="contents" v-bind:class="{expanded: expandMemberPane()}" v-on:click="clickTarget">
+      <main id="contents" v-bind:class="{expanded: expandMemberPane()}" v-on:click="clickTarget">
         <div v-if="contents.name.length < 2">
           <h1>Pts Docs</h1>
           <div class="top_info">
             <p>This page provides detailed typescript/javascript API documentation of Pts.js. It's intended for advanced users. </p>
             <p>If you're getting started, read <a href="../guide/">the guides</a> and check out <a href="../demo">the demos</a> first.</p>
           </div>
-          <h4>Organization</h4>
+          <h2 class="overview-title">Organization</h2>
           <p>
             Pts classes are organized into modules like this: Modules ⇢ Classes ⇢  Methods &amp; Accessors. <br /> 
             For example, when using ES6 modules, you can access a Pts function this way:
@@ -112,7 +112,7 @@
               <b>Polygon</b>.centroid( myPts );</code></pre>
           </p>
           <p>If you don't know what this means, don't worry about it. You can also link pts.js in your html and access all the classes directly. See the <a href="../guide/">getting started guide</a> for a quick example.</p>
-          <h4>Overview</h4>
+          <h2 class="overview-title">Overview</h2>
           <p>Pts provides you with essential building blocks for creative coding and visualization.</p>
           <ul>
             <li><strong>Pt module</strong> provides Pt and Group classes for manipulating points (ie, n-dimensional vectors).</li>
@@ -122,10 +122,10 @@
           </ul>
         </div>
 
-        <h1>{{ contents.name }}</h1>
+        <h1 v-if="contents.name.length >= 2">{{ contents.name }}</h1>
         
-        <div id="top_info" class="top_info" v-html="md(contents.comment)"></div>
-        <div class="misc">
+        <div v-if="contents.name.length >= 2" id="top_info" class="top_info" v-bind:role="loadError ? 'alert' : null" v-html="md(contents.comment)"></div>
+        <div v-if="contents.name.length >= 2" class="misc">
           <span v-if="contents.kind" :class="'token t_'+contents.kind">{{ contents.kind }}</span>
           <span v-if="contents.extends && contents.extends.length > 0">extends {{ contents.extends.join(", ") }}</span>
           <span v-if="contents.implements && contents.implements.length > 0">implements {{ contents.implements.join(", ") }}</span>
@@ -134,12 +134,10 @@
         
         
         <div id="constructor" class="section" v-if="contents.constructor && contents.constructor.length > 0">
-          <h3>Constructor</h3>
+          <h2 class="section-title">Constructor</h2>
           <div v-for="m in contents.constructor" v-bind:id="'constructor_'+m.name">
-            <h4>new {{ contents.name }} <span class="param">( {{ params(m.signatures) }} )</span></h4>
-            
-            <div>
-                <div v-for="s in first(m.signatures)">
+            <div v-for="s in m.signatures" class="overload">
+                  <h3 class="member-title">new {{ contents.name }} <span class="param">( {{ params([s]) }} )</span></h3>
                   
                   <div class="description" v-html="md(s.comment)"></div>
                 
@@ -172,16 +170,15 @@
                     </div>
                   </div>
                 
-                </div>
-              </div>
+            </div>
           </div>
         </div>
 
 
         <div class="section props" v-if="(contents.variables && contents.variables.length > 0) || (contents.properties && contents.properties.length > 0)">
-          <h3>Internal Properties</h3>
+          <h2 class="section-title">Properties</h2>
           <div v-for="m in contents.variables" v-bind:id="'property_'+m.name">
-            <h4>{{ m.name }}</h4>
+            <h3 class="member-title">{{ m.name }}</h3>
             <div v-html="md(m.comment)"></div>
             <div class="misc">
                 <span v-if="m.overrides">Overrides&nbsp;<code>{{ m.overrides }}</code></span>
@@ -190,8 +187,8 @@
             </div>
           </div>
 
-          <div class="section props" v-for="m in contents.properties"  v-bind:id="'property_'+m.name">
-            <h4>{{ m.name }}</h4>
+          <div v-for="m in contents.properties" v-bind:id="'property_'+m.name">
+            <h3 class="member-title">{{ m.name }}</h3>
             <div v-html="md(m.comment)"></div>
             <div class="misc">
                 <span v-if="m.overrides">Overrides&nbsp;<code>{{ m.overrides }}</code></span>
@@ -203,13 +200,13 @@
         
       
         <div class="section props" v-if="contents.accessors && contents.accessors.length > 0">
-          <h3>Accessors</h3>
+          <h2 class="section-title">Accessors</h2>
           <div v-for="m in contents.accessors" v-bind:id="'accessor_'+m.name">
-            <h4>
+            <h3 class="member-title">
               <span class="token" v-if="m.getter">GET</span>
               <span class="token" v-if="m.setter">SET</span>
               {{ m.name }} <span class="param">: {{ m.getter.type || m.setter.parameters.type || "" }}</span>
-            </h4>
+            </h3>
             
             <div v-html="md(m.comment)"></div>
             <div class="misc">
@@ -225,15 +222,14 @@
 
 
         <div class="section" v-if="contents.methods && contents.methods.length > 0">
-          <h3>Methods</h3>
-          <div v-for="m in contents.methods" v-bind:id="'function_'+m.name">
-            <h4>
-              <span v-if="m.flags && m.flags.isStatic" class="token">STATIC</span> 
-              {{ m.name }} 
-              <span class="param">( {{ params(m.signatures) }} )</span>
-            </h4>
-            <div>
-              <div v-for="s in first(m.signatures)">
+          <h2 class="section-title">Methods</h2>
+          <div v-for="m in contents.methods" v-bind:id="anchor('function', m)">
+              <div v-for="s in m.signatures" class="overload">
+                <h3 class="member-title">
+                  <span v-if="m.flags && m.flags.isStatic" class="token">STATIC</span>
+                  {{ m.name }}
+                  <span class="param">( {{ params([s]) }} )</span>
+                </h3>
                 
                 <div class="description" v-html="md(s.comment)"></div>
               
@@ -267,17 +263,16 @@
                 </div>
               
               </div>
-            </div>
           </div>
         </div>
 
         <div class="section" v-if="contents.type_alias && contents.type_alias.length > 0">
-          <h3>Type Alias</h3>
-          <h4>equivalent to</h4>
+          <h2 class="section-title">Type Alias</h2>
+          <h3 class="member-title">equivalent to</h3>
           <div v-for="m in contents.type_alias"><div v-html="md(m)"></div></div>
         </div>
 
-      </div>
+      </main>
     </div>
 
     <script type="text/javascript" src="./js/doc.js"></script>

@@ -4,11 +4,11 @@
     [
       "src/Op.ts",
       400,
-      22
+      13
     ]
   ],
   "kind": "Class",
-  "id": 1116,
+  "id": 3517,
   "comment": "Rectangle class provides static functions to create and operate on rectangles. A rectangle is usually represented as a Group of 2 Pts, marking the top-left and bottom-right corners of the rectangle.\nYou can use the static functions as-is, or apply the [`Group.op`](#link) or [`Pt.op`](#link) to enable functional programming.\nSee [Op guide](../guide/Op-0400.html) for details.",
   "constructor": [],
   "accessors": [],
@@ -19,10 +19,10 @@
         [
           "src/Op.ts",
           518,
-          20
+          9
         ]
       ],
-      "id": 1152,
+      "id": 3553,
       "flags": {
         "isStatic": true
       },
@@ -32,7 +32,7 @@
         {
           "comment": "Given an array of rectangles, get a rectangle that bounds all of them.",
           "returns": "Group",
-          "returns_comment": "the bounding rectangle as a Group\n",
+          "returns_comment": "the bounding rectangle as a Group",
           "parameters": [
             {
               "name": "rects",
@@ -51,10 +51,10 @@
         [
           "src/Op.ts",
           479,
-          15
+          9
         ]
       ],
-      "id": 1143,
+      "id": 3544,
       "flags": {
         "isStatic": true
       },
@@ -83,10 +83,10 @@
         [
           "src/Op.ts",
           491,
-          16
+          9
         ]
       ],
-      "id": 1146,
+      "id": 3547,
       "flags": {
         "isStatic": true
       },
@@ -100,7 +100,7 @@
           "parameters": [
             {
               "name": "rect",
-              "comment": "a Group or an Iterable<Pt> with 2 Pt representing a Rectangle\n",
+              "comment": "a Group or an Iterable<Pt> with 2 Pt representing a Rectangle",
               "type": "PtIterable",
               "default": false
             }
@@ -115,10 +115,10 @@
         [
           "src/Op.ts",
           409,
-          13
+          9
         ]
       ],
-      "id": 1117,
+      "id": 3518,
       "flags": {
         "isStatic": true
       },
@@ -128,7 +128,7 @@
         {
           "comment": "Create a rectangle from top-left anchor point. Same as [`Rectangle.fromTopLeft`](#link).",
           "returns": "Group",
-          "returns_comment": "a Group of 2 Pts representing a rectangle\n",
+          "returns_comment": "a Group of 2 Pts representing a rectangle",
           "parameters": [
             {
               "name": "topLeft",
@@ -159,10 +159,10 @@
         [
           "src/Op.ts",
           434,
-          19
+          9
         ]
       ],
-      "id": 1127,
+      "id": 3528,
       "flags": {
         "isStatic": true
       },
@@ -172,7 +172,7 @@
         {
           "comment": "Create a rectangle given a center position and a size.",
           "returns": "Group",
-          "returns_comment": "a Group of 2 Pts representing a rectangle\n",
+          "returns_comment": "a Group of 2 Pts representing a rectangle",
           "parameters": [
             {
               "name": "center",
@@ -203,10 +203,10 @@
         [
           "src/Op.ts",
           421,
-          20
+          9
         ]
       ],
-      "id": 1122,
+      "id": 3523,
       "flags": {
         "isStatic": true
       },
@@ -216,7 +216,7 @@
         {
           "comment": "Create a rectangle given a top-left position and a size.",
           "returns": "Group",
-          "returns_comment": "a Group of 2 Pts representing a rectangle\n",
+          "returns_comment": "a Group of 2 Pts representing a rectangle",
           "parameters": [
             {
               "name": "topLeft",
@@ -247,10 +247,10 @@
         [
           "src/Op.ts",
           566,
-          15
+          9
         ]
       ],
-      "id": 1162,
+      "id": 3563,
       "flags": {
         "isStatic": true
       },
@@ -260,7 +260,7 @@
         {
           "comment": "Subdivde a rectangle into 2 rectangles, by row or by column.",
           "returns": "Group[]",
-          "returns_comment": "an array of 2 Groups of rectangles\n",
+          "returns_comment": "an array of 2 Groups of rectangles",
           "parameters": [
             {
               "name": "rect",
@@ -291,10 +291,10 @@
         [
           "src/Op.ts",
           594,
-          27
+          9
         ]
       ],
-      "id": 1171,
+      "id": 3572,
       "flags": {
         "isStatic": true
       },
@@ -320,7 +320,7 @@
             },
             {
               "name": "resetBoundingBox",
-              "comment": "if `true`, reset the bounding box. Default is `false` which assumes the rect's first Pt at is its top-left corner.\n",
+              "comment": "if `true`, reset the bounding box. Default is `false` which assumes the rect's first Pt at is its top-left corner.",
               "type": "boolean",
               "default": "false"
             }
@@ -335,10 +335,10 @@
         [
           "src/Op.ts",
           615,
-          24
+          9
         ]
       ],
-      "id": 1176,
+      "id": 3577,
       "flags": {
         "isStatic": true
       },
@@ -358,7 +358,7 @@
             },
             {
               "name": "rect2",
-              "comment": "a Group of 2 Pts representing a rectangle\n",
+              "comment": "a Group of 2 Pts representing a rectangle",
               "type": "GroupLike",
               "default": false
             }
@@ -373,10 +373,10 @@
         [
           "src/Op.ts",
           541,
-          16
+          9
         ]
       ],
-      "id": 1155,
+      "id": 3556,
       "flags": {
         "isStatic": true
       },
@@ -390,7 +390,7 @@
           "parameters": [
             {
               "name": "rect",
-              "comment": "a Group or an Iterable<Pt> with 2 Pt representing a Rectangle\n",
+              "comment": "a Group or an Iterable<Pt> with 2 Pt representing a Rectangle",
               "type": "PtIterable",
               "default": false
             }
@@ -405,10 +405,10 @@
         [
           "src/Op.ts",
           551,
-          18
+          9
         ]
       ],
-      "id": 1158,
+      "id": 3559,
       "flags": {
         "isStatic": true
       },
@@ -418,7 +418,7 @@
         {
           "comment": "Subdivide a rectangle into 4 rectangles, one for each quadrant.",
           "returns": "Group[]",
-          "returns_comment": "an array of 4 Groups of rectangles\n",
+          "returns_comment": "an array of 4 Groups of rectangles",
           "parameters": [
             {
               "name": "rect",
@@ -443,10 +443,10 @@
         [
           "src/Op.ts",
           504,
-          14
+          9
         ]
       ],
-      "id": 1149,
+      "id": 3550,
       "flags": {
         "isStatic": true
       },
@@ -456,7 +456,7 @@
         {
           "comment": "Get the 4 sides of this rectangle as an array of 4 Groups.",
           "returns": "Group[]",
-          "returns_comment": "an array of 4 Groups, each of which represents a line segment\n",
+          "returns_comment": "an array of 4 Groups, each of which represents a line segment",
           "parameters": [
             {
               "name": "rect",
@@ -475,10 +475,10 @@
         [
           "src/Op.ts",
           469,
-          13
+          9
         ]
       ],
-      "id": 1140,
+      "id": 3541,
       "flags": {
         "isStatic": true
       },
@@ -507,10 +507,10 @@
         [
           "src/Op.ts",
           446,
-          17
+          9
         ]
       ],
-      "id": 1132,
+      "id": 3533,
       "flags": {
         "isStatic": true
       },
@@ -520,7 +520,7 @@
         {
           "comment": "Create a new circle that either fits within or encloses the rectangle. Same as [`Circle.fromRect`](#link).",
           "returns": "Group",
-          "returns_comment": "a Group that represents a circle\n",
+          "returns_comment": "a Group that represents a circle",
           "parameters": [
             {
               "name": "pts",
@@ -529,8 +529,8 @@
               "default": false
             },
             {
-              "name": "within",
-              "comment": "if `true`, the circle will be within the rectangle. If `false`, the circle will enclose the rectangle.",
+              "name": "enclose",
+              "comment": "if `true`, the circle will enclose the rectangle. If `false`, the circle will fit inside the rectangle.",
               "type": "boolean",
               "default": "true"
             }
@@ -545,10 +545,10 @@
         [
           "src/Op.ts",
           457,
-          17
+          9
         ]
       ],
-      "id": 1136,
+      "id": 3537,
       "flags": {
         "isStatic": true
       },
@@ -558,7 +558,7 @@
         {
           "comment": "Create a square that either fits within or encloses a rectangle.",
           "returns": "Group",
-          "returns_comment": "a Group of 2 Pts representing a rectangle\n",
+          "returns_comment": "a Group of 2 Pts representing a rectangle",
           "parameters": [
             {
               "name": "pts",
@@ -583,10 +583,10 @@
         [
           "src/Op.ts",
           582,
-          20
+          9
         ]
       ],
-      "id": 1167,
+      "id": 3568,
       "flags": {
         "isStatic": true
       },
@@ -606,7 +606,7 @@
             },
             {
               "name": "pt",
-              "comment": "the point to check\n",
+              "comment": "the point to check",
               "type": "PtLike",
               "default": false
             }

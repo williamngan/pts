@@ -1,15 +1,15 @@
 {
-  "name": "SoundType",
+  "name": "RenderingContext2D",
   "source": [
     [
       "src/Types.ts",
-      202,
+      223,
       12
     ]
   ],
   "kind": "Typealias",
-  "id": 7246,
-  "comment": "Typescript type: SoundType represents a type of sound input. It corresponds to Sound.type property.",
+  "id": 7256,
+  "comment": "",
   "constructor": [],
   "accessors": [],
   "methods": [],
@@ -19,8 +19,7 @@
   "extends": [],
   "implements": [],
   "type_alias": [
-    "file",
-    "gen",
-    "input"
+    "CanvasRenderingContext2D",
+    "OffscreenCanvasRenderingContext2D"
   ]
 }

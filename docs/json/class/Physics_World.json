@@ -4,11 +4,11 @@
     [
       "src/Physics.ts",
       12,
-      18
+      13
     ]
   ],
   "kind": "Class",
-  "id": 6066,
+  "id": 3812,
   "comment": "A `World` stores and manages [`Body`](#link) and [`Particle`](#link) for 2D physics simulation.\nSee a [Particle demo](../demo/index.html?name=physics.particles) and a [Body demo](../demo/index.html?name=physics.shapes) on the demo page.",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "src/Physics.ts",
-          27,
-          51
+          37,
+          2
         ]
       ],
-      "id": 6086,
+      "id": 3825,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -44,8 +44,8 @@
             },
             {
               "name": "gravity",
-              "comment": "a number of a Pt to define gravitational force. A number is a shorthand to set `new Pt(0, n)`. Default is 0.\n",
-              "type": "PtLike | number",
+              "comment": "a number of a Pt to define gravitational force. A number is a shorthand to set `new Pt(0, n)`. Default is 0.",
+              "type": "number | PtLike",
               "default": "0"
             }
           ],
@@ -60,11 +60,11 @@
       "source": [
         [
           "src/Physics.ts",
-          71,
-          15
+          78,
+          6
         ]
       ],
-      "id": 6107,
+      "id": 3870,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -79,16 +79,16 @@
       "source": [
         [
           "src/Physics.ts",
-          47,
-          11
+          48,
+          6
         ],
         [
           "src/Physics.ts",
-          48,
-          11
+          49,
+          6
         ]
       ],
-      "id": 6091,
+      "id": 3850,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -111,16 +111,16 @@
       "source": [
         [
           "src/Physics.ts",
-          65,
-          13
+          66,
+          6
         ],
         [
           "src/Physics.ts",
-          66,
-          13
+          67,
+          6
         ]
       ],
-      "id": 6103,
+      "id": 3862,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -143,16 +143,16 @@
       "source": [
         [
           "src/Physics.ts",
-          59,
-          14
+          60,
+          6
         ],
         [
           "src/Physics.ts",
-          60,
-          14
+          61,
+          6
         ]
       ],
-      "id": 6099,
+      "id": 3858,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -175,16 +175,16 @@
       "source": [
         [
           "src/Physics.ts",
-          53,
-          13
+          54,
+          6
         ],
         [
           "src/Physics.ts",
-          54,
-          13
+          55,
+          6
         ]
       ],
-      "id": 6095,
+      "id": 3854,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -203,15 +203,47 @@
       }
     },
     {
+      "name": "iterations",
+      "source": [
+        [
+          "src/Physics.ts",
+          72,
+          6
+        ],
+        [
+          "src/Physics.ts",
+          73,
+          6
+        ]
+      ],
+      "id": 3866,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "constraint solver iterations.",
+      "getter": {
+        "type": "number"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "f",
+          "comment": "",
+          "type": "number",
+          "default": false
+        }
+      }
+    },
+    {
       "name": "particleCount",
       "source": [
         [
           "src/Physics.ts",
-          76,
-          19
+          83,
+          6
         ]
       ],
-      "id": 6109,
+      "id": 3872,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -228,11 +260,11 @@
       "source": [
         [
           "src/Physics.ts",
-          163,
-          5
+          166,
+          2
         ]
       ],
-      "id": 6140,
+      "id": 3903,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -250,9 +282,9 @@
             },
             {
               "name": "name",
-              "comment": "optional name, which can be referenced in `body()` or `particle()` function to retrieve this back.\n",
+              "comment": "optional name, which can be referenced in `body()` or `particle()` function to retrieve this back.",
               "type": "string",
-              "default": "\"\""
+              "default": "''"
             }
           ],
           "tags": []
@@ -264,24 +296,24 @@
       "source": [
         [
           "src/Physics.ts",
-          84,
-          6
+          91,
+          2
         ]
       ],
-      "id": 6111,
+      "id": 3874,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
           "comment": "Get a body in this world by index or string id.",
-          "returns": "any",
-          "returns_comment": "a Body, or undefined if not found\n",
+          "returns": "Body",
+          "returns_comment": "a Body, or undefined if not found",
           "parameters": [
             {
               "name": "id",
               "comment": "numeric index of the body, or a string id that associates with it.",
-              "type": "number | string",
+              "type": "string | number",
               "default": false
             }
           ],
@@ -294,11 +326,11 @@
       "source": [
         [
           "src/Physics.ts",
-          114,
-          11
+          117,
+          2
         ]
       ],
-      "id": 6117,
+      "id": 3880,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -306,7 +338,7 @@
         {
           "comment": "Given a body's name, return its index in the bodies array, or -1 if not found.",
           "returns": "number",
-          "returns_comment": "index number, or -1 if not found\n",
+          "returns_comment": "index number, or -1 if not found",
           "parameters": [
             {
               "name": "name",
@@ -324,11 +356,11 @@
       "source": [
         [
           "src/Physics.ts",
-          153,
-          12
+          156,
+          2
         ]
       ],
-      "id": 6133,
+      "id": 3896,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -340,7 +372,7 @@
           "parameters": [
             {
               "name": "fn",
-              "comment": "a function that draws a body passed in the parameters `(body, index)`.\n",
+              "comment": "a function that draws a body passed in the parameters `(body, index)`.",
               "type": " Fn(p:Body, i:number)",
               "default": false
             }
@@ -354,11 +386,11 @@
       "source": [
         [
           "src/Physics.ts",
-          144,
-          15
+          147,
+          2
         ]
       ],
-      "id": 6126,
+      "id": 3889,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -370,7 +402,7 @@
           "parameters": [
             {
               "name": "fn",
-              "comment": "a function that draws a particle passed in the parameters `(particle, index)`.\n",
+              "comment": "a function that draws a particle passed in the parameters `(particle, index)`.",
               "type": " Fn(p:Particle, i:number)",
               "default": false
             }
@@ -384,11 +416,11 @@
       "source": [
         [
           "src/Physics.ts",
-          269,
-          21
+          272,
+          12
         ]
       ],
-      "id": 6171,
+      "id": 3922,
       "flags": {
         "isProtected": true
       },
@@ -414,7 +446,7 @@
             },
             {
               "name": "prevDt",
-              "comment": "previous change in time, optional\n",
+              "comment": "previous change in time, optional",
               "type": "number",
               "default": false
             }
@@ -428,24 +460,24 @@
       "source": [
         [
           "src/Physics.ts",
-          99,
-          10
+          104,
+          2
         ]
       ],
-      "id": 6114,
+      "id": 3877,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
           "comment": "Get a particle in this world by index or string id.",
-          "returns": "any",
-          "returns_comment": "a Particle, or undefined if not found\n",
+          "returns": "Particle",
+          "returns_comment": "a Particle, or undefined if not found",
           "parameters": [
             {
               "name": "id",
               "comment": "numeric index of the particle, or a string id that associates with it.",
-              "type": "number | string",
+              "type": "string | number",
               "default": false
             }
           ],
@@ -458,11 +490,11 @@
       "source": [
         [
           "src/Physics.ts",
-          124,
-          15
+          127,
+          2
         ]
       ],
-      "id": 6120,
+      "id": 3883,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -470,7 +502,7 @@
         {
           "comment": "Given a particle's name, return its index in the particles array, or -1 if not found.",
           "returns": "number",
-          "returns_comment": "index number, or -1 if not found\n",
+          "returns_comment": "index number, or -1 if not found",
           "parameters": [
             {
               "name": "name",
@@ -488,11 +520,11 @@
       "source": [
         [
           "src/Physics.ts",
-          192,
-          12
+          195,
+          2
         ]
       ],
-      "id": 6151,
+      "id": 3914,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -505,12 +537,12 @@
             {
               "name": "from",
               "comment": "Start index, which can be negative (where -1 is at index 0, -2 at index 1, etc)",
-              "type": "number | string",
+              "type": "string | number",
               "default": false
             },
             {
               "name": "count",
-              "comment": "Number of items to remove. Default is 1.\n",
+              "comment": "Number of items to remove. Default is 1.",
               "type": "number",
               "default": "1"
             }
@@ -524,11 +556,11 @@
       "source": [
         [
           "src/Physics.ts",
-          206,
-          16
+          209,
+          2
         ]
       ],
-      "id": 6155,
+      "id": 3918,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -541,12 +573,12 @@
             {
               "name": "from",
               "comment": "Start index, which can be negative (where -1 is at index 0, -2 at index 1, etc)",
-              "type": "number | string",
+              "type": "string | number",
               "default": false
             },
             {
               "name": "count",
-              "comment": "Number of items to remove. Default is 1.\n",
+              "comment": "Number of items to remove. Default is 1.",
               "type": "number",
               "default": "1"
             }
@@ -560,11 +592,11 @@
       "source": [
         [
           "src/Physics.ts",
-          133,
-          8
+          136,
+          2
         ]
       ],
-      "id": 6123,
+      "id": 3886,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -576,7 +608,7 @@
           "parameters": [
             {
               "name": "ms",
-              "comment": "change in time in milliseconds\n",
+              "comment": "change in time in milliseconds",
               "type": "number",
               "default": false
             }
@@ -590,11 +622,11 @@
       "source": [
         [
           "src/Physics.ts",
-          246,
-          24
+          249,
+          9
         ]
       ],
-      "id": 6166,
+      "id": 3820,
       "flags": {
         "isStatic": true
       },
@@ -620,7 +652,7 @@
             },
             {
               "name": "damping",
-              "comment": "damping between 0 to 1, where 1 means no damping. Default is 0.75.\n",
+              "comment": "damping between 0 to 1, where 1 means no damping. Default is 0.75.",
               "type": "number",
               "default": "0.75"
             }
@@ -634,11 +666,11 @@
       "source": [
         [
           "src/Physics.ts",
-          223,
-          23
+          226,
+          9
         ]
       ],
-      "id": 6159,
+      "id": 3813,
       "flags": {
         "isStatic": true
       },
@@ -676,7 +708,7 @@
             },
             {
               "name": "precise",
-              "comment": "use precise distance calculation. Default is `false`.\n",
+              "comment": "use precise distance calculation. Default is `false`.",
               "type": "boolean",
               "default": "false"
             }

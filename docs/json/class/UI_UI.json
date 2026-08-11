@@ -3,12 +3,12 @@
   "source": [
     [
       "src/UI.ts",
-      33,
-      15
+      34,
+      13
     ]
   ],
   "kind": "Class",
-  "id": 2,
+  "id": 7325,
   "comment": "**[Experimental]** An abstract class that represents an UI element. It wraps a [`Group`](#link) and supports UI event handling.\nExtend this class to create custom UI elements.",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "src/UI.ts",
-          42,
-          47
+          52,
+          2
         ]
       ],
-      "id": 16,
+      "id": 7371,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -50,7 +50,7 @@
             },
             {
               "name": "id",
-              "comment": "optional id string\n",
+              "comment": "optional id string",
               "type": "string",
               "default": false
             }
@@ -66,16 +66,16 @@
       "source": [
         [
           "src/UI.ts",
-          113,
-          11
+          114,
+          6
         ],
         [
           "src/UI.ts",
-          114,
-          11
+          115,
+          6
         ]
       ],
-      "id": 52,
+      "id": 7396,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -98,16 +98,16 @@
       "source": [
         [
           "src/UI.ts",
-          106,
-          8
+          107,
+          6
         ],
         [
           "src/UI.ts",
-          107,
-          8
+          108,
+          6
         ]
       ],
-      "id": 48,
+      "id": 7392,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -130,16 +130,16 @@
       "source": [
         [
           "src/UI.ts",
-          120,
-          11
+          121,
+          6
         ],
         [
           "src/UI.ts",
-          121,
-          11
+          122,
+          6
         ]
       ],
-      "id": 56,
+      "id": 7400,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -164,11 +164,11 @@
       "source": [
         [
           "src/UI.ts",
-          194,
-          16
+          195,
+          12
         ]
       ],
-      "id": 77,
+      "id": 7421,
       "flags": {
         "isProtected": true
       },
@@ -182,7 +182,7 @@
           "parameters": [
             {
               "name": "type",
-              "comment": "a string defined in [`UIPointerActions`](#link)\n",
+              "comment": "a string defined in [`UIPointerActions`](#link)",
               "type": "string",
               "default": false
             }
@@ -196,11 +196,11 @@
       "source": [
         [
           "src/UI.ts",
-          175,
-          8
+          176,
+          2
         ]
       ],
-      "id": 72,
+      "id": 7416,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -224,7 +224,7 @@
             },
             {
               "name": "evt",
-              "comment": "a MouseEvent emitted by the browser (See [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent))\n",
+              "comment": "a MouseEvent emitted by the browser (See [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent))",
               "type": "MouseEvent",
               "default": false
             }
@@ -238,11 +238,11 @@
       "source": [
         [
           "src/UI.ts",
-          158,
-          5
+          159,
+          2
         ]
       ],
-      "id": 68,
+      "id": 7412,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -274,11 +274,11 @@
       "source": [
         [
           "src/UI.ts",
-          146,
-          4
+          147,
+          2
         ]
       ],
-      "id": 64,
+      "id": 7408,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -286,7 +286,7 @@
         {
           "comment": "Add an event handler. Remember this UI will also need to be tracked for events via `UI.track`.",
           "returns": "number",
-          "returns_comment": "an id number that reference to this handler, for use in [`UI.off`](#link)\n",
+          "returns_comment": "an id number that reference to this handler, for use in [`UI.off`](#link)",
           "parameters": [
             {
               "name": "type",
@@ -310,11 +310,11 @@
       "source": [
         [
           "src/UI.ts",
-          232,
-          8
+          233,
+          2
         ]
       ],
-      "id": 89,
+      "id": 7427,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -326,8 +326,8 @@
           "parameters": [
             {
               "name": "fn",
-              "comment": "a render function\n",
-              "type": " Fn(group:Group, )",
+              "comment": "a render function",
+              "type": " Fn(group:Group, states:)",
               "default": false
             }
           ],
@@ -340,11 +340,11 @@
       "source": [
         [
           "src/UI.ts",
-          130,
-          7
+          131,
+          2
         ]
       ],
-      "id": 60,
+      "id": 7404,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -376,11 +376,11 @@
       "source": [
         [
           "src/UI.ts",
-          240,
-          10
+          241,
+          2
         ]
       ],
-      "id": 99,
+      "id": 7437,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -399,11 +399,11 @@
       "source": [
         [
           "src/UI.ts",
-          205,
-          18
+          206,
+          12
         ]
       ],
-      "id": 80,
+      "id": 7424,
       "flags": {
         "isProtected": true
       },
@@ -417,7 +417,7 @@
           "parameters": [
             {
               "name": "key",
-              "comment": "an id returned by the [`UI.hold`](#link) function\n",
+              "comment": "an id returned by the [`UI.hold`](#link) function",
               "type": "number",
               "default": false
             }
@@ -431,11 +431,11 @@
       "source": [
         [
           "src/UI.ts",
-          77,
-          19
+          78,
+          9
         ]
       ],
-      "id": 31,
+      "id": 7333,
       "flags": {
         "isStatic": true
       },
@@ -461,7 +461,7 @@
             },
             {
               "name": "id",
-              "comment": "optional id string\n",
+              "comment": "optional id string",
               "type": "string",
               "default": false
             }
@@ -475,11 +475,11 @@
       "source": [
         [
           "src/UI.ts",
-          88,
-          20
+          89,
+          9
         ]
       ],
-      "id": 37,
+      "id": 7339,
       "flags": {
         "isStatic": true
       },
@@ -505,7 +505,7 @@
             },
             {
               "name": "id",
-              "comment": "optional id string\n",
+              "comment": "optional id string",
               "type": "string",
               "default": false
             }
@@ -519,11 +519,11 @@
       "source": [
         [
           "src/UI.ts",
-          66,
-          22
+          67,
+          9
         ]
       ],
-      "id": 25,
+      "id": 7327,
       "flags": {
         "isStatic": true
       },
@@ -549,7 +549,7 @@
             },
             {
               "name": "id",
-              "comment": "optional id string\n",
+              "comment": "optional id string",
               "type": "string",
               "default": false
             }
@@ -563,11 +563,11 @@
       "source": [
         [
           "src/UI.ts",
-          98,
-          15
+          99,
+          9
         ]
       ],
-      "id": 43,
+      "id": 7345,
       "flags": {
         "isStatic": true
       },
@@ -587,7 +587,7 @@
             },
             {
               "name": "states",
-              "comment": "optional a state object keep track of custom states for this UI\n",
+              "comment": "optional a state object keep track of custom states for this UI",
               "type": "object",
               "default": false
             },
@@ -607,11 +607,11 @@
       "source": [
         [
           "src/UI.ts",
-          221,
-          14
+          222,
+          9
         ]
       ],
-      "id": 83,
+      "id": 7350,
       "flags": {
         "isStatic": true
       },
@@ -643,7 +643,7 @@
             },
             {
               "name": "evt",
-              "comment": "a MouseEvent emitted by the browser (See [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent))\n",
+              "comment": "a MouseEvent emitted by the browser (See [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent))",
               "type": "MouseEvent",
               "default": false
             }

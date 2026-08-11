@@ -3,12 +3,12 @@
   "source": [
     [
       "src/Image.ts",
-      9,
-      16
+      10,
+      13
     ]
   ],
   "kind": "Class",
-  "id": 3423,
+  "id": 2815,
   "comment": "Img provides convenient functions to support image operations on HTML Canvas and [`CanvasSpace`](#link). Combine this with other Pts functions to experiment with visual forms that integrate bitmaps and vector graphics.",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "src/Image.ts",
-          20,
-          31
+          29,
+          2
         ]
       ],
-      "id": 3432,
+      "id": 2854,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -44,7 +44,7 @@
             },
             {
               "name": "crossOrigin",
-              "comment": "an optional parameter to enable loading cross-domain images if set to true. The image server's configuration must also be set correctly. For more, see [this documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image).\n",
+              "comment": "an optional parameter to enable loading cross-domain images if set to true. The image server's configuration must also be set correctly. For more, see [this documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image).",
               "type": "boolean",
               "default": false
             }
@@ -60,11 +60,11 @@
       "source": [
         [
           "src/Image.ts",
-          360,
-          12
+          361,
+          6
         ]
       ],
-      "id": 3522,
+      "id": 2914,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -79,11 +79,11 @@
       "source": [
         [
           "src/Image.ts",
-          412,
-          16
+          413,
+          6
         ]
       ],
-      "id": 3534,
+      "id": 2926,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -98,17 +98,17 @@
       "source": [
         [
           "src/Image.ts",
-          376,
-          9
+          377,
+          6
         ]
       ],
-      "id": 3526,
+      "id": 2918,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "comment": "Get the internal canvas' context. You can use this to draw directly on canvas, or create a new [CanvasForm](#link) instance with it.",
       "getter": {
-        "type": "CanvasRenderingContext2D"
+        "type": "RenderingContext2D"
       },
       "setter": false
     },
@@ -117,11 +117,11 @@
       "source": [
         [
           "src/Image.ts",
-          344,
-          13
+          345,
+          6
         ]
       ],
-      "id": 3518,
+      "id": 2910,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -136,11 +136,11 @@
       "source": [
         [
           "src/Image.ts",
-          368,
-          10
+          369,
+          6
         ]
       ],
-      "id": 3524,
+      "id": 2916,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -155,11 +155,11 @@
       "source": [
         [
           "src/Image.ts",
-          352,
-          11
+          353,
+          6
         ]
       ],
-      "id": 3520,
+      "id": 2912,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -174,11 +174,11 @@
       "source": [
         [
           "src/Image.ts",
-          400,
-          15
+          401,
+          6
         ]
       ],
-      "id": 3532,
+      "id": 2924,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -193,11 +193,11 @@
       "source": [
         [
           "src/Image.ts",
-          384,
-          12
+          385,
+          6
         ]
       ],
-      "id": 3528,
+      "id": 2920,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -212,11 +212,11 @@
       "source": [
         [
           "src/Image.ts",
-          392,
-          16
+          393,
+          6
         ]
       ],
-      "id": 3530,
+      "id": 2922,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -231,11 +231,11 @@
       "source": [
         [
           "src/Image.ts",
-          422,
-          18
+          423,
+          6
         ]
       ],
-      "id": 3536,
+      "id": 2928,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -252,11 +252,11 @@
       "source": [
         [
           "src/Image.ts",
-          167,
-          8
+          168,
+          2
         ]
       ],
-      "id": 3475,
+      "id": 2879,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -264,7 +264,7 @@
         {
           "comment": "Get an efficient, readonly bitmap of the current canvas.",
           "returns": "Promise",
-          "returns_comment": "a Promise that resolves to an ImageBitmap\n",
+          "returns_comment": "a Promise that resolves to an ImageBitmap",
           "parameters": [
             {
               "name": "size",
@@ -282,11 +282,11 @@
       "source": [
         [
           "src/Image.ts",
-          274,
-          9
+          275,
+          2
         ]
       ],
-      "id": 3502,
+      "id": 2902,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -305,11 +305,11 @@
       "source": [
         [
           "src/Image.ts",
-          252,
-          6
+          253,
+          2
         ]
       ],
-      "id": 3496,
+      "id": 2896,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -321,7 +321,7 @@
           "parameters": [
             {
               "name": "box",
-              "comment": "bounding box\n",
+              "comment": "bounding box",
               "type": "Bound",
               "default": false
             }
@@ -335,11 +335,11 @@
       "source": [
         [
           "src/Image.ts",
-          263,
-          8
+          264,
+          2
         ]
       ],
-      "id": 3499,
+      "id": 2899,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -351,7 +351,7 @@
           "parameters": [
             {
               "name": "css",
-              "comment": "a css filter string such as \"blur(10px) | contrast(200%)\". See [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter#browser_compatibility) for a list of filter functions.\n",
+              "comment": "a css filter string such as \"blur(10px) | contrast(200%)\". See [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter#browser_compatibility) for a list of filter functions.",
               "type": "string",
               "default": false
             }
@@ -365,11 +365,11 @@
       "source": [
         [
           "src/Image.ts",
-          334,
-          9
+          335,
+          2
         ]
       ],
-      "id": 3516,
+      "id": 2908,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -388,11 +388,11 @@
       "source": [
         [
           "src/Image.ts",
-          146,
-          12
+          147,
+          2
         ]
       ],
-      "id": 3470,
+      "id": 2874,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -416,7 +416,7 @@
             },
             {
               "name": "canvasScale",
-              "comment": "pixel scale\n",
+              "comment": "pixel scale",
               "type": "number | PtLike",
               "default": "1"
             }
@@ -430,11 +430,11 @@
       "source": [
         [
           "src/Image.ts",
-          99,
-          6
+          100,
+          2
         ]
       ],
-      "id": 3463,
+      "id": 2867,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -442,7 +442,7 @@
         {
           "comment": "Load an image.",
           "returns": "Promise",
-          "returns_comment": "a Promise that resolves to an Img\n",
+          "returns_comment": "a Promise that resolves to an Img",
           "parameters": [
             {
               "name": "src",
@@ -460,11 +460,11 @@
       "source": [
         [
           "src/Image.ts",
-          180,
-          9
+          181,
+          2
         ]
       ],
-      "id": 3478,
+      "id": 2882,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -472,13 +472,13 @@
         {
           "comment": "Create a canvas pattern for `fill()`",
           "returns": "CanvasPattern",
-          "returns_comment": "a `CanvasPattern` instance for use in `fill()`\n",
+          "returns_comment": "a `CanvasPattern` instance for use in `fill()`",
           "parameters": [
             {
               "name": "reptition",
               "comment": "set how the pattern should repeat-fill",
               "type": "CanvasPatternRepetition",
-              "default": "\"repeat\""
+              "default": "'repeat'"
             },
             {
               "name": "dynamic",
@@ -496,11 +496,11 @@
       "source": [
         [
           "src/Image.ts",
-          211,
-          7
+          212,
+          2
         ]
       ],
-      "id": 3484,
+      "id": 2888,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -508,7 +508,7 @@
         {
           "comment": "Get the RGBA values of a pixel in the image",
           "returns": "Pt",
-          "returns_comment": "values of the pixel at the specific position\n",
+          "returns_comment": "[R,G,B,A] values of the pixel at the specific position",
           "parameters": [
             {
               "name": "p",
@@ -519,7 +519,7 @@
             {
               "name": "rescale",
               "comment": "Specify if the pixel position should be scaled. Usually use rescale when tracking image and don't rescale when tracking canvas. You may also set a custom scale value.",
-              "type": "boolean | number",
+              "type": "number | boolean",
               "default": "true"
             }
           ],
@@ -532,11 +532,11 @@
       "source": [
         [
           "src/Image.ts",
-          240,
-          8
+          241,
+          2
         ]
       ],
-      "id": 3492,
+      "id": 2892,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -554,7 +554,7 @@
             },
             {
               "name": "asScale",
-              "comment": "If true, treat the first parameter as scales. Otherwise, treat it as specific sizes.\n",
+              "comment": "If true, treat the first parameter as scales. Otherwise, treat it as specific sizes.",
               "type": "boolean",
               "default": "false"
             }
@@ -568,11 +568,11 @@
       "source": [
         [
           "src/Image.ts",
-          190,
-          6
+          191,
+          2
         ]
       ],
-      "id": 3482,
+      "id": 2886,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -591,11 +591,11 @@
       "source": [
         [
           "src/Image.ts",
-          316,
-          10
+          317,
+          2
         ]
       ],
-      "id": 3512,
+      "id": 2904,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -614,11 +614,11 @@
       "source": [
         [
           "src/Image.ts",
-          324,
-          8
+          325,
+          2
         ]
       ],
-      "id": 3514,
+      "id": 2906,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -637,11 +637,11 @@
       "source": [
         [
           "src/Image.ts",
-          86,
-          14
+          87,
+          9
         ]
       ],
-      "id": 3458,
+      "id": 2837,
       "flags": {
         "isStatic": true
       },
@@ -661,13 +661,13 @@
             },
             {
               "name": "space",
-              "comment": "Set the `CanvasSpace` reference. This is optional but will make sure the image's pixelScale match the canvas and set the context for creating pattern.",
+              "comment": "Optionally set the `CanvasSpace` reference. This is optional but will make sure the image's pixelScale match the canvas and set the context for creating pattern.",
               "type": "CanvasSpace",
               "default": false
             },
             {
               "name": "scale",
-              "comment": "Optionally set a specific pixel scale (density) of the image canvas.\n",
+              "comment": "Optionally set a specific pixel scale (density) of the image canvas.",
               "type": "number",
               "default": false
             }
@@ -681,11 +681,11 @@
       "source": [
         [
           "src/Image.ts",
-          286,
-          17
+          287,
+          9
         ]
       ],
-      "id": 3504,
+      "id": 2846,
       "flags": {
         "isStatic": true
       },
@@ -705,7 +705,7 @@
             },
             {
               "name": "editable",
-              "comment": "Specify if you want to manipulate pixels of this image. Default is `false`.\n",
+              "comment": "Specify if you want to manipulate pixels of this image. Default is `false`.",
               "type": "boolean",
               "default": "false"
             },
@@ -725,11 +725,11 @@
       "source": [
         [
           "src/Image.ts",
-          223,
-          17
+          224,
+          9
         ]
       ],
-      "id": 3488,
+      "id": 2842,
       "flags": {
         "isStatic": true
       },
@@ -739,7 +739,7 @@
         {
           "comment": "Given an ImaegData object and a position, return the RGBA pixel value at that position.",
           "returns": "Pt",
-          "returns_comment": "values of the pixel at the specific position\n",
+          "returns_comment": "[R,G,B,A] values of the pixel at the specific position",
           "parameters": [
             {
               "name": "imgData",
@@ -763,11 +763,11 @@
       "source": [
         [
           "src/Image.ts",
-          296,
-          24
+          297,
+          9
         ]
       ],
-      "id": 3509,
+      "id": 2851,
       "flags": {
         "isStatic": true
       },
@@ -781,7 +781,7 @@
           "parameters": [
             {
               "name": "data",
-              "comment": "\n",
+              "comment": "",
               "type": "ImageData",
               "default": false
             }
@@ -795,11 +795,11 @@
       "source": [
         [
           "src/Image.ts",
-          44,
-          13
+          45,
+          9
         ]
       ],
-      "id": 3437,
+      "id": 2816,
       "flags": {
         "isStatic": true
       },
@@ -831,7 +831,7 @@
             },
             {
               "name": "ready",
-              "comment": "An optional ready callback function\n",
+              "comment": "An optional ready callback function",
               "type": " Fn(img:any)",
               "default": false
             }
@@ -845,11 +845,11 @@
       "source": [
         [
           "src/Image.ts",
-          60,
-          24
+          61,
+          15
         ]
       ],
-      "id": 3447,
+      "id": 2826,
       "flags": {
         "isStatic": true
       },
@@ -859,7 +859,7 @@
         {
           "comment": "A static method to load an image using async/await.",
           "returns": "Promise",
-          "returns_comment": "\n",
+          "returns_comment": false,
           "parameters": [
             {
               "name": "src",
@@ -889,11 +889,11 @@
       "source": [
         [
           "src/Image.ts",
-          74,
-          26
+          75,
+          15
         ]
       ],
-      "id": 3452,
+      "id": 2831,
       "flags": {
         "isStatic": true
       },
@@ -903,7 +903,7 @@
         {
           "comment": "A static method to load an image pattern using async/await.",
           "returns": "Promise",
-          "returns_comment": "a `CanvasPattern` instance for use in `fill()`\n",
+          "returns_comment": "a `CanvasPattern` instance for use in `fill()`",
           "parameters": [
             {
               "name": "src",
@@ -921,7 +921,7 @@
               "name": "repeat",
               "comment": "set how the pattern will repeat fills",
               "type": "CanvasPatternRepetition",
-              "default": "\"repeat\""
+              "default": "'repeat'"
             },
             {
               "name": "editable",

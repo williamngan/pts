@@ -4,11 +4,11 @@
     [
       "src/UI.ts",
       19,
-      29
+      13
     ]
   ],
   "kind": "Objectliteral",
-  "id": 416,
+  "id": 7305,
   "comment": "**[Experimental]** A set of string constants to represent different UI event types.",
   "constructor": [],
   "accessors": [],
@@ -19,11 +19,11 @@
       "source": [
         [
           "src/UI.ts",
-          24,
-          33
+          25,
+          30
         ]
       ],
-      "id": 432,
+      "id": 7324,
       "flags": {},
       "type": "all",
       "overrides": false,
@@ -36,10 +36,10 @@
         [
           "src/UI.ts",
           22,
-          65
+          60
         ]
       ],
-      "id": 428,
+      "id": 7318,
       "flags": {},
       "type": "click",
       "overrides": false,
@@ -51,11 +51,11 @@
       "source": [
         [
           "src/UI.ts",
-          24,
-          13
+          25,
+          2
         ]
       ],
-      "id": 431,
+      "id": 7323,
       "flags": {},
       "type": "contextmenu",
       "overrides": false,
@@ -68,10 +68,10 @@
         [
           "src/UI.ts",
           20,
-          16
+          12
         ]
       ],
-      "id": 418,
+      "id": 7308,
       "flags": {},
       "type": "down",
       "overrides": false,
@@ -84,10 +84,10 @@
         [
           "src/UI.ts",
           21,
-          6
+          2
         ]
       ],
-      "id": 420,
+      "id": 7310,
       "flags": {},
       "type": "drag",
       "overrides": false,
@@ -100,10 +100,10 @@
         [
           "src/UI.ts",
           21,
-          38
+          34
         ]
       ],
-      "id": 422,
+      "id": 7312,
       "flags": {},
       "type": "drop",
       "overrides": false,
@@ -116,10 +116,10 @@
         [
           "src/UI.ts",
           22,
-          33
+          28
         ]
       ],
-      "id": 426,
+      "id": 7316,
       "flags": {},
       "type": "enter",
       "overrides": false,
@@ -132,10 +132,10 @@
         [
           "src/UI.ts",
           23,
-          9
+          2
         ]
       ],
-      "id": 429,
+      "id": 7319,
       "flags": {},
       "type": "keydown",
       "overrides": false,
@@ -148,10 +148,10 @@
         [
           "src/UI.ts",
           23,
-          27
+          22
         ]
       ],
-      "id": 430,
+      "id": 7320,
       "flags": {},
       "type": "keyup",
       "overrides": false,
@@ -164,10 +164,10 @@
         [
           "src/UI.ts",
           22,
-          49
+          44
         ]
       ],
-      "id": 427,
+      "id": 7317,
       "flags": {},
       "type": "leave",
       "overrides": false,
@@ -180,10 +180,10 @@
         [
           "src/UI.ts",
           20,
-          30
+          26
         ]
       ],
-      "id": 419,
+      "id": 7309,
       "flags": {},
       "type": "move",
       "overrides": false,
@@ -196,10 +196,10 @@
         [
           "src/UI.ts",
           22,
-          19
+          16
         ]
       ],
-      "id": 425,
+      "id": 7315,
       "flags": {},
       "type": "out",
       "overrides": false,
@@ -212,12 +212,44 @@
         [
           "src/UI.ts",
           22,
-          6
+          2
         ]
       ],
-      "id": 424,
+      "id": 7314,
       "flags": {},
       "type": "over",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "pointerdown",
+      "source": [
+        [
+          "src/UI.ts",
+          24,
+          2
+        ]
+      ],
+      "id": 7321,
+      "flags": {},
+      "type": "pointerdown",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "pointerup",
+      "source": [
+        [
+          "src/UI.ts",
+          24,
+          30
+        ]
+      ],
+      "id": 7322,
+      "flags": {},
+      "type": "pointerup",
       "overrides": false,
       "inherits": false,
       "comment": ""
@@ -228,10 +260,10 @@
         [
           "src/UI.ts",
           21,
-          22
+          16
         ]
       ],
-      "id": 421,
+      "id": 7311,
       "flags": {},
       "type": "uidrag",
       "overrides": false,
@@ -244,10 +276,10 @@
         [
           "src/UI.ts",
           21,
-          54
+          48
         ]
       ],
-      "id": 423,
+      "id": 7313,
       "flags": {},
       "type": "uidrop",
       "overrides": false,
@@ -260,10 +292,10 @@
         [
           "src/UI.ts",
           20,
-          4
+          2
         ]
       ],
-      "id": 417,
+      "id": 7307,
       "flags": {},
       "type": "up",
       "overrides": false,

@@ -4,11 +4,11 @@
     [
       "src/Types.ts",
       47,
-      29
+      12
     ]
   ],
   "kind": "Typealias",
-  "id": 754,
+  "id": 7122,
   "comment": "Typescript type: AnimateCallbackFn represents a callback function for animation. It accepts parameters to keep track of current time, current frame-time, and current space instance.",
   "constructor": [],
   "accessors": [],

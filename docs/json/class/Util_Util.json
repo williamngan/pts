@@ -4,11 +4,11 @@
     [
       "src/Util.ts",
       105,
-      17
+      13
     ]
   ],
   "kind": "Class",
-  "id": 1724,
+  "id": 7764,
   "comment": "Util class provides static helper functions.",
   "constructor": [],
   "accessors": [],
@@ -19,10 +19,10 @@
         [
           "src/Util.ts",
           367,
-          19
+          9
         ]
       ],
-      "id": 1803,
+      "id": 7843,
       "flags": {
         "isStatic": true
       },
@@ -42,7 +42,7 @@
             },
             {
               "name": "minRequired",
-              "comment": "minimum number of items required\n",
+              "comment": "minimum number of items required",
               "type": "number",
               "default": "2"
             }
@@ -57,10 +57,10 @@
         [
           "src/Util.ts",
           232,
-          16
+          9
         ]
       ],
-      "id": 1751,
+      "id": 7791,
       "flags": {
         "isStatic": true
       },
@@ -86,7 +86,7 @@
             },
             {
               "name": "op",
-              "comment": "a function that takes two parameters (a, b) and returns an object.\n",
+              "comment": "a function that takes two parameters (a, b) and returns an object.",
               "type": " Fn(a:T, b:T)",
               "default": false
             }
@@ -101,10 +101,10 @@
         [
           "src/Util.ts",
           329,
-          17
+          9
         ]
       ],
-      "id": 1792,
+      "id": 7832,
       "flags": {
         "isStatic": true
       },
@@ -126,7 +126,7 @@
               "name": "filename",
               "comment": "the name of the file, without the extension name.",
               "type": "string",
-              "default": "\"pts_canvas_image\""
+              "default": "'pts_canvas_image'"
             },
             {
               "name": "filetype",
@@ -136,7 +136,7 @@
             },
             {
               "name": "quality",
-              "comment": "a value between 0 to 1, if filetype is either \"jpg\" or \"png\"\n",
+              "comment": "a value between 0 to 1, if filetype is either \"jpg\" or \"png\"",
               "type": "number",
               "default": "1"
             }
@@ -151,10 +151,10 @@
         [
           "src/Util.ts",
           220,
-          16
+          9
         ]
       ],
-      "id": 1747,
+      "id": 7787,
       "flags": {
         "isStatic": true
       },
@@ -174,7 +174,7 @@
             },
             {
               "name": "flattenAsGroup",
-              "comment": "a boolean to specify whether the return type should be a Group or Array. Default is `true` which returns a Group.\n",
+              "comment": "a boolean to specify whether the return type should be a Group or Array. Default is `true` which returns a Group.",
               "type": "boolean",
               "default": "true"
             }
@@ -189,10 +189,10 @@
         [
           "src/Util.ts",
           288,
-          17
+          9
         ]
       ],
-      "id": 1775,
+      "id": 7815,
       "flags": {
         "isStatic": true
       },
@@ -202,7 +202,7 @@
         {
           "comment": "A convenient way to step through a range. Same as `for (i=0; i<range; i++)`, except this also stores the resulting return values at each step and return them as an array.",
           "returns": "any[]",
-          "returns_comment": "an array of returned values at each step\n",
+          "returns_comment": "an array of returned values at each step",
           "parameters": [
             {
               "name": "fn",
@@ -239,10 +239,10 @@
         [
           "src/Util.ts",
           126,
-          16
+          9
         ]
       ],
-      "id": 1729,
+      "id": 7769,
       "flags": {
         "isStatic": true
       },
@@ -251,12 +251,12 @@
       "signatures": [
         {
           "comment": "Convert different kinds of parameters (arguments, array, object) into an array of numbers.",
-          "returns": "Array",
+          "returns": "number[]",
           "returns_comment": false,
           "parameters": [
             {
               "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties",
               "type": "any[]",
               "default": false
             }
@@ -271,10 +271,10 @@
         [
           "src/Util.ts",
           388,
-          17
+          9
         ]
       ],
-      "id": 1810,
+      "id": 7850,
       "flags": {
         "isStatic": true
       },
@@ -296,10 +296,10 @@
         [
           "src/Util.ts",
           380,
-          20
+          9
         ]
       ],
-      "id": 1807,
+      "id": 7847,
       "flags": {
         "isStatic": true
       },
@@ -313,7 +313,7 @@
           "parameters": [
             {
               "name": "it",
-              "comment": "an iterable\n",
+              "comment": "an iterable",
               "type": "Iterable",
               "default": false
             }
@@ -328,10 +328,10 @@
         [
           "src/Util.ts",
           302,
-          13
+          9
         ]
       ],
-      "id": 1784,
+      "id": 7824,
       "flags": {
         "isStatic": true
       },
@@ -351,7 +351,7 @@
             },
             {
               "name": "callback",
-              "comment": "a function to capture the data. It receives two parameters: a `response` as string, and a `success` status as boolean.\n",
+              "comment": "a function to capture the data. It receives two parameters: a `response` as string, and a `success` status as boolean.",
               "type": " Fn(response:string, success:boolean)",
               "default": false
             }
@@ -366,10 +366,10 @@
         [
           "src/Util.ts",
           350,
-          20
+          9
         ]
       ],
-      "id": 1798,
+      "id": 7838,
       "flags": {
         "isStatic": true
       },
@@ -378,8 +378,8 @@
       "signatures": [
         {
           "comment": "Estimate performance by checking how long it takes to render a frame",
-          "returns": "",
-          "returns_comment": "milliseconds per frame\n",
+          "returns": " ()",
+          "returns_comment": "milliseconds per frame",
           "parameters": [
             {
               "name": "avgFrames",
@@ -403,10 +403,10 @@
         [
           "src/Util.ts",
           176,
-          18
+          9
         ]
       ],
-      "id": 1736,
+      "id": 7776,
       "flags": {
         "isStatic": true
       },
@@ -426,7 +426,7 @@
             },
             {
               "name": "start",
-              "comment": "Optional starting value\n",
+              "comment": "Optional starting value",
               "type": "number",
               "default": "0"
             }
@@ -441,10 +441,10 @@
         [
           "src/Util.ts",
           190,
-          14
+          9
         ]
       ],
-      "id": 1740,
+      "id": 7780,
       "flags": {
         "isStatic": true
       },
@@ -482,7 +482,7 @@
             },
             {
               "name": "matchSize",
-              "comment": "if `true`, all chunks's length must match `size`.\n",
+              "comment": "if `true`, all chunks's length must match `size`.",
               "type": "boolean",
               "default": "true"
             }
@@ -497,10 +497,10 @@
         [
           "src/Util.ts",
           269,
-          16
+          9
         ]
       ],
-      "id": 1764,
+      "id": 7804,
       "flags": {
         "isStatic": true
       },
@@ -509,8 +509,8 @@
       "signatures": [
         {
           "comment": "Create a convenient stepper. This returns a function which you can call repeatedly to step a counter.",
-          "returns": "",
-          "returns_comment": "a function which will increment the stepper and return its value at each call.\n",
+          "returns": " ()",
+          "returns_comment": "a function which will increment the stepper and return its value at each call.",
           "parameters": [
             {
               "name": "max",
@@ -547,15 +547,47 @@
       ]
     },
     {
+      "name": "uniqueId",
+      "source": [
+        [
+          "src/Util.ts",
+          397,
+          9
+        ]
+      ],
+      "id": 7852,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Generate a time-based unique ID or a crypto-based ID.",
+          "returns": "string",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "useCrypto",
+              "comment": "",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "warn",
       "source": [
         [
           "src/Util.ts",
           160,
-          13
+          9
         ]
       ],
-      "id": 1732,
+      "id": 7772,
       "flags": {
         "isStatic": true
       },
@@ -575,7 +607,7 @@
             },
             {
               "name": "defaultReturn",
-              "comment": "optional return value\n",
+              "comment": "optional return value",
               "type": "any",
               "default": "undefined"
             }
@@ -590,10 +622,10 @@
         [
           "src/Util.ts",
           114,
-          18
+          9
         ]
       ],
-      "id": 1726,
+      "id": 7766,
       "flags": {
         "isStatic": true
       },
@@ -607,7 +639,7 @@
           "parameters": [
             {
               "name": "lv",
-              "comment": "a [`WarningType`](#link) option, where \"error\" will throw an error, \"warn\" will log in console, and \"mute\" will ignore the error.\n",
+              "comment": "a [`WarningType`](#link) option, where \"error\" will throw an error, \"warn\" will log in console, and \"mute\" will ignore the error.",
               "type": "WarningType",
               "default": false
             }
@@ -622,10 +654,10 @@
         [
           "src/Util.ts",
           247,
-          12
+          9
         ]
       ],
-      "id": 1761,
+      "id": 7801,
       "flags": {
         "isStatic": true
       },
@@ -639,8 +671,8 @@
           "parameters": [
             {
               "name": "arrays",
-              "comment": "an array of arrays\n",
-              "type": "Array[]",
+              "comment": "an array of arrays",
+              "type": "any[][]",
               "default": false
             }
           ],

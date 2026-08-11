@@ -3,12 +3,12 @@
   "source": [
     [
       "src/UI.ts",
-      309,
-      21
+      310,
+      13
     ]
   ],
   "kind": "Class",
-  "id": 119,
+  "id": 7442,
   "comment": "**[Experimental]** A simple button that extends [`UI`](#link) to track clicks and hovers.",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "src/UI.ts",
-          311,
-          31
+          321,
+          2
         ]
       ],
-      "id": 121,
+      "id": 7488,
       "flags": {},
       "overrides": "UI.__constructor",
       "inherits": false,
@@ -50,7 +50,7 @@
             },
             {
               "name": "id",
-              "comment": "Optional id string\n",
+              "comment": "Optional id string",
               "type": "string",
               "default": false
             }
@@ -66,16 +66,16 @@
       "source": [
         [
           "src/UI.ts",
-          113,
-          11
+          114,
+          6
         ],
         [
           "src/UI.ts",
-          114,
-          11
+          115,
+          6
         ]
       ],
-      "id": 190,
+      "id": 7534,
       "flags": {},
       "overrides": false,
       "inherits": "UI.group",
@@ -98,16 +98,16 @@
       "source": [
         [
           "src/UI.ts",
-          106,
-          8
+          107,
+          6
         ],
         [
           "src/UI.ts",
-          107,
-          8
+          108,
+          6
         ]
       ],
-      "id": 186,
+      "id": 7530,
       "flags": {},
       "overrides": false,
       "inherits": "UI.id",
@@ -130,16 +130,16 @@
       "source": [
         [
           "src/UI.ts",
-          120,
-          11
+          121,
+          6
         ],
         [
           "src/UI.ts",
-          121,
-          11
+          122,
+          6
         ]
       ],
-      "id": 194,
+      "id": 7538,
       "flags": {},
       "overrides": false,
       "inherits": "UI.shape",
@@ -164,11 +164,11 @@
       "source": [
         [
           "src/UI.ts",
-          194,
-          16
+          195,
+          12
         ]
       ],
-      "id": 215,
+      "id": 7559,
       "flags": {
         "isProtected": true
       },
@@ -182,7 +182,7 @@
           "parameters": [
             {
               "name": "type",
-              "comment": "a string defined in [`UIPointerActions`](#link)\n",
+              "comment": "a string defined in [`UIPointerActions`](#link)",
               "type": "string",
               "default": false
             }
@@ -196,11 +196,11 @@
       "source": [
         [
           "src/UI.ts",
-          175,
-          8
+          176,
+          2
         ]
       ],
-      "id": 210,
+      "id": 7554,
       "flags": {},
       "overrides": false,
       "inherits": "UI.listen",
@@ -224,7 +224,7 @@
             },
             {
               "name": "evt",
-              "comment": "a MouseEvent emitted by the browser (See [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent))\n",
+              "comment": "a MouseEvent emitted by the browser (See [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent))",
               "type": "MouseEvent",
               "default": false
             }
@@ -238,11 +238,11 @@
       "source": [
         [
           "src/UI.ts",
-          158,
-          5
+          159,
+          2
         ]
       ],
-      "id": 206,
+      "id": 7550,
       "flags": {},
       "overrides": false,
       "inherits": "UI.off",
@@ -274,11 +274,11 @@
       "source": [
         [
           "src/UI.ts",
-          377,
-          10
+          378,
+          2
         ]
       ],
-      "id": 133,
+      "id": 7501,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -286,7 +286,7 @@
         {
           "comment": "Remove an existing click handler",
           "returns": "boolean",
-          "returns_comment": "a boolean indicating whether the handler was removed successfully\n",
+          "returns_comment": "a boolean indicating whether the handler was removed successfully",
           "parameters": [
             {
               "name": "id",
@@ -304,11 +304,11 @@
       "source": [
         [
           "src/UI.ts",
-          397,
-          16
+          398,
+          2
         ]
       ],
-      "id": 139,
+      "id": 7507,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -316,7 +316,7 @@
         {
           "comment": "Remove an existing contextmenu handler",
           "returns": "boolean",
-          "returns_comment": "a boolean indicating whether the handler was removed successfully\n",
+          "returns_comment": "a boolean indicating whether the handler was removed successfully",
           "parameters": [
             {
               "name": "id",
@@ -334,11 +334,11 @@
       "source": [
         [
           "src/UI.ts",
-          422,
-          10
+          423,
+          2
         ]
       ],
-      "id": 146,
+      "id": 7514,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -346,7 +346,7 @@
         {
           "comment": "Remove handlers for hover events.",
           "returns": "boolean[]",
-          "returns_comment": "an array of booleans indicating whether the handlers were removed successfully\n",
+          "returns_comment": "an array of booleans indicating whether the handlers were removed successfully",
           "parameters": [
             {
               "name": "enterID",
@@ -370,11 +370,11 @@
       "source": [
         [
           "src/UI.ts",
-          146,
-          4
+          147,
+          2
         ]
       ],
-      "id": 202,
+      "id": 7546,
       "flags": {},
       "overrides": false,
       "inherits": "UI.on",
@@ -382,7 +382,7 @@
         {
           "comment": "Add an event handler. Remember this UI will also need to be tracked for events via `UI.track`.",
           "returns": "number",
-          "returns_comment": "an id number that reference to this handler, for use in [`UI.off`](#link)\n",
+          "returns_comment": "an id number that reference to this handler, for use in [`UI.off`](#link)",
           "parameters": [
             {
               "name": "type",
@@ -406,11 +406,11 @@
       "source": [
         [
           "src/UI.ts",
-          367,
-          9
+          368,
+          2
         ]
       ],
-      "id": 130,
+      "id": 7498,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -418,7 +418,7 @@
         {
           "comment": "Add a new click handler. Remember this button will also need to be tracked for events via `UI.track`. If you want to track right clicks, you may also consider [`UIButton.onContextMenu`](#link).",
           "returns": "number",
-          "returns_comment": "an id number that refers to this handler, for use in [`UIButton.offClick`](#link) or [`UI.off`](#link).\n",
+          "returns_comment": "an id number that refers to this handler, for use in [`UIButton.offClick`](#link) or [`UI.off`](#link).",
           "parameters": [
             {
               "name": "fn",
@@ -436,11 +436,11 @@
       "source": [
         [
           "src/UI.ts",
-          387,
-          15
+          388,
+          2
         ]
       ],
-      "id": 136,
+      "id": 7504,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -448,7 +448,7 @@
         {
           "comment": "Add a new contextmenu handler. `contextmenu` is similar to right click, see the [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/Element/contextmenu_event). Remember this button will also need to be tracked for events via `UI.track`. Also note that you may need to use `event.preventDefault()` in the callback function to prevent other events from triggering.",
           "returns": "number",
-          "returns_comment": "an id number that refers to this handler, for use in [`UIButton.offContextMenu`](#link) or [`UI.off`](#link).\n",
+          "returns_comment": "an id number that refers to this handler, for use in [`UIButton.offContextMenu`](#link) or [`UI.off`](#link).",
           "parameters": [
             {
               "name": "fn",
@@ -466,11 +466,11 @@
       "source": [
         [
           "src/UI.ts",
-          408,
-          9
+          409,
+          2
         ]
       ],
-      "id": 142,
+      "id": 7510,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -478,7 +478,7 @@
         {
           "comment": "Add handlers for hover events. Remember this button will also need to be tracked for events via `UI.track`.",
           "returns": "number[]",
-          "returns_comment": "id numbers that refer to enter/leave handlers, for use in [`UIButton.offHover`](#link) or [`UI.off`](#link).\n",
+          "returns_comment": "id numbers that refer to enter/leave handlers, for use in [`UIButton.offHover`](#link) or [`UI.off`](#link).",
           "parameters": [
             {
               "name": "enter",
@@ -502,11 +502,11 @@
       "source": [
         [
           "src/UI.ts",
-          232,
-          8
+          233,
+          2
         ]
       ],
-      "id": 227,
+      "id": 7565,
       "flags": {},
       "overrides": false,
       "inherits": "UI.render",
@@ -518,8 +518,8 @@
           "parameters": [
             {
               "name": "fn",
-              "comment": "a render function\n",
-              "type": " Fn(group:Group, )",
+              "comment": "a render function",
+              "type": " Fn(group:Group, states:)",
               "default": false
             }
           ],
@@ -532,11 +532,11 @@
       "source": [
         [
           "src/UI.ts",
-          130,
-          7
+          131,
+          2
         ]
       ],
-      "id": 198,
+      "id": 7542,
       "flags": {},
       "overrides": false,
       "inherits": "UI.state",
@@ -568,11 +568,11 @@
       "source": [
         [
           "src/UI.ts",
-          240,
-          10
+          241,
+          2
         ]
       ],
-      "id": 237,
+      "id": 7575,
       "flags": {},
       "overrides": false,
       "inherits": "UI.toString",
@@ -591,11 +591,11 @@
       "source": [
         [
           "src/UI.ts",
-          205,
-          18
+          206,
+          12
         ]
       ],
-      "id": 218,
+      "id": 7562,
       "flags": {
         "isProtected": true
       },
@@ -609,7 +609,7 @@
           "parameters": [
             {
               "name": "key",
-              "comment": "an id returned by the [`UI.hold`](#link) function\n",
+              "comment": "an id returned by the [`UI.hold`](#link) function",
               "type": "number",
               "default": false
             }
@@ -623,11 +623,11 @@
       "source": [
         [
           "src/UI.ts",
-          77,
-          19
+          78,
+          9
         ]
       ],
-      "id": 169,
+      "id": 7450,
       "flags": {
         "isStatic": true
       },
@@ -653,7 +653,7 @@
             },
             {
               "name": "id",
-              "comment": "optional id string\n",
+              "comment": "optional id string",
               "type": "string",
               "default": false
             }
@@ -667,11 +667,11 @@
       "source": [
         [
           "src/UI.ts",
-          88,
-          20
+          89,
+          9
         ]
       ],
-      "id": 175,
+      "id": 7456,
       "flags": {
         "isStatic": true
       },
@@ -697,7 +697,7 @@
             },
             {
               "name": "id",
-              "comment": "optional id string\n",
+              "comment": "optional id string",
               "type": "string",
               "default": false
             }
@@ -711,11 +711,11 @@
       "source": [
         [
           "src/UI.ts",
-          66,
-          22
+          67,
+          9
         ]
       ],
-      "id": 163,
+      "id": 7444,
       "flags": {
         "isStatic": true
       },
@@ -741,7 +741,7 @@
             },
             {
               "name": "id",
-              "comment": "optional id string\n",
+              "comment": "optional id string",
               "type": "string",
               "default": false
             }
@@ -755,11 +755,11 @@
       "source": [
         [
           "src/UI.ts",
-          98,
-          15
+          99,
+          9
         ]
       ],
-      "id": 181,
+      "id": 7462,
       "flags": {
         "isStatic": true
       },
@@ -779,7 +779,7 @@
             },
             {
               "name": "states",
-              "comment": "optional a state object keep track of custom states for this UI\n",
+              "comment": "optional a state object keep track of custom states for this UI",
               "type": "object",
               "default": false
             },
@@ -799,11 +799,11 @@
       "source": [
         [
           "src/UI.ts",
-          221,
-          14
+          222,
+          9
         ]
       ],
-      "id": 221,
+      "id": 7467,
       "flags": {
         "isStatic": true
       },
@@ -835,7 +835,7 @@
             },
             {
               "name": "evt",
-              "comment": "a MouseEvent emitted by the browser (See [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent))\n",
+              "comment": "a MouseEvent emitted by the browser (See [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent))",
               "type": "MouseEvent",
               "default": false
             }

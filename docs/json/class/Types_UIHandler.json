@@ -3,12 +3,12 @@
   "source": [
     [
       "src/Types.ts",
-      159,
-      21
+      147,
+      12
     ]
   ],
   "kind": "Typealias",
-  "id": 796,
+  "id": 7198,
   "comment": "Typescript type: UIHandler represents a callback function to handle UI actions.",
   "constructor": [],
   "accessors": [],

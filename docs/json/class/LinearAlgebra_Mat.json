@@ -4,11 +4,11 @@
     [
       "src/LinearAlgebra.ts",
       213,
-      16
+      13
     ]
   ],
   "kind": "Class",
-  "id": 927,
+  "id": 3005,
   "comment": "Mat provides various static functions for matrix operations as well as a convenient way to chain a 3x3 transformation matrix. It's not fully optimized but good enough to use.",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          215,
-          27
+          217,
+          2
         ]
       ],
-      "id": 929,
+      "id": 3073,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -42,10 +42,10 @@
         [
           "src/LinearAlgebra.ts",
           233,
-          15
+          6
         ]
       ],
-      "id": 933,
+      "id": 3078,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -61,10 +61,10 @@
         [
           "src/LinearAlgebra.ts",
           225,
-          11
+          6
         ]
       ],
-      "id": 931,
+      "id": 3076,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -82,10 +82,10 @@
         [
           "src/LinearAlgebra.ts",
           241,
-          7
+          2
         ]
       ],
-      "id": 935,
+      "id": 3080,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -105,10 +105,10 @@
         [
           "src/LinearAlgebra.ts",
           263,
-          10
+          2
         ]
       ],
-      "id": 941,
+      "id": 3086,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -126,9 +126,9 @@
             },
             {
               "name": "at",
-              "comment": "Optional origin location to rotate from.\n",
+              "comment": "Optional origin location to rotate from.",
               "type": "PtLike",
-              "default": "[0,0]"
+              "default": "..."
             }
           ],
           "tags": []
@@ -141,10 +141,10 @@
         [
           "src/LinearAlgebra.ts",
           251,
-          9
+          2
         ]
       ],
-      "id": 937,
+      "id": 3082,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -156,15 +156,15 @@
           "parameters": [
             {
               "name": "val",
-              "comment": "scale factors",
+              "comment": "[x, y] scale factors",
               "type": "PtLike",
               "default": false
             },
             {
               "name": "at",
-              "comment": "Optional origin location to scale from.\n",
+              "comment": "Optional origin location to scale from.",
               "type": "PtLike",
-              "default": "[0,0]"
+              "default": "..."
             }
           ],
           "tags": []
@@ -177,10 +177,10 @@
         [
           "src/LinearAlgebra.ts",
           286,
-          9
+          2
         ]
       ],
-      "id": 948,
+      "id": 3093,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -192,15 +192,15 @@
           "parameters": [
             {
               "name": "val",
-              "comment": "shear factors (before tan() operation)",
+              "comment": "[x, y] shear factors (before tan() operation)",
               "type": "PtLike",
               "default": false
             },
             {
               "name": "at",
-              "comment": "Optional origin location to scale from.\n",
+              "comment": "Optional origin location to scale from.",
               "type": "PtLike",
-              "default": "[0,0]"
+              "default": "..."
             }
           ],
           "tags": []
@@ -213,10 +213,10 @@
         [
           "src/LinearAlgebra.ts",
           274,
-          13
+          2
         ]
       ],
-      "id": 945,
+      "id": 3090,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -228,7 +228,7 @@
           "parameters": [
             {
               "name": "val",
-              "comment": "offset values\n",
+              "comment": "[x, y] offset values",
               "type": "PtLike",
               "default": false
             }
@@ -243,10 +243,10 @@
         [
           "src/LinearAlgebra.ts",
           299,
-          12
+          9
         ]
       ],
-      "id": 952,
+      "id": 3006,
       "flags": {
         "isStatic": true
       },
@@ -256,7 +256,7 @@
         {
           "comment": "Matrix addition. Matrices should have the same rows and columns.",
           "returns": "Group",
-          "returns_comment": "a new group with the same rows and columns as a and b\n",
+          "returns_comment": "a new group with the same rows and columns as a and b",
           "parameters": [
             {
               "name": "a",
@@ -267,7 +267,7 @@
             {
               "name": "b",
               "comment": "a scalar number, an array of numeric arrays, or a group of Pt",
-              "type": "GroupLike | number[][] | number",
+              "type": "number | GroupLike | number[][]",
               "default": false
             }
           ],
@@ -281,10 +281,10 @@
         [
           "src/LinearAlgebra.ts",
           323,
-          17
+          9
         ]
       ],
-      "id": 956,
+      "id": 3010,
       "flags": {
         "isStatic": true
       },
@@ -294,7 +294,7 @@
         {
           "comment": "Matrix multiplication.",
           "returns": "Group",
-          "returns_comment": "If not elementwise, this will return a new group with M Pt, each with N dimensions (M-rows, N-columns).\n",
+          "returns_comment": "If not elementwise, this will return a new group with M Pt, each with N dimensions (M-rows, N-columns).",
           "parameters": [
             {
               "name": "a",
@@ -305,7 +305,7 @@
             {
               "name": "b",
               "comment": "a scalar number, an array of numeric arrays, or a Group of K Pts, each with N dimensions (K-rows, N-columns) -- or if transposed is true, then N Pts with K dimensions",
-              "type": "GroupLike | number[][] | number",
+              "type": "number | GroupLike | number[][]",
               "default": false
             },
             {
@@ -331,10 +331,10 @@
         [
           "src/LinearAlgebra.ts",
           505,
-          26
+          9
         ]
       ],
-      "id": 1015,
+      "id": 3069,
       "flags": {
         "isStatic": true
       },
@@ -348,7 +348,7 @@
           "parameters": [
             {
               "name": "p1",
-              "comment": "second end point to define the reflection line\n",
+              "comment": "first end point to define the reflection line",
               "type": "PtLike",
               "default": false
             },
@@ -369,10 +369,10 @@
         [
           "src/LinearAlgebra.ts",
           434,
-          23
+          9
         ]
       ],
-      "id": 988,
+      "id": 3042,
       "flags": {
         "isStatic": true
       },
@@ -407,10 +407,10 @@
         [
           "src/LinearAlgebra.ts",
           481,
-          25
+          9
         ]
       ],
-      "id": 1005,
+      "id": 3059,
       "flags": {
         "isStatic": true
       },
@@ -451,10 +451,10 @@
         [
           "src/LinearAlgebra.ts",
           422,
-          22
+          9
         ]
       ],
-      "id": 984,
+      "id": 3038,
       "flags": {
         "isStatic": true
       },
@@ -489,10 +489,10 @@
         [
           "src/LinearAlgebra.ts",
           470,
-          24
+          9
         ]
       ],
-      "id": 1000,
+      "id": 3054,
       "flags": {
         "isStatic": true
       },
@@ -533,10 +533,10 @@
         [
           "src/LinearAlgebra.ts",
           446,
-          22
+          9
         ]
       ],
-      "id": 992,
+      "id": 3046,
       "flags": {
         "isStatic": true
       },
@@ -571,10 +571,10 @@
         [
           "src/LinearAlgebra.ts",
           492,
-          24
+          9
         ]
       ],
-      "id": 1010,
+      "id": 3064,
       "flags": {
         "isStatic": true
       },
@@ -615,10 +615,10 @@
         [
           "src/LinearAlgebra.ts",
           401,
-          20
+          9
         ]
       ],
-      "id": 977,
+      "id": 3031,
       "flags": {
         "isStatic": true
       },
@@ -647,10 +647,10 @@
         [
           "src/LinearAlgebra.ts",
           412,
-          20
+          9
         ]
       ],
-      "id": 980,
+      "id": 3034,
       "flags": {
         "isStatic": true
       },
@@ -660,7 +660,7 @@
         {
           "comment": "Transform a 2D point given a 2x3 or 3x3 matrix.",
           "returns": "Pt",
-          "returns_comment": "a new transformed Pt\n",
+          "returns_comment": "a new transformed Pt",
           "parameters": [
             {
               "name": "pt",
@@ -685,10 +685,10 @@
         [
           "src/LinearAlgebra.ts",
           458,
-          26
+          9
         ]
       ],
-      "id": 996,
+      "id": 3050,
       "flags": {
         "isStatic": true
       },
@@ -723,10 +723,10 @@
         [
           "src/LinearAlgebra.ts",
           396,
-          18
+          9
         ]
       ],
-      "id": 972,
+      "id": 3026,
       "flags": {
         "isStatic": true
       },
@@ -767,10 +767,10 @@
         [
           "src/LinearAlgebra.ts",
           383,
-          12
+          9
         ]
       ],
-      "id": 967,
+      "id": 3021,
       "flags": {
         "isStatic": true
       },
@@ -796,7 +796,7 @@
             },
             {
               "name": "useLongest",
-              "comment": "If true, find the longest list of values in a Pt and use its length for zipping. Default is false, which uses the first item's length for zipping.\n",
+              "comment": "If true, find the longest list of values in a Pt and use its length for zipping. Default is false, which uses the first item's length for zipping.",
               "type": "boolean",
               "default": "false"
             }
@@ -811,10 +811,10 @@
         [
           "src/LinearAlgebra.ts",
           367,
-          17
+          9
         ]
       ],
-      "id": 962,
+      "id": 3016,
       "flags": {
         "isStatic": true
       },
@@ -840,7 +840,7 @@
             },
             {
               "name": "defaultValue",
-              "comment": "a default value to fill if index out of bound. If not provided, it will throw an error instead.\n",
+              "comment": "a default value to fill if index out of bound. If not provided, it will throw an error instead.",
               "type": "number | boolean",
               "default": "false"
             }

@@ -4,11 +4,11 @@
     [
       "src/Space.ts",
       13,
-      27
+      22
     ]
   ],
   "kind": "Class",
-  "id": 3105,
+  "id": 6396,
   "comment": "Space is an abstract class that represents a general context for expressing Pts. It's extended through subclasses such as [`CanvasSpace`](#link) and [`SVGSpace`](#link). You can also create your own extension of Space.\nSee [Space guide](../guide/Space-0500.html) for details.",
   "constructor": [],
   "accessors": [
@@ -18,10 +18,10 @@
         [
           "src/Space.ts",
           252,
-          12
+          6
         ]
       ],
-      "id": 3191,
+      "id": 6480,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -37,21 +37,21 @@
         [
           "src/Space.ts",
           221,
-          21
+          6
         ],
         [
           "src/Space.ts",
           222,
-          21
+          6
         ]
       ],
-      "id": 3171,
+      "id": 6460,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "comment": "Set a custom rendering function `fn(graphics_context, canvas_space)` if needed.",
       "getter": {
-        "type": ""
+        "type": " Fn(context:any, self:Space)"
       },
       "setter": {
         "type": "void",
@@ -69,10 +69,10 @@
         [
           "src/Space.ts",
           264,
-          12
+          6
         ]
       ],
-      "id": 3195,
+      "id": 6484,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -88,10 +88,10 @@
         [
           "src/Space.ts",
           240,
-          23
+          13
         ]
       ],
-      "id": 3187,
+      "id": 6476,
       "flags": {
         "isPublic": true
       },
@@ -109,10 +109,10 @@
         [
           "src/Space.ts",
           228,
-          15
+          6
         ]
       ],
-      "id": 3183,
+      "id": 6472,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -128,10 +128,10 @@
         [
           "src/Space.ts",
           234,
-          16
+          6
         ]
       ],
-      "id": 3185,
+      "id": 6474,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -147,10 +147,10 @@
         [
           "src/Space.ts",
           246,
-          10
+          6
         ]
       ],
-      "id": 3189,
+      "id": 6478,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -166,10 +166,10 @@
         [
           "src/Space.ts",
           258,
-          11
+          6
         ]
       ],
-      "id": 3193,
+      "id": 6482,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -187,10 +187,10 @@
         [
           "src/Space.ts",
           66,
-          5
+          2
         ]
       ],
-      "id": 3141,
+      "id": 6430,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -217,10 +217,10 @@
         [
           "src/Space.ts",
           278,
-          16
+          11
         ]
       ],
-      "id": 3201,
+      "id": 6490,
       "flags": {
         "isAbstract": true
       },
@@ -242,10 +242,10 @@
         [
           "src/Space.ts",
           284,
-          18
+          11
         ]
       ],
-      "id": 3203,
+      "id": 6492,
       "flags": {
         "isAbstract": true
       },
@@ -267,10 +267,10 @@
         [
           "src/Space.ts",
           52,
-          14
+          2
         ]
       ],
-      "id": 3138,
+      "id": 6427,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -282,7 +282,7 @@
           "parameters": [
             {
               "name": "ms",
-              "comment": "at least this amount of miniseconds must have elapsed before frame advances\n",
+              "comment": "at least this amount of miniseconds must have elapsed before frame advances",
               "type": "number",
               "default": "0"
             }
@@ -297,10 +297,10 @@
         [
           "src/Space.ts",
           173,
-          7
+          2
         ]
       ],
-      "id": 3157,
+      "id": 6446,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -312,7 +312,7 @@
           "parameters": [
             {
               "name": "toggle",
-              "comment": "a boolean value to set if this function call should be a toggle (between pause and resume)\n",
+              "comment": "a boolean value to set if this function call should be a toggle (between pause and resume)",
               "type": "boolean",
               "default": "false"
             }
@@ -327,10 +327,10 @@
         [
           "src/Space.ts",
           107,
-          6
+          2
         ]
       ],
-      "id": 3149,
+      "id": 6438,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -342,7 +342,7 @@
           "parameters": [
             {
               "name": "time",
-              "comment": "current time\n",
+              "comment": "current time",
               "type": "number",
               "default": "0"
             }
@@ -357,10 +357,10 @@
         [
           "src/Space.ts",
           146,
-          21
+          12
         ]
       ],
-      "id": 3154,
+      "id": 6443,
       "flags": {
         "isProtected": true
       },
@@ -374,7 +374,7 @@
           "parameters": [
             {
               "name": "time",
-              "comment": "current time\n",
+              "comment": "current time",
               "type": "number",
               "default": false
             }
@@ -389,10 +389,10 @@
         [
           "src/Space.ts",
           202,
-          10
+          2
         ]
       ],
-      "id": 3165,
+      "id": 6454,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -404,7 +404,7 @@
           "parameters": [
             {
               "name": "duration",
-              "comment": "a value in millisecond to specify a time period to play before stopping, or `-1` to play forever\n",
+              "comment": "a value in millisecond to specify a time period to play before stopping, or `-1` to play forever",
               "type": "number",
               "default": "0"
             }
@@ -419,10 +419,10 @@
         [
           "src/Space.ts",
           42,
-          9
+          2
         ]
       ],
-      "id": 3135,
+      "id": 6424,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -434,7 +434,7 @@
           "parameters": [
             {
               "name": "b",
-              "comment": "a boolean value to set whether to repaint each frame\n",
+              "comment": "a boolean value to set whether to repaint each frame",
               "type": "boolean",
               "default": false
             }
@@ -449,10 +449,10 @@
         [
           "src/Space.ts",
           87,
-          8
+          2
         ]
       ],
-      "id": 3144,
+      "id": 6433,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -464,7 +464,7 @@
           "parameters": [
             {
               "name": "player",
-              "comment": "an IPlayer that has an `animateID` property\n",
+              "comment": "an IPlayer that has an `animateID` property",
               "type": "IPlayer",
               "default": false
             }
@@ -479,10 +479,10 @@
         [
           "src/Space.ts",
           96,
-          11
+          2
         ]
       ],
-      "id": 3147,
+      "id": 6436,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -502,10 +502,10 @@
         [
           "src/Space.ts",
           212,
-          18
+          12
         ]
       ],
-      "id": 3168,
+      "id": 6457,
       "flags": {
         "isProtected": true
       },
@@ -519,7 +519,7 @@
           "parameters": [
             {
               "name": "context",
-              "comment": "rendering context\n",
+              "comment": "rendering context",
               "type": "any",
               "default": false
             }
@@ -534,10 +534,10 @@
         [
           "src/Space.ts",
           136,
-          8
+          2
         ]
       ],
-      "id": 3152,
+      "id": 6441,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -557,10 +557,10 @@
         [
           "src/Space.ts",
           272,
-          17
+          11
         ]
       ],
-      "id": 3197,
+      "id": 6486,
       "flags": {
         "isAbstract": true
       },
@@ -580,7 +580,7 @@
             },
             {
               "name": "evt",
-              "comment": "event\n",
+              "comment": "event",
               "type": "Event",
               "default": false
             }
@@ -595,10 +595,10 @@
         [
           "src/Space.ts",
           182,
-          8
+          2
         ]
       ],
-      "id": 3160,
+      "id": 6449,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -618,10 +618,10 @@
         [
           "src/Space.ts",
           192,
-          6
+          2
         ]
       ],
-      "id": 3162,
+      "id": 6451,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -633,7 +633,7 @@
           "parameters": [
             {
               "name": "t",
-              "comment": "a value in millisecond to specify a time period to play before stopping, or `-1` to play forever, or `0` to end immediately. Default is 0 which will stop the animation immediately.\n",
+              "comment": "a value in millisecond to specify a time period to play before stopping, or `-1` to play forever, or `0` to end immediately. Default is 0 which will stop the animation immediately.",
               "type": "number",
               "default": "0"
             }
@@ -651,14 +651,14 @@
         [
           "src/Space.ts",
           16,
-          17
+          12
         ]
       ],
-      "id": 3107,
+      "id": 6400,
       "flags": {
         "isProtected": true
       },
-      "type": "bound",
+      "type": "Bound",
       "overrides": false,
       "inherits": false,
       "comment": ""
@@ -669,12 +669,12 @@
         [
           "src/Space.ts",
           15,
-          4
+          2
         ]
       ],
-      "id": 3106,
+      "id": 6399,
       "flags": {},
-      "type": "id",
+      "type": "string",
       "overrides": false,
       "inherits": false,
       "comment": ""
@@ -685,14 +685,14 @@
         [
           "src/Space.ts",
           20,
-          23
+          12
         ]
       ],
-      "id": 3114,
+      "id": 6403,
       "flags": {
         "isProtected": true
       },
-      "type": "playerCount",
+      "type": "number",
       "overrides": false,
       "inherits": false,
       "comment": ""
@@ -703,14 +703,14 @@
         [
           "src/Space.ts",
           19,
-          19
+          12
         ]
       ],
-      "id": 3113,
+      "id": 6402,
       "flags": {
         "isProtected": true
       },
-      "type": "players",
+      "type": "ISpacePlayers",
       "overrides": false,
       "inherits": false,
       "comment": ""

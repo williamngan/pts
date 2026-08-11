@@ -3,12 +3,12 @@
   "source": [
     [
       "src/Physics.ts",
-      541,
-      17
+      546,
+      13
     ]
   ],
   "kind": "Class",
-  "id": 6595,
+  "id": 4389,
   "comment": "Body is a subclass of [`Group`](#link) that stores a set of [`Particle`](#link)s and edge constraints. It is usually added into a [`World`](#link) to create physics simulations.\nSee [a demo here](../demo/index.html?name=physics.shapes).",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "src/Physics.ts",
-          546,
-          29
+          556,
+          2
         ]
       ],
-      "id": 6603,
+      "id": 4437,
       "flags": {},
       "overrides": "Group.__constructor",
       "inherits": false,
@@ -41,16 +41,16 @@
       "source": [
         [
           "src/Pt.ts",
-          556,
-          8
+          558,
+          6
         ],
         [
           "src/Pt.ts",
-          557,
-          8
+          559,
+          6
         ]
       ],
-      "id": 6640,
+      "id": 4475,
       "flags": {},
       "overrides": false,
       "inherits": "Group.id",
@@ -73,16 +73,16 @@
       "source": [
         [
           "src/Physics.ts",
-          594,
-          10
+          599,
+          6
         ],
         [
           "src/Physics.ts",
-          595,
-          10
+          600,
+          6
         ]
       ],
-      "id": 6615,
+      "id": 4450,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -105,11 +105,11 @@
       "source": [
         [
           "src/Pt.ts",
-          562,
-          8
+          564,
+          6
         ]
       ],
-      "id": 6644,
+      "id": 4479,
       "flags": {},
       "overrides": false,
       "inherits": "Group.p1",
@@ -124,11 +124,11 @@
       "source": [
         [
           "src/Pt.ts",
-          567,
-          8
+          569,
+          6
         ]
       ],
-      "id": 6646,
+      "id": 4481,
       "flags": {},
       "overrides": false,
       "inherits": "Group.p2",
@@ -143,11 +143,11 @@
       "source": [
         [
           "src/Pt.ts",
-          572,
-          8
+          574,
+          6
         ]
       ],
-      "id": 6648,
+      "id": 4483,
       "flags": {},
       "overrides": false,
       "inherits": "Group.p3",
@@ -162,11 +162,11 @@
       "source": [
         [
           "src/Pt.ts",
-          577,
-          8
+          579,
+          6
         ]
       ],
-      "id": 6650,
+      "id": 4485,
       "flags": {},
       "overrides": false,
       "inherits": "Group.p4",
@@ -181,11 +181,11 @@
       "source": [
         [
           "src/Pt.ts",
-          582,
-          8
+          584,
+          6
         ]
       ],
-      "id": 6652,
+      "id": 4487,
       "flags": {},
       "overrides": false,
       "inherits": "Group.q1",
@@ -200,11 +200,11 @@
       "source": [
         [
           "src/Pt.ts",
-          587,
-          8
+          589,
+          6
         ]
       ],
-      "id": 6654,
+      "id": 4489,
       "flags": {},
       "overrides": false,
       "inherits": "Group.q2",
@@ -219,11 +219,11 @@
       "source": [
         [
           "src/Pt.ts",
-          592,
-          8
+          594,
+          6
         ]
       ],
-      "id": 6656,
+      "id": 4491,
       "flags": {},
       "overrides": false,
       "inherits": "Group.q3",
@@ -238,11 +238,11 @@
       "source": [
         [
           "src/Pt.ts",
-          597,
-          8
+          599,
+          6
         ]
       ],
-      "id": 6658,
+      "id": 4493,
       "flags": {},
       "overrides": false,
       "inherits": "Group.q4",
@@ -259,11 +259,11 @@
       "source": [
         [
           "src/Pt.ts",
-          904,
-          12
+          906,
+          2
         ]
       ],
-      "id": 6765,
+      "id": 4594,
       "flags": {},
       "overrides": false,
       "inherits": "Group.$matrixAdd",
@@ -271,12 +271,12 @@
         {
           "comment": "Apply this group as a matrix and calculate matrix addition.",
           "returns": "Group",
-          "returns_comment": "a new Group\n",
+          "returns_comment": "a new Group",
           "parameters": [
             {
               "name": "g",
               "comment": "a scalar number, an array of numeric arrays, or a group of Pt",
-              "type": "GroupLike | number[][] | number",
+              "type": "number | GroupLike | number[][]",
               "default": false
             }
           ],
@@ -289,11 +289,11 @@
       "source": [
         [
           "src/Pt.ts",
-          916,
-          17
+          918,
+          2
         ]
       ],
-      "id": 6768,
+      "id": 4597,
       "flags": {},
       "overrides": false,
       "inherits": "Group.$matrixMultiply",
@@ -301,12 +301,12 @@
         {
           "comment": "Apply this group as a matrix and calculate matrix multiplication.",
           "returns": "Group",
-          "returns_comment": "If not elementwise, this will return a new  Group with M Pt, each with N dimensions (M-rows, N-columns).\n",
+          "returns_comment": "If not elementwise, this will return a new  Group with M Pt, each with N dimensions (M-rows, N-columns).",
           "parameters": [
             {
               "name": "g",
               "comment": "a scalar number, an array of numeric arrays, or a Group of K Pts, each with N dimensions (K-rows, N-columns) -- or if transposed is true, then N Pts with K dimensions",
-              "type": "GroupLike | number",
+              "type": "number | GroupLike",
               "default": false
             },
             {
@@ -331,11 +331,11 @@
       "source": [
         [
           "src/Pt.ts",
-          936,
-          6
+          938,
+          2
         ]
       ],
-      "id": 6777,
+      "id": 4606,
       "flags": {},
       "overrides": false,
       "inherits": "Group.$zip",
@@ -353,7 +353,7 @@
             },
             {
               "name": "useLongest",
-              "comment": "If true, find the longest list of values in a Pt and use its length for zipping. Default is false, which uses the first item's length for zipping.\n",
+              "comment": "If true, find the longest list of values in a Pt and use its length for zipping. Default is false, which uses the first item's length for zipping.",
               "type": "boolean",
               "default": "false"
             }
@@ -367,11 +367,11 @@
       "source": [
         [
           "src/Pt.ts",
-          867,
-          5
+          869,
+          2
         ]
       ],
-      "id": 6753,
+      "id": 4582,
       "flags": {},
       "overrides": false,
       "inherits": "Group.add",
@@ -383,7 +383,7 @@
           "parameters": [
             {
               "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties",
               "type": "any[]",
               "default": false
             }
@@ -397,11 +397,11 @@
       "source": [
         [
           "src/Pt.ts",
-          717,
-          12
+          719,
+          2
         ]
       ],
-      "id": 6695,
+      "id": 4524,
       "flags": {},
       "overrides": false,
       "inherits": "Group.anchorFrom",
@@ -413,8 +413,8 @@
           "parameters": [
             {
               "name": "ptOrIndex",
-              "comment": "a Pt, or a numeric index to target a specific Pt in this Group\n",
-              "type": "PtLike | number",
+              "comment": "a Pt, or a numeric index to target a specific Pt in this Group",
+              "type": "number | PtLike",
               "default": "0"
             }
           ],
@@ -427,11 +427,11 @@
       "source": [
         [
           "src/Pt.ts",
-          710,
-          10
+          712,
+          2
         ]
       ],
-      "id": 6692,
+      "id": 4521,
       "flags": {},
       "overrides": false,
       "inherits": "Group.anchorTo",
@@ -443,8 +443,8 @@
           "parameters": [
             {
               "name": "ptOrIndex",
-              "comment": "a Pt, or a numeric index to target a specific Pt in this Group\n",
-              "type": "PtLike | number",
+              "comment": "a Pt, or a numeric index to target a specific Pt in this Group",
+              "type": "number | PtLike",
               "default": "0"
             }
           ],
@@ -457,11 +457,11 @@
       "source": [
         [
           "src/Physics.ts",
-          606,
-          10
+          611,
+          2
         ]
       ],
-      "id": 6619,
+      "id": 4454,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -480,11 +480,11 @@
       "source": [
         [
           "src/Pt.ts",
-          701,
-          13
+          703,
+          2
         ]
       ],
-      "id": 6690,
+      "id": 4519,
       "flags": {},
       "overrides": false,
       "inherits": "Group.boundingBox",
@@ -492,7 +492,7 @@
         {
           "comment": "Find the rectangular bounding box of this group's Pts.",
           "returns": "Group",
-          "returns_comment": "a Group of 2 Pts representing the top-left and bottom-right of the rectangle\n",
+          "returns_comment": "a Group of 2 Pts representing the top-left and bottom-right of the rectangle",
           "parameters": [],
           "tags": []
         }
@@ -503,11 +503,11 @@
       "source": [
         [
           "src/Pt.ts",
-          692,
-          10
+          694,
+          2
         ]
       ],
-      "id": 6688,
+      "id": 4517,
       "flags": {},
       "overrides": false,
       "inherits": "Group.centroid",
@@ -526,11 +526,11 @@
       "source": [
         [
           "src/Pt.ts",
-          604,
-          7
+          606,
+          2
         ]
       ],
-      "id": 6660,
+      "id": 4495,
       "flags": {},
       "overrides": false,
       "inherits": "Group.clone",
@@ -549,16 +549,16 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1315,
-          10
+          1353,
+          4
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1321,
-          10
+          1359,
+          4
         ]
       ],
-      "id": 6793,
+      "id": 4625,
       "flags": {},
       "overrides": false,
       "inherits": "Array.concat",
@@ -570,7 +570,7 @@
           "parameters": [
             {
               "name": "items",
-              "comment": "Additional arrays and/or items to add to the end of the array.\n",
+              "comment": "Additional arrays and/or items to add to the end of the array.",
               "type": "ConcatArray[]",
               "default": false
             }
@@ -584,8 +584,8 @@
           "parameters": [
             {
               "name": "items",
-              "comment": "Additional arrays and/or items to add to the end of the array.\n",
-              "type": "T[] | ConcatArray[]",
+              "comment": "Additional arrays and/or items to add to the end of the array.",
+              "type": "(Pt | ConcatArray)[]",
               "default": false
             }
           ],
@@ -598,11 +598,11 @@
       "source": [
         [
           "src/Pt.ts",
-          894,
-          8
+          896,
+          2
         ]
       ],
-      "id": 6762,
+      "id": 4591,
       "flags": {},
       "overrides": false,
       "inherits": "Group.divide",
@@ -614,7 +614,7 @@
           "parameters": [
             {
               "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties",
               "type": "any[]",
               "default": false
             }
@@ -628,23 +628,23 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1398,
-          9
+          1440,
+          4
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1407,
-          9
+          1449,
+          4
         ]
       ],
-      "id": 6835,
+      "id": 4667,
       "flags": {},
       "overrides": false,
       "inherits": "Array.every",
       "signatures": [
         {
           "comment": "Determines whether all the members of an array satisfy the specified test.",
-          "returns": "this",
+          "returns": "this is S[]",
           "returns_comment": false,
           "parameters": [
             {
@@ -655,7 +655,7 @@
             },
             {
               "name": "thisArg",
-              "comment": "An object to which the this keyword can refer in the predicate function.\nIf thisArg is omitted, undefined is used as the this value.\n",
+              "comment": "An object to which the this keyword can refer in the predicate function.\nIf thisArg is omitted, undefined is used as the this value.",
               "type": "any",
               "default": false
             }
@@ -675,7 +675,7 @@
             },
             {
               "name": "thisArg",
-              "comment": "An object to which the this keyword can refer in the predicate function.\nIf thisArg is omitted, undefined is used as the this value.\n",
+              "comment": "An object to which the this keyword can refer in the predicate function.\nIf thisArg is omitted, undefined is used as the this value.",
               "type": "any",
               "default": false
             }
@@ -689,16 +689,16 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1434,
-          10
+          1476,
+          4
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1440,
-          10
+          1482,
+          4
         ]
       ],
-      "id": 6881,
+      "id": 4713,
       "flags": {},
       "overrides": false,
       "inherits": "Array.filter",
@@ -716,7 +716,7 @@
             },
             {
               "name": "thisArg",
-              "comment": "An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.\n",
+              "comment": "An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.",
               "type": "any",
               "default": false
             }
@@ -736,7 +736,7 @@
             },
             {
               "name": "thisArg",
-              "comment": "An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.\n",
+              "comment": "An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.",
               "type": "any",
               "default": false
             }
@@ -750,11 +750,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1422,
-          11
+          1464,
+          4
         ]
       ],
-      "id": 6862,
+      "id": 4694,
       "flags": {},
       "overrides": false,
       "inherits": "Array.forEach",
@@ -772,7 +772,7 @@
             },
             {
               "name": "thisArg",
-              "comment": "An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.\n",
+              "comment": "An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.",
               "type": "any",
               "default": false
             }
@@ -786,11 +786,11 @@
       "source": [
         [
           "src/Pt.ts",
-          851,
-          11
+          853,
+          2
         ]
       ],
-      "id": 6749,
+      "id": 4578,
       "flags": {},
       "overrides": false,
       "inherits": "Group.forEachPt",
@@ -808,7 +808,7 @@
             },
             {
               "name": "args",
-              "comment": "arguments for the function specified in ptFn\n",
+              "comment": "arguments for the function specified in ptFn",
               "type": "any[]",
               "default": false
             }
@@ -822,11 +822,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1383,
-          11
+          1425,
+          4
         ]
       ],
-      "id": 6827,
+      "id": 4659,
       "flags": {},
       "overrides": false,
       "inherits": "Array.indexOf",
@@ -844,7 +844,7 @@
             },
             {
               "name": "fromIndex",
-              "comment": "The array index at which to begin the search. If fromIndex is omitted, the search starts at index 0.\n",
+              "comment": "The array index at which to begin the search. If fromIndex is omitted, the search starts at index 0.",
               "type": "number",
               "default": false
             }
@@ -858,11 +858,11 @@
       "source": [
         [
           "src/Physics.ts",
-          576,
-          6
+          581,
+          2
         ]
       ],
-      "id": 6611,
+      "id": 4446,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -880,7 +880,7 @@
             },
             {
               "name": "stiff",
-              "comment": "stiffness value from 0 to 1, where 1 is the most stiff. Default is 1.\n",
+              "comment": "stiffness value from 0 to 1, where 1 is the most stiff. Default is 1.",
               "type": "number",
               "default": "1"
             }
@@ -894,11 +894,11 @@
       "source": [
         [
           "src/Pt.ts",
-          654,
-          8
+          656,
+          2
         ]
       ],
-      "id": 6673,
+      "id": 4502,
       "flags": {},
       "overrides": false,
       "inherits": "Group.insert",
@@ -916,7 +916,7 @@
             },
             {
               "name": "index",
-              "comment": "the index position to insert into\n",
+              "comment": "the index position to insert into",
               "type": "number",
               "default": "0"
             }
@@ -930,11 +930,11 @@
       "source": [
         [
           "src/Pt.ts",
-          753,
-          13
+          755,
+          2
         ]
       ],
-      "id": 6718,
+      "id": 4547,
       "flags": {},
       "overrides": false,
       "inherits": "Group.interpolate",
@@ -946,7 +946,7 @@
           "parameters": [
             {
               "name": "t",
-              "comment": "a value between 0 to 1 usually\n",
+              "comment": "a value between 0 to 1 usually",
               "type": "number",
               "default": false
             }
@@ -960,11 +960,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1326,
-          8
+          1364,
+          4
         ]
       ],
-      "id": 6798,
+      "id": 4630,
       "flags": {},
       "overrides": false,
       "inherits": "Array.join",
@@ -976,7 +976,7 @@
           "parameters": [
             {
               "name": "separator",
-              "comment": "A string used to separate one element of the array from the next in the resulting string. If omitted, the array elements are separated with a comma.\n",
+              "comment": "A string used to separate one element of the array from the next in the resulting string. If omitted, the array elements are separated with a comma.",
               "type": "string",
               "default": false
             }
@@ -990,11 +990,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1389,
-          15
+          1431,
+          4
         ]
       ],
-      "id": 6831,
+      "id": 4663,
       "flags": {},
       "overrides": false,
       "inherits": "Array.lastIndexOf",
@@ -1012,7 +1012,7 @@
             },
             {
               "name": "fromIndex",
-              "comment": "The array index at which to begin searching backward. If fromIndex is omitted, the search starts at the last index in the array.\n",
+              "comment": "The array index at which to begin searching backward. If fromIndex is omitted, the search starts at the last index in the array.",
               "type": "number",
               "default": false
             }
@@ -1026,11 +1026,11 @@
       "source": [
         [
           "src/Pt.ts",
-          686,
-          7
+          688,
+          2
         ]
       ],
-      "id": 6686,
+      "id": 4515,
       "flags": {},
       "overrides": false,
       "inherits": "Group.lines",
@@ -1049,11 +1049,11 @@
       "source": [
         [
           "src/Physics.ts",
-          618,
-          6
+          623,
+          2
         ]
       ],
-      "id": 6621,
+      "id": 4456,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1077,7 +1077,7 @@
             },
             {
               "name": "stiff",
-              "comment": "optionally stiffness value between 0 to 1, where 1 is the most stiff.\n",
+              "comment": "optionally stiffness value between 0 to 1, where 1 is the most stiff.",
               "type": "number",
               "default": false
             }
@@ -1091,11 +1091,11 @@
       "source": [
         [
           "src/Physics.ts",
-          633,
-          9
+          638,
+          2
         ]
       ],
-      "id": 6626,
+      "id": 4461,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1107,7 +1107,7 @@
           "parameters": [
             {
               "name": "stiff",
-              "comment": "optionally stiffness value between 0 to 1, where 1 is the most stiff.\n",
+              "comment": "optionally stiffness value between 0 to 1, where 1 is the most stiff.",
               "type": "number",
               "default": false
             }
@@ -1121,11 +1121,11 @@
       "source": [
         [
           "src/Physics.ts",
-          657,
-          14
+          662,
+          2
         ]
       ],
-      "id": 6629,
+      "id": 4464,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1133,7 +1133,7 @@
         {
           "comment": "Return a list of all the linked edges as line segments.",
           "returns": "Group[]",
-          "returns_comment": "an array of Groups, each of which represents an edge\n",
+          "returns_comment": "an array of Groups, each of which represents an edge",
           "parameters": [],
           "tags": []
         }
@@ -1144,11 +1144,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1428,
-          7
+          1470,
+          4
         ]
       ],
-      "id": 6871,
+      "id": 4703,
       "flags": {},
       "overrides": false,
       "inherits": "Array.map",
@@ -1166,7 +1166,7 @@
             },
             {
               "name": "thisArg",
-              "comment": "An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.\n",
+              "comment": "An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.",
               "type": "any",
               "default": false
             }
@@ -1180,11 +1180,11 @@
       "source": [
         [
           "src/Pt.ts",
-          766,
-          8
+          768,
+          2
         ]
       ],
-      "id": 6721,
+      "id": 4550,
       "flags": {},
       "overrides": false,
       "inherits": "Group.moveBy",
@@ -1196,7 +1196,7 @@
           "parameters": [
             {
               "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties",
               "type": "any[]",
               "default": false
             }
@@ -1210,11 +1210,11 @@
       "source": [
         [
           "src/Pt.ts",
-          775,
-          8
+          777,
+          2
         ]
       ],
-      "id": 6724,
+      "id": 4553,
       "flags": {},
       "overrides": false,
       "inherits": "Group.moveTo",
@@ -1226,7 +1226,7 @@
           "parameters": [
             {
               "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties",
               "type": "any[]",
               "default": false
             }
@@ -1240,11 +1240,11 @@
       "source": [
         [
           "src/Pt.ts",
-          885,
-          10
+          887,
+          2
         ]
       ],
-      "id": 6759,
+      "id": 4588,
       "flags": {},
       "overrides": false,
       "inherits": "Group.multiply",
@@ -1256,7 +1256,7 @@
           "parameters": [
             {
               "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties",
               "type": "any[]",
               "default": false
             }
@@ -1270,11 +1270,11 @@
       "source": [
         [
           "src/Pt.ts",
-          726,
-          4
+          728,
+          2
         ]
       ],
-      "id": 6698,
+      "id": 4527,
       "flags": {},
       "overrides": false,
       "inherits": "Group.op",
@@ -1282,7 +1282,7 @@
         {
           "comment": "Create an operation using this Group, passing this Group into a custom function's first parameter.  See the [Op guide](../guide/Op-0400.html) for details.",
           "returns": " Fn(rest:any[])",
-          "returns_comment": "a resulting function that takes other parameters required in `fn`\n",
+          "returns_comment": "a resulting function that takes other parameters required in `fn`",
           "parameters": [
             {
               "name": "fn",
@@ -1305,24 +1305,24 @@
       "source": [
         [
           "src/Pt.ts",
-          740,
-          5
+          742,
+          2
         ]
       ],
-      "id": 6708,
+      "id": 4537,
       "flags": {},
       "overrides": false,
       "inherits": "Group.ops",
       "signatures": [
         {
           "comment": "This combines a series of operations into an array. See the [Op guide](../guide/Op-0400.html) for details.",
-          "returns": " Fn(rest:any[])",
-          "returns_comment": "an array of resulting functions\n",
+          "returns": " Fn(rest:any[])[]",
+          "returns_comment": "an array of resulting functions",
           "parameters": [
             {
               "name": "fns",
               "comment": "an array of functions for `op`",
-              "type": " Fn(g1:PtIterable, rest:any[])",
+              "type": " Fn(g1:PtIterable, rest:any[])[]",
               "default": false
             }
           ],
@@ -1340,18 +1340,18 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1304,
-          7
+          1342,
+          4
         ]
       ],
-      "id": 6788,
+      "id": 4620,
       "flags": {},
       "overrides": false,
       "inherits": "Array.pop",
       "signatures": [
         {
           "comment": "Removes the last element from an array and returns it.\nIf the array is empty, undefined is returned and the array is not modified.",
-          "returns": "Pt | undefined",
+          "returns": "Pt",
           "returns_comment": false,
           "parameters": [],
           "tags": []
@@ -1363,11 +1363,11 @@
       "source": [
         [
           "src/Physics.ts",
-          682,
-          13
+          687,
+          2
         ]
       ],
-      "id": 6633,
+      "id": 4468,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1379,7 +1379,7 @@
           "parameters": [
             {
               "name": "b",
-              "comment": "another body\n",
+              "comment": "another body",
               "type": "Body",
               "default": false
             }
@@ -1393,11 +1393,11 @@
       "source": [
         [
           "src/Physics.ts",
-          670,
-          14
+          675,
+          2
         ]
       ],
-      "id": 6631,
+      "id": 4466,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1416,11 +1416,11 @@
       "source": [
         [
           "src/Physics.ts",
-          720,
-          17
+          725,
+          2
         ]
       ],
-      "id": 6636,
+      "id": 4471,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1432,7 +1432,7 @@
           "parameters": [
             {
               "name": "b",
-              "comment": "a particle\n",
+              "comment": "a particle",
               "type": "Particle",
               "default": false
             }
@@ -1446,11 +1446,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1309,
-          8
+          1347,
+          4
         ]
       ],
-      "id": 6790,
+      "id": 4622,
       "flags": {},
       "overrides": false,
       "inherits": "Array.push",
@@ -1462,7 +1462,7 @@
           "parameters": [
             {
               "name": "items",
-              "comment": "New elements to add to the array.\n",
+              "comment": "New elements to add to the array.",
               "type": "Pt[]",
               "default": false
             }
@@ -1476,21 +1476,21 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1446,
-          10
+          1488,
+          4
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1447,
-          10
+          1489,
+          4
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1453,
-          10
+          1495,
+          4
         ]
       ],
-      "id": 6899,
+      "id": 4731,
       "flags": {},
       "overrides": false,
       "inherits": "Array.reduce",
@@ -1542,7 +1542,7 @@
             },
             {
               "name": "initialValue",
-              "comment": "If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.\n",
+              "comment": "If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.",
               "type": "U",
               "default": false
             }
@@ -1556,21 +1556,21 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1459,
-          15
+          1501,
+          4
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1460,
-          15
+          1502,
+          4
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1466,
-          15
+          1508,
+          4
         ]
       ],
-      "id": 6927,
+      "id": 4759,
       "flags": {},
       "overrides": false,
       "inherits": "Array.reduceRight",
@@ -1622,7 +1622,7 @@
             },
             {
               "name": "initialValue",
-              "comment": "If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.\n",
+              "comment": "If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.",
               "type": "U",
               "default": false
             }
@@ -1636,11 +1636,11 @@
       "source": [
         [
           "src/Pt.ts",
-          828,
-          11
+          830,
+          2
         ]
       ],
-      "id": 6741,
+      "id": 4570,
       "flags": {},
       "overrides": false,
       "inherits": "Group.reflect2D",
@@ -1658,7 +1658,7 @@
             },
             {
               "name": "axis",
-              "comment": "optional axis such as \"yz\" to define a 2D plane of reflection\n",
+              "comment": "optional axis such as \"yz\" to define a 2D plane of reflection",
               "type": "string",
               "default": false
             }
@@ -1672,11 +1672,11 @@
       "source": [
         [
           "src/Pt.ts",
-          666,
-          8
+          668,
+          2
         ]
       ],
-      "id": 6677,
+      "id": 4506,
       "flags": {},
       "overrides": false,
       "inherits": "Group.remove",
@@ -1684,7 +1684,7 @@
         {
           "comment": "Like Array's splice function, with support for negative index and a friendlier name.",
           "returns": "Group",
-          "returns_comment": "The items that are removed.\n",
+          "returns_comment": "The items that are removed.",
           "parameters": [
             {
               "name": "index",
@@ -1708,11 +1708,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1331,
-          11
+          1369,
+          4
         ]
       ],
-      "id": 6801,
+      "id": 4633,
       "flags": {},
       "overrides": false,
       "inherits": "Array.reverse",
@@ -1731,11 +1731,11 @@
       "source": [
         [
           "src/Pt.ts",
-          801,
-          10
+          803,
+          2
         ]
       ],
-      "id": 6731,
+      "id": 4560,
       "flags": {},
       "overrides": false,
       "inherits": "Group.rotate2D",
@@ -1759,7 +1759,7 @@
             },
             {
               "name": "axis",
-              "comment": "optional string such as \"yz\" to specify a 2D plane\n",
+              "comment": "optional string such as \"yz\" to specify a 2D plane",
               "type": "string",
               "default": false
             }
@@ -1773,11 +1773,11 @@
       "source": [
         [
           "src/Pt.ts",
-          787,
-          7
+          789,
+          2
         ]
       ],
-      "id": 6727,
+      "id": 4556,
       "flags": {},
       "overrides": false,
       "inherits": "Group.scale",
@@ -1790,12 +1790,12 @@
             {
               "name": "scale",
               "comment": "scale ratio",
-              "type": "number | number[] | PtLike",
+              "type": "number | PtLike",
               "default": false
             },
             {
               "name": "anchor",
-              "comment": "optional anchor point to scale from\n",
+              "comment": "optional anchor point to scale from",
               "type": "PtLike",
               "default": false
             }
@@ -1809,11 +1809,11 @@
       "source": [
         [
           "src/Pt.ts",
-          678,
-          10
+          680,
+          2
         ]
       ],
-      "id": 6681,
+      "id": 4510,
       "flags": {},
       "overrides": false,
       "inherits": "Group.segments",
@@ -1837,7 +1837,7 @@
             },
             {
               "name": "loopBack",
-              "comment": "if `true`, always go through the array till the end and loop back to the beginning to complete the segments if needed\n",
+              "comment": "if `true`, always go through the array till the end and loop back to the beginning to complete the segments if needed",
               "type": "boolean",
               "default": "false"
             }
@@ -1851,11 +1851,11 @@
       "source": [
         [
           "src/Pt.ts",
-          815,
-          9
+          817,
+          2
         ]
       ],
-      "id": 6736,
+      "id": 4565,
       "flags": {},
       "overrides": false,
       "inherits": "Group.shear2D",
@@ -1868,7 +1868,7 @@
             {
               "name": "scale",
               "comment": "",
-              "type": "number | number[] | PtLike",
+              "type": "number | PtLike",
               "default": false
             },
             {
@@ -1879,7 +1879,7 @@
             },
             {
               "name": "axis",
-              "comment": "optional string such as \"yz\" to specify a 2D plane\n",
+              "comment": "optional string such as \"yz\" to specify a 2D plane",
               "type": "string",
               "default": false
             }
@@ -1893,18 +1893,18 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1336,
-          9
+          1374,
+          4
         ]
       ],
-      "id": 6803,
+      "id": 4635,
       "flags": {},
       "overrides": false,
       "inherits": "Array.shift",
       "signatures": [
         {
           "comment": "Removes the first element from an array and returns it.\nIf the array is empty, undefined is returned and the array is not modified.",
-          "returns": "Pt | undefined",
+          "returns": "Pt",
           "returns_comment": false,
           "parameters": [],
           "tags": []
@@ -1916,11 +1916,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1346,
-          9
+          1384,
+          4
         ]
       ],
-      "id": 6805,
+      "id": 4637,
       "flags": {},
       "overrides": false,
       "inherits": "Array.slice",
@@ -1938,7 +1938,7 @@
             },
             {
               "name": "end",
-              "comment": "The end index of the specified portion of the array. This is exclusive of the element at the index 'end'.\nIf end is undefined, then the slice extends to the end of the array.\n",
+              "comment": "The end index of the specified portion of the array. This is exclusive of the element at the index 'end'.\nIf end is undefined, then the slice extends to the end of the array.",
               "type": "number",
               "default": false
             }
@@ -1952,11 +1952,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1416,
-          8
+          1458,
+          4
         ]
       ],
-      "id": 6853,
+      "id": 4685,
       "flags": {},
       "overrides": false,
       "inherits": "Array.some",
@@ -1974,7 +1974,7 @@
             },
             {
               "name": "thisArg",
-              "comment": "An object to which the this keyword can refer in the predicate function.\nIf thisArg is omitted, undefined is used as the this value.\n",
+              "comment": "An object to which the this keyword can refer in the predicate function.\nIf thisArg is omitted, undefined is used as the this value.",
               "type": "any",
               "default": false
             }
@@ -1988,11 +1988,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1357,
-          8
+          1395,
+          4
         ]
       ],
-      "id": 6809,
+      "id": 4641,
       "flags": {},
       "overrides": false,
       "inherits": "Array.sort",
@@ -2004,7 +2004,7 @@
           "parameters": [
             {
               "name": "compareFn",
-              "comment": "Function used to determine the order of the elements. It is expected to return\na negative value if the first argument is less than the second argument, zero if they're equal, and a positive\nvalue otherwise. If omitted, the elements are sorted in ascending, ASCII character order.\n```ts\n[11,2,22,1].sort((a, b) => a - b)\n```\n",
+              "comment": "Function used to determine the order of the elements. It is expected to return\na negative value if the first argument is less than the second argument, zero if they're equal, and a positive\nvalue otherwise. If omitted, the elements are sorted in ascending, UTF-16 code unit order.\n```ts\n[11,2,22,1].sort((a, b) => a - b)\n```",
               "type": " Fn(a:Pt, b:Pt)",
               "default": false
             }
@@ -2018,11 +2018,11 @@
       "source": [
         [
           "src/Pt.ts",
-          841,
-          17
+          843,
+          2
         ]
       ],
-      "id": 6745,
+      "id": 4574,
       "flags": {},
       "overrides": false,
       "inherits": "Group.sortByDimension",
@@ -2040,7 +2040,7 @@
             },
             {
               "name": "desc",
-              "comment": "if true, sort descending. Default is false (ascending)\n",
+              "comment": "if true, sort descending. Default is false (ascending)",
               "type": "boolean",
               "default": "false"
             }
@@ -2054,16 +2054,16 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1364,
-          10
+          1404,
+          4
         ],
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1372,
-          10
+          1414,
+          4
         ]
       ],
-      "id": 6816,
+      "id": 4648,
       "flags": {},
       "overrides": false,
       "inherits": "Array.splice",
@@ -2071,7 +2071,7 @@
         {
           "comment": "Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.",
           "returns": "Pt[]",
-          "returns_comment": "An array containing the elements that were deleted.\n",
+          "returns_comment": "An array containing the elements that were deleted.",
           "parameters": [
             {
               "name": "start",
@@ -2081,7 +2081,7 @@
             },
             {
               "name": "deleteCount",
-              "comment": "The number of elements to remove.",
+              "comment": "The number of elements to remove. Omitting this argument will remove all elements from the start\nparamater location to end of the array. If value of this argument is either a negative number, zero, undefined, or a type\nthat cannot be converted to an integer, the function will evaluate the argument as zero and not remove any elements.",
               "type": "number",
               "default": false
             }
@@ -2091,7 +2091,7 @@
         {
           "comment": "Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.",
           "returns": "Pt[]",
-          "returns_comment": "An array containing the elements that were deleted.\n",
+          "returns_comment": "An array containing the elements that were deleted.",
           "parameters": [
             {
               "name": "start",
@@ -2101,7 +2101,7 @@
             },
             {
               "name": "deleteCount",
-              "comment": "The number of elements to remove.",
+              "comment": "The number of elements to remove. If value of this argument is either a negative number, zero,\nundefined, or a type that cannot be converted to an integer, the function will evaluate the argument as zero and\nnot remove any elements.",
               "type": "number",
               "default": false
             },
@@ -2121,11 +2121,11 @@
       "source": [
         [
           "src/Pt.ts",
-          643,
-          7
+          645,
+          2
         ]
       ],
-      "id": 6668,
+      "id": 4497,
       "flags": {},
       "overrides": false,
       "inherits": "Group.split",
@@ -2149,7 +2149,7 @@
             },
             {
               "name": "loopBack",
-              "comment": "if `true`, always go through the array till the end and loop back to the beginning to complete the segments if needed\n",
+              "comment": "if `true`, always go through the array till the end and loop back to the beginning to complete the segments if needed",
               "type": "boolean",
               "default": "false"
             }
@@ -2163,11 +2163,11 @@
       "source": [
         [
           "src/Pt.ts",
-          876,
-          10
+          878,
+          2
         ]
       ],
-      "id": 6756,
+      "id": 4585,
       "flags": {},
       "overrides": false,
       "inherits": "Group.subtract",
@@ -2179,7 +2179,7 @@
           "parameters": [
             {
               "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties\n",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties",
               "type": "any[]",
               "default": false
             }
@@ -2193,18 +2193,18 @@
       "source": [
         [
           "src/Pt.ts",
-          944,
-          9
+          946,
+          2
         ]
       ],
-      "id": 6781,
+      "id": 4610,
       "flags": {},
       "overrides": false,
       "inherits": "Group.toBound",
       "signatures": [
         {
           "comment": "Get a Bound instance of this group",
-          "returns": "Group",
+          "returns": "Bound",
           "returns_comment": false,
           "parameters": [],
           "tags": []
@@ -2216,11 +2216,16 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1299,
-          18
+          1337,
+          4
+        ],
+        [
+          "node_modules/typescript/lib/lib.es2015.core.d.ts",
+          64,
+          4
         ]
       ],
-      "id": 6786,
+      "id": 4615,
       "flags": {},
       "overrides": false,
       "inherits": "Array.toLocaleString",
@@ -2231,6 +2236,26 @@
           "returns_comment": false,
           "parameters": [],
           "tags": []
+        },
+        {
+          "comment": "",
+          "returns": "string",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "locales",
+              "comment": "",
+              "type": "string | string[]",
+              "default": false
+            },
+            {
+              "name": "options",
+              "comment": "",
+              "type": "NumberFormatOptions & DateTimeFormatOptions",
+              "default": false
+            }
+          ],
+          "tags": []
         }
       ]
     },
@@ -2239,13 +2264,13 @@
       "source": [
         [
           "src/Pt.ts",
-          952,
-          10
+          954,
+          2
         ]
       ],
-      "id": 6783,
+      "id": 4612,
       "flags": {},
-      "overrides": "Array.toString",
+      "overrides": false,
       "inherits": "Group.toString",
       "signatures": [
         {
@@ -2262,11 +2287,11 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1377,
-          11
+          1419,
+          4
         ]
       ],
-      "id": 6824,
+      "id": 4656,
       "flags": {},
       "overrides": false,
       "inherits": "Array.unshift",
@@ -2278,7 +2303,7 @@
           "parameters": [
             {
               "name": "items",
-              "comment": "Elements to insert at the start of the array.\n",
+              "comment": "Elements to insert at the start of the array.",
               "type": "Pt[]",
               "default": false
             }
@@ -2292,11 +2317,11 @@
       "source": [
         [
           "src/Pt.ts",
-          926,
-          10
+          928,
+          2
         ]
       ],
-      "id": 6773,
+      "id": 4602,
       "flags": {},
       "overrides": false,
       "inherits": "Group.zipSlice",
@@ -2314,7 +2339,7 @@
             },
             {
               "name": "defaultValue",
-              "comment": "a default value to fill if index out of bound. If not provided, it will throw an error instead.\n",
+              "comment": "a default value to fill if index out of bound. If not provided, it will throw an error instead.",
               "type": "number | boolean",
               "default": "false"
             }
@@ -2328,11 +2353,11 @@
       "source": [
         [
           "src/Pt.ts",
-          618,
-          18
+          620,
+          9
         ]
       ],
-      "id": 6662,
+      "id": 4396,
       "flags": {
         "isStatic": true
       },
@@ -2354,7 +2379,7 @@
           "tags": [
             {
               "tag": "example",
-              "text": "`Group.fromArray( [[1,2], [3,4], [5,6]] )`\n"
+              "text": "`Group.fromArray( [[1,2], [3,4], [5,6]] )`"
             }
           ]
         }
@@ -2365,11 +2390,11 @@
       "source": [
         [
           "src/Physics.ts",
-          563,
-          18
+          568,
+          9
         ]
       ],
-      "id": 6605,
+      "id": 4390,
       "flags": {
         "isStatic": true
       },
@@ -2401,7 +2426,7 @@
             },
             {
               "name": "autoMass",
-              "comment": "Automatically calculate the mass based on the area of the polygon. Default is true.\n",
+              "comment": "Automatically calculate the mass based on the area of the polygon. Default is true.",
               "type": "boolean",
               "default": "true"
             }
@@ -2415,11 +2440,11 @@
       "source": [
         [
           "src/Pt.ts",
-          632,
-          20
+          634,
+          9
         ]
       ],
-      "id": 6665,
+      "id": 4399,
       "flags": {
         "isStatic": true
       },
@@ -2433,7 +2458,7 @@
           "parameters": [
             {
               "name": "list",
-              "comment": "an Iterable<Pt>\n",
+              "comment": "an Iterable<Pt>",
               "type": "PtIterable",
               "default": false
             }
@@ -2450,13 +2475,13 @@
       "source": [
         [
           "node_modules/typescript/lib/lib.es5.d.ts",
-          1291,
-          10
+          1329,
+          4
         ]
       ],
-      "id": 6785,
+      "id": 4614,
       "flags": {},
-      "type": "length",
+      "type": "number",
       "overrides": false,
       "inherits": "Array.length",
       "comment": "Gets or sets the length of the array. This is a number one higher than the highest index in the array."

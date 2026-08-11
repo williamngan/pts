@@ -4,11 +4,11 @@
     [
       "src/Form.ts",
       29,
-      32
+      22
     ]
   ],
   "kind": "Class",
-  "id": 2986,
+  "id": 2694,
   "comment": "VisualForm is an abstract class that represents a form that can be used to express Pts visually.\nFor example, [`CanvasForm`](#link) is an implementation of VisualForm that draws on [`CanvasSpace`](#link) which represents a html canvas. Learn more about Space and Form in [this guide](../guide/Space-0500.html).",
   "constructor": [],
   "accessors": [
@@ -18,10 +18,10 @@
         [
           "src/Form.ts",
           52,
-          17
+          6
         ]
       ],
-      "id": 2998,
+      "id": 2708,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -37,15 +37,15 @@
         [
           "src/Form.ts",
           38,
-          12
+          6
         ],
         [
           "src/Form.ts",
           39,
-          12
+          6
         ]
       ],
-      "id": 2990,
+      "id": 2700,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -69,10 +69,10 @@
         [
           "src/Form.ts",
           18,
-          11
+          6
         ]
       ],
-      "id": 3085,
+      "id": 2795,
       "flags": {},
       "overrides": false,
       "inherits": "Form.ready",
@@ -88,15 +88,15 @@
         [
           "src/Form.ts",
           45,
-          13
+          6
         ],
         [
           "src/Form.ts",
           46,
-          13
+          6
         ]
       ],
-      "id": 2994,
+      "id": 2704,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -122,10 +122,10 @@
         [
           "src/Form.ts",
           74,
-          7
+          2
         ]
       ],
-      "id": 3007,
+      "id": 2717,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -137,7 +137,7 @@
           "parameters": [
             {
               "name": "a",
-              "comment": "alpha value between 0 and 1\n",
+              "comment": "alpha value between 0 and 1",
               "type": "number",
               "default": false
             }
@@ -152,10 +152,10 @@
         [
           "src/Form.ts",
           182,
-          14
+          11
         ]
       ],
-      "id": 3047,
+      "id": 2757,
       "flags": {
         "isAbstract": true
       },
@@ -193,7 +193,7 @@
             },
             {
               "name": "cc",
-              "comment": "an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.\n",
+              "comment": "an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.",
               "type": "boolean",
               "default": false
             }
@@ -208,10 +208,10 @@
         [
           "src/Form.ts",
           152,
-          17
+          11
         ]
       ],
-      "id": 3038,
+      "id": 2748,
       "flags": {
         "isAbstract": true
       },
@@ -233,7 +233,7 @@
           "tags": [
             {
               "tag": "see",
-              "text": "[`Circle.fromCenter`](./?p=Op_Circle#function_fromCenter)\n"
+              "text": "[`Circle.fromCenter`](./?p=Op_Circle#function_fromCenter)"
             }
           ]
         }
@@ -245,10 +245,10 @@
         [
           "src/Form.ts",
           160,
-          9
+          2
         ]
       ],
-      "id": 3041,
+      "id": 2751,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -260,7 +260,7 @@
           "parameters": [
             {
               "name": "groups",
-              "comment": "an array of Groups that defines multiple circles\n",
+              "comment": "an array of Groups that defines multiple circles",
               "type": "GroupLike[]",
               "default": false
             }
@@ -275,10 +275,10 @@
         [
           "src/Form.ts",
           83,
-          6
+          2
         ]
       ],
-      "id": 3010,
+      "id": 2720,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -290,7 +290,7 @@
           "parameters": [
             {
               "name": "c",
-              "comment": "fill color as string or `false` to specify transparent.\n",
+              "comment": "fill color as string or `false` to specify transparent.",
               "type": "string | boolean",
               "default": false
             }
@@ -305,10 +305,10 @@
         [
           "src/Form.ts",
           92,
-          10
+          2
         ]
       ],
-      "id": 3013,
+      "id": 2723,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -320,7 +320,7 @@
           "parameters": [
             {
               "name": "c",
-              "comment": "fill color as string or `false` to specify transparent.\n",
+              "comment": "fill color as string or `false` to specify transparent.",
               "type": "string | boolean",
               "default": false
             }
@@ -335,10 +335,10 @@
         [
           "src/Form.ts",
           253,
-          15
+          11
         ]
       ],
-      "id": 3077,
+      "id": 2787,
       "flags": {
         "isAbstract": true
       },
@@ -388,7 +388,7 @@
             },
             {
               "tag": "example",
-              "text": "`form.font( myFont )`, `form.font(14, \"bold\")`\n"
+              "text": "`form.font( myFont )`, `form.font(14, \"bold\")`"
             }
           ]
         }
@@ -400,10 +400,10 @@
         [
           "src/Form.ts",
           189,
-          15
+          11
         ]
       ],
-      "id": 3054,
+      "id": 2764,
       "flags": {
         "isAbstract": true
       },
@@ -417,7 +417,7 @@
           "parameters": [
             {
               "name": "pts",
-              "comment": "a Group of multiple Pts, or an array of multiple numeric arrays\n",
+              "comment": "a Group of multiple Pts, or an array of multiple numeric arrays",
               "type": "GroupLike | number[][]",
               "default": false
             }
@@ -432,10 +432,10 @@
         [
           "src/Form.ts",
           196,
-          7
+          2
         ]
       ],
-      "id": 3057,
+      "id": 2767,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -447,7 +447,7 @@
           "parameters": [
             {
               "name": "groups",
-              "comment": "An array of Groups of Pts\n",
+              "comment": "An array of Groups of Pts",
               "type": "GroupLike[]",
               "default": false
             }
@@ -462,10 +462,10 @@
         [
           "src/Form.ts",
           129,
-          16
+          11
         ]
       ],
-      "id": 3028,
+      "id": 2738,
       "flags": {
         "isAbstract": true
       },
@@ -499,7 +499,7 @@
           "tags": [
             {
               "tag": "example",
-              "text": "`form.point( p )`, `form.point( p, 10, \"circle\" )`\n"
+              "text": "`form.point( p )`, `form.point( p, 10, \"circle\" )`"
             }
           ]
         }
@@ -511,10 +511,10 @@
         [
           "src/Form.ts",
           138,
-          8
+          2
         ]
       ],
-      "id": 3033,
+      "id": 2743,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -538,7 +538,7 @@
             },
             {
               "name": "shape",
-              "comment": "The shape of the point. Defaults to \"square\", but it can be \"circle\" or a custom shape function in your own implementation.\n",
+              "comment": "The shape of the point. Defaults to \"square\", but it can be \"circle\" or a custom shape function in your own implementation.",
               "type": "string",
               "default": false
             }
@@ -553,10 +553,10 @@
         [
           "src/Form.ts",
           205,
-          18
+          11
         ]
       ],
-      "id": 3060,
+      "id": 2770,
       "flags": {
         "isAbstract": true
       },
@@ -570,7 +570,7 @@
           "parameters": [
             {
               "name": "pts",
-              "comment": "a Group of multiple Pts, or an array of multiple numeric arrays\n",
+              "comment": "a Group of multiple Pts, or an array of multiple numeric arrays",
               "type": "GroupLike | number[][]",
               "default": false
             }
@@ -585,10 +585,10 @@
         [
           "src/Form.ts",
           212,
-          10
+          2
         ]
       ],
-      "id": 3063,
+      "id": 2773,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -600,7 +600,7 @@
           "parameters": [
             {
               "name": "groups",
-              "comment": "An array of Groups of Pts\n",
+              "comment": "An array of Groups of Pts",
               "type": "GroupLike[]",
               "default": false
             }
@@ -615,10 +615,10 @@
         [
           "src/Form.ts",
           222,
-          15
+          11
         ]
       ],
-      "id": 3066,
+      "id": 2776,
       "flags": {
         "isAbstract": true
       },
@@ -632,8 +632,8 @@
           "parameters": [
             {
               "name": "pts",
-              "comment": "usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.\n",
-              "type": "number[][] | Pt[]",
+              "comment": "usually a Group of 2 Pts specifying the top-left and bottom-right positions. Alternatively it can be an array of numeric arrays.",
+              "type": "Pt[] | number[][]",
               "default": false
             }
           ],
@@ -647,10 +647,10 @@
         [
           "src/Form.ts",
           229,
-          7
+          2
         ]
       ],
-      "id": 3069,
+      "id": 2779,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -662,7 +662,7 @@
           "parameters": [
             {
               "name": "groups",
-              "comment": "An array of Groups of Pts\n",
+              "comment": "An array of Groups of Pts",
               "type": "GroupLike[]",
               "default": false
             }
@@ -677,10 +677,10 @@
         [
           "src/Form.ts",
           67,
-          16
+          11
         ]
       ],
-      "id": 3005,
+      "id": 2715,
       "flags": {
         "isAbstract": true
       },
@@ -702,10 +702,10 @@
         [
           "src/Form.ts",
           169,
-          9
+          2
         ]
       ],
-      "id": 3044,
+      "id": 2754,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -717,7 +717,7 @@
           "parameters": [
             {
               "name": "groups",
-              "comment": "an array of Groups that defines multiple circles\n",
+              "comment": "an array of Groups that defines multiple circles",
               "type": "GroupLike[]",
               "default": false
             }
@@ -732,10 +732,10 @@
         [
           "src/Form.ts",
           105,
-          8
+          2
         ]
       ],
-      "id": 3016,
+      "id": 2726,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -765,7 +765,7 @@
             },
             {
               "name": "linecap",
-              "comment": "Optional string to set line cap style. Can be \"butt\", \"round\", or \"square\".\n",
+              "comment": "Optional string to set line cap style. Can be \"butt\", \"round\", or \"square\".",
               "type": "string",
               "default": false
             }
@@ -780,10 +780,10 @@
         [
           "src/Form.ts",
           117,
-          12
+          2
         ]
       ],
-      "id": 3022,
+      "id": 2732,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -813,7 +813,7 @@
             },
             {
               "name": "linecap",
-              "comment": "Optional string to set line cap style. Can be \"butt\", \"round\", or \"square\".\n",
+              "comment": "Optional string to set line cap style. Can be \"butt\", \"round\", or \"square\".",
               "type": "string",
               "default": false
             }
@@ -828,10 +828,10 @@
         [
           "src/Form.ts",
           240,
-          15
+          11
         ]
       ],
-      "id": 3072,
+      "id": 2782,
       "flags": {
         "isAbstract": true
       },

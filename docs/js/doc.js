@@ -7,7 +7,11 @@ function loadJSON( url, callback ) {
 
   request.onload = function() {
     if (request.status >= 200 && request.status < 400) {
-      callback( JSON.parse(request.responseText), "success" );
+      try {
+        callback( JSON.parse(request.responseText), "success" );
+      } catch (error) {
+        callback( false, "parse error" );
+      }
     } else {
       callback( false, "server error" );
     }
@@ -22,6 +26,8 @@ function loadJSON( url, callback ) {
 
 
 loadJSON( "./json/modules.json", (data, status) => {
+  if (!data) return;
+
   let ms = [];
   let m_types = null;
   for (var k in data) {
@@ -34,6 +40,10 @@ loadJSON( "./json/modules.json", (data, status) => {
       ms.push( m );
     }
   }
+
+  ms.sort( function( a, b ) {
+    return (a[0] === b[0]) ? 0 : ((a[0] < b[0]) ? -1 : 1);
+  });
 
   // push Types to last in list
   if (m_types) ms.push( m_types );
@@ -48,10 +58,10 @@ loadJSON( "./json/modules.json", (data, status) => {
 
 
 loadJSON( "./json/search.json", (data, status) => {
-  _search = data;
+  _search = data || [];
 
   let se = document.querySelector( "#search_input" );
-  se.addEventListener("keyup", function(evt) {
+  se.addEventListener("input", function(evt) {
     if (!se.value) {
       app.search([], "");
     } else {
@@ -83,9 +93,11 @@ var app = new Vue({
       methods: [], 
       accessors: [],
       variables: [],
+      properties: [],
       type_alias: [],
       count: 0
     },
+    loadError: false,
     selected: "",
     selHash: ""
   },
@@ -146,8 +158,8 @@ var app = new Vue({
       return ""
     },
 
-    first: function( s ) {
-      return (s && s.length > 0) ? [s[0]] : [];
+    anchor: function( prefix, member ) {
+      return memberAnchor( prefix, member );
     },
 
     search: function( res, query ) {
@@ -220,6 +232,20 @@ function loadContents( id, hash, reloading ) {
   hash = clean_str(hash, 30);
   
   loadJSON( `./json/class/${id}.json`, (data, status) => {
+    if (!data) {
+      resetContents();
+      app.contents.name = "Page not found";
+      app.contents.comment = `The requested documentation page \`${id}\` could not be loaded.`;
+      app.loadError = true;
+      app.selected = id;
+      app.selHash = "";
+      if (!reloading) setHistory( id, "" );
+      document.getElementById("members").scrollTo(0,0);
+      document.getElementById("contents").scrollTo(0,0);
+      return;
+    }
+
+    app.loadError = false;
     app.contents.name = data.name;
     app.contents.kind = data.kind;
     app.contents.comment = data.comment;
@@ -227,13 +253,13 @@ function loadContents( id, hash, reloading ) {
     app.contents.extends = data.extends;
     app.contents.implements = data.implements;
     
-    app.contents.constructor = data.constructor;
+    app.contents.constructor = data.constructor || [];
     app.contents.methods = (data.methods) ? data.methods.sort( sortInherited ) : [];
     app.contents.accessors = (data.accessors) ? data.accessors.sort( sortInherited ) : [];
     app.contents.variables = (data.variables) ? data.variables.sort( sortInherited ) : [];
-    app.contents.properties = (data.variables) ? data.variables.sort( sortInherited ) : [];
+    app.contents.properties = (data.properties) ? data.properties.sort( sortInherited ) : [];
     app.contents.type_alias = data.type_alias || [];
-    app.contents.count = (app.contents.methods.length || 0) + (app.contents.accessors.length || 0) + (app.contents.variables.length || 0) + (app.contents.properties.length || 0) + (app.contents.type_alias.length || 0);
+    app.contents.count = app.contents.methods.length + app.contents.accessors.length + app.contents.variables.length + app.contents.properties.length + app.contents.type_alias.length;
 
     app.selected = id;
     app.selHash = hash;
@@ -253,9 +279,12 @@ function loadContents( id, hash, reloading ) {
 
 
 function getSearchResult( q ) {
-  let query = q.split(" ").join(".*\.");
-  query = query.replace(/[^\w\$\.]/gi, " ");
-  let res = _search.filter( (v) =>  v[1].search( new RegExp( query.trim(), "gi") ) >= 0 );
+  let query = q.trim().toLowerCase().split(/\s+/).filter( Boolean );
+  if (query.length === 0) return [];
+  let res = _search.filter( (v) => {
+    let name = v[1].toLowerCase();
+    return query.every( (part) => name.indexOf(part) >= 0 );
+  });
   return res.sort( (a, b) => (b[3]*100-b[0].length) - (a[3]*100-a[0].length) ).slice(0, 50);
 }
 
@@ -277,6 +306,11 @@ function loadFirstResult( q ) {
 function sortInherited( a, b ) {
   return (a.inherits ? 100000 : 0) - (b.inherits ? 100000 : 0) + a.name.localeCompare(b.name);
 } 
+
+function memberAnchor( prefix, member ) {
+  let qualifier = (prefix === "function" && member.flags && member.flags.isStatic) ? "static_" : "";
+  return `${prefix}_${qualifier}${member.name}`;
+}
 
 
 
@@ -315,9 +349,11 @@ function resetContents() {
     methods: [], 
     accessors: [],
     variables: [],
+    properties: [],
     type_alias: [],
     count: 0
-  }
+  };
+  app.loadError = false;
 }
 
 
@@ -326,6 +362,7 @@ var _menu_toggle = false;
 function toggleMenu( t ) {
   _menu_toggle = (t !== undefined) ? t : !_menu_toggle;
   document.querySelector("#menu").className = (_menu_toggle) ? "visible" : "";
+  document.querySelector("#toc").setAttribute("aria-expanded", String(_menu_toggle));
 }
 
 document.querySelector("#toc").addEventListener("click", function(evt) {
@@ -347,4 +384,3 @@ window.addEventListener( "popstate", function ( event ) {
     if (qsel) loadContents( qsel, qsHash( event.state.path ), true );
   }
 });
-

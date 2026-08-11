@@ -65,15 +65,17 @@ pnpm test:integrations
 pnpm check:package
 ```
 
-`pnpm check` validates formatting, linting, types, unit tests, reproducible artifacts, real-browser behavior, the packed package, ESM and CommonJS resolution, declarations, and tree-shaking. Its packed-package integration suite also builds and runs the maintained React, Vue, `skia-canvas`, and single-file vanilla fixtures in [`test/integrations`](./test/integrations).
+`pnpm check` validates formatting, linting, types, unit tests, deterministic documentation, documentation and bundle behavior in a real browser, reproducible artifacts, the packed package, ESM and CommonJS resolution, declarations, and tree-shaking. Its packed-package integration suite also builds and runs the maintained React, Vue, `skia-canvas`, and single-file vanilla fixtures in [`test/integrations`](./test/integrations).
 
 ### Generate documentation
 
-The legacy documentation pipeline still requires Python 3. Its Python transformer needs separate compatibility work with the current TypeDoc JSON format, so documentation regeneration is intentionally not part of the build-system checks yet:
+The documentation generator uses TypeDoc's Node API to rebuild the custom static documentation JSON from explicit source entry points:
 
 ```bash
-pnpm docs
+pnpm run docs
 ```
+
+Generated documentation is checked in. `pnpm check:docs` regenerates it in memory, reports stale or extra files, and exercises navigation, search, anchors, and responsive layouts in Chromium.
 
 ## Contributing
 

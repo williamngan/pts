@@ -4,11 +4,11 @@
     [
       "src/Form.ts",
       11,
-      26
+      22
     ]
   ],
   "kind": "Class",
-  "id": 2982,
+  "id": 2688,
   "comment": "Form is an abstract class that represents a form that's used in a Space for expressions. Learn more about Space and Form in [this guide](../guide/Space-0500.html).",
   "constructor": [],
   "accessors": [
@@ -18,10 +18,10 @@
         [
           "src/Form.ts",
           18,
-          11
+          6
         ]
       ],
-      "id": 2984,
+      "id": 2692,
       "flags": {},
       "overrides": false,
       "inherits": false,

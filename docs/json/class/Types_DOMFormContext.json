@@ -3,12 +3,12 @@
   "source": [
     [
       "src/Types.ts",
-      135,
-      26
+      123,
+      12
     ]
   ],
   "kind": "Typealias",
-  "id": 780,
+  "id": 7182,
   "comment": "Typescript type: DOMFormContext represents the current context for an DOMForm.",
   "constructor": [],
   "accessors": [],

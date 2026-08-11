@@ -4,11 +4,11 @@
     [
       "src/Typography.ts",
       10,
-      23
+      13
     ]
   ],
   "kind": "Class",
-  "id": 3385,
+  "id": 7258,
   "comment": "Typography provides helper functions to support typographic layouts. For a concrete example, see [a demo here](../demo/index.html?name=canvasform.textBox) that uses the [`CanvasForm.textBox`](#link) function.",
   "constructor": [],
   "accessors": [],
@@ -19,10 +19,10 @@
         [
           "src/Typography.ts",
           50,
-          22
+          9
         ]
       ],
-      "id": 3406,
+      "id": 7279,
       "flags": {
         "isStatic": true
       },
@@ -32,7 +32,7 @@
         {
           "comment": "Get a function to scale font size proportionally to text box size changes.",
           "returns": " Fn(GroupLike:any)",
-          "returns_comment": "a function where input parameter is a new box, and returns the new font size value\n",
+          "returns_comment": "a function where input parameter is a new box, and returns the new font size value",
           "parameters": [
             {
               "name": "box",
@@ -63,10 +63,10 @@
         [
           "src/Typography.ts",
           69,
-          28
+          9
         ]
       ],
-      "id": 3414,
+      "id": 7287,
       "flags": {
         "isStatic": true
       },
@@ -76,7 +76,7 @@
         {
           "comment": "Get a function to scale font size based on a threshold value.",
           "returns": " Fn(a:number, b:number)",
-          "returns_comment": "a function where input parameter is the default font size and a value to compare with threshold, and returns new font size value\n",
+          "returns_comment": "a function where input parameter is the default font size and a value to compare with threshold, and returns new font size value",
           "parameters": [
             {
               "name": "threshold",
@@ -101,10 +101,10 @@
         [
           "src/Typography.ts",
           19,
-          27
+          9
         ]
       ],
-      "id": 3386,
+      "id": 7259,
       "flags": {
         "isStatic": true
       },
@@ -114,7 +114,7 @@
         {
           "comment": "Create a heuristic text width estimate function. It will be less accurate but faster.",
           "returns": " Fn(string:any)",
-          "returns_comment": "a function that can estimate text width\n",
+          "returns_comment": "a function that can estimate text width",
           "parameters": [
             {
               "name": "fn",
@@ -126,13 +126,13 @@
               "name": "samples",
               "comment": "a list of string samples. Default is [\"M\", \"n\", \".\"]",
               "type": "string[]",
-              "default": "[\"M\", \"n\", \".\"]"
+              "default": "..."
             },
             {
               "name": "distribution",
               "comment": "a list of the samples' probability distribution. Default is [0.06, 0.8, 0.14].",
               "type": "number[]",
-              "default": "[0.06, 0.8, 0.14]"
+              "default": "..."
             }
           ],
           "tags": []
@@ -145,10 +145,10 @@
         [
           "src/Typography.ts",
           33,
-          17
+          9
         ]
       ],
-      "id": 3397,
+      "id": 7270,
       "flags": {
         "isStatic": true
       },
@@ -157,7 +157,7 @@
       "signatures": [
         {
           "comment": "Truncate text to fit width.",
-          "returns": "",
+          "returns": "string,number",
           "returns_comment": false,
           "parameters": [
             {
@@ -180,7 +180,7 @@
             },
             {
               "name": "tail",
-              "comment": "text to indicate overflow such as \"...\". Default is empty \"\".\n",
+              "comment": "text to indicate overflow such as \"...\". Default is empty \"\".",
               "type": "string",
               "default": "\"\""
             }

@@ -4,11 +4,11 @@
     [
       "src/Op.ts",
       1495,
-      18
+      13
     ]
   ],
   "kind": "Class",
-  "id": 1347,
+  "id": 3756,
   "comment": "Curve class provides static functions to interpolate curves. A curve is usually represented as a Group of 3 or more control points.\nYou can use the static functions as-is, or apply the [`Group.op`](#link) or [`Pt.op`](#link) to enable functional programming.\nSee [Op guide](../guide/Op-0400.html) for details.",
   "constructor": [],
   "accessors": [],
@@ -19,10 +19,10 @@
         [
           "src/Op.ts",
           1684,
-          15
+          9
         ]
       ],
-      "id": 1378,
+      "id": 3787,
       "flags": {
         "isStatic": true
       },
@@ -32,7 +32,7 @@
         {
           "comment": "Create a Bezier curve. In a cubic bezier curve, the first and 4th anchors are end-points, and 2nd and 3rd anchors are control-points.",
           "returns": "Group",
-          "returns_comment": "a curve as a group of interpolated Pt\n",
+          "returns_comment": "a curve as a group of interpolated Pt",
           "parameters": [
             {
               "name": "pts",
@@ -57,10 +57,10 @@
         [
           "src/Op.ts",
           1713,
-          19
+          9
         ]
       ],
-      "id": 1382,
+      "id": 3791,
       "flags": {
         "isStatic": true
       },
@@ -70,7 +70,7 @@
         {
           "comment": "Interpolate to get a point on a cubic Bezier curve.",
           "returns": "Pt",
-          "returns_comment": "an interpolated Pt on the curve\n",
+          "returns_comment": "an interpolated Pt on the curve",
           "parameters": [
             {
               "name": "step",
@@ -95,10 +95,10 @@
         [
           "src/Op.ts",
           1739,
-          16
+          9
         ]
       ],
-      "id": 1386,
+      "id": 3795,
       "flags": {
         "isStatic": true
       },
@@ -108,7 +108,7 @@
         {
           "comment": "Create a basis spline (NURBS) curve.",
           "returns": "Group",
-          "returns_comment": "a curve as a group of interpolated Pt\n",
+          "returns_comment": "a curve as a group of interpolated Pt",
           "parameters": [
             {
               "name": "pts",
@@ -139,10 +139,10 @@
         [
           "src/Op.ts",
           1773,
-          20
+          9
         ]
       ],
-      "id": 1391,
+      "id": 3800,
       "flags": {
         "isStatic": true
       },
@@ -152,7 +152,7 @@
         {
           "comment": "Interpolate to get a point on a basis spline curve.",
           "returns": "Pt",
-          "returns_comment": "an interpolated Pt on the curve\n",
+          "returns_comment": "an interpolated Pt on the curve",
           "parameters": [
             {
               "name": "step",
@@ -177,10 +177,10 @@
         [
           "src/Op.ts",
           1799,
-          27
+          9
         ]
       ],
-      "id": 1395,
+      "id": 3804,
       "flags": {
         "isStatic": true
       },
@@ -190,7 +190,7 @@
         {
           "comment": "Interpolate to get a point on a basis spline curve with tension.",
           "returns": "Pt",
-          "returns_comment": "an interpolated Pt on the curve\n",
+          "returns_comment": "an interpolated Pt on the curve",
           "parameters": [
             {
               "name": "step",
@@ -221,10 +221,10 @@
         [
           "src/Op.ts",
           1614,
-          17
+          9
         ]
       ],
-      "id": 1368,
+      "id": 3777,
       "flags": {
         "isStatic": true
       },
@@ -234,7 +234,7 @@
         {
           "comment": "Create a Cardinal curve.",
           "returns": "Group",
-          "returns_comment": "a curve as a group of interpolated Pt\n",
+          "returns_comment": "a curve as a group of interpolated Pt",
           "parameters": [
             {
               "name": "pts",
@@ -265,10 +265,10 @@
         [
           "src/Op.ts",
           1648,
-          21
+          9
         ]
       ],
-      "id": 1373,
+      "id": 3782,
       "flags": {
         "isStatic": true
       },
@@ -278,7 +278,7 @@
         {
           "comment": "Interpolate to get a point on Cardinal curve.",
           "returns": "Pt",
-          "returns_comment": "an interpolated Pt on the curve\n",
+          "returns_comment": "an interpolated Pt on the curve",
           "parameters": [
             {
               "name": "step",
@@ -309,10 +309,10 @@
         [
           "src/Op.ts",
           1554,
-          19
+          9
         ]
       ],
-      "id": 1360,
+      "id": 3769,
       "flags": {
         "isStatic": true
       },
@@ -322,7 +322,7 @@
         {
           "comment": "Create a Catmull-Rom curve. Catmull-Rom is a kind of smooth-looking Cardinal curve.",
           "returns": "Group",
-          "returns_comment": "a curve as a group of interpolated Pt\n",
+          "returns_comment": "a curve as a group of interpolated Pt",
           "parameters": [
             {
               "name": "pts",
@@ -347,10 +347,10 @@
         [
           "src/Op.ts",
           1588,
-          23
+          9
         ]
       ],
-      "id": 1364,
+      "id": 3773,
       "flags": {
         "isStatic": true
       },
@@ -360,7 +360,7 @@
         {
           "comment": "Interpolate to get a point on Catmull-Rom curve.",
           "returns": "Pt",
-          "returns_comment": "an interpolated Pt on the curve\n",
+          "returns_comment": "an interpolated Pt on the curve",
           "parameters": [
             {
               "name": "step",
@@ -385,10 +385,10 @@
         [
           "src/Op.ts",
           1517,
-          22
+          9
         ]
       ],
-      "id": 1351,
+      "id": 3760,
       "flags": {
         "isStatic": true
       },
@@ -398,7 +398,7 @@
         {
           "comment": "Given an index for the starting position in a Pt group, get the control and/or end points of a curve segment.",
           "returns": "Group",
-          "returns_comment": "a group of 4 Pts\n",
+          "returns_comment": "a group of 4 Pts",
           "parameters": [
             {
               "name": "pts",
@@ -429,10 +429,10 @@
         [
           "src/Op.ts",
           1501,
-          17
+          9
         ]
       ],
-      "id": 1348,
+      "id": 3757,
       "flags": {
         "isStatic": true
       },
@@ -446,7 +446,7 @@
           "parameters": [
             {
               "name": "steps",
-              "comment": "number of steps\n",
+              "comment": "number of steps",
               "type": "number",
               "default": false
             }

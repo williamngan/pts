@@ -3,12 +3,12 @@
   "source": [
     [
       "src/Types.ts",
-      110,
-      30
+      98,
+      12
     ]
   ],
   "kind": "Typealias",
-  "id": 761,
+  "id": 7163,
   "comment": "Typescript type: Setup options for CanvasSpace. See [`CanvasSpace.setup()`](#link) function.",
   "constructor": [],
   "accessors": [],

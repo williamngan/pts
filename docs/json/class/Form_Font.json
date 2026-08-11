@@ -4,11 +4,11 @@
     [
       "src/Form.ts",
       261,
-      17
+      13
     ]
   ],
   "kind": "Class",
-  "id": 3087,
+  "id": 2797,
   "comment": "Font class lets you create a specific font style with properties for its size and style. A font instance can be passed as parameter to set a form's font. For example, see [`CanvasForm.font`](#link).",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "src/Form.ts",
-          266,
-          23
+          277,
+          2
         ]
       ],
-      "id": 3093,
+      "id": 2798,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -64,7 +64,7 @@
           "tags": [
             {
               "tag": "example",
-              "text": "`new Font(12, \"Frutiger, sans-serif\", \"bold\", \"underline\", 1.5)`\n"
+              "text": "`new Font(12, \"Frutiger, sans-serif\", \"bold\", \"underline\", 1.5)`"
             }
           ]
         }
@@ -78,10 +78,10 @@
         [
           "src/Form.ts",
           288,
-          11
+          6
         ]
       ],
-      "id": 3100,
+      "id": 2810,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -99,10 +99,10 @@
         [
           "src/Form.ts",
           294,
-          10
+          2
         ]
       ],
-      "id": 3102,
+      "id": 2812,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -125,14 +125,14 @@
         [
           "src/Form.ts",
           264,
-          13
+          9
         ]
       ],
-      "id": 3090,
+      "id": 2807,
       "flags": {
         "isPublic": true
       },
-      "type": "face",
+      "type": "string",
       "overrides": false,
       "inherits": false,
       "comment": ""
@@ -143,14 +143,14 @@
         [
           "src/Form.ts",
           263,
-          19
+          9
         ]
       ],
-      "id": 3089,
+      "id": 2806,
       "flags": {
         "isPublic": true
       },
-      "type": "lineHeight",
+      "type": "number",
       "overrides": false,
       "inherits": false,
       "comment": ""
@@ -161,14 +161,14 @@
         [
           "src/Form.ts",
           262,
-          13
+          9
         ]
       ],
-      "id": 3088,
+      "id": 2805,
       "flags": {
         "isPublic": true
       },
-      "type": "size",
+      "type": "number",
       "overrides": false,
       "inherits": false,
       "comment": ""
@@ -179,14 +179,14 @@
         [
           "src/Form.ts",
           265,
-          14
+          9
         ]
       ],
-      "id": 3091,
+      "id": 2808,
       "flags": {
         "isPublic": true
       },
-      "type": "style",
+      "type": "string",
       "overrides": false,
       "inherits": false,
       "comment": ""
@@ -197,14 +197,14 @@
         [
           "src/Form.ts",
           266,
-          15
+          9
         ]
       ],
-      "id": 3092,
+      "id": 2809,
       "flags": {
         "isPublic": true
       },
-      "type": "weight",
+      "type": "string",
       "overrides": false,
       "inherits": false,
       "comment": ""

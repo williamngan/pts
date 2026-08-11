@@ -4,11 +4,11 @@
     [
       "src/Num.ts",
       875,
-      18
+      13
     ]
   ],
   "kind": "Class",
-  "id": 1694,
+  "id": 3389,
   "comment": "Range object keeps track of a Group of n-dimensional Pts to provide its minimum, maximum, and magnitude in each dimension.\nIt also provides convenient functions such as mapping the Group to another range. This class may be useful for visualizing data in charts.",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "src/Num.ts",
-          881,
-          29
+          888,
+          2
         ]
       ],
-      "id": 1700,
+      "id": 3390,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -32,7 +32,7 @@
           "parameters": [
             {
               "name": "g",
-              "comment": "a Group or an Iterable<Pt>\n",
+              "comment": "a Group or an Iterable<Pt>",
               "type": "PtIterable",
               "default": false
             }
@@ -49,10 +49,10 @@
         [
           "src/Num.ts",
           906,
-          15
+          6
         ]
       ],
-      "id": 1707,
+      "id": 3402,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -68,10 +68,10 @@
         [
           "src/Num.ts",
           896,
-          9
+          6
         ]
       ],
-      "id": 1703,
+      "id": 3398,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -87,10 +87,10 @@
         [
           "src/Num.ts",
           901,
-          9
+          6
         ]
       ],
-      "id": 1705,
+      "id": 3400,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -108,10 +108,10 @@
         [
           "src/Num.ts",
           965,
-          8
+          2
         ]
       ],
-      "id": 1716,
+      "id": 3411,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -129,7 +129,7 @@
             },
             {
               "name": "update",
-              "comment": "Optional. Set the parameter to `false` if you want to append without immediately updating this Range's min and max values. Default is `true`.\n",
+              "comment": "Optional. Set the parameter to `false` if you want to append without immediately updating this Range's min and max values. Default is `true`.",
               "type": "boolean",
               "default": "true"
             }
@@ -144,10 +144,10 @@
         [
           "src/Num.ts",
           912,
-          6
+          2
         ]
       ],
-      "id": 1709,
+      "id": 3404,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -167,10 +167,10 @@
         [
           "src/Num.ts",
           946,
-          7
+          2
         ]
       ],
-      "id": 1711,
+      "id": 3406,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -194,7 +194,7 @@
             },
             {
               "name": "exclude",
-              "comment": "Optional boolean array where `true` means excluding the conversion in that specific dimension.\n",
+              "comment": "Optional boolean array where `true` means excluding the conversion in that specific dimension.",
               "type": "boolean[]",
               "default": false
             }
@@ -209,10 +209,10 @@
         [
           "src/Num.ts",
           978,
-          7
+          2
         ]
       ],
-      "id": 1720,
+      "id": 3415,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -224,7 +224,7 @@
           "parameters": [
             {
               "name": "count",
-              "comment": "number of subdivision. For example, 10 subdivision will return 11 tick values, which include first(min) and last(max) values.\n",
+              "comment": "number of subdivision. For example, 10 subdivision will return 11 tick values, which include first(min) and last(max) values.",
               "type": "number",
               "default": false
             }

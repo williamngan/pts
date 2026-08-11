@@ -4,11 +4,11 @@
     [
       "src/Play.ts",
       165,
-      18
+      13
     ]
   ],
   "kind": "Class",
-  "id": 7007,
+  "id": 4924,
   "comment": "Sound class simplifies common tasks like audio inputs and visualizations using a subset of Web Audio API. It can be used with other audio libraries like tone.js, and extended to support additional web audio functions. See [the guide](../guide/Sound-0800.html) to get started.",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "src/Play.ts",
-          196,
-          30
+          202,
+          2
         ]
       ],
-      "id": 7018,
+      "id": 4945,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -32,7 +32,7 @@
           "parameters": [
             {
               "name": "type",
-              "comment": "a `SoundType` string: \"file\", \"input\", or \"gen\"\n",
+              "comment": "a `SoundType` string: \"file\", \"input\", or \"gen\"",
               "type": "SoundType",
               "default": false
             }
@@ -48,11 +48,11 @@
       "source": [
         [
           "src/Play.ts",
-          413,
-          13
+          420,
+          6
         ]
       ],
-      "id": 7070,
+      "id": 4989,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -67,16 +67,16 @@
       "source": [
         [
           "src/Play.ts",
-          368,
-          12
+          375,
+          6
         ],
         [
           "src/Play.ts",
-          369,
-          12
+          376,
+          6
         ]
       ],
-      "id": 7058,
+      "id": 4977,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -99,11 +99,11 @@
       "source": [
         [
           "src/Play.ts",
-          340,
-          9
+          347,
+          6
         ]
       ],
-      "id": 7048,
+      "id": 4967,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -118,16 +118,16 @@
       "source": [
         [
           "src/Play.ts",
-          429,
-          15
+          436,
+          6
         ],
         [
           "src/Play.ts",
-          432,
-          15
+          439,
+          6
         ]
       ],
-      "id": 7074,
+      "id": 4993,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -150,11 +150,11 @@
       "source": [
         [
           "src/Play.ts",
-          346,
-          10
+          353,
+          6
         ]
       ],
-      "id": 7050,
+      "id": 4969,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -169,11 +169,11 @@
       "source": [
         [
           "src/Play.ts",
-          351,
-          16
+          358,
+          6
         ]
       ],
-      "id": 7052,
+      "id": 4971,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -188,11 +188,11 @@
       "source": [
         [
           "src/Play.ts",
-          405,
-          14
+          412,
+          6
         ]
       ],
-      "id": 7068,
+      "id": 4987,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -207,11 +207,11 @@
       "source": [
         [
           "src/Play.ts",
-          381,
-          13
+          388,
+          6
         ]
       ],
-      "id": 7064,
+      "id": 4983,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -226,11 +226,11 @@
       "source": [
         [
           "src/Play.ts",
-          387,
-          14
+          394,
+          6
         ]
       ],
-      "id": 7066,
+      "id": 4985,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -245,11 +245,11 @@
       "source": [
         [
           "src/Play.ts",
-          421,
-          16
+          428,
+          6
         ]
       ],
-      "id": 7072,
+      "id": 4991,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -264,11 +264,11 @@
       "source": [
         [
           "src/Play.ts",
-          362,
-          12
+          369,
+          6
         ]
       ],
-      "id": 7056,
+      "id": 4975,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -283,11 +283,11 @@
       "source": [
         [
           "src/Play.ts",
-          356,
-          12
+          363,
+          6
         ]
       ],
-      "id": 7054,
+      "id": 4973,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -302,11 +302,11 @@
       "source": [
         [
           "src/Play.ts",
-          375,
-          10
+          382,
+          6
         ]
       ],
-      "id": 7062,
+      "id": 4981,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -323,18 +323,18 @@
       "source": [
         [
           "src/Play.ts",
-          475,
-          9
+          482,
+          2
         ]
       ],
-      "id": 7086,
+      "id": 5005,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
           "comment": "Add an analyzer to this `Sound`. Call this once only.",
-          "returns": "this",
+          "returns": "Sound",
           "returns_comment": false,
           "parameters": [
             {
@@ -357,7 +357,7 @@
             },
             {
               "name": "smooth",
-              "comment": "Optional smoothing value (corresponds to `AnalyserNode.smoothingTimeConstant`)\n",
+              "comment": "Optional smoothing value (corresponds to `AnalyserNode.smoothingTimeConstant`)",
               "type": "number",
               "default": "0.8"
             }
@@ -371,11 +371,11 @@
       "source": [
         [
           "src/Play.ts",
-          441,
-          9
+          448,
+          2
         ]
       ],
-      "id": 7078,
+      "id": 4997,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -387,7 +387,7 @@
           "parameters": [
             {
               "name": "node",
-              "comment": "another AudioNode\n",
+              "comment": "another AudioNode",
               "type": "AudioNode",
               "default": false
             }
@@ -401,11 +401,11 @@
       "source": [
         [
           "src/Play.ts",
-          279,
-          24
+          286,
+          12
         ]
       ],
-      "id": 7034,
+      "id": 4960,
       "flags": {
         "isProtected": true
       },
@@ -419,7 +419,7 @@
           "parameters": [
             {
               "name": "buf",
-              "comment": "an AudioBuffer. Optionally, you can call this without parameters to re-use existing buffer.\n",
+              "comment": "an AudioBuffer. Optionally, you can call this without parameters to re-use existing buffer.",
               "type": "AudioBuffer",
               "default": false
             }
@@ -433,11 +433,11 @@
       "source": [
         [
           "src/Play.ts",
-          540,
-          12
+          547,
+          2
         ]
       ],
-      "id": 7108,
+      "id": 5027,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -456,11 +456,11 @@
       "source": [
         [
           "src/Play.ts",
-          553,
-          14
+          560,
+          2
         ]
       ],
-      "id": 7110,
+      "id": 5029,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -480,19 +480,19 @@
               "name": "position",
               "comment": "Optionally, set a starting `[x, y]` position. Default is `[0, 0]`",
               "type": "PtLike",
-              "default": "[0,0]"
+              "default": "..."
             },
             {
               "name": "trim",
               "comment": "Optionally, trim the start and end values by `[startTrim, data.length-endTrim]`",
               "type": "number[]",
-              "default": "[0,0]"
+              "default": "..."
             }
           ],
           "tags": [
             {
               "tag": "example",
-              "text": "`form.point( s.freqDomainTo( space.size ) )`\n"
+              "text": "`form.point( s.freqDomainTo( space.size ) )`"
             }
           ]
         }
@@ -503,11 +503,11 @@
       "source": [
         [
           "src/Play.ts",
-          462,
-          18
+          469,
+          2
         ]
       ],
-      "id": 7084,
+      "id": 5003,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -526,11 +526,11 @@
       "source": [
         [
           "src/Play.ts",
-          561,
-          7
+          568,
+          2
         ]
       ],
-      "id": 7115,
+      "id": 5034,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -549,11 +549,11 @@
       "source": [
         [
           "src/Play.ts",
-          452,
-          15
+          459,
+          2
         ]
       ],
-      "id": 7081,
+      "id": 5000,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -565,7 +565,7 @@
           "parameters": [
             {
               "name": "outputNode",
-              "comment": "The AudioNode that should connect to the AudioContext\n",
+              "comment": "The AudioNode that should connect to the AudioContext",
               "type": "AudioNode",
               "default": false
             }
@@ -579,11 +579,11 @@
       "source": [
         [
           "src/Play.ts",
-          572,
-          7
+          579,
+          2
         ]
       ],
-      "id": 7117,
+      "id": 5036,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -595,7 +595,7 @@
           "parameters": [
             {
               "name": "timeAt",
-              "comment": "optional parameter to play from a specific time\n",
+              "comment": "optional parameter to play from a specific time",
               "type": "number",
               "default": "0"
             }
@@ -609,11 +609,11 @@
       "source": [
         [
           "src/Play.ts",
-          598,
-          6
+          609,
+          2
         ]
       ],
-      "id": 7120,
+      "id": 5039,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -632,11 +632,11 @@
       "source": [
         [
           "src/Play.ts",
-          519,
-          12
+          526,
+          2
         ]
       ],
-      "id": 7101,
+      "id": 5020,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -655,11 +655,11 @@
       "source": [
         [
           "src/Play.ts",
-          532,
-          14
+          539,
+          2
         ]
       ],
-      "id": 7103,
+      "id": 5022,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -679,19 +679,19 @@
               "name": "position",
               "comment": "Optionally, set a starting `[x, y]` position. Default is `[0, 0]`",
               "type": "PtLike",
-              "default": "[0,0]"
+              "default": "..."
             },
             {
               "name": "trim",
               "comment": "Optionally, trim the start and end values by `[startTrim, data.length-endTrim]`",
               "type": "number[]",
-              "default": "[0,0]"
+              "default": "..."
             }
           ],
           "tags": [
             {
               "tag": "example",
-              "text": "form.point( s.timeDomainTo( space.size ) )\n"
+              "text": "form.point( s.timeDomainTo( space.size ) )"
             }
           ]
         }
@@ -702,11 +702,11 @@
       "source": [
         [
           "src/Play.ts",
-          625,
-          8
+          636,
+          2
         ]
       ],
-      "id": 7122,
+      "id": 5041,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -725,11 +725,11 @@
       "source": [
         [
           "src/Play.ts",
-          219,
-          13
+          224,
+          9
         ]
       ],
-      "id": 7021,
+      "id": 4925,
       "flags": {
         "isStatic": true
       },
@@ -739,7 +739,7 @@
         {
           "comment": "Create a `Sound` given an [AudioNode](https://developer.mozilla.org/en-US/docs/Web/API/AudioNode) and an [AudioContext](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext) from Web Audio API. See also [this example](../guide/js/examples/tone.html) using tone.js in the [guide](../guide/Sound-0800.html).",
           "returns": "Sound",
-          "returns_comment": "a `Sound` instance\n",
+          "returns_comment": "a `Sound` instance",
           "parameters": [
             {
               "name": "node",
@@ -775,11 +775,11 @@
       "source": [
         [
           "src/Play.ts",
-          296,
-          17
+          303,
+          9
         ]
       ],
-      "id": 7037,
+      "id": 4938,
       "flags": {
         "isStatic": true
       },
@@ -807,7 +807,7 @@
           "tags": [
             {
               "tag": "example",
-              "text": "`Sound.generate( 'sine', 120 )`\n"
+              "text": "`Sound.generate( 'sine', 120 )`"
             }
           ]
         }
@@ -818,11 +818,11 @@
       "source": [
         [
           "src/Play.ts",
-          322,
-          20
+          329,
+          15
         ]
       ],
-      "id": 7045,
+      "id": 4942,
       "flags": {
         "isStatic": true
       },
@@ -836,7 +836,7 @@
           "parameters": [
             {
               "name": "constraint",
-              "comment": "@param constraint Optional constraints which can be used to select a specific input device. For example, you may use [`enumerateDevices`](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/enumerateDevices) to find a specific deviceId;",
+              "comment": "",
               "type": "MediaStreamConstraints",
               "default": false
             }
@@ -844,7 +844,7 @@
           "tags": [
             {
               "tag": "example",
-              "text": "`Sound.input().then( s => sound = s );`\n"
+              "text": "`Sound.input().then( s => sound = s );`"
             }
           ]
         }
@@ -855,11 +855,11 @@
       "source": [
         [
           "src/Play.ts",
-          235,
-          13
+          240,
+          9
         ]
       ],
-      "id": 7027,
+      "id": 4931,
       "flags": {
         "isStatic": true
       },
@@ -874,7 +874,7 @@
             {
               "name": "source",
               "comment": "either an url string to load a sound file, or an audio element.",
-              "type": "HTMLMediaElement | string",
+              "type": "string | HTMLMediaElement",
               "default": false
             },
             {
@@ -887,7 +887,7 @@
           "tags": [
             {
               "tag": "example",
-              "text": "`Sound.load( '/path/to/file.mp3' )`\n"
+              "text": "`Sound.load( '/path/to/file.mp3' )`"
             }
           ]
         }
@@ -898,11 +898,11 @@
       "source": [
         [
           "src/Play.ts",
-          257,
-          21
+          264,
+          9
         ]
       ],
-      "id": 7031,
+      "id": 4935,
       "flags": {
         "isStatic": true
       },
@@ -916,7 +916,7 @@
           "parameters": [
             {
               "name": "url",
-              "comment": "an url to the sound file\n",
+              "comment": "an url to the sound file",
               "type": "string",
               "default": false
             }
@@ -934,12 +934,12 @@
         [
           "src/Play.ts",
           192,
-          10
+          2
         ]
       ],
-      "id": 7015,
+      "id": 4955,
       "flags": {},
-      "type": "analyzer",
+      "type": "ISoundAnalyzer",
       "overrides": false,
       "inherits": false,
       "comment": "Analyzer if any"

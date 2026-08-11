@@ -4,11 +4,11 @@
     [
       "src/Op.ts",
       631,
-      19
+      13
     ]
   ],
   "kind": "Class",
-  "id": 1180,
+  "id": 3583,
   "comment": "Circle class provides static functions to create and operate on circles. A circle is usually represented as a Group of 2 Pts, where the first Pt specifies the center, and the second Pt specifies the radius.\nYou can use the static functions as-is, or apply the [`Group.op`](#link) or [`Pt.op`](#link) to enable functional programming.\nSee [Op guide](../guide/Op-0400.html) for details.",
   "constructor": [],
   "accessors": [],
@@ -19,10 +19,10 @@
         [
           "src/Op.ts",
           675,
-          19
+          9
         ]
       ],
-      "id": 1189,
+      "id": 3592,
       "flags": {
         "isStatic": true
       },
@@ -32,7 +32,7 @@
         {
           "comment": "Create a circle based on a center point and a radius.",
           "returns": "Group",
-          "returns_comment": "a Group that represents a circle\n",
+          "returns_comment": "a Group that represents a circle",
           "parameters": [
             {
               "name": "pt",
@@ -57,10 +57,10 @@
         [
           "src/Op.ts",
           640,
-          17
+          9
         ]
       ],
-      "id": 1181,
+      "id": 3584,
       "flags": {
         "isStatic": true
       },
@@ -70,7 +70,7 @@
         {
           "comment": "Create a circle that either fits within, or encloses, a rectangle.",
           "returns": "Group",
-          "returns_comment": "a Group that represents a circle\n",
+          "returns_comment": "a Group that represents a circle",
           "parameters": [
             {
               "name": "pts",
@@ -95,10 +95,10 @@
         [
           "src/Op.ts",
           660,
-          21
+          9
         ]
       ],
-      "id": 1185,
+      "id": 3588,
       "flags": {
         "isStatic": true
       },
@@ -108,7 +108,7 @@
         {
           "comment": "Create a circle that either fits within, or encloses, a triangle. Same as [`Triangle.circumcircle`](#link) or [`Triangle.incircle`](#link).",
           "returns": "Group",
-          "returns_comment": "a Group that represents a circle\n",
+          "returns_comment": "a Group that represents a circle",
           "parameters": [
             {
               "name": "pts",
@@ -133,10 +133,10 @@
         [
           "src/Op.ts",
           756,
-          26
+          9
         ]
       ],
-      "id": 1206,
+      "id": 3609,
       "flags": {
         "isStatic": true
       },
@@ -146,7 +146,7 @@
         {
           "comment": "Get the intersection points between two circles.",
           "returns": "Group",
-          "returns_comment": "a Group of intersection points, or an empty Group if no intersection is found\n",
+          "returns_comment": "a Group of intersection points, or an empty Group if no intersection is found",
           "parameters": [
             {
               "name": "circle1",
@@ -171,10 +171,10 @@
         [
           "src/Op.ts",
           735,
-          24
+          9
         ]
       ],
-      "id": 1202,
+      "id": 3605,
       "flags": {
         "isStatic": true
       },
@@ -184,7 +184,7 @@
         {
           "comment": "Get the intersection points between a circle and a line segment.",
           "returns": "Group",
-          "returns_comment": "a Group of intersection points, or an empty Group if no intersection is found\n",
+          "returns_comment": "a Group of intersection points, or an empty Group if no intersection is found",
           "parameters": [
             {
               "name": "circle",
@@ -209,10 +209,10 @@
         [
           "src/Op.ts",
           699,
-          23
+          9
         ]
       ],
-      "id": 1198,
+      "id": 3601,
       "flags": {
         "isStatic": true
       },
@@ -222,7 +222,7 @@
         {
           "comment": "Get the intersection points between a circle and a ray (infinite line).",
           "returns": "Group",
-          "returns_comment": "a Group of intersection points, or an empty Group if no intersection is found\n",
+          "returns_comment": "a Group of intersection points, or an empty Group if no intersection is found",
           "parameters": [
             {
               "name": "circle",
@@ -247,10 +247,10 @@
         [
           "src/Op.ts",
           793,
-          24
+          9
         ]
       ],
-      "id": 1210,
+      "id": 3613,
       "flags": {
         "isStatic": true
       },
@@ -260,7 +260,7 @@
         {
           "comment": "Quick way to check rectangle intersection with a circle.\nFor more optimized implementation, store the rectangle's sides separately (eg, [`Rectangle.sides`](#link)) and use [`Polygon.intersectPolygon2D()`](#link).",
           "returns": "Group",
-          "returns_comment": "a Group of intersection points, or an empty Group if no intersection is found\n",
+          "returns_comment": "a Group of intersection points, or an empty Group if no intersection is found",
           "parameters": [
             {
               "name": "circle",
@@ -285,10 +285,10 @@
         [
           "src/Op.ts",
           813,
-          15
+          9
         ]
       ],
-      "id": 1214,
+      "id": 3617,
       "flags": {
         "isStatic": true
       },
@@ -298,7 +298,7 @@
         {
           "comment": "Get a rectangle that either fits within or encloses this circle. See also [`Rectangle.toCircle`](#link)",
           "returns": "Group",
-          "returns_comment": "a Group representing a rectangle\n",
+          "returns_comment": "a Group representing a rectangle",
           "parameters": [
             {
               "name": "circle",
@@ -323,10 +323,10 @@
         [
           "src/Op.ts",
           830,
-          19
+          9
         ]
       ],
-      "id": 1218,
+      "id": 3621,
       "flags": {
         "isStatic": true
       },
@@ -346,7 +346,7 @@
             },
             {
               "name": "within",
-              "comment": "if `true`, the triangle will be within the circle. If `false`, the triangle will enclose the circle.\n",
+              "comment": "if `true`, the triangle will be within the circle. If `false`, the triangle will enclose the circle.",
               "type": "boolean",
               "default": "true"
             }
@@ -361,10 +361,10 @@
         [
           "src/Op.ts",
           686,
-          20
+          9
         ]
       ],
-      "id": 1193,
+      "id": 3596,
       "flags": {
         "isStatic": true
       },
@@ -390,7 +390,7 @@
             },
             {
               "name": "threshold",
-              "comment": "an optional small number to set threshold. Default is 0.\n",
+              "comment": "an optional small number to set threshold. Default is 0.",
               "type": "number",
               "default": "0"
             }

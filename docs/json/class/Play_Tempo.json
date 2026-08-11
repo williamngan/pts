@@ -4,11 +4,11 @@
     [
       "src/Play.ts",
       9,
-      18
+      13
     ]
   ],
   "kind": "Class",
-  "id": 6958,
+  "id": 4875,
   "comment": "Tempo helps you create synchronized and rhythmic animations.",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "src/Play.ts",
-          16,
-          26
+          22,
+          2
         ]
       ],
-      "id": 6967,
+      "id": 4879,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -32,7 +32,7 @@
           "parameters": [
             {
               "name": "bpm",
-              "comment": "beats per minute\n",
+              "comment": "beats per minute",
               "type": "number",
               "default": false
             }
@@ -49,15 +49,15 @@
         [
           "src/Play.ts",
           37,
-          9
+          6
         ],
         [
           "src/Play.ts",
           38,
-          9
+          6
         ]
       ],
-      "id": 6973,
+      "id": 4890,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -81,15 +81,15 @@
         [
           "src/Play.ts",
           46,
-          8
+          6
         ],
         [
           "src/Play.ts",
           47,
-          8
+          6
         ]
       ],
-      "id": 6977,
+      "id": 4894,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -115,10 +115,10 @@
         [
           "src/Play.ts",
           154,
-          8
+          2
         ]
       ],
-      "id": 7001,
+      "id": 4918,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -163,10 +163,10 @@
         [
           "src/Play.ts",
           140,
-          9
+          2
         ]
       ],
-      "id": 6993,
+      "id": 4910,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -199,10 +199,10 @@
         [
           "src/Play.ts",
           74,
-          7
+          2
         ]
       ],
-      "id": 6984,
+      "id": 4901,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -210,7 +210,7 @@
         {
           "comment": "This is a core function that let you specify a rhythm and then define responses by calling the `start` and `progress` functions from the returned object. See [Animation guide](../guide/Animation-0700.html) for more details.\nThe `start` function lets you set a callback on every start. It takes a function ([`ITempoStartFn`](#link)).\nThe `progress` function lets you set a callback during progress. It takes a function ([`ITempoProgressFn`](#link)). Both functions let you optionally specify a time offset and a custom name.\nSee [Animation guide](../guide/animation-0700.html) for more details.",
           "returns": "ITempoResponses",
-          "returns_comment": "an object with chainable functions\n",
+          "returns_comment": "an object with chainable functions",
           "parameters": [
             {
               "name": "beats",
@@ -234,10 +234,10 @@
         [
           "src/Play.ts",
           147,
-          8
+          2
         ]
       ],
-      "id": 6997,
+      "id": 4914,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -270,10 +270,10 @@
         [
           "src/Play.ts",
           132,
-          6
+          2
         ]
       ],
-      "id": 6990,
+      "id": 4907,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -285,7 +285,7 @@
           "parameters": [
             {
               "name": "name",
-              "comment": "a name string specified when creating the callback function.\n",
+              "comment": "a name string specified when creating the callback function.",
               "type": "string",
               "default": false
             }
@@ -300,10 +300,10 @@
         [
           "src/Play.ts",
           99,
-          7
+          2
         ]
       ],
-      "id": 6987,
+      "id": 4904,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -315,7 +315,7 @@
           "parameters": [
             {
               "name": "time",
-              "comment": "current time in milliseconds\n",
+              "comment": "current time in milliseconds",
               "type": "any",
               "default": false
             }
@@ -330,10 +330,10 @@
         [
           "src/Play.ts",
           30,
-          17
+          9
         ]
       ],
-      "id": 6970,
+      "id": 4876,
       "flags": {
         "isStatic": true
       },
@@ -347,7 +347,7 @@
           "parameters": [
             {
               "name": "ms",
-              "comment": "milliseconds per beat\n",
+              "comment": "milliseconds per beat",
               "type": "number",
               "default": false
             }
@@ -365,14 +365,14 @@
         [
           "src/Play.ts",
           16,
-          18
+          9
         ]
       ],
-      "id": 6966,
+      "id": 4889,
       "flags": {
         "isPublic": true
       },
-      "type": "animateID",
+      "type": "string",
       "overrides": false,
       "inherits": false,
       "comment": ""

@@ -4,11 +4,11 @@
     [
       "src/Types.ts",
       10,
-      20
+      17
     ]
   ],
   "kind": "Interface",
-  "id": 434,
+  "id": 7113,
   "comment": "Typescript interface: IPt is an interface that represents an object with x, y, z, w properties.",
   "constructor": [],
   "accessors": [],
@@ -21,14 +21,14 @@
         [
           "src/Types.ts",
           14,
-          3
+          2
         ]
       ],
-      "id": 438,
+      "id": 7117,
       "flags": {
         "isOptional": true
       },
-      "type": "w",
+      "type": "number",
       "overrides": false,
       "inherits": false,
       "comment": ""
@@ -39,14 +39,14 @@
         [
           "src/Types.ts",
           11,
-          3
+          2
         ]
       ],
-      "id": 435,
+      "id": 7114,
       "flags": {
         "isOptional": true
       },
-      "type": "x",
+      "type": "number",
       "overrides": false,
       "inherits": false,
       "comment": ""
@@ -57,14 +57,14 @@
         [
           "src/Types.ts",
           12,
-          3
+          2
         ]
       ],
-      "id": 436,
+      "id": 7115,
       "flags": {
         "isOptional": true
       },
-      "type": "y",
+      "type": "number",
       "overrides": false,
       "inherits": false,
       "comment": ""
@@ -75,14 +75,14 @@
         [
           "src/Types.ts",
           13,
-          3
+          2
         ]
       ],
-      "id": 437,
+      "id": 7116,
       "flags": {
         "isOptional": true
       },
-      "type": "z",
+      "type": "number",
       "overrides": false,
       "inherits": false,
       "comment": ""
