@@ -4,9 +4,9 @@ import { Const, Util } from "./Util";
 import { Curve } from "./Op";
 import { Pt, Group } from "./Pt";
 import { Vec, Mat } from "./LinearAlgebra";
-import {PtLike, GroupLike, PtLikeIterable, PtIterable} from "./Types";
+import { PtLike, GroupLike, PtLikeIterable, PtIterable } from "./Types";
 
-import generator from './uheprng';
+import generator from "./uheprng";
 
 /**
  * Num class provides static helper functions for basic numeric operations.
@@ -20,10 +20,9 @@ export class Num {
    * @param b number b
    * @param threshold threshold value that specifies the minimum difference within which the two numbers are considered equal
    */
-  static equals( a:number, b:number, threshold = 0.00001 ):boolean {
-    return Math.abs( a - b ) < threshold;
+  static equals(a: number, b: number, threshold = 0.00001): boolean {
+    return Math.abs(a - b) < threshold;
   }
-
 
   /**
    * Calculate linear interpolation between 2 values.
@@ -31,10 +30,9 @@ export class Num {
    * @param b end value
    * @param t an interpolation value, usually between 0 to 1
    */
-  static lerp( a:number, b:number, t:number ):number {
-    return ( 1 - t ) * a + t * b;
+  static lerp(a: number, b: number, t: number): number {
+    return (1 - t) * a + t * b;
   }
-
 
   /**
    * Clamp values between min and max.
@@ -42,10 +40,9 @@ export class Num {
    * @param min min value
    * @param max max value
    */
-  static clamp( val:number, min:number, max:number ):number {
-    return Math.max( min, Math.min( max, val ) );
+  static clamp(val: number, min: number, max: number): number {
+    return Math.max(min, Math.min(max, val));
   }
-
 
   /**
    * Different from [`Num.clamp`](#link) in that the value out-of-bound will be "looped back" to the other end.
@@ -54,16 +51,15 @@ export class Num {
    * @param max max value
    * @example `boundValue(361, 0, 360)` will return 1
    */
-  static boundValue( val:number, min:number, max:number ):number {
-    const len = Math.abs( max - min );
+  static boundValue(val: number, min: number, max: number): number {
+    const len = Math.abs(max - min);
     let a = val % len;
 
-    if ( a > max ) a -= len;
-    else if ( a < min ) a += len;
+    if (a > max) a -= len;
+    else if (a < min) a += len;
 
     return a;
   }
-
 
   /**
    * Check if a value is within two other values
@@ -71,37 +67,34 @@ export class Num {
    * @param a first bounding value
    * @param b second bounding value
    */
-  static within( p:number, a:number, b:number ):boolean {
-    return p >= Math.min( a, b ) && p <= Math.max( a, b );
+  static within(p: number, a: number, b: number): boolean {
+    return p >= Math.min(a, b) && p <= Math.max(a, b);
   }
-
 
   /**
    * Get a random number within a range.
    * @param a range value 1
    * @param b range value 2
    */
-  static randomRange( a:number, b:number = 0 ):number {
-    const r = ( a > b ) ? ( a - b ) : ( b - a );
+  static randomRange(a: number, b: number = 0): number {
+    const r = a > b ? a - b : b - a;
     return a + Num.random() * r;
   }
-
 
   /**
    * Get a random Pt within the range defined by either 1 or 2 Pt
    * @param a the range if only one Pt is used, or the start of the range if two Pt were used
    * @param b optional Pt to define the end of the range
    */
-  static randomPt( a:PtLike, b?:PtLike ):Pt {
-    const p = new Pt( a.length );
-    const range = b ? Vec.subtract( b.slice(), a ) : a;
-    const start = b ? a : new Pt( a.length ).fill( 0 );
-    for ( let i = 0, len = p.length; i < len; i++ ) {
+  static randomPt(a: PtLike, b?: PtLike): Pt {
+    const p = new Pt(a.length);
+    const range = b ? Vec.subtract(b.slice(), a) : a;
+    const start = b ? a : new Pt(a.length).fill(0);
+    for (let i = 0, len = p.length; i < len; i++) {
       p[i] = Num.random() * range[i] + start[i];
     }
     return p;
   }
-
 
   /**
    * Normalize a value within a range.
@@ -109,38 +102,35 @@ export class Num {
    * @param a range value 1
    * @param b range value 1
    */
-  static normalizeValue( n:number, a:number, b:number ):number {
-    const min = Math.min( a, b );
-    const max = Math.max( a, b );
-    return ( n - min ) / ( max - min );
+  static normalizeValue(n: number, a: number, b: number): number {
+    const min = Math.min(a, b);
+    const max = Math.max(a, b);
+    return (n - min) / (max - min);
   }
-
 
   /**
    * Sum a group of numeric arrays.
    * @param pts a Group or an Iterable<PtLike>
    * @returns a Pt of the dimensional sums
    */
-  static sum( pts: PtLikeIterable ): Pt {
-    const _pts = Util.iterToArray( pts );
-    const c = new Pt( _pts[0] );
-    for ( let i = 1, len = _pts.length; i < len; i++ ) {
-      Vec.add( c, _pts[i] );
+  static sum(pts: PtLikeIterable): Pt {
+    const _pts = Util.iterToArray(pts);
+    const c = new Pt(_pts[0]);
+    for (let i = 1, len = _pts.length; i < len; i++) {
+      Vec.add(c, _pts[i]);
     }
     return c;
   }
-
 
   /**
    * Average a group of numeric arrays
    * @param pts a Group or an Iterable<PtLike>
    * @returns a Pt of averages
    */
-  static average( pts: PtLikeIterable ): Pt {
-    const _pts = Util.iterToArray( pts );
-    return Num.sum( _pts ).divide( _pts.length );
+  static average(pts: PtLikeIterable): Pt {
+    const _pts = Util.iterToArray(pts);
+    return Num.sum(_pts).divide(_pts.length);
   }
-
 
   /**
    * Given a value between 0 to 1, returns a value that cycles between 0 -> 1 -> 0 using the provided shaping method.
@@ -148,12 +138,14 @@ export class Num {
    * @param method a shaping method. Default to [`Shaping.sineInOut`](#link).
    * @return a value between 0 to 1
    */
-  static cycle( t:number, method:( t:number ) => number = Shaping.sineInOut ):number {
-    return method( t > 0.5 ? 2 - t * 2 : t * 2 );
+  static cycle(
+    t: number,
+    method: (t: number) => number = Shaping.sineInOut,
+  ): number {
+    return method(t > 0.5 ? 2 - t * 2 : t * 2);
   }
 
-
-  /**  
+  /**
    * Map a value from one range to another.
    * @param n a value in the first range
    * @param currMin lower bound of the first range
@@ -162,19 +154,28 @@ export class Num {
    * @param targetMax upper bound of the second range
    * @returns a remapped value in the second range
    */
-  static mapToRange( n:number, currA:number, currB:number, targetA:number, targetB:number ) {
-    if ( currA == currB ) throw new Error( "[currMin, currMax] must define a range that is not zero" );
-    const min = Math.min( targetA, targetB );
-    const max = Math.max( targetA, targetB );
-    return Num.normalizeValue( n, currA, currB ) * ( max - min ) + min;
+  static mapToRange(
+    n: number,
+    currA: number,
+    currB: number,
+    targetA: number,
+    targetB: number,
+  ) {
+    if (currA == currB)
+      throw new Error(
+        "[currMin, currMax] must define a range that is not zero",
+      );
+    const min = Math.min(targetA, targetB);
+    const max = Math.max(targetA, targetB);
+    return Num.normalizeValue(n, currA, currB) * (max - min) + min;
   }
 
   /**
    * Seed the pseudorandom generator.
    * @param seed seed string
    */
-  static seed( seed: string ): void {
-    this.generator = generator( seed );
+  static seed(seed: string): void {
+    this.generator = generator(seed);
   }
 
   /**
@@ -183,104 +184,96 @@ export class Num {
    * @returns a number between 0 and 1
    */
   static random(): number {
-    return this.generator 
-      ? this.generator.random()
-      : Math.random();
+    return this.generator ? this.generator.random() : Math.random();
   }
 }
-
-
 
 /**
  * Geom class provides static helper functions for basic geometric operations.
  */
 export class Geom {
-
   /**
    * Bound an angle between 0 to 360 degrees.
    * @param angle angle value
    */
-  static boundAngle( angle:number ):number {
-    return Num.boundValue( angle, 0, 360 );
+  static boundAngle(angle: number): number {
+    return Num.boundValue(angle, 0, 360);
   }
-
 
   /**
    * Bound a radian between 0 to two PI.
    * @param radian radian value
    */
-  static boundRadian( radian:number ):number {
-    return Num.boundValue( radian, 0, Const.two_pi );
+  static boundRadian(radian: number): number {
+    return Num.boundValue(radian, 0, Const.two_pi);
   }
-
 
   /**
    * Convert an angle in degree to radian.
    * @param angle angle value
    */
-  static toRadian( angle:number ):number {
+  static toRadian(angle: number): number {
     return angle * Const.deg_to_rad;
   }
-
 
   /**
    * Convert an angle in radian to degree.
    * @param radian radian value
    */
-  static toDegree( radian:number ):number {
+  static toDegree(radian: number): number {
     return radian * Const.rad_to_deg;
   }
-
 
   /**
    * Get a bounding box for a set of Pts.
    * @param pts a Group or an Iterable<Pt>
    * @return a Group of two Pts, representing the top-left and bottom-right corners
    */
-  static boundingBox( pts:PtIterable ): Group {
+  static boundingBox(pts: PtIterable): Group {
     let minPt: Pt, maxPt: Pt;
-    for ( const p of pts ) {
-      if ( minPt == undefined ) {
+    for (const p of pts) {
+      if (minPt == undefined) {
         minPt = p.clone();
         maxPt = p.clone();
       } else {
-        minPt = minPt.$min( p );
-        maxPt = maxPt.$max( p );
+        minPt = minPt.$min(p);
+        maxPt = maxPt.$max(p);
       }
     }
-    return new Group( minPt, maxPt );
+    return new Group(minPt, maxPt);
   }
-
 
   /**
    * Get a centroid (the average middle point) for a set of Pts.
-   * @param pts a Group or an Iterable<PtLike> 
-   * @return a centroid Pt 
+   * @param pts a Group or an Iterable<PtLike>
+   * @return a centroid Pt
    */
-  static centroid( pts:PtLikeIterable ):Pt {
-    return Num.average( pts );
+  static centroid(pts: PtLikeIterable): Pt {
+    return Num.average(pts);
   }
-
 
   /**
    * Given an anchor Pt, rebase all Pts in this group either to or from this anchor base.
-   * @param pts a Group or an Iterable<PtLike> 
+   * @param pts a Group or an Iterable<PtLike>
    * @param ptOrIndex an index for the Pt array, or an external Pt
    * @param direction a string either "to" (subtract all Pt with this anchor base), or "from" (add all Pt from this anchor base)
    */
-  static anchor( pts:PtLikeIterable, ptOrIndex:PtLike | number = 0, direction:( "to" | "from" ) = "to" ) {
-    const method = ( direction == "to" ) ? "subtract" : "add";
+  static anchor(
+    pts: PtLikeIterable,
+    ptOrIndex: PtLike | number = 0,
+    direction: "to" | "from" = "to",
+  ) {
+    const method = direction == "to" ? "subtract" : "add";
     let i = 0;
-    for ( const p of pts ) {
-      if ( typeof ptOrIndex == "number" ) {
-        if ( ptOrIndex !== i ) p[method]( pts[ptOrIndex] );
+    for (const p of pts) {
+      if (typeof ptOrIndex == "number") {
+        if (ptOrIndex !== i) p[method](pts[ptOrIndex]);
       } else {
-        p[method]( ptOrIndex );
+        p[method](ptOrIndex);
       }
       i++;
     }
   }
-
 
   /**
    * Get an interpolated (or extrapolated) value between two Pts. For linear interpolation between 2 scalar values, use [`Num.lerp`](#link).
@@ -289,44 +282,41 @@ export class Geom {
    * @param t a value between 0 to 1 to interpolate, or any other value to extrapolate
    * @returns interpolated point as a new Pt
    */
-  static interpolate( a:PtLike, b:PtLike, t:number = 0.5 ):Pt {
-    const len = Math.min( a.length, b.length );
-    const d = Pt.make( len );
-    for ( let i = 0; i < len; i++ ) {
-      d[i] = a[i] * ( 1 - t ) + b[i] * t;
+  static interpolate(a: PtLike, b: PtLike, t: number = 0.5): Pt {
+    const len = Math.min(a.length, b.length);
+    const d = Pt.make(len);
+    for (let i = 0; i < len; i++) {
+      d[i] = a[i] * (1 - t) + b[i] * t;
     }
     return d;
   }
-
 
   /**
    * Find two Pts that are perpendicular to this Pt (2D only).
    * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
    * @returns an array of two Pt that are perpendicular to this Pt
    */
-  static perpendicular( pt:PtLike, axis:string | PtLike = Const.xy ):Group {
+  static perpendicular(pt: PtLike, axis: string | PtLike = Const.xy): Group {
     const y = axis[1];
     const x = axis[0];
 
-    const p = new Pt( pt );
-    const pa = new Pt( p );
+    const p = new Pt(pt);
+    const pa = new Pt(p);
     pa[x] = -p[y];
     pa[y] = p[x];
-    const pb = new Pt( p );
+    const pb = new Pt(p);
     pb[x] = p[y];
     pb[y] = -p[x];
 
-    return new Group( pa, pb );
+    return new Group(pa, pb);
   }
-
 
   /**
    * Check if two Pts are perpendicular to each other (2D only).
    */
-  static isPerpendicular( p1:PtLike, p2:PtLike ):boolean {
-    return new Pt( p1 ).dot( p2 ) === 0;
+  static isPerpendicular(p1: PtLike, p2: PtLike): boolean {
+    return new Pt(p1).dot(p2) === 0;
   }
-
 
   /**
    * Check if a Pt is within the rectangular boundary defined by two Pts.
@@ -334,51 +324,54 @@ export class Geom {
    * @param boundPt1 boundary Pt 1
    * @param boundPt2 boundary Pt 2
    */
-  static withinBound( pt:PtLike, boundPt1:PtLike, boundPt2:PtLike ):boolean {
-    for ( let i = 0, len = Math.min( pt.length, boundPt1.length, boundPt2.length ); i < len; i++ ) {
-      if ( !Num.within( pt[i], boundPt1[i], boundPt2[i] ) ) return false;
+  static withinBound(pt: PtLike, boundPt1: PtLike, boundPt2: PtLike): boolean {
+    for (
+      let i = 0, len = Math.min(pt.length, boundPt1.length, boundPt2.length);
+      i < len;
+      i++
+    ) {
+      if (!Num.within(pt[i], boundPt1[i], boundPt2[i])) return false;
     }
     return true;
   }
-
 
   /**
    * Sort the Pts so that their edges will form a non-overlapping polygon. ([Reference](https://stackoverflow.com/questions/6989100/sort-points-in-clockwise-order))
    * @param pts a Group or an Iterable<Pt>
    */
-  static sortEdges( pts:PtIterable ):GroupLike {
+  static sortEdges(pts: PtIterable): GroupLike {
+    const _pts = Util.iterToArray(pts);
+    const bounds = Geom.boundingBox(_pts);
+    const center = bounds[1].add(bounds[0]).divide(2);
 
-    const _pts = Util.iterToArray( pts );
-    const bounds = Geom.boundingBox( _pts );
-    const center = bounds[1].add( bounds[0] ).divide( 2 );
-    
-    const fn = ( a:Pt, b:Pt ):number => {
-      if ( a.length < 2 || b.length < 2 ) throw new Error( "Pt dimension cannot be less than 2" );
+    const fn = (a: Pt, b: Pt): number => {
+      if (a.length < 2 || b.length < 2)
+        throw new Error("Pt dimension cannot be less than 2");
 
-      const da = a.$subtract( center );
-      const db = b.$subtract( center );
-      
-      if ( da[0] >= 0 && db[0] < 0 ) return 1;
-      if ( da[0] < 0 && db[0] >= 0 ) return -1;
-      if ( da[0] == 0 && db[0] == 0 ) {
-        if ( da[1] >= 0 || db[1] >= 0 )
-          return ( da[1] > db[1] ) ? 1 : -1;
-        return ( db[1] > da[1] ) ? 1 : -1;
+      const da = a.$subtract(center);
+      const db = b.$subtract(center);
+
+      if (da[0] >= 0 && db[0] < 0) return 1;
+      if (da[0] < 0 && db[0] >= 0) return -1;
+      if (da[0] == 0 && db[0] == 0) {
+        if (da[1] >= 0 || db[1] >= 0) return da[1] > db[1] ? 1 : -1;
+        return db[1] > da[1] ? 1 : -1;
       }
 
       // compute the cross product of vectors (center -> a) x (center -> b)
-      const det = da.$cross2D( db );
-      if ( det < 0 ) return 1;
-      if ( det > 0 ) return -1;
-      
+      const det = da.$cross2D(db);
+      if (det < 0) return 1;
+      if (det > 0) return -1;
+
       // points a and b are on the same line from the center
       // check which point is closer to the center
-      return ( da[0] * da[0] + da[1] * da[1] > db[0] * db[0] + db[1] * db[1] ) ? 1 : -1;
+      return da[0] * da[0] + da[1] * da[1] > db[0] * db[0] + db[1] * db[1]
+        ? 1
+        : -1;
     };
 
-    return _pts.sort( fn );
+    return _pts.sort(fn);
   }
-
 
   /**
    * Scale a Pt or a Group of Pts. You may also use [`Pt.scale`](#link) instance method.
@@ -386,21 +379,30 @@ export class Geom {
    * @param scale scale value
    * @param anchor optional anchor point to scale from
    */
-  static scale( ps:Pt | PtIterable, scale:number | PtLike, anchor?:PtLike ):Geom {
-    const pts = Util.iterToArray( ( ps[0] !== undefined && typeof ps[0] == 'number' ) ? [ps] : ps );
-    const scs = ( typeof scale == "number" ) ? Pt.make( pts[0].length, scale ) : scale;
-    if ( !anchor ) anchor = Pt.make( pts[0].length, 0 );
+  static scale(
+    ps: Pt | PtIterable,
+    scale: number | PtLike,
+    anchor?: PtLike,
+  ): Geom {
+    const pts = Util.iterToArray(
+      ps[0] !== undefined && typeof ps[0] == "number" ? [ps] : ps,
+    );
+    const scs =
+      typeof scale == "number" ? Pt.make(pts[0].length, scale) : scale;
+    if (!anchor) anchor = Pt.make(pts[0].length, 0);
 
-    for ( let i = 0, len = pts.length; i < len; i++ ) {
+    for (let i = 0, len = pts.length; i < len; i++) {
       const p = pts[i];
-      for ( let k = 0, lenP = p.length; k < lenP; k++ ) {
-        p[k] = ( anchor && anchor[k] ) ? anchor[k] + ( p[k] - anchor[k] ) * scs[k] : p[k] * scs[k];
+      for (let k = 0, lenP = p.length; k < lenP; k++) {
+        p[k] =
+          anchor && anchor[k]
+            ? anchor[k] + (p[k] - anchor[k]) * scs[k]
+            : p[k] * scs[k];
       }
     }
 
     return Geom;
   }
-
 
   /**
    * Rotate a Pt or a Group of Pts in 2D space. You may also use [`Pt.rotate2D`](#link) instance method.
@@ -409,18 +411,25 @@ export class Geom {
    * @param anchor optional anchor point to rotate from
    * @param axis optional axis such as "xy" (use Const.xy) to define a 2D plane, or a number array to specify indices
    */
-  static rotate2D( ps:Pt | PtIterable, angle:number, anchor?:PtLike, axis?:string | PtLike ):Geom {
-    const pts = Util.iterToArray( ( ps[0] !== undefined && typeof ps[0] == 'number' ) ? [ps] : ps );
-    const fn = ( anchor ) ? Mat.rotateAt2DMatrix : Mat.rotate2DMatrix;
-    if ( !anchor ) anchor = Pt.make( pts[0].length, 0 );
-    const cos = Math.cos( angle );
-    const sin = Math.sin( angle );
+  static rotate2D(
+    ps: Pt | PtIterable,
+    angle: number,
+    anchor?: PtLike,
+    axis?: string | PtLike,
+  ): Geom {
+    const pts = Util.iterToArray(
+      ps[0] !== undefined && typeof ps[0] == "number" ? [ps] : ps,
+    );
+    const fn = anchor ? Mat.rotateAt2DMatrix : Mat.rotate2DMatrix;
+    if (!anchor) anchor = Pt.make(pts[0].length, 0);
+    const cos = Math.cos(angle);
+    const sin = Math.sin(angle);
 
-    for ( let i = 0, len = pts.length; i < len; i++ ) {
-      const p = ( axis ) ? pts[i].$take( axis ) : pts[i];
-      p.to( Mat.transform2D( p, fn( cos, sin, anchor ) ) );
-      if ( axis ) {
-        for ( let k = 0; k < axis.length; k++ ) {
+    for (let i = 0, len = pts.length; i < len; i++) {
+      const p = axis ? pts[i].$take(axis) : pts[i];
+      p.to(Mat.transform2D(p, fn(cos, sin, anchor)));
+      if (axis) {
+        for (let k = 0; k < axis.length; k++) {
           pts[i][axis[k]] = p[k];
         }
       }
@@ -428,7 +437,6 @@ export class Geom {
 
     return Geom;
   }
-
 
   /**
    * Shear a Pt or a Group of Pts in 2D space. You may also use [`Pt.shear2D`](#link) instance method.
@@ -437,19 +445,26 @@ export class Geom {
    * @param anchor optional anchor point to shear from
    * @param axis optional axis such as "xy" (use Const.xy) to define a 2D plane, or a number array to specify indices
    */
-  static shear2D( ps:Pt | PtIterable, scale:number | PtLike, anchor?:PtLike, axis?:string | PtLike ):Geom {
-    const pts = Util.iterToArray( ( ps[0] !== undefined && typeof ps[0] == 'number' ) ? [ps] : ps );
-    const s = ( typeof scale == "number" ) ? [scale, scale] : scale;
-    if ( !anchor ) anchor = Pt.make( pts[0].length, 0 );
-    const fn = ( anchor ) ? Mat.shearAt2DMatrix : Mat.shear2DMatrix;
-    const tanx = Math.tan( s[0] );
-    const tany = Math.tan( s[1] );
+  static shear2D(
+    ps: Pt | PtIterable,
+    scale: number | PtLike,
+    anchor?: PtLike,
+    axis?: string | PtLike,
+  ): Geom {
+    const pts = Util.iterToArray(
+      ps[0] !== undefined && typeof ps[0] == "number" ? [ps] : ps,
+    );
+    const s = typeof scale == "number" ? [scale, scale] : scale;
+    if (!anchor) anchor = Pt.make(pts[0].length, 0);
+    const fn = anchor ? Mat.shearAt2DMatrix : Mat.shear2DMatrix;
+    const tanx = Math.tan(s[0]);
+    const tany = Math.tan(s[1]);
 
-    for ( let i = 0, len = pts.length; i < len; i++ ) {
-      const p = ( axis ) ? pts[i].$take( axis ) : pts[i];
-      p.to( Mat.transform2D( p, fn( tanx, tany, anchor ) ) );
-      if ( axis ) {
-        for ( let k = 0; k < axis.length; k++ ) {
+    for (let i = 0, len = pts.length; i < len; i++) {
+      const p = axis ? pts[i].$take(axis) : pts[i];
+      p.to(Mat.transform2D(p, fn(tanx, tany, anchor)));
+      if (axis) {
+        for (let k = 0; k < axis.length; k++) {
           pts[i][axis[k]] = p[k];
         }
       }
@@ -457,7 +472,6 @@ export class Geom {
 
     return Geom;
   }
-
 
   /**
    * Reflect a Pt or a Group of Pts along a 2D line. You may also use [`Pt.reflect2D`](#link) instance method.
@@ -465,16 +479,22 @@ export class Geom {
    * @param line a Group or an Iterable<PtLike> that defines a line for reflection
    * @param axis optional axis such as "xy" (use Const.xy) to define a 2D plane, or a number array to specify indices
    */
-  static reflect2D( ps:Pt | PtIterable, line:PtLikeIterable, axis?:string | PtLike ):Geom {
-    const pts = Util.iterToArray( ( ps[0] !== undefined && typeof ps[0] == 'number' ) ? [ps] : ps );
-    const _line = Util.iterToArray( line );
-    const mat = Mat.reflectAt2DMatrix( _line[0], _line[1] );
+  static reflect2D(
+    ps: Pt | PtIterable,
+    line: PtLikeIterable,
+    axis?: string | PtLike,
+  ): Geom {
+    const pts = Util.iterToArray(
+      ps[0] !== undefined && typeof ps[0] == "number" ? [ps] : ps,
+    );
+    const _line = Util.iterToArray(line);
+    const mat = Mat.reflectAt2DMatrix(_line[0], _line[1]);
 
-    for ( let i = 0, len = pts.length; i < len; i++ ) {
-      const p = ( axis ) ? pts[i].$take( axis ) : pts[i];
-      p.to( Mat.transform2D( p, mat ) );
-      if ( axis ) {
-        for ( let k = 0; k < axis.length; k++ ) {
+    for (let i = 0, len = pts.length; i < len; i++) {
+      const p = axis ? pts[i].$take(axis) : pts[i];
+      p.to(Mat.transform2D(p, mat));
+      if (axis) {
+        for (let k = 0; k < axis.length; k++) {
           pts[i][axis[k]] = p[k];
         }
       }
@@ -483,375 +503,406 @@ export class Geom {
     return Geom;
   }
 
-
   /**
    * Generate a cosine lookup table.
-   * @returns an object with a cosine tables (array of 360 values) and a function to get cosine given a radian input. 
+   * @returns an object with a cosine tables (array of 360 values) and a function to get cosine given a radian input.
    */
   static cosTable() {
-    const cos = new Float64Array( 360 );
+    const cos = new Float64Array(360);
 
-    for ( let i = 0; i < 360; i++ ) cos[i] = Math.cos( i * Math.PI / 180 );
-    const find = ( rad:number ) => cos[Math.floor( Geom.boundAngle( Geom.toDegree( rad ) ) )];
+    for (let i = 0; i < 360; i++) cos[i] = Math.cos((i * Math.PI) / 180);
+    const find = (rad: number) =>
+      cos[Math.floor(Geom.boundAngle(Geom.toDegree(rad)))];
 
     return { table: cos, cos: find };
   }
 
   /**
    * Generate a sine lookup table.
-   * @returns an object with a sine tables (array of 360 values) and a function to get sine value given a radian input. 
+   * @returns an object with a sine tables (array of 360 values) and a function to get sine value given a radian input.
    */
   static sinTable() {
-    const sin = new Float64Array( 360 );
+    const sin = new Float64Array(360);
 
-    for ( let i = 0; i < 360; i++ ) sin[i] = Math.sin( i * Math.PI / 180 );
-    const find = ( rad:number ) => sin[Math.floor( Geom.boundAngle( Geom.toDegree( rad ) ) )];
+    for (let i = 0; i < 360; i++) sin[i] = Math.sin((i * Math.PI) / 180);
+    const find = (rad: number) =>
+      sin[Math.floor(Geom.boundAngle(Geom.toDegree(rad)))];
 
     return { table: sin, sin: find };
   }
 }
 
-
-
 /**
  * Shaping provides shaping functions to interpolate a value. These are useful for easing and transitions.
  */
 export class Shaping {
-
   /**
    * Linear mapping.
    * @param t a value between 0 to 1
    * @param c the value to shape, default is 1
    */
-  static linear( t:number, c:number = 1 ):number {
+  static linear(t: number, c: number = 1): number {
     return c * t;
   }
 
-  /** 
+  /**
    * Quadratic in, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
    * @param t a value between 0 to 1
    * @param c the value to shape, default is 1
-  */
-  static quadraticIn( t:number, c:number = 1 ):number {
+   */
+  static quadraticIn(t: number, c: number = 1): number {
     return c * t * t;
   }
 
-  /** 
+  /**
    * Quadratic out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
    * @param t a value between 0 to 1
    * @param c the value to shape, default is 1
-  */
-  static quadraticOut( t:number, c:number = 1 ):number {
-    return -c * t * ( t - 2 );
+   */
+  static quadraticOut(t: number, c: number = 1): number {
+    return -c * t * (t - 2);
   }
 
-  /** 
+  /**
    * Quadratic in-out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
    * @param t a value between 0 to 1
    * @param c the value to shape, default is 1
    */
-  static quadraticInOut( t:number, c:number = 1 ):number {
+  static quadraticInOut(t: number, c: number = 1): number {
     const dt = t * 2;
-    return ( t < 0.5 ) ? c / 2 * t * t * 4 : -c / 2 * ( ( dt - 1 ) * ( dt - 3 ) - 1 );
+    return t < 0.5 ? (c / 2) * t * t * 4 : (-c / 2) * ((dt - 1) * (dt - 3) - 1);
   }
 
-  /** 
+  /**
    * Cubic in, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
    * @param t a value between 0 to 1
    * @param c the value to shape, default is 1
    */
-  static cubicIn( t:number, c:number = 1 ):number {
+  static cubicIn(t: number, c: number = 1): number {
     return c * t * t * t;
   }
 
-  /** 
+  /**
    * Cubic out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
    * @param t a value between 0 to 1
    * @param c the value to shape, default is 1
    */
-  static cubicOut( t:number, c:number = 1 ):number {
+  static cubicOut(t: number, c: number = 1): number {
     const dt = t - 1;
-    return c * ( dt * dt * dt + 1 );
+    return c * (dt * dt * dt + 1);
   }
 
-  /** 
+  /**
    * Cubic in-out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
    * @param t a value between 0 to 1
    * @param c the value to shape, default is 1
    */
-  static cubicInOut( t:number, c:number = 1 ):number {
+  static cubicInOut(t: number, c: number = 1): number {
     const dt = t * 2;
-    return ( t < 0.5 ) ? c / 2 * dt * dt * dt : c / 2 * ( ( dt - 2 ) * ( dt - 2 ) * ( dt - 2 ) + 2 );
+    return t < 0.5
+      ? (c / 2) * dt * dt * dt
+      : (c / 2) * ((dt - 2) * (dt - 2) * (dt - 2) + 2);
   }
 
-  /** 
+  /**
    * Exponential ease in, adapted from Golan Levin's [polynomial shapers](http://www.flong.com/texts/code/shapers_poly/).
    * @param t a value between 0 to 1
    * @param c the value to shape, default is 1
    * @param p a value between 0 to 1 to control the curve. Default is 0.25.
    */
-  static exponentialIn( t:number, c:number = 1, p:number = 0.25 ):number {
-    return c * Math.pow( t, 1 / p );
+  static exponentialIn(t: number, c: number = 1, p: number = 0.25): number {
+    return c * Math.pow(t, 1 / p);
   }
 
-  /** 
+  /**
    * Exponential ease out, adapted from Golan Levin's [polynomial shapers](http://www.flong.com/texts/code/shapers_poly/).
    * @param t a value between 0 to 1
    * @param c the value to shape, default is 1
    * @param p a value between 0 to 1 to control the curve. Default is 0.25.
    */
-  static exponentialOut( t:number, c:number = 1, p:number = 0.25 ):number {
-    return c * Math.pow( t, p );
+  static exponentialOut(t: number, c: number = 1, p: number = 0.25): number {
+    return c * Math.pow(t, p);
   }
 
-  /** 
+  /**
    * Sinuous in, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
    * @param t a value between 0 to 1
    * @param c the value to shape, default is 1
    */
-  static sineIn( t:number, c:number = 1 ):number {
-    return -c * Math.cos( t * Const.half_pi ) + c;
+  static sineIn(t: number, c: number = 1): number {
+    return -c * Math.cos(t * Const.half_pi) + c;
   }
 
-  /** 
+  /**
    * Sinuous out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
    * @param t a value between 0 to 1
    * @param c the value to shape, default is 1
    */
-  static sineOut( t:number, c:number = 1 ):number {
-    return c * Math.sin( t * Const.half_pi );
+  static sineOut(t: number, c: number = 1): number {
+    return c * Math.sin(t * Const.half_pi);
   }
 
-  /** 
+  /**
    * Sinuous in-out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
    * @param t a value between 0 to 1
    * @param c the value to shape, default is 1
    */
-  static sineInOut( t:number, c:number = 1 ):number {
-    return -c / 2 * ( Math.cos( Math.PI * t ) - 1 );
+  static sineInOut(t: number, c: number = 1): number {
+    return (-c / 2) * (Math.cos(Math.PI * t) - 1);
   }
 
-  /** 
+  /**
    * A faster way to approximate cosine ease in-out using Blinn-Wyvill Approximation. Adapated from Golan Levin's [polynomial shaping](http://www.flong.com/texts/code/shapers_poly/).
    * @param t a value between 0 to 1
    * @param c the value to shape, default is 1
    */
-  static cosineApprox( t:number, c:number = 1 ) {
+  static cosineApprox(t: number, c: number = 1) {
     const t2 = t * t;
     const t4 = t2 * t2;
     const t6 = t4 * t2;
-    return c * ( 4 * t6 / 9 - 17 * t4 / 9 + 22 * t2 / 9 );
+    return c * ((4 * t6) / 9 - (17 * t4) / 9 + (22 * t2) / 9);
   }
 
-  /** 
+  /**
    * Circular in, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
    * @param t a value between 0 to 1
    * @param c the value to shape, default is 1
    */
-  static circularIn( t:number, c:number = 1 ):number {
-    return -c * ( Math.sqrt( 1 - t * t ) - 1 );
+  static circularIn(t: number, c: number = 1): number {
+    return -c * (Math.sqrt(1 - t * t) - 1);
   }
 
-  /** 
+  /**
    * Circular out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
    * @param t a value between 0 to 1
    * @param c the value to shape, default is 1
    */
-  static circularOut( t:number, c:number = 1 ):number {
+  static circularOut(t: number, c: number = 1): number {
     const dt = t - 1;
-    return c * Math.sqrt( 1 - dt * dt );
+    return c * Math.sqrt(1 - dt * dt);
   }
 
-  /** 
+  /**
    * Circular in-out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
    * @param t a value between 0 to 1
    * @param c the value to shape, default is 1
    */
-  static circularInOut( t:number, c:number = 1 ):number {
+  static circularInOut(t: number, c: number = 1): number {
     const dt = t * 2;
-    return ( t < 0.5 ) ? -c / 2 * ( Math.sqrt( 1 - dt * dt ) - 1 ) : c / 2 * ( Math.sqrt( 1 - ( dt - 2 ) * ( dt - 2 ) ) + 1 );
+    return t < 0.5
+      ? (-c / 2) * (Math.sqrt(1 - dt * dt) - 1)
+      : (c / 2) * (Math.sqrt(1 - (dt - 2) * (dt - 2)) + 1);
   }
 
-  /** 
+  /**
    * Elastic in, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
    * @param t a value between 0 to 1
    * @param c the value to shape, default is 1
    * @param p elastic parmeter between 0 to 1. The lower the number, the more elastic it will be. Default is 0.7.
    */
-  static elasticIn( t:number, c:number = 1, p:number = 0.7 ):number {
+  static elasticIn(t: number, c: number = 1, p: number = 0.7): number {
     const dt = t - 1;
-    const s = ( p / Const.two_pi ) * 1.5707963267948966;
-    return c * ( -Math.pow( 2, 10 * dt ) * Math.sin( ( dt - s ) * Const.two_pi / p ) );
+    const s = (p / Const.two_pi) * 1.5707963267948966;
+    return (
+      c * (-Math.pow(2, 10 * dt) * Math.sin(((dt - s) * Const.two_pi) / p))
+    );
   }
 
-  /** 
+  /**
    * Elastic out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
    * @param t a value between 0 to 1
    * @param c the value to shape, default is 1
    * @param p elastic parmeter between 0 to 1. The lower the number, the more elastic it will be. Default is 0.7.
    */
-  static elasticOut( t:number, c:number = 1, p:number = 0.7 ):number {
-    const s = ( p / Const.two_pi ) * 1.5707963267948966;
-    return c * ( Math.pow( 2, -10 * t ) * Math.sin( ( t - s ) * Const.two_pi / p ) ) + c;
+  static elasticOut(t: number, c: number = 1, p: number = 0.7): number {
+    const s = (p / Const.two_pi) * 1.5707963267948966;
+    return (
+      c * (Math.pow(2, -10 * t) * Math.sin(((t - s) * Const.two_pi) / p)) + c
+    );
   }
 
-  /** 
+  /**
    * Elastic in-out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
    * @param t a value between 0 to 1
    * @param c the value to shape, default is 1
    * @param p elastic parmeter between 0 to 1. The lower the number, the more elastic it will be. Default is 0.6.
    */
-  static elasticInOut( t:number, c:number = 1, p:number = 0.6 ):number {
+  static elasticInOut(t: number, c: number = 1, p: number = 0.6): number {
     let dt = t * 2;
-    const s = ( p / Const.two_pi ) * 1.5707963267948966;
-    if ( t < 0.5 ) {
+    const s = (p / Const.two_pi) * 1.5707963267948966;
+    if (t < 0.5) {
       dt -= 1;
-      return c * ( -0.5 * ( Math.pow( 2, 10 * dt ) * Math.sin( ( dt - s ) * Const.two_pi / p ) ) );
+      return (
+        c *
+        (-0.5 *
+          (Math.pow(2, 10 * dt) * Math.sin(((dt - s) * Const.two_pi) / p)))
+      );
     } else {
       dt -= 1;
-      return c * ( 0.5 * ( Math.pow( 2, -10 * dt ) * Math.sin( ( dt - s ) * Const.two_pi / p ) ) ) + c;
+      return (
+        c *
+          (0.5 *
+            (Math.pow(2, -10 * dt) * Math.sin(((dt - s) * Const.two_pi) / p))) +
+        c
+      );
     }
   }
 
-  /** 
+  /**
    * Bounce in, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
    * @param t a value between 0 to 1
    * @param c the value to shape, default is 1
    */
-  static bounceIn( t:number, c:number = 1 ):number {
-    return c - Shaping.bounceOut( ( 1 - t ), c );
+  static bounceIn(t: number, c: number = 1): number {
+    return c - Shaping.bounceOut(1 - t, c);
   }
 
-  /** 
+  /**
    * Bounce out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
    * @param t a value between 0 to 1
    * @param c the value to shape, default is 1
    */
-  static bounceOut( t:number, c:number = 1 ) {
-    if ( t < ( 1 / 2.75 ) ) {
-      return c * ( 7.5625 * t * t );
-    } else if ( t < ( 2 / 2.75 ) ) {
+  static bounceOut(t: number, c: number = 1) {
+    if (t < 1 / 2.75) {
+      return c * (7.5625 * t * t);
+    } else if (t < 2 / 2.75) {
       t -= 1.5 / 2.75;
-      return c * ( 7.5625 * t * t + 0.75 );
-    } else if ( t < ( 2.5 / 2.75 ) ) {
+      return c * (7.5625 * t * t + 0.75);
+    } else if (t < 2.5 / 2.75) {
       t -= 2.25 / 2.75;
-      return c * ( 7.5625 * t * t + 0.9375 );
+      return c * (7.5625 * t * t + 0.9375);
     } else {
       t -= 2.625 / 2.75;
-      return c * ( 7.5625 * t * t + 0.984375 );
+      return c * (7.5625 * t * t + 0.984375);
     }
   }
 
-  /** 
+  /**
    * Bounce in-out, adapted from Robert Penner's [easing functions](http://robertpenner.com/easing/).
    * @param t a value between 0 to 1
    * @param c the value to shape, default is 1
    */
-  static bounceInOut( t:number, c:number = 1 ):number {
-    return ( t < 0.5 ) ? Shaping.bounceIn( t * 2, c ) / 2 : Shaping.bounceOut( t * 2 - 1, c ) / 2 + c / 2;
+  static bounceInOut(t: number, c: number = 1): number {
+    return t < 0.5
+      ? Shaping.bounceIn(t * 2, c) / 2
+      : Shaping.bounceOut(t * 2 - 1, c) / 2 + c / 2;
   }
 
-  /** 
+  /**
    * Sigmoid curve changes its shape adapted from the input value, but always returns a value between 0 to 1.
    * @param t a value between 0 to 1
    * @param c the value to shape, default is 1
    * @param p the larger the value, the "steeper" the curve will be. Default is 10.
    */
-  static sigmoid( t:number, c:number = 1, p:number = 10 ):number {
-    const d = p * ( t - 0.5 );
-    return c / ( 1 + Math.exp( -d ) );
+  static sigmoid(t: number, c: number = 1, p: number = 10): number {
+    const d = p * (t - 0.5);
+    return c / (1 + Math.exp(-d));
   }
 
-  /** 
+  /**
    * Logistic sigmoid, adapted from Golan Levin's [shaping function](http://www.flong.com/texts/code/shapers_exp/).
    * @param t a value between 0 to 1
    * @param c the value to shape, default is 1
    * @param p a parameter between 0 to 1 to control the steepness of the curve. Higher is steeper. Default is 0.7.
    */
-  static logSigmoid( t:number, c:number = 1, p:number = 0.7 ):number {
-    p = Math.max( Const.epsilon, Math.min( 1 - Const.epsilon, p ) );
-    p = 1 / ( 1 - p );
+  static logSigmoid(t: number, c: number = 1, p: number = 0.7): number {
+    p = Math.max(Const.epsilon, Math.min(1 - Const.epsilon, p));
+    p = 1 / (1 - p);
 
-    const A = 1 / ( 1 + Math.exp( ( ( t - 0.5 ) * p * -2 ) ) );
-    const B = 1 / ( 1 + Math.exp( p ) );
-    const C = 1 / ( 1 + Math.exp( -p ) );
-    return c * ( A - B ) / ( C - B );
+    const A = 1 / (1 + Math.exp((t - 0.5) * p * -2));
+    const B = 1 / (1 + Math.exp(p));
+    const C = 1 / (1 + Math.exp(-p));
+    return (c * (A - B)) / (C - B);
   }
 
-
-  /** 
+  /**
    * Exponential seat curve, adapted from Golan Levin's [shaping functions](http://www.flong.com/texts/code/shapers_exp/).
    * @param t a value between 0 to 1
    * @param c the value to shape, default is 1
    * @param p a parameter between 0 to 1 to control the steepness of the curve. Higher is steeper. Default is 0.5.
    */
-  static seat( t:number, c:number = 1, p:number = 0.5 ):number {
-    if ( ( t < 0.5 ) ) {
-      return c * ( Math.pow( 2 * t, 1 - p ) ) / 2;
+  static seat(t: number, c: number = 1, p: number = 0.5): number {
+    if (t < 0.5) {
+      return (c * Math.pow(2 * t, 1 - p)) / 2;
     } else {
-      return c * ( 1 - ( Math.pow( 2 * ( 1 - t ), 1 - p ) ) / 2 );
+      return c * (1 - Math.pow(2 * (1 - t), 1 - p) / 2);
     }
   }
 
-
-  /** 
+  /**
    * Quadratic bezier curve, adapted from Golan Levin's [shaping functions](http://www.flong.com/texts/code/shapers_exp/).
    * @param t a value between 0 to 1
    * @param c the value to shape, default is 1
    * @param p1 a Pt object specifying the first control Pt, or a value specifying the control Pt's x position (its y position will default to 0.5). Default is `Pt(0.95, 0.95)
    */
-  static quadraticBezier( t:number, c:number = 1, p:number | PtLike = [0.05, 0.95] ):number {
-    const a:number = ( typeof p != "number" ) ? p[0] : p;
-    const b:number = ( typeof p != "number" ) ? p[1] : 0.5;
+  static quadraticBezier(
+    t: number,
+    c: number = 1,
+    p: number | PtLike = [0.05, 0.95],
+  ): number {
+    const a: number = typeof p != "number" ? p[0] : p;
+    const b: number = typeof p != "number" ? p[1] : 0.5;
     let om2a = 1 - 2 * a;
-    if ( om2a === 0 ) {
+    if (om2a === 0) {
       om2a = Const.epsilon;
     }
-    const d = ( Math.sqrt( a * a + om2a * t ) - a ) / om2a;
-    return c * ( ( 1 - 2 * b ) * ( d * d ) + ( 2 * b ) * d );
+    const d = (Math.sqrt(a * a + om2a * t) - a) / om2a;
+    return c * ((1 - 2 * b) * (d * d) + 2 * b * d);
   }
 
-
-  /** 
+  /**
    * Cubic bezier curve. This reuses the bezier functions in Curve class.
    * @param t a value between 0 to 1
    * @param c the value to shape, default is 1
    * @param p1` a Pt object specifying the first control Pt. Default is `Pt(0.1, 0.7).
    * @param p2` a Pt object specifying the second control Pt. Default is `Pt(0.9, 0.2).
    */
-  static cubicBezier( t:number, c:number = 1, p1:PtLike = [0.1, 0.7], p2:PtLike = [0.9, 0.2] ):number {
-    const curve = new Group( new Pt( 0, 0 ), new Pt( p1 ), new Pt( p2 ), new Pt( 1, 1 ) );
-    return c * Curve.bezierStep( new Pt( t * t * t, t * t, t, 1 ), Curve.controlPoints( curve ) ).y;
+  static cubicBezier(
+    t: number,
+    c: number = 1,
+    p1: PtLike = [0.1, 0.7],
+    p2: PtLike = [0.9, 0.2],
+  ): number {
+    const curve = new Group(new Pt(0, 0), new Pt(p1), new Pt(p2), new Pt(1, 1));
+    return (
+      c *
+      Curve.bezierStep(
+        new Pt(t * t * t, t * t, t, 1),
+        Curve.controlPoints(curve),
+      ).y
+    );
   }
 
-
-  /** 
+  /**
    * Give a Pt, draw a quadratic curve that will pass through that Pt as closely as possible. Adapted from Golan Levin's [shaping functions](http://www.flong.com/texts/code/shapers_poly/).
    * @param t a value between 0 to 1
    * @param c the value to shape, default is 1
    * @param p1` a Pt object specifying the Pt to pass through. Default is `Pt(0.2, 0.35)
    */
-  static quadraticTarget( t:number, c:number = 1, p1:PtLike = [0.2, 0.35] ):number {
-    const a = Math.min( 1 - Const.epsilon, Math.max( Const.epsilon, p1[0] ) );
-    const b = Math.min( 1, Math.max( 0, p1[1] ) );
-    const A = ( 1 - b ) / ( 1 - a ) - ( b / a );
-    const B = ( A * ( a * a ) - b ) / a;
-    const y = A * ( t * t ) - B * t;
-    return c * Math.min( 1, Math.max( 0, y ) );
+  static quadraticTarget(
+    t: number,
+    c: number = 1,
+    p1: PtLike = [0.2, 0.35],
+  ): number {
+    const a = Math.min(1 - Const.epsilon, Math.max(Const.epsilon, p1[0]));
+    const b = Math.min(1, Math.max(0, p1[1]));
+    const A = (1 - b) / (1 - a) - b / a;
+    const B = (A * (a * a) - b) / a;
+    const y = A * (t * t) - B * t;
+    return c * Math.min(1, Math.max(0, y));
   }
 
-
-  /** 
+  /**
    * Step function is a simple jump from 0 to 1 at a specific Pt in time.
    * @param t a value between 0 to 1
    * @param c the value to shape, default is 1
    * @param p usually a value between 0 to 1, which specify the Pt to "jump". Default is 0.5 which is in the middle.
    */
-  static cliff( t:number, c:number = 1, p:number = 0.5 ):number {
-    return ( t > p ) ? c : 0;
+  static cliff(t: number, c: number = 1, p: number = 0.5): number {
+    return t > p ? c : 0;
   }
 
-  /** 
+  /**
    * Convert any shaping functions into a series of steps.
    * @param fn the original shaping function
    * @param steps the number of steps
@@ -859,73 +910,80 @@ export class Shaping {
    * @param c the value to shape, default is 1
    * @param args optional paramters to pass to original function
    */
-  static step( fn: Function, steps:number, t:number, c:number, ...args:any[] ) {
+  static step(
+    fn: Function,
+    steps: number,
+    t: number,
+    c: number,
+    ...args: any[]
+  ) {
     const s = 1 / steps;
-    const tt = Math.floor( t / s ) * s;
-    return fn( tt, c, ...args );
+    const tt = Math.floor(t / s) * s;
+    return fn(tt, c, ...args);
   }
-
 }
 
-
 /**
- * Range object keeps track of a Group of n-dimensional Pts to provide its minimum, maximum, and magnitude in each dimension. 
+ * Range object keeps track of a Group of n-dimensional Pts to provide its minimum, maximum, and magnitude in each dimension.
  * It also provides convenient functions such as mapping the Group to another range. This class may be useful for visualizing data in charts.
  */
 export class Range {
-
-  protected _source:Group;
-  protected _max:Pt;
-  protected _min:Pt;
-  protected _mag:Pt;
-  protected _dims:number = 0;
-
+  protected _source: Group;
+  protected _max: Pt;
+  protected _min: Pt;
+  protected _mag: Pt;
+  protected _dims: number = 0;
 
   /**
    * Construct a Range instance for a Group of Pts.
    * @param g a Group or an Iterable<Pt>
    */
-  constructor( g:PtIterable ) {
-    this._source = Group.fromPtArray( g );
+  constructor(g: PtIterable) {
+    this._source = Group.fromPtArray(g);
     this.calc();
   }
 
   /**
    * Get this Range's maximum values per dimension.
    */
-  get max():Pt { return this._max.clone(); }
-  
+  get max(): Pt {
+    return this._max.clone();
+  }
+
   /**
    * Get this Range's minimum values per dimension.
    */
-  get min():Pt { return this._min.clone(); }
-  
+  get min(): Pt {
+    return this._min.clone();
+  }
+
   /**
    * Get this Range's magnitude in each dimension.
    */
-  get magnitude():Pt { return this._mag.clone(); }
-
+  get magnitude(): Pt {
+    return this._mag.clone();
+  }
 
   /**
    * Go through the group and find its min and max values. Usually you don't need to call this function directly.
    */
-  calc():this {
-    if ( !this._source ) return;
+  calc(): this {
+    if (!this._source) return;
     const dims = this._source[0].length;
     this._dims = dims;
-    const max = new Pt( dims );
-    const min = new Pt( dims );
-    const mag = new Pt( dims );
+    const max = new Pt(dims);
+    const min = new Pt(dims);
+    const mag = new Pt(dims);
 
-    for ( let i = 0; i < dims; i++ ) {
+    for (let i = 0; i < dims; i++) {
       max[i] = Const.min;
       min[i] = Const.max;
       mag[i] = 0;
 
-      const s = this._source.zipSlice( i );
-      for ( let k = 0, len = s.length; k < len; k++ ) {
-        max[i] = Math.max( max[i], s[k] );
-        min[i] = Math.min( min[i], s[k] );
+      const s = this._source.zipSlice(i);
+      for (let k = 0, len = s.length; k < len; k++) {
+        max[i] = Math.max(max[i], s[k]);
+        min[i] = Math.min(min[i], s[k]);
         mag[i] = max[i] - min[i];
       }
     }
@@ -936,55 +994,57 @@ export class Range {
     return this;
   }
 
-
   /**
    * Map this Range to another range of values.
    * @param min target range's minimum value
    * @param max target range's maximum value
    * @param exclude Optional boolean array where `true` means excluding the conversion in that specific dimension.
    */
-  mapTo( min:number, max:number, exclude?:boolean[] ):Group {
+  mapTo(min: number, max: number, exclude?: boolean[]): Group {
     const target = new Group();
-    for ( let i = 0, len = this._source.length; i < len; i++ ) {
+    for (let i = 0, len = this._source.length; i < len; i++) {
       const g = this._source[i];
-      const n = new Pt( this._dims );
-      for ( let k = 0; k < this._dims; k++ ) {
-        n[k] = ( exclude && exclude[k] ) ? g[k] : Num.mapToRange( g[k], this._min[k], this._max[k], min, max ); 
+      const n = new Pt(this._dims);
+      for (let k = 0; k < this._dims; k++) {
+        n[k] =
+          exclude && exclude[k]
+            ? g[k]
+            : Num.mapToRange(g[k], this._min[k], this._max[k], min, max);
       }
-      target.push( n ); 
+      target.push(n);
     }
     return target;
   }
-
 
   /**
    * Add more Pts to this Range and recalculate its min and max values.
    * @param pts a Group or an Iterable<PtLike> to append to this Range
    * @param update Optional. Set the parameter to `false` if you want to append without immediately updating this Range's min and max values. Default is `true`.
    */
-  append( pts:PtLikeIterable, update:boolean = true ):this {
-    const _pts = Util.iterToArray( pts );
-    if ( _pts[0].length !== this._dims ) throw new Error( `Dimensions don't match. ${this._dims} dimensions in Range and ${_pts[0].length} provided in parameter. ` );
-    this._source = this._source.concat( _pts ) as Group;
-    if ( update ) this.calc();
+  append(pts: PtLikeIterable, update: boolean = true): this {
+    const _pts = Util.iterToArray(pts);
+    if (_pts[0].length !== this._dims)
+      throw new Error(
+        `Dimensions don't match. ${this._dims} dimensions in Range and ${_pts[0].length} provided in parameter. `,
+      );
+    this._source = this._source.concat(_pts) as Group;
+    if (update) this.calc();
     return this;
   }
-
 
   /**
    * Create a number of evenly spaced "ticks" that span this Range's min and max value.
    * @param count number of subdivision. For example, 10 subdivision will return 11 tick values, which include first(min) and last(max) values.
    */
-  ticks( count:number ):Group {
+  ticks(count: number): Group {
     const g = new Group();
-    for ( let i = 0; i <= count; i++ ) {
-      const p = new Pt( this._dims );
-      for ( let k = 0, len = this._max.length; k < len; k++ ) {
-        p[k] = Num.lerp( this._min[k], this._max[k], i / count );
+    for (let i = 0; i <= count; i++) {
+      const p = new Pt(this._dims);
+      for (let k = 0, len = this._max.length; k < len; k++) {
+        p[k] = Num.lerp(this._min[k], this._max[k], i / count);
       }
-      g.push( p );
+      g.push(p);
     }
     return g;
   }
-
 }

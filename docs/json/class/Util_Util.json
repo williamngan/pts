@@ -3,7 +3,7 @@
   "source": [
     [
       "src/Util.ts",
-      105,
+      100,
       13
     ]
   ],
@@ -18,7 +18,7 @@
       "source": [
         [
           "src/Util.ts",
-          367,
+          378,
           9
         ]
       ],
@@ -56,7 +56,7 @@
       "source": [
         [
           "src/Util.ts",
-          232,
+          224,
           9
         ]
       ],
@@ -100,7 +100,7 @@
       "source": [
         [
           "src/Util.ts",
-          329,
+          332,
           9
         ]
       ],
@@ -126,7 +126,7 @@
               "name": "filename",
               "comment": "the name of the file, without the extension name.",
               "type": "string",
-              "default": "'pts_canvas_image'"
+              "default": "\"pts_canvas_image\""
             },
             {
               "name": "filetype",
@@ -150,7 +150,7 @@
       "source": [
         [
           "src/Util.ts",
-          220,
+          213,
           9
         ]
       ],
@@ -188,7 +188,7 @@
       "source": [
         [
           "src/Util.ts",
-          288,
+          282,
           9
         ]
       ],
@@ -238,7 +238,7 @@
       "source": [
         [
           "src/Util.ts",
-          126,
+          118,
           9
         ]
       ],
@@ -270,7 +270,7 @@
       "source": [
         [
           "src/Util.ts",
-          388,
+          397,
           9
         ]
       ],
@@ -295,7 +295,7 @@
       "source": [
         [
           "src/Util.ts",
-          380,
+          390,
           9
         ]
       ],
@@ -327,7 +327,7 @@
       "source": [
         [
           "src/Util.ts",
-          302,
+          300,
           9
         ]
       ],
@@ -365,7 +365,7 @@
       "source": [
         [
           "src/Util.ts",
-          350,
+          361,
           9
         ]
       ],
@@ -402,7 +402,7 @@
       "source": [
         [
           "src/Util.ts",
-          176,
+          165,
           9
         ]
       ],
@@ -440,7 +440,7 @@
       "source": [
         [
           "src/Util.ts",
-          190,
+          178,
           9
         ]
       ],
@@ -496,7 +496,7 @@
       "source": [
         [
           "src/Util.ts",
-          269,
+          259,
           9
         ]
       ],
@@ -551,7 +551,7 @@
       "source": [
         [
           "src/Util.ts",
-          397,
+          405,
           9
         ]
       ],
@@ -583,7 +583,7 @@
       "source": [
         [
           "src/Util.ts",
-          160,
+          151,
           9
         ]
       ],
@@ -621,7 +621,7 @@
       "source": [
         [
           "src/Util.ts",
-          114,
+          107,
           9
         ]
       ],
@@ -653,7 +653,7 @@
       "source": [
         [
           "src/Util.ts",
-          247,
+          238,
           9
         ]
       ],

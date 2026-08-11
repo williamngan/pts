@@ -63,9 +63,13 @@ pnpm test
 pnpm test:browser
 pnpm test:integrations
 pnpm check:package
+pnpm format
+pnpm format:watch
 ```
 
 `pnpm check` validates formatting, linting, types, unit tests, deterministic documentation, documentation and bundle behavior in a real browser, reproducible artifacts, the packed package, ESM and CommonJS resolution, declarations, and tree-shaking. Its packed-package integration suite also builds and runs the maintained React, Vue, `skia-canvas`, and single-file vanilla fixtures in [`test/integrations`](./test/integrations).
+
+Prettier defines the repository's formatting rules. Run `pnpm format` once or keep `pnpm format:watch` running to reformat maintained source files as they change. The recommended VS Code extension and workspace settings also enable Prettier on save, while `pnpm check` rejects unformatted changes in CI.
 
 ### Generate documentation
 

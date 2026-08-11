@@ -16,7 +16,7 @@
       "source": [
         [
           "src/Image.ts",
-          29,
+          28,
           2
         ]
       ],
@@ -60,7 +60,7 @@
       "source": [
         [
           "src/Image.ts",
-          361,
+          401,
           6
         ]
       ],
@@ -79,7 +79,7 @@
       "source": [
         [
           "src/Image.ts",
-          413,
+          447,
           6
         ]
       ],
@@ -98,7 +98,7 @@
       "source": [
         [
           "src/Image.ts",
-          377,
+          415,
           6
         ]
       ],
@@ -117,7 +117,7 @@
       "source": [
         [
           "src/Image.ts",
-          345,
+          387,
           6
         ]
       ],
@@ -136,7 +136,7 @@
       "source": [
         [
           "src/Image.ts",
-          369,
+          408,
           6
         ]
       ],
@@ -155,7 +155,7 @@
       "source": [
         [
           "src/Image.ts",
-          353,
+          394,
           6
         ]
       ],
@@ -174,7 +174,7 @@
       "source": [
         [
           "src/Image.ts",
-          401,
+          436,
           6
         ]
       ],
@@ -193,7 +193,7 @@
       "source": [
         [
           "src/Image.ts",
-          385,
+          422,
           6
         ]
       ],
@@ -212,7 +212,7 @@
       "source": [
         [
           "src/Image.ts",
-          393,
+          429,
           6
         ]
       ],
@@ -231,7 +231,7 @@
       "source": [
         [
           "src/Image.ts",
-          423,
+          456,
           6
         ]
       ],
@@ -252,7 +252,7 @@
       "source": [
         [
           "src/Image.ts",
-          168,
+          207,
           2
         ]
       ],
@@ -282,7 +282,7 @@
       "source": [
         [
           "src/Image.ts",
-          275,
+          318,
           2
         ]
       ],
@@ -305,7 +305,7 @@
       "source": [
         [
           "src/Image.ts",
-          253,
+          298,
           2
         ]
       ],
@@ -335,7 +335,7 @@
       "source": [
         [
           "src/Image.ts",
-          264,
+          308,
           2
         ]
       ],
@@ -365,7 +365,7 @@
       "source": [
         [
           "src/Image.ts",
-          335,
+          377,
           2
         ]
       ],
@@ -388,7 +388,7 @@
       "source": [
         [
           "src/Image.ts",
-          147,
+          181,
           2
         ]
       ],
@@ -430,7 +430,7 @@
       "source": [
         [
           "src/Image.ts",
-          100,
+          112,
           2
         ]
       ],
@@ -460,7 +460,7 @@
       "source": [
         [
           "src/Image.ts",
-          181,
+          219,
           2
         ]
       ],
@@ -478,7 +478,7 @@
               "name": "reptition",
               "comment": "set how the pattern should repeat-fill",
               "type": "CanvasPatternRepetition",
-              "default": "'repeat'"
+              "default": "\"repeat\""
             },
             {
               "name": "dynamic",
@@ -496,7 +496,7 @@
       "source": [
         [
           "src/Image.ts",
-          212,
+          255,
           2
         ]
       ],
@@ -532,7 +532,7 @@
       "source": [
         [
           "src/Image.ts",
-          241,
+          282,
           2
         ]
       ],
@@ -568,7 +568,7 @@
       "source": [
         [
           "src/Image.ts",
-          191,
+          235,
           2
         ]
       ],
@@ -591,7 +591,7 @@
       "source": [
         [
           "src/Image.ts",
-          317,
+          361,
           2
         ]
       ],
@@ -614,7 +614,7 @@
       "source": [
         [
           "src/Image.ts",
-          325,
+          368,
           2
         ]
       ],
@@ -637,7 +637,7 @@
       "source": [
         [
           "src/Image.ts",
-          87,
+          100,
           9
         ]
       ],
@@ -681,7 +681,7 @@
       "source": [
         [
           "src/Image.ts",
-          287,
+          329,
           9
         ]
       ],
@@ -725,7 +725,7 @@
       "source": [
         [
           "src/Image.ts",
-          224,
+          266,
           9
         ]
       ],
@@ -763,7 +763,7 @@
       "source": [
         [
           "src/Image.ts",
-          297,
+          342,
           9
         ]
       ],
@@ -795,7 +795,7 @@
       "source": [
         [
           "src/Image.ts",
-          45,
+          47,
           9
         ]
       ],
@@ -845,7 +845,7 @@
       "source": [
         [
           "src/Image.ts",
-          61,
+          67,
           15
         ]
       ],
@@ -889,7 +889,7 @@
       "source": [
         [
           "src/Image.ts",
-          75,
+          84,
           15
         ]
       ],
@@ -921,7 +921,7 @@
               "name": "repeat",
               "comment": "set how the pattern will repeat fills",
               "type": "CanvasPatternRepetition",
-              "default": "'repeat'"
+              "default": "\"repeat\""
             },
             {
               "name": "editable",

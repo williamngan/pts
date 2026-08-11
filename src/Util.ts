@@ -2,15 +2,13 @@
 
 import { CanvasSpace } from "./Canvas";
 import { Num } from "./Num";
-import {Group, Pt} from "./Pt";
-import {WarningType, PtLikeIterable} from "./Types";
-
+import { Group, Pt } from "./Pt";
+import { WarningType, PtLikeIterable } from "./Types";
 
 /**
  * Various constant values for enumerations and calculations.
  */
 export const Const = {
-
   /** A string to indicate xy plane. */
   xy: "xy",
 
@@ -57,7 +55,7 @@ export const Const = {
   top_right: 3,
 
   /** Represents an arbitrary very small number. It is set as 0.0001 here. */
-  epsilon : 0.0001,
+  epsilon: 0.0001,
 
   /** Represents Number.MAX_VALUE */
   max: Number.MAX_VALUE,
@@ -69,13 +67,13 @@ export const Const = {
   pi: Math.PI,
 
   /** Two π radian (360deg) */
-  two_pi : 6.283185307179586,
+  two_pi: 6.283185307179586,
 
   /** Half π radian (90deg) */
-  half_pi : 1.5707963267948966,
+  half_pi: 1.5707963267948966,
 
   /** π/4 radian (45deg) */
-  quarter_pi : 0.7853981633974483,
+  quarter_pi: 0.7853981633974483,
 
   /** π/180 or 1 degree in radian */
   one_degree: 0.017453292519943295,
@@ -93,169 +91,161 @@ export const Const = {
   newton: 0.10197,
 
   /** Gaussian constant (1 / Math.sqrt(2 * Math.PI)) */
-  gaussian: 0.3989422804014327
-
+  gaussian: 0.3989422804014327,
 };
-
-
 
 /**
  * Util class provides static helper functions.
  */
 export class Util {
-
-  
-  static _warnLevel:WarningType = "mute";
+  static _warnLevel: WarningType = "mute";
 
   /**
    * Set a global warning level setting. If no parameter is passed, this will return the current warn-level. See [`Util.warn`](#link).
-   * @param lv a [`WarningType`](#link) option, where "error" will throw an error, "warn" will log in console, and "mute" will ignore the error. 
+   * @param lv a [`WarningType`](#link) option, where "error" will throw an error, "warn" will log in console, and "mute" will ignore the error.
    */
-  static warnLevel( lv?:WarningType ):WarningType {
-    if ( lv ) {
+  static warnLevel(lv?: WarningType): WarningType {
+    if (lv) {
       Util._warnLevel = lv;
     }
     return Util._warnLevel;
   }
 
-
   /**
-   * Convert different kinds of parameters (arguments, array, object) into an array of numbers.  
+   * Convert different kinds of parameters (arguments, array, object) into an array of numbers.
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
-  static getArgs( args:any[] ):Array<number> {
-    if ( args.length < 1 ) return [];
+  static getArgs(args: any[]): Array<number> {
+    if (args.length < 1) return [];
 
     let pos = [];
-    
-    let isArray = Array.isArray( args[0] ) || ArrayBuffer.isView( args[0] );
-    
-    // positional arguments: x,y,z,w,...
-    if ( typeof args[0] === 'number' ) {
-      pos = Array.prototype.slice.call( args );
 
-    // as an object of {x, y?, z?, w?}
-    } else if ( typeof args[0] === 'object' && !isArray ) {
+    let isArray = Array.isArray(args[0]) || ArrayBuffer.isView(args[0]);
+
+    // positional arguments: x,y,z,w,...
+    if (typeof args[0] === "number") {
+      pos = Array.prototype.slice.call(args);
+
+      // as an object of {x, y?, z?, w?}
+    } else if (typeof args[0] === "object" && !isArray) {
       let a = ["x", "y", "z", "w"];
       let p = args[0];
-      for ( let i = 0; i < a.length; i++ ) {
-        if ( ( p.length && i >= p.length ) || !( a[i] in p ) ) break; // check for length and key exist
-        pos.push( p[ a[i] ] );
+      for (let i = 0; i < a.length; i++) {
+        if ((p.length && i >= p.length) || !(a[i] in p)) break; // check for length and key exist
+        pos.push(p[a[i]]);
       }
 
-    // as an array of values
-    } else if ( isArray ) {
-      pos = [].slice.call( args[0] );
+      // as an array of values
+    } else if (isArray) {
+      pos = [].slice.call(args[0]);
     }
-    
+
     return pos;
   }
-
 
   /**
    * Send a warning message based on [`Util.warnLevel`](#link) global setting. This allows you to dynamically set whether minor errors should be thrown or printed in console or muted.
    * @param message any error or warning message
    * @param defaultReturn optional return value
    */
-  static warn( message:string = "error", defaultReturn:any = undefined ):any {
-    if ( Util.warnLevel() == "error" ) {
-      throw new Error( message );
-    } else if ( Util.warnLevel() == "warn" ) {
-      console.warn( message );
+  static warn(message: string = "error", defaultReturn: any = undefined): any {
+    if (Util.warnLevel() == "error") {
+      throw new Error(message);
+    } else if (Util.warnLevel() == "warn") {
+      console.warn(message);
     }
     return defaultReturn;
-  
   }
-
 
   /**
    * Get a random integer. This can be useful for selecting a random index in an array.
    * @param range value range
    * @param start Optional starting value
    */
-  static randomInt( range:number, start:number = 0 ) {
-    Util.warn( "Util.randomInt is deprecated. Please use `Num.randomRange`" );
-    return Math.floor( Num.random() * range ) + start;
+  static randomInt(range: number, start: number = 0) {
+    Util.warn("Util.randomInt is deprecated. Please use `Num.randomRange`");
+    return Math.floor(Num.random() * range) + start;
   }
-
 
   /**
    * Split an array into chunks of sub-array.
-   * @param pts an array 
+   * @param pts an array
    * @param size chunk size, ie, number of items in a chunk
    * @param stride optional parameter to "walk through" the array in steps
    * @param loopBack if `true`, always go through the array till the end and loop back to the beginning to complete the segments if needed.
    * @param matchSize if `true`, all chunks's length must match `size`.
    */
-  static split( pts: any[], size: number, stride?: number, loopBack: boolean = false, matchSize = true ): any[][] {
+  static split(
+    pts: any[],
+    size: number,
+    stride?: number,
+    loopBack: boolean = false,
+    matchSize = true,
+  ): any[][] {
     let chunks: any[] = [];
     let part: any[] = [];
     let st: number = stride || size;
     let index: number = 0;
-    if ( pts.length <= 0 || st <= 0 ) return [];
-  
-    while ( index < pts.length ) {
+    if (pts.length <= 0 || st <= 0) return [];
+
+    while (index < pts.length) {
       part = [];
-      for ( let k = 0; k < size; k++ ) {
-        if ( loopBack ) {
-          part.push( pts[( index + k ) % pts.length] );
+      for (let k = 0; k < size; k++) {
+        if (loopBack) {
+          part.push(pts[(index + k) % pts.length]);
         } else {
-          if ( index + k >= pts.length ) break;
-          part.push( pts[index + k] );
+          if (index + k >= pts.length) break;
+          part.push(pts[index + k]);
         }
       }
       index += st;
-      if ( !matchSize || ( matchSize && part.length === size ) ) chunks.push( part );
+      if (!matchSize || (matchSize && part.length === size)) chunks.push(part);
     }
 
     return chunks;
   }
-  
 
   /**
    * Flatten an array of arrays such as Group[] to a flat Array or Group.
    * @param pts an array, usually an array of Groups
    * @param flattenAsGroup a boolean to specify whether the return type should be a Group or Array. Default is `true` which returns a Group.
    */
-  static flatten( pts:any[], flattenAsGroup:boolean = true ) {
-    let arr = ( flattenAsGroup ) ? new Group() : [];
-    return arr.concat.apply( arr, pts );
+  static flatten(pts: any[], flattenAsGroup: boolean = true) {
+    let arr = flattenAsGroup ? new Group() : [];
+    return arr.concat.apply(arr, pts);
   }
 
-
   /**
-    * Given two arrays of objects, and a function that operate on two objects, return an array. Objects must be of same type. 
-    * @param a an array of object, eg `[Group, Group, ...]` 
-    * @param b another array of object 
-    * @param op a function that takes two parameters (a, b) and returns an object. 
-  */
-  static combine<T>( a:T[], b:T[], op:( a:T, b:T ) => T ):T[] {
+   * Given two arrays of objects, and a function that operate on two objects, return an array. Objects must be of same type.
+   * @param a an array of object, eg `[Group, Group, ...]`
+   * @param b another array of object
+   * @param op a function that takes two parameters (a, b) and returns an object.
+   */
+  static combine<T>(a: T[], b: T[], op: (a: T, b: T) => T): T[] {
     let result = [];
-    for ( let i = 0, len = a.length; i < len; i++ ) {
-      for ( let k = 0, lenB = b.length; k < lenB; k++ ) {
-        result.push( op( a[i], b[k] ) );
+    for (let i = 0, len = a.length; i < len; i++) {
+      for (let k = 0, lenB = b.length; k < lenB; k++) {
+        result.push(op(a[i], b[k]));
       }
     }
     return result;
   }
 
-
   /**
    * Zip arrays. eg, `[[1,2],[3,4],[5,6]] => [[1,3,5],[2,4,6]]`.
-   * @param arrays an array of arrays 
+   * @param arrays an array of arrays
    */
-  static zip( arrays:Array<any>[] ) {
+  static zip(arrays: Array<any>[]) {
     let z = [];
-    for ( let i = 0, len = arrays[0].length; i < len; i++ ) {
+    for (let i = 0, len = arrays[0].length; i < len; i++) {
       let p = [];
-      for ( let k = 0; k < arrays.length; k++ ) {
-        p.push( arrays[k][i] );
+      for (let k = 0; k < arrays.length; k++) {
+        p.push(arrays[k][i]);
       }
-      z.push( p );
+      z.push(p);
     }
     return z;
   }
-
 
   /**
    * Create a convenient stepper. This returns a function which you can call repeatedly to step a counter.
@@ -266,138 +256,155 @@ export class Util {
    * @example `let counter = stepper(100); let c = counter(); c = counter(); ...`
    * @returns a function which will increment the stepper and return its value at each call.
    */
-  static stepper( max:number, min:number = 0, stride:number = 1, callback?:( n:number ) => void ):( () => number ) {
+  static stepper(
+    max: number,
+    min: number = 0,
+    stride: number = 1,
+    callback?: (n: number) => void,
+  ): () => number {
     let c = min;
-    return function() {
+    return function () {
       c += stride;
-      if ( c >= max ) {
-        c = min + ( c - max );
+      if (c >= max) {
+        c = min + (c - max);
       }
-      if ( callback ) callback( c );
+      if (callback) callback(c);
       return c;
     };
   }
-
 
   /**
    * A convenient way to step through a range. Same as `for (i=0; i<range; i++)`, except this also stores the resulting return values at each step and return them as an array.
    * @param range a range to step through
    * @param fn a callback function `fn(index)`. If this function returns a value, it will be stored at each step
-   * @returns an array of returned values at each step  
+   * @returns an array of returned values at each step
    */
-  static forRange( fn:( index:number ) => any, range:number, start:number = 0, step:number = 1  ):any[] {
+  static forRange(
+    fn: (index: number) => any,
+    range: number,
+    start: number = 0,
+    step: number = 1,
+  ): any[] {
     let temp = [];
-    for ( let i = start, len = range; i < len; i += step ) {
-      temp[i] = fn( i );
+    for (let i = start, len = range; i < len; i += step) {
+      temp[i] = fn(i);
     }
     return temp;
   }
-
 
   /**
    * A helper function to load data from a url via XMLHttpRequest GET. Since the response passed into callback is a string, if you're loading json data, you may use standard `JSON.parse(response)` to get a JSON object. For csv, try using a javascript csv library like papaparse or vega/datalib.
    * @param url the request url
    * @param callback a function to capture the data. It receives two parameters: a `response` as string, and a `success` status as boolean.
    */
-  static load( url:string, callback:( response:string, success:boolean ) => void ) {
+  static load(
+    url: string,
+    callback: (response: string, success: boolean) => void,
+  ) {
     let request = new XMLHttpRequest();
-    request.open( 'GET', url, true );
+    request.open("GET", url, true);
 
-    request.onload = function() {
-      if ( request.status >= 200 && request.status < 400 ) {
-        callback( request.responseText, true );
+    request.onload = function () {
+      if (request.status >= 200 && request.status < 400) {
+        callback(request.responseText, true);
       } else {
-        callback( `Server error (${request.status}) when loading "${url}"`, false );
+        callback(
+          `Server error (${request.status}) when loading "${url}"`,
+          false,
+        );
       }
     };
 
-    request.onerror = function() {
-      callback( `Unknown network error`, false );
+    request.onerror = function () {
+      callback(`Unknown network error`, false);
     };
 
     request.send();
   }
 
-
   /**
    * Download the current `CanvasSpace` as an image (jpg/png/webp). Calling this function will automatically trigger a download.
    * @param space an instance of `CanvasSpace`
-   * @param filename the name of the file, without the extension name. 
+   * @param filename the name of the file, without the extension name.
    * @param filetype the image type (jpg/png/webp)
    * @param quality a value between 0 to 1, if filetype is either "jpg" or "png"
    */
-  static download( space: CanvasSpace, filename:string = 'pts_canvas_image', filetype:( "jpeg" | "jpg" | "png" | "webp" ) = "png", quality:number = 1 ) {
-    const ftype = filetype === 'jpg' ? 'jpeg' : filetype;
-    space.element.toBlob( function( blob ) {
-      const link = document.createElement( 'a' );
-      const url = URL.createObjectURL( blob );
-      link.href = url;
-      link.download = `${filename}.${filetype}`;
-      document.body.appendChild( link );
-      link.click();
-      document.body.removeChild( link );
-      URL.revokeObjectURL( url );
-    },`image/${ftype}`, quality );
+  static download(
+    space: CanvasSpace,
+    filename: string = "pts_canvas_image",
+    filetype: "jpeg" | "jpg" | "png" | "webp" = "png",
+    quality: number = 1,
+  ) {
+    const ftype = filetype === "jpg" ? "jpeg" : filetype;
+    space.element.toBlob(
+      function (blob) {
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.href = url;
+        link.download = `${filename}.${filetype}`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      },
+      `image/${ftype}`,
+      quality,
+    );
   }
-
 
   /**
    * Estimate performance by checking how long it takes to render a frame
    * @param avgFrames The number of frames used calculate to average
-   * @example `let perf = Util.performance(); perf();` 
+   * @example `let perf = Util.performance(); perf();`
    * @returns milliseconds per frame
    */
-  static performance( avgFrames:number = 10 ): () => number {
+  static performance(avgFrames: number = 10): () => number {
     let last = Date.now();
     let avg = [];
-    return function() {
+    return function () {
       const now = Date.now();
-      avg.push( now - last );
-      if ( avg.length >= avgFrames ) avg.shift();
+      avg.push(now - last);
+      if (avg.length >= avgFrames) avg.shift();
       last = now;
-      return Math.floor( avg.reduce( ( a,b ) => a + b, 0 ) / avg.length );
+      return Math.floor(avg.reduce((a, b) => a + b, 0) / avg.length);
     };
   }
 
   /**
    * Check number of items in a Group against a required number
-   * @param pts a Group or an Iterable<PtLike> 
+   * @param pts a Group or an Iterable<PtLike>
    * @param minRequired minimum number of items required
    */
-  static arrayCheck( pts:PtLikeIterable, minRequired:number = 2 ):boolean {
-    if ( Array.isArray( pts ) && pts.length < minRequired ) {
-      Util.warn( `Requires ${minRequired} or more Pts in this Group.` );
+  static arrayCheck(pts: PtLikeIterable, minRequired: number = 2): boolean {
+    if (Array.isArray(pts) && pts.length < minRequired) {
+      Util.warn(`Requires ${minRequired} or more Pts in this Group.`);
       return false;
-    } 
+    }
     return true;
   }
-
 
   /**
    * Convert an iterable into an array
    * @param it an iterable
    */
-  static iterToArray( it:Iterable<any> ): any[] {
-    return ( !Array.isArray( it ) ) ? [...it] : it;
+  static iterToArray(it: Iterable<any>): any[] {
+    return !Array.isArray(it) ? [...it] : it;
   }
-  
 
   /**
    * Check if accessing from a mobile device. Can be useful since some experimental features may not be availble in mobile browsers.
    */
   static isMobile() {
-    return /iPhone|iPad|Android/i.test( navigator.userAgent );
+    return /iPhone|iPad|Android/i.test(navigator.userAgent);
   }
-
 
   /**
    * Generate a time-based unique ID or a crypto-based ID.
-   * @returns 
+   * @returns
    */
-  static uniqueId( useCrypto = false ) {
-    return useCrypto && crypto ? crypto.randomUUID() : Date.now().toString( 36 ) + Math.random().toString( 36 ).substring( 2 );
+  static uniqueId(useCrypto = false) {
+    return useCrypto && crypto
+      ? crypto.randomUUID()
+      : Date.now().toString(36) + Math.random().toString(36).substring(2);
   }
-
 }
-
-

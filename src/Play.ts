@@ -1,25 +1,29 @@
-import {Pt, Group, Bound} from "./Pt";
-import {Num} from "./Num";
-import {ITempoListener, ITempoStartFn, ITempoProgressFn, ITempoResponses} from "./Types";
-import {ISoundAnalyzer, SoundType, PtLike, IPlayer} from "./Types";
+import { Pt, Group, Bound } from "./Pt";
+import { Num } from "./Num";
+import {
+  ITempoListener,
+  ITempoStartFn,
+  ITempoProgressFn,
+  ITempoResponses,
+} from "./Types";
+import { ISoundAnalyzer, SoundType, PtLike, IPlayer } from "./Types";
 
 /**
  * Tempo helps you create synchronized and rhythmic animations.
  */
 export class Tempo implements IPlayer {
-
   protected _bpm: number; // beat per minute
   protected _ms: number; // millis per beat
 
-  protected _listeners:{ [key:string]:ITempoListener } = {};
-  protected _listenerInc:number = 0;
-  public animateID:string;
+  protected _listeners: { [key: string]: ITempoListener } = {};
+  protected _listenerInc: number = 0;
+  public animateID: string;
 
   /**
    * Construct a new Tempo instance by beats-per-minute. Alternatively, you can use [`Tempo.fromBeat`](#link) to create from milliseconds.
    * @param bpm beats per minute
    */
-  constructor( bpm:number ) {
+  constructor(bpm: number) {
     this.bpm = bpm;
   }
 
@@ -27,15 +31,17 @@ export class Tempo implements IPlayer {
    * Create a new Tempo instance by specifying milliseconds-per-beat.
    * @param ms milliseconds per beat
    */
-  static fromBeat( ms:number ):Tempo {
-    return new Tempo( 60000 / ms );
+  static fromBeat(ms: number): Tempo {
+    return new Tempo(60000 / ms);
   }
 
   /**
    * Beats-per-minute value
    */
-  get bpm():number { return this._bpm; }
-  set bpm( n:number ) {
+  get bpm(): number {
+    return this._bpm;
+  }
+  set bpm(n: number) {
     this._bpm = n;
     this._ms = 60000 / this._bpm;
   }
@@ -43,24 +49,24 @@ export class Tempo implements IPlayer {
   /**
    * Milliseconds per beat (Note that this is derived from the bpm value).
    */
-  get ms():number { return this._ms; }
-  set ms( n:number ) {
-    this._bpm = Math.floor( 60000 / n );
+  get ms(): number {
+    return this._ms;
+  }
+  set ms(n: number) {
+    this._bpm = Math.floor(60000 / n);
     this._ms = 60000 / this._bpm;
   }
 
-
   // Get a listener unique id
-  protected _createID( listener:ITempoListener | Function ):string {
-    let id:string = '';
-    if ( typeof listener === 'function' ) {
-      id = '_b' + ( this._listenerInc++ );
+  protected _createID(listener: ITempoListener | Function): string {
+    let id: string = "";
+    if (typeof listener === "function") {
+      id = "_b" + this._listenerInc++;
     } else {
-      id = listener.name || '_b' + ( this._listenerInc++ );
+      id = listener.name || "_b" + this._listenerInc++;
     }
     return id;
   }
-
 
   /**
    * This is a core function that let you specify a rhythm and then define responses by calling the `start` and `progress` functions from the returned object. See [Animation guide](../guide/Animation-0700.html) for more details.
@@ -71,135 +77,159 @@ export class Tempo implements IPlayer {
    * @example `tempo.every(2).start( (count) => ... )`, `tempo.every([2,4,6]).progress( (count, t) => ... )`
    * @returns an object with chainable functions
    */
-  every( beats:number | number[] ):ITempoResponses {
+  every(beats: number | number[]): ITempoResponses {
     const self = this;
-    const p = Array.isArray( beats ) ? beats[0] : beats;
+    const p = Array.isArray(beats) ? beats[0] : beats;
 
     return {
-      start: function ( fn:ITempoStartFn, offset:number = 0, name?:string ): ITempoResponses {
-        const id = name || self._createID( fn );
-        self._listeners[id] = { name: id, beats: beats, period: p, index: 0, offset: offset, duration: -1, continuous: false, fn: fn };
+      start: function (
+        fn: ITempoStartFn,
+        offset: number = 0,
+        name?: string,
+      ): ITempoResponses {
+        const id = name || self._createID(fn);
+        self._listeners[id] = {
+          name: id,
+          beats: beats,
+          period: p,
+          index: 0,
+          offset: offset,
+          duration: -1,
+          continuous: false,
+          fn: fn,
+        };
         return this;
       },
 
-      progress: function ( fn:ITempoProgressFn, offset:number = 0, name?:string ): ITempoResponses {
-        const id = name || self._createID( fn );
-        self._listeners[id] = { name: id, beats: beats, period: p, index: 0, offset: offset, duration: -1, continuous: true, fn: fn };
+      progress: function (
+        fn: ITempoProgressFn,
+        offset: number = 0,
+        name?: string,
+      ): ITempoResponses {
+        const id = name || self._createID(fn);
+        self._listeners[id] = {
+          name: id,
+          beats: beats,
+          period: p,
+          index: 0,
+          offset: offset,
+          duration: -1,
+          continuous: true,
+          fn: fn,
+        };
         return this;
-      }
+      },
     };
   }
-
 
   /**
    * Usually you can add a tempo instance to a space via [`Space.add`](#link) and it will track time automatically.
    * But if necessary, you can track time manually via this function.
    * @param time current time in milliseconds
    */
-  track( time ) {
-    for ( const k in this._listeners ) {
-      if ( this._listeners.hasOwnProperty( k ) ) {
-
+  track(time) {
+    for (const k in this._listeners) {
+      if (this._listeners.hasOwnProperty(k)) {
         const li = this._listeners[k];
-        const _t = ( li.offset ) ? time + li.offset : time;
+        const _t = li.offset ? time + li.offset : time;
         const ms = li.period * this._ms; // time per period
         let isStart = false;
 
-        if ( _t > li.duration + ms ) {
-          li.duration = _t - ( _t % this._ms ); // update
-          if ( Array.isArray( li.beats ) ) { // find next period from array
-            li.index = ( li.index + 1 ) % li.beats.length;
-            li.period = li.beats[ li.index ];
+        if (_t > li.duration + ms) {
+          li.duration = _t - (_t % this._ms); // update
+          if (Array.isArray(li.beats)) {
+            // find next period from array
+            li.index = (li.index + 1) % li.beats.length;
+            li.period = li.beats[li.index];
           }
           isStart = true;
         }
 
-        const count = Math.max( 0, Math.ceil( Math.floor( li.duration / this._ms ) / li.period ) );
-        const params = ( li.continuous ) ? [count, Num.clamp( ( _t - li.duration ) / ms, 0, 1 ), _t, isStart] : [count];
-        if ( li.continuous || isStart ) {
-          const done = li.fn.apply( li, params );
-          if ( done ) delete this._listeners[ li.name ];
+        const count = Math.max(
+          0,
+          Math.ceil(Math.floor(li.duration / this._ms) / li.period),
+        );
+        const params = li.continuous
+          ? [count, Num.clamp((_t - li.duration) / ms, 0, 1), _t, isStart]
+          : [count];
+        if (li.continuous || isStart) {
+          const done = li.fn.apply(li, params);
+          if (done) delete this._listeners[li.name];
         }
       }
     }
   }
 
-
   /**
    * Remove a `start` or `progress` callback function from the list of callbacks. See [`Tempo.every`](#link) for details
    * @param name a name string specified when creating the callback function.
    */
-  stop( name:string ):void {
-    if ( this._listeners[name] ) delete this._listeners[name];
+  stop(name: string): void {
+    if (this._listeners[name]) delete this._listeners[name];
   }
-
 
   /**
    * IPlayer interface. Internal implementation that calls `track( time )`.
    */
-  animate( time, ftime ) {
-    this.track( time );
+  animate(time, ftime) {
+    this.track(time);
   }
 
   /**
    * IPlayer interface. Not implementated.
    */
-  resize( bound:Bound, evt?:Event ) {
+  resize(bound: Bound, evt?: Event) {
     return; // not implemented in IPlayer
   }
 
   /**
    * IPlayer interface. Not implementated.
    */
-  action( type:string, px:number, py:number, evt:Event ) {
+  action(type: string, px: number, py: number, evt: Event) {
     return;
   }
-
 }
-
-
 
 /**
  * Sound class simplifies common tasks like audio inputs and visualizations using a subset of Web Audio API. It can be used with other audio libraries like tone.js, and extended to support additional web audio functions. See [the guide](../guide/Sound-0800.html) to get started.
  */
 export class Sound {
-
-  private _type:SoundType;
+  private _type: SoundType;
 
   /** The audio context */
-  _ctx:AudioContext;
+  _ctx: AudioContext;
 
   /** The audio node, which is usually a subclass liked OscillatorNode */
-  _node:AudioNode;
+  _node: AudioNode;
 
   /**
    * The audio node to be connected to AudioContext when playing, if different that _node
    * This is usefull when using the connect() function to filter, as typically the output would
    * come from the filtering nodes
    */
-  _outputNode:AudioNode;
+  _outputNode: AudioNode;
 
   /** The audio stream when streaming from input device */
-  _stream:MediaStream;
+  _stream: MediaStream;
 
   /** Audio src when loading from file */
-  _source:HTMLMediaElement;
+  _source: HTMLMediaElement;
 
   /* Audio buffer when using AudioBufferSourceNode */
-  _buffer:AudioBuffer;
+  _buffer: AudioBuffer;
 
   /** Analyzer if any */
-  analyzer:ISoundAnalyzer;
+  analyzer: ISoundAnalyzer;
 
-  protected _playing:boolean = false;
+  protected _playing: boolean = false;
 
-  protected _timestamp:number; // Tracking play time against ctx.currentTime
+  protected _timestamp: number; // Tracking play time against ctx.currentTime
 
   /**
    * Construct a `Sound` instance. Usually, it's more convenient to use one of the static methods like [`Sound.load`](#function_load) or [`Sound.from`](#function_from).
    * @param type a `SoundType` string: "file", "input", or "gen"
    */
-  constructor( type:SoundType ) {
+  constructor(type: SoundType) {
     this._type = type;
     this._createAudioContext();
   }
@@ -209,8 +239,11 @@ export class Sound {
    */
   protected _createAudioContext() {
     const _ctx = window.AudioContext;
-    if ( !_ctx ) throw( new Error( "Your browser doesn't support Web Audio. (No AudioContext)" ) );
-    this._ctx = ( _ctx ) ? new _ctx() : undefined;
+    if (!_ctx)
+      throw new Error(
+        "Your browser doesn't support Web Audio. (No AudioContext)",
+      );
+    this._ctx = _ctx ? new _ctx() : undefined;
   }
 
   /**
@@ -221,14 +254,18 @@ export class Sound {
    * @param stream Optionally include a MediaStream, if the type is "input"
    * @returns a `Sound` instance
    */
-  static from( node:AudioNode, ctx:AudioContext, type:SoundType = "gen", stream?:MediaStream ) {
-    const s = new Sound( type );
+  static from(
+    node: AudioNode,
+    ctx: AudioContext,
+    type: SoundType = "gen",
+    stream?: MediaStream,
+  ) {
+    const s = new Sound(type);
     s._node = node;
     s._ctx = ctx;
-    if ( stream ) s._stream = stream;
+    if (stream) s._stream = stream;
     return s;
   }
-
 
   /**
    * Create a `Sound` by loading from a sound file or an audio element.
@@ -237,61 +274,71 @@ export class Sound {
    * @returns a `Sound` instance
    * @example `Sound.load( '/path/to/file.mp3' )`
    */
-  static load( source:HTMLMediaElement | string, crossOrigin:string = "anonymous" ):Promise<Sound> {
-    return new Promise( ( resolve, reject ) => {
-      const s = new Sound( "file" );
-      s._source = ( typeof source === 'string' ) ? new Audio( source ) : source;
+  static load(
+    source: HTMLMediaElement | string,
+    crossOrigin: string = "anonymous",
+  ): Promise<Sound> {
+    return new Promise((resolve, reject) => {
+      const s = new Sound("file");
+      s._source = typeof source === "string" ? new Audio(source) : source;
       s._source.autoplay = false;
-      ( s._source as HTMLMediaElement ).crossOrigin = crossOrigin;
-      s._source.addEventListener( "ended", function () { s._playing = false; } );
-      s._source.addEventListener( 'error', function () { reject( "Error loading sound" ); } );
-      s._source.addEventListener( 'canplaythrough', function () {
-        if ( !s._node ) {
-          s._node = s._ctx.createMediaElementSource( s._source );
+      (s._source as HTMLMediaElement).crossOrigin = crossOrigin;
+      s._source.addEventListener("ended", function () {
+        s._playing = false;
+      });
+      s._source.addEventListener("error", function () {
+        reject("Error loading sound");
+      });
+      s._source.addEventListener("canplaythrough", function () {
+        if (!s._node) {
+          s._node = s._ctx.createMediaElementSource(s._source);
         }
-        resolve( s );
-      } );
-    } );
-
+        resolve(s);
+      });
+    });
   }
-
 
   /**
    * Create a `Sound` by loading from a sound file url as `AudioBufferSourceNode`. This method is cumbersome since it can only be played once.
    * Use this method for now if you need to visualize sound in Safari and iOS. Once Apple has full support for FFT with streaming `HTMLMediaElement`, this method will likely be deprecated.
    * @param url an url to the sound file
    */
-  static loadAsBuffer( url:string ):Promise<Sound> {
-    return new Promise( ( resolve, reject ) => {
+  static loadAsBuffer(url: string): Promise<Sound> {
+    return new Promise((resolve, reject) => {
       const request = new XMLHttpRequest();
-      request.open( 'GET', url, true );
-      request.responseType = 'arraybuffer';
+      request.open("GET", url, true);
+      request.responseType = "arraybuffer";
 
-      const s = new Sound( "file" );
-      request.onload = function() {
-        s._ctx.decodeAudioData( request.response, function( buffer ) { // Decode asynchronously
-          s.createBuffer( buffer );
-          resolve( s );
-        }, ( err ) => reject( "Error decoding audio" ) );
+      const s = new Sound("file");
+      request.onload = function () {
+        s._ctx.decodeAudioData(
+          request.response,
+          function (buffer) {
+            // Decode asynchronously
+            s.createBuffer(buffer);
+            resolve(s);
+          },
+          (err) => reject("Error decoding audio"),
+        );
       };
       request.send();
-    } );
+    });
   }
-
 
   /**
    * Create or re-use an AudioBuffer. Only needed if you are using `Sound.loadAsBuffer`.
    * @param buf an AudioBuffer. Optionally, you can call this without parameters to re-use existing buffer.
    */
-  protected createBuffer( buf:AudioBuffer ):this {
+  protected createBuffer(buf: AudioBuffer): this {
     this._node = this._ctx.createBufferSource();
-    if ( buf !== undefined ) this._buffer = buf;
+    if (buf !== undefined) this._buffer = buf;
 
-    ( this._node as AudioBufferSourceNode ).buffer = this._buffer; // apply or re-use buffer
-    ( this._node as AudioBufferSourceNode ).onended = () => { this._playing = false; };
+    (this._node as AudioBufferSourceNode).buffer = this._buffer; // apply or re-use buffer
+    (this._node as AudioBufferSourceNode).onended = () => {
+      this._playing = false;
+    };
     return this;
   }
-
 
   /**
    * Create a `Sound` by generating a waveform using [OscillatorNode](https://developer.mozilla.org/en-US/docs/Web/API/OscillatorNode).
@@ -300,25 +347,23 @@ export class Sound {
    * @returns a `Sound` instance
    * @example `Sound.generate( 'sine', 120 )`
    */
-  static generate( type:OscillatorType, val:number | PeriodicWave ):Sound {
-    const s = new Sound( "gen" );
-    return s._gen( type, val );
+  static generate(type: OscillatorType, val: number | PeriodicWave): Sound {
+    const s = new Sound("gen");
+    return s._gen(type, val);
   }
 
-
   // Create the oscillator
-  protected _gen( type:OscillatorType, val:number | PeriodicWave ):Sound {
+  protected _gen(type: OscillatorType, val: number | PeriodicWave): Sound {
     this._node = this._ctx.createOscillator();
-    const osc = ( this._node as OscillatorNode );
+    const osc = this._node as OscillatorNode;
     osc.type = type;
-    if ( type === 'custom' ) {
-      osc.setPeriodicWave( val as PeriodicWave );
+    if (type === "custom") {
+      osc.setPeriodicWave(val as PeriodicWave);
     } else {
       osc.frequency.value = val as number;
     }
     return this;
   }
-
 
   /**
    * Create a `Sound` by streaming from an input device like microphone. Note that this function returns a Promise which resolves to a Sound instance.
@@ -326,77 +371,88 @@ export class Sound {
    * @returns a `Promise` which resolves to `Sound` instance
    * @example `Sound.input().then( s => sound = s );`
    */
-  static async input( constraint?:MediaStreamConstraints ):Promise<Sound> {
+  static async input(constraint?: MediaStreamConstraints): Promise<Sound> {
     try {
-      const s = new Sound( "input" );
-      if ( !s ) return undefined;
+      const s = new Sound("input");
+      if (!s) return undefined;
       const c = constraint ? constraint : { audio: true, video: false };
-      s._stream = await navigator.mediaDevices.getUserMedia( c );
-      s._node = s._ctx.createMediaStreamSource( s._stream );
+      s._stream = await navigator.mediaDevices.getUserMedia(c);
+      s._node = s._ctx.createMediaStreamSource(s._stream);
       return s;
-    } catch ( e ) {
-      console.error( "Cannot get audio from input device." );
-      return Promise.resolve( null );
+    } catch (e) {
+      console.error("Cannot get audio from input device.");
+      return Promise.resolve(null);
     }
   }
-
 
   /**
    * Get this Sound's AudioContext instance for advanced use-cases.
    */
-  get ctx():AudioContext { return this._ctx; }
-
+  get ctx(): AudioContext {
+    return this._ctx;
+  }
 
   /**
    * Get this Sound's AudioNode subclass instance for advanced use-cases.
    */
-  get node():AudioNode { return this._node; }
+  get node(): AudioNode {
+    return this._node;
+  }
 
   /**
    * Get this Sound's Output node AudioNode instance for advanced use-cases.
    */
-  get outputNode():AudioNode { return this._outputNode; }
+  get outputNode(): AudioNode {
+    return this._outputNode;
+  }
 
   /**
    * Get this Sound's MediaStream (eg, from microphone, if in use) instance for advanced use-cases. See [`Sound.input`](#link)
    */
-  get stream():MediaStream { return this._stream; }
-
+  get stream(): MediaStream {
+    return this._stream;
+  }
 
   /**
    * Get this Sound's Audio element (if used) instance for advanced use-cases. See [`Sound.load`](#link).
    */
-  get source():HTMLMediaElement { return this._source; }
-
+  get source(): HTMLMediaElement {
+    return this._source;
+  }
 
   /**
    * Get this Sound's AudioBuffer (if any) instance for advanced use-cases. See [`Sound.loadAsBuffer`](#link).
    */
-  get buffer():AudioBuffer { return this._buffer; }
-  set buffer( b:AudioBuffer ) { this._buffer = b; }
-
+  get buffer(): AudioBuffer {
+    return this._buffer;
+  }
+  set buffer(b: AudioBuffer) {
+    this._buffer = b;
+  }
 
   /**
    * Get the type of input for this Sound instance. Either "file", "input", or "gen"
    */
-  get type():SoundType { return this._type; }
-
+  get type(): SoundType {
+    return this._type;
+  }
 
   /**
    * Indicate whether the sound is currently playing.
    */
-  get playing():boolean { return this._playing; }
-
+  get playing(): boolean {
+    return this._playing;
+  }
 
   /**
    * A value between 0 to 1 to indicate playback progress.
    */
-  get progress():number {
+  get progress(): number {
     let dur = 0;
     let curr = 0;
-    if ( this._buffer ) {
+    if (this._buffer) {
       dur = this._buffer.duration;
-      curr = ( this._timestamp ) ? this._ctx.currentTime - this._timestamp : 0;
+      curr = this._timestamp ? this._ctx.currentTime - this._timestamp : 0;
     } else {
       dur = this._source.duration;
       curr = this._source.currentTime;
@@ -404,49 +460,49 @@ export class Sound {
     return curr / dur;
   }
 
-
   /**
    * Indicate whether the sound is ready to play. When loading from a file, this corresponds to a ["canplaythrough"](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState) event.
    * You can also use `this.source.addEventListener( 'canplaythrough', ...)` if needed. See also [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/canplaythrough_event).
    */
-  get playable():boolean {
-    return ( this._type === "input" ) ? this._node !== undefined : ( !!this._buffer || this._source.readyState === 4 );
+  get playable(): boolean {
+    return this._type === "input"
+      ? this._node !== undefined
+      : !!this._buffer || this._source.readyState === 4;
   }
-
 
   /**
    * If an analyzer is added (see [`analyze`](##unction_analyze) function), get the number of frequency bins in the analyzer.
    */
-  get binSize():number {
+  get binSize(): number {
     return this.analyzer.size;
   }
-
 
   /**
    * Get the sample rate of the audio, for example, at 44100 hz.
    */
-  get sampleRate():number {
+  get sampleRate(): number {
     return this._ctx.sampleRate;
   }
-
 
   /**
    * If the sound is generated, this sets and gets the frequency of the tone.
    */
-  get frequency():number {
-    return ( this._type === "gen" ) ? ( this._node as OscillatorNode ).frequency.value : 0;
+  get frequency(): number {
+    return this._type === "gen"
+      ? (this._node as OscillatorNode).frequency.value
+      : 0;
   }
-  set frequency( f:number ) {
-    if ( this._type === "gen" ) ( this._node as OscillatorNode ).frequency.value = f;
+  set frequency(f: number) {
+    if (this._type === "gen")
+      (this._node as OscillatorNode).frequency.value = f;
   }
-
 
   /**
    * Connect another AudioNode to this `Sound` instance's AudioNode. Using this function, you can extend the capabilities of this `Sound` instance for advanced use cases such as filtering.
    * @param node another AudioNode
    */
-  connect( node:AudioNode ):this {
-    this._node.connect( node );
+  connect(node: AudioNode): this {
+    this._node.connect(node);
     return this;
   }
 
@@ -456,21 +512,19 @@ export class Sound {
    * in your chain for filtering purposes.
    * @param  outputNode The AudioNode that should connect to the AudioContext
    */
-  setOutputNode( outputNode: AudioNode ):this {
+  setOutputNode(outputNode: AudioNode): this {
     this._outputNode = outputNode;
     return this;
   }
-
 
   /**
    * Removes the 'output' node added from setOuputNode
    * Note: if you start the Sound after calling this, it will play via the default node
    */
-  removeOutputNode():this {
+  removeOutputNode(): this {
     this._outputNode = null;
     return this;
   }
-
 
   /**
    * Add an analyzer to this `Sound`. Call this once only.
@@ -479,7 +533,12 @@ export class Sound {
    * @param maxDb Optional maximum decibels (corresponds to `AnalyserNode.maxDecibels`)
    * @param smooth Optional smoothing value (corresponds to `AnalyserNode.smoothingTimeConstant`)
    */
-  analyze( size:number = 256, minDb:number = -100, maxDb:number = -30, smooth:number = 0.8  ) {
+  analyze(
+    size: number = 256,
+    minDb: number = -100,
+    maxDb: number = -30,
+    smooth: number = 0.8,
+  ) {
     const a = this._ctx.createAnalyser();
     a.fftSize = size * 2;
     a.minDecibels = minDb;
@@ -488,45 +547,59 @@ export class Sound {
     this.analyzer = {
       node: a,
       size: a.frequencyBinCount,
-      data: new Uint8Array( a.frequencyBinCount )
+      data: new Uint8Array(a.frequencyBinCount),
     };
-    this._node.connect( this.analyzer.node );
+    this._node.connect(this.analyzer.node);
     return this;
   }
 
-
   // Get either time-domain or frequency domain
-  protected _domain( time:boolean ):Uint8Array {
-    if ( this.analyzer ) {
-      if ( time ) {
-        this.analyzer.node.getByteTimeDomainData( this.analyzer.data as Parameters<AnalyserNode["getByteTimeDomainData"]>[0] );
+  protected _domain(time: boolean): Uint8Array {
+    if (this.analyzer) {
+      if (time) {
+        this.analyzer.node.getByteTimeDomainData(
+          this.analyzer.data as Parameters<
+            AnalyserNode["getByteTimeDomainData"]
+          >[0],
+        );
       } else {
-        this.analyzer.node.getByteFrequencyData( this.analyzer.data as Parameters<AnalyserNode["getByteFrequencyData"]>[0] );
+        this.analyzer.node.getByteFrequencyData(
+          this.analyzer.data as Parameters<
+            AnalyserNode["getByteFrequencyData"]
+          >[0],
+        );
       }
       return this.analyzer.data;
     }
-    return new Uint8Array( 0 );
+    return new Uint8Array(0);
   }
 
-
   // Map domain data to another range
-  protected _domainTo( time:boolean, size:PtLike, position:PtLike = [0,0], trim = [0,0] ):Group {
-    const data = ( time ) ? this.timeDomain() : this.freqDomain() ;
+  protected _domainTo(
+    time: boolean,
+    size: PtLike,
+    position: PtLike = [0, 0],
+    trim = [0, 0],
+  ): Group {
+    const data = time ? this.timeDomain() : this.freqDomain();
     const g = new Group();
-    for ( let i = trim[0], len = data.length - trim[1]; i < len; i++ ) {
-      g.push( new Pt( position[0] + size[0] * i / len, position[1] + size[1] * data[i] / 255 ) );
+    for (let i = trim[0], len = data.length - trim[1]; i < len; i++) {
+      g.push(
+        new Pt(
+          position[0] + (size[0] * i) / len,
+          position[1] + (size[1] * data[i]) / 255,
+        ),
+      );
     }
     return g;
   }
 
-
   /**
    * Get the raw time-domain data from analyzer as unsigned 8-bit integers. An analyzer must be added before calling this function (See [analyze](#function_analyze) function).
    */
-  timeDomain():Uint8Array {
-    return this._domain( true );
+  timeDomain(): Uint8Array {
+    return this._domain(true);
   }
-
 
   /**
    * Map the time-domain data from analyzer to a range. An analyzer must be added before calling this function (See [analyze](#function_analyze) function).
@@ -536,18 +609,16 @@ export class Sound {
    * @returns a Group containing the mapped values
    * @example form.point( s.timeDomainTo( space.size ) )
    */
-  timeDomainTo( size:PtLike, position:PtLike = [0,0], trim = [0,0] ):Group {
-    return this._domainTo( true, size, position, trim );
+  timeDomainTo(size: PtLike, position: PtLike = [0, 0], trim = [0, 0]): Group {
+    return this._domainTo(true, size, position, trim);
   }
-
 
   /**
    * Get the raw frequency-domain data from analyzer as unsigned 8-bit integers. An analyzer must be added before calling this function (See [analyze](#function_analyze) function).
    */
-  freqDomain():Uint8Array {
-    return this._domain( false );
+  freqDomain(): Uint8Array {
+    return this._domain(false);
   }
-
 
   /**
    * Map the frequency-domain data from analyzer to a range. An analyzer must be added before calling this function (See [analyze](#function_analyze) function).
@@ -557,90 +628,85 @@ export class Sound {
    * @returns a Group containing the mapped values
    * @example `form.point( s.freqDomainTo( space.size ) )`
    */
-  freqDomainTo( size:PtLike, position:PtLike = [0,0], trim = [0,0] ):Group {
-    return this._domainTo( false, size, position, trim );
+  freqDomainTo(size: PtLike, position: PtLike = [0, 0], trim = [0, 0]): Group {
+    return this._domainTo(false, size, position, trim);
   }
-
 
   /**
    * Stop playing and disconnect the AudioNode.
    */
-  reset():this {
+  reset(): this {
     this.stop();
     this._node.disconnect();
     return this;
   }
 
-
   /**
    * Start playing. Internally this connects the `AudioNode` to `AudioContext`'s destination.
    * @param timeAt optional parameter to play from a specific time
    */
-  start( timeAt:number = 0 ):this {
-    if ( !this._ctx ) {
+  start(timeAt: number = 0): this {
+    if (!this._ctx) {
       this._createAudioContext();
-    } else if ( this._ctx.state === 'suspended' ) {
+    } else if (this._ctx.state === "suspended") {
       this._ctx.resume();
     }
 
-    if ( this._type === "file" ) {
-      if ( this._buffer ) {
-        ( this._node as AudioBufferSourceNode ).start( timeAt );
+    if (this._type === "file") {
+      if (this._buffer) {
+        (this._node as AudioBufferSourceNode).start(timeAt);
         this._timestamp = this._ctx.currentTime + timeAt;
       } else {
         this._source.play();
-        if ( timeAt > 0 ) this._source.currentTime = timeAt;
+        if (timeAt > 0) this._source.currentTime = timeAt;
       }
-    } else if ( this._type === "gen" ) {
-      this._gen( ( this._node as OscillatorNode ).type, ( this._node as OscillatorNode ).frequency.value );
-      ( this._node as OscillatorNode ).start();
-      if ( this.analyzer ) this._node.connect( this.analyzer.node );
+    } else if (this._type === "gen") {
+      this._gen(
+        (this._node as OscillatorNode).type,
+        (this._node as OscillatorNode).frequency.value,
+      );
+      (this._node as OscillatorNode).start();
+      if (this.analyzer) this._node.connect(this.analyzer.node);
     }
 
-    ( this._outputNode || this._node ).connect( this._ctx.destination );
+    (this._outputNode || this._node).connect(this._ctx.destination);
     this._playing = true;
     return this;
   }
 
-
   /**
    * Stop playing. Internally this also disconnects the `AudioNode` from `AudioContext`'s destination.
    */
-  stop():this {
+  stop(): this {
+    if (this._playing)
+      (this._outputNode || this._node).disconnect(this._ctx.destination);
 
-    if ( this._playing ) ( this._outputNode || this._node ).disconnect( this._ctx.destination );
-
-    if ( this._type === "file" ) {
-      if ( this._buffer ) {
+    if (this._type === "file") {
+      if (this._buffer) {
         // Safari throws InvalidState error if stop() is called after finished playing
-        if ( this.progress < 1 ) ( this._node as AudioBufferSourceNode ).stop();
+        if (this.progress < 1) (this._node as AudioBufferSourceNode).stop();
       } else {
         this._source.pause();
       }
-
-    } else if ( this._type === "gen" ) {
-      ( this._node as OscillatorNode ).stop();
-
-    } else if ( this._type === "input" ) {
-      this._stream.getAudioTracks().forEach( track => track.stop() );
+    } else if (this._type === "gen") {
+      (this._node as OscillatorNode).stop();
+    } else if (this._type === "input") {
+      this._stream.getAudioTracks().forEach((track) => track.stop());
     }
 
     this._playing = false;
     return this;
   }
 
-
   /**
    * Toggle between `start` and `stop`. This won't work if using [`Sound.loadAsBuffer`](#link), since `AudioBuffer` can only be played once. (See [`Sound.createBuffer`](#link) to reset buffer for replay).
    */
-  toggle():this {
-    if ( this._playing ) {
+  toggle(): this {
+    if (this._playing) {
       this.stop();
     } else {
       this.start();
     }
     return this;
   }
-
-
 }

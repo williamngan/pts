@@ -3,7 +3,7 @@
   "source": [
     [
       "src/LinearAlgebra.ts",
-      11,
+      10,
       13
     ]
   ],
@@ -50,7 +50,7 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          17,
+          15,
           9
         ]
       ],
@@ -88,7 +88,7 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          142,
+          140,
           9
         ]
       ],
@@ -120,7 +120,7 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          97,
+          96,
           9
         ]
       ],
@@ -158,7 +158,7 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          90,
+          89,
           9
         ]
       ],
@@ -196,7 +196,7 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          60,
+          59,
           9
         ]
       ],
@@ -272,7 +272,7 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          133,
+          132,
           9
         ]
       ],
@@ -304,7 +304,7 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          105,
+          107,
           9
         ]
       ],
@@ -336,7 +336,7 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          200,
+          193,
           9
         ]
       ],
@@ -374,7 +374,7 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          160,
+          156,
           9
         ]
       ],
@@ -406,7 +406,7 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          175,
+          170,
           9
         ]
       ],
@@ -438,7 +438,7 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          43,
+          41,
           9
         ]
       ],
@@ -476,7 +476,7 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          151,
+          148,
           9
         ]
       ],
@@ -508,7 +508,7 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          30,
+          28,
           9
         ]
       ],
@@ -546,7 +546,7 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          189,
+          183,
           9
         ]
       ],
@@ -578,7 +578,7 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          113,
+          114,
           9
         ]
       ],

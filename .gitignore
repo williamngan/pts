@@ -1,4 +1,6 @@
-.vscode
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
 .idea
 node_modules/
 coverage/

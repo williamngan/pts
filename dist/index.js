@@ -3529,7 +3529,7 @@ var CanvasForm = class CanvasForm extends VisualForm {
 		return this;
 	}
 	fontWidthEstimate(estimate = true) {
-		this._estimateTextWidth = estimate ? Typography.textWidthEstimator(((c) => this._ctx.measureText(c).width)) : void 0;
+		this._estimateTextWidth = estimate ? Typography.textWidthEstimator((c) => this._ctx.measureText(c).width) : void 0;
 		return this;
 	}
 	getTextWidth(c) {
@@ -4885,20 +4885,20 @@ var HTMLForm = class HTMLForm extends VisualForm {
 	constructor(space) {
 		super();
 		this._style = {
-			"filled": true,
-			"stroked": true,
-			"background": "#f03",
+			filled: true,
+			stroked: true,
+			background: "#f03",
 			"border-color": "#fff",
-			"color": "#000",
+			color: "#000",
 			"border-width": "1px",
 			"border-radius": "0",
 			"border-style": "solid",
-			"opacity": 1,
-			"position": "absolute",
-			"top": 0,
-			"left": 0,
-			"width": 0,
-			"height": 0
+			opacity: 1,
+			position: "absolute",
+			top: 0,
+			left: 0,
+			width: 0,
+			height: 0
 		};
 		this._ctx = {
 			group: null,
@@ -5127,11 +5127,11 @@ var SVGSpace = class SVGSpace extends DOMSpace {
 	resize(b, evt) {
 		super.resize(b, evt);
 		SVGSpace.setAttr(this.element, {
-			"viewBox": `0 0 ${this.bound.width} ${this.bound.height}`,
-			"width": `${this.bound.width}`,
-			"height": `${this.bound.height}`,
-			"xmlns": "http://www.w3.org/2000/svg",
-			"version": "1.1"
+			viewBox: `0 0 ${this.bound.width} ${this.bound.height}`,
+			width: `${this.bound.width}`,
+			height: `${this.bound.height}`,
+			xmlns: "http://www.w3.org/2000/svg",
+			version: "1.1"
 		});
 		return this;
 	}
@@ -5160,14 +5160,14 @@ var SVGForm = class SVGForm extends VisualForm {
 	constructor(space) {
 		super();
 		this._style = {
-			"filled": true,
-			"stroked": true,
-			"fill": "#f03",
-			"stroke": "#fff",
+			filled: true,
+			stroked: true,
+			fill: "#f03",
+			stroke: "#fff",
 			"stroke-width": 1,
 			"stroke-linejoin": "bevel",
 			"stroke-linecap": "sqaure",
-			"opacity": 1
+			opacity: 1
 		};
 		this._ctx = {
 			group: null,
@@ -5289,7 +5289,7 @@ var SVGForm = class SVGForm extends VisualForm {
 			cx: pt[0],
 			cy: pt[1],
 			r: radius,
-			"class": `pts-svgform pts-circle ${ctx.currentClass}`
+			class: `pts-svgform pts-circle ${ctx.currentClass}`
 		});
 		SVGForm.style(elem, ctx.style);
 		return elem;
@@ -5310,7 +5310,7 @@ var SVGForm = class SVGForm extends VisualForm {
 		const d = `M ${start[0]} ${start[1]} A ${radius} ${radius} 0 ${largeArc ? "1" : "0"} ${sweep} ${end[0]} ${end[1]}`;
 		DOMSpace.setAttr(elem, {
 			d,
-			"class": `pts-svgform pts-arc ${ctx.currentClass}`
+			class: `pts-svgform pts-arc ${ctx.currentClass}`
 		});
 		SVGForm.style(elem, ctx.style);
 		return elem;
@@ -5327,7 +5327,7 @@ var SVGForm = class SVGForm extends VisualForm {
 			y: pt[1] - halfsize,
 			width: halfsize * 2,
 			height: halfsize * 2,
-			"class": `pts-svgform pts-square ${ctx.currentClass}`
+			class: `pts-svgform pts-square ${ctx.currentClass}`
 		});
 		SVGForm.style(elem, ctx.style);
 		return elem;
@@ -5348,7 +5348,7 @@ var SVGForm = class SVGForm extends VisualForm {
 			y1: p[0][1],
 			x2: p[1][0],
 			y2: p[1][1],
-			"class": `pts-svgform pts-line ${ctx.currentClass}`
+			class: `pts-svgform pts-line ${ctx.currentClass}`
 		});
 		SVGForm.style(elem, ctx.style);
 		return elem;
@@ -5362,7 +5362,7 @@ var SVGForm = class SVGForm extends VisualForm {
 		let elem = SVGSpace.svgElement(ctx.group, closePath ? "polygon" : "polyline", SVGForm.getID(ctx));
 		DOMSpace.setAttr(elem, {
 			points,
-			"class": `pts-svgform pts-polygon ${ctx.currentClass}`
+			class: `pts-svgform pts-polygon ${ctx.currentClass}`
 		});
 		SVGForm.style(elem, ctx.style);
 		return elem;
@@ -5398,7 +5398,7 @@ var SVGForm = class SVGForm extends VisualForm {
 			y: bound[0][1],
 			width: size[0],
 			height: size[1],
-			"class": `pts-svgform pts-rect ${ctx.currentClass}`
+			class: `pts-svgform pts-rect ${ctx.currentClass}`
 		});
 		SVGForm.style(elem, ctx.style);
 		return elem;
@@ -5416,7 +5416,7 @@ var SVGForm = class SVGForm extends VisualForm {
 			y: pt[1],
 			dx: 0,
 			dy: 0,
-			"class": `pts-svgform pts-text ${ctx.currentClass}`
+			class: `pts-svgform pts-text ${ctx.currentClass}`
 		});
 		elem.textContent = txt;
 		SVGForm.style(elem, ctx.style);

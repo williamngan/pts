@@ -16,7 +16,7 @@
       "source": [
         [
           "src/Physics.ts",
-          37,
+          35,
           2
         ]
       ],
@@ -60,7 +60,7 @@
       "source": [
         [
           "src/Physics.ts",
-          78,
+          100,
           6
         ]
       ],
@@ -79,12 +79,12 @@
       "source": [
         [
           "src/Physics.ts",
-          48,
+          50,
           6
         ],
         [
           "src/Physics.ts",
-          49,
+          53,
           6
         ]
       ],
@@ -111,12 +111,12 @@
       "source": [
         [
           "src/Physics.ts",
-          66,
+          80,
           6
         ],
         [
           "src/Physics.ts",
-          67,
+          83,
           6
         ]
       ],
@@ -143,12 +143,12 @@
       "source": [
         [
           "src/Physics.ts",
-          60,
+          70,
           6
         ],
         [
           "src/Physics.ts",
-          61,
+          73,
           6
         ]
       ],
@@ -175,12 +175,12 @@
       "source": [
         [
           "src/Physics.ts",
-          54,
+          60,
           6
         ],
         [
           "src/Physics.ts",
-          55,
+          63,
           6
         ]
       ],
@@ -207,12 +207,12 @@
       "source": [
         [
           "src/Physics.ts",
-          72,
+          90,
           6
         ],
         [
           "src/Physics.ts",
-          73,
+          93,
           6
         ]
       ],
@@ -239,7 +239,7 @@
       "source": [
         [
           "src/Physics.ts",
-          83,
+          107,
           6
         ]
       ],
@@ -260,7 +260,7 @@
       "source": [
         [
           "src/Physics.ts",
-          166,
+          184,
           2
         ]
       ],
@@ -284,7 +284,7 @@
               "name": "name",
               "comment": "optional name, which can be referenced in `body()` or `particle()` function to retrieve this back.",
               "type": "string",
-              "default": "''"
+              "default": "\"\""
             }
           ],
           "tags": []
@@ -296,7 +296,7 @@
       "source": [
         [
           "src/Physics.ts",
-          91,
+          116,
           2
         ]
       ],
@@ -326,7 +326,7 @@
       "source": [
         [
           "src/Physics.ts",
-          117,
+          140,
           2
         ]
       ],
@@ -356,7 +356,7 @@
       "source": [
         [
           "src/Physics.ts",
-          156,
+          175,
           2
         ]
       ],
@@ -386,7 +386,7 @@
       "source": [
         [
           "src/Physics.ts",
-          147,
+          167,
           2
         ]
       ],
@@ -416,7 +416,7 @@
       "source": [
         [
           "src/Physics.ts",
-          272,
+          300,
           12
         ]
       ],
@@ -460,7 +460,7 @@
       "source": [
         [
           "src/Physics.ts",
-          104,
+          128,
           2
         ]
       ],
@@ -490,7 +490,7 @@
       "source": [
         [
           "src/Physics.ts",
-          127,
+          149,
           2
         ]
       ],
@@ -520,7 +520,7 @@
       "source": [
         [
           "src/Physics.ts",
-          195,
+          214,
           2
         ]
       ],
@@ -556,7 +556,7 @@
       "source": [
         [
           "src/Physics.ts",
-          209,
+          227,
           2
         ]
       ],
@@ -592,7 +592,7 @@
       "source": [
         [
           "src/Physics.ts",
-          136,
+          157,
           2
         ]
       ],
@@ -622,7 +622,7 @@
       "source": [
         [
           "src/Physics.ts",
-          249,
+          273,
           9
         ]
       ],
@@ -666,7 +666,7 @@
       "source": [
         [
           "src/Physics.ts",
-          226,
+          243,
           9
         ]
       ],

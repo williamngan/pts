@@ -622,7 +622,7 @@ declare class CanvasForm extends VisualForm {
   stroke(c: string | boolean | CanvasGradient | CanvasPattern, width?: number, linejoin?: CanvasLineJoin, linecap?: CanvasLineCap): this;
   strokeOnly(c: string | boolean | CanvasGradient | CanvasPattern, width?: number, linejoin?: CanvasLineJoin, linecap?: CanvasLineCap): this;
   applyFillStroke(filled?: boolean | string, stroked?: boolean | string, strokeWidth?: number): this;
-  gradient(stops: [number, string][] | string[]): ((area1: GroupLike, area2?: GroupLike) => CanvasGradient);
+  gradient(stops: [number, string][] | string[]): (area1: GroupLike, area2?: GroupLike) => CanvasGradient;
   composite(mode?: GlobalCompositeOperation): this;
   clip(): this;
   dash(segments?: PtLike | boolean, offset?: number): this;
@@ -719,7 +719,7 @@ declare class Geom {
   static toDegree(radian: number): number;
   static boundingBox(pts: PtIterable): Group;
   static centroid(pts: PtLikeIterable): Pt;
-  static anchor(pts: PtLikeIterable, ptOrIndex?: PtLike | number, direction?: ("to" | "from")): void;
+  static anchor(pts: PtLikeIterable, ptOrIndex?: PtLike | number, direction?: "to" | "from"): void;
   static interpolate(a: PtLike, b: PtLike, t?: number): Pt;
   static perpendicular(pt: PtLike, axis?: string | PtLike): Group;
   static isPerpendicular(p1: PtLike, p2: PtLike): boolean;
@@ -948,7 +948,7 @@ declare class Color extends Pt {
   set normalized(b: boolean);
   normalize(toNorm?: boolean): Color;
   $normalize(toNorm?: boolean): Color;
-  toString(format?: ("hex" | "rgb" | "rgba" | "mode")): string;
+  toString(format?: "hex" | "rgb" | "rgba" | "mode"): string;
   static RGBtoHSL(rgb: Color, normalizedInput?: boolean, normalizedOutput?: boolean): Color;
   static HSLtoRGB(hsl: Color, normalizedInput?: boolean, normalizedOutput?: boolean): Color;
   static RGBtoHSB(rgb: Color, normalizedInput?: boolean, normalizedOutput?: boolean): Color;
@@ -1010,10 +1010,10 @@ declare class Util {
   static flatten(pts: any[], flattenAsGroup?: boolean): any;
   static combine<T>(a: T[], b: T[], op: (a: T, b: T) => T): T[];
   static zip(arrays: Array<any>[]): any[];
-  static stepper(max: number, min?: number, stride?: number, callback?: (n: number) => void): (() => number);
+  static stepper(max: number, min?: number, stride?: number, callback?: (n: number) => void): () => number;
   static forRange(fn: (index: number) => any, range: number, start?: number, step?: number): any[];
   static load(url: string, callback: (response: string, success: boolean) => void): void;
-  static download(space: CanvasSpace, filename?: string, filetype?: ("jpeg" | "jpg" | "png" | "webp"), quality?: number): void;
+  static download(space: CanvasSpace, filename?: string, filetype?: "jpeg" | "jpg" | "png" | "webp", quality?: number): void;
   static performance(avgFrames?: number): () => number;
   static arrayCheck(pts: PtLikeIterable, minRequired?: number): boolean;
   static iterToArray(it: Iterable<any>): any[];
