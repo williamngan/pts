@@ -304,12 +304,8 @@ export default defineSuite("op", (b, { Pts, fx }) => {
   b.case("Rectangle.boundingBox", {
     batch: SIZES.S,
     setupOnce: () => fx.rects("op:rect:bbox", SIZES.S),
-    // Sinks the result length rather than a coordinate: this function currently
-    // returns NaN for every input, because it flattens its rectangles to Pts
-    // and then indexes each Pt's numbers as if they were Pts. The work is still
-    // performed and still worth measuring.
     run: (rects) => {
-      sink(Rectangle.boundingBox(rects).length);
+      sink(Rectangle.boundingBox(rects)[1][0]);
     },
   });
 

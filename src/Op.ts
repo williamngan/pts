@@ -555,16 +555,21 @@ export class Rectangle {
   static boundingBox(rects: Iterable<PtLikeIterable>): Group {
     let _rects = Util.iterToArray(rects);
     let merged = Util.flatten(_rects, false);
-    let min = Pt.make(2, Number.MAX_VALUE);
-    let max = Pt.make(2, Number.MIN_VALUE);
+    if (merged.length === 0) return new Group();
+
+    // Infinity, not Number.MAX_VALUE/MIN_VALUE. Pt is a Float32Array, in which
+    // MAX_VALUE overflows to Infinity and MIN_VALUE flushes to 0, which would
+    // leave the running maximum starting above every negative coordinate.
+    let min = Pt.make(2, Infinity);
+    let max = Pt.make(2, -Infinity);
 
     // calculate min max in a single pass
     for (let i = 0, len = merged.length; i < len; i++) {
-      let k = 0;
-      for (let m of merged[i]) {
-        min[k] = Math.min(min[k], m[k]);
-        max[k] = Math.max(max[k], m[k]);
-        if (++k >= 2) break;
+      let p = merged[i];
+      let dim = Math.min(2, p.length);
+      for (let k = 0; k < dim; k++) {
+        min[k] = Math.min(min[k], p[k]);
+        max[k] = Math.max(max[k], p[k]);
       }
     }
     return new Group(min, max);

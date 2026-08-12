@@ -197,13 +197,29 @@ describe("Rectangle", () => {
   it("bounds many rectangles and subdivides quadrants and halves", () => {
     const first = rect([0, 0], [10, 10]);
     const second = rect([-5, 5], [20, 15]);
-    const bounds = Rectangle.boundingBox([first, second]);
-    expect(bounds).toHaveLength(2);
-    expect(Number.isNaN(bounds[0].x)).toBe(true);
+    expect(groupValues(Rectangle.boundingBox([first, second]))).toEqual([
+      [-5, 0],
+      [20, 15],
+    ]);
     expect(Rectangle.quadrants(first)).toHaveLength(4);
     expect(Rectangle.quadrants(first, [2, 3])).toHaveLength(4);
     expect(Rectangle.halves(first, 0)).toHaveLength(2);
     expect(Rectangle.halves(first, 0.25, true)).toHaveLength(2);
+  });
+
+  it("bounds rectangles that lie entirely in negative space", () => {
+    const bounds = Rectangle.boundingBox([
+      rect([-40, -30], [-20, -10]),
+      rect([-15, -25], [-5, -5]),
+    ]);
+    expect(groupValues(bounds)).toEqual([
+      [-40, -30],
+      [-5, -5],
+    ]);
+  });
+
+  it("returns an empty group when there is nothing to bound", () => {
+    expect(Rectangle.boundingBox([])).toHaveLength(0);
   });
 
   it("checks points and rectangle intersections", () => {

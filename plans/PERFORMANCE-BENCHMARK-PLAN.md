@@ -403,26 +403,35 @@ It also surfaced that `Delaunay.voronoi` and `Delaunay.mesh` quietly return
 nothing unless `delaunay()` has been called first — those cases triangulate in
 untimed setup and measure only the read.
 
-## Bug found while benchmarking
+## Bug found while benchmarking, and fixed
 
-`Rectangle.boundingBox` returns `Pt(NaN, NaN)` for every input. It flattens its
-rectangles to Pts and then indexes each Pt's individual numbers as if they were
-themselves Pts:
+`Rectangle.boundingBox` returned `Pt(NaN, NaN)` for every input. It flattens its
+rectangles to Pts, then iterated each Pt — which yields its individual numbers —
+and indexed those numbers as if they were themselves Pts:
 
 ```ts
 let merged = Util.flatten(_rects, false); // -> Pt[]
 for (let m of merged[i]) {
   // m is a number
-  min[k] = Math.min(min[k], m[k]); // m[k] is undefined
+  min[k] = Math.min(min[k], m[k]); // m[k] is undefined -> NaN
 }
 ```
 
-This is unrelated to the benchmarks and is left unfixed here, since this work is
-scoped to measurement. The benchmark sinks the result length so the case still
-measures the work being done. A related latent issue sits one line above:
-`Pt.make(2, Number.MAX_VALUE)` overflows to `Infinity` in a `Float32Array`, and
-`Number.MIN_VALUE` flushes to `0`, so the running maximum starts at zero rather
-than at negative infinity.
+A second defect sat two lines above. `Pt` is a `Float32Array`, so the sentinels
+`Pt.make(2, Number.MAX_VALUE)` and `Pt.make(2, Number.MIN_VALUE)` do not survive
+the narrowing: `MAX_VALUE` overflows to `Infinity` (harmless for a minimum) and
+`MIN_VALUE` flushes to `0`. The running maximum therefore started at zero, which
+would have clamped the result for any rectangle in negative space even once the
+indexing was correct.
+
+Both are fixed: the inner loop indexes the Pt rather than its numbers, and the
+sentinels are `Infinity` / `-Infinity`. An empty input now returns an empty
+`Group` instead of a Group of sentinel Pts.
+
+The existing unit test had pinned the broken behaviour with
+`expect(Number.isNaN(bounds[0].x)).toBe(true)`. It now asserts the bounding box,
+alongside a case entirely in negative space — which is what covers the sentinel
+defect, since the indexing fix alone still returns `[0, 0]` for it.
 
 ### Cross-session comparison cannot gate
 
