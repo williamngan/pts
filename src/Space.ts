@@ -35,9 +35,6 @@ export abstract class Space {
   protected _isReady = false;
   protected _playing = false;
 
-  protected _keyDownBind: (evt: KeyboardEvent) => boolean;
-  protected _keyUpBind: (evt: KeyboardEvent) => boolean;
-
   /**
    * Set whether the rendering should be repainted on each frame.
    * @param b a boolean value to set whether to repaint each frame
@@ -188,6 +185,18 @@ export abstract class Space {
   }
 
   /**
+   * Cancel the active animation frame immediately. Subclasses should call this
+   * when they dispose browser resources instead of waiting for `stop()` to be
+   * observed by the next frame.
+   */
+  protected _cancelAnimation(): this {
+    if (this._animID !== -1) cancelAnimationFrame(this._animID);
+    this._animID = -1;
+    this._playing = false;
+    return this;
+  }
+
+  /**
    * Play animation loop once. Optionally set a `duration` time to play for that specific duration.
    * @param duration a value in millisecond to specify a time period to play before stopping, or `-1` to play forever
    */
@@ -296,6 +305,23 @@ export abstract class MultiTouchSpace extends Space {
   protected _hasTouch = false;
   protected _hasKeyboard = false;
 
+  private _mouseTarget: Element;
+  private _touchTarget: Element;
+  private _keyboardTarget: EventTarget;
+  private _touchPassive = false;
+
+  private readonly _mouseDownBind = this._mouseDown.bind(this);
+  private readonly _mouseUpBind = this._mouseUp.bind(this);
+  private readonly _mouseOverBind = this._mouseOver.bind(this);
+  private readonly _mouseOutBind = this._mouseOut.bind(this);
+  private readonly _mouseMoveBind = this._mouseMove.bind(this);
+  private readonly _mouseClickBind = this._mouseClick.bind(this);
+  private readonly _contextMenuBind = this._contextMenu.bind(this);
+  private readonly _touchStartBind = this._touchStart.bind(this);
+  private readonly _touchMoveBind = this._touchMove.bind(this);
+  private readonly _keyDownBind = this._keyDown.bind(this);
+  private readonly _keyUpBind = this._keyUp.bind(this);
+
   // accept subclasses that implements addEventListener, removeEventListener, dispatchEvent
   protected _canvas: EventTarget;
 
@@ -364,31 +390,31 @@ export abstract class MultiTouchSpace extends Space {
    */
   bindMouse(bind: boolean = true, customTarget?: Element): this {
     if (bind) {
-      this._mouseDown = this._mouseDown.bind(this);
-      this._mouseUp = this._mouseUp.bind(this);
-      this._mouseOver = this._mouseOver.bind(this);
-      this._mouseOut = this._mouseOut.bind(this);
-      this._mouseMove = this._mouseMove.bind(this);
-      this._mouseClick = this._mouseClick.bind(this);
-      this._contextMenu = this._contextMenu.bind(this);
+      if (this._hasMouse) {
+        if (this._mouseTarget === customTarget) return this;
+        this.bindMouse(false);
+      }
 
-      this.bindCanvas("pointerdown", this._mouseDown, {}, customTarget);
-      this.bindCanvas("pointerup", this._mouseUp, {}, customTarget);
-      this.bindCanvas("pointerover", this._mouseOver, {}, customTarget);
-      this.bindCanvas("pointerout", this._mouseOut, {}, customTarget);
-      this.bindCanvas("pointermove", this._mouseMove, {}, customTarget);
-      this.bindCanvas("click", this._mouseClick, {}, customTarget);
-      this.bindCanvas("contextmenu", this._contextMenu, {}, customTarget);
+      this._mouseTarget = customTarget;
+      this.bindCanvas("pointerdown", this._mouseDownBind, {}, customTarget);
+      this.bindCanvas("pointerup", this._mouseUpBind, {}, customTarget);
+      this.bindCanvas("pointerover", this._mouseOverBind, {}, customTarget);
+      this.bindCanvas("pointerout", this._mouseOutBind, {}, customTarget);
+      this.bindCanvas("pointermove", this._mouseMoveBind, {}, customTarget);
+      this.bindCanvas("click", this._mouseClickBind, {}, customTarget);
+      this.bindCanvas("contextmenu", this._contextMenuBind, {}, customTarget);
       this._hasMouse = true;
-    } else {
-      this.unbindCanvas("pointerdown", this._mouseDown, {}, customTarget);
-      this.unbindCanvas("pointerup", this._mouseUp, {}, customTarget);
-      this.unbindCanvas("pointerover", this._mouseOver, {}, customTarget);
-      this.unbindCanvas("pointerout", this._mouseOut, {}, customTarget);
-      this.unbindCanvas("pointermove", this._mouseMove, {}, customTarget);
-      this.unbindCanvas("click", this._mouseClick, {}, customTarget);
-      this.unbindCanvas("contextmenu", this._contextMenu, {}, customTarget);
+    } else if (this._hasMouse) {
+      const target = this._mouseTarget;
+      this.unbindCanvas("pointerdown", this._mouseDownBind, {}, target);
+      this.unbindCanvas("pointerup", this._mouseUpBind, {}, target);
+      this.unbindCanvas("pointerover", this._mouseOverBind, {}, target);
+      this.unbindCanvas("pointerout", this._mouseOutBind, {}, target);
+      this.unbindCanvas("pointermove", this._mouseMoveBind, {}, target);
+      this.unbindCanvas("click", this._mouseClickBind, {}, target);
+      this.unbindCanvas("contextmenu", this._contextMenuBind, {}, target);
       this._hasMouse = false;
+      this._mouseTarget = undefined;
     }
     return this;
   }
@@ -408,63 +434,79 @@ export abstract class MultiTouchSpace extends Space {
     customTarget?: Element,
   ): this {
     if (bind) {
+      if (this._hasTouch) {
+        if (
+          this._touchTarget === customTarget &&
+          this._touchPassive === passive
+        )
+          return this;
+        this.bindTouch(false);
+      }
+
+      this._touchTarget = customTarget;
+      this._touchPassive = passive;
       this.bindCanvas(
         "touchstart",
-        this._touchStart.bind(this),
+        this._touchStartBind,
         { passive: passive },
         customTarget,
       );
-      this.bindCanvas("touchend", this._mouseUp.bind(this), {}, customTarget);
+      this.bindCanvas("touchend", this._mouseUpBind, {}, customTarget);
       this.bindCanvas(
         "touchmove",
-        this._touchMove.bind(this),
+        this._touchMoveBind,
         { passive: passive },
         customTarget,
       );
-      this.bindCanvas(
-        "touchcancel",
-        this._mouseOut.bind(this),
-        {},
-        customTarget,
-      );
+      this.bindCanvas("touchcancel", this._mouseOutBind, {}, customTarget);
       this._hasTouch = true;
-    } else {
-      this.unbindCanvas(
-        "touchstart",
-        this._touchStart.bind(this),
-        { passive: passive },
-        customTarget,
-      );
-      this.unbindCanvas("touchend", this._mouseUp.bind(this), {}, customTarget);
-      this.unbindCanvas(
-        "touchmove",
-        this._touchMove.bind(this),
-        { passive: passive },
-        customTarget,
-      );
-      this.unbindCanvas(
-        "touchcancel",
-        this._mouseOut.bind(this),
-        {},
-        customTarget,
-      );
+    } else if (this._hasTouch) {
+      const target = this._touchTarget;
+      const options = { passive: this._touchPassive };
+      this.unbindCanvas("touchstart", this._touchStartBind, options, target);
+      this.unbindCanvas("touchend", this._mouseUpBind, {}, target);
+      this.unbindCanvas("touchmove", this._touchMoveBind, options, target);
+      this.unbindCanvas("touchcancel", this._mouseOutBind, {}, target);
       this._hasTouch = false;
+      this._touchTarget = undefined;
     }
     return this;
   }
 
-  bindKeyboard(bind: boolean = true): this {
+  /**
+   * Bind or unbind keyboard events. Events are attached to `document` by
+   * default, or to `customTarget` when one is provided.
+   */
+  bindKeyboard(bind: boolean = true, customTarget?: EventTarget): this {
     if (bind) {
-      this._keyDownBind = this._keyDown.bind(this);
-      this._keyUpBind = this._keyUp.bind(this);
-      this.bindDoc("keydown", this._keyDownBind, {});
-      this.bindDoc("keyup", this._keyUpBind, {});
+      const target = customTarget || document;
+      if (this._hasKeyboard) {
+        if (this._keyboardTarget === target) return this;
+        this.bindKeyboard(false);
+      }
+
+      target.addEventListener("keydown", this._keyDownBind, {});
+      target.addEventListener("keyup", this._keyUpBind, {});
+      this._keyboardTarget = target;
       this._hasKeyboard = true;
-    } else {
-      this.unbindDoc("keydown", this._keyDownBind, {});
-      this.unbindDoc("keyup", this._keyUpBind, {});
+    } else if (this._hasKeyboard) {
+      this._keyboardTarget.removeEventListener(
+        "keydown",
+        this._keyDownBind,
+        {},
+      );
+      this._keyboardTarget.removeEventListener("keyup", this._keyUpBind, {});
+      this._keyboardTarget = undefined;
       this._hasKeyboard = false;
     }
+    return this;
+  }
+
+  /** Unbind all pointer, touch, and keyboard listeners owned by this space. */
+  protected _unbindAll(): this {
+    this.bindMouse(false);
+    this.bindTouch(false);
+    this.bindKeyboard(false);
     return this;
   }
 

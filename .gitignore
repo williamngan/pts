@@ -4,6 +4,8 @@
 .idea
 node_modules/
 coverage/
+.vitest-attachments/
+src/test/browser/__screenshots__/
 test/integrations/*/dist/
 temp/
 .DS_Store

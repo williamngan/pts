@@ -3,12 +3,12 @@
   "source": [
     [
       "src/UI.ts",
-      452,
+      456,
       13
     ]
   ],
   "kind": "Class",
-  "id": 7580,
+  "id": 7578,
   "comment": "[Experimental] A draggable UI that provides handler such as [`UIDragger.onDrag`](#link) and [`UIDragger.onDrop`](#link).",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "src/UI.ts",
-          465,
+          469,
           2
         ]
       ],
-      "id": 7626,
+      "id": 7624,
       "flags": {},
       "overrides": "UIButton.__constructor",
       "inherits": false,
@@ -66,16 +66,16 @@
       "source": [
         [
           "src/UI.ts",
-          129,
+          133,
           6
         ],
         [
           "src/UI.ts",
-          132,
+          136,
           6
         ]
       ],
-      "id": 7687,
+      "id": 7685,
       "flags": {},
       "overrides": false,
       "inherits": "UI.group",
@@ -98,16 +98,16 @@
       "source": [
         [
           "src/UI.ts",
-          119,
+          123,
           6
         ],
         [
           "src/UI.ts",
-          122,
+          126,
           6
         ]
       ],
-      "id": 7683,
+      "id": 7681,
       "flags": {},
       "overrides": false,
       "inherits": "UI.id",
@@ -130,16 +130,16 @@
       "source": [
         [
           "src/UI.ts",
-          139,
+          143,
           6
         ],
         [
           "src/UI.ts",
-          142,
+          146,
           6
         ]
       ],
-      "id": 7691,
+      "id": 7689,
       "flags": {},
       "overrides": false,
       "inherits": "UI.shape",
@@ -164,11 +164,11 @@
       "source": [
         [
           "src/UI.ts",
-          215,
+          219,
           12
         ]
       ],
-      "id": 7712,
+      "id": 7710,
       "flags": {
         "isProtected": true
       },
@@ -196,11 +196,11 @@
       "source": [
         [
           "src/UI.ts",
-          194,
+          198,
           2
         ]
       ],
-      "id": 7707,
+      "id": 7705,
       "flags": {},
       "overrides": false,
       "inherits": "UI.listen",
@@ -238,11 +238,11 @@
       "source": [
         [
           "src/UI.ts",
-          178,
+          182,
           2
         ]
       ],
-      "id": 7703,
+      "id": 7701,
       "flags": {},
       "overrides": false,
       "inherits": "UI.off",
@@ -274,11 +274,11 @@
       "source": [
         [
           "src/UI.ts",
-          398,
+          402,
           2
         ]
       ],
-      "id": 7654,
+      "id": 7652,
       "flags": {},
       "overrides": false,
       "inherits": "UIButton.offClick",
@@ -304,11 +304,11 @@
       "source": [
         [
           "src/UI.ts",
-          416,
+          420,
           2
         ]
       ],
-      "id": 7660,
+      "id": 7658,
       "flags": {},
       "overrides": false,
       "inherits": "UIButton.offContextMenu",
@@ -334,11 +334,11 @@
       "source": [
         [
           "src/UI.ts",
-          552,
+          556,
           2
         ]
       ],
-      "id": 7642,
+      "id": 7640,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -364,11 +364,11 @@
       "source": [
         [
           "src/UI.ts",
-          570,
+          574,
           2
         ]
       ],
-      "id": 7648,
+      "id": 7646,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -394,11 +394,11 @@
       "source": [
         [
           "src/UI.ts",
-          439,
+          443,
           2
         ]
       ],
-      "id": 7667,
+      "id": 7665,
       "flags": {},
       "overrides": false,
       "inherits": "UIButton.offHover",
@@ -430,11 +430,11 @@
       "source": [
         [
           "src/UI.ts",
-          167,
+          171,
           2
         ]
       ],
-      "id": 7699,
+      "id": 7697,
       "flags": {},
       "overrides": false,
       "inherits": "UI.on",
@@ -466,11 +466,11 @@
       "source": [
         [
           "src/UI.ts",
-          389,
+          393,
           2
         ]
       ],
-      "id": 7651,
+      "id": 7649,
       "flags": {},
       "overrides": false,
       "inherits": "UIButton.onClick",
@@ -496,11 +496,11 @@
       "source": [
         [
           "src/UI.ts",
-          407,
+          411,
           2
         ]
       ],
-      "id": 7657,
+      "id": 7655,
       "flags": {},
       "overrides": false,
       "inherits": "UIButton.onContextMenu",
@@ -526,11 +526,11 @@
       "source": [
         [
           "src/UI.ts",
-          543,
+          547,
           2
         ]
       ],
-      "id": 7639,
+      "id": 7637,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -556,11 +556,11 @@
       "source": [
         [
           "src/UI.ts",
-          561,
+          565,
           2
         ]
       ],
-      "id": 7645,
+      "id": 7643,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -586,11 +586,11 @@
       "source": [
         [
           "src/UI.ts",
-          426,
+          430,
           2
         ]
       ],
-      "id": 7663,
+      "id": 7661,
       "flags": {},
       "overrides": false,
       "inherits": "UIButton.onHover",
@@ -622,11 +622,11 @@
       "source": [
         [
           "src/UI.ts",
-          250,
+          254,
           2
         ]
       ],
-      "id": 7718,
+      "id": 7716,
       "flags": {},
       "overrides": false,
       "inherits": "UI.render",
@@ -652,11 +652,11 @@
       "source": [
         [
           "src/UI.ts",
-          152,
+          156,
           2
         ]
       ],
-      "id": 7695,
+      "id": 7693,
       "flags": {},
       "overrides": false,
       "inherits": "UI.state",
@@ -688,11 +688,11 @@
       "source": [
         [
           "src/UI.ts",
-          257,
+          261,
           2
         ]
       ],
-      "id": 7728,
+      "id": 7726,
       "flags": {},
       "overrides": false,
       "inherits": "UI.toString",
@@ -711,11 +711,11 @@
       "source": [
         [
           "src/UI.ts",
-          225,
+          229,
           12
         ]
       ],
-      "id": 7715,
+      "id": 7713,
       "flags": {
         "isProtected": true
       },
@@ -743,11 +743,11 @@
       "source": [
         [
           "src/UI.ts",
-          93,
+          97,
           9
         ]
       ],
-      "id": 7588,
+      "id": 7586,
       "flags": {
         "isStatic": true
       },
@@ -787,11 +787,11 @@
       "source": [
         [
           "src/UI.ts",
-          103,
+          107,
           9
         ]
       ],
-      "id": 7594,
+      "id": 7592,
       "flags": {
         "isStatic": true
       },
@@ -831,11 +831,11 @@
       "source": [
         [
           "src/UI.ts",
-          83,
+          87,
           9
         ]
       ],
-      "id": 7582,
+      "id": 7580,
       "flags": {
         "isStatic": true
       },
@@ -875,11 +875,11 @@
       "source": [
         [
           "src/UI.ts",
-          112,
+          116,
           9
         ]
       ],
-      "id": 7600,
+      "id": 7598,
       "flags": {
         "isStatic": true
       },
@@ -919,11 +919,11 @@
       "source": [
         [
           "src/UI.ts",
-          240,
+          244,
           9
         ]
       ],
-      "id": 7605,
+      "id": 7603,
       "flags": {
         "isStatic": true
       },

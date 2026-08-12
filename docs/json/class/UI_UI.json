@@ -3,12 +3,12 @@
   "source": [
     [
       "src/UI.ts",
-      46,
+      50,
       13
     ]
   ],
   "kind": "Class",
-  "id": 7325,
+  "id": 7323,
   "comment": "**[Experimental]** An abstract class that represents an UI element. It wraps a [`Group`](#link) and supports UI event handling.\nExtend this class to create custom UI elements.",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "src/UI.ts",
-          64,
+          68,
           2
         ]
       ],
-      "id": 7371,
+      "id": 7369,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -66,16 +66,16 @@
       "source": [
         [
           "src/UI.ts",
-          129,
+          133,
           6
         ],
         [
           "src/UI.ts",
-          132,
+          136,
           6
         ]
       ],
-      "id": 7396,
+      "id": 7394,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -98,16 +98,16 @@
       "source": [
         [
           "src/UI.ts",
-          119,
+          123,
           6
         ],
         [
           "src/UI.ts",
-          122,
+          126,
           6
         ]
       ],
-      "id": 7392,
+      "id": 7390,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -130,16 +130,16 @@
       "source": [
         [
           "src/UI.ts",
-          139,
+          143,
           6
         ],
         [
           "src/UI.ts",
-          142,
+          146,
           6
         ]
       ],
-      "id": 7400,
+      "id": 7398,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -164,11 +164,11 @@
       "source": [
         [
           "src/UI.ts",
-          215,
+          219,
           12
         ]
       ],
-      "id": 7421,
+      "id": 7419,
       "flags": {
         "isProtected": true
       },
@@ -196,11 +196,11 @@
       "source": [
         [
           "src/UI.ts",
-          194,
+          198,
           2
         ]
       ],
-      "id": 7416,
+      "id": 7414,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -238,11 +238,11 @@
       "source": [
         [
           "src/UI.ts",
-          178,
+          182,
           2
         ]
       ],
-      "id": 7412,
+      "id": 7410,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -274,11 +274,11 @@
       "source": [
         [
           "src/UI.ts",
-          167,
+          171,
           2
         ]
       ],
-      "id": 7408,
+      "id": 7406,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -310,11 +310,11 @@
       "source": [
         [
           "src/UI.ts",
-          250,
+          254,
           2
         ]
       ],
-      "id": 7427,
+      "id": 7425,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -340,11 +340,11 @@
       "source": [
         [
           "src/UI.ts",
-          152,
+          156,
           2
         ]
       ],
-      "id": 7404,
+      "id": 7402,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -376,11 +376,11 @@
       "source": [
         [
           "src/UI.ts",
-          257,
+          261,
           2
         ]
       ],
-      "id": 7437,
+      "id": 7435,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -399,11 +399,11 @@
       "source": [
         [
           "src/UI.ts",
-          225,
+          229,
           12
         ]
       ],
-      "id": 7424,
+      "id": 7422,
       "flags": {
         "isProtected": true
       },
@@ -431,11 +431,11 @@
       "source": [
         [
           "src/UI.ts",
-          93,
+          97,
           9
         ]
       ],
-      "id": 7333,
+      "id": 7331,
       "flags": {
         "isStatic": true
       },
@@ -475,11 +475,11 @@
       "source": [
         [
           "src/UI.ts",
-          103,
+          107,
           9
         ]
       ],
-      "id": 7339,
+      "id": 7337,
       "flags": {
         "isStatic": true
       },
@@ -519,11 +519,11 @@
       "source": [
         [
           "src/UI.ts",
-          83,
+          87,
           9
         ]
       ],
-      "id": 7327,
+      "id": 7325,
       "flags": {
         "isStatic": true
       },
@@ -563,11 +563,11 @@
       "source": [
         [
           "src/UI.ts",
-          112,
+          116,
           9
         ]
       ],
-      "id": 7345,
+      "id": 7343,
       "flags": {
         "isStatic": true
       },
@@ -607,11 +607,11 @@
       "source": [
         [
           "src/UI.ts",
-          240,
+          244,
           9
         ]
       ],
-      "id": 7350,
+      "id": 7348,
       "flags": {
         "isStatic": true
       },

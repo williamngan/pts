@@ -10,25 +10,26 @@ declare const UIShape: {
   line: string;
 };
 declare const UIPointerActions: {
-  up: string;
-  down: string;
-  move: string;
-  drag: string;
-  uidrag: string;
-  drop: string;
-  uidrop: string;
-  over: string;
-  out: string;
-  enter: string;
-  leave: string;
-  click: string;
-  keydown: string;
-  keyup: string;
-  pointerdown: string;
-  pointerup: string;
-  contextmenu: string;
-  all: string;
+  readonly up: "up";
+  readonly down: "down";
+  readonly move: "move";
+  readonly drag: "drag";
+  readonly uidrag: "uidrag";
+  readonly drop: "drop";
+  readonly uidrop: "uidrop";
+  readonly over: "over";
+  readonly out: "out";
+  readonly enter: "enter";
+  readonly leave: "leave";
+  readonly click: "click";
+  readonly keydown: "keydown";
+  readonly keyup: "keyup";
+  readonly pointerdown: "pointerdown";
+  readonly pointerup: "pointerup";
+  readonly contextmenu: "contextmenu";
+  readonly all: "all";
 };
+type UIPointerAction = (typeof UIPointerActions)[keyof typeof UIPointerActions];
 declare class UI {
   _group: Group;
   _shape: string;
@@ -412,8 +413,6 @@ declare abstract class Space {
   protected _pointer: Pt;
   protected _isReady: boolean;
   protected _playing: boolean;
-  protected _keyDownBind: (evt: KeyboardEvent) => boolean;
-  protected _keyUpBind: (evt: KeyboardEvent) => boolean;
   refresh(b: boolean): this;
   minFrameTime(ms?: number): void;
   add(p: IPlayer | AnimateCallbackFn): this;
@@ -425,6 +424,7 @@ declare abstract class Space {
   pause(toggle?: boolean): this;
   resume(): this;
   stop(t?: number): this;
+  protected _cancelAnimation(): this;
   playOnce(duration?: number): this;
   protected render(context: any): this;
   set customRendering(f: (context: any, self: Space) => null);
@@ -446,6 +446,21 @@ declare abstract class MultiTouchSpace extends Space {
   protected _hasMouse: boolean;
   protected _hasTouch: boolean;
   protected _hasKeyboard: boolean;
+  private _mouseTarget;
+  private _touchTarget;
+  private _keyboardTarget;
+  private _touchPassive;
+  private readonly _mouseDownBind;
+  private readonly _mouseUpBind;
+  private readonly _mouseOverBind;
+  private readonly _mouseOutBind;
+  private readonly _mouseMoveBind;
+  private readonly _mouseClickBind;
+  private readonly _contextMenuBind;
+  private readonly _touchStartBind;
+  private readonly _touchMoveBind;
+  private readonly _keyDownBind;
+  private readonly _keyUpBind;
   protected _canvas: EventTarget;
   get pointer(): Pt;
   bindCanvas(evt: string, callback: EventListener, options?: any, customTarget?: Element): void;
@@ -454,7 +469,8 @@ declare abstract class MultiTouchSpace extends Space {
   unbindDoc(evt: string, callback: EventListener, options?: any): void;
   bindMouse(bind?: boolean, customTarget?: Element): this;
   bindTouch(bind?: boolean, passive?: boolean, customTarget?: Element): this;
-  bindKeyboard(bind?: boolean): this;
+  bindKeyboard(bind?: boolean, customTarget?: EventTarget): this;
+  protected _unbindAll(): this;
   touchesToPoints(evt: TouchEvent, which?: TouchPointsKey): Pt[];
   protected _mouseAction(type: string, evt: MouseEvent | TouchEvent | PointerEvent): void;
   protected _mouseDown(evt: PointerEvent): boolean;
@@ -581,6 +597,9 @@ declare class CanvasSpace extends MultiTouchSpace {
   protected _resizeObserver: ResizeObserver;
   protected _autoResize: boolean;
   protected _initialResize: boolean;
+  private _readyObserver;
+  private _readyTimer;
+  private _disposed;
   constructor(elem: string | Element, callback?: Function);
   protected _createElement(elem: string, id: any): HTMLElement;
   private _ready;
@@ -1358,5 +1377,5 @@ declare class Sound {
   toggle(): this;
 }
 //#endregion
-export { AnimateCallbackFn, Body, Bound, CanvasForm, CanvasPatternRepetition, CanvasSpace, CanvasSpaceOptions, Circle, Color, ColorType, Const, Create, Curve, DOMFormContext, DOMSpace, DefaultFormStyle, Delaunay, DelaunayMesh, DelaunayShape, Font, Form, Geom, Group, GroupLike, HTMLForm, HTMLSpace, IPlayer, IPt, ISoundAnalyzer, ISpacePlayers, ITempoListener, ITempoProgressFn, ITempoResponses, ITempoStartFn, ITimer, Img, IntersectContext, Line, Mat, MultiTouchElement, MultiTouchSpace, Noise, Num, Particle, Polygon, Pt, PtIterable, PtLike, PtLikeIterable, Range, Rectangle, RenderingContext2D, SVGForm, SVGSpace, Shaping, Sound, SoundType, Space, Tempo, TouchPointsKey, Triangle, Typography, UI, UIButton, UIDragger, UIHandler, UIPointerActions, UIShape, Util, Vec, VisualForm, WarningType, World };
+export { AnimateCallbackFn, Body, Bound, CanvasForm, CanvasPatternRepetition, CanvasSpace, CanvasSpaceOptions, Circle, Color, ColorType, Const, Create, Curve, DOMFormContext, DOMSpace, DefaultFormStyle, Delaunay, DelaunayMesh, DelaunayShape, Font, Form, Geom, Group, GroupLike, HTMLForm, HTMLSpace, IPlayer, IPt, ISoundAnalyzer, ISpacePlayers, ITempoListener, ITempoProgressFn, ITempoResponses, ITempoStartFn, ITimer, Img, IntersectContext, Line, Mat, MultiTouchElement, MultiTouchSpace, Noise, Num, Particle, Polygon, Pt, PtIterable, PtLike, PtLikeIterable, Range, Rectangle, RenderingContext2D, SVGForm, SVGSpace, Shaping, Sound, SoundType, Space, Tempo, TouchPointsKey, Triangle, Typography, UI, UIButton, UIDragger, UIHandler, UIPointerAction, UIPointerActions, UIShape, Util, Vec, VisualForm, WarningType, World };
 //# sourceMappingURL=index.d.ts.map

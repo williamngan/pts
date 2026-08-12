@@ -1,571 +1,363 @@
-import { assert, describe, it } from "vitest";
-import { Pt, Group } from "../Pt";
-import { Geom, Num } from "../Num";
+import { describe, expect, it, vi } from "vitest";
+import { Num } from "../Num";
+import { Bound, Group, Pt } from "../Pt";
 import { Util } from "../Util";
 
-describe("Pt: ", () => {
-  describe("Pt Constructor: ", () => {
-    it("can init multi-dimensions", () => {
-      assert.equal(6, new Pt(1, 2, 3, 4, 5, 6).length);
-    });
+function values(value: ArrayLike<number>) {
+  return Array.from(value);
+}
 
-    it("can init with length argument", () => {
-      assert.equal(10, new Pt(10).length);
-    });
+function groupValues(value: ArrayLike<ArrayLike<number>>) {
+  return Array.from(value, values);
+}
 
-    it("can init in 1 dimensions", () => {
-      assert.equal(1, new Pt([10]).length);
-    });
-
-    it("should init with positional arguments", () => {
-      let p1 = new Pt(10, 100, 1000, 10000);
-      let p2 = new Pt(11, 111, 1111);
-      let p3 = new Pt(22, 222);
-      let p4 = new Pt([3]);
-      assert.equal(11346, p1[0] + p1[3] + p2[2] + p3[1] + p4[0]);
-    });
-
-    it("should init with IPt-like object", () => {
-      let p1 = new Pt({ x: 10, y: 100, z: 1000, w: 10000 });
-      let p2 = new Pt({ x: 11, y: 111, z: 1111 });
-      let p3 = new Pt({ x: 22, y: 222 });
-      let p4 = new Pt({ x: 3 });
-      assert.equal(11346, p1[0] + p1[3] + p2[2] + p3[1] + p4[0]);
-    });
-
-    it("should init with Pt object", () => {
-      let p = new Pt(new Pt(1, 2, 3, 4, 5, 6));
-      assert.equal(15, p[0] + p[1] + p[2] + p[3] + p[4]);
-    });
-
-    it("should init with Array of numbers", () => {
-      let p1 = new Pt([10, 100, 1000, 10000]);
-      let p2 = new Pt([11, 111, 1111]);
-      let p3 = new Pt([22, 222]);
-      let p4 = new Pt([3]);
-      assert.equal(11346, p1[0] + p1[3] + p2[2] + p3[1] + p4[0]);
-    });
-
-    it("can init by filling dimensions", () => {
-      let p = Pt.make(5, 100);
-      assert.isTrue(p.length === 5 && p[3] === 100);
-    });
+describe("Pt construction and accessors", () => {
+  it("constructs defaults, lengths, arrays, typed arrays, objects, and positional values", () => {
+    expect(values(new Pt())).toEqual([0, 0]);
+    expect(values(new Pt(3))).toEqual([0, 0, 0]);
+    expect(values(new Pt([3]))).toEqual([3]);
+    expect(values(new Pt(new Float32Array([1, 2])))).toEqual([1, 2]);
+    expect(values(new Pt({ x: 1, y: 2, z: 3, w: 4 }))).toEqual([1, 2, 3, 4]);
+    expect(values(new Pt(1, 2, 3))).toEqual([1, 2, 3]);
   });
 
-  describe("Pt Functions: ", () => {
-    it("can use Float32Array function", () => {
-      let p = new Pt([1, 2, 3, 4, 5, 6]);
-      let p2 = p.map((d) => d * 2) as Pt;
-      let p3 = p2.slice(2) as Pt;
-      p2.multiply(100);
-      p3.multiply(10);
-      assert.isTrue(p3.length === 4 && p2[2] === 600 && p3.y === 80);
-    });
-
-    it("can check size of vector", () => {
-      let p = new Pt([1, 2, 3, 4, 5, 6]);
-      assert.equal(6, p.length);
-    });
-
-    it("can update values", () => {
-      let p = new Pt([1, 2, 3, 4, 5, 6]);
-      p.to(0, 10, 100);
-      assert.isTrue(p.equals(new Pt(0, 10, 100, 4, 5, 6)));
-    });
-
-    it("can check equality", () => {
-      let p = new Pt(1, 2.1, 3.01);
-      let p2 = new Pt(1.01, 2, 3);
-      assert.isTrue(
-        p.equals(new Pt(1, 2, 3), 0.101) &&
-          p2.equals(new Pt(1, 2, 3), 0.0099) === false,
-      );
-    });
-
-    it("can apply operations with op", () => {
-      let f1 = (a: Pt): Pt => a.$add(1);
-      let f2 = (b: Pt, n: number): Pt => p.$multiply(n);
-
-      let p = new Pt(3, 4, 5);
-      let pf1 = p.op(f1);
-      let pf2 = pf1().op(f2);
-      let r1 = pf2(2);
-      let r2 = r1.op((p: Pt) => p.$multiply(3));
-
-      assert.isTrue(r2().equals(new Pt(18, 24, 30)));
-    });
-
-    it("can apply multiple ops", () => {
-      let p = new Pt(1, 2, 3);
-      let ops = p.ops([
-        (a: Pt): Pt => a.$add(1, 2, 3),
-        (b: Pt, n: number): Pt => p.$multiply(n),
-      ]);
-      let q = ops[0]().$add(ops[1](3));
-      assert.equal(q.z, 15);
-    });
-
-    it("can map to a function", () => {
-      let p = new Pt(5, 7, 12).map((n: number, i: number, list) => {
-        return n * 10 + 2;
-      });
-      assert.isTrue((p as Pt).equals(new Pt(52, 72, 122)));
-    });
-
-    it("can take specific dimensions", () => {
-      let p = new Pt(1, 2, 3, 4, 5, 6).$take([1, 3, 5]);
-      assert.isTrue(p.equals(new Pt(2, 4, 6)));
-    });
-
-    it("can add with different args", () => {
-      let p = new Pt({ x: 1, y: 2, z: 3 })
-        .add([1, 1, 1])
-        .add(2, 2, 2)
-        .add(new Pt(3, 4, 5));
-      assert.isTrue(
-        p
-          .$add(1, 2, 3)
-          .$add([2, 4, 0])
-          .equals(new Pt(10, 15, 14)),
-      );
-    });
-
-    it("can subtract with different args", () => {
-      let p = new Pt({ x: 19, y: 18, z: 7 })
-        .subtract([5, 4, 3])
-        .subtract(2, 2, 2)
-        .subtract(new Pt(1, 1, 1));
-      assert.isTrue(
-        p
-          .$subtract(1, -1, 1)
-          .$subtract([5, 7, 0])
-          .equals(new Pt(5, 5, 0)),
-      );
-    });
-
-    it("can support for-of loop", () => {
-      let p = new Pt([1, 2, 3, 4, 5, 6]);
-      let d = 0;
-      for (let k of p) {
-        d += k;
-      }
-      assert.equal(d, 21);
-    });
-
-    it("can concat with another Pt or array", () => {
-      let p = new Pt(1, 2, 3).$concat(2, 3).$concat(new Pt(10, 20, 30, 40));
-      assert.equal(p.length, 9);
-    });
-
-    it("can get a slice of values", () => {
-      let p = new Pt(1, 2, 3, 4, 5, 6);
-      assert.isTrue((p.slice(2, 5) as Pt).equals(new Pt(3, 4, 5)));
-    });
-
-    it("can get a normalized unit vector", () => {
-      let p = new Pt(123, 3453, 293);
-      assert.isTrue(Math.abs(p.unit().magnitude() - 1) < 0.00001);
-    });
-
-    it("can calculate dot product", () => {
-      let p = new Pt(1, 2, 3, 4).dot(10, 9, 8, 7);
-      assert.equal(p, 80);
-    });
-
-    it("can calculate projection", () => {
-      let p = new Pt(1, 2)
-        .$project(new Pt(-4, 1))
-        .equals(new Pt(-2 / 5, -4 / 5), 0.001);
-      assert.isTrue(p);
-    });
-
-    it("can calculate cross product", () => {
-      let p = new Pt(3, -3, 1).$cross(new Pt(4, 9, 2));
-      assert.isTrue(p.equals(new Pt(-15, -2, 39)));
-    });
-
-    it("can calculate abs", () => {
-      let p = new Pt(3, -3, 1).$abs();
-      assert.isTrue(p.equals(new Pt(3, 3, 1)));
-    });
-
-    it("can calculate angle", () => {
-      let p = new Pt(0.5, 0.9, 0.8).angle("yz");
-      assert.isTrue(Math.abs(p - 0.7266) < 0.0001);
-    });
-
-    it("can calculate angle between two Pt", () => {
-      let p = new Pt(0.5, 0.9, 0.8).angleBetween(new Pt(0.7, 0.5));
-      assert.isTrue(Math.abs(p - 0.4434) < 0.0001);
-    });
-
-    it("can move to a new direction", () => {
-      let p = new Pt(10, 0).toAngle(Math.PI / 2);
-      assert.isTrue(
-        Math.abs(p.x - 0) < 0.00001 && Math.abs(p.y - 10) < 0.00001,
-      );
-    });
-
-    it("can find minimum point", () => {
-      let p = new Pt(3, -3, 1, -10).$min(new Pt(4, 9, -2, 0));
-      assert.isTrue(p.equals(new Pt(3, -3, -2, -10)));
-    });
-
-    it("can find maximum point", () => {
-      let p = new Pt(3, -3, 1, -10).$max(new Pt(4, 9, -2, 0));
-      assert.isTrue(p.equals(new Pt(4, 9, 1, 0)));
-    });
+  it("makes fixed and seeded-random dimensions", () => {
+    expect(values(Pt.make(3, 4))).toEqual([4, 4, 4]);
+    vi.spyOn(Num, "random").mockReturnValueOnce(0.25).mockReturnValueOnce(0.5);
+    expect(values(Pt.make(2, 8, true))).toEqual([2, 4]);
+    expect(values(Pt.make(2))).toEqual([0, 0]);
   });
 
-  describe("Group collection functions", () => {
-    it("can deep clone", function () {
-      let p = new Group(new Pt(1, 2), new Pt(2, 3));
-      let q = p.clone().map((a) => a.add(10));
-      assert.isTrue(p[1].x == 2 && q[1].x == 12);
-    });
-
-    it("can create from number array", function () {
-      let p = Group.fromArray([
-        [1, 2],
-        [3, 4],
-        [5, 6],
-      ]).moveBy(10, 20);
-      assert.equal(p[2].y, 26);
-    });
-
-    it("can create from GroupLike array", function () {
-      let p = Group.fromPtArray([
-        new Pt(1, 2),
-        new Pt(3, 4),
-        new Pt(5, 6),
-      ]).moveBy(10, 20);
-      assert.equal(p[2].x, 15);
-    });
-
-    it("can split into an array of subgroups", function () {
-      let p = Group.fromArray([
-        [1, 2],
-        [3, 4],
-        [5, 6],
-        [7, 8],
-        [9, 10],
-      ]);
-      let sp = p.split(2);
-      assert.isTrue(sp.length == 2 && sp[1][1].y == 8);
-    });
-
-    it("can split into an array of subgroups with stride", function () {
-      let p = Group.fromArray([
-        [1, 2],
-        [3, 4],
-        [5, 6],
-        [7, 8],
-        [9, 10],
-      ]);
-      let sp = p.split(4, 1);
-      assert.isTrue(sp.length == 2 && sp[1][3].y == 10);
-    });
-
-    it("can insert another group into a specific position", function () {
-      let a = Group.fromArray([
-        [1, 2],
-        [3, 4],
-        [5, 6],
-      ]);
-      let b = Group.fromArray([
-        [7, 8],
-        [9, 10],
-      ]);
-      a.insert(new Group(new Pt(7, 8), new Pt(9, 10)), 1);
-      assert.isTrue(a.length == 5 && a[1].y == 8);
-    });
-
-    it("can remove a range", function () {
-      let p = Group.fromArray([
-        [1, 2],
-        [3, 4],
-        [5, 6],
-        [7, 8],
-        [9, 10],
-      ]);
-      p.remove(1, 3);
-      assert.isTrue(p.length == 2 && p[1].x == 9);
-    });
-
-    it("can remove a range using negative index", function () {
-      let p = Group.fromArray([
-        [1, 2],
-        [3, 4],
-        [5, 6],
-        [7, 8],
-        [9, 10],
-      ]);
-      p.remove(-3, p.length);
-      assert.isTrue(p.length == 2 && p[1].x == 3);
-    });
-
-    it("can rebase all pts from an anchor", function () {
-      let p = Group.fromArray([
-        [1, 2, 3],
-        [10, 10, 10],
-        [3, 4, 5],
-      ]);
-      p.anchorFrom(1);
-      assert.isTrue(p[0].x === 11 && p[1].y === 10 && p[2].z === 15);
-    });
-
-    it("can rebase all pts to an anchor", function () {
-      let p = Group.fromArray([
-        [1, 2, 3],
-        [10, 10, 10],
-        [3, 4, 5],
-      ]);
-      p.anchorTo(2);
-      assert.isTrue(p[0].x === -2 && p[1].y === 6 && p[2].z === 5);
-    });
-
-    it("can rebase all pts from an external Pt anchor", function () {
-      let p = Group.fromArray([
-        [1, 2, 3],
-        [10, 10, 10],
-        [3, 4, 5],
-      ]);
-      p.anchorFrom(new Pt(100, 100));
-      assert.isTrue(p[0].x === 101 && p[1].y === 110 && p[2].z === 5);
-    });
-
-    it("can convert into an op", function () {
-      let p = Group.fromArray([
-        [1, 2],
-        [3, 4],
-        [5, 6],
-      ]);
-      let s = p.op(Geom.scale);
-      s(3);
-      assert.equal(p[1].y, 12);
-    });
-
-    it("can convert into multiple ops", function () {
-      let p = Group.fromArray([
-        [1, 2],
-        [3, 4],
-        [5, 6],
-        [7, 8],
-      ]);
-      let s = p.ops([Geom.scale, Geom.centroid]);
-      s[0](2);
-      assert.equal(s[1]().x, 8);
-    });
-
-    it("can sort by a specifc dimension", function () {
-      let p = Group.fromArray([
-        [1, 2, 0, 4],
-        [3, 4, 1, -1],
-        [5, 6, 2, 0],
-        [7, 8, 10, 9],
-      ]);
-      p.sortByDimension(3);
-      assert.equal(p[1].x, 5);
-    });
-
-    it("can apply a Pt function to all items in Group", function () {
-      let p = Group.fromArray([
-        [2.1, 1.2],
-        [4.2, 2],
-      ]);
-      p.forEachPt("$max", new Pt(2.5, 2.5)).forEachPt("floor");
-      assert.isTrue(p[0].y === 2 && p[1].x === 4);
-    });
-
-    it("can calculate matrix-scalar addition", function () {
-      let a = Group.fromArray([
-        [1, 3, 5],
-        [2, 4, 6],
-      ]);
-      let m = a.$matrixAdd(5);
-      assert.isTrue(
-        m[0][0] == 6 &&
-          m[0][1] == 8 &&
-          m[0][2] == 10 &&
-          m[1][0] == 7 &&
-          m[1][1] == 9 &&
-          m[1][2] == 11,
-      );
-    });
-
-    it("can calculate matrix-matrix addition", function () {
-      let a = Group.fromArray([
-        [1, 3, 5],
-        [2, 4, 6],
-      ]);
-      let b = Group.fromArray([
-        [1, 2, 3],
-        [8, 7, 6],
-      ]);
-      let m = a.$matrixAdd(b);
-
-      assert.isTrue(
-        m[0][0] == 2 &&
-          m[0][1] == 5 &&
-          m[0][2] == 8 &&
-          m[1][0] == 10 &&
-          m[1][1] == 11 &&
-          m[1][2] == 12,
-      );
-    });
-
-    it("can calculate matrix-scalar multiplication", function () {
-      let a = Group.fromArray([
-        [1, 3, 5],
-        [2, 4, 6],
-      ]);
-      let m = a.$matrixMultiply(5, false);
-      assert.isTrue(
-        m[0][0] == 5 &&
-          m[0][1] == 15 &&
-          m[0][2] == 25 &&
-          m[1][0] == 10 &&
-          m[1][1] == 20 &&
-          m[1][2] == 30,
-      );
-    });
-
-    it("can calculate matrix-matrix multiplication in standard way", function () {
-      let a = Group.fromArray([
-        [1, 3, 5, 7],
-        [2, 4, 6, 8],
-      ]);
-      let b = Group.fromArray([
-        [1, 8, 9],
-        [2, 7, 10],
-        [3, 6, 11],
-        [4, 5, 12],
-      ]);
-      let m = a.$matrixMultiply(b, false);
-
-      assert.isTrue(
-        m[0][0] == 50 &&
-          m[0][1] == 94 &&
-          m[0][2] == 178 &&
-          m[1][0] == 60 &&
-          m[1][1] == 120 &&
-          m[1][2] == 220,
-      );
-    });
-
-    it("can calculate matrix-matrix multiplication when second matrix is transposed", function () {
-      let a = Group.fromArray([
-        [1, 3, 5, 7],
-        [2, 4, 6, 8],
-      ]);
-      let b = Group.fromArray([
-        [1, 2, 3, 4],
-        [8, 7, 6, 5],
-        [9, 10, 11, 12],
-      ]);
-      let m = a.$matrixMultiply(b, true);
-
-      assert.isTrue(
-        m[0][0] == 50 &&
-          m[0][1] == 94 &&
-          m[0][2] == 178 &&
-          m[1][0] == 60 &&
-          m[1][1] == 120 &&
-          m[1][2] == 220,
-      );
-    });
-
-    it("can zip one slice", function () {
-      let p = new Group(
-        new Pt(1, 3, 5, 7),
-        new Pt(2, 4, 6, 8),
-        new Pt(5, 10, 15, 20),
-      ).zipSlice(2);
-      assert.isTrue(p.equals(new Pt(5, 6, 15)));
-    });
-
-    it("can zip one slice with default", function () {
-      let p = new Group(new Pt(1), new Pt(2, 4, 6), new Pt(5, 10)).zipSlice(
-        2,
-        -1,
-      );
-      assert.isTrue(p.equals(new Pt(-1, 6, -1)));
-    });
-
-    it("can zip an array of Pt", function () {
-      let ps = new Group(new Pt(1, 2), new Pt(3, 4), new Pt(5, 6)).$zip();
-      assert.isTrue(ps[1].equals(new Pt(2, 4, 6)) && ps.length == 2);
-    });
-
-    it("can zip an array of Pt with defaults", function () {
-      let ps = new Group(new Pt(1, 2), new Pt(3), new Pt(5, 6, 7, 8)).$zip(10);
-      assert.isTrue(ps[1].equals(new Pt(2, 10, 6)) && ps.length == 2);
-    });
-
-    it("can zip an array of Pt with longest value", function () {
-      let ps = new Group(new Pt(1, 2), new Pt(3), new Pt(5, 6, 7, 8)).$zip(
-        10,
-        true,
-      );
-      assert.isTrue(ps[2].equals(new Pt(10, 10, 7)) && ps.length == 4);
-    });
+  it("gets and sets id and named dimensions", () => {
+    const point = new Pt(1, 2, 3, 4);
+    point.id = "point";
+    point.x = 10;
+    point.y = 20;
+    point.z = 30;
+    point.w = 40;
+    expect(point.id).toBe("point");
+    expect([point.x, point.y, point.z, point.w]).toEqual([10, 20, 30, 40]);
   });
 
-  describe("Group geometry functions", () => {
-    it("can interpolate a position based on all Pts in this group", function () {
-      let ps = new Group(new Pt(0, 0), new Pt(10, 10), new Pt(20, 100));
-      assert.equal(ps.interpolate(0.75).y, 55);
-    });
+  it("clones, compares thresholds, and updates bounded dimensions", () => {
+    const point = new Pt(1, 2, 3);
+    const clone = point.clone();
+    expect(clone).not.toBe(point);
+    expect(clone.equals(point)).toBe(true);
+    expect(point.equals([1, 2.01, 3], 0.02)).toBe(true);
+    expect(point.equals([1, 2.01, 3], 0.001)).toBe(false);
+    expect(point.to(4, 5)).toBe(point);
+    expect(values(point)).toEqual([4, 5, 3]);
+    expect(values(point.$to([7, 8, 9]))).toEqual([7, 8, 9]);
+    expect(values(point)).toEqual([4, 5, 3]);
+  });
+});
 
-    it("can move by a specific amount", function () {
-      let ps = new Group(new Pt(0, 0), new Pt(10, 10), new Pt(20, 100));
-      ps.moveBy(5, 1);
-      assert.isTrue(ps[0].x === 5 && ps[1].y === 11 && ps[2].x === 25);
-    });
+describe("Pt vector operations", () => {
+  it("sets an angle with explicit, inferred, and anchored magnitudes", () => {
+    const vertical = new Pt(3, 4).toAngle(Math.PI / 2, 2);
+    expect(vertical.x).toBeCloseTo(0);
+    expect(vertical.y).toBeCloseTo(2);
+    const inferred = new Pt(3, 4).toAngle(0);
+    expect(inferred.x).toBeCloseTo(5);
+    expect(inferred.y).toBeCloseTo(0);
+    expect(values(new Pt(1, 1).toAngle(0, 2, true))).toEqual([3, 1]);
+  });
 
-    it("can move the group based on a specific position for the first Pt", function () {
-      let ps = new Group(new Pt(5, 0), new Pt(10, 10), new Pt(20, 100));
-      ps.moveTo(50, 50);
-      assert.isTrue(ps[0].x === 50 && ps[1].x === 55 && ps[2].y === 150);
-    });
+  it("binds one or many operations to the point", () => {
+    const point = new Pt(1, 2);
+    const add = point.op((self, amount: number) => new Pt(self).add(amount));
+    expect(values(add(3))).toEqual([4, 5]);
+    const [sum, product] = point.ops([
+      (self, amount) => new Pt(self).add(amount),
+      (self, amount) => new Pt(self).multiply(amount),
+    ]);
+    expect(values(sum(2))).toEqual([3, 4]);
+    expect(values(product(2))).toEqual([2, 4]);
+  });
 
-    it("can scale a group", function () {
-      let ps = new Group(new Pt(0, 0, 1), new Pt(3, 6, 5));
-      ps.scale([10, 9, 8], [0, 0, 0]);
-      assert.isTrue(ps[0].x === 0 && ps[1].y === 54 && ps[0].z === 8);
-    });
+  it("takes axes and concatenates extra dimensions", () => {
+    const point = new Pt(1, 2, 3, 4);
+    expect(values(point.$take("yx"))).toEqual([2, 1]);
+    expect(values(point.$take([3, 9]))).toEqual([4, 0]);
+    expect(values(point.$concat(5, 6))).toEqual([1, 2, 3, 4, 5, 6]);
+  });
 
-    it("can rotate a group in 2D", function () {
-      let ps = new Group(new Pt(1, 2), new Pt(3, 6));
-      let ang = Math.PI / 4;
-      ps.rotate2D(ang, [1, 1]);
-      let s1 = Num.equals(ps[0].x, Math.cos(2.35619449) + 1);
-      let s2 = Num.equals(ps[1].y, Math.sin(1.97568811) * 5.3851648 + 1);
-      assert.isTrue(s1 && s2);
-    });
+  it("supports mutable and immutable arithmetic", () => {
+    const point = new Pt(2, 4, 8);
+    expect(point.add(1)).toBe(point);
+    expect(values(point)).toEqual([3, 5, 9]);
+    expect(values(point.$add([1, 2, 3]))).toEqual([4, 7, 12]);
+    expect(point.subtract(1, 2, 3)).toBe(point);
+    expect(values(point)).toEqual([2, 3, 6]);
+    expect(values(point.$subtract(1))).toEqual([1, 2, 5]);
+    expect(point.multiply(2)).toBe(point);
+    expect(values(point)).toEqual([4, 6, 12]);
+    expect(values(point.$multiply([2, 3, 4]))).toEqual([8, 18, 48]);
+    expect(point.divide(2)).toBe(point);
+    expect(values(point)).toEqual([2, 3, 6]);
+    expect(values(point.$divide([2, 3, 6]))).toEqual([1, 1, 1]);
+  });
 
-    it("can shear a group in 2D", function () {
-      let ps = new Group(new Pt(218, 454), new Pt(218, 404));
-      let scale = [-0.5154185022026432, 0];
-      ps.shear2D(scale, [268, 454]);
-      assert.isTrue(
-        Num.equals(ps[0].x, 218) &&
-          Num.equals(ps[0].y, 482.324, 0.001) &&
-          Num.equals(ps[1].y, 432.324, 0.001),
-      );
-    });
+  it("calculates magnitudes, products, projections, and units", () => {
+    const point = new Pt(3, 4);
+    expect(point.magnitudeSq()).toBe(25);
+    expect(point.magnitude()).toBe(5);
+    expect(point.dot(2, 3)).toBe(18);
+    expect(point.$cross2D(2, 3)).toBe(1);
+    expect(values(new Pt(1, 0, 0).$cross(0, 1, 0))).toEqual([0, 0, 1]);
+    expect(point.$project([1, 0]).equals([0.36, 0.48], 0.00001)).toBe(true);
+    expect(point.projectScalar([1, 0])).toBe(0.6);
+    expect(point.$unit().magnitude()).toBeCloseTo(1);
+    expect(point.unit(5)).toBe(point);
+    expect(point.magnitude()).toBeCloseTo(1);
+  });
 
-    it("can reflect a group in 2D", function () {
-      let ps = new Group(new Pt(218, 454), new Pt(218, 404));
-      let reflect = Group.fromArray([
-        [230, 497],
-        [268, 454],
-      ]);
-      let scale = [-0.5154185022026432, 0];
-      ps.reflect2D(reflect);
-      assert.isTrue(
-        Num.equals(ps[0].x, 274.14938) && Num.equals(ps[1].y, 497.471),
-      );
-    });
+  it("rounds, clamps dimensions, and reports extrema", () => {
+    const point = new Pt(-1.2, 2.5, 3.8);
+    expect(point.$abs().equals([1.2, 2.5, 3.8], 0.00001)).toBe(true);
+    expect(point.abs()).toBe(point);
+    expect(values(point.$floor())).toEqual([1, 2, 3]);
+    expect(point.floor()).toBe(point);
+    expect(values(point.$ceil())).toEqual([1, 2, 3]);
+    point.to(1.2, 2.5, 3.8);
+    expect(point.ceil()).toBe(point);
+    expect(values(point)).toEqual([2, 3, 4]);
+    point.to(1.2, 2.5, 3.8);
+    expect(values(point.$round())).toEqual([1, 3, 4]);
+    expect(point.round()).toBe(point);
+    expect(point.minValue()).toEqual({ value: 1, index: 0 });
+    expect(point.maxValue()).toEqual({ value: 4, index: 2 });
+    expect(values(point.$min(2, 2, 9))).toEqual([1, 2, 4]);
+    expect(values(point.$max(2, 2, 9))).toEqual([2, 3, 9]);
+  });
+
+  it("calculates angles and geometric transforms", () => {
+    expect(new Pt(0, 1).angle()).toBeCloseTo(Math.PI / 2);
+    expect(new Pt(9, 0, 1).angle("xz")).toBeCloseTo(Math.atan2(1, 9));
+    expect(new Pt(1, 0).angleBetween(new Pt(0, 1))).toBeCloseTo(-Math.PI / 2);
+
+    const point = new Pt(2, 3);
+    expect(point.scale(2, [1, 1])).toBe(point);
+    expect(values(point)).toEqual([3, 5]);
+    expect(point.rotate2D(Math.PI / 2, [1, 1])).toBe(point);
+    expect(point.x).toBeCloseTo(-3);
+    expect(point.y).toBeCloseTo(3);
+    expect(point.shear2D([0, 0], [0, 0])).toBe(point);
+    expect(
+      point.reflect2D(
+        Group.fromArray([
+          [0, 0],
+          [0, 10],
+        ]),
+      ),
+    ).toBe(point);
+    expect(point.x).toBeCloseTo(3);
+  });
+
+  it("converts to strings, arrays, groups, and bounds", () => {
+    const point = new Pt(2, 3);
+    expect(point.toString()).toBe("Pt(2, 3)");
+    expect(point.toArray()).toEqual([2, 3]);
+    expect(groupValues(point.toGroup())).toEqual([
+      [0, 0],
+      [2, 3],
+    ]);
+    const bound = point.toBound();
+    expect(bound).toBeInstanceOf(Bound);
+    expect(values(bound.size)).toEqual([2, 3]);
+  });
+});
+
+describe("Group", () => {
+  const makeGroup = () =>
+    Group.fromArray([
+      [0, 0],
+      [10, 10],
+      [20, 0],
+      [30, 10],
+    ]);
+
+  it("constructs from arrays and iterables and exposes relative accessors", () => {
+    const points = [new Pt(1, 1), new Pt(2, 2), new Pt(3, 3), new Pt(4, 4)];
+    const group = new Group(...points);
+    group.id = "shape";
+    expect(group.id).toBe("shape");
+    expect([group.p1, group.p2, group.p3, group.p4]).toEqual(points);
+    expect([group.q1, group.q2, group.q3, group.q4]).toEqual(
+      points.slice().reverse(),
+    );
+    expect(groupValues(Group.fromArray(new Set(points)))).toEqual(
+      groupValues(group),
+    );
+    expect(groupValues(Group.fromPtArray(new Set(points)))).toEqual(
+      groupValues(group),
+    );
+  });
+
+  it("deep-clones, splits, inserts, and removes", () => {
+    const group = makeGroup();
+    const clone = group.clone();
+    expect(clone).toEqual(group);
+    expect(clone[0]).not.toBe(group[0]);
+    expect(group.split(2)).toHaveLength(2);
+    expect(group.segments(2, 1)).toHaveLength(3);
+    expect(group.lines()).toHaveLength(3);
+    expect(group.insert(new Set([new Pt(-1, -1)]), 1)).toBe(group);
+    expect(values(group[1])).toEqual([-1, -1]);
+    expect(group.remove(-2)[0].equals([-1, -1])).toBe(true);
+    expect(group.remove(0, 2)).toHaveLength(2);
+  });
+
+  it("calculates centroid, bounds, anchoring, and interpolation", () => {
+    const group = makeGroup();
+    expect(values(group.centroid())).toEqual([15, 5]);
+    expect(groupValues(group.boundingBox())).toEqual([
+      [0, 0],
+      [30, 10],
+    ]);
+    expect(values(group.interpolate(-1))).toEqual([0, 0]);
+    expect(values(group.interpolate(0.5))).toEqual([15, 5]);
+    expect(values(group.interpolate(2))).toEqual([30, 10]);
+
+    group.anchorTo(1);
+    expect(values(group[1])).toEqual([10, 10]);
+    expect(values(group[0])).toEqual([-10, -10]);
+    group.anchorFrom(new Pt(10, 10));
+    expect(values(group[0])).toEqual([0, 0]);
+  });
+
+  it("binds operations and moves points", () => {
+    const group = makeGroup();
+    expect(group.op((self, n) => Array.from(self).length + n)(2)).toBe(6);
+    const operations = group.ops([
+      (self) => Array.from(self).length,
+      (self, n) => Array.from(self).length * n,
+    ]);
+    expect(operations[0]()).toBe(4);
+    expect(operations[1](3)).toBe(12);
+    expect(group.moveBy(1, 2)).toBe(group);
+    expect(values(group[0])).toEqual([1, 2]);
+    expect(group.moveTo(10, 20)).toBe(group);
+    expect(values(group[0])).toEqual([10, 20]);
+  });
+
+  it("transforms, sorts, and applies point operations", () => {
+    const group = Group.fromArray([
+      [0, 0],
+      [1, 2],
+      [2, 1],
+    ]);
+    expect(group.scale(2)).toBe(group);
+    expect(group.rotate2D(Math.PI / 2)).toBe(group);
+    expect(group.shear2D([0, 0])).toBe(group);
+    expect(
+      group.reflect2D(
+        Group.fromArray([
+          [0, 0],
+          [0, 1],
+        ]),
+      ),
+    ).toBe(group);
+    expect(group.sortByDimension(1)).toBe(group);
+    expect(group[0].y).toBeLessThanOrEqual(group[1].y);
+    expect(group.sortByDimension(0, true)).toBe(group);
+    expect(group[0].x).toBeGreaterThanOrEqual(group[1].x);
+    expect(group.add(1).subtract(1).multiply(2).divide(2)).toBe(group);
+
+    const warning = vi.spyOn(Util, "warn").mockReturnValue(undefined);
+    expect(group.forEachPt("missing")).toBe(group);
+    expect(warning).toHaveBeenCalledOnce();
+  });
+
+  it("provides matrix, zip, bound, and string helpers", () => {
+    const group = Group.fromArray([
+      [1, 2],
+      [3, 4],
+    ]);
+    expect(groupValues(group.$matrixAdd(1))).toEqual([
+      [2, 3],
+      [4, 5],
+    ]);
+    expect(groupValues(group.$matrixMultiply(2))).toEqual([
+      [2, 4],
+      [6, 8],
+    ]);
+    expect(values(group.zipSlice(1))).toEqual([2, 4]);
+    expect(groupValues(group.$zip())).toEqual([
+      [1, 3],
+      [2, 4],
+    ]);
+    expect(group.toBound()).toBeInstanceOf(Bound);
+    expect(group.toString()).toBe("Group[ Pt(1, 2) Pt(3, 4)  ]");
+  });
+});
+
+describe("Bound", () => {
+  it("constructs from rectangles, groups, and partial points", () => {
+    const fromRect = Bound.fromBoundingRect({
+      left: 10,
+      top: 20,
+      right: 40,
+      bottom: 60,
+      width: 30,
+      height: 40,
+    } as DOMRect);
+    expect(values(fromRect.topLeft)).toEqual([10, 20]);
+    expect(values(fromRect.bottomRight)).toEqual([40, 60]);
+    expect(values(fromRect.size)).toEqual([30, 40]);
+    expect(values(fromRect.center)).toEqual([25, 40]);
+    expect(fromRect.inited).toBe(true);
+
+    const one = new Bound(new Pt(1, 2, 3));
+    expect(one.inited).toBe(true);
+    expect([one.width, one.height, one.depth]).toEqual([1, 2, 3]);
+    expect(() => Bound.fromGroup([new Pt()])).toThrow("less than 2 Pt");
+  });
+
+  it("keeps positions, size, center, and dimensions synchronized", () => {
+    const bound = Bound.fromGroup(
+      Group.fromArray([
+        [0, 0, 0],
+        [10, 20, 30],
+      ]),
+    );
+    bound.size = new Pt(20, 30, 40);
+    expect(values(bound.bottomRight)).toEqual([20, 30, 40]);
+    bound.center = new Pt(20, 20, 20);
+    expect(values(bound.topLeft)).toEqual([10, 5, 0]);
+    expect(values(bound.bottomRight)).toEqual([25, 32.5, 40]);
+    bound.topLeft = new Pt(0, 0, 0);
+    expect(values(bound.size)).toEqual([25, 32.5, 40]);
+    bound.bottomRight = new Pt(10, 20, 30);
+    expect(values(bound.size)).toEqual([10, 20, 30]);
+    bound.width = 5;
+    bound.height = 6;
+    bound.depth = 7;
+    expect(values(bound.bottomRight)).toEqual([5, 6, 7]);
+    expect([bound.x, bound.y, bound.z]).toEqual([0, 0, 0]);
+  });
+
+  it("clones and updates after direct point mutation", () => {
+    const bound = Bound.fromGroup(
+      Group.fromArray([
+        [0, 0],
+        [10, 20],
+      ]),
+    );
+    const clone = bound.clone();
+    expect(clone).not.toBe(bound);
+    expect(values(clone.size)).toEqual([10, 20]);
+    bound[0].to(2, 3);
+    bound[1].to(12, 23);
+    expect(bound.update()).toBe(bound);
+    expect(values(bound.size)).toEqual([10, 20]);
+    expect(values(bound.center)).toEqual([7, 13]);
+  });
+
+  it("reports zero dimensions for an empty bound", () => {
+    const bound = new Bound();
+    expect(bound.inited).toBe(false);
+    expect([bound.width, bound.height, bound.depth]).toEqual([0, 0, 0]);
   });
 });

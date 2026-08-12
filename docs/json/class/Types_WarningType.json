@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Typealias",
-  "id": 7205,
+  "id": 7202,
   "comment": "Typescript type: WarningType specifies a level of warning for [`Util.warnLevel`](#link).",
   "constructor": [],
   "accessors": [],

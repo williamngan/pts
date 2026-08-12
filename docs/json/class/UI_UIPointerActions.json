@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Objectliteral",
-  "id": 7305,
+  "id": 7302,
   "comment": "**[Experimental]** A set of string constants to represent different UI event types.",
   "constructor": [],
   "accessors": [],
@@ -23,8 +23,10 @@
           2
         ]
       ],
-      "id": 7324,
-      "flags": {},
+      "id": 7321,
+      "flags": {
+        "isReadonly": true
+      },
       "type": "all",
       "overrides": false,
       "inherits": false,
@@ -39,8 +41,10 @@
           2
         ]
       ],
-      "id": 7318,
-      "flags": {},
+      "id": 7315,
+      "flags": {
+        "isReadonly": true
+      },
       "type": "click",
       "overrides": false,
       "inherits": false,
@@ -55,8 +59,10 @@
           2
         ]
       ],
-      "id": 7323,
-      "flags": {},
+      "id": 7320,
+      "flags": {
+        "isReadonly": true
+      },
       "type": "contextmenu",
       "overrides": false,
       "inherits": false,
@@ -71,8 +77,10 @@
           2
         ]
       ],
-      "id": 7308,
-      "flags": {},
+      "id": 7305,
+      "flags": {
+        "isReadonly": true
+      },
       "type": "down",
       "overrides": false,
       "inherits": false,
@@ -87,8 +95,10 @@
           2
         ]
       ],
-      "id": 7310,
-      "flags": {},
+      "id": 7307,
+      "flags": {
+        "isReadonly": true
+      },
       "type": "drag",
       "overrides": false,
       "inherits": false,
@@ -103,8 +113,10 @@
           2
         ]
       ],
-      "id": 7312,
-      "flags": {},
+      "id": 7309,
+      "flags": {
+        "isReadonly": true
+      },
       "type": "drop",
       "overrides": false,
       "inherits": false,
@@ -119,8 +131,10 @@
           2
         ]
       ],
-      "id": 7316,
-      "flags": {},
+      "id": 7313,
+      "flags": {
+        "isReadonly": true
+      },
       "type": "enter",
       "overrides": false,
       "inherits": false,
@@ -135,8 +149,10 @@
           2
         ]
       ],
-      "id": 7319,
-      "flags": {},
+      "id": 7316,
+      "flags": {
+        "isReadonly": true
+      },
       "type": "keydown",
       "overrides": false,
       "inherits": false,
@@ -151,8 +167,10 @@
           2
         ]
       ],
-      "id": 7320,
-      "flags": {},
+      "id": 7317,
+      "flags": {
+        "isReadonly": true
+      },
       "type": "keyup",
       "overrides": false,
       "inherits": false,
@@ -167,8 +185,10 @@
           2
         ]
       ],
-      "id": 7317,
-      "flags": {},
+      "id": 7314,
+      "flags": {
+        "isReadonly": true
+      },
       "type": "leave",
       "overrides": false,
       "inherits": false,
@@ -183,8 +203,10 @@
           2
         ]
       ],
-      "id": 7309,
-      "flags": {},
+      "id": 7306,
+      "flags": {
+        "isReadonly": true
+      },
       "type": "move",
       "overrides": false,
       "inherits": false,
@@ -199,8 +221,10 @@
           2
         ]
       ],
-      "id": 7315,
-      "flags": {},
+      "id": 7312,
+      "flags": {
+        "isReadonly": true
+      },
       "type": "out",
       "overrides": false,
       "inherits": false,
@@ -215,8 +239,10 @@
           2
         ]
       ],
-      "id": 7314,
-      "flags": {},
+      "id": 7311,
+      "flags": {
+        "isReadonly": true
+      },
       "type": "over",
       "overrides": false,
       "inherits": false,
@@ -231,8 +257,10 @@
           2
         ]
       ],
-      "id": 7321,
-      "flags": {},
+      "id": 7318,
+      "flags": {
+        "isReadonly": true
+      },
       "type": "pointerdown",
       "overrides": false,
       "inherits": false,
@@ -247,8 +275,10 @@
           2
         ]
       ],
-      "id": 7322,
-      "flags": {},
+      "id": 7319,
+      "flags": {
+        "isReadonly": true
+      },
       "type": "pointerup",
       "overrides": false,
       "inherits": false,
@@ -263,8 +293,10 @@
           2
         ]
       ],
-      "id": 7311,
-      "flags": {},
+      "id": 7308,
+      "flags": {
+        "isReadonly": true
+      },
       "type": "uidrag",
       "overrides": false,
       "inherits": false,
@@ -279,8 +311,10 @@
           2
         ]
       ],
-      "id": 7313,
-      "flags": {},
+      "id": 7310,
+      "flags": {
+        "isReadonly": true
+      },
       "type": "uidrop",
       "overrides": false,
       "inherits": false,
@@ -295,8 +329,10 @@
           2
         ]
       ],
-      "id": 7307,
-      "flags": {},
+      "id": 7304,
+      "flags": {
+        "isReadonly": true
+      },
       "type": "up",
       "overrides": false,
       "inherits": false,

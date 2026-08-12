@@ -71,6 +71,7 @@
     "UI",
     "UIButton",
     "UIDragger",
+    "UIPointerAction",
     "UIPointerActions",
     "UIShape"
   ],

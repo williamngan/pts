@@ -1,0 +1,8721 @@
+{
+  "version": 1,
+  "createdAt": "2026-08-12T01:04:10.460Z",
+  "environment": {
+    "node": "v24.19.0",
+    "v8": "13.6.233.17-node.51",
+    "platform": "linux",
+    "arch": "x64",
+    "release": "6.8.0-64-generic",
+    "cpu": "Intel(R) Core(TM) i9-9820X CPU @ 3.30GHz",
+    "cores": 20,
+    "memoryGb": 62,
+    "gcExposed": true,
+    "distHash": "33c58e919d218744"
+  },
+  "environmentKey": "node24-linux-x64-intel-core-i9-9820x-3-30ghz",
+  "timing": {
+    "time": 300,
+    "iterations": 16,
+    "warmupTime": 100,
+    "warmupIterations": 8
+  },
+  "load": {
+    "before": {
+      "loadavg1": 0.86,
+      "cores": 20
+    },
+    "after": {
+      "loadavg1": 1.19,
+      "cores": 20
+    }
+  },
+  "results": [
+    {
+      "id": "calibration/float math",
+      "suite": "calibration",
+      "name": "float math",
+      "batch": 4096,
+      "nsPerItem": 1.52366,
+      "hz": 160233,
+      "median": 0.006273,
+      "p99": 0.007771,
+      "rme": 276.1,
+      "samples": 104012,
+      "roundValues": [
+        9.92336,
+        1.52366,
+        1.50826
+      ]
+    },
+    {
+      "id": "calibration/typed array allocation",
+      "suite": "calibration",
+      "name": "typed array allocation",
+      "batch": 1024,
+      "nsPerItem": 32.9244,
+      "hz": 29660.8,
+      "median": 0.03269,
+      "p99": 0.049687,
+      "rme": 4.594,
+      "samples": 27443,
+      "roundValues": [
+        30.1582,
+        33.1835,
+        32.9244
+      ]
+    },
+    {
+      "id": "pt/new Pt(x, y)",
+      "suite": "pt",
+      "name": "new Pt(x, y)",
+      "batch": 512,
+      "nsPerItem": 158.865,
+      "hz": 12294.2,
+      "median": 0.078038,
+      "p99": 0.189733,
+      "rme": 0.2029,
+      "samples": 11052,
+      "roundValues": [
+        158.864,
+        158.865,
+        159.509
+      ]
+    },
+    {
+      "id": "pt/new Pt(array)",
+      "suite": "pt",
+      "name": "new Pt(array)",
+      "batch": 512,
+      "nsPerItem": 135.041,
+      "hz": 14463.2,
+      "median": 0.065074,
+      "p99": 0.112474,
+      "rme": 3.723,
+      "samples": 12940,
+      "roundValues": [
+        141.478,
+        131.424,
+        135.041
+      ]
+    },
+    {
+      "id": "pt/new Pt(object)",
+      "suite": "pt",
+      "name": "new Pt(object)",
+      "batch": 512,
+      "nsPerItem": 192.583,
+      "hz": 10141.7,
+      "median": 0.093083,
+      "p99": 0.18072,
+      "rme": 2.491,
+      "samples": 9179,
+      "roundValues": [
+        195.937,
+        192.583,
+        186.341
+      ]
+    },
+    {
+      "id": "pt/new Pt(pt)",
+      "suite": "pt",
+      "name": "new Pt(pt)",
+      "batch": 512,
+      "nsPerItem": 612.002,
+      "hz": 3191.37,
+      "median": 0.303652,
+      "p99": 0.574677,
+      "rme": 1.747,
+      "samples": 2880,
+      "roundValues": [
+        612.002,
+        620.894,
+        599.511
+      ]
+    },
+    {
+      "id": "pt/Pt.make(dim)",
+      "suite": "pt",
+      "name": "Pt.make(dim)",
+      "batch": 512,
+      "nsPerItem": 524.323,
+      "hz": 3725.04,
+      "median": 0.268118,
+      "p99": 0.316457,
+      "rme": 6.507,
+      "samples": 3239,
+      "roundValues": [
+        588.951,
+        524.323,
+        520.712
+      ]
+    },
+    {
+      "id": "pt/Pt.clone",
+      "suite": "pt",
+      "name": "Pt.clone",
+      "batch": 512,
+      "nsPerItem": 616.718,
+      "hz": 3166.97,
+      "median": 0.295648,
+      "p99": 0.588466,
+      "rme": 8.174,
+      "samples": 2802,
+      "roundValues": [
+        687.809,
+        586.99,
+        616.718
+      ]
+    },
+    {
+      "id": "pt/Pt.add(scalar)",
+      "suite": "pt",
+      "name": "Pt.add(scalar)",
+      "batch": 512,
+      "nsPerItem": 19.7661,
+      "hz": 98811.8,
+      "median": 0.009727,
+      "p99": 0.014562,
+      "rme": 31.58,
+      "samples": 136358,
+      "roundValues": [
+        7.56227,
+        19.7661,
+        20.0465
+      ]
+    },
+    {
+      "id": "pt/Pt.add(x, y)",
+      "suite": "pt",
+      "name": "Pt.add(x, y)",
+      "batch": 512,
+      "nsPerItem": 37.409,
+      "hz": 52210,
+      "median": 0.017505,
+      "p99": 0.041576,
+      "rme": 4.844,
+      "samples": 46167,
+      "roundValues": [
+        40.3156,
+        36.6913,
+        37.409
+      ]
+    },
+    {
+      "id": "pt/Pt.add(array)",
+      "suite": "pt",
+      "name": "Pt.add(array)",
+      "batch": 512,
+      "nsPerItem": 151.012,
+      "hz": 12933.6,
+      "median": 0.076368,
+      "p99": 0.098793,
+      "rme": 2.353,
+      "samples": 11480,
+      "roundValues": [
+        157.86,
+        151.012,
+        150.754
+      ]
+    },
+    {
+      "id": "pt/Pt.subtract(pt)",
+      "suite": "pt",
+      "name": "Pt.subtract(pt)",
+      "batch": 512,
+      "nsPerItem": 506.484,
+      "hz": 3856.24,
+      "median": 0.253251,
+      "p99": 0.464445,
+      "rme": 1.076,
+      "samples": 3465,
+      "roundValues": [
+        506.484,
+        513.763,
+        502.864
+      ]
+    },
+    {
+      "id": "pt/Pt.multiply(scalar)",
+      "suite": "pt",
+      "name": "Pt.multiply(scalar)",
+      "batch": 512,
+      "nsPerItem": 11.4899,
+      "hz": 169986,
+      "median": 0.005782,
+      "p99": 0.011107,
+      "rme": 2.712,
+      "samples": 150596,
+      "roundValues": [
+        11.4626,
+        12.0858,
+        11.4899
+      ]
+    },
+    {
+      "id": "pt/Pt.divide(scalar)",
+      "suite": "pt",
+      "name": "Pt.divide(scalar)",
+      "batch": 512,
+      "nsPerItem": 11.619,
+      "hz": 168098,
+      "median": 0.005842,
+      "p99": 0.011884,
+      "rme": 1.688,
+      "samples": 152617,
+      "roundValues": [
+        11.2753,
+        11.619,
+        11.6675
+      ]
+    },
+    {
+      "id": "pt/Pt.$add(pt) (allocating)",
+      "suite": "pt",
+      "name": "Pt.$add(pt) (allocating)",
+      "batch": 512,
+      "nsPerItem": 1155.65,
+      "hz": 1690.07,
+      "median": 0.584424,
+      "p99": 0.938853,
+      "rme": 1.501,
+      "samples": 1513,
+      "roundValues": [
+        1150.76,
+        1155.65,
+        1185.46
+      ]
+    },
+    {
+      "id": "pt/Pt.$multiply(scalar) (allocating)",
+      "suite": "pt",
+      "name": "Pt.$multiply(scalar) (allocating)",
+      "batch": 512,
+      "nsPerItem": 602.698,
+      "hz": 3240.63,
+      "median": 0.29766,
+      "p99": 0.576536,
+      "rme": 1.642,
+      "samples": 2903,
+      "roundValues": [
+        598.07,
+        617.863,
+        602.698
+      ]
+    },
+    {
+      "id": "pt/Pt.magnitude",
+      "suite": "pt",
+      "name": "Pt.magnitude",
+      "batch": 512,
+      "nsPerItem": 14.7586,
+      "hz": 132338,
+      "median": 0.007138,
+      "p99": 0.01373,
+      "rme": 26.21,
+      "samples": 161242,
+      "roundValues": [
+        7.13382,
+        14.7586,
+        14.8702
+      ]
+    },
+    {
+      "id": "pt/Pt.magnitudeSq",
+      "suite": "pt",
+      "name": "Pt.magnitudeSq",
+      "batch": 512,
+      "nsPerItem": 12.1797,
+      "hz": 160359,
+      "median": 0.005946,
+      "p99": 0.012254,
+      "rme": 3.548,
+      "samples": 144223,
+      "roundValues": [
+        12.1797,
+        12.64,
+        11.7757
+      ]
+    },
+    {
+      "id": "pt/Pt.dot(pt)",
+      "suite": "pt",
+      "name": "Pt.dot(pt)",
+      "batch": 512,
+      "nsPerItem": 342.719,
+      "hz": 5698.91,
+      "median": 0.173003,
+      "p99": 0.238054,
+      "rme": 1.685,
+      "samples": 5078,
+      "roundValues": [
+        353.864,
+        342.312,
+        342.719
+      ]
+    },
+    {
+      "id": "pt/Pt.$cross2D(pt)",
+      "suite": "pt",
+      "name": "Pt.$cross2D(pt)",
+      "batch": 512,
+      "nsPerItem": 360.41,
+      "hz": 5419.18,
+      "median": 0.173418,
+      "p99": 0.341966,
+      "rme": 3.365,
+      "samples": 4967,
+      "roundValues": [
+        363.425,
+        360.41,
+        339.167
+      ]
+    },
+    {
+      "id": "pt/Pt.angle",
+      "suite": "pt",
+      "name": "Pt.angle",
+      "batch": 512,
+      "nsPerItem": 40.5339,
+      "hz": 48185,
+      "median": 0.0201905,
+      "p99": 0.036709,
+      "rme": 4.721,
+      "samples": 42457,
+      "roundValues": [
+        40.0263,
+        43.8535,
+        40.5339
+      ]
+    },
+    {
+      "id": "pt/Pt.angleBetween(pt)",
+      "suite": "pt",
+      "name": "Pt.angleBetween(pt)",
+      "batch": 512,
+      "nsPerItem": 82.7598,
+      "hz": 23599.9,
+      "median": 0.041418,
+      "p99": 0.057369,
+      "rme": 1.379,
+      "samples": 21064,
+      "roundValues": [
+        82.7598,
+        82.6797,
+        84.9625
+      ]
+    },
+    {
+      "id": "pt/Pt.projectScalar(pt)",
+      "suite": "pt",
+      "name": "Pt.projectScalar(pt)",
+      "batch": 512,
+      "nsPerItem": 352.024,
+      "hz": 5548.28,
+      "median": 0.178081,
+      "p99": 0.342904,
+      "rme": 2.488,
+      "samples": 4958,
+      "roundValues": [
+        352.024,
+        347.409,
+        364.926
+      ]
+    },
+    {
+      "id": "pt/Pt.$unit",
+      "suite": "pt",
+      "name": "Pt.$unit",
+      "batch": 512,
+      "nsPerItem": 632.515,
+      "hz": 3087.87,
+      "median": 0.320504,
+      "p99": 0.583394,
+      "rme": 3.82,
+      "samples": 2758,
+      "roundValues": [
+        617.393,
+        632.515,
+        665.718
+      ]
+    },
+    {
+      "id": "pt/Pt.$abs",
+      "suite": "pt",
+      "name": "Pt.$abs",
+      "batch": 512,
+      "nsPerItem": 601.149,
+      "hz": 3248.99,
+      "median": 0.302234,
+      "p99": 0.418369,
+      "rme": 4.675,
+      "samples": 2858,
+      "roundValues": [
+        651.996,
+        595.787,
+        601.149
+      ]
+    },
+    {
+      "id": "pt/Pt.$floor",
+      "suite": "pt",
+      "name": "Pt.$floor",
+      "batch": 512,
+      "nsPerItem": 640.22,
+      "hz": 3050.71,
+      "median": 0.321493,
+      "p99": 0.592126,
+      "rme": 0.7066,
+      "samples": 2757,
+      "roundValues": [
+        632.207,
+        640.22,
+        641.255
+      ]
+    },
+    {
+      "id": "pt/Pt.$round",
+      "suite": "pt",
+      "name": "Pt.$round",
+      "batch": 512,
+      "nsPerItem": 626.969,
+      "hz": 3115.18,
+      "median": 0.317521,
+      "p99": 0.43884,
+      "rme": 0.3433,
+      "samples": 2811,
+      "roundValues": [
+        626.969,
+        627.234,
+        622.929
+      ]
+    },
+    {
+      "id": "pt/Pt.$project(pt)",
+      "suite": "pt",
+      "name": "Pt.$project(pt)",
+      "batch": 512,
+      "nsPerItem": 1128.56,
+      "hz": 1730.63,
+      "median": 0.566794,
+      "p99": 1.00289,
+      "rme": 4.071,
+      "samples": 1569,
+      "roundValues": [
+        1074.05,
+        1128.56,
+        1165.95
+      ]
+    },
+    {
+      "id": "pt/Pt.$take('xy')",
+      "suite": "pt",
+      "name": "Pt.$take('xy')",
+      "batch": 512,
+      "nsPerItem": 208.642,
+      "hz": 9361.15,
+      "median": 0.104468,
+      "p99": 0.136623,
+      "rme": 4.55,
+      "samples": 8220,
+      "roundValues": [
+        226.499,
+        208.642,
+        207.513
+      ]
+    },
+    {
+      "id": "pt/Pt.$concat(pt)",
+      "suite": "pt",
+      "name": "Pt.$concat(pt)",
+      "batch": 512,
+      "nsPerItem": 1197.65,
+      "hz": 1630.8,
+      "median": 0.590802,
+      "p99": 1.11371,
+      "rme": 3.352,
+      "samples": 1466,
+      "roundValues": [
+        1243.19,
+        1162.9,
+        1197.65
+      ]
+    },
+    {
+      "id": "pt/Pt.equals(pt)",
+      "suite": "pt",
+      "name": "Pt.equals(pt)",
+      "batch": 512,
+      "nsPerItem": 5.49574,
+      "hz": 355389,
+      "median": 0.002725,
+      "p99": 0.003194,
+      "rme": 1.212,
+      "samples": 320026,
+      "roundValues": [
+        5.42542,
+        5.55867,
+        5.49574
+      ]
+    },
+    {
+      "id": "pt/Pt.unit (in place)",
+      "suite": "pt",
+      "name": "Pt.unit (in place)",
+      "batch": 512,
+      "nsPerItem": 11.9169,
+      "hz": 163896,
+      "median": 0.005999,
+      "p99": 0.008567,
+      "rme": 0.4089,
+      "samples": 147183,
+      "roundValues": [
+        11.9169,
+        12.0052,
+        11.9078
+      ]
+    },
+    {
+      "id": "pt/Pt.scale(scalar)",
+      "suite": "pt",
+      "name": "Pt.scale(scalar)",
+      "batch": 512,
+      "nsPerItem": 1221.4,
+      "hz": 1599.08,
+      "median": 0.621351,
+      "p99": 0.903729,
+      "rme": 1.995,
+      "samples": 1426,
+      "roundValues": [
+        1264.83,
+        1221.4,
+        1216.1
+      ]
+    },
+    {
+      "id": "pt/Pt.toAngle",
+      "suite": "pt",
+      "name": "Pt.toAngle",
+      "batch": 512,
+      "nsPerItem": 41.2945,
+      "hz": 47297.4,
+      "median": 0.020115,
+      "p99": 0.036764,
+      "rme": 3.244,
+      "samples": 42074,
+      "roundValues": [
+        43.4096,
+        41.2945,
+        40.7307
+      ]
+    },
+    {
+      "id": "pt/Pt.toString",
+      "suite": "pt",
+      "name": "Pt.toString",
+      "batch": 64,
+      "nsPerItem": 92.9895,
+      "hz": 168030,
+      "median": 0.005841,
+      "p99": 0.010135,
+      "rme": 4.646,
+      "samples": 147788,
+      "roundValues": [
+        100.788,
+        92.1468,
+        92.9895
+      ]
+    },
+    {
+      "id": "pt/Pt.toArray",
+      "suite": "pt",
+      "name": "Pt.toArray",
+      "batch": 512,
+      "nsPerItem": 473.989,
+      "hz": 4120.61,
+      "median": 0.237335,
+      "p99": 0.522983,
+      "rme": 6.711,
+      "samples": 3595,
+      "roundValues": [
+        473.989,
+        467.531,
+        531.151
+      ]
+    },
+    {
+      "id": "pt/Pt.op then call",
+      "suite": "pt",
+      "name": "Pt.op then call",
+      "batch": 64,
+      "nsPerItem": 7.99807,
+      "hz": 1953600,
+      "median": 0.000472002,
+      "p99": 0.000948995,
+      "rme": 1.053,
+      "samples": 1751400,
+      "roundValues": [
+        8.13014,
+        7.99807,
+        7.96164
+      ]
+    },
+    {
+      "id": "pt/Group.fromArray",
+      "suite": "pt",
+      "name": "Group.fromArray",
+      "batch": 512,
+      "nsPerItem": 186.523,
+      "hz": 10471.2,
+      "median": 0.093059,
+      "p99": 0.16046,
+      "rme": 2.477,
+      "samples": 9359,
+      "roundValues": [
+        184.019,
+        193.26,
+        186.523
+      ]
+    },
+    {
+      "id": "pt/Group.fromPtArray",
+      "suite": "pt",
+      "name": "Group.fromPtArray",
+      "batch": 512,
+      "nsPerItem": 82.6047,
+      "hz": 23644.2,
+      "median": 0.041134,
+      "p99": 0.058119,
+      "rme": 1.521,
+      "samples": 21348,
+      "roundValues": [
+        82.6047,
+        83.4949,
+        80.9821
+      ]
+    },
+    {
+      "id": "pt/Group.clone",
+      "suite": "pt",
+      "name": "Group.clone",
+      "batch": 512,
+      "nsPerItem": 656.85,
+      "hz": 2973.47,
+      "median": 0.327156,
+      "p99": 0.601859,
+      "rme": 1.954,
+      "samples": 2680,
+      "roundValues": [
+        643.29,
+        656.85,
+        668.959
+      ]
+    },
+    {
+      "id": "pt/Group.centroid",
+      "suite": "pt",
+      "name": "Group.centroid",
+      "batch": 512,
+      "nsPerItem": 26.0807,
+      "hz": 74887.9,
+      "median": 0.013042,
+      "p99": 0.020258,
+      "rme": 22.98,
+      "samples": 79649,
+      "roundValues": [
+        16.1253,
+        28.1096,
+        26.0807
+      ]
+    },
+    {
+      "id": "pt/Group.boundingBox",
+      "suite": "pt",
+      "name": "Group.boundingBox",
+      "batch": 512,
+      "nsPerItem": 2287.6,
+      "hz": 853.788,
+      "median": 1.1376,
+      "p99": 1.77285,
+      "rme": 3.728,
+      "samples": 783,
+      "roundValues": [
+        2287.6,
+        2324.74,
+        2154.19
+      ]
+    },
+    {
+      "id": "pt/Group.interpolate",
+      "suite": "pt",
+      "name": "Group.interpolate",
+      "batch": 64,
+      "nsPerItem": 477.695,
+      "hz": 32709.1,
+      "median": 0.029498,
+      "p99": 0.05301,
+      "rme": 1.754,
+      "samples": 29618,
+      "roundValues": [
+        465.166,
+        481.923,
+        477.695
+      ]
+    },
+    {
+      "id": "pt/Group.segments",
+      "suite": "pt",
+      "name": "Group.segments",
+      "batch": 512,
+      "nsPerItem": 26.3386,
+      "hz": 74154.5,
+      "median": 0.0129565,
+      "p99": 0.021686,
+      "rme": 1.86,
+      "samples": 66165,
+      "roundValues": [
+        27.183,
+        26.2031,
+        26.3386
+      ]
+    },
+    {
+      "id": "pt/Group.lines",
+      "suite": "pt",
+      "name": "Group.lines",
+      "batch": 512,
+      "nsPerItem": 27.1973,
+      "hz": 71813.3,
+      "median": 0.01327,
+      "p99": 0.022059,
+      "rme": 1.771,
+      "samples": 64232,
+      "roundValues": [
+        27.943,
+        27.1973,
+        26.9799
+      ]
+    },
+    {
+      "id": "pt/Group.zipSlice",
+      "suite": "pt",
+      "name": "Group.zipSlice",
+      "batch": 512,
+      "nsPerItem": 12.9499,
+      "hz": 150822,
+      "median": 0.006042,
+      "p99": 0.016666,
+      "rme": 1.281,
+      "samples": 135668,
+      "roundValues": [
+        12.7967,
+        12.9499,
+        13.1284
+      ]
+    },
+    {
+      "id": "pt/Group.$zip",
+      "suite": "pt",
+      "name": "Group.$zip",
+      "batch": 512,
+      "nsPerItem": 25.6702,
+      "hz": 76085.2,
+      "median": 0.012058,
+      "p99": 0.024109,
+      "rme": 1.504,
+      "samples": 68709,
+      "roundValues": [
+        25.6702,
+        25.9395,
+        25.1676
+      ]
+    },
+    {
+      "id": "pt/Group.sortByDimension",
+      "suite": "pt",
+      "name": "Group.sortByDimension",
+      "batch": 512,
+      "nsPerItem": 227.323,
+      "hz": 8591.85,
+      "median": 0.112587,
+      "p99": 0.135899,
+      "rme": 1.844,
+      "samples": 7814,
+      "roundValues": [
+        227.323,
+        219.749,
+        228.135
+      ]
+    },
+    {
+      "id": "pt/Group.add(pt)",
+      "suite": "pt",
+      "name": "Group.add(pt)",
+      "batch": 512,
+      "nsPerItem": 542.041,
+      "hz": 3603.28,
+      "median": 0.273148,
+      "p99": 0.526055,
+      "rme": 3.537,
+      "samples": 3308,
+      "roundValues": [
+        508.12,
+        546.46,
+        542.041
+      ]
+    },
+    {
+      "id": "pt/Group.moveTo(pt)",
+      "suite": "pt",
+      "name": "Group.moveTo(pt)",
+      "batch": 512,
+      "nsPerItem": 530.8,
+      "hz": 3679.59,
+      "median": 0.26805,
+      "p99": 0.305527,
+      "rme": 6.007,
+      "samples": 3269,
+      "roundValues": [
+        511.562,
+        530.8,
+        575.336
+      ]
+    },
+    {
+      "id": "pt/Group.scale(scalar)",
+      "suite": "pt",
+      "name": "Group.scale(scalar)",
+      "batch": 512,
+      "nsPerItem": 699.486,
+      "hz": 2792.23,
+      "median": 0.352318,
+      "p99": 0.646746,
+      "rme": 1.881,
+      "samples": 2503,
+      "roundValues": [
+        699.486,
+        691.301,
+        717.62
+      ]
+    },
+    {
+      "id": "pt/Group.rotate2D",
+      "suite": "pt",
+      "name": "Group.rotate2D",
+      "batch": 512,
+      "nsPerItem": 1491.03,
+      "hz": 1309.92,
+      "median": 0.733662,
+      "p99": 1.41295,
+      "rme": 4.2,
+      "samples": 1167,
+      "roundValues": [
+        1491.03,
+        1582.02,
+        1456.79
+      ]
+    },
+    {
+      "id": "pt/Group.shear2D",
+      "suite": "pt",
+      "name": "Group.shear2D",
+      "batch": 512,
+      "nsPerItem": 1498.21,
+      "hz": 1303.64,
+      "median": 0.739716,
+      "p99": 1.49521,
+      "rme": 0.9546,
+      "samples": 1179,
+      "roundValues": [
+        1476.54,
+        1498.21,
+        1505.14
+      ]
+    },
+    {
+      "id": "pt/Group.reflect2D",
+      "suite": "pt",
+      "name": "Group.reflect2D",
+      "batch": 512,
+      "nsPerItem": 1297.82,
+      "hz": 1504.92,
+      "median": 0.64904,
+      "p99": 1.00754,
+      "rme": 1.147,
+      "samples": 1351,
+      "roundValues": [
+        1290.44,
+        1297.82,
+        1320.22
+      ]
+    },
+    {
+      "id": "pt/Group.forEachPt('unit')",
+      "suite": "pt",
+      "name": "Group.forEachPt('unit')",
+      "batch": 512,
+      "nsPerItem": 37.628,
+      "hz": 51906.1,
+      "median": 0.018908,
+      "p99": 0.026347,
+      "rme": 7.014,
+      "samples": 48949,
+      "roundValues": [
+        32.6693,
+        37.628,
+        37.9481
+      ]
+    },
+    {
+      "id": "pt/Bound.fromGroup",
+      "suite": "pt",
+      "name": "Bound.fromGroup",
+      "batch": 64,
+      "nsPerItem": 5315.77,
+      "hz": 2939.37,
+      "median": 0.337896,
+      "p99": 0.438248,
+      "rme": 2.573,
+      "samples": 2648,
+      "roundValues": [
+        5179.4,
+        5452.9,
+        5315.77
+      ]
+    },
+    {
+      "id": "pt/Bound accessors",
+      "suite": "pt",
+      "name": "Bound accessors",
+      "batch": 64,
+      "nsPerItem": 1317.19,
+      "hz": 11862.4,
+      "median": 0.082967,
+      "p99": 0.112055,
+      "rme": 3.336,
+      "samples": 10685,
+      "roundValues": [
+        1317.19,
+        1361.1,
+        1273.23
+      ]
+    },
+    {
+      "id": "pt/Bound.clone",
+      "suite": "pt",
+      "name": "Bound.clone",
+      "batch": 64,
+      "nsPerItem": 5753.64,
+      "hz": 2715.67,
+      "median": 0.360164,
+      "p99": 0.64541,
+      "rme": 0.9509,
+      "samples": 2443,
+      "roundValues": [
+        5817.77,
+        5708.35,
+        5753.64
+      ]
+    },
+    {
+      "id": "linear-algebra/Vec.add(scalar) (array)",
+      "suite": "linear-algebra",
+      "name": "Vec.add(scalar) (array)",
+      "batch": 512,
+      "nsPerItem": 14.7533,
+      "hz": 132386,
+      "median": 0.007101,
+      "p99": 0.01758,
+      "rme": 25.41,
+      "samples": 154997,
+      "roundValues": [
+        7.64963,
+        15.1468,
+        14.7533
+      ]
+    },
+    {
+      "id": "linear-algebra/Vec.add(scalar) (Pt)",
+      "suite": "linear-algebra",
+      "name": "Vec.add(scalar) (Pt)",
+      "batch": 512,
+      "nsPerItem": 13.0891,
+      "hz": 149218,
+      "median": 0.006554,
+      "p99": 0.013112,
+      "rme": 15.89,
+      "samples": 150418,
+      "roundValues": [
+        9.38912,
+        13.549,
+        13.0891
+      ]
+    },
+    {
+      "id": "linear-algebra/Vec.add(vector) (array)",
+      "suite": "linear-algebra",
+      "name": "Vec.add(vector) (array)",
+      "batch": 512,
+      "nsPerItem": 29.7375,
+      "hz": 65678.9,
+      "median": 0.01498,
+      "p99": 0.022829,
+      "rme": 1.281,
+      "samples": 58737,
+      "roundValues": [
+        30.409,
+        29.7375,
+        29.647
+      ]
+    },
+    {
+      "id": "linear-algebra/Vec.add(vector) (Pt)",
+      "suite": "linear-algebra",
+      "name": "Vec.add(vector) (Pt)",
+      "batch": 512,
+      "nsPerItem": 32.3427,
+      "hz": 60388.4,
+      "median": 0.016257,
+      "p99": 0.026621,
+      "rme": 3.171,
+      "samples": 53327,
+      "roundValues": [
+        34.3408,
+        32.2897,
+        32.3427
+      ]
+    },
+    {
+      "id": "linear-algebra/Vec.subtract(vector) (array)",
+      "suite": "linear-algebra",
+      "name": "Vec.subtract(vector) (array)",
+      "batch": 512,
+      "nsPerItem": 16.8377,
+      "hz": 115997,
+      "median": 0.00857399,
+      "p99": 0.014428,
+      "rme": 4.622,
+      "samples": 107717,
+      "roundValues": [
+        15.331,
+        16.8377,
+        16.8875
+      ]
+    },
+    {
+      "id": "linear-algebra/Vec.subtract(vector) (Pt)",
+      "suite": "linear-algebra",
+      "name": "Vec.subtract(vector) (Pt)",
+      "batch": 512,
+      "nsPerItem": 14.8336,
+      "hz": 131669,
+      "median": 0.007387,
+      "p99": 0.010205,
+      "rme": 1.309,
+      "samples": 117798,
+      "roundValues": [
+        15.164,
+        14.8336,
+        14.7757
+      ]
+    },
+    {
+      "id": "linear-algebra/Vec.multiply(scalar) (array)",
+      "suite": "linear-algebra",
+      "name": "Vec.multiply(scalar) (array)",
+      "batch": 512,
+      "nsPerItem": 14.2315,
+      "hz": 137240,
+      "median": 0.00717,
+      "p99": 0.01092,
+      "rme": 2.17,
+      "samples": 122079,
+      "roundValues": [
+        14.7998,
+        14.1821,
+        14.2315
+      ]
+    },
+    {
+      "id": "linear-algebra/Vec.multiply(scalar) (Pt)",
+      "suite": "linear-algebra",
+      "name": "Vec.multiply(scalar) (Pt)",
+      "batch": 512,
+      "nsPerItem": 12.8049,
+      "hz": 152530,
+      "median": 0.006412,
+      "p99": 0.00961401,
+      "rme": 0.9632,
+      "samples": 136518,
+      "roundValues": [
+        13.0367,
+        12.8049,
+        12.79
+      ]
+    },
+    {
+      "id": "linear-algebra/Vec.divide(scalar) (array)",
+      "suite": "linear-algebra",
+      "name": "Vec.divide(scalar) (array)",
+      "batch": 512,
+      "nsPerItem": 13.9906,
+      "hz": 139603,
+      "median": 0.007121,
+      "p99": 0.00942,
+      "rme": 2.232,
+      "samples": 123980,
+      "roundValues": [
+        14.5931,
+        13.9685,
+        13.9906
+      ]
+    },
+    {
+      "id": "linear-algebra/Vec.divide(scalar) (Pt)",
+      "suite": "linear-algebra",
+      "name": "Vec.divide(scalar) (Pt)",
+      "batch": 512,
+      "nsPerItem": 13.2168,
+      "hz": 147776,
+      "median": 0.006636,
+      "p99": 0.008339,
+      "rme": 0.9428,
+      "samples": 133647,
+      "roundValues": [
+        13.2168,
+        12.9975,
+        13.2467
+      ]
+    },
+    {
+      "id": "linear-algebra/Vec.abs (array)",
+      "suite": "linear-algebra",
+      "name": "Vec.abs (array)",
+      "batch": 512,
+      "nsPerItem": 15.0355,
+      "hz": 129900,
+      "median": 0.00720301,
+      "p99": 0.016144,
+      "rme": 3.226,
+      "samples": 117408,
+      "roundValues": [
+        15.0355,
+        15.4412,
+        14.4712
+      ]
+    },
+    {
+      "id": "linear-algebra/Vec.abs (Pt)",
+      "suite": "linear-algebra",
+      "name": "Vec.abs (Pt)",
+      "batch": 512,
+      "nsPerItem": 13.8917,
+      "hz": 140596,
+      "median": 0.007071,
+      "p99": 0.012967,
+      "rme": 1.324,
+      "samples": 125973,
+      "roundValues": [
+        13.8038,
+        13.8917,
+        14.1717
+      ]
+    },
+    {
+      "id": "linear-algebra/Vec.floor (array)",
+      "suite": "linear-algebra",
+      "name": "Vec.floor (array)",
+      "batch": 512,
+      "nsPerItem": 14.6583,
+      "hz": 133244,
+      "median": 0.007396,
+      "p99": 0.011216,
+      "rme": 0.5048,
+      "samples": 119884,
+      "roundValues": [
+        14.7395,
+        14.6583,
+        14.5915
+      ]
+    },
+    {
+      "id": "linear-algebra/Vec.floor (Pt)",
+      "suite": "linear-algebra",
+      "name": "Vec.floor (Pt)",
+      "batch": 512,
+      "nsPerItem": 14.0235,
+      "hz": 139275,
+      "median": 0.006855,
+      "p99": 0.013517,
+      "rme": 0.6932,
+      "samples": 125845,
+      "roundValues": [
+        14.0235,
+        13.8443,
+        14.0387
+      ]
+    },
+    {
+      "id": "linear-algebra/Vec.round (array)",
+      "suite": "linear-algebra",
+      "name": "Vec.round (array)",
+      "batch": 512,
+      "nsPerItem": 23.2539,
+      "hz": 83991.5,
+      "median": 0.011517,
+      "p99": 0.020368,
+      "rme": 1.661,
+      "samples": 76402,
+      "roundValues": [
+        23.28,
+        22.5074,
+        23.2539
+      ]
+    },
+    {
+      "id": "linear-algebra/Vec.round (Pt)",
+      "suite": "linear-algebra",
+      "name": "Vec.round (Pt)",
+      "batch": 512,
+      "nsPerItem": 23.7429,
+      "hz": 82261.4,
+      "median": 0.011771,
+      "p99": 0.019846,
+      "rme": 0.4648,
+      "samples": 73865,
+      "roundValues": [
+        23.9371,
+        23.7163,
+        23.7429
+      ]
+    },
+    {
+      "id": "linear-algebra/Vec.unit (array)",
+      "suite": "linear-algebra",
+      "name": "Vec.unit (array)",
+      "batch": 512,
+      "nsPerItem": 24.1821,
+      "hz": 80767.4,
+      "median": 0.012089,
+      "p99": 0.022419,
+      "rme": 2.59,
+      "samples": 72514,
+      "roundValues": [
+        24.1821,
+        24.9139,
+        23.6614
+      ]
+    },
+    {
+      "id": "linear-algebra/Vec.unit (Pt)",
+      "suite": "linear-algebra",
+      "name": "Vec.unit (Pt)",
+      "batch": 512,
+      "nsPerItem": 22.6559,
+      "hz": 86208.1,
+      "median": 0.011451,
+      "p99": 0.019251,
+      "rme": 1.395,
+      "samples": 77633,
+      "roundValues": [
+        22.3251,
+        22.6559,
+        22.9571
+      ]
+    },
+    {
+      "id": "linear-algebra/Vec.dot",
+      "suite": "linear-algebra",
+      "name": "Vec.dot",
+      "batch": 512,
+      "nsPerItem": 18.2449,
+      "hz": 107050,
+      "median": 0.009121,
+      "p99": 0.013154,
+      "rme": 15.81,
+      "samples": 109851,
+      "roundValues": [
+        12.7236,
+        18.2449,
+        18.494
+      ]
+    },
+    {
+      "id": "linear-algebra/Vec.cross2D",
+      "suite": "linear-algebra",
+      "name": "Vec.cross2D",
+      "batch": 512,
+      "nsPerItem": 10.6604,
+      "hz": 183213,
+      "median": 0.00528,
+      "p99": 0.011443,
+      "rme": 5.756,
+      "samples": 160038,
+      "roundValues": [
+        10.573,
+        10.6604,
+        11.8002
+      ]
+    },
+    {
+      "id": "linear-algebra/Vec.magnitude",
+      "suite": "linear-algebra",
+      "name": "Vec.magnitude",
+      "batch": 512,
+      "nsPerItem": 20.0069,
+      "hz": 97622.8,
+      "median": 0.010178,
+      "p99": 0.01483,
+      "rme": 3.831,
+      "samples": 85989,
+      "roundValues": [
+        19.9294,
+        20.0069,
+        21.4624
+      ]
+    },
+    {
+      "id": "linear-algebra/Vec.sum",
+      "suite": "linear-algebra",
+      "name": "Vec.sum",
+      "batch": 512,
+      "nsPerItem": 9.55361,
+      "hz": 204438,
+      "median": 0.004774,
+      "p99": 0.005724,
+      "rme": 2.719,
+      "samples": 181189,
+      "roundValues": [
+        9.55361,
+        9.52445,
+        10.0441
+      ]
+    },
+    {
+      "id": "linear-algebra/Vec.max",
+      "suite": "linear-algebra",
+      "name": "Vec.max",
+      "batch": 512,
+      "nsPerItem": 15.9211,
+      "hz": 122675,
+      "median": 0.00776,
+      "p99": 0.014379,
+      "rme": 4.137,
+      "samples": 110350,
+      "roundValues": [
+        15.9211,
+        15.3022,
+        16.6196
+      ]
+    },
+    {
+      "id": "linear-algebra/Vec.min",
+      "suite": "linear-algebra",
+      "name": "Vec.min",
+      "batch": 512,
+      "nsPerItem": 15.8588,
+      "hz": 123157,
+      "median": 0.007923,
+      "p99": 0.012303,
+      "rme": 0.8653,
+      "samples": 110542,
+      "roundValues": [
+        15.7876,
+        15.8588,
+        16.0621
+      ]
+    },
+    {
+      "id": "linear-algebra/Vec.cross (3D)",
+      "suite": "linear-algebra",
+      "name": "Vec.cross (3D)",
+      "batch": 512,
+      "nsPerItem": 206.467,
+      "hz": 9459.73,
+      "median": 0.0994455,
+      "p99": 0.247273,
+      "rme": 1.909,
+      "samples": 8587,
+      "roundValues": [
+        200.006,
+        207.888,
+        206.467
+      ]
+    },
+    {
+      "id": "linear-algebra/Vec.map",
+      "suite": "linear-algebra",
+      "name": "Vec.map",
+      "batch": 512,
+      "nsPerItem": 8.37698,
+      "hz": 233154,
+      "median": 0.00429,
+      "p99": 0.00471999,
+      "rme": 0.4896,
+      "samples": 209737,
+      "roundValues": [
+        8.42442,
+        8.37698,
+        8.34239
+      ]
+    },
+    {
+      "id": "linear-algebra/Mat.transform2D",
+      "suite": "linear-algebra",
+      "name": "Mat.transform2D",
+      "batch": 512,
+      "nsPerItem": 179.073,
+      "hz": 10906.9,
+      "median": 0.0884455,
+      "p99": 0.203301,
+      "rme": 2.465,
+      "samples": 9778,
+      "roundValues": [
+        179.073,
+        175.874,
+        184.703
+      ]
+    },
+    {
+      "id": "linear-algebra/Mat.scale2DMatrix",
+      "suite": "linear-algebra",
+      "name": "Mat.scale2DMatrix",
+      "batch": 64,
+      "nsPerItem": 619.524,
+      "hz": 25221,
+      "median": 0.038495,
+      "p99": 0.09199,
+      "rme": 2.115,
+      "samples": 22578,
+      "roundValues": [
+        611.75,
+        619.524,
+        637.961
+      ]
+    },
+    {
+      "id": "linear-algebra/Mat.rotate2DMatrix",
+      "suite": "linear-algebra",
+      "name": "Mat.rotate2DMatrix",
+      "batch": 64,
+      "nsPerItem": 635.995,
+      "hz": 24567.8,
+      "median": 0.038481,
+      "p99": 0.095647,
+      "rme": 1.108,
+      "samples": 22168,
+      "roundValues": [
+        635.995,
+        640.761,
+        626.667
+      ]
+    },
+    {
+      "id": "linear-algebra/Mat.shear2DMatrix",
+      "suite": "linear-algebra",
+      "name": "Mat.shear2DMatrix",
+      "batch": 64,
+      "nsPerItem": 634.44,
+      "hz": 24628,
+      "median": 0.038874,
+      "p99": 0.069344,
+      "rme": 0.4976,
+      "samples": 22240,
+      "roundValues": [
+        634.487,
+        628.173,
+        634.44
+      ]
+    },
+    {
+      "id": "linear-algebra/Mat.translate2DMatrix",
+      "suite": "linear-algebra",
+      "name": "Mat.translate2DMatrix",
+      "batch": 64,
+      "nsPerItem": 584.8,
+      "hz": 26718.5,
+      "median": 0.0363905,
+      "p99": 0.052875,
+      "rme": 2.208,
+      "samples": 23759,
+      "roundValues": [
+        608.713,
+        582.894,
+        584.8
+      ]
+    },
+    {
+      "id": "linear-algebra/Mat.scaleAt2DMatrix",
+      "suite": "linear-algebra",
+      "name": "Mat.scaleAt2DMatrix",
+      "batch": 64,
+      "nsPerItem": 654.471,
+      "hz": 23874.2,
+      "median": 0.039525,
+      "p99": 0.097199,
+      "rme": 2.271,
+      "samples": 21480,
+      "roundValues": [
+        654.471,
+        640.322,
+        670.051
+      ]
+    },
+    {
+      "id": "linear-algebra/Mat.rotateAt2DMatrix",
+      "suite": "linear-algebra",
+      "name": "Mat.rotateAt2DMatrix",
+      "batch": 64,
+      "nsPerItem": 625.663,
+      "hz": 24973.5,
+      "median": 0.038288,
+      "p99": 0.09655,
+      "rme": 1.187,
+      "samples": 22391,
+      "roundValues": [
+        621.988,
+        625.663,
+        636.842
+      ]
+    },
+    {
+      "id": "linear-algebra/Mat.shearAt2DMatrix",
+      "suite": "linear-algebra",
+      "name": "Mat.shearAt2DMatrix",
+      "batch": 64,
+      "nsPerItem": 643.169,
+      "hz": 24293.8,
+      "median": 0.039802,
+      "p99": 0.0612,
+      "rme": 0.5613,
+      "samples": 21832,
+      "roundValues": [
+        643.169,
+        648.298,
+        641.078
+      ]
+    },
+    {
+      "id": "linear-algebra/Mat.reflectAt2DMatrix",
+      "suite": "linear-algebra",
+      "name": "Mat.reflectAt2DMatrix",
+      "batch": 64,
+      "nsPerItem": 544.4,
+      "hz": 28701.3,
+      "median": 0.033924,
+      "p99": 0.04963,
+      "rme": 1.518,
+      "samples": 26022,
+      "roundValues": [
+        530.328,
+        546.854,
+        544.4
+      ]
+    },
+    {
+      "id": "linear-algebra/Mat.multiply (3x3 chain)",
+      "suite": "linear-algebra",
+      "name": "Mat.multiply (3x3 chain)",
+      "batch": 64,
+      "nsPerItem": 3196.96,
+      "hz": 4887.46,
+      "median": 0.204013,
+      "p99": 0.235886,
+      "rme": 0.5055,
+      "samples": 4402,
+      "roundValues": [
+        3179.38,
+        3196.96,
+        3211.71
+      ]
+    },
+    {
+      "id": "linear-algebra/Mat.multiply (32x32)",
+      "suite": "linear-algebra",
+      "name": "Mat.multiply (32x32)",
+      "batch": 1024,
+      "nsPerItem": 226.081,
+      "hz": 4319.53,
+      "median": 0.215232,
+      "p99": 0.420209,
+      "rme": 1.766,
+      "samples": 3913,
+      "roundValues": [
+        228.064,
+        220.08,
+        226.081
+      ]
+    },
+    {
+      "id": "linear-algebra/Mat.multiply (32x32, elementwise)",
+      "suite": "linear-algebra",
+      "name": "Mat.multiply (32x32, elementwise)",
+      "batch": 1024,
+      "nsPerItem": 164.993,
+      "hz": 5918.82,
+      "median": 0.1613,
+      "p99": 0.330468,
+      "rme": 4.317,
+      "samples": 5224,
+      "roundValues": [
+        177.378,
+        163.131,
+        164.993
+      ]
+    },
+    {
+      "id": "linear-algebra/Mat.add (32x32)",
+      "suite": "linear-algebra",
+      "name": "Mat.add (32x32)",
+      "batch": 1024,
+      "nsPerItem": 173.85,
+      "hz": 5617.27,
+      "median": 0.170614,
+      "p99": 0.380293,
+      "rme": 1.521,
+      "samples": 5099,
+      "roundValues": [
+        169.139,
+        174.428,
+        173.85
+      ]
+    },
+    {
+      "id": "linear-algebra/Mat.transpose (32x32)",
+      "suite": "linear-algebra",
+      "name": "Mat.transpose (32x32)",
+      "batch": 1024,
+      "nsPerItem": 62.4481,
+      "hz": 15638,
+      "median": 0.0575275,
+      "p99": 0.135135,
+      "rme": 1.309,
+      "samples": 14105,
+      "roundValues": [
+        62.4481,
+        61.4455,
+        63.0806
+      ]
+    },
+    {
+      "id": "linear-algebra/Mat.zip",
+      "suite": "linear-algebra",
+      "name": "Mat.zip",
+      "batch": 512,
+      "nsPerItem": 85.8443,
+      "hz": 22752,
+      "median": 0.043341,
+      "p99": 0.062885,
+      "rme": 0.3811,
+      "samples": 20465,
+      "roundValues": [
+        85.6009,
+        85.8443,
+        86.2553
+      ]
+    },
+    {
+      "id": "linear-algebra/Mat.zipSlice",
+      "suite": "linear-algebra",
+      "name": "Mat.zipSlice",
+      "batch": 512,
+      "nsPerItem": 45.5443,
+      "hz": 42884,
+      "median": 0.022208,
+      "p99": 0.058648,
+      "rme": 0.7067,
+      "samples": 38748,
+      "roundValues": [
+        44.9608,
+        45.5443,
+        45.6046
+      ]
+    },
+    {
+      "id": "linear-algebra/Mat instance transform chain",
+      "suite": "linear-algebra",
+      "name": "Mat instance transform chain",
+      "batch": 64,
+      "nsPerItem": 12489,
+      "hz": 1251.11,
+      "median": 0.793158,
+      "p99": 1.06819,
+      "rme": 0.3623,
+      "samples": 1129,
+      "roundValues": [
+        12426.2,
+        12516.7,
+        12489
+      ]
+    },
+    {
+      "id": "linear-algebra/Group.$matrixMultiply",
+      "suite": "linear-algebra",
+      "name": "Group.$matrixMultiply",
+      "batch": 1024,
+      "nsPerItem": 221.234,
+      "hz": 4414.16,
+      "median": 0.213117,
+      "p99": 0.422001,
+      "rme": 1.682,
+      "samples": 3937,
+      "roundValues": [
+        228.201,
+        220.757,
+        221.234
+      ]
+    },
+    {
+      "id": "num/Num.lerp",
+      "suite": "num",
+      "name": "Num.lerp",
+      "batch": 512,
+      "nsPerItem": 9.86887,
+      "hz": 197908,
+      "median": 0.004887,
+      "p99": 0.009123,
+      "rme": 46.44,
+      "samples": 556516,
+      "roundValues": [
+        1.32773,
+        10.4943,
+        9.86887
+      ]
+    },
+    {
+      "id": "num/Num.clamp",
+      "suite": "num",
+      "name": "Num.clamp",
+      "batch": 512,
+      "nsPerItem": 15.4524,
+      "hz": 126396,
+      "median": 0.007468,
+      "p99": 0.015302,
+      "rme": 3.732,
+      "samples": 113068,
+      "roundValues": [
+        16.1923,
+        15.0388,
+        15.4524
+      ]
+    },
+    {
+      "id": "num/Num.boundValue",
+      "suite": "num",
+      "name": "Num.boundValue",
+      "batch": 512,
+      "nsPerItem": 16.6712,
+      "hz": 117156,
+      "median": 0.00815801,
+      "p99": 0.014801,
+      "rme": 2.36,
+      "samples": 107024,
+      "roundValues": [
+        16.707,
+        15.9201,
+        16.6712
+      ]
+    },
+    {
+      "id": "num/Num.within",
+      "suite": "num",
+      "name": "Num.within",
+      "batch": 512,
+      "nsPerItem": 11.529,
+      "hz": 169409,
+      "median": 0.005583,
+      "p99": 0.009891,
+      "rme": 3.147,
+      "samples": 153450,
+      "roundValues": [
+        11.529,
+        11.7932,
+        11.0677
+      ]
+    },
+    {
+      "id": "num/Num.normalizeValue",
+      "suite": "num",
+      "name": "Num.normalizeValue",
+      "batch": 512,
+      "nsPerItem": 9.54869,
+      "hz": 204544,
+      "median": 0.00473,
+      "p99": 0.011774,
+      "rme": 1.721,
+      "samples": 182174,
+      "roundValues": [
+        9.53864,
+        9.86734,
+        9.54869
+      ]
+    },
+    {
+      "id": "num/Num.cycle",
+      "suite": "num",
+      "name": "Num.cycle",
+      "batch": 512,
+      "nsPerItem": 26.5468,
+      "hz": 73572.9,
+      "median": 0.01307,
+      "p99": 0.022811,
+      "rme": 0.4674,
+      "samples": 66299,
+      "roundValues": [
+        26.5468,
+        26.6219,
+        26.3738
+      ]
+    },
+    {
+      "id": "num/Num.mapToRange",
+      "suite": "num",
+      "name": "Num.mapToRange",
+      "batch": 512,
+      "nsPerItem": 11.7416,
+      "hz": 166342,
+      "median": 0.005851,
+      "p99": 0.009911,
+      "rme": 5.515,
+      "samples": 145235,
+      "roundValues": [
+        12.9743,
+        11.7416,
+        11.6792
+      ]
+    },
+    {
+      "id": "num/Num.equals",
+      "suite": "num",
+      "name": "Num.equals",
+      "batch": 512,
+      "nsPerItem": 1.56018,
+      "hz": 1251860,
+      "median": 0.000763997,
+      "p99": 0.000945002,
+      "rme": 2.052,
+      "samples": 1131088,
+      "roundValues": [
+        1.58374,
+        1.51972,
+        1.56018
+      ]
+    },
+    {
+      "id": "num/Num.random (seeded)",
+      "suite": "num",
+      "name": "Num.random (seeded)",
+      "batch": 512,
+      "nsPerItem": 8.10098,
+      "hz": 241097,
+      "median": 0.004051,
+      "p99": 0.004316,
+      "rme": 7.451,
+      "samples": 226055,
+      "roundValues": [
+        7.06713,
+        8.27432,
+        8.10098
+      ]
+    },
+    {
+      "id": "num/Num.randomPt",
+      "suite": "num",
+      "name": "Num.randomPt",
+      "batch": 512,
+      "nsPerItem": 205.414,
+      "hz": 9508.24,
+      "median": 0.102391,
+      "p99": 0.13258,
+      "rme": 7.719,
+      "samples": 8980,
+      "roundValues": [
+        176.734,
+        208.445,
+        205.414
+      ]
+    },
+    {
+      "id": "num/Num.sum",
+      "suite": "num",
+      "name": "Num.sum",
+      "batch": 512,
+      "nsPerItem": 28.6411,
+      "hz": 68193,
+      "median": 0.013702,
+      "p99": 0.024925,
+      "rme": 2.302,
+      "samples": 62145,
+      "roundValues": [
+        28.6411,
+        28.7866,
+        27.4681
+      ]
+    },
+    {
+      "id": "num/Num.average",
+      "suite": "num",
+      "name": "Num.average",
+      "batch": 512,
+      "nsPerItem": 26.7126,
+      "hz": 73116.4,
+      "median": 0.013178,
+      "p99": 0.020135,
+      "rme": 18.69,
+      "samples": 77087,
+      "roundValues": [
+        17.3697,
+        27.3574,
+        26.7126
+      ]
+    },
+    {
+      "id": "num/Geom.boundAngle",
+      "suite": "num",
+      "name": "Geom.boundAngle",
+      "batch": 512,
+      "nsPerItem": 17.6558,
+      "hz": 110622,
+      "median": 0.008812,
+      "p99": 0.015311,
+      "rme": 24.33,
+      "samples": 129383,
+      "roundValues": [
+        9.2493,
+        17.8392,
+        17.6558
+      ]
+    },
+    {
+      "id": "num/Geom.boundRadian",
+      "suite": "num",
+      "name": "Geom.boundRadian",
+      "batch": 512,
+      "nsPerItem": 18.7445,
+      "hz": 104197,
+      "median": 0.00913601,
+      "p99": 0.01717,
+      "rme": 2.221,
+      "samples": 94177,
+      "roundValues": [
+        18.7445,
+        19.0518,
+        18.2191
+      ]
+    },
+    {
+      "id": "num/Geom.toRadian",
+      "suite": "num",
+      "name": "Geom.toRadian",
+      "batch": 512,
+      "nsPerItem": 10.7214,
+      "hz": 182171,
+      "median": 0.005125,
+      "p99": 0.012471,
+      "rme": 2.78,
+      "samples": 164074,
+      "roundValues": [
+        10.4201,
+        11.0163,
+        10.7214
+      ]
+    },
+    {
+      "id": "num/Geom.toDegree",
+      "suite": "num",
+      "name": "Geom.toDegree",
+      "batch": 512,
+      "nsPerItem": 10.6296,
+      "hz": 183744,
+      "median": 0.005196,
+      "p99": 0.012351,
+      "rme": 2.677,
+      "samples": 164172,
+      "roundValues": [
+        11.0386,
+        10.6296,
+        10.4694
+      ]
+    },
+    {
+      "id": "num/Geom.boundingBox",
+      "suite": "num",
+      "name": "Geom.boundingBox",
+      "batch": 512,
+      "nsPerItem": 2274.23,
+      "hz": 858.809,
+      "median": 1.14489,
+      "p99": 2.07024,
+      "rme": 1.67,
+      "samples": 777,
+      "roundValues": [
+        2302.39,
+        2274.23,
+        2226.44
+      ]
+    },
+    {
+      "id": "num/Geom.centroid",
+      "suite": "num",
+      "name": "Geom.centroid",
+      "batch": 512,
+      "nsPerItem": 26.3871,
+      "hz": 74018.1,
+      "median": 0.013059,
+      "p99": 0.019305,
+      "rme": 22,
+      "samples": 83099,
+      "roundValues": [
+        15.0557,
+        26.3871,
+        26.6644
+      ]
+    },
+    {
+      "id": "num/Geom.interpolate",
+      "suite": "num",
+      "name": "Geom.interpolate",
+      "batch": 512,
+      "nsPerItem": 456.496,
+      "hz": 4278.51,
+      "median": 0.231245,
+      "p99": 0.428521,
+      "rme": 0.9155,
+      "samples": 3835,
+      "roundValues": [
+        456.496,
+        463.821,
+        455.462
+      ]
+    },
+    {
+      "id": "num/Geom.perpendicular",
+      "suite": "num",
+      "name": "Geom.perpendicular",
+      "batch": 512,
+      "nsPerItem": 1866.75,
+      "hz": 1046.27,
+      "median": 0.934888,
+      "p99": 1.48713,
+      "rme": 1.346,
+      "samples": 942,
+      "roundValues": [
+        1892.83,
+        1842.58,
+        1866.75
+      ]
+    },
+    {
+      "id": "num/Geom.withinBound",
+      "suite": "num",
+      "name": "Geom.withinBound",
+      "batch": 512,
+      "nsPerItem": 10.1847,
+      "hz": 191770,
+      "median": 0.005033,
+      "p99": 0.005907,
+      "rme": 18.55,
+      "samples": 203196,
+      "roundValues": [
+        6.57766,
+        10.1847,
+        10.3554
+      ]
+    },
+    {
+      "id": "num/Geom.isPerpendicular",
+      "suite": "num",
+      "name": "Geom.isPerpendicular",
+      "batch": 512,
+      "nsPerItem": 1155.83,
+      "hz": 1689.8,
+      "median": 0.562612,
+      "p99": 1.80254,
+      "rme": 2.573,
+      "samples": 1534,
+      "roundValues": [
+        1155.83,
+        1112.89,
+        1172.38
+      ]
+    },
+    {
+      "id": "num/Geom.sortEdges",
+      "suite": "num",
+      "name": "Geom.sortEdges",
+      "batch": 64,
+      "nsPerItem": 14949.5,
+      "hz": 1045.19,
+      "median": 0.961254,
+      "p99": 1.75987,
+      "rme": 2.763,
+      "samples": 926,
+      "roundValues": [
+        14949.5,
+        15762.2,
+        14936.2
+      ]
+    },
+    {
+      "id": "num/Geom.scale",
+      "suite": "num",
+      "name": "Geom.scale",
+      "batch": 512,
+      "nsPerItem": 9.10217,
+      "hz": 214578,
+      "median": 0.004615,
+      "p99": 0.007987,
+      "rme": 10.82,
+      "samples": 183604,
+      "roundValues": [
+        10.9116,
+        8.94139,
+        9.10217
+      ]
+    },
+    {
+      "id": "num/Geom.rotate2D",
+      "suite": "num",
+      "name": "Geom.rotate2D",
+      "batch": 512,
+      "nsPerItem": 1456.23,
+      "hz": 1341.22,
+      "median": 0.704485,
+      "p99": 1.50034,
+      "rme": 3.04,
+      "samples": 1224,
+      "roundValues": [
+        1474.9,
+        1456.23,
+        1386.38
+      ]
+    },
+    {
+      "id": "num/Geom.shear2D",
+      "suite": "num",
+      "name": "Geom.shear2D",
+      "batch": 512,
+      "nsPerItem": 1420.83,
+      "hz": 1374.64,
+      "median": 0.717418,
+      "p99": 1.18644,
+      "rme": 1.972,
+      "samples": 1228,
+      "roundValues": [
+        1420.83,
+        1468.03,
+        1412
+      ]
+    },
+    {
+      "id": "num/Geom.reflect2D",
+      "suite": "num",
+      "name": "Geom.reflect2D",
+      "batch": 512,
+      "nsPerItem": 744.924,
+      "hz": 2621.91,
+      "median": 0.376944,
+      "p99": 0.728346,
+      "rme": 1.493,
+      "samples": 2357,
+      "roundValues": [
+        735.94,
+        758.188,
+        744.924
+      ]
+    },
+    {
+      "id": "num/Geom.anchor",
+      "suite": "num",
+      "name": "Geom.anchor",
+      "batch": 512,
+      "nsPerItem": 509.796,
+      "hz": 3831.19,
+      "median": 0.252882,
+      "p99": 0.49225,
+      "rme": 1.498,
+      "samples": 3469,
+      "roundValues": [
+        498.135,
+        513.408,
+        509.796
+      ]
+    },
+    {
+      "id": "num/Geom.cosTable",
+      "suite": "num",
+      "name": "Geom.cosTable",
+      "batch": 360,
+      "nsPerItem": 16.5915,
+      "hz": 167422,
+      "median": 0.005438,
+      "p99": 0.010687,
+      "rme": 6.879,
+      "samples": 145710,
+      "roundValues": [
+        18.6708,
+        16.3881,
+        16.5915
+      ]
+    },
+    {
+      "id": "num/Shaping.bounceIn",
+      "suite": "num",
+      "name": "Shaping.bounceIn",
+      "batch": 512,
+      "nsPerItem": 38.7752,
+      "hz": 50370.5,
+      "median": 0.019197,
+      "p99": 0.028506,
+      "rme": 43.12,
+      "samples": 138140,
+      "roundValues": [
+        5.42773,
+        38.7752,
+        38.8697
+      ]
+    },
+    {
+      "id": "num/Shaping.bounceInOut",
+      "suite": "num",
+      "name": "Shaping.bounceInOut",
+      "batch": 512,
+      "nsPerItem": 41.7622,
+      "hz": 46767.8,
+      "median": 0.021004,
+      "p99": 0.029685,
+      "rme": 0.3714,
+      "samples": 42158,
+      "roundValues": [
+        41.7622,
+        41.821,
+        41.5108
+      ]
+    },
+    {
+      "id": "num/Shaping.bounceOut",
+      "suite": "num",
+      "name": "Shaping.bounceOut",
+      "batch": 512,
+      "nsPerItem": 38.3953,
+      "hz": 50868.8,
+      "median": 0.019444,
+      "p99": 0.029327,
+      "rme": 0.9085,
+      "samples": 45835,
+      "roundValues": [
+        38.6817,
+        38.3953,
+        37.9841
+      ]
+    },
+    {
+      "id": "num/Shaping.circularIn",
+      "suite": "num",
+      "name": "Shaping.circularIn",
+      "batch": 512,
+      "nsPerItem": 31.7972,
+      "hz": 61424.4,
+      "median": 0.015863,
+      "p99": 0.024405,
+      "rme": 0.6662,
+      "samples": 55490,
+      "roundValues": [
+        31.8333,
+        31.7972,
+        31.4096
+      ]
+    },
+    {
+      "id": "num/Shaping.circularInOut",
+      "suite": "num",
+      "name": "Shaping.circularInOut",
+      "batch": 512,
+      "nsPerItem": 35.892,
+      "hz": 54416.7,
+      "median": 0.018182,
+      "p99": 0.028551,
+      "rme": 2.189,
+      "samples": 48449,
+      "roundValues": [
+        37.2845,
+        35.7134,
+        35.892
+      ]
+    },
+    {
+      "id": "num/Shaping.circularOut",
+      "suite": "num",
+      "name": "Shaping.circularOut",
+      "batch": 512,
+      "nsPerItem": 29.801,
+      "hz": 65538.9,
+      "median": 0.015131,
+      "p99": 0.021421,
+      "rme": 2.124,
+      "samples": 58269,
+      "roundValues": [
+        29.801,
+        31.0009,
+        29.7352
+      ]
+    },
+    {
+      "id": "num/Shaping.cliff",
+      "suite": "num",
+      "name": "Shaping.cliff",
+      "batch": 512,
+      "nsPerItem": 36.8525,
+      "hz": 52998.4,
+      "median": 0.018429,
+      "p99": 0.02706,
+      "rme": 0.7103,
+      "samples": 47899,
+      "roundValues": [
+        36.3635,
+        36.8871,
+        36.8525
+      ]
+    },
+    {
+      "id": "num/Shaping.cosineApprox",
+      "suite": "num",
+      "name": "Shaping.cosineApprox",
+      "batch": 512,
+      "nsPerItem": 32.3312,
+      "hz": 60409.9,
+      "median": 0.01604,
+      "p99": 0.026257,
+      "rme": 0.1628,
+      "samples": 54333,
+      "roundValues": [
+        32.3116,
+        32.3312,
+        32.4169
+      ]
+    },
+    {
+      "id": "num/Shaping.cubicBezier",
+      "suite": "num",
+      "name": "Shaping.cubicBezier",
+      "batch": 512,
+      "nsPerItem": 3829.67,
+      "hz": 509.998,
+      "median": 1.93887,
+      "p99": 2.26205,
+      "rme": 0.9515,
+      "samples": 460,
+      "roundValues": [
+        3876.6,
+        3803.72,
+        3829.67
+      ]
+    },
+    {
+      "id": "num/Shaping.cubicIn",
+      "suite": "num",
+      "name": "Shaping.cubicIn",
+      "batch": 512,
+      "nsPerItem": 29.4685,
+      "hz": 66278.5,
+      "median": 0.014813,
+      "p99": 0.02107,
+      "rme": 2.018,
+      "samples": 58992,
+      "roundValues": [
+        29.4685,
+        29.3826,
+        30.5718
+      ]
+    },
+    {
+      "id": "num/Shaping.cubicInOut",
+      "suite": "num",
+      "name": "Shaping.cubicInOut",
+      "batch": 512,
+      "nsPerItem": 34.8611,
+      "hz": 56026,
+      "median": 0.0174445,
+      "p99": 0.027957,
+      "rme": 0.568,
+      "samples": 50243,
+      "roundValues": [
+        34.8611,
+        34.8535,
+        35.2496
+      ]
+    },
+    {
+      "id": "num/Shaping.cubicOut",
+      "suite": "num",
+      "name": "Shaping.cubicOut",
+      "batch": 512,
+      "nsPerItem": 29.1004,
+      "hz": 67116.9,
+      "median": 0.014597,
+      "p99": 0.025442,
+      "rme": 0.5902,
+      "samples": 60355,
+      "roundValues": [
+        28.967,
+        29.3105,
+        29.1004
+      ]
+    },
+    {
+      "id": "num/Shaping.elasticIn",
+      "suite": "num",
+      "name": "Shaping.elasticIn",
+      "batch": 512,
+      "nsPerItem": 77.0038,
+      "hz": 25364,
+      "median": 0.038299,
+      "p99": 0.052801,
+      "rme": 1.07,
+      "samples": 22767,
+      "roundValues": [
+        76.5063,
+        77.0038,
+        78.1539
+      ]
+    },
+    {
+      "id": "num/Shaping.elasticInOut",
+      "suite": "num",
+      "name": "Shaping.elasticInOut",
+      "batch": 512,
+      "nsPerItem": 87.4386,
+      "hz": 22337.1,
+      "median": 0.042907,
+      "p99": 0.066469,
+      "rme": 0.61,
+      "samples": 20154,
+      "roundValues": [
+        86.5982,
+        87.665,
+        87.4386
+      ]
+    },
+    {
+      "id": "num/Shaping.elasticOut",
+      "suite": "num",
+      "name": "Shaping.elasticOut",
+      "batch": 512,
+      "nsPerItem": 89.5549,
+      "hz": 21809.3,
+      "median": 0.04256,
+      "p99": 0.140478,
+      "rme": 2.809,
+      "samples": 19965,
+      "roundValues": [
+        89.5549,
+        84.8694,
+        89.9003
+      ]
+    },
+    {
+      "id": "num/Shaping.exponentialIn",
+      "suite": "num",
+      "name": "Shaping.exponentialIn",
+      "batch": 512,
+      "nsPerItem": 56.6267,
+      "hz": 34491.3,
+      "median": 0.028303,
+      "p99": 0.051979,
+      "rme": 2.529,
+      "samples": 30883,
+      "roundValues": [
+        56.6267,
+        58.536,
+        55.6721
+      ]
+    },
+    {
+      "id": "num/Shaping.exponentialOut",
+      "suite": "num",
+      "name": "Shaping.exponentialOut",
+      "batch": 512,
+      "nsPerItem": 55.4686,
+      "hz": 35211.4,
+      "median": 0.027188,
+      "p99": 0.043837,
+      "rme": 2.297,
+      "samples": 31544,
+      "roundValues": [
+        57.1625,
+        55.4686,
+        54.6143
+      ]
+    },
+    {
+      "id": "num/Shaping.linear",
+      "suite": "num",
+      "name": "Shaping.linear",
+      "batch": 512,
+      "nsPerItem": 29.3076,
+      "hz": 66642.3,
+      "median": 0.014569,
+      "p99": 0.024529,
+      "rme": 2.022,
+      "samples": 59407,
+      "roundValues": [
+        30.3379,
+        29.3076,
+        29.1525
+      ]
+    },
+    {
+      "id": "num/Shaping.logSigmoid",
+      "suite": "num",
+      "name": "Shaping.logSigmoid",
+      "batch": 512,
+      "nsPerItem": 91.0337,
+      "hz": 21455,
+      "median": 0.045318,
+      "p99": 0.06191,
+      "rme": 2.603,
+      "samples": 19021,
+      "roundValues": [
+        95.5627,
+        91.0337,
+        90.8231
+      ]
+    },
+    {
+      "id": "num/Shaping.quadraticBezier",
+      "suite": "num",
+      "name": "Shaping.quadraticBezier",
+      "batch": 512,
+      "nsPerItem": 49.11,
+      "hz": 39770.4,
+      "median": 0.0247185,
+      "p99": 0.035349,
+      "rme": 0.6222,
+      "samples": 35689,
+      "roundValues": [
+        49.11,
+        49.0256,
+        49.6367
+      ]
+    },
+    {
+      "id": "num/Shaping.quadraticIn",
+      "suite": "num",
+      "name": "Shaping.quadraticIn",
+      "batch": 512,
+      "nsPerItem": 29.962,
+      "hz": 65186.8,
+      "median": 0.015046,
+      "p99": 0.02266,
+      "rme": 0.6595,
+      "samples": 58454,
+      "roundValues": [
+        29.9316,
+        29.962,
+        30.3268
+      ]
+    },
+    {
+      "id": "num/Shaping.quadraticInOut",
+      "suite": "num",
+      "name": "Shaping.quadraticInOut",
+      "batch": 512,
+      "nsPerItem": 35.3301,
+      "hz": 55282.1,
+      "median": 0.017515,
+      "p99": 0.028251,
+      "rme": 0.2704,
+      "samples": 49716,
+      "roundValues": [
+        35.4679,
+        35.3301,
+        35.2768
+      ]
+    },
+    {
+      "id": "num/Shaping.quadraticOut",
+      "suite": "num",
+      "name": "Shaping.quadraticOut",
+      "batch": 512,
+      "nsPerItem": 30.924,
+      "hz": 63158.8,
+      "median": 0.014899,
+      "p99": 0.026215,
+      "rme": 0.996,
+      "samples": 56880,
+      "roundValues": [
+        30.5904,
+        31.2063,
+        30.924
+      ]
+    },
+    {
+      "id": "num/Shaping.quadraticTarget",
+      "suite": "num",
+      "name": "Shaping.quadraticTarget",
+      "batch": 512,
+      "nsPerItem": 46.5108,
+      "hz": 41993,
+      "median": 0.022521,
+      "p99": 0.038829,
+      "rme": 1.498,
+      "samples": 37565,
+      "roundValues": [
+        47.645,
+        46.5108,
+        46.2518
+      ]
+    },
+    {
+      "id": "num/Shaping.seat",
+      "suite": "num",
+      "name": "Shaping.seat",
+      "batch": 512,
+      "nsPerItem": 42.9527,
+      "hz": 45471.5,
+      "median": 0.021336,
+      "p99": 0.036512,
+      "rme": 2.704,
+      "samples": 40530,
+      "roundValues": [
+        42.4536,
+        42.9527,
+        44.7769
+      ]
+    },
+    {
+      "id": "num/Shaping.sigmoid",
+      "suite": "num",
+      "name": "Shaping.sigmoid",
+      "batch": 512,
+      "nsPerItem": 62.1914,
+      "hz": 31405.1,
+      "median": 0.030977,
+      "p99": 0.042097,
+      "rme": 0.5172,
+      "samples": 28187,
+      "roundValues": [
+        62.1352,
+        62.1914,
+        62.7785
+      ]
+    },
+    {
+      "id": "num/Shaping.sineIn",
+      "suite": "num",
+      "name": "Shaping.sineIn",
+      "batch": 512,
+      "nsPerItem": 48.5779,
+      "hz": 40206,
+      "median": 0.0247675,
+      "p99": 0.037768,
+      "rme": 0.7303,
+      "samples": 36118,
+      "roundValues": [
+        48.3654,
+        49.075,
+        48.5779
+      ]
+    },
+    {
+      "id": "num/Shaping.sineInOut",
+      "suite": "num",
+      "name": "Shaping.sineInOut",
+      "batch": 512,
+      "nsPerItem": 50.9361,
+      "hz": 38344.6,
+      "median": 0.026136,
+      "p99": 0.035924,
+      "rme": 2.747,
+      "samples": 34034,
+      "roundValues": [
+        50.6543,
+        53.4529,
+        50.9361
+      ]
+    },
+    {
+      "id": "num/Shaping.sineOut",
+      "suite": "num",
+      "name": "Shaping.sineOut",
+      "batch": 512,
+      "nsPerItem": 45.8475,
+      "hz": 42600.5,
+      "median": 0.022911,
+      "p99": 0.034301,
+      "rme": 1.321,
+      "samples": 38049,
+      "roundValues": [
+        46.9928,
+        45.8475,
+        45.7818
+      ]
+    },
+    {
+      "id": "num/Shaping.step",
+      "suite": "num",
+      "name": "Shaping.step",
+      "batch": 512,
+      "nsPerItem": 4.18311,
+      "hz": 466907,
+      "median": 0.002119,
+      "p99": 0.002332,
+      "rme": 2.548,
+      "samples": 415242,
+      "roundValues": [
+        4.18311,
+        4.15486,
+        4.368
+      ]
+    },
+    {
+      "id": "num/new Range",
+      "suite": "num",
+      "name": "new Range",
+      "batch": 512,
+      "nsPerItem": 181.449,
+      "hz": 10764.1,
+      "median": 0.0878635,
+      "p99": 0.221272,
+      "rme": 1.152,
+      "samples": 9666,
+      "roundValues": [
+        184.21,
+        180.029,
+        181.449
+      ]
+    },
+    {
+      "id": "num/Range.mapTo",
+      "suite": "num",
+      "name": "Range.mapTo",
+      "batch": 512,
+      "nsPerItem": 87.4749,
+      "hz": 22327.8,
+      "median": 0.042797,
+      "p99": 0.076249,
+      "rme": 0.09228,
+      "samples": 20093,
+      "roundValues": [
+        87.4214,
+        87.4749,
+        87.5829
+      ]
+    },
+    {
+      "id": "num/Range.ticks",
+      "suite": "num",
+      "name": "Range.ticks",
+      "batch": 64,
+      "nsPerItem": 74.0383,
+      "hz": 211039,
+      "median": 0.00457,
+      "p99": 0.008125,
+      "rme": 0.4461,
+      "samples": 189505,
+      "roundValues": [
+        74.6232,
+        73.9627,
+        74.0383
+      ]
+    },
+    {
+      "id": "num/Range.append",
+      "suite": "num",
+      "name": "Range.append",
+      "batch": 64,
+      "nsPerItem": 1478.91,
+      "hz": 10565.2,
+      "median": 0.090663,
+      "p99": 0.219258,
+      "rme": 1.734,
+      "samples": 9516,
+      "roundValues": [
+        1452.39,
+        1478.91,
+        1503.68
+      ]
+    },
+    {
+      "id": "op/Line.fromAngle",
+      "suite": "op",
+      "name": "Line.fromAngle",
+      "batch": 512,
+      "nsPerItem": 1325.67,
+      "hz": 1473.31,
+      "median": 0.668849,
+      "p99": 1.07327,
+      "rme": 3.336,
+      "samples": 1310,
+      "roundValues": [
+        1309.03,
+        1325.67,
+        1397.47
+      ]
+    },
+    {
+      "id": "op/Line.slope",
+      "suite": "op",
+      "name": "Line.slope",
+      "batch": 512,
+      "nsPerItem": 16.5449,
+      "hz": 118050,
+      "median": 0.00838,
+      "p99": 0.015165,
+      "rme": 3.414,
+      "samples": 104162,
+      "roundValues": [
+        17.63,
+        16.5449,
+        16.5004
+      ]
+    },
+    {
+      "id": "op/Line.intercept",
+      "suite": "op",
+      "name": "Line.intercept",
+      "batch": 512,
+      "nsPerItem": 35.0655,
+      "hz": 55699.3,
+      "median": 0.017413,
+      "p99": 0.027509,
+      "rme": 7.719,
+      "samples": 52539,
+      "roundValues": [
+        30.2243,
+        35.6378,
+        35.0655
+      ]
+    },
+    {
+      "id": "op/Line.sideOfPt2D",
+      "suite": "op",
+      "name": "Line.sideOfPt2D",
+      "batch": 512,
+      "nsPerItem": 19.4941,
+      "hz": 100190,
+      "median": 0.00982501,
+      "p99": 0.014871,
+      "rme": 2.522,
+      "samples": 89686,
+      "roundValues": [
+        20.1572,
+        19.174,
+        19.4941
+      ]
+    },
+    {
+      "id": "op/Line.collinear",
+      "suite": "op",
+      "name": "Line.collinear",
+      "batch": 512,
+      "nsPerItem": 5142.12,
+      "hz": 379.829,
+      "median": 2.61089,
+      "p99": 3.46731,
+      "rme": 1.403,
+      "samples": 345,
+      "roundValues": [
+        5023.24,
+        5142.12,
+        5167.56
+      ]
+    },
+    {
+      "id": "op/Line.magnitude",
+      "suite": "op",
+      "name": "Line.magnitude",
+      "batch": 512,
+      "nsPerItem": 1186.91,
+      "hz": 1645.56,
+      "median": 0.603178,
+      "p99": 1.06581,
+      "rme": 1.583,
+      "samples": 1475,
+      "roundValues": [
+        1216.77,
+        1186.91,
+        1179.19
+      ]
+    },
+    {
+      "id": "op/Line.magnitudeSq",
+      "suite": "op",
+      "name": "Line.magnitudeSq",
+      "batch": 512,
+      "nsPerItem": 1198.78,
+      "hz": 1629.26,
+      "median": 0.604504,
+      "p99": 1.11852,
+      "rme": 1.395,
+      "samples": 1469,
+      "roundValues": [
+        1181.19,
+        1198.78,
+        1214.64
+      ]
+    },
+    {
+      "id": "op/Line.perpendicularFromPt",
+      "suite": "op",
+      "name": "Line.perpendicularFromPt",
+      "batch": 512,
+      "nsPerItem": 5842.49,
+      "hz": 334.297,
+      "median": 2.9334,
+      "p99": 3.3624,
+      "rme": 1.948,
+      "samples": 301,
+      "roundValues": [
+        5994.92,
+        5767.25,
+        5842.49
+      ]
+    },
+    {
+      "id": "op/Line.distanceFromPt",
+      "suite": "op",
+      "name": "Line.distanceFromPt",
+      "batch": 512,
+      "nsPerItem": 4710.39,
+      "hz": 414.642,
+      "median": 2.38097,
+      "p99": 3.36909,
+      "rme": 2.7,
+      "samples": 370,
+      "roundValues": [
+        4934.97,
+        4710.39,
+        4680.57
+      ]
+    },
+    {
+      "id": "op/Line.intersectRay2D",
+      "suite": "op",
+      "name": "Line.intersectRay2D",
+      "batch": 512,
+      "nsPerItem": 255.211,
+      "hz": 7652.99,
+      "median": 0.126252,
+      "p99": 0.25909,
+      "rme": 3.099,
+      "samples": 6837,
+      "roundValues": [
+        266.226,
+        250.407,
+        255.211
+      ]
+    },
+    {
+      "id": "op/Line.intersectLine2D",
+      "suite": "op",
+      "name": "Line.intersectLine2D",
+      "batch": 512,
+      "nsPerItem": 287.062,
+      "hz": 6803.85,
+      "median": 0.143804,
+      "p99": 0.261282,
+      "rme": 2.125,
+      "samples": 6099,
+      "roundValues": [
+        295.162,
+        282.965,
+        287.062
+      ]
+    },
+    {
+      "id": "op/Line.intersectLineWithRay2D",
+      "suite": "op",
+      "name": "Line.intersectLineWithRay2D",
+      "batch": 512,
+      "nsPerItem": 273.515,
+      "hz": 7140.84,
+      "median": 0.137784,
+      "p99": 0.181008,
+      "rme": 1.187,
+      "samples": 6393,
+      "roundValues": [
+        279.117,
+        273.515,
+        272.622
+      ]
+    },
+    {
+      "id": "op/Line.intersectPolygon2D",
+      "suite": "op",
+      "name": "Line.intersectPolygon2D",
+      "batch": 64,
+      "nsPerItem": 2338.84,
+      "hz": 6680.67,
+      "median": 0.140697,
+      "p99": 0.292633,
+      "rme": 3.978,
+      "samples": 5930,
+      "roundValues": [
+        2485.92,
+        2338.84,
+        2299.84
+      ]
+    },
+    {
+      "id": "op/Line.intersectLines2D",
+      "suite": "op",
+      "name": "Line.intersectLines2D",
+      "batch": 4096,
+      "nsPerItem": 279.716,
+      "hz": 872.817,
+      "median": 1.10727,
+      "p99": 2.01678,
+      "rme": 7.33,
+      "samples": 765,
+      "roundValues": [
+        314.014,
+        273.006,
+        279.716
+      ]
+    },
+    {
+      "id": "op/Line.intersectGridWithRay2D",
+      "suite": "op",
+      "name": "Line.intersectGridWithRay2D",
+      "batch": 512,
+      "nsPerItem": 3007.56,
+      "hz": 649.404,
+      "median": 1.52179,
+      "p99": 1.86267,
+      "rme": 0.692,
+      "samples": 584,
+      "roundValues": [
+        3039.88,
+        2998.25,
+        3007.56
+      ]
+    },
+    {
+      "id": "op/Line.intersectGridWithLine2D",
+      "suite": "op",
+      "name": "Line.intersectGridWithLine2D",
+      "batch": 512,
+      "nsPerItem": 3177.56,
+      "hz": 614.663,
+      "median": 1.59896,
+      "p99": 2.74151,
+      "rme": 2.945,
+      "samples": 548,
+      "roundValues": [
+        3143.77,
+        3330.91,
+        3177.56
+      ]
+    },
+    {
+      "id": "op/Line.intersectRect2D",
+      "suite": "op",
+      "name": "Line.intersectRect2D",
+      "batch": 512,
+      "nsPerItem": 6292.57,
+      "hz": 310.386,
+      "median": 3.20748,
+      "p99": 4.33682,
+      "rme": 2.227,
+      "samples": 280,
+      "roundValues": [
+        6173.78,
+        6292.57,
+        6454.01
+      ]
+    },
+    {
+      "id": "op/Line.subpoints",
+      "suite": "op",
+      "name": "Line.subpoints",
+      "batch": 64,
+      "nsPerItem": 8216.76,
+      "hz": 1901.6,
+      "median": 0.516253,
+      "p99": 0.875992,
+      "rme": 2.426,
+      "samples": 1698,
+      "roundValues": [
+        8526.53,
+        8216.76,
+        8127.87
+      ]
+    },
+    {
+      "id": "op/Line.crop",
+      "suite": "op",
+      "name": "Line.crop",
+      "batch": 512,
+      "nsPerItem": 2513.07,
+      "hz": 777.187,
+      "median": 1.23808,
+      "p99": 2.29525,
+      "rme": 3.024,
+      "samples": 709,
+      "roundValues": [
+        2399.59,
+        2513.07,
+        2551.57
+      ]
+    },
+    {
+      "id": "op/Line.marker",
+      "suite": "op",
+      "name": "Line.marker",
+      "batch": 512,
+      "nsPerItem": 6378.48,
+      "hz": 306.205,
+      "median": 3.20517,
+      "p99": 4.65721,
+      "rme": 4.859,
+      "samples": 272,
+      "roundValues": [
+        6890.39,
+        6378.48,
+        6270.59
+      ]
+    },
+    {
+      "id": "op/Line.toRect",
+      "suite": "op",
+      "name": "Line.toRect",
+      "batch": 512,
+      "nsPerItem": 2516.55,
+      "hz": 776.112,
+      "median": 1.27417,
+      "p99": 2.0389,
+      "rme": 0.8729,
+      "samples": 701,
+      "roundValues": [
+        2516.55,
+        2531.77,
+        2487.84
+      ]
+    },
+    {
+      "id": "op/Rectangle.fromTopLeft",
+      "suite": "op",
+      "name": "Rectangle.fromTopLeft",
+      "batch": 512,
+      "nsPerItem": 1379.98,
+      "hz": 1415.33,
+      "median": 0.691953,
+      "p99": 1.12121,
+      "rme": 0.8711,
+      "samples": 1281,
+      "roundValues": [
+        1383.15,
+        1359.11,
+        1379.98
+      ]
+    },
+    {
+      "id": "op/Rectangle.fromCenter",
+      "suite": "op",
+      "name": "Rectangle.fromCenter",
+      "batch": 512,
+      "nsPerItem": 1653.14,
+      "hz": 1181.46,
+      "median": 0.839932,
+      "p99": 1.13145,
+      "rme": 6.894,
+      "samples": 1117,
+      "roundValues": [
+        1432.83,
+        1660.75,
+        1653.14
+      ]
+    },
+    {
+      "id": "op/Rectangle.size",
+      "suite": "op",
+      "name": "Rectangle.size",
+      "batch": 512,
+      "nsPerItem": 2868.6,
+      "hz": 680.864,
+      "median": 1.45127,
+      "p99": 2.19292,
+      "rme": 2.417,
+      "samples": 617,
+      "roundValues": [
+        2778.39,
+        2868.6,
+        2917.04
+      ]
+    },
+    {
+      "id": "op/Rectangle.center",
+      "suite": "op",
+      "name": "Rectangle.center",
+      "batch": 512,
+      "nsPerItem": 3977.5,
+      "hz": 491.044,
+      "median": 1.95652,
+      "p99": 3.17343,
+      "rme": 1.092,
+      "samples": 446,
+      "roundValues": [
+        3986.37,
+        3977.5,
+        3899.46
+      ]
+    },
+    {
+      "id": "op/Rectangle.corners",
+      "suite": "op",
+      "name": "Rectangle.corners",
+      "batch": 512,
+      "nsPerItem": 2721.07,
+      "hz": 717.778,
+      "median": 1.33272,
+      "p99": 2.4857,
+      "rme": 0.9794,
+      "samples": 647,
+      "roundValues": [
+        2697.7,
+        2751,
+        2721.07
+      ]
+    },
+    {
+      "id": "op/Rectangle.sides",
+      "suite": "op",
+      "name": "Rectangle.sides",
+      "batch": 512,
+      "nsPerItem": 3601.96,
+      "hz": 542.24,
+      "median": 1.83535,
+      "p99": 2.24407,
+      "rme": 0.3721,
+      "samples": 490,
+      "roundValues": [
+        3601.96,
+        3576.57,
+        3603.37
+      ]
+    },
+    {
+      "id": "op/Rectangle.polygon",
+      "suite": "op",
+      "name": "Rectangle.polygon",
+      "batch": 512,
+      "nsPerItem": 2705.19,
+      "hz": 721.991,
+      "median": 1.34539,
+      "p99": 2.47897,
+      "rme": 1.87,
+      "samples": 647,
+      "roundValues": [
+        2705.19,
+        2681.22,
+        2782.41
+      ]
+    },
+    {
+      "id": "op/Rectangle.quadrants",
+      "suite": "op",
+      "name": "Rectangle.quadrants",
+      "batch": 512,
+      "nsPerItem": 24335.2,
+      "hz": 80.2593,
+      "median": 12.3434,
+      "p99": 14.0884,
+      "rme": 3.788,
+      "samples": 75,
+      "roundValues": [
+        22739.6,
+        24583.2,
+        24335.2
+      ]
+    },
+    {
+      "id": "op/Rectangle.halves",
+      "suite": "op",
+      "name": "Rectangle.halves",
+      "batch": 512,
+      "nsPerItem": 2670.43,
+      "hz": 731.39,
+      "median": 1.34115,
+      "p99": 1.84354,
+      "rme": 1.61,
+      "samples": 659,
+      "roundValues": [
+        2714.72,
+        2670.43,
+        2628.75
+      ]
+    },
+    {
+      "id": "op/Rectangle.toCircle",
+      "suite": "op",
+      "name": "Rectangle.toCircle",
+      "batch": 512,
+      "nsPerItem": 9689.18,
+      "hz": 201.578,
+      "median": 4.89385,
+      "p99": 7.36076,
+      "rme": 4.205,
+      "samples": 180,
+      "roundValues": [
+        9594.4,
+        10409.2,
+        9689.18
+      ]
+    },
+    {
+      "id": "op/Rectangle.toSquare",
+      "suite": "op",
+      "name": "Rectangle.toSquare",
+      "batch": 512,
+      "nsPerItem": 8330.14,
+      "hz": 234.465,
+      "median": 4.18795,
+      "p99": 5.55347,
+      "rme": 1.242,
+      "samples": 213,
+      "roundValues": [
+        8427.36,
+        8330.14,
+        8220.41
+      ]
+    },
+    {
+      "id": "op/Rectangle.withinBound",
+      "suite": "op",
+      "name": "Rectangle.withinBound",
+      "batch": 512,
+      "nsPerItem": 17.3593,
+      "hz": 112512,
+      "median": 0.008814,
+      "p99": 0.012821,
+      "rme": 1.113,
+      "samples": 101322,
+      "roundValues": [
+        17.5392,
+        17.3593,
+        17.1527
+      ]
+    },
+    {
+      "id": "op/Rectangle.hasIntersectRect2D",
+      "suite": "op",
+      "name": "Rectangle.hasIntersectRect2D",
+      "batch": 512,
+      "nsPerItem": 25.9008,
+      "hz": 75407.8,
+      "median": 0.012923,
+      "p99": 0.019239,
+      "rme": 0.7201,
+      "samples": 67666,
+      "roundValues": [
+        26.2055,
+        25.8325,
+        25.9008
+      ]
+    },
+    {
+      "id": "op/Rectangle.intersectRect2D",
+      "suite": "op",
+      "name": "Rectangle.intersectRect2D",
+      "batch": 512,
+      "nsPerItem": 1675.2,
+      "hz": 1165.91,
+      "median": 0.841435,
+      "p99": 1.17311,
+      "rme": 0.8455,
+      "samples": 1054,
+      "roundValues": [
+        1675.2,
+        1682.59,
+        1654.27
+      ]
+    },
+    {
+      "id": "op/Rectangle.boundingBox",
+      "suite": "op",
+      "name": "Rectangle.boundingBox",
+      "batch": 64,
+      "nsPerItem": 474.241,
+      "hz": 32947.4,
+      "median": 0.029013,
+      "p99": 0.076156,
+      "rme": 1.8,
+      "samples": 29995,
+      "roundValues": [
+        457.819,
+        474.241,
+        474.888
+      ]
+    },
+    {
+      "id": "op/Circle.fromCenter",
+      "suite": "op",
+      "name": "Circle.fromCenter",
+      "batch": 512,
+      "nsPerItem": 818.106,
+      "hz": 2387.38,
+      "median": 0.411256,
+      "p99": 0.623837,
+      "rme": 1.564,
+      "samples": 2137,
+      "roundValues": [
+        838.351,
+        812.76,
+        818.106
+      ]
+    },
+    {
+      "id": "op/Circle.fromRect",
+      "suite": "op",
+      "name": "Circle.fromRect",
+      "batch": 512,
+      "nsPerItem": 6956.09,
+      "hz": 280.779,
+      "median": 3.47564,
+      "p99": 6.61908,
+      "rme": 1.718,
+      "samples": 254,
+      "roundValues": [
+        6956.09,
+        6823.33,
+        7062.35
+      ]
+    },
+    {
+      "id": "op/Circle.fromTriangle",
+      "suite": "op",
+      "name": "Circle.fromTriangle",
+      "batch": 512,
+      "nsPerItem": 14074.1,
+      "hz": 138.775,
+      "median": 7.1815,
+      "p99": 7.67818,
+      "rme": 2.226,
+      "samples": 125,
+      "roundValues": [
+        14074.1,
+        13952.7,
+        14579.3
+      ]
+    },
+    {
+      "id": "op/Circle.withinBound",
+      "suite": "op",
+      "name": "Circle.withinBound",
+      "batch": 512,
+      "nsPerItem": 1735.48,
+      "hz": 1125.41,
+      "median": 0.882337,
+      "p99": 1.14492,
+      "rme": 4.341,
+      "samples": 1008,
+      "roundValues": [
+        1679.73,
+        1735.48,
+        1830.39
+      ]
+    },
+    {
+      "id": "op/Circle.intersectRay2D",
+      "suite": "op",
+      "name": "Circle.intersectRay2D",
+      "batch": 512,
+      "nsPerItem": 6554.47,
+      "hz": 297.984,
+      "median": 3.31205,
+      "p99": 5.25046,
+      "rme": 1.783,
+      "samples": 272,
+      "roundValues": [
+        6366.15,
+        6554.47,
+        6599.85
+      ]
+    },
+    {
+      "id": "op/Circle.intersectLine2D",
+      "suite": "op",
+      "name": "Circle.intersectLine2D",
+      "batch": 512,
+      "nsPerItem": 7412.22,
+      "hz": 263.501,
+      "median": 3.72311,
+      "p99": 8.29455,
+      "rme": 5.662,
+      "samples": 234,
+      "roundValues": [
+        8113.19,
+        7273.78,
+        7412.22
+      ]
+    },
+    {
+      "id": "op/Circle.intersectCircle2D",
+      "suite": "op",
+      "name": "Circle.intersectCircle2D",
+      "batch": 512,
+      "nsPerItem": 1601.3,
+      "hz": 1219.71,
+      "median": 0.790218,
+      "p99": 1.62092,
+      "rme": 1.875,
+      "samples": 1106,
+      "roundValues": [
+        1601.3,
+        1555.47,
+        1615.51
+      ]
+    },
+    {
+      "id": "op/Circle.intersectRect2D",
+      "suite": "op",
+      "name": "Circle.intersectRect2D",
+      "batch": 512,
+      "nsPerItem": 24700.6,
+      "hz": 79.0721,
+      "median": 12.4905,
+      "p99": 14.2363,
+      "rme": 1.399,
+      "samples": 72,
+      "roundValues": [
+        24700.6,
+        24529.1,
+        25220.3
+      ]
+    },
+    {
+      "id": "op/Circle.toRect",
+      "suite": "op",
+      "name": "Circle.toRect",
+      "batch": 512,
+      "nsPerItem": 1541.75,
+      "hz": 1266.82,
+      "median": 0.786861,
+      "p99": 1.0576,
+      "rme": 1.873,
+      "samples": 1139,
+      "roundValues": [
+        1520.65,
+        1541.75,
+        1578.4
+      ]
+    },
+    {
+      "id": "op/Circle.toTriangle",
+      "suite": "op",
+      "name": "Circle.toTriangle",
+      "batch": 512,
+      "nsPerItem": 2678.95,
+      "hz": 729.063,
+      "median": 1.27299,
+      "p99": 2.34712,
+      "rme": 3.759,
+      "samples": 675,
+      "roundValues": [
+        2683.91,
+        2678.95,
+        2482.51
+      ]
+    },
+    {
+      "id": "op/Triangle.medial",
+      "suite": "op",
+      "name": "Triangle.medial",
+      "batch": 512,
+      "nsPerItem": 1854.08,
+      "hz": 1053.42,
+      "median": 0.944779,
+      "p99": 1.21682,
+      "rme": 1.652,
+      "samples": 945,
+      "roundValues": [
+        1840.34,
+        1901.58,
+        1854.08
+      ]
+    },
+    {
+      "id": "op/Triangle.orthocenter",
+      "suite": "op",
+      "name": "Triangle.orthocenter",
+      "batch": 512,
+      "nsPerItem": 13727.1,
+      "hz": 142.283,
+      "median": 7.01696,
+      "p99": 7.4558,
+      "rme": 2.679,
+      "samples": 128,
+      "roundValues": [
+        14332.9,
+        13597.5,
+        13727.1
+      ]
+    },
+    {
+      "id": "op/Triangle.incenter",
+      "suite": "op",
+      "name": "Triangle.incenter",
+      "batch": 512,
+      "nsPerItem": 8623.64,
+      "hz": 226.485,
+      "median": 4.39013,
+      "p99": 6.79239,
+      "rme": 2.855,
+      "samples": 202,
+      "roundValues": [
+        8623.64,
+        9041.48,
+        8549.07
+      ]
+    },
+    {
+      "id": "op/Triangle.incircle",
+      "suite": "op",
+      "name": "Triangle.incircle",
+      "batch": 512,
+      "nsPerItem": 14474.6,
+      "hz": 134.935,
+      "median": 7.18462,
+      "p99": 10.0584,
+      "rme": 1.004,
+      "samples": 123,
+      "roundValues": [
+        14651.5,
+        14474.6,
+        14361
+      ]
+    },
+    {
+      "id": "op/Triangle.circumcenter",
+      "suite": "op",
+      "name": "Triangle.circumcenter",
+      "batch": 512,
+      "nsPerItem": 10862.5,
+      "hz": 179.804,
+      "median": 5.41033,
+      "p99": 9.24801,
+      "rme": 3.386,
+      "samples": 162,
+      "roundValues": [
+        11353,
+        10862.5,
+        10617.4
+      ]
+    },
+    {
+      "id": "op/Triangle.circumcircle",
+      "suite": "op",
+      "name": "Triangle.circumcircle",
+      "batch": 512,
+      "nsPerItem": 12452.5,
+      "hz": 156.846,
+      "median": 6.35019,
+      "p99": 7.07393,
+      "rme": 0.8876,
+      "samples": 143,
+      "roundValues": [
+        12580.1,
+        12452.5,
+        12359.1
+      ]
+    },
+    {
+      "id": "op/Triangle.oppositeSide",
+      "suite": "op",
+      "name": "Triangle.oppositeSide",
+      "batch": 512,
+      "nsPerItem": 689.86,
+      "hz": 2831.19,
+      "median": 0.354082,
+      "p99": 0.465366,
+      "rme": 0.6298,
+      "samples": 2546,
+      "roundValues": [
+        689.86,
+        686.983,
+        695.673
+      ]
+    },
+    {
+      "id": "op/Triangle.altitude",
+      "suite": "op",
+      "name": "Triangle.altitude",
+      "batch": 512,
+      "nsPerItem": 6724.62,
+      "hz": 290.444,
+      "median": 3.42458,
+      "p99": 3.87364,
+      "rme": 2.278,
+      "samples": 262,
+      "roundValues": [
+        6960.61,
+        6654.24,
+        6724.62
+      ]
+    },
+    {
+      "id": "op/Triangle.fromCenter",
+      "suite": "op",
+      "name": "Triangle.fromCenter",
+      "batch": 512,
+      "nsPerItem": 3342.92,
+      "hz": 584.256,
+      "median": 1.69268,
+      "p99": 2.09707,
+      "rme": 0.5305,
+      "samples": 529,
+      "roundValues": [
+        3310.4,
+        3345.87,
+        3342.92
+      ]
+    },
+    {
+      "id": "op/Triangle.fromRect",
+      "suite": "op",
+      "name": "Triangle.fromRect",
+      "batch": 512,
+      "nsPerItem": 2423.41,
+      "hz": 805.94,
+      "median": 1.2286,
+      "p99": 1.61862,
+      "rme": 0.6656,
+      "samples": 723,
+      "roundValues": [
+        2423.41,
+        2421.55,
+        2453.81
+      ]
+    },
+    {
+      "id": "op/Triangle.fromCircle",
+      "suite": "op",
+      "name": "Triangle.fromCircle",
+      "batch": 512,
+      "nsPerItem": 2466.22,
+      "hz": 791.952,
+      "median": 1.25214,
+      "p99": 1.58975,
+      "rme": 0.8453,
+      "samples": 710,
+      "roundValues": [
+        2464.31,
+        2466.22,
+        2506
+      ]
+    },
+    {
+      "id": "op/Polygon.centroid",
+      "suite": "op",
+      "name": "Polygon.centroid",
+      "batch": 64,
+      "nsPerItem": 912.304,
+      "hz": 17127,
+      "median": 0.0560975,
+      "p99": 0.082052,
+      "rme": 6.066,
+      "samples": 15999,
+      "roundValues": [
+        811.598,
+        912.304,
+        922.28
+      ]
+    },
+    {
+      "id": "op/Polygon.lines",
+      "suite": "op",
+      "name": "Polygon.lines",
+      "batch": 64,
+      "nsPerItem": 485.538,
+      "hz": 32180.8,
+      "median": 0.030433,
+      "p99": 0.043615,
+      "rme": 1.924,
+      "samples": 28673,
+      "roundValues": [
+        502.503,
+        485.538,
+        483.823
+      ]
+    },
+    {
+      "id": "op/Polygon.midpoints",
+      "suite": "op",
+      "name": "Polygon.midpoints",
+      "batch": 64,
+      "nsPerItem": 3576.29,
+      "hz": 4369.06,
+      "median": 0.225784,
+      "p99": 0.409508,
+      "rme": 0.6165,
+      "samples": 3948,
+      "roundValues": [
+        3576.29,
+        3534.99,
+        3579.08
+      ]
+    },
+    {
+      "id": "op/Polygon.adjacentSides",
+      "suite": "op",
+      "name": "Polygon.adjacentSides",
+      "batch": 64,
+      "nsPerItem": 441.58,
+      "hz": 35384.3,
+      "median": 0.028037,
+      "p99": 0.043739,
+      "rme": 0.4855,
+      "samples": 31932,
+      "roundValues": [
+        441.976,
+        441.58,
+        437.688
+      ]
+    },
+    {
+      "id": "op/Polygon.bisector",
+      "suite": "op",
+      "name": "Polygon.bisector",
+      "batch": 64,
+      "nsPerItem": 3462.12,
+      "hz": 4513.13,
+      "median": 0.216718,
+      "p99": 0.285862,
+      "rme": 1.232,
+      "samples": 4084,
+      "roundValues": [
+        3392.27,
+        3477.56,
+        3462.12
+      ]
+    },
+    {
+      "id": "op/Polygon.perimeter",
+      "suite": "op",
+      "name": "Polygon.perimeter",
+      "batch": 64,
+      "nsPerItem": 9456.81,
+      "hz": 1652.25,
+      "median": 0.591902,
+      "p99": 1.07782,
+      "rme": 0.7509,
+      "samples": 1484,
+      "roundValues": [
+        9456.81,
+        9429.51,
+        9571.54
+      ]
+    },
+    {
+      "id": "op/Polygon.area",
+      "suite": "op",
+      "name": "Polygon.area",
+      "batch": 64,
+      "nsPerItem": 50.1955,
+      "hz": 311283,
+      "median": 0.003134,
+      "p99": 0.004192,
+      "rme": 2.953,
+      "samples": 276721,
+      "roundValues": [
+        49.6967,
+        52.6612,
+        50.1955
+      ]
+    },
+    {
+      "id": "op/Polygon.network",
+      "suite": "op",
+      "name": "Polygon.network",
+      "batch": 64,
+      "nsPerItem": 1462.13,
+      "hz": 10686.4,
+      "median": 0.091907,
+      "p99": 0.111069,
+      "rme": 0.8303,
+      "samples": 9587,
+      "roundValues": [
+        1481.81,
+        1457.53,
+        1462.13
+      ]
+    },
+    {
+      "id": "op/Polygon.toRects",
+      "suite": "op",
+      "name": "Polygon.toRects",
+      "batch": 64,
+      "nsPerItem": 21616.7,
+      "hz": 722.822,
+      "median": 1.36225,
+      "p99": 1.71064,
+      "rme": 0.5124,
+      "samples": 653,
+      "roundValues": [
+        21671,
+        21616.7,
+        21449.5
+      ]
+    },
+    {
+      "id": "op/Polygon.fromCenter",
+      "suite": "op",
+      "name": "Polygon.fromCenter",
+      "batch": 64,
+      "nsPerItem": 6910.18,
+      "hz": 2261.16,
+      "median": 0.442718,
+      "p99": 0.545039,
+      "rme": 0.1246,
+      "samples": 2038,
+      "roundValues": [
+        6910.18,
+        6912.58,
+        6895.36
+      ]
+    },
+    {
+      "id": "op/Polygon.nearestPt",
+      "suite": "op",
+      "name": "Polygon.nearestPt",
+      "batch": 64,
+      "nsPerItem": 10206.5,
+      "hz": 1530.88,
+      "median": 0.619024,
+      "p99": 1.1436,
+      "rme": 2.895,
+      "samples": 1406,
+      "roundValues": [
+        10206.5,
+        9631.55,
+        10222.5
+      ]
+    },
+    {
+      "id": "op/Polygon.projectAxis",
+      "suite": "op",
+      "name": "Polygon.projectAxis",
+      "batch": 64,
+      "nsPerItem": 5943.88,
+      "hz": 2628.75,
+      "median": 0.375029,
+      "p99": 0.714522,
+      "rme": 1.994,
+      "samples": 2354,
+      "roundValues": [
+        5876.88,
+        6113.9,
+        5943.88
+      ]
+    },
+    {
+      "id": "op/Polygon.hasIntersectPoint",
+      "suite": "op",
+      "name": "Polygon.hasIntersectPoint",
+      "batch": 512,
+      "nsPerItem": 1734.27,
+      "hz": 1126.19,
+      "median": 0.862059,
+      "p99": 1.34195,
+      "rme": 1.818,
+      "samples": 1008,
+      "roundValues": [
+        1720.86,
+        1734.27,
+        1783.92
+      ]
+    },
+    {
+      "id": "op/Polygon.hasIntersectCircle",
+      "suite": "op",
+      "name": "Polygon.hasIntersectCircle",
+      "batch": 64,
+      "nsPerItem": 26284.9,
+      "hz": 594.448,
+      "median": 1.67624,
+      "p99": 2.34271,
+      "rme": 1.354,
+      "samples": 534,
+      "roundValues": [
+        26086.2,
+        26797.9,
+        26284.9
+      ]
+    },
+    {
+      "id": "op/Polygon.hasIntersectPolygon (SAT)",
+      "suite": "op",
+      "name": "Polygon.hasIntersectPolygon (SAT)",
+      "batch": 64,
+      "nsPerItem": 23750.7,
+      "hz": 657.875,
+      "median": 1.5123,
+      "p99": 1.86479,
+      "rme": 1.884,
+      "samples": 587,
+      "roundValues": [
+        23678.8,
+        24573.7,
+        23750.7
+      ]
+    },
+    {
+      "id": "op/Polygon.intersectPolygon2D",
+      "suite": "op",
+      "name": "Polygon.intersectPolygon2D",
+      "batch": 64,
+      "nsPerItem": 18940.6,
+      "hz": 824.949,
+      "median": 1.13062,
+      "p99": 2.1553,
+      "rme": 4.299,
+      "samples": 763,
+      "roundValues": [
+        18940.6,
+        17455.3,
+        19083.6
+      ]
+    },
+    {
+      "id": "op/Polygon.convexHull",
+      "suite": "op",
+      "name": "Polygon.convexHull",
+      "batch": 512,
+      "nsPerItem": 368.125,
+      "hz": 5305.6,
+      "median": 0.186531,
+      "p99": 0.314168,
+      "rme": 0.8205,
+      "samples": 4800,
+      "roundValues": [
+        368.125,
+        368.444,
+        362.403
+      ]
+    },
+    {
+      "id": "op/Polygon.convexHull (pre-sorted)",
+      "suite": "op",
+      "name": "Polygon.convexHull (pre-sorted)",
+      "batch": 512,
+      "nsPerItem": 33.8509,
+      "hz": 57697.9,
+      "median": 0.016993,
+      "p99": 0.022955,
+      "rme": 0.4881,
+      "samples": 52041,
+      "roundValues": [
+        33.8509,
+        33.578,
+        33.9085
+      ]
+    },
+    {
+      "id": "op/Curve.getSteps",
+      "suite": "op",
+      "name": "Curve.getSteps",
+      "batch": 20,
+      "nsPerItem": 292.4,
+      "hz": 170998,
+      "median": 0.005638,
+      "p99": 0.013671,
+      "rme": 4.793,
+      "samples": 149937,
+      "roundValues": [
+        290.778,
+        318.805,
+        292.4
+      ]
+    },
+    {
+      "id": "op/Curve.controlPoints",
+      "suite": "op",
+      "name": "Curve.controlPoints",
+      "batch": 64,
+      "nsPerItem": 214.192,
+      "hz": 72948.7,
+      "median": 0.013212,
+      "p99": 0.021105,
+      "rme": 0.907,
+      "samples": 65817,
+      "roundValues": [
+        211.474,
+        214.192,
+        215.359
+      ]
+    },
+    {
+      "id": "op/Curve.catmullRom",
+      "suite": "op",
+      "name": "Curve.catmullRom",
+      "batch": 1280,
+      "nsPerItem": 2888.04,
+      "hz": 270.512,
+      "median": 3.48991,
+      "p99": 7.20899,
+      "rme": 2.79,
+      "samples": 249,
+      "roundValues": [
+        2888.04,
+        2744.87,
+        2906.02
+      ]
+    },
+    {
+      "id": "op/Curve.cardinal",
+      "suite": "op",
+      "name": "Curve.cardinal",
+      "batch": 1280,
+      "nsPerItem": 2860.45,
+      "hz": 273.122,
+      "median": 3.50556,
+      "p99": 6.76382,
+      "rme": 3.103,
+      "samples": 249,
+      "roundValues": [
+        2752.75,
+        2930.27,
+        2860.45
+      ]
+    },
+    {
+      "id": "op/Curve.bezier",
+      "suite": "op",
+      "name": "Curve.bezier",
+      "batch": 1280,
+      "nsPerItem": 929.008,
+      "hz": 840.951,
+      "median": 1.1643,
+      "p99": 2.53207,
+      "rme": 3.514,
+      "samples": 749,
+      "roundValues": [
+        917.884,
+        983.171,
+        929.008
+      ]
+    },
+    {
+      "id": "op/Curve.bspline",
+      "suite": "op",
+      "name": "Curve.bspline",
+      "batch": 1280,
+      "nsPerItem": 2729.41,
+      "hz": 286.234,
+      "median": 3.39417,
+      "p99": 4.47547,
+      "rme": 2.813,
+      "samples": 257,
+      "roundValues": [
+        2673.27,
+        2729.41,
+        2826.81
+      ]
+    },
+    {
+      "id": "op/Curve.bspline (tension)",
+      "suite": "op",
+      "name": "Curve.bspline (tension)",
+      "batch": 1280,
+      "nsPerItem": 2806.84,
+      "hz": 278.338,
+      "median": 3.46539,
+      "p99": 4.71058,
+      "rme": 2.76,
+      "samples": 252,
+      "roundValues": [
+        2735.38,
+        2890.34,
+        2806.84
+      ]
+    },
+    {
+      "id": "create/Create.distributeRandom",
+      "suite": "create",
+      "name": "Create.distributeRandom",
+      "batch": 512,
+      "nsPerItem": 1121.62,
+      "hz": 1741.34,
+      "median": 0.564156,
+      "p99": 0.982969,
+      "rme": 5.282,
+      "samples": 1528,
+      "roundValues": [
+        1121.62,
+        1110,
+        1228.49
+      ]
+    },
+    {
+      "id": "create/Create.distributeLinear",
+      "suite": "create",
+      "name": "Create.distributeLinear",
+      "batch": 512,
+      "nsPerItem": 544.202,
+      "hz": 3588.97,
+      "median": 0.274706,
+      "p99": 0.320002,
+      "rme": 1.972,
+      "samples": 3213,
+      "roundValues": [
+        538.394,
+        544.202,
+        559.858
+      ]
+    },
+    {
+      "id": "create/Create.gridPts",
+      "suite": "create",
+      "name": "Create.gridPts",
+      "batch": 512,
+      "nsPerItem": 2814.91,
+      "hz": 693.85,
+      "median": 1.41087,
+      "p99": 2.53353,
+      "rme": 2.873,
+      "samples": 617,
+      "roundValues": [
+        2814.91,
+        2960.99,
+        2799.23
+      ]
+    },
+    {
+      "id": "create/Create.gridCells",
+      "suite": "create",
+      "name": "Create.gridCells",
+      "batch": 512,
+      "nsPerItem": 5310.25,
+      "hz": 367.803,
+      "median": 2.70079,
+      "p99": 3.27544,
+      "rme": 0.1658,
+      "samples": 333,
+      "roundValues": [
+        5321.65,
+        5310.25,
+        5304.04
+      ]
+    },
+    {
+      "id": "create/Create.radialPts",
+      "suite": "create",
+      "name": "Create.radialPts",
+      "batch": 512,
+      "nsPerItem": 565.533,
+      "hz": 3453.6,
+      "median": 0.286187,
+      "p99": 0.381876,
+      "rme": 0.8779,
+      "samples": 3099,
+      "roundValues": [
+        573.826,
+        565.533,
+        563.896
+      ]
+    },
+    {
+      "id": "create/Create.noisePts",
+      "suite": "create",
+      "name": "Create.noisePts",
+      "batch": 512,
+      "nsPerItem": 5452.24,
+      "hz": 358.224,
+      "median": 2.68476,
+      "p99": 4.38858,
+      "rme": 1.53,
+      "samples": 325,
+      "roundValues": [
+        5349.66,
+        5452.24,
+        5516.45
+      ]
+    },
+    {
+      "id": "create/Noise.noise2D",
+      "suite": "create",
+      "name": "Noise.noise2D",
+      "batch": 512,
+      "nsPerItem": 155.382,
+      "hz": 12569.8,
+      "median": 0.078183,
+      "p99": 0.101261,
+      "rme": 0.1228,
+      "samples": 11314,
+      "roundValues": [
+        155.195,
+        155.382,
+        155.577
+      ]
+    },
+    {
+      "id": "create/Noise.seed",
+      "suite": "create",
+      "name": "Noise.seed",
+      "batch": 64,
+      "nsPerItem": 542.99,
+      "hz": 28775.9,
+      "median": 0.03425,
+      "p99": 0.051039,
+      "rme": 1.614,
+      "samples": 26025,
+      "roundValues": [
+        542.99,
+        547.973,
+        530.444
+      ]
+    },
+    {
+      "id": "create/Create.delaunay + triangulate",
+      "suite": "create",
+      "name": "Create.delaunay + triangulate",
+      "batch": 128,
+      "nsPerItem": 251378,
+      "hz": 31.0787,
+      "median": 31.3965,
+      "p99": 40.0592,
+      "rme": 3.227,
+      "samples": 48,
+      "roundValues": [
+        247175,
+        251378,
+        263399
+      ]
+    },
+    {
+      "id": "create/Delaunay.voronoi",
+      "suite": "create",
+      "name": "Delaunay.voronoi",
+      "batch": 128,
+      "nsPerItem": 40674,
+      "hz": 192.076,
+      "median": 5.17589,
+      "p99": 6.27864,
+      "rme": 2.081,
+      "samples": 173,
+      "roundValues": [
+        40281.7,
+        41974.4,
+        40674
+      ]
+    },
+    {
+      "id": "create/Delaunay.neighborPts",
+      "suite": "create",
+      "name": "Delaunay.neighborPts",
+      "batch": 128,
+      "nsPerItem": 506.731,
+      "hz": 15417.4,
+      "median": 0.0650525,
+      "p99": 0.081084,
+      "rme": 0.03383,
+      "samples": 13879,
+      "roundValues": [
+        506.731,
+        506.84,
+        506.497
+      ]
+    },
+    {
+      "id": "create/Delaunay.neighbors",
+      "suite": "create",
+      "name": "Delaunay.neighbors",
+      "batch": 128,
+      "nsPerItem": 151.75,
+      "hz": 51482.6,
+      "median": 0.018976,
+      "p99": 0.03018,
+      "rme": 1.364,
+      "samples": 46221,
+      "roundValues": [
+        150.27,
+        154.41,
+        151.75
+      ]
+    },
+    {
+      "id": "color/Color.from",
+      "suite": "color",
+      "name": "Color.from",
+      "batch": 512,
+      "nsPerItem": 194.786,
+      "hz": 10027.1,
+      "median": 0.097459,
+      "p99": 0.141471,
+      "rme": 4.74,
+      "samples": 9225,
+      "roundValues": [
+        179.771,
+        198.238,
+        194.786
+      ]
+    },
+    {
+      "id": "color/Color.rgb",
+      "suite": "color",
+      "name": "Color.rgb",
+      "batch": 512,
+      "nsPerItem": 206.39,
+      "hz": 9463.26,
+      "median": 0.103162,
+      "p99": 0.177516,
+      "rme": 5.82,
+      "samples": 8761,
+      "roundValues": [
+        186.656,
+        206.39,
+        210.682
+      ]
+    },
+    {
+      "id": "color/Color.fromHex",
+      "suite": "color",
+      "name": "Color.fromHex",
+      "batch": 512,
+      "nsPerItem": 291.178,
+      "hz": 6707.66,
+      "median": 0.147935,
+      "p99": 0.198656,
+      "rme": 2.237,
+      "samples": 5955,
+      "roundValues": [
+        291.178,
+        291.015,
+        304.04
+      ]
+    },
+    {
+      "id": "color/Color.clone",
+      "suite": "color",
+      "name": "Color.clone",
+      "batch": 512,
+      "nsPerItem": 760.409,
+      "hz": 2568.52,
+      "median": 0.384743,
+      "p99": 0.736228,
+      "rme": 1.845,
+      "samples": 2293,
+      "roundValues": [
+        760.409,
+        784.966,
+        756.908
+      ]
+    },
+    {
+      "id": "color/Color.maxValues",
+      "suite": "color",
+      "name": "Color.maxValues",
+      "batch": 64,
+      "nsPerItem": 524.197,
+      "hz": 29807.5,
+      "median": 0.031485,
+      "p99": 0.061199,
+      "rme": 1.988,
+      "samples": 27143,
+      "roundValues": [
+        524.197,
+        525.769,
+        504.931
+      ]
+    },
+    {
+      "id": "color/Color.HSBtoRGB",
+      "suite": "color",
+      "name": "Color.HSBtoRGB",
+      "batch": 512,
+      "nsPerItem": 334.662,
+      "hz": 5836.12,
+      "median": 0.167805,
+      "p99": 0.323788,
+      "rme": 5.351,
+      "samples": 5311,
+      "roundValues": [
+        312.393,
+        334.662,
+        348.208
+      ]
+    },
+    {
+      "id": "color/Color.HSLtoRGB",
+      "suite": "color",
+      "name": "Color.HSLtoRGB",
+      "batch": 512,
+      "nsPerItem": 280.214,
+      "hz": 6970.12,
+      "median": 0.140908,
+      "p99": 0.218688,
+      "rme": 2.479,
+      "samples": 6181,
+      "roundValues": [
+        293.783,
+        279.889,
+        280.214
+      ]
+    },
+    {
+      "id": "color/Color.LABtoLCH",
+      "suite": "color",
+      "name": "Color.LABtoLCH",
+      "batch": 512,
+      "nsPerItem": 291.921,
+      "hz": 6690.59,
+      "median": 0.146848,
+      "p99": 0.222789,
+      "rme": 4.207,
+      "samples": 5933,
+      "roundValues": [
+        286.829,
+        291.921,
+        311.394
+      ]
+    },
+    {
+      "id": "color/Color.LABtoRGB",
+      "suite": "color",
+      "name": "Color.LABtoRGB",
+      "batch": 512,
+      "nsPerItem": 1514.96,
+      "hz": 1289.23,
+      "median": 0.769241,
+      "p99": 1.03275,
+      "rme": 3.774,
+      "samples": 1141,
+      "roundValues": [
+        1500.52,
+        1614.86,
+        1514.96
+      ]
+    },
+    {
+      "id": "color/Color.LABtoXYZ",
+      "suite": "color",
+      "name": "Color.LABtoXYZ",
+      "batch": 512,
+      "nsPerItem": 316.931,
+      "hz": 6162.62,
+      "median": 0.161179,
+      "p99": 0.19322,
+      "rme": 1.468,
+      "samples": 5502,
+      "roundValues": [
+        316.931,
+        325.68,
+        316.377
+      ]
+    },
+    {
+      "id": "color/Color.LCHtoLAB",
+      "suite": "color",
+      "name": "Color.LCHtoLAB",
+      "batch": 512,
+      "nsPerItem": 276.288,
+      "hz": 7069.17,
+      "median": 0.137094,
+      "p99": 0.169629,
+      "rme": 0.9502,
+      "samples": 6359,
+      "roundValues": [
+        273.953,
+        279.203,
+        276.288
+      ]
+    },
+    {
+      "id": "color/Color.LCHtoRGB",
+      "suite": "color",
+      "name": "Color.LCHtoRGB",
+      "batch": 512,
+      "nsPerItem": 1823.88,
+      "hz": 1070.87,
+      "median": 0.921565,
+      "p99": 1.58196,
+      "rme": 2.948,
+      "samples": 954,
+      "roundValues": [
+        1912.7,
+        1805.14,
+        1823.88
+      ]
+    },
+    {
+      "id": "color/Color.LUVtoRGB",
+      "suite": "color",
+      "name": "Color.LUVtoRGB",
+      "batch": 512,
+      "nsPerItem": 1479.97,
+      "hz": 1319.71,
+      "median": 0.731493,
+      "p99": 1.2673,
+      "rme": 1.804,
+      "samples": 1194,
+      "roundValues": [
+        1479.97,
+        1443.48,
+        1496.86
+      ]
+    },
+    {
+      "id": "color/Color.LUVtoXYZ",
+      "suite": "color",
+      "name": "Color.LUVtoXYZ",
+      "batch": 512,
+      "nsPerItem": 262.903,
+      "hz": 7429.08,
+      "median": 0.132032,
+      "p99": 0.205113,
+      "rme": 0.7615,
+      "samples": 6693,
+      "roundValues": [
+        264.575,
+        262.903,
+        260.571
+      ]
+    },
+    {
+      "id": "color/Color.RGBtoHSB",
+      "suite": "color",
+      "name": "Color.RGBtoHSB",
+      "batch": 512,
+      "nsPerItem": 1155.27,
+      "hz": 1690.63,
+      "median": 0.58052,
+      "p99": 1.03095,
+      "rme": 0.8965,
+      "samples": 1521,
+      "roundValues": [
+        1155.27,
+        1169.33,
+        1148.61
+      ]
+    },
+    {
+      "id": "color/Color.RGBtoHSL",
+      "suite": "color",
+      "name": "Color.RGBtoHSL",
+      "batch": 512,
+      "nsPerItem": 1129.25,
+      "hz": 1729.58,
+      "median": 0.562729,
+      "p99": 0.860273,
+      "rme": 2.131,
+      "samples": 1547,
+      "roundValues": [
+        1165.88,
+        1129.25,
+        1117.77
+      ]
+    },
+    {
+      "id": "color/Color.RGBtoLAB",
+      "suite": "color",
+      "name": "Color.RGBtoLAB",
+      "batch": 512,
+      "nsPerItem": 3025.21,
+      "hz": 645.615,
+      "median": 1.54493,
+      "p99": 2.85398,
+      "rme": 1.518,
+      "samples": 578,
+      "roundValues": [
+        3110.09,
+        3025.21,
+        3018.22
+      ]
+    },
+    {
+      "id": "color/Color.RGBtoLCH",
+      "suite": "color",
+      "name": "Color.RGBtoLCH",
+      "batch": 512,
+      "nsPerItem": 3292.75,
+      "hz": 593.16,
+      "median": 1.67086,
+      "p99": 2.02191,
+      "rme": 1.034,
+      "samples": 536,
+      "roundValues": [
+        3292.75,
+        3249.54,
+        3317.67
+      ]
+    },
+    {
+      "id": "color/Color.RGBtoLUV",
+      "suite": "color",
+      "name": "Color.RGBtoLUV",
+      "batch": 512,
+      "nsPerItem": 1466.01,
+      "hz": 1332.28,
+      "median": 0.741195,
+      "p99": 1.00181,
+      "rme": 1.657,
+      "samples": 1211,
+      "roundValues": [
+        1471.32,
+        1466.01,
+        1422.74
+      ]
+    },
+    {
+      "id": "color/Color.RGBtoXYZ",
+      "suite": "color",
+      "name": "Color.RGBtoXYZ",
+      "batch": 512,
+      "nsPerItem": 1201.28,
+      "hz": 1625.87,
+      "median": 0.601031,
+      "p99": 0.904486,
+      "rme": 2.063,
+      "samples": 1470,
+      "roundValues": [
+        1201.28,
+        1219.5,
+        1169.93
+      ]
+    },
+    {
+      "id": "color/Color.XYZtoLAB",
+      "suite": "color",
+      "name": "Color.XYZtoLAB",
+      "batch": 512,
+      "nsPerItem": 1805.27,
+      "hz": 1081.9,
+      "median": 0.912933,
+      "p99": 1.18136,
+      "rme": 2.24,
+      "samples": 961,
+      "roundValues": [
+        1884.8,
+        1805.27,
+        1803.91
+      ]
+    },
+    {
+      "id": "color/Color.XYZtoLUV",
+      "suite": "color",
+      "name": "Color.XYZtoLUV",
+      "batch": 512,
+      "nsPerItem": 280.652,
+      "hz": 6959.23,
+      "median": 0.141847,
+      "p99": 0.243268,
+      "rme": 1.929,
+      "samples": 6194,
+      "roundValues": [
+        291.04,
+        280.652,
+        280.214
+      ]
+    },
+    {
+      "id": "color/Color.XYZtoRGB",
+      "suite": "color",
+      "name": "Color.XYZtoRGB",
+      "batch": 512,
+      "nsPerItem": 1205.88,
+      "hz": 1619.67,
+      "median": 0.619019,
+      "p99": 0.90058,
+      "rme": 0.5852,
+      "samples": 1454,
+      "roundValues": [
+        1205.88,
+        1205.69,
+        1219.8
+      ]
+    },
+    {
+      "id": "color/Color.toMode (no conversion)",
+      "suite": "color",
+      "name": "Color.toMode (no conversion)",
+      "batch": 512,
+      "nsPerItem": 2.40783,
+      "hz": 811156,
+      "median": 0.001215,
+      "p99": 0.001474,
+      "rme": 1.75,
+      "samples": 725808,
+      "roundValues": [
+        2.40783,
+        2.38755,
+        2.47184
+      ]
+    },
+    {
+      "id": "color/Color.toMode (converting)",
+      "suite": "color",
+      "name": "Color.toMode (converting)",
+      "batch": 512,
+      "nsPerItem": 4215.67,
+      "hz": 463.301,
+      "median": 2.09079,
+      "p99": 3.39757,
+      "rme": 0.2404,
+      "samples": 418,
+      "roundValues": [
+        4215.67,
+        4226.49,
+        4206.22
+      ]
+    },
+    {
+      "id": "color/Color.normalize",
+      "suite": "color",
+      "name": "Color.normalize",
+      "batch": 512,
+      "nsPerItem": 37.6607,
+      "hz": 51861.1,
+      "median": 0.018887,
+      "p99": 0.033054,
+      "rme": 0.6835,
+      "samples": 46613,
+      "roundValues": [
+        37.6607,
+        37.997,
+        37.4822
+      ]
+    },
+    {
+      "id": "color/Color.toString(\"hex\")",
+      "suite": "color",
+      "name": "Color.toString(\"hex\")",
+      "batch": 64,
+      "nsPerItem": 92.4445,
+      "hz": 169020,
+      "median": 0.005712,
+      "p99": 0.01012,
+      "rme": 0.7241,
+      "samples": 152189,
+      "roundValues": [
+        92.4445,
+        91.7174,
+        93.0562
+      ]
+    },
+    {
+      "id": "color/Color.toString(\"rgb\")",
+      "suite": "color",
+      "name": "Color.toString(\"rgb\")",
+      "batch": 64,
+      "nsPerItem": 69.7325,
+      "hz": 224070,
+      "median": 0.004313,
+      "p99": 0.008964,
+      "rme": 1.91,
+      "samples": 199526,
+      "roundValues": [
+        72.2168,
+        69.7325,
+        69.5532
+      ]
+    },
+    {
+      "id": "color/Color.toString(\"rgba\")",
+      "suite": "color",
+      "name": "Color.toString(\"rgba\")",
+      "batch": 64,
+      "nsPerItem": 82.612,
+      "hz": 189137,
+      "median": 0.004902,
+      "p99": 0.010648,
+      "rme": 2.226,
+      "samples": 172478,
+      "roundValues": [
+        79.2067,
+        82.8843,
+        82.612
+      ]
+    },
+    {
+      "id": "color/Color.toString(\"mode\")",
+      "suite": "color",
+      "name": "Color.toString(\"mode\")",
+      "batch": 64,
+      "nsPerItem": 78.6845,
+      "hz": 198578,
+      "median": 0.0047955,
+      "p99": 0.010077,
+      "rme": 0.6764,
+      "samples": 178148,
+      "roundValues": [
+        79.6008,
+        78.6845,
+        78.5363
+      ]
+    },
+    {
+      "id": "physics/World.update (128 particles)",
+      "suite": "physics",
+      "name": "World.update (128 particles)",
+      "batch": 128,
+      "nsPerItem": 90592.4,
+      "hz": 86.2379,
+      "median": 11.2781,
+      "p99": 14.4079,
+      "rme": 1.325,
+      "samples": 79,
+      "roundValues": [
+        91878.6,
+        89477,
+        90592.4
+      ]
+    },
+    {
+      "id": "physics/World.update (128 particles, no collision radius)",
+      "suite": "physics",
+      "name": "World.update (128 particles, no collision radius)",
+      "batch": 128,
+      "nsPerItem": 87943.8,
+      "hz": 88.8351,
+      "median": 11.0611,
+      "p99": 14.2959,
+      "rme": 0.7532,
+      "samples": 81,
+      "roundValues": [
+        87943.8,
+        87208.9,
+        88533.7
+      ]
+    },
+    {
+      "id": "physics/World.update (16 bodies)",
+      "suite": "physics",
+      "name": "World.update (16 bodies)",
+      "batch": 128,
+      "nsPerItem": 242546,
+      "hz": 32.2104,
+      "median": 30.5044,
+      "p99": 36.0076,
+      "rme": 1.498,
+      "samples": 48,
+      "roundValues": [
+        244646,
+        237381,
+        242546
+      ]
+    },
+    {
+      "id": "physics/World.add / removeParticle",
+      "suite": "physics",
+      "name": "World.add / removeParticle",
+      "batch": 64,
+      "nsPerItem": 1059.36,
+      "hz": 14749.4,
+      "median": 0.0652,
+      "p99": 0.14334,
+      "rme": 3.105,
+      "samples": 13129,
+      "roundValues": [
+        1111.14,
+        1059.36,
+        1045.36
+      ]
+    },
+    {
+      "id": "physics/Particle.verlet",
+      "suite": "physics",
+      "name": "Particle.verlet",
+      "batch": 512,
+      "nsPerItem": 3167.61,
+      "hz": 616.593,
+      "median": 1.61259,
+      "p99": 2.34525,
+      "rme": 4.587,
+      "samples": 541,
+      "roundValues": [
+        3451.13,
+        3160.51,
+        3167.61
+      ]
+    },
+    {
+      "id": "physics/Particle.collide",
+      "suite": "physics",
+      "name": "Particle.collide",
+      "batch": 512,
+      "nsPerItem": 3721.48,
+      "hz": 524.824,
+      "median": 1.83812,
+      "p99": 3.35122,
+      "rme": 5.41,
+      "samples": 475,
+      "roundValues": [
+        3929.76,
+        3721.48,
+        3527.12
+      ]
+    },
+    {
+      "id": "physics/Particle.hit",
+      "suite": "physics",
+      "name": "Particle.hit",
+      "batch": 512,
+      "nsPerItem": 1538.18,
+      "hz": 1269.76,
+      "median": 0.734623,
+      "p99": 1.54553,
+      "rme": 3.349,
+      "samples": 1125,
+      "roundValues": [
+        1629.57,
+        1526.54,
+        1538.18
+      ]
+    },
+    {
+      "id": "physics/World.edgeConstraint",
+      "suite": "physics",
+      "name": "World.edgeConstraint",
+      "batch": 512,
+      "nsPerItem": 5001.04,
+      "hz": 390.543,
+      "median": 2.46731,
+      "p99": 4.62296,
+      "rme": 4.209,
+      "samples": 356,
+      "roundValues": [
+        5001.04,
+        4750.31,
+        5171.3
+      ]
+    },
+    {
+      "id": "physics/World.boundConstraint",
+      "suite": "physics",
+      "name": "World.boundConstraint",
+      "batch": 512,
+      "nsPerItem": 7539.57,
+      "hz": 259.05,
+      "median": 3.6548,
+      "p99": 7.32903,
+      "rme": 1.369,
+      "samples": 236,
+      "roundValues": [
+        7394.2,
+        7539.57,
+        7600.6
+      ]
+    },
+    {
+      "id": "physics/Body.fromGroup (auto-linked)",
+      "suite": "physics",
+      "name": "Body.fromGroup (auto-linked)",
+      "batch": 64,
+      "nsPerItem": 43236.1,
+      "hz": 361.387,
+      "median": 2.71616,
+      "p99": 4.83019,
+      "rme": 3.321,
+      "samples": 320,
+      "roundValues": [
+        43160.3,
+        46031.9,
+        43236.1
+      ]
+    },
+    {
+      "id": "physics/Body.processEdges",
+      "suite": "physics",
+      "name": "Body.processEdges",
+      "batch": 512,
+      "nsPerItem": 12918.6,
+      "hz": 151.187,
+      "median": 6.35031,
+      "p99": 9.14435,
+      "rme": 2.413,
+      "samples": 138,
+      "roundValues": [
+        12522.8,
+        13146.4,
+        12918.6
+      ]
+    },
+    {
+      "id": "physics/Body.processBody",
+      "suite": "physics",
+      "name": "Body.processBody",
+      "batch": 64,
+      "nsPerItem": 73883,
+      "hz": 211.483,
+      "median": 4.5128,
+      "p99": 7.4369,
+      "rme": 3.081,
+      "samples": 195,
+      "roundValues": [
+        74437,
+        73883,
+        69884.5
+      ]
+    },
+    {
+      "id": "physics/Body.processParticle",
+      "suite": "physics",
+      "name": "Body.processParticle",
+      "batch": 64,
+      "nsPerItem": 60645.8,
+      "hz": 257.643,
+      "median": 3.78247,
+      "p99": 6.42858,
+      "rme": 2.284,
+      "samples": 232,
+      "roundValues": [
+        62641.7,
+        60645.8,
+        59871
+      ]
+    },
+    {
+      "id": "physics/Body.linksToLines",
+      "suite": "physics",
+      "name": "Body.linksToLines",
+      "batch": 512,
+      "nsPerItem": 522.608,
+      "hz": 3737.26,
+      "median": 0.26126,
+      "p99": 0.41248,
+      "rme": 1.947,
+      "samples": 3351,
+      "roundValues": [
+        522.608,
+        536.488,
+        516.14
+      ]
+    },
+    {
+      "id": "util/Util.getArgs (numbers)",
+      "suite": "util",
+      "name": "Util.getArgs (numbers)",
+      "batch": 512,
+      "nsPerItem": 123.913,
+      "hz": 15762.1,
+      "median": 0.062058,
+      "p99": 0.111169,
+      "rme": 6.097,
+      "samples": 14728,
+      "roundValues": [
+        110.144,
+        125.253,
+        123.913
+      ]
+    },
+    {
+      "id": "util/Util.getArgs (array)",
+      "suite": "util",
+      "name": "Util.getArgs (array)",
+      "batch": 512,
+      "nsPerItem": 46.9052,
+      "hz": 41639.9,
+      "median": 0.02226,
+      "p99": 0.050123,
+      "rme": 0.9823,
+      "samples": 37573,
+      "roundValues": [
+        47.1903,
+        46.9052,
+        46.2688
+      ]
+    },
+    {
+      "id": "util/Util.getArgs (Pt)",
+      "suite": "util",
+      "name": "Util.getArgs (Pt)",
+      "batch": 512,
+      "nsPerItem": 499.479,
+      "hz": 3910.33,
+      "median": 0.248114,
+      "p99": 0.662346,
+      "rme": 2.373,
+      "samples": 3486,
+      "roundValues": [
+        495.708,
+        519.417,
+        499.479
+      ]
+    },
+    {
+      "id": "util/Util.getArgs (object)",
+      "suite": "util",
+      "name": "Util.getArgs (object)",
+      "batch": 512,
+      "nsPerItem": 103.713,
+      "hz": 18831.9,
+      "median": 0.051133,
+      "p99": 0.086061,
+      "rme": 2.054,
+      "samples": 17015,
+      "roundValues": [
+        101.035,
+        103.713,
+        105.295
+      ]
+    },
+    {
+      "id": "util/Util.split",
+      "suite": "util",
+      "name": "Util.split",
+      "batch": 512,
+      "nsPerItem": 14.2048,
+      "hz": 137497,
+      "median": 0.006837,
+      "p99": 0.01442,
+      "rme": 0.9745,
+      "samples": 124462,
+      "roundValues": [
+        14.223,
+        14.2048,
+        13.9462
+      ]
+    },
+    {
+      "id": "util/Util.flatten",
+      "suite": "util",
+      "name": "Util.flatten",
+      "batch": 512,
+      "nsPerItem": 71.6572,
+      "hz": 27256.5,
+      "median": 0.034864,
+      "p99": 0.082366,
+      "rme": 3.241,
+      "samples": 24599,
+      "roundValues": [
+        69.1172,
+        73.7619,
+        71.6572
+      ]
+    },
+    {
+      "id": "util/Util.combine",
+      "suite": "util",
+      "name": "Util.combine",
+      "batch": 4096,
+      "nsPerItem": 4.41074,
+      "hz": 55351.4,
+      "median": 0.017305,
+      "p99": 0.032519,
+      "rme": 6.948,
+      "samples": 48231,
+      "roundValues": [
+        4.95858,
+        4.34569,
+        4.41074
+      ]
+    },
+    {
+      "id": "util/Util.zip",
+      "suite": "util",
+      "name": "Util.zip",
+      "batch": 512,
+      "nsPerItem": 28.3,
+      "hz": 69015,
+      "median": 0.013982,
+      "p99": 0.02413,
+      "rme": 3.37,
+      "samples": 60918,
+      "roundValues": [
+        30.127,
+        28.2195,
+        28.3
+      ]
+    },
+    {
+      "id": "util/Util.iterToArray (array)",
+      "suite": "util",
+      "name": "Util.iterToArray (array)",
+      "batch": 1,
+      "nsPerItem": 99.0772,
+      "hz": 10093100,
+      "median": 0.0000950024,
+      "p99": 0.000174999,
+      "rme": 1.684,
+      "samples": 9024928,
+      "roundValues": [
+        101.747,
+        99.0772,
+        98.4093
+      ]
+    },
+    {
+      "id": "util/Util.iterToArray (iterable)",
+      "suite": "util",
+      "name": "Util.iterToArray (iterable)",
+      "batch": 512,
+      "nsPerItem": 2.37552,
+      "hz": 822189,
+      "median": 0.001172,
+      "p99": 0.001531,
+      "rme": 2.034,
+      "samples": 736898,
+      "roundValues": [
+        2.37552,
+        2.43971,
+        2.34307
+      ]
+    },
+    {
+      "id": "util/Util.arrayCheck",
+      "suite": "util",
+      "name": "Util.arrayCheck",
+      "batch": 512,
+      "nsPerItem": 3.30548,
+      "hz": 590874,
+      "median": 0.001678,
+      "p99": 0.002053,
+      "rme": 1.027,
+      "samples": 529145,
+      "roundValues": [
+        3.30548,
+        3.3646,
+        3.29672
+      ]
+    },
+    {
+      "id": "util/Util.forRange",
+      "suite": "util",
+      "name": "Util.forRange",
+      "batch": 512,
+      "nsPerItem": 176.125,
+      "hz": 11089.4,
+      "median": 0.084653,
+      "p99": 0.205636,
+      "rme": 1.825,
+      "samples": 9929,
+      "roundValues": [
+        180.807,
+        176.125,
+        174.377
+      ]
+    },
+    {
+      "id": "util/Util.stepper",
+      "suite": "util",
+      "name": "Util.stepper",
+      "batch": 512,
+      "nsPerItem": 3.7561,
+      "hz": 519987,
+      "median": 0.001907,
+      "p99": 0.002471,
+      "rme": 0.871,
+      "samples": 469008,
+      "roundValues": [
+        3.7561,
+        3.77689,
+        3.71146
+      ]
+    },
+    {
+      "id": "util/Util.uniqueId",
+      "suite": "util",
+      "name": "Util.uniqueId",
+      "batch": 64,
+      "nsPerItem": 381.756,
+      "hz": 40929.3,
+      "median": 0.023833,
+      "p99": 0.038652,
+      "rme": 6.477,
+      "samples": 36104,
+      "roundValues": [
+        370.331,
+        419.785,
+        381.756
+      ]
+    },
+    {
+      "id": "util/Util.randomInt",
+      "suite": "util",
+      "name": "Util.randomInt",
+      "batch": 512,
+      "nsPerItem": 12.3239,
+      "hz": 158483,
+      "median": 0.006076,
+      "p99": 0.010866,
+      "rme": 9.942,
+      "samples": 151270,
+      "roundValues": [
+        10.2041,
+        12.3239,
+        12.6547
+      ]
+    },
+    {
+      "id": "util/Num.seed then draw",
+      "suite": "util",
+      "name": "Num.seed then draw",
+      "batch": 64,
+      "nsPerItem": 64100.2,
+      "hz": 243.759,
+      "median": 3.9968,
+      "p99": 5.64131,
+      "rme": 0.3277,
+      "samples": 222,
+      "roundValues": [
+        64100.2,
+        64136.6,
+        63716.5
+      ]
+    },
+    {
+      "id": "util/Group.fromArray via Util paths",
+      "suite": "util",
+      "name": "Group.fromArray via Util paths",
+      "batch": 512,
+      "nsPerItem": 184.351,
+      "hz": 10594.6,
+      "median": 0.093295,
+      "p99": 0.115395,
+      "rme": 0.6492,
+      "samples": 9534,
+      "roundValues": [
+        183.237,
+        184.351,
+        185.63
+      ]
+    },
+    {
+      "id": "typography/Typography.textWidthEstimator (build)",
+      "suite": "typography",
+      "name": "Typography.textWidthEstimator (build)",
+      "batch": 64,
+      "nsPerItem": 280.9,
+      "hz": 55624.8,
+      "median": 0.017509,
+      "p99": 0.026746,
+      "rme": 1.08,
+      "samples": 50321,
+      "roundValues": [
+        281.819,
+        275.754,
+        280.9
+      ]
+    },
+    {
+      "id": "typography/Typography.textWidthEstimator (call)",
+      "suite": "typography",
+      "name": "Typography.textWidthEstimator (call)",
+      "batch": 512,
+      "nsPerItem": 1.64054,
+      "hz": 1190540,
+      "median": 0.000832006,
+      "p99": 0.000986002,
+      "rme": 0.9822,
+      "samples": 1074638,
+      "roundValues": [
+        1.64961,
+        1.64054,
+        1.61738
+      ]
+    },
+    {
+      "id": "typography/Typography.truncate",
+      "suite": "typography",
+      "name": "Typography.truncate",
+      "batch": 512,
+      "nsPerItem": 22.0075,
+      "hz": 88748,
+      "median": 0.010958,
+      "p99": 0.017185,
+      "rme": 1.42,
+      "samples": 79838,
+      "roundValues": [
+        22.3396,
+        21.7147,
+        22.0075
+      ]
+    },
+    {
+      "id": "typography/Typography.fontSizeToBox (build)",
+      "suite": "typography",
+      "name": "Typography.fontSizeToBox (build)",
+      "batch": 64,
+      "nsPerItem": 7896.85,
+      "hz": 1978.64,
+      "median": 0.500318,
+      "p99": 0.927249,
+      "rme": 0.7621,
+      "samples": 1785,
+      "roundValues": [
+        7896.85,
+        7942.92,
+        7822.55
+      ]
+    },
+    {
+      "id": "typography/Typography.fontSizeToBox (call)",
+      "suite": "typography",
+      "name": "Typography.fontSizeToBox (call)",
+      "batch": 512,
+      "nsPerItem": 5369.38,
+      "hz": 363.752,
+      "median": 2.68123,
+      "p99": 3.82744,
+      "rme": 1.47,
+      "samples": 332,
+      "roundValues": [
+        5222.7,
+        5369.38,
+        5380.54
+      ]
+    },
+    {
+      "id": "typography/Typography.fontSizeToThreshold (call)",
+      "suite": "typography",
+      "name": "Typography.fontSizeToThreshold (call)",
+      "batch": 512,
+      "nsPerItem": 1.76035,
+      "hz": 1109510,
+      "median": 0.000901006,
+      "p99": 0.000971004,
+      "rme": 1.613,
+      "samples": 988633,
+      "roundValues": [
+        1.76035,
+        1.81584,
+        1.75906
+      ]
+    },
+    {
+      "id": "scenarios/particle field frame (300 particles)",
+      "suite": "scenarios",
+      "name": "particle field frame (300 particles)",
+      "batch": 300,
+      "nsPerItem": 197097,
+      "hz": 16.9121,
+      "median": 58.2596,
+      "p99": 65.3713,
+      "rme": 3.196,
+      "samples": 48,
+      "roundValues": [
+        189844,
+        197097,
+        202441
+      ]
+    },
+    {
+      "id": "scenarios/delaunay + voronoi (500 points)",
+      "suite": "scenarios",
+      "name": "delaunay + voronoi (500 points)",
+      "batch": 500,
+      "nsPerItem": 756250,
+      "hz": 2.64463,
+      "median": 376.537,
+      "p99": 398.957,
+      "rme": 0.3821,
+      "samples": 48,
+      "roundValues": [
+        753551,
+        756250,
+        759330
+      ]
+    },
+    {
+      "id": "scenarios/curve smoothing (200 points x 20 steps)",
+      "suite": "scenarios",
+      "name": "curve smoothing (200 points x 20 steps)",
+      "batch": 4000,
+      "nsPerItem": 2846.93,
+      "hz": 87.8139,
+      "median": 11.2107,
+      "p99": 15.4245,
+      "rme": 2.438,
+      "samples": 80,
+      "roundValues": [
+        2844.2,
+        2846.93,
+        2983
+      ]
+    },
+    {
+      "id": "scenarios/polygon collision sweep (100 polygons)",
+      "suite": "scenarios",
+      "name": "polygon collision sweep (100 polygons)",
+      "batch": 4950,
+      "nsPerItem": 18427.3,
+      "hz": 10.9631,
+      "median": 89.7686,
+      "p99": 104.781,
+      "rme": 0.6434,
+      "samples": 48,
+      "roundValues": [
+        18427.3,
+        18264.3,
+        18501.4
+      ]
+    },
+    {
+      "id": "scenarios/colour gradient sweep (2000 stops)",
+      "suite": "scenarios",
+      "name": "colour gradient sweep (2000 stops)",
+      "batch": 2000,
+      "nsPerItem": 2092.13,
+      "hz": 238.991,
+      "median": 4.13981,
+      "p99": 5.86945,
+      "rme": 2.929,
+      "samples": 217,
+      "roundValues": [
+        2149.02,
+        2026.45,
+        2092.13
+      ]
+    },
+    {
+      "id": "scenarios/transform pipeline (4096 points)",
+      "suite": "scenarios",
+      "name": "transform pipeline (4096 points)",
+      "batch": 4096,
+      "nsPerItem": 4455.98,
+      "hz": 54.7894,
+      "median": 18.1331,
+      "p99": 19.6449,
+      "rme": 3.07,
+      "samples": 52,
+      "roundValues": [
+        4455.98,
+        4280.46,
+        4554.04
+      ]
+    },
+    {
+      "id": "scenarios/grid + noise field (4096 points)",
+      "suite": "scenarios",
+      "name": "grid + noise field (4096 points)",
+      "batch": 4096,
+      "nsPerItem": 5424.19,
+      "hz": 45.0096,
+      "median": 21.8855,
+      "p99": 25.871,
+      "rme": 1.576,
+      "samples": 48,
+      "roundValues": [
+        5288.54,
+        5424.19,
+        5459.47
+      ]
+    },
+    {
+      "id": "scenarios/nearest-point query (512 probes)",
+      "suite": "scenarios",
+      "name": "nearest-point query (512 probes)",
+      "batch": 512,
+      "nsPerItem": 77087.3,
+      "hz": 25.3365,
+      "median": 38.9765,
+      "p99": 42.5524,
+      "rme": 1.63,
+      "samples": 48,
+      "roundValues": [
+        77603.3,
+        75089.6,
+        77087.3
+      ]
+    }
+  ],
+  "allocations": [
+    {
+      "id": "calibration/float math",
+      "suite": "calibration",
+      "name": "float math",
+      "batch": 4096,
+      "iterations": 32,
+      "bytesPerItem": 0.075195,
+      "bytesPerCall": 308
+    },
+    {
+      "id": "calibration/typed array allocation",
+      "suite": "calibration",
+      "name": "typed array allocation",
+      "batch": 1024,
+      "iterations": 32,
+      "bytesPerItem": 230.59,
+      "bytesPerCall": 236130
+    },
+    {
+      "id": "pt/new Pt(x, y)",
+      "suite": "pt",
+      "name": "new Pt(x, y)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 449.43,
+      "bytesPerCall": 230110
+    },
+    {
+      "id": "pt/new Pt(array)",
+      "suite": "pt",
+      "name": "new Pt(array)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 438.29,
+      "bytesPerCall": 224410
+    },
+    {
+      "id": "pt/new Pt(object)",
+      "suite": "pt",
+      "name": "new Pt(object)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 559.33,
+      "bytesPerCall": 286370
+    },
+    {
+      "id": "pt/new Pt(pt)",
+      "suite": "pt",
+      "name": "new Pt(pt)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 509.85,
+      "bytesPerCall": 261040
+    },
+    {
+      "id": "pt/Pt.make(dim)",
+      "suite": "pt",
+      "name": "Pt.make(dim)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 698.72,
+      "bytesPerCall": 357750
+    },
+    {
+      "id": "pt/Pt.clone",
+      "suite": "pt",
+      "name": "Pt.clone",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 500.42,
+      "bytesPerCall": 256220
+    },
+    {
+      "id": "pt/Pt.add(scalar)",
+      "suite": "pt",
+      "name": "Pt.add(scalar)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 57.097,
+      "bytesPerCall": 29234
+    },
+    {
+      "id": "pt/Pt.add(x, y)",
+      "suite": "pt",
+      "name": "Pt.add(x, y)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 163.26,
+      "bytesPerCall": 83590
+    },
+    {
+      "id": "pt/Pt.add(array)",
+      "suite": "pt",
+      "name": "Pt.add(array)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 283.08,
+      "bytesPerCall": 144940
+    },
+    {
+      "id": "pt/Pt.subtract(pt)",
+      "suite": "pt",
+      "name": "Pt.subtract(pt)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 217.15,
+      "bytesPerCall": 111180
+    },
+    {
+      "id": "pt/Pt.multiply(scalar)",
+      "suite": "pt",
+      "name": "Pt.multiply(scalar)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 0.14014,
+      "bytesPerCall": 71.75
+    },
+    {
+      "id": "pt/Pt.divide(scalar)",
+      "suite": "pt",
+      "name": "Pt.divide(scalar)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 0.17725,
+      "bytesPerCall": 90.75
+    },
+    {
+      "id": "pt/Pt.$add(pt) (allocating)",
+      "suite": "pt",
+      "name": "Pt.$add(pt) (allocating)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 746.45,
+      "bytesPerCall": 382180
+    },
+    {
+      "id": "pt/Pt.$multiply(scalar) (allocating)",
+      "suite": "pt",
+      "name": "Pt.$multiply(scalar) (allocating)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 502.35,
+      "bytesPerCall": 257200
+    },
+    {
+      "id": "pt/Pt.magnitude",
+      "suite": "pt",
+      "name": "Pt.magnitude",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 15.785,
+      "bytesPerCall": 8082
+    },
+    {
+      "id": "pt/Pt.magnitudeSq",
+      "suite": "pt",
+      "name": "Pt.magnitudeSq",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 16.381,
+      "bytesPerCall": 8387
+    },
+    {
+      "id": "pt/Pt.dot(pt)",
+      "suite": "pt",
+      "name": "Pt.dot(pt)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 165.43,
+      "bytesPerCall": 84699
+    },
+    {
+      "id": "pt/Pt.$cross2D(pt)",
+      "suite": "pt",
+      "name": "Pt.$cross2D(pt)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 169.71,
+      "bytesPerCall": 86894
+    },
+    {
+      "id": "pt/Pt.angle",
+      "suite": "pt",
+      "name": "Pt.angle",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 15.656,
+      "bytesPerCall": 8015.8
+    },
+    {
+      "id": "pt/Pt.angleBetween(pt)",
+      "suite": "pt",
+      "name": "Pt.angleBetween(pt)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 15.239,
+      "bytesPerCall": 7802.5
+    },
+    {
+      "id": "pt/Pt.projectScalar(pt)",
+      "suite": "pt",
+      "name": "Pt.projectScalar(pt)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 169.29,
+      "bytesPerCall": 86677
+    },
+    {
+      "id": "pt/Pt.$unit",
+      "suite": "pt",
+      "name": "Pt.$unit",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 508.63,
+      "bytesPerCall": 260420
+    },
+    {
+      "id": "pt/Pt.$abs",
+      "suite": "pt",
+      "name": "Pt.$abs",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 512.58,
+      "bytesPerCall": 262440
+    },
+    {
+      "id": "pt/Pt.$floor",
+      "suite": "pt",
+      "name": "Pt.$floor",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 501.06,
+      "bytesPerCall": 256540
+    },
+    {
+      "id": "pt/Pt.$round",
+      "suite": "pt",
+      "name": "Pt.$round",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 506.04,
+      "bytesPerCall": 259090
+    },
+    {
+      "id": "pt/Pt.$project(pt)",
+      "suite": "pt",
+      "name": "Pt.$project(pt)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 705.91,
+      "bytesPerCall": 361430
+    },
+    {
+      "id": "pt/Pt.$take('xy')",
+      "suite": "pt",
+      "name": "Pt.$take('xy')",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 662.6,
+      "bytesPerCall": 339250
+    },
+    {
+      "id": "pt/Pt.$concat(pt)",
+      "suite": "pt",
+      "name": "Pt.$concat(pt)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 839.38,
+      "bytesPerCall": 429760
+    },
+    {
+      "id": "pt/Pt.equals(pt)",
+      "suite": "pt",
+      "name": "Pt.equals(pt)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 0.13574,
+      "bytesPerCall": 69.5
+    },
+    {
+      "id": "pt/Pt.unit (in place)",
+      "suite": "pt",
+      "name": "Pt.unit (in place)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 0.17432,
+      "bytesPerCall": 89.25
+    },
+    {
+      "id": "pt/Pt.scale(scalar)",
+      "suite": "pt",
+      "name": "Pt.scale(scalar)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 1487.3,
+      "bytesPerCall": 761520
+    },
+    {
+      "id": "pt/Pt.toAngle",
+      "suite": "pt",
+      "name": "Pt.toAngle",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 217.38,
+      "bytesPerCall": 111300
+    },
+    {
+      "id": "pt/Pt.toString",
+      "suite": "pt",
+      "name": "Pt.toString",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 130.07,
+      "bytesPerCall": 8324.5
+    },
+    {
+      "id": "pt/Pt.toArray",
+      "suite": "pt",
+      "name": "Pt.toArray",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 129.06,
+      "bytesPerCall": 66079
+    },
+    {
+      "id": "pt/Pt.op then call",
+      "suite": "pt",
+      "name": "Pt.op then call",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 56.293,
+      "bytesPerCall": 3602.8
+    },
+    {
+      "id": "pt/Group.fromArray",
+      "suite": "pt",
+      "name": "Group.fromArray",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 464.67,
+      "bytesPerCall": 237910
+    },
+    {
+      "id": "pt/Group.fromPtArray",
+      "suite": "pt",
+      "name": "Group.fromPtArray",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 66.131,
+      "bytesPerCall": 33859
+    },
+    {
+      "id": "pt/Group.clone",
+      "suite": "pt",
+      "name": "Group.clone",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 518.66,
+      "bytesPerCall": 265550
+    },
+    {
+      "id": "pt/Group.centroid",
+      "suite": "pt",
+      "name": "Group.centroid",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 33.24,
+      "bytesPerCall": 17019
+    },
+    {
+      "id": "pt/Group.boundingBox",
+      "suite": "pt",
+      "name": "Group.boundingBox",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 1491.6,
+      "bytesPerCall": 763700
+    },
+    {
+      "id": "pt/Group.interpolate",
+      "suite": "pt",
+      "name": "Group.interpolate",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 676.29,
+      "bytesPerCall": 43283
+    },
+    {
+      "id": "pt/Group.segments",
+      "suite": "pt",
+      "name": "Group.segments",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 209.04,
+      "bytesPerCall": 107030
+    },
+    {
+      "id": "pt/Group.lines",
+      "suite": "pt",
+      "name": "Group.lines",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 204.6,
+      "bytesPerCall": 104760
+    },
+    {
+      "id": "pt/Group.zipSlice",
+      "suite": "pt",
+      "name": "Group.zipSlice",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 56.561,
+      "bytesPerCall": 28959
+    },
+    {
+      "id": "pt/Group.$zip",
+      "suite": "pt",
+      "name": "Group.$zip",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 111,
+      "bytesPerCall": 56832
+    },
+    {
+      "id": "pt/Group.sortByDimension",
+      "suite": "pt",
+      "name": "Group.sortByDimension",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 29.934,
+      "bytesPerCall": 15326
+    },
+    {
+      "id": "pt/Group.add(pt)",
+      "suite": "pt",
+      "name": "Group.add(pt)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 241.7,
+      "bytesPerCall": 123750
+    },
+    {
+      "id": "pt/Group.moveTo(pt)",
+      "suite": "pt",
+      "name": "Group.moveTo(pt)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 154.34,
+      "bytesPerCall": 79021
+    },
+    {
+      "id": "pt/Group.scale(scalar)",
+      "suite": "pt",
+      "name": "Group.scale(scalar)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 816.41,
+      "bytesPerCall": 418000
+    },
+    {
+      "id": "pt/Group.rotate2D",
+      "suite": "pt",
+      "name": "Group.rotate2D",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 2335,
+      "bytesPerCall": 1195500
+    },
+    {
+      "id": "pt/Group.shear2D",
+      "suite": "pt",
+      "name": "Group.shear2D",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 2420,
+      "bytesPerCall": 1239100
+    },
+    {
+      "id": "pt/Group.reflect2D",
+      "suite": "pt",
+      "name": "Group.reflect2D",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 2568.8,
+      "bytesPerCall": 1315200
+    },
+    {
+      "id": "pt/Group.forEachPt('unit')",
+      "suite": "pt",
+      "name": "Group.forEachPt('unit')",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 16.419,
+      "bytesPerCall": 8406.8
+    },
+    {
+      "id": "pt/Bound.fromGroup",
+      "suite": "pt",
+      "name": "Bound.fromGroup",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 4422.6,
+      "bytesPerCall": 283050
+    },
+    {
+      "id": "pt/Bound accessors",
+      "suite": "pt",
+      "name": "Bound accessors",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 1423.6,
+      "bytesPerCall": 91113
+    },
+    {
+      "id": "pt/Bound.clone",
+      "suite": "pt",
+      "name": "Bound.clone",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 5583,
+      "bytesPerCall": 357310
+    },
+    {
+      "id": "linear-algebra/Vec.add(scalar) (array)",
+      "suite": "linear-algebra",
+      "name": "Vec.add(scalar) (array)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 0.17383,
+      "bytesPerCall": 89
+    },
+    {
+      "id": "linear-algebra/Vec.add(scalar) (Pt)",
+      "suite": "linear-algebra",
+      "name": "Vec.add(scalar) (Pt)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 0.104,
+      "bytesPerCall": 53.25
+    },
+    {
+      "id": "linear-algebra/Vec.add(vector) (array)",
+      "suite": "linear-algebra",
+      "name": "Vec.add(vector) (array)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 30.688,
+      "bytesPerCall": 15713
+    },
+    {
+      "id": "linear-algebra/Vec.add(vector) (Pt)",
+      "suite": "linear-algebra",
+      "name": "Vec.add(vector) (Pt)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 30.771,
+      "bytesPerCall": 15755
+    },
+    {
+      "id": "linear-algebra/Vec.subtract(vector) (array)",
+      "suite": "linear-algebra",
+      "name": "Vec.subtract(vector) (array)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 0.13721,
+      "bytesPerCall": 70.25
+    },
+    {
+      "id": "linear-algebra/Vec.subtract(vector) (Pt)",
+      "suite": "linear-algebra",
+      "name": "Vec.subtract(vector) (Pt)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 0.14404,
+      "bytesPerCall": 73.75
+    },
+    {
+      "id": "linear-algebra/Vec.multiply(scalar) (array)",
+      "suite": "linear-algebra",
+      "name": "Vec.multiply(scalar) (array)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 0.21045,
+      "bytesPerCall": 107.75
+    },
+    {
+      "id": "linear-algebra/Vec.multiply(scalar) (Pt)",
+      "suite": "linear-algebra",
+      "name": "Vec.multiply(scalar) (Pt)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 0.16895,
+      "bytesPerCall": 86.5
+    },
+    {
+      "id": "linear-algebra/Vec.divide(scalar) (array)",
+      "suite": "linear-algebra",
+      "name": "Vec.divide(scalar) (array)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 0.041016,
+      "bytesPerCall": 21
+    },
+    {
+      "id": "linear-algebra/Vec.divide(scalar) (Pt)",
+      "suite": "linear-algebra",
+      "name": "Vec.divide(scalar) (Pt)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 0.14111,
+      "bytesPerCall": 72.25
+    },
+    {
+      "id": "linear-algebra/Vec.abs (array)",
+      "suite": "linear-algebra",
+      "name": "Vec.abs (array)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 0.032227,
+      "bytesPerCall": 16.5
+    },
+    {
+      "id": "linear-algebra/Vec.abs (Pt)",
+      "suite": "linear-algebra",
+      "name": "Vec.abs (Pt)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 0.068848,
+      "bytesPerCall": 35.25
+    },
+    {
+      "id": "linear-algebra/Vec.floor (array)",
+      "suite": "linear-algebra",
+      "name": "Vec.floor (array)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 0.063965,
+      "bytesPerCall": 32.75
+    },
+    {
+      "id": "linear-algebra/Vec.floor (Pt)",
+      "suite": "linear-algebra",
+      "name": "Vec.floor (Pt)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 0.13818,
+      "bytesPerCall": 70.75
+    },
+    {
+      "id": "linear-algebra/Vec.round (array)",
+      "suite": "linear-algebra",
+      "name": "Vec.round (array)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 0.26416,
+      "bytesPerCall": 135.25
+    },
+    {
+      "id": "linear-algebra/Vec.round (Pt)",
+      "suite": "linear-algebra",
+      "name": "Vec.round (Pt)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 0.070801,
+      "bytesPerCall": 36.25
+    },
+    {
+      "id": "linear-algebra/Vec.unit (array)",
+      "suite": "linear-algebra",
+      "name": "Vec.unit (array)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 0.10059,
+      "bytesPerCall": 51.5
+    },
+    {
+      "id": "linear-algebra/Vec.unit (Pt)",
+      "suite": "linear-algebra",
+      "name": "Vec.unit (Pt)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 0.10107,
+      "bytesPerCall": 51.75
+    },
+    {
+      "id": "linear-algebra/Vec.dot",
+      "suite": "linear-algebra",
+      "name": "Vec.dot",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 15.699,
+      "bytesPerCall": 8038
+    },
+    {
+      "id": "linear-algebra/Vec.cross2D",
+      "suite": "linear-algebra",
+      "name": "Vec.cross2D",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 15.529,
+      "bytesPerCall": 7951
+    },
+    {
+      "id": "linear-algebra/Vec.magnitude",
+      "suite": "linear-algebra",
+      "name": "Vec.magnitude",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 17.56,
+      "bytesPerCall": 8990.8
+    },
+    {
+      "id": "linear-algebra/Vec.sum",
+      "suite": "linear-algebra",
+      "name": "Vec.sum",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 15.59,
+      "bytesPerCall": 7982.3
+    },
+    {
+      "id": "linear-algebra/Vec.max",
+      "suite": "linear-algebra",
+      "name": "Vec.max",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 15.671,
+      "bytesPerCall": 8023.8
+    },
+    {
+      "id": "linear-algebra/Vec.min",
+      "suite": "linear-algebra",
+      "name": "Vec.min",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 16.379,
+      "bytesPerCall": 8386
+    },
+    {
+      "id": "linear-algebra/Vec.cross (3D)",
+      "suite": "linear-algebra",
+      "name": "Vec.cross (3D)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 530.79,
+      "bytesPerCall": 271760
+    },
+    {
+      "id": "linear-algebra/Vec.map",
+      "suite": "linear-algebra",
+      "name": "Vec.map",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 0.13232,
+      "bytesPerCall": 67.75
+    },
+    {
+      "id": "linear-algebra/Mat.transform2D",
+      "suite": "linear-algebra",
+      "name": "Mat.transform2D",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 504.8,
+      "bytesPerCall": 258460
+    },
+    {
+      "id": "linear-algebra/Mat.scale2DMatrix",
+      "suite": "linear-algebra",
+      "name": "Mat.scale2DMatrix",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 1505.5,
+      "bytesPerCall": 96350
+    },
+    {
+      "id": "linear-algebra/Mat.rotate2DMatrix",
+      "suite": "linear-algebra",
+      "name": "Mat.rotate2DMatrix",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 1529.9,
+      "bytesPerCall": 97912
+    },
+    {
+      "id": "linear-algebra/Mat.shear2DMatrix",
+      "suite": "linear-algebra",
+      "name": "Mat.shear2DMatrix",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 1512.4,
+      "bytesPerCall": 96796
+    },
+    {
+      "id": "linear-algebra/Mat.translate2DMatrix",
+      "suite": "linear-algebra",
+      "name": "Mat.translate2DMatrix",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 1516.2,
+      "bytesPerCall": 97036
+    },
+    {
+      "id": "linear-algebra/Mat.scaleAt2DMatrix",
+      "suite": "linear-algebra",
+      "name": "Mat.scaleAt2DMatrix",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 1541.3,
+      "bytesPerCall": 98642
+    },
+    {
+      "id": "linear-algebra/Mat.rotateAt2DMatrix",
+      "suite": "linear-algebra",
+      "name": "Mat.rotateAt2DMatrix",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 1577.5,
+      "bytesPerCall": 100960
+    },
+    {
+      "id": "linear-algebra/Mat.shearAt2DMatrix",
+      "suite": "linear-algebra",
+      "name": "Mat.shearAt2DMatrix",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 1520.7,
+      "bytesPerCall": 97323
+    },
+    {
+      "id": "linear-algebra/Mat.reflectAt2DMatrix",
+      "suite": "linear-algebra",
+      "name": "Mat.reflectAt2DMatrix",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 1819.7,
+      "bytesPerCall": 116460
+    },
+    {
+      "id": "linear-algebra/Mat.multiply (3x3 chain)",
+      "suite": "linear-algebra",
+      "name": "Mat.multiply (3x3 chain)",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 4246.1,
+      "bytesPerCall": 271750
+    },
+    {
+      "id": "linear-algebra/Mat.multiply (32x32)",
+      "suite": "linear-algebra",
+      "name": "Mat.multiply (32x32)",
+      "batch": 1024,
+      "iterations": 32,
+      "bytesPerItem": 96.387,
+      "bytesPerCall": 98700
+    },
+    {
+      "id": "linear-algebra/Mat.multiply (32x32, elementwise)",
+      "suite": "linear-algebra",
+      "name": "Mat.multiply (32x32, elementwise)",
+      "batch": 1024,
+      "iterations": 32,
+      "bytesPerItem": 107.66,
+      "bytesPerCall": 110250
+    },
+    {
+      "id": "linear-algebra/Mat.add (32x32)",
+      "suite": "linear-algebra",
+      "name": "Mat.add (32x32)",
+      "batch": 1024,
+      "iterations": 32,
+      "bytesPerItem": 105.68,
+      "bytesPerCall": 108210
+    },
+    {
+      "id": "linear-algebra/Mat.transpose (32x32)",
+      "suite": "linear-algebra",
+      "name": "Mat.transpose (32x32)",
+      "batch": 1024,
+      "iterations": 32,
+      "bytesPerItem": 61.45,
+      "bytesPerCall": 62925
+    },
+    {
+      "id": "linear-algebra/Mat.zip",
+      "suite": "linear-algebra",
+      "name": "Mat.zip",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 110.91,
+      "bytesPerCall": 56785
+    },
+    {
+      "id": "linear-algebra/Mat.zipSlice",
+      "suite": "linear-algebra",
+      "name": "Mat.zipSlice",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 56.302,
+      "bytesPerCall": 28827
+    },
+    {
+      "id": "linear-algebra/Mat instance transform chain",
+      "suite": "linear-algebra",
+      "name": "Mat instance transform chain",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 19010,
+      "bytesPerCall": 1216700
+    },
+    {
+      "id": "linear-algebra/Group.$matrixMultiply",
+      "suite": "linear-algebra",
+      "name": "Group.$matrixMultiply",
+      "batch": 1024,
+      "iterations": 32,
+      "bytesPerItem": 98.258,
+      "bytesPerCall": 100620
+    },
+    {
+      "id": "num/Num.lerp",
+      "suite": "num",
+      "name": "Num.lerp",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 32.672,
+      "bytesPerCall": 16728
+    },
+    {
+      "id": "num/Num.clamp",
+      "suite": "num",
+      "name": "Num.clamp",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 32.471,
+      "bytesPerCall": 16625
+    },
+    {
+      "id": "num/Num.boundValue",
+      "suite": "num",
+      "name": "Num.boundValue",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 32.407,
+      "bytesPerCall": 16593
+    },
+    {
+      "id": "num/Num.within",
+      "suite": "num",
+      "name": "Num.within",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 16.605,
+      "bytesPerCall": 8501.8
+    },
+    {
+      "id": "num/Num.normalizeValue",
+      "suite": "num",
+      "name": "Num.normalizeValue",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 32.568,
+      "bytesPerCall": 16675
+    },
+    {
+      "id": "num/Num.cycle",
+      "suite": "num",
+      "name": "Num.cycle",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 30.831,
+      "bytesPerCall": 15785
+    },
+    {
+      "id": "num/Num.mapToRange",
+      "suite": "num",
+      "name": "Num.mapToRange",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 32.514,
+      "bytesPerCall": 16647
+    },
+    {
+      "id": "num/Num.equals",
+      "suite": "num",
+      "name": "Num.equals",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 31.117,
+      "bytesPerCall": 15932
+    },
+    {
+      "id": "num/Num.random (seeded)",
+      "suite": "num",
+      "name": "Num.random (seeded)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 0.067383,
+      "bytesPerCall": 34.5
+    },
+    {
+      "id": "num/Num.randomPt",
+      "suite": "num",
+      "name": "Num.randomPt",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 631.01,
+      "bytesPerCall": 323080
+    },
+    {
+      "id": "num/Num.sum",
+      "suite": "num",
+      "name": "Num.sum",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 32.647,
+      "bytesPerCall": 16716
+    },
+    {
+      "id": "num/Num.average",
+      "suite": "num",
+      "name": "Num.average",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 33.887,
+      "bytesPerCall": 17350
+    },
+    {
+      "id": "num/Geom.boundAngle",
+      "suite": "num",
+      "name": "Geom.boundAngle",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 31.281,
+      "bytesPerCall": 16016
+    },
+    {
+      "id": "num/Geom.boundRadian",
+      "suite": "num",
+      "name": "Geom.boundRadian",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 31.155,
+      "bytesPerCall": 15951
+    },
+    {
+      "id": "num/Geom.toRadian",
+      "suite": "num",
+      "name": "Geom.toRadian",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 32.489,
+      "bytesPerCall": 16634
+    },
+    {
+      "id": "num/Geom.toDegree",
+      "suite": "num",
+      "name": "Geom.toDegree",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 33.295,
+      "bytesPerCall": 17047
+    },
+    {
+      "id": "num/Geom.boundingBox",
+      "suite": "num",
+      "name": "Geom.boundingBox",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 1483.1,
+      "bytesPerCall": 759360
+    },
+    {
+      "id": "num/Geom.centroid",
+      "suite": "num",
+      "name": "Geom.centroid",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 34.176,
+      "bytesPerCall": 17498
+    },
+    {
+      "id": "num/Geom.interpolate",
+      "suite": "num",
+      "name": "Geom.interpolate",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 691.05,
+      "bytesPerCall": 353820
+    },
+    {
+      "id": "num/Geom.perpendicular",
+      "suite": "num",
+      "name": "Geom.perpendicular",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 1575,
+      "bytesPerCall": 806400
+    },
+    {
+      "id": "num/Geom.withinBound",
+      "suite": "num",
+      "name": "Geom.withinBound",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 64.132,
+      "bytesPerCall": 32836
+    },
+    {
+      "id": "num/Geom.isPerpendicular",
+      "suite": "num",
+      "name": "Geom.isPerpendicular",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 723.31,
+      "bytesPerCall": 370330
+    },
+    {
+      "id": "num/Geom.sortEdges",
+      "suite": "num",
+      "name": "Geom.sortEdges",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 3470.6,
+      "bytesPerCall": 222120
+    },
+    {
+      "id": "num/Geom.scale",
+      "suite": "num",
+      "name": "Geom.scale",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 1.5581,
+      "bytesPerCall": 797.75
+    },
+    {
+      "id": "num/Geom.rotate2D",
+      "suite": "num",
+      "name": "Geom.rotate2D",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 2254.1,
+      "bytesPerCall": 1154100
+    },
+    {
+      "id": "num/Geom.shear2D",
+      "suite": "num",
+      "name": "Geom.shear2D",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 2255.2,
+      "bytesPerCall": 1154700
+    },
+    {
+      "id": "num/Geom.reflect2D",
+      "suite": "num",
+      "name": "Geom.reflect2D",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 695.83,
+      "bytesPerCall": 356260
+    },
+    {
+      "id": "num/Geom.anchor",
+      "suite": "num",
+      "name": "Geom.anchor",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 259.57,
+      "bytesPerCall": 132900
+    },
+    {
+      "id": "num/Geom.cosTable",
+      "suite": "num",
+      "name": "Geom.cosTable",
+      "batch": 360,
+      "iterations": 32,
+      "bytesPerItem": 0.92986,
+      "bytesPerCall": 334.75
+    },
+    {
+      "id": "num/Shaping.bounceIn",
+      "suite": "num",
+      "name": "Shaping.bounceIn",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 32.232,
+      "bytesPerCall": 16503
+    },
+    {
+      "id": "num/Shaping.bounceInOut",
+      "suite": "num",
+      "name": "Shaping.bounceInOut",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 30.124,
+      "bytesPerCall": 15424
+    },
+    {
+      "id": "num/Shaping.bounceOut",
+      "suite": "num",
+      "name": "Shaping.bounceOut",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 32.22,
+      "bytesPerCall": 16497
+    },
+    {
+      "id": "num/Shaping.circularIn",
+      "suite": "num",
+      "name": "Shaping.circularIn",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 32.988,
+      "bytesPerCall": 16890
+    },
+    {
+      "id": "num/Shaping.circularInOut",
+      "suite": "num",
+      "name": "Shaping.circularInOut",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 31.885,
+      "bytesPerCall": 16325
+    },
+    {
+      "id": "num/Shaping.circularOut",
+      "suite": "num",
+      "name": "Shaping.circularOut",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 32.395,
+      "bytesPerCall": 16586
+    },
+    {
+      "id": "num/Shaping.cliff",
+      "suite": "num",
+      "name": "Shaping.cliff",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 16.594,
+      "bytesPerCall": 8496
+    },
+    {
+      "id": "num/Shaping.cosineApprox",
+      "suite": "num",
+      "name": "Shaping.cosineApprox",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 31.616,
+      "bytesPerCall": 16188
+    },
+    {
+      "id": "num/Shaping.cubicBezier",
+      "suite": "num",
+      "name": "Shaping.cubicBezier",
+      "batch": 512,
+      "iterations": 20,
+      "bytesPerItem": 6288.1,
+      "bytesPerCall": 3219500
+    },
+    {
+      "id": "num/Shaping.cubicIn",
+      "suite": "num",
+      "name": "Shaping.cubicIn",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 30.485,
+      "bytesPerCall": 15608
+    },
+    {
+      "id": "num/Shaping.cubicInOut",
+      "suite": "num",
+      "name": "Shaping.cubicInOut",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 32.286,
+      "bytesPerCall": 16531
+    },
+    {
+      "id": "num/Shaping.cubicOut",
+      "suite": "num",
+      "name": "Shaping.cubicOut",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 31.979,
+      "bytesPerCall": 16374
+    },
+    {
+      "id": "num/Shaping.elasticIn",
+      "suite": "num",
+      "name": "Shaping.elasticIn",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 33.22,
+      "bytesPerCall": 17009
+    },
+    {
+      "id": "num/Shaping.elasticInOut",
+      "suite": "num",
+      "name": "Shaping.elasticInOut",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 32.667,
+      "bytesPerCall": 16725
+    },
+    {
+      "id": "num/Shaping.elasticOut",
+      "suite": "num",
+      "name": "Shaping.elasticOut",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 32.439,
+      "bytesPerCall": 16609
+    },
+    {
+      "id": "num/Shaping.exponentialIn",
+      "suite": "num",
+      "name": "Shaping.exponentialIn",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 32.988,
+      "bytesPerCall": 16890
+    },
+    {
+      "id": "num/Shaping.exponentialOut",
+      "suite": "num",
+      "name": "Shaping.exponentialOut",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 31.28,
+      "bytesPerCall": 16015
+    },
+    {
+      "id": "num/Shaping.linear",
+      "suite": "num",
+      "name": "Shaping.linear",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 31.845,
+      "bytesPerCall": 16305
+    },
+    {
+      "id": "num/Shaping.logSigmoid",
+      "suite": "num",
+      "name": "Shaping.logSigmoid",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 32.512,
+      "bytesPerCall": 16646
+    },
+    {
+      "id": "num/Shaping.quadraticBezier",
+      "suite": "num",
+      "name": "Shaping.quadraticBezier",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 111.94,
+      "bytesPerCall": 57314
+    },
+    {
+      "id": "num/Shaping.quadraticIn",
+      "suite": "num",
+      "name": "Shaping.quadraticIn",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 32.693,
+      "bytesPerCall": 16739
+    },
+    {
+      "id": "num/Shaping.quadraticInOut",
+      "suite": "num",
+      "name": "Shaping.quadraticInOut",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 30.519,
+      "bytesPerCall": 15626
+    },
+    {
+      "id": "num/Shaping.quadraticOut",
+      "suite": "num",
+      "name": "Shaping.quadraticOut",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 32.699,
+      "bytesPerCall": 16742
+    },
+    {
+      "id": "num/Shaping.quadraticTarget",
+      "suite": "num",
+      "name": "Shaping.quadraticTarget",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 96.57,
+      "bytesPerCall": 49444
+    },
+    {
+      "id": "num/Shaping.seat",
+      "suite": "num",
+      "name": "Shaping.seat",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 32.38,
+      "bytesPerCall": 16579
+    },
+    {
+      "id": "num/Shaping.sigmoid",
+      "suite": "num",
+      "name": "Shaping.sigmoid",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 33.042,
+      "bytesPerCall": 16918
+    },
+    {
+      "id": "num/Shaping.sineIn",
+      "suite": "num",
+      "name": "Shaping.sineIn",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 32.425,
+      "bytesPerCall": 16602
+    },
+    {
+      "id": "num/Shaping.sineInOut",
+      "suite": "num",
+      "name": "Shaping.sineInOut",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 32.063,
+      "bytesPerCall": 16416
+    },
+    {
+      "id": "num/Shaping.sineOut",
+      "suite": "num",
+      "name": "Shaping.sineOut",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 32.03,
+      "bytesPerCall": 16400
+    },
+    {
+      "id": "num/Shaping.step",
+      "suite": "num",
+      "name": "Shaping.step",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 0.24463,
+      "bytesPerCall": 125.25
+    },
+    {
+      "id": "num/new Range",
+      "suite": "num",
+      "name": "new Range",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 437.95,
+      "bytesPerCall": 224230
+    },
+    {
+      "id": "num/Range.mapTo",
+      "suite": "num",
+      "name": "Range.mapTo",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 432.21,
+      "bytesPerCall": 221290
+    },
+    {
+      "id": "num/Range.ticks",
+      "suite": "num",
+      "name": "Range.ticks",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 441.11,
+      "bytesPerCall": 28231
+    },
+    {
+      "id": "num/Range.append",
+      "suite": "num",
+      "name": "Range.append",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 3065.6,
+      "bytesPerCall": 196200
+    },
+    {
+      "id": "op/Line.fromAngle",
+      "suite": "op",
+      "name": "Line.fromAngle",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 1279.8,
+      "bytesPerCall": 655230
+    },
+    {
+      "id": "op/Line.slope",
+      "suite": "op",
+      "name": "Line.slope",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 16.821,
+      "bytesPerCall": 8612.3
+    },
+    {
+      "id": "op/Line.intercept",
+      "suite": "op",
+      "name": "Line.intercept",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 116.32,
+      "bytesPerCall": 59557
+    },
+    {
+      "id": "op/Line.sideOfPt2D",
+      "suite": "op",
+      "name": "Line.sideOfPt2D",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 15.405,
+      "bytesPerCall": 7887.5
+    },
+    {
+      "id": "op/Line.collinear",
+      "suite": "op",
+      "name": "Line.collinear",
+      "batch": 512,
+      "iterations": 15,
+      "bytesPerItem": 4206.4,
+      "bytesPerCall": 2153700
+    },
+    {
+      "id": "op/Line.magnitude",
+      "suite": "op",
+      "name": "Line.magnitude",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 765.63,
+      "bytesPerCall": 392000
+    },
+    {
+      "id": "op/Line.magnitudeSq",
+      "suite": "op",
+      "name": "Line.magnitudeSq",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 766.93,
+      "bytesPerCall": 392670
+    },
+    {
+      "id": "op/Line.perpendicularFromPt",
+      "suite": "op",
+      "name": "Line.perpendicularFromPt",
+      "batch": 512,
+      "iterations": 12,
+      "bytesPerItem": 4172.6,
+      "bytesPerCall": 2136400
+    },
+    {
+      "id": "op/Line.distanceFromPt",
+      "suite": "op",
+      "name": "Line.distanceFromPt",
+      "batch": 512,
+      "iterations": 16,
+      "bytesPerItem": 3149,
+      "bytesPerCall": 1612300
+    },
+    {
+      "id": "op/Line.intersectRay2D",
+      "suite": "op",
+      "name": "Line.intersectRay2D",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 693.58,
+      "bytesPerCall": 355110
+    },
+    {
+      "id": "op/Line.intersectLine2D",
+      "suite": "op",
+      "name": "Line.intersectLine2D",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 675.82,
+      "bytesPerCall": 346020
+    },
+    {
+      "id": "op/Line.intersectLineWithRay2D",
+      "suite": "op",
+      "name": "Line.intersectLineWithRay2D",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 710.46,
+      "bytesPerCall": 363760
+    },
+    {
+      "id": "op/Line.intersectPolygon2D",
+      "suite": "op",
+      "name": "Line.intersectPolygon2D",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 5976.8,
+      "bytesPerCall": 382510
+    },
+    {
+      "id": "op/Line.intersectLines2D",
+      "suite": "op",
+      "name": "Line.intersectLines2D",
+      "batch": 4096,
+      "iterations": 32,
+      "bytesPerItem": 676.37,
+      "bytesPerCall": 2770400
+    },
+    {
+      "id": "op/Line.intersectGridWithRay2D",
+      "suite": "op",
+      "name": "Line.intersectGridWithRay2D",
+      "batch": 512,
+      "iterations": 24,
+      "bytesPerItem": 2662,
+      "bytesPerCall": 1363000
+    },
+    {
+      "id": "op/Line.intersectGridWithLine2D",
+      "suite": "op",
+      "name": "Line.intersectGridWithLine2D",
+      "batch": 512,
+      "iterations": 23,
+      "bytesPerItem": 2722.1,
+      "bytesPerCall": 1393700
+    },
+    {
+      "id": "op/Line.intersectRect2D",
+      "suite": "op",
+      "name": "Line.intersectRect2D",
+      "batch": 512,
+      "iterations": 12,
+      "bytesPerItem": 5058.4,
+      "bytesPerCall": 2589900
+    },
+    {
+      "id": "op/Line.subpoints",
+      "suite": "op",
+      "name": "Line.subpoints",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 10920,
+      "bytesPerCall": 698850
+    },
+    {
+      "id": "op/Line.crop",
+      "suite": "op",
+      "name": "Line.crop",
+      "batch": 512,
+      "iterations": 31,
+      "bytesPerItem": 1585.9,
+      "bytesPerCall": 811970
+    },
+    {
+      "id": "op/Line.marker",
+      "suite": "op",
+      "name": "Line.marker",
+      "batch": 512,
+      "iterations": 12,
+      "bytesPerItem": 4095.3,
+      "bytesPerCall": 2096800
+    },
+    {
+      "id": "op/Line.toRect",
+      "suite": "op",
+      "name": "Line.toRect",
+      "batch": 512,
+      "iterations": 30,
+      "bytesPerItem": 1523.2,
+      "bytesPerCall": 779900
+    },
+    {
+      "id": "op/Rectangle.fromTopLeft",
+      "suite": "op",
+      "name": "Rectangle.fromTopLeft",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 1250.7,
+      "bytesPerCall": 640380
+    },
+    {
+      "id": "op/Rectangle.fromCenter",
+      "suite": "op",
+      "name": "Rectangle.fromCenter",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 1520.6,
+      "bytesPerCall": 778530
+    },
+    {
+      "id": "op/Rectangle.size",
+      "suite": "op",
+      "name": "Rectangle.size",
+      "batch": 512,
+      "iterations": 27,
+      "bytesPerItem": 1698.8,
+      "bytesPerCall": 869790
+    },
+    {
+      "id": "op/Rectangle.center",
+      "suite": "op",
+      "name": "Rectangle.center",
+      "batch": 512,
+      "iterations": 19,
+      "bytesPerItem": 2420.6,
+      "bytesPerCall": 1239300
+    },
+    {
+      "id": "op/Rectangle.corners",
+      "suite": "op",
+      "name": "Rectangle.corners",
+      "batch": 512,
+      "iterations": 29,
+      "bytesPerItem": 2509,
+      "bytesPerCall": 1284600
+    },
+    {
+      "id": "op/Rectangle.sides",
+      "suite": "op",
+      "name": "Rectangle.sides",
+      "batch": 512,
+      "iterations": 22,
+      "bytesPerItem": 3098.9,
+      "bytesPerCall": 1586600
+    },
+    {
+      "id": "op/Rectangle.polygon",
+      "suite": "op",
+      "name": "Rectangle.polygon",
+      "batch": 512,
+      "iterations": 28,
+      "bytesPerItem": 2510.7,
+      "bytesPerCall": 1285500
+    },
+    {
+      "id": "op/Rectangle.quadrants",
+      "suite": "op",
+      "name": "Rectangle.quadrants",
+      "batch": 512,
+      "iterations": 3,
+      "bytesPerItem": 16193,
+      "bytesPerCall": 8290700
+    },
+    {
+      "id": "op/Rectangle.halves",
+      "suite": "op",
+      "name": "Rectangle.halves",
+      "batch": 512,
+      "iterations": 28,
+      "bytesPerItem": 2384.7,
+      "bytesPerCall": 1221000
+    },
+    {
+      "id": "op/Rectangle.toCircle",
+      "suite": "op",
+      "name": "Rectangle.toCircle",
+      "batch": 512,
+      "iterations": 8,
+      "bytesPerItem": 6311.6,
+      "bytesPerCall": 3231500
+    },
+    {
+      "id": "op/Rectangle.toSquare",
+      "suite": "op",
+      "name": "Rectangle.toSquare",
+      "batch": 512,
+      "iterations": 9,
+      "bytesPerItem": 5582.8,
+      "bytesPerCall": 2858400
+    },
+    {
+      "id": "op/Rectangle.withinBound",
+      "suite": "op",
+      "name": "Rectangle.withinBound",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 52.823,
+      "bytesPerCall": 27045
+    },
+    {
+      "id": "op/Rectangle.hasIntersectRect2D",
+      "suite": "op",
+      "name": "Rectangle.hasIntersectRect2D",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 0.10303,
+      "bytesPerCall": 52.75
+    },
+    {
+      "id": "op/Rectangle.intersectRect2D",
+      "suite": "op",
+      "name": "Rectangle.intersectRect2D",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 1892.1,
+      "bytesPerCall": 968760
+    },
+    {
+      "id": "op/Rectangle.boundingBox",
+      "suite": "op",
+      "name": "Rectangle.boundingBox",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 108.39,
+      "bytesPerCall": 6937.3
+    },
+    {
+      "id": "op/Circle.fromCenter",
+      "suite": "op",
+      "name": "Circle.fromCenter",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 962.13,
+      "bytesPerCall": 492610
+    },
+    {
+      "id": "op/Circle.fromRect",
+      "suite": "op",
+      "name": "Circle.fromRect",
+      "batch": 512,
+      "iterations": 11,
+      "bytesPerItem": 4582.8,
+      "bytesPerCall": 2346400
+    },
+    {
+      "id": "op/Circle.fromTriangle",
+      "suite": "op",
+      "name": "Circle.fromTriangle",
+      "batch": 512,
+      "iterations": 5,
+      "bytesPerItem": 10409,
+      "bytesPerCall": 5329500
+    },
+    {
+      "id": "op/Circle.withinBound",
+      "suite": "op",
+      "name": "Circle.withinBound",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 1022.8,
+      "bytesPerCall": 523660
+    },
+    {
+      "id": "op/Circle.intersectRay2D",
+      "suite": "op",
+      "name": "Circle.intersectRay2D",
+      "batch": 512,
+      "iterations": 12,
+      "bytesPerItem": 4041.3,
+      "bytesPerCall": 2069100
+    },
+    {
+      "id": "op/Circle.intersectLine2D",
+      "suite": "op",
+      "name": "Circle.intersectLine2D",
+      "batch": 512,
+      "iterations": 11,
+      "bytesPerItem": 4531.2,
+      "bytesPerCall": 2320000
+    },
+    {
+      "id": "op/Circle.intersectCircle2D",
+      "suite": "op",
+      "name": "Circle.intersectCircle2D",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 1171.9,
+      "bytesPerCall": 600030
+    },
+    {
+      "id": "op/Circle.intersectRect2D",
+      "suite": "op",
+      "name": "Circle.intersectRect2D",
+      "batch": 512,
+      "iterations": 3,
+      "bytesPerItem": 15198,
+      "bytesPerCall": 7781400
+    },
+    {
+      "id": "op/Circle.toRect",
+      "suite": "op",
+      "name": "Circle.toRect",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 1201.3,
+      "bytesPerCall": 615060
+    },
+    {
+      "id": "op/Circle.toTriangle",
+      "suite": "op",
+      "name": "Circle.toTriangle",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 2410.6,
+      "bytesPerCall": 1234200
+    },
+    {
+      "id": "op/Triangle.medial",
+      "suite": "op",
+      "name": "Triangle.medial",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 3040.3,
+      "bytesPerCall": 1556600
+    },
+    {
+      "id": "op/Triangle.orthocenter",
+      "suite": "op",
+      "name": "Triangle.orthocenter",
+      "batch": 512,
+      "iterations": 6,
+      "bytesPerItem": 9089.4,
+      "bytesPerCall": 4653800
+    },
+    {
+      "id": "op/Triangle.incenter",
+      "suite": "op",
+      "name": "Triangle.incenter",
+      "batch": 512,
+      "iterations": 9,
+      "bytesPerItem": 5602.5,
+      "bytesPerCall": 2868500
+    },
+    {
+      "id": "op/Triangle.incircle",
+      "suite": "op",
+      "name": "Triangle.incircle",
+      "batch": 512,
+      "iterations": 6,
+      "bytesPerItem": 10554,
+      "bytesPerCall": 5403700
+    },
+    {
+      "id": "op/Triangle.circumcenter",
+      "suite": "op",
+      "name": "Triangle.circumcenter",
+      "batch": 512,
+      "iterations": 7,
+      "bytesPerItem": 10029,
+      "bytesPerCall": 5134700
+    },
+    {
+      "id": "op/Triangle.circumcircle",
+      "suite": "op",
+      "name": "Triangle.circumcircle",
+      "batch": 512,
+      "iterations": 6,
+      "bytesPerItem": 11773,
+      "bytesPerCall": 6027600
+    },
+    {
+      "id": "op/Triangle.oppositeSide",
+      "suite": "op",
+      "name": "Triangle.oppositeSide",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 330.23,
+      "bytesPerCall": 169080
+    },
+    {
+      "id": "op/Triangle.altitude",
+      "suite": "op",
+      "name": "Triangle.altitude",
+      "batch": 512,
+      "iterations": 11,
+      "bytesPerItem": 4244,
+      "bytesPerCall": 2172900
+    },
+    {
+      "id": "op/Triangle.fromCenter",
+      "suite": "op",
+      "name": "Triangle.fromCenter",
+      "batch": 512,
+      "iterations": 24,
+      "bytesPerItem": 3413.9,
+      "bytesPerCall": 1747900
+    },
+    {
+      "id": "op/Triangle.fromRect",
+      "suite": "op",
+      "name": "Triangle.fromRect",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 1787.1,
+      "bytesPerCall": 914970
+    },
+    {
+      "id": "op/Triangle.fromCircle",
+      "suite": "op",
+      "name": "Triangle.fromCircle",
+      "batch": 512,
+      "iterations": 18,
+      "bytesPerItem": 2390.3,
+      "bytesPerCall": 1223800
+    },
+    {
+      "id": "op/Polygon.centroid",
+      "suite": "op",
+      "name": "Polygon.centroid",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 795.69,
+      "bytesPerCall": 50924
+    },
+    {
+      "id": "op/Polygon.lines",
+      "suite": "op",
+      "name": "Polygon.lines",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 1805.7,
+      "bytesPerCall": 115560
+    },
+    {
+      "id": "op/Polygon.midpoints",
+      "suite": "op",
+      "name": "Polygon.midpoints",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 6724.4,
+      "bytesPerCall": 430360
+    },
+    {
+      "id": "op/Polygon.adjacentSides",
+      "suite": "op",
+      "name": "Polygon.adjacentSides",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 343.13,
+      "bytesPerCall": 21961
+    },
+    {
+      "id": "op/Polygon.bisector",
+      "suite": "op",
+      "name": "Polygon.bisector",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 2170.8,
+      "bytesPerCall": 138930
+    },
+    {
+      "id": "op/Polygon.perimeter",
+      "suite": "op",
+      "name": "Polygon.perimeter",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 7791.8,
+      "bytesPerCall": 498680
+    },
+    {
+      "id": "op/Polygon.area",
+      "suite": "op",
+      "name": "Polygon.area",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 19.715,
+      "bytesPerCall": 1261.8
+    },
+    {
+      "id": "op/Polygon.network",
+      "suite": "op",
+      "name": "Polygon.network",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 636.13,
+      "bytesPerCall": 40712
+    },
+    {
+      "id": "op/Polygon.toRects",
+      "suite": "op",
+      "name": "Polygon.toRects",
+      "batch": 64,
+      "iterations": 30,
+      "bytesPerItem": 14489,
+      "bytesPerCall": 927310
+    },
+    {
+      "id": "op/Polygon.fromCenter",
+      "suite": "op",
+      "name": "Polygon.fromCenter",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 6096.9,
+      "bytesPerCall": 390200
+    },
+    {
+      "id": "op/Polygon.nearestPt",
+      "suite": "op",
+      "name": "Polygon.nearestPt",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 6446.9,
+      "bytesPerCall": 412600
+    },
+    {
+      "id": "op/Polygon.projectAxis",
+      "suite": "op",
+      "name": "Polygon.projectAxis",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 5562.8,
+      "bytesPerCall": 356020
+    },
+    {
+      "id": "op/Polygon.hasIntersectPoint",
+      "suite": "op",
+      "name": "Polygon.hasIntersectPoint",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 510.83,
+      "bytesPerCall": 261540
+    },
+    {
+      "id": "op/Polygon.hasIntersectCircle",
+      "suite": "op",
+      "name": "Polygon.hasIntersectCircle",
+      "batch": 64,
+      "iterations": 23,
+      "bytesPerItem": 21283,
+      "bytesPerCall": 1362100
+    },
+    {
+      "id": "op/Polygon.hasIntersectPolygon (SAT)",
+      "suite": "op",
+      "name": "Polygon.hasIntersectPolygon (SAT)",
+      "batch": 64,
+      "iterations": 27,
+      "bytesPerItem": 22910,
+      "bytesPerCall": 1466200
+    },
+    {
+      "id": "op/Polygon.intersectPolygon2D",
+      "suite": "op",
+      "name": "Polygon.intersectPolygon2D",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 49860,
+      "bytesPerCall": 3191000
+    },
+    {
+      "id": "op/Polygon.convexHull",
+      "suite": "op",
+      "name": "Polygon.convexHull",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 162.31,
+      "bytesPerCall": 83104
+    },
+    {
+      "id": "op/Polygon.convexHull (pre-sorted)",
+      "suite": "op",
+      "name": "Polygon.convexHull (pre-sorted)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 12.917,
+      "bytesPerCall": 6613.8
+    },
+    {
+      "id": "op/Curve.getSteps",
+      "suite": "op",
+      "name": "Curve.getSteps",
+      "batch": 20,
+      "iterations": 32,
+      "bytesPerItem": 581.44,
+      "bytesPerCall": 11629
+    },
+    {
+      "id": "op/Curve.controlPoints",
+      "suite": "op",
+      "name": "Curve.controlPoints",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 89.316,
+      "bytesPerCall": 5716.3
+    },
+    {
+      "id": "op/Curve.catmullRom",
+      "suite": "op",
+      "name": "Curve.catmullRom",
+      "batch": 1280,
+      "iterations": 11,
+      "bytesPerItem": 3844.2,
+      "bytesPerCall": 4920500
+    },
+    {
+      "id": "op/Curve.cardinal",
+      "suite": "op",
+      "name": "Curve.cardinal",
+      "batch": 1280,
+      "iterations": 11,
+      "bytesPerItem": 3887.7,
+      "bytesPerCall": 4976300
+    },
+    {
+      "id": "op/Curve.bezier",
+      "suite": "op",
+      "name": "Curve.bezier",
+      "batch": 1280,
+      "iterations": 32,
+      "bytesPerItem": 1296.6,
+      "bytesPerCall": 1659700
+    },
+    {
+      "id": "op/Curve.bspline",
+      "suite": "op",
+      "name": "Curve.bspline",
+      "batch": 1280,
+      "iterations": 7,
+      "bytesPerItem": 3716.2,
+      "bytesPerCall": 4756800
+    },
+    {
+      "id": "op/Curve.bspline (tension)",
+      "suite": "op",
+      "name": "Curve.bspline (tension)",
+      "batch": 1280,
+      "iterations": 11,
+      "bytesPerItem": 3782.1,
+      "bytesPerCall": 4841100
+    },
+    {
+      "id": "create/Create.distributeRandom",
+      "suite": "create",
+      "name": "Create.distributeRandom",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 1665.5,
+      "bytesPerCall": 852720
+    },
+    {
+      "id": "create/Create.distributeLinear",
+      "suite": "create",
+      "name": "Create.distributeLinear",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 709.73,
+      "bytesPerCall": 363380
+    },
+    {
+      "id": "create/Create.gridPts",
+      "suite": "create",
+      "name": "Create.gridPts",
+      "batch": 512,
+      "iterations": 26,
+      "bytesPerItem": 2074.1,
+      "bytesPerCall": 1061900
+    },
+    {
+      "id": "create/Create.gridCells",
+      "suite": "create",
+      "name": "Create.gridCells",
+      "batch": 512,
+      "iterations": 14,
+      "bytesPerItem": 3930.4,
+      "bytesPerCall": 2012300
+    },
+    {
+      "id": "create/Create.radialPts",
+      "suite": "create",
+      "name": "Create.radialPts",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 732.85,
+      "bytesPerCall": 375220
+    },
+    {
+      "id": "create/Create.noisePts",
+      "suite": "create",
+      "name": "Create.noisePts",
+      "batch": 512,
+      "iterations": 15,
+      "bytesPerItem": 7824.2,
+      "bytesPerCall": 4006000
+    },
+    {
+      "id": "create/Noise.noise2D",
+      "suite": "create",
+      "name": "Noise.noise2D",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 739.29,
+      "bytesPerCall": 378510
+    },
+    {
+      "id": "create/Noise.seed",
+      "suite": "create",
+      "name": "Noise.seed",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 383.94,
+      "bytesPerCall": 24572
+    },
+    {
+      "id": "create/Create.delaunay + triangulate",
+      "suite": "create",
+      "name": "Create.delaunay + triangulate",
+      "batch": 128,
+      "iterations": 3,
+      "bytesPerItem": 185070,
+      "bytesPerCall": 23689000
+    },
+    {
+      "id": "create/Delaunay.voronoi",
+      "suite": "create",
+      "name": "Delaunay.voronoi",
+      "batch": 128,
+      "iterations": 8,
+      "bytesPerItem": 26367,
+      "bytesPerCall": 3375000
+    },
+    {
+      "id": "create/Delaunay.neighborPts",
+      "suite": "create",
+      "name": "Delaunay.neighborPts",
+      "batch": 128,
+      "iterations": 32,
+      "bytesPerItem": 258.97,
+      "bytesPerCall": 33149
+    },
+    {
+      "id": "create/Delaunay.neighbors",
+      "suite": "create",
+      "name": "Delaunay.neighbors",
+      "batch": 128,
+      "iterations": 32,
+      "bytesPerItem": 192.37,
+      "bytesPerCall": 24623
+    },
+    {
+      "id": "color/Color.from",
+      "suite": "color",
+      "name": "Color.from",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 814.36,
+      "bytesPerCall": 416950
+    },
+    {
+      "id": "color/Color.rgb",
+      "suite": "color",
+      "name": "Color.rgb",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 871.44,
+      "bytesPerCall": 446180
+    },
+    {
+      "id": "color/Color.fromHex",
+      "suite": "color",
+      "name": "Color.fromHex",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 588.85,
+      "bytesPerCall": 301490
+    },
+    {
+      "id": "color/Color.clone",
+      "suite": "color",
+      "name": "Color.clone",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 627.83,
+      "bytesPerCall": 321450
+    },
+    {
+      "id": "color/Color.maxValues",
+      "suite": "color",
+      "name": "Color.maxValues",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 1372.3,
+      "bytesPerCall": 87827
+    },
+    {
+      "id": "color/Color.HSBtoRGB",
+      "suite": "color",
+      "name": "Color.HSBtoRGB",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 1607.8,
+      "bytesPerCall": 823210
+    },
+    {
+      "id": "color/Color.HSLtoRGB",
+      "suite": "color",
+      "name": "Color.HSLtoRGB",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 1342.1,
+      "bytesPerCall": 687150
+    },
+    {
+      "id": "color/Color.LABtoLCH",
+      "suite": "color",
+      "name": "Color.LABtoLCH",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 921.57,
+      "bytesPerCall": 471840
+    },
+    {
+      "id": "color/Color.LABtoRGB",
+      "suite": "color",
+      "name": "Color.LABtoRGB",
+      "batch": 512,
+      "iterations": 25,
+      "bytesPerItem": 3090.9,
+      "bytesPerCall": 1582500
+    },
+    {
+      "id": "color/Color.LABtoXYZ",
+      "suite": "color",
+      "name": "Color.LABtoXYZ",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 839.91,
+      "bytesPerCall": 430040
+    },
+    {
+      "id": "color/Color.LCHtoLAB",
+      "suite": "color",
+      "name": "Color.LCHtoLAB",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 898.31,
+      "bytesPerCall": 459940
+    },
+    {
+      "id": "color/Color.LCHtoRGB",
+      "suite": "color",
+      "name": "Color.LCHtoRGB",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 3093.1,
+      "bytesPerCall": 1583700
+    },
+    {
+      "id": "color/Color.LUVtoRGB",
+      "suite": "color",
+      "name": "Color.LUVtoRGB",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 2929.5,
+      "bytesPerCall": 1499900
+    },
+    {
+      "id": "color/Color.LUVtoXYZ",
+      "suite": "color",
+      "name": "Color.LUVtoXYZ",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 919.01,
+      "bytesPerCall": 470530
+    },
+    {
+      "id": "color/Color.RGBtoHSB",
+      "suite": "color",
+      "name": "Color.RGBtoHSB",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 1749.2,
+      "bytesPerCall": 895600
+    },
+    {
+      "id": "color/Color.RGBtoHSL",
+      "suite": "color",
+      "name": "Color.RGBtoHSL",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 1796.9,
+      "bytesPerCall": 920000
+    },
+    {
+      "id": "color/Color.RGBtoLAB",
+      "suite": "color",
+      "name": "Color.RGBtoLAB",
+      "batch": 512,
+      "iterations": 20,
+      "bytesPerItem": 3699.7,
+      "bytesPerCall": 1894200
+    },
+    {
+      "id": "color/Color.RGBtoLCH",
+      "suite": "color",
+      "name": "Color.RGBtoLCH",
+      "batch": 512,
+      "iterations": 23,
+      "bytesPerItem": 4065.5,
+      "bytesPerCall": 2081500
+    },
+    {
+      "id": "color/Color.RGBtoLUV",
+      "suite": "color",
+      "name": "Color.RGBtoLUV",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 2847.8,
+      "bytesPerCall": 1458100
+    },
+    {
+      "id": "color/Color.RGBtoXYZ",
+      "suite": "color",
+      "name": "Color.RGBtoXYZ",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 1415.6,
+      "bytesPerCall": 724780
+    },
+    {
+      "id": "color/Color.XYZtoLAB",
+      "suite": "color",
+      "name": "Color.XYZtoLAB",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 1785.4,
+      "bytesPerCall": 914130
+    },
+    {
+      "id": "color/Color.XYZtoLUV",
+      "suite": "color",
+      "name": "Color.XYZtoLUV",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 889.88,
+      "bytesPerCall": 455620
+    },
+    {
+      "id": "color/Color.XYZtoRGB",
+      "suite": "color",
+      "name": "Color.XYZtoRGB",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 1453.2,
+      "bytesPerCall": 744060
+    },
+    {
+      "id": "color/Color.toMode (no conversion)",
+      "suite": "color",
+      "name": "Color.toMode (no conversion)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 27.73,
+      "bytesPerCall": 14198
+    },
+    {
+      "id": "color/Color.toMode (converting)",
+      "suite": "color",
+      "name": "Color.toMode (converting)",
+      "batch": 512,
+      "iterations": 18,
+      "bytesPerItem": 4372.4,
+      "bytesPerCall": 2238700
+    },
+    {
+      "id": "color/Color.normalize",
+      "suite": "color",
+      "name": "Color.normalize",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 27.441,
+      "bytesPerCall": 14050
+    },
+    {
+      "id": "color/Color.toString(\"hex\")",
+      "suite": "color",
+      "name": "Color.toString(\"hex\")",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 254.93,
+      "bytesPerCall": 16316
+    },
+    {
+      "id": "color/Color.toString(\"rgb\")",
+      "suite": "color",
+      "name": "Color.toString(\"rgb\")",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 197.26,
+      "bytesPerCall": 12625
+    },
+    {
+      "id": "color/Color.toString(\"rgba\")",
+      "suite": "color",
+      "name": "Color.toString(\"rgba\")",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 257.23,
+      "bytesPerCall": 16463
+    },
+    {
+      "id": "color/Color.toString(\"mode\")",
+      "suite": "color",
+      "name": "Color.toString(\"mode\")",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 327.61,
+      "bytesPerCall": 20967
+    },
+    {
+      "id": "physics/World.update (128 particles)",
+      "suite": "physics",
+      "name": "World.update (128 particles)",
+      "batch": 128,
+      "iterations": 3,
+      "bytesPerItem": 55932,
+      "bytesPerCall": 7159300
+    },
+    {
+      "id": "physics/World.update (128 particles, no collision radius)",
+      "suite": "physics",
+      "name": "World.update (128 particles, no collision radius)",
+      "batch": 128,
+      "iterations": 4,
+      "bytesPerItem": 54705,
+      "bytesPerCall": 7002200
+    },
+    {
+      "id": "physics/World.update (16 bodies)",
+      "suite": "physics",
+      "name": "World.update (16 bodies)",
+      "batch": 128,
+      "iterations": 3,
+      "bytesPerItem": 205840,
+      "bytesPerCall": 26347000
+    },
+    {
+      "id": "physics/World.add / removeParticle",
+      "suite": "physics",
+      "name": "World.add / removeParticle",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 1724.3,
+      "bytesPerCall": 110360
+    },
+    {
+      "id": "physics/Particle.verlet",
+      "suite": "physics",
+      "name": "Particle.verlet",
+      "batch": 512,
+      "iterations": 22,
+      "bytesPerItem": 2541.2,
+      "bytesPerCall": 1301100
+    },
+    {
+      "id": "physics/Particle.collide",
+      "suite": "physics",
+      "name": "Particle.collide",
+      "batch": 512,
+      "iterations": 19,
+      "bytesPerItem": 2554.5,
+      "bytesPerCall": 1307900
+    },
+    {
+      "id": "physics/Particle.hit",
+      "suite": "physics",
+      "name": "Particle.hit",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 1400.1,
+      "bytesPerCall": 716830
+    },
+    {
+      "id": "physics/World.edgeConstraint",
+      "suite": "physics",
+      "name": "World.edgeConstraint",
+      "batch": 512,
+      "iterations": 12,
+      "bytesPerItem": 3404.4,
+      "bytesPerCall": 1743100
+    },
+    {
+      "id": "physics/World.boundConstraint",
+      "suite": "physics",
+      "name": "World.boundConstraint",
+      "batch": 512,
+      "iterations": 9,
+      "bytesPerItem": 5193.2,
+      "bytesPerCall": 2658900
+    },
+    {
+      "id": "physics/Body.fromGroup (auto-linked)",
+      "suite": "physics",
+      "name": "Body.fromGroup (auto-linked)",
+      "batch": 64,
+      "iterations": 12,
+      "bytesPerItem": 36469,
+      "bytesPerCall": 2334000
+    },
+    {
+      "id": "physics/Body.processEdges",
+      "suite": "physics",
+      "name": "Body.processEdges",
+      "batch": 512,
+      "iterations": 6,
+      "bytesPerItem": 9137.3,
+      "bytesPerCall": 4678300
+    },
+    {
+      "id": "physics/Body.processBody",
+      "suite": "physics",
+      "name": "Body.processBody",
+      "batch": 64,
+      "iterations": 8,
+      "bytesPerItem": 61634,
+      "bytesPerCall": 3944600
+    },
+    {
+      "id": "physics/Body.processParticle",
+      "suite": "physics",
+      "name": "Body.processParticle",
+      "batch": 64,
+      "iterations": 10,
+      "bytesPerItem": 46742,
+      "bytesPerCall": 2991500
+    },
+    {
+      "id": "physics/Body.linksToLines",
+      "suite": "physics",
+      "name": "Body.linksToLines",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 230.28,
+      "bytesPerCall": 117900
+    },
+    {
+      "id": "util/Util.getArgs (numbers)",
+      "suite": "util",
+      "name": "Util.getArgs (numbers)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 224.45,
+      "bytesPerCall": 114920
+    },
+    {
+      "id": "util/Util.getArgs (array)",
+      "suite": "util",
+      "name": "Util.getArgs (array)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 169.25,
+      "bytesPerCall": 86659
+    },
+    {
+      "id": "util/Util.getArgs (Pt)",
+      "suite": "util",
+      "name": "Util.getArgs (Pt)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 230.45,
+      "bytesPerCall": 117990
+    },
+    {
+      "id": "util/Util.getArgs (object)",
+      "suite": "util",
+      "name": "Util.getArgs (object)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 288.26,
+      "bytesPerCall": 147590
+    },
+    {
+      "id": "util/Util.split",
+      "suite": "util",
+      "name": "Util.split",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 103.77,
+      "bytesPerCall": 53129
+    },
+    {
+      "id": "util/Util.flatten",
+      "suite": "util",
+      "name": "Util.flatten",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 25.917,
+      "bytesPerCall": 13270
+    },
+    {
+      "id": "util/Util.combine",
+      "suite": "util",
+      "name": "Util.combine",
+      "batch": 4096,
+      "iterations": 32,
+      "bytesPerItem": 25.239,
+      "bytesPerCall": 103380
+    },
+    {
+      "id": "util/Util.zip",
+      "suite": "util",
+      "name": "Util.zip",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 205.93,
+      "bytesPerCall": 105430
+    },
+    {
+      "id": "util/Util.iterToArray (array)",
+      "suite": "util",
+      "name": "Util.iterToArray (array)",
+      "batch": 1,
+      "iterations": 32,
+      "bytesPerItem": 17,
+      "bytesPerCall": 17
+    },
+    {
+      "id": "util/Util.iterToArray (iterable)",
+      "suite": "util",
+      "name": "Util.iterToArray (iterable)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 8.1934,
+      "bytesPerCall": 4195
+    },
+    {
+      "id": "util/Util.arrayCheck",
+      "suite": "util",
+      "name": "Util.arrayCheck",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 0.063965,
+      "bytesPerCall": 32.75
+    },
+    {
+      "id": "util/Util.forRange",
+      "suite": "util",
+      "name": "Util.forRange",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 469.05,
+      "bytesPerCall": 240150
+    },
+    {
+      "id": "util/Util.stepper",
+      "suite": "util",
+      "name": "Util.stepper",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 0.52295,
+      "bytesPerCall": 267.75
+    },
+    {
+      "id": "util/Util.uniqueId",
+      "suite": "util",
+      "name": "Util.uniqueId",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 122.14,
+      "bytesPerCall": 7817.3
+    },
+    {
+      "id": "util/Util.randomInt",
+      "suite": "util",
+      "name": "Util.randomInt",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 0.104,
+      "bytesPerCall": 53.25
+    },
+    {
+      "id": "util/Num.seed then draw",
+      "suite": "util",
+      "name": "Num.seed then draw",
+      "batch": 64,
+      "iterations": 10,
+      "bytesPerItem": 25650,
+      "bytesPerCall": 1641600
+    },
+    {
+      "id": "util/Group.fromArray via Util paths",
+      "suite": "util",
+      "name": "Group.fromArray via Util paths",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 466.15,
+      "bytesPerCall": 238670
+    },
+    {
+      "id": "typography/Typography.textWidthEstimator (build)",
+      "suite": "typography",
+      "name": "Typography.textWidthEstimator (build)",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 948.37,
+      "bytesPerCall": 60696
+    },
+    {
+      "id": "typography/Typography.textWidthEstimator (call)",
+      "suite": "typography",
+      "name": "Typography.textWidthEstimator (call)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 32.203,
+      "bytesPerCall": 16488
+    },
+    {
+      "id": "typography/Typography.truncate",
+      "suite": "typography",
+      "name": "Typography.truncate",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 123.81,
+      "bytesPerCall": 63389
+    },
+    {
+      "id": "typography/Typography.fontSizeToBox (build)",
+      "suite": "typography",
+      "name": "Typography.fontSizeToBox (build)",
+      "batch": 64,
+      "iterations": 32,
+      "bytesPerItem": 8055.7,
+      "bytesPerCall": 515570
+    },
+    {
+      "id": "typography/Typography.fontSizeToBox (call)",
+      "suite": "typography",
+      "name": "Typography.fontSizeToBox (call)",
+      "batch": 512,
+      "iterations": 12,
+      "bytesPerItem": 4412.5,
+      "bytesPerCall": 2259200
+    },
+    {
+      "id": "typography/Typography.fontSizeToThreshold (call)",
+      "suite": "typography",
+      "name": "Typography.fontSizeToThreshold (call)",
+      "batch": 512,
+      "iterations": 32,
+      "bytesPerItem": 38.075,
+      "bytesPerCall": 19495
+    },
+    {
+      "id": "scenarios/particle field frame (300 particles)",
+      "suite": "scenarios",
+      "name": "particle field frame (300 particles)",
+      "batch": 300,
+      "iterations": 3,
+      "bytesPerItem": 120710,
+      "bytesPerCall": 36212000
+    },
+    {
+      "id": "scenarios/delaunay + voronoi (500 points)",
+      "suite": "scenarios",
+      "name": "delaunay + voronoi (500 points)",
+      "batch": 500,
+      "iterations": 3,
+      "bytesPerItem": 505040,
+      "bytesPerCall": 252520000
+    },
+    {
+      "id": "scenarios/curve smoothing (200 points x 20 steps)",
+      "suite": "scenarios",
+      "name": "curve smoothing (200 points x 20 steps)",
+      "batch": 4000,
+      "iterations": 4,
+      "bytesPerItem": 3892.9,
+      "bytesPerCall": 15572000
+    },
+    {
+      "id": "scenarios/polygon collision sweep (100 polygons)",
+      "suite": "scenarios",
+      "name": "polygon collision sweep (100 polygons)",
+      "batch": 4950,
+      "iterations": 3,
+      "bytesPerItem": 17390,
+      "bytesPerCall": 86083000
+    },
+    {
+      "id": "scenarios/colour gradient sweep (2000 stops)",
+      "suite": "scenarios",
+      "name": "colour gradient sweep (2000 stops)",
+      "batch": 2000,
+      "iterations": 7,
+      "bytesPerItem": 4209.6,
+      "bytesPerCall": 8419300
+    },
+    {
+      "id": "scenarios/transform pipeline (4096 points)",
+      "suite": "scenarios",
+      "name": "transform pipeline (4096 points)",
+      "batch": 4096,
+      "iterations": 3,
+      "bytesPerItem": 4672.1,
+      "bytesPerCall": 19137000
+    },
+    {
+      "id": "scenarios/grid + noise field (4096 points)",
+      "suite": "scenarios",
+      "name": "grid + noise field (4096 points)",
+      "batch": 4096,
+      "iterations": 3,
+      "bytesPerItem": 7945.2,
+      "bytesPerCall": 32543000
+    },
+    {
+      "id": "scenarios/nearest-point query (512 probes)",
+      "suite": "scenarios",
+      "name": "nearest-point query (512 probes)",
+      "batch": 512,
+      "iterations": 3,
+      "bytesPerItem": 50689,
+      "bytesPerCall": 25953000
+    }
+  ]
+}

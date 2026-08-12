@@ -42,6 +42,7 @@ export default tseslint.config(
   },
   {
     files: [
+      "bench/**/*.mjs",
       "scripts/**/*.mjs",
       "test/integrations/**/*.mjs",
       "eslint.config.mjs",

@@ -2592,6 +2592,12 @@ var Space = class {
 		this._time.end = t;
 		return this;
 	}
+	_cancelAnimation() {
+		if (this._animID !== -1) cancelAnimationFrame(this._animID);
+		this._animID = -1;
+		this._playing = false;
+		return this;
+	}
 	playOnce(duration = 0) {
 		this.play();
 		this.stop(duration);
@@ -2637,6 +2643,18 @@ var MultiTouchSpace = class extends Space {
 		this._hasMouse = false;
 		this._hasTouch = false;
 		this._hasKeyboard = false;
+		this._touchPassive = false;
+		this._mouseDownBind = this._mouseDown.bind(this);
+		this._mouseUpBind = this._mouseUp.bind(this);
+		this._mouseOverBind = this._mouseOver.bind(this);
+		this._mouseOutBind = this._mouseOut.bind(this);
+		this._mouseMoveBind = this._mouseMove.bind(this);
+		this._mouseClickBind = this._mouseClick.bind(this);
+		this._contextMenuBind = this._contextMenu.bind(this);
+		this._touchStartBind = this._touchStart.bind(this);
+		this._touchMoveBind = this._touchMove.bind(this);
+		this._keyDownBind = this._keyDown.bind(this);
+		this._keyUpBind = this._keyUp.bind(this);
 	}
 	get pointer() {
 		const p = this._pointer.clone();
@@ -2657,61 +2675,81 @@ var MultiTouchSpace = class extends Space {
 	}
 	bindMouse(bind = true, customTarget) {
 		if (bind) {
-			this._mouseDown = this._mouseDown.bind(this);
-			this._mouseUp = this._mouseUp.bind(this);
-			this._mouseOver = this._mouseOver.bind(this);
-			this._mouseOut = this._mouseOut.bind(this);
-			this._mouseMove = this._mouseMove.bind(this);
-			this._mouseClick = this._mouseClick.bind(this);
-			this._contextMenu = this._contextMenu.bind(this);
-			this.bindCanvas("pointerdown", this._mouseDown, {}, customTarget);
-			this.bindCanvas("pointerup", this._mouseUp, {}, customTarget);
-			this.bindCanvas("pointerover", this._mouseOver, {}, customTarget);
-			this.bindCanvas("pointerout", this._mouseOut, {}, customTarget);
-			this.bindCanvas("pointermove", this._mouseMove, {}, customTarget);
-			this.bindCanvas("click", this._mouseClick, {}, customTarget);
-			this.bindCanvas("contextmenu", this._contextMenu, {}, customTarget);
+			if (this._hasMouse) {
+				if (this._mouseTarget === customTarget) return this;
+				this.bindMouse(false);
+			}
+			this._mouseTarget = customTarget;
+			this.bindCanvas("pointerdown", this._mouseDownBind, {}, customTarget);
+			this.bindCanvas("pointerup", this._mouseUpBind, {}, customTarget);
+			this.bindCanvas("pointerover", this._mouseOverBind, {}, customTarget);
+			this.bindCanvas("pointerout", this._mouseOutBind, {}, customTarget);
+			this.bindCanvas("pointermove", this._mouseMoveBind, {}, customTarget);
+			this.bindCanvas("click", this._mouseClickBind, {}, customTarget);
+			this.bindCanvas("contextmenu", this._contextMenuBind, {}, customTarget);
 			this._hasMouse = true;
-		} else {
-			this.unbindCanvas("pointerdown", this._mouseDown, {}, customTarget);
-			this.unbindCanvas("pointerup", this._mouseUp, {}, customTarget);
-			this.unbindCanvas("pointerover", this._mouseOver, {}, customTarget);
-			this.unbindCanvas("pointerout", this._mouseOut, {}, customTarget);
-			this.unbindCanvas("pointermove", this._mouseMove, {}, customTarget);
-			this.unbindCanvas("click", this._mouseClick, {}, customTarget);
-			this.unbindCanvas("contextmenu", this._contextMenu, {}, customTarget);
+		} else if (this._hasMouse) {
+			const target = this._mouseTarget;
+			this.unbindCanvas("pointerdown", this._mouseDownBind, {}, target);
+			this.unbindCanvas("pointerup", this._mouseUpBind, {}, target);
+			this.unbindCanvas("pointerover", this._mouseOverBind, {}, target);
+			this.unbindCanvas("pointerout", this._mouseOutBind, {}, target);
+			this.unbindCanvas("pointermove", this._mouseMoveBind, {}, target);
+			this.unbindCanvas("click", this._mouseClickBind, {}, target);
+			this.unbindCanvas("contextmenu", this._contextMenuBind, {}, target);
 			this._hasMouse = false;
+			this._mouseTarget = void 0;
 		}
 		return this;
 	}
 	bindTouch(bind = true, passive = false, customTarget) {
 		if (bind) {
-			this.bindCanvas("touchstart", this._touchStart.bind(this), { passive }, customTarget);
-			this.bindCanvas("touchend", this._mouseUp.bind(this), {}, customTarget);
-			this.bindCanvas("touchmove", this._touchMove.bind(this), { passive }, customTarget);
-			this.bindCanvas("touchcancel", this._mouseOut.bind(this), {}, customTarget);
+			if (this._hasTouch) {
+				if (this._touchTarget === customTarget && this._touchPassive === passive) return this;
+				this.bindTouch(false);
+			}
+			this._touchTarget = customTarget;
+			this._touchPassive = passive;
+			this.bindCanvas("touchstart", this._touchStartBind, { passive }, customTarget);
+			this.bindCanvas("touchend", this._mouseUpBind, {}, customTarget);
+			this.bindCanvas("touchmove", this._touchMoveBind, { passive }, customTarget);
+			this.bindCanvas("touchcancel", this._mouseOutBind, {}, customTarget);
 			this._hasTouch = true;
-		} else {
-			this.unbindCanvas("touchstart", this._touchStart.bind(this), { passive }, customTarget);
-			this.unbindCanvas("touchend", this._mouseUp.bind(this), {}, customTarget);
-			this.unbindCanvas("touchmove", this._touchMove.bind(this), { passive }, customTarget);
-			this.unbindCanvas("touchcancel", this._mouseOut.bind(this), {}, customTarget);
+		} else if (this._hasTouch) {
+			const target = this._touchTarget;
+			const options = { passive: this._touchPassive };
+			this.unbindCanvas("touchstart", this._touchStartBind, options, target);
+			this.unbindCanvas("touchend", this._mouseUpBind, {}, target);
+			this.unbindCanvas("touchmove", this._touchMoveBind, options, target);
+			this.unbindCanvas("touchcancel", this._mouseOutBind, {}, target);
 			this._hasTouch = false;
+			this._touchTarget = void 0;
 		}
 		return this;
 	}
-	bindKeyboard(bind = true) {
+	bindKeyboard(bind = true, customTarget) {
 		if (bind) {
-			this._keyDownBind = this._keyDown.bind(this);
-			this._keyUpBind = this._keyUp.bind(this);
-			this.bindDoc("keydown", this._keyDownBind, {});
-			this.bindDoc("keyup", this._keyUpBind, {});
+			const target = customTarget || document;
+			if (this._hasKeyboard) {
+				if (this._keyboardTarget === target) return this;
+				this.bindKeyboard(false);
+			}
+			target.addEventListener("keydown", this._keyDownBind, {});
+			target.addEventListener("keyup", this._keyUpBind, {});
+			this._keyboardTarget = target;
 			this._hasKeyboard = true;
-		} else {
-			this.unbindDoc("keydown", this._keyDownBind, {});
-			this.unbindDoc("keyup", this._keyUpBind, {});
+		} else if (this._hasKeyboard) {
+			this._keyboardTarget.removeEventListener("keydown", this._keyDownBind, {});
+			this._keyboardTarget.removeEventListener("keyup", this._keyUpBind, {});
+			this._keyboardTarget = void 0;
 			this._hasKeyboard = false;
 		}
+		return this;
+	}
+	_unbindAll() {
+		this.bindMouse(false);
+		this.bindTouch(false);
+		this.bindKeyboard(false);
 		return this;
 	}
 	touchesToPoints(evt, which = "touches") {
@@ -3175,6 +3213,7 @@ var CanvasSpace = class extends MultiTouchSpace {
 		this._offscreen = false;
 		this._autoResize = true;
 		this._initialResize = false;
+		this._disposed = false;
 		let _selector = null;
 		let _existed = false;
 		this.id = Util.uniqueId();
@@ -3203,20 +3242,22 @@ var CanvasSpace = class extends MultiTouchSpace {
 		}
 		this._ctx = this._canvas.getContext("2d");
 		if (!_existed) {
-			const observer = new MutationObserver((mutations) => {
+			this._readyObserver = new MutationObserver((mutations) => {
 				mutations.forEach((mutation) => {
 					if (mutation.type === "childList" && mutation.addedNodes.length) {
 						for (let node of mutation.addedNodes) if (node === this._canvas) {
+							var _this$_readyObserver;
 							this._ready(callback);
-							observer.disconnect();
+							(_this$_readyObserver = this._readyObserver) === null || _this$_readyObserver === void 0 || _this$_readyObserver.disconnect();
+							this._readyObserver = void 0;
 							return;
 						}
 					}
 				});
 			});
-			observer.observe(this._container, { childList: true });
+			this._readyObserver.observe(this._container, { childList: true });
 			this._container.appendChild(this._canvas);
-		} else setTimeout(this._ready.bind(this, callback), 100);
+		} else this._readyTimer = window.setTimeout(() => this._ready(callback), 100);
 	}
 	_createElement(elem = "div", id) {
 		const d = document.createElement(elem);
@@ -3224,6 +3265,8 @@ var CanvasSpace = class extends MultiTouchSpace {
 		return d;
 	}
 	_ready(callback) {
+		if (this._disposed) return;
+		this._readyTimer = void 0;
 		if (!this._container) throw new Error(`Cannot initiate #${this.id} element`);
 		this._isReady = true;
 		this._resizeHandler(null);
@@ -3252,13 +3295,18 @@ var CanvasSpace = class extends MultiTouchSpace {
 		return this;
 	}
 	set autoResize(auto) {
+		if (this._autoResize === auto && (!auto || this._resizeObserver)) return;
+		if (this._resizeObserver) {
+			this._resizeObserver.disconnect();
+			this._resizeObserver = void 0;
+		}
 		this._autoResize = auto;
 		if (auto) {
 			this._resizeObserver = new ResizeObserver((entries) => {
 				this._resizeHandler(null);
 			});
 			this._resizeObserver.observe(this._container);
-		} else if (this._resizeObserver) this._resizeObserver.disconnect();
+		}
 	}
 	get autoResize() {
 		return this._autoResize;
@@ -3361,9 +3409,24 @@ var CanvasSpace = class extends MultiTouchSpace {
 		}
 	}
 	dispose() {
-		if (this._resizeObserver) this._resizeObserver.disconnect();
-		this.stop();
+		if (this._disposed) return this;
+		this._disposed = true;
+		if (this._readyTimer !== void 0) {
+			window.clearTimeout(this._readyTimer);
+			this._readyTimer = void 0;
+		}
+		if (this._readyObserver) {
+			this._readyObserver.disconnect();
+			this._readyObserver = void 0;
+		}
+		if (this._resizeObserver) {
+			this._resizeObserver.disconnect();
+			this._resizeObserver = void 0;
+		}
+		this._unbindAll();
+		this._cancelAnimation();
 		this.removeAll();
+		this._isReady = false;
 		return this;
 	}
 	recorder(downloadOrCallback, filetype = "webm", bitrate = 15e6) {

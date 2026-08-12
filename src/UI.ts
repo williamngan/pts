@@ -37,7 +37,11 @@ export const UIPointerActions = {
   pointerup: "pointerup",
   contextmenu: "contextmenu",
   all: "all",
-};
+} as const;
+
+/** A known pointer, touch, or keyboard action dispatched by a Pts space. */
+export type UIPointerAction =
+  (typeof UIPointerActions)[keyof typeof UIPointerActions];
 
 /**
  * **[Experimental]** An abstract class that represents an UI element. It wraps a [`Group`](#link) and supports UI event handling.

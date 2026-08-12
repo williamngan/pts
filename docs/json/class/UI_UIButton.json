@@ -3,12 +3,12 @@
   "source": [
     [
       "src/UI.ts",
-      327,
+      331,
       13
     ]
   ],
   "kind": "Class",
-  "id": 7442,
+  "id": 7440,
   "comment": "**[Experimental]** A simple button that extends [`UI`](#link) to track clicks and hovers.",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "src/UI.ts",
-          337,
+          341,
           2
         ]
       ],
-      "id": 7488,
+      "id": 7486,
       "flags": {},
       "overrides": "UI.__constructor",
       "inherits": false,
@@ -66,16 +66,16 @@
       "source": [
         [
           "src/UI.ts",
-          129,
+          133,
           6
         ],
         [
           "src/UI.ts",
-          132,
+          136,
           6
         ]
       ],
-      "id": 7534,
+      "id": 7532,
       "flags": {},
       "overrides": false,
       "inherits": "UI.group",
@@ -98,16 +98,16 @@
       "source": [
         [
           "src/UI.ts",
-          119,
+          123,
           6
         ],
         [
           "src/UI.ts",
-          122,
+          126,
           6
         ]
       ],
-      "id": 7530,
+      "id": 7528,
       "flags": {},
       "overrides": false,
       "inherits": "UI.id",
@@ -130,16 +130,16 @@
       "source": [
         [
           "src/UI.ts",
-          139,
+          143,
           6
         ],
         [
           "src/UI.ts",
-          142,
+          146,
           6
         ]
       ],
-      "id": 7538,
+      "id": 7536,
       "flags": {},
       "overrides": false,
       "inherits": "UI.shape",
@@ -164,11 +164,11 @@
       "source": [
         [
           "src/UI.ts",
-          215,
+          219,
           12
         ]
       ],
-      "id": 7559,
+      "id": 7557,
       "flags": {
         "isProtected": true
       },
@@ -196,11 +196,11 @@
       "source": [
         [
           "src/UI.ts",
-          194,
+          198,
           2
         ]
       ],
-      "id": 7554,
+      "id": 7552,
       "flags": {},
       "overrides": false,
       "inherits": "UI.listen",
@@ -238,11 +238,11 @@
       "source": [
         [
           "src/UI.ts",
-          178,
+          182,
           2
         ]
       ],
-      "id": 7550,
+      "id": 7548,
       "flags": {},
       "overrides": false,
       "inherits": "UI.off",
@@ -274,11 +274,11 @@
       "source": [
         [
           "src/UI.ts",
-          398,
+          402,
           2
         ]
       ],
-      "id": 7501,
+      "id": 7499,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -304,11 +304,11 @@
       "source": [
         [
           "src/UI.ts",
-          416,
+          420,
           2
         ]
       ],
-      "id": 7507,
+      "id": 7505,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -334,11 +334,11 @@
       "source": [
         [
           "src/UI.ts",
-          439,
+          443,
           2
         ]
       ],
-      "id": 7514,
+      "id": 7512,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -370,11 +370,11 @@
       "source": [
         [
           "src/UI.ts",
-          167,
+          171,
           2
         ]
       ],
-      "id": 7546,
+      "id": 7544,
       "flags": {},
       "overrides": false,
       "inherits": "UI.on",
@@ -406,11 +406,11 @@
       "source": [
         [
           "src/UI.ts",
-          389,
+          393,
           2
         ]
       ],
-      "id": 7498,
+      "id": 7496,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -436,11 +436,11 @@
       "source": [
         [
           "src/UI.ts",
-          407,
+          411,
           2
         ]
       ],
-      "id": 7504,
+      "id": 7502,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -466,11 +466,11 @@
       "source": [
         [
           "src/UI.ts",
-          426,
+          430,
           2
         ]
       ],
-      "id": 7510,
+      "id": 7508,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -502,11 +502,11 @@
       "source": [
         [
           "src/UI.ts",
-          250,
+          254,
           2
         ]
       ],
-      "id": 7565,
+      "id": 7563,
       "flags": {},
       "overrides": false,
       "inherits": "UI.render",
@@ -532,11 +532,11 @@
       "source": [
         [
           "src/UI.ts",
-          152,
+          156,
           2
         ]
       ],
-      "id": 7542,
+      "id": 7540,
       "flags": {},
       "overrides": false,
       "inherits": "UI.state",
@@ -568,11 +568,11 @@
       "source": [
         [
           "src/UI.ts",
-          257,
+          261,
           2
         ]
       ],
-      "id": 7575,
+      "id": 7573,
       "flags": {},
       "overrides": false,
       "inherits": "UI.toString",
@@ -591,11 +591,11 @@
       "source": [
         [
           "src/UI.ts",
-          225,
+          229,
           12
         ]
       ],
-      "id": 7562,
+      "id": 7560,
       "flags": {
         "isProtected": true
       },
@@ -623,11 +623,11 @@
       "source": [
         [
           "src/UI.ts",
-          93,
+          97,
           9
         ]
       ],
-      "id": 7450,
+      "id": 7448,
       "flags": {
         "isStatic": true
       },
@@ -667,11 +667,11 @@
       "source": [
         [
           "src/UI.ts",
-          103,
+          107,
           9
         ]
       ],
-      "id": 7456,
+      "id": 7454,
       "flags": {
         "isStatic": true
       },
@@ -711,11 +711,11 @@
       "source": [
         [
           "src/UI.ts",
-          83,
+          87,
           9
         ]
       ],
-      "id": 7444,
+      "id": 7442,
       "flags": {
         "isStatic": true
       },
@@ -755,11 +755,11 @@
       "source": [
         [
           "src/UI.ts",
-          112,
+          116,
           9
         ]
       ],
-      "id": 7462,
+      "id": 7460,
       "flags": {
         "isStatic": true
       },
@@ -799,11 +799,11 @@
       "source": [
         [
           "src/UI.ts",
-          240,
+          244,
           9
         ]
       ],
-      "id": 7467,
+      "id": 7465,
       "flags": {
         "isStatic": true
       },

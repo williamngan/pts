@@ -37,6 +37,10 @@ export class CanvasSpace extends MultiTouchSpace {
   protected _autoResize = true;
   protected _initialResize = false;
 
+  private _readyObserver: MutationObserver;
+  private _readyTimer: number;
+  private _disposed = false;
+
   /**
    * Create a CanvasSpace which represents a HTML Canvas Space
    * @param elem Specify an element by its "id" attribute as string, or by the element object itself. An element can be an existing `<canvas>`, or a `<div>` container in which a new `<canvas>` will be created. If left empty, a `<div id="pt_container"><canvas id="pt" /></div>` will be added to DOM. Use css to customize its appearance if needed.
@@ -92,13 +96,14 @@ export class CanvasSpace extends MultiTouchSpace {
 
     // if we created the canvas, add it to the container and observe mutation for readiness
     if (!_existed) {
-      const observer = new MutationObserver((mutations) => {
+      this._readyObserver = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
           if (mutation.type === "childList" && mutation.addedNodes.length) {
             for (let node of mutation.addedNodes) {
               if (node === this._canvas) {
                 this._ready(callback);
-                observer.disconnect();
+                this._readyObserver?.disconnect();
+                this._readyObserver = undefined;
                 return;
               }
             }
@@ -106,11 +111,11 @@ export class CanvasSpace extends MultiTouchSpace {
         });
       });
 
-      observer.observe(this._container, { childList: true });
+      this._readyObserver.observe(this._container, { childList: true });
       this._container.appendChild(this._canvas);
     } else {
       // Wait one turn for .setup() to be called before firing ready event
-      setTimeout(this._ready.bind(this, callback), 100);
+      this._readyTimer = window.setTimeout(() => this._ready(callback), 100);
     }
   }
 
@@ -130,6 +135,9 @@ export class CanvasSpace extends MultiTouchSpace {
    * @param callback
    */
   private _ready(callback: Function) {
+    if (this._disposed) return;
+
+    this._readyTimer = undefined;
     if (!this._container)
       throw new Error(`Cannot initiate #${this.id} element`);
 
@@ -191,6 +199,13 @@ export class CanvasSpace extends MultiTouchSpace {
    * @param auto a boolean value indicating if auto size is set
    */
   set autoResize(auto) {
+    if (this._autoResize === auto && (!auto || this._resizeObserver)) return;
+
+    if (this._resizeObserver) {
+      this._resizeObserver.disconnect();
+      this._resizeObserver = undefined;
+    }
+
     this._autoResize = auto;
 
     if (auto) {
@@ -198,8 +213,6 @@ export class CanvasSpace extends MultiTouchSpace {
         this._resizeHandler(null);
       });
       this._resizeObserver.observe(this._container);
-    } else {
-      if (this._resizeObserver) this._resizeObserver.disconnect();
     }
   }
   get autoResize(): boolean {
@@ -433,13 +446,26 @@ export class CanvasSpace extends MultiTouchSpace {
    * Dispose of browser resources held by this space and remove all players. Call this before unmounting the canvas.
    */
   dispose(): this {
-    // remove event listeners
-    if (this._resizeObserver) this._resizeObserver.disconnect();
+    if (this._disposed) return this;
+    this._disposed = true;
 
-    // stop animation loop
-    this.stop();
-    // remove players from space
+    if (this._readyTimer !== undefined) {
+      window.clearTimeout(this._readyTimer);
+      this._readyTimer = undefined;
+    }
+    if (this._readyObserver) {
+      this._readyObserver.disconnect();
+      this._readyObserver = undefined;
+    }
+    if (this._resizeObserver) {
+      this._resizeObserver.disconnect();
+      this._resizeObserver = undefined;
+    }
+
+    this._unbindAll();
+    this._cancelAnimation();
     this.removeAll();
+    this._isReady = false;
 
     return this;
   }

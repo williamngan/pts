@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 3933,
+  "id": 3927,
   "comment": "Particle is a subclass of [`Pt`](#link) that has radius and mass. It's usually added into [`World`](#link) to create physics simulations.\nSee [a demo here](../demo/index.html?name=physics.particles).",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           2
         ]
       ],
-      "id": 3966,
+      "id": 3960,
       "flags": {},
       "overrides": "Pt.__constructor",
       "inherits": false,
@@ -57,7 +57,7 @@
           6
         ]
       ],
-      "id": 3992,
+      "id": 3986,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -84,7 +84,7 @@
           6
         ]
       ],
-      "id": 4000,
+      "id": 3994,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -108,7 +108,7 @@
           6
         ]
       ],
-      "id": 3988,
+      "id": 3982,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -140,7 +140,7 @@
           6
         ]
       ],
-      "id": 4026,
+      "id": 4020,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.id",
@@ -172,7 +172,7 @@
           6
         ]
       ],
-      "id": 3996,
+      "id": 3990,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -204,7 +204,7 @@
           6
         ]
       ],
-      "id": 3976,
+      "id": 3970,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -231,7 +231,7 @@
           6
         ]
       ],
-      "id": 4002,
+      "id": 3996,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -261,7 +261,7 @@
           6
         ]
       ],
-      "id": 3984,
+      "id": 3978,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -293,7 +293,7 @@
           6
         ]
       ],
-      "id": 3980,
+      "id": 3974,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -325,7 +325,7 @@
           6
         ]
       ],
-      "id": 4042,
+      "id": 4036,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.w",
@@ -357,7 +357,7 @@
           6
         ]
       ],
-      "id": 4030,
+      "id": 4024,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.x",
@@ -389,7 +389,7 @@
           6
         ]
       ],
-      "id": 4034,
+      "id": 4028,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.y",
@@ -421,7 +421,7 @@
           6
         ]
       ],
-      "id": 4038,
+      "id": 4032,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.z",
@@ -450,7 +450,7 @@
           2
         ]
       ],
-      "id": 4140,
+      "id": 4134,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$abs",
@@ -473,7 +473,7 @@
           2
         ]
       ],
-      "id": 4092,
+      "id": 4086,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$add",
@@ -503,7 +503,7 @@
           2
         ]
       ],
-      "id": 4148,
+      "id": 4142,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$ceil",
@@ -526,7 +526,7 @@
           2
         ]
       ],
-      "id": 4086,
+      "id": 4080,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$concat",
@@ -556,7 +556,7 @@
           2
         ]
       ],
-      "id": 4129,
+      "id": 4123,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$cross",
@@ -586,7 +586,7 @@
           2
         ]
       ],
-      "id": 4126,
+      "id": 4120,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$cross2D",
@@ -616,7 +616,7 @@
           2
         ]
       ],
-      "id": 4110,
+      "id": 4104,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$divide",
@@ -646,7 +646,7 @@
           2
         ]
       ],
-      "id": 4144,
+      "id": 4138,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$floor",
@@ -669,7 +669,7 @@
           2
         ]
       ],
-      "id": 4167,
+      "id": 4161,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$max",
@@ -699,7 +699,7 @@
           2
         ]
       ],
-      "id": 4164,
+      "id": 4158,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$min",
@@ -729,7 +729,7 @@
           2
         ]
       ],
-      "id": 4104,
+      "id": 4098,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$multiply",
@@ -759,7 +759,7 @@
           2
         ]
       ],
-      "id": 4132,
+      "id": 4126,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$project",
@@ -789,7 +789,7 @@
           2
         ]
       ],
-      "id": 4152,
+      "id": 4146,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$round",
@@ -812,7 +812,7 @@
           2
         ]
       ],
-      "id": 4098,
+      "id": 4092,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$subtract",
@@ -842,7 +842,7 @@
           2
         ]
       ],
-      "id": 4083,
+      "id": 4077,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$take",
@@ -872,7 +872,7 @@
           2
         ]
       ],
-      "id": 4055,
+      "id": 4049,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$to",
@@ -902,7 +902,7 @@
           2
         ]
       ],
-      "id": 4120,
+      "id": 4114,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$unit",
@@ -932,7 +932,7 @@
           2
         ]
       ],
-      "id": 4138,
+      "id": 4132,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.abs",
@@ -955,7 +955,7 @@
           2
         ]
       ],
-      "id": 4089,
+      "id": 4083,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.add",
@@ -985,7 +985,7 @@
           2
         ]
       ],
-      "id": 4008,
+      "id": 4002,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1015,7 +1015,7 @@
           2
         ]
       ],
-      "id": 4170,
+      "id": 4164,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.angle",
@@ -1045,7 +1045,7 @@
           2
         ]
       ],
-      "id": 4173,
+      "id": 4167,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.angleBetween",
@@ -1081,7 +1081,7 @@
           2
         ]
       ],
-      "id": 4146,
+      "id": 4140,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.ceil",
@@ -1104,7 +1104,7 @@
           2
         ]
       ],
-      "id": 4046,
+      "id": 4040,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.clone",
@@ -1127,7 +1127,7 @@
           2
         ]
       ],
-      "id": 4019,
+      "id": 4013,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1163,7 +1163,7 @@
           4
         ]
       ],
-      "id": 4205,
+      "id": 4199,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.copyWithin",
@@ -1205,7 +1205,7 @@
           2
         ]
       ],
-      "id": 4107,
+      "id": 4101,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.divide",
@@ -1235,7 +1235,7 @@
           2
         ]
       ],
-      "id": 4123,
+      "id": 4117,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.dot",
@@ -1265,7 +1265,7 @@
           2
         ]
       ],
-      "id": 4048,
+      "id": 4042,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.equals",
@@ -1301,7 +1301,7 @@
           4
         ]
       ],
-      "id": 4210,
+      "id": 4204,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.every",
@@ -1337,7 +1337,7 @@
           4
         ]
       ],
-      "id": 4219,
+      "id": 4213,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.fill",
@@ -1379,7 +1379,7 @@
           4
         ]
       ],
-      "id": 4224,
+      "id": 4218,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.filter",
@@ -1415,7 +1415,7 @@
           4
         ]
       ],
-      "id": 4233,
+      "id": 4227,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.find",
@@ -1451,7 +1451,7 @@
           4
         ]
       ],
-      "id": 4242,
+      "id": 4236,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.findIndex",
@@ -1487,7 +1487,7 @@
           2
         ]
       ],
-      "id": 4142,
+      "id": 4136,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.floor",
@@ -1510,7 +1510,7 @@
           4
         ]
       ],
-      "id": 4251,
+      "id": 4245,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.forEach",
@@ -1546,7 +1546,7 @@
           2
         ]
       ],
-      "id": 4016,
+      "id": 4010,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1581,7 +1581,7 @@
           4
         ]
       ],
-      "id": 4260,
+      "id": 4254,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.indexOf",
@@ -1617,7 +1617,7 @@
           4
         ]
       ],
-      "id": 4264,
+      "id": 4258,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.join",
@@ -1647,7 +1647,7 @@
           4
         ]
       ],
-      "id": 4267,
+      "id": 4261,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.lastIndexOf",
@@ -1683,7 +1683,7 @@
           2
         ]
       ],
-      "id": 4115,
+      "id": 4109,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.magnitude",
@@ -1706,7 +1706,7 @@
           2
         ]
       ],
-      "id": 4113,
+      "id": 4107,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.magnitudeSq",
@@ -1729,7 +1729,7 @@
           4
         ]
       ],
-      "id": 4272,
+      "id": 4266,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.map",
@@ -1765,7 +1765,7 @@
           2
         ]
       ],
-      "id": 4159,
+      "id": 4153,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.maxValue",
@@ -1788,7 +1788,7 @@
           2
         ]
       ],
-      "id": 4154,
+      "id": 4148,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.minValue",
@@ -1811,7 +1811,7 @@
           2
         ]
       ],
-      "id": 4101,
+      "id": 4095,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.multiply",
@@ -1841,7 +1841,7 @@
           2
         ]
       ],
-      "id": 4063,
+      "id": 4057,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.op",
@@ -1876,7 +1876,7 @@
           2
         ]
       ],
-      "id": 4073,
+      "id": 4067,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.ops",
@@ -1911,7 +1911,7 @@
           2
         ]
       ],
-      "id": 4135,
+      "id": 4129,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.projectScalar",
@@ -1951,7 +1951,7 @@
           4
         ]
       ],
-      "id": 4281,
+      "id": 4275,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reduce",
@@ -2031,7 +2031,7 @@
           4
         ]
       ],
-      "id": 4309,
+      "id": 4303,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reduceRight",
@@ -2101,7 +2101,7 @@
           2
         ]
       ],
-      "id": 4191,
+      "id": 4185,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.reflect2D",
@@ -2137,7 +2137,7 @@
           4
         ]
       ],
-      "id": 4337,
+      "id": 4331,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reverse",
@@ -2160,7 +2160,7 @@
           2
         ]
       ],
-      "id": 4181,
+      "id": 4175,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.rotate2D",
@@ -2202,7 +2202,7 @@
           2
         ]
       ],
-      "id": 4150,
+      "id": 4144,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.round",
@@ -2225,7 +2225,7 @@
           2
         ]
       ],
-      "id": 4177,
+      "id": 4171,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.scale",
@@ -2261,7 +2261,7 @@
           4
         ]
       ],
-      "id": 4339,
+      "id": 4333,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.set",
@@ -2297,7 +2297,7 @@
           2
         ]
       ],
-      "id": 4186,
+      "id": 4180,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.shear2D",
@@ -2339,7 +2339,7 @@
           2
         ]
       ],
-      "id": 4005,
+      "id": 3999,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2369,7 +2369,7 @@
           4
         ]
       ],
-      "id": 4343,
+      "id": 4337,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.slice",
@@ -2405,7 +2405,7 @@
           4
         ]
       ],
-      "id": 4347,
+      "id": 4341,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.some",
@@ -2441,7 +2441,7 @@
           4
         ]
       ],
-      "id": 4356,
+      "id": 4350,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.sort",
@@ -2471,7 +2471,7 @@
           4
         ]
       ],
-      "id": 4363,
+      "id": 4357,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.subarray",
@@ -2507,7 +2507,7 @@
           2
         ]
       ],
-      "id": 4095,
+      "id": 4089,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.subtract",
@@ -2537,7 +2537,7 @@
           2
         ]
       ],
-      "id": 4052,
+      "id": 4046,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.to",
@@ -2567,7 +2567,7 @@
           2
         ]
       ],
-      "id": 4058,
+      "id": 4052,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.toAngle",
@@ -2609,7 +2609,7 @@
           2
         ]
       ],
-      "id": 4195,
+      "id": 4189,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.toArray",
@@ -2632,7 +2632,7 @@
           2
         ]
       ],
-      "id": 4199,
+      "id": 4193,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.toBound",
@@ -2655,7 +2655,7 @@
           2
         ]
       ],
-      "id": 4197,
+      "id": 4191,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.toGroup",
@@ -2683,7 +2683,7 @@
           4
         ]
       ],
-      "id": 4367,
+      "id": 4361,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.toLocaleString",
@@ -2726,7 +2726,7 @@
           2
         ]
       ],
-      "id": 4023,
+      "id": 4017,
       "flags": {},
       "overrides": "Pt.toString",
       "inherits": false,
@@ -2749,7 +2749,7 @@
           2
         ]
       ],
-      "id": 4117,
+      "id": 4111,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.unit",
@@ -2779,7 +2779,7 @@
           4
         ]
       ],
-      "id": 4372,
+      "id": 4366,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.valueOf",
@@ -2802,7 +2802,7 @@
           2
         ]
       ],
-      "id": 4011,
+      "id": 4005,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2844,7 +2844,7 @@
           9
         ]
       ],
-      "id": 3934,
+      "id": 3928,
       "flags": {
         "isStatic": true
       },
@@ -2891,7 +2891,7 @@
           13
         ]
       ],
-      "id": 4202,
+      "id": 4196,
       "flags": {
         "isReadonly": true
       },
@@ -2909,7 +2909,7 @@
           13
         ]
       ],
-      "id": 4203,
+      "id": 4197,
       "flags": {
         "isReadonly": true
       },
@@ -2927,7 +2927,7 @@
           13
         ]
       ],
-      "id": 4204,
+      "id": 4198,
       "flags": {
         "isReadonly": true
       },
@@ -2945,7 +2945,7 @@
           13
         ]
       ],
-      "id": 4201,
+      "id": 4195,
       "flags": {
         "isReadonly": true
       },
@@ -2963,7 +2963,7 @@
           13
         ]
       ],
-      "id": 4271,
+      "id": 4265,
       "flags": {
         "isReadonly": true
       },
