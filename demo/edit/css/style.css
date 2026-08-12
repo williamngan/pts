@@ -15,6 +15,39 @@ iframe {
   height: 100vh;
 }
 
+/* Each Run builds its replacement frame off-screen and swaps it in on load, so
+   there is no flash and a frame that never loads leaves the previous sketch up. */
+iframe.pending {
+  position: absolute;
+  top: 0;
+  left: -200vw;
+  visibility: hidden;
+}
+
+#error {
+  display: none;
+  position: absolute;
+  left: 0; top: 0;
+  width: 50vw;
+  box-sizing: border-box;
+  padding: 12px 16px;
+  background: rgba(255, 51, 68, 0.95);
+  color: #fff;
+  font-family: monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  z-index: 10;
+}
+
+#error.show {
+  display: block;
+}
+
+#run[disabled] {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 #editor {
   position: absolute;
   top: 70px; right: 0px; left: 50vw; bottom: 0; 

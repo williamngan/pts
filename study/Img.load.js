@@ -9,13 +9,16 @@ window.demoDescription = "Load an image and get its pixel";
 
   // Pts quick start mode.
   var run = Pts.quickStart( "#pt", "#123" ); 
-  var img = new Img(true, space.pixelScale);
+  var img = new Img(true, space);
   var imgform;
   var preview;
   img.load("../assets/feature1.jpg");
 
 
   run( (time, ftime) => {
+
+    // Nothing can be read from the image until it has loaded.
+    if (!img.loaded) return;
 
     let bound = Bound.fromGroup( Rectangle.fromCenter( space.pointer, 100 ) );
     let cropped = img.crop( bound );
@@ -25,7 +28,7 @@ window.demoDescription = "Load an image and get its pixel";
     form.imageData( [0,0], cropped );
     if (!preview) {
       preview = Img.imageDataToBlob( cropped ).then( b => {
-        Img.fromBlob(b, true, img.pixelScale).then( i => {
+        Img.fromBlob(b, true, space).then( i => {
           preview = i;
         });
       });

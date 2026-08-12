@@ -54,6 +54,8 @@ window.demoDescription = "Pts also provides experimental support for rendering H
 
   
   //// ----
-  space.bindMouse().bindTouch().play(5000);
+  // `play()` takes the current animation timestamp, not a duration — passing
+  // 5000 here made the sketch sit idle until the page clock passed 5 seconds.
+  space.bindMouse().bindTouch().play();
   
 })();

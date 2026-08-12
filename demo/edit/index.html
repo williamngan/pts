@@ -7,12 +7,14 @@
     <meta name="description" content="Pts live coding editor. Pts is a javascript library that enables you to compose and visualize points in spaces.">
 
     <script type="text/javascript" src="./js/FileSaver.min.js"></script>
+    <link rel="stylesheet" href="./vs/pts.css" type="text/css" />
     <link rel="stylesheet" href="./css/style.css" type="text/css" />
   </head>
   <body>
 
-    <iframe id="demo" title="demo" allow-scripts="true" src="./frame.html"></iframe>
+    <iframe id="demo" title="demo" src="./frame.html"></iframe>
 
+    <div id="error"></div>
     <div id="loader">Loading Editor...</div>
     <div id="editor"></div>
     
@@ -21,7 +23,7 @@
       <div class="cta" id="load">Open</div>
       <div class="cta" id="save">Export</div>
       <a href="../../docs" target="ptsdocs"><div class="cta" id="docs">Docs <small>↗</small></div></a>
-      <div class="cta" id="run">Run <small>[Cmd+Alt+0]</small></div>
+      <div class="cta" id="run" disabled>Run <small>[Cmd+Enter]</small></div>
     </div>
 
     <div id="loadmenu">
@@ -58,7 +60,8 @@
     </div>
     
     
-    <script src="./vs/loader.js"></script>
+    <script type="module" src="./vs/monaco.js"></script>
+    <script type="text/javascript" src="./js/pts-api.js"></script>
     <script type="text/javascript" src="./js/edit.js"></script>
     
   </body>

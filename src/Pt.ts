@@ -1076,8 +1076,13 @@ export class Bound extends Group implements IPt {
    */
   protected _updatePosFromCenter() {
     const half = this._size.$multiply(0.5);
-    this.topLeft = this._center.$subtract(half);
-    this.bottomRight = this._center.$add(half);
+    // Assign the corner Pts directly. Going through the `topLeft` and
+    // `bottomRight` setters would call `_updateSize` after the first of the two,
+    // recomputing size and center from a half-updated pair — so the second line
+    // would read a `_center` that no longer holds the value being applied.
+    const center = this._center;
+    this[0] = center.$subtract(half);
+    this[1] = center.$add(half);
   }
 
   /**

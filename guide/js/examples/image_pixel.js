@@ -26,8 +26,6 @@
       animate: (time, ftime) => {
         const scaling = space.size.x / img.image.width;
 
-        console.log( de, de.length );
-
         if (img.loaded) {
           form.image( [[0,0], [space.size.x, img.image.height * scaling]], img );
 

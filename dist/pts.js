@@ -2221,8 +2221,9 @@ See https://github.com/williamngan/pts for details. */
 		}
 		_updatePosFromCenter() {
 			const half = this._size.$multiply(.5);
-			this.topLeft = this._center.$subtract(half);
-			this.bottomRight = this._center.$add(half);
+			const center = this._center;
+			this[0] = center.$subtract(half);
+			this[1] = center.$add(half);
 		}
 		get size() {
 			return new Pt(this._size);

@@ -326,9 +326,9 @@ describe("Bound", () => {
     expect(values(bound.bottomRight)).toEqual([20, 30, 40]);
     bound.center = new Pt(20, 20, 20);
     expect(values(bound.topLeft)).toEqual([10, 5, 0]);
-    expect(values(bound.bottomRight)).toEqual([25, 32.5, 40]);
+    expect(values(bound.bottomRight)).toEqual([30, 35, 40]);
     bound.topLeft = new Pt(0, 0, 0);
-    expect(values(bound.size)).toEqual([25, 32.5, 40]);
+    expect(values(bound.size)).toEqual([30, 35, 40]);
     bound.bottomRight = new Pt(10, 20, 30);
     expect(values(bound.size)).toEqual([10, 20, 30]);
     bound.width = 5;
@@ -336,6 +336,22 @@ describe("Bound", () => {
     bound.depth = 7;
     expect(values(bound.bottomRight)).toEqual([5, 6, 7]);
     expect([bound.x, bound.y, bound.z]).toEqual([0, 0, 0]);
+  });
+
+  it("preserves size when the center is moved", () => {
+    // CanvasSpace offsets a measured bound by the window scroll on every
+    // resize. Moving the center must translate the bound, never reshape it.
+    const bound = Bound.fromGroup(
+      Group.fromArray([
+        [0, 0],
+        [640, 433],
+      ]),
+    );
+    bound.center = bound.center.add(0, 1600);
+    expect(values(bound.size)).toEqual([640, 433]);
+    expect(values(bound.center)).toEqual([320, 1816.5]);
+    expect(values(bound.topLeft)).toEqual([0, 1600]);
+    expect(values(bound.bottomRight)).toEqual([640, 2033]);
   });
 
   it("clones and updates after direct point mutation", () => {

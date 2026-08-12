@@ -232,8 +232,22 @@ p {
   box-sizing: border-box;
 }
 
+/* The canvas stays hidden until the sketch has painted, so the preview image
+   underneath is never replaced by an empty rectangle. A demo that fails to
+   load simply keeps showing the preview. */
+.demoOverlay canvas,
+.demoOverlay svg {
+  opacity: 0;
+  transition: opacity 0.35s ease-out;
+}
 
-.demoOverlay::after, .demoOverlay .sourceCodeLink {
+.demoOverlay.has-painted canvas,
+.demoOverlay.has-painted svg {
+  opacity: 1;
+}
+
+/* "Touch to try demo" is only true once there is a demo to try. */
+.demoOverlay.is-ready::after, .demoOverlay .sourceCodeLink {
   display: block;
   position: absolute; bottom: 0; right: 0;
   background: rgba(0,0,0,.7);
@@ -261,6 +275,53 @@ p {
 
 .demoOverlay.active .sourceCodeLink::after {
   content: "↗";
+}
+
+/* Loading spinner. Shown only after a short delay, so a cached demo does not
+   flash one on every scroll, and never outlives its own state. */
+.demoSpinner {
+  display: none;
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 1.6em; height: 1.6em;
+  margin: -0.8em 0 0 -0.8em;
+  border: 2px solid rgba(18, 35, 51, 0.18);
+  border-top-color: rgba(18, 35, 51, 0.65);
+  border-radius: 50%;
+  animation: demoSpin 0.7s linear infinite;
+}
+
+.demoOverlay.is-loading.show-spinner .demoSpinner {
+  display: block;
+}
+
+@keyframes demoSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* A static ring reads as "working" without the motion. */
+@media (prefers-reduced-motion: reduce) {
+  .demoSpinner {
+    animation: none;
+    border-top-color: rgba(18, 35, 51, 0.18);
+    opacity: 0.8;
+  }
+}
+
+.demoStatus {
+  display: none;
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  margin: 0;
+  padding: 10px;
+  background: rgba(18, 35, 51, 0.75);
+  color: #fff;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.demoOverlay.is-failed .demoStatus {
+  display: block;
 }
 
 

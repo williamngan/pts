@@ -13,6 +13,7 @@ export default tseslint.config(
       "node_modules/**",
       "study/**",
       "test/integrations/*/dist/**",
+      "demo/edit/vs/**",
     ],
   },
   eslint.configs.recommended,
@@ -41,8 +42,17 @@ export default tseslint.config(
     },
   },
   {
+    files: ["scripts/check-site.mjs"],
+    languageOptions: {
+      globals: { ...globals.browser, ...globals.node, monaco: "readonly" },
+    },
+  },
+  {
     files: [
       "bench/**/*.mjs",
+      "guide/js/guide.js",
+      "demo/edit/js/edit.js",
+      "demo/edit/src/*.js",
       "scripts/**/*.mjs",
       "test/integrations/**/*.mjs",
       "eslint.config.mjs",

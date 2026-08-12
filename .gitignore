@@ -11,3 +11,4 @@ temp/
 .DS_Store
 *.mp4
 dogfood-output/
+.pnpm-store/
