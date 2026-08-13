@@ -5358,6 +5358,12 @@
     8
   ],
   [
+    "Physics_Body#function_solveEdges",
+    "Body.solveEdges",
+    "Function",
+    8
+  ],
+  [
     "Physics_Body#function_some",
     "Body.some",
     "Function",
@@ -6060,8 +6066,20 @@
     6
   ],
   [
+    "Physics_World#accessor_maxTimeStep",
+    "World.maxTimeStep",
+    "Accessor",
+    6
+  ],
+  [
     "Physics_World#accessor_particleCount",
     "World.particleCount",
+    "Accessor",
+    6
+  ],
+  [
+    "Physics_World#accessor_substeps",
+    "World.substeps",
     "Accessor",
     6
   ],
@@ -9792,6 +9810,12 @@
     8
   ],
   [
+    "Util_Util#function_static_getPtLike",
+    "Util.getPtLike",
+    "Function",
+    8
+  ],
+  [
     "Util_Util#function_static_isMobile",
     "Util.isMobile",
     "Function",
@@ -9830,6 +9854,12 @@
   [
     "Util_Util#function_static_stepper",
     "Util.stepper",
+    "Function",
+    8
+  ],
+  [
+    "Util_Util#function_static_toNumericArray",
+    "Util.toNumericArray",
     "Function",
     8
   ],

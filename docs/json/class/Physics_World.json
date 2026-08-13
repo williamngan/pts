@@ -3,24 +3,24 @@
   "source": [
     [
       "src/Physics.ts",
-      12,
+      17,
       13
     ]
   ],
   "kind": "Class",
-  "id": 3806,
-  "comment": "A `World` stores and manages [`Body`](#link) and [`Particle`](#link) for 2D physics simulation.\nSee a [Particle demo](../demo/index.html?name=physics.particles) and a [Body demo](../demo/index.html?name=physics.shapes) on the demo page.",
+  "id": 3814,
+  "comment": "A `World` stores and manages [`Body`](#link) and [`Particle`](#link) for 2D physics simulation.\nIt advances with a substepped position-based (XPBD-style) solver and a spatial-hash broad phase.\nSee a [Particle demo](../demo/index.html?name=physics.particles) and a [Body demo](../demo/index.html?name=physics.shapes) on the demo page.",
   "constructor": [
     {
       "name": "constructor",
       "source": [
         [
           "src/Physics.ts",
-          35,
+          50,
           2
         ]
       ],
-      "id": 3819,
+      "id": 3835,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -60,11 +60,11 @@
       "source": [
         [
           "src/Physics.ts",
-          100,
+          138,
           6
         ]
       ],
-      "id": 3864,
+      "id": 3895,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -79,16 +79,16 @@
       "source": [
         [
           "src/Physics.ts",
-          50,
+          65,
           6
         ],
         [
           "src/Physics.ts",
-          53,
+          68,
           6
         ]
       ],
-      "id": 3844,
+      "id": 3867,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -111,16 +111,16 @@
       "source": [
         [
           "src/Physics.ts",
-          80,
+          95,
           6
         ],
         [
           "src/Physics.ts",
-          83,
+          98,
           6
         ]
       ],
-      "id": 3856,
+      "id": 3879,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -143,16 +143,16 @@
       "source": [
         [
           "src/Physics.ts",
-          70,
+          85,
           6
         ],
         [
           "src/Physics.ts",
-          73,
+          88,
           6
         ]
       ],
-      "id": 3852,
+      "id": 3875,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -175,16 +175,16 @@
       "source": [
         [
           "src/Physics.ts",
-          60,
+          75,
           6
         ],
         [
           "src/Physics.ts",
-          63,
+          78,
           6
         ]
       ],
-      "id": 3848,
+      "id": 3871,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -207,20 +207,20 @@
       "source": [
         [
           "src/Physics.ts",
-          90,
+          105,
           6
         ],
         [
           "src/Physics.ts",
-          93,
+          108,
           6
         ]
       ],
-      "id": 3860,
+      "id": 3883,
       "flags": {},
       "overrides": false,
       "inherits": false,
-      "comment": "constraint solver iterations.",
+      "comment": "Constraint solver iterations per substep.",
       "getter": {
         "type": "number"
       },
@@ -235,15 +235,47 @@
       }
     },
     {
+      "name": "maxTimeStep",
+      "source": [
+        [
+          "src/Physics.ts",
+          128,
+          6
+        ],
+        [
+          "src/Physics.ts",
+          131,
+          6
+        ]
+      ],
+      "id": 3891,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Maximum simulated time in milliseconds per [`World.update`](#link) call. Larger elapsed\ntimes are clamped so that a hitch (eg, a backgrounded tab) cannot destabilize the\nsimulation. Default is 50.",
+      "getter": {
+        "type": "number"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "ms",
+          "comment": "",
+          "type": "number",
+          "default": false
+        }
+      }
+    },
+    {
       "name": "particleCount",
       "source": [
         [
           "src/Physics.ts",
-          107,
+          145,
           6
         ]
       ],
-      "id": 3866,
+      "id": 3897,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -252,6 +284,38 @@
         "type": "number"
       },
       "setter": false
+    },
+    {
+      "name": "substeps",
+      "source": [
+        [
+          "src/Physics.ts",
+          116,
+          6
+        ],
+        [
+          "src/Physics.ts",
+          119,
+          6
+        ]
+      ],
+      "id": 3887,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Number of solver substeps per [`World.update`](#link) call. More substeps produce a more\nstable and accurate simulation at a linear cost. Default is 4.",
+      "getter": {
+        "type": "number"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "n",
+          "comment": "",
+          "type": "number",
+          "default": false
+        }
+      }
     }
   ],
   "methods": [
@@ -260,11 +324,11 @@
       "source": [
         [
           "src/Physics.ts",
-          184,
+          249,
           2
         ]
       ],
-      "id": 3897,
+      "id": 3928,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -296,11 +360,11 @@
       "source": [
         [
           "src/Physics.ts",
-          116,
+          154,
           2
         ]
       ],
-      "id": 3868,
+      "id": 3899,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -326,11 +390,11 @@
       "source": [
         [
           "src/Physics.ts",
-          140,
+          178,
           2
         ]
       ],
-      "id": 3874,
+      "id": 3905,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -356,11 +420,11 @@
       "source": [
         [
           "src/Physics.ts",
-          175,
+          240,
           2
         ]
       ],
-      "id": 3890,
+      "id": 3921,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -386,11 +450,11 @@
       "source": [
         [
           "src/Physics.ts",
-          167,
+          232,
           2
         ]
       ],
-      "id": 3883,
+      "id": 3914,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -416,11 +480,11 @@
       "source": [
         [
           "src/Physics.ts",
-          300,
+          391,
           12
         ]
       ],
-      "id": 3916,
+      "id": 3947,
       "flags": {
         "isProtected": true
       },
@@ -428,7 +492,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Internal integrate function",
+          "comment": "Integrate a particle for one substep: Verlet with the accumulated force plus gravity as\nacceleration, and the substep-adjusted friction as drag. Forces are read but not cleared\nhere — they persist across the substeps of one update and are cleared when it completes.",
           "returns": "Particle",
           "returns_comment": false,
           "parameters": [
@@ -440,13 +504,13 @@
             },
             {
               "name": "dt",
-              "comment": "time changed",
+              "comment": "substep time in seconds",
               "type": "number",
               "default": false
             },
             {
               "name": "prevDt",
-              "comment": "previous change in time, optional",
+              "comment": "unused; substeps are equal so no time-correction is needed. Kept for signature compatibility.",
               "type": "number",
               "default": false
             }
@@ -460,11 +524,11 @@
       "source": [
         [
           "src/Physics.ts",
-          128,
+          166,
           2
         ]
       ],
-      "id": 3871,
+      "id": 3902,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -490,11 +554,11 @@
       "source": [
         [
           "src/Physics.ts",
-          149,
+          187,
           2
         ]
       ],
-      "id": 3877,
+      "id": 3908,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -520,11 +584,11 @@
       "source": [
         [
           "src/Physics.ts",
-          214,
+          279,
           2
         ]
       ],
-      "id": 3908,
+      "id": 3939,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -556,11 +620,11 @@
       "source": [
         [
           "src/Physics.ts",
-          227,
+          292,
           2
         ]
       ],
-      "id": 3912,
+      "id": 3943,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -592,17 +656,17 @@
       "source": [
         [
           "src/Physics.ts",
-          157,
+          197,
           2
         ]
       ],
-      "id": 3880,
+      "id": 3911,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
-          "comment": "Update this world by one time-step.",
+          "comment": "Advance this world by an amount of time, solved in [`World.substeps`](#link) substeps.\nThe time is clamped to [`World.maxTimeStep`](#link). Draw callbacks fire once per call,\nafter the solve completes.",
           "returns": "void",
           "returns_comment": false,
           "parameters": [
@@ -622,11 +686,11 @@
       "source": [
         [
           "src/Physics.ts",
-          273,
+          338,
           9
         ]
       ],
-      "id": 3814,
+      "id": 3822,
       "flags": {
         "isStatic": true
       },
@@ -666,11 +730,11 @@
       "source": [
         [
           "src/Physics.ts",
-          243,
+          308,
           9
         ]
       ],
-      "id": 3807,
+      "id": 3815,
       "flags": {
         "isStatic": true
       },

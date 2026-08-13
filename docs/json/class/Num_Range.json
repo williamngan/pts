@@ -3,12 +3,12 @@
   "source": [
     [
       "src/Num.ts",
-      930,
+      933,
       13
     ]
   ],
   "kind": "Class",
-  "id": 3383,
+  "id": 3391,
   "comment": "Range object keeps track of a Group of n-dimensional Pts to provide its minimum, maximum, and magnitude in each dimension.\nIt also provides convenient functions such as mapping the Group to another range. This class may be useful for visualizing data in charts.",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "src/Num.ts",
-          941,
+          944,
           2
         ]
       ],
-      "id": 3384,
+      "id": 3392,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -48,11 +48,11 @@
       "source": [
         [
           "src/Num.ts",
-          963,
+          966,
           6
         ]
       ],
-      "id": 3396,
+      "id": 3404,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -67,11 +67,11 @@
       "source": [
         [
           "src/Num.ts",
-          949,
+          952,
           6
         ]
       ],
-      "id": 3392,
+      "id": 3400,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -86,11 +86,11 @@
       "source": [
         [
           "src/Num.ts",
-          956,
+          959,
           6
         ]
       ],
-      "id": 3394,
+      "id": 3402,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -107,11 +107,11 @@
       "source": [
         [
           "src/Num.ts",
-          1024,
+          1027,
           2
         ]
       ],
-      "id": 3405,
+      "id": 3413,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -143,11 +143,11 @@
       "source": [
         [
           "src/Num.ts",
-          970,
+          973,
           2
         ]
       ],
-      "id": 3398,
+      "id": 3406,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -166,11 +166,11 @@
       "source": [
         [
           "src/Num.ts",
-          1003,
+          1006,
           2
         ]
       ],
-      "id": 3400,
+      "id": 3408,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -208,11 +208,11 @@
       "source": [
         [
           "src/Num.ts",
-          1039,
+          1042,
           2
         ]
       ],
-      "id": 3409,
+      "id": 3417,
       "flags": {},
       "overrides": false,
       "inherits": false,

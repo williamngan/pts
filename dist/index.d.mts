@@ -1213,11 +1213,12 @@ declare class Typography {
 //#endregion
 //#region src/Physics.d.ts
 declare class World {
-  private _lastTime;
   protected _gravity: Pt;
   protected _friction: number;
   protected _damping: number;
   protected _iterations: number;
+  protected _substeps: number;
+  protected _maxTimeStep: number;
   protected _bound: Bound;
   protected _particles: Particle[];
   protected _bodies: Body[];
@@ -1225,6 +1226,12 @@ declare class World {
   protected _bnames: string[];
   protected _drawParticles: (p: Particle, i: number) => void;
   protected _drawBodies: (p: Body, i: number) => void;
+  private _frictionStep;
+  private _hashKeys;
+  private _cellStart;
+  private _cellEntries;
+  private _neighborKeys;
+  private _bodyBounds;
   constructor(bound: PtIterable, friction?: number, gravity?: PtLike | number);
   get bound(): Bound;
   set bound(bound: Bound);
@@ -1236,6 +1243,10 @@ declare class World {
   set damping(f: number);
   get iterations(): number;
   set iterations(f: number);
+  get substeps(): number;
+  set substeps(n: number);
+  get maxTimeStep(): number;
+  set maxTimeStep(ms: number);
   get bodyCount(): number;
   get particleCount(): number;
   body(id: number | string): Body;
@@ -1251,9 +1262,13 @@ declare class World {
   removeParticle(from: number | string, count?: number): this;
   static edgeConstraint(p1: Particle, p2: Particle, dist: number, stiff?: number, precise?: boolean): Particle;
   static boundConstraint(p: Particle, rect: PtIterable, damping?: number): void;
+  protected static _boundParticle(p: Particle, minX: number, minY: number, maxX: number, maxY: number, damping: number): void;
   protected integrate(p: Particle, dt: number, prevDt?: number): Particle;
   protected _updateParticles(dt: number): void;
-  protected _updateBodies(dt: number): void;
+  private _collideParticles;
+  private _clearForces;
+  protected _updateBodies(dt: number, contacts?: boolean): void;
+  private _collideBodies;
 }
 declare class Particle extends Pt {
   protected _mass: number;
@@ -1292,6 +1307,7 @@ declare class Body extends Group {
     [index: string]: Particle;
   };
   protected _mass: number;
+  protected _lambdas: Float32Array;
   constructor();
   static fromGroup(body: PtIterable, stiff?: number, autoLink?: boolean, autoMass?: boolean): Body;
   init(body: PtIterable, stiff?: number): this;
@@ -1302,6 +1318,7 @@ declare class Body extends Group {
   linkAll(stiff: number): void;
   linksToLines(): Group[];
   processEdges(): void;
+  solveEdges(dt: number, iterations?: number): this;
   processBody(b: Body): void;
   processParticle(b: Particle): void;
 }

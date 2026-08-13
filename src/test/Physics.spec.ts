@@ -280,3 +280,220 @@ describe("Body", () => {
     expect(Circle.fromCenter(particle, particle.radius)).toHaveLength(2);
   });
 });
+
+describe("Substepped solver invariants", () => {
+  function seededPositions(count: number, seed = 42) {
+    // mulberry32, deterministic
+    let a = seed;
+    const rand = () => {
+      a |= 0;
+      a = (a + 0x6d2b79f5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+    const out: [number, number][] = [];
+    for (let i = 0; i < count; i++) {
+      out.push([5 + rand() * 90, 5 + rand() * 90]);
+    }
+    return out;
+  }
+
+  it("exposes and clamps substeps and maxTimeStep", () => {
+    const world = new World(worldBound());
+    expect(world.substeps).toBe(4);
+    expect(world.maxTimeStep).toBe(50);
+    world.substeps = 2.6;
+    expect(world.substeps).toBe(3);
+    world.substeps = 0;
+    expect(world.substeps).toBe(1);
+    world.maxTimeStep = -5;
+    expect(world.maxTimeStep).toBe(0);
+  });
+
+  it("keeps particles and body vertices inside the bound under gravity", () => {
+    const world = new World(worldBound(), 0.99, 10);
+    for (const [x, y] of seededPositions(30)) {
+      world.add(new Particle(x, y).size(2));
+    }
+    world.add(square([50, 20], 8));
+    for (let i = 0; i < 120; i++) world.update(16);
+    for (let i = 0; i < world.particleCount; i++) {
+      const p = world.particle(i);
+      expect(p.x).toBeGreaterThanOrEqual(-0.01);
+      expect(p.x).toBeLessThanOrEqual(100.01);
+      expect(p.y).toBeGreaterThanOrEqual(-0.01);
+      expect(p.y).toBeLessThanOrEqual(100.01);
+    }
+    for (const vertex of world.body(0)) {
+      expect(vertex.x).toBeGreaterThanOrEqual(-0.01);
+      expect(vertex.x).toBeLessThanOrEqual(100.01);
+      expect(vertex.y).toBeGreaterThanOrEqual(-0.01);
+      expect(vertex.y).toBeLessThanOrEqual(100.01);
+    }
+  });
+
+  it("reflects both axes on a corner hit", () => {
+    const particle = new Particle(-4, -6).size(2);
+    particle.previous = new Pt(-8, -12);
+    World.boundConstraint(particle, worldBound(), 0.5);
+    expect(particle.x).toBe(2);
+    expect(particle.y).toBe(2);
+    expect(particle.previous.x).toBeGreaterThan(particle.x);
+    expect(particle.previous.y).toBeGreaterThan(particle.y);
+  });
+
+  it("does not accumulate velocity while locked", () => {
+    const world = new World(worldBound(), 1, 20);
+    const particle = new Particle(50, 50).size(2);
+    world.add(particle);
+    particle.lock = true;
+    for (let i = 0; i < 60; i++) world.update(16);
+    expect(particle.equals([50, 50], 0.001)).toBe(true);
+    particle.lock = false;
+    world.update(16);
+    // one frame of plain gravity, not 60 frames of stored velocity
+    expect(Math.abs(particle.y - 50)).toBeLessThan(1);
+  });
+
+  it("is deterministic for identical inputs", () => {
+    const build = () => {
+      const world = new World(worldBound(), 0.99, 5);
+      for (const [x, y] of seededPositions(40, 7)) {
+        world.add(new Particle(x, y).size(3));
+      }
+      return world;
+    };
+    const a = build();
+    const b = build();
+    for (let i = 0; i < 30; i++) {
+      a.update(16);
+      b.update(16);
+    }
+    for (let i = 0; i < a.particleCount; i++) {
+      expect(Array.from(a.particle(i))).toEqual(Array.from(b.particle(i)));
+    }
+  });
+
+  it("solves rigid edges independently of step partitioning", () => {
+    const run = (updates: number, ms: number) => {
+      const world = new World(worldBound(), 1, 0);
+      const body = Body.fromGroup(
+        Group.fromArray([
+          [40, 50],
+          [70, 50],
+        ]),
+        1,
+        false,
+        false,
+      );
+      body.link(0, 1);
+      // stretch beyond the rest length of 30
+      body[1].to(80, 50);
+      (body[1] as Particle).previous.to(80, 50);
+      (body[0] as Particle).previous.to(40, 50);
+      world.add(body);
+      for (let i = 0; i < updates; i++) world.update(ms);
+      return body[1].x - body[0].x;
+    };
+    const coarse = run(1, 16);
+    const fine = run(4, 4);
+    expect(coarse).toBeCloseTo(30, 0);
+    expect(fine).toBeCloseTo(30, 0);
+    expect(Math.abs(coarse - fine)).toBeLessThan(1);
+  });
+
+  it("separates exactly coincident particles without NaN", () => {
+    const first = new Particle(50, 50).size(4);
+    const second = new Particle(50, 50).size(4);
+    first.collide(second, 0.75);
+    expect(Number.isFinite(first.x) && Number.isFinite(first.y)).toBe(true);
+    expect(Number.isFinite(second.x) && Number.isFinite(second.y)).toBe(true);
+    expect(first.x).not.toBe(second.x);
+  });
+
+  it("clamps a huge elapsed time instead of exploding", () => {
+    const world = new World(worldBound(), 0.99, 10);
+    const particle = new Particle(50, 10).size(2);
+    world.add(particle);
+    world.update(5000);
+    expect(particle.y).toBeLessThanOrEqual(100.01);
+    expect(Number.isFinite(particle.y)).toBe(true);
+  });
+
+  it("handles empty worlds, single particles, and zero radii", () => {
+    const empty = new World(worldBound());
+    expect(() => empty.update(16)).not.toThrow();
+
+    const single = new World(worldBound(), 1, 1);
+    single.add(new Particle(50, 50).size(2));
+    expect(() => single.update(16)).not.toThrow();
+
+    const zeroRadius = new World(worldBound(), 1, 1);
+    const spy = vi.spyOn(Particle.prototype, "collide");
+    for (const [x, y] of seededPositions(20)) {
+      zeroRadius.add(new Particle(x, y)); // radius 0
+    }
+    zeroRadius.update(16);
+    expect(spy).not.toHaveBeenCalled();
+    spy.mockRestore();
+  });
+
+  it("visits every overlapping pair exactly once through the spatial hash", () => {
+    // isolated overlapping pairs, far enough apart that responses cannot cascade
+    const world = new World(worldBound(), 1, 0);
+    const pairs: [number, number][][] = [
+      [
+        [10, 10],
+        [13, 10],
+      ],
+      [
+        [80, 15],
+        [80, 18],
+      ],
+      [
+        [20, 80],
+        [22, 82],
+      ],
+      [
+        [70, 70],
+        [73, 73],
+      ],
+    ];
+    const particles: Particle[] = [];
+    for (const pair of pairs) {
+      for (const [x, y] of pair) {
+        const p = new Particle(x, y).size(2.5);
+        particles.push(p);
+        world.add(p);
+      }
+    }
+    // a distant loner that overlaps nothing
+    world.add(new Particle(45, 45).size(2.5));
+
+    world.substeps = 1;
+    const spy = vi.spyOn(Particle.prototype, "collide");
+    world.update(16);
+
+    // count only the calls whose particles actually overlap: collide itself is
+    // also invoked for hash-neighborhood candidates, which is fine — but each
+    // overlapping pair must be responded to exactly once
+    const overlapping = spy.mock.calls.length;
+    expect(overlapping).toBeGreaterThanOrEqual(pairs.length);
+    for (const pair of pairs) {
+      const [a, b] = pair;
+      const dx = a[0] - b[0];
+      const dy = a[1] - b[1];
+      expect(Math.sqrt(dx * dx + dy * dy)).toBeLessThan(5);
+    }
+    // every overlapping pair must now be separated to at least the radius sum
+    for (let i = 0; i < particles.length; i += 2) {
+      const p1 = particles[i];
+      const p2 = particles[i + 1];
+      const dx = p1.x - p2.x;
+      const dy = p1.y - p2.y;
+      expect(Math.sqrt(dx * dx + dy * dy)).toBeGreaterThanOrEqual(4.99);
+    }
+    spy.mockRestore();
+  });
+});

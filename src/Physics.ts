@@ -3,19 +3,24 @@
 import { Pt, Group, Bound } from "./Pt";
 import { Polygon, Circle } from "./Op";
 import { Geom } from "./Num";
-import { PtLike, GroupLike, PtIterable } from "./Types";
+import { PtLike, PtIterable } from "./Types";
+
+// Scale that maps a Body link's stiffness (0..1] to an XPBD compliance.
+// stiff=1 is a rigid projection (compliance 0) at any timestep.
+const COMPLIANCE_SCALE = 0.0001;
 
 /**
  * A `World` stores and manages [`Body`](#link) and [`Particle`](#link) for 2D physics simulation.
+ * It advances with a substepped position-based (XPBD-style) solver and a spatial-hash broad phase.
  * See a [Particle demo](../demo/index.html?name=physics.particles) and a [Body demo](../demo/index.html?name=physics.shapes) on the demo page.
  */
 export class World {
-  private _lastTime: number = null;
-
   protected _gravity: Pt = new Pt();
   protected _friction: number = 1; // general friction
   protected _damping: number = 0.75; // collision damping
-  protected _iterations: number = 1; // number of iterations to solve edge constraint
+  protected _iterations: number = 1; // constraint iterations per substep
+  protected _substeps: number = 4; // solver substeps per update
+  protected _maxTimeStep: number = 50; // clamp on ms per update
   protected _bound: Bound;
 
   protected _particles: Particle[] = [];
@@ -25,6 +30,16 @@ export class World {
 
   protected _drawParticles: (p: Particle, i: number) => void;
   protected _drawBodies: (p: Body, i: number) => void;
+
+  // substep-adjusted friction, computed once per update
+  private _frictionStep: number = 1;
+
+  // spatial-hash and AABB scratch buffers, grown geometrically and reused
+  private _hashKeys: Uint32Array = new Uint32Array(0);
+  private _cellStart: Uint32Array = new Uint32Array(0);
+  private _cellEntries: Uint32Array = new Uint32Array(0);
+  private _neighborKeys: Uint32Array = new Uint32Array(9);
+  private _bodyBounds: Float32Array = new Float32Array(0);
 
   /**
    * Create a `World` for 2D physics simulation.
@@ -85,13 +100,36 @@ export class World {
   }
 
   /**
-   * constraint solver iterations.
+   * Constraint solver iterations per substep.
    */
   get iterations(): number {
     return this._iterations;
   }
   set iterations(f: number) {
     this._iterations = f;
+  }
+
+  /**
+   * Number of solver substeps per [`World.update`](#link) call. More substeps produce a more
+   * stable and accurate simulation at a linear cost. Default is 4.
+   */
+  get substeps(): number {
+    return this._substeps;
+  }
+  set substeps(n: number) {
+    this._substeps = Math.max(1, Math.round(n));
+  }
+
+  /**
+   * Maximum simulated time in milliseconds per [`World.update`](#link) call. Larger elapsed
+   * times are clamped so that a hitch (eg, a backgrounded tab) cannot destabilize the
+   * simulation. Default is 50.
+   */
+  get maxTimeStep(): number {
+    return this._maxTimeStep;
+  }
+  set maxTimeStep(ms: number) {
+    this._maxTimeStep = Math.max(0, ms);
   }
 
   /**
@@ -151,13 +189,40 @@ export class World {
   }
 
   /**
-   * Update this world by one time-step.
+   * Advance this world by an amount of time, solved in [`World.substeps`](#link) substeps.
+   * The time is clamped to [`World.maxTimeStep`](#link). Draw callbacks fire once per call,
+   * after the solve completes.
    * @param ms change in time in milliseconds
    */
   update(ms: number) {
-    let dt = ms / 1000;
-    this._updateParticles(dt);
-    this._updateBodies(dt);
+    const clamped = Math.min(ms, this._maxTimeStep);
+    if (clamped > 0) {
+      const n = this._substeps;
+      const h = clamped / 1000 / n;
+      // friction is a per-update drag; compound it across substeps
+      this._frictionStep =
+        n === 1 ? this._friction : Math.pow(this._friction, 1 / n);
+      for (let s = 0; s < n; s++) {
+        this._updateParticles(h);
+        // body contacts resolve once per update (on the final substep): an
+        // overlapping pair stays overlapped across substeps, so running SAT
+        // every substep multiplies the narrow-phase cost without changing the
+        // visual outcome. Integration and edge constraints run every substep.
+        this._updateBodies(h, s === n - 1);
+      }
+      this._clearForces();
+    }
+
+    if (this._drawParticles) {
+      for (let i = 0, len = this._particles.length; i < len; i++) {
+        this._drawParticles(this._particles[i], i);
+      }
+    }
+    if (this._drawBodies) {
+      for (let i = 0, len = this._bodies.length; i < len; i++) {
+        this._drawBodies(this._bodies[i], i);
+      }
+    }
   }
 
   /**
@@ -275,92 +340,306 @@ export class World {
     rect: PtIterable,
     damping: number = 0.75,
   ) {
-    let bound = Geom.boundingBox(rect);
-    let np = p.$min(bound[1].subtract(p.radius)).$max(bound[0].add(p.radius));
-
-    if (np[0] === bound[0][0] || np[0] === bound[1][0]) {
-      // hit vertical walls
-      let c = p.changed.$multiply(damping);
-      p.previous = np.$subtract(new Pt(-c[0], c[1]));
-    } else if (np[1] === bound[0][1] || np[1] === bound[1][1]) {
-      // hit horizontal walls
-      let c = p.changed.$multiply(damping);
-      p.previous = np.$subtract(new Pt(c[0], -c[1]));
-    }
-
-    p.to(np);
+    const bound = Geom.boundingBox(rect);
+    World._boundParticle(
+      p,
+      bound[0][0],
+      bound[0][1],
+      bound[1][0],
+      bound[1][1],
+      damping,
+    );
   }
 
   /**
-   * Internal integrate function
+   * Shared scalar core of the bound constraint: clamp to the rectangle inset by the
+   * particle's radius, and reflect the damped velocity on each axis that hit a wall
+   * (a corner hit reflects both).
+   */
+  protected static _boundParticle(
+    p: Particle,
+    minX: number,
+    minY: number,
+    maxX: number,
+    maxY: number,
+    damping: number,
+  ) {
+    const px = p[0];
+    const py = p[1];
+    const nx = Math.min(Math.max(px, minX + p.radius), maxX - p.radius);
+    const ny = Math.min(Math.max(py, minY + p.radius), maxY - p.radius);
+
+    if (nx !== px || ny !== py) {
+      const prev = p.previous;
+      const cx = (px - prev[0]) * damping;
+      const cy = (py - prev[1]) * damping;
+      prev[0] = nx !== px ? nx + cx : nx - cx;
+      prev[1] = ny !== py ? ny + cy : ny - cy;
+      p[0] = nx;
+      p[1] = ny;
+    }
+  }
+
+  /**
+   * Integrate a particle for one substep: Verlet with the accumulated force plus gravity as
+   * acceleration, and the substep-adjusted friction as drag. Forces are read but not cleared
+   * here — they persist across the substeps of one update and are cleared when it completes.
    * @param p particle
-   * @param dt time changed
-   * @param prevDt previous change in time, optional
+   * @param dt substep time in seconds
+   * @param prevDt unused; substeps are equal so no time-correction is needed. Kept for signature compatibility.
    */
   protected integrate(p: Particle, dt: number, prevDt?: number): Particle {
-    p.addForce(this._gravity);
-    p.verlet(dt, this._friction, prevDt);
+    if (p.lock) {
+      p.verlet(dt, this._frictionStep, prevDt); // re-pins to the lock point
+      return p;
+    }
+
+    const prev = p.previous;
+    const force = p.force;
+    const f = this._frictionStep;
+    const dtSq = dt * dt;
+    const px = p[0];
+    const py = p[1];
+    const nx = px + (px - prev[0]) * f + (force[0] + this._gravity[0]) * dtSq;
+    const ny = py + (py - prev[1]) * f + (force[1] + this._gravity[1]) * dtSq;
+    prev[0] = px;
+    prev[1] = py;
+    p[0] = nx;
+    p[1] = ny;
     return p;
   }
 
   /**
-   * Internal function to update particles
+   * Internal function to update free particles for one substep: integrate, constrain to the
+   * bound, then resolve particle-particle collisions through the spatial hash.
    */
   protected _updateParticles(dt: number) {
-    for (let i = 0, len = this._particles.length; i < len; i++) {
-      let p = this._particles[i];
+    const ps = this._particles;
+    const len = ps.length;
+    if (len === 0) return;
 
-      // force and integrate
-      this.integrate(p, dt, this._lastTime);
+    const b0 = this._bound[0];
+    const b1 = this._bound[1];
+    const minX = Math.min(b0[0], b1[0]);
+    const minY = Math.min(b0[1], b1[1]);
+    const maxX = Math.max(b0[0], b1[0]);
+    const maxY = Math.max(b0[1], b1[1]);
 
-      // constraints
-      World.boundConstraint(p, this._bound, this._damping);
-
-      // collisions
-      for (let k = i + 1; k < len; k++) {
-        if (i !== k) {
-          let p2 = this._particles[k];
-          p.collide(p2, this._damping);
-        }
-      }
-
-      // render
-      if (this._drawParticles) this._drawParticles(p, i);
+    for (let i = 0; i < len; i++) {
+      const p = ps[i];
+      this.integrate(p, dt);
+      World._boundParticle(p, minX, minY, maxX, maxY, this._damping);
     }
 
-    this._lastTime = dt;
+    this._collideParticles();
   }
 
   /**
-   * Internal function to update bodies
+   * Resolve particle-particle collisions using a uniform spatial hash (a counting-sort grid),
+   * visiting only neighboring cells instead of testing all pairs.
    */
-  protected _updateBodies(dt: number) {
+  private _collideParticles() {
+    const ps = this._particles;
+    const n = ps.length;
+    if (n < 2) return;
+
+    let rmax = 0;
+    for (let i = 0; i < n; i++) {
+      if (ps[i].radius > rmax) rmax = ps[i].radius;
+    }
+    if (rmax <= 0) return; // nothing can collide
+
+    // cells of 2×rmax mean any colliding pair is within the 3×3 neighborhood
+    const inv = 1 / (rmax * 2);
+    let m = 16;
+    while (m < n * 2) m <<= 1;
+    const mask = m - 1;
+
+    if (this._cellStart.length < m + 1)
+      this._cellStart = new Uint32Array(m + 1);
+    if (this._hashKeys.length < n) {
+      this._hashKeys = new Uint32Array(n * 2);
+      this._cellEntries = new Uint32Array(n * 2);
+    }
+    const keys = this._hashKeys;
+    const start = this._cellStart;
+    const entries = this._cellEntries;
+
+    // count per cell, exclusive prefix sum, then scatter; after the scatter,
+    // bucket k spans [start[k-1], start[k])
+    start.fill(0, 0, m + 1);
+    for (let i = 0; i < n; i++) {
+      const p = ps[i];
+      const key =
+        ((Math.imul(Math.floor(p[0] * inv), 0x9e3779b1) ^
+          Math.imul(Math.floor(p[1] * inv), 0x85ebca77)) >>>
+          0) &
+        mask;
+      keys[i] = key;
+      start[key]++;
+    }
+    let sum = 0;
+    for (let k = 0; k < m; k++) {
+      const c = start[k];
+      start[k] = sum;
+      sum += c;
+    }
+    start[m] = sum;
+    for (let i = 0; i < n; i++) {
+      entries[start[keys[i]]++] = i;
+    }
+
+    const damping = this._damping;
+    const visited = this._neighborKeys;
+    for (let i = 0; i < n; i++) {
+      const p = ps[i];
+      const cx = Math.floor(p[0] * inv);
+      const cy = Math.floor(p[1] * inv);
+      // Visit each distinct hash key of the 3×3 neighborhood exactly once: two
+      // neighbor cells can collide to the same bucket, and visiting it twice
+      // would apply a pair's collision response twice.
+      let visitedCount = 0;
+      for (let gy = cy - 1; gy <= cy + 1; gy++) {
+        const hy = Math.imul(gy, 0x85ebca77);
+        for (let gx = cx - 1; gx <= cx + 1; gx++) {
+          const key = ((Math.imul(gx, 0x9e3779b1) ^ hy) >>> 0) & mask;
+          let seen = false;
+          for (let v = 0; v < visitedCount; v++) {
+            if (visited[v] === key) {
+              seen = true;
+              break;
+            }
+          }
+          if (seen) continue;
+          visited[visitedCount++] = key;
+          const end = start[key];
+          const begin = key > 0 ? start[key - 1] : 0;
+          for (let e = begin; e < end; e++) {
+            const j = entries[e];
+            if (j > i) p.collide(ps[j], damping);
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Reset all accumulated forces after an update completes.
+   */
+  private _clearForces() {
+    for (let i = 0, len = this._particles.length; i < len; i++) {
+      this._particles[i].force.fill(0);
+    }
     for (let i = 0, len = this._bodies.length; i < len; i++) {
-      let bds = this._bodies[i];
+      const bd = this._bodies[i];
+      for (let k = 0, klen = bd.length; k < klen; k++) {
+        (bd[k] as Particle).force.fill(0);
+      }
+    }
+  }
 
-      if (bds) {
-        // integrate
-        for (let k = 0, klen = bds.length; k < klen; k++) {
-          let bk = bds[k] as Particle;
-          World.boundConstraint(bk, this._bound, this._damping);
-          this.integrate(bk, dt, this._lastTime);
+  /**
+   * Internal function to update bodies for one substep: integrate and bound-constrain every
+   * body particle, optionally resolve body-body and body-particle collisions behind an AABB
+   * broad phase, then restore shapes with the edge-constraint pass.
+   * @param dt substep time in seconds
+   * @param contacts if `true` (default), resolve collisions in this substep
+   */
+  protected _updateBodies(dt: number, contacts: boolean = true) {
+    const bs = this._bodies;
+    const blen = bs.length;
+    if (blen === 0) return;
+
+    const b0 = this._bound[0];
+    const b1 = this._bound[1];
+    const minX = Math.min(b0[0], b1[0]);
+    const minY = Math.min(b0[1], b1[1]);
+    const maxX = Math.max(b0[0], b1[0]);
+    const maxY = Math.max(b0[1], b1[1]);
+
+    for (let i = 0; i < blen; i++) {
+      const bd = bs[i];
+      if (!bd) continue;
+      for (let k = 0, klen = bd.length; k < klen; k++) {
+        const bk = bd[k] as Particle;
+        this.integrate(bk, dt);
+        World._boundParticle(bk, minX, minY, maxX, maxY, this._damping);
+      }
+    }
+
+    if (contacts) this._collideBodies(blen);
+
+    for (let i = 0; i < blen; i++) {
+      if (bs[i]) bs[i].solveEdges(dt, this._iterations);
+    }
+  }
+
+  /**
+   * Resolve body-body and body-particle collisions behind an AABB broad phase.
+   */
+  private _collideBodies(blen: number) {
+    const bs = this._bodies;
+
+    // axis-aligned bounding boxes for the broad phase
+    if (this._bodyBounds.length < blen * 4) {
+      this._bodyBounds = new Float32Array(blen * 8);
+    }
+    const aabb = this._bodyBounds;
+    for (let i = 0; i < blen; i++) {
+      const bd = bs[i];
+      let bx0 = Infinity;
+      let by0 = Infinity;
+      let bx1 = -Infinity;
+      let by1 = -Infinity;
+      if (bd) {
+        for (let k = 0, klen = bd.length; k < klen; k++) {
+          const v = bd[k];
+          if (v[0] < bx0) bx0 = v[0];
+          if (v[0] > bx1) bx1 = v[0];
+          if (v[1] < by0) by0 = v[1];
+          if (v[1] > by1) by1 = v[1];
         }
+      }
+      aabb[i * 4] = bx0;
+      aabb[i * 4 + 1] = by0;
+      aabb[i * 4 + 2] = bx1;
+      aabb[i * 4 + 3] = by1;
+    }
 
-        for (let k = i + 1; k < len; k++) {
-          bds.processBody(this._bodies[k]);
+    const ps = this._particles;
+    const plen = ps.length;
+
+    for (let i = 0; i < blen; i++) {
+      const bd = bs[i];
+      if (!bd) continue;
+      const ax0 = aabb[i * 4];
+      const ay0 = aabb[i * 4 + 1];
+      const ax1 = aabb[i * 4 + 2];
+      const ay1 = aabb[i * 4 + 3];
+
+      for (let k = i + 1; k < blen; k++) {
+        if (
+          bs[k] &&
+          ax0 <= aabb[k * 4 + 2] &&
+          ax1 >= aabb[k * 4] &&
+          ay0 <= aabb[k * 4 + 3] &&
+          ay1 >= aabb[k * 4 + 1]
+        ) {
+          bd.processBody(bs[k]);
         }
+      }
 
-        for (let m = 0, mlen = this._particles.length; m < mlen; m++) {
-          bds.processParticle(this._particles[m]);
+      for (let mIdx = 0; mIdx < plen; mIdx++) {
+        const p = ps[mIdx];
+        const r = p.radius;
+        if (
+          p[0] >= ax0 - r &&
+          p[0] <= ax1 + r &&
+          p[1] >= ay0 - r &&
+          p[1] <= ay1 + r
+        ) {
+          bd.processParticle(p);
         }
-
-        // constraints
-        for (let i = 0; i < this._iterations; i++) {
-          bds.processEdges();
-        }
-
-        // render
-        if (this._drawBodies) this._drawBodies(bds, i);
       }
     }
   }
@@ -495,18 +774,24 @@ export class Particle extends Pt {
     // Positional verlet: curr + (curr - prev) + a * dt * dt
 
     if (this._lock) {
+      // pin both position and previous, so no phantom velocity accumulates
+      // while locked and gets released on unlock
       this.to(this._lockPt);
-      // this._prev.to( this._lockPt );
+      this._prev.to(this._lockPt);
     } else {
       // time corrected (https://en.wikipedia.org/wiki/Verlet_integration#Non-constant_time_differences)
-      let lt = lastDt ? lastDt : dt;
-      let a = this._force.multiply((dt * (dt + lt)) / 2);
-      let v = this.changed.multiply((friction * dt) / lt).add(a);
-
-      this._prev = this.clone();
-      this.add(v);
-
-      this._force = new Pt();
+      const lt = lastDt ? lastDt : dt;
+      const adt = (dt * (dt + lt)) / 2;
+      const f = (friction * dt) / lt;
+      const force = this._force;
+      const prev = this._prev;
+      for (let i = 0, len = this.length; i < len; i++) {
+        const cur = this[i];
+        const v = (cur - prev[i]) * f + (force[i] || 0) * adt;
+        prev[i] = cur;
+        this[i] = cur + v;
+      }
+      force.fill(0);
     }
     return this;
   }
@@ -530,40 +815,57 @@ export class Particle extends Pt {
     // reference: http://codeflow.org/entries/2010/nov/29/verlet-collision-with-impulse-preservation
     // simultaneous collision not yet resolved. Possible solutions in this paper: https://www2.msm.ctw.utwente.nl/sluding/PAPERS/dem07.pdf
 
-    let p1 = this;
-    let dp = p1.$subtract(p2);
-    let distSq = dp.magnitudeSq();
-    let dr = p1.radius + p2.radius;
+    const p1 = this;
+    let dx = p1[0] - p2[0];
+    let dy = p1[1] - p2[1];
+    let distSq = dx * dx + dy * dy;
+    const dr = p1.radius + p2.radius;
+    if (distSq >= dr * dr) return;
 
-    if (distSq < dr * dr) {
-      let c1 = p1.changed;
-      let c2 = p2.changed;
+    const prev1 = p1.previous;
+    const prev2 = p2.previous;
+    let c1x = p1[0] - prev1[0];
+    let c1y = p1[1] - prev1[1];
+    let c2x = p2[0] - prev2[0];
+    let c2y = p2[1] - prev2[1];
 
-      let dist = Math.sqrt(distSq);
-      let d = dp.$multiply((dist - dr) / dist / 2);
-
-      let np1 = p1.$subtract(d);
-      let np2 = p2.$add(d);
-
-      p1.to(np1);
-      p2.to(np2);
-
-      let f1 = (damp * dp.dot(c1)) / distSq;
-      let f2 = (damp * dp.dot(c2)) / distSq;
-
-      let dm1 = p1.mass / (p1.mass + p2.mass);
-      let dm2 = p2.mass / (p1.mass + p2.mass);
-
-      c1.add(
-        new Pt(f2 * dp[0] - f1 * dp[0], f2 * dp[1] - f1 * dp[1]).$multiply(dm2),
-      );
-      c2.add(
-        new Pt(f1 * dp[0] - f2 * dp[0], f1 * dp[1] - f2 * dp[1]).$multiply(dm1),
-      );
-
-      p1.previous = p1.$subtract(c1);
-      p2.previous = p2.$subtract(c2);
+    // separation of (dist - dr) / 2 along the collision axis; for exactly
+    // coincident particles, separate deterministically along the x-axis
+    let dist = Math.sqrt(distSq);
+    let k: number;
+    if (dist < 0.000001) {
+      dx = 1;
+      dy = 0;
+      dist = 1;
+      distSq = 1;
+      k = -dr / 2;
+    } else {
+      k = (dist - dr) / dist / 2;
     }
+
+    const np1x = p1[0] - dx * k;
+    const np1y = p1[1] - dy * k;
+    const np2x = p2[0] + dx * k;
+    const np2y = p2[1] + dy * k;
+
+    const f1 = (damp * (dx * c1x + dy * c1y)) / distSq;
+    const f2 = (damp * (dx * c2x + dy * c2y)) / distSq;
+    const dm1 = p1.mass / (p1.mass + p2.mass);
+    const dm2 = p2.mass / (p1.mass + p2.mass);
+
+    c1x += (f2 - f1) * dx * dm2;
+    c1y += (f2 - f1) * dy * dm2;
+    c2x += (f1 - f2) * dx * dm1;
+    c2y += (f1 - f2) * dy * dm1;
+
+    p1[0] = np1x;
+    p1[1] = np1y;
+    p2[0] = np2x;
+    p2[1] = np2y;
+    prev1[0] = np1x - c1x;
+    prev1[1] = np1y - c1y;
+    prev2[0] = np2x - c2x;
+    prev2[1] = np2y - c2y;
   }
 
   /**
@@ -583,6 +885,7 @@ export class Body extends Group {
   protected _stiff: number = 1;
   protected _locks: { [index: string]: Particle } = {};
   protected _mass: number = 1;
+  protected _lambdas: Float32Array = new Float32Array(0); // XPBD multipliers, one per link
 
   /**
    * Create an empty Body, this is usually followed by [`Body.init`](#link) to populate the Body. Alternatively, use static function [`Body.fromGroup`](#link) to create and initate a body directly.
@@ -711,6 +1014,62 @@ export class Body extends Group {
       let [m, n, d, s] = this._cs[i];
       World.edgeConstraint(this[m] as Particle, this[n] as Particle, d, s);
     }
+  }
+
+  /**
+   * Solve all edge constraints for one substep using XPBD, in which a link's stiffness maps to
+   * a compliance normalized by the timestep — so the same stiffness value produces the same
+   * behavior at any substep size, and `stiff=1` is a rigid projection. This is the solver used
+   * internally by [`World.update`](#link); [`Body.processEdges`](#link) remains the simpler
+   * relaxation for direct use.
+   * @param dt substep time in seconds
+   * @param iterations solver iterations for this substep. Default is 1.
+   */
+  solveEdges(dt: number, iterations: number = 1): this {
+    const cs = this._cs;
+    const clen = cs.length;
+    if (clen === 0) return this;
+
+    if (this._lambdas.length < clen) this._lambdas = new Float32Array(clen);
+    const lambdas = this._lambdas;
+    lambdas.fill(0, 0, clen);
+    const invDtSq = 1 / (dt * dt);
+
+    for (let iter = 0; iter < iterations; iter++) {
+      for (let ci = 0; ci < clen; ci++) {
+        const c = cs[ci];
+        const p1 = this[c[0]] as Particle;
+        const p2 = this[c[1]] as Particle;
+        const stiff = c[3];
+
+        const w1 = p1.lock ? 0 : 1 / (p1.mass || 1);
+        const w2 = p2.lock ? 0 : 1 / (p2.mass || 1);
+        const w = w1 + w2;
+        if (w === 0) continue;
+
+        const dx = p2[0] - p1[0];
+        const dy = p2[1] - p1[1];
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 0.000001) continue;
+
+        const alpha =
+          stiff >= 1
+            ? 0
+            : ((COMPLIANCE_SCALE * (1 - stiff)) / Math.max(stiff, 0.000001)) *
+              invDtSq;
+        const dl = (-(dist - c[2]) - alpha * lambdas[ci]) / (w + alpha);
+        lambdas[ci] += dl;
+
+        const s = dl / dist;
+        const fx = dx * s;
+        const fy = dy * s;
+        p1[0] -= fx * w1;
+        p1[1] -= fy * w1;
+        p2[0] += fx * w2;
+        p2[1] += fy * w2;
+      }
+    }
+    return this;
   }
 
   /**

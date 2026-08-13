@@ -3,12 +3,12 @@
   "source": [
     [
       "src/Op.ts",
-      895,
+      900,
       13
     ]
   ],
   "kind": "Class",
-  "id": 3621,
+  "id": 3629,
   "comment": "Triangle class provides static functions to create and operate on trianges. A triange is a polygon represented as a Group of 3 Pts.\nYou can use the static functions as-is, or apply the [`Group.op`](#link) or [`Pt.op`](#link) to enable functional programming.\nSee [Op guide](../guide/Op-0400.html) for details.",
   "constructor": [],
   "accessors": [],
@@ -18,11 +18,11 @@
       "source": [
         [
           "src/Op.ts",
-          961,
+          966,
           9
         ]
       ],
-      "id": 3639,
+      "id": 3647,
       "flags": {
         "isStatic": true
       },
@@ -56,11 +56,11 @@
       "source": [
         [
           "src/Op.ts",
-          1016,
+          1021,
           9
         ]
       ],
-      "id": 3653,
+      "id": 3661,
       "flags": {
         "isStatic": true
       },
@@ -88,11 +88,11 @@
       "source": [
         [
           "src/Op.ts",
-          1035,
+          1040,
           9
         ]
       ],
-      "id": 3656,
+      "id": 3664,
       "flags": {
         "isStatic": true
       },
@@ -126,11 +126,11 @@
       "source": [
         [
           "src/Op.ts",
-          922,
+          927,
           9
         ]
       ],
-      "id": 3628,
+      "id": 3636,
       "flags": {
         "isStatic": true
       },
@@ -164,11 +164,11 @@
       "source": [
         [
           "src/Op.ts",
-          913,
+          918,
           9
         ]
       ],
-      "id": 3625,
+      "id": 3633,
       "flags": {
         "isStatic": true
       },
@@ -196,11 +196,11 @@
       "source": [
         [
           "src/Op.ts",
-          900,
+          905,
           9
         ]
       ],
-      "id": 3622,
+      "id": 3630,
       "flags": {
         "isStatic": true
       },
@@ -228,11 +228,11 @@
       "source": [
         [
           "src/Op.ts",
-          989,
+          994,
           9
         ]
       ],
-      "id": 3646,
+      "id": 3654,
       "flags": {
         "isStatic": true
       },
@@ -260,11 +260,11 @@
       "source": [
         [
           "src/Op.ts",
-          1002,
+          1007,
           9
         ]
       ],
-      "id": 3649,
+      "id": 3657,
       "flags": {
         "isStatic": true
       },
@@ -298,11 +298,11 @@
       "source": [
         [
           "src/Op.ts",
-          931,
+          936,
           9
         ]
       ],
-      "id": 3632,
+      "id": 3640,
       "flags": {
         "isStatic": true
       },
@@ -330,11 +330,11 @@
       "source": [
         [
           "src/Op.ts",
-          943,
+          948,
           9
         ]
       ],
-      "id": 3635,
+      "id": 3643,
       "flags": {
         "isStatic": true
       },
@@ -368,11 +368,11 @@
       "source": [
         [
           "src/Op.ts",
-          976,
+          981,
           9
         ]
       ],
-      "id": 3643,
+      "id": 3651,
       "flags": {
         "isStatic": true
       },

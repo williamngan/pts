@@ -5531,17 +5531,25 @@ SVGForm.domID = 0;
 
 //#endregion
 //#region src/Physics.ts
+const COMPLIANCE_SCALE = 1e-4;
 var World = class World {
 	constructor(bound, friction = 1, gravity = 0) {
-		this._lastTime = null;
 		this._gravity = new Pt();
 		this._friction = 1;
 		this._damping = .75;
 		this._iterations = 1;
+		this._substeps = 4;
+		this._maxTimeStep = 50;
 		this._particles = [];
 		this._bodies = [];
 		this._pnames = [];
 		this._bnames = [];
+		this._frictionStep = 1;
+		this._hashKeys = /* @__PURE__ */ new Uint32Array(0);
+		this._cellStart = /* @__PURE__ */ new Uint32Array(0);
+		this._cellEntries = /* @__PURE__ */ new Uint32Array(0);
+		this._neighborKeys = /* @__PURE__ */ new Uint32Array(9);
+		this._bodyBounds = /* @__PURE__ */ new Float32Array(0);
 		this._bound = Bound.fromGroup(bound);
 		this._friction = friction;
 		this._gravity = typeof gravity === "number" ? new Pt(0, gravity) : new Pt(gravity);
@@ -5577,6 +5585,18 @@ var World = class World {
 	set iterations(f) {
 		this._iterations = f;
 	}
+	get substeps() {
+		return this._substeps;
+	}
+	set substeps(n) {
+		this._substeps = Math.max(1, Math.round(n));
+	}
+	get maxTimeStep() {
+		return this._maxTimeStep;
+	}
+	set maxTimeStep(ms) {
+		this._maxTimeStep = Math.max(0, ms);
+	}
 	get bodyCount() {
 		return this._bodies.length;
 	}
@@ -5598,9 +5618,19 @@ var World = class World {
 		return this._pnames.indexOf(name);
 	}
 	update(ms) {
-		let dt = ms / 1e3;
-		this._updateParticles(dt);
-		this._updateBodies(dt);
+		const clamped = Math.min(ms, this._maxTimeStep);
+		if (clamped > 0) {
+			const n = this._substeps;
+			const h = clamped / 1e3 / n;
+			this._frictionStep = n === 1 ? this._friction : Math.pow(this._friction, 1 / n);
+			for (let s = 0; s < n; s++) {
+				this._updateParticles(h);
+				this._updateBodies(h, s === n - 1);
+			}
+			this._clearForces();
+		}
+		if (this._drawParticles) for (let i = 0, len = this._particles.length; i < len; i++) this._drawParticles(this._particles[i], i);
+		if (this._drawBodies) for (let i = 0, len = this._bodies.length; i < len; i++) this._drawBodies(this._bodies[i], i);
 	}
 	drawParticles(fn) {
 		this._drawParticles = fn;
@@ -5653,48 +5683,187 @@ var World = class World {
 		return p1;
 	}
 	static boundConstraint(p, rect, damping = .75) {
-		let bound = Geom.boundingBox(rect);
-		let np = p.$min(bound[1].subtract(p.radius)).$max(bound[0].add(p.radius));
-		if (np[0] === bound[0][0] || np[0] === bound[1][0]) {
-			let c = p.changed.$multiply(damping);
-			p.previous = np.$subtract(new Pt(-c[0], c[1]));
-		} else if (np[1] === bound[0][1] || np[1] === bound[1][1]) {
-			let c = p.changed.$multiply(damping);
-			p.previous = np.$subtract(new Pt(c[0], -c[1]));
+		const bound = Geom.boundingBox(rect);
+		World._boundParticle(p, bound[0][0], bound[0][1], bound[1][0], bound[1][1], damping);
+	}
+	static _boundParticle(p, minX, minY, maxX, maxY, damping) {
+		const px = p[0];
+		const py = p[1];
+		const nx = Math.min(Math.max(px, minX + p.radius), maxX - p.radius);
+		const ny = Math.min(Math.max(py, minY + p.radius), maxY - p.radius);
+		if (nx !== px || ny !== py) {
+			const prev = p.previous;
+			const cx = (px - prev[0]) * damping;
+			const cy = (py - prev[1]) * damping;
+			prev[0] = nx !== px ? nx + cx : nx - cx;
+			prev[1] = ny !== py ? ny + cy : ny - cy;
+			p[0] = nx;
+			p[1] = ny;
 		}
-		p.to(np);
 	}
 	integrate(p, dt, prevDt) {
-		p.addForce(this._gravity);
-		p.verlet(dt, this._friction, prevDt);
+		if (p.lock) {
+			p.verlet(dt, this._frictionStep, prevDt);
+			return p;
+		}
+		const prev = p.previous;
+		const force = p.force;
+		const f = this._frictionStep;
+		const dtSq = dt * dt;
+		const px = p[0];
+		const py = p[1];
+		const nx = px + (px - prev[0]) * f + (force[0] + this._gravity[0]) * dtSq;
+		const ny = py + (py - prev[1]) * f + (force[1] + this._gravity[1]) * dtSq;
+		prev[0] = px;
+		prev[1] = py;
+		p[0] = nx;
+		p[1] = ny;
 		return p;
 	}
 	_updateParticles(dt) {
-		for (let i = 0, len = this._particles.length; i < len; i++) {
-			let p = this._particles[i];
-			this.integrate(p, dt, this._lastTime);
-			World.boundConstraint(p, this._bound, this._damping);
-			for (let k = i + 1; k < len; k++) if (i !== k) {
-				let p2 = this._particles[k];
-				p.collide(p2, this._damping);
-			}
-			if (this._drawParticles) this._drawParticles(p, i);
+		const ps = this._particles;
+		const len = ps.length;
+		if (len === 0) return;
+		const b0 = this._bound[0];
+		const b1 = this._bound[1];
+		const minX = Math.min(b0[0], b1[0]);
+		const minY = Math.min(b0[1], b1[1]);
+		const maxX = Math.max(b0[0], b1[0]);
+		const maxY = Math.max(b0[1], b1[1]);
+		for (let i = 0; i < len; i++) {
+			const p = ps[i];
+			this.integrate(p, dt);
+			World._boundParticle(p, minX, minY, maxX, maxY, this._damping);
 		}
-		this._lastTime = dt;
+		this._collideParticles();
 	}
-	_updateBodies(dt) {
-		for (let i = 0, len = this._bodies.length; i < len; i++) {
-			let bds = this._bodies[i];
-			if (bds) {
-				for (let k = 0, klen = bds.length; k < klen; k++) {
-					let bk = bds[k];
-					World.boundConstraint(bk, this._bound, this._damping);
-					this.integrate(bk, dt, this._lastTime);
+	_collideParticles() {
+		const ps = this._particles;
+		const n = ps.length;
+		if (n < 2) return;
+		let rmax = 0;
+		for (let i = 0; i < n; i++) if (ps[i].radius > rmax) rmax = ps[i].radius;
+		if (rmax <= 0) return;
+		const inv = 1 / (rmax * 2);
+		let m = 16;
+		while (m < n * 2) m <<= 1;
+		const mask = m - 1;
+		if (this._cellStart.length < m + 1) this._cellStart = new Uint32Array(m + 1);
+		if (this._hashKeys.length < n) {
+			this._hashKeys = new Uint32Array(n * 2);
+			this._cellEntries = new Uint32Array(n * 2);
+		}
+		const keys = this._hashKeys;
+		const start = this._cellStart;
+		const entries = this._cellEntries;
+		start.fill(0, 0, m + 1);
+		for (let i = 0; i < n; i++) {
+			const p = ps[i];
+			const key = (Math.imul(Math.floor(p[0] * inv), 2654435761) ^ Math.imul(Math.floor(p[1] * inv), 2246822519)) >>> 0 & mask;
+			keys[i] = key;
+			start[key]++;
+		}
+		let sum = 0;
+		for (let k = 0; k < m; k++) {
+			const c = start[k];
+			start[k] = sum;
+			sum += c;
+		}
+		start[m] = sum;
+		for (let i = 0; i < n; i++) entries[start[keys[i]]++] = i;
+		const damping = this._damping;
+		const visited = this._neighborKeys;
+		for (let i = 0; i < n; i++) {
+			const p = ps[i];
+			const cx = Math.floor(p[0] * inv);
+			const cy = Math.floor(p[1] * inv);
+			let visitedCount = 0;
+			for (let gy = cy - 1; gy <= cy + 1; gy++) {
+				const hy = Math.imul(gy, 2246822519);
+				for (let gx = cx - 1; gx <= cx + 1; gx++) {
+					const key = (Math.imul(gx, 2654435761) ^ hy) >>> 0 & mask;
+					let seen = false;
+					for (let v = 0; v < visitedCount; v++) if (visited[v] === key) {
+						seen = true;
+						break;
+					}
+					if (seen) continue;
+					visited[visitedCount++] = key;
+					const end = start[key];
+					const begin = key > 0 ? start[key - 1] : 0;
+					for (let e = begin; e < end; e++) {
+						const j = entries[e];
+						if (j > i) p.collide(ps[j], damping);
+					}
 				}
-				for (let k = i + 1; k < len; k++) bds.processBody(this._bodies[k]);
-				for (let m = 0, mlen = this._particles.length; m < mlen; m++) bds.processParticle(this._particles[m]);
-				for (let i = 0; i < this._iterations; i++) bds.processEdges();
-				if (this._drawBodies) this._drawBodies(bds, i);
+			}
+		}
+	}
+	_clearForces() {
+		for (let i = 0, len = this._particles.length; i < len; i++) this._particles[i].force.fill(0);
+		for (let i = 0, len = this._bodies.length; i < len; i++) {
+			const bd = this._bodies[i];
+			for (let k = 0, klen = bd.length; k < klen; k++) bd[k].force.fill(0);
+		}
+	}
+	_updateBodies(dt, contacts = true) {
+		const bs = this._bodies;
+		const blen = bs.length;
+		if (blen === 0) return;
+		const b0 = this._bound[0];
+		const b1 = this._bound[1];
+		const minX = Math.min(b0[0], b1[0]);
+		const minY = Math.min(b0[1], b1[1]);
+		const maxX = Math.max(b0[0], b1[0]);
+		const maxY = Math.max(b0[1], b1[1]);
+		for (let i = 0; i < blen; i++) {
+			const bd = bs[i];
+			if (!bd) continue;
+			for (let k = 0, klen = bd.length; k < klen; k++) {
+				const bk = bd[k];
+				this.integrate(bk, dt);
+				World._boundParticle(bk, minX, minY, maxX, maxY, this._damping);
+			}
+		}
+		if (contacts) this._collideBodies(blen);
+		for (let i = 0; i < blen; i++) if (bs[i]) bs[i].solveEdges(dt, this._iterations);
+	}
+	_collideBodies(blen) {
+		const bs = this._bodies;
+		if (this._bodyBounds.length < blen * 4) this._bodyBounds = new Float32Array(blen * 8);
+		const aabb = this._bodyBounds;
+		for (let i = 0; i < blen; i++) {
+			const bd = bs[i];
+			let bx0 = Infinity;
+			let by0 = Infinity;
+			let bx1 = -Infinity;
+			let by1 = -Infinity;
+			if (bd) for (let k = 0, klen = bd.length; k < klen; k++) {
+				const v = bd[k];
+				if (v[0] < bx0) bx0 = v[0];
+				if (v[0] > bx1) bx1 = v[0];
+				if (v[1] < by0) by0 = v[1];
+				if (v[1] > by1) by1 = v[1];
+			}
+			aabb[i * 4] = bx0;
+			aabb[i * 4 + 1] = by0;
+			aabb[i * 4 + 2] = bx1;
+			aabb[i * 4 + 3] = by1;
+		}
+		const ps = this._particles;
+		const plen = ps.length;
+		for (let i = 0; i < blen; i++) {
+			const bd = bs[i];
+			if (!bd) continue;
+			const ax0 = aabb[i * 4];
+			const ay0 = aabb[i * 4 + 1];
+			const ax1 = aabb[i * 4 + 2];
+			const ay1 = aabb[i * 4 + 3];
+			for (let k = i + 1; k < blen; k++) if (bs[k] && ax0 <= aabb[k * 4 + 2] && ax1 >= aabb[k * 4] && ay0 <= aabb[k * 4 + 3] && ay1 >= aabb[k * 4 + 1]) bd.processBody(bs[k]);
+			for (let mIdx = 0; mIdx < plen; mIdx++) {
+				const p = ps[mIdx];
+				const r = p.radius;
+				if (p[0] >= ax0 - r && p[0] <= ax1 + r && p[1] >= ay0 - r && p[1] <= ay1 + r) bd.processParticle(p);
 			}
 		}
 	}
@@ -5764,14 +5933,22 @@ var Particle = class extends Pt {
 		return this._force;
 	}
 	verlet(dt, friction, lastDt) {
-		if (this._lock) this.to(this._lockPt);
-		else {
-			let lt = lastDt ? lastDt : dt;
-			let a = this._force.multiply(dt * (dt + lt) / 2);
-			let v = this.changed.multiply(friction * dt / lt).add(a);
-			this._prev = this.clone();
-			this.add(v);
-			this._force = new Pt();
+		if (this._lock) {
+			this.to(this._lockPt);
+			this._prev.to(this._lockPt);
+		} else {
+			const lt = lastDt ? lastDt : dt;
+			const adt = dt * (dt + lt) / 2;
+			const f = friction * dt / lt;
+			const force = this._force;
+			const prev = this._prev;
+			for (let i = 0, len = this.length; i < len; i++) {
+				const cur = this[i];
+				const v = (cur - prev[i]) * f + (force[i] || 0) * adt;
+				prev[i] = cur;
+				this[i] = cur + v;
+			}
+			force.fill(0);
 		}
 		return this;
 	}
@@ -5780,28 +5957,47 @@ var Particle = class extends Pt {
 		return this;
 	}
 	collide(p2, damp = 1) {
-		let p1 = this;
-		let dp = p1.$subtract(p2);
-		let distSq = dp.magnitudeSq();
-		let dr = p1.radius + p2.radius;
-		if (distSq < dr * dr) {
-			let c1 = p1.changed;
-			let c2 = p2.changed;
-			let dist = Math.sqrt(distSq);
-			let d = dp.$multiply((dist - dr) / dist / 2);
-			let np1 = p1.$subtract(d);
-			let np2 = p2.$add(d);
-			p1.to(np1);
-			p2.to(np2);
-			let f1 = damp * dp.dot(c1) / distSq;
-			let f2 = damp * dp.dot(c2) / distSq;
-			let dm1 = p1.mass / (p1.mass + p2.mass);
-			let dm2 = p2.mass / (p1.mass + p2.mass);
-			c1.add(new Pt(f2 * dp[0] - f1 * dp[0], f2 * dp[1] - f1 * dp[1]).$multiply(dm2));
-			c2.add(new Pt(f1 * dp[0] - f2 * dp[0], f1 * dp[1] - f2 * dp[1]).$multiply(dm1));
-			p1.previous = p1.$subtract(c1);
-			p2.previous = p2.$subtract(c2);
-		}
+		const p1 = this;
+		let dx = p1[0] - p2[0];
+		let dy = p1[1] - p2[1];
+		let distSq = dx * dx + dy * dy;
+		const dr = p1.radius + p2.radius;
+		if (distSq >= dr * dr) return;
+		const prev1 = p1.previous;
+		const prev2 = p2.previous;
+		let c1x = p1[0] - prev1[0];
+		let c1y = p1[1] - prev1[1];
+		let c2x = p2[0] - prev2[0];
+		let c2y = p2[1] - prev2[1];
+		let dist = Math.sqrt(distSq);
+		let k;
+		if (dist < 1e-6) {
+			dx = 1;
+			dy = 0;
+			dist = 1;
+			distSq = 1;
+			k = -dr / 2;
+		} else k = (dist - dr) / dist / 2;
+		const np1x = p1[0] - dx * k;
+		const np1y = p1[1] - dy * k;
+		const np2x = p2[0] + dx * k;
+		const np2y = p2[1] + dy * k;
+		const f1 = damp * (dx * c1x + dy * c1y) / distSq;
+		const f2 = damp * (dx * c2x + dy * c2y) / distSq;
+		const dm1 = p1.mass / (p1.mass + p2.mass);
+		const dm2 = p2.mass / (p1.mass + p2.mass);
+		c1x += (f2 - f1) * dx * dm2;
+		c1y += (f2 - f1) * dy * dm2;
+		c2x += (f1 - f2) * dx * dm1;
+		c2y += (f1 - f2) * dy * dm1;
+		p1[0] = np1x;
+		p1[1] = np1y;
+		p2[0] = np2x;
+		p2[1] = np2y;
+		prev1[0] = np1x - c1x;
+		prev1[1] = np1y - c1y;
+		prev2[0] = np2x - c2x;
+		prev2[1] = np2y - c2y;
 	}
 	toString() {
 		return `Particle: ${this[0]} ${this[1]} | previous ${this._prev[0]} ${this._prev[1]} | mass ${this._mass}`;
@@ -5814,6 +6010,7 @@ var Body = class Body extends Group {
 		this._stiff = 1;
 		this._locks = {};
 		this._mass = 1;
+		this._lambdas = /* @__PURE__ */ new Float32Array(0);
 	}
 	static fromGroup(body, stiff = 1, autoLink = true, autoMass = true) {
 		let b = new Body().init(body);
@@ -5881,6 +6078,40 @@ var Body = class Body extends Group {
 			let [m, n, d, s] = this._cs[i];
 			World.edgeConstraint(this[m], this[n], d, s);
 		}
+	}
+	solveEdges(dt, iterations = 1) {
+		const cs = this._cs;
+		const clen = cs.length;
+		if (clen === 0) return this;
+		if (this._lambdas.length < clen) this._lambdas = new Float32Array(clen);
+		const lambdas = this._lambdas;
+		lambdas.fill(0, 0, clen);
+		const invDtSq = 1 / (dt * dt);
+		for (let iter = 0; iter < iterations; iter++) for (let ci = 0; ci < clen; ci++) {
+			const c = cs[ci];
+			const p1 = this[c[0]];
+			const p2 = this[c[1]];
+			const stiff = c[3];
+			const w1 = p1.lock ? 0 : 1 / (p1.mass || 1);
+			const w2 = p2.lock ? 0 : 1 / (p2.mass || 1);
+			const w = w1 + w2;
+			if (w === 0) continue;
+			const dx = p2[0] - p1[0];
+			const dy = p2[1] - p1[1];
+			const dist = Math.sqrt(dx * dx + dy * dy);
+			if (dist < 1e-6) continue;
+			const alpha = stiff >= 1 ? 0 : COMPLIANCE_SCALE * (1 - stiff) / Math.max(stiff, 1e-6) * invDtSq;
+			const dl = (-(dist - c[2]) - alpha * lambdas[ci]) / (w + alpha);
+			lambdas[ci] += dl;
+			const s = dl / dist;
+			const fx = dx * s;
+			const fy = dy * s;
+			p1[0] -= fx * w1;
+			p1[1] -= fy * w1;
+			p2[0] += fx * w2;
+			p2[1] += fy * w2;
+		}
+		return this;
 	}
 	processBody(b) {
 		let b1 = this;

@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 7762,
+  "id": 7830,
   "comment": "Util class provides static helper functions.",
   "constructor": [],
   "accessors": [],
@@ -18,11 +18,11 @@
       "source": [
         [
           "src/Util.ts",
-          378,
+          408,
           9
         ]
       ],
-      "id": 7841,
+      "id": 7915,
       "flags": {
         "isStatic": true
       },
@@ -56,11 +56,11 @@
       "source": [
         [
           "src/Util.ts",
-          224,
+          254,
           9
         ]
       ],
-      "id": 7789,
+      "id": 7863,
       "flags": {
         "isStatic": true
       },
@@ -100,11 +100,11 @@
       "source": [
         [
           "src/Util.ts",
-          332,
+          362,
           9
         ]
       ],
-      "id": 7830,
+      "id": 7904,
       "flags": {
         "isStatic": true
       },
@@ -150,11 +150,11 @@
       "source": [
         [
           "src/Util.ts",
-          213,
+          243,
           9
         ]
       ],
-      "id": 7785,
+      "id": 7859,
       "flags": {
         "isStatic": true
       },
@@ -188,11 +188,11 @@
       "source": [
         [
           "src/Util.ts",
-          282,
+          312,
           9
         ]
       ],
-      "id": 7813,
+      "id": 7887,
       "flags": {
         "isStatic": true
       },
@@ -242,7 +242,7 @@
           9
         ]
       ],
-      "id": 7767,
+      "id": 7835,
       "flags": {
         "isStatic": true
       },
@@ -266,15 +266,47 @@
       ]
     },
     {
+      "name": "getPtLike",
+      "source": [
+        [
+          "src/Util.ts",
+          167,
+          9
+        ]
+      ],
+      "id": 7841,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Like [`Util.getArgs`](#link), but avoids copying when the arguments are already\na numeric array, a typed array (eg, a Pt), or a list of numbers. The result may be\nthe caller's own object, so it must be treated as read-only.",
+          "returns": "PtLike",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "isMobile",
       "source": [
         [
           "src/Util.ts",
-          397,
+          427,
           9
         ]
       ],
-      "id": 7848,
+      "id": 7922,
       "flags": {
         "isStatic": true
       },
@@ -295,11 +327,11 @@
       "source": [
         [
           "src/Util.ts",
-          390,
+          420,
           9
         ]
       ],
-      "id": 7845,
+      "id": 7919,
       "flags": {
         "isStatic": true
       },
@@ -327,11 +359,11 @@
       "source": [
         [
           "src/Util.ts",
-          300,
+          330,
           9
         ]
       ],
-      "id": 7822,
+      "id": 7896,
       "flags": {
         "isStatic": true
       },
@@ -365,11 +397,11 @@
       "source": [
         [
           "src/Util.ts",
-          361,
+          391,
           9
         ]
       ],
-      "id": 7836,
+      "id": 7910,
       "flags": {
         "isStatic": true
       },
@@ -402,11 +434,11 @@
       "source": [
         [
           "src/Util.ts",
-          165,
+          195,
           9
         ]
       ],
-      "id": 7774,
+      "id": 7848,
       "flags": {
         "isStatic": true
       },
@@ -440,11 +472,11 @@
       "source": [
         [
           "src/Util.ts",
-          178,
+          208,
           9
         ]
       ],
-      "id": 7778,
+      "id": 7852,
       "flags": {
         "isStatic": true
       },
@@ -496,11 +528,11 @@
       "source": [
         [
           "src/Util.ts",
-          259,
+          289,
           9
         ]
       ],
-      "id": 7802,
+      "id": 7876,
       "flags": {
         "isStatic": true
       },
@@ -547,15 +579,47 @@
       ]
     },
     {
+      "name": "toNumericArray",
+      "source": [
+        [
+          "src/Util.ts",
+          150,
+          9
+        ]
+      ],
+      "id": 7838,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Copy an array or typed array of numbers into a fresh plain array.",
+          "returns": "number[]",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "a",
+              "comment": "an array or typed array",
+              "type": "ArrayLike",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "uniqueId",
       "source": [
         [
           "src/Util.ts",
-          405,
+          435,
           9
         ]
       ],
-      "id": 7850,
+      "id": 7924,
       "flags": {
         "isStatic": true
       },
@@ -583,11 +647,11 @@
       "source": [
         [
           "src/Util.ts",
-          151,
+          181,
           9
         ]
       ],
-      "id": 7770,
+      "id": 7844,
       "flags": {
         "isStatic": true
       },
@@ -625,7 +689,7 @@
           9
         ]
       ],
-      "id": 7764,
+      "id": 7832,
       "flags": {
         "isStatic": true
       },
@@ -653,11 +717,11 @@
       "source": [
         [
           "src/Util.ts",
-          238,
+          268,
           9
         ]
       ],
-      "id": 7799,
+      "id": 7873,
       "flags": {
         "isStatic": true
       },

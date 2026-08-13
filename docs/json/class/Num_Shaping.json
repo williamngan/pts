@@ -3,12 +3,12 @@
   "source": [
     [
       "src/Num.ts",
-      538,
+      541,
       13
     ]
   ],
   "kind": "Class",
-  "id": 3244,
+  "id": 3252,
   "comment": "Shaping provides shaping functions to interpolate a value. These are useful for easing and transitions.",
   "constructor": [],
   "accessors": [],
@@ -18,11 +18,11 @@
       "source": [
         [
           "src/Num.ts",
-          756,
+          759,
           9
         ]
       ],
-      "id": 3326,
+      "id": 3334,
       "flags": {
         "isStatic": true
       },
@@ -56,11 +56,11 @@
       "source": [
         [
           "src/Num.ts",
-          785,
+          788,
           9
         ]
       ],
-      "id": 3334,
+      "id": 3342,
       "flags": {
         "isStatic": true
       },
@@ -94,11 +94,11 @@
       "source": [
         [
           "src/Num.ts",
-          765,
+          768,
           9
         ]
       ],
-      "id": 3330,
+      "id": 3338,
       "flags": {
         "isStatic": true
       },
@@ -132,11 +132,11 @@
       "source": [
         [
           "src/Num.ts",
-          671,
+          674,
           9
         ]
       ],
-      "id": 3299,
+      "id": 3307,
       "flags": {
         "isStatic": true
       },
@@ -170,11 +170,11 @@
       "source": [
         [
           "src/Num.ts",
-          690,
+          693,
           9
         ]
       ],
-      "id": 3307,
+      "id": 3315,
       "flags": {
         "isStatic": true
       },
@@ -208,11 +208,11 @@
       "source": [
         [
           "src/Num.ts",
-          680,
+          683,
           9
         ]
       ],
-      "id": 3303,
+      "id": 3311,
       "flags": {
         "isStatic": true
       },
@@ -246,11 +246,11 @@
       "source": [
         [
           "src/Num.ts",
-          901,
+          904,
           9
         ]
       ],
-      "id": 3369,
+      "id": 3377,
       "flags": {
         "isStatic": true
       },
@@ -290,11 +290,11 @@
       "source": [
         [
           "src/Num.ts",
-          659,
+          662,
           9
         ]
       ],
-      "id": 3295,
+      "id": 3303,
       "flags": {
         "isStatic": true
       },
@@ -328,11 +328,11 @@
       "source": [
         [
           "src/Num.ts",
-          860,
+          863,
           9
         ]
       ],
-      "id": 3358,
+      "id": 3366,
       "flags": {
         "isStatic": true
       },
@@ -378,11 +378,11 @@
       "source": [
         [
           "src/Num.ts",
-          581,
+          584,
           9
         ]
       ],
-      "id": 3261,
+      "id": 3269,
       "flags": {
         "isStatic": true
       },
@@ -416,11 +416,11 @@
       "source": [
         [
           "src/Num.ts",
-          600,
+          603,
           9
         ]
       ],
-      "id": 3269,
+      "id": 3277,
       "flags": {
         "isStatic": true
       },
@@ -454,11 +454,11 @@
       "source": [
         [
           "src/Num.ts",
-          590,
+          593,
           9
         ]
       ],
-      "id": 3265,
+      "id": 3273,
       "flags": {
         "isStatic": true
       },
@@ -492,11 +492,11 @@
       "source": [
         [
           "src/Num.ts",
-          703,
+          706,
           9
         ]
       ],
-      "id": 3311,
+      "id": 3319,
       "flags": {
         "isStatic": true
       },
@@ -536,11 +536,11 @@
       "source": [
         [
           "src/Num.ts",
-          730,
+          733,
           9
         ]
       ],
-      "id": 3321,
+      "id": 3329,
       "flags": {
         "isStatic": true
       },
@@ -580,11 +580,11 @@
       "source": [
         [
           "src/Num.ts",
-          717,
+          720,
           9
         ]
       ],
-      "id": 3316,
+      "id": 3324,
       "flags": {
         "isStatic": true
       },
@@ -624,11 +624,11 @@
       "source": [
         [
           "src/Num.ts",
-          613,
+          616,
           9
         ]
       ],
-      "id": 3273,
+      "id": 3281,
       "flags": {
         "isStatic": true
       },
@@ -668,11 +668,11 @@
       "source": [
         [
           "src/Num.ts",
-          623,
+          626,
           9
         ]
       ],
-      "id": 3278,
+      "id": 3286,
       "flags": {
         "isStatic": true
       },
@@ -712,11 +712,11 @@
       "source": [
         [
           "src/Num.ts",
-          544,
+          547,
           9
         ]
       ],
-      "id": 3245,
+      "id": 3253,
       "flags": {
         "isStatic": true
       },
@@ -750,11 +750,11 @@
       "source": [
         [
           "src/Num.ts",
-          808,
+          811,
           9
         ]
       ],
-      "id": 3343,
+      "id": 3351,
       "flags": {
         "isStatic": true
       },
@@ -794,11 +794,11 @@
       "source": [
         [
           "src/Num.ts",
-          838,
+          841,
           9
         ]
       ],
-      "id": 3353,
+      "id": 3361,
       "flags": {
         "isStatic": true
       },
@@ -838,11 +838,11 @@
       "source": [
         [
           "src/Num.ts",
-          553,
+          556,
           9
         ]
       ],
-      "id": 3249,
+      "id": 3257,
       "flags": {
         "isStatic": true
       },
@@ -876,11 +876,11 @@
       "source": [
         [
           "src/Num.ts",
-          571,
+          574,
           9
         ]
       ],
-      "id": 3257,
+      "id": 3265,
       "flags": {
         "isStatic": true
       },
@@ -914,11 +914,11 @@
       "source": [
         [
           "src/Num.ts",
-          562,
+          565,
           9
         ]
       ],
-      "id": 3253,
+      "id": 3261,
       "flags": {
         "isStatic": true
       },
@@ -952,11 +952,11 @@
       "source": [
         [
           "src/Num.ts",
-          882,
+          885,
           9
         ]
       ],
-      "id": 3364,
+      "id": 3372,
       "flags": {
         "isStatic": true
       },
@@ -996,11 +996,11 @@
       "source": [
         [
           "src/Num.ts",
-          824,
+          827,
           9
         ]
       ],
-      "id": 3348,
+      "id": 3356,
       "flags": {
         "isStatic": true
       },
@@ -1040,11 +1040,11 @@
       "source": [
         [
           "src/Num.ts",
-          797,
+          800,
           9
         ]
       ],
-      "id": 3338,
+      "id": 3346,
       "flags": {
         "isStatic": true
       },
@@ -1084,11 +1084,11 @@
       "source": [
         [
           "src/Num.ts",
-          632,
+          635,
           9
         ]
       ],
-      "id": 3283,
+      "id": 3291,
       "flags": {
         "isStatic": true
       },
@@ -1122,11 +1122,11 @@
       "source": [
         [
           "src/Num.ts",
-          650,
+          653,
           9
         ]
       ],
-      "id": 3291,
+      "id": 3299,
       "flags": {
         "isStatic": true
       },
@@ -1160,11 +1160,11 @@
       "source": [
         [
           "src/Num.ts",
-          641,
+          644,
           9
         ]
       ],
-      "id": 3287,
+      "id": 3295,
       "flags": {
         "isStatic": true
       },
@@ -1198,11 +1198,11 @@
       "source": [
         [
           "src/Num.ts",
-          913,
+          916,
           9
         ]
       ],
-      "id": 3374,
+      "id": 3382,
       "flags": {
         "isStatic": true
       },

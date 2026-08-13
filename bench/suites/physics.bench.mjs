@@ -5,10 +5,10 @@
  * would make the workload depend on how fast the machine is, which corrupts the
  * measurement.
  *
- * Note that `World._updateParticles` tests every particle pair for collision
- * unconditionally, so its cost is quadratic in particle count. The particle
- * counts here are deliberately modest for that reason; the scenario suite
- * measures a realistic frame.
+ * The solver resolves particle collisions through a spatial hash, so update
+ * cost scales near-linearly with particle count; the 1024-particle cases
+ * exist to keep that property measured. The scenario suite measures a
+ * realistic frame.
  */
 
 import { SIZES } from "../lib/fixtures.mjs";
@@ -67,6 +67,24 @@ export default defineSuite("physics", (b, { Pts, fx }) => {
     run: (world) => {
       world.update(DT);
       sink(world.body(0)[0][0]);
+    },
+  });
+
+  b.case("World.update (1024 particles)", {
+    batch: 1024,
+    setup: () => makeWorld("physics:world:1k", 1024),
+    run: (world) => {
+      world.update(DT);
+      sink(world.particle(0)[0]);
+    },
+  });
+
+  b.case("World.update (1024 particles, no collision radius)", {
+    batch: 1024,
+    setup: () => makeWorld("physics:world:1k:nr", 1024, 0),
+    run: (world) => {
+      world.update(DT);
+      sink(world.particle(0)[0]);
     },
   });
 

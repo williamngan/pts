@@ -3,12 +3,12 @@
   "source": [
     [
       "src/Physics.ts",
-      373,
+      652,
       13
     ]
   ],
   "kind": "Class",
-  "id": 3927,
+  "id": 3966,
   "comment": "Particle is a subclass of [`Pt`](#link) that has radius and mass. It's usually added into [`World`](#link) to create physics simulations.\nSee [a demo here](../demo/index.html?name=physics.particles).",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "src/Physics.ts",
-          387,
+          666,
           2
         ]
       ],
-      "id": 3960,
+      "id": 3999,
       "flags": {},
       "overrides": "Pt.__constructor",
       "inherits": false,
@@ -48,16 +48,16 @@
       "source": [
         [
           "src/Physics.ts",
-          435,
+          714,
           6
         ],
         [
           "src/Physics.ts",
-          438,
+          717,
           6
         ]
       ],
-      "id": 3986,
+      "id": 4025,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -80,11 +80,11 @@
       "source": [
         [
           "src/Physics.ts",
-          456,
+          735,
           6
         ]
       ],
-      "id": 3994,
+      "id": 4033,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -99,16 +99,16 @@
       "source": [
         [
           "src/Physics.ts",
-          425,
+          704,
           6
         ],
         [
           "src/Physics.ts",
-          428,
+          707,
           6
         ]
       ],
-      "id": 3982,
+      "id": 4021,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -131,16 +131,16 @@
       "source": [
         [
           "src/Pt.ts",
-          55,
+          65,
           6
         ],
         [
           "src/Pt.ts",
-          58,
+          68,
           6
         ]
       ],
-      "id": 4020,
+      "id": 4059,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.id",
@@ -163,16 +163,16 @@
       "source": [
         [
           "src/Physics.ts",
-          445,
+          724,
           6
         ],
         [
           "src/Physics.ts",
-          448,
+          727,
           6
         ]
       ],
-      "id": 3990,
+      "id": 4029,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -195,16 +195,16 @@
       "source": [
         [
           "src/Physics.ts",
-          395,
+          674,
           6
         ],
         [
           "src/Physics.ts",
-          398,
+          677,
           6
         ]
       ],
-      "id": 3970,
+      "id": 4009,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -227,11 +227,11 @@
       "source": [
         [
           "src/Physics.ts",
-          463,
+          742,
           6
         ]
       ],
-      "id": 3996,
+      "id": 4035,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -252,16 +252,16 @@
       "source": [
         [
           "src/Physics.ts",
-          415,
+          694,
           6
         ],
         [
           "src/Physics.ts",
-          418,
+          697,
           6
         ]
       ],
-      "id": 3978,
+      "id": 4017,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -284,16 +284,16 @@
       "source": [
         [
           "src/Physics.ts",
-          405,
+          684,
           6
         ],
         [
           "src/Physics.ts",
-          408,
+          687,
           6
         ]
       ],
-      "id": 3974,
+      "id": 4013,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -316,16 +316,16 @@
       "source": [
         [
           "src/Pt.ts",
-          95,
+          105,
           6
         ],
         [
           "src/Pt.ts",
-          98,
+          108,
           6
         ]
       ],
-      "id": 4036,
+      "id": 4075,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.w",
@@ -348,16 +348,16 @@
       "source": [
         [
           "src/Pt.ts",
-          65,
+          75,
           6
         ],
         [
           "src/Pt.ts",
-          68,
+          78,
           6
         ]
       ],
-      "id": 4024,
+      "id": 4063,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.x",
@@ -380,16 +380,16 @@
       "source": [
         [
           "src/Pt.ts",
-          75,
+          85,
           6
         ],
         [
           "src/Pt.ts",
-          78,
+          88,
           6
         ]
       ],
-      "id": 4028,
+      "id": 4067,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.y",
@@ -412,16 +412,16 @@
       "source": [
         [
           "src/Pt.ts",
-          85,
+          95,
           6
         ],
         [
           "src/Pt.ts",
-          88,
+          98,
           6
         ]
       ],
-      "id": 4032,
+      "id": 4071,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.z",
@@ -446,11 +446,11 @@
       "source": [
         [
           "src/Pt.ts",
-          364,
+          374,
           2
         ]
       ],
-      "id": 4134,
+      "id": 4173,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$abs",
@@ -469,11 +469,11 @@
       "source": [
         [
           "src/Pt.ts",
-          221,
+          231,
           2
         ]
       ],
-      "id": 4086,
+      "id": 4125,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$add",
@@ -499,11 +499,11 @@
       "source": [
         [
           "src/Pt.ts",
-          394,
+          404,
           2
         ]
       ],
-      "id": 4142,
+      "id": 4181,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$ceil",
@@ -522,11 +522,11 @@
       "source": [
         [
           "src/Pt.ts",
-          202,
+          212,
           2
         ]
       ],
-      "id": 4080,
+      "id": 4119,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$concat",
@@ -552,11 +552,11 @@
       "source": [
         [
           "src/Pt.ts",
-          332,
+          342,
           2
         ]
       ],
-      "id": 4123,
+      "id": 4162,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$cross",
@@ -582,11 +582,11 @@
       "source": [
         [
           "src/Pt.ts",
-          324,
+          334,
           2
         ]
       ],
-      "id": 4120,
+      "id": 4159,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$cross2D",
@@ -612,11 +612,11 @@
       "source": [
         [
           "src/Pt.ts",
-          278,
+          288,
           2
         ]
       ],
-      "id": 4104,
+      "id": 4143,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$divide",
@@ -642,11 +642,11 @@
       "source": [
         [
           "src/Pt.ts",
-          379,
+          389,
           2
         ]
       ],
-      "id": 4138,
+      "id": 4177,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$floor",
@@ -665,11 +665,11 @@
       "source": [
         [
           "src/Pt.ts",
-          446,
+          456,
           2
         ]
       ],
-      "id": 4161,
+      "id": 4200,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$max",
@@ -695,11 +695,11 @@
       "source": [
         [
           "src/Pt.ts",
-          433,
+          443,
           2
         ]
       ],
-      "id": 4158,
+      "id": 4197,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$min",
@@ -725,11 +725,11 @@
       "source": [
         [
           "src/Pt.ts",
-          259,
+          269,
           2
         ]
       ],
-      "id": 4098,
+      "id": 4137,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$multiply",
@@ -755,11 +755,11 @@
       "source": [
         [
           "src/Pt.ts",
-          341,
+          351,
           2
         ]
       ],
-      "id": 4126,
+      "id": 4165,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$project",
@@ -785,11 +785,11 @@
       "source": [
         [
           "src/Pt.ts",
-          409,
+          419,
           2
         ]
       ],
-      "id": 4146,
+      "id": 4185,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$round",
@@ -808,11 +808,11 @@
       "source": [
         [
           "src/Pt.ts",
-          240,
+          250,
           2
         ]
       ],
-      "id": 4092,
+      "id": 4131,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$subtract",
@@ -838,11 +838,11 @@
       "source": [
         [
           "src/Pt.ts",
-          190,
+          200,
           2
         ]
       ],
-      "id": 4077,
+      "id": 4116,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$take",
@@ -868,11 +868,11 @@
       "source": [
         [
           "src/Pt.ts",
-          137,
+          147,
           2
         ]
       ],
-      "id": 4049,
+      "id": 4088,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$to",
@@ -898,11 +898,11 @@
       "source": [
         [
           "src/Pt.ts",
-          308,
+          318,
           2
         ]
       ],
-      "id": 4114,
+      "id": 4153,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.$unit",
@@ -928,11 +928,11 @@
       "source": [
         [
           "src/Pt.ts",
-          356,
+          366,
           2
         ]
       ],
-      "id": 4132,
+      "id": 4171,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.abs",
@@ -951,11 +951,11 @@
       "source": [
         [
           "src/Pt.ts",
-          210,
+          220,
           2
         ]
       ],
-      "id": 4083,
+      "id": 4122,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.add",
@@ -981,11 +981,11 @@
       "source": [
         [
           "src/Physics.ts",
-          483,
+          762,
           2
         ]
       ],
-      "id": 4002,
+      "id": 4041,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1011,11 +1011,11 @@
       "source": [
         [
           "src/Pt.ts",
-          459,
+          469,
           2
         ]
       ],
-      "id": 4164,
+      "id": 4203,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.angle",
@@ -1041,11 +1041,11 @@
       "source": [
         [
           "src/Pt.ts",
-          468,
+          478,
           2
         ]
       ],
-      "id": 4167,
+      "id": 4206,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.angleBetween",
@@ -1077,11 +1077,11 @@
       "source": [
         [
           "src/Pt.ts",
-          386,
+          396,
           2
         ]
       ],
-      "id": 4140,
+      "id": 4179,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.ceil",
@@ -1100,11 +1100,11 @@
       "source": [
         [
           "src/Pt.ts",
-          105,
+          115,
           2
         ]
       ],
-      "id": 4040,
+      "id": 4079,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.clone",
@@ -1123,11 +1123,11 @@
       "source": [
         [
           "src/Physics.ts",
-          529,
+          814,
           2
         ]
       ],
-      "id": 4013,
+      "id": 4052,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1163,7 +1163,7 @@
           4
         ]
       ],
-      "id": 4199,
+      "id": 4238,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.copyWithin",
@@ -1201,11 +1201,11 @@
       "source": [
         [
           "src/Pt.ts",
-          267,
+          277,
           2
         ]
       ],
-      "id": 4101,
+      "id": 4140,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.divide",
@@ -1231,11 +1231,11 @@
       "source": [
         [
           "src/Pt.ts",
-          316,
+          326,
           2
         ]
       ],
-      "id": 4117,
+      "id": 4156,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.dot",
@@ -1261,11 +1261,11 @@
       "source": [
         [
           "src/Pt.ts",
-          114,
+          124,
           2
         ]
       ],
-      "id": 4042,
+      "id": 4081,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.equals",
@@ -1301,7 +1301,7 @@
           4
         ]
       ],
-      "id": 4204,
+      "id": 4243,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.every",
@@ -1337,7 +1337,7 @@
           4
         ]
       ],
-      "id": 4213,
+      "id": 4252,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.fill",
@@ -1379,7 +1379,7 @@
           4
         ]
       ],
-      "id": 4218,
+      "id": 4257,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.filter",
@@ -1415,7 +1415,7 @@
           4
         ]
       ],
-      "id": 4227,
+      "id": 4266,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.find",
@@ -1451,7 +1451,7 @@
           4
         ]
       ],
-      "id": 4236,
+      "id": 4275,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.findIndex",
@@ -1483,11 +1483,11 @@
       "source": [
         [
           "src/Pt.ts",
-          371,
+          381,
           2
         ]
       ],
-      "id": 4136,
+      "id": 4175,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.floor",
@@ -1510,7 +1510,7 @@
           4
         ]
       ],
-      "id": 4245,
+      "id": 4284,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.forEach",
@@ -1542,11 +1542,11 @@
       "source": [
         [
           "src/Physics.ts",
-          519,
+          804,
           2
         ]
       ],
-      "id": 4010,
+      "id": 4049,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1581,7 +1581,7 @@
           4
         ]
       ],
-      "id": 4254,
+      "id": 4293,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.indexOf",
@@ -1617,7 +1617,7 @@
           4
         ]
       ],
-      "id": 4258,
+      "id": 4297,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.join",
@@ -1647,7 +1647,7 @@
           4
         ]
       ],
-      "id": 4261,
+      "id": 4300,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.lastIndexOf",
@@ -1679,11 +1679,11 @@
       "source": [
         [
           "src/Pt.ts",
-          292,
+          302,
           2
         ]
       ],
-      "id": 4109,
+      "id": 4148,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.magnitude",
@@ -1702,11 +1702,11 @@
       "source": [
         [
           "src/Pt.ts",
-          285,
+          295,
           2
         ]
       ],
-      "id": 4107,
+      "id": 4146,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.magnitudeSq",
@@ -1729,7 +1729,7 @@
           4
         ]
       ],
-      "id": 4266,
+      "id": 4305,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.map",
@@ -1761,11 +1761,11 @@
       "source": [
         [
           "src/Pt.ts",
-          425,
+          435,
           2
         ]
       ],
-      "id": 4153,
+      "id": 4192,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.maxValue",
@@ -1784,11 +1784,11 @@
       "source": [
         [
           "src/Pt.ts",
-          417,
+          427,
           2
         ]
       ],
-      "id": 4148,
+      "id": 4187,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.minValue",
@@ -1807,11 +1807,11 @@
       "source": [
         [
           "src/Pt.ts",
-          248,
+          258,
           2
         ]
       ],
-      "id": 4095,
+      "id": 4134,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.multiply",
@@ -1837,11 +1837,11 @@
       "source": [
         [
           "src/Pt.ts",
-          163,
+          173,
           2
         ]
       ],
-      "id": 4057,
+      "id": 4096,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.op",
@@ -1872,11 +1872,11 @@
       "source": [
         [
           "src/Pt.ts",
-          176,
+          186,
           2
         ]
       ],
-      "id": 4067,
+      "id": 4106,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.ops",
@@ -1907,11 +1907,11 @@
       "source": [
         [
           "src/Pt.ts",
-          349,
+          359,
           2
         ]
       ],
-      "id": 4129,
+      "id": 4168,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.projectScalar",
@@ -1951,7 +1951,7 @@
           4
         ]
       ],
-      "id": 4275,
+      "id": 4314,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reduce",
@@ -2031,7 +2031,7 @@
           4
         ]
       ],
-      "id": 4303,
+      "id": 4342,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reduceRight",
@@ -2097,11 +2097,11 @@
       "source": [
         [
           "src/Pt.ts",
-          509,
+          519,
           2
         ]
       ],
-      "id": 4185,
+      "id": 4224,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.reflect2D",
@@ -2137,7 +2137,7 @@
           4
         ]
       ],
-      "id": 4331,
+      "id": 4370,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reverse",
@@ -2156,11 +2156,11 @@
       "source": [
         [
           "src/Pt.ts",
-          488,
+          498,
           2
         ]
       ],
-      "id": 4175,
+      "id": 4214,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.rotate2D",
@@ -2198,11 +2198,11 @@
       "source": [
         [
           "src/Pt.ts",
-          401,
+          411,
           2
         ]
       ],
-      "id": 4144,
+      "id": 4183,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.round",
@@ -2221,11 +2221,11 @@
       "source": [
         [
           "src/Pt.ts",
-          477,
+          487,
           2
         ]
       ],
-      "id": 4171,
+      "id": 4210,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.scale",
@@ -2261,7 +2261,7 @@
           4
         ]
       ],
-      "id": 4333,
+      "id": 4372,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.set",
@@ -2293,11 +2293,11 @@
       "source": [
         [
           "src/Pt.ts",
-          499,
+          509,
           2
         ]
       ],
-      "id": 4180,
+      "id": 4219,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.shear2D",
@@ -2335,11 +2335,11 @@
       "source": [
         [
           "src/Physics.ts",
-          473,
+          752,
           2
         ]
       ],
-      "id": 3999,
+      "id": 4038,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2369,7 +2369,7 @@
           4
         ]
       ],
-      "id": 4337,
+      "id": 4376,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.slice",
@@ -2405,7 +2405,7 @@
           4
         ]
       ],
-      "id": 4341,
+      "id": 4380,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.some",
@@ -2441,7 +2441,7 @@
           4
         ]
       ],
-      "id": 4350,
+      "id": 4389,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.sort",
@@ -2471,7 +2471,7 @@
           4
         ]
       ],
-      "id": 4357,
+      "id": 4396,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.subarray",
@@ -2503,11 +2503,11 @@
       "source": [
         [
           "src/Pt.ts",
-          229,
+          239,
           2
         ]
       ],
-      "id": 4089,
+      "id": 4128,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.subtract",
@@ -2533,11 +2533,11 @@
       "source": [
         [
           "src/Pt.ts",
-          125,
+          135,
           2
         ]
       ],
-      "id": 4046,
+      "id": 4085,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.to",
@@ -2563,11 +2563,11 @@
       "source": [
         [
           "src/Pt.ts",
-          147,
+          157,
           2
         ]
       ],
-      "id": 4052,
+      "id": 4091,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.toAngle",
@@ -2605,11 +2605,11 @@
       "source": [
         [
           "src/Pt.ts",
-          524,
+          534,
           2
         ]
       ],
-      "id": 4189,
+      "id": 4228,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.toArray",
@@ -2628,11 +2628,11 @@
       "source": [
         [
           "src/Pt.ts",
-          538,
+          550,
           2
         ]
       ],
-      "id": 4193,
+      "id": 4232,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.toBound",
@@ -2651,11 +2651,11 @@
       "source": [
         [
           "src/Pt.ts",
-          531,
+          543,
           2
         ]
       ],
-      "id": 4191,
+      "id": 4230,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.toGroup",
@@ -2683,7 +2683,7 @@
           4
         ]
       ],
-      "id": 4361,
+      "id": 4400,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.toLocaleString",
@@ -2722,11 +2722,11 @@
       "source": [
         [
           "src/Physics.ts",
-          572,
+          874,
           2
         ]
       ],
-      "id": 4017,
+      "id": 4056,
       "flags": {},
       "overrides": "Pt.toString",
       "inherits": false,
@@ -2745,11 +2745,11 @@
       "source": [
         [
           "src/Pt.ts",
-          300,
+          310,
           2
         ]
       ],
-      "id": 4111,
+      "id": 4150,
       "flags": {},
       "overrides": false,
       "inherits": "Pt.unit",
@@ -2779,7 +2779,7 @@
           4
         ]
       ],
-      "id": 4366,
+      "id": 4405,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.valueOf",
@@ -2798,11 +2798,11 @@
       "source": [
         [
           "src/Physics.ts",
-          494,
+          773,
           2
         ]
       ],
-      "id": 4005,
+      "id": 4044,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2840,11 +2840,11 @@
       "source": [
         [
           "src/Pt.ts",
-          37,
+          47,
           9
         ]
       ],
-      "id": 3928,
+      "id": 3967,
       "flags": {
         "isStatic": true
       },
@@ -2891,7 +2891,7 @@
           13
         ]
       ],
-      "id": 4196,
+      "id": 4235,
       "flags": {
         "isReadonly": true
       },
@@ -2909,7 +2909,7 @@
           13
         ]
       ],
-      "id": 4197,
+      "id": 4236,
       "flags": {
         "isReadonly": true
       },
@@ -2927,7 +2927,7 @@
           13
         ]
       ],
-      "id": 4198,
+      "id": 4237,
       "flags": {
         "isReadonly": true
       },
@@ -2945,7 +2945,7 @@
           13
         ]
       ],
-      "id": 4195,
+      "id": 4234,
       "flags": {
         "isReadonly": true
       },
@@ -2963,7 +2963,7 @@
           13
         ]
       ],
-      "id": 4265,
+      "id": 4304,
       "flags": {
         "isReadonly": true
       },

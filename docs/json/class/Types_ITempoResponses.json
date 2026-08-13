@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Typealias",
-  "id": 7224,
+  "id": 7292,
   "comment": "Typescript type: the return type of `tempo.every(...)`",
   "constructor": [],
   "accessors": [],

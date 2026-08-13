@@ -3,12 +3,12 @@
   "source": [
     [
       "src/Op.ts",
-      680,
+      685,
       13
     ]
   ],
   "kind": "Class",
-  "id": 3577,
+  "id": 3585,
   "comment": "Circle class provides static functions to create and operate on circles. A circle is usually represented as a Group of 2 Pts, where the first Pt specifies the center, and the second Pt specifies the radius.\nYou can use the static functions as-is, or apply the [`Group.op`](#link) or [`Pt.op`](#link) to enable functional programming.\nSee [Op guide](../guide/Op-0400.html) for details.",
   "constructor": [],
   "accessors": [],
@@ -18,11 +18,11 @@
       "source": [
         [
           "src/Op.ts",
-          720,
+          725,
           9
         ]
       ],
-      "id": 3586,
+      "id": 3594,
       "flags": {
         "isStatic": true
       },
@@ -56,11 +56,11 @@
       "source": [
         [
           "src/Op.ts",
-          687,
+          692,
           9
         ]
       ],
-      "id": 3578,
+      "id": 3586,
       "flags": {
         "isStatic": true
       },
@@ -94,11 +94,11 @@
       "source": [
         [
           "src/Op.ts",
-          706,
+          711,
           9
         ]
       ],
-      "id": 3582,
+      "id": 3590,
       "flags": {
         "isStatic": true
       },
@@ -132,11 +132,11 @@
       "source": [
         [
           "src/Op.ts",
-          801,
+          806,
           9
         ]
       ],
-      "id": 3603,
+      "id": 3611,
       "flags": {
         "isStatic": true
       },
@@ -170,11 +170,11 @@
       "source": [
         [
           "src/Op.ts",
-          781,
+          786,
           9
         ]
       ],
-      "id": 3599,
+      "id": 3607,
       "flags": {
         "isStatic": true
       },
@@ -208,11 +208,11 @@
       "source": [
         [
           "src/Op.ts",
-          746,
+          751,
           9
         ]
       ],
-      "id": 3595,
+      "id": 3603,
       "flags": {
         "isStatic": true
       },
@@ -246,11 +246,11 @@
       "source": [
         [
           "src/Op.ts",
-          838,
+          843,
           9
         ]
       ],
-      "id": 3607,
+      "id": 3615,
       "flags": {
         "isStatic": true
       },
@@ -284,11 +284,11 @@
       "source": [
         [
           "src/Op.ts",
-          857,
+          862,
           9
         ]
       ],
-      "id": 3611,
+      "id": 3619,
       "flags": {
         "isStatic": true
       },
@@ -322,11 +322,11 @@
       "source": [
         [
           "src/Op.ts",
-          873,
+          878,
           9
         ]
       ],
-      "id": 3615,
+      "id": 3623,
       "flags": {
         "isStatic": true
       },
@@ -360,11 +360,11 @@
       "source": [
         [
           "src/Op.ts",
-          730,
+          735,
           9
         ]
       ],
-      "id": 3590,
+      "id": 3598,
       "flags": {
         "isStatic": true
       },

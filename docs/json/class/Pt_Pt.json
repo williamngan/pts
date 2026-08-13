@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 5038,
+  "id": 5090,
   "comment": "Pt is a subclass of standard [`Float32Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array) with additional properties and functions to support vector and geometric calculations.\nSee [Pt guide](../guide/Pt-0200.html) for details.",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           2
         ]
       ],
-      "id": 5071,
+      "id": 5123,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -53,16 +53,16 @@
       "source": [
         [
           "src/Pt.ts",
-          55,
+          65,
           6
         ],
         [
           "src/Pt.ts",
-          58,
+          68,
           6
         ]
       ],
-      "id": 5075,
+      "id": 5127,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -85,16 +85,16 @@
       "source": [
         [
           "src/Pt.ts",
-          95,
+          105,
           6
         ],
         [
           "src/Pt.ts",
-          98,
+          108,
           6
         ]
       ],
-      "id": 5091,
+      "id": 5143,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -117,16 +117,16 @@
       "source": [
         [
           "src/Pt.ts",
-          65,
+          75,
           6
         ],
         [
           "src/Pt.ts",
-          68,
+          78,
           6
         ]
       ],
-      "id": 5079,
+      "id": 5131,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -149,16 +149,16 @@
       "source": [
         [
           "src/Pt.ts",
-          75,
+          85,
           6
         ],
         [
           "src/Pt.ts",
-          78,
+          88,
           6
         ]
       ],
-      "id": 5083,
+      "id": 5135,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -181,16 +181,16 @@
       "source": [
         [
           "src/Pt.ts",
-          85,
+          95,
           6
         ],
         [
           "src/Pt.ts",
-          88,
+          98,
           6
         ]
       ],
-      "id": 5087,
+      "id": 5139,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -219,7 +219,7 @@
           4
         ]
       ],
-      "id": 5435,
+      "id": 5487,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.[Symbol.iterator]",
@@ -238,11 +238,11 @@
       "source": [
         [
           "src/Pt.ts",
-          364,
+          374,
           2
         ]
       ],
-      "id": 5189,
+      "id": 5241,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -261,11 +261,11 @@
       "source": [
         [
           "src/Pt.ts",
-          221,
+          231,
           2
         ]
       ],
-      "id": 5141,
+      "id": 5193,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -291,11 +291,11 @@
       "source": [
         [
           "src/Pt.ts",
-          394,
+          404,
           2
         ]
       ],
-      "id": 5197,
+      "id": 5249,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -314,11 +314,11 @@
       "source": [
         [
           "src/Pt.ts",
-          202,
+          212,
           2
         ]
       ],
-      "id": 5135,
+      "id": 5187,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -344,11 +344,11 @@
       "source": [
         [
           "src/Pt.ts",
-          332,
+          342,
           2
         ]
       ],
-      "id": 5178,
+      "id": 5230,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -374,11 +374,11 @@
       "source": [
         [
           "src/Pt.ts",
-          324,
+          334,
           2
         ]
       ],
-      "id": 5175,
+      "id": 5227,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -404,11 +404,11 @@
       "source": [
         [
           "src/Pt.ts",
-          278,
+          288,
           2
         ]
       ],
-      "id": 5159,
+      "id": 5211,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -434,11 +434,11 @@
       "source": [
         [
           "src/Pt.ts",
-          379,
+          389,
           2
         ]
       ],
-      "id": 5193,
+      "id": 5245,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -457,11 +457,11 @@
       "source": [
         [
           "src/Pt.ts",
-          446,
+          456,
           2
         ]
       ],
-      "id": 5216,
+      "id": 5268,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -487,11 +487,11 @@
       "source": [
         [
           "src/Pt.ts",
-          433,
+          443,
           2
         ]
       ],
-      "id": 5213,
+      "id": 5265,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -517,11 +517,11 @@
       "source": [
         [
           "src/Pt.ts",
-          259,
+          269,
           2
         ]
       ],
-      "id": 5153,
+      "id": 5205,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -547,11 +547,11 @@
       "source": [
         [
           "src/Pt.ts",
-          341,
+          351,
           2
         ]
       ],
-      "id": 5181,
+      "id": 5233,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -577,11 +577,11 @@
       "source": [
         [
           "src/Pt.ts",
-          409,
+          419,
           2
         ]
       ],
-      "id": 5201,
+      "id": 5253,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -600,11 +600,11 @@
       "source": [
         [
           "src/Pt.ts",
-          240,
+          250,
           2
         ]
       ],
-      "id": 5147,
+      "id": 5199,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -630,11 +630,11 @@
       "source": [
         [
           "src/Pt.ts",
-          190,
+          200,
           2
         ]
       ],
-      "id": 5132,
+      "id": 5184,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -660,11 +660,11 @@
       "source": [
         [
           "src/Pt.ts",
-          137,
+          147,
           2
         ]
       ],
-      "id": 5104,
+      "id": 5156,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -690,11 +690,11 @@
       "source": [
         [
           "src/Pt.ts",
-          308,
+          318,
           2
         ]
       ],
-      "id": 5169,
+      "id": 5221,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -720,11 +720,11 @@
       "source": [
         [
           "src/Pt.ts",
-          356,
+          366,
           2
         ]
       ],
-      "id": 5187,
+      "id": 5239,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -743,11 +743,11 @@
       "source": [
         [
           "src/Pt.ts",
-          210,
+          220,
           2
         ]
       ],
-      "id": 5138,
+      "id": 5190,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -773,11 +773,11 @@
       "source": [
         [
           "src/Pt.ts",
-          459,
+          469,
           2
         ]
       ],
-      "id": 5219,
+      "id": 5271,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -803,11 +803,11 @@
       "source": [
         [
           "src/Pt.ts",
-          468,
+          478,
           2
         ]
       ],
-      "id": 5222,
+      "id": 5274,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -839,11 +839,11 @@
       "source": [
         [
           "src/Pt.ts",
-          386,
+          396,
           2
         ]
       ],
-      "id": 5195,
+      "id": 5247,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -862,11 +862,11 @@
       "source": [
         [
           "src/Pt.ts",
-          105,
+          115,
           2
         ]
       ],
-      "id": 5095,
+      "id": 5147,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -889,7 +889,7 @@
           4
         ]
       ],
-      "id": 5256,
+      "id": 5308,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.copyWithin",
@@ -927,11 +927,11 @@
       "source": [
         [
           "src/Pt.ts",
-          267,
+          277,
           2
         ]
       ],
-      "id": 5156,
+      "id": 5208,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -957,11 +957,11 @@
       "source": [
         [
           "src/Pt.ts",
-          316,
+          326,
           2
         ]
       ],
-      "id": 5172,
+      "id": 5224,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -991,7 +991,7 @@
           4
         ]
       ],
-      "id": 5425,
+      "id": 5477,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.entries",
@@ -1010,11 +1010,11 @@
       "source": [
         [
           "src/Pt.ts",
-          114,
+          124,
           2
         ]
       ],
-      "id": 5097,
+      "id": 5149,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1050,7 +1050,7 @@
           4
         ]
       ],
-      "id": 5261,
+      "id": 5313,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.every",
@@ -1086,7 +1086,7 @@
           4
         ]
       ],
-      "id": 5270,
+      "id": 5322,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.fill",
@@ -1128,7 +1128,7 @@
           4
         ]
       ],
-      "id": 5275,
+      "id": 5327,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.filter",
@@ -1164,7 +1164,7 @@
           4
         ]
       ],
-      "id": 5284,
+      "id": 5336,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.find",
@@ -1200,7 +1200,7 @@
           4
         ]
       ],
-      "id": 5293,
+      "id": 5345,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.findIndex",
@@ -1232,11 +1232,11 @@
       "source": [
         [
           "src/Pt.ts",
-          371,
+          381,
           2
         ]
       ],
-      "id": 5191,
+      "id": 5243,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1259,7 +1259,7 @@
           4
         ]
       ],
-      "id": 5302,
+      "id": 5354,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.forEach",
@@ -1295,7 +1295,7 @@
           4
         ]
       ],
-      "id": 5431,
+      "id": 5483,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.includes",
@@ -1331,7 +1331,7 @@
           4
         ]
       ],
-      "id": 5311,
+      "id": 5363,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.indexOf",
@@ -1367,7 +1367,7 @@
           4
         ]
       ],
-      "id": 5315,
+      "id": 5367,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.join",
@@ -1397,7 +1397,7 @@
           4
         ]
       ],
-      "id": 5427,
+      "id": 5479,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.keys",
@@ -1420,7 +1420,7 @@
           4
         ]
       ],
-      "id": 5318,
+      "id": 5370,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.lastIndexOf",
@@ -1452,11 +1452,11 @@
       "source": [
         [
           "src/Pt.ts",
-          292,
+          302,
           2
         ]
       ],
-      "id": 5164,
+      "id": 5216,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1475,11 +1475,11 @@
       "source": [
         [
           "src/Pt.ts",
-          285,
+          295,
           2
         ]
       ],
-      "id": 5162,
+      "id": 5214,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1502,7 +1502,7 @@
           4
         ]
       ],
-      "id": 5323,
+      "id": 5375,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.map",
@@ -1534,11 +1534,11 @@
       "source": [
         [
           "src/Pt.ts",
-          425,
+          435,
           2
         ]
       ],
-      "id": 5208,
+      "id": 5260,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1557,11 +1557,11 @@
       "source": [
         [
           "src/Pt.ts",
-          417,
+          427,
           2
         ]
       ],
-      "id": 5203,
+      "id": 5255,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1580,11 +1580,11 @@
       "source": [
         [
           "src/Pt.ts",
-          248,
+          258,
           2
         ]
       ],
-      "id": 5150,
+      "id": 5202,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1610,11 +1610,11 @@
       "source": [
         [
           "src/Pt.ts",
-          163,
+          173,
           2
         ]
       ],
-      "id": 5112,
+      "id": 5164,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1645,11 +1645,11 @@
       "source": [
         [
           "src/Pt.ts",
-          176,
+          186,
           2
         ]
       ],
-      "id": 5122,
+      "id": 5174,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1680,11 +1680,11 @@
       "source": [
         [
           "src/Pt.ts",
-          349,
+          359,
           2
         ]
       ],
-      "id": 5184,
+      "id": 5236,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1724,7 +1724,7 @@
           4
         ]
       ],
-      "id": 5332,
+      "id": 5384,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reduce",
@@ -1804,7 +1804,7 @@
           4
         ]
       ],
-      "id": 5360,
+      "id": 5412,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reduceRight",
@@ -1870,11 +1870,11 @@
       "source": [
         [
           "src/Pt.ts",
-          509,
+          519,
           2
         ]
       ],
-      "id": 5240,
+      "id": 5292,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1910,7 +1910,7 @@
           4
         ]
       ],
-      "id": 5388,
+      "id": 5440,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reverse",
@@ -1929,11 +1929,11 @@
       "source": [
         [
           "src/Pt.ts",
-          488,
+          498,
           2
         ]
       ],
-      "id": 5230,
+      "id": 5282,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1971,11 +1971,11 @@
       "source": [
         [
           "src/Pt.ts",
-          401,
+          411,
           2
         ]
       ],
-      "id": 5199,
+      "id": 5251,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1994,11 +1994,11 @@
       "source": [
         [
           "src/Pt.ts",
-          477,
+          487,
           2
         ]
       ],
-      "id": 5226,
+      "id": 5278,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2034,7 +2034,7 @@
           4
         ]
       ],
-      "id": 5390,
+      "id": 5442,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.set",
@@ -2066,11 +2066,11 @@
       "source": [
         [
           "src/Pt.ts",
-          499,
+          509,
           2
         ]
       ],
-      "id": 5235,
+      "id": 5287,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2112,7 +2112,7 @@
           4
         ]
       ],
-      "id": 5394,
+      "id": 5446,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.slice",
@@ -2148,7 +2148,7 @@
           4
         ]
       ],
-      "id": 5398,
+      "id": 5450,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.some",
@@ -2184,7 +2184,7 @@
           4
         ]
       ],
-      "id": 5407,
+      "id": 5459,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.sort",
@@ -2214,7 +2214,7 @@
           4
         ]
       ],
-      "id": 5414,
+      "id": 5466,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.subarray",
@@ -2246,11 +2246,11 @@
       "source": [
         [
           "src/Pt.ts",
-          229,
+          239,
           2
         ]
       ],
-      "id": 5144,
+      "id": 5196,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2276,11 +2276,11 @@
       "source": [
         [
           "src/Pt.ts",
-          125,
+          135,
           2
         ]
       ],
-      "id": 5101,
+      "id": 5153,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2306,11 +2306,11 @@
       "source": [
         [
           "src/Pt.ts",
-          147,
+          157,
           2
         ]
       ],
-      "id": 5107,
+      "id": 5159,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2348,11 +2348,11 @@
       "source": [
         [
           "src/Pt.ts",
-          524,
+          534,
           2
         ]
       ],
-      "id": 5246,
+      "id": 5298,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2371,11 +2371,11 @@
       "source": [
         [
           "src/Pt.ts",
-          538,
+          550,
           2
         ]
       ],
-      "id": 5250,
+      "id": 5302,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2394,11 +2394,11 @@
       "source": [
         [
           "src/Pt.ts",
-          531,
+          543,
           2
         ]
       ],
-      "id": 5248,
+      "id": 5300,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2426,7 +2426,7 @@
           4
         ]
       ],
-      "id": 5418,
+      "id": 5470,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.toLocaleString",
@@ -2465,11 +2465,11 @@
       "source": [
         [
           "src/Pt.ts",
-          517,
+          527,
           2
         ]
       ],
-      "id": 5244,
+      "id": 5296,
       "flags": {},
       "overrides": "Float32Array.toString",
       "inherits": false,
@@ -2488,11 +2488,11 @@
       "source": [
         [
           "src/Pt.ts",
-          300,
+          310,
           2
         ]
       ],
-      "id": 5166,
+      "id": 5218,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2522,7 +2522,7 @@
           4
         ]
       ],
-      "id": 5423,
+      "id": 5475,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.valueOf",
@@ -2545,7 +2545,7 @@
           4
         ]
       ],
-      "id": 5429,
+      "id": 5481,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.values",
@@ -2564,11 +2564,11 @@
       "source": [
         [
           "src/Pt.ts",
-          37,
+          47,
           9
         ]
       ],
-      "id": 5039,
+      "id": 5091,
       "flags": {
         "isStatic": true
       },
@@ -2615,7 +2615,7 @@
           13
         ]
       ],
-      "id": 5437,
+      "id": 5489,
       "flags": {
         "isReadonly": true
       },
@@ -2633,7 +2633,7 @@
           13
         ]
       ],
-      "id": 5253,
+      "id": 5305,
       "flags": {
         "isReadonly": true
       },
@@ -2651,7 +2651,7 @@
           13
         ]
       ],
-      "id": 5254,
+      "id": 5306,
       "flags": {
         "isReadonly": true
       },
@@ -2669,7 +2669,7 @@
           13
         ]
       ],
-      "id": 5255,
+      "id": 5307,
       "flags": {
         "isReadonly": true
       },
@@ -2687,7 +2687,7 @@
           13
         ]
       ],
-      "id": 5252,
+      "id": 5304,
       "flags": {
         "isReadonly": true
       },
@@ -2705,7 +2705,7 @@
           13
         ]
       ],
-      "id": 5322,
+      "id": 5374,
       "flags": {
         "isReadonly": true
       },
