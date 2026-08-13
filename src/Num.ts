@@ -236,8 +236,11 @@ export class Geom {
         minPt = p.clone();
         maxPt = p.clone();
       } else {
-        minPt = minPt.$min(p);
-        maxPt = maxPt.$max(p);
+        // in-place equivalent of `$min` / `$max`, without 2 clones per point
+        for (let i = 0, len = Math.min(minPt.length, p.length); i < len; i++) {
+          minPt[i] = Math.min(minPt[i], p[i]);
+          maxPt[i] = Math.max(maxPt[i], p[i]);
+        }
       }
     }
     return new Group(minPt, maxPt);

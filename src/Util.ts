@@ -3,7 +3,7 @@
 import { CanvasSpace } from "./Canvas";
 import { Num } from "./Num";
 import { Group, Pt } from "./Pt";
-import { WarningType, PtLikeIterable } from "./Types";
+import { WarningType, PtLike, PtLikeIterable } from "./Types";
 
 /**
  * Various constant values for enumerations and calculations.
@@ -137,10 +137,40 @@ export class Util {
 
       // as an array of values
     } else if (isArray) {
-      pos = [].slice.call(args[0]);
+      pos = Util.toNumericArray(args[0]);
     }
 
     return pos;
+  }
+
+  /**
+   * Copy an array or typed array of numbers into a fresh plain array.
+   * @param a an array or typed array
+   */
+  static toNumericArray(a: ArrayLike<number>): number[] {
+    // native slice is a fast path for plain arrays, but `[].slice.call` on a
+    // typed array falls back to the generic per-element protocol
+    if (Array.isArray(a)) return a.slice();
+    const out = [];
+    for (let i = 0, len = a.length; i < len; i++) {
+      out.push(a[i]);
+    }
+    return out;
+  }
+
+  /**
+   * Like [`Util.getArgs`](#link), but avoids copying when the arguments are already
+   * a numeric array, a typed array (eg, a Pt), or a list of numbers. The result may be
+   * the caller's own object, so it must be treated as read-only.
+   * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
+   */
+  static getPtLike(args: any[]): PtLike {
+    const a0 = args[0];
+    if (typeof a0 === "number") return args; // rest args are a fresh, private array
+    if (args.length === 1 && (Array.isArray(a0) || ArrayBuffer.isView(a0))) {
+      return a0 as PtLike;
+    }
+    return Util.getArgs(args);
   }
 
   /**

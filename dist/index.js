@@ -1232,9 +1232,9 @@ var Geom = class Geom {
 		for (const p of pts) if (minPt == void 0) {
 			minPt = p.clone();
 			maxPt = p.clone();
-		} else {
-			minPt = minPt.$min(p);
-			maxPt = maxPt.$max(p);
+		} else for (let i = 0, len = Math.min(minPt.length, p.length); i < len; i++) {
+			minPt[i] = Math.min(minPt[i], p[i]);
+			maxPt[i] = Math.max(maxPt[i], p[i]);
 		}
 		return new Group(minPt, maxPt);
 	}
@@ -1623,8 +1623,20 @@ var Util = class Util {
 				if (p.length && i >= p.length || !(a[i] in p)) break;
 				pos.push(p[a[i]]);
 			}
-		} else if (isArray) pos = [].slice.call(args[0]);
+		} else if (isArray) pos = Util.toNumericArray(args[0]);
 		return pos;
+	}
+	static toNumericArray(a) {
+		if (Array.isArray(a)) return a.slice();
+		const out = [];
+		for (let i = 0, len = a.length; i < len; i++) out.push(a[i]);
+		return out;
+	}
+	static getPtLike(args) {
+		const a0 = args[0];
+		if (typeof a0 === "number") return args;
+		if (args.length === 1 && (Array.isArray(a0) || ArrayBuffer.isView(a0))) return a0;
+		return Util.getArgs(args);
 	}
 	static warn(message = "error", defaultReturn = void 0) {
 		if (Util.warnLevel() == "error") throw new Error(message);
@@ -1745,15 +1757,19 @@ Util._warnLevel = "mute";
 var Pt = class Pt extends Float32Array {
 	constructor(...args) {
 		let params;
-		if (args.length === 1 && typeof args[0] == "number") params = args[0];
-		else params = args.length > 0 ? Util.getArgs(args) : [0, 0];
+		const a0 = args[0];
+		if (args.length === 1 && typeof a0 == "number") params = a0;
+		else if (args.length === 0) params = 2;
+		else if (args.length === 1 && (Array.isArray(a0) || ArrayBuffer.isView(a0))) params = a0;
+		else if (typeof a0 === "number") params = args;
+		else params = Util.getArgs(args);
 		super(params);
 	}
 	static make(dimensions, defaultValue = 0, randomize = false) {
-		const p = new Float32Array(dimensions);
+		const p = new Pt(dimensions);
 		if (defaultValue) p.fill(defaultValue);
 		if (randomize) for (let i = 0, len = p.length; i < len; i++) p[i] = p[i] * Num.random();
-		return new Pt(p);
+		return p;
 	}
 	get id() {
 		return this._id;
@@ -1793,7 +1809,7 @@ var Pt = class Pt extends Float32Array {
 		return true;
 	}
 	to(...args) {
-		const p = Util.getArgs(args);
+		const p = Util.getPtLike(args);
 		for (let i = 0, len = Math.min(this.length, p.length); i < len; i++) this[i] = p[i];
 		return this;
 	}
@@ -1825,28 +1841,28 @@ var Pt = class Pt extends Float32Array {
 		return new Pt(this.toArray().concat(Util.getArgs(args)));
 	}
 	add(...args) {
-		args.length === 1 && typeof args[0] == "number" ? Vec.add(this, args[0]) : Vec.add(this, Util.getArgs(args));
+		args.length === 1 && typeof args[0] == "number" ? Vec.add(this, args[0]) : Vec.add(this, Util.getPtLike(args));
 		return this;
 	}
 	$add(...args) {
 		return this.clone().add(...args);
 	}
 	subtract(...args) {
-		args.length === 1 && typeof args[0] == "number" ? Vec.subtract(this, args[0]) : Vec.subtract(this, Util.getArgs(args));
+		args.length === 1 && typeof args[0] == "number" ? Vec.subtract(this, args[0]) : Vec.subtract(this, Util.getPtLike(args));
 		return this;
 	}
 	$subtract(...args) {
 		return this.clone().subtract(...args);
 	}
 	multiply(...args) {
-		args.length === 1 && typeof args[0] == "number" ? Vec.multiply(this, args[0]) : Vec.multiply(this, Util.getArgs(args));
+		args.length === 1 && typeof args[0] == "number" ? Vec.multiply(this, args[0]) : Vec.multiply(this, Util.getPtLike(args));
 		return this;
 	}
 	$multiply(...args) {
 		return this.clone().multiply(...args);
 	}
 	divide(...args) {
-		args.length === 1 && typeof args[0] == "number" ? Vec.divide(this, args[0]) : Vec.divide(this, Util.getArgs(args));
+		args.length === 1 && typeof args[0] == "number" ? Vec.divide(this, args[0]) : Vec.divide(this, Util.getPtLike(args));
 		return this;
 	}
 	$divide(...args) {
@@ -1866,13 +1882,13 @@ var Pt = class Pt extends Float32Array {
 		return this.clone().unit(magnitude);
 	}
 	dot(...args) {
-		return Vec.dot(this, Util.getArgs(args));
+		return Vec.dot(this, Util.getPtLike(args));
 	}
 	$cross2D(...args) {
-		return Vec.cross2D(this, Util.getArgs(args));
+		return Vec.cross2D(this, Util.getPtLike(args));
 	}
 	$cross(...args) {
-		return Vec.cross(this, Util.getArgs(args));
+		return Vec.cross(this, Util.getPtLike(args));
 	}
 	$project(...args) {
 		return this.$multiply(this.dot(...args) / this.magnitudeSq());
@@ -1915,13 +1931,13 @@ var Pt = class Pt extends Float32Array {
 		return Vec.max(this);
 	}
 	$min(...args) {
-		const p = Util.getArgs(args);
+		const p = Util.getPtLike(args);
 		const m = this.clone();
 		for (let i = 0, len = Math.min(this.length, p.length); i < len; i++) m[i] = Math.min(this[i], p[i]);
 		return m;
 	}
 	$max(...args) {
-		const p = Util.getArgs(args);
+		const p = Util.getPtLike(args);
 		const m = this.clone();
 		for (let i = 0, len = Math.min(this.length, p.length); i < len; i++) m[i] = Math.max(this[i], p[i]);
 		return m;
@@ -1952,7 +1968,9 @@ var Pt = class Pt extends Float32Array {
 		return `Pt(${this.join(", ")})`;
 	}
 	toArray() {
-		return [].slice.call(this);
+		const a = [];
+		for (let i = 0, len = this.length; i < len; i++) a.push(this[i]);
+		return a;
 	}
 	toGroup() {
 		return new Group(Pt.make(this.length), this.clone());
@@ -2066,7 +2084,7 @@ var Group = class Group extends Array {
 		return this.add(...args);
 	}
 	moveTo(...args) {
-		const d = new Pt(Util.getArgs(args)).subtract(this[0]);
+		const d = new Pt(...args).subtract(this[0]);
 		this.moveBy(d);
 		return this;
 	}
@@ -2097,17 +2115,22 @@ var Group = class Group extends Array {
 		for (let i = 0, len = this.length; i < len; i++) this[i] = this[i][ptFn](...args);
 		return this;
 	}
+	_vecOp(fn, args) {
+		const b = args.length === 1 && typeof args[0] == "number" ? args[0] : Util.getPtLike(args);
+		for (let i = 0, len = this.length; i < len; i++) fn(this[i], b);
+		return this;
+	}
 	add(...args) {
-		return this.forEachPt("add", ...args);
+		return this._vecOp(Vec.add, args);
 	}
 	subtract(...args) {
-		return this.forEachPt("subtract", ...args);
+		return this._vecOp(Vec.subtract, args);
 	}
 	multiply(...args) {
-		return this.forEachPt("multiply", ...args);
+		return this._vecOp(Vec.multiply, args);
 	}
 	divide(...args) {
-		return this.forEachPt("divide", ...args);
+		return this._vecOp(Vec.divide, args);
 	}
 	$matrixAdd(g) {
 		return Mat.add(this, g);
@@ -2157,14 +2180,21 @@ var Bound = class Bound extends Group {
 		}
 	}
 	clone() {
-		return new Bound(this.topLeft.clone(), this.bottomRight.clone());
+		return new Bound(this.topLeft, this.bottomRight);
 	}
 	_updateSize() {
-		this._size = this.bottomRight.$subtract(this.topLeft).abs();
+		const a = this[0];
+		const b = this[1];
+		const n = b ? b.length : 0;
+		if (this._size.length !== n) this._size = new Pt(n);
+		for (let i = 0; i < n; i++) this._size[i] = Math.abs(b[i] - (a ? a[i] || 0 : 0));
 		this._updateCenter();
 	}
 	_updateCenter() {
-		this._center = this._size.$multiply(.5).add(this.topLeft);
+		const a = this[0];
+		const n = this._size.length;
+		if (this._center.length !== n) this._center = new Pt(n);
+		for (let i = 0; i < n; i++) this._center[i] = this._size[i] * .5 + (a ? a[i] || 0 : 0);
 	}
 	_updatePosFromTop() {
 		this.bottomRight = this.topLeft.$add(this._size);

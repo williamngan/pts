@@ -377,3 +377,123 @@ describe("Bound", () => {
     expect([bound.width, bound.height, bound.depth]).toEqual([0, 0, 0]);
   });
 });
+
+describe("argument fast paths preserve semantics", () => {
+  it("constructs from a Pt, a Float32Array, and other typed arrays identically", () => {
+    const source = new Pt(1.5, 2.5, 3.5);
+    expect(values(new Pt(source))).toEqual([1.5, 2.5, 3.5]);
+    expect(new Pt(source)).not.toBe(source);
+    const bytes = new Uint8Array([1, 2]) as unknown as Float32Array;
+    expect(values(new Pt(bytes))).toEqual([1, 2]);
+    const clone = source.clone();
+    clone[0] = 9;
+    expect(source[0]).toBe(1.5); // clone must not share the buffer
+  });
+
+  it("does not mutate caller-owned arguments", () => {
+    const arr = [1, 2];
+    const other = new Pt(3, 4);
+    const p = new Pt(10, 20);
+    p.add(arr).subtract(arr).multiply(other).divide(other).dot(other);
+    p.$min(arr);
+    p.$max(arr);
+    p.to(arr);
+    expect(arr).toEqual([1, 2]);
+    expect(values(other)).toEqual([3, 4]);
+  });
+
+  it("handles self-aliased arguments consistently", () => {
+    expect(values(new Pt(2, 3).add(new Pt(2, 3)))).toEqual([4, 6]);
+    const p = new Pt(2, 3);
+    expect(values(p.add(p))).toEqual([4, 6]);
+    const q = new Pt(2, 3);
+    expect(values(q.subtract(q))).toEqual([0, 0]);
+    const r = new Pt(2, 3);
+    expect(values(r.multiply(r))).toEqual([4, 9]);
+    const s = new Pt(3, 4);
+    expect(s.dot(s)).toBe(25);
+  });
+
+  it("keeps group arithmetic order-dependent when a member is the argument", () => {
+    const group = Group.fromArray([
+      [1, 2],
+      [10, 20],
+    ]);
+    group.add(group[0]);
+    // member 0 doubles first; later members then see the mutated value
+    expect(groupValues(group)).toEqual([
+      [2, 4],
+      [12, 24],
+    ]);
+  });
+
+  it("accepts every argument shape in group arithmetic", () => {
+    const base = () =>
+      Group.fromArray([
+        [1, 2],
+        [3, 4],
+      ]);
+    expect(groupValues(base().add(10))).toEqual([
+      [11, 12],
+      [13, 14],
+    ]);
+    expect(groupValues(base().add(10, 20))).toEqual([
+      [11, 22],
+      [13, 24],
+    ]);
+    expect(groupValues(base().add([10, 20]))).toEqual([
+      [11, 22],
+      [13, 24],
+    ]);
+    expect(groupValues(base().add({ x: 10, y: 20 }))).toEqual([
+      [11, 22],
+      [13, 24],
+    ]);
+    expect(groupValues(base().add(new Pt(10, 20)))).toEqual([
+      [11, 22],
+      [13, 24],
+    ]);
+    expect(groupValues(new Group().add(5))).toEqual([]);
+  });
+
+  it("returns Pt instances from species-constructed results", () => {
+    const p = new Pt(1, 2, 3);
+    expect(p.map((v) => v * 2)).toBeInstanceOf(Pt);
+    expect(p.slice(1)).toBeInstanceOf(Pt);
+    expect(values(p.map((v) => v * 2))).toEqual([2, 4, 6]);
+  });
+
+  it("converts to a plain array", () => {
+    const arr = new Pt(1, 2, 3).toArray();
+    expect(Array.isArray(arr)).toBe(true);
+    expect(arr).toEqual([1, 2, 3]);
+  });
+
+  it("resolves getPtLike without copying arrays and typed arrays", () => {
+    const arr = [1, 2];
+    const typed = new Float32Array([3, 4]);
+    expect(Util.getPtLike([arr])).toBe(arr);
+    expect(Util.getPtLike([typed])).toBe(typed);
+    expect(Util.getPtLike([1, 2])).toEqual([1, 2]);
+    expect(Util.getPtLike([{ x: 1, y: 2 }])).toEqual([1, 2]);
+    expect(Util.getPtLike([])).toEqual([]);
+  });
+
+  it("computes bounding boxes without mutating inputs, across dimensions", () => {
+    const pts = Group.fromArray([
+      [5, 5],
+      [-2, 8],
+      [3, -4],
+    ]);
+    const box = pts.boundingBox();
+    expect(groupValues(box)).toEqual([
+      [-2, -4],
+      [5, 8],
+    ]);
+    expect(groupValues(pts)).toEqual([
+      [5, 5],
+      [-2, 8],
+      [3, -4],
+    ]);
+  });
+});

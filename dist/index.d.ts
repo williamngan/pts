@@ -305,6 +305,7 @@ declare class Group extends Array<Pt> {
   reflect2D(line: PtLikeIterable, axis?: string): this;
   sortByDimension(dim: number, desc?: boolean): this;
   forEachPt(ptFn: string, ...args: any[]): this;
+  protected _vecOp(fn: (a: PtLike, b: PtLike | number) => PtLike, args: any[]): this;
   add(...args: any[]): this;
   subtract(...args: any[]): this;
   multiply(...args: any[]): this;
@@ -1023,6 +1024,8 @@ declare class Util {
   static _warnLevel: WarningType;
   static warnLevel(lv?: WarningType): WarningType;
   static getArgs(args: any[]): Array<number>;
+  static toNumericArray(a: ArrayLike<number>): number[];
+  static getPtLike(args: any[]): PtLike;
   static warn(message?: string, defaultReturn?: any): any;
   static randomInt(range: number, start?: number): number;
   static split(pts: any[], size: number, stride?: number, loopBack?: boolean, matchSize?: boolean): any[][];

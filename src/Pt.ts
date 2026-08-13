@@ -20,10 +20,20 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    */
   constructor(...args: Array<number | number[] | IPt | Float32Array>) {
     let params;
-    if (args.length === 1 && typeof args[0] == "number") {
-      params = args[0]; // init with the TypedArray's length. Needed this in order to make ".map", ".slice" etc work.
+    const a0 = args[0];
+    if (args.length === 1 && typeof a0 == "number") {
+      params = a0; // init with the TypedArray's length. Needed this in order to make ".map", ".slice" etc work.
+    } else if (args.length === 0) {
+      params = 2; // default is [0, 0]
+    } else if (
+      args.length === 1 &&
+      (Array.isArray(a0) || ArrayBuffer.isView(a0))
+    ) {
+      params = a0; // the Float32Array constructor copies array-likes natively
+    } else if (typeof a0 === "number") {
+      params = args; // a list of numbers; rest args are already a fresh array
     } else {
-      params = args.length > 0 ? Util.getArgs(args) : [0, 0];
+      params = Util.getArgs(args);
     }
     super(params);
   }
@@ -39,14 +49,14 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
     defaultValue: number = 0,
     randomize: boolean = false,
   ): Pt {
-    const p = new Float32Array(dimensions);
+    const p = new Pt(dimensions);
     if (defaultValue) p.fill(defaultValue);
     if (randomize) {
       for (let i = 0, len = p.length; i < len; i++) {
         p[i] = p[i] * Num.random();
       }
     }
-    return new Pt(p);
+    return p;
   }
 
   /**
@@ -123,7 +133,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
   to(...args): this {
-    const p = Util.getArgs(args);
+    const p = Util.getPtLike(args);
     for (let i = 0, len = Math.min(this.length, p.length); i < len; i++) {
       this[i] = p[i];
     }
@@ -210,7 +220,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
   add(...args): this {
     args.length === 1 && typeof args[0] == "number"
       ? Vec.add(this, args[0])
-      : Vec.add(this, Util.getArgs(args));
+      : Vec.add(this, Util.getPtLike(args));
     return this;
   }
 
@@ -229,7 +239,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
   subtract(...args): this {
     args.length === 1 && typeof args[0] == "number"
       ? Vec.subtract(this, args[0])
-      : Vec.subtract(this, Util.getArgs(args));
+      : Vec.subtract(this, Util.getPtLike(args));
     return this;
   }
 
@@ -248,7 +258,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
   multiply(...args): this {
     args.length === 1 && typeof args[0] == "number"
       ? Vec.multiply(this, args[0])
-      : Vec.multiply(this, Util.getArgs(args));
+      : Vec.multiply(this, Util.getPtLike(args));
     return this;
   }
 
@@ -267,7 +277,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
   divide(...args): this {
     args.length === 1 && typeof args[0] == "number"
       ? Vec.divide(this, args[0])
-      : Vec.divide(this, Util.getArgs(args));
+      : Vec.divide(this, Util.getPtLike(args));
     return this;
   }
 
@@ -314,7 +324,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
   dot(...args): number {
-    return Vec.dot(this, Util.getArgs(args));
+    return Vec.dot(this, Util.getPtLike(args));
   }
 
   /**
@@ -322,7 +332,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
   $cross2D(...args): number {
-    return Vec.cross2D(this, Util.getArgs(args));
+    return Vec.cross2D(this, Util.getPtLike(args));
   }
 
   /**
@@ -330,7 +340,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
   $cross(...args): Pt {
-    return Vec.cross(this, Util.getArgs(args));
+    return Vec.cross(this, Util.getPtLike(args));
   }
 
   /**
@@ -431,7 +441,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
   $min(...args): Pt {
-    const p = Util.getArgs(args);
+    const p = Util.getPtLike(args);
     const m = this.clone();
     for (let i = 0, len = Math.min(this.length, p.length); i < len; i++) {
       m[i] = Math.min(this[i], p[i]);
@@ -444,7 +454,7 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
   $max(...args): Pt {
-    const p = Util.getArgs(args);
+    const p = Util.getPtLike(args);
     const m = this.clone();
     for (let i = 0, len = Math.min(this.length, p.length); i < len; i++) {
       m[i] = Math.max(this[i], p[i]);
@@ -522,7 +532,9 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
    * Convert this Pt to a javascript Array.
    */
   toArray(): number[] {
-    return [].slice.call(this);
+    const a = [];
+    for (let i = 0, len = this.length; i < len; i++) a.push(this[i]);
+    return a;
   }
 
   /**
@@ -800,7 +812,7 @@ export class Group extends Array<Pt> {
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
   moveTo(...args): this {
-    const d = new Pt(Util.getArgs(args)).subtract(this[0]);
+    const d = new Pt(...args).subtract(this[0]);
     this.moveBy(d);
     return this;
   }
@@ -885,11 +897,29 @@ export class Group extends Array<Pt> {
   }
 
   /**
+   * Apply a Vec operation to every Pt, parsing the arguments once for the whole
+   * group rather than once per Pt.
+   */
+  protected _vecOp(
+    fn: (a: PtLike, b: PtLike | number) => PtLike,
+    args: any[],
+  ): this {
+    const b =
+      args.length === 1 && typeof args[0] == "number"
+        ? args[0]
+        : Util.getPtLike(args);
+    for (let i = 0, len = this.length; i < len; i++) {
+      fn(this[i], b);
+    }
+    return this;
+  }
+
+  /**
    * Add scalar or vector values to this group's Pts.
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
   add(...args): this {
-    return this.forEachPt("add", ...args);
+    return this._vecOp(Vec.add, args);
   }
 
   /**
@@ -897,7 +927,7 @@ export class Group extends Array<Pt> {
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
   subtract(...args): this {
-    return this.forEachPt("subtract", ...args);
+    return this._vecOp(Vec.subtract, args);
   }
 
   /**
@@ -905,7 +935,7 @@ export class Group extends Array<Pt> {
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
   multiply(...args): this {
-    return this.forEachPt("multiply", ...args);
+    return this._vecOp(Vec.multiply, args);
   }
 
   /**
@@ -913,7 +943,7 @@ export class Group extends Array<Pt> {
    * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
   divide(...args): this {
-    return this.forEachPt("divide", ...args);
+    return this._vecOp(Vec.divide, args);
   }
 
   /**
@@ -1037,14 +1067,23 @@ export class Bound extends Group implements IPt {
    * Clone this bound and return a new one.
    */
   clone(): Bound {
-    return new Bound(this.topLeft.clone(), this.bottomRight.clone());
+    // the topLeft and bottomRight getters already return fresh Pts
+    return new Bound(this.topLeft, this.bottomRight);
   }
 
   /**
    * Recalculte size and center.
    */
   protected _updateSize() {
-    this._size = this.bottomRight.$subtract(this.topLeft).abs();
+    // In-place equivalent of `bottomRight.$subtract(topLeft).abs()`: dimensions
+    // follow this[1], with missing/NaN topLeft values treated as 0.
+    const a = this[0];
+    const b = this[1];
+    const n = b ? b.length : 0;
+    if (this._size.length !== n) this._size = new Pt(n);
+    for (let i = 0; i < n; i++) {
+      this._size[i] = Math.abs(b[i] - (a ? a[i] || 0 : 0));
+    }
     this._updateCenter();
   }
 
@@ -1052,7 +1091,13 @@ export class Bound extends Group implements IPt {
    * Recalculate center.
    */
   protected _updateCenter() {
-    this._center = this._size.$multiply(0.5).add(this.topLeft);
+    // In-place equivalent of `size.$multiply(0.5).add(topLeft)`
+    const a = this[0];
+    const n = this._size.length;
+    if (this._center.length !== n) this._center = new Pt(n);
+    for (let i = 0; i < n; i++) {
+      this._center[i] = this._size[i] * 0.5 + (a ? a[i] || 0 : 0);
+    }
   }
 
   /**
