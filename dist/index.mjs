@@ -846,13 +846,31 @@ var Polygon = class Polygon {
 	}
 	static projectAxis(poly, unitAxis) {
 		let _poly = Util.iterToArray(poly);
-		let dot = unitAxis.dot(_poly[0]);
-		let d = new Pt(dot, dot);
+		let min = unitAxis.dot(_poly[0]);
+		let max = min;
 		for (let n = 1, len = _poly.length; n < len; n++) {
-			dot = unitAxis.dot(_poly[n]);
-			d = new Pt(Math.min(dot, d[0]), Math.max(dot, d[1]));
+			const dot = unitAxis.dot(_poly[n]);
+			if (dot < min) min = dot;
+			else if (dot > max) max = dot;
 		}
-		return d;
+		return new Pt(min, max);
+	}
+	static _axisOverlap2D(poly1, poly2, ax, ay) {
+		let min1 = ax * poly1[0][0] + ay * poly1[0][1];
+		let max1 = min1;
+		for (let n = 1, len = poly1.length; n < len; n++) {
+			const d = ax * poly1[n][0] + ay * poly1[n][1];
+			if (d < min1) min1 = d;
+			else if (d > max1) max1 = d;
+		}
+		let min2 = ax * poly2[0][0] + ay * poly2[0][1];
+		let max2 = min2;
+		for (let n = 1, len = poly2.length; n < len; n++) {
+			const d = ax * poly2[n][0] + ay * poly2[n][1];
+			if (d < min2) min2 = d;
+			else if (d > max2) max2 = d;
+		}
+		return min1 < min2 ? min2 - max1 : min1 - max2;
 	}
 	static _axisOverlap(poly1, poly2, unitAxis) {
 		let pa = Polygon.projectAxis(poly1, unitAxis);
@@ -871,75 +889,113 @@ var Polygon = class Polygon {
 	static hasIntersectCircle(poly, circle) {
 		let _poly = Util.iterToArray(poly);
 		let _circle = Util.iterToArray(circle);
-		let info = {
-			which: -1,
-			dist: 0,
-			normal: null,
-			edge: null,
-			vertex: null
-		};
-		let c = _circle[0];
-		let r = _circle[1][0];
+		const c = _circle[0];
+		const r = _circle[1][0];
 		let minDist = Number.MAX_SAFE_INTEGER;
+		let minEdge = null;
+		let minAx = 0;
+		let minAy = 0;
+		let which = -1;
 		for (let i = 0, len = _poly.length; i < len; i++) {
-			let edge = Polygon.lineAt(_poly, i);
-			let axis = new Pt(edge[0].y - edge[1].y, edge[1].x - edge[0].x).unit();
-			let poly2 = new Group(c.$add(axis.$multiply(r)), c.$subtract(axis.$multiply(r)));
-			let dist = Polygon._axisOverlap(_poly, poly2, axis);
+			const ea = _poly[i];
+			const eb = _poly[i === len - 1 ? 0 : i + 1];
+			let ax = ea[1] - eb[1];
+			let ay = eb[0] - ea[0];
+			const alen = Math.sqrt(ax * ax + ay * ay);
+			if (alen === 0) continue;
+			ax /= alen;
+			ay /= alen;
+			let minP = ax * _poly[0][0] + ay * _poly[0][1];
+			let maxP = minP;
+			for (let n = 1; n < len; n++) {
+				const d = ax * _poly[n][0] + ay * _poly[n][1];
+				if (d < minP) minP = d;
+				else if (d > maxP) maxP = d;
+			}
+			const dotC = ax * c[0] + ay * c[1];
+			const dist = minP < dotC - r ? dotC - r - maxP : minP - (dotC + r);
 			if (dist > 0) return null;
 			else if (Math.abs(dist) < minDist) {
-				if (Rectangle.withinBound(edge, Line.perpendicularFromPt(edge, c)) || Circle.intersectLine2D(circle, edge).length > 0) {
-					info.edge = edge;
-					info.normal = axis;
+				const edge = Polygon.lineAt(_poly, i);
+				if (Rectangle.withinBound(edge, Line.perpendicularFromPt(edge, c)) || Circle.intersectLine2D(_circle, edge).length > 0) {
+					minEdge = edge;
+					minAx = ax;
+					minAy = ay;
 					minDist = Math.abs(dist);
-					info.which = i;
+					which = i;
 				}
 			}
 		}
-		if (!info.edge) return null;
-		if (c.$subtract(Polygon.centroid(_poly)).dot(info.normal) < 0) info.normal.multiply(-1);
-		info.dist = minDist;
-		info.vertex = c;
-		return info;
+		if (!minEdge) return null;
+		const centroid = Polygon.centroid(_poly);
+		if (minAx * (c[0] - centroid[0]) + minAy * (c[1] - centroid[1]) < 0) {
+			minAx = -minAx;
+			minAy = -minAy;
+		}
+		return {
+			which,
+			dist: minDist,
+			normal: new Pt(minAx, minAy),
+			edge: minEdge,
+			vertex: c
+		};
 	}
 	static hasIntersectPolygon(poly1, poly2) {
 		let _poly1 = Util.iterToArray(poly1);
 		let _poly2 = Util.iterToArray(poly2);
-		let info = {
-			which: -1,
-			dist: 0,
-			normal: new Pt(),
-			edge: new Group(),
-			vertex: new Pt()
-		};
+		const len1 = _poly1.length;
+		const len2 = _poly2.length;
 		let minDist = Number.MAX_SAFE_INTEGER;
-		for (let i = 0, plen = _poly1.length + _poly2.length; i < plen; i++) {
-			let edge = i < _poly1.length ? Polygon.lineAt(_poly1, i) : Polygon.lineAt(_poly2, i - _poly1.length);
-			let axis = new Pt(edge[0].y - edge[1].y, edge[1].x - edge[0].x).unit();
-			let dist = Polygon._axisOverlap(_poly1, _poly2, axis);
+		let minIndex = -1;
+		let minAx = 0;
+		let minAy = 0;
+		for (let i = 0, plen = len1 + len2; i < plen; i++) {
+			const src = i < len1 ? _poly1 : _poly2;
+			const ei = i < len1 ? i : i - len1;
+			const ea = src[ei];
+			const eb = src[ei === src.length - 1 ? 0 : ei + 1];
+			let ax = ea[1] - eb[1];
+			let ay = eb[0] - ea[0];
+			const alen = Math.sqrt(ax * ax + ay * ay);
+			if (alen === 0) continue;
+			ax /= alen;
+			ay /= alen;
+			const dist = Polygon._axisOverlap2D(_poly1, _poly2, ax, ay);
 			if (dist > 0) return null;
 			else if (Math.abs(dist) < minDist) {
-				info.edge = edge;
-				info.normal = axis;
 				minDist = Math.abs(dist);
-				info.which = i < _poly1.length ? 0 : 1;
+				minIndex = i;
+				minAx = ax;
+				minAy = ay;
 			}
 		}
-		info.dist = minDist;
-		let b1 = info.which === 0 ? _poly2 : _poly1;
-		let b2 = info.which === 0 ? _poly1 : _poly2;
-		let c1 = Polygon.centroid(b1);
-		let c2 = Polygon.centroid(b2);
-		if (c1.$subtract(c2).dot(info.normal) < 0) info.normal.multiply(-1);
+		if (minIndex < 0) return null;
+		const which = minIndex < len1 ? 0 : 1;
+		const edge = which === 0 ? Polygon.lineAt(_poly1, minIndex) : Polygon.lineAt(_poly2, minIndex - len1);
+		const b1 = which === 0 ? _poly2 : _poly1;
+		const b2 = which === 0 ? _poly1 : _poly2;
+		const c1 = Polygon.centroid(b1);
+		const c2 = Polygon.centroid(b2);
+		if (minAx * (c1[0] - c2[0]) + minAy * (c1[1] - c2[1]) < 0) {
+			minAx = -minAx;
+			minAy = -minAy;
+		}
 		let smallest = Number.MAX_SAFE_INTEGER;
+		let vertex = null;
 		for (let i = 0, len = b1.length; i < len; i++) {
-			let d = info.normal.dot(b1[i].$subtract(c2));
+			const d = minAx * (b1[i][0] - c2[0]) + minAy * (b1[i][1] - c2[1]);
 			if (d < smallest) {
 				smallest = d;
-				info.vertex = b1[i];
+				vertex = b1[i];
 			}
 		}
-		return info;
+		return {
+			which,
+			dist: minDist,
+			normal: new Pt(minAx, minAy),
+			edge,
+			vertex
+		};
 	}
 	static intersectPolygon2D(poly1, poly2) {
 		let _poly1 = Util.iterToArray(poly1);
@@ -5531,7 +5587,6 @@ SVGForm.domID = 0;
 
 //#endregion
 //#region src/Physics.ts
-const COMPLIANCE_SCALE = 1e-4;
 var World = class World {
 	constructor(bound, friction = 1, gravity = 0) {
 		this._gravity = new Pt();
@@ -5625,7 +5680,7 @@ var World = class World {
 			this._frictionStep = n === 1 ? this._friction : Math.pow(this._friction, 1 / n);
 			for (let s = 0; s < n; s++) {
 				this._updateParticles(h);
-				this._updateBodies(h, s === n - 1);
+				this._updateBodies(h);
 			}
 			this._clearForces();
 		}
@@ -5826,7 +5881,7 @@ var World = class World {
 			}
 		}
 		if (contacts) this._collideBodies(blen);
-		for (let i = 0; i < blen; i++) if (bs[i]) bs[i].solveEdges(dt, this._iterations);
+		for (let i = 0; i < blen; i++) if (bs[i]) bs[i].solveEdges(dt, this._iterations, this._substeps);
 	}
 	_collideBodies(blen) {
 		const bs = this._bodies;
@@ -5912,6 +5967,7 @@ var Particle = class extends Pt {
 		return this._lock;
 	}
 	set lock(b) {
+		if (this._lock && !b) this._prev.to(this);
 		this._lock = b;
 		this._lockPt = new Pt(this);
 	}
@@ -5933,10 +5989,8 @@ var Particle = class extends Pt {
 		return this._force;
 	}
 	verlet(dt, friction, lastDt) {
-		if (this._lock) {
-			this.to(this._lockPt);
-			this._prev.to(this._lockPt);
-		} else {
+		if (this._lock) this.to(this._lockPt);
+		else {
 			const lt = lastDt ? lastDt : dt;
 			const adt = dt * (dt + lt) / 2;
 			const f = friction * dt / lt;
@@ -6079,14 +6133,14 @@ var Body = class Body extends Group {
 			World.edgeConstraint(this[m], this[n], d, s);
 		}
 	}
-	solveEdges(dt, iterations = 1) {
+	solveEdges(dt, iterations = 1, substeps = 1) {
 		const cs = this._cs;
 		const clen = cs.length;
 		if (clen === 0) return this;
 		if (this._lambdas.length < clen) this._lambdas = new Float32Array(clen);
 		const lambdas = this._lambdas;
 		lambdas.fill(0, 0, clen);
-		const invDtSq = 1 / (dt * dt);
+		const invPasses = 1 / Math.max(1, iterations * substeps);
 		for (let iter = 0; iter < iterations; iter++) for (let ci = 0; ci < clen; ci++) {
 			const c = cs[ci];
 			const p1 = this[c[0]];
@@ -6100,7 +6154,11 @@ var Body = class Body extends Group {
 			const dy = p2[1] - p1[1];
 			const dist = Math.sqrt(dx * dx + dy * dy);
 			if (dist < 1e-6) continue;
-			const alpha = stiff >= 1 ? 0 : COMPLIANCE_SCALE * (1 - stiff) / Math.max(stiff, 1e-6) * invDtSq;
+			let alpha = 0;
+			if (stiff < 1) {
+				const sEff = 1 - Math.pow(1 - stiff, invPasses);
+				alpha = sEff > 1e-6 ? w * (1 - sEff) / sEff : w * 1e6;
+			}
 			const dl = (-(dist - c[2]) - alpha * lambdas[ci]) / (w + alpha);
 			lambdas[ci] += dl;
 			const s = dl / dist;

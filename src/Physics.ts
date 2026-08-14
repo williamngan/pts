@@ -5,10 +5,6 @@ import { Polygon, Circle } from "./Op";
 import { Geom } from "./Num";
 import { PtLike, PtIterable } from "./Types";
 
-// Scale that maps a Body link's stiffness (0..1] to an XPBD compliance.
-// stiff=1 is a rigid projection (compliance 0) at any timestep.
-const COMPLIANCE_SCALE = 0.0001;
-
 /**
  * A `World` stores and manages [`Body`](#link) and [`Particle`](#link) for 2D physics simulation.
  * It advances with a substepped position-based (XPBD-style) solver and a spatial-hash broad phase.
@@ -204,11 +200,12 @@ export class World {
         n === 1 ? this._friction : Math.pow(this._friction, 1 / n);
       for (let s = 0; s < n; s++) {
         this._updateParticles(h);
-        // body contacts resolve once per update (on the final substep): an
-        // overlapping pair stays overlapped across substeps, so running SAT
-        // every substep multiplies the narrow-phase cost without changing the
-        // visual outcome. Integration and edge constraints run every substep.
-        this._updateBodies(h, s === n - 1);
+        // Body contacts resolve every substep: penetrations are detected while
+        // still shallow, and each positional push stays at the scale of one
+        // substep's motion — resolving once per update would inject the whole
+        // frame's correction at substep velocity, kicking bodies 4× harder than
+        // intended. The scalarized SAT makes the extra narrow-phase passes cheap.
+        this._updateBodies(h);
       }
       this._clearForces();
     }
@@ -570,7 +567,7 @@ export class World {
     if (contacts) this._collideBodies(blen);
 
     for (let i = 0; i < blen; i++) {
-      if (bs[i]) bs[i].solveEdges(dt, this._iterations);
+      if (bs[i]) bs[i].solveEdges(dt, this._iterations, this._substeps);
     }
   }
 
@@ -725,6 +722,10 @@ export class Particle extends Pt {
     return this._lock;
   }
   set lock(b: boolean) {
+    // On unlock, reset `previous` to the current position: while locked, collisions
+    // and dragging can leave it arbitrarily stale, and integrating that difference
+    // would launch the particle. (To throw a particle on release, use `hit`.)
+    if (this._lock && !b) this._prev.to(this);
     this._lock = b;
     this._lockPt = new Pt(this);
   }
@@ -774,10 +775,12 @@ export class Particle extends Pt {
     // Positional verlet: curr + (curr - prev) + a * dt * dt
 
     if (this._lock) {
-      // pin both position and previous, so no phantom velocity accumulates
-      // while locked and gets released on unlock
+      // Pin the position only. `previous` is deliberately left alone: dragging a
+      // locked particle via the `position` setter stores the drag delta there, and
+      // collisions read it as the particle's velocity — this is what makes a
+      // pointer-dragged particle knock others away. Stale velocity is cleared at
+      // the moment of unlocking instead (see the `lock` setter).
       this.to(this._lockPt);
-      this._prev.to(this._lockPt);
     } else {
       // time corrected (https://en.wikipedia.org/wiki/Verlet_integration#Non-constant_time_differences)
       const lt = lastDt ? lastDt : dt;
@@ -1017,15 +1020,19 @@ export class Body extends Group {
   }
 
   /**
-   * Solve all edge constraints for one substep using XPBD, in which a link's stiffness maps to
-   * a compliance normalized by the timestep — so the same stiffness value produces the same
-   * behavior at any substep size, and `stiff=1` is a rigid projection. This is the solver used
-   * internally by [`World.update`](#link); [`Body.processEdges`](#link) remains the simpler
-   * relaxation for direct use.
-   * @param dt substep time in seconds
+   * Solve all edge constraints for one substep in XPBD form. A link's `stiff` value is a
+   * geometric knob: it is the fraction of the remaining constraint violation resolved per
+   * update, independent of the particles' masses and of the substep/iteration counts
+   * (per Müller et al. 2007, the per-pass fraction is `1-(1-stiff)^(1/passes)`), and
+   * `stiff=1` is a rigid projection. Mapping the fraction to a mass-relative compliance
+   * keeps a heavy body exactly as stiff as a light one at the same value.
+   * This is the solver used internally by [`World.update`](#link);
+   * [`Body.processEdges`](#link) remains the simpler relaxation for direct use.
+   * @param dt substep time in seconds (reserved; the geometric stiffness does not depend on it)
    * @param iterations solver iterations for this substep. Default is 1.
+   * @param substeps the caller's substeps per update, for pass-count-independent stiffness. Default is 1.
    */
-  solveEdges(dt: number, iterations: number = 1): this {
+  solveEdges(dt: number, iterations: number = 1, substeps: number = 1): this {
     const cs = this._cs;
     const clen = cs.length;
     if (clen === 0) return this;
@@ -1033,7 +1040,7 @@ export class Body extends Group {
     if (this._lambdas.length < clen) this._lambdas = new Float32Array(clen);
     const lambdas = this._lambdas;
     lambdas.fill(0, 0, clen);
-    const invDtSq = 1 / (dt * dt);
+    const invPasses = 1 / Math.max(1, iterations * substeps);
 
     for (let iter = 0; iter < iterations; iter++) {
       for (let ci = 0; ci < clen; ci++) {
@@ -1052,11 +1059,13 @@ export class Body extends Group {
         const dist = Math.sqrt(dx * dx + dy * dy);
         if (dist < 0.000001) continue;
 
-        const alpha =
-          stiff >= 1
-            ? 0
-            : ((COMPLIANCE_SCALE * (1 - stiff)) / Math.max(stiff, 0.000001)) *
-              invDtSq;
+        // mass-relative compliance: the per-pass correction fraction is exactly
+        // `sEff` regardless of mass, since w / (w + alpha) = sEff
+        let alpha = 0;
+        if (stiff < 1) {
+          const sEff = 1 - Math.pow(1 - stiff, invPasses);
+          alpha = sEff > 0.000001 ? (w * (1 - sEff)) / sEff : w * 1000000;
+        }
         const dl = (-(dist - c[2]) - alpha * lambdas[ci]) / (w + alpha);
         lambdas[ci] += dl;
 

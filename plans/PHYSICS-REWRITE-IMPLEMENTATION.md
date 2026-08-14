@@ -348,3 +348,95 @@ twelve issues; each is folded into the implementation.
   the physical ½·a·dt²); substepping converges to the correct value. Per-frame
   velocity gain is `a·dt` in both, so trajectories beyond the first frames
   match. Noted as an accepted feel change, invisible in practice.
+
+## Follow-up: SAT scalarization (Op.ts)
+
+The rewrite left `Polygon.hasIntersectPolygon` / `hasIntersectCircle`
+dominating the 16-bodies case: `projectAxis` allocated a `Pt` per vertex and
+every axis test allocated an edge `Group`, an axis `Pt`, and two projection
+`Pt`s (~300 allocations per SAT call). Both SAT functions and `projectAxis`
+are now scalar (one `_axisOverlap2D` core; the winning edge/normal/vertex are
+materialized once at the end, preserving the `IntersectContext` shape and the
+reference semantics the physics response relies on). Degenerate zero-length
+edges are now skipped instead of producing a zero axis.
+
+Measured with `--against HEAD` (HEAD = `f5b5310`, physics rewrite committed),
+full timing, 5 rounds, 0 slower:
+
+| Case                                |  Before |   After |  Delta |
+| ----------------------------------- | ------: | ------: | -----: |
+| `Polygon.hasIntersectPolygon` (SAT) | 6.64 µs |  165 ns | −97.5% |
+| `Polygon.hasIntersectCircle`        | 5.41 µs |  802 ns |   −85% |
+| `Polygon.projectAxis`               | 1.53 µs |  338 ns |   −78% |
+| `Body.processBody`                  | 19.5 µs | 2.28 µs |   −88% |
+| `Body.processParticle`              | 12.6 µs | 3.55 µs |   −72% |
+| `World.update` (16 bodies)          | 58.2 µs | 4.04 µs |   −93% |
+| polygon collision sweep scenario    | 5.19 µs |  182 ns |   −97% |
+
+Cumulative for the body path: the 16-bodies world update has gone from 252 µs
+(original engine) to 4.0 µs — about 60×. Demos re-verified in Chromium after
+the change.
+
+## Interactive regressions found in demo testing, and the resolution
+
+Manual testing of the two physics demos surfaced two behavioral regressions
+the unit and bench suites could not see, both introduced by this rewrite:
+
+1. **The pointer-dragged (locked) particle stopped hitting others.** Both
+   demos drive interaction by dragging a locked particle through the
+   `position` setter, which leaves the drag delta in `previous` — and
+   `Particle.collide` reads that as velocity. The rewrite's lock fix pinned
+   `previous` to the lock point every substep, zeroing the drag velocity
+   before collisions ran: the white ball merely displaced its neighbors and
+   "stuck". Resolution: the lock branch pins the position only (original
+   behavior), and the stale-velocity launch bug is fixed where it actually
+   lives — the **unlock transition** resets `previous` to the current
+   position. Pinned by two new tests: a dragged locked particle must impart
+   velocity; unlocking after a drag must not launch.
+
+2. **Bodies deformed violently on contact.** Substepping changed the meaning
+   of a positional push: contact responses move positions without touching
+   `previous`, so a push of Δ reads as Δ _per substep_ — 4× the old engine's
+   velocity injection — and resolving contacts once per frame (the earlier
+   performance fix) delivered the whole frame's penetration as one such kick.
+   Resolution: body contacts run **every substep** again. Penetrations are
+   caught shallow, each push is at one substep's scale, and the scalarized SAT
+   (165 ns) makes the extra narrow-phase passes affordable — that fix removed
+   the reason contacts were rationed in the first place.
+
+Re-measured after both fixes (`--against HEAD`, physics + op suites, 5
+rounds): 0 slower. `World.update (16 bodies)` lands at 11.2 µs — above the
+4.0 µs of the once-per-frame variant, but −80% vs HEAD and ~23× faster than
+the original engine, with physically consistent contact response. Both demos
+re-verified with scripted pointer sweeps: particles scatter like billiards,
+and the hexagon slides rigidly under the dragged triangle and settles
+undeformed.
+
+The general lesson recorded for future solver changes: **positional
+corrections and substep count are coupled** — any code that displaces a
+particle without updating `previous` injects velocity scaled by the substep
+rate, so contact frequency and substep count must move together.
+
+## Stiffness calibration bug found in demo testing
+
+The residual "hexagon deforms too much" report exposed a real calibration bug
+in the XPBD mapping, not a demo problem. XPBD's per-pass correction fraction
+is `w / (w + α̃)` with `w` the summed inverse masses — so mapping `stiff` to a
+**fixed** compliance made softness mass-dependent. The demo hexagon
+(`stiff = 0.5`, autoMass ≈ 20) corrected ~7% of its violation per frame versus
+the legacy engine's ~25%: the heaviest body on screen was also the softest.
+
+Fix: `stiff` is a geometric 0–1 knob, so compliance is now **mass-relative**,
+`α̃ = w · (1 − sEff) / sEff`, making the per-pass fraction exactly `sEff` for
+any mass — with `sEff = 1 − (1 − stiff)^(1/passes)` (Müller et al. 2007) so
+that `stiff` means "fraction of the violation resolved per update" regardless
+of substep or iteration counts. `stiff = 1` remains an exact rigid projection
+(`α̃ = 0`), which is the timestep-independent XPBD case. The `dt` parameter of
+`solveEdges` is reserved (a future physical-compliance mode could use it), and
+the `COMPLIANCE_SCALE` constant is gone.
+
+Pinned by three new tests: equal correction fraction at mass 1 vs 100; `stiff`
+fraction preserved across 1×16 ms vs 4×4 ms solves; rigid projection at
+`stiff = 1` for heavy bodies. Physics A/B after the fix: 0 slower, 16-bodies
+at −81% vs HEAD. Demo re-verified: the hexagon now slides rigidly under the
+dragged triangle and stays a hexagon.

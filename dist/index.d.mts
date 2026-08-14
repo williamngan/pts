@@ -895,6 +895,7 @@ declare class Polygon {
   static network(poly: PtIterable, originIndex?: number): Group[];
   static nearestPt(poly: PtIterable, pt: PtLike): number;
   static projectAxis(poly: PtIterable, unitAxis: Pt): Pt;
+  private static _axisOverlap2D;
   protected static _axisOverlap(poly1: PtIterable, poly2: PtIterable, unitAxis: Pt): number;
   static hasIntersectPoint(poly: PtLikeIterable, pt: PtLike): boolean;
   static hasIntersectCircle(poly: PtIterable, circle: PtIterable): IntersectContext;
@@ -1318,7 +1319,7 @@ declare class Body extends Group {
   linkAll(stiff: number): void;
   linksToLines(): Group[];
   processEdges(): void;
-  solveEdges(dt: number, iterations?: number): this;
+  solveEdges(dt: number, iterations?: number, substeps?: number): this;
   processBody(b: Body): void;
   processParticle(b: Particle): void;
 }

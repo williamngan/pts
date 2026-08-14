@@ -356,6 +356,37 @@ describe("Substepped solver invariants", () => {
     expect(Math.abs(particle.y - 50)).toBeLessThan(1);
   });
 
+  it("transfers momentum from a dragged locked particle", () => {
+    // the demo interaction model: a locked particle is dragged by the pointer
+    // via the `position` setter, and its drag delta must knock others away
+    const world = new World(worldBound(), 1, 0);
+    const dragged = new Particle(40, 50).size(5);
+    const target = new Particle(52, 50).size(5);
+    world.add(dragged).add(target);
+    dragged.lock = true;
+
+    // drag right into overlap with the target
+    dragged.position = new Pt(45, 50);
+    world.update(16);
+    const kicked = target.x;
+    expect(kicked).toBeGreaterThan(52); // separated rightward
+    world.update(16);
+    world.update(16);
+    // and it keeps moving away: it received velocity, not just separation
+    expect(target.x).toBeGreaterThan(kicked + 0.5);
+  });
+
+  it("does not launch a dragged particle on unlock", () => {
+    const world = new World(worldBound(), 1, 0);
+    const particle = new Particle(30, 50).size(2);
+    world.add(particle);
+    particle.lock = true;
+    particle.position = new Pt(70, 50); // big drag delta left in `previous`
+    particle.lock = false;
+    world.update(16);
+    expect(Math.abs(particle.x - 70)).toBeLessThan(1);
+  });
+
   it("is deterministic for identical inputs", () => {
     const build = () => {
       const world = new World(worldBound(), 0.99, 5);
@@ -495,5 +526,56 @@ describe("Substepped solver invariants", () => {
       expect(Math.sqrt(dx * dx + dy * dy)).toBeGreaterThanOrEqual(4.99);
     }
     spy.mockRestore();
+  });
+});
+
+describe("Edge stiffness semantics", () => {
+  function stretchedPair(mass: number, stiff: number) {
+    const body = Body.fromGroup(
+      Group.fromArray([
+        [40, 50],
+        [70, 50],
+      ]),
+      stiff,
+      false,
+      false,
+    );
+    body.link(0, 1, stiff);
+    body.mass = mass;
+    // stretch from rest length 30 to 40
+    body[1].to(80, 50);
+    (body[0] as Particle).previous.to(40, 50);
+    (body[1] as Particle).previous.to(80, 50);
+    return body;
+  }
+
+  it("corrects the same fraction regardless of mass", () => {
+    const light = stretchedPair(1, 0.5);
+    const heavy = stretchedPair(100, 0.5);
+    light.solveEdges(0.004, 1, 1);
+    heavy.solveEdges(0.004, 1, 1);
+    const lightLen = light[1].x - light[0].x;
+    const heavyLen = heavy[1].x - heavy[0].x;
+    expect(lightLen).toBeCloseTo(heavyLen, 3);
+    expect(lightLen).toBeLessThan(40);
+  });
+
+  it("treats stiff as the fraction resolved per update, independent of substeps", () => {
+    // violation is 10; stiff 0.5 should leave ~5 after one update's worth of passes
+    const single = stretchedPair(4, 0.5);
+    single.solveEdges(0.016, 1, 1);
+    const afterSingle = single[1].x - single[0].x;
+    expect(afterSingle).toBeCloseTo(35, 1);
+
+    const quartered = stretchedPair(4, 0.5);
+    for (let s = 0; s < 4; s++) quartered.solveEdges(0.004, 1, 4);
+    const afterQuartered = quartered[1].x - quartered[0].x;
+    expect(afterQuartered).toBeCloseTo(35, 0);
+  });
+
+  it("projects rigidly at stiff 1 for any mass", () => {
+    const heavy = stretchedPair(100, 1);
+    heavy.solveEdges(0.004, 1, 4);
+    expect(heavy[1].x - heavy[0].x).toBeCloseTo(30, 3);
   });
 });
