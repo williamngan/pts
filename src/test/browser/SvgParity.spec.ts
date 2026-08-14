@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { CanvasSpace } from "../../Canvas";
 import { SVGSpace } from "../../Svg";
 import { Bound, Pt } from "../../Pt";
@@ -127,6 +127,57 @@ describe("canvas-svg rendering parity", () => {
     const expanded = space.toSVG(true);
     const doc = new DOMParser().parseFromString(expanded, "image/svg+xml");
     expect(doc.querySelectorAll("g.pts-svgform path")).toHaveLength(3);
+    host.remove();
+  });
+});
+
+describe("Space lifecycle", () => {
+  it("removes the window resize listener on dispose", async () => {
+    const host = document.createElement("div");
+    document.body.appendChild(host);
+    const space = new SVGSpace(host).setup({ resize: true });
+    await ready(space as any);
+
+    const resizes = vi.spyOn(space, "resize");
+    window.dispatchEvent(new Event("resize"));
+    const before = resizes.mock.calls.length;
+    expect(before).toBeGreaterThan(0);
+
+    space.dispose();
+    window.dispatchEvent(new Event("resize"));
+    expect(resizes.mock.calls.length).toBe(before); // no further calls
+    host.remove();
+  });
+
+  it("is idempotent and re-mountable on the same element (StrictMode)", async () => {
+    const host = document.createElement("div");
+    document.body.appendChild(host);
+
+    // mount 1
+    const first = new SVGSpace(host).setup({ resize: false });
+    await ready(first as any);
+    const firstForm = first.getForm();
+    firstForm.fillOnly("#f03").point([10, 10], 5);
+    firstForm.svgContext.commitFrame();
+    expect(() => first.dispose().dispose()).not.toThrow(); // double dispose
+
+    // managed elements are gone after dispose
+    const svg = host.querySelector("svg");
+    expect(svg.querySelectorAll("g.pts-svgform")).toHaveLength(0);
+    expect(svg.querySelectorAll(".pts-svg-bg")).toHaveLength(0);
+
+    // mount 2 on the same element: exactly one bg and one group, no duplicates
+    const second = new SVGSpace(host).setup({ resize: false });
+    await ready(second as any);
+    second.clear("#123");
+    const secondForm = second.getForm();
+    secondForm.fillOnly("#0c9").point([20, 20], 5);
+    secondForm.svgContext.commitFrame();
+    expect(svg.querySelectorAll(".pts-svg-bg")).toHaveLength(1);
+    expect(svg.querySelectorAll("g.pts-svgform")).toHaveLength(1);
+    expect(svg.querySelectorAll("g.pts-svgform path")).toHaveLength(1);
+
+    second.dispose();
     host.remove();
   });
 });

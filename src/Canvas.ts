@@ -531,7 +531,10 @@ export class CanvasForm extends VisualForm {
 
   /**
    * Create a new CanvasForm. You may also use [`CanvasSpace.getForm()`](#link) to get the default form.
-   * @param space an instance of CanvasSpace
+   * @param space an instance of CanvasSpace, or a rendering context. Passing a context is the
+   * renderer extension point: any object implementing the context surface documented in
+   * [`SVGContext2D`](#link) (the reference implementation) receives this form's full drawing
+   * API — this is how SVG output works, and how custom renderers can be built.
    */
   constructor(space?: CanvasSpace | RenderingContext2D) {
     super();

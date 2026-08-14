@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 3100,
+  "id": 3102,
   "comment": "Num class provides static helper functions for basic numeric operations.",
   "constructor": [],
   "accessors": [],
@@ -22,7 +22,7 @@
           9
         ]
       ],
-      "id": 3143,
+      "id": 3145,
       "flags": {
         "isStatic": true
       },
@@ -54,7 +54,7 @@
           9
         ]
       ],
-      "id": 3117,
+      "id": 3119,
       "flags": {
         "isStatic": true
       },
@@ -103,7 +103,7 @@
           9
         ]
       ],
-      "id": 3112,
+      "id": 3114,
       "flags": {
         "isStatic": true
       },
@@ -147,7 +147,7 @@
           9
         ]
       ],
-      "id": 3146,
+      "id": 3148,
       "flags": {
         "isStatic": true
       },
@@ -185,7 +185,7 @@
           9
         ]
       ],
-      "id": 3102,
+      "id": 3104,
       "flags": {
         "isStatic": true
       },
@@ -229,7 +229,7 @@
           9
         ]
       ],
-      "id": 3107,
+      "id": 3109,
       "flags": {
         "isStatic": true
       },
@@ -273,7 +273,7 @@
           9
         ]
       ],
-      "id": 3153,
+      "id": 3155,
       "flags": {
         "isStatic": true
       },
@@ -329,7 +329,7 @@
           9
         ]
       ],
-      "id": 3135,
+      "id": 3137,
       "flags": {
         "isStatic": true
       },
@@ -373,7 +373,7 @@
           9
         ]
       ],
-      "id": 3163,
+      "id": 3165,
       "flags": {
         "isStatic": true
       },
@@ -398,7 +398,7 @@
           9
         ]
       ],
-      "id": 3131,
+      "id": 3133,
       "flags": {
         "isStatic": true
       },
@@ -436,7 +436,7 @@
           9
         ]
       ],
-      "id": 3127,
+      "id": 3129,
       "flags": {
         "isStatic": true
       },
@@ -474,7 +474,7 @@
           9
         ]
       ],
-      "id": 3160,
+      "id": 3162,
       "flags": {
         "isStatic": true
       },
@@ -506,7 +506,7 @@
           9
         ]
       ],
-      "id": 3140,
+      "id": 3142,
       "flags": {
         "isStatic": true
       },
@@ -538,7 +538,7 @@
           9
         ]
       ],
-      "id": 3122,
+      "id": 3124,
       "flags": {
         "isStatic": true
       },
@@ -585,7 +585,7 @@
           9
         ]
       ],
-      "id": 3101,
+      "id": 3103,
       "flags": {
         "isStatic": true
       },

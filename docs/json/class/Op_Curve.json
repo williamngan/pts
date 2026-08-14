@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 3764,
+  "id": 3766,
   "comment": "Curve class provides static functions to interpolate curves. A curve is usually represented as a Group of 3 or more control points.\nYou can use the static functions as-is, or apply the [`Group.op`](#link) or [`Pt.op`](#link) to enable functional programming.\nSee [Op guide](../guide/Op-0400.html) for details.",
   "constructor": [],
   "accessors": [],
@@ -22,7 +22,7 @@
           9
         ]
       ],
-      "id": 3795,
+      "id": 3797,
       "flags": {
         "isStatic": true
       },
@@ -60,7 +60,7 @@
           9
         ]
       ],
-      "id": 3799,
+      "id": 3801,
       "flags": {
         "isStatic": true
       },
@@ -98,7 +98,7 @@
           9
         ]
       ],
-      "id": 3803,
+      "id": 3805,
       "flags": {
         "isStatic": true
       },
@@ -142,7 +142,7 @@
           9
         ]
       ],
-      "id": 3808,
+      "id": 3810,
       "flags": {
         "isStatic": true
       },
@@ -180,7 +180,7 @@
           9
         ]
       ],
-      "id": 3812,
+      "id": 3814,
       "flags": {
         "isStatic": true
       },
@@ -224,7 +224,7 @@
           9
         ]
       ],
-      "id": 3785,
+      "id": 3787,
       "flags": {
         "isStatic": true
       },
@@ -268,7 +268,7 @@
           9
         ]
       ],
-      "id": 3790,
+      "id": 3792,
       "flags": {
         "isStatic": true
       },
@@ -312,7 +312,7 @@
           9
         ]
       ],
-      "id": 3777,
+      "id": 3779,
       "flags": {
         "isStatic": true
       },
@@ -350,7 +350,7 @@
           9
         ]
       ],
-      "id": 3781,
+      "id": 3783,
       "flags": {
         "isStatic": true
       },
@@ -388,7 +388,7 @@
           9
         ]
       ],
-      "id": 3768,
+      "id": 3770,
       "flags": {
         "isStatic": true
       },
@@ -432,7 +432,7 @@
           9
         ]
       ],
-      "id": 3765,
+      "id": 3767,
       "flags": {
         "isStatic": true
       },

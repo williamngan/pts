@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Typealias",
-  "id": 7651,
+  "id": 7655,
   "comment": "Typescript type: CanvasPatternRepetition represents the string options to specify pattern repetition",
   "constructor": [],
   "accessors": [],

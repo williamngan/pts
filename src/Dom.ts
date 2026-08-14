@@ -1,6 +1,6 @@
 /*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
-import { MultiTouchSpace } from "./Space";
+import { Space, MultiTouchSpace } from "./Space";
 import { Form, VisualForm, Font } from "./Form";
 import { Util } from "./Util";
 import { Pt, Bound } from "./Pt";
@@ -13,8 +13,22 @@ import {
 } from "./Types";
 
 /**
- * DOMSpace is a space for DOM elements. Usually its subclasses such as [`HTMLSpace`](#link) and [`#SVGSpace`](#link) should be used instead.
+ * DOMSpace hosts a Space in a DOM element. It is the subclassing entry point for building
+ * custom element-based spaces; usually its subclass [`SVGSpace`](#link) should be used instead.
  * Learn more about spaces in [this guide](../guide/space-0500).
+ *
+ * When using a Space inside a component framework, create it on mount and call
+ * [`DOMSpace.dispose`](#link) on unmount so listeners and the animation loop are released.
+ * For example, in React:
+ * ```
+ * useEffect(() => {
+ *   const space = new SVGSpace(ref.current).setup({ resize: true });
+ *   space.add(...).play();
+ *   return () => { space.dispose(); };
+ * }, []);
+ * ```
+ * Dispose is idempotent, and a new Space can be mounted on the same element afterwards
+ * (as happens under React's StrictMode).
  */
 export class DOMSpace extends MultiTouchSpace {
   protected _canvas: HTMLElement | SVGElement;
@@ -24,6 +38,11 @@ export class DOMSpace extends MultiTouchSpace {
   protected _autoResize = true;
   protected _bgcolor = "#e1e9f0";
   protected _css = {};
+  private _domDisposed = false;
+
+  // one stable bound reference, so removeEventListener actually removes the
+  // listener that addEventListener added (and double-adds dedupe)
+  private readonly _resizeHandlerBound = this._resizeHandler.bind(this);
 
   /**
    * Create a DOMSpace for HTML DOM elements
@@ -141,11 +160,11 @@ export class DOMSpace extends MultiTouchSpace {
   set autoResize(auto: boolean) {
     this._autoResize = auto;
     if (auto) {
-      window.addEventListener("resize", this._resizeHandler.bind(this));
+      window.addEventListener("resize", this._resizeHandlerBound);
     } else {
       delete this._css["width"];
       delete this._css["height"];
-      window.removeEventListener("resize", this._resizeHandler.bind(this));
+      window.removeEventListener("resize", this._resizeHandlerBound);
     }
   }
   get autoResize(): boolean {
@@ -287,22 +306,30 @@ export class DOMSpace extends MultiTouchSpace {
   }
 
   /**
-   * Dispose of browser resources held by this space and remove all players. Call this before unmounting the DOM.
+   * Dispose of browser resources held by this space and remove all players. Call this before
+   * unmounting the DOM, eg in a framework component's unmount/cleanup callback. Dispose is
+   * idempotent, and a new Space can be created on the same element afterwards.
    */
   dispose(): this {
-    // remove event listeners
-    window.removeEventListener("resize", this._resizeHandler.bind(this));
-    // stop animation loop
-    this.stop();
-    // remove players from space
-    this.removeAll();
+    if (this._domDisposed) return this;
+    this._domDisposed = true;
+
+    this.autoResize = false; // removes the window resize listener
+    this._unbindAll(); // removes mouse/touch listeners on the element
+    this._cancelAnimation(); // cancels the animation frame immediately
+
+    // Remove the players without the subclass's DOM-clearing `removeAll`:
+    // disposing must release resources, never destroy a user-owned host
+    // element's contents (a re-mount on the same element must work).
+    Space.prototype.removeAll.call(this);
 
     return this;
   }
 }
 
 /**
- * **[Experimental]** HTMLSpace is a subclass of DOMSpace that works with HTML elements. Note that this is currently experimental and may change in future.  See [a demo here](../demo/index.html?name=htmlform.scope).
+ * @deprecated HTML rendering is deprecated and will be removed in a future major version. Use [`SVGSpace`](#link) for DOM-based output instead — it shares the complete [`CanvasForm`](#link) drawing API.
+ * **[Experimental]** HTMLSpace is a subclass of DOMSpace that works with HTML elements. See [a demo here](../demo/index.html?name=htmlform.scope).
  */
 export class HTMLSpace extends DOMSpace {
   /**
@@ -365,7 +392,8 @@ export class HTMLSpace extends DOMSpace {
 }
 
 /**
- * **[Experimental]** HTMLForm is an implementation of abstract class [`VisualForm`](#link). It provide methods to express Pts on [`HTMLSpace`](#link). Note that this is currently experimental and may change in future.
+ * @deprecated HTML rendering is deprecated and will be removed in a future major version. Use [`SVGForm`](#link) for DOM-based output instead — it shares the complete [`CanvasForm`](#link) drawing API.
+ * **[Experimental]** HTMLForm is an implementation of abstract class [`VisualForm`](#link). It provide methods to express Pts on [`HTMLSpace`](#link).
  */
 export class HTMLForm extends VisualForm {
   /**

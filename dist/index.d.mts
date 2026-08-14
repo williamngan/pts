@@ -1052,6 +1052,8 @@ declare class DOMSpace extends MultiTouchSpace {
   protected _autoResize: boolean;
   protected _bgcolor: string;
   protected _css: {};
+  private _domDisposed;
+  private readonly _resizeHandlerBound;
   constructor(elem: string | Element, callback?: Function);
   static createElement(elem: string, id: string, appendTo?: Element): Element;
   private _ready;
@@ -1198,6 +1200,7 @@ declare class SVGContext2D {
   commitFrame(): void;
   get runs(): SVGRun[];
   resetDom(): void;
+  disposeDom(): void;
   beginPath(): void;
   closePath(): void;
   moveTo(x: number, y: number): void;
@@ -1246,6 +1249,7 @@ declare class SVGSpace extends DOMSpace {
   static svgElement(parent: Element, name: string, id?: string): SVGElement;
   remove(player: IPlayer): this;
   removeAll(): this;
+  dispose(): this;
 }
 declare class SVGForm extends CanvasForm {
   protected _svgSpace: SVGSpace;

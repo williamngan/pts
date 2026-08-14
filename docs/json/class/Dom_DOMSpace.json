@@ -3,20 +3,20 @@
   "source": [
     [
       "src/Dom.ts",
-      19,
+      33,
       13
     ]
   ],
   "kind": "Class",
   "id": 2028,
-  "comment": "DOMSpace is a space for DOM elements. Usually its subclasses such as [`HTMLSpace`](#link) and [`#SVGSpace`](#link) should be used instead.\nLearn more about spaces in [this guide](../guide/space-0500).",
+  "comment": "DOMSpace hosts a Space in a DOM element. It is the subclassing entry point for building\ncustom element-based spaces; usually its subclass [`SVGSpace`](#link) should be used instead.\nLearn more about spaces in [this guide](../guide/space-0500).\n\nWhen using a Space inside a component framework, create it on mount and call\n[`DOMSpace.dispose`](#link) on unmount so listeners and the animation loop are released.\nFor example, in React:\n```\nuseEffect(() => {\n  const space = new SVGSpace(ref.current).setup({ resize: true });\n  space.add(...).play();\n  return () => { space.dispose(); };\n}, []);\n```\nDispose is idempotent, and a new Space can be mounted on the same element afterwards\n(as happens under React's StrictMode).",
   "constructor": [
     {
       "name": "constructor",
       "source": [
         [
           "src/Dom.ts",
-          34,
+          53,
           2
         ]
       ],
@@ -59,16 +59,16 @@
       "source": [
         [
           "src/Dom.ts",
-          141,
+          160,
           6
         ],
         [
           "src/Dom.ts",
-          151,
+          170,
           6
         ]
       ],
-      "id": 2063,
+      "id": 2065,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -91,16 +91,16 @@
       "source": [
         [
           "src/Dom.ts",
-          225,
+          244,
           6
         ],
         [
           "src/Dom.ts",
-          229,
+          248,
           6
         ]
       ],
-      "id": 2083,
+      "id": 2085,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -127,7 +127,7 @@
           6
         ]
       ],
-      "id": 2253,
+      "id": 2255,
       "flags": {},
       "overrides": false,
       "inherits": "Space.center",
@@ -151,7 +151,7 @@
           6
         ]
       ],
-      "id": 2233,
+      "id": 2235,
       "flags": {},
       "overrides": false,
       "inherits": "Space.customRendering",
@@ -174,11 +174,11 @@
       "source": [
         [
           "src/Dom.ts",
-          193,
+          212,
           6
         ]
       ],
-      "id": 2074,
+      "id": 2076,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -197,7 +197,7 @@
           6
         ]
       ],
-      "id": 2257,
+      "id": 2259,
       "flags": {},
       "overrides": false,
       "inherits": "Space.height",
@@ -216,7 +216,7 @@
           13
         ]
       ],
-      "id": 2249,
+      "id": 2251,
       "flags": {
         "isPublic": true
       },
@@ -237,7 +237,7 @@
           6
         ]
       ],
-      "id": 2245,
+      "id": 2247,
       "flags": {},
       "overrides": false,
       "inherits": "Space.isPlaying",
@@ -256,7 +256,7 @@
           6
         ]
       ],
-      "id": 2247,
+      "id": 2249,
       "flags": {},
       "overrides": false,
       "inherits": "Space.outerBound",
@@ -271,11 +271,11 @@
       "source": [
         [
           "src/Dom.ts",
-          200,
+          219,
           6
         ]
       ],
-      "id": 2076,
+      "id": 2078,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -294,7 +294,7 @@
           13
         ]
       ],
-      "id": 2103,
+      "id": 2105,
       "flags": {
         "isPublic": true
       },
@@ -311,11 +311,11 @@
       "source": [
         [
           "src/Dom.ts",
-          207,
+          226,
           6
         ]
       ],
-      "id": 2078,
+      "id": 2080,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -334,7 +334,7 @@
           6
         ]
       ],
-      "id": 2251,
+      "id": 2253,
       "flags": {},
       "overrides": false,
       "inherits": "Space.size",
@@ -353,7 +353,7 @@
           6
         ]
       ],
-      "id": 2255,
+      "id": 2257,
       "flags": {},
       "overrides": false,
       "inherits": "Space.width",
@@ -374,7 +374,7 @@
           2
         ]
       ],
-      "id": 2201,
+      "id": 2203,
       "flags": {},
       "overrides": false,
       "inherits": "Space.add",
@@ -404,7 +404,7 @@
           2
         ]
       ],
-      "id": 2105,
+      "id": 2107,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.bindCanvas",
@@ -452,7 +452,7 @@
           2
         ]
       ],
-      "id": 2117,
+      "id": 2119,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.bindDoc",
@@ -494,7 +494,7 @@
           2
         ]
       ],
-      "id": 2136,
+      "id": 2138,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.bindKeyboard",
@@ -530,7 +530,7 @@
           2
         ]
       ],
-      "id": 2127,
+      "id": 2129,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.bindMouse",
@@ -571,7 +571,7 @@
           2
         ]
       ],
-      "id": 2131,
+      "id": 2133,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.bindTouch",
@@ -614,11 +614,11 @@
       "source": [
         [
           "src/Dom.ts",
-          215,
+          234,
           2
         ]
       ],
-      "id": 2080,
+      "id": 2082,
       "flags": {},
       "overrides": "MultiTouchSpace.clear",
       "inherits": false,
@@ -644,17 +644,17 @@
       "source": [
         [
           "src/Dom.ts",
-          292,
+          313,
           2
         ]
       ],
-      "id": 2096,
+      "id": 2098,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
-          "comment": "Dispose of browser resources held by this space and remove all players. Call this before unmounting the DOM.",
+          "comment": "Dispose of browser resources held by this space and remove all players. Call this before\nunmounting the DOM, eg in a framework component's unmount/cleanup callback. Dispose is\nidempotent, and a new Space can be created on the same element afterwards.",
           "returns": "this",
           "returns_comment": false,
           "parameters": [],
@@ -667,11 +667,11 @@
       "source": [
         [
           "src/Dom.ts",
-          133,
+          152,
           2
         ]
       ],
-      "id": 2061,
+      "id": 2063,
       "flags": {},
       "overrides": "MultiTouchSpace.getForm",
       "inherits": false,
@@ -694,7 +694,7 @@
           2
         ]
       ],
-      "id": 2198,
+      "id": 2200,
       "flags": {},
       "overrides": false,
       "inherits": "Space.minFrameTime",
@@ -724,7 +724,7 @@
           2
         ]
       ],
-      "id": 2217,
+      "id": 2219,
       "flags": {},
       "overrides": false,
       "inherits": "Space.pause",
@@ -754,7 +754,7 @@
           2
         ]
       ],
-      "id": 2209,
+      "id": 2211,
       "flags": {},
       "overrides": false,
       "inherits": "Space.play",
@@ -784,7 +784,7 @@
           12
         ]
       ],
-      "id": 2214,
+      "id": 2216,
       "flags": {
         "isProtected": true
       },
@@ -816,7 +816,7 @@
           2
         ]
       ],
-      "id": 2227,
+      "id": 2229,
       "flags": {},
       "overrides": false,
       "inherits": "Space.playOnce",
@@ -846,7 +846,7 @@
           2
         ]
       ],
-      "id": 2195,
+      "id": 2197,
       "flags": {},
       "overrides": false,
       "inherits": "Space.refresh",
@@ -876,7 +876,7 @@
           2
         ]
       ],
-      "id": 2204,
+      "id": 2206,
       "flags": {},
       "overrides": false,
       "inherits": "Space.remove",
@@ -906,7 +906,7 @@
           2
         ]
       ],
-      "id": 2207,
+      "id": 2209,
       "flags": {},
       "overrides": false,
       "inherits": "Space.removeAll",
@@ -929,7 +929,7 @@
           12
         ]
       ],
-      "id": 2230,
+      "id": 2232,
       "flags": {
         "isProtected": true
       },
@@ -961,7 +961,7 @@
           2
         ]
       ],
-      "id": 2212,
+      "id": 2214,
       "flags": {},
       "overrides": false,
       "inherits": "Space.replay",
@@ -980,11 +980,11 @@
       "source": [
         [
           "src/Dom.ts",
-          160,
+          179,
           2
         ]
       ],
-      "id": 2067,
+      "id": 2069,
       "flags": {},
       "overrides": "MultiTouchSpace.resize",
       "inherits": false,
@@ -1020,7 +1020,7 @@
           2
         ]
       ],
-      "id": 2220,
+      "id": 2222,
       "flags": {},
       "overrides": false,
       "inherits": "Space.resume",
@@ -1039,11 +1039,11 @@
       "source": [
         [
           "src/Dom.ts",
-          120,
+          139,
           2
         ]
       ],
-      "id": 2055,
+      "id": 2057,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1078,7 +1078,7 @@
           2
         ]
       ],
-      "id": 2222,
+      "id": 2224,
       "flags": {},
       "overrides": false,
       "inherits": "Space.stop",
@@ -1104,11 +1104,11 @@
       "source": [
         [
           "src/Dom.ts",
-          239,
+          258,
           2
         ]
       ],
-      "id": 2087,
+      "id": 2089,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1146,11 +1146,11 @@
       "source": [
         [
           "src/Dom.ts",
-          251,
+          270,
           2
         ]
       ],
-      "id": 2092,
+      "id": 2094,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1186,7 +1186,7 @@
           2
         ]
       ],
-      "id": 2142,
+      "id": 2144,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.touchesToPoints",
@@ -1222,7 +1222,7 @@
           2
         ]
       ],
-      "id": 2111,
+      "id": 2113,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.unbindCanvas",
@@ -1270,7 +1270,7 @@
           2
         ]
       ],
-      "id": 2122,
+      "id": 2124,
       "flags": {},
       "overrides": false,
       "inherits": "MultiTouchSpace.unbindDoc",
@@ -1308,7 +1308,7 @@
       "source": [
         [
           "src/Dom.ts",
-          76,
+          95,
           9
         ]
       ],
@@ -1352,7 +1352,7 @@
       "source": [
         [
           "src/Dom.ts",
-          279,
+          298,
           9
         ]
       ],
@@ -1389,7 +1389,7 @@
       "source": [
         [
           "src/Dom.ts",
-          264,
+          283,
           9
         ]
       ],
@@ -1434,7 +1434,7 @@
           12
         ]
       ],
-      "id": 2187,
+      "id": 2189,
       "flags": {
         "isProtected": true
       },
@@ -1448,7 +1448,7 @@
       "source": [
         [
           "src/Dom.ts",
-          23,
+          37,
           2
         ]
       ],
@@ -1468,7 +1468,7 @@
           12
         ]
       ],
-      "id": 2190,
+      "id": 2192,
       "flags": {
         "isProtected": true
       },
@@ -1486,7 +1486,7 @@
           12
         ]
       ],
-      "id": 2189,
+      "id": 2191,
       "flags": {
         "isProtected": true
       },

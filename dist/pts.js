@@ -5300,6 +5300,8 @@ See https://github.com/williamngan/pts for details. */
 			this._autoResize = true;
 			this._bgcolor = "#e1e9f0";
 			this._css = {};
+			this._domDisposed = false;
+			this._resizeHandlerBound = this._resizeHandler.bind(this);
 			let _selector = null;
 			this.id = "pts";
 			if (elem instanceof Element) {
@@ -5349,11 +5351,11 @@ See https://github.com/williamngan/pts for details. */
 		}
 		set autoResize(auto) {
 			this._autoResize = auto;
-			if (auto) window.addEventListener("resize", this._resizeHandler.bind(this));
+			if (auto) window.addEventListener("resize", this._resizeHandlerBound);
 			else {
 				delete this._css["width"];
 				delete this._css["height"];
-				window.removeEventListener("resize", this._resizeHandler.bind(this));
+				window.removeEventListener("resize", this._resizeHandlerBound);
 			}
 		}
 		get autoResize() {
@@ -5425,9 +5427,12 @@ See https://github.com/williamngan/pts for details. */
 			return str;
 		}
 		dispose() {
-			window.removeEventListener("resize", this._resizeHandler.bind(this));
-			this.stop();
-			this.removeAll();
+			if (this._domDisposed) return this;
+			this._domDisposed = true;
+			this.autoResize = false;
+			this._unbindAll();
+			this._cancelAnimation();
+			Space.prototype.removeAll.call(this);
 			return this;
 		}
 	};
@@ -5920,6 +5925,11 @@ See https://github.com/williamngan/pts for details. */
 			this._pool = [];
 			this._attrCache = [];
 		}
+		disposeDom() {
+			if (this._group && this._group.parentNode) this._group.parentNode.removeChild(this._group);
+			if (this._defs && this._defs.parentNode) this._defs.parentNode.removeChild(this._defs);
+			this.resetDom();
+		}
 		beginPath() {
 			this._flushShape();
 			this._d = "";
@@ -6291,6 +6301,14 @@ See https://github.com/williamngan/pts for details. */
 			this._bgElem = null;
 			for (const ctx of this._svgContexts) ctx.resetDom();
 			return super.removeAll();
+		}
+		dispose() {
+			super.dispose();
+			for (const ctx of this._svgContexts) ctx.disposeDom();
+			this._svgContexts = [];
+			if (this._bgElem && this._bgElem.parentNode) this._bgElem.parentNode.removeChild(this._bgElem);
+			this._bgElem = null;
+			return this;
 		}
 	};
 	var SVGForm = class SVGForm extends CanvasForm {

@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Typealias",
-  "id": 7637,
+  "id": 7641,
   "comment": "Typescript type: ISoundAnalyzer represents an object that stores the AnalyzerNode properties",
   "constructor": [],
   "accessors": [],

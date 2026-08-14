@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Objectliteral",
-  "id": 7701,
+  "id": 7705,
   "comment": "**[Experimental]** A set of string constants to represent different UI event types.",
   "constructor": [],
   "accessors": [],
@@ -23,7 +23,7 @@
           2
         ]
       ],
-      "id": 7720,
+      "id": 7724,
       "flags": {
         "isReadonly": true
       },
@@ -41,7 +41,7 @@
           2
         ]
       ],
-      "id": 7714,
+      "id": 7718,
       "flags": {
         "isReadonly": true
       },
@@ -59,7 +59,7 @@
           2
         ]
       ],
-      "id": 7719,
+      "id": 7723,
       "flags": {
         "isReadonly": true
       },
@@ -77,7 +77,7 @@
           2
         ]
       ],
-      "id": 7704,
+      "id": 7708,
       "flags": {
         "isReadonly": true
       },
@@ -95,7 +95,7 @@
           2
         ]
       ],
-      "id": 7706,
+      "id": 7710,
       "flags": {
         "isReadonly": true
       },
@@ -113,7 +113,7 @@
           2
         ]
       ],
-      "id": 7708,
+      "id": 7712,
       "flags": {
         "isReadonly": true
       },
@@ -131,7 +131,7 @@
           2
         ]
       ],
-      "id": 7712,
+      "id": 7716,
       "flags": {
         "isReadonly": true
       },
@@ -149,7 +149,7 @@
           2
         ]
       ],
-      "id": 7715,
+      "id": 7719,
       "flags": {
         "isReadonly": true
       },
@@ -167,7 +167,7 @@
           2
         ]
       ],
-      "id": 7716,
+      "id": 7720,
       "flags": {
         "isReadonly": true
       },
@@ -185,7 +185,7 @@
           2
         ]
       ],
-      "id": 7713,
+      "id": 7717,
       "flags": {
         "isReadonly": true
       },
@@ -203,7 +203,7 @@
           2
         ]
       ],
-      "id": 7705,
+      "id": 7709,
       "flags": {
         "isReadonly": true
       },
@@ -221,7 +221,7 @@
           2
         ]
       ],
-      "id": 7711,
+      "id": 7715,
       "flags": {
         "isReadonly": true
       },
@@ -239,7 +239,7 @@
           2
         ]
       ],
-      "id": 7710,
+      "id": 7714,
       "flags": {
         "isReadonly": true
       },
@@ -257,7 +257,7 @@
           2
         ]
       ],
-      "id": 7717,
+      "id": 7721,
       "flags": {
         "isReadonly": true
       },
@@ -275,7 +275,7 @@
           2
         ]
       ],
-      "id": 7718,
+      "id": 7722,
       "flags": {
         "isReadonly": true
       },
@@ -293,7 +293,7 @@
           2
         ]
       ],
-      "id": 7707,
+      "id": 7711,
       "flags": {
         "isReadonly": true
       },
@@ -311,7 +311,7 @@
           2
         ]
       ],
-      "id": 7709,
+      "id": 7713,
       "flags": {
         "isReadonly": true
       },
@@ -329,7 +329,7 @@
           2
         ]
       ],
-      "id": 7703,
+      "id": 7707,
       "flags": {
         "isReadonly": true
       },

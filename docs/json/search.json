@@ -8460,6 +8460,12 @@
     8
   ],
   [
+    "Svg_SVGContext2D#function_disposeDom",
+    "SVGContext2D.disposeDom",
+    "Function",
+    8
+  ],
+  [
     "Svg_SVGContext2D#function_drawImage",
     "SVGContext2D.drawImage",
     "Function",

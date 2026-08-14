@@ -116,6 +116,27 @@ type SVGRun = {
  * `textBox` layout matches canvas exactly. When shapes with both fill and stroke are merged,
  * all fills in a run paint before its strokes — visible only for overlapping same-styled
  * shapes.
+ *
+ * **Writing your own renderer**: this class is the reference implementation of the rendering
+ * contract — any object implementing the same context surface can be handed to
+ * [`CanvasForm`](#link)'s constructor to become a Pts renderer (a PDF writer, a command
+ * recorder, a test snapshotter, and so on). The surface is the subset of
+ * `CanvasRenderingContext2D` that `CanvasForm` draws through:
+ * - path verbs: `beginPath`, `moveTo`, `lineTo`, `quadraticCurveTo`, `bezierCurveTo`,
+ *   `rect`, `arc`, `ellipse`, `closePath`
+ * - paint: `fill`, `stroke`, `fillRect`, `clearRect`
+ * - state: `save`, `restore`, `clip`, `scale`
+ * - style fields: `fillStyle`, `strokeStyle`, `lineWidth`, `lineJoin`, `lineCap`,
+ *   `globalAlpha`, `globalCompositeOperation`, `setLineDash`, `lineDashOffset`
+ * - text: `font`, `textAlign`, `textBaseline`, `fillText`, `measureText`
+ * - images: `drawImage`, `putImageData`
+ * - gradients: `createLinearGradient`, `createRadialGradient`
+ *
+ * A renderer driven by a Space should also expose a frame lifecycle like
+ * [`SVGContext2D.beginFrame`](#link) / [`SVGContext2D.commitFrame`](#link), called around the
+ * players' animate callbacks. The unit test "implements every context member that CanvasForm
+ * uses" is the compatibility alarm: it fails when a new `CanvasForm` feature touches a
+ * context member a renderer does not implement.
  */
 export class SVGContext2D {
   // ---- canvas-compatible state ----
@@ -254,6 +275,20 @@ export class SVGContext2D {
     this._defs = null;
     this._pool = [];
     this._attrCache = [];
+  }
+
+  /**
+   * Remove this context's managed elements from the DOM and forget them. Used when a space
+   * is disposed so that a re-mounted space on the same element starts clean.
+   */
+  disposeDom(): void {
+    if (this._group && this._group.parentNode) {
+      this._group.parentNode.removeChild(this._group);
+    }
+    if (this._defs && this._defs.parentNode) {
+      this._defs.parentNode.removeChild(this._defs);
+    }
+    this.resetDom();
   }
 
   // ------------------------------------------------------------ path verbs
@@ -845,6 +880,23 @@ export class SVGSpace extends DOMSpace {
     this._bgElem = null;
     for (const ctx of this._svgContexts) ctx.resetDom();
     return super.removeAll();
+  }
+
+  /**
+   * Dispose of browser resources held by this space: listeners, the animation loop, and the
+   * elements this space manages inside the `<svg>`. Call this before unmounting, eg in a
+   * framework component's cleanup callback. A new space can be mounted on the same element
+   * afterwards (as happens under React's StrictMode).
+   */
+  dispose(): this {
+    super.dispose();
+    for (const ctx of this._svgContexts) ctx.disposeDom();
+    this._svgContexts = [];
+    if (this._bgElem && this._bgElem.parentNode) {
+      this._bgElem.parentNode.removeChild(this._bgElem);
+    }
+    this._bgElem = null;
+    return this;
   }
 }
 
