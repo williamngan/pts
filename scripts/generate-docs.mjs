@@ -271,9 +271,13 @@ function signatureOf(signature, context) {
 
 function inheritedReferenceName(reference) {
   // TypeDoc now points at each intermediate subclass. The old site displayed
-  // the reflection that originally declared the inherited member.
+  // the reflection that originally declared the inherited member. The chain
+  // can contain reference cycles (eg, re-declared members in a subclass), so
+  // track visited reflections to guarantee termination.
   let current = reference;
-  while (current?.reflection?.inheritedFrom) {
+  const seen = new Set();
+  while (current?.reflection?.inheritedFrom && !seen.has(current.reflection)) {
+    seen.add(current.reflection);
     current = current.reflection.inheritedFrom;
   }
   return normalizeReferenceName(current);

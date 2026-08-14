@@ -259,7 +259,14 @@ describe("SVGSpace and SVGForm", () => {
       .text([5, 70], "svg")
       .log("log");
 
-    expect(space.element.querySelectorAll(".pts-svgform").length).toBe(12);
+    // draws are committed as style runs: consecutive same-styled shapes merge
+    // into one <path>, each text call becomes one <text>, and log()'s
+    // fill-only background rectangle is its own run
+    form.svgContext.commitFrame();
+    const runGroup = space.element.querySelector("g.pts-svgform");
+    expect(runGroup).not.toBeNull();
+    expect(runGroup.querySelectorAll("path").length).toBe(2);
+    expect(runGroup.querySelectorAll("text").length).toBe(2);
     expect(space.element.querySelector(".custom-svg")).not.toBeNull();
     form.fill(false).stroke(false).cls(false).font(new Font()).reset();
     expect(() => form.scope({ animate: vi.fn() })).toThrow(/not defined/);
@@ -296,13 +303,15 @@ describe("SVGSpace and SVGForm", () => {
     const first = SVGSpace.svgElement(svg, "circle", "reuse");
     expect(SVGSpace.svgElement(svg, "rect", "reuse")).toBe(first);
     expect(() => SVGSpace.svgElement(null, "rect", "bad")).toThrow(/parent/);
-    expect(SVGForm.point(ctx, [2, 2], 1, "circle").nodeName).toBe("circle");
+    expect(SVGForm.pointElement(ctx, [2, 2], 1, "circle").nodeName).toBe(
+      "circle",
+    );
     ctx.currentID = "two";
-    expect(SVGForm.point(ctx, [2, 2], 1).nodeName).toBe("rect");
+    expect(SVGForm.pointElement(ctx, [2, 2], 1).nodeName).toBe("rect");
     ctx.currentID = "three";
-    expect(SVGForm.line(ctx, [[0, 0]])).toBeUndefined();
+    expect(SVGForm.lineElement(ctx, [[0, 0]])).toBeUndefined();
     ctx.currentID = "four";
-    expect(SVGForm.rect(ctx, [])).toBeUndefined();
+    expect(SVGForm.rectElement(ctx, [])).toBeUndefined();
     expect(SVGForm.style(first, ctx.style).getAttribute("style")).toContain(
       "stroke: none",
     );

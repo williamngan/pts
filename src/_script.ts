@@ -53,11 +53,22 @@ globalThis.Pts.quickStart = (id: string, bg: string = "#9ab") => {
   let s: any = globalThis;
   globalThis.Pts.namespace(s);
 
-  s.space = new Canvas.CanvasSpace(id).setup({
-    bgcolor: bg,
-    resize: true,
-    retina: true,
-  });
+  // pick the rendering backend from the mount element: an <svg> element (or a
+  // container holding one) gets an SVGSpace, anything else a CanvasSpace —
+  // so a sketch can swap renderers by changing only its HTML
+  const elem = typeof id === "string" ? document.querySelector(id) : id;
+  const isSVG =
+    elem &&
+    ((elem as Element).nodeName.toLowerCase() === "svg" ||
+      !!(elem as Element).querySelector(":scope > svg"));
+
+  s.space = isSVG
+    ? new Svg.SVGSpace(id).setup({ bgcolor: bg, resize: true })
+    : new Canvas.CanvasSpace(id).setup({
+        bgcolor: bg,
+        resize: true,
+        retina: true,
+      });
   s.form = s.space.getForm();
 
   return function (animate = null, start = null, action = null, resize = null) {

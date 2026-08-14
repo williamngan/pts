@@ -3,12 +3,12 @@
   "source": [
     [
       "src/Op.ts",
-      1562,
+      1668,
       13
     ]
   ],
   "kind": "Class",
-  "id": 3758,
+  "id": 3764,
   "comment": "Curve class provides static functions to interpolate curves. A curve is usually represented as a Group of 3 or more control points.\nYou can use the static functions as-is, or apply the [`Group.op`](#link) or [`Pt.op`](#link) to enable functional programming.\nSee [Op guide](../guide/Op-0400.html) for details.",
   "constructor": [],
   "accessors": [],
@@ -18,11 +18,11 @@
       "source": [
         [
           "src/Op.ts",
-          1758,
+          1864,
           9
         ]
       ],
-      "id": 3789,
+      "id": 3795,
       "flags": {
         "isStatic": true
       },
@@ -56,11 +56,11 @@
       "source": [
         [
           "src/Op.ts",
-          1787,
+          1893,
           9
         ]
       ],
-      "id": 3793,
+      "id": 3799,
       "flags": {
         "isStatic": true
       },
@@ -94,11 +94,11 @@
       "source": [
         [
           "src/Op.ts",
-          1813,
+          1919,
           9
         ]
       ],
-      "id": 3797,
+      "id": 3803,
       "flags": {
         "isStatic": true
       },
@@ -138,11 +138,11 @@
       "source": [
         [
           "src/Op.ts",
-          1850,
+          1956,
           9
         ]
       ],
-      "id": 3802,
+      "id": 3808,
       "flags": {
         "isStatic": true
       },
@@ -176,11 +176,11 @@
       "source": [
         [
           "src/Op.ts",
-          1876,
+          1982,
           9
         ]
       ],
-      "id": 3806,
+      "id": 3812,
       "flags": {
         "isStatic": true
       },
@@ -220,11 +220,11 @@
       "source": [
         [
           "src/Op.ts",
-          1685,
+          1791,
           9
         ]
       ],
-      "id": 3779,
+      "id": 3785,
       "flags": {
         "isStatic": true
       },
@@ -264,11 +264,11 @@
       "source": [
         [
           "src/Op.ts",
-          1723,
+          1829,
           9
         ]
       ],
-      "id": 3784,
+      "id": 3790,
       "flags": {
         "isStatic": true
       },
@@ -308,11 +308,11 @@
       "source": [
         [
           "src/Op.ts",
-          1626,
+          1732,
           9
         ]
       ],
-      "id": 3771,
+      "id": 3777,
       "flags": {
         "isStatic": true
       },
@@ -346,11 +346,11 @@
       "source": [
         [
           "src/Op.ts",
-          1659,
+          1765,
           9
         ]
       ],
-      "id": 3775,
+      "id": 3781,
       "flags": {
         "isStatic": true
       },
@@ -384,11 +384,11 @@
       "source": [
         [
           "src/Op.ts",
-          1583,
+          1689,
           9
         ]
       ],
-      "id": 3762,
+      "id": 3768,
       "flags": {
         "isStatic": true
       },
@@ -428,11 +428,11 @@
       "source": [
         [
           "src/Op.ts",
-          1567,
+          1673,
           9
         ]
       ],
-      "id": 3759,
+      "id": 3765,
       "flags": {
         "isStatic": true
       },

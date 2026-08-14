@@ -48,6 +48,7 @@ const expectedExports = [
   "Pt",
   "Range",
   "Rectangle",
+  "SVGContext2D",
   "SVGForm",
   "SVGSpace",
   "Shaping",
@@ -67,12 +68,12 @@ const expectedExports = [
   "World",
 ];
 const sizeLimits = {
-  "index.d.mts": 56_768,
-  "index.d.ts": 56_767,
-  "index.js": 182_153,
-  "index.mjs": 181_307,
-  "pts.js": 193_096,
-  "pts.min.js": 116_711,
+  "index.d.mts": 59552,
+  "index.d.ts": 59551,
+  "index.js": 207399,
+  "index.mjs": 206530,
+  "pts.js": 217280,
+  "pts.min.js": 129319,
 };
 const banner = "Copyright © 2017-present William Ngan and contributors.";
 

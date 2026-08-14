@@ -1,19 +1,655 @@
 /*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
 import { VisualForm, Font } from "./Form";
+import { CanvasForm } from "./Canvas";
 import { Geom } from "./Num";
 import { Const, Util } from "./Util";
 import { Pt, Group, Bound } from "./Pt";
 import { Rectangle } from "./Op";
 import { DOMSpace } from "./Dom";
-import { PtLike, PtLikeIterable, IPlayer, DOMFormContext } from "./Types";
+import {
+  PtLike,
+  PtLikeIterable,
+  IPlayer,
+  DOMFormContext,
+  RenderingContext2D,
+} from "./Types";
+
+const SVG_NS = "http://www.w3.org/2000/svg";
+
+// Canvas composite operations that map directly onto CSS mix-blend-mode.
+// The Porter-Duff subset ("source-in" etc.) has no SVG equivalent per-element.
+const BLEND_MODES = new Set([
+  "multiply",
+  "screen",
+  "overlay",
+  "darken",
+  "lighten",
+  "color-dodge",
+  "color-burn",
+  "hard-light",
+  "soft-light",
+  "difference",
+  "exclusion",
+  "hue",
+  "saturation",
+  "color",
+  "luminosity",
+]);
 
 /**
- * **[Experimental]** SVGSpace extends [`DOMSpace`](#link) to support SVG elements. Use it with [`SVGForm`](#link) to express Pts in svg.
- * You may easily switch between html canvas and svg renderings with minimal code changes. Check out the [Space guide](../guide/Space-0500.html) for details, and see [a demo here](../demo/index.html?name=svgform.scope).
+ * A gradient handle returned by [`SVGContext2D`](#link)'s `createLinearGradient` and
+ * `createRadialGradient`. It is structurally compatible with `CanvasGradient` (it has
+ * `addColorStop`), and materializes into an SVG `<defs>` gradient when first painted.
+ */
+class SVGGradient {
+  readonly id: string;
+  readonly kind: "linear" | "radial";
+  readonly coords: number[];
+  stops: [number, string][] = [];
+  protected _elem: SVGElement = null;
+
+  private static _count = 0;
+
+  constructor(kind: "linear" | "radial", coords: number[]) {
+    this.kind = kind;
+    this.coords = coords;
+    this.id = `pts_grad_${SVGGradient._count++}`;
+  }
+
+  addColorStop(offset: number, color: string): void {
+    this.stops.push([offset, color]);
+    if (this._elem) this._render(this._elem); // already materialized; keep it in sync
+  }
+
+  /** Create or update the `<defs>` element for this gradient and return its paint url. */
+  materialize(defs: SVGElement): string {
+    if (!this._elem) {
+      this._elem = document.createElementNS(
+        SVG_NS,
+        this.kind === "linear" ? "linearGradient" : "radialGradient",
+      ) as SVGElement;
+      this._elem.setAttribute("id", this.id);
+      this._elem.setAttribute("gradientUnits", "userSpaceOnUse");
+      if (this.kind === "linear") {
+        const [x1, y1, x2, y2] = this.coords;
+        DOMSpace.setAttr(this._elem, { x1, y1, x2, y2 });
+      } else {
+        const [x0, y0, r0, x1, y1, r1] = this.coords;
+        DOMSpace.setAttr(this._elem, { cx: x1, cy: y1, r: r1, fx: x0, fy: y0 });
+        if (r0) this._elem.setAttribute("fr", `${r0}`);
+      }
+      this._render(this._elem);
+      defs.appendChild(this._elem);
+    }
+    return `url(#${this.id})`;
+  }
+
+  protected _render(elem: SVGElement) {
+    elem.textContent = "";
+    for (const [offset, color] of this.stops) {
+      const stop = document.createElementNS(SVG_NS, "stop");
+      stop.setAttribute("offset", `${offset}`);
+      stop.setAttribute("stop-color", color);
+      elem.appendChild(stop);
+    }
+  }
+}
+
+/** A pending draw record produced by SVGContext2D, consumed by the frame commit. */
+type SVGRun = {
+  tag: "path" | "text" | "image";
+  attrs: Record<string, string | number>;
+  text?: string;
+  shapeEnds?: number[]; // per-shape boundaries in the d string, for expanded export
+};
+
+/**
+ * **`SVGContext2D`** implements the subset of `CanvasRenderingContext2D` that
+ * [`CanvasForm`](#link) draws through, and renders it as SVG. Consecutive shapes that share
+ * paint state are merged into single `<path>` elements ("style runs"), so the DOM cost per
+ * frame is proportional to the number of style changes, not the number of shapes. This is
+ * what lets the same sketch run unchanged on canvas and SVG.
+ *
+ * Capability notes: blend-mode composites map to `mix-blend-mode`; Porter-Duff composites,
+ * `clip`, and `putImageData` warn once and no-op. Text metrics come from a hidden canvas, so
+ * `textBox` layout matches canvas exactly. When shapes with both fill and stroke are merged,
+ * all fills in a run paint before its strokes — visible only for overlapping same-styled
+ * shapes.
+ */
+export class SVGContext2D {
+  // ---- canvas-compatible state ----
+  fillStyle: string | SVGGradient = "#f03";
+  strokeStyle: string | SVGGradient = "#fff";
+  lineWidth: number = 1;
+  lineJoin: string = "bevel";
+  lineCap: string = "butt";
+  globalAlpha: number = 1;
+  globalCompositeOperation: string = "source-over";
+  font: string = "10px sans-serif";
+  textAlign: string = "start";
+  textBaseline: string = "alphabetic";
+  lineDashOffset: number = 0;
+
+  protected _dash: number[] = [];
+  protected _stateStack: object[] = [];
+
+  /** Optional CSS class applied to emitted elements (see `SVGForm.cls`). */
+  className: string = "";
+
+  // ---- current path & shape ----
+  protected _d: string = "";
+  protected _shapeFill: string = null; // resolved paint or null
+  protected _shapeStroke: string = null;
+  protected _shapePainted: boolean = false;
+  // class/alpha/blend are captured at paint time (fill/stroke), not at flush
+  // time, so a style change between shapes cannot apply retroactively
+  protected _shapeClass: string = "";
+  protected _shapeAlpha: number = 1;
+  protected _shapeBlend: string = "source-over";
+
+  // ---- frame state ----
+  protected _runs: SVGRun[] = [];
+  protected _drawCount: number = 0;
+
+  // ---- DOM ----
+  protected _host: SVGElement; // the <svg> element
+  protected _group: SVGElement = null; // managed <g> holding this context's output
+  protected _defs: SVGElement = null;
+  protected _pool: SVGElement[] = []; // pooled elements, index-aligned with runs
+  protected _attrCache: Record<string, string>[] = [];
+
+  protected static _measurer: CanvasRenderingContext2D = null;
+  protected static _warned: { [k: string]: boolean } = {};
+
+  constructor(host: SVGElement) {
+    this._host = host;
+  }
+
+  protected static _warnOnce(key: string, msg: string) {
+    if (!SVGContext2D._warned[key]) {
+      SVGContext2D._warned[key] = true;
+      Util.warn(msg);
+    }
+  }
+
+  // -------------------------------------------------------------- lifecycle
+
+  /** Start a new frame: subsequent draws build a fresh run list. */
+  beginFrame(): void {
+    this._runs = [];
+    this._d = "";
+    this._shapeFill = null;
+    this._shapeStroke = null;
+    this._shapePainted = false;
+    this._drawCount = 0;
+  }
+
+  /** Number of paint calls since `beginFrame` — used to skip empty commits. */
+  get drawCount(): number {
+    return this._drawCount;
+  }
+
+  /** The `<g>` element holding this context's rendered output. */
+  get group(): SVGElement {
+    return this._group;
+  }
+
+  /**
+   * Commit the frame: reconcile the run list against the pooled elements, patching only
+   * changed attributes, and truncate unused elements.
+   */
+  commitFrame(): void {
+    this._flushShape();
+    if (!this._group) {
+      this._group = document.createElementNS(SVG_NS, "g") as SVGElement;
+      this._group.setAttribute("class", "pts-svgform");
+      this._host.appendChild(this._group);
+    }
+
+    const runs = this._runs;
+    for (let i = 0; i < runs.length; i++) {
+      const run = runs[i];
+      let elem = this._pool[i];
+      if (!elem || elem.nodeName !== run.tag) {
+        const fresh = document.createElementNS(SVG_NS, run.tag) as SVGElement;
+        if (elem) {
+          this._group.replaceChild(fresh, elem);
+        } else {
+          this._group.appendChild(fresh);
+        }
+        elem = fresh;
+        this._pool[i] = elem;
+        this._attrCache[i] = {};
+      }
+      const cache = this._attrCache[i];
+      for (const k in run.attrs) {
+        const v = `${run.attrs[k]}`;
+        if (cache[k] !== v) {
+          elem.setAttribute(k, v);
+          cache[k] = v;
+        }
+      }
+      if (run.tag === "text" && elem.textContent !== run.text) {
+        elem.textContent = run.text;
+      }
+    }
+
+    // truncate the unused tail
+    for (let i = this._pool.length - 1; i >= runs.length; i--) {
+      this._group.removeChild(this._pool[i]);
+      this._pool.pop();
+      this._attrCache.pop();
+    }
+  }
+
+  /** The current frame's run list (used by expanded export). */
+  get runs(): SVGRun[] {
+    return this._runs;
+  }
+
+  /** Forget cached DOM references, eg after the host's contents were removed externally. */
+  resetDom(): void {
+    this._group = null;
+    this._defs = null;
+    this._pool = [];
+    this._attrCache = [];
+  }
+
+  // ------------------------------------------------------------ path verbs
+
+  beginPath(): void {
+    this._flushShape();
+    this._d = "";
+  }
+
+  closePath(): void {
+    this._d += "Z";
+  }
+
+  moveTo(x: number, y: number): void {
+    this._d += `M${round2(x)} ${round2(y)}`;
+  }
+
+  lineTo(x: number, y: number): void {
+    this._d += `L${round2(x)} ${round2(y)}`;
+  }
+
+  quadraticCurveTo(cpx: number, cpy: number, x: number, y: number): void {
+    this._d += `Q${round2(cpx)} ${round2(cpy)} ${round2(x)} ${round2(y)}`;
+  }
+
+  bezierCurveTo(
+    cp1x: number,
+    cp1y: number,
+    cp2x: number,
+    cp2y: number,
+    x: number,
+    y: number,
+  ): void {
+    this._d += `C${round2(cp1x)} ${round2(cp1y)} ${round2(cp2x)} ${round2(cp2y)} ${round2(x)} ${round2(y)}`;
+  }
+
+  rect(x: number, y: number, w: number, h: number): void {
+    this._d += `M${round2(x)} ${round2(y)}h${round2(w)}v${round2(h)}h${round2(-w)}Z`;
+  }
+
+  arc(
+    x: number,
+    y: number,
+    radius: number,
+    startAngle: number,
+    endAngle: number,
+    ccw: boolean = false,
+  ): void {
+    this.ellipse(x, y, radius, radius, 0, startAngle, endAngle, ccw);
+  }
+
+  ellipse(
+    x: number,
+    y: number,
+    rx: number,
+    ry: number,
+    rotation: number,
+    startAngle: number,
+    endAngle: number,
+    ccw: boolean = false,
+  ): void {
+    // canvas sweep semantics: direction-signed delta, wrapped into [0, 2π),
+    // where a delta of 2π or more is a full ellipse
+    let delta = ccw ? startAngle - endAngle : endAngle - startAngle;
+    const full = delta >= Const.two_pi;
+    if (!full) delta = ((delta % Const.two_pi) + Const.two_pi) % Const.two_pi;
+
+    const cosR = Math.cos(rotation);
+    const sinR = Math.sin(rotation);
+    const ptAt = (angle: number): [number, number] => {
+      const px = rx * Math.cos(angle);
+      const py = ry * Math.sin(angle);
+      return [x + px * cosR - py * sinR, y + px * sinR + py * cosR];
+    };
+
+    const dir = ccw ? -1 : 1;
+    const sweepFlag = ccw ? 0 : 1;
+    const rotDeg = round2((rotation * 180) / Math.PI);
+    const [sx, sy] = ptAt(startAngle);
+
+    // connect from the current point like canvas does
+    this._d +=
+      this._d.length > 0
+        ? `L${round2(sx)} ${round2(sy)}`
+        : `M${round2(sx)} ${round2(sy)}`;
+
+    // emit in half-turn segments so large-arc flags stay unambiguous
+    const sweep = full ? Const.two_pi : delta;
+    const segments = Math.max(1, Math.ceil(sweep / Const.pi - 0.000001));
+    let angle = startAngle;
+    for (let s = 1; s <= segments; s++) {
+      const target =
+        s === segments ? startAngle + dir * sweep : angle + dir * Const.pi;
+      const [ex, ey] = ptAt(target);
+      this._d += `A${round2(rx)} ${round2(ry)} ${rotDeg} 0 ${sweepFlag} ${round2(ex)} ${round2(ey)}`;
+      angle = target;
+    }
+    if (full) this._d += "Z";
+  }
+
+  // ----------------------------------------------------------------- paint
+
+  fill(): void {
+    this._shapeFill = this._resolvePaint(this.fillStyle);
+    this._capturePaintState();
+  }
+
+  stroke(): void {
+    this._shapeStroke = this._resolvePaint(this.strokeStyle);
+    this._capturePaintState();
+  }
+
+  protected _capturePaintState(): void {
+    this._shapePainted = true;
+    this._shapeClass = this.className;
+    this._shapeAlpha = this.globalAlpha;
+    this._shapeBlend = this.globalCompositeOperation;
+    this._drawCount++;
+  }
+
+  fillRect(x: number, y: number, w: number, h: number): void {
+    this.beginPath();
+    this.rect(x, y, w, h);
+    this.fill();
+  }
+
+  clearRect(): void {
+    // background clearing is handled by SVGSpace.clear; nothing to erase mid-frame
+  }
+
+  fillText(txt: string, x: number, y: number): void {
+    this._flushShape();
+    const anchor =
+      this.textAlign === "center"
+        ? "middle"
+        : this.textAlign === "right" || this.textAlign === "end"
+          ? "end"
+          : "start";
+    const baseline =
+      this.textBaseline === "top"
+        ? "text-before-edge"
+        : this.textBaseline === "middle"
+          ? "central"
+          : this.textBaseline === "bottom"
+            ? "text-after-edge"
+            : this.textBaseline; // alphabetic, hanging, ideographic pass through
+    const attrs: Record<string, string | number> = {
+      x: round2(x),
+      y: round2(y),
+      fill: this._resolvePaint(this.fillStyle),
+      "text-anchor": anchor,
+      "dominant-baseline": baseline,
+      style: `font: ${this.font}`,
+      "pointer-events": "none",
+    };
+    this._applyCommon(attrs);
+    this._runs.push({ tag: "text", attrs, text: txt });
+    this._drawCount++;
+  }
+
+  measureText(txt: string): TextMetrics {
+    if (!SVGContext2D._measurer) {
+      SVGContext2D._measurer = document
+        .createElement("canvas")
+        .getContext("2d");
+    }
+    SVGContext2D._measurer.font = this.font;
+    return SVGContext2D._measurer.measureText(txt);
+  }
+
+  drawImage(
+    img: CanvasImageSource,
+    x: number,
+    y: number,
+    w?: number,
+    h?: number,
+    ...rest: number[]
+  ): void {
+    if (rest.length > 0) {
+      SVGContext2D._warnOnce(
+        "drawImage9",
+        "SVG output does not support the 9-argument (source-cropped) drawImage",
+      );
+      return;
+    }
+    this._flushShape();
+    const src =
+      (img as HTMLImageElement).src ??
+      ((img as HTMLCanvasElement).toDataURL
+        ? (img as HTMLCanvasElement).toDataURL()
+        : null);
+    if (!src) {
+      SVGContext2D._warnOnce(
+        "drawImageSrc",
+        "SVG output supports images from <img> elements or canvases only",
+      );
+      return;
+    }
+    const attrs: Record<string, string | number> = {
+      href: src,
+      x: round2(x),
+      y: round2(y),
+    };
+    const iw = w ?? (img as HTMLImageElement).width;
+    const ih = h ?? (img as HTMLImageElement).height;
+    if (iw != null) attrs.width = round2(iw as number);
+    if (ih != null) attrs.height = round2(ih as number);
+    this._applyCommon(attrs);
+    this._runs.push({ tag: "image", attrs });
+    this._drawCount++;
+  }
+
+  putImageData(): void {
+    SVGContext2D._warnOnce(
+      "putImageData",
+      "putImageData is not supported in SVG output",
+    );
+  }
+
+  // ----------------------------------------------------------- state & misc
+
+  save(): void {
+    this._stateStack.push({
+      fillStyle: this.fillStyle,
+      strokeStyle: this.strokeStyle,
+      lineWidth: this.lineWidth,
+      lineJoin: this.lineJoin,
+      lineCap: this.lineCap,
+      globalAlpha: this.globalAlpha,
+      globalCompositeOperation: this.globalCompositeOperation,
+      font: this.font,
+      textAlign: this.textAlign,
+      textBaseline: this.textBaseline,
+      lineDashOffset: this.lineDashOffset,
+      _dash: this._dash.slice(),
+    });
+  }
+
+  restore(): void {
+    const s = this._stateStack.pop();
+    if (s) Object.assign(this, s);
+  }
+
+  scale(): void {
+    // SVG output is resolution-independent; the canvas pixel-density scale is a no-op here
+  }
+
+  clip(): void {
+    SVGContext2D._warnOnce("clip", "clip is not yet supported in SVG output");
+  }
+
+  setLineDash(segments: number[]): void {
+    this._dash = segments;
+  }
+
+  getLineDash(): number[] {
+    return this._dash;
+  }
+
+  createLinearGradient(
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number,
+  ): SVGGradient {
+    return new SVGGradient("linear", [x1, y1, x2, y2]);
+  }
+
+  createRadialGradient(
+    x0: number,
+    y0: number,
+    r0: number,
+    x1: number,
+    y1: number,
+    r1: number,
+  ): SVGGradient {
+    return new SVGGradient("radial", [x0, y0, r0, x1, y1, r1]);
+  }
+
+  // -------------------------------------------------------------- internals
+
+  protected _resolvePaint(style: string | SVGGradient): string {
+    if (style instanceof SVGGradient) {
+      if (!this._defs) {
+        this._defs = document.createElementNS(SVG_NS, "defs") as SVGElement;
+        this._host.insertBefore(this._defs, this._host.firstChild);
+      }
+      return style.materialize(this._defs);
+    }
+    return style as string;
+  }
+
+  /** Add class, alpha, and blend attributes shared by all run kinds. */
+  protected _applyCommon(attrs: Record<string, string | number>): void {
+    attrs.class = this.className
+      ? `pts-svgform ${this.className}`
+      : "pts-svgform";
+    if (this.globalAlpha !== 1) attrs.opacity = this.globalAlpha;
+    else attrs.opacity = 1;
+    const op = this.globalCompositeOperation;
+    if (op !== "source-over") {
+      if (BLEND_MODES.has(op)) {
+        attrs["mix-blend-mode"] = op;
+      } else {
+        SVGContext2D._warnOnce(
+          `composite-${op}`,
+          `composite operation "${op}" has no SVG equivalent`,
+        );
+      }
+    }
+  }
+
+  /**
+   * Commit the current shape (its path and fill/stroke usage) into the run list, merging
+   * with the previous run when the paint state matches.
+   */
+  protected _flushShape(): void {
+    if (!this._shapePainted || this._d.length === 0) {
+      this._shapePainted = false;
+      return;
+    }
+
+    const attrs: Record<string, string | number> = {
+      d: this._d,
+      fill: this._shapeFill ?? "none",
+      stroke: this._shapeStroke ?? "none",
+    };
+    if (this._shapeStroke) {
+      attrs["stroke-width"] = this.lineWidth;
+      attrs["stroke-linejoin"] = this.lineJoin;
+      attrs["stroke-linecap"] = this.lineCap;
+      if (this._dash.length > 0) {
+        attrs["stroke-dasharray"] = this._dash.join(" ");
+        if (this.lineDashOffset)
+          attrs["stroke-dashoffset"] = this.lineDashOffset;
+      }
+    }
+    attrs.class = this._shapeClass
+      ? `pts-svgform ${this._shapeClass}`
+      : "pts-svgform";
+    attrs.opacity = this._shapeAlpha;
+    if (this._shapeBlend !== "source-over") {
+      if (BLEND_MODES.has(this._shapeBlend)) {
+        attrs["mix-blend-mode"] = this._shapeBlend;
+      } else {
+        SVGContext2D._warnOnce(
+          `composite-${this._shapeBlend}`,
+          `composite operation "${this._shapeBlend}" has no SVG equivalent`,
+        );
+      }
+    }
+
+    const prev = this._runs[this._runs.length - 1];
+    if (prev && prev.tag === "path" && sameRunStyle(prev.attrs, attrs)) {
+      prev.shapeEnds.push((prev.attrs.d as string).length);
+      prev.attrs.d = (prev.attrs.d as string) + this._d;
+    } else {
+      this._runs.push({ tag: "path", attrs, shapeEnds: [] });
+    }
+
+    this._d = "";
+    this._shapeFill = null;
+    this._shapeStroke = null;
+    this._shapePainted = false;
+  }
+}
+
+function round2(n: number): number {
+  return Math.round(n * 100) / 100;
+}
+
+/** Compare two path-run attribute sets for style equality (everything but the path data). */
+function sameRunStyle(
+  a: Record<string, string | number>,
+  b: Record<string, string | number>,
+): boolean {
+  const keysA = Object.keys(a);
+  const keysB = Object.keys(b);
+  if (keysA.length !== keysB.length) return false;
+  for (const k of keysA) {
+    if (k === "d") continue;
+    if (a[k] !== b[k]) return false;
+  }
+  return true;
+}
+
+/**
+ * SVGSpace extends [`DOMSpace`](#link) to support SVG elements. Use it with [`SVGForm`](#link),
+ * which shares its drawing API and semantics with [`CanvasForm`](#link) — a sketch written for
+ * canvas runs on SVG unchanged. Check out the [Space guide](../guide/Space-0500.html) for details.
  */
 export class SVGSpace extends DOMSpace {
   protected _bgcolor: string = "#999";
+  protected _svgContexts: SVGContext2D[] = [];
+  protected _bgElem: SVGElement = null;
+  protected _svgRefresh: boolean = true; // mirrors Space's private refresh flag
 
   /**
    * Create a SVGSpace which represents a Space for SVG elements.
@@ -29,10 +665,14 @@ export class SVGSpace extends DOMSpace {
       this._container = this._canvas;
       this._canvas = s as SVGElement;
     }
+
+    // immediate-mode cycle like canvas: redraw and reconcile every frame
+    this.refresh(true);
   }
 
   /**
-   * Get a new [`SVGForm`](#link) for drawing.
+   * Get a new [`SVGForm`](#link) for drawing. The form shares its API with
+   * [`CanvasForm`](#link), rendered through a [`SVGContext2D`](#link).
    * @see `SVGForm`
    */
   getForm(): SVGForm {
@@ -44,6 +684,11 @@ export class SVGSpace extends DOMSpace {
    */
   get element(): Element {
     return this._canvas;
+  }
+
+  /** Register a rendering context so its frame lifecycle follows this space's play cycle. */
+  registerContext(ctx: SVGContext2D): void {
+    this._svgContexts.push(ctx);
   }
 
   /**
@@ -58,10 +703,103 @@ export class SVGSpace extends DOMSpace {
       viewBox: `0 0 ${this.bound.width} ${this.bound.height}`,
       width: `${this.bound.width}`,
       height: `${this.bound.height}`,
-      xmlns: "http://www.w3.org/2000/svg",
+      xmlns: SVG_NS,
       version: "1.1",
     });
+    this._updateBackground();
     return this;
+  }
+
+  /**
+   * Clear the drawing. In SVG this maintains a background rectangle rather than erasing
+   * elements — the per-frame reconciliation removes stale shapes.
+   * @param bg Optionally specify a custom background color in hex or rgba string, or "transparent"
+   */
+  clear(bg?: string): this {
+    if (bg) this._bgcolor = bg;
+    this._updateBackground();
+    return this;
+  }
+
+  protected _updateBackground(): void {
+    const svg = this._canvas as SVGElement;
+    if (!this._bgElem) {
+      this._bgElem = document.createElementNS(SVG_NS, "rect") as SVGElement;
+      this._bgElem.setAttribute("class", "pts-svg-bg");
+      svg.insertBefore(this._bgElem, svg.firstChild);
+    }
+    DOMSpace.setAttr(this._bgElem, {
+      x: 0,
+      y: 0,
+      width: this.bound.width,
+      height: this.bound.height,
+      fill:
+        !this._bgcolor || this._bgcolor === "transparent"
+          ? "none"
+          : this._bgcolor,
+    });
+  }
+
+  /**
+   * The per-frame cycle: begin all registered contexts' frames, run the players, then
+   * commit — reconciling the SVG DOM against what was drawn this frame.
+   */
+  protected playItems(time: number) {
+    const ctxs = this._svgContexts;
+    for (let i = 0, len = ctxs.length; i < len; i++) ctxs[i].beginFrame();
+    super.playItems(time);
+    for (let i = 0, len = ctxs.length; i < len; i++) {
+      // skip empty commits so scenes drawn once (with refresh off) persist
+      if (this._svgRefresh || ctxs[i].drawCount > 0) ctxs[i].commitFrame();
+    }
+  }
+
+  /**
+   * Set whether the rendering should be repainted on each frame.
+   * @param b a boolean value to set whether to repaint each frame
+   */
+  refresh(b: boolean): this {
+    this._svgRefresh = b;
+    return super.refresh(b);
+  }
+
+  /**
+   * Serialize the current SVG output to a string.
+   * @param expand if `true`, split merged style runs into one element per shape — a
+   * semantic export suited for editing in vector tools. Default is `false`.
+   */
+  toSVG(expand: boolean = false): string {
+    const svg = this._canvas as SVGElement;
+    if (!expand) return svg.outerHTML;
+
+    const clone = svg.cloneNode(true) as SVGElement;
+    // rebuild each form's group with one element per shape
+    const groups = clone.querySelectorAll("g.pts-svgform");
+    let gi = 0;
+    for (const ctx of this._svgContexts) {
+      const group = groups[gi++];
+      if (!group) continue;
+      group.textContent = "";
+      for (const run of ctx.runs) {
+        if (run.tag !== "path") {
+          const elem = document.createElementNS(SVG_NS, run.tag);
+          DOMSpace.setAttr(elem, run.attrs);
+          if (run.text) elem.textContent = run.text;
+          group.appendChild(elem);
+          continue;
+        }
+        const d = run.attrs.d as string;
+        const bounds = [...run.shapeEnds, d.length];
+        let begin = 0;
+        for (const end of bounds) {
+          const elem = document.createElementNS(SVG_NS, "path");
+          DOMSpace.setAttr(elem, { ...run.attrs, d: d.slice(begin, end) });
+          group.appendChild(elem);
+          begin = end;
+        }
+      }
+    }
+    return clone.outerHTML;
   }
 
   /**
@@ -77,7 +815,7 @@ export class SVGSpace extends DOMSpace {
     let elem = document.querySelector(`#${id}`);
 
     if (!elem) {
-      elem = document.createElementNS("http://www.w3.org/2000/svg", name);
+      elem = document.createElementNS(SVG_NS, name);
       elem.setAttribute("id", id);
 
       parent.appendChild(elem);
@@ -104,27 +842,24 @@ export class SVGSpace extends DOMSpace {
    */
   removeAll(): this {
     this._container.innerHTML = "";
+    this._bgElem = null;
+    for (const ctx of this._svgContexts) ctx.resetDom();
     return super.removeAll();
   }
 }
 
 /**
- * **[Experimental]** SVGForm is an implementation of abstract class [`VisualForm`](#link). It provide methods to express Pts in [`SVGSpace`](#link).
- * You may extend SVGForm to implement your own expressions for SVGSpace. See out the [Space guide](../guide/Space-0500.html) for details.
+ * SVGForm is a [`CanvasForm`](#link) rendered through a [`SVGContext2D`](#link): it inherits
+ * the complete canvas drawing API — shapes, gradients, dashes, images, `textBox` — with SVG
+ * output, so a sketch can swap between `CanvasSpace` and `SVGSpace` without changing any
+ * drawing code. The legacy per-element static helpers and `scope()` workflow are retained
+ * for compatibility but are no longer needed.
  */
-export class SVGForm extends VisualForm {
-  protected _style = {
-    filled: true,
-    stroked: true,
-    fill: "#f03",
-    stroke: "#fff",
-    "stroke-width": 1,
-    "stroke-linejoin": "bevel",
-    "stroke-linecap": "sqaure",
-    opacity: 1,
-  };
+export class SVGForm extends CanvasForm {
+  protected _svgSpace: SVGSpace;
+  protected _svgCtx: SVGContext2D;
 
-  protected _ctx: DOMFormContext = {
+  protected _legacyCtx: DOMFormContext = {
     group: null,
     groupID: "pts",
     groupCount: 0,
@@ -136,188 +871,84 @@ export class SVGForm extends VisualForm {
   static groupID: number = 0;
   static domID: number = 0;
 
-  protected _space: SVGSpace;
-  protected _ready: boolean = false;
-
   /**
    * Create a new SVGForm. You may also use [`SVGSpace.getForm`](#link) to get a default form directly.
    * @param space an instance of SVGSpace
    */
   constructor(space: SVGSpace) {
     super();
-    this._space = space;
+    this._svgSpace = space;
+    this._svgCtx = new SVGContext2D(space.element as SVGElement);
+    space.registerContext(this._svgCtx);
 
-    this._space.add({
-      start: () => {
-        this._ctx.group = this._space.element;
-        this._ctx.groupID = "pts_svg_" + SVGForm.groupID++;
-        this._ctx.style = Object.assign({}, this._style);
-        this._ready = true;
-      },
-    });
+    this._ctx = this._svgCtx as unknown as RenderingContext2D;
+    this._ctx.fillStyle = "#f03";
+    this._ctx.strokeStyle = "#fff";
+    this._ready = true;
+
+    this._legacyCtx.group = space.element;
   }
 
   /**
    * Get the [`SVGSpace`](#link) instance that this form is associated with.
    */
+  // @ts-expect-error SVGSpace is not a structural subtype of CanvasSpace; this
+  // getter intentionally re-types the association for the SVG backend.
   get space(): SVGSpace {
-    return this._space;
+    return this._svgSpace;
   }
 
   /**
-   * Update a style in current context. It will throw an Erorr if the style doesn't exist.
-   * @param k style key
-   * @param v  style value
+   * The underlying [`SVGContext2D`](#link), for advanced use.
    */
-  styleTo(k, v) {
-    if (this._ctx.style[k] === undefined)
-      throw new Error(`${k} style property doesn't exist`);
-    this._ctx.style[k] = v;
+  get svgContext(): SVGContext2D {
+    return this._svgCtx;
   }
 
   /**
-   * Set current alpha value.
-   * @example `form.alpha(0.6)`
-   * @param a alpha value between 0 and 1
-   */
-  alpha(a: number): this {
-    this.styleTo("opacity", a);
-    return this;
-  }
-
-  /**
-   * Set current fill style. Provide a valid color string or `false` to specify no fill color.
-   * @example `form.fill("#F90")`, `form.fill("rgba(0,0,0,.5")`, `form.fill(false)`
-   * @param c a valid color string or `false` to specify no fill color.
-   */
-  fill(c: string | boolean): this {
-    if (typeof c == "boolean") {
-      this.styleTo("filled", c);
-    } else {
-      this.styleTo("filled", true);
-      this.styleTo("fill", c);
-    }
-    return this;
-  }
-
-  /**
-   * Set current stroke style. Provide a valid color string or `false` to specify no stroke color.
-   * @example `form.stroke("#F90")`, `form.stroke("rgba(0,0,0,.5")`, `form.stroke(false)`, `form.stroke("#000", 0.5, 'round', 'square')`
-   * @param c a valid color string or `false` to specify no stroke color.
-   * @param width Optional value (can be floating point) to set line width
-   * @param linejoin Optional string to set line joint style. Can be "miter", "bevel", or "round".
-   * @param linecap Optional string to set line cap style. Can be "butt", "round", or "square".
-   */
-  stroke(
-    c: string | boolean,
-    width?: number,
-    linejoin?: string,
-    linecap?: string,
-  ): this {
-    if (typeof c == "boolean") {
-      this.styleTo("stroked", c);
-    } else {
-      this.styleTo("stroked", true);
-      this.styleTo("stroke", c);
-      if (width) this.styleTo("stroke-width", width);
-      if (linejoin) this.styleTo("stroke-linejoin", linejoin);
-      if (linecap) this.styleTo("stroke-linecap", linecap);
-    }
-    return this;
-  }
-
-  /**
-   * Add custom class to the created element.
+   * Add custom class to the created element(s). In batched rendering the class applies to
+   * the current style run.
    * @param c custom class name or `false` to reset it
    * @example `form.fill("#f00").cls("myClass").rects(r)` `form.cls(false).circles(c)`
    */
   cls(c: string | boolean) {
-    if (typeof c == "boolean") {
-      this._ctx.currentClass = "";
-    } else {
-      this._ctx.currentClass = c;
-    }
+    const cls = typeof c == "boolean" ? "" : c;
+    this._legacyCtx.currentClass = cls;
+    this._svgCtx.className = cls;
     return this;
   }
 
-  /**
-   * Set the current font.
-   * @param sizeOrFont either a number to specify font-size, or a `Font` object to specify all font properties
-   * @param weight Optional font-weight string such as "bold"
-   * @param style Optional font-style string such as "italic"
-   * @param lineHeight Optional line-height number suchas 1.5
-   * @param family Optional font-family such as "Helvetica, sans-serif"
-   * @example `form.font( myFont )`, `form.font(14, "bold")`
-   */
-  font(
-    sizeOrFont: number | Font,
-    weight?: string,
-    style?: string,
-    lineHeight?: number,
-    family?: string,
-  ): this {
-    if (typeof sizeOrFont == "number") {
-      this._font.size = sizeOrFont;
-      if (family) this._font.face = family;
-      if (weight) this._font.weight = weight;
-      if (style) this._font.style = style;
-      if (lineHeight) this._font.lineHeight = lineHeight;
-    } else {
-      this._font = sizeOrFont;
-    }
-
-    this._ctx.style["font"] = this._font.value;
-
-    return this;
-  }
+  // ------------------------------------------------- legacy scope workflow
 
   /**
-   * Reset the context's common styles to this form's styles. This supports using multiple forms in the same space.
-   */
-  reset(): this {
-    this._ctx.style = Object.assign({}, this._style);
-
-    this._font = new Font(10, "sans-serif");
-    this._ctx.style["font"] = this._font.value;
-
-    return this;
-  }
-
-  /**
-   * Set this form's group scope by an ID, and optionally define the group's parent element. A group scope keeps track of elements by their generated IDs, and updates their properties as needed. See also [`SVGForm.scope`](#link).
-   * @param group_id a string to use as prefix for the group's id. For example, group_id "hello" will create elements with id like "hello-1", "hello-2", etc
-   * @param group Optional DOM or SVG element to define this group's parent element
-   * @returns this form's context
+   * @deprecated No longer needed: elements are reconciled automatically each frame. Kept
+   * for compatibility with code that pairs it with the legacy static helpers.
    */
   updateScope(group_id: string, group?: Element): object {
-    this._ctx.group = group;
-    this._ctx.groupID = group_id;
-    this._ctx.groupCount = 0;
+    this._legacyCtx.group = group;
+    this._legacyCtx.groupID = group_id;
+    this._legacyCtx.groupCount = 0;
     this.nextID();
-    return this._ctx;
+    return this._legacyCtx;
   }
 
   /**
-   * Set the current group scope to an item added into space, in order to keep track of any point, circle, etc created within it in the DOM.
-   * The item must have an `animateID` property, so that elements created within the item will have generated IDs like "item-{animateID}-{count}".
-   * See the svg section in [`Space guide`](../guide/Space-0500.html) to learn more about scope.
-   * @param item a [`IPlayer`](#link) object that's added to space (see [`Space.add`](#link)) and has an `animateID` property
-   * @returns this form's context
+   * @deprecated No longer needed: elements are reconciled automatically each frame. Kept
+   * for compatibility; returns the legacy context used by the static helpers.
    */
   scope(item: IPlayer) {
     if (!item || item.animateID == null)
       throw new Error("item not defined or not yet added to Space");
-    return this.updateScope(SVGForm.scopeID(item), this.space.element);
+    return this.updateScope(SVGForm.scopeID(item), this._svgSpace.element);
   }
 
   /**
-   * Get next available id in the current group.
-   * @returns an id string
+   * @deprecated Part of the legacy scope workflow.
    */
   nextID(): string {
-    this._ctx.groupCount++;
-    this._ctx.currentID = `${this._ctx.groupID}-${this._ctx.groupCount}`;
-    return this._ctx.currentID;
+    this._legacyCtx.groupCount++;
+    this._legacyCtx.currentID = `${this._legacyCtx.groupID}-${this._legacyCtx.groupCount}`;
+    return this._legacyCtx.currentID;
   }
 
   /**
@@ -335,6 +966,10 @@ export class SVGForm extends VisualForm {
   static scopeID(item: IPlayer): string {
     return `item-${item.animateID}`;
   }
+
+  // --------------------------------------- legacy per-element static helpers
+  // These draw one SVG element per call using id-based lookup, exactly as
+  // before. They are retained for compatibility and for expanded exports.
 
   /**
    * A static function to help adding style object to an element.
@@ -369,46 +1004,33 @@ export class SVGForm extends VisualForm {
   }
 
   /**
-   * A static function to draw a point.
+   * A static function to draw a point as a circle or square element.
    * @param ctx a context object of SVGForm
    * @param pt a Pt object or numeric array
    * @param radius radius of the point. Default is 5.
    * @param shape The shape of the point. Defaults to "square", but it can be "circle" or a custom shape function in your own implementation.
-   * @example `SVGForm.point( p )`, `SVGForm.point( p, 10, "circle" )`
+   * @example `SVGForm.point( ctx, p )`, `SVGForm.point( ctx, p, 10, "circle" )`
    */
-  static point(
+  static pointElement(
     ctx: DOMFormContext,
     pt: PtLike,
     radius: number = 5,
     shape: string = "square",
   ): SVGElement {
     if (shape === "circle") {
-      return SVGForm.circle(ctx, pt, radius);
+      return SVGForm.circleElement(ctx, pt, radius);
     } else {
-      return SVGForm.square(ctx, pt, radius);
+      return SVGForm.squareElement(ctx, pt, radius);
     }
   }
 
   /**
-   * Draws a point.
-   * @param p a Pt object
-   * @param radius radius of the point. Default is 5.
-   * @param shape The shape of the point. Defaults to "square", but it can be "circle" or a custom shape function in your own implementation.
-   * @example `form.point( p )`, `form.point( p, 10, "circle" )`
-   */
-  point(pt: PtLike, radius: number = 5, shape: string = "square"): this {
-    this.nextID();
-    SVGForm.point(this._ctx, pt, radius, shape);
-    return this;
-  }
-
-  /**
-   * A static function to draw a circle.
+   * A static function to draw a circle element.
    * @param ctx a context object of SVGForm
    * @param pt center position of the circle
    * @param radius radius of the circle
    */
-  static circle(
+  static circleElement(
     ctx: DOMFormContext,
     pt: PtLike,
     radius: number = 10,
@@ -427,19 +1049,7 @@ export class SVGForm extends VisualForm {
   }
 
   /**
-   * Draw a circle.
-   * @param pts a Group or an Iterable<PtLike> representing a circle with `[[position], [size]]`
-   * @see [`Circle.fromCenter`](./?p=Op_Circle#function_fromCenter)
-   */
-  circle(pts: PtLikeIterable): this {
-    this.nextID();
-    let p = Util.iterToArray(pts);
-    SVGForm.circle(this._ctx, p[0], p[1][0]);
-    return this;
-  }
-
-  /**
-   * A static function to draw an arc.
+   * A static function to draw an arc element.
    * @param ctx a context object of SVGForm
    * @param pt center position
    * @param radius radius of the arc circle
@@ -447,7 +1057,7 @@ export class SVGForm extends VisualForm {
    * @param endAngle end angle of the arc
    * @param cc an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.
    */
-  static arc(
+  static arcElement(
     ctx: DOMFormContext,
     pt: PtLike,
     radius: number,
@@ -475,32 +1085,12 @@ export class SVGForm extends VisualForm {
   }
 
   /**
-   * Draw an arc.
-   * @param pt center position
-   * @param radius radius of the arc circle
-   * @param startAngle start angle of the arc
-   * @param endAngle end angle of the arc
-   * @param cc an optional boolean value to specify if it should be drawn clockwise (`false`) or counter-clockwise (`true`). Default is clockwise.
-   */
-  arc(
-    pt: PtLike,
-    radius: number,
-    startAngle: number,
-    endAngle: number,
-    cc?: boolean,
-  ): this {
-    this.nextID();
-    SVGForm.arc(this._ctx, pt, radius, startAngle, endAngle, cc);
-    return this;
-  }
-
-  /**
-   * A static function to draw a square.
+   * A static function to draw a square element.
    * @param ctx a context object of SVGForm
    * @param pt center position of the square
    * @param halfsize half size of the square
    */
-  static square(ctx: DOMFormContext, pt: PtLike, halfsize: number) {
+  static squareElement(ctx: DOMFormContext, pt: PtLike, halfsize: number) {
     let elem = SVGSpace.svgElement(ctx.group, "rect", SVGForm.getID(ctx));
     DOMSpace.setAttr(elem, {
       x: pt[0] - halfsize,
@@ -514,22 +1104,11 @@ export class SVGForm extends VisualForm {
   }
 
   /**
-   * Draw a square, given a center and its half-size.
-   * @param pt center Pt
-   * @param halfsize half-size
-   */
-  square(pt: PtLike, halfsize: number): this {
-    this.nextID();
-    SVGForm.square(this._ctx, pt, halfsize);
-    return this;
-  }
-
-  /**
-   * A static function to draw a line or polyline.
+   * A static function to draw a line or polyline element.
    * @param ctx a context object of SVGForm
    * @param pts a Group or an Iterable<PtLike>
    */
-  static line(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement {
+  static lineElement(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement {
     let points = SVGForm.pointsString(pts);
     if (points.count < 2) return;
 
@@ -550,16 +1129,6 @@ export class SVGForm extends VisualForm {
 
     SVGForm.style(elem, ctx.style);
     return elem;
-  }
-
-  /**
-   * Draw a line or polyline.
-   * @param pts a Group or an Iterable<PtLike>
-   */
-  line(pts: PtLikeIterable): this {
-    this.nextID();
-    SVGForm.line(this._ctx, pts);
-    return this;
   }
 
   /**
@@ -606,31 +1175,21 @@ export class SVGForm extends VisualForm {
   }
 
   /**
-   * A static function to draw polygon.
+   * A static function to draw a polygon element.
    * @param ctx a context object of SVGForm
    * @param pts a Group or an Iterable<PtLike> representing a polygon
    */
-  static polygon(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement {
+  static polygonElement(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement {
     let points = SVGForm.pointsString(pts);
     return SVGForm._poly(ctx, points.string, true);
   }
 
   /**
-   * Draw a polygon.
-   * @param pts a Group or an Iterable<PtLike> representing a polygon
-   */
-  polygon(pts: PtLikeIterable): this {
-    this.nextID();
-    SVGForm.polygon(this._ctx, pts);
-    return this;
-  }
-
-  /**
-   * A static function to draw a rectangle.
+   * A static function to draw a rectangle element.
    * @param ctx a context object of SVGForm
    * @param pts a Group or an Iterable<PtLike> with 2 Pt specifying the top-left and bottom-right positions.
    */
-  static rect(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement {
+  static rectElement(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement {
     if (!Util.arrayCheck(pts)) return;
 
     let elem = SVGSpace.svgElement(ctx.group, "rect", SVGForm.getID(ctx));
@@ -650,23 +1209,12 @@ export class SVGForm extends VisualForm {
   }
 
   /**
-   * Draw a rectangle.
-   * @param pts a Group or an Iterable<PtLike> with 2 Pt specifying the top-left and bottom-right positions.
-   */
-  rect(pts: PtLikeIterable): this {
-    this.nextID();
-    SVGForm.rect(this._ctx, pts);
-    return this;
-  }
-
-  /**
-   * A static function to draw text.
+   * A static function to draw a text element.
    * @param ctx a context object of SVGForm
    * @param `pt` a Point object to specify the anchor point
    * @param `txt` a string of text to draw
-   * @param `maxWidth` specify a maximum width per line
    */
-  static text(ctx: DOMFormContext, pt: PtLike, txt: string): SVGElement {
+  static textElement(ctx: DOMFormContext, pt: PtLike, txt: string): SVGElement {
     let elem = SVGSpace.svgElement(ctx.group, "text", SVGForm.getID(ctx));
 
     DOMSpace.setAttr(elem, {
@@ -683,26 +1231,5 @@ export class SVGForm extends VisualForm {
     SVGForm.style(elem, ctx.style);
 
     return elem;
-  }
-
-  /**
-   * Draw text on canvas.
-   * @param `pt` a Pt or numeric array to specify the anchor point
-   * @param `txt` text
-   * @param `maxWidth` specify a maximum width per line
-   */
-  text(pt: PtLike, txt: string): this {
-    this.nextID();
-    SVGForm.text(this._ctx, pt, txt);
-    return this;
-  }
-
-  /**
-   * A convenient way to draw some text on canvas for logging or debugging. It'll be draw on the top-left of the canvas as an overlay.
-   * @param txt text
-   */
-  log(txt): this {
-    this.fill("#000").stroke("#fff", 0.5).text([10, 14], txt);
-    return this;
   }
 }

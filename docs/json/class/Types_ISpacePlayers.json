@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Interface",
-  "id": 7210,
+  "id": 7541,
   "comment": "Typescript interface: ISpacePlayers represents a map of IPlayer instances.",
   "constructor": [],
   "accessors": [],

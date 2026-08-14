@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 7646,
+  "id": 7977,
   "comment": "[Experimental] A draggable UI that provides handler such as [`UIDragger.onDrag`](#link) and [`UIDragger.onDrop`](#link).",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           2
         ]
       ],
-      "id": 7692,
+      "id": 8023,
       "flags": {},
       "overrides": "UIButton.__constructor",
       "inherits": false,
@@ -75,7 +75,7 @@
           6
         ]
       ],
-      "id": 7753,
+      "id": 8084,
       "flags": {},
       "overrides": false,
       "inherits": "UI.group",
@@ -107,7 +107,7 @@
           6
         ]
       ],
-      "id": 7749,
+      "id": 8080,
       "flags": {},
       "overrides": false,
       "inherits": "UI.id",
@@ -139,7 +139,7 @@
           6
         ]
       ],
-      "id": 7757,
+      "id": 8088,
       "flags": {},
       "overrides": false,
       "inherits": "UI.shape",
@@ -168,7 +168,7 @@
           12
         ]
       ],
-      "id": 7778,
+      "id": 8109,
       "flags": {
         "isProtected": true
       },
@@ -200,7 +200,7 @@
           2
         ]
       ],
-      "id": 7773,
+      "id": 8104,
       "flags": {},
       "overrides": false,
       "inherits": "UI.listen",
@@ -242,7 +242,7 @@
           2
         ]
       ],
-      "id": 7769,
+      "id": 8100,
       "flags": {},
       "overrides": false,
       "inherits": "UI.off",
@@ -278,7 +278,7 @@
           2
         ]
       ],
-      "id": 7720,
+      "id": 8051,
       "flags": {},
       "overrides": false,
       "inherits": "UIButton.offClick",
@@ -308,7 +308,7 @@
           2
         ]
       ],
-      "id": 7726,
+      "id": 8057,
       "flags": {},
       "overrides": false,
       "inherits": "UIButton.offContextMenu",
@@ -338,7 +338,7 @@
           2
         ]
       ],
-      "id": 7708,
+      "id": 8039,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -368,7 +368,7 @@
           2
         ]
       ],
-      "id": 7714,
+      "id": 8045,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -398,7 +398,7 @@
           2
         ]
       ],
-      "id": 7733,
+      "id": 8064,
       "flags": {},
       "overrides": false,
       "inherits": "UIButton.offHover",
@@ -434,7 +434,7 @@
           2
         ]
       ],
-      "id": 7765,
+      "id": 8096,
       "flags": {},
       "overrides": false,
       "inherits": "UI.on",
@@ -470,7 +470,7 @@
           2
         ]
       ],
-      "id": 7717,
+      "id": 8048,
       "flags": {},
       "overrides": false,
       "inherits": "UIButton.onClick",
@@ -500,7 +500,7 @@
           2
         ]
       ],
-      "id": 7723,
+      "id": 8054,
       "flags": {},
       "overrides": false,
       "inherits": "UIButton.onContextMenu",
@@ -530,7 +530,7 @@
           2
         ]
       ],
-      "id": 7705,
+      "id": 8036,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -560,7 +560,7 @@
           2
         ]
       ],
-      "id": 7711,
+      "id": 8042,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -590,7 +590,7 @@
           2
         ]
       ],
-      "id": 7729,
+      "id": 8060,
       "flags": {},
       "overrides": false,
       "inherits": "UIButton.onHover",
@@ -626,7 +626,7 @@
           2
         ]
       ],
-      "id": 7784,
+      "id": 8115,
       "flags": {},
       "overrides": false,
       "inherits": "UI.render",
@@ -656,7 +656,7 @@
           2
         ]
       ],
-      "id": 7761,
+      "id": 8092,
       "flags": {},
       "overrides": false,
       "inherits": "UI.state",
@@ -692,7 +692,7 @@
           2
         ]
       ],
-      "id": 7794,
+      "id": 8125,
       "flags": {},
       "overrides": false,
       "inherits": "UI.toString",
@@ -715,7 +715,7 @@
           12
         ]
       ],
-      "id": 7781,
+      "id": 8112,
       "flags": {
         "isProtected": true
       },
@@ -747,7 +747,7 @@
           9
         ]
       ],
-      "id": 7654,
+      "id": 7985,
       "flags": {
         "isStatic": true
       },
@@ -791,7 +791,7 @@
           9
         ]
       ],
-      "id": 7660,
+      "id": 7991,
       "flags": {
         "isStatic": true
       },
@@ -835,7 +835,7 @@
           9
         ]
       ],
-      "id": 7648,
+      "id": 7979,
       "flags": {
         "isStatic": true
       },
@@ -879,7 +879,7 @@
           9
         ]
       ],
-      "id": 7666,
+      "id": 7997,
       "flags": {
         "isStatic": true
       },
@@ -923,7 +923,7 @@
           9
         ]
       ],
-      "id": 7671,
+      "id": 8002,
       "flags": {
         "isStatic": true
       },

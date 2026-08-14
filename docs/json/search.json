@@ -8304,6 +8304,276 @@
     0
   ],
   [
+    "Svg_SVGContext2D#constructor_constructor",
+    "SVGContext2D.constructor",
+    "Constructor",
+    10
+  ],
+  [
+    "Svg_SVGContext2D#property_className",
+    "SVGContext2D.className",
+    "Variable",
+    0
+  ],
+  [
+    "Svg_SVGContext2D#property_fillStyle",
+    "SVGContext2D.fillStyle",
+    "Variable",
+    0
+  ],
+  [
+    "Svg_SVGContext2D#property_font",
+    "SVGContext2D.font",
+    "Variable",
+    0
+  ],
+  [
+    "Svg_SVGContext2D#property_globalAlpha",
+    "SVGContext2D.globalAlpha",
+    "Variable",
+    0
+  ],
+  [
+    "Svg_SVGContext2D#property_globalCompositeOperation",
+    "SVGContext2D.globalCompositeOperation",
+    "Variable",
+    0
+  ],
+  [
+    "Svg_SVGContext2D#property_lineCap",
+    "SVGContext2D.lineCap",
+    "Variable",
+    0
+  ],
+  [
+    "Svg_SVGContext2D#property_lineDashOffset",
+    "SVGContext2D.lineDashOffset",
+    "Variable",
+    0
+  ],
+  [
+    "Svg_SVGContext2D#property_lineJoin",
+    "SVGContext2D.lineJoin",
+    "Variable",
+    0
+  ],
+  [
+    "Svg_SVGContext2D#property_lineWidth",
+    "SVGContext2D.lineWidth",
+    "Variable",
+    0
+  ],
+  [
+    "Svg_SVGContext2D#property_strokeStyle",
+    "SVGContext2D.strokeStyle",
+    "Variable",
+    0
+  ],
+  [
+    "Svg_SVGContext2D#property_textAlign",
+    "SVGContext2D.textAlign",
+    "Variable",
+    0
+  ],
+  [
+    "Svg_SVGContext2D#property_textBaseline",
+    "SVGContext2D.textBaseline",
+    "Variable",
+    0
+  ],
+  [
+    "Svg_SVGContext2D#accessor_drawCount",
+    "SVGContext2D.drawCount",
+    "Accessor",
+    6
+  ],
+  [
+    "Svg_SVGContext2D#accessor_group",
+    "SVGContext2D.group",
+    "Accessor",
+    6
+  ],
+  [
+    "Svg_SVGContext2D#accessor_runs",
+    "SVGContext2D.runs",
+    "Accessor",
+    6
+  ],
+  [
+    "Svg_SVGContext2D#function_arc",
+    "SVGContext2D.arc",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGContext2D#function_beginFrame",
+    "SVGContext2D.beginFrame",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGContext2D#function_beginPath",
+    "SVGContext2D.beginPath",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGContext2D#function_bezierCurveTo",
+    "SVGContext2D.bezierCurveTo",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGContext2D#function_clearRect",
+    "SVGContext2D.clearRect",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGContext2D#function_clip",
+    "SVGContext2D.clip",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGContext2D#function_closePath",
+    "SVGContext2D.closePath",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGContext2D#function_commitFrame",
+    "SVGContext2D.commitFrame",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGContext2D#function_createLinearGradient",
+    "SVGContext2D.createLinearGradient",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGContext2D#function_createRadialGradient",
+    "SVGContext2D.createRadialGradient",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGContext2D#function_drawImage",
+    "SVGContext2D.drawImage",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGContext2D#function_ellipse",
+    "SVGContext2D.ellipse",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGContext2D#function_fill",
+    "SVGContext2D.fill",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGContext2D#function_fillRect",
+    "SVGContext2D.fillRect",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGContext2D#function_fillText",
+    "SVGContext2D.fillText",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGContext2D#function_getLineDash",
+    "SVGContext2D.getLineDash",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGContext2D#function_lineTo",
+    "SVGContext2D.lineTo",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGContext2D#function_measureText",
+    "SVGContext2D.measureText",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGContext2D#function_moveTo",
+    "SVGContext2D.moveTo",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGContext2D#function_putImageData",
+    "SVGContext2D.putImageData",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGContext2D#function_quadraticCurveTo",
+    "SVGContext2D.quadraticCurveTo",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGContext2D#function_rect",
+    "SVGContext2D.rect",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGContext2D#function_resetDom",
+    "SVGContext2D.resetDom",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGContext2D#function_restore",
+    "SVGContext2D.restore",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGContext2D#function_save",
+    "SVGContext2D.save",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGContext2D#function_scale",
+    "SVGContext2D.scale",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGContext2D#function_setLineDash",
+    "SVGContext2D.setLineDash",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGContext2D#function_stroke",
+    "SVGContext2D.stroke",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGContext2D",
+    "SVGContext2D",
+    "Class",
+    0
+  ],
+  [
     "Svg_SVGForm#constructor_constructor",
     "SVGForm.constructor",
     "Constructor",
@@ -8320,6 +8590,12 @@
     "SVGForm.groupID",
     "Variable",
     0
+  ],
+  [
+    "Svg_SVGForm#accessor_ctx",
+    "SVGForm.ctx",
+    "Accessor",
+    6
   ],
   [
     "Svg_SVGForm#accessor_currentFont",
@@ -8352,8 +8628,26 @@
     6
   ],
   [
+    "Svg_SVGForm#accessor_svgContext",
+    "SVGForm.svgContext",
+    "Accessor",
+    6
+  ],
+  [
+    "Svg_SVGForm#function_alignText",
+    "SVGForm.alignText",
+    "Function",
+    8
+  ],
+  [
     "Svg_SVGForm#function_alpha",
     "SVGForm.alpha",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGForm#function_applyFillStroke",
+    "SVGForm.applyFillStroke",
     "Function",
     8
   ],
@@ -8376,8 +8670,32 @@
     8
   ],
   [
+    "Svg_SVGForm#function_clip",
+    "SVGForm.clip",
+    "Function",
+    8
+  ],
+  [
     "Svg_SVGForm#function_cls",
     "SVGForm.cls",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGForm#function_composite",
+    "SVGForm.composite",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGForm#function_dash",
+    "SVGForm.dash",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGForm#function_ellipse",
+    "SVGForm.ellipse",
     "Function",
     8
   ],
@@ -8396,6 +8714,36 @@
   [
     "Svg_SVGForm#function_font",
     "SVGForm.font",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGForm#function_fontWidthEstimate",
+    "SVGForm.fontWidthEstimate",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGForm#function_getTextWidth",
+    "SVGForm.getTextWidth",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGForm#function_gradient",
+    "SVGForm.gradient",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGForm#function_image",
+    "SVGForm.image",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGForm#function_imageData",
+    "SVGForm.imageData",
     "Function",
     8
   ],
@@ -8420,6 +8768,12 @@
   [
     "Svg_SVGForm#function_nextID",
     "SVGForm.nextID",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGForm#function_paragraphBox",
+    "SVGForm.paragraphBox",
     "Function",
     8
   ],
@@ -8460,6 +8814,12 @@
     8
   ],
   [
+    "Svg_SVGForm#function_renderOffscreen",
+    "SVGForm.renderOffscreen",
+    "Function",
+    8
+  ],
+  [
     "Svg_SVGForm#function_reset",
     "SVGForm.reset",
     "Function",
@@ -8496,14 +8856,14 @@
     8
   ],
   [
-    "Svg_SVGForm#function_styleTo",
-    "SVGForm.styleTo",
+    "Svg_SVGForm#function_text",
+    "SVGForm.text",
     "Function",
     8
   ],
   [
-    "Svg_SVGForm#function_text",
-    "SVGForm.text",
+    "Svg_SVGForm#function_textBox",
+    "SVGForm.textBox",
     "Function",
     8
   ],
@@ -8514,8 +8874,20 @@
     8
   ],
   [
+    "Svg_SVGForm#function_useOffscreen",
+    "SVGForm.useOffscreen",
+    "Function",
+    8
+  ],
+  [
     "Svg_SVGForm#function_static_arc",
     "SVGForm.arc",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGForm#function_static_arcElement",
+    "SVGForm.arcElement",
     "Function",
     8
   ],
@@ -8526,8 +8898,32 @@
     8
   ],
   [
+    "Svg_SVGForm#function_static_circleElement",
+    "SVGForm.circleElement",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGForm#function_static_ellipse",
+    "SVGForm.ellipse",
+    "Function",
+    8
+  ],
+  [
     "Svg_SVGForm#function_static_getID",
     "SVGForm.getID",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGForm#function_static_image",
+    "SVGForm.image",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGForm#function_static_imageData",
+    "SVGForm.imageData",
     "Function",
     8
   ],
@@ -8538,8 +8934,20 @@
     8
   ],
   [
+    "Svg_SVGForm#function_static_lineElement",
+    "SVGForm.lineElement",
+    "Function",
+    8
+  ],
+  [
     "Svg_SVGForm#function_static_point",
     "SVGForm.point",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGForm#function_static_pointElement",
+    "SVGForm.pointElement",
     "Function",
     8
   ],
@@ -8556,8 +8964,20 @@
     8
   ],
   [
+    "Svg_SVGForm#function_static_polygonElement",
+    "SVGForm.polygonElement",
+    "Function",
+    8
+  ],
+  [
     "Svg_SVGForm#function_static_rect",
     "SVGForm.rect",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGForm#function_static_rectElement",
+    "SVGForm.rectElement",
     "Function",
     8
   ],
@@ -8574,6 +8994,12 @@
     8
   ],
   [
+    "Svg_SVGForm#function_static_squareElement",
+    "SVGForm.squareElement",
+    "Function",
+    8
+  ],
+  [
     "Svg_SVGForm#function_static_style",
     "SVGForm.style",
     "Function",
@@ -8582,6 +9008,12 @@
   [
     "Svg_SVGForm#function_static_text",
     "SVGForm.text",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGForm#function_static_textElement",
+    "SVGForm.textElement",
     "Function",
     8
   ],
@@ -8796,6 +9228,12 @@
     8
   ],
   [
+    "Svg_SVGSpace#function_registerContext",
+    "SVGSpace.registerContext",
+    "Function",
+    8
+  ],
+  [
     "Svg_SVGSpace#function_remove",
     "SVGSpace.remove",
     "Function",
@@ -8852,6 +9290,12 @@
   [
     "Svg_SVGSpace#function_styles",
     "SVGSpace.styles",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGSpace#function_toSVG",
+    "SVGSpace.toSVG",
     "Function",
     8
   ],

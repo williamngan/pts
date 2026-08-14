@@ -61,6 +61,7 @@
     "Space"
   ],
   "Svg": [
+    "SVGContext2D",
     "SVGForm",
     "SVGSpace"
   ],

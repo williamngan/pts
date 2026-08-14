@@ -1139,69 +1139,143 @@ declare class HTMLForm extends VisualForm {
 }
 //#endregion
 //#region src/Svg.d.ts
+declare class SVGGradient {
+  readonly id: string;
+  readonly kind: "linear" | "radial";
+  readonly coords: number[];
+  stops: [number, string][];
+  protected _elem: SVGElement;
+  private static _count;
+  constructor(kind: "linear" | "radial", coords: number[]);
+  addColorStop(offset: number, color: string): void;
+  materialize(defs: SVGElement): string;
+  protected _render(elem: SVGElement): void;
+}
+type SVGRun = {
+  tag: "path" | "text" | "image";
+  attrs: Record<string, string | number>;
+  text?: string;
+  shapeEnds?: number[];
+};
+declare class SVGContext2D {
+  fillStyle: string | SVGGradient;
+  strokeStyle: string | SVGGradient;
+  lineWidth: number;
+  lineJoin: string;
+  lineCap: string;
+  globalAlpha: number;
+  globalCompositeOperation: string;
+  font: string;
+  textAlign: string;
+  textBaseline: string;
+  lineDashOffset: number;
+  protected _dash: number[];
+  protected _stateStack: object[];
+  className: string;
+  protected _d: string;
+  protected _shapeFill: string;
+  protected _shapeStroke: string;
+  protected _shapePainted: boolean;
+  protected _shapeClass: string;
+  protected _shapeAlpha: number;
+  protected _shapeBlend: string;
+  protected _runs: SVGRun[];
+  protected _drawCount: number;
+  protected _host: SVGElement;
+  protected _group: SVGElement;
+  protected _defs: SVGElement;
+  protected _pool: SVGElement[];
+  protected _attrCache: Record<string, string>[];
+  protected static _measurer: CanvasRenderingContext2D;
+  protected static _warned: {
+    [k: string]: boolean;
+  };
+  constructor(host: SVGElement);
+  protected static _warnOnce(key: string, msg: string): void;
+  beginFrame(): void;
+  get drawCount(): number;
+  get group(): SVGElement;
+  commitFrame(): void;
+  get runs(): SVGRun[];
+  resetDom(): void;
+  beginPath(): void;
+  closePath(): void;
+  moveTo(x: number, y: number): void;
+  lineTo(x: number, y: number): void;
+  quadraticCurveTo(cpx: number, cpy: number, x: number, y: number): void;
+  bezierCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number): void;
+  rect(x: number, y: number, w: number, h: number): void;
+  arc(x: number, y: number, radius: number, startAngle: number, endAngle: number, ccw?: boolean): void;
+  ellipse(x: number, y: number, rx: number, ry: number, rotation: number, startAngle: number, endAngle: number, ccw?: boolean): void;
+  fill(): void;
+  stroke(): void;
+  protected _capturePaintState(): void;
+  fillRect(x: number, y: number, w: number, h: number): void;
+  clearRect(): void;
+  fillText(txt: string, x: number, y: number): void;
+  measureText(txt: string): TextMetrics;
+  drawImage(img: CanvasImageSource, x: number, y: number, w?: number, h?: number, ...rest: number[]): void;
+  putImageData(): void;
+  save(): void;
+  restore(): void;
+  scale(): void;
+  clip(): void;
+  setLineDash(segments: number[]): void;
+  getLineDash(): number[];
+  createLinearGradient(x1: number, y1: number, x2: number, y2: number): SVGGradient;
+  createRadialGradient(x0: number, y0: number, r0: number, x1: number, y1: number, r1: number): SVGGradient;
+  protected _resolvePaint(style: string | SVGGradient): string;
+  protected _applyCommon(attrs: Record<string, string | number>): void;
+  protected _flushShape(): void;
+}
 declare class SVGSpace extends DOMSpace {
   protected _bgcolor: string;
+  protected _svgContexts: SVGContext2D[];
+  protected _bgElem: SVGElement;
+  protected _svgRefresh: boolean;
   constructor(elem: string | Element, callback?: Function);
   getForm(): SVGForm;
   get element(): Element;
+  registerContext(ctx: SVGContext2D): void;
   resize(b: Bound, evt?: Event): this;
+  clear(bg?: string): this;
+  protected _updateBackground(): void;
+  protected playItems(time: number): void;
+  refresh(b: boolean): this;
+  toSVG(expand?: boolean): string;
   static svgElement(parent: Element, name: string, id?: string): SVGElement;
   remove(player: IPlayer): this;
   removeAll(): this;
 }
-declare class SVGForm extends VisualForm {
-  protected _style: {
-    filled: boolean;
-    stroked: boolean;
-    fill: string;
-    stroke: string;
-    "stroke-width": number;
-    "stroke-linejoin": string;
-    "stroke-linecap": string;
-    opacity: number;
-  };
-  protected _ctx: DOMFormContext;
+declare class SVGForm extends CanvasForm {
+  protected _svgSpace: SVGSpace;
+  protected _svgCtx: SVGContext2D;
+  protected _legacyCtx: DOMFormContext;
   static groupID: number;
   static domID: number;
-  protected _space: SVGSpace;
-  protected _ready: boolean;
   constructor(space: SVGSpace);
   get space(): SVGSpace;
-  styleTo(k: any, v: any): void;
-  alpha(a: number): this;
-  fill(c: string | boolean): this;
-  stroke(c: string | boolean, width?: number, linejoin?: string, linecap?: string): this;
+  get svgContext(): SVGContext2D;
   cls(c: string | boolean): this;
-  font(sizeOrFont: number | Font, weight?: string, style?: string, lineHeight?: number, family?: string): this;
-  reset(): this;
   updateScope(group_id: string, group?: Element): object;
   scope(item: IPlayer): object;
   nextID(): string;
   static getID(ctx: any): string;
   static scopeID(item: IPlayer): string;
   static style(elem: SVGElement, styles: object): Element;
-  static point(ctx: DOMFormContext, pt: PtLike, radius?: number, shape?: string): SVGElement;
-  point(pt: PtLike, radius?: number, shape?: string): this;
-  static circle(ctx: DOMFormContext, pt: PtLike, radius?: number): SVGElement;
-  circle(pts: PtLikeIterable): this;
-  static arc(ctx: DOMFormContext, pt: PtLike, radius: number, startAngle: number, endAngle: number, cc?: boolean): SVGElement;
-  arc(pt: PtLike, radius: number, startAngle: number, endAngle: number, cc?: boolean): this;
-  static square(ctx: DOMFormContext, pt: PtLike, halfsize: number): SVGElement;
-  square(pt: PtLike, halfsize: number): this;
-  static line(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement;
-  line(pts: PtLikeIterable): this;
+  static pointElement(ctx: DOMFormContext, pt: PtLike, radius?: number, shape?: string): SVGElement;
+  static circleElement(ctx: DOMFormContext, pt: PtLike, radius?: number): SVGElement;
+  static arcElement(ctx: DOMFormContext, pt: PtLike, radius: number, startAngle: number, endAngle: number, cc?: boolean): SVGElement;
+  static squareElement(ctx: DOMFormContext, pt: PtLike, halfsize: number): SVGElement;
+  static lineElement(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement;
   protected static _poly(ctx: DOMFormContext, points: string, closePath?: boolean): SVGElement;
   protected static pointsString(pts: PtLikeIterable): {
     string: string;
     count: number;
   };
-  static polygon(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement;
-  polygon(pts: PtLikeIterable): this;
-  static rect(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement;
-  rect(pts: PtLikeIterable): this;
-  static text(ctx: DOMFormContext, pt: PtLike, txt: string): SVGElement;
-  text(pt: PtLike, txt: string): this;
-  log(txt: any): this;
+  static polygonElement(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement;
+  static rectElement(ctx: DOMFormContext, pts: PtLikeIterable): SVGElement;
+  static textElement(ctx: DOMFormContext, pt: PtLike, txt: string): SVGElement;
 }
 //#endregion
 //#region src/Typography.d.ts
@@ -1398,5 +1472,5 @@ declare class Sound {
   toggle(): this;
 }
 //#endregion
-export { AnimateCallbackFn, Body, Bound, CanvasForm, CanvasPatternRepetition, CanvasSpace, CanvasSpaceOptions, Circle, Color, ColorType, Const, Create, Curve, DOMFormContext, DOMSpace, DefaultFormStyle, Delaunay, DelaunayMesh, DelaunayShape, Font, Form, Geom, Group, GroupLike, HTMLForm, HTMLSpace, IPlayer, IPt, ISoundAnalyzer, ISpacePlayers, ITempoListener, ITempoProgressFn, ITempoResponses, ITempoStartFn, ITimer, Img, IntersectContext, Line, Mat, MultiTouchElement, MultiTouchSpace, Noise, Num, Particle, Polygon, Pt, PtIterable, PtLike, PtLikeIterable, Range, Rectangle, RenderingContext2D, SVGForm, SVGSpace, Shaping, Sound, SoundType, Space, Tempo, TouchPointsKey, Triangle, Typography, UI, UIButton, UIDragger, UIHandler, UIPointerAction, UIPointerActions, UIShape, Util, Vec, VisualForm, WarningType, World };
+export { AnimateCallbackFn, Body, Bound, CanvasForm, CanvasPatternRepetition, CanvasSpace, CanvasSpaceOptions, Circle, Color, ColorType, Const, Create, Curve, DOMFormContext, DOMSpace, DefaultFormStyle, Delaunay, DelaunayMesh, DelaunayShape, Font, Form, Geom, Group, GroupLike, HTMLForm, HTMLSpace, IPlayer, IPt, ISoundAnalyzer, ISpacePlayers, ITempoListener, ITempoProgressFn, ITempoResponses, ITempoStartFn, ITimer, Img, IntersectContext, Line, Mat, MultiTouchElement, MultiTouchSpace, Noise, Num, Particle, Polygon, Pt, PtIterable, PtLike, PtLikeIterable, Range, Rectangle, RenderingContext2D, SVGContext2D, SVGForm, SVGSpace, Shaping, Sound, SoundType, Space, Tempo, TouchPointsKey, Triangle, Typography, UI, UIButton, UIDragger, UIHandler, UIPointerAction, UIPointerActions, UIShape, Util, Vec, VisualForm, WarningType, World };
 //# sourceMappingURL=index.d.mts.map

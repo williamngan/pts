@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Typealias",
-  "id": 7390,
+  "id": 7721,
   "comment": "A known pointer, touch, or keyboard action dispatched by a Pts space.",
   "constructor": [],
   "accessors": [],

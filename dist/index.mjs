@@ -5604,16 +5604,505 @@ HTMLForm.groupID = 0;
 HTMLForm.domID = 0;
 
 //#endregion
+//#region \0@oxc-project+runtime@0.143.0/helpers/esm/typeof.js
+function _typeof(o) {
+	"@babel/helpers - typeof";
+	return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(o) {
+		return typeof o;
+	} : function(o) {
+		return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
+	}, _typeof(o);
+}
+
+//#endregion
+//#region \0@oxc-project+runtime@0.143.0/helpers/esm/toPrimitive.js
+function toPrimitive(t, r) {
+	if ("object" != _typeof(t) || !t) return t;
+	var e = t[Symbol.toPrimitive];
+	if (void 0 !== e) {
+		var i = e.call(t, r || "default");
+		if ("object" != _typeof(i)) return i;
+		throw new TypeError("@@toPrimitive must return a primitive value.");
+	}
+	return ("string" === r ? String : Number)(t);
+}
+
+//#endregion
+//#region \0@oxc-project+runtime@0.143.0/helpers/esm/toPropertyKey.js
+function toPropertyKey(t) {
+	var i = toPrimitive(t, "string");
+	return "symbol" == _typeof(i) ? i : i + "";
+}
+
+//#endregion
+//#region \0@oxc-project+runtime@0.143.0/helpers/esm/defineProperty.js
+function _defineProperty(e, r, t) {
+	return (r = toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
+		value: t,
+		enumerable: !0,
+		configurable: !0,
+		writable: !0
+	}) : e[r] = t, e;
+}
+
+//#endregion
+//#region \0@oxc-project+runtime@0.143.0/helpers/esm/objectSpread2.js
+function ownKeys(e, r) {
+	var t = Object.keys(e);
+	if (Object.getOwnPropertySymbols) {
+		var o = Object.getOwnPropertySymbols(e);
+		r && (o = o.filter(function(r) {
+			return Object.getOwnPropertyDescriptor(e, r).enumerable;
+		})), t.push.apply(t, o);
+	}
+	return t;
+}
+function _objectSpread2(e) {
+	for (var r = 1; r < arguments.length; r++) {
+		var t = null != arguments[r] ? arguments[r] : {};
+		r % 2 ? ownKeys(Object(t), !0).forEach(function(r) {
+			_defineProperty(e, r, t[r]);
+		}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function(r) {
+			Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
+		});
+	}
+	return e;
+}
+
+//#endregion
 //#region src/Svg.ts
+const SVG_NS = "http://www.w3.org/2000/svg";
+const BLEND_MODES = /* @__PURE__ */ new Set([
+	"multiply",
+	"screen",
+	"overlay",
+	"darken",
+	"lighten",
+	"color-dodge",
+	"color-burn",
+	"hard-light",
+	"soft-light",
+	"difference",
+	"exclusion",
+	"hue",
+	"saturation",
+	"color",
+	"luminosity"
+]);
+var SVGGradient = class SVGGradient {
+	constructor(kind, coords) {
+		this.stops = [];
+		this._elem = null;
+		this.kind = kind;
+		this.coords = coords;
+		this.id = `pts_grad_${SVGGradient._count++}`;
+	}
+	addColorStop(offset, color) {
+		this.stops.push([offset, color]);
+		if (this._elem) this._render(this._elem);
+	}
+	materialize(defs) {
+		if (!this._elem) {
+			this._elem = document.createElementNS(SVG_NS, this.kind === "linear" ? "linearGradient" : "radialGradient");
+			this._elem.setAttribute("id", this.id);
+			this._elem.setAttribute("gradientUnits", "userSpaceOnUse");
+			if (this.kind === "linear") {
+				const [x1, y1, x2, y2] = this.coords;
+				DOMSpace.setAttr(this._elem, {
+					x1,
+					y1,
+					x2,
+					y2
+				});
+			} else {
+				const [x0, y0, r0, x1, y1, r1] = this.coords;
+				DOMSpace.setAttr(this._elem, {
+					cx: x1,
+					cy: y1,
+					r: r1,
+					fx: x0,
+					fy: y0
+				});
+				if (r0) this._elem.setAttribute("fr", `${r0}`);
+			}
+			this._render(this._elem);
+			defs.appendChild(this._elem);
+		}
+		return `url(#${this.id})`;
+	}
+	_render(elem) {
+		elem.textContent = "";
+		for (const [offset, color] of this.stops) {
+			const stop = document.createElementNS(SVG_NS, "stop");
+			stop.setAttribute("offset", `${offset}`);
+			stop.setAttribute("stop-color", color);
+			elem.appendChild(stop);
+		}
+	}
+};
+SVGGradient._count = 0;
+var SVGContext2D = class SVGContext2D {
+	constructor(host) {
+		this.fillStyle = "#f03";
+		this.strokeStyle = "#fff";
+		this.lineWidth = 1;
+		this.lineJoin = "bevel";
+		this.lineCap = "butt";
+		this.globalAlpha = 1;
+		this.globalCompositeOperation = "source-over";
+		this.font = "10px sans-serif";
+		this.textAlign = "start";
+		this.textBaseline = "alphabetic";
+		this.lineDashOffset = 0;
+		this._dash = [];
+		this._stateStack = [];
+		this.className = "";
+		this._d = "";
+		this._shapeFill = null;
+		this._shapeStroke = null;
+		this._shapePainted = false;
+		this._shapeClass = "";
+		this._shapeAlpha = 1;
+		this._shapeBlend = "source-over";
+		this._runs = [];
+		this._drawCount = 0;
+		this._group = null;
+		this._defs = null;
+		this._pool = [];
+		this._attrCache = [];
+		this._host = host;
+	}
+	static _warnOnce(key, msg) {
+		if (!SVGContext2D._warned[key]) {
+			SVGContext2D._warned[key] = true;
+			Util.warn(msg);
+		}
+	}
+	beginFrame() {
+		this._runs = [];
+		this._d = "";
+		this._shapeFill = null;
+		this._shapeStroke = null;
+		this._shapePainted = false;
+		this._drawCount = 0;
+	}
+	get drawCount() {
+		return this._drawCount;
+	}
+	get group() {
+		return this._group;
+	}
+	commitFrame() {
+		this._flushShape();
+		if (!this._group) {
+			this._group = document.createElementNS(SVG_NS, "g");
+			this._group.setAttribute("class", "pts-svgform");
+			this._host.appendChild(this._group);
+		}
+		const runs = this._runs;
+		for (let i = 0; i < runs.length; i++) {
+			const run = runs[i];
+			let elem = this._pool[i];
+			if (!elem || elem.nodeName !== run.tag) {
+				const fresh = document.createElementNS(SVG_NS, run.tag);
+				if (elem) this._group.replaceChild(fresh, elem);
+				else this._group.appendChild(fresh);
+				elem = fresh;
+				this._pool[i] = elem;
+				this._attrCache[i] = {};
+			}
+			const cache = this._attrCache[i];
+			for (const k in run.attrs) {
+				const v = `${run.attrs[k]}`;
+				if (cache[k] !== v) {
+					elem.setAttribute(k, v);
+					cache[k] = v;
+				}
+			}
+			if (run.tag === "text" && elem.textContent !== run.text) elem.textContent = run.text;
+		}
+		for (let i = this._pool.length - 1; i >= runs.length; i--) {
+			this._group.removeChild(this._pool[i]);
+			this._pool.pop();
+			this._attrCache.pop();
+		}
+	}
+	get runs() {
+		return this._runs;
+	}
+	resetDom() {
+		this._group = null;
+		this._defs = null;
+		this._pool = [];
+		this._attrCache = [];
+	}
+	beginPath() {
+		this._flushShape();
+		this._d = "";
+	}
+	closePath() {
+		this._d += "Z";
+	}
+	moveTo(x, y) {
+		this._d += `M${round2(x)} ${round2(y)}`;
+	}
+	lineTo(x, y) {
+		this._d += `L${round2(x)} ${round2(y)}`;
+	}
+	quadraticCurveTo(cpx, cpy, x, y) {
+		this._d += `Q${round2(cpx)} ${round2(cpy)} ${round2(x)} ${round2(y)}`;
+	}
+	bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y) {
+		this._d += `C${round2(cp1x)} ${round2(cp1y)} ${round2(cp2x)} ${round2(cp2y)} ${round2(x)} ${round2(y)}`;
+	}
+	rect(x, y, w, h) {
+		this._d += `M${round2(x)} ${round2(y)}h${round2(w)}v${round2(h)}h${round2(-w)}Z`;
+	}
+	arc(x, y, radius, startAngle, endAngle, ccw = false) {
+		this.ellipse(x, y, radius, radius, 0, startAngle, endAngle, ccw);
+	}
+	ellipse(x, y, rx, ry, rotation, startAngle, endAngle, ccw = false) {
+		let delta = ccw ? startAngle - endAngle : endAngle - startAngle;
+		const full = delta >= Const.two_pi;
+		if (!full) delta = (delta % Const.two_pi + Const.two_pi) % Const.two_pi;
+		const cosR = Math.cos(rotation);
+		const sinR = Math.sin(rotation);
+		const ptAt = (angle) => {
+			const px = rx * Math.cos(angle);
+			const py = ry * Math.sin(angle);
+			return [x + px * cosR - py * sinR, y + px * sinR + py * cosR];
+		};
+		const dir = ccw ? -1 : 1;
+		const sweepFlag = ccw ? 0 : 1;
+		const rotDeg = round2(rotation * 180 / Math.PI);
+		const [sx, sy] = ptAt(startAngle);
+		this._d += this._d.length > 0 ? `L${round2(sx)} ${round2(sy)}` : `M${round2(sx)} ${round2(sy)}`;
+		const sweep = full ? Const.two_pi : delta;
+		const segments = Math.max(1, Math.ceil(sweep / Const.pi - 1e-6));
+		let angle = startAngle;
+		for (let s = 1; s <= segments; s++) {
+			const target = s === segments ? startAngle + dir * sweep : angle + dir * Const.pi;
+			const [ex, ey] = ptAt(target);
+			this._d += `A${round2(rx)} ${round2(ry)} ${rotDeg} 0 ${sweepFlag} ${round2(ex)} ${round2(ey)}`;
+			angle = target;
+		}
+		if (full) this._d += "Z";
+	}
+	fill() {
+		this._shapeFill = this._resolvePaint(this.fillStyle);
+		this._capturePaintState();
+	}
+	stroke() {
+		this._shapeStroke = this._resolvePaint(this.strokeStyle);
+		this._capturePaintState();
+	}
+	_capturePaintState() {
+		this._shapePainted = true;
+		this._shapeClass = this.className;
+		this._shapeAlpha = this.globalAlpha;
+		this._shapeBlend = this.globalCompositeOperation;
+		this._drawCount++;
+	}
+	fillRect(x, y, w, h) {
+		this.beginPath();
+		this.rect(x, y, w, h);
+		this.fill();
+	}
+	clearRect() {}
+	fillText(txt, x, y) {
+		this._flushShape();
+		const anchor = this.textAlign === "center" ? "middle" : this.textAlign === "right" || this.textAlign === "end" ? "end" : "start";
+		const baseline = this.textBaseline === "top" ? "text-before-edge" : this.textBaseline === "middle" ? "central" : this.textBaseline === "bottom" ? "text-after-edge" : this.textBaseline;
+		const attrs = {
+			x: round2(x),
+			y: round2(y),
+			fill: this._resolvePaint(this.fillStyle),
+			"text-anchor": anchor,
+			"dominant-baseline": baseline,
+			style: `font: ${this.font}`,
+			"pointer-events": "none"
+		};
+		this._applyCommon(attrs);
+		this._runs.push({
+			tag: "text",
+			attrs,
+			text: txt
+		});
+		this._drawCount++;
+	}
+	measureText(txt) {
+		if (!SVGContext2D._measurer) SVGContext2D._measurer = document.createElement("canvas").getContext("2d");
+		SVGContext2D._measurer.font = this.font;
+		return SVGContext2D._measurer.measureText(txt);
+	}
+	drawImage(img, x, y, w, h, ...rest) {
+		var _src;
+		if (rest.length > 0) {
+			SVGContext2D._warnOnce("drawImage9", "SVG output does not support the 9-argument (source-cropped) drawImage");
+			return;
+		}
+		this._flushShape();
+		const src = (_src = img.src) !== null && _src !== void 0 ? _src : img.toDataURL ? img.toDataURL() : null;
+		if (!src) {
+			SVGContext2D._warnOnce("drawImageSrc", "SVG output supports images from <img> elements or canvases only");
+			return;
+		}
+		const attrs = {
+			href: src,
+			x: round2(x),
+			y: round2(y)
+		};
+		const iw = w !== null && w !== void 0 ? w : img.width;
+		const ih = h !== null && h !== void 0 ? h : img.height;
+		if (iw != null) attrs.width = round2(iw);
+		if (ih != null) attrs.height = round2(ih);
+		this._applyCommon(attrs);
+		this._runs.push({
+			tag: "image",
+			attrs
+		});
+		this._drawCount++;
+	}
+	putImageData() {
+		SVGContext2D._warnOnce("putImageData", "putImageData is not supported in SVG output");
+	}
+	save() {
+		this._stateStack.push({
+			fillStyle: this.fillStyle,
+			strokeStyle: this.strokeStyle,
+			lineWidth: this.lineWidth,
+			lineJoin: this.lineJoin,
+			lineCap: this.lineCap,
+			globalAlpha: this.globalAlpha,
+			globalCompositeOperation: this.globalCompositeOperation,
+			font: this.font,
+			textAlign: this.textAlign,
+			textBaseline: this.textBaseline,
+			lineDashOffset: this.lineDashOffset,
+			_dash: this._dash.slice()
+		});
+	}
+	restore() {
+		const s = this._stateStack.pop();
+		if (s) Object.assign(this, s);
+	}
+	scale() {}
+	clip() {
+		SVGContext2D._warnOnce("clip", "clip is not yet supported in SVG output");
+	}
+	setLineDash(segments) {
+		this._dash = segments;
+	}
+	getLineDash() {
+		return this._dash;
+	}
+	createLinearGradient(x1, y1, x2, y2) {
+		return new SVGGradient("linear", [
+			x1,
+			y1,
+			x2,
+			y2
+		]);
+	}
+	createRadialGradient(x0, y0, r0, x1, y1, r1) {
+		return new SVGGradient("radial", [
+			x0,
+			y0,
+			r0,
+			x1,
+			y1,
+			r1
+		]);
+	}
+	_resolvePaint(style) {
+		if (style instanceof SVGGradient) {
+			if (!this._defs) {
+				this._defs = document.createElementNS(SVG_NS, "defs");
+				this._host.insertBefore(this._defs, this._host.firstChild);
+			}
+			return style.materialize(this._defs);
+		}
+		return style;
+	}
+	_applyCommon(attrs) {
+		attrs.class = this.className ? `pts-svgform ${this.className}` : "pts-svgform";
+		if (this.globalAlpha !== 1) attrs.opacity = this.globalAlpha;
+		else attrs.opacity = 1;
+		const op = this.globalCompositeOperation;
+		if (op !== "source-over") {
+			if (BLEND_MODES.has(op)) attrs["mix-blend-mode"] = op;
+			else SVGContext2D._warnOnce(`composite-${op}`, `composite operation "${op}" has no SVG equivalent`);
+		}
+	}
+	_flushShape() {
+		var _this$_shapeFill, _this$_shapeStroke;
+		if (!this._shapePainted || this._d.length === 0) {
+			this._shapePainted = false;
+			return;
+		}
+		const attrs = {
+			d: this._d,
+			fill: (_this$_shapeFill = this._shapeFill) !== null && _this$_shapeFill !== void 0 ? _this$_shapeFill : "none",
+			stroke: (_this$_shapeStroke = this._shapeStroke) !== null && _this$_shapeStroke !== void 0 ? _this$_shapeStroke : "none"
+		};
+		if (this._shapeStroke) {
+			attrs["stroke-width"] = this.lineWidth;
+			attrs["stroke-linejoin"] = this.lineJoin;
+			attrs["stroke-linecap"] = this.lineCap;
+			if (this._dash.length > 0) {
+				attrs["stroke-dasharray"] = this._dash.join(" ");
+				if (this.lineDashOffset) attrs["stroke-dashoffset"] = this.lineDashOffset;
+			}
+		}
+		attrs.class = this._shapeClass ? `pts-svgform ${this._shapeClass}` : "pts-svgform";
+		attrs.opacity = this._shapeAlpha;
+		if (this._shapeBlend !== "source-over") {
+			if (BLEND_MODES.has(this._shapeBlend)) attrs["mix-blend-mode"] = this._shapeBlend;
+			else SVGContext2D._warnOnce(`composite-${this._shapeBlend}`, `composite operation "${this._shapeBlend}" has no SVG equivalent`);
+		}
+		const prev = this._runs[this._runs.length - 1];
+		if (prev && prev.tag === "path" && sameRunStyle(prev.attrs, attrs)) {
+			prev.shapeEnds.push(prev.attrs.d.length);
+			prev.attrs.d = prev.attrs.d + this._d;
+		} else this._runs.push({
+			tag: "path",
+			attrs,
+			shapeEnds: []
+		});
+		this._d = "";
+		this._shapeFill = null;
+		this._shapeStroke = null;
+		this._shapePainted = false;
+	}
+};
+SVGContext2D._measurer = null;
+SVGContext2D._warned = {};
+function round2(n) {
+	return Math.round(n * 100) / 100;
+}
+function sameRunStyle(a, b) {
+	const keysA = Object.keys(a);
+	const keysB = Object.keys(b);
+	if (keysA.length !== keysB.length) return false;
+	for (const k of keysA) {
+		if (k === "d") continue;
+		if (a[k] !== b[k]) return false;
+	}
+	return true;
+}
 var SVGSpace = class SVGSpace extends DOMSpace {
 	constructor(elem, callback) {
 		super(elem, callback);
 		this._bgcolor = "#999";
+		this._svgContexts = [];
+		this._bgElem = null;
+		this._svgRefresh = true;
 		if (this._canvas.nodeName.toLowerCase() != "svg") {
 			let s = SVGSpace.svgElement(this._canvas, "svg", `${this.id}_svg`);
 			this._container = this._canvas;
 			this._canvas = s;
 		}
+		this.refresh(true);
 	}
 	getForm() {
 		return new SVGForm(this);
@@ -5621,22 +6110,87 @@ var SVGSpace = class SVGSpace extends DOMSpace {
 	get element() {
 		return this._canvas;
 	}
+	registerContext(ctx) {
+		this._svgContexts.push(ctx);
+	}
 	resize(b, evt) {
 		super.resize(b, evt);
 		SVGSpace.setAttr(this.element, {
 			viewBox: `0 0 ${this.bound.width} ${this.bound.height}`,
 			width: `${this.bound.width}`,
 			height: `${this.bound.height}`,
-			xmlns: "http://www.w3.org/2000/svg",
+			xmlns: SVG_NS,
 			version: "1.1"
 		});
+		this._updateBackground();
 		return this;
+	}
+	clear(bg) {
+		if (bg) this._bgcolor = bg;
+		this._updateBackground();
+		return this;
+	}
+	_updateBackground() {
+		const svg = this._canvas;
+		if (!this._bgElem) {
+			this._bgElem = document.createElementNS(SVG_NS, "rect");
+			this._bgElem.setAttribute("class", "pts-svg-bg");
+			svg.insertBefore(this._bgElem, svg.firstChild);
+		}
+		DOMSpace.setAttr(this._bgElem, {
+			x: 0,
+			y: 0,
+			width: this.bound.width,
+			height: this.bound.height,
+			fill: !this._bgcolor || this._bgcolor === "transparent" ? "none" : this._bgcolor
+		});
+	}
+	playItems(time) {
+		const ctxs = this._svgContexts;
+		for (let i = 0, len = ctxs.length; i < len; i++) ctxs[i].beginFrame();
+		super.playItems(time);
+		for (let i = 0, len = ctxs.length; i < len; i++) if (this._svgRefresh || ctxs[i].drawCount > 0) ctxs[i].commitFrame();
+	}
+	refresh(b) {
+		this._svgRefresh = b;
+		return super.refresh(b);
+	}
+	toSVG(expand = false) {
+		const svg = this._canvas;
+		if (!expand) return svg.outerHTML;
+		const clone = svg.cloneNode(true);
+		const groups = clone.querySelectorAll("g.pts-svgform");
+		let gi = 0;
+		for (const ctx of this._svgContexts) {
+			const group = groups[gi++];
+			if (!group) continue;
+			group.textContent = "";
+			for (const run of ctx.runs) {
+				if (run.tag !== "path") {
+					const elem = document.createElementNS(SVG_NS, run.tag);
+					DOMSpace.setAttr(elem, run.attrs);
+					if (run.text) elem.textContent = run.text;
+					group.appendChild(elem);
+					continue;
+				}
+				const d = run.attrs.d;
+				const bounds = [...run.shapeEnds, d.length];
+				let begin = 0;
+				for (const end of bounds) {
+					const elem = document.createElementNS(SVG_NS, "path");
+					DOMSpace.setAttr(elem, _objectSpread2(_objectSpread2({}, run.attrs), {}, { d: d.slice(begin, end) }));
+					group.appendChild(elem);
+					begin = end;
+				}
+			}
+		}
+		return clone.outerHTML;
 	}
 	static svgElement(parent, name, id) {
 		if (!parent || !parent.appendChild) throw new Error("parent is not a valid DOM element");
 		let elem = document.querySelector(`#${id}`);
 		if (!elem) {
-			elem = document.createElementNS("http://www.w3.org/2000/svg", name);
+			elem = document.createElementNS(SVG_NS, name);
 			elem.setAttribute("id", id);
 			parent.appendChild(elem);
 		}
@@ -5650,23 +6204,15 @@ var SVGSpace = class SVGSpace extends DOMSpace {
 	}
 	removeAll() {
 		this._container.innerHTML = "";
+		this._bgElem = null;
+		for (const ctx of this._svgContexts) ctx.resetDom();
 		return super.removeAll();
 	}
 };
-var SVGForm = class SVGForm extends VisualForm {
+var SVGForm = class SVGForm extends CanvasForm {
 	constructor(space) {
 		super();
-		this._style = {
-			filled: true,
-			stroked: true,
-			fill: "#f03",
-			stroke: "#fff",
-			"stroke-width": 1,
-			"stroke-linejoin": "bevel",
-			"stroke-linecap": "sqaure",
-			opacity: 1
-		};
-		this._ctx = {
+		this._legacyCtx = {
 			group: null,
 			groupID: "pts",
 			groupCount: 0,
@@ -5674,82 +6220,42 @@ var SVGForm = class SVGForm extends VisualForm {
 			currentClass: "",
 			style: {}
 		};
-		this._ready = false;
-		this._space = space;
-		this._space.add({ start: () => {
-			this._ctx.group = this._space.element;
-			this._ctx.groupID = "pts_svg_" + SVGForm.groupID++;
-			this._ctx.style = Object.assign({}, this._style);
-			this._ready = true;
-		} });
+		this._svgSpace = space;
+		this._svgCtx = new SVGContext2D(space.element);
+		space.registerContext(this._svgCtx);
+		this._ctx = this._svgCtx;
+		this._ctx.fillStyle = "#f03";
+		this._ctx.strokeStyle = "#fff";
+		this._ready = true;
+		this._legacyCtx.group = space.element;
 	}
 	get space() {
-		return this._space;
+		return this._svgSpace;
 	}
-	styleTo(k, v) {
-		if (this._ctx.style[k] === void 0) throw new Error(`${k} style property doesn't exist`);
-		this._ctx.style[k] = v;
-	}
-	alpha(a) {
-		this.styleTo("opacity", a);
-		return this;
-	}
-	fill(c) {
-		if (typeof c == "boolean") this.styleTo("filled", c);
-		else {
-			this.styleTo("filled", true);
-			this.styleTo("fill", c);
-		}
-		return this;
-	}
-	stroke(c, width, linejoin, linecap) {
-		if (typeof c == "boolean") this.styleTo("stroked", c);
-		else {
-			this.styleTo("stroked", true);
-			this.styleTo("stroke", c);
-			if (width) this.styleTo("stroke-width", width);
-			if (linejoin) this.styleTo("stroke-linejoin", linejoin);
-			if (linecap) this.styleTo("stroke-linecap", linecap);
-		}
-		return this;
+	get svgContext() {
+		return this._svgCtx;
 	}
 	cls(c) {
-		if (typeof c == "boolean") this._ctx.currentClass = "";
-		else this._ctx.currentClass = c;
-		return this;
-	}
-	font(sizeOrFont, weight, style, lineHeight, family) {
-		if (typeof sizeOrFont == "number") {
-			this._font.size = sizeOrFont;
-			if (family) this._font.face = family;
-			if (weight) this._font.weight = weight;
-			if (style) this._font.style = style;
-			if (lineHeight) this._font.lineHeight = lineHeight;
-		} else this._font = sizeOrFont;
-		this._ctx.style["font"] = this._font.value;
-		return this;
-	}
-	reset() {
-		this._ctx.style = Object.assign({}, this._style);
-		this._font = new Font(10, "sans-serif");
-		this._ctx.style["font"] = this._font.value;
+		const cls = typeof c == "boolean" ? "" : c;
+		this._legacyCtx.currentClass = cls;
+		this._svgCtx.className = cls;
 		return this;
 	}
 	updateScope(group_id, group) {
-		this._ctx.group = group;
-		this._ctx.groupID = group_id;
-		this._ctx.groupCount = 0;
+		this._legacyCtx.group = group;
+		this._legacyCtx.groupID = group_id;
+		this._legacyCtx.groupCount = 0;
 		this.nextID();
-		return this._ctx;
+		return this._legacyCtx;
 	}
 	scope(item) {
 		if (!item || item.animateID == null) throw new Error("item not defined or not yet added to Space");
-		return this.updateScope(SVGForm.scopeID(item), this.space.element);
+		return this.updateScope(SVGForm.scopeID(item), this._svgSpace.element);
 	}
 	nextID() {
-		this._ctx.groupCount++;
-		this._ctx.currentID = `${this._ctx.groupID}-${this._ctx.groupCount}`;
-		return this._ctx.currentID;
+		this._legacyCtx.groupCount++;
+		this._legacyCtx.currentID = `${this._legacyCtx.groupID}-${this._legacyCtx.groupCount}`;
+		return this._legacyCtx.currentID;
 	}
 	static getID(ctx) {
 		return ctx.currentID || `p-${SVGForm.domID++}`;
@@ -5771,16 +6277,11 @@ var SVGForm = class SVGForm extends VisualForm {
 		}
 		return DOMSpace.setAttr(elem, { style: st.join(";") });
 	}
-	static point(ctx, pt, radius = 5, shape = "square") {
-		if (shape === "circle") return SVGForm.circle(ctx, pt, radius);
-		else return SVGForm.square(ctx, pt, radius);
+	static pointElement(ctx, pt, radius = 5, shape = "square") {
+		if (shape === "circle") return SVGForm.circleElement(ctx, pt, radius);
+		else return SVGForm.squareElement(ctx, pt, radius);
 	}
-	point(pt, radius = 5, shape = "square") {
-		this.nextID();
-		SVGForm.point(this._ctx, pt, radius, shape);
-		return this;
-	}
-	static circle(ctx, pt, radius = 10) {
+	static circleElement(ctx, pt, radius = 10) {
 		let elem = SVGSpace.svgElement(ctx.group, "circle", SVGForm.getID(ctx));
 		DOMSpace.setAttr(elem, {
 			cx: pt[0],
@@ -5791,13 +6292,7 @@ var SVGForm = class SVGForm extends VisualForm {
 		SVGForm.style(elem, ctx.style);
 		return elem;
 	}
-	circle(pts) {
-		this.nextID();
-		let p = Util.iterToArray(pts);
-		SVGForm.circle(this._ctx, p[0], p[1][0]);
-		return this;
-	}
-	static arc(ctx, pt, radius, startAngle, endAngle, cc) {
+	static arcElement(ctx, pt, radius, startAngle, endAngle, cc) {
 		let elem = SVGSpace.svgElement(ctx.group, "path", SVGForm.getID(ctx));
 		const start = new Pt(pt).toAngle(startAngle, radius, true);
 		const end = new Pt(pt).toAngle(endAngle, radius, true);
@@ -5812,12 +6307,7 @@ var SVGForm = class SVGForm extends VisualForm {
 		SVGForm.style(elem, ctx.style);
 		return elem;
 	}
-	arc(pt, radius, startAngle, endAngle, cc) {
-		this.nextID();
-		SVGForm.arc(this._ctx, pt, radius, startAngle, endAngle, cc);
-		return this;
-	}
-	static square(ctx, pt, halfsize) {
+	static squareElement(ctx, pt, halfsize) {
 		let elem = SVGSpace.svgElement(ctx.group, "rect", SVGForm.getID(ctx));
 		DOMSpace.setAttr(elem, {
 			x: pt[0] - halfsize,
@@ -5829,12 +6319,7 @@ var SVGForm = class SVGForm extends VisualForm {
 		SVGForm.style(elem, ctx.style);
 		return elem;
 	}
-	square(pt, halfsize) {
-		this.nextID();
-		SVGForm.square(this._ctx, pt, halfsize);
-		return this;
-	}
-	static line(ctx, pts) {
+	static lineElement(ctx, pts) {
 		let points = SVGForm.pointsString(pts);
 		if (points.count < 2) return;
 		if (points.count > 2) return SVGForm._poly(ctx, points.string, false);
@@ -5849,11 +6334,6 @@ var SVGForm = class SVGForm extends VisualForm {
 		});
 		SVGForm.style(elem, ctx.style);
 		return elem;
-	}
-	line(pts) {
-		this.nextID();
-		SVGForm.line(this._ctx, pts);
-		return this;
 	}
 	static _poly(ctx, points, closePath = true) {
 		let elem = SVGSpace.svgElement(ctx.group, closePath ? "polygon" : "polyline", SVGForm.getID(ctx));
@@ -5876,16 +6356,11 @@ var SVGForm = class SVGForm extends VisualForm {
 			count
 		};
 	}
-	static polygon(ctx, pts) {
+	static polygonElement(ctx, pts) {
 		let points = SVGForm.pointsString(pts);
 		return SVGForm._poly(ctx, points.string, true);
 	}
-	polygon(pts) {
-		this.nextID();
-		SVGForm.polygon(this._ctx, pts);
-		return this;
-	}
-	static rect(ctx, pts) {
+	static rectElement(ctx, pts) {
 		if (!Util.arrayCheck(pts)) return;
 		let elem = SVGSpace.svgElement(ctx.group, "rect", SVGForm.getID(ctx));
 		let bound = Group.fromArray(pts).boundingBox();
@@ -5900,12 +6375,7 @@ var SVGForm = class SVGForm extends VisualForm {
 		SVGForm.style(elem, ctx.style);
 		return elem;
 	}
-	rect(pts) {
-		this.nextID();
-		SVGForm.rect(this._ctx, pts);
-		return this;
-	}
-	static text(ctx, pt, txt) {
+	static textElement(ctx, pt, txt) {
 		let elem = SVGSpace.svgElement(ctx.group, "text", SVGForm.getID(ctx));
 		DOMSpace.setAttr(elem, {
 			"pointer-events": "none",
@@ -5918,15 +6388,6 @@ var SVGForm = class SVGForm extends VisualForm {
 		elem.textContent = txt;
 		SVGForm.style(elem, ctx.style);
 		return elem;
-	}
-	text(pt, txt) {
-		this.nextID();
-		SVGForm.text(this._ctx, pt, txt);
-		return this;
-	}
-	log(txt) {
-		this.fill("#000").stroke("#fff", .5).text([10, 14], txt);
-		return this;
 	}
 };
 SVGForm.groupID = 0;
@@ -6900,5 +7361,5 @@ var Sound = class Sound {
 };
 
 //#endregion
-export { Body, Bound, CanvasForm, CanvasSpace, Circle, Color, Const, Create, Curve, DOMSpace, Delaunay, Font, Form, Geom, Group, HTMLForm, HTMLSpace, Img, Line, Mat, MultiTouchSpace, Noise, Num, Particle, Polygon, Pt, Range, Rectangle, SVGForm, SVGSpace, Shaping, Sound, Space, Tempo, Triangle, Typography, UI, UIButton, UIDragger, UIPointerActions, UIShape, Util, Vec, VisualForm, World };
+export { Body, Bound, CanvasForm, CanvasSpace, Circle, Color, Const, Create, Curve, DOMSpace, Delaunay, Font, Form, Geom, Group, HTMLForm, HTMLSpace, Img, Line, Mat, MultiTouchSpace, Noise, Num, Particle, Polygon, Pt, Range, Rectangle, SVGContext2D, SVGForm, SVGSpace, Shaping, Sound, Space, Tempo, Triangle, Typography, UI, UIButton, UIDragger, UIPointerActions, UIShape, Util, Vec, VisualForm, World };
 //# sourceMappingURL=index.mjs.map

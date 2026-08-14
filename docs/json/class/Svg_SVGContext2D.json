@@ -1,0 +1,1304 @@
+{
+  "name": "SVGContext2D",
+  "source": [
+    [
+      "src/Svg.ts",
+      120,
+      13
+    ]
+  ],
+  "kind": "Class",
+  "id": 6747,
+  "comment": "**`SVGContext2D`** implements the subset of `CanvasRenderingContext2D` that\n[`CanvasForm`](#link) draws through, and renders it as SVG. Consecutive shapes that share\npaint state are merged into single `<path>` elements (\"style runs\"), so the DOM cost per\nframe is proportional to the number of style changes, not the number of shapes. This is\nwhat lets the same sketch run unchanged on canvas and SVG.\n\nCapability notes: blend-mode composites map to `mix-blend-mode`; Porter-Duff composites,\n`clip`, and `putImageData` warn once and no-op. Text metrics come from a hidden canvas, so\n`textBox` layout matches canvas exactly. When shapes with both fill and stroke are merged,\nall fills in a run paint before its strokes — visible only for overlapping same-styled\nshapes.",
+  "constructor": [
+    {
+      "name": "constructor",
+      "source": [
+        [
+          "src/Svg.ts",
+          165,
+          2
+        ]
+      ],
+      "id": 6757,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "SVGContext2D",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "host",
+              "comment": "",
+              "type": "SVGElement",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "accessors": [
+    {
+      "name": "drawCount",
+      "source": [
+        [
+          "src/Svg.ts",
+          189,
+          6
+        ]
+      ],
+      "id": 6790,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Number of paint calls since `beginFrame` — used to skip empty commits.",
+      "getter": {
+        "type": "number"
+      },
+      "setter": false
+    },
+    {
+      "name": "group",
+      "source": [
+        [
+          "src/Svg.ts",
+          194,
+          6
+        ]
+      ],
+      "id": 6792,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "The `<g>` element holding this context's rendered output.",
+      "getter": {
+        "type": "SVGElement"
+      },
+      "setter": false
+    },
+    {
+      "name": "runs",
+      "source": [
+        [
+          "src/Svg.ts",
+          247,
+          6
+        ]
+      ],
+      "id": 6796,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "The current frame's run list (used by expanded export).",
+      "getter": {
+        "type": "SVGRun[]"
+      },
+      "setter": false
+    }
+  ],
+  "methods": [
+    {
+      "name": "arc",
+      "source": [
+        [
+          "src/Svg.ts",
+          297,
+          2
+        ]
+      ],
+      "id": 6832,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "radius",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "startAngle",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "endAngle",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "ccw",
+              "comment": "",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "beginFrame",
+      "source": [
+        [
+          "src/Svg.ts",
+          179,
+          2
+        ]
+      ],
+      "id": 6788,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Start a new frame: subsequent draws build a fresh run list.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "beginPath",
+      "source": [
+        [
+          "src/Svg.ts",
+          261,
+          2
+        ]
+      ],
+      "id": 6800,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "bezierCurveTo",
+      "source": [
+        [
+          "src/Svg.ts",
+          282,
+          2
+        ]
+      ],
+      "id": 6818,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "cp1x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "cp1y",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "cp2x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "cp2y",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "clearRect",
+      "source": [
+        [
+          "src/Svg.ts",
+          383,
+          2
+        ]
+      ],
+      "id": 6862,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "clip",
+      "source": [
+        [
+          "src/Svg.ts",
+          504,
+          2
+        ]
+      ],
+      "id": 6888,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "closePath",
+      "source": [
+        [
+          "src/Svg.ts",
+          266,
+          2
+        ]
+      ],
+      "id": 6802,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "commitFrame",
+      "source": [
+        [
+          "src/Svg.ts",
+          202,
+          2
+        ]
+      ],
+      "id": 6794,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Commit the frame: reconcile the run list against the pooled elements, patching only\nchanged attributes, and truncate unused elements.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "createLinearGradient",
+      "source": [
+        [
+          "src/Svg.ts",
+          516,
+          2
+        ]
+      ],
+      "id": 6895,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "SVGGradient",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "x1",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y1",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "x2",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y2",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "createRadialGradient",
+      "source": [
+        [
+          "src/Svg.ts",
+          525,
+          2
+        ]
+      ],
+      "id": 6901,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "SVGGradient",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "x0",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y0",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "r0",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "x1",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y1",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "r1",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "drawImage",
+      "source": [
+        [
+          "src/Svg.ts",
+          427,
+          2
+        ]
+      ],
+      "id": 6872,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "img",
+              "comment": "",
+              "type": "CanvasImageSource",
+              "default": false
+            },
+            {
+              "name": "x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "w",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "h",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "rest",
+              "comment": "",
+              "type": "number[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "ellipse",
+      "source": [
+        [
+          "src/Svg.ts",
+          308,
+          2
+        ]
+      ],
+      "id": 6840,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "rx",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "ry",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "rotation",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "startAngle",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "endAngle",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "ccw",
+              "comment": "",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "fill",
+      "source": [
+        [
+          "src/Svg.ts",
+          359,
+          2
+        ]
+      ],
+      "id": 6850,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "fillRect",
+      "source": [
+        [
+          "src/Svg.ts",
+          377,
+          2
+        ]
+      ],
+      "id": 6856,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "w",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "h",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "fillText",
+      "source": [
+        [
+          "src/Svg.ts",
+          387,
+          2
+        ]
+      ],
+      "id": 6864,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "txt",
+              "comment": "",
+              "type": "string",
+              "default": false
+            },
+            {
+              "name": "x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "getLineDash",
+      "source": [
+        [
+          "src/Svg.ts",
+          512,
+          2
+        ]
+      ],
+      "id": 6893,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "number[]",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "lineTo",
+      "source": [
+        [
+          "src/Svg.ts",
+          274,
+          2
+        ]
+      ],
+      "id": 6808,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "measureText",
+      "source": [
+        [
+          "src/Svg.ts",
+          417,
+          2
+        ]
+      ],
+      "id": 6869,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "TextMetrics",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "txt",
+              "comment": "",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "moveTo",
+      "source": [
+        [
+          "src/Svg.ts",
+          270,
+          2
+        ]
+      ],
+      "id": 6804,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "putImageData",
+      "source": [
+        [
+          "src/Svg.ts",
+          469,
+          2
+        ]
+      ],
+      "id": 6880,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "quadraticCurveTo",
+      "source": [
+        [
+          "src/Svg.ts",
+          278,
+          2
+        ]
+      ],
+      "id": 6812,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "cpx",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "cpy",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "rect",
+      "source": [
+        [
+          "src/Svg.ts",
+          293,
+          2
+        ]
+      ],
+      "id": 6826,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "x",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "y",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "w",
+              "comment": "",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "h",
+              "comment": "",
+              "type": "number",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "resetDom",
+      "source": [
+        [
+          "src/Svg.ts",
+          252,
+          2
+        ]
+      ],
+      "id": 6798,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Forget cached DOM references, eg after the host's contents were removed externally.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "restore",
+      "source": [
+        [
+          "src/Svg.ts",
+          495,
+          2
+        ]
+      ],
+      "id": 6884,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "save",
+      "source": [
+        [
+          "src/Svg.ts",
+          478,
+          2
+        ]
+      ],
+      "id": 6882,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "scale",
+      "source": [
+        [
+          "src/Svg.ts",
+          500,
+          2
+        ]
+      ],
+      "id": 6886,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "setLineDash",
+      "source": [
+        [
+          "src/Svg.ts",
+          508,
+          2
+        ]
+      ],
+      "id": 6890,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "segments",
+              "comment": "",
+              "type": "number[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "stroke",
+      "source": [
+        [
+          "src/Svg.ts",
+          364,
+          2
+        ]
+      ],
+      "id": 6852,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    }
+  ],
+  "variables": [],
+  "properties": [
+    {
+      "name": "className",
+      "source": [
+        [
+          "src/Svg.ts",
+          138,
+          2
+        ]
+      ],
+      "id": 6773,
+      "flags": {},
+      "type": "string",
+      "overrides": false,
+      "inherits": false,
+      "comment": "Optional CSS class applied to emitted elements (see `SVGForm.cls`)."
+    },
+    {
+      "name": "fillStyle",
+      "source": [
+        [
+          "src/Svg.ts",
+          122,
+          2
+        ]
+      ],
+      "id": 6760,
+      "flags": {},
+      "type": "string | SVGGradient",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "font",
+      "source": [
+        [
+          "src/Svg.ts",
+          129,
+          2
+        ]
+      ],
+      "id": 6767,
+      "flags": {},
+      "type": "string",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "globalAlpha",
+      "source": [
+        [
+          "src/Svg.ts",
+          127,
+          2
+        ]
+      ],
+      "id": 6765,
+      "flags": {},
+      "type": "number",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "globalCompositeOperation",
+      "source": [
+        [
+          "src/Svg.ts",
+          128,
+          2
+        ]
+      ],
+      "id": 6766,
+      "flags": {},
+      "type": "string",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "lineCap",
+      "source": [
+        [
+          "src/Svg.ts",
+          126,
+          2
+        ]
+      ],
+      "id": 6764,
+      "flags": {},
+      "type": "string",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "lineDashOffset",
+      "source": [
+        [
+          "src/Svg.ts",
+          132,
+          2
+        ]
+      ],
+      "id": 6770,
+      "flags": {},
+      "type": "number",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "lineJoin",
+      "source": [
+        [
+          "src/Svg.ts",
+          125,
+          2
+        ]
+      ],
+      "id": 6763,
+      "flags": {},
+      "type": "string",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "lineWidth",
+      "source": [
+        [
+          "src/Svg.ts",
+          124,
+          2
+        ]
+      ],
+      "id": 6762,
+      "flags": {},
+      "type": "number",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "strokeStyle",
+      "source": [
+        [
+          "src/Svg.ts",
+          123,
+          2
+        ]
+      ],
+      "id": 6761,
+      "flags": {},
+      "type": "string | SVGGradient",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "textAlign",
+      "source": [
+        [
+          "src/Svg.ts",
+          130,
+          2
+        ]
+      ],
+      "id": 6768,
+      "flags": {},
+      "type": "string",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    },
+    {
+      "name": "textBaseline",
+      "source": [
+        [
+          "src/Svg.ts",
+          131,
+          2
+        ]
+      ],
+      "id": 6769,
+      "flags": {},
+      "type": "string",
+      "overrides": false,
+      "inherits": false,
+      "comment": ""
+    }
+  ],
+  "flags": {},
+  "extends": [],
+  "implements": []
+}

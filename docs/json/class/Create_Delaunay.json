@@ -3,13 +3,13 @@
   "source": [
     [
       "src/Create.ts",
-      304,
+      804,
       13
     ]
   ],
   "kind": "Class",
   "id": 1538,
-  "comment": "Delaunay is a [`Group`](#link) of Pts that generates Delaunay and Voronoi tessellations. The triangulation algorithm is ported from [Pt](https://github.com/williamngan/pt).\nBased on [Paul Bourke's algorithm](http://paulbourke.net/papers/triangulate/)\nwith reference to its [javascript implementation](https://github.com/ironwallaby/delaunay) by ironwallaby.",
+  "comment": "Delaunay is a [`Group`](#link) of Pts that generates Delaunay and Voronoi tessellations.\nThe triangulation core is adapted from [Delaunator](https://github.com/mapbox/delaunator)\n(ISC License, © Mapbox); earlier versions were based on\n[Paul Bourke's algorithm](http://paulbourke.net/papers/triangulate/).",
   "constructor": [
     {
       "name": "constructor",
@@ -550,7 +550,7 @@
       "source": [
         [
           "src/Create.ts",
-          312,
+          812,
           2
         ]
       ],
@@ -1031,7 +1031,7 @@
       "source": [
         [
           "src/Create.ts",
-          404,
+          884,
           2
         ]
       ],
@@ -1144,7 +1144,7 @@
       "source": [
         [
           "src/Create.ts",
-          414,
+          894,
           2
         ]
       ],
@@ -1180,7 +1180,7 @@
       "source": [
         [
           "src/Create.ts",
-          428,
+          908,
           2
         ]
       ],
@@ -2174,7 +2174,7 @@
       "source": [
         [
           "src/Create.ts",
-          391,
+          871,
           2
         ]
       ],
