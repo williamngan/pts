@@ -1318,16 +1318,19 @@ export class Polygon {
    * @returns an index in the pts indicating the nearest Pt, or -1 if none found
    */
   static nearestPt(poly: PtIterable, pt: PtLike): number {
+    const _poly = Util.iterToArray(poly);
+    const px = pt[0];
+    const py = pt[1];
     let _near = Number.MAX_VALUE;
     let _item = -1;
-    let i = 0;
-    for (let p of poly) {
-      let d = p.$subtract(pt).magnitudeSq();
+    for (let i = 0, len = _poly.length; i < len; i++) {
+      const dx = _poly[i][0] - px;
+      const dy = _poly[i][1] - py;
+      const d = dx * dx + dy * dy;
       if (d < _near) {
         _near = d;
         _item = i;
       }
-      i++;
     }
     return _item;
   }
@@ -1430,6 +1433,23 @@ export class Polygon {
     const c = _circle[0];
     const r = _circle[1][0];
 
+    // AABB pre-reject against the circle's bounding box. The corner cases this
+    // skips are exactly those the perpendicular-foot check below would reject.
+    let bx0 = Infinity;
+    let by0 = Infinity;
+    let bx1 = -Infinity;
+    let by1 = -Infinity;
+    for (let i = 0, len = _poly.length; i < len; i++) {
+      const p = _poly[i];
+      if (p[0] < bx0) bx0 = p[0];
+      if (p[0] > bx1) bx1 = p[0];
+      if (p[1] < by0) by0 = p[1];
+      if (p[1] > by1) by1 = p[1];
+    }
+    if (c[0] + r < bx0 || c[0] - r > bx1 || c[1] + r < by0 || c[1] - r > by1) {
+      return null;
+    }
+
     let minDist = Number.MAX_SAFE_INTEGER;
     let minEdge: Group = null;
     let minAx = 0;
@@ -1509,6 +1529,32 @@ export class Polygon {
     let _poly2 = Util.iterToArray(poly2);
     const len1 = _poly1.length;
     const len2 = _poly2.length;
+
+    // AABB pre-reject: for convex polygons, disjoint bounding boxes guarantee
+    // that a separating edge normal exists, so the axis scan can be skipped
+    let ax0 = Infinity;
+    let ay0 = Infinity;
+    let ax1 = -Infinity;
+    let ay1 = -Infinity;
+    for (let i = 0; i < len1; i++) {
+      const p = _poly1[i];
+      if (p[0] < ax0) ax0 = p[0];
+      if (p[0] > ax1) ax1 = p[0];
+      if (p[1] < ay0) ay0 = p[1];
+      if (p[1] > ay1) ay1 = p[1];
+    }
+    let bx0 = Infinity;
+    let by0 = Infinity;
+    let bx1 = -Infinity;
+    let by1 = -Infinity;
+    for (let i = 0; i < len2; i++) {
+      const p = _poly2[i];
+      if (p[0] < bx0) bx0 = p[0];
+      if (p[0] > bx1) bx1 = p[0];
+      if (p[1] < by0) by0 = p[1];
+      if (p[1] > by1) by1 = p[1];
+    }
+    if (ax0 > bx1 || bx0 > ax1 || ay0 > by1 || by0 > ay1) return null;
 
     // scan all edge normals as separating axes, tracking the smallest overlap
     let minDist = Number.MAX_SAFE_INTEGER;

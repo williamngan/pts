@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { Create, Delaunay, Noise } from "../Create";
+import { DelaunayShape } from "../Types";
 import { Num } from "../Num";
 import { Bound, Group, Pt } from "../Pt";
 
@@ -181,5 +182,92 @@ describe("Delaunay", () => {
     );
     expect(delaunay.circum(0, 1, 2).circle).toHaveLength(2);
     expect(TestDelaunay.dedupe([0, 1, 1, 0, 1, 2])).toEqual([1, 2]);
+  });
+});
+
+describe("Delaunay invariants", () => {
+  function seededPts(count: number, seed = 9876) {
+    let a = seed;
+    const rand = () => {
+      a = (a * 16807) % 2147483647;
+      return a / 2147483647;
+    };
+    const g = new Group();
+    for (let i = 0; i < count; i++) {
+      g.push(new Pt(rand() * 500, rand() * 500));
+    }
+    return g;
+  }
+
+  it("satisfies the empty-circumcircle property on a random set", () => {
+    const pts = seededPts(80);
+    const delaunay = Create.delaunay(pts);
+    const shapes = delaunay.delaunay(false) as DelaunayShape[];
+    expect(shapes.length).toBeGreaterThan(100);
+    for (const s of shapes) {
+      const c = s.circle[0];
+      const r = s.circle[1][0];
+      for (let i = 0; i < pts.length; i++) {
+        if (i === s.i || i === s.j || i === s.k) continue;
+        const dx = pts[i][0] - c[0];
+        const dy = pts[i][1] - c[1];
+        // strictly inside would violate the Delaunay condition
+        expect(dx * dx + dy * dy).toBeGreaterThan(r * r - 0.01);
+      }
+    }
+  });
+
+  it("produces complete voronoi and mesh structures on a larger set", () => {
+    const pts = seededPts(150, 555);
+    const delaunay = Create.delaunay(pts);
+    const triangles = delaunay.delaunay();
+    expect(triangles.length).toBeGreaterThan(200);
+    expect(delaunay.mesh()).toHaveLength(150);
+    const cells = delaunay.voronoi();
+    expect(cells).toHaveLength(150);
+    // interior points must have at least a triangle's worth of neighbors
+    const interiorCells = cells.filter((cell) => cell.length >= 3);
+    expect(interiorCells.length).toBeGreaterThan(100);
+  });
+
+  it("skips duplicate points instead of producing degenerate triangles", () => {
+    const pts = Group.fromArray([
+      [0, 0],
+      [10, 0],
+      [10, 10],
+      [0, 10],
+      [10, 0], // duplicate
+      [5, 5],
+    ]);
+    const delaunay = Create.delaunay(pts);
+    const shapes = delaunay.delaunay(false) as DelaunayShape[];
+    for (const s of shapes) {
+      const area = Math.abs(
+        (pts[s.j][0] - pts[s.i][0]) * (pts[s.k][1] - pts[s.i][1]) -
+          (pts[s.k][0] - pts[s.i][0]) * (pts[s.j][1] - pts[s.i][1]),
+      );
+      expect(area).toBeGreaterThan(0.01); // no degenerate triangles
+    }
+    expect(delaunay.mesh()).toHaveLength(6); // duplicates keep their mesh slot
+    expect(delaunay.neighborPts(4)).toHaveLength(0); // the skipped duplicate
+  });
+
+  it("returns no triangles for collinear input", () => {
+    const pts = Group.fromArray([
+      [0, 0],
+      [10, 10],
+      [20, 20],
+      [30, 30],
+    ]);
+    expect(Create.delaunay(pts).delaunay()).toEqual([]);
+  });
+
+  it("handles a thousand points", () => {
+    const pts = seededPts(1000, 321);
+    const delaunay = Create.delaunay(pts);
+    const triangles = delaunay.delaunay();
+    // Euler: interior triangulation of n points has ~2n triangles
+    expect(triangles.length).toBeGreaterThan(1800);
+    expect(triangles.length).toBeLessThan(2000);
   });
 });

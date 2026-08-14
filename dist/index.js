@@ -832,16 +832,19 @@ var Polygon = class Polygon {
 		return g;
 	}
 	static nearestPt(poly, pt) {
+		const _poly = Util.iterToArray(poly);
+		const px = pt[0];
+		const py = pt[1];
 		let _near = Number.MAX_VALUE;
 		let _item = -1;
-		let i = 0;
-		for (let p of poly) {
-			let d = p.$subtract(pt).magnitudeSq();
+		for (let i = 0, len = _poly.length; i < len; i++) {
+			const dx = _poly[i][0] - px;
+			const dy = _poly[i][1] - py;
+			const d = dx * dx + dy * dy;
 			if (d < _near) {
 				_near = d;
 				_item = i;
 			}
-			i++;
 		}
 		return _item;
 	}
@@ -892,6 +895,18 @@ var Polygon = class Polygon {
 		let _circle = Util.iterToArray(circle);
 		const c = _circle[0];
 		const r = _circle[1][0];
+		let bx0 = Infinity;
+		let by0 = Infinity;
+		let bx1 = -Infinity;
+		let by1 = -Infinity;
+		for (let i = 0, len = _poly.length; i < len; i++) {
+			const p = _poly[i];
+			if (p[0] < bx0) bx0 = p[0];
+			if (p[0] > bx1) bx1 = p[0];
+			if (p[1] < by0) by0 = p[1];
+			if (p[1] > by1) by1 = p[1];
+		}
+		if (c[0] + r < bx0 || c[0] - r > bx1 || c[1] + r < by0 || c[1] - r > by1) return null;
 		let minDist = Number.MAX_SAFE_INTEGER;
 		let minEdge = null;
 		let minAx = 0;
@@ -946,6 +961,29 @@ var Polygon = class Polygon {
 		let _poly2 = Util.iterToArray(poly2);
 		const len1 = _poly1.length;
 		const len2 = _poly2.length;
+		let ax0 = Infinity;
+		let ay0 = Infinity;
+		let ax1 = -Infinity;
+		let ay1 = -Infinity;
+		for (let i = 0; i < len1; i++) {
+			const p = _poly1[i];
+			if (p[0] < ax0) ax0 = p[0];
+			if (p[0] > ax1) ax1 = p[0];
+			if (p[1] < ay0) ay0 = p[1];
+			if (p[1] > ay1) ay1 = p[1];
+		}
+		let bx0 = Infinity;
+		let by0 = Infinity;
+		let bx1 = -Infinity;
+		let by1 = -Infinity;
+		for (let i = 0; i < len2; i++) {
+			const p = _poly2[i];
+			if (p[0] < bx0) bx0 = p[0];
+			if (p[0] > bx1) bx1 = p[0];
+			if (p[1] < by0) by0 = p[1];
+			if (p[1] > by1) by1 = p[1];
+		}
+		if (ax0 > bx1 || bx0 > ax1 || ay0 > by1 || by0 > ay1) return null;
 		let minDist = Number.MAX_SAFE_INTEGER;
 		let minIndex = -1;
 		let minAx = 0;
@@ -4350,56 +4388,365 @@ var Noise = class extends Pt {
 		return Num.lerp(Num.lerp(n00, n10, tx), Num.lerp(n01, n11, tx), _fade(y));
 	}
 };
-var Delaunay = class Delaunay extends Group {
+const _DELAUNAY_EPSILON = Math.pow(2, -52);
+const _delaunayEdgeStack = /* @__PURE__ */ new Uint32Array(512);
+function _pseudoAngle(dx, dy) {
+	const p = dx / (Math.abs(dx) + Math.abs(dy));
+	return (dy > 0 ? 3 - p : 1 + p) / 4;
+}
+function _sqDist(ax, ay, bx, by) {
+	const dx = ax - bx;
+	const dy = ay - by;
+	return dx * dx + dy * dy;
+}
+function _orientIfSure(px, py, rx, ry, qx, qy) {
+	const l = (ry - py) * (qx - px);
+	const r = (rx - px) * (qy - py);
+	return Math.abs(l - r) >= 33306690738754716e-32 * Math.abs(l + r) ? l - r : 0;
+}
+function _orient(rx, ry, qx, qy, px, py) {
+	return (_orientIfSure(px, py, rx, ry, qx, qy) || _orientIfSure(rx, ry, qx, qy, px, py) || _orientIfSure(qx, qy, px, py, rx, ry)) < 0;
+}
+function _inCircle(ax, ay, bx, by, cx, cy, px, py) {
+	const dx = ax - px;
+	const dy = ay - py;
+	const ex = bx - px;
+	const ey = by - py;
+	const fx = cx - px;
+	const fy = cy - py;
+	const ap = dx * dx + dy * dy;
+	const bp = ex * ex + ey * ey;
+	const cp = fx * fx + fy * fy;
+	return dx * (ey * cp - bp * fy) - dy * (ex * cp - bp * fx) + ap * (ex * fy - ey * fx) < 0;
+}
+function _circumradiusSq(ax, ay, bx, by, cx, cy) {
+	const dx = bx - ax;
+	const dy = by - ay;
+	const ex = cx - ax;
+	const ey = cy - ay;
+	const bl = dx * dx + dy * dy;
+	const cl = ex * ex + ey * ey;
+	const d = .5 / (dx * ey - dy * ex);
+	const x = (ey * bl - dy * cl) * d;
+	const y = (dx * cl - ex * bl) * d;
+	return x * x + y * y;
+}
+function _circumcenterX(ax, ay, bx, by, cx, cy) {
+	const dx = bx - ax;
+	const dy = by - ay;
+	const ex = cx - ax;
+	const ey = cy - ay;
+	const bl = dx * dx + dy * dy;
+	const cl = ex * ex + ey * ey;
+	const d = .5 / (dx * ey - dy * ex);
+	return ax + (ey * bl - dy * cl) * d;
+}
+function _circumcenterY(ax, ay, bx, by, cx, cy) {
+	const dx = bx - ax;
+	const dy = by - ay;
+	const ex = cx - ax;
+	const ey = cy - ay;
+	const bl = dx * dx + dy * dy;
+	const cl = ex * ex + ey * ey;
+	const d = .5 / (dx * ey - dy * ex);
+	return ay + (dx * cl - ex * bl) * d;
+}
+function _quicksortIds(ids, dists, left, right) {
+	if (right - left <= 20) {
+		for (let i = left + 1; i <= right; i++) {
+			const temp = ids[i];
+			const tempDist = dists[temp];
+			let j = i - 1;
+			while (j >= left && dists[ids[j]] > tempDist) ids[j + 1] = ids[j--];
+			ids[j + 1] = temp;
+		}
+		return;
+	}
+	const median = left + right >> 1;
+	let i = left + 1;
+	let j = right;
+	_swapIds(ids, median, i);
+	if (dists[ids[left]] > dists[ids[right]]) _swapIds(ids, left, right);
+	if (dists[ids[i]] > dists[ids[right]]) _swapIds(ids, i, right);
+	if (dists[ids[left]] > dists[ids[i]]) _swapIds(ids, left, i);
+	const temp = ids[i];
+	const tempDist = dists[temp];
+	while (true) {
+		do
+			i++;
+		while (dists[ids[i]] < tempDist);
+		do
+			j--;
+		while (dists[ids[j]] > tempDist);
+		if (j < i) break;
+		_swapIds(ids, i, j);
+	}
+	ids[left + 1] = ids[j];
+	ids[j] = temp;
+	if (right - i + 1 >= j - left) {
+		_quicksortIds(ids, dists, i, right);
+		_quicksortIds(ids, dists, left, j - 1);
+	} else {
+		_quicksortIds(ids, dists, left, j - 1);
+		_quicksortIds(ids, dists, i, right);
+	}
+}
+function _swapIds(arr, i, j) {
+	const tmp = arr[i];
+	arr[i] = arr[j];
+	arr[j] = tmp;
+}
+function _triangulate(coords) {
+	const n = coords.length >> 1;
+	let minX = Infinity;
+	let minY = Infinity;
+	let maxX = -Infinity;
+	let maxY = -Infinity;
+	const ids = new Uint32Array(n);
+	for (let i = 0; i < n; i++) {
+		const x = coords[2 * i];
+		const y = coords[2 * i + 1];
+		if (x < minX) minX = x;
+		if (y < minY) minY = y;
+		if (x > maxX) maxX = x;
+		if (y > maxY) maxY = y;
+		ids[i] = i;
+	}
+	const bcx = (minX + maxX) / 2;
+	const bcy = (minY + maxY) / 2;
+	let i0 = 0;
+	let i1 = -1;
+	let i2 = -1;
+	let minDist = Infinity;
+	for (let i = 0; i < n; i++) {
+		const d = _sqDist(bcx, bcy, coords[2 * i], coords[2 * i + 1]);
+		if (d < minDist) {
+			i0 = i;
+			minDist = d;
+		}
+	}
+	let i0x = coords[2 * i0];
+	let i0y = coords[2 * i0 + 1];
+	minDist = Infinity;
+	for (let i = 0; i < n; i++) {
+		if (i === i0) continue;
+		const d = _sqDist(i0x, i0y, coords[2 * i], coords[2 * i + 1]);
+		if (d < minDist && d > 0) {
+			i1 = i;
+			minDist = d;
+		}
+	}
+	if (i1 === -1) return null;
+	let i1x = coords[2 * i1];
+	let i1y = coords[2 * i1 + 1];
+	let minRadius = Infinity;
+	for (let i = 0; i < n; i++) {
+		if (i === i0 || i === i1) continue;
+		const r = _circumradiusSq(i0x, i0y, i1x, i1y, coords[2 * i], coords[2 * i + 1]);
+		if (r < minRadius) {
+			i2 = i;
+			minRadius = r;
+		}
+	}
+	if (i2 === -1 || minRadius === Infinity) return null;
+	let i2x = coords[2 * i2];
+	let i2y = coords[2 * i2 + 1];
+	if (_orient(i0x, i0y, i1x, i1y, i2x, i2y)) {
+		const i = i1;
+		const x = i1x;
+		const y = i1y;
+		i1 = i2;
+		i1x = i2x;
+		i1y = i2y;
+		i2 = i;
+		i2x = x;
+		i2y = y;
+	}
+	const cx = _circumcenterX(i0x, i0y, i1x, i1y, i2x, i2y);
+	const cy = _circumcenterY(i0x, i0y, i1x, i1y, i2x, i2y);
+	const dists = new Float64Array(n);
+	for (let i = 0; i < n; i++) dists[i] = _sqDist(coords[2 * i], coords[2 * i + 1], cx, cy);
+	_quicksortIds(ids, dists, 0, n - 1);
+	const hashSize = Math.ceil(Math.sqrt(n));
+	const hullPrev = new Uint32Array(n);
+	const hullNext = new Uint32Array(n);
+	const hullTri = new Uint32Array(n);
+	const hullHash = new Int32Array(hashSize).fill(-1);
+	const hashKey = (x, y) => Math.floor(_pseudoAngle(x - cx, y - cy) * hashSize) % hashSize;
+	let hullStart = i0;
+	hullNext[i0] = hullPrev[i2] = i1;
+	hullNext[i1] = hullPrev[i0] = i2;
+	hullNext[i2] = hullPrev[i1] = i0;
+	hullTri[i0] = 0;
+	hullTri[i1] = 1;
+	hullTri[i2] = 2;
+	hullHash[hashKey(i0x, i0y)] = i0;
+	hullHash[hashKey(i1x, i1y)] = i1;
+	hullHash[hashKey(i2x, i2y)] = i2;
+	const maxTriangles = Math.max(2 * n - 5, 0);
+	const triangles = new Uint32Array(maxTriangles * 3);
+	const halfedges = new Int32Array(maxTriangles * 3);
+	let trianglesLen = 0;
+	const link = (a, b) => {
+		halfedges[a] = b;
+		if (b !== -1) halfedges[b] = a;
+	};
+	const addTriangle = (t0, t1, t2, a, b, c) => {
+		const t = trianglesLen;
+		triangles[t] = t0;
+		triangles[t + 1] = t1;
+		triangles[t + 2] = t2;
+		link(t, a);
+		link(t + 1, b);
+		link(t + 2, c);
+		trianglesLen += 3;
+		return t;
+	};
+	const legalize = (a) => {
+		let i = 0;
+		let ar = 0;
+		while (true) {
+			const b = halfedges[a];
+			if (b === -1) {
+				if (i === 0) break;
+				a = _delaunayEdgeStack[--i];
+				continue;
+			}
+			const a0 = a - a % 3;
+			ar = a0 + (a + 2) % 3;
+			const al = a0 + (a + 1) % 3;
+			const b0 = b - b % 3;
+			const bl = b0 + (b + 2) % 3;
+			const p0 = triangles[ar];
+			const pr = triangles[a];
+			const pl = triangles[al];
+			const p1 = triangles[bl];
+			if (_inCircle(coords[2 * p0], coords[2 * p0 + 1], coords[2 * pr], coords[2 * pr + 1], coords[2 * pl], coords[2 * pl + 1], coords[2 * p1], coords[2 * p1 + 1])) {
+				triangles[a] = p1;
+				triangles[b] = p0;
+				const hbl = halfedges[bl];
+				if (hbl === -1) {
+					let e = hullStart;
+					do {
+						if (hullTri[e] === bl) {
+							hullTri[e] = a;
+							break;
+						}
+						e = hullPrev[e];
+					} while (e !== hullStart);
+				}
+				link(a, hbl);
+				link(b, halfedges[ar]);
+				link(ar, bl);
+				const br = b0 + (b + 1) % 3;
+				if (i < _delaunayEdgeStack.length) _delaunayEdgeStack[i++] = br;
+			} else {
+				if (i === 0) break;
+				a = _delaunayEdgeStack[--i];
+			}
+		}
+		return ar;
+	};
+	addTriangle(i0, i1, i2, -1, -1, -1);
+	let xp = 0;
+	let yp = 0;
+	for (let k = 0; k < n; k++) {
+		const i = ids[k];
+		const x = coords[2 * i];
+		const y = coords[2 * i + 1];
+		if (k > 0 && Math.abs(x - xp) <= _DELAUNAY_EPSILON && Math.abs(y - yp) <= _DELAUNAY_EPSILON) continue;
+		xp = x;
+		yp = y;
+		if (i === i0 || i === i1 || i === i2) continue;
+		let start = 0;
+		for (let j = 0, key = hashKey(x, y); j < hashSize; j++) {
+			start = hullHash[(key + j) % hashSize];
+			if (start !== -1 && start !== hullNext[start]) break;
+		}
+		start = hullPrev[start];
+		let e = start;
+		let q = hullNext[e];
+		while (!_orient(x, y, coords[2 * e], coords[2 * e + 1], coords[2 * q], coords[2 * q + 1])) {
+			e = q;
+			if (e === start) {
+				e = -1;
+				break;
+			}
+			q = hullNext[e];
+		}
+		if (e === -1) continue;
+		let t = addTriangle(e, i, hullNext[e], -1, -1, hullTri[e]);
+		hullTri[i] = legalize(t + 2);
+		hullTri[e] = t;
+		let next = hullNext[e];
+		q = hullNext[next];
+		while (_orient(x, y, coords[2 * next], coords[2 * next + 1], coords[2 * q], coords[2 * q + 1])) {
+			t = addTriangle(next, i, q, hullTri[i], -1, hullTri[next]);
+			hullTri[i] = legalize(t + 2);
+			hullNext[next] = next;
+			next = q;
+			q = hullNext[next];
+		}
+		if (e === start) {
+			q = hullPrev[e];
+			while (_orient(x, y, coords[2 * q], coords[2 * q + 1], coords[2 * e], coords[2 * e + 1])) {
+				t = addTriangle(q, i, e, -1, hullTri[e], hullTri[q]);
+				legalize(t + 2);
+				hullTri[q] = t;
+				hullNext[e] = e;
+				e = q;
+				q = hullPrev[e];
+			}
+		}
+		hullStart = hullPrev[i] = e;
+		hullNext[e] = hullPrev[next] = i;
+		hullNext[i] = next;
+		hullHash[hashKey(x, y)] = i;
+		hullHash[hashKey(coords[2 * e], coords[2 * e + 1])] = e;
+	}
+	return triangles.subarray(0, trianglesLen);
+}
+var Delaunay = class extends Group {
 	constructor(..._args) {
 		super(..._args);
 		this._mesh = [];
 	}
 	delaunay(triangleOnly = true) {
 		if (this.length < 3) return [];
+		const n = this.length;
 		this._mesh = [];
-		let n = this.length;
-		let indices = [];
-		for (let i = 0; i < n; i++) indices[i] = i;
-		indices.sort((i, j) => this[j][0] - this[i][0]);
-		let pts = this.slice();
-		let st = this._superTriangle();
-		pts = pts.concat(st);
-		let opened = [this._circum(n, n + 1, n + 2, st)];
-		let closed = [];
-		let tris = [];
-		for (let i = 0, len = indices.length; i < len; i++) {
-			let c = indices[i];
-			let edges = [];
-			let j = opened.length;
-			if (!this._mesh[c]) this._mesh[c] = {};
-			while (j--) {
-				let circum = opened[j];
-				let radius = circum.circle[1][0];
-				let d = pts[c].$subtract(circum.circle[0]);
-				if (d[0] > 0 && d[0] * d[0] > radius * radius) {
-					closed.push(circum);
-					tris.push(circum.triangle);
-					opened.splice(j, 1);
-					continue;
-				}
-				if (d[0] * d[0] + d[1] * d[1] - radius * radius > Const.epsilon) continue;
-				edges.push(circum.i, circum.j, circum.j, circum.k, circum.k, circum.i);
-				opened.splice(j, 1);
-			}
-			Delaunay._dedupe(edges);
-			j = edges.length;
-			while (j > 1) opened.push(this._circum(edges[--j], edges[--j], c, false, pts));
+		for (let i = 0; i < n; i++) this._mesh[i] = {};
+		const coords = new Float64Array(n * 2);
+		for (let i = 0; i < n; i++) {
+			coords[2 * i] = this[i][0];
+			coords[2 * i + 1] = this[i][1];
 		}
-		for (let i = 0, len = opened.length; i < len; i++) {
-			let o = opened[i];
-			if (o.i < n && o.j < n && o.k < n) {
-				closed.push(o);
-				tris.push(o.triangle);
-				this._cache(o);
-			}
+		const triIndices = _triangulate(coords);
+		if (!triIndices) return [];
+		const shapes = [];
+		const tris = [];
+		for (let t = 0, len = triIndices.length; t < len; t += 3) {
+			const i = triIndices[t];
+			const j = triIndices[t + 1];
+			const k = triIndices[t + 2];
+			const triangle = this._triangle(i, j, k);
+			const ax = coords[2 * i];
+			const ay = coords[2 * i + 1];
+			const ccx = _circumcenterX(ax, ay, coords[2 * j], coords[2 * j + 1], coords[2 * k], coords[2 * k + 1]);
+			const ccy = _circumcenterY(ax, ay, coords[2 * j], coords[2 * j + 1], coords[2 * k], coords[2 * k + 1]);
+			const r = Math.sqrt(_sqDist(ax, ay, ccx, ccy));
+			const shape = {
+				i,
+				j,
+				k,
+				triangle,
+				circle: new Group(new Pt(ccx, ccy), new Pt(r, r))
+			};
+			this._cache(shape);
+			shapes.push(shape);
+			tris.push(triangle);
 		}
-		return triangleOnly ? tris : closed;
+		return triangleOnly ? tris : shapes;
 	}
 	voronoi() {
 		let vs = [];
