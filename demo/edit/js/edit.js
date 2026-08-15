@@ -5,9 +5,9 @@
  *
  *  1. Every Run builds a brand new sketch document (see `runCode`). Reusing one
  *     document and undoing the previous sketch by hand is not possible — see the
- *     comment in frame.html.
- *  2. Editor start-up does not hang off a single `load` event, because that
- *     event can fire before this script runs. See `frameReady`.
+ *     comment on `FRAME_SRCDOC`.
+ *  2. The sketch shell is embedded here via `srcdoc`, not fetched from a
+ *     `frame.html` next to this file. See `FRAME_SRCDOC` for why.
  */
 
 (function () {
@@ -21,6 +21,61 @@
   var frame = document.getElementById("demo");
   var loader = document.getElementById("loader");
   var errorBar = document.getElementById("error");
+
+  /**
+   * The sketch host document. Every Run creates a *new* iframe with this
+   * `srcdoc` and injects the sketch once it has loaded, then swaps the new
+   * frame in for the old one.
+   *
+   * A fresh document per Run is deliberate. Injecting each new version into one
+   * long-lived document and undoing the previous sketch by hand cannot work:
+   * stopping the old sketch through `window.space` misses any sketch holding
+   * its space in a local variable (leaking its render loop on every Run), and
+   * removing a <script> element does not release its top-level `let`/`const`
+   * bindings, so the second Run of such a sketch throws "already been
+   * declared". A fresh document has neither problem and needs no teardown.
+   *
+   * The shell is embedded rather than fetched from a `frame.html` because a
+   * fetched shell is the one editor asset whose cache freshness can drift from
+   * the editor itself. Clean-URL static servers (`serve`, Vercel, Netlify)
+   * 301-redirect `frame.html?v=...` to an extensionless `frame`, stripping the
+   * cache-busting version and funnelling every deployment's frame requests
+   * onto a single unversioned, cacheable URL — so a stale shell could pair
+   * with a newer editor, which is exactly the mixed-deployment blanking the
+   * versioning exists to prevent. Embedded, the shell and the editor are
+   * fetched, cached, and versioned as one unit and can never disagree.
+   *
+   * Notes on the document itself: it is in standards mode, where <body> is
+   * only as tall as its content — HTMLSpace and DOMSpace measure their
+   * container, so without `height: 100%` they would size to zero. And
+   * `Pts.namespace(window)` puts the Pts classes in scope so sketches can
+   * write `new CanvasSpace(...)`, which is what the guide teaches; each fresh
+   * document has to do this deliberately. The script URL is relative and
+   * resolves against this page's base (srcdoc documents inherit it), so the
+   * editor still works when the site is served from a subpath.
+   */
+  var FRAME_SRCDOC = [
+    "<!doctype html>",
+    "<html>",
+    "<head>",
+    '<meta charset="UTF-8" />',
+    '<script type="text/javascript" src="../../dist/pts.min.js"><\/script>',
+    "<style>",
+    "html, body { height: 100%; }",
+    // overflow hidden: sketch content that outgrows the viewport by even a
+    // fraction of a pixel must not summon scrollbars — on systems where they
+    // take up layout space, they shrink the viewport and can put container-
+    // measuring sketches into a resize feedback loop.
+    "body { background-color: #f1f3f7; font-family: sans-serif; margin: 0; overflow: hidden; }",
+    "#pt { position: absolute; top: 0; left: 0; right: 0; bottom: 0; }",
+    "</style>",
+    "</head>",
+    "<body>",
+    '<div id="pt"></div>',
+    '<script type="text/javascript">Pts.namespace(window);<\/script>',
+    "</body>",
+    "</html>",
+  ].join("\n");
 
   // ---------------------------------------------------------------- helpers
 
@@ -143,7 +198,7 @@
     var next = document.createElement("iframe");
     next.setAttribute("title", "demo");
     next.className = "pending";
-    next.src = "./frame.html";
+    next.srcdoc = FRAME_SRCDOC;
     // `id="demo"` is not decoration: the stylesheet hides #demo below 768px,
     // among other rules. A replacement without it escapes all of them, which
     // showed up as the preview pane covering the editor on narrow windows.
@@ -214,31 +269,6 @@
   }
 
   // ------------------------------------------------------------------ boot
-
-  /**
-   * Resolve once the sketch frame is usable.
-   *
-   * The previous version chained start-up onto `frame.onload`, assigned only
-   * after two other synchronous scripts had run. The parser yields between
-   * scripts, so a warm-cached frame could fire `load` first and the editor
-   * would sit at "Loading Editor..." forever. Checking `readyState` closes that
-   * window.
-   */
-  function frameReady() {
-    return new Promise(function (resolve) {
-      var doc = frame.contentDocument;
-      if (doc && doc.readyState === "complete") return resolve();
-      frame.addEventListener(
-        "load",
-        function () {
-          resolve();
-        },
-        { once: true },
-      );
-      // Never let frame readiness be the thing that hangs the editor.
-      setTimeout(resolve, RUN_TIMEOUT);
-    });
-  }
 
   /**
    * Resolve once the Monaco module has run, whether or not it already has.
@@ -413,7 +443,7 @@
   }
 
   function boot() {
-    Promise.all([frameReady(), monacoReady()])
+    monacoReady()
       .then(function () {
         if (!window.monaco) throw new Error("the editor bundle did not load");
         createEditor();

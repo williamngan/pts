@@ -13,6 +13,9 @@ iframe {
   border: none;
   width: 50vw;
   height: 100vh;
+  /* Match the sketch shell's background so the placeholder pane shown before
+     the first Run looks the same as a loaded sketch document. */
+  background-color: #f1f3f7;
 }
 
 /* Each Run builds its replacement frame off-screen and swaps it in on load, so

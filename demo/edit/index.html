@@ -7,12 +7,14 @@
     <meta name="description" content="Pts live coding editor. Pts is a javascript library that enables you to compose and visualize points in spaces.">
 
     <script type="text/javascript" src="./js/FileSaver.min.js"></script>
-    <link rel="stylesheet" href="./vs/pts.css" type="text/css" />
-    <link rel="stylesheet" href="./css/style.css" type="text/css" />
+    <link rel="stylesheet" href="./vs/pts.css?v=d600326f1b42" type="text/css" />
+    <link rel="stylesheet" href="./css/style.css?v=d600326f1b42" type="text/css" />
   </head>
   <body>
 
-    <iframe id="demo" title="demo" src="./frame.html"></iframe>
+    <!-- Placeholder pane only. Every Run replaces it with a fresh iframe whose
+         sketch shell is embedded in edit.js (see FRAME_SRCDOC there). -->
+    <iframe id="demo" title="demo"></iframe>
 
     <div id="error"></div>
     <div id="loader">Loading Editor...</div>
@@ -60,9 +62,9 @@
     </div>
     
     
-    <script type="module" src="./vs/monaco.js"></script>
-    <script type="text/javascript" src="./js/pts-api.js"></script>
-    <script type="text/javascript" src="./js/edit.js"></script>
+    <script type="module" src="./vs/monaco.js?v=d600326f1b42"></script>
+    <script type="text/javascript" src="./js/pts-api.js?v=d600326f1b42"></script>
+    <script type="text/javascript" src="./js/edit.js?v=d600326f1b42"></script>
     
   </body>
 </html>

@@ -228,10 +228,18 @@ export class CanvasSpace extends MultiTouchSpace {
   resize(b: Bound, evt?: Event): this {
     this.bound = b;
 
+    // The buffer needs whole device pixels, so round up to cover the bound.
     this._canvas.width = Math.ceil(this.bound.size.x) * this._pixelScale;
     this._canvas.height = Math.ceil(this.bound.size.y) * this._pixelScale;
-    this._canvas.style.width = Math.ceil(this.bound.size.x) + "px";
-    this._canvas.style.height = Math.ceil(this.bound.size.y) + "px";
+    // The CSS size must not round up: a canvas even a fraction of a pixel
+    // larger than its container overflows it, and on systems whose scrollbars
+    // take up layout space that summons scrollbars, shrinking the container —
+    // which the resize observer answers by shrinking the canvas, letting the
+    // scrollbars retract, growing the container again, and so on forever. The
+    // oscillation clears the canvas on every pass (it looks blank) and the
+    // endless relayout can eventually crash the tab.
+    this._canvas.style.width = this.bound.size.x + "px";
+    this._canvas.style.height = this.bound.size.y + "px";
 
     if (this._offscreen) {
       this._offCanvas.width = Math.ceil(this.bound.size.x) * this._pixelScale;
