@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Typealias",
-  "id": 7631,
+  "id": 7645,
   "comment": "Typescript type: a callback function type used in `tempo.every(...).progress( fn )`",
   "constructor": [],
   "accessors": [],

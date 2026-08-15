@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 3527,
+  "id": 3535,
   "comment": "Rectangle class provides static functions to create and operate on rectangles. A rectangle is usually represented as a Group of 2 Pts, marking the top-left and bottom-right corners of the rectangle.\nYou can use the static functions as-is, or apply the [`Group.op`](#link) or [`Pt.op`](#link) to enable functional programming.\nSee [Op guide](../guide/Op-0400.html) for details.",
   "constructor": [],
   "accessors": [],
@@ -22,7 +22,7 @@
           9
         ]
       ],
-      "id": 3563,
+      "id": 3571,
       "flags": {
         "isStatic": true
       },
@@ -54,7 +54,7 @@
           9
         ]
       ],
-      "id": 3554,
+      "id": 3562,
       "flags": {
         "isStatic": true
       },
@@ -86,7 +86,7 @@
           9
         ]
       ],
-      "id": 3557,
+      "id": 3565,
       "flags": {
         "isStatic": true
       },
@@ -118,7 +118,7 @@
           9
         ]
       ],
-      "id": 3528,
+      "id": 3536,
       "flags": {
         "isStatic": true
       },
@@ -162,7 +162,7 @@
           9
         ]
       ],
-      "id": 3538,
+      "id": 3546,
       "flags": {
         "isStatic": true
       },
@@ -206,7 +206,7 @@
           9
         ]
       ],
-      "id": 3533,
+      "id": 3541,
       "flags": {
         "isStatic": true
       },
@@ -250,7 +250,7 @@
           9
         ]
       ],
-      "id": 3573,
+      "id": 3581,
       "flags": {
         "isStatic": true
       },
@@ -294,7 +294,7 @@
           9
         ]
       ],
-      "id": 3582,
+      "id": 3590,
       "flags": {
         "isStatic": true
       },
@@ -338,7 +338,7 @@
           9
         ]
       ],
-      "id": 3587,
+      "id": 3595,
       "flags": {
         "isStatic": true
       },
@@ -376,7 +376,7 @@
           9
         ]
       ],
-      "id": 3566,
+      "id": 3574,
       "flags": {
         "isStatic": true
       },
@@ -408,7 +408,7 @@
           9
         ]
       ],
-      "id": 3569,
+      "id": 3577,
       "flags": {
         "isStatic": true
       },
@@ -446,7 +446,7 @@
           9
         ]
       ],
-      "id": 3560,
+      "id": 3568,
       "flags": {
         "isStatic": true
       },
@@ -478,7 +478,7 @@
           9
         ]
       ],
-      "id": 3551,
+      "id": 3559,
       "flags": {
         "isStatic": true
       },
@@ -510,7 +510,7 @@
           9
         ]
       ],
-      "id": 3543,
+      "id": 3551,
       "flags": {
         "isStatic": true
       },
@@ -548,7 +548,7 @@
           9
         ]
       ],
-      "id": 3547,
+      "id": 3555,
       "flags": {
         "isStatic": true
       },
@@ -586,7 +586,7 @@
           9
         ]
       ],
-      "id": 3578,
+      "id": 3586,
       "flags": {
         "isStatic": true
       },

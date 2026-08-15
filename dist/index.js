@@ -3632,9 +3632,31 @@ var CanvasSpace = class extends MultiTouchSpace {
 		return recorder;
 	}
 };
+const _ctxStyleCache = /* @__PURE__ */ new WeakMap();
 var CanvasForm = class CanvasForm extends VisualForm {
+	_cacheForCtx() {
+		if (this._styleCacheCtx !== this._ctx) {
+			let cache = _ctxStyleCache.get(this._ctx);
+			if (!cache) {
+				cache = {};
+				_ctxStyleCache.set(this._ctx, cache);
+			}
+			this._styleCache = cache;
+			this._styleCacheCtx = this._ctx;
+		}
+		return this._styleCache;
+	}
+	_set(key, value) {
+		const cache = this._cacheForCtx();
+		if (cache[key] !== value) {
+			cache[key] = value;
+			this._ctx[key] = value;
+		}
+	}
 	constructor(space) {
 		super();
+		this._styleCache = null;
+		this._styleCacheCtx = null;
 		this._style = {
 			fillStyle: "#f03",
 			strokeStyle: "#fff",
@@ -3646,10 +3668,10 @@ var CanvasForm = class CanvasForm extends VisualForm {
 		if (!space) return this;
 		const _setup = (ctx) => {
 			this._ctx = ctx;
-			this._ctx.fillStyle = this._style.fillStyle;
-			this._ctx.strokeStyle = this._style.strokeStyle;
-			this._ctx.lineJoin = "bevel";
-			this._ctx.font = this._font.value;
+			this._set("fillStyle", this._style.fillStyle);
+			this._set("strokeStyle", this._style.strokeStyle);
+			this._set("lineJoin", "bevel");
+			this._set("font", this._font.value);
 			this._ready = true;
 		};
 		if (space instanceof CanvasSpace) {
@@ -3675,7 +3697,7 @@ var CanvasForm = class CanvasForm extends VisualForm {
 		if (this._space.hasOffscreen) this._space.ctx.drawImage(this._space.offscreenCanvas, offset[0], offset[1], this._space.width, this._space.height);
 	}
 	alpha(a) {
-		this._ctx.globalAlpha = a;
+		this._set("globalAlpha", a);
 		this._style.globalAlpha = a;
 		return this;
 	}
@@ -3684,7 +3706,7 @@ var CanvasForm = class CanvasForm extends VisualForm {
 		else {
 			this.filled = true;
 			this._style.fillStyle = c;
-			this._ctx.fillStyle = c;
+			this._set("fillStyle", c);
 		}
 		return this;
 	}
@@ -3697,17 +3719,17 @@ var CanvasForm = class CanvasForm extends VisualForm {
 		else {
 			this.stroked = true;
 			this._style.strokeStyle = c;
-			this._ctx.strokeStyle = c;
+			this._set("strokeStyle", c);
 			if (width) {
-				this._ctx.lineWidth = width;
+				this._set("lineWidth", width);
 				this._style.lineWidth = width;
 			}
 			if (linejoin) {
-				this._ctx.lineJoin = linejoin;
+				this._set("lineJoin", linejoin);
 				this._style.lineJoin = linejoin;
 			}
 			if (linecap) {
-				this._ctx.lineCap = linecap;
+				this._set("lineCap", linecap);
 				this._style.lineCap = linecap;
 			}
 		}
@@ -3743,7 +3765,7 @@ var CanvasForm = class CanvasForm extends VisualForm {
 		};
 	}
 	composite(mode = "source-over") {
-		this._ctx.globalCompositeOperation = mode;
+		this._set("globalCompositeOperation", mode);
 		return this;
 	}
 	clip() {
@@ -3751,13 +3773,21 @@ var CanvasForm = class CanvasForm extends VisualForm {
 		return this;
 	}
 	dash(segments = true, offset = 0) {
+		const cache = this._cacheForCtx();
 		if (!segments) {
-			this._ctx.setLineDash([]);
-			this._ctx.lineDashOffset = 0;
+			if (cache.dash !== "/0") {
+				cache.dash = "/0";
+				this._ctx.setLineDash([]);
+				this._ctx.lineDashOffset = 0;
+			}
 		} else {
 			if (segments === true) segments = [5, 5];
-			this._ctx.setLineDash([segments[0], segments[1]]);
-			this._ctx.lineDashOffset = offset;
+			const key = `${segments[0]},${segments[1]}/${offset}`;
+			if (cache.dash !== key) {
+				cache.dash = key;
+				this._ctx.setLineDash([segments[0], segments[1]]);
+				this._ctx.lineDashOffset = offset;
+			}
 		}
 		return this;
 	}
@@ -3769,7 +3799,7 @@ var CanvasForm = class CanvasForm extends VisualForm {
 			if (style) this._font.style = style;
 			if (lineHeight) this._font.lineHeight = lineHeight;
 		} else this._font = sizeOrFont;
-		this._ctx.font = this._font.value;
+		this._set("font", this._font.value);
 		if (this._estimateTextWidth) this.fontWidthEstimate(true);
 		return this;
 	}
@@ -3796,9 +3826,14 @@ var CanvasForm = class CanvasForm extends VisualForm {
 		return offset ? new Pt(px + offset[0], py + offset[1]) : new Pt(px, py);
 	}
 	reset() {
-		for (const k in this._style) if (this._style.hasOwnProperty(k)) this._ctx[k] = this._style[k];
+		const cache = this._cacheForCtx();
+		for (const k in this._style) if (this._style.hasOwnProperty(k)) {
+			this._ctx[k] = this._style[k];
+			cache[k] = this._style[k];
+		}
 		this._font = new Font();
 		this._ctx.font = this._font.value;
+		cache.font = this._font.value;
 		return this;
 	}
 	_paint() {

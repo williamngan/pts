@@ -512,10 +512,48 @@ export class CanvasSpace extends MultiTouchSpace {
  * CanvasForm is an implementation of abstract class [`VisualForm`](#link). It provide methods to express Pts on [`CanvasSpace`](#link).
  * You may extend CanvasForm to implement your own expressions for CanvasSpace.
  */
+// Last-written style values per rendering context, so identical values are
+// not re-applied (color parsing in particular is costly). Keyed by context —
+// not by form — because multiple forms can share one context (see `reset()`),
+// and a per-form cache would skip writes another form made stale.
+const _ctxStyleCache = new WeakMap<object, Record<string, unknown>>();
+
 export class CanvasForm extends VisualForm {
   protected _space: CanvasSpace;
   protected _ctx: RenderingContext2D;
   protected _estimateTextWidth: (string) => number;
+
+  // the shared cache object for this._ctx, revalidated only when the context
+  // changes so the hot path avoids a WeakMap lookup per style write
+  private _styleCache: Record<string, unknown> = null;
+  private _styleCacheCtx: RenderingContext2D = null;
+
+  /** Get the style cache shared by all forms drawing on this context. */
+  protected _cacheForCtx(): Record<string, unknown> {
+    if (this._styleCacheCtx !== this._ctx) {
+      let cache = _ctxStyleCache.get(this._ctx);
+      if (!cache) {
+        cache = {};
+        _ctxStyleCache.set(this._ctx, cache);
+      }
+      this._styleCache = cache;
+      this._styleCacheCtx = this._ctx;
+    }
+    return this._styleCache;
+  }
+
+  /**
+   * Write a context style property only when it differs from the last value
+   * written to this context. After setting style properties directly on
+   * [`CanvasForm.ctx`](#link), call [`CanvasForm.reset`](#link) to resync.
+   */
+  protected _set(key: string, value: unknown): void {
+    const cache = this._cacheForCtx();
+    if (cache[key] !== value) {
+      cache[key] = value;
+      this._ctx[key] = value;
+    }
+  }
 
   /**
    * store common styles so that they can be restored to canvas context when using multiple forms. See `reset()`.
@@ -544,10 +582,10 @@ export class CanvasForm extends VisualForm {
 
     const _setup = (ctx) => {
       this._ctx = ctx;
-      this._ctx.fillStyle = this._style.fillStyle;
-      this._ctx.strokeStyle = this._style.strokeStyle;
-      this._ctx.lineJoin = "bevel";
-      this._ctx.font = this._font.value;
+      this._set("fillStyle", this._style.fillStyle);
+      this._set("strokeStyle", this._style.strokeStyle);
+      this._set("lineJoin", "bevel");
+      this._set("font", this._font.value);
       this._ready = true;
     };
 
@@ -619,7 +657,7 @@ export class CanvasForm extends VisualForm {
    * @param a alpha value between 0 and 1
    */
   alpha(a: number): this {
-    this._ctx.globalAlpha = a;
+    this._set("globalAlpha", a);
     this._style.globalAlpha = a;
     return this;
   }
@@ -635,7 +673,7 @@ export class CanvasForm extends VisualForm {
     } else {
       this.filled = true;
       this._style.fillStyle = c;
-      this._ctx.fillStyle = c;
+      this._set("fillStyle", c);
     }
     return this;
   }
@@ -668,17 +706,17 @@ export class CanvasForm extends VisualForm {
     } else {
       this.stroked = true;
       this._style.strokeStyle = c;
-      this._ctx.strokeStyle = c;
+      this._set("strokeStyle", c);
       if (width) {
-        this._ctx.lineWidth = width;
+        this._set("lineWidth", width);
         this._style.lineWidth = width;
       }
       if (linejoin) {
-        this._ctx.lineJoin = linejoin;
+        this._set("lineJoin", linejoin);
         this._style.lineJoin = linejoin;
       }
       if (linecap) {
-        this._ctx.lineCap = linecap;
+        this._set("lineCap", linecap);
         this._style.lineCap = linecap;
       }
     }
@@ -783,7 +821,7 @@ export class CanvasForm extends VisualForm {
    * @param mode a composite operation such as 'lighten', 'multiply', 'overlay', and 'color-burn'.
    */
   composite(mode: GlobalCompositeOperation = "source-over"): this {
-    this._ctx.globalCompositeOperation = mode;
+    this._set("globalCompositeOperation", mode);
     return this;
   }
 
@@ -802,16 +840,25 @@ export class CanvasForm extends VisualForm {
    * @param offset Dash offset. Defaults to 0. (See [canvas documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineDashOffset)
    */
   dash(segments: PtLike | boolean = true, offset: number = 0): this {
+    // dedupe via a compact key since getLineDash() allocates
+    const cache = this._cacheForCtx();
     if (!segments) {
       // false or [], deactivate dashed strokes
-      this._ctx.setLineDash([]);
-      this._ctx.lineDashOffset = 0;
+      if (cache.dash !== "/0") {
+        cache.dash = "/0";
+        this._ctx.setLineDash([]);
+        this._ctx.lineDashOffset = 0;
+      }
     } else {
       if (segments === true) {
         segments = [5, 5];
       }
-      this._ctx.setLineDash([segments[0], segments[1]]);
-      this._ctx.lineDashOffset = offset;
+      const key = `${segments[0]},${segments[1]}/${offset}`;
+      if (cache.dash !== key) {
+        cache.dash = key;
+        this._ctx.setLineDash([segments[0], segments[1]]);
+        this._ctx.lineDashOffset = offset;
+      }
     }
     return this;
   }
@@ -842,7 +889,7 @@ export class CanvasForm extends VisualForm {
       this._font = sizeOrFont;
     }
 
-    this._ctx.font = this._font.value;
+    this._set("font", this._font.value);
 
     // If using estimate, reapply it when font changes.
     if (this._estimateTextWidth) this.fontWidthEstimate(true);
@@ -928,13 +975,18 @@ export class CanvasForm extends VisualForm {
    * Reset the rendering context's common styles to this form's styles. This supports using multiple forms on the same canvas context.
    */
   reset(): this {
+    // force-write and resync the cache — this is the documented recovery
+    // point after styles were set directly on the context
+    const cache = this._cacheForCtx();
     for (const k in this._style) {
       if (this._style.hasOwnProperty(k)) {
         this._ctx[k] = this._style[k];
+        cache[k] = this._style[k];
       }
     }
     this._font = new Font();
     this._ctx.font = this._font.value;
+    cache.font = this._font.value;
     return this;
   }
 

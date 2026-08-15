@@ -630,6 +630,10 @@ declare class CanvasForm extends VisualForm {
   protected _space: CanvasSpace;
   protected _ctx: RenderingContext2D;
   protected _estimateTextWidth: (string: any) => number;
+  private _styleCache;
+  private _styleCacheCtx;
+  protected _cacheForCtx(): Record<string, unknown>;
+  protected _set(key: string, value: unknown): void;
   protected _style: DefaultFormStyle;
   constructor(space?: CanvasSpace | RenderingContext2D);
   get space(): CanvasSpace;
