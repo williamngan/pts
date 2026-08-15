@@ -263,6 +263,9 @@ export class Img {
     this._cv.height = height * cms[1];
     // the whole point of an editable Img is repeated readback
     this._ctx = this._cv.getContext("2d", { willReadFrequently: true });
+    // resizing resets the context state; forget any cached style values so a
+    // CanvasForm from getForm() re-applies its styles
+    CanvasForm.resetStyleCache(this._ctx);
     // keep the pixel-density field coherent with the actual canvas scaling,
     // which `pixel( p, true )` depends on
     if (typeof canvasScale === "number") this._scale = canvasScale;

@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 2839,
+  "id": 2850,
   "comment": "Img provides convenient functions to support image operations on HTML Canvas and [`CanvasSpace`](#link). Combine this with other Pts functions to experiment with visual forms that integrate bitmaps and vector graphics.",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           2
         ]
       ],
-      "id": 2877,
+      "id": 2888,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -65,11 +65,11 @@
       "source": [
         [
           "src/Image.ts",
-          644,
+          647,
           6
         ]
       ],
-      "id": 2967,
+      "id": 2978,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -84,11 +84,11 @@
       "source": [
         [
           "src/Image.ts",
-          691,
+          694,
           6
         ]
       ],
-      "id": 2979,
+      "id": 2990,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -103,11 +103,11 @@
       "source": [
         [
           "src/Image.ts",
-          659,
+          662,
           6
         ]
       ],
-      "id": 2971,
+      "id": 2982,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -122,11 +122,11 @@
       "source": [
         [
           "src/Image.ts",
-          630,
+          633,
           6
         ]
       ],
-      "id": 2963,
+      "id": 2974,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -141,11 +141,11 @@
       "source": [
         [
           "src/Image.ts",
-          651,
+          654,
           6
         ]
       ],
-      "id": 2969,
+      "id": 2980,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -160,11 +160,11 @@
       "source": [
         [
           "src/Image.ts",
-          637,
+          640,
           6
         ]
       ],
-      "id": 2965,
+      "id": 2976,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -179,11 +179,11 @@
       "source": [
         [
           "src/Image.ts",
-          680,
+          683,
           6
         ]
       ],
-      "id": 2977,
+      "id": 2988,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -198,11 +198,11 @@
       "source": [
         [
           "src/Image.ts",
-          666,
+          669,
           6
         ]
       ],
-      "id": 2973,
+      "id": 2984,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -217,11 +217,11 @@
       "source": [
         [
           "src/Image.ts",
-          673,
+          676,
           6
         ]
       ],
-      "id": 2975,
+      "id": 2986,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -236,11 +236,11 @@
       "source": [
         [
           "src/Image.ts",
-          700,
+          703,
           6
         ]
       ],
-      "id": 2981,
+      "id": 2992,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -257,11 +257,11 @@
       "source": [
         [
           "src/Image.ts",
-          278,
+          281,
           2
         ]
       ],
-      "id": 2921,
+      "id": 2932,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -287,11 +287,11 @@
       "source": [
         [
           "src/Image.ts",
-          543,
+          546,
           2
         ]
       ],
-      "id": 2955,
+      "id": 2966,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -315,11 +315,11 @@
       "source": [
         [
           "src/Image.ts",
-          492,
+          495,
           2
         ]
       ],
-      "id": 2947,
+      "id": 2958,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -345,11 +345,11 @@
       "source": [
         [
           "src/Image.ts",
-          523,
+          526,
           2
         ]
       ],
-      "id": 2953,
+      "id": 2964,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -368,11 +368,11 @@
       "source": [
         [
           "src/Image.ts",
-          506,
+          509,
           2
         ]
       ],
-      "id": 2950,
+      "id": 2961,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -398,11 +398,11 @@
       "source": [
         [
           "src/Image.ts",
-          620,
+          623,
           2
         ]
       ],
-      "id": 2961,
+      "id": 2972,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -425,7 +425,7 @@
           2
         ]
       ],
-      "id": 2911,
+      "id": 2922,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -467,7 +467,7 @@
           2
         ]
       ],
-      "id": 2897,
+      "id": 2908,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -493,11 +493,11 @@
       "source": [
         [
           "src/Image.ts",
-          403,
+          406,
           2
         ]
       ],
-      "id": 2939,
+      "id": 2950,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -516,11 +516,11 @@
       "source": [
         [
           "src/Image.ts",
-          290,
+          293,
           2
         ]
       ],
-      "id": 2924,
+      "id": 2935,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -552,11 +552,11 @@
       "source": [
         [
           "src/Image.ts",
-          360,
+          363,
           2
         ]
       ],
-      "id": 2930,
+      "id": 2941,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -588,11 +588,11 @@
       "source": [
         [
           "src/Image.ts",
-          461,
+          464,
           2
         ]
       ],
-      "id": 2943,
+      "id": 2954,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -624,11 +624,11 @@
       "source": [
         [
           "src/Image.ts",
-          379,
+          382,
           2
         ]
       ],
-      "id": 2934,
+      "id": 2945,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -666,11 +666,11 @@
       "source": [
         [
           "src/Image.ts",
-          310,
+          313,
           8
         ]
       ],
-      "id": 2928,
+      "id": 2939,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -689,11 +689,11 @@
       "source": [
         [
           "src/Image.ts",
-          604,
+          607,
           2
         ]
       ],
-      "id": 2957,
+      "id": 2968,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -712,11 +712,11 @@
       "source": [
         [
           "src/Image.ts",
-          611,
+          614,
           2
         ]
       ],
-      "id": 2959,
+      "id": 2970,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -735,11 +735,11 @@
       "source": [
         [
           "src/Image.ts",
-          416,
+          419,
           2
         ]
       ],
-      "id": 2941,
+      "id": 2952,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -762,7 +762,7 @@
           9
         ]
       ],
-      "id": 2860,
+      "id": 2871,
       "flags": {
         "isStatic": true
       },
@@ -802,11 +802,11 @@
       "source": [
         [
           "src/Image.ts",
-          552,
+          555,
           9
         ]
       ],
-      "id": 2869,
+      "id": 2880,
       "flags": {
         "isStatic": true
       },
@@ -846,11 +846,11 @@
       "source": [
         [
           "src/Image.ts",
-          432,
+          435,
           9
         ]
       ],
-      "id": 2865,
+      "id": 2876,
       "flags": {
         "isStatic": true
       },
@@ -884,11 +884,11 @@
       "source": [
         [
           "src/Image.ts",
-          582,
+          585,
           9
         ]
       ],
-      "id": 2874,
+      "id": 2885,
       "flags": {
         "isStatic": true
       },
@@ -920,7 +920,7 @@
           9
         ]
       ],
-      "id": 2840,
+      "id": 2851,
       "flags": {
         "isStatic": true
       },
@@ -975,7 +975,7 @@
           15
         ]
       ],
-      "id": 2849,
+      "id": 2860,
       "flags": {
         "isStatic": true
       },
@@ -1024,7 +1024,7 @@
           15
         ]
       ],
-      "id": 2854,
+      "id": 2865,
       "flags": {
         "isStatic": true
       },

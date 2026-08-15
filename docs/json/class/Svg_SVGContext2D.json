@@ -3,12 +3,12 @@
   "source": [
     [
       "src/Svg.ts",
-      141,
+      147,
       13
     ]
   ],
   "kind": "Class",
-  "id": 6813,
+  "id": 6824,
   "comment": "**`SVGContext2D`** implements the subset of `CanvasRenderingContext2D` that\n[`CanvasForm`](#link) draws through, and renders it as SVG. Consecutive shapes that share\npaint state are merged into single `<path>` elements (\"style runs\"), so the DOM cost per\nframe is proportional to the number of style changes, not the number of shapes. This is\nwhat lets the same sketch run unchanged on canvas and SVG.\n\nCapability notes: blend-mode composites map to `mix-blend-mode`; Porter-Duff composites,\n`clip`, and `putImageData` warn once and no-op. Text metrics come from a hidden canvas, so\n`textBox` layout matches canvas exactly. When shapes with both fill and stroke are merged,\nall fills in a run paint before its strokes — visible only for overlapping same-styled\nshapes.\n\n**Writing your own renderer**: this class is the reference implementation of the rendering\ncontract — any object implementing the same context surface can be handed to\n[`CanvasForm`](#link)'s constructor to become a Pts renderer (a PDF writer, a command\nrecorder, a test snapshotter, and so on). The surface is the subset of\n`CanvasRenderingContext2D` that `CanvasForm` draws through:\n- path verbs: `beginPath`, `moveTo`, `lineTo`, `quadraticCurveTo`, `bezierCurveTo`,\n  `rect`, `arc`, `ellipse`, `closePath`\n- paint: `fill`, `stroke`, `fillRect`, `clearRect`\n- state: `save`, `restore`, `clip`, `scale`\n- style fields: `fillStyle`, `strokeStyle`, `lineWidth`, `lineJoin`, `lineCap`,\n  `globalAlpha`, `globalCompositeOperation`, `setLineDash`, `lineDashOffset`\n- text: `font`, `textAlign`, `textBaseline`, `fillText`, `measureText`\n- images: `drawImage`, `putImageData`\n- gradients: `createLinearGradient`, `createRadialGradient`\n\nA renderer driven by a Space should also expose a frame lifecycle like\n[`SVGContext2D.beginFrame`](#link) / [`SVGContext2D.commitFrame`](#link), called around the\nplayers' animate callbacks. The unit test \"implements every context member that CanvasForm\nuses\" is the compatibility alarm: it fails when a new `CanvasForm` feature touches a\ncontext member a renderer does not implement.",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "src/Svg.ts",
-          186,
+          189,
           2
         ]
       ],
-      "id": 6823,
+      "id": 6829,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -48,11 +48,11 @@
       "source": [
         [
           "src/Svg.ts",
-          210,
+          213,
           6
         ]
       ],
-      "id": 6856,
+      "id": 6862,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -67,11 +67,11 @@
       "source": [
         [
           "src/Svg.ts",
-          215,
+          218,
           6
         ]
       ],
-      "id": 6858,
+      "id": 6864,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -86,11 +86,11 @@
       "source": [
         [
           "src/Svg.ts",
-          268,
+          271,
           6
         ]
       ],
-      "id": 6862,
+      "id": 6868,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -107,11 +107,11 @@
       "source": [
         [
           "src/Svg.ts",
-          332,
+          335,
           2
         ]
       ],
-      "id": 6900,
+      "id": 6906,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -167,11 +167,11 @@
       "source": [
         [
           "src/Svg.ts",
-          200,
+          203,
           2
         ]
       ],
-      "id": 6854,
+      "id": 6860,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -190,11 +190,11 @@
       "source": [
         [
           "src/Svg.ts",
-          296,
+          299,
           2
         ]
       ],
-      "id": 6868,
+      "id": 6874,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -213,11 +213,11 @@
       "source": [
         [
           "src/Svg.ts",
-          317,
+          320,
           2
         ]
       ],
-      "id": 6886,
+      "id": 6892,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -273,11 +273,11 @@
       "source": [
         [
           "src/Svg.ts",
-          418,
+          421,
           2
         ]
       ],
-      "id": 6930,
+      "id": 6936,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -296,11 +296,11 @@
       "source": [
         [
           "src/Svg.ts",
-          539,
+          540,
           2
         ]
       ],
-      "id": 6956,
+      "id": 6962,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -319,11 +319,11 @@
       "source": [
         [
           "src/Svg.ts",
-          301,
+          304,
           2
         ]
       ],
-      "id": 6870,
+      "id": 6876,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -342,11 +342,11 @@
       "source": [
         [
           "src/Svg.ts",
-          223,
+          226,
           2
         ]
       ],
-      "id": 6860,
+      "id": 6866,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -365,11 +365,11 @@
       "source": [
         [
           "src/Svg.ts",
-          551,
+          552,
           2
         ]
       ],
-      "id": 6963,
+      "id": 6969,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -413,11 +413,11 @@
       "source": [
         [
           "src/Svg.ts",
-          560,
+          561,
           2
         ]
       ],
-      "id": 6969,
+      "id": 6975,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -473,11 +473,11 @@
       "source": [
         [
           "src/Svg.ts",
-          284,
+          287,
           2
         ]
       ],
-      "id": 6866,
+      "id": 6872,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -496,11 +496,11 @@
       "source": [
         [
           "src/Svg.ts",
-          462,
+          463,
           2
         ]
       ],
-      "id": 6940,
+      "id": 6946,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -556,11 +556,11 @@
       "source": [
         [
           "src/Svg.ts",
-          343,
+          346,
           2
         ]
       ],
-      "id": 6908,
+      "id": 6914,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -628,11 +628,11 @@
       "source": [
         [
           "src/Svg.ts",
-          394,
+          397,
           2
         ]
       ],
-      "id": 6918,
+      "id": 6924,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -651,11 +651,11 @@
       "source": [
         [
           "src/Svg.ts",
-          412,
+          415,
           2
         ]
       ],
-      "id": 6924,
+      "id": 6930,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -699,11 +699,11 @@
       "source": [
         [
           "src/Svg.ts",
-          422,
+          425,
           2
         ]
       ],
-      "id": 6932,
+      "id": 6938,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -741,11 +741,11 @@
       "source": [
         [
           "src/Svg.ts",
-          547,
+          548,
           2
         ]
       ],
-      "id": 6961,
+      "id": 6967,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -764,11 +764,11 @@
       "source": [
         [
           "src/Svg.ts",
-          309,
+          312,
           2
         ]
       ],
-      "id": 6876,
+      "id": 6882,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -800,11 +800,11 @@
       "source": [
         [
           "src/Svg.ts",
-          452,
+          455,
           2
         ]
       ],
-      "id": 6937,
+      "id": 6943,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -830,11 +830,11 @@
       "source": [
         [
           "src/Svg.ts",
-          305,
+          308,
           2
         ]
       ],
-      "id": 6872,
+      "id": 6878,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -866,11 +866,11 @@
       "source": [
         [
           "src/Svg.ts",
-          504,
+          505,
           2
         ]
       ],
-      "id": 6948,
+      "id": 6954,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -889,11 +889,11 @@
       "source": [
         [
           "src/Svg.ts",
-          313,
+          316,
           2
         ]
       ],
-      "id": 6880,
+      "id": 6886,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -937,11 +937,11 @@
       "source": [
         [
           "src/Svg.ts",
-          328,
+          331,
           2
         ]
       ],
-      "id": 6894,
+      "id": 6900,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -985,11 +985,11 @@
       "source": [
         [
           "src/Svg.ts",
-          273,
+          276,
           2
         ]
       ],
-      "id": 6864,
+      "id": 6870,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1008,11 +1008,11 @@
       "source": [
         [
           "src/Svg.ts",
-          530,
+          531,
           2
         ]
       ],
-      "id": 6952,
+      "id": 6958,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1031,11 +1031,11 @@
       "source": [
         [
           "src/Svg.ts",
-          513,
+          514,
           2
         ]
       ],
-      "id": 6950,
+      "id": 6956,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1054,11 +1054,11 @@
       "source": [
         [
           "src/Svg.ts",
-          535,
+          536,
           2
         ]
       ],
-      "id": 6954,
+      "id": 6960,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1077,11 +1077,11 @@
       "source": [
         [
           "src/Svg.ts",
-          543,
+          544,
           2
         ]
       ],
-      "id": 6958,
+      "id": 6964,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1107,11 +1107,11 @@
       "source": [
         [
           "src/Svg.ts",
-          399,
+          402,
           2
         ]
       ],
-      "id": 6920,
+      "id": 6926,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1133,11 +1133,11 @@
       "source": [
         [
           "src/Svg.ts",
-          159,
+          165,
           2
         ]
       ],
-      "id": 6839,
+      "id": 6845,
       "flags": {},
       "type": "string",
       "overrides": false,
@@ -1149,11 +1149,11 @@
       "source": [
         [
           "src/Svg.ts",
-          143,
+          149,
           2
         ]
       ],
-      "id": 6826,
+      "id": 6832,
       "flags": {},
       "type": "string | SVGGradient",
       "overrides": false,
@@ -1165,11 +1165,11 @@
       "source": [
         [
           "src/Svg.ts",
-          150,
+          156,
           2
         ]
       ],
-      "id": 6833,
+      "id": 6839,
       "flags": {},
       "type": "string",
       "overrides": false,
@@ -1181,11 +1181,11 @@
       "source": [
         [
           "src/Svg.ts",
-          148,
+          154,
           2
         ]
       ],
-      "id": 6831,
+      "id": 6837,
       "flags": {},
       "type": "number",
       "overrides": false,
@@ -1197,11 +1197,11 @@
       "source": [
         [
           "src/Svg.ts",
-          149,
+          155,
           2
         ]
       ],
-      "id": 6832,
+      "id": 6838,
       "flags": {},
       "type": "string",
       "overrides": false,
@@ -1213,11 +1213,11 @@
       "source": [
         [
           "src/Svg.ts",
-          147,
+          153,
           2
         ]
       ],
-      "id": 6830,
+      "id": 6836,
       "flags": {},
       "type": "string",
       "overrides": false,
@@ -1229,11 +1229,11 @@
       "source": [
         [
           "src/Svg.ts",
-          153,
+          159,
           2
         ]
       ],
-      "id": 6836,
+      "id": 6842,
       "flags": {},
       "type": "number",
       "overrides": false,
@@ -1245,11 +1245,11 @@
       "source": [
         [
           "src/Svg.ts",
-          146,
+          152,
           2
         ]
       ],
-      "id": 6829,
+      "id": 6835,
       "flags": {},
       "type": "string",
       "overrides": false,
@@ -1261,11 +1261,11 @@
       "source": [
         [
           "src/Svg.ts",
-          145,
+          151,
           2
         ]
       ],
-      "id": 6828,
+      "id": 6834,
       "flags": {},
       "type": "number",
       "overrides": false,
@@ -1277,11 +1277,11 @@
       "source": [
         [
           "src/Svg.ts",
-          144,
+          150,
           2
         ]
       ],
-      "id": 6827,
+      "id": 6833,
       "flags": {},
       "type": "string | SVGGradient",
       "overrides": false,
@@ -1293,11 +1293,11 @@
       "source": [
         [
           "src/Svg.ts",
-          151,
+          157,
           2
         ]
       ],
-      "id": 6834,
+      "id": 6840,
       "flags": {},
       "type": "string",
       "overrides": false,
@@ -1309,11 +1309,11 @@
       "source": [
         [
           "src/Svg.ts",
-          152,
+          158,
           2
         ]
       ],
-      "id": 6835,
+      "id": 6841,
       "flags": {},
       "type": "string",
       "overrides": false,

@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 3680,
+  "id": 3691,
   "comment": "Triangle class provides static functions to create and operate on trianges. A triange is a polygon represented as a Group of 3 Pts.\nYou can use the static functions as-is, or apply the [`Group.op`](#link) or [`Pt.op`](#link) to enable functional programming.\nSee [Op guide](../guide/Op-0400.html) for details.",
   "constructor": [],
   "accessors": [],
@@ -22,7 +22,7 @@
           9
         ]
       ],
-      "id": 3698,
+      "id": 3709,
       "flags": {
         "isStatic": true
       },
@@ -60,7 +60,7 @@
           9
         ]
       ],
-      "id": 3712,
+      "id": 3723,
       "flags": {
         "isStatic": true
       },
@@ -92,7 +92,7 @@
           9
         ]
       ],
-      "id": 3715,
+      "id": 3726,
       "flags": {
         "isStatic": true
       },
@@ -130,7 +130,7 @@
           9
         ]
       ],
-      "id": 3687,
+      "id": 3698,
       "flags": {
         "isStatic": true
       },
@@ -168,7 +168,7 @@
           9
         ]
       ],
-      "id": 3684,
+      "id": 3695,
       "flags": {
         "isStatic": true
       },
@@ -200,7 +200,7 @@
           9
         ]
       ],
-      "id": 3681,
+      "id": 3692,
       "flags": {
         "isStatic": true
       },
@@ -232,7 +232,7 @@
           9
         ]
       ],
-      "id": 3705,
+      "id": 3716,
       "flags": {
         "isStatic": true
       },
@@ -264,7 +264,7 @@
           9
         ]
       ],
-      "id": 3708,
+      "id": 3719,
       "flags": {
         "isStatic": true
       },
@@ -302,7 +302,7 @@
           9
         ]
       ],
-      "id": 3691,
+      "id": 3702,
       "flags": {
         "isStatic": true
       },
@@ -334,7 +334,7 @@
           9
         ]
       ],
-      "id": 3694,
+      "id": 3705,
       "flags": {
         "isStatic": true
       },
@@ -372,7 +372,7 @@
           9
         ]
       ],
-      "id": 3702,
+      "id": 3713,
       "flags": {
         "isStatic": true
       },

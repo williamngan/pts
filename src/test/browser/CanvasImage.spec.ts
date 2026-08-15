@@ -686,3 +686,65 @@ describe("Img correctness fixes", () => {
     img.dispose();
   });
 });
+
+describe("style cache survives context resets", () => {
+  it("re-applies styles after a space resize resets the canvas context", async () => {
+    const space = new CanvasSpace(host()).setup({ retina: false });
+    await ready(space);
+    const form = space.getForm();
+    const ctx = space.ctx;
+
+    form.stroke("#fff", 2);
+    expect(ctx.strokeStyle).toBe("#ffffff");
+
+    // resizing assigns canvas.width, which resets the context to defaults
+    space.resize(Bound.fromBoundingRect(bounds(120, 80)));
+    expect(ctx.strokeStyle).toBe("#000000"); // the reset really happened
+
+    // the same style value must still apply — this was the black-stroke bug
+    form.stroke("#fff", 2);
+    expect(ctx.strokeStyle).toBe("#ffffff");
+    expect(ctx.lineWidth).toBe(2);
+
+    form.fill("#f03");
+    expect(ctx.fillStyle).toBe("#ff0033");
+    space.dispose();
+  });
+
+  it("keeps styles applied across animation frames despite the per-frame ctx restore", async () => {
+    // playItems wraps each frame in ctx.save()/restore(); the restore reverts
+    // style state silently, so a cached same-value write on the next frame
+    // must not be skipped — this made every sketch paint defaults from frame 2
+    const space = new CanvasSpace(host()).setup({
+      bgcolor: "#0f172a",
+      retina: false,
+    });
+    await ready(space);
+    const form = space.getForm();
+    space.add({
+      animate: () => {
+        form.fillOnly("#f97316").point([30, 30], 10, "circle");
+      },
+    });
+
+    const play = (t: number) =>
+      (space as unknown as { playItems: (time: number) => void }).playItems(t);
+    play(1);
+    play(2);
+    const px = space.ctx.getImageData(30, 30, 1, 1).data;
+    expect([px[0], px[1], px[2]]).toEqual([249, 115, 22]);
+    space.dispose();
+  });
+
+  it("re-applies styles after an Img canvas re-init", () => {
+    const img = Img.blank([8, 8]);
+    const form = img.getForm();
+    form.fillOnly("#0c9");
+    expect((img.ctx as CanvasRenderingContext2D).fillStyle).toBe("#00cc99");
+
+    img.initCanvas(16, 16); // resets the context
+    form.fillOnly("#0c9"); // same value must re-apply
+    expect((img.ctx as CanvasRenderingContext2D).fillStyle).toBe("#00cc99");
+    img.dispose();
+  });
+});

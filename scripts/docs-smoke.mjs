@@ -214,7 +214,8 @@ try {
     const target = document
       .querySelector("#function_static_arc")
       .getBoundingClientRect();
-    return Math.round(target.top - contents.top);
+    // abs() so a subpixel offset can't round to -0, which fails strict equality
+    return Math.round(Math.abs(target.top - contents.top));
   });
   assert.equal(staticArcAlignment, 0);
 

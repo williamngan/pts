@@ -391,6 +391,9 @@ export class HTMLSpace extends DOMSpace {
   }
 }
 
+let _htmlFormGroupID = 0;
+let _htmlFormDomID = 0;
+
 /**
  * @deprecated HTML rendering is deprecated and will be removed in a future major version. Use [`SVGForm`](#link) for DOM-based output instead — it shares the complete [`CanvasForm`](#link) drawing API.
  * **[Experimental]** HTMLForm is an implementation of abstract class [`VisualForm`](#link). It provide methods to express Pts on [`HTMLSpace`](#link).
@@ -425,8 +428,20 @@ export class HTMLForm extends VisualForm {
     style: {},
   };
 
-  static groupID: number = 0;
-  static domID: number = 0;
+  // mutable statics are stored at module level and exposed through accessors so
+  // no post-class assignment is emitted (which would defeat tree-shaking)
+  static get groupID(): number {
+    return _htmlFormGroupID;
+  }
+  static set groupID(n: number) {
+    _htmlFormGroupID = n;
+  }
+  static get domID(): number {
+    return _htmlFormDomID;
+  }
+  static set domID(n: number) {
+    _htmlFormDomID = n;
+  }
 
   protected _space: HTMLSpace;
   protected _ready: boolean = false;

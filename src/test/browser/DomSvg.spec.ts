@@ -3,8 +3,10 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { DOMSpace, HTMLForm, HTMLSpace } from "../../Dom";
 import { Font } from "../../Form";
 import { Bound, Group, Pt } from "../../Pt";
-import { SVGForm, SVGSpace } from "../../Svg";
+import { SVGContext2D, SVGForm, SVGSpace } from "../../Svg";
 import { Util } from "../../Util";
+
+const SVG_NS = "http://www.w3.org/2000/svg";
 
 const bounds = (width = 240, height = 120) =>
   ({
@@ -207,6 +209,326 @@ const rect = () => [
   [0, 0],
   [10, 10],
 ];
+
+describe("SVGContext2D", () => {
+  function makeCtx() {
+    const host = document.createElementNS(SVG_NS, "svg") as SVGElement;
+    document.body.appendChild(host);
+    return { host, ctx: new SVGContext2D(host) };
+  }
+
+  it("materializes gradients into <defs> and keeps stops in sync", () => {
+    const { host, ctx } = makeCtx();
+    ctx.beginFrame();
+    const grad = ctx.createLinearGradient(0, 0, 10, 0);
+    grad.addColorStop(0, "#000");
+    grad.addColorStop(1, "#fff");
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.rect(0, 0, 10, 10);
+    ctx.fill();
+    ctx.commitFrame();
+
+    const defs = host.querySelector("defs");
+    const lin = defs.querySelector("linearGradient");
+    expect(lin.getAttribute("x2")).toBe("10");
+    expect(lin.getAttribute("gradientUnits")).toBe("userSpaceOnUse");
+    expect(lin.querySelectorAll("stop")).toHaveLength(2);
+    expect(host.querySelector("path").getAttribute("fill")).toBe(
+      `url(#${grad.id})`,
+    );
+
+    // adding a stop after materialization re-renders the defs element
+    grad.addColorStop(0.5, "#888");
+    expect(lin.querySelectorAll("stop")).toHaveLength(3);
+
+    const rad = ctx.createRadialGradient(1, 2, 3, 4, 5, 6);
+    rad.addColorStop(0, "red");
+    ctx.beginFrame();
+    ctx.strokeStyle = rad;
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(5, 5);
+    ctx.stroke();
+    ctx.commitFrame();
+    const radial = defs.querySelector("radialGradient");
+    expect(radial.getAttribute("cx")).toBe("4");
+    expect(radial.getAttribute("fr")).toBe("3");
+  });
+
+  it("reconciles pooled elements across frames: patch, replace, truncate", () => {
+    const { ctx } = makeCtx();
+    ctx.beginFrame();
+    expect(ctx.drawCount).toBe(0);
+    ctx.beginPath();
+    ctx.rect(0, 0, 5, 5);
+    ctx.fill();
+    ctx.fillText("hi", 1, 1);
+    expect(ctx.drawCount).toBe(2);
+    ctx.commitFrame();
+    const group = ctx.group;
+    expect(group.children).toHaveLength(2);
+    const pooledPath = group.children[0];
+    expect(pooledPath.nodeName).toBe("path");
+
+    // a same-shaped frame reuses pooled elements, patching only what changed
+    ctx.beginFrame();
+    ctx.beginPath();
+    ctx.rect(2, 0, 5, 5);
+    ctx.fill();
+    ctx.fillText("bye", 1, 1);
+    ctx.commitFrame();
+    expect(group.children[0]).toBe(pooledPath);
+    expect(group.children[1].textContent).toBe("bye");
+
+    // a tag mismatch replaces the pooled element in place; shorter frames truncate
+    ctx.beginFrame();
+    ctx.fillText("only", 3, 3);
+    ctx.commitFrame();
+    expect(group.children).toHaveLength(1);
+    expect(group.children[0].nodeName).toBe("text");
+
+    ctx.beginFrame();
+    ctx.commitFrame();
+    expect(group.children).toHaveLength(0);
+
+    ctx.disposeDom();
+    expect(ctx.group).toBeNull();
+  });
+
+  it("maps text alignment and baseline to SVG anchors", () => {
+    const { ctx } = makeCtx();
+    ctx.beginFrame();
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+    ctx.fillText("a", 0, 0);
+    ctx.textAlign = "right";
+    ctx.textBaseline = "middle";
+    ctx.fillText("b", 0, 0);
+    ctx.textAlign = "left";
+    ctx.textBaseline = "bottom";
+    ctx.fillText("c", 0, 0);
+    const [a, b, c] = ctx.runs;
+    expect(a.attrs["text-anchor"]).toBe("middle");
+    expect(a.attrs["dominant-baseline"]).toBe("text-before-edge");
+    expect(b.attrs["text-anchor"]).toBe("end");
+    expect(b.attrs["dominant-baseline"]).toBe("central");
+    expect(c.attrs["text-anchor"]).toBe("start");
+    expect(c.attrs["dominant-baseline"]).toBe("text-after-edge");
+    expect(ctx.measureText("abc").width).toBeGreaterThan(0);
+  });
+
+  it("renders images from elements and canvases, warning on unsupported forms", () => {
+    const { host, ctx } = makeCtx();
+    ctx.beginFrame();
+    const img = document.createElement("img");
+    img.src = "data:image/gif;base64,R0lGODlhAQABAAAAACw=";
+    ctx.drawImage(img, 1, 2, 3, 4);
+    const cv = document.createElement("canvas");
+    cv.width = 2;
+    cv.height = 2;
+    ctx.drawImage(cv, 0, 0);
+    // 9-argument (source-cropped) form and src-less sources warn and draw nothing
+    ctx.drawImage(img, 0, 0, 1, 1, 0, 0, 1, 1);
+    ctx.drawImage({} as CanvasImageSource, 0, 0);
+    ctx.putImageData();
+    ctx.clip();
+    expect(ctx.runs.filter((r) => r.tag === "image")).toHaveLength(2);
+    ctx.commitFrame();
+    const images = host.querySelectorAll("image");
+    expect(images).toHaveLength(2);
+    expect(images[0].getAttribute("x")).toBe("1");
+    expect(images[0].getAttribute("width")).toBe("3");
+    expect(images[1].getAttribute("href")).toContain("data:image/png");
+  });
+
+  it("saves and restores state, tracks dashes, and maps blend composites", () => {
+    const { ctx } = makeCtx();
+    ctx.beginFrame();
+    ctx.fillStyle = "#123";
+    ctx.setLineDash([2, 3]);
+    ctx.lineDashOffset = 1;
+    ctx.save();
+    ctx.fillStyle = "#456";
+    ctx.setLineDash([]);
+    ctx.restore();
+    expect(ctx.fillStyle).toBe("#123");
+    expect(ctx.getLineDash()).toEqual([2, 3]);
+    ctx.restore(); // empty stack is a no-op
+    ctx.scale(); // resolution-independent no-op
+
+    ctx.globalCompositeOperation = "multiply";
+    ctx.beginPath();
+    ctx.rect(0, 0, 2, 2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.globalCompositeOperation = "destination-out"; // no SVG equivalent
+    ctx.beginPath();
+    ctx.rect(4, 0, 2, 2);
+    ctx.fill();
+    ctx.commitFrame();
+    const paths = ctx.group.querySelectorAll("path");
+    expect(paths[0].getAttribute("mix-blend-mode")).toBe("multiply");
+    expect(paths[0].getAttribute("stroke-dasharray")).toBe("2 3");
+    expect(paths[0].getAttribute("stroke-dashoffset")).toBe("1");
+    expect(paths[1].getAttribute("mix-blend-mode")).toBeNull();
+  });
+
+  it("builds path data through every verb", () => {
+    const { ctx } = makeCtx();
+    ctx.beginFrame();
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(10, 0);
+    ctx.quadraticCurveTo(12, 2, 10, 4);
+    ctx.bezierCurveTo(8, 6, 4, 6, 2, 4);
+    ctx.closePath();
+    ctx.arc(20, 20, 5, 0, Math.PI * 2);
+    ctx.ellipse(40, 20, 6, 3, Math.PI / 4, 0, Math.PI, true);
+    ctx.fill();
+    ctx.fillRect(50, 0, 4, 4);
+    ctx.clearRect();
+    ctx.commitFrame();
+    const d = ctx.runs.map((r) => r.attrs.d).join(" ");
+    expect(d).toContain("M0 0L10 0Q12 2 10 4C8 6 4 6 2 4Z");
+    expect(d).toContain("A5 5");
+    expect(d).toContain("A6 3 45");
+  });
+});
+
+describe("SVGSpace frame lifecycle and export", () => {
+  it("commits frames through playItems, honoring the refresh flag", async () => {
+    const { element } = mount();
+    const space = new SVGSpace(element);
+    const form = space.getForm();
+    let draw = true;
+    space.add({
+      animate: () => {
+        if (draw) form.fillOnly("#f03").point([10, 10], 3).text([5, 20], "t");
+      },
+    });
+    await ready(space);
+
+    const play = (t: number) =>
+      (space as unknown as { playItems: (time: number) => void }).playItems(t);
+    play(1);
+    const group = space.element.querySelector("g.pts-svgform");
+    expect(group.children.length).toBeGreaterThan(0);
+
+    // refresh(false): an empty frame keeps the previous scene
+    space.refresh(false);
+    draw = false;
+    play(2);
+    expect(group.children.length).toBeGreaterThan(0);
+
+    // refresh(true): an empty frame clears it
+    space.refresh(true);
+    play(3);
+    expect(group.children).toHaveLength(0);
+    space.dispose();
+  });
+
+  it("exports plain and expanded SVG including text and image runs", async () => {
+    const { element } = mount();
+    const space = new SVGSpace(element);
+    space.background = "transparent";
+    const form = space.getForm();
+    space.add({
+      animate: () => {
+        form.fillOnly("#f03").point([10, 10], 3).point([20, 10], 3);
+        form.text([5, 30], "label");
+      },
+    });
+    await ready(space);
+    (space as unknown as { playItems: (time: number) => void }).playItems(1);
+
+    expect(space.toSVG()).toContain("<svg");
+    const expanded = space.toSVG(true);
+    const doc = new DOMParser().parseFromString(expanded, "image/svg+xml");
+    const shapes = doc.querySelectorAll("g.pts-svgform > *");
+    // two merged points expand to two paths, plus the text element
+    expect(
+      [...shapes].map((s) => s.nodeName).filter((n) => n === "path"),
+    ).toHaveLength(2);
+    expect([...shapes].some((s) => s.nodeName === "text")).toBe(true);
+    expect(doc.querySelector("rect").getAttribute("fill")).toBe("none");
+    space.dispose();
+  });
+});
+
+describe("SVGForm legacy static helpers", () => {
+  it("draws every legacy element type into a scoped group", () => {
+    const svg = document.createElementNS(SVG_NS, "svg");
+    document.body.appendChild(svg);
+    const ctx: any = {
+      group: svg,
+      currentID: "el-0",
+      currentClass: "legacy",
+      style: {
+        filled: true,
+        stroked: true,
+        fill: "#123",
+        stroke: "#456",
+        "stroke-width": "2",
+      },
+    };
+    let n = 0;
+    const next = () => {
+      ctx.currentID = `el-${++n}`;
+      return ctx;
+    };
+
+    expect(SVGForm.circleElement(next(), [5, 5], 4).getAttribute("r")).toBe(
+      "4",
+    );
+    expect(
+      SVGForm.arcElement(next(), [5, 5], 4, 0, Math.PI / 2).getAttribute("d"),
+    ).toContain("A");
+    expect(
+      SVGForm.arcElement(next(), [5, 5], 4, 0, Math.PI * 1.5, true).nodeName,
+    ).toBe("path");
+    expect(SVGForm.squareElement(next(), [5, 5], 3).getAttribute("width")).toBe(
+      "6",
+    );
+    expect(
+      SVGForm.lineElement(next(), [
+        [0, 0],
+        [10, 10],
+      ]).nodeName,
+    ).toBe("line");
+    expect(
+      SVGForm.lineElement(next(), [
+        [0, 0],
+        [10, 0],
+        [10, 10],
+      ]).nodeName,
+    ).toBe("polyline");
+    expect(
+      SVGForm.polygonElement(next(), [
+        [0, 0],
+        [10, 0],
+        [5, 8],
+      ]).getAttribute("points"),
+    ).toContain("0,0");
+    expect(
+      SVGForm.rectElement(next(), [
+        [1, 2],
+        [11, 22],
+      ]).getAttribute("width"),
+    ).toBe("10");
+    expect(SVGForm.textElement(next(), [3, 4], "hello").textContent).toBe(
+      "hello",
+    );
+    expect(SVGForm.getID({} as any)).toMatch(/p-/);
+    const styled = SVGForm.style(svg.firstElementChild as SVGElement, {
+      filled: true,
+      stroked: true,
+      fill: "#123",
+      stroke: "#456",
+    });
+    expect(styled.getAttribute("style")).toContain("fill: #123");
+  });
+});
 
 describe("SVGSpace and SVGForm", () => {
   it("creates an SVG surface, resizes it, draws all primitives, and removes scopes", async () => {

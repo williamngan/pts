@@ -16,7 +16,7 @@ window.demoDescription = "Play sound";
     start:( bound ) => {
       console.log( "started" );
       // sound = new Sound().load("/assets/nasa-magnetic-drum.mp3");
-      sound = new Sound().generate( "sine", 120 );
+      sound = Sound.generate( "sine", 120 );
       console.log( sound );
     },
 
@@ -30,7 +30,7 @@ window.demoDescription = "Play sound";
         sound.toggle();
       } 
 
-      if (sound.playing) sound.generate( "sine", 100 + Math.floor(300 * space.pointer.x/space.size.x) );
+      if (sound.playing) sound.frequency = 100 + Math.floor(300 * space.pointer.x/space.size.x);
     }
   });
 

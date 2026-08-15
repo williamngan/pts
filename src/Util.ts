@@ -1,6 +1,6 @@
 /*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
-import { CanvasSpace } from "./Canvas";
+import type { CanvasSpace } from "./Canvas";
 import { Num } from "./Num";
 import { Group, Pt } from "./Pt";
 import { WarningType, PtLike, PtLikeIterable } from "./Types";

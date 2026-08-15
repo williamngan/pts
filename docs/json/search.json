@@ -318,6 +318,12 @@
     8
   ],
   [
+    "Canvas_CanvasForm#function_static_resetStyleCache",
+    "CanvasForm.resetStyleCache",
+    "Function",
+    8
+  ],
+  [
     "Canvas_CanvasForm#function_static_square",
     "CanvasForm.square",
     "Function",
@@ -2736,18 +2742,6 @@
     10
   ],
   [
-    "Dom_HTMLForm#property_domID",
-    "HTMLForm.domID",
-    "Variable",
-    0
-  ],
-  [
-    "Dom_HTMLForm#property_groupID",
-    "HTMLForm.groupID",
-    "Variable",
-    0
-  ],
-  [
     "Dom_HTMLForm#accessor_currentFont",
     "HTMLForm.currentFont",
     "Accessor",
@@ -2774,6 +2768,18 @@
   [
     "Dom_HTMLForm#accessor_stroked",
     "HTMLForm.stroked",
+    "Accessor",
+    6
+  ],
+  [
+    "Dom_HTMLForm#accessor_domID",
+    "HTMLForm.domID",
+    "Accessor",
+    6
+  ],
+  [
+    "Dom_HTMLForm#accessor_groupID",
+    "HTMLForm.groupID",
     "Accessor",
     6
   ],
@@ -8616,18 +8622,6 @@
     10
   ],
   [
-    "Svg_SVGForm#property_domID",
-    "SVGForm.domID",
-    "Variable",
-    0
-  ],
-  [
-    "Svg_SVGForm#property_groupID",
-    "SVGForm.groupID",
-    "Variable",
-    0
-  ],
-  [
     "Svg_SVGForm#accessor_ctx",
     "SVGForm.ctx",
     "Accessor",
@@ -8666,6 +8660,18 @@
   [
     "Svg_SVGForm#accessor_svgContext",
     "SVGForm.svgContext",
+    "Accessor",
+    6
+  ],
+  [
+    "Svg_SVGForm#accessor_domID",
+    "SVGForm.domID",
+    "Accessor",
+    6
+  ],
+  [
+    "Svg_SVGForm#accessor_groupID",
+    "SVGForm.groupID",
     "Accessor",
     6
   ],
@@ -9014,6 +9020,12 @@
   [
     "Svg_SVGForm#function_static_rectElement",
     "SVGForm.rectElement",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGForm#function_static_resetStyleCache",
+    "SVGForm.resetStyleCache",
     "Function",
     8
   ],

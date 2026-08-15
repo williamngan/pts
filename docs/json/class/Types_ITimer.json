@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Interface",
-  "id": 7618,
+  "id": 7633,
   "comment": "Typescript interface: ITimer represents a time-recording object.",
   "constructor": [],
   "accessors": [],
@@ -24,7 +24,7 @@
           2
         ]
       ],
-      "id": 7620,
+      "id": 7635,
       "flags": {},
       "type": "number",
       "overrides": false,
@@ -40,7 +40,7 @@
           2
         ]
       ],
-      "id": 7621,
+      "id": 7636,
       "flags": {},
       "type": "number",
       "overrides": false,
@@ -56,7 +56,7 @@
           2
         ]
       ],
-      "id": 7622,
+      "id": 7637,
       "flags": {},
       "type": "number",
       "overrides": false,
@@ -72,7 +72,7 @@
           2
         ]
       ],
-      "id": 7619,
+      "id": 7634,
       "flags": {},
       "type": "number",
       "overrides": false,

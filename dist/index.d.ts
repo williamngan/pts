@@ -644,17 +644,18 @@ declare class CanvasSpace extends MultiTouchSpace {
   dispose(): this;
   recorder(downloadOrCallback: boolean | ((blobURL: string) => {}), filetype?: string, bitrate?: number): MediaRecorder;
 }
-declare class CanvasForm extends VisualForm {
+declare class CanvasForm<S extends MultiTouchSpace = CanvasSpace> extends VisualForm {
   protected _space: CanvasSpace;
   protected _ctx: RenderingContext2D;
   protected _estimateTextWidth: (string: any) => number;
   private _styleCache;
   private _styleCacheCtx;
   protected _cacheForCtx(): Record<string, unknown>;
+  static resetStyleCache(ctx: RenderingContext2D | object): void;
   protected _set(key: string, value: unknown): void;
   protected _style: DefaultFormStyle;
   constructor(space?: CanvasSpace | RenderingContext2D);
-  get space(): CanvasSpace;
+  get space(): S;
   get ctx(): RenderingContext2D;
   useOffscreen(off?: boolean, clear?: boolean | string): this;
   renderOffscreen(offset?: PtLike): void;
@@ -1130,8 +1131,10 @@ declare class HTMLForm extends VisualForm {
     height: number;
   };
   protected _ctx: DOMFormContext;
-  static groupID: number;
-  static domID: number;
+  static get groupID(): number;
+  static set groupID(n: number);
+  static get domID(): number;
+  static set domID(n: number);
   protected _space: HTMLSpace;
   protected _ready: boolean;
   constructor(space: HTMLSpace);
@@ -1175,7 +1178,6 @@ declare class SVGGradient {
   readonly coords: number[];
   stops: [number, string][];
   protected _elem: SVGElement;
-  private static _count;
   constructor(kind: "linear" | "radial", coords: number[]);
   addColorStop(offset: number, color: string): void;
   materialize(defs: SVGElement): string;
@@ -1216,10 +1218,6 @@ declare class SVGContext2D {
   protected _defs: SVGElement;
   protected _pool: SVGElement[];
   protected _attrCache: Record<string, string>[];
-  protected static _measurer: CanvasRenderingContext2D;
-  protected static _warned: {
-    [k: string]: boolean;
-  };
   constructor(host: SVGElement);
   protected static _warnOnce(key: string, msg: string): void;
   beginFrame(): void;
@@ -1279,12 +1277,14 @@ declare class SVGSpace extends DOMSpace {
   removeAll(): this;
   dispose(): this;
 }
-declare class SVGForm extends CanvasForm {
+declare class SVGForm extends CanvasForm<SVGSpace> {
   protected _svgSpace: SVGSpace;
   protected _svgCtx: SVGContext2D;
   protected _legacyCtx: DOMFormContext;
-  static groupID: number;
-  static domID: number;
+  static get groupID(): number;
+  static set groupID(n: number);
+  static get domID(): number;
+  static set domID(n: number);
   constructor(space: SVGSpace);
   get space(): SVGSpace;
   get svgContext(): SVGContext2D;

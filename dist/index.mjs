@@ -3296,6 +3296,7 @@ var Img = class Img {
 		this._cv.width = width * cms[0];
 		this._cv.height = height * cms[1];
 		this._ctx = this._cv.getContext("2d", { willReadFrequently: true });
+		CanvasForm.resetStyleCache(this._ctx);
 		if (typeof canvasScale === "number") this._scale = canvasScale;
 		this._dataDirty = true;
 		this._loaded = true;
@@ -3647,6 +3648,8 @@ var CanvasSpace = class extends MultiTouchSpace {
 			this._ctx.scale(this._pixelScale, this._pixelScale);
 			if (this._offscreen) this._offCtx.scale(this._pixelScale, this._pixelScale);
 		}
+		CanvasForm.resetStyleCache(this._ctx);
+		if (this._offscreen) CanvasForm.resetStyleCache(this._offCtx);
 		for (const k in this.players) if (this.players.hasOwnProperty(k)) {
 			const p = this.players[k];
 			if (p.resize) p.resize(this.bound, evt);
@@ -3727,6 +3730,8 @@ var CanvasSpace = class extends MultiTouchSpace {
 			super.playItems(time);
 			this._ctx.restore();
 			if (this._offscreen) this._offCtx.restore();
+			CanvasForm.resetStyleCache(this._ctx);
+			if (this._offscreen) CanvasForm.resetStyleCache(this._offCtx);
 			this.render(this._ctx);
 		}
 	}
@@ -3784,6 +3789,10 @@ var CanvasForm = class CanvasForm extends VisualForm {
 			this._styleCacheCtx = this._ctx;
 		}
 		return this._styleCache;
+	}
+	static resetStyleCache(ctx) {
+		const cache = _ctxStyleCache.get(ctx);
+		if (cache) for (const k in cache) delete cache[k];
 	}
 	_set(key, value) {
 		const cache = this._cacheForCtx();
@@ -5715,7 +5724,21 @@ var HTMLSpace = class extends DOMSpace {
 		return super.removeAll();
 	}
 };
+let _htmlFormGroupID = 0;
+let _htmlFormDomID = 0;
 var HTMLForm = class HTMLForm extends VisualForm {
+	static get groupID() {
+		return _htmlFormGroupID;
+	}
+	static set groupID(n) {
+		_htmlFormGroupID = n;
+	}
+	static get domID() {
+		return _htmlFormDomID;
+	}
+	static set domID(n) {
+		_htmlFormDomID = n;
+	}
 	constructor(space) {
 		super();
 		this._style = {
@@ -5937,8 +5960,6 @@ var HTMLForm = class HTMLForm extends VisualForm {
 		return this;
 	}
 };
-HTMLForm.groupID = 0;
-HTMLForm.domID = 0;
 
 //#endregion
 //#region \0@oxc-project+runtime@0.143.0/helpers/esm/typeof.js
@@ -6026,13 +6047,14 @@ const BLEND_MODES = /* @__PURE__ */ new Set([
 	"color",
 	"luminosity"
 ]);
-var SVGGradient = class SVGGradient {
+let _gradientCount = 0;
+var SVGGradient = class {
 	constructor(kind, coords) {
 		this.stops = [];
 		this._elem = null;
 		this.kind = kind;
 		this.coords = coords;
-		this.id = `pts_grad_${SVGGradient._count++}`;
+		this.id = `pts_grad_${_gradientCount++}`;
 	}
 	addColorStop(offset, color) {
 		this.stops.push([offset, color]);
@@ -6077,7 +6099,8 @@ var SVGGradient = class SVGGradient {
 		}
 	}
 };
-SVGGradient._count = 0;
+let _svgMeasurer = null;
+const _svgWarned = {};
 var SVGContext2D = class SVGContext2D {
 	constructor(host) {
 		this.fillStyle = "#f03";
@@ -6110,8 +6133,8 @@ var SVGContext2D = class SVGContext2D {
 		this._host = host;
 	}
 	static _warnOnce(key, msg) {
-		if (!SVGContext2D._warned[key]) {
-			SVGContext2D._warned[key] = true;
+		if (!_svgWarned[key]) {
+			_svgWarned[key] = true;
 			Util.warn(msg);
 		}
 	}
@@ -6273,9 +6296,9 @@ var SVGContext2D = class SVGContext2D {
 		this._drawCount++;
 	}
 	measureText(txt) {
-		if (!SVGContext2D._measurer) SVGContext2D._measurer = document.createElement("canvas").getContext("2d");
-		SVGContext2D._measurer.font = this.font;
-		return SVGContext2D._measurer.measureText(txt);
+		if (!_svgMeasurer) _svgMeasurer = document.createElement("canvas").getContext("2d");
+		_svgMeasurer.font = this.font;
+		return _svgMeasurer.measureText(txt);
 	}
 	drawImage(img, x, y, w, h, ...rest) {
 		var _src;
@@ -6417,8 +6440,6 @@ var SVGContext2D = class SVGContext2D {
 		this._shapePainted = false;
 	}
 };
-SVGContext2D._measurer = null;
-SVGContext2D._warned = {};
 function round2(n) {
 	return Math.round(n * 100) / 100;
 }
@@ -6559,7 +6580,21 @@ var SVGSpace = class SVGSpace extends DOMSpace {
 		return this;
 	}
 };
+let _svgFormGroupID = 0;
+let _svgFormDomID = 0;
 var SVGForm = class SVGForm extends CanvasForm {
+	static get groupID() {
+		return _svgFormGroupID;
+	}
+	static set groupID(n) {
+		_svgFormGroupID = n;
+	}
+	static get domID() {
+		return _svgFormDomID;
+	}
+	static set domID(n) {
+		_svgFormDomID = n;
+	}
 	constructor(space) {
 		super();
 		this._legacyCtx = {
@@ -6740,8 +6775,6 @@ var SVGForm = class SVGForm extends CanvasForm {
 		return elem;
 	}
 };
-SVGForm.groupID = 0;
-SVGForm.domID = 0;
 
 //#endregion
 //#region src/Physics.ts

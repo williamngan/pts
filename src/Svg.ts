@@ -37,6 +37,10 @@ const BLEND_MODES = new Set([
   "luminosity",
 ]);
 
+// module-level so the class stays tree-shakable (a static field would
+// downlevel to a post-class assignment, which bundlers keep)
+let _gradientCount = 0;
+
 /**
  * A gradient handle returned by [`SVGContext2D`](#link)'s `createLinearGradient` and
  * `createRadialGradient`. It is structurally compatible with `CanvasGradient` (it has
@@ -49,12 +53,10 @@ class SVGGradient {
   stops: [number, string][] = [];
   protected _elem: SVGElement = null;
 
-  private static _count = 0;
-
   constructor(kind: "linear" | "radial", coords: number[]) {
     this.kind = kind;
     this.coords = coords;
-    this.id = `pts_grad_${SVGGradient._count++}`;
+    this.id = `pts_grad_${_gradientCount++}`;
   }
 
   addColorStop(offset: number, color: string): void {
@@ -103,6 +105,10 @@ type SVGRun = {
   text?: string;
   shapeEnds?: number[]; // per-shape boundaries in the d string, for expanded export
 };
+
+// module-level state for the same tree-shaking reason as _gradientCount above
+let _svgMeasurer: CanvasRenderingContext2D = null;
+const _svgWarned: { [k: string]: boolean } = {};
 
 /**
  * **`SVGContext2D`** implements the subset of `CanvasRenderingContext2D` that
@@ -180,16 +186,13 @@ export class SVGContext2D {
   protected _pool: SVGElement[] = []; // pooled elements, index-aligned with runs
   protected _attrCache: Record<string, string>[] = [];
 
-  protected static _measurer: CanvasRenderingContext2D = null;
-  protected static _warned: { [k: string]: boolean } = {};
-
   constructor(host: SVGElement) {
     this._host = host;
   }
 
   protected static _warnOnce(key: string, msg: string) {
-    if (!SVGContext2D._warned[key]) {
-      SVGContext2D._warned[key] = true;
+    if (!_svgWarned[key]) {
+      _svgWarned[key] = true;
       Util.warn(msg);
     }
   }
@@ -450,13 +453,11 @@ export class SVGContext2D {
   }
 
   measureText(txt: string): TextMetrics {
-    if (!SVGContext2D._measurer) {
-      SVGContext2D._measurer = document
-        .createElement("canvas")
-        .getContext("2d");
+    if (!_svgMeasurer) {
+      _svgMeasurer = document.createElement("canvas").getContext("2d");
     }
-    SVGContext2D._measurer.font = this.font;
-    return SVGContext2D._measurer.measureText(txt);
+    _svgMeasurer.font = this.font;
+    return _svgMeasurer.measureText(txt);
   }
 
   drawImage(
@@ -900,6 +901,9 @@ export class SVGSpace extends DOMSpace {
   }
 }
 
+let _svgFormGroupID = 0;
+let _svgFormDomID = 0;
+
 /**
  * SVGForm is a [`CanvasForm`](#link) rendered through a [`SVGContext2D`](#link): it inherits
  * the complete canvas drawing API — shapes, gradients, dashes, images, `textBox` — with SVG
@@ -907,7 +911,7 @@ export class SVGSpace extends DOMSpace {
  * drawing code. The legacy per-element static helpers and `scope()` workflow are retained
  * for compatibility but are no longer needed.
  */
-export class SVGForm extends CanvasForm {
+export class SVGForm extends CanvasForm<SVGSpace> {
   protected _svgSpace: SVGSpace;
   protected _svgCtx: SVGContext2D;
 
@@ -920,8 +924,20 @@ export class SVGForm extends CanvasForm {
     style: {},
   };
 
-  static groupID: number = 0;
-  static domID: number = 0;
+  // mutable statics are stored at module level and exposed through accessors so
+  // no post-class assignment is emitted (which would defeat tree-shaking)
+  static get groupID(): number {
+    return _svgFormGroupID;
+  }
+  static set groupID(n: number) {
+    _svgFormGroupID = n;
+  }
+  static get domID(): number {
+    return _svgFormDomID;
+  }
+  static set domID(n: number) {
+    _svgFormDomID = n;
+  }
 
   /**
    * Create a new SVGForm. You may also use [`SVGSpace.getForm`](#link) to get a default form directly.
@@ -944,8 +960,6 @@ export class SVGForm extends CanvasForm {
   /**
    * Get the [`SVGSpace`](#link) instance that this form is associated with.
    */
-  // @ts-expect-error SVGSpace is not a structural subtype of CanvasSpace; this
-  // getter intentionally re-types the association for the SVG backend.
   get space(): SVGSpace {
     return this._svgSpace;
   }

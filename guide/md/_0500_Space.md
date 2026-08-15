@@ -1,6 +1,6 @@
 # Space
 
-[`Space`](#space-space) provides a general context for its points to be expressed. Each subclass of `Space` represents a specific context. Currently **`Pts`** includes [`CanvasSpace`](#canvas-canvasspace) which corresponds to the [`canvas`](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) element, and [`SVGSpace`](#svg-svgspace) which lets you create vector graphics in svg format instead. There is also an experimental [`HTMLSpace`](#dom-htmlspace) which renders forms in basic html elements. Soon we will have spaces for other contexts too.
+[`Space`](#space-space) provides a general context for its points to be expressed. Each subclass of `Space` represents a specific context. Currently **`Pts`** includes [`CanvasSpace`](#canvas-canvasspace) which corresponds to the [`canvas`](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) element, and [`SVGSpace`](#svg-svgspace) which lets you create vector graphics in svg format instead. There is also a deprecated [`HTMLSpace`](#dom-htmlspace) which renders forms in basic html elements. Soon we will have spaces for other contexts too.
 
 [`CanvasSpace`](#canvas-canvasspace) can be created like this:
 ```
@@ -109,34 +109,24 @@ If you need more advanced canvas functions, you can get canvas' rendering contex
 And since both Space and Form are javascript classes, you can extend them to override its functions and add new ones. 
 
 ### SVG Space
-You can easily switch you code from [`CanvasSpace`](#canvas-canvasspace) to [`SVGSpace`](#svg-svgspace) in 3 easy steps:
+You can switch your code from [`CanvasSpace`](#canvas-canvasspace) to [`SVGSpace`](#svg-svgspace) without changing your drawing code: initiate the space as `SVGSpace` instead of `CanvasSpace`, and `space.getForm()` will return an [`SVGForm`](#svg-svgform), which shares the complete `CanvasForm` drawing API — shapes, gradients, dashes, text and more render as svg automatically.
 
-First, initiate space as `SVGSpace` instead of `CanvasSpace`. If you use `space.getForm()`, then it will return an `SVGForm` instead of `CanvasForm` automatically.
-
-Second, in the beginning of your animate callback function, add this line: 
 ```
-form.scope( this );
-``` 
-This keeps track of the created svg or dom elements to optimize rendering.
-
-Lastly, if you use es6 arrow function in a player's callback functions, for example: 
+const space = new SVGSpace( "#elem" ).setup({ bgcolor: "#123", resize: true });
+const form = space.getForm();
+// ... the same drawing code as canvas
 ```
-animate: (time, ftime) => ...
-``` 
-You should change it back to the standard form:
-```
-animate: function( time, ftime) ...
-``` 
-The arrow function automatically binds `this` and will confuse the `form.scope(this)` call.
 
-Take a look at the source code of the [svg demo](https://ptsjs.org/demo/index.html?name=svgform.scope). It's pretty straightforward.
+If you use [`quickStart`](#play-quickstart), it picks the space for you: mount on an `<svg>` element and you get an `SVGSpace`; mount on a `<canvas>` or `<div>` and you get a `CanvasSpace`. No other changes needed — a sketch written for canvas runs on svg as-is.
+
+Under the hood, consecutive shapes that share styles are merged into single svg elements per frame, so the output stays fast and compact. To export the current frame as an svg file, use [`SVGSpace.toSVG`](#svg-svgspace) — pass `true` to get one element per shape, which is easier to edit in vector graphics tools.
+
+(In earlier versions of Pts, SVG rendering required a `form.scope(this)` call in each animate callback. This is no longer needed — existing code that calls it will still run, as the function is kept as a harmless no-op.)
 
 
 ### HTML Space
 
-There's also experimental support for rendering HTML elements using [`HTMLSpace`](#dom-htmlspace), which you can use by making similar changes in your code as described in SVG section above.
-
-Take a look at the [html demo](https://ptsjs.org/demo/index.html?name=htmlform.scope) and its source code. Because of the limitations of HTML, you cannot draw polygon, arc, and some other shapes with it.
+There is also an [`HTMLSpace`](#dom-htmlspace) that renders forms in basic html elements. It is deprecated and will be removed in a future major version — use [`SVGSpace`](#svg-svgspace) for DOM-based output instead. Because of the limitations of HTML, it cannot draw polygon, arc, and some other shapes.
 
 If you use Pts with React or other web rendering frameworks, it will be better to use the props and states of their virtual DOM implementations instead.
 

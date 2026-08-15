@@ -256,6 +256,13 @@ export class CanvasSpace extends MultiTouchSpace {
       }
     }
 
+    // Assigning canvas width/height resets the context's entire state to
+    // defaults, so any cached style values no longer describe the context —
+    // without this, a form's style write matching the stale cache would be
+    // skipped and the context would stay at its black defaults.
+    CanvasForm.resetStyleCache(this._ctx);
+    if (this._offscreen) CanvasForm.resetStyleCache(this._offCtx);
+
     for (const k in this.players) {
       if (this.players.hasOwnProperty(k)) {
         const p = this.players[k];
@@ -446,6 +453,10 @@ export class CanvasSpace extends MultiTouchSpace {
       super.playItems(time);
       this._ctx.restore();
       if (this._offscreen) this._offCtx.restore();
+      // restore() reverted the context's style state without going through the
+      // forms' style cache, so the cached values no longer describe the context
+      CanvasForm.resetStyleCache(this._ctx);
+      if (this._offscreen) CanvasForm.resetStyleCache(this._offCtx);
       this.render(this._ctx);
     }
   }
@@ -526,7 +537,9 @@ export class CanvasSpace extends MultiTouchSpace {
 // and a per-form cache would skip writes another form made stale.
 const _ctxStyleCache = new WeakMap<object, Record<string, unknown>>();
 
-export class CanvasForm extends VisualForm {
+export class CanvasForm<
+  S extends MultiTouchSpace = CanvasSpace,
+> extends VisualForm {
   protected _space: CanvasSpace;
   protected _ctx: RenderingContext2D;
   protected _estimateTextWidth: (string) => number;
@@ -548,6 +561,23 @@ export class CanvasForm extends VisualForm {
       this._styleCacheCtx = this._ctx;
     }
     return this._styleCache;
+  }
+
+  /**
+   * Forget the cached style values for a rendering context, so every
+   * subsequent style write applies. Call this after anything that resets or
+   * desyncs a context's state outside a form — most commonly assigning a
+   * canvas's `width` or `height`, which resets the context to its defaults.
+   * (Within a form, [`CanvasForm.reset`](#link) is the equivalent recovery.)
+   * @param ctx the rendering context to forget
+   */
+  static resetStyleCache(ctx: RenderingContext2D | object): void {
+    // clear the shared object in place: forms cache a reference to it, so
+    // deleting the WeakMap entry would leave them holding stale values
+    const cache = _ctxStyleCache.get(ctx);
+    if (cache) {
+      for (const k in cache) delete cache[k];
+    }
   }
 
   /**
@@ -616,8 +646,9 @@ export class CanvasForm extends VisualForm {
   /**
    * get the CanvasSpace instance that this form is associated with
    */
-  get space(): CanvasSpace {
-    return this._space;
+  get space(): S {
+    // subclasses for other backends (eg, SVGForm) narrow S to their own space type
+    return this._space as unknown as S;
   }
 
   /**
