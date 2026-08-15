@@ -25,7 +25,7 @@
     animate: (time, ftime) => {
 
       // As an example, this shows how we load the image and then check img.loaded here. 
-      // This is an alternative to Img.loadAsync() as shown in other examples in this guide
+      // This is an alternative to the static Img.load() as shown in other examples in this guide
       if (img.loaded) { 
         
         // draw original image

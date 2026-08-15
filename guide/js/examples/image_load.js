@@ -1,7 +1,7 @@
 // Source code licensed under Apache License 2.0. 
 // Copyright © 2021 William Ngan. (https://github.com/williamngan/pts)
 
-(function(){
+(async function(){
   // Pts.namespace( this ); // add Pts into scope if needed
   
   var demoID = "image_load";
@@ -9,7 +9,7 @@
   // create Space and Form
   let space = new CanvasSpace("#"+demoID).setup({ retina: true, bgcolor: "#e2e6ef", resize: true });
   let form = space.getForm();
-  let img = Img.load( "/assets/img_demo.jpg");
+  let img = await Img.load( "/assets/img_demo.jpg");
   
   // animation
   space.add( (time, ftime) => {

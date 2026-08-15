@@ -5,10 +5,9 @@
  * sample an image.
  *
  * The fixture is generated rather than loaded from a file, so the suite has no
- * asset or network dependency. It still goes through `Img.load`, because that
- * is the only path that populates the `ImageData` the pixel functions read —
- * `Img.blank(...)` followed by `sync()` leaves it undefined until the image has
- * asynchronously reloaded itself.
+ * asset or network dependency. It goes through `Img.load` to exercise the
+ * realistic editable pipeline (pixel data now materializes lazily on first
+ * read, and `Img.blank(...)` supports pixel reads directly).
  */
 
 import { SIZES } from "../lib/fixtures.mjs";

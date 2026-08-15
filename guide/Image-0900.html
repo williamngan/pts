@@ -22,15 +22,15 @@
 <p>The standard API for working with images on canvas is rather laborious, and often takes the fun out of creative coding. In Pts, the <a href="#image-img"><code>Img</code></a> class simplifies the common use cases, from loading and displaying static images to generating dynamic textures, so that you can get started quickly. Let's take a look.</p>
 <h3>Loading and Displaying Images</h3>
 <p>We will start a minimalistic example: Load an image and display it on canvas. This can be done in 2 lines of code:</p>
-<pre><code>const img = Img.load( &quot;/assets/demo.jpg&quot; );
+<pre><code>const img = await Img.load( &quot;/assets/demo.jpg&quot; );
 space.add( time =&gt; form.image( space.pointer, img ) );
 </code></pre>
 <p><img src="./assets/bg.png" alt="js:image_load"></p>
 <h5>Image credit: &quot;C 50 Last Birds And Flowers&quot; by Kurt Schwitters</h5>
-<p>The above example uses the <em>static</em> function <a href="#image-img"><code>Img.load</code></a> to load an image, and then uses CanvasForm's <a href="#canvas-canvasform"><code>image</code></a> function to display it. The image will be displayed as soon as it's loaded.</p>
-<p>To wait for the image to be ready first, either use the static <a href="#image-img"><code>Img.loadAsync</code></a> function, or create a blank Img instance and then call the <em>instance</em> function <a href="#image-img"><code>load</code></a>. An example:</p>
+<p>The above example uses the <em>static</em> function <a href="#image-img"><code>Img.load</code></a>, which returns a Promise that resolves to the loaded image, and then uses CanvasForm's <a href="#canvas-canvasform"><code>image</code></a> function to display it. A load failure rejects the Promise.</p>
+<p>You can also create an Img instance yourself and call the <em>instance</em> function <a href="#image-img"><code>load</code></a>, which is handy when you want to configure the instance first. An example:</p>
 <pre><code>(async function() {
-  let img = await Img.loadAsync( &quot;/assets/img_demo.jpg&quot; );
+  let img = await new Img().load( &quot;/assets/img_demo.jpg&quot; );
   space.add( time =&gt; form.image( space.pointer, img ) );
 })();
 </code></pre>
@@ -40,11 +40,11 @@ space.add( time =&gt; form.image( space.pointer, img ) );
 <h3>Editing Images</h3>
 <p>When you create an Img instance with its <code>editable</code> parameter set to <code>true</code>, it will hold an internal canvas to support image manipulations. It will also match the pixel-density of your display. An example:</p>
 <pre><code>// Create an editable img with the current space's pixelScale
-let img = new Img( true, space.pixelScale );
+let img = new Img( { editable: true, pixelScale: space.pixelScale } );
 img.load( &quot;/assets/demo.jpg&quot; ).then( ... );
 
-// Alternatively, Img.loadAsync static function
-let img2 = await Img.loadAsync( &quot;/assets/demo.jpg&quot;, true, space.pixelScale );
+// Alternatively, pass the options to the static load function
+let img2 = await Img.load( &quot;/assets/demo.jpg&quot;, { editable: true, pixelScale: space.pixelScale } );
 </code></pre>
 <p>You can do a lot with an editable image. Let's cover a couple common use cases.</p>
 <h3>Get Pixels and Crop Regions</h3>
@@ -61,7 +61,7 @@ let img2 = await Img.loadAsync( &quot;/assets/demo.jpg&quot;, true, space.pixelS
 <h3>Edit and Sync</h3>
 <p>Since an editable <a href="#image-img"><code>Img</code></a> stores an internal canvas, you can leverage <a href="#canvas-canvasform"><code>CanvasForm</code></a>'s many drawing functions to draw directly on it. It's that easy!</p>
 <p>After the image is loaded, you can access the canvas' rendering context through the property <code>img.ctx</code> and then create a new <a href="#canvas-canvasform"><code>CanvasForm</code></a> instance with it. For example:</p>
-<pre><code>const img = await Img.loadAsync( &quot;demo.jpg&quot; );
+<pre><code>const img = await Img.load( &quot;demo.jpg&quot;, true );
 const imgForm = new CanvasForm( img.ctx );
 ...
 imgForm.fill(&quot;#f00&quot;).rect( rect );
@@ -76,7 +76,8 @@ imgForm.fill(&quot;#f00&quot;).rect( rect );
 <pre><code>// draw internal image canvas
 form.image( img.canvas ); 
 </code></pre>
-<p>As we are only editing an internal canvas, the original image is unchanged until it's explicitly updated. Use <a href="#image-img"><code>sync</code></a> to update the original image when needed.</p>
+<p>As we are only editing an internal canvas, the original image is unchanged until it's explicitly updated. Use <a href="#image-img"><code>sync</code></a>, which returns a Promise, to update the original image when needed: <code>await img.sync()</code>.</p>
+<p>You can also work at the pixel level: <a href="#image-img"><code>setPixel</code></a> writes a color into the cached pixel data, <a href="#image-img"><code>updatePixels</code></a> applies those changes onto the canvas, and <a href="#image-img"><code>loadPixels</code></a> refreshes the cache after you've drawn on the canvas directly. When you're done with an Img, call <a href="#image-img"><code>dispose</code></a> to release its resources.</p>
 <h3>Patterns</h3>
 <p>In a similar way, you can treat an image (or an image canvas) as a pattern to fill an area. One difference is that we'll get a <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasPattern">CanvasPattern</a> instance for use in  <code>form.fill(...)</code>, instead of an image for <code>form.image(...)</code>.</p>
 <pre><code>const pattern = await Img.loadPattern( &quot;tile.jpg&quot;, space );
@@ -103,18 +104,14 @@ pattern.setTransform( m );
 <h3>Cheatsheet</h3>
 <p>Creating, loading, displaying</p>
 <pre><code>// Simplest way
-let img = Img.load( &quot;demo.jpg&quot;);
+let img = await Img.load( &quot;demo.jpg&quot;);
 
 // Load an editable image that matches the screen's resolution
-// with an optional callback function when the image is loaded.
-let img = Img.load(&quot;demo.png&quot;, true, space.pixelScale, onLoad );
+let img = await Img.load(&quot;demo.png&quot;, { editable: true, pixelScale: space.pixelScale } );
 
-// Equivalent but using async/await
-let img = new Img( true, space.pixelScale );
+// Equivalent, creating the instance first
+let img = new Img( { editable: true, pixelScale: space.pixelScale } );
 await img.load(&quot;demo.png&quot;)
-
-// Or using the loadAsync static function
-let img = await Img.loadAsync( &quot;demo.png&quot; )
 
 // Display an image automatically when it's loaded 
 form.image( [0,0], img );

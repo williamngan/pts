@@ -13,7 +13,7 @@
   let form = space.getForm();
   let lastP = new Pt();
   let imgform;
-  let img = new Img(true, space.pixelScale);
+  let img = new Img({ editable: true, pixelScale: space.pixelScale });
   img.load( "/assets/img_demo.jpg" ).then( res => imgform = new CanvasForm( res.ctx ) );
   
   // animation
