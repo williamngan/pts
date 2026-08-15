@@ -560,13 +560,16 @@ declare class Img {
   protected _patternCtx: RenderingContext2D;
   protected _objectUrl: string;
   private _pendingLoadReject;
+  protected _dataDirty: boolean;
   constructor(editable?: boolean | ImgOptions, space?: CanvasSpace, crossOrigin?: boolean);
   static load(src: string, editable?: boolean | ImgOptions, space?: CanvasSpace, ready?: (img: Img) => void): Promise<Img>;
   static loadAsync(src: string, editable?: boolean | ImgOptions, space?: CanvasSpace): Promise<Img>;
   static loadPattern(src: string, space: CanvasSpace, repeat?: CanvasPatternRepetition, editable?: boolean): Promise<CanvasPattern>;
   static blank(size: PtLike, space?: CanvasSpace, scale?: number): Img;
   load(src: string): Promise<Img>;
+  protected _loadImageSrc(src: string): Promise<void>;
   protected _refreshData(): void;
+  protected _ensureData(): void;
   protected _drawToScale(canvasScale: number | PtLike, img: HTMLImageElement | HTMLCanvasElement | ImageBitmap | OffscreenCanvas | HTMLVideoElement): void;
   initCanvas(width: number, height: number, canvasScale?: number | PtLike): void;
   protected _initCanvas(width: number, height: number, canvasScale?: number | PtLike): void;

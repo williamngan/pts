@@ -36,6 +36,7 @@ export class Img {
   protected _patternCtx: RenderingContext2D; // lazy fallback when no space is set
   protected _objectUrl: string; // tracked for revocation on dispose
   private _pendingLoadReject: (err: Error) => void = null; // newer loads supersede pending ones
+  protected _dataDirty: boolean = false; // ImageData refreshes lazily on first read
 
   /**
    * Create an Img
@@ -133,14 +134,30 @@ export class Img {
    * @returns a Promise that resolves to an Img
    */
   load(src: string): Promise<Img> {
-    return new Promise((resolve, reject) => {
-      if (this._editable && typeof document === "undefined") {
-        reject(
-          new Error("Cannot create html canvas element. document not found."),
-        );
-        return;
-      }
+    if (this._editable && typeof document === "undefined") {
+      return Promise.reject(
+        new Error("Cannot create html canvas element. document not found."),
+      );
+    }
 
+    return this._loadImageSrc(src).then(() => {
+      if (this._editable) {
+        if (!this._cv)
+          this._cv = document.createElement("canvas") as HTMLCanvasElement;
+        this._drawToScale(this._scale, this._img);
+        this._dataDirty = true;
+      }
+      this._loaded = true;
+      return this;
+    });
+  }
+
+  /**
+   * Swap the underlying image's source and await its load — without the editable
+   * pipeline. Shared by `load()` and `sync()` so both respect the supersede rule.
+   */
+  protected _loadImageSrc(src: string): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
       // a newer load replaces this one's handlers on the shared <img>, so a
       // pending previous promise must be rejected proactively
       if (this._pendingLoadReject) {
@@ -152,15 +169,7 @@ export class Img {
 
       this._img.onload = () => {
         this._pendingLoadReject = null;
-        if (this._editable) {
-          if (!this._cv)
-            this._cv = document.createElement("canvas") as HTMLCanvasElement;
-          this._drawToScale(this._scale, this._img);
-          this._refreshData();
-        }
-
-        this._loaded = true;
-        resolve(this);
+        resolve();
       };
 
       this._img.onerror = () => {
@@ -175,6 +184,14 @@ export class Img {
   /** Refresh the cached `ImageData` from the current canvas. */
   protected _refreshData(): void {
     this._data = this._ctx.getImageData(0, 0, this._cv.width, this._cv.height);
+    this._dataDirty = false;
+  }
+
+  /** Materialize the cached `ImageData` lazily, on first read after a change. */
+  protected _ensureData(): void {
+    if ((this._dataDirty || !this._data) && this._ctx && this._cv) {
+      this._refreshData();
+    }
   }
 
   /**
@@ -217,7 +234,6 @@ export class Img {
    */
   initCanvas(width: number, height: number, canvasScale: number | PtLike = 1) {
     this._initCanvas(width, height, canvasScale);
-    if (this._ctx) this._refreshData(); // a blank image must still support pixel reads
   }
 
   /**
@@ -245,10 +261,12 @@ export class Img {
         : canvasScale;
     this._cv.width = width * cms[0];
     this._cv.height = height * cms[1];
-    this._ctx = this._cv.getContext("2d");
+    // the whole point of an editable Img is repeated readback
+    this._ctx = this._cv.getContext("2d", { willReadFrequently: true });
     // keep the pixel-density field coherent with the actual canvas scaling,
     // which `pixel( p, true )` depends on
     if (typeof canvasScale === "number") this._scale = canvasScale;
+    this._dataDirty = true; // pixel reads materialize lazily
     this._loaded = true;
   }
 
@@ -290,15 +308,45 @@ export class Img {
    * To display the internal canvas, you can also use `form.image( img.canvas )` directly.
    */
   async sync(): Promise<Img> {
-    // retina: resize canvas to fit image original size
+    // Blob-blit instead of a base64 round-trip: encode asynchronously, load
+    // the result into the image, and leave the working canvas untouched (the
+    // canvas is already the source of truth, so no redraw or readback is
+    // needed — and the retina canvas is no longer squashed through a lossy
+    // reload; a temporary canvas produces the logical-size image instead).
+    let source: HTMLCanvasElement = this._cv;
     if (this._scale !== 1) {
-      const b = await this.bitmap();
-      this._drawToScale(1 / this._scale, b); // rescale canvas to match original and draw saved bitmap
-      await this.load(this.toBase64()); // load current canvas into image (also refreshes data)
+      source = document.createElement("canvas");
+      source.width = this._cv.width / this._scale;
+      source.height = this._cv.height / this._scale;
+      source
+        .getContext("2d")
+        .drawImage(
+          this._cv,
+          0,
+          0,
+          this._cv.width,
+          this._cv.height,
+          0,
+          0,
+          source.width,
+          source.height,
+        );
+    }
 
-      // no retina so no need to rescale
-    } else {
-      await this.load(this.toBase64());
+    const blob = await new Promise<Blob>((resolve, reject) => {
+      source.toBlob((b) =>
+        b ? resolve(b) : reject(new Error("Img cannot export canvas to blob")),
+      );
+    });
+
+    const url = URL.createObjectURL(blob);
+    this._objectUrl = url;
+    try {
+      await this._loadImageSrc(url);
+      this._loaded = true;
+    } finally {
+      URL.revokeObjectURL(url);
+      this._objectUrl = null;
     }
     return this;
   }
@@ -310,6 +358,7 @@ export class Img {
    * @returns [R,G,B,A] values of the pixel at the specific position
    */
   pixel(p: PtLike, rescale: boolean | number = true): Pt {
+    this._ensureData();
     if (!this._data) {
       Util.warn(
         "Img has no pixel data — create it as editable and wait for load",
@@ -328,6 +377,7 @@ export class Img {
    * @param rescale Specify if the pixel position should be scaled, matching [`Img.pixel`](#link)
    */
   setPixel(p: PtLike, rgba: PtLike, rescale: boolean | number = true): this {
+    this._ensureData();
     if (!this._data) {
       Util.warn("Img has no pixel data — create it as editable");
       return this;
@@ -369,6 +419,7 @@ export class Img {
       return this;
     }
     this._ctx.putImageData(this._data, 0, 0);
+    this._dataDirty = false; // canvas now equals the cached data
     return this;
   }
 
@@ -379,21 +430,27 @@ export class Img {
    * @returns [R,G,B,A] values of the pixel at the specific position
    */
   static getPixel(imgData: ImageData, p: PtLike): Pt {
-    const no = new Pt(0, 0, 0, 0);
+    // `new Pt(4)` + element stores is ~8x faster than the 4-argument
+    // constructor path, and out-of-bound reads return the zeroed Pt as before
+    const out = new Pt(4);
     if (
       p[0] < 0 ||
       p[1] < 0 ||
       p[0] >= imgData.width ||
       p[1] >= imgData.height
     ) {
-      return no;
+      return out;
     }
 
     const i = Math.floor(p[1]) * (imgData.width * 4) + Math.floor(p[0]) * 4;
     const d = imgData.data;
-    if (i > d.length - 4) return no;
+    if (i > d.length - 4) return out;
 
-    return new Pt(d[i], d[i + 1], d[i + 2], d[i + 3]);
+    out[0] = d[i];
+    out[1] = d[i + 1];
+    out[2] = d[i + 2];
+    out[3] = d[i + 3];
+    return out;
   }
 
   /**
@@ -424,7 +481,7 @@ export class Img {
       source = snap;
     }
     this._drawToScale(s, source);
-    this._refreshData();
+    this._dataDirty = true;
     return this;
   }
 
@@ -433,9 +490,13 @@ export class Img {
    * @param box bounding box
    */
   crop(box: Bound): ImageData {
-    let p = box.topLeft.scale(this._scale);
-    let s = box.size.scale(this._scale);
-    return this._ctx.getImageData(p.x, p.y, s.x, s.y);
+    const s = this._scale;
+    return this._ctx.getImageData(
+      box[0][0] * s,
+      box[0][1] * s,
+      box.width * s,
+      box.height * s,
+    );
   }
 
   /**
@@ -452,7 +513,7 @@ export class Img {
     this._ctx.drawImage(this._cv, 0, 0);
     this._ctx.filter = "none";
     this._ctx.globalCompositeOperation = op;
-    this._refreshData();
+    this._dataDirty = true;
     return this;
   }
 
@@ -588,6 +649,7 @@ export class Img {
    * Get the internal canvas' ImageData
    */
   get data(): ImageData {
+    this._ensureData();
     return this._data;
   }
 

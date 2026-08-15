@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 7223,
+  "id": 7229,
   "comment": "SVGForm is a [`CanvasForm`](#link) rendered through a [`SVGContext2D`](#link): it inherits\nthe complete canvas drawing API — shapes, gradients, dashes, images, `textBox` — with SVG\noutput, so a sketch can swap between `CanvasSpace` and `SVGSpace` without changing any\ndrawing code. The legacy per-element static helpers and `scope()` workflow are retained\nfor compatibility but are no longer needed.",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           2
         ]
       ],
-      "id": 7350,
+      "id": 7356,
       "flags": {},
       "overrides": "CanvasForm.__constructor",
       "inherits": false,
@@ -52,7 +52,7 @@
           6
         ]
       ],
-      "id": 7385,
+      "id": 7391,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasForm.ctx",
@@ -71,7 +71,7 @@
           6
         ]
       ],
-      "id": 7546,
+      "id": 7552,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.currentFont",
@@ -95,7 +95,7 @@
           6
         ]
       ],
-      "id": 7538,
+      "id": 7544,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasForm.filled",
@@ -122,7 +122,7 @@
           6
         ]
       ],
-      "id": 7574,
+      "id": 7580,
       "flags": {},
       "overrides": false,
       "inherits": "Form.ready",
@@ -141,7 +141,7 @@
           6
         ]
       ],
-      "id": 7356,
+      "id": 7362,
       "flags": {},
       "overrides": "CanvasForm.space",
       "inherits": false,
@@ -165,7 +165,7 @@
           6
         ]
       ],
-      "id": 7542,
+      "id": 7548,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasForm.stroked",
@@ -192,7 +192,7 @@
           6
         ]
       ],
-      "id": 7358,
+      "id": 7364,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -213,7 +213,7 @@
           2
         ]
       ],
-      "id": 7528,
+      "id": 7534,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasForm.alignText",
@@ -249,7 +249,7 @@
           2
         ]
       ],
-      "id": 7394,
+      "id": 7400,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasForm.alpha",
@@ -284,7 +284,7 @@
           2
         ]
       ],
-      "id": 7415,
+      "id": 7421,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasForm.applyFillStroke",
@@ -331,7 +331,7 @@
           2
         ]
       ],
-      "id": 7480,
+      "id": 7486,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasForm.arc",
@@ -385,7 +385,7 @@
           2
         ]
       ],
-      "id": 7469,
+      "id": 7475,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasForm.circle",
@@ -415,7 +415,7 @@
           2
         ]
       ],
-      "id": 7558,
+      "id": 7564,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.circles",
@@ -445,7 +445,7 @@
           2
         ]
       ],
-      "id": 7430,
+      "id": 7436,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasForm.clip",
@@ -468,7 +468,7 @@
           2
         ]
       ],
-      "id": 7360,
+      "id": 7366,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -503,7 +503,7 @@
           2
         ]
       ],
-      "id": 7427,
+      "id": 7433,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasForm.composite",
@@ -533,7 +533,7 @@
           2
         ]
       ],
-      "id": 7432,
+      "id": 7438,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasForm.dash",
@@ -574,7 +574,7 @@
           2
         ]
       ],
-      "id": 7472,
+      "id": 7478,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasForm.ellipse",
@@ -634,7 +634,7 @@
           2
         ]
       ],
-      "id": 7397,
+      "id": 7403,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasForm.fill",
@@ -669,7 +669,7 @@
           2
         ]
       ],
-      "id": 7400,
+      "id": 7406,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasForm.fillOnly",
@@ -699,7 +699,7 @@
           2
         ]
       ],
-      "id": 7436,
+      "id": 7442,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasForm.font",
@@ -758,7 +758,7 @@
           2
         ]
       ],
-      "id": 7443,
+      "id": 7449,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasForm.fontWidthEstimate",
@@ -788,7 +788,7 @@
           2
         ]
       ],
-      "id": 7446,
+      "id": 7452,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasForm.getTextWidth",
@@ -818,7 +818,7 @@
           2
         ]
       ],
-      "id": 7420,
+      "id": 7426,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasForm.gradient",
@@ -853,7 +853,7 @@
           2
         ]
       ],
-      "id": 7500,
+      "id": 7506,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasForm.image",
@@ -895,7 +895,7 @@
           2
         ]
       ],
-      "id": 7505,
+      "id": 7511,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasForm.imageData",
@@ -931,7 +931,7 @@
           2
         ]
       ],
-      "id": 7491,
+      "id": 7497,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasForm.line",
@@ -961,7 +961,7 @@
           2
         ]
       ],
-      "id": 7564,
+      "id": 7570,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.lines",
@@ -991,7 +991,7 @@
           2
         ]
       ],
-      "id": 7532,
+      "id": 7538,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasForm.log",
@@ -1021,7 +1021,7 @@
           2
         ]
       ],
-      "id": 7370,
+      "id": 7376,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1049,7 +1049,7 @@
           2
         ]
       ],
-      "id": 7521,
+      "id": 7527,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasForm.paragraphBox",
@@ -1103,7 +1103,7 @@
           2
         ]
       ],
-      "id": 7464,
+      "id": 7470,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasForm.point",
@@ -1150,7 +1150,7 @@
           2
         ]
       ],
-      "id": 7553,
+      "id": 7559,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.points",
@@ -1192,7 +1192,7 @@
           2
         ]
       ],
-      "id": 7494,
+      "id": 7500,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasForm.polygon",
@@ -1222,7 +1222,7 @@
           2
         ]
       ],
-      "id": 7567,
+      "id": 7573,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.polygons",
@@ -1252,7 +1252,7 @@
           2
         ]
       ],
-      "id": 7497,
+      "id": 7503,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasForm.rect",
@@ -1282,7 +1282,7 @@
           2
         ]
       ],
-      "id": 7570,
+      "id": 7576,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.rects",
@@ -1312,7 +1312,7 @@
           2
         ]
       ],
-      "id": 7391,
+      "id": 7397,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasForm.renderOffscreen",
@@ -1342,7 +1342,7 @@
           2
         ]
       ],
-      "id": 7460,
+      "id": 7466,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasForm.reset",
@@ -1365,7 +1365,7 @@
           2
         ]
       ],
-      "id": 7367,
+      "id": 7373,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1400,7 +1400,7 @@
           2
         ]
       ],
-      "id": 7487,
+      "id": 7493,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasForm.square",
@@ -1436,7 +1436,7 @@
           2
         ]
       ],
-      "id": 7561,
+      "id": 7567,
       "flags": {},
       "overrides": false,
       "inherits": "VisualForm.squares",
@@ -1466,7 +1466,7 @@
           2
         ]
       ],
-      "id": 7403,
+      "id": 7409,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasForm.stroke",
@@ -1519,7 +1519,7 @@
           2
         ]
       ],
-      "id": 7409,
+      "id": 7415,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasForm.strokeOnly",
@@ -1567,7 +1567,7 @@
           2
         ]
       ],
-      "id": 7509,
+      "id": 7515,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasForm.text",
@@ -1609,7 +1609,7 @@
           2
         ]
       ],
-      "id": 7514,
+      "id": 7520,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasForm.textBox",
@@ -1663,7 +1663,7 @@
           2
         ]
       ],
-      "id": 7363,
+      "id": 7369,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1704,7 +1704,7 @@
           2
         ]
       ],
-      "id": 7387,
+      "id": 7393,
       "flags": {},
       "overrides": false,
       "inherits": "CanvasForm.useOffscreen",
@@ -1740,7 +1740,7 @@
           9
         ]
       ],
-      "id": 7308,
+      "id": 7314,
       "flags": {
         "isStatic": true
       },
@@ -1802,7 +1802,7 @@
           9
         ]
       ],
-      "id": 7247,
+      "id": 7253,
       "flags": {
         "isStatic": true
       },
@@ -1864,7 +1864,7 @@
           9
         ]
       ],
-      "id": 7294,
+      "id": 7300,
       "flags": {
         "isStatic": true
       },
@@ -1908,7 +1908,7 @@
           9
         ]
       ],
-      "id": 7242,
+      "id": 7248,
       "flags": {
         "isStatic": true
       },
@@ -1952,7 +1952,7 @@
           9
         ]
       ],
-      "id": 7299,
+      "id": 7305,
       "flags": {
         "isStatic": true
       },
@@ -2020,7 +2020,7 @@
           9
         ]
       ],
-      "id": 7226,
+      "id": 7232,
       "flags": {
         "isStatic": true
       },
@@ -2052,7 +2052,7 @@
           9
         ]
       ],
-      "id": 7333,
+      "id": 7339,
       "flags": {
         "isStatic": true
       },
@@ -2102,7 +2102,7 @@
           9
         ]
       ],
-      "id": 7339,
+      "id": 7345,
       "flags": {
         "isStatic": true
       },
@@ -2146,7 +2146,7 @@
           9
         ]
       ],
-      "id": 7321,
+      "id": 7327,
       "flags": {
         "isStatic": true
       },
@@ -2184,7 +2184,7 @@
           9
         ]
       ],
-      "id": 7260,
+      "id": 7266,
       "flags": {
         "isStatic": true
       },
@@ -2222,7 +2222,7 @@
           9
         ]
       ],
-      "id": 7288,
+      "id": 7294,
       "flags": {
         "isStatic": true
       },
@@ -2277,7 +2277,7 @@
           9
         ]
       ],
-      "id": 7236,
+      "id": 7242,
       "flags": {
         "isStatic": true
       },
@@ -2332,7 +2332,7 @@
           19
         ]
       ],
-      "id": 7269,
+      "id": 7275,
       "flags": {
         "isProtected": true,
         "isStatic": true
@@ -2365,7 +2365,7 @@
           9
         ]
       ],
-      "id": 7325,
+      "id": 7331,
       "flags": {
         "isStatic": true
       },
@@ -2403,7 +2403,7 @@
           9
         ]
       ],
-      "id": 7275,
+      "id": 7281,
       "flags": {
         "isStatic": true
       },
@@ -2441,7 +2441,7 @@
           9
         ]
       ],
-      "id": 7329,
+      "id": 7335,
       "flags": {
         "isStatic": true
       },
@@ -2479,7 +2479,7 @@
           9
         ]
       ],
-      "id": 7279,
+      "id": 7285,
       "flags": {
         "isStatic": true
       },
@@ -2517,7 +2517,7 @@
           9
         ]
       ],
-      "id": 7229,
+      "id": 7235,
       "flags": {
         "isStatic": true
       },
@@ -2549,7 +2549,7 @@
           9
         ]
       ],
-      "id": 7316,
+      "id": 7322,
       "flags": {
         "isStatic": true
       },
@@ -2593,7 +2593,7 @@
           9
         ]
       ],
-      "id": 7255,
+      "id": 7261,
       "flags": {
         "isStatic": true
       },
@@ -2637,7 +2637,7 @@
           9
         ]
       ],
-      "id": 7232,
+      "id": 7238,
       "flags": {
         "isStatic": true
       },
@@ -2680,7 +2680,7 @@
           9
         ]
       ],
-      "id": 7344,
+      "id": 7350,
       "flags": {
         "isStatic": true
       },
@@ -2730,7 +2730,7 @@
           9
         ]
       ],
-      "id": 7283,
+      "id": 7289,
       "flags": {
         "isStatic": true
       },
@@ -2777,7 +2777,7 @@
           9
         ]
       ],
-      "id": 7225,
+      "id": 7231,
       "flags": {
         "isStatic": true
       },
@@ -2795,7 +2795,7 @@
           9
         ]
       ],
-      "id": 7224,
+      "id": 7230,
       "flags": {
         "isStatic": true
       },

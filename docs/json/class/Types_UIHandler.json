@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Typealias",
-  "id": 7662,
+  "id": 7668,
   "comment": "Typescript type: UIHandler represents a callback function to handle UI actions.",
   "constructor": [],
   "accessors": [],
