@@ -1,15 +1,15 @@
 {
-  "name": "WarningType",
+  "name": "ImgOptions",
   "source": [
     [
-      "src/Types.ts",
-      158,
+      "src/Image.ts",
+      11,
       12
     ]
   ],
   "kind": "Typealias",
-  "id": 7669,
-  "comment": "Typescript type: WarningType specifies a level of warning for [`Util.warnLevel`](#link).",
+  "id": 2833,
+  "comment": "Options for creating an [`Img`](#link).",
   "constructor": [],
   "accessors": [],
   "methods": [],
@@ -19,8 +19,6 @@
   "extends": [],
   "implements": [],
   "type_alias": [
-    "error",
-    "warn",
-    "mute"
+    "{ crossOrigin:`boolean`, editable:`boolean`, pixelScale:`number`, space:`CanvasSpace` }"
   ]
 }

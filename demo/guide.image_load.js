@@ -5,10 +5,10 @@ window.demoDescription = "Demo in loading images";
 
 //// Demo code starts (anonymous function wrapper is optional) ---
 
-(function() {
+(async function() {
   
   let run = Pts.quickStart( "#pt", "#e2e6ef" );
-  let img = Img.load( "/assets/img_demo.jpg")
+  let img = await Img.load( "/assets/img_demo.jpg");
   run( t  => form.image( space.pointer, img ) );
 
   //// ----  

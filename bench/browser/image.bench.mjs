@@ -108,4 +108,80 @@ export default defineSuite("image", (b, { Pts, fx }) => {
       sink(img.canvasSize[0]);
     },
   });
+
+  // The editable load pipeline: decode + scale-draw + full getImageData.
+  b.case("Img.load (editable)", {
+    batch: IMAGE * IMAGE,
+    setupOnce: () => sourceUrl(),
+    run: async (url) => {
+      const img = await new Img(true).load(url);
+      sink(img.canvasSize[0]);
+      img.cleanup();
+    },
+  });
+
+  // sync() currently kicks off untracked async work and returns undefined; the
+  // measurable portion is its synchronous cost (dominated by toDataURL). If a
+  // future version returns a Promise, this case awaits full completion — which
+  // only makes the before/after comparison understate the improvement.
+  b.case("Img.sync", {
+    batch: IMAGE * IMAGE,
+    setupOnce: async () => await loadImage(),
+    teardown: (img) => img?.cleanup(),
+    run: async (img) => {
+      const r = img.sync();
+      if (r && typeof r.then === "function") await r;
+      sink(img.canvasSize[0]);
+    },
+  });
+
+  // Isolates the main-thread PNG encode that sync() pays.
+  b.case("Img.toBase64", {
+    batch: IMAGE * IMAGE,
+    setupOnce: async () => await loadImage(),
+    teardown: (img) => img?.cleanup(),
+    run: (img) => {
+      sink(img.toBase64().length);
+    },
+  });
+
+  // The generative workflow: blank canvas, draw through a CanvasForm, read
+  // pixels back. Reads via crop() because blank() never populates the
+  // ImageData that pixel() requires — pixel() would throw here today.
+  b.case("Img.blank + draw + crop readback", {
+    batch: IMAGE * IMAGE,
+    setupOnce: () => ({
+      box: Bound.fromGroup(
+        Group.fromArray([
+          [0, 0],
+          [8, 8],
+        ]),
+      ),
+    }),
+    run: ({ box }) => {
+      const img = Img.blank([IMAGE, IMAGE], null, 1);
+      const form = img.getForm();
+      form.fillOnly("#f90").rect([
+        [0, 0],
+        [IMAGE, IMAGE],
+      ]);
+      const d = img.crop(box);
+      sink(d.data[0] + 1);
+      img.cleanup();
+    },
+  });
+
+  b.case("Img.bitmap", {
+    batch: 1,
+    setupOnce: async () => await loadImage(),
+    teardown: (img) => img?.cleanup(),
+    run: async (img) => {
+      const bmp = await img.bitmap();
+      sink(bmp.width);
+      bmp.close();
+    },
+  });
+
+  // Not covered intentionally: pattern(), fromBlob(), toBlob() are one-shot
+  // wrappers over platform calls with no Pts-side work to measure.
 });

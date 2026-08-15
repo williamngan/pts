@@ -2,7 +2,22 @@ import { CanvasForm, CanvasSpace } from "./Canvas";
 import { Bound, Pt } from "./Pt";
 import { Mat } from "./LinearAlgebra";
 import { PtLike, CanvasPatternRepetition } from "./Types";
+import { Util } from "./Util";
 import { RenderingContext2D } from "./Types";
+
+/**
+ * Options for creating an [`Img`](#link).
+ */
+export type ImgOptions = {
+  /** Specify if you want to manipulate pixels of this image. Default is `false`. */
+  editable?: boolean;
+  /** Set the `CanvasSpace` reference so the image's pixelScale matches the canvas. */
+  space?: CanvasSpace;
+  /** Enable loading cross-domain images. The image server must also allow it. */
+  crossOrigin?: boolean;
+  /** Set a specific pixel scale, overriding the space's. */
+  pixelScale?: number;
+};
 
 /**
  * Img provides convenient functions to support image operations on HTML Canvas and [`CanvasSpace`](#link). Combine this with other Pts functions to experiment with visual forms that integrate bitmaps and vector graphics.
@@ -18,59 +33,67 @@ export class Img {
   protected _editable: boolean;
 
   protected _space: CanvasSpace;
+  protected _patternCtx: RenderingContext2D; // lazy fallback when no space is set
+  protected _objectUrl: string; // tracked for revocation on dispose
+  private _pendingLoadReject: (err: Error) => void = null; // newer loads supersede pending ones
 
   /**
    * Create an Img
-   * @param editable Specify if you want to manipulate pixels of this image. Default is `false`.
+   * @param editable either an [`ImgOptions`](#link) object, or a boolean specifying if you want to manipulate pixels of this image. Default is `false`.
    * @param space Set the `CanvasSpace` reference. This is optional but will make sure the image's pixelScale match the canvas and set the context for creating pattern.
    * @param crossOrigin an optional parameter to enable loading cross-domain images if set to true. The image server's configuration must also be set correctly. For more, see [this documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image).
+   * @example `new Img(true, space)`, `new Img({ editable: true, pixelScale: 2 })`
    */
   constructor(
-    editable: boolean = false,
+    editable: boolean | ImgOptions = false,
     space?: CanvasSpace,
     crossOrigin?: boolean,
   ) {
-    this._editable = editable;
-    this._space = space;
-    this._scale = this._space ? this._space.pixelScale : 1;
+    const opts: ImgOptions =
+      typeof editable === "object"
+        ? editable
+        : { editable, space, crossOrigin };
+    this._editable = !!opts.editable;
+    this._space = opts.space;
+    this._scale = opts.pixelScale ?? (this._space ? this._space.pixelScale : 1);
     this._img = new Image();
-    if (crossOrigin) this._img.crossOrigin = "Anonymous";
+    if (opts.crossOrigin) this._img.crossOrigin = "Anonymous";
   }
 
   /**
-   * A static function to load an image with an optional ready callback. The Img instance will returned immediately before the image is loaded. To use async/await, use the `loadAsync` function or `new Img(...).load(...)`.
+   * A static function to load an image, returning a Promise that resolves to the loaded Img.
+   * A load failure rejects the Promise.
    * @param src an url of the image in same domain. Alternatively you can use a base64 string. To load from Blob, use `Img.fromBlob`.
-   * @param editable Specify if you want to manipulate pixels of this image. Default is `false`.
+   * @param editable either an [`ImgOptions`](#link) object, or a boolean specifying if you want to manipulate pixels of this image. Default is `false`.
    * @param space Set the `CanvasSpace` reference. This is optional but will make sure the image's pixelScale match the canvas and set the context for creating pattern.
-   * @param ready An optional ready callback function
+   * @param ready An optional callback, invoked with the Img when loading succeeds
+   * @example `const img = await Img.load("photo.jpg", true)`
    */
   static load(
     src: string,
-    editable: boolean = false,
+    editable: boolean | ImgOptions = false,
     space?: CanvasSpace,
-    ready?: (img) => {},
-  ): Img {
-    const img = new Img(editable, space);
-    img.load(src).then((res) => {
+    ready?: (img: Img) => void,
+  ): Promise<Img> {
+    return new Img(editable, space).load(src).then((res) => {
       if (ready) ready(res);
+      return res;
     });
-    return img;
   }
 
   /**
    * A static method to load an image using async/await.
+   * @deprecated Use [`Img.load`](#link), which now returns a Promise.
    * @param src an url of the image in same domain. Alternatively you can use a base64 string. To load from Blob, use `Img.fromBlob`.
    * @param editable Specify if you want to manipulate pixels of this image. Default is `false`.
    * @param space Set the `CanvasSpace` reference. This is optional but will make sure the image's pixelScale match the canvas and set the context for creating pattern.
-   * @returns
    */
   static async loadAsync(
     src: string,
-    editable: boolean = false,
+    editable: boolean | ImgOptions = false,
     space?: CanvasSpace,
-  ) {
-    const img = await new Img(editable, space).load(src);
-    return img;
+  ): Promise<Img> {
+    return Img.load(src, editable, space);
   }
 
   /**
@@ -111,33 +134,47 @@ export class Img {
    */
   load(src: string): Promise<Img> {
     return new Promise((resolve, reject) => {
-      if (this._editable && !document) {
-        reject("Cannot create html canvas element. document not found.");
+      if (this._editable && typeof document === "undefined") {
+        reject(
+          new Error("Cannot create html canvas element. document not found."),
+        );
+        return;
       }
 
-      this._img.src = src;
+      // a newer load replaces this one's handlers on the shared <img>, so a
+      // pending previous promise must be rejected proactively
+      if (this._pendingLoadReject) {
+        this._pendingLoadReject(
+          new Error("Img loading superseded by a newer load"),
+        );
+      }
+      this._pendingLoadReject = reject;
 
       this._img.onload = () => {
+        this._pendingLoadReject = null;
         if (this._editable) {
           if (!this._cv)
             this._cv = document.createElement("canvas") as HTMLCanvasElement;
           this._drawToScale(this._scale, this._img);
-          this._data = this._ctx.getImageData(
-            0,
-            0,
-            this._cv.width,
-            this._cv.height,
-          );
+          this._refreshData();
         }
 
         this._loaded = true;
         resolve(this);
       };
 
-      this._img.onerror = (evt: Event) => {
-        reject(evt);
+      this._img.onerror = () => {
+        this._pendingLoadReject = null;
+        reject(new Error(`Img cannot load ${src}`));
       };
+
+      this._img.src = src;
     });
+  }
+
+  /** Refresh the cached `ImageData` from the current canvas. */
+  protected _refreshData(): void {
+    this._data = this._ctx.getImageData(0, 0, this._cv.width, this._cv.height);
   }
 
   /**
@@ -157,7 +194,7 @@ export class Img {
   ) {
     const nw = img.width as number;
     const nh = img.height as number;
-    this.initCanvas(nw, nh, canvasScale);
+    this._initCanvas(nw, nh, canvasScale);
     if (img)
       this._ctx.drawImage(
         img,
@@ -179,8 +216,21 @@ export class Img {
    * @param canvasScale pixel scale
    */
   initCanvas(width: number, height: number, canvasScale: number | PtLike = 1) {
+    this._initCanvas(width, height, canvasScale);
+    if (this._ctx) this._refreshData(); // a blank image must still support pixel reads
+  }
+
+  /**
+   * Internal canvas setup without the pixel-data refresh — callers that draw
+   * immediately afterwards refresh once after their draw instead.
+   */
+  protected _initCanvas(
+    width: number,
+    height: number,
+    canvasScale: number | PtLike = 1,
+  ) {
     if (!this._editable) {
-      console.error(
+      Util.warn(
         "Cannot initiate canvas because this Img is not set to be editable",
       );
       return;
@@ -196,6 +246,9 @@ export class Img {
     this._cv.width = width * cms[0];
     this._cv.height = height * cms[1];
     this._ctx = this._cv.getContext("2d");
+    // keep the pixel-density field coherent with the actual canvas scaling,
+    // which `pixel( p, true )` depends on
+    if (typeof canvasScale === "number") this._scale = canvasScale;
     this._loaded = true;
   }
 
@@ -220,30 +273,34 @@ export class Img {
     reptition: CanvasPatternRepetition = "repeat",
     dynamic: boolean = false,
   ): CanvasPattern {
-    if (!this._space)
-      throw "Cannot find CanvasSpace ctx to create image pattern";
-    return this._space.ctx.createPattern(
-      dynamic ? this._cv : this._img,
-      reptition,
-    );
+    // any 2D context can create a pattern; fall back to an internal one so a
+    // CanvasSpace reference is optional
+    let ctx: RenderingContext2D = this._space ? this._space.ctx : undefined;
+    if (!ctx) {
+      if (!this._patternCtx) {
+        this._patternCtx = document.createElement("canvas").getContext("2d");
+      }
+      ctx = this._patternCtx;
+    }
+    return ctx.createPattern(dynamic ? this._cv : this._img, reptition);
   }
 
   /**
    * Replace the image with the current canvas data. For example, you can use CanvasForm's static functions to draw on `this.ctx` and then update the current image.
    * To display the internal canvas, you can also use `form.image( img.canvas )` directly.
    */
-  sync() {
+  async sync(): Promise<Img> {
     // retina: resize canvas to fit image original size
     if (this._scale !== 1) {
-      this.bitmap().then((b) => {
-        this._drawToScale(1 / this._scale, b); // rescale canvas to match original and draw saved bitmap
-        this.load(this.toBase64()); // load current canvas into image
-      });
+      const b = await this.bitmap();
+      this._drawToScale(1 / this._scale, b); // rescale canvas to match original and draw saved bitmap
+      await this.load(this.toBase64()); // load current canvas into image (also refreshes data)
 
       // no retina so no need to rescale
     } else {
-      this._img.src = this.toBase64();
+      await this.load(this.toBase64());
     }
+    return this;
   }
 
   /**
@@ -253,8 +310,66 @@ export class Img {
    * @returns [R,G,B,A] values of the pixel at the specific position
    */
   pixel(p: PtLike, rescale: boolean | number = true): Pt {
+    if (!this._data) {
+      Util.warn(
+        "Img has no pixel data — create it as editable and wait for load",
+      );
+      return new Pt(0, 0, 0, 0);
+    }
     const s = typeof rescale == "number" ? rescale : rescale ? this._scale : 1;
     return Img.getPixel(this._data, [p[0] * s, p[1] * s]);
+  }
+
+  /**
+   * Set the RGBA values of a pixel in the cached `ImageData`. Call [`Img.updatePixels`](#link)
+   * to write the changes onto the canvas.
+   * @param p position of the pixel
+   * @param rgba [R,G,B,A] values, 0-255
+   * @param rescale Specify if the pixel position should be scaled, matching [`Img.pixel`](#link)
+   */
+  setPixel(p: PtLike, rgba: PtLike, rescale: boolean | number = true): this {
+    if (!this._data) {
+      Util.warn("Img has no pixel data — create it as editable");
+      return this;
+    }
+    const s = typeof rescale == "number" ? rescale : rescale ? this._scale : 1;
+    const x = Math.floor(p[0] * s);
+    const y = Math.floor(p[1] * s);
+    if (x < 0 || y < 0 || x >= this._data.width || y >= this._data.height) {
+      return this;
+    }
+    const i = y * this._data.width * 4 + x * 4;
+    this._data.data[i] = rgba[0];
+    this._data.data[i + 1] = rgba[1];
+    this._data.data[i + 2] = rgba[2];
+    this._data.data[i + 3] = rgba[3] !== undefined ? rgba[3] : 255;
+    return this;
+  }
+
+  /**
+   * Refresh the cached `ImageData` from the canvas — call this after drawing on the
+   * canvas (eg, via [`Img.getForm`](#link)) before reading pixels.
+   */
+  loadPixels(): this {
+    if (!this._ctx) {
+      Util.warn("Img has no canvas — create it as editable");
+      return this;
+    }
+    this._refreshData();
+    return this;
+  }
+
+  /**
+   * Write the cached `ImageData` (eg, after [`Img.setPixel`](#link) calls) back onto
+   * the canvas.
+   */
+  updatePixels(): this {
+    if (!this._ctx || !this._data) {
+      Util.warn("Img has no canvas — create it as editable");
+      return this;
+    }
+    this._ctx.putImageData(this._data, 0, 0);
+    return this;
   }
 
   /**
@@ -265,11 +380,18 @@ export class Img {
    */
   static getPixel(imgData: ImageData, p: PtLike): Pt {
     const no = new Pt(0, 0, 0, 0);
-    if (p[0] >= imgData.width || p[1] >= imgData.height) return no;
+    if (
+      p[0] < 0 ||
+      p[1] < 0 ||
+      p[0] >= imgData.width ||
+      p[1] >= imgData.height
+    ) {
+      return no;
+    }
 
     const i = Math.floor(p[1]) * (imgData.width * 4) + Math.floor(p[0]) * 4;
     const d = imgData.data;
-    if (i >= d.length - 4) return no;
+    if (i > d.length - 4) return no;
 
     return new Pt(d[i], d[i + 1], d[i + 2], d[i + 3]);
   }
@@ -280,14 +402,29 @@ export class Img {
    * @param asScale If true, treat the first parameter as scales. Otherwise, treat it as specific sizes.
    */
   resize(sizeOrScale: PtLike, asScale: boolean = false): this {
-    let s = asScale
+    const hasImage = this._img.naturalWidth > 0;
+    // canvas-only images (eg, from `Img.blank`) scale relative to the canvas
+    // size, and need a snapshot since `_drawToScale` clears the canvas first
+    const refW = hasImage ? this._img.naturalWidth : this._cv.width;
+    const refH = hasImage ? this._img.naturalHeight : this._cv.height;
+    if (!refW || !refH) {
+      Util.warn("Img cannot resize before an image or canvas exists");
+      return this;
+    }
+    const s = asScale
       ? sizeOrScale
-      : [
-          sizeOrScale[0] / this._img.naturalWidth,
-          sizeOrScale[1] / this._img.naturalHeight,
-        ];
-    this._drawToScale(s, this._img);
-    this._data = this._ctx.getImageData(0, 0, this._cv.width, this._cv.height);
+      : [sizeOrScale[0] / refW, sizeOrScale[1] / refH];
+
+    let source: HTMLImageElement | HTMLCanvasElement = this._img;
+    if (!hasImage) {
+      const snap = document.createElement("canvas");
+      snap.width = this._cv.width;
+      snap.height = this._cv.height;
+      snap.getContext("2d").drawImage(this._cv, 0, 0);
+      source = snap;
+    }
+    this._drawToScale(s, source);
+    this._refreshData();
     return this;
   }
 
@@ -306,19 +443,44 @@ export class Img {
    * @param css a css filter string such as "blur(10px) | contrast(200%)". See [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter#browser_compatibility) for a list of filter functions.
    */
   filter(css: string): this {
+    // "copy" replaces the canvas with the filtered result (the source is
+    // snapshotted before compositing) — plain source-over would blend the
+    // filtered copy with the original wherever the filter introduces alpha
+    const op = this._ctx.globalCompositeOperation;
+    this._ctx.globalCompositeOperation = "copy";
     this._ctx.filter = css;
     this._ctx.drawImage(this._cv, 0, 0);
     this._ctx.filter = "none";
+    this._ctx.globalCompositeOperation = op;
+    this._refreshData();
+    return this;
+  }
+
+  /**
+   * Dispose of the elements, data, and any object URL associated with this Img.
+   */
+  dispose(): this {
+    if (this._objectUrl) {
+      URL.revokeObjectURL(this._objectUrl);
+      this._objectUrl = null;
+    }
+    if (this._cv) this._cv.remove();
+    if (this._img) this._img.remove();
+    this._cv = null;
+    this._ctx = null;
+    this._patternCtx = null;
+    this._img = null;
+    this._data = null;
+    this._loaded = false;
     return this;
   }
 
   /**
    * Remove the elements and data associated with this Img.
+   * @deprecated Use [`Img.dispose`](#link).
    */
   cleanup() {
-    if (this._cv) this._cv.remove();
-    if (this._img) this._img.remove();
-    this._data = null;
+    this.dispose();
   }
 
   /**
@@ -328,11 +490,28 @@ export class Img {
    */
   static fromBlob(
     blob: Blob,
-    editable: boolean = false,
+    editable: boolean | ImgOptions = false,
     space?: CanvasSpace,
   ): Promise<Img> {
-    let url = URL.createObjectURL(blob);
-    return new Img(editable, space).load(url);
+    const url = URL.createObjectURL(blob);
+    const img = new Img(editable, space);
+    img._objectUrl = url;
+    // the decoded image no longer needs the URL once the load settles;
+    // dispose() also guards this
+    const done = () => {
+      URL.revokeObjectURL(url);
+      img._objectUrl = null;
+    };
+    return img.load(url).then(
+      (res) => {
+        done();
+        return res;
+      },
+      (err) => {
+        done();
+        throw err;
+      },
+    );
   }
 
   /**
@@ -341,8 +520,11 @@ export class Img {
    */
   static imageDataToBlob(data: ImageData): Promise<Blob> {
     return new Promise(function (resolve, reject) {
-      if (!document) {
-        reject("Cannot create html canvas element. document not found.");
+      if (typeof document === "undefined") {
+        reject(
+          new Error("Cannot create html canvas element. document not found."),
+        );
+        return;
       }
       let cv = document.createElement("canvas") as HTMLCanvasElement;
       cv.width = data.width;
@@ -376,7 +558,7 @@ export class Img {
    */
   getForm(): CanvasForm {
     if (!this._editable) {
-      console.error("Cannot get a CanvasForm because this Img is not editable");
+      Util.warn("Cannot get a CanvasForm because this Img is not editable");
     }
     return this._ctx ? new CanvasForm(this._ctx) : undefined;
   }
@@ -434,8 +616,8 @@ export class Img {
    * Get size of the original image
    */
   get imageSize(): Pt {
-    if (!this._img.width || !this._img.height) {
-      return this.canvasSize.$divide(this._scale);
+    if (!this._img || !this._img.width || !this._img.height) {
+      return this._cv ? this.canvasSize.$divide(this._scale) : new Pt(0, 0);
     } else {
       return new Pt(this._img.width, this._img.height);
     }

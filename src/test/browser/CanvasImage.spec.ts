@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { CanvasForm, CanvasSpace } from "../../Canvas";
 import { Font } from "../../Form";
 import { Img } from "../../Image";
+import { Util } from "../../Util";
 import { Bound, Group, Pt } from "../../Pt";
 
 const bounds = (width = 200, height = 100) =>
@@ -496,8 +497,8 @@ describe("Img", () => {
     expect(img.loaded).toBe(true);
     expect(img.current).toBe(img.canvas);
     expect(img.canvasSize).toEqual(new Pt(16, 12));
-    expect(img.imageSize).toEqual(new Pt(16, 12));
-    expect(img.pixelScale).toBe(1);
+    expect(img.imageSize).toEqual(new Pt(8, 6)); // logical size: canvas / pixelScale
+    expect(img.pixelScale).toBe(2);
     expect(img.getForm()).toBeInstanceOf(CanvasForm);
     expect(img.ctx).toBeTruthy();
     expect(img.image).toBeInstanceOf(HTMLImageElement);
@@ -530,15 +531,17 @@ describe("Img", () => {
     const loaded = await Img.loadAsync(url, true);
     expect(loaded.loaded).toBe(true);
     expect(loaded.imageSize).toEqual(new Pt(4, 3));
-    loaded.resize([8, 6]).resize([0.5, 0.5], true).sync();
+    await loaded.resize([8, 6]).resize([0.5, 0.5], true).sync();
 
+    // merged static load: returns a Promise and still supports the callback
     const callback = vi.fn();
-    const immediate = Img.load(url, false, undefined, callback);
-    expect(immediate).toBeInstanceOf(Img);
-    await new Promise<void>((resolve) => {
-      immediate.image.addEventListener("load", () => resolve(), { once: true });
-    });
-    expect(callback).toHaveBeenCalled();
+    const viaPromise = await Img.load(url, false, undefined, callback);
+    expect(viaPromise).toBeInstanceOf(Img);
+    expect(callback).toHaveBeenCalledWith(viaPromise);
+    // failures reject instead of vanishing
+    await expect(
+      Img.load("data:image/png;base64,not-an-image"),
+    ).rejects.toThrow(/cannot load/);
 
     const blob = await loaded.toBlob();
     const fromBlob = await Img.fromBlob(blob, true);
@@ -553,7 +556,8 @@ describe("Img", () => {
     );
     const dynamic = Img.blank([2, 2], space);
     expect(dynamic.pattern("repeat-x", true)).toBeInstanceOf(CanvasPattern);
-    expect(() => loaded.pattern()).toThrow(/CanvasSpace/);
+    // pattern no longer requires a CanvasSpace: it falls back internally
+    expect(loaded.pattern()).toBeInstanceOf(CanvasPattern);
     space.dispose();
 
     loaded.cleanup();
@@ -563,12 +567,122 @@ describe("Img", () => {
   it("reports invalid edit operations and image load failures", async () => {
     const plain = new Img(false, undefined, true);
     expect(plain.image.crossOrigin).toBe("anonymous");
-    const error = vi.spyOn(console, "error").mockImplementation(() => {});
+    Util.warnLevel("warn");
+    const warned = vi.spyOn(console, "warn").mockImplementation(() => {});
     plain.initCanvas(2, 2);
     expect(plain.getForm()).toBeUndefined();
-    expect(error).toHaveBeenCalledTimes(2);
+    expect(warned).toHaveBeenCalledTimes(2);
+    Util.warnLevel("mute");
     await expect(
       plain.load("data:image/png;base64,invalid"),
     ).rejects.toBeTruthy();
+  });
+});
+
+describe("Img correctness fixes", () => {
+  function sourceUrl(w = 4, h = 4, color = "#ff0000") {
+    const cv = document.createElement("canvas");
+    cv.width = w;
+    cv.height = h;
+    const ctx = cv.getContext("2d");
+    ctx.fillStyle = color;
+    ctx.fillRect(0, 0, w, h);
+    return cv.toDataURL();
+  }
+
+  it("reads the last pixel and rejects negative coordinates", async () => {
+    const img = await Img.load(sourceUrl(4, 4), true);
+    expect(img.pixel([3, 3], false)).toEqual(new Pt(255, 0, 0, 255));
+    expect(img.pixel([-1, 0], false)).toEqual(new Pt(0, 0, 0, 0));
+    img.dispose();
+  });
+
+  it("supersedes a pending load with a rejection", async () => {
+    const img = new Img(true);
+    const first = img.load(sourceUrl(4, 4, "#00ff00"));
+    const second = img.load(sourceUrl(4, 4, "#0000ff"));
+    await expect(first).rejects.toThrow(/superseded/);
+    await (await second).sync();
+    expect(img.pixel([1, 1], false)[2]).toBe(255); // blue won
+    img.dispose();
+  });
+
+  it("sync() is awaitable and refreshes data at scale 1 and 2", async () => {
+    for (const scale of [1, 2]) {
+      const img = Img.blank([4, 4], undefined, scale);
+      const form = img.getForm();
+      form.fillOnly("#00ff00").rect([
+        [0, 0],
+        [8, 8],
+      ]);
+      img.loadPixels();
+      await img.sync();
+      expect(img.pixel([1, 1], false)[1]).toBe(255);
+      img.dispose();
+    }
+  });
+
+  it("filter replaces instead of compositing", async () => {
+    const img = await Img.load(sourceUrl(4, 4), true);
+    img.filter("opacity(50%)");
+    const alpha = img.pixel([1, 1], false)[3];
+    // "copy" semantics: 50% of 255 ≈ 127-128; the old bug composited to ~191
+    expect(alpha).toBeGreaterThan(120);
+    expect(alpha).toBeLessThan(140);
+    img.dispose();
+  });
+
+  it("resizes canvas-only images", () => {
+    const img = Img.blank([4, 4]);
+    const form = img.getForm();
+    form.fillOnly("#0000ff").rect([
+      [0, 0],
+      [4, 4],
+    ]);
+    img.resize([8, 8]);
+    expect(img.canvasSize).toEqual(new Pt(8, 8));
+    expect(img.pixel([6, 6], false)[2]).toBe(255); // content scaled up
+    img.dispose();
+  });
+
+  it("blank images support pixel reads immediately", () => {
+    const img = Img.blank([4, 4]);
+    expect(img.pixel([1, 1], false)).toEqual(new Pt(0, 0, 0, 0)); // no crash
+    img.dispose();
+  });
+
+  it("setPixel and updatePixels round-trip", () => {
+    const img = Img.blank([4, 4]);
+    img.setPixel([2, 2], [10, 20, 30, 255], false).updatePixels();
+    img.loadPixels();
+    expect(img.pixel([2, 2], false)).toEqual(new Pt(10, 20, 30, 255));
+    img.dispose();
+  });
+
+  it("supports the options-object constructor", () => {
+    const img = new Img({ editable: true, pixelScale: 2 });
+    expect(img.pixelScale).toBe(2);
+    img.initCanvas(4, 4, 2);
+    expect(img.canvasSize).toEqual(new Pt(8, 8));
+    img.dispose();
+  });
+
+  it("revokes object URLs from fromBlob", async () => {
+    const revoke = vi.spyOn(URL, "revokeObjectURL");
+    const src = await Img.load(sourceUrl(2, 2), true);
+    const blob = await src.toBlob();
+    const img = await Img.fromBlob(blob, true);
+    expect(img.loaded).toBe(true);
+    expect(revoke).toHaveBeenCalled();
+    revoke.mockRestore();
+    img.dispose();
+    src.dispose();
+  });
+
+  it("warns instead of crashing on non-editable pixel reads", async () => {
+    const img = await Img.load(sourceUrl(2, 2), false);
+    expect(img.pixel([0, 0])).toEqual(new Pt(0, 0, 0, 0));
+    expect(new Img().imageSize).toEqual(new Pt(0, 0));
+    img.dispose();
   });
 });

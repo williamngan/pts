@@ -3,12 +3,12 @@
   "source": [
     [
       "src/Image.ts",
-      10,
+      25,
       13
     ]
   ],
   "kind": "Class",
-  "id": 2833,
+  "id": 2839,
   "comment": "Img provides convenient functions to support image operations on HTML Canvas and [`CanvasSpace`](#link). Combine this with other Pts functions to experiment with visual forms that integrate bitmaps and vector graphics.",
   "constructor": [
     {
@@ -16,11 +16,11 @@
       "source": [
         [
           "src/Image.ts",
-          28,
+          47,
           2
         ]
       ],
-      "id": 2872,
+      "id": 2877,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -32,8 +32,8 @@
           "parameters": [
             {
               "name": "editable",
-              "comment": "Specify if you want to manipulate pixels of this image. Default is `false`.",
-              "type": "boolean",
+              "comment": "either an [`ImgOptions`](#link) object, or a boolean specifying if you want to manipulate pixels of this image. Default is `false`.",
+              "type": "boolean | ImgOptions",
               "default": "false"
             },
             {
@@ -49,7 +49,12 @@
               "default": false
             }
           ],
-          "tags": []
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`new Img(true, space)`, `new Img({ editable: true, pixelScale: 2 })`"
+            }
+          ]
         }
       ]
     }
@@ -60,11 +65,11 @@
       "source": [
         [
           "src/Image.ts",
-          401,
+          583,
           6
         ]
       ],
-      "id": 2932,
+      "id": 2961,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -79,11 +84,11 @@
       "source": [
         [
           "src/Image.ts",
-          447,
+          629,
           6
         ]
       ],
-      "id": 2944,
+      "id": 2973,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -98,11 +103,11 @@
       "source": [
         [
           "src/Image.ts",
-          415,
+          597,
           6
         ]
       ],
-      "id": 2936,
+      "id": 2965,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -117,11 +122,11 @@
       "source": [
         [
           "src/Image.ts",
-          387,
+          569,
           6
         ]
       ],
-      "id": 2928,
+      "id": 2957,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -136,11 +141,11 @@
       "source": [
         [
           "src/Image.ts",
-          408,
+          590,
           6
         ]
       ],
-      "id": 2934,
+      "id": 2963,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -155,11 +160,11 @@
       "source": [
         [
           "src/Image.ts",
-          394,
+          576,
           6
         ]
       ],
-      "id": 2930,
+      "id": 2959,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -174,11 +179,11 @@
       "source": [
         [
           "src/Image.ts",
-          436,
+          618,
           6
         ]
       ],
-      "id": 2942,
+      "id": 2971,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -193,11 +198,11 @@
       "source": [
         [
           "src/Image.ts",
-          422,
+          604,
           6
         ]
       ],
-      "id": 2938,
+      "id": 2967,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -212,11 +217,11 @@
       "source": [
         [
           "src/Image.ts",
-          429,
+          611,
           6
         ]
       ],
-      "id": 2940,
+      "id": 2969,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -231,11 +236,11 @@
       "source": [
         [
           "src/Image.ts",
-          456,
+          638,
           6
         ]
       ],
-      "id": 2946,
+      "id": 2975,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -252,11 +257,11 @@
       "source": [
         [
           "src/Image.ts",
-          207,
+          260,
           2
         ]
       ],
-      "id": 2897,
+      "id": 2915,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -282,11 +287,11 @@
       "source": [
         [
           "src/Image.ts",
-          318,
+          482,
           2
         ]
       ],
-      "id": 2920,
+      "id": 2949,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -296,7 +301,12 @@
           "returns": "void",
           "returns_comment": false,
           "parameters": [],
-          "tags": []
+          "tags": [
+            {
+              "tag": "deprecated",
+              "text": "Use [`Img.dispose`](#link)."
+            }
+          ]
         }
       ]
     },
@@ -305,11 +315,11 @@
       "source": [
         [
           "src/Image.ts",
-          298,
+          435,
           2
         ]
       ],
-      "id": 2914,
+      "id": 2941,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -331,15 +341,38 @@
       ]
     },
     {
+      "name": "dispose",
+      "source": [
+        [
+          "src/Image.ts",
+          462,
+          2
+        ]
+      ],
+      "id": 2947,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Dispose of the elements, data, and any object URL associated with this Img.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "filter",
       "source": [
         [
           "src/Image.ts",
-          308,
+          445,
           2
         ]
       ],
-      "id": 2917,
+      "id": 2944,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -365,11 +398,11 @@
       "source": [
         [
           "src/Image.ts",
-          377,
+          559,
           2
         ]
       ],
-      "id": 2926,
+      "id": 2955,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -388,11 +421,11 @@
       "source": [
         [
           "src/Image.ts",
-          181,
+          218,
           2
         ]
       ],
-      "id": 2892,
+      "id": 2905,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -430,11 +463,11 @@
       "source": [
         [
           "src/Image.ts",
-          112,
+          135,
           2
         ]
       ],
-      "id": 2885,
+      "id": 2896,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -456,15 +489,38 @@
       ]
     },
     {
+      "name": "loadPixels",
+      "source": [
+        [
+          "src/Image.ts",
+          353,
+          2
+        ]
+      ],
+      "id": 2933,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Refresh the cached `ImageData` from the canvas — call this after drawing on the\ncanvas (eg, via [`Img.getForm`](#link)) before reading pixels.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "pattern",
       "source": [
         [
           "src/Image.ts",
-          219,
+          272,
           2
         ]
       ],
-      "id": 2900,
+      "id": 2918,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -496,11 +552,11 @@
       "source": [
         [
           "src/Image.ts",
-          255,
+          312,
           2
         ]
       ],
-      "id": 2906,
+      "id": 2924,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -532,11 +588,11 @@
       "source": [
         [
           "src/Image.ts",
-          282,
+          404,
           2
         ]
       ],
-      "id": 2910,
+      "id": 2937,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -564,22 +620,64 @@
       ]
     },
     {
+      "name": "setPixel",
+      "source": [
+        [
+          "src/Image.ts",
+          330,
+          2
+        ]
+      ],
+      "id": 2928,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Set the RGBA values of a pixel in the cached `ImageData`. Call [`Img.updatePixels`](#link)\nto write the changes onto the canvas.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "p",
+              "comment": "position of the pixel",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "rgba",
+              "comment": "[R,G,B,A] values, 0-255",
+              "type": "PtLike",
+              "default": false
+            },
+            {
+              "name": "rescale",
+              "comment": "Specify if the pixel position should be scaled, matching [`Img.pixel`](#link)",
+              "type": "number | boolean",
+              "default": "true"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "sync",
       "source": [
         [
           "src/Image.ts",
-          235,
-          2
+          292,
+          8
         ]
       ],
-      "id": 2904,
+      "id": 2922,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
           "comment": "Replace the image with the current canvas data. For example, you can use CanvasForm's static functions to draw on `this.ctx` and then update the current image.\nTo display the internal canvas, you can also use `form.image( img.canvas )` directly.",
-          "returns": "void",
+          "returns": "Promise",
           "returns_comment": false,
           "parameters": [],
           "tags": []
@@ -591,11 +689,11 @@
       "source": [
         [
           "src/Image.ts",
-          361,
+          543,
           2
         ]
       ],
-      "id": 2922,
+      "id": 2951,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -614,11 +712,11 @@
       "source": [
         [
           "src/Image.ts",
-          368,
+          550,
           2
         ]
       ],
-      "id": 2924,
+      "id": 2953,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -633,15 +731,38 @@
       ]
     },
     {
+      "name": "updatePixels",
+      "source": [
+        [
+          "src/Image.ts",
+          366,
+          2
+        ]
+      ],
+      "id": 2935,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Write the cached `ImageData` (eg, after [`Img.setPixel`](#link) calls) back onto\nthe canvas.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "blank",
       "source": [
         [
           "src/Image.ts",
-          100,
+          123,
           9
         ]
       ],
-      "id": 2855,
+      "id": 2860,
       "flags": {
         "isStatic": true
       },
@@ -681,11 +802,11 @@
       "source": [
         [
           "src/Image.ts",
-          329,
+          491,
           9
         ]
       ],
-      "id": 2864,
+      "id": 2869,
       "flags": {
         "isStatic": true
       },
@@ -706,7 +827,7 @@
             {
               "name": "editable",
               "comment": "Specify if you want to manipulate pixels of this image. Default is `false`.",
-              "type": "boolean",
+              "type": "boolean | ImgOptions",
               "default": "false"
             },
             {
@@ -725,11 +846,11 @@
       "source": [
         [
           "src/Image.ts",
-          266,
+          381,
           9
         ]
       ],
-      "id": 2860,
+      "id": 2865,
       "flags": {
         "isStatic": true
       },
@@ -763,11 +884,11 @@
       "source": [
         [
           "src/Image.ts",
-          342,
+          521,
           9
         ]
       ],
-      "id": 2869,
+      "id": 2874,
       "flags": {
         "isStatic": true
       },
@@ -795,11 +916,11 @@
       "source": [
         [
           "src/Image.ts",
-          47,
+          72,
           9
         ]
       ],
-      "id": 2834,
+      "id": 2840,
       "flags": {
         "isStatic": true
       },
@@ -807,8 +928,8 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "A static function to load an image with an optional ready callback. The Img instance will returned immediately before the image is loaded. To use async/await, use the `loadAsync` function or `new Img(...).load(...)`.",
-          "returns": "Img",
+          "comment": "A static function to load an image, returning a Promise that resolves to the loaded Img.\nA load failure rejects the Promise.",
+          "returns": "Promise",
           "returns_comment": false,
           "parameters": [
             {
@@ -819,8 +940,8 @@
             },
             {
               "name": "editable",
-              "comment": "Specify if you want to manipulate pixels of this image. Default is `false`.",
-              "type": "boolean",
+              "comment": "either an [`ImgOptions`](#link) object, or a boolean specifying if you want to manipulate pixels of this image. Default is `false`.",
+              "type": "boolean | ImgOptions",
               "default": "false"
             },
             {
@@ -831,12 +952,17 @@
             },
             {
               "name": "ready",
-              "comment": "An optional ready callback function",
-              "type": " Fn(img:any)",
+              "comment": "An optional callback, invoked with the Img when loading succeeds",
+              "type": " Fn(img:Img)",
               "default": false
             }
           ],
-          "tags": []
+          "tags": [
+            {
+              "tag": "example",
+              "text": "`const img = await Img.load(\"photo.jpg\", true)`"
+            }
+          ]
         }
       ]
     },
@@ -845,11 +971,11 @@
       "source": [
         [
           "src/Image.ts",
-          67,
+          91,
           15
         ]
       ],
-      "id": 2844,
+      "id": 2849,
       "flags": {
         "isStatic": true
       },
@@ -870,7 +996,7 @@
             {
               "name": "editable",
               "comment": "Specify if you want to manipulate pixels of this image. Default is `false`.",
-              "type": "boolean",
+              "type": "boolean | ImgOptions",
               "default": "false"
             },
             {
@@ -880,7 +1006,12 @@
               "default": false
             }
           ],
-          "tags": []
+          "tags": [
+            {
+              "tag": "deprecated",
+              "text": "Use [`Img.load`](#link), which now returns a Promise."
+            }
+          ]
         }
       ]
     },
@@ -889,11 +1020,11 @@
       "source": [
         [
           "src/Image.ts",
-          84,
+          107,
           15
         ]
       ],
-      "id": 2849,
+      "id": 2854,
       "flags": {
         "isStatic": true
       },

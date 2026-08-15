@@ -542,6 +542,12 @@ declare class Mat {
 }
 //#endregion
 //#region src/Image.d.ts
+type ImgOptions = {
+  editable?: boolean;
+  space?: CanvasSpace;
+  crossOrigin?: boolean;
+  pixelScale?: number;
+};
 declare class Img {
   protected _img: HTMLImageElement;
   protected _data: ImageData;
@@ -551,24 +557,33 @@ declare class Img {
   protected _loaded: boolean;
   protected _editable: boolean;
   protected _space: CanvasSpace;
-  constructor(editable?: boolean, space?: CanvasSpace, crossOrigin?: boolean);
-  static load(src: string, editable?: boolean, space?: CanvasSpace, ready?: (img: any) => {}): Img;
-  static loadAsync(src: string, editable?: boolean, space?: CanvasSpace): Promise<Img>;
+  protected _patternCtx: RenderingContext2D;
+  protected _objectUrl: string;
+  private _pendingLoadReject;
+  constructor(editable?: boolean | ImgOptions, space?: CanvasSpace, crossOrigin?: boolean);
+  static load(src: string, editable?: boolean | ImgOptions, space?: CanvasSpace, ready?: (img: Img) => void): Promise<Img>;
+  static loadAsync(src: string, editable?: boolean | ImgOptions, space?: CanvasSpace): Promise<Img>;
   static loadPattern(src: string, space: CanvasSpace, repeat?: CanvasPatternRepetition, editable?: boolean): Promise<CanvasPattern>;
   static blank(size: PtLike, space?: CanvasSpace, scale?: number): Img;
   load(src: string): Promise<Img>;
+  protected _refreshData(): void;
   protected _drawToScale(canvasScale: number | PtLike, img: HTMLImageElement | HTMLCanvasElement | ImageBitmap | OffscreenCanvas | HTMLVideoElement): void;
   initCanvas(width: number, height: number, canvasScale?: number | PtLike): void;
+  protected _initCanvas(width: number, height: number, canvasScale?: number | PtLike): void;
   bitmap(size?: PtLike): Promise<ImageBitmap>;
   pattern(reptition?: CanvasPatternRepetition, dynamic?: boolean): CanvasPattern;
-  sync(): void;
+  sync(): Promise<Img>;
   pixel(p: PtLike, rescale?: boolean | number): Pt;
+  setPixel(p: PtLike, rgba: PtLike, rescale?: boolean | number): this;
+  loadPixels(): this;
+  updatePixels(): this;
   static getPixel(imgData: ImageData, p: PtLike): Pt;
   resize(sizeOrScale: PtLike, asScale?: boolean): this;
   crop(box: Bound): ImageData;
   filter(css: string): this;
+  dispose(): this;
   cleanup(): void;
-  static fromBlob(blob: Blob, editable?: boolean, space?: CanvasSpace): Promise<Img>;
+  static fromBlob(blob: Blob, editable?: boolean | ImgOptions, space?: CanvasSpace): Promise<Img>;
   static imageDataToBlob(data: ImageData): Promise<Blob>;
   toBase64(): string;
   toBlob(): Promise<Blob>;
@@ -1486,5 +1501,5 @@ declare class Sound {
   toggle(): this;
 }
 //#endregion
-export { AnimateCallbackFn, Body, Bound, CanvasForm, CanvasPatternRepetition, CanvasSpace, CanvasSpaceOptions, Circle, Color, ColorType, Const, Create, Curve, DOMFormContext, DOMSpace, DefaultFormStyle, Delaunay, DelaunayMesh, DelaunayShape, Font, Form, Geom, Group, GroupLike, HTMLForm, HTMLSpace, IPlayer, IPt, ISoundAnalyzer, ISpacePlayers, ITempoListener, ITempoProgressFn, ITempoResponses, ITempoStartFn, ITimer, Img, IntersectContext, Line, Mat, MultiTouchElement, MultiTouchSpace, Noise, Num, Particle, Polygon, Pt, PtIterable, PtLike, PtLikeIterable, Range, Rectangle, RenderingContext2D, SVGContext2D, SVGForm, SVGSpace, Shaping, Sound, SoundType, Space, Tempo, TouchPointsKey, Triangle, Typography, UI, UIButton, UIDragger, UIHandler, UIPointerAction, UIPointerActions, UIShape, Util, Vec, VisualForm, WarningType, World };
+export { AnimateCallbackFn, Body, Bound, CanvasForm, CanvasPatternRepetition, CanvasSpace, CanvasSpaceOptions, Circle, Color, ColorType, Const, Create, Curve, DOMFormContext, DOMSpace, DefaultFormStyle, Delaunay, DelaunayMesh, DelaunayShape, Font, Form, Geom, Group, GroupLike, HTMLForm, HTMLSpace, IPlayer, IPt, ISoundAnalyzer, ISpacePlayers, ITempoListener, ITempoProgressFn, ITempoResponses, ITempoStartFn, ITimer, Img, ImgOptions, IntersectContext, Line, Mat, MultiTouchElement, MultiTouchSpace, Noise, Num, Particle, Polygon, Pt, PtIterable, PtLike, PtLikeIterable, Range, Rectangle, RenderingContext2D, SVGContext2D, SVGForm, SVGSpace, Shaping, Sound, SoundType, Space, Tempo, TouchPointsKey, Triangle, Typography, UI, UIButton, UIDragger, UIHandler, UIPointerAction, UIPointerActions, UIShape, Util, Vec, VisualForm, WarningType, World };
 //# sourceMappingURL=index.d.mts.map

@@ -11,7 +11,7 @@
   // create Space and Form
   let space = new CanvasSpace("#"+demoID).setup({ retina: true, bgcolor: "#e2e6ef", resize: true });
   let form = space.getForm();
-  let img = await Img.loadAsync( "/assets/img_demo.jpg", true, space.pixelScale);
+  let img = await Img.load( "/assets/img_demo.jpg", { editable: true, pixelScale: space.pixelScale });
   let de, triangles;
   
   // animation

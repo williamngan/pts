@@ -3624,6 +3624,12 @@
     8
   ],
   [
+    "Image_Img#function_dispose",
+    "Img.dispose",
+    "Function",
+    8
+  ],
+  [
     "Image_Img#function_filter",
     "Img.filter",
     "Function",
@@ -3648,6 +3654,12 @@
     8
   ],
   [
+    "Image_Img#function_loadPixels",
+    "Img.loadPixels",
+    "Function",
+    8
+  ],
+  [
     "Image_Img#function_pattern",
     "Img.pattern",
     "Function",
@@ -3666,6 +3678,12 @@
     8
   ],
   [
+    "Image_Img#function_setPixel",
+    "Img.setPixel",
+    "Function",
+    8
+  ],
+  [
     "Image_Img#function_sync",
     "Img.sync",
     "Function",
@@ -3680,6 +3698,12 @@
   [
     "Image_Img#function_toBlob",
     "Img.toBlob",
+    "Function",
+    8
+  ],
+  [
+    "Image_Img#function_updatePixels",
+    "Img.updatePixels",
     "Function",
     8
   ],
@@ -3729,6 +3753,12 @@
     "Image_Img",
     "Img",
     "Class",
+    0
+  ],
+  [
+    "Image_ImgOptions",
+    "ImgOptions",
+    "Type alias",
     0
   ],
   [

@@ -3205,24 +3205,30 @@ function _asyncToGenerator(n) {
 //#region src/Image.ts
 var Img = class Img {
 	constructor(editable = false, space, crossOrigin) {
+		var _opts$pixelScale;
 		this._scale = 1;
 		this._loaded = false;
-		this._editable = editable;
-		this._space = space;
-		this._scale = this._space ? this._space.pixelScale : 1;
+		this._pendingLoadReject = null;
+		const opts = typeof editable === "object" ? editable : {
+			editable,
+			space,
+			crossOrigin
+		};
+		this._editable = !!opts.editable;
+		this._space = opts.space;
+		this._scale = (_opts$pixelScale = opts.pixelScale) !== null && _opts$pixelScale !== void 0 ? _opts$pixelScale : this._space ? this._space.pixelScale : 1;
 		this._img = new Image();
-		if (crossOrigin) this._img.crossOrigin = "Anonymous";
+		if (opts.crossOrigin) this._img.crossOrigin = "Anonymous";
 	}
 	static load(src, editable = false, space, ready) {
-		const img = new Img(editable, space);
-		img.load(src).then((res) => {
+		return new Img(editable, space).load(src).then((res) => {
 			if (ready) ready(res);
+			return res;
 		});
-		return img;
 	}
 	static loadAsync(src, editable = false, space) {
 		return _asyncToGenerator(function* () {
-			return yield new Img(editable, space).load(src);
+			return Img.load(src, editable, space);
 		})();
 	}
 	static loadPattern(src, space, repeat = "repeat", editable = false) {
@@ -3238,31 +3244,45 @@ var Img = class Img {
 	}
 	load(src) {
 		return new Promise((resolve, reject) => {
-			if (this._editable && !document) reject("Cannot create html canvas element. document not found.");
-			this._img.src = src;
+			if (this._editable && typeof document === "undefined") {
+				reject(/* @__PURE__ */ new Error("Cannot create html canvas element. document not found."));
+				return;
+			}
+			if (this._pendingLoadReject) this._pendingLoadReject(/* @__PURE__ */ new Error("Img loading superseded by a newer load"));
+			this._pendingLoadReject = reject;
 			this._img.onload = () => {
+				this._pendingLoadReject = null;
 				if (this._editable) {
 					if (!this._cv) this._cv = document.createElement("canvas");
 					this._drawToScale(this._scale, this._img);
-					this._data = this._ctx.getImageData(0, 0, this._cv.width, this._cv.height);
+					this._refreshData();
 				}
 				this._loaded = true;
 				resolve(this);
 			};
-			this._img.onerror = (evt) => {
-				reject(evt);
+			this._img.onerror = () => {
+				this._pendingLoadReject = null;
+				reject(/* @__PURE__ */ new Error(`Img cannot load ${src}`));
 			};
+			this._img.src = src;
 		});
+	}
+	_refreshData() {
+		this._data = this._ctx.getImageData(0, 0, this._cv.width, this._cv.height);
 	}
 	_drawToScale(canvasScale, img) {
 		const nw = img.width;
 		const nh = img.height;
-		this.initCanvas(nw, nh, canvasScale);
+		this._initCanvas(nw, nh, canvasScale);
 		if (img) this._ctx.drawImage(img, 0, 0, nw, nh, 0, 0, this._cv.width, this._cv.height);
 	}
 	initCanvas(width, height, canvasScale = 1) {
+		this._initCanvas(width, height, canvasScale);
+		if (this._ctx) this._refreshData();
+	}
+	_initCanvas(width, height, canvasScale = 1) {
 		if (!this._editable) {
-			console.error("Cannot initiate canvas because this Img is not set to be editable");
+			Util.warn("Cannot initiate canvas because this Img is not set to be editable");
 			return;
 		}
 		if (!this._cv) this._cv = document.createElement("canvas");
@@ -3270,6 +3290,7 @@ var Img = class Img {
 		this._cv.width = width * cms[0];
 		this._cv.height = height * cms[1];
 		this._ctx = this._cv.getContext("2d");
+		if (typeof canvasScale === "number") this._scale = canvasScale;
 		this._loaded = true;
 	}
 	bitmap(size) {
@@ -3278,32 +3299,91 @@ var Img = class Img {
 		return createImageBitmap(this._cv, 0, 0, w, h);
 	}
 	pattern(reptition = "repeat", dynamic = false) {
-		if (!this._space) throw "Cannot find CanvasSpace ctx to create image pattern";
-		return this._space.ctx.createPattern(dynamic ? this._cv : this._img, reptition);
+		let ctx = this._space ? this._space.ctx : void 0;
+		if (!ctx) {
+			if (!this._patternCtx) this._patternCtx = document.createElement("canvas").getContext("2d");
+			ctx = this._patternCtx;
+		}
+		return ctx.createPattern(dynamic ? this._cv : this._img, reptition);
 	}
 	sync() {
-		if (this._scale !== 1) this.bitmap().then((b) => {
-			this._drawToScale(1 / this._scale, b);
-			this.load(this.toBase64());
-		});
-		else this._img.src = this.toBase64();
+		var _this = this;
+		return _asyncToGenerator(function* () {
+			if (_this._scale !== 1) {
+				const b = yield _this.bitmap();
+				_this._drawToScale(1 / _this._scale, b);
+				yield _this.load(_this.toBase64());
+			} else yield _this.load(_this.toBase64());
+			return _this;
+		})();
 	}
 	pixel(p, rescale = true) {
+		if (!this._data) {
+			Util.warn("Img has no pixel data — create it as editable and wait for load");
+			return new Pt(0, 0, 0, 0);
+		}
 		const s = typeof rescale == "number" ? rescale : rescale ? this._scale : 1;
 		return Img.getPixel(this._data, [p[0] * s, p[1] * s]);
 	}
+	setPixel(p, rgba, rescale = true) {
+		if (!this._data) {
+			Util.warn("Img has no pixel data — create it as editable");
+			return this;
+		}
+		const s = typeof rescale == "number" ? rescale : rescale ? this._scale : 1;
+		const x = Math.floor(p[0] * s);
+		const y = Math.floor(p[1] * s);
+		if (x < 0 || y < 0 || x >= this._data.width || y >= this._data.height) return this;
+		const i = y * this._data.width * 4 + x * 4;
+		this._data.data[i] = rgba[0];
+		this._data.data[i + 1] = rgba[1];
+		this._data.data[i + 2] = rgba[2];
+		this._data.data[i + 3] = rgba[3] !== void 0 ? rgba[3] : 255;
+		return this;
+	}
+	loadPixels() {
+		if (!this._ctx) {
+			Util.warn("Img has no canvas — create it as editable");
+			return this;
+		}
+		this._refreshData();
+		return this;
+	}
+	updatePixels() {
+		if (!this._ctx || !this._data) {
+			Util.warn("Img has no canvas — create it as editable");
+			return this;
+		}
+		this._ctx.putImageData(this._data, 0, 0);
+		return this;
+	}
 	static getPixel(imgData, p) {
 		const no = new Pt(0, 0, 0, 0);
-		if (p[0] >= imgData.width || p[1] >= imgData.height) return no;
+		if (p[0] < 0 || p[1] < 0 || p[0] >= imgData.width || p[1] >= imgData.height) return no;
 		const i = Math.floor(p[1]) * (imgData.width * 4) + Math.floor(p[0]) * 4;
 		const d = imgData.data;
-		if (i >= d.length - 4) return no;
+		if (i > d.length - 4) return no;
 		return new Pt(d[i], d[i + 1], d[i + 2], d[i + 3]);
 	}
 	resize(sizeOrScale, asScale = false) {
-		let s = asScale ? sizeOrScale : [sizeOrScale[0] / this._img.naturalWidth, sizeOrScale[1] / this._img.naturalHeight];
-		this._drawToScale(s, this._img);
-		this._data = this._ctx.getImageData(0, 0, this._cv.width, this._cv.height);
+		const hasImage = this._img.naturalWidth > 0;
+		const refW = hasImage ? this._img.naturalWidth : this._cv.width;
+		const refH = hasImage ? this._img.naturalHeight : this._cv.height;
+		if (!refW || !refH) {
+			Util.warn("Img cannot resize before an image or canvas exists");
+			return this;
+		}
+		const s = asScale ? sizeOrScale : [sizeOrScale[0] / refW, sizeOrScale[1] / refH];
+		let source = this._img;
+		if (!hasImage) {
+			const snap = document.createElement("canvas");
+			snap.width = this._cv.width;
+			snap.height = this._cv.height;
+			snap.getContext("2d").drawImage(this._cv, 0, 0);
+			source = snap;
+		}
+		this._drawToScale(s, source);
+		this._refreshData();
 		return this;
 	}
 	crop(box) {
@@ -3312,23 +3392,55 @@ var Img = class Img {
 		return this._ctx.getImageData(p.x, p.y, s.x, s.y);
 	}
 	filter(css) {
+		const op = this._ctx.globalCompositeOperation;
+		this._ctx.globalCompositeOperation = "copy";
 		this._ctx.filter = css;
 		this._ctx.drawImage(this._cv, 0, 0);
 		this._ctx.filter = "none";
+		this._ctx.globalCompositeOperation = op;
+		this._refreshData();
+		return this;
+	}
+	dispose() {
+		if (this._objectUrl) {
+			URL.revokeObjectURL(this._objectUrl);
+			this._objectUrl = null;
+		}
+		if (this._cv) this._cv.remove();
+		if (this._img) this._img.remove();
+		this._cv = null;
+		this._ctx = null;
+		this._patternCtx = null;
+		this._img = null;
+		this._data = null;
+		this._loaded = false;
 		return this;
 	}
 	cleanup() {
-		if (this._cv) this._cv.remove();
-		if (this._img) this._img.remove();
-		this._data = null;
+		this.dispose();
 	}
 	static fromBlob(blob, editable = false, space) {
-		let url = URL.createObjectURL(blob);
-		return new Img(editable, space).load(url);
+		const url = URL.createObjectURL(blob);
+		const img = new Img(editable, space);
+		img._objectUrl = url;
+		const done = () => {
+			URL.revokeObjectURL(url);
+			img._objectUrl = null;
+		};
+		return img.load(url).then((res) => {
+			done();
+			return res;
+		}, (err) => {
+			done();
+			throw err;
+		});
 	}
 	static imageDataToBlob(data) {
 		return new Promise(function(resolve, reject) {
-			if (!document) reject("Cannot create html canvas element. document not found.");
+			if (typeof document === "undefined") {
+				reject(/* @__PURE__ */ new Error("Cannot create html canvas element. document not found."));
+				return;
+			}
 			let cv = document.createElement("canvas");
 			cv.width = data.width;
 			cv.height = data.height;
@@ -3348,7 +3460,7 @@ var Img = class Img {
 		});
 	}
 	getForm() {
-		if (!this._editable) console.error("Cannot get a CanvasForm because this Img is not editable");
+		if (!this._editable) Util.warn("Cannot get a CanvasForm because this Img is not editable");
 		return this._ctx ? new CanvasForm(this._ctx) : void 0;
 	}
 	get current() {
@@ -3373,7 +3485,7 @@ var Img = class Img {
 		return this._scale;
 	}
 	get imageSize() {
-		if (!this._img.width || !this._img.height) return this.canvasSize.$divide(this._scale);
+		if (!this._img || !this._img.width || !this._img.height) return this._cv ? this.canvasSize.$divide(this._scale) : new Pt(0, 0);
 		else return new Pt(this._img.width, this._img.height);
 	}
 	get canvasSize() {

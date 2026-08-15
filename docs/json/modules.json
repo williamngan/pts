@@ -22,7 +22,8 @@
     "VisualForm"
   ],
   "Image": [
-    "Img"
+    "Img",
+    "ImgOptions"
   ],
   "LinearAlgebra": [
     "Mat",

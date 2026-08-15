@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Typealias",
-  "id": 7588,
+  "id": 7617,
   "comment": "Typescript type: TouchPointsKey represents a set of acceptable string keys for defining touch action.",
   "constructor": [],
   "accessors": [],
