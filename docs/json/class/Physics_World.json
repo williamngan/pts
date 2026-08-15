@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 3822,
+  "id": 3843,
   "comment": "A `World` stores and manages [`Body`](#link) and [`Particle`](#link) for 2D physics simulation.\nIt advances with a substepped position-based (XPBD-style) solver and a spatial-hash broad phase.\nSee a [Particle demo](../demo/index.html?name=physics.particles) and a [Body demo](../demo/index.html?name=physics.shapes) on the demo page.",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           2
         ]
       ],
-      "id": 3843,
+      "id": 3864,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -64,7 +64,7 @@
           6
         ]
       ],
-      "id": 3903,
+      "id": 3924,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -88,7 +88,7 @@
           6
         ]
       ],
-      "id": 3875,
+      "id": 3896,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -120,7 +120,7 @@
           6
         ]
       ],
-      "id": 3887,
+      "id": 3908,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -152,7 +152,7 @@
           6
         ]
       ],
-      "id": 3883,
+      "id": 3904,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -184,7 +184,7 @@
           6
         ]
       ],
-      "id": 3879,
+      "id": 3900,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -216,7 +216,7 @@
           6
         ]
       ],
-      "id": 3891,
+      "id": 3912,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -248,7 +248,7 @@
           6
         ]
       ],
-      "id": 3899,
+      "id": 3920,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -275,7 +275,7 @@
           6
         ]
       ],
-      "id": 3905,
+      "id": 3926,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -299,7 +299,7 @@
           6
         ]
       ],
-      "id": 3895,
+      "id": 3916,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -328,7 +328,7 @@
           2
         ]
       ],
-      "id": 3936,
+      "id": 3957,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -364,7 +364,7 @@
           2
         ]
       ],
-      "id": 3907,
+      "id": 3928,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -394,7 +394,7 @@
           2
         ]
       ],
-      "id": 3913,
+      "id": 3934,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -424,7 +424,7 @@
           2
         ]
       ],
-      "id": 3929,
+      "id": 3950,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -454,7 +454,7 @@
           2
         ]
       ],
-      "id": 3922,
+      "id": 3943,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -484,7 +484,7 @@
           12
         ]
       ],
-      "id": 3955,
+      "id": 3976,
       "flags": {
         "isProtected": true
       },
@@ -528,7 +528,7 @@
           2
         ]
       ],
-      "id": 3910,
+      "id": 3931,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -558,7 +558,7 @@
           2
         ]
       ],
-      "id": 3916,
+      "id": 3937,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -588,7 +588,7 @@
           2
         ]
       ],
-      "id": 3947,
+      "id": 3968,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -624,7 +624,7 @@
           2
         ]
       ],
-      "id": 3951,
+      "id": 3972,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -660,7 +660,7 @@
           2
         ]
       ],
-      "id": 3919,
+      "id": 3940,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -690,7 +690,7 @@
           9
         ]
       ],
-      "id": 3830,
+      "id": 3851,
       "flags": {
         "isStatic": true
       },
@@ -734,7 +734,7 @@
           9
         ]
       ],
-      "id": 3823,
+      "id": 3844,
       "flags": {
         "isStatic": true
       },

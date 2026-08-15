@@ -485,10 +485,13 @@ function _swapIds(arr: Uint32Array, i: number, j: number): void {
 
 /**
  * Triangulate a flat [x0, y0, x1, y1, ...] coordinate array. Returns the
- * triangle vertex indices (3 per triangle), or null if the input is
- * degenerate (fewer than 3 distinct non-collinear points).
+ * triangle vertex indices (3 per triangle) with the half-edge adjacency
+ * array, or null if the input is degenerate (fewer than 3 distinct
+ * non-collinear points).
  */
-function _triangulate(coords: Float64Array): Uint32Array | null {
+function _triangulate(
+  coords: Float64Array,
+): { triangles: Uint32Array; halfedges: Int32Array } | null {
   const n = coords.length >> 1;
 
   // seed selection: the point closest to the bounding-box center, its nearest
@@ -792,7 +795,112 @@ function _triangulate(coords: Float64Array): Uint32Array | null {
     hullHash[hashKey(coords[2 * e], coords[2 * e + 1])] = e;
   }
 
-  return triangles.subarray(0, trianglesLen) as Uint32Array;
+  return {
+    triangles: triangles.subarray(0, trianglesLen) as Uint32Array,
+    halfedges: halfedges.subarray(0, trianglesLen) as Int32Array,
+  };
+}
+
+/**
+ * Clip a convex cell polygon against an axis-aligned rectangle
+ * (Sutherland–Hodgman). Returns the input Group unchanged (shared Pt
+ * references) when every vertex is already inside.
+ */
+function _clipCellToRect(
+  cell: Group,
+  x0: number,
+  y0: number,
+  x1: number,
+  y1: number,
+): Group {
+  // fast path: fully inside
+  let inside = true;
+  for (let i = 0, len = cell.length; i < len; i++) {
+    const px = cell[i][0];
+    const py = cell[i][1];
+    if (px < x0 || px > x1 || py < y0 || py > y1 || !Number.isFinite(px + py)) {
+      inside = false;
+      break;
+    }
+  }
+  if (inside) return cell;
+
+  // degenerate hull fragments (1-2 vertices) cannot form a polygon to clip;
+  // keep only their in-bound vertices
+  if (cell.length < 3) {
+    const kept = new Group();
+    for (let i = 0, len = cell.length; i < len; i++) {
+      const px = cell[i][0];
+      const py = cell[i][1];
+      if (px >= x0 && px <= x1 && py >= y0 && py <= y1) kept.push(cell[i]);
+    }
+    return kept;
+  }
+
+  // clamp non-finite coordinates so intersection math stays finite
+  const big = 1e7;
+  let pts: number[][] = [];
+  for (let i = 0, len = cell.length; i < len; i++) {
+    let px = cell[i][0];
+    let py = cell[i][1];
+    if (!Number.isFinite(px)) px = px > 0 ? big : -big;
+    if (!Number.isFinite(py)) py = py > 0 ? big : -big;
+    if (Number.isNaN(px) || Number.isNaN(py)) continue;
+    pts.push([px, py]);
+  }
+
+  // clip against each rect edge: keep(p) tests inside, cross(a,b) intersects
+  const clip = (
+    input: number[][],
+    keep: (p: number[]) => boolean,
+    cross: (a: number[], b: number[]) => number[],
+  ): number[][] => {
+    const output: number[][] = [];
+    for (let i = 0, len = input.length; i < len; i++) {
+      const a = input[i === 0 ? len - 1 : i - 1];
+      const b = input[i];
+      const keepB = keep(b);
+      if (keep(a)) {
+        if (keepB) output.push(b);
+        else output.push(cross(a, b));
+      } else if (keepB) {
+        output.push(cross(a, b), b);
+      }
+    }
+    return output;
+  };
+
+  const lerpAt = (a: number[], b: number[], t: number): number[] => [
+    a[0] + (b[0] - a[0]) * t,
+    a[1] + (b[1] - a[1]) * t,
+  ];
+
+  pts = clip(
+    pts,
+    (p) => p[0] >= x0,
+    (a, b) => lerpAt(a, b, (x0 - a[0]) / (b[0] - a[0])),
+  );
+  pts = clip(
+    pts,
+    (p) => p[0] <= x1,
+    (a, b) => lerpAt(a, b, (x1 - a[0]) / (b[0] - a[0])),
+  );
+  pts = clip(
+    pts,
+    (p) => p[1] >= y0,
+    (a, b) => lerpAt(a, b, (y0 - a[1]) / (b[1] - a[1])),
+  );
+  pts = clip(
+    pts,
+    (p) => p[1] <= y1,
+    (a, b) => lerpAt(a, b, (y1 - a[1]) / (b[1] - a[1])),
+  );
+
+  const out = new Group();
+  for (let i = 0, len = pts.length; i < len; i++) {
+    out.push(new Pt(pts[i]));
+  }
+  return out;
 }
 
 /**
@@ -803,6 +911,9 @@ function _triangulate(coords: Float64Array): Uint32Array | null {
  */
 export class Delaunay extends Group {
   private _mesh: DelaunayMesh = [];
+  private _triangles: Uint32Array = null;
+  private _halfedges: Int32Array = null;
+  private _shapes: DelaunayShape[] = null;
 
   /**
    * Generate Delaunay triangles. This function also caches the mesh that is used to generate Voronoi tessellation in `voronoi()`. See a [Delaunay demo here](../demo/index.html?name=create.delaunay).
@@ -822,8 +933,12 @@ export class Delaunay extends Group {
       coords[2 * i + 1] = this[i][1];
     }
 
-    const triIndices = _triangulate(coords);
-    if (!triIndices) return [];
+    const result = _triangulate(coords);
+    this._triangles = result ? result.triangles : null;
+    this._halfedges = result ? result.halfedges : null;
+    this._shapes = null;
+    if (!result) return [];
+    const triIndices = result.triangles;
 
     const shapes: DelaunayShape[] = [];
     const tris: GroupLike[] = [];
@@ -860,19 +975,73 @@ export class Delaunay extends Group {
       shapes.push(shape);
       tris.push(triangle);
     }
+    this._shapes = shapes;
 
     return triangleOnly ? tris : shapes;
   }
 
   /**
    * Generate Voronoi cells. `delaunay()` must be called before calling this function. See a [Voronoi demo here](../demo/index.html?name=create.delaunay).
+   * @param bound Optionally provide a rectangular bound (eg, `space.innerBound`) to clip the cells against.
+   * Without a bound, cells around sliver triangles can extend to enormous coordinates (circumcenters of
+   * nearly-collinear points), which is technically correct but extremely slow to draw.
    * @returns an array of Groups, each of which represents a Voronoi cell
    */
-  voronoi(): Group[] {
-    let vs = [];
-    let n = this._mesh;
-    for (let i = 0, len = n.length; i < len; i++) {
-      vs.push(this.neighborPts(i, true));
+  voronoi(bound?: PtIterable): Group[] {
+    const cells = this._voronoiCells();
+    if (!bound) return cells;
+
+    const _bound = Geom.boundingBox(Util.iterToArray(bound) as Group);
+    const x0 = _bound[0][0];
+    const y0 = _bound[0][1];
+    const x1 = _bound[1][0];
+    const y1 = _bound[1][1];
+    for (let i = 0, len = cells.length; i < len; i++) {
+      cells[i] = _clipCellToRect(cells[i], x0, y0, x1, y1);
+    }
+    return cells;
+  }
+
+  /** Assemble unclipped Voronoi cells. */
+  private _voronoiCells(): Group[] {
+    // walk the half-edge structure so each cell's circumcenters come out
+    // already in polygon order — no per-cell angle sort needed
+    const triangles = this._triangles;
+    const halfedges = this._halfedges;
+    const shapes = this._shapes;
+    if (!triangles || !halfedges || !shapes) {
+      // fallback (eg, subclasses bypassing delaunay()): sort per cell
+      let vs = [];
+      let n = this._mesh;
+      for (let i = 0, len = n.length; i < len; i++) {
+        vs.push(this.neighborPts(i, true));
+      }
+      return vs;
+    }
+
+    const n = this._mesh.length;
+    // one incoming half-edge per point; prefer hull edges so a boundary
+    // point's walk starts at the open end of its fan and covers all of it
+    const inedges = new Int32Array(n).fill(-1);
+    for (let e = 0, len = triangles.length; e < len; e++) {
+      const p = triangles[e % 3 === 2 ? e - 2 : e + 1];
+      if (halfedges[e] === -1 || inedges[p] === -1) inedges[p] = e;
+    }
+
+    const vs: Group[] = [];
+    for (let i = 0; i < n; i++) {
+      const cell = new Group();
+      const e0 = inedges[i];
+      if (e0 !== -1) {
+        let e = e0;
+        do {
+          cell.push(shapes[Math.floor(e / 3)].circle[0]);
+          const next = e % 3 === 2 ? e - 2 : e + 1;
+          if (triangles[next] !== i) break; // degenerate-case guard
+          e = halfedges[next];
+        } while (e !== -1 && e !== e0);
+      }
+      vs.push(cell);
     }
     return vs;
   }

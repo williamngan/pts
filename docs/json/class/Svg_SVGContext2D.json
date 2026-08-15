@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 6749,
+  "id": 6770,
   "comment": "**`SVGContext2D`** implements the subset of `CanvasRenderingContext2D` that\n[`CanvasForm`](#link) draws through, and renders it as SVG. Consecutive shapes that share\npaint state are merged into single `<path>` elements (\"style runs\"), so the DOM cost per\nframe is proportional to the number of style changes, not the number of shapes. This is\nwhat lets the same sketch run unchanged on canvas and SVG.\n\nCapability notes: blend-mode composites map to `mix-blend-mode`; Porter-Duff composites,\n`clip`, and `putImageData` warn once and no-op. Text metrics come from a hidden canvas, so\n`textBox` layout matches canvas exactly. When shapes with both fill and stroke are merged,\nall fills in a run paint before its strokes — visible only for overlapping same-styled\nshapes.\n\n**Writing your own renderer**: this class is the reference implementation of the rendering\ncontract — any object implementing the same context surface can be handed to\n[`CanvasForm`](#link)'s constructor to become a Pts renderer (a PDF writer, a command\nrecorder, a test snapshotter, and so on). The surface is the subset of\n`CanvasRenderingContext2D` that `CanvasForm` draws through:\n- path verbs: `beginPath`, `moveTo`, `lineTo`, `quadraticCurveTo`, `bezierCurveTo`,\n  `rect`, `arc`, `ellipse`, `closePath`\n- paint: `fill`, `stroke`, `fillRect`, `clearRect`\n- state: `save`, `restore`, `clip`, `scale`\n- style fields: `fillStyle`, `strokeStyle`, `lineWidth`, `lineJoin`, `lineCap`,\n  `globalAlpha`, `globalCompositeOperation`, `setLineDash`, `lineDashOffset`\n- text: `font`, `textAlign`, `textBaseline`, `fillText`, `measureText`\n- images: `drawImage`, `putImageData`\n- gradients: `createLinearGradient`, `createRadialGradient`\n\nA renderer driven by a Space should also expose a frame lifecycle like\n[`SVGContext2D.beginFrame`](#link) / [`SVGContext2D.commitFrame`](#link), called around the\nplayers' animate callbacks. The unit test \"implements every context member that CanvasForm\nuses\" is the compatibility alarm: it fails when a new `CanvasForm` feature touches a\ncontext member a renderer does not implement.",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           2
         ]
       ],
-      "id": 6759,
+      "id": 6780,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -52,7 +52,7 @@
           6
         ]
       ],
-      "id": 6792,
+      "id": 6813,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -71,7 +71,7 @@
           6
         ]
       ],
-      "id": 6794,
+      "id": 6815,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -90,7 +90,7 @@
           6
         ]
       ],
-      "id": 6798,
+      "id": 6819,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -111,7 +111,7 @@
           2
         ]
       ],
-      "id": 6836,
+      "id": 6857,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -171,7 +171,7 @@
           2
         ]
       ],
-      "id": 6790,
+      "id": 6811,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -194,7 +194,7 @@
           2
         ]
       ],
-      "id": 6804,
+      "id": 6825,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -217,7 +217,7 @@
           2
         ]
       ],
-      "id": 6822,
+      "id": 6843,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -277,7 +277,7 @@
           2
         ]
       ],
-      "id": 6866,
+      "id": 6887,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -300,7 +300,7 @@
           2
         ]
       ],
-      "id": 6892,
+      "id": 6913,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -323,7 +323,7 @@
           2
         ]
       ],
-      "id": 6806,
+      "id": 6827,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -346,7 +346,7 @@
           2
         ]
       ],
-      "id": 6796,
+      "id": 6817,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -369,7 +369,7 @@
           2
         ]
       ],
-      "id": 6899,
+      "id": 6920,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -417,7 +417,7 @@
           2
         ]
       ],
-      "id": 6905,
+      "id": 6926,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -477,7 +477,7 @@
           2
         ]
       ],
-      "id": 6802,
+      "id": 6823,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -500,7 +500,7 @@
           2
         ]
       ],
-      "id": 6876,
+      "id": 6897,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -560,7 +560,7 @@
           2
         ]
       ],
-      "id": 6844,
+      "id": 6865,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -632,7 +632,7 @@
           2
         ]
       ],
-      "id": 6854,
+      "id": 6875,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -655,7 +655,7 @@
           2
         ]
       ],
-      "id": 6860,
+      "id": 6881,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -703,7 +703,7 @@
           2
         ]
       ],
-      "id": 6868,
+      "id": 6889,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -745,7 +745,7 @@
           2
         ]
       ],
-      "id": 6897,
+      "id": 6918,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -768,7 +768,7 @@
           2
         ]
       ],
-      "id": 6812,
+      "id": 6833,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -804,7 +804,7 @@
           2
         ]
       ],
-      "id": 6873,
+      "id": 6894,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -834,7 +834,7 @@
           2
         ]
       ],
-      "id": 6808,
+      "id": 6829,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -870,7 +870,7 @@
           2
         ]
       ],
-      "id": 6884,
+      "id": 6905,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -893,7 +893,7 @@
           2
         ]
       ],
-      "id": 6816,
+      "id": 6837,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -941,7 +941,7 @@
           2
         ]
       ],
-      "id": 6830,
+      "id": 6851,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -989,7 +989,7 @@
           2
         ]
       ],
-      "id": 6800,
+      "id": 6821,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1012,7 +1012,7 @@
           2
         ]
       ],
-      "id": 6888,
+      "id": 6909,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1035,7 +1035,7 @@
           2
         ]
       ],
-      "id": 6886,
+      "id": 6907,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1058,7 +1058,7 @@
           2
         ]
       ],
-      "id": 6890,
+      "id": 6911,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1081,7 +1081,7 @@
           2
         ]
       ],
-      "id": 6894,
+      "id": 6915,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1111,7 +1111,7 @@
           2
         ]
       ],
-      "id": 6856,
+      "id": 6877,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1137,7 +1137,7 @@
           2
         ]
       ],
-      "id": 6775,
+      "id": 6796,
       "flags": {},
       "type": "string",
       "overrides": false,
@@ -1153,7 +1153,7 @@
           2
         ]
       ],
-      "id": 6762,
+      "id": 6783,
       "flags": {},
       "type": "string | SVGGradient",
       "overrides": false,
@@ -1169,7 +1169,7 @@
           2
         ]
       ],
-      "id": 6769,
+      "id": 6790,
       "flags": {},
       "type": "string",
       "overrides": false,
@@ -1185,7 +1185,7 @@
           2
         ]
       ],
-      "id": 6767,
+      "id": 6788,
       "flags": {},
       "type": "number",
       "overrides": false,
@@ -1201,7 +1201,7 @@
           2
         ]
       ],
-      "id": 6768,
+      "id": 6789,
       "flags": {},
       "type": "string",
       "overrides": false,
@@ -1217,7 +1217,7 @@
           2
         ]
       ],
-      "id": 6766,
+      "id": 6787,
       "flags": {},
       "type": "string",
       "overrides": false,
@@ -1233,7 +1233,7 @@
           2
         ]
       ],
-      "id": 6772,
+      "id": 6793,
       "flags": {},
       "type": "number",
       "overrides": false,
@@ -1249,7 +1249,7 @@
           2
         ]
       ],
-      "id": 6765,
+      "id": 6786,
       "flags": {},
       "type": "string",
       "overrides": false,
@@ -1265,7 +1265,7 @@
           2
         ]
       ],
-      "id": 6764,
+      "id": 6785,
       "flags": {},
       "type": "number",
       "overrides": false,
@@ -1281,7 +1281,7 @@
           2
         ]
       ],
-      "id": 6763,
+      "id": 6784,
       "flags": {},
       "type": "string | SVGGradient",
       "overrides": false,
@@ -1297,7 +1297,7 @@
           2
         ]
       ],
-      "id": 6770,
+      "id": 6791,
       "flags": {},
       "type": "string",
       "overrides": false,
@@ -1313,7 +1313,7 @@
           2
         ]
       ],
-      "id": 6771,
+      "id": 6792,
       "flags": {},
       "type": "string",
       "overrides": false,

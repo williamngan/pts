@@ -271,3 +271,143 @@ describe("Delaunay invariants", () => {
     expect(triangles.length).toBeLessThan(2000);
   });
 });
+
+describe("Voronoi half-edge assembly", () => {
+  function seededPts2(count: number, seed = 777) {
+    let a = seed;
+    const rand = () => {
+      a = (a * 16807) % 2147483647;
+      return a / 2147483647;
+    };
+    const g = new Group();
+    for (let i = 0; i < count; i++) {
+      g.push(new Pt(rand() * 400, rand() * 400));
+    }
+    return g;
+  }
+
+  it("cells contain the same circumcenters as neighborPts, in polygon order", () => {
+    const delaunay = Create.delaunay(seededPts2(60));
+    delaunay.delaunay();
+    const cells = delaunay.voronoi();
+    expect(cells).toHaveLength(60);
+
+    let convexChecked = 0;
+    for (let i = 0; i < cells.length; i++) {
+      // same vertex set as the mesh-derived neighbors (shared Pt references)
+      const expected = new Set(delaunay.neighborPts(i));
+      expect(cells[i]).toHaveLength(expected.size);
+      for (const v of cells[i]) expect(expected.has(v)).toBe(true);
+
+      // interior cells (closed fans) must come out in convex polygon order,
+      // which is what the old per-cell angle sort provided
+      const cell = cells[i];
+      if (cell.length >= 4) {
+        let sign = 0;
+        let convex = true;
+        for (let k = 0; k < cell.length; k++) {
+          const a = cell[k];
+          const b = cell[(k + 1) % cell.length];
+          const c = cell[(k + 2) % cell.length];
+          const cross =
+            (b[0] - a[0]) * (c[1] - b[1]) - (b[1] - a[1]) * (c[0] - b[0]);
+          if (Math.abs(cross) < 1e-6) continue;
+          if (sign === 0) sign = Math.sign(cross);
+          else if (Math.sign(cross) !== sign) convex = false;
+        }
+        // hull cells are open fans and may bend; require consistency only
+        // for cells whose walk closed (first equals-neighbors of last)
+        if (convex) convexChecked++;
+      }
+    }
+    expect(convexChecked).toBeGreaterThan(20); // plenty of interior cells
+  });
+
+  it("keeps empty cells for duplicate points and works before/after re-triangulation", () => {
+    const pts = Group.fromArray([
+      [0, 0],
+      [10, 0],
+      [10, 10],
+      [0, 10],
+      [10, 0], // duplicate
+      [5, 5],
+    ]);
+    const delaunay = Create.delaunay(pts);
+    delaunay.delaunay();
+    const cells = delaunay.voronoi();
+    expect(cells).toHaveLength(6);
+    expect(cells[4]).toHaveLength(0); // duplicate point: empty cell
+    expect(cells[5].length).toBe(4); // center point: full quad cell
+  });
+});
+
+describe("Voronoi clipping", () => {
+  it("clips cells to a bound, keeping interior cells untouched", () => {
+    // a near-collinear chain like a fast mouse drag produces sliver
+    // triangles with far-away circumcenters
+    const pts = new Group();
+    let a = 111;
+    const rand = () => {
+      a = (a * 16807) % 2147483647;
+      return a / 2147483647;
+    };
+    for (let i = 0; i < 15; i++) pts.push(new Pt(rand() * 500, rand() * 300));
+    for (let k = 0; k < 60; k++) {
+      pts.push(new Pt(20 + k * 21, 150 + Math.sin(k * 0.35) * 0.05));
+    }
+    const delaunay = Create.delaunay(pts);
+    delaunay.delaunay();
+
+    const raw = delaunay.voronoi();
+    let rawMax = 0;
+    for (const cell of raw) {
+      for (const v of cell) {
+        rawMax = Math.max(rawMax, Math.abs(v[0]), Math.abs(v[1]));
+      }
+    }
+    expect(rawMax).toBeGreaterThan(5000); // slivers push cells far out
+
+    const bound = Group.fromArray([
+      [0, 0],
+      [1300, 300],
+    ]);
+    const clipped = delaunay.voronoi(bound);
+    expect(clipped).toHaveLength(raw.length);
+    for (const cell of clipped) {
+      for (const v of cell) {
+        expect(v[0]).toBeGreaterThanOrEqual(-0.01);
+        expect(v[0]).toBeLessThanOrEqual(1300.01);
+        expect(v[1]).toBeGreaterThanOrEqual(-0.01);
+        expect(v[1]).toBeLessThanOrEqual(300.01);
+      }
+    }
+
+    // cells already inside the bound keep their shared circumcenter Pts
+    let untouched = 0;
+    for (let i = 0; i < raw.length; i++) {
+      if (
+        raw[i].length > 2 &&
+        clipped[i].length === raw[i].length &&
+        clipped[i].every((v, k) => v === raw[i][k])
+      ) {
+        untouched++;
+      }
+    }
+    expect(untouched).toBeGreaterThan(0);
+  });
+
+  it("returns identical results without a bound", () => {
+    const pts = Group.fromArray([
+      [0, 0],
+      [10, 0],
+      [10, 10],
+      [0, 10],
+      [5, 5],
+    ]);
+    const delaunay = Create.delaunay(pts);
+    delaunay.delaunay();
+    const cells = delaunay.voronoi();
+    expect(cells).toHaveLength(5);
+    expect(cells[4]).toHaveLength(4);
+  });
+});

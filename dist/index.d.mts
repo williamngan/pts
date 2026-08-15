@@ -702,8 +702,12 @@ declare class Noise extends Pt {
 }
 declare class Delaunay extends Group {
   private _mesh;
+  private _triangles;
+  private _halfedges;
+  private _shapes;
   delaunay(triangleOnly?: boolean): GroupLike[] | DelaunayShape[];
-  voronoi(): Group[];
+  voronoi(bound?: PtIterable): Group[];
+  private _voronoiCells;
   mesh(): DelaunayMesh;
   neighborPts(i: number, sort?: boolean): GroupLike;
   neighbors(i: number): DelaunayShape[];
@@ -906,6 +910,8 @@ declare class Polygon {
 declare class Curve {
   static getSteps(steps: number): Group;
   static controlPoints(pts: PtLikeIterable, index?: number, copyStart?: boolean): Group;
+  private static _weights;
+  private static _evalSegment;
   static _calcPt(ctrls: GroupLike, params: PtLike): Pt;
   static catmullRom(pts: PtLikeIterable, steps?: number): Group;
   static catmullRomStep(step: Pt, ctrls: GroupLike): Pt;

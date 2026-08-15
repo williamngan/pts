@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 2935,
+  "id": 2941,
   "comment": "Vec provides various static functions for vector operations. It's not fully optimized but good enough to use.",
   "constructor": [],
   "accessors": [],
@@ -22,7 +22,7 @@
           9
         ]
       ],
-      "id": 2971,
+      "id": 2977,
       "flags": {
         "isStatic": true
       },
@@ -54,7 +54,7 @@
           9
         ]
       ],
-      "id": 2936,
+      "id": 2942,
       "flags": {
         "isStatic": true
       },
@@ -92,7 +92,7 @@
           9
         ]
       ],
-      "id": 2977,
+      "id": 2983,
       "flags": {
         "isStatic": true
       },
@@ -124,7 +124,7 @@
           9
         ]
       ],
-      "id": 2960,
+      "id": 2966,
       "flags": {
         "isStatic": true
       },
@@ -162,7 +162,7 @@
           9
         ]
       ],
-      "id": 2956,
+      "id": 2962,
       "flags": {
         "isStatic": true
       },
@@ -200,7 +200,7 @@
           9
         ]
       ],
-      "id": 2948,
+      "id": 2954,
       "flags": {
         "isStatic": true
       },
@@ -238,7 +238,7 @@
           9
         ]
       ],
-      "id": 2952,
+      "id": 2958,
       "flags": {
         "isStatic": true
       },
@@ -276,7 +276,7 @@
           9
         ]
       ],
-      "id": 2974,
+      "id": 2980,
       "flags": {
         "isStatic": true
       },
@@ -308,7 +308,7 @@
           9
         ]
       ],
-      "id": 2964,
+      "id": 2970,
       "flags": {
         "isStatic": true
       },
@@ -340,7 +340,7 @@
           9
         ]
       ],
-      "id": 2998,
+      "id": 3004,
       "flags": {
         "isStatic": true
       },
@@ -378,7 +378,7 @@
           9
         ]
       ],
-      "id": 2983,
+      "id": 2989,
       "flags": {
         "isStatic": true
       },
@@ -410,7 +410,7 @@
           9
         ]
       ],
-      "id": 2989,
+      "id": 2995,
       "flags": {
         "isStatic": true
       },
@@ -442,7 +442,7 @@
           9
         ]
       ],
-      "id": 2944,
+      "id": 2950,
       "flags": {
         "isStatic": true
       },
@@ -480,7 +480,7 @@
           9
         ]
       ],
-      "id": 2980,
+      "id": 2986,
       "flags": {
         "isStatic": true
       },
@@ -512,7 +512,7 @@
           9
         ]
       ],
-      "id": 2940,
+      "id": 2946,
       "flags": {
         "isStatic": true
       },
@@ -550,7 +550,7 @@
           9
         ]
       ],
-      "id": 2995,
+      "id": 3001,
       "flags": {
         "isStatic": true
       },
@@ -582,7 +582,7 @@
           9
         ]
       ],
-      "id": 2967,
+      "id": 2973,
       "flags": {
         "isStatic": true
       },

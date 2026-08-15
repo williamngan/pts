@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Interface",
-  "id": 7513,
+  "id": 7534,
   "comment": "Typescript interface: IPt is an interface that represents an object with x, y, z, w properties.",
   "constructor": [],
   "accessors": [],
@@ -24,7 +24,7 @@
           2
         ]
       ],
-      "id": 7517,
+      "id": 7538,
       "flags": {
         "isOptional": true
       },
@@ -42,7 +42,7 @@
           2
         ]
       ],
-      "id": 7514,
+      "id": 7535,
       "flags": {
         "isOptional": true
       },
@@ -60,7 +60,7 @@
           2
         ]
       ],
-      "id": 7515,
+      "id": 7536,
       "flags": {
         "isOptional": true
       },
@@ -78,7 +78,7 @@
           2
         ]
       ],
-      "id": 7516,
+      "id": 7537,
       "flags": {
         "isOptional": true
       },

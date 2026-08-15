@@ -537,3 +537,123 @@ describe("Curve", () => {
     expect(warning).toHaveBeenCalled();
   });
 });
+
+describe("Curve fast paths match the step-function reference", () => {
+  function seededPath(count: number, seed = 4242) {
+    let a = seed;
+    const rand = () => {
+      a = (a * 16807) % 2147483647;
+      return a / 2147483647;
+    };
+    const g = new Group();
+    for (let i = 0; i < count; i++) g.push(new Pt(rand() * 200, rand() * 200));
+    return g;
+  }
+
+  function referenceChain(
+    pts: Group,
+    steps: number,
+    stepFn: (step: Pt, c: Group) => Pt,
+  ): Group {
+    // the retained public *Step functions are the old machinery; use them to
+    // compute the expected values for the table-driven implementations
+    const ts = Curve.getSteps(steps);
+    const out = new Group();
+    const first = Curve.controlPoints(pts, 0, true);
+    for (let i = 0; i <= steps; i++) out.push(stepFn(ts[i], first));
+    let k = 0;
+    while (k < pts.length - 2) {
+      const cp = Curve.controlPoints(pts, k);
+      if (cp.length > 0) {
+        for (let i = 0; i <= steps; i++) out.push(stepFn(ts[i], cp));
+        k++;
+      }
+    }
+    return out;
+  }
+
+  function expectClose(actual: Group, expected: Group) {
+    expect(actual.length).toBe(expected.length);
+    for (let i = 0; i < actual.length; i++) {
+      expect(actual[i][0]).toBeCloseTo(expected[i][0], 3);
+      expect(actual[i][1]).toBeCloseTo(expected[i][1], 3);
+    }
+  }
+
+  it("catmullRom matches catmullRomStep", () => {
+    const pts = seededPath(12);
+    expectClose(
+      Curve.catmullRom(pts, 7) as Group,
+      referenceChain(pts, 7, (s, c) => Curve.catmullRomStep(s, c)),
+    );
+  });
+
+  it("cardinal matches cardinalStep with tension", () => {
+    const pts = seededPath(12, 99);
+    expectClose(
+      Curve.cardinal(pts, 7, 0.75) as Group,
+      referenceChain(pts, 7, (s, c) => Curve.cardinalStep(s, c, 0.75)),
+    );
+  });
+
+  it("bspline matches bsplineStep and bsplineTensionStep", () => {
+    const pts = seededPath(12, 7);
+    const steps = 6;
+    const ts = Curve.getSteps(steps);
+    const plain = new Group();
+    const tensioned = new Group();
+    let k = 0;
+    while (k < pts.length - 3) {
+      const c = Curve.controlPoints(pts, k);
+      for (let i = 0; i <= steps; i++) {
+        plain.push(Curve.bsplineStep(ts[i], c));
+        tensioned.push(Curve.bsplineTensionStep(ts[i], c, 0.4));
+      }
+      k++;
+    }
+    expectClose(Curve.bspline(pts, steps) as Group, plain);
+    expectClose(Curve.bspline(pts, steps, 0.4) as Group, tensioned);
+  });
+
+  it("bezier matches bezierStep", () => {
+    const pts = seededPath(13, 55); // 13 points = 4 bezier segments
+    const steps = 5;
+    const ts = Curve.getSteps(steps);
+    const expected = new Group();
+    let k = 0;
+    while (k < pts.length - 3) {
+      const c = Curve.controlPoints(pts, k);
+      for (let i = 0; i <= steps; i++)
+        expected.push(Curve.bezierStep(ts[i], c));
+      k += 3;
+    }
+    expectClose(Curve.bezier(pts, steps) as Group, expected);
+  });
+
+  it("supports 3D points and plain-array input", () => {
+    const pts3d = Group.fromArray([
+      [0, 0, 0],
+      [10, 5, 2],
+      [20, 0, 6],
+      [30, 8, 1],
+      [40, 2, 4],
+    ]);
+    const curve3d = Curve.catmullRom(pts3d, 4);
+    expect(curve3d[0].length).toBe(3);
+    expect(Number.isFinite(curve3d[8][2])).toBe(true);
+
+    // plain arrays used to produce NaN through the .x/.y accessors; the
+    // indexed fast path handles them correctly
+    const arrays = [
+      [0, 0],
+      [10, 5],
+      [20, 0],
+      [30, 8],
+    ];
+    const curve = Curve.catmullRom(arrays, 4);
+    expect(curve.length).toBeGreaterThan(0);
+    expect(
+      curve.every((p) => Number.isFinite(p[0]) && Number.isFinite(p[1])),
+    ).toBe(true);
+  });
+});

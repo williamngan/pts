@@ -1709,6 +1709,54 @@ export class Curve {
   }
 
   /**
+   * Build a per-step table of the 4 control-point weights for a curve family.
+   * Computing these once per call (instead of a matrix product per output
+   * point) is what makes the curve functions fast.
+   */
+  private static _weights(
+    steps: number,
+    fill: (t: number, out: Float64Array, o: number) => void,
+  ): Float64Array {
+    const w = new Float64Array((steps + 1) * 4);
+    for (let i = 0; i <= steps; i++) {
+      fill(i / steps, w, i * 4);
+    }
+    return w;
+  }
+
+  /**
+   * Evaluate one curve segment with a precomputed weight table, pushing one
+   * interpolated Pt per step into `out`. Control values are read by index so
+   * both Pts and plain arrays work.
+   */
+  private static _evalSegment(
+    out: Group,
+    c: GroupLike,
+    w: Float64Array,
+    steps: number,
+  ): void {
+    const c0 = c[0];
+    const c1 = c[1];
+    const c2 = c[2];
+    const c3 = c[3];
+    const dim3 = c0.length > 2;
+    for (let i = 0; i <= steps; i++) {
+      const o = i * 4;
+      const w0 = w[o];
+      const w1 = w[o + 1];
+      const w2 = w[o + 2];
+      const w3 = w[o + 3];
+      const x = w0 * c0[0] + w1 * c1[0] + w2 * c2[0] + w3 * c3[0];
+      const y = w0 * c0[1] + w1 * c1[1] + w2 * c2[1] + w3 * c3[1];
+      out.push(
+        dim3
+          ? new Pt(x, y, w0 * c0[2] + w1 * c1[2] + w2 * c2[2] + w3 * c3[2])
+          : new Pt(x, y),
+      );
+    }
+  }
+
+  /**
    * Calulcate weighted sum to get the interpolated points.
    * @param ctrls anchors
    * @param params parameters
@@ -1734,21 +1782,23 @@ export class Curve {
     if (_pts.length < 2) return new Group();
 
     let ps = new Group();
-    let ts = Curve.getSteps(steps);
+    const w = Curve._weights(steps, (t, out, o) => {
+      const t2 = t * t;
+      const t3 = t2 * t;
+      out[o] = -0.5 * t3 + t2 - 0.5 * t;
+      out[o + 1] = 1.5 * t3 - 2.5 * t2 + 1;
+      out[o + 2] = -1.5 * t3 + 2 * t2 + 0.5 * t;
+      out[o + 3] = 0.5 * t3 - 0.5 * t2;
+    });
 
     // use first point twice
-    let c = Curve.controlPoints(_pts, 0, true);
-    for (let i = 0; i <= steps; i++) {
-      ps.push(Curve.catmullRomStep(ts[i], c));
-    }
+    Curve._evalSegment(ps, Curve.controlPoints(_pts, 0, true), w, steps);
 
     let k = 0;
     while (k < _pts.length - 2) {
       let cp = Curve.controlPoints(_pts, k);
       if (cp.length > 0) {
-        for (let i = 0; i <= steps; i++) {
-          ps.push(Curve.catmullRomStep(ts[i], cp));
-        }
+        Curve._evalSegment(ps, cp, w, steps);
         k++;
       }
     }
@@ -1797,21 +1847,23 @@ export class Curve {
     if (_pts.length < 2) return new Group();
 
     let ps = new Group();
-    let ts = Curve.getSteps(steps);
+    const w = Curve._weights(steps, (t, out, o) => {
+      const t2 = t * t;
+      const t3 = t2 * t;
+      out[o] = tension * (-t3 + 2 * t2 - t);
+      out[o + 1] = tension * (-t3 + t2) + (2 * t3 - 3 * t2 + 1);
+      out[o + 2] = tension * (t3 - 2 * t2 + t) + (-2 * t3 + 3 * t2);
+      out[o + 3] = tension * (t3 - t2);
+    });
 
     // use first point twice
-    let c = Curve.controlPoints(_pts, 0, true);
-    for (let i = 0; i <= steps; i++) {
-      ps.push(Curve.cardinalStep(ts[i], c, tension));
-    }
+    Curve._evalSegment(ps, Curve.controlPoints(_pts, 0, true), w, steps);
 
     let k = 0;
     while (k < _pts.length - 2) {
       let cp = Curve.controlPoints(_pts, k);
       if (cp.length > 0) {
-        for (let i = 0; i <= steps; i++) {
-          ps.push(Curve.cardinalStep(ts[i], cp, tension));
-        }
+        Curve._evalSegment(ps, cp, w, steps);
         k++;
       }
     }
@@ -1866,15 +1918,20 @@ export class Curve {
     if (_pts.length < 4) return new Group();
 
     let ps = new Group();
-    let ts = Curve.getSteps(steps);
+    const w = Curve._weights(steps, (t, out, o) => {
+      const t2 = t * t;
+      const t3 = t2 * t;
+      out[o] = -t3 + 3 * t2 - 3 * t + 1;
+      out[o + 1] = 3 * t3 - 6 * t2 + 3 * t;
+      out[o + 2] = -3 * t3 + 3 * t2;
+      out[o + 3] = t3;
+    });
 
     let k = 0;
     while (k < _pts.length - 3) {
       let c = Curve.controlPoints(_pts, k);
       if (c.length > 0) {
-        for (let i = 0; i <= steps; i++) {
-          ps.push(Curve.bezierStep(ts[i], c));
-        }
+        Curve._evalSegment(ps, c, w, steps);
 
         // go to the next set of point, but assume current end pt is next start pt
         k += 3;
@@ -1925,21 +1982,32 @@ export class Curve {
     if (_pts.length < 2) return new Group();
 
     let ps = new Group();
-    let ts = Curve.getSteps(steps);
+    const w =
+      tension !== 1
+        ? Curve._weights(steps, (t, out, o) => {
+            const t2 = t * t;
+            const t3 = t2 * t;
+            const b1 = 2 * t3 - 3 * t2 + 1;
+            const b2 = -2 * t3 + 3 * t2;
+            out[o] = tension * (-t3 / 6 + 0.5 * t2 - 0.5 * t + 1 / 6);
+            out[o + 1] = tension * (-1.5 * t3 + 2 * t2 - 1 / 3) + b1;
+            out[o + 2] = tension * (1.5 * t3 - 2.5 * t2 + 0.5 * t + 1 / 6) + b2;
+            out[o + 3] = tension * (t3 / 6);
+          })
+        : Curve._weights(steps, (t, out, o) => {
+            const t2 = t * t;
+            const t3 = t2 * t;
+            out[o] = -t3 / 6 + 0.5 * t2 - 0.5 * t + 1 / 6;
+            out[o + 1] = 0.5 * t3 - t2 + 2 / 3;
+            out[o + 2] = -0.5 * t3 + 0.5 * t2 + 0.5 * t + 1 / 6;
+            out[o + 3] = t3 / 6;
+          });
 
     let k = 0;
     while (k < _pts.length - 3) {
       let c = Curve.controlPoints(_pts, k);
       if (c.length > 0) {
-        if (tension !== 1) {
-          for (let i = 0; i <= steps; i++) {
-            ps.push(Curve.bsplineTensionStep(ts[i], c, tension));
-          }
-        } else {
-          for (let i = 0; i <= steps; i++) {
-            ps.push(Curve.bsplineStep(ts[i], c));
-          }
-        }
+        Curve._evalSegment(ps, c, w, steps);
         k++;
       }
     }

@@ -1071,6 +1071,28 @@ var Curve = class Curve {
 		index = copyStart ? index : index + 1;
 		return new Group(p0, _pts[_index(index++)], _pts[_index(index++)], _pts[_index(index++)]);
 	}
+	static _weights(steps, fill) {
+		const w = new Float64Array((steps + 1) * 4);
+		for (let i = 0; i <= steps; i++) fill(i / steps, w, i * 4);
+		return w;
+	}
+	static _evalSegment(out, c, w, steps) {
+		const c0 = c[0];
+		const c1 = c[1];
+		const c2 = c[2];
+		const c3 = c[3];
+		const dim3 = c0.length > 2;
+		for (let i = 0; i <= steps; i++) {
+			const o = i * 4;
+			const w0 = w[o];
+			const w1 = w[o + 1];
+			const w2 = w[o + 2];
+			const w3 = w[o + 3];
+			const x = w0 * c0[0] + w1 * c1[0] + w2 * c2[0] + w3 * c3[0];
+			const y = w0 * c0[1] + w1 * c1[1] + w2 * c2[1] + w3 * c3[1];
+			out.push(dim3 ? new Pt(x, y, w0 * c0[2] + w1 * c1[2] + w2 * c2[2] + w3 * c3[2]) : new Pt(x, y));
+		}
+	}
 	static _calcPt(ctrls, params) {
 		let x = ctrls.reduce((a, c, i) => a + c.x * params[i], 0);
 		let y = ctrls.reduce((a, c, i) => a + c.y * params[i], 0);
@@ -1084,14 +1106,20 @@ var Curve = class Curve {
 		let _pts = Util.iterToArray(pts);
 		if (_pts.length < 2) return new Group();
 		let ps = new Group();
-		let ts = Curve.getSteps(steps);
-		let c = Curve.controlPoints(_pts, 0, true);
-		for (let i = 0; i <= steps; i++) ps.push(Curve.catmullRomStep(ts[i], c));
+		const w = Curve._weights(steps, (t, out, o) => {
+			const t2 = t * t;
+			const t3 = t2 * t;
+			out[o] = -.5 * t3 + t2 - .5 * t;
+			out[o + 1] = 1.5 * t3 - 2.5 * t2 + 1;
+			out[o + 2] = -1.5 * t3 + 2 * t2 + .5 * t;
+			out[o + 3] = .5 * t3 - .5 * t2;
+		});
+		Curve._evalSegment(ps, Curve.controlPoints(_pts, 0, true), w, steps);
 		let k = 0;
 		while (k < _pts.length - 2) {
 			let cp = Curve.controlPoints(_pts, k);
 			if (cp.length > 0) {
-				for (let i = 0; i <= steps; i++) ps.push(Curve.catmullRomStep(ts[i], cp));
+				Curve._evalSegment(ps, cp, w, steps);
 				k++;
 			}
 		}
@@ -1105,14 +1133,20 @@ var Curve = class Curve {
 		let _pts = Util.iterToArray(pts);
 		if (_pts.length < 2) return new Group();
 		let ps = new Group();
-		let ts = Curve.getSteps(steps);
-		let c = Curve.controlPoints(_pts, 0, true);
-		for (let i = 0; i <= steps; i++) ps.push(Curve.cardinalStep(ts[i], c, tension));
+		const w = Curve._weights(steps, (t, out, o) => {
+			const t2 = t * t;
+			const t3 = t2 * t;
+			out[o] = tension * (-t3 + 2 * t2 - t);
+			out[o + 1] = tension * (-t3 + t2) + (2 * t3 - 3 * t2 + 1);
+			out[o + 2] = tension * (t3 - 2 * t2 + t) + (-2 * t3 + 3 * t2);
+			out[o + 3] = tension * (t3 - t2);
+		});
+		Curve._evalSegment(ps, Curve.controlPoints(_pts, 0, true), w, steps);
 		let k = 0;
 		while (k < _pts.length - 2) {
 			let cp = Curve.controlPoints(_pts, k);
 			if (cp.length > 0) {
-				for (let i = 0; i <= steps; i++) ps.push(Curve.cardinalStep(ts[i], cp, tension));
+				Curve._evalSegment(ps, cp, w, steps);
 				k++;
 			}
 		}
@@ -1133,12 +1167,19 @@ var Curve = class Curve {
 		let _pts = Util.iterToArray(pts);
 		if (_pts.length < 4) return new Group();
 		let ps = new Group();
-		let ts = Curve.getSteps(steps);
+		const w = Curve._weights(steps, (t, out, o) => {
+			const t2 = t * t;
+			const t3 = t2 * t;
+			out[o] = -t3 + 3 * t2 - 3 * t + 1;
+			out[o + 1] = 3 * t3 - 6 * t2 + 3 * t;
+			out[o + 2] = -3 * t3 + 3 * t2;
+			out[o + 3] = t3;
+		});
 		let k = 0;
 		while (k < _pts.length - 3) {
 			let c = Curve.controlPoints(_pts, k);
 			if (c.length > 0) {
-				for (let i = 0; i <= steps; i++) ps.push(Curve.bezierStep(ts[i], c));
+				Curve._evalSegment(ps, c, w, steps);
 				k += 3;
 			}
 		}
@@ -1152,13 +1193,28 @@ var Curve = class Curve {
 		let _pts = Util.iterToArray(pts);
 		if (_pts.length < 2) return new Group();
 		let ps = new Group();
-		let ts = Curve.getSteps(steps);
+		const w = tension !== 1 ? Curve._weights(steps, (t, out, o) => {
+			const t2 = t * t;
+			const t3 = t2 * t;
+			const b1 = 2 * t3 - 3 * t2 + 1;
+			const b2 = -2 * t3 + 3 * t2;
+			out[o] = tension * (-t3 / 6 + .5 * t2 - .5 * t + 1 / 6);
+			out[o + 1] = tension * (-1.5 * t3 + 2 * t2 - 1 / 3) + b1;
+			out[o + 2] = tension * (1.5 * t3 - 2.5 * t2 + .5 * t + 1 / 6) + b2;
+			out[o + 3] = tension * (t3 / 6);
+		}) : Curve._weights(steps, (t, out, o) => {
+			const t2 = t * t;
+			const t3 = t2 * t;
+			out[o] = -t3 / 6 + .5 * t2 - .5 * t + 1 / 6;
+			out[o + 1] = .5 * t3 - t2 + 2 / 3;
+			out[o + 2] = -.5 * t3 + .5 * t2 + .5 * t + 1 / 6;
+			out[o + 3] = t3 / 6;
+		});
 		let k = 0;
 		while (k < _pts.length - 3) {
 			let c = Curve.controlPoints(_pts, k);
 			if (c.length > 0) {
-				if (tension !== 1) for (let i = 0; i <= steps; i++) ps.push(Curve.bsplineTensionStep(ts[i], c, tension));
-				else for (let i = 0; i <= steps; i++) ps.push(Curve.bsplineStep(ts[i], c));
+				Curve._evalSegment(ps, c, w, steps);
 				k++;
 			}
 		}
@@ -4703,12 +4759,70 @@ function _triangulate(coords) {
 		hullHash[hashKey(x, y)] = i;
 		hullHash[hashKey(coords[2 * e], coords[2 * e + 1])] = e;
 	}
-	return triangles.subarray(0, trianglesLen);
+	return {
+		triangles: triangles.subarray(0, trianglesLen),
+		halfedges: halfedges.subarray(0, trianglesLen)
+	};
+}
+function _clipCellToRect(cell, x0, y0, x1, y1) {
+	let inside = true;
+	for (let i = 0, len = cell.length; i < len; i++) {
+		const px = cell[i][0];
+		const py = cell[i][1];
+		if (px < x0 || px > x1 || py < y0 || py > y1 || !Number.isFinite(px + py)) {
+			inside = false;
+			break;
+		}
+	}
+	if (inside) return cell;
+	if (cell.length < 3) {
+		const kept = new Group();
+		for (let i = 0, len = cell.length; i < len; i++) {
+			const px = cell[i][0];
+			const py = cell[i][1];
+			if (px >= x0 && px <= x1 && py >= y0 && py <= y1) kept.push(cell[i]);
+		}
+		return kept;
+	}
+	const big = 1e7;
+	let pts = [];
+	for (let i = 0, len = cell.length; i < len; i++) {
+		let px = cell[i][0];
+		let py = cell[i][1];
+		if (!Number.isFinite(px)) px = px > 0 ? big : -1e7;
+		if (!Number.isFinite(py)) py = py > 0 ? big : -1e7;
+		if (Number.isNaN(px) || Number.isNaN(py)) continue;
+		pts.push([px, py]);
+	}
+	const clip = (input, keep, cross) => {
+		const output = [];
+		for (let i = 0, len = input.length; i < len; i++) {
+			const a = input[i === 0 ? len - 1 : i - 1];
+			const b = input[i];
+			const keepB = keep(b);
+			if (keep(a)) {
+				if (keepB) output.push(b);
+				else output.push(cross(a, b));
+			} else if (keepB) output.push(cross(a, b), b);
+		}
+		return output;
+	};
+	const lerpAt = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+	pts = clip(pts, (p) => p[0] >= x0, (a, b) => lerpAt(a, b, (x0 - a[0]) / (b[0] - a[0])));
+	pts = clip(pts, (p) => p[0] <= x1, (a, b) => lerpAt(a, b, (x1 - a[0]) / (b[0] - a[0])));
+	pts = clip(pts, (p) => p[1] >= y0, (a, b) => lerpAt(a, b, (y0 - a[1]) / (b[1] - a[1])));
+	pts = clip(pts, (p) => p[1] <= y1, (a, b) => lerpAt(a, b, (y1 - a[1]) / (b[1] - a[1])));
+	const out = new Group();
+	for (let i = 0, len = pts.length; i < len; i++) out.push(new Pt(pts[i]));
+	return out;
 }
 var Delaunay = class extends Group {
 	constructor(..._args) {
 		super(..._args);
 		this._mesh = [];
+		this._triangles = null;
+		this._halfedges = null;
+		this._shapes = null;
 	}
 	delaunay(triangleOnly = true) {
 		if (this.length < 3) return [];
@@ -4720,8 +4834,12 @@ var Delaunay = class extends Group {
 			coords[2 * i] = this[i][0];
 			coords[2 * i + 1] = this[i][1];
 		}
-		const triIndices = _triangulate(coords);
-		if (!triIndices) return [];
+		const result = _triangulate(coords);
+		this._triangles = result ? result.triangles : null;
+		this._halfedges = result ? result.halfedges : null;
+		this._shapes = null;
+		if (!result) return [];
+		const triIndices = result.triangles;
 		const shapes = [];
 		const tris = [];
 		for (let t = 0, len = triIndices.length; t < len; t += 3) {
@@ -4745,12 +4863,51 @@ var Delaunay = class extends Group {
 			shapes.push(shape);
 			tris.push(triangle);
 		}
+		this._shapes = shapes;
 		return triangleOnly ? tris : shapes;
 	}
-	voronoi() {
-		let vs = [];
-		let n = this._mesh;
-		for (let i = 0, len = n.length; i < len; i++) vs.push(this.neighborPts(i, true));
+	voronoi(bound) {
+		const cells = this._voronoiCells();
+		if (!bound) return cells;
+		const _bound = Geom.boundingBox(Util.iterToArray(bound));
+		const x0 = _bound[0][0];
+		const y0 = _bound[0][1];
+		const x1 = _bound[1][0];
+		const y1 = _bound[1][1];
+		for (let i = 0, len = cells.length; i < len; i++) cells[i] = _clipCellToRect(cells[i], x0, y0, x1, y1);
+		return cells;
+	}
+	_voronoiCells() {
+		const triangles = this._triangles;
+		const halfedges = this._halfedges;
+		const shapes = this._shapes;
+		if (!triangles || !halfedges || !shapes) {
+			let vs = [];
+			let n = this._mesh;
+			for (let i = 0, len = n.length; i < len; i++) vs.push(this.neighborPts(i, true));
+			return vs;
+		}
+		const n = this._mesh.length;
+		const inedges = new Int32Array(n).fill(-1);
+		for (let e = 0, len = triangles.length; e < len; e++) {
+			const p = triangles[e % 3 === 2 ? e - 2 : e + 1];
+			if (halfedges[e] === -1 || inedges[p] === -1) inedges[p] = e;
+		}
+		const vs = [];
+		for (let i = 0; i < n; i++) {
+			const cell = new Group();
+			const e0 = inedges[i];
+			if (e0 !== -1) {
+				let e = e0;
+				do {
+					cell.push(shapes[Math.floor(e / 3)].circle[0]);
+					const next = e % 3 === 2 ? e - 2 : e + 1;
+					if (triangles[next] !== i) break;
+					e = halfedges[next];
+				} while (e !== -1 && e !== e0);
+			}
+			vs.push(cell);
+		}
 		return vs;
 	}
 	mesh() {

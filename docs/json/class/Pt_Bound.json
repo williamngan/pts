@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 5954,
+  "id": 5975,
   "comment": "Bound is a subclass of [`Group`](#link) that represents a rectangular boundary.\nIt includes some convenient accessors (eg, bottomRight, center) for bounding box calculations.",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           2
         ]
       ],
-      "id": 6002,
+      "id": 6023,
       "flags": {},
       "overrides": "Group.__constructor",
       "inherits": false,
@@ -62,7 +62,7 @@
           6
         ]
       ],
-      "id": 6034,
+      "id": 6055,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -94,7 +94,7 @@
           6
         ]
       ],
-      "id": 6026,
+      "id": 6047,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -126,7 +126,7 @@
           6
         ]
       ],
-      "id": 6046,
+      "id": 6067,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -158,7 +158,7 @@
           6
         ]
       ],
-      "id": 6042,
+      "id": 6063,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -190,7 +190,7 @@
           6
         ]
       ],
-      "id": 6061,
+      "id": 6082,
       "flags": {},
       "overrides": false,
       "inherits": "Group.id",
@@ -217,7 +217,7 @@
           6
         ]
       ],
-      "id": 6056,
+      "id": 6077,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -236,7 +236,7 @@
           6
         ]
       ],
-      "id": 6065,
+      "id": 6086,
       "flags": {},
       "overrides": false,
       "inherits": "Group.p1",
@@ -255,7 +255,7 @@
           6
         ]
       ],
-      "id": 6067,
+      "id": 6088,
       "flags": {},
       "overrides": false,
       "inherits": "Group.p2",
@@ -274,7 +274,7 @@
           6
         ]
       ],
-      "id": 6069,
+      "id": 6090,
       "flags": {},
       "overrides": false,
       "inherits": "Group.p3",
@@ -293,7 +293,7 @@
           6
         ]
       ],
-      "id": 6071,
+      "id": 6092,
       "flags": {},
       "overrides": false,
       "inherits": "Group.p4",
@@ -312,7 +312,7 @@
           6
         ]
       ],
-      "id": 6073,
+      "id": 6094,
       "flags": {},
       "overrides": false,
       "inherits": "Group.q1",
@@ -331,7 +331,7 @@
           6
         ]
       ],
-      "id": 6075,
+      "id": 6096,
       "flags": {},
       "overrides": false,
       "inherits": "Group.q2",
@@ -350,7 +350,7 @@
           6
         ]
       ],
-      "id": 6077,
+      "id": 6098,
       "flags": {},
       "overrides": false,
       "inherits": "Group.q3",
@@ -369,7 +369,7 @@
           6
         ]
       ],
-      "id": 6079,
+      "id": 6100,
       "flags": {},
       "overrides": false,
       "inherits": "Group.q4",
@@ -393,7 +393,7 @@
           6
         ]
       ],
-      "id": 6022,
+      "id": 6043,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -425,7 +425,7 @@
           6
         ]
       ],
-      "id": 6030,
+      "id": 6051,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -457,7 +457,7 @@
           6
         ]
       ],
-      "id": 6038,
+      "id": 6059,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -484,7 +484,7 @@
           6
         ]
       ],
-      "id": 6050,
+      "id": 6071,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -503,7 +503,7 @@
           6
         ]
       ],
-      "id": 6052,
+      "id": 6073,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -522,7 +522,7 @@
           6
         ]
       ],
-      "id": 6054,
+      "id": 6075,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -543,7 +543,7 @@
           2
         ]
       ],
-      "id": 6186,
+      "id": 6207,
       "flags": {},
       "overrides": false,
       "inherits": "Group.$matrixAdd",
@@ -573,7 +573,7 @@
           2
         ]
       ],
-      "id": 6189,
+      "id": 6210,
       "flags": {},
       "overrides": false,
       "inherits": "Group.$matrixMultiply",
@@ -615,7 +615,7 @@
           2
         ]
       ],
-      "id": 6198,
+      "id": 6219,
       "flags": {},
       "overrides": false,
       "inherits": "Group.$zip",
@@ -651,7 +651,7 @@
           2
         ]
       ],
-      "id": 6174,
+      "id": 6195,
       "flags": {},
       "overrides": false,
       "inherits": "Group.add",
@@ -681,7 +681,7 @@
           2
         ]
       ],
-      "id": 6108,
+      "id": 6129,
       "flags": {},
       "overrides": false,
       "inherits": "Group.anchorFrom",
@@ -711,7 +711,7 @@
           2
         ]
       ],
-      "id": 6105,
+      "id": 6126,
       "flags": {},
       "overrides": false,
       "inherits": "Group.anchorTo",
@@ -741,7 +741,7 @@
           2
         ]
       ],
-      "id": 6103,
+      "id": 6124,
       "flags": {},
       "overrides": false,
       "inherits": "Group.boundingBox",
@@ -764,7 +764,7 @@
           2
         ]
       ],
-      "id": 6101,
+      "id": 6122,
       "flags": {},
       "overrides": false,
       "inherits": "Group.centroid",
@@ -787,7 +787,7 @@
           2
         ]
       ],
-      "id": 6010,
+      "id": 6031,
       "flags": {},
       "overrides": "Group.clone",
       "inherits": false,
@@ -815,7 +815,7 @@
           4
         ]
       ],
-      "id": 6217,
+      "id": 6238,
       "flags": {},
       "overrides": false,
       "inherits": "Array.concat",
@@ -859,7 +859,7 @@
           2
         ]
       ],
-      "id": 6183,
+      "id": 6204,
       "flags": {},
       "overrides": false,
       "inherits": "Group.divide",
@@ -894,7 +894,7 @@
           4
         ]
       ],
-      "id": 6259,
+      "id": 6280,
       "flags": {},
       "overrides": false,
       "inherits": "Array.every",
@@ -955,7 +955,7 @@
           4
         ]
       ],
-      "id": 6305,
+      "id": 6326,
       "flags": {},
       "overrides": false,
       "inherits": "Array.filter",
@@ -1011,7 +1011,7 @@
           4
         ]
       ],
-      "id": 6286,
+      "id": 6307,
       "flags": {},
       "overrides": false,
       "inherits": "Array.forEach",
@@ -1047,7 +1047,7 @@
           2
         ]
       ],
-      "id": 6162,
+      "id": 6183,
       "flags": {},
       "overrides": false,
       "inherits": "Group.forEachPt",
@@ -1083,7 +1083,7 @@
           4
         ]
       ],
-      "id": 6251,
+      "id": 6272,
       "flags": {},
       "overrides": false,
       "inherits": "Array.indexOf",
@@ -1119,7 +1119,7 @@
           12
         ]
       ],
-      "id": 6008,
+      "id": 6029,
       "flags": {
         "isProtected": true
       },
@@ -1144,7 +1144,7 @@
           2
         ]
       ],
-      "id": 6086,
+      "id": 6107,
       "flags": {},
       "overrides": false,
       "inherits": "Group.insert",
@@ -1180,7 +1180,7 @@
           2
         ]
       ],
-      "id": 6131,
+      "id": 6152,
       "flags": {},
       "overrides": false,
       "inherits": "Group.interpolate",
@@ -1210,7 +1210,7 @@
           4
         ]
       ],
-      "id": 6222,
+      "id": 6243,
       "flags": {},
       "overrides": false,
       "inherits": "Array.join",
@@ -1240,7 +1240,7 @@
           4
         ]
       ],
-      "id": 6255,
+      "id": 6276,
       "flags": {},
       "overrides": false,
       "inherits": "Array.lastIndexOf",
@@ -1276,7 +1276,7 @@
           2
         ]
       ],
-      "id": 6099,
+      "id": 6120,
       "flags": {},
       "overrides": false,
       "inherits": "Group.lines",
@@ -1299,7 +1299,7 @@
           4
         ]
       ],
-      "id": 6295,
+      "id": 6316,
       "flags": {},
       "overrides": false,
       "inherits": "Array.map",
@@ -1335,7 +1335,7 @@
           2
         ]
       ],
-      "id": 6134,
+      "id": 6155,
       "flags": {},
       "overrides": false,
       "inherits": "Group.moveBy",
@@ -1365,7 +1365,7 @@
           2
         ]
       ],
-      "id": 6137,
+      "id": 6158,
       "flags": {},
       "overrides": false,
       "inherits": "Group.moveTo",
@@ -1395,7 +1395,7 @@
           2
         ]
       ],
-      "id": 6180,
+      "id": 6201,
       "flags": {},
       "overrides": false,
       "inherits": "Group.multiply",
@@ -1425,7 +1425,7 @@
           2
         ]
       ],
-      "id": 6111,
+      "id": 6132,
       "flags": {},
       "overrides": false,
       "inherits": "Group.op",
@@ -1460,7 +1460,7 @@
           2
         ]
       ],
-      "id": 6121,
+      "id": 6142,
       "flags": {},
       "overrides": false,
       "inherits": "Group.ops",
@@ -1495,7 +1495,7 @@
           4
         ]
       ],
-      "id": 6212,
+      "id": 6233,
       "flags": {},
       "overrides": false,
       "inherits": "Array.pop",
@@ -1518,7 +1518,7 @@
           4
         ]
       ],
-      "id": 6214,
+      "id": 6235,
       "flags": {},
       "overrides": false,
       "inherits": "Array.push",
@@ -1558,7 +1558,7 @@
           4
         ]
       ],
-      "id": 6323,
+      "id": 6344,
       "flags": {},
       "overrides": false,
       "inherits": "Array.reduce",
@@ -1638,7 +1638,7 @@
           4
         ]
       ],
-      "id": 6351,
+      "id": 6372,
       "flags": {},
       "overrides": false,
       "inherits": "Array.reduceRight",
@@ -1708,7 +1708,7 @@
           2
         ]
       ],
-      "id": 6154,
+      "id": 6175,
       "flags": {},
       "overrides": false,
       "inherits": "Group.reflect2D",
@@ -1744,7 +1744,7 @@
           2
         ]
       ],
-      "id": 6090,
+      "id": 6111,
       "flags": {},
       "overrides": false,
       "inherits": "Group.remove",
@@ -1780,7 +1780,7 @@
           4
         ]
       ],
-      "id": 6225,
+      "id": 6246,
       "flags": {},
       "overrides": false,
       "inherits": "Array.reverse",
@@ -1803,7 +1803,7 @@
           2
         ]
       ],
-      "id": 6144,
+      "id": 6165,
       "flags": {},
       "overrides": false,
       "inherits": "Group.rotate2D",
@@ -1845,7 +1845,7 @@
           2
         ]
       ],
-      "id": 6140,
+      "id": 6161,
       "flags": {},
       "overrides": false,
       "inherits": "Group.scale",
@@ -1881,7 +1881,7 @@
           2
         ]
       ],
-      "id": 6094,
+      "id": 6115,
       "flags": {},
       "overrides": false,
       "inherits": "Group.segments",
@@ -1923,7 +1923,7 @@
           2
         ]
       ],
-      "id": 6149,
+      "id": 6170,
       "flags": {},
       "overrides": false,
       "inherits": "Group.shear2D",
@@ -1965,7 +1965,7 @@
           4
         ]
       ],
-      "id": 6227,
+      "id": 6248,
       "flags": {},
       "overrides": false,
       "inherits": "Array.shift",
@@ -1988,7 +1988,7 @@
           4
         ]
       ],
-      "id": 6229,
+      "id": 6250,
       "flags": {},
       "overrides": false,
       "inherits": "Array.slice",
@@ -2024,7 +2024,7 @@
           4
         ]
       ],
-      "id": 6277,
+      "id": 6298,
       "flags": {},
       "overrides": false,
       "inherits": "Array.some",
@@ -2060,7 +2060,7 @@
           4
         ]
       ],
-      "id": 6233,
+      "id": 6254,
       "flags": {},
       "overrides": false,
       "inherits": "Array.sort",
@@ -2090,7 +2090,7 @@
           2
         ]
       ],
-      "id": 6158,
+      "id": 6179,
       "flags": {},
       "overrides": false,
       "inherits": "Group.sortByDimension",
@@ -2131,7 +2131,7 @@
           4
         ]
       ],
-      "id": 6240,
+      "id": 6261,
       "flags": {},
       "overrides": false,
       "inherits": "Array.splice",
@@ -2193,7 +2193,7 @@
           2
         ]
       ],
-      "id": 6081,
+      "id": 6102,
       "flags": {},
       "overrides": false,
       "inherits": "Group.split",
@@ -2235,7 +2235,7 @@
           2
         ]
       ],
-      "id": 6177,
+      "id": 6198,
       "flags": {},
       "overrides": false,
       "inherits": "Group.subtract",
@@ -2265,7 +2265,7 @@
           2
         ]
       ],
-      "id": 6202,
+      "id": 6223,
       "flags": {},
       "overrides": false,
       "inherits": "Group.toBound",
@@ -2293,7 +2293,7 @@
           4
         ]
       ],
-      "id": 6207,
+      "id": 6228,
       "flags": {},
       "overrides": false,
       "inherits": "Array.toLocaleString",
@@ -2336,7 +2336,7 @@
           2
         ]
       ],
-      "id": 6204,
+      "id": 6225,
       "flags": {},
       "overrides": false,
       "inherits": "Group.toString",
@@ -2359,7 +2359,7 @@
           4
         ]
       ],
-      "id": 6248,
+      "id": 6269,
       "flags": {},
       "overrides": false,
       "inherits": "Array.unshift",
@@ -2389,7 +2389,7 @@
           2
         ]
       ],
-      "id": 6058,
+      "id": 6079,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2412,7 +2412,7 @@
           2
         ]
       ],
-      "id": 6194,
+      "id": 6215,
       "flags": {},
       "overrides": false,
       "inherits": "Group.zipSlice",
@@ -2448,7 +2448,7 @@
           9
         ]
       ],
-      "id": 5961,
+      "id": 5982,
       "flags": {
         "isStatic": true
       },
@@ -2485,7 +2485,7 @@
           9
         ]
       ],
-      "id": 5955,
+      "id": 5976,
       "flags": {
         "isStatic": true
       },
@@ -2517,7 +2517,7 @@
           9
         ]
       ],
-      "id": 5958,
+      "id": 5979,
       "flags": {
         "isStatic": true
       },
@@ -2549,7 +2549,7 @@
           9
         ]
       ],
-      "id": 5964,
+      "id": 5985,
       "flags": {
         "isStatic": true
       },
@@ -2584,7 +2584,7 @@
           4
         ]
       ],
-      "id": 6206,
+      "id": 6227,
       "flags": {},
       "type": "number",
       "overrides": false,
