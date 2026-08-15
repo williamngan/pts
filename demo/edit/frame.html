@@ -1,4 +1,12 @@
 <!doctype html>
+<!--
+  LEGACY — no longer referenced. The editor now embeds this shell in
+  edit.js (see FRAME_SRCDOC there), so it can never be cached separately from
+  the editor that injects into it. This file stays only so browsers holding a
+  previously cached index.html/edit.js pair — which still fetch
+  `./frame.html?v=<old>` — keep working instead of hitting a 404. Safe to
+  delete once those caches have long expired.
+-->
 <html>
   <head>
     <meta charset="UTF-8" />

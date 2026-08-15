@@ -18,11 +18,34 @@
  */
 
 import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { readdir, readFile, writeFile } from "node:fs/promises";
 
 const root = new URL("../", import.meta.url);
 const classDir = new URL("docs/json/class/", root);
 const apiOut = new URL("demo/edit/js/pts-api.js", root);
+const editorIndex = new URL("demo/edit/index.html", root);
+
+// The sketch shell is not listed: it is embedded in edit.js (FRAME_SRCDOC),
+// precisely so it cannot be fetched, cached, or versioned separately. An
+// `.html` asset could not be safely query-versioned anyway — clean-URL static
+// servers 301-redirect `frame.html?v=...` to an extensionless URL, stripping
+// the version.
+const versionedAssets = [
+  "demo/edit/vs/monaco.js",
+  "demo/edit/vs/pts.css",
+  "demo/edit/css/style.css",
+  "demo/edit/js/pts-api.js",
+  "demo/edit/js/edit.js",
+];
+
+const versionedReferences = [
+  "./vs/pts.css",
+  "./css/style.css",
+  "./vs/monaco.js",
+  "./js/pts-api.js",
+  "./js/edit.js",
+];
 
 function run(command, args) {
   const result = spawnSync(command, args, {
@@ -133,5 +156,41 @@ async function buildApiData() {
   );
 }
 
+/**
+ * Give every editor-owned asset one content-derived version.
+ *
+ * The editor used to publish a stable `monaco.js` that imported hashed chunks.
+ * A deployment removed the old chunks while browsers could still reuse the old
+ * entry, leaving the page blank. The bundle is self-contained now, but changing
+ * its contents without changing its URL does not rescue browsers that already
+ * cached that older split entry. Versioning the whole cooperating asset set also
+ * prevents a cached edit.js from running against a new bundle.
+ */
+async function versionAssets() {
+  const hash = createHash("sha256");
+  for (const path of versionedAssets) {
+    hash.update(path);
+    hash.update(await readFile(new URL(path, root)));
+  }
+  const version = hash.digest("hex").slice(0, 12);
+
+  let html = await readFile(editorIndex, "utf8");
+  for (const reference of versionedReferences) {
+    const escaped = reference.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const pattern = new RegExp(`${escaped}(?:\\?v=[a-f0-9]+)?`, "g");
+    const matches = html.match(pattern) ?? [];
+    if (matches.length !== 1) {
+      throw new Error(
+        `expected one versionable reference to ${reference}, found ${matches.length}`,
+      );
+    }
+    html = html.replace(pattern, `${reference}?v=${version}`);
+  }
+
+  await writeFile(editorIndex, html);
+  process.stdout.write(`versioned editor assets (${version})\n`);
+}
+
 run("npx", ["vite", "build", "--config", "vite.monaco.config.mjs"]);
 await buildApiData();
+await versionAssets();

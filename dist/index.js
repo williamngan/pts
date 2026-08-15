@@ -3318,8 +3318,8 @@ var CanvasSpace = class extends MultiTouchSpace {
 		this.bound = b;
 		this._canvas.width = Math.ceil(this.bound.size.x) * this._pixelScale;
 		this._canvas.height = Math.ceil(this.bound.size.y) * this._pixelScale;
-		this._canvas.style.width = Math.ceil(this.bound.size.x) + "px";
-		this._canvas.style.height = Math.ceil(this.bound.size.y) + "px";
+		this._canvas.style.width = this.bound.size.x + "px";
+		this._canvas.style.height = this.bound.size.y + "px";
 		if (this._offscreen) {
 			this._offCanvas.width = Math.ceil(this.bound.size.x) * this._pixelScale;
 			this._offCanvas.height = Math.ceil(this.bound.size.y) * this._pixelScale;

@@ -9,12 +9,16 @@
  *   E1  each Run leaked another animation loop
  *   E2  a top-level `let`/`const` broke Run permanently
  *   E4  the editor could hang at "Loading Editor..."
+ *   E11 cached editor assets could straddle two deployments and blank the page
+ *   E12 space-taking scrollbars + a fractional pane width put the sketch canvas
+ *       in an endless resize oscillation: blank preview, eventual tab crash
  *
  * Serves the repo statically and drives it with Chromium, in the same style as
  * `browser-smoke.mjs`.
  */
 
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { createServer } from "node:http";
 import { readFile, stat } from "node:fs/promises";
 import { extname, join, normalize } from "node:path";
@@ -24,6 +28,24 @@ import { chromium } from "playwright";
 const ROOT = new URL("../", import.meta.url).pathname;
 const PORT = 8123;
 const ORIGIN = `http://localhost:${PORT}`;
+
+// Keep in sync with scripts/build-editor.mjs. The sketch shell is embedded in
+// edit.js (FRAME_SRCDOC) rather than fetched, so it is not a versionable asset.
+const EDITOR_VERSIONED_ASSETS = [
+  "demo/edit/vs/monaco.js",
+  "demo/edit/vs/pts.css",
+  "demo/edit/css/style.css",
+  "demo/edit/js/pts-api.js",
+  "demo/edit/js/edit.js",
+];
+
+const EDITOR_VERSIONED_REFERENCES = [
+  "./vs/pts.css",
+  "./css/style.css",
+  "./vs/monaco.js",
+  "./js/pts-api.js",
+  "./js/edit.js",
+];
 
 const TYPES = {
   ".html": "text/html",
@@ -249,8 +271,11 @@ async function checkEditorBundleIsSelfContained() {
   const scripts = await page.evaluate(() =>
     performance
       .getEntriesByType("resource")
-      .filter((r) => r.name.includes("/vs/") && r.name.endsWith(".js"))
-      .map((r) => r.name.split("/vs/")[1]),
+      .map((r) => new URL(r.name))
+      .filter(
+        (url) => url.pathname.includes("/vs/") && url.pathname.endsWith(".js"),
+      )
+      .map((url) => url.pathname.split("/vs/")[1]),
   );
   assert.deepEqual(
     scripts,
@@ -260,6 +285,30 @@ async function checkEditorBundleIsSelfContained() {
 
   await page.close();
   return "single self-contained monaco.js, no hashed chunk imports";
+}
+
+async function checkEditorAssetsAreVersioned() {
+  const hash = createHash("sha256");
+  for (const path of EDITOR_VERSIONED_ASSETS) {
+    hash.update(path);
+    hash.update(await readFile(join(ROOT, path)));
+  }
+  const expected = hash.digest("hex").slice(0, 12);
+  const html = await readFile(join(ROOT, "demo/edit/index.html"), "utf8");
+
+  for (const reference of EDITOR_VERSIONED_REFERENCES) {
+    const escaped = reference.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const versions = [
+      ...html.matchAll(new RegExp(`${escaped}\\?v=([a-f0-9]+)`, "g")),
+    ].map((match) => match[1]);
+    assert.deepEqual(
+      versions,
+      [expected],
+      `${reference} must use the current editor asset version; run pnpm build:editor`,
+    );
+  }
+
+  return `all editor assets use content version ${expected}`;
 }
 
 async function checkEditorRendersNamedDemo() {
@@ -282,7 +331,7 @@ async function checkEditorRendersNamedDemo() {
   );
   assert.ok(lines > 0, "the editor showed no code");
 
-  const frame = page.frames().find((f) => f.url().includes("frame.html"));
+  const frame = page.frames().find((f) => f.url() === "about:srcdoc");
   const painted = await frame.evaluate(() => {
     const c = document.querySelector("#pt canvas");
     if (!c || !c.width) return false;
@@ -330,8 +379,7 @@ async function checkEditorRunsAreIsolated() {
     ),
   );
 
-  const sketch = () =>
-    page.frames().find((f) => f.url().includes("frame.html"));
+  const sketch = () => page.frames().find((f) => f.url() === "about:srcdoc");
   const rate = async () => {
     const frame = sketch();
     await frame.evaluate(() => {
@@ -401,13 +449,66 @@ space.play();`,
     );
     const canvases = await page
       .frames()
-      .find((f) => f.url().includes("frame.html"))
+      .find((f) => f.url() === "about:srcdoc")
       .evaluate(() => document.querySelectorAll("#pt canvas").length);
     assert.equal(canvases, 1, `run ${i} left ${canvases} canvases`);
   }
 
   await page.close();
   return "three consecutive Runs, no redeclaration error";
+}
+
+async function checkEditorWithClassicScrollbars() {
+  // Headless Chromium passes --hide-scrollbars, which is exactly what masked
+  // E12: overlay scrollbars occupy no layout space, so the oscillation only
+  // happened in real browsers. Launch a dedicated browser without that flag.
+  // 1437px wide makes the 50vw preview pane 718.5px — the fractional width
+  // that made the canvas's rounded-up CSS size overflow its container.
+  const scrollbarBrowser = await chromium.launch({
+    headless: true,
+    ignoreDefaultArgs: ["--hide-scrollbars"],
+  });
+  try {
+    const page = await scrollbarBrowser.newPage({
+      viewport: { width: 1437, height: 901 },
+    });
+    await page.goto(`${ORIGIN}/demo/edit/?name=guide.getting_started`, {
+      waitUntil: "load",
+    });
+    await page.waitForFunction(
+      () => document.getElementById("loader").style.display === "none",
+      { timeout: 30000 },
+    );
+    await page.waitForTimeout(1500);
+
+    const sizes = [];
+    for (let i = 0; i < 4; i++) {
+      sizes.push(
+        await page.evaluate(() => {
+          const c = document
+            .querySelector("iframe")
+            .contentWindow.document.querySelector("#pt canvas");
+          return c ? `${c.width}x${c.height}` : "none";
+        }),
+      );
+      await page.waitForTimeout(700);
+    }
+    assert.equal(
+      new Set(sizes).size,
+      1,
+      `the sketch canvas kept resizing: ${sizes.join(" -> ")}`,
+    );
+    assert.notEqual(sizes[0], "none", "the sketch canvas never appeared");
+
+    const banner = await page.evaluate(
+      () => document.getElementById("error").textContent,
+    );
+    assert.equal(banner, "", `the editor surfaced an error: ${banner}`);
+
+    return `canvas stable at ${sizes[0]} with space-taking scrollbars`;
+  } finally {
+    await scrollbarBrowser.close();
+  }
 }
 
 async function checkEditorReportsErrors() {
@@ -435,10 +536,12 @@ const checks = [
   ["guide waits for off-screen demos", checkGuideDoesNotFailOffscreenDemos],
   ["editor is usable on narrow screens", checkEditorOnNarrowScreens],
   ["editor bundle is one file", checkEditorBundleIsSelfContained],
+  ["editor assets are cache-safe", checkEditorAssetsAreVersioned],
   ["editor renders a named demo", checkEditorRendersNamedDemo],
   ["editor isolates each Run", checkEditorRunsAreIsolated],
   ["editor survives top-level const", checkEditorHandlesLexicalDeclarations],
   ["editor reports sketch errors", checkEditorReportsErrors],
+  ["editor survives classic scrollbars", checkEditorWithClassicScrollbars],
 ];
 
 let failed = 0;
