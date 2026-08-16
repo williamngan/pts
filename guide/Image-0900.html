@@ -96,10 +96,18 @@ pattern.setTransform( m );
 <p>It's now your turn to experiment!</p>
 <h3>Tips and Tricks</h3>
 <ul>
-<li><p>Anticipate screens with different pixel density. You can pass a CanvasSpace's <a href="https://ptsjs.org/docs/?p=Canvas_CanvasSpace#accessor_pixelScale"><code>pixelScale</code></a> when creating an Img instance. (See example in Cheatsheet below)</p></li>
-<li><p>You can <a href="#image-img"><code>load</code></a> an image from a base64 string or an url, or from a blob via the <a href="#image-img"><code>fromBlob</code></a> function. To export the current image, use <a href="#image-img"><code>toBase64</code></a> or <a href="#image-img"><code>toBlob</code></a> functions.</p></li>
-<li><p>CanvasForm's <a href="#canvas-canvasform"><code>image</code></a> drawing function can take either an Img instance or a <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource">CanvasImageSource</a> which includes various kinds of image objects like HTML Image or Canvas.</p></li>
-<li><p>Typically, you can't load an image from another domain due to security concerns. But if the image server allows for it and you want to do it, you can set the <code>crossOrigin</code> parameter to <code>true</code> when creating an  <code>Img</code> instance. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image">More details here</a>.</p></li>
+<li>
+<p>Anticipate screens with different pixel density. You can pass a CanvasSpace's <a href="https://ptsjs.org/docs/?p=Canvas_CanvasSpace#accessor_pixelScale"><code>pixelScale</code></a> when creating an Img instance. (See example in Cheatsheet below)</p>
+</li>
+<li>
+<p>You can <a href="#image-img"><code>load</code></a> an image from a base64 string or an url, or from a blob via the <a href="#image-img"><code>fromBlob</code></a> function. To export the current image, use <a href="#image-img"><code>toBase64</code></a> or <a href="#image-img"><code>toBlob</code></a> functions.</p>
+</li>
+<li>
+<p>CanvasForm's <a href="#canvas-canvasform"><code>image</code></a> drawing function can take either an Img instance or a <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource">CanvasImageSource</a> which includes various kinds of image objects like HTML Image or Canvas.</p>
+</li>
+<li>
+<p>Typically, you can't load an image from another domain due to security concerns. But if the image server allows for it and you want to do it, you can set the <code>crossOrigin</code> parameter to <code>true</code> when creating an  <code>Img</code> instance. <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image">More details here</a>.</p>
+</li>
 </ul>
 <h3>Cheatsheet</h3>
 <p>Creating, loading, displaying</p>

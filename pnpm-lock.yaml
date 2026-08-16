@@ -29,6 +29,9 @@ importers:
       globals:
         specifier: 17.9.0
         version: 17.9.0
+      markdown-it:
+        specifier: 14.3.0
+        version: 14.3.0
       monaco-editor:
         specifier: 0.56.0
         version: 0.56.0

@@ -49,11 +49,11 @@ Here we add an object that conforms to the [IPlayer](../docs/?p=Types_IPlayer) i
 - `start` function is called when the space is ready. It includes 2 parameters: `bound` which returns the bounding box, and `space` which returns its space.   
 
 
-- `animate` function is called continuously when the space plays. It includes 2 parameters: `time` which gives the current running time, and `ftime` which gives the time taken to draw the previous frame.    
+* `animate` function is called continuously when the space plays. It includes 2 parameters: `time` which gives the current running time, and `ftime` which gives the time taken to draw the previous frame.
 
-- `action` function is called when an user event is detected. It includes 4 parameters: `type` is a string that returns the action's name. ("up", "down", "move", "drag", "drop", "over", and "out"). `x` and `y` returns the position at which the action happened, and `event` returns the actual event object. See also: [`bindMouse`](#canvas-canvasspace)   
+* `action` function is called when an user event is detected. It includes 4 parameters: `type` is a string that returns the action's name. ("up", "down", "move", "drag", "drop", "over", and "out"). `x` and `y` returns the position at which the action happened, and `event` returns the actual event object. See also: [`bindMouse`](#canvas-canvasspace)
 
-- `resize` function is called when the space is resized. It includes 2 parameter: `size` which returns the new size, and event which returns the event object. You'll also need to add `{resize: true}` in [`setup`](#canvas-canvasspace) to enable tracking.
+* `resize` function is called when the space is resized. It includes 2 parameter: `size` which returns the new size, and event which returns the event object. You'll also need to add `{resize: true}` in [`setup`](#canvas-canvasspace) to enable tracking.
 
 You may add multiple players into a space, each taking care of specific parts of a scene. Use [`add`](#canvas-canvasspace) and [`remove`](#canvas-canvasspace) to manage a space's players.
 
@@ -155,5 +155,3 @@ space.add( (time, ftime) => {
 
 space.bindMouse().bindTouch().play();
 ```
-
-

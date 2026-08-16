@@ -51,7 +51,7 @@ The following demo shows 2 paragraphs with different line-height and alignments 
 
 ##### You may combine `alignText` with `paragraphBox` too.
 
-For long paragraphs, you may consider using [`fontWidthEstimate `](#canvas-canvasform). This will use a simple heuristic to estimate text width, which is less accurate but may be faster.
+For long paragraphs, you may consider using [`fontWidthEstimate`](#canvas-canvasform). This will use a simple heuristic to estimate text width, which is less accurate but may be faster.
 
 ### Considerations
 
