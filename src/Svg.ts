@@ -247,6 +247,14 @@ export class SVGContext2D {
         this._attrCache[i] = {};
       }
       const cache = this._attrCache[i];
+      // conditional attributes (eg, stroke-dasharray, mix-blend-mode) must not
+      // survive from an earlier frame's run on this pooled element
+      for (const k in cache) {
+        if (!(k in run.attrs)) {
+          elem.removeAttribute(k);
+          delete cache[k];
+        }
+      }
       for (const k in run.attrs) {
         const v = `${run.attrs[k]}`;
         if (cache[k] !== v) {

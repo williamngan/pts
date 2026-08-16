@@ -296,6 +296,49 @@ describe("SVGContext2D", () => {
     expect(ctx.group).toBeNull();
   });
 
+  it("removes conditional attributes when a later frame stops using them", () => {
+    const { ctx } = makeCtx();
+    ctx.beginFrame();
+    ctx.setLineDash([5, 3]);
+    ctx.lineDashOffset = 2;
+    ctx.globalCompositeOperation = "multiply";
+    ctx.beginPath();
+    ctx.rect(0, 0, 10, 10);
+    ctx.stroke();
+    ctx.commitFrame();
+    const pooled = ctx.group.children[0];
+    expect(pooled.getAttribute("stroke-dasharray")).toBe("5 3");
+    expect(pooled.getAttribute("stroke-dashoffset")).toBe("2");
+    expect(pooled.getAttribute("mix-blend-mode")).toBe("multiply");
+
+    // same shape without dashes or blend: the reused element must not keep
+    // the attributes the previous frame set
+    ctx.beginFrame();
+    ctx.setLineDash([]);
+    ctx.lineDashOffset = 0;
+    ctx.globalCompositeOperation = "source-over";
+    ctx.beginPath();
+    ctx.rect(0, 0, 10, 10);
+    ctx.stroke();
+    ctx.commitFrame();
+    expect(ctx.group.children[0]).toBe(pooled);
+    expect(pooled.getAttribute("stroke-dasharray")).toBeNull();
+    expect(pooled.getAttribute("stroke-dashoffset")).toBeNull();
+    expect(pooled.getAttribute("mix-blend-mode")).toBeNull();
+
+    // fill-only: the stroke-only attributes go away with the stroke
+    ctx.beginFrame();
+    ctx.beginPath();
+    ctx.rect(0, 0, 10, 10);
+    ctx.fill();
+    ctx.commitFrame();
+    expect(ctx.group.children[0]).toBe(pooled);
+    expect(pooled.getAttribute("stroke")).toBe("none");
+    expect(pooled.getAttribute("stroke-width")).toBeNull();
+    expect(pooled.getAttribute("stroke-linejoin")).toBeNull();
+    expect(pooled.getAttribute("stroke-linecap")).toBeNull();
+  });
+
   it("maps text alignment and baseline to SVG anchors", () => {
     const { ctx } = makeCtx();
     ctx.beginFrame();

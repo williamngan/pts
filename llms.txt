@@ -1,0 +1,6 @@
+# Pts
+
+> Pts is a TypeScript and JavaScript library for visualization and creative coding.
+
+- [Complete API reference](https://ptsjs.org/docs.md): Classes, interfaces, types, methods, properties, signatures, parameters, and examples.
+- [Guides and demos](https://ptsjs.org/guide.md): All guides, interactive demos, studies, and their complete source code.

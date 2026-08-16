@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Typealias",
-  "id": 7731,
+  "id": 7730,
   "comment": "Typescript type: SoundType represents a type of sound input. It corresponds to Sound.type property.",
   "constructor": [],
   "accessors": [],

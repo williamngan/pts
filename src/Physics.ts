@@ -537,12 +537,11 @@ export class World {
 
   /**
    * Internal function to update bodies for one substep: integrate and bound-constrain every
-   * body particle, optionally resolve body-body and body-particle collisions behind an AABB
-   * broad phase, then restore shapes with the edge-constraint pass.
+   * body particle, resolve body-body and body-particle collisions behind an AABB broad
+   * phase, then restore shapes with the edge-constraint pass.
    * @param dt substep time in seconds
-   * @param contacts if `true` (default), resolve collisions in this substep
    */
-  protected _updateBodies(dt: number, contacts: boolean = true) {
+  protected _updateBodies(dt: number) {
     const bs = this._bodies;
     const blen = bs.length;
     if (blen === 0) return;
@@ -564,7 +563,7 @@ export class World {
       }
     }
 
-    if (contacts) this._collideBodies(blen);
+    this._collideBodies(blen);
 
     for (let i = 0; i < blen; i++) {
       if (bs[i]) bs[i].solveEdges(dt, this._iterations, this._substeps);

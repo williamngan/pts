@@ -6172,6 +6172,10 @@ var SVGContext2D = class SVGContext2D {
 				this._attrCache[i] = {};
 			}
 			const cache = this._attrCache[i];
+			for (const k in cache) if (!(k in run.attrs)) {
+				elem.removeAttribute(k);
+				delete cache[k];
+			}
 			for (const k in run.attrs) {
 				const v = `${run.attrs[k]}`;
 				if (cache[k] !== v) {
@@ -7052,7 +7056,7 @@ var World = class World {
 			for (let k = 0, klen = bd.length; k < klen; k++) bd[k].force.fill(0);
 		}
 	}
-	_updateBodies(dt, contacts = true) {
+	_updateBodies(dt) {
 		const bs = this._bodies;
 		const blen = bs.length;
 		if (blen === 0) return;
@@ -7071,7 +7075,7 @@ var World = class World {
 				World._boundParticle(bk, minX, minY, maxX, maxY, this._damping);
 			}
 		}
-		if (contacts) this._collideBodies(blen);
+		this._collideBodies(blen);
 		for (let i = 0; i < blen; i++) if (bs[i]) bs[i].solveEdges(dt, this._iterations, this._substeps);
 	}
 	_collideBodies(blen) {

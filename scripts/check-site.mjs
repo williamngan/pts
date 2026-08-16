@@ -53,6 +53,7 @@ const TYPES = {
   ".mjs": "text/javascript",
   ".css": "text/css",
   ".json": "application/json",
+  ".md": "text/markdown; charset=utf-8",
   ".png": "image/png",
   ".jpg": "image/jpeg",
   ".svg": "image/svg+xml",
@@ -101,6 +102,33 @@ const CANVAS_PROBE = () =>
     }
     return { id: div.id, hasCanvas: !!canvas, uniform };
   });
+
+async function checkAgentMarkdown() {
+  const expected = [
+    ["docs.md", "# Pts API Reference", 500_000],
+    ["guide.md", "# Pts Guides and Demos", 200_000],
+    ["llms.txt", "# Pts", 100],
+  ];
+  for (const [file, heading, minimumSize] of expected) {
+    const response = await fetch(`${ORIGIN}/${file}`);
+    assert.equal(response.status, 200, `${file} was not served`);
+    if (file.endsWith(".md")) {
+      assert.match(
+        response.headers.get("content-type") ?? "",
+        /^text\/markdown\b/u,
+        `${file} did not use a Markdown content type`,
+      );
+    }
+    const body = await response.text();
+    assert.ok(body.includes(heading), `${file} has no expected heading`);
+    assert.ok(body.length >= minimumSize, `${file} is unexpectedly small`);
+  }
+
+  const home = await (await fetch(`${ORIGIN}/`)).text();
+  assert.match(home, /href="\/docs\.md"/u);
+  assert.match(home, /href="\/guide\.md"/u);
+  return "docs.md, guide.md, and llms.txt served with discovery links";
+}
 
 async function checkGuideUnderSlowImages() {
   const page = await browser.newPage({
@@ -531,6 +559,7 @@ async function checkEditorReportsErrors() {
 }
 
 const checks = [
+  ["agent documentation is discoverable", checkAgentMarkdown],
   ["guide renders with slow images", checkGuideUnderSlowImages],
   ["guide loads demos lazily", checkGuideIsLazy],
   ["guide waits for off-screen demos", checkGuideDoesNotFailOffscreenDemos],

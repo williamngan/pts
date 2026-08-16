@@ -73,7 +73,7 @@ Prettier defines the repository's formatting rules. Run `pnpm format` once or ke
 
 ### Generate documentation
 
-The documentation generator uses TypeDoc's Node API to rebuild the custom static documentation JSON from explicit source entry points:
+The documentation generator uses TypeDoc's Node API to rebuild the custom static documentation JSON from explicit source entry points. It also generates [`docs.md`](./docs.md), [`guide.md`](./guide.md), and [`llms.txt`](./llms.txt) for agents and other clients that cannot navigate the documentation SPA:
 
 ```bash
 pnpm run docs

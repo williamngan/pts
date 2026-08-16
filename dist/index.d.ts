@@ -1374,7 +1374,7 @@ declare class World {
   protected _updateParticles(dt: number): void;
   private _collideParticles;
   private _clearForces;
-  protected _updateBodies(dt: number, contacts?: boolean): void;
+  protected _updateBodies(dt: number): void;
   private _collideBodies;
 }
 declare class Particle extends Pt {
