@@ -160,6 +160,58 @@ export default defineSuite("canvas", (b, { Pts, fx }) => {
     },
   );
 
+  // Same workload with the heuristic width estimator instead of measureText,
+  // so both sides of the `fontWidthEstimate` toggle have a baseline.
+  draw(
+    "textBox (estimated width)",
+    SIZES.S,
+    () => ({
+      form: makeForm().fontWidthEstimate(true),
+      boxes: positive("canvas:textBox:est", SIZES.S).map((p) =>
+        Group.fromArray([p, [p[0] + 120, p[1] + 40]]),
+      ),
+      words: fx.words("canvas:textBox:est:words", SIZES.S, 20, 60),
+    }),
+    ({ form, boxes, words }) => {
+      for (let i = 0; i < SIZES.S; i++) form.textBox(boxes[i], words[i]);
+      sink(SIZES.S);
+    },
+  );
+
+  // Word wrap re-measures the remaining text for every line, so paragraphBox
+  // is the most expensive text call in the API. Small batch: each call wraps
+  // a few hundred characters into many lines.
+  draw(
+    "paragraphBox",
+    SIZES.XS,
+    () => ({
+      boxes: positive("canvas:paragraphBox", SIZES.XS).map((p) =>
+        Group.fromArray([p, [p[0] + 220, p[1] + 160]]),
+      ),
+      texts: fx.words("canvas:paragraphBox:texts", SIZES.XS, 240, 400),
+    }),
+    ({ form, boxes, texts }) => {
+      for (let i = 0; i < SIZES.XS; i++) form.paragraphBox(boxes[i], texts[i]);
+      sink(SIZES.XS);
+    },
+  );
+
+  draw(
+    "paragraphBox (estimated width)",
+    SIZES.XS,
+    () => ({
+      form: makeForm().fontWidthEstimate(true),
+      boxes: positive("canvas:paragraphBox:est", SIZES.XS).map((p) =>
+        Group.fromArray([p, [p[0] + 220, p[1] + 160]]),
+      ),
+      texts: fx.words("canvas:paragraphBox:est:texts", SIZES.XS, 240, 400),
+    }),
+    ({ form, boxes, texts }) => {
+      for (let i = 0; i < SIZES.XS; i++) form.paragraphBox(boxes[i], texts[i]);
+      sink(SIZES.XS);
+    },
+  );
+
   // Style changes force a context state write on every call, which is the
   // usual reason a colourful sketch is slower than a monochrome one.
   draw(

@@ -54,6 +54,61 @@ export default defineSuite("typography", (b, { Pts, fx }) => {
     },
   });
 
+  // A measure whose cost grows with string length, like a host `measureText`.
+  // The flat-cost `measure` above times Typography's own overhead; this one
+  // shows how the truncate/wrap algorithms scale when every probe re-measures
+  // the whole remaining string.
+  const measurePerChar = (text) => {
+    let w = 0;
+    for (let i = 0; i < text.length; i++) w += 4 + (text.charCodeAt(i) % 8);
+    return w;
+  };
+
+  const paragraph = (label, chars) => {
+    const words = fx.words(label, 64, 3, 12);
+    let text = words[0];
+    for (let i = 1; text.length < chars; i++) {
+      text += " " + words[i % words.length];
+    }
+    return text;
+  };
+
+  b.case("Typography.truncate (long text, per-char measure)", {
+    batch: 32,
+    setupOnce: () => paragraph("typography:truncate:long", 2048),
+    run: (text) => {
+      let acc = 0;
+      for (let i = 0; i < 32; i++) {
+        acc += Typography.truncate(measurePerChar, text, 200 + i * 8, "...")[1];
+      }
+      sink(acc);
+    },
+  });
+
+  // The line-consumption loop inside `CanvasForm.paragraphBox`: truncate the
+  // remaining text to one line's width, cut at the last space, repeat.
+  // Re-measuring the whole remainder for every line makes this the quadratic
+  // hot path in text-heavy sketches, so it gets its own baseline.
+  b.case("paragraph wrap loop (per-char measure)", {
+    batch: 4,
+    setupOnce: () => paragraph("typography:wrap", 2048),
+    run: (text) => {
+      let lines = 0;
+      for (let k = 0; k < 4; k++) {
+        let sub = text;
+        for (let guard = 0; sub && guard < 10000; guard++) {
+          const t = Typography.truncate(measurePerChar, sub, 320, "");
+          let dt = t[0].lastIndexOf(" ") + 1;
+          if (dt <= 0 || t[1] === sub.length) dt = undefined;
+          lines++;
+          if (t[1] <= 0 || t[1] === sub.length) break;
+          sub = sub.substring(dt ?? t[1]);
+        }
+      }
+      sink(lines);
+    },
+  });
+
   b.case("Typography.fontSizeToBox (build)", {
     batch: N,
     setupOnce: () =>

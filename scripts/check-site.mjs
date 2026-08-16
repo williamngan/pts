@@ -105,8 +105,8 @@ const CANVAS_PROBE = () =>
 
 async function checkAgentMarkdown() {
   const expected = [
-    ["docs.md", "# Pts API Reference", 500_000],
-    ["guide.md", "# Pts Guides and Demos", 200_000],
+    ["docs.md", "# Pts API Reference", 300_000],
+    ["guide.md", "# Pts Guides and Demos", 80_000],
     ["llms.txt", "# Pts", 100],
   ];
   for (const [file, heading, minimumSize] of expected) {

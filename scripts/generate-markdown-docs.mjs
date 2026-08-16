@@ -54,7 +54,11 @@ function typeText(value) {
 }
 
 function fencedCode(value, language = "") {
-  const text = normalizeLineEndings(String(value)).replace(/\n+$/u, "");
+  const text = normalizeLineEndings(String(value))
+    .split("\n")
+    .map((line) => line.trimEnd())
+    .join("\n")
+    .replace(/\n+$/u, "");
   const longest = Math.max(
     2,
     ...[...text.matchAll(/`+/gu)].map((match) => match[0].length),
@@ -88,8 +92,6 @@ function relationDetails(reflection) {
   if (reflection.overrides) {
     details.push(`overrides ${inlineCode(reflection.overrides)}`);
   }
-  const sources = sourceReferences(reflection.source);
-  if (sources) details.push(`source ${sources}`);
   return details.length ? `*${details.join(" · ")}*` : "";
 }
 
@@ -155,7 +157,14 @@ function declarationMembers(declaration) {
   ];
 }
 
-function resolveApiReference(reference, declarationsByName, currentTarget) {
+function resolveApiReference(
+  reference,
+  declarationsByName,
+  currentTarget,
+  visited = new Set(),
+) {
+  if (visited.has(reference)) return "";
+  visited.add(reference);
   const separator = reference.indexOf(".");
   let target =
     separator >= 0
@@ -196,6 +205,15 @@ function resolveApiReference(reference, declarationsByName, currentTarget) {
   }
   if (!member)
     return declarationAnchor(target.moduleName, target.document.name);
+  if (member.inherits) {
+    const inheritedAnchor = resolveApiReference(
+      member.inherits,
+      declarationsByName,
+      undefined,
+      visited,
+    );
+    if (inheritedAnchor) return inheritedAnchor;
+  }
   return memberAnchor(
     target.moduleName,
     target.document.name,
@@ -220,6 +238,61 @@ function rewriteApiComment(comment, declarationsByName, currentTarget) {
     .replaceAll("(../guide/", `(${siteOrigin}/guide/`)
     .replaceAll("(../demo/", `(${siteOrigin}/demo/`)
     .replaceAll("(../study/", `(${siteOrigin}/study/`);
+}
+
+function inheritedOwner(relation) {
+  const symbolIndex = relation.indexOf(".[Symbol.");
+  if (symbolIndex >= 0) return relation.slice(0, symbolIndex);
+  const separator = relation.lastIndexOf(".");
+  return separator >= 0 ? relation.slice(0, separator) : relation;
+}
+
+function renderInheritedApi(inherited, declarationsByName) {
+  if (!inherited.length) return "";
+  const groups = new Map();
+  for (const member of inherited) {
+    const owner = inheritedOwner(member.inherits);
+    if (!groups.has(owner)) groups.set(owner, []);
+    groups.get(owner).push(member);
+  }
+
+  const standardTypes = new Map([
+    [
+      "Array",
+      "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+    ],
+    [
+      "Float32Array",
+      "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array",
+    ],
+  ]);
+  const lines = ["#### Inherited API", ""];
+  for (const [owner, members] of groups) {
+    const standardUrl = standardTypes.get(owner);
+    if (standardUrl) {
+      lines.push(
+        `- From [${inlineCode(owner)}](${standardUrl}): ${members.length} standard properties and methods (not repeated here).`,
+      );
+      continue;
+    }
+
+    const target = declarationsByName.get(owner);
+    const ownerLabel = target
+      ? `[${inlineCode(owner)}](#${declarationAnchor(target.moduleName, target.document.name)})`
+      : inlineCode(owner);
+    const memberLinks = members.map((member) => {
+      const anchor = resolveApiReference(
+        `${owner}.${member.name}`,
+        declarationsByName,
+        target,
+      );
+      return anchor
+        ? `[${inlineCode(member.name)}](#${anchor})`
+        : inlineCode(member.name);
+    });
+    lines.push(`- From ${ownerLabel}: ${memberLinks.join(", ")}.`);
+  }
+  return lines.join("\n");
 }
 
 function renderMethod(
@@ -386,10 +459,18 @@ function renderDeclaration(moduleName, declaration, declarationsByName) {
     ["Values", declaration.variables, "value", false],
     ["Properties", declaration.properties, "value", false],
   ];
+  const inherited = [];
   for (const [title, members, kind, constructor] of sections) {
-    if (!members?.length) continue;
+    const declared = (members ?? []).filter((member) => {
+      if (member.inherits) {
+        inherited.push(member);
+        return false;
+      }
+      return true;
+    });
+    if (!declared.length) continue;
     lines.push("", `#### ${title}`);
-    for (const member of members) {
+    for (const member of declared) {
       const rendered =
         kind === "method"
           ? renderMethod(
@@ -410,6 +491,8 @@ function renderDeclaration(moduleName, declaration, declarationsByName) {
       lines.push("", rendered);
     }
   }
+  const inheritedApi = renderInheritedApi(inherited, declarationsByName);
+  if (inheritedApi) lines.push("", inheritedApi);
   return lines
     .join("\n")
     .replace(/\]\(#+(?:f?unction_)([^)]+)\)/gu, (match, name) => {
@@ -451,7 +534,7 @@ async function apiMarkdown(version) {
     "<!-- Generated by scripts/generate-markdown-docs.mjs. Do not edit directly. -->",
     "# Pts API Reference",
     "",
-    `Complete API reference for [Pts ${version}](${siteOrigin}), generated from the same TypeDoc data used by the documentation website. For tutorials and runnable examples, see the [Pts guides and demos](${siteOrigin}/guide.md).`,
+    `Complete API reference for [Pts ${version}](${siteOrigin}), generated from the same TypeDoc data used by the documentation website. Members are documented in full where they are declared and linked from subclasses that inherit them. For tutorials and runnable examples, see the [Pts guides and demos](${siteOrigin}/guide.md).`,
     "",
     "## Contents",
   ];
@@ -547,14 +630,6 @@ function descriptionOf(source, fallback) {
   return JSON.parse(match[1]).trim();
 }
 
-function omitEmbeddedData(source) {
-  return source.replace(
-    /(["'])data:([^;,"']+);base64,[A-Za-z0-9+/=]+\1/gu,
-    (match, quote, mediaType) =>
-      `${quote}data:${mediaType};base64,[omitted from generated guide; see linked source]${quote}`,
-  );
-}
-
 async function javascriptFiles(directory) {
   return (await readdir(directory))
     .filter((file) => file.endsWith(".js"))
@@ -578,9 +653,7 @@ async function renderSketch(directoryName, file, anchorPrefix) {
     "",
     descriptionOf(source, fallback),
     "",
-    `[Open live](${liveUrl}) · [Source](${sourceOrigin}/${directoryName}/${file})`,
-    "",
-    fencedCode(omitEmbeddedData(source), "js"),
+    `[Open live](${liveUrl}) · [Source code](${siteOrigin}/${directoryName}/${file}) · [GitHub](${sourceOrigin}/${directoryName}/${file})`,
   ].join("\n");
 }
 
@@ -590,7 +663,7 @@ async function renderAdditionalDemos() {
   const readme = adjustHeadingLevels(
     await readFile(path.join(directory, "README.md"), "utf8"),
     2,
-  );
+  ).replaceAll("(./", `(${siteOrigin}/${relativeDirectory}/`);
   const files = [
     "a.html",
     "b.html",
@@ -606,20 +679,17 @@ async function renderAdditionalDemos() {
     '<a id="additional-tfjs-posenet"></a>',
     "### TensorFlow.js PoseNet",
     "",
-    `[Source directory](${sourceOrigin}/${relativeDirectory})`,
+    `[Source directory](${siteOrigin}/${relativeDirectory}/) · [GitHub](${sourceOrigin}/${relativeDirectory})`,
     "",
     readme,
   ];
   for (const file of files) {
-    const language = file.endsWith(".html") ? "html" : "js";
-    const source = await readFile(path.join(directory, file), "utf8");
+    await readFile(path.join(directory, file));
     lines.push(
       "",
       `#### ${inlineCode(file)}`,
       "",
-      `[Source](${sourceOrigin}/${relativeDirectory}/${file})${file.endsWith(".html") ? ` · [Open live](${siteOrigin}/${relativeDirectory}/${file})` : ""}`,
-      "",
-      fencedCode(source, language),
+      `[Source code](${siteOrigin}/${relativeDirectory}/${file}) · [GitHub](${sourceOrigin}/${relativeDirectory}/${file})${file.endsWith(".html") ? ` · [Open live](${siteOrigin}/${relativeDirectory}/${file})` : ""}`,
     );
   }
   return lines.join("\n");
@@ -656,9 +726,9 @@ async function guideMarkdown(version) {
     "<!-- Generated by scripts/generate-markdown-docs.mjs. Do not edit directly. -->",
     "# Pts Guides and Demos",
     "",
-    `Tutorials and complete example source for [Pts ${version}](${siteOrigin}). For class and method details, see the [complete API reference](${siteOrigin}/docs.md).`,
+    `Tutorials and a complete example catalog for [Pts ${version}](${siteOrigin}). For class and method details, see the [complete API reference](${siteOrigin}/docs.md).`,
     "",
-    "Large embedded data URLs are replaced with a short marker; the linked source file retains the exact payload.",
+    "Demo and study source files are linked directly from `ptsjs.org` instead of embedded, so agents can fetch only the examples they need.",
     "",
     "## Contents",
     "",
@@ -721,7 +791,7 @@ async function guideMarkdown(version) {
 }
 
 function llmsText() {
-  return `# Pts\n\n> Pts is a TypeScript and JavaScript library for visualization and creative coding.\n\n- [Complete API reference](${siteOrigin}/docs.md): Classes, interfaces, types, methods, properties, signatures, parameters, and examples.\n- [Guides and demos](${siteOrigin}/guide.md): All guides, interactive demos, studies, and their complete source code.\n`;
+  return `# Pts\n\n> Pts is a TypeScript and JavaScript library for visualization and creative coding.\n\n- [Complete API reference](${siteOrigin}/docs.md): Classes, interfaces, types, methods, properties, signatures, parameters, and examples.\n- [Guides and demos](${siteOrigin}/guide.md): All guides plus a catalog of interactive demos and studies with direct source links.\n`;
 }
 
 function markdownProse(markdown) {
