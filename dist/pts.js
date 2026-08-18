@@ -7574,6 +7574,7 @@ See https://github.com/williamngan/pts for details. */
 				let isStart = false;
 				if (li.duration < 0) {
 					li.duration = _t - _t % this._ms;
+					li.count = li.count || 0;
 					isStart = true;
 				} else if (_t > li.duration + ms) {
 					li.duration = _t - _t % this._ms;
@@ -7581,7 +7582,7 @@ See https://github.com/williamngan/pts for details. */
 						li.index = (li.index + 1) % li.beats.length;
 						li.period = li.beats[li.index];
 					}
-					li.count++;
+					li.count = (li.count || 0) + 1;
 					isStart = true;
 				}
 				let done;
@@ -7607,6 +7608,7 @@ See https://github.com/williamngan/pts for details. */
 			this._volume = 1;
 			this._connected = [];
 			this._bufferPlayed = false;
+			this._generated = false;
 			this._type = type;
 			this._ctx = ctx || Sound._getContext();
 		}
@@ -7636,16 +7638,21 @@ See https://github.com/williamngan/pts for details. */
 					s._source.crossOrigin = crossOrigin;
 				}
 				s._source.autoplay = false;
-				s._source.addEventListener("ended", function() {
-					s._playing = false;
-				});
+				const onError = () => {
+					s._source.removeEventListener("canplaythrough", ready);
+					reject(/* @__PURE__ */ new Error(`Error loading sound: ${s._source.src || "media element"}`));
+				};
 				const ready = () => {
+					s._source.removeEventListener("error", onError);
+					s._source.addEventListener("ended", function() {
+						s._playing = false;
+					});
 					s._node = s._ctx.createMediaElementSource(s._source);
 					resolve(s);
 				};
 				if (s._source.readyState >= 4) ready();
 				else {
-					s._source.addEventListener("error", () => reject(/* @__PURE__ */ new Error(`Error loading sound: ${s._source.src || "media element"}`)), { once: true });
+					s._source.addEventListener("error", onError, { once: true });
 					s._source.addEventListener("canplaythrough", ready, { once: true });
 					if (s._source.readyState === 0) s._source.load();
 				}
@@ -7665,6 +7672,10 @@ See https://github.com/williamngan/pts for details. */
 			})();
 		}
 		createBuffer(buf) {
+			if (this._node) {
+				this._node.onended = null;
+				this._node.disconnect();
+			}
 			this._node = this._ctx.createBufferSource();
 			if (buf !== void 0) this._buffer = buf;
 			this._node.buffer = this._buffer;
@@ -7673,13 +7684,16 @@ See https://github.com/williamngan/pts for details. */
 			};
 			this._bufferPlayed = false;
 			if (this.analyzer) this._node.connect(this.analyzer.node);
+			for (const n of this._connected) this._node.connect(n);
 			return this;
 		}
 		static generate(type, val) {
 			return new Sound("gen")._gen(type, val);
 		}
 		_gen(type, val) {
+			if (this._node) this._node.disconnect();
 			this._node = this._ctx.createOscillator();
+			this._generated = true;
 			const osc = this._node;
 			osc.type = type;
 			if (type === "custom") {
@@ -7732,7 +7746,7 @@ See https://github.com/williamngan/pts for details. */
 			let curr = 0;
 			if (this._buffer) {
 				dur = this._buffer.duration;
-				curr = this._timestamp ? this._ctx.currentTime - this._timestamp : 0;
+				curr = this._timestamp !== void 0 ? this._ctx.currentTime - this._timestamp : 0;
 			} else if (this._source) {
 				dur = this._source.duration;
 				curr = this._source.currentTime;
@@ -7750,16 +7764,18 @@ See https://github.com/williamngan/pts for details. */
 			return this._ctx.sampleRate;
 		}
 		get frequency() {
-			return this._type === "gen" ? this._node.frequency.value : 0;
+			const osc = this._node;
+			return this._type === "gen" && osc && osc.frequency ? osc.frequency.value : 0;
 		}
 		set frequency(f) {
-			if (this._type === "gen") this._node.frequency.value = f;
+			const osc = this._node;
+			if (this._type === "gen" && osc && osc.frequency) osc.frequency.value = f;
 		}
 		get volume() {
 			return this._volume;
 		}
 		set volume(v) {
-			this._volume = Math.max(0, v);
+			this._volume = Math.max(0, v || 0);
 			if (this._gain) this._gain.gain.value = this._volume;
 		}
 		connect(node) {
@@ -7847,21 +7863,28 @@ See https://github.com/williamngan/pts for details. */
 			if (this._ctx.state === "suspended") this._ctx.resume();
 			if (this._type === "file") {
 				if (this._buffer) {
-					if (this._bufferPlayed) this.createBuffer();
+					if (this._playing || this._bufferPlayed || !this._node) {
+						if (this._playing && this.progress < 1) this._node.stop();
+						this.createBuffer();
+					}
 					this._node.start(0, timeAt);
 					this._bufferPlayed = true;
 					this._timestamp = this._ctx.currentTime - timeAt;
 				} else {
 					if (timeAt > 0) this._source.currentTime = timeAt;
-					this._source.play();
+					const played = this._source.play();
+					if (played && played.catch) played.catch(() => {
+						if (this._source.paused) this._playing = false;
+					});
 				}
-			} else if (this._type === "gen") {
+			} else if (this._type === "gen" && this._generated) {
+				if (this._playing) return this;
 				const osc = this._node;
 				this._gen(osc.type, osc.type === "custom" ? this._wave : osc.frequency.value);
 				this._node.start();
-				if (this.analyzer) this._node.connect(this.analyzer.node);
-				for (const n of this._connected) this._node.connect(n);
 			}
+			if (this.analyzer) this._node.connect(this.analyzer.node);
+			for (const n of this._connected) this._node.connect(n);
 			(this._outputNode || this._node).connect(this._getGain());
 			this._playing = true;
 			return this;
@@ -7873,8 +7896,9 @@ See https://github.com/williamngan/pts for details. */
 				if (this._buffer) {
 					if (this.progress < 1) this._node.stop();
 				} else this._source.pause();
-			} else if (this._type === "gen") this._node.stop();
-			else if (this._type === "input") this._stream.getAudioTracks().forEach((track) => track.stop());
+			} else if (this._type === "gen") {
+				if (this._generated) this._node.stop();
+			} else if (this._type === "input") this._stream.getAudioTracks().forEach((track) => track.stop());
 			this._playing = false;
 			return this;
 		}

@@ -21,7 +21,7 @@ export class Tempo implements IPlayer {
 
   /**
    * Construct a new Tempo instance by beats-per-minute. Alternatively, you can use [`Tempo.fromBeat`](#link) to create from milliseconds.
-   * @param bpm beats per minute
+   * @param bpm beats per minute. Must be greater than 0.
    */
   constructor(bpm: number) {
     this.bpm = bpm;
@@ -29,14 +29,14 @@ export class Tempo implements IPlayer {
 
   /**
    * Create a new Tempo instance by specifying milliseconds-per-beat.
-   * @param ms milliseconds per beat
+   * @param ms milliseconds per beat. Must be greater than 0.
    */
   static fromBeat(ms: number): Tempo {
     return new Tempo(60000 / ms);
   }
 
   /**
-   * Beats-per-minute value
+   * Beats-per-minute value. Must be greater than 0.
    */
   get bpm(): number {
     return this._bpm;
@@ -134,6 +134,7 @@ export class Tempo implements IPlayer {
         if (li.duration < 0) {
           // first tick is the start of the first period
           li.duration = _t - (_t % this._ms);
+          li.count = li.count || 0; // a hand-built listener may omit count
           isStart = true;
         } else if (_t > li.duration + ms) {
           li.duration = _t - (_t % this._ms); // update
@@ -142,7 +143,7 @@ export class Tempo implements IPlayer {
             li.index = (li.index + 1) % li.beats.length;
             li.period = li.beats[li.index];
           }
-          li.count++;
+          li.count = (li.count || 0) + 1;
           isStart = true;
         }
 
@@ -233,6 +234,8 @@ export class Sound {
 
   protected _bufferPlayed: boolean = false; // An AudioBufferSourceNode can only start once
 
+  protected _generated: boolean = false; // Whether _node is an oscillator created by _gen
+
   // A single AudioContext shared by all Sound instances that don't provide their own
   protected static _sharedContext: AudioContext;
 
@@ -306,12 +309,20 @@ export class Sound {
         s._source.crossOrigin = crossOrigin;
       }
       s._source.autoplay = false;
-      s._source.addEventListener("ended", function () {
-        s._playing = false;
-      });
+
+      const onError = () => {
+        s._source.removeEventListener("canplaythrough", ready);
+        reject(
+          new Error(`Error loading sound: ${s._source.src || "media element"}`),
+        );
+      };
 
       const ready = () => {
         // runs once: either immediately below, or via the once-only listener
+        s._source.removeEventListener("error", onError);
+        s._source.addEventListener("ended", function () {
+          s._playing = false;
+        });
         s._node = s._ctx.createMediaElementSource(s._source);
         resolve(s);
       };
@@ -320,16 +331,7 @@ export class Sound {
         // already buffered enough (eg, a previously loaded element)
         ready();
       } else {
-        s._source.addEventListener(
-          "error",
-          () =>
-            reject(
-              new Error(
-                `Error loading sound: ${s._source.src || "media element"}`,
-              ),
-            ),
-          { once: true },
-        );
+        s._source.addEventListener("error", onError, { once: true });
         s._source.addEventListener("canplaythrough", ready, { once: true });
         if (s._source.readyState === 0) s._source.load(); // eg, preload="none"
       }
@@ -360,6 +362,11 @@ export class Sound {
    * @param buf an AudioBuffer. Optionally, you can call this without parameters to re-use existing buffer.
    */
   createBuffer(buf?: AudioBuffer): this {
+    if (this._node) {
+      // the replaced node's late "ended" event must not clobber the new playback state
+      (this._node as AudioBufferSourceNode).onended = null;
+      this._node.disconnect();
+    }
     this._node = this._ctx.createBufferSource();
     if (buf !== undefined) this._buffer = buf;
 
@@ -369,6 +376,7 @@ export class Sound {
     };
     this._bufferPlayed = false;
     if (this.analyzer) this._node.connect(this.analyzer.node);
+    for (const n of this._connected) this._node.connect(n);
     return this;
   }
 
@@ -386,7 +394,9 @@ export class Sound {
 
   // Create the oscillator
   protected _gen(type: OscillatorType, val: number | PeriodicWave): Sound {
+    if (this._node) this._node.disconnect(); // tidy the replaced node's edges
     this._node = this._ctx.createOscillator();
+    this._generated = true;
     const osc = this._node as OscillatorNode;
     osc.type = type;
     if (type === "custom") {
@@ -479,7 +489,11 @@ export class Sound {
     let curr = 0;
     if (this._buffer) {
       dur = this._buffer.duration;
-      curr = this._timestamp ? this._ctx.currentTime - this._timestamp : 0;
+      // a timestamp of exactly 0 is valid (started when currentTime === timeAt)
+      curr =
+        this._timestamp !== undefined
+          ? this._ctx.currentTime - this._timestamp
+          : 0;
     } else if (this._source) {
       dur = this._source.duration;
       curr = this._source.currentTime;
@@ -518,13 +532,14 @@ export class Sound {
    * If the sound is generated, this sets and gets the frequency of the tone.
    */
   get frequency(): number {
-    return this._type === "gen"
-      ? (this._node as OscillatorNode).frequency.value
+    const osc = this._node as OscillatorNode;
+    return this._type === "gen" && osc && osc.frequency
+      ? osc.frequency.value
       : 0;
   }
   set frequency(f: number) {
-    if (this._type === "gen")
-      (this._node as OscillatorNode).frequency.value = f;
+    const osc = this._node as OscillatorNode;
+    if (this._type === "gen" && osc && osc.frequency) osc.frequency.value = f;
   }
 
   /**
@@ -534,7 +549,7 @@ export class Sound {
     return this._volume;
   }
   set volume(v: number) {
-    this._volume = Math.max(0, v);
+    this._volume = Math.max(0, v || 0); // `|| 0` also converts NaN
     if (this._gain) this._gain.gain.value = this._volume;
   }
 
@@ -722,6 +737,7 @@ export class Sound {
 
   /**
    * Start playing. Internally this connects the `AudioNode` to `AudioContext`'s destination.
+   * Calling `start( timeAt )` while a file or buffer sound is playing seeks to that time; a generated sound that is already playing is unaffected.
    * @param timeAt optional parameter to play from a specific time, in seconds
    */
   start(timeAt: number = 0): this {
@@ -729,25 +745,41 @@ export class Sound {
 
     if (this._type === "file") {
       if (this._buffer) {
-        // An AudioBufferSourceNode can only start once; re-create it for replay
-        if (this._bufferPlayed) this.createBuffer();
+        // An AudioBufferSourceNode can only start once; re-create it for
+        // replay, seek-while-playing, or when only the buffer was assigned
+        if (this._playing || this._bufferPlayed || !this._node) {
+          if (this._playing && this.progress < 1) {
+            (this._node as AudioBufferSourceNode).stop();
+          }
+          this.createBuffer();
+        }
         (this._node as AudioBufferSourceNode).start(0, timeAt);
         this._bufferPlayed = true;
         this._timestamp = this._ctx.currentTime - timeAt;
       } else {
         if (timeAt > 0) this._source.currentTime = timeAt;
-        this._source.play();
+        const played = this._source.play();
+        if (played && played.catch) {
+          played.catch(() => {
+            // eg, autoplay was blocked — but only if a later start hasn't succeeded
+            if (this._source.paused) this._playing = false;
+          });
+        }
       }
-    } else if (this._type === "gen") {
+    } else if (this._type === "gen" && this._generated) {
+      // restarting while playing would orphan the old oscillator, which keeps sounding
+      if (this._playing) return this;
       const osc = this._node as OscillatorNode;
       this._gen(
         osc.type,
         osc.type === "custom" ? this._wave : osc.frequency.value,
       );
       (this._node as OscillatorNode).start();
-      if (this.analyzer) this._node.connect(this.analyzer.node);
-      for (const n of this._connected) this._node.connect(n);
     }
+
+    // restore analysis and filter chains; duplicate connects are no-ops
+    if (this.analyzer) this._node.connect(this.analyzer.node);
+    for (const n of this._connected) this._node.connect(n);
 
     (this._outputNode || this._node).connect(this._getGain());
     this._playing = true;
@@ -769,7 +801,7 @@ export class Sound {
         this._source.pause();
       }
     } else if (this._type === "gen") {
-      (this._node as OscillatorNode).stop();
+      if (this._generated) (this._node as OscillatorNode).stop();
     } else if (this._type === "input") {
       this._stream.getAudioTracks().forEach((track) => track.stop());
     }
@@ -792,7 +824,7 @@ export class Sound {
 
   /**
    * Stop playing and disconnect all nodes (including analyzer and volume), and release stream, source, and buffer references.
-   * Note that this never closes an `AudioContext`: the shared context lives for the page, and a context you provided is yours to close.
+   * The instance should not be used after calling this. Note that this never closes an `AudioContext`: the shared context lives for the page, and a context you provided is yours to close.
    */
   dispose(): this {
     this.reset();

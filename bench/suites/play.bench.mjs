@@ -33,6 +33,8 @@ class FakeAnalyser {
 
   connect() {}
 
+  disconnect() {}
+
   getByteTimeDomainData(data) {
     for (let i = 0; i < data.length; i++) data[i] = (i * 7) & 255;
   }
@@ -49,6 +51,7 @@ class FakeOscillator {
   }
 
   connect() {}
+  disconnect() {}
   start() {}
   stop() {}
   setPeriodicWave() {}

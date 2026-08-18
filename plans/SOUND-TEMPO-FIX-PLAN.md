@@ -235,6 +235,38 @@ baselines recorded (2026-08-16).
   the pattern; `play`/`sound` bench suites gained "(reuse)" cases and both
   baselines were re-recorded.
 
+## Post-implementation review fixes — **Completed 2026-08-18**
+
+A second review pass over the landed code found and fixed seven
+node-lifecycle gaps (all additive, no API changes):
+
+1. `start()` while playing: gen sounds no longer orphan a still-sounding
+   oscillator (now a no-op); buffer sounds now treat it as a **seek**
+   (stop old node unless already ended, re-create, start at `timeAt`).
+2. `Sound.from(node, ctx)` with the default `"gen"` type no longer
+   replaces the caller's node with an oscillator on `start()` (internal
+   `_generated` flag; `stop()` likewise skips `OscillatorNode.stop`).
+3. Filter chains (`connect()`) now survive buffer re-creation, and
+   analyzer + chains are re-connected in the common `start()` path — so
+   media/input sounds restarted after `reset()` analyze again (duplicate
+   connects are spec-defined no-ops).
+4. `buffer` setter + `start()` auto-creates the source node instead of
+   throwing.
+5. Replaced nodes are fully disconnected (and their `onended` cleared so
+   a late "ended" event cannot clobber the new playback state).
+6. `_source.play()` rejections are caught: autoplay-blocked starts flip
+   `playing` back to false, guarded by `source.paused` so a stale
+   rejection cannot undo a later successful start.
+7. `progress` treated a timestamp of exactly 0 as "never started"
+   (truthiness bug, found by the new seek spec).
+
+Plus minor hardening: `load()` removes its counterpart listener on
+settle and attaches `ended` only on success; `frequency` is total for
+node-less or external-node sounds; `volume` rejects NaN/negatives;
+hand-built Tempo listeners without `count` default to 0; `dispose()`
+documents that the instance is finished; bench fakes gained
+`disconnect`.
+
 ## Deferred (feature work, not performance)
 
 - `pause()`/`stop()` split and mic re-acquisition on restart.

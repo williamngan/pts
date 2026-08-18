@@ -141,21 +141,39 @@ class FakeMedia extends EventTarget {
   duration = 10;
   currentTime = 2;
   readyState = 4;
+  paused = true; // mirrors HTMLMediaElement.paused
   played = 0;
-  paused = 0;
+  pauseCalls = 0;
   loads = 0;
 
   play() {
     this.played++;
+    this.paused = false;
     return Promise.resolve();
   }
 
   pause() {
-    this.paused++;
+    this.pauseCalls++;
+    this.paused = true;
   }
 
   load() {
     this.loads++;
+  }
+}
+
+class BlockedMedia extends FakeMedia {
+  play() {
+    this.played++;
+    return Promise.reject(new Error("autoplay blocked"));
+  }
+}
+
+class LegacyMedia extends FakeMedia {
+  play() {
+    this.played++;
+    this.paused = false;
+    return undefined; // some older implementations return no promise
   }
 }
 
@@ -304,6 +322,65 @@ describe("Sound construction and generated audio", () => {
     expect(grown[1]).toBe(pts[1]); // surviving Pt reused
   });
 
+  it("ignores start while a generated sound is already playing", () => {
+    const sound = Sound.generate("sine", 440);
+    sound.start();
+    const ctx = sound.ctx as unknown as FakeAudioContext;
+    const node = sound.node;
+    const oscillators = ctx.createdOscillators.length;
+    sound.start(); // would orphan a still-sounding oscillator
+    expect(ctx.createdOscillators.length).toBe(oscillators);
+    expect(sound.node).toBe(node);
+    expect(sound.playing).toBe(true);
+  });
+
+  it("does not replace an external node given to Sound.from with default gen type", () => {
+    const node = new FakeNode();
+    const context = new FakeAudioContext();
+    const sound = Sound.from(
+      node as unknown as AudioNode,
+      context as unknown as AudioContext,
+    );
+    expect(sound.type).toBe("gen");
+    expect(sound.frequency).toBe(0); // external node has no oscillator frequency
+    sound.frequency = 999; // ignored, no crash
+    sound.start();
+    expect(sound.node).toBe(node); // never swapped for an oscillator
+    expect(node.connections).toContain(context.createdGains[0]);
+    sound.stop(); // must not call OscillatorNode.stop on the external node
+    expect(sound.playing).toBe(false);
+  });
+
+  it("returns zero frequency for a generated sound without a node", () => {
+    const bare = new Sound("gen");
+    expect(bare.frequency).toBe(0);
+    bare.frequency = 100; // no crash
+  });
+
+  it("clamps invalid volume values", () => {
+    const sound = Sound.generate("sine", 440);
+    sound.volume = NaN;
+    expect(sound.volume).toBe(0);
+    sound.volume = -3;
+    expect(sound.volume).toBe(0);
+    sound.volume = 1.5;
+    expect(sound.volume).toBe(1.5);
+  });
+
+  it("restores analyzer and filter chains when starting after reset", async () => {
+    const media = new FakeMedia();
+    const sound = await Sound.load(media as unknown as HTMLMediaElement);
+    const filter = new FakeNode();
+    sound.analyze(4).connect(filter as unknown as AudioNode);
+    sound.reset(); // disconnects everything from the media node
+    const node = sound.node as unknown as FakeNode;
+    const before = node.connections.length;
+    sound.start();
+    const restored = node.connections.slice(before);
+    expect(restored.some((n) => n instanceof FakeAnalyser)).toBe(true);
+    expect(restored).toContain(filter);
+  });
+
   it("replaces the analyzer when analyze is called again", () => {
     const sound = Sound.generate("sine", 440);
     sound.analyze(4);
@@ -396,7 +473,7 @@ describe("Sound file and buffer sources", () => {
     expect(media.played).toBe(1);
     expect(media.currentTime).toBe(3);
     sound.stop();
-    expect(media.paused).toBe(1);
+    expect(media.pauseCalls).toBe(1);
     media.dispatchEvent(new Event("ended"));
     expect(sound.playing).toBe(false);
   });
@@ -446,11 +523,30 @@ describe("Sound file and buffer sources", () => {
 
     sound.stop(); // never started: nothing happens
     expect((sound.node as unknown as FakeNode).disconnects).toHaveLength(0);
-    expect(media.paused).toBe(0);
+    expect(media.pauseCalls).toBe(0);
 
     sound.start();
     expect(media.played).toBe(1);
     expect(media.currentTime).toBe(2);
+  });
+
+  it("recovers when autoplay is blocked and tolerates promise-less play", async () => {
+    const media = new BlockedMedia();
+    const sound = await Sound.load(media as unknown as HTMLMediaElement);
+    sound.start();
+    expect(sound.playing).toBe(true); // optimistic until the rejection lands
+    await new Promise((r) => setTimeout(r, 0));
+    expect(sound.playing).toBe(false); // rejection observed, still paused
+
+    sound.start();
+    media.paused = false; // as if a later trusted start succeeded
+    await new Promise((r) => setTimeout(r, 0));
+    expect(sound.playing).toBe(true); // stale rejection must not flip it back
+
+    const legacy = new LegacyMedia();
+    const older = await Sound.load(legacy as unknown as HTMLMediaElement);
+    older.start(); // play() returns undefined: no crash
+    expect(older.playing).toBe(true);
   });
 
   it("creates, starts, seeks, and stops an audio buffer", () => {
@@ -479,6 +575,43 @@ describe("Sound file and buffer sources", () => {
     expect((sound.node as unknown as FakeBufferSource).buffer).toBe(buffer);
     (sound.node as unknown as FakeBufferSource).onended();
     expect(sound.playing).toBe(false);
+  });
+
+  it("seeks by re-creating the buffer node when starting while playing", () => {
+    const sound = new Sound("file");
+    sound.createBuffer({ duration: 10 } as AudioBuffer);
+    const filter = new FakeNode();
+    sound.connect(filter as unknown as AudioNode);
+    const ctx = sound.ctx as unknown as FakeAudioContext;
+
+    sound.start();
+    const first = sound.node as unknown as FakeBufferSource;
+    sound.start(5); // seek while playing
+    expect(first.stopped).toBe(1); // old node stopped before replacement
+    expect(ctx.createdBuffers).toHaveLength(2);
+    const second = sound.node as unknown as FakeBufferSource;
+    expect(second.starts).toEqual([[0, 5]]);
+    expect(second.connections).toContain(filter); // chain survives re-creation
+    expect(sound.playing).toBe(true);
+
+    ctx.currentTime += 100; // playback ran past the end
+    sound.start(2); // seek again: the ended node must not be stopped
+    expect(second.stopped).toBe(0);
+    expect(ctx.createdBuffers).toHaveLength(3);
+    expect((sound.node as unknown as FakeBufferSource).starts).toEqual([
+      [0, 2],
+    ]);
+  });
+
+  it("creates the buffer node automatically when only a buffer was assigned", () => {
+    const sound = new Sound("file");
+    sound.buffer = { duration: 4 } as AudioBuffer;
+    sound.start();
+    expect(sound.node).toBeInstanceOf(FakeBufferSource);
+    expect((sound.node as unknown as FakeBufferSource).starts).toEqual([
+      [0, 0],
+    ]);
+    expect(sound.playing).toBe(true);
   });
 
   it("re-creates a used buffer node on start so replay and toggle work", () => {

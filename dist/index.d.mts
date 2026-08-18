@@ -1470,6 +1470,7 @@ declare class Sound {
   protected _volume: number;
   protected _connected: AudioNode[];
   protected _bufferPlayed: boolean;
+  protected _generated: boolean;
   protected static _sharedContext: AudioContext;
   constructor(type: SoundType, ctx?: AudioContext);
   protected static _getContext(): AudioContext;

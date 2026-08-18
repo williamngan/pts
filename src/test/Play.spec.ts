@@ -80,6 +80,35 @@ describe("Tempo", () => {
     expect(once).toHaveBeenCalledOnce();
   });
 
+  it("defaults the count for hand-built listeners that omit it", () => {
+    const tempo = new Tempo(60);
+    const fresh = vi.fn();
+    const midway = vi.fn();
+    (tempo as any)._listeners["fresh"] = {
+      name: "fresh",
+      beats: 1,
+      period: 1,
+      index: 0,
+      offset: 0,
+      duration: -1,
+      continuous: false,
+      fn: fresh,
+    };
+    (tempo as any)._listeners["midway"] = {
+      name: "midway",
+      beats: 1,
+      period: 1,
+      index: 0,
+      offset: 0,
+      duration: 0,
+      continuous: false,
+      fn: midway,
+    };
+    tempo.track(1001);
+    expect(fresh).toHaveBeenLastCalledWith(0); // first tick, not NaN
+    expect(midway).toHaveBeenLastCalledWith(1); // rollover from omitted count
+  });
+
   it("skips inherited keys in the listener map", () => {
     const tempo = new Tempo(60);
     const own = vi.fn();
