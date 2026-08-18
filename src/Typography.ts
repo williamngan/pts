@@ -75,6 +75,7 @@ export class Typography {
    * @param str text to truncate
    * @param width width to fit
    * @param tail text to indicate overflow such as "...". Default is empty "".
+   * @param hint optional expected number of characters to keep — a pure performance hint (any value yields the same result) that seeds the search, such as the previous line's length when wrapping. With an empty `tail`, a hint also avoids measuring the entire string.
    * @return a tuple of the truncated text (tail included) and the number of characters kept from `str`
    */
   static truncate(
@@ -82,26 +83,42 @@ export class Typography {
     str: string,
     width: number,
     tail: string = "",
+    hint?: number,
   ): [string, number] {
-    const full = fn(str);
-    if (full <= width) return [str, str.length];
+    const len = str.length;
+    let budget: number;
+    let max: number;
+    let seed: number;
 
-    const budget = width - (tail ? fn(tail) : 0);
-    const max = str.length - 1;
+    if (hint !== undefined && !tail) {
+      // Hinted search with no tail: skip the full-string measure. The domain
+      // includes `len` itself, so "everything fits" is discovered by the
+      // search rather than by a separate upfront measurement.
+      budget = width;
+      max = len;
+      seed = Math.min(max, Math.max(0, Math.floor(hint)));
+    } else {
+      const full = fn(str);
+      if (full <= width) return [str, len];
+      budget = width - (tail ? fn(tail) : 0);
+      max = len - 1;
+      seed =
+        hint !== undefined
+          ? Math.min(max, Math.max(0, Math.floor(hint)))
+          : Math.min(max, Math.max(0, Math.floor((len * budget) / full)));
+    }
+
     const fits = (k: number): boolean => fn(str.slice(0, k)) <= budget;
 
     // Find the largest k in [0, max] where the prefix fits, starting from the
-    // proportional guess — exact for linear measures, so the gallop below
-    // usually settles the boundary in two probes.
+    // seed — exact for linear measures, so the gallop below usually settles
+    // the boundary in two probes.
     let best = -1;
     let lo = 0;
     let hi = max;
 
     if (budget >= 0) {
-      let k = Math.min(
-        max,
-        Math.max(0, Math.floor((str.length * budget) / full)),
-      );
+      const k = seed;
       if (fits(k)) {
         best = k;
         lo = k + 1;
@@ -138,6 +155,7 @@ export class Typography {
     }
 
     if (best < 0) return ["", 0];
+    if (best === len) return [str, len]; // hinted search found the whole string fits
 
     // Don't cut between a surrogate pair's halves; a shorter prefix still fits.
     let cut = best;

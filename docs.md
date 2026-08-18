@@ -12036,7 +12036,7 @@ Create a heuristic text width estimate function. It will be less accurate but fa
 *static*
 
 ```ts
-static truncate(fn: TextMeasure, str: string, width: number, tail: string = ""): string,number
+static truncate(fn: TextMeasure, str: string, width: number, tail: string = "", hint: number): string,number
 ```
 
 Truncate text to fit width. The result is guaranteed to fit: the largest prefix (possibly empty) is kept such that the prefix plus the tail measures within `width`. The cut never splits a surrogate pair. If even the tail alone cannot fit, `["", 0]` is returned.
@@ -12047,6 +12047,7 @@ Truncate text to fit width. The result is guaranteed to fit: the largest prefix 
 - `str` (`string`) — text to truncate
 - `width` (`number`) — width to fit
 - `tail` (`string`; default `""`) — text to indicate overflow such as "...". Default is empty "".
+- `hint` (`number`) — optional expected number of characters to keep — a pure performance hint (any value yields the same result) that seeds the search, such as the previous line's length when wrapping. With an empty `tail`, a hint also avoids measuring the entire string.
 
 **Returns:** a tuple of the truncated text (tail included) and the number of characters kept from `str`
 

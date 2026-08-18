@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 3067,
+  "id": 3068,
   "comment": "Mat provides various static functions for matrix operations as well as a convenient way to chain a 3x3 transformation matrix. It's not fully optimized but good enough to use.",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           2
         ]
       ],
-      "id": 3135,
+      "id": 3136,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -45,7 +45,7 @@
           6
         ]
       ],
-      "id": 3140,
+      "id": 3141,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -64,7 +64,7 @@
           6
         ]
       ],
-      "id": 3138,
+      "id": 3139,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -85,7 +85,7 @@
           2
         ]
       ],
-      "id": 3142,
+      "id": 3143,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -108,7 +108,7 @@
           2
         ]
       ],
-      "id": 3148,
+      "id": 3149,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -144,7 +144,7 @@
           2
         ]
       ],
-      "id": 3144,
+      "id": 3145,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -180,7 +180,7 @@
           2
         ]
       ],
-      "id": 3155,
+      "id": 3156,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -216,7 +216,7 @@
           2
         ]
       ],
-      "id": 3152,
+      "id": 3153,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -246,7 +246,7 @@
           9
         ]
       ],
-      "id": 3068,
+      "id": 3069,
       "flags": {
         "isStatic": true
       },
@@ -284,7 +284,7 @@
           9
         ]
       ],
-      "id": 3072,
+      "id": 3073,
       "flags": {
         "isStatic": true
       },
@@ -334,7 +334,7 @@
           9
         ]
       ],
-      "id": 3131,
+      "id": 3132,
       "flags": {
         "isStatic": true
       },
@@ -372,7 +372,7 @@
           9
         ]
       ],
-      "id": 3104,
+      "id": 3105,
       "flags": {
         "isStatic": true
       },
@@ -410,7 +410,7 @@
           9
         ]
       ],
-      "id": 3121,
+      "id": 3122,
       "flags": {
         "isStatic": true
       },
@@ -454,7 +454,7 @@
           9
         ]
       ],
-      "id": 3100,
+      "id": 3101,
       "flags": {
         "isStatic": true
       },
@@ -492,7 +492,7 @@
           9
         ]
       ],
-      "id": 3116,
+      "id": 3117,
       "flags": {
         "isStatic": true
       },
@@ -536,7 +536,7 @@
           9
         ]
       ],
-      "id": 3108,
+      "id": 3109,
       "flags": {
         "isStatic": true
       },
@@ -574,7 +574,7 @@
           9
         ]
       ],
-      "id": 3126,
+      "id": 3127,
       "flags": {
         "isStatic": true
       },
@@ -618,7 +618,7 @@
           9
         ]
       ],
-      "id": 3093,
+      "id": 3094,
       "flags": {
         "isStatic": true
       },
@@ -650,7 +650,7 @@
           9
         ]
       ],
-      "id": 3096,
+      "id": 3097,
       "flags": {
         "isStatic": true
       },
@@ -688,7 +688,7 @@
           9
         ]
       ],
-      "id": 3112,
+      "id": 3113,
       "flags": {
         "isStatic": true
       },
@@ -726,7 +726,7 @@
           9
         ]
       ],
-      "id": 3088,
+      "id": 3089,
       "flags": {
         "isStatic": true
       },
@@ -770,7 +770,7 @@
           9
         ]
       ],
-      "id": 3083,
+      "id": 3084,
       "flags": {
         "isStatic": true
       },
@@ -814,7 +814,7 @@
           9
         ]
       ],
-      "id": 3078,
+      "id": 3079,
       "flags": {
         "isStatic": true
       },

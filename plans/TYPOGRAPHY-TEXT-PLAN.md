@@ -353,6 +353,29 @@ Two acceptance notes where reality sharpened the plan:
 The `dist` size budgets in `scripts/check-artifacts.mjs` were re-pinned for
 the added API surface (+1.2 KB minified).
 
+### Follow-up (2026-08-18): hint-seeded wrap
+
+`Typography.truncate` gained an optional `hint` parameter — the expected
+number of characters to keep. It is a pure performance hint (any value yields
+the same result, property-tested across hints), and with an empty tail it
+widens the search domain to include the whole string, so the upfront
+full-string measure disappears entirely. `paragraphBox` seeds each line with
+the previous line's fitted length (first line estimated from one character
+sample), which also made the 3.3 window-and-retry machinery unnecessary —
+gallop probes self-bound near the line boundary, so the hint replaces the
+window as the cost bound.
+
+Measured effect: the node wrap loop dropped 45 → ~39 µs (−12%). Browser
+`paragraphBox` moved within run-to-run noise on paragraph-sized texts —
+`measureText` cost there is per-call overhead and the hint eliminates only
+about one of five calls per line, diluted further by shared drawing cost;
+char-cached mode ticked down (~23 → ~21 µs). The win grows with text length
+(the deleted measure was the longest string measured per line). Remaining
+speed-up options for measured mode are recorded in the discussion of
+2026-08-18: a per-form truncation memo keyed by font/width/text, a
+char-cache-guided search with measure-verified repair, and a
+`TextMetrics.advances` feature detect.
+
 ## Out of scope
 
 - Grapheme-cluster segmentation (`Intl.Segmenter`) — see 2.3.

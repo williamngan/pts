@@ -3242,17 +3242,28 @@ See https://github.com/williamngan/pts for details. */
 				return sum;
 			};
 		}
-		static truncate(fn, str, width, tail = "") {
-			const full = fn(str);
-			if (full <= width) return [str, str.length];
-			const budget = width - (tail ? fn(tail) : 0);
-			const max = str.length - 1;
+		static truncate(fn, str, width, tail = "", hint) {
+			const len = str.length;
+			let budget;
+			let max;
+			let seed;
+			if (hint !== void 0 && !tail) {
+				budget = width;
+				max = len;
+				seed = Math.min(max, Math.max(0, Math.floor(hint)));
+			} else {
+				const full = fn(str);
+				if (full <= width) return [str, len];
+				budget = width - (tail ? fn(tail) : 0);
+				max = len - 1;
+				seed = hint !== void 0 ? Math.min(max, Math.max(0, Math.floor(hint))) : Math.min(max, Math.max(0, Math.floor(len * budget / full)));
+			}
 			const fits = (k) => fn(str.slice(0, k)) <= budget;
 			let best = -1;
 			let lo = 0;
 			let hi = max;
 			if (budget >= 0) {
-				let k = Math.min(max, Math.max(0, Math.floor(str.length * budget / full)));
+				const k = seed;
 				if (fits(k)) {
 					best = k;
 					lo = k + 1;
@@ -3286,6 +3297,7 @@ See https://github.com/williamngan/pts for details. */
 				}
 			}
 			if (best < 0) return ["", 0];
+			if (best === len) return [str, len];
 			let cut = best;
 			if (cut > 0) {
 				const code = str.charCodeAt(cut - 1);
@@ -4113,8 +4125,8 @@ See https://github.com/williamngan/pts for details. */
 		getTextWidth(c) {
 			return !this._estimateTextWidth ? this._ctx.measureText(c).width : this._estimateTextWidth(c);
 		}
-		_textTruncate(str, width, tail = "") {
-			return Typography.truncate(this.getTextWidth.bind(this), str, width, tail);
+		_textTruncate(str, width, tail = "", hint) {
+			return Typography.truncate(this.getTextWidth.bind(this), str, width, tail, hint);
 		}
 		_textAlign(box, vertical, offset, center) {
 			const _box = Util.iterToArray(box);
@@ -4303,19 +4315,14 @@ See https://github.com/williamngan/pts for details. */
 			const size = Rectangle.size(b);
 			this._ctx.textBaseline = "top";
 			const lstep = this._font.size * lineHeight;
-			const avgWidth = Math.max(1, this.getTextWidth("n"));
-			const baseWindow = Math.max(16, Math.ceil(size[0] * 3 / avgWidth));
+			let hint = Math.ceil(size[0] / Math.max(1, this.getTextWidth("n")));
 			const lines = [];
 			let sub = txt;
 			while (sub) {
 				var _dt;
 				if (crop && lines.length * lstep > size[1] - lstep * 2) break;
-				let win = Math.min(sub.length, baseWindow);
-				let t = this._textTruncate(sub.slice(0, win), size[0], "");
-				while (t[1] === win && win < sub.length) {
-					win = Math.min(sub.length, win * 2);
-					t = this._textTruncate(sub.slice(0, win), size[0], "");
-				}
+				const t = this._textTruncate(sub, size[0], "", hint);
+				if (t[1] > 0) hint = t[1];
 				const newln = t[0].indexOf("\n");
 				if (newln >= 0) {
 					lines.push(t[0].slice(0, newln));

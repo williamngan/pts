@@ -675,7 +675,7 @@ declare class CanvasForm<S extends MultiTouchSpace = CanvasSpace> extends Visual
   font(sizeOrFont: number | Font, weight?: string, style?: string, lineHeight?: number, family?: string): this;
   fontWidthEstimate(estimate?: boolean | "sample" | "char"): this;
   getTextWidth(c: string): number;
-  protected _textTruncate(str: string, width: number, tail?: string): [string, number];
+  protected _textTruncate(str: string, width: number, tail?: string, hint?: number): [string, number];
   protected _textAlign(box: PtLikeIterable, vertical: TextVerticalAlign, offset?: PtLike, center?: Pt): Pt;
   reset(): this;
   protected _paint(): void;
@@ -1317,7 +1317,7 @@ declare class SVGForm extends CanvasForm<SVGSpace> {
 declare class Typography {
   static textWidthEstimator(fn: TextMeasure, samples?: string[], distribution?: number[]): TextMeasure;
   static charWidthCache(fn: TextMeasure): TextMeasure;
-  static truncate(fn: TextMeasure, str: string, width: number, tail?: string): [string, number];
+  static truncate(fn: TextMeasure, str: string, width: number, tail?: string, hint?: number): [string, number];
   static fontSizeToBox(ratio?: number, byHeight?: boolean): (box: PtLikeIterable) => number;
   static fontSizeToBox(box: PtLikeIterable, ratio?: number, byHeight?: boolean): (box: PtLikeIterable) => number;
   static fontSizeToThreshold(threshold: number, direction?: number): (defaultSize: number, val: number) => number;

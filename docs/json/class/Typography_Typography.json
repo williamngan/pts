@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 7743,
+  "id": 7745,
   "comment": "Typography provides helper functions to support typographic layouts. For a concrete example, see [a demo here](../demo/index.html?name=canvasform.textBox) that uses the [`CanvasForm.textBox`](#link) function.",
   "constructor": [],
   "accessors": [],
@@ -22,7 +22,7 @@
           9
         ]
       ],
-      "id": 7749,
+      "id": 7751,
       "flags": {
         "isStatic": true
       },
@@ -50,21 +50,21 @@
       "source": [
         [
           "src/Typography.ts",
-          158,
+          176,
           9
         ],
         [
           "src/Typography.ts",
-          165,
+          183,
           9
         ],
         [
           "src/Typography.ts",
-          170,
+          188,
           9
         ]
       ],
-      "id": 7758,
+      "id": 7761,
       "flags": {
         "isStatic": true
       },
@@ -129,11 +129,11 @@
       "source": [
         [
           "src/Typography.ts",
-          196,
+          214,
           9
         ]
       ],
-      "id": 7772,
+      "id": 7775,
       "flags": {
         "isStatic": true
       },
@@ -171,7 +171,7 @@
           9
         ]
       ],
-      "id": 7744,
+      "id": 7746,
       "flags": {
         "isStatic": true
       },
@@ -211,11 +211,11 @@
       "source": [
         [
           "src/Typography.ts",
-          80,
+          81,
           9
         ]
       ],
-      "id": 7752,
+      "id": 7754,
       "flags": {
         "isStatic": true
       },
@@ -250,6 +250,12 @@
               "comment": "text to indicate overflow such as \"...\". Default is empty \"\".",
               "type": "string",
               "default": "\"\""
+            },
+            {
+              "name": "hint",
+              "comment": "optional expected number of characters to keep — a pure performance hint (any value yields the same result) that seeds the search, such as the previous line's length when wrapping. With an empty `tail`, a hint also avoids measuring the entire string.",
+              "type": "number",
+              "default": false
             }
           ],
           "tags": []

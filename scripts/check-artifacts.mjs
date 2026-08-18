@@ -68,12 +68,12 @@ const expectedExports = [
   "World",
 ];
 const sizeLimits = {
-  "index.d.mts": 61139,
-  "index.d.ts": 61138,
-  "index.js": 221121,
-  "index.mjs": 220252,
-  "pts.js": 231469,
-  "pts.min.js": 137231,
+  "index.d.mts": 61169,
+  "index.d.ts": 61168,
+  "index.js": 221618,
+  "index.mjs": 220749,
+  "pts.js": 231989,
+  "pts.min.js": 137437,
 };
 const banner = "Copyright © 2017-present William Ngan and contributors.";
 

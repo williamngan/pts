@@ -979,8 +979,9 @@ export class CanvasForm<
     str: string,
     width: number,
     tail: string = "",
+    hint?: number,
   ): [string, number] {
-    return Typo.truncate(this.getTextWidth.bind(this), str, width, tail);
+    return Typo.truncate(this.getTextWidth.bind(this), str, width, tail, hint);
   }
 
   /**
@@ -1500,25 +1501,19 @@ export class CanvasForm<
 
     const lstep = this._font.size * lineHeight;
 
-    // Measure each line against a bounded slice of the remaining text rather
-    // than the whole remainder, which made wrapping quadratic in text length.
-    // The window is sized to comfortably exceed any line that can fit.
-    const avgWidth = Math.max(1, this.getTextWidth("n"));
-    const baseWindow = Math.max(16, Math.ceil((size[0] * 3) / avgWidth));
+    // Seed each line's cut search with the previous line's fitted length, so
+    // truncate probes near the boundary instead of measuring the whole
+    // remainder (which made wrapping quadratic in text length). The first
+    // line's seed is estimated from a single character sample.
+    let hint = Math.ceil(size[0] / Math.max(1, this.getTextWidth("n")));
 
     const lines: string[] = [];
     let sub = txt;
     while (sub) {
       if (crop && lines.length * lstep > size[1] - lstep * 2) break;
 
-      let win = Math.min(sub.length, baseWindow);
-      let t = this._textTruncate(sub.slice(0, win), size[0], "");
-      // If the whole window fits but text remains, the window cannot prove
-      // where the line ends — widen and retry.
-      while (t[1] === win && win < sub.length) {
-        win = Math.min(sub.length, win * 2);
-        t = this._textTruncate(sub.slice(0, win), size[0], "");
-      }
+      const t = this._textTruncate(sub, size[0], "", hint);
+      if (t[1] > 0) hint = t[1];
 
       // new line
       const newln = t[0].indexOf("\n");

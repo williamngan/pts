@@ -98,37 +98,23 @@ export default defineSuite("typography", (b, { Pts, fx }) => {
     },
   });
 
-  // The line-consumption loop inside `CanvasForm.paragraphBox`: truncate a
-  // bounded window of the remaining text to one line's width, cut at the last
-  // space, repeat — with the window doubled whenever it fits entirely. This
-  // mirrors the current windowed algorithm; the pre-revamp variant measured
-  // the whole remainder per line and was quadratic in text length.
+  // The line-consumption loop inside `CanvasForm.paragraphBox`: truncate the
+  // remainder to one line's width with the previous line's fitted length as
+  // the search hint, cut at the last space, repeat. The hint keeps probes
+  // near the line boundary; the pre-revamp variant measured the whole
+  // remainder per line and was quadratic in text length.
   b.case("paragraph wrap loop (per-char measure)", {
     batch: 4,
     setupOnce: () => paragraph("typography:wrap", 2048),
     run: (text) => {
       const width = 320;
-      const baseWindow = Math.max(16, Math.ceil((width * 3) / 7.5));
       let lines = 0;
       for (let k = 0; k < 4; k++) {
         let sub = text;
+        let hint = Math.ceil(width / 7.5);
         while (sub) {
-          let win = Math.min(sub.length, baseWindow);
-          let t = Typography.truncate(
-            measurePerChar,
-            sub.slice(0, win),
-            width,
-            "",
-          );
-          while (t[1] === win && win < sub.length) {
-            win = Math.min(sub.length, win * 2);
-            t = Typography.truncate(
-              measurePerChar,
-              sub.slice(0, win),
-              width,
-              "",
-            );
-          }
+          const t = Typography.truncate(measurePerChar, sub, width, "", hint);
+          if (t[1] > 0) hint = t[1];
           const consumedAll = t[1] === sub.length;
           let dt = t[0].lastIndexOf(" ") + 1;
           if (dt <= 0 || consumedAll) dt = undefined;

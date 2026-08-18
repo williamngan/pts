@@ -80,6 +80,41 @@ describe("Typography", () => {
     expect(measure(text)).toBeLessThanOrEqual(60);
   });
 
+  it("treats the hint as a pure performance hint", () => {
+    const measure = (text: string) => {
+      let w = 0;
+      for (const ch of text) w += ch === "W" ? 20 : 2;
+      return w;
+    };
+    const str = "iiiiiiiiiiWWWWW";
+    const expected = Typography.truncate(measure, str, 60);
+    for (const hint of [0, 1, 3, 7, 12, 15, 99, -5, 4.7]) {
+      expect(Typography.truncate(measure, str, 60, "", hint)).toEqual(expected);
+    }
+    // a hinted search discovers "everything fits" without a separate measure
+    expect(Typography.truncate(measure, "iiii", 100, "", 2)).toEqual([
+      "iiii",
+      4,
+    ]);
+    // hints alongside a tail fall back to the standard (measured) path
+    expect(Typography.truncate(measure, str, 60, "..", 3)).toEqual(
+      Typography.truncate(measure, str, 60, ".."),
+    );
+  });
+
+  it("never measures the full string when hinted without a tail", () => {
+    const seen: number[] = [];
+    const width = (text: string) => {
+      seen.push(text.length);
+      return text.length * 10;
+    };
+    expect(Typography.truncate(width, "abcdefghijklmnop", 50, "", 5)).toEqual([
+      "abcde",
+      5,
+    ]);
+    expect(Math.max(...seen)).toBeLessThan(16);
+  });
+
   it("does not split surrogate pairs when truncating", () => {
     const width = (text: string) => text.length * 10;
     // "😀" is two UTF-16 code units; a cut at 3 units would leave a lone
