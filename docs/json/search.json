@@ -9636,6 +9636,18 @@
     0
   ],
   [
+    "Types_TextMeasure",
+    "TextMeasure",
+    "Type alias",
+    0
+  ],
+  [
+    "Types_TextVerticalAlign",
+    "TextVerticalAlign",
+    "Type alias",
+    0
+  ],
+  [
     "Types_TouchPointsKey",
     "TouchPointsKey",
     "Type alias",
@@ -9652,6 +9664,12 @@
     "WarningType",
     "Type alias",
     0
+  ],
+  [
+    "Typography_Typography#function_static_charWidthCache",
+    "Typography.charWidthCache",
+    "Function",
+    8
   ],
   [
     "Typography_Typography#function_static_fontSizeToBox",

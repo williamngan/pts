@@ -110,6 +110,8 @@
     "PtLikeIterable",
     "RenderingContext2D",
     "SoundType",
+    "TextMeasure",
+    "TextVerticalAlign",
     "TouchPointsKey",
     "UIHandler",
     "WarningType"

@@ -108,6 +108,8 @@ type PtLike = Pt | Float32Array | number[];
 type GroupLike = Group | Pt[];
 type PtIterable = GroupLike | Pt[] | Iterable<Pt>;
 type PtLikeIterable = GroupLike | PtLike[] | Iterable<PtLike>;
+type TextMeasure = (text: string) => number;
+type TextVerticalAlign = "top" | "start" | "middle" | "center" | "bottom" | "end";
 type AnimateCallbackFn = (time: number, frameTime: number, currentSpace: any) => void;
 interface IPlayer {
   animateID?: string;
@@ -647,7 +649,8 @@ declare class CanvasSpace extends MultiTouchSpace {
 declare class CanvasForm<S extends MultiTouchSpace = CanvasSpace> extends VisualForm {
   protected _space: CanvasSpace;
   protected _ctx: RenderingContext2D;
-  protected _estimateTextWidth: (string: any) => number;
+  protected _estimateTextWidth: TextMeasure;
+  protected _estimateMode: "sample" | "char";
   private _styleCache;
   private _styleCacheCtx;
   protected _cacheForCtx(): Record<string, unknown>;
@@ -670,10 +673,10 @@ declare class CanvasForm<S extends MultiTouchSpace = CanvasSpace> extends Visual
   clip(): this;
   dash(segments?: PtLike | boolean, offset?: number): this;
   font(sizeOrFont: number | Font, weight?: string, style?: string, lineHeight?: number, family?: string): this;
-  fontWidthEstimate(estimate?: boolean): this;
+  fontWidthEstimate(estimate?: boolean | "sample" | "char"): this;
   getTextWidth(c: string): number;
   protected _textTruncate(str: string, width: number, tail?: string): [string, number];
-  protected _textAlign(box: PtLikeIterable, vertical: string, offset?: PtLike, center?: Pt): Pt;
+  protected _textAlign(box: PtLikeIterable, vertical: TextVerticalAlign, offset?: PtLike, center?: Pt): Pt;
   reset(): this;
   protected _paint(): void;
   static point(ctx: RenderingContext2D, p: PtLike, radius?: number, shape?: string): void;
@@ -698,8 +701,8 @@ declare class CanvasForm<S extends MultiTouchSpace = CanvasSpace> extends Visual
   imageData(ptOrRect: PtLike | PtLikeIterable, img: ImageData): this;
   static text(ctx: RenderingContext2D, pt: PtLike, txt: string, maxWidth?: number): void;
   text(pt: PtLike, txt: string, maxWidth?: number): this;
-  textBox(box: PtIterable, txt: string, verticalAlign?: string, tail?: string, overrideBaseline?: boolean): this;
-  paragraphBox(box: PtLikeIterable, txt: string, lineHeight?: number, verticalAlign?: string, crop?: boolean): this;
+  textBox(box: PtIterable, txt: string, verticalAlign?: TextVerticalAlign, tail?: string, overrideBaseline?: boolean): this;
+  paragraphBox(box: PtLikeIterable, txt: string, lineHeight?: number, verticalAlign?: TextVerticalAlign, crop?: boolean): this;
   alignText(alignment?: CanvasTextAlign, baseline?: CanvasTextBaseline): this;
   log(txt: any): this;
 }
@@ -1312,10 +1315,12 @@ declare class SVGForm extends CanvasForm<SVGSpace> {
 //#endregion
 //#region src/Typography.d.ts
 declare class Typography {
-  static textWidthEstimator(fn: (string: any) => number, samples?: string[], distribution?: number[]): (string: any) => number;
-  static truncate(fn: (string: any) => number, str: string, width: number, tail?: string): [string, number];
-  static fontSizeToBox(box: PtLikeIterable, ratio?: number, byHeight?: boolean): (GroupLike: any) => number;
-  static fontSizeToThreshold(threshold: number, direction?: number): (a: number, b: number) => number;
+  static textWidthEstimator(fn: TextMeasure, samples?: string[], distribution?: number[]): TextMeasure;
+  static charWidthCache(fn: TextMeasure): TextMeasure;
+  static truncate(fn: TextMeasure, str: string, width: number, tail?: string): [string, number];
+  static fontSizeToBox(ratio?: number, byHeight?: boolean): (box: PtLikeIterable) => number;
+  static fontSizeToBox(box: PtLikeIterable, ratio?: number, byHeight?: boolean): (box: PtLikeIterable) => number;
+  static fontSizeToThreshold(threshold: number, direction?: number): (defaultSize: number, val: number) => number;
 }
 //#endregion
 //#region src/Physics.d.ts
@@ -1504,5 +1509,5 @@ declare class Sound {
   toggle(): this;
 }
 //#endregion
-export { AnimateCallbackFn, Body, Bound, CanvasForm, CanvasPatternRepetition, CanvasSpace, CanvasSpaceOptions, Circle, Color, ColorType, Const, Create, Curve, DOMFormContext, DOMSpace, DefaultFormStyle, Delaunay, DelaunayMesh, DelaunayShape, Font, Form, Geom, Group, GroupLike, HTMLForm, HTMLSpace, IPlayer, IPt, ISoundAnalyzer, ISpacePlayers, ITempoListener, ITempoProgressFn, ITempoResponses, ITempoStartFn, ITimer, Img, ImgOptions, IntersectContext, Line, Mat, MultiTouchElement, MultiTouchSpace, Noise, Num, Particle, Polygon, Pt, PtIterable, PtLike, PtLikeIterable, Range, Rectangle, RenderingContext2D, SVGContext2D, SVGForm, SVGSpace, Shaping, Sound, SoundType, Space, Tempo, TouchPointsKey, Triangle, Typography, UI, UIButton, UIDragger, UIHandler, UIPointerAction, UIPointerActions, UIShape, Util, Vec, VisualForm, WarningType, World };
+export { AnimateCallbackFn, Body, Bound, CanvasForm, CanvasPatternRepetition, CanvasSpace, CanvasSpaceOptions, Circle, Color, ColorType, Const, Create, Curve, DOMFormContext, DOMSpace, DefaultFormStyle, Delaunay, DelaunayMesh, DelaunayShape, Font, Form, Geom, Group, GroupLike, HTMLForm, HTMLSpace, IPlayer, IPt, ISoundAnalyzer, ISpacePlayers, ITempoListener, ITempoProgressFn, ITempoResponses, ITempoStartFn, ITimer, Img, ImgOptions, IntersectContext, Line, Mat, MultiTouchElement, MultiTouchSpace, Noise, Num, Particle, Polygon, Pt, PtIterable, PtLike, PtLikeIterable, Range, Rectangle, RenderingContext2D, SVGContext2D, SVGForm, SVGSpace, Shaping, Sound, SoundType, Space, Tempo, TextMeasure, TextVerticalAlign, TouchPointsKey, Triangle, Typography, UI, UIButton, UIDragger, UIHandler, UIPointerAction, UIPointerActions, UIShape, Util, Vec, VisualForm, WarningType, World };
 //# sourceMappingURL=index.d.ts.map

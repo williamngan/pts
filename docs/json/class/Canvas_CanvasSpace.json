@@ -3,7 +3,7 @@
   "source": [
     [
       "src/Canvas.ts",
-      24,
+      26,
       13
     ]
   ],
@@ -16,7 +16,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          50,
+          52,
           2
         ]
       ],
@@ -59,12 +59,12 @@
       "source": [
         [
           "src/Canvas.ts",
-          201,
+          203,
           6
         ],
         [
           "src/Canvas.ts",
-          218,
+          220,
           6
         ]
       ],
@@ -91,12 +91,12 @@
       "source": [
         [
           "src/Canvas.ts",
-          304,
+          306,
           6
         ],
         [
           "src/Canvas.ts",
-          307,
+          309,
           6
         ]
       ],
@@ -142,7 +142,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          372,
+          374,
           13
         ]
       ],
@@ -195,7 +195,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          350,
+          352,
           6
         ]
       ],
@@ -214,7 +214,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          321,
+          323,
           13
         ]
       ],
@@ -294,7 +294,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          335,
+          337,
           13
         ]
       ],
@@ -315,7 +315,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          328,
+          330,
           13
         ]
       ],
@@ -355,7 +355,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          357,
+          359,
           6
         ]
       ],
@@ -374,7 +374,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          314,
+          316,
           13
         ]
       ],
@@ -416,7 +416,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          364,
+          366,
           6
         ]
       ],
@@ -719,7 +719,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          380,
+          382,
           2
         ]
       ],
@@ -749,7 +749,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          422,
+          424,
           2
         ]
       ],
@@ -779,7 +779,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          467,
+          469,
           2
         ]
       ],
@@ -802,7 +802,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          343,
+          345,
           9
         ]
       ],
@@ -922,7 +922,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          449,
+          451,
           12
         ]
       ],
@@ -984,7 +984,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          499,
+          501,
           2
         ]
       ],
@@ -1169,7 +1169,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          228,
+          230,
           2
         ]
       ],
@@ -1233,7 +1233,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          169,
+          171,
           2
         ]
       ],

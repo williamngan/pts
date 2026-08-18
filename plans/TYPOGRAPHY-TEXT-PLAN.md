@@ -46,8 +46,9 @@ the same cost seen from the browser. Phases 2–3 exist to shrink those ratios;
 
 ## Phase 1 — hygiene, no behavior change
 
-Safe to land immediately, in one commit. Rendered output and all existing
-tests (including the characterization tests) stay untouched.
+Safe to land immediately, in one commit. Rendered output stays untouched; the
+only test that moves is the error-message expectation in 1.4's
+characterization test, updated in the same commit.
 
 ### 1.1 A real type for measure functions
 
@@ -160,8 +161,9 @@ Current behavior, locked in by an existing test: `truncate(fn, "abc", 0,
 "....")` returns `["....", 0]` — a tail that itself cannot fit. Under 2.1's
 condition the natural result becomes `["", 0]` (nothing fits, including the
 tail). Recommendation: adopt `["", 0]` — drawing an ellipsis wider than the
-box is never what a sketch wants. **Decision owner: William** — this is
-observable behavior with a green test asserting the old result.
+box is never what a sketch wants. **Decision (2026-08-17): agreed — adopt
+`["", 0]`.** The invariant becomes: the returned string always measures within
+`width`.
 
 ## Phase 3 — measurement consistency and the quadratic wrap
 
@@ -180,7 +182,9 @@ cache must be invalidated when the font changes — `CanvasForm.font()` already
 re-derives the estimator on font change (`Canvas.ts:934`), so the same hook
 applies. Keep the existing boolean argument working; accept
 `"sample" | "char" | boolean` where `true` keeps meaning the current sampled
-estimator, so no existing call site changes meaning.
+estimator, so no existing call site changes meaning. The form must remember
+which mode is active (not just that _an_ estimator is set) so the re-derivation
+in `font()` rebuilds the same mode with the new metrics.
 
 Acceptance: new node bench case for the cached mode; browser
 `paragraphBox (estimated width)` must not regress; a new spec test asserts
@@ -197,8 +201,8 @@ slack.
 Recommendation: remove the padding when 2.1 lands (they ship in the same
 release), making both modes return honest widths. Consequence: measured-mode
 truncation keeps roughly one more character than before — the visual diff
-rides along with Phase 2's screenshot check. **Decision owner: William**, as
-it shifts every measured-mode `textBox` slightly.
+rides along with Phase 2's screenshot check. **Decision (2026-08-17): agreed —
+remove the padding together with 2.1.**
 
 ### 3.3 `paragraphBox`: iterative wrap without whole-remainder re-measuring
 
@@ -209,13 +213,17 @@ Two independent problems in `nextLine` (`Canvas.ts:1492`):
    mechanical, since the recursion is tail-shaped. The guard disappears
    instead of firing.
 2. **Quadratic measuring.** Each line's truncate measures the _entire
-   remaining text_. Fix inside `_textTruncate`'s caller: before truncating,
-   slice the remainder to a generous window — e.g.
-   `3 × width / (cached average char width)` code units, from the same
-   samples the estimator already takes — so each line measures O(window)
-   instead of O(remaining). The window only needs to be provably wider than
-   any line that could fit; the binary search from 2.1 does the exact fitting
-   within it.
+   remaining text_. Fix inside `paragraphBox`: before truncating, slice the
+   remainder to a generous window — `3 × width / (average char width)` code
+   units, the average taken from one `getTextWidth` sample — so each line
+   measures O(window) instead of O(remaining). Correctness rule: if the
+   truncate consumes the _whole_ window while more text remains, the window
+   was too narrow to prove where the line ends — double it and retry. With
+   that rule the cut decisions are provably identical to truncating the full
+   remainder (a fitting prefix strictly inside the window cannot change when
+   text is appended after the window), so the window is purely a cost bound,
+   and pathological inputs (all-narrow glyphs) degrade to a couple of retries
+   rather than wrong output.
 
 Acceptance: the node `paragraph wrap loop (per-char measure)` case (154.5 µs
 baseline) drops substantially — the target is growth roughly linear in text
@@ -260,17 +268,37 @@ introduce `NaN`. Two coherent designs:
 which means every real-world call was written (or at least tuned) against
 `ratio * h2`. Option A would "fix" the API by breaking all of them visually;
 Option B makes the API tell the truth about what it already does. The revamp
-branch allows the signature break. **Decision owner: William.**
+branch allows the signature break. **Decision (2026-08-17): agreed — Option
+B.** Shim detection: a `number` first argument is the new signature; anything
+iterable is the old one (warn via `Util.warn`, ignore the box, shift the
+remaining arguments).
 
 Whichever option lands, the cancellation characterization test is replaced by
 a direct test of the chosen contract, and the docs get an honest description
 ("returns a font size proportional to the box's height/width").
 
+## Call-site migrations
+
+Repo call sites that must move with the API, found by grep — anything missed
+here would silently measure or exercise the deprecation shim:
+
+- `bench/suites/typography.bench.mjs`: both `fontSizeToBox` cases use the old
+  `(box, ratio)` signature. Update to the new signature so the bench measures
+  the API, not the shim (and doesn't spam warnings). Add a node case for the
+  char-cache measure and a browser `paragraphBox (char-cached width)` case so
+  3.1 has numbers.
+- `demo/canvasform.textBox.js:26`: `Typography.fontSizeToBox(grid[0], 0.8)` →
+  `Typography.fontSizeToBox(0.8)`. This demo also exercises
+  `fontWidthEstimate(true/false)` and is the visual smoke test for Phases 2–3.
+- `src/test/browser/CanvasImage.spec.ts` covers `fontWidthEstimate`,
+  `getTextWidth`, `textBox`, `paragraphBox` — assertions are existence-level
+  (`> 0`) and should survive, but verify.
+
 ## Sequencing and verification
 
-Land order: 1 → 2 (+3.2 in the same release) → 3 → 4. Phases 2 and 4 each
-need a decision from William before their commit (2.4 contract, 3.2 padding,
-4 option); everything else is mechanical.
+Land order: 1 → 2 (+3.2 in the same release) → 3 → 4. All three judgment
+calls (2.4 contract, 3.2 padding, Phase 4 option) were decided 2026-08-17;
+everything below is mechanical.
 
 Per-phase gates, on top of `pnpm check`:
 
@@ -286,6 +314,44 @@ Per-phase gates, on top of `pnpm check`:
 - After the final phase, re-record both baselines (`--record` and the
   `--json` chromium run) so the improved wrap-loop number becomes the new
   reference.
+
+## Implementation outcome (2026-08-17)
+
+All four phases landed together on `revamp`. Final numbers on the i9-9820X,
+against the pre-fix baselines:
+
+| Case                                                  | Before             | After                 |
+| ----------------------------------------------------- | ------------------ | --------------------- |
+| node: `truncate` (short words, flat)                  | 24.3 ns            | ~50 ns                |
+| node: wrap loop (2048 chars, per-char)                | 154.5 µs           | ~50 µs                |
+| node: `charWidthCache` (call, per word)               | —                  | ~72 ns                |
+| node: `fontSizeToBox` (build)                         | 914.7 ns           | ~412 ns               |
+| browser: `textBox` (measured / estimated)             | 2.82 / 1.74 µs     | 4.39 / 1.74 µs        |
+| browser: `paragraphBox` (measured / char / estimated) | 24.8 / — / 12.2 µs | 35.8 / 23.2 / 12.3 µs |
+
+Linearity of the windowed wrap was verified directly: 2048 → 16384 chars
+scales 79 → 416 µs, a constant ~2.1 µs per line, where the old algorithm was
+quadratic.
+
+Two acceptance notes where reality sharpened the plan:
+
+- **Measured-mode calls got slower on short texts, by design.** The fit
+  guarantee costs ~4–6 `measureText` probes where the old code spent exactly
+  one unguarded measure, so measured-mode `textBox`/`paragraphBox` run ~1.5×
+  slower on paragraph-sized inputs (the asymptotic win only shows on long
+  texts). The plan's "improves or holds" criterion for measured-mode
+  `paragraphBox` was wrong to promise both correctness and the old probe
+  count. Sketches that need the old speed switch to
+  `fontWidthEstimate("char")` (near-measureText accuracy, 1.5× faster than
+  measured) or `"sample"` (fastest). Estimated modes were unaffected.
+- **`charWidthCache` needed a typed-array fast path.** A `Map` lookup per
+  character costs about as much as the `measureText` it replaces; the shipped
+  version uses a `Float64Array(256)` table for Latin-1 (a `charCodeAt` loop,
+  surrogate pairs handled explicitly) with the `Map` as fallback, taking it
+  from 487 ns to 72 ns per word.
+
+The `dist` size budgets in `scripts/check-artifacts.mjs` were re-pinned for
+the added API surface (+1.2 KB minified).
 
 ## Out of scope
 

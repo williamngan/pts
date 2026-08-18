@@ -197,6 +197,22 @@ export default defineSuite("canvas", (b, { Pts, fx }) => {
   );
 
   draw(
+    "paragraphBox (char-cached width)",
+    SIZES.XS,
+    () => ({
+      form: makeForm().fontWidthEstimate("char"),
+      boxes: positive("canvas:paragraphBox:char", SIZES.XS).map((p) =>
+        Group.fromArray([p, [p[0] + 220, p[1] + 160]]),
+      ),
+      texts: fx.words("canvas:paragraphBox:char:texts", SIZES.XS, 240, 400),
+    }),
+    ({ form, boxes, texts }) => {
+      for (let i = 0; i < SIZES.XS; i++) form.paragraphBox(boxes[i], texts[i]);
+      sink(SIZES.XS);
+    },
+  );
+
+  draw(
     "paragraphBox (estimated width)",
     SIZES.XS,
     () => ({

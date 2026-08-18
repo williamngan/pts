@@ -23,7 +23,7 @@ Pts.quickStart( "#pt", "#0c9" );
 
     start:( bound ) => {
       layout();
-      headerResize = Typography.fontSizeToBox( grid[0], 0.8 ); // a function to resize header font based on box height
+      headerResize = Typography.fontSizeToBox( 0.8 ); // a function to resize header font based on box height
       widthResize = Typography.fontSizeToThreshold( 850, -1 ); // a function to resize header font based on threshold
     },
 

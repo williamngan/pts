@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 3453,
+  "id": 3451,
   "comment": "Range object keeps track of a Group of n-dimensional Pts to provide its minimum, maximum, and magnitude in each dimension.\nIt also provides convenient functions such as mapping the Group to another range. This class may be useful for visualizing data in charts.",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           2
         ]
       ],
-      "id": 3454,
+      "id": 3452,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -52,7 +52,7 @@
           6
         ]
       ],
-      "id": 3466,
+      "id": 3464,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -71,7 +71,7 @@
           6
         ]
       ],
-      "id": 3462,
+      "id": 3460,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -90,7 +90,7 @@
           6
         ]
       ],
-      "id": 3464,
+      "id": 3462,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -111,7 +111,7 @@
           2
         ]
       ],
-      "id": 3475,
+      "id": 3473,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -147,7 +147,7 @@
           2
         ]
       ],
-      "id": 3468,
+      "id": 3466,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -170,7 +170,7 @@
           2
         ]
       ],
-      "id": 3470,
+      "id": 3468,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -212,7 +212,7 @@
           2
         ]
       ],
-      "id": 3479,
+      "id": 3477,
       "flags": {},
       "overrides": false,
       "inherits": false,

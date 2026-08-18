@@ -3,12 +3,12 @@
   "source": [
     [
       "src/Types.ts",
-      168,
+      179,
       12
     ]
   ],
   "kind": "Typealias",
-  "id": 7694,
+  "id": 7695,
   "comment": "Typescript type: a callback function type used in `tempo.every(...).progress( fn )`",
   "constructor": [],
   "accessors": [],

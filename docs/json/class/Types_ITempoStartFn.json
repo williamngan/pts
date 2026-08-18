@@ -3,12 +3,12 @@
   "source": [
     [
       "src/Types.ts",
-      163,
+      174,
       12
     ]
   ],
   "kind": "Typealias",
-  "id": 7690,
+  "id": 7691,
   "comment": "Typescript type: a callback function type used in `tempo.every(...).start( fn )`",
   "constructor": [],
   "accessors": [],

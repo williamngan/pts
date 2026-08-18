@@ -73,6 +73,19 @@ export default defineSuite("typography", (b, { Pts, fx }) => {
     return text;
   };
 
+  b.case("Typography.charWidthCache (call)", {
+    batch: SIZES.M,
+    setupOnce: () => ({
+      cached: Typography.charWidthCache(measurePerChar),
+      words: fx.words("typography:charcache", SIZES.M),
+    }),
+    run: ({ cached, words }) => {
+      let acc = 0;
+      for (let i = 0; i < SIZES.M; i++) acc += cached(words[i]);
+      sink(acc);
+    },
+  });
+
   b.case("Typography.truncate (long text, per-char measure)", {
     batch: 32,
     setupOnce: () => paragraph("typography:truncate:long", 2048),
@@ -85,24 +98,43 @@ export default defineSuite("typography", (b, { Pts, fx }) => {
     },
   });
 
-  // The line-consumption loop inside `CanvasForm.paragraphBox`: truncate the
-  // remaining text to one line's width, cut at the last space, repeat.
-  // Re-measuring the whole remainder for every line makes this the quadratic
-  // hot path in text-heavy sketches, so it gets its own baseline.
+  // The line-consumption loop inside `CanvasForm.paragraphBox`: truncate a
+  // bounded window of the remaining text to one line's width, cut at the last
+  // space, repeat — with the window doubled whenever it fits entirely. This
+  // mirrors the current windowed algorithm; the pre-revamp variant measured
+  // the whole remainder per line and was quadratic in text length.
   b.case("paragraph wrap loop (per-char measure)", {
     batch: 4,
     setupOnce: () => paragraph("typography:wrap", 2048),
     run: (text) => {
+      const width = 320;
+      const baseWindow = Math.max(16, Math.ceil((width * 3) / 7.5));
       let lines = 0;
       for (let k = 0; k < 4; k++) {
         let sub = text;
-        for (let guard = 0; sub && guard < 10000; guard++) {
-          const t = Typography.truncate(measurePerChar, sub, 320, "");
+        while (sub) {
+          let win = Math.min(sub.length, baseWindow);
+          let t = Typography.truncate(
+            measurePerChar,
+            sub.slice(0, win),
+            width,
+            "",
+          );
+          while (t[1] === win && win < sub.length) {
+            win = Math.min(sub.length, win * 2);
+            t = Typography.truncate(
+              measurePerChar,
+              sub.slice(0, win),
+              width,
+              "",
+            );
+          }
+          const consumedAll = t[1] === sub.length;
           let dt = t[0].lastIndexOf(" ") + 1;
-          if (dt <= 0 || t[1] === sub.length) dt = undefined;
+          if (dt <= 0 || consumedAll) dt = undefined;
           lines++;
-          if (t[1] <= 0 || t[1] === sub.length) break;
-          sub = sub.substring(dt ?? t[1]);
+          if (t[1] <= 0 || consumedAll) break;
+          sub = sub.slice(dt ?? t[1]);
         }
       }
       sink(lines);
@@ -119,7 +151,7 @@ export default defineSuite("typography", (b, { Pts, fx }) => {
     run: (box) => {
       let acc = 0;
       for (let i = 0; i < N; i++) {
-        acc += Typography.fontSizeToBox(box, 0.8)(box);
+        acc += Typography.fontSizeToBox(0.8)(box);
       }
       sink(acc);
     },
@@ -127,16 +159,10 @@ export default defineSuite("typography", (b, { Pts, fx }) => {
 
   b.case("Typography.fontSizeToBox (call)", {
     batch: SIZES.M,
-    setupOnce: () => {
-      const box = Group.fromArray([
-        [0, 0],
-        [200, 40],
-      ]);
-      return {
-        scale: Typography.fontSizeToBox(box, 0.8),
-        boxes: fx.rects("typography:boxes", SIZES.M, 60),
-      };
-    },
+    setupOnce: () => ({
+      scale: Typography.fontSizeToBox(0.8),
+      boxes: fx.rects("typography:boxes", SIZES.M, 60),
+    }),
     run: ({ scale, boxes }) => {
       let acc = 0;
       for (let i = 0; i < SIZES.M; i++) acc += scale(boxes[i]);

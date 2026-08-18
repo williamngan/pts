@@ -3,12 +3,12 @@
   "source": [
     [
       "src/Types.ts",
-      178,
+      189,
       12
     ]
   ],
   "kind": "Typealias",
-  "id": 7701,
+  "id": 7702,
   "comment": "Typescript type: ITempoListener represents a listener created by Tempo class",
   "constructor": [],
   "accessors": [],

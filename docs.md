@@ -116,6 +116,8 @@ Complete API reference for [Pts 0.12.9](https://ptsjs.org), generated from the s
   - [`PtLikeIterable`](#types-ptlikeiterable)
   - [`RenderingContext2D`](#types-renderingcontext2d)
   - [`SoundType`](#types-soundtype)
+  - [`TextMeasure`](#types-textmeasure)
+  - [`TextVerticalAlign`](#types-textverticalalign)
   - [`TouchPointsKey`](#types-touchpointskey)
   - [`UIHandler`](#types-uihandler)
   - [`WarningType`](#types-warningtype)
@@ -126,7 +128,7 @@ Complete API reference for [Pts 0.12.9](https://ptsjs.org), generated from the s
 <a id="canvas-canvasform"></a>
 ### `CanvasForm`
 
-**Kind:** Class · **Source:** [`src/Canvas.ts:540`](https://github.com/williamngan/pts/blob/master/src/Canvas.ts#L540)
+**Kind:** Class · **Source:** [`src/Canvas.ts:542`](https://github.com/williamngan/pts/blob/master/src/Canvas.ts#L542)
 
 **Extends:** `VisualForm`
 
@@ -386,14 +388,14 @@ form.font( myFont )`, `form.font(14, "bold")
 ##### `fontWidthEstimate`
 
 ```ts
-fontWidthEstimate(estimate: boolean = true): this
+fontWidthEstimate(estimate: boolean | sample | char = true): this
 ```
 
-Set whether to use html canvas' [`measureText`](#svg-svgcontext2d-measure-text) function, or a faster but less accurate heuristic function.
+Set whether to use html canvas' [`measureText`](#svg-svgcontext2d-measure-text) function, or a faster but less accurate estimate.
 
 **Parameters**
 
-- `estimate` (`boolean`; default `true`) — `true` to use heuristic function, or `false` to use ctx.measureText
+- `estimate` (`boolean | sample | char`; default `true`) — `false` to use ctx.measureText; `true` or `"sample"` to use a sampled-average estimator (fastest); `"char"` to use a per-character width cache (nearly as accurate as measureText for most texts, and much faster after warmup)
 
 <a id="canvas-canvasform-get-text-width"></a>
 ##### `getTextWidth`
@@ -490,7 +492,7 @@ A convenient way to draw some text on canvas for logging or debugging. It'll be 
 ##### `paragraphBox`
 
 ```ts
-paragraphBox(box: PtLikeIterable, txt: string, lineHeight: number = 1.2, verticalAlign: string = "top", crop: boolean = true): this
+paragraphBox(box: PtLikeIterable, txt: string, lineHeight: number = 1.2, verticalAlign: TextVerticalAlign = "top", crop: boolean = true): this
 ```
 
 Fit multi-line text in a rectangular box. Note that this will also set canvas context's textBaseline to "top".
@@ -500,7 +502,7 @@ Fit multi-line text in a rectangular box. Note that this will also set canvas co
 - `box` (`PtLikeIterable`) — a Group or an Iterable<PtLike> with 2 Pt that represents a bounding box
 - `txt` (`string`) — string of text
 - `lineHeight` (`number`; default `1.2`) — line height as a ratio of font size. Default is 1.2.
-- `verticalAlign` (`string`; default `"top"`) — "top", "middle", or "bottom" to specify vertical alignment inside the box
+- `verticalAlign` (`TextVerticalAlign`; default `"top"`) — "top", "middle", or "bottom" to specify vertical alignment inside the box
 - `crop` (`boolean`; default `true`) — a boolean to specify whether to crop text when overflowing
 
 <a id="canvas-canvasform-point"></a>
@@ -657,7 +659,7 @@ Draw text on canvas.
 ##### `textBox`
 
 ```ts
-textBox(box: PtIterable, txt: string, verticalAlign: string = "middle", tail: string = "", overrideBaseline: boolean = true): this
+textBox(box: PtIterable, txt: string, verticalAlign: TextVerticalAlign = "middle", tail: string = "", overrideBaseline: boolean = true): this
 ```
 
 Fit a single-line text in a rectangular box.
@@ -666,7 +668,7 @@ Fit a single-line text in a rectangular box.
 
 - `box` (`PtIterable`) — a rectangle box defined by a Group or an Iterable<Pt>
 - `txt` (`string`) — string of text
-- `verticalAlign` (`string`; default `"middle"`) — "top", "middle", or "bottom" to specify vertical alignment inside the box
+- `verticalAlign` (`TextVerticalAlign`; default `"middle"`) — "top", "middle", or "bottom" to specify vertical alignment inside the box
 - `tail` (`string`; default `""`) — text to indicate overflow such as "...". Default is empty "".
 - `overrideBaseline` (`boolean`; default `true`) — If `true`, use the corresponding baseline as verticalAlign. If `false`, use the current canvas context's textBaseline setting. Default is `true`.
 
@@ -911,7 +913,7 @@ A static function to draw text.
 <a id="canvas-canvasspace"></a>
 ### `CanvasSpace`
 
-**Kind:** Class · **Source:** [`src/Canvas.ts:24`](https://github.com/williamngan/pts/blob/master/src/Canvas.ts#L24)
+**Kind:** Class · **Source:** [`src/Canvas.ts:26`](https://github.com/williamngan/pts/blob/master/src/Canvas.ts#L26)
 
 **Extends:** `MultiTouchSpace`
 
@@ -11940,24 +11942,56 @@ Typography provides helper functions to support typographic layouts. For a concr
 
 #### Methods
 
+<a id="typography-typography-static-char-width-cache"></a>
+##### `charWidthCache`
+
+*static*
+
+```ts
+static charWidthCache(fn: TextMeasure): TextMeasure
+```
+
+Create a memoizing text width function that measures each distinct character once and sums the cached widths. Nearly as accurate as the reference function for most texts (kerning and ligatures excepted) at close to estimator speed after warmup. The cache is keyed by character, so create a new instance whenever the font changes.
+
+**Parameters**
+
+- `fn` (`TextMeasure`) — a reference function that can measure text width accurately
+
+**Returns:** a function that measures text width using per-character caching
+
 <a id="typography-typography-static-font-size-to-box"></a>
 ##### `fontSizeToBox`
 
 *static*
 
+**Overload 1**
+
 ```ts
-static fontSizeToBox(box: PtLikeIterable, ratio: number = 1, byHeight: boolean = true):  Fn(GroupLike:any)
+static fontSizeToBox(ratio: number, byHeight: boolean):  Fn(box:PtLikeIterable)
 ```
 
-Get a function to scale font size proportionally to text box size changes.
+Get a function to scale font size proportionally to a box's size. (Deprecated form: passing an initial box as the first parameter is deprecated — it never affected the result — and will be removed in a future version.)
 
 **Parameters**
 
-- `box` (`PtLikeIterable`) — a Group or an Iterable<PtLike> representing the initial box
-- `ratio` (`number`; default `1`) — font-size change ratio. Default is 1.
-- `byHeight` (`boolean`; default `true`)
+- `ratio` (`number`) — font-size to box-size ratio. Default is 1.
+- `byHeight` (`boolean`) — `true` to scale by the box's height, `false` to scale by its width. Default is `true`.
 
-**Returns:** a function where input parameter is a new box, and returns the new font size value
+**Returns:** a function where input parameter is a box, and returns a font size value (`ratio` multiplied by the box's height or width)
+
+**Overload 2**
+
+```ts
+static fontSizeToBox(box: PtLikeIterable, ratio: number, byHeight: boolean):  Fn(box:PtLikeIterable)
+```
+
+**Parameters**
+
+- `box` (`PtLikeIterable`)
+- `ratio` (`number`)
+- `byHeight` (`boolean`)
+
+**deprecated:** The initial box never affected the result. Use `fontSizeToBox(ratio, byHeight)` instead.
 
 <a id="typography-typography-static-font-size-to-threshold"></a>
 ##### `fontSizeToThreshold`
@@ -11965,17 +11999,17 @@ Get a function to scale font size proportionally to text box size changes.
 *static*
 
 ```ts
-static fontSizeToThreshold(threshold: number, direction: number = 0):  Fn(a:number, b:number)
+static fontSizeToThreshold(threshold: number, direction: number = 0):  Fn(defaultSize:number, val:number)
 ```
 
 Get a function to scale font size based on a threshold value.
 
 **Parameters**
 
-- `threshold` (`number`) — threshold value
+- `threshold` (`number`) — threshold value. Cannot be 0.
 - `direction` (`number`; default `0`) — if negative, get a font size <= defaultSize; if positive, get a font size >= defaultSize; Default is 0 which will scale font without min or max limits.
 
-**Returns:** a function where input parameter is the default font size and a value to compare with threshold, and returns new font size value
+**Returns:** a function whose input parameters are a default font size and a value to compare with threshold, and which returns a new font size value
 
 <a id="typography-typography-static-text-width-estimator"></a>
 ##### `textWidthEstimator`
@@ -11983,16 +12017,16 @@ Get a function to scale font size based on a threshold value.
 *static*
 
 ```ts
-static textWidthEstimator(fn:  Fn(string:any), samples: string[] = ..., distribution: number[] = ...):  Fn(string:any)
+static textWidthEstimator(fn: TextMeasure, samples: string[] = ..., distribution: number[] = ...): TextMeasure
 ```
 
 Create a heuristic text width estimate function. It will be less accurate but faster.
 
 **Parameters**
 
-- `fn` (` Fn(string:any)`) — a reference function that can measure text width accurately
+- `fn` (`TextMeasure`) — a reference function that can measure text width accurately
 - `samples` (`string[]`; default `...`) — a list of string samples. Default is ["M", "n", "."]
-- `distribution` (`number[]`; default `...`) — a list of the samples' probability distribution. Default is [0.06, 0.8, 0.14].
+- `distribution` (`number[]`; default `...`) — a list of the samples' probability distribution, which should have the same length as `samples` and sum to 1. Default is [0.06, 0.8, 0.14]. (A distribution that sums to more or less than 1 will proportionally inflate or deflate every estimate.)
 
 **Returns:** a function that can estimate text width
 
@@ -12002,17 +12036,19 @@ Create a heuristic text width estimate function. It will be less accurate but fa
 *static*
 
 ```ts
-static truncate(fn:  Fn(string:any), str: string, width: number, tail: string = ""): string,number
+static truncate(fn: TextMeasure, str: string, width: number, tail: string = ""): string,number
 ```
 
-Truncate text to fit width.
+Truncate text to fit width. The result is guaranteed to fit: the largest prefix (possibly empty) is kept such that the prefix plus the tail measures within `width`. The cut never splits a surrogate pair. If even the tail alone cannot fit, `["", 0]` is returned.
 
 **Parameters**
 
-- `fn` (` Fn(string:any)`) — a function that can measure text width
+- `fn` (`TextMeasure`) — a function that can measure text width
 - `str` (`string`) — text to truncate
 - `width` (`number`) — width to fit
 - `tail` (`string`; default `""`) — text to indicate overflow such as "...". Default is empty "".
+
+**Returns:** a tuple of the truncated text (tail included) and the number of characters kept from `str`
 
 <a id="module-ui"></a>
 ## Module: `UI`
@@ -13331,7 +13367,7 @@ A string to indicate yz plane.
 <a id="types-iplayer"></a>
 ### `IPlayer`
 
-**Kind:** Interface · **Source:** [`src/Types.ts:51`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L51)
+**Kind:** Interface · **Source:** [`src/Types.ts:62`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L62)
 
 Typescript interface: IPlayer is an interface that represents a "player" object that can be added into a Space.
 
@@ -13449,14 +13485,14 @@ z?: number
 <a id="types-ispaceplayers"></a>
 ### `ISpacePlayers`
 
-**Kind:** Interface · **Source:** [`src/Types.ts:62`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L62)
+**Kind:** Interface · **Source:** [`src/Types.ts:73`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L73)
 
 Typescript interface: ISpacePlayers represents a map of IPlayer instances.
 
 <a id="types-itimer"></a>
 ### `ITimer`
 
-**Kind:** Interface · **Source:** [`src/Types.ts:69`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L69)
+**Kind:** Interface · **Source:** [`src/Types.ts:80`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L80)
 
 Typescript interface: ITimer represents a time-recording object.
 
@@ -13493,7 +13529,7 @@ prev: number
 <a id="types-multitouchelement"></a>
 ### `MultiTouchElement`
 
-**Kind:** Interface · **Source:** [`src/Types.ts:84`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L84)
+**Kind:** Interface · **Source:** [`src/Types.ts:95`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L95)
 
 Typescript interface: MultiTouchElement represents an element that can handle touch events.
 
@@ -13526,7 +13562,7 @@ removeEventListener(evt: any, callback: Function): any
 <a id="types-animatecallbackfn"></a>
 ### `AnimateCallbackFn`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:42`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L42)
+**Kind:** Typealias · **Source:** [`src/Types.ts:53`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L53)
 
 Typescript type: AnimateCallbackFn represents a callback function for animation. It accepts parameters to keep track of current time, current frame-time, and current space instance.
 
@@ -13537,7 +13573,7 @@ type AnimateCallbackFn =  Fn(time:number, frameTime:number, currentSpace:any);
 <a id="types-canvaspatternrepetition"></a>
 ### `CanvasPatternRepetition`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:230`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L230)
+**Kind:** Typealias · **Source:** [`src/Types.ts:241`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L241)
 
 Typescript type: CanvasPatternRepetition represents the string options to specify pattern repetition
 
@@ -13548,7 +13584,7 @@ type CanvasPatternRepetition = repeat | repeat-x | repeat-y | no-repeat;
 <a id="types-canvasspaceoptions"></a>
 ### `CanvasSpaceOptions`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:92`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L92)
+**Kind:** Typealias · **Source:** [`src/Types.ts:103`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L103)
 
 Typescript type: Setup options for CanvasSpace. See [`CanvasSpace.setup()`](#canvas-canvasspace-setup) function.
 
@@ -13559,7 +13595,7 @@ type CanvasSpaceOptions = { bgcolor:string, offscreen:boolean, pixelDensity:numb
 <a id="types-colortype"></a>
 ### `ColorType`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:103`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L103)
+**Kind:** Typealias · **Source:** [`src/Types.ts:114`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L114)
 
 Typescript type: ColorType represents a defined set of string values such as "rgb" and "lab".
 
@@ -13570,7 +13606,7 @@ type ColorType = rgb | hsl | hsb | lab | lch | luv | xyz;
 <a id="types-defaultformstyle"></a>
 ### `DefaultFormStyle`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:218`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L218)
+**Kind:** Typealias · **Source:** [`src/Types.ts:229`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L229)
 
 Typescript type: DefaultFormStyle represents a default object for visual styles such as fill, stroke, line width, and others.
 
@@ -13581,7 +13617,7 @@ type DefaultFormStyle = { fillStyle:string | CanvasGradient | CanvasPattern, glo
 <a id="types-delaunaymesh"></a>
 ### `DelaunayMesh`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:119`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L119)
+**Kind:** Typealias · **Source:** [`src/Types.ts:130`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L130)
 
 Typescript type: DelaunayMesh represents an object type that has an array of {key: shape} items, where each shape represents a DelaunayShape.
 
@@ -13592,7 +13628,7 @@ type DelaunayMesh = [];
 <a id="types-delaunayshape"></a>
 ### `DelaunayShape`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:108`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L108)
+**Kind:** Typealias · **Source:** [`src/Types.ts:119`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L119)
 
 Typescript type: DelaunayShape represents an object type that can store a Delaunay element. It has 3 indices (i, j, k) and two groups that represent a triangle and a circle.
 
@@ -13603,7 +13639,7 @@ type DelaunayShape = { circle:Group, i:number, j:number, k:number, triangle:Grou
 <a id="types-domformcontext"></a>
 ### `DOMFormContext`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:124`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L124)
+**Kind:** Typealias · **Source:** [`src/Types.ts:135`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L135)
 
 Typescript type: DOMFormContext represents the current context for an DOMForm.
 
@@ -13625,7 +13661,7 @@ type GroupLike = Group | Pt[];
 <a id="types-intersectcontext"></a>
 ### `IntersectContext`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:136`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L136)
+**Kind:** Typealias · **Source:** [`src/Types.ts:147`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L147)
 
 Typescript type: IntersectContext represents a type of an object that store the intersection info.
 
@@ -13636,7 +13672,7 @@ type IntersectContext = { dist:number, edge:Group, normal:Pt, other:any, vertex:
 <a id="types-isoundanalyzer"></a>
 ### `ISoundAnalyzer`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:204`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L204)
+**Kind:** Typealias · **Source:** [`src/Types.ts:215`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L215)
 
 Typescript type: ISoundAnalyzer represents an object that stores the AnalyzerNode properties
 
@@ -13647,7 +13683,7 @@ type ISoundAnalyzer = { data:Uint8Array, node:AnalyserNode, size:number };
 <a id="types-itempolistener"></a>
 ### `ITempoListener`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:178`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L178)
+**Kind:** Typealias · **Source:** [`src/Types.ts:189`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L189)
 
 Typescript type: ITempoListener represents a listener created by Tempo class
 
@@ -13658,7 +13694,7 @@ type ITempoListener = { beats:number | number[], continuous:boolean, duration:nu
 <a id="types-itempoprogressfn"></a>
 ### `ITempoProgressFn`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:168`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L168)
+**Kind:** Typealias · **Source:** [`src/Types.ts:179`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L179)
 
 Typescript type: a callback function type used in `tempo.every(...).progress( fn )`
 
@@ -13669,7 +13705,7 @@ type ITempoProgressFn =  Fn(count:number, t:number, ms:number, start:boolean);
 <a id="types-itemporesponses"></a>
 ### `ITempoResponses`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:192`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L192)
+**Kind:** Typealias · **Source:** [`src/Types.ts:203`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L203)
 
 Typescript type: the return type of `tempo.every(...)`
 
@@ -13680,7 +13716,7 @@ type ITempoResponses = { progress: Fn(fn:ITempoProgressFn, offset:number, name:s
 <a id="types-itempostartfn"></a>
 ### `ITempoStartFn`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:163`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L163)
+**Kind:** Typealias · **Source:** [`src/Types.ts:174`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L174)
 
 Typescript type: a callback function type used in `tempo.every(...).start( fn )`
 
@@ -13726,7 +13762,7 @@ type PtLikeIterable = GroupLike | PtLike[] | Iterable;
 <a id="types-renderingcontext2d"></a>
 ### `RenderingContext2D`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:233`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L233)
+**Kind:** Typealias · **Source:** [`src/Types.ts:244`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L244)
 
 ```ts
 type RenderingContext2D = CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
@@ -13735,7 +13771,7 @@ type RenderingContext2D = CanvasRenderingContext2D | OffscreenCanvasRenderingCon
 <a id="types-soundtype"></a>
 ### `SoundType`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:213`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L213)
+**Kind:** Typealias · **Source:** [`src/Types.ts:224`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L224)
 
 Typescript type: SoundType represents a type of sound input. It corresponds to Sound.type property.
 
@@ -13743,10 +13779,32 @@ Typescript type: SoundType represents a type of sound input. It corresponds to S
 type SoundType = file | gen | input;
 ```
 
+<a id="types-textmeasure"></a>
+### `TextMeasure`
+
+**Kind:** Typealias · **Source:** [`src/Types.ts:42`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L42)
+
+Typescript type: TextMeasure represents a function that returns the rendered width of a string of text, such as canvas context's `measureText` or an estimator created via [`Typography.textWidthEstimator`](#typography-typography-static-text-width-estimator).
+
+```ts
+type TextMeasure =  Fn(text:string);
+```
+
+<a id="types-textverticalalign"></a>
+### `TextVerticalAlign`
+
+**Kind:** Typealias · **Source:** [`src/Types.ts:47`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L47)
+
+Typescript type: TextVerticalAlign represents the vertical alignment options accepted by [`CanvasForm.textBox`](#canvas-canvasform-text-box) and [`CanvasForm.paragraphBox`](#canvas-canvasform-paragraph-box).
+
+```ts
+type TextVerticalAlign = top | start | middle | center | bottom | end;
+```
+
 <a id="types-touchpointskey"></a>
 ### `TouchPointsKey`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:79`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L79)
+**Kind:** Typealias · **Source:** [`src/Types.ts:90`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L90)
 
 Typescript type: TouchPointsKey represents a set of acceptable string keys for defining touch action.
 
@@ -13757,7 +13815,7 @@ type TouchPointsKey = touches | changedTouches | targetTouches;
 <a id="types-uihandler"></a>
 ### `UIHandler`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:148`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L148)
+**Kind:** Typealias · **Source:** [`src/Types.ts:159`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L159)
 
 Typescript type: UIHandler represents a callback function to handle UI actions.
 
@@ -13768,7 +13826,7 @@ type UIHandler =  Fn(target:UI, pt:PtLike, type:string, evt:MouseEvent);
 <a id="types-warningtype"></a>
 ### `WarningType`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:158`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L158)
+**Kind:** Typealias · **Source:** [`src/Types.ts:169`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L169)
 
 Typescript type: WarningType specifies a level of warning for [`Util.warnLevel`](#util-util-static-warn-level).
 

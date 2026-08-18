@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 2850,
+  "id": 2848,
   "comment": "Img provides convenient functions to support image operations on HTML Canvas and [`CanvasSpace`](#link). Combine this with other Pts functions to experiment with visual forms that integrate bitmaps and vector graphics.",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           2
         ]
       ],
-      "id": 2888,
+      "id": 2886,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -69,7 +69,7 @@
           6
         ]
       ],
-      "id": 2978,
+      "id": 2976,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -88,7 +88,7 @@
           6
         ]
       ],
-      "id": 2990,
+      "id": 2988,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -107,7 +107,7 @@
           6
         ]
       ],
-      "id": 2982,
+      "id": 2980,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -126,7 +126,7 @@
           6
         ]
       ],
-      "id": 2974,
+      "id": 2972,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -145,7 +145,7 @@
           6
         ]
       ],
-      "id": 2980,
+      "id": 2978,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -164,7 +164,7 @@
           6
         ]
       ],
-      "id": 2976,
+      "id": 2974,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -183,7 +183,7 @@
           6
         ]
       ],
-      "id": 2988,
+      "id": 2986,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -202,7 +202,7 @@
           6
         ]
       ],
-      "id": 2984,
+      "id": 2982,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -221,7 +221,7 @@
           6
         ]
       ],
-      "id": 2986,
+      "id": 2984,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -240,7 +240,7 @@
           6
         ]
       ],
-      "id": 2992,
+      "id": 2990,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -261,7 +261,7 @@
           2
         ]
       ],
-      "id": 2932,
+      "id": 2930,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -291,7 +291,7 @@
           2
         ]
       ],
-      "id": 2966,
+      "id": 2964,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -319,7 +319,7 @@
           2
         ]
       ],
-      "id": 2958,
+      "id": 2956,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -349,7 +349,7 @@
           2
         ]
       ],
-      "id": 2964,
+      "id": 2962,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -372,7 +372,7 @@
           2
         ]
       ],
-      "id": 2961,
+      "id": 2959,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -402,7 +402,7 @@
           2
         ]
       ],
-      "id": 2972,
+      "id": 2970,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -425,7 +425,7 @@
           2
         ]
       ],
-      "id": 2922,
+      "id": 2920,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -467,7 +467,7 @@
           2
         ]
       ],
-      "id": 2908,
+      "id": 2906,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -497,7 +497,7 @@
           2
         ]
       ],
-      "id": 2950,
+      "id": 2948,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -520,7 +520,7 @@
           2
         ]
       ],
-      "id": 2935,
+      "id": 2933,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -556,7 +556,7 @@
           2
         ]
       ],
-      "id": 2941,
+      "id": 2939,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -592,7 +592,7 @@
           2
         ]
       ],
-      "id": 2954,
+      "id": 2952,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -628,7 +628,7 @@
           2
         ]
       ],
-      "id": 2945,
+      "id": 2943,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -670,7 +670,7 @@
           8
         ]
       ],
-      "id": 2939,
+      "id": 2937,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -693,7 +693,7 @@
           2
         ]
       ],
-      "id": 2968,
+      "id": 2966,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -716,7 +716,7 @@
           2
         ]
       ],
-      "id": 2970,
+      "id": 2968,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -739,7 +739,7 @@
           2
         ]
       ],
-      "id": 2952,
+      "id": 2950,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -762,7 +762,7 @@
           9
         ]
       ],
-      "id": 2871,
+      "id": 2869,
       "flags": {
         "isStatic": true
       },
@@ -806,7 +806,7 @@
           9
         ]
       ],
-      "id": 2880,
+      "id": 2878,
       "flags": {
         "isStatic": true
       },
@@ -850,7 +850,7 @@
           9
         ]
       ],
-      "id": 2876,
+      "id": 2874,
       "flags": {
         "isStatic": true
       },
@@ -888,7 +888,7 @@
           9
         ]
       ],
-      "id": 2885,
+      "id": 2883,
       "flags": {
         "isStatic": true
       },
@@ -920,7 +920,7 @@
           9
         ]
       ],
-      "id": 2851,
+      "id": 2849,
       "flags": {
         "isStatic": true
       },
@@ -975,7 +975,7 @@
           15
         ]
       ],
-      "id": 2860,
+      "id": 2858,
       "flags": {
         "isStatic": true
       },
@@ -1024,7 +1024,7 @@
           15
         ]
       ],
-      "id": 2865,
+      "id": 2863,
       "flags": {
         "isStatic": true
       },

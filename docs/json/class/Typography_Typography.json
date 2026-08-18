@@ -8,21 +8,21 @@
     ]
   ],
   "kind": "Class",
-  "id": 7742,
+  "id": 7743,
   "comment": "Typography provides helper functions to support typographic layouts. For a concrete example, see [a demo here](../demo/index.html?name=canvasform.textBox) that uses the [`CanvasForm.textBox`](#link) function.",
   "constructor": [],
   "accessors": [],
   "methods": [
     {
-      "name": "fontSizeToBox",
+      "name": "charWidthCache",
       "source": [
         [
           "src/Typography.ts",
-          56,
+          38,
           9
         ]
       ],
-      "id": 7763,
+      "id": 7749,
       "flags": {
         "isStatic": true
       },
@@ -30,30 +30,97 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Get a function to scale font size proportionally to text box size changes.",
-          "returns": " Fn(GroupLike:any)",
-          "returns_comment": "a function where input parameter is a new box, and returns the new font size value",
+          "comment": "Create a memoizing text width function that measures each distinct character once and sums the cached widths. Nearly as accurate as the reference function for most texts (kerning and ligatures excepted) at close to estimator speed after warmup. The cache is keyed by character, so create a new instance whenever the font changes.",
+          "returns": "TextMeasure",
+          "returns_comment": "a function that measures text width using per-character caching",
+          "parameters": [
+            {
+              "name": "fn",
+              "comment": "a reference function that can measure text width accurately",
+              "type": "TextMeasure",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "fontSizeToBox",
+      "source": [
+        [
+          "src/Typography.ts",
+          158,
+          9
+        ],
+        [
+          "src/Typography.ts",
+          165,
+          9
+        ],
+        [
+          "src/Typography.ts",
+          170,
+          9
+        ]
+      ],
+      "id": 7758,
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a function to scale font size proportionally to a box's size. (Deprecated form: passing an initial box as the first parameter is deprecated — it never affected the result — and will be removed in a future version.)",
+          "returns": " Fn(box:PtLikeIterable)",
+          "returns_comment": "a function where input parameter is a box, and returns a font size value (`ratio` multiplied by the box's height or width)",
+          "parameters": [
+            {
+              "name": "ratio",
+              "comment": "font-size to box-size ratio. Default is 1.",
+              "type": "number",
+              "default": false
+            },
+            {
+              "name": "byHeight",
+              "comment": "`true` to scale by the box's height, `false` to scale by its width. Default is `true`.",
+              "type": "boolean",
+              "default": false
+            }
+          ],
+          "tags": []
+        },
+        {
+          "comment": "",
+          "returns": " Fn(box:PtLikeIterable)",
+          "returns_comment": false,
           "parameters": [
             {
               "name": "box",
-              "comment": "a Group or an Iterable<PtLike> representing the initial box",
+              "comment": "",
               "type": "PtLikeIterable",
               "default": false
             },
             {
               "name": "ratio",
-              "comment": "font-size change ratio. Default is 1.",
+              "comment": "",
               "type": "number",
-              "default": "1"
+              "default": false
             },
             {
               "name": "byHeight",
               "comment": "",
               "type": "boolean",
-              "default": "true"
+              "default": false
             }
           ],
-          "tags": []
+          "tags": [
+            {
+              "tag": "deprecated",
+              "text": "The initial box never affected the result. Use `fontSizeToBox(ratio, byHeight)` instead."
+            }
+          ]
         }
       ]
     },
@@ -62,11 +129,11 @@
       "source": [
         [
           "src/Typography.ts",
-          78,
+          196,
           9
         ]
       ],
-      "id": 7771,
+      "id": 7772,
       "flags": {
         "isStatic": true
       },
@@ -75,12 +142,12 @@
       "signatures": [
         {
           "comment": "Get a function to scale font size based on a threshold value.",
-          "returns": " Fn(a:number, b:number)",
-          "returns_comment": "a function where input parameter is the default font size and a value to compare with threshold, and returns new font size value",
+          "returns": " Fn(defaultSize:number, val:number)",
+          "returns_comment": "a function whose input parameters are a default font size and a value to compare with threshold, and which returns a new font size value",
           "parameters": [
             {
               "name": "threshold",
-              "comment": "threshold value",
+              "comment": "threshold value. Cannot be 0.",
               "type": "number",
               "default": false
             },
@@ -104,7 +171,7 @@
           9
         ]
       ],
-      "id": 7743,
+      "id": 7744,
       "flags": {
         "isStatic": true
       },
@@ -113,13 +180,13 @@
       "signatures": [
         {
           "comment": "Create a heuristic text width estimate function. It will be less accurate but faster.",
-          "returns": " Fn(string:any)",
+          "returns": "TextMeasure",
           "returns_comment": "a function that can estimate text width",
           "parameters": [
             {
               "name": "fn",
               "comment": "a reference function that can measure text width accurately",
-              "type": " Fn(string:any)",
+              "type": "TextMeasure",
               "default": false
             },
             {
@@ -130,7 +197,7 @@
             },
             {
               "name": "distribution",
-              "comment": "a list of the samples' probability distribution. Default is [0.06, 0.8, 0.14].",
+              "comment": "a list of the samples' probability distribution, which should have the same length as `samples` and sum to 1. Default is [0.06, 0.8, 0.14]. (A distribution that sums to more or less than 1 will proportionally inflate or deflate every estimate.)",
               "type": "number[]",
               "default": "..."
             }
@@ -144,11 +211,11 @@
       "source": [
         [
           "src/Typography.ts",
-          35,
+          80,
           9
         ]
       ],
-      "id": 7754,
+      "id": 7752,
       "flags": {
         "isStatic": true
       },
@@ -156,14 +223,14 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Truncate text to fit width.",
+          "comment": "Truncate text to fit width. The result is guaranteed to fit: the largest prefix (possibly empty) is kept such that the prefix plus the tail measures within `width`. The cut never splits a surrogate pair. If even the tail alone cannot fit, `[\"\", 0]` is returned.",
           "returns": "string,number",
-          "returns_comment": false,
+          "returns_comment": "a tuple of the truncated text (tail included) and the number of characters kept from `str`",
           "parameters": [
             {
               "name": "fn",
               "comment": "a function that can measure text width",
-              "type": " Fn(string:any)",
+              "type": "TextMeasure",
               "default": false
             },
             {

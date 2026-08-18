@@ -3143,30 +3143,110 @@ var Typography = class {
 		.8,
 		.14
 	]) {
-		let m = samples.map(fn);
-		let avg = new Pt(distribution).dot(m);
-		return (str) => str.length * avg;
+		if (samples.length !== distribution.length) throw new Error(`textWidthEstimator: samples (${samples.length}) and distribution (${distribution.length}) must have the same length`);
+		const m = samples.map(fn);
+		const avg = new Pt(distribution).dot(m);
+		return (text) => text.length * avg;
+	}
+	static charWidthCache(fn) {
+		const latin = (/* @__PURE__ */ new Float64Array(256)).fill(NaN);
+		const cache = /* @__PURE__ */ new Map();
+		return (text) => {
+			let sum = 0;
+			for (let i = 0, len = text.length; i < len; i++) {
+				const code = text.charCodeAt(i);
+				if (code < 256) {
+					let w = latin[code];
+					if (w !== w) {
+						w = fn(text[i]);
+						latin[code] = w;
+					}
+					sum += w;
+				} else {
+					let ch = text[i];
+					if (code >= 55296 && code <= 56319 && i + 1 < len) {
+						ch += text[i + 1];
+						i++;
+					}
+					let w = cache.get(ch);
+					if (w === void 0) {
+						w = fn(ch);
+						cache.set(ch, w);
+					}
+					sum += w;
+				}
+			}
+			return sum;
+		};
 	}
 	static truncate(fn, str, width, tail = "") {
-		let trim = Math.floor(str.length * Math.min(1, width / fn(str)));
-		if (trim < str.length) {
-			trim = Math.max(0, trim - tail.length);
-			return [str.substr(0, trim) + tail, trim];
-		} else return [str, str.length];
+		const full = fn(str);
+		if (full <= width) return [str, str.length];
+		const budget = width - (tail ? fn(tail) : 0);
+		const max = str.length - 1;
+		const fits = (k) => fn(str.slice(0, k)) <= budget;
+		let best = -1;
+		let lo = 0;
+		let hi = max;
+		if (budget >= 0) {
+			let k = Math.min(max, Math.max(0, Math.floor(str.length * budget / full)));
+			if (fits(k)) {
+				best = k;
+				lo = k + 1;
+				for (let inc = 1; lo <= hi; inc *= 2) {
+					const p = Math.min(hi, k + inc);
+					if (!fits(p)) {
+						hi = p - 1;
+						break;
+					}
+					best = p;
+					lo = p + 1;
+				}
+			} else {
+				hi = k - 1;
+				for (let inc = 1; lo <= hi; inc *= 2) {
+					const p = Math.max(lo, k - inc);
+					if (fits(p)) {
+						best = p;
+						lo = p + 1;
+						break;
+					}
+					hi = p - 1;
+				}
+			}
+			while (lo <= hi) {
+				const p = lo + hi >> 1;
+				if (fits(p)) {
+					best = p;
+					lo = p + 1;
+				} else hi = p - 1;
+			}
+		}
+		if (best < 0) return ["", 0];
+		let cut = best;
+		if (cut > 0) {
+			const code = str.charCodeAt(cut - 1);
+			if (code >= 55296 && code <= 56319) cut--;
+		}
+		return [str.slice(0, cut) + tail, cut];
 	}
-	static fontSizeToBox(box, ratio = 1, byHeight = true) {
-		let bound = Bound.fromGroup(box);
-		let h = byHeight ? bound.height : bound.width;
-		let f = ratio * h;
-		return function(box2) {
-			let bound2 = Bound.fromGroup(box2);
-			let nh = (byHeight ? bound2.height : bound2.width) / h;
-			return f * nh;
+	static fontSizeToBox(ratio = 1, byHeight = true, legacyByHeight) {
+		if (typeof ratio !== "number") {
+			Util.warn("Typography.fontSizeToBox(box, ratio, byHeight) is deprecated: the initial box never affected the result. Use fontSizeToBox(ratio, byHeight) instead.");
+			ratio = typeof byHeight === "number" ? byHeight : 1;
+			byHeight = legacyByHeight === void 0 ? true : legacyByHeight;
+		}
+		const r = ratio;
+		const by = byHeight;
+		return (box) => {
+			const bound = Bound.fromGroup(box);
+			return r * (by ? bound.height : bound.width);
 		};
 	}
 	static fontSizeToThreshold(threshold, direction = 0) {
+		if (threshold === 0) throw new Error("fontSizeToThreshold: threshold cannot be 0");
 		return function(defaultSize, val) {
-			let d = defaultSize * val / threshold;
+			const d = defaultSize * val / threshold;
 			if (direction < 0) return Math.min(d, defaultSize);
 			if (direction > 0) return Math.max(d, defaultSize);
 			return d;
@@ -3948,15 +4028,22 @@ var CanvasForm = class CanvasForm extends VisualForm {
 			if (lineHeight) this._font.lineHeight = lineHeight;
 		} else this._font = sizeOrFont;
 		this._set("font", this._font.value);
-		if (this._estimateTextWidth) this.fontWidthEstimate(true);
+		if (this._estimateMode) this.fontWidthEstimate(this._estimateMode);
 		return this;
 	}
 	fontWidthEstimate(estimate = true) {
-		this._estimateTextWidth = estimate ? Typography.textWidthEstimator((c) => this._ctx.measureText(c).width) : void 0;
+		if (!estimate) {
+			this._estimateMode = void 0;
+			this._estimateTextWidth = void 0;
+		} else {
+			const measure = (c) => this._ctx.measureText(c).width;
+			this._estimateMode = estimate === true ? "sample" : estimate;
+			this._estimateTextWidth = this._estimateMode === "char" ? Typography.charWidthCache(measure) : Typography.textWidthEstimator(measure);
+		}
 		return this;
 	}
 	getTextWidth(c) {
-		return !this._estimateTextWidth ? this._ctx.measureText(c + " .").width : this._estimateTextWidth(c);
+		return !this._estimateTextWidth ? this._ctx.measureText(c).width : this._estimateTextWidth(c);
 	}
 	_textTruncate(str, width, tail = "") {
 		return Typography.truncate(this.getTextWidth.bind(this), str, width, tail);
@@ -4148,23 +4235,32 @@ var CanvasForm = class CanvasForm extends VisualForm {
 		const size = Rectangle.size(b);
 		this._ctx.textBaseline = "top";
 		const lstep = this._font.size * lineHeight;
-		const nextLine = (sub, buffer = [], cc = 0) => {
-			if (!sub) return buffer;
-			if (crop && cc * lstep > size[1] - lstep * 2) return buffer;
-			if (cc > 1e4) throw new Error("max recursion reached (10000)");
-			const t = this._textTruncate(sub, size[0], "");
+		const avgWidth = Math.max(1, this.getTextWidth("n"));
+		const baseWindow = Math.max(16, Math.ceil(size[0] * 3 / avgWidth));
+		const lines = [];
+		let sub = txt;
+		while (sub) {
+			var _dt;
+			if (crop && lines.length * lstep > size[1] - lstep * 2) break;
+			let win = Math.min(sub.length, baseWindow);
+			let t = this._textTruncate(sub.slice(0, win), size[0], "");
+			while (t[1] === win && win < sub.length) {
+				win = Math.min(sub.length, win * 2);
+				t = this._textTruncate(sub.slice(0, win), size[0], "");
+			}
 			const newln = t[0].indexOf("\n");
 			if (newln >= 0) {
-				buffer.push(t[0].substr(0, newln));
-				return nextLine(sub.substr(newln + 1), buffer, cc + 1);
+				lines.push(t[0].slice(0, newln));
+				sub = sub.slice(newln + 1);
+				continue;
 			}
+			const consumedAll = t[1] === sub.length;
 			let dt = t[0].lastIndexOf(" ") + 1;
-			if (dt <= 0 || t[1] === sub.length) dt = void 0;
-			const line = t[0].substr(0, dt);
-			buffer.push(line);
-			return t[1] <= 0 || t[1] === sub.length ? buffer : nextLine(sub.substr(dt || t[1]), buffer, cc + 1);
-		};
-		const lines = nextLine(txt);
+			if (dt <= 0 || consumedAll) dt = void 0;
+			lines.push(dt === void 0 ? t[0] : t[0].slice(0, dt));
+			if (t[1] <= 0 || consumedAll) break;
+			sub = sub.slice((_dt = dt) !== null && _dt !== void 0 ? _dt : t[1]);
+		}
 		const lsize = lines.length * lstep;
 		let lbox = b;
 		if (verticalAlign == "middle" || verticalAlign == "center") {

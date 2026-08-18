@@ -1,0 +1,24 @@
+{
+  "name": "TextMeasure",
+  "source": [
+    [
+      "src/Types.ts",
+      42,
+      12
+    ]
+  ],
+  "kind": "Typealias",
+  "id": 7602,
+  "comment": "Typescript type: TextMeasure represents a function that returns the rendered width of a string of text, such as canvas context's `measureText` or an estimator created via [`Typography.textWidthEstimator`](#link).",
+  "constructor": [],
+  "accessors": [],
+  "methods": [],
+  "variables": [],
+  "properties": [],
+  "flags": {},
+  "extends": [],
+  "implements": [],
+  "type_alias": [
+    " Fn(text:string)"
+  ]
+}

@@ -37,6 +37,17 @@ export type PtIterable = GroupLike | Pt[] | Iterable<Pt>;
 export type PtLikeIterable = GroupLike | PtLike[] | Iterable<PtLike>;
 
 /**
+ * Typescript type: TextMeasure represents a function that returns the rendered width of a string of text, such as canvas context's `measureText` or an estimator created via [`Typography.textWidthEstimator`](#link).
+ */
+export type TextMeasure = (text: string) => number;
+
+/**
+ * Typescript type: TextVerticalAlign represents the vertical alignment options accepted by [`CanvasForm.textBox`](#link) and [`CanvasForm.paragraphBox`](#link).
+ */
+export type TextVerticalAlign =
+  "top" | "start" | "middle" | "center" | "bottom" | "end";
+
+/**
  * Typescript type: AnimateCallbackFn represents a callback function for animation. It accepts parameters to keep track of current time, current frame-time, and current space instance.
  */
 export type AnimateCallbackFn = (

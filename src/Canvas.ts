@@ -15,6 +15,8 @@ import {
   PtLikeIterable,
   PtIterable,
   CanvasSpaceOptions,
+  TextMeasure,
+  TextVerticalAlign,
 } from "./Types";
 
 /**
@@ -542,7 +544,8 @@ export class CanvasForm<
 > extends VisualForm {
   protected _space: CanvasSpace;
   protected _ctx: RenderingContext2D;
-  protected _estimateTextWidth: (string) => number;
+  protected _estimateTextWidth: TextMeasure;
+  protected _estimateMode: "sample" | "char";
 
   // the shared cache object for this._ctx, revalidated only when the context
   // changes so the hot path avoids a WeakMap lookup per style write
@@ -930,20 +933,29 @@ export class CanvasForm<
 
     this._set("font", this._font.value);
 
-    // If using estimate, reapply it when font changes.
-    if (this._estimateTextWidth) this.fontWidthEstimate(true);
+    // If using estimate, reapply the same mode with the new font's metrics.
+    if (this._estimateMode) this.fontWidthEstimate(this._estimateMode);
 
     return this;
   }
 
   /**
-   * Set whether to use html canvas' [`measureText`](#link) function, or a faster but less accurate heuristic function.
-   * @param estimate `true` to use heuristic function, or `false` to use ctx.measureText
+   * Set whether to use html canvas' [`measureText`](#link) function, or a faster but less accurate estimate.
+   * @param estimate `false` to use ctx.measureText; `true` or `"sample"` to use a sampled-average estimator (fastest); `"char"` to use a per-character width cache (nearly as accurate as measureText for most texts, and much faster after warmup)
    */
-  fontWidthEstimate(estimate: boolean = true): this {
-    this._estimateTextWidth = estimate
-      ? Typo.textWidthEstimator((c: string) => this._ctx.measureText(c).width)
-      : undefined;
+  fontWidthEstimate(estimate: boolean | "sample" | "char" = true): this {
+    if (!estimate) {
+      this._estimateMode = undefined;
+      this._estimateTextWidth = undefined;
+    } else {
+      const measure: TextMeasure = (c: string) =>
+        this._ctx.measureText(c).width;
+      this._estimateMode = estimate === true ? "sample" : estimate;
+      this._estimateTextWidth =
+        this._estimateMode === "char"
+          ? Typo.charWidthCache(measure)
+          : Typo.textWidthEstimator(measure);
+    }
     return this;
   }
 
@@ -953,7 +965,7 @@ export class CanvasForm<
    */
   getTextWidth(c: string): number {
     return !this._estimateTextWidth
-      ? this._ctx.measureText(c + " .").width
+      ? this._ctx.measureText(c).width
       : this._estimateTextWidth(c);
   }
 
@@ -980,7 +992,7 @@ export class CanvasForm<
    */
   protected _textAlign(
     box: PtLikeIterable,
-    vertical: string,
+    vertical: TextVerticalAlign,
     offset?: PtLike,
     center?: Pt,
   ): Pt {
@@ -1455,7 +1467,7 @@ export class CanvasForm<
   textBox(
     box: PtIterable,
     txt: string,
-    verticalAlign: string = "middle",
+    verticalAlign: TextVerticalAlign = "middle",
     tail: string = "",
     overrideBaseline: boolean = true,
   ): this {
@@ -1479,7 +1491,7 @@ export class CanvasForm<
     box: PtLikeIterable,
     txt: string,
     lineHeight: number = 1.2,
-    verticalAlign: string = "top",
+    verticalAlign: TextVerticalAlign = "top",
     crop: boolean = true,
   ): this {
     const b = Util.iterToArray(box);
@@ -1488,33 +1500,43 @@ export class CanvasForm<
 
     const lstep = this._font.size * lineHeight;
 
-    // find next lines recursively
-    const nextLine = (sub: string, buffer: string[] = [], cc: number = 0) => {
-      if (!sub) return buffer;
-      if (crop && cc * lstep > size[1] - lstep * 2) return buffer;
-      if (cc > 10000) throw new Error("max recursion reached (10000)");
+    // Measure each line against a bounded slice of the remaining text rather
+    // than the whole remainder, which made wrapping quadratic in text length.
+    // The window is sized to comfortably exceed any line that can fit.
+    const avgWidth = Math.max(1, this.getTextWidth("n"));
+    const baseWindow = Math.max(16, Math.ceil((size[0] * 3) / avgWidth));
 
-      const t = this._textTruncate(sub, size[0], "");
+    const lines: string[] = [];
+    let sub = txt;
+    while (sub) {
+      if (crop && lines.length * lstep > size[1] - lstep * 2) break;
+
+      let win = Math.min(sub.length, baseWindow);
+      let t = this._textTruncate(sub.slice(0, win), size[0], "");
+      // If the whole window fits but text remains, the window cannot prove
+      // where the line ends — widen and retry.
+      while (t[1] === win && win < sub.length) {
+        win = Math.min(sub.length, win * 2);
+        t = this._textTruncate(sub.slice(0, win), size[0], "");
+      }
 
       // new line
       const newln = t[0].indexOf("\n");
       if (newln >= 0) {
-        buffer.push(t[0].substr(0, newln));
-        return nextLine(sub.substr(newln + 1), buffer, cc + 1);
+        lines.push(t[0].slice(0, newln));
+        sub = sub.slice(newln + 1);
+        continue;
       }
 
       // word wrap
+      const consumedAll = t[1] === sub.length;
       let dt = t[0].lastIndexOf(" ") + 1;
-      if (dt <= 0 || t[1] === sub.length) dt = undefined;
-      const line = t[0].substr(0, dt);
-      buffer.push(line);
+      if (dt <= 0 || consumedAll) dt = undefined;
+      lines.push(dt === undefined ? t[0] : t[0].slice(0, dt));
 
-      return t[1] <= 0 || t[1] === sub.length
-        ? buffer
-        : nextLine(sub.substr(dt || t[1]), buffer, cc + 1);
-    };
-
-    const lines = nextLine(txt); // go through all lines
+      if (t[1] <= 0 || consumedAll) break;
+      sub = sub.slice(dt ?? t[1]);
+    }
     const lsize = lines.length * lstep; // total height
     let lbox = b;
 
