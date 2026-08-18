@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { Sound } from "../../Play";
-import { Group } from "../../Pt";
+import { Group, Pt } from "../../Pt";
 
 class FakeNode {
   connections: unknown[] = [];
@@ -276,6 +276,32 @@ describe("Sound construction and generated audio", () => {
     expect(osc.wave).toBe(wave); // the wave survives the rebuild
     expect(osc.connections).toContain(filter); // so does the filter chain
     expect(osc.connections.some((n) => n instanceof FakeAnalyser)).toBe(true);
+  });
+
+  it("reuses a provided output group without allocating new Pts", () => {
+    const sound = Sound.generate("sine", 440).analyze(4);
+    const out = sound.freqDomainTo([40, 20]);
+    expect(out).toHaveLength(4);
+    const pts = [...out];
+
+    const again = sound.freqDomainTo([40, 20], [0, 0], [0, 0], out);
+    expect(again).toBe(out);
+    again.forEach((p, i) => {
+      expect(p).toBe(pts[i]); // same Pt instances, mutated in place
+      expect(p[1]).toBeCloseTo((20 * i * 10) / 255, 5); // values still correct
+    });
+
+    // trimming shrinks the reused group
+    const trimmed = sound.freqDomainTo([40, 20], [0, 0], [1, 1], out);
+    expect(trimmed).toBe(out);
+    expect(out).toHaveLength(2);
+
+    // growing back allocates only the missing Pts, and replaces unusable ones
+    (out as any)[0] = new Pt([7]); // a 1-dimensional Pt cannot be reused
+    const grown = sound.timeDomainTo([40, 20], [0, 0], [0, 0], out);
+    expect(grown).toHaveLength(4);
+    expect(grown[0].length).toBeGreaterThanOrEqual(2);
+    expect(grown[1]).toBe(pts[1]); // surviving Pt reused
   });
 
   it("replaces the analyzer when analyze is called again", () => {

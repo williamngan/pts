@@ -169,4 +169,16 @@ export default defineSuite("play", (b, { Pts }) => {
       sink(g.length + g[g.length - 1][1]);
     },
   });
+
+  b.case(`Sound.freqDomainTo ${BINS} bins (reuse)`, {
+    batch: BINS,
+    setupOnce: () => {
+      const sound = stubbedSound(Sound, BINS);
+      return { sound, out: sound.freqDomainTo([800, 400], [10, 10]) };
+    },
+    run: (s) => {
+      const g = s.sound.freqDomainTo([800, 400], [10, 10], [0, 0], s.out);
+      sink(g.length + g[g.length - 1][0]);
+    },
+  });
 });

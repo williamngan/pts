@@ -16506,7 +16506,7 @@ Create or re-use an AudioBuffer. Only needed if you are using `Sound.loadAsBuffe
 <a id="play-sound-dispose"></a>
 ##### `dispose`
 
-*source [`src/Play.ts:778`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L778)*
+*source [`src/Play.ts:797`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L797)*
 
 ```ts
 dispose(): this
@@ -16518,7 +16518,7 @@ Note that this never closes an `AudioContext`: the shared context lives for the 
 <a id="play-sound-freq-domain"></a>
 ##### `freqDomain`
 
-*source [`src/Play.ts:668`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L668)*
+*source [`src/Play.ts:681`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L681)*
 
 ```ts
 freqDomain(): Uint8Array
@@ -16529,10 +16529,10 @@ Get the raw frequency-domain data from analyzer as unsigned 8-bit integers. An a
 <a id="play-sound-freq-domain-to"></a>
 ##### `freqDomainTo`
 
-*source [`src/Play.ts:680`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L680)*
+*source [`src/Play.ts:694`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L694)*
 
 ```ts
-freqDomainTo(size: PtLike, position: PtLike = ..., trim: number[] = ...): Group
+freqDomainTo(size: PtLike, position: PtLike = ..., trim: number[] = ..., out: Group): Group
 ```
 
 Map the frequency-domain data from analyzer to a range. An analyzer must be added before calling this function (See [analyze](#play-sound-analyze) function).
@@ -16542,6 +16542,7 @@ Map the frequency-domain data from analyzer to a range. An analyzer must be adde
 - `size` (`PtLike`) — map each data point `[index, value]` to `[width, height]`
 - `position` (`PtLike`; default `...`) — Optionally, set a starting `[x, y]` position. Default is `[0, 0]`
 - `trim` (`number[]`; default `...`) — Optionally, trim the start and end values by `[startTrim, data.length-endTrim]`
+- `out` (`Group`) — Optionally, provide a `Group` (usually one returned by a previous call) whose Pts will be reused instead of allocating new ones — recommended when calling once per frame
 
 **Returns:** a Group containing the mapped values
 
@@ -16566,7 +16567,7 @@ Note: if you start the Sound after calling this, it will play via the default no
 <a id="play-sound-reset"></a>
 ##### `reset`
 
-*source [`src/Play.ts:687`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L687)*
+*source [`src/Play.ts:706`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L706)*
 
 ```ts
 reset(): this
@@ -16594,7 +16595,7 @@ in your chain for filtering purposes.
 <a id="play-sound-start"></a>
 ##### `start`
 
-*source [`src/Play.ts:708`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L708)*
+*source [`src/Play.ts:727`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L727)*
 
 ```ts
 start(timeAt: number = 0): this
@@ -16609,7 +16610,7 @@ Start playing. Internally this connects the `AudioNode` to `AudioContext`'s dest
 <a id="play-sound-stop"></a>
 ##### `stop`
 
-*source [`src/Play.ts:741`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L741)*
+*source [`src/Play.ts:760`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L760)*
 
 ```ts
 stop(): this
@@ -16620,7 +16621,7 @@ Stop playing. Internally this also disconnects the `AudioNode` from `AudioContex
 <a id="play-sound-time-domain"></a>
 ##### `timeDomain`
 
-*source [`src/Play.ts:649`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L649)*
+*source [`src/Play.ts:656`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L656)*
 
 ```ts
 timeDomain(): Uint8Array
@@ -16631,10 +16632,10 @@ Get the raw time-domain data from analyzer as unsigned 8-bit integers. An analyz
 <a id="play-sound-time-domain-to"></a>
 ##### `timeDomainTo`
 
-*source [`src/Play.ts:661`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L661)*
+*source [`src/Play.ts:669`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L669)*
 
 ```ts
-timeDomainTo(size: PtLike, position: PtLike = ..., trim: number[] = ...): Group
+timeDomainTo(size: PtLike, position: PtLike = ..., trim: number[] = ..., out: Group): Group
 ```
 
 Map the time-domain data from analyzer to a range. An analyzer must be added before calling this function (See [analyze](#play-sound-analyze) function).
@@ -16644,6 +16645,7 @@ Map the time-domain data from analyzer to a range. An analyzer must be added bef
 - `size` (`PtLike`) — map each data point `[index, value]` to `[width, height]`
 - `position` (`PtLike`; default `...`) — Optionally, set a starting `[x, y]` position. Default is `[0, 0]`
 - `trim` (`number[]`; default `...`) — Optionally, trim the start and end values by `[startTrim, data.length-endTrim]`
+- `out` (`Group`) — Optionally, provide a `Group` (usually one returned by a previous call) whose Pts will be reused instead of allocating new ones — recommended when calling once per frame
 
 **Returns:** a Group containing the mapped values
 
@@ -16656,7 +16658,7 @@ form.point( s.timeDomainTo( space.size ) )
 <a id="play-sound-toggle"></a>
 ##### `toggle`
 
-*source [`src/Play.ts:765`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L765)*
+*source [`src/Play.ts:784`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L784)*
 
 ```ts
 toggle(): this

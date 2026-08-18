@@ -219,10 +219,24 @@ baselines recorded (2026-08-16).
 5. Demos touched (`sound.play`, `sound.analyze`, `guide.sound_mic`)
    verified in the served demo pages via agent-browser.
 
-## Deferred (next pass)
+## Performance pass — **Completed 2026-08-18**
 
-- `*DomainTo` allocation reuse (the ~112 KB/call, ~6.7 MB/s at 60fps
-  measured in the baseline) and `Tempo.track` params reuse.
+- `Tempo.track` params reuse landed with the fix pass (typed direct calls;
+  ~13% faster at 64 listeners).
+- `timeDomainTo`/`freqDomainTo` gained an optional trailing
+  **`out?: Group`** parameter (additive API): pass the `Group` from a
+  previous call and its Pts are mutated in place — truncated when trimming
+  shrinks the result, extended (and unusable entries replaced) when it
+  grows. The no-`out` path is unchanged in behavior.
+- Measured on the recorded rig, 256 bins: reuse path **14.2 ns/bin vs
+  228.8 allocating (16×)** in Node, **27.5 vs 222.8 (8×)** in Chromium;
+  allocation **3.85 KB/call vs ~101 KB (−96%)**. The allocating path
+  itself also sped up 10–23% from the restructured loop. Guide documents
+  the pattern; `play`/`sound` bench suites gained "(reuse)" cases and both
+  baselines were re-recorded.
+
+## Deferred (feature work, not performance)
+
 - `pause()`/`stop()` split and mic re-acquisition on restart.
 - `loop`, `playbackRate`, an `ended` promise, and async `start()` that
   awaits `ctx.resume()`.

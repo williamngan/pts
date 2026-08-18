@@ -1502,11 +1502,11 @@ declare class Sound {
   removeOutputNode(): this;
   analyze(size?: number, minDb?: number, maxDb?: number, smooth?: number): this;
   protected _domain(time: boolean): Uint8Array;
-  protected _domainTo(time: boolean, size: PtLike, position?: PtLike, trim?: number[]): Group;
+  protected _domainTo(time: boolean, size: PtLike, position?: PtLike, trim?: number[], out?: Group): Group;
   timeDomain(): Uint8Array;
-  timeDomainTo(size: PtLike, position?: PtLike, trim?: number[]): Group;
+  timeDomainTo(size: PtLike, position?: PtLike, trim?: number[], out?: Group): Group;
   freqDomain(): Uint8Array;
-  freqDomainTo(size: PtLike, position?: PtLike, trim?: number[]): Group;
+  freqDomainTo(size: PtLike, position?: PtLike, trim?: number[], out?: Group): Group;
   reset(): this;
   protected _getGain(): GainNode;
   start(timeAt?: number): this;

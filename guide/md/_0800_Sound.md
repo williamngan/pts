@@ -104,6 +104,13 @@ let td = sound.timeDomainTo( [200, 100], [50, 50] );
 form.points( td ); // visualize as points
 ```
 
+Since you'll typically call these functions on every animation frame, you can optionally pass the resulting `Group` back in the last parameter to reuse it, which avoids creating new objects per frame:
+
+```
+let td; // keep a reference across frames
+td = sound.timeDomainTo( [200, 100], [50, 50], [0, 0], td ); // reused
+```
+
 In the following example, we map the data to a normalized circle and then re-map it to draw colorful lines.
 
 ```
@@ -196,5 +203,6 @@ s.timeDomainTo( area, position ); // map to a area [w, h] from position [x, y]
 
 s.freqDomain();
 s.freqDomainTo( [10, 5] ); // map to a 10x5 area
+g = s.freqDomainTo( area, position, trim, g ); // reuse a Group across frames
 ```
 

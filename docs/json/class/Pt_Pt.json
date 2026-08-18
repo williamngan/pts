@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Class",
-  "id": 5187,
+  "id": 5190,
   "comment": "Pt is a subclass of standard [`Float32Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array) with additional properties and functions to support vector and geometric calculations.\nSee [Pt guide](../guide/Pt-0200.html) for details.",
   "constructor": [
     {
@@ -20,7 +20,7 @@
           2
         ]
       ],
-      "id": 5220,
+      "id": 5223,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -62,7 +62,7 @@
           6
         ]
       ],
-      "id": 5224,
+      "id": 5227,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -94,7 +94,7 @@
           6
         ]
       ],
-      "id": 5240,
+      "id": 5243,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -126,7 +126,7 @@
           6
         ]
       ],
-      "id": 5228,
+      "id": 5231,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -158,7 +158,7 @@
           6
         ]
       ],
-      "id": 5232,
+      "id": 5235,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -190,7 +190,7 @@
           6
         ]
       ],
-      "id": 5236,
+      "id": 5239,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -219,7 +219,7 @@
           4
         ]
       ],
-      "id": 5584,
+      "id": 5587,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.[Symbol.iterator]",
@@ -242,7 +242,7 @@
           2
         ]
       ],
-      "id": 5338,
+      "id": 5341,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -265,7 +265,7 @@
           2
         ]
       ],
-      "id": 5290,
+      "id": 5293,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -295,7 +295,7 @@
           2
         ]
       ],
-      "id": 5346,
+      "id": 5349,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -318,7 +318,7 @@
           2
         ]
       ],
-      "id": 5284,
+      "id": 5287,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -348,7 +348,7 @@
           2
         ]
       ],
-      "id": 5327,
+      "id": 5330,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -378,7 +378,7 @@
           2
         ]
       ],
-      "id": 5324,
+      "id": 5327,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -408,7 +408,7 @@
           2
         ]
       ],
-      "id": 5308,
+      "id": 5311,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -438,7 +438,7 @@
           2
         ]
       ],
-      "id": 5342,
+      "id": 5345,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -461,7 +461,7 @@
           2
         ]
       ],
-      "id": 5365,
+      "id": 5368,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -491,7 +491,7 @@
           2
         ]
       ],
-      "id": 5362,
+      "id": 5365,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -521,7 +521,7 @@
           2
         ]
       ],
-      "id": 5302,
+      "id": 5305,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -551,7 +551,7 @@
           2
         ]
       ],
-      "id": 5330,
+      "id": 5333,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -581,7 +581,7 @@
           2
         ]
       ],
-      "id": 5350,
+      "id": 5353,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -604,7 +604,7 @@
           2
         ]
       ],
-      "id": 5296,
+      "id": 5299,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -634,7 +634,7 @@
           2
         ]
       ],
-      "id": 5281,
+      "id": 5284,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -664,7 +664,7 @@
           2
         ]
       ],
-      "id": 5253,
+      "id": 5256,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -694,7 +694,7 @@
           2
         ]
       ],
-      "id": 5318,
+      "id": 5321,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -724,7 +724,7 @@
           2
         ]
       ],
-      "id": 5336,
+      "id": 5339,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -747,7 +747,7 @@
           2
         ]
       ],
-      "id": 5287,
+      "id": 5290,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -777,7 +777,7 @@
           2
         ]
       ],
-      "id": 5368,
+      "id": 5371,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -807,7 +807,7 @@
           2
         ]
       ],
-      "id": 5371,
+      "id": 5374,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -843,7 +843,7 @@
           2
         ]
       ],
-      "id": 5344,
+      "id": 5347,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -866,7 +866,7 @@
           2
         ]
       ],
-      "id": 5244,
+      "id": 5247,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -889,7 +889,7 @@
           4
         ]
       ],
-      "id": 5405,
+      "id": 5408,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.copyWithin",
@@ -931,7 +931,7 @@
           2
         ]
       ],
-      "id": 5305,
+      "id": 5308,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -961,7 +961,7 @@
           2
         ]
       ],
-      "id": 5321,
+      "id": 5324,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -991,7 +991,7 @@
           4
         ]
       ],
-      "id": 5574,
+      "id": 5577,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.entries",
@@ -1014,7 +1014,7 @@
           2
         ]
       ],
-      "id": 5246,
+      "id": 5249,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1050,7 +1050,7 @@
           4
         ]
       ],
-      "id": 5410,
+      "id": 5413,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.every",
@@ -1086,7 +1086,7 @@
           4
         ]
       ],
-      "id": 5419,
+      "id": 5422,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.fill",
@@ -1128,7 +1128,7 @@
           4
         ]
       ],
-      "id": 5424,
+      "id": 5427,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.filter",
@@ -1164,7 +1164,7 @@
           4
         ]
       ],
-      "id": 5433,
+      "id": 5436,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.find",
@@ -1200,7 +1200,7 @@
           4
         ]
       ],
-      "id": 5442,
+      "id": 5445,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.findIndex",
@@ -1236,7 +1236,7 @@
           2
         ]
       ],
-      "id": 5340,
+      "id": 5343,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1259,7 +1259,7 @@
           4
         ]
       ],
-      "id": 5451,
+      "id": 5454,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.forEach",
@@ -1295,7 +1295,7 @@
           4
         ]
       ],
-      "id": 5580,
+      "id": 5583,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.includes",
@@ -1331,7 +1331,7 @@
           4
         ]
       ],
-      "id": 5460,
+      "id": 5463,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.indexOf",
@@ -1367,7 +1367,7 @@
           4
         ]
       ],
-      "id": 5464,
+      "id": 5467,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.join",
@@ -1397,7 +1397,7 @@
           4
         ]
       ],
-      "id": 5576,
+      "id": 5579,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.keys",
@@ -1420,7 +1420,7 @@
           4
         ]
       ],
-      "id": 5467,
+      "id": 5470,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.lastIndexOf",
@@ -1456,7 +1456,7 @@
           2
         ]
       ],
-      "id": 5313,
+      "id": 5316,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1479,7 +1479,7 @@
           2
         ]
       ],
-      "id": 5311,
+      "id": 5314,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1502,7 +1502,7 @@
           4
         ]
       ],
-      "id": 5472,
+      "id": 5475,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.map",
@@ -1538,7 +1538,7 @@
           2
         ]
       ],
-      "id": 5357,
+      "id": 5360,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1561,7 +1561,7 @@
           2
         ]
       ],
-      "id": 5352,
+      "id": 5355,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1584,7 +1584,7 @@
           2
         ]
       ],
-      "id": 5299,
+      "id": 5302,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1614,7 +1614,7 @@
           2
         ]
       ],
-      "id": 5261,
+      "id": 5264,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1649,7 +1649,7 @@
           2
         ]
       ],
-      "id": 5271,
+      "id": 5274,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1684,7 +1684,7 @@
           2
         ]
       ],
-      "id": 5333,
+      "id": 5336,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1724,7 +1724,7 @@
           4
         ]
       ],
-      "id": 5481,
+      "id": 5484,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reduce",
@@ -1804,7 +1804,7 @@
           4
         ]
       ],
-      "id": 5509,
+      "id": 5512,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reduceRight",
@@ -1874,7 +1874,7 @@
           2
         ]
       ],
-      "id": 5389,
+      "id": 5392,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1910,7 +1910,7 @@
           4
         ]
       ],
-      "id": 5537,
+      "id": 5540,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.reverse",
@@ -1933,7 +1933,7 @@
           2
         ]
       ],
-      "id": 5379,
+      "id": 5382,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1975,7 +1975,7 @@
           2
         ]
       ],
-      "id": 5348,
+      "id": 5351,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1998,7 +1998,7 @@
           2
         ]
       ],
-      "id": 5375,
+      "id": 5378,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2034,7 +2034,7 @@
           4
         ]
       ],
-      "id": 5539,
+      "id": 5542,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.set",
@@ -2070,7 +2070,7 @@
           2
         ]
       ],
-      "id": 5384,
+      "id": 5387,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2112,7 +2112,7 @@
           4
         ]
       ],
-      "id": 5543,
+      "id": 5546,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.slice",
@@ -2148,7 +2148,7 @@
           4
         ]
       ],
-      "id": 5547,
+      "id": 5550,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.some",
@@ -2184,7 +2184,7 @@
           4
         ]
       ],
-      "id": 5556,
+      "id": 5559,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.sort",
@@ -2214,7 +2214,7 @@
           4
         ]
       ],
-      "id": 5563,
+      "id": 5566,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.subarray",
@@ -2250,7 +2250,7 @@
           2
         ]
       ],
-      "id": 5293,
+      "id": 5296,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2280,7 +2280,7 @@
           2
         ]
       ],
-      "id": 5250,
+      "id": 5253,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2310,7 +2310,7 @@
           2
         ]
       ],
-      "id": 5256,
+      "id": 5259,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2352,7 +2352,7 @@
           2
         ]
       ],
-      "id": 5395,
+      "id": 5398,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2375,7 +2375,7 @@
           2
         ]
       ],
-      "id": 5399,
+      "id": 5402,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2398,7 +2398,7 @@
           2
         ]
       ],
-      "id": 5397,
+      "id": 5400,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2426,7 +2426,7 @@
           4
         ]
       ],
-      "id": 5567,
+      "id": 5570,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.toLocaleString",
@@ -2469,7 +2469,7 @@
           2
         ]
       ],
-      "id": 5393,
+      "id": 5396,
       "flags": {},
       "overrides": "Float32Array.toString",
       "inherits": false,
@@ -2492,7 +2492,7 @@
           2
         ]
       ],
-      "id": 5315,
+      "id": 5318,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -2522,7 +2522,7 @@
           4
         ]
       ],
-      "id": 5572,
+      "id": 5575,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.valueOf",
@@ -2545,7 +2545,7 @@
           4
         ]
       ],
-      "id": 5578,
+      "id": 5581,
       "flags": {},
       "overrides": false,
       "inherits": "Float32Array.values",
@@ -2568,7 +2568,7 @@
           9
         ]
       ],
-      "id": 5188,
+      "id": 5191,
       "flags": {
         "isStatic": true
       },
@@ -2615,7 +2615,7 @@
           13
         ]
       ],
-      "id": 5586,
+      "id": 5589,
       "flags": {
         "isReadonly": true
       },
@@ -2633,7 +2633,7 @@
           13
         ]
       ],
-      "id": 5402,
+      "id": 5405,
       "flags": {
         "isReadonly": true
       },
@@ -2651,7 +2651,7 @@
           13
         ]
       ],
-      "id": 5403,
+      "id": 5406,
       "flags": {
         "isReadonly": true
       },
@@ -2669,7 +2669,7 @@
           13
         ]
       ],
-      "id": 5404,
+      "id": 5407,
       "flags": {
         "isReadonly": true
       },
@@ -2687,7 +2687,7 @@
           13
         ]
       ],
-      "id": 5401,
+      "id": 5404,
       "flags": {
         "isReadonly": true
       },
@@ -2705,7 +2705,7 @@
           13
         ]
       ],
-      "id": 5471,
+      "id": 5474,
       "flags": {
         "isReadonly": true
       },

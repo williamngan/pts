@@ -7707,23 +7707,34 @@ var Sound = class Sound {
 		}
 		return /* @__PURE__ */ new Uint8Array(0);
 	}
-	_domainTo(time, size, position = [0, 0], trim = [0, 0]) {
+	_domainTo(time, size, position = [0, 0], trim = [0, 0], out) {
 		const data = time ? this.timeDomain() : this.freqDomain();
-		const g = new Group();
-		for (let i = trim[0], len = data.length - trim[1]; i < len; i++) g.push(new Pt(position[0] + size[0] * i / len, position[1] + size[1] * data[i] / 255));
+		const g = out || new Group();
+		const len = data.length - trim[1];
+		const count = Math.max(0, len - trim[0]);
+		if (g.length > count) g.length = count;
+		for (let i = trim[0], j = 0; i < len; i++, j++) {
+			const x = position[0] + size[0] * i / len;
+			const y = position[1] + size[1] * data[i] / 255;
+			const p = g[j];
+			if (p && p.length >= 2) {
+				p[0] = x;
+				p[1] = y;
+			} else g[j] = new Pt(x, y);
+		}
 		return g;
 	}
 	timeDomain() {
 		return this._domain(true);
 	}
-	timeDomainTo(size, position = [0, 0], trim = [0, 0]) {
-		return this._domainTo(true, size, position, trim);
+	timeDomainTo(size, position = [0, 0], trim = [0, 0], out) {
+		return this._domainTo(true, size, position, trim, out);
 	}
 	freqDomain() {
 		return this._domain(false);
 	}
-	freqDomainTo(size, position = [0, 0], trim = [0, 0]) {
-		return this._domainTo(false, size, position, trim);
+	freqDomainTo(size, position = [0, 0], trim = [0, 0], out) {
+		return this._domainTo(false, size, position, trim, out);
 	}
 	reset() {
 		this.stop();

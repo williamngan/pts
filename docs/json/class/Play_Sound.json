@@ -469,11 +469,11 @@
       "source": [
         [
           "src/Play.ts",
-          778,
+          797,
           2
         ]
       ],
-      "id": 5184,
+      "id": 5187,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -492,11 +492,11 @@
       "source": [
         [
           "src/Play.ts",
-          668,
+          681,
           2
         ]
       ],
-      "id": 5166,
+      "id": 5168,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -515,11 +515,11 @@
       "source": [
         [
           "src/Play.ts",
-          680,
+          694,
           2
         ]
       ],
-      "id": 5168,
+      "id": 5170,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -546,6 +546,12 @@
               "comment": "Optionally, trim the start and end values by `[startTrim, data.length-endTrim]`",
               "type": "number[]",
               "default": "..."
+            },
+            {
+              "name": "out",
+              "comment": "Optionally, provide a `Group` (usually one returned by a previous call) whose Pts will be reused instead of allocating new ones — recommended when calling once per frame",
+              "type": "Group",
+              "default": false
             }
           ],
           "tags": [
@@ -585,11 +591,11 @@
       "source": [
         [
           "src/Play.ts",
-          687,
+          706,
           2
         ]
       ],
-      "id": 5173,
+      "id": 5176,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -638,11 +644,11 @@
       "source": [
         [
           "src/Play.ts",
-          708,
+          727,
           2
         ]
       ],
-      "id": 5177,
+      "id": 5180,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -668,11 +674,11 @@
       "source": [
         [
           "src/Play.ts",
-          741,
+          760,
           2
         ]
       ],
-      "id": 5180,
+      "id": 5183,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -691,11 +697,11 @@
       "source": [
         [
           "src/Play.ts",
-          649,
+          656,
           2
         ]
       ],
-      "id": 5159,
+      "id": 5160,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -714,11 +720,11 @@
       "source": [
         [
           "src/Play.ts",
-          661,
+          669,
           2
         ]
       ],
-      "id": 5161,
+      "id": 5162,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -745,6 +751,12 @@
               "comment": "Optionally, trim the start and end values by `[startTrim, data.length-endTrim]`",
               "type": "number[]",
               "default": "..."
+            },
+            {
+              "name": "out",
+              "comment": "Optionally, provide a `Group` (usually one returned by a previous call) whose Pts will be reused instead of allocating new ones — recommended when calling once per frame",
+              "type": "Group",
+              "default": false
             }
           ],
           "tags": [
@@ -761,11 +773,11 @@
       "source": [
         [
           "src/Play.ts",
-          765,
+          784,
           2
         ]
       ],
-      "id": 5182,
+      "id": 5185,
       "flags": {},
       "overrides": false,
       "inherits": false,

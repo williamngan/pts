@@ -623,22 +623,29 @@ export class Sound {
     return new Uint8Array(0);
   }
 
-  // Map domain data to another range
+  // Map domain data to another range, reusing the Pts in `out` when provided
   protected _domainTo(
     time: boolean,
     size: PtLike,
     position: PtLike = [0, 0],
     trim = [0, 0],
+    out?: Group,
   ): Group {
     const data = time ? this.timeDomain() : this.freqDomain();
-    const g = new Group();
-    for (let i = trim[0], len = data.length - trim[1]; i < len; i++) {
-      g.push(
-        new Pt(
-          position[0] + (size[0] * i) / len,
-          position[1] + (size[1] * data[i]) / 255,
-        ),
-      );
+    const g = out || new Group();
+    const len = data.length - trim[1];
+    const count = Math.max(0, len - trim[0]);
+    if (g.length > count) g.length = count;
+    for (let i = trim[0], j = 0; i < len; i++, j++) {
+      const x = position[0] + (size[0] * i) / len;
+      const y = position[1] + (size[1] * data[i]) / 255;
+      const p = g[j];
+      if (p && p.length >= 2) {
+        p[0] = x;
+        p[1] = y;
+      } else {
+        g[j] = new Pt(x, y);
+      }
     }
     return g;
   }
@@ -655,11 +662,17 @@ export class Sound {
    * @param size map each data point `[index, value]` to `[width, height]`
    * @param position Optionally, set a starting `[x, y]` position. Default is `[0, 0]`
    * @param trim Optionally, trim the start and end values by `[startTrim, data.length-endTrim]`
+   * @param out Optionally, provide a `Group` (usually one returned by a previous call) whose Pts will be reused instead of allocating new ones — recommended when calling once per frame
    * @returns a Group containing the mapped values
    * @example form.point( s.timeDomainTo( space.size ) )
    */
-  timeDomainTo(size: PtLike, position: PtLike = [0, 0], trim = [0, 0]): Group {
-    return this._domainTo(true, size, position, trim);
+  timeDomainTo(
+    size: PtLike,
+    position: PtLike = [0, 0],
+    trim = [0, 0],
+    out?: Group,
+  ): Group {
+    return this._domainTo(true, size, position, trim, out);
   }
 
   /**
@@ -674,11 +687,17 @@ export class Sound {
    * @param size map each data point `[index, value]` to `[width, height]`
    * @param position Optionally, set a starting `[x, y]` position. Default is `[0, 0]`
    * @param trim Optionally, trim the start and end values by `[startTrim, data.length-endTrim]`
+   * @param out Optionally, provide a `Group` (usually one returned by a previous call) whose Pts will be reused instead of allocating new ones — recommended when calling once per frame
    * @returns a Group containing the mapped values
    * @example `form.point( s.freqDomainTo( space.size ) )`
    */
-  freqDomainTo(size: PtLike, position: PtLike = [0, 0], trim = [0, 0]): Group {
-    return this._domainTo(false, size, position, trim);
+  freqDomainTo(
+    size: PtLike,
+    position: PtLike = [0, 0],
+    trim = [0, 0],
+    out?: Group,
+  ): Group {
+    return this._domainTo(false, size, position, trim, out);
   }
 
   /**
