@@ -178,7 +178,8 @@ type ITempoListener = {
   offset?: number;
   continuous?: boolean;
   index?: number;
-  fn: Function;
+  count?: number;
+  fn: ITempoStartFn | ITempoProgressFn;
 };
 type ITempoResponses = {
   start: (fn: ITempoStartFn, offset?: number, name?: string) => ITempoResponses;
@@ -1450,11 +1451,11 @@ declare class Tempo implements IPlayer {
   set bpm(n: number);
   get ms(): number;
   set ms(n: number);
-  protected _createID(listener: ITempoListener | Function): string;
+  protected _createID(): string;
   every(beats: number | number[]): ITempoResponses;
-  track(time: any): void;
+  track(time: number): void;
   stop(name: string): void;
-  animate(time: any, ftime: any): void;
+  animate(time: number, ftime: number): void;
   resize(bound: Bound, evt?: Event): void;
   action(type: string, px: number, py: number, evt: Event): void;
 }
@@ -1469,12 +1470,19 @@ declare class Sound {
   analyzer: ISoundAnalyzer;
   protected _playing: boolean;
   protected _timestamp: number;
-  constructor(type: SoundType);
-  protected _createAudioContext(): void;
+  protected _wave: PeriodicWave;
+  protected _gain: GainNode;
+  protected _volume: number;
+  protected _connected: AudioNode[];
+  protected _bufferPlayed: boolean;
+  protected _generated: boolean;
+  protected static _sharedContext: AudioContext;
+  constructor(type: SoundType, ctx?: AudioContext);
+  protected static _getContext(): AudioContext;
   static from(node: AudioNode, ctx: AudioContext, type?: SoundType, stream?: MediaStream): Sound;
   static load(source: HTMLMediaElement | string, crossOrigin?: string): Promise<Sound>;
   static loadAsBuffer(url: string): Promise<Sound>;
-  protected createBuffer(buf: AudioBuffer): this;
+  createBuffer(buf?: AudioBuffer): this;
   static generate(type: OscillatorType, val: number | PeriodicWave): Sound;
   protected _gen(type: OscillatorType, val: number | PeriodicWave): Sound;
   static input(constraint?: MediaStreamConstraints): Promise<Sound>;
@@ -1493,20 +1501,24 @@ declare class Sound {
   get sampleRate(): number;
   get frequency(): number;
   set frequency(f: number);
+  get volume(): number;
+  set volume(v: number);
   connect(node: AudioNode): this;
   setOutputNode(outputNode: AudioNode): this;
   removeOutputNode(): this;
   analyze(size?: number, minDb?: number, maxDb?: number, smooth?: number): this;
   protected _domain(time: boolean): Uint8Array;
-  protected _domainTo(time: boolean, size: PtLike, position?: PtLike, trim?: number[]): Group;
+  protected _domainTo(time: boolean, size: PtLike, position?: PtLike, trim?: number[], out?: Group): Group;
   timeDomain(): Uint8Array;
-  timeDomainTo(size: PtLike, position?: PtLike, trim?: number[]): Group;
+  timeDomainTo(size: PtLike, position?: PtLike, trim?: number[], out?: Group): Group;
   freqDomain(): Uint8Array;
-  freqDomainTo(size: PtLike, position?: PtLike, trim?: number[]): Group;
+  freqDomainTo(size: PtLike, position?: PtLike, trim?: number[], out?: Group): Group;
   reset(): this;
+  protected _getGain(): GainNode;
   start(timeAt?: number): this;
   stop(): this;
   toggle(): this;
+  dispose(): this;
 }
 //#endregion
 export { AnimateCallbackFn, Body, Bound, CanvasForm, CanvasPatternRepetition, CanvasSpace, CanvasSpaceOptions, Circle, Color, ColorType, Const, Create, Curve, DOMFormContext, DOMSpace, DefaultFormStyle, Delaunay, DelaunayMesh, DelaunayShape, Font, Form, Geom, Group, GroupLike, HTMLForm, HTMLSpace, IPlayer, IPt, ISoundAnalyzer, ISpacePlayers, ITempoListener, ITempoProgressFn, ITempoResponses, ITempoStartFn, ITimer, Img, ImgOptions, IntersectContext, Line, Mat, MultiTouchElement, MultiTouchSpace, Noise, Num, Particle, Polygon, Pt, PtIterable, PtLike, PtLikeIterable, Range, Rectangle, RenderingContext2D, SVGContext2D, SVGForm, SVGSpace, Shaping, Sound, SoundType, Space, Tempo, TextMeasure, TextVerticalAlign, TouchPointsKey, Triangle, Typography, UI, UIButton, UIDragger, UIHandler, UIPointerAction, UIPointerActions, UIShape, Util, Vec, VisualForm, WarningType, World };

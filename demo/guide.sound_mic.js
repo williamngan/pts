@@ -26,11 +26,15 @@ window.demoDescription = "Microphone demo in Sound guide.";
   function toggleRecord() {
     if ( Geom.withinBound( space.pointer, [0,0], [50,50] ) ) {
       if (!recording) {
-        Sound.input().then( s => { sound = s.analyze( 128 ); });
+        recording = true;
+        Sound.input().then( s => { sound = s.analyze( 128 ); }).catch( e => {
+          recording = false;
+          console.error( e );
+        });
       } else {
+        recording = false;
         sound.stop();
       }
-      recording = !recording;
     }
   }
   

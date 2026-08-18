@@ -56,9 +56,9 @@ everyTen.progress( (count, t, time, isStart) =&gt; ... )
 }) 
 </code></pre>
 <p><img src="./assets/bg.png" alt="js:tempo_shaping"></p>
-<p><strong>Stagger</strong>: You can offset a beat's timing by a small difference to create a &quot;stagger&quot; effect. Specify an offset time (in milliseconds) in the optional second parameter.</p>
+<p><strong>Stagger</strong>: You can offset a beat's timing by a small difference to create a &quot;stagger&quot; effect. Specify an offset time (in milliseconds) in the optional second parameter. A positive offset activates sooner, and a negative offset activates later.</p>
 <pre><code>let fn = (count, t) =&gt; ... ;
-everyTwo.progress( fn, -100 ); // activate 100ms sooner
+everyTwo.progress( fn, 100 ); // activate 100ms sooner
 </code></pre>
 <p><img src="./assets/bg.png" alt="js:tempo_stagger"></p>
 <p><strong>Rhythm</strong>: Set a custom rhythm by passing a list of beats in the <code>every</code> function.</p>
@@ -78,7 +78,7 @@ tempo.bpm += 20; // make it 20 beats faster per minute
    return (count &gt; 5);  // return true will stop this animation
 }
 
-tempo.progress( walking, 0, &quot;robot&quot; );
+tempo.every( 1 ).progress( walking, 0, &quot;robot&quot; );
 tempo.stop( &quot;robot&quot; ); // another way to stop this animation
 </code></pre>
 <h3>Cheat Sheet</h3>

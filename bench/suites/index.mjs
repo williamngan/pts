@@ -8,6 +8,7 @@ import op from "./op.bench.mjs";
 import create from "./create.bench.mjs";
 import color from "./color.bench.mjs";
 import physics from "./physics.bench.mjs";
+import play from "./play.bench.mjs";
 import util from "./util.bench.mjs";
 import typography from "./typography.bench.mjs";
 import scenarios from "./scenarios.bench.mjs";
@@ -21,6 +22,7 @@ export const suites = [
   create,
   color,
   physics,
+  play,
   util,
   typography,
   scenarios,

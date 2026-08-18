@@ -4,8 +4,8 @@
  *
  *   node scripts/bench-browser.mjs [--suite canvas] [--filter text] [--json out]
  *
- * `CanvasForm`, `SVGForm`, `HTMLForm`, `Img`, `Space` and `UI` cannot be
- * measured in Node, and they are where a real sketch spends its frame. This
+ * `CanvasForm`, `SVGForm`, `HTMLForm`, `Img`, `Sound`, `Space` and `UI` cannot
+ * be measured in Node, and they are where a real sketch spends its frame. This
  * runs them in headless Chromium against `dist/pts.js` — the classic script
  * artifact, which is what a `<script>` tag user actually gets.
  *
@@ -50,7 +50,7 @@ if (flags.help) {
     [
       "Usage: node scripts/bench-browser.mjs [options]",
       "",
-      "  --suite <name>   canvas | form | image | space (repeatable)",
+      "  --suite <name>   canvas | form | image | sound | space (repeatable)",
       "  --filter <text>  run only cases whose id contains <text>",
       "  --quick          short timings",
       "  --time <ms>      measurement time per case",

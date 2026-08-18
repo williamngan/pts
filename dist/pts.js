@@ -7627,21 +7627,18 @@ See https://github.com/williamngan/pts for details. */
 			return this._ms;
 		}
 		set ms(n) {
-			this._bpm = Math.floor(6e4 / n);
-			this._ms = 6e4 / this._bpm;
+			this._bpm = 6e4 / n;
+			this._ms = n;
 		}
-		_createID(listener) {
-			let id = "";
-			if (typeof listener === "function") id = "_b" + this._listenerInc++;
-			else id = listener.name || "_b" + this._listenerInc++;
-			return id;
+		_createID() {
+			return "_b" + this._listenerInc++;
 		}
 		every(beats) {
 			const self = this;
 			const p = Array.isArray(beats) ? beats[0] : beats;
 			return {
 				start: function(fn, offset = 0, name) {
-					const id = name || self._createID(fn);
+					const id = name || self._createID();
 					self._listeners[id] = {
 						name: id,
 						beats,
@@ -7649,13 +7646,14 @@ See https://github.com/williamngan/pts for details. */
 						index: 0,
 						offset,
 						duration: -1,
+						count: 0,
 						continuous: false,
 						fn
 					};
 					return this;
 				},
 				progress: function(fn, offset = 0, name) {
-					const id = name || self._createID(fn);
+					const id = name || self._createID();
 					self._listeners[id] = {
 						name: id,
 						beats,
@@ -7663,6 +7661,7 @@ See https://github.com/williamngan/pts for details. */
 						index: 0,
 						offset,
 						duration: -1,
+						count: 0,
 						continuous: true,
 						fn
 					};
@@ -7676,24 +7675,25 @@ See https://github.com/williamngan/pts for details. */
 				const _t = li.offset ? time + li.offset : time;
 				const ms = li.period * this._ms;
 				let isStart = false;
-				if (_t > li.duration + ms) {
+				if (li.duration < 0) {
+					li.duration = _t - _t % this._ms;
+					li.count = li.count || 0;
+					isStart = true;
+				} else if (_t > li.duration + ms) {
 					li.duration = _t - _t % this._ms;
 					if (Array.isArray(li.beats)) {
 						li.index = (li.index + 1) % li.beats.length;
 						li.period = li.beats[li.index];
 					}
+					li.count = (li.count || 0) + 1;
 					isStart = true;
 				}
-				const count = Math.max(0, Math.ceil(Math.floor(li.duration / this._ms) / li.period));
-				const params = li.continuous ? [
-					count,
-					Num.clamp((_t - li.duration) / ms, 0, 1),
-					_t,
-					isStart
-				] : [count];
-				if (li.continuous || isStart) {
-					if (li.fn.apply(li, params)) delete this._listeners[li.name];
-				}
+				let done;
+				if (li.continuous) {
+					const t = Num.clamp((_t - li.duration) / ms, 0, 1);
+					done = li.fn.call(li, li.count, t, _t, isStart);
+				} else if (isStart) done = li.fn.call(li, li.count);
+				if (done) delete this._listeners[li.name];
 			}
 		}
 		stop(name) {
@@ -7706,92 +7706,115 @@ See https://github.com/williamngan/pts for details. */
 		action(type, px, py, evt) {}
 	};
 	var Sound = class Sound {
-		constructor(type) {
+		constructor(type, ctx) {
 			this._playing = false;
+			this._volume = 1;
+			this._connected = [];
+			this._bufferPlayed = false;
+			this._generated = false;
 			this._type = type;
-			this._createAudioContext();
+			this._ctx = ctx || Sound._getContext();
 		}
-		_createAudioContext() {
-			const _ctx = window.AudioContext;
-			if (!_ctx) throw new Error("Your browser doesn't support Web Audio. (No AudioContext)");
-			this._ctx = _ctx ? new _ctx() : void 0;
+		static _getContext() {
+			if (!Sound._sharedContext) {
+				const _ctx = typeof window !== "undefined" ? window.AudioContext : void 0;
+				if (!_ctx) throw new Error("Your browser doesn't support Web Audio. (No AudioContext)");
+				Sound._sharedContext = new _ctx();
+			}
+			return Sound._sharedContext;
 		}
 		static from(node, ctx, type = "gen", stream) {
-			const s = new Sound(type);
+			const s = new Sound(type, ctx);
 			s._node = node;
-			s._ctx = ctx;
 			if (stream) s._stream = stream;
 			return s;
 		}
 		static load(source, crossOrigin = "anonymous") {
 			return new Promise((resolve, reject) => {
 				const s = new Sound("file");
-				s._source = typeof source === "string" ? new Audio(source) : source;
+				if (typeof source === "string") {
+					s._source = new Audio();
+					s._source.crossOrigin = crossOrigin;
+					s._source.src = source;
+				} else {
+					s._source = source;
+					s._source.crossOrigin = crossOrigin;
+				}
 				s._source.autoplay = false;
-				s._source.crossOrigin = crossOrigin;
-				s._source.addEventListener("ended", function() {
-					s._playing = false;
-				});
-				s._source.addEventListener("error", function() {
-					reject("Error loading sound");
-				});
-				s._source.addEventListener("canplaythrough", function() {
-					if (!s._node) s._node = s._ctx.createMediaElementSource(s._source);
+				const onError = () => {
+					s._source.removeEventListener("canplaythrough", ready);
+					reject(/* @__PURE__ */ new Error(`Error loading sound: ${s._source.src || "media element"}`));
+				};
+				const ready = () => {
+					s._source.removeEventListener("error", onError);
+					s._source.addEventListener("ended", function() {
+						s._playing = false;
+					});
+					s._node = s._ctx.createMediaElementSource(s._source);
 					resolve(s);
-				});
+				};
+				if (s._source.readyState >= 4) ready();
+				else {
+					s._source.addEventListener("error", onError, { once: true });
+					s._source.addEventListener("canplaythrough", ready, { once: true });
+					if (s._source.readyState === 0) s._source.load();
+				}
 			});
 		}
 		static loadAsBuffer(url) {
-			return new Promise((resolve, reject) => {
-				const request = new XMLHttpRequest();
-				request.open("GET", url, true);
-				request.responseType = "arraybuffer";
+			return _asyncToGenerator(function* () {
 				const s = new Sound("file");
-				request.onload = function() {
-					s._ctx.decodeAudioData(request.response, function(buffer) {
-						s.createBuffer(buffer);
-						resolve(s);
-					}, (err) => reject("Error decoding audio"));
-				};
-				request.send();
-			});
+				const res = yield fetch(url);
+				if (!res.ok) throw new Error(`Error loading sound: ${url} (status ${res.status})`);
+				try {
+					s.createBuffer(yield s._ctx.decodeAudioData(yield res.arrayBuffer()));
+				} catch (err) {
+					throw Object.assign(/* @__PURE__ */ new Error("Error decoding audio"), { cause: err });
+				}
+				return s;
+			})();
 		}
 		createBuffer(buf) {
+			if (this._node) {
+				this._node.onended = null;
+				this._node.disconnect();
+			}
 			this._node = this._ctx.createBufferSource();
 			if (buf !== void 0) this._buffer = buf;
 			this._node.buffer = this._buffer;
 			this._node.onended = () => {
 				this._playing = false;
 			};
+			this._bufferPlayed = false;
+			if (this.analyzer) this._node.connect(this.analyzer.node);
+			for (const n of this._connected) this._node.connect(n);
 			return this;
 		}
 		static generate(type, val) {
 			return new Sound("gen")._gen(type, val);
 		}
 		_gen(type, val) {
+			if (this._node) this._node.disconnect();
 			this._node = this._ctx.createOscillator();
+			this._generated = true;
 			const osc = this._node;
 			osc.type = type;
-			if (type === "custom") osc.setPeriodicWave(val);
-			else osc.frequency.value = val;
+			if (type === "custom") {
+				this._wave = val;
+				osc.setPeriodicWave(this._wave);
+			} else osc.frequency.value = val;
 			return this;
 		}
 		static input(constraint) {
 			return _asyncToGenerator(function* () {
-				try {
-					const s = new Sound("input");
-					if (!s) return void 0;
-					const c = constraint ? constraint : {
-						audio: true,
-						video: false
-					};
-					s._stream = yield navigator.mediaDevices.getUserMedia(c);
-					s._node = s._ctx.createMediaStreamSource(s._stream);
-					return s;
-				} catch (e) {
-					console.error("Cannot get audio from input device.");
-					return Promise.resolve(null);
-				}
+				const s = new Sound("input");
+				const c = constraint ? constraint : {
+					audio: true,
+					video: false
+				};
+				s._stream = yield navigator.mediaDevices.getUserMedia(c);
+				s._node = s._ctx.createMediaStreamSource(s._stream);
+				return s;
 			})();
 		}
 		get ctx() {
@@ -7826,29 +7849,40 @@ See https://github.com/williamngan/pts for details. */
 			let curr = 0;
 			if (this._buffer) {
 				dur = this._buffer.duration;
-				curr = this._timestamp ? this._ctx.currentTime - this._timestamp : 0;
-			} else {
+				curr = this._timestamp !== void 0 ? this._ctx.currentTime - this._timestamp : 0;
+			} else if (this._source) {
 				dur = this._source.duration;
 				curr = this._source.currentTime;
 			}
-			return curr / dur;
+			return dur > 0 ? Num.clamp(curr / dur, 0, 1) : 0;
 		}
 		get playable() {
-			return this._type === "input" ? this._node !== void 0 : !!this._buffer || this._source.readyState === 4;
+			if (this._type === "input" || this._type === "gen") return this._node !== void 0;
+			return !!this._buffer || this._source !== void 0 && this._source.readyState === 4;
 		}
 		get binSize() {
-			return this.analyzer.size;
+			return this.analyzer ? this.analyzer.size : 0;
 		}
 		get sampleRate() {
 			return this._ctx.sampleRate;
 		}
 		get frequency() {
-			return this._type === "gen" ? this._node.frequency.value : 0;
+			const osc = this._node;
+			return this._type === "gen" && osc && osc.frequency ? osc.frequency.value : 0;
 		}
 		set frequency(f) {
-			if (this._type === "gen") this._node.frequency.value = f;
+			const osc = this._node;
+			if (this._type === "gen" && osc && osc.frequency) osc.frequency.value = f;
+		}
+		get volume() {
+			return this._volume;
+		}
+		set volume(v) {
+			this._volume = Math.max(0, v || 0);
+			if (this._gain) this._gain.gain.value = this._volume;
 		}
 		connect(node) {
+			this._connected.push(node);
 			this._node.connect(node);
 			return this;
 		}
@@ -7861,6 +7895,9 @@ See https://github.com/williamngan/pts for details. */
 			return this;
 		}
 		analyze(size = 256, minDb = -100, maxDb = -30, smooth = .8) {
+			if (this.analyzer && this._node) try {
+				this._node.disconnect(this.analyzer.node);
+			} catch (_unused) {}
 			const a = this._ctx.createAnalyser();
 			a.fftSize = size * 2;
 			a.minDecibels = minDb;
@@ -7882,63 +7919,111 @@ See https://github.com/williamngan/pts for details. */
 			}
 			return /* @__PURE__ */ new Uint8Array(0);
 		}
-		_domainTo(time, size, position = [0, 0], trim = [0, 0]) {
+		_domainTo(time, size, position = [0, 0], trim = [0, 0], out) {
 			const data = time ? this.timeDomain() : this.freqDomain();
-			const g = new Group();
-			for (let i = trim[0], len = data.length - trim[1]; i < len; i++) g.push(new Pt(position[0] + size[0] * i / len, position[1] + size[1] * data[i] / 255));
+			const g = out || new Group();
+			const len = data.length - trim[1];
+			const count = Math.max(0, len - trim[0]);
+			if (g.length > count) g.length = count;
+			for (let i = trim[0], j = 0; i < len; i++, j++) {
+				const x = position[0] + size[0] * i / len;
+				const y = position[1] + size[1] * data[i] / 255;
+				const p = g[j];
+				if (p && p.length >= 2) {
+					p[0] = x;
+					p[1] = y;
+				} else g[j] = new Pt(x, y);
+			}
 			return g;
 		}
 		timeDomain() {
 			return this._domain(true);
 		}
-		timeDomainTo(size, position = [0, 0], trim = [0, 0]) {
-			return this._domainTo(true, size, position, trim);
+		timeDomainTo(size, position = [0, 0], trim = [0, 0], out) {
+			return this._domainTo(true, size, position, trim, out);
 		}
 		freqDomain() {
 			return this._domain(false);
 		}
-		freqDomainTo(size, position = [0, 0], trim = [0, 0]) {
-			return this._domainTo(false, size, position, trim);
+		freqDomainTo(size, position = [0, 0], trim = [0, 0], out) {
+			return this._domainTo(false, size, position, trim, out);
 		}
 		reset() {
 			this.stop();
-			this._node.disconnect();
+			if (this._node) this._node.disconnect();
+			if (this._outputNode) this._outputNode.disconnect();
 			return this;
 		}
+		_getGain() {
+			if (!this._gain) {
+				this._gain = this._ctx.createGain();
+				this._gain.gain.value = this._volume;
+				this._gain.connect(this._ctx.destination);
+			}
+			return this._gain;
+		}
 		start(timeAt = 0) {
-			if (!this._ctx) this._createAudioContext();
-			else if (this._ctx.state === "suspended") this._ctx.resume();
+			if (this._ctx.state === "suspended") this._ctx.resume();
 			if (this._type === "file") {
 				if (this._buffer) {
-					this._node.start(timeAt);
-					this._timestamp = this._ctx.currentTime + timeAt;
+					if (this._playing || this._bufferPlayed || !this._node) {
+						if (this._playing && this.progress < 1) this._node.stop();
+						this.createBuffer();
+					}
+					this._node.start(0, timeAt);
+					this._bufferPlayed = true;
+					this._timestamp = this._ctx.currentTime - timeAt;
 				} else {
-					this._source.play();
 					if (timeAt > 0) this._source.currentTime = timeAt;
+					const played = this._source.play();
+					if (played && played.catch) played.catch(() => {
+						if (this._source.paused) this._playing = false;
+					});
 				}
-			} else if (this._type === "gen") {
-				this._gen(this._node.type, this._node.frequency.value);
+			} else if (this._type === "gen" && this._generated) {
+				if (this._playing) return this;
+				const osc = this._node;
+				this._gen(osc.type, osc.type === "custom" ? this._wave : osc.frequency.value);
 				this._node.start();
-				if (this.analyzer) this._node.connect(this.analyzer.node);
 			}
-			(this._outputNode || this._node).connect(this._ctx.destination);
+			if (this.analyzer) this._node.connect(this.analyzer.node);
+			for (const n of this._connected) this._node.connect(n);
+			(this._outputNode || this._node).connect(this._getGain());
 			this._playing = true;
 			return this;
 		}
 		stop() {
-			if (this._playing) (this._outputNode || this._node).disconnect(this._ctx.destination);
+			if (!this._playing) return this;
+			(this._outputNode || this._node).disconnect(this._gain);
 			if (this._type === "file") {
 				if (this._buffer) {
 					if (this.progress < 1) this._node.stop();
 				} else this._source.pause();
-			} else if (this._type === "gen") this._node.stop();
-			else if (this._type === "input") this._stream.getAudioTracks().forEach((track) => track.stop());
+			} else if (this._type === "gen") {
+				if (this._generated) this._node.stop();
+			} else if (this._type === "input") this._stream.getAudioTracks().forEach((track) => track.stop());
 			this._playing = false;
 			return this;
 		}
 		toggle() {
 			if (this._playing) this.stop();
 			else this.start();
+			return this;
+		}
+		dispose() {
+			this.reset();
+			if (this.analyzer) {
+				this.analyzer.node.disconnect();
+				this.analyzer = void 0;
+			}
+			if (this._gain) {
+				this._gain.disconnect();
+				this._gain = void 0;
+			}
+			this._connected = [];
+			this._stream = void 0;
+			this._source = void 0;
+			this._buffer = void 0;
 			return this;
 		}
 	};
