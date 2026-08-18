@@ -8,7 +8,6 @@
     ]
   ],
   "kind": "Class",
-  "id": 6822,
   "comment": "**`SVGContext2D`** implements the subset of `CanvasRenderingContext2D` that\n[`CanvasForm`](#link) draws through, and renders it as SVG. Consecutive shapes that share\npaint state are merged into single `<path>` elements (\"style runs\"), so the DOM cost per\nframe is proportional to the number of style changes, not the number of shapes. This is\nwhat lets the same sketch run unchanged on canvas and SVG.\n\nCapability notes: blend-mode composites map to `mix-blend-mode`; Porter-Duff composites,\n`clip`, and `putImageData` warn once and no-op. Text metrics come from a hidden canvas, so\n`textBox` layout matches canvas exactly. When shapes with both fill and stroke are merged,\nall fills in a run paint before its strokes — visible only for overlapping same-styled\nshapes.\n\n**Writing your own renderer**: this class is the reference implementation of the rendering\ncontract — any object implementing the same context surface can be handed to\n[`CanvasForm`](#link)'s constructor to become a Pts renderer (a PDF writer, a command\nrecorder, a test snapshotter, and so on). The surface is the subset of\n`CanvasRenderingContext2D` that `CanvasForm` draws through:\n- path verbs: `beginPath`, `moveTo`, `lineTo`, `quadraticCurveTo`, `bezierCurveTo`,\n  `rect`, `arc`, `ellipse`, `closePath`\n- paint: `fill`, `stroke`, `fillRect`, `clearRect`\n- state: `save`, `restore`, `clip`, `scale`\n- style fields: `fillStyle`, `strokeStyle`, `lineWidth`, `lineJoin`, `lineCap`,\n  `globalAlpha`, `globalCompositeOperation`, `setLineDash`, `lineDashOffset`\n- text: `font`, `textAlign`, `textBaseline`, `fillText`, `measureText`\n- images: `drawImage`, `putImageData`\n- gradients: `createLinearGradient`, `createRadialGradient`\n\nA renderer driven by a Space should also expose a frame lifecycle like\n[`SVGContext2D.beginFrame`](#link) / [`SVGContext2D.commitFrame`](#link), called around the\nplayers' animate callbacks. The unit test \"implements every context member that CanvasForm\nuses\" is the compatibility alarm: it fails when a new `CanvasForm` feature touches a\ncontext member a renderer does not implement.",
   "constructor": [
     {
@@ -20,7 +19,6 @@
           2
         ]
       ],
-      "id": 6827,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -52,7 +50,6 @@
           6
         ]
       ],
-      "id": 6860,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -71,7 +68,6 @@
           6
         ]
       ],
-      "id": 6862,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -90,7 +86,6 @@
           6
         ]
       ],
-      "id": 6866,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -111,7 +106,6 @@
           2
         ]
       ],
-      "id": 6904,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -171,7 +165,6 @@
           2
         ]
       ],
-      "id": 6858,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -194,7 +187,6 @@
           2
         ]
       ],
-      "id": 6872,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -217,7 +209,6 @@
           2
         ]
       ],
-      "id": 6890,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -277,7 +268,6 @@
           2
         ]
       ],
-      "id": 6934,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -300,7 +290,6 @@
           2
         ]
       ],
-      "id": 6960,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -323,7 +312,6 @@
           2
         ]
       ],
-      "id": 6874,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -346,7 +334,6 @@
           2
         ]
       ],
-      "id": 6864,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -369,7 +356,6 @@
           2
         ]
       ],
-      "id": 6967,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -417,7 +403,6 @@
           2
         ]
       ],
-      "id": 6973,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -477,7 +462,6 @@
           2
         ]
       ],
-      "id": 6870,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -500,7 +484,6 @@
           2
         ]
       ],
-      "id": 6944,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -560,7 +543,6 @@
           2
         ]
       ],
-      "id": 6912,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -632,7 +614,6 @@
           2
         ]
       ],
-      "id": 6922,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -655,7 +636,6 @@
           2
         ]
       ],
-      "id": 6928,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -703,7 +683,6 @@
           2
         ]
       ],
-      "id": 6936,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -745,7 +724,6 @@
           2
         ]
       ],
-      "id": 6965,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -768,7 +746,6 @@
           2
         ]
       ],
-      "id": 6880,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -804,7 +781,6 @@
           2
         ]
       ],
-      "id": 6941,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -834,7 +810,6 @@
           2
         ]
       ],
-      "id": 6876,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -870,7 +845,6 @@
           2
         ]
       ],
-      "id": 6952,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -893,7 +867,6 @@
           2
         ]
       ],
-      "id": 6884,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -941,7 +914,6 @@
           2
         ]
       ],
-      "id": 6898,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -989,7 +961,6 @@
           2
         ]
       ],
-      "id": 6868,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1012,7 +983,6 @@
           2
         ]
       ],
-      "id": 6956,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1035,7 +1005,6 @@
           2
         ]
       ],
-      "id": 6954,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1058,7 +1027,6 @@
           2
         ]
       ],
-      "id": 6958,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1081,7 +1049,6 @@
           2
         ]
       ],
-      "id": 6962,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1111,7 +1078,6 @@
           2
         ]
       ],
-      "id": 6924,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -1137,7 +1103,6 @@
           2
         ]
       ],
-      "id": 6843,
       "flags": {},
       "type": "string",
       "overrides": false,
@@ -1153,7 +1118,6 @@
           2
         ]
       ],
-      "id": 6830,
       "flags": {},
       "type": "string | SVGGradient",
       "overrides": false,
@@ -1169,7 +1133,6 @@
           2
         ]
       ],
-      "id": 6837,
       "flags": {},
       "type": "string",
       "overrides": false,
@@ -1185,7 +1148,6 @@
           2
         ]
       ],
-      "id": 6835,
       "flags": {},
       "type": "number",
       "overrides": false,
@@ -1201,7 +1163,6 @@
           2
         ]
       ],
-      "id": 6836,
       "flags": {},
       "type": "string",
       "overrides": false,
@@ -1217,7 +1178,6 @@
           2
         ]
       ],
-      "id": 6834,
       "flags": {},
       "type": "string",
       "overrides": false,
@@ -1233,7 +1193,6 @@
           2
         ]
       ],
-      "id": 6840,
       "flags": {},
       "type": "number",
       "overrides": false,
@@ -1249,7 +1208,6 @@
           2
         ]
       ],
-      "id": 6833,
       "flags": {},
       "type": "string",
       "overrides": false,
@@ -1265,7 +1223,6 @@
           2
         ]
       ],
-      "id": 6832,
       "flags": {},
       "type": "number",
       "overrides": false,
@@ -1281,7 +1238,6 @@
           2
         ]
       ],
-      "id": 6831,
       "flags": {},
       "type": "string | SVGGradient",
       "overrides": false,
@@ -1297,7 +1253,6 @@
           2
         ]
       ],
-      "id": 6838,
       "flags": {},
       "type": "string",
       "overrides": false,
@@ -1313,7 +1268,6 @@
           2
         ]
       ],
-      "id": 6839,
       "flags": {},
       "type": "string",
       "overrides": false,

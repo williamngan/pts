@@ -8,7 +8,6 @@
     ]
   ],
   "kind": "Typealias",
-  "id": 7608,
   "comment": "Typescript type: TextVerticalAlign represents the vertical alignment options accepted by [`CanvasForm.textBox`](#link) and [`CanvasForm.paragraphBox`](#link).",
   "constructor": [],
   "accessors": [],

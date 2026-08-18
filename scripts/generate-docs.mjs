@@ -311,7 +311,6 @@ function methodOf(reflection, context) {
   return {
     name: normalizeName(reflection.name),
     source: sourcesOf(reflection),
-    id: reflection.id,
     flags: flagsOf(reflection),
     ...relationFields(reflection),
     signatures: (reflection.signatures ?? []).map((signature) =>
@@ -335,7 +334,6 @@ function accessorOf(reflection, context) {
   return {
     name: normalizeName(reflection.name),
     source: sourcesOf(reflection),
-    id: reflection.id,
     flags: flagsOf(reflection),
     ...relationFields(reflection),
     comment: commentOf(reflection),
@@ -354,7 +352,6 @@ function valueOf(reflection, context, objectLiteral = false) {
   return {
     name: normalizeName(reflection.name),
     source: sourcesOf(reflection),
-    id: reflection.id,
     flags: flagsOf(reflection),
     type: objectLiteral
       ? reflection.name
@@ -429,7 +426,6 @@ function baseDeclaration(reflection) {
     name: reflection.name,
     source: sourcesOf(reflection),
     kind: declarationKind(reflection),
-    id: reflection.id,
     comment: commentOf(reflection),
     constructor: [],
     accessors: [],

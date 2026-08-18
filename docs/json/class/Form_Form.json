@@ -8,7 +8,6 @@
     ]
   ],
   "kind": "Class",
-  "id": 2716,
   "comment": "Form is an abstract class that represents a form that's used in a Space for expressions. Learn more about Space and Form in [this guide](../guide/Space-0500.html).",
   "constructor": [],
   "accessors": [
@@ -21,7 +20,6 @@
           6
         ]
       ],
-      "id": 2720,
       "flags": {},
       "overrides": false,
       "inherits": false,

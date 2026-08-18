@@ -8,7 +8,6 @@
     ]
   ],
   "kind": "Objectliteral",
-  "id": 7793,
   "comment": "**[Experimental]** A set of string constants to represent different UI event types.",
   "constructor": [],
   "accessors": [],
@@ -23,7 +22,6 @@
           2
         ]
       ],
-      "id": 7812,
       "flags": {
         "isReadonly": true
       },
@@ -41,7 +39,6 @@
           2
         ]
       ],
-      "id": 7806,
       "flags": {
         "isReadonly": true
       },
@@ -59,7 +56,6 @@
           2
         ]
       ],
-      "id": 7811,
       "flags": {
         "isReadonly": true
       },
@@ -77,7 +73,6 @@
           2
         ]
       ],
-      "id": 7796,
       "flags": {
         "isReadonly": true
       },
@@ -95,7 +90,6 @@
           2
         ]
       ],
-      "id": 7798,
       "flags": {
         "isReadonly": true
       },
@@ -113,7 +107,6 @@
           2
         ]
       ],
-      "id": 7800,
       "flags": {
         "isReadonly": true
       },
@@ -131,7 +124,6 @@
           2
         ]
       ],
-      "id": 7804,
       "flags": {
         "isReadonly": true
       },
@@ -149,7 +141,6 @@
           2
         ]
       ],
-      "id": 7807,
       "flags": {
         "isReadonly": true
       },
@@ -167,7 +158,6 @@
           2
         ]
       ],
-      "id": 7808,
       "flags": {
         "isReadonly": true
       },
@@ -185,7 +175,6 @@
           2
         ]
       ],
-      "id": 7805,
       "flags": {
         "isReadonly": true
       },
@@ -203,7 +192,6 @@
           2
         ]
       ],
-      "id": 7797,
       "flags": {
         "isReadonly": true
       },
@@ -221,7 +209,6 @@
           2
         ]
       ],
-      "id": 7803,
       "flags": {
         "isReadonly": true
       },
@@ -239,7 +226,6 @@
           2
         ]
       ],
-      "id": 7802,
       "flags": {
         "isReadonly": true
       },
@@ -257,7 +243,6 @@
           2
         ]
       ],
-      "id": 7809,
       "flags": {
         "isReadonly": true
       },
@@ -275,7 +260,6 @@
           2
         ]
       ],
-      "id": 7810,
       "flags": {
         "isReadonly": true
       },
@@ -293,7 +277,6 @@
           2
         ]
       ],
-      "id": 7799,
       "flags": {
         "isReadonly": true
       },
@@ -311,7 +294,6 @@
           2
         ]
       ],
-      "id": 7801,
       "flags": {
         "isReadonly": true
       },
@@ -329,7 +311,6 @@
           2
         ]
       ],
-      "id": 7795,
       "flags": {
         "isReadonly": true
       },

@@ -8,7 +8,6 @@
     ]
   ],
   "kind": "Class",
-  "id": 3825,
   "comment": "Curve class provides static functions to interpolate curves. A curve is usually represented as a Group of 3 or more control points.\nYou can use the static functions as-is, or apply the [`Group.op`](#link) or [`Pt.op`](#link) to enable functional programming.\nSee [Op guide](../guide/Op-0400.html) for details.",
   "constructor": [],
   "accessors": [],
@@ -22,7 +21,6 @@
           9
         ]
       ],
-      "id": 3871,
       "flags": {
         "isStatic": true
       },
@@ -60,7 +58,6 @@
           9
         ]
       ],
-      "id": 3875,
       "flags": {
         "isStatic": true
       },
@@ -98,7 +95,6 @@
           9
         ]
       ],
-      "id": 3879,
       "flags": {
         "isStatic": true
       },
@@ -142,7 +138,6 @@
           9
         ]
       ],
-      "id": 3884,
       "flags": {
         "isStatic": true
       },
@@ -180,7 +175,6 @@
           9
         ]
       ],
-      "id": 3888,
       "flags": {
         "isStatic": true
       },
@@ -224,7 +218,6 @@
           9
         ]
       ],
-      "id": 3861,
       "flags": {
         "isStatic": true
       },
@@ -268,7 +261,6 @@
           9
         ]
       ],
-      "id": 3866,
       "flags": {
         "isStatic": true
       },
@@ -312,7 +304,6 @@
           9
         ]
       ],
-      "id": 3853,
       "flags": {
         "isStatic": true
       },
@@ -350,7 +341,6 @@
           9
         ]
       ],
-      "id": 3857,
       "flags": {
         "isStatic": true
       },
@@ -388,7 +378,6 @@
           9
         ]
       ],
-      "id": 3829,
       "flags": {
         "isStatic": true
       },
@@ -432,7 +421,6 @@
           9
         ]
       ],
-      "id": 3826,
       "flags": {
         "isStatic": true
       },

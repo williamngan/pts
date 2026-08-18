@@ -8,7 +8,6 @@
     ]
   ],
   "kind": "Typealias",
-  "id": 2843,
   "comment": "Options for creating an [`Img`](#link).",
   "constructor": [],
   "accessors": [],

@@ -8,7 +8,6 @@
     ]
   ],
   "kind": "Typealias",
-  "id": 7665,
   "comment": "Typescript type: DelaunayMesh represents an object type that has an array of {key: shape} items, where each shape represents a DelaunayShape.",
   "constructor": [],
   "accessors": [],

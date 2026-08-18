@@ -8,7 +8,6 @@
     ]
   ],
   "kind": "Typealias",
-  "id": 7704,
   "comment": "Typescript type: ITempoListener represents a listener created by Tempo class",
   "constructor": [],
   "accessors": [],

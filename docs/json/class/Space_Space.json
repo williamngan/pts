@@ -8,7 +8,6 @@
     ]
   ],
   "kind": "Class",
-  "id": 6540,
   "comment": "Space is an abstract class that represents a general context for expressing Pts. It's extended through subclasses such as [`CanvasSpace`](#link) and [`SVGSpace`](#link). You can also create your own extension of Space.\nSee [Space guide](../guide/Space-0500.html) for details.",
   "constructor": [],
   "accessors": [
@@ -21,7 +20,6 @@
           6
         ]
       ],
-      "id": 6618,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -45,7 +43,6 @@
           6
         ]
       ],
-      "id": 6598,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -72,7 +69,6 @@
           6
         ]
       ],
-      "id": 6622,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -91,7 +87,6 @@
           13
         ]
       ],
-      "id": 6614,
       "flags": {
         "isPublic": true
       },
@@ -112,7 +107,6 @@
           6
         ]
       ],
-      "id": 6610,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -131,7 +125,6 @@
           6
         ]
       ],
-      "id": 6612,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -150,7 +143,6 @@
           6
         ]
       ],
-      "id": 6616,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -169,7 +161,6 @@
           6
         ]
       ],
-      "id": 6620,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -190,7 +181,6 @@
           2
         ]
       ],
-      "id": 6566,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -220,7 +210,6 @@
           11
         ]
       ],
-      "id": 6628,
       "flags": {
         "isAbstract": true
       },
@@ -245,7 +234,6 @@
           11
         ]
       ],
-      "id": 6630,
       "flags": {
         "isAbstract": true
       },
@@ -270,7 +258,6 @@
           2
         ]
       ],
-      "id": 6563,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -300,7 +287,6 @@
           2
         ]
       ],
-      "id": 6582,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -330,7 +316,6 @@
           2
         ]
       ],
-      "id": 6574,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -360,7 +345,6 @@
           12
         ]
       ],
-      "id": 6579,
       "flags": {
         "isProtected": true
       },
@@ -392,7 +376,6 @@
           2
         ]
       ],
-      "id": 6592,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -422,7 +405,6 @@
           2
         ]
       ],
-      "id": 6560,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -452,7 +434,6 @@
           2
         ]
       ],
-      "id": 6569,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -482,7 +463,6 @@
           2
         ]
       ],
-      "id": 6572,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -505,7 +485,6 @@
           12
         ]
       ],
-      "id": 6595,
       "flags": {
         "isProtected": true
       },
@@ -537,7 +516,6 @@
           2
         ]
       ],
-      "id": 6577,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -560,7 +538,6 @@
           11
         ]
       ],
-      "id": 6624,
       "flags": {
         "isAbstract": true
       },
@@ -598,7 +575,6 @@
           2
         ]
       ],
-      "id": 6585,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -621,7 +597,6 @@
           2
         ]
       ],
-      "id": 6587,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -654,7 +629,6 @@
           12
         ]
       ],
-      "id": 6544,
       "flags": {
         "isProtected": true
       },
@@ -672,7 +646,6 @@
           2
         ]
       ],
-      "id": 6543,
       "flags": {},
       "type": "string",
       "overrides": false,
@@ -688,7 +661,6 @@
           12
         ]
       ],
-      "id": 6547,
       "flags": {
         "isProtected": true
       },
@@ -706,7 +678,6 @@
           12
         ]
       ],
-      "id": 6546,
       "flags": {
         "isProtected": true
       },

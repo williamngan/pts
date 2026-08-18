@@ -8,7 +8,6 @@
     ]
   ],
   "kind": "Class",
-  "id": 2722,
   "comment": "VisualForm is an abstract class that represents a form that can be used to express Pts visually.\nFor example, [`CanvasForm`](#link) is an implementation of VisualForm that draws on [`CanvasSpace`](#link) which represents a html canvas. Learn more about Space and Form in [this guide](../guide/Space-0500.html).",
   "constructor": [],
   "accessors": [
@@ -21,7 +20,6 @@
           6
         ]
       ],
-      "id": 2736,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -45,7 +43,6 @@
           6
         ]
       ],
-      "id": 2728,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -72,7 +69,6 @@
           6
         ]
       ],
-      "id": 2823,
       "flags": {},
       "overrides": false,
       "inherits": "Form.ready",
@@ -96,7 +92,6 @@
           6
         ]
       ],
-      "id": 2732,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -125,7 +120,6 @@
           2
         ]
       ],
-      "id": 2745,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -155,7 +149,6 @@
           11
         ]
       ],
-      "id": 2785,
       "flags": {
         "isAbstract": true
       },
@@ -211,7 +204,6 @@
           11
         ]
       ],
-      "id": 2776,
       "flags": {
         "isAbstract": true
       },
@@ -248,7 +240,6 @@
           2
         ]
       ],
-      "id": 2779,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -278,7 +269,6 @@
           2
         ]
       ],
-      "id": 2748,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -308,7 +298,6 @@
           2
         ]
       ],
-      "id": 2751,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -338,7 +327,6 @@
           11
         ]
       ],
-      "id": 2815,
       "flags": {
         "isAbstract": true
       },
@@ -403,7 +391,6 @@
           11
         ]
       ],
-      "id": 2792,
       "flags": {
         "isAbstract": true
       },
@@ -435,7 +422,6 @@
           2
         ]
       ],
-      "id": 2795,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -465,7 +451,6 @@
           11
         ]
       ],
-      "id": 2766,
       "flags": {
         "isAbstract": true
       },
@@ -514,7 +499,6 @@
           2
         ]
       ],
-      "id": 2771,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -556,7 +540,6 @@
           11
         ]
       ],
-      "id": 2798,
       "flags": {
         "isAbstract": true
       },
@@ -588,7 +571,6 @@
           2
         ]
       ],
-      "id": 2801,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -618,7 +600,6 @@
           11
         ]
       ],
-      "id": 2804,
       "flags": {
         "isAbstract": true
       },
@@ -650,7 +631,6 @@
           2
         ]
       ],
-      "id": 2807,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -680,7 +660,6 @@
           11
         ]
       ],
-      "id": 2743,
       "flags": {
         "isAbstract": true
       },
@@ -705,7 +684,6 @@
           2
         ]
       ],
-      "id": 2782,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -735,7 +713,6 @@
           2
         ]
       ],
-      "id": 2754,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -783,7 +760,6 @@
           2
         ]
       ],
-      "id": 2760,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -831,7 +807,6 @@
           11
         ]
       ],
-      "id": 2810,
       "flags": {
         "isAbstract": true
       },

@@ -8,7 +8,6 @@
     ]
   ],
   "kind": "Class",
-  "id": 3313,
   "comment": "Shaping provides shaping functions to interpolate a value. These are useful for easing and transitions.",
   "constructor": [],
   "accessors": [],
@@ -22,7 +21,6 @@
           9
         ]
       ],
-      "id": 3395,
       "flags": {
         "isStatic": true
       },
@@ -60,7 +58,6 @@
           9
         ]
       ],
-      "id": 3403,
       "flags": {
         "isStatic": true
       },
@@ -98,7 +95,6 @@
           9
         ]
       ],
-      "id": 3399,
       "flags": {
         "isStatic": true
       },
@@ -136,7 +132,6 @@
           9
         ]
       ],
-      "id": 3368,
       "flags": {
         "isStatic": true
       },
@@ -174,7 +169,6 @@
           9
         ]
       ],
-      "id": 3376,
       "flags": {
         "isStatic": true
       },
@@ -212,7 +206,6 @@
           9
         ]
       ],
-      "id": 3372,
       "flags": {
         "isStatic": true
       },
@@ -250,7 +243,6 @@
           9
         ]
       ],
-      "id": 3438,
       "flags": {
         "isStatic": true
       },
@@ -294,7 +286,6 @@
           9
         ]
       ],
-      "id": 3364,
       "flags": {
         "isStatic": true
       },
@@ -332,7 +323,6 @@
           9
         ]
       ],
-      "id": 3427,
       "flags": {
         "isStatic": true
       },
@@ -382,7 +372,6 @@
           9
         ]
       ],
-      "id": 3330,
       "flags": {
         "isStatic": true
       },
@@ -420,7 +409,6 @@
           9
         ]
       ],
-      "id": 3338,
       "flags": {
         "isStatic": true
       },
@@ -458,7 +446,6 @@
           9
         ]
       ],
-      "id": 3334,
       "flags": {
         "isStatic": true
       },
@@ -496,7 +483,6 @@
           9
         ]
       ],
-      "id": 3380,
       "flags": {
         "isStatic": true
       },
@@ -540,7 +526,6 @@
           9
         ]
       ],
-      "id": 3390,
       "flags": {
         "isStatic": true
       },
@@ -584,7 +569,6 @@
           9
         ]
       ],
-      "id": 3385,
       "flags": {
         "isStatic": true
       },
@@ -628,7 +612,6 @@
           9
         ]
       ],
-      "id": 3342,
       "flags": {
         "isStatic": true
       },
@@ -672,7 +655,6 @@
           9
         ]
       ],
-      "id": 3347,
       "flags": {
         "isStatic": true
       },
@@ -716,7 +698,6 @@
           9
         ]
       ],
-      "id": 3314,
       "flags": {
         "isStatic": true
       },
@@ -754,7 +735,6 @@
           9
         ]
       ],
-      "id": 3412,
       "flags": {
         "isStatic": true
       },
@@ -798,7 +778,6 @@
           9
         ]
       ],
-      "id": 3422,
       "flags": {
         "isStatic": true
       },
@@ -842,7 +821,6 @@
           9
         ]
       ],
-      "id": 3318,
       "flags": {
         "isStatic": true
       },
@@ -880,7 +858,6 @@
           9
         ]
       ],
-      "id": 3326,
       "flags": {
         "isStatic": true
       },
@@ -918,7 +895,6 @@
           9
         ]
       ],
-      "id": 3322,
       "flags": {
         "isStatic": true
       },
@@ -956,7 +932,6 @@
           9
         ]
       ],
-      "id": 3433,
       "flags": {
         "isStatic": true
       },
@@ -1000,7 +975,6 @@
           9
         ]
       ],
-      "id": 3417,
       "flags": {
         "isStatic": true
       },
@@ -1044,7 +1018,6 @@
           9
         ]
       ],
-      "id": 3407,
       "flags": {
         "isStatic": true
       },
@@ -1088,7 +1061,6 @@
           9
         ]
       ],
-      "id": 3352,
       "flags": {
         "isStatic": true
       },
@@ -1126,7 +1098,6 @@
           9
         ]
       ],
-      "id": 3360,
       "flags": {
         "isStatic": true
       },
@@ -1164,7 +1135,6 @@
           9
         ]
       ],
-      "id": 3356,
       "flags": {
         "isStatic": true
       },
@@ -1202,7 +1172,6 @@
           9
         ]
       ],
-      "id": 3443,
       "flags": {
         "isStatic": true
       },
