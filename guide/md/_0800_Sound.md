@@ -50,10 +50,10 @@ Sound.loadAsBuffer( "/path/to/hello.mp3" ).then( s => sound = s );
 let sound = Sound.generate( "sine", 120 ); // sine oscillator at 120Hz
 ```
 
-4. Use [`Sound.input`](#play-sound) to get audio from default input device (usually microphone). This will return a Promise object which will resolve when the input device is ready.
+4. Use [`Sound.input`](#play-sound) to get audio from default input device (usually microphone). This will return a Promise object which will resolve when the input device is ready, or reject if the device is unavailable or permission is denied.
 ```
 let sound;
-Sound.input().then( s => sound = s ); // default input device
+Sound.input().then( s => sound = s ).catch( err => ... ); // default input device
 Sound.input( constraints ).then( s => sound = s ); // advanced use cases
 ```
 
@@ -71,6 +71,7 @@ sound.start();
 sound.stop();
 sound.toggle(); // toggle between start and stop
 sound.playing; // boolean to indicate if sound is playing
+sound.volume = 0.5; // change the volume (default is 1)
 ```
 
 ##### Note that current browsers no longer support autoplay. Users will need to express intent to play the sound (eg, with a click). 
@@ -94,13 +95,20 @@ To get the time domain data at current time step, call the [`timeDomain`](#play-
 let td = sound.timeDomain(); 
 ```
 
-Optionaly, use the [`timeDomainTo`](#play-sound) function to map the data to another range, such as a rectangular area. You can then apply various Pts functions to transform and visualize waveforms in a few lines of code.
+Optionally, use the [`timeDomainTo`](#play-sound) function to map the data to another range, such as a rectangular area. You can then apply various Pts functions to transform and visualize waveforms in a few lines of code.
 
 ```
 // fit data into a 200x100 area, starting from position (50, 50)
 let td = sound.timeDomainTo( [200, 100], [50, 50] );
 
 form.points( td ); // visualize as points
+```
+
+Since you'll typically call these functions on every animation frame, you can optionally pass the resulting `Group` back in the last parameter to reuse it, which avoids creating new objects per frame:
+
+```
+let td; // keep a reference across frames
+td = sound.timeDomainTo( [200, 100], [50, 50], [0, 0], td ); // reused
 ```
 
 In the following example, we map the data to a normalized circle and then re-map it to draw colorful lines.
@@ -113,7 +121,7 @@ sound.timeDomainTo( [Const.two_pi, 1] ).map( t => ... );
 
 ##### Click to play and visualize sounds of drum, tambourine, and flute from Philharmonia Orchestra.
 
-In a similar way, we can access the frequency domain data by [`freqDomain`](#play-sound) and [`freqDomainTo`](#play-sound). The frequency bins are calculated by an algorithm called Fast Fourier Transform (FFT). The FFT size is usually 2 times the bin size and they need to be multiples of 2. (Recall that we set bin size to 128 earlier). You can quickly test it with a single line of code:
+In a similar way, we can access the frequency domain data by [`freqDomain`](#play-sound) and [`freqDomainTo`](#play-sound). The frequency bins are calculated by an algorithm called Fast Fourier Transform (FFT). The FFT size is 2 times the bin size and both need to be powers of 2. (Recall that we set bin size to 128 earlier). You can quickly test it with a single line of code:
 
 ```
 form.points( sound.freqDomainTo( space.size ) );
@@ -133,11 +141,11 @@ Currently Safari and iOS can play streaming <audio> element, but don't reliably 
 Sound.loadAsBuffer( "/path/to/hello.mp3" ).then( s => sound = s );
 ```
 
-`AudioBuffer` doesn't support streaming and can only be played once. To replay it, you need to recreate the buffer and reconnect the nodes. Use the convenient [`createBuffer`](#play-sound) function without parameter to re-use the previous buffer.
+`AudioBuffer` doesn't support streaming and its source node can only be played once. Pts recreates the buffer for you when you call [`start`](#play-sound) or [`toggle`](#play-sound) again, so replay just works. If you want to prepare a replay manually, use the convenient [`createBuffer`](#play-sound) function without parameter to re-use the previous buffer.
 
 ```
-// replay the sound by reusing previously loaded buffer
-sound.createBuffer().analyze(bins);
+// optionally, prepare a replay manually by reusing the loaded buffer
+sound.createBuffer();
 ```
 
 For custom use cases with other libraries, you can create an instance using  [`Sound.from`](#play-sound) static method. Here's an example using Tone.js:
@@ -188,12 +196,13 @@ s.toggle();
 
 Getting time domain and frequency domain data
 ```
-s.analyzer( 256 ); // Create analyzer with 256 bins. Call once only.
+s.analyze( 256 ); // Create analyzer with 256 bins
 
 s.timeDomain();
 s.timeDomainTo( area, position ); // map to a area [w, h] from position [x, y]
 
 s.freqDomain();
 s.freqDomainTo( [10, 5] ); // map to a 10x5 area
+g = s.freqDomainTo( area, position, trim, g ); // reuse a Group across frames
 ```
 

@@ -3,12 +3,12 @@
   "source": [
     [
       "src/Types.ts",
-      244,
+      245,
       12
     ]
   ],
   "kind": "Typealias",
-  "id": 7743,
+  "id": 7762,
   "comment": "",
   "constructor": [],
   "accessors": [],

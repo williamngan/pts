@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { Sound } from "../../Play";
-import { Group } from "../../Pt";
+import { Group, Pt } from "../../Pt";
 
 class FakeNode {
   connections: unknown[] = [];
@@ -15,6 +15,10 @@ class FakeNode {
   disconnect(node?: unknown) {
     this.disconnects.push(node);
   }
+}
+
+class FakeGain extends FakeNode {
+  gain = { value: 1 };
 }
 
 class FakeOscillator extends FakeNode {
@@ -40,11 +44,11 @@ class FakeOscillator extends FakeNode {
 class FakeBufferSource extends FakeNode {
   buffer: AudioBuffer;
   onended: () => void;
-  starts: number[] = [];
+  starts: [number, number][] = [];
   stopped = 0;
 
-  start(time = 0) {
-    this.starts.push(time);
+  start(when = 0, offset = 0) {
+    this.starts.push([when, offset]);
   }
 
   stop() {
@@ -86,6 +90,7 @@ class FakeAudioContext {
   destination = new FakeNode();
   createdOscillators: FakeOscillator[] = [];
   createdBuffers: FakeBufferSource[] = [];
+  createdGains: FakeGain[] = [];
   resumed = 0;
 
   createOscillator() {
@@ -104,6 +109,12 @@ class FakeAudioContext {
     return source;
   }
 
+  createGain() {
+    const gain = new FakeGain();
+    this.createdGains.push(gain);
+    return gain;
+  }
+
   createMediaElementSource() {
     return new FakeNode();
   }
@@ -112,8 +123,8 @@ class FakeAudioContext {
     return new FakeNode();
   }
 
-  decodeAudioData(_data: ArrayBuffer, success: (buffer: AudioBuffer) => void) {
-    success({ duration: 4 } as AudioBuffer);
+  decodeAudioData(_data: ArrayBuffer): Promise<AudioBuffer> {
+    return Promise.resolve({ duration: 4 } as AudioBuffer);
   }
 
   resume() {
@@ -126,24 +137,67 @@ class FakeAudioContext {
 class FakeMedia extends EventTarget {
   autoplay = true;
   crossOrigin = "";
+  src = "";
   duration = 10;
   currentTime = 2;
   readyState = 4;
+  paused = true; // mirrors HTMLMediaElement.paused
   played = 0;
-  paused = 0;
+  pauseCalls = 0;
+  loads = 0;
 
   play() {
     this.played++;
+    this.paused = false;
     return Promise.resolve();
   }
 
   pause() {
-    this.paused++;
+    this.pauseCalls++;
+    this.paused = true;
+  }
+
+  load() {
+    this.loads++;
   }
 }
 
+class BlockedMedia extends FakeMedia {
+  play() {
+    this.played++;
+    return Promise.reject(new Error("autoplay blocked"));
+  }
+}
+
+class LegacyMedia extends FakeMedia {
+  play() {
+    this.played++;
+    this.paused = false;
+    return undefined; // some older implementations return no promise
+  }
+}
+
+class FakeAudio extends FakeMedia {
+  static created: FakeAudio[] = [];
+  readyState = 0; // a fresh element has loaded nothing yet
+
+  constructor(src?: string) {
+    super();
+    if (src !== undefined) this.src = src;
+    FakeAudio.created.push(this);
+  }
+}
+
+const okFetch = () =>
+  vi.fn().mockResolvedValue({
+    ok: true,
+    arrayBuffer: () => Promise.resolve(new ArrayBuffer(2)),
+  });
+
 beforeEach(() => {
   vi.stubGlobal("AudioContext", FakeAudioContext);
+  (Sound as any)._sharedContext = undefined; // never reuse a stale fake context
+  FakeAudio.created.length = 0;
 });
 
 afterEach(() => {
@@ -157,11 +211,23 @@ describe("Sound construction and generated audio", () => {
     expect(() => new Sound("gen")).toThrow(/doesn't support Web Audio/);
   });
 
+  it("shares one AudioContext across instances by default", () => {
+    const a = Sound.generate("sine", 100);
+    const b = Sound.generate("sine", 200);
+    expect(a.ctx).toBe(b.ctx);
+    const own = new FakeAudioContext();
+    const c = new Sound("gen", own as unknown as AudioContext);
+    expect(c.ctx).toBe(own);
+  });
+
   it("generates, controls, analyzes, maps, connects, and resets a tone", () => {
     const sound = Sound.generate("sine", 440);
     expect(sound.type).toBe("gen");
     expect(sound.ctx).toBeInstanceOf(FakeAudioContext);
     expect(sound.node).toBeInstanceOf(FakeOscillator);
+    expect(sound.playable).toBe(true);
+    expect(sound.progress).toBe(0);
+    expect(sound.binSize).toBe(0);
     expect(sound.frequency).toBe(440);
     expect(sound.sampleRate).toBe(48_000);
     sound.frequency = 220;
@@ -190,15 +256,170 @@ describe("Sound construction and generated audio", () => {
     expect(sound.playing).toBe(true);
     sound.reset();
     expect(sound.playing).toBe(false);
+    sound.reset(); // reset when already stopped is a no-op
   });
 
-  it("creates custom oscillators and exposes empty domains without analysis", () => {
+  it("controls volume through a gain node before and during playback", () => {
+    const sound = Sound.generate("sine", 440);
+    sound.volume = 0.5; // before the gain node exists
+    expect(sound.volume).toBe(0.5);
+    sound.start();
+    const ctx = sound.ctx as unknown as FakeAudioContext;
+    expect(ctx.createdGains).toHaveLength(1);
+    const gain = ctx.createdGains[0];
+    expect(gain.gain.value).toBe(0.5);
+    expect(gain.connections).toContain(ctx.destination);
+    expect((sound.node as unknown as FakeNode).connections).toContain(gain);
+    sound.volume = 2; // amplification allowed
+    expect(gain.gain.value).toBe(2);
+    sound.volume = -1; // negative clamps to 0
+    expect(sound.volume).toBe(0);
+    sound.stop();
+    expect((sound.node as unknown as FakeNode).disconnects).toContain(gain);
+  });
+
+  it("restores custom waves and connected chains when restarting", () => {
     const wave = {} as PeriodicWave;
     const custom = Sound.generate("custom", wave);
     expect((custom.node as unknown as FakeOscillator).wave).toBe(wave);
     expect(custom.timeDomain()).toHaveLength(0);
     expect(custom.freqDomain()).toHaveLength(0);
 
+    const filter = new FakeNode();
+    custom.connect(filter as unknown as AudioNode);
+    custom.analyze(4);
+    custom.start().stop();
+    custom.start(); // restart rebuilds the oscillator
+    const osc = custom.node as unknown as FakeOscillator;
+    expect(osc.wave).toBe(wave); // the wave survives the rebuild
+    expect(osc.connections).toContain(filter); // so does the filter chain
+    expect(osc.connections.some((n) => n instanceof FakeAnalyser)).toBe(true);
+  });
+
+  it("reuses a provided output group without allocating new Pts", () => {
+    const sound = Sound.generate("sine", 440).analyze(4);
+    const out = sound.freqDomainTo([40, 20]);
+    expect(out).toHaveLength(4);
+    const pts = [...out];
+
+    const again = sound.freqDomainTo([40, 20], [0, 0], [0, 0], out);
+    expect(again).toBe(out);
+    again.forEach((p, i) => {
+      expect(p).toBe(pts[i]); // same Pt instances, mutated in place
+      expect(p[1]).toBeCloseTo((20 * i * 10) / 255, 5); // values still correct
+    });
+
+    // trimming shrinks the reused group
+    const trimmed = sound.freqDomainTo([40, 20], [0, 0], [1, 1], out);
+    expect(trimmed).toBe(out);
+    expect(out).toHaveLength(2);
+
+    // growing back allocates only the missing Pts, and replaces unusable ones
+    (out as any)[0] = new Pt([7]); // a 1-dimensional Pt cannot be reused
+    const grown = sound.timeDomainTo([40, 20], [0, 0], [0, 0], out);
+    expect(grown).toHaveLength(4);
+    expect(grown[0].length).toBeGreaterThanOrEqual(2);
+    expect(grown[1]).toBe(pts[1]); // surviving Pt reused
+  });
+
+  it("ignores start while a generated sound is already playing", () => {
+    const sound = Sound.generate("sine", 440);
+    sound.start();
+    const ctx = sound.ctx as unknown as FakeAudioContext;
+    const node = sound.node;
+    const oscillators = ctx.createdOscillators.length;
+    sound.start(); // would orphan a still-sounding oscillator
+    expect(ctx.createdOscillators.length).toBe(oscillators);
+    expect(sound.node).toBe(node);
+    expect(sound.playing).toBe(true);
+  });
+
+  it("does not replace an external node given to Sound.from with default gen type", () => {
+    const node = new FakeNode();
+    const context = new FakeAudioContext();
+    const sound = Sound.from(
+      node as unknown as AudioNode,
+      context as unknown as AudioContext,
+    );
+    expect(sound.type).toBe("gen");
+    expect(sound.frequency).toBe(0); // external node has no oscillator frequency
+    sound.frequency = 999; // ignored, no crash
+    sound.start();
+    expect(sound.node).toBe(node); // never swapped for an oscillator
+    expect(node.connections).toContain(context.createdGains[0]);
+    sound.stop(); // must not call OscillatorNode.stop on the external node
+    expect(sound.playing).toBe(false);
+  });
+
+  it("returns zero frequency for a generated sound without a node", () => {
+    const bare = new Sound("gen");
+    expect(bare.frequency).toBe(0);
+    bare.frequency = 100; // no crash
+  });
+
+  it("clamps invalid volume values", () => {
+    const sound = Sound.generate("sine", 440);
+    sound.volume = NaN;
+    expect(sound.volume).toBe(0);
+    sound.volume = -3;
+    expect(sound.volume).toBe(0);
+    sound.volume = 1.5;
+    expect(sound.volume).toBe(1.5);
+  });
+
+  it("restores analyzer and filter chains when starting after reset", async () => {
+    const media = new FakeMedia();
+    const sound = await Sound.load(media as unknown as HTMLMediaElement);
+    const filter = new FakeNode();
+    sound.analyze(4).connect(filter as unknown as AudioNode);
+    sound.reset(); // disconnects everything from the media node
+    const node = sound.node as unknown as FakeNode;
+    const before = node.connections.length;
+    sound.start();
+    const restored = node.connections.slice(before);
+    expect(restored.some((n) => n instanceof FakeAnalyser)).toBe(true);
+    expect(restored).toContain(filter);
+  });
+
+  it("replaces the analyzer when analyze is called again", () => {
+    const sound = Sound.generate("sine", 440);
+    sound.analyze(4);
+    const first = sound.analyzer.node;
+    sound.analyze(8);
+    expect(sound.analyzer.node).not.toBe(first);
+    expect(sound.binSize).toBe(8);
+    expect((sound.node as unknown as FakeNode).disconnects).toContain(first);
+  });
+
+  it("resumes a suspended AudioContext on start", () => {
+    const sound = Sound.generate("sine", 440);
+    const ctx = sound.ctx as unknown as FakeAudioContext;
+    ctx.state = "suspended";
+    sound.start();
+    expect(ctx.resumed).toBe(1);
+    expect(sound.playing).toBe(true);
+  });
+
+  it("connects and disconnects externally managed node types on start/stop", () => {
+    const node = new FakeNode();
+    const context = new FakeAudioContext();
+    const sound = Sound.from(
+      node as unknown as AudioNode,
+      context as unknown as AudioContext,
+      "external" as any,
+    );
+    expect(sound.stream).toBeUndefined();
+    expect(sound.frequency).toBe(0);
+    sound.frequency = 999; // ignored for non-generated sounds
+    sound.start();
+    expect(sound.playing).toBe(true);
+    expect(node.connections).toContain(context.createdGains[0]);
+    sound.stop();
+    expect(sound.playing).toBe(false);
+    expect(node.disconnects).toContain(context.createdGains[0]);
+  });
+
+  it("passes a stream through Sound.from", () => {
     const node = new FakeNode();
     const context = new FakeAudioContext();
     const stream = { id: "stream" } as unknown as MediaStream;
@@ -211,70 +432,245 @@ describe("Sound construction and generated audio", () => {
     expect(from.node).toBe(node);
     expect(from.ctx).toBe(context);
     expect(from.stream).toBe(stream);
-    expect(from.frequency).toBe(0);
-    from.frequency = 999;
+  });
+
+  it("disposes nodes and references without closing the context", () => {
+    const sound = Sound.generate("sine", 440).analyze(4);
+    const output = new FakeNode();
+    sound.setOutputNode(output as unknown as AudioNode);
+    sound.start();
+    const ctx = sound.ctx;
+    const gain = (sound.ctx as unknown as FakeAudioContext).createdGains[0];
+    sound.dispose();
+    expect(sound.playing).toBe(false);
+    expect(sound.analyzer).toBeUndefined();
+    expect(output.disconnects.length).toBeGreaterThan(0);
+    expect(gain.disconnects.length).toBeGreaterThan(0);
+    expect(sound.ctx).toBe(ctx); // context stays usable
+
+    const bare = Sound.generate("sine", 440);
+    bare.dispose(); // no analyzer, gain, or playback: still safe
+    expect(bare.playing).toBe(false);
   });
 });
 
 describe("Sound file and buffer sources", () => {
-  it("loads media elements, tracks progress/end/error, and plays from an offset", async () => {
+  it("resolves immediately for an already-buffered element", async () => {
     const media = new FakeMedia();
-    const promise = Sound.load(
+    const sound = await Sound.load(
       media as unknown as HTMLMediaElement,
       "use-credentials",
     );
-    media.dispatchEvent(new Event("canplaythrough"));
-    const sound = await promise;
 
     expect(sound.source).toBe(media);
     expect(sound.playable).toBe(true);
     expect(sound.progress).toBe(0.2);
     expect(media.autoplay).toBe(false);
     expect(media.crossOrigin).toBe("use-credentials");
-    sound.start(3);
+    expect(media.loads).toBe(0);
+
+    sound.start(3); // seeks before playing
     expect(media.played).toBe(1);
     expect(media.currentTime).toBe(3);
     sound.stop();
-    expect(media.paused).toBe(1);
+    expect(media.pauseCalls).toBe(1);
     media.dispatchEvent(new Event("ended"));
     expect(sound.playing).toBe(false);
-
-    const broken = new FakeMedia();
-    const rejection = Sound.load(broken as unknown as HTMLMediaElement);
-    broken.dispatchEvent(new Event("error"));
-    await expect(rejection).rejects.toBe("Error loading sound");
   });
 
-  it("creates, reuses, starts, and stops an audio buffer", () => {
+  it("waits for canplaythrough on an unloaded element and rejects on error", async () => {
+    const media = new FakeMedia();
+    media.readyState = 0;
+    const promise = Sound.load(media as unknown as HTMLMediaElement);
+    expect(media.loads).toBe(1); // kicks off loading (eg, preload="none")
+    media.readyState = 4;
+    media.dispatchEvent(new Event("canplaythrough"));
+    const sound = await promise;
+    expect(sound.playable).toBe(true);
+
+    const partial = new FakeMedia();
+    partial.readyState = 2; // already loading: no extra load() call
+    const pending = Sound.load(partial as unknown as HTMLMediaElement);
+    expect(partial.loads).toBe(0);
+    partial.dispatchEvent(new Event("canplaythrough"));
+    await pending;
+
+    const broken = new FakeMedia();
+    broken.readyState = 0;
+    const rejection = Sound.load(broken as unknown as HTMLMediaElement);
+    broken.dispatchEvent(new Event("error"));
+    await expect(rejection).rejects.toThrow(/Error loading sound/);
+  });
+
+  it("loads from a url string with CORS set before src", async () => {
+    vi.stubGlobal("Audio", FakeAudio);
+    const promise = Sound.load("/song.mp3");
+    const media = FakeAudio.created[0];
+    expect(media.src).toBe("/song.mp3");
+    expect(media.crossOrigin).toBe("anonymous");
+    expect(media.loads).toBe(1);
+    media.dispatchEvent(new Event("canplaythrough"));
+    const sound = await promise;
+    expect(sound.source).toBe(media);
+    const node = sound.node;
+    media.dispatchEvent(new Event("canplaythrough")); // repeated ready event is inert
+    expect(sound.node).toBe(node);
+  });
+
+  it("keeps media position on a default start and ignores stop when idle", async () => {
+    const media = new FakeMedia();
+    const sound = await Sound.load(media as unknown as HTMLMediaElement);
+
+    sound.stop(); // never started: nothing happens
+    expect((sound.node as unknown as FakeNode).disconnects).toHaveLength(0);
+    expect(media.pauseCalls).toBe(0);
+
+    sound.start();
+    expect(media.played).toBe(1);
+    expect(media.currentTime).toBe(2);
+  });
+
+  it("recovers when autoplay is blocked and tolerates promise-less play", async () => {
+    const media = new BlockedMedia();
+    const sound = await Sound.load(media as unknown as HTMLMediaElement);
+    sound.start();
+    expect(sound.playing).toBe(true); // optimistic until the rejection lands
+    await new Promise((r) => setTimeout(r, 0));
+    expect(sound.playing).toBe(false); // rejection observed, still paused
+
+    sound.start();
+    media.paused = false; // as if a later trusted start succeeded
+    await new Promise((r) => setTimeout(r, 0));
+    expect(sound.playing).toBe(true); // stale rejection must not flip it back
+
+    const legacy = new LegacyMedia();
+    const older = await Sound.load(legacy as unknown as HTMLMediaElement);
+    older.start(); // play() returns undefined: no crash
+    expect(older.playing).toBe(true);
+  });
+
+  it("creates, starts, seeks, and stops an audio buffer", () => {
     const sound = new Sound("file");
+    expect(sound.playable).toBe(false);
+    expect(sound.progress).toBe(0);
+    sound.reset(); // safe with no node
+
     const buffer = { duration: 10 } as AudioBuffer;
     sound.buffer = buffer;
     expect(sound.buffer).toBe(buffer);
-    (sound as any).createBuffer(buffer);
+    sound.createBuffer(buffer);
     expect(sound.playable).toBe(true);
+    expect(sound.progress).toBe(0); // not started yet
+
     sound.start(1);
+    const node = sound.node as unknown as FakeBufferSource;
+    expect(node.starts).toEqual([[0, 1]]); // seek offset, not a delay
     expect(sound.playing).toBe(true);
-    expect(sound.progress).toBe(-0.1);
+    expect(sound.progress).toBe(0.1); // (currentTime 5 - timestamp 4) / duration 10
     sound.stop();
+    expect(node.stopped).toBe(1);
     expect(sound.playing).toBe(false);
-    (sound as any).createBuffer(undefined);
+
+    sound.createBuffer(); // re-use existing buffer
     expect((sound.node as unknown as FakeBufferSource).buffer).toBe(buffer);
     (sound.node as unknown as FakeBufferSource).onended();
     expect(sound.playing).toBe(false);
   });
 
-  it("loads and decodes an XMLHttpRequest buffer", async () => {
-    class FakeRequest {
-      responseType = "";
-      response = new ArrayBuffer(2);
-      onload: () => void;
-      open = vi.fn();
-      send = () => this.onload();
-    }
-    vi.stubGlobal("XMLHttpRequest", FakeRequest);
+  it("seeks by re-creating the buffer node when starting while playing", () => {
+    const sound = new Sound("file");
+    sound.createBuffer({ duration: 10 } as AudioBuffer);
+    const filter = new FakeNode();
+    sound.connect(filter as unknown as AudioNode);
+    const ctx = sound.ctx as unknown as FakeAudioContext;
+
+    sound.start();
+    const first = sound.node as unknown as FakeBufferSource;
+    sound.start(5); // seek while playing
+    expect(first.stopped).toBe(1); // old node stopped before replacement
+    expect(ctx.createdBuffers).toHaveLength(2);
+    const second = sound.node as unknown as FakeBufferSource;
+    expect(second.starts).toEqual([[0, 5]]);
+    expect(second.connections).toContain(filter); // chain survives re-creation
+    expect(sound.playing).toBe(true);
+
+    ctx.currentTime += 100; // playback ran past the end
+    sound.start(2); // seek again: the ended node must not be stopped
+    expect(second.stopped).toBe(0);
+    expect(ctx.createdBuffers).toHaveLength(3);
+    expect((sound.node as unknown as FakeBufferSource).starts).toEqual([
+      [0, 2],
+    ]);
+  });
+
+  it("creates the buffer node automatically when only a buffer was assigned", () => {
+    const sound = new Sound("file");
+    sound.buffer = { duration: 4 } as AudioBuffer;
+    sound.start();
+    expect(sound.node).toBeInstanceOf(FakeBufferSource);
+    expect((sound.node as unknown as FakeBufferSource).starts).toEqual([
+      [0, 0],
+    ]);
+    expect(sound.playing).toBe(true);
+  });
+
+  it("re-creates a used buffer node on start so replay and toggle work", () => {
+    const sound = new Sound("file");
+    sound.createBuffer({ duration: 10 } as AudioBuffer);
+    sound.analyze(4);
+    const ctx = sound.ctx as unknown as FakeAudioContext;
+    sound.start();
+    expect(ctx.createdBuffers).toHaveLength(1);
+    sound.stop();
+    sound.toggle(); // restart re-creates the one-shot node
+    expect(ctx.createdBuffers).toHaveLength(2);
+    const replay = sound.node as unknown as FakeBufferSource;
+    expect(replay.connections.some((n) => n instanceof FakeAnalyser)).toBe(
+      true,
+    );
+    expect(sound.playing).toBe(true);
+  });
+
+  it("skips the buffer node stop once playback has run past its end", () => {
+    const sound = new Sound("file");
+    sound.createBuffer({ duration: 10 } as AudioBuffer);
+    sound.start();
+    (sound.ctx as unknown as FakeAudioContext).currentTime = 500;
+    expect(sound.progress).toBe(1); // clamped
+    sound.stop();
+    expect(sound.playing).toBe(false);
+    expect((sound.node as unknown as FakeBufferSource).stopped).toBe(0);
+  });
+
+  it("loads and decodes a buffer via fetch", async () => {
+    vi.stubGlobal("fetch", okFetch());
     const sound = await Sound.loadAsBuffer("/audio.bin");
     expect(sound.buffer.duration).toBe(4);
     expect(sound.node).toBeInstanceOf(FakeBufferSource);
+  });
+
+  it("rejects when the sound file request fails", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({ ok: false, status: 404 }),
+    );
+    await expect(Sound.loadAsBuffer("/missing.bin")).rejects.toThrow(
+      /Error loading sound.*404/,
+    );
+  });
+
+  it("rejects when audio data cannot be decoded", async () => {
+    class FailingContext extends FakeAudioContext {
+      decodeAudioData(): Promise<AudioBuffer> {
+        return Promise.reject(new Error("bad data"));
+      }
+    }
+    vi.stubGlobal("AudioContext", FailingContext);
+    (Sound as any)._sharedContext = undefined;
+    vi.stubGlobal("fetch", okFetch());
+    await expect(Sound.loadAsBuffer("/audio.bin")).rejects.toThrow(
+      /Error decoding audio/,
+    );
   });
 });
 
@@ -292,20 +688,19 @@ describe("Sound input", () => {
     expect(sound.type).toBe("input");
     expect(sound.stream).toBe(stream);
     expect(sound.playable).toBe(true);
+    expect(sound.progress).toBe(0);
     sound.start().stop();
     expect(track.stop).toHaveBeenCalledOnce();
   });
 
-  it("returns null when microphone access fails", async () => {
+  it("rejects when microphone access fails", async () => {
     vi.stubGlobal("navigator", {
       mediaDevices: {
-        getUserMedia: vi.fn().mockRejectedValue(new Error("no")),
+        getUserMedia: vi.fn().mockRejectedValue(new Error("denied")),
       },
     });
-    const error = vi.spyOn(console, "error").mockImplementation(() => {});
     await expect(
       Sound.input({ audio: { echoCancellation: true } }),
-    ).resolves.toBeNull();
-    expect(error).toHaveBeenCalledWith("Cannot get audio from input device.");
+    ).rejects.toThrow("denied");
   });
 });

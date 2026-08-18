@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Typealias",
-  "id": 7669,
+  "id": 7687,
   "comment": "Typescript type: DOMFormContext represents the current context for an DOMForm.",
   "constructor": [],
   "accessors": [],

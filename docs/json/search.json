@@ -6294,6 +6294,12 @@
     6
   ],
   [
+    "Play_Sound#accessor_volume",
+    "Sound.volume",
+    "Accessor",
+    6
+  ],
+  [
     "Play_Sound#function_analyze",
     "Sound.analyze",
     "Function",
@@ -6308,6 +6314,12 @@
   [
     "Play_Sound#function_createBuffer",
     "Sound.createBuffer",
+    "Function",
+    8
+  ],
+  [
+    "Play_Sound#function_dispose",
+    "Sound.dispose",
     "Function",
     8
   ],

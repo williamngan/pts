@@ -3,12 +3,12 @@
   "source": [
     [
       "src/Play.ts",
-      196,
+      195,
       13
     ]
   ],
   "kind": "Class",
-  "id": 5052,
+  "id": 5051,
   "comment": "Sound class simplifies common tasks like audio inputs and visualizations using a subset of Web Audio API. It can be used with other audio libraries like tone.js, and extended to support additional web audio functions. See [the guide](../guide/Sound-0800.html) to get started.",
   "constructor": [
     {
@@ -16,17 +16,17 @@
       "source": [
         [
           "src/Play.ts",
-          232,
+          248,
           2
         ]
       ],
-      "id": 5073,
+      "id": 5075,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
-          "comment": "Construct a `Sound` instance. Usually, it's more convenient to use one of the static methods like [`Sound.load`](#function_load) or [`Sound.from`](#function_from).",
+          "comment": "Construct a `Sound` instance. Usually, it's more convenient to use one of the static methods like [`Sound.load`](#function_load) or [`Sound.from`](#function_from).\nBy default, all instances share a single `AudioContext` (browsers limit how many can be live at once).",
           "returns": "Sound",
           "returns_comment": false,
           "parameters": [
@@ -34,6 +34,12 @@
               "name": "type",
               "comment": "a `SoundType` string: \"file\", \"input\", or \"gen\"",
               "type": "SoundType",
+              "default": false
+            },
+            {
+              "name": "ctx",
+              "comment": "Optionally provide your own AudioContext instead of the shared one",
+              "type": "AudioContext",
               "default": false
             }
           ],
@@ -48,15 +54,15 @@
       "source": [
         [
           "src/Play.ts",
-          476,
+          520,
           6
         ]
       ],
-      "id": 5117,
+      "id": 5124,
       "flags": {},
       "overrides": false,
       "inherits": false,
-      "comment": "If an analyzer is added (see [`analyze`](##unction_analyze) function), get the number of frequency bins in the analyzer.",
+      "comment": "If an analyzer is added (see [`analyze`](#function_analyze) function), get the number of frequency bins in the analyzer. Returns 0 if no analyzer is added.",
       "getter": {
         "type": "number"
       },
@@ -67,16 +73,16 @@
       "source": [
         [
           "src/Play.ts",
-          426,
+          463,
           6
         ],
         [
           "src/Play.ts",
-          429,
+          466,
           6
         ]
       ],
-      "id": 5105,
+      "id": 5112,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -99,11 +105,11 @@
       "source": [
         [
           "src/Play.ts",
-          391,
+          428,
           6
         ]
       ],
-      "id": 5095,
+      "id": 5102,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -118,16 +124,16 @@
       "source": [
         [
           "src/Play.ts",
-          490,
+          534,
           6
         ],
         [
           "src/Play.ts",
-          495,
+          540,
           6
         ]
       ],
-      "id": 5121,
+      "id": 5128,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -150,11 +156,11 @@
       "source": [
         [
           "src/Play.ts",
-          398,
+          435,
           6
         ]
       ],
-      "id": 5097,
+      "id": 5104,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -169,11 +175,11 @@
       "source": [
         [
           "src/Play.ts",
-          405,
+          442,
           6
         ]
       ],
-      "id": 5099,
+      "id": 5106,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -188,11 +194,11 @@
       "source": [
         [
           "src/Play.ts",
-          467,
+          508,
           6
         ]
       ],
-      "id": 5115,
+      "id": 5122,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -207,11 +213,11 @@
       "source": [
         [
           "src/Play.ts",
-          443,
+          480,
           6
         ]
       ],
-      "id": 5111,
+      "id": 5118,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -226,15 +232,15 @@
       "source": [
         [
           "src/Play.ts",
-          450,
+          487,
           6
         ]
       ],
-      "id": 5113,
+      "id": 5120,
       "flags": {},
       "overrides": false,
       "inherits": false,
-      "comment": "A value between 0 to 1 to indicate playback progress.",
+      "comment": "A value between 0 to 1 to indicate playback progress. Returns 0 if the sound has no duration (eg, generated or input sounds).",
       "getter": {
         "type": "number"
       },
@@ -245,11 +251,11 @@
       "source": [
         [
           "src/Play.ts",
-          483,
+          527,
           6
         ]
       ],
-      "id": 5119,
+      "id": 5126,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -264,11 +270,11 @@
       "source": [
         [
           "src/Play.ts",
-          419,
+          456,
           6
         ]
       ],
-      "id": 5103,
+      "id": 5110,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -283,11 +289,11 @@
       "source": [
         [
           "src/Play.ts",
-          412,
+          449,
           6
         ]
       ],
-      "id": 5101,
+      "id": 5108,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -302,11 +308,11 @@
       "source": [
         [
           "src/Play.ts",
-          436,
+          473,
           6
         ]
       ],
-      "id": 5109,
+      "id": 5116,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -315,6 +321,38 @@
         "type": "SoundType"
       },
       "setter": false
+    },
+    {
+      "name": "volume",
+      "source": [
+        [
+          "src/Play.ts",
+          548,
+          6
+        ],
+        [
+          "src/Play.ts",
+          551,
+          6
+        ]
+      ],
+      "id": 5132,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "comment": "Get and set the volume of this sound. Default is 1. Values above 1 amplify the sound. Can be set before or during playback.",
+      "getter": {
+        "type": "number"
+      },
+      "setter": {
+        "type": "void",
+        "parameters": {
+          "name": "v",
+          "comment": "",
+          "type": "number",
+          "default": false
+        }
+      }
     }
   ],
   "methods": [
@@ -323,23 +361,23 @@
       "source": [
         [
           "src/Play.ts",
-          536,
+          593,
           2
         ]
       ],
-      "id": 5133,
+      "id": 5144,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
-          "comment": "Add an analyzer to this `Sound`. Call this once only.",
-          "returns": "Sound",
+          "comment": "Add an analyzer to this `Sound`. Calling it again replaces the existing analyzer.",
+          "returns": "this",
           "returns_comment": false,
           "parameters": [
             {
               "name": "size",
-              "comment": "the number of frequency bins",
+              "comment": "the number of frequency bins. Should be a power of 2.",
               "type": "number",
               "default": "256"
             },
@@ -371,17 +409,17 @@
       "source": [
         [
           "src/Play.ts",
-          504,
+          560,
           2
         ]
       ],
-      "id": 5125,
+      "id": 5136,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
-          "comment": "Connect another AudioNode to this `Sound` instance's AudioNode. Using this function, you can extend the capabilities of this `Sound` instance for advanced use cases such as filtering.",
+          "comment": "Connect another AudioNode to this `Sound` instance's AudioNode. Using this function, you can extend the capabilities of this `Sound` instance for advanced use cases such as filtering. The connection is restored if a generated sound is restarted.",
           "returns": "this",
           "returns_comment": false,
           "parameters": [
@@ -401,19 +439,17 @@
       "source": [
         [
           "src/Play.ts",
-          332,
-          12
+          364,
+          2
         ]
       ],
-      "id": 5088,
-      "flags": {
-        "isProtected": true
-      },
+      "id": 5095,
+      "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
-          "comment": "Create or re-use an AudioBuffer. Only needed if you are using `Sound.loadAsBuffer`.",
+          "comment": "Create or re-use an AudioBuffer. Only needed if you are using `Sound.loadAsBuffer` and want to prepare a replay manually — [`start`](#link) re-creates a used buffer automatically.",
           "returns": "this",
           "returns_comment": false,
           "parameters": [
@@ -429,15 +465,38 @@
       ]
     },
     {
+      "name": "dispose",
+      "source": [
+        [
+          "src/Play.ts",
+          829,
+          2
+        ]
+      ],
+      "id": 5187,
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Stop playing and disconnect all nodes (including analyzer and volume), and release stream, source, and buffer references.\nThe instance should not be used after calling this. Note that this never closes an `AudioContext`: the shared context lives for the page, and a context you provided is yours to close.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "freqDomain",
       "source": [
         [
           "src/Play.ts",
-          619,
+          696,
           2
         ]
       ],
-      "id": 5155,
+      "id": 5168,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -456,11 +515,11 @@
       "source": [
         [
           "src/Play.ts",
-          631,
+          709,
           2
         ]
       ],
-      "id": 5157,
+      "id": 5170,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -487,6 +546,12 @@
               "comment": "Optionally, trim the start and end values by `[startTrim, data.length-endTrim]`",
               "type": "number[]",
               "default": "..."
+            },
+            {
+              "name": "out",
+              "comment": "Optionally, provide a `Group` (usually one returned by a previous call) whose Pts will be reused instead of allocating new ones — recommended when calling once per frame",
+              "type": "Group",
+              "default": false
             }
           ],
           "tags": [
@@ -503,17 +568,17 @@
       "source": [
         [
           "src/Play.ts",
-          524,
+          581,
           2
         ]
       ],
-      "id": 5131,
+      "id": 5142,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
-          "comment": "Removes the 'output' node added from setOuputNode\nNote: if you start the Sound after calling this, it will play via the default node",
+          "comment": "Removes the 'output' node added from setOutputNode\nNote: if you start the Sound after calling this, it will play via the default node",
           "returns": "this",
           "returns_comment": false,
           "parameters": [],
@@ -526,11 +591,11 @@
       "source": [
         [
           "src/Play.ts",
-          638,
+          721,
           2
         ]
       ],
-      "id": 5162,
+      "id": 5176,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -549,11 +614,11 @@
       "source": [
         [
           "src/Play.ts",
-          515,
+          572,
           2
         ]
       ],
-      "id": 5128,
+      "id": 5139,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -579,23 +644,23 @@
       "source": [
         [
           "src/Play.ts",
-          648,
+          743,
           2
         ]
       ],
-      "id": 5164,
+      "id": 5180,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
-          "comment": "Start playing. Internally this connects the `AudioNode` to `AudioContext`'s destination.",
+          "comment": "Start playing. Internally this connects the `AudioNode` to `AudioContext`'s destination.\nCalling `start( timeAt )` while a file or buffer sound is playing seeks to that time; a generated sound that is already playing is unaffected.",
           "returns": "this",
           "returns_comment": false,
           "parameters": [
             {
               "name": "timeAt",
-              "comment": "optional parameter to play from a specific time",
+              "comment": "optional parameter to play from a specific time, in seconds",
               "type": "number",
               "default": "0"
             }
@@ -609,17 +674,17 @@
       "source": [
         [
           "src/Play.ts",
-          680,
+          792,
           2
         ]
       ],
-      "id": 5167,
+      "id": 5183,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
-          "comment": "Stop playing. Internally this also disconnects the `AudioNode` from `AudioContext`'s destination.",
+          "comment": "Stop playing. Internally this also disconnects the `AudioNode` from `AudioContext`'s destination. Calling `stop` when the sound is not playing has no effect.",
           "returns": "this",
           "returns_comment": false,
           "parameters": [],
@@ -632,11 +697,11 @@
       "source": [
         [
           "src/Play.ts",
-          600,
+          671,
           2
         ]
       ],
-      "id": 5148,
+      "id": 5160,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -655,11 +720,11 @@
       "source": [
         [
           "src/Play.ts",
-          612,
+          684,
           2
         ]
       ],
-      "id": 5150,
+      "id": 5162,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -686,6 +751,12 @@
               "comment": "Optionally, trim the start and end values by `[startTrim, data.length-endTrim]`",
               "type": "number[]",
               "default": "..."
+            },
+            {
+              "name": "out",
+              "comment": "Optionally, provide a `Group` (usually one returned by a previous call) whose Pts will be reused instead of allocating new ones — recommended when calling once per frame",
+              "type": "Group",
+              "default": false
             }
           ],
           "tags": [
@@ -702,17 +773,17 @@
       "source": [
         [
           "src/Play.ts",
-          704,
+          816,
           2
         ]
       ],
-      "id": 5169,
+      "id": 5185,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
-          "comment": "Toggle between `start` and `stop`. This won't work if using [`Sound.loadAsBuffer`](#link), since `AudioBuffer` can only be played once. (See [`Sound.createBuffer`](#link) to reset buffer for replay).",
+          "comment": "Toggle between `start` and `stop`.",
           "returns": "this",
           "returns_comment": false,
           "parameters": [],
@@ -725,11 +796,11 @@
       "source": [
         [
           "src/Play.ts",
-          257,
+          277,
           9
         ]
       ],
-      "id": 5053,
+      "id": 5055,
       "flags": {
         "isStatic": true
       },
@@ -775,11 +846,11 @@
       "source": [
         [
           "src/Play.ts",
-          350,
+          390,
           9
         ]
       ],
-      "id": 5066,
+      "id": 5068,
       "flags": {
         "isStatic": true
       },
@@ -818,11 +889,11 @@
       "source": [
         [
           "src/Play.ts",
-          374,
+          417,
           15
         ]
       ],
-      "id": 5070,
+      "id": 5072,
       "flags": {
         "isStatic": true
       },
@@ -830,13 +901,13 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Create a `Sound` by streaming from an input device like microphone. Note that this function returns a Promise which resolves to a Sound instance.",
+          "comment": "Create a `Sound` by streaming from an input device like microphone. Note that this function returns a Promise which resolves to a Sound instance, and rejects if the input device is unavailable or permission is denied.",
           "returns": "Promise",
           "returns_comment": "a `Promise` which resolves to `Sound` instance",
           "parameters": [
             {
               "name": "constraint",
-              "comment": "",
+              "comment": "Optional constraints which can be used to select a specific input device. For example, you may use [`enumerateDevices`](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/enumerateDevices) to find a specific deviceId;",
               "type": "MediaStreamConstraints",
               "default": false
             }
@@ -844,7 +915,7 @@
           "tags": [
             {
               "tag": "example",
-              "text": "`Sound.input().then( s => sound = s );`"
+              "text": "`Sound.input().then( s => sound = s ).catch( err => ... );`"
             }
           ]
         }
@@ -855,11 +926,11 @@
       "source": [
         [
           "src/Play.ts",
-          277,
+          296,
           9
         ]
       ],
-      "id": 5059,
+      "id": 5061,
       "flags": {
         "isStatic": true
       },
@@ -879,7 +950,7 @@
             },
             {
               "name": "crossOrigin",
-              "comment": "whether to support loading cross-origin. Default is \"anonymous\".",
+              "comment": "whether to support loading cross-origin. Default is \"anonymous\". When passing an audio element, set the attribute in markup before the element loads for it to take effect.",
               "type": "string",
               "default": "\"anonymous\""
             }
@@ -898,11 +969,11 @@
       "source": [
         [
           "src/Play.ts",
-          306,
-          9
+          346,
+          15
         ]
       ],
-      "id": 5063,
+      "id": 5065,
       "flags": {
         "isStatic": true
       },
@@ -910,7 +981,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Create a `Sound` by loading from a sound file url as `AudioBufferSourceNode`. This method is cumbersome since it can only be played once.\nUse this method for now if you need to visualize sound in Safari and iOS. Once Apple has full support for FFT with streaming `HTMLMediaElement`, this method will likely be deprecated.",
+          "comment": "Create a `Sound` by loading from a sound file url as `AudioBufferSourceNode`.\nUse this method for now if you need to visualize sound in Safari and iOS. Once Apple has full support for FFT with streaming `HTMLMediaElement`, this method will likely be deprecated.",
           "returns": "Promise",
           "returns_comment": false,
           "parameters": [
@@ -933,11 +1004,11 @@
       "source": [
         [
           "src/Play.ts",
-          222,
+          221,
           2
         ]
       ],
-      "id": 5083,
+      "id": 5086,
       "flags": {},
       "type": "ISoundAnalyzer",
       "overrides": false,

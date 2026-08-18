@@ -15,22 +15,18 @@ window.demoDescription = "Basic example of loading sound and visualizing frequen
    * See this demo: http://ptsjs.org/demo/edit/?name=guide.sound_simple
    */
 
-  var bins = 256; 
+  var bins = 256;
   var sound;
   var colors = ["#f06", "#62e", "#fff", "#fe3", "#0c9"];
   var bufferLoaded = false;
   Sound.loadAsBuffer( "/assets/spacetravel.mp3" ).then( s => {
-    sound = s;
+    sound = s.analyze( bins );
     bufferLoaded = true;
   }).catch( e => console.error(e) );
 
   function toggle() {
-    if (sound.playing || !bufferLoaded) {
-      sound.stop();
-    } else {
-      sound.createBuffer().analyze(bins); // recreate buffer again
-      sound.start();
-    }
+    // Sound recreates the buffer as needed for replay
+    if (bufferLoaded) sound.toggle();
   }
 
   // Draw play button

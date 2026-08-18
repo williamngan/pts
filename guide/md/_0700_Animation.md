@@ -59,11 +59,11 @@ everyTwo.progress( (count, t, time, isStart) => {
 ![js:tempo_shaping](./assets/bg.png)
 
 
-**Stagger**: You can offset a beat's timing by a small difference to create a "stagger" effect. Specify an offset time (in milliseconds) in the optional second parameter.
+**Stagger**: You can offset a beat's timing by a small difference to create a "stagger" effect. Specify an offset time (in milliseconds) in the optional second parameter. A positive offset activates sooner, and a negative offset activates later.
 
 ```
 let fn = (count, t) => ... ;
-everyTwo.progress( fn, -100 ); // activate 100ms sooner
+everyTwo.progress( fn, 100 ); // activate 100ms sooner
 ```
 
 ![js:tempo_stagger](./assets/bg.png)
@@ -96,7 +96,7 @@ let walking = (count, t) => {
    return (count > 5);  // return true will stop this animation
 }
 
-tempo.progress( walking, 0, "robot" );
+tempo.every( 1 ).progress( walking, 0, "robot" );
 tempo.stop( "robot" ); // another way to stop this animation
 ```
 
