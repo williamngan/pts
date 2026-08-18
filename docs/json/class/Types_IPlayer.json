@@ -8,7 +8,7 @@
     ]
   ],
   "kind": "Interface",
-  "id": 7612,
+  "id": 7626,
   "comment": "Typescript interface: IPlayer is an interface that represents a \"player\" object that can be added into a Space.",
   "constructor": [],
   "accessors": [],
@@ -22,7 +22,7 @@
           2
         ]
       ],
-      "id": 7619,
+      "id": 7633,
       "flags": {
         "isOptional": true
       },
@@ -72,7 +72,7 @@
           2
         ]
       ],
-      "id": 7615,
+      "id": 7629,
       "flags": {
         "isOptional": true
       },
@@ -110,7 +110,7 @@
           2
         ]
       ],
-      "id": 7625,
+      "id": 7639,
       "flags": {
         "isOptional": true
       },
@@ -151,7 +151,7 @@
           2
         ]
       ],
-      "id": 7614,
+      "id": 7628,
       "flags": {
         "isOptional": true
       },
@@ -169,7 +169,7 @@
           2
         ]
       ],
-      "id": 7613,
+      "id": 7627,
       "flags": {
         "isOptional": true
       },

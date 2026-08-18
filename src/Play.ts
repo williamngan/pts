@@ -53,26 +53,20 @@ export class Tempo implements IPlayer {
     return this._ms;
   }
   set ms(n: number) {
-    this._bpm = Math.floor(60000 / n);
-    this._ms = 60000 / this._bpm;
+    this._bpm = 60000 / n;
+    this._ms = n;
   }
 
   // Get a listener unique id
-  protected _createID(listener: ITempoListener | Function): string {
-    let id: string = "";
-    if (typeof listener === "function") {
-      id = "_b" + this._listenerInc++;
-    } else {
-      id = listener.name || "_b" + this._listenerInc++;
-    }
-    return id;
+  protected _createID(): string {
+    return "_b" + this._listenerInc++;
   }
 
   /**
    * This is a core function that let you specify a rhythm and then define responses by calling the `start` and `progress` functions from the returned object. See [Animation guide](../guide/Animation-0700.html) for more details.
    * The `start` function lets you set a callback on every start. It takes a function ([`ITempoStartFn`](#link)).
    * The `progress` function lets you set a callback during progress. It takes a function ([`ITempoProgressFn`](#link)). Both functions let you optionally specify a time offset and a custom name.
-   * See [Animation guide](../guide/animation-0700.html) for more details.
+   * A positive offset shifts the beat earlier (fires sooner), a negative offset shifts it later.
    * @param beats a rhythm in beats as a number or an array of numbers
    * @example `tempo.every(2).start( (count) => ... )`, `tempo.every([2,4,6]).progress( (count, t) => ... )`
    * @returns an object with chainable functions
@@ -87,7 +81,7 @@ export class Tempo implements IPlayer {
         offset: number = 0,
         name?: string,
       ): ITempoResponses {
-        const id = name || self._createID(fn);
+        const id = name || self._createID();
         self._listeners[id] = {
           name: id,
           beats: beats,
@@ -95,6 +89,7 @@ export class Tempo implements IPlayer {
           index: 0,
           offset: offset,
           duration: -1,
+          count: 0,
           continuous: false,
           fn: fn,
         };
@@ -106,7 +101,7 @@ export class Tempo implements IPlayer {
         offset: number = 0,
         name?: string,
       ): ITempoResponses {
-        const id = name || self._createID(fn);
+        const id = name || self._createID();
         self._listeners[id] = {
           name: id,
           beats: beats,
@@ -114,6 +109,7 @@ export class Tempo implements IPlayer {
           index: 0,
           offset: offset,
           duration: -1,
+          count: 0,
           continuous: true,
           fn: fn,
         };
@@ -127,7 +123,7 @@ export class Tempo implements IPlayer {
    * But if necessary, you can track time manually via this function.
    * @param time current time in milliseconds
    */
-  track(time) {
+  track(time: number) {
     for (const k in this._listeners) {
       if (this._listeners.hasOwnProperty(k)) {
         const li = this._listeners[k];
@@ -135,27 +131,29 @@ export class Tempo implements IPlayer {
         const ms = li.period * this._ms; // time per period
         let isStart = false;
 
-        if (_t > li.duration + ms) {
+        if (li.duration < 0) {
+          // first tick is the start of the first period
+          li.duration = _t - (_t % this._ms);
+          isStart = true;
+        } else if (_t > li.duration + ms) {
           li.duration = _t - (_t % this._ms); // update
           if (Array.isArray(li.beats)) {
             // find next period from array
             li.index = (li.index + 1) % li.beats.length;
             li.period = li.beats[li.index];
           }
+          li.count++;
           isStart = true;
         }
 
-        const count = Math.max(
-          0,
-          Math.ceil(Math.floor(li.duration / this._ms) / li.period),
-        );
-        const params = li.continuous
-          ? [count, Num.clamp((_t - li.duration) / ms, 0, 1), _t, isStart]
-          : [count];
-        if (li.continuous || isStart) {
-          const done = li.fn.apply(li, params);
-          if (done) delete this._listeners[li.name];
+        let done: void | boolean;
+        if (li.continuous) {
+          const t = Num.clamp((_t - li.duration) / ms, 0, 1);
+          done = (li.fn as ITempoProgressFn).call(li, li.count, t, _t, isStart);
+        } else if (isStart) {
+          done = (li.fn as ITempoStartFn).call(li, li.count);
         }
+        if (done) delete this._listeners[li.name];
       }
     }
   }
@@ -171,19 +169,19 @@ export class Tempo implements IPlayer {
   /**
    * IPlayer interface. Internal implementation that calls `track( time )`.
    */
-  animate(time, ftime) {
+  animate(time: number, ftime: number) {
     this.track(time);
   }
 
   /**
-   * IPlayer interface. Not implementated.
+   * IPlayer interface. Not implemented.
    */
   resize(bound: Bound, evt?: Event) {
     return; // not implemented in IPlayer
   }
 
   /**
-   * IPlayer interface. Not implementated.
+   * IPlayer interface. Not implemented.
    */
   action(type: string, px: number, py: number, evt: Event) {
     return;
@@ -203,8 +201,8 @@ export class Sound {
   _node: AudioNode;
 
   /**
-   * The audio node to be connected to AudioContext when playing, if different that _node
-   * This is usefull when using the connect() function to filter, as typically the output would
+   * The audio node to be connected to AudioContext when playing, if different than _node
+   * This is useful when using the connect() function to filter, as typically the output would
    * come from the filtering nodes
    */
   _outputNode: AudioNode;
@@ -225,25 +223,44 @@ export class Sound {
 
   protected _timestamp: number; // Tracking play time against ctx.currentTime
 
+  protected _wave: PeriodicWave; // Wave when generating a "custom" oscillator
+
+  protected _gain: GainNode; // Gain node for volume control, created on first start
+
+  protected _volume: number = 1;
+
+  protected _connected: AudioNode[] = []; // Nodes added via connect(), re-applied on gen restart
+
+  protected _bufferPlayed: boolean = false; // An AudioBufferSourceNode can only start once
+
+  // A single AudioContext shared by all Sound instances that don't provide their own
+  protected static _sharedContext: AudioContext;
+
   /**
    * Construct a `Sound` instance. Usually, it's more convenient to use one of the static methods like [`Sound.load`](#function_load) or [`Sound.from`](#function_from).
+   * By default, all instances share a single `AudioContext` (browsers limit how many can be live at once).
    * @param type a `SoundType` string: "file", "input", or "gen"
+   * @param ctx Optionally provide your own AudioContext instead of the shared one
    */
-  constructor(type: SoundType) {
+  constructor(type: SoundType, ctx?: AudioContext) {
     this._type = type;
-    this._createAudioContext();
+    this._ctx = ctx || Sound._getContext();
   }
 
   /**
-   * Create an AudioContext instance. This is called internally only.
+   * Get the shared AudioContext instance, creating it on first use. This is called internally only.
    */
-  protected _createAudioContext() {
-    const _ctx = window.AudioContext;
-    if (!_ctx)
-      throw new Error(
-        "Your browser doesn't support Web Audio. (No AudioContext)",
-      );
-    this._ctx = _ctx ? new _ctx() : undefined;
+  protected static _getContext(): AudioContext {
+    if (!Sound._sharedContext) {
+      const _ctx =
+        typeof window !== "undefined" ? window.AudioContext : undefined;
+      if (!_ctx)
+        throw new Error(
+          "Your browser doesn't support Web Audio. (No AudioContext)",
+        );
+      Sound._sharedContext = new _ctx();
+    }
+    return Sound._sharedContext;
   }
 
   /**
@@ -260,9 +277,8 @@ export class Sound {
     type: SoundType = "gen",
     stream?: MediaStream,
   ) {
-    const s = new Sound(type);
+    const s = new Sound(type, ctx);
     s._node = node;
-    s._ctx = ctx;
     if (stream) s._stream = stream;
     return s;
   }
@@ -270,7 +286,7 @@ export class Sound {
   /**
    * Create a `Sound` by loading from a sound file or an audio element.
    * @param source either an url string to load a sound file, or an audio element.
-   * @param crossOrigin whether to support loading cross-origin. Default is "anonymous".
+   * @param crossOrigin whether to support loading cross-origin. Default is "anonymous". When passing an audio element, set the attribute in markup before the element loads for it to take effect.
    * @returns a `Sound` instance
    * @example `Sound.load( '/path/to/file.mp3' )`
    */
@@ -280,56 +296,70 @@ export class Sound {
   ): Promise<Sound> {
     return new Promise((resolve, reject) => {
       const s = new Sound("file");
-      s._source = typeof source === "string" ? new Audio(source) : source;
+      if (typeof source === "string") {
+        // crossOrigin must be set before src, or the initial request is made without CORS
+        s._source = new Audio();
+        s._source.crossOrigin = crossOrigin;
+        s._source.src = source;
+      } else {
+        s._source = source;
+        s._source.crossOrigin = crossOrigin;
+      }
       s._source.autoplay = false;
-      (s._source as HTMLMediaElement).crossOrigin = crossOrigin;
       s._source.addEventListener("ended", function () {
         s._playing = false;
       });
-      s._source.addEventListener("error", function () {
-        reject("Error loading sound");
-      });
-      s._source.addEventListener("canplaythrough", function () {
-        if (!s._node) {
-          s._node = s._ctx.createMediaElementSource(s._source);
-        }
+
+      const ready = () => {
+        // runs once: either immediately below, or via the once-only listener
+        s._node = s._ctx.createMediaElementSource(s._source);
         resolve(s);
-      });
+      };
+
+      if (s._source.readyState >= 4) {
+        // already buffered enough (eg, a previously loaded element)
+        ready();
+      } else {
+        s._source.addEventListener(
+          "error",
+          () =>
+            reject(
+              new Error(
+                `Error loading sound: ${s._source.src || "media element"}`,
+              ),
+            ),
+          { once: true },
+        );
+        s._source.addEventListener("canplaythrough", ready, { once: true });
+        if (s._source.readyState === 0) s._source.load(); // eg, preload="none"
+      }
     });
   }
 
   /**
-   * Create a `Sound` by loading from a sound file url as `AudioBufferSourceNode`. This method is cumbersome since it can only be played once.
+   * Create a `Sound` by loading from a sound file url as `AudioBufferSourceNode`.
    * Use this method for now if you need to visualize sound in Safari and iOS. Once Apple has full support for FFT with streaming `HTMLMediaElement`, this method will likely be deprecated.
    * @param url an url to the sound file
    */
-  static loadAsBuffer(url: string): Promise<Sound> {
-    return new Promise((resolve, reject) => {
-      const request = new XMLHttpRequest();
-      request.open("GET", url, true);
-      request.responseType = "arraybuffer";
-
-      const s = new Sound("file");
-      request.onload = function () {
-        s._ctx.decodeAudioData(
-          request.response,
-          function (buffer) {
-            // Decode asynchronously
-            s.createBuffer(buffer);
-            resolve(s);
-          },
-          (err) => reject("Error decoding audio"),
-        );
-      };
-      request.send();
-    });
+  static async loadAsBuffer(url: string): Promise<Sound> {
+    const s = new Sound("file");
+    const res = await fetch(url);
+    if (!res.ok)
+      throw new Error(`Error loading sound: ${url} (status ${res.status})`);
+    try {
+      s.createBuffer(await s._ctx.decodeAudioData(await res.arrayBuffer()));
+    } catch (err) {
+      // ErrorOptions isn't in this project's TS lib target; attach cause manually
+      throw Object.assign(new Error("Error decoding audio"), { cause: err });
+    }
+    return s;
   }
 
   /**
-   * Create or re-use an AudioBuffer. Only needed if you are using `Sound.loadAsBuffer`.
+   * Create or re-use an AudioBuffer. Only needed if you are using `Sound.loadAsBuffer` and want to prepare a replay manually — [`start`](#link) re-creates a used buffer automatically.
    * @param buf an AudioBuffer. Optionally, you can call this without parameters to re-use existing buffer.
    */
-  protected createBuffer(buf: AudioBuffer): this {
+  createBuffer(buf?: AudioBuffer): this {
     this._node = this._ctx.createBufferSource();
     if (buf !== undefined) this._buffer = buf;
 
@@ -337,6 +367,8 @@ export class Sound {
     (this._node as AudioBufferSourceNode).onended = () => {
       this._playing = false;
     };
+    this._bufferPlayed = false;
+    if (this.analyzer) this._node.connect(this.analyzer.node);
     return this;
   }
 
@@ -358,7 +390,8 @@ export class Sound {
     const osc = this._node as OscillatorNode;
     osc.type = type;
     if (type === "custom") {
-      osc.setPeriodicWave(val as PeriodicWave);
+      this._wave = val as PeriodicWave;
+      osc.setPeriodicWave(this._wave);
     } else {
       osc.frequency.value = val as number;
     }
@@ -366,23 +399,17 @@ export class Sound {
   }
 
   /**
-   * Create a `Sound` by streaming from an input device like microphone. Note that this function returns a Promise which resolves to a Sound instance.
-   * @param constraint @param constraint Optional constraints which can be used to select a specific input device. For example, you may use [`enumerateDevices`](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/enumerateDevices) to find a specific deviceId;
+   * Create a `Sound` by streaming from an input device like microphone. Note that this function returns a Promise which resolves to a Sound instance, and rejects if the input device is unavailable or permission is denied.
+   * @param constraint Optional constraints which can be used to select a specific input device. For example, you may use [`enumerateDevices`](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/enumerateDevices) to find a specific deviceId;
    * @returns a `Promise` which resolves to `Sound` instance
-   * @example `Sound.input().then( s => sound = s );`
+   * @example `Sound.input().then( s => sound = s ).catch( err => ... );`
    */
   static async input(constraint?: MediaStreamConstraints): Promise<Sound> {
-    try {
-      const s = new Sound("input");
-      if (!s) return undefined;
-      const c = constraint ? constraint : { audio: true, video: false };
-      s._stream = await navigator.mediaDevices.getUserMedia(c);
-      s._node = s._ctx.createMediaStreamSource(s._stream);
-      return s;
-    } catch (e) {
-      console.error("Cannot get audio from input device.");
-      return Promise.resolve(null);
-    }
+    const s = new Sound("input");
+    const c = constraint ? constraint : { audio: true, video: false };
+    s._stream = await navigator.mediaDevices.getUserMedia(c);
+    s._node = s._ctx.createMediaStreamSource(s._stream);
+    return s;
   }
 
   /**
@@ -445,7 +472,7 @@ export class Sound {
   }
 
   /**
-   * A value between 0 to 1 to indicate playback progress.
+   * A value between 0 to 1 to indicate playback progress. Returns 0 if the sound has no duration (eg, generated or input sounds).
    */
   get progress(): number {
     let dur = 0;
@@ -453,11 +480,11 @@ export class Sound {
     if (this._buffer) {
       dur = this._buffer.duration;
       curr = this._timestamp ? this._ctx.currentTime - this._timestamp : 0;
-    } else {
+    } else if (this._source) {
       dur = this._source.duration;
       curr = this._source.currentTime;
     }
-    return curr / dur;
+    return dur > 0 ? Num.clamp(curr / dur, 0, 1) : 0;
   }
 
   /**
@@ -465,16 +492,19 @@ export class Sound {
    * You can also use `this.source.addEventListener( 'canplaythrough', ...)` if needed. See also [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/canplaythrough_event).
    */
   get playable(): boolean {
-    return this._type === "input"
-      ? this._node !== undefined
-      : !!this._buffer || this._source.readyState === 4;
+    if (this._type === "input" || this._type === "gen")
+      return this._node !== undefined;
+    return (
+      !!this._buffer ||
+      (this._source !== undefined && this._source.readyState === 4)
+    );
   }
 
   /**
-   * If an analyzer is added (see [`analyze`](##unction_analyze) function), get the number of frequency bins in the analyzer.
+   * If an analyzer is added (see [`analyze`](#function_analyze) function), get the number of frequency bins in the analyzer. Returns 0 if no analyzer is added.
    */
   get binSize(): number {
-    return this.analyzer.size;
+    return this.analyzer ? this.analyzer.size : 0;
   }
 
   /**
@@ -498,10 +528,22 @@ export class Sound {
   }
 
   /**
-   * Connect another AudioNode to this `Sound` instance's AudioNode. Using this function, you can extend the capabilities of this `Sound` instance for advanced use cases such as filtering.
+   * Get and set the volume of this sound. Default is 1. Values above 1 amplify the sound. Can be set before or during playback.
+   */
+  get volume(): number {
+    return this._volume;
+  }
+  set volume(v: number) {
+    this._volume = Math.max(0, v);
+    if (this._gain) this._gain.gain.value = this._volume;
+  }
+
+  /**
+   * Connect another AudioNode to this `Sound` instance's AudioNode. Using this function, you can extend the capabilities of this `Sound` instance for advanced use cases such as filtering. The connection is restored if a generated sound is restarted.
    * @param node another AudioNode
    */
   connect(node: AudioNode): this {
+    this._connected.push(node);
     this._node.connect(node);
     return this;
   }
@@ -518,7 +560,7 @@ export class Sound {
   }
 
   /**
-   * Removes the 'output' node added from setOuputNode
+   * Removes the 'output' node added from setOutputNode
    * Note: if you start the Sound after calling this, it will play via the default node
    */
   removeOutputNode(): this {
@@ -527,8 +569,8 @@ export class Sound {
   }
 
   /**
-   * Add an analyzer to this `Sound`. Call this once only.
-   * @param size the number of frequency bins
+   * Add an analyzer to this `Sound`. Calling it again replaces the existing analyzer.
+   * @param size the number of frequency bins. Should be a power of 2.
    * @param minDb Optional minimum decibels (corresponds to `AnalyserNode.minDecibels`)
    * @param maxDb Optional maximum decibels (corresponds to `AnalyserNode.maxDecibels`)
    * @param smooth Optional smoothing value (corresponds to `AnalyserNode.smoothingTimeConstant`)
@@ -538,7 +580,14 @@ export class Sound {
     minDb: number = -100,
     maxDb: number = -30,
     smooth: number = 0.8,
-  ) {
+  ): this {
+    if (this.analyzer && this._node) {
+      try {
+        this._node.disconnect(this.analyzer.node);
+      } catch {
+        // the previous analyzer node was not connected
+      }
+    }
     const a = this._ctx.createAnalyser();
     a.fftSize = size * 2;
     a.minDecibels = minDb;
@@ -637,49 +686,61 @@ export class Sound {
    */
   reset(): this {
     this.stop();
-    this._node.disconnect();
+    if (this._node) this._node.disconnect();
+    if (this._outputNode) this._outputNode.disconnect();
     return this;
+  }
+
+  // Get the gain node for volume control, creating and connecting it on first use
+  protected _getGain(): GainNode {
+    if (!this._gain) {
+      this._gain = this._ctx.createGain();
+      this._gain.gain.value = this._volume;
+      this._gain.connect(this._ctx.destination);
+    }
+    return this._gain;
   }
 
   /**
    * Start playing. Internally this connects the `AudioNode` to `AudioContext`'s destination.
-   * @param timeAt optional parameter to play from a specific time
+   * @param timeAt optional parameter to play from a specific time, in seconds
    */
   start(timeAt: number = 0): this {
-    if (!this._ctx) {
-      this._createAudioContext();
-    } else if (this._ctx.state === "suspended") {
-      this._ctx.resume();
-    }
+    if (this._ctx.state === "suspended") this._ctx.resume();
 
     if (this._type === "file") {
       if (this._buffer) {
-        (this._node as AudioBufferSourceNode).start(timeAt);
-        this._timestamp = this._ctx.currentTime + timeAt;
+        // An AudioBufferSourceNode can only start once; re-create it for replay
+        if (this._bufferPlayed) this.createBuffer();
+        (this._node as AudioBufferSourceNode).start(0, timeAt);
+        this._bufferPlayed = true;
+        this._timestamp = this._ctx.currentTime - timeAt;
       } else {
-        this._source.play();
         if (timeAt > 0) this._source.currentTime = timeAt;
+        this._source.play();
       }
     } else if (this._type === "gen") {
+      const osc = this._node as OscillatorNode;
       this._gen(
-        (this._node as OscillatorNode).type,
-        (this._node as OscillatorNode).frequency.value,
+        osc.type,
+        osc.type === "custom" ? this._wave : osc.frequency.value,
       );
       (this._node as OscillatorNode).start();
       if (this.analyzer) this._node.connect(this.analyzer.node);
+      for (const n of this._connected) this._node.connect(n);
     }
 
-    (this._outputNode || this._node).connect(this._ctx.destination);
+    (this._outputNode || this._node).connect(this._getGain());
     this._playing = true;
     return this;
   }
 
   /**
-   * Stop playing. Internally this also disconnects the `AudioNode` from `AudioContext`'s destination.
+   * Stop playing. Internally this also disconnects the `AudioNode` from `AudioContext`'s destination. Calling `stop` when the sound is not playing has no effect.
    */
   stop(): this {
-    if (this._playing)
-      (this._outputNode || this._node).disconnect(this._ctx.destination);
+    if (!this._playing) return this;
+    (this._outputNode || this._node).disconnect(this._gain);
 
     if (this._type === "file") {
       if (this._buffer) {
@@ -699,7 +760,7 @@ export class Sound {
   }
 
   /**
-   * Toggle between `start` and `stop`. This won't work if using [`Sound.loadAsBuffer`](#link), since `AudioBuffer` can only be played once. (See [`Sound.createBuffer`](#link) to reset buffer for replay).
+   * Toggle between `start` and `stop`.
    */
   toggle(): this {
     if (this._playing) {
@@ -707,6 +768,27 @@ export class Sound {
     } else {
       this.start();
     }
+    return this;
+  }
+
+  /**
+   * Stop playing and disconnect all nodes (including analyzer and volume), and release stream, source, and buffer references.
+   * Note that this never closes an `AudioContext`: the shared context lives for the page, and a context you provided is yours to close.
+   */
+  dispose(): this {
+    this.reset();
+    if (this.analyzer) {
+      this.analyzer.node.disconnect();
+      this.analyzer = undefined;
+    }
+    if (this._gain) {
+      this._gain.disconnect();
+      this._gain = undefined;
+    }
+    this._connected = [];
+    this._stream = undefined;
+    this._source = undefined;
+    this._buffer = undefined;
     return this;
   }
 }

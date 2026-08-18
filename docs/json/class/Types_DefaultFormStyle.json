@@ -3,12 +3,12 @@
   "source": [
     [
       "src/Types.ts",
-      218,
+      219,
       12
     ]
   ],
   "kind": "Typealias",
-  "id": 7731,
+  "id": 7746,
   "comment": "Typescript type: DefaultFormStyle represents a default object for visual styles such as fill, stroke, line width, and others.",
   "constructor": [],
   "accessors": [],

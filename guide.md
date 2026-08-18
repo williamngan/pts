@@ -1193,11 +1193,11 @@ everyTwo.progress( (count, t, time, isStart) => {
 > Interactive example: [`guide.tempo_shaping`](#demo-guide-tempo-shaping) · [open live](https://ptsjs.org/demo/?name=guide.tempo_shaping)
 
 
-**Stagger**: You can offset a beat's timing by a small difference to create a "stagger" effect. Specify an offset time (in milliseconds) in the optional second parameter.
+**Stagger**: You can offset a beat's timing by a small difference to create a "stagger" effect. Specify an offset time (in milliseconds) in the optional second parameter. A positive offset activates sooner, and a negative offset activates later.
 
 ```
 let fn = (count, t) => ... ;
-everyTwo.progress( fn, -100 ); // activate 100ms sooner
+everyTwo.progress( fn, 100 ); // activate 100ms sooner
 ```
 
 > Interactive example: [`guide.tempo_stagger`](#demo-guide-tempo-stagger) · [open live](https://ptsjs.org/demo/?name=guide.tempo_stagger)
@@ -1230,7 +1230,7 @@ let walking = (count, t) => {
    return (count > 5);  // return true will stop this animation
 }
 
-tempo.progress( walking, 0, "robot" );
+tempo.every( 1 ).progress( walking, 0, "robot" );
 tempo.stop( "robot" ); // another way to stop this animation
 ```
 
@@ -1311,10 +1311,10 @@ Sound.loadAsBuffer( "/path/to/hello.mp3" ).then( s => sound = s );
 let sound = Sound.generate( "sine", 120 ); // sine oscillator at 120Hz
 ```
 
-4. Use [`Sound.input`](https://ptsjs.org/docs.md#play-sound) to get audio from default input device (usually microphone). This will return a Promise object which will resolve when the input device is ready.
+4. Use [`Sound.input`](https://ptsjs.org/docs.md#play-sound) to get audio from default input device (usually microphone). This will return a Promise object which will resolve when the input device is ready, or reject if the device is unavailable or permission is denied.
 ```
 let sound;
-Sound.input().then( s => sound = s ); // default input device
+Sound.input().then( s => sound = s ).catch( err => ... ); // default input device
 Sound.input( constraints ).then( s => sound = s ); // advanced use cases
 ```
 
@@ -1332,6 +1332,7 @@ sound.start();
 sound.stop();
 sound.toggle(); // toggle between start and stop
 sound.playing; // boolean to indicate if sound is playing
+sound.volume = 0.5; // change the volume (default is 1)
 ```
 
 ##### Note that current browsers no longer support autoplay. Users will need to express intent to play the sound (eg, with a click).
@@ -1355,7 +1356,7 @@ To get the time domain data at current time step, call the [`timeDomain`](https:
 let td = sound.timeDomain();
 ```
 
-Optionaly, use the [`timeDomainTo`](https://ptsjs.org/docs.md#play-sound) function to map the data to another range, such as a rectangular area. You can then apply various Pts functions to transform and visualize waveforms in a few lines of code.
+Optionally, use the [`timeDomainTo`](https://ptsjs.org/docs.md#play-sound) function to map the data to another range, such as a rectangular area. You can then apply various Pts functions to transform and visualize waveforms in a few lines of code.
 
 ```
 // fit data into a 200x100 area, starting from position (50, 50)
@@ -1374,7 +1375,7 @@ sound.timeDomainTo( [Const.two_pi, 1] ).map( t => ... );
 
 ##### Click to play and visualize sounds of drum, tambourine, and flute from Philharmonia Orchestra.
 
-In a similar way, we can access the frequency domain data by [`freqDomain`](https://ptsjs.org/docs.md#play-sound) and [`freqDomainTo`](https://ptsjs.org/docs.md#play-sound). The frequency bins are calculated by an algorithm called Fast Fourier Transform (FFT). The FFT size is usually 2 times the bin size and they need to be multiples of 2. (Recall that we set bin size to 128 earlier). You can quickly test it with a single line of code:
+In a similar way, we can access the frequency domain data by [`freqDomain`](https://ptsjs.org/docs.md#play-sound) and [`freqDomainTo`](https://ptsjs.org/docs.md#play-sound). The frequency bins are calculated by an algorithm called Fast Fourier Transform (FFT). The FFT size is 2 times the bin size and both need to be powers of 2. (Recall that we set bin size to 128 earlier). You can quickly test it with a single line of code:
 
 ```
 form.points( sound.freqDomainTo( space.size ) );
@@ -1394,11 +1395,11 @@ Currently Safari and iOS can play streaming <audio> element, but don't reliably 
 Sound.loadAsBuffer( "/path/to/hello.mp3" ).then( s => sound = s );
 ```
 
-`AudioBuffer` doesn't support streaming and can only be played once. To replay it, you need to recreate the buffer and reconnect the nodes. Use the convenient [`createBuffer`](https://ptsjs.org/docs.md#play-sound) function without parameter to re-use the previous buffer.
+`AudioBuffer` doesn't support streaming and its source node can only be played once. Pts recreates the buffer for you when you call [`start`](https://ptsjs.org/docs.md#play-sound) or [`toggle`](https://ptsjs.org/docs.md#play-sound) again, so replay just works. If you want to prepare a replay manually, use the convenient [`createBuffer`](https://ptsjs.org/docs.md#play-sound) function without parameter to re-use the previous buffer.
 
 ```
-// replay the sound by reusing previously loaded buffer
-sound.createBuffer().analyze(bins);
+// optionally, prepare a replay manually by reusing the loaded buffer
+sound.createBuffer();
 ```
 
 For custom use cases with other libraries, you can create an instance using  [`Sound.from`](https://ptsjs.org/docs.md#play-sound) static method. Here's an example using Tone.js:
@@ -1449,7 +1450,7 @@ s.toggle();
 
 Getting time domain and frequency domain data
 ```
-s.analyzer( 256 ); // Create analyzer with 256 bins. Call once only.
+s.analyze( 256 ); // Create analyzer with 256 bins
 
 s.timeDomain();
 s.timeDomainTo( area, position ); // map to a area [w, h] from position [x, y]
@@ -3953,22 +3954,18 @@ window.demoDescription = "Basic example of loading sound and visualizing frequen
    * See this demo: http://ptsjs.org/demo/edit/?name=guide.sound_simple
    */
 
-  var bins = 256; 
+  var bins = 256;
   var sound;
   var colors = ["#f06", "#62e", "#fff", "#fe3", "#0c9"];
   var bufferLoaded = false;
   Sound.loadAsBuffer( "/assets/spacetravel.mp3" ).then( s => {
-    sound = s;
+    sound = s.analyze( bins );
     bufferLoaded = true;
   }).catch( e => console.error(e) );
 
   function toggle() {
-    if (sound.playing || !bufferLoaded) {
-      sound.stop();
-    } else {
-      sound.createBuffer().analyze(bins); // recreate buffer again
-      sound.start();
-    }
+    // Sound recreates the buffer as needed for replay
+    if (bufferLoaded) sound.toggle();
   }
 
   // Draw play button
@@ -4200,42 +4197,38 @@ Pts.quickStart( "#pt", "#fe3" );
 <a id="demo-sound-play"></a>
 ### `sound.play`
 
-Play sound
+Play a generated tone, and control its frequency by pointer position.
 
 [Open live](https://ptsjs.org/demo/?name=sound.play) · [Source](https://github.com/williamngan/pts/blob/master/demo/sound.play.js)
 
 ```js
-// Source code licensed under Apache License 2.0. 
+// Source code licensed under Apache License 2.0.
 // Copyright © 2017 William Ngan. (https://github.com/williamngan/pts)
 
-window.demoDescription = "Play sound";
+window.demoDescription = "Play a generated tone, and control its frequency by pointer position.";
 
 //// Demo code starts (anonymous function wrapper is optional) ---
 
 (function() {
 
   // Pts quick start mode.
-  Pts.quickStart( "#pt", "#123" ); 
+  Pts.quickStart( "#pt", "#123" );
 
   let sound;
 
   space.add({
     start:( bound ) => {
-      console.log( "started" );
-      // sound = new Sound().load("/assets/nasa-magnetic-drum.mp3");
       sound = Sound.generate( "sine", 120 );
-      console.log( sound );
     },
 
     animate: (time, ftime) => {
-
+      form.fillOnly("#fff").text( [20, 30], sound.playing ? "Playing at "+Math.round(sound.frequency)+"hz — click to stop" : "Click to play" );
     },
 
     action: (type, x, y, evt) => {
-      console.log( type );
       if (type === "up") {
         sound.toggle();
-      } 
+      }
 
       if (sound.playing) sound.frequency = 100 + Math.floor(300 * space.pointer.x/space.size.x);
     }
@@ -6076,11 +6069,15 @@ window.demoDescription = "Microphone demo in Sound guide.";
   function toggleRecord() {
     if ( Geom.withinBound( space.pointer, [0,0], [50,50] ) ) {
       if (!recording) {
-        Sound.input().then( s => { sound = s.analyze( 128 ); });
+        recording = true;
+        Sound.input().then( s => { sound = s.analyze( 128 ); }).catch( e => {
+          recording = false;
+          console.error( e );
+        });
       } else {
+        recording = false;
         sound.stop();
       }
-      recording = !recording;
     }
   }
   

@@ -114,17 +114,17 @@
       "source": [
         [
           "src/Play.ts",
-          188,
+          186,
           2
         ]
       ],
-      "id": 5047,
+      "id": 5046,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
-          "comment": "IPlayer interface. Not implementated.",
+          "comment": "IPlayer interface. Not implemented.",
           "returns": "void",
           "returns_comment": false,
           "parameters": [
@@ -162,11 +162,11 @@
       "source": [
         [
           "src/Play.ts",
-          174,
+          172,
           2
         ]
       ],
-      "id": 5039,
+      "id": 5038,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -179,13 +179,13 @@
             {
               "name": "time",
               "comment": "",
-              "type": "any",
+              "type": "number",
               "default": false
             },
             {
               "name": "ftime",
               "comment": "",
-              "type": "any",
+              "type": "number",
               "default": false
             }
           ],
@@ -198,17 +198,17 @@
       "source": [
         [
           "src/Play.ts",
-          80,
+          74,
           2
         ]
       ],
-      "id": 5030,
+      "id": 5029,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
-          "comment": "This is a core function that let you specify a rhythm and then define responses by calling the `start` and `progress` functions from the returned object. See [Animation guide](../guide/Animation-0700.html) for more details.\nThe `start` function lets you set a callback on every start. It takes a function ([`ITempoStartFn`](#link)).\nThe `progress` function lets you set a callback during progress. It takes a function ([`ITempoProgressFn`](#link)). Both functions let you optionally specify a time offset and a custom name.\nSee [Animation guide](../guide/animation-0700.html) for more details.",
+          "comment": "This is a core function that let you specify a rhythm and then define responses by calling the `start` and `progress` functions from the returned object. See [Animation guide](../guide/Animation-0700.html) for more details.\nThe `start` function lets you set a callback on every start. It takes a function ([`ITempoStartFn`](#link)).\nThe `progress` function lets you set a callback during progress. It takes a function ([`ITempoProgressFn`](#link)). Both functions let you optionally specify a time offset and a custom name.\nA positive offset shifts the beat earlier (fires sooner), a negative offset shifts it later.",
           "returns": "ITempoResponses",
           "returns_comment": "an object with chainable functions",
           "parameters": [
@@ -233,17 +233,17 @@
       "source": [
         [
           "src/Play.ts",
-          181,
+          179,
           2
         ]
       ],
-      "id": 5043,
+      "id": 5042,
       "flags": {},
       "overrides": false,
       "inherits": false,
       "signatures": [
         {
-          "comment": "IPlayer interface. Not implementated.",
+          "comment": "IPlayer interface. Not implemented.",
           "returns": "void",
           "returns_comment": false,
           "parameters": [
@@ -269,11 +269,11 @@
       "source": [
         [
           "src/Play.ts",
-          167,
+          165,
           2
         ]
       ],
-      "id": 5036,
+      "id": 5035,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -299,11 +299,11 @@
       "source": [
         [
           "src/Play.ts",
-          130,
+          126,
           2
         ]
       ],
-      "id": 5033,
+      "id": 5032,
       "flags": {},
       "overrides": false,
       "inherits": false,
@@ -316,7 +316,7 @@
             {
               "name": "time",
               "comment": "current time in milliseconds",
-              "type": "any",
+              "type": "number",
               "default": false
             }
           ],

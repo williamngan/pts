@@ -16270,7 +16270,7 @@ Static function to calculate edge constraints between 2 particles.
 <a id="play-sound"></a>
 ### `Sound`
 
-**Kind:** Class · **Source:** [`src/Play.ts:196`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L196)
+**Kind:** Class · **Source:** [`src/Play.ts:194`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L194)
 
 Sound class simplifies common tasks like audio inputs and visualizations using a subset of Web Audio API. It can be used with other audio libraries like tone.js, and extended to support additional web audio functions. See [the guide](https://ptsjs.org/guide/Sound-0800.html) to get started.
 
@@ -16279,35 +16279,37 @@ Sound class simplifies common tasks like audio inputs and visualizations using a
 <a id="play-sound-constructor"></a>
 ##### Constructor
 
-*source [`src/Play.ts:232`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L232)*
+*source [`src/Play.ts:245`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L245)*
 
 ```ts
-new Sound(type: SoundType): Sound
+new Sound(type: SoundType, ctx: AudioContext): Sound
 ```
 
 Construct a `Sound` instance. Usually, it's more convenient to use one of the static methods like [`Sound.load`](#play-sound-static-load) or [`Sound.from`](#play-sound-static-from).
+By default, all instances share a single `AudioContext` (browsers limit how many can be live at once).
 
 **Parameters**
 
 - `type` (`SoundType`) — a `SoundType` string: "file", "input", or "gen"
+- `ctx` (`AudioContext`) — Optionally provide your own AudioContext instead of the shared one
 
 #### Accessors
 
 <a id="play-sound-bin-size"></a>
 ##### `binSize`
 
-*source [`src/Play.ts:476`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L476)*
+*source [`src/Play.ts:506`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L506)*
 
 ```ts
 get binSize(): number
 ```
 
-If an analyzer is added (see [`analyze`](#play-sound-analyze) function), get the number of frequency bins in the analyzer.
+If an analyzer is added (see [`analyze`](#play-sound-analyze) function), get the number of frequency bins in the analyzer. Returns 0 if no analyzer is added.
 
 <a id="play-sound-buffer"></a>
 ##### `buffer`
 
-*source [`src/Play.ts:426`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L426), [`src/Play.ts:429`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L429)*
+*source [`src/Play.ts:453`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L453), [`src/Play.ts:456`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L456)*
 
 ```ts
 get buffer(): AudioBuffer
@@ -16319,7 +16321,7 @@ Get this Sound's AudioBuffer (if any) instance for advanced use-cases. See [`Sou
 <a id="play-sound-ctx"></a>
 ##### `ctx`
 
-*source [`src/Play.ts:391`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L391)*
+*source [`src/Play.ts:418`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L418)*
 
 ```ts
 get ctx(): AudioContext
@@ -16330,7 +16332,7 @@ Get this Sound's AudioContext instance for advanced use-cases.
 <a id="play-sound-frequency"></a>
 ##### `frequency`
 
-*source [`src/Play.ts:490`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L490), [`src/Play.ts:495`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L495)*
+*source [`src/Play.ts:520`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L520), [`src/Play.ts:525`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L525)*
 
 ```ts
 get frequency(): number
@@ -16342,7 +16344,7 @@ If the sound is generated, this sets and gets the frequency of the tone.
 <a id="play-sound-node"></a>
 ##### `node`
 
-*source [`src/Play.ts:398`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L398)*
+*source [`src/Play.ts:425`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L425)*
 
 ```ts
 get node(): AudioNode
@@ -16353,7 +16355,7 @@ Get this Sound's AudioNode subclass instance for advanced use-cases.
 <a id="play-sound-output-node"></a>
 ##### `outputNode`
 
-*source [`src/Play.ts:405`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L405)*
+*source [`src/Play.ts:432`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L432)*
 
 ```ts
 get outputNode(): AudioNode
@@ -16364,7 +16366,7 @@ Get this Sound's Output node AudioNode instance for advanced use-cases.
 <a id="play-sound-playable"></a>
 ##### `playable`
 
-*source [`src/Play.ts:467`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L467)*
+*source [`src/Play.ts:494`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L494)*
 
 ```ts
 get playable(): boolean
@@ -16376,7 +16378,7 @@ You can also use `this.source.addEventListener( 'canplaythrough', ...)` if neede
 <a id="play-sound-playing"></a>
 ##### `playing`
 
-*source [`src/Play.ts:443`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L443)*
+*source [`src/Play.ts:470`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L470)*
 
 ```ts
 get playing(): boolean
@@ -16387,18 +16389,18 @@ Indicate whether the sound is currently playing.
 <a id="play-sound-progress"></a>
 ##### `progress`
 
-*source [`src/Play.ts:450`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L450)*
+*source [`src/Play.ts:477`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L477)*
 
 ```ts
 get progress(): number
 ```
 
-A value between 0 to 1 to indicate playback progress.
+A value between 0 to 1 to indicate playback progress. Returns 0 if the sound has no duration (eg, generated or input sounds).
 
 <a id="play-sound-sample-rate"></a>
 ##### `sampleRate`
 
-*source [`src/Play.ts:483`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L483)*
+*source [`src/Play.ts:513`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L513)*
 
 ```ts
 get sampleRate(): number
@@ -16409,7 +16411,7 @@ Get the sample rate of the audio, for example, at 44100 hz.
 <a id="play-sound-source"></a>
 ##### `source`
 
-*source [`src/Play.ts:419`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L419)*
+*source [`src/Play.ts:446`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L446)*
 
 ```ts
 get source(): HTMLMediaElement
@@ -16420,7 +16422,7 @@ Get this Sound's Audio element (if used) instance for advanced use-cases. See [`
 <a id="play-sound-stream"></a>
 ##### `stream`
 
-*source [`src/Play.ts:412`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L412)*
+*source [`src/Play.ts:439`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L439)*
 
 ```ts
 get stream(): MediaStream
@@ -16431,7 +16433,7 @@ Get this Sound's MediaStream (eg, from microphone, if in use) instance for advan
 <a id="play-sound-type"></a>
 ##### `type`
 
-*source [`src/Play.ts:436`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L436)*
+*source [`src/Play.ts:463`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L463)*
 
 ```ts
 get type(): SoundType
@@ -16439,22 +16441,34 @@ get type(): SoundType
 
 Get the type of input for this Sound instance. Either "file", "input", or "gen"
 
+<a id="play-sound-volume"></a>
+##### `volume`
+
+*source [`src/Play.ts:533`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L533), [`src/Play.ts:536`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L536)*
+
+```ts
+get volume(): number
+set volume(v: number): void
+```
+
+Get and set the volume of this sound. Default is 1. Values above 1 amplify the sound. Can be set before or during playback.
+
 #### Methods
 
 <a id="play-sound-analyze"></a>
 ##### `analyze`
 
-*source [`src/Play.ts:536`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L536)*
+*source [`src/Play.ts:578`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L578)*
 
 ```ts
-analyze(size: number = 256, minDb: number = -100, maxDb: number = -30, smooth: number = 0.8): Sound
+analyze(size: number = 256, minDb: number = -100, maxDb: number = -30, smooth: number = 0.8): this
 ```
 
-Add an analyzer to this `Sound`. Call this once only.
+Add an analyzer to this `Sound`. Calling it again replaces the existing analyzer.
 
 **Parameters**
 
-- `size` (`number`; default `256`) — the number of frequency bins
+- `size` (`number`; default `256`) — the number of frequency bins. Should be a power of 2.
 - `minDb` (`number`; default `-100`) — Optional minimum decibels (corresponds to `AnalyserNode.minDecibels`)
 - `maxDb` (`number`; default `-30`) — Optional maximum decibels (corresponds to `AnalyserNode.maxDecibels`)
 - `smooth` (`number`; default `0.8`) — Optional smoothing value (corresponds to `AnalyserNode.smoothingTimeConstant`)
@@ -16462,13 +16476,13 @@ Add an analyzer to this `Sound`. Call this once only.
 <a id="play-sound-connect"></a>
 ##### `connect`
 
-*source [`src/Play.ts:504`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L504)*
+*source [`src/Play.ts:545`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L545)*
 
 ```ts
 connect(node: AudioNode): this
 ```
 
-Connect another AudioNode to this `Sound` instance's AudioNode. Using this function, you can extend the capabilities of this `Sound` instance for advanced use cases such as filtering.
+Connect another AudioNode to this `Sound` instance's AudioNode. Using this function, you can extend the capabilities of this `Sound` instance for advanced use cases such as filtering. The connection is restored if a generated sound is restarted.
 
 **Parameters**
 
@@ -16477,22 +16491,34 @@ Connect another AudioNode to this `Sound` instance's AudioNode. Using this funct
 <a id="play-sound-create-buffer"></a>
 ##### `createBuffer`
 
-*protected · source [`src/Play.ts:332`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L332)*
+*source [`src/Play.ts:362`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L362)*
 
 ```ts
 createBuffer(buf: AudioBuffer): this
 ```
 
-Create or re-use an AudioBuffer. Only needed if you are using `Sound.loadAsBuffer`.
+Create or re-use an AudioBuffer. Only needed if you are using `Sound.loadAsBuffer` and want to prepare a replay manually — [`start`](#play-sound-start) re-creates a used buffer automatically.
 
 **Parameters**
 
 - `buf` (`AudioBuffer`) — an AudioBuffer. Optionally, you can call this without parameters to re-use existing buffer.
 
+<a id="play-sound-dispose"></a>
+##### `dispose`
+
+*source [`src/Play.ts:778`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L778)*
+
+```ts
+dispose(): this
+```
+
+Stop playing and disconnect all nodes (including analyzer and volume), and release stream, source, and buffer references.
+Note that this never closes an `AudioContext`: the shared context lives for the page, and a context you provided is yours to close.
+
 <a id="play-sound-freq-domain"></a>
 ##### `freqDomain`
 
-*source [`src/Play.ts:619`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L619)*
+*source [`src/Play.ts:668`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L668)*
 
 ```ts
 freqDomain(): Uint8Array
@@ -16503,7 +16529,7 @@ Get the raw frequency-domain data from analyzer as unsigned 8-bit integers. An a
 <a id="play-sound-freq-domain-to"></a>
 ##### `freqDomainTo`
 
-*source [`src/Play.ts:631`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L631)*
+*source [`src/Play.ts:680`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L680)*
 
 ```ts
 freqDomainTo(size: PtLike, position: PtLike = ..., trim: number[] = ...): Group
@@ -16528,19 +16554,19 @@ form.point( s.freqDomainTo( space.size ) )
 <a id="play-sound-remove-output-node"></a>
 ##### `removeOutputNode`
 
-*source [`src/Play.ts:524`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L524)*
+*source [`src/Play.ts:566`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L566)*
 
 ```ts
 removeOutputNode(): this
 ```
 
-Removes the 'output' node added from setOuputNode
+Removes the 'output' node added from setOutputNode
 Note: if you start the Sound after calling this, it will play via the default node
 
 <a id="play-sound-reset"></a>
 ##### `reset`
 
-*source [`src/Play.ts:638`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L638)*
+*source [`src/Play.ts:687`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L687)*
 
 ```ts
 reset(): this
@@ -16551,7 +16577,7 @@ Stop playing and disconnect the AudioNode.
 <a id="play-sound-set-output-node"></a>
 ##### `setOutputNode`
 
-*source [`src/Play.ts:515`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L515)*
+*source [`src/Play.ts:557`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L557)*
 
 ```ts
 setOutputNode(outputNode: AudioNode): this
@@ -16568,7 +16594,7 @@ in your chain for filtering purposes.
 <a id="play-sound-start"></a>
 ##### `start`
 
-*source [`src/Play.ts:648`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L648)*
+*source [`src/Play.ts:708`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L708)*
 
 ```ts
 start(timeAt: number = 0): this
@@ -16578,23 +16604,23 @@ Start playing. Internally this connects the `AudioNode` to `AudioContext`'s dest
 
 **Parameters**
 
-- `timeAt` (`number`; default `0`) — optional parameter to play from a specific time
+- `timeAt` (`number`; default `0`) — optional parameter to play from a specific time, in seconds
 
 <a id="play-sound-stop"></a>
 ##### `stop`
 
-*source [`src/Play.ts:680`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L680)*
+*source [`src/Play.ts:741`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L741)*
 
 ```ts
 stop(): this
 ```
 
-Stop playing. Internally this also disconnects the `AudioNode` from `AudioContext`'s destination.
+Stop playing. Internally this also disconnects the `AudioNode` from `AudioContext`'s destination. Calling `stop` when the sound is not playing has no effect.
 
 <a id="play-sound-time-domain"></a>
 ##### `timeDomain`
 
-*source [`src/Play.ts:600`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L600)*
+*source [`src/Play.ts:649`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L649)*
 
 ```ts
 timeDomain(): Uint8Array
@@ -16605,7 +16631,7 @@ Get the raw time-domain data from analyzer as unsigned 8-bit integers. An analyz
 <a id="play-sound-time-domain-to"></a>
 ##### `timeDomainTo`
 
-*source [`src/Play.ts:612`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L612)*
+*source [`src/Play.ts:661`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L661)*
 
 ```ts
 timeDomainTo(size: PtLike, position: PtLike = ..., trim: number[] = ...): Group
@@ -16630,18 +16656,18 @@ form.point( s.timeDomainTo( space.size ) )
 <a id="play-sound-toggle"></a>
 ##### `toggle`
 
-*source [`src/Play.ts:704`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L704)*
+*source [`src/Play.ts:765`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L765)*
 
 ```ts
 toggle(): this
 ```
 
-Toggle between `start` and `stop`. This won't work if using [`Sound.loadAsBuffer`](#play-sound-static-load-as-buffer), since `AudioBuffer` can only be played once. (See [`Sound.createBuffer`](#play-sound-create-buffer) to reset buffer for replay).
+Toggle between `start` and `stop`.
 
 <a id="play-sound-static-from"></a>
 ##### `from`
 
-*static · source [`src/Play.ts:257`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L257)*
+*static · source [`src/Play.ts:274`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L274)*
 
 ```ts
 static from(node: AudioNode, ctx: AudioContext, type: SoundType = "gen", stream: MediaStream): Sound
@@ -16661,7 +16687,7 @@ Create a `Sound` given an [AudioNode](https://developer.mozilla.org/en-US/docs/W
 <a id="play-sound-static-generate"></a>
 ##### `generate`
 
-*static · source [`src/Play.ts:350`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L350)*
+*static · source [`src/Play.ts:382`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L382)*
 
 ```ts
 static generate(type: OscillatorType, val: number | PeriodicWave): Sound
@@ -16685,30 +16711,30 @@ Sound.generate( 'sine', 120 )
 <a id="play-sound-static-input"></a>
 ##### `input`
 
-*static · source [`src/Play.ts:374`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L374)*
+*static · source [`src/Play.ts:407`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L407)*
 
 ```ts
 static input(constraint: MediaStreamConstraints): Promise
 ```
 
-Create a `Sound` by streaming from an input device like microphone. Note that this function returns a Promise which resolves to a Sound instance.
+Create a `Sound` by streaming from an input device like microphone. Note that this function returns a Promise which resolves to a Sound instance, and rejects if the input device is unavailable or permission is denied.
 
 **Parameters**
 
-- `constraint` (`MediaStreamConstraints`)
+- `constraint` (`MediaStreamConstraints`) — Optional constraints which can be used to select a specific input device. For example, you may use [`enumerateDevices`](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/enumerateDevices) to find a specific deviceId;
 
 **Returns:** a `Promise` which resolves to `Sound` instance
 
 **Example**
 
 ```ts
-Sound.input().then( s => sound = s );
+Sound.input().then( s => sound = s ).catch( err => ... );
 ```
 
 <a id="play-sound-static-load"></a>
 ##### `load`
 
-*static · source [`src/Play.ts:277`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L277)*
+*static · source [`src/Play.ts:293`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L293)*
 
 ```ts
 static load(source: string | HTMLMediaElement, crossOrigin: string = "anonymous"): Promise
@@ -16719,7 +16745,7 @@ Create a `Sound` by loading from a sound file or an audio element.
 **Parameters**
 
 - `source` (`string | HTMLMediaElement`) — either an url string to load a sound file, or an audio element.
-- `crossOrigin` (`string`; default `"anonymous"`) — whether to support loading cross-origin. Default is "anonymous".
+- `crossOrigin` (`string`; default `"anonymous"`) — whether to support loading cross-origin. Default is "anonymous". When passing an audio element, set the attribute in markup before the element loads for it to take effect.
 
 **Returns:** a `Sound` instance
 
@@ -16732,13 +16758,13 @@ Sound.load( '/path/to/file.mp3' )
 <a id="play-sound-static-load-as-buffer"></a>
 ##### `loadAsBuffer`
 
-*static · source [`src/Play.ts:306`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L306)*
+*static · source [`src/Play.ts:344`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L344)*
 
 ```ts
 static loadAsBuffer(url: string): Promise
 ```
 
-Create a `Sound` by loading from a sound file url as `AudioBufferSourceNode`. This method is cumbersome since it can only be played once.
+Create a `Sound` by loading from a sound file url as `AudioBufferSourceNode`.
 Use this method for now if you need to visualize sound in Safari and iOS. Once Apple has full support for FFT with streaming `HTMLMediaElement`, this method will likely be deprecated.
 
 **Parameters**
@@ -16750,7 +16776,7 @@ Use this method for now if you need to visualize sound in Safari and iOS. Once A
 <a id="play-sound-analyzer"></a>
 ##### `analyzer`
 
-*source [`src/Play.ts:222`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L222)*
+*source [`src/Play.ts:220`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L220)*
 
 ```ts
 analyzer: ISoundAnalyzer
@@ -16815,13 +16841,13 @@ Milliseconds per beat (Note that this is derived from the bpm value).
 <a id="play-tempo-action"></a>
 ##### `action`
 
-*source [`src/Play.ts:188`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L188)*
+*source [`src/Play.ts:186`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L186)*
 
 ```ts
 action(type: string, px: number, py: number, evt: Event): void
 ```
 
-IPlayer interface. Not implementated.
+IPlayer interface. Not implemented.
 
 **Parameters**
 
@@ -16833,23 +16859,23 @@ IPlayer interface. Not implementated.
 <a id="play-tempo-animate"></a>
 ##### `animate`
 
-*source [`src/Play.ts:174`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L174)*
+*source [`src/Play.ts:172`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L172)*
 
 ```ts
-animate(time: any, ftime: any): void
+animate(time: number, ftime: number): void
 ```
 
 IPlayer interface. Internal implementation that calls `track( time )`.
 
 **Parameters**
 
-- `time` (`any`)
-- `ftime` (`any`)
+- `time` (`number`)
+- `ftime` (`number`)
 
 <a id="play-tempo-every"></a>
 ##### `every`
 
-*source [`src/Play.ts:80`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L80)*
+*source [`src/Play.ts:74`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L74)*
 
 ```ts
 every(beats: number | number[]): ITempoResponses
@@ -16858,7 +16884,7 @@ every(beats: number | number[]): ITempoResponses
 This is a core function that let you specify a rhythm and then define responses by calling the `start` and `progress` functions from the returned object. See [Animation guide](https://ptsjs.org/guide/Animation-0700.html) for more details.
 The `start` function lets you set a callback on every start. It takes a function ([`ITempoStartFn`](#types-itempostartfn)).
 The `progress` function lets you set a callback during progress. It takes a function ([`ITempoProgressFn`](#types-itempoprogressfn)). Both functions let you optionally specify a time offset and a custom name.
-See [Animation guide](https://ptsjs.org/guide/animation-0700.html) for more details.
+A positive offset shifts the beat earlier (fires sooner), a negative offset shifts it later.
 
 **Parameters**
 
@@ -16875,13 +16901,13 @@ tempo.every(2).start( (count) => ... )`, `tempo.every([2,4,6]).progress( (count,
 <a id="play-tempo-resize"></a>
 ##### `resize`
 
-*source [`src/Play.ts:181`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L181)*
+*source [`src/Play.ts:179`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L179)*
 
 ```ts
 resize(bound: Bound, evt: Event): void
 ```
 
-IPlayer interface. Not implementated.
+IPlayer interface. Not implemented.
 
 **Parameters**
 
@@ -16891,7 +16917,7 @@ IPlayer interface. Not implementated.
 <a id="play-tempo-stop"></a>
 ##### `stop`
 
-*source [`src/Play.ts:167`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L167)*
+*source [`src/Play.ts:165`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L165)*
 
 ```ts
 stop(name: string): void
@@ -16906,10 +16932,10 @@ Remove a `start` or `progress` callback function from the list of callbacks. See
 <a id="play-tempo-track"></a>
 ##### `track`
 
-*source [`src/Play.ts:130`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L130)*
+*source [`src/Play.ts:126`](https://github.com/williamngan/pts/blob/master/src/Play.ts#L126)*
 
 ```ts
-track(time: any): void
+track(time: number): void
 ```
 
 Usually you can add a tempo instance to a space via [`Space.add`](#space-space-add) and it will track time automatically.
@@ -16917,7 +16943,7 @@ But if necessary, you can track time manually via this function.
 
 **Parameters**
 
-- `time` (`any`) — current time in milliseconds
+- `time` (`number`) — current time in milliseconds
 
 <a id="play-tempo-static-from-beat"></a>
 ##### `fromBeat`
@@ -26640,7 +26666,7 @@ type AnimateCallbackFn =  Fn(time:number, frameTime:number, currentSpace:any);
 <a id="types-canvaspatternrepetition"></a>
 ### `CanvasPatternRepetition`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:230`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L230)
+**Kind:** Typealias · **Source:** [`src/Types.ts:231`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L231)
 
 Typescript type: CanvasPatternRepetition represents the string options to specify pattern repetition
 
@@ -26673,7 +26699,7 @@ type ColorType = rgb | hsl | hsb | lab | lch | luv | xyz;
 <a id="types-defaultformstyle"></a>
 ### `DefaultFormStyle`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:218`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L218)
+**Kind:** Typealias · **Source:** [`src/Types.ts:219`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L219)
 
 Typescript type: DefaultFormStyle represents a default object for visual styles such as fill, stroke, line width, and others.
 
@@ -26739,7 +26765,7 @@ type IntersectContext = { dist:number, edge:Group, normal:Pt, other:any, vertex:
 <a id="types-isoundanalyzer"></a>
 ### `ISoundAnalyzer`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:204`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L204)
+**Kind:** Typealias · **Source:** [`src/Types.ts:205`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L205)
 
 Typescript type: ISoundAnalyzer represents an object that stores the AnalyzerNode properties
 
@@ -26755,7 +26781,7 @@ type ISoundAnalyzer = { data:Uint8Array, node:AnalyserNode, size:number };
 Typescript type: ITempoListener represents a listener created by Tempo class
 
 ```ts
-type ITempoListener = { beats:number | number[], continuous:boolean, duration:number, fn:Function, index:number, name:string, offset:number, period:number };
+type ITempoListener = { beats:number | number[], continuous:boolean, count:number, duration:number, fn:ITempoStartFn | ITempoProgressFn, index:number, name:string, offset:number, period:number };
 ```
 
 <a id="types-itempoprogressfn"></a>
@@ -26772,7 +26798,7 @@ type ITempoProgressFn =  Fn(count:number, t:number, ms:number, start:boolean);
 <a id="types-itemporesponses"></a>
 ### `ITempoResponses`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:192`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L192)
+**Kind:** Typealias · **Source:** [`src/Types.ts:193`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L193)
 
 Typescript type: the return type of `tempo.every(...)`
 
@@ -26829,7 +26855,7 @@ type PtLikeIterable = GroupLike | PtLike[] | Iterable;
 <a id="types-renderingcontext2d"></a>
 ### `RenderingContext2D`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:233`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L233)
+**Kind:** Typealias · **Source:** [`src/Types.ts:234`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L234)
 
 ```ts
 type RenderingContext2D = CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
@@ -26838,7 +26864,7 @@ type RenderingContext2D = CanvasRenderingContext2D | OffscreenCanvasRenderingCon
 <a id="types-soundtype"></a>
 ### `SoundType`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:213`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L213)
+**Kind:** Typealias · **Source:** [`src/Types.ts:214`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L214)
 
 Typescript type: SoundType represents a type of sound input. It corresponds to Sound.type property.
 

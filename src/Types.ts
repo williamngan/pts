@@ -183,7 +183,8 @@ export type ITempoListener = {
   offset?: number; // time offset
   continuous?: boolean; // track progress is true, otherwise track only triggers
   index?: number; // if beats is an array, this is the current index
-  fn: Function; // callback function
+  count?: number; // number of periods started so far
+  fn: ITempoStartFn | ITempoProgressFn; // callback function
 };
 
 /**

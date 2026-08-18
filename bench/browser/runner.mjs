@@ -14,9 +14,10 @@ import { checkSink, sinkState } from "../lib/sink.mjs";
 import canvas from "./canvas.bench.mjs";
 import form from "./form.bench.mjs";
 import image from "./image.bench.mjs";
+import sound from "./sound.bench.mjs";
 import space from "./space.bench.mjs";
 
-const suites = [canvas, form, image, space];
+const suites = [canvas, form, image, sound, space];
 
 export async function runBrowserBenchmarks(options = {}) {
   const Pts = globalThis.Pts;

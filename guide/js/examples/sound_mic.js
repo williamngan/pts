@@ -31,6 +31,9 @@
         Sound.input().then( s => {
           sound = s;
           sound.analyze( 128 );
+        }).catch( e => {
+          recording = false;
+          console.error( e );
         });
       } else {
         sound.stop();
