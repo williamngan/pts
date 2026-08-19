@@ -138,7 +138,7 @@ describe("Line", () => {
     ]);
     const horizontal = line([0, 0], [10, 0]);
     expect(values(Line.crop(horizontal, [2, 3], 0, true))).toEqual([3, 0]);
-    expect(values(Line.crop(line([0, 0], [0, 10]), [2, 3]))).toEqual([0, 0]);
+    expect(values(Line.crop(line([0, 0], [0, 10]), [2, 3]))).toEqual([0, 3]);
     expect(Line.crop(horizontal, [4, 4], 0, false)).toBeTruthy();
     expect(Line.crop(line([0, 0], [1, 10]), [4, 4], 1, false)).toBeTruthy();
     expect(Line.marker(horizontal, [2, 3], "arrow", true)).toHaveLength(3);
@@ -304,9 +304,10 @@ describe("Circle", () => {
     expect(
       Circle.intersectCircle2D(circle, Circle.fromCenter([1, 0], 1)),
     ).toHaveLength(1);
+    // coincident circles have no discrete intersection points
     expect(
       Circle.intersectCircle2D(circle, Circle.fromCenter([0, 0], 5)),
-    ).toHaveLength(2);
+    ).toHaveLength(0);
   });
 
   it("intersects rectangles and converts to rectangles and triangles", () => {
@@ -655,5 +656,154 @@ describe("Curve fast paths match the step-function reference", () => {
     expect(
       curve.every((p) => Number.isFinite(p[0]) && Number.isFinite(p[1])),
     ).toBe(true);
+  });
+});
+
+describe("Geometry correctness pins", () => {
+  const square = () =>
+    Group.fromArray([
+      [0, 0],
+      [10, 0],
+      [10, 10],
+      [0, 10],
+    ]);
+
+  it("returns the maximal inscribed square from Circle.toRect", () => {
+    const inner = Circle.toRect(Circle.fromCenter([0, 0], 10), true);
+    const half = 10 / Math.SQRT2;
+    expect(inner[1][0]).toBeCloseTo(half, 4);
+    expect(inner[0][0]).toBeCloseTo(-half, 4);
+    // corners land on the circle
+    expect(Math.hypot(inner[1][0], inner[1][1])).toBeCloseTo(10, 4);
+  });
+
+  it("handles degenerate circle intersections without NaN", () => {
+    const c = Circle.fromCenter([0, 0], 5);
+    expect(
+      Circle.intersectCircle2D(c, Circle.fromCenter([0, 0], 5)),
+    ).toHaveLength(0);
+    const enclosed = Circle.intersectCircle2D(c, Circle.fromCenter([1, 0], 1));
+    expect(enclosed).toHaveLength(1); // legacy enclosed-marker behavior kept
+    expect(Circle.intersectRay2D(c, line([1, 1], [1, 1]))).toHaveLength(0);
+  });
+
+  it("includes grid intersections that pass exactly through the grid point", () => {
+    const through = Line.intersectGridWithRay2D(line([-5, -5], [5, 5]), [0, 0]);
+    expect(through.length).toBeGreaterThan(0);
+    for (const p of through) expect(values(p)).toEqual([0, 0]);
+  });
+
+  it("returns real Groups from Polygon.lines, midpoints, and Triangle.medial", () => {
+    const tri = Group.fromArray([
+      [0, 0],
+      [10, 0],
+      [5, 10],
+    ]);
+    const lines = Polygon.lines(tri);
+    expect(lines).toHaveLength(3);
+    for (const l of lines) expect(l instanceof Group).toBe(true);
+    const mids = Polygon.midpoints(tri, true);
+    expect(mids instanceof Group).toBe(true);
+    expect(Triangle.medial(tri) instanceof Group).toBe(true);
+  });
+
+  it("judges collinearity scale-independently", () => {
+    expect(Line.collinear([0, 0], [1, 0], [0.5, 0.4])).toBe(false);
+    expect(Line.collinear([0, 0], [1000, 1000], [2000, 2000])).toBe(true);
+    expect(Line.collinear([0, 0], [0.001, 0.001], [0.002, 0.002])).toBe(true);
+    expect(Line.collinear([1, 1], [1, 1], [5, 5])).toBe(true); // coincident
+  });
+
+  it("respects explicit zero height in rectangle constructors", () => {
+    expect(groupValues(Rectangle.fromTopLeft([0, 0], 10, 0))).toEqual([
+      [0, 0],
+      [10, 0],
+    ]);
+    expect(groupValues(Rectangle.fromCenter([5, 5], 10, 0))).toEqual([
+      [0, 5],
+      [10, 5],
+    ]);
+  });
+
+  it("returns undefined for degenerate triangle centers", () => {
+    const degenerate = Group.fromArray([
+      [0, 0],
+      [5, 5],
+      [10, 10],
+    ]);
+    expect(Triangle.circumcenter(degenerate)).toBeUndefined();
+    expect(Triangle.orthocenter(degenerate)).toBeUndefined();
+    expect(Triangle.circumcircle(degenerate)).toBeUndefined();
+  });
+
+  it("keeps ray intersection contract on the parametric form", () => {
+    // coincident lines return the first line's start point
+    expect(
+      values(Line.intersectRay2D(line([3, 3], [10, 10]), line([2, 2], [8, 8]))),
+    ).toEqual([3, 3]);
+    // near-vertical stays finite and accurate
+    const ix = Line.intersectRay2D(
+      line([100, 0], [100.0001, 1000]),
+      line([0, 500], [1000, 500]),
+    );
+    expect(ix[0]).toBeCloseTo(100.00005, 3);
+    expect(ix[1]).toBeCloseTo(500, 6);
+  });
+
+  it("keeps point-in-polygon results for hit testing", () => {
+    expect(Polygon.hasIntersectPoint(square(), [5, 5])).toBe(true);
+    expect(Polygon.hasIntersectPoint(square(), [15, 5])).toBe(false);
+    expect(Polygon.hasIntersectPoint(square(), [-0.1, 5])).toBe(false);
+  });
+
+  it("computes perimeter totals and segments", () => {
+    const tri = Group.fromArray([
+      [0, 0],
+      [3, 0],
+      [3, 4],
+    ]);
+    const open = Polygon.perimeter(tri);
+    expect(open.total).toBeCloseTo(7);
+    expect(values(open.segments)).toEqual([3, 4]);
+    const closed = Polygon.perimeter(tri, true);
+    expect(closed.total).toBeCloseTo(12);
+    expect(values(closed.segments)).toEqual([3, 4, 5]);
+  });
+
+  it("keeps single-step curve functions consistent with batch curves", () => {
+    const g4 = Group.fromArray([
+      [0, 0],
+      [4, 8],
+      [9, 2],
+      [12, 6],
+    ]);
+    const t = 0.3;
+    const step = new Pt(t * t * t, t * t, t, 1);
+
+    const bz = Curve.bezierStep(step, g4);
+    expect(values(Curve.bezier(g4, 10)[3])).toEqual(
+      values(bz).map((v) => expect.closeTo(v, 5)) as unknown as number[],
+    );
+
+    const cmCtrl = Curve.controlPoints(g4, 0, true);
+    const cm = Curve.catmullRomStep(step, cmCtrl);
+    const cmBatch = Curve.catmullRom(g4, 10)[3];
+    expect(cmBatch[0]).toBeCloseTo(cm[0], 5);
+    expect(cmBatch[1]).toBeCloseTo(cm[1], 5);
+
+    const cd = Curve.cardinalStep(step, cmCtrl, 0.5);
+    const cdBatch = Curve.cardinal(g4, 10)[3];
+    expect(cdBatch[0]).toBeCloseTo(cd[0], 5);
+    expect(cdBatch[1]).toBeCloseTo(cd[1], 5);
+
+    const bs = Curve.bsplineStep(step, g4);
+    const bsBatch = Curve.bspline(g4, 10)[3];
+    expect(bsBatch[0]).toBeCloseTo(bs[0], 5);
+    expect(bsBatch[1]).toBeCloseTo(bs[1], 5);
+
+    const bst = Curve.bsplineTensionStep(step, g4, 0.8);
+    const bstBatch = Curve.bspline(g4, 10, 0.8)[3];
+    expect(bstBatch[0]).toBeCloseTo(bst[0], 5);
+    expect(bstBatch[1]).toBeCloseTo(bst[1], 5);
   });
 });

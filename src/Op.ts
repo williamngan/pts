@@ -91,13 +91,13 @@ export class Line {
     p3: PtLike,
     threshold: number = 0.01,
   ): boolean {
-    // Use cross product method
-    let a = new Pt(0, 0, 0).to(p1).$subtract(p2);
-    let b = new Pt(0, 0, 0).to(p1).$subtract(p3);
-    return a
-      .$cross(b)
-      .divide(1000)
-      .equals(new Pt(0, 0, 0), threshold);
+    // Compare the cross product normalized by the segment magnitudes (the
+    // sine of the angle between them), so the threshold is scale-free.
+    const a = new Pt(0, 0, 0).to(p1).$subtract(p2);
+    const b = new Pt(0, 0, 0).to(p1).$subtract(p3);
+    const magSq = a.magnitudeSq() * b.magnitudeSq();
+    if (magSq === 0) return true; // coincident points are collinear
+    return a.$cross(b).magnitudeSq() / magSq <= threshold * threshold;
   }
 
   /**
@@ -163,40 +163,32 @@ export class Line {
    * @returns an intersection Pt or undefined if no intersection
    */
   static intersectRay2D(la: PtIterable, lb: PtIterable): Pt {
-    let _la = Util.iterToArray(la);
-    let _lb = Util.iterToArray(lb);
+    const _la = Util.iterToArray(la);
+    const _lb = Util.iterToArray(lb);
 
-    let a = Line.intercept(_la[0], _la[1]);
-    let b = Line.intercept(_lb[0], _lb[1]);
+    const pa = _la[0];
+    const pb = _lb[0];
 
-    let pa = _la[0];
-    let pb = _lb[0];
+    // parametric form: no slope blow-up near vertical lines and uniform
+    // handling of vertical/horizontal cases
+    const rx = _la[1][0] - pa[0];
+    const ry = _la[1][1] - pa[1];
+    const sx = _lb[1][0] - pb[0];
+    const sy = _lb[1][1] - pb[1];
 
-    if (a == undefined) {
-      if (b == undefined) return undefined;
-      // one of them is vertical line, while the other is not, so they will intersect
-      let y1 = -b.slope * (pb[0] - pa[0]) + pb[1]; // -slope * x + y
-      return new Pt(pa[0], y1);
-    } else {
-      // diff slope, or b slope is vertical line
-      if (b == undefined) {
-        let y1 = -a.slope * (pa[0] - pb[0]) + pa[1];
-        return new Pt(pb[0], y1);
-      } else if (b.slope != a.slope) {
-        let px =
-          (a.slope * pa[0] - b.slope * pb[0] + pb[1] - pa[1]) /
-          (a.slope - b.slope);
-        let py = a.slope * (px - pa[0]) + pa[1];
-        return new Pt(px, py);
-      } else {
-        if (a.yi == b.yi) {
-          // exactly along the same path
-          return new Pt(pa[0], pa[1]);
-        } else {
-          return undefined;
-        }
-      }
+    // a zero-length input does not define a ray
+    if ((rx === 0 && ry === 0) || (sx === 0 && sy === 0)) return undefined;
+
+    const det = rx * sy - ry * sx;
+    if (det === 0) {
+      // parallel; if collinear, keep legacy behavior of returning la's start
+      const qpx = pb[0] - pa[0];
+      const qpy = pb[1] - pa[1];
+      return qpx * ry - qpy * rx === 0 ? new Pt(pa[0], pa[1]) : undefined;
     }
+
+    const t = ((pb[0] - pa[0]) * sy - (pb[1] - pa[1]) * sx) / det;
+    return new Pt(pa[0] + t * rx, pa[1] + t * ry);
   }
 
   /**
@@ -289,8 +281,8 @@ export class Line {
       new Pt(_ray[1]).subtract(gridPt),
     );
     let g = new Group();
-    if (t && t.xi) g.push(new Pt(gridPt[0] + t.xi, gridPt[1]));
-    if (t && t.yi) g.push(new Pt(gridPt[0], gridPt[1] + t.yi));
+    if (t && t.xi !== undefined) g.push(new Pt(gridPt[0] + t.xi, gridPt[1]));
+    if (t && t.yi !== undefined) g.push(new Pt(gridPt[0], gridPt[1] + t.yi));
     return g;
   }
 
@@ -359,12 +351,13 @@ export class Line {
     let tdx = index === 0 ? 1 : 0;
     let ls = _line[tdx].$subtract(_line[index]);
 
-    if (ls[0] === 0 || size[0] === 0) return _line[index];
+    if (ls.magnitudeSq() === 0) return _line[index]; // zero-length line
 
     if (cropAsCircle) {
       let d = ls.unit().multiply(size[1]);
       return _line[index].$add(d);
     } else {
+      if (size[0] === 0) return _line[index]; // degenerate rectangle
       let rect = Rectangle.fromCenter(_line[index], size);
       let sides = Rectangle.sides(rect);
       let sideIdx = 0;
@@ -454,7 +447,7 @@ export class Rectangle {
   ): Group {
     let size =
       typeof widthOrSize == "number"
-        ? [widthOrSize, height || widthOrSize]
+        ? [widthOrSize, height ?? widthOrSize]
         : widthOrSize;
     return new Group(new Pt(topLeft), new Pt(topLeft).add(size));
   }
@@ -473,7 +466,7 @@ export class Rectangle {
   ): Group {
     let half =
       typeof widthOrSize == "number"
-        ? [widthOrSize / 2, (height || widthOrSize) / 2]
+        ? [widthOrSize / 2, (height ?? widthOrSize) / 2]
         : new Pt(widthOrSize).divide(2);
     return new Group(new Pt(center).subtract(half), new Pt(center).add(half));
   }
@@ -756,6 +749,7 @@ export class Circle {
     let f = _pts[0].$subtract(_ray[0]);
 
     let a = d.dot(d);
+    if (a === 0) return new Group(); // degenerate ray (two identical points)
     let b = f.dot(d);
     let c = f.dot(f) - _pts[1].x * _pts[1].x;
     let p = b / a;
@@ -822,6 +816,9 @@ export class Circle {
     } else if (dr < Math.abs(ar - br)) {
       // completely enclosed
       return new Group(_pts[0].clone());
+    } else if (dr === 0) {
+      // coincident circles: no discrete intersection points
+      return new Group();
     } else {
       let a = (ar2 - br2 + dr2) / (2 * dr);
       let h = Math.sqrt(ar2 - a * a);
@@ -863,7 +860,8 @@ export class Circle {
     let _pts = Util.iterToArray(circle);
     let r = _pts[1][0];
     if (within) {
-      let half = Math.sqrt(r * r) / 2;
+      // half-side of the maximal inscribed square (its corners on the circle)
+      let half = r / Math.SQRT2;
       return new Group(_pts[0].$subtract(half), _pts[0].$add(half));
     } else {
       return new Group(_pts[0].$subtract(r), _pts[0].$add(r));
@@ -1007,6 +1005,7 @@ export class Triangle {
   static incircle(tri: PtIterable, center?: Pt): Group {
     let _pts = Util.iterToArray(tri);
     let c = center ? center : Triangle.incenter(_pts);
+    if (!c) return undefined; // degenerate (collinear) triangle
     let area = Polygon.area(_pts);
     let perim = Polygon.perimeter(_pts, true);
     let r = (2 * area) / perim.total;
@@ -1040,6 +1039,7 @@ export class Triangle {
   static circumcircle(tri: PtIterable, center?: Pt): Group {
     let _pts = Util.iterToArray(tri);
     let c = center ? center : Triangle.circumcenter(_pts);
+    if (!c) return undefined; // degenerate (collinear) triangle
     let r = _pts[0].$subtract(c).magnitude();
     return Circle.fromCenter(c, r);
   }
@@ -1114,9 +1114,17 @@ export class Polygon {
   static lines(poly: PtIterable, closePath: boolean = true): Group[] {
     let _pts = Util.iterToArray(poly);
     if (_pts.length < 2) return _errorLength(new Group(), 2);
-    let sp = Util.split(_pts, 2, 1);
-    if (closePath) sp.push(new Group(_pts[_pts.length - 1], _pts[0]));
-    return sp.map((g) => g as Group);
+    // build real Groups; indexed assignment avoids the slow spread through
+    // the Array subclass constructor
+    const count = closePath ? _pts.length : _pts.length - 1;
+    const sp: Group[] = new Array(count);
+    for (let i = 0; i < count; i++) {
+      const seg = new Group();
+      seg[0] = _pts[i];
+      seg[1] = _pts[i === _pts.length - 1 ? 0 : i + 1];
+      sp[i] = seg;
+    }
+    return sp;
   }
 
   /**
@@ -1130,9 +1138,12 @@ export class Polygon {
     closePath: boolean = false,
     t: number = 0.5,
   ): Group {
-    let sides = Polygon.lines(poly, closePath);
-    let mids = sides.map((s) => Geom.interpolate(s[0], s[1], t));
-    return mids as Group;
+    const sides = Polygon.lines(poly, closePath);
+    const mids = new Group();
+    for (let i = 0, len = sides.length; i < len; i++) {
+      mids[i] = Geom.interpolate(sides[i][0], sides[i][1], t);
+    }
+    return mids;
   }
 
   /**
@@ -1168,7 +1179,7 @@ export class Polygon {
    * @param poly a Group or an Iterable<Pt>
    * @param index the Pt in the polygon to bisect from
    * @param closePath a boolean to specify whether the polygon should be closed (ie, whether the final segment should be counted).
-   * @returns a bisector Pt that's a normalized unit vector
+   * @returns a bisector direction Pt, the average of the two adjacent sides' unit vectors (not itself normalized)
    */
   static bisector(poly: PtIterable, index: number): Pt {
     let sides = Polygon.adjacentSides(poly, index, true);
@@ -1191,12 +1202,22 @@ export class Polygon {
     poly: PtIterable,
     closePath: boolean = false,
   ): { total: number; segments: Pt } {
-    let lines = Polygon.lines(poly, closePath);
-    let mag = 0;
-    let p = Pt.make(lines.length, 0);
+    const _pts = Util.iterToArray(poly);
+    if (_pts.length < 2) {
+      _errorLength(new Group(), 2);
+      return { total: 0, segments: Pt.make(0, 0) };
+    }
 
-    for (let i = 0, len = lines.length; i < len; i++) {
-      let m = Line.magnitude(lines[i]);
+    const count = closePath ? _pts.length : _pts.length - 1;
+    const p = Pt.make(count, 0);
+    let mag = 0;
+
+    for (let i = 0; i < count; i++) {
+      const a = _pts[i];
+      const b = _pts[i === _pts.length - 1 ? 0 : i + 1];
+      const dx = b[0] - a[0];
+      const dy = b[1] - a[1];
+      const m = Math.sqrt(dx * dx + dy * dy);
       mag += m;
       p[i] = m;
     }
@@ -1208,7 +1229,7 @@ export class Polygon {
   }
 
   /**
-   * Find the area of a *convex* polygon.
+   * Find the area of a simple (non-self-intersecting) polygon using the shoelace formula.
    * @param pts a Group or an Iterable<PtLike> representing a polygon
    */
   static area(pts: PtLikeIterable) {
@@ -1401,15 +1422,17 @@ export class Polygon {
    * @param pt the Pt to check
    */
   static hasIntersectPoint(poly: PtLikeIterable, pt: PtLike): boolean {
-    let _poly = Util.iterToArray(poly);
+    const _poly = Util.iterToArray(poly);
+    const px = pt[0];
+    const py = pt[1];
     let c = false;
+    // same ray-cast as before, without a Group allocation per edge
     for (let i = 0, len = _poly.length; i < len; i++) {
-      let ln = Polygon.lineAt(_poly, i);
+      const a = _poly[i];
+      const b = _poly[i === len - 1 ? 0 : i + 1];
       if (
-        ln[0][1] > pt[1] != ln[1][1] > pt[1] &&
-        pt[0] <
-          ((ln[1][0] - ln[0][0]) * (pt[1] - ln[0][1])) / (ln[1][1] - ln[0][1]) +
-            ln[0][0]
+        a[1] > py != b[1] > py &&
+        px < ((b[0] - a[0]) * (py - a[1])) / (b[1] - a[1]) + a[0]
       ) {
         c = !c;
       }
@@ -1772,6 +1795,29 @@ export class Curve {
   }
 
   /**
+   * Weighted sum of 4 control points with scalar weights — the shared core
+   * of the single-point step functions, kept consistent with the batch
+   * `_weights` tables by construction.
+   */
+  private static _stepPt(
+    ctrls: GroupLike,
+    w0: number,
+    w1: number,
+    w2: number,
+    w3: number,
+  ): Pt {
+    const c0 = ctrls[0];
+    const c1 = ctrls[1];
+    const c2 = ctrls[2];
+    const c3 = ctrls[3];
+    const x = w0 * c0[0] + w1 * c1[0] + w2 * c2[0] + w3 * c3[0];
+    const y = w0 * c0[1] + w1 * c1[1] + w2 * c2[1] + w3 * c3[1];
+    return c0.length > 2
+      ? new Pt(x, y, w0 * c0[2] + w1 * c1[2] + w2 * c2[2] + w3 * c3[2])
+      : new Pt(x, y);
+  }
+
+  /**
    * Create a Catmull-Rom curve. Catmull-Rom is a kind of smooth-looking Cardinal curve.
    * @param pts a Group or an Iterable<PtLike>
    * @param steps the number of line segments per curve. Defaults to 10 steps
@@ -1813,22 +1859,17 @@ export class Curve {
    * @return an interpolated Pt on the curve
    */
   static catmullRomStep(step: Pt, ctrls: GroupLike): Pt {
-    /*
-     * Basis Matrix (http://mrl.nyu.edu/~perlin/courses/fall2002/hw/12.html)
-     * [-0.5,  1.5, -1.5, 0.5],
-     * [ 1  , -2.5,  2  ,-0.5],
-     * [-0.5,  0  ,  0.5, 0  ],
-     * [ 0  ,  1  ,  0  , 0  ]
-     */
-
-    let m = new Group(
-      new Pt(-0.5, 1, -0.5, 0),
-      new Pt(1.5, -2.5, 0, 1),
-      new Pt(-1.5, 2, 0.5, 0),
-      new Pt(0.5, -0.5, 0, 0),
+    // same coefficients as the batch `catmullRom` weight table
+    const t3 = step[0];
+    const t2 = step[1];
+    const t = step[2];
+    return Curve._stepPt(
+      ctrls,
+      -0.5 * t3 + t2 - 0.5 * t,
+      1.5 * t3 - 2.5 * t2 + 1,
+      -1.5 * t3 + 2 * t2 + 0.5 * t,
+      0.5 * t3 - 0.5 * t2,
     );
-
-    return Curve._calcPt(ctrls, Mat.multiply([step], m, true)[0]);
   }
 
   /**
@@ -1879,32 +1920,17 @@ export class Curve {
    * @return an interpolated Pt on the curve
    */
   static cardinalStep(step: Pt, ctrls: GroupLike, tension: number = 0.5): Pt {
-    /*
-     * Basis Matrix (http://algorithmist.wordpress.com/2009/10/06/cardinal-splines-part-4/)
-     * [ -s  2-s  s-2   s ]
-     * [ 2s  s-3  3-2s -s ]
-     * [ -s   0    s    0 ]
-     * [  0   1    0    0 ]
-     */
-
-    let m = new Group(
-      new Pt(-1, 2, -1, 0),
-      new Pt(-1, 1, 0, 0),
-      new Pt(1, -2, 1, 0),
-      new Pt(1, -1, 0, 0),
+    // same coefficients as the batch `cardinal` weight table
+    const t3 = step[0];
+    const t2 = step[1];
+    const t = step[2];
+    return Curve._stepPt(
+      ctrls,
+      tension * (-t3 + 2 * t2 - t),
+      tension * (-t3 + t2) + (2 * t3 - 3 * t2 + 1),
+      tension * (t3 - 2 * t2 + t) + (-2 * t3 + 3 * t2),
+      tension * (t3 - t2),
     );
-
-    let h = Mat.multiply([step], m, true)[0].multiply(tension);
-    let h2 = 2 * step[0] - 3 * step[1] + 1;
-    let h3 = -2 * step[0] + 3 * step[1];
-
-    let pt = Curve._calcPt(ctrls, h);
-
-    pt.x += h2 * ctrls[1].x + h3 * ctrls[2].x;
-    pt.y += h2 * ctrls[1].y + h3 * ctrls[2].y;
-    if (pt.length > 2) pt.z += h2 * ctrls[1].z + h3 * ctrls[2].z;
-
-    return pt;
   }
 
   /**
@@ -1948,22 +1974,17 @@ export class Curve {
    * @return an interpolated Pt on the curve
    */
   static bezierStep(step: Pt, ctrls: GroupLike) {
-    /*
-     * Bezier basis matrix
-     * [ -1,  3, -3,  1 ]
-     * [  3, -6,  3,  0 ]
-     * [ -3,  3,  0,  0 ]
-     * [  1,  0,  0,  0 ]
-     */
-
-    let m = new Group(
-      new Pt(-1, 3, -3, 1),
-      new Pt(3, -6, 3, 0),
-      new Pt(-3, 3, 0, 0),
-      new Pt(1, 0, 0, 0),
+    // same coefficients as the batch `bezier` weight table
+    const t3 = step[0];
+    const t2 = step[1];
+    const t = step[2];
+    return Curve._stepPt(
+      ctrls,
+      -t3 + 3 * t2 - 3 * t + 1,
+      3 * t3 - 6 * t2 + 3 * t,
+      -3 * t3 + 3 * t2,
+      t3,
     );
-
-    return Curve._calcPt(ctrls, Mat.multiply([step], m, true)[0]);
   }
 
   /**
@@ -2022,22 +2043,17 @@ export class Curve {
    * @return an interpolated Pt on the curve
    */
   static bsplineStep(step: Pt, ctrls: GroupLike): Pt {
-    /*
-     * Basis matrix:
-     * [ -1.0/6.0,  3.0/6.0, -3.0/6.0, 1.0/6.0 ],
-     * [  3.0/6.0, -6.0/6.0,  3.0/6.0,    0.0 ],
-     * [ -3.0/6.0,      0.0,  3.0/6.0,    0.0 ],
-     * [  1.0/6.0,  4.0/6.0,  1.0/6.0,    0.0 ]
-     */
-
-    let m = new Group(
-      new Pt(-0.16666666666666666, 0.5, -0.5, 0.16666666666666666),
-      new Pt(0.5, -1, 0, 0.6666666666666666),
-      new Pt(-0.5, 0.5, 0.5, 0.16666666666666666),
-      new Pt(0.16666666666666666, 0, 0, 0),
+    // same coefficients as the batch `bspline` weight table
+    const t3 = step[0];
+    const t2 = step[1];
+    const t = step[2];
+    return Curve._stepPt(
+      ctrls,
+      -t3 / 6 + 0.5 * t2 - 0.5 * t + 1 / 6,
+      0.5 * t3 - t2 + 2 / 3,
+      -0.5 * t3 + 0.5 * t2 + 0.5 * t + 1 / 6,
+      t3 / 6,
     );
-
-    return Curve._calcPt(ctrls, Mat.multiply([step], m, true)[0]);
   }
 
   /**
@@ -2052,31 +2068,18 @@ export class Curve {
     ctrls: GroupLike,
     tension: number = 1,
   ): Pt {
-    /*
-     * Basis matrix:
-     * [ -1/6a, 2 - 1.5a, 1.5a - 2, 1/6a ]
-     * [ 0.5a,  2a-3,     3-2.5a    0 ]
-     * [ -0.5a, 0,        0.5a,     0 ]
-     * [ 1/6a,  1 - 1/3a, 1/6a,     0 ]
-     */
-
-    let m = new Group(
-      new Pt(-0.16666666666666666, 0.5, -0.5, 0.16666666666666666),
-      new Pt(-1.5, 2, 0, -0.3333333333333333),
-      new Pt(1.5, -2.5, 0.5, 0.16666666666666666),
-      new Pt(0.16666666666666666, 0, 0, 0),
+    // same coefficients as the batch `bspline` tension weight table
+    const t3 = step[0];
+    const t2 = step[1];
+    const t = step[2];
+    const b1 = 2 * t3 - 3 * t2 + 1;
+    const b2 = -2 * t3 + 3 * t2;
+    return Curve._stepPt(
+      ctrls,
+      tension * (-t3 / 6 + 0.5 * t2 - 0.5 * t + 1 / 6),
+      tension * (-1.5 * t3 + 2 * t2 - 1 / 3) + b1,
+      tension * (1.5 * t3 - 2.5 * t2 + 0.5 * t + 1 / 6) + b2,
+      tension * (t3 / 6),
     );
-
-    let h = Mat.multiply([step], m, true)[0].multiply(tension);
-    let h2 = 2 * step[0] - 3 * step[1] + 1;
-    let h3 = -2 * step[0] + 3 * step[1];
-
-    let pt = Curve._calcPt(ctrls, h);
-
-    pt.x += h2 * ctrls[1].x + h3 * ctrls[2].x;
-    pt.y += h2 * ctrls[1].y + h3 * ctrls[2].y;
-    if (pt.length > 2) pt.z += h2 * ctrls[1].z + h3 * ctrls[2].z;
-
-    return pt;
   }
 }

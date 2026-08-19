@@ -4975,7 +4975,7 @@ Unit vector of `a`. If magnitude of `a` is already known, pass it in the second 
 <a id="num-geom"></a>
 ### `Geom`
 
-**Kind:** Class · **Source:** [`src/Num.ts:194`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L194)
+**Kind:** Class · **Source:** [`src/Num.ts:192`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L192)
 
 Geom class provides static helper functions for basic geometric operations.
 
@@ -5538,7 +5538,7 @@ static generator: any
 <a id="num-range"></a>
 ### `Range`
 
-**Kind:** Class · **Source:** [`src/Num.ts:933`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L933)
+**Kind:** Class · **Source:** [`src/Num.ts:949`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L949)
 
 Range object keeps track of a Group of n-dimensional Pts to provide its minimum, maximum, and magnitude in each dimension.
 It also provides convenient functions such as mapping the Group to another range. This class may be useful for visualizing data in charts.
@@ -5643,7 +5643,7 @@ Create a number of evenly spaced "ticks" that span this Range's min and max valu
 <a id="num-shaping"></a>
 ### `Shaping`
 
-**Kind:** Class · **Source:** [`src/Num.ts:541`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L541)
+**Kind:** Class · **Source:** [`src/Num.ts:557`](https://github.com/williamngan/pts/blob/master/src/Num.ts#L557)
 
 Shaping provides shaping functions to interpolate a value. These are useful for easing and transitions.
 
@@ -5787,7 +5787,7 @@ A faster way to approximate cosine ease in-out using Blinn-Wyvill Approximation.
 static cubicBezier(t: number, c: number = 1, p1: PtLike = ..., p2: PtLike = ...): number
 ```
 
-Cubic bezier curve. This reuses the bezier functions in Curve class.
+Cubic bezier curve. This reuses the bezier functions in Curve class. Note that `t` is the curve parameter, not the x position: unlike CSS `cubic-bezier(...)`, this returns the curve's y value at parameter `t` rather than solving y at x = t.
 
 **Parameters**
 
@@ -6151,7 +6151,7 @@ Convert any shaping functions into a series of steps.
 <a id="op-circle"></a>
 ### `Circle`
 
-**Kind:** Class · **Source:** [`src/Op.ts:685`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L685)
+**Kind:** Class · **Source:** [`src/Op.ts:678`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L678)
 
 Circle class provides static functions to create and operate on circles. A circle is usually represented as a Group of 2 Pts, where the first Pt specifies the center, and the second Pt specifies the radius.
 You can use the static functions as-is, or apply the [`Group.op`](#pt-group-op) or [`Pt.op`](#pt-pt-op) to enable functional programming.
@@ -6340,7 +6340,7 @@ Check if a point is within a circle.
 <a id="op-curve"></a>
 ### `Curve`
 
-**Kind:** Class · **Source:** [`src/Op.ts:1668`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1668)
+**Kind:** Class · **Source:** [`src/Op.ts:1691`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L1691)
 
 Curve class provides static functions to interpolate curves. A curve is usually represented as a Group of 3 or more control points.
 You can use the static functions as-is, or apply the [`Group.op`](#pt-group-op) or [`Pt.op`](#pt-pt-op) to enable functional programming.
@@ -6965,7 +6965,7 @@ Given a Pt in the polygon group, the adjacent sides are the two sides which the 
 static area(pts: PtLikeIterable): any
 ```
 
-Find the area of a *convex* polygon.
+Find the area of a simple (non-self-intersecting) polygon using the shoelace formula.
 
 **Parameters**
 
@@ -6987,7 +6987,7 @@ Get a bisector which is a line that split between two sides of a polygon equally
 - `poly` (`PtIterable`) — a Group or an Iterable<Pt>
 - `index` (`number`) — the Pt in the polygon to bisect from
 
-**Returns:** a bisector Pt that's a normalized unit vector
+**Returns:** a bisector direction Pt, the average of the two adjacent sides' unit vectors (not itself normalized)
 
 <a id="op-polygon-static-centroid"></a>
 ##### `centroid`
@@ -7263,7 +7263,7 @@ Get a bounding box for each polygon group, as well as a union bounding-box for a
 <a id="op-rectangle"></a>
 ### `Rectangle`
 
-**Kind:** Class · **Source:** [`src/Op.ts:427`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L427)
+**Kind:** Class · **Source:** [`src/Op.ts:420`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L420)
 
 Rectangle class provides static functions to create and operate on rectangles. A rectangle is usually represented as a Group of 2 Pts, marking the top-left and bottom-right corners of the rectangle.
 You can use the static functions as-is, or apply the [`Group.op`](#pt-group-op) or [`Pt.op`](#pt-pt-op) to enable functional programming.
@@ -7547,7 +7547,7 @@ Check if a point is within a rectangle.
 <a id="op-triangle"></a>
 ### `Triangle`
 
-**Kind:** Class · **Source:** [`src/Op.ts:900`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L900)
+**Kind:** Class · **Source:** [`src/Op.ts:898`](https://github.com/williamngan/pts/blob/master/src/Op.ts#L898)
 
 Triangle class provides static functions to create and operate on trianges. A triange is a polygon represented as a Group of 3 Pts.
 You can use the static functions as-is, or apply the [`Group.op`](#pt-group-op) or [`Pt.op`](#pt-pt-op) to enable functional programming.

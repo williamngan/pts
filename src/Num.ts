@@ -53,12 +53,9 @@ export class Num {
    */
   static boundValue(val: number, min: number, max: number): number {
     const len = Math.abs(max - min);
-    let a = val % len;
-
-    if (a > max) a -= len;
-    else if (a < min) a += len;
-
-    return a;
+    let a = (val - min) % len;
+    if (a < 0) a += len;
+    return a + min;
   }
 
   /**
@@ -78,7 +75,7 @@ export class Num {
    */
   static randomRange(a: number, b: number = 0): number {
     const r = a > b ? a - b : b - a;
-    return a + Num.random() * r;
+    return Math.min(a, b) + Num.random() * r;
   }
 
   /**
@@ -165,9 +162,10 @@ export class Num {
       throw new Error(
         "[currMin, currMax] must define a range that is not zero",
       );
-    const min = Math.min(targetA, targetB);
-    const max = Math.max(targetA, targetB);
-    return Num.normalizeValue(n, currA, currB) * (max - min) + min;
+    // signed normalization so that reversed source or target ranges map
+    // directionally instead of being silently reoriented
+    const t = (n - currA) / (currB - currA);
+    return targetA + t * (targetB - targetA);
   }
 
   /**
@@ -318,7 +316,16 @@ export class Geom {
    * Check if two Pts are perpendicular to each other (2D only).
    */
   static isPerpendicular(p1: PtLike, p2: PtLike): boolean {
-    return new Pt(p1).dot(p2) === 0;
+    // relative epsilon: |a·b| <= ε·|a|·|b| (zero vectors keep returning true)
+    let dot = 0;
+    let ma = 0;
+    let mb = 0;
+    for (let i = 0, len = Math.min(p1.length, p2.length); i < len; i++) {
+      dot += p1[i] * p2[i];
+      ma += p1[i] * p1[i];
+      mb += p2[i] * p2[i];
+    }
+    return Math.abs(dot) <= Const.epsilon * Math.sqrt(ma * mb);
   }
 
   /**
@@ -346,31 +353,35 @@ export class Geom {
     const _pts = Util.iterToArray(pts);
     const bounds = Geom.boundingBox(_pts);
     const center = bounds[1].add(bounds[0]).divide(2);
+    const cx = center[0];
+    const cy = center[1];
 
+    // same ordering as before, with scalar math instead of two Pt
+    // allocations per comparison
     const fn = (a: Pt, b: Pt): number => {
       if (a.length < 2 || b.length < 2)
         throw new Error("Pt dimension cannot be less than 2");
 
-      const da = a.$subtract(center);
-      const db = b.$subtract(center);
+      const dax = a[0] - cx;
+      const day = a[1] - cy;
+      const dbx = b[0] - cx;
+      const dby = b[1] - cy;
 
-      if (da[0] >= 0 && db[0] < 0) return 1;
-      if (da[0] < 0 && db[0] >= 0) return -1;
-      if (da[0] == 0 && db[0] == 0) {
-        if (da[1] >= 0 || db[1] >= 0) return da[1] > db[1] ? 1 : -1;
-        return db[1] > da[1] ? 1 : -1;
+      if (dax >= 0 && dbx < 0) return 1;
+      if (dax < 0 && dbx >= 0) return -1;
+      if (dax == 0 && dbx == 0) {
+        if (day >= 0 || dby >= 0) return day > dby ? 1 : -1;
+        return dby > day ? 1 : -1;
       }
 
-      // compute the cross product of vectors (center -> a) x (center -> b)
-      const det = da.$cross2D(db);
+      // cross product of vectors (center -> a) x (center -> b)
+      const det = dax * dby - day * dbx;
       if (det < 0) return 1;
       if (det > 0) return -1;
 
       // points a and b are on the same line from the center
       // check which point is closer to the center
-      return da[0] * da[0] + da[1] * da[1] > db[0] * db[0] + db[1] * db[1]
-        ? 1
-        : -1;
+      return dax * dax + day * day > dbx * dbx + dby * dby ? 1 : -1;
     };
 
     return _pts.sort(fn);
@@ -427,10 +438,13 @@ export class Geom {
     if (!anchor) anchor = Pt.make(pts[0].length, 0);
     const cos = Math.cos(angle);
     const sin = Math.sin(angle);
+    // the anchor is a fixed point of the rotation even when it aliases one
+    // of the transformed points, so the matrix can be built once
+    const mat = fn(cos, sin, anchor);
 
     for (let i = 0, len = pts.length; i < len; i++) {
       const p = axis ? pts[i].$take(axis) : pts[i];
-      p.to(Mat.transform2D(p, fn(cos, sin, anchor)));
+      p.to(Mat.transform2D(p, mat));
       if (axis) {
         for (let k = 0; k < axis.length; k++) {
           pts[i][axis[k]] = p[k];
@@ -462,10 +476,12 @@ export class Geom {
     const fn = anchor ? Mat.shearAt2DMatrix : Mat.shear2DMatrix;
     const tanx = Math.tan(s[0]);
     const tany = Math.tan(s[1]);
+    // like rotate2D, the anchor is invariant under its own shear
+    const mat = fn(tanx, tany, anchor);
 
     for (let i = 0, len = pts.length; i < len; i++) {
       const p = axis ? pts[i].$take(axis) : pts[i];
-      p.to(Mat.transform2D(p, fn(tanx, tany, anchor)));
+      p.to(Mat.transform2D(p, mat));
       if (axis) {
         for (let k = 0; k < axis.length; k++) {
           pts[i][axis[k]] = p[k];
@@ -836,7 +852,7 @@ export class Shaping {
    * Quadratic bezier curve, adapted from Golan Levin's [shaping functions](http://www.flong.com/texts/code/shapers_exp/).
    * @param t a value between 0 to 1
    * @param c the value to shape, default is 1
-   * @param p1 a Pt object specifying the first control Pt, or a value specifying the control Pt's x position (its y position will default to 0.5). Default is `Pt(0.95, 0.95)
+   * @param p1 a Pt object specifying the first control Pt, or a value specifying the control Pt's x position (its y position will default to 0.5). Default is `[0.05, 0.95]`.
    */
   static quadraticBezier(
     t: number,
@@ -854,7 +870,7 @@ export class Shaping {
   }
 
   /**
-   * Cubic bezier curve. This reuses the bezier functions in Curve class.
+   * Cubic bezier curve. This reuses the bezier functions in Curve class. Note that `t` is the curve parameter, not the x position: unlike CSS `cubic-bezier(...)`, this returns the curve's y value at parameter `t` rather than solving y at x = t.
    * @param t a value between 0 to 1
    * @param c the value to shape, default is 1
    * @param p1` a Pt object specifying the first control Pt. Default is `Pt(0.1, 0.7).
@@ -979,8 +995,11 @@ export class Range {
     const mag = new Pt(dims);
 
     for (let i = 0; i < dims; i++) {
-      max[i] = Const.min;
-      min[i] = Const.max;
+      // Infinity, not MAX_VALUE/MIN_VALUE: MIN_VALUE is the smallest positive
+      // double (flushes to 0 in the Float32 Pt), which would cap the maximum
+      // of all-negative data at 0
+      max[i] = -Infinity;
+      min[i] = Infinity;
       mag[i] = 0;
 
       const s = this._source.zipSlice(i);
@@ -1043,8 +1062,9 @@ export class Range {
     const g = new Group();
     for (let i = 0; i <= count; i++) {
       const p = new Pt(this._dims);
+      const t = count > 0 ? i / count : 0;
       for (let k = 0, len = this._max.length; k < len; k++) {
-        p[k] = Num.lerp(this._min[k], this._max[k], i / count);
+        p[k] = Num.lerp(this._min[k], this._max[k], t);
       }
       g.push(p);
     }

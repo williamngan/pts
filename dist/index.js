@@ -2,6 +2,1013 @@
 Licensed under Apache 2.0 License.
 See https://github.com/williamngan/pts for details. */
 Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+//#region src/Op.ts
+let _errorLength = (obj, param = "expected") => Util.warn("Group's length is less than " + param, obj);
+let _errorOutofBound = (obj, param = "") => Util.warn(`Index ${param} is out of bound in Group`, obj);
+var Line = class Line {
+	static fromAngle(anchor, angle, magnitude) {
+		let g = new Group(new Pt(anchor), new Pt(anchor));
+		g[1].toAngle(angle, magnitude, true);
+		return g;
+	}
+	static slope(p1, p2) {
+		return p2[0] - p1[0] === 0 ? void 0 : (p2[1] - p1[1]) / (p2[0] - p1[0]);
+	}
+	static intercept(p1, p2) {
+		if (p2[0] - p1[0] === 0) return;
+		else {
+			let m = (p2[1] - p1[1]) / (p2[0] - p1[0]);
+			let c = p1[1] - m * p1[0];
+			return {
+				slope: m,
+				yi: c,
+				xi: m === 0 ? void 0 : -c / m
+			};
+		}
+	}
+	static sideOfPt2D(line, pt) {
+		let _line = Util.iterToArray(line);
+		return (_line[1][0] - _line[0][0]) * (pt[1] - _line[0][1]) - (pt[0] - _line[0][0]) * (_line[1][1] - _line[0][1]);
+	}
+	static collinear(p1, p2, p3, threshold = .01) {
+		const a = new Pt(0, 0, 0).to(p1).$subtract(p2);
+		const b = new Pt(0, 0, 0).to(p1).$subtract(p3);
+		const magSq = a.magnitudeSq() * b.magnitudeSq();
+		if (magSq === 0) return true;
+		return a.$cross(b).magnitudeSq() / magSq <= threshold * threshold;
+	}
+	static magnitude(line) {
+		let _line = Util.iterToArray(line);
+		return _line.length >= 2 ? _line[1].$subtract(_line[0]).magnitude() : 0;
+	}
+	static magnitudeSq(line) {
+		let _line = Util.iterToArray(line);
+		return _line.length >= 2 ? _line[1].$subtract(_line[0]).magnitudeSq() : 0;
+	}
+	static perpendicularFromPt(line, pt, asProjection = false) {
+		let _line = Util.iterToArray(line);
+		if (_line[0].equals(_line[1])) return void 0;
+		let a = _line[0].$subtract(_line[1]);
+		let b = _line[1].$subtract(pt);
+		let proj = b.$subtract(a.$project(b));
+		return asProjection ? proj : proj.$add(pt);
+	}
+	static distanceFromPt(line, pt) {
+		let _line = Util.iterToArray(line);
+		let projectionVector = Line.perpendicularFromPt(_line, pt, true);
+		if (projectionVector) return projectionVector.magnitude();
+		else return _line[0].$subtract(pt).magnitude();
+	}
+	static intersectRay2D(la, lb) {
+		const _la = Util.iterToArray(la);
+		const _lb = Util.iterToArray(lb);
+		const pa = _la[0];
+		const pb = _lb[0];
+		const rx = _la[1][0] - pa[0];
+		const ry = _la[1][1] - pa[1];
+		const sx = _lb[1][0] - pb[0];
+		const sy = _lb[1][1] - pb[1];
+		if (rx === 0 && ry === 0 || sx === 0 && sy === 0) return void 0;
+		const det = rx * sy - ry * sx;
+		if (det === 0) {
+			const qpx = pb[0] - pa[0];
+			const qpy = pb[1] - pa[1];
+			return qpx * ry - qpy * rx === 0 ? new Pt(pa[0], pa[1]) : void 0;
+		}
+		const t = ((pb[0] - pa[0]) * sy - (pb[1] - pa[1]) * sx) / det;
+		return new Pt(pa[0] + t * rx, pa[1] + t * ry);
+	}
+	static intersectLine2D(la, lb) {
+		let _la = Util.iterToArray(la);
+		let _lb = Util.iterToArray(lb);
+		let pt = Line.intersectRay2D(_la, _lb);
+		return pt && Geom.withinBound(pt, _la[0], _la[1]) && Geom.withinBound(pt, _lb[0], _lb[1]) ? pt : void 0;
+	}
+	static intersectLineWithRay2D(line, ray) {
+		let _line = Util.iterToArray(line);
+		let _ray = Util.iterToArray(ray);
+		let pt = Line.intersectRay2D(_line, _ray);
+		return pt && Geom.withinBound(pt, _line[0], _line[1]) ? pt : void 0;
+	}
+	static intersectPolygon2D(lineOrRay, poly, sourceIsRay = false) {
+		let _lineOrRay = Util.iterToArray(lineOrRay);
+		let _poly = Util.iterToArray(poly);
+		let fn = sourceIsRay ? Line.intersectLineWithRay2D : Line.intersectLine2D;
+		let pts = new Group();
+		for (let i = 0, len = _poly.length; i < len; i++) {
+			let next = i === len - 1 ? 0 : i + 1;
+			let d = fn([_poly[i], _poly[next]], _lineOrRay);
+			if (d) pts.push(d);
+		}
+		return pts.length > 0 ? pts : void 0;
+	}
+	static intersectLines2D(lines1, lines2, isRay = false) {
+		let group = new Group();
+		let fn = isRay ? Line.intersectLineWithRay2D : Line.intersectLine2D;
+		for (let l1 of lines1) for (let l2 of lines2) {
+			let _ip = fn(l1, l2);
+			if (_ip) group.push(_ip);
+		}
+		return group;
+	}
+	static intersectGridWithRay2D(ray, gridPt) {
+		let _ray = Util.iterToArray(ray);
+		let t = Line.intercept(new Pt(_ray[0]).subtract(gridPt), new Pt(_ray[1]).subtract(gridPt));
+		let g = new Group();
+		if (t && t.xi !== void 0) g.push(new Pt(gridPt[0] + t.xi, gridPt[1]));
+		if (t && t.yi !== void 0) g.push(new Pt(gridPt[0], gridPt[1] + t.yi));
+		return g;
+	}
+	static intersectGridWithLine2D(line, gridPt) {
+		let _line = Util.iterToArray(line);
+		let g = Line.intersectGridWithRay2D(_line, gridPt);
+		let gg = new Group();
+		for (let i = 0, len = g.length; i < len; i++) if (Geom.withinBound(g[i], _line[0], _line[1])) gg.push(g[i]);
+		return gg;
+	}
+	static intersectRect2D(line, rect) {
+		let _line = Util.iterToArray(line);
+		let _rect = Util.iterToArray(rect);
+		let box = Geom.boundingBox(Group.fromPtArray(_line));
+		if (!Rectangle.hasIntersectRect2D(box, _rect)) return new Group();
+		return Line.intersectLines2D([_line], Rectangle.sides(_rect));
+	}
+	static subpoints(line, num) {
+		let _line = Util.iterToArray(line);
+		let pts = new Group();
+		for (let i = 1; i <= num; i++) pts.push(Geom.interpolate(_line[0], _line[1], i / (num + 1)));
+		return pts;
+	}
+	static crop(line, size, index = 0, cropAsCircle = true) {
+		let _line = Util.iterToArray(line);
+		let ls = _line[index === 0 ? 1 : 0].$subtract(_line[index]);
+		if (ls.magnitudeSq() === 0) return _line[index];
+		if (cropAsCircle) {
+			let d = ls.unit().multiply(size[1]);
+			return _line[index].$add(d);
+		} else {
+			if (size[0] === 0) return _line[index];
+			let rect = Rectangle.fromCenter(_line[index], size);
+			let sides = Rectangle.sides(rect);
+			let sideIdx = 0;
+			if (Math.abs(ls[1] / ls[0]) > Math.abs(size[1] / size[0])) sideIdx = ls[1] < 0 ? 0 : 2;
+			else sideIdx = ls[0] < 0 ? 3 : 1;
+			return Line.intersectRay2D(sides[sideIdx], _line);
+		}
+	}
+	static marker(line, size, graphic = "arrow", atTail = true) {
+		let _line = Util.iterToArray(line);
+		let h = atTail ? 0 : 1;
+		let t = atTail ? 1 : 0;
+		let unit = _line[h].$subtract(_line[t]);
+		if (unit.magnitudeSq() === 0) return new Group();
+		unit.unit();
+		let ps = Geom.perpendicular(unit).multiply(size[0]).add(_line[t]);
+		if (graphic == "arrow") {
+			ps.add(unit.$multiply(size[1]));
+			return new Group(_line[t], ps[0], ps[1]);
+		} else return new Group(ps[0], ps[1]);
+	}
+	static toRect(line) {
+		let _line = Util.iterToArray(line);
+		return new Group(_line[0].$min(_line[1]), _line[0].$max(_line[1]));
+	}
+};
+var Rectangle = class Rectangle {
+	static from(topLeft, widthOrSize, height) {
+		return Rectangle.fromTopLeft(topLeft, widthOrSize, height);
+	}
+	static fromTopLeft(topLeft, widthOrSize, height) {
+		let size = typeof widthOrSize == "number" ? [widthOrSize, height !== null && height !== void 0 ? height : widthOrSize] : widthOrSize;
+		return new Group(new Pt(topLeft), new Pt(topLeft).add(size));
+	}
+	static fromCenter(center, widthOrSize, height) {
+		let half = typeof widthOrSize == "number" ? [widthOrSize / 2, (height !== null && height !== void 0 ? height : widthOrSize) / 2] : new Pt(widthOrSize).divide(2);
+		return new Group(new Pt(center).subtract(half), new Pt(center).add(half));
+	}
+	static toCircle(pts, enclose = true) {
+		return Circle.fromRect(pts, enclose);
+	}
+	static toSquare(pts, enclose = false) {
+		let _pts = Util.iterToArray(pts);
+		let s = Rectangle.size(_pts);
+		let m = enclose ? s.maxValue().value : s.minValue().value;
+		return Rectangle.fromCenter(Rectangle.center(_pts), m, m);
+	}
+	static size(pts) {
+		let p = Util.iterToArray(pts);
+		return p[0].$max(p[1]).subtract(p[0].$min(p[1]));
+	}
+	static center(pts) {
+		let p = Util.iterToArray(pts);
+		let min = p[0].$min(p[1]);
+		let max = p[0].$max(p[1]);
+		return min.add(max.$subtract(min).divide(2));
+	}
+	static corners(rect) {
+		let _rect = Util.iterToArray(rect);
+		let p0 = _rect[0].$min(_rect[1]);
+		let p2 = _rect[0].$max(_rect[1]);
+		return new Group(p0, new Pt(p2.x, p0.y), p2, new Pt(p0.x, p2.y));
+	}
+	static sides(rect) {
+		let [p0, p1, p2, p3] = Rectangle.corners(rect);
+		return [
+			new Group(p0, p1),
+			new Group(p1, p2),
+			new Group(p2, p3),
+			new Group(p3, p0)
+		];
+	}
+	static boundingBox(rects) {
+		let _rects = Util.iterToArray(rects);
+		let merged = Util.flatten(_rects, false);
+		if (merged.length === 0) return new Group();
+		let min = Pt.make(2, Infinity);
+		let max = Pt.make(2, -Infinity);
+		for (let i = 0, len = merged.length; i < len; i++) {
+			let p = merged[i];
+			let dim = Math.min(2, p.length);
+			for (let k = 0; k < dim; k++) {
+				min[k] = Math.min(min[k], p[k]);
+				max[k] = Math.max(max[k], p[k]);
+			}
+		}
+		return new Group(min, max);
+	}
+	static polygon(rect) {
+		return Rectangle.corners(rect);
+	}
+	static quadrants(rect, center) {
+		let _rect = Util.iterToArray(rect);
+		let corners = Rectangle.corners(_rect);
+		let _center = center != void 0 ? new Pt(center) : Rectangle.center(_rect);
+		return corners.map((c) => new Group(c, _center).boundingBox());
+	}
+	static halves(rect, ratio = .5, asRows = false) {
+		let _rect = Util.iterToArray(rect);
+		let min = _rect[0].$min(_rect[1]);
+		let max = _rect[0].$max(_rect[1]);
+		let mid = asRows ? Num.lerp(min[1], max[1], ratio) : Num.lerp(min[0], max[0], ratio);
+		return asRows ? [new Group(min, new Pt(max[0], mid)), new Group(new Pt(min[0], mid), max)] : [new Group(min, new Pt(mid, max[1])), new Group(new Pt(mid, min[1]), max)];
+	}
+	static withinBound(rect, pt) {
+		let _rect = Util.iterToArray(rect);
+		return Geom.withinBound(pt, _rect[0], _rect[1]);
+	}
+	static hasIntersectRect2D(rect1, rect2, resetBoundingBox = false) {
+		let _rect1 = Util.iterToArray(rect1);
+		let _rect2 = Util.iterToArray(rect2);
+		if (resetBoundingBox) {
+			_rect1 = Geom.boundingBox(_rect1);
+			_rect2 = Geom.boundingBox(_rect2);
+		}
+		if (_rect1[0][0] > _rect2[1][0] || _rect2[0][0] > _rect1[1][0]) return false;
+		if (_rect1[0][1] > _rect2[1][1] || _rect2[0][1] > _rect1[1][1]) return false;
+		return true;
+	}
+	static intersectRect2D(rect1, rect2) {
+		let _rect1 = Util.iterToArray(rect1);
+		let _rect2 = Util.iterToArray(rect2);
+		if (!Rectangle.hasIntersectRect2D(_rect1, _rect2)) return new Group();
+		return Line.intersectLines2D(Rectangle.sides(_rect1), Rectangle.sides(_rect2));
+	}
+};
+var Circle = class Circle {
+	static fromRect(pts, enclose = false) {
+		let _pts = Util.iterToArray(pts);
+		let r = 0;
+		let min = r = Rectangle.size(_pts).minValue().value / 2;
+		if (enclose) {
+			let max = Rectangle.size(_pts).maxValue().value / 2;
+			r = Math.sqrt(min * min + max * max);
+		} else r = min;
+		return new Group(Rectangle.center(_pts), new Pt(r, r));
+	}
+	static fromTriangle(pts, enclose = false) {
+		if (enclose) return Triangle.circumcircle(pts);
+		else return Triangle.incircle(pts);
+	}
+	static fromCenter(pt, radius) {
+		return new Group(new Pt(pt), new Pt(radius, radius));
+	}
+	static withinBound(pts, pt, threshold = 0) {
+		let _pts = Util.iterToArray(pts);
+		let d = _pts[0].$subtract(pt);
+		return d.dot(d) + threshold < _pts[1].x * _pts[1].x;
+	}
+	static intersectRay2D(circle, ray) {
+		let _pts = Util.iterToArray(circle);
+		let _ray = Util.iterToArray(ray);
+		let d = _ray[0].$subtract(_ray[1]);
+		let f = _pts[0].$subtract(_ray[0]);
+		let a = d.dot(d);
+		if (a === 0) return new Group();
+		let b = f.dot(d);
+		let c = f.dot(f) - _pts[1].x * _pts[1].x;
+		let p = b / a;
+		let q = c / a;
+		let disc = p * p - q;
+		if (disc < 0) return new Group();
+		else {
+			let discSqrt = Math.sqrt(disc);
+			let t1 = -p + discSqrt;
+			let p1 = _ray[0].$subtract(d.$multiply(t1));
+			if (disc === 0) return new Group(p1);
+			let t2 = -p - discSqrt;
+			let p2 = _ray[0].$subtract(d.$multiply(t2));
+			return new Group(p1, p2);
+		}
+	}
+	static intersectLine2D(circle, line) {
+		let _pts = Util.iterToArray(circle);
+		let _line = Util.iterToArray(line);
+		let ps = Circle.intersectRay2D(_pts, _line);
+		let g = new Group();
+		if (ps.length > 0) {
+			for (let i = 0, len = ps.length; i < len; i++) if (Rectangle.withinBound(_line, ps[i])) g.push(ps[i]);
+		}
+		return g;
+	}
+	static intersectCircle2D(circle1, circle2) {
+		let _pts = Util.iterToArray(circle1);
+		let _circle = Util.iterToArray(circle2);
+		let dv = _circle[0].$subtract(_pts[0]);
+		let dr2 = dv.magnitudeSq();
+		let dr = Math.sqrt(dr2);
+		let ar = _pts[1].x;
+		let br = _circle[1].x;
+		let ar2 = ar * ar;
+		let br2 = br * br;
+		if (dr > ar + br) return new Group();
+		else if (dr < Math.abs(ar - br)) return new Group(_pts[0].clone());
+		else if (dr === 0) return new Group();
+		else {
+			let a = (ar2 - br2 + dr2) / (2 * dr);
+			let h = Math.sqrt(ar2 - a * a);
+			let p = dv.$multiply(a / dr).add(_pts[0]);
+			return new Group(new Pt(p.x + h * dv.y / dr, p.y - h * dv.x / dr), new Pt(p.x - h * dv.y / dr, p.y + h * dv.x / dr));
+		}
+	}
+	static intersectRect2D(circle, rect) {
+		let _pts = Util.iterToArray(circle);
+		let _rect = Util.iterToArray(rect);
+		let sides = Rectangle.sides(_rect);
+		let g = [];
+		for (let i = 0, len = sides.length; i < len; i++) {
+			let ps = Circle.intersectLine2D(_pts, sides[i]);
+			if (ps.length > 0) g.push(ps);
+		}
+		return Util.flatten(g);
+	}
+	static toRect(circle, within = false) {
+		let _pts = Util.iterToArray(circle);
+		let r = _pts[1][0];
+		if (within) {
+			let half = r / Math.SQRT2;
+			return new Group(_pts[0].$subtract(half), _pts[0].$add(half));
+		} else return new Group(_pts[0].$subtract(r), _pts[0].$add(r));
+	}
+	static toTriangle(circle, within = true) {
+		let _pts = Util.iterToArray(circle);
+		if (within) {
+			let ang = -Math.PI / 2;
+			let inc = Math.PI * 2 / 3;
+			let g = new Group();
+			for (let i = 0; i < 3; i++) {
+				g.push(_pts[0].clone().toAngle(ang, _pts[1][0], true));
+				ang += inc;
+			}
+			return g;
+		} else return Triangle.fromCenter(_pts[0], _pts[1][0]);
+	}
+};
+var Triangle = class Triangle {
+	static fromRect(rect) {
+		let _rect = Util.iterToArray(rect);
+		let top = _rect[0].$add(_rect[1]).divide(2);
+		top.y = _rect[0][1];
+		let left = _rect[1].clone();
+		left.x = _rect[0][0];
+		return new Group(top, _rect[1].clone(), left);
+	}
+	static fromCircle(circle) {
+		return Circle.toTriangle(circle, true);
+	}
+	static fromCenter(pt, size) {
+		return Triangle.fromCircle(Circle.fromCenter(pt, size));
+	}
+	static medial(tri) {
+		let _pts = Util.iterToArray(tri);
+		if (_pts.length < 3) return _errorLength(new Group(), 3);
+		return Polygon.midpoints(_pts, true);
+	}
+	static oppositeSide(tri, index) {
+		let _pts = Util.iterToArray(tri);
+		if (_pts.length < 3) return _errorLength(new Group(), 3);
+		if (index === 0) return Group.fromPtArray([_pts[1], _pts[2]]);
+		else if (index === 1) return Group.fromPtArray([_pts[0], _pts[2]]);
+		else return Group.fromPtArray([_pts[0], _pts[1]]);
+	}
+	static altitude(tri, index) {
+		let _pts = Util.iterToArray(tri);
+		let opp = Triangle.oppositeSide(_pts, index);
+		if (opp.length > 1) return new Group(_pts[index], Line.perpendicularFromPt(opp, _pts[index]));
+		else return new Group();
+	}
+	static orthocenter(tri) {
+		let _pts = Util.iterToArray(tri);
+		if (_pts.length < 3) return _errorLength(void 0, 3);
+		let a = Triangle.altitude(_pts, 0);
+		let b = Triangle.altitude(_pts, 1);
+		return Line.intersectRay2D(a, b);
+	}
+	static incenter(tri) {
+		let _pts = Util.iterToArray(tri);
+		if (_pts.length < 3) return _errorLength(void 0, 3);
+		let a = Polygon.bisector(_pts, 0).add(_pts[0]);
+		let b = Polygon.bisector(_pts, 1).add(_pts[1]);
+		return Line.intersectRay2D(new Group(_pts[0], a), new Group(_pts[1], b));
+	}
+	static incircle(tri, center) {
+		let _pts = Util.iterToArray(tri);
+		let c = center ? center : Triangle.incenter(_pts);
+		if (!c) return void 0;
+		let area = Polygon.area(_pts);
+		let perim = Polygon.perimeter(_pts, true);
+		let r = 2 * area / perim.total;
+		return Circle.fromCenter(c, r);
+	}
+	static circumcenter(tri) {
+		let _pts = Util.iterToArray(tri);
+		let md = Triangle.medial(_pts);
+		let a = [md[0], Geom.perpendicular(_pts[0].$subtract(md[0])).p1.$add(md[0])];
+		let b = [md[1], Geom.perpendicular(_pts[1].$subtract(md[1])).p1.$add(md[1])];
+		return Line.intersectRay2D(a, b);
+	}
+	static circumcircle(tri, center) {
+		let _pts = Util.iterToArray(tri);
+		let c = center ? center : Triangle.circumcenter(_pts);
+		if (!c) return void 0;
+		let r = _pts[0].$subtract(c).magnitude();
+		return Circle.fromCenter(c, r);
+	}
+};
+var Polygon = class Polygon {
+	static centroid(pts) {
+		return Geom.centroid(pts);
+	}
+	static rectangle(center, widthOrSize, height) {
+		return Rectangle.corners(Rectangle.fromCenter(center, widthOrSize, height));
+	}
+	static fromCenter(center, radius, sides) {
+		let g = new Group();
+		for (let i = 0; i < sides; i++) {
+			let ang = Math.PI * 2 * i / sides;
+			g.push(new Pt(Math.cos(ang) * radius, Math.sin(ang) * radius).add(center));
+		}
+		return g;
+	}
+	static lineAt(pts, index) {
+		let _pts = Util.iterToArray(pts);
+		if (index < 0 || index >= _pts.length) throw new Error("index out of the Polygon's range");
+		return new Group(_pts[index], index === _pts.length - 1 ? _pts[0] : _pts[index + 1]);
+	}
+	static lines(poly, closePath = true) {
+		let _pts = Util.iterToArray(poly);
+		if (_pts.length < 2) return _errorLength(new Group(), 2);
+		const count = closePath ? _pts.length : _pts.length - 1;
+		const sp = new Array(count);
+		for (let i = 0; i < count; i++) {
+			const seg = new Group();
+			seg[0] = _pts[i];
+			seg[1] = _pts[i === _pts.length - 1 ? 0 : i + 1];
+			sp[i] = seg;
+		}
+		return sp;
+	}
+	static midpoints(poly, closePath = false, t = .5) {
+		const sides = Polygon.lines(poly, closePath);
+		const mids = new Group();
+		for (let i = 0, len = sides.length; i < len; i++) mids[i] = Geom.interpolate(sides[i][0], sides[i][1], t);
+		return mids;
+	}
+	static adjacentSides(poly, index, closePath = false) {
+		let _pts = Util.iterToArray(poly);
+		if (_pts.length < 2) return _errorLength(new Group(), 2);
+		if (index < 0 || index >= _pts.length) return _errorOutofBound(new Group(), index);
+		let gs = [];
+		let left = index - 1;
+		if (closePath && left < 0) left = _pts.length - 1;
+		if (left >= 0) gs.push(new Group(_pts[index], _pts[left]));
+		let right = index + 1;
+		if (closePath && right > _pts.length - 1) right = 0;
+		if (right <= _pts.length - 1) gs.push(new Group(_pts[index], _pts[right]));
+		return gs;
+	}
+	static bisector(poly, index) {
+		let sides = Polygon.adjacentSides(poly, index, true);
+		if (sides.length >= 2) {
+			let a = sides[0][1].$subtract(sides[0][0]).unit();
+			let b = sides[1][1].$subtract(sides[1][0]).unit();
+			return a.add(b).divide(2);
+		} else return;
+	}
+	static perimeter(poly, closePath = false) {
+		const _pts = Util.iterToArray(poly);
+		if (_pts.length < 2) {
+			_errorLength(new Group(), 2);
+			return {
+				total: 0,
+				segments: Pt.make(0, 0)
+			};
+		}
+		const count = closePath ? _pts.length : _pts.length - 1;
+		const p = Pt.make(count, 0);
+		let mag = 0;
+		for (let i = 0; i < count; i++) {
+			const a = _pts[i];
+			const b = _pts[i === _pts.length - 1 ? 0 : i + 1];
+			const dx = b[0] - a[0];
+			const dy = b[1] - a[1];
+			const m = Math.sqrt(dx * dx + dy * dy);
+			mag += m;
+			p[i] = m;
+		}
+		return {
+			total: mag,
+			segments: p
+		};
+	}
+	static area(pts) {
+		let _pts = Util.iterToArray(pts);
+		if (_pts.length < 3) return _errorLength(new Group(), 3);
+		let det = (a, b) => a[0] * b[1] - a[1] * b[0];
+		let area = 0;
+		for (let i = 0, len = _pts.length; i < len; i++) if (i < _pts.length - 1) area += det(_pts[i], _pts[i + 1]);
+		else area += det(_pts[i], _pts[0]);
+		return Math.abs(area / 2);
+	}
+	static convexHull(pts, sorted = false) {
+		let _pts = Util.iterToArray(pts);
+		if (_pts.length < 3) return _errorLength(new Group(), 3);
+		if (!sorted) {
+			_pts = _pts.slice();
+			_pts.sort((a, b) => a[0] - b[0]);
+		}
+		let left = (a, b, c) => {
+			return (b[0] - a[0]) * (c[1] - a[1]) - (c[0] - a[0]) * (b[1] - a[1]) > 0;
+		};
+		let dq = [];
+		let bot = _pts.length - 2;
+		let top = bot + 3;
+		dq[bot] = _pts[2];
+		dq[top] = _pts[2];
+		if (left(_pts[0], _pts[1], _pts[2])) {
+			dq[bot + 1] = _pts[0];
+			dq[bot + 2] = _pts[1];
+		} else {
+			dq[bot + 1] = _pts[1];
+			dq[bot + 2] = _pts[0];
+		}
+		for (let i = 3, len = _pts.length; i < len; i++) {
+			let pt = _pts[i];
+			if (left(dq[bot], dq[bot + 1], pt) && left(dq[top - 1], dq[top], pt)) continue;
+			while (!left(dq[bot], dq[bot + 1], pt)) bot += 1;
+			bot -= 1;
+			dq[bot] = pt;
+			while (!left(dq[top - 1], dq[top], pt)) top -= 1;
+			top += 1;
+			dq[top] = pt;
+		}
+		let hull = new Group();
+		for (let h = 0; h < top - bot; h++) hull.push(dq[bot + h]);
+		return hull;
+	}
+	static network(poly, originIndex = 0) {
+		let _pts = Util.iterToArray(poly);
+		let g = [];
+		for (let i = 0, len = _pts.length; i < len; i++) if (i != originIndex) g.push(new Group(_pts[originIndex], _pts[i]));
+		return g;
+	}
+	static nearestPt(poly, pt) {
+		const _poly = Util.iterToArray(poly);
+		const px = pt[0];
+		const py = pt[1];
+		let _near = Number.MAX_VALUE;
+		let _item = -1;
+		for (let i = 0, len = _poly.length; i < len; i++) {
+			const dx = _poly[i][0] - px;
+			const dy = _poly[i][1] - py;
+			const d = dx * dx + dy * dy;
+			if (d < _near) {
+				_near = d;
+				_item = i;
+			}
+		}
+		return _item;
+	}
+	static projectAxis(poly, unitAxis) {
+		let _poly = Util.iterToArray(poly);
+		let min = unitAxis.dot(_poly[0]);
+		let max = min;
+		for (let n = 1, len = _poly.length; n < len; n++) {
+			const dot = unitAxis.dot(_poly[n]);
+			if (dot < min) min = dot;
+			else if (dot > max) max = dot;
+		}
+		return new Pt(min, max);
+	}
+	static _axisOverlap2D(poly1, poly2, ax, ay) {
+		let min1 = ax * poly1[0][0] + ay * poly1[0][1];
+		let max1 = min1;
+		for (let n = 1, len = poly1.length; n < len; n++) {
+			const d = ax * poly1[n][0] + ay * poly1[n][1];
+			if (d < min1) min1 = d;
+			else if (d > max1) max1 = d;
+		}
+		let min2 = ax * poly2[0][0] + ay * poly2[0][1];
+		let max2 = min2;
+		for (let n = 1, len = poly2.length; n < len; n++) {
+			const d = ax * poly2[n][0] + ay * poly2[n][1];
+			if (d < min2) min2 = d;
+			else if (d > max2) max2 = d;
+		}
+		return min1 < min2 ? min2 - max1 : min1 - max2;
+	}
+	static _axisOverlap(poly1, poly2, unitAxis) {
+		let pa = Polygon.projectAxis(poly1, unitAxis);
+		let pb = Polygon.projectAxis(poly2, unitAxis);
+		return pa[0] < pb[0] ? pb[0] - pa[1] : pa[0] - pb[1];
+	}
+	static hasIntersectPoint(poly, pt) {
+		const _poly = Util.iterToArray(poly);
+		const px = pt[0];
+		const py = pt[1];
+		let c = false;
+		for (let i = 0, len = _poly.length; i < len; i++) {
+			const a = _poly[i];
+			const b = _poly[i === len - 1 ? 0 : i + 1];
+			if (a[1] > py != b[1] > py && px < (b[0] - a[0]) * (py - a[1]) / (b[1] - a[1]) + a[0]) c = !c;
+		}
+		return c;
+	}
+	static hasIntersectCircle(poly, circle) {
+		let _poly = Util.iterToArray(poly);
+		let _circle = Util.iterToArray(circle);
+		const c = _circle[0];
+		const r = _circle[1][0];
+		let bx0 = Infinity;
+		let by0 = Infinity;
+		let bx1 = -Infinity;
+		let by1 = -Infinity;
+		for (let i = 0, len = _poly.length; i < len; i++) {
+			const p = _poly[i];
+			if (p[0] < bx0) bx0 = p[0];
+			if (p[0] > bx1) bx1 = p[0];
+			if (p[1] < by0) by0 = p[1];
+			if (p[1] > by1) by1 = p[1];
+		}
+		if (c[0] + r < bx0 || c[0] - r > bx1 || c[1] + r < by0 || c[1] - r > by1) return null;
+		let minDist = Number.MAX_SAFE_INTEGER;
+		let minEdge = null;
+		let minAx = 0;
+		let minAy = 0;
+		let which = -1;
+		for (let i = 0, len = _poly.length; i < len; i++) {
+			const ea = _poly[i];
+			const eb = _poly[i === len - 1 ? 0 : i + 1];
+			let ax = ea[1] - eb[1];
+			let ay = eb[0] - ea[0];
+			const alen = Math.sqrt(ax * ax + ay * ay);
+			if (alen === 0) continue;
+			ax /= alen;
+			ay /= alen;
+			let minP = ax * _poly[0][0] + ay * _poly[0][1];
+			let maxP = minP;
+			for (let n = 1; n < len; n++) {
+				const d = ax * _poly[n][0] + ay * _poly[n][1];
+				if (d < minP) minP = d;
+				else if (d > maxP) maxP = d;
+			}
+			const dotC = ax * c[0] + ay * c[1];
+			const dist = minP < dotC - r ? dotC - r - maxP : minP - (dotC + r);
+			if (dist > 0) return null;
+			else if (Math.abs(dist) < minDist) {
+				const edge = Polygon.lineAt(_poly, i);
+				if (Rectangle.withinBound(edge, Line.perpendicularFromPt(edge, c)) || Circle.intersectLine2D(_circle, edge).length > 0) {
+					minEdge = edge;
+					minAx = ax;
+					minAy = ay;
+					minDist = Math.abs(dist);
+					which = i;
+				}
+			}
+		}
+		if (!minEdge) return null;
+		const centroid = Polygon.centroid(_poly);
+		if (minAx * (c[0] - centroid[0]) + minAy * (c[1] - centroid[1]) < 0) {
+			minAx = -minAx;
+			minAy = -minAy;
+		}
+		return {
+			which,
+			dist: minDist,
+			normal: new Pt(minAx, minAy),
+			edge: minEdge,
+			vertex: c
+		};
+	}
+	static hasIntersectPolygon(poly1, poly2) {
+		let _poly1 = Util.iterToArray(poly1);
+		let _poly2 = Util.iterToArray(poly2);
+		const len1 = _poly1.length;
+		const len2 = _poly2.length;
+		let ax0 = Infinity;
+		let ay0 = Infinity;
+		let ax1 = -Infinity;
+		let ay1 = -Infinity;
+		for (let i = 0; i < len1; i++) {
+			const p = _poly1[i];
+			if (p[0] < ax0) ax0 = p[0];
+			if (p[0] > ax1) ax1 = p[0];
+			if (p[1] < ay0) ay0 = p[1];
+			if (p[1] > ay1) ay1 = p[1];
+		}
+		let bx0 = Infinity;
+		let by0 = Infinity;
+		let bx1 = -Infinity;
+		let by1 = -Infinity;
+		for (let i = 0; i < len2; i++) {
+			const p = _poly2[i];
+			if (p[0] < bx0) bx0 = p[0];
+			if (p[0] > bx1) bx1 = p[0];
+			if (p[1] < by0) by0 = p[1];
+			if (p[1] > by1) by1 = p[1];
+		}
+		if (ax0 > bx1 || bx0 > ax1 || ay0 > by1 || by0 > ay1) return null;
+		let minDist = Number.MAX_SAFE_INTEGER;
+		let minIndex = -1;
+		let minAx = 0;
+		let minAy = 0;
+		for (let i = 0, plen = len1 + len2; i < plen; i++) {
+			const src = i < len1 ? _poly1 : _poly2;
+			const ei = i < len1 ? i : i - len1;
+			const ea = src[ei];
+			const eb = src[ei === src.length - 1 ? 0 : ei + 1];
+			let ax = ea[1] - eb[1];
+			let ay = eb[0] - ea[0];
+			const alen = Math.sqrt(ax * ax + ay * ay);
+			if (alen === 0) continue;
+			ax /= alen;
+			ay /= alen;
+			const dist = Polygon._axisOverlap2D(_poly1, _poly2, ax, ay);
+			if (dist > 0) return null;
+			else if (Math.abs(dist) < minDist) {
+				minDist = Math.abs(dist);
+				minIndex = i;
+				minAx = ax;
+				minAy = ay;
+			}
+		}
+		if (minIndex < 0) return null;
+		const which = minIndex < len1 ? 0 : 1;
+		const edge = which === 0 ? Polygon.lineAt(_poly1, minIndex) : Polygon.lineAt(_poly2, minIndex - len1);
+		const b1 = which === 0 ? _poly2 : _poly1;
+		const b2 = which === 0 ? _poly1 : _poly2;
+		const c1 = Polygon.centroid(b1);
+		const c2 = Polygon.centroid(b2);
+		if (minAx * (c1[0] - c2[0]) + minAy * (c1[1] - c2[1]) < 0) {
+			minAx = -minAx;
+			minAy = -minAy;
+		}
+		let smallest = Number.MAX_SAFE_INTEGER;
+		let vertex = null;
+		for (let i = 0, len = b1.length; i < len; i++) {
+			const d = minAx * (b1[i][0] - c2[0]) + minAy * (b1[i][1] - c2[1]);
+			if (d < smallest) {
+				smallest = d;
+				vertex = b1[i];
+			}
+		}
+		return {
+			which,
+			dist: minDist,
+			normal: new Pt(minAx, minAy),
+			edge,
+			vertex
+		};
+	}
+	static intersectPolygon2D(poly1, poly2) {
+		let _poly1 = Util.iterToArray(poly1);
+		let _poly2 = Util.iterToArray(poly2);
+		let lp = Polygon.lines(_poly1);
+		let g = [];
+		for (let i = 0, len = lp.length; i < len; i++) {
+			let ins = Line.intersectPolygon2D(lp[i], _poly2, false);
+			if (ins) g.push(ins);
+		}
+		return Util.flatten(g, true);
+	}
+	static toRects(polys) {
+		let boxes = [];
+		for (let g of polys) boxes.push(Geom.boundingBox(g));
+		let merged = Util.flatten(boxes, false);
+		boxes.unshift(Geom.boundingBox(merged));
+		return boxes;
+	}
+};
+var Curve = class Curve {
+	static getSteps(steps) {
+		let ts = new Group();
+		for (let i = 0; i <= steps; i++) {
+			let t = i / steps;
+			ts.push(new Pt(t * t * t, t * t, t, 1));
+		}
+		return ts;
+	}
+	static controlPoints(pts, index = 0, copyStart = false) {
+		let _pts = Util.iterToArray(pts);
+		if (index > _pts.length - 1) return new Group();
+		let _index = (i) => i < _pts.length - 1 ? i : _pts.length - 1;
+		let p0 = _pts[index];
+		index = copyStart ? index : index + 1;
+		return new Group(p0, _pts[_index(index++)], _pts[_index(index++)], _pts[_index(index++)]);
+	}
+	static _weights(steps, fill) {
+		const w = new Float64Array((steps + 1) * 4);
+		for (let i = 0; i <= steps; i++) fill(i / steps, w, i * 4);
+		return w;
+	}
+	static _evalSegment(out, c, w, steps) {
+		const c0 = c[0];
+		const c1 = c[1];
+		const c2 = c[2];
+		const c3 = c[3];
+		const dim3 = c0.length > 2;
+		for (let i = 0; i <= steps; i++) {
+			const o = i * 4;
+			const w0 = w[o];
+			const w1 = w[o + 1];
+			const w2 = w[o + 2];
+			const w3 = w[o + 3];
+			const x = w0 * c0[0] + w1 * c1[0] + w2 * c2[0] + w3 * c3[0];
+			const y = w0 * c0[1] + w1 * c1[1] + w2 * c2[1] + w3 * c3[1];
+			out.push(dim3 ? new Pt(x, y, w0 * c0[2] + w1 * c1[2] + w2 * c2[2] + w3 * c3[2]) : new Pt(x, y));
+		}
+	}
+	static _calcPt(ctrls, params) {
+		let x = ctrls.reduce((a, c, i) => a + c.x * params[i], 0);
+		let y = ctrls.reduce((a, c, i) => a + c.y * params[i], 0);
+		if (ctrls[0].length > 2) {
+			let z = ctrls.reduce((a, c, i) => a + c.z * params[i], 0);
+			return new Pt(x, y, z);
+		}
+		return new Pt(x, y);
+	}
+	static _stepPt(ctrls, w0, w1, w2, w3) {
+		const c0 = ctrls[0];
+		const c1 = ctrls[1];
+		const c2 = ctrls[2];
+		const c3 = ctrls[3];
+		const x = w0 * c0[0] + w1 * c1[0] + w2 * c2[0] + w3 * c3[0];
+		const y = w0 * c0[1] + w1 * c1[1] + w2 * c2[1] + w3 * c3[1];
+		return c0.length > 2 ? new Pt(x, y, w0 * c0[2] + w1 * c1[2] + w2 * c2[2] + w3 * c3[2]) : new Pt(x, y);
+	}
+	static catmullRom(pts, steps = 10) {
+		let _pts = Util.iterToArray(pts);
+		if (_pts.length < 2) return new Group();
+		let ps = new Group();
+		const w = Curve._weights(steps, (t, out, o) => {
+			const t2 = t * t;
+			const t3 = t2 * t;
+			out[o] = -.5 * t3 + t2 - .5 * t;
+			out[o + 1] = 1.5 * t3 - 2.5 * t2 + 1;
+			out[o + 2] = -1.5 * t3 + 2 * t2 + .5 * t;
+			out[o + 3] = .5 * t3 - .5 * t2;
+		});
+		Curve._evalSegment(ps, Curve.controlPoints(_pts, 0, true), w, steps);
+		let k = 0;
+		while (k < _pts.length - 2) {
+			let cp = Curve.controlPoints(_pts, k);
+			if (cp.length > 0) {
+				Curve._evalSegment(ps, cp, w, steps);
+				k++;
+			}
+		}
+		return ps;
+	}
+	static catmullRomStep(step, ctrls) {
+		const t3 = step[0];
+		const t2 = step[1];
+		const t = step[2];
+		return Curve._stepPt(ctrls, -.5 * t3 + t2 - .5 * t, 1.5 * t3 - 2.5 * t2 + 1, -1.5 * t3 + 2 * t2 + .5 * t, .5 * t3 - .5 * t2);
+	}
+	static cardinal(pts, steps = 10, tension = .5) {
+		let _pts = Util.iterToArray(pts);
+		if (_pts.length < 2) return new Group();
+		let ps = new Group();
+		const w = Curve._weights(steps, (t, out, o) => {
+			const t2 = t * t;
+			const t3 = t2 * t;
+			out[o] = tension * (-t3 + 2 * t2 - t);
+			out[o + 1] = tension * (-t3 + t2) + (2 * t3 - 3 * t2 + 1);
+			out[o + 2] = tension * (t3 - 2 * t2 + t) + (-2 * t3 + 3 * t2);
+			out[o + 3] = tension * (t3 - t2);
+		});
+		Curve._evalSegment(ps, Curve.controlPoints(_pts, 0, true), w, steps);
+		let k = 0;
+		while (k < _pts.length - 2) {
+			let cp = Curve.controlPoints(_pts, k);
+			if (cp.length > 0) {
+				Curve._evalSegment(ps, cp, w, steps);
+				k++;
+			}
+		}
+		return ps;
+	}
+	static cardinalStep(step, ctrls, tension = .5) {
+		const t3 = step[0];
+		const t2 = step[1];
+		const t = step[2];
+		return Curve._stepPt(ctrls, tension * (-t3 + 2 * t2 - t), tension * (-t3 + t2) + (2 * t3 - 3 * t2 + 1), tension * (t3 - 2 * t2 + t) + (-2 * t3 + 3 * t2), tension * (t3 - t2));
+	}
+	static bezier(pts, steps = 10) {
+		let _pts = Util.iterToArray(pts);
+		if (_pts.length < 4) return new Group();
+		let ps = new Group();
+		const w = Curve._weights(steps, (t, out, o) => {
+			const t2 = t * t;
+			const t3 = t2 * t;
+			out[o] = -t3 + 3 * t2 - 3 * t + 1;
+			out[o + 1] = 3 * t3 - 6 * t2 + 3 * t;
+			out[o + 2] = -3 * t3 + 3 * t2;
+			out[o + 3] = t3;
+		});
+		let k = 0;
+		while (k < _pts.length - 3) {
+			let c = Curve.controlPoints(_pts, k);
+			if (c.length > 0) {
+				Curve._evalSegment(ps, c, w, steps);
+				k += 3;
+			}
+		}
+		return ps;
+	}
+	static bezierStep(step, ctrls) {
+		const t3 = step[0];
+		const t2 = step[1];
+		const t = step[2];
+		return Curve._stepPt(ctrls, -t3 + 3 * t2 - 3 * t + 1, 3 * t3 - 6 * t2 + 3 * t, -3 * t3 + 3 * t2, t3);
+	}
+	static bspline(pts, steps = 10, tension = 1) {
+		let _pts = Util.iterToArray(pts);
+		if (_pts.length < 2) return new Group();
+		let ps = new Group();
+		const w = tension !== 1 ? Curve._weights(steps, (t, out, o) => {
+			const t2 = t * t;
+			const t3 = t2 * t;
+			const b1 = 2 * t3 - 3 * t2 + 1;
+			const b2 = -2 * t3 + 3 * t2;
+			out[o] = tension * (-t3 / 6 + .5 * t2 - .5 * t + 1 / 6);
+			out[o + 1] = tension * (-1.5 * t3 + 2 * t2 - 1 / 3) + b1;
+			out[o + 2] = tension * (1.5 * t3 - 2.5 * t2 + .5 * t + 1 / 6) + b2;
+			out[o + 3] = tension * (t3 / 6);
+		}) : Curve._weights(steps, (t, out, o) => {
+			const t2 = t * t;
+			const t3 = t2 * t;
+			out[o] = -t3 / 6 + .5 * t2 - .5 * t + 1 / 6;
+			out[o + 1] = .5 * t3 - t2 + 2 / 3;
+			out[o + 2] = -.5 * t3 + .5 * t2 + .5 * t + 1 / 6;
+			out[o + 3] = t3 / 6;
+		});
+		let k = 0;
+		while (k < _pts.length - 3) {
+			let c = Curve.controlPoints(_pts, k);
+			if (c.length > 0) {
+				Curve._evalSegment(ps, c, w, steps);
+				k++;
+			}
+		}
+		return ps;
+	}
+	static bsplineStep(step, ctrls) {
+		const t3 = step[0];
+		const t2 = step[1];
+		const t = step[2];
+		return Curve._stepPt(ctrls, -t3 / 6 + .5 * t2 - .5 * t + 1 / 6, .5 * t3 - t2 + 2 / 3, -.5 * t3 + .5 * t2 + .5 * t + 1 / 6, t3 / 6);
+	}
+	static bsplineTensionStep(step, ctrls, tension = 1) {
+		const t3 = step[0];
+		const t2 = step[1];
+		const t = step[2];
+		const b1 = 2 * t3 - 3 * t2 + 1;
+		const b2 = -2 * t3 + 3 * t2;
+		return Curve._stepPt(ctrls, tension * (-t3 / 6 + .5 * t2 - .5 * t + 1 / 6), tension * (-1.5 * t3 + 2 * t2 - 1 / 3) + b1, tension * (1.5 * t3 - 2.5 * t2 + .5 * t + 1 / 6) + b2, tension * (t3 / 6));
+	}
+};
+
+//#endregion
 //#region src/LinearAlgebra.ts
 var Vec = class Vec {
 	static add(a, b) {
@@ -268,977 +1275,6 @@ var Mat = class Mat {
 };
 
 //#endregion
-//#region src/Op.ts
-let _errorLength = (obj, param = "expected") => Util.warn("Group's length is less than " + param, obj);
-let _errorOutofBound = (obj, param = "") => Util.warn(`Index ${param} is out of bound in Group`, obj);
-var Line = class Line {
-	static fromAngle(anchor, angle, magnitude) {
-		let g = new Group(new Pt(anchor), new Pt(anchor));
-		g[1].toAngle(angle, magnitude, true);
-		return g;
-	}
-	static slope(p1, p2) {
-		return p2[0] - p1[0] === 0 ? void 0 : (p2[1] - p1[1]) / (p2[0] - p1[0]);
-	}
-	static intercept(p1, p2) {
-		if (p2[0] - p1[0] === 0) return;
-		else {
-			let m = (p2[1] - p1[1]) / (p2[0] - p1[0]);
-			let c = p1[1] - m * p1[0];
-			return {
-				slope: m,
-				yi: c,
-				xi: m === 0 ? void 0 : -c / m
-			};
-		}
-	}
-	static sideOfPt2D(line, pt) {
-		let _line = Util.iterToArray(line);
-		return (_line[1][0] - _line[0][0]) * (pt[1] - _line[0][1]) - (pt[0] - _line[0][0]) * (_line[1][1] - _line[0][1]);
-	}
-	static collinear(p1, p2, p3, threshold = .01) {
-		let a = new Pt(0, 0, 0).to(p1).$subtract(p2);
-		let b = new Pt(0, 0, 0).to(p1).$subtract(p3);
-		return a.$cross(b).divide(1e3).equals(new Pt(0, 0, 0), threshold);
-	}
-	static magnitude(line) {
-		let _line = Util.iterToArray(line);
-		return _line.length >= 2 ? _line[1].$subtract(_line[0]).magnitude() : 0;
-	}
-	static magnitudeSq(line) {
-		let _line = Util.iterToArray(line);
-		return _line.length >= 2 ? _line[1].$subtract(_line[0]).magnitudeSq() : 0;
-	}
-	static perpendicularFromPt(line, pt, asProjection = false) {
-		let _line = Util.iterToArray(line);
-		if (_line[0].equals(_line[1])) return void 0;
-		let a = _line[0].$subtract(_line[1]);
-		let b = _line[1].$subtract(pt);
-		let proj = b.$subtract(a.$project(b));
-		return asProjection ? proj : proj.$add(pt);
-	}
-	static distanceFromPt(line, pt) {
-		let _line = Util.iterToArray(line);
-		let projectionVector = Line.perpendicularFromPt(_line, pt, true);
-		if (projectionVector) return projectionVector.magnitude();
-		else return _line[0].$subtract(pt).magnitude();
-	}
-	static intersectRay2D(la, lb) {
-		let _la = Util.iterToArray(la);
-		let _lb = Util.iterToArray(lb);
-		let a = Line.intercept(_la[0], _la[1]);
-		let b = Line.intercept(_lb[0], _lb[1]);
-		let pa = _la[0];
-		let pb = _lb[0];
-		if (a == void 0) {
-			if (b == void 0) return void 0;
-			let y1 = -b.slope * (pb[0] - pa[0]) + pb[1];
-			return new Pt(pa[0], y1);
-		} else if (b == void 0) {
-			let y1 = -a.slope * (pa[0] - pb[0]) + pa[1];
-			return new Pt(pb[0], y1);
-		} else if (b.slope != a.slope) {
-			let px = (a.slope * pa[0] - b.slope * pb[0] + pb[1] - pa[1]) / (a.slope - b.slope);
-			let py = a.slope * (px - pa[0]) + pa[1];
-			return new Pt(px, py);
-		} else if (a.yi == b.yi) return new Pt(pa[0], pa[1]);
-		else return;
-	}
-	static intersectLine2D(la, lb) {
-		let _la = Util.iterToArray(la);
-		let _lb = Util.iterToArray(lb);
-		let pt = Line.intersectRay2D(_la, _lb);
-		return pt && Geom.withinBound(pt, _la[0], _la[1]) && Geom.withinBound(pt, _lb[0], _lb[1]) ? pt : void 0;
-	}
-	static intersectLineWithRay2D(line, ray) {
-		let _line = Util.iterToArray(line);
-		let _ray = Util.iterToArray(ray);
-		let pt = Line.intersectRay2D(_line, _ray);
-		return pt && Geom.withinBound(pt, _line[0], _line[1]) ? pt : void 0;
-	}
-	static intersectPolygon2D(lineOrRay, poly, sourceIsRay = false) {
-		let _lineOrRay = Util.iterToArray(lineOrRay);
-		let _poly = Util.iterToArray(poly);
-		let fn = sourceIsRay ? Line.intersectLineWithRay2D : Line.intersectLine2D;
-		let pts = new Group();
-		for (let i = 0, len = _poly.length; i < len; i++) {
-			let next = i === len - 1 ? 0 : i + 1;
-			let d = fn([_poly[i], _poly[next]], _lineOrRay);
-			if (d) pts.push(d);
-		}
-		return pts.length > 0 ? pts : void 0;
-	}
-	static intersectLines2D(lines1, lines2, isRay = false) {
-		let group = new Group();
-		let fn = isRay ? Line.intersectLineWithRay2D : Line.intersectLine2D;
-		for (let l1 of lines1) for (let l2 of lines2) {
-			let _ip = fn(l1, l2);
-			if (_ip) group.push(_ip);
-		}
-		return group;
-	}
-	static intersectGridWithRay2D(ray, gridPt) {
-		let _ray = Util.iterToArray(ray);
-		let t = Line.intercept(new Pt(_ray[0]).subtract(gridPt), new Pt(_ray[1]).subtract(gridPt));
-		let g = new Group();
-		if (t && t.xi) g.push(new Pt(gridPt[0] + t.xi, gridPt[1]));
-		if (t && t.yi) g.push(new Pt(gridPt[0], gridPt[1] + t.yi));
-		return g;
-	}
-	static intersectGridWithLine2D(line, gridPt) {
-		let _line = Util.iterToArray(line);
-		let g = Line.intersectGridWithRay2D(_line, gridPt);
-		let gg = new Group();
-		for (let i = 0, len = g.length; i < len; i++) if (Geom.withinBound(g[i], _line[0], _line[1])) gg.push(g[i]);
-		return gg;
-	}
-	static intersectRect2D(line, rect) {
-		let _line = Util.iterToArray(line);
-		let _rect = Util.iterToArray(rect);
-		let box = Geom.boundingBox(Group.fromPtArray(_line));
-		if (!Rectangle.hasIntersectRect2D(box, _rect)) return new Group();
-		return Line.intersectLines2D([_line], Rectangle.sides(_rect));
-	}
-	static subpoints(line, num) {
-		let _line = Util.iterToArray(line);
-		let pts = new Group();
-		for (let i = 1; i <= num; i++) pts.push(Geom.interpolate(_line[0], _line[1], i / (num + 1)));
-		return pts;
-	}
-	static crop(line, size, index = 0, cropAsCircle = true) {
-		let _line = Util.iterToArray(line);
-		let ls = _line[index === 0 ? 1 : 0].$subtract(_line[index]);
-		if (ls[0] === 0 || size[0] === 0) return _line[index];
-		if (cropAsCircle) {
-			let d = ls.unit().multiply(size[1]);
-			return _line[index].$add(d);
-		} else {
-			let rect = Rectangle.fromCenter(_line[index], size);
-			let sides = Rectangle.sides(rect);
-			let sideIdx = 0;
-			if (Math.abs(ls[1] / ls[0]) > Math.abs(size[1] / size[0])) sideIdx = ls[1] < 0 ? 0 : 2;
-			else sideIdx = ls[0] < 0 ? 3 : 1;
-			return Line.intersectRay2D(sides[sideIdx], _line);
-		}
-	}
-	static marker(line, size, graphic = "arrow", atTail = true) {
-		let _line = Util.iterToArray(line);
-		let h = atTail ? 0 : 1;
-		let t = atTail ? 1 : 0;
-		let unit = _line[h].$subtract(_line[t]);
-		if (unit.magnitudeSq() === 0) return new Group();
-		unit.unit();
-		let ps = Geom.perpendicular(unit).multiply(size[0]).add(_line[t]);
-		if (graphic == "arrow") {
-			ps.add(unit.$multiply(size[1]));
-			return new Group(_line[t], ps[0], ps[1]);
-		} else return new Group(ps[0], ps[1]);
-	}
-	static toRect(line) {
-		let _line = Util.iterToArray(line);
-		return new Group(_line[0].$min(_line[1]), _line[0].$max(_line[1]));
-	}
-};
-var Rectangle = class Rectangle {
-	static from(topLeft, widthOrSize, height) {
-		return Rectangle.fromTopLeft(topLeft, widthOrSize, height);
-	}
-	static fromTopLeft(topLeft, widthOrSize, height) {
-		let size = typeof widthOrSize == "number" ? [widthOrSize, height || widthOrSize] : widthOrSize;
-		return new Group(new Pt(topLeft), new Pt(topLeft).add(size));
-	}
-	static fromCenter(center, widthOrSize, height) {
-		let half = typeof widthOrSize == "number" ? [widthOrSize / 2, (height || widthOrSize) / 2] : new Pt(widthOrSize).divide(2);
-		return new Group(new Pt(center).subtract(half), new Pt(center).add(half));
-	}
-	static toCircle(pts, enclose = true) {
-		return Circle.fromRect(pts, enclose);
-	}
-	static toSquare(pts, enclose = false) {
-		let _pts = Util.iterToArray(pts);
-		let s = Rectangle.size(_pts);
-		let m = enclose ? s.maxValue().value : s.minValue().value;
-		return Rectangle.fromCenter(Rectangle.center(_pts), m, m);
-	}
-	static size(pts) {
-		let p = Util.iterToArray(pts);
-		return p[0].$max(p[1]).subtract(p[0].$min(p[1]));
-	}
-	static center(pts) {
-		let p = Util.iterToArray(pts);
-		let min = p[0].$min(p[1]);
-		let max = p[0].$max(p[1]);
-		return min.add(max.$subtract(min).divide(2));
-	}
-	static corners(rect) {
-		let _rect = Util.iterToArray(rect);
-		let p0 = _rect[0].$min(_rect[1]);
-		let p2 = _rect[0].$max(_rect[1]);
-		return new Group(p0, new Pt(p2.x, p0.y), p2, new Pt(p0.x, p2.y));
-	}
-	static sides(rect) {
-		let [p0, p1, p2, p3] = Rectangle.corners(rect);
-		return [
-			new Group(p0, p1),
-			new Group(p1, p2),
-			new Group(p2, p3),
-			new Group(p3, p0)
-		];
-	}
-	static boundingBox(rects) {
-		let _rects = Util.iterToArray(rects);
-		let merged = Util.flatten(_rects, false);
-		if (merged.length === 0) return new Group();
-		let min = Pt.make(2, Infinity);
-		let max = Pt.make(2, -Infinity);
-		for (let i = 0, len = merged.length; i < len; i++) {
-			let p = merged[i];
-			let dim = Math.min(2, p.length);
-			for (let k = 0; k < dim; k++) {
-				min[k] = Math.min(min[k], p[k]);
-				max[k] = Math.max(max[k], p[k]);
-			}
-		}
-		return new Group(min, max);
-	}
-	static polygon(rect) {
-		return Rectangle.corners(rect);
-	}
-	static quadrants(rect, center) {
-		let _rect = Util.iterToArray(rect);
-		let corners = Rectangle.corners(_rect);
-		let _center = center != void 0 ? new Pt(center) : Rectangle.center(_rect);
-		return corners.map((c) => new Group(c, _center).boundingBox());
-	}
-	static halves(rect, ratio = .5, asRows = false) {
-		let _rect = Util.iterToArray(rect);
-		let min = _rect[0].$min(_rect[1]);
-		let max = _rect[0].$max(_rect[1]);
-		let mid = asRows ? Num.lerp(min[1], max[1], ratio) : Num.lerp(min[0], max[0], ratio);
-		return asRows ? [new Group(min, new Pt(max[0], mid)), new Group(new Pt(min[0], mid), max)] : [new Group(min, new Pt(mid, max[1])), new Group(new Pt(mid, min[1]), max)];
-	}
-	static withinBound(rect, pt) {
-		let _rect = Util.iterToArray(rect);
-		return Geom.withinBound(pt, _rect[0], _rect[1]);
-	}
-	static hasIntersectRect2D(rect1, rect2, resetBoundingBox = false) {
-		let _rect1 = Util.iterToArray(rect1);
-		let _rect2 = Util.iterToArray(rect2);
-		if (resetBoundingBox) {
-			_rect1 = Geom.boundingBox(_rect1);
-			_rect2 = Geom.boundingBox(_rect2);
-		}
-		if (_rect1[0][0] > _rect2[1][0] || _rect2[0][0] > _rect1[1][0]) return false;
-		if (_rect1[0][1] > _rect2[1][1] || _rect2[0][1] > _rect1[1][1]) return false;
-		return true;
-	}
-	static intersectRect2D(rect1, rect2) {
-		let _rect1 = Util.iterToArray(rect1);
-		let _rect2 = Util.iterToArray(rect2);
-		if (!Rectangle.hasIntersectRect2D(_rect1, _rect2)) return new Group();
-		return Line.intersectLines2D(Rectangle.sides(_rect1), Rectangle.sides(_rect2));
-	}
-};
-var Circle = class Circle {
-	static fromRect(pts, enclose = false) {
-		let _pts = Util.iterToArray(pts);
-		let r = 0;
-		let min = r = Rectangle.size(_pts).minValue().value / 2;
-		if (enclose) {
-			let max = Rectangle.size(_pts).maxValue().value / 2;
-			r = Math.sqrt(min * min + max * max);
-		} else r = min;
-		return new Group(Rectangle.center(_pts), new Pt(r, r));
-	}
-	static fromTriangle(pts, enclose = false) {
-		if (enclose) return Triangle.circumcircle(pts);
-		else return Triangle.incircle(pts);
-	}
-	static fromCenter(pt, radius) {
-		return new Group(new Pt(pt), new Pt(radius, radius));
-	}
-	static withinBound(pts, pt, threshold = 0) {
-		let _pts = Util.iterToArray(pts);
-		let d = _pts[0].$subtract(pt);
-		return d.dot(d) + threshold < _pts[1].x * _pts[1].x;
-	}
-	static intersectRay2D(circle, ray) {
-		let _pts = Util.iterToArray(circle);
-		let _ray = Util.iterToArray(ray);
-		let d = _ray[0].$subtract(_ray[1]);
-		let f = _pts[0].$subtract(_ray[0]);
-		let a = d.dot(d);
-		let b = f.dot(d);
-		let c = f.dot(f) - _pts[1].x * _pts[1].x;
-		let p = b / a;
-		let q = c / a;
-		let disc = p * p - q;
-		if (disc < 0) return new Group();
-		else {
-			let discSqrt = Math.sqrt(disc);
-			let t1 = -p + discSqrt;
-			let p1 = _ray[0].$subtract(d.$multiply(t1));
-			if (disc === 0) return new Group(p1);
-			let t2 = -p - discSqrt;
-			let p2 = _ray[0].$subtract(d.$multiply(t2));
-			return new Group(p1, p2);
-		}
-	}
-	static intersectLine2D(circle, line) {
-		let _pts = Util.iterToArray(circle);
-		let _line = Util.iterToArray(line);
-		let ps = Circle.intersectRay2D(_pts, _line);
-		let g = new Group();
-		if (ps.length > 0) {
-			for (let i = 0, len = ps.length; i < len; i++) if (Rectangle.withinBound(_line, ps[i])) g.push(ps[i]);
-		}
-		return g;
-	}
-	static intersectCircle2D(circle1, circle2) {
-		let _pts = Util.iterToArray(circle1);
-		let _circle = Util.iterToArray(circle2);
-		let dv = _circle[0].$subtract(_pts[0]);
-		let dr2 = dv.magnitudeSq();
-		let dr = Math.sqrt(dr2);
-		let ar = _pts[1].x;
-		let br = _circle[1].x;
-		let ar2 = ar * ar;
-		let br2 = br * br;
-		if (dr > ar + br) return new Group();
-		else if (dr < Math.abs(ar - br)) return new Group(_pts[0].clone());
-		else {
-			let a = (ar2 - br2 + dr2) / (2 * dr);
-			let h = Math.sqrt(ar2 - a * a);
-			let p = dv.$multiply(a / dr).add(_pts[0]);
-			return new Group(new Pt(p.x + h * dv.y / dr, p.y - h * dv.x / dr), new Pt(p.x - h * dv.y / dr, p.y + h * dv.x / dr));
-		}
-	}
-	static intersectRect2D(circle, rect) {
-		let _pts = Util.iterToArray(circle);
-		let _rect = Util.iterToArray(rect);
-		let sides = Rectangle.sides(_rect);
-		let g = [];
-		for (let i = 0, len = sides.length; i < len; i++) {
-			let ps = Circle.intersectLine2D(_pts, sides[i]);
-			if (ps.length > 0) g.push(ps);
-		}
-		return Util.flatten(g);
-	}
-	static toRect(circle, within = false) {
-		let _pts = Util.iterToArray(circle);
-		let r = _pts[1][0];
-		if (within) {
-			let half = Math.sqrt(r * r) / 2;
-			return new Group(_pts[0].$subtract(half), _pts[0].$add(half));
-		} else return new Group(_pts[0].$subtract(r), _pts[0].$add(r));
-	}
-	static toTriangle(circle, within = true) {
-		let _pts = Util.iterToArray(circle);
-		if (within) {
-			let ang = -Math.PI / 2;
-			let inc = Math.PI * 2 / 3;
-			let g = new Group();
-			for (let i = 0; i < 3; i++) {
-				g.push(_pts[0].clone().toAngle(ang, _pts[1][0], true));
-				ang += inc;
-			}
-			return g;
-		} else return Triangle.fromCenter(_pts[0], _pts[1][0]);
-	}
-};
-var Triangle = class Triangle {
-	static fromRect(rect) {
-		let _rect = Util.iterToArray(rect);
-		let top = _rect[0].$add(_rect[1]).divide(2);
-		top.y = _rect[0][1];
-		let left = _rect[1].clone();
-		left.x = _rect[0][0];
-		return new Group(top, _rect[1].clone(), left);
-	}
-	static fromCircle(circle) {
-		return Circle.toTriangle(circle, true);
-	}
-	static fromCenter(pt, size) {
-		return Triangle.fromCircle(Circle.fromCenter(pt, size));
-	}
-	static medial(tri) {
-		let _pts = Util.iterToArray(tri);
-		if (_pts.length < 3) return _errorLength(new Group(), 3);
-		return Polygon.midpoints(_pts, true);
-	}
-	static oppositeSide(tri, index) {
-		let _pts = Util.iterToArray(tri);
-		if (_pts.length < 3) return _errorLength(new Group(), 3);
-		if (index === 0) return Group.fromPtArray([_pts[1], _pts[2]]);
-		else if (index === 1) return Group.fromPtArray([_pts[0], _pts[2]]);
-		else return Group.fromPtArray([_pts[0], _pts[1]]);
-	}
-	static altitude(tri, index) {
-		let _pts = Util.iterToArray(tri);
-		let opp = Triangle.oppositeSide(_pts, index);
-		if (opp.length > 1) return new Group(_pts[index], Line.perpendicularFromPt(opp, _pts[index]));
-		else return new Group();
-	}
-	static orthocenter(tri) {
-		let _pts = Util.iterToArray(tri);
-		if (_pts.length < 3) return _errorLength(void 0, 3);
-		let a = Triangle.altitude(_pts, 0);
-		let b = Triangle.altitude(_pts, 1);
-		return Line.intersectRay2D(a, b);
-	}
-	static incenter(tri) {
-		let _pts = Util.iterToArray(tri);
-		if (_pts.length < 3) return _errorLength(void 0, 3);
-		let a = Polygon.bisector(_pts, 0).add(_pts[0]);
-		let b = Polygon.bisector(_pts, 1).add(_pts[1]);
-		return Line.intersectRay2D(new Group(_pts[0], a), new Group(_pts[1], b));
-	}
-	static incircle(tri, center) {
-		let _pts = Util.iterToArray(tri);
-		let c = center ? center : Triangle.incenter(_pts);
-		let area = Polygon.area(_pts);
-		let perim = Polygon.perimeter(_pts, true);
-		let r = 2 * area / perim.total;
-		return Circle.fromCenter(c, r);
-	}
-	static circumcenter(tri) {
-		let _pts = Util.iterToArray(tri);
-		let md = Triangle.medial(_pts);
-		let a = [md[0], Geom.perpendicular(_pts[0].$subtract(md[0])).p1.$add(md[0])];
-		let b = [md[1], Geom.perpendicular(_pts[1].$subtract(md[1])).p1.$add(md[1])];
-		return Line.intersectRay2D(a, b);
-	}
-	static circumcircle(tri, center) {
-		let _pts = Util.iterToArray(tri);
-		let c = center ? center : Triangle.circumcenter(_pts);
-		let r = _pts[0].$subtract(c).magnitude();
-		return Circle.fromCenter(c, r);
-	}
-};
-var Polygon = class Polygon {
-	static centroid(pts) {
-		return Geom.centroid(pts);
-	}
-	static rectangle(center, widthOrSize, height) {
-		return Rectangle.corners(Rectangle.fromCenter(center, widthOrSize, height));
-	}
-	static fromCenter(center, radius, sides) {
-		let g = new Group();
-		for (let i = 0; i < sides; i++) {
-			let ang = Math.PI * 2 * i / sides;
-			g.push(new Pt(Math.cos(ang) * radius, Math.sin(ang) * radius).add(center));
-		}
-		return g;
-	}
-	static lineAt(pts, index) {
-		let _pts = Util.iterToArray(pts);
-		if (index < 0 || index >= _pts.length) throw new Error("index out of the Polygon's range");
-		return new Group(_pts[index], index === _pts.length - 1 ? _pts[0] : _pts[index + 1]);
-	}
-	static lines(poly, closePath = true) {
-		let _pts = Util.iterToArray(poly);
-		if (_pts.length < 2) return _errorLength(new Group(), 2);
-		let sp = Util.split(_pts, 2, 1);
-		if (closePath) sp.push(new Group(_pts[_pts.length - 1], _pts[0]));
-		return sp.map((g) => g);
-	}
-	static midpoints(poly, closePath = false, t = .5) {
-		return Polygon.lines(poly, closePath).map((s) => Geom.interpolate(s[0], s[1], t));
-	}
-	static adjacentSides(poly, index, closePath = false) {
-		let _pts = Util.iterToArray(poly);
-		if (_pts.length < 2) return _errorLength(new Group(), 2);
-		if (index < 0 || index >= _pts.length) return _errorOutofBound(new Group(), index);
-		let gs = [];
-		let left = index - 1;
-		if (closePath && left < 0) left = _pts.length - 1;
-		if (left >= 0) gs.push(new Group(_pts[index], _pts[left]));
-		let right = index + 1;
-		if (closePath && right > _pts.length - 1) right = 0;
-		if (right <= _pts.length - 1) gs.push(new Group(_pts[index], _pts[right]));
-		return gs;
-	}
-	static bisector(poly, index) {
-		let sides = Polygon.adjacentSides(poly, index, true);
-		if (sides.length >= 2) {
-			let a = sides[0][1].$subtract(sides[0][0]).unit();
-			let b = sides[1][1].$subtract(sides[1][0]).unit();
-			return a.add(b).divide(2);
-		} else return;
-	}
-	static perimeter(poly, closePath = false) {
-		let lines = Polygon.lines(poly, closePath);
-		let mag = 0;
-		let p = Pt.make(lines.length, 0);
-		for (let i = 0, len = lines.length; i < len; i++) {
-			let m = Line.magnitude(lines[i]);
-			mag += m;
-			p[i] = m;
-		}
-		return {
-			total: mag,
-			segments: p
-		};
-	}
-	static area(pts) {
-		let _pts = Util.iterToArray(pts);
-		if (_pts.length < 3) return _errorLength(new Group(), 3);
-		let det = (a, b) => a[0] * b[1] - a[1] * b[0];
-		let area = 0;
-		for (let i = 0, len = _pts.length; i < len; i++) if (i < _pts.length - 1) area += det(_pts[i], _pts[i + 1]);
-		else area += det(_pts[i], _pts[0]);
-		return Math.abs(area / 2);
-	}
-	static convexHull(pts, sorted = false) {
-		let _pts = Util.iterToArray(pts);
-		if (_pts.length < 3) return _errorLength(new Group(), 3);
-		if (!sorted) {
-			_pts = _pts.slice();
-			_pts.sort((a, b) => a[0] - b[0]);
-		}
-		let left = (a, b, c) => {
-			return (b[0] - a[0]) * (c[1] - a[1]) - (c[0] - a[0]) * (b[1] - a[1]) > 0;
-		};
-		let dq = [];
-		let bot = _pts.length - 2;
-		let top = bot + 3;
-		dq[bot] = _pts[2];
-		dq[top] = _pts[2];
-		if (left(_pts[0], _pts[1], _pts[2])) {
-			dq[bot + 1] = _pts[0];
-			dq[bot + 2] = _pts[1];
-		} else {
-			dq[bot + 1] = _pts[1];
-			dq[bot + 2] = _pts[0];
-		}
-		for (let i = 3, len = _pts.length; i < len; i++) {
-			let pt = _pts[i];
-			if (left(dq[bot], dq[bot + 1], pt) && left(dq[top - 1], dq[top], pt)) continue;
-			while (!left(dq[bot], dq[bot + 1], pt)) bot += 1;
-			bot -= 1;
-			dq[bot] = pt;
-			while (!left(dq[top - 1], dq[top], pt)) top -= 1;
-			top += 1;
-			dq[top] = pt;
-		}
-		let hull = new Group();
-		for (let h = 0; h < top - bot; h++) hull.push(dq[bot + h]);
-		return hull;
-	}
-	static network(poly, originIndex = 0) {
-		let _pts = Util.iterToArray(poly);
-		let g = [];
-		for (let i = 0, len = _pts.length; i < len; i++) if (i != originIndex) g.push(new Group(_pts[originIndex], _pts[i]));
-		return g;
-	}
-	static nearestPt(poly, pt) {
-		const _poly = Util.iterToArray(poly);
-		const px = pt[0];
-		const py = pt[1];
-		let _near = Number.MAX_VALUE;
-		let _item = -1;
-		for (let i = 0, len = _poly.length; i < len; i++) {
-			const dx = _poly[i][0] - px;
-			const dy = _poly[i][1] - py;
-			const d = dx * dx + dy * dy;
-			if (d < _near) {
-				_near = d;
-				_item = i;
-			}
-		}
-		return _item;
-	}
-	static projectAxis(poly, unitAxis) {
-		let _poly = Util.iterToArray(poly);
-		let min = unitAxis.dot(_poly[0]);
-		let max = min;
-		for (let n = 1, len = _poly.length; n < len; n++) {
-			const dot = unitAxis.dot(_poly[n]);
-			if (dot < min) min = dot;
-			else if (dot > max) max = dot;
-		}
-		return new Pt(min, max);
-	}
-	static _axisOverlap2D(poly1, poly2, ax, ay) {
-		let min1 = ax * poly1[0][0] + ay * poly1[0][1];
-		let max1 = min1;
-		for (let n = 1, len = poly1.length; n < len; n++) {
-			const d = ax * poly1[n][0] + ay * poly1[n][1];
-			if (d < min1) min1 = d;
-			else if (d > max1) max1 = d;
-		}
-		let min2 = ax * poly2[0][0] + ay * poly2[0][1];
-		let max2 = min2;
-		for (let n = 1, len = poly2.length; n < len; n++) {
-			const d = ax * poly2[n][0] + ay * poly2[n][1];
-			if (d < min2) min2 = d;
-			else if (d > max2) max2 = d;
-		}
-		return min1 < min2 ? min2 - max1 : min1 - max2;
-	}
-	static _axisOverlap(poly1, poly2, unitAxis) {
-		let pa = Polygon.projectAxis(poly1, unitAxis);
-		let pb = Polygon.projectAxis(poly2, unitAxis);
-		return pa[0] < pb[0] ? pb[0] - pa[1] : pa[0] - pb[1];
-	}
-	static hasIntersectPoint(poly, pt) {
-		let _poly = Util.iterToArray(poly);
-		let c = false;
-		for (let i = 0, len = _poly.length; i < len; i++) {
-			let ln = Polygon.lineAt(_poly, i);
-			if (ln[0][1] > pt[1] != ln[1][1] > pt[1] && pt[0] < (ln[1][0] - ln[0][0]) * (pt[1] - ln[0][1]) / (ln[1][1] - ln[0][1]) + ln[0][0]) c = !c;
-		}
-		return c;
-	}
-	static hasIntersectCircle(poly, circle) {
-		let _poly = Util.iterToArray(poly);
-		let _circle = Util.iterToArray(circle);
-		const c = _circle[0];
-		const r = _circle[1][0];
-		let bx0 = Infinity;
-		let by0 = Infinity;
-		let bx1 = -Infinity;
-		let by1 = -Infinity;
-		for (let i = 0, len = _poly.length; i < len; i++) {
-			const p = _poly[i];
-			if (p[0] < bx0) bx0 = p[0];
-			if (p[0] > bx1) bx1 = p[0];
-			if (p[1] < by0) by0 = p[1];
-			if (p[1] > by1) by1 = p[1];
-		}
-		if (c[0] + r < bx0 || c[0] - r > bx1 || c[1] + r < by0 || c[1] - r > by1) return null;
-		let minDist = Number.MAX_SAFE_INTEGER;
-		let minEdge = null;
-		let minAx = 0;
-		let minAy = 0;
-		let which = -1;
-		for (let i = 0, len = _poly.length; i < len; i++) {
-			const ea = _poly[i];
-			const eb = _poly[i === len - 1 ? 0 : i + 1];
-			let ax = ea[1] - eb[1];
-			let ay = eb[0] - ea[0];
-			const alen = Math.sqrt(ax * ax + ay * ay);
-			if (alen === 0) continue;
-			ax /= alen;
-			ay /= alen;
-			let minP = ax * _poly[0][0] + ay * _poly[0][1];
-			let maxP = minP;
-			for (let n = 1; n < len; n++) {
-				const d = ax * _poly[n][0] + ay * _poly[n][1];
-				if (d < minP) minP = d;
-				else if (d > maxP) maxP = d;
-			}
-			const dotC = ax * c[0] + ay * c[1];
-			const dist = minP < dotC - r ? dotC - r - maxP : minP - (dotC + r);
-			if (dist > 0) return null;
-			else if (Math.abs(dist) < minDist) {
-				const edge = Polygon.lineAt(_poly, i);
-				if (Rectangle.withinBound(edge, Line.perpendicularFromPt(edge, c)) || Circle.intersectLine2D(_circle, edge).length > 0) {
-					minEdge = edge;
-					minAx = ax;
-					minAy = ay;
-					minDist = Math.abs(dist);
-					which = i;
-				}
-			}
-		}
-		if (!minEdge) return null;
-		const centroid = Polygon.centroid(_poly);
-		if (minAx * (c[0] - centroid[0]) + minAy * (c[1] - centroid[1]) < 0) {
-			minAx = -minAx;
-			minAy = -minAy;
-		}
-		return {
-			which,
-			dist: minDist,
-			normal: new Pt(minAx, minAy),
-			edge: minEdge,
-			vertex: c
-		};
-	}
-	static hasIntersectPolygon(poly1, poly2) {
-		let _poly1 = Util.iterToArray(poly1);
-		let _poly2 = Util.iterToArray(poly2);
-		const len1 = _poly1.length;
-		const len2 = _poly2.length;
-		let ax0 = Infinity;
-		let ay0 = Infinity;
-		let ax1 = -Infinity;
-		let ay1 = -Infinity;
-		for (let i = 0; i < len1; i++) {
-			const p = _poly1[i];
-			if (p[0] < ax0) ax0 = p[0];
-			if (p[0] > ax1) ax1 = p[0];
-			if (p[1] < ay0) ay0 = p[1];
-			if (p[1] > ay1) ay1 = p[1];
-		}
-		let bx0 = Infinity;
-		let by0 = Infinity;
-		let bx1 = -Infinity;
-		let by1 = -Infinity;
-		for (let i = 0; i < len2; i++) {
-			const p = _poly2[i];
-			if (p[0] < bx0) bx0 = p[0];
-			if (p[0] > bx1) bx1 = p[0];
-			if (p[1] < by0) by0 = p[1];
-			if (p[1] > by1) by1 = p[1];
-		}
-		if (ax0 > bx1 || bx0 > ax1 || ay0 > by1 || by0 > ay1) return null;
-		let minDist = Number.MAX_SAFE_INTEGER;
-		let minIndex = -1;
-		let minAx = 0;
-		let minAy = 0;
-		for (let i = 0, plen = len1 + len2; i < plen; i++) {
-			const src = i < len1 ? _poly1 : _poly2;
-			const ei = i < len1 ? i : i - len1;
-			const ea = src[ei];
-			const eb = src[ei === src.length - 1 ? 0 : ei + 1];
-			let ax = ea[1] - eb[1];
-			let ay = eb[0] - ea[0];
-			const alen = Math.sqrt(ax * ax + ay * ay);
-			if (alen === 0) continue;
-			ax /= alen;
-			ay /= alen;
-			const dist = Polygon._axisOverlap2D(_poly1, _poly2, ax, ay);
-			if (dist > 0) return null;
-			else if (Math.abs(dist) < minDist) {
-				minDist = Math.abs(dist);
-				minIndex = i;
-				minAx = ax;
-				minAy = ay;
-			}
-		}
-		if (minIndex < 0) return null;
-		const which = minIndex < len1 ? 0 : 1;
-		const edge = which === 0 ? Polygon.lineAt(_poly1, minIndex) : Polygon.lineAt(_poly2, minIndex - len1);
-		const b1 = which === 0 ? _poly2 : _poly1;
-		const b2 = which === 0 ? _poly1 : _poly2;
-		const c1 = Polygon.centroid(b1);
-		const c2 = Polygon.centroid(b2);
-		if (minAx * (c1[0] - c2[0]) + minAy * (c1[1] - c2[1]) < 0) {
-			minAx = -minAx;
-			minAy = -minAy;
-		}
-		let smallest = Number.MAX_SAFE_INTEGER;
-		let vertex = null;
-		for (let i = 0, len = b1.length; i < len; i++) {
-			const d = minAx * (b1[i][0] - c2[0]) + minAy * (b1[i][1] - c2[1]);
-			if (d < smallest) {
-				smallest = d;
-				vertex = b1[i];
-			}
-		}
-		return {
-			which,
-			dist: minDist,
-			normal: new Pt(minAx, minAy),
-			edge,
-			vertex
-		};
-	}
-	static intersectPolygon2D(poly1, poly2) {
-		let _poly1 = Util.iterToArray(poly1);
-		let _poly2 = Util.iterToArray(poly2);
-		let lp = Polygon.lines(_poly1);
-		let g = [];
-		for (let i = 0, len = lp.length; i < len; i++) {
-			let ins = Line.intersectPolygon2D(lp[i], _poly2, false);
-			if (ins) g.push(ins);
-		}
-		return Util.flatten(g, true);
-	}
-	static toRects(polys) {
-		let boxes = [];
-		for (let g of polys) boxes.push(Geom.boundingBox(g));
-		let merged = Util.flatten(boxes, false);
-		boxes.unshift(Geom.boundingBox(merged));
-		return boxes;
-	}
-};
-var Curve = class Curve {
-	static getSteps(steps) {
-		let ts = new Group();
-		for (let i = 0; i <= steps; i++) {
-			let t = i / steps;
-			ts.push(new Pt(t * t * t, t * t, t, 1));
-		}
-		return ts;
-	}
-	static controlPoints(pts, index = 0, copyStart = false) {
-		let _pts = Util.iterToArray(pts);
-		if (index > _pts.length - 1) return new Group();
-		let _index = (i) => i < _pts.length - 1 ? i : _pts.length - 1;
-		let p0 = _pts[index];
-		index = copyStart ? index : index + 1;
-		return new Group(p0, _pts[_index(index++)], _pts[_index(index++)], _pts[_index(index++)]);
-	}
-	static _weights(steps, fill) {
-		const w = new Float64Array((steps + 1) * 4);
-		for (let i = 0; i <= steps; i++) fill(i / steps, w, i * 4);
-		return w;
-	}
-	static _evalSegment(out, c, w, steps) {
-		const c0 = c[0];
-		const c1 = c[1];
-		const c2 = c[2];
-		const c3 = c[3];
-		const dim3 = c0.length > 2;
-		for (let i = 0; i <= steps; i++) {
-			const o = i * 4;
-			const w0 = w[o];
-			const w1 = w[o + 1];
-			const w2 = w[o + 2];
-			const w3 = w[o + 3];
-			const x = w0 * c0[0] + w1 * c1[0] + w2 * c2[0] + w3 * c3[0];
-			const y = w0 * c0[1] + w1 * c1[1] + w2 * c2[1] + w3 * c3[1];
-			out.push(dim3 ? new Pt(x, y, w0 * c0[2] + w1 * c1[2] + w2 * c2[2] + w3 * c3[2]) : new Pt(x, y));
-		}
-	}
-	static _calcPt(ctrls, params) {
-		let x = ctrls.reduce((a, c, i) => a + c.x * params[i], 0);
-		let y = ctrls.reduce((a, c, i) => a + c.y * params[i], 0);
-		if (ctrls[0].length > 2) {
-			let z = ctrls.reduce((a, c, i) => a + c.z * params[i], 0);
-			return new Pt(x, y, z);
-		}
-		return new Pt(x, y);
-	}
-	static catmullRom(pts, steps = 10) {
-		let _pts = Util.iterToArray(pts);
-		if (_pts.length < 2) return new Group();
-		let ps = new Group();
-		const w = Curve._weights(steps, (t, out, o) => {
-			const t2 = t * t;
-			const t3 = t2 * t;
-			out[o] = -.5 * t3 + t2 - .5 * t;
-			out[o + 1] = 1.5 * t3 - 2.5 * t2 + 1;
-			out[o + 2] = -1.5 * t3 + 2 * t2 + .5 * t;
-			out[o + 3] = .5 * t3 - .5 * t2;
-		});
-		Curve._evalSegment(ps, Curve.controlPoints(_pts, 0, true), w, steps);
-		let k = 0;
-		while (k < _pts.length - 2) {
-			let cp = Curve.controlPoints(_pts, k);
-			if (cp.length > 0) {
-				Curve._evalSegment(ps, cp, w, steps);
-				k++;
-			}
-		}
-		return ps;
-	}
-	static catmullRomStep(step, ctrls) {
-		let m = new Group(new Pt(-.5, 1, -.5, 0), new Pt(1.5, -2.5, 0, 1), new Pt(-1.5, 2, .5, 0), new Pt(.5, -.5, 0, 0));
-		return Curve._calcPt(ctrls, Mat.multiply([step], m, true)[0]);
-	}
-	static cardinal(pts, steps = 10, tension = .5) {
-		let _pts = Util.iterToArray(pts);
-		if (_pts.length < 2) return new Group();
-		let ps = new Group();
-		const w = Curve._weights(steps, (t, out, o) => {
-			const t2 = t * t;
-			const t3 = t2 * t;
-			out[o] = tension * (-t3 + 2 * t2 - t);
-			out[o + 1] = tension * (-t3 + t2) + (2 * t3 - 3 * t2 + 1);
-			out[o + 2] = tension * (t3 - 2 * t2 + t) + (-2 * t3 + 3 * t2);
-			out[o + 3] = tension * (t3 - t2);
-		});
-		Curve._evalSegment(ps, Curve.controlPoints(_pts, 0, true), w, steps);
-		let k = 0;
-		while (k < _pts.length - 2) {
-			let cp = Curve.controlPoints(_pts, k);
-			if (cp.length > 0) {
-				Curve._evalSegment(ps, cp, w, steps);
-				k++;
-			}
-		}
-		return ps;
-	}
-	static cardinalStep(step, ctrls, tension = .5) {
-		let m = new Group(new Pt(-1, 2, -1, 0), new Pt(-1, 1, 0, 0), new Pt(1, -2, 1, 0), new Pt(1, -1, 0, 0));
-		let h = Mat.multiply([step], m, true)[0].multiply(tension);
-		let h2 = 2 * step[0] - 3 * step[1] + 1;
-		let h3 = -2 * step[0] + 3 * step[1];
-		let pt = Curve._calcPt(ctrls, h);
-		pt.x += h2 * ctrls[1].x + h3 * ctrls[2].x;
-		pt.y += h2 * ctrls[1].y + h3 * ctrls[2].y;
-		if (pt.length > 2) pt.z += h2 * ctrls[1].z + h3 * ctrls[2].z;
-		return pt;
-	}
-	static bezier(pts, steps = 10) {
-		let _pts = Util.iterToArray(pts);
-		if (_pts.length < 4) return new Group();
-		let ps = new Group();
-		const w = Curve._weights(steps, (t, out, o) => {
-			const t2 = t * t;
-			const t3 = t2 * t;
-			out[o] = -t3 + 3 * t2 - 3 * t + 1;
-			out[o + 1] = 3 * t3 - 6 * t2 + 3 * t;
-			out[o + 2] = -3 * t3 + 3 * t2;
-			out[o + 3] = t3;
-		});
-		let k = 0;
-		while (k < _pts.length - 3) {
-			let c = Curve.controlPoints(_pts, k);
-			if (c.length > 0) {
-				Curve._evalSegment(ps, c, w, steps);
-				k += 3;
-			}
-		}
-		return ps;
-	}
-	static bezierStep(step, ctrls) {
-		let m = new Group(new Pt(-1, 3, -3, 1), new Pt(3, -6, 3, 0), new Pt(-3, 3, 0, 0), new Pt(1, 0, 0, 0));
-		return Curve._calcPt(ctrls, Mat.multiply([step], m, true)[0]);
-	}
-	static bspline(pts, steps = 10, tension = 1) {
-		let _pts = Util.iterToArray(pts);
-		if (_pts.length < 2) return new Group();
-		let ps = new Group();
-		const w = tension !== 1 ? Curve._weights(steps, (t, out, o) => {
-			const t2 = t * t;
-			const t3 = t2 * t;
-			const b1 = 2 * t3 - 3 * t2 + 1;
-			const b2 = -2 * t3 + 3 * t2;
-			out[o] = tension * (-t3 / 6 + .5 * t2 - .5 * t + 1 / 6);
-			out[o + 1] = tension * (-1.5 * t3 + 2 * t2 - 1 / 3) + b1;
-			out[o + 2] = tension * (1.5 * t3 - 2.5 * t2 + .5 * t + 1 / 6) + b2;
-			out[o + 3] = tension * (t3 / 6);
-		}) : Curve._weights(steps, (t, out, o) => {
-			const t2 = t * t;
-			const t3 = t2 * t;
-			out[o] = -t3 / 6 + .5 * t2 - .5 * t + 1 / 6;
-			out[o + 1] = .5 * t3 - t2 + 2 / 3;
-			out[o + 2] = -.5 * t3 + .5 * t2 + .5 * t + 1 / 6;
-			out[o + 3] = t3 / 6;
-		});
-		let k = 0;
-		while (k < _pts.length - 3) {
-			let c = Curve.controlPoints(_pts, k);
-			if (c.length > 0) {
-				Curve._evalSegment(ps, c, w, steps);
-				k++;
-			}
-		}
-		return ps;
-	}
-	static bsplineStep(step, ctrls) {
-		let m = new Group(new Pt(-.16666666666666666, .5, -.5, .16666666666666666), new Pt(.5, -1, 0, .6666666666666666), new Pt(-.5, .5, .5, .16666666666666666), new Pt(.16666666666666666, 0, 0, 0));
-		return Curve._calcPt(ctrls, Mat.multiply([step], m, true)[0]);
-	}
-	static bsplineTensionStep(step, ctrls, tension = 1) {
-		let m = new Group(new Pt(-.16666666666666666, .5, -.5, .16666666666666666), new Pt(-1.5, 2, 0, -.3333333333333333), new Pt(1.5, -2.5, .5, .16666666666666666), new Pt(.16666666666666666, 0, 0, 0));
-		let h = Mat.multiply([step], m, true)[0].multiply(tension);
-		let h2 = 2 * step[0] - 3 * step[1] + 1;
-		let h3 = -2 * step[0] + 3 * step[1];
-		let pt = Curve._calcPt(ctrls, h);
-		pt.x += h2 * ctrls[1].x + h3 * ctrls[2].x;
-		pt.y += h2 * ctrls[1].y + h3 * ctrls[2].y;
-		if (pt.length > 2) pt.z += h2 * ctrls[1].z + h3 * ctrls[2].z;
-		return pt;
-	}
-};
-
-//#endregion
 //#region src/uheprng.ts
 function Mash() {
 	let n = 4022871197;
@@ -1314,17 +1350,16 @@ var Num = class Num {
 	}
 	static boundValue(val, min, max) {
 		const len = Math.abs(max - min);
-		let a = val % len;
-		if (a > max) a -= len;
-		else if (a < min) a += len;
-		return a;
+		let a = (val - min) % len;
+		if (a < 0) a += len;
+		return a + min;
 	}
 	static within(p, a, b) {
 		return p >= Math.min(a, b) && p <= Math.max(a, b);
 	}
 	static randomRange(a, b = 0) {
 		const r = a > b ? a - b : b - a;
-		return a + Num.random() * r;
+		return Math.min(a, b) + Num.random() * r;
 	}
 	static randomPt(a, b) {
 		const p = new Pt(a.length);
@@ -1353,9 +1388,7 @@ var Num = class Num {
 	}
 	static mapToRange(n, currA, currB, targetA, targetB) {
 		if (currA == currB) throw new Error("[currMin, currMax] must define a range that is not zero");
-		const min = Math.min(targetA, targetB);
-		const max = Math.max(targetA, targetB);
-		return Num.normalizeValue(n, currA, currB) * (max - min) + min;
+		return targetA + (n - currA) / (currB - currA) * (targetB - targetA);
 	}
 	static seed(seed) {
 		this.generator = uheprng_default(seed);
@@ -1420,7 +1453,15 @@ var Geom = class Geom {
 		return new Group(pa, pb);
 	}
 	static isPerpendicular(p1, p2) {
-		return new Pt(p1).dot(p2) === 0;
+		let dot = 0;
+		let ma = 0;
+		let mb = 0;
+		for (let i = 0, len = Math.min(p1.length, p2.length); i < len; i++) {
+			dot += p1[i] * p2[i];
+			ma += p1[i] * p1[i];
+			mb += p2[i] * p2[i];
+		}
+		return Math.abs(dot) <= Const.epsilon * Math.sqrt(ma * mb);
 	}
 	static withinBound(pt, boundPt1, boundPt2) {
 		for (let i = 0, len = Math.min(pt.length, boundPt1.length, boundPt2.length); i < len; i++) if (!Num.within(pt[i], boundPt1[i], boundPt2[i])) return false;
@@ -1430,20 +1471,24 @@ var Geom = class Geom {
 		const _pts = Util.iterToArray(pts);
 		const bounds = Geom.boundingBox(_pts);
 		const center = bounds[1].add(bounds[0]).divide(2);
+		const cx = center[0];
+		const cy = center[1];
 		const fn = (a, b) => {
 			if (a.length < 2 || b.length < 2) throw new Error("Pt dimension cannot be less than 2");
-			const da = a.$subtract(center);
-			const db = b.$subtract(center);
-			if (da[0] >= 0 && db[0] < 0) return 1;
-			if (da[0] < 0 && db[0] >= 0) return -1;
-			if (da[0] == 0 && db[0] == 0) {
-				if (da[1] >= 0 || db[1] >= 0) return da[1] > db[1] ? 1 : -1;
-				return db[1] > da[1] ? 1 : -1;
+			const dax = a[0] - cx;
+			const day = a[1] - cy;
+			const dbx = b[0] - cx;
+			const dby = b[1] - cy;
+			if (dax >= 0 && dbx < 0) return 1;
+			if (dax < 0 && dbx >= 0) return -1;
+			if (dax == 0 && dbx == 0) {
+				if (day >= 0 || dby >= 0) return day > dby ? 1 : -1;
+				return dby > day ? 1 : -1;
 			}
-			const det = da.$cross2D(db);
+			const det = dax * dby - day * dbx;
 			if (det < 0) return 1;
 			if (det > 0) return -1;
-			return da[0] * da[0] + da[1] * da[1] > db[0] * db[0] + db[1] * db[1] ? 1 : -1;
+			return dax * dax + day * day > dbx * dbx + dby * dby ? 1 : -1;
 		};
 		return _pts.sort(fn);
 	}
@@ -1461,11 +1506,10 @@ var Geom = class Geom {
 		const pts = Util.iterToArray(ps[0] !== void 0 && typeof ps[0] == "number" ? [ps] : ps);
 		const fn = anchor ? Mat.rotateAt2DMatrix : Mat.rotate2DMatrix;
 		if (!anchor) anchor = Pt.make(pts[0].length, 0);
-		const cos = Math.cos(angle);
-		const sin = Math.sin(angle);
+		const mat = fn(Math.cos(angle), Math.sin(angle), anchor);
 		for (let i = 0, len = pts.length; i < len; i++) {
 			const p = axis ? pts[i].$take(axis) : pts[i];
-			p.to(Mat.transform2D(p, fn(cos, sin, anchor)));
+			p.to(Mat.transform2D(p, mat));
 			if (axis) for (let k = 0; k < axis.length; k++) pts[i][axis[k]] = p[k];
 		}
 		return Geom;
@@ -1474,12 +1518,10 @@ var Geom = class Geom {
 		const pts = Util.iterToArray(ps[0] !== void 0 && typeof ps[0] == "number" ? [ps] : ps);
 		const s = typeof scale == "number" ? [scale, scale] : scale;
 		if (!anchor) anchor = Pt.make(pts[0].length, 0);
-		const fn = anchor ? Mat.shearAt2DMatrix : Mat.shear2DMatrix;
-		const tanx = Math.tan(s[0]);
-		const tany = Math.tan(s[1]);
+		const mat = (anchor ? Mat.shearAt2DMatrix : Mat.shear2DMatrix)(Math.tan(s[0]), Math.tan(s[1]), anchor);
 		for (let i = 0, len = pts.length; i < len; i++) {
 			const p = axis ? pts[i].$take(axis) : pts[i];
-			p.to(Mat.transform2D(p, fn(tanx, tany, anchor)));
+			p.to(Mat.transform2D(p, mat));
 			if (axis) for (let k = 0; k < axis.length; k++) pts[i][axis[k]] = p[k];
 		}
 		return Geom;
@@ -1676,8 +1718,8 @@ var Range = class {
 		const min = new Pt(dims);
 		const mag = new Pt(dims);
 		for (let i = 0; i < dims; i++) {
-			max[i] = Const.min;
-			min[i] = Const.max;
+			max[i] = -Infinity;
+			min[i] = Infinity;
 			mag[i] = 0;
 			const s = this._source.zipSlice(i);
 			for (let k = 0, len = s.length; k < len; k++) {
@@ -1712,7 +1754,8 @@ var Range = class {
 		const g = new Group();
 		for (let i = 0; i <= count; i++) {
 			const p = new Pt(this._dims);
-			for (let k = 0, len = this._max.length; k < len; k++) p[k] = Num.lerp(this._min[k], this._max[k], i / count);
+			const t = count > 0 ? i / count : 0;
+			for (let k = 0, len = this._max.length; k < len; k++) p[k] = Num.lerp(this._min[k], this._max[k], t);
 			g.push(p);
 		}
 		return g;

@@ -940,6 +940,7 @@ declare class Curve {
   private static _weights;
   private static _evalSegment;
   static _calcPt(ctrls: GroupLike, params: PtLike): Pt;
+  private static _stepPt;
   static catmullRom(pts: PtLikeIterable, steps?: number): Group;
   static catmullRomStep(step: Pt, ctrls: GroupLike): Pt;
   static cardinal(pts: PtLikeIterable, steps?: number, tension?: number): Group;

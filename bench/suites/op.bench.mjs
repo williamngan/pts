@@ -591,4 +591,28 @@ export default defineSuite("op", (b, { Pts, fx }) => {
       sink(Curve.bspline(g, CURVE_STEPS, 0.8).length);
     },
   });
+
+  // Single-point step functions (used per-frame by easing/shaping callers)
+  const curveSteps = [
+    ["catmullRomStep", (s, c) => Curve.catmullRomStep(s, c)],
+    ["cardinalStep", (s, c) => Curve.cardinalStep(s, c, 0.5)],
+    ["bezierStep", (s, c) => Curve.bezierStep(s, c)],
+    ["bsplineStep", (s, c) => Curve.bsplineStep(s, c)],
+    ["bsplineTensionStep", (s, c) => Curve.bsplineTensionStep(s, c, 0.8)],
+  ];
+
+  for (const [name, apply] of curveSteps) {
+    perItem(
+      `Curve.${name}`,
+      N,
+      () => ({
+        ctrls: fx.group(`op:curve:step:${name}`, 4),
+        steps: Array.from({ length: N }, (_, i) => {
+          const t = i / N;
+          return new Pt(t * t * t, t * t, t, 1);
+        }),
+      }),
+      (s, i) => apply(s.steps[i], s.ctrls)[0],
+    );
+  }
 });

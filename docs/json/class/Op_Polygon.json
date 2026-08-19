@@ -17,7 +17,7 @@
       "source": [
         [
           "src/Op.ts",
-          1144,
+          1155,
           9
         ]
       ],
@@ -60,7 +60,7 @@
       "source": [
         [
           "src/Op.ts",
-          1214,
+          1235,
           9
         ]
       ],
@@ -71,7 +71,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Find the area of a *convex* polygon.",
+          "comment": "Find the area of a simple (non-self-intersecting) polygon using the shoelace formula.",
           "returns": "any",
           "returns_comment": false,
           "parameters": [
@@ -91,7 +91,7 @@
       "source": [
         [
           "src/Op.ts",
-          1173,
+          1184,
           9
         ]
       ],
@@ -104,7 +104,7 @@
         {
           "comment": "Get a bisector which is a line that split between two sides of a polygon equally.",
           "returns": "Pt",
-          "returns_comment": "a bisector Pt that's a normalized unit vector",
+          "returns_comment": "a bisector direction Pt, the average of the two adjacent sides' unit vectors (not itself normalized)",
           "parameters": [
             {
               "name": "poly",
@@ -159,7 +159,7 @@
       "source": [
         [
           "src/Op.ts",
-          1237,
+          1258,
           9
         ]
       ],
@@ -239,7 +239,7 @@
       "source": [
         [
           "src/Op.ts",
-          1426,
+          1449,
           9
         ]
       ],
@@ -276,7 +276,7 @@
       "source": [
         [
           "src/Op.ts",
-          1403,
+          1424,
           9
         ]
       ],
@@ -313,7 +313,7 @@
       "source": [
         [
           "src/Op.ts",
-          1523,
+          1546,
           9
         ]
       ],
@@ -350,7 +350,7 @@
       "source": [
         [
           "src/Op.ts",
-          1634,
+          1657,
           9
         ]
       ],
@@ -461,7 +461,7 @@
       "source": [
         [
           "src/Op.ts",
-          1128,
+          1136,
           9
         ]
       ],
@@ -504,7 +504,7 @@
       "source": [
         [
           "src/Op.ts",
-          1320,
+          1341,
           9
         ]
       ],
@@ -541,7 +541,7 @@
       "source": [
         [
           "src/Op.ts",
-          1305,
+          1326,
           9
         ]
       ],
@@ -578,7 +578,7 @@
       "source": [
         [
           "src/Op.ts",
-          1190,
+          1201,
           9
         ]
       ],
@@ -615,7 +615,7 @@
       "source": [
         [
           "src/Op.ts",
-          1343,
+          1364,
           9
         ]
       ],
@@ -695,7 +695,7 @@
       "source": [
         [
           "src/Op.ts",
-          1651,
+          1674,
           9
         ]
       ],

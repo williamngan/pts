@@ -23,15 +23,19 @@ describe("Num", () => {
     expect(Num.clamp(20, 0, 10)).toBe(10);
     expect(Num.boundValue(361, 0, 360)).toBe(1);
     expect(Num.boundValue(-1, 0, 360)).toBe(359);
+    expect(Num.boundValue(-370, 0, 360)).toBe(350);
     expect(Num.boundValue(16, 10, 20)).toBe(16);
+    expect(Num.boundValue(-5, 10, 20)).toBe(15);
+    expect(Num.boundValue(25, 10, 20)).toBe(15);
     expect(Num.within(3, 5, 1)).toBe(true);
     expect(Num.within(6, 5, 1)).toBe(false);
   });
 
   it("creates deterministic random ranges and points", () => {
     vi.spyOn(Num, "random").mockReturnValue(0.25);
-    expect(Num.randomRange(10)).toBe(12.5);
+    expect(Num.randomRange(10)).toBe(2.5);
     expect(Num.randomRange(10, 20)).toBe(12.5);
+    expect(Num.randomRange(10, 5)).toBe(6.25);
     expect(values(Num.randomPt([8, 4]))).toEqual([2, 1]);
     expect(values(Num.randomPt([10, 20], [30, 40]))).toEqual([15, 25]);
   });
@@ -46,6 +50,10 @@ describe("Num", () => {
     expect(Num.cycle(0.75, (value) => value)).toBe(0.5);
     expect(Num.cycle(0.5)).toBeCloseTo(1);
     expect(Num.mapToRange(5, 0, 10, 100, 0)).toBe(50);
+    // inverted target and inverted source ranges map directionally
+    expect(Num.mapToRange(2, 0, 10, 100, 0)).toBe(80);
+    expect(Num.mapToRange(2, 10, 0, 0, 100)).toBe(80);
+    expect(Num.mapToRange(2, 0, 10, 0, 100)).toBe(20);
     expect(() => Num.mapToRange(1, 2, 2, 0, 1)).toThrow("not zero");
   });
 
@@ -331,5 +339,55 @@ describe("Range", () => {
       [3, 15, 50],
       [5, 20, 100],
     ]);
+  });
+});
+
+describe("Num and Geom correctness pins", () => {
+  it("keeps Range min/max correct for all-negative data", () => {
+    const r = new Range(
+      new Group(new Pt(-5, -10), new Pt(-2, -8), new Pt(-7, -3)),
+    );
+    expect(values(r.max)).toEqual([-2, -3]);
+    expect(values(r.min)).toEqual([-7, -10]);
+    expect(values(r.magnitude)).toEqual([5, 7]);
+  });
+
+  it("returns finite ticks for zero subdivisions", () => {
+    const r = new Range(new Group(new Pt(0, 0), new Pt(10, 10)));
+    const t = r.ticks(0);
+    expect(t.length).toBe(1);
+    expect(values(t[0]).every(Number.isFinite)).toBe(true);
+  });
+
+  it("checks perpendicularity with a relative epsilon", () => {
+    // exact perpendicular still passes
+    expect(Geom.isPerpendicular([-2, 4], [8, 4])).toBe(true);
+    // tiny float error within relative epsilon passes
+    expect(Geom.isPerpendicular([3, 1], [-1, 3.0000001])).toBe(true);
+    // clearly non-perpendicular fails
+    expect(Geom.isPerpendicular([3, 1], [-1, 3.1])).toBe(false);
+    // zero vector keeps its legacy result
+    expect(Geom.isPerpendicular([0, 0], [1, 2])).toBe(true);
+  });
+
+  it("rotates a group about an anchor that aliases a group point", () => {
+    const g = new Group(new Pt(0, 0), new Pt(2, 0));
+    Geom.rotate2D(g, Math.PI / 2, [1, 0]);
+    expect(g[0][0]).toBeCloseTo(1);
+    expect(g[0][1]).toBeCloseTo(-1);
+    expect(g[1][0]).toBeCloseTo(1);
+    expect(g[1][1]).toBeCloseTo(1);
+  });
+
+  it("shears a group with a hoisted matrix", () => {
+    // s[1] shears x by y; s[0] shears y by x (current convention, pinned)
+    const g = new Group(new Pt(0, 0), new Pt(0, 2));
+    Geom.shear2D(g, [0, 0.5], [0, 0]);
+    expect(g[1][0]).toBeCloseTo(2 * Math.tan(0.5));
+    expect(g[1][1]).toBeCloseTo(2);
+    const h = new Group(new Pt(0, 0), new Pt(2, 0));
+    Geom.shear2D(h, [0.5, 0], [0, 0]);
+    expect(h[1][0]).toBeCloseTo(2);
+    expect(h[1][1]).toBeCloseTo(2 * Math.tan(0.5));
   });
 });
