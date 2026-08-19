@@ -30,7 +30,7 @@
           "parameters": [
             {
               "name": "bpm",
-              "comment": "beats per minute",
+              "comment": "beats per minute. Must be greater than 0.",
               "type": "number",
               "default": false
             }
@@ -58,7 +58,7 @@
       "flags": {},
       "overrides": false,
       "inherits": false,
-      "comment": "Beats-per-minute value",
+      "comment": "Beats-per-minute value. Must be greater than 0.",
       "getter": {
         "type": "number"
       },
@@ -110,7 +110,7 @@
       "source": [
         [
           "src/Play.ts",
-          188,
+          187,
           2
         ]
       ],
@@ -119,7 +119,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "IPlayer interface. Not implementated.",
+          "comment": "IPlayer interface. Not implemented.",
           "returns": "void",
           "returns_comment": false,
           "parameters": [
@@ -157,7 +157,7 @@
       "source": [
         [
           "src/Play.ts",
-          174,
+          173,
           2
         ]
       ],
@@ -173,13 +173,13 @@
             {
               "name": "time",
               "comment": "",
-              "type": "any",
+              "type": "number",
               "default": false
             },
             {
               "name": "ftime",
               "comment": "",
-              "type": "any",
+              "type": "number",
               "default": false
             }
           ],
@@ -192,7 +192,7 @@
       "source": [
         [
           "src/Play.ts",
-          80,
+          74,
           2
         ]
       ],
@@ -201,7 +201,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "This is a core function that let you specify a rhythm and then define responses by calling the `start` and `progress` functions from the returned object. See [Animation guide](../guide/Animation-0700.html) for more details.\nThe `start` function lets you set a callback on every start. It takes a function ([`ITempoStartFn`](#link)).\nThe `progress` function lets you set a callback during progress. It takes a function ([`ITempoProgressFn`](#link)). Both functions let you optionally specify a time offset and a custom name.\nSee [Animation guide](../guide/animation-0700.html) for more details.",
+          "comment": "This is a core function that let you specify a rhythm and then define responses by calling the `start` and `progress` functions from the returned object. See [Animation guide](../guide/Animation-0700.html) for more details.\nThe `start` function lets you set a callback on every start. It takes a function ([`ITempoStartFn`](#link)).\nThe `progress` function lets you set a callback during progress. It takes a function ([`ITempoProgressFn`](#link)). Both functions let you optionally specify a time offset and a custom name.\nA positive offset shifts the beat earlier (fires sooner), a negative offset shifts it later.",
           "returns": "ITempoResponses",
           "returns_comment": "an object with chainable functions",
           "parameters": [
@@ -226,7 +226,7 @@
       "source": [
         [
           "src/Play.ts",
-          181,
+          180,
           2
         ]
       ],
@@ -235,7 +235,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "IPlayer interface. Not implementated.",
+          "comment": "IPlayer interface. Not implemented.",
           "returns": "void",
           "returns_comment": false,
           "parameters": [
@@ -261,7 +261,7 @@
       "source": [
         [
           "src/Play.ts",
-          167,
+          166,
           2
         ]
       ],
@@ -290,7 +290,7 @@
       "source": [
         [
           "src/Play.ts",
-          130,
+          126,
           2
         ]
       ],
@@ -306,7 +306,7 @@
             {
               "name": "time",
               "comment": "current time in milliseconds",
-              "type": "any",
+              "type": "number",
               "default": false
             }
           ],
@@ -336,7 +336,7 @@
           "parameters": [
             {
               "name": "ms",
-              "comment": "milliseconds per beat",
+              "comment": "milliseconds per beat. Must be greater than 0.",
               "type": "number",
               "default": false
             }

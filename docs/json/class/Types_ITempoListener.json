@@ -3,7 +3,7 @@
   "source": [
     [
       "src/Types.ts",
-      189,
+      190,
       12
     ]
   ],
@@ -19,6 +19,7 @@
   "implements": [],
   "type_alias": [
     "{ beats:`number",
-    "number[]`, continuous:`boolean`, duration:`number`, fn:`Function`, index:`number`, name:`string`, offset:`number`, period:`number` }"
+    "number[]`, continuous:`boolean`, count:`number`, duration:`number`, fn:`ITempoStartFn",
+    "ITempoProgressFn`, index:`number`, name:`string`, offset:`number`, period:`number` }"
   ]
 }

@@ -23,6 +23,8 @@ describe("Color construction and representation", () => {
       lch: Color.lch,
       luv: Color.luv,
       xyz: Color.xyz,
+      oklab: Color.oklab,
+      oklch: Color.oklch,
     };
 
     for (const mode in constructors) {
@@ -40,9 +42,10 @@ describe("Color construction and representation", () => {
     ["ffff00", [255, 255, 0, 1]],
     ["Ff0", [255, 255, 0, 1]],
     ["A", [170, 255, 255, 1]],
-    ["33669980", [51, 102, 153, 1]],
+    ["33669980", [51, 102, 153, 128 / 255]],
+    ["#f008", [255, 0, 0, 136 / 255]],
   ])("parses hexadecimal color %s", (hex, expected) => {
-    expectColor(Color.fromHex(hex), expected);
+    expectColor(Color.fromHex(hex), expected, 3);
   });
 
   it("exposes channel aliases for each mode", () => {
@@ -186,6 +189,7 @@ describe("Color-space conversions", () => {
   it("covers normalized conversion inputs and outputs", () => {
     const normalized = Color.rgb(0.2, 0.4, 0.6);
     normalized.normalized = true;
+    const raw = Color.rgb(51, 102, 153);
     for (const forward of [
       Color.RGBtoLAB,
       Color.RGBtoLCH,
@@ -193,7 +197,8 @@ describe("Color-space conversions", () => {
       Color.RGBtoXYZ,
     ]) {
       const result = forward(normalized, true, true);
-      expect(Array.from(result).every(Number.isFinite)).toBe(true);
+      expect(result.normalized).toBe(true);
+      expectColor(result, forward(raw, false, true), 3);
     }
   });
 
@@ -232,5 +237,224 @@ describe("Color-space conversions", () => {
         Number.isFinite,
       ),
     ).toBe(true);
+  });
+});
+
+describe("Color-space reference values", () => {
+  // Independently computed via CIE 15 / IEC 61966-2-1 (sRGB, D65, 2° observer)
+  const references: [string, number[], Record<string, number[]>][] = [
+    [
+      "red",
+      [255, 0, 0],
+      {
+        xyz: [41.2456, 21.2673, 1.9334],
+        lab: [53.2408, 80.0925, 67.2032],
+        lch: [53.2408, 104.5518, 39.999],
+        luv: [53.2408, 175.015, 37.7564],
+      },
+    ],
+    [
+      "blue",
+      [0, 0, 255],
+      {
+        xyz: [18.0437, 7.2175, 95.0304],
+        lab: [32.297, 79.1875, -107.8602],
+        lch: [32.297, 133.8076, 306.2849],
+        luv: [32.297, -9.4054, -130.3423],
+      },
+    ],
+    [
+      "teal",
+      [64, 156, 180],
+      {
+        xyz: [22.2377, 28.1599, 47.4346],
+        lab: [60.0329, -19.6313, -20.5237],
+        lch: [60.0329, 28.4008, 226.2732],
+        luv: [60.0329, -36.1258, -28.5162],
+      },
+    ],
+    [
+      "white",
+      [255, 255, 255],
+      {
+        xyz: [95.047, 100, 108.883],
+        lab: [100, 0, 0],
+        luv: [100, 0, 0],
+      },
+    ],
+  ];
+
+  const forwards = {
+    xyz: Color.RGBtoXYZ,
+    lab: Color.RGBtoLAB,
+    lch: Color.RGBtoLCH,
+    luv: Color.RGBtoLUV,
+  };
+
+  it.each(references)("matches CIE values for %s", (_, rgb, expected) => {
+    for (const mode in expected) {
+      const result = forwards[mode as keyof typeof forwards](Color.rgb(rgb));
+      expectColor(result, [...expected[mode], 1], 2);
+    }
+  });
+
+  // Anchor values published in Ottosson's OKLAB reference (CSS Color 4)
+  it.each([
+    ["white", [255, 255, 255], [1, 0, 0]],
+    ["red", [255, 0, 0], [0.62796, 0.22486, 0.12585]],
+    ["green", [0, 255, 0], [0.86644, -0.23389, 0.1795]],
+    ["blue", [0, 0, 255], [0.45201, -0.03246, -0.31153]],
+  ])("matches OKLAB reference values for %s", (_, rgb, expected) => {
+    const oklab = Color.RGBtoOKLAB(Color.rgb(rgb));
+    expectColor(oklab, [...expected, 1], 3);
+    expectColor(Color.OKLABtoRGB(oklab), [...rgb, 1], 0);
+
+    const oklch = Color.RGBtoOKLCH(Color.rgb(rgb));
+    expect(oklch[0]).toBeCloseTo(expected[0], 3);
+    expect(oklch[1]).toBeCloseTo(Math.hypot(expected[1], expected[2]), 3);
+    expectColor(Color.OKLCHtoRGB(oklch), [...rgb, 1], 0);
+  });
+
+  it("exposes l/c/h accessors for oklch", () => {
+    const oklch = Color.RGBtoOKLCH(Color.rgb(64, 156, 180));
+    expect(oklch.mode).toBe("oklch");
+    expect(oklch.l).toBe(oklch[0]);
+    expect(oklch.c).toBe(oklch[1]);
+    expect(oklch.h).toBe(oklch[2]);
+    const viaLab = Color.OKLABtoOKLCH(
+      Color.RGBtoOKLAB(Color.rgb(64, 156, 180)),
+    );
+    expectColor(oklch, viaLab, 3);
+  });
+
+  it("converts black without NaN in every space", () => {
+    const black = Color.rgb(0, 0, 0);
+    for (const mode in forwards) {
+      const converted = forwards[mode as keyof typeof forwards](black);
+      expectColor([converted[0], converted[1], converted[2]], [0, 0, 0], 3);
+    }
+    expectColor(Color.LUVtoRGB(Color.luv(0, 0, 0)), [0, 0, 0, 1]);
+    expectColor(Color.LUVtoXYZ(Color.luv(0, 0, 0)), [0, 0, 0, 1]);
+  });
+});
+
+describe("Color conversion flags", () => {
+  const conversionNames = Object.getOwnPropertyNames(Color)
+    .filter(
+      (key) => typeof Color[key] === "function" && /^[A-Z]+to[A-Z]+$/.test(key),
+    )
+    .sort();
+
+  const sourceFor = (mode: string): Color => {
+    const rgb = Color.rgb(64, 156, 180, 0.75);
+    if (mode === "rgb") return rgb;
+    return Color[`RGBto${mode.toUpperCase()}`](rgb);
+  };
+
+  it.each(conversionNames)(
+    "%s normalizedOutput maps the plain result through Color.ranges",
+    (name) => {
+      const source = sourceFor(name.split("to")[0].toLowerCase());
+      const plain: Color = Color[name](source.clone());
+      const normalized: Color = Color[name](source.clone(), false, true);
+      expect(normalized.normalized).toBe(true);
+      expectColor(normalized, plain.clone().normalize(), 2);
+    },
+  );
+
+  it.each(conversionNames)(
+    "%s normalizedInput accepts flagged and unflagged 0...1 values",
+    (name) => {
+      const source = sourceFor(name.split("to")[0].toLowerCase());
+      const expected: Color = Color[name](source.clone());
+
+      const flagged = source.$normalize();
+      expectColor(Color[name](flagged, true), expected, 2);
+
+      // The flag argument is authoritative even when the color was
+      // constructed directly from 0...1 values and never flagged.
+      const unflagged = Color[source.mode](
+        flagged[0],
+        flagged[1],
+        flagged[2],
+        source.alpha,
+      );
+      expectColor(Color[name](unflagged, true), expected, 2);
+    },
+  );
+
+  it("keeps hue consistent between normalized and plain HSL/HSB", () => {
+    const rgb = Color.rgb(64, 156, 180);
+    expect(Color.RGBtoHSL(rgb, false, true)[0]).toBeCloseTo(
+      Color.RGBtoHSL(rgb)[0] / 360,
+      3,
+    );
+    expect(Color.RGBtoHSB(rgb, false, true)[0]).toBeCloseTo(
+      Color.RGBtoHSB(rgb)[0] / 360,
+      3,
+    );
+  });
+
+  it("honors normalizedOutput for achromatic HSL colors", () => {
+    expectColor(
+      Color.HSLtoRGB(Color.hsl(0, 0, 0.5), false, true),
+      [0.5, 0.5, 0.5, 1],
+    );
+  });
+
+  it("wraps out-of-range hues in HSB", () => {
+    expectColor(
+      Color.HSBtoRGB(Color.hsb(-60, 1, 1)),
+      Color.HSBtoRGB(Color.hsb(300, 1, 1)),
+    );
+    expectColor(
+      Color.HSBtoRGB(Color.hsb(420, 1, 1)),
+      Color.HSBtoRGB(Color.hsb(60, 1, 1)),
+    );
+  });
+
+  it("preserves the normalized flag through clone and toMode conversion", () => {
+    const norm = Color.rgb(255, 0, 0).normalize();
+    expect(norm.clone().normalized).toBe(true);
+
+    norm.toMode("lab", true);
+    expect(norm.normalized).toBe(true);
+    expectColor(
+      norm,
+      [53.2408 / 100, (80.0925 + 128) / 255, (67.2032 + 128) / 255, 1],
+      2,
+    );
+
+    norm.toMode("rgb", true);
+    expectColor(norm, [1, 0, 0, 1], 2);
+  });
+
+  it("treats same-mode conversion as a no-op", () => {
+    const rgb = Color.rgb(10, 20, 30);
+    expect(rgb.toMode("rgb", true)).toBe(rgb);
+    expectColor(rgb, [10, 20, 30, 1]);
+  });
+
+  it("renders CSS strings from normalized colors", () => {
+    const norm = Color.rgb(255, 0, 128).normalize();
+    expect(norm.hex).toBe("#ff0080");
+    expect(norm.rgb).toBe("rgb(255,0,128)");
+    expect(norm.rgba).toBe("rgba(255,0,128,1)");
+    // the "mode" format keeps raw (normalized) values
+    expect(norm.toString()).toContain("rgb(1,0,");
+    // formatting must not mutate the color
+    expect(norm.normalized).toBe(true);
+    expectColor(norm, [1, 0, 128 / 255, 1], 3);
+  });
+
+  it("wraps out-of-range hues in HSL", () => {
+    expectColor(
+      Color.HSLtoRGB(Color.hsl(-300, 1, 0.5)),
+      Color.HSLtoRGB(Color.hsl(60, 1, 0.5)),
+    );
+    expectColor(
+      Color.HSLtoRGB(Color.hsl(780, 1, 0.5)),
+      Color.HSLtoRGB(Color.hsl(60, 1, 0.5)),
+    );
   });
 });

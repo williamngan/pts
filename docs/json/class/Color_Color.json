@@ -15,7 +15,7 @@
       "source": [
         [
           "src/Color.ts",
-          35,
+          37,
           2
         ]
       ],
@@ -46,12 +46,12 @@
       "source": [
         [
           "src/Color.ts",
-          262,
+          313,
           6
         ],
         [
           "src/Color.ts",
-          265,
+          316,
           6
         ]
       ],
@@ -77,12 +77,12 @@
       "source": [
         [
           "src/Color.ts",
-          302,
+          353,
           6
         ],
         [
           "src/Color.ts",
-          305,
+          356,
           6
         ]
       ],
@@ -108,12 +108,12 @@
       "source": [
         [
           "src/Color.ts",
-          218,
+          269,
           6
         ],
         [
           "src/Color.ts",
-          221,
+          272,
           6
         ]
       ],
@@ -139,12 +139,12 @@
       "source": [
         [
           "src/Color.ts",
-          272,
+          323,
           6
         ],
         [
           "src/Color.ts",
-          275,
+          326,
           6
         ]
       ],
@@ -170,12 +170,12 @@
       "source": [
         [
           "src/Color.ts",
-          208,
+          259,
           6
         ],
         [
           "src/Color.ts",
-          211,
+          262,
           6
         ]
       ],
@@ -201,12 +201,12 @@
       "source": [
         [
           "src/Color.ts",
-          229,
+          280,
           6
         ],
         [
           "src/Color.ts",
-          232,
+          283,
           6
         ]
       ],
@@ -232,7 +232,7 @@
       "source": [
         [
           "src/Color.ts",
-          141,
+          160,
           13
         ]
       ],
@@ -283,12 +283,12 @@
       "source": [
         [
           "src/Color.ts",
-          250,
+          301,
           6
         ],
         [
           "src/Color.ts",
-          253,
+          304,
           6
         ]
       ],
@@ -314,7 +314,7 @@
       "source": [
         [
           "src/Color.ts",
-          190,
+          241,
           6
         ]
       ],
@@ -332,12 +332,12 @@
       "source": [
         [
           "src/Color.ts",
-          312,
+          363,
           6
         ],
         [
           "src/Color.ts",
-          315,
+          366,
           6
         ]
       ],
@@ -363,12 +363,12 @@
       "source": [
         [
           "src/Color.ts",
-          198,
+          249,
           6
         ],
         [
           "src/Color.ts",
-          201,
+          252,
           6
         ]
       ],
@@ -394,7 +394,7 @@
       "source": [
         [
           "src/Color.ts",
-          148,
+          167,
           13
         ]
       ],
@@ -414,7 +414,7 @@
       "source": [
         [
           "src/Color.ts",
-          155,
+          174,
           13
         ]
       ],
@@ -434,12 +434,12 @@
       "source": [
         [
           "src/Color.ts",
-          240,
+          291,
           6
         ],
         [
           "src/Color.ts",
-          243,
+          294,
           6
         ]
       ],
@@ -465,12 +465,12 @@
       "source": [
         [
           "src/Color.ts",
-          282,
+          333,
           6
         ],
         [
           "src/Color.ts",
-          285,
+          336,
           6
         ]
       ],
@@ -496,12 +496,12 @@
       "source": [
         [
           "src/Color.ts",
-          292,
+          343,
           6
         ],
         [
           "src/Color.ts",
-          295,
+          346,
           6
         ]
       ],
@@ -951,7 +951,7 @@
       "source": [
         [
           "src/Color.ts",
-          344,
+          395,
           2
         ]
       ],
@@ -1284,7 +1284,7 @@
       "source": [
         [
           "src/Color.ts",
-          162,
+          181,
           2
         ]
       ],
@@ -1929,7 +1929,7 @@
       "source": [
         [
           "src/Color.ts",
-          323,
+          374,
           2
         ]
       ],
@@ -2790,7 +2790,7 @@
       "source": [
         [
           "src/Color.ts",
-          173,
+          224,
           2
         ]
       ],
@@ -2825,7 +2825,7 @@
       "source": [
         [
           "src/Color.ts",
-          352,
+          403,
           2
         ]
       ],
@@ -2905,7 +2905,7 @@
       "source": [
         [
           "src/Color.ts",
-          43,
+          45,
           9
         ]
       ],
@@ -2936,7 +2936,7 @@
       "source": [
         [
           "src/Color.ts",
-          56,
+          58,
           9
         ]
       ],
@@ -2967,7 +2967,7 @@
       "source": [
         [
           "src/Color.ts",
-          93,
+          96,
           9
         ]
       ],
@@ -2998,7 +2998,7 @@
       "source": [
         [
           "src/Color.ts",
-          492,
+          556,
           9
         ]
       ],
@@ -3041,7 +3041,7 @@
       "source": [
         [
           "src/Color.ts",
-          85,
+          88,
           9
         ]
       ],
@@ -3072,7 +3072,7 @@
       "source": [
         [
           "src/Color.ts",
-          415,
+          471,
           9
         ]
       ],
@@ -3115,7 +3115,7 @@
       "source": [
         [
           "src/Color.ts",
-          101,
+          104,
           9
         ]
       ],
@@ -3146,7 +3146,7 @@
       "source": [
         [
           "src/Color.ts",
-          823,
+          909,
           9
         ]
       ],
@@ -3189,7 +3189,7 @@
       "source": [
         [
           "src/Color.ts",
-          544,
+          611,
           9
         ]
       ],
@@ -3232,7 +3232,7 @@
       "source": [
         [
           "src/Color.ts",
-          725,
+          793,
           9
         ]
       ],
@@ -3275,7 +3275,7 @@
       "source": [
         [
           "src/Color.ts",
-          109,
+          112,
           9
         ]
       ],
@@ -3306,7 +3306,7 @@
       "source": [
         [
           "src/Color.ts",
-          840,
+          932,
           9
         ]
       ],
@@ -3349,7 +3349,7 @@
       "source": [
         [
           "src/Color.ts",
-          576,
+          643,
           9
         ]
       ],
@@ -3392,7 +3392,7 @@
       "source": [
         [
           "src/Color.ts",
-          117,
+          120,
           9
         ]
       ],
@@ -3423,7 +3423,7 @@
       "source": [
         [
           "src/Color.ts",
-          608,
+          675,
           9
         ]
       ],
@@ -3466,7 +3466,7 @@
       "source": [
         [
           "src/Color.ts",
-          789,
+          866,
           9
         ]
       ],
@@ -3552,7 +3552,7 @@
       "source": [
         [
           "src/Color.ts",
-          134,
+          153,
           9
         ]
       ],
@@ -3584,11 +3584,245 @@
       ]
     },
     {
+      "name": "oklab",
+      "source": [
+        [
+          "src/Color.ts",
+          136,
+          9
+        ]
+      ],
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create OKLAB Color. OKLAB color ranges are (0...1, -0.4...0.4, -0.4...0.4) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.",
+          "returns": "Color",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "OKLABtoOKLCH",
+      "source": [
+        [
+          "src/Color.ts",
+          1061,
+          9
+        ]
+      ],
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to convert OKLAB to OKLCH.",
+          "returns": "Color",
+          "returns_comment": "a new OKLCH Color",
+          "parameters": [
+            {
+              "name": "oklab",
+              "comment": "an OKLAB Color",
+              "type": "Color",
+              "default": false
+            },
+            {
+              "name": "normalizedInput",
+              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            },
+            {
+              "name": "normalizedOutput",
+              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "OKLABtoRGB",
+      "source": [
+        [
+          "src/Color.ts",
+          988,
+          9
+        ]
+      ],
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to convert OKLAB to RGB. Out-of-gamut results are clamped to the sRGB range.",
+          "returns": "Color",
+          "returns_comment": "a new RGB Color",
+          "parameters": [
+            {
+              "name": "oklab",
+              "comment": "an OKLAB Color",
+              "type": "Color",
+              "default": false
+            },
+            {
+              "name": "normalizedInput",
+              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            },
+            {
+              "name": "normalizedOutput",
+              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "oklch",
+      "source": [
+        [
+          "src/Color.ts",
+          144,
+          9
+        ]
+      ],
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Create OKLCH Color. OKLCH color ranges are (0...1, 0...0.4, 0...360) respectively. You may use [`Color.normalize`](#link) to convert the ranges to 0...1.",
+          "returns": "Color",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "args",
+              "comment": "Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.",
+              "type": "any[]",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "OKLCHtoOKLAB",
+      "source": [
+        [
+          "src/Color.ts",
+          1084,
+          9
+        ]
+      ],
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to convert OKLCH to OKLAB.",
+          "returns": "Color",
+          "returns_comment": "a new OKLAB Color",
+          "parameters": [
+            {
+              "name": "oklch",
+              "comment": "an OKLCH Color",
+              "type": "Color",
+              "default": false
+            },
+            {
+              "name": "normalizedInput",
+              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            },
+            {
+              "name": "normalizedOutput",
+              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "OKLCHtoRGB",
+      "source": [
+        [
+          "src/Color.ts",
+          1045,
+          9
+        ]
+      ],
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to convert OKLCH to RGB. Out-of-gamut results are clamped to the sRGB range.",
+          "returns": "Color",
+          "returns_comment": "a new RGB Color",
+          "parameters": [
+            {
+              "name": "oklch",
+              "comment": "an OKLCH Color",
+              "type": "Color",
+              "default": false
+            },
+            {
+              "name": "normalizedInput",
+              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            },
+            {
+              "name": "normalizedOutput",
+              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "rgb",
       "source": [
         [
           "src/Color.ts",
-          77,
+          80,
           9
         ]
       ],
@@ -3619,7 +3853,7 @@
       "source": [
         [
           "src/Color.ts",
-          458,
+          520,
           9
         ]
       ],
@@ -3662,7 +3896,7 @@
       "source": [
         [
           "src/Color.ts",
-          375,
+          429,
           9
         ]
       ],
@@ -3705,7 +3939,7 @@
       "source": [
         [
           "src/Color.ts",
-          528,
+          595,
           9
         ]
       ],
@@ -3748,7 +3982,7 @@
       "source": [
         [
           "src/Color.ts",
-          560,
+          627,
           9
         ]
       ],
@@ -3791,7 +4025,7 @@
       "source": [
         [
           "src/Color.ts",
-          592,
+          659,
           9
         ]
       ],
@@ -3830,11 +4064,97 @@
       ]
     },
     {
+      "name": "RGBtoOKLAB",
+      "source": [
+        [
+          "src/Color.ts",
+          955,
+          9
+        ]
+      ],
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to convert RGB to OKLAB (Ottosson 2020, as specified in CSS Color 4). OKLAB improves on LAB's perceptual uniformity, especially hue stability in blues.",
+          "returns": "Color",
+          "returns_comment": "a new OKLAB Color",
+          "parameters": [
+            {
+              "name": "rgb",
+              "comment": "a RGB Color",
+              "type": "Color",
+              "default": false
+            },
+            {
+              "name": "normalizedInput",
+              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            },
+            {
+              "name": "normalizedOutput",
+              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "RGBtoOKLCH",
+      "source": [
+        [
+          "src/Color.ts",
+          1029,
+          9
+        ]
+      ],
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "A static function to convert RGB to OKLCH, the cylindrical form of OKLAB as specified in CSS Color 4.",
+          "returns": "Color",
+          "returns_comment": "a new OKLCH Color",
+          "parameters": [
+            {
+              "name": "rgb",
+              "comment": "a RGB Color",
+              "type": "Color",
+              "default": false
+            },
+            {
+              "name": "normalizedInput",
+              "comment": "a boolean specifying whether input color is normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            },
+            {
+              "name": "normalizedOutput",
+              "comment": "a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.",
+              "type": "boolean",
+              "default": "false"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "RGBtoXYZ",
       "source": [
         [
           "src/Color.ts",
-          624,
+          691,
           9
         ]
       ],
@@ -3877,7 +4197,7 @@
       "source": [
         [
           "src/Color.ts",
-          125,
+          128,
           9
         ]
       ],
@@ -3908,7 +4228,7 @@
       "source": [
         [
           "src/Color.ts",
-          694,
+          762,
           9
         ]
       ],
@@ -3951,7 +4271,7 @@
       "source": [
         [
           "src/Color.ts",
-          759,
+          827,
           9
         ]
       ],
@@ -3994,7 +4314,7 @@
       "source": [
         [
           "src/Color.ts",
-          654,
+          721,
           9
         ]
       ],

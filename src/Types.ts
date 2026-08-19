@@ -111,7 +111,8 @@ export type CanvasSpaceOptions = {
 /**
  * Typescript type: ColorType represents a defined set of string values such as "rgb" and "lab".
  */
-export type ColorType = "rgb" | "hsl" | "hsb" | "lab" | "lch" | "luv" | "xyz";
+export type ColorType =
+  "rgb" | "hsl" | "hsb" | "lab" | "lch" | "luv" | "xyz" | "oklab" | "oklch";
 
 /**
  * Typescript type: DelaunayShape represents an object type that can store a Delaunay element. It has 3 indices (i, j, k) and two groups that represent a triangle and a circle.

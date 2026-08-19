@@ -24,6 +24,8 @@
     "lab",
     "lch",
     "luv",
-    "xyz"
+    "xyz",
+    "oklab",
+    "oklch"
   ]
 }

@@ -86,6 +86,22 @@ export default defineSuite("color", (b, { Pts, fx }) => {
         sink(acc);
       },
     });
+
+    // The normalized flags take a different path (denormalize on the way
+    // in, map through Color.ranges on the way out), so measure it too.
+    b.case(`Color.${name} (normalized)`, {
+      batch: N,
+      setupOnce: () =>
+        fx
+          .colors(`color:${name}:normalized`, N, sourceMode)
+          .map((c) => c.$normalize()),
+      run: (source) => {
+        let acc = 0;
+        for (let i = 0; i < N; i++)
+          acc += Color[name](source[i], true, true)[0];
+        sink(acc);
+      },
+    });
   }
 
   b.case("Color.toMode (no conversion)", {

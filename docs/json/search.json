@@ -1368,6 +1368,42 @@
     8
   ],
   [
+    "Color_Color#function_static_oklab",
+    "Color.oklab",
+    "Function",
+    8
+  ],
+  [
+    "Color_Color#function_static_OKLABtoOKLCH",
+    "Color.OKLABtoOKLCH",
+    "Function",
+    8
+  ],
+  [
+    "Color_Color#function_static_OKLABtoRGB",
+    "Color.OKLABtoRGB",
+    "Function",
+    8
+  ],
+  [
+    "Color_Color#function_static_oklch",
+    "Color.oklch",
+    "Function",
+    8
+  ],
+  [
+    "Color_Color#function_static_OKLCHtoOKLAB",
+    "Color.OKLCHtoOKLAB",
+    "Function",
+    8
+  ],
+  [
+    "Color_Color#function_static_OKLCHtoRGB",
+    "Color.OKLCHtoRGB",
+    "Function",
+    8
+  ],
+  [
     "Color_Color#function_static_rgb",
     "Color.rgb",
     "Function",
@@ -1400,6 +1436,18 @@
   [
     "Color_Color#function_static_RGBtoLUV",
     "Color.RGBtoLUV",
+    "Function",
+    8
+  ],
+  [
+    "Color_Color#function_static_RGBtoOKLAB",
+    "Color.RGBtoOKLAB",
+    "Function",
+    8
+  ],
+  [
+    "Color_Color#function_static_RGBtoOKLCH",
+    "Color.RGBtoOKLCH",
     "Function",
     8
   ],
@@ -6294,6 +6342,12 @@
     6
   ],
   [
+    "Play_Sound#accessor_volume",
+    "Sound.volume",
+    "Accessor",
+    6
+  ],
+  [
     "Play_Sound#function_analyze",
     "Sound.analyze",
     "Function",
@@ -6308,6 +6362,12 @@
   [
     "Play_Sound#function_createBuffer",
     "Sound.createBuffer",
+    "Function",
+    8
+  ],
+  [
+    "Play_Sound#function_dispose",
+    "Sound.dispose",
     "Function",
     8
   ],

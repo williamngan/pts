@@ -1736,6 +1736,112 @@ Get a Color object whose values are the maximum of its mode.
 Color.maxValue("rgb") will return a rgb Color object with values (255,255,255)
 ```
 
+<a id="color-color-static-oklab"></a>
+##### `oklab`
+
+*static*
+
+```ts
+static oklab(args: any[]): Color
+```
+
+Create OKLAB Color. OKLAB color ranges are (0...1, -0.4...0.4, -0.4...0.4) respectively. You may use [`Color.normalize`](#color-color-normalize) to convert the ranges to 0...1.
+
+**Parameters**
+
+- `args` (`any[]`) — Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
+
+<a id="color-color-static-oklabto-oklch"></a>
+##### `OKLABtoOKLCH`
+
+*static*
+
+```ts
+static OKLABtoOKLCH(oklab: Color, normalizedInput: boolean = false, normalizedOutput: boolean = false): Color
+```
+
+A static function to convert OKLAB to OKLCH.
+
+**Parameters**
+
+- `oklab` (`Color`) — an OKLAB Color
+- `normalizedInput` (`boolean`; default `false`) — a boolean specifying whether input color is normalized. Default is not normalized: `false`.
+- `normalizedOutput` (`boolean`; default `false`) — a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
+
+**Returns:** a new OKLCH Color
+
+<a id="color-color-static-oklabto-rgb"></a>
+##### `OKLABtoRGB`
+
+*static*
+
+```ts
+static OKLABtoRGB(oklab: Color, normalizedInput: boolean = false, normalizedOutput: boolean = false): Color
+```
+
+A static function to convert OKLAB to RGB. Out-of-gamut results are clamped to the sRGB range.
+
+**Parameters**
+
+- `oklab` (`Color`) — an OKLAB Color
+- `normalizedInput` (`boolean`; default `false`) — a boolean specifying whether input color is normalized. Default is not normalized: `false`.
+- `normalizedOutput` (`boolean`; default `false`) — a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
+
+**Returns:** a new RGB Color
+
+<a id="color-color-static-oklch"></a>
+##### `oklch`
+
+*static*
+
+```ts
+static oklch(args: any[]): Color
+```
+
+Create OKLCH Color. OKLCH color ranges are (0...1, 0...0.4, 0...360) respectively. You may use [`Color.normalize`](#color-color-normalize) to convert the ranges to 0...1.
+
+**Parameters**
+
+- `args` (`any[]`) — Pt-like parameters which can be a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties.
+
+<a id="color-color-static-oklchto-oklab"></a>
+##### `OKLCHtoOKLAB`
+
+*static*
+
+```ts
+static OKLCHtoOKLAB(oklch: Color, normalizedInput: boolean = false, normalizedOutput: boolean = false): Color
+```
+
+A static function to convert OKLCH to OKLAB.
+
+**Parameters**
+
+- `oklch` (`Color`) — an OKLCH Color
+- `normalizedInput` (`boolean`; default `false`) — a boolean specifying whether input color is normalized. Default is not normalized: `false`.
+- `normalizedOutput` (`boolean`; default `false`) — a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
+
+**Returns:** a new OKLAB Color
+
+<a id="color-color-static-oklchto-rgb"></a>
+##### `OKLCHtoRGB`
+
+*static*
+
+```ts
+static OKLCHtoRGB(oklch: Color, normalizedInput: boolean = false, normalizedOutput: boolean = false): Color
+```
+
+A static function to convert OKLCH to RGB. Out-of-gamut results are clamped to the sRGB range.
+
+**Parameters**
+
+- `oklch` (`Color`) — an OKLCH Color
+- `normalizedInput` (`boolean`; default `false`) — a boolean specifying whether input color is normalized. Default is not normalized: `false`.
+- `normalizedOutput` (`boolean`; default `false`) — a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
+
+**Returns:** a new RGB Color
+
 <a id="color-color-static-rgb"></a>
 ##### `rgb`
 
@@ -1845,6 +1951,44 @@ A static function to convert RGB to LUV.
 - `normalizedOutput` (`boolean`; default `false`) — a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
 
 **Returns:** a new LUV Color
+
+<a id="color-color-static-rgbto-oklab"></a>
+##### `RGBtoOKLAB`
+
+*static*
+
+```ts
+static RGBtoOKLAB(rgb: Color, normalizedInput: boolean = false, normalizedOutput: boolean = false): Color
+```
+
+A static function to convert RGB to OKLAB (Ottosson 2020, as specified in CSS Color 4). OKLAB improves on LAB's perceptual uniformity, especially hue stability in blues.
+
+**Parameters**
+
+- `rgb` (`Color`) — a RGB Color
+- `normalizedInput` (`boolean`; default `false`) — a boolean specifying whether input color is normalized. Default is not normalized: `false`.
+- `normalizedOutput` (`boolean`; default `false`) — a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
+
+**Returns:** a new OKLAB Color
+
+<a id="color-color-static-rgbto-oklch"></a>
+##### `RGBtoOKLCH`
+
+*static*
+
+```ts
+static RGBtoOKLCH(rgb: Color, normalizedInput: boolean = false, normalizedOutput: boolean = false): Color
+```
+
+A static function to convert RGB to OKLCH, the cylindrical form of OKLAB as specified in CSS Color 4.
+
+**Parameters**
+
+- `rgb` (`Color`) — a RGB Color
+- `normalizedInput` (`boolean`; default `false`) — a boolean specifying whether input color is normalized. Default is not normalized: `false`.
+- `normalizedOutput` (`boolean`; default `false`) — a boolean specifying whether output color shoud be normalized. Default is not normalized: `false`.
+
+**Returns:** a new OKLCH Color
 
 <a id="color-color-static-rgbto-xyz"></a>
 ##### `RGBtoXYZ`
@@ -13597,7 +13741,7 @@ type AnimateCallbackFn =  Fn(time:number, frameTime:number, currentSpace:any);
 <a id="types-canvaspatternrepetition"></a>
 ### `CanvasPatternRepetition`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:242`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L242)
+**Kind:** Typealias · **Source:** [`src/Types.ts:243`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L243)
 
 Typescript type: CanvasPatternRepetition represents the string options to specify pattern repetition
 
@@ -13624,13 +13768,13 @@ type CanvasSpaceOptions = { bgcolor:string, offscreen:boolean, pixelDensity:numb
 Typescript type: ColorType represents a defined set of string values such as "rgb" and "lab".
 
 ```ts
-type ColorType = rgb | hsl | hsb | lab | lch | luv | xyz;
+type ColorType = rgb | hsl | hsb | lab | lch | luv | xyz | oklab | oklch;
 ```
 
 <a id="types-defaultformstyle"></a>
 ### `DefaultFormStyle`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:230`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L230)
+**Kind:** Typealias · **Source:** [`src/Types.ts:231`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L231)
 
 Typescript type: DefaultFormStyle represents a default object for visual styles such as fill, stroke, line width, and others.
 
@@ -13641,7 +13785,7 @@ type DefaultFormStyle = { fillStyle:string | CanvasGradient | CanvasPattern, glo
 <a id="types-delaunaymesh"></a>
 ### `DelaunayMesh`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:130`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L130)
+**Kind:** Typealias · **Source:** [`src/Types.ts:131`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L131)
 
 Typescript type: DelaunayMesh represents an object type that has an array of {key: shape} items, where each shape represents a DelaunayShape.
 
@@ -13652,7 +13796,7 @@ type DelaunayMesh = [];
 <a id="types-delaunayshape"></a>
 ### `DelaunayShape`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:119`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L119)
+**Kind:** Typealias · **Source:** [`src/Types.ts:120`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L120)
 
 Typescript type: DelaunayShape represents an object type that can store a Delaunay element. It has 3 indices (i, j, k) and two groups that represent a triangle and a circle.
 
@@ -13663,7 +13807,7 @@ type DelaunayShape = { circle:Group, i:number, j:number, k:number, triangle:Grou
 <a id="types-domformcontext"></a>
 ### `DOMFormContext`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:135`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L135)
+**Kind:** Typealias · **Source:** [`src/Types.ts:136`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L136)
 
 Typescript type: DOMFormContext represents the current context for an DOMForm.
 
@@ -13685,7 +13829,7 @@ type GroupLike = Group | Pt[];
 <a id="types-intersectcontext"></a>
 ### `IntersectContext`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:147`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L147)
+**Kind:** Typealias · **Source:** [`src/Types.ts:148`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L148)
 
 Typescript type: IntersectContext represents a type of an object that store the intersection info.
 
@@ -13696,7 +13840,7 @@ type IntersectContext = { dist:number, edge:Group, normal:Pt, other:any, vertex:
 <a id="types-isoundanalyzer"></a>
 ### `ISoundAnalyzer`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:216`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L216)
+**Kind:** Typealias · **Source:** [`src/Types.ts:217`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L217)
 
 Typescript type: ISoundAnalyzer represents an object that stores the AnalyzerNode properties
 
@@ -13707,7 +13851,7 @@ type ISoundAnalyzer = { data:Uint8Array, node:AnalyserNode, size:number };
 <a id="types-itempolistener"></a>
 ### `ITempoListener`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:189`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L189)
+**Kind:** Typealias · **Source:** [`src/Types.ts:190`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L190)
 
 Typescript type: ITempoListener represents a listener created by Tempo class
 
@@ -13718,7 +13862,7 @@ type ITempoListener = { beats:number | number[], continuous:boolean, count:numbe
 <a id="types-itempoprogressfn"></a>
 ### `ITempoProgressFn`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:179`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L179)
+**Kind:** Typealias · **Source:** [`src/Types.ts:180`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L180)
 
 Typescript type: a callback function type used in `tempo.every(...).progress( fn )`
 
@@ -13729,7 +13873,7 @@ type ITempoProgressFn =  Fn(count:number, t:number, ms:number, start:boolean);
 <a id="types-itemporesponses"></a>
 ### `ITempoResponses`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:204`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L204)
+**Kind:** Typealias · **Source:** [`src/Types.ts:205`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L205)
 
 Typescript type: the return type of `tempo.every(...)`
 
@@ -13740,7 +13884,7 @@ type ITempoResponses = { progress: Fn(fn:ITempoProgressFn, offset:number, name:s
 <a id="types-itempostartfn"></a>
 ### `ITempoStartFn`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:174`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L174)
+**Kind:** Typealias · **Source:** [`src/Types.ts:175`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L175)
 
 Typescript type: a callback function type used in `tempo.every(...).start( fn )`
 
@@ -13786,7 +13930,7 @@ type PtLikeIterable = GroupLike | PtLike[] | Iterable;
 <a id="types-renderingcontext2d"></a>
 ### `RenderingContext2D`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:245`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L245)
+**Kind:** Typealias · **Source:** [`src/Types.ts:246`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L246)
 
 ```ts
 type RenderingContext2D = CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
@@ -13795,7 +13939,7 @@ type RenderingContext2D = CanvasRenderingContext2D | OffscreenCanvasRenderingCon
 <a id="types-soundtype"></a>
 ### `SoundType`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:225`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L225)
+**Kind:** Typealias · **Source:** [`src/Types.ts:226`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L226)
 
 Typescript type: SoundType represents a type of sound input. It corresponds to Sound.type property.
 
@@ -13839,7 +13983,7 @@ type TouchPointsKey = touches | changedTouches | targetTouches;
 <a id="types-uihandler"></a>
 ### `UIHandler`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:159`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L159)
+**Kind:** Typealias · **Source:** [`src/Types.ts:160`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L160)
 
 Typescript type: UIHandler represents a callback function to handle UI actions.
 
@@ -13850,7 +13994,7 @@ type UIHandler =  Fn(target:UI, pt:PtLike, type:string, evt:MouseEvent);
 <a id="types-warningtype"></a>
 ### `WarningType`
 
-**Kind:** Typealias · **Source:** [`src/Types.ts:169`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L169)
+**Kind:** Typealias · **Source:** [`src/Types.ts:170`](https://github.com/williamngan/pts/blob/master/src/Types.ts#L170)
 
 Typescript type: WarningType specifies a level of warning for [`Util.warnLevel`](#util-util-static-warn-level).
 

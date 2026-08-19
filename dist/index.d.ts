@@ -139,7 +139,7 @@ type CanvasSpaceOptions = {
   offscreen?: boolean;
   pixelDensity?: number;
 };
-type ColorType = "rgb" | "hsl" | "hsb" | "lab" | "lch" | "luv" | "xyz";
+type ColorType = "rgb" | "hsl" | "hsb" | "lab" | "lch" | "luv" | "xyz" | "oklab" | "oklch";
 type DelaunayShape = {
   i: number;
   j: number;
@@ -969,11 +969,15 @@ declare class Color extends Pt {
   static lch(...args: any[]): Color;
   static luv(...args: any[]): Color;
   static xyz(...args: any[]): Color;
+  static oklab(...args: any[]): Color;
+  static oklch(...args: any[]): Color;
   static maxValues(mode: string): Pt;
   get hex(): string;
   get rgb(): string;
   get rgba(): string;
   clone(): Color;
+  private static _denorm;
+  private static _normOut;
   toMode(mode: ColorType, convert?: boolean): this;
   get mode(): ColorType;
   get r(): number;
@@ -1021,6 +1025,12 @@ declare class Color extends Pt {
   static LUVtoXYZ(luv: Color, normalizedInput?: boolean, normalizedOutput?: boolean): Color;
   static LABtoLCH(lab: Color, normalizedInput?: boolean, normalizedOutput?: boolean): Color;
   static LCHtoLAB(lch: Color, normalizedInput?: boolean, normalizedOutput?: boolean): Color;
+  static RGBtoOKLAB(rgb: Color, normalizedInput?: boolean, normalizedOutput?: boolean): Color;
+  static OKLABtoRGB(oklab: Color, normalizedInput?: boolean, normalizedOutput?: boolean): Color;
+  static RGBtoOKLCH(rgb: Color, normalizedInput?: boolean, normalizedOutput?: boolean): Color;
+  static OKLCHtoRGB(oklch: Color, normalizedInput?: boolean, normalizedOutput?: boolean): Color;
+  static OKLABtoOKLCH(oklab: Color, normalizedInput?: boolean, normalizedOutput?: boolean): Color;
+  static OKLCHtoOKLAB(oklch: Color, normalizedInput?: boolean, normalizedOutput?: boolean): Color;
 }
 //#endregion
 //#region src/Util.d.ts

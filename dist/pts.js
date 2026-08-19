@@ -5357,13 +5357,14 @@ See https://github.com/williamngan/pts for details. */
 		}
 		static fromHex(hex) {
 			if (hex[0] == "#") hex = hex.substr(1);
-			if (hex.length <= 3) {
+			if (hex.length <= 4) {
 				const fn = (i) => hex[i] || "F";
-				hex = `${fn(0)}${fn(0)}${fn(1)}${fn(1)}${fn(2)}${fn(2)}`;
+				const shortAlpha = hex.length === 4 ? `${fn(3)}${fn(3)}` : "";
+				hex = `${fn(0)}${fn(0)}${fn(1)}${fn(1)}${fn(2)}${fn(2)}${shortAlpha}`;
 			}
 			let alpha = 1;
 			if (hex.length === 8) {
-				alpha = hex.substr(6) && 1;
+				alpha = parseInt(hex.substr(6, 2), 16) / 255;
 				hex = hex.substring(0, 6);
 			}
 			const hexVal = parseInt(hex, 16);
@@ -5390,6 +5391,12 @@ See https://github.com/williamngan/pts for details. */
 		static xyz(...args) {
 			return Color.from(...args).toMode("xyz");
 		}
+		static oklab(...args) {
+			return Color.from(...args).toMode("oklab");
+		}
+		static oklch(...args) {
+			return Color.from(...args).toMode("oklch");
+		}
 		static maxValues(mode) {
 			return Color.ranges[mode].zipSlice(1).$take([
 				0,
@@ -5409,10 +5416,30 @@ See https://github.com/williamngan/pts for details. */
 		clone() {
 			const c = new Color(this);
 			c.toMode(this._mode);
+			c._isNorm = this._isNorm;
+			return c;
+		}
+		static _denorm(c) {
+			const cc = c.clone();
+			const ranges = Color.ranges[cc._mode];
+			for (let i = 0; i < 3; i++) {
+				const r = ranges[i];
+				cc[i] = r[0] + cc[i] * (r[1] - r[0]);
+			}
+			cc._isNorm = false;
+			return cc;
+		}
+		static _normOut(c) {
+			const ranges = Color.ranges[c._mode];
+			for (let i = 0; i < 3; i++) {
+				const r = ranges[i];
+				c[i] = (c[i] - r[0]) / (r[1] - r[0]);
+			}
+			c._isNorm = true;
 			return c;
 		}
 		toMode(mode, convert = false) {
-			if (convert) {
+			if (convert && mode !== this._mode) {
 				const fname = this._mode.toUpperCase() + "to" + mode.toUpperCase();
 				if (Color[fname]) this.to(Color[fname](this, this._isNorm, this._isNorm));
 				else throw new Error("Cannot convert color with " + fname);
@@ -5442,10 +5469,10 @@ See https://github.com/williamngan/pts for details. */
 			this[2] = n;
 		}
 		get h() {
-			return this._mode == "lch" ? this[2] : this[0];
+			return this._mode == "lch" || this._mode == "oklch" ? this[2] : this[0];
 		}
 		set h(n) {
-			const i = this._mode == "lch" ? 2 : 0;
+			const i = this._mode == "lch" || this._mode == "oklch" ? 2 : 0;
 			this[i] = n;
 		}
 		get s() {
@@ -5508,14 +5535,15 @@ See https://github.com/williamngan/pts for details. */
 			return this.clone().normalize(toNorm);
 		}
 		toString(format = "mode") {
+			const v = this._isNorm && format !== "mode" ? Color._denorm(this) : this;
 			if (format == "hex") {
 				const _hex = (n) => {
 					const s = Math.floor(n).toString(16);
 					return s.length < 2 ? "0" + s : s;
 				};
-				return `#${_hex(this[0])}${_hex(this[1])}${_hex(this[2])}`;
-			} else if (format == "rgba") return `rgba(${Math.floor(this[0])},${Math.floor(this[1])},${Math.floor(this[2])},${this.alpha})`;
-			else if (format == "rgb") return `rgb(${Math.floor(this[0])},${Math.floor(this[1])},${Math.floor(this[2])})`;
+				return `#${_hex(v[0])}${_hex(v[1])}${_hex(v[2])}`;
+			} else if (format == "rgba") return `rgba(${Math.floor(v[0])},${Math.floor(v[1])},${Math.floor(v[2])},${this.alpha})`;
+			else if (format == "rgb") return `rgb(${Math.floor(v[0])},${Math.floor(v[1])},${Math.floor(v[2])})`;
 			else return `${this._mode}(${this[0]},${this[1]},${this[2]},${this.alpha})`;
 		}
 		static RGBtoHSL(rgb, normalizedInput = false, normalizedOutput = false) {
@@ -5536,12 +5564,20 @@ See https://github.com/williamngan/pts for details. */
 				else if (max === g) h = (b - r) / d + 2;
 				else if (max === b) h = (r - g) / d + 4;
 			}
-			return Color.hsl(normalizedOutput ? h / 60 : h * 60, s, l, rgb.alpha);
+			const cc = Color.hsl(normalizedOutput ? h / 6 : h * 60, s, l, rgb.alpha);
+			if (normalizedOutput) cc.normalized = true;
+			return cc;
 		}
 		static HSLtoRGB(hsl, normalizedInput = false, normalizedOutput = false) {
 			let [h, s, l] = hsl;
 			if (!normalizedInput) h = h / 360;
-			if (s == 0) return Color.rgb(l * 255, l * 255, l * 255, hsl.alpha);
+			h = h - Math.floor(h);
+			const sc = normalizedOutput ? 1 : 255;
+			if (s == 0) {
+				const gray = Color.rgb(sc * l, sc * l, sc * l, hsl.alpha);
+				if (normalizedOutput) gray.normalized = true;
+				return gray;
+			}
 			const q = l <= .5 ? l * (1 + s) : l + s - l * s;
 			const p = 2 * l - q;
 			const convert = (t) => {
@@ -5551,8 +5587,9 @@ See https://github.com/williamngan/pts for details. */
 				else if (t * 3 < 2) return p + (q - p) * (2 / 3 - t) * 6;
 				else return p;
 			};
-			const sc = normalizedOutput ? 1 : 255;
-			return Color.rgb(sc * convert(h + 1 / 3), sc * convert(h), sc * convert(h - 1 / 3), hsl.alpha);
+			const cc = Color.rgb(sc * convert(h + 1 / 3), sc * convert(h), sc * convert(h - 1 / 3), hsl.alpha);
+			if (normalizedOutput) cc.normalized = true;
+			return cc;
 		}
 		static RGBtoHSB(rgb, normalizedInput = false, normalizedOutput = false) {
 			const [r, g, b] = !normalizedInput ? rgb.$normalize() : rgb;
@@ -5567,11 +5604,14 @@ See https://github.com/williamngan/pts for details. */
 				else if (max === g) h = (b - r) / d + 2;
 				else if (max === b) h = (r - g) / d + 4;
 			}
-			return Color.hsb(normalizedOutput ? h / 60 : h * 60, s, v, rgb.alpha);
+			const cc = Color.hsb(normalizedOutput ? h / 6 : h * 60, s, v, rgb.alpha);
+			if (normalizedOutput) cc.normalized = true;
+			return cc;
 		}
 		static HSBtoRGB(hsb, normalizedInput = false, normalizedOutput = false) {
 			let [h, s, v] = hsb;
 			if (!normalizedInput) h = h / 360;
+			h = h - Math.floor(h);
 			const i = Math.floor(h * 6);
 			const f = h * 6 - i;
 			const p = v * (1 - s);
@@ -5610,40 +5650,42 @@ See https://github.com/williamngan/pts for details. */
 				]
 			][i % 6];
 			const sc = normalizedOutput ? 1 : 255;
-			return Color.rgb(sc * c[0], sc * c[1], sc * c[2], hsb.alpha);
+			const cc = Color.rgb(sc * c[0], sc * c[1], sc * c[2], hsb.alpha);
+			if (normalizedOutput) cc.normalized = true;
+			return cc;
 		}
 		static RGBtoLAB(rgb, normalizedInput = false, normalizedOutput = false) {
-			const c = normalizedInput ? rgb.$normalize(false) : rgb;
+			const c = normalizedInput ? Color._denorm(rgb) : rgb;
 			return Color.XYZtoLAB(Color.RGBtoXYZ(c), false, normalizedOutput);
 		}
 		static LABtoRGB(lab, normalizedInput = false, normalizedOutput = false) {
-			const c = normalizedInput ? lab.$normalize(false) : lab;
+			const c = normalizedInput ? Color._denorm(lab) : lab;
 			return Color.XYZtoRGB(Color.LABtoXYZ(c), false, normalizedOutput);
 		}
 		static RGBtoLCH(rgb, normalizedInput = false, normalizedOutput = false) {
-			const c = normalizedInput ? rgb.$normalize(false) : rgb;
+			const c = normalizedInput ? Color._denorm(rgb) : rgb;
 			return Color.LABtoLCH(Color.RGBtoLAB(c), false, normalizedOutput);
 		}
 		static LCHtoRGB(lch, normalizedInput = false, normalizedOutput = false) {
-			const c = normalizedInput ? lch.$normalize(false) : lch;
+			const c = normalizedInput ? Color._denorm(lch) : lch;
 			return Color.LABtoRGB(Color.LCHtoLAB(c), false, normalizedOutput);
 		}
 		static RGBtoLUV(rgb, normalizedInput = false, normalizedOutput = false) {
-			const c = normalizedInput ? rgb.$normalize(false) : rgb;
+			const c = normalizedInput ? Color._denorm(rgb) : rgb;
 			return Color.XYZtoLUV(Color.RGBtoXYZ(c), false, normalizedOutput);
 		}
 		static LUVtoRGB(luv, normalizedInput = false, normalizedOutput = false) {
-			const c = normalizedInput ? luv.$normalize(false) : luv;
+			const c = normalizedInput ? Color._denorm(luv) : luv;
 			return Color.XYZtoRGB(Color.LUVtoXYZ(c), false, normalizedOutput);
 		}
 		static RGBtoXYZ(rgb, normalizedInput = false, normalizedOutput = false) {
 			const c = !normalizedInput ? rgb.$normalize() : rgb.clone();
 			for (let i = 0; i < 3; i++) {
 				c[i] = c[i] > .04045 ? Math.pow((c[i] + .055) / 1.055, 2.4) : c[i] / 12.92;
-				if (!normalizedOutput) c[i] = c[i] * 100;
+				c[i] = c[i] * 100;
 			}
 			const cc = Color.xyz(c[0] * .4124564 + c[1] * .3575761 + c[2] * .1804375, c[0] * .2126729 + c[1] * .7151522 + c[2] * .072175, c[0] * .0193339 + c[1] * .119192 + c[2] * .9503041, rgb.alpha);
-			return normalizedOutput ? cc.normalize() : cc;
+			return normalizedOutput ? Color._normOut(cc) : cc;
 		}
 		static XYZtoRGB(xyz, normalizedInput = false, normalizedOutput = false) {
 			const [x, y, z] = !normalizedInput ? xyz.$normalize() : xyz;
@@ -5658,47 +5700,56 @@ See https://github.com/williamngan/pts for details. */
 				if (!normalizedOutput) rgb[i] = Math.round(rgb[i] * 255);
 			}
 			const cc = Color.rgb(rgb[0], rgb[1], rgb[2], xyz.alpha);
-			return normalizedOutput ? cc.normalize() : cc;
+			if (normalizedOutput) cc.normalized = true;
+			return cc;
 		}
 		static XYZtoLAB(xyz, normalizedInput = false, normalizedOutput = false) {
-			const c = normalizedInput ? xyz.$normalize(false) : xyz.clone();
-			const eps = .00885645167;
-			const kap = 903.296296296;
+			const c = normalizedInput ? Color._denorm(xyz) : xyz.clone();
+			const eps = 216 / 24389;
+			const kap = 24389 / 27;
 			c.divide(Color.D65);
-			const fn = (n) => n > eps ? Math.pow(n, 1 / 3) : (kap * n + 16) / 116;
+			const fn = (n) => n > eps ? Math.cbrt(n) : (kap * n + 16) / 116;
 			const cy = fn(c[1]);
 			const cc = Color.lab(116 * cy - 16, 500 * (fn(c[0]) - cy), 200 * (cy - fn(c[2])), xyz.alpha);
-			return normalizedOutput ? cc.normalize() : cc;
+			return normalizedOutput ? Color._normOut(cc) : cc;
 		}
 		static LABtoXYZ(lab, normalizedInput = false, normalizedOutput = false) {
-			const c = normalizedInput ? lab.$normalize(false) : lab;
+			const c = normalizedInput ? Color._denorm(lab) : lab;
 			const y = (c[0] + 16) / 116;
 			const x = c[1] / 500 + y;
 			const z = y - c[2] / 200;
-			const eps = .00885645167;
-			const kap = 903.296296296;
+			const eps = 216 / 24389;
+			const kap = 24389 / 27;
 			const d = Color.D65;
 			const xxx = Math.pow(x, 3);
 			const zzz = Math.pow(z, 3);
 			const cc = Color.xyz(d[0] * (xxx > eps ? xxx : (116 * x - 16) / kap), d[1] * (c[0] > kap * eps ? Math.pow((c[0] + 16) / 116, 3) : c[0] / kap), d[2] * (zzz > eps ? zzz : (116 * z - 16) / kap), lab.alpha);
-			return normalizedOutput ? cc.normalize() : cc;
+			return normalizedOutput ? Color._normOut(cc) : cc;
 		}
 		static XYZtoLUV(xyz, normalizedInput = false, normalizedOutput = false) {
-			let [x, y, z] = normalizedInput ? xyz.$normalize(false) : xyz;
-			const u = 4 * x / (x + 15 * y + 3 * z);
-			const v = 9 * y / (x + 15 * y + 3 * z);
+			let [x, y, z] = normalizedInput ? Color._denorm(xyz) : xyz;
+			const den = x + 15 * y + 3 * z;
+			const u = den === 0 ? 0 : 4 * x / den;
+			const v = den === 0 ? 0 : 9 * y / den;
+			const eps = 216 / 24389;
+			const kap = 24389 / 27;
 			y = y / 100;
-			y = y > .008856 ? Math.pow(y, 1 / 3) : 7.787 * y + 16 / 116;
+			const L = y > eps ? 116 * Math.cbrt(y) - 16 : kap * y;
 			const refU = 4 * Color.D65[0] / (Color.D65[0] + 15 * Color.D65[1] + 3 * Color.D65[2]);
 			const refV = 9 * Color.D65[1] / (Color.D65[0] + 15 * Color.D65[1] + 3 * Color.D65[2]);
-			const L = 116 * y - 16;
-			return Color.luv(L, 13 * L * (u - refU), 13 * L * (v - refV), xyz.alpha);
+			const cc = Color.luv(L, 13 * L * (u - refU), 13 * L * (v - refV), xyz.alpha);
+			return normalizedOutput ? Color._normOut(cc) : cc;
 		}
 		static LUVtoXYZ(luv, normalizedInput = false, normalizedOutput = false) {
-			let [l, u, v] = normalizedInput ? luv.$normalize(false) : luv;
-			let y = (l + 16) / 116;
-			const cubeY = y * y * y;
-			y = cubeY > .008856 ? cubeY : (y - 16 / 116) / 7.787;
+			let [l, u, v] = normalizedInput ? Color._denorm(luv) : luv;
+			const eps = 216 / 24389;
+			const kap = 24389 / 27;
+			if (l === 0) {
+				const black = Color.xyz(0, 0, 0, luv.alpha);
+				return normalizedOutput ? Color._normOut(black) : black;
+			}
+			const fy = (l + 16) / 116;
+			let y = l > kap * eps ? fy * fy * fy : l / kap;
 			const refU = 4 * Color.D65[0] / (Color.D65[0] + 15 * Color.D65[1] + 3 * Color.D65[2]);
 			const refV = 9 * Color.D65[1] / (Color.D65[0] + 15 * Color.D65[1] + 3 * Color.D65[2]);
 			u = u / (13 * l) + refU;
@@ -5706,17 +5757,74 @@ See https://github.com/williamngan/pts for details. */
 			y = y * 100;
 			const x = -1 * (9 * y * u) / ((u - 4) * v - u * v);
 			const z = (9 * y - 15 * v * y - v * x) / (3 * v);
-			return Color.xyz(x, y, z, luv.alpha);
+			const cc = Color.xyz(x, y, z, luv.alpha);
+			return normalizedOutput ? Color._normOut(cc) : cc;
 		}
 		static LABtoLCH(lab, normalizedInput = false, normalizedOutput = false) {
-			const c = normalizedInput ? lab.$normalize(false) : lab;
+			const c = normalizedInput ? Color._denorm(lab) : lab;
 			const h = Geom.toDegree(Geom.boundRadian(Math.atan2(c[2], c[1])));
-			return Color.lch(c[0], Math.sqrt(c[1] * c[1] + c[2] * c[2]), h, lab.alpha);
+			const cc = Color.lch(c[0], Math.sqrt(c[1] * c[1] + c[2] * c[2]), h, lab.alpha);
+			return normalizedOutput ? Color._normOut(cc) : cc;
 		}
 		static LCHtoLAB(lch, normalizedInput = false, normalizedOutput = false) {
-			const c = normalizedInput ? lch.$normalize(false) : lch;
+			const c = normalizedInput ? Color._denorm(lch) : lch;
 			const rad = Geom.toRadian(c[2]);
-			return Color.lab(c[0], Math.cos(rad) * c[1], Math.sin(rad) * c[1], lch.alpha);
+			const cc = Color.lab(c[0], Math.cos(rad) * c[1], Math.sin(rad) * c[1], lch.alpha);
+			return normalizedOutput ? Color._normOut(cc) : cc;
+		}
+		static RGBtoOKLAB(rgb, normalizedInput = false, normalizedOutput = false) {
+			const c = !normalizedInput ? rgb.$normalize() : rgb;
+			const lin = (v) => v > .04045 ? Math.pow((v + .055) / 1.055, 2.4) : v / 12.92;
+			const r = lin(c[0]);
+			const g = lin(c[1]);
+			const b = lin(c[2]);
+			const l = Math.cbrt(.4122214708 * r + .5363325363 * g + .0514459929 * b);
+			const m = Math.cbrt(.2119034982 * r + .6806995451 * g + .1073969566 * b);
+			const s = Math.cbrt(.0883024619 * r + .2817188376 * g + .6299787005 * b);
+			const cc = Color.oklab(.2104542553 * l + .793617785 * m - .0040720468 * s, 1.9779984951 * l - 2.428592205 * m + .4505937099 * s, .0259040371 * l + .7827717662 * m - .808675766 * s, rgb.alpha);
+			return normalizedOutput ? Color._normOut(cc) : cc;
+		}
+		static OKLABtoRGB(oklab, normalizedInput = false, normalizedOutput = false) {
+			const c = normalizedInput ? Color._denorm(oklab) : oklab;
+			const l_ = c[0] + .3963377774 * c[1] + .2158037573 * c[2];
+			const m_ = c[0] - .1055613458 * c[1] - .0638541728 * c[2];
+			const s_ = c[0] - .0894841775 * c[1] - 1.291485548 * c[2];
+			const l = l_ * l_ * l_;
+			const m = m_ * m_ * m_;
+			const s = s_ * s_ * s_;
+			const rgb = [
+				4.0767416621 * l - 3.3077115913 * m + .2309699292 * s,
+				-1.2684380046 * l + 2.6097574011 * m - .3413193965 * s,
+				-.0041960863 * l - .7034186147 * m + 1.707614701 * s
+			];
+			for (let i = 0; i < 3; i++) {
+				rgb[i] = rgb[i] > .0031308 ? 1.055 * Math.pow(rgb[i], 1 / 2.4) - .055 : 12.92 * rgb[i];
+				rgb[i] = Math.max(0, Math.min(1, rgb[i]));
+				if (!normalizedOutput) rgb[i] = Math.round(rgb[i] * 255);
+			}
+			const cc = Color.rgb(rgb[0], rgb[1], rgb[2], oklab.alpha);
+			if (normalizedOutput) cc.normalized = true;
+			return cc;
+		}
+		static RGBtoOKLCH(rgb, normalizedInput = false, normalizedOutput = false) {
+			const c = normalizedInput ? Color._denorm(rgb) : rgb;
+			return Color.OKLABtoOKLCH(Color.RGBtoOKLAB(c), false, normalizedOutput);
+		}
+		static OKLCHtoRGB(oklch, normalizedInput = false, normalizedOutput = false) {
+			const c = normalizedInput ? Color._denorm(oklch) : oklch;
+			return Color.OKLABtoRGB(Color.OKLCHtoOKLAB(c), false, normalizedOutput);
+		}
+		static OKLABtoOKLCH(oklab, normalizedInput = false, normalizedOutput = false) {
+			const c = normalizedInput ? Color._denorm(oklab) : oklab;
+			const h = Geom.toDegree(Geom.boundRadian(Math.atan2(c[2], c[1])));
+			const cc = Color.oklch(c[0], Math.sqrt(c[1] * c[1] + c[2] * c[2]), h, oklab.alpha);
+			return normalizedOutput ? Color._normOut(cc) : cc;
+		}
+		static OKLCHtoOKLAB(oklch, normalizedInput = false, normalizedOutput = false) {
+			const c = normalizedInput ? Color._denorm(oklch) : oklch;
+			const rad = Geom.toRadian(c[2]);
+			const cc = Color.oklab(c[0], Math.cos(rad) * c[1], Math.sin(rad) * c[1], oklch.alpha);
+			return normalizedOutput ? Color._normOut(cc) : cc;
 		}
 	};
 	Color.D65 = new Pt(95.047, 100, 108.883, 1);
@@ -5727,7 +5835,9 @@ See https://github.com/williamngan/pts for details. */
 		lab: new Group(new Pt(0, 100), new Pt(-128, 127), new Pt(-128, 127)),
 		lch: new Group(new Pt(0, 100), new Pt(0, 100), new Pt(0, 360)),
 		luv: new Group(new Pt(0, 100), new Pt(-134, 220), new Pt(-140, 122)),
-		xyz: new Group(new Pt(0, 100), new Pt(0, 100), new Pt(0, 100))
+		xyz: new Group(new Pt(0, 100), new Pt(0, 100), new Pt(0, 100)),
+		oklab: new Group(new Pt(0, 1), new Pt(-.4, .4), new Pt(-.4, .4)),
+		oklch: new Group(new Pt(0, 1), new Pt(0, .4), new Pt(0, 360))
 	};
 
 //#endregion
