@@ -166,7 +166,7 @@ describe("Util platform helpers", () => {
     const measure = Util.performance(3);
     expect(measure()).toBe(10);
     expect(measure()).toBe(15);
-    expect(measure()).toBe(25);
+    expect(measure()).toBe(20); // 3 frames: (10+20+30)/3
     expect(now).toHaveBeenCalledTimes(4);
   });
 
@@ -184,5 +184,35 @@ describe("Util platform helpers", () => {
     vi.spyOn(Date, "now").mockReturnValue(1234);
     vi.spyOn(Math, "random").mockReturnValue(0.5);
     expect(Util.uniqueId()).toBe("yai");
+  });
+});
+
+describe("Util correctness pins", () => {
+  it("keeps stepper values in range for strides larger than the range", () => {
+    const next = Util.stepper(3, 0, 5);
+    const seq = [next(), next(), next(), next()];
+    expect(seq).toEqual([2, 1, 0, 2]);
+    for (const v of seq) {
+      expect(v).toBeGreaterThanOrEqual(0);
+      expect(v).toBeLessThan(3);
+    }
+  });
+
+  it("falls back to a time-based id when crypto is unavailable", () => {
+    vi.stubGlobal("crypto", undefined);
+    vi.spyOn(Date, "now").mockReturnValue(1234);
+    vi.spyOn(Math, "random").mockReturnValue(0.5);
+    expect(Util.uniqueId(true)).toBe("yai");
+  });
+
+  it("flattens very large collections without an arguments overflow", () => {
+    const many: number[][] = new Array(200000);
+    for (let i = 0; i < many.length; i++) many[i] = [i];
+    const flat = Util.flatten(many, false);
+    expect(flat).toHaveLength(200000);
+    expect(flat[199999]).toBe(199999);
+    const asGroup = Util.flatten([[new Pt(1, 2)], [new Pt(3, 4)]]);
+    expect(asGroup instanceof Group).toBe(true);
+    expect(asGroup).toHaveLength(2);
   });
 });

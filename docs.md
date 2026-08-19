@@ -4324,7 +4324,7 @@ type ImgOptions = { crossOrigin:boolean, editable:boolean, pixelScale:number, sp
 <a id="linearalgebra-mat"></a>
 ### `Mat`
 
-**Kind:** Class · **Source:** [`src/LinearAlgebra.ts:204`](https://github.com/williamngan/pts/blob/master/src/LinearAlgebra.ts#L204)
+**Kind:** Class · **Source:** [`src/LinearAlgebra.ts:210`](https://github.com/williamngan/pts/blob/master/src/LinearAlgebra.ts#L210)
 
 Mat provides various static functions for matrix operations as well as a convenient way to chain a 3x3 transformation matrix. It's not fully optimized but good enough to use.
 
@@ -4709,7 +4709,7 @@ Set `a` to its absolute value in each dimension.
 static add(a: PtLike, b: number | PtLike): PtLike
 ```
 
-Add `b` to vector `a`.
+Add `b` to vector `a`. Unlike `multiply`/`divide`, a shorter `b` is tolerated: missing (or NaN) dimensions are treated as 0.
 
 **Parameters**
 
@@ -4929,7 +4929,7 @@ Set `a` to its rounded value in each dimension.
 static subtract(a: PtLike, b: number | PtLike): PtLike
 ```
 
-Subtract `b` from vector `a`.
+Subtract `b` from vector `a`. Unlike `multiply`/`divide`, a shorter `b` is tolerated: missing (or NaN) dimensions are treated as 0.
 
 **Parameters**
 
@@ -13024,7 +13024,7 @@ A convenient way to step through a range. Same as `for (i=0; i<range; i++)`, exc
 - `start` (`number`; default `0`)
 - `step` (`number`; default `1`)
 
-**Returns:** an array of returned values at each step
+**Returns:** an index-aligned array of returned values: entries sit at their step index, so with a non-zero `start` the positions below `start` are empty holes
 
 <a id="util-util-static-get-args"></a>
 ##### `getArgs`
@@ -13171,7 +13171,7 @@ Create a convenient stepper. This returns a function which you can call repeated
 
 **Parameters**
 
-- `max` (`number`) — Maximum of the stepper range. The resulting stepper will return (min to max-1) values.
+- `max` (`number`) — Maximum of the stepper range. The resulting stepper will return values within [min, max). Note that the first call returns `min + stride`, not `min`.
 - `min` (`number`; default `0`) — Minimum of the stepper range. Default is 0.
 - `stride` (`number`; default `1`) — Stride of the step. Default is 1.
 - `callback` (` Fn(n:number)`) — An optional callback function `fn( step )`, which will be called each time when stepper function is called.
@@ -13375,7 +13375,7 @@ Represents left position or direction
 max: max
 ```
 
-Represents Number.MAX_VALUE
+Represents Number.MAX_VALUE. Note: as a Float32 Pt value this overflows to Infinity.
 
 <a id="util-const-min"></a>
 ##### `min`
@@ -13384,7 +13384,7 @@ Represents Number.MAX_VALUE
 min: min
 ```
 
-Represents Number.MIN_VALUE
+Represents Number.MIN_VALUE, the smallest *positive* number (5e-324) — not the most negative number. Do not use it to initialize a running maximum; use -Infinity instead. As a Float32 Pt value this flushes to 0.
 
 <a id="util-const-newton"></a>
 ##### `newton`

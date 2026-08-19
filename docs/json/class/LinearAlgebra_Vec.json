@@ -59,7 +59,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Add `b` to vector `a`.",
+          "comment": "Add `b` to vector `a`. Unlike `multiply`/`divide`, a shorter `b` is tolerated: missing (or NaN) dimensions are treated as 0.",
           "returns": "PtLike",
           "returns_comment": "vector `a`",
           "parameters": [
@@ -326,7 +326,7 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          193,
+          199,
           9
         ]
       ],
@@ -394,7 +394,7 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          170,
+          174,
           9
         ]
       ],
@@ -504,7 +504,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Subtract `b` from vector `a`.",
+          "comment": "Subtract `b` from vector `a`. Unlike `multiply`/`divide`, a shorter `b` is tolerated: missing (or NaN) dimensions are treated as 0.",
           "returns": "PtLike",
           "returns_comment": "vector `a`",
           "parameters": [
@@ -530,7 +530,7 @@
       "source": [
         [
           "src/LinearAlgebra.ts",
-          183,
+          189,
           9
         ]
       ],

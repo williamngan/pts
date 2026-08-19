@@ -9,7 +9,7 @@ import { PtLike, GroupLike } from "./Types";
  */
 export class Vec {
   /**
-   * Add `b` to vector `a`.
+   * Add `b` to vector `a`. Unlike `multiply`/`divide`, a shorter `b` is tolerated: missing (or NaN) dimensions are treated as 0.
    * @returns vector `a`
    */
   static add(a: PtLike, b: PtLike | number): PtLike {
@@ -22,7 +22,7 @@ export class Vec {
   }
 
   /**
-   * Subtract `b` from vector `a`.
+   * Subtract `b` from vector `a`. Unlike `multiply`/`divide`, a shorter `b` is tolerated: missing (or NaN) dimensions are treated as 0.
    * @returns vector `a`
    */
   static subtract(a: PtLike, b: PtLike | number): PtLike {
@@ -113,7 +113,7 @@ export class Vec {
    */
   static unit(a: PtLike, magnitude: number = undefined): PtLike {
     const m = magnitude === undefined ? Vec.magnitude(a) : magnitude;
-    if (m === 0) return Pt.make(a.length);
+    if (m === 0) return a; // zero vector: values are already zeros
     return Vec.divide(a, m);
   }
 
@@ -154,11 +154,15 @@ export class Vec {
    * @returns an object with `value` and `index` that specifies the max value and its corresponding dimension.
    */
   static max(a: PtLike): { value; index } {
-    let m = Number.MIN_VALUE;
+    // -Infinity, not Number.MIN_VALUE (the smallest positive double), so
+    // all-negative vectors report a correct maximum
+    let m = -Infinity;
     let index = 0;
     for (let i = 0, len = a.length; i < len; i++) {
-      m = Math.max(m, a[i]);
-      if (m === a[i]) index = i;
+      if (a[i] >= m) {
+        m = a[i];
+        index = i;
+      }
     }
     return { value: m, index: index };
   }
@@ -168,11 +172,13 @@ export class Vec {
    * @returns an object with `value` and `index` that specifies the min value and its corresponding dimension.
    */
   static min(a: PtLike): { value; index } {
-    let m = Number.MAX_VALUE;
+    let m = Infinity;
     let index = 0;
     for (let i = 0, len = a.length; i < len; i++) {
-      m = Math.min(m, a[i]);
-      if (m === a[i]) index = i;
+      if (a[i] <= m) {
+        m = a[i];
+        index = i;
+      }
     }
     return { value: m, index: index };
   }
@@ -235,7 +241,7 @@ export class Mat {
    * @param at Optional origin location to scale from.
    */
   scale2D(val: PtLike, at: PtLike = [0, 0]): this {
-    const m = Mat.scaleAt2DMatrix(val[0] || 1, val[1] || 1, at);
+    const m = Mat.scaleAt2DMatrix(val[0] ?? 1, val[1] ?? 1, at);
     this._33 = Mat.multiply(this._33, m);
     return this;
   }
@@ -268,8 +274,8 @@ export class Mat {
    */
   shear2D(val: PtLike, at: PtLike = [0, 0]): this {
     const m = Mat.shearAt2DMatrix(
-      Math.tan(val[0] || 0),
-      Math.tan(val[1] || 1),
+      Math.tan(val[0] ?? 0),
+      Math.tan(val[1] ?? 0),
       at,
     );
     this._33 = Mat.multiply(this._33, m);
@@ -370,9 +376,13 @@ export class Mat {
   ): Pt {
     const z = [];
     for (let i = 0, len = g.length; i < len; i++) {
-      if (g[i].length - 1 < index && defaultValue === false)
-        throw `Index ${index} is out of bounds`;
-      z.push(g[i][index] || defaultValue);
+      if (g[i].length - 1 < index) {
+        if (defaultValue === false)
+          throw new Error(`Index ${index} is out of bounds`);
+        z.push(defaultValue);
+      } else {
+        z.push(g[i][index]);
+      }
     }
     return new Pt(z);
   }

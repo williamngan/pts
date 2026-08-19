@@ -57,10 +57,10 @@ export const Const = {
   /** Represents an arbitrary very small number. It is set as 0.0001 here. */
   epsilon: 0.0001,
 
-  /** Represents Number.MAX_VALUE */
+  /** Represents Number.MAX_VALUE. Note: as a Float32 Pt value this overflows to Infinity. */
   max: Number.MAX_VALUE,
 
-  /** Represents Number.MIN_VALUE */
+  /** Represents Number.MIN_VALUE, the smallest *positive* number (5e-324) — not the most negative number. Do not use it to initialize a running maximum; use -Infinity instead. As a Float32 Pt value this flushes to 0. */
   min: Number.MIN_VALUE,
 
   /** π radian (180 deg) */
@@ -240,9 +240,19 @@ export class Util {
    * @param pts an array, usually an array of Groups
    * @param flattenAsGroup a boolean to specify whether the return type should be a Group or Array. Default is `true` which returns a Group.
    */
-  static flatten(pts: any[], flattenAsGroup: boolean = true) {
-    let arr = flattenAsGroup ? new Group() : [];
-    return arr.concat.apply(arr, pts);
+  static flatten(pts: any[], flattenAsGroup: boolean = true): any {
+    // loop instead of concat.apply: spreading `pts` as arguments overflows
+    // the JS argument-count limit for very large inputs
+    const arr = flattenAsGroup ? new Group() : [];
+    for (let i = 0, len = pts.length; i < len; i++) {
+      const p = pts[i];
+      if (Array.isArray(p)) {
+        for (let k = 0, lenP = p.length; k < lenP; k++) arr.push(p[k]);
+      } else {
+        arr.push(p);
+      }
+    }
+    return arr;
   }
 
   /**
@@ -279,7 +289,7 @@ export class Util {
 
   /**
    * Create a convenient stepper. This returns a function which you can call repeatedly to step a counter.
-   * @param max Maximum of the stepper range. The resulting stepper will return (min to max-1) values.
+   * @param max Maximum of the stepper range. The resulting stepper will return values within [min, max). Note that the first call returns `min + stride`, not `min`.
    * @param min Minimum of the stepper range. Default is 0.
    * @param stride Stride of the step. Default is 1.
    * @param callback An optional callback function `fn( step )`, which will be called each time when stepper function is called.
@@ -296,7 +306,8 @@ export class Util {
     return function () {
       c += stride;
       if (c >= max) {
-        c = min + (c - max);
+        // anchored modulo keeps c in [min, max) even when stride > max - min
+        c = min + ((c - min) % (max - min));
       }
       if (callback) callback(c);
       return c;
@@ -307,7 +318,7 @@ export class Util {
    * A convenient way to step through a range. Same as `for (i=0; i<range; i++)`, except this also stores the resulting return values at each step and return them as an array.
    * @param range a range to step through
    * @param fn a callback function `fn(index)`. If this function returns a value, it will be stored at each step
-   * @returns an array of returned values at each step
+   * @returns an index-aligned array of returned values: entries sit at their step index, so with a non-zero `start` the positions below `start` are empty holes
    */
   static forRange(
     fn: (index: number) => any,
@@ -394,7 +405,7 @@ export class Util {
     return function () {
       const now = Date.now();
       avg.push(now - last);
-      if (avg.length >= avgFrames) avg.shift();
+      if (avg.length > avgFrames) avg.shift();
       last = now;
       return Math.floor(avg.reduce((a, b) => a + b, 0) / avg.length);
     };
@@ -433,7 +444,7 @@ export class Util {
    * @returns
    */
   static uniqueId(useCrypto = false) {
-    return useCrypto && crypto
+    return useCrypto && typeof crypto !== "undefined" && crypto?.randomUUID
       ? crypto.randomUUID()
       : Date.now().toString(36) + Math.random().toString(36).substring(2);
   }

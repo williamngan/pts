@@ -17,7 +17,7 @@
       "source": [
         [
           "src/Util.ts",
-          408,
+          419,
           9
         ]
       ],
@@ -54,7 +54,7 @@
       "source": [
         [
           "src/Util.ts",
-          254,
+          264,
           9
         ]
       ],
@@ -97,7 +97,7 @@
       "source": [
         [
           "src/Util.ts",
-          362,
+          373,
           9
         ]
       ],
@@ -183,7 +183,7 @@
       "source": [
         [
           "src/Util.ts",
-          312,
+          323,
           9
         ]
       ],
@@ -196,7 +196,7 @@
         {
           "comment": "A convenient way to step through a range. Same as `for (i=0; i<range; i++)`, except this also stores the resulting return values at each step and return them as an array.",
           "returns": "any[]",
-          "returns_comment": "an array of returned values at each step",
+          "returns_comment": "an index-aligned array of returned values: entries sit at their step index, so with a non-zero `start` the positions below `start` are empty holes",
           "parameters": [
             {
               "name": "fn",
@@ -294,7 +294,7 @@
       "source": [
         [
           "src/Util.ts",
-          427,
+          438,
           9
         ]
       ],
@@ -318,7 +318,7 @@
       "source": [
         [
           "src/Util.ts",
-          420,
+          431,
           9
         ]
       ],
@@ -349,7 +349,7 @@
       "source": [
         [
           "src/Util.ts",
-          330,
+          341,
           9
         ]
       ],
@@ -386,7 +386,7 @@
       "source": [
         [
           "src/Util.ts",
-          391,
+          402,
           9
         ]
       ],
@@ -514,7 +514,7 @@
       "source": [
         [
           "src/Util.ts",
-          289,
+          299,
           9
         ]
       ],
@@ -531,7 +531,7 @@
           "parameters": [
             {
               "name": "max",
-              "comment": "Maximum of the stepper range. The resulting stepper will return (min to max-1) values.",
+              "comment": "Maximum of the stepper range. The resulting stepper will return values within [min, max). Note that the first call returns `min + stride`, not `min`.",
               "type": "number",
               "default": false
             },
@@ -599,7 +599,7 @@
       "source": [
         [
           "src/Util.ts",
-          435,
+          446,
           9
         ]
       ],
@@ -698,7 +698,7 @@
       "source": [
         [
           "src/Util.ts",
-          268,
+          278,
           9
         ]
       ],

@@ -1056,7 +1056,7 @@ var Vec = class Vec {
 	}
 	static unit(a, magnitude = void 0) {
 		const m = magnitude === void 0 ? Vec.magnitude(a) : magnitude;
-		if (m === 0) return Pt.make(a.length);
+		if (m === 0) return a;
 		return Vec.divide(a, m);
 	}
 	static abs(a) {
@@ -1072,11 +1072,11 @@ var Vec = class Vec {
 		return Vec.map(a, Math.round);
 	}
 	static max(a) {
-		let m = Number.MIN_VALUE;
+		let m = -Infinity;
 		let index = 0;
-		for (let i = 0, len = a.length; i < len; i++) {
-			m = Math.max(m, a[i]);
-			if (m === a[i]) index = i;
+		for (let i = 0, len = a.length; i < len; i++) if (a[i] >= m) {
+			m = a[i];
+			index = i;
 		}
 		return {
 			value: m,
@@ -1084,11 +1084,11 @@ var Vec = class Vec {
 		};
 	}
 	static min(a) {
-		let m = Number.MAX_VALUE;
+		let m = Infinity;
 		let index = 0;
-		for (let i = 0, len = a.length; i < len; i++) {
-			m = Math.min(m, a[i]);
-			if (m === a[i]) index = i;
+		for (let i = 0, len = a.length; i < len; i++) if (a[i] <= m) {
+			m = a[i];
+			index = i;
 		}
 		return {
 			value: m,
@@ -1119,7 +1119,8 @@ var Mat = class Mat {
 		this._33 = Mat.scale2DMatrix(1, 1);
 	}
 	scale2D(val, at = [0, 0]) {
-		const m = Mat.scaleAt2DMatrix(val[0] || 1, val[1] || 1, at);
+		var _val$, _val$2;
+		const m = Mat.scaleAt2DMatrix((_val$ = val[0]) !== null && _val$ !== void 0 ? _val$ : 1, (_val$2 = val[1]) !== null && _val$2 !== void 0 ? _val$2 : 1, at);
 		this._33 = Mat.multiply(this._33, m);
 		return this;
 	}
@@ -1134,7 +1135,8 @@ var Mat = class Mat {
 		return this;
 	}
 	shear2D(val, at = [0, 0]) {
-		const m = Mat.shearAt2DMatrix(Math.tan(val[0] || 0), Math.tan(val[1] || 1), at);
+		var _val$3, _val$4;
+		const m = Mat.shearAt2DMatrix(Math.tan((_val$3 = val[0]) !== null && _val$3 !== void 0 ? _val$3 : 0), Math.tan((_val$4 = val[1]) !== null && _val$4 !== void 0 ? _val$4 : 0), at);
 		this._33 = Mat.multiply(this._33, m);
 		return this;
 	}
@@ -1169,10 +1171,10 @@ var Mat = class Mat {
 	}
 	static zipSlice(g, index, defaultValue = false) {
 		const z = [];
-		for (let i = 0, len = g.length; i < len; i++) {
-			if (g[i].length - 1 < index && defaultValue === false) throw `Index ${index} is out of bounds`;
-			z.push(g[i][index] || defaultValue);
-		}
+		for (let i = 0, len = g.length; i < len; i++) if (g[i].length - 1 < index) {
+			if (defaultValue === false) throw new Error(`Index ${index} is out of bounds`);
+			z.push(defaultValue);
+		} else z.push(g[i][index]);
 		return new Pt(z);
 	}
 	static zip(g, defaultValue = false, useLongest = false) {
@@ -1859,8 +1861,13 @@ var Util = class Util {
 		return chunks;
 	}
 	static flatten(pts, flattenAsGroup = true) {
-		let arr = flattenAsGroup ? new Group() : [];
-		return arr.concat.apply(arr, pts);
+		const arr = flattenAsGroup ? new Group() : [];
+		for (let i = 0, len = pts.length; i < len; i++) {
+			const p = pts[i];
+			if (Array.isArray(p)) for (let k = 0, lenP = p.length; k < lenP; k++) arr.push(p[k]);
+			else arr.push(p);
+		}
+		return arr;
 	}
 	static combine(a, b, op) {
 		let result = [];
@@ -1880,7 +1887,7 @@ var Util = class Util {
 		let c = min;
 		return function() {
 			c += stride;
-			if (c >= max) c = min + (c - max);
+			if (c >= max) c = min + (c - min) % (max - min);
 			if (callback) callback(c);
 			return c;
 		};
@@ -1921,7 +1928,7 @@ var Util = class Util {
 		return function() {
 			const now = Date.now();
 			avg.push(now - last);
-			if (avg.length >= avgFrames) avg.shift();
+			if (avg.length > avgFrames) avg.shift();
 			last = now;
 			return Math.floor(avg.reduce((a, b) => a + b, 0) / avg.length);
 		};
@@ -1940,7 +1947,8 @@ var Util = class Util {
 		return /iPhone|iPad|Android/i.test(navigator.userAgent);
 	}
 	static uniqueId(useCrypto = false) {
-		return useCrypto && crypto ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).substring(2);
+		var _crypto;
+		return useCrypto && typeof crypto !== "undefined" && ((_crypto = crypto) === null || _crypto === void 0 ? void 0 : _crypto.randomUUID) ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).substring(2);
 	}
 };
 Util._warnLevel = "mute";

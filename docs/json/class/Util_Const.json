@@ -191,7 +191,7 @@
       "type": "max",
       "overrides": false,
       "inherits": false,
-      "comment": "Represents Number.MAX_VALUE"
+      "comment": "Represents Number.MAX_VALUE. Note: as a Float32 Pt value this overflows to Infinity."
     },
     {
       "name": "min",
@@ -206,7 +206,7 @@
       "type": "min",
       "overrides": false,
       "inherits": false,
-      "comment": "Represents Number.MIN_VALUE"
+      "comment": "Represents Number.MIN_VALUE, the smallest *positive* number (5e-324) — not the most negative number. Do not use it to initialize a running maximum; use -Infinity instead. As a Float32 Pt value this flushes to 0."
     },
     {
       "name": "newton",

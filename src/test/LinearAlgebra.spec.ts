@@ -255,3 +255,49 @@ describe("Mat 2D transformations", () => {
     expect(values(Mat.transform2D([3, 1], diagonal))).toEqual([1, 3]);
   });
 });
+
+describe("Vec and Mat correctness pins", () => {
+  it("finds max/min of all-negative vectors", () => {
+    expect(Vec.max([-5, -2])).toEqual({ value: -2, index: 1 });
+    expect(Vec.min([-5, -2])).toEqual({ value: -5, index: 0 });
+    expect(new Pt(-5, -2).maxValue()).toEqual({ value: -2, index: 1 });
+    // ties keep returning the last occurrence
+    expect(Vec.max([7, 5, 7])).toEqual({ value: 7, index: 2 });
+  });
+
+  it("returns the input vector from Vec.unit on a zero vector", () => {
+    const zero = new Pt(0, 0);
+    const u = Vec.unit(zero);
+    expect(u).toBe(zero);
+    expect(values(u)).toEqual([0, 0]);
+  });
+
+  it("treats explicit zeros as values in chained scale2D and shear2D", () => {
+    const sheared = new Mat().shear2D([0.5, 0]);
+    expect(sheared.value[0][1]).toBeCloseTo(Math.tan(0.5));
+    expect(sheared.value[1][0]).toBe(0); // no y-shear was requested
+    const scaled = new Mat().scale2D([0, 2]);
+    expect(scaled.value[0][0]).toBe(0);
+    expect(scaled.value[1][1]).toBe(2);
+  });
+
+  it("keeps zero values when zipping with a default", () => {
+    expect(
+      values(
+        Mat.zipSlice(
+          [
+            [0, 1],
+            [2, 3],
+          ],
+          0,
+          99,
+        ),
+      ),
+    ).toEqual([0, 2]);
+    expect(matrix(Mat.zip([[0, 2], [3]], 99))).toEqual([
+      [0, 3],
+      [2, 99],
+    ]);
+    expect(() => Mat.zipSlice([[1]], 5)).toThrow(Error);
+  });
+});
