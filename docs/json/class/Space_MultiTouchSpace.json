@@ -3,7 +3,7 @@
   "source": [
     [
       "src/Space.ts",
-      299,
+      327,
       22
     ]
   ],
@@ -16,7 +16,7 @@
       "source": [
         [
           "src/Space.ts",
-          259,
+          287,
           6
         ]
       ],
@@ -34,12 +34,12 @@
       "source": [
         [
           "src/Space.ts",
-          221,
+          249,
           6
         ],
         [
           "src/Space.ts",
-          224,
+          252,
           6
         ]
       ],
@@ -65,7 +65,7 @@
       "source": [
         [
           "src/Space.ts",
-          273,
+          301,
           6
         ]
       ],
@@ -83,7 +83,7 @@
       "source": [
         [
           "src/Space.ts",
-          245,
+          273,
           13
         ]
       ],
@@ -103,7 +103,7 @@
       "source": [
         [
           "src/Space.ts",
-          231,
+          259,
           6
         ]
       ],
@@ -121,7 +121,7 @@
       "source": [
         [
           "src/Space.ts",
-          238,
+          266,
           6
         ]
       ],
@@ -139,7 +139,7 @@
       "source": [
         [
           "src/Space.ts",
-          331,
+          359,
           13
         ]
       ],
@@ -159,7 +159,7 @@
       "source": [
         [
           "src/Space.ts",
-          252,
+          280,
           6
         ]
       ],
@@ -177,7 +177,7 @@
       "source": [
         [
           "src/Space.ts",
-          266,
+          294,
           6
         ]
       ],
@@ -197,7 +197,7 @@
       "source": [
         [
           "src/Space.ts",
-          64,
+          66,
           2
         ]
       ],
@@ -226,7 +226,7 @@
       "source": [
         [
           "src/Space.ts",
-          344,
+          372,
           2
         ]
       ],
@@ -273,7 +273,7 @@
       "source": [
         [
           "src/Space.ts",
-          371,
+          399,
           2
         ]
       ],
@@ -314,7 +314,7 @@
       "source": [
         [
           "src/Space.ts",
-          480,
+          508,
           2
         ]
       ],
@@ -349,7 +349,7 @@
       "source": [
         [
           "src/Space.ts",
-          391,
+          419,
           2
         ]
       ],
@@ -389,7 +389,7 @@
       "source": [
         [
           "src/Space.ts",
-          431,
+          459,
           2
         ]
       ],
@@ -435,7 +435,7 @@
       "source": [
         [
           "src/Space.ts",
-          287,
+          315,
           11
         ]
       ],
@@ -459,7 +459,7 @@
       "source": [
         [
           "src/Space.ts",
-          292,
+          320,
           11
         ]
       ],
@@ -483,7 +483,7 @@
       "source": [
         [
           "src/Space.ts",
-          51,
+          52,
           2
         ]
       ],
@@ -493,12 +493,12 @@
       "signatures": [
         {
           "comment": "Set a minimum frame time",
-          "returns": "void",
+          "returns": "this",
           "returns_comment": false,
           "parameters": [
             {
               "name": "ms",
-              "comment": "at least this amount of miniseconds must have elapsed before frame advances",
+              "comment": "at least this amount of milliseconds must have elapsed before frame advances",
               "type": "number",
               "default": "0"
             }
@@ -512,7 +512,7 @@
       "source": [
         [
           "src/Space.ts",
-          165,
+          192,
           2
         ]
       ],
@@ -541,7 +541,7 @@
       "source": [
         [
           "src/Space.ts",
-          102,
+          106,
           2
         ]
       ],
@@ -570,7 +570,7 @@
       "source": [
         [
           "src/Space.ts",
-          139,
+          165,
           12
         ]
       ],
@@ -601,7 +601,7 @@
       "source": [
         [
           "src/Space.ts",
-          203,
+          231,
           2
         ]
       ],
@@ -630,7 +630,7 @@
       "source": [
         [
           "src/Space.ts",
-          42,
+          43,
           2
         ]
       ],
@@ -659,7 +659,7 @@
       "source": [
         [
           "src/Space.ts",
-          84,
+          88,
           2
         ]
       ],
@@ -688,7 +688,7 @@
       "source": [
         [
           "src/Space.ts",
-          92,
+          96,
           2
         ]
       ],
@@ -710,7 +710,7 @@
       "source": [
         [
           "src/Space.ts",
-          213,
+          241,
           12
         ]
       ],
@@ -741,7 +741,7 @@
       "source": [
         [
           "src/Space.ts",
-          130,
+          156,
           2
         ]
       ],
@@ -763,7 +763,7 @@
       "source": [
         [
           "src/Space.ts",
-          282,
+          310,
           11
         ]
       ],
@@ -800,7 +800,7 @@
       "source": [
         [
           "src/Space.ts",
-          173,
+          200,
           2
         ]
       ],
@@ -822,7 +822,7 @@
       "source": [
         [
           "src/Space.ts",
-          182,
+          209,
           2
         ]
       ],
@@ -851,7 +851,7 @@
       "source": [
         [
           "src/Space.ts",
-          519,
+          547,
           2
         ]
       ],
@@ -886,7 +886,7 @@
       "source": [
         [
           "src/Space.ts",
-          361,
+          389,
           2
         ]
       ],
@@ -933,7 +933,7 @@
       "source": [
         [
           "src/Space.ts",
-          377,
+          405,
           2
         ]
       ],

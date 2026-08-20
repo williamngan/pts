@@ -58,6 +58,37 @@ export default defineSuite("space", (b, { Pts, fx }) => {
     },
   });
 
+  // The pointer-action dispatch path (`_mouseAction`): per-event cost of
+  // delivering a pointer event to every player with an `action` callback.
+  b.case("Space pointer-action dispatch", {
+    batch: PLAYERS,
+    setupOnce: async () => {
+      const element = host();
+      const space = new CanvasSpace(element).setup({ resize: false });
+      await ready(space);
+      let acc = 0;
+      for (let i = 0; i < PLAYERS; i++) {
+        space.add({
+          animate: () => {},
+          action: (type, px) => (acc += px),
+        });
+      }
+      space.bindMouse();
+      space.playItems(16); // actions dispatch only while playing
+      return { element, space, read: () => acc };
+    },
+    teardown: (state) => {
+      state?.space?.dispose();
+      state?.element?.remove();
+    },
+    run: ({ space, read }) => {
+      space.element.dispatchEvent(
+        new PointerEvent("pointermove", { clientX: 50, clientY: 60 }),
+      );
+      sink(read());
+    },
+  });
+
   b.case("Space add / removeAll", {
     batch: PLAYERS,
     setupOnce: async () => {

@@ -34,6 +34,7 @@ export abstract class Space {
 
   protected _isReady = false;
   protected _playing = false;
+  private _firstFrame = true;
 
   /**
    * Set whether the rendering should be repainted on each frame.
@@ -46,10 +47,11 @@ export abstract class Space {
 
   /**
    * Set a minimum frame time
-   * @param ms at least this amount of miniseconds must have elapsed before frame advances
+   * @param ms at least this amount of milliseconds must have elapsed before frame advances
    */
-  minFrameTime(ms: number = 0) {
+  minFrameTime(ms: number = 0): this {
     this._time.min = ms;
+    return this;
   }
 
   /**
@@ -69,6 +71,8 @@ export abstract class Space {
 
     this.players[pid] = player;
     player.animateID = pid;
+    // resize callbacks receive the live bound (as they do on space resize);
+    // treat it as read-only
     if (player.resize && this.bound.inited) player.resize(this.bound);
 
     // if _refresh is not set, set it to true
@@ -100,16 +104,37 @@ export abstract class Space {
    * @param time current time
    */
   play(time = 0): this {
-    // make sure only one play loop is active
+    // make sure only one play loop is active: an external play() while the
+    // loop runs is a no-op...
     if (time === 0 && this._animID !== -1) {
-      return;
+      return this;
     }
+    // ...and any other call (a frame callback, or a manual play(t)) replaces
+    // the pending frame instead of stacking a parallel chain — cancelling an
+    // already-fired frame id is a spec-defined no-op
+    if (this._animID !== -1) cancelAnimationFrame(this._animID);
     this._animID = requestAnimationFrame(this.play.bind(this));
-    if (this._pause) return this;
 
-    this._time.diff = time - this._time.prev;
-    if (this._time.diff < this._time.min) return this;
-    this._time.prev = time;
+    if (this._pause) {
+      // track time while paused so resuming doesn't deliver the entire
+      // pause duration as one frame's ftime
+      this._time.prev = time;
+      return this;
+    }
+
+    if (this._firstFrame) {
+      // the first frame after a fresh start renders immediately with no
+      // elapsed time — `time` is an arbitrary clock timestamp, not a delta
+      this._firstFrame = false;
+      this._time.diff = 0;
+      this._time.prev = time;
+    } else {
+      const diff = time - this._time.prev;
+      // accumulate until the minimum frame time is reached
+      if (diff < this._time.min) return this;
+      this._time.diff = diff;
+      this._time.prev = time;
+    }
 
     try {
       this.playItems(time);
@@ -117,6 +142,7 @@ export abstract class Space {
       cancelAnimationFrame(this._animID);
       this._animID = -1;
       this._playing = false;
+      this._firstFrame = true;
       throw err;
     }
 
@@ -155,6 +181,7 @@ export abstract class Space {
       cancelAnimationFrame(this._animID);
       this._animID = -1;
       this._playing = false;
+      this._firstFrame = true;
     }
   }
 
@@ -193,6 +220,7 @@ export abstract class Space {
     if (this._animID !== -1) cancelAnimationFrame(this._animID);
     this._animID = -1;
     this._playing = false;
+    this._firstFrame = true;
     return this;
   }
 
@@ -369,13 +397,13 @@ export abstract class MultiTouchSpace extends Space {
   }
 
   bindDoc(evt: string, callback: EventListener, options: any = {}) {
-    if (document) {
+    if (typeof document !== "undefined") {
       document.addEventListener(evt, callback, options);
     }
   }
 
   unbindDoc(evt: string, callback: EventListener, options: any = {}) {
-    if (document) {
+    if (typeof document !== "undefined") {
       document.removeEventListener(evt, callback, options);
     }
   }
@@ -540,30 +568,33 @@ export abstract class MultiTouchSpace extends Space {
   ) {
     if (!this.isPlaying) return;
 
+    // compute the event position once — not per player, and independent of
+    // whether any player is registered (the pointer must track regardless)
+    const topLeft = this.bound.topLeft;
     let px = 0,
       py = 0;
 
     if (evt instanceof MouseEvent) {
-      for (const k in this.players) {
-        if (this.players.hasOwnProperty(k)) {
-          const v = this.players[k];
-          px = evt.pageX - this.outerBound.x;
-          py = evt.pageY - this.outerBound.y;
-          if (v.action) v.action(type, px, py, evt);
-        }
-      }
+      px = evt.pageX - topLeft.x;
+      py = evt.pageY - topLeft.y;
     } else {
-      for (const k in this.players) {
-        if (this.players.hasOwnProperty(k)) {
-          const v = this.players[k];
-          const c = evt.changedTouches && evt.changedTouches.length > 0;
-          const touch = evt.changedTouches.item(0);
-          px = c ? touch.pageX - this.outerBound.x : 0;
-          py = c ? touch.pageY - this.outerBound.y : 0;
-          if (v.action) v.action(type, px, py, evt);
-        }
+      const touch =
+        evt.changedTouches && evt.changedTouches.length > 0
+          ? evt.changedTouches.item(0)
+          : null;
+      if (touch) {
+        px = touch.pageX - topLeft.x;
+        py = touch.pageY - topLeft.y;
       }
     }
+
+    for (const k in this.players) {
+      if (this.players.hasOwnProperty(k)) {
+        const v = this.players[k];
+        if (v.action) v.action(type, px, py, evt);
+      }
+    }
+
     if (type) {
       this._pointer.to(px, py);
       this._pointer.id = type;
@@ -667,7 +698,8 @@ export abstract class MultiTouchSpace extends Space {
       this._dragged = true;
       this._mouseAction(UIA.drag, evt);
     }
-    evt.preventDefault();
+    // preventDefault is ignored (and logs an error) inside passive listeners
+    if (!this._touchPassive) evt.preventDefault();
     return false;
   }
 
@@ -678,8 +710,7 @@ export abstract class MultiTouchSpace extends Space {
   protected _touchStart(evt: TouchEvent) {
     this._mouseAction(UIA.down, evt);
     this._pressed = true;
-    return false;
-    evt.preventDefault();
+    if (!this._touchPassive) evt.preventDefault();
     return false;
   }
 

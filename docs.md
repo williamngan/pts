@@ -10562,7 +10562,7 @@ Create an n-dimensional Pt with either default value or random values.
 <a id="space-multitouchspace"></a>
 ### `MultiTouchSpace`
 
-**Kind:** Class · **Source:** [`src/Space.ts:299`](https://github.com/williamngan/pts/blob/master/src/Space.ts#L299)
+**Kind:** Class · **Source:** [`src/Space.ts:327`](https://github.com/williamngan/pts/blob/master/src/Space.ts#L327)
 
 **Extends:** `Space`
 
@@ -10845,14 +10845,14 @@ Get a default form for drawing in this space. To be implemented in subclasses.
 ##### `minFrameTime`
 
 ```ts
-minFrameTime(ms: number = 0): void
+minFrameTime(ms: number = 0): this
 ```
 
 Set a minimum frame time
 
 **Parameters**
 
-- `ms` (`number`; default `0`) — at least this amount of miniseconds must have elapsed before frame advances
+- `ms` (`number`; default `0`) — at least this amount of milliseconds must have elapsed before frame advances
 
 <a id="space-space-pause"></a>
 ##### `pause`

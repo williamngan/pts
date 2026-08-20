@@ -2754,6 +2754,7 @@ var Space = class {
 		this._pointer = new Pt();
 		this._isReady = false;
 		this._playing = false;
+		this._firstFrame = true;
 	}
 	refresh(b) {
 		this._refresh = b;
@@ -2761,6 +2762,7 @@ var Space = class {
 	}
 	minFrameTime(ms = 0) {
 		this._time.min = ms;
+		return this;
 	}
 	add(p) {
 		const player = typeof p == "function" ? { animate: p } : p;
@@ -2781,18 +2783,30 @@ var Space = class {
 		return this;
 	}
 	play(time = 0) {
-		if (time === 0 && this._animID !== -1) return;
+		if (time === 0 && this._animID !== -1) return this;
+		if (this._animID !== -1) cancelAnimationFrame(this._animID);
 		this._animID = requestAnimationFrame(this.play.bind(this));
-		if (this._pause) return this;
-		this._time.diff = time - this._time.prev;
-		if (this._time.diff < this._time.min) return this;
-		this._time.prev = time;
+		if (this._pause) {
+			this._time.prev = time;
+			return this;
+		}
+		if (this._firstFrame) {
+			this._firstFrame = false;
+			this._time.diff = 0;
+			this._time.prev = time;
+		} else {
+			const diff = time - this._time.prev;
+			if (diff < this._time.min) return this;
+			this._time.diff = diff;
+			this._time.prev = time;
+		}
 		try {
 			this.playItems(time);
 		} catch (err) {
 			cancelAnimationFrame(this._animID);
 			this._animID = -1;
 			this._playing = false;
+			this._firstFrame = true;
 			throw err;
 		}
 		return this;
@@ -2811,6 +2825,7 @@ var Space = class {
 			cancelAnimationFrame(this._animID);
 			this._animID = -1;
 			this._playing = false;
+			this._firstFrame = true;
 		}
 	}
 	pause(toggle = false) {
@@ -2829,6 +2844,7 @@ var Space = class {
 		if (this._animID !== -1) cancelAnimationFrame(this._animID);
 		this._animID = -1;
 		this._playing = false;
+		this._firstFrame = true;
 		return this;
 	}
 	playOnce(duration = 0) {
@@ -2901,10 +2917,10 @@ var MultiTouchSpace = class extends Space {
 		(customTarget ? customTarget : this._canvas).removeEventListener(evt, callback, options);
 	}
 	bindDoc(evt, callback, options = {}) {
-		if (document) document.addEventListener(evt, callback, options);
+		if (typeof document !== "undefined") document.addEventListener(evt, callback, options);
 	}
 	unbindDoc(evt, callback, options = {}) {
-		if (document) document.removeEventListener(evt, callback, options);
+		if (typeof document !== "undefined") document.removeEventListener(evt, callback, options);
 	}
 	bindMouse(bind = true, customTarget) {
 		if (bind) {
@@ -2996,20 +3012,20 @@ var MultiTouchSpace = class extends Space {
 	}
 	_mouseAction(type, evt) {
 		if (!this.isPlaying) return;
+		const topLeft = this.bound.topLeft;
 		let px = 0, py = 0;
 		if (evt instanceof MouseEvent) {
-			for (const k in this.players) if (this.players.hasOwnProperty(k)) {
-				const v = this.players[k];
-				px = evt.pageX - this.outerBound.x;
-				py = evt.pageY - this.outerBound.y;
-				if (v.action) v.action(type, px, py, evt);
+			px = evt.pageX - topLeft.x;
+			py = evt.pageY - topLeft.y;
+		} else {
+			const touch = evt.changedTouches && evt.changedTouches.length > 0 ? evt.changedTouches.item(0) : null;
+			if (touch) {
+				px = touch.pageX - topLeft.x;
+				py = touch.pageY - topLeft.y;
 			}
-		} else for (const k in this.players) if (this.players.hasOwnProperty(k)) {
+		}
+		for (const k in this.players) if (this.players.hasOwnProperty(k)) {
 			const v = this.players[k];
-			const c = evt.changedTouches && evt.changedTouches.length > 0;
-			const touch = evt.changedTouches.item(0);
-			px = c ? touch.pageX - this.outerBound.x : 0;
-			py = c ? touch.pageY - this.outerBound.y : 0;
 			if (v.action) v.action(type, px, py, evt);
 		}
 		if (type) {
@@ -3066,12 +3082,13 @@ var MultiTouchSpace = class extends Space {
 			this._dragged = true;
 			this._mouseAction(UIPointerActions.drag, evt);
 		}
-		evt.preventDefault();
+		if (!this._touchPassive) evt.preventDefault();
 		return false;
 	}
 	_touchStart(evt) {
 		this._mouseAction(UIPointerActions.down, evt);
 		this._pressed = true;
+		if (!this._touchPassive) evt.preventDefault();
 		return false;
 	}
 	_keyDown(evt) {

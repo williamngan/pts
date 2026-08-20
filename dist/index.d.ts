@@ -417,8 +417,9 @@ declare abstract class Space {
   protected _pointer: Pt;
   protected _isReady: boolean;
   protected _playing: boolean;
+  private _firstFrame;
   refresh(b: boolean): this;
-  minFrameTime(ms?: number): void;
+  minFrameTime(ms?: number): this;
   add(p: IPlayer | AnimateCallbackFn): this;
   remove(player: IPlayer): this;
   removeAll(): this;
