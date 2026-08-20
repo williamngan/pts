@@ -961,6 +961,13 @@ Using [`bindMouse`](https://ptsjs.org/docs.md#canvas-canvasspace)  and [`bindTou
 space.bindMouse().bindTouch().play();
 ```
 
+If you use interactive [`UI`](https://ptsjs.org/docs.md#ui-ui) elements like [`UIButton`](https://ptsjs.org/docs.md#ui-uibutton) or [`UIDragger`](https://ptsjs.org/docs.md#ui-uidragger), you can skip the `action` callback entirely: [`track`](https://ptsjs.org/docs.md#space-multitouchspace) forwards the space's events to them for you.
+
+```
+space.track( myButton ); // myButton now receives clicks, hovers, drags...
+space.untrack( myButton ); // ...until you stop tracking it
+```
+
 CanvasSpace also provides a couple convenient properties which you may access once the space is initiated. [`.pointer`](https://ptsjs.org/docs.md#canvas-canvasspace) gives you the current pointer position. [`.size`](https://ptsjs.org/docs.md#canvas-canvasspace), [`.center`](https://ptsjs.org/docs.md#canvas-canvasspace), [`.width`](https://ptsjs.org/docs.md#canvas-canvasspace), [`.height`](https://ptsjs.org/docs.md#canvas-canvasspace) and [`.innerBound`](https://ptsjs.org/docs.md#canvas-canvasspace) are handy to get a space's size and center point. [`.element`](https://ptsjs.org/docs.md#canvas-canvasspace) and [`.parent`](https://ptsjs.org/docs.md#canvas-canvasspace) returns the html elements of this space.
 
 CanvasSpace also supports offscreen rendering which may help with rendering complex scene. Take a look at the source code of [this study](https://ptsjs.org/study/index.html?name=CanvasSpace.offscreen) for more.

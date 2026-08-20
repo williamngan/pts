@@ -78,6 +78,10 @@ space.stop();
 <pre><code>// You can chain multiple functions together
 space.bindMouse().bindTouch().play();
 </code></pre>
+<p>If you use interactive <a href="#ui-ui"><code>UI</code></a> elements like <a href="#ui-uibutton"><code>UIButton</code></a> or <a href="#ui-uidragger"><code>UIDragger</code></a>, you can skip the <code>action</code> callback entirely: <a href="#space-multitouchspace"><code>track</code></a> forwards the space's events to them for you.</p>
+<pre><code>space.track( myButton ); // myButton now receives clicks, hovers, drags...
+space.untrack( myButton ); // ...until you stop tracking it
+</code></pre>
 <p>CanvasSpace also provides a couple convenient properties which you may access once the space is initiated. <a href="#canvas-canvasspace"><code>.pointer</code></a> gives you the current pointer position. <a href="#canvas-canvasspace"><code>.size</code></a>, <a href="#canvas-canvasspace"><code>.center</code></a>, <a href="#canvas-canvasspace"><code>.width</code></a>, <a href="#canvas-canvasspace"><code>.height</code></a> and <a href="#canvas-canvasspace"><code>.innerBound</code></a> are handy to get a space's size and center point. <a href="#canvas-canvasspace"><code>.element</code></a> and <a href="#canvas-canvasspace"><code>.parent</code></a> returns the html elements of this space.</p>
 <p>CanvasSpace also supports offscreen rendering which may help with rendering complex scene. Take a look at the source code of <a href="../study/index.html?name=CanvasSpace.offscreen">this study</a> for more.</p>
 <h3>Form</h3>
