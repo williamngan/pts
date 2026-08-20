@@ -286,7 +286,7 @@
       "source": [
         [
           "src/Svg.ts",
-          548,
+          553,
           2
         ]
       ],
@@ -352,7 +352,7 @@
       "source": [
         [
           "src/Svg.ts",
-          560,
+          565,
           2
         ]
       ],
@@ -399,7 +399,7 @@
       "source": [
         [
           "src/Svg.ts",
-          569,
+          574,
           2
         ]
       ],
@@ -480,7 +480,7 @@
       "source": [
         [
           "src/Svg.ts",
-          471,
+          476,
           2
         ]
       ],
@@ -709,6 +709,12 @@
               "comment": "",
               "type": "number",
               "default": false
+            },
+            {
+              "name": "maxWidth",
+              "comment": "",
+              "type": "number",
+              "default": false
             }
           ],
           "tags": []
@@ -720,7 +726,7 @@
       "source": [
         [
           "src/Svg.ts",
-          556,
+          561,
           2
         ]
       ],
@@ -777,7 +783,7 @@
       "source": [
         [
           "src/Svg.ts",
-          463,
+          468,
           2
         ]
       ],
@@ -841,7 +847,7 @@
       "source": [
         [
           "src/Svg.ts",
-          513,
+          518,
           2
         ]
       ],
@@ -979,7 +985,7 @@
       "source": [
         [
           "src/Svg.ts",
-          539,
+          544,
           2
         ]
       ],
@@ -1001,7 +1007,7 @@
       "source": [
         [
           "src/Svg.ts",
-          522,
+          527,
           2
         ]
       ],
@@ -1023,7 +1029,7 @@
       "source": [
         [
           "src/Svg.ts",
-          544,
+          549,
           2
         ]
       ],
@@ -1045,7 +1051,7 @@
       "source": [
         [
           "src/Svg.ts",
-          552,
+          557,
           2
         ]
       ],

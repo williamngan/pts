@@ -138,7 +138,8 @@ describe("VisualForm", () => {
 
 describe("Font", () => {
   it("formats defaults and complete CSS font values", () => {
-    expect(new Font().value).toBe("  12px/1.5 sans-serif");
+    expect(new Font().value).toBe("12px/1.5 sans-serif");
+    expect(new Font(14, "serif", "bold").value).toBe("bold 14px/1.5 serif");
     const font = new Font(18, "Inter, sans-serif", "700", "italic", 1.2);
     expect(font.toString()).toBe("italic 700 18px/1.2 Inter, sans-serif");
     expect(`${font}`).toBe(font.value);

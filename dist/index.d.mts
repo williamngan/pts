@@ -1256,7 +1256,7 @@ declare class SVGContext2D {
   protected _capturePaintState(): void;
   fillRect(x: number, y: number, w: number, h: number): void;
   clearRect(): void;
-  fillText(txt: string, x: number, y: number): void;
+  fillText(txt: string, x: number, y: number, maxWidth?: number): void;
   measureText(txt: string): TextMetrics;
   drawImage(img: CanvasImageSource, x: number, y: number, w?: number, h?: number, ...rest: number[]): void;
   putImageData(): void;

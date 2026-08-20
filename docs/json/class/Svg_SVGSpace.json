@@ -3,7 +3,7 @@
   "source": [
     [
       "src/Svg.ts",
-      692,
+      697,
       13
     ]
   ],
@@ -15,7 +15,7 @@
       "source": [
         [
           "src/Svg.ts",
-          704,
+          709,
           2
         ]
       ],
@@ -168,7 +168,7 @@
       "source": [
         [
           "src/Svg.ts",
-          729,
+          734,
           6
         ]
       ],
@@ -592,7 +592,7 @@
       "source": [
         [
           "src/Svg.ts",
-          762,
+          767,
           2
         ]
       ],
@@ -621,7 +621,7 @@
       "source": [
         [
           "src/Svg.ts",
-          900,
+          909,
           2
         ]
       ],
@@ -643,7 +643,7 @@
       "source": [
         [
           "src/Svg.ts",
-          722,
+          727,
           2
         ]
       ],
@@ -757,7 +757,7 @@
       "source": [
         [
           "src/Svg.ts",
-          791,
+          796,
           12
         ]
       ],
@@ -817,7 +817,7 @@
       "source": [
         [
           "src/Svg.ts",
-          805,
+          810,
           2
         ]
       ],
@@ -846,7 +846,7 @@
       "source": [
         [
           "src/Svg.ts",
-          734,
+          739,
           2
         ]
       ],
@@ -875,7 +875,7 @@
       "source": [
         [
           "src/Svg.ts",
-          874,
+          881,
           2
         ]
       ],
@@ -904,7 +904,7 @@
       "source": [
         [
           "src/Svg.ts",
-          887,
+          896,
           2
         ]
       ],
@@ -913,7 +913,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Remove all items from this Space.",
+          "comment": "Remove all items from this Space. This clears the contents of the space's\n`<svg>` element but never touches its container, so the space keeps\nrendering after items are re-added.",
           "returns": "this",
           "returns_comment": false,
           "parameters": [],
@@ -979,7 +979,7 @@
       "source": [
         [
           "src/Svg.ts",
-          744,
+          749,
           2
         ]
       ],
@@ -1175,7 +1175,7 @@
       "source": [
         [
           "src/Svg.ts",
-          815,
+          820,
           2
         ]
       ],
@@ -1443,7 +1443,7 @@
       "source": [
         [
           "src/Svg.ts",
-          855,
+          860,
           9
         ]
       ],

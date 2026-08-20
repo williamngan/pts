@@ -3,7 +3,7 @@
   "source": [
     [
       "src/Svg.ts",
-      922,
+      931,
       13
     ]
   ],
@@ -15,7 +15,7 @@
       "source": [
         [
           "src/Svg.ts",
-          954,
+          963,
           2
         ]
       ],
@@ -46,7 +46,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          661,
+          664,
           6
         ]
       ],
@@ -131,7 +131,7 @@
       "source": [
         [
           "src/Svg.ts",
-          971,
+          980,
           6
         ]
       ],
@@ -180,7 +180,7 @@
       "source": [
         [
           "src/Svg.ts",
-          978,
+          987,
           6
         ]
       ],
@@ -198,12 +198,12 @@
       "source": [
         [
           "src/Svg.ts",
-          943,
+          952,
           13
         ],
         [
           "src/Svg.ts",
-          946,
+          955,
           13
         ]
       ],
@@ -231,12 +231,12 @@
       "source": [
         [
           "src/Svg.ts",
-          937,
+          946,
           13
         ],
         [
           "src/Svg.ts",
-          940,
+          949,
           13
         ]
       ],
@@ -266,7 +266,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1561,
+          1582,
           2
         ]
       ],
@@ -301,7 +301,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          701,
+          704,
           2
         ]
       ],
@@ -335,7 +335,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          793,
+          796,
           2
         ]
       ],
@@ -381,7 +381,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1200,
+          1205,
           2
         ]
       ],
@@ -434,7 +434,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1100,
+          1105,
           2
         ]
       ],
@@ -492,7 +492,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          873,
+          879,
           2
         ]
       ],
@@ -514,7 +514,7 @@
       "source": [
         [
           "src/Svg.ts",
-          988,
+          997,
           2
         ]
       ],
@@ -548,7 +548,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          865,
+          871,
           2
         ]
       ],
@@ -577,7 +577,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          884,
+          890,
           2
         ]
       ],
@@ -617,7 +617,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1149,
+          1154,
           2
         ]
       ],
@@ -676,7 +676,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          712,
+          715,
           2
         ]
       ],
@@ -710,7 +710,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          727,
+          730,
           2
         ]
       ],
@@ -739,7 +739,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          917,
+          921,
           2
         ]
       ],
@@ -797,7 +797,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          946,
+          950,
           2
         ]
       ],
@@ -826,7 +826,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          966,
+          970,
           2
         ]
       ],
@@ -855,7 +855,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          817,
+          820,
           2
         ]
       ],
@@ -889,7 +889,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1378,
+          1397,
           2
         ]
       ],
@@ -930,7 +930,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1427,
+          1447,
           2
         ]
       ],
@@ -965,7 +965,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1269,
+          1288,
           2
         ]
       ],
@@ -1023,7 +1023,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1578,
+          1599,
           2
         ]
       ],
@@ -1052,7 +1052,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1022,
+          1031,
           2
         ]
       ],
@@ -1079,7 +1079,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1491,
+          1511,
           2
         ]
       ],
@@ -1132,7 +1132,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1077,
+          1082,
           2
         ]
       ],
@@ -1219,7 +1219,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1290,
+          1309,
           2
         ]
       ],
@@ -1277,7 +1277,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1316,
+          1335,
           2
         ]
       ],
@@ -1335,7 +1335,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          684,
+          687,
           2
         ]
       ],
@@ -1364,7 +1364,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1029,
+          1033,
           2
         ]
       ],
@@ -1386,7 +1386,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1013,
+          1022,
           2
         ]
       ],
@@ -1420,7 +1420,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1239,
+          1244,
           2
         ]
       ],
@@ -1484,7 +1484,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          740,
+          743,
           2
         ]
       ],
@@ -1536,7 +1536,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          775,
+          778,
           2
         ]
       ],
@@ -1583,7 +1583,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1455,
+          1475,
           2
         ]
       ],
@@ -1624,7 +1624,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1468,
+          1488,
           2
         ]
       ],
@@ -1677,7 +1677,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1001,
+          1010,
           2
         ]
       ],
@@ -1717,7 +1717,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          670,
+          673,
           2
         ]
       ],
@@ -1752,7 +1752,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1179,
+          1184,
           9
         ]
       ],
@@ -1813,7 +1813,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1134,
+          1143,
           9
         ]
       ],
@@ -1874,7 +1874,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1089,
+          1094,
           9
         ]
       ],
@@ -1917,7 +1917,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1107,
+          1116,
           9
         ]
       ],
@@ -1960,7 +1960,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1117,
+          1122,
           9
         ]
       ],
@@ -2027,7 +2027,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1032,
+          1041,
           9
         ]
       ],
@@ -2058,7 +2058,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1329,
+          1348,
           9
         ]
       ],
@@ -2107,7 +2107,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1399,
+          1418,
           9
         ]
       ],
@@ -2130,7 +2130,7 @@
             },
             {
               "name": "ptOrRect",
-              "comment": "a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a bounding box for resizing. Default is (0,0) at top-left.",
+              "comment": "a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that places a region of the image data of that size at that position. Note that `putImageData` cannot resize: the rect clips, not scales. Default is (0,0) at top-left.",
               "type": "PtLikeIterable | PtLike",
               "default": false
             },
@@ -2150,7 +2150,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1250,
+          1255,
           9
         ]
       ],
@@ -2187,7 +2187,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1185,
+          1194,
           9
         ]
       ],
@@ -2224,7 +2224,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1058,
+          1063,
           9
         ]
       ],
@@ -2278,7 +2278,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1088,
+          1097,
           9
         ]
       ],
@@ -2332,7 +2332,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1238,
+          1247,
           19
         ]
       ],
@@ -2364,7 +2364,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1280,
+          1299,
           9
         ]
       ],
@@ -2401,7 +2401,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1256,
+          1265,
           9
         ]
       ],
@@ -2438,7 +2438,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1301,
+          1320,
           9
         ]
       ],
@@ -2475,7 +2475,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1266,
+          1275,
           9
         ]
       ],
@@ -2512,7 +2512,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          577,
+          580,
           9
         ]
       ],
@@ -2543,7 +2543,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1040,
+          1049,
           9
         ]
       ],
@@ -2574,7 +2574,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1218,
+          1223,
           9
         ]
       ],
@@ -2617,7 +2617,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1167,
+          1176,
           9
         ]
       ],
@@ -2660,7 +2660,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1056,
+          1065,
           9
         ]
       ],
@@ -2702,7 +2702,7 @@
       "source": [
         [
           "src/Canvas.ts",
-          1439,
+          1459,
           9
         ]
       ],
@@ -2751,7 +2751,7 @@
       "source": [
         [
           "src/Svg.ts",
-          1291,
+          1300,
           9
         ]
       ],

@@ -164,7 +164,9 @@ describe("HTMLSpace and HTMLForm", () => {
     space.remove(player);
     expect(parent.querySelector(`.${scoped}`)).toBeNull();
     space.removeAll();
-    expect(parent.childElementCount).toBe(0);
+    // removeAll clears the space's element but never its container
+    expect(space.element.childElementCount).toBe(0);
+    expect(parent.contains(space.element)).toBe(true);
   });
 
   it("exercises the static style and drawing helpers", () => {
@@ -216,6 +218,22 @@ describe("SVGContext2D", () => {
     document.body.appendChild(host);
     return { host, ctx: new SVGContext2D(host) };
   }
+
+  it("maps canvas maxWidth to textLength when text overflows", () => {
+    const { host, ctx } = makeCtx();
+    ctx.beginFrame();
+    ctx.font = "16px sans-serif";
+    ctx.fillText("a very long piece of text that overflows", 0, 20, 30);
+    ctx.fillText("ok", 0, 40, 500);
+    ctx.commitFrame();
+
+    const texts = host.querySelectorAll("text");
+    expect(texts.length).toBe(2);
+    expect(texts[0].getAttribute("textLength")).toBe("30");
+    expect(texts[0].getAttribute("lengthAdjust")).toBe("spacingAndGlyphs");
+    // short text is not compressed, matching canvas semantics
+    expect(texts[1].hasAttribute("textLength")).toBe(false);
+  });
 
   it("materializes gradients into <defs> and keeps stops in sync", () => {
     const { host, ctx } = makeCtx();
@@ -652,7 +670,23 @@ describe("SVGSpace and SVGForm", () => {
     space.remove(player);
     expect(parent.querySelector(selector)).toBeNull();
     space.removeAll();
-    expect(element.childElementCount).toBe(0);
+    // removeAll clears the <svg>'s contents but keeps it mounted
+    expect(space.element.childElementCount).toBe(0);
+    expect(element.contains(space.element)).toBe(true);
+
+    // the space still renders after items are re-added
+    form.svgContext.beginFrame();
+    form
+      .fill("#0f9")
+      .stroke(false)
+      .circle([
+        [40, 40],
+        [10, 10],
+      ]);
+    form.svgContext.commitFrame();
+    const regrown = space.element.querySelector("g.pts-svgform");
+    expect(regrown).not.toBeNull();
+    expect(regrown.querySelectorAll("path").length).toBe(1);
   });
 
   it("covers SVG static helpers, invalid inputs, reuse, and style suppression", () => {

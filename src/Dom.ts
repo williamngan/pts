@@ -356,7 +356,10 @@ export class HTMLSpace extends DOMSpace {
     if (!parent || !parent.appendChild)
       throw new Error("parent is not a valid DOM element");
 
-    let elem = document.querySelector(`#${id}`);
+    // O(1) id lookup, then verify it's inside the parent so a same-id
+    // element elsewhere in the document is never silently adopted
+    let elem: Element = document.getElementById(id);
+    if (elem && !parent.contains(elem)) elem = null;
     if (!elem) {
       elem = document.createElement(name);
       elem.setAttribute("id", id);
@@ -383,10 +386,11 @@ export class HTMLSpace extends DOMSpace {
   }
 
   /**
-   * Remove all items from this space.
+   * Remove all items from this space. This clears the contents of the space's
+   * element but never touches its container.
    */
   removeAll(): this {
-    this._container.innerHTML = "";
+    this._canvas.innerHTML = "";
     return super.removeAll();
   }
 }
@@ -743,7 +747,8 @@ export class HTMLForm extends VisualForm {
    */
   point(pt: PtLike, radius: number = 5, shape: string = "square"): this {
     this.nextID();
-    if (shape == "circle") this.styleTo("border-radius", "100%");
+    // reset radius for squares, so a square after a circle isn't rounded
+    this.styleTo("border-radius", shape == "circle" ? "100%" : "0");
     HTMLForm.point(this._ctx, pt, radius, shape);
     return this;
   }
@@ -807,6 +812,7 @@ export class HTMLForm extends VisualForm {
    */
   square(pt: PtLike, halfsize: number): this {
     this.nextID();
+    this.styleTo("border-radius", "0");
     HTMLForm.square(this._ctx, pt, halfsize);
     return this;
   }

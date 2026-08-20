@@ -846,7 +846,7 @@
       "source": [
         [
           "src/Dom.ts",
-          375,
+          377,
           2
         ]
       ],
@@ -875,7 +875,7 @@
       "source": [
         [
           "src/Dom.ts",
-          388,
+          391,
           2
         ]
       ],
@@ -884,7 +884,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Remove all items from this space.",
+          "comment": "Remove all items from this space. This clears the contents of the space's\nelement but never touches its container.",
           "returns": "this",
           "returns_comment": false,
           "parameters": [],

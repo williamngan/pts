@@ -141,7 +141,7 @@ export abstract class VisualForm extends Form {
    * @param shape The shape of the point. Defaults to "square", but it can be "circle" or a custom shape function in your own implementation.
    */
   points(pts: GroupLike | number[][], radius: number, shape: string): this {
-    if (!pts) return;
+    if (!pts) return this;
     for (let i = 0, len = pts.length; i < len; i++) {
       this.point(pts[i], radius, shape);
     }
@@ -293,7 +293,9 @@ export class Font {
    * Get a string representing the font style, in css-like string such as "italic bold 12px/1.5 sans-serif".
    */
   get value(): string {
-    return `${this.style} ${this.weight} ${this.size}px/${this.lineHeight} ${this.face}`;
+    const prefix = [this.style, this.weight].filter(Boolean).join(" ");
+    const base = `${this.size}px/${this.lineHeight} ${this.face}`;
+    return prefix ? `${prefix} ${base}` : base;
   }
 
   /**

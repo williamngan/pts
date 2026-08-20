@@ -165,7 +165,7 @@ export class CanvasSpace extends MultiTouchSpace {
 
   /**
    * Set up various options for CanvasSpace. The `opt` parameter is an object with the following fields. This is usually set during instantiation, eg `new CanvasSpace(...).setup( { opt } )`
-   * @param opt a [`CanvasSpaceOptions`](#link) object with optional settings, ie `{ bgcolor:string, resize:boolean, retina:boolean, offscreen:boolean, pixelDensity:number }`.
+   * @param opt a [`CanvasSpaceOptions`](#link) object with optional settings, ie `{ bgcolor:string, resize:boolean, retina:boolean, offscreen:boolean, pixelDensity:number }`. Note that omitting `bgcolor` sets a transparent background (a long-standing behavior that differs from `DOMSpace.setup`, which keeps the current background when the option is absent).
    * @example `space.setup({ bgcolor: "#f00", retina: true, resize: true })`
    */
   setup(opt: CanvasSpaceOptions): this {
@@ -522,6 +522,9 @@ export class CanvasSpace extends MultiTouchSpace {
         a.download = `canvas_video.${filetype}`;
         a.click();
         a.remove();
+        // the download has started from the blob by now; release the URL
+        // (callback consumers own the URL and release it themselves)
+        setTimeout(() => URL.revokeObjectURL(url), 100);
       }
     };
 
@@ -818,8 +821,11 @@ export class CanvasForm<
     stops: [number, string][] | string[],
   ): (area1: GroupLike, area2?: GroupLike) => CanvasGradient {
     const vals: [number, string][] = [];
-    if (stops.length < 2)
-      (stops as [number, string][]).push([0.99, "#000"], [1, "#000"]);
+    // copy before padding so the caller's array is never mutated
+    if (stops.length < 2) {
+      stops = [...stops, [0.99, "#000"], [1, "#000"]] as
+        [number, string][] | string[];
+    }
 
     for (let i = 0, len = stops.length; i < len; i++) {
       const t: number =
@@ -884,7 +890,7 @@ export class CanvasForm<
   dash(segments: PtLike | boolean = true, offset: number = 0): this {
     // dedupe via a compact key since getLineDash() allocates
     const cache = this._cacheForCtx();
-    if (!segments) {
+    if (segments === false || (segments !== true && segments.length === 0)) {
       // false or [], deactivate dashed strokes
       if (cache.dash !== "/0") {
         cache.dash = "/0";
@@ -892,13 +898,11 @@ export class CanvasForm<
         this._ctx.lineDashOffset = 0;
       }
     } else {
-      if (segments === true) {
-        segments = [5, 5];
-      }
-      const key = `${segments[0]},${segments[1]}/${offset}`;
+      const seg: PtLike = segments === true ? [5, 5] : segments;
+      const key = `${Array.prototype.join.call(seg, ",")}/${offset}`;
       if (cache.dash !== key) {
         cache.dash = key;
-        this._ctx.setLineDash([segments[0], segments[1]]);
+        this._ctx.setLineDash(seg as number[]);
         this._ctx.lineDashOffset = offset;
       }
     }
@@ -1036,7 +1040,8 @@ export class CanvasForm<
         cache[k] = this._style[k];
       }
     }
-    this._font = new Font();
+    // same default as a fresh VisualForm (14px sans-serif)
+    this._font = new Font(14, "sans-serif");
     this._ctx.font = this._font.value;
     cache.font = this._font.value;
     return this;
@@ -1249,14 +1254,28 @@ export class CanvasForm<
    */
   static line(ctx: RenderingContext2D, pts: PtLikeIterable) {
     if (!Util.arrayCheck(pts)) return;
-    let i = 0;
     ctx.beginPath();
-    for (const it of pts) {
-      if (it) {
-        if (i++ > 0) {
-          ctx.lineTo(it[0], it[1]);
-        } else {
-          ctx.moveTo(it[0], it[1]);
+    let i = 0;
+    if (Array.isArray(pts)) {
+      // indexed fast path — inputs are nearly always Groups (Array subclass)
+      for (let k = 0, len = pts.length; k < len; k++) {
+        const it = pts[k];
+        if (it) {
+          if (i++ > 0) {
+            ctx.lineTo(it[0], it[1]);
+          } else {
+            ctx.moveTo(it[0], it[1]);
+          }
+        }
+      }
+    } else {
+      for (const it of pts) {
+        if (it) {
+          if (i++ > 0) {
+            ctx.lineTo(it[0], it[1]);
+          } else {
+            ctx.moveTo(it[0], it[1]);
+          }
         }
       }
     }
@@ -1393,7 +1412,7 @@ export class CanvasForm<
   /**
    * A static function to draw ImageData on canvas
    * @param ctx canvas rendering context
-   * @param ptOrRect a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a bounding box for resizing. Default is (0,0) at top-left.
+   * @param ptOrRect a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that places a region of the image data of that size at that position. Note that `putImageData` cannot resize: the rect clips, not scales. Default is (0,0) at top-left.
    * @param img an ImageData object
    */
   static imageData(
@@ -1406,15 +1425,16 @@ export class CanvasForm<
       // Pt
       ctx.putImageData(img, t[0], t[1]);
     } else {
-      // rect
+      // rect: place the image data's top-left region of the rect's size at
+      // the rect's position (dirty coordinates are relative to the data)
       ctx.putImageData(
         img,
         t[0][0],
         t[0][1],
-        t[0][0],
-        t[0][1],
-        t[1][0],
-        t[1][1],
+        0,
+        0,
+        t[1][0] - t[0][0],
+        t[1][1] - t[0][1],
       );
     }
   }
@@ -1510,7 +1530,8 @@ export class CanvasForm<
     const lines: string[] = [];
     let sub = txt;
     while (sub) {
-      if (crop && lines.length * lstep > size[1] - lstep * 2) break;
+      // crop when the next line would no longer fit inside the box
+      if (crop && (lines.length + 1) * lstep > size[1]) break;
 
       const t = this._textTruncate(sub, size[0], "", hint);
       if (t[1] > 0) hint = t[1];

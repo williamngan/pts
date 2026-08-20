@@ -430,7 +430,7 @@ export class SVGContext2D {
     // background clearing is handled by SVGSpace.clear; nothing to erase mid-frame
   }
 
-  fillText(txt: string, x: number, y: number): void {
+  fillText(txt: string, x: number, y: number, maxWidth?: number): void {
     this._flushShape();
     const anchor =
       this.textAlign === "center"
@@ -455,6 +455,11 @@ export class SVGContext2D {
       style: `font: ${this.font}`,
       "pointer-events": "none",
     };
+    // canvas maxWidth semantics: compress to fit only when text is wider
+    if (maxWidth > 0 && this.measureText(txt).width > maxWidth) {
+      attrs.textLength = round2(maxWidth);
+      attrs.lengthAdjust = "spacingAndGlyphs";
+    }
     this._applyCommon(attrs);
     this._runs.push({ tag: "text", attrs, text: txt });
     this._drawCount++;
@@ -856,7 +861,10 @@ export class SVGSpace extends DOMSpace {
     if (!parent || !parent.appendChild)
       throw new Error("parent is not a valid DOM element");
 
-    let elem = document.querySelector(`#${id}`);
+    // O(1) id lookup, then verify it's inside the parent so a same-id
+    // element elsewhere in the document is never silently adopted
+    let elem: Element = document.getElementById(id);
+    if (elem && !parent.contains(elem)) elem = null;
 
     if (!elem) {
       elem = document.createElementNS(SVG_NS, name);
@@ -882,10 +890,12 @@ export class SVGSpace extends DOMSpace {
   }
 
   /**
-   * Remove all items from this Space.
+   * Remove all items from this Space. This clears the contents of the space's
+   * `<svg>` element but never touches its container, so the space keeps
+   * rendering after items are re-added.
    */
   removeAll(): this {
-    this._container.innerHTML = "";
+    this._canvas.innerHTML = "";
     this._bgElem = null;
     for (const ctx of this._svgContexts) ctx.resetDom();
     return super.removeAll();

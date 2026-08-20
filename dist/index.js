@@ -3147,7 +3147,7 @@ var VisualForm = class extends Form {
 		return this.stroke(c, width, linejoin, linecap);
 	}
 	points(pts, radius, shape) {
-		if (!pts) return;
+		if (!pts) return this;
 		for (let i = 0, len = pts.length; i < len; i++) this.point(pts[i], radius, shape);
 		return this;
 	}
@@ -3176,7 +3176,9 @@ var Font = class {
 		this.lineHeight = lineHeight;
 	}
 	get value() {
-		return `${this.style} ${this.weight} ${this.size}px/${this.lineHeight} ${this.face}`;
+		const prefix = [this.style, this.weight].filter(Boolean).join(" ");
+		const base = `${this.size}px/${this.lineHeight} ${this.face}`;
+		return prefix ? `${prefix} ${base}` : base;
 	}
 	toString() {
 		return this.value;
@@ -3915,6 +3917,7 @@ var CanvasSpace = class extends MultiTouchSpace {
 				a.download = `canvas_video.${filetype}`;
 				a.click();
 				a.remove();
+				setTimeout(() => URL.revokeObjectURL(url), 100);
 			}
 		};
 		return recorder;
@@ -4044,7 +4047,11 @@ var CanvasForm = class CanvasForm extends VisualForm {
 	}
 	gradient(stops) {
 		const vals = [];
-		if (stops.length < 2) stops.push([.99, "#000"], [1, "#000"]);
+		if (stops.length < 2) stops = [
+			...stops,
+			[.99, "#000"],
+			[1, "#000"]
+		];
 		for (let i = 0, len = stops.length; i < len; i++) {
 			const t = typeof stops[i] === "string" ? i * (1 / (stops.length - 1)) : stops[i][0];
 			const v = typeof stops[i] === "string" ? stops[i] : stops[i][1];
@@ -4066,18 +4073,18 @@ var CanvasForm = class CanvasForm extends VisualForm {
 	}
 	dash(segments = true, offset = 0) {
 		const cache = this._cacheForCtx();
-		if (!segments) {
+		if (segments === false || segments !== true && segments.length === 0) {
 			if (cache.dash !== "/0") {
 				cache.dash = "/0";
 				this._ctx.setLineDash([]);
 				this._ctx.lineDashOffset = 0;
 			}
 		} else {
-			if (segments === true) segments = [5, 5];
-			const key = `${segments[0]},${segments[1]}/${offset}`;
+			const seg = segments === true ? [5, 5] : segments;
+			const key = `${Array.prototype.join.call(seg, ",")}/${offset}`;
 			if (cache.dash !== key) {
 				cache.dash = key;
-				this._ctx.setLineDash([segments[0], segments[1]]);
+				this._ctx.setLineDash(seg);
 				this._ctx.lineDashOffset = offset;
 			}
 		}
@@ -4130,7 +4137,7 @@ var CanvasForm = class CanvasForm extends VisualForm {
 			this._ctx[k] = this._style[k];
 			cache[k] = this._style[k];
 		}
-		this._font = new Font();
+		this._font = new Font(14, "sans-serif");
 		this._ctx.font = this._font.value;
 		cache.font = this._font.value;
 		return this;
@@ -4201,9 +4208,16 @@ var CanvasForm = class CanvasForm extends VisualForm {
 	}
 	static line(ctx, pts) {
 		if (!Util.arrayCheck(pts)) return;
-		let i = 0;
 		ctx.beginPath();
-		for (const it of pts) if (it) {
+		let i = 0;
+		if (Array.isArray(pts)) for (let k = 0, len = pts.length; k < len; k++) {
+			const it = pts[k];
+			if (it) {
+				if (i++ > 0) ctx.lineTo(it[0], it[1]);
+				else ctx.moveTo(it[0], it[1]);
+			}
+		}
+		else for (const it of pts) if (it) {
 			if (i++ > 0) ctx.lineTo(it[0], it[1]);
 			else ctx.moveTo(it[0], it[1]);
 		}
@@ -4273,7 +4287,7 @@ var CanvasForm = class CanvasForm extends VisualForm {
 	static imageData(ctx, ptOrRect, img) {
 		const t = Util.iterToArray(ptOrRect);
 		if (typeof t[0] === "number") ctx.putImageData(img, t[0], t[1]);
-		else ctx.putImageData(img, t[0][0], t[0][1], t[0][0], t[0][1], t[1][0], t[1][1]);
+		else ctx.putImageData(img, t[0][0], t[0][1], 0, 0, t[1][0] - t[0][0], t[1][1] - t[0][1]);
 	}
 	imageData(ptOrRect, img) {
 		CanvasForm.imageData(this._ctx, ptOrRect, img);
@@ -4304,7 +4318,7 @@ var CanvasForm = class CanvasForm extends VisualForm {
 		let sub = txt;
 		while (sub) {
 			var _dt;
-			if (crop && lines.length * lstep > size[1] - lstep * 2) break;
+			if (crop && (lines.length + 1) * lstep > size[1]) break;
 			const t = this._textTruncate(sub, size[0], "", hint);
 			if (t[1] > 0) hint = t[1];
 			const newln = t[0].indexOf("\n");
@@ -5969,7 +5983,8 @@ var HTMLSpace = class extends DOMSpace {
 	}
 	static htmlElement(parent, name, id, autoClass = true) {
 		if (!parent || !parent.appendChild) throw new Error("parent is not a valid DOM element");
-		let elem = document.querySelector(`#${id}`);
+		let elem = document.getElementById(id);
+		if (elem && !parent.contains(elem)) elem = null;
 		if (!elem) {
 			elem = document.createElement(name);
 			elem.setAttribute("id", id);
@@ -5985,7 +6000,7 @@ var HTMLSpace = class extends DOMSpace {
 		return super.remove(player);
 	}
 	removeAll() {
-		this._container.innerHTML = "";
+		this._canvas.innerHTML = "";
 		return super.removeAll();
 	}
 };
@@ -6151,7 +6166,7 @@ var HTMLForm = class HTMLForm extends VisualForm {
 	}
 	point(pt, radius = 5, shape = "square") {
 		this.nextID();
-		if (shape == "circle") this.styleTo("border-radius", "100%");
+		this.styleTo("border-radius", shape == "circle" ? "100%" : "0");
 		HTMLForm.point(this._ctx, pt, radius, shape);
 		return this;
 	}
@@ -6177,6 +6192,7 @@ var HTMLForm = class HTMLForm extends VisualForm {
 	}
 	square(pt, halfsize) {
 		this.nextID();
+		this.styleTo("border-radius", "0");
 		HTMLForm.square(this._ctx, pt, halfsize);
 		return this;
 	}
@@ -6543,7 +6559,7 @@ var SVGContext2D = class SVGContext2D {
 		this.fill();
 	}
 	clearRect() {}
-	fillText(txt, x, y) {
+	fillText(txt, x, y, maxWidth) {
 		this._flushShape();
 		const anchor = this.textAlign === "center" ? "middle" : this.textAlign === "right" || this.textAlign === "end" ? "end" : "start";
 		const baseline = this.textBaseline === "top" ? "text-before-edge" : this.textBaseline === "middle" ? "central" : this.textBaseline === "bottom" ? "text-after-edge" : this.textBaseline;
@@ -6556,6 +6572,10 @@ var SVGContext2D = class SVGContext2D {
 			style: `font: ${this.font}`,
 			"pointer-events": "none"
 		};
+		if (maxWidth > 0 && this.measureText(txt).width > maxWidth) {
+			attrs.textLength = round2(maxWidth);
+			attrs.lengthAdjust = "spacingAndGlyphs";
+		}
 		this._applyCommon(attrs);
 		this._runs.push({
 			tag: "text",
@@ -6820,7 +6840,8 @@ var SVGSpace = class SVGSpace extends DOMSpace {
 	}
 	static svgElement(parent, name, id) {
 		if (!parent || !parent.appendChild) throw new Error("parent is not a valid DOM element");
-		let elem = document.querySelector(`#${id}`);
+		let elem = document.getElementById(id);
+		if (elem && !parent.contains(elem)) elem = null;
 		if (!elem) {
 			elem = document.createElementNS(SVG_NS, name);
 			elem.setAttribute("id", id);
@@ -6835,7 +6856,7 @@ var SVGSpace = class SVGSpace extends DOMSpace {
 		return super.remove(player);
 	}
 	removeAll() {
-		this._container.innerHTML = "";
+		this._canvas.innerHTML = "";
 		this._bgElem = null;
 		for (const ctx of this._svgContexts) ctx.resetDom();
 		return super.removeAll();

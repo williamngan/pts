@@ -128,7 +128,7 @@ Complete API reference for [Pts 0.12.9](https://ptsjs.org), generated from the s
 <a id="canvas-canvasform"></a>
 ### `CanvasForm`
 
-**Kind:** Class · **Source:** [`src/Canvas.ts:542`](https://github.com/williamngan/pts/blob/master/src/Canvas.ts#L542)
+**Kind:** Class · **Source:** [`src/Canvas.ts:545`](https://github.com/williamngan/pts/blob/master/src/Canvas.ts#L545)
 
 **Extends:** `VisualForm`
 
@@ -776,7 +776,7 @@ A static function to draw ImageData on canvas
 **Parameters**
 
 - `ctx` (`RenderingContext2D`) — canvas rendering context
-- `ptOrRect` (`PtLikeIterable | PtLike`) — a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a bounding box for resizing. Default is (0,0) at top-left.
+- `ptOrRect` (`PtLikeIterable | PtLike`) — a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that places a region of the image data of that size at that position. Note that `putImageData` cannot resize: the rect clips, not scales. Default is (0,0) at top-left.
 - `img` (`ImageData`) — an ImageData object
 
 <a id="canvas-canvasform-static-line"></a>
@@ -1163,7 +1163,7 @@ Set up various options for CanvasSpace. The `opt` parameter is an object with th
 
 **Parameters**
 
-- `opt` (`CanvasSpaceOptions`) — a [`CanvasSpaceOptions`](#types-canvasspaceoptions) object with optional settings, ie `{ bgcolor:string, resize:boolean, retina:boolean, offscreen:boolean, pixelDensity:number }`.
+- `opt` (`CanvasSpaceOptions`) — a [`CanvasSpaceOptions`](#types-canvasspaceoptions) object with optional settings, ie `{ bgcolor:string, resize:boolean, retina:boolean, offscreen:boolean, pixelDensity:number }`. Note that omitting `bgcolor` sets a transparent background (a long-standing behavior that differs from `DOMSpace.setup`, which keeps the current background when the option is absent).
 
 **Example**
 
@@ -2706,7 +2706,7 @@ id: string
 <a id="dom-htmlform"></a>
 ### `HTMLForm`
 
-**Kind:** Class · **Source:** [`src/Dom.ts:401`](https://github.com/williamngan/pts/blob/master/src/Dom.ts#L401)
+**Kind:** Class · **Source:** [`src/Dom.ts:404`](https://github.com/williamngan/pts/blob/master/src/Dom.ts#L404)
 
 **Extends:** `VisualForm`
 
@@ -3333,7 +3333,8 @@ Remove an item from this space.
 removeAll(): this
 ```
 
-Remove all items from this space.
+Remove all items from this space. This clears the contents of the space's
+element but never touches its container.
 
 <a id="dom-htmlspace-static-html-element"></a>
 ##### `htmlElement`
@@ -11305,7 +11306,7 @@ fillRect(x: number, y: number, w: number, h: number): void
 ##### `fillText`
 
 ```ts
-fillText(txt: string, x: number, y: number): void
+fillText(txt: string, x: number, y: number, maxWidth: number): void
 ```
 
 **Parameters**
@@ -11313,6 +11314,7 @@ fillText(txt: string, x: number, y: number): void
 - `txt` (`string`)
 - `x` (`number`)
 - `y` (`number`)
+- `maxWidth` (`number`)
 
 <a id="svg-svgcontext2d-get-line-dash"></a>
 ##### `getLineDash`
@@ -11530,7 +11532,7 @@ textBaseline: string
 <a id="svg-svgform"></a>
 ### `SVGForm`
 
-**Kind:** Class · **Source:** [`src/Svg.ts:922`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L922)
+**Kind:** Class · **Source:** [`src/Svg.ts:931`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L931)
 
 **Extends:** `CanvasForm`
 
@@ -11883,7 +11885,7 @@ A static function to draw a text element.
 <a id="svg-svgspace"></a>
 ### `SVGSpace`
 
-**Kind:** Class · **Source:** [`src/Svg.ts:692`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L692)
+**Kind:** Class · **Source:** [`src/Svg.ts:697`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L697)
 
 **Extends:** `DOMSpace`
 
@@ -12042,7 +12044,9 @@ Remove an item from this Space.
 removeAll(): this
 ```
 
-Remove all items from this Space.
+Remove all items from this Space. This clears the contents of the space's
+`<svg>` element but never touches its container, so the space keeps
+rendering after items are re-added.
 
 <a id="svg-svgspace-resize"></a>
 ##### `resize`
