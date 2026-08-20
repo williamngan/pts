@@ -42,6 +42,12 @@ export default tseslint.config(
     },
   },
   {
+    files: ["test/visual/**/*.ts"],
+    languageOptions: {
+      globals: { ...globals.node },
+    },
+  },
+  {
     files: ["scripts/check-site.mjs"],
     languageOptions: {
       globals: { ...globals.browser, ...globals.node, monaco: "readonly" },

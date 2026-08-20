@@ -6,6 +6,7 @@ node_modules/
 coverage/
 .vitest-attachments/
 src/test/browser/__screenshots__/
+test/visual/output/
 test/integrations/*/dist/
 temp/
 .DS_Store
@@ -13,5 +14,6 @@ temp/
 dogfood-output/
 .pnpm-store/
 .wt/
+test/visual/**/*.png
 
 dist/

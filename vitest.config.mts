@@ -37,6 +37,17 @@ export default defineConfig({
       {
         extends: true,
         test: {
+          name: "visual",
+          include: ["test/visual/**/*.spec.ts"],
+          environment: "node",
+          mockReset: true,
+          restoreMocks: true,
+          unstubGlobals: true,
+        },
+      },
+      {
+        extends: true,
+        test: {
           name: "browser",
           include: ["src/test/browser/**/*.spec.ts"],
           browser: {
