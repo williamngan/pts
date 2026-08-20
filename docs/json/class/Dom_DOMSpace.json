@@ -1141,7 +1141,7 @@
       "source": [
         [
           "src/Space.ts",
-          547,
+          592,
           2
         ]
       ],
@@ -1165,6 +1165,35 @@
               "comment": "a string to select a touches list: \"touches\", \"changedTouches\", or \"targetTouches\". Default is \"touches\"",
               "type": "TouchPointsKey",
               "default": "\"touches\""
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "track",
+      "source": [
+        [
+          "src/Space.ts",
+          552,
+          2
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": "MultiTouchSpace.track",
+      "signatures": [
+        {
+          "comment": "Track one or more [`UI`](#link) elements: every pointer, touch, and keyboard\naction dispatched by this space is forwarded to them via [`UI.track`](#link),\nso no manual `action` wiring is needed. Remember to also bind the events,\neg via [`MultiTouchSpace.bindMouse`](#link). Keyboard actions are forwarded\ntoo (their x/y carry the shift/alt flags, as the space dispatches them).",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "uis",
+              "comment": "a UI, or an array of UIs",
+              "type": "UI | UI[]",
+              "default": false
             }
           ],
           "tags": []
@@ -1253,6 +1282,35 @@
               "comment": "",
               "type": "any",
               "default": "{}"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
+      "name": "untrack",
+      "source": [
+        [
+          "src/Space.ts",
+          573,
+          2
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": "MultiTouchSpace.untrack",
+      "signatures": [
+        {
+          "comment": "Stop tracking one or more [`UI`](#link) elements added via [`MultiTouchSpace.track`](#link).",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "uis",
+              "comment": "a UI or an array of UIs to remove from tracking, or omit to stop tracking all",
+              "type": "UI | UI[]",
+              "default": false
             }
           ],
           "tags": []

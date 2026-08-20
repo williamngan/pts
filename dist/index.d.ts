@@ -2,6 +2,9 @@
 Licensed under Apache 2.0 License.
 See https://github.com/williamngan/pts for details. */
 //#region src/UI.d.ts
+type UIShapeTest = (group: Group, pt: PtLike, states: {
+  [key: string]: any;
+}) => boolean;
 declare const UIShape: {
   rectangle: string;
   circle: string;
@@ -38,6 +41,9 @@ declare class UI {
   protected _actions: {
     [type: string]: UIHandler[];
   };
+  protected _sysActions: {
+    [type: string]: UIHandler[];
+  };
   protected _states: {
     [key: string]: any;
   };
@@ -45,6 +51,7 @@ declare class UI {
   constructor(group: PtLikeIterable, shape: string, states?: {
     [key: string]: any;
   }, id?: string);
+  static registerShape(shape: string, fn: UIShapeTest): void;
   static fromRectangle(group: PtLikeIterable, states: {}, id?: string): UI;
   static fromCircle(group: PtLikeIterable, states: {}, id?: string): UI;
   static fromPolygon(group: PtLikeIterable, states: {}, id?: string): UI;
@@ -56,9 +63,17 @@ declare class UI {
   get shape(): string;
   set shape(d: string);
   state(key: string, value?: any): any;
-  on(type: string, fn: UIHandler): number;
-  off(type: string, which?: number): boolean;
-  listen(type: string, p: PtLike, evt: MouseEvent): boolean;
+  getState<T = any>(key: string): T;
+  setState(key: string, value: any): this;
+  on(type: UIPointerAction | (string & {}), fn: UIHandler, options?: {
+    once?: boolean;
+    signal?: AbortSignal;
+  }): number;
+  off(type: UIPointerAction | (string & {}), which?: number): boolean;
+  listen(type: UIPointerAction | (string & {}), p: PtLike, evt: MouseEvent): boolean;
+  private _holdsType;
+  protected _sysOn(type: string, fn: UIHandler): number;
+  protected _sysOff(type: string, which: number): boolean;
   protected hold(type: string): number;
   protected unhold(key?: number): void;
   static track(uis: UI[], type: string, p: PtLike, evt: MouseEvent): void;
@@ -476,6 +491,10 @@ declare abstract class MultiTouchSpace extends Space {
   bindTouch(bind?: boolean, passive?: boolean, customTarget?: Element): this;
   bindKeyboard(bind?: boolean, customTarget?: EventTarget): this;
   protected _unbindAll(): this;
+  private _trackedUIs;
+  private _uiPlayer;
+  track(uis: UI | UI[]): this;
+  untrack(uis?: UI | UI[]): this;
   touchesToPoints(evt: TouchEvent, which?: TouchPointsKey): Pt[];
   protected _mouseAction(type: string, evt: MouseEvent | TouchEvent | PointerEvent): void;
   protected _mouseDown(evt: PointerEvent): boolean;
@@ -1533,5 +1552,5 @@ declare class Sound {
   dispose(): this;
 }
 //#endregion
-export { AnimateCallbackFn, Body, Bound, CanvasForm, CanvasPatternRepetition, CanvasSpace, CanvasSpaceOptions, Circle, Color, ColorType, Const, Create, Curve, DOMFormContext, DOMSpace, DefaultFormStyle, Delaunay, DelaunayMesh, DelaunayShape, Font, Form, Geom, Group, GroupLike, HTMLForm, HTMLSpace, IPlayer, IPt, ISoundAnalyzer, ISpacePlayers, ITempoListener, ITempoProgressFn, ITempoResponses, ITempoStartFn, ITimer, Img, ImgOptions, IntersectContext, Line, Mat, MultiTouchElement, MultiTouchSpace, Noise, Num, Particle, Polygon, Pt, PtIterable, PtLike, PtLikeIterable, Range, Rectangle, RenderingContext2D, SVGContext2D, SVGForm, SVGSpace, Shaping, Sound, SoundType, Space, Tempo, TextMeasure, TextVerticalAlign, TouchPointsKey, Triangle, Typography, UI, UIButton, UIDragger, UIHandler, UIPointerAction, UIPointerActions, UIShape, Util, Vec, VisualForm, WarningType, World };
+export { AnimateCallbackFn, Body, Bound, CanvasForm, CanvasPatternRepetition, CanvasSpace, CanvasSpaceOptions, Circle, Color, ColorType, Const, Create, Curve, DOMFormContext, DOMSpace, DefaultFormStyle, Delaunay, DelaunayMesh, DelaunayShape, Font, Form, Geom, Group, GroupLike, HTMLForm, HTMLSpace, IPlayer, IPt, ISoundAnalyzer, ISpacePlayers, ITempoListener, ITempoProgressFn, ITempoResponses, ITempoStartFn, ITimer, Img, ImgOptions, IntersectContext, Line, Mat, MultiTouchElement, MultiTouchSpace, Noise, Num, Particle, Polygon, Pt, PtIterable, PtLike, PtLikeIterable, Range, Rectangle, RenderingContext2D, SVGContext2D, SVGForm, SVGSpace, Shaping, Sound, SoundType, Space, Tempo, TextMeasure, TextVerticalAlign, TouchPointsKey, Triangle, Typography, UI, UIButton, UIDragger, UIHandler, UIPointerAction, UIPointerActions, UIShape, UIShapeTest, Util, Vec, VisualForm, WarningType, World };
 //# sourceMappingURL=index.d.ts.map

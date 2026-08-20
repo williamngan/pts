@@ -3,7 +3,7 @@
   "source": [
     [
       "src/UI.ts",
-      50,
+      76,
       13
     ]
   ],
@@ -15,7 +15,7 @@
       "source": [
         [
           "src/UI.ts",
-          68,
+          97,
           2
         ]
       ],
@@ -64,12 +64,12 @@
       "source": [
         [
           "src/UI.ts",
-          133,
+          174,
           6
         ],
         [
           "src/UI.ts",
-          136,
+          177,
           6
         ]
       ],
@@ -95,12 +95,12 @@
       "source": [
         [
           "src/UI.ts",
-          123,
+          164,
           6
         ],
         [
           "src/UI.ts",
-          126,
+          167,
           6
         ]
       ],
@@ -126,12 +126,12 @@
       "source": [
         [
           "src/UI.ts",
-          143,
+          184,
           6
         ],
         [
           "src/UI.ts",
-          146,
+          187,
           6
         ]
       ],
@@ -155,11 +155,40 @@
   ],
   "methods": [
     {
+      "name": "getState",
+      "source": [
+        [
+          "src/UI.ts",
+          210,
+          2
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Get a specific UI state. Unlike [`UI.state`](#link), this is a plain typed getter.",
+          "returns": "T",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "key",
+              "comment": "state's name",
+              "type": "string",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "hold",
       "source": [
         [
           "src/UI.ts",
-          219,
+          333,
           12
         ]
       ],
@@ -190,7 +219,7 @@
       "source": [
         [
           "src/UI.ts",
-          198,
+          278,
           2
         ]
       ],
@@ -206,7 +235,7 @@
             {
               "name": "type",
               "comment": "an action type. Can be one of UIPointerActions or a custom one.",
-              "type": "string",
+              "type": "UIPointerAction | string & ",
               "default": false
             },
             {
@@ -231,7 +260,7 @@
       "source": [
         [
           "src/UI.ts",
-          182,
+          262,
           2
         ]
       ],
@@ -247,12 +276,12 @@
             {
               "name": "type",
               "comment": "event type",
-              "type": "string",
+              "type": "UIPointerAction | string & ",
               "default": false
             },
             {
               "name": "which",
-              "comment": "an ID number returned by [`UI.on`](#link). If this is not defined, all handlers in this type will be removed.",
+              "comment": "an ID number returned by [`UI.on`](#link). If this is not defined, all handlers in this type will be removed (built-in machinery like UIButton's click counting is unaffected). Note that after removal an id is stale — removing it twice may affect a handler that has since reused the slot.",
               "type": "number",
               "default": false
             }
@@ -266,7 +295,7 @@
       "source": [
         [
           "src/UI.ts",
-          171,
+          231,
           2
         ]
       ],
@@ -275,20 +304,26 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Add an event handler. Remember this UI will also need to be tracked for events via `UI.track`.",
+          "comment": "Add an event handler. Remember this UI will also need to be tracked for events, via `UI.track` or [`MultiTouchSpace.track`](#link).",
           "returns": "number",
-          "returns_comment": "an id number that reference to this handler, for use in [`UI.off`](#link)",
+          "returns_comment": "an id number that reference to this handler, for use in [`UI.off`](#link), or -1 if nothing was registered",
           "parameters": [
             {
               "name": "type",
-              "comment": "event type",
-              "type": "string",
+              "comment": "event type, either one of [`UIPointerActions`](#link) or a custom type",
+              "type": "UIPointerAction | string & ",
               "default": false
             },
             {
               "name": "fn",
               "comment": "a [`UIHandler`](#link) callback function: `fn( target:UI, pt:Pt, type:string, evt:MouseEvent )`",
               "type": "UIHandler",
+              "default": false
+            },
+            {
+              "name": "options",
+              "comment": "optionally `{ once }` to remove the handler after its first call, and/or `{ signal }` with an [`AbortSignal`](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal) that removes it on abort (an already-aborted signal registers nothing)",
+              "type": "{ once:`boolean`, signal:`AbortSignal` }",
               "default": false
             }
           ],
@@ -301,7 +336,7 @@
       "source": [
         [
           "src/UI.ts",
-          254,
+          368,
           2
         ]
       ],
@@ -326,11 +361,46 @@
       ]
     },
     {
+      "name": "setState",
+      "source": [
+        [
+          "src/UI.ts",
+          219,
+          2
+        ]
+      ],
+      "flags": {},
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Set a specific UI state. Unlike [`UI.state`](#link), this can also store `undefined`.",
+          "returns": "this",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "key",
+              "comment": "state's name",
+              "type": "string",
+              "default": false
+            },
+            {
+              "name": "value",
+              "comment": "the value to set",
+              "type": "any",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "state",
       "source": [
         [
           "src/UI.ts",
-          156,
+          197,
           2
         ]
       ],
@@ -365,7 +435,7 @@
       "source": [
         [
           "src/UI.ts",
-          261,
+          375,
           2
         ]
       ],
@@ -387,7 +457,7 @@
       "source": [
         [
           "src/UI.ts",
-          229,
+          343,
           12
         ]
       ],
@@ -418,7 +488,7 @@
       "source": [
         [
           "src/UI.ts",
-          97,
+          137,
           9
         ]
       ],
@@ -461,7 +531,7 @@
       "source": [
         [
           "src/UI.ts",
-          107,
+          147,
           9
         ]
       ],
@@ -504,7 +574,7 @@
       "source": [
         [
           "src/UI.ts",
-          87,
+          127,
           9
         ]
       ],
@@ -547,7 +617,7 @@
       "source": [
         [
           "src/UI.ts",
-          116,
+          156,
           9
         ]
       ],
@@ -586,11 +656,48 @@
       ]
     },
     {
+      "name": "registerShape",
+      "source": [
+        [
+          "src/UI.ts",
+          117,
+          9
+        ]
+      ],
+      "flags": {
+        "isStatic": true
+      },
+      "overrides": false,
+      "inherits": false,
+      "signatures": [
+        {
+          "comment": "Register a custom shape hit test, or override a built-in one. The shape\nname can then be used when constructing a UI.",
+          "returns": "void",
+          "returns_comment": false,
+          "parameters": [
+            {
+              "name": "shape",
+              "comment": "shape name",
+              "type": "string",
+              "default": false
+            },
+            {
+              "name": "fn",
+              "comment": "a function `(group, pt, states) => boolean` that returns whether the point hits the shape",
+              "type": "UIShapeTest",
+              "default": false
+            }
+          ],
+          "tags": []
+        }
+      ]
+    },
+    {
       "name": "track",
       "source": [
         [
           "src/UI.ts",
-          244,
+          358,
           9
         ]
       ],

@@ -787,7 +787,7 @@
             {
               "name": "ptOrRect",
               "comment": "a target area to place the image. Either a PtLike specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left position, bottom-right position) that specifies a bounding box. Default is (0,0) at top-left.",
-              "type": "PtLikeIterable | PtLike",
+              "type": "PtLike | PtLikeIterable",
               "default": false
             },
             {
@@ -828,7 +828,7 @@
             {
               "name": "ptOrRect",
               "comment": "a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a bounding box for resizing. Default is (0,0) at top-left.",
-              "type": "PtLikeIterable | PtLike",
+              "type": "PtLike | PtLikeIterable",
               "default": false
             },
             {
@@ -1728,7 +1728,7 @@
             {
               "name": "ptOrRect",
               "comment": "a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a bounding box for resizing. Default is (0,0) at top-left.",
-              "type": "PtLikeIterable | PtLike",
+              "type": "PtLike | PtLikeIterable",
               "default": false
             },
             {
@@ -1777,7 +1777,7 @@
             {
               "name": "ptOrRect",
               "comment": "a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that places a region of the image data of that size at that position. Note that `putImageData` cannot resize: the rect clips, not scales. Default is (0,0) at top-left.",
-              "type": "PtLikeIterable | PtLike",
+              "type": "PtLike | PtLikeIterable",
               "default": false
             },
             {

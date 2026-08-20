@@ -1,8 +1,34 @@
 /*! Pts.js is licensed under Apache License 2.0. Copyright © 2017-current William Ngan and contributors. (https://github.com/williamngan/pts) */
 
 import { Pt, Group } from "./Pt";
-import { Rectangle, Circle, Polygon } from "./Op";
+import { Rectangle, Circle, Polygon, Line } from "./Op";
 import { UIHandler, GroupLike, PtLike, PtLikeIterable } from "./Types";
+
+/** A hit-test function for a UI shape: given the UI's group, a point, and the UI's states, return whether the point is within the shape. */
+export type UIShapeTest = (
+  group: Group,
+  pt: PtLike,
+  states: { [key: string]: any },
+) => boolean;
+
+// Shape hit tests, keyed by shape name. Extensible via `UI.registerShape`.
+const _shapeTests: { [key: string]: UIShapeTest } = {
+  rectangle: (group, pt) => Rectangle.withinBound(group, pt),
+  circle: (group, pt) => Circle.withinBound(group, pt),
+  polygon: (group, pt) => Polygon.hasIntersectPoint(group, pt),
+  line: (group, pt, states) => {
+    const threshold = states.lineThreshold ?? 5;
+    return Line.distanceFromPt(group, pt) <= threshold;
+  },
+  polyline: (group, pt, states) => {
+    const threshold = states.lineThreshold ?? 5;
+    for (let i = 0, len = group.length - 1; i < len; i++) {
+      if (Line.distanceFromPt([group[i], group[i + 1]], pt) <= threshold)
+        return true;
+    }
+    return false;
+  },
+};
 
 /**
  * **[Experimental]** A set of string constatns to represent different UI types, for use in [`UI`](#link) instances.
@@ -54,6 +80,9 @@ export class UI {
   protected static _counter: number = 0;
   protected _id: string;
   protected _actions: { [type: string]: UIHandler[] };
+  // built-in machinery (UIButton hover, UIDragger drag) registers here, so
+  // public `off(type)` cannot remove it along with user handlers
+  protected _sysActions: { [type: string]: UIHandler[] };
   protected _states: { [key: string]: any };
 
   protected _holds = new Map<number, string>();
@@ -76,6 +105,17 @@ export class UI {
     this._id = id === undefined ? `ui_${UI._counter++}` : id;
     this._states = states;
     this._actions = {};
+    this._sysActions = {};
+  }
+
+  /**
+   * Register a custom shape hit test, or override a built-in one. The shape
+   * name can then be used when constructing a UI.
+   * @param shape shape name
+   * @param fn a function `(group, pt, states) => boolean` that returns whether the point hits the shape
+   */
+  static registerShape(shape: string, fn: UIShapeTest): void {
+    _shapeTests[shape] = fn;
   }
 
   /**
@@ -114,7 +154,8 @@ export class UI {
    * @param states optional a state object keep track of custom states for this UI
    */
   static fromUI(ui: UI, states?: object, id?: string): UI {
-    return new this(ui.group, ui.shape, states || ui._states, id);
+    // copy the source states so the new UI doesn't share mutations
+    return new this(ui.group, ui.shape, states || { ...ui._states }, id);
   }
 
   /**
@@ -163,23 +204,62 @@ export class UI {
   }
 
   /**
-   * Add an event handler. Remember this UI will also need to be tracked for events via `UI.track`.
-   * @param type event type
-   * @param fn a [`UIHandler`](#link) callback function: `fn( target:UI, pt:Pt, type:string, evt:MouseEvent )`
-   * @returns an id number that reference to this handler, for use in [`UI.off`](#link)
+   * Get a specific UI state. Unlike [`UI.state`](#link), this is a plain typed getter.
+   * @param key state's name
    */
-  on(type: string, fn: UIHandler): number {
+  getState<T = any>(key: string): T {
+    return this._states[key];
+  }
+
+  /**
+   * Set a specific UI state. Unlike [`UI.state`](#link), this can also store `undefined`.
+   * @param key state's name
+   * @param value the value to set
+   */
+  setState(key: string, value: any): this {
+    this._states[key] = value;
+    return this;
+  }
+
+  /**
+   * Add an event handler. Remember this UI will also need to be tracked for events, via `UI.track` or [`MultiTouchSpace.track`](#link).
+   * @param type event type, either one of [`UIPointerActions`](#link) or a custom type
+   * @param fn a [`UIHandler`](#link) callback function: `fn( target:UI, pt:Pt, type:string, evt:MouseEvent )`
+   * @param options optionally `{ once }` to remove the handler after its first call, and/or `{ signal }` with an [`AbortSignal`](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal) that removes it on abort (an already-aborted signal registers nothing)
+   * @returns an id number that reference to this handler, for use in [`UI.off`](#link), or -1 if nothing was registered
+   */
+  on(
+    type: UIPointerAction | (string & {}),
+    fn: UIHandler,
+    options?: { once?: boolean; signal?: AbortSignal },
+  ): number {
+    if (!fn) return -1;
+    if (options?.signal?.aborted) return -1;
     if (!this._actions[type]) this._actions[type] = [];
-    return UI._addHandler(this._actions[type], fn);
+
+    let handler = fn;
+    let id = -1;
+    if (options?.once) {
+      handler = (t, p, ty, e) => {
+        this.off(type, id);
+        fn(t, p, ty, e);
+      };
+    }
+    id = UI._addHandler(this._actions[type], handler);
+    if (options?.signal) {
+      options.signal.addEventListener("abort", () => this.off(type, id), {
+        once: true,
+      });
+    }
+    return id;
   }
 
   /**
    * Remove an event handler.
    * @param type event type
-   * @param which an ID number returned by [`UI.on`](#link). If this is not defined, all handlers in this type will be removed.
-   * @param fn a [`UIHandler`](#link) function: `fn( target:UI, pt:Pt, type:string, evt:MouseEvent )`
+   * @param which an ID number returned by [`UI.on`](#link). If this is not defined, all handlers in this type will be removed (built-in machinery like UIButton's click counting is unaffected). Note that after removal an id is stale — removing it twice may affect a handler that has since reused the slot.
    */
-  off(type: string, which?: number): boolean {
+  off(type: UIPointerAction | (string & {}), which?: number): boolean {
     if (!this._actions[type]) return false;
     if (which === undefined) {
       delete this._actions[type];
@@ -195,21 +275,55 @@ export class UI {
    * @param p a point to check
    * @param evt a MouseEvent emitted by the browser (See [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent))
    */
-  listen(type: string, p: PtLike, evt: MouseEvent): boolean {
-    if (this._actions[type] !== undefined) {
-      if (
-        this._within(p) ||
-        Array.from(this._holds.values()).indexOf(type) >= 0
-      ) {
-        UI._trigger(this._actions[type], this, p, type, evt);
-        return true;
-      } else if (this._actions["all"]) {
-        // listen for all regardless of trigger
-        UI._trigger(this._actions["all"], this, p, type, evt);
-        return true;
+  listen(
+    type: UIPointerAction | (string & {}),
+    p: PtLike,
+    evt: MouseEvent,
+  ): boolean {
+    let fired = false;
+    const userActions = this._actions[type];
+    const sysActions = this._sysActions[type];
+
+    if (userActions || sysActions) {
+      if (this._within(p) || this._holdsType(type)) {
+        if (sysActions) {
+          UI._trigger(sysActions, this, p, type, evt);
+          fired = true;
+        }
+        if (userActions) {
+          UI._trigger(userActions, this, p, type, evt);
+          fired = true;
+        }
       }
     }
+
+    // "all" handlers observe every event, regardless of position
+    if (this._actions["all"]) {
+      UI._trigger(this._actions["all"], this, p, type, evt);
+      fired = true;
+    }
+
+    return fired;
+  }
+
+  /** Check whether an action type is currently held, without allocating. */
+  private _holdsType(type: string): boolean {
+    for (const held of this._holds.values()) {
+      if (held === type) return true;
+    }
     return false;
+  }
+
+  /** Register a built-in handler unaffected by public `off`. */
+  protected _sysOn(type: string, fn: UIHandler): number {
+    if (!this._sysActions[type]) this._sysActions[type] = [];
+    return UI._addHandler(this._sysActions[type], fn);
+  }
+
+  /** Remove a built-in handler registered with `_sysOn`. */
+  protected _sysOff(type: string, which: number): boolean {
+    if (!this._sysActions[type]) return false;
+    return UI._removeHandler(this._sysActions[type], which);
   }
 
   /**
@@ -259,27 +373,18 @@ export class UI {
    * Returns a string representation of this UI
    */
   toString(): string {
-    return `UI ${this.group.toString}`;
+    return `UI ${this.group.toString()}`;
   }
 
   /**
-   * Check intersection using a specific function based on the shape of the UI.
+   * Check intersection using the hit test registered for this UI's shape.
    * @param p a point to check
    * @returns a boolean to indicate if the event should be triggered
    */
   protected _within(p: PtLike): boolean {
-    let fn = null;
-    if (this._shape === UIShape.rectangle) {
-      fn = Rectangle.withinBound;
-    } else if (this._shape === UIShape.circle) {
-      fn = Circle.withinBound;
-    } else if (this._shape === UIShape.polygon) {
-      fn = Polygon.hasIntersectPoint;
-    } else {
-      return false;
-    }
-
-    return fn(this._group, p);
+    const fn = _shapeTests[this._shape];
+    if (!fn) return false;
+    return fn(this._group, p, this._states);
   }
 
   /**
@@ -303,25 +408,29 @@ export class UI {
    * Static function to add a new handler to an array store of UIHandlers.
    */
   protected static _addHandler(fns: UIHandler[], fn: UIHandler): number {
-    if (fn) {
-      fns.push(fn);
-      return fns.length - 1;
-    } else {
-      return -1;
+    if (!fn) return -1;
+    // reuse a removed slot so ids stay stable and the array doesn't grow
+    // unboundedly when handlers are added and removed repeatedly
+    for (let i = 0, len = fns.length; i < len; i++) {
+      if (fns[i] === null) {
+        fns[i] = fn;
+        return i;
+      }
     }
+    fns.push(fn);
+    return fns.length - 1;
   }
 
   /**
    * Static function to remove an existing handler from an array store of UIHandlers.
+   * The slot is nulled (not spliced) so other handlers' ids remain valid.
    */
   protected static _removeHandler(fns: UIHandler[], index: number): boolean {
-    if (index >= 0 && index < fns.length) {
-      let temp = fns.length;
-      fns.splice(index, 1);
-      return temp > fns.length;
-    } else {
-      return false;
+    if (index >= 0 && index < fns.length && fns[index]) {
+      fns[index] = null;
+      return true;
     }
+    return false;
   }
 }
 
@@ -352,12 +461,12 @@ export class UIButton extends UI {
     const UA = UIPointerActions;
 
     // listen for clicks when mouse up and increment clicks
-    this.on(UA.up, (target: UI, pt: PtLike, type: string, evt: MouseEvent) => {
+    this._sysOn(UA.up, () => {
       this.state("clicks", this._states.clicks + 1);
     });
 
     // listen for move events and fire enter and leave events accordingly
-    this.on(
+    this._sysOn(
       UA.move,
       (target: UI, pt: PtLike, type: string, evt: MouseEvent) => {
         let hover = this._within(pt);
@@ -371,15 +480,18 @@ export class UIButton extends UI {
 
           // listen for hover off
           let _capID = this.hold(UA.move); // keep hold of second move
-          this._hoverID = this.on(UA.move, (t: UI, p: PtLike) => {
-            if (!this._within(p) && !this.state("dragging")) {
-              this.state("hover", false);
-              // leave trigger
-              UI._trigger(this._actions[UA.leave], this, pt, UA.leave, evt);
-              this.off(UA.move, this._hoverID); // remove second move listener
-              this.unhold(_capID); // stop keeping hold of second move
-            }
-          });
+          this._hoverID = this._sysOn(
+            UA.move,
+            (t: UI, p: PtLike, ty: string, e: MouseEvent) => {
+              if (!this._within(p) && !this.state("dragging")) {
+                this.state("hover", false);
+                // leave trigger, with the current position and event
+                UI._trigger(this._actions[UA.leave], this, p, UA.leave, e);
+                this._sysOff(UA.move, this._hoverID); // remove second move listener
+                this.unhold(_capID); // stop keeping hold of second move
+              }
+            },
+          );
         }
       },
     );
@@ -487,7 +599,7 @@ export class UIDragger extends UIButton {
      */
 
     // Handle pointer down and begin dragging
-    this.on(
+    this._sysOn(
       UA.down,
       (target: UI, pt: PtLike, type: string, evt: MouseEvent) => {
         // begin listening for all events after dragging starts
@@ -503,12 +615,15 @@ export class UIDragger extends UIButton {
           this._upHoldID = this.hold(UA.up); // keep hold of up (cancel dragging if simple click)
         }
         if (this._draggingID === -1) {
-          this._draggingID = this.on(UA.move, (t: UI, p: PtLike) => {
-            if (this.state("dragging")) {
-              UI._trigger(this._actions[UA.uidrag], t, p, UA.uidrag, evt);
-              this.state("moved", true);
-            }
-          });
+          this._draggingID = this._sysOn(
+            UA.move,
+            (t: UI, p: PtLike, ty: string, e: MouseEvent) => {
+              if (this.state("dragging")) {
+                UI._trigger(this._actions[UA.uidrag], t, p, UA.uidrag, e);
+                this.state("moved", true);
+              }
+            },
+          );
         }
       },
     );
@@ -517,7 +632,7 @@ export class UIDragger extends UIButton {
     const endDrag = (target: UI, pt: PtLike, type: string, evt: MouseEvent) => {
       this.state("dragging", false);
       // remove move listener
-      this.off(UA.move, this._draggingID);
+      this._sysOff(UA.move, this._draggingID);
       this._draggingID = -1;
       // stop keeping hold of move
       this.unhold(this._moveHoldID);
@@ -534,9 +649,9 @@ export class UIDragger extends UIButton {
         this.state("moved", false);
       }
     };
-    this.on(UA.drop, endDrag);
-    this.on(UA.up, endDrag);
-    this.on(UA.out, endDrag);
+    this._sysOn(UA.drop, endDrag);
+    this._sysOn(UA.up, endDrag);
+    this._sysOn(UA.out, endDrag);
   }
 
   /**

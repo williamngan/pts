@@ -2,7 +2,7 @@
 
 import { Pt, Bound } from "./Pt";
 import { Form } from "./Form";
-import { UIPointerActions as UIA } from "./UI";
+import { UI, UIPointerActions as UIA } from "./UI";
 import {
   ITimer,
   ISpacePlayers,
@@ -535,6 +535,51 @@ export abstract class MultiTouchSpace extends Space {
     this.bindMouse(false);
     this.bindTouch(false);
     this.bindKeyboard(false);
+    return this;
+  }
+
+  private _trackedUIs: UI[] = [];
+  private _uiPlayer: IPlayer = null;
+
+  /**
+   * Track one or more [`UI`](#link) elements: every pointer, touch, and keyboard
+   * action dispatched by this space is forwarded to them via [`UI.track`](#link),
+   * so no manual `action` wiring is needed. Remember to also bind the events,
+   * eg via [`MultiTouchSpace.bindMouse`](#link). Keyboard actions are forwarded
+   * too (their x/y carry the shift/alt flags, as the space dispatches them).
+   * @param uis a UI, or an array of UIs
+   */
+  track(uis: UI | UI[]): this {
+    const list = Array.isArray(uis) ? uis : [uis];
+    for (let i = 0, len = list.length; i < len; i++) {
+      if (this._trackedUIs.indexOf(list[i]) < 0) this._trackedUIs.push(list[i]);
+    }
+    if (!this._uiPlayer) {
+      this._uiPlayer = {
+        animate: () => {},
+        action: (type: string, px: number, py: number, evt: Event) => {
+          UI.track(this._trackedUIs, type, new Pt(px, py), evt as MouseEvent);
+        },
+      };
+      this.add(this._uiPlayer);
+    }
+    return this;
+  }
+
+  /**
+   * Stop tracking one or more [`UI`](#link) elements added via [`MultiTouchSpace.track`](#link).
+   * @param uis a UI or an array of UIs to remove from tracking, or omit to stop tracking all
+   */
+  untrack(uis?: UI | UI[]): this {
+    if (uis === undefined) {
+      this._trackedUIs.length = 0;
+      return this;
+    }
+    const list = Array.isArray(uis) ? uis : [uis];
+    for (let i = 0, len = list.length; i < len; i++) {
+      const at = this._trackedUIs.indexOf(list[i]);
+      if (at >= 0) this._trackedUIs.splice(at, 1);
+    }
     return this;
   }
 

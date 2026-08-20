@@ -74,6 +74,7 @@
     "UIButton",
     "UIDragger",
     "UIPointerAction",
+    "UIShapeTest",
     "UIPointerActions",
     "UIShape"
   ],

@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { CanvasSpace } from "../../Canvas";
+import { UIButton } from "../../UI";
 
 const bounds = (width = 200, height = 100) =>
   ({
@@ -153,6 +154,39 @@ describe("MultiTouchSpace dispatch", () => {
     document.dispatchEvent(new KeyboardEvent("keyup", { altKey: true }));
     expect(actions).toContainEqual(["keydown", 1, 0]);
     expect(actions).toContainEqual(["keyup", 0, 1]);
+
+    space.dispose();
+  });
+});
+
+describe("Space UI tracking", () => {
+  it("tracks UIs through space.track without manual wiring", async () => {
+    const space = new CanvasSpace(host()).setup({ retina: false });
+    await ready(space);
+    space.bindMouse();
+    space.play(10);
+
+    const button = UIButton.fromRectangle(
+      [
+        [0, 0],
+        [50, 50],
+      ],
+      {},
+    ) as UIButton;
+    space.track(button);
+
+    const inside = new PointerEvent("pointermove", {
+      clientX: 30,
+      clientY: 40,
+    });
+    space.element.dispatchEvent(inside);
+    expect(button.state("hover")).toBe(true);
+
+    space.untrack(button);
+    space.element.dispatchEvent(
+      new PointerEvent("pointermove", { clientX: 500, clientY: 500 }),
+    );
+    expect(button.state("hover")).toBe(true); // no longer receiving events
 
     space.dispose();
   });

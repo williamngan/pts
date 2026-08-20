@@ -80,6 +80,7 @@ Complete API reference for [Pts 0.12.9](https://ptsjs.org), generated from the s
   - [`UIButton`](#ui-uibutton)
   - [`UIDragger`](#ui-uidragger)
   - [`UIPointerAction`](#ui-uipointeraction)
+  - [`UIShapeTest`](#ui-uishapetest)
   - [`UIPointerActions`](#ui-uipointeractions)
   - [`UIShape`](#ui-uishape)
 
@@ -435,14 +436,14 @@ c1 = Circle.fromCenter(...); grad = form.gradient(["#f00", "#00f"]); form.fill( 
 ##### `image`
 
 ```ts
-image(ptOrRect: PtLikeIterable | PtLike, img: Img | CanvasImageSource, orig: PtLikeIterable): CanvasForm
+image(ptOrRect: PtLike | PtLikeIterable, img: Img | CanvasImageSource, orig: PtLikeIterable): CanvasForm
 ```
 
 Draw an image.
 
 **Parameters**
 
-- `ptOrRect` (`PtLikeIterable | PtLike`) — a target area to place the image. Either a PtLike specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left position, bottom-right position) that specifies a bounding box. Default is (0,0) at top-left.
+- `ptOrRect` (`PtLike | PtLikeIterable`) — a target area to place the image. Either a PtLike specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left position, bottom-right position) that specifies a bounding box. Default is (0,0) at top-left.
 - `img` (`Img | CanvasImageSource`) — either an [Img](#image-img) instance or an [`CanvasImageSource`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource) instance (eg the image from `<img>`, `<video>` or `<canvas>`)
 - `orig` (`PtLikeIterable`) — optionally a Group or an Iterable<PtLike> with 2 Pt (top-left position, bottom-right position) that specifies a cropping box  in the original target.
 
@@ -450,14 +451,14 @@ Draw an image.
 ##### `imageData`
 
 ```ts
-imageData(ptOrRect: PtLikeIterable | PtLike, img: ImageData): CanvasForm
+imageData(ptOrRect: PtLike | PtLikeIterable, img: ImageData): CanvasForm
 ```
 
 Draw ImageData on canvas using ImageData
 
 **Parameters**
 
-- `ptOrRect` (`PtLikeIterable | PtLike`) — a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a bounding box for resizing. Default is (0,0) at top-left.
+- `ptOrRect` (`PtLike | PtLikeIterable`) — a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a bounding box for resizing. Default is (0,0) at top-left.
 - `img` (`ImageData`) — an ImageData object
 
 <a id="canvas-canvasform-line"></a>
@@ -750,7 +751,7 @@ A static function to draw an ellipse.
 *static*
 
 ```ts
-static image(ctx: RenderingContext2D, ptOrRect: PtLikeIterable | PtLike, img: Img | CanvasImageSource, orig: PtLikeIterable): void
+static image(ctx: RenderingContext2D, ptOrRect: PtLike | PtLikeIterable, img: Img | CanvasImageSource, orig: PtLikeIterable): void
 ```
 
 A static function to draw an image.
@@ -758,7 +759,7 @@ A static function to draw an image.
 **Parameters**
 
 - `ctx` (`RenderingContext2D`) — canvas rendering context
-- `ptOrRect` (`PtLikeIterable | PtLike`) — a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a bounding box for resizing. Default is (0,0) at top-left.
+- `ptOrRect` (`PtLike | PtLikeIterable`) — a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a bounding box for resizing. Default is (0,0) at top-left.
 - `img` (`Img | CanvasImageSource`) — either an [Img](#image-img) instance or an [`CanvasImageSource`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource) instance (eg the image from `<img>`, `<video>` or `<canvas>`)
 - `orig` (`PtLikeIterable`) — optionally a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that specifies a cropping box in the original target.
 
@@ -768,7 +769,7 @@ A static function to draw an image.
 *static*
 
 ```ts
-static imageData(ctx: RenderingContext2D, ptOrRect: PtLikeIterable | PtLike, img: ImageData): void
+static imageData(ctx: RenderingContext2D, ptOrRect: PtLike | PtLikeIterable, img: ImageData): void
 ```
 
 A static function to draw ImageData on canvas
@@ -776,7 +777,7 @@ A static function to draw ImageData on canvas
 **Parameters**
 
 - `ctx` (`RenderingContext2D`) — canvas rendering context
-- `ptOrRect` (`PtLikeIterable | PtLike`) — a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that places a region of the image data of that size at that position. Note that `putImageData` cannot resize: the rect clips, not scales. Default is (0,0) at top-left.
+- `ptOrRect` (`PtLike | PtLikeIterable`) — a target area to place the image. Either a Pt or numeric array specifying a position, or a Group or an Iterable<PtLike> with 2 Pt (top-left, bottom-right) that places a region of the image data of that size at that position. Note that `putImageData` cannot resize: the rect clips, not scales. Default is (0,0) at top-left.
 - `img` (`ImageData`) — an ImageData object
 
 <a id="canvas-canvasform-static-line"></a>
@@ -1174,7 +1175,7 @@ space.setup({ bgcolor: "#f00", retina: true, resize: true })
 #### Inherited API
 
 - From [`Space`](#space-space): [`center`](#space-space-center), [`customRendering`](#space-space-custom-rendering), [`height`](#space-space-height), [`innerBound`](#space-space-inner-bound), [`isPlaying`](#space-space-is-playing), [`outerBound`](#space-space-outer-bound), [`size`](#space-space-size), [`width`](#space-space-width), [`add`](#space-space-add), [`minFrameTime`](#space-space-min-frame-time), [`pause`](#space-space-pause), [`play`](#space-space-play), [`playOnce`](#space-space-play-once), [`refresh`](#space-space-refresh), [`remove`](#space-space-remove), [`removeAll`](#space-space-remove-all), [`render`](#space-space-render), [`replay`](#space-space-replay), [`resume`](#space-space-resume), [`stop`](#space-space-stop), [`bound`](#space-space-bound), [`id`](#space-space-id), [`playerCount`](#space-space-player-count), [`players`](#space-space-players).
-- From [`MultiTouchSpace`](#space-multitouchspace): [`pointer`](#space-multitouchspace-pointer), [`bindCanvas`](#space-multitouchspace-bind-canvas), [`bindDoc`](#space-multitouchspace-bind-doc), [`bindKeyboard`](#space-multitouchspace-bind-keyboard), [`bindMouse`](#space-multitouchspace-bind-mouse), [`bindTouch`](#space-multitouchspace-bind-touch), [`touchesToPoints`](#space-multitouchspace-touches-to-points), [`unbindCanvas`](#space-multitouchspace-unbind-canvas), [`unbindDoc`](#space-multitouchspace-unbind-doc).
+- From [`MultiTouchSpace`](#space-multitouchspace): [`pointer`](#space-multitouchspace-pointer), [`bindCanvas`](#space-multitouchspace-bind-canvas), [`bindDoc`](#space-multitouchspace-bind-doc), [`bindKeyboard`](#space-multitouchspace-bind-keyboard), [`bindMouse`](#space-multitouchspace-bind-mouse), [`bindTouch`](#space-multitouchspace-bind-touch), [`touchesToPoints`](#space-multitouchspace-touches-to-points), [`track`](#space-multitouchspace-track), [`unbindCanvas`](#space-multitouchspace-unbind-canvas), [`unbindDoc`](#space-multitouchspace-unbind-doc), [`untrack`](#space-multitouchspace-untrack).
 
 <a id="module-color"></a>
 ## Module: `Color`
@@ -2701,7 +2702,7 @@ id: string
 #### Inherited API
 
 - From [`Space`](#space-space): [`center`](#space-space-center), [`customRendering`](#space-space-custom-rendering), [`height`](#space-space-height), [`innerBound`](#space-space-inner-bound), [`isPlaying`](#space-space-is-playing), [`outerBound`](#space-space-outer-bound), [`size`](#space-space-size), [`width`](#space-space-width), [`add`](#space-space-add), [`minFrameTime`](#space-space-min-frame-time), [`pause`](#space-space-pause), [`play`](#space-space-play), [`playItems`](#space-space-play-items), [`playOnce`](#space-space-play-once), [`refresh`](#space-space-refresh), [`remove`](#space-space-remove), [`removeAll`](#space-space-remove-all), [`render`](#space-space-render), [`replay`](#space-space-replay), [`resume`](#space-space-resume), [`stop`](#space-space-stop), [`bound`](#space-space-bound), [`playerCount`](#space-space-player-count), [`players`](#space-space-players).
-- From [`MultiTouchSpace`](#space-multitouchspace): [`pointer`](#space-multitouchspace-pointer), [`bindCanvas`](#space-multitouchspace-bind-canvas), [`bindDoc`](#space-multitouchspace-bind-doc), [`bindKeyboard`](#space-multitouchspace-bind-keyboard), [`bindMouse`](#space-multitouchspace-bind-mouse), [`bindTouch`](#space-multitouchspace-bind-touch), [`touchesToPoints`](#space-multitouchspace-touches-to-points), [`unbindCanvas`](#space-multitouchspace-unbind-canvas), [`unbindDoc`](#space-multitouchspace-unbind-doc).
+- From [`MultiTouchSpace`](#space-multitouchspace): [`pointer`](#space-multitouchspace-pointer), [`bindCanvas`](#space-multitouchspace-bind-canvas), [`bindDoc`](#space-multitouchspace-bind-doc), [`bindKeyboard`](#space-multitouchspace-bind-keyboard), [`bindMouse`](#space-multitouchspace-bind-mouse), [`bindTouch`](#space-multitouchspace-bind-touch), [`touchesToPoints`](#space-multitouchspace-touches-to-points), [`track`](#space-multitouchspace-track), [`unbindCanvas`](#space-multitouchspace-unbind-canvas), [`unbindDoc`](#space-multitouchspace-unbind-doc), [`untrack`](#space-multitouchspace-untrack).
 
 <a id="dom-htmlform"></a>
 ### `HTMLForm`
@@ -3358,7 +3359,7 @@ A static function to add a DOM element inside a node. Usually you don't need to 
 
 - From [`DOMSpace`](#dom-domspace): [`constructor`](#dom-domspace-constructor), [`autoResize`](#dom-domspace-auto-resize), [`background`](#dom-domspace-background), [`element`](#dom-domspace-element), [`parent`](#dom-domspace-parent), [`ready`](#dom-domspace-ready), [`clear`](#dom-domspace-clear), [`dispose`](#dom-domspace-dispose), [`resize`](#dom-domspace-resize), [`setup`](#dom-domspace-setup), [`style`](#dom-domspace-style), [`styles`](#dom-domspace-styles), [`createElement`](#dom-domspace-static-create-element), [`getInlineStyles`](#dom-domspace-static-get-inline-styles), [`setAttr`](#dom-domspace-static-set-attr), [`id`](#dom-domspace-id).
 - From [`Space`](#space-space): [`center`](#space-space-center), [`customRendering`](#space-space-custom-rendering), [`height`](#space-space-height), [`innerBound`](#space-space-inner-bound), [`isPlaying`](#space-space-is-playing), [`outerBound`](#space-space-outer-bound), [`size`](#space-space-size), [`width`](#space-space-width), [`add`](#space-space-add), [`minFrameTime`](#space-space-min-frame-time), [`pause`](#space-space-pause), [`play`](#space-space-play), [`playItems`](#space-space-play-items), [`playOnce`](#space-space-play-once), [`refresh`](#space-space-refresh), [`render`](#space-space-render), [`replay`](#space-space-replay), [`resume`](#space-space-resume), [`stop`](#space-space-stop), [`bound`](#space-space-bound), [`playerCount`](#space-space-player-count), [`players`](#space-space-players).
-- From [`MultiTouchSpace`](#space-multitouchspace): [`pointer`](#space-multitouchspace-pointer), [`bindCanvas`](#space-multitouchspace-bind-canvas), [`bindDoc`](#space-multitouchspace-bind-doc), [`bindKeyboard`](#space-multitouchspace-bind-keyboard), [`bindMouse`](#space-multitouchspace-bind-mouse), [`bindTouch`](#space-multitouchspace-bind-touch), [`touchesToPoints`](#space-multitouchspace-touches-to-points), [`unbindCanvas`](#space-multitouchspace-unbind-canvas), [`unbindDoc`](#space-multitouchspace-unbind-doc).
+- From [`MultiTouchSpace`](#space-multitouchspace): [`pointer`](#space-multitouchspace-pointer), [`bindCanvas`](#space-multitouchspace-bind-canvas), [`bindDoc`](#space-multitouchspace-bind-doc), [`bindKeyboard`](#space-multitouchspace-bind-keyboard), [`bindMouse`](#space-multitouchspace-bind-mouse), [`bindTouch`](#space-multitouchspace-bind-touch), [`touchesToPoints`](#space-multitouchspace-touches-to-points), [`track`](#space-multitouchspace-track), [`unbindCanvas`](#space-multitouchspace-unbind-canvas), [`unbindDoc`](#space-multitouchspace-unbind-doc), [`untrack`](#space-multitouchspace-untrack).
 
 <a id="module-form"></a>
 ## Module: `Form`
@@ -10681,6 +10682,23 @@ A convenient method to convert the touch points in a touch event to an array of 
 
 **Returns:** an array of Pt, whose origin position (0,0) is offset to the top-left of this space
 
+<a id="space-multitouchspace-track"></a>
+##### `track`
+
+```ts
+track(uis: UI | UI[]): this
+```
+
+Track one or more [`UI`](#ui-ui) elements: every pointer, touch, and keyboard
+action dispatched by this space is forwarded to them via [`UI.track`](#ui-ui-static-track),
+so no manual `action` wiring is needed. Remember to also bind the events,
+eg via [`MultiTouchSpace.bindMouse`](#space-multitouchspace-bind-mouse). Keyboard actions are forwarded
+too (their x/y carry the shift/alt flags, as the space dispatches them).
+
+**Parameters**
+
+- `uis` (`UI | UI[]`) — a UI, or an array of UIs
+
 <a id="space-multitouchspace-unbind-canvas"></a>
 ##### `unbindCanvas`
 
@@ -10709,6 +10727,19 @@ unbindDoc(evt: string, callback: EventListener, options: any = {}): void
 - `evt` (`string`)
 - `callback` (`EventListener`)
 - `options` (`any`; default `{}`)
+
+<a id="space-multitouchspace-untrack"></a>
+##### `untrack`
+
+```ts
+untrack(uis: UI | UI[]): this
+```
+
+Stop tracking one or more [`UI`](#ui-ui) elements added via [`MultiTouchSpace.track`](#space-multitouchspace-track).
+
+**Parameters**
+
+- `uis` (`UI | UI[]`) — a UI or an array of UIs to remove from tracking, or omit to stop tracking all
 
 #### Inherited API
 
@@ -12099,7 +12130,7 @@ A static function to add a svg element inside a node. Usually you don't need to 
 
 - From [`DOMSpace`](#dom-domspace): [`autoResize`](#dom-domspace-auto-resize), [`background`](#dom-domspace-background), [`parent`](#dom-domspace-parent), [`ready`](#dom-domspace-ready), [`setup`](#dom-domspace-setup), [`style`](#dom-domspace-style), [`styles`](#dom-domspace-styles), [`createElement`](#dom-domspace-static-create-element), [`getInlineStyles`](#dom-domspace-static-get-inline-styles), [`setAttr`](#dom-domspace-static-set-attr), [`id`](#dom-domspace-id).
 - From [`Space`](#space-space): [`center`](#space-space-center), [`customRendering`](#space-space-custom-rendering), [`height`](#space-space-height), [`innerBound`](#space-space-inner-bound), [`isPlaying`](#space-space-is-playing), [`outerBound`](#space-space-outer-bound), [`size`](#space-space-size), [`width`](#space-space-width), [`add`](#space-space-add), [`minFrameTime`](#space-space-min-frame-time), [`pause`](#space-space-pause), [`play`](#space-space-play), [`playOnce`](#space-space-play-once), [`render`](#space-space-render), [`replay`](#space-space-replay), [`resume`](#space-space-resume), [`stop`](#space-space-stop), [`bound`](#space-space-bound), [`playerCount`](#space-space-player-count), [`players`](#space-space-players).
-- From [`MultiTouchSpace`](#space-multitouchspace): [`pointer`](#space-multitouchspace-pointer), [`bindCanvas`](#space-multitouchspace-bind-canvas), [`bindDoc`](#space-multitouchspace-bind-doc), [`bindKeyboard`](#space-multitouchspace-bind-keyboard), [`bindMouse`](#space-multitouchspace-bind-mouse), [`bindTouch`](#space-multitouchspace-bind-touch), [`touchesToPoints`](#space-multitouchspace-touches-to-points), [`unbindCanvas`](#space-multitouchspace-unbind-canvas), [`unbindDoc`](#space-multitouchspace-unbind-doc).
+- From [`MultiTouchSpace`](#space-multitouchspace): [`pointer`](#space-multitouchspace-pointer), [`bindCanvas`](#space-multitouchspace-bind-canvas), [`bindDoc`](#space-multitouchspace-bind-doc), [`bindKeyboard`](#space-multitouchspace-bind-keyboard), [`bindMouse`](#space-multitouchspace-bind-mouse), [`bindTouch`](#space-multitouchspace-bind-touch), [`touchesToPoints`](#space-multitouchspace-touches-to-points), [`track`](#space-multitouchspace-track), [`unbindCanvas`](#space-multitouchspace-unbind-canvas), [`unbindDoc`](#space-multitouchspace-unbind-doc), [`untrack`](#space-multitouchspace-untrack).
 
 <a id="module-typography"></a>
 ## Module: `Typography`
@@ -12228,7 +12259,7 @@ Truncate text to fit width. The result is guaranteed to fit: the largest prefix 
 <a id="ui-ui"></a>
 ### `UI`
 
-**Kind:** Class · **Source:** [`src/UI.ts:50`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L50)
+**Kind:** Class · **Source:** [`src/UI.ts:76`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L76)
 
 **[Experimental]** An abstract class that represents an UI element. It wraps a [`Group`](#pt-group) and supports UI event handling.
 Extend this class to create custom UI elements.
@@ -12285,6 +12316,19 @@ A string that describes this UI's shape.
 
 #### Methods
 
+<a id="ui-ui-get-state"></a>
+##### `getState`
+
+```ts
+getState(key: string): T
+```
+
+Get a specific UI state. Unlike [`UI.state`](#ui-ui-state), this is a plain typed getter.
+
+**Parameters**
+
+- `key` (`string`) — state's name
+
 <a id="ui-ui-hold"></a>
 ##### `hold`
 
@@ -12304,14 +12348,14 @@ Continue to keep track of an actions even if it's not within this UI. Useful for
 ##### `listen`
 
 ```ts
-listen(type: string, p: PtLike, evt: MouseEvent): boolean
+listen(type: UIPointerAction | string & , p: PtLike, evt: MouseEvent): boolean
 ```
 
 Listen for UI events and trigger action handlers.
 
 **Parameters**
 
-- `type` (`string`) — an action type. Can be one of UIPointerActions or a custom one.
+- `type` (`UIPointerAction | string & `) — an action type. Can be one of UIPointerActions or a custom one.
 - `p` (`PtLike`) — a point to check
 - `evt` (`MouseEvent`) — a MouseEvent emitted by the browser (See [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent))
 
@@ -12319,31 +12363,32 @@ Listen for UI events and trigger action handlers.
 ##### `off`
 
 ```ts
-off(type: string, which: number): boolean
+off(type: UIPointerAction | string & , which: number): boolean
 ```
 
 Remove an event handler.
 
 **Parameters**
 
-- `type` (`string`) — event type
-- `which` (`number`) — an ID number returned by [`UI.on`](#ui-ui-on). If this is not defined, all handlers in this type will be removed.
+- `type` (`UIPointerAction | string & `) — event type
+- `which` (`number`) — an ID number returned by [`UI.on`](#ui-ui-on). If this is not defined, all handlers in this type will be removed (built-in machinery like UIButton's click counting is unaffected). Note that after removal an id is stale — removing it twice may affect a handler that has since reused the slot.
 
 <a id="ui-ui-on"></a>
 ##### `on`
 
 ```ts
-on(type: string, fn: UIHandler): number
+on(type: UIPointerAction | string & , fn: UIHandler, options: { once:boolean, signal:AbortSignal }): number
 ```
 
-Add an event handler. Remember this UI will also need to be tracked for events via `UI.track`.
+Add an event handler. Remember this UI will also need to be tracked for events, via `UI.track` or [`MultiTouchSpace.track`](#space-multitouchspace-track).
 
 **Parameters**
 
-- `type` (`string`) — event type
+- `type` (`UIPointerAction | string & `) — event type, either one of [`UIPointerActions`](#ui-uipointeractions) or a custom type
 - `fn` (`UIHandler`) — a [`UIHandler`](#types-uihandler) callback function: `fn( target:UI, pt:Pt, type:string, evt:MouseEvent )`
+- `options` (`{ once:boolean, signal:AbortSignal }`) — optionally `{ once }` to remove the handler after its first call, and/or `{ signal }` with an [`AbortSignal`](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal) that removes it on abort (an already-aborted signal registers nothing)
 
-**Returns:** an id number that reference to this handler, for use in [`UI.off`](#ui-ui-off)
+**Returns:** an id number that reference to this handler, for use in [`UI.off`](#ui-ui-off), or -1 if nothing was registered
 
 <a id="ui-ui-render"></a>
 ##### `render`
@@ -12357,6 +12402,20 @@ Take a custom render function to render this UI.
 **Parameters**
 
 - `fn` (` Fn(group:Group, states:)`) — a render function
+
+<a id="ui-ui-set-state"></a>
+##### `setState`
+
+```ts
+setState(key: string, value: any): this
+```
+
+Set a specific UI state. Unlike [`UI.state`](#ui-ui-state), this can also store `undefined`.
+
+**Parameters**
+
+- `key` (`string`) — state's name
+- `value` (`any`) — the value to set
 
 <a id="ui-ui-state"></a>
 ##### `state`
@@ -12464,6 +12523,23 @@ A static helper function to create a new UI based on another UI.
 - `states` (`object`) — optional a state object keep track of custom states for this UI
 - `id` (`string`)
 
+<a id="ui-ui-static-register-shape"></a>
+##### `registerShape`
+
+*static*
+
+```ts
+static registerShape(shape: string, fn: UIShapeTest): void
+```
+
+Register a custom shape hit test, or override a built-in one. The shape
+name can then be used when constructing a UI.
+
+**Parameters**
+
+- `shape` (`string`) — shape name
+- `fn` (`UIShapeTest`) — a function `(group, pt, states) => boolean` that returns whether the point hits the shape
+
 <a id="ui-ui-static-track"></a>
 ##### `track`
 
@@ -12485,7 +12561,7 @@ A static function to listen for a list of UIs. See also [`UI.listen`](#ui-ui-lis
 <a id="ui-uibutton"></a>
 ### `UIButton`
 
-**Kind:** Class · **Source:** [`src/UI.ts:331`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L331)
+**Kind:** Class · **Source:** [`src/UI.ts:440`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L440)
 
 **Extends:** `UI`
 
@@ -12607,12 +12683,12 @@ Add handlers for hover events. Remember this button will also need to be tracked
 
 #### Inherited API
 
-- From [`UI`](#ui-ui): [`group`](#ui-ui-group), [`id`](#ui-ui-id), [`shape`](#ui-ui-shape), [`hold`](#ui-ui-hold), [`listen`](#ui-ui-listen), [`off`](#ui-ui-off), [`on`](#ui-ui-on), [`render`](#ui-ui-render), [`state`](#ui-ui-state), [`toString`](#ui-ui-to-string), [`unhold`](#ui-ui-unhold), [`fromCircle`](#ui-ui-static-from-circle), [`fromPolygon`](#ui-ui-static-from-polygon), [`fromRectangle`](#ui-ui-static-from-rectangle), [`fromUI`](#ui-ui-static-from-ui), [`track`](#ui-ui-static-track).
+- From [`UI`](#ui-ui): [`group`](#ui-ui-group), [`id`](#ui-ui-id), [`shape`](#ui-ui-shape), [`getState`](#ui-ui-get-state), [`hold`](#ui-ui-hold), [`listen`](#ui-ui-listen), [`off`](#ui-ui-off), [`on`](#ui-ui-on), [`render`](#ui-ui-render), [`setState`](#ui-ui-set-state), [`state`](#ui-ui-state), [`toString`](#ui-ui-to-string), [`unhold`](#ui-ui-unhold), [`fromCircle`](#ui-ui-static-from-circle), [`fromPolygon`](#ui-ui-static-from-polygon), [`fromRectangle`](#ui-ui-static-from-rectangle), [`fromUI`](#ui-ui-static-from-ui), [`registerShape`](#ui-ui-static-register-shape), [`track`](#ui-ui-static-track).
 
 <a id="ui-uidragger"></a>
 ### `UIDragger`
 
-**Kind:** Class · **Source:** [`src/UI.ts:456`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L456)
+**Kind:** Class · **Source:** [`src/UI.ts:568`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L568)
 
 **Extends:** `UIButton`
 
@@ -12702,13 +12778,13 @@ Add a new drop handler. Remember this button will also need to be tracked for ev
 
 #### Inherited API
 
-- From [`UI`](#ui-ui): [`group`](#ui-ui-group), [`id`](#ui-ui-id), [`shape`](#ui-ui-shape), [`hold`](#ui-ui-hold), [`listen`](#ui-ui-listen), [`off`](#ui-ui-off), [`on`](#ui-ui-on), [`render`](#ui-ui-render), [`state`](#ui-ui-state), [`toString`](#ui-ui-to-string), [`unhold`](#ui-ui-unhold), [`fromCircle`](#ui-ui-static-from-circle), [`fromPolygon`](#ui-ui-static-from-polygon), [`fromRectangle`](#ui-ui-static-from-rectangle), [`fromUI`](#ui-ui-static-from-ui), [`track`](#ui-ui-static-track).
+- From [`UI`](#ui-ui): [`group`](#ui-ui-group), [`id`](#ui-ui-id), [`shape`](#ui-ui-shape), [`getState`](#ui-ui-get-state), [`hold`](#ui-ui-hold), [`listen`](#ui-ui-listen), [`off`](#ui-ui-off), [`on`](#ui-ui-on), [`render`](#ui-ui-render), [`setState`](#ui-ui-set-state), [`state`](#ui-ui-state), [`toString`](#ui-ui-to-string), [`unhold`](#ui-ui-unhold), [`fromCircle`](#ui-ui-static-from-circle), [`fromPolygon`](#ui-ui-static-from-polygon), [`fromRectangle`](#ui-ui-static-from-rectangle), [`fromUI`](#ui-ui-static-from-ui), [`registerShape`](#ui-ui-static-register-shape), [`track`](#ui-ui-static-track).
 - From [`UIButton`](#ui-uibutton): [`offClick`](#ui-uibutton-off-click), [`offContextMenu`](#ui-uibutton-off-context-menu), [`offHover`](#ui-uibutton-off-hover), [`onClick`](#ui-uibutton-on-click), [`onContextMenu`](#ui-uibutton-on-context-menu), [`onHover`](#ui-uibutton-on-hover).
 
 <a id="ui-uipointeraction"></a>
 ### `UIPointerAction`
 
-**Kind:** Typealias · **Source:** [`src/UI.ts:43`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L43)
+**Kind:** Typealias · **Source:** [`src/UI.ts:69`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L69)
 
 A known pointer, touch, or keyboard action dispatched by a Pts space.
 
@@ -12716,10 +12792,21 @@ A known pointer, touch, or keyboard action dispatched by a Pts space.
 type UIPointerAction = UIPointerActions[keyof UIPointerActions];
 ```
 
+<a id="ui-uishapetest"></a>
+### `UIShapeTest`
+
+**Kind:** Typealias · **Source:** [`src/UI.ts:8`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L8)
+
+A hit-test function for a UI shape: given the UI's group, a point, and the UI's states, return whether the point is within the shape.
+
+```ts
+type UIShapeTest =  Fn(group:Group, pt:PtLike, states:);
+```
+
 <a id="ui-uipointeractions"></a>
 ### `UIPointerActions`
 
-**Kind:** Objectliteral · **Source:** [`src/UI.ts:21`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L21)
+**Kind:** Objectliteral · **Source:** [`src/UI.ts:47`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L47)
 
 **[Experimental]** A set of string constants to represent different UI event types.
 
@@ -12890,7 +12977,7 @@ readonly up: up
 <a id="ui-uishape"></a>
 ### `UIShape`
 
-**Kind:** Objectliteral · **Source:** [`src/UI.ts:10`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L10)
+**Kind:** Objectliteral · **Source:** [`src/UI.ts:36`](https://github.com/williamngan/pts/blob/master/src/UI.ts#L36)
 
 **[Experimental]** A set of string constatns to represent different UI types, for use in [`UI`](#ui-ui) instances.
 

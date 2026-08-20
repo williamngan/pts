@@ -642,6 +642,12 @@
     8
   ],
   [
+    "Canvas_CanvasSpace#function_track",
+    "CanvasSpace.track",
+    "Function",
+    8
+  ],
+  [
     "Canvas_CanvasSpace#function_unbindCanvas",
     "CanvasSpace.unbindCanvas",
     "Function",
@@ -650,6 +656,12 @@
   [
     "Canvas_CanvasSpace#function_unbindDoc",
     "CanvasSpace.unbindDoc",
+    "Function",
+    8
+  ],
+  [
+    "Canvas_CanvasSpace#function_untrack",
+    "CanvasSpace.untrack",
     "Function",
     8
   ],
@@ -2748,6 +2760,12 @@
     8
   ],
   [
+    "Dom_DOMSpace#function_track",
+    "DOMSpace.track",
+    "Function",
+    8
+  ],
+  [
     "Dom_DOMSpace#function_unbindCanvas",
     "DOMSpace.unbindCanvas",
     "Function",
@@ -2756,6 +2774,12 @@
   [
     "Dom_DOMSpace#function_unbindDoc",
     "DOMSpace.unbindDoc",
+    "Function",
+    8
+  ],
+  [
+    "Dom_DOMSpace#function_untrack",
+    "DOMSpace.untrack",
     "Function",
     8
   ],
@@ -3336,6 +3360,12 @@
     8
   ],
   [
+    "Dom_HTMLSpace#function_track",
+    "HTMLSpace.track",
+    "Function",
+    8
+  ],
+  [
     "Dom_HTMLSpace#function_unbindCanvas",
     "HTMLSpace.unbindCanvas",
     "Function",
@@ -3344,6 +3374,12 @@
   [
     "Dom_HTMLSpace#function_unbindDoc",
     "HTMLSpace.unbindDoc",
+    "Function",
+    8
+  ],
+  [
+    "Dom_HTMLSpace#function_untrack",
+    "HTMLSpace.untrack",
     "Function",
     8
   ],
@@ -8208,6 +8244,12 @@
     8
   ],
   [
+    "Space_MultiTouchSpace#function_track",
+    "MultiTouchSpace.track",
+    "Function",
+    8
+  ],
+  [
     "Space_MultiTouchSpace#function_unbindCanvas",
     "MultiTouchSpace.unbindCanvas",
     "Function",
@@ -8216,6 +8258,12 @@
   [
     "Space_MultiTouchSpace#function_unbindDoc",
     "MultiTouchSpace.unbindDoc",
+    "Function",
+    8
+  ],
+  [
+    "Space_MultiTouchSpace#function_untrack",
+    "MultiTouchSpace.untrack",
     "Function",
     8
   ],
@@ -9414,6 +9462,12 @@
     8
   ],
   [
+    "Svg_SVGSpace#function_track",
+    "SVGSpace.track",
+    "Function",
+    8
+  ],
+  [
     "Svg_SVGSpace#function_unbindCanvas",
     "SVGSpace.unbindCanvas",
     "Function",
@@ -9422,6 +9476,12 @@
   [
     "Svg_SVGSpace#function_unbindDoc",
     "SVGSpace.unbindDoc",
+    "Function",
+    8
+  ],
+  [
+    "Svg_SVGSpace#function_untrack",
+    "SVGSpace.untrack",
     "Function",
     8
   ],
@@ -9792,6 +9852,12 @@
     6
   ],
   [
+    "UI_UI#function_getState",
+    "UI.getState",
+    "Function",
+    8
+  ],
+  [
     "UI_UI#function_hold",
     "UI.hold",
     "Function",
@@ -9818,6 +9884,12 @@
   [
     "UI_UI#function_render",
     "UI.render",
+    "Function",
+    8
+  ],
+  [
+    "UI_UI#function_setState",
+    "UI.setState",
     "Function",
     8
   ],
@@ -9864,6 +9936,12 @@
     8
   ],
   [
+    "UI_UI#function_static_registerShape",
+    "UI.registerShape",
+    "Function",
+    8
+  ],
+  [
     "UI_UI#function_static_track",
     "UI.track",
     "Function",
@@ -9898,6 +9976,12 @@
     "UIButton.shape",
     "Accessor",
     6
+  ],
+  [
+    "UI_UIButton#function_getState",
+    "UIButton.getState",
+    "Function",
+    8
   ],
   [
     "UI_UIButton#function_hold",
@@ -9966,6 +10050,12 @@
     8
   ],
   [
+    "UI_UIButton#function_setState",
+    "UIButton.setState",
+    "Function",
+    8
+  ],
+  [
     "UI_UIButton#function_state",
     "UIButton.state",
     "Function",
@@ -10008,6 +10098,12 @@
     8
   ],
   [
+    "UI_UIButton#function_static_registerShape",
+    "UIButton.registerShape",
+    "Function",
+    8
+  ],
+  [
     "UI_UIButton#function_static_track",
     "UIButton.track",
     "Function",
@@ -10042,6 +10138,12 @@
     "UIDragger.shape",
     "Accessor",
     6
+  ],
+  [
+    "UI_UIDragger#function_getState",
+    "UIDragger.getState",
+    "Function",
+    8
   ],
   [
     "UI_UIDragger#function_hold",
@@ -10134,6 +10236,12 @@
     8
   ],
   [
+    "UI_UIDragger#function_setState",
+    "UIDragger.setState",
+    "Function",
+    8
+  ],
+  [
     "UI_UIDragger#function_state",
     "UIDragger.state",
     "Function",
@@ -10176,6 +10284,12 @@
     8
   ],
   [
+    "UI_UIDragger#function_static_registerShape",
+    "UIDragger.registerShape",
+    "Function",
+    8
+  ],
+  [
     "UI_UIDragger#function_static_track",
     "UIDragger.track",
     "Function",
@@ -10190,6 +10304,12 @@
   [
     "UI_UIPointerAction",
     "UIPointerAction",
+    "Type alias",
+    0
+  ],
+  [
+    "UI_UIShapeTest",
+    "UIShapeTest",
     "Type alias",
     0
   ],

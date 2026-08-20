@@ -78,7 +78,8 @@ describe("UI", () => {
     expect(ui.listen(Action.move, [5, 5], evt)).toBe(true);
     expect(hit).toHaveBeenCalledOnce();
     expect(ui.listen(Action.move, [20, 20], evt)).toBe(true);
-    expect(all).toHaveBeenCalledOnce();
+    // "all" observes every event: the within move and the outside move
+    expect(all).toHaveBeenCalledTimes(2);
 
     UI.track([ui], Action.move, [2, 2], evt);
     expect(hit).toHaveBeenCalledTimes(2);
@@ -90,8 +91,8 @@ describe("UI", () => {
     expect(ui.on(Action.up, undefined)).toBe(-1);
   });
 
-  it("rejects points for unsupported shapes", () => {
-    const ui = new UI(rect(), UIShape.line);
+  it("rejects points for unregistered shapes", () => {
+    const ui = new UI(rect(), "unregistered-shape");
     const fn = vi.fn();
     ui.on(Action.down, fn);
     expect(ui.listen(Action.down, [1, 1], evt)).toBe(false);
@@ -164,5 +165,180 @@ describe("UIDragger", () => {
     dragger.listen(Action.down, [1, 1], evt);
     dragger.listen(Action.out, [1, 1], evt);
     expect(dragger.state("dragging")).toBe(false);
+  });
+});
+
+describe("UI correctness pins", () => {
+  it("keeps handler ids stable across removals", () => {
+    const u = UI.fromRectangle(rect(), {});
+    const calls: string[] = [];
+    const idA = u.on("move", () => calls.push("A"));
+    const idB = u.on("move", () => calls.push("B"));
+    expect(u.off("move", idA)).toBe(true);
+    expect(u.off("move", idB)).toBe(true);
+    u.listen("move", new Pt(5, 5), evt);
+    expect(calls).toEqual([]);
+
+    // re-registering after removals still dispatches
+    u.on("move", () => calls.push("C"));
+    u.listen("move", new Pt(5, 5), evt);
+    expect(calls).toEqual(["C"]);
+  });
+
+  it("fires 'all' handlers for every event, standalone or alongside types", () => {
+    const u = UI.fromRectangle(rect(), {});
+    const seen: string[] = [];
+    u.on("all", (t, p, type) => seen.push(`all:${type}`));
+    u.listen("move", new Pt(5, 5), evt);
+    u.listen("down", new Pt(500, 500), evt); // outside, still reported
+    expect(seen).toEqual(["all:move", "all:down"]);
+
+    u.on("move", () => seen.push("move"));
+    u.listen("move", new Pt(5, 5), evt);
+    // type handlers first, then the "all" observers
+    expect(seen.slice(2)).toEqual(["move", "all:move"]);
+  });
+
+  it("delivers the current position to hover leave handlers", () => {
+    const b = UIButton.fromRectangle(rect(), {}) as UIButton;
+    const positions: { enter?: number[]; leave?: number[] } = {};
+    b.onHover(
+      (t, pt) => (positions.enter = [pt[0], pt[1]]),
+      (t, pt) => (positions.leave = [pt[0], pt[1]]),
+    );
+    b.listen("move", new Pt(2, 3), evt);
+    b.listen("move", new Pt(500, 600), evt);
+    expect(positions.enter).toEqual([2, 3]);
+    expect(positions.leave).toEqual([500, 600]);
+    expect(b.state("hover")).toBe(false);
+  });
+
+  it("renders a readable toString", () => {
+    const u = UI.fromRectangle(rect(), {}, "pin-id");
+    expect(u.toString()).not.toContain("{");
+    expect(u.toString()).toContain("UI");
+  });
+
+  it("isolates states in fromUI copies", () => {
+    const base = UI.fromRectangle(rect(), { n: 1 });
+    const copy = UI.fromUI(base);
+    copy.state("n", 99);
+    expect(base.state("n")).toBe(1);
+    expect(copy.state("n")).toBe(99);
+  });
+
+  it("runs a full drag scenario through listen()", () => {
+    const d = UIDragger.fromRectangle(rect(), {}) as UIDragger;
+    let drags = 0;
+    let drops = 0;
+    d.onDrag(() => drags++);
+    d.onDrop(() => drops++);
+
+    // click without moving: no uidrop
+    d.listen("down", new Pt(5, 5), evt);
+    d.listen("up", new Pt(5, 5), evt);
+    expect(drops).toBe(0);
+    expect(d.state("dragging")).toBe(false);
+
+    // drag inside, outside (held), then drop
+    d.listen("down", new Pt(5, 5), evt);
+    expect(d.state("dragging")).toBe(true);
+    d.listen("move", new Pt(8, 8), evt);
+    d.listen("move", new Pt(300, 300), evt); // outside but held
+    expect(drags).toBe(2);
+    d.listen("drop", new Pt(300, 300), evt);
+    expect(drops).toBe(1);
+    expect(d.state("dragging")).toBe(false);
+    expect(d.state("moved")).toBe(false);
+  });
+});
+
+describe("UI API modernization", () => {
+  it("supports once and AbortSignal options on handlers", () => {
+    const u = UI.fromRectangle(rect(), {});
+    let onceCount = 0;
+    u.on("move", () => onceCount++, { once: true });
+    u.listen("move", new Pt(5, 5), evt);
+    u.listen("move", new Pt(5, 5), evt);
+    expect(onceCount).toBe(1);
+
+    const ac = new AbortController();
+    let signaled = 0;
+    u.on("move", () => signaled++, { signal: ac.signal });
+    u.listen("move", new Pt(5, 5), evt);
+    ac.abort();
+    u.listen("move", new Pt(5, 5), evt);
+    expect(signaled).toBe(1);
+
+    // an already-aborted signal registers nothing
+    const dead = new AbortController();
+    dead.abort();
+    let never = 0;
+    u.on("move", () => never++, { signal: dead.signal });
+    u.listen("move", new Pt(5, 5), evt);
+    expect(never).toBe(0);
+  });
+
+  it("hit-tests line and polyline shapes and supports custom shapes", () => {
+    const line = new UI(
+      [
+        [0, 0],
+        [100, 0],
+      ],
+      UIShape.line,
+    );
+    let hits = 0;
+    line.on("move", () => hits++);
+    line.listen("move", new Pt(50, 3), evt); // within default threshold 5
+    line.listen("move", new Pt(50, 30), evt); // beyond
+    expect(hits).toBe(1);
+
+    const poly = new UI(
+      [
+        [0, 0],
+        [100, 0],
+        [100, 100],
+      ],
+      UIShape.polyline,
+      { lineThreshold: 10 },
+    );
+    let polyHits = 0;
+    poly.on("move", () => polyHits++);
+    poly.listen("move", new Pt(100, 50), evt); // near second segment
+    poly.listen("move", new Pt(50, 50), evt); // far from both
+    expect(polyHits).toBe(1);
+
+    UI.registerShape("everywhere", () => true);
+    const custom = new UI([[0, 0]], "everywhere");
+    let customHits = 0;
+    custom.on("move", () => customHits++);
+    custom.listen("move", new Pt(9999, 9999), evt);
+    expect(customHits).toBe(1);
+  });
+
+  it("keeps built-in machinery when a type's handlers are cleared", () => {
+    const b = UIButton.fromRectangle(rect(), {}) as UIButton;
+    b.onClick(() => {});
+    b.off("up"); // clears user click handlers
+    b.listen("up", new Pt(5, 5), evt);
+    // the internal click counter still works
+    expect(b.state("clicks")).toBe(1);
+
+    const d = UIDragger.fromRectangle(rect(), {}) as UIDragger;
+    d.off("down");
+    d.off("up");
+    d.listen("down", new Pt(5, 5), evt);
+    expect(d.state("dragging")).toBe(true);
+    d.listen("up", new Pt(5, 5), evt);
+    expect(d.state("dragging")).toBe(false);
+  });
+
+  it("provides typed getState and setState", () => {
+    const u = UI.fromRectangle(rect(), { n: 1 });
+    expect(u.getState<number>("n")).toBe(1);
+    expect(u.setState("n", 2)).toBe(u);
+    expect(u.getState<number>("n")).toBe(2);
+    u.setState("maybe", undefined);
+    expect(u.getState("maybe")).toBeUndefined();
   });
 });

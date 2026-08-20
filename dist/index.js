@@ -2481,7 +2481,89 @@ var Bound = class Bound extends Group {
 };
 
 //#endregion
+//#region \0@oxc-project+runtime@0.143.0/helpers/esm/typeof.js
+function _typeof(o) {
+	"@babel/helpers - typeof";
+	return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(o) {
+		return typeof o;
+	} : function(o) {
+		return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
+	}, _typeof(o);
+}
+
+//#endregion
+//#region \0@oxc-project+runtime@0.143.0/helpers/esm/toPrimitive.js
+function toPrimitive(t, r) {
+	if ("object" != _typeof(t) || !t) return t;
+	var e = t[Symbol.toPrimitive];
+	if (void 0 !== e) {
+		var i = e.call(t, r || "default");
+		if ("object" != _typeof(i)) return i;
+		throw new TypeError("@@toPrimitive must return a primitive value.");
+	}
+	return ("string" === r ? String : Number)(t);
+}
+
+//#endregion
+//#region \0@oxc-project+runtime@0.143.0/helpers/esm/toPropertyKey.js
+function toPropertyKey(t) {
+	var i = toPrimitive(t, "string");
+	return "symbol" == _typeof(i) ? i : i + "";
+}
+
+//#endregion
+//#region \0@oxc-project+runtime@0.143.0/helpers/esm/defineProperty.js
+function _defineProperty(e, r, t) {
+	return (r = toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
+		value: t,
+		enumerable: !0,
+		configurable: !0,
+		writable: !0
+	}) : e[r] = t, e;
+}
+
+//#endregion
+//#region \0@oxc-project+runtime@0.143.0/helpers/esm/objectSpread2.js
+function ownKeys(e, r) {
+	var t = Object.keys(e);
+	if (Object.getOwnPropertySymbols) {
+		var o = Object.getOwnPropertySymbols(e);
+		r && (o = o.filter(function(r) {
+			return Object.getOwnPropertyDescriptor(e, r).enumerable;
+		})), t.push.apply(t, o);
+	}
+	return t;
+}
+function _objectSpread2(e) {
+	for (var r = 1; r < arguments.length; r++) {
+		var t = null != arguments[r] ? arguments[r] : {};
+		r % 2 ? ownKeys(Object(t), !0).forEach(function(r) {
+			_defineProperty(e, r, t[r]);
+		}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function(r) {
+			Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
+		});
+	}
+	return e;
+}
+
+//#endregion
 //#region src/UI.ts
+const _shapeTests = {
+	rectangle: (group, pt) => Rectangle.withinBound(group, pt),
+	circle: (group, pt) => Circle.withinBound(group, pt),
+	polygon: (group, pt) => Polygon.hasIntersectPoint(group, pt),
+	line: (group, pt, states) => {
+		var _states$lineThreshold;
+		const threshold = (_states$lineThreshold = states.lineThreshold) !== null && _states$lineThreshold !== void 0 ? _states$lineThreshold : 5;
+		return Line.distanceFromPt(group, pt) <= threshold;
+	},
+	polyline: (group, pt, states) => {
+		var _states$lineThreshold2;
+		const threshold = (_states$lineThreshold2 = states.lineThreshold) !== null && _states$lineThreshold2 !== void 0 ? _states$lineThreshold2 : 5;
+		for (let i = 0, len = group.length - 1; i < len; i++) if (Line.distanceFromPt([group[i], group[i + 1]], pt) <= threshold) return true;
+		return false;
+	}
+};
 const UIShape = {
 	rectangle: "rectangle",
 	circle: "circle",
@@ -2517,6 +2599,10 @@ var UI = class UI {
 		this._id = id === void 0 ? `ui_${UI._counter++}` : id;
 		this._states = states;
 		this._actions = {};
+		this._sysActions = {};
+	}
+	static registerShape(shape, fn) {
+		_shapeTests[shape] = fn;
 	}
 	static fromRectangle(group, states, id) {
 		return new this(group, UIShape.rectangle, states, id);
@@ -2528,7 +2614,7 @@ var UI = class UI {
 		return new this(group, UIShape.polygon, states, id);
 	}
 	static fromUI(ui, states, id) {
-		return new this(ui.group, ui.shape, states || ui._states, id);
+		return new this(ui.group, ui.shape, states || _objectSpread2({}, ui._states), id);
 	}
 	get id() {
 		return this._id;
@@ -2556,9 +2642,27 @@ var UI = class UI {
 		}
 		return this._states[key];
 	}
-	on(type, fn) {
+	getState(key) {
+		return this._states[key];
+	}
+	setState(key, value) {
+		this._states[key] = value;
+		return this;
+	}
+	on(type, fn, options) {
+		var _options$signal;
+		if (!fn) return -1;
+		if (options === null || options === void 0 || (_options$signal = options.signal) === null || _options$signal === void 0 ? void 0 : _options$signal.aborted) return -1;
 		if (!this._actions[type]) this._actions[type] = [];
-		return UI._addHandler(this._actions[type], fn);
+		let handler = fn;
+		let id = -1;
+		if (options === null || options === void 0 ? void 0 : options.once) handler = (t, p, ty, e) => {
+			this.off(type, id);
+			fn(t, p, ty, e);
+		};
+		id = UI._addHandler(this._actions[type], handler);
+		if (options === null || options === void 0 ? void 0 : options.signal) options.signal.addEventListener("abort", () => this.off(type, id), { once: true });
+		return id;
 	}
 	off(type, which) {
 		if (!this._actions[type]) return false;
@@ -2568,16 +2672,38 @@ var UI = class UI {
 		} else return UI._removeHandler(this._actions[type], which);
 	}
 	listen(type, p, evt) {
-		if (this._actions[type] !== void 0) {
-			if (this._within(p) || Array.from(this._holds.values()).indexOf(type) >= 0) {
-				UI._trigger(this._actions[type], this, p, type, evt);
-				return true;
-			} else if (this._actions["all"]) {
-				UI._trigger(this._actions["all"], this, p, type, evt);
-				return true;
+		let fired = false;
+		const userActions = this._actions[type];
+		const sysActions = this._sysActions[type];
+		if (userActions || sysActions) {
+			if (this._within(p) || this._holdsType(type)) {
+				if (sysActions) {
+					UI._trigger(sysActions, this, p, type, evt);
+					fired = true;
+				}
+				if (userActions) {
+					UI._trigger(userActions, this, p, type, evt);
+					fired = true;
+				}
 			}
 		}
+		if (this._actions["all"]) {
+			UI._trigger(this._actions["all"], this, p, type, evt);
+			fired = true;
+		}
+		return fired;
+	}
+	_holdsType(type) {
+		for (const held of this._holds.values()) if (held === type) return true;
 		return false;
+	}
+	_sysOn(type, fn) {
+		if (!this._sysActions[type]) this._sysActions[type] = [];
+		return UI._addHandler(this._sysActions[type], fn);
+	}
+	_sysOff(type, which) {
+		if (!this._sysActions[type]) return false;
+		return UI._removeHandler(this._sysActions[type], which);
 	}
 	hold(type) {
 		let newKey = Math.max(0, ...Array.from(this._holds.keys())) + 1;
@@ -2595,15 +2721,12 @@ var UI = class UI {
 		fn(this._group, this._states);
 	}
 	toString() {
-		return `UI ${this.group.toString}`;
+		return `UI ${this.group.toString()}`;
 	}
 	_within(p) {
-		let fn = null;
-		if (this._shape === UIShape.rectangle) fn = Rectangle.withinBound;
-		else if (this._shape === UIShape.circle) fn = Circle.withinBound;
-		else if (this._shape === UIShape.polygon) fn = Polygon.hasIntersectPoint;
-		else return false;
-		return fn(this._group, p);
+		const fn = _shapeTests[this._shape];
+		if (!fn) return false;
+		return fn(this._group, p, this._states);
 	}
 	static _trigger(fns, target, pt, type, evt) {
 		if (fns) {
@@ -2611,17 +2734,20 @@ var UI = class UI {
 		}
 	}
 	static _addHandler(fns, fn) {
-		if (fn) {
-			fns.push(fn);
-			return fns.length - 1;
-		} else return -1;
+		if (!fn) return -1;
+		for (let i = 0, len = fns.length; i < len; i++) if (fns[i] === null) {
+			fns[i] = fn;
+			return i;
+		}
+		fns.push(fn);
+		return fns.length - 1;
 	}
 	static _removeHandler(fns, index) {
-		if (index >= 0 && index < fns.length) {
-			let temp = fns.length;
-			fns.splice(index, 1);
-			return temp > fns.length;
-		} else return false;
+		if (index >= 0 && index < fns.length && fns[index]) {
+			fns[index] = null;
+			return true;
+		}
+		return false;
 	}
 };
 UI._counter = 0;
@@ -2632,19 +2758,19 @@ var UIButton = class extends UI {
 		if (states.hover === void 0) this._states["hover"] = false;
 		if (states.clicks === void 0) this._states["clicks"] = 0;
 		const UA = UIPointerActions;
-		this.on(UA.up, (target, pt, type, evt) => {
+		this._sysOn(UA.up, () => {
 			this.state("clicks", this._states.clicks + 1);
 		});
-		this.on(UA.move, (target, pt, type, evt) => {
+		this._sysOn(UA.move, (target, pt, type, evt) => {
 			if (this._within(pt) && !this._states.hover) {
 				this.state("hover", true);
 				UI._trigger(this._actions[UA.enter], this, pt, UA.enter, evt);
 				let _capID = this.hold(UA.move);
-				this._hoverID = this.on(UA.move, (t, p) => {
+				this._hoverID = this._sysOn(UA.move, (t, p, ty, e) => {
 					if (!this._within(p) && !this.state("dragging")) {
 						this.state("hover", false);
-						UI._trigger(this._actions[UA.leave], this, pt, UA.leave, evt);
-						this.off(UA.move, this._hoverID);
+						UI._trigger(this._actions[UA.leave], this, p, UA.leave, e);
+						this._sysOff(UA.move, this._hoverID);
 						this.unhold(_capID);
 					}
 				});
@@ -2687,7 +2813,7 @@ var UIDragger = class extends UIButton {
 		if (states.moved === void 0) this._states["moved"] = false;
 		if (states.offset === void 0) this._states["offset"] = new Pt();
 		const UA = UIPointerActions;
-		this.on(UA.down, (target, pt, type, evt) => {
+		this._sysOn(UA.down, (target, pt, type, evt) => {
 			if (this._moveHoldID === -1) {
 				this.state("dragging", true);
 				this.state("offset", new Pt(pt).subtract(target.group[0]));
@@ -2695,16 +2821,16 @@ var UIDragger = class extends UIButton {
 			}
 			if (this._dropHoldID === -1) this._dropHoldID = this.hold(UA.drop);
 			if (this._upHoldID === -1) this._upHoldID = this.hold(UA.up);
-			if (this._draggingID === -1) this._draggingID = this.on(UA.move, (t, p) => {
+			if (this._draggingID === -1) this._draggingID = this._sysOn(UA.move, (t, p, ty, e) => {
 				if (this.state("dragging")) {
-					UI._trigger(this._actions[UA.uidrag], t, p, UA.uidrag, evt);
+					UI._trigger(this._actions[UA.uidrag], t, p, UA.uidrag, e);
 					this.state("moved", true);
 				}
 			});
 		});
 		const endDrag = (target, pt, type, evt) => {
 			this.state("dragging", false);
-			this.off(UA.move, this._draggingID);
+			this._sysOff(UA.move, this._draggingID);
 			this._draggingID = -1;
 			this.unhold(this._moveHoldID);
 			this._moveHoldID = -1;
@@ -2717,9 +2843,9 @@ var UIDragger = class extends UIButton {
 				this.state("moved", false);
 			}
 		};
-		this.on(UA.drop, endDrag);
-		this.on(UA.up, endDrag);
-		this.on(UA.out, endDrag);
+		this._sysOn(UA.drop, endDrag);
+		this._sysOn(UA.up, endDrag);
+		this._sysOn(UA.out, endDrag);
 	}
 	onDrag(fn) {
 		return this.on(UIPointerActions.uidrag, fn);
@@ -2905,6 +3031,8 @@ var MultiTouchSpace = class extends Space {
 		this._touchMoveBind = this._touchMove.bind(this);
 		this._keyDownBind = this._keyDown.bind(this);
 		this._keyUpBind = this._keyUp.bind(this);
+		this._trackedUIs = [];
+		this._uiPlayer = null;
 	}
 	get pointer() {
 		const p = this._pointer.clone();
@@ -3000,6 +3128,32 @@ var MultiTouchSpace = class extends Space {
 		this.bindMouse(false);
 		this.bindTouch(false);
 		this.bindKeyboard(false);
+		return this;
+	}
+	track(uis) {
+		const list = Array.isArray(uis) ? uis : [uis];
+		for (let i = 0, len = list.length; i < len; i++) if (this._trackedUIs.indexOf(list[i]) < 0) this._trackedUIs.push(list[i]);
+		if (!this._uiPlayer) {
+			this._uiPlayer = {
+				animate: () => {},
+				action: (type, px, py, evt) => {
+					UI.track(this._trackedUIs, type, new Pt(px, py), evt);
+				}
+			};
+			this.add(this._uiPlayer);
+		}
+		return this;
+	}
+	untrack(uis) {
+		if (uis === void 0) {
+			this._trackedUIs.length = 0;
+			return this;
+		}
+		const list = Array.isArray(uis) ? uis : [uis];
+		for (let i = 0, len = list.length; i < len; i++) {
+			const at = this._trackedUIs.indexOf(list[i]);
+			if (at >= 0) this._trackedUIs.splice(at, 1);
+		}
 		return this;
 	}
 	touchesToPoints(evt, which = "touches") {
@@ -6268,72 +6422,6 @@ var HTMLForm = class HTMLForm extends VisualForm {
 		return this;
 	}
 };
-
-//#endregion
-//#region \0@oxc-project+runtime@0.143.0/helpers/esm/typeof.js
-function _typeof(o) {
-	"@babel/helpers - typeof";
-	return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(o) {
-		return typeof o;
-	} : function(o) {
-		return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-	}, _typeof(o);
-}
-
-//#endregion
-//#region \0@oxc-project+runtime@0.143.0/helpers/esm/toPrimitive.js
-function toPrimitive(t, r) {
-	if ("object" != _typeof(t) || !t) return t;
-	var e = t[Symbol.toPrimitive];
-	if (void 0 !== e) {
-		var i = e.call(t, r || "default");
-		if ("object" != _typeof(i)) return i;
-		throw new TypeError("@@toPrimitive must return a primitive value.");
-	}
-	return ("string" === r ? String : Number)(t);
-}
-
-//#endregion
-//#region \0@oxc-project+runtime@0.143.0/helpers/esm/toPropertyKey.js
-function toPropertyKey(t) {
-	var i = toPrimitive(t, "string");
-	return "symbol" == _typeof(i) ? i : i + "";
-}
-
-//#endregion
-//#region \0@oxc-project+runtime@0.143.0/helpers/esm/defineProperty.js
-function _defineProperty(e, r, t) {
-	return (r = toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
-		value: t,
-		enumerable: !0,
-		configurable: !0,
-		writable: !0
-	}) : e[r] = t, e;
-}
-
-//#endregion
-//#region \0@oxc-project+runtime@0.143.0/helpers/esm/objectSpread2.js
-function ownKeys(e, r) {
-	var t = Object.keys(e);
-	if (Object.getOwnPropertySymbols) {
-		var o = Object.getOwnPropertySymbols(e);
-		r && (o = o.filter(function(r) {
-			return Object.getOwnPropertyDescriptor(e, r).enumerable;
-		})), t.push.apply(t, o);
-	}
-	return t;
-}
-function _objectSpread2(e) {
-	for (var r = 1; r < arguments.length; r++) {
-		var t = null != arguments[r] ? arguments[r] : {};
-		r % 2 ? ownKeys(Object(t), !0).forEach(function(r) {
-			_defineProperty(e, r, t[r]);
-		}) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function(r) {
-			Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
-		});
-	}
-	return e;
-}
 
 //#endregion
 //#region src/Svg.ts

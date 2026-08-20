@@ -1,14 +1,14 @@
 {
-  "name": "UIPointerAction",
+  "name": "UIShapeTest",
   "source": [
     [
       "src/UI.ts",
-      69,
+      8,
       12
     ]
   ],
   "kind": "Typealias",
-  "comment": "A known pointer, touch, or keyboard action dispatched by a Pts space.",
+  "comment": "A hit-test function for a UI shape: given the UI's group, a point, and the UI's states, return whether the point is within the shape.",
   "constructor": [],
   "accessors": [],
   "methods": [],
@@ -18,6 +18,6 @@
   "extends": [],
   "implements": [],
   "type_alias": [
-    "UIPointerActions[keyof UIPointerActions]"
+    " Fn(group:Group, pt:PtLike, states:)"
   ]
 }
