@@ -4375,7 +4375,9 @@ var Create = class {
 		return pts;
 	}
 	static distributeLinear(line, count) {
+		if (count <= 0) return new Group();
 		let _line = Util.iterToArray(line);
+		if (count === 1) return new Group(_line[0]);
 		let ln = Line.subpoints(_line, count - 2);
 		ln.unshift(_line[0]);
 		ln.push(_line[_line.length - 1]);
@@ -4406,10 +4408,11 @@ var Create = class {
 		let seed = Num.random();
 		let g = new Group();
 		let i = 0;
+		const perRow = columns > 0 ? columns : rows > 0 ? rows : 0;
 		for (let p of pts) {
 			let np = new Noise(p);
-			let r = rows && rows > 0 ? Math.floor(i / rows) : i;
-			let c = columns && columns > 0 ? i % columns : i;
+			let r = perRow > 0 ? Math.floor(i / perRow) : i;
+			let c = perRow > 0 ? i % perRow : i;
 			np.initNoise(dx * c, dy * r);
 			np.seed(seed);
 			g.push(np);
@@ -4741,12 +4744,30 @@ const __noise_permTable = [
 	156,
 	180
 ];
+const __noise_permDoubled = __noise_permTable.concat(__noise_permTable);
+let __noise_lastSeed = void 0;
+let __noise_lastPerm = null;
+function __noise_seededPerm(seed) {
+	if (seed === __noise_lastSeed && __noise_lastPerm) return __noise_lastPerm;
+	let s = seed;
+	if (s > 0 && s < 1) s *= 65536;
+	s = Math.floor(s);
+	if (s < 256) s |= s << 8;
+	const perm = new Array(512);
+	for (let i = 0; i < 256; i++) {
+		const v = i & 1 ? __noise_permTable[i] ^ s & 255 : __noise_permTable[i] ^ s >> 8 & 255;
+		perm[i] = perm[i + 256] = v;
+	}
+	__noise_lastSeed = seed;
+	__noise_lastPerm = perm;
+	return perm;
+}
 var Noise = class extends Pt {
 	constructor(...args) {
 		super(...args);
 		this.perm = [];
 		this._n = new Pt(.01, .01);
-		this.perm = __noise_permTable.concat(__noise_permTable);
+		this.perm = __noise_permDoubled;
 	}
 	initNoise(...args) {
 		this._n = new Pt(...args);
@@ -4757,43 +4778,32 @@ var Noise = class extends Pt {
 		return this;
 	}
 	seed(s) {
-		if (s > 0 && s < 1) s *= 65536;
-		s = Math.floor(s);
-		if (s < 256) s |= s << 8;
-		for (let i = 0; i < 255; i++) {
-			let v = i & 1 ? __noise_permTable[i] ^ s & 255 : __noise_permTable[i] ^ s >> 8 & 255;
-			this.perm[i] = this.perm[i + 256] = v;
-		}
+		this.perm = __noise_seededPerm(s);
 		return this;
 	}
 	noise2D() {
-		let i = Math.max(0, Math.floor(this._n[0])) % 255;
-		let j = Math.max(0, Math.floor(this._n[1])) % 255;
-		let x = this._n[0] % 255 - i;
-		let y = this._n[1] % 255 - j;
-		let n00 = Vec.dot(__noise_grad3[(i + this.perm[j]) % 12], [
-			x,
-			y,
-			0
-		]);
-		let n01 = Vec.dot(__noise_grad3[(i + this.perm[j + 1]) % 12], [
-			x,
-			y - 1,
-			0
-		]);
-		let n10 = Vec.dot(__noise_grad3[(i + 1 + this.perm[j]) % 12], [
-			x - 1,
-			y,
-			0
-		]);
-		let n11 = Vec.dot(__noise_grad3[(i + 1 + this.perm[j + 1]) % 12], [
-			x - 1,
-			y - 1,
-			0
-		]);
-		let _fade = (f) => f * f * f * (f * (f * 6 - 15) + 10);
-		let tx = _fade(x);
-		return Num.lerp(Num.lerp(n00, n10, tx), Num.lerp(n01, n11, tx), _fade(y));
+		const perm = this.perm;
+		const nx = this._n[0];
+		const ny = this._n[1];
+		const cx = Math.floor(nx);
+		const cy = Math.floor(ny);
+		const i = cx & 255;
+		const j = cy & 255;
+		const x = nx - cx;
+		const y = ny - cy;
+		const g00 = __noise_grad3[perm[i + perm[j]] % 12];
+		const g01 = __noise_grad3[perm[i + perm[j + 1]] % 12];
+		const g10 = __noise_grad3[perm[i + 1 + perm[j]] % 12];
+		const g11 = __noise_grad3[perm[i + 1 + perm[j + 1]] % 12];
+		const n00 = g00[0] * x + g00[1] * y;
+		const n01 = g01[0] * x + g01[1] * (y - 1);
+		const n10 = g10[0] * (x - 1) + g10[1] * y;
+		const n11 = g11[0] * (x - 1) + g11[1] * (y - 1);
+		const _fade = (f) => f * f * f * (f * (f * 6 - 15) + 10);
+		const tx = _fade(x);
+		const u = n00 + tx * (n10 - n00);
+		const v = n01 + tx * (n11 - n01);
+		return u + _fade(y) * (v - u);
 	}
 };
 const _DELAUNAY_EPSILON = Math.pow(2, -52);
@@ -7554,11 +7564,9 @@ var Body = class Body extends Group {
 		return b;
 	}
 	init(body, stiff = 1) {
-		let c = new Pt();
 		for (let li of body) {
 			let p = new Particle(li);
 			p.body = this;
-			c.add(li);
 			this.push(p);
 		}
 		this._stiff = stiff;
@@ -7588,16 +7596,25 @@ var Body = class Body extends Group {
 		return this;
 	}
 	linkAll(stiff) {
-		let half = this.length / 2;
-		for (let i = 0, len = this.length; i < len; i++) {
-			let n = i >= len - 1 ? 0 : i + 1;
-			this.link(i, n, stiff);
-			if (len > 4) {
-				let nd = Math.floor(half / 2) + 1;
-				let n2 = i >= len - nd ? i % len : i + nd;
-				this.link(i, n2, stiff);
+		const half = this.length / 2;
+		const tryLink = (a, b, s) => {
+			if (a === b) return;
+			const cs = this._cs;
+			for (let k = 0, klen = cs.length; k < klen; k++) {
+				const c = cs[k];
+				if (c[0] === a && c[1] === b || c[0] === b && c[1] === a) return;
 			}
-			if (i <= half - 1) this.link(i, Math.min(this.length - 1, i + Math.floor(half)));
+			this.link(a, b, s);
+		};
+		for (let i = 0, len = this.length; i < len; i++) {
+			const n = i >= len - 1 ? 0 : i + 1;
+			tryLink(i, n, stiff);
+			if (len > 4) {
+				const nd = Math.floor(half / 2) + 1;
+				const n2 = i >= len - nd ? i % len : i + nd;
+				tryLink(i, n2, stiff);
+			}
+			if (i <= half - 1) tryLink(i, Math.min(this.length - 1, i + Math.floor(half)));
 		}
 	}
 	linksToLines() {
@@ -7683,7 +7700,7 @@ var Body = class Body extends Group {
 			if (Math.abs(eg[0][0] - eg[1][0]) > Math.abs(eg[0][1] - eg[1][1])) t = (hit.vertex[0] - cv[0] - eg[0][0]) / (eg[1][0] - eg[0][0]);
 			else t = (hit.vertex[1] - cv[1] - eg[0][1]) / (eg[1][1] - eg[0][1]);
 			let lambda = 1 / (t * t + (1 - t) * (1 - t));
-			let m0 = hit.vertex.mass || b2.mass || 1;
+			let m0 = b2.mass || 1;
 			let m1 = hit.edge[0].body.mass || 1;
 			let mr0 = m0 / (m0 + m1);
 			let mr1 = m1 / (m0 + m1);

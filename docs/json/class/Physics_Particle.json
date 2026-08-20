@@ -1500,7 +1500,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "Hit this particle with an impulse.",
+          "comment": "Hit this particle with an impulse. The impulse is scaled by 1/√mass, so a heavier particle moves less from the same hit.",
           "returns": "this",
           "returns_comment": false,
           "parameters": [

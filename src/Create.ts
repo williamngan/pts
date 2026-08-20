@@ -4,7 +4,6 @@ import { Pt, Group, Bound } from "./Pt";
 import { Line, Triangle } from "./Op";
 import { Const, Util } from "./Util";
 import { Num, Geom } from "./Num";
-import { Vec } from "./LinearAlgebra";
 import {
   PtLike,
   GroupLike,
@@ -44,7 +43,9 @@ export class Create {
    * @param count number of points to create
    */
   static distributeLinear(line: PtIterable, count: number): Group {
+    if (count <= 0) return new Group();
     let _line = Util.iterToArray(line);
+    if (count === 1) return new Group(_line[0]);
     let ln = Line.subpoints(_line, count - 2);
     ln.unshift(_line[0]);
     ln.push(_line[_line.length - 1]);
@@ -126,11 +127,11 @@ export class Create {
 
   /**
    * Given a group of Pts, return a new group of `Noise` Pts.
-   * @param pts a Group or an Iterable<Pt>
+   * @param pts a Group or an Iterable<Pt>, in row-major order when treated as a grid
    * @param dx small increment value in x dimension
    * @param dy small increment value in y dimension
    * @param rows Optional row count to generate 2D noise
-   * @param columns Optional column count to generate 2D noise
+   * @param columns Optional column count (points per row) to generate 2D noise. When provided, each point's noise offset is (dx·column, dy·row) with row = floor(i/columns); when only `rows` is provided it is used as the points-per-row divisor instead.
    */
   static noisePts(
     pts: PtIterable,
@@ -142,10 +143,12 @@ export class Create {
     let seed = Num.random();
     let g = new Group();
     let i = 0;
+    // row-major grid: one consistent per-row divisor for both row and column
+    const perRow = columns > 0 ? columns : rows > 0 ? rows : 0;
     for (let p of pts) {
       let np = new Noise(p);
-      let r = rows && rows > 0 ? Math.floor(i / rows) : i;
-      let c = columns && columns > 0 ? i % columns : i;
+      let r = perRow > 0 ? Math.floor(i / perRow) : i;
+      let c = perRow > 0 ? i % perRow : i;
       np.initNoise(dx * c, dy * r);
       np.seed(seed);
       g.push(np);
@@ -204,6 +207,38 @@ const __noise_permTable = [
   61, 156, 180,
 ];
 
+// The doubled base permutation table, built once and shared by every unseeded
+// Noise instance (a per-instance copy would allocate 512 entries per point in
+// `Create.noisePts`). `seed()` swaps in a seeded table instead of mutating.
+const __noise_permDoubled = __noise_permTable.concat(__noise_permTable);
+
+// Memoize the last seeded table: `Create.noisePts` seeds every point with the
+// same value, so all its Noise Pts share one table.
+let __noise_lastSeed: number = undefined;
+let __noise_lastPerm: number[] = null;
+
+function __noise_seededPerm(seed: number): number[] {
+  if (seed === __noise_lastSeed && __noise_lastPerm) return __noise_lastPerm;
+
+  let s = seed;
+  if (s > 0 && s < 1) s *= 65536;
+  s = Math.floor(s);
+  if (s < 256) s |= s << 8;
+
+  const perm = new Array<number>(512);
+  for (let i = 0; i < 256; i++) {
+    const v =
+      i & 1
+        ? __noise_permTable[i] ^ (s & 255)
+        : __noise_permTable[i] ^ ((s >> 8) & 255);
+    perm[i] = perm[i + 256] = v;
+  }
+
+  __noise_lastSeed = seed;
+  __noise_lastPerm = perm;
+  return perm;
+}
+
 /**
  * Noise is a subclass of Pt that generates Perlin noise. Current implementation supports basic 2D noise.
  * This implementation is based on this [gist](https://gist.github.com/banksean/304522).
@@ -219,8 +254,8 @@ export class Noise extends Pt {
   constructor(...args) {
     super(...args);
 
-    // For easier index wrapping, double the permutation table length
-    this.perm = __noise_permTable.concat(__noise_permTable);
+    // shared doubled table for easy index wrapping; replaced by seed()
+    this.perm = __noise_permDoubled;
   }
 
   /**
@@ -248,19 +283,7 @@ export class Noise extends Pt {
    * @param s seed value
    */
   seed(s) {
-    if (s > 0 && s < 1) s *= 65536;
-
-    s = Math.floor(s);
-    if (s < 256) s |= s << 8;
-
-    for (let i = 0; i < 255; i++) {
-      let v =
-        i & 1
-          ? __noise_permTable[i] ^ (s & 255)
-          : __noise_permTable[i] ^ ((s >> 8) & 255);
-      this.perm[i] = this.perm[i + 256] = v;
-    }
-
+    this.perm = __noise_seededPerm(s);
     return this;
   }
 
@@ -268,31 +291,36 @@ export class Noise extends Pt {
    * Generate a 2D Perlin noise value.
    */
   noise2D() {
-    let i = Math.max(0, Math.floor(this._n[0])) % 255;
-    let j = Math.max(0, Math.floor(this._n[1])) % 255;
-    let x = (this._n[0] % 255) - i;
-    let y = (this._n[1] % 255) - j;
+    const perm = this.perm;
+    const nx = this._n[0];
+    const ny = this._n[1];
 
-    let n00 = Vec.dot(__noise_grad3[(i + this.perm[j]) % 12], [x, y, 0]);
-    let n01 = Vec.dot(__noise_grad3[(i + this.perm[j + 1]) % 12], [
-      x,
-      y - 1,
-      0,
-    ]);
-    let n10 = Vec.dot(__noise_grad3[(i + 1 + this.perm[j]) % 12], [
-      x - 1,
-      y,
-      0,
-    ]);
-    let n11 = Vec.dot(__noise_grad3[(i + 1 + this.perm[j + 1]) % 12], [
-      x - 1,
-      y - 1,
-      0,
-    ]);
+    // integer cell (wrapped to the table via two's-complement &, which also
+    // handles negative coordinates seamlessly) and the position within it
+    const cx = Math.floor(nx);
+    const cy = Math.floor(ny);
+    const i = cx & 255;
+    const j = cy & 255;
+    const x = nx - cx;
+    const y = ny - cy;
 
-    let _fade = (f) => f * f * f * (f * (f * 6 - 15) + 10);
-    let tx = _fade(x);
-    return Num.lerp(Num.lerp(n00, n10, tx), Num.lerp(n01, n11, tx), _fade(y));
+    // standard Perlin gradient hashing through the permutation table; the
+    // doubled table makes i + perm[j + 1] safe without extra wrapping
+    const g00 = __noise_grad3[perm[i + perm[j]] % 12];
+    const g01 = __noise_grad3[perm[i + perm[j + 1]] % 12];
+    const g10 = __noise_grad3[perm[i + 1 + perm[j]] % 12];
+    const g11 = __noise_grad3[perm[i + 1 + perm[j + 1]] % 12];
+
+    const n00 = g00[0] * x + g00[1] * y;
+    const n01 = g01[0] * x + g01[1] * (y - 1);
+    const n10 = g10[0] * (x - 1) + g10[1] * y;
+    const n11 = g11[0] * (x - 1) + g11[1] * (y - 1);
+
+    const _fade = (f: number) => f * f * f * (f * (f * 6 - 15) + 10);
+    const tx = _fade(x);
+    const u = n00 + tx * (n10 - n00);
+    const v = n01 + tx * (n11 - n01);
+    return u + _fade(y) * (v - u);
   }
 }
 
@@ -985,7 +1013,7 @@ export class Delaunay extends Group {
    * @param bound Optionally provide a rectangular bound (eg, `space.innerBound`) to clip the cells against.
    * Without a bound, cells around sliver triangles can extend to enormous coordinates (circumcenters of
    * nearly-collinear points), which is technically correct but extremely slow to draw.
-   * @returns an array of Groups, each of which represents a Voronoi cell
+   * @returns an array of Groups, each of which represents a Voronoi cell. Unclipped cells share their vertex Pts with the cached mesh (see [`Delaunay.mesh`](#link)), so treat them as read-only or clone before mutating.
    */
   voronoi(bound?: PtIterable): Group[] {
     const cells = this._voronoiCells();
@@ -1095,6 +1123,7 @@ export class Delaunay extends Group {
 
   /**
    * Get the initial "super triangle" that contains all the points in this set.
+   * Not used by the current triangulation core; kept for subclass compatibility.
    * @returns a Group representing a triangle
    */
   protected _superTriangle(): Group {

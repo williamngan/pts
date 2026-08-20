@@ -98,6 +98,20 @@ export default defineSuite("create", (b, { Pts, fx }) => {
     },
   });
 
+  // repeated same-seed path (memoized): the pattern `Create.noisePts` uses
+  b.case("Noise.seed (repeated seed)", {
+    batch: SIZES.S,
+    setupOnce: () => new Noise(0, 0),
+    run: (noise) => {
+      let acc = 0;
+      for (let i = 0; i < SIZES.S; i++) {
+        noise.seed(0.42);
+        acc += noise.noise2D();
+      }
+      sink(acc);
+    },
+  });
+
   // -------------------------------------------------------------- Delaunay
 
   b.case("Create.delaunay + triangulate", {

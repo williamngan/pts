@@ -297,7 +297,7 @@ export class World {
   /**
    * Static function to calculate edge constraints between 2 particles.
    * @param p1 particle 1
-   * @param p2 particle 1
+   * @param p2 particle 2
    * @param dist distance between particles
    * @param stiff stiffness between 0 to 1.
    * @param precise use precise distance calculation. Default is `false`.
@@ -799,7 +799,7 @@ export class Particle extends Pt {
   }
 
   /**
-   * Hit this particle with an impulse.
+   * Hit this particle with an impulse. The impulse is scaled by 1/√mass, so a heavier particle moves less from the same hit.
    * @param args an impulse vector defined by either a list of numeric parameters, an array of numbers, or an object with {x,y,z,w} properties
    * @example `hit(10, 20)`, `hit( new Pt(5, 9) )`
    */
@@ -921,11 +921,9 @@ export class Body extends Group {
    * @param stiff stiffness value from 0 to 1, where 1 is the most stiff. Default is 1.
    */
   init(body: PtIterable, stiff: number = 1): this {
-    let c = new Pt();
     for (let li of body) {
       let p = new Particle(li);
       p.body = this;
-      c.add(li);
       this.push(p);
     }
 
@@ -977,20 +975,33 @@ export class Body extends Group {
    * @param stiff optionally stiffness value between 0 to 1, where 1 is the most stiff.
    */
   linkAll(stiff: number): void {
-    let half = this.length / 2;
+    const half = this.length / 2;
+
+    // skip duplicate pairs and self-pairs, which the cross-link passes below
+    // can produce for odd sizes (a duplicate would double-solve an edge);
+    // a linear scan of the small link list beats allocating a Set here
+    const tryLink = (a: number, b: number, s?: number) => {
+      if (a === b) return;
+      const cs = this._cs;
+      for (let k = 0, klen = cs.length; k < klen; k++) {
+        const c = cs[k];
+        if ((c[0] === a && c[1] === b) || (c[0] === b && c[1] === a)) return;
+      }
+      this.link(a, b, s);
+    };
 
     for (let i = 0, len = this.length; i < len; i++) {
-      let n = i >= len - 1 ? 0 : i + 1;
-      this.link(i, n, stiff);
+      const n = i >= len - 1 ? 0 : i + 1;
+      tryLink(i, n, stiff);
 
       if (len > 4) {
-        let nd = Math.floor(half / 2) + 1;
-        let n2 = i >= len - nd ? i % len : i + nd;
-        this.link(i, n2, stiff);
+        const nd = Math.floor(half / 2) + 1;
+        const n2 = i >= len - nd ? i % len : i + nd;
+        tryLink(i, n2, stiff);
       }
 
       if (i <= half - 1) {
-        this.link(i, Math.min(this.length - 1, i + Math.floor(half)));
+        tryLink(i, Math.min(this.length - 1, i + Math.floor(half)));
       }
     }
   }
@@ -1137,7 +1148,9 @@ export class Body extends Group {
       }
 
       let lambda = 1 / (t * t + (1 - t) * (1 - t));
-      let m0 = (hit.vertex as Particle).mass || b2.mass || 1;
+      // hit.vertex is the circle's center Pt (not a Particle), so the
+      // particle's own mass is the vertex-side mass here
+      let m0 = b2.mass || 1;
       let m1 = (hit.edge[0] as Particle).body.mass || 1;
 
       let mr0 = m0 / (m0 + m1);
@@ -1148,9 +1161,6 @@ export class Body extends Group {
 
       let c1 = b.changed.add(cv.$multiply(mr1));
       b.previous = b.$subtract(c1);
-
-      // let c2 = b2.changed.add( cv.$multiply(mr0) );
-      // b2.previous = b2.$subtract( c2 );
     }
   }
 }

@@ -230,7 +230,8 @@ describe("Body", () => {
     expect(body.mass).toBe(1);
     expect(body.linksToLines()).toEqual([]);
     body.linkAll(0.5);
-    expect(body.linksToLines()).toHaveLength(4);
+    // 3 unique edges for a triangle; the legacy duplicate 0-1 link is gone
+    expect(body.linksToLines()).toHaveLength(3);
   });
 
   it("responds to body collisions on horizontal and vertical edges", () => {
@@ -577,5 +578,60 @@ describe("Edge stiffness semantics", () => {
     const heavy = stretchedPair(100, 1);
     heavy.solveEdges(0.004, 1, 4);
     expect(heavy[1].x - heavy[0].x).toBeCloseTo(30, 3);
+  });
+});
+
+describe("Physics correctness pins", () => {
+  const regular = (n: number, r = 50) => {
+    const pts: number[][] = [];
+    for (let i = 0; i < n; i++) {
+      pts.push([
+        Math.cos((i / n) * Math.PI * 2) * r,
+        Math.sin((i / n) * Math.PI * 2) * r,
+      ]);
+    }
+    return Group.fromArray(pts);
+  };
+
+  it("creates no duplicate or self links in linkAll", () => {
+    for (const n of [2, 3, 4, 5, 6, 8]) {
+      const b = Body.fromGroup(regular(n));
+      const seen = new Set<string>();
+      for (const link of (b as any)._cs as number[][]) {
+        expect(link[0]).not.toBe(link[1]);
+        const key = `${Math.min(link[0], link[1])}-${Math.max(link[0], link[1])}`;
+        expect(seen.has(key)).toBe(false);
+        seen.add(key);
+      }
+    }
+  });
+
+  it("simulates a small body world deterministically", () => {
+    const run = () => {
+      const world = new World(
+        Group.fromArray([
+          [0, 0],
+          [400, 400],
+        ]),
+        0.99,
+        1,
+      );
+      const b1 = Body.fromGroup(regular(4, 40).moveBy(100, 100));
+      const b2 = Body.fromGroup(regular(5, 30).moveBy(180, 120));
+      const p = new Particle(new Pt(150, 60));
+      p.size(8);
+      world.add(b1).add(b2).add(p);
+      for (let i = 0; i < 30; i++) world.update(16);
+      const state: number[] = [];
+      for (const bd of [b1, b2]) {
+        for (const v of bd) state.push(v[0], v[1]);
+      }
+      state.push(p[0], p[1]);
+      return state;
+    };
+    const a = run();
+    const b = run();
+    expect(a).toEqual(b);
+    expect(a.every(Number.isFinite)).toBe(true);
   });
 });

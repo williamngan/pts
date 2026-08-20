@@ -730,7 +730,7 @@
             },
             {
               "name": "p2",
-              "comment": "particle 1",
+              "comment": "particle 2",
               "type": "Particle",
               "default": false
             },

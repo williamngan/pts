@@ -3,7 +3,7 @@
   "source": [
     [
       "src/Create.ts",
-      912,
+      940,
       13
     ]
   ],
@@ -529,7 +529,7 @@
       "source": [
         [
           "src/Create.ts",
-          923,
+          951,
           2
         ]
       ],
@@ -997,7 +997,7 @@
       "source": [
         [
           "src/Create.ts",
-          1053,
+          1081,
           2
         ]
       ],
@@ -1106,7 +1106,7 @@
       "source": [
         [
           "src/Create.ts",
-          1063,
+          1091,
           2
         ]
       ],
@@ -1141,7 +1141,7 @@
       "source": [
         [
           "src/Create.ts",
-          1077,
+          1105,
           2
         ]
       ],
@@ -2109,7 +2109,7 @@
       "source": [
         [
           "src/Create.ts",
-          990,
+          1018,
           2
         ]
       ],
@@ -2120,7 +2120,7 @@
         {
           "comment": "Generate Voronoi cells. `delaunay()` must be called before calling this function. See a [Voronoi demo here](../demo/index.html?name=create.delaunay).",
           "returns": "Group[]",
-          "returns_comment": "an array of Groups, each of which represents a Voronoi cell",
+          "returns_comment": "an array of Groups, each of which represents a Voronoi cell. Unclipped cells share their vertex Pts with the cached mesh (see [`Delaunay.mesh`](#link)), so treat them as read-only or clone before mutating.",
           "parameters": [
             {
               "name": "bound",

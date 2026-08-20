@@ -88,6 +88,45 @@ export default defineSuite("physics", (b, { Pts, fx }) => {
     },
   });
 
+  // Composed body-world update: integrate + AABB broad phase + SAT narrow
+  // phase + solveEdges across substeps, end to end.
+  const makeBodyWorld = (label, bodyCount, particleCount = 0) => {
+    const world = new World(fx.bound(600, 400), 0.99, 1);
+    const centers = fx.ptLikes(label, bodyCount, 2, 60, 340);
+    for (let i = 0; i < bodyCount; i++) {
+      const shape = fx.polygon(`${label}:b${i}`, 3 + (i % 4), 18);
+      const body = Body.fromGroup(shape.moveBy(centers[i][0], centers[i][1]));
+      world.add(body);
+    }
+    if (particleCount > 0) {
+      const positions = fx.ptLikes(`${label}:pts`, particleCount, 2, 20, 380);
+      for (const position of positions) {
+        const particle = new Particle(position);
+        particle.radius = 4;
+        world.add(particle);
+      }
+    }
+    return world;
+  };
+
+  b.case("World.update (64 bodies)", {
+    batch: 64 * 5,
+    setup: () => makeBodyWorld("physics:world:bodies", 64),
+    run: (world) => {
+      world.update(DT);
+      sink(world.body(0)[0][0]);
+    },
+  });
+
+  b.case("World.update (32 bodies + 256 particles)", {
+    batch: 32 * 5 + 256,
+    setup: () => makeBodyWorld("physics:world:mixed", 32, 256),
+    run: (world) => {
+      world.update(DT);
+      sink(world.body(0)[0][0] + world.particle(0)[0]);
+    },
+  });
+
   b.case("World.add / removeParticle", {
     batch: SIZES.S,
     setupOnce: () => fx.ptLikes("physics:add", SIZES.S, 2, 0, 300),

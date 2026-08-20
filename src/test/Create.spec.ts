@@ -106,7 +106,7 @@ describe("Create point distributions", () => {
     expect(points).toHaveLength(4);
     expect(points.every((point) => point instanceof Noise)).toBe(true);
     expect(points.map((point: Noise) => point.noise2D())).toEqual([
-      0, -0.007704000313133006, -0.1884160023498535, -0.1862594683443733,
+      0, 0.007704000313133006, -0.1884160023498535, -0.18568443368551887,
     ]);
 
     const linear = Create.noisePts([new Pt(), new Pt()], 0.1, 0.2);
@@ -409,5 +409,97 @@ describe("Voronoi clipping", () => {
     const cells = delaunay.voronoi();
     expect(cells).toHaveLength(5);
     expect(cells[4]).toHaveLength(4);
+  });
+});
+
+describe("Create and Noise correctness pins", () => {
+  it("clamps distributeLinear to the requested count", () => {
+    const line = Group.fromArray([
+      [0, 0],
+      [10, 0],
+    ]);
+    expect(Create.distributeLinear(line, 5)).toHaveLength(5);
+    expect(Create.distributeLinear(line, 2)).toHaveLength(2);
+    expect(Create.distributeLinear(line, 1)).toHaveLength(1);
+    expect(Create.distributeLinear(line, 0)).toHaveLength(0);
+  });
+
+  it("assigns row-major grid offsets in noisePts", () => {
+    // 2 rows x 3 columns, row-major: point i sits at row floor(i/3), column i%3
+    const pts = Group.fromArray([
+      [0, 0],
+      [1, 0],
+      [2, 0],
+      [0, 1],
+      [1, 1],
+      [2, 1],
+    ]);
+    const dx = 0.5;
+    const dy = 0.25;
+    const np = Create.noisePts(pts, dx, dy, 2, 3) as Group;
+    // same-row points must share the same initial y-noise position, and
+    // columns must advance x-noise; probe via noise determinism: two Noise
+    // pts initialized identically produce identical noise2D values
+    const sample = (n: Noise) => n.noise2D();
+    // row 0: indices 0..2; row 1: indices 3..5
+    const rows = [
+      [0, 1, 2],
+      [3, 4, 5],
+    ];
+    for (const row of rows) {
+      for (const i of row) {
+        const expected = new Noise(0, 0);
+        expected.initNoise(
+          dx * (i % 3),
+          dy * rows.findIndex((r) => r.includes(i)),
+        );
+        expected["perm"] = (np[i] as Noise)["perm"];
+        expect(sample(np[i] as Noise)).toBeCloseTo(sample(expected), 10);
+      }
+    }
+  });
+
+  it("seeds the full permutation table", () => {
+    // seeds chosen with nonzero low bytes: 0.5 maps to s=32768 whose low byte
+    // is 0, which legitimately leaves odd indices unchanged
+    const a = new Noise(0, 0).seed(0.123) as Noise;
+    const b = new Noise(0, 0).seed(0.879) as Noise;
+    let identical = 0;
+    for (let i = 0; i < 256; i++) {
+      if (a["perm"][i] === b["perm"][i]) identical++;
+    }
+    // different seeds must not leave any index systematically unseeded;
+    // coincidental matches are possible but index 255 must not be fixed
+    expect(a["perm"][255]).not.toBe(180);
+    expect(identical).toBeLessThan(64);
+    // determinism: same seed gives the same table
+    const c = new Noise(0, 0).seed(0.123) as Noise;
+    expect(Array.from(a["perm"])).toEqual(Array.from(c["perm"]));
+  });
+
+  it("does not repeat noise with period 12 along the x axis", () => {
+    const n = new Noise(0, 0);
+    n.seed(0.42);
+    const vals: number[] = [];
+    for (const base of [3, 15, 27, 39]) {
+      n.initNoise(base + 0.5, 7.3);
+      vals.push(n.noise2D());
+    }
+    const distinct = new Set(vals.map((v) => v.toFixed(9)));
+    expect(distinct.size).toBeGreaterThan(1);
+  });
+
+  it("produces continuous noise across cell boundaries and negative coords", () => {
+    const n = new Noise(0, 0);
+    n.seed(0.7);
+    const at = (x: number, y: number) => {
+      n.initNoise(x, y);
+      return n.noise2D();
+    };
+    // continuity: value just below and above an integer boundary are close
+    expect(Math.abs(at(4.999, 2.5) - at(5.001, 2.5))).toBeLessThan(0.05);
+    expect(Math.abs(at(-3.001, 2.5) - at(-2.999, 2.5))).toBeLessThan(0.05);
+    // noise is exactly 0 at integer lattice points; probe determinism off-lattice
+    expect(at(-7.5, -2.25)).toBe(at(-7.5, -2.25));
   });
 });

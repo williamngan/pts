@@ -15,7 +15,7 @@ pnpm test:visual          # compare against baselines
 pnpm test:visual:update   # re-record baselines after an intended change
 ```
 
-Visual specs live in `src/test/visual/` and run as part of `pnpm test` too.
+Visual specs live in `test/visual/` and run as part of `pnpm test` too.
 
 A missing baseline is recorded automatically on a local run (with a warning) but
 fails when `CI` is set, so an unreviewed snapshot can never sneak through CI.

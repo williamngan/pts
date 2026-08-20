@@ -3,7 +3,7 @@
   "source": [
     [
       "src/Create.ts",
-      19,
+      18,
       13
     ]
   ],
@@ -17,7 +17,7 @@
       "source": [
         [
           "src/Create.ts",
-          162,
+          165,
           9
         ]
       ],
@@ -48,7 +48,7 @@
       "source": [
         [
           "src/Create.ts",
-          46,
+          45,
           9
         ]
       ],
@@ -85,7 +85,7 @@
       "source": [
         [
           "src/Create.ts",
-          26,
+          25,
           9
         ]
       ],
@@ -128,7 +128,7 @@
       "source": [
         [
           "src/Create.ts",
-          88,
+          89,
           9
         ]
       ],
@@ -171,7 +171,7 @@
       "source": [
         [
           "src/Create.ts",
-          62,
+          63,
           9
         ]
       ],
@@ -220,7 +220,7 @@
       "source": [
         [
           "src/Create.ts",
-          135,
+          136,
           9
         ]
       ],
@@ -237,7 +237,7 @@
           "parameters": [
             {
               "name": "pts",
-              "comment": "a Group or an Iterable<Pt>",
+              "comment": "a Group or an Iterable<Pt>, in row-major order when treated as a grid",
               "type": "PtIterable",
               "default": false
             },
@@ -261,7 +261,7 @@
             },
             {
               "name": "columns",
-              "comment": "Optional column count to generate 2D noise",
+              "comment": "Optional column count (points per row) to generate 2D noise. When provided, each point's noise offset is (dx·column, dy·row) with row = floor(i/columns); when only `rows` is provided it is used as the points-per-row divisor instead.",
               "type": "number",
               "default": "0"
             }
@@ -275,7 +275,7 @@
       "source": [
         [
           "src/Create.ts",
-          113,
+          114,
           9
         ]
       ],

@@ -2105,7 +2105,7 @@ Value range for each color space
 <a id="create-create"></a>
 ### `Create`
 
-**Kind:** Class · **Source:** [`src/Create.ts:19`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L19)
+**Kind:** Class · **Source:** [`src/Create.ts:18`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L18)
 
 The `Create` class helps you create structures from sets of points.
 
@@ -2213,11 +2213,11 @@ Given a group of Pts, return a new group of `Noise` Pts.
 
 **Parameters**
 
-- `pts` (`PtIterable`) — a Group or an Iterable<Pt>
+- `pts` (`PtIterable`) — a Group or an Iterable<Pt>, in row-major order when treated as a grid
 - `dx` (`number`; default `0.01`) — small increment value in x dimension
 - `dy` (`number`; default `0.01`) — small increment value in y dimension
 - `rows` (`number`; default `0`) — Optional row count to generate 2D noise
-- `columns` (`number`; default `0`) — Optional column count to generate 2D noise
+- `columns` (`number`; default `0`) — Optional column count (points per row) to generate 2D noise. When provided, each point's noise offset is (dx·column, dy·row) with row = floor(i/columns); when only `rows` is provided it is used as the points-per-row divisor instead.
 
 <a id="create-create-static-radial-pts"></a>
 ##### `radialPts`
@@ -2240,7 +2240,7 @@ Create a set of Pts around a circular path.
 <a id="create-delaunay"></a>
 ### `Delaunay`
 
-**Kind:** Class · **Source:** [`src/Create.ts:912`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L912)
+**Kind:** Class · **Source:** [`src/Create.ts:940`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L940)
 
 **Extends:** `Group`
 
@@ -2321,7 +2321,7 @@ Generate Voronoi cells. `delaunay()` must be called before calling this function
 
 - `bound` (`PtIterable`) — Optionally provide a rectangular bound (eg, `space.innerBound`) to clip the cells against. Without a bound, cells around sliver triangles can extend to enormous coordinates (circumcenters of nearly-collinear points), which is technically correct but extremely slow to draw.
 
-**Returns:** an array of Groups, each of which represents a Voronoi cell
+**Returns:** an array of Groups, each of which represents a Voronoi cell. Unclipped cells share their vertex Pts with the cached mesh (see [`Delaunay.mesh`](#create-delaunay-mesh)), so treat them as read-only or clone before mutating.
 
 #### Inherited API
 
@@ -2331,7 +2331,7 @@ Generate Voronoi cells. `delaunay()` must be called before calling this function
 <a id="create-noise"></a>
 ### `Noise`
 
-**Kind:** Class · **Source:** [`src/Create.ts:211`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L211)
+**Kind:** Class · **Source:** [`src/Create.ts:246`](https://github.com/williamngan/pts/blob/master/src/Create.ts#L246)
 
 **Extends:** `Pt`
 
@@ -2706,7 +2706,7 @@ id: string
 <a id="dom-htmlform"></a>
 ### `HTMLForm`
 
-**Kind:** Class · **Source:** [`src/Dom.ts:404`](https://github.com/williamngan/pts/blob/master/src/Dom.ts#L404)
+**Kind:** Class · **Source:** [`src/Dom.ts:405`](https://github.com/williamngan/pts/blob/master/src/Dom.ts#L405)
 
 **Extends:** `VisualForm`
 
@@ -8063,7 +8063,7 @@ Check and respoond to collisions between this and another particle.
 hit(args: any[]): this
 ```
 
-Hit this particle with an impulse.
+Hit this particle with an impulse. The impulse is scaled by 1/√mass, so a heavier particle moves less from the same hit.
 
 **Parameters**
 
@@ -8433,7 +8433,7 @@ Static function to calculate edge constraints between 2 particles.
 **Parameters**
 
 - `p1` (`Particle`) — particle 1
-- `p2` (`Particle`) — particle 1
+- `p2` (`Particle`) — particle 2
 - `dist` (`number`) — distance between particles
 - `stiff` (`number`; default `1`) — stiffness between 0 to 1.
 - `precise` (`boolean`; default `false`) — use precise distance calculation. Default is `false`.
@@ -11532,7 +11532,7 @@ textBaseline: string
 <a id="svg-svgform"></a>
 ### `SVGForm`
 
-**Kind:** Class · **Source:** [`src/Svg.ts:931`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L931)
+**Kind:** Class · **Source:** [`src/Svg.ts:932`](https://github.com/williamngan/pts/blob/master/src/Svg.ts#L932)
 
 **Extends:** `CanvasForm`
 
