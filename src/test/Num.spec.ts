@@ -68,6 +68,52 @@ describe("Num", () => {
     Num.seed("");
     expect(Number.isFinite(Num.random())).toBe(true);
   });
+
+  it("reproduces the exact uheprng sequences for known seeds", () => {
+    // golden values captured 2026-08-21; any change here breaks users'
+    // reproducible seeded artwork
+    Num.seed("hello");
+    expect([
+      Num.random(),
+      Num.random(),
+      Num.random(),
+      Num.random(),
+      Num.random(),
+    ]).toEqual([
+      0.9439915572293103, 0.48723091022111475, 0.5987379888538271,
+      0.31852455413900316, 0.3260437978897244,
+    ]);
+    Num.seed("");
+    expect(Num.random()).toBe(0.5887344738002867);
+    Num.seed("pts");
+    expect(Num.random()).toBe(0.03993775951676071);
+  });
+
+  it("hashes effective seeds: trimmed and control-stripped keys collide", () => {
+    Num.seed("hello");
+    const hello = Num.random();
+    Num.seed(" hello ");
+    expect(Num.random()).toBe(hello);
+    Num.seed("hel\x01lo");
+    expect(Num.random()).toBe(hello);
+    Num.seed("");
+    const empty = Num.random();
+    Num.seed("  ");
+    expect(Num.random()).toBe(empty);
+  });
+
+  it("draws on a 32-bit lattice without consuming Math.random", () => {
+    const spy = vi.spyOn(Math, "random").mockImplementation(() => {
+      throw new Error("uheprng must not consume Math.random");
+    });
+    try {
+      Num.seed("lattice");
+      const draws = [Num.random(), Num.random(), Num.random()];
+      expect(draws.every((v) => Number.isInteger(v * 4294967296))).toBe(true);
+    } finally {
+      spy.mockRestore();
+    }
+  });
 });
 
 describe("Geom basics", () => {

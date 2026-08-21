@@ -1279,7 +1279,7 @@ var Mat = class Mat {
 //#region src/uheprng.ts
 function Mash() {
 	let n = 4022871197;
-	let mash = function(data) {
+	return function(data) {
 		if (data) {
 			data = data.toString();
 			for (let i = 0; i < data.length; i++) {
@@ -1293,37 +1293,35 @@ function Mash() {
 				n += h * 4294967296;
 			}
 			return (n >>> 0) * 23283064365386963e-26;
-		} else n = 4022871197;
+		}
+		n = 4022871197;
+		return 0;
 	};
-	return mash;
 }
-function uheprng_default(seed) {
-	let o = 48;
+function uheprng(seed) {
+	const o = 48;
 	let c = 1;
 	let p = o;
-	let s = new Array(o);
-	let i, j, k = 0;
-	let mash = Mash();
-	for (i = 0; i < o; i++) s[i] = mash(Math.random().toString());
+	const s = new Array(o);
+	const mash = Mash();
 	function initState() {
 		mash();
-		for (i = 0; i < o; i++) s[i] = mash(" ");
+		for (let i = 0; i < o; i++) s[i] = mash(" ");
 		c = 1;
 		p = o;
 	}
 	function cleanString(inStr) {
 		inStr = inStr.replace(/(^\s*)|(\s*$)/gi, "");
 		inStr = inStr.replace(/[\x00-\x1F]/gi, "");
-		inStr = inStr.replace(/\n /, "\n");
 		return inStr;
 	}
 	function hashString(inStr) {
 		inStr = cleanString(inStr);
 		mash(inStr);
-		for (i = 0; i < inStr.length; i++) {
-			k = inStr.charCodeAt(i);
-			for (j = 0; j < o; j++) {
-				s[j] -= mash(k.toString());
+		for (let i = 0; i < inStr.length; i++) {
+			const k = inStr.charCodeAt(i).toString();
+			for (let j = 0; j < o; j++) {
+				s[j] -= mash(k);
 				if (s[j] < 0) s[j] += 1;
 			}
 		}
@@ -1332,7 +1330,7 @@ function uheprng_default(seed) {
 	hashString(seed);
 	return { random() {
 		if (++p >= o) p = 0;
-		let t = 1768863 * s[p] + c * 23283064365386963e-26;
+		const t = 1768863 * s[p] + c * 23283064365386963e-26;
 		return s[p] = t - (c = t | 0);
 	} };
 }
@@ -1392,7 +1390,7 @@ var Num = class Num {
 		return targetA + (n - currA) / (currB - currA) * (targetB - targetA);
 	}
 	static seed(seed) {
-		this.generator = uheprng_default(seed);
+		this.generator = uheprng(seed);
 	}
 	static random() {
 		return this.generator ? this.generator.random() : Math.random();

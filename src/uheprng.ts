@@ -1,10 +1,21 @@
-"use strict";
 /* This code has been written by Steve Gibson and can be found here:
  *
  * https://www.grc.com/otg/uheprng.htm
  *
  * The code has been converted to typescript and unused functions have
- * been removed
+ * been removed.
+ *
+ * Port notes:
+ * - Only the seeded, deterministic path survives: the original's
+ *   nondeterministic startup fill (from the host's `Math.random`) fed a
+ *   usage this port removed, so it is omitted and seeding consumes no
+ *   outside entropy.
+ * - `random()` returns the raw 32-bit MWC fraction — every draw is an
+ *   exact multiple of 2^-32. The original composed two draws into a
+ *   53-bit double; callers here (Float32-based Pts) don't need that.
+ * - Despite the original header below, this is not a cryptographically
+ *   secure PRNG by modern standards (its state is recoverable from its
+ *   outputs). Pts uses it for reproducible generative art only.
  */
 
 /*	============================================================================
@@ -54,9 +65,12 @@
     which is good.	See: http://baagoe.com/en/RandomMusings/hash/avalanche.xhtml
     ============================================================================
 */
-function Mash() {
+// calling with no (or a falsy) argument resets the hash state instead of
+// hashing — initState and the empty-seed path rely on that contract (the
+// reset path's return value is never consumed)
+function Mash(): (data?: string) => number {
   let n = 0xefc8249d;
-  let mash = function (data?: string) {
+  return function (data?: string): number {
     if (data) {
       data = data.toString();
       for (let i = 0; i < data.length; i++) {
@@ -70,59 +84,51 @@ function Mash() {
         n += h * 0x100000000; // 2^32
       }
       return (n >>> 0) * 2.3283064365386963e-10; // 2^-32
-    } else n = 0xefc8249d;
+    }
+    n = 0xefc8249d;
+    return 0;
   };
-  return mash;
 }
 
-export default function (seed: string) {
-  let o = 48; // set the 'order' number of ENTROPY-holding 32-bit values
+export default function uheprng(seed: string) {
+  const o = 48; // set the 'order' number of ENTROPY-holding 32-bit values
   let c = 1; // init the 'carry' used by the multiply-with-carry (MWC) algorithm
   let p = o; // init the 'phase' (max-1) of the intermediate variable pointer
-  let s = new Array(o); // declare our intermediate variables array
-  let i: number,
-    j: number,
-    k = 0; // general purpose locals
+  const s: number[] = new Array(o); // declare our intermediate variables array
 
-  // when our "uheprng" is initially invoked our PRNG state is initialized from the
-  // browser's own local PRNG. This is okay since although its generator might not
-  // be wonderful, it's useful for establishing large startup entropy for our usage.
-  let mash = Mash(); // get a pointer to our high-performance "Mash" hash
-  for (i = 0; i < o; i++) s[i] = mash(Math.random().toString()); // fill the array with initial mash hash values
+  const mash = Mash(); // get a pointer to our high-performance "Mash" hash
 
-  // if we want to provide a deterministic startup context for our PRNG,
-  // but without directly setting the internal state variables, this allows
-  // us to initialize the mash hash and PRNG's internal state before providing
-  // some hashing input
+  // initialize the mash hash and the PRNG's internal state to a fixed,
+  // deterministic startup context before hashing in the seeding input
   function initState() {
     mash(); // pass a null arg to force mash hash to init
-    for (i = 0; i < o; i++) s[i] = mash(" "); // fill the array with initial mash hash values
+    for (let i = 0; i < o; i++) s[i] = mash(" "); // fill the array with initial mash hash values
     c = 1; // init our multiply-with-carry carry
     p = o; // init our phase
   }
 
-  // this EXPORTED "clean string" function removes leading and trailing spaces and non-printing
-  // control characters, including any embedded carriage-return (CR) and line-feed (LF) characters,
-  // from any string it is handed. this is also used by the 'hashstring' function (below) to help
-  // users always obtain the same EFFECTIVE uheprng seeding key.
-  function cleanString(inStr: string) {
+  // this "clean string" function removes leading and trailing spaces and non-printing
+  // control characters, including any embedded carriage-return (CR) and line-feed (LF)
+  // characters, from any string it is handed. this is used by the 'hashString' function
+  // (below) so users always obtain the same EFFECTIVE uheprng seeding key: seeds that
+  // differ only by surrounding whitespace or embedded control characters collide.
+  function cleanString(inStr: string): string {
     inStr = inStr.replace(/(^\s*)|(\s*$)/gi, ""); // remove any/all leading spaces
     inStr = inStr.replace(/[\x00-\x1F]/gi, ""); // remove any/all control characters
-    inStr = inStr.replace(/\n /, "\n"); // remove any/all trailing spaces
     return inStr; // return the cleaned up result
   }
 
-  // this EXPORTED "hash string" function hashes the provided character string after first removing
-  // any leading or trailing spaces and ignoring any embedded carriage returns (CR) or Line Feeds (LF)
+  // this "hash string" function hashes the provided character string after first cleaning
+  // it (above); an empty effective seed leaves the fixed initState context untouched
   function hashString(inStr: string) {
     inStr = cleanString(inStr);
     mash(inStr); // use the string to evolve the 'mash' state
-    for (i = 0; i < inStr.length; i++) {
+    for (let i = 0; i < inStr.length; i++) {
       // scan through the characters in our string
-      k = inStr.charCodeAt(i); // get the character code at the location
-      for (j = 0; j < o; j++) {
+      const k = inStr.charCodeAt(i).toString(); // stringify once per character, not per slot
+      for (let j = 0; j < o; j++) {
         // 	"mash" it into the UHEPRNG state
-        s[j] -= mash(k.toString());
+        s[j] -= mash(k);
         if (s[j] < 0) s[j] += 1;
       }
     }
@@ -135,14 +141,12 @@ export default function (seed: string) {
     /**
      * this (not anymore) PRIVATE (internal access only) function is the heart of the multiply-with-carry
      * (MWC) PRNG algorithm. When called it returns a pseudo-random number in the form of a
-     * 32-bit JavaScript fraction (0.0 to <1.0) it is a PRIVATE function used by the default
-     * [0-1] return function, and by the random 'string(n)' function which returns 'n'
-     * characters from 33 to 126.
+     * 32-bit JavaScript fraction (0.0 to <1.0) — an exact multiple of 2^-32.
      * @returns a number between 0.0 and 1.0
      */
-    random() {
+    random(): number {
       if (++p >= o) p = 0;
-      let t = 1768863 * s[p] + c * 2.3283064365386963e-10; // 2^-32
+      const t = 1768863 * s[p] + c * 2.3283064365386963e-10; // 2^-32
       return (s[p] = t - (c = t | 0));
     },
   };

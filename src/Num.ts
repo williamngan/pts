@@ -169,7 +169,11 @@ export class Num {
   }
 
   /**
-   * Seed the pseudorandom generator.
+   * Seed the pseudorandom generator for reproducible [`Num.random`](#link) sequences.
+   * The seed is hashed by its *effective* key: leading/trailing whitespace and embedded
+   * control characters are stripped first, so seeds differing only in those collide.
+   * An empty (or whitespace-only) seed yields a fixed default sequence. This generator
+   * is deterministic and statistically strong, but not cryptographically secure.
    * @param seed seed string
    */
   static seed(seed: string): void {
@@ -177,8 +181,9 @@ export class Num {
   }
 
   /**
-   * Return a random number between 0 and 1 from a seed,
-   * if the seed is not defined it uses Math.random
+   * Return a random number between 0 and 1. If a seed was set via [`Num.seed`](#link),
+   * draws come from the seeded generator with 32-bit resolution (exact multiples of 2^-32);
+   * otherwise it uses `Math.random`.
    * @returns a number between 0 and 1
    */
   static random(): number {
