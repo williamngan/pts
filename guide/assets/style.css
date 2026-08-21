@@ -605,6 +605,10 @@ p {
     padding-right: 10px;
   }
 
+  #topmenu > a:nth-child(n + 3) {
+    display: none;
+  }
+
   #pts {
     padding-left: 0;
   }
@@ -697,9 +701,6 @@ p {
 
   #topmenu > a {
     padding-left: 0;
-  }
-  #topmenu > a:nth-child(2) {
-    display: none;
   }
   #topmenu > a:last-child {
     padding-right: 20px;

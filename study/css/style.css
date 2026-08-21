@@ -243,6 +243,8 @@ a:hover {
     padding-left: 10px;
     padding-right: 10px;
   }
+
+  #topmenu > a:nth-child(n + 3) { display: none; }
   
   #pts { padding-left: 0; }
   #pts a { padding: 0; }
@@ -300,7 +302,6 @@ a:hover {
   }  
   
   #topmenu > a { padding-left: 0; }
-  #topmenu > a:nth-child(3) { display: none; }
   
   #toc { width: 50px; height: 80px; line-height: 65px; }
   

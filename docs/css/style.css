@@ -762,6 +762,8 @@ p {
     padding-right: 10px;
   }
 
+  #topmenu > a:nth-child(n + 3) { display: none; }
+
   #pts {
     flex: 0 0 auto;
     padding: 0 10px;
