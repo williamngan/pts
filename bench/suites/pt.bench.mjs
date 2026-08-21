@@ -437,6 +437,44 @@ export default defineSuite("pt", (b, { Pts, fx }) => {
     },
   });
 
+  // the scalar position getters, read per generated point by
+  // Create.distributeRandom and similar hot paths
+  b.case("Bound.x/y/z", {
+    batch: SIZES.S,
+    setupOnce: () => fx.bound(),
+    run: (bound) => {
+      let acc = 0;
+      for (let i = 0; i < SIZES.S; i++) {
+        acc += bound.x + bound.y + i;
+      }
+      sink(acc);
+    },
+  });
+
+  b.case("Group.insert", {
+    batch: SIZES.S,
+    setupOnce: () => {
+      // insert grows the target, so restore by truncating back to the
+      // original four Pts rather than fx.restorable (values-only reset)
+      const target = fx.group("pt:insert:tgt", 4);
+      return {
+        source: fx.group("pt:insert:src", SIZES.S),
+        target,
+        orig: [target[0], target[1], target[2], target[3]],
+      };
+    },
+    setup: (shared) => {
+      const t = shared.target;
+      t.length = 0;
+      for (let i = 0; i < 4; i++) t[i] = shared.orig[i];
+      return { source: shared.source, target: t };
+    },
+    run: ({ source, target }) => {
+      target.insert(source, 2);
+      sink(target.length);
+    },
+  });
+
   b.case("Bound.clone", {
     batch: SIZES.S,
     setupOnce: () => fx.bound(),

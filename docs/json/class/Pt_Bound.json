@@ -3,7 +3,7 @@
   "source": [
     [
       "src/Pt.ts",
-      1010,
+      1046,
       13
     ]
   ],
@@ -15,7 +15,7 @@
       "source": [
         [
           "src/Pt.ts",
-          1020,
+          1056,
           2
         ]
       ],
@@ -51,12 +51,12 @@
       "source": [
         [
           "src/Pt.ts",
-          1169,
+          1205,
           6
         ],
         [
           "src/Pt.ts",
-          1172,
+          1208,
           6
         ]
       ],
@@ -82,12 +82,12 @@
       "source": [
         [
           "src/Pt.ts",
-          1147,
+          1183,
           6
         ],
         [
           "src/Pt.ts",
-          1150,
+          1186,
           6
         ]
       ],
@@ -113,12 +113,12 @@
       "source": [
         [
           "src/Pt.ts",
-          1202,
+          1238,
           6
         ],
         [
           "src/Pt.ts",
-          1205,
+          1241,
           6
         ]
       ],
@@ -144,12 +144,12 @@
       "source": [
         [
           "src/Pt.ts",
-          1191,
+          1227,
           6
         ],
         [
           "src/Pt.ts",
-          1194,
+          1230,
           6
         ]
       ],
@@ -175,12 +175,12 @@
       "source": [
         [
           "src/Pt.ts",
-          573,
+          577,
           6
         ],
         [
           "src/Pt.ts",
-          576,
+          580,
           6
         ]
       ],
@@ -206,7 +206,7 @@
       "source": [
         [
           "src/Pt.ts",
-          1234,
+          1271,
           6
         ]
       ],
@@ -224,7 +224,7 @@
       "source": [
         [
           "src/Pt.ts",
-          583,
+          587,
           6
         ]
       ],
@@ -242,7 +242,7 @@
       "source": [
         [
           "src/Pt.ts",
-          590,
+          594,
           6
         ]
       ],
@@ -260,7 +260,7 @@
       "source": [
         [
           "src/Pt.ts",
-          597,
+          601,
           6
         ]
       ],
@@ -278,7 +278,7 @@
       "source": [
         [
           "src/Pt.ts",
-          604,
+          608,
           6
         ]
       ],
@@ -296,7 +296,7 @@
       "source": [
         [
           "src/Pt.ts",
-          611,
+          615,
           6
         ]
       ],
@@ -314,7 +314,7 @@
       "source": [
         [
           "src/Pt.ts",
-          618,
+          622,
           6
         ]
       ],
@@ -332,7 +332,7 @@
       "source": [
         [
           "src/Pt.ts",
-          625,
+          629,
           6
         ]
       ],
@@ -350,7 +350,7 @@
       "source": [
         [
           "src/Pt.ts",
-          632,
+          636,
           6
         ]
       ],
@@ -368,12 +368,12 @@
       "source": [
         [
           "src/Pt.ts",
-          1136,
+          1172,
           6
         ],
         [
           "src/Pt.ts",
-          1139,
+          1175,
           6
         ]
       ],
@@ -399,12 +399,12 @@
       "source": [
         [
           "src/Pt.ts",
-          1158,
+          1194,
           6
         ],
         [
           "src/Pt.ts",
-          1161,
+          1197,
           6
         ]
       ],
@@ -430,12 +430,12 @@
       "source": [
         [
           "src/Pt.ts",
-          1180,
+          1216,
           6
         ],
         [
           "src/Pt.ts",
-          1183,
+          1219,
           6
         ]
       ],
@@ -461,7 +461,7 @@
       "source": [
         [
           "src/Pt.ts",
-          1213,
+          1249,
           6
         ]
       ],
@@ -479,7 +479,7 @@
       "source": [
         [
           "src/Pt.ts",
-          1220,
+          1257,
           6
         ]
       ],
@@ -497,7 +497,7 @@
       "source": [
         [
           "src/Pt.ts",
-          1227,
+          1264,
           6
         ]
       ],
@@ -517,7 +517,7 @@
       "source": [
         [
           "src/Pt.ts",
-          954,
+          990,
           2
         ]
       ],
@@ -546,7 +546,7 @@
       "source": [
         [
           "src/Pt.ts",
-          965,
+          1001,
           2
         ]
       ],
@@ -587,7 +587,7 @@
       "source": [
         [
           "src/Pt.ts",
-          987,
+          1023,
           2
         ]
       ],
@@ -622,7 +622,7 @@
       "source": [
         [
           "src/Pt.ts",
-          921,
+          957,
           2
         ]
       ],
@@ -651,7 +651,7 @@
       "source": [
         [
           "src/Pt.ts",
-          753,
+          788,
           2
         ]
       ],
@@ -680,7 +680,7 @@
       "source": [
         [
           "src/Pt.ts",
-          745,
+          780,
           2
         ]
       ],
@@ -709,7 +709,7 @@
       "source": [
         [
           "src/Pt.ts",
-          737,
+          772,
           2
         ]
       ],
@@ -731,7 +731,7 @@
       "source": [
         [
           "src/Pt.ts",
-          729,
+          764,
           2
         ]
       ],
@@ -753,7 +753,7 @@
       "source": [
         [
           "src/Pt.ts",
-          1069,
+          1105,
           2
         ]
       ],
@@ -823,7 +823,7 @@
       "source": [
         [
           "src/Pt.ts",
-          945,
+          981,
           2
         ]
       ],
@@ -1007,7 +1007,7 @@
       "source": [
         [
           "src/Pt.ts",
-          888,
+          923,
           2
         ]
       ],
@@ -1077,7 +1077,7 @@
       "source": [
         [
           "src/Pt.ts",
-          1055,
+          1091,
           12
         ]
       ],
@@ -1101,7 +1101,7 @@
       "source": [
         [
           "src/Pt.ts",
-          689,
+          713,
           2
         ]
       ],
@@ -1136,7 +1136,7 @@
       "source": [
         [
           "src/Pt.ts",
-          790,
+          825,
           2
         ]
       ],
@@ -1229,7 +1229,7 @@
       "source": [
         [
           "src/Pt.ts",
-          722,
+          757,
           2
         ]
       ],
@@ -1286,7 +1286,7 @@
       "source": [
         [
           "src/Pt.ts",
-          806,
+          841,
           2
         ]
       ],
@@ -1315,7 +1315,7 @@
       "source": [
         [
           "src/Pt.ts",
-          814,
+          849,
           2
         ]
       ],
@@ -1344,7 +1344,7 @@
       "source": [
         [
           "src/Pt.ts",
-          937,
+          973,
           2
         ]
       ],
@@ -1373,7 +1373,7 @@
       "source": [
         [
           "src/Pt.ts",
-          763,
+          798,
           2
         ]
       ],
@@ -1407,7 +1407,7 @@
       "source": [
         [
           "src/Pt.ts",
-          776,
+          811,
           2
         ]
       ],
@@ -1650,7 +1650,7 @@
       "source": [
         [
           "src/Pt.ts",
-          867,
+          902,
           2
         ]
       ],
@@ -1685,7 +1685,7 @@
       "source": [
         [
           "src/Pt.ts",
-          700,
+          735,
           2
         ]
       ],
@@ -1742,7 +1742,7 @@
       "source": [
         [
           "src/Pt.ts",
-          838,
+          873,
           2
         ]
       ],
@@ -1783,7 +1783,7 @@
       "source": [
         [
           "src/Pt.ts",
-          825,
+          860,
           2
         ]
       ],
@@ -1818,7 +1818,7 @@
       "source": [
         [
           "src/Pt.ts",
-          711,
+          746,
           2
         ]
       ],
@@ -1859,7 +1859,7 @@
       "source": [
         [
           "src/Pt.ts",
-          851,
+          886,
           2
         ]
       ],
@@ -2021,7 +2021,7 @@
       "source": [
         [
           "src/Pt.ts",
-          879,
+          914,
           2
         ]
       ],
@@ -2122,7 +2122,7 @@
       "source": [
         [
           "src/Pt.ts",
-          675,
+          679,
           2
         ]
       ],
@@ -2163,7 +2163,7 @@
       "source": [
         [
           "src/Pt.ts",
-          929,
+          965,
           2
         ]
       ],
@@ -2192,7 +2192,7 @@
       "source": [
         [
           "src/Pt.ts",
-          994,
+          1030,
           2
         ]
       ],
@@ -2261,7 +2261,7 @@
       "source": [
         [
           "src/Pt.ts",
-          1001,
+          1037,
           2
         ]
       ],
@@ -2312,7 +2312,7 @@
       "source": [
         [
           "src/Pt.ts",
-          1242,
+          1280,
           2
         ]
       ],
@@ -2321,7 +2321,7 @@
       "inherits": false,
       "signatures": [
         {
-          "comment": "If the Bound's Pts are changed, call this function to update the Bound's properties.\nIt's simpler and preferable to change the Bound's properties (eg, topLeft, bottomRight) instead of updating the Bound's Pts.",
+          "comment": "If the Bound's Pts are changed, call this function to update the Bound's properties.\nIt's simpler and preferable to change the Bound's properties (eg, topLeft, bottomRight) instead of updating the Bound's Pts.\nNote that this recomputes from the current corner Pts in place; it does not replace them with fresh instances.",
           "returns": "Bound",
           "returns_comment": false,
           "parameters": [],
@@ -2334,7 +2334,7 @@
       "source": [
         [
           "src/Pt.ts",
-          978,
+          1014,
           2
         ]
       ],
@@ -2369,7 +2369,7 @@
       "source": [
         [
           "src/Pt.ts",
-          652,
+          656,
           9
         ]
       ],
@@ -2405,7 +2405,7 @@
       "source": [
         [
           "src/Pt.ts",
-          1030,
+          1066,
           9
         ]
       ],
@@ -2436,7 +2436,7 @@
       "source": [
         [
           "src/Pt.ts",
-          1043,
+          1079,
           9
         ]
       ],
@@ -2467,7 +2467,7 @@
       "source": [
         [
           "src/Pt.ts",
-          665,
+          669,
           9
         ]
       ],

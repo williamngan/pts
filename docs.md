@@ -9077,7 +9077,7 @@ animateID: string
 <a id="pt-bound"></a>
 ### `Bound`
 
-**Kind:** Class · **Source:** [`src/Pt.ts:1010`](https://github.com/williamngan/pts/blob/master/src/Pt.ts#L1010)
+**Kind:** Class · **Source:** [`src/Pt.ts:1046`](https://github.com/williamngan/pts/blob/master/src/Pt.ts#L1046)
 
 **Extends:** `Group`
 
@@ -9246,6 +9246,7 @@ update(): Bound
 
 If the Bound's Pts are changed, call this function to update the Bound's properties.
 It's simpler and preferable to change the Bound's properties (eg, topLeft, bottomRight) instead of updating the Bound's Pts.
+Note that this recomputes from the current corner Pts in place; it does not replace them with fresh instances.
 
 <a id="pt-bound-static-from-bounding-rect"></a>
 ##### `fromBoundingRect`
@@ -9287,7 +9288,7 @@ Create a Bound from a Group or an array of Pts
 <a id="pt-group"></a>
 ### `Group`
 
-**Kind:** Class · **Source:** [`src/Pt.ts:559`](https://github.com/williamngan/pts/blob/master/src/Pt.ts#L559)
+**Kind:** Class · **Source:** [`src/Pt.ts:563`](https://github.com/williamngan/pts/blob/master/src/Pt.ts#L563)
 
 **Extends:** `Array`
 
@@ -10084,11 +10085,11 @@ Like [`Pt.multiply`](#pt-pt-multiply), but returns result as a new Pt.
 $project(args: any[]): Pt
 ```
 
-Calculate vector projection of this Pt on another Pt.
+Calculate the vector projection of another Pt onto this Pt — ie, the component of the other Pt along this Pt's direction. Note that this Pt must be non-zero.
 
 **Parameters**
 
-- `args` (`any[]`) — can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
+- `args` (`any[]`) — the other Pt, as either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
 
 **Returns:** the projection vector as a Pt
 
@@ -10195,7 +10196,7 @@ Get angle of this Pt from origin.
 angleBetween(p: Pt, axis: string | number[] = Const.xy): number
 ```
 
-Get the angle between this and another Pt.
+Get the signed angle between this and another Pt, normalized to [-π, π).
 
 **Parameters**
 
@@ -10253,7 +10254,7 @@ Dot product of this Pt and another Pt.
 equals(p: PtLike, threshold: number = 0.000001): boolean
 ```
 
-Check if another Pt is equal to this Pt, within a threshold.
+Check if another Pt is equal to this Pt, within a threshold. Every dimension of this Pt must be matched: a shorter Pt, or one with a NaN dimension, is not equal (following IEEE semantics, NaN never equals NaN).
 
 **Parameters**
 
@@ -10371,11 +10372,11 @@ let myOps = pt.ops([fn1, fn2, fn3]); let results = myOps.map( (op) => op([1,2,3]
 projectScalar(args: any[]): number
 ```
 
-Calculate scalar projection.
+Calculate the scalar projection of another Pt onto this Pt — the signed length of the other Pt's component along this Pt's direction. Note that this Pt must be non-zero.
 
 **Parameters**
 
-- `args` (`any[]`) — can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
+- `args` (`any[]`) — the other Pt, as either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
 
 <a id="pt-pt-reflect2-d"></a>
 ##### `reflect2D`

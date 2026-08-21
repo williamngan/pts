@@ -117,13 +117,14 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
   }
 
   /**
-   * Check if another Pt is equal to this Pt, within a threshold.
+   * Check if another Pt is equal to this Pt, within a threshold. Every dimension of this Pt must be matched: a shorter Pt, or one with a NaN dimension, is not equal (following IEEE semantics, NaN never equals NaN).
    * @param p another Pt to compare with
    * @param threshold a threshold value within which the two Pts are considered equal. Default is 0.000001.
    */
   equals(p: PtLike, threshold = 0.000001): boolean {
     for (let i = 0, len = this.length; i < len; i++) {
-      if (Math.abs(this[i] - p[i]) > threshold) return false;
+      // written so that a missing or NaN dimension fails the comparison
+      if (!(Math.abs(this[i] - p[i]) <= threshold)) return false;
     }
     return true;
   }
@@ -344,8 +345,8 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
   }
 
   /**
-   * Calculate vector projection of this Pt on another Pt.
-   * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
+   * Calculate the vector projection of another Pt onto this Pt — ie, the component of the other Pt along this Pt's direction. Note that this Pt must be non-zero.
+   * @param args the other Pt, as either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    * @returns the projection vector as a Pt
    */
   $project(...args): Pt {
@@ -353,8 +354,8 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
   }
 
   /**
-   * Calculate scalar projection.
-   * @param args can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
+   * Calculate the scalar projection of another Pt onto this Pt — the signed length of the other Pt's component along this Pt's direction. Note that this Pt must be non-zero.
+   * @param args the other Pt, as either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties
    */
   projectScalar(...args): number {
     return this.dot(...args) / this.magnitude();
@@ -471,12 +472,15 @@ export class Pt extends Float32Array implements IPt, Iterable<number> {
   }
 
   /**
-   * Get the angle between this and another Pt.
+   * Get the signed angle between this and another Pt, normalized to [-π, π).
    * @param p the other Pt
    * @param axis a string such as "xy" (use Const.xy) or an array to specify index for two dimensions
    */
   angleBetween(p: Pt, axis: string | number[] = Const.xy): number {
-    return Geom.boundRadian(this.angle(axis)) - Geom.boundRadian(p.angle(axis));
+    // normalize the difference so results don't jump across the ±π wrap
+    return (
+      Geom.boundRadian(this.angle(axis) - p.angle(axis) + Math.PI) - Math.PI
+    );
   }
 
   /**
@@ -677,8 +681,28 @@ export class Group extends Array<Pt> {
     stride?: number,
     loopBack: boolean = false,
   ): Group[] {
-    const sp = Util.split(this, chunkSize, stride, loopBack);
-    return sp as Group[];
+    // build real Groups (Util.split returns plain arrays); indexed assignment
+    // avoids the slow spread through the Array subclass constructor
+    const st = stride || chunkSize;
+    const chunks: Group[] = [];
+    if (this.length <= 0 || st <= 0) return chunks;
+
+    let index = 0;
+    while (index < this.length) {
+      const g = new Group();
+      let size = 0;
+      for (let k = 0; k < chunkSize; k++) {
+        if (loopBack) {
+          g[size++] = this[(index + k) % this.length];
+        } else {
+          if (index + k >= this.length) break;
+          g[size++] = this[index + k];
+        }
+      }
+      index += st;
+      if (size === chunkSize) chunks.push(g);
+    }
+    return chunks;
   }
 
   /**
@@ -687,7 +711,18 @@ export class Group extends Array<Pt> {
    * @param index the index position to insert into
    */
   insert(pts: PtIterable, index = 0): this {
-    Group.prototype.splice.apply(this, [index, 0, ...pts]);
+    const _pts = Util.iterToArray(pts);
+    const len = this.length;
+    const n = _pts.length;
+    if (n === 0) return this;
+    // normalize like Array.prototype.splice, including negative index
+    let start = Math.trunc(index) || 0;
+    start = start < 0 ? Math.max(len + start, 0) : Math.min(start, len);
+    // shift the tail and copy in place: splice's argument-spread overflows
+    // the call stack for very large inputs
+    this.length = len + n;
+    for (let i = len - 1; i >= start; i--) this[i + n] = this[i];
+    for (let i = 0; i < n; i++) this[start + i] = _pts[i];
     return this;
   }
 
@@ -886,6 +921,7 @@ export class Group extends Array<Pt> {
    * @param args arguments for the function specified in ptFn
    */
   forEachPt(ptFn: string, ...args): this {
+    if (this.length === 0) return this;
     if (!this[0][ptFn]) {
       Util.warn(`${ptFn} is not a function of Pt`);
       return this;
@@ -1211,21 +1247,22 @@ export class Bound extends Group implements IPt {
    * First value of the Bound's top-left position
    */
   get x(): number {
-    return this.topLeft.x;
+    // direct read: going through the `topLeft` getter clones a Pt per access
+    return this[0] ? this[0][0] : undefined;
   }
 
   /**
    * Second value of the Bound's top-left position
    */
   get y(): number {
-    return this.topLeft.y;
+    return this[0] ? this[0][1] : undefined;
   }
 
   /**
    * Third value of the Bound's top-left position
    */
   get z(): number {
-    return this.topLeft.z;
+    return this[0] ? this[0][2] : undefined;
   }
 
   /**
@@ -1238,10 +1275,9 @@ export class Bound extends Group implements IPt {
   /**
    * If the Bound's Pts are changed, call this function to update the Bound's properties.
    * It's simpler and preferable to change the Bound's properties (eg, topLeft, bottomRight) instead of updating the Bound's Pts.
+   * Note that this recomputes from the current corner Pts in place; it does not replace them with fresh instances.
    */
   update() {
-    this.topLeft = this[0];
-    this.bottomRight = this[1];
     this._updateSize();
     return this;
   }

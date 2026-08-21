@@ -431,7 +431,7 @@
       "source": [
         [
           "src/Pt.ts",
-          374,
+          375,
           2
         ]
       ],
@@ -453,7 +453,7 @@
       "source": [
         [
           "src/Pt.ts",
-          231,
+          232,
           2
         ]
       ],
@@ -482,7 +482,7 @@
       "source": [
         [
           "src/Pt.ts",
-          404,
+          405,
           2
         ]
       ],
@@ -504,7 +504,7 @@
       "source": [
         [
           "src/Pt.ts",
-          212,
+          213,
           2
         ]
       ],
@@ -533,7 +533,7 @@
       "source": [
         [
           "src/Pt.ts",
-          342,
+          343,
           2
         ]
       ],
@@ -562,7 +562,7 @@
       "source": [
         [
           "src/Pt.ts",
-          334,
+          335,
           2
         ]
       ],
@@ -591,7 +591,7 @@
       "source": [
         [
           "src/Pt.ts",
-          288,
+          289,
           2
         ]
       ],
@@ -620,7 +620,7 @@
       "source": [
         [
           "src/Pt.ts",
-          389,
+          390,
           2
         ]
       ],
@@ -642,7 +642,7 @@
       "source": [
         [
           "src/Pt.ts",
-          456,
+          457,
           2
         ]
       ],
@@ -671,7 +671,7 @@
       "source": [
         [
           "src/Pt.ts",
-          443,
+          444,
           2
         ]
       ],
@@ -700,7 +700,7 @@
       "source": [
         [
           "src/Pt.ts",
-          269,
+          270,
           2
         ]
       ],
@@ -729,7 +729,7 @@
       "source": [
         [
           "src/Pt.ts",
-          351,
+          352,
           2
         ]
       ],
@@ -738,13 +738,13 @@
       "inherits": "Pt.$project",
       "signatures": [
         {
-          "comment": "Calculate vector projection of this Pt on another Pt.",
+          "comment": "Calculate the vector projection of another Pt onto this Pt — ie, the component of the other Pt along this Pt's direction. Note that this Pt must be non-zero.",
           "returns": "Pt",
           "returns_comment": "the projection vector as a Pt",
           "parameters": [
             {
               "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties",
+              "comment": "the other Pt, as either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties",
               "type": "any[]",
               "default": false
             }
@@ -758,7 +758,7 @@
       "source": [
         [
           "src/Pt.ts",
-          419,
+          420,
           2
         ]
       ],
@@ -780,7 +780,7 @@
       "source": [
         [
           "src/Pt.ts",
-          250,
+          251,
           2
         ]
       ],
@@ -809,7 +809,7 @@
       "source": [
         [
           "src/Pt.ts",
-          200,
+          201,
           2
         ]
       ],
@@ -838,7 +838,7 @@
       "source": [
         [
           "src/Pt.ts",
-          147,
+          148,
           2
         ]
       ],
@@ -867,7 +867,7 @@
       "source": [
         [
           "src/Pt.ts",
-          318,
+          319,
           2
         ]
       ],
@@ -896,7 +896,7 @@
       "source": [
         [
           "src/Pt.ts",
-          366,
+          367,
           2
         ]
       ],
@@ -918,7 +918,7 @@
       "source": [
         [
           "src/Pt.ts",
-          220,
+          221,
           2
         ]
       ],
@@ -976,7 +976,7 @@
       "source": [
         [
           "src/Pt.ts",
-          469,
+          470,
           2
         ]
       ],
@@ -1005,7 +1005,7 @@
       "source": [
         [
           "src/Pt.ts",
-          478,
+          479,
           2
         ]
       ],
@@ -1014,7 +1014,7 @@
       "inherits": "Pt.angleBetween",
       "signatures": [
         {
-          "comment": "Get the angle between this and another Pt.",
+          "comment": "Get the signed angle between this and another Pt, normalized to [-π, π).",
           "returns": "number",
           "returns_comment": false,
           "parameters": [
@@ -1040,7 +1040,7 @@
       "source": [
         [
           "src/Pt.ts",
-          396,
+          397,
           2
         ]
       ],
@@ -1160,7 +1160,7 @@
       "source": [
         [
           "src/Pt.ts",
-          277,
+          278,
           2
         ]
       ],
@@ -1189,7 +1189,7 @@
       "source": [
         [
           "src/Pt.ts",
-          326,
+          327,
           2
         ]
       ],
@@ -1227,7 +1227,7 @@
       "inherits": "Pt.equals",
       "signatures": [
         {
-          "comment": "Check if another Pt is equal to this Pt, within a threshold.",
+          "comment": "Check if another Pt is equal to this Pt, within a threshold. Every dimension of this Pt must be matched: a shorter Pt, or one with a NaN dimension, is not equal (following IEEE semantics, NaN never equals NaN).",
           "returns": "boolean",
           "returns_comment": false,
           "parameters": [
@@ -1434,7 +1434,7 @@
       "source": [
         [
           "src/Pt.ts",
-          381,
+          382,
           2
         ]
       ],
@@ -1624,7 +1624,7 @@
       "source": [
         [
           "src/Pt.ts",
-          302,
+          303,
           2
         ]
       ],
@@ -1646,7 +1646,7 @@
       "source": [
         [
           "src/Pt.ts",
-          295,
+          296,
           2
         ]
       ],
@@ -1703,7 +1703,7 @@
       "source": [
         [
           "src/Pt.ts",
-          435,
+          436,
           2
         ]
       ],
@@ -1725,7 +1725,7 @@
       "source": [
         [
           "src/Pt.ts",
-          427,
+          428,
           2
         ]
       ],
@@ -1747,7 +1747,7 @@
       "source": [
         [
           "src/Pt.ts",
-          258,
+          259,
           2
         ]
       ],
@@ -1776,7 +1776,7 @@
       "source": [
         [
           "src/Pt.ts",
-          173,
+          174,
           2
         ]
       ],
@@ -1810,7 +1810,7 @@
       "source": [
         [
           "src/Pt.ts",
-          186,
+          187,
           2
         ]
       ],
@@ -1844,7 +1844,7 @@
       "source": [
         [
           "src/Pt.ts",
-          359,
+          360,
           2
         ]
       ],
@@ -1853,13 +1853,13 @@
       "inherits": "Pt.projectScalar",
       "signatures": [
         {
-          "comment": "Calculate scalar projection.",
+          "comment": "Calculate the scalar projection of another Pt onto this Pt — the signed length of the other Pt's component along this Pt's direction. Note that this Pt must be non-zero.",
           "returns": "number",
           "returns_comment": false,
           "parameters": [
             {
               "name": "args",
-              "comment": "can be either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties",
+              "comment": "the other Pt, as either a list of numbers, an array, a Pt, or an object with {x,y,z,w} properties",
               "type": "any[]",
               "default": false
             }
@@ -2031,7 +2031,7 @@
       "source": [
         [
           "src/Pt.ts",
-          519,
+          523,
           2
         ]
       ],
@@ -2088,7 +2088,7 @@
       "source": [
         [
           "src/Pt.ts",
-          498,
+          502,
           2
         ]
       ],
@@ -2129,7 +2129,7 @@
       "source": [
         [
           "src/Pt.ts",
-          411,
+          412,
           2
         ]
       ],
@@ -2151,7 +2151,7 @@
       "source": [
         [
           "src/Pt.ts",
-          487,
+          491,
           2
         ]
       ],
@@ -2221,7 +2221,7 @@
       "source": [
         [
           "src/Pt.ts",
-          509,
+          513,
           2
         ]
       ],
@@ -2425,7 +2425,7 @@
       "source": [
         [
           "src/Pt.ts",
-          239,
+          240,
           2
         ]
       ],
@@ -2454,7 +2454,7 @@
       "source": [
         [
           "src/Pt.ts",
-          135,
+          136,
           2
         ]
       ],
@@ -2483,7 +2483,7 @@
       "source": [
         [
           "src/Pt.ts",
-          157,
+          158,
           2
         ]
       ],
@@ -2524,7 +2524,7 @@
       "source": [
         [
           "src/Pt.ts",
-          534,
+          538,
           2
         ]
       ],
@@ -2546,7 +2546,7 @@
       "source": [
         [
           "src/Pt.ts",
-          550,
+          554,
           2
         ]
       ],
@@ -2568,7 +2568,7 @@
       "source": [
         [
           "src/Pt.ts",
-          543,
+          547,
           2
         ]
       ],
@@ -2659,7 +2659,7 @@
       "source": [
         [
           "src/Pt.ts",
-          310,
+          311,
           2
         ]
       ],

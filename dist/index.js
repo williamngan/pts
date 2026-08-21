@@ -2006,7 +2006,7 @@ var Pt = class Pt extends Float32Array {
 		return new Pt(this);
 	}
 	equals(p, threshold = 1e-6) {
-		for (let i = 0, len = this.length; i < len; i++) if (Math.abs(this[i] - p[i]) > threshold) return false;
+		for (let i = 0, len = this.length; i < len; i++) if (!(Math.abs(this[i] - p[i]) <= threshold)) return false;
 		return true;
 	}
 	to(...args) {
@@ -2147,7 +2147,7 @@ var Pt = class Pt extends Float32Array {
 		return Math.atan2(this[axis[1]], this[axis[0]]);
 	}
 	angleBetween(p, axis = Const.xy) {
-		return Geom.boundRadian(this.angle(axis)) - Geom.boundRadian(p.angle(axis));
+		return Geom.boundRadian(this.angle(axis) - p.angle(axis) + Math.PI) - Math.PI;
 	}
 	scale(scale, anchor) {
 		Geom.scale(this, scale, anchor || Pt.make(this.length, 0));
@@ -2231,14 +2231,33 @@ var Group = class Group extends Array {
 		return Group.from(list);
 	}
 	split(chunkSize, stride, loopBack = false) {
-		return Util.split(this, chunkSize, stride, loopBack);
+		const st = stride || chunkSize;
+		const chunks = [];
+		if (this.length <= 0 || st <= 0) return chunks;
+		let index = 0;
+		while (index < this.length) {
+			const g = new Group();
+			let size = 0;
+			for (let k = 0; k < chunkSize; k++) if (loopBack) g[size++] = this[(index + k) % this.length];
+			else {
+				if (index + k >= this.length) break;
+				g[size++] = this[index + k];
+			}
+			index += st;
+			if (size === chunkSize) chunks.push(g);
+		}
+		return chunks;
 	}
 	insert(pts, index = 0) {
-		Group.prototype.splice.apply(this, [
-			index,
-			0,
-			...pts
-		]);
+		const _pts = Util.iterToArray(pts);
+		const len = this.length;
+		const n = _pts.length;
+		if (n === 0) return this;
+		let start = Math.trunc(index) || 0;
+		start = start < 0 ? Math.max(len + start, 0) : Math.min(start, len);
+		this.length = len + n;
+		for (let i = len - 1; i >= start; i--) this[i + n] = this[i];
+		for (let i = 0; i < n; i++) this[start + i] = _pts[i];
 		return this;
 	}
 	remove(index = 0, count = 1) {
@@ -2309,6 +2328,7 @@ var Group = class Group extends Array {
 		return this.sort((a, b) => desc ? b[dim] - a[dim] : a[dim] - b[dim]);
 	}
 	forEachPt(ptFn, ...args) {
+		if (this.length === 0) return this;
 		if (!this[0][ptFn]) {
 			Util.warn(`${ptFn} is not a function of Pt`);
 			return this;
@@ -2461,20 +2481,18 @@ var Bound = class Bound extends Group {
 		this._updatePosFromTop();
 	}
 	get x() {
-		return this.topLeft.x;
+		return this[0] ? this[0][0] : void 0;
 	}
 	get y() {
-		return this.topLeft.y;
+		return this[0] ? this[0][1] : void 0;
 	}
 	get z() {
-		return this.topLeft.z;
+		return this[0] ? this[0][2] : void 0;
 	}
 	get inited() {
 		return this._inited;
 	}
 	update() {
-		this.topLeft = this[0];
-		this.bottomRight = this[1];
 		this._updateSize();
 		return this;
 	}

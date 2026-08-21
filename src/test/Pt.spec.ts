@@ -497,3 +497,74 @@ describe("argument fast paths preserve semantics", () => {
     ]);
   });
 });
+
+describe("Pt, Group, and Bound correctness pins", () => {
+  it("rejects equality against shorter or NaN Pts", () => {
+    expect(new Pt(1, 2, 3).equals([1, 2])).toBe(false);
+    expect(new Pt(1, 2).equals([1, 2, 99])).toBe(true); // own dims compared
+    expect(new Pt(1, 2).equals([1, NaN])).toBe(false);
+    expect(new Pt(1, 2).equals([1, 2.0000001], 0.001)).toBe(true);
+  });
+
+  it("returns real Groups from split, segments, and lines", () => {
+    const g = Group.fromArray([
+      [0, 0],
+      [1, 1],
+      [2, 2],
+      [3, 3],
+    ]);
+    for (const part of g.split(2)) expect(part instanceof Group).toBe(true);
+    for (const seg of g.segments(2, 1)) expect(seg instanceof Group).toBe(true);
+    for (const ln of g.lines()) expect(ln instanceof Group).toBe(true);
+    // loopBack path too, with identical chunk content
+    const looped = g.segments(3, 2, true);
+    expect(looped.every((s) => s instanceof Group)).toBe(true);
+    expect(looped.map((s) => s.length)).toEqual([3, 3]);
+    expect(Array.from(looped[1][2])).toEqual([0, 0]); // wraps to start
+  });
+
+  it("treats forEachPt on an empty group as a no-op", () => {
+    const g = new Group();
+    expect(g.forEachPt("unit")).toBe(g);
+  });
+
+  it("normalizes angleBetween across the wrap", () => {
+    const at = (rad: number) => new Pt(Math.cos(rad), Math.sin(rad));
+    const wrap = at(-0.1).angleBetween(at(0.1));
+    expect(Math.abs(wrap)).toBeCloseTo(0.2, 5);
+    expect(at(0.5).angleBetween(at(0.2))).toBeCloseTo(0.3, 5);
+    expect(at(0.2).angleBetween(at(0.5))).toBeCloseTo(-0.3, 5);
+  });
+
+  it("projects the argument onto this Pt", () => {
+    // anchor for the corrected docs: $project(b) projects b onto this
+    expect(Array.from(new Pt(10, 0).$project([3, 4]))).toEqual([3, 0]);
+    expect(new Pt(10, 0).projectScalar([3, 4])).toBeCloseTo(3);
+  });
+
+  it("reads Bound x/y/z without losing missing-dimension semantics", () => {
+    const b = Bound.fromGroup(
+      Group.fromArray([
+        [5, 6],
+        [105, 206],
+      ]),
+    );
+    expect(b.x).toBe(5);
+    expect(b.y).toBe(6);
+    expect(b.z).toBeUndefined(); // 2D bound has no z
+    b.topLeft = new Pt(7, 8);
+    expect(b.x).toBe(7);
+    expect(b.width).toBe(98);
+  });
+
+  it("inserts very large groups without an arguments overflow", () => {
+    const big = Group.fromArray(
+      Array.from({ length: 200000 }, (_, i) => [i, i]),
+    );
+    const g = Group.fromArray([[-1, -1]]);
+    g.insert(big, 1);
+    expect(g).toHaveLength(200001);
+    expect(Array.from(g[1])).toEqual([0, 0]);
+    expect(Array.from(g[200000])).toEqual([199999, 199999]);
+  });
+});
